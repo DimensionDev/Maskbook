@@ -65,7 +65,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
             erc: 'erc721',
             user_address: address,
         })
-        if (!response || !response.data) return []
+        if (!response?.data) return []
         return response.data
             .map((x) => {
                 const contractDetailed = createERC721ContractDetailed(
@@ -103,7 +103,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
             use_address: from,
             erc: 'erc721',
         })
-        if (!response || !response.data)
+        if (!response?.data)
             return {
                 data: [],
                 hasNextPage: false,
