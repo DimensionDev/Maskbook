@@ -319,12 +319,12 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     const [tokenIdListInput, setTokenIdListInput] = useState<string>('')
     const [tokenIdFilterList, setTokenIdFilterList] = useState<string[]>([])
     const [nonExistedTokenIdList, setNonExistedTokenIdList] = useState<string[]>([])
-    const [selectAll, setSelectAll] = useState<boolean>(false)
     const maxSelectShares = Math.min(NFT_RED_PACKET_MAX_SHARES, tokenDetailedOwnerList.length)
     const isSelectSharesExceed =
         (tokenDetailedOwnerList.length === 0 ? NFT_RED_PACKET_MAX_SHARES - 1 : NFT_RED_PACKET_MAX_SHARES) <
         tokenDetailedSelectedList.length
     const { classes } = useStyles({ isSelectSharesExceed })
+    const selectAll = maxSelectShares === tokenDetailedSelectedList.length
     const selectAllHandler = useCallback(() => {
         setTokenDetailedSelectedList(
             tokenIdFilterList.length === 0
@@ -340,17 +340,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                 .slice(0, maxSelectShares)
             setTokenDetailedSelectedList(uniqBy(newlyAdded.concat(tokenDetailedSelectedList), 'tokenId'))
         }
-
-        setSelectAll(!selectAll)
     }, [selectAll, maxSelectShares, tokenIdFilterList, tokenDetailedSelectedList])
-
-    useEffect(() => {
-        setSelectAll(
-            tokenIdFilterList.length === 0
-                ? tokenDetailedSelectedList.length >= maxSelectShares
-                : tokenIdFilterList.every((id) => tokenDetailedSelectedList.map((t) => t.tokenId).includes(id)),
-        )
-    }, [tokenDetailedSelectedList, maxSelectShares, tokenIdListInput, tokenIdFilterList])
 
     useEffect(() => {
         setTokenDetailed(undefined)
