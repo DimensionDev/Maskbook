@@ -346,7 +346,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                 <div className={classes.line}>
                     <RedpacketMessagePanel onChange={(val: string) => setMessage(val)} message={message} />
                 </div>
-                {tokenDetailedOwnerList.length > 0 ? (
+                {contract && balance && !loadingOwnerList ? (
                     <Typography className={classes.approveAllTip}>
                         {t('plugin_red_packet_nft_approve_all_tip')}
                     </Typography>

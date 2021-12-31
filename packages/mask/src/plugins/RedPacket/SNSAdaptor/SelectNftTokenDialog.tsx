@@ -7,9 +7,8 @@ import {
     useAccount,
     isSameAddress,
 } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../../utils'
+import { useI18N, ShadowRootTooltip } from '../../../utils'
 import { DialogContent, Box, InputBase, Paper, Button, Typography, ListItem, CircularProgress } from '@mui/material'
-import { ShadowRootTooltip } from '../../../utils'
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState, useEffect } from 'react'
@@ -431,7 +430,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
 
     useEffect(() => {
         if (tokenDetailedOwnerList.length > 0) setTokenDetailed(undefined)
-    }, [tokenDetailedOwnerList])
+    }, [tokenDetailedOwnerList.length])
 
     const isOwner = isSameAddress(account, tokenDetailed?.info.owner) || tokenDetailedSelectedList.length > 0
     const isAdded = existTokenDetailedList.map((t) => t.tokenId).includes(tokenDetailed?.tokenId ?? '')
