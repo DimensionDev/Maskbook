@@ -147,7 +147,7 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
         <div className={classes.root}>
             <div className={classes.title}>
                 <Typography variant="body1" color="colorPrimary">
-                    Amount
+                    Price
                 </Typography>
                 <Typography variant="body1" color="colorPrimary">{`Balance: ${balance} ${token?.symbol}`}</Typography>
             </div>
