@@ -67,6 +67,10 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
             label: 'SushiSwap',
             value: TradeProvider.SUSHISWAP,
         },
+        {
+            label: 'Fusefi',
+            value: TradeProvider.FUSEFI,
+        },
     ]
 
     const t = useDashboardI18N()

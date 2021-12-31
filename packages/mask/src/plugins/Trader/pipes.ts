@@ -57,6 +57,7 @@ export const resolveTradeProviderName = createLookupTableResolver<TradeProvider,
         [TradeProvider.DODO]: 'DODO',
         [TradeProvider.BANCOR]: 'Bancor',
         [TradeProvider.OPENOCEAN]: 'OpenOcean',
+        [TradeProvider.FUSEFI]: 'FuseFi',
     },
     (tradeProvider) => {
         throw new Error(`Unknown provider type: ${tradeProvider}`)
@@ -107,6 +108,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
             return 'https://app.bancor.network/eth/swap'
         case TradeProvider.OPENOCEAN:
             return 'https://openocean.finance/classic'
+        case TradeProvider.FUSEFI:
+            return 'https://fuseswap.io'
         default:
             unreachable(tradeProvider)
     }
@@ -167,6 +170,9 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
         case TradeProvider.OPENOCEAN:
             // TODO - OpenOcean
             return ``
+        case TradeProvider.FUSEFI:
+        case TradeProvider.FUSEFI:
+            return `https://fuseswap.info/pool/${address}`
         default:
             unreachable(tradeProvider)
     }
@@ -256,6 +262,7 @@ export const resolveZrxTradePoolName = createLookupTableResolver<ZrxTradePool, s
         [ZrxTradePool.UniswapV3]: 'Uniswap V3',
         [ZrxTradePool.WaultSwap]: 'WaultSwap',
         [ZrxTradePool.xSigma]: 'xSigma',
+        [ZrxTradePool.Fusefi]: 'Fusefi',
     },
     'Unknown',
 )

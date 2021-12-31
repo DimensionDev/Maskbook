@@ -106,6 +106,8 @@ export function useTradeCallback(
             return bancor
         case TradeProvider.OPENOCEAN:
             return openocean
+        case TradeProvider.FUSEFI:
+            return uniswapV2Like
         default:
             if (provider) unreachable(provider)
             return []
