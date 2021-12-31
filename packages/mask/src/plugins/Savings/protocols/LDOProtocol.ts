@@ -1,10 +1,17 @@
 import type Web3 from 'web3'
 import type { AbiItem } from 'web3-utils'
-import { EthereumTokenType, ChainId, getSavingsConstants } from '@masknet/web3-shared-evm'
-import type { Contract } from 'web3-eth-contract'
-import LidoStETHABI from '@masknet/web3-contracts/abis/LidoStETH.json'
-import type BigNumber from 'bignumber.js'
+import {
+    EthereumTokenType,
+    ChainId,
+    getSavingsConstants,
+    formatBalance,
+    createContract,
+} from '@masknet/web3-shared-evm'
+import type { Lido } from '@masknet/web3-contracts/types/Lido'
+import LidoABI from '@masknet/web3-contracts/abis/Lido.json'
+import BigNumber from 'bignumber.js'
 import type { SavingsNetwork, SavingsProtocol } from '../types'
+import { ProtocolType } from '../types'
 
 export interface LidoContract {
     type: EthereumTokenType
@@ -29,7 +36,7 @@ export const LidoContracts: { [key: number]: LidoContract } = {
 }
 
 export class LidoProtocol implements SavingsProtocol {
-    public id = 0
+    public type = ProtocolType.Lido
     public name = 'Lido'
     public image = 'lido'
     public base = 'ETH'
@@ -42,14 +49,9 @@ export class LidoProtocol implements SavingsProtocol {
         { chainId: ChainId.Gorli, chainName: 'Gorli' },
     ]
 
-    public getContract(chainId: number, web3: Web3): Contract {
-        const contract = new web3.eth.Contract(LidoStETHABI as AbiItem[], LidoContracts[chainId].stEthContract)
-        return contract
-    }
-
     public async getApr() {
         try {
-            const LidoAprUrl = `https://cors.r2d2.to/?uri=https://stake.lido.fi/api/steth-apr`
+            const LidoAprUrl = `https://cors.r2d2.to/?https://stake.lido.fi/api/steth-apr`
             const response = await fetch(LidoAprUrl)
             const apr = await response.text()
             this.apr = apr
@@ -62,14 +64,15 @@ export class LidoProtocol implements SavingsProtocol {
         }
     }
 
-    public async getBalance(chainId: number, web3: Web3, account: string) {
+    public async getBalance(chainId: ChainId, web3: Web3, account: string) {
         try {
-            const contract = this.getContract(chainId, web3)
-            const balance = await contract.methods.balanceOf(account).call()
-            const formattedBalance = (balance / Math.pow(10, 18)).toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 6,
-            })
+            const contract = createContract<Lido>(
+                web3,
+                getSavingsConstants(chainId).LIDO_STETH || '',
+                LidoABI as AbiItem[],
+            )
+            const balance = await contract?.methods.balanceOf(account).call()
+            const formattedBalance = formatBalance(balance, 18, 4)
 
             this.balance = formattedBalance
             return formattedBalance
@@ -80,16 +83,45 @@ export class LidoProtocol implements SavingsProtocol {
         }
     }
 
-    public async deposit(account: string, chainId: number, web3: Web3, value: BigNumber) {
+    public async depositEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
         try {
-            const LidoReferralAddress = '0x278D7e418a28ff763eEeDf29238CD6dfcade3A3a'
-            const contract = this.getContract(chainId, web3)
+            const contract = createContract<Lido>(
+                web3,
+                getSavingsConstants(chainId).LIDO_STETH || '',
+                LidoABI as AbiItem[],
+            )
+            const gasEstimate = await contract?.methods
+                .submit(
+                    getSavingsConstants(chainId).LIDO_REFERALL_ADDRESS || '0x0000000000000000000000000000000000000000',
+                )
+                .estimateGas({
+                    from: account,
+                    value: value.toString(),
+                })
 
-            await contract.methods.submit(LidoReferralAddress).send({
-                from: account,
-                value,
-                gasLimit: 2100000,
-            })
+            return new BigNumber(gasEstimate || 0)
+        } catch (error) {
+            console.error('LDO `depositEstimate()` Error', error)
+            return 0
+        }
+    }
+
+    public async deposit(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
+        try {
+            const contract = createContract<Lido>(
+                web3,
+                getSavingsConstants(chainId).LIDO_STETH || '',
+                LidoABI as AbiItem[],
+            )
+            await contract?.methods
+                .submit(
+                    getSavingsConstants(chainId).LIDO_REFERALL_ADDRESS || '0x0000000000000000000000000000000000000000',
+                )
+                .send({
+                    from: account,
+                    value: value.toString(),
+                    gas: 21000,
+                })
 
             return true
         } catch (error) {
@@ -98,7 +130,11 @@ export class LidoProtocol implements SavingsProtocol {
         }
     }
 
-    public async withdraw(account: string, chainId: number, web3: Web3, value: BigNumber) {
+    public async withdrawEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
+        return new BigNumber('0')
+    }
+
+    public async withdraw(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
         /*
          * @TODO: Implement withdraw when stETH Beacon Chain allows for withdraws
          *

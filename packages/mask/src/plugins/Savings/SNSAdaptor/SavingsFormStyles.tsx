@@ -17,47 +17,16 @@ export const useStyles = makeStyles()((theme, props) => ({
         height: '32px',
         margin: '0 15px 0 0',
     },
-    inputLabel: {
-        textAlign: 'right',
-        fontSize: '12px',
-        padding: '0 10px 5px 10px',
-    },
     inputWrap: {
         position: 'relative',
         width: '100%',
         margin: '0 0 15px 0',
     },
-    input: {
-        background: 'transparent',
-        border: 'none',
-        width: '100%',
-    },
-    inputBalance: {
-        position: 'absolute',
-        right: '15px',
-        top: '0',
-        height: '100%',
-        display: 'flex',
-        alignItems: 'center',
-    },
-    inputButton: {
-        borderRadius: '5px',
-        border: '1px solid ' + theme.palette.primary,
-        margin: '0 10px 0 0',
-    },
-    inputCurrency: {
-        display: 'flex',
-        alignItems: 'center',
-    },
-    inputImage: {
-        height: '24px',
-        margin: '0 5px',
-    },
     infoRow: {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: '15px 5px',
+        padding: '0 5px 15px 5px',
     },
     infoRowLeft: {
         display: 'flex',

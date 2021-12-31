@@ -1,19 +1,30 @@
-import { TextField, Button, Typography } from '@mui/material'
+import BigNumber from 'bignumber.js'
+import { Typography } from '@mui/material'
 import { useState, useMemo } from 'react'
-import { EthereumTokenType, useFungibleTokenBalance, useWeb3, useAccount } from '@masknet/web3-shared-evm'
+import { useAsync } from 'react-use'
+import { unreachable } from '@dimensiondev/kit'
+import {
+    EthereumTokenType,
+    useNativeTokenDetailed,
+    useFungibleTokenBalance,
+    useWeb3,
+    useAccount,
+    formatBalance,
+} from '@masknet/web3-shared-evm'
+import { TokenAmountPanel } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import { useStyles } from './SavingsFormStyles'
 import { IconURLS } from './IconURL'
-import { TabType } from '../types'
+import { TabType, ProtocolType } from '../types'
 import { SavingsProtocols } from '../protocols'
-import { isLessThan, leftShift, rightShift } from '@masknet/web3-shared-base'
+import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 export interface SavingsFormProps {
     chainId: number
-    selectedProtocol: number
+    selectedProtocol: ProtocolType
     tab: TabType
     onClose?: () => void
     onSwapDialogOpen?: () => void
@@ -25,98 +36,84 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
     const protocol = SavingsProtocols[selectedProtocol]
     const targetChainId = chainId
 
+    const { value: nativeTokenDetailed } = useNativeTokenDetailed()
     const web3 = useWeb3(false, targetChainId)
     const account = useAccount()
 
     const [inputAmount, setInputAmount] = useState('')
+    const [estimatedGas, setEstimatedGas] = useState<BigNumber.Value>(new BigNumber('0'))
 
-    const { value: nativeTokenBalance, loading: loadingNativeTokenBalance } = useFungibleTokenBalance(
-        EthereumTokenType.Native,
-        '',
-        targetChainId,
-    )
+    const { value: nativeTokenBalance } = useFungibleTokenBalance(EthereumTokenType.Native, '', targetChainId)
 
-    //#region form controls
-    const formattedBalance = leftShift(Number.parseInt(nativeTokenBalance || '0', 16), 18)
-    const tokenAmount = rightShift(inputAmount || '0', 18)
+    //#region form variables
+    const tokenAmount = new BigNumber(rightShift(inputAmount || '0', 18))
+    const inputAsBN = new BigNumber(rightShift(inputAmount, 18))
+    const balanceAsBN = new BigNumber(TabType.Deposit ? nativeTokenBalance || '0' : protocol.balance)
+
+    useAsync(async () => {
+        const gasEstimate =
+            tab === TabType.Deposit
+                ? await protocol.depositEstimate(account, targetChainId, web3, new BigNumber('1'))
+                : await protocol.withdrawEstimate(account, targetChainId, web3, new BigNumber('1'))
+        setEstimatedGas(gasEstimate)
+    }, [protocol, chainId])
     //#endregion
 
-    //#region UI logic
-    // validate form return a message if an error exists
+    //#region form validation
     const validationMessage = useMemo(() => {
-        if (tokenAmount.isZero()) return t('plugin_trader_error_amount_absence')
-        if (isLessThan(inputAmount, 0)) return t('plugin_trade_error_input_amount_less_minimum_amount')
+        if (tokenAmount.isZero() || !inputAmount) return t('plugin_trader_error_amount_absence')
+        if (isLessThan(inputAsBN, 0)) return t('plugin_trade_error_input_amount_less_minimum_amount')
 
-        const tokenBalance =
-            (tab === TabType.Deposit
-                ? nativeTokenBalance
-                : rightShift(protocol.balance, 18).integerValue().toFixed()) || '0'
-
-        if (isLessThan(tokenBalance, tokenAmount)) {
+        if (isLessThan(balanceAsBN.minus(estimatedGas), tokenAmount)) {
             return t('plugin_trader_error_insufficient_balance', {
                 symbol: tab === TabType.Deposit ? protocol.base : protocol.pair,
             })
         }
 
         return ''
-    }, [inputAmount, tokenAmount.toFixed(), formattedBalance])
+    }, [inputAmount, tokenAmount, nativeTokenBalance, protocol.balance])
     //#endregion
 
-    const needsSwap = protocol.name === 'Lido' && tab === 'withdraw'
+    const needsSwap = protocol.type === ProtocolType.Lido && tab === TabType.Withdraw
 
     return (
         <div className={classes.containerWrap}>
             <Typography variant="h3" className={classes.title}>
                 <img src={IconURLS.lido} className={classes.titleImage} />
-                {tab === TabType.Deposit ? 'Stake' : 'Withdraw'} {protocol.name}
-            </Typography>
-
-            <Typography variant="body1" className={classes.inputLabel}>
-                Balance:{' '}
-                {tab === TabType.Deposit
-                    ? formattedBalance
-                          .toNumber()
-                          .toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })
-                    : protocol.balance}{' '}
-                {tab === TabType.Deposit ? protocol.base : protocol.pair}
+                {tab === TabType.Deposit ? t('plugin_savings_lido_deposit') : t('plugin_savings_lido_withdraw')}
             </Typography>
 
             <div className={classes.inputWrap}>
-                <TextField
-                    type="text"
-                    placeholder="0.00"
-                    size="medium"
-                    className={classes.input}
-                    value={inputAmount}
-                    onChange={(e) => setInputAmount(e.target.value)}
+                <TokenAmountPanel
+                    amount={inputAmount}
+                    maxAmount={balanceAsBN.minus(estimatedGas).toString()}
+                    balance={balanceAsBN.toString()}
+                    label={t('plugin_savings_amount')}
+                    token={nativeTokenDetailed}
+                    onAmountChange={setInputAmount}
                 />
-                <div className={classes.inputBalance}>
-                    <Button
-                        variant="outlined"
-                        size="small"
-                        color="primary"
-                        className={classes.inputButton}
-                        onClick={(e) =>
-                            setInputAmount(tab === TabType.Deposit ? formattedBalance.toString() : protocol.balance)
-                        }>
-                        Max
-                    </Button>
-                    <div className={classes.inputCurrency}>
-                        <img src={IconURLS.eth} className={classes.inputImage} />
-                        <p>{tab === TabType.Deposit ? protocol.base : protocol.pair}</p>
-                    </div>
-                </div>
             </div>
 
             <div className={classes.infoRow}>
                 <Typography variant="body1" className={classes.infoRowLeft}>
                     <img src={IconURLS.eth} className={classes.rowImage} />
-                    {protocol.pair} APY%
+                    {protocol.pair} {t('plugin_savings_apy')}%
                 </Typography>
                 <Typography variant="body1" className={classes.infoRowRight}>
                     {protocol.apr}%
                 </Typography>
             </div>
+
+            <div className={classes.infoRow}>
+                <Typography variant="body1" className={classes.infoRowLeft}>
+                    <img src={IconURLS.eth} className={classes.rowImage} />
+                    {t('plugin_savings_fee')}
+                </Typography>
+                <Typography variant="body1" className={classes.infoRowRight}>
+                    ~{formatBalance(estimatedGas, 18)} {nativeTokenDetailed?.symbol}
+                </Typography>
+            </div>
+
             <EthereumChainBoundary
                 chainId={targetChainId}
                 noSwitchNetworkTip
@@ -139,22 +136,34 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
                             needsSwap
                                 ? 'Swap ' + protocol.pair
                                 : validationMessage ||
-                                  (tab === TabType.Deposit ? 'Deposit ' + protocol.base : 'Withdraw ' + protocol.pair)
+                                  (tab === TabType.Deposit
+                                      ? t('plugin_savings_deposit') + ' ' + protocol.base
+                                      : t('plugin_savings_withdraw') + ' ' + protocol.pair)
                         }
-                        waiting={TabType.Deposit ? 'Processing Deposit' : 'Processing Withdrawal'}
+                        waiting={
+                            TabType.Deposit ? t('plugin_savings_process_deposit') : t('plugin_savings_process_withdraw')
+                        }
                         failed={t('failed')}
                         complete={t('done')}
                         disabled={validationMessage !== '' && !needsSwap}
                         executor={async () => {
-                            if (tab === TabType.Deposit) {
-                                await protocol.deposit(account, targetChainId, web3, tokenAmount)
-                            } else {
-                                if (needsSwap) {
-                                    onClose?.()
-                                    onSwapDialogOpen?.()
-                                } else {
-                                    await protocol.withdraw(account, targetChainId, web3, tokenAmount)
-                                }
+                            switch (tab) {
+                                case TabType.Deposit:
+                                    await protocol.deposit(account, targetChainId, web3, tokenAmount)
+                                    break
+                                case TabType.Withdraw:
+                                    switch (protocol.type) {
+                                        case ProtocolType.Lido:
+                                            onClose?.()
+                                            onSwapDialogOpen?.()
+                                            break
+                                        default:
+                                            await protocol.withdraw(account, targetChainId, web3, tokenAmount)
+                                            break
+                                    }
+                                    break
+                                default:
+                                    unreachable(tab)
                             }
                         }}
                     />

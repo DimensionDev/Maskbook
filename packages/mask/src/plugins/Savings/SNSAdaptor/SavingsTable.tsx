@@ -2,8 +2,10 @@ import { useAsync } from 'react-use'
 import { Box, Grid, Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useWeb3, useAccount } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { IconURLS } from './IconURL'
-import { TabType } from '../types'
+import { useI18N } from '../../../utils'
+import { ProtocolType, TabType } from '../types'
 import { SavingsProtocols } from '../protocols'
 
 const useStyles = makeStyles()((theme, props) => ({
@@ -36,12 +38,13 @@ const useStyles = makeStyles()((theme, props) => ({
 }))
 
 export interface SavingsTableProps {
-    chainId: number
+    chainId: ChainId
     tab: TabType
-    setSelectedProtocol(protocol: number): void
+    setSelectedProtocol(protocol: ProtocolType): void
 }
 
 export function SavingsTable({ chainId, tab, setSelectedProtocol }: SavingsTableProps) {
+    const { t } = useI18N()
     const { classes } = useStyles()
 
     const web3 = useWeb3(false, chainId)
@@ -59,16 +62,16 @@ export function SavingsTable({ chainId, tab, setSelectedProtocol }: SavingsTable
         <Box className={classes.containerWrap}>
             <Grid container spacing={0} className={classes.tableHeader}>
                 <Grid item xs={4} className={classes.tableCell}>
-                    Protocol
+                    {t('plugin_savings_type')}
                 </Grid>
                 <Grid item xs={2} className={classes.tableCell}>
-                    APY
+                    {t('plugin_savings_apy')}
                 </Grid>
                 <Grid item xs={3} className={classes.tableCell}>
-                    Value
+                    {t('plugin_savings_wallet')}
                 </Grid>
                 <Grid item xs={3} className={classes.tableCell}>
-                    {tab === TabType.Deposit ? 'Deposit' : 'Withdraw'}
+                    {t('plugin_savings_operation')}
                 </Grid>
             </Grid>
 
@@ -81,7 +84,7 @@ export function SavingsTable({ chainId, tab, setSelectedProtocol }: SavingsTable
                 return false
             }).map((protocol) => {
                 return (
-                    <Grid container spacing={0} className={classes.tableHeader} key={protocol.id}>
+                    <Grid container spacing={0} className={classes.tableHeader} key={protocol.type}>
                         <Grid item xs={4} className={classes.tableCell}>
                             <img src={IconURLS[protocol.image]} className={classes.logo} />
                             {protocol.name}
@@ -96,8 +99,8 @@ export function SavingsTable({ chainId, tab, setSelectedProtocol }: SavingsTable
                             <Button
                                 variant="contained"
                                 color="primary"
-                                onClick={() => setSelectedProtocol(protocol.id)}>
-                                {tab === 'deposit' ? 'Deposit' : 'Withdraw'}
+                                onClick={() => setSelectedProtocol(protocol.type)}>
+                                {tab === TabType.Deposit ? t('plugin_savings_deposit') : t('plugin_savings_withdraw')}
                             </Button>
                         </Grid>
                     </Grid>
