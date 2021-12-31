@@ -360,7 +360,8 @@
         "Enjin",
         "poap",
         "irss",
-        "CELO"
+        "CELO",
+        "flac"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [

@@ -20,6 +20,7 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
             ]
         case NetworkType.Polygon:
             return [
+                TradeProvider.UNISWAP_V3,
                 TradeProvider.QUICKSWAP,
                 TradeProvider.SUSHISWAP,
                 TradeProvider.DODO,
