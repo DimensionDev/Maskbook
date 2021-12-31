@@ -12,6 +12,7 @@ import { resolveTradeProviderName } from '../../pipes'
 
 const quickswapIcon = new URL('../../../../resources/quickswap.png', import.meta.url).toString()
 const pancakeswapIcon = new URL('../../../../resources/pancakeswap.png', import.meta.url).toString()
+const traderjoeIcon = new URL('../../../../resources/traderjoe.png', import.meta.url).toString()
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -59,6 +60,14 @@ export function TradeProviderIcon(props: TradeProviderIconProps) {
             return <DODOIcon classes={{ root: classes.icon }} />
         case TradeProvider.BANCOR:
             return <BancorIcon classes={{ root: classes.icon }} />
+        case TradeProvider.TRADERJOE:
+            return (
+                <img
+                    src={traderjoeIcon}
+                    alt={resolveTradeProviderName(TradeProvider.TRADERJOE)}
+                    className={classes.icon}
+                />
+            )
         default:
             unreachable(props.provider)
     }

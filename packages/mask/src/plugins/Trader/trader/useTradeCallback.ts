@@ -88,6 +88,8 @@ export function useTradeCallback(
             return uniswapV2Like
         case TradeProvider.PANCAKESWAP:
             return uniswapV2Like
+        case TradeProvider.TRADERJOE:
+            return uniswapV2Like
         case TradeProvider.ZRX:
             return zrx
         case TradeProvider.BALANCER:
@@ -96,6 +98,8 @@ export function useTradeCallback(
             return dodo
         case TradeProvider.BANCOR:
             return bancor
+        case TradeProvider.TRADERJOE:
+            return uniswapV2Like
         default:
             if (provider) unreachable(provider)
             return []
