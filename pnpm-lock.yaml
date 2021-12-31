@@ -745,8 +745,10 @@ importers:
   packages/plugins/example:
     specifiers:
       '@masknet/plugin-infra': workspace:*
+      ts-results: ^3.3.0
     dependencies:
       '@masknet/plugin-infra': link:../../plugin-infra
+      ts-results: 3.3.0
 
   packages/polyfills:
     specifiers:
@@ -976,6 +978,7 @@ importers:
       date-fns: ^2.27.0
       json-stable-stringify: ^1.0.1
       lodash-unified: 1.0.1
+      rss3-next: ^0.6.17
       urlcat: ^2.0.4
     dependencies:
       '@masknet/plugin-infra': link:../plugin-infra
@@ -985,6 +988,7 @@ importers:
       date-fns: 2.27.0
       json-stable-stringify: 1.0.1
       lodash-unified: 1.0.1_bd4845f8c1bf1d81a616b60758034d0a
+      rss3-next: 0.6.17_typescript@4.6.0-dev.20211202
       urlcat: 2.0.4
 
   packages/web3-shared/base:
@@ -1074,7 +1078,7 @@ packages:
       bintrees: 1.0.2
       bn.js: 4.12.0
       compare-versions: 3.6.0
-      ethereumjs-abi: 0.6.6
+      ethereumjs-abi: 0.6.8
       ethereumjs-blockstream: 2.0.7
       ethereumjs-util: 5.2.1
       find-versions: 2.0.0
@@ -3931,7 +3935,7 @@ packages:
     dependencies:
       '@ethersproject/abi': 5.4.0
       '@ethersproject/abstract-provider': 5.4.0
-      '@ethersproject/abstract-signer': 5.4.0
+      '@ethersproject/abstract-signer': 5.4.1
       '@ethersproject/address': 5.4.0
       '@ethersproject/bignumber': 5.4.1
       '@ethersproject/bytes': 5.4.0
@@ -13550,11 +13554,11 @@ packages:
     resolution: {integrity: sha512-5qwJ5n3YhjSpE6O/WEBXCAb2nagUgyagJ6C0lGUBWC4LjKp/rRzD+pwtDJ6KCiITFEAoX4eIrWOjRy0Sylq5Hg==}
     dev: false
 
-  /ethereumjs-abi/0.6.6:
-    resolution: {integrity: sha512-w8KubDsA/+OAuqtIR9RGsMcoZ5nhM8vxwjJAJvEIY+clhxA3BHoLG3+ClYQaQhD0n3mlDt3U5rBrmSVJvI3c8A==}
+  /ethereumjs-abi/0.6.8:
+    resolution: {integrity: sha512-Tx0r/iXI6r+lRsdvkFDlut0N08jWMnKRZ6Gkq+Nmw75lZe4e6o3EkSnkaBP5NF6+m5PTGAr9JP43N3LyeoglsA==}
     dependencies:
       bn.js: 4.12.0
-      ethereumjs-util: 5.2.1
+      ethereumjs-util: 6.2.1
     dev: false
 
   /ethereumjs-account/2.0.5:
