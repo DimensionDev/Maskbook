@@ -574,6 +574,7 @@
     "plugin_collectible_you": "crwdns5185:0crwdne5185:0",
     "plugin_collectible_done": "crwdns5187:0crwdne5187:0",
     "plugin_collectible_retry": "crwdns5189:0crwdne5189:0",
+    "plugin_collectible_get_more_token": "crwdns10805:0{{token}}crwdne10805:0",
     "plugin_collectible_sell": "crwdns5191:0crwdne5191:0",
     "plugin_collectible_checkout": "crwdns5193:0crwdne5193:0",
     "plugin_collectible_place_bid": "crwdns5195:0crwdne5195:0",
