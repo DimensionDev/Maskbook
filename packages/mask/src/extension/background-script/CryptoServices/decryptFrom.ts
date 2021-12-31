@@ -184,6 +184,7 @@ async function* decryptFromPayloadWithProgress_raw(
         const { publicKey: minePublic, privateKey: minePrivate } = mine
         const networkWorker = getNetworkWorkerUninitialized(whoAmI)
         try {
+            // eslint-disable-next-line
             if (version === -40) throw ''
             const gunNetworkHint = networkWorker!.gunNetworkHint
             const { keyHash, postHash } = await (
