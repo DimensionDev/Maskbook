@@ -68,17 +68,11 @@ export default function MaskPluginWrapper(props: PluginWrapperProps) {
     const personaConnectStatus = usePersonaConnectStatus()
     const { t } = useI18N()
 
-    const renderChildren = useMemo(() => {
-        return personaConnectStatus.connected && children
-    }, [personaConnectStatus, children])
-
-    const name = useMemo(() => {
-        return !personaConnectStatus.hasPersona
-            ? t('please_create_persona')
-            : !personaConnectStatus.connected
-            ? t('please_connect_persona')
-            : pluginName
-    }, [personaConnectStatus, pluginName])
+    const name = !personaConnectStatus.hasPersona
+        ? t('please_create_persona')
+        : !personaConnectStatus.connected
+        ? t('please_connect_persona')
+        : pluginName
 
     const actionButton = useMemo(() => {
         if (!personaConnectStatus.action) return null
@@ -89,7 +83,7 @@ export default function MaskPluginWrapper(props: PluginWrapperProps) {
                 {button}
             </Button>
         )
-    }, [personaConnectStatus])
+    }, [personaConnectStatus, t])
 
     const publisherInfo = useMemo(() => {
         if (!publisher) return null
@@ -121,7 +115,7 @@ export default function MaskPluginWrapper(props: PluginWrapperProps) {
                 </div>
                 <div className={classes.action}>{actionButton || action || publisherInfo}</div>
             </div>
-            {renderChildren ? <div className={classes.body}>{children}</div> : null}
+            {personaConnectStatus.connected && children ? <div className={classes.body}>{children}</div> : null}
         </div>
     )
     return <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />} children={inner} />
