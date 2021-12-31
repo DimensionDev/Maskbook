@@ -33,7 +33,7 @@ import { CollectibleTab } from '../types'
 import { MaskTextIcon } from '../../../resources/MaskIcon'
 import { resolveAssetLinkOnOpenSea, resolveCollectibleProviderName } from '../pipes'
 import { ActionBar } from './ActionBar'
-import { NonFungibleAssetProvider, useChainId } from '@masknet/web3-shared-evm'
+import { useChainId } from '@masknet/web3-shared-evm'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/FootnoteMenu'
 import { LoadingAnimation } from '@masknet/shared'
@@ -149,6 +149,11 @@ const useStyles = makeStyles()((theme) => {
 
 export interface CollectibleProps {}
 
+enum ShownProviderOptions {
+    OPENSEA = 'OpenSea',
+    RARIBLE = 'Rarible',
+}
+
 export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
@@ -156,16 +161,16 @@ export function Collectible(props: CollectibleProps) {
     const { asset, provider, tabIndex, setTabIndex } = CollectibleState.useContainer()
 
     //#region sync with settings
-    const collectibleProviderOptions = getEnumAsArray(NonFungibleAssetProvider)
+    const collectibleProviderOptions = getEnumAsArray(ShownProviderOptions)
     const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
-        currentNonFungibleAssetProviderSettings.value = option.value as NonFungibleAssetProvider
+        currentNonFungibleAssetProviderSettings.value = option.value as ShownProviderOptions
     }, [])
     //#endregion
 
     //#region provider switcher
     const CollectibleProviderSwitcher = useSettingsSwitcher(
         currentNonFungibleAssetProviderSettings,
-        getEnumAsArray(NonFungibleAssetProvider).map((x) => x.value),
+        getEnumAsArray(ShownProviderOptions).map((x) => x.value),
         resolveCollectibleProviderName,
     )
     //#endregion
@@ -337,7 +342,7 @@ export function Collectible(props: CollectibleProps) {
                     </Typography>
                 </Box>
             )}
-            {provider === NonFungibleAssetProvider.OPENSEA ? <ActionBar /> : null}
+            {provider === ShownProviderOptions.OPENSEA ? <ActionBar /> : null}
         </>
     )
 }
