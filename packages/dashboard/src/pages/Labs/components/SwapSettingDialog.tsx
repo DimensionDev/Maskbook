@@ -19,8 +19,8 @@ export interface SettingDialogProps {
 }
 export default function SwapSettingDialog({ open, onClose }: SettingDialogProps) {
     const ethOptions = [
-        { label: 'UniSwap V2', value: TradeProvider.UNISWAP_V2 },
-        { label: 'UniSwap V3', value: TradeProvider.UNISWAP_V3 },
+        { label: 'Uniswap V2', value: TradeProvider.UNISWAP_V2 },
+        { label: 'Uniswap V3', value: TradeProvider.UNISWAP_V3 },
         { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
         { label: 'SashimiSwap', value: TradeProvider.SASHIMISWAP },
         { label: '0x', value: TradeProvider.ZRX },
@@ -47,7 +47,7 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
     ]
 
     const arbitrumOptions = [
-        { label: 'UniSwap V3', value: TradeProvider.UNISWAP_V3 },
+        { label: 'Uniswap V3', value: TradeProvider.UNISWAP_V3 },
         { label: 'OpenOcean', value: TradeProvider.OPENOCEAN },
     ]
 

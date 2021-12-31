@@ -61,6 +61,6 @@ constructABI(NftHappyRedPacket as AbiItem[])
 constructABI(HappyRedPacketV4 as AbiItem[])
 constructABI(MaskBox as AbiItem[])
 constructABI(ERC20 as AbiItem[])
-constructABI(RouterV2ABI as AbiItem[]) // uniswap V2 like
+constructABI(RouterV2ABI as AbiItem[]) // Uniswap V2 like
 constructABI(SwapRouter as AbiItem[]) // uniswap V3 like
 //#endregion
