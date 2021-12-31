@@ -44,7 +44,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const { t } = useI18N()
 
     const pluginID = usePluginIDContext()
-    const plugin = useActivatedPlugin(pluginID)
+    const plugin = useActivatedPlugin(pluginID, 'any')
 
     const account = useAccount()
     const chainId = useChainId()

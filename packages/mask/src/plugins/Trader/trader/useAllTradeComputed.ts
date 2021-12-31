@@ -18,10 +18,13 @@ import { useTradeGasLimit as useDODOTradeGasLimit } from './dodo/useTradeGasLimi
 import { useTrade as useBancorTrade } from './bancor/useTrade'
 import { useTradeComputed as useBancorTradeComputed } from './bancor/useTradeComputed'
 import { useTradeGasLimit as useBancorTradeGasLimit } from './bancor/useTradeGasLimit'
+import { useTradeComputed as useOpenOceanTradeComputed } from './openocean/useTradeComputed'
+import { useTrade as useOpenOceanTrade } from './openocean/useTrade'
 import { TradeProvider } from '@masknet/public-api'
 import { useAvailableTraderProviders } from '../trending/useAvailableTraderProviders'
 import { useNativeTradeGasLimit } from './useNativeTradeGasLimit'
 import { TargetChainIdContext } from './useTargetChainIdContext'
+import type { TradeComputed, SwapRouteData } from '../types'
 
 export function useAllTradeComputed(
     inputAmount: string,

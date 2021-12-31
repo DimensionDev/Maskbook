@@ -9,6 +9,7 @@ import { TraderJoeIcon } from '../../../../resources/TraderJoeIcon'
 import { UniswapIcon } from '../../../../resources/UniswapIcon'
 import { ZRXIcon } from '../../../../resources/ZRXIcon'
 import { DODOIcon } from '../../../../resources/DODOIcon'
+import { OpenOceanIcon } from '../../../../resources/OpenOceanIcon'
 import { resolveTradeProviderName } from '../../pipes'
 
 const quickswapIcon = new URL('../../../../resources/quickswap.png', import.meta.url).toString()
