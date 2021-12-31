@@ -60,6 +60,16 @@ export function useClaimNftRedpacketCallback(id: string, totalAmount: number | u
                     })
                     resolve()
                 })
+                .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+                    if (claimState.type === TransactionStateType.CONFIRMED) return
+
+                    setClaimState({
+                        type: TransactionStateType.CONFIRMED,
+                        no: 0,
+                        receipt,
+                    })
+                    resolve()
+                })
                 .on(TransactionEventType.ERROR, (error: Error) => {
                     setClaimState({
                         type: TransactionStateType.FAILED,
@@ -68,7 +78,7 @@ export function useClaimNftRedpacketCallback(id: string, totalAmount: number | u
                     reject(error)
                 })
         })
-    }, [id, signedMsg, account, chainId, totalAmount])
+    }, [id, signedMsg, account, chainId, totalAmount, claimState])
 
     const resetCallback = useCallback(() => {
         setClaimState({
