@@ -15,8 +15,19 @@ import { EnhancedProfileTab } from '../../../plugins/Profile/SNSAdaptor/Enhanced
 
 export function injectEnhancedProfileTabAtTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())
-    startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<EnhancedProfileTabAtTwitter />)
+    let tabInjected = false
+    const contentWatcher = new MutationObserverWatcher(searchProfileTabPageSelector()).useForeach((node, key, meta) => {
+        const elePage = searchProfileTabPageSelector().evaluate()
+        if (elePage && !tabInjected) {
+            startWatch(watcher, signal)
+            createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
+                <EnhancedProfileTabAtTwitter />,
+            )
+            tabInjected = true
+        }
+    })
+
+    startWatch(contentWatcher, signal)
 }
 
 function getStyleProps() {
