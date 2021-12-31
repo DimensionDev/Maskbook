@@ -283,7 +283,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         }
 
         resetCallback()
-    }, [claimState, retryAvailability])
+    }, [claimState.type, retryAvailability])
 
     useEffect(() => {
         retryAvailability()
