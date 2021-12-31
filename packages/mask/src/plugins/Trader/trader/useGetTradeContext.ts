@@ -115,6 +115,11 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     TYPE: tradeProvider,
                     ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).BANCOR_EXCHANGE_PROXY_ADDRESS,
                 }
+            case TradeProvider.OPENOCEAN:
+                return {
+                    TYPE: tradeProvider,
+                    ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).BANCOR_EXCHANGE_PROXY_ADDRESS,
+                }
             case TradeProvider.TRADERJOE:
                 return {
                     TYPE: tradeProvider,

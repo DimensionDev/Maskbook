@@ -164,6 +164,8 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
         case TradeProvider.BANCOR:
             // TODO - Bancor analytics should be available with V3
             return ``
+        case TradeProvider.OPENOCEAN:
+            return 'https://openocean.finance/classic'
         case TradeProvider.TRADERJOE:
             return `https://analytics.traderjoexyz.com/pairs/${address}`
         default:

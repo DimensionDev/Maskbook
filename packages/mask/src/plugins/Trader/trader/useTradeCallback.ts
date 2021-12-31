@@ -96,6 +96,8 @@ export function useTradeCallback(
             return dodo
         case TradeProvider.BANCOR:
             return bancor
+        case TradeProvider.OPENOCEAN:
+            return openocean
         case TradeProvider.TRADERJOE:
             return uniswapV2Like
         default:

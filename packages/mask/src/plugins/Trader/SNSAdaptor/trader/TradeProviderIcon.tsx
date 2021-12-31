@@ -60,6 +60,8 @@ export function TradeProviderIcon(props: TradeProviderIconProps) {
             return <DODOIcon classes={{ root: classes.icon }} />
         case TradeProvider.BANCOR:
             return <BancorIcon classes={{ root: classes.icon }} />
+        case TradeProvider.OPENOCEAN:
+            return <OpenOceanIcon classes={{ root: classes.icon }} />
         case TradeProvider.TRADERJOE:
             return <TraderJoeIcon classes={{ root: classes.icon }} />
         default:

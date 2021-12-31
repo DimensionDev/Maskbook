@@ -174,6 +174,16 @@ export function useAllTradeComputed(
     const bancor = useBancorTradeComputed(bancor_.value ?? null, TradeStrategy.ExactIn, inputToken, outputToken)
     const bancorSwapEstimateGas = useBancorTradeGasLimit(bancor)
 
+    // openocean
+    const openocean_ = useOpenOceanTrade(TradeStrategy.ExactIn, inputAmount_, '0', inputToken, outputToken)
+    const openocean = useOpenOceanTradeComputed(
+        openocean_.value ?? null,
+        TradeStrategy.ExactIn,
+        inputToken,
+        outputToken,
+    )
+    const openoceanSwapEstimateGas = useDODOTradeGasLimit(openocean as TradeComputed<SwapRouteData> | null)
+
     // traderjoe
     const traderjoe_ = useUniswapV2Trade(
         TradeProvider.TRADERJOE,
@@ -197,6 +207,7 @@ export function useAllTradeComputed(
         { provider: TradeProvider.BALANCER, ...balancer_, value: balancer, gas: balancerSwapEstimateGas },
         { provider: TradeProvider.DODO, ...dodo_, value: dodo, gas: dodoSwapEstimateGas },
         { provider: TradeProvider.BANCOR, ...bancor_, value: bancor, gas: bancorSwapEstimateGas },
+        { provider: TradeProvider.OPENOCEAN, ...openocean_, value: openocean, gas: openoceanSwapEstimateGas },
         { provider: TradeProvider.TRADERJOE, ...traderjoe_, value: traderjoe, gas: traderjoeEstimateGas },
     ]
 
