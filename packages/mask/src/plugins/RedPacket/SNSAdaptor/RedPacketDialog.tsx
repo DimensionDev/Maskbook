@@ -194,7 +194,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         // storing the created red packet in DB, it helps retrieve red packet password later
         // save to the database early, otherwise red-packet would lose when close the tx dialog or
         //  web page before create successfully.
-        if (createState.type === TransactionStateType.WAIT_FOR_CONFIRMING && createState.hash) {
+        if (createState.type === TransactionStateType.HASH && createState.hash) {
             payload.current.txid = createState.hash
             const record: RedPacketRecord = {
                 id: createState.hash!,
