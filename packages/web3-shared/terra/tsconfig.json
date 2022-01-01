@@ -1,0 +1,10 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "../dist/terra",
+    "tsBuildInfoFile": "../dist/terra.tsbuildinfo"
+  },
+  "include": ["./", "./**/*.json"],
+  "references": [{ "path": "../../web3-kit" }]
+}

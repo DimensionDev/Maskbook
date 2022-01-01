@@ -22,6 +22,7 @@
     "@masknet/plugin-example": "workspace:*",
     "@masknet/plugin-file-service": "workspace:*",
     "@masknet/plugin-flow": "workspace:*",
+    "@masknet/plugin-terra": "workspace:*",
     "@masknet/plugin-rss3": "workspace:*",
     "@masknet/plugin-dao": "workspace:*",
     "@masknet/plugin-debugger": "workspace:*",

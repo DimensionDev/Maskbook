@@ -1,0 +1,17 @@
+{
+  "name": "@masknet/plugin-terra",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@masknet/icons": "workspace:*",
+    "@masknet/plugin-infra": "workspace:*",
+    "@masknet/shared": "workspace:*",
+    "@masknet/shared-base": "workspace:*",
+    "@masknet/theme": "workspace:*",
+    "@masknet/web3-shared-terra": "workspace:*",
+    "@terra-money/terra.js": "^3.0.2",
+    "bignumber.js": "^9.0.1",
+    "react-use": "^17.3.1"
+  }
+}

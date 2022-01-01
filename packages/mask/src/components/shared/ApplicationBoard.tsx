@@ -105,6 +105,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     const selectedWallet = useWallet()
     const currentPluginId = usePluginIDContext()
     const isFlow = currentPluginId === NetworkPluginID.PLUGIN_FLOW
+    const isTerra = currentPluginId === NetworkPluginID.PLUGIN_TERRA
 
     //#region Encrypted message
     const openEncryptedMessage = useCallback(
