@@ -9,9 +9,15 @@ import { InMemoryStorages, PersistentStorages } from '../utils/kv-storage'
 
 const PluginHost: Plugin.__Host.Host<Plugin.Dashboard.DashboardContext> = {
     enabled: {
+        // Due to MASK-391, we don't have a user configurable "disabled" plugin.
+        // All plugins are always loaded but it might be displayed in the invisible mode.
+        isEnabled: () => true,
+        events: new Emitter(),
+    },
+    minimalMode: {
         events: new Emitter(),
         isEnabled: (id) => {
-            return Services.Settings.getPluginEnabled(id)
+            return Services.Settings.getPluginMinimalModeEnabled(id)
         },
     },
     addI18NResource(plugin, resource) {
@@ -27,7 +33,8 @@ const PluginHost: Plugin.__Host.Host<Plugin.Dashboard.DashboardContext> = {
     },
 }
 setTimeout(() => {
-    Messages.events.pluginEnabled.on((id) => PluginHost.enabled.events.emit('enabled', id))
-    Messages.events.pluginDisabled.on((id) => PluginHost.enabled.events.emit('disabled', id))
+    Messages.events.pluginMinimalModeChanged.on(([id, status]) => {
+        PluginHost.minimalMode.events.emit(status ? 'enabled' : 'disabled', id)
+    })
     startPluginDashboard(PluginHost)
 })

@@ -1,5 +1,6 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
 import { regexMatch } from '../../../utils/utils'
+import { isMobileTwitter } from './isMobile'
 import { isCompose } from './postBox'
 
 type E = HTMLElement
@@ -224,11 +225,14 @@ export const searchAvatarSelectorImage = () =>
 export const searchAvatarOpenFileSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1)
 export const searchProfileSaveSelector = () => querySelector<E>('[data-testid="Profile_Save_Button"]')
 
-export const searchProfessionalButtonSelector = () =>
-    querySelector<E>('[data-testid="ProfessionalButton_Switch_To_Professional"]')
+export const searchProfessionalButtonSelector = () => querySelector<E>('a[href="/settings/professional_profile"]')
 
 export const searchProfileSetAvatarSelector = () =>
-    searchProfessionalButtonSelector().closest<E>(3).querySelector('div > div:nth-child(2) > div:nth-child(2)')
+    isMobileTwitter
+        ? searchProfessionalButtonSelector()
+              .closest<E>(4)
+              .querySelector('div > div:nth-child(2) >div > div:nth-child(2)')
+        : searchProfessionalButtonSelector().closest<E>(3).querySelector('div > div:nth-child(2) > div:nth-child(2)')
 //#endregion
 
 //#region avatar selector

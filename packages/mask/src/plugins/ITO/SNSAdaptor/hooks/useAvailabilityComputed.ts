@@ -1,5 +1,6 @@
 import { compact } from 'lodash-unified'
 import { useChainId, useITOConstants } from '@masknet/web3-shared-evm'
+import isAfter from 'date-fns/isAfter'
 import { JSON_PayloadInMask, JSON_PayloadFromChain, ITO_Status } from '../../types'
 import { useAvailability } from './useAvailability'
 import { useQualification } from './useQualification'
@@ -56,7 +57,7 @@ export function useAvailabilityComputed(payload: JSON_PayloadInMask | JSON_Paylo
             unlockTime,
             qualificationAddress,
             hasLockTime,
-            isUnlocked: availability.unlocked,
+            isUnlocked: isAfter(Date.now(), unlockTime),
             canFetch: payload.chain_id === chainId,
             canSwap: isStarted && !isExpired && !isCompleted && payload.chain_id === chainId && payload.password,
             canRefund: isExpired && payload.chain_id === chainId,

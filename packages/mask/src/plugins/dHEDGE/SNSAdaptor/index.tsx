@@ -6,12 +6,7 @@ import { base } from '../base'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { PoolView } from '../UI/PoolView'
 import { InvestDialog } from '../UI/InvestDialog'
-import { escapeRegExp } from 'lodash-unified'
-import { BASE_URL, STAGING_URL } from '../constants'
-
-function createMatchLink() {
-    return new RegExp(`(${escapeRegExp(BASE_URL)}|${escapeRegExp(STAGING_URL)})/pool/(\\w+)`)
-}
+import { createMatchLink } from '../constants'
 
 function getPoolFromLink(link: string) {
     const matchLink = createMatchLink()
