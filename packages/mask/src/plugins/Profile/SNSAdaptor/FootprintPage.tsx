@@ -20,7 +20,8 @@ const useStyles = makeStyles()((theme) => ({
 
 const getFootprintLink = (label: string, footprint: GeneralAssetWithTags) => {
     const { platform, identity, id, type } = footprint
-    return urlcat(`https://${label}.bio/singlefootprint/:platform/:identity/:id/:type`, {
+    const domain = label.endsWith('.rss3') ? label : `${label}.rss3`
+    return urlcat(`https://${domain}.bio/singlefootprint/:platform/:identity/:id/:type`, {
         platform,
         identity,
         id,

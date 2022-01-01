@@ -33,9 +33,9 @@ function getAddressName(currentTag: PageTags, addressNames: AddressName[]) {
         case PageTags.NFTTag:
             return addressENS || addressUNS || addressRSS3 || addressLiteral || addressGUN || addressTheGraph
         case PageTags.DonationTag:
-            return addressRSS3 || addressENS || addressUNS || addressLiteral || addressGUN || addressTheGraph
+            return addressRSS3 || addressENS || addressUNS
         case PageTags.FootprintTag:
-            return addressRSS3 || addressENS || addressUNS || addressLiteral || addressGUN || addressTheGraph
+            return addressRSS3 || addressENS || addressUNS
         case PageTags.DAOTag:
             return
         default:

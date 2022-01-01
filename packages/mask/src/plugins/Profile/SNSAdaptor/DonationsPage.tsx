@@ -9,7 +9,8 @@ import { useI18N } from '../../../utils'
 
 const getDonationLink = (label: string, donation: GeneralAssetWithTags) => {
     const { platform, identity, id, type } = donation
-    return urlcat(`https://${label}.bio/singlegitcoin/:platform/:identity/:id/:type`, {
+    const domain = label.endsWith('.rss3') ? label : `${label}.rss3`
+    return urlcat(`https://${domain}.bio/singlegitcoin/:platform/:identity/:id/:type`, {
         platform,
         identity,
         id,
