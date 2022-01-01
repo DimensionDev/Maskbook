@@ -21,7 +21,7 @@ import { Trans } from 'react-i18next'
 const useStyles = makeStyles()({
     root: {
         '& > *': {
-            marginBottom: `10px !important`,
+            marginBottom: '10px !important',
         },
     },
     flex: {
@@ -36,7 +36,7 @@ const useStyles = makeStyles()({
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center',
-        '& > *': { marginLeft: `12px !important` },
+        '& > *': { marginLeft: '12px !important' },
     },
 })
 

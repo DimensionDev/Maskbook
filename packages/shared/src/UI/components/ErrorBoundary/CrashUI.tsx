@@ -52,7 +52,7 @@ Error stack:
         const url = new URLSearchParams()
         url.set('title', reportTitle)
         url.set('body', reportBody)
-        return `https://github.com/DimensionDev/Maskbook/issues/new?` + url.toString()
+        return 'https://github.com/DimensionDev/Maskbook/issues/new?' + url.toString()
     }, [reportBody, reportTitle])
     return (
         <Root>

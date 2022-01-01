@@ -159,10 +159,10 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             return `https://pancakeswap.info/pool/${address}`
         case TradeProvider.BANCOR:
             // TODO - Bancor analytics should be available with V3
-            return ``
+            return ''
         case TradeProvider.OPENOCEAN:
             // TODO - OpenOcean
-            return ``
+            return ''
         default:
             unreachable(tradeProvider)
     }

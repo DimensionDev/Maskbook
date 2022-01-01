@@ -91,7 +91,7 @@ const LogoItem = styled(MuiListItem)(({ theme }) => ({
 })) as any as typeof MuiListItem
 
 const ItemIcon = styled(ListItemIcon)(({ theme }) => ({
-    [`& svg`]: {
+    ['& svg']: {
         fontSize: 36,
     },
 }))
