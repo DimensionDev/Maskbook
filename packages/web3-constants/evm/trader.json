@@ -685,17 +685,17 @@
         "Rinkeby": "",
         "Kovan": "",
         "Gorli": "",
-        "BSC": "",
+        "BSC": "0x31aFfd875e9f68cd6Cd12Cee8943566c9A4bBA13",
         "BSCT": "",
-        "Matic": "",
+        "Matic": "0xE3BD06c7ac7E1CeB17BdD2E5BA83E40D1515AF2a",
         "Mumbai": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": "",
+        "xDai": "0xCB018587dA9590A18f49fFE2b85314c33aF3Ad3B",
         "Fuse": "0x779407e40dad9d70ba5adc30e45cc3494ec71ad2",
         "Fuse_Sparknet": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "0x7Ba73c99e6f01a37f3e33854c8F544BbbadD3420"
     },
     "ELKFINANCE_THEGRAPH": {
         "Mainnet": "",
@@ -721,17 +721,17 @@
         "Rinkeby": "",
         "Kovan": "",
         "Gorli": "",
-        "BSC": "",
+        "BSC": "0x84845e7ccb283dec564acfcd3d9287a491dec6d675705545a2ab8be22ad78f31",
         "BSCT": "",
-        "Matic": "",
+        "Matic": "0x84845e7ccb283dec564acfcd3d9287a491dec6d675705545a2ab8be22ad78f31",
         "Mumbai": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": "",
+        "xDai": "0x84845e7ccb283dec564acfcd3d9287a491dec6d675705545a2ab8be22ad78f31",
         "Fuse": "0x84845e7ccb283dec564acfcd3d9287a491dec6d675705545a2ab8be22ad78f31",
         "Fuse_Sparknet": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "0x84845e7ccb283dec564acfcd3d9287a491dec6d675705545a2ab8be22ad78f31"
     },
     "ELKFINANCE_ROUTER_ADDRESS": {
         "Mainnet": "",
@@ -739,16 +739,16 @@
         "Rinkeby": "",
         "Kovan": "",
         "Gorli": "",
-        "BSC": "",
+        "BSC": "0xA63B831264183D755756ca9AE5190fF5183d65D6",
         "BSCT": "",
-        "Matic": "",
+        "Matic": "0xf38a7A7Ac2D745E2204c13F824c00139DF831FFf",
         "Mumbai": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": "",
+        "xDai": "0xe5759714998e8B50A33c7333C04C2d02e5dcE77f",
         "Fuse": "0x9a5De8C973c2f64f0f518DE581BcC2aa2dF8A621",
         "Fuse_Sparknet": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "0x4D2cf285a519261F30b4d9c2c344Baf260d65Fa2"
     }
 }
