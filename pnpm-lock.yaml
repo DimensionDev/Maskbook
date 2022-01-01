@@ -10,7 +10,7 @@ importers:
     specifiers:
       '@commitlint/cli': ^16.0.0
       '@commitlint/config-conventional': ^16.0.0
-      '@dimensiondev/eslint-plugin': ^0.0.1-20220101061925-045d7e4
+      '@dimensiondev/eslint-plugin': ^0.0.1-20211222115249-a29dc76
       '@dimensiondev/kit': 0.0.0-20211215044858-27d964f
       '@dimensiondev/patch-package': ^6.5.0
       '@emotion/cache': ^11.7.1
@@ -89,7 +89,7 @@ importers:
     devDependencies:
       '@commitlint/cli': 16.0.0
       '@commitlint/config-conventional': 16.0.0
-      '@dimensiondev/eslint-plugin': 0.0.1-20220101061925-045d7e4_eslint@8.5.0
+      '@dimensiondev/eslint-plugin': 0.0.1-20211222115249-a29dc76_eslint@8.5.0
       '@dimensiondev/patch-package': 6.5.0
       '@jest/globals': 27.4.4
       '@magic-works/i18n-codegen': 0.0.6_typescript@4.6.0-dev.20211202
@@ -3431,12 +3431,13 @@ packages:
       '@msgpack/msgpack': 1.12.2
     dev: false
 
-  /@dimensiondev/eslint-plugin/0.0.1-20220101061925-045d7e4_eslint@8.5.0:
-    resolution: {integrity: sha512-8Khq+pwwVswLl2cQkt/FfHIqSdHONyvFb1bEH0jM+1l8m+Ga/knfs6WHU9lpsNxLJxLycoX+oRgzfKGhNBMl0w==, tarball: download/@dimensiondev/eslint-plugin/0.0.1-20220101061925-045d7e4/a63afd2a06038c24704cc20a59e22c730e9d2429cb5fb1640252d8024296e258}
+  /@dimensiondev/eslint-plugin/0.0.1-20211222115249-a29dc76_eslint@8.5.0:
+    resolution: {integrity: sha512-Fk/QkniAX7dCrmgCGg+pJtr1h1aVKKo4pqmzLWHd2U4ojdzSud7UQAkBVms33eX+zgpeenvKaXTg0AcpoOMs/Q==, tarball: download/@dimensiondev/eslint-plugin/0.0.1-20211222115249-a29dc76/22627fc1a5d1a77af829212c8926c8c5dfbce05fef80b61e2aaba1a8cac037d6}
     peerDependencies:
-      eslint: '>=6'
+      eslint: '>= 8'
     dependencies:
       eslint: 8.5.0
+      lodash.set: 4.3.2
     dev: true
 
   /@dimensiondev/holoflows-kit/0.9.0-20210902104757-7c3d0d0:
@@ -17753,7 +17754,6 @@ packages:
 
   /lodash.set/4.3.2:
     resolution: {integrity: sha1-2HV7HagH3eJIFrDWqEvqGnYjCyM=}
-    dev: false
 
   /lodash.unescape/4.0.1:
     resolution: {integrity: sha1-vyJJiGzlFM2hEvrpIYzcBlIR/Jw=}
