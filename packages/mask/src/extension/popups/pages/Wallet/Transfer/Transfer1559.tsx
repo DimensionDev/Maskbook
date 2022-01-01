@@ -315,7 +315,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     //#region set default gasLimit
     useUpdateEffect(() => {
         if (!minGasLimit) return
-        methods.setValue('gasLimit', `${minGasLimit}`)
+        methods.setValue('gasLimit', minGasLimit.toString())
         setMinGasLimitContext(minGasLimit)
     }, [minGasLimit, methods.setValue])
     //#endregion

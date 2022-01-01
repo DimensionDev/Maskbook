@@ -65,7 +65,7 @@ const ListItemLink = styled(ListItemLinkUnStyled)(({ theme }) => {
             color: MaskColorVar.textLink,
             backgroundColor: theme.palette.background.default,
             position: 'relative',
-            [`${listItemIconClasses.root}`]: {
+            [listItemIconClasses.root]: {
                 color: MaskColorVar.textLink,
             },
             '&:after': {
