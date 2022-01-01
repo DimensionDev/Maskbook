@@ -110,6 +110,7 @@ const balancerSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvi
 const dodoSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+dodo`, '')
 const bancorSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+bancor`, '')
 const netswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+netswap`, '')
+const openoceanSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+openocean`, '')
 
 /**
  * The general settings of specific tarde provider
@@ -138,6 +139,8 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return bancorSettings
         case TradeProvider.NETSWAP:
             return netswapSettings
+        case TradeProvider.OPENOCEAN:
+            return openoceanSettings
         default:
             unreachable(tradeProvider)
     }
