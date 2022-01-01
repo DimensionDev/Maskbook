@@ -108,6 +108,8 @@ export function useTradeCallback(
             return openocean
         case TradeProvider.FUSEFI:
             return uniswapV2Like
+        case TradeProvider.ELKFINANCE:
+            return uniswapV2Like
         default:
             if (provider) unreachable(provider)
             return []

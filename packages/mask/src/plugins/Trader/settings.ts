@@ -111,6 +111,7 @@ const dodoSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+
 const bancorSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+bancor`, '')
 const openoceanSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+openocean`, '')
 const fusefiSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+fusefi`, '')
+const elkfinanceSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+elkfinance`, '')
 
 /**
  * The general settings of specific tarde provider
@@ -141,6 +142,8 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return openoceanSettings
         case TradeProvider.FUSEFI:
             return fusefiSettings
+        case TradeProvider.ELKFINANCE:
+            return elkfinanceSettings
         default:
             unreachable(tradeProvider)
     }

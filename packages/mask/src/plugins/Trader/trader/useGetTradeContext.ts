@@ -13,6 +13,10 @@ import {
     SUSHISWAP_CUSTOM_BASES,
     UNISWAP_BASE_AGAINST_TOKENS,
     UNISWAP_CUSTOM_BASES,
+    FUSEFI_BASE_AGAINST_TOKENS,
+    FUSEFI_CUSTOM_BASES,
+    ELKFINANCE_CUSTOM_BASES,
+    ELKFINANCE_BASE_AGAINST_TOKENS,
 } from '../constants'
 import { unreachable } from '@dimensiondev/kit'
 import { TargetChainIdContext } from './useTargetChainIdContext'
@@ -93,6 +97,30 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     AGAINST_TOKENS: PANCAKESWAP_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: PANCAKESWAP_CUSTOM_BASES,
+                }
+            case TradeProvider.FUSEFI:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: getTraderConstants(chainId).FUSEFI_THEGRAPH,
+                    INIT_CODE_HASH: getTraderConstants(chainId).FUSEFI_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).FUSEFI_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: getTraderConstants(chainId).FUSEFI_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: FUSEFI_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: FUSEFI_CUSTOM_BASES,
+                }
+            case TradeProvider.ELKFINANCE:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: getTraderConstants(chainId).ELKFINANCE_THEGRAPH,
+                    INIT_CODE_HASH: getTraderConstants(chainId).ELKFINANCE_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).ELKFINANCE_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: getTraderConstants(chainId).ELKFINANCE_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: ELKFINANCE_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: ELKFINANCE_CUSTOM_BASES,
                 }
             case TradeProvider.ZRX:
                 return {

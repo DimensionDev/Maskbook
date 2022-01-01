@@ -63,14 +63,9 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
     const celoOptions = [{ label: 'SushiSwap', value: TradeProvider.SUSHISWAP }]
 
     const fuseOptions = [
-        {
-            label: 'SushiSwap',
-            value: TradeProvider.SUSHISWAP,
-        },
-        {
-            label: 'Fusefi',
-            value: TradeProvider.FUSEFI,
-        },
+        { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
+        { label: 'Fusefi', value: TradeProvider.FUSEFI },
+        { label: 'ElkFinance', value: TradeProvider.ELKFINANCE },
     ]
 
     const t = useDashboardI18N()

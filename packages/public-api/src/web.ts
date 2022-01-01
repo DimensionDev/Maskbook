@@ -215,6 +215,7 @@ export enum TradeProvider {
     BANCOR = 9,
     OPENOCEAN = 10,
     FUSEFI = 11,
+    ELKFINANCE = 12,
 }
 /** Supported language settings */
 export enum LanguageOptions {
