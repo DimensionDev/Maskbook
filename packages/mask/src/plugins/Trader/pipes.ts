@@ -58,6 +58,7 @@ export const resolveTradeProviderName = createLookupTableResolver<TradeProvider,
         [TradeProvider.BANCOR]: 'Bancor',
         [TradeProvider.NETSWAP]: 'NetSwap',
         [TradeProvider.OPENOCEAN]: 'OpenOcean',
+        [TradeProvider.TETHYS]: 'Tethys',
     },
     (tradeProvider) => {
         throw new Error(`Unknown provider type: ${tradeProvider}`)
@@ -110,6 +111,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
             return 'https://netswap.io/#/swap'
         case TradeProvider.OPENOCEAN:
             return 'https://openocean.finance/classic'
+        case TradeProvider.TETHYS:
+            return 'http://tethys.finance'
         default:
             unreachable(tradeProvider)
     }
@@ -170,6 +173,9 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
         case TradeProvider.NETSWAP:
             return `https://info.netswap.io/pair/${address}`
         case TradeProvider.OPENOCEAN:
+            // TODO - OpenOcean
+            return ``
+        case TradeProvider.TETHYS:
             // TODO - OpenOcean
             return ``
         default:
@@ -262,6 +268,7 @@ export const resolveZrxTradePoolName = createLookupTableResolver<ZrxTradePool, s
         [ZrxTradePool.WaultSwap]: 'WaultSwap',
         [ZrxTradePool.xSigma]: 'xSigma',
         [ZrxTradePool.NetSwap]: 'NetSwap',
+        [ZrxTradePool.Tethys]: 'NetSwap',
     },
     'Unknown',
 )

@@ -15,6 +15,8 @@ import {
     UNISWAP_CUSTOM_BASES,
     NETSWAP_BASE_AGAINST_TOKENS,
     NETSWAP_CUSTOM_BASES,
+    TETHYS_BASE_AGAINST_TOKENS,
+    TETHYS_CUSTOM_BASES,
 } from '../constants'
 import { unreachable } from '@dimensiondev/kit'
 import { TargetChainIdContext } from './useTargetChainIdContext'
@@ -96,6 +98,30 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: PANCAKESWAP_CUSTOM_BASES,
                 }
+            case TradeProvider.NETSWAP:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: getTraderConstants(chainId).NETSWAP_THEGRAPH,
+                    INIT_CODE_HASH: getTraderConstants(chainId).NETSWAP_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).NETSWAP_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: getTraderConstants(chainId).NETSWAP_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: NETSWAP_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: NETSWAP_CUSTOM_BASES,
+                }
+            case TradeProvider.TETHYS:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: getTraderConstants(chainId).TETHYS_THEGRAPH,
+                    INIT_CODE_HASH: getTraderConstants(chainId).TETHYS_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).TETHYS_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: getTraderConstants(chainId).TETHYS_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: TETHYS_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: TETHYS_CUSTOM_BASES,
+                }
             case TradeProvider.ZRX:
                 return {
                     TYPE: tradeProvider,
@@ -114,18 +140,6 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                 return {
                     TYPE: tradeProvider,
                     ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).BANCOR_EXCHANGE_PROXY_ADDRESS,
-                }
-            case TradeProvider.NETSWAP:
-                return {
-                    TYPE: tradeProvider,
-                    IS_UNISWAP_V2_LIKE: true,
-                    GRAPH_API: getTraderConstants(chainId).NETSWAP_THEGRAPH,
-                    INIT_CODE_HASH: getTraderConstants(chainId).NETSWAP_INIT_CODE_HASH,
-                    ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).NETSWAP_ROUTER_ADDRESS,
-                    FACTORY_CONTRACT_ADDRESS: getTraderConstants(chainId).NETSWAP_FACTORY_ADDRESS,
-                    AGAINST_TOKENS: NETSWAP_BASE_AGAINST_TOKENS,
-                    ADDITIONAL_TOKENS: {},
-                    CUSTOM_TOKENS: NETSWAP_CUSTOM_BASES,
                 }
             case TradeProvider.OPENOCEAN:
                 return {

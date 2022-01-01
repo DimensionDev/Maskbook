@@ -15,6 +15,8 @@ import {
     UNISWAP_CUSTOM_BASES,
     NETSWAP_BASE_AGAINST_TOKENS,
     NETSWAP_CUSTOM_BASES,
+    TETHYS_CUSTOM_BASES,
+    TETHYS_BASE_AGAINST_TOKENS,
 } from '../constants'
 import type { TradeContext as TradeContext_ } from '../types'
 import { TargetChainIdContext } from './useTargetChainIdContext'
@@ -108,6 +110,18 @@ export function useTradeContext(tradeProvider: TradeProvider) {
                     AGAINST_TOKENS: NETSWAP_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: NETSWAP_CUSTOM_BASES,
+                }
+            case TradeProvider.TETHYS:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: getTraderConstants(chainId).TETHYS_THEGRAPH,
+                    INIT_CODE_HASH: getTraderConstants(chainId).TETHYS_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).TETHYS_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: getTraderConstants(chainId).TETHYS_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: TETHYS_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: TETHYS_CUSTOM_BASES,
                 }
             case TradeProvider.ZRX:
                 return {

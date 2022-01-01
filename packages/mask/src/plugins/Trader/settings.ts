@@ -110,6 +110,7 @@ const balancerSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvi
 const dodoSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+dodo`, '')
 const bancorSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+bancor`, '')
 const netswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+netswap`, '')
+const tethysSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+tethys`, '')
 const openoceanSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+openocean`, '')
 
 /**
@@ -139,6 +140,8 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return bancorSettings
         case TradeProvider.NETSWAP:
             return netswapSettings
+        case TradeProvider.TETHYS:
+            return tethysSettings
         case TradeProvider.OPENOCEAN:
             return openoceanSettings
         default:

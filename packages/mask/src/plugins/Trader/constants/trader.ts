@@ -43,6 +43,9 @@ export const NFTX = createERC20Tokens('NFTX_ADDRESS', 'NFTX', 'NFTX', 18)
 export const STETH = createERC20Tokens('stETH_ADDRESS', 'stakedETH', 'stETH', 18)
 export const CUSD = createERC20Tokens('cUSD_ADDRESS', 'Celo Dollar', 'cUSD', 18)
 export const CEUR = createERC20Tokens('cEUR_ADDRESS', 'Celo Euro', 'cEUR', 18)
+export const NETT = createERC20Tokens('NETT_ADDRESS', 'Netswap Token', 'NETT', 18)
+export const METIS = createERC20Tokens('METIS_ADDRESS', 'Metis Token', 'METIS', 18)
+export const TETHYS = createERC20Tokens('TETHYS_ADDRESS', 'Tethys', 'TETHYS', 18)
 
 export const WNATIVE = createERC20Tokens(
     'WNATIVE_ADDRESS',

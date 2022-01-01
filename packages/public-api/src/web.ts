@@ -215,6 +215,7 @@ export enum TradeProvider {
     BANCOR = 9,
     NETSWAP = 11,
     OPENOCEAN = 10,
+    TETHYS = 12,
 }
 /** Supported language settings */
 export enum LanguageOptions {

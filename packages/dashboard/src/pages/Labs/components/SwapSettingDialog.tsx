@@ -65,6 +65,7 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
     const metisOptions = [
         { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
         { label: 'NetSwap', value: TradeProvider.NETSWAP },
+        { label: 'Tethys', value: TradeProvider.TETHYS },
     ]
 
     const t = useDashboardI18N()

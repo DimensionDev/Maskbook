@@ -106,6 +106,8 @@ export function useTradeCallback(
             return bancor
         case TradeProvider.NETSWAP:
             return uniswapV2Like
+        case TradeProvider.TETHYS:
+            return uniswapV2Like
         case TradeProvider.OPENOCEAN:
             return openocean
         default:

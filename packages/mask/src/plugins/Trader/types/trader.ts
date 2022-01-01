@@ -67,6 +67,7 @@ export enum ZrxTradePool {
     WaultSwap = 'WaultSwap',
     xSigma = 'xSigma',
     NetSwap = 'NetSwap',
+    Tethys = 'Tethys',
 }
 
 export interface TradeComputed<T = unknown> {
