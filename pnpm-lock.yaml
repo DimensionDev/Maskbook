@@ -3433,12 +3433,15 @@ packages:
 
   /@dimensiondev/eslint-plugin/0.0.1-20211222115249-7984aa5_eslint@8.5.0:
     resolution: {integrity: sha512-CcPs3cioDRhYs0Gpz+F4TKfL+rsgdulFd3zaBNU06Rq522opZX9VmpcrCDuW4f1EHNYKYIj1wEVGvBvSlbCMAg==, tarball: download/@dimensiondev/eslint-plugin/0.0.1-20211222115249-7984aa5/2641dcbec68ae0b51f1dc91e9c92abe14be0258740198e2c12d24888a5f1f338}
+    engines: {node: '>= 14'}
     peerDependencies:
       eslint: '>= 8'
     dependencies:
       eslint: 8.5.0
       lodash.set: 4.3.2
     dev: true
+    bundledDependencies:
+      - lodash.set
 
   /@dimensiondev/holoflows-kit/0.9.0-20210902104757-7c3d0d0:
     resolution: {integrity: sha512-Vk22WLOTW20OECTHdLGulGmDsTFguURQYB9Oq8S+eDVrmWHCxKD/N+4OU5uCFrWCkqjl/n7vec3fVWUSunpBeA==, tarball: download/@dimensiondev/holoflows-kit/0.9.0-20210902104757-7c3d0d0/bce56871014284e7863fc97177b316aec94f6dfddf627312e690958400e958e8}
