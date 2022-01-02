@@ -19,9 +19,9 @@ const AnimatePic = () => {
     const [start, setStart] = useState(true)
 
     const user = useUser()
-    const userMeta = useEssay(user, start)
     const visitor = useCurrentVisitingUser()
-    const visitorMeta = useEssay(visitor, start)
+    //visitor cannot get address, but user can
+    const visitorMeta = useEssay(user.userId === visitor.userId ? user : visitor, start)
     const defMeta = useDefaultEssay(visitor)
 
     const [showMeta, setShowMeta] = useState<ShowMeta | undefined>(undefined)
@@ -29,8 +29,8 @@ const AnimatePic = () => {
     const [infoShow, setInfoShow] = useState(false)
 
     useEffect(() => {
-        setShowMeta((user.userId === visitor.userId ? userMeta : visitorMeta) ?? defMeta)
-    }, [userMeta, visitorMeta, defMeta])
+        setShowMeta(visitorMeta ?? defMeta)
+    }, [visitor, visitorMeta, defMeta])
 
     const handleClose = () => setShow(false)
     const handleMouseEnter = () => setInfoShow(true)
