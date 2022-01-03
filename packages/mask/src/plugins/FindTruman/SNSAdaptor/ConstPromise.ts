@@ -14,7 +14,7 @@ export default class FindTrumanConstPromise {
         executor(this.resolve, this.reject)
     }
 
-    initialized: boolean = false
+    initialized = false
     status: Status = Status.PENDING
 
     value?: FindTrumanConst
