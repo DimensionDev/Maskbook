@@ -59,6 +59,7 @@
         "@dimensiondev/no-unsafe-location": "error",
         "@dimensiondev/prefer-early-return": "error",
         "@typescript-eslint/await-thenable": "error",
+        "@typescript-eslint/no-base-to-string": "off",
         "@typescript-eslint/no-for-in-array": "error",
         "@typescript-eslint/no-implied-eval": "error",
         "@typescript-eslint/no-inferrable-types": "error",
@@ -72,6 +73,9 @@
         "@typescript-eslint/prefer-nullish-coalescing": "error",
         "@typescript-eslint/prefer-optional-chain": "error",
         "@typescript-eslint/prefer-reduce-type-parameter": "error",
-        "@typescript-eslint/prefer-string-starts-ends-with": "error"
+        "@typescript-eslint/prefer-regexp-exec": "off",
+        "@typescript-eslint/prefer-string-starts-ends-with": "error",
+        "@typescript-eslint/restrict-plus-operands": "off",
+        "@typescript-eslint/restrict-template-expressions": "off"
     }
 }
