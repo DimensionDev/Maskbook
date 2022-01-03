@@ -11,7 +11,7 @@ import type { ChainId } from '../types'
 
 export function useERC20TokensDetailedFromTokenLists(
     lists?: string[],
-    keyword: string = '',
+    keyword = '',
     additionalTokens: (ERC20TokenDetailed | NativeTokenDetailed)[] = [],
     targetChainId?: ChainId,
 ): AsyncStateRetry<(ERC20TokenDetailed | NativeTokenDetailed)[]> {

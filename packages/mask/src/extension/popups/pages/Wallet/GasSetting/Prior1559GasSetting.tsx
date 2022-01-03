@@ -213,19 +213,17 @@ export const Prior1559GasSetting = memo(() => {
 
     const [{ loading }, handleConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
-            if (value) {
-                const config = value.payload.params.map((param) => ({
-                    ...param,
-                    gas: toHex(new BigNumber(data.gasLimit).toString()),
-                    gasPrice: toHex(formatGweiToWei(data.gasPrice).toString()),
-                }))
-
-                await WalletRPC.updateUnconfirmedRequest({
-                    ...value.payload,
-                    params: config,
-                })
-                history.goBack()
-            }
+            if (!value) return
+            const config = value.payload.params.map((param) => ({
+                ...param,
+                gas: toHex(new BigNumber(data.gasLimit).toString()),
+                gasPrice: toHex(formatGweiToWei(data.gasPrice).toString()),
+            }))
+            await WalletRPC.updateUnconfirmedRequest({
+                ...value.payload,
+                params: config,
+            })
+            history.goBack()
         },
         [value],
     )

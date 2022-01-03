@@ -118,17 +118,16 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
 
         //#region If the selected changed, set the value on the option to the form data
         useEffect(() => {
-            if (selectedGasOption !== null) {
-                clearErrors(['maxPriorityFeePerGas', 'maxFeePerGas'])
-                setValue(
-                    'maxPriorityFeePerGas',
-                    new BigNumber(currentGasOption?.content?.suggestedMaxPriorityFeePerGas ?? 0).toString() ?? '',
-                )
-                setValue(
-                    'maxFeePerGas',
-                    new BigNumber(currentGasOption?.content?.suggestedMaxFeePerGas ?? 0).toString() ?? '',
-                )
-            }
+            if (selectedGasOption === null) return
+            clearErrors(['maxPriorityFeePerGas', 'maxFeePerGas'])
+            setValue(
+                'maxPriorityFeePerGas',
+                new BigNumber(currentGasOption?.content?.suggestedMaxPriorityFeePerGas ?? 0).toString() ?? '',
+            )
+            setValue(
+                'maxFeePerGas',
+                new BigNumber(currentGasOption?.content?.suggestedMaxFeePerGas ?? 0).toString() ?? '',
+            )
         }, [currentGasOption, setValue, options])
         //#endregion
 
