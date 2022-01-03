@@ -87,13 +87,13 @@ export function getChainIdFromName(name: string) {
 export const getChainIdFromNetworkType = createLookupTableResolver<NetworkType, ChainId>(
     {
         [NetworkType.Ethereum]: ChainId.Mainnet,
-        [NetworkType.Binance]: ChainId.BSC,
-        [NetworkType.Polygon]: ChainId.Matic,
         [NetworkType.Arbitrum]: ChainId.Arbitrum,
-        [NetworkType.xDai]: ChainId.xDai,
         [NetworkType.Avalanche]: ChainId.Avalanche,
+        [NetworkType.Binance]: ChainId.BSC,
         [NetworkType.Celo]: ChainId.Celo,
         [NetworkType.Fantom]: ChainId.Fantom,
+        [NetworkType.Polygon]: ChainId.Matic,
+        [NetworkType.xDai]: ChainId.xDai,
     },
     ChainId.Mainnet,
 )
@@ -101,13 +101,13 @@ export const getChainIdFromNetworkType = createLookupTableResolver<NetworkType, 
 export function getNetworkTypeFromChainId(chainId: ChainId, value?: boolean) {
     const map: Record<NetworkType, string> = {
         [NetworkType.Ethereum]: 'ETH',
-        [NetworkType.Binance]: 'BSC',
-        [NetworkType.Polygon]: 'Polygon',
         [NetworkType.Arbitrum]: 'Arbitrum',
-        [NetworkType.xDai]: 'xDai',
         [NetworkType.Avalanche]: 'Avalanche',
+        [NetworkType.Binance]: 'BSC',
         [NetworkType.Celo]: 'CELO',
         [NetworkType.Fantom]: 'FTM',
+        [NetworkType.Polygon]: 'Polygon',
+        [NetworkType.xDai]: 'xDai',
     }
     const chainDetailed = getChainDetailed(chainId)
     const entry = Object.entries(map).find(([key, value]) => {

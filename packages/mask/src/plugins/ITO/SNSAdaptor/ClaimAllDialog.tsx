@@ -381,6 +381,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                 ChainId.Arbitrum,
                                 ChainId.xDai,
                                 ChainId.Fantom,
+                                ChainId.Avalanche,
                             ]}
                         />
                     </div>
