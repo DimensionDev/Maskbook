@@ -66,12 +66,11 @@ export const ContactTableRow = memo<ContactTableRowProps>(({ network, contact, i
     const theme = useTheme().palette.mode
 
     const handleClickStar = useCallback(async () => {
-        if (currentPersona) {
-            contact.favorite
-                ? await removeContactFromFavorite(contact.identifier, currentPersona)
-                : await addContactToFavorite(contact.identifier, currentPersona)
-            onReset()
-        }
+        if (!currentPersona) return
+        contact.favorite
+            ? await removeContactFromFavorite(contact.identifier, currentPersona)
+            : await addContactToFavorite(contact.identifier, currentPersona)
+        onReset()
     }, [contact, currentPersona, onReset])
 
     const [{ loading }, handleClickInvite] = useAsyncFn(async () => {

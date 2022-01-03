@@ -65,7 +65,7 @@ const ListItemLink = styled(ListItemLinkUnStyled)(({ theme }) => {
             color: MaskColorVar.textLink,
             backgroundColor: theme.palette.background.default,
             position: 'relative',
-            [`${listItemIconClasses.root}`]: {
+            [listItemIconClasses.root]: {
                 color: MaskColorVar.textLink,
             },
             '&:after': {
@@ -91,7 +91,7 @@ const LogoItem = styled(MuiListItem)(({ theme }) => ({
 })) as any as typeof MuiListItem
 
 const ItemIcon = styled(ListItemIcon)(({ theme }) => ({
-    [`& svg`]: {
+    '& svg': {
         fontSize: 36,
     },
 }))

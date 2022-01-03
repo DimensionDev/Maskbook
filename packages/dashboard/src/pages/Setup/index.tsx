@@ -20,7 +20,7 @@ const Setup = () => {
 
     return (
         <ColumnLayout>
-            <Container sx={{ paddingBottom: (theme) => `${theme.spacing(8)}` }}>
+            <Container sx={{ paddingBottom: (theme) => theme.spacing(8) }}>
                 <Box textAlign="center" paddingBottom="32px">
                     <Title>
                         <Typography variant="h3">{t.setup_page_title()}</Typography>

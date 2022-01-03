@@ -8,8 +8,8 @@ import {
     useEthereumNetworkTradeProvider,
     usePolygonNetworkTradeProvider,
     useArbitrumNetworkTradeProvider,
-    useXDaiNetworkTradeProvider,
     useAvalancheNetworkTradeProvider,
+    useXDaiNetworkTradeProvider,
     useCeloNetworkTradeProvider,
     useFantomNetworkTradeProvider,
 } from '../../Settings/api'
