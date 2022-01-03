@@ -12,7 +12,7 @@ export async function fetchProposal(id: string) {
 }
 
 async function fetchProposalFromGraphql(id: string) {
-    const response = await fetch(`https://hub.snapshot.org/graphql`, {
+    const response = await fetch('https://hub.snapshot.org/graphql', {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -143,7 +143,7 @@ export async function vote(identifier: ProposalIdentifier, choice: number, addre
 
     const sig = await Services.Ethereum.personalSign(msg, address)
 
-    const response = await fetch(`https://hub.snapshot.org/api/msg`, {
+    const response = await fetch('https://hub.snapshot.org/api/msg', {
         method: 'POST',
         headers: {
             Accept: 'application/json',

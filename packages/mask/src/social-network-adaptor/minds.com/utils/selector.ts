@@ -2,10 +2,7 @@ import { LiveSelector } from '@dimensiondev/holoflows-kit'
 
 type E = HTMLElement
 
-const querySelector = <T extends E, SingleMode extends boolean = true>(
-    selector: string,
-    singleMode: boolean = true,
-) => {
+const querySelector = <T extends E, SingleMode extends boolean = true>(selector: string, singleMode = true) => {
     const ls = new LiveSelector<T, SingleMode>().querySelector<T>(selector)
     return (singleMode ? ls.enableSingleMode() : ls) as LiveSelector<T, SingleMode>
 }

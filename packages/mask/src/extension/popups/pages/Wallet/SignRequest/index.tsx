@@ -109,10 +109,9 @@ const SignRequest = memo(() => {
     }, [value, location.search, history])
 
     const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
-        if (value) {
-            await Services.Ethereum.rejectRequest(value.payload)
-            history.replace(PopupRoutes.Wallet)
-        }
+        if (!value) return
+        await Services.Ethereum.rejectRequest(value.payload)
+        history.replace(PopupRoutes.Wallet)
     }, [value])
 
     useUpdateEffect(() => {
