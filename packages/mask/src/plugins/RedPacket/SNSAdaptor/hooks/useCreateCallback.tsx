@@ -171,7 +171,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                 .send(config as PayableTx)
                 .on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
                     setCreateState({
-                        type: TransactionStateType.WAIT_FOR_CONFIRMING,
+                        type: TransactionStateType.HASH,
                         hash,
                     })
                     transactionHashRef.current = hash
