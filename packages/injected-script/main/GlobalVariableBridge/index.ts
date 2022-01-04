@@ -12,11 +12,11 @@ const { shift } = Array.prototype
 function read(path: string) {
     const fragments = apply(split, path, ['.' as any])
     let result: any = window
-    while (true) {
-        if (fragments.length === 0) return result
+    while (fragments.length !== 0) {
         const key = apply(shift, fragments, [])
         result = key ? result[key] : result
     }
+    return result
 }
 
 export function access(path: string, id: number, property: string) {

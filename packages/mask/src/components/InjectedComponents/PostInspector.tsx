@@ -7,8 +7,12 @@ import type { Profile } from '../../database'
 import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
+import { PossiblePluginSuggestionPostInspector } from './DisabledPluginSuggestion'
 
-const PluginHooksRenderer = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (plugin) => plugin.PostInspector)
+const PluginHooksRenderer = createInjectHooksRenderer(
+    useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
+    (plugin) => plugin.PostInspector,
+)
 
 export interface PostInspectorProps {
     onDecrypted(post: TypedMessageTuple): void
@@ -58,6 +62,7 @@ export function PostInspector(props: PostInspectorProps) {
                 ) : null}
                 {props.slotPosition !== 'after' && slot}
                 {x}
+                <PossiblePluginSuggestionPostInspector />
                 <PluginHooksRenderer />
                 {props.slotPosition !== 'before' && slot}
             </>

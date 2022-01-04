@@ -83,7 +83,7 @@ function makeProgress(
     if (typeof progress === 'string') return { type: 'progress', progress, internal }
     return { type: 'progress', progress: 'intermediate_success', data: progress, internal }
 }
-function makeError(error: string | Error, internal: boolean = false): Failure {
+function makeError(error: string | Error, internal = false): Failure {
     if (typeof error === 'string') return { type: 'error', error, internal }
     return makeError(error.message, internal)
 }

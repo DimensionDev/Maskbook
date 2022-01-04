@@ -70,8 +70,7 @@ export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, Ma
     restoreSuccess: void
     profilesChanged: UpdateEvent<ProfileIdentifier>[]
     relationsChanged: RelationChangedEvent[]
-    pluginEnabled: string
-    pluginDisabled: string
+    pluginMinimalModeChanged: [id: string, newStatus: boolean]
 
     requestExtensionPermission: RequestExtensionPermissionEvent
     signRequestApproved: PersonaSignApprovedEvent
