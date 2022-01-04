@@ -53,10 +53,9 @@ function Personas() {
         PersonaContext.useContainer()
 
     useEffect(() => {
-        if (personas?.length === 0) {
-            showSnackbar(t.personas_setup_tip(), { variant: 'warning' })
-            navigate(DashboardRoutes.Setup)
-        }
+        if (personas?.length !== 0) return
+        showSnackbar(t.personas_setup_tip(), { variant: 'warning' })
+        navigate(DashboardRoutes.Setup)
     }, [personas])
 
     const [activeTab, setActiveTab] = useState(

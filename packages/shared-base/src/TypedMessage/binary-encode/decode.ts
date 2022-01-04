@@ -3,7 +3,7 @@ import { Result } from 'ts-results'
 import { makeTypedMessageText, makeTypedMessageTuple, makeTypedMessageUnknown, TypedMessage } from '..'
 import { TypedMessageTypeEnum } from './type'
 
-const HEAD = `[@masknet/shared-base] TypedMessage: `
+const HEAD = '[@masknet/shared-base] TypedMessage: '
 export function decodeTypedMessageFromDocument(bin: Uint8Array) {
     return Result.wrap(() => {
         const doc = decode(bin)

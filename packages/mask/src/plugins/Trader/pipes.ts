@@ -169,12 +169,12 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             return `https://pancakeswap.info/pool/${address}`
         case TradeProvider.BANCOR:
             // TODO - Bancor analytics should be available with V3
-            return ``
+            return ''
         case TradeProvider.OPENOCEAN:
             // TODO - OpenOcean
-            return ``
+            return ''
         case TradeProvider.ELKFINANCE:
-            return `https://fuse-info.elk.finance/`
+            return 'https://fuse-info.elk.finance/'
         case TradeProvider.FUSEFI:
             return `https://fuseswap.info/pool/${address}`
         default:

@@ -92,10 +92,9 @@ export function DepositDialog() {
 
     //#region remote controlled dialog
     const { open, closeDialog } = useRemoteControlledDialog(PluginPoolTogetherMessages.DepositDialogUpdated, (ev) => {
-        if (ev.open) {
-            setPool(ev.pool)
-            setToken(ev.token)
-        }
+        if (!ev.open) return
+        setPool(ev.pool)
+        setToken(ev.token)
     })
     const onClose = useCallback(() => {
         closeDialog()

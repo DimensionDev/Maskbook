@@ -9,7 +9,7 @@
         "editorconfig.editorconfig",
         "aaron-bond.better-comments",
         "davidanson.vscode-markdownlint",
-        "jpoissonnier.vscode-styled-components",
+        "diegolincoln.vscode-styled-components",
         "christian-kohler.path-intellisense"
     ],
     // List of extensions recommended by VS Code that should not be recommended for users of this workspace.
