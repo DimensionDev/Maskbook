@@ -43,7 +43,6 @@ const useStyles = makeStyles()((theme) => ({
     icon: {
         width: 24,
         height: 24,
-        paddingRight: theme.spacing(0.5),
     },
     input: {},
 
@@ -183,7 +182,13 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
                                         name={token?.name}
                                         logoURI={token?.logoURI}
                                     />
-                                    <Typography variant="inherit">{token?.symbol}</Typography>
+                                    <Typography
+                                        variant="inherit"
+                                        sx={{
+                                            paddingLeft: (theme) => theme.spacing(0.5),
+                                        }}>
+                                        {token?.symbol}
+                                    </Typography>
                                 </>
                             ) : null}
                             {haveMenu ? <ArrowDropDownIcon onClick={onClick} /> : null}
