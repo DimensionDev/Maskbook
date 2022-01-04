@@ -258,10 +258,9 @@ const ContractInteraction = memo(() => {
     }, [request, location.search, history])
 
     const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
-        if (request) {
-            await Services.Ethereum.rejectRequest(request.payload)
-            history.replace(PopupRoutes.Wallet)
-        }
+        if (!request) return
+        await Services.Ethereum.rejectRequest(request.payload)
+        history.replace(PopupRoutes.Wallet)
     }, [request])
 
     // Wei

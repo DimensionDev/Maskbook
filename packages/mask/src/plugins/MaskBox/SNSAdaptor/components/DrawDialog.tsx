@@ -51,10 +51,10 @@ const useStyles = makeStyles()((theme) => ({
     field: {
         borderRadius: 0,
         padding: theme.spacing(0),
-        height: `25px !important`,
+        height: '25px !important',
         minWidth: 0,
         minHeight: 0,
-        outline: `none !important`,
+        outline: 'none !important',
         borderColor: `${theme.palette.divider} !important`,
     },
     textfield: {

@@ -104,7 +104,7 @@ const facebookUI: SocialNetworkUI.Definition = {
             profilePage(profile) {
                 // there is no PWA way on Facebook desktop.
                 // mobile not tested
-                location.href = getProfilePageUrlAtFacebook(profile)
+                location.assign(getProfilePageUrlAtFacebook(profile))
             },
             newsFeed() {
                 const homeLink = document.querySelector<HTMLAnchorElement>(
@@ -114,7 +114,7 @@ const facebookUI: SocialNetworkUI.Definition = {
                     ].join(','),
                 )
                 if (homeLink) homeLink.click()
-                else if (location.pathname !== '/') location.pathname = '/'
+                else if (location.pathname !== '/') location.assign('/')
             },
         },
         maskCompositionDialog: { open: taskOpenComposeBoxFacebook },

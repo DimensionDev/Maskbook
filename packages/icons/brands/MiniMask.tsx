@@ -45,5 +45,6 @@ export const MiniMaskIcon: typeof SvgIcon = createPaletteAwareIcon(
             </clipPath>
         </defs>
     </g>,
+    undefined,
     '0 0 48 48',
 )

@@ -34,7 +34,7 @@ export default function Welcome() {
     const mode = useTheme().palette.mode
     const navigate = useNavigate()
 
-    const agreementContentPageURL = new URL(`./en.html`, import.meta.url).toString()
+    const agreementContentPageURL = new URL('./en.html', import.meta.url).toString()
     const privacyPolicyDocument = useMemo(() => () => iframeRef?.current?.contentWindow?.document, [iframeRef])
 
     useEffect(
