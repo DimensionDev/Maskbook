@@ -10,7 +10,6 @@ xdescribe('Proxy websocket', () => {
     let client: ProviderProxy
     let mockNotifyCallback: any
 
-    // TODO: remove any
     const pushToClientMockData = (data: any) => server.send(data)
 
     beforeEach(async () => {

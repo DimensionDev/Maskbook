@@ -111,7 +111,6 @@ export function NFTAvatar(props: NFTAvatarProps) {
         WalletMessages.events.selectProviderDialogUpdated,
     )
 
-    // TODO: merger loading
     const LoadStatus = Array.from({ length: 8 })
         .fill(0)
         .map((_, i) => (
