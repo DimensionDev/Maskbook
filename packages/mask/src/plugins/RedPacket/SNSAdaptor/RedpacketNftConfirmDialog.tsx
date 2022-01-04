@@ -202,7 +202,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
         [duration, message, senderName, contract, privateKey, txid],
     )
     useEffect(() => {
-        if (createState.type === TransactionStateType.WAIT_FOR_CONFIRMING && createState.hash) {
+        if (createState.type === TransactionStateType.HASH && createState.hash) {
             setTxid(createState.hash)
             RedPacketRPC.addRedPacketNft({ id: createState.hash, password: privateKey, contract_version: 1 })
         }
