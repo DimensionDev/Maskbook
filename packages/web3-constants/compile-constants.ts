@@ -18,6 +18,11 @@ async function compileConstants(folderPath: string, names: string[]) {
             for (const name of names) {
                 pairs.push([name, values[name] ?? defaultValue])
             }
+            pairs.sort((pairA, pairZ) => {
+                const [nameA] = pairA
+                const [nameZ] = pairZ
+                return names.indexOf(nameA) - names.indexOf(nameZ)
+            })
             constants[name] = Object.fromEntries(pairs)
         }
         await fs.writeFile(filePath, JSON.stringify(constants, null, 4), 'utf-8')
@@ -53,6 +58,7 @@ compileConstants(path.join(__dirname, 'evm'), [
     'Arbitrum_Rinkeby',
     'xDai',
     'Celo',
+    'Fantom',
 ])
 
 compileConstants(path.join(__dirname, 'solana'), ['mainnet-beta', 'testnet', 'devnet'])

@@ -7,8 +7,21 @@ import { PostDialogHint } from '../../../components/InjectedComponents/PostDialo
 import { MaskMessages } from '../../../utils/messages'
 import { startWatch } from '../../../utils/watcher'
 import { taskOpenComposeBoxFacebook } from '../automation/openComposeBox'
+import { makeStyles } from '@masknet/theme'
 
 let composeBox: LiveSelector<Element>
+
+const useStyles = makeStyles()(() => ({
+    tooltip: {
+        borderRadius: 8,
+        padding: 8,
+        marginBottom: '0 !important',
+        fontSize: 12,
+        background: 'rgba(0,0,0,.75)',
+        boxShadow: '0 4px 10px 0 rgba(0,0,0,.5)',
+        color: '#ddd',
+    },
+}))
 
 function isGroup() {
     const matched = location.href.match(/\/groups/)
@@ -51,13 +64,19 @@ export function injectCompositionFacebook(signal: AbortSignal) {
     )
 }
 function UI() {
+    const { classes } = useStyles()
     const onHintButtonClicked = useCallback(
         () => MaskMessages.events.requestComposition.sendToLocal({ reason: 'popup', open: true }),
         [],
     )
     return (
         <span style={{ display: 'block', padding: 0, marginTop: 0 }}>
-            <PostDialogHint onHintButtonClicked={onHintButtonClicked} />
+            <PostDialogHint
+                size={24}
+                classes={{ tooltip: classes.tooltip }}
+                onHintButtonClicked={onHintButtonClicked}
+                tooltip={{ disabled: false, placement: 'top' }}
+            />
             <Composition type="popup" />
         </span>
     )

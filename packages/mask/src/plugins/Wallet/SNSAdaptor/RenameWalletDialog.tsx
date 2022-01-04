@@ -25,10 +25,9 @@ export function WalletRenameWalletDialog() {
     const [wallet, setWallet] = useState<Wallet | null>(null)
     const { open, setDialog } = useRemoteControlledDialog(WalletMessages.events.walletRenameDialogUpdated)
     WalletMessages.events.walletRenameDialogUpdated.on((data) => {
-        if (data.open) {
-            setName(data.wallet?.name ?? '')
-            setWallet(data.wallet)
-        }
+        if (!data.open) return
+        setName(data.wallet?.name ?? '')
+        setWallet(data.wallet)
     })
     const handleClose = useCallback(() => {
         setDialog({

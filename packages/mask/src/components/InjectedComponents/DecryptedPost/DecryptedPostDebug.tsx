@@ -18,7 +18,7 @@ interface DebugDisplayProps {
     decryptedResult: SuccessDecryption | FailureDecryption | null
 }
 export function DecryptedPostDebug(props: Partial<DebugDisplayProps>) {
-    const postBy = usePostInfoDetails.postBy()
+    const postBy = usePostInfoDetails.author()
     const postContent = usePostInfoDetails.postContent()
     const payloadResult = useMemo(() => deconstructPayload(postContent), [postContent])
     const setting = useValueRef(debugModeSetting)

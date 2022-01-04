@@ -5,8 +5,8 @@ const NFTSCAN_SECRET = '21da1d638ef5d0bf76e37aa5c2da7fd789ade9e3'
 const NFTSCAN_URL = 'https://restapi.nftscan.com'
 const NFTSCAN_BASE_API = `${NFTSCAN_URL}/api/v1`
 
-let token: string = ''
-let token_expiration: number = 0
+let token = ''
+let token_expiration = 0
 
 async function getToken() {
     const params = new URLSearchParams()

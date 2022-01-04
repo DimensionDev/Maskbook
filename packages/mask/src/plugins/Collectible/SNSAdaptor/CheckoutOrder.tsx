@@ -1,12 +1,12 @@
 import { Table, TableHead, TableBody, TableRow, TableCell, Typography, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import type { Order } from 'opensea-js/lib/types'
 import { Image } from '../../../components/shared/Image'
-import { useChainId } from '@masknet/web3-shared-evm'
-import type { useAsset } from '../hooks/useAsset'
+import { ERC20TokenDetailed, useChainId, formatBalance } from '@masknet/web3-shared-evm'
 import { resolveAssetLinkOnOpenSea } from '../pipes'
 import { useI18N } from '../../../utils'
+import type { useAsset } from '../../EVM/hooks/useAsset'
 import type { useAssetOrder } from '../hooks/useAssetOrder'
+import type { Order } from 'opensea-js/lib/types'
 
 const useStyles = makeStyles()((theme) => ({
     itemInfo: {
@@ -26,12 +26,21 @@ export interface CheckoutOrderProps {
 export function CheckoutOrder(props: CheckoutOrderProps) {
     const { t } = useI18N()
     const { asset, assetOrder } = props
-    const order = assetOrder?.value as Order | undefined
+    const order = assetOrder?.value ?? asset?.value?.desktopOrder
     const { classes } = useStyles()
     const chainId = useChainId()
-
     if (!asset?.value) return null
     if (!order) return null
+
+    const price = (order as Order).currentPrice ?? asset.value.current_price
+    const getPrice = () => {
+        if (!price) return 'error'
+        const decimal = asset.value?.response_.collection.payment_tokens.find((item: ERC20TokenDetailed) => {
+            return item.symbol === asset.value?.current_symbol
+        })?.decimals
+        if (!decimal) return 'error'
+        return formatBalance(price, decimal) ?? 'error'
+    }
 
     return (
         <Table size="small">
@@ -45,7 +54,7 @@ export function CheckoutOrder(props: CheckoutOrderProps) {
                 <TableRow>
                     <TableCell>
                         <div className={classes.itemInfo}>
-                            <Image height={80} width={80} src={asset.value.image_url} />
+                            <Image height={80} width={80} src={asset.value?.image_url ?? ''} />
                             <div className={classes.texts}>
                                 <Typography>{asset.value.collection_name ?? ''}</Typography>
                                 {asset.value.token_address && asset.value.token_id ? (
@@ -68,7 +77,7 @@ export function CheckoutOrder(props: CheckoutOrderProps) {
                     </TableCell>
                     <TableCell align="right">
                         <Typography>
-                            {asset.value.current_price} {asset.value.current_symbol}
+                            {getPrice()} {asset.value.current_symbol}
                         </Typography>
                     </TableCell>
                 </TableRow>
@@ -78,7 +87,7 @@ export function CheckoutOrder(props: CheckoutOrderProps) {
                     </TableCell>
                     <TableCell align="right">
                         <Typography>
-                            {asset.value.current_price} {asset.value.current_symbol}
+                            {getPrice()} {asset.value.current_symbol}
                         </Typography>
                     </TableCell>
                 </TableRow>

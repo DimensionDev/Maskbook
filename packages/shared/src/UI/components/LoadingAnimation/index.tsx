@@ -13,7 +13,7 @@ const useStyles = makeStyles()({
                 transform: 'rotate(360deg)',
             },
         },
-        animation: `loadingAnimation 1.6s linear infinite`,
+        animation: 'loadingAnimation 1.6s linear infinite',
     },
 })
 

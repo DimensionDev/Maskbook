@@ -19,7 +19,7 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
             .filter((x) => x.ui)
             .map(({ key, name, ui }) => (
                 // TODO: i18n
-                <ErrorBoundary key={key} subject={`Plugin ` + name.fallback}>
+                <ErrorBoundary key={key} subject={'Plugin ' + name.fallback}>
                     <Main UI={ui!} data={props} />
                 </ErrorBoundary>
             ))

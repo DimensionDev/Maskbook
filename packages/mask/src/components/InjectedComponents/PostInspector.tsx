@@ -17,8 +17,12 @@ import { DebugList } from '../DebugModeUI/DebugList'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
 import { decodePublicKeyUI } from '../../social-network/utils/text-payload-ui'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
+import { PossiblePluginSuggestionPostInspector } from './DisabledPluginSuggestion'
 
-const PluginHooksRenderer = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (plugin) => plugin.PostInspector)
+const PluginHooksRenderer = createInjectHooksRenderer(
+    useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
+    (plugin) => plugin.PostInspector,
+)
 
 export interface PostInspectorProps {
     onDecrypted(post: TypedMessageTuple): void
@@ -31,10 +35,10 @@ export interface PostInspectorProps {
     slotPosition?: 'before' | 'after'
 }
 export function PostInspector(props: PostInspectorProps) {
-    const postBy = usePostInfoDetails.postBy()
+    const postBy = usePostInfoDetails.author()
     const postContent = usePostInfoDetails.postContent()
-    const encryptedPost = usePostInfoDetails.postPayload()
-    const postId = usePostInfoDetails.postIdentifier()
+    const encryptedPost = usePostInfoDetails.containingMaskPayload()
+    const postId = usePostInfoDetails.identifier()
     const decryptedPayloadForImage = usePostInfoDetails.decryptedPayloadForImage()
     const postImages = usePostInfoDetails.postMetadataImages()
     const isDebugging = useValueRef(debugModeSetting)
@@ -119,6 +123,7 @@ export function PostInspector(props: PostInspectorProps) {
                 ) : null}
                 {props.slotPosition !== 'after' && slot}
                 {x}
+                <PossiblePluginSuggestionPostInspector />
                 <PluginHooksRenderer />
                 {debugInfo}
                 {props.slotPosition !== 'before' && slot}

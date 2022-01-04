@@ -1210,7 +1210,15 @@
         "chainId": 250,
         "networkId": 250,
         "icon": "fantom",
-        "explorers": [{ "name": "ftmscan", "url": "https://ftmscan.com", "icon": "ftmscan", "standard": "EIP3091" }]
+        "explorers": [
+            {
+                "name": "ftmscan",
+                "url": "https://ftmscan.com",
+                "icon": "ftmscan",
+                "standard": "EIP3091",
+                "logoURI": "https://static.debank.com/image/ftm_token/logo_url/ftm/33fdb9c5067e94f3a1b9e78f6fa86984.png"
+            }
+        ]
     },
     {
         "name": "Huobi ECO Chain Testnet",

@@ -4,7 +4,13 @@ import type {
     StoreNames,
     IDBPTransaction,
     IDBPObjectStore,
+    TypedDOMStringList,
     IDBPCursorWithValueIteratorValue,
+    StoreKey,
+    IndexNames,
+    IDBPIndex,
+    IDBPCursorWithValue,
+    IDBPCursor,
 } from 'idb/with-async-ittr'
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { MaskMessages } from '../../../shared'
@@ -102,22 +108,72 @@ export interface IDBPSafeObjectStore<
     DBTypes extends DBSchema,
     TxStores extends StoreNames<DBTypes>[] = StoreNames<DBTypes>[],
     StoreName extends StoreNames<DBTypes> = StoreNames<DBTypes>,
-> extends Omit<
-        IDBPObjectStore<DBTypes, TxStores, StoreName> /** createIndex is only available in versionchange transaction */,
-        | 'createIndex'
-        /** deleteIndex is only available in versionchange transaction */
-        | 'deleteIndex'
-        | 'transaction'
+    Writable extends boolean = boolean,
+> extends Pick<
+        IDBPObjectStore<DBTypes, TxStores, StoreName, 'readonly'>,
+        'get' | 'getAll' | 'getAllKeys' | 'getKey' | 'count' | 'autoIncrement' | 'indexNames' | 'keyPath' | 'name'
     > {
-    [Symbol.asyncIterator](): AsyncIterableIterator<IDBPCursorWithValueIteratorValue<DBTypes, TxStores, StoreName>>
+    add: Writable extends true ? IDBPObjectStore<DBTypes, TxStores, StoreName, 'readwrite'>['add'] : unknown
+    clear: Writable extends true ? IDBPObjectStore<DBTypes, TxStores, StoreName, 'readwrite'>['clear'] : unknown
+    delete: Writable extends true ? IDBPObjectStore<DBTypes, TxStores, StoreName, 'readwrite'>['delete'] : unknown
+    put: Writable extends true ? IDBPObjectStore<DBTypes, TxStores, StoreName, 'readwrite'>['put'] : unknown
+
+    index<IndexName extends IndexNames<DBTypes, StoreName>>(
+        name: IndexName,
+    ): IDBPIndex<DBTypes, TxStores, StoreName, IndexName, Writable extends true ? 'readwrite' : 'readonly'>
+    openCursor(
+        query?: StoreKey<DBTypes, StoreName> | IDBKeyRange | null,
+        direction?: IDBCursorDirection,
+    ): Promise<IDBPCursorWithValue<
+        DBTypes,
+        TxStores,
+        StoreName,
+        unknown,
+        Writable extends true ? 'readwrite' : 'readonly'
+    > | null>
+
+    openKeyCursor(
+        query?: StoreKey<DBTypes, StoreName> | IDBKeyRange | null,
+        direction?: IDBCursorDirection,
+    ): Promise<IDBPCursor<
+        DBTypes,
+        TxStores,
+        StoreName,
+        unknown,
+        Writable extends true ? 'readwrite' : 'readonly'
+    > | null>
+
+    [Symbol.asyncIterator](): AsyncIterableIterator<
+        IDBPCursorWithValueIteratorValue<
+            DBTypes,
+            TxStores,
+            StoreName,
+            unknown,
+            Writable extends true ? 'readwrite' : 'readonly'
+        >
+    >
+    iterate(
+        query?: StoreKey<DBTypes, StoreName> | IDBKeyRange | null,
+        direction?: IDBCursorDirection,
+    ): AsyncIterableIterator<
+        IDBPCursorWithValueIteratorValue<
+            DBTypes,
+            TxStores,
+            StoreName,
+            unknown,
+            Writable extends true ? 'readwrite' : 'readonly'
+        >
+    >
 }
 export type IDBPSafeTransaction<
     DBTypes extends DBSchema,
     TxStores extends StoreNames<DBTypes>[],
-    Mode extends 'readonly' | 'readwrite',
-> = Omit<IDBPTransaction<DBTypes, TxStores>, 'objectStoreNames' | 'objectStore' | 'store'> & {
-    __writable__?: Mode extends 'readwrite' ? true : boolean
-    __stores__?: Record<
+    Mode extends IDBTransactionMode = 'readonly',
+> = Omit<IDBPTransaction<DBTypes, TxStores, Mode>, 'mode' | 'objectStoreNames' | 'objectStore' | 'store'> & {
+    readonly objectStoreNames: TypedDOMStringList<StoreNames<DBTypes> & string>
+    readonly mode: IDBTransactionMode
+    readonly __writable__?: Mode extends 'readwrite' ? true : boolean
+    readonly __stores__?: Record<
         TxStores extends readonly (infer ValueOfUsedStoreName)[]
             ? ValueOfUsedStoreName extends string | number | symbol
                 ? ValueOfUsedStoreName
@@ -127,7 +183,7 @@ export type IDBPSafeTransaction<
     >
     objectStore<StoreName extends TxStores[number]>(
         name: StoreName,
-    ): IDBPSafeObjectStore<DBTypes, StoreName[], StoreName>
+    ): IDBPSafeObjectStore<DBTypes, StoreName[], StoreName, Mode extends 'readonly' ? boolean : true>
 }
 
 export function createTransaction<DBType extends DBSchema, Mode extends 'readonly' | 'readwrite'>(

@@ -96,17 +96,14 @@ const Logout = memo(() => {
     }, [])
 
     const [{ loading }, onLogout] = useAsyncFn(async () => {
-        if (deletingPersona) {
-            await Services.Identity.logoutPersona(deletingPersona.identifier)
-            const currentPersona = await Services.Settings.getCurrentPersonaIdentifier()
-            if (!currentPersona) {
-                const lastCreatedPersona = await Services.Identity.queryLastPersonaCreated()
-                if (lastCreatedPersona)
-                    await Services.Settings.setCurrentPersonaIdentifier(lastCreatedPersona.identifier)
-            }
-
-            history.replace(PopupRoutes.Personas)
+        if (!deletingPersona) return
+        await Services.Identity.logoutPersona(deletingPersona.identifier)
+        const currentPersona = await Services.Settings.getCurrentPersonaIdentifier()
+        if (!currentPersona) {
+            const lastCreatedPersona = await Services.Identity.queryLastPersonaCreated()
+            if (lastCreatedPersona) await Services.Settings.setCurrentPersonaIdentifier(lastCreatedPersona.identifier)
         }
+        history.replace(PopupRoutes.Personas)
     }, [deletingPersona, history])
     return (
         <LogoutUI

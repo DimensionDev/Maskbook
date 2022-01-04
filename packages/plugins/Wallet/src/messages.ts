@@ -11,7 +11,7 @@ import type {
     GasOption,
 } from '@masknet/web3-shared-evm'
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
-import { PLUGIN_IDENTIFIER } from './constants'
+import { PLUGIN_ID } from './constants'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
 export type TransactionDialogEvent =
@@ -224,5 +224,5 @@ export interface WalletMessage {
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
 export const WalletMessages: { events: PluginMessageEmitter<WalletMessage> } = {
-    events: createPluginMessage<WalletMessage>(PLUGIN_IDENTIFIER),
+    events: createPluginMessage<WalletMessage>(PLUGIN_ID),
 }

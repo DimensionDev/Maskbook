@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { PLUGIN_ID, PLUGIN_ICON, PLUGIN_NAME, PLUGIN_DESCRIPTION } from './constants'
+import { PLUGIN_ID, PLUGIN_ICON, PLUGIN_NAME, PLUGIN_DESCRIPTION, PLUGIN_META_KEY } from './constants'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
@@ -13,4 +13,5 @@ export const base: Plugin.Shared.Definition = {
         target: 'insider',
     },
     experimentalMark: true,
+    contribution: { metadataKeys: new Set([PLUGIN_META_KEY]) },
 }

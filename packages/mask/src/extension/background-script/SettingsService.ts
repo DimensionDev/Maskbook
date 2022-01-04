@@ -5,7 +5,7 @@ import {
     appearanceSettings,
     currentPersonaIdentifier,
     languageSettings,
-    currentPluginEnabledStatus,
+    currentPluginMinimalModeNOTEnabled,
     pluginIDSettings,
 } from '../../settings/settings'
 import {
@@ -16,6 +16,7 @@ import {
     arbitrumNetworkTradeProviderSettings,
     xdaiNetworkTradeProviderSettings,
     celoNetworkTradeProviderSettings,
+    fantomNetworkTradeProviderSettings,
 } from '../../plugins/Trader/settings'
 import { queryMyPersonas } from './IdentityService'
 import {
@@ -35,7 +36,7 @@ import {
     currentMaskWalletNetworkSettings,
     currentBalancesSettings,
 } from '../../plugins/Wallet/settings'
-import { Flags } from '../../../shared'
+import { Flags, MaskMessages } from '../../../shared'
 import { indexedDB_KVStorageBackend, inMemory_KVStorageBackend } from '../../../background/database/kv-storage'
 
 function create<T>(settings: InternalSettings<T>) {
@@ -75,6 +76,8 @@ export const [getArbitrumNetworkTradeProvider, setArbitrumNetworkTradeProvider] 
 export const [getxDaiNetworkTradeProvider, setxDaiNetworkTradeProvider] = create(xdaiNetworkTradeProviderSettings)
 
 export const [getCeloNetworkTradeProvider, setCeloNetworkTradeProvider] = create(celoNetworkTradeProviderSettings)
+
+export const [getFantomNetworkTradeProvider, setFantomNetworkTradeProvider] = create(fantomNetworkTradeProviderSettings)
 
 export const [getCurrentSelectedWalletProvider, setCurrentSelectedWalletProvider] = create(currentProviderSettings)
 
@@ -123,11 +126,13 @@ export async function setCurrentPersonaIdentifier(x: PersonaIdentifier) {
     await currentPersonaIdentifier.readyPromise
     currentPersonaIdentifier.value = x.toText()
 }
-export async function getPluginEnabled(id: string) {
-    return currentPluginEnabledStatus['plugin:' + id].value
+export async function getPluginMinimalModeEnabled(id: string) {
+    return !currentPluginMinimalModeNOTEnabled['plugin:' + id].value
 }
-export async function setPluginEnabled(id: string, enabled: boolean) {
-    currentPluginEnabledStatus['plugin:' + id].value = enabled
+export async function setPluginMinimalModeEnabled(id: string, enabled: boolean) {
+    currentPluginMinimalModeNOTEnabled['plugin:' + id].value = !enabled
+
+    MaskMessages.events.pluginMinimalModeChanged.sendToAll([id, enabled])
 }
 
 export async function openTab(url: string) {
