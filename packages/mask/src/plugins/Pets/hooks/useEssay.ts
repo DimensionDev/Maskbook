@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
 import { PluginPetRPC } from '../messages'
 import type { User } from '../types'
-import { DEFAULT_SET_WORD, DEFAULT_MASK_WORD, MASK_TWITTER } from '../constants'
+import { DEFAULT_SET_WORD, MASK_TWITTER, DEFAULT_PUNK_MASK_WORD } from '../constants'
 import { getAssetAsBlobURL } from '../../../utils'
 
 export function useEssay(user: User, refresh?: boolean) {
@@ -23,7 +23,7 @@ export function useDefaultEssay(user: User) {
         if (user?.userId || user?.userId !== '$unknown') {
             setEssayMeta({
                 image: PunkIcon,
-                word: user.userId === MASK_TWITTER ? DEFAULT_MASK_WORD : DEFAULT_SET_WORD,
+                word: user.userId === MASK_TWITTER ? DEFAULT_PUNK_MASK_WORD : DEFAULT_SET_WORD,
                 type: user.userId === MASK_TWITTER ? ImageType.GLB : ImageType.NORMAL,
             })
         } else {

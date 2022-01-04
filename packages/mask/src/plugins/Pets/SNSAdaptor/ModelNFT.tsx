@@ -21,7 +21,7 @@ const useStyles = makeStyles()(() => ({
     wordContent: {
         position: 'absolute',
         right: 40,
-        marginTop: -300,
+        marginTop: -340,
     },
     word: {
         width: '150px !important',

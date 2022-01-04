@@ -100,7 +100,7 @@ export function PetDialog() {
     //should not use user address here
     const user = useUser()
     const visitor = useCurrentVisitingUser()
-    const nfts = useNfts(user.userId === visitor.userId ? visitor : undefined)
+    const nfts = useNfts(user.userId === visitor.userId && user.address === visitor.address ? visitor : undefined)
     const [extraData, setExtraData] = useState<ERC721ContractDetailed[]>([])
 
     const { open, closeDialog } = useRemoteControlledDialog(PluginPetMessages.essayDialogUpdated, () => {})
@@ -123,12 +123,13 @@ export function PetDialog() {
 
     useAsync(async () => {
         const lists = []
+        if (!open) return
         for (const i of nfts) {
             const contract = await OpenSea.getContract(i.contract, chainId)
             lists.push(contract)
         }
         setExtraData(lists)
-    }, [nfts])
+    }, [nfts, open])
 
     let timer: NodeJS.Timeout
     const saveHandle = async () => {
@@ -142,10 +143,10 @@ export function PetDialog() {
         }
         const chosenToken = collection.tokens.find((item) => item.mediaUrl === metaData.image)
         const meta = { ...metaData }
-        meta.userId = user.userId
+        meta.userId = visitor.userId
         meta.contract = collection.contract
         meta.tokenId = chosenToken?.tokenId ?? ''
-        await PluginPetRPC.saveEssay(user?.address, meta, user?.userId ?? '')
+        await PluginPetRPC.saveEssay(visitor?.address, meta, visitor?.userId ?? '')
         setTipShow(true)
         closeDialog()
         clearTimeout(timer)
@@ -167,7 +168,7 @@ export function PetDialog() {
         setTokenInfoSelect(v)
         setMetaData({
             ...metaData,
-            userId: user.userId,
+            userId: visitor.userId,
             tokenId: v?.tokenId ?? '',
             image: v?.mediaUrl ?? '',
         })
