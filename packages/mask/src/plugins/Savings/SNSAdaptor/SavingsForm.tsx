@@ -9,9 +9,10 @@ import {
     useFungibleTokenBalance,
     useWeb3,
     useAccount,
-    formatBalance,
+    formatCurrency,
 } from '@masknet/web3-shared-evm'
-import { TokenAmountPanel } from '@masknet/shared'
+import { TokenAmountPanel, FormattedCurrency } from '@masknet/shared'
+import { useTokenPrice } from '../../Wallet/hooks/useTokenPrice'
 import { useI18N } from '../../../utils'
 import { useStyles } from './SavingsFormStyles'
 import { IconURLS } from './IconURL'
@@ -72,17 +73,19 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
 
         return ''
     }, [inputAmount, tokenAmount, nativeTokenBalance, protocol.balance])
+
+    const tokenPrice = useTokenPrice(chainId, undefined)
+
+    const tokenValueUSD = useMemo(
+        () => (inputAmount ? new BigNumber(inputAmount).times(tokenPrice).toFixed(2).toString() : '0'),
+        [inputAmount, tokenPrice],
+    )
     //#endregion
 
     const needsSwap = protocol.type === ProtocolType.Lido && tab === TabType.Withdraw
 
     return (
         <div className={classes.containerWrap}>
-            <Typography variant="h3" className={classes.title}>
-                <img src={IconURLS.lido} className={classes.titleImage} />
-                {tab === TabType.Deposit ? t('plugin_savings_lido_deposit') : t('plugin_savings_lido_withdraw')}
-            </Typography>
-
             <div className={classes.inputWrap}>
                 <TokenAmountPanel
                     amount={inputAmount}
@@ -91,8 +94,15 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
                     label={t('plugin_savings_amount')}
                     token={nativeTokenDetailed}
                     onAmountChange={setInputAmount}
+                    InputProps={{ classes: { root: classes.inputTextField } }}
+                    MaxChipProps={{ classes: { root: classes.maxChip } }}
+                    SelectTokenChip={{ ChipProps: { classes: { root: classes.selectTokenChip } } }}
                 />
             </div>
+
+            <Typography variant="body2" textAlign="right" className={classes.tokenValueUSD}>
+                ≈ <FormattedCurrency value={tokenValueUSD} sign="$" formatter={formatCurrency} />
+            </Typography>
 
             <div className={classes.infoRow}>
                 <Typography variant="body1" className={classes.infoRowLeft}>
@@ -101,16 +111,6 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
                 </Typography>
                 <Typography variant="body1" className={classes.infoRowRight}>
                     {protocol.apr}%
-                </Typography>
-            </div>
-
-            <div className={classes.infoRow}>
-                <Typography variant="body1" className={classes.infoRowLeft}>
-                    <img src={IconURLS.eth} className={classes.rowImage} />
-                    {t('plugin_savings_fee')}
-                </Typography>
-                <Typography variant="body1" className={classes.infoRowRight}>
-                    ~{formatBalance(estimatedGas, 18)} {nativeTokenDetailed?.symbol}
                 </Typography>
             </div>
 
