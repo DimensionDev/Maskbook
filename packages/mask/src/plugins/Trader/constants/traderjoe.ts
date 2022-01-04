@@ -1,5 +1,5 @@
 import { ChainId } from '@masknet/web3-shared-evm'
-import { ETHER, WNATIVE, WBTCe, DAIe, USDTe, WNATIVE_ONLY } from './trader'
+import { ETHER, WNATIVE, WBTCe, DAIe, USDTe, USDCe, WNATIVE_ONLY } from './trader'
 import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'
 
 /**
@@ -10,5 +10,5 @@ export const TRADERJOE_CUSTOM_BASES: ERC20TokenCustomizedBase = {}
 
 export const TRADERJOE_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
     ...WNATIVE_ONLY,
-    [ChainId.Avalanche]: [WNATIVE, DAIe, USDTe, ETHER, WBTCe].map((x) => x[ChainId.Avalanche]),
+    [ChainId.Avalanche]: [WNATIVE, DAIe, USDTe, USDCe, ETHER, WBTCe].map((x) => x[ChainId.Avalanche]),
 }

@@ -44,8 +44,9 @@ export const STETH = createERC20Tokens('stETH_ADDRESS', 'stakedETH', 'stETH', 18
 export const CUSD = createERC20Tokens('cUSD_ADDRESS', 'Celo Dollar', 'cUSD', 18)
 export const CEUR = createERC20Tokens('cEUR_ADDRESS', 'Celo Euro', 'cEUR', 18)
 export const USDTe = createERC20Tokens('USDT_ADDRESS', 'Tether USD', 'USDT.e', 6)
-export const DAIe = createERC20Tokens('DAI_ADDRESS', 'Celo Euro', 'cEUR', 18)
+export const DAIe = createERC20Tokens('DAI_ADDRESS', 'Dai Stablecoin', 'DAI.e ', 18)
 export const WBTCe = createERC20Tokens('WBTC_ADDRESS', 'Wrapped BTC', 'WBTCe', 18)
+export const USDCe = createERC20Tokens('USDC_ADDRESS', ' USD Coin', 'USDCe', 18)
 export const JOE = createERC20Tokens('JOE_ADDRESS', 'JoeToken', 'JOE', 18)
 
 export const WNATIVE = createERC20Tokens(
