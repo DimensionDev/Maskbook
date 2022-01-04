@@ -65,6 +65,7 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
     const avalancheOptions = [
         { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
         { label: 'TraderJoe', value: TradeProvider.TRADERJOE },
+        { label: 'OpenOcean', value: TradeProvider.OPENOCEAN },
     ]
 
     const t = useDashboardI18N()
