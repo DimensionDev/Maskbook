@@ -118,7 +118,7 @@ export interface Tag {
 }
 
 export interface RaribleCollectibleResponse {
-    ['@class']: string
+    '@class': string
     id: string
     name: string
     symbol: string

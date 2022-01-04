@@ -5,7 +5,7 @@ import {
     appearanceSettings,
     currentPersonaIdentifier,
     languageSettings,
-    currentPluginEnabledStatus,
+    currentPluginMinimalModeNOTEnabled,
     pluginIDSettings,
 } from '../../settings/settings'
 import {
@@ -36,7 +36,7 @@ import {
     currentMaskWalletNetworkSettings,
     currentBalancesSettings,
 } from '../../plugins/Wallet/settings'
-import { Flags } from '../../../shared'
+import { Flags, MaskMessages } from '../../../shared'
 import { indexedDB_KVStorageBackend, inMemory_KVStorageBackend } from '../../../background/database/kv-storage'
 
 function create<T>(settings: InternalSettings<T>) {
@@ -126,11 +126,13 @@ export async function setCurrentPersonaIdentifier(x: PersonaIdentifier) {
     await currentPersonaIdentifier.readyPromise
     currentPersonaIdentifier.value = x.toText()
 }
-export async function getPluginEnabled(id: string) {
-    return currentPluginEnabledStatus['plugin:' + id].value
+export async function getPluginMinimalModeEnabled(id: string) {
+    return !currentPluginMinimalModeNOTEnabled['plugin:' + id].value
 }
-export async function setPluginEnabled(id: string, enabled: boolean) {
-    currentPluginEnabledStatus['plugin:' + id].value = enabled
+export async function setPluginMinimalModeEnabled(id: string, enabled: boolean) {
+    currentPluginMinimalModeNOTEnabled['plugin:' + id].value = !enabled
+
+    MaskMessages.events.pluginMinimalModeChanged.sendToAll([id, enabled])
 }
 
 export async function openTab(url: string) {

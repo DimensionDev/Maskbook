@@ -86,7 +86,7 @@ function makeProgress(
     if (typeof progress === 'string') return { type: 'progress', progress, internal }
     return { type: 'progress', progress: 'intermediate_success', data: progress, internal }
 }
-function makeError(error: string | Error, internal: boolean = false): Failure {
+function makeError(error: string | Error, internal = false): Failure {
     if (typeof error === 'string') return { type: 'error', error, internal }
     return makeError(error.message, internal)
 }
@@ -184,6 +184,7 @@ async function* decryptFromPayloadWithProgress_raw(
         const { publicKey: minePublic, privateKey: minePrivate } = mine
         const networkWorker = getNetworkWorkerUninitialized(whoAmI)
         try {
+            // eslint-disable-next-line
             if (version === -40) throw ''
             const gunNetworkHint = networkWorker!.gunNetworkHint
             const { keyHash, postHash } = await (

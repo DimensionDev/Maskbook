@@ -48,25 +48,14 @@ const FindTrumanDialog: React.FC<Props> = (props) => {
     const [consts, setConsts] = useState<FindTrumanConst>()
 
     useEffect(() => {
-        if (!!account) {
-            if (!FindTruman_Const.initialized) {
-                FindTruman_Const.init((resolve, reject) => {
-                    fetchConst(i18n.language)
-                        .then((res) => {
-                            resolve(res)
-                        })
-                        .catch((error) => {
-                            reject(error)
-                        })
-                })
-            }
-            FindTruman_Const.then((res) => {
-                setConsts(res)
-            })
-            fetchUserParticipatedStoryStatus(account).then((res) => {
-                setStatuses(res)
+        if (!account) return
+        if (!FindTruman_Const.initialized) {
+            FindTruman_Const.init((resolve, reject) => {
+                fetchConst(i18n.language).then(resolve, reject)
             })
         }
+        FindTruman_Const.then(setConsts)
+        fetchUserParticipatedStoryStatus(account).then(setStatuses)
     }, [account])
 
     const renderProgress = (total: number, success: number, color: 'primary' | 'secondary' | 'success') => {

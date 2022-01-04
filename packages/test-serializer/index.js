@@ -16,12 +16,12 @@ module.exports = {
         }
         if (isCryptoKey(val)) {
             // crypto.subtle.exportKey('jwk', val).then(console.log)
-            return `CryptoKey { [opaque crypto key material] }`
+            return 'CryptoKey { [opaque crypto key material] }'
         }
         const inner = printer(val.val, config, indentation, depth, refs)
         if (val.ok) return `Ok(${inner})`
         if (val.err) return `Err(${inner})`
-        if (val.none) return `None`
+        if (val.none) return 'None'
         if (val.some) return `Some(${inner})`
     },
     test(val) {
