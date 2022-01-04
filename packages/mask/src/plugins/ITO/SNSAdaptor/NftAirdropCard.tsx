@@ -225,7 +225,7 @@ export function NftAirdropCard(props: NftAirdropCardProps) {
             <div className={classes.claimParent}>
                 {campaignInfos.map((v, i) => {
                     return v.claimableInfo.claimable ? (
-                        <div key={i.toString()}>
+                        <div key={i}>
                             <ClaimItem campaignInfo={v.campaignInfo} claimed={v.claimableInfo.claimed} retry={retry} />
                         </div>
                     ) : null
