@@ -147,6 +147,16 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         iconColor: 'rgb(73, 169, 166)',
         isMainnet: true,
     },
+    {
+        ID: `${PLUGIN_ID}_fuse`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Fuse,
+        type: NetworkType.Fuse,
+        name: 'Fuse',
+        icon: new URL('./assets/fuse.png', import.meta.url),
+        iconColor: 'rgb(197 250 176)',
+        isMainnet: true,
+    },
 ]
 export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
     {
