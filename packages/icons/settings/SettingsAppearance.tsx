@@ -25,5 +25,6 @@ export const SettingsAppearanceIcon: typeof SvgIcon = createPaletteAwareIcon(
         <circle cx="14.212" cy="7.754" r=".531" fill="#fff" stroke="#fff" />
         <circle cx="16.575" cy="9.367" r=".531" fill="#fff" stroke="#fff" />
     </g>,
+    undefined,
     '0 0 24 24',
 )

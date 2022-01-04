@@ -222,7 +222,7 @@ export const searchAvatarSelectorImage = () =>
 export const searchAvatarOpenFileSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1)
 export const searchProfileSaveSelector = () => querySelector<E>('[data-testid="Profile_Save_Button"]')
 
-export const searchProfessionalButtonSelector = () => querySelector<E>('a[href="/settings/professional_profile"]')
+export const searchProfessionalButtonSelector = () => querySelector<E>('[data-testid*="ProfessionalButton"]')
 
 export const searchProfileSetAvatarSelector = () =>
     isMobileTwitter
