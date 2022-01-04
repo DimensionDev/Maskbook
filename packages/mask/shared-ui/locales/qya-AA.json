@@ -582,6 +582,7 @@
     "plugin_ito_unlocking_symbol": "crwdns5179:0{{symbol}}crwdne5179:0",
     "plugin_ito_continue": "crwdns5181:0crwdne5181:0",
     "plugin_ito_view_on_explorer": "crwdns5183:0crwdne5183:0",
+    "plugin_ito_unlock_tip": "crwdns10829:0{{address}}crwdnd10829:0{{symbol}}crwdne10829:0",
     "plugin_collectible_you": "crwdns5185:0crwdne5185:0",
     "plugin_collectible_done": "crwdns5187:0crwdne5187:0",
     "plugin_collectible_retry": "crwdns5189:0crwdne5189:0",
