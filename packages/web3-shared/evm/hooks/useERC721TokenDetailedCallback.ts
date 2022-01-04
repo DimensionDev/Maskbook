@@ -32,7 +32,15 @@ export function useERC721TokenDetailedCallback(contractDetailed: ERC721ContractD
             }
             return tokenDetailedFromChain
         } else {
-            return getERC721TokenDetailedFromOpensea(contractDetailed, tokenId, GET_SINGLE_ASSET_URL)
+            const tokenDetailedFromOpensea = await getERC721TokenDetailedFromOpensea(
+                contractDetailed,
+                tokenId,
+                GET_SINGLE_ASSET_URL,
+            )
+
+            if (tokenDetailedFromOpensea) tokenDetailedFromOpensea.info.hasTokenDetailed = true
+
+            return tokenDetailedFromOpensea
         }
     }, [tokenId, contractDetailed, erc721TokenContract, GET_SINGLE_ASSET_URL])
 

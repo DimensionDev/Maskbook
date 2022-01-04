@@ -248,7 +248,8 @@
         "metaverse",
         "hexlify",
         "contribs",
-        "contrib"
+        "contrib",
+        "juicebox"
     ],
     "ignoreWords": [
         "cryptopunks",
@@ -288,6 +289,8 @@
         "crwdns",
         "dodoapi",
         "getdodoroute",
+        "openocean",
+        "OPENOCEAN",
         "getx",
         "hookform",
         "idiv",
@@ -354,9 +357,11 @@
         "CANFT",
         "Kodav",
         "koda",
+        "Enjin",
         "poap",
         "irss",
         "CELO",
+        "flac",
         "clueid"
     ],
     "ignoreRegExpList": ["/@servie/"],

@@ -10,6 +10,7 @@ import {
     ChainId,
     FungibleToken,
 } from '@masknet/web3-shared-evm'
+import isAfter from 'date-fns/isAfter'
 import { useClaimablePoolsBySubgraph } from './useClaimablePoolsBySubgraph'
 import { checkAvailability } from '../../Worker/apis/checkAvailability'
 import { useMemo } from 'react'
@@ -81,12 +82,13 @@ export function useClaimablePools(chainId: ChainId, isMainnetOld = false) {
                     Number(raw.availability.end_time) * 1000 < Number(raw.availability.unlock_time) * 1000,
             )
             .map((raw) => {
+                const unlockTime = Number(raw.availability.unlock_time) * 1000
                 return {
                     pids: [raw.pid],
                     amount: Number(raw.availability.swapped),
                     token: raw.token,
-                    isClaimable: raw.availability.unlocked,
-                    unlockTime: new Date(Number(raw.availability.unlock_time) * 1000),
+                    isClaimable: isAfter(Date.now(), unlockTime),
+                    unlockTime: new Date(unlockTime),
                 }
             })
             .reduce((acc: SwappedToken[], cur) => {

@@ -17,8 +17,8 @@ import {
     FungibleTokenDetailed,
     EthereumTokenType,
     useAccount,
-    isNative,
     useFungibleTokenWatched,
+    isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../utils'
@@ -28,15 +28,16 @@ import { UnreviewedWarning } from './UnreviewedWarning'
 import ActionButton, { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/SNSAdaptor/SelectTokenAmountPanel'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import type { useAsset } from '../hooks/useAsset'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { PluginCollectibleRPC } from '../messages'
 import { toAsset } from '../helpers'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { Trans } from 'react-i18next'
 import getUnixTime from 'date-fns/getUnixTime'
+import type { useAsset } from '../../EVM/hooks'
 import { rightShift, ZERO } from '@masknet/web3-shared-base/utils/number'
 import type { Coin } from '../../Trader/types'
+import { isWyvernSchemaName } from '../utils'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -74,14 +75,14 @@ export interface MakeOfferDialogProps {
 
 export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const { asset, open, onClose } = props
+
     const isAuction = asset?.value?.is_auction ?? false
     const isVerified = asset?.value?.is_verified ?? false
     const leastPrice =
-        asset?.value && asset.value.orders?.length ? new BigNumber(asset.value.orders[0].base_price ?? '0') : ZERO
+        asset?.value && asset.value.desktopOrder ? new BigNumber(asset.value.desktopOrder.current_price ?? '0') : ZERO
 
     const paymentTokens = (isAuction ? asset?.value?.offer_payment_tokens : asset?.value?.order_payment_tokens) ?? []
     const selectedPaymentToken = first(paymentTokens)
-
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -90,6 +91,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const [expirationDateTime, setExpirationDateTime] = useState(new Date())
     const [unreviewedChecked, setUnreviewedChecked] = useState(false)
     const [ToS_Checked, setToS_Checked] = useState(false)
+    const [insufficientBalance, setInsufficientBalance] = useState(false)
 
     const { amount, token, balance, setAmount, setToken } = useFungibleTokenWatched(selectedPaymentToken)
 
@@ -98,11 +100,12 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!token?.value) return
         if (token.value.type !== EthereumTokenType.Native && token.value.type !== EthereumTokenType.ERC20) return
+        const schemaName = asset.value.asset_contract?.schemaName
         await PluginCollectibleRPC.createBuyOrder({
             asset: toAsset({
                 tokenId: asset.value.token_id,
                 tokenAddress: asset.value.token_address,
-                schemaName: asset.value.asset_contract.schema_name,
+                schemaName: isWyvernSchemaName(schemaName) ? schemaName : undefined,
             }),
             accountAddress: account,
             startAmount: Number.parseFloat(amount),
@@ -135,10 +138,14 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     }, [open])
 
     const validationMessage = useMemo(() => {
+        setInsufficientBalance(false)
         const amount_ = rightShift(amount, token.value?.decimals)
         const balance_ = new BigNumber(balance.value ?? '0')
         if (amount_.isNaN() || amount_.isZero()) return t('plugin_collectible_enter_a_price')
-        if (balance_.isZero() || amount_.isGreaterThan(balance_)) return t('plugin_collectible_insufficient_balance')
+        if (balance_.isZero() || amount_.isGreaterThan(balance_)) {
+            setInsufficientBalance(true)
+            return t('plugin_collectible_insufficient_balance')
+        }
         if (!isAuction && expirationDateTime.getTime() - Date.now() <= 0)
             return t('plugin_collectible_invalid_expiration_date')
         if (!isVerified && !unreviewedChecked) return t('plugin_collectible_ensure_unreviewed_item')
@@ -167,7 +174,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                             amount={amount}
                             balance={balance.value ?? '0'}
                             token={token.value as FungibleTokenDetailed}
-                            disableNativeToken={!paymentTokens.some((x) => isNative(x.address))}
+                            disableNativeToken={!paymentTokens.some(isNativeTokenAddress)}
                             onAmountChange={setAmount}
                             onTokenChange={setToken}
                             TokenAmountPanelProps={{
@@ -258,13 +265,16 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                     completeOnClick={onClose}
                                     failedOnClick="use executor"
                                 />
-                                {(isAuction ? asset.value?.is_collection_weth : asset.value?.is_order_weth) ? (
+                                {(isAuction ? asset.value?.isCollectionWeth : asset.value?.isOrderWeth) ||
+                                insufficientBalance ? (
                                     <ActionButton
                                         className={classes.button}
                                         variant="contained"
                                         size="large"
                                         onClick={onConvertClick}>
-                                        Convert ETH
+                                        {insufficientBalance
+                                            ? t('plugin_collectible_get_more_token', { token: token.value?.symbol })
+                                            : t('plugin_collectible_convert_eth')}
                                     </ActionButton>
                                 ) : null}
                             </Box>

@@ -1,6 +1,6 @@
 import { Pagination, Web3Plugin, CurrencyType } from '@masknet/plugin-infra'
 import { ChainId, createClient, getTokenConstants } from '@masknet/web3-shared-flow'
-import { getTokenPrice } from '@masknet/web3-providers'
+import { CoinGecko } from '@masknet/web3-providers'
 import { createFungibleAsset, createFungibleToken } from '../helpers'
 import { rightShift } from '@masknet/web3-shared-base'
 
@@ -47,7 +47,7 @@ async function getTokenBalance(
 
 async function getAssetFUSD(chainId: ChainId, account: string) {
     const { FUSD_ADDRESS = '', FUNGIBLE_TOKEN_ADDRESS = '' } = getTokenConstants(chainId)
-    const price = await getTokenPrice('usd-coin', CurrencyType.USD)
+    const price = await CoinGecko.getTokenPrice('usd-coin', CurrencyType.USD)
     const balance = await getTokenBalance(chainId, account, 8, {
         fungibleTokenAddress: FUNGIBLE_TOKEN_ADDRESS,
         tokenAddress: FUSD_ADDRESS,
@@ -64,7 +64,7 @@ async function getAssetFUSD(chainId: ChainId, account: string) {
 
 async function getAssetFLOW(chainId: ChainId, account: string) {
     const { FLOW_ADDRESS = '', FUNGIBLE_TOKEN_ADDRESS = '' } = getTokenConstants(chainId)
-    const price = await getTokenPrice('flow', CurrencyType.USD)
+    const price = await CoinGecko.getTokenPrice('flow', CurrencyType.USD)
     const balance = await getTokenBalance(chainId, account, 8, {
         fungibleTokenAddress: FUNGIBLE_TOKEN_ADDRESS,
         tokenAddress: FLOW_ADDRESS,
@@ -82,7 +82,7 @@ async function getAssetFLOW(chainId: ChainId, account: string) {
 
 async function getAssetTether(chainId: ChainId, account: string) {
     const { TETHER_ADDRESS = '', FUNGIBLE_TOKEN_ADDRESS = '' } = getTokenConstants(chainId)
-    const price = await getTokenPrice('tether', CurrencyType.USD)
+    const price = await CoinGecko.getTokenPrice('tether', CurrencyType.USD)
     const balance = await getTokenBalance(chainId, account, 8, {
         fungibleTokenAddress: FUNGIBLE_TOKEN_ADDRESS,
         tokenAddress: TETHER_ADDRESS,

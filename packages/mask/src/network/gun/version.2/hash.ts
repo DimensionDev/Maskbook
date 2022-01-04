@@ -27,7 +27,7 @@ export async function calculatePostKeyPartition(
 
 export const hashPostSalt = memoizePromise(
     async function (postSalt: string, networkHint: string) {
-        const hashPair = `9283464d-ee4e-4e8d-a7f3-cf392a88133f`
+        const hashPair = '9283464d-ee4e-4e8d-a7f3-cf392a88133f'
         const N = 2
 
         const hash = (await Gun.SEA.work(postSalt, hashPair))!
@@ -40,7 +40,7 @@ export const hashPostSalt = memoizePromise(
  * @param key - The key need to be hashed
  */
 export const hashCryptoKeyUnstable = memoizePromise(async function (key: EC_Public_JsonWebKey) {
-    const hashPair = `10198a2f-205f-45a6-9987-3488c80113d0`
+    const hashPair = '10198a2f-205f-45a6-9987-3488c80113d0'
     const N = 2
 
     const jwk = JSON.stringify(key)
@@ -52,7 +52,7 @@ export const hashCryptoKeyUnstable = memoizePromise(async function (key: EC_Publ
  * @param key - The key need to be hashed
  */
 export const hashCryptoKey = memoizePromise(async function (key: EC_Public_JsonWebKey) {
-    const hashPair = `10198a2f-205f-45a6-9987-3488c80113d0`
+    const hashPair = '10198a2f-205f-45a6-9987-3488c80113d0'
     const N = 2
 
     const jwk = key
