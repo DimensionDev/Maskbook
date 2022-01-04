@@ -1,6 +1,5 @@
 import { PluginId } from '@masknet/plugin-infra'
 
-export const RSS3_APP = 'https://hub.pass3.me'
 export const NFT_AVATAR_JSON_SERVER = 'https://configuration.r2d2.to/com.maskbook.avatar.json'
 export const NFT_AVATAR_GUN_SERVER = 'com.maskbook.user'
 

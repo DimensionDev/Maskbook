@@ -49,7 +49,7 @@ export const postContentMessageParser = (node: HTMLElement) => {
             const href = anchor.getAttribute('title') ?? anchor.getAttribute('href')
             const content = anchor.textContent
             if (!content) return makeTypedMessageEmpty()
-            return makeTypedMessageAnchor(resolve(content), href ?? 'javascript: void 0;', content)
+            return makeTypedMessageAnchor(resolve(content), href ?? '', content)
         } else if (node instanceof HTMLImageElement) {
             const image = node
             const src = image.getAttribute('src')

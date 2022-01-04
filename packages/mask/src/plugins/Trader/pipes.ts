@@ -169,15 +169,14 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             return `https://pancakeswap.info/pool/${address}`
         case TradeProvider.BANCOR:
             // TODO - Bancor analytics should be available with V3
-            return ``
+            return ''
         case TradeProvider.NETSWAP:
             return `https://info.netswap.io/pair/${address}`
         case TradeProvider.OPENOCEAN:
             // TODO - OpenOcean
-            return ``
+            return ''
         case TradeProvider.TETHYS:
-            // TODO - OpenOcean
-            return ``
+            return `https://info.tethys.finance/pair/${address}`
         default:
             unreachable(tradeProvider)
     }

@@ -143,7 +143,7 @@ export async function getSendTransactionComputedPayload(payload: JsonRpcPayload)
     }
 
     if (to) {
-        let code: string = ''
+        let code = ''
         try {
             code = await getCode(to)
         } catch {

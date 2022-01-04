@@ -159,10 +159,9 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
             WalletMessages.events.walletStatusDialogUpdated,
         )
         const handleSend = useCallback(() => {
-            if (canSend && contractDetailed && isPasswordValid) {
-                onSend(history, contractDetailed)
-                closeWalletStatusDialog()
-            }
+            if (!(canSend && contractDetailed && isPasswordValid)) return
+            onSend(history, contractDetailed)
+            closeWalletStatusDialog()
         }, [onSend, closeWalletStatusDialog, canSend, history, contractDetailed, isPasswordValid])
 
         const { value: redpacketStatus } = useAvailabilityNftRedPacket(history.rpid, account)
