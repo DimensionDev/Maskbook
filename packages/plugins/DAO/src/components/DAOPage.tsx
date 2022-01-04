@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react'
 import IframeResizer from 'iframe-resizer-react'
 import type { ProfileIdentifier } from '@masknet/shared-base'
-import { MaskIconPaletteContext } from '../../../../icons/utils/MaskIconPaletteContext'
+import { MaskIconPaletteContext } from '@masknet/icons'
 
 interface DAOPageProps {
     identifier?: ProfileIdentifier
