@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useUser, useEssay, useDefaultEssay, useCurrentVisitingUser } from '../hooks'
+import { useEssay, useDefaultEssay, useCurrentVisitingUser } from '../hooks'
 import { ModelNFT } from './ModelNFT'
 import { NormalNFT } from './NormalNFT'
 import { ImageType, ShowMeta } from '../types'
@@ -18,10 +18,8 @@ const AnimatePic = () => {
 
     const [start, setStart] = useState(true)
 
-    const user = useUser()
     const visitor = useCurrentVisitingUser()
-    //visitor cannot get address, but user can
-    const visitorMeta = useEssay(user.userId === visitor.userId ? user : visitor, start)
+    const visitorMeta = useEssay(visitor, start)
     const defMeta = useDefaultEssay(visitor)
 
     const [showMeta, setShowMeta] = useState<ShowMeta | undefined>(undefined)

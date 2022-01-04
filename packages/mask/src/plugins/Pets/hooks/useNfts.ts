@@ -11,7 +11,7 @@ import type { User, FilterContract } from '../types'
 import { currentNonFungibleAssetDataProviderSettings } from '../../Wallet/settings'
 import { Punk3D } from '../constants'
 
-export function useNfts(user: User) {
+export function useNfts(user: User | undefined) {
     const nftList = useNFTListConstants()
     const initContracts = Object.keys(nftList).map((i) => {
         const value = nftList[i as keyof typeof nftList]
@@ -23,7 +23,7 @@ export function useNfts(user: User) {
     const [fetchTotal, setFetchTotal] = useState<ERC721TokenDetailed[]>([])
     const provider = useValueRef(currentNonFungibleAssetDataProviderSettings)
     const { value = { collectibles: [], hasNextPage: false } } = useCollectibles(
-        user.address,
+        user?.address ?? '',
         chainId,
         provider,
         page,
@@ -37,11 +37,10 @@ export function useNfts(user: User) {
             setFetchTotal(total)
             total.forEach((x) => {
                 tempNfts.forEach((y, idx) => {
-                    if (isSameAddress(y.contract, x.contractDetailed.address)) {
-                        const glbSupport =
-                            isSameAddress(x.contractDetailed.address, Punk3D.contract) && x.tokenId === Punk3D.tokenId
-                        tempNfts[idx].tokens.push({ ...x.info, tokenId: x.tokenId, glbSupport })
-                    }
+                    if (!isSameAddress(y.contract, x.contractDetailed.address)) return
+                    const glbSupport =
+                        isSameAddress(x.contractDetailed.address, Punk3D.contract) && x.tokenId === Punk3D.tokenId
+                    tempNfts[idx].tokens.push({ ...x.info, tokenId: x.tokenId, glbSupport })
                 })
             })
         }

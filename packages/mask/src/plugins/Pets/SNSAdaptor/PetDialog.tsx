@@ -20,7 +20,7 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { initMeta, initCollection, Punk3D } from '../constants'
 import { PreviewBox } from './PreviewBox'
 import { PetMetaDB, FilterContract, OwnerERC721TokenInfo, ImageType } from '../types'
-import { useUser, useNfts } from '../hooks'
+import { useUser, useCurrentVisitingUser, useNfts } from '../hooks'
 import { useI18N, getAssetAsBlobURL } from '../../../utils'
 import { ShadowRootPopper } from '../../../utils/shadow-root/ShadowRootComponents'
 import { ImgLoader } from './ImgLoader'
@@ -97,8 +97,10 @@ export function PetDialog() {
     const GLB3DIcon = getAssetAsBlobURL(new URL('../assets/glb3D.png', import.meta.url))
 
     const chainId = useChainId()
+    //should not use user address here
     const user = useUser()
-    const nfts = useNfts(user)
+    const visitor = useCurrentVisitingUser()
+    const nfts = useNfts(user.userId === visitor.userId ? visitor : undefined)
     const [extraData, setExtraData] = useState<ERC721ContractDetailed[]>([])
 
     const { open, closeDialog } = useRemoteControlledDialog(PluginPetMessages.essayDialogUpdated, () => {})
@@ -113,11 +115,10 @@ export function PetDialog() {
     const [tokenInfoSelect, setTokenInfoSelect] = useState<OwnerERC721TokenInfo | null>(null)
 
     useEffect(() => {
-        if (!open) {
-            setMetaData(initMeta)
-            setCollection(initCollection)
-            setTokenInfoSelect(null)
-        }
+        if (!!open) return
+        setMetaData(initMeta)
+        setCollection(initCollection)
+        setTokenInfoSelect(null)
     }, [open])
 
     useAsync(async () => {
