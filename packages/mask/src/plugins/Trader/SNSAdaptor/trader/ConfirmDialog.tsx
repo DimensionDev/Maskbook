@@ -28,7 +28,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        ['& > p']: {
+        '& > p': {
             fontSize: 16,
             lineHeight: '22px',
             color: theme.palette.text.primary,

@@ -78,10 +78,8 @@ export default function Wallet() {
     }, [location.search, location.pathname])
 
     useEffect(() => {
-        if (isLocked && !getLockStatusLoading && location.pathname !== PopupRoutes.Unlock) {
-            history.replace(urlcat(PopupRoutes.Unlock, { from: location.pathname }))
-            return
-        }
+        if (!(isLocked && !getLockStatusLoading && location.pathname !== PopupRoutes.Unlock)) return
+        history.replace(urlcat(PopupRoutes.Unlock, { from: location.pathname }))
     }, [isLocked, location.pathname, getLockStatusLoading])
 
     useEffect(() => {

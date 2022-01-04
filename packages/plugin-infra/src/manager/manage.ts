@@ -87,7 +87,7 @@ export function createManager<
     function verifyHostHooks() {
         if (!_host)
             throw new Error(
-                `[@masknet/plugin-infra] You must call configureHostHooks or startDaemon to configure host hooks.`,
+                '[@masknet/plugin-infra] You must call configureHostHooks or startDaemon to configure host hooks.',
             )
     }
 

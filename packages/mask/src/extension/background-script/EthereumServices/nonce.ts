@@ -6,7 +6,7 @@ import { currentMaskWalletChainIdSettings } from '../../../plugins/Wallet/settin
 class NonceManager {
     constructor(private address: string) {}
     private nonce = NonceManager.INITIAL_NONCE
-    private locked: boolean = false
+    private locked = false
     private tasks: (() => void)[] = []
 
     private lock() {
