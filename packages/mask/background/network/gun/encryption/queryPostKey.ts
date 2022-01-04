@@ -46,6 +46,7 @@ namespace Version38Or39 {
 
         /* cspell:disable-next-line */
         // ? In this step we get something like ["jzarhbyjtexiE7aB1DvQ", "jzarhuse6xlTAtblKRx9"]
+        console.log(`[@masknet/encryption] Reading key partition [${postHash}][${keyHash}]`)
         const internalNodeNames = Object.keys((await getGunData(gun, postHash, keyHash)) || {}).filter((x) => x !== '_')
         // ? In this step we get all keys in this category (gun2[postHash][keyHash])
         const resultPromise = internalNodeNames.map((key) => getGunData(gun, key))

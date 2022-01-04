@@ -1,4 +1,4 @@
-import { encodeArrayBuffer } from '@dimensiondev/kit'
+import { encodeArrayBuffer, unreachable } from '@dimensiondev/kit'
 import {
     decrypt,
     parsePayload,
@@ -31,8 +31,6 @@ import { getGunInstance } from '../../network/gun/instance'
 export type DecryptionInfo = {
     type: DecryptProgressKind.Info
     iv?: Uint8Array
-    /** Progress and failure should be silent. */
-    implicit?: boolean
 }
 export type DecryptionProgress = DecryptProgress | DecryptionInfo
 
@@ -51,16 +49,15 @@ export async function* decryptionWithSocialNetworkDecoding(
     encoded: SocialNetworkEncodedPayload[],
     context: DecryptionContext,
 ) {
-    yield* new EventIterator<[id: number, progress: DecryptProgress | DecryptionInfo]>((flow) => {
+    yield* new EventIterator<[id: string, progress: DecryptProgress | DecryptionInfo]>((flow) => {
         for (const e of encoded) {
             async function main() {
-                const id = Math.random()
+                const id = Math.random() + ''
                 let decoded!: string | Uint8Array
                 if (e.type === 'text') {
                     // TODO: socialNetworkDecoder should emit multiple results if the text contains multiple payload.
                     decoded = socialNetworkDecoder(context.currentSocialNetwork, e.text).unwrapOr(e.text)
                 } else if (e.type === 'image-url') {
-                    flow.push([id, { type: DecryptProgressKind.Info, implicit: true }])
                     if (!context.authorHint || context.authorHint.isUnknown) {
                         flow.push([id, new DecryptError(ErrorReasons.UnrecognizedAuthor, undefined)])
                         return
@@ -75,22 +72,20 @@ export async function* decryptionWithSocialNetworkDecoding(
                     if (result.none) return
                     decoded = result.val
                 }
-                for await (const x of decryption(decoded, context)) {
-                    flow.push([id, x])
-                }
+                for await (const x of decryption(decoded, context)) flow.push([id, x])
             }
             main()
         }
     })
 }
 export async function* decryption(payload: string | Uint8Array, context: DecryptionContext) {
+    const parse = await parsePayload(payload)
+    if (parse.err) return null
+
     const { currentSocialNetwork, postURL } = context
     let { currentProfile, authorHint } = context
     if (currentProfile?.isUnknown) currentProfile = null
     if (authorHint?.isUnknown) authorHint = null
-
-    const parse = await parsePayload(payload)
-    if (parse.err) return null
 
     //#region Identify the PostIdentifier
     const iv = parse.val.encryption.unwrapOr(null)?.iv.unwrapOr(null)
@@ -137,40 +132,34 @@ export async function* decryption(payload: string | Uint8Array, context: Decrypt
             async deriveAESKey(pub) {
                 return Array.from((await deriveAESByECDH(pub)).values())
             },
-            async queryAuthorPublicKey(author, signal) {
-                author ||= authorHint
-                if (!author) return null
-                const persona = await queryPersonaByProfileDB(author)
-                if (!persona) return null
-                return (await crypto.subtle.importKey(
-                    'jwk',
-                    persona.publicKey,
-                    { name: 'ECDH', namedCurve: persona.publicKey.crv! } as EcKeyAlgorithm,
-                    false,
-                    ['deriveKey'],
-                )) as EC_Public_CryptoKey
+            queryAuthorPublicKey(author, signal) {
+                return queryPublicKey(author || authorHint, false, signal)
             },
             // TODO: get a gun instance
             async *queryPostKey_version37() {
                 throw 'TODO'
             },
             async *queryPostKey_version38(iv, signal) {
+                const author = await queryPublicKey(context.currentProfile, true)
+                if (!author) throw new DecryptError(ErrorReasons.CurrentProfileDoesNotConnectedToPersona, undefined)
                 yield* GUN_queryPostKey_version39Or38(
                     getGunInstance(),
                     -38,
                     iv,
-                    {} as any,
-                    '',
+                    author,
+                    getNetworkHint(context.currentSocialNetwork),
                     signal || new AbortController().signal,
                 )
             },
             async *queryPostKey_version39(iv, signal) {
+                const author = await queryPublicKey(context.currentProfile, true)
+                if (!author) throw new DecryptError(ErrorReasons.CurrentProfileDoesNotConnectedToPersona, undefined)
                 yield* GUN_queryPostKey_version39Or38(
                     getGunInstance(),
                     -39,
                     iv,
-                    {} as any,
-                    '',
+                    author,
+                    getNetworkHint(context.currentSocialNetwork),
                     signal || new AbortController().signal,
                 )
             },
@@ -184,6 +173,15 @@ export async function* decryption(payload: string | Uint8Array, context: Decrypt
     yield* progress
     return null
 }
+
+function getNetworkHint(x: SocialNetworkEnum) {
+    if (x === SocialNetworkEnum.Facebook) return ''
+    if (x === SocialNetworkEnum.Twitter) return 'twitter-'
+    if (x === SocialNetworkEnum.Minds) return 'minds-'
+    if (x === SocialNetworkEnum.Instagram) return 'instagram-'
+    unreachable(x)
+}
+
 async function getPostKeyCache(id: PostIVIdentifier) {
     const post = await queryPostDB(id)
     if (!post?.postCryptoKey) return null
@@ -205,4 +203,17 @@ async function storeAuthorPublicKey(
         // TODO: store the key
     }
     // ! Author detected is not equal to AuthorHint. Skip store the public key because it might be a security problem.
+}
+
+async function queryPublicKey(author: ProfileIdentifier | null, extractable = false, signal?: AbortSignal) {
+    if (!author) return null
+    const persona = await queryPersonaByProfileDB(author)
+    if (!persona) return null
+    return (await crypto.subtle.importKey(
+        'jwk',
+        persona.publicKey,
+        { name: 'ECDH', namedCurve: persona.publicKey.crv! } as EcKeyAlgorithm,
+        extractable,
+        ['deriveKey'],
+    )) as EC_Public_CryptoKey
 }

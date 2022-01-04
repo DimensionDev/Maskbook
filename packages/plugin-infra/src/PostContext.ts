@@ -2,6 +2,7 @@ import { useObservableValues, useValueRef } from '@masknet/shared'
 import {
     ObservableMap,
     ObservableSet,
+    TypedMessage,
     type Payload,
     type PostIdentifier,
     type ProfileIdentifier,
@@ -66,6 +67,8 @@ export interface PostContext extends PostContextAuthor {
     //#endregion
     //#region Raw post content (not decrypted)
     readonly rawMessage: Subscription<TypedMessageTuple>
+    /** rawMessage but with no TypedMessagePromise inside */
+    readonly rawMessageResolved: Subscription<TypedMessage>
     // TODO: should be a Subscription
     readonly rawMessagePiped: ValueRef<TypedMessageTuple>
     //#endregion

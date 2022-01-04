@@ -16,6 +16,10 @@ import {
     SubscriptionFromValueRef,
     SubscriptionDebug as debug,
     mapSubscription,
+    createSubscriptionFromAsync,
+    waitTypedMessage,
+    makeTypedMessageEmpty,
+    flattenTypedMessage,
 } from '@masknet/shared-base'
 import { Err, Result } from 'ts-results'
 import type { Subscription } from 'use-subscription'
@@ -102,6 +106,15 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
                 return () => void [a(), b()]
             },
         })
+        let initialTrigger = false
+        const rawMessageResolved = createSubscriptionFromAsync(
+            () => waitTypedMessage(opt.rawMessage.getCurrentValue()).then(flattenTypedMessage),
+            makeTypedMessageEmpty(),
+            (e) => {
+                !initialTrigger && e() && (initialTrigger = true)
+                return opt.rawMessage.subscribe(e)
+            },
+        )
         return {
             ...author,
 
@@ -127,6 +140,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             postMetadataMentionedLinks: linksSubscribe,
 
             rawMessage: opt.rawMessage,
+            rawMessageResolved,
             rawMessagePiped: transformedPostContent,
 
             containingMaskPayload: SubscriptionFromValueRef(postPayload),
