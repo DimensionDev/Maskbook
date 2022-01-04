@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     input: {
-        padding: `${theme.spacing(2)}`,
+        padding: theme.spacing(2),
     },
     span: {
         paddingLeft: theme.spacing(2),

@@ -147,8 +147,8 @@ export function resolveDomainLink(domain?: string) {
 export function resolveCollectibleProviderLink(chainId: ChainId, provider: NonFungibleAssetProvider) {
     switch (provider) {
         case NonFungibleAssetProvider.OPENSEA:
-            if (chainId === ChainId.Rinkeby) return `https://testnets.opensea.io`
-            return `https://opensea.io`
+            if (chainId === ChainId.Rinkeby) return 'https://testnets.opensea.io'
+            return 'https://opensea.io'
         case NonFungibleAssetProvider.RARIBLE:
             return 'https://rarible.com'
         case NonFungibleAssetProvider.NFTSCAN:
@@ -161,9 +161,9 @@ export function resolveCollectibleProviderLink(chainId: ChainId, provider: NonFu
 export function resolveCollectibleAssetLink(chainId: ChainId, provider: NonFungibleAssetProvider) {
     switch (provider) {
         case NonFungibleAssetProvider.OPENSEA:
-            if (chainId === ChainId.Rinkeby) return `https://testnets.opensea.io/assets`
-            if (chainId === ChainId.Matic) return `https://opensea.io/assets/matic`
-            return `https://opensea.io/assets`
+            if (chainId === ChainId.Rinkeby) return 'https://testnets.opensea.io/assets'
+            if (chainId === ChainId.Matic) return 'https://opensea.io/assets/matic'
+            return 'https://opensea.io/assets'
         case NonFungibleAssetProvider.RARIBLE:
             return ''
         case NonFungibleAssetProvider.NFTSCAN:

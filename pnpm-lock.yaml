@@ -10,6 +10,7 @@ importers:
     specifiers:
       '@commitlint/cli': ^16.0.0
       '@commitlint/config-conventional': ^16.0.0
+      '@dimensiondev/eslint-plugin': ^0.0.1-20211222115249-7984aa5
       '@dimensiondev/kit': 0.0.0-20211215044858-27d964f
       '@dimensiondev/patch-package': ^6.5.0
       '@emotion/cache': ^11.7.1
@@ -35,7 +36,6 @@ importers:
       eslint: 8.5.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-import: 2.25.3
-      eslint-plugin-lodash: ^7.3.0
       eslint-plugin-prettier: ^4.0.0
       eslint-plugin-react: ^7.28.0
       eslint-plugin-react-hooks: ^4.3.0
@@ -89,6 +89,7 @@ importers:
     devDependencies:
       '@commitlint/cli': 16.0.0
       '@commitlint/config-conventional': 16.0.0
+      '@dimensiondev/eslint-plugin': 0.0.1-20211222115249-7984aa5_eslint@8.5.0
       '@dimensiondev/patch-package': 6.5.0
       '@jest/globals': 27.4.4
       '@magic-works/i18n-codegen': 0.0.6_typescript@4.6.0-dev.20211202
@@ -100,7 +101,6 @@ importers:
       eslint: 8.5.0
       eslint-config-prettier: 8.3.0_eslint@8.5.0
       eslint-plugin-import: 2.25.3_eslint@8.5.0
-      eslint-plugin-lodash: 7.3.0_eslint@8.5.0
       eslint-plugin-prettier: 4.0.0_94e1b6d3ce6ea916847122712570e9ae
       eslint-plugin-react: 7.28.0_eslint@8.5.0
       eslint-plugin-react-hooks: 4.3.0_eslint@8.5.0
@@ -3434,6 +3434,18 @@ packages:
     dependencies:
       '@msgpack/msgpack': 1.12.2
     dev: false
+
+  /@dimensiondev/eslint-plugin/0.0.1-20211222115249-7984aa5_eslint@8.5.0:
+    resolution: {integrity: sha512-CcPs3cioDRhYs0Gpz+F4TKfL+rsgdulFd3zaBNU06Rq522opZX9VmpcrCDuW4f1EHNYKYIj1wEVGvBvSlbCMAg==, tarball: download/@dimensiondev/eslint-plugin/0.0.1-20211222115249-7984aa5/2641dcbec68ae0b51f1dc91e9c92abe14be0258740198e2c12d24888a5f1f338}
+    engines: {node: '>= 14'}
+    peerDependencies:
+      eslint: '>= 8'
+    dependencies:
+      eslint: 8.5.0
+      lodash.set: 4.3.2
+    dev: true
+    bundledDependencies:
+      - lodash.set
 
   /@dimensiondev/holoflows-kit/0.9.0-20210902104757-7c3d0d0:
     resolution: {integrity: sha512-Vk22WLOTW20OECTHdLGulGmDsTFguURQYB9Oq8S+eDVrmWHCxKD/N+4OU5uCFrWCkqjl/n7vec3fVWUSunpBeA==, tarball: download/@dimensiondev/holoflows-kit/0.9.0-20210902104757-7c3d0d0/bce56871014284e7863fc97177b316aec94f6dfddf627312e690958400e958e8}
@@ -13171,16 +13183,6 @@ packages:
       tsconfig-paths: 3.12.0
     dev: true
 
-  /eslint-plugin-lodash/7.3.0_eslint@8.5.0:
-    resolution: {integrity: sha512-FQM8HklruJzulPawX3uZqWbeyN3bQT4hjVCpFYMrWo0Hdz1qDCwp1v3JS4zjhdssAXdwCxdnyrNMCZJK70GeUQ==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      eslint: '>=2'
-    dependencies:
-      eslint: 8.5.0
-      lodash: 4.17.21
-    dev: true
-
   /eslint-plugin-prettier/4.0.0_94e1b6d3ce6ea916847122712570e9ae:
     resolution: {integrity: sha512-98MqmCJ7vJodoQK359bqQWaxOE0CS8paAz/GgjaZLyex4TTk3g9HugoO89EqWCrFiOqn9EVvcoo7gZzONCWVwQ==}
     engines: {node: '>=6.0.0'}
@@ -17776,7 +17778,6 @@ packages:
 
   /lodash.set/4.3.2:
     resolution: {integrity: sha1-2HV7HagH3eJIFrDWqEvqGnYjCyM=}
-    dev: false
 
   /lodash.unescape/4.0.1:
     resolution: {integrity: sha1-vyJJiGzlFM2hEvrpIYzcBlIR/Jw=}

@@ -93,6 +93,7 @@ export function encodeEvent<T extends keyof InternalEvents>(key: T, args: Intern
 export function decodeEvent(data: string): EventItemBeforeSerialization {
     const result = parse(data)
     // Do not throw new Error cause it requires a global lookup.
+    // eslint-disable-next-line
     if (!isEventItemBeforeSerialization(result)) throw null
     return result
 }

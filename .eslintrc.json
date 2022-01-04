@@ -7,7 +7,7 @@
     "env": {
         "node": true
     },
-    "plugins": ["unused-imports", "lodash"],
+    "plugins": ["unused-imports"],
     "rules": {
         "constructor-super": "error",
         "dot-notation": "error",
@@ -37,7 +37,6 @@
         "no-template-curly-in-string": "error",
         "prefer-const": "warn",
         "use-isnan": "error",
-        "unused-imports/no-unused-imports-ts": "error",
-        "lodash/import-scope": ["error", "member"]
+        "unused-imports/no-unused-imports-ts": "error"
     }
 }
