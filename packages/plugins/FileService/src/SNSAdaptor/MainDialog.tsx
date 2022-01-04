@@ -17,7 +17,7 @@ interface Props {
     open: boolean
 }
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     actions: {
         alignSelf: 'center',
     },
@@ -29,7 +29,18 @@ const useStyles = makeStyles()({
         paddingLeft: 35,
         paddingRight: 35,
     },
-})
+    paper: {
+        width: '600px !important',
+        maxWidth: 'none',
+        boxShadow: 'none',
+        backgroundImage: 'none',
+        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+            display: 'block !important',
+            margin: 12,
+        },
+    },
+}))
+
 const FileServiceDialog: React.FC<Props> = (props) => {
     const t = useI18N()
     const { classes } = useStyles()
@@ -60,7 +71,11 @@ const FileServiceDialog: React.FC<Props> = (props) => {
         showSnackbar(t.uploading_on_cancel())
     }
     return (
-        <MaskDialog DialogProps={{ scroll: 'paper' }} open={props.open} title={t.__display_name()} onClose={onDecline}>
+        <MaskDialog
+            DialogProps={{ scroll: 'paper', classes: { paper: classes.paper } }}
+            open={props.open}
+            title={t.__display_name()}
+            onClose={onDecline}>
             <DialogContent style={{ minWidth: 515 }}>
                 <Exchange onUploading={setUploading} onInsert={setSelectedFileInfo}>
                     <Entry />
