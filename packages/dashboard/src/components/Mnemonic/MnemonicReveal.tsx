@@ -23,7 +23,7 @@ export function MnemonicReveal(props: MnemonicRevealProps) {
     return (
         <Grid container spacing={2}>
             {words.map((item, index) => (
-                <Grid item xs={3} key={index + item}>
+                <Grid item xs={3} key={index}>
                     <WordCard>{item}</WordCard>
                 </Grid>
             ))}

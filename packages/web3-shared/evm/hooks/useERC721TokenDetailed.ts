@@ -64,6 +64,7 @@ export async function getERC721TokenDetailedFromOpensea(
                 description: data.description,
                 mediaUrl: data.image_url || data.animation_url,
                 owner: first(data.top_ownerships)?.owner.address ?? '',
+                hasTokenDetailed: true,
             },
             tokenId,
         )

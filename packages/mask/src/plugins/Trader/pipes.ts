@@ -144,7 +144,7 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
                 case NetworkType.xDai:
                     return `https://analytics-xdai.sushi.com/pairs/${address}`
                 case NetworkType.Optimistic:
-                    return ``
+                    return ''
                 case NetworkType.Celo:
                     return `https://analytics-celo.sushi.com/pairs/${address}`
                 case NetworkType.Fantom:
@@ -163,10 +163,10 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             return `https://pancakeswap.info/pool/${address}`
         case TradeProvider.BANCOR:
             // TODO - Bancor analytics should be available with V3
-            return ``
+            return ''
         case TradeProvider.OPENOCEAN:
             // TODO - OpenOcean
-            return ``
+            return ''
         default:
             unreachable(tradeProvider)
     }

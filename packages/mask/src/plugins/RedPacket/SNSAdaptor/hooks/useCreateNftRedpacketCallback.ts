@@ -101,7 +101,7 @@ export function useCreateNftRedpacketCallback(
                     // Note: DO NOT remove this event listener since it relates to password saving.
                     .on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
                         setCreateState({
-                            type: TransactionStateType.WAIT_FOR_CONFIRMING,
+                            type: TransactionStateType.HASH,
                             hash,
                         })
                     })
