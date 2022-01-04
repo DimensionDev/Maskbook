@@ -316,6 +316,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                         ChainId.xDai,
                         ChainId.Celo,
                         ChainId.Fantom,
+                        ChainId.Optimistic,
                     ],
                 ),
             undefined,

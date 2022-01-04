@@ -31,9 +31,9 @@
         "Arbitrum": "0xadF885960B47eA2CD9B55E6DAc6B42b7Cb2806dB",
         "Arbitrum_Rinkeby": "0xa501c031958F579dB7676fF1CE78AD305794d579",
         "xDai": "0xAb7B1bE4233A04e5C43a810E75657ECED8E5463B",
-        "Optimistic": "",
-        "Optimistic_Kovan": "",
-        "Optimistic_Goerli": "",
+        "Optimistic": "0x5BA1e12693Dc8F9c48aAD8770482f4739bEeD696",
+        "Optimistic_Kovan": "0x5BA1e12693Dc8F9c48aAD8770482f4739bEeD696",
+        "Optimistic_Goerli": "0x5BA1e12693Dc8F9c48aAD8770482f4739bEeD696",
         "Celo": "0x072453AdEC16cFC7FB6Af1517c3f25407180cccC",
         "Fantom": "0x913975af2Bb8a6Be4100D7dc5e9765B77F6A5d6c"
     },
