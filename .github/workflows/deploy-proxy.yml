@@ -2,7 +2,7 @@ name: Publish Proxy Package
 
 on:
   push:
-    branches: [feat/api-provider-proxy*]
+    branches: [hyper-proxy-deploy]
 
 jobs:
   build:
