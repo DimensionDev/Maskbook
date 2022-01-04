@@ -1,4 +1,4 @@
-import { describe, test, expect, beforeEach, afterEach, jest } from '@jest/globals'
+import { describe, test, expect, beforeEach, afterEach, jest, afterAll, beforeAll } from '@jest/globals'
 import { SocketPoolItem, ProviderProxy } from '../proxy'
 import * as mockWS from 'jest-websocket-mock'
 import addSeconds from 'date-fns/addSeconds'
@@ -34,9 +34,6 @@ describe('Proxy websocket', () => {
         client.send({ ...testMethod, notify: mockNotifyCallback })
         pushToClientMockData(mockData)
 
-        // @ts-ignore
-        await expect(server).toReceiveMessage(testMethod)
-
         const data = client.getResult<string>(id)
         expect(data).toEqual(['eth', 'bsc'])
         expect(mockNotifyCallback?.mock.calls.length).toBe(1)
@@ -51,9 +48,6 @@ describe('Proxy websocket', () => {
 
         client.send({ ...testMethod, notify: mockNotifyCallback })
         pushToClientMockData(mockData, true)
-
-        // @ts-ignore
-        await expect(server).toReceiveMessage(testMethod)
 
         const data = client.getResult<string>(id)
         expect(data).toEqual(['eth', 'bsc'])
@@ -73,9 +67,6 @@ describe('Proxy websocket', () => {
         const mockData2 = { id, results: ['matic'] }
         pushToClientMockData(mockData1)
         pushToClientMockData(mockData2, true)
-
-        // @ts-ignore
-        await expect(server).toReceiveMessage(testMethod)
 
         const data = client.getResult<string>(id)
         expect(data).toEqual(['eth', 'bsc', 'matic'])
@@ -98,11 +89,6 @@ describe('Proxy websocket', () => {
         pushToClientMockData(mockData1)
         pushToClientMockData(mockData2)
         pushToClientMockData(mockData3)
-
-        // @ts-ignore
-        await expect(server).toReceiveMessage(testMethod1)
-        // @ts-ignore
-        await expect(server).toReceiveMessage(testMethod2)
 
         const request1Data = client.getResult<string>(requestID1)
         expect(request1Data).toEqual(['eth', 'bsc', 'matic'])
@@ -131,16 +117,22 @@ describe('Proxy websocket', () => {
         expect(data).toEqual([])
     })
 
-    afterEach(() => {
+    afterEach((done) => {
         client?.socket?.close()
         server.server.close()
         mockWS.WS.clean()
+        done()
     })
 })
 
 describe('Proxy websocket unit', () => {
+    let client: ProviderProxy
+
+    beforeAll(async () => {
+        client = new ProviderProxy(TEST_WS_POINT)
+    })
+
     test('should not expired when update before 30s', () => {
-        const client = new ProviderProxy(TEST_WS_POINT, () => {})
         const item = {
             updatedAt: addSeconds(new Date(), -20),
         }
@@ -149,11 +141,14 @@ describe('Proxy websocket unit', () => {
     })
 
     test('should not expired when update within 30s', () => {
-        const client = new ProviderProxy(TEST_WS_POINT, () => {})
         const item = {
             updatedAt: addSeconds(new Date(), -20),
         }
         const isExpired = client.isExpired(item as SocketPoolItem)
         expect(isExpired).toBe(false)
+    })
+    afterAll((done) => {
+        client?.socket?.close()
+        done()
     })
 })
