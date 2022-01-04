@@ -313,7 +313,7 @@ export const TransferERC721 = memo(() => {
                                             if (!!ensContent) setPopoverOpen(true)
                                             setMinPopoverWidth(event.currentTarget.clientWidth)
                                         },
-                                        spellCheck: {false}
+                                        spellCheck: false
                                     }}
                                     label={t.wallets_transfer_to_address()}
                                 />
