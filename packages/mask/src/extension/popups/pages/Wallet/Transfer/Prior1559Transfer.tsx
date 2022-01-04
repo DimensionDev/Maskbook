@@ -150,7 +150,10 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                 .string()
                 .min(1, t('wallet_transfer_error_address_absence'))
                 .refine((address) => EthereumAddress.isValid(address), t('wallet_transfer_error_invalid_address'))
-                .refine((address) => address !== wallet?.address, t('wallet_transfer_error_address_absence')),
+                .refine(
+                    (address) => address !== wallet?.address,
+                    t('wallet_transfer_error_same_address_with_current_account'),
+                ),
             amount: zod
                 .string()
                 .refine((amount) => {

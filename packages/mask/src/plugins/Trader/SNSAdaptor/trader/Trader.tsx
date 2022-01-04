@@ -499,6 +499,7 @@ export function Trader(props: TraderProps) {
     return (
         <div className={classes.root}>
             <TradeForm
+                wallet={wallet}
                 trades={sortedAllTradeComputed}
                 inputToken={inputToken}
                 outputToken={outputToken}

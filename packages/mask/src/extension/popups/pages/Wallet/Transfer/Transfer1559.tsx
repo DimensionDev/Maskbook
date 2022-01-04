@@ -193,7 +193,10 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                         (address) => EthereumAddress.isValid(address) || Utils?.isValidDomain?.(address),
                         t('wallet_transfer_error_invalid_address'),
                     )
-                    .refine((address) => address !== wallet?.address, t('wallet_transfer_error_address_absence')),
+                    .refine(
+                        (address) => address !== wallet?.address,
+                        t('wallet_transfer_error_same_address_with_current_account'),
+                    ),
                 amount: zod
                     .string()
                     .refine((amount) => {
@@ -252,7 +255,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 message: t('wallet_transfer_error_max_priority_gas_fee_imbalance'),
                 path: ['maxFeePerGas'],
             })
-    }, [selectedAsset, minGasLimitContext, estimateGasFees, Utils])
+    }, [wallet, selectedAsset, minGasLimitContext, estimateGasFees, Utils])
 
     const methods = useForm<zod.infer<typeof schema>>({
         shouldUnregister: false,
@@ -266,6 +269,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
             maxFeePerGas: '',
         },
         context: {
+            wallet,
             minGasLimitContext,
             estimateGasFees,
             selectedAsset,

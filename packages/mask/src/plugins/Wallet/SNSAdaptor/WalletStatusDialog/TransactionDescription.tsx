@@ -28,6 +28,7 @@ function getTransactionDescription(
 ) {
     if (!computedPayload) return
     const type = computedPayload.type
+
     switch (type) {
         case EthereumRpcType.SEND_ETHER:
             return `Send token -${getTokenAmountDescription(
@@ -72,6 +73,8 @@ function getTransactionDescription(
                     )
                     const amountOut = formatBalance(computedPayload.parameters.amountOutMin, tokenDetailed?.decimals, 2)
                     return `Swap ${amountIn} ${nativeTokenDetailed?.symbol} for ${amountOut} ${tokenDetailed?.symbol}`
+                case 'create_red_packet':
+                    return 'Lucky drop'
                 default:
                     return `${computedPayload.name ?? 'Contract Interaction'} ${
                         computedPayload._tx.value

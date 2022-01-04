@@ -218,6 +218,7 @@
     "wallet_transfer_title": "Transfer",
     "wallet_transfer_error_amount_absence": "Enter an amount",
     "wallet_transfer_error_address_absence": "Enter recipient address",
+    "wallet_transfer_error_same_address_with_current_account": "This receiving address is the same as the sending address. Please check again.",
     "wallet_transfer_error_invalid_address": "Invalid recipient address",
     "wallet_transfer_error_no_address_has_been_set_name": "The address of the receiver is invalid.",
     "wallet_transfer_error_no_support_ens": "Network does not support ENS.",

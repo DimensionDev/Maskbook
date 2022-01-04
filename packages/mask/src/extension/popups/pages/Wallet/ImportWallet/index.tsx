@@ -1,5 +1,5 @@
 import { memo, useMemo, useState } from 'react'
-import { Tab, Tabs, TextField, Typography } from '@mui/material'
+import { Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles, useTabs } from '@masknet/theme'
 import { Controller, useForm } from 'react-hook-form'
 import { z as zod } from 'zod'
@@ -65,18 +65,24 @@ const useStyles = makeStyles()({
     },
     tabPanel: {
         padding: '16px 0 0 0',
+        flex: 1,
+        position: 'relative',
     },
     multiline: {
         width: '100%',
+        height: '100%',
+        position: 'absolute',
     },
     multilineInput: {
         padding: 6,
         borderRadius: 6,
         backgroundColor: '#F7F9FA',
+        height: '100%',
     },
     textArea: {
         padding: 0,
         fontSize: 12,
+        height: '100%!important',
     },
     button: {
         fontWeight: 600,
@@ -263,16 +269,13 @@ const ImportWallet = memo(() => {
                         />
                     </Tabs>
                     <TabPanel value={tabs.mnemonic} className={classes.tabPanel}>
-                        <TextField
-                            variant="filled"
+                        <StyledInput
                             multiline
                             value={mnemonic}
                             onChange={(e) => {
                                 if (errorMessage) setErrorMessage('')
-                                setMnemonic(e.target.value)
+                                setMnemonic(e.target.value.replaceAll('\n', ' '))
                             }}
-                            minRows={4}
-                            maxRows={10}
                             placeholder={t('popups_wallet_name_mnemonic_placeholder')}
                             InputProps={{ disableUnderline: true, classes: { root: classes.multilineInput } }}
                             className={classes.multiline}
@@ -292,8 +295,7 @@ const ImportWallet = memo(() => {
                         />
                     </TabPanel>
                     <TabPanel value={tabs.privateKey} className={classes.tabPanel}>
-                        <TextField
-                            variant="filled"
+                        <StyledInput
                             multiline
                             value={privateKey}
                             onChange={(e) => {
