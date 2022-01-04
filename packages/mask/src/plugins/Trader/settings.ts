@@ -110,6 +110,7 @@ const balancerSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvi
 const dodoSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+dodo`, '')
 const bancorSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+bancor`, '')
 const traderjoeSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+traderjoe`, '')
+const pangolinSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+pangolin`, '')
 const openoceanSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+openocean`, '')
 
 /**
@@ -141,6 +142,8 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return traderjoeSettings
         case TradeProvider.OPENOCEAN:
             return openoceanSettings
+        case TradeProvider.PANGOLIN:
+            return pangolinSettings
         default:
             unreachable(tradeProvider)
     }

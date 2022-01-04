@@ -66,6 +66,7 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
         { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
         { label: 'TraderJoe', value: TradeProvider.TRADERJOE },
         { label: 'OpenOcean', value: TradeProvider.OPENOCEAN },
+        { label: 'PangolinDex', value: TradeProvider.PANGOLIN },
     ]
 
     const t = useDashboardI18N()

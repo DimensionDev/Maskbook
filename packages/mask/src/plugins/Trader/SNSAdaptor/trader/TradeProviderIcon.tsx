@@ -9,6 +9,7 @@ import { UniswapIcon } from '../../../../resources/UniswapIcon'
 import { ZRXIcon } from '../../../../resources/ZRXIcon'
 import { DODOIcon } from '../../../../resources/DODOIcon'
 import { OpenOceanIcon } from '../../../../resources/OpenOceanIcon'
+import { PangolinIcon } from '../../../../resources/PangolinIcon'
 import { resolveTradeProviderName } from '../../pipes'
 
 const quickswapIcon = new URL('../../../../resources/quickswap.png', import.meta.url).toString()
@@ -71,6 +72,8 @@ export function TradeProviderIcon(props: TradeProviderIconProps) {
             )
         case TradeProvider.OPENOCEAN:
             return <OpenOceanIcon classes={{ root: classes.icon }} />
+        case TradeProvider.PANGOLIN:
+            return <PangolinIcon classes={{ root: classes.icon }} />
         default:
             unreachable(props.provider)
     }

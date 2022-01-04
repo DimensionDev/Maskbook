@@ -58,6 +58,7 @@ export const resolveTradeProviderName = createLookupTableResolver<TradeProvider,
         [TradeProvider.BANCOR]: 'Bancor',
         [TradeProvider.OPENOCEAN]: 'OpenOcean',
         [TradeProvider.TRADERJOE]: 'TraderJoe',
+        [TradeProvider.PANGOLIN]: 'PangolinDex',
     },
     (tradeProvider) => {
         throw new Error(`Unknown provider type: ${tradeProvider}`)
@@ -110,6 +111,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
             return 'https://openocean.finance/classic'
         case TradeProvider.TRADERJOE:
             return 'https://traderjoexyz.com/#/trade'
+        case TradeProvider.PANGOLIN:
+            return 'https://app.pangolin.exchange/#/swap'
         default:
             unreachable(tradeProvider)
     }
@@ -173,6 +176,8 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
         case TradeProvider.TRADERJOE:
             // TODO - Trader Joe Analytics
             return ''
+        case TradeProvider.PANGOLIN:
+            return `https://info.pangolin.exchange/pair/${address}`
         default:
             unreachable(tradeProvider)
     }
@@ -263,6 +268,7 @@ export const resolveZrxTradePoolName = createLookupTableResolver<ZrxTradePool, s
         [ZrxTradePool.WaultSwap]: 'WaultSwap',
         [ZrxTradePool.xSigma]: 'xSigma',
         [ZrxTradePool.TraderJoe]: 'TraderJoe',
+        [ZrxTradePool.PangolinDex]: 'PangolinDex',
     },
     'Unknown',
 )

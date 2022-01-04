@@ -15,6 +15,8 @@ import {
     UNISWAP_CUSTOM_BASES,
     TRADERJOE_BASE_AGAINST_TOKENS,
     TRADERJOE_CUSTOM_BASES,
+    PANGOLIN_BASE_AGAINST_TOKENS,
+    PANGOLIN_CUSTOM_BASES,
 } from '../constants'
 import { unreachable } from '@dimensiondev/kit'
 import { TargetChainIdContext } from './useTargetChainIdContext'
@@ -96,6 +98,30 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: PANCAKESWAP_CUSTOM_BASES,
                 }
+            case TradeProvider.TRADERJOE:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: getTraderConstants(chainId).TRADERJOE_THEGRAPH,
+                    INIT_CODE_HASH: getTraderConstants(chainId).TRADERJOE_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).TRADERJOE_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: getTraderConstants(chainId).TRADERJOE_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: TRADERJOE_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: TRADERJOE_CUSTOM_BASES,
+                }
+            case TradeProvider.PANGOLIN:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: getTraderConstants(chainId).PANGOLIN_THEGRAPH,
+                    INIT_CODE_HASH: getTraderConstants(chainId).PANGOLIN_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).PANGOLIN_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: getTraderConstants(chainId).PANGOLIN_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: PANGOLIN_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: PANGOLIN_CUSTOM_BASES,
+                }
             case TradeProvider.ZRX:
                 return {
                     TYPE: tradeProvider,
@@ -114,18 +140,6 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                 return {
                     TYPE: tradeProvider,
                     ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).BANCOR_EXCHANGE_PROXY_ADDRESS,
-                }
-            case TradeProvider.TRADERJOE:
-                return {
-                    TYPE: tradeProvider,
-                    IS_UNISWAP_V2_LIKE: true,
-                    GRAPH_API: getTraderConstants(chainId).TRADERJOE_THEGRAPH,
-                    INIT_CODE_HASH: getTraderConstants(chainId).TRADERJOE_INIT_CODE_HASH,
-                    ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).TRADERJOE_ROUTER_ADDRESS,
-                    FACTORY_CONTRACT_ADDRESS: getTraderConstants(chainId).TRADERJOE_FACTORY_ADDRESS,
-                    AGAINST_TOKENS: TRADERJOE_BASE_AGAINST_TOKENS,
-                    ADDITIONAL_TOKENS: {},
-                    CUSTOM_TOKENS: TRADERJOE_CUSTOM_BASES,
                 }
             case TradeProvider.OPENOCEAN:
                 return {

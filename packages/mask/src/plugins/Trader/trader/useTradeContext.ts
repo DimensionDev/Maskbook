@@ -15,6 +15,8 @@ import {
     UNISWAP_CUSTOM_BASES,
     TRADERJOE_BASE_AGAINST_TOKENS,
     TRADERJOE_CUSTOM_BASES,
+    PANGOLIN_BASE_AGAINST_TOKENS,
+    PANGOLIN_CUSTOM_BASES,
 } from '../constants'
 import type { TradeContext as TradeContext_ } from '../types'
 import { TargetChainIdContext } from './useTargetChainIdContext'
@@ -127,6 +129,18 @@ export function useTradeContext(tradeProvider: TradeProvider) {
                     AGAINST_TOKENS: TRADERJOE_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: TRADERJOE_CUSTOM_BASES,
+                }
+            case TradeProvider.PANGOLIN:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: getTraderConstants(chainId).PANGOLIN_THEGRAPH,
+                    INIT_CODE_HASH: getTraderConstants(chainId).PANGOLIN_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).PANGOLIN_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: getTraderConstants(chainId).PANGOLIN_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: PANGOLIN_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: PANGOLIN_CUSTOM_BASES,
                 }
             case TradeProvider.OPENOCEAN:
                 return {

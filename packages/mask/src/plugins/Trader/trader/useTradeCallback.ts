@@ -108,6 +108,8 @@ export function useTradeCallback(
             return bancor
         case TradeProvider.TRADERJOE:
             return uniswapV2Like
+        case TradeProvider.PANGOLIN:
+            return uniswapV2Like
         case TradeProvider.OPENOCEAN:
             return openocean
         default:

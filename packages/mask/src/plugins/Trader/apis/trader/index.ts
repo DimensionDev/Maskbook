@@ -40,7 +40,7 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
         case NetworkType.xDai:
             return [TradeProvider.SUSHISWAP]
         case NetworkType.Avalanche:
-            return [TradeProvider.SUSHISWAP, TradeProvider.TRADERJOE]
+            return [TradeProvider.SUSHISWAP, TradeProvider.TRADERJOE, TradeProvider.OPENOCEAN, TradeProvider.PANGOLIN]
         case NetworkType.xDai:
             return [TradeProvider.SUSHISWAP, TradeProvider.OPENOCEAN]
         case NetworkType.Celo:
