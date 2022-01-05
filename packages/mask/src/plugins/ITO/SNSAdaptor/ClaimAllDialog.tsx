@@ -215,6 +215,15 @@ interface ClaimAllDialogProps {
     open: boolean
 }
 
+const SUPPORTED_CHAIN_ID_LIST = [
+    ChainId.Mainnet,
+    ChainId.BSC,
+    ChainId.Matic,
+    ChainId.Arbitrum,
+    ChainId.xDai,
+    ChainId.Fantom,
+]
+
 export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { t } = useI18N()
     const { open, onClose } = props
@@ -233,14 +242,15 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         [ChainId.Boba]: 'Boba',
     }
 
-    const [chainId, setChainId] = useState(tabItems[currentChainId] ? currentChainId : ChainId.Mainnet)
-
     const {
         value: campaignInfos,
         loading: loadingAirdrop,
         retry: retryAirdrop,
     } = useSpaceStationCampaignInfo(account, Flags.nft_airdrop_enabled)
 
+    const [chainId, setChainId] = useState(
+        SUPPORTED_CHAIN_ID_LIST.includes(currentChainId) ? currentChainId : ChainId.Mainnet,
+    )
     const { value: swappedTokens, loading, retry } = useClaimablePools(chainId)
     const { ITO_CONTRACT_ADDRESS: ITO_CONTRACT_ADDRESS_MAINNET } = useITOConstants(ChainId.Mainnet)
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
@@ -388,14 +398,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                             chainId={chainId}
                             setChainId={setChainId}
                             classes={classes}
-                            chains={[
-                                ChainId.Mainnet,
-                                ChainId.BSC,
-                                ChainId.Matic,
-                                ChainId.Arbitrum,
-                                ChainId.xDai,
-                                ChainId.Fantom,
-                            ]}
+                            chains={SUPPORTED_CHAIN_ID_LIST}
                         />
                     </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>

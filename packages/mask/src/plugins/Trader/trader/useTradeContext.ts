@@ -21,6 +21,7 @@ export const TradeContext = createContext<TradeContext_ | null>(null)
 
 export function useTradeContext(tradeProvider: TradeProvider) {
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+
     return useMemo<TradeContext_>(() => {
         switch (tradeProvider) {
             case TradeProvider.UNISWAP_V2:
