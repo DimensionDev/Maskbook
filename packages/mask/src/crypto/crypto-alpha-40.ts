@@ -4,9 +4,8 @@
  */
 import { encodeText, encodeArrayBuffer, decodeArrayBuffer, decodeText, concatArrayBuffer } from '@dimensiondev/kit'
 import { memoizePromise } from '../../utils-pure'
-import { i18n } from '../../shared-ui/locales_legacy'
 import { CryptoWorker } from '../modules/workers'
-import { EC_Private_JsonWebKey, EC_Public_JsonWebKey, AESJsonWebKey, makeTypedMessageText } from '@masknet/shared-base'
+import type { EC_Private_JsonWebKey, EC_Public_JsonWebKey, AESJsonWebKey } from '@masknet/shared-base'
 import {
     derive_AES_GCM_256_Key_From_PBKDF2,
     derive_AES_GCM_256_Key_From_ECDH_256k1_Keys,
@@ -156,59 +155,7 @@ export async function encrypt1ToN(info: {
     return { encryptedContent, iv, version: -40, ownersAESKeyEncrypted, othersAESKeyEncrypted, postAESKey: AESKey }
 }
 //#endregion
-//#region decrypt text
-/**
- * Decrypt 1 to 1
- */
-export async function decryptMessage1To1(info: {
-    version: -40 | -39 | -38
-    encryptedContent: string | ArrayBuffer
-    salt: string | ArrayBuffer
-    /** Your private key */
-    privateKeyECDH: EC_Private_JsonWebKey
-    /** If you are the author, this should be the receiver's public key.
-     * Otherwise, this should be the author's public key */
-    anotherPublicKeyECDH: EC_Public_JsonWebKey
-}): Promise<ArrayBuffer> {
-    const { anotherPublicKeyECDH, version, salt, encryptedContent, privateKeyECDH } = info
-    const encrypted = typeof encryptedContent === 'string' ? decodeArrayBuffer(encryptedContent) : encryptedContent
 
-    const { iv, key } = await deriveAESKey(privateKeyECDH, anotherPublicKeyECDH, salt)
-    return CryptoWorker.decrypt_aes_gcm(key, iv, encrypted)
-}
-/**
- * Decrypt 1 to N message that send by other
- */
-export async function decryptMessage1ToNByOther(info: {
-    version: -40 | -39 | -38
-    encryptedContent: string | ArrayBuffer
-    privateKeyECDH: EC_Private_JsonWebKey
-    authorsPublicKeyECDH: EC_Public_JsonWebKey
-    AESKeyEncrypted: PublishedAESKey | PublishedAESKey[]
-    iv: ArrayBuffer | string
-}): Promise<[ArrayBuffer, AESJsonWebKey]> {
-    const { encryptedContent, privateKeyECDH, authorsPublicKeyECDH, iv } = info
-    const AESKeyEncrypted = Array.isArray(info.AESKeyEncrypted) ? info.AESKeyEncrypted : [info.AESKeyEncrypted]
-
-    let resolvedAESKey: string | null = null
-    await Promise.all(
-        AESKeyEncrypted.map(async (key) => {
-            try {
-                const result = await decryptMessage1To1({
-                    version: -40,
-                    salt: key.salt,
-                    encryptedContent: key.encryptedKey,
-                    anotherPublicKeyECDH: authorsPublicKeyECDH,
-                    privateKeyECDH: privateKeyECDH,
-                })
-                resolvedAESKey = decodeText(result)
-            } catch {}
-        }),
-    )
-    if (resolvedAESKey === null) throw new Error(i18n.t('service_not_share_target'))
-    const aesKey: AESJsonWebKey = JSON.parse(resolvedAESKey)
-    return [await decryptWithAES({ aesKey, iv, encrypted: encryptedContent }), aesKey]
-}
 export async function extractAESKeyInMessage(
     version: -40 | -39 | -38,
     encodedEncryptedKey: string | ArrayBuffer,
@@ -223,22 +170,7 @@ export async function extractAESKeyInMessage(
     )
     return decryptedAESKeyJWK
 }
-/**
- * Decrypt 1 to N message that send by myself
- */
-export async function decryptMessage1ToNByMyself(info: {
-    version: -40 | -39 | -38
-    encryptedContent: string | ArrayBuffer
-    /** This should be included in the message */
-    encryptedAESKey: string | ArrayBuffer
-    myLocalKey: AESJsonWebKey
-    iv: string | ArrayBuffer
-}): Promise<[ArrayBuffer, AESJsonWebKey]> {
-    const { encryptedContent, myLocalKey, iv, encryptedAESKey } = info
-    const decryptedAESKey = await extractAESKeyInMessage(-40, encryptedAESKey, iv, myLocalKey)
-    const post = await decryptWithAES({ aesKey: decryptedAESKey, encrypted: encryptedContent, iv })
-    return [post, decryptedAESKey]
-}
+
 /**
  * Decrypt the content encrypted by AES
  */
@@ -322,7 +254,4 @@ export async function decryptComment(
 
 export function typedMessageStringify(x: any) {
     throw new Error('Not supported typed message in version older than v39.')
-}
-export function typedMessageParse(x: string) {
-    return makeTypedMessageText(x)
 }

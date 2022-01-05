@@ -79,8 +79,8 @@ export async function encrypt1ToN(info: {
     }
 }
 
-export { encrypt1To1, decryptMessage1To1 } from './crypto-alpha-40'
-export { decryptMessage1ToNByOther, decryptMessage1ToNByMyself, extractAESKeyInMessage } from './crypto-alpha-40'
+export { encrypt1To1 } from './crypto-alpha-40'
+export { extractAESKeyInMessage } from './crypto-alpha-40'
 export { encryptWithAES, decryptWithAES } from './crypto-alpha-40'
 export { encryptComment, decryptComment } from './crypto-alpha-40'
-export { typedMessageStringify, typedMessageParse } from './crypto-alpha-40'
+export { typedMessageStringify } from './crypto-alpha-40'

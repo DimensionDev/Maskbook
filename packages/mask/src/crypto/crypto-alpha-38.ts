@@ -23,13 +23,3 @@ export function typedMessageStringify(x: TypedMessage) {
 
     return JSON.stringify(obj) + '🧩' + x.content
 }
-export function typedMessageParse(x: string) {
-    const [maybeMetadata, ...end] = x.split('🧩')
-    try {
-        const json: unknown = JSON.parse(maybeMetadata)
-        if (typeof json !== 'object' || json === null || Object.keys(json).length === 0)
-            throw new Error('Not a metadata')
-        return makeTypedMessageText(end.join('🧩'), new Map(Object.entries(json)))
-    } catch {}
-    return makeTypedMessageText(x)
-}
