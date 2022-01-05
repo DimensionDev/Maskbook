@@ -3,6 +3,7 @@ import { facebookBase } from './base'
 import { getPostUrlAtFacebook, isValidFacebookUsername } from './utils/parse-username'
 import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { createSNSAdaptorSpecializedPostContext } from '../../social-network/utils/create-post-context'
+import { SocialNetworkEnum } from '@masknet/encryption'
 
 const getPostURL = (post: PostIdentifier): URL | null => {
     if (post.identifier instanceof ProfileIdentifier)
@@ -24,6 +25,7 @@ export const facebookShared: SocialNetwork.Shared & SocialNetwork.Base = {
         },
         createPostContext: createSNSAdaptorSpecializedPostContext({
             getURLFromPostIdentifier: getPostURL,
+            socialNetwork: SocialNetworkEnum.Facebook,
         }),
     },
 }

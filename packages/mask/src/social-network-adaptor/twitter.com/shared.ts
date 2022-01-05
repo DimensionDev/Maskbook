@@ -1,3 +1,4 @@
+import { SocialNetworkEnum } from '@masknet/encryption'
 import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import type { SocialNetwork } from '../../social-network/types'
 import { createSNSAdaptorSpecializedPostContext } from '../../social-network/utils/create-post-context'
@@ -20,6 +21,7 @@ export const twitterShared: SocialNetwork.Shared & SocialNetwork.Base = {
         },
         createPostContext: createSNSAdaptorSpecializedPostContext({
             getURLFromPostIdentifier: getPostURL,
+            socialNetwork: SocialNetworkEnum.Twitter,
         }),
     },
 }

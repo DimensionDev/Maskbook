@@ -19,10 +19,6 @@ import type { Subscription } from 'use-subscription'
 type ClassNameMap<ClassKey extends string = string> = { [P in ClassKey]: string }
 // Don't define values in namespaces
 export namespace SocialNetwork {
-    export interface PayloadEncoding {
-        decoder(text: string): string[]
-    }
-
     export interface Utils {
         /** @returns the homepage url. e.g.: https://twitter.com/ */
         getHomePage?(): string

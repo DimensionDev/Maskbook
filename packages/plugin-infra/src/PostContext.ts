@@ -9,9 +9,11 @@ import {
 import { ValueRef, LiveSelector, DOMProxy } from '@dimensiondev/holoflows-kit'
 import { Context, createContext, createElement, memo, useContext } from 'react'
 import { Subscription, useSubscription } from 'use-subscription'
-import type { DecryptProgress } from '@masknet/encryption'
+import type { DecryptProgress, SocialNetworkEnum } from '@masknet/encryption'
 export interface PostContextSNSActions {
     getURLFromPostIdentifier?(post: PostIdentifier): URL | null
+    /** This used for encode/decode */
+    socialNetwork: SocialNetworkEnum
 }
 export interface PostContextAuthor {
     readonly nickname: Subscription<string | null>

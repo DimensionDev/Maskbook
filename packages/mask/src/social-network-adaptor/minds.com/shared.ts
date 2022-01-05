@@ -1,3 +1,4 @@
+import { SocialNetworkEnum } from '@masknet/encryption'
 import type { PostIdentifier } from '@masknet/shared-base'
 import type { SocialNetwork } from '../../social-network/types'
 import { createSNSAdaptorSpecializedPostContext } from '../../social-network/utils/create-post-context'
@@ -19,6 +20,7 @@ export const mindsShared: SocialNetwork.Shared & SocialNetwork.Base = {
         },
         createPostContext: createSNSAdaptorSpecializedPostContext({
             getURLFromPostIdentifier: getPostURL,
+            socialNetwork: SocialNetworkEnum.Minds,
         }),
     },
 }

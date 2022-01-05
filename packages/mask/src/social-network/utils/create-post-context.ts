@@ -108,6 +108,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             subscribe: (sub) => postIdentifier.subscribe(sub),
         })
         const MaskPayloads = decryptionContext(
+            create.socialNetwork,
             {
                 mentionedLinks,
                 rawMessage: opt.rawMessage,
@@ -197,6 +198,7 @@ export function createRefsForCreatePostContext() {
 }
 
 function decryptionContext(
+    currentSocialNetwork: SocialNetworkEnum,
     context: Pick<PostContext, 'rawMessage' | 'mentionedLinks' | 'author' | 'url'>,
     signal?: AbortSignal,
 ): PostContext['maskPayloads'] {
@@ -274,8 +276,7 @@ function decryptionContext(
 
     async function decryption(key: string, signal: AbortSignal, payloads: SocialNetworkEncodedPayload[]) {
         const decryption = ServicesWithProgress.decryptionWithSocialNetworkDecoding(payloads, {
-            // TODO:
-            currentSocialNetwork: SocialNetworkEnum.Twitter,
+            currentSocialNetwork,
             authorHint: author.getCurrentValue(),
             currentProfile: CurrentIdentitySubscription.getCurrentValue()?.identifier,
             postURL: url.getCurrentValue()?.toString(),
