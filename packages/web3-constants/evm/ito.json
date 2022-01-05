@@ -13,7 +13,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Boba": "",
-        "Boba_Rinkeby": "",
+        "Boba_Rinkeby": "0x97369fEE7db34E0BfE47861f2ec44b4378d13eB4",
         "Celo": "",
         "Fantom": ""
     },
@@ -67,7 +67,7 @@
         "Arbitrum_Rinkeby": 708696,
         "xDai": 17865755,
         "Boba": 0,
-        "Boba_Rinkeby": 0,
+        "Boba_Rinkeby": 83114,
         "Celo": 10278776,
         "Fantom": 0
     },

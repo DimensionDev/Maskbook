@@ -147,6 +147,16 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         iconColor: 'rgb(73, 169, 166)',
         isMainnet: true,
     },
+    {
+        ID: `${PLUGIN_ID}_boba`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Boba,
+        type: NetworkType.Boba,
+        name: 'Boba',
+        icon: new URL('./assets/boba.png', import.meta.url),
+        iconColor: 'rgb(73, 169, 166)',
+        isMainnet: true,
+    },
 ]
 export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
     {
