@@ -121,18 +121,14 @@ export interface CollectionsResponse {
     collections: AssetCollection[]
 }
 
-interface BaseOptions {
-    chainId?: ChainId
-    page?: number
-    size?: number
-}
+type Options<T = {}> = { chainId?: ChainId; page?: number; size?: number } & T
 
 const SUPPORTED_CHAIN_ID_LIST = [ChainId.Mainnet, ChainId.Rinkeby]
 
-export function getAssetsList(from: string, opts: BaseOptions & { collection?: string }): Promise<AssetsListResponse> {
+export function getAssetsList(from: string, opts: Options<{ collection?: string }>): Promise<AssetsListResponse> {
     const { chainId = ChainId.Mainnet, page = 0, size = 50, collection } = opts
     if (!SUPPORTED_CHAIN_ID_LIST.includes(chainId)) return Promise.resolve({ assets: [] })
-    return request(chainId, '/api/v1/assets', {
+    return request(chainId, '/assets', {
         owner: from.toLowerCase(),
         limit: size,
         offset: size * page,
@@ -140,10 +136,10 @@ export function getAssetsList(from: string, opts: BaseOptions & { collection?: s
     })
 }
 
-export function getCollections(owner: string, opts: BaseOptions): Promise<CollectionsResponse> {
+export function getCollections(owner: string, opts: Options): Promise<CollectionsResponse> {
     const { chainId = ChainId.Mainnet, page = 0, size = 300 } = opts
     if (!SUPPORTED_CHAIN_ID_LIST.includes(chainId)) return Promise.resolve({ collections: [] })
-    return request(chainId, '/api/v1/collections', {
+    return request(chainId, '/collections', {
         asset_owner: owner.toLowerCase(),
         limit: size,
         offset: size * page,
@@ -151,8 +147,8 @@ export function getCollections(owner: string, opts: BaseOptions): Promise<Collec
 }
 
 async function request<T>(chainId: ChainId, requestPath: string, params: object): Promise<T> {
-    const domain = chainId === ChainId.Mainnet ? 'https://api.opensea.io' : 'https://rinkeby-api.opensea.io'
-    const response = await fetch(urlcat(domain, requestPath, params), {
+    const subdomain = chainId === ChainId.Mainnet ? 'api' : 'rinkeby-api'
+    const response = await fetch(urlcat(`https://${subdomain}.opensea.io/api/v1/`, requestPath, params), {
         method: 'GET',
         mode: 'cors',
         headers: { 'x-api-key': OPENSEA_API_KEY },

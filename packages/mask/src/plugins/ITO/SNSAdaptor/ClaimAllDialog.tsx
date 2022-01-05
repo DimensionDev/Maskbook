@@ -28,7 +28,6 @@ import { useClaimCallback } from './hooks/useClaimCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import type { AbstractTabProps } from '../../../components/shared/AbstractTab'
 
 interface StyleProps {
     shortITOwrapper: boolean
@@ -222,6 +221,7 @@ const SUPPORTED_CHAIN_ID_LIST = [
     ChainId.Arbitrum,
     ChainId.xDai,
     ChainId.Fantom,
+    ChainId.Boba,
 ]
 
 export function ClaimAllDialog(props: ClaimAllDialogProps) {
@@ -231,16 +231,9 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const account = useAccount()
     const currentChainId = useChainId()
 
-    const tabItems: Record<ChainId, string> = {
-        [ChainId.Mainnet]: 'ETH',
-        [ChainId.BSC]: 'BSC',
-        [ChainId.Matic]: 'Polygon/Matic',
-        [ChainId.Arbitrum]: 'Arbitrum',
-        [ChainId.xDai]: 'xDai ',
-        [ChainId.Fantom]: 'Fantom',
-        [ChainId.Celo]: 'Celo',
-        [ChainId.Boba]: 'Boba',
-    }
+    const [chainId, setChainId] = useState(
+        SUPPORTED_CHAIN_ID_LIST.includes(currentChainId) ? currentChainId : ChainId.Mainnet,
+    )
 
     const {
         value: campaignInfos,
@@ -248,9 +241,6 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         retry: retryAirdrop,
     } = useSpaceStationCampaignInfo(account, Flags.nft_airdrop_enabled)
 
-    const [chainId, setChainId] = useState(
-        SUPPORTED_CHAIN_ID_LIST.includes(currentChainId) ? currentChainId : ChainId.Mainnet,
-    )
     const { value: swappedTokens, loading, retry } = useClaimablePools(chainId)
     const { ITO_CONTRACT_ADDRESS: ITO_CONTRACT_ADDRESS_MAINNET } = useITOConstants(ChainId.Mainnet)
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
@@ -369,18 +359,6 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         })
     }, [claimState, swappedTokens /* update tx dialog only if state changed */])
 
-    const createTabItem = (name: string, chainId: ChainId) => ({
-        label: <span>{name}</span>,
-        sx: { p: 0 },
-        cb: () => setChainId(chainId),
-    })
-
-    const tabProps: AbstractTabProps = {
-        tabs: Object.entries(tabItems).map(([chainId, displayName]) => createTabItem(displayName, chainId)),
-        index: Object.keys(tabItems).indexOf(chainId),
-        classes,
-        hasOnlyOneChild: true,
-    }
     return (
         <SnackbarProvider
             domRoot={DialogRef.current as HTMLElement}
