@@ -4,17 +4,17 @@ import { ChainId } from '@masknet/web3-shared-evm'
 
 const DEBANK_API = 'https://api.debank.com'
 
-export async function getTransactionList(address: string, chain: string) {
-    const response = await fetch(`${DEBANK_API}/history/list?user_addr=${address.toLowerCase()}&chain=${chain}`)
-    return (await response.json()) as HistoryResponse
+export async function getTransactionList(address: string, chain: string): Promise<HistoryResponse> {
+    const response = await fetch(urlcat(DEBANK_API, '/history/list', { user_addr: address.toLowerCase(), chain }))
+    return response.json()
 }
 
-export async function getAssetsList(address: string) {
-    const response = await fetch(`${DEBANK_API}/token/balance_list?is_all=true&user_addr=${address.toLowerCase()}`)
-    return (await response.json()) as BalanceListResponse
+export async function getAssetsList(address: string): Promise<BalanceListResponse> {
+    const response = await fetch(DEBANK_API, '/token/balance_list', { is_all: true, user_addr: address.toLowerCase() })
+    return response.json()
 }
 
-const chainIdMap: Record<number, string> = {
+const chainIdMap: Record<ChainId, string> = {
     [ChainId.Mainnet]: 'eth',
     [ChainId.BSC]: 'bsc',
     [ChainId.xDai]: 'xdai',
@@ -23,16 +23,15 @@ const chainIdMap: Record<number, string> = {
     [ChainId.Boba]: 'bob',
 }
 
-const getDebankChain = (chainId: number) => {
+const getDebankChain = (chainId: ChainId) => {
     return chainIdMap[chainId] ?? ''
 }
 
 export async function getGasPriceDict(chainId: ChainId) {
     const chain = getDebankChain(chainId)
     const response = await fetch(urlcat(DEBANK_API, '/chain/gas_price_dict_v2', { chain }))
-    const result = await response.json()
+    const result: GasPriceDictResponse = await response.json()
     if (result.error_code === 0) {
-        return result as GasPriceDictResponse
+        return result
     }
-    return null
 }

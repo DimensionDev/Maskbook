@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import BigNumber from 'bignumber.js'
-import { pow10, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import { rightShift } from '@masknet/web3-shared-base/utils/number'
 import type { TradeStrategy } from '../types'
 import { useTrade as useNativeTokenTrade } from './native/useTrade'
 import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed'
@@ -22,15 +23,17 @@ import { TradeContext } from './useTradeContext'
 export function useTradeComputed(
     provider: TradeProvider,
     strategy: TradeStrategy,
-    inputAmount: string,
-    outputAmount: string,
+    inputAmount: BigNumber.Value = '0',
+    outputAmount: BigNumber.Value = '0',
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
 ) {
-    const inputTokenProduct = pow10(inputToken?.decimals ?? 0)
-    const outputTokenProduct = pow10(outputToken?.decimals ?? 0)
-    const inputAmount_ = new BigNumber(inputAmount || '0').multipliedBy(inputTokenProduct).integerValue().toFixed()
-    const outputAmount_ = new BigNumber(outputAmount || '0').multipliedBy(outputTokenProduct).integerValue().toFixed()
+    inputAmount = rightShift(inputAmount, inputToken?.decimals ?? 0)
+        .integerValue()
+        .toFixed()
+    outputAmount = rightShift(outputAmount, outputToken?.decimals ?? 0)
+        .integerValue()
+        .toFixed()
 
     // trade context
     const context = useContext(TradeContext)
@@ -40,8 +43,8 @@ export function useTradeComputed(
     const nativeToken = useNativeTokenTradeComputed(
         nativeToken_.value ?? false,
         strategy,
-        inputAmount_,
-        outputAmount_,
+        inputAmount,
+        outputAmount,
         inputToken,
         outputToken,
     )
@@ -49,8 +52,8 @@ export function useTradeComputed(
     // uniswap-v2 like providers
     const uniswapV2_ = useUniswapV2Trade(
         strategy,
-        context?.IS_UNISWAP_V2_LIKE ? inputAmount_ : '0',
-        context?.IS_UNISWAP_V2_LIKE ? outputAmount_ : '0',
+        context?.IS_UNISWAP_V2_LIKE ? inputAmount : '0',
+        context?.IS_UNISWAP_V2_LIKE ? outputAmount : '0',
         inputToken,
         outputToken,
     )
@@ -59,8 +62,8 @@ export function useTradeComputed(
     // uniswap-v3 like providers
     const uniswapV3_ = useUniswapV3Trade(
         strategy,
-        context?.IS_UNISWAP_V3_LIKE ? inputAmount_ : '0',
-        context?.IS_UNISWAP_V3_LIKE ? outputAmount_ : '0',
+        context?.IS_UNISWAP_V3_LIKE ? inputAmount : '0',
+        context?.IS_UNISWAP_V3_LIKE ? outputAmount : '0',
         inputToken,
         outputToken,
     )
@@ -69,8 +72,8 @@ export function useTradeComputed(
     // zrx
     const zrx_ = useZrxTrade(
         strategy,
-        provider === TradeProvider.ZRX ? inputAmount_ : '0',
-        provider === TradeProvider.ZRX ? outputAmount_ : '0',
+        provider === TradeProvider.ZRX ? inputAmount : '0',
+        provider === TradeProvider.ZRX ? outputAmount : '0',
         inputToken,
         outputToken,
     )
@@ -79,16 +82,16 @@ export function useTradeComputed(
     // balancer
     const balancer_ = useBalancerTrade(
         strategy,
-        provider === TradeProvider.BALANCER ? inputAmount_ : '0',
-        provider === TradeProvider.BALANCER ? outputAmount_ : '0',
+        provider === TradeProvider.BALANCER ? inputAmount : '0',
+        provider === TradeProvider.BALANCER ? outputAmount : '0',
         inputToken,
         outputToken,
     )
     const balancer = useBalancerTradeComputed(
         balancer_.value ?? null,
         strategy,
-        provider === TradeProvider.BALANCER ? inputAmount_ : '0',
-        provider === TradeProvider.BALANCER ? outputAmount_ : '0',
+        provider === TradeProvider.BALANCER ? inputAmount : '0',
+        provider === TradeProvider.BALANCER ? outputAmount : '0',
         inputToken,
         outputToken,
     )
@@ -96,8 +99,8 @@ export function useTradeComputed(
     // dodo
     const dodo_ = useDODOTrade(
         strategy,
-        provider === TradeProvider.DODO ? inputAmount_ : '0',
-        provider === TradeProvider.DODO ? outputAmount_ : '0',
+        provider === TradeProvider.DODO ? inputAmount : '0',
+        provider === TradeProvider.DODO ? outputAmount : '0',
         inputToken,
         outputToken,
     )
@@ -105,8 +108,8 @@ export function useTradeComputed(
 
     const bancor_ = useBancorTrade(
         strategy,
-        provider === TradeProvider.BANCOR ? inputAmount_ : '0',
-        provider === TradeProvider.BANCOR ? outputAmount_ : '0',
+        provider === TradeProvider.BANCOR ? inputAmount : '0',
+        provider === TradeProvider.BANCOR ? outputAmount : '0',
         inputToken,
         outputToken,
     )

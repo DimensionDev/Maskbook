@@ -74,18 +74,9 @@ export const resolveChainByScope = createLookupTableResolver<
     }
 >(
     {
-        assets: {
-            chain: 'eth',
-            chainId: ChainId.Mainnet,
-        },
-        'bsc-assets': {
-            chain: 'bsc',
-            chainId: ChainId.BSC,
-        },
-        'polygon-assets': {
-            chain: 'matic',
-            chainId: ChainId.Matic,
-        },
+        assets: { chain: 'eth', chainId: ChainId.Mainnet },
+        'bsc-assets': { chain: 'bsc', chainId: ChainId.BSC },
+        'polygon-assets': { chain: 'matic', chainId: ChainId.Matic },
     },
     {
         chain: 'unknown',

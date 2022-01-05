@@ -221,11 +221,17 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const DialogRef = useRef<HTMLDivElement>(null)
     const account = useAccount()
     const currentChainId = useChainId()
-    const {
-        value: campaignInfos,
-        loading: loadingAirdrop,
-        retry: retryAirdrop,
-    } = useSpaceStationCampaignInfo(account, Flags.nft_airdrop_enabled)
+
+    const tabItems: Record<ChainId, string> = {
+        [ChainId.Mainnet]: 'ETH',
+        [ChainId.BSC]: 'BSC',
+        [ChainId.Matic]: 'Polygon/Matic',
+        [ChainId.Arbitrum]: 'Arbitrum',
+        [ChainId.xDai]: 'xDai ',
+        [ChainId.Fantom]: 'Fantom',
+        [ChainId.Celo]: 'Celo',
+        [ChainId.Boba]: 'Boba',
+    }
 
     const [chainId, setChainId] = useState(
         [
@@ -236,10 +242,17 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
             ChainId.xDai,
             ChainId.Boba,
             ChainId.Fantom,
+            ChainId.Celo,
         ].includes(currentChainId)
             ? currentChainId
             : ChainId.Mainnet,
     )
+    const {
+        value: campaignInfos,
+        loading: loadingAirdrop,
+        retry: retryAirdrop,
+    } = useSpaceStationCampaignInfo(account, Flags.nft_airdrop_enabled)
+
     const { value: swappedTokens, loading, retry } = useClaimablePools(chainId)
     const { ITO_CONTRACT_ADDRESS: ITO_CONTRACT_ADDRESS_MAINNET } = useITOConstants(ChainId.Mainnet)
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
@@ -365,17 +378,8 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     })
 
     const tabProps: AbstractTabProps = {
-        tabs: [
-            createTabItem('ETH', ChainId.Mainnet),
-            createTabItem('BSC', ChainId.BSC),
-            createTabItem('Polygon/Matic', ChainId.Matic),
-            createTabItem('Arbitrum', ChainId.Arbitrum),
-            createTabItem('xDai', ChainId.xDai),
-            createTabItem('Boba', ChainId.Boba),
-        ],
-        index: [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai, ChainId.Boba].indexOf(
-            chainId,
-        ),
+        tabs: Object.entries(tabItems).map(([chainId, displayName]) => createTabItem(displayName, chainId)),
+        index: Object.keys(tabItems).indexOf(chainId),
         classes,
         hasOnlyOneChild: true,
     }

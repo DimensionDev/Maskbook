@@ -30,8 +30,5 @@ export function NetworkIcon(props: NetworkIconProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     if (!networkType) return null
-
-    return icons[networkType] ? (
-        <img height={size} width={size} src={icons[networkType]} className={classes.icon} />
-    ) : null
+    return <img height={size} width={size} src={icons[networkType]} className={classes.icon} />
 }
