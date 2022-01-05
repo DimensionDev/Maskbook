@@ -444,8 +444,8 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                 tokenIdList: (
                     <span>
                         {nonExistedTokenIdList.map((id, i) => (
-                            <span key={i.toString()}>
-                                <span className={classes.tokenId}>{' #' + id}</span>
+                            <span key={i}>
+                                <span className={classes.tokenId}> #{id}</span>
                                 {i < nonExistedTokenIdList.length - 1 ? ', ' : ' '}
                             </span>
                         ))}
