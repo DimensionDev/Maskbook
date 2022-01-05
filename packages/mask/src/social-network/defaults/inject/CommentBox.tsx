@@ -29,19 +29,18 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
 ) {
     const CommentBoxUI = memo(function CommentBoxUI({ dom }: { dom: HTMLElement | null }) {
         const info = usePostInfo()
-        const payload = usePostInfoDetails.containingMaskPayload()
+        const postIV = usePostInfoDetails.commentEncryptionIV()
         const postContent = usePostInfoDetails.rawMessagePiped()
         const { classes } = useCustomStyles()
-        const iv = null as null | string
         const props = additionPropsToCommentBox(classes)
         const onCallback = useCallback(
             async (content) => {
-                const postIV = iv || payload.unwrap().iv
                 const decryptedText = extractTextFromTypedMessage(postContent).unwrap()
+                if (!postIV) throw new TypeError('[@masknet/encryption] No IV, cannot encrypt/decrypt comment.')
                 const encryptedComment = await Services.Crypto.encryptComment(postIV, decryptedText, content)
                 onPasteToCommentBox(encryptedComment, info!, dom).catch(console.error)
             },
-            [payload, postContent, info, dom, iv],
+            [postIV, postContent, info, dom, postIV],
         )
 
         if (!postContent.items.length) return null

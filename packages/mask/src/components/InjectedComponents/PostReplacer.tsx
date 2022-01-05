@@ -26,7 +26,7 @@ export interface PostReplacerProps {
 export function PostReplacer(props: PostReplacerProps) {
     const { classes } = useStyles()
     const postMessage = usePostInfoDetails.rawMessage()
-    const postPayload = usePostInfoDetails.containingMaskPayload()
+    const hasMaskPayload = usePostInfoDetails.containsMaskPayload()
     const allPostReplacement = useValueRef(allPostReplacementSettings)
 
     const plugins = useActivatedPluginsSNSAdaptor(false)
@@ -49,7 +49,7 @@ export function PostReplacer(props: PostReplacerProps) {
         // replace posts which enhanced by plugins
         processedPostMessage.items.some((x) => !isWellKnownTypedMessages(x)) ||
         // replace posts which encrypted by Mask
-        postPayload.ok
+        hasMaskPayload
 
     // zip/unzip original post
     useEffect(() => {

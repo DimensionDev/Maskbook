@@ -8,7 +8,6 @@ import {
     ObservableMap,
     ObservableSet,
     parseURL,
-    Payload,
     PostIdentifier,
     ProfileIdentifier,
     TypedMessage,
@@ -20,10 +19,11 @@ import {
     waitTypedMessage,
     makeTypedMessageEmpty,
     flattenTypedMessage,
+    createConstantSubscription,
 } from '@masknet/shared-base'
-import { Err, Result } from 'ts-results'
 import type { Subscription } from 'use-subscription'
 import { activatedSocialNetworkUI } from '../'
+import { FACEBOOK_ID } from '../../social-network-adaptor/facebook.com/base'
 import { resolveFacebookLink } from '../../social-network-adaptor/facebook.com/utils/resolveFacebookLink'
 
 export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSActions) {
@@ -31,60 +31,27 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
         const cancel: (Function | undefined)[] = []
         opt.signal?.addEventListener('abort', () => cancel.forEach((fn) => fn?.()))
 
-        //#region Post text content
-        const postContent = new ValueRef(extractText())
-        cancel.push(opt.rawMessage.subscribe(() => (postContent.value = extractText())))
-        function extractText() {
-            return extractTextFromTypedMessage(opt.rawMessage.getCurrentValue()).unwrapOr('')
-        }
-        //#endregion
-
         //#region Mentioned links
         const links = new ObservableSet<string>()
-        cancel.push(
-            postContent.addListener((post) => {
+        {
+            async function fillLinks() {
+                const message = await waitTypedMessage(opt.rawMessage.getCurrentValue())
+                const text = extractTextFromTypedMessage(message).unwrapOr('')
+                const link = parseURL(text).concat(opt.postMentionedLinksProvider?.getCurrentValue() || [])
                 links.clear()
-                parseURL(post).forEach((link) =>
-                    links.add(resolveFacebookLink(link, activatedSocialNetworkUI.networkIdentifier)),
-                )
-                opt.postMentionedLinksProvider
-                    ?.getCurrentValue()
-                    .forEach((link) => links.add(resolveFacebookLink(link, activatedSocialNetworkUI.networkIdentifier)))
-            }),
-        )
-        cancel.push(
-            opt.postMentionedLinksProvider?.subscribe(() => {
-                // Not clean old links cause post content not changed
-                opt.postMentionedLinksProvider
-                    ?.getCurrentValue()
-                    .forEach((link) => links.add(resolveFacebookLink(link, activatedSocialNetworkUI.networkIdentifier)))
-            }),
-        )
+                for (const x of link) {
+                    if (activatedSocialNetworkUI.networkIdentifier === FACEBOOK_ID) {
+                        links.add(resolveFacebookLink(x))
+                    } else links.add(x)
+                }
+            }
+            fillLinks()
+            cancel.push(opt.rawMessage.subscribe(fillLinks))
+        }
         const linksSubscribe: Subscription<string[]> = debug({
             getCurrentValue: () => [...links],
             subscribe: (sub) => links.event.on(ALL_EVENTS, sub),
         })
-        //#endregion
-
-        //#region Parse payload
-        const postPayload = new ValueRef<Result<Payload, unknown>>(Err(new Error('Empty')))
-        parsePayload()
-        cancel.push(postContent.addListener(parsePayload))
-        cancel.push(linksSubscribe.subscribe(parsePayload))
-        function parsePayload() {
-            // TODO: Also parse for payload in the image.
-            let lastResult: Result<Payload, unknown> = Err(new Error('No candidate'))
-            for (const each of (create.payloadDecoder || ((x) => [x]))(
-                postContent.value + linksSubscribe.getCurrentValue().join('\n'),
-            )) {
-                lastResult = create.payloadParser(each)
-                if (lastResult.ok) {
-                    postPayload.value = lastResult
-                    return
-                }
-            }
-            if (postPayload.value.err) postPayload.value = lastResult
-        }
         //#endregion
         const author: PostContextAuthor = {
             avatarURL: opt.avatarURL,
@@ -115,6 +82,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
                 return opt.rawMessage.subscribe(e)
             },
         )
+        // @ts-ignore
         return {
             ...author,
 
@@ -137,13 +105,14 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             }),
 
             mentionedLinks: linksSubscribe,
-            postMetadataMentionedLinks: linksSubscribe,
 
             rawMessage: opt.rawMessage,
-            rawMessageResolved,
             rawMessagePiped: transformedPostContent,
 
-            containingMaskPayload: SubscriptionFromValueRef(postPayload),
+            // TODO
+            commentEncryptionIV: createConstantSubscription(''),
+            containsMaskPayload: createConstantSubscription(false),
+            payloadClaimedAuthor: createConstantSubscription(undefined),
         }
     }
 }

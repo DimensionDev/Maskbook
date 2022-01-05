@@ -22,21 +22,23 @@ export interface PostInspectorProps {
 }
 export function PostInspector(props: PostInspectorProps) {
     const postBy = usePostInfoDetails.author()
-    const encryptedPost = usePostInfoDetails.containingMaskPayload()
+    const encryptedPost = { ok: false } // usePostInfoDetails.containingMaskPayload()
+    const version = usePostInfoDetails.containsMaskPayloadVersion()
     const whoAmI = useCurrentIdentity()
     const friends = useFriendsList()
     const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Profile[]>([])
 
     const { value: sharedListOfPost } = useAsync(async () => {
-        if (!whoAmI || !whoAmI.identifier.equals(postBy) || !encryptedPost.ok) return []
-        const { iv, version } = encryptedPost.val
-        return Services.Crypto.getPartialSharedListOfPost(version, iv, postBy)
-    }, [postBy, whoAmI, encryptedPost])
+        return []
+        // if (!whoAmI || !whoAmI.identifier.equals(postBy) || !encryptedPost.ok) return []
+        // const { iv, version } = encryptedPost.val
+        // return Services.Crypto.getPartialSharedListOfPost(version, iv, postBy)
+    }, [])
     useEffect(() => setAlreadySelectedPreviously(sharedListOfPost ?? []), [sharedListOfPost])
 
-    if (encryptedPost.ok) {
-        props.needZip()
-    }
+    // if (encryptedPost.ok) {
+    //     props.needZip()
+    // }
     return withAdditionalContent(
         <DecryptPost
             onDecrypted={props.onDecrypted}

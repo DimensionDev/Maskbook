@@ -12,6 +12,7 @@ import { ValueRef, LiveSelector, DOMProxy } from '@dimensiondev/holoflows-kit'
 import type { Result } from 'ts-results'
 import { Context, createContext, createElement, memo, useContext } from 'react'
 import { Subscription, useSubscription } from 'use-subscription'
+import type { DecryptProgress } from '@masknet/encryption'
 export interface PostContextSNSActions {
     /** Parse payload into Payload */
     payloadParser(raw: string): Result<Payload, Error>
@@ -62,19 +63,18 @@ export interface PostContext extends PostContextAuthor {
     readonly url: Subscription<URL | null>
     // Meta
     readonly mentionedLinks: Subscription<string[]>
-    /** @deprecated Use postMentionedLinks instead */
-    readonly postMetadataMentionedLinks: Subscription<string[]>
     //#endregion
     //#region Raw post content (not decrypted)
     readonly rawMessage: Subscription<TypedMessageTuple>
-    /** rawMessage but with no TypedMessagePromise inside */
-    readonly rawMessageResolved: Subscription<TypedMessage>
     // TODO: should be a Subscription
     readonly rawMessagePiped: ValueRef<TypedMessageTuple>
     //#endregion
-    //#region Post payload discovered in the rawMessage
-    readonly containingMaskPayload: Subscription<Result<Payload, unknown>>
-
+    //#region Information revealed in the Mask Payload
+    readonly containsMaskPayload: Subscription<boolean>
+    readonly containsMaskPayloadVersion: Subscription<Array<-40 | -39 | -38 | -37>>
+    readonly payloadClaimedAuthor: Subscription<ProfileIdentifier | undefined>
+    readonly commentEncryptionIV: Subscription<string | null>
+    readonly decryptedMaskPayload: Subscription<Record<string, DecryptProgress[]>>
     //#endregion
 }
 export type PostInfo = PostContext

@@ -50,11 +50,9 @@ export interface PostCommentProps {
 export function PostComment(props: PostCommentProps) {
     const { failedComponent: Fail, waitingComponent: Wait, needZip } = props
     const comment = useValueRef(props.comment)
+    // TODO:
     const postContent = usePostInfoDetails.rawMessagePiped()
-    const containingPayload = usePostInfoDetails.containingMaskPayload()
-    // TODO
-    const iv = null as string | null
-    const postIV = containingPayload.map((x) => x.iv).unwrapOr(iv)
+    const postIV = usePostInfoDetails.commentEncryptionIV()
 
     const dec = useAsync(async () => {
         const decryptedText = extractTextFromTypedMessage(postContent).unwrap()
