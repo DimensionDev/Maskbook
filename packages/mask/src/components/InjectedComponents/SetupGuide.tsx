@@ -1,80 +1,32 @@
 import { useMemo, useState, useEffect } from 'react'
-import { Paper, Typography, ThemeProvider, IconButton, Box, Theme } from '@mui/material'
+import { Paper, Typography, IconButton, Box, Button, FormControlLabel, Checkbox } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import CloseIcon from '@mui/icons-material/Close'
 import { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { useValueRef } from '@masknet/shared'
-import { useI18N, MaskMessages, extendsTheme } from '../../utils'
+import { useI18N, MaskMessages } from '../../utils'
 import { activatedSocialNetworkUI } from '../../social-network'
-import { currentSetupGuideStatus, userGuideStatus } from '../../settings/settings'
+import { currentSetupGuideStatus, dismissPinExtensionTip, userGuideStatus } from '../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
 import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '@masknet/shared-base'
 import Services from '../../extension/service'
-
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { MaskIcon } from '../../resources/MaskIcon'
 import { useAsync, useCopyToClipboard } from 'react-use'
 import classNames from 'classnames'
 import VerifiedIcon from '@mui/icons-material/Verified'
 import { makeTypedMessageText } from '@masknet/shared-base'
+import ExtensionIcon from '@mui/icons-material/Extension'
+import PushPinIcon from '@mui/icons-material/PushPin'
+import stringify from 'json-stable-stringify'
 
 export enum SetupGuideStep {
     FindUsername = 'find-username',
+    PinExtension = 'pin-extension',
     Close = 'close',
 }
 
 //#region wizard dialog
-const wizardTheme = extendsTheme((theme: Theme) => ({
-    components: {
-        MuiOutlinedInput: {
-            styleOverrides: {
-                input: {
-                    paddingTop: 8,
-                    paddingBottom: 8,
-                },
-                multiline: {
-                    paddingTop: 8,
-                    paddingBottom: 8,
-                },
-            },
-        },
-        MuiTextField: {
-            defaultProps: {
-                fullWidth: true,
-                variant: 'outlined',
-                margin: 'normal',
-            },
-            styleOverrides: {
-                root: {
-                    marginTop: theme.spacing(2),
-                    marginBottom: 0,
-                    '&:first-child': {
-                        marginTop: 0,
-                    },
-                },
-            },
-        },
-        MuiButton: {
-            defaultProps: {
-                size: 'medium',
-            },
-            styleOverrides: {
-                root: {
-                    '&[hidden]': {
-                        visibility: 'hidden',
-                    },
-                },
-                text: {
-                    height: 28,
-                    lineHeight: 1,
-                    paddingTop: 0,
-                    paddingBottom: 0,
-                },
-            },
-        },
-    },
-}))
-
 const useWizardDialogStyles = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(3),
@@ -83,7 +35,6 @@ const useWizardDialogStyles = makeStyles()((theme) => ({
         border: `${theme.palette.mode === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
         borderRadius: 20,
         [theme.breakpoints.down('sm')]: {
-            padding: '35px 20px 16px',
             position: 'fixed',
             bottom: 0,
             left: 0,
@@ -107,9 +58,6 @@ const useWizardDialogStyles = makeStyles()((theme) => ({
         marginTop: 0,
         [theme.breakpoints.down('sm')]: {
             width: '100%',
-            height: '45px !important',
-            marginTop: 20,
-            borderRadius: 0,
         },
         fontSize: 14,
         wordBreak: 'keep-all',
@@ -118,31 +66,11 @@ const useWizardDialogStyles = makeStyles()((theme) => ({
             background: `${MaskColorVar.twitterButton} !important`,
         },
     },
-    back: {
-        color: theme.palette.text.primary,
-        position: 'absolute',
-        left: 10,
-        top: 10,
-    },
     close: {
         color: theme.palette.text.primary,
         position: 'absolute',
         right: 10,
         top: 10,
-    },
-    primary: {
-        fontSize: 18,
-        fontWeight: 600,
-        lineHeight: '30px',
-    },
-    secondary: {
-        fontSize: 14,
-        fontWeight: 500,
-        lineHeight: 1.75,
-        marginTop: 2,
-    },
-    sandbox: {
-        marginTop: 16,
     },
     tip: {
         fontSize: 16,
@@ -150,128 +78,19 @@ const useWizardDialogStyles = makeStyles()((theme) => ({
         lineHeight: '22px',
         paddingTop: 16,
     },
-    textButton: {
-        fontSize: 14,
-        marginTop: theme.spacing(1),
-        marginBottom: theme.spacing(-2),
+    label: {
+        fontSize: 16,
+        fontWeight: 400,
+        lineHeight: '22px',
     },
     header: {
-        marginBottom: 0,
+        height: 40,
     },
     content: {},
-    footer: {},
-    progress: {
-        left: 0,
-        right: 0,
-        bottom: 0,
-        height: 8,
-        position: 'absolute',
-    },
-}))
-
-const useStyles = makeStyles()({
-    root: {
-        alignItems: 'center',
-    },
-    content: {},
-    footer: {
-        marginLeft: 0,
-        marginTop: 24,
-        flex: 1,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'column',
-    },
-    tip: {},
-})
-
-interface ContentUIProps {
-    dialogType: SetupGuideStep
-    content?: React.ReactNode
-    footer?: React.ReactNode
-    tip?: React.ReactNode
-}
-
-function ContentUI(props: ContentUIProps) {
-    const { classes } = useStyles()
-    switch (props.dialogType) {
-        case SetupGuideStep.FindUsername:
-            return (
-                <Box>
-                    <main className={classes.content}>{props.content}</main>
-                    <div>{props.tip}</div>
-                    <footer className={classes.footer}>{props.footer}</footer>
-                </Box>
-            )
-
-        default:
-            return null
-    }
-}
-
-interface WizardDialogProps {
-    title: string
-    dialogType: SetupGuideStep
-    completion?: number
-    status: boolean | 'undetermined'
-    optional?: boolean
-    content?: React.ReactNode
-    tip?: React.ReactNode
-    footer?: React.ReactNode
-    onBack?: () => void
-    onClose?: () => void
-}
-
-function WizardDialog(props: WizardDialogProps) {
-    const { title, dialogType, status, content, tip, footer, onBack, onClose } = props
-    const { classes } = useWizardDialogStyles()
-
-    return (
-        <ThemeProvider theme={wizardTheme}>
-            <Paper className={classes.root}>
-                <header className={classes.header}>
-                    <Typography className={classes.primary} color="textPrimary" variant="h3">
-                        {title}
-                    </Typography>
-                </header>
-                <ContentUI dialogType={dialogType} content={content} tip={tip} footer={footer} />
-                {onClose ? (
-                    <IconButton className={classes.close} size="medium" onClick={onClose}>
-                        <CloseIcon cursor="pointer" />
-                    </IconButton>
-                ) : null}
-            </Paper>
-        </ThemeProvider>
-    )
-}
-//#endregion
-
-//#region find username
-const useFindUsernameStyles = makeStyles()((theme) => ({
-    main: {
-        marginTop: theme.spacing(5),
-        marginBottom: theme.spacing(2),
+    connection: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-around',
-    },
-    avatar: {
-        display: 'block',
-        width: 48,
-        height: 48,
-        borderRadius: '50%',
-        border: `solid 1px ${MaskColorVar.border}`,
-        '&.connected': {
-            borderColor: MaskColorVar.success,
-        },
-    },
-    verified: {
-        position: 'absolute',
-        bottom: 0,
-        right: 0,
-        fontSize: 16,
-        color: MaskColorVar.success,
     },
     connectItem: {
         height: 75,
@@ -288,6 +107,103 @@ const useFindUsernameStyles = makeStyles()((theme) => ({
     name: {
         fontSize: 16,
         fontWeight: 500,
+    },
+    footer: {},
+}))
+
+const useStyles = makeStyles()((theme) => ({
+    content: {
+        marginBottom: theme.spacing(2),
+    },
+    footer: {
+        marginLeft: 0,
+        marginTop: theme.spacing(3),
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+    },
+    tip: {},
+}))
+
+interface ContentUIProps {
+    dialogType: SetupGuideStep
+    content?: React.ReactNode
+    footer?: React.ReactNode
+    tip?: React.ReactNode
+    dismiss?: React.ReactNode
+}
+
+function ContentUI(props: ContentUIProps) {
+    const { classes } = useStyles()
+    switch (props.dialogType) {
+        case SetupGuideStep.FindUsername:
+        case SetupGuideStep.PinExtension:
+            return (
+                <Box>
+                    <main className={classes.content}>{props.content}</main>
+                    <div>{props.tip}</div>
+                    <footer className={classes.footer}>{props.footer}</footer>
+                    {props.dismiss ? <div>{props.dismiss}</div> : null}
+                </Box>
+            )
+        default:
+            return null
+    }
+}
+
+interface WizardDialogProps {
+    title?: string
+    dialogType: SetupGuideStep
+    optional?: boolean
+    content?: React.ReactNode
+    tip?: React.ReactNode
+    footer?: React.ReactNode
+    dismiss?: React.ReactNode
+    onClose?: () => void
+}
+
+function WizardDialog(props: WizardDialogProps) {
+    const { title, dialogType, content, tip, footer, dismiss, onClose } = props
+    const { classes } = useWizardDialogStyles()
+
+    return (
+        <Paper className={classes.root}>
+            <header className={classes.header}>
+                <Typography color="textPrimary" variant="h3" fontSize={24}>
+                    {title}
+                </Typography>
+            </header>
+            <ContentUI dialogType={dialogType} content={content} tip={tip} footer={footer} dismiss={dismiss} />
+            {onClose ? (
+                <IconButton className={classes.close} size="medium" onClick={onClose}>
+                    <CloseIcon cursor="pointer" />
+                </IconButton>
+            ) : null}
+        </Paper>
+    )
+}
+//#endregion
+
+//#region find username
+const useFindUsernameStyles = makeStyles()((theme) => ({
+    avatar: {
+        display: 'block',
+        width: 48,
+        height: 48,
+        borderRadius: '50%',
+        border: `solid 1px ${MaskColorVar.border}`,
+        '&.connected': {
+            borderColor: MaskColorVar.success,
+        },
+    },
+    verified: {
+        position: 'absolute',
+        bottom: 0,
+        right: 0,
+        fontSize: 16,
+        color: MaskColorVar.success,
     },
 }))
 
@@ -309,20 +225,17 @@ function FindUsername({ personaName, username, avatar, onConnect, onDone, onClos
 
     return (
         <WizardDialog
-            completion={33.33}
             dialogType={SetupGuideStep.FindUsername}
-            status="undetermined"
-            title=""
             content={
-                <Box className={findUsernameClasses.main}>
-                    <Box className={findUsernameClasses.connectItem}>
+                <Box className={classes.connection}>
+                    <Box className={classes.connectItem}>
                         <MaskIcon size={48} />
-                        <Typography variant="body2" className={findUsernameClasses.name}>
+                        <Typography variant="body2" className={classes.name}>
                             {personaName}
                         </Typography>
                     </Box>
-                    <Box className={findUsernameClasses.line} />
-                    <Box className={findUsernameClasses.connectItem}>
+                    <Box className={classes.line} />
+                    <Box className={classes.connectItem}>
                         <Box position="relative" width={48}>
                             <img
                                 src={avatar}
@@ -330,7 +243,7 @@ function FindUsername({ personaName, username, avatar, onConnect, onDone, onClos
                             />
                             {connected ? <VerifiedIcon className={findUsernameClasses.verified} /> : null}
                         </Box>
-                        <Typography variant="body2" className={findUsernameClasses.name}>
+                        <Typography variant="body2" className={classes.name}>
                             {username}
                         </Typography>
                     </Box>
@@ -356,7 +269,7 @@ function FindUsername({ personaName, username, avatar, onConnect, onDone, onClos
                     executor={onConnect}
                     completeOnClick={onDone}
                     onComplete={() => setConnected(true)}
-                    disabled={!username}
+                    disabled={!username || !personaName}
                     completeIcon={null}
                     failIcon={null}
                     failedOnClick="use executor"
@@ -369,6 +282,75 @@ function FindUsername({ personaName, username, avatar, onConnect, onDone, onClos
     )
 }
 //#endregion
+
+interface PinExtensionProps {
+    onDone?: () => void
+}
+function PinExtension({ onDone }: PinExtensionProps) {
+    const pinImg = new URL('../../resources/extensionPinned.png', import.meta.url).toString()
+    const { classes } = useWizardDialogStyles()
+    const { t } = useI18N()
+    const [checked, setChecked] = useState(true)
+
+    useEffect(() => {
+        dismissPinExtensionTip.value = checked
+    }, [checked])
+
+    return (
+        <WizardDialog
+            dialogType={SetupGuideStep.PinExtension}
+            content={
+                <Box className={classes.connection}>
+                    <Box className={classes.connectItem}>
+                        <MaskIcon size={48} />
+                        <Typography variant="body2" className={classes.name}>
+                            Mask Network
+                        </Typography>
+                    </Box>
+                    <Box className={classes.line} />
+                    <Box className={classes.connectItem}>
+                        <img
+                            src={pinImg}
+                            width={100}
+                            style={{ filter: 'drop-shadow(0px 0px 16px rgba(101, 119, 134, 0.2))' }}
+                        />
+                    </Box>
+                </Box>
+            }
+            tip={
+                <Typography className={classes.tip} component="div">
+                    <div>{t('setup_guide_pin_tip_0')}</div>
+                    <ol style={{ paddingLeft: '24px' }}>
+                        <li>
+                            {t('setup_guide_pin_tip_1')}
+                            <ExtensionIcon sx={{ fontSize: 16, color: '#ababab' }} />
+                            {t('setup_guide_pin_tip_1_s')}
+                        </li>
+                        <li>
+                            {t('setup_guide_pin_tip_2')}
+                            <PushPinIcon sx={{ fontSize: 16 }} />
+                            {t('setup_guide_pin_tip_2_s')}
+                        </li>
+                        <li>{t('setup_guide_pin_tip_3')}</li>
+                    </ol>
+                </Typography>
+            }
+            footer={
+                <Button className={classes.button} variant="contained" onClick={onDone}>
+                    {t('start')}
+                </Button>
+            }
+            dismiss={
+                <FormControlLabel
+                    classes={{ label: classes.label }}
+                    control={<Checkbox checked={checked} onChange={(e) => setChecked(e.target.checked)} />}
+                    label={t('setup_guide_pin_dissmiss')}
+                />
+            }
+            onClose={onDone}
+        />
+    )
+}
 
 //#region setup guide ui
 interface SetupGuideUIProps {
@@ -395,7 +377,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     }, [lastState_])
     useEffect(() => {
         setStep(lastState.status ?? SetupGuideStep.Close)
-    }, [step, setStep, lastState])
+    }, [lastState])
     //#endregion
 
     //#region setup username
@@ -431,9 +413,15 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
     const onClose = () => {
         currentSetupGuideStatus[ui.networkIdentifier].value = ''
+        setStep(SetupGuideStep.Close)
     }
 
     const onDone = () => {
+        // check pin tip status
+        if (step === SetupGuideStep.FindUsername && !dismissPinExtensionTip.value) {
+            currentSetupGuideStatus[ui.networkIdentifier].value = stringify({ status: SetupGuideStep.PinExtension })
+            return setStep(SetupGuideStep.PinExtension)
+        }
         // check user guide status
         const network = ui.networkIdentifier
         if (network === 'twitter.com' && userGuideStatus[network].value !== 'completed') {
@@ -453,17 +441,24 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         })
     }
 
-    return step === SetupGuideStep.FindUsername ? (
-        <FindUsername
-            personaName={persona_?.nickname}
-            username={username}
-            avatar={lastRecognized.avatar}
-            onUsernameChange={setUsername}
-            onConnect={onConnect}
-            onDone={onDone}
-            onClose={onClose}
-        />
-    ) : null
+    switch (step) {
+        case SetupGuideStep.FindUsername:
+            return (
+                <FindUsername
+                    personaName={persona_?.nickname}
+                    username={username}
+                    avatar={lastRecognized.avatar}
+                    onUsernameChange={setUsername}
+                    onConnect={onConnect}
+                    onDone={onDone}
+                    onClose={onClose}
+                />
+            )
+        case SetupGuideStep.PinExtension:
+            return <PinExtension onDone={onDone} />
+        default:
+            return null
+    }
 }
 //#endregion
 

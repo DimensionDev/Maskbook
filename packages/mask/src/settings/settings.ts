@@ -65,6 +65,9 @@ export function getCurrentSelectedIdentity(network: string) {
 }
 export const currentSetupGuideStatus: NetworkSettings<string> = createNetworkSettings('currentSetupGuideStatus', '')
 export const userGuideStatus: NetworkSettings<string> = createNetworkSettings('userGuideStatus', '')
+export const dismissPinExtensionTip = createGlobalSettings<boolean>('dismissPinExtensionTip', false, {
+    primary: () => '',
+})
 // This is a misuse of concept "NetworkSettings" as "namespaced settings"
 // The refactor is tracked in https://github.com/DimensionDev/Maskbook/issues/1884
 /**
