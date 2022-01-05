@@ -361,7 +361,8 @@
         "poap",
         "irss",
         "CELO",
-        "flac"
+        "flac",
+        "plusplus"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [
