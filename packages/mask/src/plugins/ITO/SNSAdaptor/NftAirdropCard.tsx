@@ -233,7 +233,7 @@ export function NftAirdropCard(props: NftAirdropCardProps) {
             </div>
             <Typography className={classes.text}>
                 {t('plugin_ito_total_claimable_count')}
-                {claimableCount} {claimableCount > 1 ? 'items' : 'item'}`
+                {claimableCount} {claimableCount > 1 ? 'items' : 'item'},
             </Typography>
 
             <Typography className={classes.subText}>{t('plugin_airdrop_nft_check_address')}</Typography>
