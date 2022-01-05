@@ -1,4 +1,5 @@
 import { ChainId } from '@masknet/web3-shared-evm'
+import urlcat from 'urlcat'
 import { OPENSEA_API_KEY } from '../constants'
 
 interface AssetContract {
@@ -120,62 +121,37 @@ export interface CollectionsResponse {
     collections: AssetCollection[]
 }
 
-export async function getAssetsList(
-    from: string,
-    opts: { chainId?: ChainId; page?: number; size?: number; collection?: string },
-) {
+type Options<T = {}> = { chainId?: ChainId; page?: number; size?: number } & T
+
+const SUPPORTED_CHAIN_ID_LIST = [ChainId.Mainnet, ChainId.Rinkeby]
+
+export function getAssetsList(from: string, opts: Options<{ collection?: string }>): Promise<AssetsListResponse> {
     const { chainId = ChainId.Mainnet, page = 0, size = 50, collection } = opts
-    const params = new URLSearchParams()
-    params.append('owner', from.toLowerCase())
-    params.append('limit', String(size))
-    params.append('offset', String(size * page))
-    if (collection) {
-        params.append('collection', collection)
-    }
-
-    if (![ChainId.Mainnet, ChainId.Rinkeby].includes(chainId))
-        return {
-            assets: [],
-        } as AssetsListResponse
-
-    const response = await fetch(
-        `https://${chainId === ChainId.Mainnet ? 'api' : 'rinkeby-api'}.opensea.io/api/v1/assets?${params.toString()}`,
-        {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                'x-api-key': OPENSEA_API_KEY,
-            },
-        },
-    )
-    return (await response.json()) as AssetsListResponse
+    if (!SUPPORTED_CHAIN_ID_LIST.includes(chainId)) return Promise.resolve({ assets: [] })
+    return request(chainId, '/assets', {
+        owner: from.toLowerCase(),
+        limit: size,
+        offset: size * page,
+        collection,
+    })
 }
 
-export async function getCollections(owner: string, opts: { chainId?: ChainId; page?: number; size?: number }) {
+export function getCollections(owner: string, opts: Options): Promise<CollectionsResponse> {
     const { chainId = ChainId.Mainnet, page = 0, size = 300 } = opts
-    const params = new URLSearchParams()
-    params.append('asset_owner', owner.toLowerCase())
-    params.append('limit', String(size))
-    params.append('offset', String(size * page))
+    if (!SUPPORTED_CHAIN_ID_LIST.includes(chainId)) return Promise.resolve({ collections: [] })
+    return request(chainId, '/collections', {
+        asset_owner: owner.toLowerCase(),
+        limit: size,
+        offset: size * page,
+    })
+}
 
-    if (![ChainId.Mainnet, ChainId.Rinkeby].includes(chainId))
-        return {
-            collections: [],
-        } as CollectionsResponse
-
-    const response = await fetch(
-        `https://${
-            chainId === ChainId.Mainnet ? 'api' : 'rinkeby-api'
-        }.opensea.io/api/v1/collections?${params.toString()}`,
-        {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                'x-api-key': OPENSEA_API_KEY,
-            },
-        },
-    )
-    const collections = (await response.json()) as AssetCollection[]
-
-    return { collections }
+async function request<T>(chainId: ChainId, requestPath: string, params: object): Promise<T> {
+    const subdomain = chainId === ChainId.Mainnet ? 'api' : 'rinkeby-api'
+    const response = await fetch(urlcat(`https://${subdomain}.opensea.io/api/v1/`, requestPath, params), {
+        method: 'GET',
+        mode: 'cors',
+        headers: { 'x-api-key': OPENSEA_API_KEY },
+    })
+    return response.json()
 }
