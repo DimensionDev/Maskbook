@@ -1,4 +1,5 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
+import { encodeArrayBuffer } from '@dimensiondev/kit'
 import type { PostContext, PostContextAuthor, PostContextCreation, PostContextSNSActions } from '@masknet/plugin-infra'
 import {
     ALL_EVENTS,
@@ -23,6 +24,7 @@ import {
 } from '@masknet/shared-base'
 import type { Subscription } from 'use-subscription'
 import { activatedSocialNetworkUI } from '../'
+import { nonNullable } from '../../../utils-pure'
 import { FACEBOOK_ID } from '../../social-network-adaptor/facebook.com/base'
 import { resolveFacebookLink } from '../../social-network-adaptor/facebook.com/utils/resolveFacebookLink'
 
@@ -73,18 +75,20 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
                 return () => void [a(), b()]
             },
         })
-        let initialTrigger = false
-        const rawMessageResolved = createSubscriptionFromAsync(
-            () => waitTypedMessage(opt.rawMessage.getCurrentValue()).then(flattenTypedMessage),
-            makeTypedMessageEmpty(),
-            (e) => {
-                !initialTrigger && e() && (initialTrigger = true)
-                return opt.rawMessage.subscribe(e)
-            },
-        )
-        // @ts-ignore
+        const MaskPayloads: PostContext['maskPayloads'] = new ObservableMap()
+        function calculateCommentEncryptionIV() {
+            const all = [...MaskPayloads.values()]
+                .map((x) => x.iv.getCurrentValue()?.buffer)
+                .filter(nonNullable)
+                .map(encodeArrayBuffer)
+                .sort()
+            return all[0] as string | null
+        }
         return {
-            ...author,
+            author: author.author,
+            avatarURL: author.avatarURL,
+            nickname: author.nickname,
+            snsID: author.snsID,
 
             get rootNode() {
                 return opt.rootElement.realCurrent
@@ -109,10 +113,17 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             rawMessage: opt.rawMessage,
             rawMessagePiped: transformedPostContent,
 
-            // TODO
-            commentEncryptionIV: createConstantSubscription(''),
-            containsMaskPayload: createConstantSubscription(false),
-            payloadClaimedAuthor: createConstantSubscription(undefined),
+            async decryptPostComment() {
+                throw new Error('TODO')
+            },
+            async encryptPostComment() {
+                throw new Error('TODO')
+            },
+            containsMaskPayload: {
+                getCurrentValue: () => MaskPayloads.size !== 0,
+                subscribe: (sub) => MaskPayloads.event.on(ALL_EVENTS, sub),
+            },
+            maskPayloads: MaskPayloads,
         }
     }
 }

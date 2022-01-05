@@ -1,9 +1,4 @@
-import { useState, useEffect } from 'react'
-import { useAsync } from 'react-use'
-import { DecryptPost } from './DecryptedPost/DecryptedPost'
-import { ProfileIdentifier, type TypedMessageTuple } from '@masknet/shared-base'
-import type { Profile } from '../../database'
-import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'
+import { DecryptedPosts } from './DecryptedPost/DecryptedPost'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 import { PossiblePluginSuggestionPostInspector } from './DisabledPluginSuggestion'
@@ -14,7 +9,6 @@ const PluginHooksRenderer = createInjectHooksRenderer(
 )
 
 export interface PostInspectorProps {
-    onDecrypted(post: TypedMessageTuple): void
     needZip(): void
     /** @default 'before' */
     slotPosition?: 'before' | 'after'
@@ -22,38 +16,11 @@ export interface PostInspectorProps {
 export function PostInspector(props: PostInspectorProps) {
     const postBy = usePostInfoDetails.author()
     const encryptedPost = { ok: false } // usePostInfoDetails.containingMaskPayload()
-    const version = usePostInfoDetails.containsMaskPayloadVersion()
-    const whoAmI = useCurrentIdentity()
-    const friends = useFriendsList()
-    const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Profile[]>([])
-
-    const { value: sharedListOfPost } = useAsync(async () => {
-        return []
-        // if (!whoAmI || !whoAmI.identifier.equals(postBy) || !encryptedPost.ok) return []
-        // const { iv, version } = encryptedPost.val
-        // return Services.Crypto.getPartialSharedListOfPost(version, iv, postBy)
-    }, [])
-    useEffect(() => setAlreadySelectedPreviously(sharedListOfPost ?? []), [sharedListOfPost])
 
     // if (encryptedPost.ok) {
     //     props.needZip()
     // }
-    return withAdditionalContent(
-        <DecryptPost
-            onDecrypted={props.onDecrypted}
-            requestAppendRecipients={async () => {
-                // TODO
-            }}
-            alreadySelectedPreviously={alreadySelectedPreviously}
-            profiles={friends}
-            whoAmI={whoAmI ? whoAmI.identifier : ProfileIdentifier.unknown}
-        />,
-    )
-    // else if (provePost.length) {
-    //     // TODO:
-    //     return null
-    //     // return withAdditionalContent(<AddToKeyStore postBy={postBy} provePost={postContent} />)
-    // }
+    return withAdditionalContent(<DecryptedPosts />)
     function withAdditionalContent(x: JSX.Element | null) {
         const slot = encryptedPost.ok ? null : <slot />
         return (

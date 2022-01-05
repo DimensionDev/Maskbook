@@ -12,14 +12,11 @@ export function injectPostInspectorDefault<T extends string>(
     additionalPropsToPostInspector: (classes: Record<T, string>) => Partial<PostInspectorProps> = () => ({}),
     useCustomStyles: (props?: any) => { classes: Record<T, string> } = makeStyles()({}) as any,
 ) {
-    const PostInspectorDefault = memo(function PostInspectorDefault(props: {
-        onDecrypted: PostInspectorProps['onDecrypted']
-        zipPost: PostInspectorProps['needZip']
-    }) {
-        const { onDecrypted, zipPost } = props
+    const PostInspectorDefault = memo(function PostInspectorDefault(props: { zipPost: PostInspectorProps['needZip'] }) {
+        const { zipPost } = props
         const { classes } = useCustomStyles()
         const additionalProps = additionalPropsToPostInspector(classes)
-        return <PostInspector onDecrypted={onDecrypted} needZip={zipPost} {...additionalProps} />
+        return <PostInspector needZip={zipPost} {...additionalProps} />
     })
 
     const { zipPost, injectionPoint } = config
@@ -27,11 +24,7 @@ export function injectPostInspectorDefault<T extends string>(
     return function injectPostInspector(current: PostInfo, signal: AbortSignal) {
         const jsx = (
             <PostInfoProvider post={current}>
-                <PostInspectorDefault
-                    onDecrypted={() => {}}
-                    zipPost={() => zipPostF(current.rootElement)}
-                    {...current}
-                />
+                <PostInspectorDefault zipPost={() => zipPostF(current.rootElement)} {...current} />
             </PostInfoProvider>
         )
         const root = createReactRootShadowed(injectionPoint?.(current) ?? current.rootElement.afterShadow, {

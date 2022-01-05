@@ -1,39 +1,46 @@
-import type { TypedMessageTuple, ProfileIdentifier } from '@masknet/shared-base'
-
-import type { Profile } from '../../../database'
-import { usePostInfoDetails } from '@masknet/plugin-infra'
+import { MaskPayloadContext, usePostInfoDetails } from '@masknet/plugin-infra'
 import { DecryptError, DecryptProgress, DecryptProgressKind, DecryptSuccess } from '@masknet/encryption'
 import type { DecryptionInfo } from '../../../../background/services/crypto/decryption'
 import { DecryptPostSuccess } from './DecryptedPostSuccess'
 import type { DecryptIntermediateProgress } from '@masknet/encryption/src/encryption'
 import { DecryptPostAwaiting } from './DecryptPostAwaiting'
 import { DecryptPostFailed } from './DecryptPostFailed'
+import { useSubscription } from 'use-subscription'
+import { findLast } from 'lodash-unified'
 
-export interface DecryptPostProps {
-    onDecrypted: (post: TypedMessageTuple) => void
-    whoAmI: ProfileIdentifier
-    profiles: Profile[]
-    alreadySelectedPreviously: Profile[]
-    requestAppendRecipients?(to: Profile[]): Promise<void>
+export interface DecryptedPostsProps {}
+export function DecryptedPosts(props: DecryptedPostsProps) {
+    const decryptions = usePostInfoDetails.maskPayloads()
+    return (
+        <>
+            {decryptions.map((context) => (
+                <DecryptedPost {...context} key={context.id} />
+            ))}
+        </>
+    )
 }
-export function DecryptPost(props: DecryptPostProps) {
-    const decryptions = usePostInfoDetails.decryptedMaskPayload()
-    const jsx = Object.entries(decryptions).map(([key, value]) => {
-        const result = value.find(isDecryptSuccess)
 
-        if (result) {
-            return (
-                <DecryptPostSuccess key={key} alreadySelectedPreviously={[]} data={result} profiles={[]} sharedPublic />
-            )
-        }
-        const failed = value.find(isDecryptError)
-        if (failed) return <DecryptPostFailed key={key} error={failed} />
-        const process = value.find(isDecryptProgress)
-        if (process) return <DecryptPostAwaiting key={key} progress={process} />
+function DecryptedPost(props: MaskPayloadContext) {
+    const decryption = useSubscription(props.decrypted)
+    const publicShared = useSubscription(props.publicShared)
 
-        return null
-    })
-    return <>{jsx}</>
+    const success = findLast(decryption, isDecryptSuccess)
+    if (success) {
+        return (
+            <DecryptPostSuccess
+                data={success}
+                // TODO:
+                alreadySelectedPreviously={[]}
+                profiles={[]}
+                sharedPublic={publicShared}
+            />
+        )
+    }
+    const failed = findLast(decryption, isDecryptError)
+    if (failed) return <DecryptPostFailed error={failed} />
+    const progress = findLast(decryption, isDecryptProgress)
+    if (progress) return <DecryptPostAwaiting progress={progress} />
+    return null
 }
 
 // function useSocialNetworkEncodedPayload(): SocialNetworkEncodedPayload[] {

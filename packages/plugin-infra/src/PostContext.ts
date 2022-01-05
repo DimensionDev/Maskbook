@@ -70,11 +70,17 @@ export interface PostContext extends PostContextAuthor {
     //#endregion
     //#region Information revealed in the Mask Payload
     readonly containsMaskPayload: Subscription<boolean>
-    readonly containsMaskPayloadVersion: Subscription<Array<-40 | -39 | -38 | -37>>
-    readonly payloadClaimedAuthor: Subscription<ProfileIdentifier | undefined>
-    readonly commentEncryptionIV: Subscription<string | null>
-    readonly decryptedMaskPayload: Subscription<Record<string, DecryptProgress[]>>
+    encryptPostComment(comment: string): Promise<string>
+    decryptPostComment(comment: string): Promise<string>
+    readonly maskPayloads: ObservableMap<string, MaskPayloadContext>
     //#endregion
+}
+export interface MaskPayloadContext {
+    readonly claimedAuthor: Subscription<ProfileIdentifier | null>
+    readonly decrypted: Subscription<DecryptProgress[]>
+    readonly iv: Subscription<Uint8Array | null>
+    readonly publicShared: Subscription<boolean>
+    readonly id: string
 }
 export type PostInfo = PostContext
 

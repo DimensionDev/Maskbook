@@ -2,18 +2,17 @@ import { memo, useCallback } from 'react'
 import type { PostInfo } from '../../PostInfo'
 import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { CommentBox, CommentBoxProps } from '../../../components/InjectedComponents/CommentBox'
-import Services from '../../../extension/service'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { makeStyles } from '@masknet/theme'
 import { usePostInfoDetails, usePostInfo, PostInfoProvider } from '../../../components/DataSource/usePostInfo'
 import { noop } from 'lodash-unified'
 import { MaskMessages } from '../../../utils/messages'
 import { startWatch } from '../../../utils/watcher'
-import { extractTextFromTypedMessage } from '@masknet/shared-base'
+import type { PostContext } from '@masknet/plugin-infra/src'
 
 const defaultOnPasteToCommentBox = async (
     encryptedComment: string,
-    _current: PostInfo,
+    _postContext: PostContext,
     _realCurrent: HTMLElement | null,
 ) => {
     MaskMessages.events.autoPasteFailed.sendToLocal({ text: encryptedComment })
@@ -28,19 +27,17 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
     mountPointCallback?: (node: DOMProxy<HTMLElement, HTMLSpanElement, HTMLSpanElement>) => void,
 ) {
     const CommentBoxUI = memo(function CommentBoxUI({ dom }: { dom: HTMLElement | null }) {
-        const info = usePostInfo()
-        const postIV = usePostInfoDetails.commentEncryptionIV()
+        const info = usePostInfo()!
+        const { encryptPostComment } = usePostInfo()!
         const postContent = usePostInfoDetails.rawMessagePiped()
         const { classes } = useCustomStyles()
         const props = additionPropsToCommentBox(classes)
         const onCallback = useCallback(
             async (content) => {
-                const decryptedText = extractTextFromTypedMessage(postContent).unwrap()
-                if (!postIV) throw new TypeError('[@masknet/encryption] No IV, cannot encrypt/decrypt comment.')
-                const encryptedComment = await Services.Crypto.encryptComment(postIV, decryptedText, content)
-                onPasteToCommentBox(encryptedComment, info!, dom).catch(console.error)
+                const encryptedComment = await encryptPostComment(content)
+                onPasteToCommentBox(encryptedComment, info, dom).catch(console.error)
             },
-            [postIV, postContent, info, dom, postIV],
+            [encryptPostComment, postContent, info, dom],
         )
 
         if (!postContent.items.length) return null

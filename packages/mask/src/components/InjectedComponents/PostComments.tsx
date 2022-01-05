@@ -6,9 +6,7 @@ import type { ChipProps } from '@mui/material/Chip'
 import Lock from '@mui/icons-material/Lock'
 import { useEffect } from 'react'
 import { useAsync } from 'react-use'
-import Services from '../../extension/service'
-import { extractTextFromTypedMessage } from '@masknet/shared-base'
-import { usePostInfoDetails } from '../DataSource/usePostInfo'
+import { usePostInfo } from '../DataSource/usePostInfo'
 
 const useStyle = makeStyles()({
     root: {
@@ -42,30 +40,19 @@ export function PostCommentDecrypted(props: PostCommentDecryptedProps) {
 export interface PostCommentProps {
     comment: ValueRef<string>
     needZip(): void
-    successComponentProps?: PostCommentDecryptedProps
-    successComponent?: React.ComponentType<PostCommentDecryptedProps>
-    waitingComponent?: React.ComponentType
-    failedComponent?: React.ComponentType<{ error: Error }>
 }
 export function PostComment(props: PostCommentProps) {
-    const { failedComponent: Fail, waitingComponent: Wait, needZip } = props
+    const { needZip } = props
     const comment = useValueRef(props.comment)
-    // TODO:
-    const postContent = usePostInfoDetails.rawMessagePiped()
-    const postIV = usePostInfoDetails.commentEncryptionIV()
+    const { decryptPostComment } = usePostInfo()!
 
     const dec = useAsync(async () => {
-        const decryptedText = extractTextFromTypedMessage(postContent).unwrap()
-        if (!postIV || !decryptedText) throw new Error('Decrypt comment failed')
-        const result = await Services.Crypto.decryptComment(postIV, decryptedText, comment)
+        const result = await decryptPostComment(comment)
         if (result === null) throw new Error('Decrypt result empty')
         return result
-    }, [postIV, postContent, comment])
+    }, [comment])
 
-    const Success = props.successComponent || PostCommentDecrypted
     useEffect(() => void (dec.value && needZip()), [dec.value, needZip])
-    if (dec.error) return Fail ? <Fail error={dec.error} /> : null
-    if (dec.loading) return Wait ? <Wait /> : null
-    if (dec.value) return <Success {...props.successComponentProps}>{dec.value}</Success>
+    if (dec.value) return <PostCommentDecrypted>{dec.value}</PostCommentDecrypted>
     return null
 }
