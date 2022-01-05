@@ -1,4 +1,4 @@
-import { DecryptedPosts } from './DecryptedPost/DecryptedPost'
+import { DecryptedPosts } from './DecryptedPost/DecryptedPosts'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 import { PossiblePluginSuggestionPostInspector } from './DisabledPluginSuggestion'
