@@ -6,7 +6,6 @@ export * from './shadow-root'
 export * from './suspends'
 export * from './type-transform'
 export * from './comparer'
-export * from './constants'
 export * from './dom'
 export * from './getTextUILength'
 export * from './i18n-next-ui'
@@ -18,3 +17,8 @@ export * from './theme'
 export * from './utils'
 export * from './watcher'
 export * from './collectNodeText'
+export async function asyncIteratorToArray<T>(iter: AsyncIterable<T>): Promise<T[]> {
+    const x: T[] = []
+    for await (const y of x) x.push(y)
+    return x
+}

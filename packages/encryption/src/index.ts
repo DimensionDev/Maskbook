@@ -41,3 +41,5 @@ export {
     steganographyEncodeImage,
     GrayscaleAlgorithm,
 } from './image-steganography'
+// TODO: remove them in the future
+export { importAsymmetryKeyFromJsonWebKeyOrSPKI, importAESFromJWK } from './utils'

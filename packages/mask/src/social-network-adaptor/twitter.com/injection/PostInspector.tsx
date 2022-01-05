@@ -1,6 +1,6 @@
 import type { PostInfo } from '../../../social-network/PostInfo'
 import { injectPostInspectorDefault } from '../../../social-network/defaults/inject/PostInspector'
-import { twitterEncoding } from '../encoding'
+import { socialNetworkDecoder, SocialNetworkEnum } from '@masknet/encryption'
 
 export function injectPostInspectorAtTwitter(signal: AbortSignal, current: PostInfo) {
     return injectPostInspectorDefault({
@@ -12,7 +12,7 @@ export function injectPostInspectorAtTwitter(signal: AbortSignal, current: PostI
             if (!content) return
 
             for (const a of content.querySelectorAll('a')) {
-                if (twitterEncoding.payloadDecoder(a.title).length) hideDOM(a)
+                if (socialNetworkDecoder(SocialNetworkEnum.Twitter, a.title).some) hideDOM(a)
 
                 if (/^https?:\/\/mask(\.io|book\.com)$/i.test(a.title)) hideDOM(a)
             }

@@ -17,7 +17,6 @@ import {
 import { Image } from '../shared/Image'
 import { useAsync } from 'react-use'
 import { getRendererOfTypedMessage, registerTypedMessageRenderer } from '../../protocols/typed-message'
-import { deconstructPayload } from '../../utils/type-transform/Payload'
 import { PayloadReplacer } from './PayloadReplacer'
 import { useI18N } from '../../utils'
 
@@ -50,15 +49,12 @@ export const DefaultTypedMessageTextRenderer = memo(function DefaultTypedMessage
     props: TypedMessageRendererProps<TypedMessageText>,
 ) {
     const { content } = props.message
-    const deconstructed = deconstructPayload(content, null)
     return renderWithMetadata(
         props,
         <Typography component="span" color="textPrimary" variant="body1" data-testid="text_payload">
-            {deconstructed.ok ? (
-                <PayloadReplacer payload={content} />
-            ) : (
-                <RenderText text={content} allowTextEnlarge={Boolean(props.allowTextEnlarge)} />
-            )}
+            {/* // TODO: */}
+            <PayloadReplacer payload={content} />
+            <RenderText text={content} allowTextEnlarge={Boolean(props.allowTextEnlarge)} />
         </Typography>,
     )
 })
@@ -72,18 +68,15 @@ export const DefaultTypedMessageAnchorRenderer = memo(function DefaultTypedMessa
     props: TypedMessageRendererProps<TypedMessageAnchor>,
 ) {
     const { content, href } = props.message
-    const deconstructed = deconstructPayload(content, null)
     return renderWithMetadata(
         props,
         <Typography component="span" variant="body1" data-testid="anchor_payload">
-            {deconstructed.ok ? (
-                <PayloadReplacer payload={href} />
-            ) : (
-                // TODO: shrink link size
-                <Link color="primary" target="_blank" rel="noopener noreferrer" href={href}>
-                    {content}
-                </Link>
-            )}
+            {/* // TODO: */}
+            <PayloadReplacer payload={href} />
+            // TODO: shrink link size
+            <Link color="primary" target="_blank" rel="noopener noreferrer" href={href}>
+                {content}
+            </Link>
         </Typography>,
     )
 })

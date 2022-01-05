@@ -1,6 +1,5 @@
 import * as Alpha38 from '../../../crypto/crypto-alpha-38'
 import { decodeArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
-import { constructAlpha38 } from '../../../utils/type-transform/Payload'
 import { queryPrivateKey, queryLocalKey, queryProfile } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier } from '@masknet/shared-base'
 import { prepareRecipientDetail } from './prepareRecipientDetail'
@@ -8,16 +7,18 @@ import { getNetworkWorker } from '../../../social-network/worker'
 import { createPostDB, PostRecord } from '../../../../background/database/post'
 import { queryPersonaByProfileDB } from '../../../../background/database/persona/db'
 import { i18n } from '../../../../shared-ui/locales_legacy'
-import {
-    isTypedMessageText,
-    TypedMessage,
-    TypedMessageText,
-    PayloadLatest,
-    compressSecp256k1Key,
-} from '@masknet/shared-base'
-import { encodeTextPayloadWorker } from '../../../social-network/utils/text-payload-worker'
+import { isTypedMessageText, TypedMessage, TypedMessageText } from '@masknet/shared-base'
 import { publishPostAESKey_version39Or38 } from '../../../../background/network/gun/encryption/queryPostKey'
 import { getGunInstance } from '../../../../background/network/gun/instance'
+import {
+    PayloadWellFormed,
+    PublicKeyAlgorithmEnum,
+    importAsymmetryKeyFromJsonWebKeyOrSPKI,
+    AESAlgorithmEnum,
+    importAESFromJWK,
+    encodePayload,
+} from '@masknet/encryption'
+import { None, Some } from 'ts-results'
 
 type EncryptedText = string
 type OthersAESKeyEncryptedToken = string
@@ -67,26 +68,51 @@ export async function encryptTo(
         iv: crypto.getRandomValues(new Uint8Array(16)),
     })
 
-    const payload: PayloadLatest = {
-        AESKeyEncrypted: encodeArrayBuffer(ownersAESKeyEncrypted),
-        encryptedText: encodeArrayBuffer(encryptedText),
-        iv: encodeArrayBuffer(iv),
-        signature: '',
-        sharedPublic: publicShared,
-        version: -38,
-        authorUserID: whoAmI,
-    }
+    let authorPublicKey: PayloadWellFormed.Payload['authorPublicKey'] = None
     try {
-        const publicKey = (await queryPersonaByProfileDB(whoAmI))?.publicKey
-        if (publicKey) payload.authorPublicKey = compressSecp256k1Key(publicKey)
+        const jwk = (await queryPersonaByProfileDB(whoAmI))?.publicKey
+        if (jwk) {
+            authorPublicKey = Some({
+                algr: PublicKeyAlgorithmEnum.secp256k1,
+                key: (await importAsymmetryKeyFromJsonWebKeyOrSPKI(jwk, PublicKeyAlgorithmEnum.secp256k1)).unwrap(),
+            })
+        }
     } catch {
         // ignore
     }
 
-    payload.signature = '_'
+    const postCryptoKey = (await importAESFromJWK(postAESKey, AESAlgorithmEnum.A256GCM)).unwrap()
+    let encryption: PayloadWellFormed.EndToEndEncryption | PayloadWellFormed.PublicEncryption
+    if (publicShared) {
+        encryption = {
+            type: 'public',
+            iv: new Uint8Array(iv),
+            AESKey: {
+                algr: AESAlgorithmEnum.A256GCM,
+                key: postCryptoKey,
+            },
+        }
+    } else {
+        encryption = {
+            type: 'E2E',
+            iv: new Uint8Array(iv),
+            ephemeralPublicKey: new Map(),
+            ownersAESKeyEncrypted: new Uint8Array(ownersAESKeyEncrypted),
+        }
+    }
+
+    const payload: { -readonly [key in keyof PayloadWellFormed.Payload]: PayloadWellFormed.Payload[key] } = {
+        version: -38,
+        author: Some(whoAmI),
+        encryption,
+        encrypted: new Uint8Array(encryptedText),
+        authorPublicKey,
+        // not supported
+        signature: None,
+    }
 
     const newPostRecord: PostRecord = {
-        identifier: new PostIVIdentifier(whoAmI.network, payload.iv),
+        identifier: new PostIVIdentifier(whoAmI.network, encodeArrayBuffer(iv)),
         postBy: whoAmI,
         postCryptoKey: postAESKey,
         recipients: publicShared ? 'everyone' : recipients,
@@ -102,7 +128,9 @@ export async function encryptTo(
     const postAESKeyToken = encodeArrayBuffer(iv)
     const worker = await getNetworkWorker(whoAmI)!
     OthersAESKeyEncryptedMap.set(postAESKeyToken, [worker.gunNetworkHint, othersAESKeyEncrypted])
-    return [constructAlpha38(payload, await encodeTextPayloadWorker(whoAmI)), postAESKeyToken]
+    const payloadEncoded = (await encodePayload.NoSign(payload)).unwrap()
+    if (typeof payloadEncoded !== 'string') throw new TypeError('')
+    return [payloadEncoded, postAESKeyToken]
 }
 
 /**

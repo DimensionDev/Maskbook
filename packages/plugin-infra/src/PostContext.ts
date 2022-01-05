@@ -2,24 +2,15 @@ import { useObservableValues, useValueRef } from '@masknet/shared'
 import {
     ObservableMap,
     ObservableSet,
-    type Payload,
     type PostIdentifier,
     type ProfileIdentifier,
     type TypedMessageTuple,
 } from '@masknet/shared-base'
 import { ValueRef, LiveSelector, DOMProxy } from '@dimensiondev/holoflows-kit'
-import type { Result } from 'ts-results'
 import { Context, createContext, createElement, memo, useContext } from 'react'
 import { Subscription, useSubscription } from 'use-subscription'
 import type { DecryptProgress } from '@masknet/encryption'
 export interface PostContextSNSActions {
-    /** Parse payload into Payload */
-    payloadParser(raw: string): Result<Payload, Error>
-    /**
-     * It will run before parser.
-     * @returns a list of candidates of payload string.
-     */
-    payloadDecoder?(postContent: string): string[]
     getURLFromPostIdentifier?(post: PostIdentifier): URL | null
 }
 export interface PostContextAuthor {
