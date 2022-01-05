@@ -11,8 +11,11 @@ export const base: Plugin.Shared.Definition = {
     },
     publisher: { name: { fallback: 'SebastianLF' }, link: 'https://github.com/SebastianLF' },
     enableRequirement: {
-        architecture: { app: false, web: true },
+        architecture: { app: true, web: true },
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
+    },
+    contribution: {
+        postContent: new Set([/https:\/\/furucombo.app\/invest\/(pool|farm)\/(137|1)\/(0x\w+)/]),
     },
 }
