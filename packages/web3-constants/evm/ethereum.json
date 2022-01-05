@@ -14,7 +14,7 @@
         "xDai": "0x96c7D011cdFD467f551605f0f5Fce279F86F4186",
         "Celo": "0x8e28F1d64ceD52b9A09aB1AA3071Aa3c05802d1F",
         "Metis": "",
-        "Metis_Stardust": "",
+        "Metis_Stardust": "0x2690906609A9AF3bF08B8384CD9A0F97A88A7E9c",
         "Fantom": "0xc119574d5fb333f5ac018658d4d8b5035e16bf39"
     },
     "MULTICALL_ADDRESS": {
