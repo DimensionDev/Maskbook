@@ -21,7 +21,7 @@ export function createContract<T extends BaseContract>(web3: Web3, address: stri
  * @param ABI
  */
 export function useContract<T extends BaseContract>(
-    address: string = '',
+    address = '',
     ABI: AbiItem[] = [],
     readonly = false,
     chainId?: ChainId,

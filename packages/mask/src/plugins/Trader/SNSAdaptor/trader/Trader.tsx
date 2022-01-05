@@ -467,10 +467,9 @@ export function Trader(props: TraderProps) {
 
     //#region if chain id be changed, reset the chain id on context, and reset gas config
     useEffect(() => {
-        if (chainId) {
-            setTargetChainId(chainId)
-            setGasConfig(undefined)
-        }
+        if (!chainId) return
+        setTargetChainId(chainId)
+        setGasConfig(undefined)
     }, [chainId])
     //#endregion
 

@@ -51,7 +51,7 @@ export interface LandingPageMetadata {
 }
 
 export async function uploadLandingPage(metadata: LandingPageMetadata) {
-    let linkPrefix: string = 'https://arweave.net'
+    let linkPrefix = 'https://arweave.net'
     if (metadata.useCDN) {
         linkPrefix = mesonPrefix
     }

@@ -36,7 +36,7 @@ export const MnemonicRevealForm = memo(() => {
         if (words.join(' ') !== puzzleWords.join(' ')) {
             showSnackbar(t.create_account_mnemonic_confirm_failed(), { variant: 'error' })
         } else {
-            navigate(`${SignUpRoutePath.PersonaCreate}`, {
+            navigate(SignUpRoutePath.PersonaCreate, {
                 replace: true,
                 state: { mnemonic: words },
             })

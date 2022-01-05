@@ -76,7 +76,11 @@ export const dismissPinExtensionTip = createGlobalSettings<boolean>('dismissPinE
  * use `useActivatedPluginsSNSAdaptor().find((x) => x.ID === PLUGIN_ID)` or
  * `useActivatedPluginsDashboard().find((x) => x.ID === PLUGIN_ID)` instead
  */
-export const currentPluginEnabledStatus: NetworkSettings<boolean> = createNetworkSettings('pluginsEnabled', true)
+// This was "currentPluginEnabled" before, but we used it to represent minimal mode now to make the settings be able to migrate.
+export const currentPluginMinimalModeNOTEnabled: NetworkSettings<boolean> = createNetworkSettings(
+    'pluginsEnabled',
+    true,
+)
 //#endregion
 
 export const launchPageSettings = createGlobalSettings<LaunchPage>('launchPage', LaunchPage.dashboard, {

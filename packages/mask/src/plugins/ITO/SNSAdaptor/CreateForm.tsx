@@ -235,7 +235,7 @@ export function CreateForm(props: CreateFormProps) {
         setTokenAndAmount(first)
         onChangePoolSettings({
             // this is the raw password which should be signed by the sender
-            password: Web3Utils.sha3(`${message}`) ?? '',
+            password: Web3Utils.sha3(message) ?? '',
             name: senderName,
             title: message,
             limit: formatAmount(totalOfPerWallet || '0', first?.token?.decimals),

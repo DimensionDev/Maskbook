@@ -126,7 +126,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     //#region buy
-    const transakPluginEnabled = useActivatedPluginsSNSAdaptor().find((x) => x.ID === PluginId.Transak)
+    const transakPluginEnabled = useActivatedPluginsSNSAdaptor('any').find((x) => x.ID === PluginId.Transak)
     const account = useAccount()
     const isAllowanceCoin = useTransakAllowanceCoin(coin)
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)

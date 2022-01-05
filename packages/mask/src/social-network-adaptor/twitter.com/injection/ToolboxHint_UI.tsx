@@ -16,7 +16,7 @@ const ListItem = styled(ListItemButton)`
     display: inline-flex;
     &:hover {
         background: rgba(15, 20, 25, 0.1);
-        ${({ theme }) => (theme.palette.mode === 'dark' ? `background: rgba(217, 217, 217, 0.1);` : '')}
+        ${({ theme }) => (theme.palette.mode === 'dark' ? 'background: rgba(217, 217, 217, 0.1);' : '')}
     }
     /* twitter break point */
     @media screen and (max-width: ${twitterBreakPoint}px) {
