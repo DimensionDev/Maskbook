@@ -565,7 +565,7 @@ importers:
   packages/plugin-infra:
     specifiers:
       '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
-      '@masknet/encryption': workspace:^0.0.0
+      '@masknet/encryption': workspace:^*
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
