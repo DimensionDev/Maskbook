@@ -4,7 +4,7 @@ import { List, ListItem, ListProps, Skeleton, Typography } from '@mui/material'
 import classnames from 'classnames'
 import type { FC, HTMLProps } from 'react'
 import { useI18N } from '../../../utils'
-// import { NftImage } from './NftImage'
+import { NFTLuckyDropStyledAssetPlayer } from './NFTLuckyDropStyledAssetPlayer'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -108,13 +108,15 @@ export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claime
 
     return (
         <div className={classnames(className, classes.nft)} {...rest}>
-            {/* <NftImage
+            <NFTLuckyDropStyledAssetPlayer
                 classes={{
                     loadingFailImage: classes.loadingFailImage,
                 }}
-                token={result.tokenDetailed}
+                tokenId={result.tokenDetailed.tokenId}
+                contractAddress={result.tokenDetailed.contractDetailed.address}
+                chainId={result.tokenDetailed.contractDetailed.chainId}
                 fallbackImage={new URL('./assets/nft_token_fallback.png', import.meta.url)}
-            /> */}
+            />
             <Typography className={classes.name}>{result.tokenDetailed.info.name}</Typography>
             {claimed && <Typography className={classes.claimedBadge}>{t('plugin_red_packet_claimed')}</Typography>}
         </div>

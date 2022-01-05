@@ -21,7 +21,7 @@ import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
-import { NftImage } from './NftImage'
+import { NFTLuckyDropStyledAssetPlayer } from './NFTLuckyDropStyledAssetPlayer'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -355,7 +355,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
 
                 {availability.isClaimed ? (
                     <Box className={classes.tokenWrapper}>
-                        <NftImage
+                        <NFTLuckyDropStyledAssetPlayer
                             chainId={payload.chainId}
                             contractAddress={payload.contractAddress}
                             tokenId={availability.claimed_id}

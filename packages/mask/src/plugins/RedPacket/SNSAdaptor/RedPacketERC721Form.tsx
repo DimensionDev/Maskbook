@@ -21,7 +21,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { RedpacketMessagePanel } from './RedpacketMessagePanel'
 import { SelectNftTokenDialog, OrderedERC721Token } from './SelectNftTokenDialog'
 import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog'
-import { NftImage } from './NftImage'
+import { NFTLuckyDropStyledAssetPlayer } from './NFTLuckyDropStyledAssetPlayer'
 import { NFTSelectOption } from '../types'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants'
 
@@ -312,7 +312,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         <List className={classes.tokenSelector}>
                             {existTokenDetailedList.map((value, i) => (
                                 <ListItem key={i.toString()} className={classNames(classes.tokenSelectorWrapper)}>
-                                    <NftImage
+                                    <NFTLuckyDropStyledAssetPlayer
                                         contractAddress={value.contractDetailed.address}
                                         chainId={value.contractDetailed.chainId}
                                         tokenId={value.tokenId}

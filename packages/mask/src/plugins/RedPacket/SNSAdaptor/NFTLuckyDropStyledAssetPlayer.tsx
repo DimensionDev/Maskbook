@@ -29,16 +29,15 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface NftImageProps extends withClasses<'loadingFailImage' | 'iframe'> {
+interface NFTLuckyDropStyledAssetPlayerProps extends withClasses<'loadingFailImage' | 'iframe'> {
     chainId: ChainId
     contractAddress: string
     tokenId: string
     fallbackImage: URL
 }
-export function NftImage(props: NftImageProps) {
+export function NFTLuckyDropStyledAssetPlayer(props: NFTLuckyDropStyledAssetPlayerProps) {
     const { chainId, contractAddress, tokenId, fallbackImage } = props
     const classes = useStylesExtends(useStyles(), props)
-    console.log({ props })
     return (
         <AssetPlayer
             erc721Token={{

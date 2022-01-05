@@ -16,7 +16,7 @@ import { SearchIcon } from '@masknet/icons'
 import CheckIcon from '@mui/icons-material/Check'
 import { Trans } from 'react-i18next'
 import { useUpdate } from 'react-use'
-import { NftImage } from './NftImage'
+import { NFTLuckyDropStyledAssetPlayer } from './NFTLuckyDropStyledAssetPlayer'
 import { findLastIndex, uniqBy } from 'lodash-unified'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants'
 
@@ -494,7 +494,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             </Box>
                         ) : (
                             <Box className={classNames(classes.wrapper, classes.nftWrapper)}>
-                                <NftImage
+                                <NFTLuckyDropStyledAssetPlayer
                                     contractAddress={contract.address}
                                     chainId={contract.chainId}
                                     tokenId={tokenId}
@@ -643,7 +643,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                                             : '',
                                                     )}
                                                     key={i.toString()}>
-                                                    <NftImage
+                                                    <NFTLuckyDropStyledAssetPlayer
                                                         contractAddress={token.contractDetailed.address}
                                                         tokenId={token.tokenId}
                                                         chainId={token.contractDetailed.chainId}

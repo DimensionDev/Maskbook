@@ -26,7 +26,7 @@ import { useCompositionContext } from '@masknet/plugin-infra'
 import { RedPacketNftMetaKey } from '../constants'
 import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketRPC } from '../messages'
-import { NftImage } from './NftImage'
+import { NFTLuckyDropStyledAssetPlayer } from './NFTLuckyDropStyledAssetPlayer'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -288,7 +288,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                         <List className={classes.tokenSelector}>
                             {tokenList.map((value, i) => (
                                 <ListItem key={i.toString()} className={classNames(classes.tokenSelectorWrapper)}>
-                                    <NftImage
+                                    <NFTLuckyDropStyledAssetPlayer
                                         contractAddress={value.contractDetailed.address}
                                         chainId={value.contractDetailed.chainId}
                                         tokenId={value.tokenId}
