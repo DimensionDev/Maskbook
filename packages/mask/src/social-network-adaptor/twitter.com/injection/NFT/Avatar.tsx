@@ -1,5 +1,5 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { NFTBadgeTimeline } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeline'
+import { NFTBadgeTimeline } from '@masknet/plugin-avatar/src/SNSAdaptor/NFTBadgeTimeline'
 import { createReactRootShadowed, startWatch } from '../../../../utils'
 import { Flags } from '../../../../../shared'
 import { getInjectNodeInfo } from '../../utils/avatar'

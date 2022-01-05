@@ -1,7 +1,6 @@
 import { isNull } from 'lodash-unified'
 import { ChainId, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 import { EVM_RPC } from '../../EVM/messages'
-import Services from '../../../extension/service'
 import { getOrderUnitPrice } from '@masknet/web3-providers'
 import { ONE } from '@masknet/web3-shared-base'
 
@@ -29,19 +28,6 @@ export async function getNFT(address: string, tokenId: string) {
 
 export async function createNFT(address: string, tokenId: string) {
     return EVM_RPC.getNFT({ address, tokenId, chainId: ChainId.Mainnet, provider: NonFungibleAssetProvider.OPENSEA })
-}
-
-export async function getImage(image: string): Promise<string> {
-    const blob = await Services.Helper.fetch(image)
-    return (await blobToBase64(blob)) as string
-}
-
-function blobToBase64(blob: Blob) {
-    return new Promise((resolve, _) => {
-        const reader = new FileReader()
-        reader.onloadend = () => resolve(reader.result)
-        reader.readAsDataURL(blob)
-    })
 }
 
 export function toPNG(image: string) {

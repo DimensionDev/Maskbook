@@ -11,9 +11,9 @@ import {
 } from '../../utils/selector'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { getAvatarId } from '../../utils/user'
-import { toPNG } from '../../../../plugins/Avatar/utils'
+import { toPNG } from '@masknet/plugin-avatar/src/utils'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
-import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
+import { NFTAvatar } from '@masknet/plugin-avatar/src/SNSAdaptor/NFTAvatar'
 import { hookInputUploadOnce } from '@masknet/injected-script'
 
 export async function injectProfileNFTAvatarInTwitter(signal: AbortSignal) {

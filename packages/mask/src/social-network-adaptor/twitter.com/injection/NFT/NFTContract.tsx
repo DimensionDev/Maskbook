@@ -1,5 +1,5 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { NFTContractImage } from '../../../../plugins/Avatar/SNSAdaptor/NFTContractImage'
+import { NFTContractImage } from '@masknet/plugin-avatar/src/SNSAdaptor/NFTContractImage'
 import { createReactRootShadowed, startWatch } from '../../../../utils'
 import { Flags } from '../../../../../shared'
 import { postAvatarsContentSelector } from '../../utils/selector'

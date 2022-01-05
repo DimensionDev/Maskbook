@@ -27,6 +27,7 @@
     "@masknet/plugin-debugger": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/plugin-wallet": "workspace:*",
+    "@masknet/plugin-avatar": "workspace:*",
     "@masknet/public-api": "workspace:*",
     "@masknet/sdk": "workspace:*",
     "@masknet/shared": "workspace:*",

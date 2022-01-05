@@ -1,7 +1,7 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useState, useEffect } from 'react'
-import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
+import { NFTAvatarButton } from '@masknet/plugin-avatar/src/SNSAdaptor/NFTAvatarButton'
 import { startWatch, createReactRootShadowed } from '../../../../utils'
 import { useLocationChange } from '../../../../utils/hooks/useLocationChange'
 import { searchEditProfileSelector } from '../../utils/selector'
