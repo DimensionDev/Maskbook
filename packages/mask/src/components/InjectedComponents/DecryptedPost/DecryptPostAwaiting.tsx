@@ -1,4 +1,4 @@
-import { memo, useState } from 'react'
+import { memo } from 'react'
 import { ShadowRootTooltip, useI18N } from '../../../utils'
 import { AdditionalContent } from '../AdditionalPostContent'
 import type { ProfileIdentifier } from '@masknet/shared-base'

@@ -95,7 +95,7 @@ namespace Version38Or39 {
         // Store AES key to gun
         receiversKeys.forEach(async ({ aesKey, receiverKey }) => {
             const keyHash = await (version === -38 ? hashKey38 : hashKey39)(receiverKey)
-            console.log(`gun[${postHash}][${keyHash}].push(`, aesKey, `)`)
+            console.log(`gun[${postHash}][${keyHash}].push(`, aesKey, ')')
             pushToGunDataArray(gun, [postHash, keyHash], aesKey)
         })
     }
@@ -128,7 +128,7 @@ namespace Version38Or39 {
     }
 
     async function hashIV(networkHint: string, iv: Uint8Array) {
-        const hashPair = `9283464d-ee4e-4e8d-a7f3-cf392a88133f`
+        const hashPair = '9283464d-ee4e-4e8d-a7f3-cf392a88133f'
         const N = 2
 
         const hash = await work(encodeArrayBuffer(iv), hashPair)
@@ -139,7 +139,7 @@ namespace Version38Or39 {
     // it's an implementation bug but for backward compatibility, it cannot be changed.
     // Therefore we upgraded the version and use a stable hash.
     async function hashKey39(key: EC_Public_JsonWebKey) {
-        const hashPair = `10198a2f-205f-45a6-9987-3488c80113d0`
+        const hashPair = '10198a2f-205f-45a6-9987-3488c80113d0'
         const N = 2
 
         const jwk = JSON.stringify(key)
@@ -148,7 +148,7 @@ namespace Version38Or39 {
     }
 
     async function hashKey38(jwk: EC_Public_JsonWebKey) {
-        const hashPair = `10198a2f-205f-45a6-9987-3488c80113d0`
+        const hashPair = '10198a2f-205f-45a6-9987-3488c80113d0'
         const N = 2
 
         const hash = await work(jwk.x! + jwk.y!, hashPair)

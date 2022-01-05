@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAsync } from 'react-use'
 import { DecryptPost } from './DecryptedPost/DecryptedPost'
-import Services from '../../extension/service'
 import { ProfileIdentifier, type TypedMessageTuple } from '@masknet/shared-base'
 import type { Profile } from '../../database'
 import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'

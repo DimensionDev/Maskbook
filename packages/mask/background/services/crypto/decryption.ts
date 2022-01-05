@@ -137,7 +137,7 @@ export async function* decryption(payload: string | Uint8Array, context: Decrypt
             },
             // TODO: get a gun instance
             async *queryPostKey_version37() {
-                throw 'TODO'
+                throw new Error('TODO')
             },
             async *queryPostKey_version38(iv, signal) {
                 const author = await queryPublicKey(context.currentProfile, true)

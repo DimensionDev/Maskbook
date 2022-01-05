@@ -2,7 +2,6 @@ import { useObservableValues, useValueRef } from '@masknet/shared'
 import {
     ObservableMap,
     ObservableSet,
-    TypedMessage,
     type Payload,
     type PostIdentifier,
     type ProfileIdentifier,
