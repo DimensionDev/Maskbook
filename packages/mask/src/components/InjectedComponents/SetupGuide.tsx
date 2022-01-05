@@ -344,7 +344,7 @@ function PinExtension({ onDone }: PinExtensionProps) {
                 <FormControlLabel
                     classes={{ label: classes.label }}
                     control={<Checkbox checked={checked} onChange={(e) => setChecked(e.target.checked)} />}
-                    label={t('setup_guide_pin_dissmiss')}
+                    label={t('setup_guide_pin_dismiss')}
                 />
             }
             onClose={onDone}
