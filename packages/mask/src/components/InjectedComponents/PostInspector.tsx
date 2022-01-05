@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useAsync } from 'react-use'
-import { DecryptPost, DecryptPostProps } from './DecryptedPost/DecryptedPost'
-import { AddToKeyStore, AddToKeyStoreProps } from './AddToKeyStore'
+import { DecryptPost } from './DecryptedPost/DecryptedPost'
+import { AddToKeyStore } from './AddToKeyStore'
 import Services from '../../extension/service'
 import {
     ProfileIdentifier,
