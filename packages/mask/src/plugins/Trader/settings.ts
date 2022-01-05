@@ -87,6 +87,11 @@ export const celoNetworkTradeProviderSettings = createGlobalSettings<TradeProvid
     TradeProvider.SUSHISWAP,
     { primary: () => '' },
 )
+export const moonriverNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_ID}+moonriver+tradeProvider`,
+    TradeProvider.SUSHISWAP,
+    { primary: () => '' },
+)
 
 //#region trade provider general settings
 export interface TradeProviderSettings {

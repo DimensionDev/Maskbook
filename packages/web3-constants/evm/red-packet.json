@@ -13,7 +13,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Moonriver": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V2": {
         "Mainnet": "0x8D8912E1237F9FF3EF661F32743CFB276E052F98",
@@ -29,7 +30,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Moonriver": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V3": {
         "Mainnet": "",
@@ -45,7 +47,8 @@
         "Arbitrum_Rinkeby": "0x6B70EC653c4331bdD0D0DCC7C941eb594e69a91d",
         "xDai": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Moonriver": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V4": {
         "Mainnet": "0xaBBe1101FD8fa5847c452A6D70C8655532B03C33",
@@ -61,7 +64,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "0x54a0A221C25Fc0a347EC929cFC5db0be17fA2a2B",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Moonriver": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT": {
         "Mainnet": 12939427,
@@ -77,7 +81,8 @@
         "Arbitrum_Rinkeby": 0,
         "xDai": 18101937,
         "Celo": 0,
-        "Fantom": 0
+        "Fantom": 0,
+        "Moonriver": 0
     },
     "SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-mainnet",
@@ -93,6 +98,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-xdai",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Moonriver": ""
     }
 }

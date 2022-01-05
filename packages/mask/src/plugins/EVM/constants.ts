@@ -147,6 +147,16 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         iconColor: 'rgb(73, 169, 166)',
         isMainnet: true,
     },
+    {
+        ID: `${PLUGIN_ID}_moonriver`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Moonriver,
+        type: NetworkType.Moonriver,
+        name: 'Moonriver',
+        icon: new URL('./assets/moonriver.png', import.meta.url),
+        iconColor: 'rgb(242, 183, 5)',
+        isMainnet: true,
+    },
 ]
 export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
     {

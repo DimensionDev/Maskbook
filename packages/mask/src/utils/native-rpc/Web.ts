@@ -119,6 +119,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.getCeloNetworkTradeProvider()
             case NetworkType.Fantom:
                 return Services.Settings.getxDaiNetworkTradeProvider()
+            case NetworkType.Moonriver:
+                return Services.Settings.getMrvNetworkTradeProvider()
             default:
                 unreachable(network)
         }
@@ -139,6 +141,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.setCeloNetworkTradeProvider(provider)
             case NetworkType.Fantom:
                 return Services.Settings.setFantomNetworkTradeProvider(provider)
+            case NetworkType.Moonriver:
+                return Services.Settings.setMrvNetworkTradeProvider(provider)
             default:
                 unreachable(network)
         }

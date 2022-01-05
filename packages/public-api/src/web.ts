@@ -193,6 +193,7 @@ export enum NetworkType {
     xDai = 'xDai',
     Celo = 'Celo',
     Fantom = 'Fantom',
+    Moonriver = 'Moonriver',
 }
 
 export enum DataProvider {

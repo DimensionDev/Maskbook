@@ -1624,8 +1624,10 @@
         "nativeCurrency": { "name": "River", "symbol": "RIVER", "decimals": 18 },
         "infoURL": "https://moonbeam.network/networks/moonriver/",
         "shortName": "mriver",
+        "icon": "moonriver",
         "chainId": 1285,
-        "networkId": 1285
+        "networkId": 1285,
+        "explorers": [{ "name": "explorer", "url": "https://moonriver.moonscan.io", "standard": "EIP3091" }]
     },
     {
         "name": "Moonrock Rococo",

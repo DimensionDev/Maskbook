@@ -13,7 +13,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Moonriver": ""
     },
     "MASK_BOX_CONTRACT_FROM_BLOCK": {
         "Mainnet": 13687866,
@@ -29,7 +30,8 @@
         "Arbitrum_Rinkeby": 0,
         "xDai": 0,
         "Celo": 0,
-        "Fantom": 0
+        "Fantom": 0,
+        "Moonriver": 0
     },
     "MASK_BOX_TEST_NFT": {
         "Mainnet": "0x56136E69A5771436a9598804c5eA792230c21181",
@@ -45,7 +47,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Moonriver": ""
     },
     "WHITE_LIST_QUALIFICATION_CONTRACT_ADDRESS": {
         "Mainnet": "",
@@ -61,7 +64,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Moonriver": ""
     },
     "SIG_VERIFY_QULIFICATION_CONTRACT_ADDRESS": {
         "Mainnet": "",
@@ -77,6 +81,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Moonriver": ""
     }
 }

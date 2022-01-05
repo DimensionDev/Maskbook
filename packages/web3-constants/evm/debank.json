@@ -13,6 +13,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai",
         "Celo": "celo",
-        "Fantom": "ftm"
+        "Fantom": "ftm",
+        "Moonriver": "movr"
     }
 }

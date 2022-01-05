@@ -35,6 +35,7 @@ export interface MaskSettingsEvents {
     xdaiNetworkTradeProviderSettings: TradeProvider
     fantomNetworkTradeProviderSettings: TradeProvider
     celoNetworkTradeProviderSettings: TradeProvider
+    moonriverNetworkTradeProviderSettings: TradeProvider
 }
 
 export interface MaskMobileOnlyEvents {

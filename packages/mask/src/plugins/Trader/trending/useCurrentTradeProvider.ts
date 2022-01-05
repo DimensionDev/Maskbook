@@ -7,6 +7,7 @@ import {
     xdaiNetworkTradeProviderSettings,
     celoNetworkTradeProviderSettings,
     fantomNetworkTradeProviderSettings,
+    moonriverNetworkTradeProviderSettings,
 } from '../settings'
 import { ChainId, getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
@@ -22,6 +23,7 @@ export function useCurrentTradeProvider(chainId?: ChainId) {
     const xdaiNetworkTradeProvider = useValueRef(xdaiNetworkTradeProviderSettings)
     const celoNetworkTradeProvider = useValueRef(celoNetworkTradeProviderSettings)
     const fantomNetworkTradeProvider = useValueRef(fantomNetworkTradeProviderSettings)
+    const moonriverNetworkTradeProvider = useValueRef(moonriverNetworkTradeProviderSettings)
 
     if (!networkType) return TradeProvider.UNISWAP_V2
     switch (networkType) {
@@ -39,6 +41,8 @@ export function useCurrentTradeProvider(chainId?: ChainId) {
             return celoNetworkTradeProvider
         case NetworkType.Fantom:
             return fantomNetworkTradeProvider
+        case NetworkType.Moonriver:
+            return moonriverNetworkTradeProvider
         default:
             unreachable(networkType)
     }

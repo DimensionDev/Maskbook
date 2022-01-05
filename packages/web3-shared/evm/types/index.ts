@@ -67,6 +67,9 @@ export enum ChainId {
 
     // Fantom
     Fantom = 250,
+
+    // Moonriver
+    Moonriver = 1285,
 }
 
 export enum ProviderType {
@@ -96,6 +99,7 @@ export enum NetworkType {
     xDai = 'xDai',
     Celo = 'Celo',
     Fantom = 'Fantom',
+    Moonriver = 'Moonriver',
 }
 
 export interface Wallet {

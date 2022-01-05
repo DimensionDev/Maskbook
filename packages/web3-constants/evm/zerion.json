@@ -13,7 +13,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai-assets",
         "Celo": "celo-assets",
-        "Fantom": "fantom-assets"
+        "Fantom": "fantom-assets",
+        "Moonriver": "moonriver-assets"
     },
     "TRANSACTIONS_SCOPE_NAME": {
         "Mainnet": "transactions",
@@ -29,6 +30,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai-transactions",
         "Celo": "celo-transactions",
-        "Fantom": "fantom-transactions"
+        "Fantom": "fantom-transactions",
+        "Moonriver": "moonriver-transactions"
     }
 }

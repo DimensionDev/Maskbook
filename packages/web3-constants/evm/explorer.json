@@ -13,7 +13,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Fantom": "https://api.ftmscan.com/api"
+        "Fantom": "https://api.ftmscan.com/api",
+        "Moonriver": ""
     },
     "EXPLORER_API_KEY": {
         "Mainnet": "99IX9MBZKG8FYQUECXDNDPATGVDDH6JCWW",
@@ -29,6 +30,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Moonriver": ""
     }
 }

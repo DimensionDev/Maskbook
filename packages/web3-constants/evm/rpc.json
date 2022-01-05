@@ -13,7 +13,8 @@
         "Arbitrum_Rinkeby": ["https://rinkeby.arbitrum.io/rpc"],
         "xDai": ["https://rpc.xdaichain.com/"],
         "Celo": ["https://forno.celo.org"],
-        "Fantom": ["https://rpcapi.fantom.network/"]
+        "Fantom": ["https://rpcapi.fantom.network/"],
+        "moonriver": ["https://rpc.moonriver.moonbeam.network"]
     },
     "RPC_WEIGHTS": {
         "Mainnet": [0, 0, 0, 0],
@@ -29,6 +30,7 @@
         "Arbitrum_Rinkeby": [0, 0, 0, 0],
         "xDai": [0, 0, 0, 0],
         "Celo": [0, 0, 0, 0],
-        "Fantom": [0, 0, 0, 0]
+        "Fantom": [0, 0, 0, 0],
+        "Moonriver": [0, 0, 0, 0]
     }
 }
