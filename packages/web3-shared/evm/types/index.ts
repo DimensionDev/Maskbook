@@ -181,6 +181,11 @@ export interface ERC721TokenDetailed {
     tokenId: string
     info: ERC721TokenInfo
     contractDetailed: ERC721ContractDetailed
+    collection?: {
+        name: string
+        image?: string
+        slug: string
+    }
 }
 
 export interface ERC721TokenRecordInDatabase extends ERC721TokenDetailed {
