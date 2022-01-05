@@ -7,6 +7,7 @@
     { "path": "./packages/mask-sdk/main" },
     { "path": "./packages/mask-sdk/public-api" },
     { "path": "./packages/dashboard" },
+    { "path": "./packages/provider-proxy" },
     // Storybooks are considered as a "project" not depended by any other project
     { "path": "./packages/dashboard/stories" },
     { "path": "./packages/theme/stories" },
