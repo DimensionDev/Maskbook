@@ -2,16 +2,10 @@ import { useCallback, useMemo, useState } from 'react'
 import stringify from 'json-stable-stringify'
 import { pick } from 'lodash-unified'
 import type { TransactionConfig } from 'web3-core'
-import {
-    ChainId,
-    GasOptionConfig,
-    TransactionState,
-    TransactionStateType,
-    useAccount,
-    useWeb3,
-} from '@masknet/web3-shared-evm'
+import { GasOptionConfig, TransactionState, TransactionStateType, useAccount, useWeb3 } from '@masknet/web3-shared-evm'
 import type { SwapQuoteResponse, TradeComputed } from '../../types'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { SUPPORTED_CHAIN_IDS } from './constants'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse> | null, gasConfig?: GasOptionConfig) {
     const account = useAccount()
@@ -24,8 +18,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
 
     // compose transaction config
     const config = useMemo(() => {
-        if (!account || !tradeComputed?.trade_ || ![ChainId.Mainnet, ChainId.BSC, ChainId.Matic].includes(chainId))
-            return null
+        if (!account || !tradeComputed?.trade_ || !SUPPORTED_CHAIN_IDS.includes(chainId)) return null
         return {
             from: account,
             ...pick(tradeComputed.trade_, ['to', 'data', 'value', 'gas', 'gasPrice']),
