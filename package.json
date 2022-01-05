@@ -21,7 +21,8 @@
   "lint-staged": {
     "*": "prettier --write --ignore-unknown",
     "packages/**/*.{ts,tsx,js,jsx}": "eslint -c packages/.eslintrc.json --fix",
-    "packages/mask/**/*": "node ./packages/scripts/src/bin/precommit-hook-localekit.js"
+    "packages/mask/**/*": "node ./packages/scripts/src/bin/precommit-hook-localekit.js",
+    "packages/web3-constants/**/*": "pnpm start --filter web3-constants"
   },
   "dependencies": {
     "@dimensiondev/kit": "0.0.0-20211215044858-27d964f",
