@@ -1,0 +1,25 @@
+{
+  "name": "@dimensiondev/provider-proxy",
+  "version": "0.0.1",
+  "scripts": {
+    "build:rollup": "rollup -c",
+    "build": "node ./build.mjs"
+  },
+  "dependencies": {
+    "@masknet/plugin-infra": "workspace:*",
+    "@masknet/web3-providers": "workspace:*",
+    "@masknet/web3-shared-base": "workspace:*",
+    "@masknet/web3-shared-evm": "workspace:*",
+    "urlcat": "^2.0.4"
+  },
+  "devDependencies": {
+    "@rollup/plugin-alias": "^3.1.8",
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.0.6",
+    "@rollup/plugin-sucrase": "^4.0.1",
+    "date-fns": "^2.27.0",
+    "rollup": "^2.60.1",
+    "rollup-plugin-dts": "4.0.1"
+  }
+}

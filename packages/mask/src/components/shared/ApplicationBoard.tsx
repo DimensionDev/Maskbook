@@ -345,7 +345,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                                     walletRequired && !selectedWallet ? classes.disabled : '',
                                 )}
                                 onClick={onClick}
-                                key={i.toString()}>
+                                key={i}>
                                 <img src={img} className={classes.applicationImg} />
                                 <Typography className={classes.title} color="textPrimary">
                                     {title}

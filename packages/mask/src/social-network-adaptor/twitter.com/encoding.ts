@@ -52,7 +52,7 @@ export const twitterEncoding = {
     },
 }
 
-function regexMatchAll(str: string, regexp: RegExp, index: number = 1) {
+function regexMatchAll(str: string, regexp: RegExp, index = 1) {
     const gPos = regexp.flags.indexOf('g')
     const withoutG = gPos >= 0 ? `${regexp.flags.slice(0, gPos)}${regexp.flags.slice(gPos + 1)}` : regexp.flags
     const o = new RegExp(regexp.source, withoutG)

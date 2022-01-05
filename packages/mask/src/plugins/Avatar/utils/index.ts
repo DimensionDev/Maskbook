@@ -3,7 +3,7 @@ import { ChainId, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 import { EVM_RPC } from '../../EVM/messages'
 import Services from '../../../extension/service'
 import { getOrderUnitPrice } from '@masknet/web3-providers'
-import { ONE } from '@masknet/web3-shared-base'
+import { ZERO } from '@masknet/web3-shared-base'
 
 export async function getNFT(address: string, tokenId: string) {
     const asset = await EVM_RPC.getAsset({
@@ -17,7 +17,7 @@ export async function getNFT(address: string, tokenId: string) {
             asset?.desktopOrder?.current_price,
             asset?.desktopOrder?.payment_token_contract?.decimals ?? 0,
             asset?.desktopOrder?.quantity ?? '1',
-        ) ?? ONE
+        ) ?? ZERO
     return {
         amount: amount.toFixed(),
         name: asset?.name ?? '',

@@ -143,7 +143,7 @@ export function PollCardUI(props: PollCardProps) {
                 ))}
             </List>
             <Typography variant="body2" classes={{ root: classes.deadline }}>
-                {isClosed ? `${t('plugin_poll_status_closed')}` : `${getDeadline(poll.end_time)}`}
+                {isClosed ? t('plugin_poll_status_closed') : getDeadline(poll.end_time)}
             </Typography>
         </Card>
     )

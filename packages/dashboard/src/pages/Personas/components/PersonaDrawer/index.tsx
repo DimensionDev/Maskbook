@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom'
 const useStyles = makeStyles()((theme) => ({
     paper: {
         // material-ui toolbar height
-        top: `64px`,
+        top: '64px',
         padding: theme.spacing(3, 3.75, 11.25, 3.75),
         background: MaskColorVar.suspensionBackground,
     },
