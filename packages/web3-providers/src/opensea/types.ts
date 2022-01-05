@@ -93,7 +93,7 @@ export interface OpenSeaResponse extends Asset {
     is_presale: boolean
     image_url: string
     image_preview_url: string
-    image_url_original: string
+    image_original_url: string
     image_url_thumbnail: string
     opensea_link: string
     external_link: string

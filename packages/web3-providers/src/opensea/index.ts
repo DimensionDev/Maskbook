@@ -66,7 +66,7 @@ function createERC721TokenFromAsset(
         {
             name: asset?.name ?? asset?.asset_contract.name ?? '',
             description: asset?.description ?? '',
-            mediaUrl: asset?.image_url_original ?? asset?.image_url ?? asset?.image_preview_url ?? '',
+            mediaUrl: asset?.image_original_url ?? asset?.image_url ?? asset?.image_preview_url ?? '',
             owner: asset?.owner.address ?? '',
         },
         tokenId,
@@ -111,7 +111,7 @@ function createNFTAsset(asset: OpenSeaResponse, chainId: ChainId): NonFungibleTo
         is_verified: ['approved', 'verified'].includes(asset.collection?.safelist_request_status ?? ''),
         // it's an IOS string as my inspection
         is_auction: isAfter(Date.parse(`${asset.endTime ?? ''}Z`), Date.now()),
-        image_url: asset.image_url_original ?? asset.image_url ?? asset.image_preview_url ?? '',
+        image_url: asset.image_original_url ?? asset.image_url ?? asset.image_preview_url ?? '',
         asset_contract: {
             name: asset.asset_contract.name,
             description: asset.asset_contract.description,

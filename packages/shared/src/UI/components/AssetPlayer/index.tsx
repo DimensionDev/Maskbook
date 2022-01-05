@@ -123,7 +123,7 @@ export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconPro
                     cancel()
                     setPlayerState(AssetPlayerState.NORMAL)
                 }}
-                style={{ width: playerState !== AssetPlayerState.NORMAL ? 0 : undefined }}
+                style={{ width: playerState !== AssetPlayerState.NORMAL ? 0 : undefined, maxWidth: '100%' }}
                 checkOrigin={false}
                 onMessage={onMessage}
                 frameBorder="0"
