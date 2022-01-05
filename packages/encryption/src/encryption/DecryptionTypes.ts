@@ -89,17 +89,30 @@ export interface DecryptEphemeralECDH_PostKey extends DecryptStaticECDH_PostKey 
     ephemeralPublicKeySignature?: Uint8Array
 }
 export enum DecryptProgressKind {
-    Started = 'started',
     Success = 'success',
     Error = 'error',
     Info = 'info',
+    Progress = 'progress',
 }
-export type DecryptProgress = { type: DecryptProgressKind.Started } | DecryptSuccess | DecryptError
+export type DecryptProgress = DecryptSuccess | DecryptError | DecryptIntermediateProgress | DecryptReportedInfo
+export interface DecryptReportedInfo {
+    type: DecryptProgressKind.Info
+    iv?: Uint8Array
+    claimedAuthor?: ProfileIdentifier
+    publicShared?: boolean
+}
+export interface DecryptIntermediateProgress {
+    type: DecryptProgressKind.Progress
+    event: DecryptIntermediateProgressKind
+}
+export enum DecryptIntermediateProgressKind {
+    TryDecryptByE2E = 'E2E',
+}
 export interface DecryptSuccess {
     type: DecryptProgressKind.Success
     content: TypedMessage
 }
-enum ErrorReasons {
+export enum ErrorReasons {
     PayloadBroken = '[@masknet/encryption] Payload is broken.',
     PayloadDecryptedButTypedMessageBroken = "[@masknet/encryption] Payload decrypted, but it's inner TypedMessage is broken.",
     CannotDecryptAsAuthor = '[@masknet/encryption] Failed decrypt as the author of this payload.',
@@ -107,6 +120,9 @@ enum ErrorReasons {
     AuthorPublicKeyNotFound = "[@masknet/encryption] Cannot found author's public key",
     PrivateKeyNotFound = '[@masknet/encryption] Cannot continue to decrypt because there is no private key found.',
     NotShareTarget = '[@masknet/encryption] No valid key is found. Likely this post is not shared with you',
+    // Not used in this library.
+    UnrecognizedAuthor = '[@masknet/encryption] No author is recognized which is required for the image steganography decoding.',
+    CurrentProfileDoesNotConnectedToPersona = '[@masknet/encryption] Cannot get the public key of the current profile therefore cannot decrypt by E2E.',
 }
 export class DecryptError extends Error {
     static Reasons = ErrorReasons
