@@ -130,7 +130,6 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
                     getCurrentValue: () => [],
                     subscribe: () => () => {},
                 }),
-            postMetadataMentionedLinks: linksSubscribe,
 
             rawMessage: opt.rawMessage,
             rawMessagePiped: transformedPostContent,
