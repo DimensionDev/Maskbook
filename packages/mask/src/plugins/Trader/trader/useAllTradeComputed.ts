@@ -187,14 +187,15 @@ export function useAllTradeComputed(
     )
     const openoceanSwapEstimateGas = useDODOTradeGasLimit(openocean as TradeComputed<SwapRouteData> | null)
 
+    const isTraderJoe = tradeProviders.some((x) => x === TradeProvider.TRADERJOE)
     // traderjoe
     const traderjoe_ = useUniswapV2Trade(
         TradeProvider.TRADERJOE,
         TradeStrategy.ExactIn,
         inputAmount_,
         '0',
-        tradeProviders.some((x) => x === TradeProvider.TRADERJOE) ? inputToken : undefined,
-        tradeProviders.some((x) => x === TradeProvider.TRADERJOE) ? outputToken : undefined,
+        isTraderJoe ? inputToken : undefined,
+        isTraderJoe ? outputToken : undefined,
     )
     const traderjoe = useUniswapTradeComputed(traderjoe_.value, inputToken, outputToken)
     const traderjoeEstimateGas = useUniswapTradeGasLimit(traderjoe, TradeProvider.TRADERJOE)
