@@ -1,4 +1,4 @@
-import { createContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useEffect, useMemo } from 'react'
 import { useValueRef } from '@masknet/shared'
 import {
     ChainId,
@@ -172,7 +172,6 @@ function CollectibleListUI(props: CollectibleListUIProps) {
 export interface CollectibleListProps extends withClasses<'empty' | 'button'> {
     address: string
     collection?: string
-    setCount: (count: number) => void
     collectibles: ERC721TokenDetailed[]
     error?: string
     loading: boolean
@@ -202,7 +201,6 @@ export function CollectionList({ address }: { address: string }) {
     const chainId = ChainId.Mainnet
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [counts, setCounts] = useState<number[]>([])
 
     const {
         data: collections,
@@ -254,37 +252,40 @@ export function CollectionList({ address }: { address: string }) {
 
     return (
         <Box>
-            {(collections ?? []).map((x, i) => (
-                <Box key={i}>
-                    <Box display="flex" alignItems="center" sx={{ marginTop: '16px' }}>
-                        <Box className={classes.collectionWrap}>
-                            {x.image ? <Image component="img" className={classes.collectionImg} src={x.image} /> : null}
+            {(collections ?? []).map((x, i) => {
+                const renderCollectibles = collectibles.filter((c) => c.collection?.slug === x.slug)
+                return (
+                    <Box key={i}>
+                        <Box display="flex" alignItems="center" sx={{ marginTop: '16px' }}>
+                            <Box className={classes.collectionWrap}>
+                                {x.image ? (
+                                    <Image component="img" className={classes.collectionImg} src={x.image} />
+                                ) : null}
+                            </Box>
+                            <Typography
+                                className={classes.name}
+                                color="textPrimary"
+                                variant="body2"
+                                sx={{ fontSize: '16px' }}>
+                                {x.name}
+                                {loadingCollectibleDone && renderCollectibles.length
+                                    ? `(${renderCollectibles.length})`
+                                    : null}
+                            </Typography>
                         </Box>
-                        <Typography
-                            className={classes.name}
-                            color="textPrimary"
-                            variant="body2"
-                            sx={{ fontSize: '16px' }}>
-                            {x.name}
-                            {counts[i] ? `(${counts[i]})` : null}
-                        </Typography>
+                        <CollectibleList
+                            address={address}
+                            collection={x.slug}
+                            retry={() => {
+                                retryFetchCollectible()
+                                retryFetchCollection()
+                            }}
+                            collectibles={renderCollectibles}
+                            loading={isLoading}
+                        />
                     </Box>
-                    <CollectibleList
-                        address={address}
-                        collection={x.slug}
-                        setCount={(count) => {
-                            counts[i] = count
-                            setCounts(counts)
-                        }}
-                        retry={() => {
-                            retryFetchCollectible()
-                            retryFetchCollection()
-                        }}
-                        collectibles={collectibles.filter((c) => c.collection?.slug === x.slug)}
-                        loading={isLoading}
-                    />
-                </Box>
-            ))}
+                )
+            })}
             {!!renderWithRarible.length && (
                 <Box key="rarible">
                     <Box display="flex" alignItems="center" sx={{ marginTop: '16px' }}>
@@ -299,7 +300,6 @@ export function CollectionList({ address }: { address: string }) {
                     <CollectibleList
                         address={address}
                         collection="Rarible"
-                        setCount={() => {}}
                         retry={() => {
                             retryFetchCollectible()
                             retryFetchCollection()

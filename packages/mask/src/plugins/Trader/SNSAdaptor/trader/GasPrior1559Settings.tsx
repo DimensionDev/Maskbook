@@ -166,14 +166,13 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(({ onCancel,
     //#endregion
 
     useUpdateEffect(() => {
-        if (gasConfig?.gasPrice && gasOptions) {
-            const gasPrice = new BigNumber(gasConfig.gasPrice)
-            if (gasPrice.isEqualTo(gasOptions.standard)) setOption(0)
-            else if (gasPrice.isEqualTo(gasOptions.fast)) setOption(1)
-            else {
-                setCustomGasPrice(formatWeiToGwei(gasPrice).toString())
-                setOption(2)
-            }
+        if (!(gasConfig?.gasPrice && gasOptions)) return
+        const gasPrice = new BigNumber(gasConfig.gasPrice)
+        if (gasPrice.isEqualTo(gasOptions.standard)) setOption(0)
+        else if (gasPrice.isEqualTo(gasOptions.fast)) setOption(1)
+        else {
+            setCustomGasPrice(formatWeiToGwei(gasPrice).toString())
+            setOption(2)
         }
     }, [gasConfig, gasOptions])
 

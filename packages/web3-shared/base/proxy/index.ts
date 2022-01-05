@@ -32,6 +32,7 @@ export type OutMessageEvent = { id: string; done: boolean; error?: unknown; from
 export type NotifyFn = (event: OutMessageEvent) => void
 
 const POOL_CACHE_EXPIRE_TIME = 30
+const POOL_CACHE_MAX_CAPACITY = 10
 
 export class ProviderProxy {
     private readonly _socket: ReconnectingWebSocket
@@ -91,7 +92,7 @@ export class ProviderProxy {
             return
         }
 
-        this._socket.send(JSON.stringify(message))
+        this._socket.send(JSON.stringify({ id: message.id, method: message.method, params: message.params }))
         this._pool.set(message.id, { data: [], createdAt: new Date(), notify: message.notify || this._globalNotify! })
     }
 
@@ -146,11 +147,11 @@ export class ProviderProxy {
         beCleaned = entities.filter((x) => this.isExpired(x[1]))
 
         // clear overed size
-        if (entities.length > 10) {
+        if (entities.length > POOL_CACHE_MAX_CAPACITY) {
             const picks = entities
                 .sort((a, b) => compareAsc(a[1].pickedAt || a[1].createdAt, b[1].pickedAt || b[1].createdAt))
-                .slice(0, entities.length - 10)
-            beCleaned.concat(picks)
+                .slice(0, entities.length - POOL_CACHE_MAX_CAPACITY)
+            beCleaned = [...beCleaned, ...picks]
         }
         beCleaned.forEach((x) => this._pool.delete(x[0]))
     }
@@ -182,6 +183,7 @@ function getProxyWebsocketInstanceWrapper(): (notify?: NotifyFn) => Promise<Prov
     }
 
     return async (notify?: NotifyFn) => {
+        if (cachedInstance) return cachedInstance
         await createNewInstance(notify)
         return cachedInstance
     }

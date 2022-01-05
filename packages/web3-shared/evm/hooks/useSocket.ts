@@ -1,4 +1,3 @@
-// TODO: move to shared
 import { useWeb3Context } from '../context'
 import { useAsyncRetry } from 'react-use'
 import type { NotifyFn, RequestMessage } from '@masknet/web3-shared-base'

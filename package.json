@@ -52,6 +52,7 @@
   "devDependencies": {
     "@commitlint/cli": "^16.0.0",
     "@commitlint/config-conventional": "^16.0.0",
+    "@dimensiondev/eslint-plugin": "^0.0.1-20211222115249-7984aa5",
     "@dimensiondev/patch-package": "^6.5.0",
     "@jest/globals": "^27.4.4",
     "@magic-works/i18n-codegen": "^0.0.6",
@@ -63,7 +64,6 @@
     "eslint": "8.5.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "2.25.3",
-    "eslint-plugin-lodash": "^7.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",

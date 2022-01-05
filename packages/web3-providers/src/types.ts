@@ -1,3 +1,4 @@
+import type RSS3 from 'rss3-next'
 import type { CurrencyType } from '@masknet/plugin-infra'
 import type {
     ChainId,
@@ -7,6 +8,68 @@ import type {
     NativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
 import type { Web3Plugin } from '@masknet/plugin-infra'
+
+export namespace RSS3BaseAPI {
+    export interface GeneralAsset {
+        platform: string
+        identity: string
+        id: string // contractAddress-id or admin_address
+        type: string
+        info: {
+            collection?: string
+            collection_icon?: string
+            image_preview_url?: string | null
+            animation_url?: string | null
+            animation_original_url?: string | null
+            title?: string
+            total_contribs?: number
+            token_contribs?: {
+                token: string
+                amount: string
+            }[]
+            start_date?: string
+            end_date?: string
+            country?: string
+            city?: string
+        }
+    }
+
+    export interface GeneralAssetWithTags extends GeneralAsset {
+        tags?: string[]
+    }
+
+    export interface GeneralAssetResponse {
+        status: boolean
+        assets: GeneralAsset[]
+    }
+
+    export interface ProfileInfo {
+        avatar: string[]
+        bio: string
+        name: string
+    }
+
+    export enum AssetType {
+        GitcoinDonation = 'Gitcoin-Donation',
+        POAP = 'POAP',
+    }
+
+    export interface NameInfo {
+        rnsName: string
+        ensName: string | null
+        address: string
+    }
+
+    export interface Provider {
+        createRSS3(address: string): RSS3
+        getFileData<T>(rss3: RSS3, address: string, key: string): Promise<T | undefined>
+        setFileData<T>(rss3: RSS3, address: string, key: string, data: T): Promise<T>
+        getDonations(address: string): Promise<GeneralAssetResponse | undefined>
+        getFootprints(address: string): Promise<GeneralAssetResponse | undefined>
+        getNameInfo(id: string): Promise<NameInfo | undefined>
+        getProfileInfo(address: string): Promise<ProfileInfo | undefined>
+    }
+}
 
 export namespace PriceAPI {
     export interface CryptoPrice {

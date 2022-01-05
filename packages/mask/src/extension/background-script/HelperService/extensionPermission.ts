@@ -16,10 +16,9 @@ export async function requestExtensionPermission(permission: browser.permissions
     })
     return new Promise((resolve) => {
         browser.windows.onRemoved.addListener(function listener(windowID: number) {
-            if (windowID === popup.id) {
-                resolve(browser.permissions.contains(permission))
-                browser.windows.onRemoved.removeListener(listener)
-            }
+            if (windowID !== popup.id) return
+            resolve(browser.permissions.contains(permission))
+            browser.windows.onRemoved.removeListener(listener)
         })
     })
 }

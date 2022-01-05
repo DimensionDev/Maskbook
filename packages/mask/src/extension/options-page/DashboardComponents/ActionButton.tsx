@@ -27,10 +27,9 @@ function useDebounceAsync<T extends any[]>(
     useDebounce(() => setDebounceLoading(state.loading), 500, [state])
     const f = useCallback(
         (...args: T) => {
-            if (!state.loading) {
-                setDebounceLoading(false)
-                startAsyncFn(...args)
-            }
+            if (state.loading) return
+            setDebounceLoading(false)
+            startAsyncFn(...args)
         },
         [startAsyncFn, state.loading],
     )

@@ -30,7 +30,6 @@ const resolveRaribleUserNetwork = createLookupTableResolver<ChainId.Mainnet | Ch
 async function fetchFromRarible<T>(url: string, path: string, init?: RequestInit, env?: NonFungibleTokenAPI.APIEnv) {
     const currentEnv = env ?? NonFungibleTokenAPI.APIEnv.browser
     const response = await fetch(urlcat(url, path), {
-        // TODO: cors not work in cloudflare worker
         ...(currentEnv === NonFungibleTokenAPI.APIEnv.browser && { mode: 'cors' }),
         ...init,
     })

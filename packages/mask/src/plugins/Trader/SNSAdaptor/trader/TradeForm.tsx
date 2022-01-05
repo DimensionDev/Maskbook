@@ -72,7 +72,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             cursor: 'pointer',
         },
         reverseChevron: {
-            transform: `rotate(-180deg)`,
+            transform: 'rotate(-180deg)',
             transition: 'all 300ms',
         },
         status: {
@@ -109,7 +109,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             height: 'auto',
         },
         selectedTokenChip: {
-            borderRadius: `22px!important`,
+            borderRadius: '22px!important',
             height: 'auto',
             backgroundColor: isDashboard ? MaskColorVar.input : theme.palette.background.input,
             [`& .${chipClasses.label}`]: {
@@ -133,7 +133,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             bottom: -20,
         },
         noToken: {
-            borderRadius: `18px !important`,
+            borderRadius: '18px !important',
             backgroundColor: theme.palette.primary.main,
             [`& .${chipClasses.label}`]: {
                 paddingTop: 9,
