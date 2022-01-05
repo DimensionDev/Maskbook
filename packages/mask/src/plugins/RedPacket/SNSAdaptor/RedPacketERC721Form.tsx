@@ -311,7 +311,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     <div className={classes.tokenSelectorParent}>
                         <List className={classes.tokenSelector}>
                             {existTokenDetailedList.map((value, i) => (
-                                <ListItem key={i.toString()} className={classNames(classes.tokenSelectorWrapper)}>
+                                <ListItem key={i} className={classNames(classes.tokenSelectorWrapper)}>
                                     <NftImage
                                         token={value}
                                         classes={{

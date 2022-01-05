@@ -236,8 +236,8 @@ function SearchResultBox(props: SearchResultBoxProps) {
             ) : (
                 <List>
                     {(keyword === '' ? contractList : searchedTokenList).map((contract, i) => (
-                        <div key={i.toString()}>
-                            <ContractListItem key={i.toString()} onSubmit={onSubmit} contract={contract} />
+                        <div key={i}>
+                            <ContractListItem onSubmit={onSubmit} contract={contract} />
                         </div>
                     ))}
                 </List>

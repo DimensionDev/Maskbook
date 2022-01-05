@@ -101,7 +101,7 @@ function Content() {
             title={proposal.isEnd ? t('plugin_snapshot_result_title') : t('plugin_snapshot_current_result_title')}>
             <List className={classes.list}>
                 {results.map((result, i) => (
-                    <ListItem className={classes.listItem} key={i.toString()}>
+                    <ListItem className={classes.listItem} key={i}>
                         <Box className={classes.listItemHeader}>
                             <ShadowRootTooltip
                                 PopperProps={{
