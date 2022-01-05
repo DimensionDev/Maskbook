@@ -14,7 +14,7 @@ import formatDuration from 'date-fns/formatDuration'
 import isBefore from 'date-fns/isBefore'
 import { CurrencyType, TransactionStateType } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
-import { isZero, multipliedBy } from '@masknet/web3-shared-base'
+import { isZero, multipliedBy, ZERO } from '@masknet/web3-shared-base'
 
 export enum PlayerStatus {
     Winning = 'winning',
@@ -96,7 +96,7 @@ export function getGameFinancialData(
     assets: GameAssets,
 ) {
     const rawPoolInterest = isZero(poolData.totalAdai)
-        ? new BigNumber(0)
+        ? ZERO
         : new BigNumber(poolData.totalAdai).minus(info.totalGamePrincipal)
     const gameInterest = new BigNumber(info.gameHasEnded ? info.totalGameInterest : rawPoolInterest).multipliedBy(
         assets.gameAsset?.price ? assets.gameAsset?.price[CurrencyType.USD] : 1,
