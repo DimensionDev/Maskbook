@@ -3,6 +3,7 @@ import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
 import Link from '@mui/material/Link'
 import BigNumber from 'bignumber.js'
 import { useNFT } from '../hooks'
+import { useUserOwnerAddress } from '../hooks/useUserOwnerAddress'
 import { useNFTVerified } from '../hooks/useNFTVerified'
 import type { AvatarMetaDB } from '../types'
 import { NFTAvatarRing } from './NFTAvatarRing'
@@ -47,8 +48,9 @@ export function NFTBadge(props: NFTBadgeProps) {
         avatar.tokenId,
     )
 
+    const address = useUserOwnerAddress(avatar.userId)
     const { amount, symbol, name } = value
-    const { loading: loadingNFTVerified } = useNFTVerified(avatar.address)
+    const { loading: loadingNFTVerified, value: NFTVerified } = useNFTVerified(avatar.address)
 
     return (
         <div

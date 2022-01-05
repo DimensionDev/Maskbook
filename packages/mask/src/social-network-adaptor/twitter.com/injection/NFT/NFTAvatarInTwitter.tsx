@@ -11,9 +11,8 @@ import { getAvatarId } from '../../utils/user'
 import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
 import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
-import { useAsync, useLocation, useUpdateEffect, useWindowSize } from 'react-use'
+import { useLocation, useUpdateEffect, useWindowSize } from 'react-use'
 import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/RainbowBox'
-import { trim } from 'lodash-unified'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -71,7 +70,7 @@ function NFTAvatarInTwitter() {
         setNFTEvent(data)
     }
 
-    useAsync(async () => {
+    useEffect(() => {
         if (!wallet || !NFTAvatar) return
 
         if (!NFTEvent?.address || !NFTEvent?.tokenId) {
@@ -85,21 +84,20 @@ function NFTAvatarInTwitter() {
             return
         }
 
-        const avatar = await PluginNFTAvatarRPC.saveNFTAvatar(wallet.address, {
+        PluginNFTAvatarRPC.saveNFTAvatar(wallet.address, {
             ...NFTEvent,
             avatarId: getAvatarId(identity.avatar ?? ''),
-        } as AvatarMetaDB)
-
-        setAvatar(avatar)
-        MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll(
-            avatar ?? {
-                userId: identity.identifier.userId,
-                avatarId: getAvatarId(identity.avatar ?? ''),
-                address: '',
-                tokenId: '',
-            },
-        )
-
+        } as AvatarMetaDB).then((avatar: AvatarMetaDB | undefined) => {
+            setAvatar(avatar)
+            MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll(
+                avatar ?? {
+                    userId: identity.identifier.userId,
+                    avatarId: getAvatarId(identity.avatar ?? ''),
+                    address: '',
+                    tokenId: '',
+                },
+            )
+        })
         setNFTEvent(undefined)
     }, [identity.avatar])
 
@@ -114,6 +112,7 @@ function NFTAvatarInTwitter() {
     useEffect(() => {
         const linkDom = searchTwitterAvatarLinkSelector().evaluate()
 
+        if (!showAvatar) return
         if (linkDom?.firstElementChild && linkDom.childNodes.length === 4) {
             const linkParentDom = linkDom.closest('div')
 
@@ -141,7 +140,7 @@ function NFTAvatarInTwitter() {
                 linkDom.appendChild(style)
             }
         }
-    }, [location.pathname])
+    }, [location.pathname, showAvatar])
 
     useEffect(() => {
         const linkDom = searchTwitterAvatarLinkSelector().evaluate()
@@ -160,16 +159,6 @@ function NFTAvatarInTwitter() {
             rainBowElement.current?.classList.remove('rainbowBorder')
         }
     }, [showAvatar])
-
-    useUpdateEffect(() => {
-        if (
-            location.pathname &&
-            location.pathname.split('/').length === 2 &&
-            trim(location.pathname, '/') !== identity.identifier.userId
-        ) {
-            setAvatar(undefined)
-        }
-    }, [location, identity])
 
     useUpdateEffect(() => {
         const linkParentDom = searchTwitterAvatarLinkSelector().evaluate()?.closest('div')
