@@ -28,8 +28,8 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
 ) {
     const CommentBoxUI = memo(function CommentBoxUI({ dom }: { dom: HTMLElement | null }) {
         const info = usePostInfo()!
-        const { encryptPostComment } = usePostInfo()!
-        const postContent = usePostInfoDetails.rawMessagePiped()
+        const hasMask = usePostInfoDetails.containsMaskPayload()
+        const { encryptPostComment } = info
         const { classes } = useCustomStyles()
         const props = additionPropsToCommentBox(classes)
         const onCallback = useCallback(
@@ -37,10 +37,9 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
                 const encryptedComment = await encryptPostComment(content)
                 onPasteToCommentBox(encryptedComment, info, dom).catch(console.error)
             },
-            [encryptPostComment, postContent, info, dom],
+            [encryptPostComment, info, dom],
         )
-
-        if (!postContent.items.length) return null
+        if (!hasMask) return null
         return <CommentBox onSubmit={onCallback} {...props} />
     })
     return (signal: AbortSignal, current: PostInfo) => {

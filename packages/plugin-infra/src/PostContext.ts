@@ -65,8 +65,6 @@ export interface PostContext extends PostContextAuthor {
     //#endregion
     //#region Raw post content (not decrypted)
     readonly rawMessage: Subscription<TypedMessageTuple>
-    // TODO: should be a Subscription
-    readonly rawMessagePiped: ValueRef<TypedMessageTuple>
     //#endregion
     //#region Information revealed in the Mask Payload
     readonly containsMaskPayload: Subscription<boolean>

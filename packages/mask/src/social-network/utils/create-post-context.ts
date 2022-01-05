@@ -11,7 +11,6 @@ import type {
 import {
     ALL_EVENTS,
     extractTextFromTypedMessage,
-    isTypedMessageEqual,
     makeTypedMessageTupleFromList,
     ObservableMap,
     ObservableSet,
@@ -23,13 +22,10 @@ import {
     SubscriptionFromValueRef,
     SubscriptionDebug as debug,
     mapSubscription,
-    createSubscriptionFromAsync,
-    waitTypedMessage,
-    makeTypedMessageEmpty,
-    flattenTypedMessage,
-    createConstantSubscription,
+    collectTypedMessagePromise,
     combineAbortSignal,
     extractImageFromTypedMessage,
+    flattenTypedMessage,
 } from '@masknet/shared-base'
 import type { Subscription } from 'use-subscription'
 import { activatedSocialNetworkUI } from '../'
@@ -48,19 +44,36 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
         //#region Mentioned links
         const links = new ObservableSet<string>()
         {
-            async function fillLinks() {
-                const message = await waitTypedMessage(opt.rawMessage.getCurrentValue())
+            const isFB = activatedSocialNetworkUI.networkIdentifier === FACEBOOK_ID
+
+            let controller = new AbortController()
+            function fillLinks() {
+                const signal = controller.signal
+                function addLink(x: string) {
+                    if (signal.aborted) return
+                    if (isFB) links.add(resolveFacebookLink(x))
+                    else links.add(x)
+                }
+                // Instant values
+                const message = flattenTypedMessage(opt.rawMessage.getCurrentValue())
                 const text = extractTextFromTypedMessage(message).unwrapOr('')
                 const link = parseURL(text).concat(opt.postMentionedLinksProvider?.getCurrentValue() || [])
+                link.forEach(addLink)
+
+                // Deferred values
+                collectTypedMessagePromise(message).forEach((x) =>
+                    x.then(extractTextFromTypedMessage).then((x) => x.map(parseURL).map((val) => val.forEach(addLink))),
+                )
+            }
+            const retry = () => {
+                controller.abort()
+                controller = new AbortController()
                 links.clear()
-                for (const x of link) {
-                    if (activatedSocialNetworkUI.networkIdentifier === FACEBOOK_ID) {
-                        links.add(resolveFacebookLink(x))
-                    } else links.add(x)
-                }
+                fillLinks()
             }
             fillLinks()
-            cancel.push(opt.rawMessage.subscribe(fillLinks))
+            cancel.push(opt.rawMessage.subscribe(retry))
+            cancel.push(opt.postMentionedLinksProvider?.subscribe(retry))
         }
         const mentionedLinks: Subscription<string[]> = debug({
             getCurrentValue: () => [...links],
@@ -73,7 +86,6 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             author: opt.author,
             snsID: opt.snsID,
         }
-        const transformedPostContent = new ValueRef(makeTypedMessageTupleFromList(), isTypedMessageEqual)
         const postIdentifier = debug({
             getCurrentValue: () => {
                 const by = opt.author.getCurrentValue()
@@ -132,7 +144,6 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             mentionedLinks: mentionedLinks,
 
             rawMessage: opt.rawMessage,
-            rawMessagePiped: transformedPostContent,
 
             async decryptPostComment() {
                 throw new Error('TODO')
@@ -197,6 +208,8 @@ function decryptionContext(
         let abort = new AbortController()
         async function decryptByLinks() {
             const links = [...mentionedLinks.getCurrentValue()].sort()
+            console.log('start by link', ...links)
+            if (links.length === 0) return
             const key = await hash(links.join(';'))
             await decryption(
                 key,
@@ -216,29 +229,47 @@ function decryptionContext(
 
     {
         let abort = new AbortController()
-        async function decryptByPost() {
-            const message = await waitTypedMessage(rawMessage.getCurrentValue())
+        async function decryptByPost(
+            message = flattenTypedMessage(rawMessage.getCurrentValue()),
+            signal = abort.signal,
+        ) {
+            // Instant values
             let text = extractTextFromTypedMessage(message).unwrapOr('')
+            {
+                // Because all links are in the mentionedLinks, we should remove them to avoid duplicate
+                const links = mentionedLinks.getCurrentValue()
+                links.forEach((link) => (text = text.replace(link, '')))
+            }
             if (text.length < 10) text = ''
             const images = extractImageFromTypedMessage(message)
                 .filter((x): x is string => typeof x === 'string')
                 .sort()
-            const key = await hash(text + images.join(';'))
-
             const payloads: SocialNetworkEncodedPayload[] = []
-
             if (text) payloads.push({ type: 'text', text })
             payloads.push(...images.map<SocialNetworkEncodedPayload>((url) => ({ type: 'image-url', url })))
+            if (payloads.length === 0) return
+
+            // Deferred values
+            const promises = collectTypedMessagePromise(message)
+            promises.forEach((promise) => {
+                promise.then((message) => decryptByPost(message, signal))
+            })
+
+            // Instant value parse
+            const key = await hash(text + images.join(';'))
             await decryption(key, combineAbortSignal(signal, abort.signal), payloads)
         }
 
         decryptByPost()
-        const f = mentionedLinks.subscribe(() => {
+        const reload = () => {
             abort.abort()
             abort = new AbortController()
             decryptByPost()
-        })
+        }
+        const f = rawMessage.subscribe(reload)
+        const f2 = mentionedLinks.subscribe(reload)
         signal?.addEventListener('abort', f)
+        signal?.addEventListener('abort', f2)
     }
 
     async function decryption(key: string, signal: AbortSignal, payloads: SocialNetworkEncodedPayload[]) {
@@ -263,7 +294,7 @@ function decryptionContext(
             const currentID = `${key}-${decryptionID}`
             currentPassIDs.add(currentID)
             if (!map.has(decryptionID)) {
-                const provider = new MaskPayloadContextProvider(decryptionID)
+                const provider = new MaskPayloadContextProvider(currentID)
                 providerMap.set(currentID, provider)
                 map.set(currentID, provider.context)
             }
@@ -315,8 +346,8 @@ class MaskPayloadContextProvider {
 }
 
 // hash for a stable key of rendering UI, therefore SHA-1 is acceptable
-async function hash(val: string | Uint8Array) {
-    if (typeof val === 'string') val = encodeText(val)
+async function hash(text: string) {
+    const val = encodeText(text)
     const buf = await crypto.subtle.digest({ name: 'SHA-1' }, val)
     return encodeArrayBuffer(buf)
 }
