@@ -1,4 +1,3 @@
-import { serialize } from '../serializer'
 import { Result, Ok, Err } from 'ts-results'
 
 /**
@@ -113,7 +112,6 @@ export class ProfileIdentifier extends Identifier {
         return new ProfileIdentifier(network, userId)
     }
 }
-serialize('ProfileIdentifier')(ProfileIdentifier)
 export class GroupIdentifier extends Identifier {
     static getFriendsGroupIdentifier(who: ProfileIdentifier, groupId: string) {
         return new GroupIdentifier(who.network, who.userId, groupId)
@@ -147,7 +145,6 @@ export class GroupIdentifier extends Identifier {
         return new GroupIdentifier(network, belongs, groupID)
     }
 }
-serialize('GroupIdentifier')(GroupIdentifier)
 export class PostIdentifier<T extends Identifier = Identifier> extends Identifier {
     static readonly unknown = new PostIdentifier(ProfileIdentifier.unknown, '$unknown')
     get isUnknown() {
@@ -171,7 +168,6 @@ export class PostIdentifier<T extends Identifier = Identifier> extends Identifie
         return new PostIdentifier(id.val, postId)
     }
 }
-serialize('PostIdentifier')(PostIdentifier)
 export class PostIVIdentifier extends Identifier {
     constructor(public readonly network: string, public readonly postIV: string) {
         super()
@@ -185,7 +181,6 @@ export class PostIVIdentifier extends Identifier {
         return new PostIVIdentifier(network, iv)
     }
 }
-serialize('PostIVIdentifier')(PostIVIdentifier)
 
 /**
  * This class identify the point on an EC curve.
@@ -208,7 +203,6 @@ export class ECKeyIdentifier extends Identifier {
         return new ECKeyIdentifier(curve, point)
     }
 }
-serialize('ECKeyIdentifier')(ECKeyIdentifier)
 export type PersonaIdentifier = ECKeyIdentifier
 // eslint-disable-next-line no-redeclare
 export const PersonaIdentifier = [ECKeyIdentifier]

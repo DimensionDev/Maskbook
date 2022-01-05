@@ -1,7 +1,7 @@
 import { Result, Ok, Err, Some, Option, None } from 'ts-results'
 import type { TypedMessage } from './base'
 import z_schema from 'z-schema'
-import produce, { enableMapSet, Draft } from 'immer'
+import draft, { enableMapSet, Draft } from 'immer'
 enableMapSet()
 
 const metadataSchemaStore = new Map<string, object>()
@@ -82,7 +82,7 @@ export function editMetadata(
     metadata: TypedMessage['meta'],
     edit: (meta: NonNullable<Draft<TypedMessage['meta']>>) => void,
 ): NonNullable<TypedMessage['meta']> {
-    return produce(metadata || new Map(), (e) => void edit(e))
+    return draft(metadata || new Map(), (e) => void edit(e))
 }
 export function editTypedMessageMeta<T extends TypedMessage>(
     typedMessage: T,

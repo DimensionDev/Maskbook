@@ -22,7 +22,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer url={link} />
     },
     PostInspector: function Component() {
-        const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.mentionedLinks())
+        const links = usePostInfoDetails.mentionedLinks()
 
         const link = links.find(isGoodGhosting)
         if (!link) return null
