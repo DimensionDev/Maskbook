@@ -39,7 +39,10 @@
         "Arbitrum": [],
         "Arbitrum_Rinkeby": [],
         "xDai": [],
-        "Avalanche": [],
+        "Avalanche": [
+            "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/avalanchec",
+            "https://rawcdn.githack.com/trustwallet/assets/master/blockchains/avalanchec"
+        ],
         "Avalanche_Fuji": [],
         "Celo": [],
         "Fantom": []

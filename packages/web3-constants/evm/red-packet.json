@@ -100,9 +100,9 @@
         "Arbitrum": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-arbitrum-one",
         "Arbitrum_Rinkeby": "",
         "xDai": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-xdai",
-        "Avalanche": "",
+        "Avalanche": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-avalanche",
         "Avalanche_Fuji": "",
-        "Celo": "",
-        "Fantom": ""
+        "Celo": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-celo",
+        "Fantom": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-fantom"
     }
 }
