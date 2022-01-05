@@ -100,7 +100,9 @@ export function PetDialog() {
     //should not use user address here
     const user = useUser()
     const visitor = useCurrentVisitingUser()
-    const nfts = useNfts(user.userId === visitor.userId && user.address === visitor.address ? visitor : undefined)
+    const nfts = useNfts(
+        user.userId === visitor.userId && isSameAddress(user.address, visitor.address) ? visitor : undefined,
+    )
     const [extraData, setExtraData] = useState<ERC721ContractDetailed[]>([])
 
     const { open, closeDialog } = useRemoteControlledDialog(PluginPetMessages.essayDialogUpdated, () => {})
@@ -129,7 +131,7 @@ export function PetDialog() {
             lists.push(contract)
         }
         setExtraData(lists)
-    }, [nfts, open])
+    }, [JSON.stringify(nfts), open])
 
     let timer: NodeJS.Timeout
     const saveHandle = async () => {

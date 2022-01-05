@@ -12,7 +12,9 @@ export async function getCustomEssayFromRSS(address: string): Promise<PetMetaDB 
 
 export async function saveCustomEssayToRSS(address: string, essay: PetMetaDB, signature: string) {
     if (!address) return
-    const rss = getRSS3FromAddress(address)
+    const rss = RSS3.createRSS3(address, async (message: string) => {
+        return personalSign(message, address)
+    })
     await RSS3.setFileData<EssayRSSNode>(rss, address, '_pet', { address, signature, essay })
     return essay
 }
