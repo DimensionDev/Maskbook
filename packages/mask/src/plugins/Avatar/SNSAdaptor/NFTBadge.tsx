@@ -62,7 +62,8 @@ export function NFTBadge(props: NFTBadgeProps) {
                     strokeWidth={14}
                     stroke="black"
                     fontSize={9}
-                    text={loading ? 'loading...' : `${name} ${formatPrice(amount)} ${symbol}`}
+                    text={loading ? 'loading...' : name}
+                    price={loading ? '' : `${formatPrice(amount)} ${symbol}`}
                 />
             </Link>
         </div>
