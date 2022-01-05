@@ -89,6 +89,10 @@ export namespace PriceAPI {
 }
 
 export namespace NonFungibleTokenAPI {
+    export enum APIEnv {
+        browser = 0,
+        proxy = 1,
+    }
     export enum OrderSide {
         Buy = 0,
         Sell = 1,
@@ -243,7 +247,7 @@ export namespace NonFungibleTokenAPI {
         pageInfo?: { [key in string]: unknown }
     }
 
-    interface ProviderPageable<T> {
+    export interface ProviderPageable<T> {
         data: T[]
         hasNextPage: boolean
         nextPageInfo?: { [key in string]: unknown }

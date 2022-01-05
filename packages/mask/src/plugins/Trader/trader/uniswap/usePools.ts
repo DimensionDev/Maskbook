@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import BigNumber from 'bignumber.js'
 import { computePoolAddress, Pool, FeeAmount } from '@uniswap/v3-sdk'
 import type { Token, Currency } from '@uniswap/sdk-core'
 import { MulticallStateType, useMultipleContractSingleData } from '@masknet/web3-shared-evm'
@@ -9,6 +8,7 @@ import type { TradeProvider } from '@masknet/public-api'
 import { useGetTradeContext } from '../useGetTradeContext'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { useTargetBlockNumber } from '../useTargetBlockNumber'
+import { isZero } from '@masknet/web3-shared-base'
 
 export enum PoolState {
     LOADING = 0,
@@ -86,7 +86,7 @@ export function usePools(
 
             if (!slot0 || !liquidity) return [PoolState.NOT_EXISTS, null]
 
-            if (new BigNumber(slot0.sqrtPriceX96 ?? '0').isZero()) return [PoolState.NOT_EXISTS, null]
+            if (isZero(slot0.sqrtPriceX96 ?? 0)) return [PoolState.NOT_EXISTS, null]
 
             try {
                 return [
