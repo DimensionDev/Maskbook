@@ -31,6 +31,8 @@ import { getGunInstance } from '../../network/gun/instance'
 export type DecryptionInfo = {
     type: DecryptProgressKind.Info
     iv?: Uint8Array
+    claimedAuthor?: ProfileIdentifier
+    publicShared?: boolean
 }
 export type DecryptionProgress = DecryptProgress | DecryptionInfo
 
@@ -50,10 +52,11 @@ export async function* decryptionWithSocialNetworkDecoding(
     context: DecryptionContext,
 ) {
     yield* new EventIterator<[id: string, progress: DecryptProgress | DecryptionInfo]>((flow) => {
+        let globalID = 0
         for (const e of encoded) {
+            const id = (globalID += 1) + ''
+            let decoded!: string | Uint8Array
             async function main() {
-                const id = Math.random() + ''
-                let decoded!: string | Uint8Array
                 if (e.type === 'text') {
                     // TODO: socialNetworkDecoder should emit multiple results if the text contains multiple payload.
                     decoded = socialNetworkDecoder(context.currentSocialNetwork, e.text).unwrapOr(e.text)

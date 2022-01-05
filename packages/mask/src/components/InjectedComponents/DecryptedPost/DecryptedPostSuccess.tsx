@@ -37,7 +37,7 @@ export interface DecryptPostSuccessProps extends withClasses<never> {
     requestAppendRecipients?(to: Profile[]): Promise<void>
     alreadySelectedPreviously: Profile[]
     profiles: Profile[]
-    sharedPublic?: boolean
+    sharedPublic: boolean | null
     AdditionalContentProps?: Partial<AdditionalContentProps>
     /** The author in the payload */
     author?: ProfileIdentifier
@@ -68,7 +68,7 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
         props.requestAppendRecipients || (async () => {}),
         props.alreadySelectedPreviously,
     )
-    const rightActions = props.requestAppendRecipients && !props.sharedPublic && (
+    const rightActions = props.requestAppendRecipients && props.sharedPublic === false && (
         <Link color="primary" onClick={shareMenu.showShare} className={classes.addRecipientsLink}>
             {t('decrypted_postbox_add_recipients')}
         </Link>

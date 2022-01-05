@@ -79,7 +79,7 @@ export interface MaskPayloadContext {
     readonly claimedAuthor: Subscription<ProfileIdentifier | null>
     readonly decrypted: Subscription<DecryptProgress[]>
     readonly iv: Subscription<Uint8Array | null>
-    readonly publicShared: Subscription<boolean>
+    readonly publicShared: Subscription<boolean | null>
     readonly id: string
 }
 export type PostInfo = PostContext
