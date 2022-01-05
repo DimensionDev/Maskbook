@@ -79,7 +79,7 @@ export function InformationCard(props: InformationCardProps) {
                             .filter((strategy) => Boolean(strategy.params.address))
                             .map((strategy, i) => (
                                 <Link
-                                    key={i.toString()}
+                                    key={i}
                                     className={classes.link}
                                     target="_blank"
                                     rel="noopener"
