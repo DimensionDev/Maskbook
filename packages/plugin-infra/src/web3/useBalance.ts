@@ -1,9 +1,10 @@
+import { useAccount, useChainId } from '.'
 import type { NetworkPluginID } from '..'
 import { usePluginWeb3StateContext } from './Context'
 
-/**
- * Get the current block number
- */
-export function useBalance(pluginID?: NetworkPluginID) {
-    return usePluginWeb3StateContext(pluginID).balance
+export function useBalance(chainId?: number, account?: string, pluginID?: NetworkPluginID) {
+    const defaultChainId = useChainId(pluginID)
+    const defaultAccount = useAccount(pluginID)
+    const { balanceOfChain } = usePluginWeb3StateContext(pluginID)
+    return balanceOfChain?.[chainId ?? defaultChainId]?.[(account ?? defaultAccount).toLowerCase()] ?? '0'
 }

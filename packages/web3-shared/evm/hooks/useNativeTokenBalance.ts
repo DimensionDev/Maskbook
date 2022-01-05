@@ -10,7 +10,7 @@ export function useNativeTokenBalance() {
     const account = useAccount()
     const balance = useBalance()
     return useAsyncRetry(async () => {
-        if (!account) return undefined
+        if (!account) return
         return balance
     }, [account, balance])
 }

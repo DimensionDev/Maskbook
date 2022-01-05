@@ -20,8 +20,6 @@ import {
 } from '../../plugins/Trader/settings'
 import { queryMyPersonas } from './IdentityService'
 import {
-    currentBalanceSettings,
-    currentBlockNumberSettings,
     currentAccountSettings,
     currentNetworkSettings,
     currentProviderSettings,
@@ -34,7 +32,8 @@ import {
     currentMaskWalletAccountSettings,
     currentMaskWalletChainIdSettings,
     currentMaskWalletNetworkSettings,
-    currentBalancesSettings,
+    currentBalanceOfChainSettings,
+    currentBlockNumberOfChainSettings,
 } from '../../plugins/Wallet/settings'
 import { Flags, MaskMessages } from '../../../shared'
 import { indexedDB_KVStorageBackend, inMemory_KVStorageBackend } from '../../../background/database/kv-storage'
@@ -54,9 +53,8 @@ export const [getPluginID, setPluginID] = create(pluginIDSettings)
 export const [getTheme, setTheme] = create(appearanceSettings)
 export const [getLanguage, setLanguage] = create(languageSettings)
 export const [getChainId, setChainId] = create(currentChainIdSettings)
-export const [getBalance, setBalance] = create(currentBalanceSettings)
-export const [getBalances, setBalances] = create(currentBalancesSettings)
-export const [getBlockNumber, setBlockNumber] = create(currentBlockNumberSettings)
+export const [getBalanceOfChain, setBalanceOfChain] = create(currentBalanceOfChainSettings)
+export const [getBlockNumberOfChain, setBlockNumberOfChain] = create(currentBlockNumberOfChainSettings)
 export const [getTokenPrices, setTokenPrices] = create(currentTokenPricesSettings)
 export const [getGasOptions, setGasOptions] = create(currentGasOptionsSettings)
 export const [getGasPrice, setGasPrice] = create(currentGasOptionsSettings)

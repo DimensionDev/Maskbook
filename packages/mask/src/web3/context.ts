@@ -13,8 +13,6 @@ import {
 import { isPopupPage } from '@masknet/shared-base'
 import { bridgedCoin98Provider, bridgedEthereumProvider } from '@masknet/injected-script'
 import {
-    currentBlockNumberSettings,
-    currentBalanceSettings,
     currentAccountSettings,
     currentNetworkSettings,
     currentProviderSettings,
@@ -24,8 +22,8 @@ import {
     currentMaskWalletChainIdSettings,
     currentMaskWalletNetworkSettings,
     currentMaskWalletAccountSettings,
-    currentMaskWalletBalanceSettings,
-    currentBalancesSettings,
+    currentBalanceOfChainSettings,
+    currentBlockNumberOfChainSettings,
 } from '../plugins/Wallet/settings'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import type { InternalSettings } from '../settings/createSettings'
@@ -93,9 +91,8 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
                 return () => void [a(), b(), c()]
             },
         ),
-        balance: createSubscriptionFromSettings(isMask ? currentMaskWalletBalanceSettings : currentBalanceSettings),
-        balances: createSubscriptionFromSettings(currentBalancesSettings),
-        blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
+        balanceOfChain: createSubscriptionFromSettings(currentBalanceOfChainSettings),
+        blockNumberOfChain: createSubscriptionFromSettings(currentBlockNumberOfChainSettings),
         tokenPrices: createSubscriptionFromSettings(currentTokenPricesSettings),
         walletPrimary: createSubscriptionFromAsync(
             WalletRPC.getWalletPrimary,

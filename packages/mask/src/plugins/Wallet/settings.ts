@@ -1,3 +1,5 @@
+import { isEqual } from 'lodash-unified'
+import type { Web3Plugin } from '@masknet/plugin-infra'
 import { createGlobalSettings } from '../../settings/createSettings'
 import { i18n } from '../../../shared-ui/locales_legacy'
 import {
@@ -9,10 +11,8 @@ import {
     FungibleAssetProvider,
     ProviderType,
     LockStatus,
-    BalanceOfChains,
 } from '@masknet/web3-shared-evm'
 import { PLUGIN_ID } from './constants'
-import { isEqual } from 'lodash-unified'
 
 export const currentMaskWalletAccountSettings = createGlobalSettings<string>(
     `${PLUGIN_ID}+selectedMaskWalletAddress`,
@@ -30,11 +30,6 @@ export const currentMaskWalletChainIdSettings = createGlobalSettings<number>(
         secondary: () => 'This only affects the built-in wallet.',
     },
 )
-
-export const currentMaskWalletBalanceSettings = createGlobalSettings<string>(`${PLUGIN_ID}+maskWalletBalance`, '0', {
-    primary: () => i18n.t('settings_choose_eth_network'),
-    secondary: () => 'This only affects the built-in wallet.',
-})
 
 export const currentMaskWalletNetworkSettings = createGlobalSettings<NetworkType>(
     `${PLUGIN_ID}+selectedMaskWalletNetwork`,
@@ -54,6 +49,11 @@ export const currentMaskWalletLockStatusSettings = createGlobalSettings<LockStat
 
 export const currentAccountSettings = createGlobalSettings<string>(`${PLUGIN_ID}+selectedWalletAddress`, '', {
     primary: () => 'DO NOT DISPLAY IT IN UI',
+})
+
+export const currentChainIdSettings = createGlobalSettings<ChainId>(`${PLUGIN_ID}+chainId`, ChainId.Mainnet, {
+    primary: () => i18n.t('settings_choose_eth_network'),
+    secondary: () => 'This only affects the built-in wallet.',
 })
 
 export const currentNetworkSettings = createGlobalSettings<NetworkType>(
@@ -90,19 +90,6 @@ export const currentNonFungibleAssetDataProviderSettings = createGlobalSettings<
     },
 )
 
-export const currentChainIdSettings = createGlobalSettings<number>(`${PLUGIN_ID}+chainId`, ChainId.Mainnet, {
-    primary: () => i18n.t('settings_choose_eth_network'),
-    secondary: () => 'This only affects the built-in wallet.',
-})
-
-export const currentBlockNumberSettings = createGlobalSettings<number>(`${PLUGIN_ID}+blockNumber`, 0, {
-    primary: () => 'DO NOT DISPLAY IT IN UI',
-})
-
-export const currentBalanceSettings = createGlobalSettings<string>(`${PLUGIN_ID}+balance`, '0', {
-    primary: () => 'DO NOT DISPLAY IT IN UI',
-})
-
 export const currentGasOptionsSettings = createGlobalSettings<GasOptions | null>(
     `${PLUGIN_ID}+gasOptions`,
     null,
@@ -124,11 +111,17 @@ export const currentTokenPricesSettings = createGlobalSettings<CryptoPrice>(
     (a, b) => isEqual(a, b),
 )
 
-/**
- * ERC20 Token balances
- */
-export const currentBalancesSettings = createGlobalSettings<BalanceOfChains>(
-    `${PLUGIN_ID}+balances`,
+export const currentBlockNumberOfChainSettings = createGlobalSettings<Web3Plugin.BlockNumberOfChain>(
+    `${PLUGIN_ID}+blockNumberOfChain`,
+    {},
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+    (a, b) => isEqual(a, b),
+)
+
+export const currentBalanceOfChainSettings = createGlobalSettings<Web3Plugin.BalanceOfChain>(
+    `${PLUGIN_ID}+balanceOfChain`,
     {},
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',

@@ -1,117 +1,142 @@
-import { throttle } from 'lodash-unified'
-import { BalanceOfChains, ProviderType } from '@masknet/web3-shared-evm'
-import { pollingTask } from '@masknet/shared-base'
+import { throttle, DebouncedFunc, noop, uniq, uniqBy } from 'lodash-unified'
+import { EthereumAddress } from 'wallet.ts'
+import { getEnumAsArray } from '@dimensiondev/kit'
+import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { getBalance, getBlockNumber, resetAllNonce } from '../../../extension/background-script/EthereumService'
 import { startEffects } from '../../../../utils-pure'
-import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
 import {
-    currentMaskWalletAccountSettings,
     currentAccountSettings,
-    currentBalanceSettings,
-    currentBlockNumberSettings,
+    currentMaskWalletAccountSettings,
     currentChainIdSettings,
-    currentMaskWalletBalanceSettings,
     currentMaskWalletChainIdSettings,
     currentProviderSettings,
-    currentBalancesSettings,
+    currentBalanceOfChainSettings,
+    currentBlockNumberOfChainSettings,
 } from '../settings'
 
-let beats = 0
+//#region updater
+class Updater<T extends (...args: any[]) => Promise<void>> {
+    private controller: AbortController | null = null
+    private cache: Map<ChainId, DebouncedFunc<T>> = new Map()
+
+    build(createUpdater: (signal: AbortSignal) => T) {
+        this.controller?.abort()
+        this.controller = new AbortController()
+
+        const updater = createUpdater(this.controller.signal)
+
+        getEnumAsArray(ChainId).forEach(({ value }) => {
+            this.cache.set(
+                value,
+                throttle(updater, 30 * 1000, {
+                    trailing: true,
+                }),
+            )
+        })
+    }
+
+    update(chainId: ChainId, ...args: Parameters<T>) {
+        return this.cache.get(chainId)?.(...args)
+    }
+}
+//#endregion
+
 const { run } = startEffects(import.meta.webpackHot)
 
-export async function kickToUpdateChainState() {
-    beats += 1
-}
+const balanceUpdater = new Updater()
+const blockNumberUpdater = new Updater()
 
-export async function updateBalances(data: BalanceOfChains) {
-    const balancesOfChains = { ...currentBalancesSettings.value }
-    for (const [key, value] of Object.entries(data)) {
-        balancesOfChains[key] = {
-            ...balancesOfChains[key],
-            ...value,
+const createBalanceUpdater = (signal: AbortSignal) => {
+    let last = Date.now()
+
+    return async function updateBalanceOfChain(chainId: ChainId, address: string) {
+        if (!address || !EthereumAddress.isValid(address)) return
+        const balance = await getBalance(address, {
+            chainId,
+            providerType: ProviderType.MaskWallet,
+        })
+        if (signal.aborted) return
+
+        console.log(`DEBUG: updateBalanceOfChain ${chainId} after ${Date.now() - last}`)
+        last = Date.now()
+
+        currentBalanceOfChainSettings.value = {
+            ...currentBalanceOfChainSettings.value,
+            [chainId]: {
+                ...currentBalanceOfChainSettings.value[chainId],
+                [address.toLowerCase()]: balance,
+            },
         }
     }
-
-    currentBalancesSettings.value = balancesOfChains
 }
 
-export async function updateChainState() {
-    // reset the polling task cause it will be called from service call
-    resetPoolTask()
+const createBlockNumberUpdater = (signal: AbortSignal) => {
+    let last = Date.now()
 
-    // forget those passed beats
-    beats = 0
+    return async function updateBlockNumberOfChain(chainId: ChainId) {
+        const blockNumber = await getBlockNumber({
+            chainId,
+        })
+        if (signal.aborted) return
 
-    // update chain state
-    try {
-        ;[currentBlockNumberSettings.value, currentBalanceSettings.value, currentMaskWalletBalanceSettings.value] =
-            await Promise.all([
-                getBlockNumber(),
-                currentAccountSettings.value
-                    ? getBalance(currentAccountSettings.value, {
-                          chainId: currentChainIdSettings.value,
-                          providerType: currentProviderSettings.value,
-                      }).then((value) => {
-                          updateBalances({
-                              [currentProviderSettings.value]: {
-                                  [currentChainIdSettings.value]: value,
-                              },
-                          })
-                          return value
-                      })
-                    : currentBalanceSettings.value,
-                currentMaskWalletAccountSettings.value
-                    ? getBalance(currentMaskWalletAccountSettings.value, {
-                          chainId: currentMaskWalletChainIdSettings.value,
-                          providerType: ProviderType.MaskWallet,
-                      })
-                    : currentMaskWalletBalanceSettings.value,
-            ])
-    } catch {
-        // do nothing
-    } finally {
-        // reset the polling if chain state updated successfully
-        resetPoolTask()
+        console.log(`DEBUG: updateBlockNumberOfChain ${chainId} after ${Date.now() - last}`)
+        last = Date.now()
+
+        currentBlockNumberOfChainSettings.value = {
+            ...currentBlockNumberOfChainSettings.value,
+            [chainId]: blockNumber,
+        }
     }
 }
 
-export const updateChainStateThrottled = throttle(updateChainState, 300, {
-    leading: false,
-    trailing: true,
-})
+export function updateBlockNumber(chainId = currentChainIdSettings.value) {
+    uniq([chainId, currentChainIdSettings.value, currentMaskWalletChainIdSettings.value]).forEach((chainId) => {
+        blockNumberUpdater.update(chainId, chainId)
+    })
+}
 
-let resetPoolTask: () => void = () => {}
+export function updateBalance(chainId = currentChainIdSettings.value, account = currentAccountSettings.value) {
+    const pairs = [
+        [account, chainId] as const,
+        [currentAccountSettings.value, currentChainIdSettings.value] as const,
+        [currentMaskWalletAccountSettings.value, currentMaskWalletChainIdSettings.value] as const,
+    ]
+    uniqBy(pairs, ([account, chainId]) => `${account.toLowerCase()}_${chainId}`).forEach(([account, chainId]) => {
+        balanceUpdater.update(chainId, chainId, account)
+    })
+}
 
-// poll the newest chain state
 run(() => {
-    const { reset, cancel } = pollingTask(
-        async () => {
-            if (beats <= 0) return false
-            await updateChainState()
-            return false
-        },
-        {
-            delay: UPDATE_CHAIN_STATE_DELAY,
-        },
-    )
-    resetPoolTask = reset
-    return cancel
-})
+    balanceUpdater.build(createBalanceUpdater)
+    blockNumberUpdater.build(createBlockNumberUpdater)
 
-// revalidate chain state if the chainId of current provider was changed
+    setInterval(() => {
+        updateBalance()
+        updateBlockNumber()
+    }, 5000)
+    return noop
+})
 run(() =>
     currentChainIdSettings.addListener(() => {
-        updateChainStateThrottled()
+        balanceUpdater.build(createBalanceUpdater)
+        blockNumberUpdater.build(createBlockNumberUpdater)
         if (currentProviderSettings.value === ProviderType.MaskWallet) resetAllNonce()
     }),
 )
 run(() =>
     currentMaskWalletChainIdSettings.addListener(() => {
-        updateChainStateThrottled()
+        balanceUpdater.build(createBalanceUpdater)
+        blockNumberUpdater.build(createBlockNumberUpdater)
         resetAllNonce()
     }),
 )
-
-// revalidate chain state if the current wallet was changed
-run(() => currentAccountSettings.addListener(() => updateChainStateThrottled()))
-run(() => currentMaskWalletAccountSettings.addListener(() => updateChainStateThrottled()))
+run(() =>
+    currentAccountSettings.addListener(() => {
+        balanceUpdater.build(createBalanceUpdater)
+    }),
+)
+run(() =>
+    currentMaskWalletAccountSettings.addListener(() => {
+        balanceUpdater.build(createBalanceUpdater)
+    }),
+)

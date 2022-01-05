@@ -15,17 +15,17 @@ import type {
     Transaction,
     AddressName,
     CryptoPrice,
-    BalanceOfChains,
     ERC721TokenCollectionInfo,
+    BalanceOfChain,
+    BlockNumberOfChain,
 } from '../types'
 
 export interface Web3ProviderType {
     allowTestnet: Subscription<boolean>
     chainId: Subscription<ChainId>
     account: Subscription<string>
-    balance: Subscription<string>
-    balances: Subscription<BalanceOfChains>
-    blockNumber: Subscription<number>
+    balanceOfChain: Subscription<BalanceOfChain>
+    blockNumberOfChain: Subscription<BlockNumberOfChain>
     provider: Subscription<Provider>
     networkType: Subscription<NetworkType>
     providerType: Subscription<ProviderType>

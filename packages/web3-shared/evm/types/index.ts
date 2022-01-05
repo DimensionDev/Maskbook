@@ -28,9 +28,13 @@ export interface BalanceOfChainRecord {
     [chainId: number]: string
 }
 
-export interface BalanceOfChains {
-    [provider: string]: {
-        [chainId: number]: string
+export interface BlockNumberOfChain {
+    [chainId: string]: number
+}
+
+export interface BalanceOfChain {
+    [chainId: string]: {
+        [account: string]: string
     }
 }
 

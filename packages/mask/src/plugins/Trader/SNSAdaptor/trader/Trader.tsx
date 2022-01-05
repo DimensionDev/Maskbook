@@ -15,8 +15,9 @@ import {
     useChainId,
     useChainIdValid,
     useFungibleTokenBalance,
-    useProviderType,
     useTokenConstants,
+    useBalance,
+    useAccount,
     useWallet,
 } from '@masknet/web3-shared-evm'
 import { isGreaterThan, isLessThan, multipliedBy } from '@masknet/web3-shared-base'
@@ -36,8 +37,6 @@ import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base
 import { useTradeCallback } from '../../trader/useTradeCallback'
 import { isNativeTokenWrapper } from '../../helpers'
 import { ConfirmDialog } from './ConfirmDialog'
-import Services from '../../../../extension/service'
-import { currentBalancesSettings } from '../../../Wallet/settings'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { WalletRPC } from '../../../Wallet/messages'
 import { PluginTraderMessages } from '../../messages'
@@ -45,7 +44,6 @@ import { NetworkType } from '@masknet/public-api'
 import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice, useTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 import { SettingsDialog } from './SettingsDialog'
-import { useAccount } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()(() => {
     return {
@@ -71,8 +69,8 @@ export function Trader(props: TraderProps) {
     const chainId = targetChainId ?? currentChainId
     const chainIdValid = useChainIdValid()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
-    const currentAccount = useAccount()
-    const currentProvider = useProviderType()
+    const account = useAccount()
+    const balance = useBalance(chainId, account)
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
     const { setTargetChainId } = TargetChainIdContext.useContainer()
@@ -179,8 +177,8 @@ export function Trader(props: TraderProps) {
     ])
 
     // Query the balance of native tokens on target chain
-    useAsync(async () => {
-        if (!currentAccount) {
+    useEffect(() => {
+        if (!account) {
             dispatchTradeStore({
                 type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
                 balance: '0',
@@ -193,24 +191,7 @@ export function Trader(props: TraderProps) {
             return
         }
 
-        if (chainId && currentProvider && currentAccount) {
-            const cacheBalance = currentBalancesSettings.value[currentProvider]?.[chainId]
-
-            let balance: string
-
-            if (cacheBalance) balance = cacheBalance
-            else {
-                balance = await Services.Ethereum.getBalance(currentAccount, {
-                    chainId: chainId,
-                    providerType: currentProvider,
-                })
-                await WalletRPC.updateBalances({
-                    [currentProvider]: {
-                        [chainId]: balance,
-                    },
-                })
-            }
-
+        if (chainId && account) {
             dispatchTradeStore({
                 type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
                 balance: inputToken?.type === EthereumTokenType.Native ? balance : '0',
@@ -225,7 +206,7 @@ export function Trader(props: TraderProps) {
                         : '0',
             })
         }
-    }, [inputToken, outputToken, currentAccount, currentProvider, chainId, currentChainId])
+    }, [inputToken, outputToken, account, chainId, balance])
     // #endregion
 
     // #region select token

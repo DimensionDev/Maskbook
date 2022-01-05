@@ -1,7 +1,6 @@
 import type { BigNumber } from 'bignumber.js'
 import type { Subscription } from 'use-subscription'
-import type { Pagination, Plugin } from './types'
-import type { Pageable } from './types'
+import type { Pagination, Plugin, Pageable } from './types'
 
 /**
  * A network plugin defines the way to connect to a single chain.
@@ -197,8 +196,18 @@ export declare namespace Web3Plugin {
         tokens: Token[]
     }
 
-    export type domainAddressBook = {
+    export type DomainAddressBook = {
         [chainId: number]: Record<string, string> | undefined
+    }
+
+    export interface BalanceOfChain {
+        [chainId: string]: {
+            [account: string]: string
+        }
+    }
+
+    export interface BlockNumberOfChain {
+        [chainId: string]: number
     }
 
     export namespace ObjectCapabilities {
@@ -208,10 +217,10 @@ export declare namespace Web3Plugin {
             chainId?: Subscription<number>
             /** The address of the currently chosen wallet. */
             account?: Subscription<string>
-            /** The balance of the currently chosen account. */
-            balance?: Subscription<string>
-            /** The currently tracked block height. */
-            blockNumber?: Subscription<number>
+            /** The tracked balance of chain. */
+            balanceOfChain?: Subscription<BalanceOfChain>
+            /** The tracked block height of chain. */
+            blockNumberOfChain?: Subscription<BlockNumberOfChain>
             /** The network type. */
             networkType?: Subscription<string | undefined>
             /** The wallet provider type. */
