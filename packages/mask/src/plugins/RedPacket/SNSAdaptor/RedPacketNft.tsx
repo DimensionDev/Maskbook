@@ -3,11 +3,8 @@ import {
     useAccount,
     resolveAddressLinkOnExplorer,
     useWeb3,
-    useERC721TokenDetailed,
-    EthereumTokenType,
     resolveNetworkName,
     useNetworkType,
-    ERC721ContractDetailed,
     TransactionStateType,
 } from '@masknet/web3-shared-evm'
 import LaunchIcon from '@mui/icons-material/Launch'
@@ -223,6 +220,9 @@ const useStyles = makeStyles()((theme) => ({
         maxWidth: 400,
         fontSize: '1.5rem',
     },
+    assetPlayerIframe: {
+        marginBottom: 16,
+    },
 }))
 export interface RedPacketNftProps {
     payload: RedPacketNftJSONPayload
@@ -257,29 +257,6 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         )
     }, [payload])
 
-    const { asyncRetry, tokenDetailed: erc721TokenDetailed } = useERC721TokenDetailed(
-        availability
-            ? ({
-                  type: EthereumTokenType.ERC721,
-                  address: payload.contractAddress,
-                  chainId: payload.chainId,
-                  name: payload.contractName,
-                  symbol: '',
-                  baseURI: '',
-                  iconURL: payload.contractTokenURI,
-              } as ERC721ContractDetailed)
-            : undefined,
-        availability?.claimed_id,
-    )
-
-    const { retry: retryERC721TokenDetailed, error: ERC721TokenDetailedError } = asyncRetry
-    const isFailedToLoading = Boolean(availabilityError || ERC721TokenDetailedError)
-
-    const onErrorRetry = useCallback(() => {
-        retryAvailability()
-        retryERC721TokenDetailed()
-    }, [retryAvailability, retryERC721TokenDetailed])
-
     useEffect(() => {
         if (![TransactionStateType.CONFIRMED, TransactionStateType.FAILED].includes(claimState.type)) {
             return
@@ -297,7 +274,6 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         resetCallback()
     }, [account])
 
-    const previewNftImg = new URL('./assets/nft-preview.png', import.meta.url).toString()
     const rpNftImg = new URL('./assets/redpacket.nft.png', import.meta.url).toString()
     //#region on share
     const postLink = usePostLink()
@@ -335,7 +311,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     }, [shareLink])
     //#endregion
 
-    if (isFailedToLoading)
+    if (Boolean(availabilityError))
         return (
             <div className={classes.root}>
                 <Card className={classNames(classes.card, classes.errorCard)} component="article" elevation={0}>
@@ -344,7 +320,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                         {t('loading_failed')}
                     </Typography>
                     <Button
-                        onClick={onErrorRetry}
+                        onClick={retryAvailability}
                         className={classNames(classes.errorButton, classes.whiteText)}
                         variant="outlined">
                         {t('try_again')}
@@ -380,7 +356,12 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 {availability.isClaimed ? (
                     <Box className={classes.tokenWrapper}>
                         <NftImage
-                            token={erc721TokenDetailed}
+                            chainId={payload.chainId}
+                            contractAddress={payload.contractAddress}
+                            tokenId={availability.claimed_id}
+                            classes={{
+                                iframe: classes.assetPlayerIframe,
+                            }}
                             fallbackImage={new URL('./assets/nft-preview.png', import.meta.url)}
                         />
 

@@ -203,8 +203,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         minHeight: '0px !important',
         maxWidth: 'none',
         transform: 'translateY(10px)',
-        width: 64,
-        height: 64,
+        width: '64px !important',
+        height: '64px !important',
     },
     selectedTokenAmount: {
         color: props.isSelectSharesExceed ? '#FF5F5F' : '#1C68F3',
@@ -482,7 +482,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                 {t('search')}
                             </Button>
                         </div>
-                        {loadingToken || !tokenDetailed ? (
+                        {loadingToken || !tokenDetailed || !contract ? (
                             <Box className={classes.noResultBox}>
                                 <Typography>
                                     {loadingToken
@@ -495,7 +495,9 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                         ) : (
                             <Box className={classNames(classes.wrapper, classes.nftWrapper)}>
                                 <NftImage
-                                    token={tokenDetailed}
+                                    contractAddress={contract.address}
+                                    chainId={contract.chainId}
+                                    tokenId={tokenId}
                                     classes={{
                                         loadingFailImage: classes.loadingFailImage,
                                     }}
@@ -642,7 +644,9 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                                     )}
                                                     key={i.toString()}>
                                                     <NftImage
-                                                        token={token}
+                                                        contractAddress={token.contractDetailed.address}
+                                                        tokenId={token.tokenId}
+                                                        chainId={token.contractDetailed.chainId}
                                                         classes={{
                                                             loadingFailImage: classes.loadingFailImage,
                                                         }}

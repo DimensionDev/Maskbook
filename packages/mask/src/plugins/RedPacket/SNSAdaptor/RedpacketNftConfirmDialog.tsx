@@ -289,7 +289,9 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                             {tokenList.map((value, i) => (
                                 <ListItem key={i.toString()} className={classNames(classes.tokenSelectorWrapper)}>
                                     <NftImage
-                                        token={value}
+                                        contractAddress={value.contractDetailed.address}
+                                        chainId={value.contractDetailed.chainId}
+                                        tokenId={value.tokenId}
                                         classes={{
                                             loadingFailImage: classes.loadingFailImage,
                                         }}
