@@ -38,7 +38,7 @@ function DecryptedPost(props: MaskPayloadContext) {
     const failed = findLast(decryption, isDecryptError)
     if (failed) return <DecryptPostFailed error={failed} />
     const progress = findLast(decryption, isDecryptProgress)
-    if (progress) return <DecryptPostAwaiting progress={progress} />
+    if (progress) return <DecryptPostAwaiting type={progress} />
     return null
 }
 

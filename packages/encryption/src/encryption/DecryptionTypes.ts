@@ -94,7 +94,17 @@ export enum DecryptProgressKind {
     Info = 'info',
     Progress = 'progress',
 }
-export type DecryptProgress = DecryptSuccess | DecryptError | DecryptIntermediateProgress
+export interface DecryptIntermediateProgress {
+    type: DecryptProgressKind.Progress
+    event: DecryptIntermediateProgressKind
+}
+export type DecryptProgress = DecryptSuccess | DecryptError | DecryptIntermediateProgress | DecryptReportedInfo
+export interface DecryptReportedInfo {
+    type: DecryptProgressKind.Info
+    iv?: Uint8Array
+    claimedAuthor?: ProfileIdentifier
+    publicShared?: boolean
+}
 export interface DecryptIntermediateProgress {
     type: DecryptProgressKind.Progress
     event: DecryptIntermediateProgressKind

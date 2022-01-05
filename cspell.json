@@ -359,10 +359,13 @@
         "koda",
         "Enjin",
         "poap",
-        "irss",
         "CELO",
         "flac",
-        "plusplus"
+        "plusplus",
+        "treeshake",
+        "xtest",
+        "xdescribe",
+        "irss"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [

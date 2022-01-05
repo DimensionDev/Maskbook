@@ -19,7 +19,7 @@ export interface Asset {
 export interface OpenSeaAssetContract extends OpenSeaFees {
     name: string
     address: string
-    type: string
+    asset_contract_type: string
     schema_name: string
     seller_fee_basis_points: number
     buyer_fee_basis_points: number

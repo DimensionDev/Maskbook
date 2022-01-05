@@ -7,7 +7,7 @@ import {
     andThenAsync,
 } from '@masknet/shared-base'
 import { None, Result } from 'ts-results'
-import { DecryptIntermediateProgress, DecryptIntermediateProgressKind } from '.'
+import { DecryptIntermediateProgress, DecryptIntermediateProgressKind, DecryptReportedInfo } from '.'
 import { AESAlgorithmEnum, PayloadParseResult } from '../payload'
 import { decryptWithAES, importAESFromJWK } from '../utils'
 import {
@@ -29,25 +29,30 @@ export async function* decrypt(options: DecryptOptions, io: DecryptIO): AsyncIte
     if (_encryption.err) return yield new DecryptError(ErrorReasons.PayloadBroken, _encryption.val)
     if (_encrypted.err) return yield new DecryptError(ErrorReasons.PayloadBroken, _encrypted.val)
     const encryption = _encryption.val
+    if (encryption.iv.err) return yield new DecryptError(ErrorReasons.PayloadBroken, encryption.iv.val)
+    const iv = encryption.iv.val
     const encrypted = _encrypted.val
 
+    {
+        const info: DecryptReportedInfo = { type: DecryptProgressKind.Info }
+        const author = _author.unwrapOr(None)
+        if (author.some) info.claimedAuthor = author.val
+        info.publicShared = encryption.type === 'public'
+        info.iv = iv
+    }
     // ! try decrypt by cache
     {
         const cacheKey = await io.getPostKeyCache().catch(() => null)
-        const iv = encryption.iv.unwrapOr(null)
         if (cacheKey && iv) return yield* decryptWithPostAESKey(version, cacheKey, iv, encrypted)
     }
 
     if (encryption.type === 'public') {
-        const { AESKey, iv } = encryption
+        const { AESKey } = encryption
         if (AESKey.err) return yield new DecryptError(ErrorReasons.PayloadBroken, AESKey.val)
-        if (iv.err) return yield new DecryptError(ErrorReasons.PayloadBroken, iv.val)
         // Not calling setPostCache here. It's public post and saving key is wasting storage space.
-        return yield* decryptWithPostAESKey(version, AESKey.val.key as AESCryptoKey, iv.val, encrypted)
+        return yield* decryptWithPostAESKey(version, AESKey.val.key as AESCryptoKey, iv, encrypted)
     } else if (encryption.type === 'E2E') {
-        const { ephemeralPublicKey, iv: _iv, ownersAESKeyEncrypted } = encryption
-        if (_iv.err) return yield new DecryptError(ErrorReasons.PayloadBroken, _iv.val)
-        const iv = _iv.val
+        const { ephemeralPublicKey, ownersAESKeyEncrypted } = encryption
         const author = _author.unwrapOr(None)
 
         // ! Try to decrypt this post as author (using ownersAESKeyEncrypted field)

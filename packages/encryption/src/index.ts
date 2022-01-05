@@ -17,13 +17,14 @@ export {
     DecryptProgressKind,
     ErrorReasons,
     DecryptIntermediateProgressKind,
-    type DecryptIntermediateProgress,
     type DecryptOptions,
     type DecryptIO,
-    type DecryptEphemeralECDH_PostKey,
-    type DecryptStaticECDH_PostKey,
     type DecryptProgress,
+    type DecryptReportedInfo,
+    type DecryptIntermediateProgress,
     type DecryptSuccess,
+    type DecryptStaticECDH_PostKey,
+    type DecryptEphemeralECDH_PostKey,
 } from './encryption'
 export {
     socialNetworkEncoder,

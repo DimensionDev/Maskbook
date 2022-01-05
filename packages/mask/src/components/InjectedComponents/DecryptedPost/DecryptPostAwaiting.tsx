@@ -3,18 +3,18 @@ import { ShadowRootTooltip, useI18N } from '../../../utils'
 import { AdditionalContent } from '../AdditionalPostContent'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import { wrapAuthorDifferentMessage } from './authorDifferentMessage'
-import { DecryptIntermediateProgress, DecryptIntermediateProgressKind } from '@masknet/encryption'
+import { DecryptIntermediateProgressKind, DecryptIntermediateProgress } from '@masknet/encryption'
 import { useTimeout } from 'react-use'
 import { Typography } from '@mui/material'
 export interface DecryptPostAwaitingProps {
-    progress?: DecryptIntermediateProgress
+    type?: DecryptIntermediateProgress
     /** The author in the payload */
     author?: ProfileIdentifier
     /** The author of the encrypted post */
     postedBy?: ProfileIdentifier
 }
 export const DecryptPostAwaiting = memo(function DecryptPostAwaiting(props: DecryptPostAwaitingProps) {
-    const { author, postedBy, progress: type } = props
+    const { author, postedBy, type } = props
     const { t } = useI18N()
 
     const [isReady] = useTimeout(5000)
