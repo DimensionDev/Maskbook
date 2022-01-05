@@ -233,20 +233,8 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         [ChainId.Boba]: 'Boba',
     }
 
-    const [chainId, setChainId] = useState(
-        [
-            ChainId.Mainnet,
-            ChainId.BSC,
-            ChainId.Matic,
-            ChainId.Arbitrum,
-            ChainId.xDai,
-            ChainId.Boba,
-            ChainId.Fantom,
-            ChainId.Celo,
-        ].includes(currentChainId)
-            ? currentChainId
-            : ChainId.Mainnet,
-    )
+    const [chainId, setChainId] = useState(tabItems[currentChainId] ? currentChainId : ChainId.Mainnet)
+
     const {
         value: campaignInfos,
         loading: loadingAirdrop,
