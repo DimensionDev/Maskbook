@@ -21,6 +21,8 @@ export const OpenSeaTraitURL =
     '/assets/known-origin?search[stringTraits][0][name]=Tag&search[stringTraits][0][values][0]='
 export const NullAddress = 'NullAddress'
 export const ReferrerAddress = ''
+export const OpenSeaMainnetURL = 'https://opensea.io'
+export const OpenSeaTestnetURL = 'https://testnets.opensea.io'
 
 export const RaribleURL = 'https://api.rarible.com/'
 export const RaribleChainURL = 'https://ethereum-api.rarible.org/'
