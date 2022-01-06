@@ -241,6 +241,9 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         retry: retryAirdrop,
     } = useSpaceStationCampaignInfo(account, Flags.nft_airdrop_enabled)
 
+    const [chainId, setChainId] = useState(
+        SUPPORTED_CHAIN_ID_LIST.includes(currentChainId) ? currentChainId : ChainId.Mainnet,
+    )
     const { value: swappedTokens, loading, retry } = useClaimablePools(chainId)
     const { ITO_CONTRACT_ADDRESS: ITO_CONTRACT_ADDRESS_MAINNET } = useITOConstants(ChainId.Mainnet)
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
