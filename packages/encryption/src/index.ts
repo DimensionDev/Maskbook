@@ -15,12 +15,15 @@ export {
     decrypt,
     DecryptError,
     DecryptProgressKind,
+    DecryptIntermediateProgressKind,
     ErrorReasons,
     type DecryptOptions,
     type DecryptIO,
     type DecryptEphemeralECDH_PostKey,
     type DecryptStaticECDH_PostKey,
     type DecryptProgress,
+    type DecryptIntermediateProgress,
+    type DecryptReportedInfo,
     type DecryptSuccess,
 } from './encryption'
 export {

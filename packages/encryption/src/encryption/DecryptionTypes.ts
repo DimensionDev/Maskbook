@@ -149,6 +149,7 @@ export enum ErrorReasons {
     NotShareTarget = '[@masknet/encryption] No valid key is found. Likely this post is not shared with you',
     // Not used in this library.
     UnrecognizedAuthor = '[@masknet/encryption] No author is recognized which is required for the image steganography decoding.',
+    CurrentProfileDoesNotConnectedToPersona = '[@masknet/encryption] Cannot decrypt by E2E because no persona is linked with the current profile.',
 }
 export class DecryptError extends Error {
     static Reasons = ErrorReasons
