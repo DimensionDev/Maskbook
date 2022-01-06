@@ -70,11 +70,13 @@ export async function encryptTo(
 
     let authorPublicKey: PayloadWellFormed.Payload['authorPublicKey'] = None
     try {
-        const jwk = (await queryPersonaByProfileDB(whoAmI))?.publicKey
-        if (jwk) {
+        const publicKey = (await queryPersonaByProfileDB(whoAmI))?.publicKey
+        if (publicKey) {
             authorPublicKey = Some({
                 algr: PublicKeyAlgorithmEnum.secp256k1,
-                key: (await importAsymmetryKeyFromJsonWebKeyOrSPKI(jwk, PublicKeyAlgorithmEnum.secp256k1)).unwrap(),
+                key: (
+                    await importAsymmetryKeyFromJsonWebKeyOrSPKI(publicKey, PublicKeyAlgorithmEnum.secp256k1)
+                ).unwrap(),
             })
         }
     } catch {
@@ -101,7 +103,7 @@ export async function encryptTo(
         }
     }
 
-    const payload: { -readonly [key in keyof PayloadWellFormed.Payload]: PayloadWellFormed.Payload[key] } = {
+    const payload: PayloadWellFormed.Payload = {
         version: -38,
         author: Some(whoAmI),
         encryption,
