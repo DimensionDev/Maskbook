@@ -13,7 +13,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { Account } from './Account'
-import { resolveTraitLinkOnOpenSea } from '../pipes'
+import { resolveTraitLinkOnOpenSea, resolveUserUrlOnCurrentProvider } from '../pipes'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -67,9 +67,10 @@ export function TokenTab(props: TokenTabProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const chainId = useChainId()
-    const { token, asset } = CollectibleState.useContainer()
+    const { token, asset, provider } = CollectibleState.useContainer()
 
     if (!asset.value) return null
+    console.log(asset.value, 'fff')
     return (
         <CollectibleTab classes={{ content: classes.content }}>
             <Box className={classes.container}>
@@ -79,7 +80,15 @@ export function TokenTab(props: TokenTabProps) {
                 {asset.value.creator ? (
                     <Typography variant="body2">
                         {t('plugin_collectible_create_by')}{' '}
-                        <Link href={asset.value.creator.link} target="_blank" rel="noopener noreferrer">
+                        <Link
+                            href={resolveUserUrlOnCurrentProvider(
+                                chainId,
+                                asset.value.creator.address,
+                                provider,
+                                asset.value.creator.user?.username,
+                            )}
+                            target="_blank"
+                            rel="noopener noreferrer">
                             <Account
                                 address={asset.value.creator.address}
                                 username={asset.value.creator.user?.username}
@@ -89,7 +98,15 @@ export function TokenTab(props: TokenTabProps) {
                 ) : asset.value.owner ? (
                     <Typography variant="body2">
                         {t('plugin_collectible_owned_by')}{' '}
-                        <Link href={asset.value.owner.link} target="_blank" rel="noopener noreferrer">
+                        <Link
+                            href={resolveUserUrlOnCurrentProvider(
+                                chainId,
+                                asset.value.owner?.address,
+                                provider,
+                                asset.value.owner?.user?.username,
+                            )}
+                            target="_blank"
+                            rel="noopener noreferrer">
                             <Account
                                 address={asset.value.owner?.user?.username}
                                 username={asset.value.owner?.address}

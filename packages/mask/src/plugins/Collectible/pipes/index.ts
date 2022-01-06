@@ -1,7 +1,7 @@
 import { identity } from 'lodash-unified'
 import { Network } from 'opensea-js'
 import { ChainId, createLookupTableResolver, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
-import { NullAddress, RaribleRopstenUserURL, RaribleUserURL } from '../constants'
+import { NullAddress, RaribleRopstenUserURL, RaribleUserURL, RaribleRinkebyUserURL } from '../constants'
 import { OpenSeaAssetEventType, RaribleEventType } from '../types'
 import urlcat from 'urlcat'
 
@@ -55,10 +55,14 @@ export const resolveCollectibleProviderName = createLookupTableResolver<NonFungi
     },
 )
 
-export const resolveRaribleUserNetwork = createLookupTableResolver<ChainId.Mainnet | ChainId.Ropsten, string>(
+export const resolveRaribleUserNetwork = createLookupTableResolver<
+    ChainId.Mainnet | ChainId.Ropsten | ChainId.Rinkeby,
+    string
+>(
     {
         [ChainId.Mainnet]: RaribleUserURL,
         [ChainId.Ropsten]: RaribleRopstenUserURL,
+        [ChainId.Rinkeby]: RaribleRinkebyUserURL,
     },
     RaribleUserURL,
 )
@@ -71,10 +75,14 @@ export const resolveLinkOnOpenSea = createLookupTableResolver<ChainId.Mainnet | 
     'https://opensea.io',
 )
 
-export const resolveLinkOnRarible = createLookupTableResolver<ChainId.Mainnet | ChainId.Rinkeby, string>(
+export const resolveLinkOnRarible = createLookupTableResolver<
+    ChainId.Mainnet | ChainId.Ropsten | ChainId.Rinkeby,
+    string
+>(
     {
         [ChainId.Mainnet]: 'https://rarible.com',
         [ChainId.Rinkeby]: 'https://rinkeby.rarible.com/',
+        [ChainId.Ropsten]: 'https://ropsten.rarible.com/',
     },
     'https://rarible.com',
 )
@@ -103,6 +111,36 @@ export function resolveAssetLinkOnCurrentProvider(
             return urlcat(
                 resolveLinkOnRarible(chainId === ChainId.Mainnet ? ChainId.Mainnet : ChainId.Rinkeby),
                 `/token/${address}:${id}`,
+            )
+        case NonFungibleAssetProvider.NFTSCAN:
+            return ''
+        default:
+            return ''
+    }
+}
+
+export function resolveUserUrlOnCurrentProvider(
+    chainId: ChainId,
+    address: string,
+    provider: NonFungibleAssetProvider,
+    username?: string,
+) {
+    switch (provider) {
+        case NonFungibleAssetProvider.RARIBLE:
+            return urlcat(
+                resolveRaribleUserNetwork(
+                    chainId === ChainId.Mainnet
+                        ? ChainId.Mainnet
+                        : chainId === ChainId.Rinkeby
+                        ? ChainId.Rinkeby
+                        : ChainId.Ropsten,
+                ),
+                `/${address}`,
+            )
+        case NonFungibleAssetProvider.OPENSEA:
+            return urlcat(
+                resolveLinkOnOpenSea(chainId === ChainId.Mainnet ? ChainId.Mainnet : ChainId.Rinkeby),
+                `/${username ?? ''}`,
             )
         case NonFungibleAssetProvider.NFTSCAN:
             return ''
