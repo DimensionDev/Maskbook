@@ -1,6 +1,6 @@
-import { useCallback, cloneElement, isValidElement } from 'react'
+import { useCallback, cloneElement, isValidElement, useMemo, useEffect } from 'react'
 import type { Web3Plugin } from '@masknet/plugin-infra'
-import { WalletAdapterNetwork } from '@solana/wallet-adapter-base'
+import { Adapter, WalletAdapterNetwork, WalletReadyState } from '@solana/wallet-adapter-base'
 import { SolletWalletAdapter } from '@solana/wallet-adapter-wallets'
 
 import { getStorage } from '../../storage'
@@ -12,7 +12,13 @@ export function ProviderIconClickBait({
     onSubmit,
     onClick,
 }: Web3Plugin.UI.ProviderIconClickBaitProps) {
-    const solletAdapter = new SolletWalletAdapter({ network: WalletAdapterNetwork.Mainnet })
+    const solletAdapter = useMemo(
+        () =>
+            new SolletWalletAdapter({
+                network: WalletAdapterNetwork.Mainnet,
+            }),
+        [],
+    )
     const onLogIn = useCallback(async () => {
         onClick?.(network, provider)
         await solletAdapter.connect()
