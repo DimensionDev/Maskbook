@@ -66,7 +66,6 @@
     "days": "Every {{days}} days",
     "decrypted_postbox_add_recipients": "Append recipients",
     "decrypted_postbox_decrypting": "Mask decrypting…",
-    "decrypted_postbox_decrypting_finding_person_key": "Mask is looking for the public key of the author…",
     "decrypted_postbox_decrypting_finding_post_key": "Mask is looking for the key to decrypt this post…",
     "decrypted_postbox_decrypting_finding_post_key_long": "Mask is still trying to decrypt this post, but it seems like the post is not shared with you.",
     "decrypted_postbox_author_mismatch": "Originally posted by {{name}}",

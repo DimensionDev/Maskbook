@@ -22,7 +22,6 @@
     "dashboard_no_collectible_found": "コレクションが見つかりません",
     "decrypted_postbox_add_recipients": "受信者を追加",
     "decrypted_postbox_decrypting": "Mask が復号しています。",
-    "decrypted_postbox_decrypting_finding_person_key": "Mask は公開鍵を探しています…",
     "decrypted_postbox_decrypting_finding_post_key": "Mask はこの投稿を復号するために ポストキーを取得しています…",
     "decrypted_postbox_author_mismatch": "最初の作者は {{name}}",
     "decrypted_postbox_title": "Mask で暗号化されています:",

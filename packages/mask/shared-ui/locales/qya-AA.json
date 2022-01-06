@@ -66,7 +66,6 @@
     "days": "crwdns4107:0{{days}}crwdne4107:0",
     "decrypted_postbox_add_recipients": "crwdns4109:0crwdne4109:0",
     "decrypted_postbox_decrypting": "crwdns4111:0crwdne4111:0",
-    "decrypted_postbox_decrypting_finding_person_key": "crwdns4115:0crwdne4115:0",
     "decrypted_postbox_decrypting_finding_post_key": "crwdns4117:0crwdne4117:0",
     "decrypted_postbox_author_mismatch": "crwdns4119:0{{name}}crwdne4119:0",
     "decrypted_postbox_title": "crwdns4121:0crwdne4121:0",

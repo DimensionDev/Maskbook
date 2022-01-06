@@ -66,7 +66,6 @@
     "days": "{{days}} 일마다",
     "decrypted_postbox_add_recipients": "받는사람 추가",
     "decrypted_postbox_decrypting": "Mask 해독 중",
-    "decrypted_postbox_decrypting_finding_person_key": "Mask가 상대방의 공개 키를 찾고 있습니다...",
     "decrypted_postbox_decrypting_finding_post_key": "Mask가 이 게시글의 키를 검색하고 있습니다.",
     "decrypted_postbox_author_mismatch": "{{name}}님이 이 글을 처음 게시했습니다.",
     "decrypted_postbox_title": "Mask로 해독되었습니다:",

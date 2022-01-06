@@ -66,7 +66,6 @@
     "days": "每隔 {{days}} 天",
     "decrypted_postbox_add_recipients": "追加收件人",
     "decrypted_postbox_decrypting": "Mask正在解密中…",
-    "decrypted_postbox_decrypting_finding_person_key": "Mask 正在寻找作者的公钥…",
     "decrypted_postbox_decrypting_finding_post_key": "Mask 正在获取贴文密钥以解密此贴文…",
     "decrypted_postbox_author_mismatch": "最初发布于 {{name}}",
     "decrypted_postbox_title": "由Mask解密：",

@@ -49,7 +49,6 @@
     "dashboard_no_collectible_found": "找不到收藏品",
     "decrypted_postbox_add_recipients": "新增收件人",
     "decrypted_postbox_decrypting": "Mask 正在解密…",
-    "decrypted_postbox_decrypting_finding_person_key": "Mask 正在尋找這個作者的公鑰…",
     "decrypted_postbox_decrypting_finding_post_key": "Mask 正在取得貼文金鑰以解密此貼文…",
     "decrypted_postbox_author_mismatch": "最初由 {{name}} 發佈",
     "decrypted_postbox_title": "已由 Mask 解密：",
