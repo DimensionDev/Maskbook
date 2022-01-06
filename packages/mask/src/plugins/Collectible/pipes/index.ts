@@ -71,7 +71,7 @@ export const resolveLinkOnOpenSea = createLookupTableResolver<ChainId.Mainnet | 
     'https://opensea.io',
 )
 
-export const resolveLinkOnRaribale = createLookupTableResolver<ChainId.Mainnet | ChainId.Rinkeby, string>(
+export const resolveLinkOnRarible = createLookupTableResolver<ChainId.Mainnet | ChainId.Rinkeby, string>(
     {
         [ChainId.Mainnet]: 'https://rarible.com',
         [ChainId.Rinkeby]: 'https://rinkeby.rarible.com/',
@@ -101,7 +101,7 @@ export function resolveAssetLinkOnCurrentProvider(
             )
         case NonFungibleAssetProvider.RARIBLE:
             return urlcat(
-                resolveLinkOnRaribale(chainId === ChainId.Mainnet ? ChainId.Mainnet : ChainId.Rinkeby),
+                resolveLinkOnRarible(chainId === ChainId.Mainnet ? ChainId.Mainnet : ChainId.Rinkeby),
                 `/token/${address}:${id}`,
             )
         case NonFungibleAssetProvider.NFTSCAN:
