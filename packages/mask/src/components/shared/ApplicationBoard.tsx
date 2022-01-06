@@ -15,8 +15,6 @@ import { NetworkTab } from './NetworkTab'
 import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialog'
 import { NetworkPluginID, PluginId, usePluginIDContext } from '@masknet/plugin-infra'
 
-
-
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
         position: 'sticky',
@@ -85,7 +83,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 15,
     },
 }))
-const CHAIN_ID_LIST = [
+const SUPPORTED_CHAIN_ID_LIST = [
     ChainId.Mainnet,
     ChainId.BSC,
     ChainId.Matic,
@@ -95,7 +93,6 @@ const CHAIN_ID_LIST = [
     ChainId.Fantom,
     ChainId.Avalanche,
 ]
-
 
 export interface MaskAppEntry {
     title: string
@@ -294,7 +291,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                         ]),
                         createEntry('dHEDGE', new URL('./assets/dHEDGE.png', import.meta.url).toString(), () => {}),
                     ],
-                    CHAIN_ID_LIST,
+                    SUPPORTED_CHAIN_ID_LIST,
                 ),
             undefined,
             true,
@@ -313,7 +310,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                             () => {},
                         ),
                     ],
-                    CHAIN_ID_LIST,
+                    SUPPORTED_CHAIN_ID_LIST,
                 ),
             undefined,
             true,

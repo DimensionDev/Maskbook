@@ -2096,9 +2096,18 @@
             "logoURI": "https://raw.githubusercontent.com/traderjoe-xyz/joe-tokenlists/main/logos/0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7/logo.png"
         },
         "infoURL": "https://snowtrace.io/",
-        "shortName": "Avalanche",
+        "shortName": "AVAX",
         "chainId": 43114,
-        "networkId": 43114
+        "networkId": 43114,
+        "explorers": [
+            {
+                "name": "snowtrace",
+                "url": "https://snowtrace.io/",
+                "icon": "avalanche",
+                "standard": "EIP3091",
+                "logoURI": "https://snowtrace.io/images/svg/brands/main.svg?v=21.12.4.1"
+            }
+        ]
     },
     {
         "name": "Celo Alfajores Testnet",

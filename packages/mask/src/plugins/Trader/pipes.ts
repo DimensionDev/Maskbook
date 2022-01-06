@@ -107,7 +107,7 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
         case TradeProvider.BANCOR:
             return 'https://app.bancor.network/eth/swap'
         case TradeProvider.TRADERJOE:
-            return 'https://traderjoexyz.com/'
+            return 'https://traderjoexyz.com/#/trade'
         case TradeProvider.OPENOCEAN:
             return 'https://openocean.finance/classic'
         default:
