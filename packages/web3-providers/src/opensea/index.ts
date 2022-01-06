@@ -101,8 +101,8 @@ function createAssetLink(account: OpenSeaCustomAccount | undefined) {
 function createNFTAsset(asset: OpenSeaResponse, chainId: ChainId): NonFungibleTokenAPI.Asset {
     const desktopOrder = head(
         asset.orders?.sort((a, b) =>
-            new BigNumber(getOrderUSDPrice(a.current_price, a.payment_token_contract?.usd_price) ?? 0)
-                .minus(getOrderUSDPrice(b.current_price, b.payment_token_contract?.usd_price) ?? 0)
+            new BigNumber(getOrderUSDPrice(b.current_price, b.payment_token_contract?.usd_price) ?? 0)
+                .minus(getOrderUSDPrice(a.current_price, a.payment_token_contract?.usd_price) ?? 0)
                 .toNumber(),
         ),
     )
