@@ -16,7 +16,7 @@ import { SearchIcon } from '@masknet/icons'
 import CheckIcon from '@mui/icons-material/Check'
 import { Trans } from 'react-i18next'
 import { useUpdate } from 'react-use'
-import { NFTLuckyDropStyledAssetPlayer } from './NFTLuckyDropStyledAssetPlayer'
+import { NFTCardStyledAssetPlayer } from './NFTCardStyledAssetPlayer'
 import { findLastIndex, uniqBy } from 'lodash-unified'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants'
 
@@ -203,8 +203,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         minHeight: '0px !important',
         maxWidth: 'none',
         transform: 'translateY(10px)',
-        width: '64px !important',
-        height: '64px !important',
+        width: 64,
+        height: 64,
     },
     selectedTokenAmount: {
         color: props.isSelectSharesExceed ? '#FF5F5F' : '#1C68F3',
@@ -494,7 +494,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             </Box>
                         ) : (
                             <Box className={classNames(classes.wrapper, classes.nftWrapper)}>
-                                <NFTLuckyDropStyledAssetPlayer
+                                <NFTCardStyledAssetPlayer
                                     contractAddress={contract.address}
                                     chainId={contract.chainId}
                                     tokenId={tokenId}
@@ -643,7 +643,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                                             : '',
                                                     )}
                                                     key={i.toString()}>
-                                                    <NFTLuckyDropStyledAssetPlayer
+                                                    <NFTCardStyledAssetPlayer
                                                         contractAddress={token.contractDetailed.address}
                                                         tokenId={token.tokenId}
                                                         chainId={token.contractDetailed.chainId}

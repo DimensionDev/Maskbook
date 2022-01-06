@@ -4,7 +4,7 @@ import { List, ListItem, ListProps, Skeleton, Typography } from '@mui/material'
 import classnames from 'classnames'
 import type { FC, HTMLProps } from 'react'
 import { useI18N } from '../../../utils'
-import { NFTLuckyDropStyledAssetPlayer } from './NFTLuckyDropStyledAssetPlayer'
+import { NFTCardStyledAssetPlayer } from './NFTCardStyledAssetPlayer'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -108,7 +108,7 @@ export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claime
 
     return (
         <div className={classnames(className, classes.nft)} {...rest}>
-            <NFTLuckyDropStyledAssetPlayer
+            <NFTCardStyledAssetPlayer
                 classes={{
                     loadingFailImage: classes.loadingFailImage,
                 }}

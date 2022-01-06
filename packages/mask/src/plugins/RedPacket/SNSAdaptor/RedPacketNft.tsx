@@ -21,7 +21,7 @@ import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
-import { NFTLuckyDropStyledAssetPlayer } from './NFTLuckyDropStyledAssetPlayer'
+import { NFTCardStyledAssetPlayer } from './NFTCardStyledAssetPlayer'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -223,6 +223,10 @@ const useStyles = makeStyles()((theme) => ({
     assetPlayerIframe: {
         marginBottom: 16,
     },
+    loadingFailImage: {
+        height: 160,
+        width: 120,
+    },
 }))
 export interface RedPacketNftProps {
     payload: RedPacketNftJSONPayload
@@ -355,12 +359,13 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
 
                 {availability.isClaimed ? (
                     <Box className={classes.tokenWrapper}>
-                        <NFTLuckyDropStyledAssetPlayer
+                        <NFTCardStyledAssetPlayer
                             chainId={payload.chainId}
                             contractAddress={payload.contractAddress}
                             tokenId={availability.claimed_id}
                             classes={{
                                 iframe: classes.assetPlayerIframe,
+                                loadingFailImage: classes.loadingFailImage,
                             }}
                             fallbackImage={new URL('./assets/nft-preview.png', import.meta.url)}
                         />

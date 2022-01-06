@@ -19,10 +19,6 @@ const useStyles = makeStyles()((theme) => ({
         height: 160,
         width: 120,
     },
-    loadingFailImage: {
-        height: 160,
-        width: 120,
-    },
     loadingIcon: {
         width: 36,
         height: 52,
@@ -35,7 +31,7 @@ interface NFTLuckyDropStyledAssetPlayerProps extends withClasses<'loadingFailIma
     tokenId: string
     fallbackImage: URL
 }
-export function NFTLuckyDropStyledAssetPlayer(props: NFTLuckyDropStyledAssetPlayerProps) {
+export function NFTCardStyledAssetPlayer(props: NFTLuckyDropStyledAssetPlayerProps) {
     const { chainId, contractAddress, tokenId, fallbackImage } = props
     const classes = useStylesExtends(useStyles(), props)
     return (
