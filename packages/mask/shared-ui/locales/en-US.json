@@ -959,6 +959,7 @@
     "popups_wallet_contract_interaction": "Contract Interaction",
     "popups_wallet_contract_interaction_approve": "Approve",
     "popups_wallet_contract_interaction_transfer": "Transfer",
+    "popups_wallet_contract_interaction_create_lucky_drop": "Create Lucky Drop",
     "popups_wallet_contract_interaction_gas_fee": "Gas fee",
     "popups_wallet_contract_interaction_edit": "Edit",
     "popups_wallet_contract_interaction_total": "Total",

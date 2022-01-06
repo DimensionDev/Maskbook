@@ -27,7 +27,7 @@ export function useTokenPrice(
         coinId = getCoinGeckoCoinId(chainId)
     }
 
-    const category = contractAddress || coinId
+    const category = (contractAddress || coinId)?.toLocaleLowerCase()
 
     const [price, setPrice] = useState(0)
     useEffect(() => {
