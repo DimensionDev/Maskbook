@@ -74,7 +74,11 @@ function getTransactionDescription(
                     const amountOut = formatBalance(computedPayload.parameters.amountOutMin, tokenDetailed?.decimals, 2)
                     return `Swap ${amountIn} ${nativeTokenDetailed?.symbol} for ${amountOut} ${tokenDetailed?.symbol}`
                 case 'create_red_packet':
-                    return 'Lucky drop'
+                    return `Create lucky drop with ${formatBalance(
+                        computedPayload?.parameters._total_tokens,
+                        tokenDetailed?.decimals,
+                        2,
+                    )} ${tokenDetailed?.symbol}`
                 default:
                     return `${computedPayload.name ?? 'Contract Interaction'} ${
                         computedPayload._tx.value
@@ -129,6 +133,9 @@ export function RecentTransactionDescription(props: RecentTransactionDescription
             case 'swapExactTokensForTokens':
                 inputTokenAddress = first(computedPayload.parameters.path)
                 tokenAddress = last(computedPayload.parameters.path)
+                break
+            case 'create_red_packet':
+                tokenAddress = computedPayload.parameters._token_addr
                 break
             default:
                 tokenAddress = ''
