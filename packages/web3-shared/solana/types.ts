@@ -1,5 +1,5 @@
 export enum ChainId {
-    MainnetBeta = 1,
+    Mainnet = 1,
     Testnet = 2,
     Devnet = 3,
 }

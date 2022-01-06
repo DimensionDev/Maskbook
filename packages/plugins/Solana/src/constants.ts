@@ -10,7 +10,7 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
     {
         ID: `${PLUGIN_ID}_solana`,
         networkSupporterPluginID: PLUGIN_ID,
-        chainId: ChainId.MainnetBeta,
+        chainId: ChainId.Mainnet,
         type: NetworkType.Solana,
         name: 'Solana',
         icon: new URL('./assets/solana.png', import.meta.url),
@@ -29,13 +29,6 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
     },
 ]
 export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
-    {
-        ID: `${PLUGIN_ID}_sollet`,
-        providerAdaptorPluginID: PLUGIN_ID,
-        type: ProviderType.Sollet,
-        name: 'Sollet',
-        icon: new URL('./assets/sollet.png', import.meta.url),
-    },
     {
         ID: `${PLUGIN_ID}_phantom`,
         providerAdaptorPluginID: PLUGIN_ID,

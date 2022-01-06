@@ -9,6 +9,7 @@ import {
     resolveTransactionLinkOnExplorer,
 } from '@masknet/web3-shared-solana'
 import BigNumber from 'bignumber.js'
+import { getFungibleAssets } from '../../apis'
 import { formatAddress } from '../../helpers'
 import { getStorage, StorageDefaultValue } from '../../storage'
 
@@ -17,7 +18,7 @@ function createSubscriptionFromPublicKey<T>(getter: (value: typeof StorageDefaul
 }
 
 export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilities.Capabilities {
-    const chainId = ChainId.MainnetBeta
+    const chainId = ChainId.Mainnet
 
     return {
         Shared: {
@@ -42,7 +43,9 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
                 return publicKey ? ProviderType.Sollet : undefined
             }),
         },
-        Asset: {},
+        Asset: {
+            getFungibleAssets,
+        },
         Utils: {
             formatAddress,
             formatBalance: (value) => new BigNumber(value).toFixed(),

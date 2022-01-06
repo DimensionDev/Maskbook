@@ -4,7 +4,7 @@ import { ChainId, ProviderType } from '../types'
 
 export const resolveChainName = createLookupTableResolver<ChainId, string>(
     {
-        [ChainId.MainnetBeta]: 'mainnet',
+        [ChainId.Mainnet]: 'mainnet',
         [ChainId.Testnet]: 'testnet',
         [ChainId.Devnet]: 'devnet',
     },
@@ -21,7 +21,7 @@ export const resolveProviderName = createLookupTableResolver<ProviderType, strin
 
 export const resolveLinkOnExplorer = createLookupTableResolver<ChainId, string>(
     {
-        [ChainId.MainnetBeta]: 'https://explorer.solana.com/',
+        [ChainId.Mainnet]: 'https://explorer.solana.com/',
         [ChainId.Testnet]: 'https://explorer.solana.com/?cluster=testnet',
         [ChainId.Devnet]: 'https://explorer.solana.com/?cluster=devnet',
     },
