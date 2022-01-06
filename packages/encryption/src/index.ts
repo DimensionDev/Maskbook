@@ -15,6 +15,7 @@ export {
     decrypt,
     DecryptError,
     DecryptProgressKind,
+    ErrorReasons,
     type DecryptOptions,
     type DecryptIO,
     type DecryptEphemeralECDH_PostKey,

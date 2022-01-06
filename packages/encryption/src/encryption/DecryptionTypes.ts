@@ -99,7 +99,7 @@ export interface DecryptSuccess {
     type: DecryptProgressKind.Success
     content: TypedMessage
 }
-enum ErrorReasons {
+export enum ErrorReasons {
     PayloadBroken = '[@masknet/encryption] Payload is broken.',
     PayloadDecryptedButTypedMessageBroken = "[@masknet/encryption] Payload decrypted, but it's inner TypedMessage is broken.",
     CannotDecryptAsAuthor = '[@masknet/encryption] Failed decrypt as the author of this payload.',
@@ -107,6 +107,8 @@ enum ErrorReasons {
     AuthorPublicKeyNotFound = "[@masknet/encryption] Cannot found author's public key",
     PrivateKeyNotFound = '[@masknet/encryption] Cannot continue to decrypt because there is no private key found.',
     NotShareTarget = '[@masknet/encryption] No valid key is found. Likely this post is not shared with you',
+    // Not used in this library.
+    UnrecognizedAuthor = '[@masknet/encryption] No author is recognized which is required for the image steganography decoding.',
 }
 export class DecryptError extends Error {
     static Reasons = ErrorReasons
