@@ -15,12 +15,15 @@ export {
     decrypt,
     DecryptError,
     DecryptProgressKind,
+    DecryptIntermediateProgressKind,
     ErrorReasons,
     type DecryptOptions,
     type DecryptIO,
     type DecryptEphemeralECDH_PostKey,
     type DecryptStaticECDH_PostKey,
     type DecryptProgress,
+    type DecryptIntermediateProgress,
+    type DecryptReportedInfo,
     type DecryptSuccess,
 } from './encryption'
 export {
@@ -38,3 +41,5 @@ export {
     steganographyEncodeImage,
     GrayscaleAlgorithm,
 } from './image-steganography'
+// TODO: remove them in the future
+export { importAsymmetryKeyFromJsonWebKeyOrSPKI, importAESFromJWK } from './utils'
