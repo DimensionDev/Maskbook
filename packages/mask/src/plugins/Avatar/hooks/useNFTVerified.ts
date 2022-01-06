@@ -4,5 +4,8 @@ import { PluginNFTAvatarRPC } from '../messages'
 import type { NFTVerified } from '../types'
 
 export function useNFTVerified(address: string): AsyncState<NFTVerified> {
-    return useAsync(async () => PluginNFTAvatarRPC.getNFTContractVerifiedFromJSON(address), [address])
+    return useAsync(async () => {
+        if (!address) return
+        return PluginNFTAvatarRPC.getNFTContractVerifiedFromJSON(address)
+    }, [address])
 }

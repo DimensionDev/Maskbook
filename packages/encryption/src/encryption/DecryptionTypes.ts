@@ -111,6 +111,7 @@ export interface DecryptEphemeralECDH_PostKey extends DecryptStaticECDH_PostKey 
     ephemeralPublicKeySignature?: Uint8Array
 }
 export enum DecryptProgressKind {
+    Started = 'started',
     Success = 'success',
     Error = 'error',
     Info = 'info',
@@ -148,7 +149,6 @@ export enum ErrorReasons {
     NotShareTarget = '[@masknet/encryption] No valid key is found. Likely this post is not shared with you',
     // Not used in this library.
     UnrecognizedAuthor = '[@masknet/encryption] No author is recognized which is required for the image steganography decoding.',
-    CurrentProfileDoesNotConnectedToPersona = '[@masknet/encryption] Cannot get the public key of the current profile therefore cannot decrypt by E2E.',
 }
 export class DecryptError extends Error {
     static Reasons = ErrorReasons
