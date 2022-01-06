@@ -246,7 +246,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                                 if (!!ensContent) setPopoverOpen(true)
                                 setMinPopoverWidth(event.currentTarget.clientWidth)
                             },
-                            spellCheck: false
+                            spellCheck: false,
                         }}
                         onChange={(e) => setAddress(e.currentTarget.value)}
                         label={t.wallets_transfer_to_address()}
