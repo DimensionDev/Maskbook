@@ -287,7 +287,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                     <Grid item xs={12}>
                         <List className={classes.tokenSelector}>
                             {tokenList.map((value, i) => (
-                                <ListItem key={i.toString()} className={classNames(classes.tokenSelectorWrapper)}>
+                                <ListItem key={i} className={classNames(classes.tokenSelectorWrapper)}>
                                     <NftImage
                                         token={value}
                                         classes={{

@@ -89,7 +89,7 @@ export function TimelineView(props: TimelineViewProps) {
             <Grid container className={classes.timeline}>
                 <Grid item className={classes.timelinePadding} />
                 {timeline.map((timelineEvent, index) => (
-                    <Grid item className={classes.timelineCells} key={`timeline-${timelineEvent.date.toString()}`}>
+                    <Grid item className={classes.timelineCells} key={index}>
                         <div className={classes.timelineEvent}>
                             <Typography variant="caption" color="textSecondary" className={classes.text}>
                                 {timelineEvent.eventOnDate}

@@ -8,6 +8,10 @@
     "editor.tabSize": 4,
     "json.schemas": [
         {
+            "fileMatch": ["/tsconfig.*.json"],
+            "url": "http://json.schemastore.org/tsconfig"
+        },
+        {
             "fileMatch": ["/packages/mask/src/manifest.json"],
             "url": "http://json.schemastore.org/chrome-manifest"
         },
