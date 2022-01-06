@@ -30,8 +30,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Avalanche": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Avalanche": ""
     },
     "ITO2_CONTRACT_ADDRESS": {
         "Mainnet": "0xc2CFbF22d6Dc87D0eE18d38d73733524c109Ff46",
@@ -47,8 +47,8 @@
         "Arbitrum_Rinkeby": "0x9b3649eC8C9f68484acC76D437B145a4e58Bf2A2",
         "xDai": "0x913975af2Bb8a6Be4100D7dc5e9765B77F6A5d6c",
         "Celo": "",
-        "Avalanche": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Avalanche": ""
     },
     "ITO2_CONTRACT_CREATION_BLOCK_HEIGHT": {
         "Mainnet": 12766513,
@@ -64,8 +64,8 @@
         "Arbitrum_Rinkeby": 708696,
         "xDai": 17865755,
         "Celo": "",
-        "Avalanche": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Avalanche": ""
     },
     "DEFAULT_QUALIFICATION_ADDRESS": {
         "Mainnet": "0x81b6ae377e360dcad63611846a2516f4ba8c88ac",
@@ -81,8 +81,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Avalanche": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Avalanche": ""
     },
     "DEFAULT_QUALIFICATION2_ADDRESS": {
         "Mainnet": "0x4dC5f343Fe57E4fbDA1B454d125D396A3181272c",
@@ -98,8 +98,8 @@
         "Arbitrum_Rinkeby": "0xEbd753E66649C824241E63894301BA8Db5DBF5Bb",
         "xDai": "0x71834a3FDeA3E70F14a93ED85c6be70925D0CAd9",
         "Celo": "",
-        "Avalanche": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Avalanche": ""
     },
     "SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-mainnet",
@@ -115,7 +115,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-xdai",
         "Celo": "",
-        "Avalanche": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Avalanche": ""
     }
 }

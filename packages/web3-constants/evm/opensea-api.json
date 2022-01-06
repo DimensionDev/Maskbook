@@ -13,8 +13,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Avalanche": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Avalanche": ""
     },
     "GET_SINGLE_ASSET_URL": {
         "Mainnet": "https://api.opensea.io/api/v1/asset",
@@ -30,8 +30,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Avalanche": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Avalanche": ""
     },
     "GET_ASSETS_URL": {
         "Mainnet": "https://api.opensea.io/api/v1/assets",
@@ -47,7 +47,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Avalanche": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Avalanche": ""
     }
 }

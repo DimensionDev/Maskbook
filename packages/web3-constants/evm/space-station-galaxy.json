@@ -13,8 +13,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Avalanche": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Avalanche": ""
     },
     "SUBGRAPH_URL": {
         "Mainnet": "",
@@ -30,7 +30,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Avalanche": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Avalanche": ""
     }
 }
