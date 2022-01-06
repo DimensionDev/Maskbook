@@ -1,14 +1,14 @@
 import classNames from 'classnames'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { AssetPlayer } from '@masknet/shared'
+import { AssetPlayer } from '../AssetPlayer'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '160px !important',
+        height: 160,
         width: 120,
         overflow: 'hidden',
     },
@@ -25,11 +25,12 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface NFTLuckyDropStyledAssetPlayerProps extends withClasses<'loadingFailImage' | 'iframe'> {
+interface NFTLuckyDropStyledAssetPlayerProps
+    extends withClasses<'loadingFailImage' | 'iframe' | 'wrapper' | 'loadingPlaceholder'> {
     chainId: ChainId
     contractAddress: string
     tokenId: string
-    fallbackImage: URL
+    fallbackImage?: URL
 }
 export function NFTCardStyledAssetPlayer(props: NFTLuckyDropStyledAssetPlayerProps) {
     const { chainId, contractAddress, tokenId, fallbackImage } = props
@@ -41,7 +42,7 @@ export function NFTCardStyledAssetPlayer(props: NFTLuckyDropStyledAssetPlayerPro
                 contractAddress,
                 tokenId: tokenId,
             }}
-            fallbackImage={fallbackImage}
+            fallbackImage={fallbackImage ?? new URL('./nft_token_fallback.png', import.meta.url)}
             classes={{
                 iframe: classNames(classes.wrapper, classes.iframe),
                 errorPlaceholder: classes.wrapper,

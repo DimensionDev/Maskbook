@@ -21,7 +21,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { RedpacketMessagePanel } from './RedpacketMessagePanel'
 import { SelectNftTokenDialog, OrderedERC721Token } from './SelectNftTokenDialog'
 import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog'
-import { NFTCardStyledAssetPlayer } from './NFTCardStyledAssetPlayer'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { NFTSelectOption } from '../types'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants'
 
@@ -319,7 +319,6 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                         classes={{
                                             loadingFailImage: classes.loadingFailImage,
                                         }}
-                                        fallbackImage={new URL('./assets/nft_token_fallback.png', import.meta.url)}
                                     />
                                     <div className={classes.nftNameWrapper}>
                                         <Typography className={classes.nftName} color="textSecondary">

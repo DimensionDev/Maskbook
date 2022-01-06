@@ -21,7 +21,7 @@ import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
-import { NFTCardStyledAssetPlayer } from './NFTCardStyledAssetPlayer'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

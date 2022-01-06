@@ -2,7 +2,8 @@ import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { memo, useMemo, useState } from 'react'
 import { Checkbox, ImageListItem, ImageListItemBar, Box } from '@mui/material'
 import { getMaskColor, makeStyles, MaskColorVar } from '@masknet/theme'
-import { MiniMaskIcon, CheckedBorderIcon, CheckedIcon } from '@masknet/icons'
+import { CheckedBorderIcon, CheckedIcon } from '@masknet/icons'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 
 const useStyles = makeStyles()({
     card: {
@@ -39,6 +40,23 @@ const useStyles = makeStyles()({
         padding: 0,
         lineHeight: '16px',
     },
+    wrapper: {
+        borderTopRightRadius: '12px',
+        borderTopLeftRadius: '12px',
+        width: '140px !important',
+        height: '186px !important',
+    },
+    loadingPlaceholder: {
+        width: '140px !important',
+        height: '186px !important',
+    },
+    loadingFailImage: {
+        minHeight: '0px !important',
+        maxWidth: 'none',
+        transform: 'translateY(10px)',
+        width: 64,
+        height: 64,
+    },
 })
 
 export interface NFTCardProps {
@@ -49,7 +67,6 @@ export interface NFTCardProps {
 
 export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect }) => {
     const { classes } = useStyles()
-    const [loadFailed, setLoadFailed] = useState(false)
     const [checked, setChecked] = useState(!!selectedTokenId && selectedTokenId === token.tokenId)
 
     const isDisabled = useMemo(
@@ -77,26 +94,22 @@ export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect })
     return (
         <ImageListItem
             sx={{
-                borderTopLeftRadius: '10px',
-                borderTopRightRadius: '10px',
+                borderRadius: '12px',
                 mb: 6,
                 maxWidth: '140px',
                 background: (theme) => (theme.palette.mode === 'dark' ? getMaskColor(theme).white : '#F9F9FA'),
             }}
             className={isDisabled ? classes.disabled : ''}>
-            {loadFailed || !token.info.mediaUrl ? (
-                <div className={classes.container}>
-                    <div className={classes.placeholder}>
-                        <MiniMaskIcon viewBox="0 0 48 48" sx={{ fontSize: 48 }} />
-                    </div>
-                </div>
-            ) : (
-                <img
-                    onError={() => setLoadFailed(true)}
-                    src={token.info.mediaUrl}
-                    style={{ width: '100%', height: '100%', borderRadius: '8px 8px 0px 0px', objectFit: 'cover' }}
-                />
-            )}
+            <NFTCardStyledAssetPlayer
+                contractAddress={token.contractDetailed.address}
+                chainId={token.contractDetailed.chainId}
+                tokenId={token.tokenId}
+                classes={{
+                    loadingFailImage: classes.loadingFailImage,
+                    loadingPlaceholder: classes.loadingPlaceholder,
+                    wrapper: classes.wrapper,
+                }}
+            />
             {NFTNameBar}
             <Box className={classes.checkbox}>
                 <Checkbox

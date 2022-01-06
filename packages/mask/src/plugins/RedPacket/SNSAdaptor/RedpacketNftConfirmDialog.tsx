@@ -26,7 +26,7 @@ import { useCompositionContext } from '@masknet/plugin-infra'
 import { RedPacketNftMetaKey } from '../constants'
 import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketRPC } from '../messages'
-import { NFTCardStyledAssetPlayer } from './NFTCardStyledAssetPlayer'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -295,7 +295,6 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                                         classes={{
                                             loadingFailImage: classes.loadingFailImage,
                                         }}
-                                        fallbackImage={new URL('./assets/nft_token_fallback.png', import.meta.url)}
                                     />
 
                                     <div className={classes.nftNameWrapper}>
