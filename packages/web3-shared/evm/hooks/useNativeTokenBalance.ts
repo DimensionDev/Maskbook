@@ -1,5 +1,5 @@
-import { useAccount } from './useAccount'
 import { useAsyncRetry } from 'react-use'
+import { useAccount } from './useAccount'
 import { useBalance } from './useBalance'
 
 /**

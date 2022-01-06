@@ -4,6 +4,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "bignumber.js": "9.0.2"
+    "bignumber.js": "9.0.2",
+    "react-use": "^17.3.1"
   }
 }

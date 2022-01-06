@@ -990,8 +990,10 @@ importers:
   packages/web3-shared/base:
     specifiers:
       bignumber.js: 9.0.2
+      react-use: ^17.3.1
     dependencies:
       bignumber.js: 9.0.2
+      react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
 
   packages/web3-shared/evm:
     specifiers:
@@ -3433,6 +3435,7 @@ packages:
 
   /@dimensiondev/eslint-plugin/0.0.1-20220104011158-0905fa1_eslint@8.5.0:
     resolution: {integrity: sha512-DyAzOQp2Dp9Nzll6dTbujqyBAXOLhlWXvDdmnfX3+cHixhvaupbMeoh4MmujkOY681N5ohVm2eKWJd/ApC4lrQ==, tarball: download/@dimensiondev/eslint-plugin/0.0.1-20220104011158-0905fa1/931c157d880a7f8a78e87326a2840ad7d4583b5c714f155e045f73a11969fc82}
+    engines: {node: '>= 14'}
     peerDependencies:
       eslint: '>= 8'
     dependencies:

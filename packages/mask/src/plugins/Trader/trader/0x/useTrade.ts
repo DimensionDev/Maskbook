@@ -4,10 +4,8 @@ import {
     isNativeTokenAddress,
     NetworkType,
     useAccount,
-    useBlockNumber,
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
-import { useAsyncRetry } from 'react-use'
 import { safeUnreachable } from '@dimensiondev/kit'
 import { ZRX_AFFILIATE_ADDRESS } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
@@ -17,6 +15,7 @@ import { useTradeProviderSettings } from '../useTradeSettings'
 import { currentNetworkSettings } from '../../../Wallet/settings'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { TradeProvider } from '@masknet/public-api'
+import { DOUBLE_BLOCK_DELAY, useBeatRetry } from '@masknet/web3-shared-base'
 
 export function getNativeTokenLabel(networkType: NetworkType) {
     switch (networkType) {
@@ -50,45 +49,47 @@ export function useTrade(
     const account = useAccount()
     const { targetChainId } = TargetChainIdContext.useContainer()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(targetChainId)
-    const blockNumber = useBlockNumber()
 
     const slippage = useSlippageTolerance()
     const { pools } = useTradeProviderSettings(TradeProvider.ZRX)
-    return useAsyncRetry(async () => {
-        if (!inputToken || !outputToken) return null
-        const isExactIn = strategy === TradeStrategy.ExactIn
-        if (inputAmount === '0' && isExactIn) return null
-        if (outputAmount === '0' && !isExactIn) return null
+    return useBeatRetry(
+        async () => {
+            if (!inputToken || !outputToken) return null
+            const isExactIn = strategy === TradeStrategy.ExactIn
+            if (inputAmount === '0' && isExactIn) return null
+            if (outputAmount === '0' && !isExactIn) return null
 
-        const sellToken = isNativeTokenAddress(inputToken)
-            ? getNativeTokenLabel(getNetworkTypeFromChainId(targetChainId) ?? currentNetworkSettings.value)
-            : inputToken.address
-        const buyToken = isNativeTokenAddress(outputToken)
-            ? getNativeTokenLabel(getNetworkTypeFromChainId(targetChainId) ?? currentNetworkSettings.value)
-            : outputToken.address
-        return PluginTraderRPC.swapQuote(
-            {
-                sellToken,
-                buyToken,
-                takerAddress: account,
-                sellAmount: isExactIn ? inputAmount : void 0,
-                buyAmount: isExactIn ? void 0 : outputAmount,
-                skipValidation: true,
-                slippagePercentage: slippage,
-                affiliateAddress: ZRX_AFFILIATE_ADDRESS,
-            },
-            getNetworkTypeFromChainId(targetChainId) ?? currentNetworkSettings.value,
-        )
-    }, [
-        NATIVE_TOKEN_ADDRESS,
-        account,
-        strategy,
-        inputAmount,
-        outputAmount,
-        inputToken?.address,
-        outputToken?.address,
-        slippage,
-        pools.length,
-        blockNumber, // refresh api each block
-    ])
+            const sellToken = isNativeTokenAddress(inputToken)
+                ? getNativeTokenLabel(getNetworkTypeFromChainId(targetChainId) ?? currentNetworkSettings.value)
+                : inputToken.address
+            const buyToken = isNativeTokenAddress(outputToken)
+                ? getNativeTokenLabel(getNetworkTypeFromChainId(targetChainId) ?? currentNetworkSettings.value)
+                : outputToken.address
+            return PluginTraderRPC.swapQuote(
+                {
+                    sellToken,
+                    buyToken,
+                    takerAddress: account,
+                    sellAmount: isExactIn ? inputAmount : void 0,
+                    buyAmount: isExactIn ? void 0 : outputAmount,
+                    skipValidation: true,
+                    slippagePercentage: slippage,
+                    affiliateAddress: ZRX_AFFILIATE_ADDRESS,
+                },
+                getNetworkTypeFromChainId(targetChainId) ?? currentNetworkSettings.value,
+            )
+        },
+        DOUBLE_BLOCK_DELAY,
+        [
+            NATIVE_TOKEN_ADDRESS,
+            account,
+            strategy,
+            inputAmount,
+            outputAmount,
+            inputToken?.address,
+            outputToken?.address,
+            slippage,
+            pools.length,
+        ],
+    )
 }
