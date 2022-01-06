@@ -14,6 +14,7 @@ import {
     useChainId,
     useNativeTokenDetailed,
     useWeb3,
+    ChainIdOptionalRecord,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { z as zod } from 'zod'
@@ -89,7 +90,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const minGasPriceOfChain: { [key in ChainId]?: string } = {
+const minGasPriceOfChain: ChainIdOptionalRecord<string> = {
     [ChainId.BSC]: '0x12a05f200', // 5
     [ChainId.Matic]: '0x6fc23ac00', // 30
 }
