@@ -1,3 +1,4 @@
+import { concatArrayBuffer, decodeArrayBuffer } from '@dimensiondev/kit'
 import {
     AESCryptoKey,
     AESJsonWebKey,
@@ -73,7 +74,7 @@ async function getLocalKeyOf(
 //#endregion
 
 //#region ECDH
-export async function deriveAESByECDH(pub: EC_Public_CryptoKey) {
+export async function deriveAESByECDH(pub: EC_Public_CryptoKey, extractable = true) {
     const curve = (pub.algorithm as EcKeyAlgorithm).namedCurve || ''
     const sameCurvePrivateKeys = new Map<string, EC_Private_JsonWebKey>()
 
@@ -102,7 +103,7 @@ export async function deriveAESByECDH(pub: EC_Public_CryptoKey) {
                 { name: 'ECDH', public: pub },
                 k,
                 { name: 'AES-GCM', length: 256 },
-                false,
+                extractable,
                 ['encrypt', 'decrypt'],
             )
             deriveResult.set(id, result as AESCryptoKey)
@@ -113,6 +114,40 @@ export async function deriveAESByECDH(pub: EC_Public_CryptoKey) {
         console.warn('Failed to ECDH', ...failed.map((x) => x.reason))
     }
     return new IdentifierMap<ECKeyIdentifier, AESCryptoKey>(deriveResult, ECKeyIdentifier)
+}
+
+const KEY = decodeArrayBuffer('KEY')
+const IV = decodeArrayBuffer('IV')
+export async function deriveAESByECDH_version38_or_older(
+    pub: EC_Public_CryptoKey,
+    iv: Uint8Array,
+    extractable = false,
+) {
+    const deriveResult = (await deriveAESByECDH(pub, true)).__raw_map__
+    type R = [key: AESCryptoKey, iv: Uint8Array]
+    const next_map = new Map<string, R>()
+
+    for (const [id, key] of deriveResult) {
+        const derivedKeyRaw = await crypto.subtle.exportKey('raw', key)
+        const _a = concatArrayBuffer(derivedKeyRaw, iv)
+        const nextAESKeyMaterial = await crypto.subtle.digest('SHA-256', concatArrayBuffer(_a, iv, KEY))
+        const iv_pre = new Uint8Array(await crypto.subtle.digest('SHA-256', concatArrayBuffer(_a, iv, IV)))
+        const nextIV = new Uint8Array(16)
+        for (let i = 0; i <= 16; i += 1) {
+            // eslint-disable-next-line no-bitwise
+            nextIV[i] = iv_pre[i] ^ iv_pre[16 + i]
+        }
+        const nextAESKey = await crypto.subtle.importKey(
+            'raw',
+            nextAESKeyMaterial,
+            { name: 'AES-GCM', length: 256 },
+            extractable,
+            ['encrypt', 'decrypt'],
+        )
+        next_map.set(id, [nextAESKey as AESCryptoKey, nextIV])
+    }
+
+    return new IdentifierMap<ECKeyIdentifier, R>(next_map, ECKeyIdentifier)
 }
 //#endregion
 

@@ -22,7 +22,12 @@ import {
 } from '@masknet/shared-base'
 import EventIterator from 'event-iterator'
 import { queryPersonaByProfileDB } from '../../database/persona/db'
-import { decryptByLocalKey, deriveAESByECDH, hasLocalKeyOf } from '../../database/persona/helper'
+import {
+    decryptByLocalKey,
+    deriveAESByECDH,
+    deriveAESByECDH_version38_or_older,
+    hasLocalKeyOf,
+} from '../../database/persona/helper'
 import { queryPostDB } from '../../database/post'
 import { savePostKeyToDB } from '../../database/post/helper'
 import { GUN_queryPostKey_version39Or38, GUN_queryPostKey_version40 } from '../../network/gun/encryption/queryPostKey'
@@ -134,6 +139,9 @@ export async function* decryption(payload: string | Uint8Array, context: Decrypt
             decryptByLocalKey: decryptByLocalKey,
             async deriveAESKey(pub) {
                 return Array.from((await deriveAESByECDH(pub)).values())
+            },
+            async deriveAESKey_version38_or_older(pub, iv) {
+                return Array.from((await deriveAESByECDH_version38_or_older(pub, iv)).values())
             },
             queryAuthorPublicKey(author, signal) {
                 return queryPublicKey(author || authorHint, false, signal)
