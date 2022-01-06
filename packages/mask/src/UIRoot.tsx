@@ -11,7 +11,9 @@ import { activatedSocialNetworkUI } from './social-network'
 import { isFacebook } from './social-network-adaptor/facebook.com/base'
 import { pluginIDSettings } from './settings/settings'
 import { fixWeb3State } from './plugins/EVM/UI/Web3State'
-
+import { getBackgroundColor } from './utils'
+import { MaskIconPaletteContext } from '@masknet/icons'
+import { isTwitter } from './social-network-adaptor/twitter.com/base'
 const identity = (jsx: React.ReactNode) => jsx as JSX.Element
 function compose(init: React.ReactNode, ...f: ((children: React.ReactNode) => JSX.Element)[]) {
     return f.reduceRight((prev, curr) => curr(prev), <>{init}</>)
@@ -24,8 +26,18 @@ type MaskThemeProvider = React.PropsWithChildren<{
 function MaskThemeProvider({ children, baseline, useTheme }: MaskThemeProvider) {
     const theme = useTheme()
 
+    const backgroundColor = getBackgroundColor(document.body)
+    const isDark = theme.palette.mode === 'dark'
+    const isDarker = backgroundColor === 'rgb(0,0,0)'
+
     return compose(
         children,
+        (jsx) => (
+            <MaskIconPaletteContext.Provider
+                value={isDark ? (!isDarker && isTwitter(activatedSocialNetworkUI) ? 'dim' : 'dark') : 'light'}>
+                {jsx}
+            </MaskIconPaletteContext.Provider>
+        ),
         (jsx) => <ThemeProvider theme={theme} children={jsx} />,
         (jsx) => (
             <CustomSnackbarProvider

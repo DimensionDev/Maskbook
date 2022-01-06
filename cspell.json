@@ -360,11 +360,14 @@
         "koda",
         "Enjin",
         "poap",
-        "irss",
         "CELO",
         "flac",
         "Aurora",
-        "Betanet"
+        "Betanet",
+        "treeshake",
+        "xtest",
+        "xdescribe",
+        "irss"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [

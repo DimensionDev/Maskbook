@@ -163,12 +163,12 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     //#endregion
 
     useEffect(() => {
-        if (transferState.type === TransactionStateType.FAILED || transferState.type === TransactionStateType.HASH) {
-            setMemo('')
-            setAddress('')
-            setAmount('')
-            resetTransferCallback()
-        }
+        const ALLOWED_TYPES = [TransactionStateType.FAILED, TransactionStateType.HASH]
+        if (!ALLOWED_TYPES.includes(transferState.type)) return
+        setMemo('')
+        setAddress('')
+        setAmount('')
+        resetTransferCallback()
     }, [transferState])
 
     const ensContent = useMemo(() => {
@@ -246,6 +246,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                                 if (!!ensContent) setPopoverOpen(true)
                                 setMinPopoverWidth(event.currentTarget.clientWidth)
                             },
+                            spellCheck: false,
                         }}
                         onChange={(e) => setAddress(e.currentTarget.value)}
                         label={t.wallets_transfer_to_address()}

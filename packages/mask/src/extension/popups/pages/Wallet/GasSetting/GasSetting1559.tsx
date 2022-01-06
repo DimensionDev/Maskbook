@@ -265,35 +265,28 @@ export const GasSetting1559 = memo(() => {
 
     //#region If the selected changed, set the value on the option to the form data
     useEffect(() => {
-        if (selected !== null) {
-            setValue(
-                'maxPriorityFeePerGas',
-                new BigNumber(options[selected].content?.suggestedMaxPriorityFeePerGas ?? 0).toString() ?? '',
-            )
-            setValue(
-                'maxFeePerGas',
-                new BigNumber(options[selected].content?.suggestedMaxFeePerGas ?? 0).toString() ?? '',
-            )
-        }
+        if (selected === null) return
+        const { content } = options[selected]
+        setValue('maxPriorityFeePerGas', new BigNumber(content?.suggestedMaxPriorityFeePerGas ?? 0).toString() ?? '')
+        setValue('maxFeePerGas', new BigNumber(content?.suggestedMaxFeePerGas ?? 0).toString() ?? '')
     }, [selected, setValue, options])
     //#endregion
 
     const [{ loading }, handleConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
-            if (value) {
-                const config = value.payload.params.map((param) => ({
-                    ...param,
-                    gas: toHex(new BigNumber(data.gasLimit).toString()),
-                    maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toString()),
-                    maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toString()),
-                }))
+            if (!value) return
+            const config = value.payload.params.map((param) => ({
+                ...param,
+                gas: toHex(new BigNumber(data.gasLimit).toString()),
+                maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toString()),
+                maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toString()),
+            }))
 
-                await WalletRPC.updateUnconfirmedRequest({
-                    ...value.payload,
-                    params: config,
-                })
-                history.goBack()
-            }
+            await WalletRPC.updateUnconfirmedRequest({
+                ...value.payload,
+                params: config,
+            })
+            history.goBack()
         },
         [value, history],
     )

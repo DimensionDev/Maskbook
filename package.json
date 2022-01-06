@@ -21,7 +21,8 @@
   "lint-staged": {
     "*": "prettier --write --ignore-unknown",
     "packages/**/*.{ts,tsx,js,jsx}": "eslint -c packages/.eslintrc.json --fix",
-    "packages/mask/**/*": "node ./packages/scripts/src/bin/precommit-hook-localekit.js"
+    "packages/mask/**/*": "node ./packages/scripts/src/bin/precommit-hook-localekit.js",
+    "packages/web3-constants/**/*": "pnpm start --filter web3-constants"
   },
   "dependencies": {
     "@dimensiondev/kit": "0.0.0-20211215044858-27d964f",
@@ -52,6 +53,7 @@
   "devDependencies": {
     "@commitlint/cli": "^16.0.0",
     "@commitlint/config-conventional": "^16.0.0",
+    "@dimensiondev/eslint-plugin": "^0.0.1-20220104011158-0905fa1",
     "@dimensiondev/patch-package": "^6.5.0",
     "@jest/globals": "^27.4.4",
     "@magic-works/i18n-codegen": "^0.0.6",
@@ -63,7 +65,6 @@
     "eslint": "8.5.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "2.25.3",
-    "eslint-plugin-lodash": "^7.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",

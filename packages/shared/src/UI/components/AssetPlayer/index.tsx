@@ -119,10 +119,9 @@ export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconPro
                     setIframe()
                 }}
                 onResized={({ type }) => {
-                    if (type !== 'init') {
-                        cancel()
-                        setPlayerState(AssetPlayerState.NORMAL)
-                    }
+                    if (type === 'init') return
+                    cancel()
+                    setPlayerState(AssetPlayerState.NORMAL)
                 }}
                 style={{ width: playerState !== AssetPlayerState.NORMAL ? 0 : undefined }}
                 checkOrigin={false}

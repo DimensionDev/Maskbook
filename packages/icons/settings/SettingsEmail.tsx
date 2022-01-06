@@ -23,5 +23,6 @@ export const SettingsEmailIcon: typeof SvgIcon = createPaletteAwareIcon(
         />
         <path d="m22 6-10 7L2 6" stroke="#fff" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
     </g>,
+    undefined,
     '0 0 24 24',
 )

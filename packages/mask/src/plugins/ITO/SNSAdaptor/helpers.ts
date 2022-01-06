@@ -28,6 +28,7 @@ export function gcd(a: BigNumber, b: BigNumber) {
         b_ = a_
         a_ = temp
     }
+    // eslint-disable-next-line no-constant-condition
     while (true) {
         if (b_.isZero()) return a_
         a_ = a_.mod(b_)
