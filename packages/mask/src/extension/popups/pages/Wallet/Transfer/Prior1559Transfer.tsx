@@ -160,7 +160,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
             address: zod
                 .string()
                 .min(1, t('wallet_transfer_error_address_absence'))
-                .refine((address) => EthereumAddress.isValid(address), t('wallet_transfer_error_invalid_address')),
+                .refine(EthereumAddress.isValid, t('wallet_transfer_error_invalid_address')),
             amount: zod
                 .string()
                 .refine((amount) => {
@@ -314,22 +314,20 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
         </Collapse>,
     )
     const popoverContent = useMemo(() => {
-        if (addressTip) {
-            return (
-                <Box py={2.5} px={1.5}>
-                    <Typography
-                        className={
-                            addressTip.type === TransferAddressError.SAME_ACCOUNT
-                                ? classes.normalMessage
-                                : classes.errorMessage
-                        }>
-                        {addressTip.message}
-                    </Typography>
-                </Box>
-            )
-        }
+        if (!addressTip) return
 
-        return
+        return (
+            <Box py={2.5} px={1.5}>
+                <Typography
+                    className={
+                        addressTip.type === TransferAddressError.SAME_ACCOUNT
+                            ? classes.normalMessage
+                            : classes.errorMessage
+                    }>
+                    {addressTip.message}
+                </Typography>
+            </Box>
+        )
     }, [address, addressTip])
 
     return (
@@ -402,7 +400,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
         } = useFormContext<TransferFormData>()
 
         useUpdateEffect(() => {
-            setPopoverOpen(!!popoverContent && !!anchorEl.current)
+            setPopoverOpen(Boolean(popoverContent && anchorEl.current))
         }, [popoverContent])
 
         return (

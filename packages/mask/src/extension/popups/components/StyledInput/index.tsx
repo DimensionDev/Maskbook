@@ -1,7 +1,7 @@
 import { forwardRef, memo } from 'react'
 import { TextFieldProps, TextField } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import classnames from 'classnames'
+import classNames from 'classnames'
 
 const useStyles = makeStyles()(({ palette }) => ({
     textField: {
@@ -31,7 +31,7 @@ export const StyledInput = memo(
                 {...props}
                 inputRef={ref}
                 variant="filled"
-                className={classnames(classes.textField, props.className)}
+                className={classNames(classes.textField, props.className)}
                 autoComplete="off"
                 inputProps={{ className: classes.input, 'aria-autocomplete': 'none', ...props.inputProps }}
                 InputProps={{
