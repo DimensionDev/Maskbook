@@ -15,7 +15,7 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": "",
+        "Aurora_Testnet": "0x97369fEE7db34E0BfE47861f2ec44b4378d13eB4",
         "Aurora_Betanet": ""
     },
     "SUBGRAPH_URL": {
@@ -33,7 +33,7 @@
         "xDai": "",
         "Celo": "",
         "Fantom": "",
-        "Aurora": "",
+        "Aurora": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-nft-red-packet-aurora",
         "Aurora_Testnet": "",
         "Aurora_Betanet": ""
     }

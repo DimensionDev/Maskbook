@@ -15,7 +15,7 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": "",
+        "Aurora_Testnet": "0xB4D669bc117735FdA44e90e52795132187705B21",
         "Aurora_Betanet": ""
     },
     "MASK_BOX_CONTRACT_FROM_BLOCK": {
@@ -34,7 +34,7 @@
         "Celo": 0,
         "Fantom": 0,
         "Aurora": 0,
-        "Aurora_Testnet": 0,
+        "Aurora_Testnet": 77919118,
         "Aurora_Betanet": 0
     },
     "MASK_BOX_TEST_NFT": {

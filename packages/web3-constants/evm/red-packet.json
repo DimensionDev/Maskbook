@@ -72,7 +72,7 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": "",
+        "Aurora_Testnet": "0xdB93cCd481012bB5D1E2c8d0aF7C5f2940c00fdC",
         "Aurora_Betanet": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT": {
@@ -91,7 +91,7 @@
         "Celo": 0,
         "Fantom": 0,
         "Aurora": 0,
-        "Aurora_Testnet": 0,
+        "Aurora_Testnet": 77918765,
         "Aurora_Betanet": 0
     },
     "SUBGRAPH_URL": {
