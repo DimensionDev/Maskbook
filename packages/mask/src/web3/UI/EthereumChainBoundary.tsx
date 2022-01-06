@@ -198,7 +198,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         complete={t('plugin_wallet_switch_network', {
                             network: expectedNetwork,
                         })}
-                        failed={t('retry')}
                         executor={onSwitchChain}
                         completeOnClick={onSwitchChain}
                         failedOnClick="use executor"
@@ -239,7 +238,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     complete={t('plugin_wallet_switch_network', {
                         network: expectedNetwork,
                     })}
-                    failed={t('retry')}
                     executor={onSwitchChain}
                     completeOnClick={onSwitchChain}
                     failedOnClick="use executor"

@@ -87,7 +87,7 @@ export interface ActionButtonPromiseProps extends ButtonProps {
     completeOnClick?: 'use executor' | (() => void)
     waiting: React.ReactChild
     waitingOnClick?: () => ActionButtonPromiseState
-    failed: React.ReactChild
+    failed?: React.ReactChild
     failedOnClick?: 'use executor' | (() => void)
     completeIcon?: React.ReactNode
     failIcon?: React.ReactNode
@@ -133,9 +133,7 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
     const failClick = failedOnClick === 'use executor' ? run : failedOnClick
 
     useUpdateEffect(() => {
-        setState((prev) => {
-            return prev === 'init' ? prev : 'init'
-        })
+        setState((prev) => (prev === 'init' ? prev : 'init'))
     }, [executor])
 
     if (state === 'wait')
@@ -151,7 +149,7 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
                 onClick={completeClick}
             />
         )
-    if (state === 'fail')
+    if (state === 'fail' && failed)
         return (
             <Button
                 {...b}
@@ -174,6 +172,7 @@ const useStyles = makeStyles()({
     },
     failed: {
         backgroundColor: red[500],
+        color: '#fff',
         '&:hover': {
             backgroundColor: red[700],
         },
