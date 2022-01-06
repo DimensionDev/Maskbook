@@ -167,6 +167,7 @@ const useStyles = makeStyles()({
     },
     failed: {
         backgroundColor: red[500],
+        color: '#fff',
         '&:hover': {
             backgroundColor: red[700],
         },
