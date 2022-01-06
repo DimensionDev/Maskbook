@@ -7,6 +7,7 @@ import {
     andThenAsync,
 } from '@masknet/shared-base'
 import { None, Result } from 'ts-results'
+import { DecryptIntermediateProgress, DecryptIntermediateProgressKind, DecryptReportedInfo } from '.'
 import { AESAlgorithmEnum, PayloadParseResult } from '../payload'
 import { decryptWithAES, importAESFromJWK } from '../utils'
 import {
@@ -22,33 +23,36 @@ export * from './DecryptionTypes'
 const ErrorReasons = DecryptError.Reasons
 type Version = PayloadParseResult.Payload['version']
 export async function* decrypt(options: DecryptOptions, io: DecryptIO): AsyncIterableIterator<DecryptProgress> {
-    yield progress(DecryptProgressKind.Started)
-
     const { author: _author, encrypted: _encrypted, encryption: _encryption, version } = options.message
     const { authorPublicKey: _authorPublicKey } = options.message
 
     if (_encryption.err) return yield new DecryptError(ErrorReasons.PayloadBroken, _encryption.val)
     if (_encrypted.err) return yield new DecryptError(ErrorReasons.PayloadBroken, _encrypted.val)
     const encryption = _encryption.val
+    if (encryption.iv.err) return yield new DecryptError(ErrorReasons.PayloadBroken, encryption.iv.val)
+    const iv = encryption.iv.val
     const encrypted = _encrypted.val
 
+    {
+        const info: DecryptReportedInfo = { type: DecryptProgressKind.Info }
+        const author = _author.unwrapOr(None)
+        if (author.some) info.claimedAuthor = author.val
+        info.publicShared = encryption.type === 'public'
+        info.iv = iv
+    }
     // ! try decrypt by cache
     {
         const cacheKey = await io.getPostKeyCache().catch(() => null)
-        const iv = encryption.iv.unwrapOr(null)
         if (cacheKey && iv) return yield* decryptWithPostAESKey(version, cacheKey, iv, encrypted)
     }
 
     if (encryption.type === 'public') {
-        const { AESKey, iv } = encryption
+        const { AESKey } = encryption
         if (AESKey.err) return yield new DecryptError(ErrorReasons.PayloadBroken, AESKey.val)
-        if (iv.err) return yield new DecryptError(ErrorReasons.PayloadBroken, iv.val)
         // Not calling setPostCache here. It's public post and saving key is wasting storage space.
-        return yield* decryptWithPostAESKey(version, AESKey.val.key as AESCryptoKey, iv.val, encrypted)
+        return yield* decryptWithPostAESKey(version, AESKey.val.key as AESCryptoKey, iv, encrypted)
     } else if (encryption.type === 'E2E') {
-        const { ephemeralPublicKey, iv: _iv, ownersAESKeyEncrypted } = encryption
-        if (_iv.err) return yield new DecryptError(ErrorReasons.PayloadBroken, _iv.val)
-        const iv = _iv.val
+        const { ephemeralPublicKey, ownersAESKeyEncrypted } = encryption
         const author = _author.unwrapOr(None)
 
         // ! Try to decrypt this post as author (using ownersAESKeyEncrypted field)
@@ -79,6 +83,7 @@ export async function* decrypt(options: DecryptOptions, io: DecryptIO): AsyncIte
         //#endregion
 
         // ! Try to decrypt this post via ECDH
+        yield { type: DecryptProgressKind.Progress, event: DecryptIntermediateProgressKind.TryDecryptByE2E }
         //#region
         const authorPublicKey = _authorPublicKey.unwrapOr(None)
         if (version === -37) {
@@ -183,7 +188,10 @@ async function* decryptByECDH(
                 decryptWithAES(AESAlgorithmEnum.A256GCM, derivedKey, postKeyIV, encryptedPostKey),
                 (postKeyRaw) => Result.wrapAsync(() => importAESKeyFromJWKFromTextEncoder(postKeyRaw)),
             )
-            if (possiblePostKey.err) continue
+            if (possiblePostKey.err) {
+                console.debug(possiblePostKey.val)
+                continue
+            }
             const decrypted = await decryptWithAES(AESAlgorithmEnum.A256GCM, possiblePostKey.val, iv, encrypted)
             if (decrypted.err) continue
 
@@ -222,7 +230,7 @@ async function importAESKeyFromJWKFromTextEncoder(aes_raw: Uint8Array) {
 }
 
 function progress(kind: DecryptProgressKind.Success, rest: Omit<DecryptSuccess, 'type'>): DecryptSuccess
-function progress(kind: DecryptProgressKind.Started): DecryptProgress
+function progress(kind: DecryptProgressKind.Progress, rest: Omit<DecryptIntermediateProgress, 'type'>): DecryptProgress
 function progress(kind: DecryptProgressKind, rest?: object): DecryptProgress {
     return { type: kind, ...rest } as any
 }

@@ -9,7 +9,7 @@ import { OrderRow } from './OrderRow'
 import { TableListPagination } from './Pagination'
 import { LoadingTable } from './LoadingTable'
 import { NonFungibleAssetProvider, useAccount } from '@masknet/web3-shared-evm'
-import { isZero } from '@masknet/web3-shared-base'
+import { isOne, isZero } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -50,7 +50,7 @@ export function ListingTab() {
                     (item) =>
                         (item.payment_token_contract?.symbol !== 'WETH' &&
                             item.payment_token_contract?.symbol !== 'ETH') ||
-                        (item.quantity && new BigNumber(item.quantity).toString() !== '1'),
+                        (item.quantity && !isOne(item.quantity)),
                 ) && orders.value?.data.filter((item) => isZero(item.expiration_time ?? 0)).length === 0
             )
         } else {
