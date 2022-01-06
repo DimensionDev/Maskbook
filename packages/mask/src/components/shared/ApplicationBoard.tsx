@@ -84,6 +84,17 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+const SUPPORTED_CHAIN_ID_LIST = [
+    ChainId.Mainnet,
+    ChainId.BSC,
+    ChainId.Matic,
+    ChainId.Arbitrum,
+    ChainId.xDai,
+    ChainId.Celo,
+    ChainId.Fantom,
+    ChainId.Metis,
+]
+
 export interface MaskAppEntry {
     title: string
     img: string
@@ -281,16 +292,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                         ]),
                         createEntry('dHEDGE', new URL('./assets/dHEDGE.png', import.meta.url).toString(), () => {}),
                     ],
-                    [
-                        ChainId.Mainnet,
-                        ChainId.BSC,
-                        ChainId.Matic,
-                        ChainId.Arbitrum,
-                        ChainId.xDai,
-                        ChainId.Celo,
-                        ChainId.Metis,
-                        ChainId.Fantom,
-                    ],
+                    SUPPORTED_CHAIN_ID_LIST,
                 ),
             undefined,
             true,
@@ -309,16 +311,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                             () => {},
                         ),
                     ],
-                    [
-                        ChainId.Mainnet,
-                        ChainId.BSC,
-                        ChainId.Matic,
-                        ChainId.Arbitrum,
-                        ChainId.xDai,
-                        ChainId.Celo,
-                        ChainId.Metis,
-                        ChainId.Fantom,
-                    ],
+                    SUPPORTED_CHAIN_ID_LIST,
                 ),
             undefined,
             true,
