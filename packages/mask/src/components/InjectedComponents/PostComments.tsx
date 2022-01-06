@@ -42,13 +42,9 @@ export function PostCommentDecrypted(props: PostCommentDecryptedProps) {
 export interface PostCommentProps {
     comment: ValueRef<string>
     needZip(): void
-    successComponentProps?: PostCommentDecryptedProps
-    successComponent?: React.ComponentType<PostCommentDecryptedProps>
-    waitingComponent?: React.ComponentType
-    failedComponent?: React.ComponentType<{ error: Error }>
 }
 export function PostComment(props: PostCommentProps) {
-    const { failedComponent: Fail, waitingComponent: Wait, needZip } = props
+    const { needZip } = props
     const comment = useValueRef(props.comment)
     const postContent = usePostInfoDetails.rawMessagePiped()
     const containingPayload = usePostInfoDetails.containingMaskPayload()
@@ -63,10 +59,7 @@ export function PostComment(props: PostCommentProps) {
         return result
     }, [postIV, postContent, comment])
 
-    const Success = props.successComponent || PostCommentDecrypted
     useEffect(() => void (dec.value && needZip()), [dec.value, needZip])
-    if (dec.error) return Fail ? <Fail error={dec.error} /> : null
-    if (dec.loading) return Wait ? <Wait /> : null
-    if (dec.value) return <Success {...props.successComponentProps}>{dec.value}</Success>
+    if (dec.value) return <PostCommentDecrypted>{dec.value}</PostCommentDecrypted>
     return null
 }

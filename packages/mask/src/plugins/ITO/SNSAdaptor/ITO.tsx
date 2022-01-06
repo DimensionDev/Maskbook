@@ -11,6 +11,7 @@ import {
     useChainId,
     useChainIdValid,
     useTokenConstants,
+    isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import { isZero, ZERO, isGreaterThan } from '@masknet/web3-shared-base'
 import { Box, Card, Grid, Link, Typography } from '@mui/material'
@@ -283,8 +284,7 @@ export function ITO(props: ITO_Props) {
     } = useIfQualified(qualificationAddress, payload.contract_address)
     //#endregion
 
-    const isAccountSeller =
-        payload.seller.address.toLowerCase() === account.toLowerCase() && chainId === payload.chain_id
+    const isAccountSeller = isSameAddress(payload.seller.address, account) && chainId === payload.chain_id
     const noRemain = total_remaining.isZero()
 
     //#region remote controlled select provider dialog
@@ -315,10 +315,9 @@ export function ITO(props: ITO_Props) {
         .toString()
     const canWithdraw = useMemo(
         () =>
+            !availability?.destructed &&
             isAccountSeller &&
-            !tradeInfo?.destructInfo &&
-            !loadingTradeInfo &&
-            !availability?.exchanged_tokens.every((t) => t === '0') &&
+            !availability?.exchanged_tokens.every(isZero) &&
             (listOfStatus.includes(ITO_Status.expired) || noRemain),
         [tradeInfo, listOfStatus, isAccountSeller, noRemain, loadingTradeInfo],
     )
@@ -726,7 +725,8 @@ export function ITO(props: ITO_Props) {
                         className={classes.actionButton}>
                         {t('plugin_ito_withdraw')}
                     </ActionButton>
-                ) : !ifQualified || !(ifQualified as Qual_V2).qualified ? (
+                ) : (!ifQualified || !(ifQualified as Qual_V2).qualified) &&
+                  !isNativeTokenAddress(qualificationAddress) ? (
                     <ActionButton
                         onClick={retryIfQualified}
                         loading={loadingIfQualified}
@@ -741,16 +741,7 @@ export function ITO(props: ITO_Props) {
                             ? startCase((ifQualified as Qual_V2).errorMsg)
                             : null}
                     </ActionButton>
-                ) : listOfStatus.includes(ITO_Status.expired) ? (
-                    <ActionButton
-                        disabled
-                        onClick={() => undefined}
-                        variant="contained"
-                        size="large"
-                        className={classes.actionButton}>
-                        {t('plugin_ito_expired')}
-                    </ActionButton>
-                ) : listOfStatus.includes(ITO_Status.waited) ? (
+                ) : listOfStatus.includes(ITO_Status.expired) ? null : listOfStatus.includes(ITO_Status.waited) ? (
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
                             <ActionButton

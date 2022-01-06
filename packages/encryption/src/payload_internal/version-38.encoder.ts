@@ -29,9 +29,9 @@ export async function encode38(payload: PayloadWellFormed.Payload) {
     if (payload.authorPublicKey.some) {
         const compressed = await compressSecp256k1Key(payload.authorPublicKey.val.key)
         if (compressed.err) {
-            console.error(`[@masknet/encryption] An error happened when compressing a secp256k1 key.`, compressed.err)
+            console.error('[@masknet/encryption] An error happened when compressing a secp256k1 key.', compressed.err)
         }
-        fields[Index.authorPublicKey] = `${compressed.unwrapOr('_')}`
+        fields[Index.authorPublicKey] = compressed.unwrapOr('_')
     }
     fields[Index.publicShared] = String(payload.encryption.type === 'public' ? 1 : 0)
     if (payload.author.some) {

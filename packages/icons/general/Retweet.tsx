@@ -14,5 +14,6 @@ export const RetweetIcon = createPaletteAwareIcon(
             fill="#D9D9D9"
         />
     </g>,
+    undefined,
     '0 0 24 24',
 )

@@ -107,6 +107,11 @@ export interface NftRedPacketJSONPayload extends RedPacketBasic {
     token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
 }
 
+export enum NFTSelectOption {
+    All = 'All',
+    Partial = 'Partial',
+}
+
 interface ERC721TokenContract {
     address: string
     name: string
