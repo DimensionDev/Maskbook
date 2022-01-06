@@ -12,6 +12,8 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Avalanche": "0x0477524B070F73BE7f84f3326d104899e1beBb12",
+        "Avalanche_Fuji": "",
         "Celo": "",
         "Fantom": ""
     },
@@ -28,6 +30,8 @@
         "Arbitrum": 0,
         "Arbitrum_Rinkeby": 0,
         "xDai": 0,
+        "Avalanche": 9212180,
+        "Avalanche_Fuji": 0,
         "Celo": 0,
         "Fantom": 0
     },
@@ -44,6 +48,8 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
         "Celo": "",
         "Fantom": ""
     },
@@ -60,6 +66,8 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
         "Celo": "",
         "Fantom": ""
     },
@@ -76,6 +84,8 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
         "Celo": "",
         "Fantom": ""
     }
