@@ -284,8 +284,7 @@ export function ITO(props: ITO_Props) {
     } = useIfQualified(qualificationAddress, payload.contract_address)
     //#endregion
 
-    const isAccountSeller =
-        payload.seller.address.toLowerCase() === account.toLowerCase() && chainId === payload.chain_id
+    const isAccountSeller = isSameAddress(payload.seller.address, account) && chainId === payload.chain_id
     const noRemain = total_remaining.isZero()
 
     //#region remote controlled select provider dialog
