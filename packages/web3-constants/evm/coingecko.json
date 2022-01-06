@@ -12,9 +12,10 @@
         "Arbitrum": "arbitrum-one",
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai",
+        "Fuse": "fuse",
+        "Fuse_Sparknet": "",
         "Celo": "celo",
-        "Fantom": "fantom",
-        "Fuse": "fuse"
+        "Fantom": "fantom"
     },
     "COIN_ID": {
         "Mainnet": "ethereum",
@@ -29,8 +30,9 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai",
+        "Fuse": "fuse",
+        "Fuse_Sparknet": "",
         "Celo": "celo",
-        "Fantom": "fantom",
-        "Fuse": "fuse"
+        "Fantom": "fantom"
     }
 }

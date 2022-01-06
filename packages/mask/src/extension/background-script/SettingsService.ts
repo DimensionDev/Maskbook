@@ -77,6 +77,7 @@ export const [getArbitrumNetworkTradeProvider, setArbitrumNetworkTradeProvider] 
 export const [getxDaiNetworkTradeProvider, setxDaiNetworkTradeProvider] = create(xdaiNetworkTradeProviderSettings)
 
 export const [getFuseNetworkTradeProvider, setFuseNetworkTradeProvider] = create(fuseNetworkTradeProviderSettings)
+
 export const [getCeloNetworkTradeProvider, setCeloNetworkTradeProvider] = create(celoNetworkTradeProviderSettings)
 
 export const [getFantomNetworkTradeProvider, setFantomNetworkTradeProvider] = create(fantomNetworkTradeProviderSettings)

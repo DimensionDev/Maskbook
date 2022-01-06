@@ -12,6 +12,8 @@
         "Arbitrum": "arbitrum-assets",
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai-assets",
+        "Fuse": "",
+        "Fuse_Sparknet": "",
         "Celo": "celo-assets",
         "Fantom": "fantom-assets"
     },
@@ -28,6 +30,8 @@
         "Arbitrum": "arbitrum-transactions",
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai-transactions",
+        "Fuse": "",
+        "Fuse_Sparknet": "",
         "Celo": "celo-transactions",
         "Fantom": "fantom-transactions"
     }

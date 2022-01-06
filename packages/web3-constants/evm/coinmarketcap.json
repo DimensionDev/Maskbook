@@ -12,8 +12,9 @@
         "Arbitrum": "11841",
         "Arbitrum_Rinkeby": "",
         "xDai": "5601",
+        "Fuse": "122",
+        "Fuse_Sparknet": "",
         "Celo": "5567",
-        "Fantom": "3513",
-        "Fuse": "122"
+        "Fantom": "3513"
     }
 }

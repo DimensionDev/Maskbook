@@ -12,8 +12,9 @@
         "Arbitrum": "arb",
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai",
+        "Fuse": "fuse",
+        "Fuse_Sparknet": "",
         "Celo": "celo",
-        "Fantom": "ftm",
-        "Fuse": "fuse"
+        "Fantom": "ftm"
     }
 }
