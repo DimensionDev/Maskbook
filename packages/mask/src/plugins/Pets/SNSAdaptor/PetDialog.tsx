@@ -1,8 +1,6 @@
 import { useEffect, useState, useMemo, ReactNode } from 'react'
-import { useAsync } from 'react-use'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { useChainId, isSameAddress, ERC721ContractDetailed } from '@masknet/web3-shared-evm'
-import { OpenSea } from '@masknet/web3-providers'
+import { useChainId, isSameAddress } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import {
     Button,
@@ -20,7 +18,7 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { initMeta, initCollection, Punk3D } from '../constants'
 import { PreviewBox } from './PreviewBox'
 import { PetMetaDB, FilterContract, OwnerERC721TokenInfo, ImageType } from '../types'
-import { useUser, useCurrentVisitingUser, useNfts } from '../hooks'
+import { useUser, useCurrentVisitingUser, useNfts, useNftsExtra } from '../hooks'
 import { useI18N, getAssetAsBlobURL } from '../../../utils'
 import { ShadowRootPopper } from '../../../utils/shadow-root/ShadowRootComponents'
 import { ImgLoader } from './ImgLoader'
@@ -95,6 +93,7 @@ export function PetDialog() {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), {})
     const GLB3DIcon = getAssetAsBlobURL(new URL('../assets/glb3D.png', import.meta.url))
+    const { open, closeDialog } = useRemoteControlledDialog(PluginPetMessages.essayDialogUpdated, () => {})
 
     const chainId = useChainId()
     //should not use user address here
@@ -103,9 +102,7 @@ export function PetDialog() {
     const nfts = useNfts(
         user.userId === visitor.userId && isSameAddress(user.address, visitor.address) ? visitor : undefined,
     )
-    const [extraData, setExtraData] = useState<ERC721ContractDetailed[]>([])
-
-    const { open, closeDialog } = useRemoteControlledDialog(PluginPetMessages.essayDialogUpdated, () => {})
+    const extraData = useNftsExtra(open)
 
     const [collection, setCollection] = useState<FilterContract>(initCollection)
     const [isCollectionsError, setCollectionsError] = useState(false)
@@ -122,16 +119,6 @@ export function PetDialog() {
         setCollection(initCollection)
         setTokenInfoSelect(null)
     }, [open])
-
-    useAsync(async () => {
-        const lists = []
-        if (!open) return
-        for (const i of nfts) {
-            const contract = await OpenSea.getContract(i.contract, chainId)
-            lists.push(contract)
-        }
-        setExtraData(lists)
-    }, [JSON.stringify(nfts), open])
 
     let timer: NodeJS.Timeout
     const saveHandle = async () => {
