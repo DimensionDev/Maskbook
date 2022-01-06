@@ -74,11 +74,8 @@ function getTransactionDescription(
                     const amountOut = formatBalance(computedPayload.parameters.amountOutMin, tokenDetailed?.decimals, 2)
                     return `Swap ${amountIn} ${nativeTokenDetailed?.symbol} for ${amountOut} ${tokenDetailed?.symbol}`
                 case 'create_red_packet':
-                    return `Create lucky drop with ${formatBalance(
-                        computedPayload?.parameters._total_tokens,
-                        tokenDetailed?.decimals,
-                        2,
-                    )} ${tokenDetailed?.symbol}`
+                    const amount = formatBalance(computedPayload?.parameters._total_tokens, tokenDetailed?.decimals, 2)
+                    return `Create lucky drop with ${amount} ${tokenDetailed?.symbol}`
                 default:
                     return `${computedPayload.name ?? 'Contract Interaction'} ${
                         computedPayload._tx.value
