@@ -497,6 +497,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                 <NFTCardStyledAssetPlayer
                                     contractAddress={contract.address}
                                     chainId={contract.chainId}
+                                    url={tokenDetailed.info.mediaUrl}
                                     tokenId={tokenId}
                                     classes={{
                                         loadingFailImage: classes.loadingFailImage,
@@ -504,7 +505,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                 />
                                 <div className={classes.selectWrapperNftNameWrapper}>
                                     <Typography className={classes.selectWrapperNftName} color="textSecondary">
-                                        {tokenDetailed?.info.name}
+                                        {tokenDetailed.info.name}
                                     </Typography>
                                 </div>
                             </Box>

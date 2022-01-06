@@ -30,11 +30,12 @@ interface NFTLuckyDropStyledAssetPlayerProps
     chainId: ChainId
     contractAddress: string
     tokenId: string
+    url?: string
     fallbackImage?: URL
     setERC721TokenName?: (name: string) => void
 }
 export function NFTCardStyledAssetPlayer(props: NFTLuckyDropStyledAssetPlayerProps) {
-    const { chainId, contractAddress, tokenId, fallbackImage, setERC721TokenName } = props
+    const { chainId, contractAddress, tokenId, fallbackImage, url, setERC721TokenName } = props
     const classes = useStylesExtends(useStyles(), props)
     return (
         <AssetPlayer
@@ -43,6 +44,7 @@ export function NFTCardStyledAssetPlayer(props: NFTLuckyDropStyledAssetPlayerPro
                 contractAddress,
                 tokenId: tokenId,
             }}
+            url={url}
             setERC721TokenName={setERC721TokenName}
             fallbackImage={fallbackImage ?? new URL('./nft_token_fallback.png', import.meta.url)}
             classes={{
