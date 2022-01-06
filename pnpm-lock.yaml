@@ -725,6 +725,7 @@ importers:
   packages/plugins/Solana:
     specifiers:
       '@masknet/icons': workspace:*
+      '@masknet/injected-script': workspace:*
       '@masknet/plugin-infra': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
@@ -735,9 +736,13 @@ importers:
       '@solana/wallet-adapter-wallets': 0.14.0
       '@solana/web3.js': ^1.30.2
       bignumber.js: ^9.0.1
+      bn.js: ^4.12.0
+      bs58: ^4.0.1
+      buffer: ^6.0.3
       react-use: ^17.3.1
     dependencies:
       '@masknet/icons': link:../../icons
+      '@masknet/injected-script': link:../../injected-script
       '@masknet/plugin-infra': link:../../plugin-infra
       '@masknet/shared': link:../../shared
       '@masknet/shared-base': link:../../shared-base
@@ -748,6 +753,9 @@ importers:
       '@solana/wallet-adapter-wallets': 0.14.0
       '@solana/web3.js': 1.31.0
       bignumber.js: 9.0.1
+      bn.js: 4.12.0
+      bs58: 4.0.1
+      buffer: 6.0.3
       react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
 
   packages/plugins/Wallet:
@@ -3452,6 +3460,7 @@ packages:
 
   /@dimensiondev/eslint-plugin/0.0.1-20220104011158-0905fa1_eslint@8.5.0:
     resolution: {integrity: sha512-DyAzOQp2Dp9Nzll6dTbujqyBAXOLhlWXvDdmnfX3+cHixhvaupbMeoh4MmujkOY681N5ohVm2eKWJd/ApC4lrQ==, tarball: download/@dimensiondev/eslint-plugin/0.0.1-20220104011158-0905fa1/931c157d880a7f8a78e87326a2840ad7d4583b5c714f155e045f73a11969fc82}
+    engines: {node: '>= 14'}
     peerDependencies:
       eslint: '>= 8'
     dependencies:

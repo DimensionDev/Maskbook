@@ -1,9 +1,8 @@
-import { useCallback, cloneElement, isValidElement, useMemo, useEffect } from 'react'
+import { bridgedSolanaProvider } from '@masknet/injected-script'
 import type { Web3Plugin } from '@masknet/plugin-infra'
-import { Adapter, WalletAdapterNetwork, WalletReadyState } from '@solana/wallet-adapter-base'
-import { SolletWalletAdapter } from '@solana/wallet-adapter-wallets'
-
+import { cloneElement, isValidElement, useCallback } from 'react'
 import { getStorage } from '../../storage'
+import { hexToBase58 } from '../../utils'
 
 export function ProviderIconClickBait({
     network,
@@ -12,18 +11,12 @@ export function ProviderIconClickBait({
     onSubmit,
     onClick,
 }: Web3Plugin.UI.ProviderIconClickBaitProps) {
-    const solletAdapter = useMemo(
-        () =>
-            new SolletWalletAdapter({
-                network: WalletAdapterNetwork.Mainnet,
-            }),
-        [],
-    )
     const onLogIn = useCallback(async () => {
         onClick?.(network, provider)
-        await solletAdapter.connect()
-        if (solletAdapter?.publicKey) {
-            await getStorage().publicKey.setValue(solletAdapter.publicKey.toBase58())
+        const rsp = await bridgedSolanaProvider.connect()
+        if (rsp?.publicKey) {
+            const base58Key = hexToBase58(rsp.publicKey._bn)
+            await getStorage().publicKey.setValue(base58Key)
             onSubmit?.(network, provider)
         }
     }, [provider, onClick, onSubmit])

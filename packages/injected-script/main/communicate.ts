@@ -4,7 +4,7 @@ import { getCustomEventDetail, apply, warn } from './intrinsic'
 import { dispatchInput } from './EventListenerPatch/dispatchInput'
 import { dispatchPaste } from './EventListenerPatch/dispatchPaste'
 import { dispatchPasteImage } from './EventListenerPatch/dispatchPasteImage'
-import { callRequest, access, bindEvent, until } from './GlobalVariableBridge'
+import { callRequest, access, bindEvent, execute, until } from './GlobalVariableBridge'
 import { hookInputUploadOnce } from './EventListenerPatch/hookInputUploadOnce'
 
 document.addEventListener(CustomEventId, (e) => {
@@ -30,6 +30,10 @@ document.addEventListener(CustomEventId, (e) => {
         // solana
         case 'solanaBridgeRequestListen':
             return apply(bindEvent, null, ['solana', 'solanaBridgeOnEvent', ...r[1]])
+        case 'solanaBridgeExecute':
+            const result = apply(execute, null, [...r[1]])
+            console.log('solanaBridgeExecute', { result })
+            return result
         case 'solanaBridgeSendRequest':
             return apply(callRequest, null, ['solana', ...r[1]])
         case 'solanaBridgePrimitiveAccess':

@@ -34,6 +34,13 @@ export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
         providerAdaptorPluginID: PLUGIN_ID,
         type: ProviderType.Sollet,
         name: 'Sollet',
-        icon: new URL('./assets/Sollet.png', import.meta.url),
+        icon: new URL('./assets/sollet.png', import.meta.url),
+    },
+    {
+        ID: `${PLUGIN_ID}_phantom`,
+        providerAdaptorPluginID: PLUGIN_ID,
+        type: ProviderType.Phantom,
+        name: 'Phantom',
+        icon: new URL('./assets/phantom.png', import.meta.url),
     },
 ]

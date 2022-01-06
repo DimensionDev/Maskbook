@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { I18nextProvider, type I18nextProviderProps } from 'react-i18next'
 
-export const I18NextProviderHMR =
-    process.env.NODE_ENV === 'development'
+export const I18NextProviderHMR = false
         ? function I18NextProviderHMR({ i18n, defaultNS, children }: React.PropsWithChildren<I18nextProviderProps>) {
               const [ns, setNS] = useState(defaultNS)
 
