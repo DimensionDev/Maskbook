@@ -13,6 +13,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Metis": " ",
+        "Metis_Stardust": "0x97369fEE7db34E0BfE47861f2ec44b4378d13eB4",
         "Fantom": ""
     },
     "SUBGRAPH_URL": {
@@ -29,6 +31,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Metis": "",
+        "Metis_Stardust": "",
         "Fantom": ""
     }
 }

@@ -104,7 +104,7 @@
         "xDai": "0x71834a3FDeA3E70F14a93ED85c6be70925D0CAd9",
         "Celo": "",
         "Metis": "",
-        "Metis_Stardust": "",
+        "Metis_Stardust": "0xdcA6F476EebCDE8FE8b072e3fC80dBC28dC209b3",
         "Fantom": ""
     },
     "SUBGRAPH_URL": {
@@ -121,7 +121,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-xdai",
         "Celo": "",
-        "Metis": "",
+        "Metis": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-metis",
         "Metis_Stardust": "",
         "Fantom": ""
     }
