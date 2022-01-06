@@ -80,7 +80,7 @@ export const useStyles = makeStyles()((theme) => ({
         lineHeight: '16px',
         color: '#222',
         textAlign: 'left',
-        wordBreak: 'break-all',
+        overflowWrap: 'break-word',
     },
     image: {
         borderRadius: '4px',

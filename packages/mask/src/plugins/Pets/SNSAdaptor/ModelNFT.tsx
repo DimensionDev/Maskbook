@@ -24,7 +24,7 @@ const useStyles = makeStyles()(() => ({
         marginTop: -340,
     },
     word: {
-        width: '150px !important',
+        width: '152px !important',
         maxHeight: 85,
     },
 }))
