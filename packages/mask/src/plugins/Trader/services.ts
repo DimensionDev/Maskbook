@@ -53,6 +53,7 @@ currentChainIdSettings.addListener((chainId: ChainId) => {
             currentTradeProviderSettings.value = TradeProvider.SUSHISWAP
             if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
                 currentDataProviderSettings.value = DataProvider.COIN_MARKET_CAP
+            break
         case NetworkType.Aurora:
             currentTradeProviderSettings.value = TradeProvider.DODO
             if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
@@ -87,6 +88,7 @@ currentTradeProviderSettings.addListener((tradeProvider: TradeProvider) => {
             break
         case NetworkType.Fantom:
             fantomNetworkTradeProviderSettings.value = tradeProvider
+            break
         case NetworkType.Aurora:
             auroraNetworkTradeProviderSettings.value = tradeProvider
             break
