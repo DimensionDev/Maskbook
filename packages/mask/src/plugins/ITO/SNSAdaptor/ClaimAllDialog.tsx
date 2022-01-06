@@ -32,15 +32,7 @@ import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 interface StyleProps {
     shortITOwrapper: boolean
 }
-const ALLOWED_CHAIN_ID_LIST = [
-    ChainId.Mainnet,
-    ChainId.BSC,
-    ChainId.Matic,
-    ChainId.Arbitrum,
-    ChainId.xDai,
-    ChainId.Fantom,
-    ChainId.Avalanche,
-]
+
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     wrapper: {
         paddingBottom: '0px !important',
@@ -222,6 +214,16 @@ interface ClaimAllDialogProps {
     open: boolean
 }
 
+const SUPPORTED_CHAIN_ID_LIST = [
+    ChainId.Mainnet,
+    ChainId.BSC,
+    ChainId.Matic,
+    ChainId.Arbitrum,
+    ChainId.xDai,
+    ChainId.Fantom,
+    ChainId.Avalanche,
+]
+
 export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { t } = useI18N()
     const { open, onClose } = props
@@ -236,7 +238,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     } = useSpaceStationCampaignInfo(account, Flags.nft_airdrop_enabled)
 
     const [chainId, setChainId] = useState(
-        ALLOWED_CHAIN_ID_LIST.includes(currentChainId) ? currentChainId : ChainId.Mainnet,
+        SUPPORTED_CHAIN_ID_LIST.includes(currentChainId) ? currentChainId : ChainId.Mainnet,
     )
     const { value: swappedTokens, loading, retry } = useClaimablePools(chainId)
     const { ITO_CONTRACT_ADDRESS: ITO_CONTRACT_ADDRESS_MAINNET } = useITOConstants(ChainId.Mainnet)
@@ -373,7 +375,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                             chainId={chainId}
                             setChainId={setChainId}
                             classes={classes}
-                            chains={ALLOWED_CHAIN_ID_LIST}
+                            chains={SUPPORTED_CHAIN_ID_LIST}
                         />
                     </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>

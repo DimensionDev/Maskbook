@@ -15,16 +15,7 @@ import { NetworkTab } from './NetworkTab'
 import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialog'
 import { NetworkPluginID, PluginId, usePluginIDContext } from '@masknet/plugin-infra'
 
-const CHAIN_ID_LIST = [
-    ChainId.Mainnet,
-    ChainId.BSC,
-    ChainId.Matic,
-    ChainId.Arbitrum,
-    ChainId.xDai,
-    ChainId.Celo,
-    ChainId.Fantom,
-    ChainId.Avalanche,
-]
+
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -94,6 +85,17 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 15,
     },
 }))
+const CHAIN_ID_LIST = [
+    ChainId.Mainnet,
+    ChainId.BSC,
+    ChainId.Matic,
+    ChainId.Arbitrum,
+    ChainId.xDai,
+    ChainId.Celo,
+    ChainId.Fantom,
+    ChainId.Avalanche,
+]
+
 
 export interface MaskAppEntry {
     title: string
