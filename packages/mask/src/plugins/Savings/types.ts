@@ -7,11 +7,16 @@ export interface SavingsNetwork {
     chainName: string
 }
 
+export enum ProtocolCategory {
+    ETH = 'eth',
+}
+
 export enum ProtocolType {
     Lido = 0,
 }
 
 export interface SavingsProtocol {
+    category: ProtocolCategory
     type: ProtocolType
     name: string
     image: string

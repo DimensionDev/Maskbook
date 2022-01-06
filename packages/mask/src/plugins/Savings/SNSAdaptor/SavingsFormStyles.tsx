@@ -75,4 +75,9 @@ export const useStyles = makeStyles()((theme, props) => ({
     tooltipArrow: {
         color: theme.palette.mode === 'dark' ? '#ffffff' : '#000000',
     },
+    gasFee: {
+        padding: '0 0 0 5px',
+        fontSize: 11,
+        opacity: 0.5,
+    },
 }))

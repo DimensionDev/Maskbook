@@ -10,6 +10,7 @@ import {
     useWeb3,
     useAccount,
     formatCurrency,
+    formatBalance,
 } from '@masknet/web3-shared-evm'
 import { TokenAmountPanel, FormattedCurrency } from '@masknet/shared'
 import { useTokenPrice } from '../../Wallet/hooks/useTokenPrice'
@@ -22,6 +23,7 @@ import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { LoadingAnimation } from '@masknet/shared'
 
 export interface SavingsFormProps {
     chainId: number
@@ -43,6 +45,7 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
 
     const [inputAmount, setInputAmount] = useState('')
     const [estimatedGas, setEstimatedGas] = useState<BigNumber.Value>(new BigNumber('0'))
+    const [loading, setLoading] = useState(false)
 
     const { value: nativeTokenBalance } = useFungibleTokenBalance(EthereumTokenType.Native, '', targetChainId)
 
@@ -52,12 +55,15 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
     const balanceAsBN = new BigNumber(TabType.Deposit ? nativeTokenBalance || '0' : protocol.balance)
 
     useAsync(async () => {
+        if (!(inputAsBN.toNumber() > 0)) return
+        setLoading(true)
         const gasEstimate =
             tab === TabType.Deposit
-                ? await protocol.depositEstimate(account, targetChainId, web3, new BigNumber('1'))
-                : await protocol.withdrawEstimate(account, targetChainId, web3, new BigNumber('1'))
+                ? await protocol.depositEstimate(account, targetChainId, web3, inputAsBN)
+                : await protocol.withdrawEstimate(account, targetChainId, web3, inputAsBN)
         setEstimatedGas(gasEstimate)
-    }, [protocol, chainId])
+        setLoading(false)
+    }, [protocol, chainId, inputAmount])
     //#endregion
 
     //#region form validation
@@ -100,13 +106,24 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
                 />
             </div>
 
-            <Typography variant="body2" textAlign="right" className={classes.tokenValueUSD}>
-                ≈ <FormattedCurrency value={tokenValueUSD} sign="$" formatter={formatCurrency} />
-            </Typography>
+            {loading ? (
+                <Typography variant="body2" textAlign="right" className={classes.tokenValueUSD}>
+                    <LoadingAnimation width={16} height={16} />
+                </Typography>
+            ) : (
+                <Typography variant="body2" textAlign="right" className={classes.tokenValueUSD}>
+                    ≈ <FormattedCurrency value={tokenValueUSD} sign="$" formatter={formatCurrency} />
+                    {estimatedGas > 0 ? (
+                        <span className={classes.gasFee}>+ {formatBalance(estimatedGas, 18)} ETH</span>
+                    ) : (
+                        <span />
+                    )}
+                </Typography>
+            )}
 
             <div className={classes.infoRow}>
                 <Typography variant="body1" className={classes.infoRowLeft}>
-                    <img src={IconURLS.eth} className={classes.rowImage} />
+                    <img src={IconURLS[protocol.image]} className={classes.rowImage} />
                     {protocol.pair} {t('plugin_savings_apy')}%
                 </Typography>
                 <Typography variant="body1" className={classes.infoRowRight}>

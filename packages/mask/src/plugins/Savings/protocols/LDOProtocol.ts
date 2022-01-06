@@ -10,7 +10,7 @@ import {
 import type { Lido } from '@masknet/web3-contracts/types/Lido'
 import LidoABI from '@masknet/web3-contracts/abis/Lido.json'
 import BigNumber from 'bignumber.js'
-import type { SavingsNetwork, SavingsProtocol } from '../types'
+import { ProtocolCategory, SavingsNetwork, SavingsProtocol } from '../types'
 import { ProtocolType } from '../types'
 
 export interface LidoContract {
@@ -36,6 +36,7 @@ export const LidoContracts: { [key: number]: LidoContract } = {
 }
 
 export class LidoProtocol implements SavingsProtocol {
+    public category = ProtocolCategory.ETH
     public type = ProtocolType.Lido
     public name = 'Lido'
     public image = 'lido'
@@ -51,7 +52,7 @@ export class LidoProtocol implements SavingsProtocol {
 
     public async getApr() {
         try {
-            const LidoAprUrl = `https://cors.r2d2.to/?https://stake.lido.fi/api/steth-apr`
+            const LidoAprUrl = 'https://cors.r2d2.to/?https://stake.lido.fi/api/steth-apr'
             const response = await fetch(LidoAprUrl)
             const apr = await response.text()
             this.apr = apr
@@ -92,7 +93,7 @@ export class LidoProtocol implements SavingsProtocol {
             )
             const gasEstimate = await contract?.methods
                 .submit(
-                    getSavingsConstants(chainId).LIDO_REFERALL_ADDRESS || '0x0000000000000000000000000000000000000000',
+                    getSavingsConstants(chainId).LIDO_REFERAL_ADDRESS || '0x0000000000000000000000000000000000000000',
                 )
                 .estimateGas({
                     from: account,
@@ -115,7 +116,7 @@ export class LidoProtocol implements SavingsProtocol {
             )
             await contract?.methods
                 .submit(
-                    getSavingsConstants(chainId).LIDO_REFERALL_ADDRESS || '0x0000000000000000000000000000000000000000',
+                    getSavingsConstants(chainId).LIDO_REFERAL_ADDRESS || '0x0000000000000000000000000000000000000000',
                 )
                 .send({
                     from: account,
