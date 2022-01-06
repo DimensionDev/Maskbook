@@ -71,6 +71,14 @@ export const resolveLinkOnOpenSea = createLookupTableResolver<ChainId.Mainnet | 
     'https://opensea.io',
 )
 
+export const resolveLinkOnRaribale = createLookupTableResolver<ChainId.Mainnet | ChainId.Ropsten, string>(
+    {
+        [ChainId.Mainnet]: 'https://rarible.com',
+        [ChainId.Ropsten]: 'https://testnets.raible.com',
+    },
+    'https://rarible.com',
+)
+
 export function resolveTraitLinkOnOpenSea(chainId: ChainId, slug: string, search: string, value: string) {
     if (chainId === ChainId.Rinkeby) {
         return `https://testnets.opensea.io/assets/${slug}?search[stringTraits][0][name]=${search}&search[stringTraits][0][values][0]=${value}`
@@ -79,9 +87,26 @@ export function resolveTraitLinkOnOpenSea(chainId: ChainId, slug: string, search
     return `https://opensea.io/assets/${slug}?search[stringTraits][0][name]=${search}&search[stringTraits][0][values][0]=${value}`
 }
 
-export function resolveAssetLinkOnOpenSea(chainId: ChainId, address: string, id: string) {
-    return urlcat(
-        resolveLinkOnOpenSea(chainId === ChainId.Mainnet ? ChainId.Mainnet : ChainId.Rinkeby),
-        `/assets/${address}/${id}`,
-    )
+export function resolveAssetLinkOnCurrentProvider(
+    chainId: ChainId,
+    address: string,
+    id: string,
+    provider: NonFungibleAssetProvider,
+) {
+    switch (provider) {
+        case NonFungibleAssetProvider.OPENSEA:
+            return urlcat(
+                resolveLinkOnOpenSea(chainId === ChainId.Mainnet ? ChainId.Mainnet : ChainId.Rinkeby),
+                `/assets/${address}/${id}`,
+            )
+        case NonFungibleAssetProvider.RARIBLE:
+            return urlcat(
+                resolveLinkOnRaribale(chainId === ChainId.Mainnet ? ChainId.Mainnet : ChainId.Ropsten),
+                `/token/${address}:${id}`,
+            )
+        case NonFungibleAssetProvider.NFTSCAN:
+            return ''
+        default:
+            return ''
+    }
 }

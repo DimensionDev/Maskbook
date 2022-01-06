@@ -31,7 +31,7 @@ import { CollectibleCard } from './CollectibleCard'
 import { CollectibleProviderIcon } from './CollectibleProviderIcon'
 import { CollectibleTab } from '../types'
 import { MaskTextIcon } from '../../../resources/MaskIcon'
-import { resolveAssetLinkOnOpenSea, resolveCollectibleProviderName } from '../pipes'
+import { resolveAssetLinkOnCurrentProvider, resolveCollectibleProviderName } from '../pipes'
 import { ActionBar } from './ActionBar'
 import { NonFungibleAssetProvider, useChainId } from '@masknet/web3-shared-evm'
 import { getEnumAsArray } from '@dimensiondev/kit'
@@ -153,7 +153,7 @@ export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const chainId = useChainId()
-    const { asset, provider, tabIndex, setTabIndex } = CollectibleState.useContainer()
+    const { token, asset, provider, tabIndex, setTabIndex } = CollectibleState.useContainer()
 
     //#region sync with settings
     const collectibleProviderOptions = getEnumAsArray(NonFungibleAssetProvider)
@@ -170,7 +170,7 @@ export function Collectible(props: CollectibleProps) {
     )
     //#endregion
 
-    if (!asset.value)
+    if (!asset.value || !token)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
                 <Typography color="textPrimary" sx={{ marginTop: 8, marginBottom: 8 }}>
@@ -223,15 +223,16 @@ export function Collectible(props: CollectibleProps) {
                     }
                     title={
                         <Typography style={{ display: 'flex', alignItems: 'center' }}>
-                            {asset.value.token_address && asset.value.token_id ? (
+                            {token ? (
                                 <Link
                                     color="primary"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    href={resolveAssetLinkOnOpenSea(
+                                    href={resolveAssetLinkOnCurrentProvider(
                                         chainId,
-                                        asset.value.token_address,
-                                        asset.value.token_id,
+                                        token.contractAddress,
+                                        token.tokenId,
+                                        provider,
                                     )}>
                                     {asset.value.name ?? ''}
                                 </Link>
