@@ -135,8 +135,6 @@
     "settings_language": "语言",
     "settings_language_secondary": "选择您要使用的语言.",
     "settings_choose_eth_network": "选择以太坊网络",
-    "settings_post_replacement": "替换贴文",
-    "settings_post_replacement_desc": "所有网页上的贴文将由Mask提供，包括不是由Mask创建的贴文。",
     "settings_launch_page": "启动页面",
     "settings_launch_page_secondary": "选择启动应用程序时要打开的默认页面",
     "speed_up": "加速",

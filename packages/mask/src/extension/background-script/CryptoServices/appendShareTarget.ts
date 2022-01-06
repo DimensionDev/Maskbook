@@ -12,7 +12,6 @@ import { updatePostDB, RecipientDetail, RecipientReason } from '../../../../back
 import { getNetworkWorkerUninitialized } from '../../../social-network/worker'
 import { queryPrivateKey, queryLocalKey } from '../../../database'
 import { publishPostAESKey_version39Or38 } from '../../../../background/network/gun/encryption/queryPostKey'
-import { getGunInstance } from '../../../../background/network/gun/instance'
 import { decodeArrayBuffer } from '@dimensiondev/kit'
 export async function appendShareTarget(
     version: -40 | -39 | -38,
@@ -44,7 +43,6 @@ export async function appendShareTarget(
         const gunHint = getNetworkWorkerUninitialized(whoAmI)?.gunNetworkHint
         gunHint &&
             publishPostAESKey_version39Or38(
-                getGunInstance(),
                 version,
                 new Uint8Array(decodeArrayBuffer(iv)),
                 gunHint,

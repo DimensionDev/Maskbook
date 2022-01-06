@@ -251,6 +251,14 @@ importers:
       '@masknet/theme': link:../theme
       ef.js: 0.14.2
 
+  packages/gun-utils:
+    specifiers:
+      event-iterator: ^2.0.0
+      gun: ^0.2020.1234
+    dependencies:
+      event-iterator: 2.0.0
+      gun: 0.2020.1235
+
   packages/icons:
     specifiers:
       '@emotion/server': ^11.4.0
@@ -286,6 +294,7 @@ importers:
       '@masknet/dashboard': workspace:*
       '@masknet/encryption': workspace:^0.0.0
       '@masknet/external-plugin-previewer': workspace:*
+      '@masknet/gun-utils': workspace:^undefined
       '@masknet/icons': workspace:*
       '@masknet/injected-script': workspace:*
       '@masknet/plugin-dao': workspace:*
@@ -353,7 +362,6 @@ importers:
       fuse.js: ^6.5.3
       graphql: ^15.5.1
       graphql-request: ^3.4.0
-      gun: ^0.2020.1234
       history: ^5.2.0
       html-webpack-plugin: ^5.5.0
       https-browserify: ^1.0.0
@@ -422,6 +430,7 @@ importers:
       '@masknet/dashboard': link:../dashboard
       '@masknet/encryption': link:../encryption
       '@masknet/external-plugin-previewer': link:../external-plugin-previewer
+      '@masknet/gun-utils': link:../gun-utils
       '@masknet/icons': link:../icons
       '@masknet/injected-script': link:../injected-script
       '@masknet/plugin-dao': link:../plugins/DAO
@@ -482,7 +491,6 @@ importers:
       fuse.js: 6.5.3
       graphql: 15.5.3
       graphql-request: 3.5.0_graphql@15.5.3
-      gun: 0.2020.1234
       history: 5.2.0
       https-browserify: 1.0.0
       i18next-browser-languagedetector: 6.1.2
@@ -15177,15 +15185,14 @@ packages:
       glogg: 1.0.2
     dev: true
 
-  /gun/0.2020.1234:
-    resolution: {integrity: sha512-RqlGDDze1U7gdRZCHx8VMBi0dzyJL4C6jQHwOuFjH9aldGcCQPN0HyVaKVn6jNHgS1AAbTBod4KCfMRXda+eZg==}
+  /gun/0.2020.1235:
+    resolution: {integrity: sha512-aba6s0X/MCCOByt0T3VrMzMMUEblfN2aLV2bAmIQWjkB7SKnm07zAZWigljwI69Rb5sOw7C1G116UyvCM2p9kA==}
     engines: {node: '>=0.8.4'}
     dependencies:
-      ws: 7.5.5
+      ws: 7.5.6
     optionalDependencies:
       '@peculiar/webcrypto': 1.2.3
       emailjs: 2.2.0
-      text-encoding: 0.7.0
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -24959,19 +24966,6 @@ packages:
         optional: true
     dev: false
 
-  /ws/7.5.5:
-    resolution: {integrity: sha512-BAkMFcAzl8as1G/hArkxOxq3G7pjUqQ3gzYbLL0/5zNkph70e+lCoxBGnm6AW1+/aiNeV4fnKqZ8m4GZewmH2w==}
-    engines: {node: '>=8.3.0'}
-    peerDependencies:
-      bufferutil: ^4.0.1
-      utf-8-validate: ^5.0.2
-    peerDependenciesMeta:
-      bufferutil:
-        optional: true
-      utf-8-validate:
-        optional: true
-    dev: false
-
   /ws/7.5.6:
     resolution: {integrity: sha512-6GLgCqo2cy2A2rjCNFlxQS6ZljG/coZfZXclldI8FB/1G3CCI36Zd8xy2HrFVACi8tfk5XrgLQEk+P0Tnz9UcA==}
     engines: {node: '>=8.3.0'}
@@ -24983,7 +24977,6 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
-    dev: true
 
   /ws/8.3.0:
     resolution: {integrity: sha512-Gs5EZtpqZzLvmIM59w4igITU57lrtYVFneaa434VROv4thzJyV6UjIL3D42lslWlI+D4KzLYnxSwtfuiO79sNw==}

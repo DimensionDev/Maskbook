@@ -9,6 +9,7 @@ packages:
   - 'packages/dashboard'
   - 'packages/mask'
   - 'packages/injected-script'
+  - 'packages/gun-utils'
   - 'packages/mask-sdk'
   - 'packages/public-api'
   - 'packages/shared-base'

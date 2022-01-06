@@ -4,10 +4,7 @@ import 'gun/lib/radix'
 import 'gun/lib/radisk'
 import 'gun/lib/store'
 import 'gun/lib/rindexed'
-import { gunServers } from '.'
-import { startEffects } from '../../../utils-pure'
-
-const { signal } = startEffects(import.meta.webpackHot)
+import { gunServers } from './server'
 
 export type GunRoot = ReturnType<typeof createGun>
 let gun: GunRoot | undefined
@@ -29,12 +26,11 @@ function createGun() {
                 if (this.timer) clearTimeout(this.timer)
                 this.timer = setTimeout(abort, 15 * 60 * 1000)
             })
-            signal.addEventListener('abort', abort)
-            this.addEventListener('message', tick, { signal })
+            this.addEventListener('message', tick, {})
         }
         private declare abort: () => void
         private declare tick: () => void
-        declare timer: NodeJS.Timeout | undefined
+        declare timer: NodeJS.Timer | undefined
         override send(data: any) {
             this.tick()
             super.send(data)

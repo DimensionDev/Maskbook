@@ -210,7 +210,6 @@ function decryptionContext(
         let abort = new AbortController()
         async function decryptByLinks() {
             const links = [...mentionedLinks.getCurrentValue()].sort()
-            console.log('start by link', ...links)
             if (links.length === 0) return
             const key = await hash(links.join(';'))
             await decryption(
@@ -287,7 +286,6 @@ function decryptionContext(
                 providerMap.delete(id)
                 map.delete(id)
             })
-            decryption.return()
         })
 
         for await (const [decryptionID, progress] of decryption) {

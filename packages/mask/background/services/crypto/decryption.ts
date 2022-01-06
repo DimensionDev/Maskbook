@@ -31,7 +31,6 @@ import {
 import { queryPostDB } from '../../database/post'
 import { savePostKeyToDB } from '../../database/post/helper'
 import { GUN_queryPostKey_version39Or38, GUN_queryPostKey_version40 } from '../../network/gun/encryption/queryPostKey'
-import { getGunInstance } from '../../network/gun/instance'
 
 export type DecryptionInfo = {
     type: DecryptProgressKind.Info
@@ -154,7 +153,6 @@ export async function* decryption(payload: string | Uint8Array, context: Decrypt
                 const author = await queryPublicKey(context.currentProfile, true)
                 if (!author) throw new DecryptError(ErrorReasons.CurrentProfileDoesNotConnectedToPersona, undefined)
                 yield* GUN_queryPostKey_version39Or38(
-                    getGunInstance(),
                     -38,
                     iv,
                     author,
@@ -166,7 +164,6 @@ export async function* decryption(payload: string | Uint8Array, context: Decrypt
                 const author = await queryPublicKey(context.currentProfile, true)
                 if (!author) throw new DecryptError(ErrorReasons.CurrentProfileDoesNotConnectedToPersona, undefined)
                 yield* GUN_queryPostKey_version39Or38(
-                    getGunInstance(),
                     -39,
                     iv,
                     author,
@@ -176,7 +173,7 @@ export async function* decryption(payload: string | Uint8Array, context: Decrypt
             },
             async queryPostKey_version40(iv) {
                 if (!currentProfile) return null
-                return GUN_queryPostKey_version40(getGunInstance(), iv, currentProfile.userId)
+                return GUN_queryPostKey_version40(iv, currentProfile.userId)
             },
         },
     )

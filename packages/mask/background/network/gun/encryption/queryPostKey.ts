@@ -1,21 +1,18 @@
 import { decodeArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
 import type { DecryptStaticECDH_PostKey } from '@masknet/encryption'
 import type { EC_Public_CryptoKey, EC_Public_JsonWebKey } from '@masknet/shared-base'
-import type { default as gun } from 'gun'
 import { CryptoKeyToJsonWebKey } from '../../../../utils-pure'
-import { getGunData, pushToGunDataArray, subscribeGunMapData } from '../utils'
+import { getGunData, pushToGunDataArray, subscribeGunMapData } from '@masknet/gun-utils'
 import { EventIterator } from 'event-iterator'
 import { noop } from 'lodash-unified'
-type Gun = ReturnType<typeof gun>
 
 // !!! Change how this file access Gun will break the compatibility of v40 payload decryption.
 export async function GUN_queryPostKey_version40(
-    gun: Gun,
     iv: Uint8Array,
     whoAmI: string,
 ): Promise<null | DecryptStaticECDH_PostKey> {
     // PATH ON GUN: maskbook > posts > iv > userID
-    const result = await getGunData(gun, 'maskbook', 'posts', encodeArrayBuffer(iv), whoAmI)
+    const result = await getGunData('maskbook', 'posts', encodeArrayBuffer(iv), whoAmI)
     if (!isValidData(result)) return null
     return {
         encryptedPostKey: new Uint8Array(decodeArrayBuffer(result.encryptedKey)),
@@ -34,7 +31,6 @@ export async function GUN_queryPostKey_version40(
 
 namespace Version38Or39 {
     export async function* GUN_queryPostKey_version39Or38(
-        gun: Gun,
         version: -38 | -39,
         iv: Uint8Array,
         minePublicKey: EC_Public_CryptoKey,
@@ -47,15 +43,15 @@ namespace Version38Or39 {
         /* cspell:disable-next-line */
         // ? In this step we get something like ["jzarhbyjtexiE7aB1DvQ", "jzarhuse6xlTAtblKRx9"]
         console.log(`[@masknet/encryption] Reading key partition [${postHash}][${keyHash}]`)
-        const internalNodeNames = Object.keys((await getGunData(gun, postHash, keyHash)) || {}).filter((x) => x !== '_')
+        const internalNodeNames = Object.keys((await getGunData(postHash, keyHash)) || {}).filter((x) => x !== '_')
         // ? In this step we get all keys in this category (gun2[postHash][keyHash])
-        const resultPromise = internalNodeNames.map((key) => getGunData(gun, key))
+        const resultPromise = internalNodeNames.map((key) => getGunData(key))
 
         const iter = new EventIterator<DecryptStaticECDH_PostKey>((queue) => {
             for (const result of resultPromise) result.then(emit, noop)
 
             async function main() {
-                const iter = subscribeGunMapData(gun, [postHash], isValidData, abortSignal)
+                const iter = subscribeGunMapData([postHash], isValidData, abortSignal)
                 for await (const data of iter) emit(data)
             }
 
@@ -85,7 +81,6 @@ namespace Version38Or39 {
      * @param receiversKeys Keys needs to publish
      */
     export async function publishPostAESKey_version39Or38(
-        gun: Gun,
         version: -39 | -38,
         postIV: Uint8Array,
         networkHint: string,
@@ -96,7 +91,7 @@ namespace Version38Or39 {
         receiversKeys.forEach(async ({ aesKey, receiverKey }) => {
             const keyHash = await (version === -38 ? hashKey38 : hashKey39)(receiverKey)
             console.log(`gun[${postHash}][${keyHash}].push(`, aesKey, ')')
-            pushToGunDataArray(gun, [postHash, keyHash], aesKey)
+            pushToGunDataArray([postHash, keyHash], aesKey)
         })
     }
 

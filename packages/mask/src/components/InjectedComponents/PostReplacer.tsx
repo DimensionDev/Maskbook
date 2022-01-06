@@ -1,5 +1,4 @@
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
-import { useValueRef } from '@masknet/shared'
 import {
     isTypedMessagePromise,
     isTypedMessageTuple,
@@ -9,7 +8,6 @@ import {
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo } from 'react'
 import { Result } from 'ts-results'
-import { allPostReplacementSettings } from '../../settings/settings'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
 import { DefaultTypedMessageRenderer } from './TypedMessageRenderer'
 const useStyles = makeStyles()({
@@ -27,7 +25,6 @@ export function PostReplacer(props: PostReplacerProps) {
     const { classes } = useStyles()
     const postMessage = usePostInfoDetails.rawMessage()
     const hasMaskPayload = usePostInfoDetails.containsMaskPayload()
-    const allPostReplacement = useValueRef(allPostReplacementSettings)
 
     const plugins = useActivatedPluginsSNSAdaptor(false)
     const processedPostMessage = useMemo(
@@ -44,8 +41,6 @@ export function PostReplacer(props: PostReplacerProps) {
         [plugins.map((x) => x.ID).join(), postMessage],
     )
     const shouldReplacePost =
-        // replace all posts
-        allPostReplacement ||
         // replace posts which enhanced by plugins
         processedPostMessage.items.some((x) => !isWellKnownTypedMessages(x)) ||
         // replace posts which encrypted by Mask

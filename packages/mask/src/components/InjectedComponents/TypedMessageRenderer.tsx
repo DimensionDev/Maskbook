@@ -73,7 +73,6 @@ export const DefaultTypedMessageAnchorRenderer = memo(function DefaultTypedMessa
         <Typography component="span" variant="body1" data-testid="anchor_payload">
             {/* // TODO: */}
             <PayloadReplacer payload={href} />
-            // TODO: shrink link size
             <Link color="primary" target="_blank" rel="noopener noreferrer" href={href}>
                 {content}
             </Link>

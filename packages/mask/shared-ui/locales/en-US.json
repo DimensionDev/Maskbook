@@ -139,8 +139,6 @@
     "settings_language": "Language",
     "settings_language_secondary": "Select the language you would like to use.",
     "settings_choose_eth_network": "Choose Ethereum Network",
-    "settings_post_replacement": "Substitute Post",
-    "settings_post_replacement_desc": "All posts on the web-pages will be rendered by Mask, including those not created by Mask.",
     "settings_launch_page": "Launch Page",
     "settings_launch_page_secondary": "Select the default page to open when launch the app",
     "speed_up": "Speed up",

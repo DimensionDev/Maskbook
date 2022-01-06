@@ -103,8 +103,6 @@
     "settings_language": "語言",
     "settings_language_secondary": "選擇你想使用的語言。",
     "settings_choose_eth_network": "選擇乙太坊網路",
-    "settings_post_replacement": "取代貼文",
-    "settings_post_replacement_desc": "網頁上的所有貼文都將通過 Mask 呈現，包括那些不是由 Mask 建立的貼文。",
     "settings_launch_page": "啟動頁面",
     "settings_launch_page_secondary": "選擇啟動程式時要打開的預設頁面",
     "speed_up": "加速",
