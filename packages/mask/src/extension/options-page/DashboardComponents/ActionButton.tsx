@@ -122,7 +122,10 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
                 setState('complete')
                 onComplete?.()
             },
-            () => setState('fail'),
+            (error) => {
+                if (error.message.includes('Switch Chain Error')) setState('init')
+                else setState('fail')
+            },
         )
     }
     const cancel = () => {
@@ -149,7 +152,7 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
                 onClick={completeClick}
             />
         )
-    if (state === 'fail' && failed)
+    if (state === 'fail')
         return (
             <Button
                 {...b}
