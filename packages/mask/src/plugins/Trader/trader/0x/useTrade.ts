@@ -28,9 +28,9 @@ export function getNativeTokenLabel(networkType: NetworkType) {
         case NetworkType.Polygon:
         case NetworkType.Arbitrum:
         case NetworkType.xDai:
-        case NetworkType.Avalanche:
         case NetworkType.Celo:
         case NetworkType.Fantom:
+        case NetworkType.Avalanche:
             return NATIVE_TOKEN_ADDRESS
         default:
             safeUnreachable(networkType)
