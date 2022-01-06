@@ -220,6 +220,7 @@ const SUPPORTED_CHAIN_ID_LIST = [
     ChainId.Matic,
     ChainId.Arbitrum,
     ChainId.xDai,
+    ChainId.Celo,
     ChainId.Fantom,
     ChainId.Boba,
 ]
