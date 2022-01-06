@@ -89,8 +89,8 @@ export const celoNetworkTradeProviderSettings = createGlobalSettings<TradeProvid
 )
 
 export const auroraNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_IDENTIFIER}+aurora+tradeProvider`,
-    TradeProvider.SUSHISWAP,
+    `${PLUGIN_ID}+aurora+tradeProvider`,
+    TradeProvider.DODO,
     { primary: () => '' },
 )
 
@@ -110,6 +110,8 @@ const balancerSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvi
 const dodoSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+dodo`, '')
 const bancorSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+bancor`, '')
 const openoceanSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+openocean`, '')
+const trisolarisSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+trisolaris`, '')
+const wannaswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+wannaswap`, '')
 
 /**
  * The general settings of specific tarde provider
@@ -138,6 +140,10 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return bancorSettings
         case TradeProvider.OPENOCEAN:
             return openoceanSettings
+        case TradeProvider.TRISOLARIS:
+            return trisolarisSettings
+        case TradeProvider.WANNASWAP:
+            return wannaswapSettings
         default:
             unreachable(tradeProvider)
     }

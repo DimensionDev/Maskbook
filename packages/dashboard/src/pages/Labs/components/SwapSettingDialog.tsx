@@ -62,7 +62,11 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
 
     const celoOptions = [{ label: 'SushiSwap', value: TradeProvider.SUSHISWAP }]
 
-    const auroraOptions = [{ label: 'DODO', value: TradeProvider.DODO }]
+    const auroraOptions = [
+        { label: 'DODO', value: TradeProvider.DODO },
+        { label: 'WannaSwap', value: TradeProvider.WANNASWAP },
+        { label: 'Trisolaris', value: TradeProvider.TRISOLARIS },
+    ]
 
     const t = useDashboardI18N()
 

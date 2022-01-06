@@ -214,6 +214,8 @@ export enum TradeProvider {
     UNISWAP_V3 = 8,
     BANCOR = 9,
     OPENOCEAN = 10,
+    WANNASWAP = 11,
+    TRISOLARIS = 12,
 }
 /** Supported language settings */
 export enum LanguageOptions {
