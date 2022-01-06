@@ -22,16 +22,16 @@ export async function getNFT(address: string, tokenId: string) {
         orders.sort((a, b) =>
             new BigNumber(
                 getOrderUSDPrice(
-                    b.current_price,
-                    b.payment_token_contract?.usd_price,
-                    b.payment_token_contract?.decimals,
+                    a.current_price,
+                    a.payment_token_contract?.usd_price,
+                    a.payment_token_contract?.decimals,
                 ) ?? 0,
             )
                 .minus(
                     getOrderUSDPrice(
-                        a.current_price,
-                        a.payment_token_contract?.usd_price,
-                        a.payment_token_contract?.decimals,
+                        b.current_price,
+                        b.payment_token_contract?.usd_price,
+                        b.payment_token_contract?.decimals,
                     ) ?? 0,
                 )
                 .toNumber(),
