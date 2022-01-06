@@ -1,8 +1,8 @@
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { ERC721ContractDetailed, useERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import type { ERC721ContractDetailed } from '@masknet/web3-shared-evm'
 import { List, ListItem, ListProps, Skeleton, Typography } from '@mui/material'
 import classnames from 'classnames'
-import type { FC, HTMLProps } from 'react'
+import { FC, HTMLProps, useState } from 'react'
 import { useI18N } from '../../../utils'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 
@@ -96,9 +96,9 @@ interface NftItemProps extends HTMLProps<HTMLDivElement> {
 
 export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claimed, ...rest }) => {
     const { t } = useI18N()
-    const result = useERC721TokenDetailed(contract, tokenId)
     const { classes } = useStyles()
-    if (!result.tokenDetailed || !contract) {
+    const [name, setName] = useState('#' + tokenId)
+    if (!contract) {
         return (
             <div className={classnames(className, classes.nft, classes.loading)} {...rest}>
                 <Skeleton height={185} width={120} />
@@ -112,11 +112,12 @@ export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claime
                 classes={{
                     loadingFailImage: classes.loadingFailImage,
                 }}
-                tokenId={result.tokenDetailed.tokenId}
-                contractAddress={result.tokenDetailed.contractDetailed.address}
-                chainId={result.tokenDetailed.contractDetailed.chainId}
+                tokenId={tokenId}
+                contractAddress={contract.address}
+                chainId={contract.chainId}
+                setERC721TokenName={setName}
             />
-            <Typography className={classes.name}>{result.tokenDetailed.info.name}</Typography>
+            <Typography className={classes.name}>{name}</Typography>
             {claimed && <Typography className={classes.claimedBadge}>{t('plugin_red_packet_claimed')}</Typography>}
         </div>
     )

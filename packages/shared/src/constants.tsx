@@ -8,4 +8,4 @@ export const SOCIAL_MEDIA_ICON_MAPPING: Record<string, ReactNode> = {
     'instagram.com': <InstagramColoredIcon />,
 }
 
-export const mediaViewerUrl = 'https://192.168.3.101:8081/index.html'
+export const mediaViewerUrl = 'https://dimensiondev.github.io/Media-Viewer/index.html'

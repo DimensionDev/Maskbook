@@ -32,7 +32,12 @@ interface AssetPlayerProps
     fallbackImage?: URL
     setERC721TokenName?: (name: string) => void
 }
-const useStyles = makeStyles()({})
+const useStyles = makeStyles()({
+    hidden: {
+        position: 'absolute',
+        visibility: 'hidden',
+    },
+})
 
 enum AssetPlayerState {
     LOADING = 0,
@@ -41,7 +46,7 @@ enum AssetPlayerState {
     ERROR = 3,
 }
 
-const TIMEOUT = 10000
+const TIMEOUT = 30000
 
 export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconProps, ...props }) => {
     const ref = useRef<IFrameComponent | null>(null)
@@ -82,15 +87,14 @@ export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconPro
     }, [url, JSON.stringify(erc721Token), type, JSON.stringify(options), playerState])
     //endregion
 
-    type ERC721TokenNameMsg = { type: 'name'; name: string }
+    type ERC721TokenNameMsg = { message: { type: 'name'; name: string } }
     //#region resource loaded error
     const onMessage = useCallback(({ message }: { message: { name: string } | ERC721TokenNameMsg }) => {
-        if (message?.name === 'Error') {
+        if ((message as { name: string })?.name === 'Error') {
             setPlayerState(AssetPlayerState.ERROR)
         }
-
-        if ((message as ERC721TokenNameMsg).type === 'name') {
-            props.setERC721TokenName?.((message as ERC721TokenNameMsg).name)
+        if ((message as ERC721TokenNameMsg).message?.type === 'name') {
+            props.setERC721TokenName?.((message as ERC721TokenNameMsg).message.name)
         }
     }, [])
     //#endregion
@@ -123,7 +127,7 @@ export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconPro
                     setPlayerState(AssetPlayerState.INIT)
                     setIframe()
                 }}
-                className={playerState !== AssetPlayerState.NORMAL ? '' : classes.iframe}
+                className={playerState !== AssetPlayerState.NORMAL ? classes.hidden : classes.iframe}
                 onResized={({ type }) => {
                     if (type === 'init' || playerState === AssetPlayerState.NORMAL) return
                     cancel()

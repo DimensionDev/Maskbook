@@ -68,7 +68,7 @@ export interface NFTCardProps {
 export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect }) => {
     const { classes } = useStyles()
     const [checked, setChecked] = useState(!!selectedTokenId && selectedTokenId === token.tokenId)
-
+    const [name, setName] = useState(token.tokenId)
     const isDisabled = useMemo(
         () => !!selectedTokenId && selectedTokenId !== token.tokenId,
         [selectedTokenId, token.tokenId],
@@ -85,16 +85,17 @@ export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect })
                     background: (theme) => (theme.palette.mode === 'dark' ? MaskColorVar.primaryBackground : '#F9F9FA'),
                 }}
                 classes={{ titleWrap: classes.barTitle }}
-                subtitle={<span>{token.info.name || token.tokenId}</span>}
+                subtitle={<span>{name}</span>}
                 position="below"
             />
         )
-    }, [token.info.name, token.tokenId])
+    }, [name])
 
     return (
         <ImageListItem
             sx={{
-                borderRadius: '12px',
+                borderTopLeftRadius: '10px',
+                borderTopRightRadius: '10px',
                 mb: 6,
                 maxWidth: '140px',
                 background: (theme) => (theme.palette.mode === 'dark' ? getMaskColor(theme).white : '#F9F9FA'),
@@ -104,6 +105,7 @@ export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect })
                 contractAddress={token.contractDetailed.address}
                 chainId={token.contractDetailed.chainId}
                 tokenId={token.tokenId}
+                setERC721TokenName={setName}
                 classes={{
                     loadingFailImage: classes.loadingFailImage,
                     loadingPlaceholder: classes.loadingPlaceholder,

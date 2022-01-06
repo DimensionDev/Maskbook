@@ -287,22 +287,9 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                     <Grid item xs={12}>
                         <List className={classes.tokenSelector}>
                             {tokenList.map((value, i) => (
-                                <ListItem key={i.toString()} className={classNames(classes.tokenSelectorWrapper)}>
-                                    <NFTCardStyledAssetPlayer
-                                        contractAddress={value.contractDetailed.address}
-                                        chainId={value.contractDetailed.chainId}
-                                        tokenId={value.tokenId}
-                                        classes={{
-                                            loadingFailImage: classes.loadingFailImage,
-                                        }}
-                                    />
-
-                                    <div className={classes.nftNameWrapper}>
-                                        <Typography className={classes.nftName} color="textSecondary">
-                                            {value.info.name}
-                                        </Typography>
-                                    </div>
-                                </ListItem>
+                                <div key={i.toString()}>
+                                    <NFTCard token={value} />
+                                </div>
                             ))}
                         </List>
                     </Grid>
@@ -356,5 +343,34 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                 </Grid>
             </DialogContent>
         </InjectedDialog>
+    )
+}
+
+interface NFTCardProps {
+    token: ERC721TokenDetailed
+}
+
+function NFTCard(props: NFTCardProps) {
+    const { token } = props
+    const { classes } = useStyles()
+    const [name, setName] = useState('#' + token.tokenId)
+    return (
+        <ListItem className={classNames(classes.tokenSelectorWrapper)}>
+            <NFTCardStyledAssetPlayer
+                contractAddress={token.contractDetailed.address}
+                chainId={token.contractDetailed.chainId}
+                tokenId={token.tokenId}
+                setERC721TokenName={setName}
+                classes={{
+                    loadingFailImage: classes.loadingFailImage,
+                }}
+            />
+
+            <div className={classes.nftNameWrapper}>
+                <Typography className={classes.nftName} color="textSecondary">
+                    {name}
+                </Typography>
+            </div>
+        </ListItem>
     )
 }

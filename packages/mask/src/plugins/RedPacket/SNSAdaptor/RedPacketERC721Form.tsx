@@ -311,26 +311,9 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     <div className={classes.tokenSelectorParent}>
                         <List className={classes.tokenSelector}>
                             {existTokenDetailedList.map((value, i) => (
-                                <ListItem key={i.toString()} className={classNames(classes.tokenSelectorWrapper)}>
-                                    <NFTCardStyledAssetPlayer
-                                        contractAddress={value.contractDetailed.address}
-                                        chainId={value.contractDetailed.chainId}
-                                        tokenId={value.tokenId}
-                                        classes={{
-                                            loadingFailImage: classes.loadingFailImage,
-                                        }}
-                                    />
-                                    <div className={classes.nftNameWrapper}>
-                                        <Typography className={classes.nftName} color="textSecondary">
-                                            {value.info.name}
-                                        </Typography>
-                                    </div>
-                                    <div className={classes.closeIconWrapperBack} onClick={() => removeToken(value)}>
-                                        <div className={classes.closeIconWrapper}>
-                                            <CloseIcon className={classes.closeIcon} />
-                                        </div>
-                                    </div>
-                                </ListItem>
+                                <div key={i.toString()}>
+                                    <NFTCard token={value} removeToken={removeToken} />
+                                </div>
                             ))}
                             <ListItem
                                 onClick={() => setOpen(true)}
@@ -387,5 +370,39 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                 />
             ) : null}
         </>
+    )
+}
+
+interface NFTCardProps {
+    token: OrderedERC721Token
+    removeToken: (token: ERC721TokenDetailed) => void
+}
+
+function NFTCard(props: NFTCardProps) {
+    const { token, removeToken } = props
+    const { classes } = useStyles()
+    const [name, setName] = useState('#' + token.tokenId)
+    return (
+        <ListItem className={classNames(classes.tokenSelectorWrapper)}>
+            <NFTCardStyledAssetPlayer
+                contractAddress={token.contractDetailed.address}
+                chainId={token.contractDetailed.chainId}
+                tokenId={token.tokenId}
+                setERC721TokenName={setName}
+                classes={{
+                    loadingFailImage: classes.loadingFailImage,
+                }}
+            />
+            <div className={classes.nftNameWrapper}>
+                <Typography className={classes.nftName} color="textSecondary">
+                    {name}
+                </Typography>
+            </div>
+            <div className={classes.closeIconWrapperBack} onClick={() => removeToken(token)}>
+                <div className={classes.closeIconWrapper}>
+                    <CloseIcon className={classes.closeIcon} />
+                </div>
+            </div>
+        </ListItem>
     )
 }
