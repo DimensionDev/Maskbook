@@ -16,14 +16,17 @@ interface Configure {
     ignoreWords?: string[]
 }
 
-function localeCompare(a: string, b: string) {
-    return a.localeCompare(b, 'en-US', { numeric: true })
+function sort(values?: string[]) {
+    if (!values) return
+    values = [...new Set(values)]
+    values.sort((a, b) => a.localeCompare(b, 'en-US', { numeric: true }))
+    return values
 }
 
 function sortConfigure(configure: Configure) {
-    configure.ignorePaths?.sort(localeCompare)
-    configure.words?.sort(localeCompare)
-    configure.ignoreWords?.sort(localeCompare)
+    configure.ignorePaths = sort(configure.ignorePaths)
+    configure.words = sort(configure.words)
+    configure.ignoreWords = sort(configure.ignoreWords)
 }
 
 export async function reorderSpellcheck() {
