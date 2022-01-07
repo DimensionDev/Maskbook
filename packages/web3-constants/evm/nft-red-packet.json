@@ -13,7 +13,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Boba": "",
-        "Boba_Rinkeby": "",
+        "Boba_Rinkeby": "0xdcA6F476EebCDE8FE8b072e3fC80dBC28dC209b3",
         "Celo": "",
         "Fantom": ""
     },
@@ -31,7 +31,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Boba": "",
-        "Boba_Rinkeby": "",
+        "Boba_Rinkeby": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-nft-red-packet-boba-rinkeby",
         "Celo": "",
         "Fantom": ""
     }
