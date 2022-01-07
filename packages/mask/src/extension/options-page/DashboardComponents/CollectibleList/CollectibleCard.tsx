@@ -12,7 +12,7 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         borderRadius: 4,
         position: 'relative',
-        backgroundColor: theme.palette.background.paper,
+        backgroundColor: theme.palette.background.default,
         width: 172,
         height: 172,
     },

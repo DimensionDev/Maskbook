@@ -50,7 +50,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1),
     },
     description: {
-        background: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
+        background: theme.palette.mode === 'light' ? '#F7F9FA' : '#2F3336',
         alignSelf: 'stretch',
     },
     name: {
