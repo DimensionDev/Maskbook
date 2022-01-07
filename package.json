@@ -22,7 +22,8 @@
     "*": "prettier --write --ignore-unknown",
     "packages/**/*.{ts,tsx,js,jsx}": "eslint -c packages/.eslintrc.json --fix",
     "packages/mask/**/*": "node ./packages/scripts/src/bin/precommit-hook-localekit.js",
-    "packages/web3-constants/**/*": "pnpm start --filter web3-constants"
+    "packages/web3-constants/**/*": "pnpm start --filter web3-constants",
+    "cspell.json": "sh -c 'gulp reorderSpellcheck'"
   },
   "dependencies": {
     "@dimensiondev/kit": "0.0.0-20211215044858-27d964f",
