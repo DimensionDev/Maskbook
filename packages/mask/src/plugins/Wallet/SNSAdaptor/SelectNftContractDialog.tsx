@@ -9,6 +9,7 @@ import {
     useAccount,
     useERC721Tokens,
     formatEthereumAddress,
+    useBlockie,
 } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../messages'
@@ -22,7 +23,6 @@ import { useERC721ContractDetailed } from '@masknet/web3-shared-evm'
 import { unionBy } from 'lodash-unified'
 import { useNFTBalance } from '../../EVM/hooks'
 import type { NonFungibleTokenAPI } from '@masknet/web3-providers'
-import { NFTContractIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     search: {
@@ -255,15 +255,13 @@ function ContractListItem(props: ContractListItemProps) {
     const { onSubmit, contract } = props
     const { classes } = useStyles()
     const chainId = useChainId()
+    const blockie = useBlockie(contract.contractDetailed.address)
 
     return (
         <div style={{ position: 'relative' }}>
             <ListItem className={classes.listItem} onClick={() => onSubmit(contract.contractDetailed)}>
-                {contract.contractDetailed.iconURL ? (
-                    <img className={classes.icon} src={contract.contractDetailed.iconURL} />
-                ) : (
-                    <NFTContractIcon className={classes.icon} />
-                )}
+                <img className={classes.icon} src={contract.contractDetailed.iconURL ?? blockie} />
+
                 <Typography className={classes.contractName}>
                     {contract.contractDetailed.name}{' '}
                     {contract.contractDetailed.symbol ? '(' + contract.contractDetailed.symbol + ')' : ''}
