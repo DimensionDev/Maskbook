@@ -214,11 +214,22 @@ export function Collectible(props: CollectibleProps) {
             <CollectibleCard classes={classes}>
                 <CardHeader
                     avatar={
-                        <Link
-                            href={_asset.owner?.link ?? _asset.creator?.link}
-                            title={_asset.owner?.user?.username ?? _asset.owner?.address ?? ''}
-                            target="_blank"
-                            rel="noopener noreferrer">
+                        (_asset.collectionLinkUrl && (
+                            <Link
+                                href={_asset.collectionLinkUrl}
+                                title={_asset.owner?.user?.username ?? _asset.owner?.address ?? ''}
+                                target="_blank"
+                                rel="noopener noreferrer">
+                                <Avatar
+                                    src={
+                                        _asset.collection?.image_url ??
+                                        _asset.creator?.profile_img_url ??
+                                        _asset.owner?.profile_img_url ??
+                                        ''
+                                    }
+                                />
+                            </Link>
+                        )) || (
                             <Avatar
                                 src={
                                     _asset.collection?.image_url ??
@@ -227,7 +238,7 @@ export function Collectible(props: CollectibleProps) {
                                     ''
                                 }
                             />
-                        </Link>
+                        )
                     }
                     title={
                         <Typography style={{ display: 'flex', alignItems: 'center' }}>

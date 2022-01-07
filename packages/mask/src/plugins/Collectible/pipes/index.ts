@@ -86,17 +86,18 @@ export function resolveLinkOnOpenSea(chainId: ChainId) {
     }
 }
 
-export const resolveLinkOnRarible = createLookupTableResolver<
-    ChainId.Mainnet | ChainId.Ropsten | ChainId.Rinkeby,
-    string
->(
-    {
-        [ChainId.Mainnet]: 'https://rarible.com',
-        [ChainId.Rinkeby]: 'https://rinkeby.rarible.com',
-        [ChainId.Ropsten]: 'https://ropsten.rarible.com',
-    },
-    'https://rarible.com',
-)
+export function resolveLinkOnRarible(chainId: ChainId) {
+    switch (chainId) {
+        case ChainId.Mainnet:
+            return 'https://rarible.com'
+        case ChainId.Rinkeby:
+            return 'https://rinkeby.rarible.com'
+        case ChainId.Ropsten:
+            return 'https://ropsten.rarible.com'
+        default:
+            return 'https://rarible.com'
+    }
+}
 
 export function resolveTraitLinkOnOpenSea(chainId: ChainId, slug: string, search: string, value: string) {
     if (chainId === ChainId.Rinkeby) {
@@ -141,6 +142,19 @@ export function resolveUserUrlOnCurrentProvider(
             return urlcat(resolveRaribleUserNetwork(chainId), `/${address}`)
         case NonFungibleAssetProvider.OPENSEA:
             return urlcat(resolveLinkOnOpenSea(chainId), `/${username ?? ''}`)
+        case NonFungibleAssetProvider.NFTSCAN:
+            return ''
+        default:
+            return ''
+    }
+}
+
+export function resolveAvatarLinkOnCurrentProvider(chainId: ChainId, asset: any, provider: NonFungibleAssetProvider) {
+    switch (provider) {
+        case NonFungibleAssetProvider.OPENSEA:
+            return urlcat(resolveLinkOnOpenSea(chainId), `/collection/${asset.slug ?? ''}`)
+        case NonFungibleAssetProvider.RARIBLE:
+            return urlcat(resolveLinkOnRarible(chainId), `/collection/${asset.token_address ?? ''}`)
         case NonFungibleAssetProvider.NFTSCAN:
             return ''
         default:
