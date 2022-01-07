@@ -1,17 +1,8 @@
-import { FungibleTokenDetailed, isSameAddress } from '@masknet/web3-shared-evm'
-import type { ERC20TokenListProps, TokenAmountPanelProps } from '@masknet/shared'
-import {
-    FormControl,
-    InputAdornment,
-    ListItemIcon,
-    MenuItem,
-    MenuProps,
-    OutlinedInput,
-    Typography,
-} from '@mui/material'
-import { useMenu } from '../../../utils'
+import { formatBalance, FungibleTokenDetailed, isSameAddress } from '@masknet/web3-shared-evm'
+import { FormControl, InputAdornment, ListItemIcon, MenuItem, OutlinedInput, Typography } from '@mui/material'
+import { useI18N, useMenu } from '../../../utils'
 import { useEffect, useState, useCallback, useRef, useMemo, ChangeEvent } from 'react'
-import { TokenIcon } from '@masknet/shared'
+import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import Check from '@mui/icons-material/Check'
@@ -20,12 +11,9 @@ export interface SelectTokenPanelProps {
     amount: string
     balance: string
     token?: FungibleTokenDetailed
-    disableNativeToken?: boolean
     onAmountChange: (amount: string) => void
     onTokenChange: (token: FungibleTokenDetailed) => void
-    FungibleTokenListProps?: Partial<ERC20TokenListProps>
-    TokenAmountPanelProps?: Partial<TokenAmountPanelProps>
-    SelectMenuProps?: Partial<MenuProps>
+    tokens?: FungibleTokenDetailed[]
 }
 
 const MIN_AMOUNT_LENGTH = 1
@@ -54,16 +42,8 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 export function SelectTokenListPanel(props: SelectTokenPanelProps) {
-    const {
-        amount,
-        balance,
-        token,
-        disableNativeToken = false,
-        onAmountChange,
-        onTokenChange,
-        FungibleTokenListProps,
-        TokenAmountPanelProps,
-    } = props
+    const { t } = useI18N()
+    const { amount, balance, token, onAmountChange, onTokenChange, tokens = [] } = props
     const ref = useRef<HTMLElement>(null)
 
     const { classes } = useStyles()
@@ -77,11 +57,11 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
     }, [ref.current])
 
     useEffect(() => {
-        if (!FungibleTokenListProps?.tokens || FungibleTokenListProps.tokens.length <= 1) setHaveMenu(false)
-    }, [FungibleTokenListProps, token])
+        if (tokens.length <= 1) setHaveMenu(false)
+    }, [tokens])
 
     const [menu, openMenu] = useMenu(
-        FungibleTokenListProps?.tokens?.map((x, i) => {
+        tokens.map((x, i) => {
             return (
                 <MenuItem
                     key={i}
@@ -121,7 +101,6 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
 
     const onClick = useCallback(() => {
         if (!ref.current) return
-
         openMenu(ref.current)
     }, [openMenu, ref.current])
 
@@ -147,9 +126,18 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
         <div className={classes.root}>
             <div className={classes.title}>
                 <Typography variant="body1" color="colorPrimary">
-                    Price
+                    {t('plugin_collectible_price')}
                 </Typography>
-                <Typography variant="body1" color="colorPrimary">{`Balance: ${balance} ${token?.symbol}`}</Typography>
+                <Typography variant="body1" color="colorPrimary">
+                    {t('wallet_balance')}:
+                    <FormattedBalance
+                        value={balance}
+                        decimals={token?.decimals}
+                        significant={6}
+                        formatter={formatBalance}
+                    />
+                    {token?.symbol}
+                </Typography>
             </div>
             <FormControl className={classes.input} variant="outlined" fullWidth>
                 <OutlinedInput

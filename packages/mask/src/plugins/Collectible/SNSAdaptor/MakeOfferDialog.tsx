@@ -13,13 +13,7 @@ import {
 import { makeStyles } from '@masknet/theme'
 import { first, uniqBy } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
-import {
-    FungibleTokenDetailed,
-    EthereumTokenType,
-    useAccount,
-    useFungibleTokenWatched,
-    isNativeTokenAddress,
-} from '@masknet/web3-shared-evm'
+import { FungibleTokenDetailed, EthereumTokenType, useAccount, useFungibleTokenWatched } from '@masknet/web3-shared-evm'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -81,13 +75,13 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const leastPrice =
         asset?.value && asset.value.desktopOrder ? new BigNumber(asset.value.desktopOrder.current_price ?? '0') : ZERO
 
-    const paymentTokens = (isAuction ? asset?.value?.offer_payment_tokens : asset?.value?.order_payment_tokens) ?? []
-    const selectedPaymentToken = first(
-        uniqBy(
-            [...(asset?.value?.offer_payment_tokens ?? []), ...(asset?.value?.order_payment_tokens ?? [])],
-            (x) => x.address,
-        ),
+    const paymentTokens = uniqBy(
+        [...(asset?.value?.offer_payment_tokens ?? []), ...(asset?.value?.order_payment_tokens ?? [])],
+        (x) => x.address,
     )
+
+    const selectedPaymentToken = first(paymentTokens)
+
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -98,7 +92,8 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const [ToS_Checked, setToS_Checked] = useState(false)
     const [insufficientBalance, setInsufficientBalance] = useState(false)
 
-    const { amount, token, balance, setAmount, setToken } = useFungibleTokenWatched(selectedPaymentToken)
+    const { amount: _amount, token, balance, setAmount, setToken } = useFungibleTokenWatched(selectedPaymentToken)
+    const amount = ''
 
     const onMakeOffer = useCallback(async () => {
         if (!asset?.value) return
@@ -144,7 +139,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
 
     const validationMessage = useMemo(() => {
         setInsufficientBalance(false)
-        const amount_ = rightShift(amount, token.value?.decimals)
+        const amount_ = rightShift(amount ?? '0', token.value?.decimals ?? 0)
         const balance_ = new BigNumber(balance.value ?? '0')
         if (amount_.isNaN() || amount_.isZero()) return t('plugin_collectible_enter_a_price')
         if (balance_.isZero() || amount_.isGreaterThan(balance_)) {
@@ -179,23 +174,9 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                             amount={amount}
                             balance={balance.value ?? '0'}
                             token={token.value as FungibleTokenDetailed}
-                            disableNativeToken={!paymentTokens.some(isNativeTokenAddress)}
                             onAmountChange={setAmount}
                             onTokenChange={setToken}
-                            TokenAmountPanelProps={{
-                                label: t('plugin_collectible_price'),
-                            }}
-                            FungibleTokenListProps={{
-                                selectedTokens: selectedPaymentToken ? [selectedPaymentToken.address] : [],
-                                tokens: uniqBy(
-                                    [
-                                        ...(asset?.value?.offer_payment_tokens ?? []),
-                                        ...(asset?.value?.order_payment_tokens ?? []),
-                                    ],
-                                    (x) => x.address,
-                                ),
-                                whitelist: paymentTokens.map((x) => x.address),
-                            }}
+                            tokens={paymentTokens}
                         />
 
                         {!isAuction ? (
