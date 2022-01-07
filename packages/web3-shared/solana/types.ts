@@ -1,7 +1,7 @@
 export enum ChainId {
-    Mainnet = 1,
-    Testnet = 2,
-    Devnet = 3,
+    Mainnet = 101,
+    Testnet = 102,
+    Devnet = 103,
 }
 
 export enum NetworkType {

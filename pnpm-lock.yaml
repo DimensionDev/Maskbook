@@ -733,6 +733,7 @@ importers:
       '@masknet/web3-providers': workspace:*
       '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-solana': workspace:*
+      '@solana/spl-token-registry': ^0.2.1301
       '@solana/web3.js': ^1.30.2
       bignumber.js: ^9.0.1
       bn.js: ^4.12.0
@@ -749,12 +750,13 @@ importers:
       '@masknet/web3-providers': link:../../web3-providers
       '@masknet/web3-shared-base': link:../../web3-shared/base
       '@masknet/web3-shared-solana': link:../../web3-shared/solana
+      '@solana/spl-token-registry': 0.2.1301
       '@solana/web3.js': 1.31.0
       bignumber.js: 9.0.1
       bn.js: 4.12.0
       bs58: 4.0.1
       buffer: 6.0.3
-      react-use: 17.3.1
+      react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
 
   packages/plugins/Wallet:
     specifiers:
@@ -5340,6 +5342,13 @@ packages:
     engines: {node: '>=5.10'}
     dependencies:
       buffer: 6.0.3
+    dev: false
+
+  /@solana/spl-token-registry/0.2.1301:
+    resolution: {integrity: sha512-6T5AL18n9PxhGAA3useBON1DVxZg8QbrmkD9dNTzvPZQdrzSi8Hha2GmJst4kZSPAQ77l6GlcIw8ibQTAm3SZQ==}
+    engines: {node: '>=10'}
+    dependencies:
+      cross-fetch: 3.0.6
     dev: false
 
   /@solana/web3.js/1.31.0:
@@ -11795,6 +11804,12 @@ packages:
   /create-require/1.1.1:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
     dev: true
+
+  /cross-fetch/3.0.6:
+    resolution: {integrity: sha512-KBPUbqgFjzWlVcURG+Svp9TlhA5uliYtiNx/0r8nv0pdypeQCRJ9IaSIc3q/x3q8t3F75cHuwxVql1HFGHCNJQ==}
+    dependencies:
+      node-fetch: 2.6.1
+    dev: false
 
   /cross-fetch/3.1.4:
     resolution: {integrity: sha512-1eAtFWdIubi6T4XPy6ei9iUFoKpUkIF971QLN8lIvvvwueI65+Nw5haMNKUwfJxabqlIIDODJKGrQ66gxC0PbQ==}
@@ -18610,22 +18625,6 @@ packages:
     resolution: {integrity: sha1-ulSMh578+5DaHE2eCX20pGySVe8=}
     dev: false
 
-  /nano-css/5.3.1:
-    resolution: {integrity: sha512-ENPIyNzANQRyYVvb62ajDd7PAyIgS2LIUnT9ewih4yrXSZX4hKoUwssy8WjUH++kEOA5wUTMgNnV7ko5n34kUA==}
-    peerDependencies:
-      react: '*'
-      react-dom: '*'
-    dependencies:
-      css-tree: 1.1.3
-      csstype: 3.0.8
-      fastest-stable-stringify: 2.0.2
-      inline-style-prefixer: 6.0.0
-      rtl-css-js: 1.14.2
-      sourcemap-codec: 1.4.8
-      stacktrace-js: 2.0.2
-      stylis: 4.0.10
-    dev: false
-
   /nano-css/5.3.1_757a802188413a36d4f24237d13b8e90:
     resolution: {integrity: sha512-ENPIyNzANQRyYVvb62ajDd7PAyIgS2LIUnT9ewih4yrXSZX4hKoUwssy8WjUH++kEOA5wUTMgNnV7ko5n34kUA==}
     peerDependencies:
@@ -20540,37 +20539,6 @@ packages:
       tslib: '*'
     dependencies:
       react: 18.0.0-rc.0
-      tslib: 2.3.1
-    dev: false
-
-  /react-universal-interface/0.6.2_tslib@2.3.1:
-    resolution: {integrity: sha512-dg8yXdcQmvgR13RIlZbTRQOoUrDciFVoSBZILwjE2LFISxZZ8loVJKAkuzswl5js8BHda79bIb2b84ehU8IjXw==}
-    peerDependencies:
-      react: '*'
-      tslib: '*'
-    dependencies:
-      tslib: 2.3.1
-    dev: false
-
-  /react-use/17.3.1:
-    resolution: {integrity: sha512-hs7+tS4rRm1QLHPfanLCqXIi632tP4V7Sai1ENUP2WTufU6am++tU9uSw9YrNCFqbABiEv0ndKU1XCUcfu2tXA==}
-    peerDependencies:
-      react: ^16.8.0  || ^17.0.0
-      react-dom: ^16.8.0  || ^17.0.0
-    dependencies:
-      '@types/js-cookie': 2.2.7
-      '@xobotyi/scrollbar-width': 1.9.5
-      copy-to-clipboard: 3.3.1
-      fast-deep-equal: 3.1.3
-      fast-shallow-equal: 1.0.0
-      js-cookie: 2.2.1
-      nano-css: 5.3.1
-      react-universal-interface: 0.6.2_tslib@2.3.1
-      resize-observer-polyfill: 1.5.1
-      screenfull: 5.1.0
-      set-harmonic-interval: 1.0.1
-      throttle-debounce: 3.0.1
-      ts-easing: 0.2.0
       tslib: 2.3.1
     dev: false
 

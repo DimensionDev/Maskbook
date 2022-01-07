@@ -13,6 +13,7 @@
     "@masknet/web3-providers": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
     "@masknet/web3-shared-solana": "workspace:*",
+    "@solana/spl-token-registry": "^0.2.1301",
     "@solana/web3.js": "^1.30.2",
     "bignumber.js": "^9.0.1",
     "bn.js": "^4.12.0",

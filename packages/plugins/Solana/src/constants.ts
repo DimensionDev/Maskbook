@@ -39,7 +39,7 @@ export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
 ]
 
 export const NETWORK_ENDPOINTS: Record<ChainId, string> = {
-    [ChainId.Mainnet]: 'https://solana-api.projectserum.com',
+    [ChainId.Devnet]: 'https://solana-api.projectserum.com',
     [ChainId.Testnet]: 'https://api.testnet.solana.com',
-    [ChainId.Devnet]: 'https://api.devnet.solana.com',
+    [ChainId.Mainnet]: 'https://api.devnet.solana.com',
 }

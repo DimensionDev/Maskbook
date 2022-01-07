@@ -3,6 +3,7 @@ import { ChainId, getTokenConstants } from '@masknet/web3-shared-solana'
 import { CoinGecko } from '@masknet/web3-providers'
 import { createFungibleAsset, createFungibleToken } from '../helpers'
 import { NETWORK_ENDPOINTS } from '../constants'
+import { TokenListProvider, TokenInfo } from '@solana/spl-token-registry'
 
 interface RpcOptions {
     method: string
@@ -69,7 +70,7 @@ async function requestRPC<T = unknown>(chainId: ChainId, options: RpcOptions): P
 }
 
 async function getSolanaBalance(chainId: ChainId, account: string) {
-    const { TETHER_ADDRESS = '' } = getTokenConstants(chainId)
+    const { SOL_ADDRESS = '' } = getTokenConstants(chainId)
     const price = await CoinGecko.getTokenPrice('solana', CurrencyType.USD)
     const data = await requestRPC<GetAccountInfoResponse>(chainId, {
         method: 'getAccountInfo',
@@ -77,7 +78,7 @@ async function getSolanaBalance(chainId: ChainId, account: string) {
     })
     const balance = data.result?.value.lamports.toString() ?? '0'
     return createFungibleAsset(
-        createFungibleToken(chainId, TETHER_ADDRESS, 'Solana', 'SOL', 9),
+        createFungibleToken(chainId, SOL_ADDRESS, 'Solana', 'SOL', 9),
         balance,
         new URL('../assets/solana.png', import.meta.url).toString(),
         price,
@@ -86,7 +87,7 @@ async function getSolanaBalance(chainId: ChainId, account: string) {
 
 const SPL_TOKEN_PROGRAM_ID = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'
 
-async function getFungibleTokenLists(chainId: ChainId, account: string) {
+async function getSplTokenList(chainId: ChainId, account: string) {
     const data = await requestRPC<GetProgramAccountsResponse>(chainId, {
         method: 'getProgramAccounts',
         params: [
@@ -108,11 +109,18 @@ async function getFungibleTokenLists(chainId: ChainId, account: string) {
         ],
     })
     if (!data.result?.length) return []
+    const tokenListProvider = new TokenListProvider()
+    const provider = await tokenListProvider.resolve()
+    const tokenList = provider.filterByChainId(chainId).getList()
     return data.result.map((programAccount) => {
         const info = programAccount.account.data.parsed.info
+        const token = tokenList.find((x) => x.address === info.mint) ?? ({} as TokenInfo)
+        const name = token.name || 'Unknown Token'
+        const symbol = token.symbol || 'Unknown Token'
         return createFungibleAsset(
-            createFungibleToken(chainId, info.mint, info.mint, info.mint, info.tokenAmount.decimals),
+            createFungibleToken(chainId, info.mint, name, symbol, info.tokenAmount.decimals),
             info.tokenAmount.amount,
+            token.logoURI,
         )
     })
 }
@@ -125,7 +133,7 @@ export async function getFungibleAssets(
 ): Promise<Web3Plugin.Asset<Web3Plugin.FungibleToken>[]> {
     const allSettled = await Promise.allSettled([
         getSolanaBalance(network.chainId, address).then((x) => [x]),
-        getFungibleTokenLists(network.chainId, address),
+        getSplTokenList(network.chainId, address),
     ])
 
     return allSettled

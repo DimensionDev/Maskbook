@@ -251,7 +251,8 @@
         "contrib",
         "juicebox",
         "sollet",
-        "signup"
+        "signup",
+        "lamports"
     ],
     "ignoreWords": [
         "cryptopunks",

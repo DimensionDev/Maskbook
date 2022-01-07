@@ -40,7 +40,7 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
             chainId: createConstantSubscription(chainId),
             networkType: createConstantSubscription(NetworkType.Solana),
             providerType: createSubscriptionFromPublicKey((publicKey) => {
-                return publicKey ? ProviderType.Sollet : undefined
+                return publicKey ? ProviderType.Phantom : undefined
             }),
         },
         Asset: {
