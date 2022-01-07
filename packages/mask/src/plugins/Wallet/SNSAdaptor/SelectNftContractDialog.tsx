@@ -19,10 +19,10 @@ import { SearchInput } from '../../../extension/options-page/DashboardComponents
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import Fuse from 'fuse.js'
 import { useERC721ContractDetailed } from '@masknet/web3-shared-evm'
-import classNames from 'classnames'
 import { unionBy } from 'lodash-unified'
 import { useNFTBalance } from '../../EVM/hooks'
 import type { NonFungibleTokenAPI } from '@masknet/web3-providers'
+import { NFTContractIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     search: {
@@ -261,18 +261,16 @@ function ContractListItem(props: ContractListItemProps) {
             <ListItem className={classes.listItem} onClick={() => onSubmit(contract.contractDetailed)}>
                 {contract.contractDetailed.iconURL ? (
                     <img className={classes.icon} src={contract.contractDetailed.iconURL} />
-                ) : null}
+                ) : (
+                    <NFTContractIcon className={classes.icon} />
+                )}
                 <Typography className={classes.contractName}>
                     {contract.contractDetailed.name}{' '}
                     {contract.contractDetailed.symbol ? '(' + contract.contractDetailed.symbol + ')' : ''}
                 </Typography>
                 {contract.balance ? <Typography className={classes.balance}>{contract.balance}</Typography> : null}
             </ListItem>
-            <div
-                className={classNames(
-                    classes.address,
-                    contract.contractDetailed.iconURL ? '' : classes.addressNoImage,
-                )}>
+            <div className={classes.address}>
                 <span onClick={() => onSubmit(contract.contractDetailed)}>{contract.contractDetailed.address}</span>
                 <Link
                     href={resolveAddressLinkOnExplorer(chainId, contract.contractDetailed.address)}
