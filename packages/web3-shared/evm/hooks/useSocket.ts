@@ -1,8 +1,8 @@
-import { useWeb3Context } from '../context'
 import { useAsyncRetry } from 'react-use'
 import type { NotifyFn, RequestMessage } from '@masknet/web3-shared-base'
 import { v4 as uuid } from 'uuid'
 import { useState } from 'react'
+import { getProxyWebsocketInstance } from '@masknet/web3-shared-base'
 
 type SocketMessage = Omit<RequestMessage, 'notify'>
 
@@ -14,12 +14,11 @@ export enum SocketState {
 }
 
 export const useSocket = <T>(message: SocketMessage) => {
-    const { providerSocket } = useWeb3Context()
     const [data, setData] = useState<T[]>([])
     const [state, setState] = useState(SocketState.init)
     const [error, setError] = useState<unknown>()
     const [id] = useState(uuid())
-    const { value: socket, loading } = useAsyncRetry(() => providerSocket, [])
+    const { value: socket, loading } = useAsyncRetry(getProxyWebsocketInstance, [])
 
     const { retry } = useAsyncRetry(async () => {
         if (!socket || !message.id || loading) return

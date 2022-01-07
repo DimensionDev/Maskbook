@@ -244,6 +244,7 @@ export declare namespace Web3Plugin {
                 providerType: string,
                 network: NetworkDescriptor,
                 pagination?: Pagination,
+                other?: { [key in string]: unknown },
             ) => Promise<Asset<FungibleToken>[]>
             /** Get non-fungible assets of given account. */
             getNonFungibleAssets?: (
@@ -251,6 +252,7 @@ export declare namespace Web3Plugin {
                 pagination: Pagination,
                 providerType?: string,
                 network?: NetworkDescriptor,
+                other?: { [key in string]: unknown },
             ) => Promise<Pageable<NonFungibleToken>>
         }
         export interface NameServiceState {

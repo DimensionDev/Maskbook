@@ -10,8 +10,7 @@ import {
 import { createConstantSubscription, mapSubscription } from '@masknet/shared-base'
 import { getStorage, StorageDefaultValue } from '../../storage'
 import { formatAddress } from '../../helpers'
-import { getFungibleAssets, getNonFungibleAssetFn } from '../../apis'
-import type { ProviderProxy } from '@masknet/web3-shared-base'
+import { getFungibleAssets, getNonFungibleAssets } from '../../apis'
 
 function createSubscriptionFromChainId<T>(getter: (value: typeof StorageDefaultValue.chainId) => T) {
     return mapSubscription(getStorage().chainId.subscription, getter)
@@ -45,7 +44,10 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
                 return user?.addr ? ProviderType.Blocto : undefined
             }),
         },
-        Asset: {},
+        Asset: {
+            getFungibleAssets,
+            getNonFungibleAssets,
+        },
         Utils: {
             formatAddress,
             formatBalance: (value) => new BigNumber(value).toFixed(),
@@ -58,17 +60,4 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
             resolveBlockLink: resolveBlockLinkOnExplorer,
         },
     }
-}
-
-export function fixWeb3State(
-    state?: Web3Plugin.ObjectCapabilities.Capabilities,
-    context?: { providerSocket: Promise<ProviderProxy> },
-) {
-    if (!state || !context) return
-
-    state.Asset = {
-        getFungibleAssets,
-        getNonFungibleAssets: getNonFungibleAssetFn(context),
-    }
-    return state
 }

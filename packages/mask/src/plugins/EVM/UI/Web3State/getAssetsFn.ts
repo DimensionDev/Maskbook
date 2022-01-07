@@ -21,14 +21,15 @@ import { first, uniqBy } from 'lodash-unified'
 import { PLUGIN_NETWORKS } from '../../constants'
 import { makeSortAssertWithoutChainFn } from '../../utils/token'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
+import { getProxyWebsocketInstance, NotifyFn } from '@masknet/web3-shared-base'
 
 export const getFungibleAssetsFn =
     (context: Web3ProviderType) =>
     async (address: string, providerType: string, network: Web3Plugin.NetworkDescriptor, pagination?: Pagination) => {
+        const socket = await getProxyWebsocketInstance()
         const chainId = context.chainId.getCurrentValue()
         const provider = context.provider.getCurrentValue()
         const wallet = context.wallets.getCurrentValue().find((x) => isSameAddress(x.address, address))
-        const socket = await context.providerSocket
         const networks = PLUGIN_NETWORKS
         const trustedTokens = context.erc20Tokens
             .getCurrentValue()
@@ -130,8 +131,9 @@ export const getNonFungibleTokenFn =
         pagination: Pagination,
         providerType?: string,
         network?: Web3Plugin.NetworkDescriptor,
+        other?: { [key in string]: unknown },
     ): Promise<Pageable<Web3Plugin.NonFungibleToken>> => {
-        const socket = await context.providerSocket
+        const socket = await getProxyWebsocketInstance()
         let tokenInDb: ERC721TokenDetailed[] = []
         // validate and show trusted erc721 token in first page
         if (pagination?.page === 0) {
@@ -164,10 +166,11 @@ export const getNonFungibleTokenFn =
         }
 
         const socketId = `mask.fetchNonFungibleCollectibleAsset_${address}`
-        await socket.send({
+        socket.send({
             id: socketId,
             method: 'mask.fetchNonFungibleCollectibleAsset',
             params: { address, pageSize: 40 },
+            notify: other?.notify as NotifyFn,
         })
 
         const tokenFromProvider = socket.getResult<ERC721TokenDetailed>(socketId)
