@@ -7,7 +7,7 @@
     "@blocto/fcl": "^0.0.78-alpha.8",
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-kit": "workspace:*",
-    "@onflow/types": "^0.0.5",
+    "@onflow/types": "^0.0.6",
     "react-use": "^17.3.1",
     "urlcat": "^2.0.4"
   }
