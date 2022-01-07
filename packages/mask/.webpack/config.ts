@@ -121,18 +121,10 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 { test: /(async-call|webextension).+\.js$/, enforce: 'pre', use: ['source-map-loader'] },
                 // TypeScript
                 {
-                    test: /\.(t|j)sx?$/,
-                    resolve: {
-                        fullySpecified: false, // disable the behaviour
-                        extensions: ['.js', '.ts', '.tsx'],
-                    },
+                    test: /\.tsx?$/,
                     parser: { worker: ['OnDemandWorker', '...'] },
                     // Compile all ts files in the workspace
-                    include: [
-                        join(__dirname, '../../'),
-                        // https://github.com/solana-labs/wallet-adapter/issues/231
-                        /node_modules\/@solana\/wallet-adapter-\w+/,
-                    ],
+                    include: join(__dirname, '../../'),
                     loader: require.resolve('swc-loader'),
                     options: {
                         // https://swc.rs/docs/configuring-swc/
