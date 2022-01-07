@@ -92,7 +92,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     nftNameWrapper: {
         width: '100%',
-        background: theme.palette.mode === 'light' ? 'none' : '#2F3336',
+        background: theme.palette.background.paper,
         borderBottomRightRadius: 8,
         borderBottomLeftRadius: 8,
         paddingTop: 2,

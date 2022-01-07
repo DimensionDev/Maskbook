@@ -1,4 +1,5 @@
 import classNames from 'classnames'
+import { CircularProgress } from '@mui/material'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { AssetPlayer } from '../AssetPlayer'
@@ -47,6 +48,7 @@ export function NFTCardStyledAssetPlayer(props: NFTLuckyDropStyledAssetPlayerPro
             url={url}
             setERC721TokenName={setERC721TokenName}
             fallbackImage={fallbackImage ?? new URL('./nft_token_fallback.png', import.meta.url)}
+            loadingIcon={<CircularProgress size={20} className={classes.loadingNftImg} />}
             classes={{
                 iframe: classNames(classes.wrapper, classes.iframe),
                 errorPlaceholder: classes.wrapper,

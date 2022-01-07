@@ -27,6 +27,7 @@ interface AssetPlayerProps
         loop?: boolean
         muted?: boolean
     }
+    loadingIcon?: React.ReactNode
     erc721Token?: ERC721TokenQuery
     iconProps?: SvgIconProps
     fallbackImage?: URL
@@ -117,7 +118,7 @@ export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconPro
                         <MaskGreyIcon className={classes.errorIcon} viewBox="0 0 36 36" {...iconProps} />
                     )
                 ) : (
-                    <AssetLoadingIcon className={classes.loadingIcon} />
+                    props.loadingIcon ?? <AssetLoadingIcon className={classes.loadingIcon} />
                 )}
             </Box>
             <IframeResizer

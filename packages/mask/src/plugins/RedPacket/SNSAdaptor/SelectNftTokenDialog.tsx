@@ -165,7 +165,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
     selectWrapperNftNameWrapper: {
         width: '100%',
-        background: theme.palette.background.default,
+        background: theme.palette.background.paper,
         borderBottomRightRadius: 8,
         borderBottomLeftRadius: 8,
         overflow: 'hidden',

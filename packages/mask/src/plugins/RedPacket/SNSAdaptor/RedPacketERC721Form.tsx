@@ -38,7 +38,7 @@ const useStyles = makeStyles()((theme) => {
         },
         nftNameWrapper: {
             width: '100%',
-            background: theme.palette.background.default,
+            background: theme.palette.background.paper,
             borderBottomRightRadius: 8,
             borderBottomLeftRadius: 8,
             paddingTop: 2,
@@ -81,10 +81,10 @@ const useStyles = makeStyles()((theme) => {
             position: 'relative',
             display: 'flex',
             flexDirection: 'column',
-            borderRadius: 6,
+            borderRadius: 8,
             padding: 0,
             marginBottom: theme.spacing(2.5),
-            background: theme.palette.background.default,
+            background: theme.palette.mode === 'light' ? '#fff' : '#2F3336',
             width: 120,
             height: 180,
             overflow: 'hidden',
@@ -99,6 +99,7 @@ const useStyles = makeStyles()((theme) => {
         addWrapper: {
             cursor: 'pointer',
             alignItems: 'center',
+            background: theme.palette.background.default,
             justifyContent: 'center',
         },
         addIcon: {
