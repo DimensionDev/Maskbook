@@ -41,12 +41,12 @@ export function NFTBadge(props: NFTBadgeProps) {
     const { avatar, size = 140 } = props
     const classes = useStylesExtends(useStyles(), props)
 
-    const { value = { amount: '0', symbol: 'ETH', name: '', owner: '' }, loading } = useNFT(
+    const { value = { amount: '0', symbol: 'ETH', name: '', slug: '' }, loading } = useNFT(
         avatar.address,
         avatar.tokenId,
     )
 
-    const { amount, symbol, name } = value
+    const { amount, symbol, name, slug } = value
 
     return (
         <div
@@ -62,7 +62,7 @@ export function NFTBadge(props: NFTBadgeProps) {
                     strokeWidth={14}
                     stroke="black"
                     fontSize={9}
-                    text={loading ? 'loading...' : name}
+                    text={loading ? 'loading...' : `${name} ${slug.toLocaleLowerCase() === 'ens' ? 'ENS' : ''}`}
                     price={loading ? '' : `${formatPrice(amount)} ${symbol}`}
                 />
             </Link>
