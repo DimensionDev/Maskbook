@@ -70,7 +70,6 @@ interface TokenTableProps {
 export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
     const navigate = useNavigate()
     const account = useAccount()
-    console.log('account', { account })
     const { Asset } = useWeb3PluginState()
     const { portfolioProvider } = useWeb3State()
     const network = useNetworkDescriptor()

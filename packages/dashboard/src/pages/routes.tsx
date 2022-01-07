@@ -18,6 +18,11 @@ export function Pages() {
     return (
         <Suspense fallback={null}>
             <Routes>
+                <NoPersonaGuardRoute
+                    path={DashboardRoutes.Welcome}
+                    element={<Welcome />}
+                    redirectTo={DashboardRoutes.Personas}
+                />
                 <Route path={DashboardRoutes.Setup} element={<Setup />} />
                 <Route path={`${DashboardRoutes.SignUp}/*`} element={<SignUp />} />
                 <Route path={DashboardRoutes.SignIn} element={<SignIn />} />

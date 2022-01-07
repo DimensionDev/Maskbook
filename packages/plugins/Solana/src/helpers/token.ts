@@ -29,11 +29,11 @@ export function createFungibleAsset(
     return {
         id: token.address,
         chainId: token.chainId,
-        balance: leftShift(balance, 6).toFixed(),
+        balance: leftShift(balance, token.decimals).toFixed(),
         token,
         logoURI,
         value: {
-            [CurrencyType.USD]: multipliedBy(price?.usd ?? 0, leftShift(balance, 6)).toFixed(),
+            [CurrencyType.USD]: multipliedBy(price?.usd ?? 0, leftShift(balance, token.decimals)).toFixed(),
         },
         price,
     }

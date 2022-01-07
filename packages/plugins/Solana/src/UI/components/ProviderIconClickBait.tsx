@@ -16,7 +16,9 @@ export function ProviderIconClickBait({
         const rsp = await bridgedSolanaProvider.connect()
         if (rsp?.publicKey) {
             const base58Key = hexToBase58(rsp.publicKey._bn)
-            await getStorage().publicKey.setValue(base58Key)
+            const storage = getStorage()
+            await storage.publicKey.setValue(base58Key)
+            await storage.network.setValue(network.chainId)
             onSubmit?.(network, provider)
         }
     }, [provider, onClick, onSubmit])

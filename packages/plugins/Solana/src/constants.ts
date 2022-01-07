@@ -37,3 +37,9 @@ export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
         icon: new URL('./assets/phantom.png', import.meta.url),
     },
 ]
+
+export const NETWORK_ENDPOINTS: Record<ChainId, string> = {
+    [ChainId.Mainnet]: 'https://solana-api.projectserum.com',
+    [ChainId.Testnet]: 'https://api.testnet.solana.com',
+    [ChainId.Devnet]: 'https://api.devnet.solana.com',
+}

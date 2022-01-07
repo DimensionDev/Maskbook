@@ -31,9 +31,7 @@ document.addEventListener(CustomEventId, (e) => {
         case 'solanaBridgeRequestListen':
             return apply(bindEvent, null, ['solana', 'solanaBridgeOnEvent', ...r[1]])
         case 'solanaBridgeExecute':
-            const result = apply(execute, null, [...r[1]])
-            console.log('solanaBridgeExecute', { result })
-            return result
+            return apply(execute, null, [...r[1]])
         case 'solanaBridgeSendRequest':
             return apply(callRequest, null, ['solana', ...r[1]])
         case 'solanaBridgePrimitiveAccess':
