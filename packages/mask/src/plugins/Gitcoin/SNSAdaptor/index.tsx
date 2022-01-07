@@ -29,7 +29,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <DonateDialog />
     },
     PostInspector() {
-        const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.mentionedLinks())
+        const links = usePostInfoDetails.mentionedLinks()
 
         const link = links.find(isGitcoin)
         if (!link) return null
