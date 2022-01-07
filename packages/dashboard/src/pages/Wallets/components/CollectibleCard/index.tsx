@@ -1,6 +1,7 @@
 import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { Box, Button, Link, Tooltip, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { CollectiblePlaceholder } from '../CollectiblePlaceHolder'
 import { useHoverDirty } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
@@ -29,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         overflow: 'hidden',
     },
-    imgContainer: {
+    mediaContainer: {
         width: '100%',
         height: 186,
         backgroundColor: theme.palette.mode === 'dark' ? MaskColorVar.lineLight : '#f6f6f7',
@@ -50,6 +51,7 @@ const useStyles = makeStyles()((theme) => ({
         top: 8,
         height: 20,
         width: 20,
+        zIndex: 20,
     },
     tip: {
         padding: theme.spacing(1),
@@ -57,6 +59,18 @@ const useStyles = makeStyles()((theme) => ({
     },
     tipArrow: {
         color: '#111432',
+    },
+    loadingFailImage: {
+        minHeight: '0px !important',
+        maxWidth: 'none',
+        transform: 'translateY(10px)',
+        width: 64,
+        height: 64,
+    },
+    wrapper: {
+        width: '100%',
+        height: '100%',
+        maxHeight: 186,
     },
 }))
 
@@ -97,10 +111,16 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
                                 token.tokenId,
                             ) ?? '#'
                         }>
-                        <div className={classes.imgContainer}>
-                            <img
-                                src={token.metadata.assetURL || token.metadata.iconURL}
-                                style={{ objectFit: 'contain', width: '100%', height: '100%' }}
+                        <div className={classes.mediaContainer}>
+                            <NFTCardStyledAssetPlayer
+                                contractAddress={token.contract.address}
+                                chainId={token.contract.chainId}
+                                url={token.metadata.assetURL || token.metadata.iconURL}
+                                tokenId={token.tokenId}
+                                classes={{
+                                    loadingFailImage: classes.loadingFailImage,
+                                    wrapper: classes.wrapper,
+                                }}
                             />
                         </div>
                     </Link>
