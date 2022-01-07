@@ -215,7 +215,7 @@ export function Collectible(props: CollectibleProps) {
                 <CardHeader
                     avatar={
                         <Link
-                            href={_asset.creator?.link ?? _asset.owner?.link}
+                            href={_asset.owner?.link ?? _asset.creator?.link}
                             title={_asset.owner?.user?.username ?? _asset.owner?.address ?? ''}
                             target="_blank"
                             rel="noopener noreferrer">
