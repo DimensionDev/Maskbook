@@ -2,6 +2,7 @@ import { readFile, writeFile } from 'fs/promises'
 import { resolve } from 'path'
 import { ROOT_PATH } from '../utils'
 import { prettier } from '../utils/prettier'
+import { parseArgs, task } from '../utils'
 
 const CONFIGURE_PATH = resolve(ROOT_PATH, 'cspell.json')
 
@@ -36,3 +37,5 @@ export async function reorderSpellcheck() {
     const formatted = await prettier(JSON.stringify(configure, null, 2), 'json')
     await writeFile(CONFIGURE_PATH, formatted, 'utf-8')
 }
+
+task(reorderSpellcheck, 'reorder-spellcheck', 'Run Spellcheck reorder words.')
