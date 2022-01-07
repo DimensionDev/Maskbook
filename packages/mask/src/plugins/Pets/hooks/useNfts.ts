@@ -50,7 +50,20 @@ export function useNfts(user: User | undefined) {
                     if (!isSameAddress(y.contract, x.contractDetailed.address)) return
                     const glbSupport =
                         isSameAddress(x.contractDetailed.address, Punk3D.contract) && x.tokenId === Punk3D.tokenId
-                    tempNfts[idx].tokens.push({ ...x.info, tokenId: x.tokenId, glbSupport })
+                    const item = { ...x.info, tokenId: x.tokenId, glbSupport }
+                    let filterIdx = -1
+                    const filter = tempNfts[idx].tokens.filter((token, idxToken) => {
+                        const flag = token.tokenId === x.tokenId
+                        if (flag) {
+                            filterIdx = idxToken
+                        }
+                        return flag
+                    })
+                    if (filter.length) {
+                        tempNfts[idx].tokens[filterIdx] = item
+                    } else {
+                        tempNfts[idx].tokens.push(item)
+                    }
                 })
             })
         }
@@ -73,15 +86,14 @@ export function useNftsExtra(open: boolean) {
     const [retry, setRetry] = useState(0)
     const chainId = useChainId()
     const [extra, setExtra] = useState<ERC721ContractDetailed[]>([])
-    let timer: NodeJS.Timeout
     useAsync(async () => {
-        if (retry > 5) return
+        if (retry > 2) return
         let requests = []
         if (!extra.length) {
             requests = nfts.map((nft) => OpenSea.getContract(nft.contract, chainId))
         } else {
-            //openSea request should not immediately
-            await delay(1500)
+            //openSea api request should not immediately
+            await delay(3000)
             requests = extra.map((nft, index) => {
                 if (nft.symbol && nft.name !== 'Unknown Token') {
                     return Promise.resolve(nft)
@@ -95,6 +107,6 @@ export function useNftsExtra(open: boolean) {
         }
         setExtra(lists)
         setRetry(retry + 1)
-    }, [nfts, JSON.stringify(extra)])
+    }, [nfts, retry])
     return extra
 }

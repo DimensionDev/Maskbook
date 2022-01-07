@@ -6,8 +6,12 @@ export function ImgLoader(props: ImgHTMLAttributes<HTMLImageElement>) {
 
     return (
         <>
-            <img {...props} onLoad={() => setLoaded(true)} style={{ display: loaded ? 'block' : 'none' }} />
-            {!loaded ? <CircularProgress size={20} /> : null}
+            <img
+                {...props}
+                onLoad={() => setLoaded(Boolean(props.src))}
+                style={{ display: loaded || !Boolean(props.src) ? 'block' : 'none' }}
+            />
+            {!loaded && Boolean(props.src) ? <CircularProgress size={20} /> : null}
         </>
     )
 }
