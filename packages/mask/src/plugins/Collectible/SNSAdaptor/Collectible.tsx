@@ -207,18 +207,26 @@ export function Collectible(props: CollectibleProps) {
         return tabMap[tabIndex] || null
     }
 
-    const endDate = asset.value?.end_time
+    const _asset = asset.value
+    const endDate = _asset.end_time
     return (
         <>
             <CollectibleCard classes={classes}>
                 <CardHeader
                     avatar={
                         <Link
-                            href={asset.value.owner?.link}
-                            title={asset.value.owner?.user?.username ?? asset.value.owner?.address ?? ''}
+                            href={_asset.creator?.link ?? _asset.owner?.link}
+                            title={_asset.owner?.user?.username ?? _asset.owner?.address ?? ''}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <Avatar src={asset.value.owner?.profile_img_url ?? ''} />
+                            <Avatar
+                                src={
+                                    _asset.collection?.image_url ??
+                                    _asset.creator?.profile_img_url ??
+                                    _asset.owner?.profile_img_url ??
+                                    ''
+                                }
+                            />
                         </Link>
                     }
                     title={
@@ -234,37 +242,34 @@ export function Collectible(props: CollectibleProps) {
                                         token.tokenId,
                                         provider,
                                     )}>
-                                    {asset.value.name ?? ''}
+                                    {_asset.name ?? ''}
                                 </Link>
                             ) : (
-                                asset.value.name ?? ''
+                                _asset.name ?? ''
                             )}
-                            {asset.value.safelist_request_status === 'verified' ? (
+                            {_asset.safelist_request_status === 'verified' ? (
                                 <VerifiedUserIcon color="primary" fontSize="small" sx={{ marginLeft: 0.5 }} />
                             ) : null}
                         </Typography>
                     }
                     subheader={
                         <>
-                            {asset.value.description ? (
+                            {_asset.description ? (
                                 <Box display="flex" alignItems="center">
                                     <Typography className={classes.subtitle} component="div" variant="body2">
-                                        <Markdown
-                                            classes={{ root: classes.markdown }}
-                                            content={asset.value.description}
-                                        />
+                                        <Markdown classes={{ root: classes.markdown }} content={_asset.description} />
                                     </Typography>
                                 </Box>
                             ) : null}
 
-                            {asset.value?.current_price ? (
+                            {_asset?.current_price ? (
                                 <Box display="flex" alignItems="center" sx={{ marginTop: 1 }}>
                                     <Typography className={classes.description} component="span">
                                         <Trans
                                             i18nKey="plugin_collectible_description"
                                             values={{
-                                                price: asset.value?.current_price,
-                                                symbol: asset.value?.current_symbol,
+                                                price: _asset?.current_price,
+                                                symbol: _asset?.current_symbol,
                                             }}
                                         />
                                     </Typography>
