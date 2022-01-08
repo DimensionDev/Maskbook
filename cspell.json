@@ -367,7 +367,8 @@
         "treeshake",
         "xtest",
         "xdescribe",
-        "irss"
+        "irss",
+        "metaplex"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [

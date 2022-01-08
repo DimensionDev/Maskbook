@@ -1,6 +1,7 @@
 import { Dispatch, memo, SetStateAction, useCallback, useEffect, useRef, useState } from 'react'
 import { Box, Stack, TablePagination } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import { EMPTY_LIST } from '@masknet/web3-shared-evm'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { CollectibleCard } from '../CollectibleCard'
@@ -49,20 +50,20 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
     const [renderData, setRenderData] = useState<Web3Plugin.NonFungibleToken[]>([])
 
     const {
-        value = { data: [], hasNextPage: false },
+        value = { data: EMPTY_LIST, hasNextPage: false },
         error: collectiblesError,
         retry,
     } = useAsyncRetry(
         async () =>
-            Asset?.getNonFungibleAssets?.(account, { page: page, size: 20 }, undefined, selectedNetwork ?? undefined),
-        [account, Asset, network, selectedNetwork],
+            Asset?.getNonFungibleAssets?.(account, { page: page, size: 20 }, undefined, selectedNetwork || undefined),
+        [account, Asset?.getNonFungibleAssets, network, selectedNetwork],
     )
 
     useEffect(() => {
         if (!loadingSize) return
         const render = value.data.slice(page * loadingSize, (page + 1) * loadingSize)
         setRenderData(render)
-    }, [value, loadingSize, page])
+    }, [value.data, loadingSize, page])
 
     const onSend = useCallback(
         (detail: Web3Plugin.NonFungibleToken) =>

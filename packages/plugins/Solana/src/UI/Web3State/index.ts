@@ -9,7 +9,7 @@ import {
     resolveTransactionLinkOnExplorer,
 } from '@masknet/web3-shared-solana'
 import BigNumber from 'bignumber.js'
-import { getFungibleAssets } from '../../apis'
+import { getFungibleAssets, getNonFungibleAssets } from '../../apis'
 import { formatAddress } from '../../helpers'
 import { getStorage, StorageDefaultValue } from '../../storage'
 
@@ -45,6 +45,7 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
         },
         Asset: {
             getFungibleAssets,
+            getNonFungibleAssets,
         },
         Utils: {
             formatAddress,
