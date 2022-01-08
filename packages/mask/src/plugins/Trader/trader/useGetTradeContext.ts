@@ -23,9 +23,8 @@ import { TargetChainIdContext } from './useTargetChainIdContext'
 
 export function useGetTradeContext(tradeProvider?: TradeProvider) {
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-    const DEX_TRADE = getTraderConstants(chainId)
-
     return useMemo<TradeContext_ | null>(() => {
+        const DEX_TRADE = getTraderConstants(chainId)
         switch (tradeProvider) {
             case TradeProvider.UNISWAP_V2:
                 return {
