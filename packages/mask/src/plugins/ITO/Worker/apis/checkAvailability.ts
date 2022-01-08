@@ -23,7 +23,7 @@ function decodeResult(data: string, isV1: boolean): Availability {
         remaining: +parseHexToInt(results[1]),
         started: results[2],
         expired: results[3],
-        unlocked: results[4],
+        destructed: results[4],
         unlock_time: parseHexToInt(results[5]),
         swapped: parseHexToInt(results[6]),
         exchanged_tokens: parse(results[7]).map(parseHexToInt),

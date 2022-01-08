@@ -41,7 +41,7 @@ export interface TypedMessageImageV1 extends NonSerializableTypedMessage {
     readonly width?: number
     readonly height?: number
 }
-export const isTypedMessageImageV1 = createIsType<TypedMessageImageV1>('image', 1)
+export const isTypedMessageImageV1 = createIsType<TypedMessageImageV1>('image')
 export const isTypedMessageImage = composeSome(isTypedMessageImageV1) as (x: TypedMessage) => x is TypedMessageImage
 export function makeTypedMessageImage(
     image: TypedMessageImageV1['image'],
@@ -115,13 +115,15 @@ export function makeTypedMessageEmpty(meta?: Meta): TypedMessageEmpty {
 export interface TypedMessagePromise<T extends TypedMessage = TypedMessage> extends NonSerializableTypedMessage {
     readonly type: 'promise'
     readonly promise: Promise<T>
+    readonly value?: T
 }
 export const isTypedMessagePromise = createIsType<TypedMessagePromise>('promise')
 export function makeTypedMessagePromise<T extends TypedMessage = TypedMessage>(
     promise: Promise<T>,
-    meta?: Meta,
 ): TypedMessagePromise<T> {
-    return { type: 'promise', serializable: false, promise, meta }
+    const x: TypedMessagePromise<T> = { type: 'promise', serializable: false, promise }
+    promise.then((y) => ((x as any).value = y))
+    return x
 }
 //#endregion
 export const isWellKnownCoreTypedMessages = composeSome(

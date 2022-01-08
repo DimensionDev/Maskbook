@@ -12,13 +12,13 @@ function getShadowRoot(node: HTMLElement) {
     return dom
 }
 export function injectPostInspectorFacebook(signal: AbortSignal, current: PostInfo) {
-    clickSeeMore(current.rootNodeProxy.current?.parentElement)
+    clickSeeMore(current.rootElement.current?.parentElement)
     return injectPostInspectorDefault({
         zipPost(node) {
             zipEncryptedPostContent(node)
             zipPostLinkPreview(node)
         },
-        injectionPoint: (post) => getShadowRoot(post.postContentNode),
+        injectionPoint: (post) => getShadowRoot(post.suggestedInjectionPoint),
     })(current, signal)
 }
 function zipPostLinkPreview(node: DOMProxy) {

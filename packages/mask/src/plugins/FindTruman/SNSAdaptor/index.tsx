@@ -68,7 +68,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer url={link} />
     },
     PostInspector: function Component(): JSX.Element | null {
-        const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks())
+        const links = usePostInfoDetails.mentionedLinks()
         const link = links.find(isFindTrumanURL)
         if (!link) return null
         return <Renderer url={link} />

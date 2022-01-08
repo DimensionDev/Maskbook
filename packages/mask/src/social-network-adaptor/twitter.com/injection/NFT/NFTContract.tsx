@@ -18,8 +18,9 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                 const twitterId = twitterIdNode.innerText.trim().replace('@', '')
 
                 const nftDom = ele.querySelector(
-                    'div > :nth-child(2) > :nth-child(2) > div > div > div > div > div > a > div > div',
+                    'div > :nth-child(2) > :nth-child(2) > div > div > div > div > div > a > div > div > :last-child',
                 ) as HTMLSpanElement as HTMLElement
+
                 if (!nftDom) return
                 const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
                 proxy.realCurrent = nftDom

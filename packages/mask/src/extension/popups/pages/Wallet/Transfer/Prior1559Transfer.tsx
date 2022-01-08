@@ -227,10 +227,9 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
 
     //#region set default gasLimit
     useUpdateEffect(() => {
-        if (minGasLimit) {
-            methods.setValue('gasLimit', `${minGasLimit}`)
-            setMinGasLimitContext(minGasLimit)
-        }
+        if (!minGasLimit) return
+        methods.setValue('gasLimit', minGasLimit.toString())
+        setMinGasLimitContext(minGasLimit)
     }, [minGasLimit, methods.setValue])
     //#endregion
 

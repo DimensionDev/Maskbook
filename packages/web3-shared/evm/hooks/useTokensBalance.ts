@@ -3,6 +3,7 @@ import { useBalanceCheckerContract } from '../contracts/useBalanceChecker'
 import { useAccount } from './useAccount'
 import { useChainId } from './useChainId'
 import type { ChainId } from '../types'
+import { EMPTY_LIST } from '../utils'
 import { numberToHex } from 'web3-utils'
 
 /**
@@ -17,7 +18,7 @@ export function useTokensBalance(listOfAddress: string[], targetChainId?: ChainI
     const balanceCheckerContract = useBalanceCheckerContract(chainId)
 
     return useAsyncRetry(async () => {
-        if (!account || !balanceCheckerContract || !listOfAddress.length) return []
+        if (!account || !balanceCheckerContract || !listOfAddress.length) return EMPTY_LIST
         return balanceCheckerContract.methods.balances([account], listOfAddress).call({
             // cannot check the sender's balance in the same contract
             from: undefined,

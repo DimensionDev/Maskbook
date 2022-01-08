@@ -1,6 +1,6 @@
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
-import type { TypedMessage, TypedMessageTuple, ScopedStorage } from '@masknet/shared-base'
+import type { TypedMessage, TypedMessageTuple, ScopedStorage, ProfileIdentifier } from '@masknet/shared-base'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
 
@@ -48,6 +48,9 @@ export declare namespace Plugin {
         Dashboard?: Loader<Dashboard.Definition>
         /** Load the Worker part of the plugin. */
         Worker?: Loader<Worker.Definition>
+        /** Load the General UI of the plugin. */
+        // TODO: not supported yet.
+        // GeneralUI?: Loader<GeneralUI.DefinitionDeferred>
     }
 }
 /**
@@ -98,8 +101,6 @@ export namespace Plugin.Shared {
          * This does not affect if the plugin enable or not.
          */
         experimentalMark?: boolean
-        /** Configuration of how this plugin is managed by the Mask Network. */
-        management?: ManagementProperty
         /** i18n resources of this plugin */
         i18n?: I18NResource
         /** Introduce networks information. */
@@ -108,6 +109,14 @@ export namespace Plugin.Shared {
         declareWeb3Providers?: Web3Plugin.ProviderDescriptor[]
         /** Introduce application category information. */
         declareApplicationCategories?: Web3Plugin.ApplicationCategoryDescriptor[]
+        /**
+         * Declare what this plugin provides.
+         *
+         * Declare this field properly so Mask Network can suggest your plugin when needed.
+         */
+        contribution?: Contribution
+        /** Declare ability this plugin supported. */
+        ability?: Ability
     }
     /**
      * This part is shared between Dashboard, SNSAdaptor and Worker part
@@ -153,18 +162,6 @@ export namespace Plugin.Shared {
         /** The Web3 Network this plugin supports */
         web3?: Web3Plugin.EnableRequirement
     }
-    export interface ManagementProperty {
-        /** This plugin should not displayed in the plugin management page. */
-        internal?: boolean
-        /**
-         * This plugin should not allow to be "disabled" in the plugin management page.
-         *
-         * This property is for the Wallet plugin. It's the core of almost all other plugins.
-         *
-         * It should be replaced by "dependency" management in the future (if there are more cases than the Wallet one).
-         */
-        alwaysOn?: boolean
-    }
     export interface SupportedNetworksDeclare {
         /**
          * opt-in means the listed networks is supported.
@@ -177,6 +174,25 @@ export namespace Plugin.Shared {
     export type I18NKey = string
     export type I18NValue = string
     export type I18NResource = Record<I18NLanguage, Record<I18NKey, I18NValue>>
+    export interface Contribution {
+        /** This plugin can recognize and react to the following metadata keys. */
+        metadataKeys?: ReadonlySet<string>
+        /** This plugin can recognize and enhance the post that matches the following matchers. */
+        postContent?: ReadonlySet<RegExp | string>
+    }
+    export interface Ability {
+        /**
+         * Declare that this plugin supports minimal mode.
+         * In this mode, the automated minimal mode is not applied to this plugin.
+         *
+         * The plugin MUST follow the design guide to behave like it is in the automated minimal mode, e.g.:
+         *
+         * - Do not display full UI in PostInspector
+         * - Do not display full UI in DecryptedPostInspector
+         */
+        // TODO: implement this flag when there is use case.
+        // UX_NEED_APPROVAL_manualMinimalMode?: boolean
+    }
 }
 
 /** This part runs in the SNSAdaptor */
@@ -187,8 +203,8 @@ export namespace Plugin.SNSAdaptor {
         PostInspector?: InjectUI<{}>
         /** This UI will be rendered for each decrypted post. */
         DecryptedInspector?: InjectUI<{ message: TypedMessage }>
-        /** This UI will be rendered under the Search box of the SNS. */
-        SearchBoxComponent?: InjectUI<{}>
+        /** This UI will be rendered under the Search of the SNS. */
+        SearchResultBox?: InjectUI<{}>
         /** This UI will be rendered into the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
@@ -199,6 +215,14 @@ export namespace Plugin.SNSAdaptor {
         CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be use when there is known badges. */
         CompositionDialogMetadataBadgeRender?: CompositionMetadataBadgeRender
+        /** This UI will be rendered as an entry in the toolbar (if the SNS has a Toolbar support) */
+        ToolbarEntry?: ToolbarEntry
+        /** This UI will be rendered as an entry in the wallet status dialog */
+        ApplicationEntry?: ApplicationEntry
+        /** This UI will be rendered as sliders on the profile page */
+        ProfileSliders?: ProfileSlider[]
+        /** This UI will be rendered as tabs on the profile page */
+        ProfileTabs?: ProfileTab[]
     }
     //#region Composition entry
     /**
@@ -251,6 +275,115 @@ export namespace Plugin.SNSAdaptor {
         tooltip?: React.ReactChild
     }
     //#endregion
+
+    //#region Toolbar entry
+    export interface ToolbarEntry {
+        image: string
+        // TODO: remove string
+        label: I18NStringField | string
+        /**
+         * Used to order the toolbars
+         *
+         * TODO: can we make them unordered?
+         */
+        priority: number
+        /**
+         * This is a React hook. If it returns false, this entry will not be displayed.
+         */
+        useShouldDisplay?(): boolean
+        /**
+         * What to do if the entry is clicked.
+         */
+        // TODO: add support for DialogEntry.
+        // TODO: add support for onClick event.
+        onClick: 'openCompositionEntry'
+    }
+    //#endregion
+
+    export interface ApplicationEntry {
+        /**
+         * The icon image URL
+         */
+        icon: URL
+        /**
+         * The name of the application
+         */
+        label: I18NStringField | string
+        /**
+         * Also an entrance in a sub-folder
+         */
+        categoryID?: string
+        /**
+         * Used to order the applications on the board
+         */
+        priority: number
+        /**
+         * What to do if the application icon is clicked.
+         */
+        onClick(): void
+    }
+
+    export interface ProfileIdentity {
+        avatar?: string
+        bio?: string
+        homepage?: string
+        nickname?: string
+        identifier: ProfileIdentifier
+    }
+
+    export interface ProfileAddress {
+        type: string
+        label: string
+        resolvedAddress: string
+    }
+
+    export interface ProfileSlider {
+        ID: string
+
+        /**
+         * The name of the slider card
+         */
+        label: I18NStringField | string
+        /**
+         * Used to order the sliders
+         */
+        priority: number
+        /**
+         * The injected UI
+         */
+        children: InjectUI<{}>
+    }
+
+    export interface ProfileTab {
+        ID: string
+
+        /**
+         * The name of the tab
+         */
+        label: I18NStringField | string
+        /**
+         * Used to order the sliders
+         */
+        priority: number
+
+        UI?: {
+            /**
+             * The injected tab content
+             */
+            TabContent: InjectUI<{ identity?: ProfileIdentity; addressNames?: ProfileAddress[] }>
+        }
+        Utils?: {
+            /**
+             * If it returns false, this tab will not be displayed.
+             */
+            shouldDisplay?: (identity?: ProfileIdentity, addressNames?: ProfileAddress[]) => boolean
+
+            /**
+             * Sort address name in expected order.
+             */
+            addressNameSorter?: (a: ProfileAddress, z: ProfileAddress) => number
+        }
+    }
 }
 
 /** This part runs in the dashboard */
@@ -266,6 +399,8 @@ export namespace Plugin.Dashboard {
         Web3UI?: Web3Plugin.UI.UI
         /** This is the context of the currently chosen network. */
         Web3State?: Web3Plugin.ObjectCapabilities.Capabilities
+        /** Plugin DO NOT need to define this. This will be auto set by the plugin host. */
+        __general_ui__?: GeneralUI.DefinitionDeferred
     }
 }
 
@@ -376,6 +511,90 @@ export namespace Plugin.Worker {
     }
 }
 
+/** This part defines the plugin part that does not context aware. */
+export namespace Plugin.GeneralUI {
+    export interface DefinitionDeferred {
+        /**
+         * Render metadata in many different environments.
+         *
+         * 1. Environment
+         *
+         * The render component MUST NOT assume they are running in a specific environment (e.g. SNS Adaptor).
+         * Plugin messages and RPC MAY NOT working.
+         *
+         * It MUST NOT assume the environment using the `context` props.
+         * ALL actions MUST BE DONE with the given props.
+         *
+         * Here is some example of *possible* environments.
+         * - inside SNS Adaptor, given "composition" context, running in the CompositionDialog.
+         * - inside SNS Adaptor, given "post" context,        running in the DecryptedPost.
+         * - inside Dashboard,   given "post" context,        running in the PostHistory as the previewer.
+         * - inside Popups,      given "post" context,        running in the PostInspector (Isolated mode).
+         * - on mask.io,         given "post" context,        allowing preview the message without extension installed.
+         *
+         * 2. Contexts
+         *
+         * The render component might be used in many different contexts.
+         *
+         * - "composition" context, the render should be editable, but not interactive (e.g. allow vote).
+         * - "post" context, the render should be readonly, but interactive.
+         *
+         * 3. Actions
+         *
+         * The render component MUST BE a ForwardRefExotic React Component
+         * that support operations defined in `Plugin.ContextFree.MetadataRender.RenderActions`
+         */
+        metadataRender: MetadataRender.StaticRender | MetadataRender.DynamicRender
+    }
+
+    export namespace MetadataRender {
+        export type MetadataReader<T> = (meta: TypedMessage['meta']) => Result<T, unknown>
+        //#region Static render
+        // new Map([ [reader, react component] ])
+        export type StaticRender<T = any> = ReadonlyMap<MetadataReader<T>, StaticRenderComponent<T>>
+        export type StaticRenderComponent<T> = Omit<React.ForwardRefExoticComponent<StaticRenderProps<T>>, 'propTypes'>
+        export type StaticRenderProps<T> = Context<T> & React.RefAttributes<RenderActions<T>> & { metadata: T }
+        //#endregion
+        //#region DynamicRender
+        export type DynamicRender = Omit<React.ForwardRefExoticComponent<DynamicRenderProps>, 'propTypes'>
+        export type DynamicRenderProps = Context<unknown> &
+            React.RefAttributes<RenderActions<unknown>> & { metadata: TypedMessage['meta'] }
+        //#endregion
+        export type RenderActions<T> = {
+            /**
+             * This action make the render into the edit state.
+             * It should report the result via onEditComplete() props.
+             *
+             * If this action does not exist, it will be rendered as non-editable.
+             */
+            edit?(): void
+            /**
+             * This action make the render quit the edit state.
+             * If save is true, the render MUST report the new result via onEditComplete.
+             *
+             * If this action does not exist, the render should handle the save/cancel by themselves.
+             */
+            quitEdit?(save: boolean): void
+        }
+        export type Context<T> = CompositionContext<T> | DecryptedPostContext
+        /** This metadata render is called in a composition preview context. */
+        export interface CompositionContext<T> {
+            context: 'composition'
+            /**
+             * When edit() is called, this component should go into to editable state.
+             * If the edit completes, the new metadata will be used to replace the old one.
+             */
+            onEditComplete(metaKey: string, replaceMeta: T): void
+        }
+        /**
+         * This metadata render is called in the decrypted post.
+         */
+        export interface DecryptedPostContext {
+            context: 'post'
+        }
+    }
+}
+
 // Helper types
 export namespace Plugin {
     /**
@@ -429,6 +648,41 @@ export enum CurrentSNSNetwork {
     Facebook = 1,
     Twitter = 2,
     Instagram = 3,
+    Minds = 4,
+}
+
+/**
+ * All integrated Plugin IDs
+ */
+export enum PluginId {
+    Avatar = 'com.maskbook.avatar',
+    Collectible = 'com.maskbook.collectibles',
+    CryptoArtAI = 'com.maskbook.cryptoartai',
+    dHEDGE = 'org.dhedge',
+    EVM = 'com.mask.evm',
+    External = 'io.mask.external',
+    Furucombo = 'app.furucombo',
+    Gitcoin = 'co.gitcoin',
+    GoodGhosting = 'co.good_ghosting',
+    MaskBox = 'com.maskbook.box',
+    Poll = 'com.maskbook.poll',
+    Profile = 'com.mask.profile',
+    Trader = 'com.maskbook.trader',
+    Transak = 'com.maskbook.transak',
+    Valuables = 'com.maskbook.tweet',
+    DAO = 'money.juicebox',
+    Debugger = 'io.mask.debugger',
+    Example = 'io.mask.example',
+    Flow = 'com.mask.flow',
+    RSS3 = 'bio.rss3',
+    RedPacket = 'com.maskbook.red_packet',
+    Pets = 'com.maskbook.pets',
+    Snapshot = 'org.snapshot',
+    ITO = 'com.maskbook.ito',
+    Wallet = 'com.maskbook.wallet',
+    PoolTogether = 'com.pooltogether',
+    UnlockProtocol = 'com.maskbook.unlockprotocol',
+    FileService = 'com.maskbook.fileservice',
 }
 
 export interface Pagination {
@@ -449,7 +703,22 @@ export interface Pageable<T> {
 // ---------------------------------------------------
 export namespace Plugin.__Host {
     export interface Host<Context = undefined> {
+        /**
+         * Control if the plugin is enabled or not.
+         *
+         * Note: This API currently is not in use.
+         *
+         * The "enabled/disabled" UI in the dashboard actually reflects to the "minimalMode" below.
+         */
         enabled: EnabledStatusReporter
+        /**
+         * Control if the plugin is in the minimal mode.
+         *
+         * If it is in the minimal mode, it will be omitted in some cases.
+         *
+         * Plugin can use
+         */
+        minimalMode: EnabledStatusReporter
         addI18NResource(pluginID: string, resources: Plugin.Shared.I18NResource): void
         createContext(id: string, signal: AbortSignal): Context
         signal?: AbortSignal

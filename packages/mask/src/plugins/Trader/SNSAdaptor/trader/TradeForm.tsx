@@ -72,7 +72,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             cursor: 'pointer',
         },
         reverseChevron: {
-            transform: `rotate(-180deg)`,
+            transform: 'rotate(-180deg)',
             transition: 'all 300ms',
         },
         status: {
@@ -109,9 +109,9 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             height: 'auto',
         },
         selectedTokenChip: {
-            borderRadius: `22px!important`,
+            borderRadius: '22px!important',
             height: 'auto',
-            backgroundColor: isDashboard ? MaskColorVar.input : MaskColorVar.twitterInput,
+            backgroundColor: isDashboard ? MaskColorVar.input : theme.palette.background.input,
             [`& .${chipClasses.label}`]: {
                 paddingTop: 10,
                 paddingBottom: 10,
@@ -133,7 +133,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             bottom: -20,
         },
         noToken: {
-            borderRadius: `18px !important`,
+            borderRadius: '18px !important',
             backgroundColor: theme.palette.primary.main,
             [`& .${chipClasses.label}`]: {
                 paddingTop: 9,
@@ -145,17 +145,11 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             },
         },
         tooltip: {
-            backgroundColor: theme.palette.mode === 'dark' ? '#ffffff' : '#000000',
-            color: theme.palette.mode === 'dark' ? '#7B8192' : '#ffffff',
-            borderRadius: 8,
             padding: 16,
             textAlign: 'left',
             fontSize: 16,
             lineHeight: '22px',
             fontWeight: 500,
-        },
-        tooltipArrow: {
-            color: theme.palette.mode === 'dark' ? '#ffffff' : '#000000',
         },
         dropIcon: {
             width: 20,
@@ -489,7 +483,6 @@ export const TradeForm = memo<AllTradeFormProps>(
                                             <Tooltip
                                                 classes={{
                                                     tooltip: classes.tooltip,
-                                                    arrow: classes.tooltipArrow,
                                                 }}
                                                 PopperProps={{
                                                     disablePortal: true,

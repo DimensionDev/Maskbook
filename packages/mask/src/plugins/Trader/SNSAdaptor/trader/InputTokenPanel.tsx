@@ -54,9 +54,9 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         color: isDashboard ? MaskColorVar.normalText : MaskColorVar.twitterSecond,
     },
     selectedTokenChip: {
-        borderRadius: `22px!important`,
+        borderRadius: '22px!important',
         height: 'auto',
-        backgroundColor: isDashboard ? MaskColorVar.input : MaskColorVar.twitterInput,
+        backgroundColor: isDashboard ? MaskColorVar.input : theme.palette.background.input,
         [`& .${chipClasses.label}`]: {
             paddingTop: 10,
             paddingBottom: 10,
@@ -70,7 +70,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         height: '28px!important',
     },
     noToken: {
-        borderRadius: `18px !important`,
+        borderRadius: '18px !important',
         backgroundColor: theme.palette.primary.main,
         [`& .${chipClasses.label}`]: {
             paddingTop: 9,

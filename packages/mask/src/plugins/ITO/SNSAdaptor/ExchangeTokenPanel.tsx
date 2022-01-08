@@ -30,6 +30,7 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         margin: theme.spacing(1),
         borderRadius: 10,
+        backgroundColor: theme.palette.background.default,
         [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
             margin: theme.spacing(0),
             padding: theme.spacing(0, 0, 0, 0.5),
@@ -152,7 +153,7 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
             ) : null}
             {showRemove ? (
                 <IconButton size="large" onClick={onRemove} className={classes.button}>
-                    <RemoveIcon color="secondary" />
+                    <RemoveIcon color="error" />
                 </IconButton>
             ) : null}
         </Paper>
