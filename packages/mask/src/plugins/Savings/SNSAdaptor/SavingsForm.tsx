@@ -161,12 +161,15 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
                             TabType.Deposit ? t('plugin_savings_process_deposit') : t('plugin_savings_process_withdraw')
                         }
                         failed={t('failed')}
+                        failedOnClick="use executor"
                         complete={t('done')}
                         disabled={validationMessage !== '' && !needsSwap}
                         executor={async () => {
                             switch (tab) {
                                 case TabType.Deposit:
-                                    await protocol.deposit(account, targetChainId, web3, tokenAmount)
+                                    if ((await protocol.deposit(account, targetChainId, web3, tokenAmount)) === false) {
+                                        throw new Error('Could not deposit')
+                                    }
                                     break
                                 case TabType.Withdraw:
                                     switch (protocol.type) {
@@ -175,7 +178,12 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
                                             onSwapDialogOpen?.()
                                             break
                                         default:
-                                            await protocol.withdraw(account, targetChainId, web3, tokenAmount)
+                                            if (
+                                                (await protocol.withdraw(account, targetChainId, web3, tokenAmount)) ===
+                                                false
+                                            ) {
+                                                throw new Error('Could not withdraw')
+                                            }
                                             break
                                     }
                                     break

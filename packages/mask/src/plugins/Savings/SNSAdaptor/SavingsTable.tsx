@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js'
 import { useAsync } from 'react-use'
 import { Box, Grid, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -80,38 +81,46 @@ export function SavingsTable({ chainId, tab, setSelectedProtocol }: SavingsTable
         }
     })
 
+    const MappableProtocols = CategorizedProtocols.filter((categorizedProtocol) => {
+        if (categorizedProtocol.protocols.length === 0) {
+            return false
+        }
+
+        for (const protocol of categorizedProtocol.protocols) {
+            for (const network of protocol.availableNetworks) {
+                if (network.chainId === chainId) {
+                    return true
+                }
+            }
+        }
+
+        return false
+    })
+
     return (
         <Box className={classes.containerWrap}>
-            <Grid container spacing={0} className={classes.tableHeader}>
-                <Grid item xs={4} className={classes.tableCell}>
-                    <Typography variant="body1">{t('plugin_savings_type')}</Typography>
+            {MappableProtocols.length === 0 ? (
+                <Typography variant="h5" textAlign="center">
+                    {t('plugin_no_protocol_available')}
+                </Typography>
+            ) : (
+                <Grid container spacing={0} className={classes.tableHeader}>
+                    <Grid item xs={4} className={classes.tableCell}>
+                        <Typography variant="body1">{t('plugin_savings_type')}</Typography>
+                    </Grid>
+                    <Grid item xs={2} className={classes.tableCell}>
+                        <Typography variant="body1"> {t('plugin_savings_apy')}</Typography>
+                    </Grid>
+                    <Grid item xs={3} className={classes.tableCell}>
+                        <Typography variant="body1">{t('plugin_savings_wallet')}</Typography>
+                    </Grid>
+                    <Grid item xs={3} className={classes.tableCell}>
+                        <Typography variant="body1">{t('plugin_savings_operation')}</Typography>
+                    </Grid>
                 </Grid>
-                <Grid item xs={2} className={classes.tableCell}>
-                    <Typography variant="body1"> {t('plugin_savings_apy')}</Typography>
-                </Grid>
-                <Grid item xs={3} className={classes.tableCell}>
-                    <Typography variant="body1">{t('plugin_savings_wallet')}</Typography>
-                </Grid>
-                <Grid item xs={3} className={classes.tableCell}>
-                    <Typography variant="body1">{t('plugin_savings_operation')}</Typography>
-                </Grid>
-            </Grid>
+            )}
 
-            {CategorizedProtocols.filter((categorizedProtocol) => {
-                if (categorizedProtocol.protocols.length === 0) {
-                    return false
-                }
-
-                for (const protocol of categorizedProtocol.protocols) {
-                    for (const network of protocol.availableNetworks) {
-                        if (network.chainId === chainId) {
-                            return true
-                        }
-                    }
-                }
-
-                return false
-            }).map((categorizedProtocol) => {
+            {MappableProtocols.map((categorizedProtocol) => {
                 const protocols = categorizedProtocol.protocols
                 if (protocols.length === 1) {
                     const protocol = protocols[0]
@@ -142,6 +151,9 @@ export function SavingsTable({ chainId, tab, setSelectedProtocol }: SavingsTable
                                 <Button
                                     variant="contained"
                                     color="primary"
+                                    disabled={
+                                        tab === TabType.Withdraw ? new BigNumber(protocol.balance).isZero() : false
+                                    }
                                     onClick={() => setSelectedProtocol(protocol.type)}>
                                     {tab === TabType.Deposit
                                         ? t('plugin_savings_deposit')
