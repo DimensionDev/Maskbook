@@ -22,6 +22,7 @@ import SpaceStationGalaxy from '@masknet/web3-constants/evm/space-station-galaxy
 import OpenseaAPI from '@masknet/web3-constants/evm/opensea-api.json'
 import Explorer from '@masknet/web3-constants/evm/explorer.json'
 import CryptoArtAI from '@masknet/web3-constants/evm/cryptoartai.json'
+import ArtBlocks from '@masknet/web3-constants/evm/artblocks.json'
 import { hookTransform, transform, transformFromJSON } from './utils'
 
 export { ZERO_ADDRESS, FAKE_SIGN_PASSWORD, EthereumNameType } from './specific'
@@ -98,6 +99,9 @@ export const useExplorerConstants = hookTransform(getExplorerConstants)
 
 export const getCryptoArtAIConstants = transform(CryptoArtAI)
 export const useCryptoArtAIConstants = hookTransform(getCryptoArtAIConstants)
+
+export const getArtBlocksConstants = transform(ArtBlocks)
+export const useArtBlocksConstants = hookTransform(getArtBlocksConstants)
 
 export const getNftRedPacketConstants = transform(NftRedPacket)
 export const useNftRedPacketConstants = hookTransform(getNftRedPacketConstants)

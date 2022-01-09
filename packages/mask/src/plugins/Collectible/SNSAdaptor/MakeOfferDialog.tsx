@@ -151,6 +151,9 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         return ''
     }, [amount, balance.value, expirationDateTime, isVerified, isAuction, unreviewedChecked, ToS_Checked])
 
+    console.log('balance: ', balance)
+    console.log('token: ', token)
+
     if (!asset?.value) return null
     return (
         <InjectedDialog
