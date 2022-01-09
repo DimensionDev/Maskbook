@@ -362,7 +362,11 @@
         "irss",
         "STETHABI",
         "CELO",
-        "flac"
+        "flac",
+        "treeshake",
+        "xtest",
+        "xdescribe",
+        "irss"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [

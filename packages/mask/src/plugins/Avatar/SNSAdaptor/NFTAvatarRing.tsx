@@ -11,21 +11,21 @@ interface NFTAvatarRingProps {
     strokeWidth: number
     fontSize: number
     text: string
+    price: string
     width: number
     id: string
 }
 
 export function NFTAvatarRing(props: NFTAvatarRingProps) {
     const { classes } = useStyles()
-    const { stroke, strokeWidth, fontSize, text, width, id } = props
+    const { stroke, strokeWidth, fontSize, text, width, id, price } = props
 
     const avatarSize = width + 3
     const R = avatarSize / 2
     const path_r = R - strokeWidth + fontSize / 2
-    const x1 = R - path_r / 2
-    const y1 = R + Math.sqrt(Math.pow(path_r, 2) - Math.pow(path_r / 2, 2))
-    const x2 = R + path_r / 2
-
+    const x1 = R - path_r
+    const y1 = R
+    const x2 = R + path_r
     return (
         <RainbowBox>
             <svg
@@ -36,11 +36,18 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
                 id={id}>
                 <defs>
                     <path
-                        id={`${id}-path`}
+                        id={`${id}-path-name`}
                         fill="none"
                         stroke="none"
                         strokeWidth="0"
                         d={`M${x1} ${y1} A${path_r} ${path_r} 0 1 1 ${x2} ${y1}`}
+                    />
+                    <path
+                        id={`${id}-path-price`}
+                        fill="none"
+                        stroke="none"
+                        strokeWidth="0"
+                        d={`M${x1} ${y1} A${path_r} ${path_r} 0 1 0 ${x2} ${y1}`}
                     />
                     <linearGradient id={`${id}-gradient`} x1="0%" y1="0%" x2="100%" y2="0">
                         <stop offset="0%" stopColor="#00f8ff" />
@@ -67,9 +74,21 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
                 </pattern>
 
                 <text x="0%" textAnchor="middle" fill={`url(#${id}-pattern)`} fontFamily="sans-serif">
-                    <textPath xlinkHref={`#${id}-path`} startOffset="50%" rotate="auto">
+                    <textPath xlinkHref={`#${id}-path-name`} startOffset="50%" rotate="auto">
                         <tspan fontWeight="bold" fontSize={fontSize}>
                             {text}
+                        </tspan>
+                    </textPath>
+                </text>
+
+                <text x="0%" textAnchor="middle" fill={`url(#${id}-pattern)`} fontFamily="sans-serif">
+                    <textPath
+                        xlinkHref={`#${id}-path-price`}
+                        startOffset="50%"
+                        rotate="auto"
+                        dominantBaseline="mathematical">
+                        <tspan fontWeight="bold" fontSize={fontSize}>
+                            {price}
                         </tspan>
                     </textPath>
                 </text>
