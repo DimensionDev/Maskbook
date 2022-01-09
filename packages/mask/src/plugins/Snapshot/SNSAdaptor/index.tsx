@@ -57,7 +57,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer url={link} />
     },
     PostInspector: function Component(): JSX.Element | null {
-        const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.mentionedLinks())
+        const links = usePostInfoDetails.mentionedLinks()
 
         const link = links.find(isSnapshotURL)
         if (!link) return null

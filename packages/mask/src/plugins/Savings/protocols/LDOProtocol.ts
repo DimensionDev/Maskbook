@@ -93,7 +93,7 @@ export class LidoProtocol implements SavingsProtocol {
             )
             const gasEstimate = await contract?.methods
                 .submit(
-                    getSavingsConstants(chainId).LIDO_REFERAL_ADDRESS || '0x0000000000000000000000000000000000000000',
+                    getSavingsConstants(chainId).LIDO_REFERRAL_ADDRESS || '0x0000000000000000000000000000000000000000',
                 )
                 .estimateGas({
                     from: account,
@@ -116,7 +116,7 @@ export class LidoProtocol implements SavingsProtocol {
             )
             await contract?.methods
                 .submit(
-                    getSavingsConstants(chainId).LIDO_REFERAL_ADDRESS || '0x0000000000000000000000000000000000000000',
+                    getSavingsConstants(chainId).LIDO_REFERRAL_ADDRESS || '0x0000000000000000000000000000000000000000',
                 )
                 .send({
                     from: account,

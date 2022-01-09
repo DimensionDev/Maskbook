@@ -75,11 +75,17 @@ export function createERC721Token(
     contractDetailed: ERC721ContractDetailed,
     info: ERC721TokenInfo,
     tokenId: string,
+    collection?: {
+        name: string
+        image?: string
+        slug: string
+    },
 ): ERC721TokenDetailed {
     return {
         contractDetailed,
         info,
         tokenId,
+        collection,
     }
 }
 

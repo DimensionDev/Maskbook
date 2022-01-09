@@ -45,7 +45,7 @@ export function useDisabledPluginSuggestionFromMeta(meta: ReadonlyMap<string, un
 
 export function PossiblePluginSuggestionPostInspector() {
     const message = extractTextFromTypedMessage(usePostInfoDetails.rawMessage())
-    const metaLinks = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.mentionedLinks())
+    const metaLinks = usePostInfoDetails.mentionedLinks()
     const matches = useDisabledPluginSuggestionFromPost(message, metaLinks)
     return <PossiblePluginSuggestionUI plugins={matches} />
 }
