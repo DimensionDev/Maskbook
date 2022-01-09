@@ -82,6 +82,9 @@ const ID_ADDRESS_MAP: {
         [NetworkType.Polygon]: {
             '8536': '0x2B9E7ccDF0F4e5B24757c1E1a80e311E34Cb10c7', // MASK
         },
+        [NetworkType.Avalanche]: {
+            '5805': '0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7', // AVAX
+        },
     },
     [DataProvider.COIN_GECKO]: {
         [NetworkType.Ethereum]: {
@@ -89,6 +92,9 @@ const ID_ADDRESS_MAP: {
         },
         [NetworkType.Polygon]: {
             'mask-network': '0x2B9E7ccDF0F4e5B24757c1E1a80e311E34Cb10c7', // MASK
+        },
+        [NetworkType.Avalanche]: {
+            'avalanche-2': '0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7', // AVAX
         },
     },
     [DataProvider.UNISWAP_INFO]: {},

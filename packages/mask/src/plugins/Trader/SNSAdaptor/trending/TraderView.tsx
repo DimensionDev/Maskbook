@@ -207,8 +207,7 @@ export function TraderView(props: TraderViewProps) {
         (!!trending?.coin.contract_address ||
             ['eth', 'matic', 'bnb'].includes(trending?.coin.symbol.toLowerCase() ?? '')) &&
         chainIdValid &&
-        tradeProviders.length &&
-        !['avax'].includes(trending?.coin.symbol.toLowerCase() ?? '')
+        tradeProviders.length
     //#endregion
 
     //#region display loading skeleton
