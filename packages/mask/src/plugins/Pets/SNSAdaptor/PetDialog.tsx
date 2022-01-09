@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo, ReactNode } from 'react'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { useChainId, isSameAddress } from '@masknet/web3-shared-evm'
+import { isSameAddress } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import {
     Button,
@@ -18,7 +18,7 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { initMeta, initCollection, Punk3D } from '../constants'
 import { PreviewBox } from './PreviewBox'
 import { PetMetaDB, FilterContract, OwnerERC721TokenInfo, ImageType } from '../types'
-import { useUser, useCurrentVisitingUser, useNfts, useNftsExtra } from '../hooks'
+import { useUser, useCurrentVisitingUser, useNFTs, useNFTsExtra } from '../hooks'
 import { useI18N, getAssetAsBlobURL } from '../../../utils'
 import { ShadowRootPopper } from '../../../utils/shadow-root/ShadowRootComponents'
 import { ImgLoader } from './ImgLoader'
@@ -95,14 +95,13 @@ export function PetDialog() {
     const GLB3DIcon = getAssetAsBlobURL(new URL('../assets/glb3D.png', import.meta.url))
     const { open, closeDialog } = useRemoteControlledDialog(PluginPetMessages.essayDialogUpdated, () => {})
 
-    const chainId = useChainId()
     //should not use user address here
     const user = useUser()
     const visitor = useCurrentVisitingUser()
-    const nfts = useNfts(
+    const nfts = useNFTs(
         user.userId === visitor.userId && isSameAddress(user.address, visitor.address) ? visitor : undefined,
     )
-    const extraData = useNftsExtra(open)
+    const extraData = useNFTsExtra()
 
     const [collection, setCollection] = useState<FilterContract>(initCollection)
     const [isCollectionsError, setCollectionsError] = useState(false)
@@ -114,7 +113,7 @@ export function PetDialog() {
     const [tokenInfoSelect, setTokenInfoSelect] = useState<OwnerERC721TokenInfo | null>(null)
 
     useEffect(() => {
-        if (!!open) return
+        if (open) return
         setMetaData(initMeta)
         setCollection(initCollection)
         setTokenInfoSelect(null)
