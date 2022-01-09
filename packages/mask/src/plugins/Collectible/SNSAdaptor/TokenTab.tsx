@@ -70,7 +70,6 @@ export function TokenTab(props: TokenTabProps) {
     const { token, asset, provider } = CollectibleState.useContainer()
 
     if (!asset.value) return null
-    console.log(asset.value, 'fff')
     return (
         <CollectibleTab classes={{ content: classes.content }}>
             <Box className={classes.container}>
