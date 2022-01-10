@@ -115,9 +115,9 @@ export function resolveAssetLinkOnCurrentProvider(
 ) {
     switch (provider) {
         case NonFungibleAssetProvider.OPENSEA:
-            return urlcat(resolveLinkOnOpenSea(chainId), ‘/assets/:address/:id', { address, id })
+            return urlcat(resolveLinkOnOpenSea(chainId), '/assets/:address/:id', { address, id })
         case NonFungibleAssetProvider.RARIBLE:
-            return urlcat(resolveLinkOnRarible(chainId), '/token/:address::id', { address, id })
+            return urlcat(resolveLinkOnRarible(chainId), '/token/:address/:id', { address, id })
         case NonFungibleAssetProvider.NFTSCAN:
             return ''
         default:

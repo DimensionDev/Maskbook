@@ -1,17 +1,5 @@
 import { ReactElement, useCallback } from 'react'
-import {
-    Avatar,
-    Box,
-    Button,
-    CardActions,
-    CardContent,
-    CardHeader,
-    Link,
-    Paper,
-    Tab,
-    Tabs,
-    Typography,
-} from '@mui/material'
+import { Box, Button, CardActions, CardContent, CardHeader, Link, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import { findIndex } from 'lodash-unified'
@@ -26,6 +14,7 @@ import { TokenTab } from './TokenTab'
 import { OfferTab } from './OfferTab'
 import { ListingTab } from './ListingTab'
 import { HistoryTab } from './HistoryTab'
+import { LinkingAvatar } from './LinkingAvatar'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleCard } from './CollectibleCard'
 import { CollectibleProviderIcon } from './CollectibleProviderIcon'
@@ -214,31 +203,16 @@ export function Collectible(props: CollectibleProps) {
             <CollectibleCard classes={classes}>
                 <CardHeader
                     avatar={
-                        (_asset.collectionLinkUrl && (
-                            <Link
-                                href={_asset.collectionLinkUrl}
-                                title={_asset.owner?.user?.username ?? _asset.owner?.address ?? ''}
-                                target="_blank"
-                                rel="noopener noreferrer">
-                                <Avatar
-                                    src={
-                                        _asset.collection?.image_url ??
-                                        _asset.creator?.profile_img_url ??
-                                        _asset.owner?.profile_img_url ??
-                                        ''
-                                    }
-                                />
-                            </Link>
-                        )) || (
-                            <Avatar
-                                src={
-                                    _asset.collection?.image_url ??
-                                    _asset.creator?.profile_img_url ??
-                                    _asset.owner?.profile_img_url ??
-                                    ''
-                                }
-                            />
-                        )
+                        <LinkingAvatar
+                            href={_asset.collectionLinkUrl}
+                            title={_asset.owner?.user?.username ?? _asset.owner?.address ?? ''}
+                            src={
+                                _asset.collection?.image_url ??
+                                _asset.creator?.profile_img_url ??
+                                _asset.owner?.profile_img_url ??
+                                ''
+                            }
+                        />
                     }
                     title={
                         <Typography style={{ display: 'flex', alignItems: 'center' }}>
