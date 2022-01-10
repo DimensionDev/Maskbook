@@ -92,7 +92,7 @@ const useStyles = makeStyles()({
     error: {
         color: '#FF5F5F',
         fontSize: 12,
-        marginTop: 8,
+        marginTop: 24,
         lineHeight: '16px',
         wordBreak: 'break-all',
     },
