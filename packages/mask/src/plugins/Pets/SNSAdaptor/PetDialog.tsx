@@ -35,7 +35,7 @@ const useStyles = makeStyles()((theme) => ({
     input: {
         margin: theme.spacing(2, 0, 0),
     },
-    inputOptl: {
+    inputOption: {
         margin: theme.spacing(4, 0, 0),
     },
     inputBorder: {
@@ -262,7 +262,7 @@ export function PetDialog() {
                                 )}
                             />
                             <TextField
-                                className={classes.inputOptl}
+                                className={classes.inputOption}
                                 InputProps={{ classes: { root: classes.inputArea } }}
                                 label={
                                     holderChange ? t('plugin_pets_dialog_msg_optional') : t('plugin_pets_dialog_msg')
