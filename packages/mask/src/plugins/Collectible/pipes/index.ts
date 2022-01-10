@@ -62,42 +62,31 @@ export const resolveCollectibleProviderName = createLookupTableResolver<NonFungi
     },
 )
 
-export function resolveRaribleUserNetwork(chainId: ChainId) {
-    switch (chainId) {
-        case ChainId.Mainnet:
-            return RaribleUserURL
-        case ChainId.Ropsten:
-            return RaribleRopstenUserURL
-        case ChainId.Rinkeby:
-            return RaribleRinkebyUserURL
-        default:
-            return RaribleUserURL
-    }
-}
+export const resolveRaribleUserNetwork = createLookupTableResolver<ChainId, string>(
+    {
+        [ChainId.Mainnet]: RaribleUserURL,
+        [ChainId.Ropsten]: RaribleRopstenUserURL,
+        [ChainId.Rinkeby]: RaribleRinkebyUserURL,
+    },
+    RaribleUserURL,
+)
 
-export function resolveLinkOnOpenSea(chainId: ChainId) {
-    switch (chainId) {
-        case ChainId.Mainnet:
-            return OpenSeaMainnetURL
-        case ChainId.Rinkeby:
-            return OpenSeaTestnetURL
-        default:
-            return OpenSeaMainnetURL
-    }
-}
+export const resolveLinkOnOpenSea = createLookupTableResolver<ChainId, string>(
+    {
+        [ChainId.Mainnet]: OpenSeaMainnetURL,
+        [ChainId.Rinkeby]: OpenSeaTestnetURL,
+    },
+    OpenSeaMainnetURL,
+)
 
-export function resolveLinkOnRarible(chainId: ChainId) {
-    switch (chainId) {
-        case ChainId.Mainnet:
-            return 'https://rarible.com'
-        case ChainId.Rinkeby:
-            return 'https://rinkeby.rarible.com'
-        case ChainId.Ropsten:
-            return 'https://ropsten.rarible.com'
-        default:
-            return 'https://rarible.com'
-    }
-}
+export const resolveLinkOnRarible = createLookupTableResolver<ChainId, string>(
+    {
+        [ChainId.Mainnet]: 'https://rarible.com',
+        [ChainId.Rinkeby]: 'https://rinkeby.rarible.com',
+        [ChainId.Ropsten]: 'https://ropsten.rarible.com',
+    },
+    'https://rarible.com',
+)
 
 export function resolveTraitLinkOnOpenSea(chainId: ChainId, slug: string, search: string, value: string) {
     if (chainId === ChainId.Rinkeby) {
