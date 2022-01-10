@@ -4,7 +4,7 @@ import { Box, Grid, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useWeb3, useAccount } from '@masknet/web3-shared-evm'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { IconURLS } from './IconURL'
+import { IconURLs } from './IconURL'
 import { useI18N } from '../../../utils'
 import { ProtocolCategory, ProtocolType, TabType } from '../types'
 import { SavingsProtocols } from '../protocols'
@@ -129,8 +129,8 @@ export function SavingsTable({ chainId, tab, setSelectedProtocol }: SavingsTable
                         <Grid container spacing={0} className={classes.tableHeader} key={protocol.type}>
                             <Grid item xs={4} className={classes.tableCell}>
                                 <div className={classes.logoWrap}>
-                                    <img src={IconURLS[protocol.category]} className={classes.logo} />
-                                    <img src={IconURLS[protocol.image]} className={classes.logoMini} />
+                                    <img src={IconURLs[protocol.category]} className={classes.logo} />
+                                    <img src={IconURLs[protocol.image]} className={classes.logoMini} />
                                 </div>
                                 <div>
                                     <Typography variant="body1">{protocol.category.toUpperCase()}</Typography>

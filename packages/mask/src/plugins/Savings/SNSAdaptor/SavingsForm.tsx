@@ -16,7 +16,7 @@ import { TokenAmountPanel, FormattedCurrency } from '@masknet/shared'
 import { useTokenPrice } from '../../Wallet/hooks/useTokenPrice'
 import { useI18N } from '../../../utils'
 import { useStyles } from './SavingsFormStyles'
-import { IconURLS } from './IconURL'
+import { IconURLs } from './IconURL'
 import { TabType, ProtocolType } from '../types'
 import { SavingsProtocols } from '../protocols'
 import { isLessThan, rightShift } from '@masknet/web3-shared-base'
@@ -123,7 +123,7 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
 
             <div className={classes.infoRow}>
                 <Typography variant="body1" className={classes.infoRowLeft}>
-                    <img src={IconURLS[protocol.image]} className={classes.rowImage} />
+                    <img src={IconURLs[protocol.image]} className={classes.rowImage} />
                     {protocol.pair} {t('plugin_savings_apy')}%
                 </Typography>
                 <Typography variant="body1" className={classes.infoRowRight}>
@@ -167,7 +167,7 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
                         executor={async () => {
                             switch (tab) {
                                 case TabType.Deposit:
-                                    if ((await protocol.deposit(account, targetChainId, web3, tokenAmount)) === false) {
+                                    if (!(await protocol.deposit(account, targetChainId, web3, tokenAmount))) {
                                         throw new Error('Could not deposit')
                                     }
                                     break
@@ -178,10 +178,7 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
                                             onSwapDialogOpen?.()
                                             break
                                         default:
-                                            if (
-                                                (await protocol.withdraw(account, targetChainId, web3, tokenAmount)) ===
-                                                false
-                                            ) {
+                                            if (!(await protocol.withdraw(account, targetChainId, web3, tokenAmount))) {
                                                 throw new Error('Could not withdraw')
                                             }
                                             break
