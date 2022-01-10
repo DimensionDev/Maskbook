@@ -23,14 +23,14 @@ const AnimatePic = () => {
     const defMeta = useDefaultEssay(visitor)
 
     const [showMeta, setShowMeta] = useState<ShowMeta | undefined>(undefined)
-    const [show, setShow] = useState(true)
+    const [hidden, setHidden] = useState(false)
     const [infoShow, setInfoShow] = useState(false)
 
     useEffect(() => {
         setShowMeta(visitorMeta ?? defMeta)
     }, [visitor, visitorMeta, defMeta])
 
-    const handleClose = () => setShow(false)
+    const handleClose = () => setHidden(true)
     const handleMouseEnter = () => setInfoShow(true)
     const handleMouseLeave = () => setInfoShow(false)
 
@@ -45,7 +45,7 @@ const AnimatePic = () => {
             clearInterval(timer)
         }
     }, [])
-    if (!visitor.userId || visitor.userId === '$unknown' || !show || !showMeta?.image) return <></>
+    if (!visitor.userId || visitor.userId === '$unknown' || hidden || !showMeta?.image) return null
     return (
         <div className={classes.root} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             {showMeta.type === ImageType.GLB ? (

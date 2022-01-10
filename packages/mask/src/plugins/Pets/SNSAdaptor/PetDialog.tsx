@@ -21,7 +21,7 @@ import { PetMetaDB, FilterContract, OwnerERC721TokenInfo, ImageType } from '../t
 import { useUser, useCurrentVisitingUser, useNFTs, useNFTsExtra } from '../hooks'
 import { useI18N } from '../../../utils'
 import { ShadowRootPopper } from '../../../utils/shadow-root/ShadowRootComponents'
-import { ImageLoader } from './ImgLoader'
+import { ImageLoader } from './ImageLoader'
 
 const useStyles = makeStyles()((theme) => ({
     desBox: {
@@ -143,11 +143,11 @@ export function PetDialog() {
     }
 
     const onCollectionChange = (v: string) => {
-        nfts.forEach((y) => {
-            if (y.name === v) {
-                setCollection(y)
+        for (const item of nfts) {
+            if (item.name === v) {
+                setCollection(item)
             }
-        })
+        }
         setCollectionsError(false)
     }
 
@@ -183,8 +183,8 @@ export function PetDialog() {
     }, [metaData.image])
 
     const renderImg = (address: string) => {
-        const imgItem = extraData.filter((i) => isSameAddress(i.address, address))
-        return imgItem ? <ImageLoader className={classes.thumbnail} src={imgItem[0]?.iconURL ?? ''} /> : null
+        const matched = extraData.find((item) => isSameAddress(item.address, address))
+        return <ImageLoader className={classes.thumbnail} src={matched?.iconURL ?? ''} />
     }
 
     const paperComponent = (children: ReactNode | undefined) => <Box className={classes.boxPaper}>{children}</Box>

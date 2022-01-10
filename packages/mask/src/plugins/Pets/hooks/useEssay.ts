@@ -8,11 +8,9 @@ import { getAssetAsBlobURL } from '../../../utils'
 
 export function useEssay(user: User, refresh?: boolean) {
     return useAsync(async () => {
-        if (user.address) {
-            const metaData = await PluginPetRPC.getEssay(user.address)
-            return metaData?.userId === user.userId ? metaData : null
-        }
-        return null
+        if (!user.address) return null
+        const metaData = await PluginPetRPC.getEssay(user.address)
+        return metaData?.userId === user.userId ? metaData : null
     }, [user, refresh]).value
 }
 

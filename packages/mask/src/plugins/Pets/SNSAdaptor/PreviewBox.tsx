@@ -124,9 +124,7 @@ export function PreviewBox(props: Props) {
     const [glbShow, setGlbShow] = useState(false)
     const handleGLBTransfer = () => {
         setGlbShow(!glbShow)
-        if (props.glbTransferHandle) {
-            props.glbTransferHandle(!glbShow)
-        }
+        props.glbTransferHandle?.(!glbShow)
     }
     return (
         <div className={classes.box}>
