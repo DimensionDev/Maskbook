@@ -33,7 +33,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer link={pool.link} address={pool.address} />
     },
     PostInspector: function Component() {
-        const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.mentionedLinks())
+        const links = usePostInfoDetails.mentionedLinks()
         const pool = getPoolFromLinks(links)
         if (!pool?.address) return null
         return <Renderer link={pool.link} address={pool.address} />

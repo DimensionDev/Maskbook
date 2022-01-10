@@ -62,7 +62,7 @@ export interface Meta {
         key: string
         value: string
     }[]
-    image: {
+    image?: {
         meta: {
             PREVIEW: {
                 type: string

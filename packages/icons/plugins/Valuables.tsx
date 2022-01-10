@@ -19,5 +19,6 @@ export const ValuablesIcon: typeof SvgIcon = createPaletteAwareIcon(
             fill="#fff"
         />
     </g>,
+    undefined,
     '0 0 28 28',
 )

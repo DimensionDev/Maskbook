@@ -1,3 +1,4 @@
+import { MaskIconPaletteContext } from './MaskIconPaletteContext'
 /** @internal */
 export interface IconPreviewProps {
     icons: Record<string, React.ComponentType<any>>
@@ -14,6 +15,13 @@ export function IconPreview(props: IconPreviewProps) {
                         <td>{name}</td>
                         <td children={<C />} />
                         <td children={<C className="black" />} />
+                        <td
+                            children={
+                                <MaskIconPaletteContext.Provider value="dim">
+                                    <C className="black" />
+                                </MaskIconPaletteContext.Provider>
+                            }
+                        />
                     </tr>
                 ))}
             </table>

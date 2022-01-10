@@ -10,7 +10,7 @@ importers:
     specifiers:
       '@commitlint/cli': ^16.0.0
       '@commitlint/config-conventional': ^16.0.0
-      '@dimensiondev/eslint-plugin': ^0.0.1-20211222115249-7984aa5
+      '@dimensiondev/eslint-plugin': ^0.0.1-20220104011158-0905fa1
       '@dimensiondev/kit': 0.0.0-20211215044858-27d964f
       '@dimensiondev/patch-package': ^6.5.0
       '@emotion/cache': ^11.7.1
@@ -89,7 +89,7 @@ importers:
     devDependencies:
       '@commitlint/cli': 16.0.0
       '@commitlint/config-conventional': 16.0.0
-      '@dimensiondev/eslint-plugin': 0.0.1-20211222115249-7984aa5_eslint@8.5.0
+      '@dimensiondev/eslint-plugin': 0.0.1-20220104011158-0905fa1_eslint@8.5.0
       '@dimensiondev/patch-package': 6.5.0
       '@jest/globals': 27.4.4
       '@magic-works/i18n-codegen': 0.0.6_typescript@4.6.0-dev.20211202
@@ -784,6 +784,37 @@ importers:
   packages/polyfills/types:
     specifiers: {}
 
+  packages/provider-proxy:
+    specifiers:
+      '@masknet/plugin-infra': workspace:*
+      '@masknet/web3-providers': workspace:*
+      '@masknet/web3-shared-base': workspace:*
+      '@masknet/web3-shared-evm': workspace:*
+      '@rollup/plugin-alias': ^3.1.8
+      '@rollup/plugin-commonjs': ^21.0.1
+      '@rollup/plugin-json': ^4.1.0
+      '@rollup/plugin-node-resolve': ^13.0.6
+      '@rollup/plugin-sucrase': ^4.0.1
+      date-fns: ^2.27.0
+      rollup: ^2.60.1
+      rollup-plugin-dts: 4.0.1
+      urlcat: ^2.0.4
+    dependencies:
+      '@masknet/plugin-infra': link:../plugin-infra
+      '@masknet/web3-providers': link:../web3-providers
+      '@masknet/web3-shared-base': link:../web3-shared/base
+      '@masknet/web3-shared-evm': link:../web3-shared/evm
+      urlcat: 2.0.4
+    devDependencies:
+      '@rollup/plugin-alias': 3.1.9_rollup@2.62.0
+      '@rollup/plugin-commonjs': 21.0.1_rollup@2.62.0
+      '@rollup/plugin-json': 4.1.0_rollup@2.62.0
+      '@rollup/plugin-node-resolve': 13.1.1_rollup@2.62.0
+      '@rollup/plugin-sucrase': 4.0.1_rollup@2.62.0
+      date-fns: 2.27.0
+      rollup: 2.62.0
+      rollup-plugin-dts: 4.0.1_f989a9f75f95e6331defeb4529ad92f3
+
   packages/public-api:
     specifiers: {}
 
@@ -974,12 +1005,14 @@ importers:
       '@masknet/plugin-infra': workspace:*
       '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-evm': workspace:*
-      bignumber.js: ^9.0.1
+      bignumber.js: 9.0.1
       date-fns: ^2.27.0
       json-stable-stringify: ^1.0.1
       lodash-unified: 1.0.1
       rss3-next: ^0.6.17
+      socket.io-client: 2.4.0
       urlcat: ^2.0.4
+      uuid: ^8.3.2
     dependencies:
       '@masknet/plugin-infra': link:../plugin-infra
       '@masknet/web3-shared-base': link:../web3-shared/base
@@ -989,13 +1022,24 @@ importers:
       json-stable-stringify: 1.0.1
       lodash-unified: 1.0.1_bd4845f8c1bf1d81a616b60758034d0a
       rss3-next: 0.6.17_typescript@4.6.0-dev.20211202
+      socket.io-client: 2.4.0
       urlcat: 2.0.4
+      uuid: 8.3.2
 
   packages/web3-shared/base:
     specifiers:
       bignumber.js: 9.0.2
+      date-fns: ^2.27.0
+      jest-websocket-mock: ^2.2.1
+      mock-socket: ^9.0.8
+      reconnecting-websocket: ^4.4.0
     dependencies:
       bignumber.js: 9.0.2
+      date-fns: 2.27.0
+      reconnecting-websocket: 4.4.0
+    devDependencies:
+      jest-websocket-mock: 2.2.1_mock-socket@9.0.8
+      mock-socket: 9.0.8
 
   packages/web3-shared/evm:
     specifiers:
@@ -1017,6 +1061,7 @@ importers:
       unstated-next: ^1.1.0
       urlcat: ^2.0.4
       use-subscription: ^1.5.1
+      uuid: ^8.3.2
       wallet.ts: ^1.0.1
       web3: 1.5.2
       web3-core-helpers: 1.5.2
@@ -1039,6 +1084,7 @@ importers:
       unstated-next: 1.1.0
       urlcat: 2.0.4
       use-subscription: 1.5.1_react@18.0.0-rc.0
+      uuid: 8.3.2
       wallet.ts: 1.0.1
       web3: 1.5.2
       web3-core-helpers: 1.5.2
@@ -3435,17 +3481,13 @@ packages:
       '@msgpack/msgpack': 1.12.2
     dev: false
 
-  /@dimensiondev/eslint-plugin/0.0.1-20211222115249-7984aa5_eslint@8.5.0:
-    resolution: {integrity: sha512-CcPs3cioDRhYs0Gpz+F4TKfL+rsgdulFd3zaBNU06Rq522opZX9VmpcrCDuW4f1EHNYKYIj1wEVGvBvSlbCMAg==, tarball: download/@dimensiondev/eslint-plugin/0.0.1-20211222115249-7984aa5/2641dcbec68ae0b51f1dc91e9c92abe14be0258740198e2c12d24888a5f1f338}
-    engines: {node: '>= 14'}
+  /@dimensiondev/eslint-plugin/0.0.1-20220104011158-0905fa1_eslint@8.5.0:
+    resolution: {integrity: sha512-DyAzOQp2Dp9Nzll6dTbujqyBAXOLhlWXvDdmnfX3+cHixhvaupbMeoh4MmujkOY681N5ohVm2eKWJd/ApC4lrQ==, tarball: download/@dimensiondev/eslint-plugin/0.0.1-20220104011158-0905fa1/931c157d880a7f8a78e87326a2840ad7d4583b5c714f155e045f73a11969fc82}
     peerDependencies:
       eslint: '>= 8'
     dependencies:
       eslint: 8.5.0
-      lodash.set: 4.3.2
     dev: true
-    bundledDependencies:
-      - lodash.set
 
   /@dimensiondev/holoflows-kit/0.9.0-20210902104757-7c3d0d0:
     resolution: {integrity: sha512-Vk22WLOTW20OECTHdLGulGmDsTFguURQYB9Oq8S+eDVrmWHCxKD/N+4OU5uCFrWCkqjl/n7vec3fVWUSunpBeA==, tarball: download/@dimensiondev/holoflows-kit/0.9.0-20210902104757-7c3d0d0/bce56871014284e7863fc97177b316aec94f6dfddf627312e690958400e958e8}
@@ -5210,6 +5252,16 @@ packages:
   /@protobufjs/utf8/1.1.0:
     resolution: {integrity: sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=}
     dev: false
+
+  /@rollup/plugin-alias/3.1.9_rollup@2.62.0:
+    resolution: {integrity: sha512-QI5fsEvm9bDzt32k39wpOwZhVzRcL5ydcffUHMyLVaVaLeC70I8TJZ17F1z1eMoLu4E/UOcH9BWVkKpIKdrfiw==}
+    engines: {node: '>=8.0.0'}
+    peerDependencies:
+      rollup: ^1.20.0||^2.0.0
+    dependencies:
+      rollup: 2.62.0
+      slash: 3.0.0
+    dev: true
 
   /@rollup/plugin-commonjs/21.0.1_rollup@2.62.0:
     resolution: {integrity: sha512-EA+g22lbNJ8p5kuZJUYyhhDK7WgJckW5g4pNN7n4mAFUM96VuwUnNT3xr2Db2iCZPI1pJPbGyfT5mS9T1dHfMg==}
@@ -12264,7 +12316,6 @@ packages:
   /date-fns/2.27.0:
     resolution: {integrity: sha512-sj+J0Mo2p2X1e306MHq282WS4/A8Pz/95GIFcsPNMPMZVI3EUrAdSv90al1k+p74WGLCruMXk23bfEDZa71X9Q==}
     engines: {node: '>=0.11'}
-    dev: false
 
   /debug/2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
@@ -17030,6 +17081,15 @@ packages:
       string-length: 4.0.2
     dev: true
 
+  /jest-websocket-mock/2.2.1_mock-socket@9.0.8:
+    resolution: {integrity: sha512-fhsGLXrPfs06PhHoxqOSA9yZ6Rb4qYrf4Wcm7/nfRzjlrf1gIeuhYUkzMRjjE0TMQ37SwkmeLanwrZY4ZaNp8g==}
+    peerDependencies:
+      mock-socket: ^8||^9
+    dependencies:
+      jest-diff: 27.4.2
+      mock-socket: 9.0.8
+    dev: true
+
   /jest-worker/26.6.2:
     resolution: {integrity: sha512-KWYVV1c4i+jbMpaBC+U++4Va0cp8OisU185o73T1vo99hqi7w8tSJfUXYswwqqrjzwxa6KpRK54WhPvwf5w6PQ==}
     engines: {node: '>= 10.13.0'}
@@ -17778,6 +17838,7 @@ packages:
 
   /lodash.set/4.3.2:
     resolution: {integrity: sha1-2HV7HagH3eJIFrDWqEvqGnYjCyM=}
+    dev: false
 
   /lodash.unescape/4.0.1:
     resolution: {integrity: sha1-vyJJiGzlFM2hEvrpIYzcBlIR/Jw=}
@@ -18353,6 +18414,11 @@ packages:
   /mock-fs/4.14.0:
     resolution: {integrity: sha512-qYvlv/exQ4+svI3UOvPUpLDF0OMX5euvUH0Ny4N5QyRyhNdgAgUrVH3iUINSzEPLvx0kbo/Bp28GJKIqvE7URw==}
     dev: false
+
+  /mock-socket/9.0.8:
+    resolution: {integrity: sha512-8Syqkaaa2SzRqW68DEsnZkKQicHP7hVzfj3uCvigB5TL79H1ljKbwmOcRIENkx0ZTyu/5W6u+Pk9Qy6JCp38Ww==}
+    engines: {node: '>= 8'}
+    dev: true
 
   /move-concurrently/1.0.1:
     resolution: {integrity: sha1-viwAX9oy4LKa8fBdfEszIUxwH5I=}
@@ -20565,6 +20631,10 @@ packages:
       resolve: 1.20.0
     dev: true
 
+  /reconnecting-websocket/4.4.0:
+    resolution: {integrity: sha512-D2E33ceRPga0NvTDhJmphEgJ7FUYF0v4lr1ki0csq06OdlxKfugGzN0dSkxM/NfqCxYELK4KcaTOUOjTV6Dcng==}
+    dev: false
+
   /recursive-readdir/2.2.2:
     resolution: {integrity: sha512-nRCcW9Sj7NuZwa2XvH9co8NPeXUBhZP7CRKJtU+cS6PW9FpCIFoI5ib0NT1ZrbNuPoRy0ylyCaUL8Gih4LSyFg==}
     engines: {node: '>=0.10.0'}
@@ -21041,6 +21111,20 @@ packages:
     hasBin: true
     dependencies:
       bn.js: 5.2.0
+
+  /rollup-plugin-dts/4.0.1_f989a9f75f95e6331defeb4529ad92f3:
+    resolution: {integrity: sha512-DNv5F8pro/r0Hkx3JWKRtJZocDnqXfgypoajeiaNq134rYaFcEIl/oas5PogD1qexMadVijsHyVko1Chig0OOQ==}
+    engines: {node: '>=v12.22.6'}
+    peerDependencies:
+      rollup: ^2.56.3
+      typescript: ^4.4.2
+    dependencies:
+      magic-string: 0.25.7
+      rollup: 2.62.0
+      typescript: 4.6.0-dev.20211202
+    optionalDependencies:
+      '@babel/code-frame': 7.16.0
+    dev: true
 
   /rollup-plugin-terser/7.0.2_rollup@2.62.0:
     resolution: {integrity: sha512-w3iIaU4OxcF52UUXiZNsNeuXIMDvFrr+ZXK6bFZ0Q60qyVfq4uLptoS4bbq3paG3x216eQllFZX7zt6TIImguQ==}
