@@ -32,7 +32,6 @@ function getTransactionDescription(
 ) {
     if (!computedPayload) return
     const type = computedPayload.type
-
     switch (type) {
         case EthereumRpcType.SEND_ETHER:
             return `Send token -${getTokenAmountDescription(

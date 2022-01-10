@@ -5,8 +5,6 @@ import {
     formatBalance,
     isNativeTokenAddress,
     useNativeTokenDetailed,
-    ERC20TokenDetailed,
-    NativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../../utils'
 import type { ContractMethodInfo, ComputedPayload } from '../type'
@@ -39,13 +37,11 @@ interface CreateRedpacketDescriptionProps {
 
 export function CreateRedpacketDescription(props: CreateRedpacketDescriptionProps) {
     const { tokenAddress, tokenAmount } = props
-
-    let token: ERC20TokenDetailed | NativeTokenDetailed | undefined
     const { t } = useI18N()
-    const { value: nativeToken } = useNativeTokenDetailed()
 
+    const { value: nativeToken } = useNativeTokenDetailed()
     const { value: tokenDetailed } = useERC20TokenDetailed(tokenAddress)
-    token = isNativeTokenAddress(tokenAddress) ? nativeToken : tokenDetailed
+    const token = isNativeTokenAddress(tokenAddress) ? nativeToken : tokenDetailed
 
     return (
         <span>
