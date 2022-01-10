@@ -5,7 +5,7 @@ import { PETSIcon } from '../../resources/PETSIcon'
 export const base: Plugin.Shared.Definition = {
     ID: PetsPluginID,
     icon: <PETSIcon />,
-    name: { fallback: 'Non-Fungible Friends by Mint Team' },
+    name: { fallback: 'Non-Fungible Friends' },
     description: {
         fallback: 'Explore the endless possibilities of NFTs.',
     },

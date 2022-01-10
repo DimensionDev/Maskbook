@@ -113,8 +113,8 @@ export const useStyles = makeStyles()((theme) => ({
 }))
 
 interface Props {
-    message?: string | undefined
-    imageUrl?: string | undefined
+    message?: string
+    imageUrl?: string
     tokenInfo?: OwnerERC721TokenInfo | null
     glbTransferHandle?: (transfer: boolean) => void
 }

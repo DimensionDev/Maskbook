@@ -8,9 +8,8 @@ export function useUser() {
     const account = useAccount()
     const whoAmI = useLastRecognizedIdentity()
     useEffect(() => {
-        if (account && whoAmI?.identifier?.userId) {
-            setUser({ userId: whoAmI?.identifier?.userId, address: account })
-        }
+        if (!(account && whoAmI?.identifier?.userId)) return
+        setUser({ userId: whoAmI.identifier.userId, address: account })
     }, [account, whoAmI])
     return user
 }

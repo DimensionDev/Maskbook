@@ -10,7 +10,7 @@ import {
     ERC721ContractDetailed,
     SocketState,
 } from '@masknet/web3-shared-evm'
-import { cloneDeep } from 'lodash-unified'
+import { cloneDeep, findLastIndex } from 'lodash-unified'
 import { delay } from '@masknet/shared-base'
 import type { User, FilterContract } from '../types'
 import { Punk3D } from '../constants'
@@ -45,18 +45,11 @@ export function useNFTs(user: User | undefined) {
                 const glbSupport =
                     isSameAddress(NFT.contractDetailed.address, Punk3D.contract) && NFT.tokenId === Punk3D.tokenId
                 const item = { ...NFT.info, tokenId: NFT.tokenId, glbSupport }
-                let filterIdx = -1
-                sameNFT.tokens.filter((token, idxToken) => {
-                    const flag = token.tokenId === NFT.tokenId
-                    if (flag) {
-                        filterIdx = idxToken
-                    }
-                    return flag
-                })
-                if (filterIdx === -1) {
+                const sameTokenIndex = findLastIndex(sameNFT.tokens, (v) => v.tokenId === NFT.tokenId)
+                if (sameTokenIndex === -1) {
                     sameNFT.tokens.push(item)
                 } else {
-                    sameNFT.tokens[filterIdx] = item
+                    sameNFT.tokens[sameTokenIndex] = item
                 }
             }
         }

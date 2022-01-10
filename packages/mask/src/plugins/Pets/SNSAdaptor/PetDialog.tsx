@@ -21,7 +21,7 @@ import { PetMetaDB, FilterContract, OwnerERC721TokenInfo, ImageType } from '../t
 import { useUser, useCurrentVisitingUser, useNFTs, useNFTsExtra } from '../hooks'
 import { useI18N, getAssetAsBlobURL } from '../../../utils'
 import { ShadowRootPopper } from '../../../utils/shadow-root/ShadowRootComponents'
-import { ImgLoader } from './ImgLoader'
+import { ImageLoader } from './ImgLoader'
 
 const useStyles = makeStyles()((theme) => ({
     desBox: {
@@ -185,7 +185,7 @@ export function PetDialog() {
 
     const renderImg = (address: string) => {
         const imgItem = extraData.filter((i) => isSameAddress(i.address, address))
-        return imgItem ? <ImgLoader className={classes.thumbnail} src={imgItem[0]?.iconURL ?? ''} /> : null
+        return imgItem ? <ImageLoader className={classes.thumbnail} src={imgItem[0]?.iconURL ?? ''} /> : null
     }
 
     const paperComponent = (children: ReactNode | undefined) => <Box className={classes.boxPaper}>{children}</Box>
