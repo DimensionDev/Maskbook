@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { OpenSea } from '@masknet/web3-providers'
-import { useValueRef } from '@masknet/shared'
 import {
     useChainId,
     useCollectibles,
@@ -9,11 +8,11 @@ import {
     ERC721TokenDetailed,
     isSameAddress,
     ERC721ContractDetailed,
+    SocketState,
 } from '@masknet/web3-shared-evm'
 import { cloneDeep } from 'lodash-unified'
 import { delay } from '@masknet/shared-base'
 import type { User, FilterContract } from '../types'
-import { currentNonFungibleAssetDataProviderSettings } from '../../Wallet/settings'
 import { Punk3D } from '../constants'
 
 function useInitNFTs() {
@@ -31,21 +30,13 @@ function useInitNFTs() {
 export function useNFTs(user: User | undefined) {
     const initContracts = useInitNFTs()
     const [nfts, setNfts] = useState<FilterContract[]>(initContracts)
-    const [page, setPage] = useState(0)
     const chainId = useChainId()
     const [fetchTotal, setFetchTotal] = useState<ERC721TokenDetailed[]>([])
-    const provider = useValueRef(currentNonFungibleAssetDataProviderSettings)
-    const { value = { collectibles: [], hasNextPage: false } } = useCollectibles(
-        user?.address ?? '',
-        chainId,
-        provider,
-        page,
-        50,
-    )
-    const { collectibles = [], hasNextPage } = value
+    const { data: collectibles, state } = useCollectibles(user?.address ?? '', chainId)
+
     useEffect(() => {
         const tempNFTs: FilterContract[] = cloneDeep(initContracts)
-        if (collectibles.length) {
+        if (collectibles.length && state === SocketState.done) {
             const total = [...fetchTotal, ...collectibles]
             setFetchTotal(total)
             for (const NFT of total) {
@@ -70,16 +61,8 @@ export function useNFTs(user: User | undefined) {
             }
         }
         setNfts(tempNFTs)
-        if (hasNextPage) {
-            const timer = setTimeout(() => {
-                setPage(page + 1)
-            }, 1000)
-            return () => {
-                clearTimeout(timer)
-            }
-        }
         return () => {}
-    }, [JSON.stringify(user), JSON.stringify(collectibles)])
+    }, [JSON.stringify(user), JSON.stringify(collectibles), state])
     return nfts
 }
 
