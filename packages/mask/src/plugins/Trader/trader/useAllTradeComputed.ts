@@ -26,6 +26,27 @@ import { useNativeTradeGasLimit } from './useNativeTradeGasLimit'
 import { TargetChainIdContext } from './useTargetChainIdContext'
 import type { TradeComputed, SwapRouteData } from '../types'
 
+export function useUniswapV2Hook(
+    tradeProviders: TradeProvider[],
+    traderProvider: TradeProvider,
+    inputAmount_: string,
+    inputToken?: FungibleTokenDetailed,
+    outputToken?: FungibleTokenDetailed,
+) {
+    const isTrader = tradeProviders.some((x) => x === traderProvider)
+    const trader_ = useUniswapV2Trade(
+        traderProvider,
+        TradeStrategy.ExactIn,
+        inputAmount_,
+        '0',
+        isTrader ? inputToken : undefined,
+        isTrader ? outputToken : undefined,
+    )
+    const trader = useUniswapTradeComputed(trader_.value, inputToken, outputToken)
+    const traderEstimateGas = useUniswapTradeGasLimit(trader, traderProvider)
+    return { trader_, trader, traderEstimateGas }
+}
+
 export function useAllTradeComputed(
     inputAmount: string,
     inputToken?: FungibleTokenDetailed,
@@ -52,68 +73,40 @@ export function useAllTradeComputed(
     const nativeTradeGasLimit = useNativeTradeGasLimit(nativeToken, targetChainId)
 
     //uniswap-v2
-    const uniswapV2_ = useUniswapV2Trade(
-        TradeProvider.UNISWAP_V2,
-        TradeStrategy.ExactIn,
-        inputAmount_,
-        '0',
-        tradeProviders.some((x) => x === TradeProvider.UNISWAP_V2) ? inputToken : undefined,
-        tradeProviders.some((x) => x === TradeProvider.UNISWAP_V2) ? outputToken : undefined,
-    )
-    const uniswapV2 = useUniswapTradeComputed(
-        uniswapV2_.value,
-        tradeProviders.some((x) => x === TradeProvider.UNISWAP_V2) ? inputToken : undefined,
-        tradeProviders.some((x) => x === TradeProvider.UNISWAP_V2) ? outputToken : undefined,
-    )
-    const uniswapV2EstimateGas = useUniswapTradeGasLimit(uniswapV2, TradeProvider.UNISWAP_V2)
+
+    const {
+        trader_: uniswapV2_,
+        trader: uniswapV2,
+        traderEstimateGas: uniswapV2EstimateGas,
+    } = useUniswapV2Hook(tradeProviders, TradeProvider.UNISWAP_V2, inputAmount_, inputToken, outputToken)
 
     // sushi swap
-    const sushiSwap_ = useUniswapV2Trade(
-        TradeProvider.SUSHISWAP,
-        TradeStrategy.ExactIn,
-        inputAmount_,
-        '0',
-        tradeProviders.some((x) => x === TradeProvider.SUSHISWAP) ? inputToken : undefined,
-        tradeProviders.some((x) => x === TradeProvider.SUSHISWAP) ? outputToken : undefined,
-    )
-    const sushiSwap = useUniswapTradeComputed(sushiSwap_.value, inputToken, outputToken)
-    const sushiSwapEstimateGas = useUniswapTradeGasLimit(sushiSwap, TradeProvider.SUSHISWAP)
+    const {
+        trader_: sushiSwap_,
+        trader: sushiSwap,
+        traderEstimateGas: sushiSwapEstimateGas,
+    } = useUniswapV2Hook(tradeProviders, TradeProvider.SUSHISWAP, inputAmount_, inputToken, outputToken)
 
     // sashimi swap
-    const sashimiSwap_ = useUniswapV2Trade(
-        TradeProvider.SASHIMISWAP,
-        TradeStrategy.ExactIn,
-        inputAmount_,
-        '0',
-        tradeProviders.some((x) => x === TradeProvider.SASHIMISWAP) ? inputToken : undefined,
-        tradeProviders.some((x) => x === TradeProvider.SASHIMISWAP) ? outputToken : undefined,
-    )
-    const sashimiSwap = useUniswapTradeComputed(sashimiSwap_.value, inputToken, outputToken)
-    const sashimiSwapEstimateGas = useUniswapTradeGasLimit(sashimiSwap, TradeProvider.SASHIMISWAP)
+    const {
+        trader_: sashimiSwap_,
+        trader: sashimiSwap,
+        traderEstimateGas: sashimiSwapEstimateGas,
+    } = useUniswapV2Hook(tradeProviders, TradeProvider.SASHIMISWAP, inputAmount_, inputToken, outputToken)
 
     // quick swap
-    const quickSwap_ = useUniswapV2Trade(
-        TradeProvider.QUICKSWAP,
-        TradeStrategy.ExactIn,
-        inputAmount_,
-        '0',
-        tradeProviders.some((x) => x === TradeProvider.QUICKSWAP) ? inputToken : undefined,
-        tradeProviders.some((x) => x === TradeProvider.QUICKSWAP) ? outputToken : undefined,
-    )
-    const quickSwap = useUniswapTradeComputed(quickSwap_.value, inputToken, outputToken)
-    const quickSwapEstimateGas = useUniswapTradeGasLimit(quickSwap, TradeProvider.QUICKSWAP)
+    const {
+        trader_: quickSwap_,
+        trader: quickSwap,
+        traderEstimateGas: quickSwapEstimateGas,
+    } = useUniswapV2Hook(tradeProviders, TradeProvider.QUICKSWAP, inputAmount_, inputToken, outputToken)
 
     // pancake swap
-    const pancakeSwap_ = useUniswapV2Trade(
-        TradeProvider.PANCAKESWAP,
-        TradeStrategy.ExactIn,
-        inputAmount_,
-        '0',
-        tradeProviders.some((x) => x === TradeProvider.PANCAKESWAP) ? inputToken : undefined,
-        tradeProviders.some((x) => x === TradeProvider.PANCAKESWAP) ? outputToken : undefined,
-    )
-    const pancakeSwap = useUniswapTradeComputed(pancakeSwap_.value, inputToken, outputToken)
-    const pancakeSwapEstimateGas = useUniswapTradeGasLimit(pancakeSwap, TradeProvider.PANCAKESWAP)
+    const {
+        trader_: pancakeSwap_,
+        trader: pancakeSwap,
+        traderEstimateGas: pancakeSwapEstimateGas,
+    } = useUniswapV2Hook(tradeProviders, TradeProvider.PANCAKESWAP, inputAmount_, inputToken, outputToken)
 
     // uniswap-v3 like providers
     const uniswapV3_ = useUniswapV3Trade(
@@ -187,18 +180,11 @@ export function useAllTradeComputed(
     )
     const openoceanSwapEstimateGas = useDODOTradeGasLimit(openocean as TradeComputed<SwapRouteData> | null)
 
-    const isTraderJoe = tradeProviders.some((x) => x === TradeProvider.TRADERJOE)
-    // traderjoe
-    const traderjoe_ = useUniswapV2Trade(
-        TradeProvider.TRADERJOE,
-        TradeStrategy.ExactIn,
-        inputAmount_,
-        '0',
-        isTraderJoe ? inputToken : undefined,
-        isTraderJoe ? outputToken : undefined,
-    )
-    const traderjoe = useUniswapTradeComputed(traderjoe_.value, inputToken, outputToken)
-    const traderjoeEstimateGas = useUniswapTradeGasLimit(traderjoe, TradeProvider.TRADERJOE)
+    const {
+        trader_: traderjoe_,
+        trader: traderjoe,
+        traderEstimateGas: traderjoeEstimateGas,
+    } = useUniswapV2Hook(tradeProviders, TradeProvider.TRADERJOE, inputAmount_, inputToken, outputToken)
 
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
