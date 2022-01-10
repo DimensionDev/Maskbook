@@ -7,7 +7,7 @@ import { Box, ListItem, Typography, Popper, useMediaQuery, Theme } from '@mui/ma
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import { RedPacketJSONPayload, RedPacketStatus, RedPacketJSONPayloadFromChain } from '../types'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog, TokenIcon } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import {
     formatBalance,
@@ -18,7 +18,6 @@ import {
     useFungibleTokenDetailed,
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
-import { TokenIcon } from '@masknet/shared'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { StyledLinearProgress } from '../../ITO/SNSAdaptor/StyledLinearProgress'
