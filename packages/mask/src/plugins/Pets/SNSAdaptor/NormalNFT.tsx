@@ -2,9 +2,9 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box } from '@mui/material'
 import { useStyles as boxUseStyles } from './PreviewBox'
 import classNames from 'classnames'
-import { getAssetAsBlobURL } from '../../../utils'
 import Drag from './Drag'
 import type { ShowMeta } from '../types'
+import { CloseIcon } from '../constants'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -60,7 +60,6 @@ export function NormalNFT(props: NormalNFTProps) {
     const { start, infoShow, showMeta, handleClose } = props
     const classes = useStylesExtends(useStyles(), {})
     const boxClasses = useStylesExtends(boxUseStyles(), {})
-    const CloseIcon = getAssetAsBlobURL(new URL('../assets/close.png', import.meta.url))
 
     return (
         <Drag baseWidth={150} baseHeight={150}>

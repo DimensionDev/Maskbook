@@ -3,10 +3,9 @@ import { Typography } from '@mui/material'
 import classNames from 'classnames'
 import { useI18N } from '../../../utils'
 import type { OwnerERC721TokenInfo } from '../types'
-import { getAssetAsBlobURL } from '../../../utils'
 import ModelView from './ModelView'
 import { useState } from 'react'
-import { Punk3D } from '../constants'
+import { GlbTransferIcon, Punk3D } from '../constants'
 
 export const useStyles = makeStyles()((theme) => ({
     box: {
@@ -122,7 +121,6 @@ interface Props {
 export function PreviewBox(props: Props) {
     const classes = useStylesExtends(useStyles(), {})
     const { t } = useI18N()
-    const GlbTransferIcon = getAssetAsBlobURL(new URL('../assets/glbTransfer.png', import.meta.url))
     const [glbShow, setGlbShow] = useState(false)
     const handleGLBTransfer = () => {
         setGlbShow(!glbShow)

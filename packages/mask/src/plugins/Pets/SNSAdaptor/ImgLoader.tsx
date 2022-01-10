@@ -1,11 +1,11 @@
 import { CircularProgress } from '@mui/material'
 import { ImgHTMLAttributes, useState, SyntheticEvent } from 'react'
+import { DefaultIcon } from '../constants'
 
 export function ImageLoader(props: ImgHTMLAttributes<HTMLImageElement>) {
     const [loaded, setLoaded] = useState(false)
-    const defaultIcon = new URL('../assets/defaultIcon.png', import.meta.url).toString()
     const onErrorHandle = (event: SyntheticEvent<HTMLImageElement, Event>) => {
-        event.currentTarget.src = defaultIcon
+        event.currentTarget.src = DefaultIcon
     }
     return (
         <>

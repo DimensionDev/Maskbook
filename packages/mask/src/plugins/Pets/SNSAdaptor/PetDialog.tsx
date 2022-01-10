@@ -15,11 +15,11 @@ import {
 } from '@mui/material'
 import { PluginPetMessages, PluginPetRPC } from '../messages'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { initMeta, initCollection, Punk3D } from '../constants'
+import { initMeta, initCollection, Punk3D, GLB3DIcon } from '../constants'
 import { PreviewBox } from './PreviewBox'
 import { PetMetaDB, FilterContract, OwnerERC721TokenInfo, ImageType } from '../types'
 import { useUser, useCurrentVisitingUser, useNFTs, useNFTsExtra } from '../hooks'
-import { useI18N, getAssetAsBlobURL } from '../../../utils'
+import { useI18N } from '../../../utils'
 import { ShadowRootPopper } from '../../../utils/shadow-root/ShadowRootComponents'
 import { ImageLoader } from './ImgLoader'
 
@@ -92,7 +92,6 @@ const useStyles = makeStyles()((theme) => ({
 export function PetDialog() {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), {})
-    const GLB3DIcon = getAssetAsBlobURL(new URL('../assets/glb3D.png', import.meta.url))
     const { open, closeDialog } = useRemoteControlledDialog(PluginPetMessages.essayDialogUpdated, () => {})
 
     //should not use user address here

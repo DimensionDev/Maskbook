@@ -25,3 +25,9 @@ export const Punk3D = {
     tokenId: '6128',
     url: 'https://gateway.pinata.cloud/ipfs/QmZjfo1zKTfQZjqs4CaZJ7pQDZHrUBaozre8Z71c7ZXGMc',
 }
+
+export const GLB3DIcon = new URL('./assets/glb3D.png', import.meta.url).toString()
+export const CloseIcon = new URL('./assets/close.png', import.meta.url).toString()
+export const DragIcon = new URL('./assets/drag.png', import.meta.url).toString()
+export const DefaultIcon = new URL('./assets/defaultIcon.png', import.meta.url).toString()
+export const GlbTransferIcon = new URL('./assets/glbTransfer.png', import.meta.url).toString()
