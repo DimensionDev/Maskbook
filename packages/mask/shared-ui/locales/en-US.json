@@ -358,6 +358,7 @@
     "plugin_red_packet_hint": "You can withdraw the remaining balance 24 hours after the Lucky Drop is sent.",
     "plugin_red_packet_token": "Token",
     "plugin_red_packet_message_label": "Title",
+    "plugin_red_packet_create": "Creating Lucky Drop",
     "plugin_red_packet_create_with_token": "Creating Lucky Drop with {{symbol}}",
     "plugin_red_packet_history_duration": "Time: {{startTime}} ~ {{endTime}} (UTC+8)",
     "plugin_red_packet_history_total_amount": "Total Amount: {{amount}} {{symbol}}",
