@@ -14,11 +14,10 @@ import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { MaskIcon } from '../../resources/MaskIcon'
 import { useAsync, useCopyToClipboard } from 'react-use'
 import classNames from 'classnames'
-import VerifiedIcon from '@mui/icons-material/Verified'
 import { makeTypedMessageText } from '@masknet/shared-base'
 import ExtensionIcon from '@mui/icons-material/Extension'
-import PushPinIcon from '@mui/icons-material/PushPin'
 import stringify from 'json-stable-stringify'
+import { VerifiedIcon, PinIcon } from '@masknet/icons'
 
 export enum SetupGuideStep {
     FindUsername = 'find-username',
@@ -328,7 +327,7 @@ function PinExtension({ onDone }: PinExtensionProps) {
                         </li>
                         <li>
                             {t('setup_guide_pin_tip_2')}
-                            <PushPinIcon sx={{ fontSize: 16 }} />
+                            <PinIcon sx={{ fontSize: 16 }} />
                             {t('setup_guide_pin_tip_2_s')}
                         </li>
                         <li>{t('setup_guide_pin_tip_3')}</li>
