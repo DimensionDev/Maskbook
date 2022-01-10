@@ -103,7 +103,7 @@ export class LidoProtocol implements SavingsProtocol {
             return new BigNumber(gasEstimate || 0)
         } catch (error) {
             console.error('LDO `depositEstimate()` Error', error)
-            return 0
+            return new BigNumber(0)
         }
     }
 
@@ -121,7 +121,7 @@ export class LidoProtocol implements SavingsProtocol {
                 .send({
                     from: account,
                     value: value.toString(),
-                    gas: 21000,
+                    gas: 300000,
                 })
 
             return true

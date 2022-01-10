@@ -164,26 +164,26 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
                         failedOnClick="use executor"
                         complete={t('done')}
                         disabled={validationMessage !== '' && !needsSwap}
+                        noUpdateEffect
                         executor={async () => {
                             switch (tab) {
                                 case TabType.Deposit:
                                     if (!(await protocol.deposit(account, targetChainId, web3, tokenAmount))) {
                                         throw new Error('Could not deposit')
                                     }
-                                    break
+                                    return
                                 case TabType.Withdraw:
                                     switch (protocol.type) {
                                         case ProtocolType.Lido:
                                             onClose?.()
                                             onSwapDialogOpen?.()
-                                            break
+                                            return
                                         default:
                                             if (!(await protocol.withdraw(account, targetChainId, web3, tokenAmount))) {
                                                 throw new Error('Could not withdraw')
                                             }
-                                            break
+                                            return
                                     }
-                                    break
                                 default:
                                     unreachable(tab)
                             }

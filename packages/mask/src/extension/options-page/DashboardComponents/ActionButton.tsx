@@ -92,6 +92,7 @@ export interface ActionButtonPromiseProps extends ButtonProps {
     completeIcon?: React.ReactNode
     failIcon?: React.ReactNode
     onComplete?: () => void
+    noUpdateEffect?: boolean
 }
 type ActionButtonPromiseState = 'init' | 'complete' | 'wait' | 'fail'
 export function ActionButtonPromise(props: ActionButtonPromiseProps) {
@@ -106,6 +107,7 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
         waitingOnClick,
         failedOnClick,
         onComplete,
+        noUpdateEffect,
         completeIcon = <CheckIcon />,
         failIcon = <ErrorIcon />,
         ...b
@@ -136,7 +138,9 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
     const failClick = failedOnClick === 'use executor' ? run : failedOnClick
 
     useUpdateEffect(() => {
-        setState((prev) => (prev === 'init' ? prev : 'init'))
+        if (!noUpdateEffect) {
+            setState((prev) => (prev === 'init' ? prev : 'init'))
+        }
     }, [executor])
 
     if (state === 'wait')
