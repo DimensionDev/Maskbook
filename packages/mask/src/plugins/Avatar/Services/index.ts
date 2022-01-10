@@ -1,8 +1,9 @@
+import { isSameAddress } from '@masknet/web3-shared-evm'
 import { personalSign } from '../../../extension/background-script/EthereumService'
 import type { AvatarMetaDB } from '../types'
 import { getNFTAvatarFromJSON } from './db'
 import { getUserAddress, setUserAddress } from './gun'
-import { getNFTAvatarFromRSS, saveNFTAvatarToRSS } from './rss3'
+import { getNFTAvatarFromRSS, getSignature, saveNFTAvatarToRSS } from './rss3'
 
 export async function getNFTAvatar(userId: string) {
     let result
@@ -20,9 +21,22 @@ export async function getNFTAvatar(userId: string) {
     return result
 }
 
+async function getAddressSignature(userId: string, address: string) {
+    const _address = await getUserAddress(userId)
+    if (!_address) return
+
+    if (!isSameAddress(address, _address)) return
+
+    return getSignature(userId, _address)
+}
+
 export async function saveNFTAvatar(address: string, nft: AvatarMetaDB) {
-    const signature = await personalSign(nft.userId, address)
-    setUserAddress(nft.userId, address)
+    let signature
+    signature = await getAddressSignature(nft.userId, address)
+    if (!signature) {
+        signature = await personalSign(nft.userId, address)
+        setUserAddress(nft.userId, address)
+    }
     const avatar = await saveNFTAvatarToRSS(address, nft, signature)
     return avatar
 }
@@ -33,17 +47,3 @@ export async function getAddress(userId: string) {
 }
 
 export { getNFTContractVerifiedFromJSON } from './verified'
-export { getUserAddresses } from './gun'
-
-export async function getImage(image: string): Promise<string> {
-    const response = await globalThis.fetch(image)
-    return (await blobToBase64(await response.blob())) as string
-}
-
-function blobToBase64(blob: Blob) {
-    return new Promise((resolve, _) => {
-        const reader = new FileReader()
-        reader.onloadend = () => resolve(reader.result)
-        reader.readAsDataURL(blob)
-    })
-}
