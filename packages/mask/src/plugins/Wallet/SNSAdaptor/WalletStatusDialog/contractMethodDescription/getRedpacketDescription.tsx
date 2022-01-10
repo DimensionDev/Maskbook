@@ -17,7 +17,7 @@ export function getRedpacketDescription(
 ) {
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = getRedPacketConstants(chainId)
 
-    if (!isSameAddress(address, HAPPY_RED_PACKET_ADDRESS_V4)) return false
+    if (!isSameAddress(address, HAPPY_RED_PACKET_ADDRESS_V4)) return undefined
 
     switch (name) {
         case 'create_red_packet':
@@ -28,7 +28,7 @@ export function getRedpacketDescription(
                 />
             )
         default:
-            return false
+            return undefined
     }
 }
 
@@ -51,9 +51,7 @@ export function CreateRedpacketDescription(props: CreateRedpacketDescriptionProp
         <span>
             {token && tokenAddress
                 ? t('plugin_red_packet_create_with_token', {
-                      symbol: `${formatBalance(tokenAmount, token.decimals)} ${
-                          isNativeTokenAddress(tokenAddress) ? token.symbol : nativeToken?.decimals
-                      }`,
+                      symbol: `${formatBalance(tokenAmount, token.decimals)} ${token.symbol}`,
                   })
                 : t('plugin_red_packet_create')}
         </span>

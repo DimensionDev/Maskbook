@@ -536,6 +536,7 @@
     "plugin_ito_region_ban": "This Pool is banned by its creator at your region",
     "plugin_ito_next": "Next",
     "plugin_ito_back": "Back",
+    "plugin_ito_transaction_dialog_summary_with_no_token": "Create an ITO.",
     "plugin_ito_transaction_dialog_summary": "Create an ITO with {{amount}} {{symbol}}.",
     "plugin_ito_swap": "Swap",
     "plugin_ito_send_tip": "You can find your ITOs in the Past tab.",
