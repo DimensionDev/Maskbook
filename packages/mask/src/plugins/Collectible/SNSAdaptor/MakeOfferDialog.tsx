@@ -92,8 +92,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const [ToS_Checked, setToS_Checked] = useState(false)
     const [insufficientBalance, setInsufficientBalance] = useState(false)
 
-    const { amount: _amount, token, balance, setAmount, setToken } = useFungibleTokenWatched(selectedPaymentToken)
-    const amount = ''
+    const { amount, token, balance, setAmount, setToken } = useFungibleTokenWatched(selectedPaymentToken)
 
     const onMakeOffer = useCallback(async () => {
         if (!asset?.value) return
@@ -139,7 +138,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
 
     const validationMessage = useMemo(() => {
         setInsufficientBalance(false)
-        const amount_ = rightShift(amount ?? '0', token.value?.decimals ?? 0)
+        const amount_ = rightShift(amount ?? '0', Number.isNaN(token.value?.decimals ?? 0) ? 0 : token.value?.decimals)
         const balance_ = new BigNumber(balance.value ?? '0')
         if (amount_.isNaN() || amount_.isZero()) return t('plugin_collectible_enter_a_price')
         if (balance_.isZero() || amount_.isGreaterThan(balance_)) {

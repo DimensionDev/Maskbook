@@ -129,7 +129,7 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
                     {t('plugin_collectible_price')}
                 </Typography>
                 <Typography variant="body1" color="colorPrimary">
-                    {t('wallet_balance')}:
+                    {`${t('wallet_balance')}: `}
                     <FormattedBalance
                         value={balance}
                         decimals={token?.decimals}
