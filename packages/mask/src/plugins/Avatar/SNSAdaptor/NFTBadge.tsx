@@ -24,13 +24,13 @@ interface NFTBadgeProps extends withClasses<'root' | 'text' | 'icon'> {
     width?: number
 }
 
-function formatPrice(amount: string) {
+function formatPrice(amount: string, symbol: string) {
     const _amount = new BigNumber(amount ?? '0')
-    if (_amount.isZero()) return '0'
-    if (_amount.isLessThan(1)) return _amount.toFixed(2)
-    if (_amount.isLessThan(1e3)) return _amount.toFixed(1)
-    if (_amount.isLessThan(1e6)) return `${_amount.div(1e6).toFixed(1)}K`
-    return `${_amount.div(1e6).toFixed(1)}M`
+    if (_amount.isZero()) return ''
+    if (_amount.isLessThan(1)) return `${_amount.toFixed(2)} ${symbol}`
+    if (_amount.isLessThan(1e3)) return `${_amount.toFixed(1)} ${symbol}`
+    if (_amount.isLessThan(1e6)) return `${_amount.div(1e6).toFixed(1)}K ${symbol}`
+    return `${_amount.div(1e6).toFixed(1)}M ${symbol}`
 }
 
 function formatText(symbol: string, length: number) {
@@ -63,7 +63,7 @@ export function NFTBadge(props: NFTBadgeProps) {
                     stroke="black"
                     fontSize={9}
                     text={loading ? 'loading...' : `${name} ${slug.toLocaleLowerCase() === 'ens' ? 'ENS' : ''}`}
-                    price={loading ? '' : `${formatPrice(amount)} ${symbol}`}
+                    price={loading ? '' : formatPrice(amount, symbol)}
                 />
             </Link>
         </div>
