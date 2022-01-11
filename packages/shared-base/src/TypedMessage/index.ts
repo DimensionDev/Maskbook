@@ -11,3 +11,4 @@ export const isWellKnownTypedMessages = composeSome(isWellKnownCoreTypedMessages
 export { encodeTypedMessageToDocument } from './binary-encode/encode'
 export { decodeTypedMessageFromDocument } from './binary-encode/decode'
 export * from './deprecated-encode'
+export * from './visitor'

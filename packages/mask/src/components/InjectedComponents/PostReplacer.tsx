@@ -1,14 +1,10 @@
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
-import {
-    isTypedMessagePromise,
-    isTypedMessageTuple,
-    isWellKnownTypedMessages,
-    makeTypedMessageTuple,
-} from '@masknet/shared-base'
+import { isTypedMessageTuple, isWellKnownTypedMessages, TypedMessage } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo } from 'react'
 import { Result } from 'ts-results'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
+import { PayloadReplacerTransformer } from './PayloadReplacer'
 import { DefaultTypedMessageRenderer } from './TypedMessageRenderer'
 const useStyles = makeStyles()({
     root: {
@@ -30,19 +26,19 @@ export function PostReplacer(props: PostReplacerProps) {
     const processedPostMessage = useMemo(
         () =>
             plugins.reduce((x, plugin) => {
-                const result = Result.wrap(() => plugin.typedMessageTransformer?.(x) ?? x).unwrapOr(x)
-                if (isTypedMessageTuple(result)) return result
-                console.warn(
-                    '[TypedMessage] typedMessageTransformer that return a non TypedMessageTuple is not supported yet. This transform is ignored',
-                    result,
-                )
-                return x
-            }, postMessage),
+                try {
+                    return plugin.typedMessageTransformer?.(x) ?? x
+                } catch {
+                    return x
+                }
+            }, PayloadReplacerTransformer(postMessage)),
         [plugins.map((x) => x.ID).join(), postMessage],
     )
     const shouldReplacePost =
         // replace posts which enhanced by plugins
-        processedPostMessage.items.some((x) => !isWellKnownTypedMessages(x)) ||
+        (isTypedMessageTuple(processedPostMessage)
+            ? processedPostMessage.items.some((x) => !isWellKnownTypedMessages(x))
+            : true) ||
         // replace posts which encrypted by Mask
         hasMaskPayload
 
@@ -54,9 +50,7 @@ export function PostReplacer(props: PostReplacerProps) {
 
     return shouldReplacePost ? (
         <span className={classes.root}>
-            <DefaultTypedMessageRenderer
-                message={makeTypedMessageTuple(processedPostMessage.items.filter((x) => !isTypedMessagePromise(x)))}
-            />
+            <DefaultTypedMessageRenderer message={processedPostMessage} />
         </span>
     ) : null
 }

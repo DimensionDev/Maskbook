@@ -17,7 +17,6 @@ import {
 import { Image } from '../shared/Image'
 import { useAsync } from 'react-use'
 import { getRendererOfTypedMessage, registerTypedMessageRenderer } from '../../protocols/typed-message'
-import { PayloadReplacer } from './PayloadReplacer'
 import { useI18N } from '../../utils'
 
 export interface MetadataRendererProps {
@@ -45,15 +44,13 @@ export const DefaultTypedMessageRenderer = memo(function DefaultTypedMessageRend
     return <Renderer {...props} message={props.message} />
 })
 
-export const DefaultTypedMessageTextRenderer = memo(function DefaultTypedMessageTextRenderer(
+const DefaultTypedMessageTextRenderer = memo(function DefaultTypedMessageTextRenderer(
     props: TypedMessageRendererProps<TypedMessageText>,
 ) {
     const { content } = props.message
     return renderWithMetadata(
         props,
         <Typography component="span" color="textPrimary" variant="body1" data-testid="text_payload">
-            {/* // TODO: */}
-            <PayloadReplacer payload={content} />
             <RenderText text={content} allowTextEnlarge={Boolean(props.allowTextEnlarge)} />
         </Typography>,
     )
@@ -64,15 +61,13 @@ registerTypedMessageRenderer('text', {
     priority: 0,
 })
 
-export const DefaultTypedMessageAnchorRenderer = memo(function DefaultTypedMessageAnchorRenderer(
+const DefaultTypedMessageAnchorRenderer = memo(function DefaultTypedMessageAnchorRenderer(
     props: TypedMessageRendererProps<TypedMessageAnchor>,
 ) {
     const { content, href } = props.message
     return renderWithMetadata(
         props,
         <Typography component="span" variant="body1" data-testid="anchor_payload">
-            {/* // TODO: */}
-            <PayloadReplacer payload={href} />
             <Link color="primary" target="_blank" rel="noopener noreferrer" href={href}>
                 {content}
             </Link>
@@ -85,7 +80,7 @@ registerTypedMessageRenderer('x-anchor', {
     priority: 0,
 })
 
-export const DefaultTypedMessageImageRenderer = memo(function DefaultTypedMessageImageRenderer(
+const DefaultTypedMessageImageRenderer = memo(function DefaultTypedMessageImageRenderer(
     props: TypedMessageRendererProps<TypedMessageImage>,
 ) {
     const { image, width, height } = props.message
@@ -102,7 +97,7 @@ registerTypedMessageRenderer('image', {
     priority: 0,
 })
 
-export const DefaultTypedMessageTupleRenderer = memo(function DefaultTypedMessageTupleRenderer(
+const DefaultTypedMessageTupleRenderer = memo(function DefaultTypedMessageTupleRenderer(
     props: TypedMessageRendererProps<TypedMessageTuple>,
 ) {
     const { t } = useI18N()
@@ -127,7 +122,7 @@ registerTypedMessageRenderer('tuple', {
     priority: 0,
 })
 
-export const DefaultTypedMessageEmptyRenderer = memo(function DefaultTypedMessageEmptyRenderer(
+const DefaultTypedMessageEmptyRenderer = memo(function DefaultTypedMessageEmptyRenderer(
     props: TypedMessageRendererProps<TypedMessageEmpty>,
 ) {
     return renderWithMetadata(props, null)
@@ -138,7 +133,7 @@ registerTypedMessageRenderer('empty', {
     priority: 0,
 })
 
-export const DefaultTypedMessageUnknownRenderer = memo(function DefaultTypedMessageUnknownRenderer(
+const DefaultTypedMessageUnknownRenderer = memo(function DefaultTypedMessageUnknownRenderer(
     props: TypedMessageRendererProps<TypedMessageUnknown>,
 ) {
     const { t } = useI18N()
@@ -156,16 +151,18 @@ registerTypedMessageRenderer('unknown', {
     priority: 0,
 })
 
-export const DefaultTypedMessageSuspendedRenderer = memo(function DefaultTypedMessageSuspendedRenderer(
+const DefaultTypedMessageSuspendedRenderer = memo(function DefaultTypedMessageSuspendedRenderer(
     props: TypedMessageRendererProps<TypedMessagePromise>,
 ) {
-    const { promise } = props.message
+    const { promise, explicit } = props.message
     const { loading, error, value } = useAsync(() => promise, [promise])
 
     return renderWithMetadata(
         props,
         loading ? (
-            <DefaultTypedMessageTextRenderer {...props} message={makeTypedMessageText('Loading...')} />
+            explicit ? (
+                <DefaultTypedMessageTextRenderer {...props} message={makeTypedMessageText('Loading...')} />
+            ) : null
         ) : error ? (
             <DefaultTypedMessageTextRenderer {...props} message={makeTypedMessageText('Error!')} />
         ) : (

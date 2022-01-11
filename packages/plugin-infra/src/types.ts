@@ -139,7 +139,7 @@ export namespace Plugin.Shared {
          */
         typedMessageTransformer?: TypedMessageTransformer
     }
-    export type TypedMessageTransformer = (message: TypedMessageTuple) => TypedMessageTuple
+    export type TypedMessageTransformer = (message: TypedMessage) => TypedMessage
     /** The publisher of the plugin */
     export interface Publisher {
         /** The name of the publisher */

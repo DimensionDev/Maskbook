@@ -116,12 +116,15 @@ export interface TypedMessagePromise<T extends TypedMessage = TypedMessage> exte
     readonly type: 'promise'
     readonly promise: Promise<T>
     readonly value?: T
+    /** Should this message rendered when it's in the pending state? */
+    readonly explicit?: boolean
 }
 export const isTypedMessagePromise = createIsType<TypedMessagePromise>('promise')
 export function makeTypedMessagePromise<T extends TypedMessage = TypedMessage>(
     promise: Promise<T>,
+    explicit = false,
 ): TypedMessagePromise<T> {
-    const x: TypedMessagePromise<T> = { type: 'promise', serializable: false, promise }
+    const x: TypedMessagePromise<T> = { type: 'promise', serializable: false, promise, explicit }
     promise.then((y) => ((x as any).value = y))
     return x
 }
