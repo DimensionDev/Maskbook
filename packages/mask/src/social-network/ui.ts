@@ -2,7 +2,7 @@ import '../utils/debug/general'
 import '../utils/debug/ui'
 import Services from '../extension/service'
 import { untilDomLoaded } from '../utils/dom'
-import { Flags } from '../../shared'
+import { Flags, InMemoryStorages, PersistentStorages } from '../../shared'
 import i18nNextInstance from '../../shared-ui/locales_legacy'
 import type { SocialNetworkUI } from './types'
 import { managedStateCreator } from './utils'
@@ -15,7 +15,6 @@ import { getCurrentSNSNetwork } from '../social-network-adaptor/utils'
 import { createPluginHost } from '../plugin-infra/host'
 import { definedSocialNetworkUIs } from './define'
 import { setupShadowRootPortal } from '../utils'
-import { InMemoryStorages, PersistentStorages } from '../../shared'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
