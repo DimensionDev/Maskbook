@@ -32,6 +32,7 @@ interface AssetPlayerProps
     iconProps?: SvgIconProps
     fallbackImage?: URL
     setERC721TokenName?: (name: string) => void
+    setSourceType?: (type: string) => void
 }
 const useStyles = makeStyles()({
     hidden: {
@@ -88,7 +89,7 @@ export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconPro
     }, [url, JSON.stringify(erc721Token), type, JSON.stringify(options), playerState])
     //endregion
 
-    type ERC721TokenNameMsg = { message: { type: 'name'; name: string } }
+    type ERC721TokenNameMsg = { message: { type: 'name'; name: string } | { type: 'sourceType'; name: string } }
     //#region resource loaded error
     const onMessage = useCallback(({ message }: { message: { name: string } | ERC721TokenNameMsg }) => {
         if ((message as { name: string })?.name === 'Error') {
@@ -96,6 +97,9 @@ export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconPro
         }
         if ((message as ERC721TokenNameMsg).message?.type === 'name') {
             props.setERC721TokenName?.((message as ERC721TokenNameMsg).message.name)
+        }
+        if ((message as ERC721TokenNameMsg).message?.type === 'sourceType') {
+            props.setSourceType?.((message as ERC721TokenNameMsg).message.name)
         }
     }, [])
     //#endregion

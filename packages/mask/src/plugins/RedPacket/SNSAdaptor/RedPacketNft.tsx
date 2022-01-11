@@ -9,7 +9,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import LaunchIcon from '@mui/icons-material/Launch'
 import { Grid, Card, CardHeader, Typography, Link, CardMedia, CardContent, Button, Box, Skeleton } from '@mui/material'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
@@ -222,6 +222,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     assetPlayerIframe: {
         marginBottom: 16,
+        height: '160px !important',
+    },
+    assetPlayerVideoIframe: {
+        minWidth: 'fit-content',
     },
     loadingFailImage: {
         height: 160,
@@ -260,6 +264,8 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             'noopener noreferrer',
         )
     }, [payload])
+
+    const [sourceType, setSourceType] = useState('')
 
     useEffect(() => {
         if (![TransactionStateType.CONFIRMED, TransactionStateType.FAILED].includes(claimState.type)) {
@@ -363,8 +369,12 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                             chainId={payload.chainId}
                             contractAddress={payload.contractAddress}
                             tokenId={availability.claimed_id}
+                            setSourceType={setSourceType}
                             classes={{
-                                iframe: classes.assetPlayerIframe,
+                                iframe: classNames(
+                                    classes.assetPlayerIframe,
+                                    sourceType === 'video' ? classes.assetPlayerVideoIframe : '',
+                                ),
                                 loadingFailImage: classes.loadingFailImage,
                             }}
                             fallbackImage={new URL('./assets/nft-preview.png', import.meta.url)}
