@@ -19,6 +19,7 @@ import {
     useTokenConstants,
     useWallet,
     useAccount,
+    useNativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
 import { isGreaterThan, isLessThan, multipliedBy } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -411,10 +412,11 @@ export function Trader(props: TraderProps) {
     //#endregion
 
     //#region The trades sort by best price (Estimate received * price - Gas fee * native token price)
+    const { value: nativeToken } = useNativeTokenDetailed(chainId)
     const nativeTokenPrice = useNativeTokenPrice(chainId)
     const outputTokenPrice = useTokenPrice(chainId, outputToken?.address.toLowerCase())
     const sortedAllTradeComputed = useMemo(() => {
-        if (outputToken && (outputTokenPrice || nativeTokenPrice)) {
+        if (outputToken && nativeToken && (outputTokenPrice || nativeTokenPrice)) {
             return allTradeComputed
                 .map((trade) => {
                     if (
@@ -425,7 +427,7 @@ export function Trader(props: TraderProps) {
                     ) {
                         const gasFee = multipliedBy(gasPrice, trade.gas.value).integerValue().toFixed()
 
-                        const gasFeeUSD = new BigNumber(formatBalance(gasFee ?? 0, outputToken.decimals)).times(
+                        const gasFeeUSD = new BigNumber(formatBalance(gasFee ?? 0, nativeToken?.decimals)).times(
                             nativeTokenPrice,
                         )
 
@@ -472,7 +474,7 @@ export function Trader(props: TraderProps) {
                 if (a?.outputAmount.isLessThan(b?.outputAmount ?? 0)) return 1
                 return 0
             })
-    }, [allTradeComputed, outputToken, gasPrice, outputTokenPrice, nativeTokenPrice])
+    }, [allTradeComputed, outputToken, gasPrice, outputTokenPrice, nativeTokenPrice, nativeToken])
     //#endregion
 
     //#region reset focused trade when chainId, inputToken, outputToken, inputAmount be changed
