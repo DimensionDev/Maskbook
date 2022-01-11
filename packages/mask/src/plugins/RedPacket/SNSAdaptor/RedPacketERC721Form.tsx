@@ -84,7 +84,7 @@ const useStyles = makeStyles()((theme) => {
             borderRadius: 8,
             padding: 0,
             marginBottom: theme.spacing(2.5),
-            background: theme.palette.mode === 'light' ? '#fff' : '#2F3336',
+            background: theme.palette.background.default,
             width: 120,
             height: 180,
             overflow: 'hidden',
@@ -312,7 +312,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     <div className={classes.tokenSelectorParent}>
                         <List className={classes.tokenSelector}>
                             {existTokenDetailedList.map((value, i) => (
-                                <div key={i.toString()}>
+                                <div key={i}>
                                     <NFTCard token={value} removeToken={removeToken} />
                                 </div>
                             ))}

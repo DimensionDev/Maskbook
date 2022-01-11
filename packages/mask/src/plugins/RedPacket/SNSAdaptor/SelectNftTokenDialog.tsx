@@ -634,7 +634,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                             )
 
                                             return (
-                                                <div key={i.toString()}>
+                                                <div key={i}>
                                                     <NFTCard
                                                         findToken={findToken}
                                                         token={token}
