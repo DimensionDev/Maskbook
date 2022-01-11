@@ -66,6 +66,7 @@ class SwarmAgent implements ProviderAgent {
         const encodedMetadata = JSON.stringify({
             name: metadata.name,
             size: metadata.size,
+            provider: 'swarm',
             link: urlcat(linkPrefix, '/:txId', { txId: metadata.txId }),
             signed: await makeFileKeySigned(metadata.key),
             createdAt: new Date().toISOString(),

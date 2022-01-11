@@ -45,6 +45,7 @@ class IPFSAgent implements ProviderAgent {
         const encodedMetadata = JSON.stringify({
             name: metadata.name,
             size: metadata.size,
+            provider: 'ipfs',
             link: urlcat(linkPrefix, '/:txId', { txId: metadata.txId }),
             signed: await makeFileKeySigned(metadata.key),
             createdAt: new Date().toISOString(),

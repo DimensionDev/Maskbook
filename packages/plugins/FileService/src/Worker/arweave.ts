@@ -46,6 +46,7 @@ class ArweaveAgent implements ProviderAgent {
         const encodedMetadata = JSON.stringify({
             name: metadata.name,
             size: metadata.size,
+            provider: 'arweave',
             link: `${linkPrefix}/${metadata.txId}`,
             signed: await makeFileKeySigned(metadata.key),
             createdAt: new Date().toISOString(),
