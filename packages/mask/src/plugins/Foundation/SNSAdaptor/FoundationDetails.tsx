@@ -44,7 +44,7 @@ function FoundationDetails(props: Props) {
     const { classes } = useStyles()
     return (
         <Box p={3} className={classes.body}>
-            <Accordion className={classes.accordion} defaultExpanded={true}>
+            <Accordion className={classes.accordion}>
                 <AccordionSummary
                     className={classes.accordionHeader}
                     sx={{ height: '44px' }}
@@ -63,7 +63,7 @@ function FoundationDetails(props: Props) {
                     <Typography className={classes.typography}>{props.metadata.description}</Typography>
                 </AccordionDetails>
             </Accordion>
-            <Accordion className={classes.accordion} defaultExpanded={true}>
+            <Accordion className={classes.accordion}>
                 <AccordionSummary
                     className={classes.accordionHeader}
                     sx={{ height: '44px' }}

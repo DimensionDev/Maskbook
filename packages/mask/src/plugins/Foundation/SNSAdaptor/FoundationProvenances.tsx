@@ -81,12 +81,13 @@ function FoundationProvenances(props: Props) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {histories.map((history: NftHistory) => (
-                            <TableRow sx={{ background: isDarkModeEnabled.color }}>
+                        {histories.map((history: NftHistory, idx) => (
+                            <TableRow key={idx} sx={{ background: isDarkModeEnabled.color }}>
                                 <TableCell className={classes.tableCell}>
                                     <Box>
                                         <Typography variant="subtitle1">
-                                            {`${history.event} ${t('plugin_foundation_by')} `}
+                                            {history.event}
+                                            {t('plugin_foundation_by')}
                                             <Link
                                                 href={`https://etherscan.io/address/${history.txOrigin.id}`}
                                                 target="_blank">
