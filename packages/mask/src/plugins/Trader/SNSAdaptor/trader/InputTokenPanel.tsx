@@ -186,7 +186,7 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
                         </Typography>
                     ),
                 }}
-                inputProps={{ className: classes.input }}
+                inputProps={{ className: classes.input, autoComplete: 'off' }}
             />
         )
     },
