@@ -443,11 +443,27 @@ export function Trader(props: TraderProps) {
                     return trade
                 })
                 .filter(({ value }) => !!value && !value.outputAmount.isZero())
-                .sort(({ finalPrice: a }, { finalPrice: b }) => {
-                    if (a && b && isGreaterThan(a, b)) return -1
-                    if (a && b && isLessThan(a, b)) return 1
-                    return 0
-                })
+                .sort(
+                    (
+                        { finalPrice: finalPriceA, gas: { value: gasA }, value: valueA },
+                        { finalPrice: finalPriceB, gas: { value: gasB }, value: valueB },
+                    ) => {
+                        let a = finalPriceA
+                        let b = finalPriceB
+
+                        if (!gasA && gasB) {
+                            return 1 // B goes first
+                        } else if (gasA && !gasB) {
+                            return -1 // A goes first
+                        } else if (!gasA && !gasB) {
+                            a = valueA?.outputAmount
+                            b = valueB?.outputAmount
+                        }
+                        if (isGreaterThan(a ?? 0, b ?? 0)) return -1
+                        if (isLessThan(a ?? 0, b ?? 0)) return 1
+                        return 0
+                    },
+                )
         }
         return allTradeComputed
             .filter(({ value }) => !!value && !value.outputAmount.isZero())
