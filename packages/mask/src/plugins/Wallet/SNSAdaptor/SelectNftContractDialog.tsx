@@ -9,6 +9,7 @@ import {
     useAccount,
     useERC721Tokens,
     formatEthereumAddress,
+    useERC721ContractDetailed,
 } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../messages'
@@ -18,10 +19,10 @@ import { EthereumAddress } from 'wallet.ts'
 import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import Fuse from 'fuse.js'
-import { useERC721ContractDetailed } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
-import { useNFTscanFindAssets } from '../hooks/useNFTscanFindAssets'
 import { unionBy } from 'lodash-unified'
+import { useNFTBalance } from '../../EVM/hooks'
+import type { NonFungibleTokenAPI } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     search: {
@@ -106,11 +107,6 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-type NFTAsset = {
-    contractDetailed: ERC721ContractDetailed
-    balance?: number
-}
-
 export interface SelectNftContractDialogProps extends withClasses<never> {}
 
 export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
@@ -151,7 +147,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     }, [id, setDialog])
     //#endregion
 
-    const { value: assets } = useNFTscanFindAssets(account, !open)
+    const { value: assets } = useNFTBalance(account, !open)
 
     const erc721InDb = useERC721Tokens()
     const allContractsInDb = unionBy(
@@ -207,8 +203,8 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
 
 export interface SearchResultBoxProps extends withClasses<never> {
     keyword: string
-    contractList: NFTAsset[]
-    searchedTokenList: NFTAsset[]
+    contractList: NonFungibleTokenAPI.ContractBalance[]
+    searchedTokenList: NonFungibleTokenAPI.ContractBalance[]
     onSubmit: (contract: ERC721ContractDetailed) => void
 }
 
@@ -240,8 +236,8 @@ function SearchResultBox(props: SearchResultBoxProps) {
             ) : (
                 <List>
                     {(keyword === '' ? contractList : searchedTokenList).map((contract, i) => (
-                        <div key={i.toString()}>
-                            <ContractListItem key={i.toString()} onSubmit={onSubmit} contract={contract} />
+                        <div key={i}>
+                            <ContractListItem onSubmit={onSubmit} contract={contract} />
                         </div>
                     ))}
                 </List>
@@ -251,7 +247,7 @@ function SearchResultBox(props: SearchResultBoxProps) {
 }
 
 interface ContractListItemProps {
-    contract: NFTAsset
+    contract: NonFungibleTokenAPI.ContractBalance
     onSubmit: (contract: ERC721ContractDetailed) => void
 }
 
@@ -272,21 +268,19 @@ function ContractListItem(props: ContractListItemProps) {
                 </Typography>
                 {contract.balance ? <Typography className={classes.balance}>{contract.balance}</Typography> : null}
             </ListItem>
-            <Typography>
-                <div
-                    className={classNames(
-                        classes.address,
-                        contract.contractDetailed.iconURL ? '' : classes.addressNoImage,
-                    )}>
-                    <span onClick={() => onSubmit(contract.contractDetailed)}>{contract.contractDetailed.address}</span>
-                    <Link
-                        href={resolveAddressLinkOnExplorer(chainId, contract.contractDetailed.address)}
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        <OpenInNewIcon className={classes.openIcon} fontSize="small" />
-                    </Link>
-                </div>
-            </Typography>
+            <div
+                className={classNames(
+                    classes.address,
+                    contract.contractDetailed.iconURL ? '' : classes.addressNoImage,
+                )}>
+                <span onClick={() => onSubmit(contract.contractDetailed)}>{contract.contractDetailed.address}</span>
+                <Link
+                    href={resolveAddressLinkOnExplorer(chainId, contract.contractDetailed.address)}
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    <OpenInNewIcon className={classes.openIcon} fontSize="small" />
+                </Link>
+            </div>
         </div>
     )
 }

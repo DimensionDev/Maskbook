@@ -16,6 +16,7 @@ export async function getNFTAvatar(userId: string) {
     if (!result) {
         result = await getNFTAvatarFromJSON(userId)
     }
+
     return result
 }
 
@@ -28,12 +29,11 @@ export async function saveNFTAvatar(address: string, nft: AvatarMetaDB) {
 
 export async function getAddress(userId: string) {
     const address = await getUserAddress(userId)
-    return address
+    return (address ?? '') as string
 }
 
 export { getNFTContractVerifiedFromJSON } from './verified'
 export { getUserAddresses } from './gun'
-export { getRSSNode } from './rss3'
 
 export async function getImage(image: string): Promise<string> {
     const response = await globalThis.fetch(image)

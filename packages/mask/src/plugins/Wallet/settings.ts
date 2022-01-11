@@ -11,15 +11,11 @@ import {
     LockStatus,
     BalanceOfChains,
 } from '@masknet/web3-shared-evm'
-import { PLUGIN_IDENTIFIER } from './constants'
+import { PLUGIN_ID } from './constants'
 import { isEqual } from 'lodash-unified'
 
-export const currentAccountSettings = createGlobalSettings<string>(`${PLUGIN_IDENTIFIER}+selectedWalletAddress`, '', {
-    primary: () => 'DO NOT DISPLAY IT IN UI',
-})
-
 export const currentMaskWalletAccountSettings = createGlobalSettings<string>(
-    `${PLUGIN_IDENTIFIER}+selectedMaskWalletAddress`,
+    `${PLUGIN_ID}+selectedMaskWalletAddress`,
     '',
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',
@@ -27,7 +23,7 @@ export const currentMaskWalletAccountSettings = createGlobalSettings<string>(
 )
 
 export const currentMaskWalletChainIdSettings = createGlobalSettings<number>(
-    `${PLUGIN_IDENTIFIER}+maskWalletChainId`,
+    `${PLUGIN_ID}+maskWalletChainId`,
     ChainId.Mainnet,
     {
         primary: () => i18n.t('settings_choose_eth_network'),
@@ -35,50 +31,49 @@ export const currentMaskWalletChainIdSettings = createGlobalSettings<number>(
     },
 )
 
-export const currentMaskWalletBalanceSettings = createGlobalSettings<string>(
-    `${PLUGIN_IDENTIFIER}+maskWalletBalance`,
-    '0',
-    {
-        primary: () => i18n.t('settings_choose_eth_network'),
-        secondary: () => 'This only affects the built-in wallet.',
-    },
-)
-
-/**
- * The network type of the selected wallet
- */
-export const currentNetworkSettings = createGlobalSettings<NetworkType>(
-    `${PLUGIN_IDENTIFIER}+selectedWalletNetwork`,
-    NetworkType.Ethereum,
-    {
-        primary: () => 'DO NOT DISPLAY IT IN UI',
-    },
-)
+export const currentMaskWalletBalanceSettings = createGlobalSettings<string>(`${PLUGIN_ID}+maskWalletBalance`, '0', {
+    primary: () => i18n.t('settings_choose_eth_network'),
+    secondary: () => 'This only affects the built-in wallet.',
+})
 
 export const currentMaskWalletNetworkSettings = createGlobalSettings<NetworkType>(
-    `${PLUGIN_IDENTIFIER}+selectedMaskWalletNetwork`,
+    `${PLUGIN_ID}+selectedMaskWalletNetwork`,
     NetworkType.Ethereum,
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',
     },
 )
 
-/**
- * The provider type of the selected wallet
- */
+export const currentMaskWalletLockStatusSettings = createGlobalSettings<LockStatus>(
+    `${PLUGIN_ID}+maskWalletLockStatus`,
+    LockStatus.INIT,
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+)
+
+export const currentAccountSettings = createGlobalSettings<string>(`${PLUGIN_ID}+selectedWalletAddress`, '', {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
+
+export const currentNetworkSettings = createGlobalSettings<NetworkType>(
+    `${PLUGIN_ID}+selectedWalletNetwork`,
+    NetworkType.Ethereum,
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+)
+
 export const currentProviderSettings = createGlobalSettings<ProviderType>(
-    `${PLUGIN_IDENTIFIER}+selectedWalletProvider`,
+    `${PLUGIN_ID}+selectedWalletProvider`,
     ProviderType.MaskWallet,
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',
     },
 )
 
-/**
- * The default asset data provider
- */
 export const currentFungibleAssetDataProviderSettings = createGlobalSettings<FungibleAssetProvider>(
-    `${PLUGIN_IDENTIFIER}+fungibleAssetProvider`,
+    `${PLUGIN_ID}+fungibleAssetProvider`,
     FungibleAssetProvider.DEBANK,
     {
         primary: () => i18n.t('plugin_wallet_settings_fungible_asset_data_source_primary'),
@@ -86,11 +81,8 @@ export const currentFungibleAssetDataProviderSettings = createGlobalSettings<Fun
     },
 )
 
-/**
- * The default collectible data provider
- */
 export const currentNonFungibleAssetDataProviderSettings = createGlobalSettings<NonFungibleAssetProvider>(
-    `${PLUGIN_IDENTIFIER}+nonFungibleAssetProvider`,
+    `${PLUGIN_ID}+nonFungibleAssetProvider`,
     NonFungibleAssetProvider.OPENSEA,
     {
         primary: () => i18n.t('plugin_wallet_settings_non_fungible_data_source_primary'),
@@ -98,63 +90,21 @@ export const currentNonFungibleAssetDataProviderSettings = createGlobalSettings<
     },
 )
 
-/**
- * Is the current selected wallet has been locked?
- */
-export const currentMaskWalletLockStatusSettings = createGlobalSettings<LockStatus>(
-    `${PLUGIN_IDENTIFIER}+maskWalletLockStatus`,
-    LockStatus.INIT,
-    {
-        primary: () => 'DO NOT DISPLAY IT IN UI',
-    },
-)
-
-/**
- * Chain Id
- */
-export const currentChainIdSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+chainId`, ChainId.Mainnet, {
+export const currentChainIdSettings = createGlobalSettings<number>(`${PLUGIN_ID}+chainId`, ChainId.Mainnet, {
     primary: () => i18n.t('settings_choose_eth_network'),
     secondary: () => 'This only affects the built-in wallet.',
 })
 
-/**
- * Block number
- */
-export const currentBlockNumberSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+blockNumber`, 0, {
+export const currentBlockNumberSettings = createGlobalSettings<number>(`${PLUGIN_ID}+blockNumber`, 0, {
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
 
-/**
- * Balance
- */
-export const currentBalanceSettings = createGlobalSettings<string>(`${PLUGIN_IDENTIFIER}+balance`, '0', {
+export const currentBalanceSettings = createGlobalSettings<string>(`${PLUGIN_ID}+balance`, '0', {
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
 
-/**
- * Nonce
- */
-export const currentNonceSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+nonce`, 0, {
-    primary: () => 'DO NOT DISPLAY IT IN UI',
-})
-
-/**
- * Gas Price
- */
-export const currentGasPriceSettings = createGlobalSettings<number>(
-    `${PLUGIN_IDENTIFIER}+gasPrice`,
-    0,
-    {
-        primary: () => 'DO NOT DISPLAY IT IN UI',
-    },
-    (a: number, b: number) => isEqual(a, b),
-)
-
-/**
- * Gas Options
- */
 export const currentGasOptionsSettings = createGlobalSettings<GasOptions | null>(
-    `${PLUGIN_IDENTIFIER}+gasOptions`,
+    `${PLUGIN_ID}+gasOptions`,
     null,
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',
@@ -163,17 +113,10 @@ export const currentGasOptionsSettings = createGlobalSettings<GasOptions | null>
 )
 
 /**
- * Ether Price in USD
- */
-export const currentEtherPriceSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+etherPriceUSD`, 0, {
-    primary: () => 'DO NOT DISPLAY IT IN UI',
-})
-
-/**
  * ERC20 Token prices or native token prices
  */
 export const currentTokenPricesSettings = createGlobalSettings<CryptoPrice>(
-    `${PLUGIN_IDENTIFIER}+tokenPrices`,
+    `${PLUGIN_ID}+tokenPrices`,
     {},
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',
@@ -185,7 +128,7 @@ export const currentTokenPricesSettings = createGlobalSettings<CryptoPrice>(
  * ERC20 Token balances
  */
 export const currentBalancesSettings = createGlobalSettings<BalanceOfChains>(
-    `${PLUGIN_IDENTIFIER}+balances`,
+    `${PLUGIN_ID}+balances`,
     {},
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',

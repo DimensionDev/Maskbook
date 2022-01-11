@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { DHEDGE_PLUGIN_ID } from './constants'
+import { createMatchLink, DHEDGE_PLUGIN_ID } from './constants'
 import { DHEDGEIcon } from '../../resources/DHEDGEIcon'
 
 export const base: Plugin.Shared.Definition = {
@@ -12,5 +12,8 @@ export const base: Plugin.Shared.Definition = {
         architecture: { app: true, web: true },
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
+    },
+    contribution: {
+        postContent: new Set([createMatchLink()]),
     },
 }

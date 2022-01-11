@@ -1,7 +1,7 @@
 import {
     FungibleTokenDetailed,
     getNetworkTypeFromChainId,
-    isNative,
+    isNativeTokenAddress,
     NetworkType,
     useAccount,
     useBlockNumber,
@@ -18,18 +18,19 @@ import { currentNetworkSettings } from '../../../Wallet/settings'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { TradeProvider } from '@masknet/public-api'
 
+const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+
 export function getNativeTokenLabel(networkType: NetworkType) {
     switch (networkType) {
         case NetworkType.Ethereum:
             return 'ETH'
         case NetworkType.Binance:
-            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         case NetworkType.Polygon:
-            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         case NetworkType.Arbitrum:
-            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         case NetworkType.xDai:
-            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+        case NetworkType.Celo:
+        case NetworkType.Fantom:
+            return NATIVE_TOKEN_ADDRESS
         default:
             safeUnreachable(networkType)
             return ''
@@ -56,10 +57,10 @@ export function useTrade(
         if (inputAmount === '0' && isExactIn) return null
         if (outputAmount === '0' && !isExactIn) return null
 
-        const sellToken = isNative(inputToken.address)
+        const sellToken = isNativeTokenAddress(inputToken)
             ? getNativeTokenLabel(getNetworkTypeFromChainId(targetChainId) ?? currentNetworkSettings.value)
             : inputToken.address
-        const buyToken = isNative(outputToken.address)
+        const buyToken = isNativeTokenAddress(outputToken)
             ? getNativeTokenLabel(getNetworkTypeFromChainId(targetChainId) ?? currentNetworkSettings.value)
             : outputToken.address
         return PluginTraderRPC.swapQuote(

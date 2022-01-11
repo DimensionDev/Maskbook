@@ -61,6 +61,12 @@ export enum ChainId {
 
     // xDai
     xDai = 100,
+
+    // Celo
+    Celo = 42220,
+
+    // Fantom
+    Fantom = 250,
 }
 
 export enum ProviderType {
@@ -88,6 +94,8 @@ export enum NetworkType {
     Polygon = 'Polygon',
     Arbitrum = 'Arbitrum',
     xDai = 'xDai',
+    Celo = 'Celo',
+    Fantom = 'Fantom',
 }
 
 export interface Wallet {
@@ -162,14 +170,22 @@ export interface ERC721ContractDetailed extends ERC721Token {
 export interface ERC721TokenInfo {
     name?: string
     description?: string
+    tokenURI?: string
     mediaUrl?: string
     owner?: string
+    // loading tokenURI
+    hasTokenDetailed?: boolean
 }
 
 export interface ERC721TokenDetailed {
     tokenId: string
     info: ERC721TokenInfo
     contractDetailed: ERC721ContractDetailed
+    collection?: {
+        name: string
+        image?: string
+        slug: string
+    }
 }
 
 export interface ERC721TokenRecordInDatabase extends ERC721TokenDetailed {
@@ -543,6 +559,8 @@ export enum FungibleAssetProvider {
 
 export enum NonFungibleAssetProvider {
     OPENSEA = 'OpenSea',
+    RARIBLE = 'Rarible',
+    NFTSCAN = 'NFTScan',
 }
 
 export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<infer R>
@@ -609,15 +627,19 @@ export interface Transaction {
 
 //#region address name
 export enum AddressNameType {
+    ADDRESS = 'ADDRESS',
     ENS = 'ENS',
     UNS = 'UNS',
     DNS = 'DNS',
+    RSS3 = 'RSS3',
+    GUN = 'GUN',
+    THE_GRAPH = 'THE_GRAPH',
 }
 
 export interface AddressName {
+    type: AddressNameType
     label: string
-    ownerAddress: string
-    resolvedAddress?: string
+    resolvedAddress: string
 }
 //#endregion
 

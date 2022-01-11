@@ -27,6 +27,7 @@ import { HelpOutline, ArrowDownward } from '@mui/icons-material'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
 import { useUpdateEffect } from 'react-use'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
+import { isDashboardPage } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => {
     return {
@@ -71,7 +72,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             cursor: 'pointer',
         },
         reverseChevron: {
-            transform: `rotate(-180deg)`,
+            transform: 'rotate(-180deg)',
             transition: 'all 300ms',
         },
         status: {
@@ -108,9 +109,9 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             height: 'auto',
         },
         selectedTokenChip: {
-            borderRadius: `22px!important`,
+            borderRadius: '22px!important',
             height: 'auto',
-            backgroundColor: isDashboard ? MaskColorVar.input : MaskColorVar.twitterInput,
+            backgroundColor: isDashboard ? MaskColorVar.input : theme.palette.background.input,
             [`& .${chipClasses.label}`]: {
                 paddingTop: 10,
                 paddingBottom: 10,
@@ -132,7 +133,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             bottom: -20,
         },
         noToken: {
-            borderRadius: `18px !important`,
+            borderRadius: '18px !important',
             backgroundColor: theme.palette.primary.main,
             [`& .${chipClasses.label}`]: {
                 paddingTop: 9,
@@ -144,17 +145,11 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             },
         },
         tooltip: {
-            backgroundColor: theme.palette.mode === 'dark' ? '#ffffff' : '#000000',
-            color: theme.palette.mode === 'dark' ? '#7B8192' : '#ffffff',
-            borderRadius: 8,
             padding: 16,
             textAlign: 'left',
             fontSize: 16,
             lineHeight: '22px',
             fontWeight: 500,
-        },
-        tooltipArrow: {
-            color: theme.palette.mode === 'dark' ? '#ffffff' : '#000000',
         },
         dropIcon: {
             width: 20,
@@ -206,7 +201,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         onSwitch,
     }) => {
         const userSelected = useRef(false)
-        const isDashboard = location.href.includes('dashboard.html')
+        const isDashboard = isDashboardPage()
 
         const { t } = useI18N()
         const { classes } = useStyles({ isDashboard })
@@ -245,7 +240,7 @@ export const TradeForm = memo<AllTradeFormProps>(
             if (isLessThan(inputAmount, MINIMUM_AMOUNT)) return t('plugin_trade_error_input_amount_less_minimum_amount')
             if (!inputToken || !outputToken) return t('plugin_trader_error_amount_absence')
             if (!trades.length) return t('plugin_trader_error_insufficient_lp')
-            if (inputTokenBalanceAmount.isLessThan(inputTokenTradeAmount.plus(focusedTrade?.value?.fee ?? 0)))
+            if (inputTokenBalanceAmount.isLessThan(inputTokenTradeAmount))
                 return t('plugin_trader_error_insufficient_balance', {
                     symbol: inputToken?.symbol,
                 })
@@ -453,7 +448,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                         <EthereumChainBoundary
                             chainId={chainId}
                             noSwitchNetworkTip
-                            disablePadding={true}
+                            disablePadding
                             ActionButtonPromiseProps={{
                                 fullWidth: true,
                                 classes: { root: classes.button, disabled: classes.disabledButton },
@@ -488,7 +483,6 @@ export const TradeForm = memo<AllTradeFormProps>(
                                             <Tooltip
                                                 classes={{
                                                     tooltip: classes.tooltip,
-                                                    arrow: classes.tooltipArrow,
                                                 }}
                                                 PopperProps={{
                                                     disablePortal: true,

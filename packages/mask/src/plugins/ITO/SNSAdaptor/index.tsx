@@ -15,7 +15,6 @@ import { ITO_MetadataReader, payloadIntoMask } from './helpers'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { CompositionDialog } from './CompositionDialog'
 import { set } from 'lodash-unified'
-import { ToolIconURLs } from '../../../resources/tool-icon'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
@@ -35,7 +34,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const payload = ITO_MetadataReader(props.message.meta)
         if (!payload.ok) return null
         return (
-            <MaskPluginWrapper pluginName="ITO">
+            <MaskPluginWrapper pluginName="ITO" publisher={base.publisher}>
                 <EthereumChainBoundary chainId={payload.val.chain_id}>
                     <PostInspector payload={set(payloadIntoMask(payload.val), 'token', payload.val.token)} />
                 </EthereumChainBoundary>
@@ -51,10 +50,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
             return <CompositionDialog open={open} onConfirm={onClose} onClose={onClose} />
         },
         label: { fallback: '🚀 ITO' },
-    },
-    ToolbarEntry: {
-        ...ToolIconURLs.markets,
-        onClick: 'openCompositionEntry',
     },
 }
 
@@ -78,7 +73,9 @@ function Badge({ payload }: BadgeProps) {
     return loadingToken ? null : (
         <div className={classes.root}>
             <ItoLabelIcon size={14} />
-            <span className={classes.span}>{`A ITO with ${balance} $${symbol} from ${sellerName}`}</span>
+            <span className={classes.span}>
+                A ITO with {balance} ${symbol} from {sellerName}
+            </span>
         </div>
     )
 }

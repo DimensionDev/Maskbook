@@ -9,7 +9,7 @@ import {
 import { encode } from '@msgpack/msgpack'
 import { TypedMessageTypeEnum } from './type'
 
-const HEAD = `[@masknet/shared-base] TypedMessage: `
+const HEAD = '[@masknet/shared-base] TypedMessage: '
 export function encodeTypedMessageToDocument(tm: SerializableTypedMessages) {
     const doc = [0, encodeTypedMessage(tm)]
     return encode(doc)

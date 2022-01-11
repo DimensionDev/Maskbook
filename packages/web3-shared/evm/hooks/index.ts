@@ -60,6 +60,8 @@ export * from './useChainColor'
 export * from './useResolveENS'
 export * from './useResolveUNS'
 export * from './useGasLimit'
+export * from './useSocketOnce'
+export * from './useSocket'
 
 // wallet plugin related
 export * from './useWalletPrimary'
@@ -69,4 +71,3 @@ export * from './useERC20Tokens'
 export * from './useTrustedERC20Tokens'
 export * from './useTrustERC20TokenCallback'
 export * from './useAddERC20TokenCallback'
-export * from './useEthereumName'

@@ -21,10 +21,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer url={link} />
     },
     PostInspector: function Component() {
-        const link = usePostInfoDetails
-            .postMetadataMentionedLinks()
-            .concat(usePostInfoDetails.postMentionedLinks())
-            .find(isMaskBox)
+        const link = usePostInfoDetails.mentionedLinks().find(isMaskBox)
         if (!link) return null
         return <Renderer url={link} />
     },
@@ -39,7 +36,7 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     if (!chainId || !boxId) return null
 
     return (
-        <MaskPluginWrapper pluginName="MaskBox">
+        <MaskPluginWrapper pluginName="MaskBox" publisher={base.publisher}>
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
                 <EthereumChainBoundary chainId={Number.parseInt(chainId, 10)}>
                     <Context.Provider initialState={{ boxId }}>

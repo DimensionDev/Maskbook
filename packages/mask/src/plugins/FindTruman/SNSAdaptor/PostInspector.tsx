@@ -171,12 +171,7 @@ export function PostInspector(props: PostInspectorProps) {
 
     return (
         <FindTrumanContext.Provider value={{ address: account, const: consts }}>
-            <LoadingFailCard
-                title=""
-                isFullPluginDown={true}
-                retry={() => {
-                    fetchData()
-                }}>
+            <LoadingFailCard title="" isFullPluginDown retry={fetchData}>
                 <FindTruman
                     storyInfo={storyInfo}
                     encryptionPayload={encryptionPayload}

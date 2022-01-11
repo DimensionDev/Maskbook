@@ -10,7 +10,8 @@ import {
     resolveProviderInjectedKey,
     isInjectedProvider,
 } from '@masknet/web3-shared-evm'
-import { bridgedEthereumProvider } from '@masknet/injected-script'
+import { isPopupPage } from '@masknet/shared-base'
+import { bridgedCoin98Provider, bridgedEthereumProvider } from '@masknet/injected-script'
 import {
     currentBlockNumberSettings,
     currentBalanceSettings,
@@ -31,6 +32,7 @@ import type { InternalSettings } from '../settings/createSettings'
 import { Flags } from '../../shared'
 import { createExternalProvider } from './helpers'
 import Services from '../extension/service'
+import { getProxyWebsocketInstance } from '@masknet/web3-shared-base'
 
 function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderType {
     const Web3Provider = createExternalProvider(
@@ -68,14 +70,16 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
                 const account = isMask ? currentMaskWalletAccountSettings.value : currentAccountSettings.value
                 const providerType = currentProviderSettings.value
 
-                if (location.href.includes('popups.html')) return account
+                if (isPopupPage()) return account
                 if (providerType === ProviderType.Fortmatic) return account
                 if (!isInjectedProvider(providerType)) return account
 
                 try {
+                    const bridgedProvider =
+                        providerType === ProviderType.Coin98 ? bridgedCoin98Provider : bridgedEthereumProvider
                     const injectedKey = resolveProviderInjectedKey(providerType)
                     if (!injectedKey) return ''
-                    const propertyValue = await bridgedEthereumProvider.getProperty(injectedKey)
+                    const propertyValue = await bridgedProvider.getProperty(injectedKey)
                     if (propertyValue === true) return account
                     return ''
                 } catch (error) {
@@ -131,6 +135,7 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
         getAddressNamesList: WalletRPC.getAddressNames,
         getTransactionList: WalletRPC.getTransactionList,
         fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
+        providerSocket: getProxyWebsocketInstance((info) => WalletMessages.events.socketMessageUpdated.sendToAll(info)),
     }
 }
 

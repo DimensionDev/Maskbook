@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useState, useLayoutEffect, useRef } from 'react'
 import { flatten, uniq } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
-import { useCustomSnackbar, VariantType, SnackbarProvider } from '@masknet/theme'
+import { useCustomSnackbar, VariantType, SnackbarProvider, makeStyles } from '@masknet/theme'
 import { FormattedBalance, useRemoteControlledDialog } from '@masknet/shared'
 import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
 import {
     formatBalance,
     TransactionStateType,
@@ -112,8 +111,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         border: `1px solid ${theme.palette.mode === 'light' ? '#EBEEF0' : '#2F3336'}`,
     },
     cardContentClaimable: {
-        background: theme.palette.mode === 'light' ? 'rgba(119, 224, 181, 0.15)' : 'rgba(56, 221, 192, 0.2)',
-        border: '1px solid rgba(56, 221, 192, 0.2)',
+        background: 'rgba(119, 224, 181, 0.1)',
+        border: '1px solid rgba(56, 221, 192, 0.4)',
     },
     content: {
         marginBottom: theme.spacing(2),
@@ -214,6 +213,15 @@ interface ClaimAllDialogProps {
     open: boolean
 }
 
+const SUPPORTED_CHAIN_ID_LIST = [
+    ChainId.Mainnet,
+    ChainId.BSC,
+    ChainId.Matic,
+    ChainId.Arbitrum,
+    ChainId.xDai,
+    ChainId.Fantom,
+]
+
 export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { t } = useI18N()
     const { open, onClose } = props
@@ -227,9 +235,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     } = useSpaceStationCampaignInfo(account, Flags.nft_airdrop_enabled)
 
     const [chainId, setChainId] = useState(
-        [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai].includes(currentChainId)
-            ? currentChainId
-            : ChainId.Mainnet,
+        SUPPORTED_CHAIN_ID_LIST.includes(currentChainId) ? currentChainId : ChainId.Mainnet,
     )
     const { value: swappedTokens, loading, retry } = useClaimablePools(chainId)
     const { ITO_CONTRACT_ADDRESS: ITO_CONTRACT_ADDRESS_MAINNET } = useITOConstants(ChainId.Mainnet)
@@ -366,7 +372,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                             chainId={chainId}
                             setChainId={setChainId}
                             classes={classes}
-                            chains={[ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai]}
+                            chains={SUPPORTED_CHAIN_ID_LIST}
                         />
                     </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>
@@ -419,7 +425,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                 <EthereumChainBoundary
                                     chainId={chainId}
                                     classes={{ switchButton: classes.claimAllButton }}
-                                    noSwitchNetworkTip={true}
+                                    noSwitchNetworkTip
                                     switchButtonStyle={{
                                         minHeight: 'auto',
                                         width: 540,

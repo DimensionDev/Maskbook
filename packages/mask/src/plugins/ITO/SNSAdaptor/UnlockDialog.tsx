@@ -2,7 +2,7 @@ import { Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState } from 'react'
 import { v4 as uuid } from 'uuid'
-import { FormattedAddress, useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import {
@@ -69,7 +69,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
             uuid: id,
             disableNativeToken: true,
             disableSearchBar: true,
-            FixedTokenListProps: {
+            FungibleTokenListProps: {
                 selectedTokens: token ? [token.address] : [],
                 whitelist: tokens.map((x) => x.address),
             },
@@ -103,23 +103,18 @@ export function UnlockDialog(props: UnlockDialogProps) {
             {ITO2_CONTRACT_ADDRESS ? (
                 <Typography className={classes.tip} variant="body2" color="textSecondary">
                     <Trans
+                        i18nKey="plugin_ito_unlock_tip"
                         components={{
-                            link: (
+                            contractLink: (
                                 <Link
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     href={resolveAddressLinkOnExplorer(chainId, ITO2_CONTRACT_ADDRESS)}
                                 />
                             ),
-                            address: (
-                                <FormattedAddress
-                                    address={ITO2_CONTRACT_ADDRESS}
-                                    size={4}
-                                    formatter={formatEthereumAddress}
-                                />
-                            ),
                         }}
                         values={{
+                            address: formatEthereumAddress(ITO2_CONTRACT_ADDRESS, 4),
                             symbol: token.symbol ?? 'Unknown',
                         }}
                     />

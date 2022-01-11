@@ -33,11 +33,13 @@ export function ActionsBarNFT(props: ActionsBarNFT_Props) {
     const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
     const [menu, openMenu] = useMenu([
         token.contractDetailed.type === EthereumTokenType.ERC721 ? (
-            <MenuItem disabled={!chainIdValid} onClick={() => openTransferDialogOpen({ token })}>
+            <MenuItem key="transfer" disabled={!chainIdValid} onClick={() => openTransferDialogOpen({ token })}>
                 {t('transfer')}
             </MenuItem>
         ) : null,
-        <MenuItem onClick={() => openHideTokenConfirmDialog({ wallet, token })}>{t('hide')}</MenuItem>,
+        <MenuItem key="hide" onClick={() => openHideTokenConfirmDialog({ wallet, token })}>
+            {t('hide')}
+        </MenuItem>,
     ])
 
     const onClickButton = useCallback(

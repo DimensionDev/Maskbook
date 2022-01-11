@@ -9,7 +9,6 @@ import {
     formatBalance,
     formatEthereumAddress,
     useAccount,
-    useProviderType,
     useChainId,
     useMaskBoxConstants,
     EthereumTokenType,
@@ -52,10 +51,10 @@ const useStyles = makeStyles()((theme) => ({
     field: {
         borderRadius: 0,
         padding: theme.spacing(0),
-        height: `25px !important`,
+        height: '25px !important',
         minWidth: 0,
         minHeight: 0,
-        outline: `none !important`,
+        outline: 'none !important',
         borderColor: `${theme.palette.divider} !important`,
     },
     textfield: {
@@ -115,7 +114,6 @@ export function DrawDialog(props: DrawDialogProps) {
     const providerDescriptor = useProviderDescriptor()
     const account = useAccount()
     const chainId = useChainId()
-    const providerType = useProviderType()
 
     const onCount = useCallback(
         (step: number) => {
@@ -256,7 +254,7 @@ export function DrawDialog(props: DrawDialogProps) {
                                 </Typography>
                                 <Box className={classes.content}>
                                     <GasSettingBar
-                                        gasLimit={openBoxTransactionGasLimit}
+                                        gasLimit={openBoxTransactionGasLimit || 0}
                                         onChange={setOpenBoxTransactionOverrides}
                                     />
                                 </Box>

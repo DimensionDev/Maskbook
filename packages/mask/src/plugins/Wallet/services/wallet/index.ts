@@ -174,6 +174,7 @@ export async function deriveWallet(name: string) {
     let latestDerivationPath = primaryWallet.latestDerivationPath ?? primaryWallet.derivationPath
     if (!latestDerivationPath) throw new Error('Failed to derive wallet without derivation path.')
 
+    // eslint-disable-next-line no-constant-condition
     while (true) {
         derivedTimes += 1
 

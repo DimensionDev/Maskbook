@@ -75,11 +75,17 @@ export function createERC721Token(
     contractDetailed: ERC721ContractDetailed,
     info: ERC721TokenInfo,
     tokenId: string,
+    collection?: {
+        name: string
+        image?: string
+        slug: string
+    },
 ): ERC721TokenDetailed {
     return {
         contractDetailed,
         info,
         tokenId,
+        collection,
     }
 }
 
@@ -125,7 +131,6 @@ export function createERC20Tokens(
         return accumulator
     }, base)
 }
-//#endregion
 
 export function addGasMargin(value: BigNumber.Value, scale = 3000) {
     return new BigNumber(value).multipliedBy(new BigNumber(10000).plus(scale)).dividedToIntegerBy(10000)

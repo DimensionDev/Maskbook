@@ -14,11 +14,11 @@ import type {
     NonFungibleAssetProvider,
     Transaction,
     AddressName,
-    AddressNameType,
     CryptoPrice,
     BalanceOfChains,
     ERC721TokenCollectionInfo,
 } from '../types'
+import type { ProviderProxy } from '@masknet/web3-shared-base'
 
 export interface Web3ProviderType {
     allowTestnet: Subscription<boolean>
@@ -59,7 +59,16 @@ export interface Web3ProviderType {
         page?: number,
         size?: number,
     ) => Promise<{ collections: ERC721TokenCollectionInfo[]; hasNextPage: boolean }>
-    getAddressNamesList: (twitterId: string, addressNameType: AddressNameType) => Promise<AddressName[]>
+    getAddressNamesList: (identity: {
+        identifier: {
+            userId: string
+            network: string
+        }
+        avatar?: string
+        bio?: string
+        nickname?: string
+        homepage?: string
+    }) => Promise<AddressName[]>
     getTransactionList: (
         address: string,
         network: NetworkType,
@@ -71,4 +80,5 @@ export interface Web3ProviderType {
         hasNextPage: boolean
     }>
     fetchERC20TokensFromTokenLists: (urls: string[], chainId: ChainId) => Promise<ERC20TokenDetailed[]>
+    providerSocket: Promise<ProviderProxy>
 }

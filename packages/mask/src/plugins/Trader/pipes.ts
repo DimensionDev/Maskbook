@@ -56,6 +56,7 @@ export const resolveTradeProviderName = createLookupTableResolver<TradeProvider,
         [TradeProvider.PANCAKESWAP]: 'PancakeSwap',
         [TradeProvider.DODO]: 'DODO',
         [TradeProvider.BANCOR]: 'Bancor',
+        [TradeProvider.OPENOCEAN]: 'OpenOcean',
     },
     (tradeProvider) => {
         throw new Error(`Unknown provider type: ${tradeProvider}`)
@@ -80,6 +81,10 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
                     return 'https://aribitrum.api.0x.org/'
                 case NetworkType.xDai:
                     return 'https://xdai.api.0x.org/'
+                case NetworkType.Celo:
+                    return 'https://celo.api.0x.org/'
+                case NetworkType.Fantom:
+                    return 'https://fantom.api.0x.org/'
                 default:
                     safeUnreachable(networkType)
                     return ''
@@ -98,6 +103,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
             return 'https://app.dodoex.io'
         case TradeProvider.BANCOR:
             return 'https://app.bancor.network/eth/swap'
+        case TradeProvider.OPENOCEAN:
+            return 'https://openocean.finance/classic'
         default:
             unreachable(tradeProvider)
     }
@@ -134,6 +141,10 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
                     return `https://analytics-aribtrum.sushi.com/pairs/${address}`
                 case NetworkType.xDai:
                     return `https://analytics-xdai.sushi.com/pairs/${address}`
+                case NetworkType.Celo:
+                    return `https://analytics-celo.sushi.com/pairs/${address}`
+                case NetworkType.Fantom:
+                    return `https://analytics-ftm.sushi.com/pairs/${address}`
                 default:
                     safeUnreachable(networkType)
                     return ''
@@ -148,7 +159,10 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             return `https://pancakeswap.info/pool/${address}`
         case TradeProvider.BANCOR:
             // TODO - Bancor analytics should be available with V3
-            return ``
+            return ''
+        case TradeProvider.OPENOCEAN:
+            // TODO - OpenOcean
+            return ''
         default:
             unreachable(tradeProvider)
     }

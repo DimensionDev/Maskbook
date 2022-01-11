@@ -15,6 +15,7 @@ import { fromWei, toHex } from 'web3-utils'
 import { isEmpty } from 'lodash-unified'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { isGreaterThan, isLessThan, isLessThanOrEqualTo, isPositive, multipliedBy } from '@masknet/web3-shared-base'
+import { isDashboardPage } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     option: {
@@ -140,7 +141,7 @@ const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 
 export const Gas1559Settings = memo<Gas1559SettingsProps>(({ onCancel, onSave: onSave_, gasConfig }) => {
     const { t } = useI18N()
-    const isDashboard = location.href.includes('dashboard.html')
+    const isDashboard = isDashboardPage()
     const { classes } = useStyles({ isDashboard })
     const chainId = useChainId()
 
@@ -234,28 +235,19 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(({ onCancel, onSave: o
 
     //#region If the selected changed, set the value on the option to the form data
     useEffect(() => {
-        if (selected !== null) {
-            setValue(
-                'maxPriorityFeePerGas',
-                new BigNumber(options[selected].content?.suggestedMaxPriorityFeePerGas ?? 0).toFixed() ?? '',
-            )
-            setValue(
-                'maxFeePerGas',
-                new BigNumber(options[selected].content?.suggestedMaxFeePerGas ?? 0).toFixed() ?? '',
-            )
-        }
+        if (selected === null) return
+        const { content } = options[selected]
+        setValue('maxPriorityFeePerGas', new BigNumber(content?.suggestedMaxPriorityFeePerGas ?? 0).toFixed() ?? '')
+        setValue('maxFeePerGas', new BigNumber(content?.suggestedMaxFeePerGas ?? 0).toFixed() ?? '')
     }, [selected, setValue, options])
     //#endregion
 
     useEffect(() => {
-        if (gasConfig?.maxPriorityFeePerGas && gasConfig?.maxFeePerGas && gasConfig?.maxPriorityFeePerGas) {
-            setOption(null)
-            setValue('maxFeePerGas', fromWei(new BigNumber(gasConfig.maxFeePerGas).toString(), 'gwei').toString())
-            setValue(
-                'maxPriorityFeePerGas',
-                fromWei(new BigNumber(gasConfig.maxPriorityFeePerGas).toString(), 'gwei').toString(),
-            )
-        }
+        if (!(gasConfig?.maxPriorityFeePerGas && gasConfig?.maxFeePerGas)) return
+        const { maxFeePerGas, maxPriorityFeePerGas } = gasConfig
+        setOption(null)
+        setValue('maxFeePerGas', fromWei(maxFeePerGas.toString(), 'gwei').toString())
+        setValue('maxPriorityFeePerGas', fromWei(maxPriorityFeePerGas.toString(), 'gwei').toString())
     }, [gasConfig, setValue])
 
     return (

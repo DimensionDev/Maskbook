@@ -5,6 +5,7 @@ import classNames from 'classnames'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
 import { getMaskColor, makeStyles } from '@masknet/theme'
+import { isDashboardPage } from '@masknet/shared-base'
 import {
     useAccount,
     useWeb3State,
@@ -29,7 +30,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         padding: theme.spacing(1.5),
         marginBottom: theme.spacing(2),
         display: 'flex',
-        backgroundColor: isDashboard ? getMaskColor(theme).primaryBackground2 : getMaskColor(theme).twitterBackground,
+        backgroundColor: isDashboard ? getMaskColor(theme).primaryBackground2 : theme.palette.background.default,
         borderRadius: 8,
         alignItems: 'center',
     },
@@ -72,7 +73,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         border: `1px solid ${theme.palette.background.default}`,
     },
     twitterProviderBorder: {
-        border: `1px solid ${getMaskColor(theme).twitterBackground}`,
+        border: `1px solid ${theme.palette.background.default}`,
         width: 14,
         height: 14,
     },
@@ -98,7 +99,7 @@ interface WalletStatusBox {
 export function WalletStatusBox(props: WalletStatusBox) {
     const { t } = useI18N()
 
-    const isDashboard = location.href.includes('dashboard.html')
+    const isDashboard = isDashboardPage()
     const { classes } = useStyles({ isDashboard })
     const chainId = useChainId()
     const account = useAccount()
@@ -225,7 +226,6 @@ export function WalletStatusBox(props: WalletStatusBox) {
                 ) : null}
                 <Button
                     className={classNames(classes.actionButton)}
-                    color="primary"
                     variant="contained"
                     size="small"
                     onClick={onChange}>

@@ -11,19 +11,7 @@ import {
     TransactionStateType,
 } from '@masknet/web3-shared-evm'
 import LaunchIcon from '@mui/icons-material/Launch'
-import {
-    Grid,
-    Card,
-    CardHeader,
-    Typography,
-    Link,
-    CardMedia,
-    CardContent,
-    Button,
-    Box,
-    Skeleton,
-    CircularProgress,
-} from '@mui/material'
+import { Grid, Card, CardHeader, Typography, Link, CardMedia, CardContent, Button, Box, Skeleton } from '@mui/material'
 import { useCallback, useEffect } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
@@ -36,6 +24,7 @@ import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
+import { NftImage } from './NftImage'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -128,12 +117,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-    },
-    tokenImgWrapper: {
-        position: 'relative',
-        width: 120,
-        height: 180,
-        overflow: 'hidden',
     },
     tokenImg: {
         width: '100%',
@@ -233,6 +216,13 @@ const useStyles = makeStyles()((theme) => ({
             borderColor: 'white',
         },
     },
+    ellipsis: {
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        maxWidth: 400,
+        fontSize: '1.5rem',
+    },
 }))
 export interface RedPacketNftProps {
     payload: RedPacketNftJSONPayload
@@ -267,11 +257,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         )
     }, [payload])
 
-    const {
-        value: erc721TokenDetailed,
-        retry: retryERC721TokenDetailed,
-        error: ERC721TokenDetailedError,
-    } = useERC721TokenDetailed(
+    const { asyncRetry, tokenDetailed: erc721TokenDetailed } = useERC721TokenDetailed(
         availability
             ? ({
                   type: EthereumTokenType.ERC721,
@@ -285,6 +271,8 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             : undefined,
         availability?.claimed_id,
     )
+
+    const { retry: retryERC721TokenDetailed, error: ERC721TokenDetailedError } = asyncRetry
     const isFailedToLoading = Boolean(availabilityError || ERC721TokenDetailedError)
 
     const onErrorRetry = useCallback(() => {
@@ -302,7 +290,12 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         }
 
         resetCallback()
-    }, [claimState, retryAvailability])
+    }, [claimState.type, retryAvailability])
+
+    useEffect(() => {
+        retryAvailability()
+        resetCallback()
+    }, [account])
 
     const previewNftImg = new URL('./assets/nft-preview.png', import.meta.url).toString()
     const rpNftImg = new URL('./assets/redpacket.nft.png', import.meta.url).toString()
@@ -373,7 +366,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             <Card className={classes.card} component="article" elevation={0}>
                 <CardHeader
                     className={classNames(classes.title, availability.isEnd ? classes.hide : '', classes.whiteText)}
-                    title={payload.message}
+                    title={<Typography className={classes.ellipsis}>{payload.message}</Typography>}
                     subheader={
                         <span
                             className={classNames(classes.link, classes.whiteText)}
@@ -386,19 +379,11 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
 
                 {availability.isClaimed ? (
                     <Box className={classes.tokenWrapper}>
-                        <div className={classes.tokenImgWrapper}>
-                            {erc721TokenDetailed?.info.mediaUrl ? null : (
-                                <CircularProgress className={classes.tokenImgSpinner} />
-                            )}
+                        <NftImage
+                            token={erc721TokenDetailed}
+                            fallbackImage={new URL('./assets/nft-preview.png', import.meta.url)}
+                        />
 
-                            <img
-                                className={classNames(
-                                    classes.tokenImg,
-                                    erc721TokenDetailed?.info.mediaUrl ? '' : classes.loadingTokenImg,
-                                )}
-                                src={erc721TokenDetailed?.info.mediaUrl ?? previewNftImg}
-                            />
-                        </div>
                         <Typography className={classes.claimedText}>You got 1 {payload.contractName}</Typography>
                     </Box>
                 ) : (
@@ -420,7 +405,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                         className={classes.whiteText}>
-                        Mask.io
+                        <Typography variant="body1">Mask.io</Typography>
                     </Link>
                     <Typography variant="body1">From: @{payload.senderName}</Typography>
                 </div>
@@ -445,7 +430,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                         </Typography>
                     </div>
                 </Card>
-            ) : (
+            ) : availability.isClaimedAll || availability.isCompleted ? null : (
                 <Grid container spacing={2} className={classes.buttonWrapper}>
                     <Grid item xs={availability.isClaimed ? 12 : 6}>
                         <Button className={classes.button} fullWidth onClick={onShare} size="large" variant="contained">

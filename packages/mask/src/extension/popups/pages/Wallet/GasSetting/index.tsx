@@ -1,12 +1,10 @@
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { useValueRef } from '@masknet/shared'
-import { NetworkType } from '@masknet/web3-shared-evm'
+import { NetworkType, useNetworkType } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../../utils'
 import { GasSetting1559 } from './GasSetting1559'
 import { Prior1559GasSetting } from './Prior1559GasSetting'
-import { currentNetworkSettings } from '../../../../../plugins/Wallet/settings'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -30,7 +28,7 @@ const useStyles = makeStyles()(() => ({
 const GasSetting = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const networkType = useValueRef(currentNetworkSettings)
+    const networkType = useNetworkType()
     return (
         <main className={classes.container}>
             <Typography className={classes.title}>{t('popups_wallet_gas_fee_settings')}</Typography>

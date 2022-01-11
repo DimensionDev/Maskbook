@@ -14,14 +14,14 @@ import { debugModeSetting } from '../../settings/settings'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients'
 import type { Profile } from '../../database'
-import { CompositionContext } from './CompositionContext'
+import { CompositionContext } from '@masknet/plugin-infra'
 import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
 import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles()({
     root: {
         '& > *': {
-            marginBottom: `10px !important`,
+            marginBottom: '10px !important',
         },
     },
     flex: {
@@ -36,7 +36,7 @@ const useStyles = makeStyles()({
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center',
-        '& > *': { marginLeft: `12px !important` },
+        '& > *': { marginLeft: '12px !important' },
     },
 })
 

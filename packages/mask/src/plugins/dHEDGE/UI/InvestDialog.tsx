@@ -64,10 +64,9 @@ export function InvestDialog() {
 
     //#region remote controlled dialog
     const { open, closeDialog } = useRemoteControlledDialog(PluginDHedgeMessages.InvestDialogUpdated, (ev) => {
-        if (ev.open) {
-            setPool(ev.pool)
-            setAllowedTokens(ev.tokens)
-        }
+        if (!ev.open) return
+        setPool(ev.pool)
+        setAllowedTokens(ev.tokens)
     })
     const onClose = useCallback(() => {
         setPool(undefined)
@@ -93,7 +92,7 @@ export function InvestDialog() {
             open: true,
             uuid: id,
             disableNativeToken: true,
-            FixedTokenListProps: {
+            FungibleTokenListProps: {
                 whitelist: allowedTokens,
             },
         })

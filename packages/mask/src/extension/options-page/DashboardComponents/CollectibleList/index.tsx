@@ -1,11 +1,10 @@
-import { createContext, useState, useEffect } from 'react'
-import { useUpdateEffect } from 'react-use'
+import { createContext, useEffect, useMemo } from 'react'
 import { useValueRef } from '@masknet/shared'
 import {
     ChainId,
-    NonFungibleAssetProvider,
-    ERC721TokenCollectionInfo,
     ERC721TokenDetailed,
+    NonFungibleAssetProvider,
+    SocketState,
     useCollectibles,
     useCollections,
     Wallet,
@@ -15,8 +14,8 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { currentNonFungibleAssetDataProviderSettings } from '../../../../plugins/Wallet/settings'
 import { useI18N } from '../../../../utils'
 import { CollectibleCard } from './CollectibleCard'
-import { WalletMessages } from '../../../../plugins/Wallet/messages'
 import { Image } from '../../../../components/shared/Image'
+import { WalletMessages } from '@masknet/plugin-wallet'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -111,40 +110,39 @@ interface CollectibleListUIProps extends withClasses<'empty' | 'button' | 'text'
     collectibles: ERC721TokenDetailed[]
     loading: boolean
     collectiblesRetry: () => void
-    error: Error | undefined
+    error: string | undefined
     readonly?: boolean
     hasRetry?: boolean
 }
 function CollectibleListUI(props: CollectibleListUIProps) {
     const { provider, wallet, collectibles, loading, collectiblesRetry, error, readonly, hasRetry = true } = props
-    const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
+    const classes = useStylesExtends(useStyles(), props)
 
-    WalletMessages.events.erc721TokensUpdated.on(collectiblesRetry)
-    if (loading)
-        return (
-            <Box className={classes.root}>
-                {Array.from({ length: 3 })
-                    .fill(0)
-                    .map((_, i) => (
-                        <Box className={classes.card} display="flex" flexDirection="column" key={i}>
-                            <Skeleton animation="wave" variant="rectangular" width={172} height={172} />
-                            <Skeleton
-                                animation="wave"
-                                variant="text"
-                                width={172}
-                                height={20}
-                                style={{ marginTop: 4 }}
-                            />
-                        </Box>
-                    ))}
-            </Box>
-        )
+    useEffect(() => WalletMessages.events.erc721TokensUpdated.on(collectiblesRetry))
 
     return (
         <CollectibleContext.Provider value={{ collectiblesRetry }}>
             <Box className={classes.container}>
-                {error || collectibles.length === 0 ? (
+                {loading && (
+                    <Box className={classes.root}>
+                        {Array.from({ length: 3 })
+                            .fill(0)
+                            .map((_, i) => (
+                                <Box className={classes.card} display="flex" flexDirection="column" key={i}>
+                                    <Skeleton animation="wave" variant="rectangular" width={172} height={172} />
+                                    <Skeleton
+                                        animation="wave"
+                                        variant="text"
+                                        width={172}
+                                        height={20}
+                                        style={{ marginTop: 4 }}
+                                    />
+                                </Box>
+                            ))}
+                    </Box>
+                )}
+                {error || (collectibles.length === 0 && !loading) ? (
                     <Box className={classes.text}>
                         <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
                         {hasRetry ? (
@@ -171,126 +169,146 @@ function CollectibleListUI(props: CollectibleListUIProps) {
     )
 }
 
-export interface CollectibleListAddressProps extends withClasses<'empty' | 'button'> {
+export interface CollectibleListProps extends withClasses<'empty' | 'button'> {
     address: string
     collection?: string
-    setCount: (count: number) => void
+    collectibles: ERC721TokenDetailed[]
+    error?: string
+    loading: boolean
+    retry(): void
 }
 
-export function CollectibleListAddress(props: CollectibleListAddressProps) {
-    const { address, collection, setCount } = props
+export function CollectibleList(props: CollectibleListProps) {
+    const { address, collectibles, error, loading, retry } = props
     const provider = useValueRef(currentNonFungibleAssetDataProviderSettings)
-    const chainId = ChainId.Mainnet
-    const [page, setPage] = useState(0)
     const classes = props.classes ?? {}
-
-    const {
-        value = { collectibles: [], hasNextPage: false },
-        loading: collectiblesLoading,
-        retry: collectiblesRetry,
-        error: collectiblesError,
-    } = useCollectibles(address, chainId, provider, page, 50, collection)
-    const { collectibles = [], hasNextPage } = value
-    const [rendCollectibles, setRendCollectibles] = useState<ERC721TokenDetailed[]>([])
-
-    useUpdateEffect(() => {
-        setPage(0)
-    }, [provider, address])
-
-    useEffect(() => {
-        if (collectibles.length) {
-            setRendCollectibles([...rendCollectibles, ...collectibles])
-            if (hasNextPage) {
-                const timer = setTimeout(() => {
-                    setPage(page + 1)
-                }, 1000)
-
-                return () => {
-                    clearTimeout(timer)
-                }
-            }
-        }
-
-        return () => {}
-    }, [collectibles])
-
-    useEffect(() => {
-        setCount(rendCollectibles.length)
-    }, [rendCollectibles])
 
     return (
         <CollectibleListUI
             classes={classes}
             provider={provider}
             collectibles={collectibles}
-            loading={collectiblesLoading}
-            collectiblesRetry={collectiblesRetry}
-            error={collectiblesError}
-            readonly={true}
+            loading={loading}
+            collectiblesRetry={retry}
+            error={error}
+            readonly
             hasRetry={!!address}
         />
     )
 }
 
 export function CollectionList({ address }: { address: string }) {
-    const provider = useValueRef(currentNonFungibleAssetDataProviderSettings)
     const chainId = ChainId.Mainnet
-    const [page, setPage] = useState(0)
+    const { t } = useI18N()
     const { classes } = useStyles()
-    const [counts, setCounts] = useState<number[]>([])
-    const [rendCollections, setRendCollections] = useState<ERC721TokenCollectionInfo[]>([])
 
-    const { value = { collections: [], hasNextPage: false } } = useCollections(address, chainId, provider, page, 3)
-    const { collections = [], hasNextPage } = value
+    const {
+        data: collections,
+        retry: retryFetchCollection,
+        state: loadingCollectionDone,
+    } = useCollections(address, chainId)
+    const {
+        data: collectibles,
+        state: loadingCollectibleDone,
+        retry: retryFetchCollectible,
+    } = useCollectibles(address, chainId, !!collections.length)
 
-    useUpdateEffect(() => {
-        setPage(0)
-    }, [provider, address])
+    const isLoading = loadingCollectibleDone !== SocketState.done || loadingCollectionDone !== SocketState.done
 
-    useEffect(() => {
-        if (collections.length) {
-            setRendCollections([...rendCollections, ...collections])
-            if (hasNextPage) {
-                const timer = setTimeout(() => {
-                    setPage(page + 1)
-                }, 3000)
+    const renderWithRarible = useMemo(() => {
+        if (isLoading) return []
+        return collectibles.filter((item) => !item.collection)
+    }, [collections?.length, collectibles?.length])
 
-                return () => {
-                    clearTimeout(timer)
-                }
-            }
-        }
+    if (loadingCollectionDone !== SocketState.done) {
+        return (
+            <Box className={classes.root}>
+                {Array.from({ length: 3 })
+                    .fill(0)
+                    .map((_, i) => (
+                        <Box className={classes.card} display="flex" flexDirection="column" key={i}>
+                            <Skeleton animation="wave" variant="rectangular" width={172} height={172} />
+                            <Skeleton
+                                animation="wave"
+                                variant="text"
+                                width={172}
+                                height={20}
+                                style={{ marginTop: 4 }}
+                            />
+                        </Box>
+                    ))}
+            </Box>
+        )
+    }
 
-        return () => {}
-    }, [collections])
+    if (!isLoading && !collections.length)
+        return (
+            <Box display="flex" alignItems="center" justifyContent="center">
+                <Typography color="textPrimary" sx={{ paddingTop: 4, paddingBottom: 4 }}>
+                    {t('dashboard_no_collectible_found')}
+                </Typography>
+            </Box>
+        )
 
     return (
         <Box>
-            {rendCollections.map((x, i) => (
-                <Box key={i}>
-                    <Box display="flex" alignItems="center" sx={{ marginTop: '16px' }}>
-                        <Box className={classes.collectionWrap}>
-                            {x.image ? <Image component="img" className={classes.collectionImg} src={x.image} /> : null}
+            {(collections ?? []).map((x, i) => {
+                const renderCollectibles = collectibles.filter((c) => c.collection?.slug === x.slug)
+                return (
+                    <Box key={i}>
+                        <Box display="flex" alignItems="center" sx={{ marginTop: '16px' }}>
+                            <Box className={classes.collectionWrap}>
+                                {x.image ? (
+                                    <Image component="img" className={classes.collectionImg} src={x.image} />
+                                ) : null}
+                            </Box>
+                            <Typography
+                                className={classes.name}
+                                color="textPrimary"
+                                variant="body2"
+                                sx={{ fontSize: '16px' }}>
+                                {x.name}
+                                {loadingCollectibleDone && renderCollectibles.length
+                                    ? `(${renderCollectibles.length})`
+                                    : null}
+                            </Typography>
                         </Box>
+                        <CollectibleList
+                            address={address}
+                            collection={x.slug}
+                            retry={() => {
+                                retryFetchCollectible()
+                                retryFetchCollection()
+                            }}
+                            collectibles={renderCollectibles}
+                            loading={isLoading}
+                        />
+                    </Box>
+                )
+            })}
+            {!!renderWithRarible.length && (
+                <Box key="rarible">
+                    <Box display="flex" alignItems="center" sx={{ marginTop: '16px' }}>
                         <Typography
                             className={classes.name}
                             color="textPrimary"
                             variant="body2"
                             sx={{ fontSize: '16px' }}>
-                            {x.name}
-                            {counts[i] ? `(${counts[i]})` : null}
+                            Rarible ({renderWithRarible.length})
                         </Typography>
                     </Box>
-                    <CollectibleListAddress
+                    <CollectibleList
                         address={address}
-                        collection={x.slug}
-                        setCount={(count) => {
-                            counts[i] = count
-                            setCounts(counts)
+                        collection="Rarible"
+                        retry={() => {
+                            retryFetchCollectible()
+                            retryFetchCollection()
                         }}
+                        collectibles={renderWithRarible}
+                        loading={false}
                     />
                 </Box>
-            ))}
+            )}
         </Box>
     )
 }

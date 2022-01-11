@@ -1,9 +1,9 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { PLUGIN_DESCRIPTION, PLUGIN_ICON, PLUGIN_IDENTIFIER, PLUGIN_NAME } from './constants'
-import { languages } from './locales'
+import { PLUGIN_DESCRIPTION, PLUGIN_ICON, PLUGIN_ID, PLUGIN_NAME } from './constants'
+import { languages } from './locales/languages'
 
 export const base: Plugin.Shared.Definition = {
-    ID: PLUGIN_IDENTIFIER,
+    ID: PLUGIN_ID,
     icon: PLUGIN_ICON,
     name: { fallback: PLUGIN_NAME },
     description: { fallback: PLUGIN_DESCRIPTION },
@@ -13,6 +13,5 @@ export const base: Plugin.Shared.Definition = {
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
     },
-    management: { alwaysOn: true },
     i18n: languages,
 }

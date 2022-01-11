@@ -18,6 +18,7 @@ import { ExpandMore } from '@mui/icons-material'
 import { toHex } from 'web3-utils'
 import BigNumber from 'bignumber.js'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
+import { isDashboardPage } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     container: {
@@ -115,7 +116,7 @@ interface GasPrior1559SettingsProps {
 
 export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(({ onCancel, onSave: onSave_, gasConfig }) => {
     const chainId = useChainId()
-    const isDashboard = location.href.includes('dashboard.html')
+    const isDashboard = isDashboardPage()
     const { classes } = useStyles({ isDashboard })
     const { t } = useI18N()
     const [selected, setOption] = useState<number>(1)
@@ -165,14 +166,13 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(({ onCancel,
     //#endregion
 
     useUpdateEffect(() => {
-        if (gasConfig?.gasPrice && gasOptions) {
-            const gasPrice = new BigNumber(gasConfig.gasPrice)
-            if (gasPrice.isEqualTo(gasOptions.standard)) setOption(0)
-            else if (gasPrice.isEqualTo(gasOptions.fast)) setOption(1)
-            else {
-                setCustomGasPrice(formatWeiToGwei(gasPrice).toString())
-                setOption(2)
-            }
+        if (!(gasConfig?.gasPrice && gasOptions)) return
+        const gasPrice = new BigNumber(gasConfig.gasPrice)
+        if (gasPrice.isEqualTo(gasOptions.standard)) setOption(0)
+        else if (gasPrice.isEqualTo(gasOptions.fast)) setOption(1)
+        else {
+            setCustomGasPrice(formatWeiToGwei(gasPrice).toString())
+            setOption(2)
         }
     }, [gasConfig, gasOptions])
 

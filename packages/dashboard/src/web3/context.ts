@@ -16,6 +16,7 @@ import {
     isInjectedProvider,
 } from '@masknet/web3-shared-evm'
 import { Services, Messages, PluginServices, PluginMessages } from '../API'
+import { getProxyWebsocketInstance } from '@masknet/web3-shared-base'
 
 const Web3Provider = createExternalProvider()
 
@@ -30,7 +31,7 @@ export const Web3Context: Web3ProviderType = {
     account: createSubscriptionFromAsync(
         async () => {
             const providerType = await Services.Settings.getCurrentSelectedWalletProvider()
-            if (isInjectedProvider(providerType)) return ''
+            if (isInjectedProvider(providerType) || providerType === ProviderType.Fortmatic) return ''
             return Services.Settings.getSelectedWalletAddress()
         },
         '',
@@ -113,6 +114,9 @@ export const Web3Context: Web3ProviderType = {
     getAddressNamesList: PluginServices.Wallet.getAddressNames,
     getTransactionList: PluginServices.Wallet.getTransactionList,
     fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
+    providerSocket: getProxyWebsocketInstance((info) =>
+        PluginMessages.Wallet.events.socketMessageUpdated.sendToAll(info),
+    ),
 }
 
 export function createExternalProvider() {

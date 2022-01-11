@@ -1,3 +1,4 @@
+import { useChainId, ChainId } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState } from 'react'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
@@ -7,7 +8,7 @@ import { RedPacketHistoryList } from './RedPacketHistoryList'
 import { NftRedPacketHistoryList } from './NftRedPacketHistoryList'
 import type { NftRedPacketHistory, RedPacketJSONPayload } from '../types'
 import { RedPacketNftMetaKey } from '../constants'
-import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
+import { useCompositionContext } from '@masknet/plugin-infra'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import type { ERC721ContractDetailed } from '@masknet/web3-shared-evm'
 
@@ -46,7 +47,7 @@ const useStyles = makeStyles()((theme) => ({
     labelWrapper: {
         display: 'flex',
     },
-    wrapper: {
+    tabWrapper: {
         padding: theme.spacing(0, 2, 0, 2),
     },
 }))
@@ -60,6 +61,7 @@ export function RedPacketPast({ onSelect, onClose }: Props) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const state = useState(RpTypeTabs.ERC20)
+    const chainId = useChainId()
 
     const currentIdentity = useCurrentIdentity()
     const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
@@ -83,6 +85,7 @@ export function RedPacketPast({ onSelect, onClose }: Props) {
         },
         [senderName, onClose],
     )
+
     const tabProps: AbstractTabProps = {
         tabs: [
             {
@@ -104,13 +107,14 @@ export function RedPacketPast({ onSelect, onClose }: Props) {
                 ),
                 children: <NftRedPacketHistoryList onSend={handleSendNftRedpacket} />,
                 sx: { p: 0 },
+                disabled: ![ChainId.Mainnet, ChainId.Matic].includes(chainId),
             },
         ],
         state,
         classes,
     }
     return (
-        <div className={classes.wrapper}>
+        <div className={classes.tabWrapper}>
             <AbstractTab height={512} {...tabProps} />
         </div>
     )

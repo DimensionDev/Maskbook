@@ -7,13 +7,14 @@ import {
     useNativeTokenDetailed,
     useRedPacketConstants,
     useFungibleTokenBalance,
+    useChainId,
 } from '@masknet/web3-shared-evm'
 import { isGreaterThan, isZero, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import { omit } from 'lodash-unified'
 import { FormControl, InputLabel, MenuItem, MenuProps, Select, TextField } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
-import { ChangeEvent, useCallback, useMemo, useState } from 'react'
+import { ChangeEvent, useCallback, useMemo, useState, useEffect } from 'react'
 import { v4 as uuid } from 'uuid'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -89,6 +90,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const { onChange, onNext, origin } = props
     // context
     const account = useAccount()
+    const chainId = useChainId()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
 
     //#region select token
@@ -110,7 +112,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             open: true,
             uuid: id,
             disableNativeToken: false,
-            FixedTokenListProps: {
+            FungibleTokenListProps: {
                 selectedTokens: token ? [token.address] : [],
             },
         })
@@ -146,6 +148,15 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     )
     const amount = rightShift(rawAmount ?? '0', token?.decimals)
     const totalAmount = useMemo(() => multipliedBy(amount, isRandom ? 1 : shares ?? '0'), [amount, shares])
+    const isDivisible = !totalAmount.dividedBy(shares).isLessThan(1)
+
+    useEffect(() => {
+        setToken(nativeTokenDetailed)
+    }, [chainId, nativeTokenDetailed])
+
+    useEffect(() => {
+        setRawAmount('0')
+    }, [token])
 
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
@@ -162,6 +173,11 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         if (isZero(amount)) return t('plugin_dhedge_enter_an_amount')
         if (isGreaterThan(totalAmount, tokenBalance))
             return t('plugin_gitcoin_insufficient_balance', { symbol: token.symbol })
+        if (!isDivisible)
+            return t('plugin_red_packet_indivisible', {
+                symbol: token.symbol,
+                amount: formatBalance(1, token.decimals),
+            })
         return ''
     }, [account, amount, totalAmount, shares, token, tokenBalance])
 

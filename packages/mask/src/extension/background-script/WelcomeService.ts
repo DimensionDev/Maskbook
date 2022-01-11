@@ -15,10 +15,11 @@ import {
 } from '../../utils/type-transform/BackupFormat/JSON/latest'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { decompressBackupFile, extraPermissions } from '../../utils'
+import { convertBackupFileToObject, extraPermissions, fixBackupFilePermission } from '../../utils'
 import { v4 as uuid } from 'uuid'
 import { getUnconfirmedBackup, restoreBackup, setUnconfirmedBackup } from './WelcomeServices/restoreBackup'
 import { openPopupWindow } from './HelperService'
+import formatDateTime from 'date-fns/format'
 
 export { generateBackupJSON, generateBackupPreviewInfo } from './WelcomeServices/generateBackupJSON'
 export * from './WelcomeServices/restoreBackup'
@@ -65,14 +66,7 @@ export async function downloadBackup<T>(obj: T, type?: 'txt' | 'json') {
 }
 
 export async function downloadBackupV2(buffer: ArrayBuffer) {
-    const date = new Date()
-    const today = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date
-        .getDate()
-        .toString()
-        .padStart(2, '0')}`
-    const fileName = `mask-network-keystore-backup-${today}.bin`
-
-    saveFileFromBuffer(buffer, 'application/octet-stream', fileName)
+    saveFileFromBuffer(buffer, 'application/octet-stream', makeBackupName('bin'))
 }
 
 export async function createBackupFile(
@@ -98,14 +92,8 @@ export async function createBackupUrl(
 async function createBackupInfo<T>(obj: T, type?: 'txt' | 'json') {
     const string = typeof obj === 'string' ? obj : JSON.stringify(obj)
     const buffer = encodeText(string)
-    const date = new Date()
-    const today = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date
-        .getDate()
-        .toString()
-        .padStart(2, '0')}`
-    const fileName = `mask-network-keystore-backup-${today}.${type ?? 'json'}`
     const mimeType = type === 'txt' ? 'text/plain' : 'application/json'
-    return { buffer, mimeType, fileName }
+    return { buffer, mimeType, fileName: makeBackupName(type ?? 'json') }
 }
 
 export async function openOptionsPage(route?: DashboardRoutes, search?: string) {
@@ -118,7 +106,7 @@ export async function openOptionsPage(route?: DashboardRoutes, search?: string) 
 export { createPersonaByMnemonic } from '../../database'
 
 export function parseBackupStr(str: string) {
-    const json = UpgradeBackupJSONFile(decompressBackupFile(str))
+    const json = fixBackupFilePermission(UpgradeBackupJSONFile(convertBackupFileToObject(str)))
     if (json) {
         const info = getBackupPreviewInfo(json)
         const id = uuid()
@@ -153,4 +141,9 @@ export async function checkPermissionAndOpenWalletRecovery(id: string) {
 
         await openPopupWindow(PopupRoutes.WalletRecovered, { backupId: id })
     }
+}
+
+function makeBackupName(extension: string) {
+    const now = formatDateTime(Date.now(), 'yyyy-MM-dd')
+    return `mask-network-keystore-backup-${now}.${extension}`
 }
