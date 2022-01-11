@@ -21,7 +21,7 @@ export function useGasConfig(chainId: ChainId) {
                     const maxFeePerGas = formatGweiToWei(response?.medium?.suggestedMaxFeePerGas ?? 0).toFixed()
                     const maxPriorityFeePerGas = formatGweiToWei(
                         response?.medium?.suggestedMaxPriorityFeePerGas ?? 0,
-                    ).toString()
+                    ).toFixed()
                     setGasConfig({
                         maxFeePerGas,
                         maxPriorityFeePerGas,
