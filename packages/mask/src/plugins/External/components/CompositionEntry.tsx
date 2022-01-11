@@ -1,6 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { usePortalShadowRoot } from '@masknet/theme'
-import { MaskDialog } from '@masknet/theme'
+import { usePortalShadowRoot, MaskDialog } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
 import { useEffect } from 'react'
 import { MaskMessages, useI18N } from '../../../utils'

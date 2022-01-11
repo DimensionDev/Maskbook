@@ -9,8 +9,7 @@ import {
     isNativeTokenAddress,
     useAccount,
 } from '@masknet/web3-shared-evm'
-import { isZero } from '@masknet/web3-shared-base'
-import { isGreaterThan } from '@masknet/web3-shared-base'
+import { isZero, isGreaterThan } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../utils'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'

@@ -1,10 +1,9 @@
-import type { FungibleTokenDetailed } from '../types'
+import type { FungibleTokenDetailed, ChainId } from '../types'
 import { useAssetsFromChain } from './useAssetsFromChain'
 import { useAssetsFromProvider } from './useAssetsFromProvider'
 import { useCallback, useEffect, useState } from 'react'
 import { isSameAddress } from '../utils'
 import { sortBy, uniqBy } from 'lodash-unified'
-import type { ChainId } from '../types'
 
 export function useAssetsByTokenList(tokens: FungibleTokenDetailed[], targetChainId?: ChainId) {
     const [tokensForAsset, setTokensForAsset] = useState<FungibleTokenDetailed[]>([])

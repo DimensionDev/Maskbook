@@ -1,7 +1,6 @@
 import classNames from 'classnames'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { ImageIcon } from '../ImageIcon'
-import { useStylesExtends } from '@masknet/theme'
 
 interface StyleProps {
     size: number
@@ -18,13 +17,11 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         display: 'block',
         width: '100%',
         height: '100%',
-        borderRadius: '50%',
     },
     badgeIcon: {
         position: 'absolute',
         right: -2,
         bottom: -2,
-        borderRadius: '50%',
     },
     networkIcon: {},
     providerIcon: {},
