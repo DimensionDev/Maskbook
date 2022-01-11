@@ -7,9 +7,9 @@ interface LinkingAvatarProps {
 export function LinkingAvatar(props: LinkingAvatarProps) {
     const { href, title, src } = props
     try {
-        const url = new URL(href)
+        const url = new URL(href).toString()
         return (
-            <Link href={url.href} title={title} target="_blank" rel="noopener noreferrer">
+            <Link href={url} title={title} target="_blank" rel="noopener noreferrer">
                 <Avatar src={src} />
             </Link>
         )
