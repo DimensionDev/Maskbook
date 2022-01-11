@@ -25,6 +25,9 @@ const useStyles = makeStyles<void, 'atBottom'>()((theme, _, refs) => {
                 width: '100%',
                 padding: 0,
             },
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         placeholder: {
             textAlign: 'center',

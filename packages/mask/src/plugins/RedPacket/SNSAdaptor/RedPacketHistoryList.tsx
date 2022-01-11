@@ -21,6 +21,9 @@ const useStyles = makeStyles()((theme) => {
             [smallQuery]: {
                 padding: 0,
             },
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         placeholder: {
             textAlign: 'center',
