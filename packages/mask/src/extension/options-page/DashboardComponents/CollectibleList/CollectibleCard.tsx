@@ -11,7 +11,8 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 4,
-        position: 'relative',
+        position: 'absolute',
+        zIndex: 1,
         backgroundColor: theme.palette.background.default,
         width: 172,
         height: 172,
@@ -39,6 +40,17 @@ const useStyles = makeStyles()((theme) => ({
         width: '172px !important',
         height: '172px !important',
     },
+    blocker: {
+        position: 'absolute',
+        zIndex: 2,
+        width: 172,
+        height: 172,
+    },
+    linkWrapper: {
+        position: 'relative',
+        width: 172,
+        height: 172,
+    },
 }))
 
 export interface CollectibleCardProps {
@@ -56,7 +68,9 @@ export function CollectibleCard(props: CollectibleCardProps) {
         <Link
             target="_blank"
             rel="noopener noreferrer"
+            className={classes.linkWrapper}
             href={resolveCollectibleLink(token.contractDetailed.chainId, provider, token)}>
+            <div className={classes.blocker} />
             <Card className={classes.root}>
                 {readonly || !wallet ? null : (
                     <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} token={token} />

@@ -46,6 +46,11 @@ export function NFTCardStyledAssetPlayer(props: NFTLuckyDropStyledAssetPlayerPro
                 tokenId: tokenId,
             }}
             url={url}
+            options={{
+                autoPlay: true,
+                controls: false,
+                playsInline: true,
+            }}
             setERC721TokenName={setERC721TokenName}
             fallbackImage={fallbackImage ?? new URL('./nft_token_fallback.png', import.meta.url)}
             loadingIcon={<CircularProgress size={20} className={classes.loadingNftImg} />}

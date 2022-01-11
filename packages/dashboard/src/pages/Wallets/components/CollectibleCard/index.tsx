@@ -31,6 +31,8 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
     },
     mediaContainer: {
+        position: 'absolute',
+        zIndex: 1,
         width: '100%',
         height: 186,
         backgroundColor: theme.palette.mode === 'dark' ? MaskColorVar.lineLight : '#f6f6f7',
@@ -69,8 +71,20 @@ const useStyles = makeStyles()((theme) => ({
     },
     wrapper: {
         width: '100%',
+        minWidth: 140,
         height: '100%',
-        maxHeight: 186,
+        minHeight: 186,
+    },
+    linkWrapper: {
+        position: 'relative',
+        width: 140,
+        height: 186,
+    },
+    blocker: {
+        position: 'absolute',
+        zIndex: 2,
+        width: 140,
+        height: 186,
     },
 }))
 
@@ -104,6 +118,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
                     <Link
                         target="_blank"
                         rel="noopener noreferrer"
+                        className={classes.linkWrapper}
                         href={
                             Utils?.resolveNonFungibleTokenLink?.(
                                 token.contract?.chainId,
@@ -111,6 +126,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
                                 token.tokenId,
                             ) ?? '#'
                         }>
+                        <div className={classes.blocker} />
                         <div className={classes.mediaContainer}>
                             <NFTCardStyledAssetPlayer
                                 contractAddress={token.contract.address}
