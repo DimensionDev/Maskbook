@@ -307,10 +307,6 @@ function PinExtension({ onDone }: PinExtensionProps) {
     const { t } = useI18N()
     const [checked, setChecked] = useState(true)
 
-    useEffect(() => {
-        dismissPinExtensionTip.value = checked
-    }, [checked])
-
     return (
         <WizardDialog
             dialogType={SetupGuideStep.PinExtension}
@@ -358,7 +354,15 @@ function PinExtension({ onDone }: PinExtensionProps) {
             dismiss={
                 <FormControlLabel
                     classes={{ label: classes.label }}
-                    control={<Checkbox checked={checked} onChange={(e) => setChecked(e.target.checked)} />}
+                    control={
+                        <Checkbox
+                            checked={checked}
+                            onChange={(e) => {
+                                setChecked(e.target.checked)
+                                dismissPinExtensionTip.value = e.target.checked
+                            }}
+                        />
+                    }
                     label={t('setup_guide_pin_dismiss')}
                 />
             }
@@ -411,10 +415,9 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         let reloaded = false
         const handler = () => {
             // twitter will redirect to home page after login
-            if (!reloaded && window.location.pathname === '/home') {
-                reloaded = true
-                window.location.reload()
-            }
+            if (!(!reloaded && window.location.pathname === '/home')) return
+            reloaded = true
+            window.location.reload()
         }
         window.addEventListener('locationchange', handler)
         return () => {
