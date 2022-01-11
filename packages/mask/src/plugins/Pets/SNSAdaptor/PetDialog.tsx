@@ -97,9 +97,10 @@ export function PetDialog() {
     //should not use user address here
     const user = useUser()
     const visitor = useCurrentVisitingUser()
-    const nfts = useNFTs(
-        user.userId === visitor.userId && isSameAddress(user.address, visitor.address) ? visitor : undefined,
-    )
+    const isProfilePage = useMemo(() => {
+        return visitor.userId !== '' && visitor.userId !== '$unknown' && user.userId === visitor.userId
+    }, [user, visitor])
+    const nfts = useNFTs(isProfilePage && isSameAddress(user.address, visitor.address) ? visitor : undefined)
     const extraData = useNFTsExtra()
 
     const [collection, setCollection] = useState<FilterContract>(initCollection)
@@ -112,13 +113,27 @@ export function PetDialog() {
     const [tokenInfoSelect, setTokenInfoSelect] = useState<OwnerERC721TokenInfo | null>(null)
 
     useEffect(() => {
-        if (open) return
+        if (open) {
+            if (!isProfilePage) {
+                closeDialogHandle()
+            }
+            return
+        }
         setMetaData(initMeta)
         setCollection(initCollection)
         setTokenInfoSelect(null)
-    }, [open])
+    }, [open, isProfilePage])
 
     let timer: NodeJS.Timeout
+    const closeDialogHandle = () => {
+        setTipShow(true)
+        closeDialog()
+        clearTimeout(timer)
+        timer = setTimeout(() => {
+            setTipShow(false)
+        }, 2000)
+    }
+
     const saveHandle = async () => {
         if (!collection.name) {
             setCollectionsError(true)
@@ -134,19 +149,13 @@ export function PetDialog() {
         meta.contract = collection.contract
         meta.tokenId = chosenToken?.tokenId ?? ''
         await PluginPetRPC.saveEssay(visitor?.address, meta, visitor?.userId ?? '')
-        setTipShow(true)
-        closeDialog()
-        clearTimeout(timer)
-        timer = setTimeout(() => {
-            setTipShow(false)
-        }, 2000)
+        closeDialogHandle()
     }
 
     const onCollectionChange = (v: string) => {
-        for (const item of nfts) {
-            if (item.name === v) {
-                setCollection(item)
-            }
+        const matched = nfts.find((item) => item.name === v)
+        if (matched) {
+            setCollection(matched)
         }
         setCollectionsError(false)
     }
@@ -189,9 +198,76 @@ export function PetDialog() {
 
     const paperComponent = (children: ReactNode | undefined) => <Box className={classes.boxPaper}>{children}</Box>
 
+    const nftsRender = useMemo(() => {
+        return (
+            <Autocomplete
+                disablePortal
+                id="collection-box"
+                options={nfts}
+                onChange={(_event, newValue) => onCollectionChange(newValue?.name ?? '')}
+                getOptionLabel={(option) => option.name}
+                PopperComponent={ShadowRootPopper}
+                PaperComponent={({ children }) => paperComponent(children)}
+                renderOption={(props, option) => (
+                    <MenuItem
+                        key={option.name}
+                        value={option.name}
+                        disabled={!option.tokens.length}
+                        className={classes.menuItem}>
+                        <Box {...props} component="li" className={classes.itemFix}>
+                            {renderImg(option.contract)}
+                            <Typography className={classes.itemTxt}>{option.name}</Typography>
+                        </Box>
+                    </MenuItem>
+                )}
+                renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        label={t('plugin_pets_dialog_contract')}
+                        error={isCollectionsError}
+                        className={classes.input}
+                        inputProps={{ ...params.inputProps }}
+                        InputProps={{ ...params.InputProps, classes: { root: classes.inputBorder } }}
+                    />
+                )}
+            />
+        )
+    }, [nfts])
+
+    const tokensRender = useMemo(() => {
+        return (
+            <Autocomplete
+                disablePortal
+                id="token-box"
+                options={collection.tokens}
+                onChange={(_event, newValue) => onImageChange(newValue)}
+                getOptionLabel={(option) => option.name ?? ''}
+                PaperComponent={({ children }) => paperComponent(children)}
+                PopperComponent={ShadowRootPopper}
+                renderOption={(props, option) => (
+                    <Box component="li" className={classes.itemFix} {...props}>
+                        <img className={classes.thumbnail} src={option.mediaUrl} />
+                        <Typography>{option.name}</Typography>
+                        {option.glbSupport ? <img className={classes.glbIcon} src={GLB3DIcon} /> : null}
+                    </Box>
+                )}
+                renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        label={t('plugin_pets_dialog_token')}
+                        error={isImageError}
+                        className={classes.input}
+                        inputProps={{ ...params.inputProps }}
+                        InputProps={{ ...params.InputProps, classes: { root: classes.inputBorder } }}
+                    />
+                )}
+            />
+        )
+    }, [collection.tokens])
+
     return (
         <>
-            <InjectedDialog open={open} onClose={closeDialog} title={t('plugin_pets_dialog_title')}>
+            <InjectedDialog open={open && isProfilePage} onClose={closeDialog} title={t('plugin_pets_dialog_title')}>
                 <DialogContent>
                     <Grid container spacing={2}>
                         <Grid item xs={4}>
@@ -203,63 +279,8 @@ export function PetDialog() {
                             />
                         </Grid>
                         <Grid item xs={8}>
-                            <Autocomplete
-                                disablePortal
-                                id="collection-box"
-                                options={nfts}
-                                onChange={(_event, newValue) => onCollectionChange(newValue?.name ?? '')}
-                                getOptionLabel={(option) => option.name}
-                                PopperComponent={ShadowRootPopper}
-                                PaperComponent={({ children }) => paperComponent(children)}
-                                renderOption={(props, option) => (
-                                    <MenuItem
-                                        key={option.name}
-                                        value={option.name}
-                                        disabled={!option.tokens.length}
-                                        className={classes.menuItem}>
-                                        <Box {...props} component="li" className={classes.itemFix}>
-                                            {renderImg(option.contract)}
-                                            <Typography className={classes.itemTxt}>{option.name}</Typography>
-                                        </Box>
-                                    </MenuItem>
-                                )}
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        label={t('plugin_pets_dialog_contract')}
-                                        error={isCollectionsError}
-                                        className={classes.input}
-                                        inputProps={{ ...params.inputProps }}
-                                        InputProps={{ ...params.InputProps, classes: { root: classes.inputBorder } }}
-                                    />
-                                )}
-                            />
-                            <Autocomplete
-                                disablePortal
-                                id="token-box"
-                                options={collection.tokens}
-                                onChange={(_event, newValue) => onImageChange(newValue)}
-                                getOptionLabel={(option) => option.name ?? ''}
-                                PaperComponent={({ children }) => paperComponent(children)}
-                                PopperComponent={ShadowRootPopper}
-                                renderOption={(props, option) => (
-                                    <Box component="li" className={classes.itemFix} {...props}>
-                                        <img className={classes.thumbnail} src={option.mediaUrl} />
-                                        <Typography>{option.name}</Typography>
-                                        {option.glbSupport ? <img className={classes.glbIcon} src={GLB3DIcon} /> : null}
-                                    </Box>
-                                )}
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        label={t('plugin_pets_dialog_token')}
-                                        error={isImageError}
-                                        className={classes.input}
-                                        inputProps={{ ...params.inputProps }}
-                                        InputProps={{ ...params.InputProps, classes: { root: classes.inputBorder } }}
-                                    />
-                                )}
-                            />
+                            {nftsRender}
+                            {tokensRender}
                             <TextField
                                 className={classes.inputOption}
                                 InputProps={{ classes: { root: classes.inputArea } }}
@@ -296,7 +317,7 @@ export function PetDialog() {
             <Snackbar
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                 open={isTipShow}
-                message={t('plugin_pets_dialog_success')}
+                message={isProfilePage ? t('plugin_pets_dialog_success') : t('plugin_pets_dialog_notice')}
             />
         </>
     )
