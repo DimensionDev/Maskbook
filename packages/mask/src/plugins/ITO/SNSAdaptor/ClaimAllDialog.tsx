@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useState, useLayoutEffect, useRef } from 'react'
 import { flatten, uniq } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
-import { useCustomSnackbar, VariantType, SnackbarProvider } from '@masknet/theme'
+import { useCustomSnackbar, VariantType, SnackbarProvider, makeStyles } from '@masknet/theme'
 import { FormattedBalance, useRemoteControlledDialog } from '@masknet/shared'
 import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
 import {
     formatBalance,
     TransactionStateType,

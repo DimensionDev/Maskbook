@@ -1,7 +1,6 @@
 import { decode, encode } from '@msgpack/msgpack'
-import { createContainer, parseEncryptedJSONContainer } from '../container'
+import { createContainer, parseEncryptedJSONContainer, SupportedVersions } from '../container'
 import { BackupErrors } from '../BackupErrors'
-import { SupportedVersions } from '../container'
 
 export async function encryptBackup(password: BufferSource, binaryBackup: Uint8Array) {
     const [pbkdf2IV, AESKey] = await createAESFromPassword(password)
