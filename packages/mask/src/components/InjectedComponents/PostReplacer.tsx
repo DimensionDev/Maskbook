@@ -1,8 +1,14 @@
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
-import { isTypedMessageTuple, isWellKnownTypedMessages, TypedMessage } from '@masknet/shared-base'
+import {
+    isTypedMessageImage,
+    isTypedMessageTuple,
+    isWellKnownTypedMessages,
+    makeTypedMessageEmpty,
+    TypedMessage,
+    visitEachTypedMessageChild,
+} from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo } from 'react'
-import { Result } from 'ts-results'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
 import { PayloadReplacerTransformer } from './PayloadReplacer'
 import { DefaultTypedMessageRenderer } from './TypedMessageRenderer'

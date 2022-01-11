@@ -58,28 +58,27 @@ export async function* decryptionWithSocialNetworkDecoding(
     yield* new EventIterator<[id: string, progress: DecryptProgress | DecryptionInfo]>((flow) => {
         let globalID = 0
         for (const e of encoded) {
-            const id = (globalID += 1) + ''
-            let decoded!: string | Uint8Array
-            async function main() {
-                if (e.type === 'text') {
-                    // TODO: socialNetworkDecoder should emit multiple results if the text contains multiple payload.
-                    decoded = socialNetworkDecoder(context.currentSocialNetwork, e.text).unwrapOr(e.text)
-                } else if (e.type === 'image-url') {
-                    if (!context.authorHint || context.authorHint.isUnknown) {
-                        flow.push([id, new DecryptError(ErrorReasons.UnrecognizedAuthor, undefined)])
-                        return
-                    }
-                    const result = socialNetworkDecoder(
-                        context.currentSocialNetwork,
-                        await steganographyDecodeImageUrl(e.url, {
-                            pass: context.authorHint.toText(),
-                            downloadImage,
-                        }),
-                    )
-                    if (result.none) return
-                    decoded = result.val
+            let decoded: string[] | Promise<string[]> = []
+            if (e.type === 'text') {
+                decoded = socialNetworkDecoder(context.currentSocialNetwork, e.text)
+            } else if (e.type === 'image-url') {
+                if (!context.authorHint || context.authorHint.isUnknown) {
+                    flow.push([globalID + '', new DecryptError(ErrorReasons.UnrecognizedAuthor, undefined)])
+                    return
                 }
-                for await (const x of decryption(decoded, context)) flow.push([id, x])
+                const result = steganographyDecodeImageUrl(e.url, {
+                    pass: context.authorHint.toText(),
+                    downloadImage,
+                }).then((val) => socialNetworkDecoder(context.currentSocialNetwork, val))
+                decoded = result
+            }
+            async function main() {
+                let localID = 0
+                for (const each of await decoded) {
+                    localID += 1
+                    const ID = `${globalID}-${localID}`
+                    for await (const x of decryption(each, context)) flow.push([ID, x])
+                }
             }
             main()
         }

@@ -84,12 +84,14 @@ const DefaultTypedMessageImageRenderer = memo(function DefaultTypedMessageImageR
     props: TypedMessageRendererProps<TypedMessageImage>,
 ) {
     const { image, width, height } = props.message
-    return renderWithMetadata(
-        props,
-        <Typography variant="body1" data-testid="image_payload">
-            <Image src={image} width={width} height={height} />
-        </Typography>,
-    )
+    return null
+    // TODO:
+    // return renderWithMetadata(
+    //     props,
+    //     <Typography variant="body1" data-testid="image_payload">
+    //         <Image src={image} width={width} height={height} />
+    //     </Typography>,
+    // )
 })
 registerTypedMessageRenderer('image', {
     component: DefaultTypedMessageImageRenderer,
