@@ -496,6 +496,15 @@ export function Trader(props: TraderProps) {
         })
     })
 
+    useUpdateEffect(() => {
+        if (!openConfirmDialog) return
+        const target = allTradeComputed.find((x) => focusedTrade?.provider === x.provider)
+
+        if (target?.value?.outputAmount && focusedTrade?.value?.outputAmount.isEqualTo(target.value.outputAmount)) {
+            setFocusTrade(target)
+        }
+    }, [focusedTrade, allTradeComputed, openConfirmDialog])
+
     return (
         <div className={classes.root}>
             <TradeForm

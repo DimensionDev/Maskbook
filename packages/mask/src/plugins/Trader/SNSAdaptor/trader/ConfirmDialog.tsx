@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { ExternalLink } from 'react-feather'
 import BigNumber from 'bignumber.js'
 import { Alert, Box, Button, DialogActions, DialogContent, Link, Typography } from '@mui/material'
@@ -15,12 +15,13 @@ import {
     resolveAddressLinkOnExplorer,
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
-import { InfoIcon, RetweetIcon } from '@masknet/icons'
+import { InfoIcon, RetweetIcon, CramIcon } from '@masknet/icons'
 import { multipliedBy } from '@masknet/web3-shared-base'
 import { isDashboardPage } from '@masknet/shared-base'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { currentSlippageSettings } from '../../settings'
 import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
+import { useUpdateEffect } from 'react-use'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     section: {
@@ -52,6 +53,19 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         justifyContent: 'center',
         alignItems: 'center',
     },
+    error: {
+        backgroundColor: MaskColorVar.redMain.alpha(0.1),
+        color: '#F4212E',
+        marginTop: 12,
+        fontSize: 12,
+        lineHeight: '16px',
+        display: 'flex',
+        alignItems: 'center',
+        padding: 16,
+    },
+    action: {
+        marginRight: 0,
+    },
     alertIcon: {
         color: MaskColorVar.twitterInfo,
     },
@@ -79,6 +93,14 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         paddingRight: 0,
         paddingBottom: 40,
     },
+    accept: {
+        backgroundColor: '#F4212E',
+        fontWeight: 600,
+        fontSize: 14,
+        lineHeight: '20px',
+        padding: '10px 16px',
+        borderRadius: 20,
+    },
 }))
 
 export interface ConfirmDialogUIProps extends withClasses<never> {
@@ -95,6 +117,8 @@ export interface ConfirmDialogUIProps extends withClasses<never> {
 
 export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     const { t } = useI18N()
+    const cacheTrade = useRef<TradeComputed | null>(null)
+    const [priceUpdated, setPriceUpdated] = useState(false)
     const currentSlippage = useValueRef(currentSlippageSettings)
     const isDashboard = isDashboardPage()
     const classes = useStylesExtends(useStyles({ isDashboard }), props)
@@ -129,6 +153,20 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     //#endregion
 
     const staled = !!(executionPrice && !executionPrice.isEqualTo(trade.executionPrice))
+
+    useUpdateEffect(() => {
+        if (open) return
+        setPriceUpdated(false)
+        cacheTrade.current = null
+    }, [open])
+
+    useUpdateEffect(() => {
+        if (!open) return
+        if (!cacheTrade.current) cacheTrade.current = trade
+        else if (cacheTrade.current?.outputAmount !== trade.outputAmount) {
+            setPriceUpdated(true)
+        }
+    }, [open, trade])
 
     return (
         <>
@@ -265,9 +303,27 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                             </Typography>
                         </Box>
                     ) : null}
-                    <Alert className={classes.alert} icon={<InfoIcon className={classes.alertIcon} />} severity="info">
-                        {t('plugin_trader_confirm_tips')}
-                    </Alert>
+                    {priceUpdated ? (
+                        <Alert
+                            classes={{ action: classes.action }}
+                            className={classes.error}
+                            severity="error"
+                            icon={<CramIcon className={classes.alertIcon} />}
+                            action={
+                                <Button variant="contained" color="error" className={classes.accept}>
+                                    Accept
+                                </Button>
+                            }>
+                            Price updated
+                        </Alert>
+                    ) : (
+                        <Alert
+                            className={classes.alert}
+                            icon={<InfoIcon className={classes.alertIcon} />}
+                            severity="info">
+                            {t('plugin_trader_confirm_tips')}
+                        </Alert>
+                    )}
                 </DialogContent>
                 <DialogActions className={classes.actions}>
                     <Button
