@@ -52,6 +52,8 @@ export declare namespace Web3Plugin {
         name: string
         /** Is a mainnet network */
         isMainnet: boolean
+        /** Enable requirements */
+        enableRequirement?: Plugin.Shared.EnableRequirement
     }
     export interface ProviderDescriptor {
         /** An unique ID for each wallet provider */
@@ -64,6 +66,8 @@ export declare namespace Web3Plugin {
         icon: URL
         /** The provider name */
         name: string
+        /** Enable requirements */
+        enableRequirement?: Plugin.Shared.EnableRequirement
     }
 
     export interface ApplicationCategoryDescriptor {
