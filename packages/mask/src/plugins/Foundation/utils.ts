@@ -17,18 +17,13 @@ export function getRelevantUrl(textContent: string) {
 export function getAssetInfoFromURL(url?: string) {
     if (!url) return null
     const _url = new URL(url)
-    //#region foundation
     const foundationMatched = _url.pathname.match(foundationPathnameRegexMatcher)
-
     if (foundationMatched) {
-        const tokenId = foundationMatched[0].split('-').slice(-1)[0]
         return {
-            chain_id: _url.host.includes('gorli') ? ChainId.Gorli : ChainId.Mainnet,
-            token_id: tokenId,
+            chainId: _url.host.includes('gorli') ? ChainId.Gorli : ChainId.Mainnet,
+            link: url,
         }
     }
-    //#endregion
-    // nothing matched
     return
 }
 

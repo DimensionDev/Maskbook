@@ -37,7 +37,6 @@ const useStyles = makeStyles()((theme) => {
 interface Props extends React.PropsWithChildren<{}> {
     nft: Nft
     metadata: Metadata
-    link: string
 }
 
 function FoundationPrices(props: Props) {

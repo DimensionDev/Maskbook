@@ -109,7 +109,7 @@ function FoundationContent(props: Props) {
             <Typography variant="h6" className={classes.name} align="left">
                 {props.metadata?.name}
             </Typography>
-            <FoundationPrices nft={props.nft} metadata={props.metadata} link={props.link} />
+            <FoundationPrices nft={props.nft} metadata={props.metadata} />
             {isOver() && (
                 <Button
                     className={classes.button}
