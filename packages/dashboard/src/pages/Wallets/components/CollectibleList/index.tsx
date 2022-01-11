@@ -45,13 +45,13 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
     const account = useAccount()
     const { Asset } = useWeb3PluginState()
     const network = useNetworkDescriptor()
-    const [loadingSize, setLoadingSize] = useState<number>()
-    const [loadingCollectible, setLoadingCollectible] = useState(true)
+    const [loadingSize, setLoadingSize] = useState(0)
     const [renderData, setRenderData] = useState<Web3Plugin.NonFungibleToken[]>([])
 
     const {
         value = { data: EMPTY_LIST, hasNextPage: false },
         error: collectiblesError,
+        loading: isQuerying,
         retry,
     } = useAsyncRetry(
         async () =>
@@ -82,22 +82,20 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
             if (!info.done) {
                 retry()
             }
-            setLoadingCollectible(false)
         })
     }, [retry])
 
-    const hasNextPage = (page + 1) * (loadingSize ?? 0) < value.data.length
+    const hasNextPage = (page + 1) * loadingSize < value.data.length
+    const isLoading = renderData.length === 0 && isQuerying
 
     return (
         <CollectibleListUI
-            isLoading={renderData.length === 0 && loadingCollectible}
-            isEmpty={
-                (!!collectiblesError || renderData.length === 0) && !(renderData.length === 0 && loadingCollectible)
-            }
+            isLoading={isLoading}
+            isEmpty={!!collectiblesError || renderData.length === 0}
             page={page}
             onPageChange={setPage}
             hasNextPage={hasNextPage}
-            showPagination={!loadingCollectible && !(page === 0 && !hasNextPage)}
+            showPagination={!isQuerying && !(page === 0 && !hasNextPage)}
             dataSource={renderData}
             chainId={network?.chainId ?? 1}
             onSend={onSend}
@@ -146,28 +144,26 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
 
         return (
             <Stack flexDirection="column" justifyContent="space-between" height="100%" ref={ref}>
-                <>
-                    {isLoading ? (
-                        <LoadingPlaceholder />
-                    ) : isEmpty ? (
-                        <EmptyPlaceholder children={t.wallets_empty_collectible_tip()} />
-                    ) : (
-                        <Box>
-                            <div className={classes.root}>
-                                {dataSource.map((x) => (
-                                    <div className={classes.card} key={x.id}>
-                                        <CollectibleCard
-                                            chainId={chainId}
-                                            token={x}
-                                            // TODO: transfer not support multi chain, should remove is after supported
-                                            onSend={() => onSend(x as unknown as any)}
-                                        />
-                                    </div>
-                                ))}
-                            </div>
-                        </Box>
-                    )}
-                </>
+                {isLoading ? (
+                    <LoadingPlaceholder />
+                ) : isEmpty ? (
+                    <EmptyPlaceholder children={t.wallets_empty_collectible_tip()} />
+                ) : (
+                    <Box>
+                        <div className={classes.root}>
+                            {dataSource.map((x) => (
+                                <div className={classes.card} key={x.id}>
+                                    <CollectibleCard
+                                        chainId={chainId}
+                                        token={x}
+                                        // TODO: transfer not support multi chain, should remove is after supported
+                                        onSend={() => onSend(x as unknown as any)}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </Box>
+                )}
                 {showPagination ? (
                     <Box className={classes.footer}>
                         <TablePagination
