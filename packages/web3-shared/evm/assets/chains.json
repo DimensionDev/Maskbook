@@ -2084,7 +2084,7 @@
     },
     {
         "name": "Avalanche Mainnet",
-        "chain": "Avalanche",
+        "chain": "AVAX",
         "network": "mainnet",
         "rpc": ["https://api.avax.network/ext/bc/C/rpc"],
         "faucets": [],
