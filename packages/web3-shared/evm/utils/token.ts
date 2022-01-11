@@ -24,7 +24,7 @@ import { isSameAddress } from './address'
 export function createNativeToken(chainId: ChainId): NativeTokenDetailed {
     const chainDetailed = getChainDetailed(chainId)
     if (!chainDetailed) throw new Error('Unknown chain id.')
-    const { NATIVE_TOKEN_ADDRESS } = getTokenConstants()
+    const { NATIVE_TOKEN_ADDRESS } = getTokenConstants(chainId)
     if (!NATIVE_TOKEN_ADDRESS) throw new Error('Failed to create token.')
     return {
         type: EthereumTokenType.Native,

@@ -1,17 +1,19 @@
 import BigNumber from 'bignumber.js'
 import type { WalletTokenRecord } from './type'
-import { ChainId, getChainIdFromName } from '@masknet/web3-shared-evm'
+import { ChainId, createNativeToken, getChainIdFromName } from '@masknet/web3-shared-evm'
 import { CurrencyType, TokenType, Web3Plugin } from '@masknet/plugin-infra'
 import { multipliedBy, rightShift } from '@masknet/web3-shared-base'
 
 type Asset = Web3Plugin.Asset<Web3Plugin.FungibleToken>
+
+const debankSupportedChains = ['eth', 'bsc', 'xdai', 'matic', 'avax', 'arb']
 
 export function formatAssets(data: WalletTokenRecord[]): Asset[] {
     return data
         .filter((x) => x.is_verified)
         .map((y): Asset => {
             const chainIdFromChain = getChainIdFromName(y.chain) ?? ChainId.Mainnet
-            const address = y.id === 'eth' ? '' : y.id
+            const address = debankSupportedChains.includes(y.id) ? createNativeToken(chainIdFromChain).address : y.id
 
             return {
                 id: address,
