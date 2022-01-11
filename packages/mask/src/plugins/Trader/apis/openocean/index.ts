@@ -18,11 +18,12 @@ export async function swapOO(request: SwapOORequest): Promise<SwapOOData> {
         }),
     )
     const payload = await response.json()
-    const { data, outAmount, minOutAmount, to, value } = payload
+    const { data, outAmount, minOutAmount, to, value, estimatedGas } = payload
     const _resAmount = leftShift(outAmount, request.toToken.decimals).toNumber()
     const _fromAmount = leftShift(request.fromAmount, request.fromToken.decimals).toNumber()
     return {
         data,
+        estimatedGas,
         targetApproveAddr: request.fromToken.address,
         targetDecimals: request.fromToken.decimals,
         resAmount: _resAmount,

@@ -1,5 +1,4 @@
-import { useMemo } from 'react'
-import { useCallback } from 'react'
+import { useMemo, useCallback } from 'react'
 import { useValueRef } from '@masknet/shared'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
 import type { InternalSettings } from '../../settings/createSettings'

@@ -1,7 +1,6 @@
 import { memo, useState } from 'react'
 import { Button, TextField } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { MaskColorVar } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { isPersonaNameLengthValid, PERSONA_NAME_MAX_LENGTH } from '../../../../utils/checkLengthExceed'
 
