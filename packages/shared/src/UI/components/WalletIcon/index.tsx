@@ -1,7 +1,6 @@
 import classNames from 'classnames'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { ImageIcon } from '../ImageIcon'
-import { useStylesExtends } from '@masknet/theme'
 
 interface StyleProps {
     size: number

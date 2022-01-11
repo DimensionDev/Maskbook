@@ -1,11 +1,10 @@
 import ConfirmDialog from '../../../../components/ConfirmDialog'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { Box, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, CountdownButton, MaskTextField, useCustomSnackbar } from '@masknet/theme'
 import { UserContext } from '../../hooks/UserContext'
 import { useDashboardI18N } from '../../../../locales'
 import { phoneRegexp } from '../../regexp'
-import { CountdownButton, MaskTextField, useCustomSnackbar } from '@masknet/theme'
 import { Scenario, Locale, AccountType } from '../../type'
 import {
     fetchBackupValue,

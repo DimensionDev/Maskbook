@@ -9,10 +9,10 @@ import type {
     TransactionState,
     Wallet,
     GasOption,
+    ChainId,
 } from '@masknet/web3-shared-evm'
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
 import { PLUGIN_ID } from './constants'
-import type { ChainId } from '@masknet/web3-shared-evm'
 
 export type TransactionDialogEvent =
     | {
