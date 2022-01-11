@@ -2,7 +2,7 @@ import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { multipliedBy, pow10 } from '@masknet/web3-shared-base'
 import { useTrade as useNativeTokenTrade } from './native/useTrade'
 import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed'
-import { TagType, TradeInfo, TradeStrategy } from '../types'
+import { SwapOOData, TagType, TradeInfo, TradeStrategy } from '../types'
 import { useV2Trade as useUniswapV2Trade, useV3Trade as useUniswapV3Trade } from './uniswap/useTrade'
 import { useTradeComputed as useUniswapTradeComputed } from './uniswap/useTradeComputed'
 import { useTradeGasLimit as useUniswapTradeGasLimit } from './uniswap/useTradeGasLimit'
@@ -20,11 +20,12 @@ import { useTradeComputed as useBancorTradeComputed } from './bancor/useTradeCom
 import { useTradeGasLimit as useBancorTradeGasLimit } from './bancor/useTradeGasLimit'
 import { useTradeComputed as useOpenOceanTradeComputed } from './openocean/useTradeComputed'
 import { useTrade as useOpenOceanTrade } from './openocean/useTrade'
+import { useTradeGasLimit as useOpenOceanTradeGasLimit } from './openocean/useTradeGasLimit'
 import { TradeProvider } from '@masknet/public-api'
 import { useAvailableTraderProviders } from '../trending/useAvailableTraderProviders'
 import { useNativeTradeGasLimit } from './useNativeTradeGasLimit'
 import { TargetChainIdContext } from './useTargetChainIdContext'
-import type { TradeComputed, SwapRouteData } from '../types'
+import type { TradeComputed } from '../types'
 
 export function useUniswapV2Hook(
     tradeProviders: TradeProvider[],
@@ -178,7 +179,7 @@ export function useAllTradeComputed(
         inputToken,
         outputToken,
     )
-    const openoceanSwapEstimateGas = useDODOTradeGasLimit(openocean as TradeComputed<SwapRouteData> | null)
+    const openoceanSwapEstimateGas = useOpenOceanTradeGasLimit(openocean as TradeComputed<SwapOOData> | null)
 
     const {
         trader_: traderjoe_,

@@ -1,12 +1,11 @@
-import { postsContentSelector } from '../utils/selector'
+import { postsContentSelector, postsImageSelector } from '../utils/selector'
 import { IntervalWatcher } from '@dimensiondev/holoflows-kit'
 import { creator, SocialNetworkUI as Next } from '../../../social-network'
 import type { PostInfo } from '../../../social-network/PostInfo'
-import { postIdParser } from '../utils/fetch'
+import { postIdParser, postParser, postImagesParser } from '../utils/fetch'
 import { memoize } from 'lodash-unified'
 import Services from '../../../extension/service'
 import { injectMaskIconToPostTwitter } from '../injection/MaskIcon'
-import { postsImageSelector } from '../utils/selector'
 import {
     ProfileIdentifier,
     makeTypedMessageImage,
@@ -15,7 +14,6 @@ import {
     makeTypedMessagePromise,
     makeTypedMessageTuple,
 } from '@masknet/shared-base'
-import { postParser, postImagesParser } from '../utils/fetch'
 import { untilElementAvailable } from '../../../utils/dom'
 import { twitterBase } from '../base'
 import { twitterShared } from '../shared'

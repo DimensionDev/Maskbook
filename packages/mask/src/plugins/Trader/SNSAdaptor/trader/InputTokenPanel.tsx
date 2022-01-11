@@ -1,14 +1,12 @@
 import { ChangeEvent, memo, useCallback, useMemo } from 'react'
 import { useI18N } from '../../../../utils'
-import { FungibleTokenDetailed, isZeroAddress } from '@masknet/web3-shared-evm'
+import { FungibleTokenDetailed, isZeroAddress, formatBalance, formatCurrency } from '@masknet/web3-shared-evm'
 import { Box, Chip, chipClasses, TextField, Typography } from '@mui/material'
-import { FormattedBalance, SelectTokenChip, SelectTokenChipProps } from '@masknet/shared'
+import { FormattedBalance, SelectTokenChip, SelectTokenChipProps, FormattedCurrency } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
-import { FormattedCurrency } from '@masknet/shared'
-import { formatBalance, formatCurrency } from '@masknet/web3-shared-evm'
 import { isDashboardPage } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
