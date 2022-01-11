@@ -41,7 +41,7 @@ export function useNFTs(user: User | undefined) {
             setFetchTotal(total)
             for (const NFT of total) {
                 const sameNFT = tempNFTs.find((temp) => isSameAddress(temp.contract, NFT.contractDetailed.address))
-                if (!sameNFT) return
+                if (!sameNFT) continue
                 const glbSupport =
                     isSameAddress(NFT.contractDetailed.address, Punk3D.contract) && NFT.tokenId === Punk3D.tokenId
                 const item = { ...NFT.info, tokenId: NFT.tokenId, glbSupport }
