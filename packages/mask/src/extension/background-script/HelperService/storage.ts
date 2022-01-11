@@ -6,7 +6,7 @@ import { timeout } from '@masknet/shared-base'
  */
 class MutexStorage<T extends browser.storage.StorageValue> {
     private tasks: (() => void)[] = []
-    private locked: boolean = false
+    private locked = false
 
     private lock() {
         this.locked = true

@@ -1,5 +1,7 @@
+import { PluginId } from '@masknet/plugin-infra'
+
 //#region plugin definitions
-export const PLUGIN_IDENTIFIER = 'com.maskbook.wallet'
+export const PLUGIN_ID = PluginId.Wallet
 export const PLUGIN_NAME = 'Wallet'
 export const PLUGIN_ICON = '💰'
 export const PLUGIN_DESCRIPTION = 'Mask Wallet'

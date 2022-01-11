@@ -1,9 +1,8 @@
 import type { RelationProfile } from '@masknet/shared-base'
 import { memo, useCallback } from 'react'
 import { Box, TableCell, TableRow, Typography, Avatar, useTheme } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { StarIcon, MaskBlueIcon } from '@masknet/icons'
-import { MaskColorVar } from '@masknet/theme'
 import { Services } from '../../../../API'
 import { useDashboardI18N } from '../../../../locales'
 import { generateContactAvatarColor } from '../../../../utils/generateContactAvatarColor'
@@ -66,12 +65,11 @@ export const ContactTableRow = memo<ContactTableRowProps>(({ network, contact, i
     const theme = useTheme().palette.mode
 
     const handleClickStar = useCallback(async () => {
-        if (currentPersona) {
-            contact.favorite
-                ? await removeContactFromFavorite(contact.identifier, currentPersona)
-                : await addContactToFavorite(contact.identifier, currentPersona)
-            onReset()
-        }
+        if (!currentPersona) return
+        contact.favorite
+            ? await removeContactFromFavorite(contact.identifier, currentPersona)
+            : await addContactToFavorite(contact.identifier, currentPersona)
+        onReset()
     }, [contact, currentPersona, onReset])
 
     const [{ loading }, handleClickInvite] = useAsyncFn(async () => {

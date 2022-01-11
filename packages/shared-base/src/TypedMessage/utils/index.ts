@@ -1,7 +1,6 @@
 import { isTypedMessageAnchor } from '../extension'
 import { isTypedMessageText, isTypedMessageTuple, TypedMessageTuple } from '../core'
 import type {
-    NonSerializableTypedMessage,
     NonSerializableWithAltTypedMessage,
     SerializableTypedMessage,
     SerializableTypedMessages,
@@ -9,18 +8,13 @@ import type {
 } from '../base'
 import { eq } from 'lodash-unified'
 import { Err, Ok, Result } from 'ts-results'
+import { isTypedMessageImage } from '..'
 
 export function isSerializableTypedMessage(x: TypedMessage): x is SerializableTypedMessages {
     if ((x as SerializableTypedMessage<number>).serializable) return true
     const y = x as NonSerializableWithAltTypedMessage
     if (y.serializable === false && y.alt) return true
     return false
-}
-
-export function normalizeTypedMessage(x: SerializableTypedMessages): SerializableTypedMessages
-export function normalizeTypedMessage(x: NonSerializableTypedMessage): NonSerializableTypedMessage
-export function normalizeTypedMessage(x: TypedMessage): TypedMessage {
-    return x
 }
 
 /**
@@ -43,7 +37,7 @@ export function isTypedMessageEqual(message1: TypedMessage, message2: TypedMessa
  * @param message message
  */
 export function extractTextFromTypedMessage(message: TypedMessage | null): Result<string, void> {
-    if (message === null) return Err.EMPTY
+    if (!message) return Err.EMPTY
     if (isTypedMessageText(message)) return Ok(message.content)
     if (isTypedMessageAnchor(message)) return Ok(message.content)
     if (isTypedMessageTuple(message)) {
@@ -57,3 +51,15 @@ export function extractTextFromTypedMessage(message: TypedMessage | null): Resul
     }
     return Err.EMPTY
 }
+export function extractImageFromTypedMessage(
+    message: TypedMessage | null,
+    result: (string | Blob)[] = [],
+): (string | Blob)[] {
+    if (!message) return result
+    if (isTypedMessageImage(message)) return result.concat(message.image)
+    if (isTypedMessageTuple(message))
+        return result.concat(message.items.flatMap((x) => extractImageFromTypedMessage(x)))
+    return result
+}
+export * from '../transforms/flatten'
+export * from '../transforms/promise'

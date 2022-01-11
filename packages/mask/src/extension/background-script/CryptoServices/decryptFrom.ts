@@ -1,6 +1,6 @@
 import * as Alpha40 from '../../../crypto/crypto-alpha-40'
 import * as Alpha39 from '../../../crypto/crypto-alpha-39'
-import { GunAPI as Gun2, GunAPISubscribe as Gun2Subscribe, GunWorker } from '../../../network/gun/'
+import { GunAPI as Gun2, GunAPISubscribe as Gun2Subscribe, GunWorker, GunAPI } from '../../../network/gun/'
 import { decodeText } from '@dimensiondev/kit'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { i18n } from '../../../../shared-ui/locales_legacy'
@@ -19,7 +19,6 @@ import type { TypedMessage, AESJsonWebKey, Payload } from '@masknet/shared-base'
 import stringify from 'json-stable-stringify'
 import type { SharedAESKeyGun2 } from '../../../network/gun/version.2'
 import { MaskMessages } from '../../../utils/messages'
-import { GunAPI } from '../../../network/gun'
 import { Err, Ok, Result } from 'ts-results'
 import { decodeTextPayloadWorker } from '../../../social-network/utils/text-payload-worker'
 import { steganographyDownloadImage } from './utils'
@@ -86,7 +85,7 @@ function makeProgress(
     if (typeof progress === 'string') return { type: 'progress', progress, internal }
     return { type: 'progress', progress: 'intermediate_success', data: progress, internal }
 }
-function makeError(error: string | Error, internal: boolean = false): Failure {
+function makeError(error: string | Error, internal = false): Failure {
     if (typeof error === 'string') return { type: 'error', error, internal }
     return makeError(error.message, internal)
 }
@@ -184,6 +183,7 @@ async function* decryptFromPayloadWithProgress_raw(
         const { publicKey: minePublic, privateKey: minePrivate } = mine
         const networkWorker = getNetworkWorkerUninitialized(whoAmI)
         try {
+            // eslint-disable-next-line
             if (version === -40) throw ''
             const gunNetworkHint = networkWorker!.gunNetworkHint
             const { keyHash, postHash } = await (

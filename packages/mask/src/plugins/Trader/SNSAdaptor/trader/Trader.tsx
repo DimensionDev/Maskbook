@@ -18,6 +18,7 @@ import {
     useProviderType,
     useTokenConstants,
     useWallet,
+    useAccount,
 } from '@masknet/web3-shared-evm'
 import { isGreaterThan, isLessThan, multipliedBy } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -45,7 +46,6 @@ import { NetworkType } from '@masknet/public-api'
 import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice, useTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 import { SettingsDialog } from './SettingsDialog'
-import { useAccount } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()(() => {
     return {
@@ -467,10 +467,9 @@ export function Trader(props: TraderProps) {
 
     //#region if chain id be changed, reset the chain id on context, and reset gas config
     useEffect(() => {
-        if (chainId) {
-            setTargetChainId(chainId)
-            setGasConfig(undefined)
-        }
+        if (!chainId) return
+        setTargetChainId(chainId)
+        setGasConfig(undefined)
     }, [chainId])
     //#endregion
 

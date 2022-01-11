@@ -5,8 +5,7 @@ import { Skeleton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { usePostInfoDetails } from '@masknet/plugin-infra'
-import { extractTextFromTypedMessage } from '@masknet/shared-base'
-import { parseURL } from '@masknet/shared-base'
+import { extractTextFromTypedMessage, parseURL } from '@masknet/shared-base'
 import { PostInspector } from './PostInspector'
 
 const useStyles = makeStyles()((theme) => {
@@ -68,7 +67,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer url={link} />
     },
     PostInspector: function Component(): JSX.Element | null {
-        const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks())
+        const links = usePostInfoDetails.mentionedLinks()
         const link = links.find(isFindTrumanURL)
         if (!link) return null
         return <Renderer url={link} />

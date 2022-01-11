@@ -1,13 +1,11 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
 import { regexMatch } from '../../../utils/utils'
+import { isMobileTwitter } from './isMobile'
 import { isCompose } from './postBox'
 
 type E = HTMLElement
 
-const querySelector = <T extends E, SingleMode extends boolean = true>(
-    selector: string,
-    singleMode: boolean = true,
-) => {
+const querySelector = <T extends E, SingleMode extends boolean = true>(selector: string, singleMode = true) => {
     const ls = new LiveSelector<T, SingleMode>().querySelector<T>(selector)
     return (singleMode ? ls.enableSingleMode() : ls) as LiveSelector<T, SingleMode>
 }
@@ -100,7 +98,7 @@ export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
 export const postEditorDraftContentSelector = () => {
     if (location.pathname === '/compose/tweet') {
         return querySelector<HTMLDivElement>(
-            `[contenteditable][aria-label][spellcheck],textarea[aria-label][spellcheck]`,
+            '[contenteditable][aria-label][spellcheck],textarea[aria-label][spellcheck]',
         )
     }
     return (isCompose() ? postEditorInPopupSelector() : postEditorInTimelineSelector()).querySelector<HTMLElement>(
@@ -224,11 +222,14 @@ export const searchAvatarSelectorImage = () =>
 export const searchAvatarOpenFileSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1)
 export const searchProfileSaveSelector = () => querySelector<E>('[data-testid="Profile_Save_Button"]')
 
-export const searchProfessionalButtonSelector = () =>
-    querySelector<E>('[data-testid="ProfessionalButton_Switch_To_Professional"]')
+export const searchProfessionalButtonSelector = () => querySelector<E>('[data-testid*="ProfessionalButton"]')
 
 export const searchProfileSetAvatarSelector = () =>
-    searchProfessionalButtonSelector().closest<E>(3).querySelector('div > div:nth-child(2) > div:nth-child(2)')
+    isMobileTwitter
+        ? searchProfessionalButtonSelector()
+              .closest<E>(4)
+              .querySelector('div > div:nth-child(2) >div > div:nth-child(2)')
+        : searchProfessionalButtonSelector().closest<E>(3).querySelector('div > div:nth-child(2) > div:nth-child(2)')
 //#endregion
 
 //#region avatar selector

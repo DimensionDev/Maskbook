@@ -6,8 +6,7 @@ import { makeStyles } from '@masknet/theme'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { PostInspector } from './PostInspector'
 import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
-import { extractTextFromTypedMessage } from '@masknet/shared-base'
-import { parseURL } from '@masknet/shared-base'
+import { extractTextFromTypedMessage, parseURL } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -57,7 +56,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer url={link} />
     },
     PostInspector: function Component(): JSX.Element | null {
-        const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks())
+        const links = usePostInfoDetails.mentionedLinks()
 
         const link = links.find(isSnapshotURL)
         if (!link) return null
