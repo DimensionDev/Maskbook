@@ -47,6 +47,9 @@ const useWizardDialogStyles = makeStyles()((theme) => ({
         userSelect: 'none',
         boxSizing: 'border-box',
         width: 480,
+        '&.small': {
+            width: 384,
+        },
         overflow: 'hidden',
     },
     button: {
@@ -92,6 +95,7 @@ const useWizardDialogStyles = makeStyles()((theme) => ({
         justifyContent: 'space-around',
     },
     connectItem: {
+        flex: 1,
         height: 75,
         display: 'flex',
         flexDirection: 'column',
@@ -143,7 +147,7 @@ function ContentUI(props: ContentUIProps) {
                 <Box>
                     <main className={classes.content}>{props.content}</main>
                     <div>{props.tip}</div>
-                    <footer className={classes.footer}>{props.footer}</footer>
+                    {props.footer ? <footer className={classes.footer}>{props.footer}</footer> : null}
                     {props.dismiss ? <div>{props.dismiss}</div> : null}
                 </Box>
             )
@@ -153,6 +157,7 @@ function ContentUI(props: ContentUIProps) {
 }
 
 interface WizardDialogProps {
+    small?: boolean
     title?: string
     dialogType: SetupGuideStep
     optional?: boolean
@@ -164,11 +169,11 @@ interface WizardDialogProps {
 }
 
 function WizardDialog(props: WizardDialogProps) {
-    const { title, dialogType, content, tip, footer, dismiss, onClose } = props
+    const { small, title, dialogType, content, tip, footer, dismiss, onClose } = props
     const { classes } = useWizardDialogStyles()
 
     return (
-        <Paper className={classes.root}>
+        <Paper className={classNames(classes.root, small ? 'small' : '')}>
             <header className={classes.header}>
                 <Typography color="textPrimary" variant="h3" fontSize={24}>
                     {title}
@@ -225,6 +230,7 @@ function FindUsername({ personaName, username, avatar, onConnect, onDone, onClos
     return (
         <WizardDialog
             dialogType={SetupGuideStep.FindUsername}
+            small={!username}
             content={
                 <Box className={classes.connection}>
                     <Box className={classes.connectItem}>
@@ -233,19 +239,23 @@ function FindUsername({ personaName, username, avatar, onConnect, onDone, onClos
                             {personaName}
                         </Typography>
                     </Box>
-                    <Box className={classes.line} />
-                    <Box className={classes.connectItem}>
-                        <Box position="relative" width={48}>
-                            <img
-                                src={avatar}
-                                className={classNames(findUsernameClasses.avatar, connected ? 'connected' : '')}
-                            />
-                            {connected ? <VerifiedIcon className={findUsernameClasses.verified} /> : null}
-                        </Box>
-                        <Typography variant="body2" className={classes.name}>
-                            {username}
-                        </Typography>
-                    </Box>
+                    {username ? (
+                        <>
+                            <Box className={classes.line} />
+                            <Box className={classes.connectItem}>
+                                <Box position="relative" width={48}>
+                                    <img
+                                        src={avatar}
+                                        className={classNames(findUsernameClasses.avatar, connected ? 'connected' : '')}
+                                    />
+                                    {connected ? <VerifiedIcon className={findUsernameClasses.verified} /> : null}
+                                </Box>
+                                <Typography variant="body2" className={classes.name}>
+                                    {username}
+                                </Typography>
+                            </Box>
+                        </>
+                    ) : null}
                 </Box>
             }
             tip={
@@ -253,28 +263,34 @@ function FindUsername({ personaName, username, avatar, onConnect, onDone, onClos
                     className={classes.tip}
                     variant="body2"
                     dangerouslySetInnerHTML={{
-                        __html: connected ? t('user_guide_tip_connected') : t('setup_guide_find_username_text'),
+                        __html: !username
+                            ? t('setup_guide_login')
+                            : connected
+                            ? t('user_guide_tip_connected')
+                            : t('setup_guide_find_username_text'),
                     }}
                 />
             }
             footer={
-                <ActionButtonPromise
-                    className={classes.button}
-                    variant="contained"
-                    init={t('setup_guide_connect_auto')}
-                    waiting={t('connecting')}
-                    complete={t('ok')}
-                    failed={t('setup_guide_connect_failed')}
-                    executor={onConnect}
-                    completeOnClick={onDone}
-                    onComplete={() => setConnected(true)}
-                    disabled={!username || !personaName}
-                    completeIcon={null}
-                    failIcon={null}
-                    failedOnClick="use executor"
-                    data-testid="confirm_button">
-                    {t('confirm')}
-                </ActionButtonPromise>
+                username ? (
+                    <ActionButtonPromise
+                        className={classes.button}
+                        variant="contained"
+                        init={t('setup_guide_connect_auto')}
+                        waiting={t('connecting')}
+                        complete={t('ok')}
+                        failed={t('setup_guide_connect_failed')}
+                        executor={onConnect}
+                        completeOnClick={onDone}
+                        onComplete={() => setConnected(true)}
+                        disabled={!username || !personaName}
+                        completeIcon={null}
+                        failIcon={null}
+                        failedOnClick="use executor"
+                        data-testid="confirm_button">
+                        {t('confirm')}
+                    </ActionButtonPromise>
+                ) : null
             }
             onClose={onClose}
         />
@@ -385,13 +401,26 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         lastState.username || (lastRecognized.identifier.isUnknown ? '' : lastRecognized.identifier.userId)
     const [username, setUsername] = useState(getUsername)
 
-    useEffect(
-        () =>
-            activatedSocialNetworkUI.collecting.identityProvider?.recognized.addListener((val) => {
-                if (username === '' && !val.identifier.isUnknown) setUsername(val.identifier.userId)
-            }),
-        [username],
-    )
+    useEffect(() => {
+        activatedSocialNetworkUI.collecting.identityProvider?.recognized.addListener((val) => {
+            if (username === '' && !val.identifier.isUnknown) setUsername(val.identifier.userId)
+        })
+
+        if (username || ui.networkIdentifier !== 'twitter.com') return
+        // In order to collect user info after login, need to reload twitter once
+        let reloaded = false
+        const handler = () => {
+            // twitter will redirect to home page after login
+            if (!reloaded && window.location.pathname === '/home') {
+                reloaded = true
+                window.location.reload()
+            }
+        }
+        window.addEventListener('locationchange', handler)
+        return () => {
+            window.removeEventListener('locationchange', handler)
+        }
+    }, [username])
     //#endregion
 
     const { value: persona_ } = useAsync(async () => {

@@ -83,6 +83,7 @@
     "download": "Download",
     "failed": "Failed",
     "buy_now": "Buy Now",
+    "setup_guide_login": "Please sign up or log in to connect Mask network.",
     "setup_guide_find_username_text": "Mask needs the username to connect your profile to your persona.",
     "setup_guide_connect_auto": "Connect",
     "setup_guide_connect_failed": "Re-Connect",
