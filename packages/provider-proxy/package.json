@@ -9,8 +9,7 @@
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/web3-providers": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
-    "@masknet/web3-shared-evm": "workspace:*",
-    "urlcat": "^2.0.4"
+    "@masknet/web3-shared-evm": "workspace:*"
   },
   "devDependencies": {
     "@rollup/plugin-alias": "^3.1.8",

@@ -41,6 +41,7 @@
     "react-dom": "18.0.0-rc.0",
     "react-i18next": "^11.15.1",
     "ts-results": "3.3.0",
+    "urlcat": "^2.0.4",
     "web3-core": "1.5.2",
     "web3-core-method": "1.5.2"
   },

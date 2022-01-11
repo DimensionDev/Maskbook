@@ -13,7 +13,6 @@
     "lodash-unified": "1.0.1",
     "rss3-next": "^0.6.17",
     "socket.io-client": "2.4.0",
-    "uuid": "^8.3.2",
-    "urlcat": "^2.0.4"
+    "uuid": "^8.3.2"
   }
 }

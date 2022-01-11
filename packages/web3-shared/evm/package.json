@@ -21,7 +21,6 @@
     "punycode": "^2.1.1",
     "react-use": "^17.3.1",
     "unstated-next": "^1.1.0",
-    "urlcat": "^2.0.4",
     "use-subscription": "^1.5.1",
     "wallet.ts": "^1.0.1",
     "web3": "1.5.2",

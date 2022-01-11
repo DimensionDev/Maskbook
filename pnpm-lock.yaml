@@ -58,6 +58,7 @@ importers:
       ts-node: ^10.4.0
       ts-results: 3.3.0
       typescript: 4.6.0-dev.20211202
+      urlcat: ^2.0.4
       web3-core: 1.5.2
       web3-core-method: 1.5.2
       webpack: 5.65.0
@@ -84,6 +85,7 @@ importers:
       react-dom: 18.0.0-rc.0_react@18.0.0-rc.0
       react-i18next: 11.15.1_i18next@21.6.3+react@18.0.0-rc.0
       ts-results: 3.3.0
+      urlcat: 2.0.4
       web3-core: 1.5.2
       web3-core-method: 1.5.2
     devDependencies:
@@ -169,7 +171,6 @@ importers:
       react-use: ^17.3.1
       stream-browserify: ^3.0.0
       unstated-next: ^1.1.0
-      urlcat: ^2.0.4
       use-subscription: ^1.5.1
       uuid: ^8.3.2
       wallet.ts: ^1.0.1
@@ -210,7 +211,6 @@ importers:
       react-router-dom: 6.0.0-beta.4_154c53788755629e2430b224cbac559e
       react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
       unstated-next: 1.1.0
-      urlcat: 2.0.4
       use-subscription: 1.5.1_react@18.0.0-rc.0
       uuid: 8.3.2
       wallet.ts: 1.0.1
@@ -392,7 +392,6 @@ importers:
       stream-http: ^2.8.3
       swc-loader: ^0.1.15
       unstated-next: ^1.1.0
-      urlcat: ^2.0.4
       use-subscription: ^1.5.1
       uuid: ^8.3.2
       wallet.ts: ^1.0.1
@@ -516,7 +515,6 @@ importers:
       stream-browserify: 3.0.0
       stream-http: 2.8.3
       unstated-next: 1.1.0
-      urlcat: 2.0.4
       use-subscription: 1.5.1_react@18.0.0-rc.0
       uuid: 8.3.2
       wallet.ts: 1.0.1
@@ -598,7 +596,6 @@ importers:
       date-fns: ^2.27.0
       iframe-resizer-react: ^1.1.0
       react-use: ^17.3.1
-      urlcat: ^2.0.4
     dependencies:
       '@masknet/icons': link:../../icons
       '@masknet/plugin-infra': link:../../plugin-infra
@@ -608,7 +605,6 @@ importers:
       date-fns: 2.27.0
       iframe-resizer-react: 1.1.0_757a802188413a36d4f24237d13b8e90
       react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
-      urlcat: 2.0.4
 
   packages/plugins/Debugger:
     specifiers:
@@ -623,7 +619,6 @@ importers:
       bignumber.js: ^9.0.1
       date-fns: ^2.27.0
       react-use: ^17.3.1
-      urlcat: ^2.0.4
     dependencies:
       '@masknet/icons': link:../../icons
       '@masknet/plugin-infra': link:../../plugin-infra
@@ -636,7 +631,6 @@ importers:
       bignumber.js: 9.0.1
       date-fns: 2.27.0
       react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
-      urlcat: 2.0.4
 
   packages/plugins/FileService:
     specifiers:
@@ -705,7 +699,6 @@ importers:
       bignumber.js: ^9.0.1
       date-fns: ^2.27.0
       react-use: ^17.3.1
-      urlcat: ^2.0.4
     dependencies:
       '@masknet/icons': link:../../icons
       '@masknet/plugin-infra': link:../../plugin-infra
@@ -718,7 +711,6 @@ importers:
       bignumber.js: 9.0.1
       date-fns: 2.27.0
       react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
-      urlcat: 2.0.4
 
   packages/plugins/Wallet:
     specifiers:
@@ -794,13 +786,11 @@ importers:
       date-fns: ^2.27.0
       rollup: ^2.60.1
       rollup-plugin-dts: 4.0.1
-      urlcat: ^2.0.4
     dependencies:
       '@masknet/plugin-infra': link:../plugin-infra
       '@masknet/web3-providers': link:../web3-providers
       '@masknet/web3-shared-base': link:../web3-shared/base
       '@masknet/web3-shared-evm': link:../web3-shared/evm
-      urlcat: 2.0.4
     devDependencies:
       '@rollup/plugin-alias': 3.1.9_rollup@2.62.0
       '@rollup/plugin-commonjs': 21.0.1_rollup@2.62.0
@@ -854,7 +844,6 @@ importers:
       qrcode: ^1.5.0
       react-feather: ^2.0.9
       react-use: ^17.3.1
-      urlcat: ^2.0.4
       use-subscription: ^1.5.1
       uuid: ^8.3.2
     dependencies:
@@ -871,7 +860,6 @@ importers:
       qrcode: 1.5.0
       react-feather: 2.0.9_react@18.0.0-rc.0
       react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
-      urlcat: 2.0.4
       use-subscription: 1.5.1_react@18.0.0-rc.0
       uuid: 8.3.2
 
@@ -1007,7 +995,6 @@ importers:
       lodash-unified: 1.0.1
       rss3-next: ^0.6.17
       socket.io-client: 2.4.0
-      urlcat: ^2.0.4
       uuid: ^8.3.2
     dependencies:
       '@masknet/plugin-infra': link:../plugin-infra
@@ -1019,7 +1006,6 @@ importers:
       lodash-unified: 1.0.1_bd4845f8c1bf1d81a616b60758034d0a
       rss3-next: 0.6.17_typescript@4.6.0-dev.20211202
       socket.io-client: 2.4.0
-      urlcat: 2.0.4
       uuid: 8.3.2
 
   packages/web3-shared/base:
@@ -1055,7 +1041,6 @@ importers:
       punycode: ^2.1.1
       react-use: ^17.3.1
       unstated-next: ^1.1.0
-      urlcat: ^2.0.4
       use-subscription: ^1.5.1
       uuid: ^8.3.2
       wallet.ts: ^1.0.1
@@ -1078,7 +1063,6 @@ importers:
       punycode: 2.1.1
       react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
       unstated-next: 1.1.0
-      urlcat: 2.0.4
       use-subscription: 1.5.1_react@18.0.0-rc.0
       uuid: 8.3.2
       wallet.ts: 1.0.1
@@ -1095,14 +1079,12 @@ importers:
       '@masknet/web3-kit': workspace:*
       '@onflow/types': ^0.0.5
       react-use: ^17.3.1
-      urlcat: ^2.0.4
     dependencies:
       '@blocto/fcl': 0.0.78-alpha.8
       '@masknet/web3-constants': link:../../web3-constants
       '@masknet/web3-kit': link:../../web3-kit
       '@onflow/types': 0.0.5
       react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
-      urlcat: 2.0.4
 
   packages/web3-shared/solana:
     specifiers: {}
@@ -3479,6 +3461,7 @@ packages:
 
   /@dimensiondev/eslint-plugin/0.0.1-20220110102506-9f382ee_eslint@8.5.0:
     resolution: {integrity: sha512-DFNWb35mRshQA4OZzRmqPAENf49I+3/2i5mY8b37oi/i3sB+WjK8Z9BQjpz8uf+lURMhs1CdzJp9oQoTA08YZg==, tarball: download/@dimensiondev/eslint-plugin/0.0.1-20220110102506-9f382ee/00bf74704d413d6c24deba9f94bcfb2e13a94634263dc71695c71630d7716785}
+    engines: {node: '>= 14'}
     peerDependencies:
       eslint: '>= 8'
     dependencies:
@@ -25321,8 +25304,8 @@ packages:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==}
     dev: true
 
-  github.com/ProjectOpenSea/wyvern-js/1634ad0e2f9961accca62edbf4ac624effa18552:
-    resolution: {tarball: https://codeload.github.com/ProjectOpenSea/wyvern-js/tar.gz/1634ad0e2f9961accca62edbf4ac624effa18552}
+  github.com/ProjectOpenSea/wyvern-js/1e69699e8ba39edcb177b503caeaaefbf0c31385:
+    resolution: {commit: 1e69699e8ba39edcb177b503caeaaefbf0c31385, repo: git+ssh://git@github.com/ProjectOpenSea/wyvern-js.git, type: git}
     name: wyvern-js
     version: 3.2.0
     dependencies:
@@ -25342,7 +25325,7 @@ packages:
     dev: false
 
   github.com/ProjectOpenSea/wyvern-js/fabb7660f23f2252c141077e32193d281036299e:
-    resolution: {tarball: https://codeload.github.com/ProjectOpenSea/wyvern-js/tar.gz/fabb7660f23f2252c141077e32193d281036299e}
+    resolution: {commit: fabb7660f23f2252c141077e32193d281036299e, repo: git+ssh://git@github.com/ProjectOpenSea/wyvern-js.git, type: git}
     name: wyvern-js
     version: 3.2.0
     dependencies:
@@ -25374,7 +25357,7 @@ packages:
     dev: false
 
   github.com/ProjectOpenSea/wyvern-schemas/e1a08fcf8ce2b11a0fe9cbdc7c9f77c59fadef26:
-    resolution: {tarball: https://codeload.github.com/ProjectOpenSea/wyvern-schemas/tar.gz/e1a08fcf8ce2b11a0fe9cbdc7c9f77c59fadef26}
+    resolution: {commit: e1a08fcf8ce2b11a0fe9cbdc7c9f77c59fadef26, repo: git+ssh://git@github.com/ProjectOpenSea/wyvern-schemas.git, type: git}
     name: wyvern-schemas
     version: 0.10.7
     dependencies:
@@ -25383,13 +25366,13 @@ packages:
       bignumber.js: 6.0.0
       typed-promisify: 0.4.0
       web3-provider-engine: 13.8.0
-      wyvern-js: github.com/ProjectOpenSea/wyvern-js/1634ad0e2f9961accca62edbf4ac624effa18552
+      wyvern-js: github.com/ProjectOpenSea/wyvern-js/1e69699e8ba39edcb177b503caeaaefbf0c31385
     transitivePeerDependencies:
       - debug
     dev: false
 
   github.com/ProjectWyvern/ethereumjs-abi/3d2d89641a6ad5984929b6ca4b646452ec74f73d:
-    resolution: {tarball: https://codeload.github.com/ProjectWyvern/ethereumjs-abi/tar.gz/3d2d89641a6ad5984929b6ca4b646452ec74f73d}
+    resolution: {commit: 3d2d89641a6ad5984929b6ca4b646452ec74f73d, repo: git+ssh://git@github.com/ProjectWyvern/ethereumjs-abi.git, type: git}
     name: ethereumjs-abi
     version: 0.6.6
     dependencies:
@@ -25398,7 +25381,7 @@ packages:
     dev: false
 
   github.com/ahultgren/async-eventemitter/fa06e39e56786ba541c180061dbf2c0a5bbf951c:
-    resolution: {tarball: https://codeload.github.com/ahultgren/async-eventemitter/tar.gz/fa06e39e56786ba541c180061dbf2c0a5bbf951c}
+    resolution: {commit: fa06e39e56786ba541c180061dbf2c0a5bbf951c, repo: git+ssh://git@github.com/ahultgren/async-eventemitter.git, type: git}
     name: async-eventemitter
     version: 0.2.3
     dependencies:
@@ -25415,13 +25398,13 @@ packages:
     dev: false
 
   github.com/frozeman/bignumber.js-nolookahead/57692b3ecfc98bbdd6b3a516cb2353652ea49934:
-    resolution: {tarball: https://codeload.github.com/frozeman/bignumber.js-nolookahead/tar.gz/57692b3ecfc98bbdd6b3a516cb2353652ea49934}
+    resolution: {commit: 57692b3ecfc98bbdd6b3a516cb2353652ea49934, repo: git+ssh://git@github.com/frozeman/bignumber.js-nolookahead.git, type: git}
     name: bignumber.js
     version: 2.0.7
     dev: false
 
   github.com/locize/html-parse-stringify2/d463109433b2c49c74a081044f54b2a6a1ccad7c:
-    resolution: {tarball: https://codeload.github.com/locize/html-parse-stringify2/tar.gz/d463109433b2c49c74a081044f54b2a6a1ccad7c}
+    resolution: {commit: d463109433b2c49c74a081044f54b2a6a1ccad7c, repo: git+ssh://git@github.com/locize/html-parse-stringify2.git, type: git}
     name: html-parse-stringify2
     version: 2.0.1
     dependencies:

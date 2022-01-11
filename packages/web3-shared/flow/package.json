@@ -8,7 +8,6 @@
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-kit": "workspace:*",
     "@onflow/types": "^0.0.5",
-    "react-use": "^17.3.1",
-    "urlcat": "^2.0.4"
+    "react-use": "^17.3.1"
   }
 }

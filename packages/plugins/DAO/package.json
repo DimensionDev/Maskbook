@@ -11,7 +11,6 @@
     "iframe-resizer-react": "^1.1.0",
     "bignumber.js": "^9.0.1",
     "date-fns": "^2.27.0",
-    "react-use": "^17.3.1",
-    "urlcat": "^2.0.4"
+    "react-use": "^17.3.1"
   }
 }
