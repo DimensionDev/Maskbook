@@ -27,6 +27,7 @@ export interface SwapOOErrorResponse {
 
 export interface SwapOOData {
     data: string
+    estimatedGas: string
     priceImpact: number
     resAmount: number
     resCostGas: number

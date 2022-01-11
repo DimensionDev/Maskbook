@@ -1,5 +1,4 @@
-import { isTypedMessagePromise, isTypedMessageTuple, TypedMessage } from '..'
-import { flattenTypedMessage } from './flatten'
+import { flattenTypedMessage, isTypedMessagePromise, isTypedMessageTuple, TypedMessage } from '..'
 
 export function hasPromise(x: TypedMessage) {
     if (isTypedMessagePromise(x)) return true
@@ -7,17 +6,13 @@ export function hasPromise(x: TypedMessage) {
     return false
 }
 
-export async function waitTypedMessage(x: TypedMessage): Promise<TypedMessage> {
-    if (!hasPromise(x)) return x
-    const promise = collectPromise(x)
-    await Promise.allSettled(promise)
-    return flattenTypedMessage(x)
-}
-
-function collectPromise(x: TypedMessage, result: Promise<TypedMessage>[] = []): Promise<TypedMessage>[] {
-    if (isTypedMessagePromise(x)) return result.concat(x.promise)
+export function collectTypedMessagePromise(
+    x: TypedMessage,
+    result: Promise<TypedMessage>[] = [],
+): Promise<TypedMessage>[] {
+    if (isTypedMessagePromise(x)) return result.concat(x.promise.then(flattenTypedMessage))
     if (isTypedMessageTuple(x)) {
-        return result.concat(x.items.flatMap((x) => collectPromise(x)))
+        return result.concat(x.items.flatMap((x) => collectTypedMessagePromise(x)))
     }
     return result
 }

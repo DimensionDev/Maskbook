@@ -23,10 +23,9 @@ import formatDateTime from 'date-fns/format'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { TokenIcon } from '@masknet/shared'
+import { TokenIcon, useRemoteControlledDialog } from '@masknet/shared'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { getAssetAsBlobURL, getTextUILength, useI18N } from '../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '../../Wallet/messages'
 import { ITO_EXCHANGE_RATION_MAX, MSG_DELIMITER, TIME_WAIT_BLOCKCHAIN } from '../constants'
 import { sortTokens } from './helpers'
@@ -41,8 +40,7 @@ import { StyledLinearProgress } from './StyledLinearProgress'
 import { SwapGuide, SwapStatus } from './SwapGuide'
 import urlcat from 'urlcat'
 import { startCase } from 'lodash-unified'
-import { FACEBOOK_ID } from '../../../social-network-adaptor/facebook.com/base'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
+import { FACEBOOK_ID, isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 
 export interface IconProps {
@@ -284,8 +282,7 @@ export function ITO(props: ITO_Props) {
     } = useIfQualified(qualificationAddress, payload.contract_address)
     //#endregion
 
-    const isAccountSeller =
-        payload.seller.address.toLowerCase() === account.toLowerCase() && chainId === payload.chain_id
+    const isAccountSeller = isSameAddress(payload.seller.address, account) && chainId === payload.chain_id
     const noRemain = total_remaining.isZero()
 
     //#region remote controlled select provider dialog
