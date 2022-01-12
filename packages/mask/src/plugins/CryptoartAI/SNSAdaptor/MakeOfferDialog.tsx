@@ -8,6 +8,8 @@ import {
     useFungibleTokenWatched,
     useChainId,
     isNativeTokenAddress,
+    formatBalance,
+    TransactionStateType,
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -17,10 +19,8 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '../../Wallet/messages'
 import type { useAsset } from '../hooks/useAsset'
-import { formatBalance, TransactionStateType } from '@masknet/web3-shared-evm'
-import { resolvePaymentTokensOnCryptoartAI } from '../pipes'
+import { resolvePaymentTokensOnCryptoartAI, resolveAssetLinkOnCryptoartAI } from '../pipes'
 import { usePlaceBidCallback } from '../hooks/usePlaceBidCallback'
-import { resolveAssetLinkOnCryptoartAI } from '../pipes'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'

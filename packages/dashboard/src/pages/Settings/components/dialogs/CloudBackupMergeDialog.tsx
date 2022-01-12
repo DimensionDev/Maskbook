@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { MaskColorVar, MaskDialog, useCustomSnackbar } from '@masknet/theme'
+import { MaskColorVar, MaskDialog, useCustomSnackbar, makeStyles } from '@masknet/theme'
 import { Box, FormControlLabel, formControlLabelClasses, Radio, RadioGroup, styled, Typography } from '@mui/material'
 import { BackupInfoCard } from '../../../../components/Restore/BackupInfoCard'
 import type { BackupFileInfo } from '../../type'
@@ -10,7 +10,6 @@ import { useAsyncFn } from 'react-use'
 import { decryptBackup } from '@masknet/backup-format'
 import { decode, encode } from '@msgpack/msgpack'
 import PasswordField from '../../../../components/PasswordField'
-import { makeStyles } from '@masknet/theme'
 import { LoadingButton } from '../../../../components/LoadingButton'
 
 const StyledFormControlLabel = styled(FormControlLabel)({

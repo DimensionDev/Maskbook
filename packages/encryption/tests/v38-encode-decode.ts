@@ -1,10 +1,9 @@
-import './setup'
+import { ECDH_K256_PublicKey } from './setup'
 import { expect, test } from '@jest/globals'
 import { AESAlgorithmEnum, encodePayload, parsePayload, PayloadWellFormed, PublicKeyAlgorithmEnum } from '../src'
 import { None, Some } from 'ts-results'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { importAESFromJWK, importAsymmetryKeyFromJsonWebKeyOrSPKI } from '../src/utils'
-import { ECDH_K256_PublicKey } from './setup'
 
 test('Parse v38 encoded by old infra', async () => {
     const out = (await parsePayload(oldInfraOutput)).unwrap()
