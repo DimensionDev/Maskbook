@@ -415,9 +415,9 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         let reloaded = false
         const handler = () => {
             // twitter will redirect to home page after login
-            if (!(!reloaded && window.location.pathname === '/home')) return
+            if (!(!reloaded && location.pathname === '/home')) return
             reloaded = true
-            window.location.reload()
+            location.reload()
         }
         window.addEventListener('locationchange', handler)
         return () => {
