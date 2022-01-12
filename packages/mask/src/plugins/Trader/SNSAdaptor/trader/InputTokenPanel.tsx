@@ -13,8 +13,8 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     filledInput: {
         borderRadius: 12,
         padding: 12,
-        background: isDashboard ? MaskColorVar.primaryBackground2 : MaskColorVar.twitterInputBackground,
-        border: `1px solid ${isDashboard ? MaskColorVar.lineLight : MaskColorVar.twitterBorderLine}`,
+        background: isDashboard ? MaskColorVar.primaryBackground2 : theme.palette.background.default,
+        border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.divider}`,
         position: 'relative',
     },
     balance: {
@@ -49,7 +49,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         position: 'absolute',
         top: 18,
         right: 12,
-        color: isDashboard ? MaskColorVar.normalText : MaskColorVar.twitterSecond,
+        color: isDashboard ? MaskColorVar.normalText : theme.palette.text.secondary,
     },
     selectedTokenChip: {
         borderRadius: '22px!important',

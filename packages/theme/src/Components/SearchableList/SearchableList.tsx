@@ -4,7 +4,6 @@ import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-unified'
 import { Box, InputAdornment } from '@mui/material'
 import { makeStyles } from '../../makeStyles'
-import { MaskColorVar } from '../../constants'
 import { MaskSearchableItemInList } from './MaskSearchableItemInList'
 import { MaskTextField, MaskTextFieldProps } from '../TextField'
 import { SearchIcon } from '@masknet/icons'
@@ -147,7 +146,7 @@ const useStyles = makeStyles()((theme) => ({
         },
         '& > div::-webkit-scrollbar-thumb': {
             borderRadius: '4px',
-            backgroundColor: MaskColorVar.normalBackground,
+            backgroundColor: theme.palette.background.default,
         },
     },
 }))
