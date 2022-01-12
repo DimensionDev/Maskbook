@@ -16,29 +16,21 @@ export async function getPool(pid: string) {
     return poolFromChain
 }
 
-export async function getAllPoolsAsSeller(address: string, page: number, endBlock: number, chainId: ChainId) {
+export async function getAllPoolsAsSeller(address: string, endBlock: number, chainId: ChainId) {
     const { ITO2_CONTRACT_CREATION_BLOCK_HEIGHT } = getITOConstants(chainId)
 
-    //#region Get data from thegraph
-    const poolsFromSubgraph = await subgraph.getAllPoolsAsSeller(address, page, chainId)
-    //#endregion
-
-    //#region Get data from chain which has not been synced by thegraph.
-    const latestPoolFromSubgraph = poolsFromSubgraph[0]
-    const startBlockNumberFromChain = getLatestBlockNumberFromSubgraph(
-        latestPoolFromSubgraph,
-        page,
+    //#region Get data from chain.
+    const poolsFromChain = await chain.getAllPoolsAsSeller(
+        chainId,
         ITO2_CONTRACT_CREATION_BLOCK_HEIGHT,
+        endBlock,
+        address,
     )
-
-    const poolsFromChain = await chain.getAllPoolsAsSeller(chainId, startBlockNumberFromChain, endBlock, address)
-
     //#endregion
-    const poolsFromNetwork = poolsFromChain.concat(poolsFromSubgraph)
 
     //#region Inject password from database
-    const poolsFromDB = await database.getAllPoolsAsSeller(poolsFromNetwork.map((x) => x.pool.pid))
-    return poolsFromNetwork
+    const poolsFromDB = await database.getAllPoolsAsSeller(poolsFromChain.map((x) => x.pool.pid))
+    return poolsFromChain
         .map((x) => {
             const pool = poolsFromDB.find((y) => y.payload.pid === x.pool.pid)
             if (!pool) return x
