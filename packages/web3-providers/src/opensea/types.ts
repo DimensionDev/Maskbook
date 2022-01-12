@@ -102,7 +102,7 @@ export interface OpenSeaResponse extends Asset {
         value: string
     }[]
     num_sales: number
-    last_sale: AssetEvent | null
+    last_sale: NonFungibleTokenAPI.AssetEvent | null
     background_color: string | null
     transfer_fee: string | null
     transfer_fee_payment_token: OpenSeaFungibleToken | null
@@ -113,15 +113,15 @@ export interface OpenSeaResponse extends Asset {
     creator: OpenSeaCustomAccount
     endTime: string
 }
-
-interface AssetEvent {
-    event_type: string
-    event_timestamp: number
-    auction_type: string
-    total_price: string
-    transaction: Transaction | null
-    payment_token: OpenSeaFungibleToken | null
-}
+//
+// interface AssetEvent {
+//     event_type: string
+//     event_timestamp: number
+//     auction_type: string
+//     total_price: string
+//     transaction: Transaction | null
+//     payment_token: OpenSeaFungibleToken | null
+// }
 
 interface Transaction {
     from_account: OpenSeaCustomAccount
