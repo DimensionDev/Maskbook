@@ -7,7 +7,7 @@ import urlcat from 'urlcat'
 import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types'
 import { makeFileKeySigned } from '../helpers'
 
-function creatClient(): IPFSHTTPClient {
+function createClient(): IPFSHTTPClient {
     return create({
         host: 'ipfs.infura.io',
         port: 5001,
@@ -21,7 +21,7 @@ class IPFSAgent implements ProviderAgent {
 
     init() {
         if (this.client) return
-        this.client = creatClient()
+        this.client = createClient()
     }
 
     async makeAttachment(options: AttachmentOptions) {
