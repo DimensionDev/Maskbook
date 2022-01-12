@@ -113,7 +113,9 @@ export const getERC20TokenListItem =
                         {loadingAsset ? (
                             <LoadingAnimation />
                         ) : (
-                            new BigNumber(formatBalance(data.balance ?? 0, token.decimals, 6)).toFixed(6)
+                            Number.parseFloat(
+                                new BigNumber(formatBalance(data.balance ?? 0, token.decimals, 6)).toFixed(6),
+                            )
                         )}
                     </span>
                 )
