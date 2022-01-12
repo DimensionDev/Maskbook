@@ -12,10 +12,10 @@
         "Arbitrum": "arbitrum-assets",
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai-assets",
-        "Celo": "celo-assets",
-        "Fantom": "fantom-assets",
         "Boba": "boba-assets",
-        "Boba_Rinkeby": ""
+        "Boba_Rinkeby": "",
+        "Celo": "celo-assets",
+        "Fantom": "fantom-assets"
     },
     "TRANSACTIONS_SCOPE_NAME": {
         "Mainnet": "transactions",
@@ -30,9 +30,9 @@
         "Arbitrum": "arbitrum-transactions",
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai-transactions",
-        "Celo": "celo-transactions",
-        "Fantom": "fantom-transactions",
         "Boba": "boba-transactions",
-        "Boba_Rinkeby": ""
+        "Boba_Rinkeby": "",
+        "Celo": "celo-transactions",
+        "Fantom": "fantom-transactions"
     }
 }
