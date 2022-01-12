@@ -8,13 +8,19 @@ import type { SocialNetworkUI } from './types'
 import { managedStateCreator } from './utils'
 import { currentSetupGuideStatus } from '../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../settings/types'
-import { ECKeyIdentifier, Identifier, delay } from '@masknet/shared-base'
+import {
+    ECKeyIdentifier,
+    Identifier,
+    delay,
+    createSubscriptionFromAsync,
+    PersonaIdentifier,
+} from '@masknet/shared-base'
 import { Environment, assertNotEnvironment } from '@dimensiondev/holoflows-kit'
 import { startPluginSNSAdaptor } from '@masknet/plugin-infra'
 import { getCurrentSNSNetwork } from '../social-network-adaptor/utils'
 import { createPluginHost } from '../plugin-infra/host'
 import { definedSocialNetworkUIs } from './define'
-import { setupShadowRootPortal } from '../utils'
+import { setupShadowRootPortal, MaskMessages } from '../utils'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
@@ -101,6 +107,11 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                 },
                 personaSign: Services.Identity.signWithPersona,
                 walletSign: Services.Ethereum.personalSign,
+                currentPersona: createSubscriptionFromAsync(
+                    Services.Settings.getCurrentPersonaIdentifier,
+                    undefined as PersonaIdentifier | undefined,
+                    MaskMessages.events.currentPersonaIdentifier.on,
+                ),
             }
         }),
     )

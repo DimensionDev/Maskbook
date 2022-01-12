@@ -9,6 +9,7 @@ import type {
 } from '@masknet/shared-base'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
+import type { Subscription } from 'use-subscription'
 
 export declare namespace Plugin {
     /**
@@ -228,7 +229,10 @@ export namespace Plugin.Shared {
 
 /** This part runs in the SNSAdaptor */
 export namespace Plugin.SNSAdaptor {
-    export interface SNSAdaptorContext extends Shared.SharedContext {}
+    export interface SNSAdaptorContext extends Shared.SharedContext {
+        /** Get current persona */
+        currentPersona: Subscription<PersonaIdentifier | undefined>
+    }
     export interface Definition extends Shared.DefinitionDeferred<SNSAdaptorContext> {
         /** This UI will be rendered for each post found. */
         PostInspector?: InjectUI<{}>
