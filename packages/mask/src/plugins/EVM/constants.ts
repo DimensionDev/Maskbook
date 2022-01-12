@@ -154,7 +154,7 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         type: NetworkType.Aurora,
         name: 'Aurora',
         icon: new URL('./assets/aurora.png', import.meta.url),
-        iconColor: 'rgb(112 212 74)',
+        iconColor: 'rgb(112, 212, 74)',
         isMainnet: true,
     },
 ]

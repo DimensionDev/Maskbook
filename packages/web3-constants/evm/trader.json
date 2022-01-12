@@ -336,7 +336,10 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": "",
+        "Aurora_Betanet": ""
     },
     "QUICKSWAP_FACTORY_ADDRESS": {
         "Mainnet": "",
@@ -352,7 +355,10 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": "",
+        "Aurora_Betanet": ""
     },
     "QUICKSWAP_THEGRAPH": {
         "Mainnet": "",
@@ -596,7 +602,10 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": "",
+        "Aurora_Betanet": ""
     },
     "OPENOCEAN_ETH_ADDRESS": {
         "Mainnet": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -612,7 +621,10 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "0x0000000000000000000000000000000000000000",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": "",
+        "Aurora_Betanet": ""
     },
     "OPENOCEAN_EXCHANGE_PROXY_ADDRESS": {
         "Mainnet": "0x6352a56caadC4F1E25CD6c75970Fa768A3304e64",
@@ -647,10 +659,10 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Fantom": "",
         "Aurora": "0xa3a1eF5Ae6561572023363862e238aFA84C72ef5",
         "Aurora_Testnet": "",
-        "Aurora_Betanet": "",
-        "Fantom": ""
+        "Aurora_Betanet": ""
     },
     "WANNASWAP_ROUTER_ADDRESS": {
         "Mainnet": "",
@@ -666,10 +678,10 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Fantom": "",
         "Aurora": "0x8f1E0Cf0f9f269Bc977C38635E560aa5b0E63323",
         "Aurora_Testnet": "",
-        "Aurora_Betanet": "",
-        "Fantom": ""
+        "Aurora_Betanet": ""
     },
     "WANNASWAP_FACTORY_ADDRESS": {
         "Mainnet": "",
@@ -685,10 +697,10 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Fantom": "",
         "Aurora": "0x7928D4FeA7b2c90C732c10aFF59cf403f0C38246",
         "Aurora_Testnet": "",
-        "Aurora_Betanet": "",
-        "Fantom": ""
+        "Aurora_Betanet": ""
     },
     "WANNASWAP_THEGRAPH": {
         "Mainnet": "",
@@ -704,10 +716,10 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Aurora_Betanet": "",
-        "Fantom": ""
+        "Aurora_Betanet": ""
     },
     "WANNASWAP_INIT_CODE_HASH": {
         "Mainnet": "",
@@ -723,10 +735,10 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Fantom": "",
         "Aurora": "0xa06b8b0642cf6a9298322d0c8ac3c68c291ca24dc66245cf23aa2abc33b57e21",
         "Aurora_Testnet": "",
-        "Aurora_Betanet": "",
-        "Fantom": ""
+        "Aurora_Betanet": ""
     },
     "TRISOLARIS_ROUTER_ADDRESS": {
         "Mainnet": "",
@@ -742,10 +754,10 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Fantom": "",
         "Aurora": "0x2CB45Edb4517d5947aFdE3BEAbF95A582506858B",
         "Aurora_Testnet": "",
-        "Aurora_Betanet": "",
-        "Fantom": ""
+        "Aurora_Betanet": ""
     },
     "TRISOLARIS_FACTORY_ADDRESS": {
         "Mainnet": "",
@@ -761,10 +773,10 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Fantom": "",
         "Aurora": "0xc66F594268041dB60507F00703b152492fb176E7",
         "Aurora_Testnet": "",
-        "Aurora_Betanet": "",
-        "Fantom": ""
+        "Aurora_Betanet": ""
     },
     "TRISOLARIS_THEGRAPH": {
         "Mainnet": "",
@@ -780,10 +792,10 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
-        "Aurora_Betanet": "",
-        "Fantom": ""
+        "Aurora_Betanet": ""
     },
     "TRISOLARIS_INIT_CODE_HASH": {
         "Mainnet": "",
@@ -799,9 +811,9 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Fantom": "",
         "Aurora": "0x754e1d90e536e4c1df81b7f030f47b4ca80c87120e145c294f098c83a6cb5ace",
         "Aurora_Testnet": "",
-        "Aurora_Betanet": "",
-        "Fantom": ""
+        "Aurora_Betanet": ""
     }
 }

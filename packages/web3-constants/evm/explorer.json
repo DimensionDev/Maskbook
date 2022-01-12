@@ -12,8 +12,8 @@
         "Arbitrum": "https://api.arbscan.io/api",
         "Arbitrum_Rinkeby": "",
         "xDai": "https://blockscout.com/xdai/mainnet/",
-        "Fantom": "https://api.ftmscan.com/api",
         "Celo": "https://explorer.celo.org/api",
+        "Fantom": "https://api.ftmscan.com/api",
         "Aurora": "https://explorer.mainnet.aurora.dev/api",
         "Aurora_Testnet": "https://explorer.testnet.aurora.dev/api",
         "Aurora_Betanet": "https://explorer.betanet.aurora.dev/api"
