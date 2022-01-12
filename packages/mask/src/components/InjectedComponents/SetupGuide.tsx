@@ -465,9 +465,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     }
 
     const onCreate = async () => {
-        const content = t('setup_guide_say_hello_content')
-        copyToClipboard(content)
-        ui.automation.maskCompositionDialog?.open?.(makeTypedMessageText(content), {
+        ui.automation.maskCompositionDialog?.open?.(makeTypedMessageText(t('setup_guide_say_hello_content')), {
             target: 'Everyone',
         })
     }
