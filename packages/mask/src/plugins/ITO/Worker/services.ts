@@ -1,4 +1,4 @@
-import type { JSON_PayloadInMask, PoolRecord, PoolFromNetwork } from '../types'
+import type { JSON_PayloadInMask, PoolRecord } from '../types'
 import * as subgraph from './apis/subgraph'
 import * as chain from './apis/chain'
 import * as database from './database'
@@ -70,14 +70,6 @@ export async function discoverPool(from: string, payload: JSON_PayloadInMask) {
     await database.addPoolIntoDB(record)
 }
 
-function getLatestBlockNumberFromSubgraph(
-    poolFromSubgraph: PoolFromNetwork | undefined,
-    page: number,
-    creationBlockNumber: number | undefined,
-) {
-    return page === 0
-        ? poolFromSubgraph?.pool
-            ? poolFromSubgraph.pool.block_number! + 1
-            : creationBlockNumber
-        : undefined
+export async function getClaimAllPools(chainId: ChainId, endBlock: number, swapperAddress: string) {
+    return chain.getClaimAllPools(chainId, endBlock, swapperAddress)
 }
