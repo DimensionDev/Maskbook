@@ -14,6 +14,7 @@
         "xDai": "xdai-assets",
         "Celo": "celo-assets",
         "Metis": "metis-assets",
+        "Metis_Stardust": "",
         "Fantom": "fantom-assets"
     },
     "TRANSACTIONS_SCOPE_NAME": {
@@ -31,6 +32,7 @@
         "xDai": "xdai-transactions",
         "Celo": "celo-transactions",
         "Metis": "metis-transactions",
+        "Metis_Stardust": "",
         "Fantom": "fantom-transactions"
     }
 }

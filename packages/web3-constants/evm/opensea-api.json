@@ -13,6 +13,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Metis": "",
+        "Metis_Stardust": "",
         "Fantom": ""
     },
     "GET_SINGLE_ASSET_URL": {
@@ -29,6 +31,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Metis": "",
+        "Metis_Stardust": "",
         "Fantom": ""
     },
     "GET_ASSETS_URL": {
@@ -45,6 +49,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Metis": "",
+        "Metis_Stardust": "",
         "Fantom": ""
     }
 }

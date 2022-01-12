@@ -572,7 +572,8 @@
         "xDai": "",
         "Celo": "",
         "Metis": "",
-        "Metis_Stardust": ""
+        "Metis_Stardust": "",
+        "Fantom": ""
     },
     "NETSWAP_ROUTER_ADDRESS": {
         "Mainnet": "",
@@ -589,7 +590,8 @@
         "xDai": "",
         "Celo": "4",
         "Metis": "0x70f51d68D16e8f9e418441280342BD43AC9Dff9f",
-        "Metis_Stardust": "0xA327674305d490199B76b186Ed360fCad3296949"
+        "Metis_Stardust": "0xA327674305d490199B76b186Ed360fCad3296949",
+        "Fantom": ""
     },
     "OPENOCEAN_ETH_ADDRESS": {
         "Mainnet": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -606,7 +608,8 @@
         "xDai": "",
         "Celo": "",
         "Metis": "0x1E876cCe41B7b844FDe09E38Fa1cf00f213bFf56",
-        "Metis_Stardust": "0x19BCFEe83ee0D77158b0c151150aFb0f389E4721"
+        "Metis_Stardust": "0x19BCFEe83ee0D77158b0c151150aFb0f389E4721",
+        "Fantom": ""
     },
     "NETSWAP_FACTORY_ADDRESS": {
         "Mainnet": "",
@@ -623,7 +626,8 @@
         "xDai": "",
         "Celo": "4",
         "Metis": "0x70f51d68D16e8f9e418441280342BD43AC9Dff9f",
-        "Metis_Stardust": "0xA327674305d490199B76b186Ed360fCad3296949"
+        "Metis_Stardust": "0xA327674305d490199B76b186Ed360fCad3296949",
+        "Fantom": ""
     },
     "NETSWAP_THEGRAPH": {
         "Mainnet": "",
@@ -640,7 +644,8 @@
         "xDai": "",
         "Celo": "",
         "Metis": "",
-        "Metis_Stardust": ""
+        "Metis_Stardust": "",
+        "Fantom": ""
     },
     "NETSWAP_INIT_CODE_HASH": {
         "Mainnet": "",
@@ -651,13 +656,13 @@
         "BSC": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
         "BSCT": "",
         "Matic": "0x0000000000000000000000000000000000001010",
-        "Metis": "0x966d65068a6a30f10fd1fa814258637a34e059081d79daa94f3e2b6cec48e810",
-        "Metis_Stardust": "0x68cc803ebc27f23a62dd9f9251e76a9d6f2c659f76c92ffbd5e62d5b877384d6",
         "Mumbai": "",
         "Arbitrum": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
         "Arbitrum_Rinkeby": "",
         "xDai": "0x0000000000000000000000000000000000000000",
         "Celo": "",
+        "Metis": "0x966d65068a6a30f10fd1fa814258637a34e059081d79daa94f3e2b6cec48e810",
+        "Metis_Stardust": "0x68cc803ebc27f23a62dd9f9251e76a9d6f2c659f76c92ffbd5e62d5b877384d6",
         "Fantom": ""
     },
     "OPENOCEAN_EXCHANGE_PROXY_ADDRESS": {
@@ -674,6 +679,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "0x6352a56caadC4F1E25CD6c75970Fa768A3304e64",
         "Celo": "",
+        "Metis": "",
+        "Metis_Stardust": "",
         "Fantom": ""
     },
     "TETHYS_FACTORY_ADDRESS": {
@@ -691,7 +698,8 @@
         "xDai": "",
         "Celo": "4",
         "Metis": "0x70f51d68D16e8f9e418441280342BD43AC9Dff9f",
-        "Metis_Stardust": "0xA327674305d490199B76b186Ed360fCad3296949"
+        "Metis_Stardust": "0xA327674305d490199B76b186Ed360fCad3296949",
+        "Fantom": ""
     },
     "TETHYS_THEGRAPH": {
         "Mainnet": "",
@@ -708,7 +716,8 @@
         "xDai": "",
         "Celo": "",
         "Metis": "0x2CdFB20205701FF01689461610C9F321D1d00F80",
-        "Metis_Stardust": ""
+        "Metis_Stardust": "",
+        "Fantom": ""
     },
     "TETHYS_INIT_CODE_HASH": {
         "Mainnet": "",
@@ -719,13 +728,13 @@
         "BSC": "",
         "BSCT": "",
         "Matic": "",
-        "Metis": "0xef3f1aabf6b944a53c06890783ddef260a21995d1eaea6d52f980cfe082a877d",
-        "Metis_Stardust": "",
         "Mumbai": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Metis": "0xef3f1aabf6b944a53c06890783ddef260a21995d1eaea6d52f980cfe082a877d",
+        "Metis_Stardust": "",
         "Fantom": ""
     },
     "TETHYS_ROUTER_ADDRESS": {
@@ -743,6 +752,7 @@
         "xDai": "",
         "Celo": "",
         "Metis": "0x81b9FA50D5f5155Ee17817C21702C3AE4780AD09",
-        "Metis_Stardust": ""
+        "Metis_Stardust": "",
+        "Fantom": ""
     }
 }
