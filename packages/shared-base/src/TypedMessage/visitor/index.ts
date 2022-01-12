@@ -10,7 +10,7 @@ export function visitEachTypedMessageChild(node: TypedMessage, visitor: Visitor)
     }
 
     if (isSerializableTypedMessage(node) && 'alt' in node) {
-        let alt = visitor(node.alt)
+        const alt = visitor(node.alt)
         if (!isSerializableTypedMessage(alt)) {
             console.warn(
                 '[@masknet/typed-message] You must return a serializable message in this position. Original:',

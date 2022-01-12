@@ -56,7 +56,7 @@ export async function* decryptionWithSocialNetworkDecoding(
     context: DecryptionContext,
 ) {
     yield* new EventIterator<[id: string, progress: DecryptProgress | DecryptionInfo]>((flow) => {
-        let globalID = 0
+        const globalID = 0
         for (const e of encoded) {
             let decoded: string[] | Promise<string[]> = []
             if (e.type === 'text') {

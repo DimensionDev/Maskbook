@@ -1,5 +1,5 @@
 import { EventIterator } from 'event-iterator'
-import { getGunInstance, GunRoot } from './instance'
+import { getGunInstance } from './instance'
 
 function getGunNodeFromPath(path: string[]) {
     const resultNode = path.reduce((gun, path) => gun.get(path as never), getGunInstance())

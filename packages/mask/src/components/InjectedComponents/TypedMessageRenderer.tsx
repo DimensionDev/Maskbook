@@ -14,7 +14,6 @@ import {
     TypedMessageEmpty,
     makeTypedMessageText,
 } from '@masknet/shared-base'
-import { Image } from '../shared/Image'
 import { useAsync } from 'react-use'
 import { getRendererOfTypedMessage, registerTypedMessageRenderer } from '../../protocols/typed-message'
 import { useI18N } from '../../utils'

@@ -6,7 +6,7 @@ export function socialNetworkDecoder(network: SocialNetworkEnum, content: string
         return TwitterDecoder(content)
             .map((x) => [x])
             .unwrapOr([])
-    const all = content.match(/(🎼[\d\/\|\w=_\+]+:\|\|)/gi)
+    const all = content.match(/(🎼[\w+/=|]+:\|\|)/gi)
     if (all) return all
     return []
 }

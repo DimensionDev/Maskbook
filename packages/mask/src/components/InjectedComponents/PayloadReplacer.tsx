@@ -27,9 +27,9 @@ interface TypedMessageExtension_MaskPayloadReplacer extends TypedMessage {
     type: typeof TypedMessageExtension_MaskPayloadReplacerType
 }
 // match the link version payload
-const shouldReplace = /^https?:\/\/mask(\.io|book\.com)\/\?PostData_v/i
+const shouldReplace = /^https?:\/\/mask(\.io|book\.com)\/\?postdata_v/i
 // match the text version payload
-const shouldReplace2 = /(🎼[\d\/\|\w=_\+]+:\|\|)/gi
+const shouldReplace2 = /(🎼[\w+/=|]+:\|\|)/gi
 const PayloadReplacer = memo(({ link }: { link?: string }) => {
     const { t } = useI18N()
     const { classes } = useStyle()
