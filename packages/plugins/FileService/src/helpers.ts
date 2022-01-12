@@ -6,6 +6,10 @@ import schemaV2 from './schema-v2.json'
 import type { Result } from 'ts-results'
 import { isNil } from 'lodash-unified'
 import { encodeArrayBuffer, encodeText, unreachable } from '@dimensiondev/kit'
+import { createLookupTableResolver } from '@masknet/web3-kit'
+// import { ChainId, ProviderType } from '../types'
+
+
 
 const reader_v1 = createTypedMessageMetadataReader<FileInfoV1>(META_KEY_1, schemaV1)
 const reader_v2 = createTypedMessageMetadataReader<FileInfo>(META_KEY_2, schemaV2)
@@ -31,15 +35,11 @@ export async function makeFileKeySigned(fileKey: string | undefined | null) {
     return [signed, exportedKey].map(encodeArrayBuffer)
 }
 
-export function getGatewayAPI(provider: Provider) {
-    switch (provider) {
-        case Provider.arweave:
-            return 'https://arweave.net'
-        case Provider.ipfs:
-            return 'https://infura-ipfs.io/ipfs'
-        case Provider.swarm:
-            return 'https://bee-2.gateway.ethswarm.org/bzz'
-        default:
-            unreachable(provider)
-    }
-}
+export const resolveGatewayAPI = createLookupTableResolver<Provider, string>(
+    {
+        [Provider.arweave]: 'https://arweave.net',
+        [Provider.ipfs]: 'https://infura-ipfs.io/ipfs',
+        [Provider.swarm]: 'https://bee-2.gateway.ethswarm.org/bzz',
+    },
+    () => 'Unknown provider',
+)

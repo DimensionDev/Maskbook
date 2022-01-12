@@ -10,7 +10,7 @@ import { useI18N } from '../../locales/i18n_generated'
 import { FileRouter } from '../../constants'
 import type { FileInfo } from '../../types'
 import { FileName } from './FileName'
-import { getGatewayAPI } from '../../helpers'
+import { resolveGatewayAPI } from '../../helpers'
 import urlcat from 'urlcat'
 
 const useStyles = makeStyles()({
@@ -68,7 +68,7 @@ export const Uploaded: React.FC = () => {
             return
         }
 
-        const linkPrefix = getGatewayAPI(state.provider)
+        const linkPrefix = resolveGatewayAPI(state.provider)
         const link = urlcat(linkPrefix, '/:txId', { txId: state.landingTxID })
         open(state.key ? `${link}#${state.key}` : link)
     }

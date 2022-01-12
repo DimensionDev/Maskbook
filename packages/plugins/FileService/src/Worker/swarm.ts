@@ -19,9 +19,8 @@ class SwarmAgent implements ProviderAgent {
     bee!: Bee
 
     init() {
-        if (!this.bee) {
-            this.bee = createBee()
-        }
+        if (this.bee) return 
+        this.bee = createBee()
     }
 
     async makePayload(data: Uint8Array, type: string, name: string) {

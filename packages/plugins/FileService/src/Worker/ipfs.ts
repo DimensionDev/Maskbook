@@ -20,9 +20,8 @@ class IPFSAgent implements ProviderAgent {
     client!: IPFSHTTPClient
 
     init() {
-        if (!this.client) {
-            this.client = creatClient()
-        }
+        if (this.client) return
+        this.client = creatClient()
     }
 
     async makeAttachment(options: AttachmentOptions) {

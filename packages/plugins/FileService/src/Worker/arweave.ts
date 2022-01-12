@@ -14,13 +14,12 @@ class ArweaveAgent implements ProviderAgent {
     static stage: Record<Transaction['id'], Transaction> = {}
 
     init() {
-        if (!this.instance) {
-            this.instance = Arweave.init({
-                host: 'arweave.net',
-                port: 443,
-                protocol: 'https',
-            })
-        }
+        if (this.instance) return
+        this.instance = Arweave.init({
+            host: 'arweave.net',
+            port: 443,
+            protocol: 'https',
+        })
     }
 
     async makeAttachment(options: AttachmentOptions) {

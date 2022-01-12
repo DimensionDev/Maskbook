@@ -5,7 +5,7 @@ import { DownloadCloud, File } from 'react-feather'
 import { useI18N } from '../locales/i18n_generated'
 import { CopyableCode } from './components/Copyable'
 import type { FileInfo } from '../types'
-import { getGatewayAPI } from '../helpers'
+import { resolveGatewayAPI } from '../helpers'
 import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
@@ -59,7 +59,7 @@ export function Preview({ info }: { info: FileInfo }) {
         </Typography>
     )
 
-    const linkPrefix = getGatewayAPI(info.provider)
+    const linkPrefix = resolveGatewayAPI(info.provider)
     const link = urlcat(linkPrefix, '/:txId', { txId: info.landingTxID })
 
     const onClick = (event: React.MouseEvent) => {
