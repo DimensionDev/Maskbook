@@ -36,7 +36,7 @@ export function useNFTs(user: User | undefined) {
 
     useEffect(() => {
         const tempNFTs: FilterContract[] = cloneDeep(initContracts)
-        if (collectibles.length && state === SocketState.done) {
+        if (collectibles.length && (state === SocketState.done || state === SocketState.sent)) {
             const total = [...fetchTotal, ...collectibles]
             setFetchTotal(total)
             for (const NFT of total) {
