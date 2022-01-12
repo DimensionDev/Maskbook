@@ -83,6 +83,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 15,
     },
 }))
+
 const SUPPORTED_CHAIN_ID_LIST = [
     ChainId.Mainnet,
     ChainId.BSC,
