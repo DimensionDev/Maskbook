@@ -6,7 +6,7 @@ import { base } from '../base'
 import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils'
 import { PLUGIN_NAME } from '../constants'
 import type { PayloadType } from '../types'
-import { getTypedMessageContent } from '../../../protocols/typed-message'
+import { extractTextFromTypedMessage } from '@masknet/typed-message/base'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -20,7 +20,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return asset ? renderPostInspector(asset) : null
     },
     DecryptedInspector: function Component(props) {
-        const collectibleUrl = getRelevantUrl(getTypedMessageContent(props.message))
+        const collectibleUrl = getRelevantUrl(extractTextFromTypedMessage(props.message).unwrapOr(''))
         const asset = getAssetInfoFromURL(collectibleUrl)
         return asset ? renderPostInspector(asset) : null
     },

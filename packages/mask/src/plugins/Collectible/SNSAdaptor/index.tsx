@@ -6,9 +6,9 @@ import { base } from '../base'
 import type { CollectibleJSON_Payload } from '../types'
 import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils'
 import { PLUGIN_NAME, PLUGIN_ID } from '../constants'
-import { getTypedMessageContent } from '../../../protocols/typed-message'
 import { NFTPage } from './NFTPage'
 import { AddressName, AddressNameType } from '@masknet/web3-shared-evm'
+import { extractTextFromTypedMessage } from '@masknet/typed-message/base'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -21,7 +21,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return asset ? renderPostInspector(asset) : null
     },
     DecryptedInspector: function Component(props) {
-        const collectibleUrl = getRelevantUrl(getTypedMessageContent(props.message))
+        const collectibleUrl = getRelevantUrl(extractTextFromTypedMessage(props.message).unwrapOr(''))
         const asset = getAssetInfoFromURL(collectibleUrl)
         return asset ? renderPostInspector(asset) : null
     },
