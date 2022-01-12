@@ -28,7 +28,9 @@
         "Boba": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/288/tokens.json"],
         "Boba_Rinkeby": [
             "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/28/tokens.json"
-        ]
+        ],
+        "Celo": [],
+        "Fantom": []
     },
     "BALANCE_CHECKER_ADDRESS": {
         "Mainnet": "0xb1F8e55c7f64D203C1400B9D8555d050F94aDF39",
@@ -43,7 +45,7 @@
         "Arbitrum": "0xAb7B1bE4233A04e5C43a810E75657ECED8E5463B",
         "Arbitrum_Rinkeby": "0xF98dC9391273c5ab9fa2c980A8d4F875ece802db",
         "xDai": "0x96c7D011cdFD467f551605f0f5Fce279F86F4186",
-        "Boba": "",
+        "Boba": "0xAe5C53294003f72B27CEF476680979453193673d",
         "Boba_Rinkeby": "0x2690906609A9AF3bF08B8384CD9A0F97A88A7E9c",
         "Celo": "0x8e28F1d64ceD52b9A09aB1AA3071Aa3c05802d1F",
         "Fantom": "0xc119574d5fb333f5ac018658d4d8b5035e16bf39"

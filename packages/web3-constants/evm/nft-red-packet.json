@@ -12,7 +12,7 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
-        "Boba": "",
+        "Boba": "0x3f64DFB6009d138DfD7b62916f3322A438d8b00D",
         "Boba_Rinkeby": "0xdcA6F476EebCDE8FE8b072e3fC80dBC28dC209b3",
         "Celo": "",
         "Fantom": ""
@@ -30,7 +30,7 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
-        "Boba": "",
+        "Boba": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-nft-red-packet-boba",
         "Boba_Rinkeby": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-nft-red-packet-boba-rinkeby",
         "Celo": "",
         "Fantom": ""

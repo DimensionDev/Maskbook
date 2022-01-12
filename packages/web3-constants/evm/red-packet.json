@@ -66,7 +66,7 @@
         "Arbitrum": "0x83D6b366f21e413f214EB077D5378478e71a5eD2",
         "Arbitrum_Rinkeby": "0x4A77E797031257db72F7D2C3Ec08a4FAc5c8CfE9",
         "xDai": "0x54a0A221C25Fc0a347EC929cFC5db0be17fA2a2B",
-        "Boba": "",
+        "Boba": "0x5de932BD252DD79231C9eDB5F2e30D488B785109",
         "Boba_Rinkeby": "0xB4D669bc117735FdA44e90e52795132187705B21",
         "Celo": "",
         "Fantom": ""
@@ -84,7 +84,7 @@
         "Arbitrum": 909051,
         "Arbitrum_Rinkeby": 0,
         "xDai": 18101937,
-        "Boba": 0,
+        "Boba": 284557,
         "Boba_Rinkeby": 87121,
         "Celo": 0,
         "Fantom": 0
