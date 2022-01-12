@@ -238,7 +238,12 @@ export const GasSetting1559 = memo(() => {
             value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
             value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION
         ) {
-            if (value?.computedPayload._tx.maxFeePerGas && value?.computedPayload._tx.maxPriorityFeePerGas) {
+            if (
+                value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION &&
+                !['transfer', 'transferFrom', 'approve'].includes(value?.computedPayload.name)
+            ) {
+                setOption(1)
+            } else if (value?.computedPayload._tx.maxFeePerGas && value?.computedPayload._tx.maxPriorityFeePerGas) {
                 setValue(
                     'maxPriorityFeePerGas',
                     fromWei(
