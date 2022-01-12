@@ -1,6 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
+import { UnlockIcon } from '@masknet/icons'
 import { base } from '../base'
-import { pluginIcon, pluginMetaKey, pluginName } from '../constants'
+import { pluginMetaKey, pluginName } from '../constants'
 import type { UnlockLockInMetadata } from '../types'
 import { UnlockProtocolMetadataReader } from '../helpers'
 import UnlockProtocolDialog from './UnlockProtocolDialog'
@@ -17,7 +18,17 @@ const sns: Plugin.SNSAdaptor.Definition = {
     CompositionDialogMetadataBadgeRender: new Map([
         [pluginMetaKey, (meta: UnlockLockInMetadata) => 'An Unlock Protocol post has been added'],
     ]),
-    CompositionDialogEntry: { label: pluginIcon + ' ' + pluginName, dialog: UnlockProtocolDialog },
+    CompositionDialogEntry: {
+        label: {
+            fallback: (
+                <>
+                    <UnlockIcon style={{ width: 16, height: 16 }} />
+                    {pluginName}
+                </>
+            ),
+        },
+        dialog: UnlockProtocolDialog,
+    },
 }
 
 export default sns

@@ -38,11 +38,11 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         },
         reverseIcon: {
             cursor: 'pointer',
-            color: isDashboard ? `${theme.palette.text.primary}!important` : undefined,
+            color: isDashboard ? `${theme.palette.text.primary}!important` : theme.palette.text.strong,
         },
         card: {
-            backgroundColor: isDashboard ? MaskColorVar.primaryBackground2 : MaskColorVar.twitterInputBackground,
-            border: `1px solid ${isDashboard ? MaskColorVar.lineLight : MaskColorVar.twitterBorderLine}`,
+            backgroundColor: isDashboard ? MaskColorVar.primaryBackground2 : theme.palette.background.default,
+            border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.divider}`,
             borderRadius: 12,
             padding: 12,
         },
@@ -56,7 +56,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         },
 
         reverse: {
-            backgroundColor: isDashboard ? MaskColorVar.lightBackground : MaskColorVar.twitterInputBackground,
+            backgroundColor: isDashboard ? MaskColorVar.lightBackground : theme.palette.background.default,
             width: 32,
             height: 32,
             borderRadius: 16,
@@ -67,7 +67,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         },
         chevron: {
             fill: 'none',
-            stroke: theme.palette.text.primary,
+            stroke: isDashboard ? theme.palette.text.primary : theme.palette.text.strong,
             transition: 'all 300ms',
             cursor: 'pointer',
         },
@@ -154,7 +154,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         dropIcon: {
             width: 20,
             height: 24,
-            fill: isDashboard ? theme.palette.text.primary : MaskColorVar.twitterButton,
+            fill: isDashboard ? theme.palette.text.primary : theme.palette.text.strong,
         },
         connectWallet: {
             marginTop: 0,

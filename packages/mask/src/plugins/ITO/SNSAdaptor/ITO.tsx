@@ -152,7 +152,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         marginTop: theme.spacing(1),
     },
     actionButton: {
-        minHeight: 'auto',
         width: '100%',
     },
     textProviderErr: {
@@ -770,7 +769,7 @@ export function ITO(props: ITO_Props) {
                                 variant="contained"
                                 size="large"
                                 className={classes.actionButton}>
-                                <Typography>{t('plugin_ito_enter')}</Typography>
+                                {t('plugin_ito_enter')}
                             </ActionButton>
                         </Grid>
                         <Grid item xs={6}>
@@ -779,7 +778,7 @@ export function ITO(props: ITO_Props) {
                                 variant="contained"
                                 size="large"
                                 className={classes.actionButton}>
-                                <Typography>{t('plugin_ito_share')}</Typography>
+                                {t('plugin_ito_share')}
                             </ActionButton>
                         </Grid>
                     </Grid>
