@@ -1,6 +1,12 @@
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
-import type { TypedMessage, TypedMessageTuple, ScopedStorage, ProfileIdentifier } from '@masknet/shared-base'
+import type {
+    TypedMessage,
+    TypedMessageTuple,
+    ScopedStorage,
+    ProfileIdentifier,
+    PersonaIdentifier,
+} from '@masknet/shared-base'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
 
@@ -62,6 +68,10 @@ export namespace Plugin.Shared {
          * A lightweight K/V storage used to store some simple data.
          */
         createKVStorage<T extends object>(type: 'memory' | 'persistent', defaultValues: T): ScopedStorage<T>
+        /** Sign a message with persona */
+        personaSign(payload: PersonaSignRequest): Promise<PersonaSignResult>
+        /** Sign a message with wallet */
+        walletSign(message: string, address: string): Promise<string>
     }
     export interface Definition {
         /**
@@ -192,6 +202,27 @@ export namespace Plugin.Shared {
          */
         // TODO: implement this flag when there is use case.
         // UX_NEED_APPROVAL_manualMinimalMode?: boolean
+    }
+
+    export interface PersonaSignRequest {
+        /** The message to be signed. */
+        message: string
+        /** Use what method to sign this message? */
+        method: 'eth'
+    }
+    export interface PersonaSignResult {
+        /** The persona user selected to sign the message */
+        persona: PersonaIdentifier
+        signature: {
+            // type from ethereumjs-util
+            // raw: ECDSASignature
+            EIP2098: string
+            signature: string
+        }
+        /** Persona converted to a wallet address */
+        address: string
+        /** Message in hex */
+        messageHex: string
     }
 }
 

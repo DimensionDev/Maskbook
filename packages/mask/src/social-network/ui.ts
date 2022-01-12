@@ -99,6 +99,8 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                         return InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
                     else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
                 },
+                personaSign: Services.Identity.signWithPersona,
+                walletSign: Services.Ethereum.personalSign,
             }
         }),
     )
