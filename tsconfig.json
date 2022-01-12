@@ -16,7 +16,9 @@
     { "path": "./packages/encryption/tsconfig.tests.json" },
     { "path": "./packages/shared-base/tsconfig.tests.json" },
     // All plugins should be type checked too
-    { "path": "./packages/plugins" }
+    { "path": "./packages/plugins" },
+    { "path": "./packages/typed-message/base" },
+    { "path": "./packages/typed-message/dom" }
   ],
   "compilerOptions": {
     // Classification follows https://www.typescriptlang.org/tsconfig

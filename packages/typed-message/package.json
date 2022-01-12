@@ -1,0 +1,16 @@
+{
+  "name": "@masknet/typed-message",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {},
+  "dependencies": {
+    "@msgpack/msgpack": "^2.7.1",
+    "immer": "^9.0.7",
+    "z-schema": "^5.0.2"
+  },
+  "exports": {
+    "./base": "./dist/base/index.js",
+    "./dom": "./dist/dom/index.js"
+  }
+}

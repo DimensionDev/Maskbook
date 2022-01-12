@@ -1,4 +1,6 @@
-import { flattenTypedMessage, isTypedMessagePromise, isTypedMessageTuple, TypedMessage } from '..'
+import { flattenTypedMessage } from './flatten'
+import { isTypedMessagePromise, isTypedMessageTuple } from '../core'
+import type { TypedMessage } from '../base'
 
 export function hasPromise(x: TypedMessage) {
     if (isTypedMessagePromise(x)) return true

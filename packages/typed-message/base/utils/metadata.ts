@@ -1,5 +1,5 @@
 import { Result, Ok, Err, Some, Option, None } from 'ts-results'
-import type { TypedMessage } from './base'
+import type { TypedMessage } from '../base'
 import z_schema from 'z-schema'
 import draft, { enableMapSet, Draft } from 'immer'
 enableMapSet()
@@ -8,17 +8,20 @@ const metadataSchemaStore = new Map<string, object>()
 export function getKnownMetadataKeys() {
     return [...metadataSchemaStore.keys()]
 }
+
 export function getMetadataSchema(key: string): Option<object> {
     return metadataSchemaStore.has(key) ? Some(metadataSchemaStore.get(key)!) : None
 }
+
 /**
- * Register your metadata with a JSON Schema so Mask can validate the schema for you.
+ * Register your metadata with a JSON Schema so we can validate the schema for you.
  * @param key Metadata key
  * @param jsonSchema JSON Schema to validate the metadata
  */
 export function registerMetadataSchema(key: string, jsonSchema: object) {
     metadataSchemaStore.set(key, jsonSchema)
 }
+
 /**
  * Create a TypedMessage metadata reader for your plugin
  * @param key Metadata key
@@ -31,6 +34,7 @@ export function createTypedMessageMetadataReader<T>(key: string, jsonSchema?: ob
     if (jsonSchema) registerMetadataSchema(key, jsonSchema)
     return (meta: TypedMessage['meta']) => readTypedMessageMetadataUntyped<T>(meta, key)
 }
+
 /**
  * The raw parser of metadata reader
  * @param meta Metadata object

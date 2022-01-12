@@ -1,15 +1,14 @@
 import {
     isTypedMessageText,
     isTypedMessageTupleSerializable,
-    SerializableTypedMessages,
-    TypedMessage,
     TypedMessageText,
     TypedMessageTupleSerializable,
-} from '..'
+} from '../core'
+import type { SerializableTypedMessages, TypedMessage } from '../base'
 import { encode } from '@msgpack/msgpack'
-import { TypedMessageTypeEnum } from './type'
+import { TypedMessageBinaryEncodingTypeEnum } from './type'
 
-const HEAD = '[@masknet/shared-base] TypedMessage: '
+const HEAD = '[@masknet/typed-message] '
 export function encodeTypedMessageToDocument(tm: SerializableTypedMessages) {
     const doc = [0, encodeTypedMessage(tm)]
     return encode(doc)
@@ -25,10 +24,10 @@ function encodeTypedMessage(tm: SerializableTypedMessages): any[] {
 }
 function encodeTypedMessageText(tm: TypedMessageText): any[] {
     // TODO: TextFormat
-    return [TypedMessageTypeEnum.Text, tm.version, encodeMeta(tm), tm.content]
+    return [TypedMessageBinaryEncodingTypeEnum.Text, tm.version, encodeMeta(tm), tm.content]
 }
 function encodeTypedMessageTuple(tm: TypedMessageTupleSerializable): any[] {
-    return [TypedMessageTypeEnum.Tuple, tm.version, encodeMeta(tm), tm.items.map(encodeTypedMessage)]
+    return [TypedMessageBinaryEncodingTypeEnum.Tuple, tm.version, encodeMeta(tm), tm.items.map(encodeTypedMessage)]
 }
 
 function encodeMeta(tm: TypedMessage) {
@@ -78,7 +77,7 @@ function collectValue(val: any): any {
         }
         return result
     } catch (err) {
-        console.warn('[@masknet/shared-base] TypedMessage: When converting value', val, ', an error occurred', err)
+        console.warn(HEAD, 'When converting value', val, ', an error occurred', err)
         throw err
     }
 }

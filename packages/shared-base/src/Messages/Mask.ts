@@ -1,4 +1,4 @@
-import type { TypedMessage } from '../TypedMessage'
+import type { TypedMessage } from '@masknet/typed-message/base'
 import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier/type'
 import type { RelationFavor } from '../Persona/type'
 import type { Appearance, LanguageOptions, TradeProvider, DataProvider } from '../../../public-api/src/web'

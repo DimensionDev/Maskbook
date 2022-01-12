@@ -1,3 +1,4 @@
+export type Meta = ReadonlyMap<string, unknown>
 /**
  * The basic structure that contains
  */

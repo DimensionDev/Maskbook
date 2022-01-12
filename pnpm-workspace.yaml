@@ -10,6 +10,7 @@ packages:
   - 'packages/mask'
   - 'packages/injected-script'
   - 'packages/gun-utils'
+  - 'packages/typed-message'
   - 'packages/mask-sdk'
   - 'packages/public-api'
   - 'packages/shared-base'

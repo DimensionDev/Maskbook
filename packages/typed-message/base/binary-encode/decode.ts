@@ -1,9 +1,10 @@
 import { decode } from '@msgpack/msgpack'
 import { Result } from 'ts-results'
-import { makeTypedMessageText, makeTypedMessageTuple, makeTypedMessageUnknown, TypedMessage } from '..'
-import { TypedMessageTypeEnum } from './type'
+import type { TypedMessage } from '../base'
+import { makeTypedMessageText, makeTypedMessageTuple, makeTypedMessageUnknown } from '../core'
+import { TypedMessageBinaryEncodingTypeEnum } from './type'
 
-const HEAD = '[@masknet/shared-base] TypedMessage: '
+const HEAD = '[@masknet/typed-message] '
 export function decodeTypedMessageFromDocument(bin: Uint8Array) {
     return Result.wrap(() => {
         const doc = decode(bin)
@@ -19,8 +20,8 @@ export function decodeTypedMessageFromDocument(bin: Uint8Array) {
 function decodeTypedMessage(tm: readonly unknown[]): TypedMessage {
     const [type] = tm
     if (typeof type !== 'string' && typeof type !== 'number') throw new TypeError(`${HEAD}Invalid TypedMessage`)
-    if (type === TypedMessageTypeEnum.Text) return decodeTypedMessageText(tm)
-    if (type === TypedMessageTypeEnum.Tuple) return decodeTypedMessageTuple(tm)
+    if (type === TypedMessageBinaryEncodingTypeEnum.Text) return decodeTypedMessageText(tm)
+    if (type === TypedMessageBinaryEncodingTypeEnum.Tuple) return decodeTypedMessageTuple(tm)
     return makeTypedMessageUnknown(tm, decodeMetadata(tm[1]))
 }
 function decodeTypedMessageText([, version, meta, text, format]: readonly unknown[]) {

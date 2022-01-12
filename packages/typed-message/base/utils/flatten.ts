@@ -5,10 +5,10 @@ import {
     makeTypedMessageEmpty,
     makeTypedMessageText,
     makeTypedMessageTuple,
-    TypedMessage,
-} from '..'
+} from '../core'
+import type { TypedMessage } from '../base'
+
 export function flattenTypedMessage(x: TypedMessage): TypedMessage {
-    // Promise are always dropped after resolve even it has meta.
     if (isTypedMessagePromise(x) && x.value) return flattenTypedMessage(x.value)
     if (isTypedMessageTuple(x)) {
         if (x.meta) return x

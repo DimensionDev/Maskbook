@@ -1,4 +1,5 @@
-import { isSerializableTypedMessage, isTypedMessagePromise, isTypedMessageTuple, makeTypedMessageTuple } from '..'
+import { isTypedMessagePromise, isTypedMessageTuple, makeTypedMessageTuple } from '../core'
+import { isSerializableTypedMessage } from '../utils'
 import type { TypedMessage } from '../base'
 
 export type Visitor = (message: TypedMessage) => TypedMessage
