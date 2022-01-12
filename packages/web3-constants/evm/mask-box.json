@@ -13,7 +13,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Avalanche": "0x0477524B070F73BE7f84f3326d104899e1beBb12",
-        "Avalanche_Fuji": "",
+        "Avalanche_Fuji": "0xae5c53294003f72b27cef476680979453193673d",
         "Celo": "",
         "Fantom": ""
     },
@@ -31,7 +31,7 @@
         "Arbitrum_Rinkeby": 0,
         "xDai": 0,
         "Avalanche": 9212180,
-        "Avalanche_Fuji": 0,
+        "Avalanche_Fuji": 4752026,
         "Celo": 0,
         "Fantom": 0
     },
