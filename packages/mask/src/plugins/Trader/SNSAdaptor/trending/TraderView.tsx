@@ -205,7 +205,7 @@ export function TraderView(props: TraderViewProps) {
 
     const isSwappable =
         (!!trending?.coin.contract_address ||
-            ['eth', 'matic', 'bnb'].includes(trending?.coin.symbol.toLowerCase() ?? '')) &&
+            ['eth', 'matic', 'bnb', 'metis'].includes(trending?.coin.symbol.toLowerCase() ?? '')) &&
         chainIdValid &&
         tradeProviders.length
     //#endregion

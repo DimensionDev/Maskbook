@@ -196,7 +196,7 @@
     },
     {
         "name": "Metis Andromeda Mainnet",
-        "chainId": 80001,
+        "chainId": 1088,
         "fullName": "Metis",
         "shortName": "metis",
         "chain": "Metis",
@@ -205,7 +205,8 @@
         "nativeCurrency": {
             "name": "Metis",
             "symbol": "METIS",
-            "decimals": 18
+            "decimals": 18,
+            "logoURI": "https://static.debank.com/image/metis_token/logo_url/0xdeaddeaddeaddeaddeaddeaddeaddeaddead0000/baa52ace2e72eb1c3157d0466aa49fae.png"
         },
         "faucets": [],
         "features": [],
@@ -229,7 +230,8 @@
         "nativeCurrency": {
             "name": "Metis",
             "symbol": "Metis",
-            "decimals": 18
+            "decimals": 18,
+            "logoURI": "https://static.debank.com/image/metis_token/logo_url/0xdeaddeaddeaddeaddeaddeaddeaddeaddead0000/baa52ace2e72eb1c3157d0466aa49fae.png"
         },
         "faucets": ["https://faucets.chain.link/rinkeby"],
         "features": [],

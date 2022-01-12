@@ -221,6 +221,7 @@ const SUPPORTED_CHAIN_ID_LIST = [
     ChainId.Arbitrum,
     ChainId.xDai,
     ChainId.Fantom,
+    ChainId.Metis,
 ]
 
 export function ClaimAllDialog(props: ClaimAllDialogProps) {

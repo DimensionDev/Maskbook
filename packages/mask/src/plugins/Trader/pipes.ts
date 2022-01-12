@@ -267,7 +267,7 @@ export const resolveZrxTradePoolName = createLookupTableResolver<ZrxTradePool, s
         [ZrxTradePool.WaultSwap]: 'WaultSwap',
         [ZrxTradePool.xSigma]: 'xSigma',
         [ZrxTradePool.NetSwap]: 'NetSwap',
-        [ZrxTradePool.Tethys]: 'NetSwap',
+        [ZrxTradePool.Tethys]: 'Tethys',
     },
     'Unknown',
 )
