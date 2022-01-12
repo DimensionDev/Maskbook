@@ -7,9 +7,6 @@ import type { Result } from 'ts-results'
 import { isNil } from 'lodash-unified'
 import { encodeArrayBuffer, encodeText, unreachable } from '@dimensiondev/kit'
 import { createLookupTableResolver } from '@masknet/web3-kit'
-// import { ChainId, ProviderType } from '../types'
-
-
 
 const reader_v1 = createTypedMessageMetadataReader<FileInfoV1>(META_KEY_1, schemaV1)
 const reader_v2 = createTypedMessageMetadataReader<FileInfo>(META_KEY_2, schemaV2)
