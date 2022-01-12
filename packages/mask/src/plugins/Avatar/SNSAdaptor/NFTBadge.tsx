@@ -62,7 +62,7 @@ export function NFTBadge(props: NFTBadgeProps) {
                     strokeWidth={14}
                     stroke="black"
                     fontSize={9}
-                    text={loading ? 'loading...' : `${name} ${slug.toLocaleLowerCase() === 'ens' ? 'ENS' : ''}`}
+                    text={loading ? 'loading...' : `${name} ${slug.toLowerCase() === 'ens' ? 'ENS' : ''}`}
                     price={loading ? '' : formatPrice(amount, symbol)}
                 />
             </Link>
