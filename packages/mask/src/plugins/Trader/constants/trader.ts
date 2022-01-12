@@ -48,6 +48,7 @@ export const DAIe = createERC20Tokens('DAI_ADDRESS', 'Dai Stablecoin', 'DAI.e ',
 export const WBTCe = createERC20Tokens('WBTC_ADDRESS', 'Wrapped BTC', 'WBTCe', 18)
 export const USDCe = createERC20Tokens('USDC_ADDRESS', ' USD Coin', 'USDCe', 18)
 export const JOE = createERC20Tokens('JOE_ADDRESS', 'JoeToken', 'JOE', 18)
+export const PNG = createERC20Tokens('PNG_ADDRESS', 'Pangolin', 'PG', 18)
 
 export const WNATIVE = createERC20Tokens(
     'WNATIVE_ADDRESS',

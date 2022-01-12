@@ -1,5 +1,5 @@
 import { ChainId } from '@masknet/web3-shared-evm'
-import { ETHER, WNATIVE, WBTCe, DAIe, USDTe, USDCe, WNATIVE_ONLY } from './trader'
+import { ETHER, WNATIVE, WBTCe, DAIe, PNG, USDTe, USDCe, WNATIVE_ONLY } from './trader'
 import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'
 
 /**
@@ -10,5 +10,5 @@ export const PANGOLIN_CUSTOM_BASES: ERC20TokenCustomizedBase = {}
 
 export const PANGOLIN_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
     ...WNATIVE_ONLY,
-    [ChainId.Avalanche]: [WNATIVE, DAIe, USDTe, USDCe, ETHER, WBTCe].map((x) => x[ChainId.Avalanche]),
+    [ChainId.Avalanche]: [WNATIVE, DAIe, PNG, USDTe, USDCe, ETHER, WBTCe].map((x) => x[ChainId.Avalanche]),
 }

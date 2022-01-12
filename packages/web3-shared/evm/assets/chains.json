@@ -14,6 +14,7 @@
             "logoURI": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
         },
         "faucets": [],
+
         "features": ["EIP1559"],
         "explorers": [
             {
@@ -2076,7 +2077,11 @@
         "rpc": ["https://api.avax-test.network/ext/bc/C/rpc"],
         "faucets": ["https://faucet.avax-test.network/"],
         "features": [],
-        "nativeCurrency": { "name": "Avalanche", "symbol": "AVAX", "decimals": 18 },
+        "nativeCurrency": {
+            "name": "Avalanche",
+            "symbol": "AVAX",
+            "decimals": 18
+        },
         "infoURL": "https://cchain.explorer.avax-test.network",
         "shortName": "Fuji",
         "chainId": 43113,
@@ -2084,7 +2089,7 @@
     },
     {
         "name": "Avalanche Mainnet",
-        "chain": "AVAX",
+        "chain": "Avalanche",
         "network": "mainnet",
         "rpc": ["https://api.avax.network/ext/bc/C/rpc"],
         "faucets": [],

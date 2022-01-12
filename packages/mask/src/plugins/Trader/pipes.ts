@@ -174,8 +174,7 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             // TODO - OpenOcean
             return ''
         case TradeProvider.TRADERJOE:
-            // TODO - Trader Joe Analytics
-            return ''
+            return `https://analytics.traderjoexyz.com/pairs/${address}`
         case TradeProvider.PANGOLIN:
             return `https://info.pangolin.exchange/pair/${address}`
         default:
