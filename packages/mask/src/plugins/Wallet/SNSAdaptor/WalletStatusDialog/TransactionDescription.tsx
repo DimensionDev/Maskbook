@@ -28,6 +28,7 @@ function getTransactionDescription(
 ) {
     if (!computedPayload) return
     const type = computedPayload.type
+
     switch (type) {
         case EthereumRpcType.SEND_ETHER:
             return `Send token -${getTokenAmountDescription(
@@ -72,6 +73,9 @@ function getTransactionDescription(
                     )
                     const amountOut = formatBalance(computedPayload.parameters.amountOutMin, tokenDetailed?.decimals, 2)
                     return `Swap ${amountIn} ${nativeTokenDetailed?.symbol} for ${amountOut} ${tokenDetailed?.symbol}`
+                case 'create_red_packet':
+                    const amount = formatBalance(computedPayload?.parameters._total_tokens, tokenDetailed?.decimals, 2)
+                    return `Create lucky drop with ${amount} ${tokenDetailed?.symbol}`
                 default:
                     return `${computedPayload.name ?? 'Contract Interaction'} ${
                         computedPayload._tx.value
@@ -126,6 +130,9 @@ export function RecentTransactionDescription(props: RecentTransactionDescription
             case 'swapExactTokensForTokens':
                 inputTokenAddress = first(computedPayload.parameters.path)
                 tokenAddress = last(computedPayload.parameters.path)
+                break
+            case 'create_red_packet':
+                tokenAddress = computedPayload.parameters._token_addr
                 break
             default:
                 tokenAddress = ''
