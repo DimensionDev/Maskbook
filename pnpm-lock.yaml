@@ -26,6 +26,7 @@ importers:
       '@mui/icons-material': 5.2.5
       '@mui/lab': 5.0.0-alpha.61
       '@mui/material': 5.2.5
+      '@mui/styled-engine': 5.2.5
       '@mui/system': 5.2.5
       '@nice-labs/git-rev': ^3.5.0
       '@types/lodash-es': ^4.17.5
@@ -73,6 +74,7 @@ importers:
       '@mui/icons-material': 5.2.5_695e98f08a2d125282e19cae338368d2
       '@mui/lab': 5.0.0-alpha.61_10fe5b9cda37a48a2d94b5e38d45d618
       '@mui/material': 5.2.5_811d2bc6069f340521b4a59905442643
+      '@mui/styled-engine': 5.2.5_c0cf7dff94e5429eafa9194873ebdbc2
       '@mui/system': 5.2.5_78136fa2e471fe4795d123fe9b8f9a75
       '@types/masknet__global-types': link:packages/polyfills/types
       '@types/react': 17.0.38
@@ -4928,7 +4930,7 @@ packages:
       '@emotion/react': 11.7.1_2fa291bfae6e56080648438396754a97
       '@emotion/styled': 11.6.0_e0f2ce61d672e052c2dabbceabccaca0
       '@mui/private-theming': 5.2.3_2fa291bfae6e56080648438396754a97
-      '@mui/styled-engine': 5.2.5_c0cf7dff94e5429eafa9194873ebdbc2
+      '@mui/styled-engine': 5.2.6_c0cf7dff94e5429eafa9194873ebdbc2
       '@mui/types': 7.1.0_@types+react@17.0.38
       '@mui/utils': 5.2.3_react@18.0.0-rc.0
       '@types/react': 17.0.38
