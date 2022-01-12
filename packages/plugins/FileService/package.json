@@ -10,6 +10,7 @@
     "@masknet/shared": "workspace:*",
     "@masknet/shared-base": "workspace:*",
     "@masknet/theme": "workspace:*",
+    "@masknet/icons": "workspace:*",
     "@msgpack/msgpack": "^2.7.1",
     "arweave": "^1.10.3",
     "date-fns": "^2.27.0",

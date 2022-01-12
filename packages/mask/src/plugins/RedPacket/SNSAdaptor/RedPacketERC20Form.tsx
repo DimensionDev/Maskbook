@@ -32,7 +32,7 @@ const duration = 60 * 60 * 24
 const useStyles = makeStyles()((theme) => ({
     field: {
         display: 'flex',
-        margin: theme.spacing(1),
+        margin: theme.spacing(1, 0),
     },
     line: {
         display: 'flex',
