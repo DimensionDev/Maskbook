@@ -1,6 +1,6 @@
 import type { RecentTransaction } from '../../../../../../plugins/Wallet/services'
 import { makeStyles } from '@masknet/theme'
-import React, { memo, useMemo } from 'react'
+import { memo, useMemo } from 'react'
 import { Box, Button, ListItem, ListItemText, Typography } from '@mui/material'
 import { formatEthereumAddress, TransactionStatusType } from '../../../../../../../../web3-shared/evm'
 import { ArrowRightIcon, CircleCloseIcon, InteractionCircleIcon, LoaderIcon, UploadIcon } from '@masknet/icons'
