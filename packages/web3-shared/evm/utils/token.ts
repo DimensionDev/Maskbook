@@ -15,6 +15,7 @@ import {
     EthereumTokenType,
     FungibleTokenDetailed,
     NativeTokenDetailed,
+    ChainIdRecord,
 } from '../types'
 import { getChainDetailed, getChainIdFromName } from './chainDetailed'
 import { formatBalance } from './formatter'
@@ -114,7 +115,7 @@ export function createERC20Tokens(
     symbol: string | ((chainId: ChainId) => string),
     decimals: number | ((chainId: ChainId) => number),
 ) {
-    type Table = { [chainId in ChainId]: ERC20TokenDetailed }
+    type Table = ChainIdRecord<ERC20TokenDetailed>
     const base = {} as Table
     return getEnumAsArray(ChainId).reduce<Table>((accumulator, { value: chainId }) => {
         const evaluator: <T>(f: T | ((chainId: ChainId) => T)) => T = (f) =>

@@ -6,7 +6,7 @@ import * as progress from './progress'
 import * as helpers from './helpers'
 import { currentChainIdSettings } from '../../settings'
 
-let timer: NodeJS.Timer | null = null
+let timer: ReturnType<typeof setTimeout> | null = null
 const WATCHED_TRANSACTION_CHECK_DELAY = 15 * 1000 // 15s
 const WATCHED_TRANSACTION_MAP = new Map<
     ChainId,

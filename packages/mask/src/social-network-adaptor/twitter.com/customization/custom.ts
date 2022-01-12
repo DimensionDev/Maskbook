@@ -75,7 +75,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                 }
             })
             theme.palette.divider = colorSchema.divider
-            theme.palette.divider2 = colorSchema.divider2
+            theme.palette.secondaryDivider = colorSchema.secondaryDivider
             theme.shape.borderRadius = isMobileTwitter ? 0 : 15
             theme.breakpoints.values = { xs: 0, sm: 687, md: 1024, lg: 1280, xl: 1920 }
             theme.components = theme.components || {}
@@ -108,7 +108,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                     root: {
                         borderRadius: 500,
                         textTransform: 'initial',
-                        fontWeight: 'bold',
+                        fontWeight: 600,
                         minHeight: 39,
                         paddingLeft: 15,
                         paddingRight: 15,
@@ -155,11 +155,11 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                     },
                     outlined: {
                         color: theme.palette.text.strong,
-                        borderColor: theme.palette.divider2,
+                        borderColor: theme.palette.secondaryDivider,
                         backgroundColor: 'transparent',
                         '&:hover': {
                             color: theme.palette.action.buttonHover,
-                            borderColor: theme.palette.divider2,
+                            borderColor: theme.palette.secondaryDivider,
                             backgroundColor: parseColor(theme.palette.text.primary).setAlpha(0.1).toRgbString(),
                         },
                         '&.Mui-disabled': {
@@ -169,7 +169,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                         },
                     },
                     sizeLarge: {
-                        minHeight: 49,
+                        minHeight: 40,
                         paddingLeft: 30,
                         paddingRight: 30,
                         [smallQuery]: {

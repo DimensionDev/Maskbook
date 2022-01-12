@@ -1,5 +1,10 @@
 import type BigNumber from 'bignumber.js'
-import type { ChainId, FungibleTokenDetailed, NativeTokenDetailed, ERC20TokenDetailed } from '@masknet/web3-shared-evm'
+import type {
+    FungibleTokenDetailed,
+    NativeTokenDetailed,
+    ERC20TokenDetailed,
+    ChainIdOptionalRecord,
+} from '@masknet/web3-shared-evm'
 import type { TradeProvider } from '@masknet/public-api'
 
 export enum WarningLevel {
@@ -102,15 +107,9 @@ export interface TradeContext {
     INIT_CODE_HASH?: string
     ROUTER_CONTRACT_ADDRESS?: string
     FACTORY_CONTRACT_ADDRESS?: string
-    ADDITIONAL_TOKENS?: {
-        [key in ChainId]?: Record<string, ERC20TokenDetailed[]>
-    }
-    AGAINST_TOKENS?: {
-        [key in ChainId]?: ERC20TokenDetailed[]
-    }
-    CUSTOM_TOKENS?: {
-        [key in ChainId]?: Record<string, ERC20TokenDetailed[]>
-    }
+    ADDITIONAL_TOKENS?: ChainIdOptionalRecord<Record<string, ERC20TokenDetailed[]>>
+    AGAINST_TOKENS?: ChainIdOptionalRecord<ERC20TokenDetailed[]>
+    CUSTOM_TOKENS?: ChainIdOptionalRecord<Record<string, ERC20TokenDetailed[]>>
 }
 
 export interface TradeInfo {
