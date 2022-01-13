@@ -60,5 +60,5 @@ export function useMnemonicWordsPuzzle() {
 
     const refreshCallback = wordsRetry
 
-    return [words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback] as const
+    return { words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback } as const
 }

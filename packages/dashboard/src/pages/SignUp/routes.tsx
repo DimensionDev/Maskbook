@@ -21,7 +21,7 @@ export const SignUpRoutes = () => {
     return (
         <Routes>
             <Route path=":action" element={<Actions />} />
-            <Route path="*" element={<MnemonicRevealForm />} />
+            <Route path="*" element={<PersonaCreate />} />
         </Routes>
     )
 }

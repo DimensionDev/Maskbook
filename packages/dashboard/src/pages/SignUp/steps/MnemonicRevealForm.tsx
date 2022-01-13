@@ -1,10 +1,10 @@
-import { memo, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { some } from 'lodash-unified'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, Stack, Box } from '@mui/material'
 import RefreshIcon from '@mui/icons-material/Refresh'
 import { useCustomSnackbar } from '@masknet/theme'
-import { DashboardRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, delay } from '@masknet/shared-base'
 import { MaskAlert } from '../../../components/MaskAlert'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
 import {
@@ -14,39 +14,39 @@ import {
     SignUpAccountLogo,
 } from '../../../components/RegisterFrame/ColumnContentLayout'
 import { useDashboardI18N } from '../../../locales'
-import { DesktopMnemonicConfirm, MnemonicReveal } from '../../../components/Mnemonic'
+import { MnemonicReveal } from '../../../components/Mnemonic'
 import { SignUpRoutePath } from '../routePath'
 import { ButtonContainer } from '../../../components/RegisterFrame/ButtonContainer'
 import { useMnemonicWordsPuzzle } from '../../../hooks/useMnemonicWordsPuzzle'
-
-enum CreateWalletStep {
-    NameAndWords = 0,
-    Verify = 1,
-}
+import { useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2'
+import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
+import { Services } from '../../../API'
 
 export const MnemonicRevealForm = memo(() => {
+    const createPersona = useCreatePersonaV2()
+    const { changeCurrentPersona } = PersonaContext.useContainer()
     const t = useDashboardI18N()
     const navigate = useNavigate()
+    const { state } = useLocation() as { state: { personaName: string } }
     const { showSnackbar } = useCustomSnackbar()
-    const [words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback] = useMnemonicWordsPuzzle()
+    const { words, refreshCallback } = useMnemonicWordsPuzzle()
 
-    const [step, setStep] = useState(CreateWalletStep.NameAndWords)
+    const onConfirm = useCallback(async () => {
+        try {
+            const identifier = await createPersona(words.join(' '), state.personaName)
 
-    const onSubmit = async () => {
-        if (words.join(' ') !== puzzleWords.join(' ')) {
-            showSnackbar(t.create_account_mnemonic_confirm_failed(), { variant: 'error' })
-        } else {
-            navigate(SignUpRoutePath.PersonaCreate, {
-                replace: true,
-                state: { mnemonic: words },
-            })
+            const privateKey = await Services.Identity.exportPersonaPrivateKey(identifier)
+            console.log(identifier.toText(), privateKey)
+
+            await changeCurrentPersona(identifier)
+            showSnackbar(t.create_account_persona_successfully(), { variant: 'success' })
+
+            await delay(300)
+            navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.ConnectSocialMedia}`)
+        } catch (error) {
+            showSnackbar((error as Error).message, { variant: 'error' })
         }
-    }
-
-    const onBack = () => {
-        setStep(CreateWalletStep.NameAndWords)
-        resetCallback()
-    }
+    }, [words, state.personaName])
 
     return (
         <ColumnContentLayout>
@@ -58,49 +58,23 @@ export const MnemonicRevealForm = memo(() => {
                 <PersonaLogoBox>
                     <SignUpAccountLogo />
                 </PersonaLogoBox>
-                {step === CreateWalletStep.NameAndWords && (
-                    <>
-                        <Stack
-                            direction="row"
-                            justifyContent="flex-end"
-                            sx={{ marginBottom: (theme) => theme.spacing(2) }}>
-                            <Button variant="text" startIcon={<RefreshIcon />} onClick={refreshCallback}>
-                                {t.refresh()}
-                            </Button>
-                        </Stack>
-                        <MnemonicReveal words={words} />
-                        <ButtonContainer>
-                            <Button
-                                size="large"
-                                variant="rounded"
-                                color="primary"
-                                onClick={() => setStep(CreateWalletStep.Verify)}>
-                                {t.verify()}
-                            </Button>
-                        </ButtonContainer>
-                    </>
-                )}
-                {step === CreateWalletStep.Verify && (
-                    <>
-                        <DesktopMnemonicConfirm indexes={indexes} puzzleWords={puzzleWords} onChange={answerCallback} />
-                        <ButtonContainer>
-                            <Button variant="rounded" size="large" color="secondary" onClick={onBack}>
-                                {t.back()}
-                            </Button>
-                            <Button
-                                sx={{ width: '224px' }}
-                                variant="rounded"
-                                color="primary"
-                                size="large"
-                                disabled={some(puzzleWords, (word) => !word)}
-                                onClick={onSubmit}>
-                                {t.confirm()}
-                            </Button>
-                        </ButtonContainer>
-                    </>
-                )}
+
+                <Box>
+                    <Stack direction="row" justifyContent="flex-end" sx={{ marginBottom: (theme) => theme.spacing(2) }}>
+                        <Button variant="text" startIcon={<RefreshIcon />} onClick={refreshCallback}>
+                            {t.refresh()}
+                        </Button>
+                    </Stack>
+                    <MnemonicReveal words={words} />
+                    <ButtonContainer>
+                        <Button size="large" variant="rounded" color="primary" onClick={onConfirm}>
+                            {t.create_account_mnemonic_download_or_print()}
+                        </Button>
+                    </ButtonContainer>
+                </Box>
+
                 <Box sx={{ pt: 4, pb: 2, width: '100%' }}>
-                    <MaskAlert description={t.create_account_identity_warning()} type="error" />
+                    <MaskAlert description={t.create_account_identity_warning()} type="info" />
                 </Box>
             </Body>
         </ColumnContentLayout>
