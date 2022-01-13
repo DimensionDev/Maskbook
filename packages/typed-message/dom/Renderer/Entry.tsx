@@ -22,7 +22,7 @@ export function TypedMessageRender(props: RenderProps) {
     const transform = useContext(TransformerContext)
     const message2 = useMemo(() => transform(message), [message, transform])
 
-    const Render = useContext(RegistryContext)(message.type)?.component || TypedMessageUnknownRenderer
+    const Render = useContext(RegistryContext)(message2.type)?.component || TypedMessageUnknownRenderer
 
     if (message.type === 'empty') return null
     return (
