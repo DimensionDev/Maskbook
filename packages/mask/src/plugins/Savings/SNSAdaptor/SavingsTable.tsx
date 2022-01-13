@@ -64,9 +64,10 @@ export interface SavingsTableProps {
     tab: TabType
     mappableProtocols: MappableProtocol[]
     setSelectedProtocol(protocol: ProtocolType): void
+    setTab(tab: TabType): void
 }
 
-export function SavingsTable({ chainId, tab, mappableProtocols, setSelectedProtocol }: SavingsTableProps) {
+export function SavingsTable({ chainId, tab, mappableProtocols, setSelectedProtocol, setTab }: SavingsTableProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -138,7 +139,10 @@ export function SavingsTable({ chainId, tab, mappableProtocols, setSelectedProto
                                     disabled={
                                         tab === TabType.Withdraw ? new BigNumber(protocol.balance).isZero() : false
                                     }
-                                    onClick={() => setSelectedProtocol(protocol.type)}>
+                                    onClick={() => {
+                                        setSelectedProtocol(protocol.type)
+                                        setTab(tab)
+                                    }}>
                                     {tab === TabType.Deposit
                                         ? t('plugin_savings_deposit')
                                         : t('plugin_savings_withdraw')}

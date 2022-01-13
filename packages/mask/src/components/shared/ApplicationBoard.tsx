@@ -14,6 +14,8 @@ import { EntrySecondLevelDialog } from './EntrySecondLevelDialog'
 import { NetworkTab } from './NetworkTab'
 import { SavingsDialog } from '../../plugins/Savings/SNSAdaptor/SavingsDialog'
 import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialog'
+import { AllProviderTradeContext } from '../../plugins/Trader/trader/useAllProviderTradeContext'
+import { TargetChainIdContext } from '../../plugins/Trader/trader/useTargetChainIdContext'
 import { NetworkPluginID, PluginId, usePluginIDContext } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
@@ -333,56 +335,58 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     ]
 
     return (
-        <>
-            {secondEntryChainTabs?.length ? (
-                <div className={classes.abstractTabWrapper}>
-                    <NetworkTab
-                        chainId={chainId}
-                        setChainId={setChainId}
-                        classes={classes}
-                        chains={secondEntryChainTabs}
+        <TargetChainIdContext.Provider>
+            <AllProviderTradeContext.Provider>
+                {secondEntryChainTabs?.length ? (
+                    <div className={classes.abstractTabWrapper}>
+                        <NetworkTab
+                            chainId={chainId}
+                            setChainId={setChainId}
+                            classes={classes}
+                            chains={secondEntryChainTabs}
+                        />
+                    </div>
+                ) : null}
+                <section className={classes.applicationWrapper}>
+                    {(secondEntries ?? firstLevelEntries).map(
+                        ({ title, img, onClick, supportedChains, hidden, walletRequired }, i) =>
+                            (!supportedChains || supportedChains?.includes(chainId)) && !hidden ? (
+                                <div
+                                    className={classNames(
+                                        classes.applicationBox,
+                                        walletRequired && !selectedWallet ? classes.disabled : '',
+                                    )}
+                                    onClick={onClick}
+                                    key={i}>
+                                    <img src={img} className={classes.applicationImg} />
+                                    <Typography className={classes.title} color="textPrimary">
+                                        {title}
+                                    </Typography>
+                                </div>
+                            ) : null,
+                    )}
+                </section>
+                {isClaimAllDialogOpen ? (
+                    <ClaimAllDialog open={isClaimAllDialogOpen} onClose={onClaimAllDialogClose} />
+                ) : null}
+                {isSavingsDialogOpen ? (
+                    <SavingsDialog
+                        open={isSavingsDialogOpen}
+                        onClose={onSavingsDialogClose}
+                        onSwapDialogOpen={onSwapDialogOpen}
                     />
-                </div>
-            ) : null}
-            <section className={classes.applicationWrapper}>
-                {(secondEntries ?? firstLevelEntries).map(
-                    ({ title, img, onClick, supportedChains, hidden, walletRequired }, i) =>
-                        (!supportedChains || supportedChains?.includes(chainId)) && !hidden ? (
-                            <div
-                                className={classNames(
-                                    classes.applicationBox,
-                                    walletRequired && !selectedWallet ? classes.disabled : '',
-                                )}
-                                onClick={onClick}
-                                key={i}>
-                                <img src={img} className={classes.applicationImg} />
-                                <Typography className={classes.title} color="textPrimary">
-                                    {title}
-                                </Typography>
-                            </div>
-                        ) : null,
-                )}
-            </section>
-            {isClaimAllDialogOpen ? (
-                <ClaimAllDialog open={isClaimAllDialogOpen} onClose={onClaimAllDialogClose} />
-            ) : null}
-            {isSavingsDialogOpen ? (
-                <SavingsDialog
-                    open={isSavingsDialogOpen}
-                    onClose={onSavingsDialogClose}
-                    onSwapDialogOpen={onSwapDialogOpen}
-                />
-            ) : null}
-            {isSwapDialogOpen ? <TraderDialog open={isSwapDialogOpen} onClose={onSwapDialogClose} /> : null}
-            {isSecondLevelEntryDialogOpen ? (
-                <EntrySecondLevelDialog
-                    title={secondLevelEntryDialogTitle}
-                    open={isSecondLevelEntryDialogOpen}
-                    entries={secondLevelEntries}
-                    chains={secondLevelEntryChains}
-                    closeDialog={onSecondLevelEntryDialogClose}
-                />
-            ) : null}
-        </>
+                ) : null}
+                {isSwapDialogOpen ? <TraderDialog open={isSwapDialogOpen} onClose={onSwapDialogClose} /> : null}
+                {isSecondLevelEntryDialogOpen ? (
+                    <EntrySecondLevelDialog
+                        title={secondLevelEntryDialogTitle}
+                        open={isSecondLevelEntryDialogOpen}
+                        entries={secondLevelEntries}
+                        chains={secondLevelEntryChains}
+                        closeDialog={onSecondLevelEntryDialogClose}
+                    />
+                ) : null}
+            </AllProviderTradeContext.Provider>
+        </TargetChainIdContext.Provider>
     )
 }

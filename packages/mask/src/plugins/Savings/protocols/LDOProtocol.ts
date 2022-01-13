@@ -6,12 +6,12 @@ import {
     getSavingsConstants,
     formatBalance,
     createContract,
+    FungibleTokenDetailed,
 } from '@masknet/web3-shared-evm'
 import type { Lido } from '@masknet/web3-contracts/types/Lido'
 import LidoABI from '@masknet/web3-contracts/abis/Lido.json'
 import BigNumber from 'bignumber.js'
-import { ProtocolCategory, SavingsNetwork, SavingsProtocol } from '../types'
-import { ProtocolType } from '../types'
+import { ProtocolCategory, SavingsNetwork, SavingsProtocol, ProtocolType } from '../types'
 
 export interface LidoContract {
     type: EthereumTokenType
@@ -44,11 +44,41 @@ export class LidoProtocol implements SavingsProtocol {
     public pair = 'stETH'
     public apr = '0.00'
     public balance = '0.00'
-
     public availableNetworks: SavingsNetwork[] = [
-        { chainId: ChainId.Mainnet, chainName: 'Ethereum' },
-        { chainId: ChainId.Gorli, chainName: 'Gorli' },
+        {
+            chainId: ChainId.Mainnet,
+            chainName: 'Ethereum',
+            contractAddress: getSavingsConstants(ChainId.Mainnet).LIDO_STETH || '',
+        },
+        {
+            chainId: ChainId.Gorli,
+            chainName: 'Gorli',
+            contractAddress: getSavingsConstants(ChainId.Gorli).LIDO_STETH || '',
+        },
     ]
+
+    public getFungibleTokenDetails(chainId: ChainId): FungibleTokenDetailed {
+        let contractAddress = ''
+
+        for (const network of this.availableNetworks) {
+            if (network.chainId === chainId) {
+                contractAddress = network.contractAddress
+            }
+        }
+
+        return {
+            type: 1,
+            chainId: chainId,
+            address: contractAddress,
+            symbol: 'stETH',
+            decimals: 18,
+            name: 'Liquid staked Ether 2.0',
+            logoURI: [
+                'https://static.debank.com/image/eth_token/logo_url/0xae7ab96520de3a18e5e111b5eaab095312d7fe84/f768023f77be7a2ea23c37f25b272048.png',
+                'https://tokens.1inch.io/0xae7ab96520de3a18e5e111b5eaab095312d7fe84.png',
+            ],
+        }
+    }
 
     public async getApr() {
         try {

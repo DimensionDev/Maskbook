@@ -12,7 +12,7 @@ import {
     formatCurrency,
     formatBalance,
 } from '@masknet/web3-shared-evm'
-import { TokenAmountPanel, FormattedCurrency } from '@masknet/shared'
+import { TokenAmountPanel, FormattedCurrency, LoadingAnimation } from '@masknet/shared'
 import { useTokenPrice } from '../../Wallet/hooks/useTokenPrice'
 import { useI18N } from '../../../utils'
 import { useStyles } from './SavingsFormStyles'
@@ -23,7 +23,7 @@ import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { LoadingAnimation } from '@masknet/shared'
+import { AllProviderTradeActionType, AllProviderTradeContext } from '../../Trader/trader/useAllProviderTradeContext'
 
 export interface SavingsFormProps {
     chainId: number
@@ -88,37 +88,48 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
     )
     //#endregion
 
+    //#region trade state
+    const {
+        tradeState: [{ inputToken, outputToken }, dispatchTradeStore],
+        allTradeComputed,
+    } = AllProviderTradeContext.useContainer()
+    //#endregion
+
     const needsSwap = protocol.type === ProtocolType.Lido && tab === TabType.Withdraw
 
     return (
         <div className={classes.containerWrap}>
-            <div className={classes.inputWrap}>
-                <TokenAmountPanel
-                    amount={inputAmount}
-                    maxAmount={balanceAsBN.minus(estimatedGas).toString()}
-                    balance={balanceAsBN.toString()}
-                    label={t('plugin_savings_amount')}
-                    token={nativeTokenDetailed}
-                    onAmountChange={setInputAmount}
-                    InputProps={{ classes: { root: classes.inputTextField } }}
-                    MaxChipProps={{ classes: { root: classes.maxChip } }}
-                    SelectTokenChip={{ ChipProps: { classes: { root: classes.selectTokenChip } } }}
-                />
-            </div>
+            {needsSwap ? null : (
+                <>
+                    <div className={classes.inputWrap}>
+                        <TokenAmountPanel
+                            amount={inputAmount}
+                            maxAmount={balanceAsBN.minus(estimatedGas).toString()}
+                            balance={balanceAsBN.toString()}
+                            label={t('plugin_savings_amount')}
+                            token={nativeTokenDetailed}
+                            onAmountChange={setInputAmount}
+                            InputProps={{ classes: { root: classes.inputTextField } }}
+                            MaxChipProps={{ classes: { root: classes.maxChip } }}
+                            SelectTokenChip={{ ChipProps: { classes: { root: classes.selectTokenChip } } }}
+                        />
+                    </div>
 
-            {loading ? (
-                <Typography variant="body2" textAlign="right" className={classes.tokenValueUSD}>
-                    <LoadingAnimation width={16} height={16} />
-                </Typography>
-            ) : (
-                <Typography variant="body2" textAlign="right" className={classes.tokenValueUSD}>
-                    ≈ <FormattedCurrency value={tokenValueUSD} sign="$" formatter={formatCurrency} />
-                    {estimatedGas > 0 ? (
-                        <span className={classes.gasFee}>+ {formatBalance(estimatedGas, 18)} ETH</span>
+                    {loading ? (
+                        <Typography variant="body2" textAlign="right" className={classes.tokenValueUSD}>
+                            <LoadingAnimation width={16} height={16} />
+                        </Typography>
                     ) : (
-                        <span />
+                        <Typography variant="body2" textAlign="right" className={classes.tokenValueUSD}>
+                            ≈ <FormattedCurrency value={tokenValueUSD} sign="$" formatter={formatCurrency} />
+                            {estimatedGas > 0 ? (
+                                <span className={classes.gasFee}>+ {formatBalance(estimatedGas, 18)} ETH</span>
+                            ) : (
+                                <span />
+                            )}
+                        </Typography>
                     )}
-                </Typography>
+                </>
             )}
 
             <div className={classes.infoRow}>
@@ -175,6 +186,11 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
                                 case TabType.Withdraw:
                                     switch (protocol.type) {
                                         case ProtocolType.Lido:
+                                            dispatchTradeStore({
+                                                type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
+                                                token: protocol.getFungibleTokenDetails(targetChainId),
+                                            })
+
                                             onClose?.()
                                             onSwapDialogOpen?.()
                                             return

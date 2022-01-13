@@ -1,10 +1,11 @@
 import type BigNumber from 'bignumber.js'
 import type Web3 from 'web3'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 
 export interface SavingsNetwork {
     chainId: ChainId
     chainName: string
+    contractAddress: string
 }
 
 export enum ProtocolCategory {
@@ -26,6 +27,7 @@ export interface SavingsProtocol {
     apr: string
     balance: string
 
+    getFungibleTokenDetails(chainId: ChainId): FungibleTokenDetailed
     getApr(): Promise<string>
     getBalance(chainId: ChainId, web3: Web3, account: string): Promise<string>
     depositEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value): Promise<BigNumber.Value>

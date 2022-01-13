@@ -82,10 +82,15 @@ export function Trader(props: TraderProps) {
     //#region if chain id be changed, update input token be native token
     useEffect(() => {
         if (!chainIdValid) return
-        dispatchTradeStore({
-            type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
-            token: chainId === ChainId.Mainnet && coin?.is_mirrored ? UST[ChainId.Mainnet] : createNativeToken(chainId),
-        })
+        if (!inputToken) {
+            dispatchTradeStore({
+                type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
+                token:
+                    chainId === ChainId.Mainnet && coin?.is_mirrored
+                        ? UST[ChainId.Mainnet]
+                        : createNativeToken(chainId),
+            })
+        }
     }, [chainId, chainIdValid])
     //#endregion
 

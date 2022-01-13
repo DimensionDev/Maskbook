@@ -36,36 +36,22 @@ export function SavingsDialog({ open, onClose, onSwapDialogOpen }: SavingsDialog
         return networks.map((network) => getChainIdFromNetworkType(network))
     }, [])
 
-    const CategorizedProtocols = Object.keys(ProtocolCategory).map((category) => {
-        return {
-            category,
-            protocols: SavingsProtocols.filter(
-                (protocol) => protocol.category.toLowerCase() === category.toLowerCase(),
-            ),
-        }
-    })
+    const CategorizedProtocols = Object.keys(ProtocolCategory).map((category) => ({
+        category,
+        protocols: SavingsProtocols.filter((protocol) => protocol.category.toLowerCase() === category.toLowerCase()),
+    }))
 
-    const MappableProtocols = CategorizedProtocols.filter((categorizedProtocol) => {
-        if (categorizedProtocol.protocols.length === 0) {
-            return false
-        }
-
-        for (const protocol of categorizedProtocol.protocols) {
-            for (const network of protocol.availableNetworks) {
-                if (network.chainId === chainId) {
-                    return true
-                }
-            }
-        }
-
-        return false
-    })
+    const MappableProtocols = CategorizedProtocols.filter((categorizedProtocol) =>
+        categorizedProtocol.protocols.some(({ availableNetworks }) =>
+            availableNetworks.some((network) => network.chainId === chainId),
+        ),
+    )
 
     return (
         <InjectedDialog
             open={open || false}
             onClose={() => {
-                if (!selectedProtocol) {
+                if (selectedProtocol === null) {
                     onClose?.()
                 } else {
                     setSelectedProtocol(null)
@@ -97,6 +83,7 @@ export function SavingsDialog({ open, onClose, onSwapDialogOpen }: SavingsDialog
                                         tab={TabType.Deposit}
                                         mappableProtocols={MappableProtocols}
                                         setSelectedProtocol={setSelectedProtocol}
+                                        setTab={setTab}
                                     />
                                 </FolderTabPanel>
                                 <FolderTabPanel label="WITHDRAW">
@@ -105,6 +92,7 @@ export function SavingsDialog({ open, onClose, onSwapDialogOpen }: SavingsDialog
                                         tab={TabType.Withdraw}
                                         mappableProtocols={MappableProtocols}
                                         setSelectedProtocol={setSelectedProtocol}
+                                        setTab={setTab}
                                     />
                                 </FolderTabPanel>
                             </FolderTabs>
