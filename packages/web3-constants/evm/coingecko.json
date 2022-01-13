@@ -13,7 +13,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai",
         "Celo": "celo",
-        "Metis": "metis",
+        "Metis": "metis-andromeda",
         "Metis_Stardust": "",
         "Fantom": "fantom"
     },
@@ -31,7 +31,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai",
         "Celo": "celo",
-        "Metis": "metis",
+        "Metis": "metis-token",
         "Metis_Stardust": "",
         "Fantom": "fantom"
     }

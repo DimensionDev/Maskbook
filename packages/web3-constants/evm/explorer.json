@@ -13,8 +13,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Metis": "",
-        "Metis_Stardust": "",
+        "Metis": "https://andromeda-explorer.metis.io/api",
+        "Metis_Stardust": "https://stardust-explorer.metis.io/api",
         "Fantom": "https://api.ftmscan.com/api"
     },
     "EXPLORER_API_KEY": {

@@ -50,7 +50,7 @@ currentChainIdSettings.addListener((chainId: ChainId) => {
                 currentDataProviderSettings.value = DataProvider.COIN_GECKO
             break
         case NetworkType.Metis:
-            currentTradeProviderSettings.value = TradeProvider.SUSHISWAP
+            currentTradeProviderSettings.value = TradeProvider.TETHYS
             if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
                 currentDataProviderSettings.value = DataProvider.COIN_GECKO
             break
