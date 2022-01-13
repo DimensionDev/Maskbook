@@ -23,14 +23,12 @@ import { HistoryTab } from './HistoryTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleCard } from './CollectibleCard'
 import { PluginSkeleton } from './PluginSkeleton'
-import { TabState } from '../types'
+import { TabState, TransactionType } from '../types'
 import { MaskTextIcon } from '../../../resources/MaskIcon'
-import { resolveAssetLinkOnCryptoartAI } from '../pipes'
+import { resolveAssetLinkOnCryptoartAI, resolveWebLinkOnCryptoartAI } from '../pipes'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { ActionBar } from './ActionBar'
 import { useChainId } from '@masknet/web3-shared-evm'
-import { resolveWebLinkOnCryptoartAI } from '../pipes'
-import { TransactionType } from '../types'
 
 const useStyles = makeStyles()((theme) => {
     return {

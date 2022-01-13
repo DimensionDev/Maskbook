@@ -58,11 +58,15 @@ export function toUniswapPercent(numerator: number, denominator: number) {
 }
 
 export function toUniswapCurrency(chainId: ChainId, token?: FungibleTokenDetailed): Currency | undefined {
-    if (!token) return
-    const extendedEther = ExtendedEther.onChain(chainId)
-    const weth = toUniswapToken(chainId, WNATIVE[chainId])
-    if (weth && isSameAddress(token.address, weth.address)) return weth
-    return token.type === EthereumTokenType.Native ? extendedEther : toUniswapToken(chainId, token)
+    try {
+        if (!token) return
+        const extendedEther = ExtendedEther.onChain(chainId)
+        const weth = toUniswapToken(chainId, WNATIVE[chainId])
+        if (weth && isSameAddress(token.address, weth.address)) return weth
+        return token.type === EthereumTokenType.Native ? extendedEther : toUniswapToken(chainId, token)
+    } catch {
+        return
+    }
 }
 
 export function toUniswapToken(chainId: ChainId, token: FungibleTokenDetailed) {
