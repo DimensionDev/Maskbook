@@ -3,7 +3,7 @@ import { useI18N } from '../../../../utils'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
 import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import type { FungibleTokenDetailed, Wallet } from '@masknet/web3-shared-evm'
 import { EthereumTokenType, formatBalance, formatPercentage } from '@masknet/web3-shared-evm'
 import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo, WarningLevel } from '../../types'
@@ -19,7 +19,6 @@ import { currentSlippageSettings } from '../../settings'
 import TuneIcon from '@mui/icons-material/Tune'
 import { MINIMUM_AMOUNT } from '../../constants'
 import { resolveTradeProviderName, resolveUniswapWarningLevel } from '../../pipes'
-import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
@@ -168,6 +167,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
 })
 
 export interface AllTradeFormProps {
+    wallet?: Wallet
     inputAmount: string
     inputToken?: FungibleTokenDetailed
     outputToken?: FungibleTokenDetailed
@@ -186,6 +186,7 @@ export interface AllTradeFormProps {
 
 export const TradeForm = memo<AllTradeFormProps>(
     ({
+        wallet,
         trades,
         inputAmount,
         inputToken,
@@ -444,20 +445,18 @@ export const TradeForm = memo<AllTradeFormProps>(
                             </IconButton>
                         </div>
                     </Box>
-                    <Box className={classes.section}>
-                        <EthereumChainBoundary
-                            chainId={chainId}
-                            noSwitchNetworkTip
-                            disablePadding
-                            ActionButtonPromiseProps={{
-                                fullWidth: true,
-                                classes: { root: classes.button, disabled: classes.disabledButton },
-                                color: 'primary',
-                                style: { padding: '13px 0', marginTop: 0 },
-                            }}>
-                            <EthereumWalletConnectedBoundary
-                                ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}
-                                classes={{ connectWallet: classes.connectWallet, button: classes.button }}>
+                    {wallet ? (
+                        <Box className={classes.section}>
+                            <EthereumChainBoundary
+                                chainId={chainId}
+                                noSwitchNetworkTip
+                                disablePadding
+                                ActionButtonPromiseProps={{
+                                    fullWidth: true,
+                                    classes: { root: classes.button, disabled: classes.disabledButton },
+                                    color: 'primary',
+                                    style: { padding: '13px 0', marginTop: 0 },
+                                }}>
                                 <EthereumERC20TokenApprovedBoundary
                                     amount={approveAmount.toFixed()}
                                     token={
@@ -518,9 +517,9 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         </ActionButton>
                                     )}
                                 />
-                            </EthereumWalletConnectedBoundary>
-                        </EthereumChainBoundary>
-                    </Box>
+                            </EthereumChainBoundary>
+                        </Box>
+                    ) : null}
                 </Box>
             </Box>
         )
