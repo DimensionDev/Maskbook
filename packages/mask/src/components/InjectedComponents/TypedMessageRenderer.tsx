@@ -155,16 +155,12 @@ registerTypedMessageRenderer('unknown', {
 const DefaultTypedMessageSuspendedRenderer = memo(function DefaultTypedMessageSuspendedRenderer(
     props: TypedMessageRendererProps<TypedMessagePromise>,
 ) {
-    const { promise, explicit } = props.message
+    const { promise } = props.message
     const { loading, error, value } = useAsync(() => promise, [promise])
 
     return renderWithMetadata(
         props,
-        loading ? (
-            explicit ? (
-                <DefaultTypedMessageTextRenderer {...props} message={makeTypedMessageText('Loading...')} />
-            ) : null
-        ) : error ? (
+        loading ? null : error ? (
             <DefaultTypedMessageTextRenderer {...props} message={makeTypedMessageText('Error!')} />
         ) : (
             <DefaultTypedMessageRenderer {...props} message={value!} />

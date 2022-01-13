@@ -6,7 +6,10 @@
   "scripts": {},
   "dependencies": {
     "@msgpack/msgpack": "^2.7.1",
+    "@mui/material": "link:..\\empty",
+    "anchorme": "^2.1.2",
     "immer": "^9.0.7",
+    "use-subscription": "^1.5.1",
     "z-schema": "^5.0.2"
   },
   "exports": {
