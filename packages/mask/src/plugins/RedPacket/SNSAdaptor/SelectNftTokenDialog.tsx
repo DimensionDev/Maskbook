@@ -146,6 +146,9 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         marginBottom: theme.spacing(1.5),
         padding: theme.spacing(1, 1.5, 1, 1),
         boxSizing: 'border-box',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     selectWrapper: {
         background: theme.palette.mode === 'light' ? '#fff' : '#2F3336',
