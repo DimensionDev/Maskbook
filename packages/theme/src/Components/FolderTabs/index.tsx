@@ -1,22 +1,22 @@
 import { styled } from '@mui/material'
-import {
-    TabPanelUnstyled,
-    TabPanelUnstyledProps,
-    TabsListUnstyled,
-    TabsUnstyled,
-    TabsUnstyledProps,
-    TabUnstyled,
-    tabUnstyledClasses,
-} from '@mui/base'
-import { Children, cloneElement, FC } from 'react'
+// import {
+// TabPanelUnstyled,
+// TabPanelUnstyledProps,
+// TabsListUnstyled,
+// TabsUnstyled,
+// TabsUnstyledProps,
+// TabUnstyled,
+// tabUnstyledClasses,
+// } from '@mui/base'
+import { Children, cloneElement, FC, useState, HTMLProps } from 'react'
 import { MaskColorVar } from '../../constants'
 
-const TabList = styled(TabsListUnstyled)`
+const TabList = styled('div')`
     display: flex;
     gap: 8px;
 `
 
-const Tab = styled(TabUnstyled)(({ theme }) => {
+const Tab = styled('button')(({ theme }) => {
     const isDark = theme.palette.mode === 'dark'
     const inactiveColor = isDark ? theme.palette.grey['50'] : MaskColorVar.twitterBg
     return {
@@ -33,13 +33,13 @@ const Tab = styled(TabUnstyled)(({ theme }) => {
         color: theme.palette.text.secondary,
         position: 'relative',
         boxSizing: 'border-box',
-        [`&.${tabUnstyledClasses.selected}`]: {
+        ['&.selected']: {
             backgroundColor: theme.palette.background.paper,
             borderColor: MaskColorVar.twitterBorderLine,
             color: theme.palette.primary.main,
         },
         // cover bottom border of the active tab
-        [`&.${tabUnstyledClasses.selected}::after`]: {
+        ['&.selected::after']: {
             position: 'absolute',
             content: '""',
             height: 2,
@@ -59,35 +59,46 @@ const PanelContent = styled('div')`
     border-radius: 0 0 8px 8px;
 `
 
-interface TabPanelProps extends Omit<TabPanelUnstyledProps, 'value'> {
+interface TabPanelProps extends HTMLProps<HTMLDivElement> {
     label: string
-    value?: TabPanelUnstyledProps['value']
+    value?: number | string
 }
 
-export const FolderTabPanel = styled(TabPanelUnstyled)<TabPanelProps>(({ theme }) => ({
+export const FolderTabPanel = styled('div')<TabPanelProps>(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
 }))
 
 type TabPanelReactElement = React.ReactElement<TabPanelProps, FC<TabPanelProps>>
 
-interface FolderTabsProps extends TabsUnstyledProps {}
+interface FolderTabsProps extends HTMLProps<HTMLDivElement> {}
 
 export const FolderTabs: FC<FolderTabsProps> = ({ children: childNodes, defaultValue = 0, ...rest }) => {
-    const labels = Children.map(childNodes as TabPanelReactElement[], (child) => child.props.label)
-    const children = Children.map(childNodes as TabPanelReactElement[], (child, index) =>
-        cloneElement(child, {
-            value: child.props.value ?? index,
-        }),
-    )
-    if (!labels.length) return null
+    const [value, setValue] = useState(defaultValue)
+    const tabs = Children.map(childNodes as TabPanelReactElement[], (child, index) => {
+        const label = child.props.label
+        const childValue = child.props.value ?? index
+        const selected = value === childValue
+        return (
+            <Tab
+                key={label}
+                tabIndex={index === 0 ? 0 : -1}
+                role="tab"
+                className={selected ? 'selected' : ''}
+                onClick={() => setValue(childValue)}>
+                {label}
+            </Tab>
+        )
+    })
+    const children = Children.map(childNodes as TabPanelReactElement[], (child, index) => {
+        const childValue = child.props.value ?? index
+        const selected = value === childValue
+        return selected ? child : null
+    })
+    if (!tabs.length) return null
     return (
-        <TabsUnstyled defaultValue={defaultValue} {...rest}>
-            <TabList>
-                {labels.map((label) => (
-                    <Tab key={label}>{label}</Tab>
-                ))}
-            </TabList>
+        <div>
+            <TabList>{tabs}</TabList>
             <PanelContent>{children}</PanelContent>
-        </TabsUnstyled>
+        </div>
     )
 }
