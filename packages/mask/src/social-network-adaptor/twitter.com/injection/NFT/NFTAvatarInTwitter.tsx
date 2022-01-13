@@ -99,7 +99,7 @@ function NFTAvatarInTwitter() {
             )
         })
         setNFTEvent(undefined)
-    }, [identity.avatar])
+    }, [identity.avatar, identity.identifier.userId, NFTEvent?.address, NFTEvent?.tokenId])
 
     useEffect(() => {
         setAvatar(_avatar)
