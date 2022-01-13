@@ -282,6 +282,7 @@
     "plugin_wallet_transaction_confirmed": "crwdns4609:0crwdne4609:0",
     "plugin_wallet_transaction_reverted": "crwdns4611:0crwdne4611:0",
     "plugin_wallet_transaction_rejected": "crwdns4613:0crwdne4613:0",
+    "plugin_wallet_transaction_underpriced": "crwdns11871:0crwdne11871:0",
     "plugin_wallet_transaction_server_error": "crwdns4615:0crwdne4615:0",
     "plugin_wallet_view_on_explorer": "crwdns4617:0crwdne4617:0",
     "plugin_ito_placeholder_when_token_unselected": "crwdns4619:0crwdne4619:0",
