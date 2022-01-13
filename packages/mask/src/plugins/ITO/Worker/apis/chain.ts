@@ -171,7 +171,7 @@ export async function getAllPoolsAsSeller(
 }
 
 export async function getClaimAllPools(chainId: ChainId, endBlock: number, swapperAddress: string) {
-    const { EXPLORER_API, EXPLORER_API_KEY } = getExplorerConstants(chainId)
+    const { EXPLORER_API, API_KEYS = [] } = getExplorerConstants(chainId)
     const { ITO2_CONTRACT_ADDRESS, ITO2_CONTRACT_CREATION_BLOCK_HEIGHT: startBlock } = getITOConstants(chainId)
 
     if (!EXPLORER_API || !ITO2_CONTRACT_ADDRESS || !startBlock) return []
@@ -180,7 +180,7 @@ export async function getClaimAllPools(chainId: ChainId, endBlock: number, swapp
     // 2. Retrieve payload major data from its decoded input param.
     const response = await fetch(
         urlcat(EXPLORER_API, {
-            apikey: EXPLORER_API_KEY,
+            apikey: first(API_KEYS),
             action: 'txlist',
             module: 'account',
             sort: 'desc',
