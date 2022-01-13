@@ -16,4 +16,4 @@ export { RegistryContext as RenderRegistryContext } from './Renderer/utils/Regis
 
 // Transformation
 export { type Transformer, TransformerContext } from './Renderer/utils/TransformContext'
-export { createTransformPipe } from './Renderer/utils/transformPipe'
+export { type ComposedTransformers, composeTransformer } from './Renderer/utils/transformPipe'

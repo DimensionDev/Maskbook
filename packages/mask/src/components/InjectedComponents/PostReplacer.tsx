@@ -3,7 +3,7 @@ import { isTypedMessageTuple, isWellKnownTypedMessages } from '@masknet/shared-b
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo } from 'react'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
-import { PayloadReplacerTransformer } from './PayloadReplacer'
+import './PayloadReplacer'
 import { TypedMessageRender } from '@masknet/typed-message/dom'
 import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context'
 const useStyles = makeStyles()({
@@ -20,27 +20,7 @@ export interface PostReplacerProps {
 export function PostReplacer(props: PostReplacerProps) {
     const { classes } = useStyles()
     const postMessage = usePostInfoDetails.rawMessage()
-    const hasMaskPayload = usePostInfoDetails.containsMaskPayload()
-
-    const plugins = useActivatedPluginsSNSAdaptor(false)
-    const processedPostMessage = useMemo(
-        () =>
-            plugins.reduce((x, plugin) => {
-                try {
-                    return plugin.typedMessageTransformer?.(x) ?? x
-                } catch {
-                    return x
-                }
-            }, PayloadReplacerTransformer(postMessage)),
-        [plugins.map((x) => x.ID).join(), postMessage],
-    )
-    const shouldReplacePost =
-        // replace posts which enhanced by plugins
-        (isTypedMessageTuple(processedPostMessage)
-            ? processedPostMessage.items.some((x) => !isWellKnownTypedMessages(x))
-            : true) ||
-        // replace posts which encrypted by Mask
-        hasMaskPayload
+    const shouldReplacePost = true
 
     // zip/unzip original post
     useEffect(() => {
@@ -51,7 +31,7 @@ export function PostReplacer(props: PostReplacerProps) {
     return shouldReplacePost ? (
         <span className={classes.root}>
             <TypedMessageRenderContext>
-                <TypedMessageRender message={processedPostMessage} />
+                <TypedMessageRender message={postMessage} />
             </TypedMessageRenderContext>
         </span>
     ) : null

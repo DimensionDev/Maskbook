@@ -12,6 +12,7 @@ import {
 import { memo } from 'react'
 import type { MessageRenderProps } from '@masknet/typed-message/dom'
 import { TypedMessageRenderRegistry } from '../../../shared-ui/TypedMessageRender/registry'
+import { TypedMessageTransformers } from '../../../shared-ui/TypedMessageRender/transformer'
 import { startEffects } from '../../../utils-pure'
 
 const useStyle = makeStyles()((theme) => ({
@@ -61,6 +62,7 @@ export function PayloadReplacerTransformer(message: TypedMessage): TypedMessage 
 
     return visitEachTypedMessageChild(message, PayloadReplacerTransformer)
 }
+TypedMessageTransformers.addTransformer(PayloadReplacerTransformer, 1000)
 
 const MaskPayloadReplacer = memo(function MaskPayloadReplacer(
     props: MessageRenderProps<TypedMessageExtension_MaskPayloadReplacer>,
