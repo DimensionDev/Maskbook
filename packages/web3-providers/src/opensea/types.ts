@@ -113,15 +113,6 @@ export interface OpenSeaResponse extends Asset {
     creator: OpenSeaCustomAccount
     endTime: string
 }
-//
-// interface AssetEvent {
-//     event_type: string
-//     event_timestamp: number
-//     auction_type: string
-//     total_price: string
-//     transaction: Transaction | null
-//     payment_token: OpenSeaFungibleToken | null
-// }
 
 interface Transaction {
     from_account: OpenSeaCustomAccount
