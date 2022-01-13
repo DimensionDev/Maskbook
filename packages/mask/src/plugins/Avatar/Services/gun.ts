@@ -21,19 +21,26 @@ export async function getUserAddress(userId: string) {
 }
 
 export async function setUserAddress(userId: string, address: string) {
-    // delete userId
-    await NFTAvatarGUN
-        //@ts-expect-error
-        .get(userId)
-        //@ts-expect-error
-        .put(null).then!()
+    try {
+        // delete userId
+        await NFTAvatarGUN
+            //@ts-expect-error
+            .get(userId)
+            //@ts-expect-error
+            .put(null).then!()
 
-    // save userId
-    await NFTAvatarGUN
-        // @ts-expect-error
-        .get(userId)
-        // @ts-expect-error
-        .put(address).then!()
+        // save userId
+        await NFTAvatarGUN
+            // @ts-expect-error
+            .get(userId)
+            // @ts-expect-error
+            .put(address).then!()
+
+        const address = await getUserAddress(userId)
+        if (!address) throw new Error('Save Error !!!')
+    } catch {
+        throw new Error('Save Error!!!')
+    }
 }
 
 export async function getUserAddresses() {
