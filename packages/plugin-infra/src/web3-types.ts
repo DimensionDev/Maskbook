@@ -22,8 +22,10 @@ export enum TokenType {
 }
 
 type ColorRgb = `rgb(${number}, ${number}, ${number})`
+type ColorRgba = `rgba(${number}, ${number}, ${number}, ${number})`
 type ColorHex = `#${number}${number}${number}${number}${number}${number}` | `#${number}${number}${number}`
-type Color = ColorRgb | ColorHex
+type ColorHsl = `hsl(${number}, ${number}%, ${number}%)`
+type Color = ColorRgb | ColorRgba | ColorHex | ColorHsl
 
 export declare namespace Web3Plugin {
     /**
