@@ -184,6 +184,9 @@ const useStyles = makeStyles()((theme) => {
         loadingOwnerList: {
             margin: '24px auto 16px',
         },
+        iframe: {
+            minHeight: 147,
+        },
     }
 })
 interface RedPacketERC721FormProps {
@@ -392,6 +395,7 @@ function NFTCard(props: NFTCardProps) {
                 setERC721TokenName={setName}
                 classes={{
                     loadingFailImage: classes.loadingFailImage,
+                    iframe: classes.iframe,
                 }}
             />
             <div className={classes.nftNameWrapper}>

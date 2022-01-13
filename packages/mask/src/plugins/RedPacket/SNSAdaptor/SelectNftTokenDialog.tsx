@@ -104,7 +104,11 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         marginBottom: theme.spacing(2.5),
         background: theme.palette.mode === 'light' ? '#fff' : '#2F3336',
         width: 120,
+        minHeight: 153,
         borderRadius: 8,
+    },
+    iframe: {
+        minHeight: 153,
     },
     nftNameWrapper: {
         width: '100%',
@@ -501,6 +505,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                     tokenId={tokenId}
                                     classes={{
                                         loadingFailImage: classes.loadingFailImage,
+                                        iframe: classes.iframe,
                                     }}
                                 />
                                 <div className={classes.selectWrapperNftNameWrapper}>
@@ -745,6 +750,7 @@ function NFTCard(props: NFTCardProps) {
                 chainId={token.contractDetailed.chainId}
                 classes={{
                     loadingFailImage: classes.loadingFailImage,
+                    iframe: classes.iframe,
                 }}
                 setERC721TokenName={setName}
             />

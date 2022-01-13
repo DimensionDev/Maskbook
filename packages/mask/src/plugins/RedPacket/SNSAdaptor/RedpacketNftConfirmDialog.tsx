@@ -139,6 +139,9 @@ const useStyles = makeStyles()((theme) => ({
         width: 64,
         height: 64,
     },
+    iframe: {
+        minHeight: 147,
+    },
     ellipsis: {
         overflow: 'hidden',
         textOverflow: 'ellipsis',
@@ -363,6 +366,7 @@ function NFTCard(props: NFTCardProps) {
                 setERC721TokenName={setName}
                 classes={{
                     loadingFailImage: classes.loadingFailImage,
+                    iframe: classes.iframe,
                 }}
             />
 
