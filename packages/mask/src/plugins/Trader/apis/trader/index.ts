@@ -42,7 +42,7 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
         case NetworkType.Celo:
             return [TradeProvider.SUSHISWAP]
         case NetworkType.Metis:
-            return [TradeProvider.SUSHISWAP, TradeProvider.NETSWAP, TradeProvider.TETHYS]
+            return [TradeProvider.TETHYS, TradeProvider.NETSWAP]
         case NetworkType.Fantom:
             return [TradeProvider.SUSHISWAP]
         default:
