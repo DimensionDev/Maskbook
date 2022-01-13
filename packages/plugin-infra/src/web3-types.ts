@@ -23,7 +23,7 @@ export enum TokenType {
 
 type ColorRGB = `rgb(${number}, ${number}, ${number})`
 type ColorRGBA = `rgba(${number}, ${number}, ${number}, ${number})`
-type ColorHEX = `#${number}${number}${number}${number}${number}${number}` | `#${number}${number}${number}`
+type ColorHEX = `#${string}${string}${string}${string}${string}${string}` | `#${string}${string}${string}`
 type ColorHSL = `hsl(${number}, ${number}%, ${number}%)`
 type Color = ColorRGB | ColorRGBA | ColorHEX | ColorHSL
 
