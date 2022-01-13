@@ -1,5 +1,4 @@
-import { styled } from '@mui/material'
-import { Children, cloneElement, FC, useState, HTMLProps, ReactElement } from 'react'
+import { Children, FC, useState, HTMLProps, ReactElement } from 'react'
 import classnames from 'classnames'
 import { makeStyles } from '../../makeStyles'
 import { MaskColorVar } from '../../constants'

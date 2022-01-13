@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import classNames from 'classnames'
 import { Typography } from '@mui/material'
-import { FolderTabPanel, FolderTabs, makeStyles } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { ChainId, useChainId, useAccount, useWallet } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { MaskMessages } from '../../utils/messages'
@@ -318,9 +318,49 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     ]
 
     return (
-        <FolderTabs>
-            <FolderTabPanel label="Label 1">Content 1</FolderTabPanel>
-            <FolderTabPanel label="Label 2">Content 2</FolderTabPanel>
-        </FolderTabs>
+        <>
+            {secondEntryChainTabs?.length ? (
+                <div className={classes.abstractTabWrapper}>
+                    <NetworkTab
+                        chainId={chainId}
+                        setChainId={setChainId}
+                        classes={classes}
+                        chains={secondEntryChainTabs}
+                    />
+                </div>
+            ) : null}
+            <section className={classes.applicationWrapper}>
+                {(secondEntries ?? firstLevelEntries).map(
+                    ({ title, img, onClick, supportedChains, hidden, walletRequired }, i) =>
+                        (!supportedChains || supportedChains?.includes(chainId)) && !hidden ? (
+                            <div
+                                className={classNames(
+                                    classes.applicationBox,
+                                    walletRequired && !selectedWallet ? classes.disabled : '',
+                                )}
+                                onClick={onClick}
+                                key={i}>
+                                <img src={img} className={classes.applicationImg} />
+                                <Typography className={classes.title} color="textPrimary">
+                                    {title}
+                                </Typography>
+                            </div>
+                        ) : null,
+                )}
+            </section>
+            {isClaimAllDialogOpen ? (
+                <ClaimAllDialog open={isClaimAllDialogOpen} onClose={onClaimAllDialogClose} />
+            ) : null}
+            {isSwapDialogOpen ? <TraderDialog open={isSwapDialogOpen} onClose={onSwapDialogClose} /> : null}
+            {isSecondLevelEntryDialogOpen ? (
+                <EntrySecondLevelDialog
+                    title={secondLevelEntryDialogTitle}
+                    open={isSecondLevelEntryDialogOpen}
+                    entries={secondLevelEntries}
+                    chains={secondLevelEntryChains}
+                    closeDialog={onSecondLevelEntryDialogClose}
+                />
+            ) : null}
+        </>
     )
 }
