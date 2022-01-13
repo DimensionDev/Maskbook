@@ -3,13 +3,13 @@ import {
     useAccount,
     useGoodGhostingConstants,
     useSingleContractMultipleData,
+    ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { useGoodGhostingContract } from '../contracts/useGoodGhostingContract'
 import type { GameMetaData, GoodGhostingInfo, Player, TimelineEvent } from '../types'
-import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import addSeconds from 'date-fns/addSeconds'
 import Services from '../../../extension/service'

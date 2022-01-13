@@ -127,7 +127,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                             </Box>
                         )}
                         <Box sx={{ padding: 2 }}>
-                            <CheckoutOrder asset={asset} assetOrder={order} />
+                            <CheckoutOrder />
                             {isVerified ? null : (
                                 <>
                                     <FormControlLabel

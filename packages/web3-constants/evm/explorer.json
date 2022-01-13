@@ -28,7 +28,7 @@
         "BSCT": "",
         "Matic": "https://api.polygonscan.com/api",
         "Mumbai": "",
-        "Arbitrum": "",
+        "Arbitrum": "https://api.arbiscan.io/api",
         "Arbitrum_Rinkeby": "",
         "xDai": "https://blockscout.com/xdai/mainnet/api",
         "Optimistic": "https://api-optimistic.etherscan.io/api",

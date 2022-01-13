@@ -9,6 +9,7 @@ import {
     useAccount,
     useERC721Tokens,
     formatEthereumAddress,
+    useERC721ContractDetailed,
 } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../messages'
@@ -18,7 +19,6 @@ import { EthereumAddress } from 'wallet.ts'
 import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import Fuse from 'fuse.js'
-import { useERC721ContractDetailed } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
 import { unionBy } from 'lodash-unified'
 import { useNFTBalance } from '../../EVM/hooks'

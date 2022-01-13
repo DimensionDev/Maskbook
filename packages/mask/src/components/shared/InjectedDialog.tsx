@@ -58,6 +58,7 @@ export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'titl
     onClose?(): void
     title?: React.ReactChild
     disableBackdropClick?: boolean
+    disableTitleBorder?: boolean
     titleBarIconStyle?: 'auto' | 'back' | 'close'
 }
 
@@ -82,7 +83,8 @@ export function InjectedDialog(props: InjectedDialogProps) {
     // eslint-disable-next-line import/no-deprecated
     const fullScreen = useMediaQuery(useTheme().breakpoints.down('xs'))
     const isDashboard = isDashboardPage()
-    const { children, open, disableBackdropClick, titleBarIconStyle, onClose, title, ...rest } = props
+    const { children, open, disableBackdropClick, titleBarIconStyle, onClose, title, disableTitleBorder, ...rest } =
+        props
     const { t } = useI18N()
     const actions = CopyElementWithNewProps(children, DialogActions, { root: dialogActions })
     const content = CopyElementWithNewProps(children, DialogContent, { root: dialogContent })
@@ -117,7 +119,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                             className="dashboard-dialog-title-hook"
                             classes={{ root: dialogTitle }}
                             style={{
-                                border: isDashboard ? 'none' : undefined,
+                                border: isDashboard || disableTitleBorder ? 'none' : undefined,
                                 fontSize: isDashboard ? 24 : undefined,
                             }}>
                             <IconButton
