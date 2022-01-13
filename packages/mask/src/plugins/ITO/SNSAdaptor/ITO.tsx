@@ -23,10 +23,9 @@ import formatDateTime from 'date-fns/format'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { TokenIcon } from '@masknet/shared'
+import { TokenIcon, useRemoteControlledDialog } from '@masknet/shared'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { getAssetAsBlobURL, getTextUILength, useI18N } from '../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '../../Wallet/messages'
 import { ITO_EXCHANGE_RATION_MAX, MSG_DELIMITER, TIME_WAIT_BLOCKCHAIN } from '../constants'
 import { sortTokens } from './helpers'
@@ -41,8 +40,7 @@ import { StyledLinearProgress } from './StyledLinearProgress'
 import { SwapGuide, SwapStatus } from './SwapGuide'
 import urlcat from 'urlcat'
 import { startCase } from 'lodash-unified'
-import { FACEBOOK_ID } from '../../../social-network-adaptor/facebook.com/base'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
+import { FACEBOOK_ID, isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 
 export interface IconProps {
@@ -154,7 +152,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         marginTop: theme.spacing(1),
     },
     actionButton: {
-        minHeight: 'auto',
         width: '100%',
     },
     textProviderErr: {
@@ -772,7 +769,7 @@ export function ITO(props: ITO_Props) {
                                 variant="contained"
                                 size="large"
                                 className={classes.actionButton}>
-                                <Typography>{t('plugin_ito_enter')}</Typography>
+                                {t('plugin_ito_enter')}
                             </ActionButton>
                         </Grid>
                         <Grid item xs={6}>
@@ -781,7 +778,7 @@ export function ITO(props: ITO_Props) {
                                 variant="contained"
                                 size="large"
                                 className={classes.actionButton}>
-                                <Typography>{t('plugin_ito_share')}</Typography>
+                                {t('plugin_ito_share')}
                             </ActionButton>
                         </Grid>
                     </Grid>

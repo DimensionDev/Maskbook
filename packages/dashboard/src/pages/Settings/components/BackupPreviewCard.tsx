@@ -1,6 +1,5 @@
-import { MaskColorVar } from '@masknet/theme'
+import { MaskColorVar, makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import { useDashboardI18N } from '../../../locales'
 import formatDateTime from 'date-fns/format'

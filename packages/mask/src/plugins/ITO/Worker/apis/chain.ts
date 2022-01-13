@@ -1,8 +1,9 @@
+import { first } from 'lodash-unified'
+import urlcat from 'urlcat'
+import BigNumber from 'bignumber.js'
 import { ChainId, getExplorerConstants, getITOConstants, isSameAddress } from '@masknet/web3-shared-evm'
 import { Interface } from '@ethersproject/abi'
 import ITO_ABI from '@masknet/web3-contracts/abis/ITO2.json'
-import urlcat from 'urlcat'
-import BigNumber from 'bignumber.js'
 import type { PoolFromNetwork, JSON_PayloadFromChain } from '../../types'
 import { MSG_DELIMITER, ITO_CONTRACT_BASE_TIMESTAMP } from '../../constants'
 import { getTransactionReceipt } from '../../../../extension/background-script/EthereumService'
@@ -16,7 +17,7 @@ export async function getAllPoolsAsSeller(
     endBlock: number,
     sellerAddress: string,
 ) {
-    const { EXPLORER_API, EXPLORER_API_KEY } = getExplorerConstants(chainId)
+    const { EXPLORER_API, API_KEYS = [] } = getExplorerConstants(chainId)
     const { ITO2_CONTRACT_ADDRESS } = getITOConstants(chainId)
 
     if (!EXPLORER_API || !ITO2_CONTRACT_ADDRESS || !startBlock) return []
@@ -26,7 +27,7 @@ export async function getAllPoolsAsSeller(
     // 2. Retrieve payload major data from its decoded input param.
     const response = await fetch(
         urlcat(EXPLORER_API, {
-            apikey: EXPLORER_API_KEY,
+            apikey: first(API_KEYS),
             action: 'txlist',
             module: 'account',
             sort: 'desc',
