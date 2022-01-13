@@ -79,8 +79,11 @@ export async function saveNFTAvatarToRSS(address: string, nft: AvatarMetaDB, sig
             nft,
         }
     }
-
-    await RSS3.setFileData(rss, address, '_nfts', _nfts)
+    try {
+        await RSS3.setFileData(rss, address, '_nfts', _nfts)
+    } catch {
+        throw new Error('Something went wrong, and please check your connection.')
+    }
 
     // clear cache
     if (cache.has(address)) cache.delete(address)

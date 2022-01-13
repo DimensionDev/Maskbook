@@ -37,9 +37,9 @@ export async function setUserAddress(userId: string, address: string) {
             .put(address).then!()
 
         const address = await getUserAddress(userId)
-        if (!address) throw new Error('Save Error !!!')
+        if (!address) throw new Error('Something went wrong, and please check your connection.')
     } catch {
-        throw new Error('Save Error!!!')
+        throw new Error('Something went wrong, and please check your connection.')
     }
 }
 
