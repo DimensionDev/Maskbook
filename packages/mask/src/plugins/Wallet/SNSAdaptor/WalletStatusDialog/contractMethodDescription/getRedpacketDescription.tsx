@@ -47,7 +47,8 @@ export function CreateRedpacketDescription(props: CreateRedpacketDescriptionProp
         <span>
             {token && tokenAddress
                 ? t('plugin_red_packet_create_with_token', {
-                      symbol: `${formatBalance(tokenAmount, token.decimals)} ${token.symbol}`,
+                      amount: formatBalance(tokenAmount, token.decimals),
+                      symbol: token.symbol,
                   })
                 : t('plugin_red_packet_create')}
         </span>

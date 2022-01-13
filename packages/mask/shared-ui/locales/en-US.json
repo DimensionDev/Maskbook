@@ -359,7 +359,7 @@
     "plugin_red_packet_token": "Token",
     "plugin_red_packet_message_label": "Title",
     "plugin_red_packet_create": "Create a Lucky Drop",
-    "plugin_red_packet_create_with_token": "Create a Lucky Drop with {{symbol}}",
+    "plugin_red_packet_create_with_token": "Create a Lucky Drop with {{amount}} {{symbol}}",
     "plugin_red_packet_history_duration": "Time: {{startTime}} ~ {{endTime}} (UTC+8)",
     "plugin_red_packet_history_total_amount": "Total Amount: {{amount}} {{symbol}}",
     "plugin_red_packet_history_total_claimed_amount": "Total: <span><strong>{{claimedAmount}}/{{amount}}</strong></span> {{symbol}}",

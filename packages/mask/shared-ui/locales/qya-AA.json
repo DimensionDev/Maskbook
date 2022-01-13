@@ -358,7 +358,7 @@
     "plugin_red_packet_hint": "crwdns4771:0crwdne4771:0",
     "plugin_red_packet_token": "crwdns4773:0crwdne4773:0",
     "plugin_red_packet_message_label": "crwdns8157:0crwdne8157:0",
-    "plugin_red_packet_create_with_token": "crwdns4775:0{{symbol}}crwdne4775:0",
+    "plugin_red_packet_create_with_token": "crwdns4775:0{{amount}} {{symbol}}crwdne4775:0",
     "plugin_red_packet_history_duration": "crwdns4777:0{{startTime}}crwdnd4777:0{{endTime}}crwdne4777:0",
     "plugin_red_packet_history_total_amount": "crwdns4779:0{{amount}}crwdnd4779:0{{symbol}}crwdne4779:0",
     "plugin_red_packet_history_total_claimed_amount": "crwdns4781:0{{claimedAmount}}crwdnd4781:0{{amount}}crwdnd4781:0{{symbol}}crwdne4781:0",
