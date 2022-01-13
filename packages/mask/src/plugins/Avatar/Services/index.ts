@@ -6,27 +6,17 @@ import { getUserAddress, setUserAddress } from './gun'
 import { getNFTAvatarFromRSS, getSignature, saveNFTAvatarToRSS } from './rss3'
 
 export async function getNFTAvatar(userId: string) {
-    let result
     const address = await getUserAddress(userId)
-    if (!address) {
-        result = await getNFTAvatarFromJSON(userId)
-        return result
+    if (address) {
+        const result = await getNFTAvatarFromRSS(userId, address)
+        if (result) return result
     }
-
-    result = await getNFTAvatarFromRSS(userId, address)
-    if (!result) {
-        result = await getNFTAvatarFromJSON(userId)
-    }
-
-    return result
+    return getNFTAvatarFromJSON(userId)
 }
 
 async function getAddressSignature(userId: string, address: string) {
     const _address = await getUserAddress(userId)
-    if (!_address) return
-
-    if (!isSameAddress(address, _address)) return
-
+    if (!_address || !isSameAddress(address, _address)) return
     return getSignature(userId, _address)
 }
 

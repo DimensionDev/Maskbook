@@ -187,6 +187,10 @@ function NFTAvatarInTwitter() {
         }
     }, [avatar])
 
+    console.log(avatar)
+    console.log(showAvatar)
+    console.log(size)
+
     if (!avatar || !size) return null
 
     return (

@@ -5,7 +5,7 @@ import { NFT_AVATAR_GUN_SERVER } from '../constants'
 const NFTAvatarGUN = gun2.get(NFT_AVATAR_GUN_SERVER)
 
 // After reinstalling the system, it cannot be retrieved for the first time, so it needs to be taken twice
-export async function getUserAddress(userId: string) {
+export async function getUserAddress(userId: string): Promise<string> {
     let result = await NFTAvatarGUN
         //@ts-expect-error
         .get(userId).then!()
@@ -35,7 +35,11 @@ export async function setUserAddress(userId: string, address: string) {
             .get(userId)
             // @ts-expect-error
             .put(address).then!()
-    } catch {
-        throw new Error('GUN2 Error!!!')
-    }
+
+        const result = NFTAvatarGUN
+            //@ts-expect-error
+            .get(userId).then!()
+        if (result) return
+    } catch {}
+    throw new Error('Something went wrong, and please check your connection.')
 }
