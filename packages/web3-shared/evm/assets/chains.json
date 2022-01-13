@@ -323,7 +323,7 @@
     },
     {
         "name": "Optimistic Ethereum",
-        "chain": "OPT",
+        "chain": "OP",
         "network": "mainnet",
         "rpc": ["https://mainnet.optimism.io/"],
         "faucets": [],
@@ -335,9 +335,15 @@
             "logoURI": "https://static.debank.com/image/chain/logo_url/op/01ae734fe781c9c2ae6a4cc7e9244056.png"
         },
         "infoURL": "https://optimism.io",
-        "shortName": "oeth",
+        "shortName": "op",
         "chainId": 10,
-        "networkId": 10
+        "networkId": 10,
+        "explorers": [
+            {
+                "name": "optimisc",
+                "url": "https://optimistic.etherscan.io/"
+            }
+        ]
     },
     {
         "name": "Optimistic Ethereum Testnet Kovan",

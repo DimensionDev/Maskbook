@@ -25,7 +25,7 @@
             "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/421611/tokens.json"
         ],
         "xDai": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/100/tokens.json"],
-        "Optimistic": [],
+        "Optimistic": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/10/tokens.json"],
         "Optimistic_Kovan": [],
         "Optimistic_Goerli": [],
         "Celo": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/42220/tokens.json"],

@@ -154,7 +154,7 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         type: NetworkType.Optimistic,
         name: 'Optimistic',
         icon: new URL('./assets/optimistic.png', import.meta.url),
-        iconColor: 'rgb(254 5 33)',
+        iconColor: 'rgb(254, 5, 33)',
         isMainnet: true,
     },
 ]

@@ -105,7 +105,7 @@ export function getNetworkTypeFromChainId(chainId: ChainId, value?: boolean) {
         [NetworkType.Polygon]: 'Polygon',
         [NetworkType.Arbitrum]: 'Arbitrum',
         [NetworkType.xDai]: 'xDai',
-        [NetworkType.Optimistic]: 'Optimistic',
+        [NetworkType.Optimistic]: 'OP',
         [NetworkType.Celo]: 'CELO',
         [NetworkType.Fantom]: 'FTM',
     }
