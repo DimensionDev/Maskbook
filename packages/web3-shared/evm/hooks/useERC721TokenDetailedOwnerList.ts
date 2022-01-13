@@ -69,7 +69,7 @@ async function getERC721TokenDetailedOwnerListFromChain(
 
         if (!tokenId) return
 
-        return getERC721TokenDetailedFromChain(contractDetailed, erc721TokenContract, tokenId)
+        return getERC721TokenDetailedFromChain(contractDetailed, erc721TokenContract, tokenId, owner, false)
     })
 
     return (await Promise.allSettled(allRequest))

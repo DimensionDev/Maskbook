@@ -92,9 +92,10 @@ export interface CollectibleCardProps {
     chainId: number
     token: Web3Plugin.NonFungibleToken
     onSend(): void
+    renderOrder: number
 }
 
-export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onSend }) => {
+export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onSend, renderOrder }) => {
     const t = useDashboardI18N()
     const { Utils } = useWeb3State()
     const { classes } = useStyles()
@@ -131,6 +132,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
                             <NFTCardStyledAssetPlayer
                                 contractAddress={token.contract.address}
                                 chainId={token.contract.chainId}
+                                renderOrder={renderOrder}
                                 url={token.metadata.assetURL || token.metadata.iconURL}
                                 tokenId={token.tokenId}
                                 classes={{

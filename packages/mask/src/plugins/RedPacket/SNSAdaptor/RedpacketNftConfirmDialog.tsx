@@ -291,7 +291,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                         <List className={classes.tokenSelector}>
                             {tokenList.map((value, i) => (
                                 <div key={i}>
-                                    <NFTCard token={value} />
+                                    <NFTCard token={value} renderOrder={i} />
                                 </div>
                             ))}
                         </List>
@@ -351,10 +351,11 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
 
 interface NFTCardProps {
     token: ERC721TokenDetailed
+    renderOrder: number
 }
 
 function NFTCard(props: NFTCardProps) {
-    const { token } = props
+    const { token, renderOrder } = props
     const { classes } = useStyles()
     const [name, setName] = useState('#' + token.tokenId)
     return (
@@ -363,6 +364,7 @@ function NFTCard(props: NFTCardProps) {
                 contractAddress={token.contractDetailed.address}
                 chainId={token.contractDetailed.chainId}
                 tokenId={token.tokenId}
+                renderOrder={renderOrder}
                 setERC721TokenName={setName}
                 classes={{
                     loadingFailImage: classes.loadingFailImage,

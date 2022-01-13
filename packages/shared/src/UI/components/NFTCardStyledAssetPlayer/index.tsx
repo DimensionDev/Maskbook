@@ -33,11 +33,13 @@ interface NFTLuckyDropStyledAssetPlayerProps
     tokenId: string
     url?: string
     fallbackImage?: URL
+    renderOrder?: number
     setERC721TokenName?: (name: string) => void
     setSourceType?: (type: string) => void
 }
 export function NFTCardStyledAssetPlayer(props: NFTLuckyDropStyledAssetPlayerProps) {
-    const { chainId, contractAddress, tokenId, fallbackImage, url, setERC721TokenName, setSourceType } = props
+    const { chainId, contractAddress, tokenId, fallbackImage, url, setERC721TokenName, renderOrder, setSourceType } =
+        props
     const classes = useStylesExtends(useStyles(), props)
     return (
         <AssetPlayer
@@ -54,6 +56,8 @@ export function NFTCardStyledAssetPlayer(props: NFTLuckyDropStyledAssetPlayerPro
             }}
             setERC721TokenName={setERC721TokenName}
             setSourceType={setSourceType}
+            // It would fail to render as loading too many(>200) iframe at once.
+            renderTimeout={renderOrder ? 20000 * Math.floor(renderOrder / 100) : undefined}
             fallbackImage={fallbackImage ?? new URL('./nft_token_fallback.png', import.meta.url)}
             loadingIcon={<CircularProgress size={20} className={classes.loadingNftImg} />}
             classes={{

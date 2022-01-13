@@ -316,7 +316,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         <List className={classes.tokenSelector}>
                             {existTokenDetailedList.map((value, i) => (
                                 <div key={i}>
-                                    <NFTCard token={value} removeToken={removeToken} />
+                                    <NFTCard token={value} removeToken={removeToken} renderOrder={i} />
                                 </div>
                             ))}
                             <ListItem
@@ -380,10 +380,11 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
 interface NFTCardProps {
     token: OrderedERC721Token
     removeToken: (token: ERC721TokenDetailed) => void
+    renderOrder: number
 }
 
 function NFTCard(props: NFTCardProps) {
-    const { token, removeToken } = props
+    const { token, removeToken, renderOrder } = props
     const { classes } = useStyles()
     const [name, setName] = useState('#' + token.tokenId)
     return (
@@ -392,6 +393,7 @@ function NFTCard(props: NFTCardProps) {
                 contractAddress={token.contractDetailed.address}
                 chainId={token.contractDetailed.chainId}
                 tokenId={token.tokenId}
+                renderOrder={renderOrder}
                 setERC721TokenName={setName}
                 classes={{
                     loadingFailImage: classes.loadingFailImage,

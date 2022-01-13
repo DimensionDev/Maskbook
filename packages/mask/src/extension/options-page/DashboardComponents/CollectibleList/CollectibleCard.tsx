@@ -58,10 +58,11 @@ export interface CollectibleCardProps {
     wallet?: Wallet
     token: ERC721TokenDetailed
     readonly?: boolean
+    renderOrder: number
 }
 
 export function CollectibleCard(props: CollectibleCardProps) {
-    const { wallet, token, provider, readonly } = props
+    const { wallet, token, provider, readonly, renderOrder } = props
     const { classes } = useStyles()
 
     return (
@@ -80,6 +81,7 @@ export function CollectibleCard(props: CollectibleCardProps) {
                         contractAddress={token.contractDetailed.address}
                         chainId={token.contractDetailed.chainId}
                         url={token.info.mediaUrl}
+                        renderOrder={renderOrder}
                         tokenId={token.tokenId}
                         classes={{
                             loadingFailImage: classes.loadingFailImage,

@@ -63,9 +63,10 @@ export interface NFTCardProps {
     token: ERC721TokenDetailed
     selectedTokenId: string
     onSelect(tokenId: string): void
+    renderOrder: number
 }
 
-export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect }) => {
+export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect, renderOrder }) => {
     const { classes } = useStyles()
     const [checked, setChecked] = useState(!!selectedTokenId && selectedTokenId === token.tokenId)
     const [name, setName] = useState(token.tokenId)
@@ -106,6 +107,7 @@ export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect })
                 chainId={token.contractDetailed.chainId}
                 tokenId={token.tokenId}
                 setERC721TokenName={setName}
+                renderOrder={renderOrder}
                 classes={{
                     loadingFailImage: classes.loadingFailImage,
                     loadingPlaceholder: classes.loadingPlaceholder,

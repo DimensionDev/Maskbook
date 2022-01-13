@@ -1,9 +1,9 @@
-import { memo, useRef, useCallback, useState } from 'react'
+import { memo, useRef, useCallback, useState, useEffect } from 'react'
 import { ChainId, getRPCConstants } from '@masknet/web3-shared-evm'
 import { first } from 'lodash-unified'
 import IframeResizer, { IFrameComponent } from 'iframe-resizer-react'
 import { mediaViewerUrl } from '../../../constants'
-import { useTimeoutFn, useUpdateEffect } from 'react-use'
+import { useUpdateEffect } from 'react-use'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, SvgIconProps } from '@mui/material'
 import { AssetLoadingIcon, MaskGreyIcon } from '@masknet/icons'
@@ -29,6 +29,7 @@ interface AssetPlayerProps
     }
     loadingIcon?: React.ReactNode
     erc721Token?: ERC721TokenQuery
+    renderTimeout?: number
     iconProps?: SvgIconProps
     fallbackImage?: URL
     setERC721TokenName?: (name: string) => void
@@ -48,11 +49,10 @@ enum AssetPlayerState {
     ERROR = 3,
 }
 
-const TIMEOUT = 30000
-
 export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconProps, ...props }) => {
     const ref = useRef<IFrameComponent | null>(null)
     const classes = useStylesExtends(useStyles(), props)
+    const [hidden, setHidden] = useState(Boolean(props.renderTimeout))
     const { RPC: RPC_Entries } = getRPCConstants(props.erc721Token?.chainId)
     const rpc = first(RPC_Entries)
     const erc721Token = rpc ? ({ ...props.erc721Token, rpc } as ERC721TokenQuery) : undefined
@@ -60,13 +60,15 @@ export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconPro
         url || erc721Token ? AssetPlayerState.LOADING : AssetPlayerState.ERROR,
     )
 
-    //#region If onResized is not triggered within the specified time, set player state to error
-    const [, cancel, reset] = useTimeoutFn(() => {
-        if (playerState !== AssetPlayerState.NORMAL) {
-            setPlayerState(AssetPlayerState.ERROR)
-        }
-    }, TIMEOUT)
-    //#endregion
+    useEffect(() => {
+        if (!props.renderTimeout || !hidden) return
+
+        const timer = setTimeout(() => {
+            setHidden(false)
+        }, props.renderTimeout)
+
+        return () => clearTimeout(timer)
+    }, [props.renderTimeout, hidden])
 
     //#region setup iframe when url and options be changed
     const setIframe = useCallback(() => {
@@ -77,7 +79,6 @@ export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconPro
             return
         }
         if (playerState === AssetPlayerState.INIT) {
-            reset()
             ref.current.iFrameResizer.sendMessage({
                 url,
                 erc721Token,
@@ -125,29 +126,30 @@ export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconPro
                     props.loadingIcon ?? <AssetLoadingIcon className={classes.loadingIcon} />
                 )}
             </Box>
-            <IframeResizer
-                src={mediaViewerUrl}
-                onInit={(iframe: IFrameComponent) => {
-                    ref.current = iframe
-                    setPlayerState(AssetPlayerState.INIT)
-                    setIframe()
-                }}
-                className={playerState !== AssetPlayerState.NORMAL ? classes.hidden : classes.iframe}
-                onResized={({ type }) => {
-                    if (type === 'init' || playerState === AssetPlayerState.NORMAL) return
-                    cancel()
-                    setPlayerState(AssetPlayerState.NORMAL)
-                }}
-                style={{
-                    width: playerState !== AssetPlayerState.NORMAL ? 0 : undefined,
-                    height: playerState !== AssetPlayerState.NORMAL ? 0 : undefined,
-                }}
-                checkOrigin={false}
-                onMessage={onMessage}
-                frameBorder="0"
-                allow="autoplay"
-                allowFullScreen
-            />
+            {hidden ? null : (
+                <IframeResizer
+                    src={mediaViewerUrl}
+                    onInit={(iframe: IFrameComponent) => {
+                        ref.current = iframe
+                        setPlayerState(AssetPlayerState.INIT)
+                        setIframe()
+                    }}
+                    className={playerState !== AssetPlayerState.NORMAL ? classes.hidden : classes.iframe}
+                    onResized={({ type }) => {
+                        if (type === 'init' || playerState === AssetPlayerState.NORMAL) return
+                        setPlayerState(AssetPlayerState.NORMAL)
+                    }}
+                    style={{
+                        width: playerState !== AssetPlayerState.NORMAL ? 0 : undefined,
+                        height: playerState !== AssetPlayerState.NORMAL ? 0 : undefined,
+                    }}
+                    checkOrigin={false}
+                    onMessage={onMessage}
+                    frameBorder="0"
+                    allow="autoplay"
+                    allowFullScreen
+                />
+            )}
         </>
     )
 })

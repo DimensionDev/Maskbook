@@ -92,9 +92,10 @@ interface NftItemProps extends HTMLProps<HTMLDivElement> {
     contract: ERC721ContractDetailed | undefined
     tokenId: string
     claimed?: boolean
+    renderOrder: number
 }
 
-export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claimed, ...rest }) => {
+export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claimed, renderOrder, ...rest }) => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [name, setName] = useState('#' + tokenId)
@@ -113,6 +114,7 @@ export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claime
                     loadingFailImage: classes.loadingFailImage,
                 }}
                 tokenId={tokenId}
+                renderOrder={renderOrder}
                 contractAddress={contract.address}
                 chainId={contract.chainId}
                 setERC721TokenName={setName}
@@ -135,7 +137,7 @@ export const NftList: FC<NftListProps> = ({ contract, statusList, tokenIds, clas
         <List className={classnames(className, classes.list)} {...rest}>
             {tokenIds.map((tokenId, index) => (
                 <ListItem className={classes.listItem} key={tokenId}>
-                    <NftItem contract={contract} claimed={statusList[index]} tokenId={tokenId} />
+                    <NftItem contract={contract} claimed={statusList[index]} tokenId={tokenId} renderOrder={index} />
                 </ListItem>
             ))}
         </List>

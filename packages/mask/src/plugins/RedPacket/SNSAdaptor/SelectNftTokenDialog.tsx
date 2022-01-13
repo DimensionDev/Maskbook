@@ -642,6 +642,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                                 <div key={i}>
                                                     <NFTCard
                                                         findToken={findToken}
+                                                        renderOrder={i}
                                                         token={token}
                                                         tokenIdFilterList={tokenIdFilterList}
                                                         selectToken={selectToken}
@@ -726,6 +727,7 @@ interface NFTCardProps {
     token: OrderedERC721Token
     tokenIdFilterList: string[]
     isSelectSharesExceed: boolean
+    renderOrder: number
     selectToken: (
         token: OrderedERC721Token,
         findToken: OrderedERC721Token | undefined,
@@ -735,7 +737,7 @@ interface NFTCardProps {
 }
 
 function NFTCard(props: NFTCardProps) {
-    const { findToken, token, tokenIdFilterList, isSelectSharesExceed, selectToken } = props
+    const { findToken, token, tokenIdFilterList, isSelectSharesExceed, renderOrder, selectToken } = props
     const { classes } = useStyles({ isSelectSharesExceed })
     const [name, setName] = useState('#' + token.tokenId)
     return (
@@ -747,6 +749,7 @@ function NFTCard(props: NFTCardProps) {
             <NFTCardStyledAssetPlayer
                 contractAddress={token.contractDetailed.address}
                 tokenId={token.tokenId}
+                renderOrder={renderOrder}
                 chainId={token.contractDetailed.chainId}
                 classes={{
                     loadingFailImage: classes.loadingFailImage,
