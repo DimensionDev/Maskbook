@@ -15,8 +15,7 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": "",
-        "Aurora_Betanet": ""
+        "Aurora_Testnet": ""
     },
     "GET_SINGLE_ASSET_URL": {
         "Mainnet": "https://api.opensea.io/api/v1/asset",
@@ -34,8 +33,7 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": "",
-        "Aurora_Betanet": ""
+        "Aurora_Testnet": ""
     },
     "GET_ASSETS_URL": {
         "Mainnet": "https://api.opensea.io/api/v1/assets",
@@ -53,7 +51,6 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": "",
-        "Aurora_Betanet": ""
+        "Aurora_Testnet": ""
     }
 }

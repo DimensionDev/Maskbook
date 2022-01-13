@@ -1,5 +1,5 @@
 import { ChainId } from '@masknet/web3-shared-evm'
-import { DAI, MSKA, MSKB, MSKC, USDC, USDT, fUSDT, WBTC, WNATIVE, WNATIVE_ONLY } from './trader'
+import { DAI, MSKA, MSKB, MSKC, USDC, USDT, WBTC, WNATIVE, WNATIVE_ONLY } from './trader'
 import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'
 
 /**
@@ -12,5 +12,5 @@ export const TRISOLARIS_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
     ...WNATIVE_ONLY,
     [ChainId.Rinkeby]: [WNATIVE, MSKA, MSKB, MSKC].map((x) => x[ChainId.Rinkeby]),
     [ChainId.Matic]: [WNATIVE, USDC, WBTC, DAI, USDT].map((x) => x[ChainId.Matic]),
-    [ChainId.Aurora]: [WNATIVE, DAI, USDT, USDC, fUSDT, WBTC].map((x) => x[ChainId.Aurora]),
+    [ChainId.Aurora]: [WNATIVE, DAI, USDT, USDC, WBTC].map((x) => x[ChainId.Aurora]),
 }

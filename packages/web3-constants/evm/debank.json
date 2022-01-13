@@ -15,7 +15,6 @@
         "Celo": "celo",
         "Fantom": "ftm",
         "Aurora": "aurora",
-        "Aurora_Testnet": "",
-        "Aurora_Betanet": ""
+        "Aurora_Testnet": ""
     }
 }

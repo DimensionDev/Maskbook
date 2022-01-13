@@ -67,8 +67,7 @@ export enum ChainId {
 
     // Aurora
     Aurora = 1313161554,
-    Aurora_Testnet = 1313161555,
-    Aurora_Betanet = 1313161556,
+    Aurora_Testnet = 1313161555
 }
 
 export enum ProviderType {

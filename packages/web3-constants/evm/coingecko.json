@@ -15,8 +15,7 @@
         "Celo": "celo",
         "Fantom": "fantom",
         "Aurora": "aurora",
-        "Aurora_Testnet": "",
-        "Aurora_Betanet": ""
+        "Aurora_Testnet": ""
     },
     "COIN_ID": {
         "Mainnet": "ethereum",
@@ -34,7 +33,6 @@
         "Celo": "celo",
         "Fantom": "fantom",
         "Aurora": "aurora",
-        "Aurora_Testnet": "",
-        "Aurora_Betanet": ""
+        "Aurora_Testnet": ""
     }
 }
