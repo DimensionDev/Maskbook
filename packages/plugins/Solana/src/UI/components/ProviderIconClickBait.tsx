@@ -28,9 +28,7 @@ export function ProviderIconClickBait({
             {isValidElement<object>(children)
                 ? cloneElement(children, {
                       ...children.props,
-                      ...{
-                          onClick: onLogIn,
-                      },
+                      onClick: onLogIn,
                   })
                 : children}
         </>

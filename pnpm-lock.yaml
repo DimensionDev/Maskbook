@@ -10,7 +10,7 @@ importers:
     specifiers:
       '@commitlint/cli': ^16.0.0
       '@commitlint/config-conventional': ^16.0.0
-      '@dimensiondev/eslint-plugin': ^0.0.1-20220104011158-0905fa1
+      '@dimensiondev/eslint-plugin': ^0.0.1-20220110102506-9f382ee
       '@dimensiondev/kit': 0.0.0-20211215044858-27d964f
       '@dimensiondev/patch-package': ^6.5.0
       '@emotion/cache': ^11.7.1
@@ -89,7 +89,7 @@ importers:
     devDependencies:
       '@commitlint/cli': 16.0.0
       '@commitlint/config-conventional': 16.0.0
-      '@dimensiondev/eslint-plugin': 0.0.1-20220104011158-0905fa1_eslint@8.5.0
+      '@dimensiondev/eslint-plugin': 0.0.1-20220110102506-9f382ee_eslint@8.5.0
       '@dimensiondev/patch-package': 6.5.0
       '@jest/globals': 27.4.4
       '@magic-works/i18n-codegen': 0.0.6_typescript@4.6.0-dev.20211202
@@ -643,6 +643,7 @@ importers:
   packages/plugins/FileService:
     specifiers:
       '@dimensiondev/common-protocols': 1.6.0-20210723072221-8f46a92
+      '@masknet/icons': workspace:*
       '@masknet/plugin-infra': workspace:*
       '@masknet/plugin-wallet': workspace:*
       '@masknet/shared': workspace:*
@@ -656,6 +657,7 @@ importers:
       react-use: ^17.3.1
     dependencies:
       '@dimensiondev/common-protocols': 1.6.0-20210723072221-8f46a92
+      '@masknet/icons': link:../../icons
       '@masknet/plugin-infra': link:../../plugin-infra
       '@masknet/plugin-wallet': link:../Wallet
       '@masknet/shared': link:../../shared
@@ -3450,8 +3452,8 @@ packages:
       '@msgpack/msgpack': 1.12.2
     dev: false
 
-  /@dimensiondev/eslint-plugin/0.0.1-20220104011158-0905fa1_eslint@8.5.0:
-    resolution: {integrity: sha512-DyAzOQp2Dp9Nzll6dTbujqyBAXOLhlWXvDdmnfX3+cHixhvaupbMeoh4MmujkOY681N5ohVm2eKWJd/ApC4lrQ==, tarball: download/@dimensiondev/eslint-plugin/0.0.1-20220104011158-0905fa1/931c157d880a7f8a78e87326a2840ad7d4583b5c714f155e045f73a11969fc82}
+  /@dimensiondev/eslint-plugin/0.0.1-20220110102506-9f382ee_eslint@8.5.0:
+    resolution: {integrity: sha512-DFNWb35mRshQA4OZzRmqPAENf49I+3/2i5mY8b37oi/i3sB+WjK8Z9BQjpz8uf+lURMhs1CdzJp9oQoTA08YZg==, tarball: download/@dimensiondev/eslint-plugin/0.0.1-20220110102506-9f382ee/00bf74704d413d6c24deba9f94bcfb2e13a94634263dc71695c71630d7716785}
     engines: {node: '>= 14'}
     peerDependencies:
       eslint: '>= 8'

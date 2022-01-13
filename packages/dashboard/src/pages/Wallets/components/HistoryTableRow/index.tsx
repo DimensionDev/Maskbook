@@ -2,7 +2,7 @@ import { memo, useMemo } from 'react'
 import formatDateTime from 'date-fns/format'
 import type { Transaction } from '@masknet/web3-shared-evm'
 import { Box, TableCell, TableRow, Typography, Link, Stack } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import {
     ChainId,
     DebankTransactionDirection,
@@ -11,7 +11,6 @@ import {
 } from '@masknet/web3-shared-evm'
 import { TransactionIcon } from '../TransactionIcon'
 import { LinkOutIcon } from '@masknet/icons'
-import { MaskColorVar } from '@masknet/theme'
 import classNames from 'classnames'
 import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
 

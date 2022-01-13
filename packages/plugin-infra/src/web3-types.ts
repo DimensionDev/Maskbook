@@ -1,7 +1,6 @@
 import type { BigNumber } from 'bignumber.js'
 import type { Subscription } from 'use-subscription'
-import type { Pagination, Plugin } from './types'
-import type { Pageable } from './types'
+import type { Pagination, Plugin, Pageable } from './types'
 
 /**
  * A network plugin defines the way to connect to a single chain.
