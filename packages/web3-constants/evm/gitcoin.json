@@ -66,12 +66,12 @@
         "BSCT": 5,
         "Matic": 5,
         "Mumbai": 5,
-        "Optimistic": 5,
-        "Optimistic_Kovan": 0,
-        "Optimistic_Goerli": 0,
         "Arbitrum": 5,
         "Arbitrum_Rinkeby": 5,
         "xDai": 5,
+        "Optimistic": 5,
+        "Optimistic_Kovan": 0,
+        "Optimistic_Goerli": 0,
         "Celo": 5,
         "Fantom": 5
     }

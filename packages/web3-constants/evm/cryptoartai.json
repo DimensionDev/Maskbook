@@ -12,6 +12,9 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Optimistic": "",
+        "Optimistic_Kovan": "",
+        "Optimistic_Goerli": "",
         "Celo": "",
         "Fantom": ""
     },
@@ -28,6 +31,9 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Optimistic": "",
+        "Optimistic_Kovan": "",
+        "Optimistic_Goerli": "",
         "Celo": "",
         "Fantom": ""
     },
@@ -44,6 +50,9 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Optimistic": "",
+        "Optimistic_Kovan": "",
+        "Optimistic_Goerli": "",
         "Celo": "",
         "Fantom": ""
     }

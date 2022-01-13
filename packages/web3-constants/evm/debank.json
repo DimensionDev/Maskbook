@@ -12,8 +12,10 @@
         "Arbitrum": "arb",
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai",
+        "Optimistic": "op",
+        "Optimistic_Kovan": "",
+        "Optimistic_Goerli": "",
         "Celo": "celo",
-        "Fantom": "ftm",
-        "Optimistic": "op"
+        "Fantom": "ftm"
     }
 }

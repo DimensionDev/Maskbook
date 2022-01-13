@@ -12,8 +12,10 @@
         "Arbitrum": "11841",
         "Arbitrum_Rinkeby": "",
         "xDai": "5601",
+        "Optimistic": "10",
+        "Optimistic_Kovan": "",
+        "Optimistic_Goerli": "",
         "Celo": "5567",
-        "Fantom": "3513",
-        "Optimistic": "10"
+        "Fantom": "3513"
     }
 }

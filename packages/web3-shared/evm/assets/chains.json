@@ -328,7 +328,12 @@
         "rpc": ["https://mainnet.optimism.io/"],
         "faucets": [],
         "features": [],
-        "nativeCurrency": { "name": "Ether", "symbol": "OETH", "decimals": 18 },
+        "nativeCurrency": {
+            "name": "Ether",
+            "symbol": "OETH",
+            "decimals": 18,
+            "logoURI": "https://static.debank.com/image/chain/logo_url/op/01ae734fe781c9c2ae6a4cc7e9244056.png"
+        },
         "infoURL": "https://optimism.io",
         "shortName": "oeth",
         "chainId": 10,
@@ -341,7 +346,12 @@
         "rpc": ["https://kovan.optimism.io/"],
         "faucets": [],
         "features": [],
-        "nativeCurrency": { "name": "Ether", "symbol": "KOR", "decimals": 18 },
+        "nativeCurrency": {
+            "name": "Ether",
+            "symbol": "KOR",
+            "decimals": 18,
+            "logoURI": "https://static.debank.com/image/chain/logo_url/op/01ae734fe781c9c2ae6a4cc7e9244056.png"
+        },
         "infoURL": "https://optimism.io",
         "shortName": "gor",
         "chainId": 69,

@@ -74,6 +74,8 @@ Before we ship the chain to the user, we need to do basic ability checks.
 - [ ] Check if the gas estimate dialog is working.
   - Setup the chain for CoinGecko API.
 
+<!-- cspell:ignore jkoeaghipilijlahjplgbfiocjhldnap -->
+
 Goto `chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/dashboard.html#/wallets/transfer` and check the estimated USD value is working.
 
 ![image](https://user-images.githubusercontent.com/52657989/144754866-9c5f389b-6eb4-4325-8f3d-ae53ee6e3b4a.png)

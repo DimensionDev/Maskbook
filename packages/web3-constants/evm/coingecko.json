@@ -12,9 +12,11 @@
         "Arbitrum": "arbitrum-one",
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai",
+        "Optimistic": "optimistic-ethereum",
+        "Optimistic_Kovan": "",
+        "Optimistic_Goerli": "",
         "Celo": "celo",
-        "Fantom": "fantom",
-        "Optimistic": "optimistic-ethereum"
+        "Fantom": "fantom"
     },
     "COIN_ID": {
         "Mainnet": "ethereum",
@@ -26,11 +28,13 @@
         "BSCT": "",
         "Matic": "matic-network",
         "Mumbai": "arbitrum-one",
-        "Arbitrum": "",
+        "Arbitrum": "ethereum",
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai",
+        "Optimistic": "ethereum",
+        "Optimistic_Kovan": "",
+        "Optimistic_Goerli": "",
         "Celo": "celo",
-        "Fantom": "fantom",
-        "Optimistic": "optimistic-ethereum"
+        "Fantom": "fantom"
     }
 }

@@ -12,6 +12,9 @@
         "Arbitrum": "arbitrum-assets",
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai-assets",
+        "Optimistic": "opt-assets",
+        "Optimistic_Kovan": "",
+        "Optimistic_Goerli": "",
         "Celo": "celo-assets",
         "Fantom": "fantom-assets"
     },
@@ -28,6 +31,9 @@
         "Arbitrum": "arbitrum-transactions",
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai-transactions",
+        "Optimistic": "opt-transactions",
+        "Optimistic_Kovan": "",
+        "Optimistic_Goerli": "",
         "Celo": "celo-transactions",
         "Fantom": "fantom-transactions"
     }
