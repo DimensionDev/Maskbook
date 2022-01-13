@@ -6,11 +6,12 @@ import { isDashboardPage } from '@masknet/shared-base'
 import { useI18N } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
+import { FolderTabPanel, FolderTabs } from '@masknet/theme'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { WalletRPC } from '../../Wallet/messages'
-import { ProtocolType, TabType } from '../types'
+import { ProtocolCategory, ProtocolType, TabType } from '../types'
+import { SavingsProtocols } from '../protocols'
 import { useStyles } from './SavingsDialogStyles'
-import { SavingsTab } from './SavingsTab'
 import { SavingsTable } from './SavingsTable'
 import { SavingsForm } from './SavingsForm'
 
@@ -34,6 +35,31 @@ export function SavingsDialog({ open, onClose, onSwapDialogOpen }: SavingsDialog
         const networks = await WalletRPC.getSupportedNetworks()
         return networks.map((network) => getChainIdFromNetworkType(network))
     }, [])
+
+    const CategorizedProtocols = Object.keys(ProtocolCategory).map((category) => {
+        return {
+            category,
+            protocols: SavingsProtocols.filter(
+                (protocol) => protocol.category.toLowerCase() === category.toLowerCase(),
+            ),
+        }
+    })
+
+    const MappableProtocols = CategorizedProtocols.filter((categorizedProtocol) => {
+        if (categorizedProtocol.protocols.length === 0) {
+            return false
+        }
+
+        for (const protocol of categorizedProtocol.protocols) {
+            for (const network of protocol.availableNetworks) {
+                if (network.chainId === chainId) {
+                    return true
+                }
+            }
+        }
+
+        return false
+    })
 
     return (
         <InjectedDialog
@@ -63,11 +89,25 @@ export function SavingsDialog({ open, onClose, onSwapDialogOpen }: SavingsDialog
                                 chains={chains ?? []}
                             />
                         </div>
-                        <div className={classes.abstractTabWrapper}>
-                            <SavingsTab tab={tab} setTab={setTab} />
-                        </div>
-                        <div className={classes.abstractTabWrapper}>
-                            <SavingsTable chainId={chainId} tab={tab} setSelectedProtocol={setSelectedProtocol} />
+                        <div className={classes.tableTabWrapper}>
+                            <FolderTabs>
+                                <FolderTabPanel label="DEPOSIT">
+                                    <SavingsTable
+                                        chainId={chainId}
+                                        tab={TabType.Deposit}
+                                        mappableProtocols={MappableProtocols}
+                                        setSelectedProtocol={setSelectedProtocol}
+                                    />
+                                </FolderTabPanel>
+                                <FolderTabPanel label="WITHDRAW">
+                                    <SavingsTable
+                                        chainId={chainId}
+                                        tab={TabType.Withdraw}
+                                        mappableProtocols={MappableProtocols}
+                                        setSelectedProtocol={setSelectedProtocol}
+                                    />
+                                </FolderTabPanel>
+                            </FolderTabs>
                         </div>
                     </>
                 ) : (

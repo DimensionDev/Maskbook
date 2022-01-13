@@ -6,12 +6,11 @@ import { useWeb3, useAccount } from '@masknet/web3-shared-evm'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { IconURLs } from './IconURL'
 import { useI18N } from '../../../utils'
-import { ProtocolCategory, ProtocolType, TabType } from '../types'
+import { ProtocolType, SavingsProtocol, TabType } from '../types'
 import { SavingsProtocols } from '../protocols'
 
 const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {
-        padding: '0 15px',
         fontFamily: theme.typography.fontFamily,
     },
     tableHeader: {
@@ -20,11 +19,15 @@ const useStyles = makeStyles()((theme, props) => ({
         borderRadius: '8px',
         margin: '0 0 15px 0',
     },
+    tableRow: {
+        display: 'flex',
+        background: theme.palette.mode === 'light' ? '#F6F8F8' : '#17191D',
+        borderRadius: '8px',
+    },
     tableItem: {
         display: 'flex',
         background: theme.palette.mode === 'light' ? '#F6F8F8' : '#17191D',
         borderRadius: '8px',
-        margin: '0 0 15px 0',
     },
     tableCell: {
         display: 'flex',
@@ -51,13 +54,19 @@ const useStyles = makeStyles()((theme, props) => ({
     },
 }))
 
+export interface MappableProtocol {
+    category: string
+    protocols: SavingsProtocol[]
+}
+
 export interface SavingsTableProps {
     chainId: ChainId
     tab: TabType
+    mappableProtocols: MappableProtocol[]
     setSelectedProtocol(protocol: ProtocolType): void
 }
 
-export function SavingsTable({ chainId, tab, setSelectedProtocol }: SavingsTableProps) {
+export function SavingsTable({ chainId, tab, mappableProtocols, setSelectedProtocol }: SavingsTableProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -72,34 +81,9 @@ export function SavingsTable({ chainId, tab, setSelectedProtocol }: SavingsTable
         }
     }, [chainId])
 
-    const CategorizedProtocols = Object.keys(ProtocolCategory).map((category) => {
-        return {
-            category,
-            protocols: SavingsProtocols.filter(
-                (protocol) => protocol.category.toLowerCase() === category.toLowerCase(),
-            ),
-        }
-    })
-
-    const MappableProtocols = CategorizedProtocols.filter((categorizedProtocol) => {
-        if (categorizedProtocol.protocols.length === 0) {
-            return false
-        }
-
-        for (const protocol of categorizedProtocol.protocols) {
-            for (const network of protocol.availableNetworks) {
-                if (network.chainId === chainId) {
-                    return true
-                }
-            }
-        }
-
-        return false
-    })
-
     return (
         <Box className={classes.containerWrap}>
-            {MappableProtocols.length === 0 ? (
+            {mappableProtocols.length === 0 ? (
                 <Typography variant="h5" textAlign="center">
                     {t('plugin_no_protocol_available')}
                 </Typography>
@@ -120,13 +104,13 @@ export function SavingsTable({ chainId, tab, setSelectedProtocol }: SavingsTable
                 </Grid>
             )}
 
-            {MappableProtocols.map((categorizedProtocol) => {
+            {mappableProtocols.map((categorizedProtocol) => {
                 const protocols = categorizedProtocol.protocols
                 if (protocols.length === 1) {
                     const protocol = protocols[0]
 
                     return (
-                        <Grid container spacing={0} className={classes.tableHeader} key={protocol.type}>
+                        <Grid container spacing={0} className={classes.tableRow} key={protocol.type}>
                             <Grid item xs={4} className={classes.tableCell}>
                                 <div className={classes.logoWrap}>
                                     <img src={IconURLs[protocol.category]} className={classes.logo} />

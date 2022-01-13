@@ -10,6 +10,9 @@ export const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDash
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(2),
     },
+    tableTabWrapper: {
+        padding: theme.spacing(2),
+    },
     tab: {
         height: 36,
         minHeight: 36,
