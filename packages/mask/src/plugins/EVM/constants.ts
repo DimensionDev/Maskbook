@@ -154,7 +154,7 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         type: NetworkType.Boba,
         name: 'Boba',
         icon: new URL('./assets/boba.png', import.meta.url),
-        iconColor: 'rgb(73, 169, 166)',
+        iconColor: 'rgb(53, 208, 127)',
         isMainnet: true,
     },
 ]

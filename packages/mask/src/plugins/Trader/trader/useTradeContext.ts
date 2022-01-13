@@ -11,6 +11,8 @@ import {
     SASHIMISWAP_CUSTOM_BASES,
     SUSHISWAP_BASE_AGAINST_TOKENS,
     SUSHISWAP_CUSTOM_BASES,
+    OOLONGSWAP_BASE_AGAINST_TOKENS,
+    OOLONGSWAP_CUSTOM_BASES,
     UNISWAP_BASE_AGAINST_TOKENS,
     UNISWAP_CUSTOM_BASES,
 } from '../constants'
@@ -106,9 +108,9 @@ export function useTradeContext(tradeProvider: TradeProvider) {
                     INIT_CODE_HASH: TRADER_DEX.OOLONGSWAP_INIT_CODE_HASH,
                     ROUTER_CONTRACT_ADDRESS: TRADER_DEX.OOLONGSWAP_ROUTER_ADDRESS,
                     FACTORY_CONTRACT_ADDRESS: TRADER_DEX.OOLONGSWAP_FACTORY_ADDRESS,
-                    AGAINST_TOKENS: SUSHISWAP_BASE_AGAINST_TOKENS,
+                    AGAINST_TOKENS: OOLONGSWAP_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
-                    CUSTOM_TOKENS: SUSHISWAP_CUSTOM_BASES,
+                    CUSTOM_TOKENS: OOLONGSWAP_CUSTOM_BASES,
                 }
             case TradeProvider.ZRX:
                 return {

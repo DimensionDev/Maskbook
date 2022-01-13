@@ -342,7 +342,7 @@
         "faucets": [],
         "features": [],
         "nativeCurrency": {
-            "name": "Ether",
+            "name": "Boba Ether",
             "symbol": "ETH",
             "decimals": 18,
             "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/eth.jpg"
@@ -367,7 +367,7 @@
         "faucets": [],
         "features": [],
         "nativeCurrency": {
-            "name": "Ether",
+            "name": "Boba Ether",
             "symbol": "ETH",
             "decimals": 18,
             "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/eth.jpg"

@@ -84,7 +84,7 @@ export const fantomNetworkTradeProviderSettings = createGlobalSettings<TradeProv
 
 export const bobaNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
     `${PLUGIN_ID}+boba+tradeProvider`,
-    TradeProvider.SUSHISWAP,
+    TradeProvider.OOLONGSWAP,
     { primary: () => '' },
 )
 

@@ -27,10 +27,10 @@
         "BSCT": "",
         "Matic": "matic-network",
         "Mumbai": "arbitrum-one",
-        "Arbitrum": "",
+        "Arbitrum": "ethereum",
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai",
-        "Boba": "boba",
+        "Boba": "ethereum",
         "Boba_Rinkeby": "",
         "Celo": "celo",
         "Fantom": "fantom"

@@ -45,7 +45,7 @@ currentChainIdSettings.addListener((chainId: ChainId) => {
                 currentDataProviderSettings.value = DataProvider.COIN_MARKET_CAP
             break
         case NetworkType.Boba:
-            currentTradeProviderSettings.value = TradeProvider.SUSHISWAP
+            currentTradeProviderSettings.value = TradeProvider.OOLONGSWAP
             if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
                 currentDataProviderSettings.value = DataProvider.COIN_MARKET_CAP
             break

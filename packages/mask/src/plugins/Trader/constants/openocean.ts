@@ -10,5 +10,5 @@ export const networkNames: Record<NetworkType, string> = {
     [NetworkType.xDai]: 'xdai',
     [NetworkType.Celo]: 'celo',
     [NetworkType.Fantom]: 'fantom',
-    [NetworkType.Boba]: 'boba',
+    [NetworkType.Boba]: '',
 }
