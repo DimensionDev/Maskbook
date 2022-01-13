@@ -108,10 +108,10 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         borderRadius: isDashboard ? 8 : 24,
     },
     cancelButton: {
-        backgroundColor: !isDashboard ? MaskColorVar.twitterBg : undefined,
-        color: !isDashboard ? MaskColorVar.twitterButton : undefined,
+        backgroundColor: !isDashboard ? theme.palette.background.default : undefined,
+        color: !isDashboard ? theme.palette.text.strong : undefined,
         '&:hover': {
-            backgroundColor: !isDashboard ? `${MaskColorVar.twitterBg}!important` : undefined,
+            backgroundColor: !isDashboard ? `${theme.palette.background.default}!important` : undefined,
         },
     },
 }))

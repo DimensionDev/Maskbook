@@ -2,6 +2,7 @@ import classNames from 'classnames'
 import { makeStyles } from '@masknet/theme'
 import DoneIcon from '@mui/icons-material/Done'
 import Chip, { ChipProps } from '@mui/material/Chip'
+import { noop } from 'lodash-unified'
 
 export interface ClickableChipProps extends ChipProps {
     checked?: boolean
@@ -16,6 +17,12 @@ const useStyles = makeStyles<StyleProps>()((theme, { checked }) => ({
         marginBottom: 6,
         cursor: 'pointer',
         ...(checked ? { color: theme.palette.text.buttonText, backgroundColor: theme.palette.text.primary } : {}),
+        '&:hover': {
+            color: theme.palette.text.primary,
+            '& > svg': {
+                color: `${theme.palette.text.primary} !important`,
+            },
+        },
     },
     icon: {
         backgroundColor: 'transparent !important',
@@ -30,7 +37,8 @@ export function ClickableChip(props: ClickableChipProps) {
     const { classes } = useStyles({ checked: Boolean(props.checked) })
     return (
         <Chip
-            avatar={props.checked ? <DoneIcon className={classes.icon} /> : undefined}
+            deleteIcon={props.checked ? <DoneIcon className={classes.icon} /> : undefined}
+            onDelete={props.checked ? noop : undefined}
             color={props.checked ? 'primary' : 'default'}
             {...props}
             classes={{

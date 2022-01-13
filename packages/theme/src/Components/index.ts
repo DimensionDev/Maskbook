@@ -1,5 +1,6 @@
 export * from './Dialogs'
 export * from './ButtonGroupTab'
+export * from './FolderTabs'
 export * from './Snackbar'
 export * from './SearchableList'
 export * from './TextField'

@@ -1,6 +1,6 @@
 declare module '@mui/material/styles/createPalette.d' {
     export interface Palette {
-        divider2: string
+        secondaryDivider: string
     }
     export interface TypeText {
         hint: string

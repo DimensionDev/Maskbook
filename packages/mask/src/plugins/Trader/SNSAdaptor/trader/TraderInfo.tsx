@@ -21,8 +21,8 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     trade: {
         marginBottom: 8,
         padding: 10,
-        backgroundColor: `${isDashboard ? MaskColorVar.input : MaskColorVar.twitterBottom}!important`,
-        border: `1px solid ${isDashboard ? MaskColorVar.lineLight : MaskColorVar.twitterBorderLine}`,
+        backgroundColor: `${isDashboard ? MaskColorVar.input : theme.palette.background.paper}!important`,
+        border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.divider}`,
         borderRadius: 8,
         cursor: 'pointer',
         position: 'relative',
@@ -35,7 +35,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         wordBreak: 'keep-all',
     },
     cost: {
-        color: isDashboard ? MaskColorVar.normalText : MaskColorVar.twitterSecond,
+        color: isDashboard ? MaskColorVar.normalText : theme.palette.text.secondary,
         fontSize: 14,
         lineHeight: '20px',
         marginTop: 12,
