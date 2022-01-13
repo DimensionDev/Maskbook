@@ -14,7 +14,7 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         type: NetworkType.Solana,
         name: 'Solana',
         icon: new URL('./assets/solana.png', import.meta.url),
-        iconColor: 'rgb(54 173 104)',
+        iconColor: '#5d6fc0',
         isMainnet: true,
     },
     {
@@ -24,7 +24,7 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         type: NetworkType.Solana,
         name: 'Solana Testnet',
         icon: new URL('./assets/solana.png', import.meta.url),
-        iconColor: 'rgb(54 173 104)',
+        iconColor: '#5d6fc0',
         isMainnet: false,
     },
 ]
