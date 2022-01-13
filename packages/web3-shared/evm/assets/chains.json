@@ -2604,7 +2604,7 @@
     },
     {
         "name": "Aurora MainNet",
-        "chain": "NEAR",
+        "chain": "Aurora",
         "network": "mainnet",
         "rpc": ["https://rpc.mainnet.aurora.dev:8545"],
         "faucets": [],
@@ -2617,7 +2617,7 @@
     },
     {
         "name": "Aurora TestNet",
-        "chain": "NEAR",
+        "chain": "Aurora",
         "network": "testnet",
         "rpc": ["https://rpc.testnet.aurora.dev:8545"],
         "faucets": [],
