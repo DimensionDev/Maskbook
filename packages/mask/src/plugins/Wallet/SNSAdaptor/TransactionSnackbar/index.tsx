@@ -127,7 +127,7 @@ export function TransactionSnackbar() {
                 if (progress.state.type === TransactionStateType.FAILED) {
                     showSingletonSnackbar(t('plugin_wallet_snackbar_swap_token'), {
                         ...config,
-                        ...{ message: getFullMessage('Transaction rejected', hash) },
+                        ...{ message: getFullMessage('Transaction failed', hash) },
                     })
                     return
                 }
