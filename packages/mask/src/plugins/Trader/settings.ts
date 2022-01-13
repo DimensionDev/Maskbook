@@ -88,8 +88,8 @@ export const celoNetworkTradeProviderSettings = createGlobalSettings<TradeProvid
     { primary: () => '' },
 )
 
-export const optimisticNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_ID}+optimistic+tradeProvider`,
+export const opNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_ID}+op+tradeProvider`,
     TradeProvider.UNISWAP_V3,
     { primary: () => '' },
 )

@@ -43,9 +43,9 @@ export const [useCeloNetworkTradeProvider] = createGlobalState(
     Messages.events.celoNetworkTradeProviderSettings.on,
 )
 
-export const [useOptimisticNetworkTradeProvider] = createGlobalState(
-    Services.Settings.getOptimisticNetworkTradeProvider,
-    Messages.events.optimisticNetworkTradeProviderSettings.on,
+export const [useOpNetworkTradeProvider] = createGlobalState(
+    Services.Settings.getOpNetworkTradeProvider,
+    Messages.events.opNetworkTradeProviderSettings.on,
 )
 
 const BASE_RUL = 'https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com/api'

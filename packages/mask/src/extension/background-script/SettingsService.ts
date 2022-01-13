@@ -15,7 +15,7 @@ import {
     polygonNetworkTradeProviderSettings,
     arbitrumNetworkTradeProviderSettings,
     xdaiNetworkTradeProviderSettings,
-    optimisticNetworkTradeProviderSettings,
+    opNetworkTradeProviderSettings,
     celoNetworkTradeProviderSettings,
     fantomNetworkTradeProviderSettings,
 } from '../../plugins/Trader/settings'
@@ -76,9 +76,7 @@ export const [getArbitrumNetworkTradeProvider, setArbitrumNetworkTradeProvider] 
 )
 export const [getxDaiNetworkTradeProvider, setxDaiNetworkTradeProvider] = create(xdaiNetworkTradeProviderSettings)
 
-export const [getOptimisticNetworkTradeProvider, setOptimisticNetworkTradeProvider] = create(
-    optimisticNetworkTradeProviderSettings,
-)
+export const [getOpNetworkTradeProvider, setOpNetworkTradeProvider] = create(opNetworkTradeProviderSettings)
 export const [getCeloNetworkTradeProvider, setCeloNetworkTradeProvider] = create(celoNetworkTradeProviderSettings)
 
 export const [getFantomNetworkTradeProvider, setFantomNetworkTradeProvider] = create(fantomNetworkTradeProviderSettings)

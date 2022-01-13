@@ -101,7 +101,7 @@ export function uniswapPriceTo(price: Price<Currency, Currency>) {
 
 export function uniswapTokenTo(token: Token) {
     return {
-        type: ['eth', 'matic', 'bnb', 'oeth'].includes(token.name?.toLowerCase() ?? '')
+        type: ['eth', 'matic', 'bnb'].includes(token.name?.toLowerCase() ?? '')
             ? EthereumTokenType.Native
             : EthereumTokenType.ERC20,
         name: token.name,

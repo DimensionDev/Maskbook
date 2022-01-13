@@ -11,7 +11,7 @@ import {
     polygonNetworkTradeProviderSettings,
     arbitrumNetworkTradeProviderSettings,
     xdaiNetworkTradeProviderSettings,
-    optimisticNetworkTradeProviderSettings,
+    opNetworkTradeProviderSettings,
     celoNetworkTradeProviderSettings,
     fantomNetworkTradeProviderSettings,
 } from './settings'
@@ -84,7 +84,7 @@ currentTradeProviderSettings.addListener((tradeProvider: TradeProvider) => {
             xdaiNetworkTradeProviderSettings.value = tradeProvider
             break
         case NetworkType.Optimistic:
-            optimisticNetworkTradeProviderSettings.value = tradeProvider
+            opNetworkTradeProviderSettings.value = tradeProvider
             break
         case NetworkType.Celo:
             celoNetworkTradeProviderSettings.value = tradeProvider

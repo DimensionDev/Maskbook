@@ -5,7 +5,7 @@ import {
     binanceNetworkTradeProviderSettings,
     arbitrumNetworkTradeProviderSettings,
     xdaiNetworkTradeProviderSettings,
-    optimisticNetworkTradeProviderSettings,
+    opNetworkTradeProviderSettings,
     celoNetworkTradeProviderSettings,
     fantomNetworkTradeProviderSettings,
 } from '../settings'
@@ -21,7 +21,7 @@ export function useCurrentTradeProvider(chainId?: ChainId) {
     const binanceNetworkTradeProvider = useValueRef(binanceNetworkTradeProviderSettings)
     const arbitrumNetworkTradeProvider = useValueRef(arbitrumNetworkTradeProviderSettings)
     const xdaiNetworkTradeProvider = useValueRef(xdaiNetworkTradeProviderSettings)
-    const optimisticNetworkTradeProvider = useValueRef(optimisticNetworkTradeProviderSettings)
+    const optimisticNetworkTradeProvider = useValueRef(opNetworkTradeProviderSettings)
     const celoNetworkTradeProvider = useValueRef(celoNetworkTradeProviderSettings)
     const fantomNetworkTradeProvider = useValueRef(fantomNetworkTradeProviderSettings)
 

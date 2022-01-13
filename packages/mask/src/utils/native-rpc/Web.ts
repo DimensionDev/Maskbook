@@ -116,7 +116,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
             case NetworkType.xDai:
                 return Services.Settings.getxDaiNetworkTradeProvider()
             case NetworkType.Optimistic:
-                return Services.Settings.getOptimisticNetworkTradeProvider()
+                return Services.Settings.getOpNetworkTradeProvider()
             case NetworkType.Celo:
                 return Services.Settings.getCeloNetworkTradeProvider()
             case NetworkType.Fantom:
@@ -138,7 +138,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
             case NetworkType.xDai:
                 return Services.Settings.setxDaiNetworkTradeProvider(provider)
             case NetworkType.Optimistic:
-                return Services.Settings.setOptimisticNetworkTradeProvider(provider)
+                return Services.Settings.setOpNetworkTradeProvider(provider)
             case NetworkType.Celo:
                 return Services.Settings.setCeloNetworkTradeProvider(provider)
             case NetworkType.Fantom:

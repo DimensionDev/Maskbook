@@ -53,7 +53,6 @@ export const AddTokenConfirmUI = memo<AddTokenConfirmUIProps>(({ token, balance,
                         <Typography className={classes.confirmTitle}>{t.wallets_assets_balance()}</Typography>
                     </Box>
                     <Box>
-                        {console.log(token?.address)}
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <TokenIcon
                                 address={token?.address ?? ''}
