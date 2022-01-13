@@ -17,7 +17,7 @@ export interface RenderProps extends MessageRenderProps {
     /** TODO: remove this property */
     allowTextEnlarge?: boolean
 }
-export function DefaultRenderer(props: RenderProps) {
+export function TypedMessageRender(props: RenderProps) {
     const { message } = props
     const transform = useContext(TransformerContext)
     const message2 = useMemo(() => transform(message), [message, transform])

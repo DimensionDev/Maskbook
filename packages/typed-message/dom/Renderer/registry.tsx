@@ -26,7 +26,7 @@ export function createTypedMessageRenderRegistry() {
     const registry = new Map<string, Map<symbol, RenderConfig<any>>>()
     const event = new EventTarget()
 
-    function registerTypedMessageRenderer<T extends TypedMessage>(type: T['type'], config: RenderConfig<T>) {
+    function registerTypedMessageRender<T extends TypedMessage>(type: T['type'], config: RenderConfig<T>) {
         if (!registry.has(type)) registry.set(type, new Map())
         const map = registry.get(type)!
 
@@ -38,58 +38,58 @@ export function createTypedMessageRenderRegistry() {
             event.dispatchEvent(new Event('update'))
         }
     }
-    function getTypedMessageRenderer<T extends TypedMessage>(type: T['type']): RenderConfig<T> | undefined {
+    function getTypedMessageRender<T extends TypedMessage>(type: T['type']): RenderConfig<T> | undefined {
         return Array.from(registry.get(type)?.values() || []).sort((a, b) => b.priority - a.priority)[0]
     }
-    const subscription: Subscription<typeof getTypedMessageRenderer> = {
+    const subscription: Subscription<typeof getTypedMessageRender> = {
         // generate a new function everytime to make sure old !== new
-        getCurrentValue: () => (type) => getTypedMessageRenderer(type),
+        getCurrentValue: () => (type) => getTypedMessageRender(type),
         subscribe: (f) => {
             event.addEventListener('update', f)
             return () => event.removeEventListener('update', f)
         },
     }
 
-    registerTypedMessageRenderer<TypedMessageText>('text', {
+    registerTypedMessageRender<TypedMessageText>('text', {
         component: TypedMessageTextRenderer,
         id: Symbol('std.text'),
         priority: 0,
     })
 
-    registerTypedMessageRenderer<TypedMessageImage>('image', {
+    registerTypedMessageRender<TypedMessageImage>('image', {
         component: TypedMessageImageRenderer,
         id: Symbol('std.image'),
         priority: 0,
     })
 
-    registerTypedMessageRenderer<TypedMessageUnknown>('unknown', {
+    registerTypedMessageRender<TypedMessageUnknown>('unknown', {
         component: TypedMessageUnknownRenderer,
         id: Symbol('std.unknown'),
         priority: 0,
     })
 
-    registerTypedMessageRenderer<TypedMessageTuple>('tuple', {
+    registerTypedMessageRender<TypedMessageTuple>('tuple', {
         component: TypedMessageTupleRenderer,
         id: Symbol('std.tuple'),
         priority: 0,
     })
 
-    registerTypedMessageRenderer<TypedMessagePromise>('promise', {
+    registerTypedMessageRender<TypedMessagePromise>('promise', {
         component: TypedMessagePromiseRenderer,
         id: Symbol('std.promise'),
         priority: 0,
     })
 
     // Extension
-    registerTypedMessageRenderer<TypedMessageAnchor>('x-anchor', {
+    registerTypedMessageRender<TypedMessageAnchor>('x-anchor', {
         component: TypedMessageAnchorRenderer,
         id: Symbol('std.anchor'),
         priority: 0,
     })
 
     return {
-        registerTypedMessageRenderer,
-        getTypedMessageRenderer,
+        registerTypedMessageRender,
+        getTypedMessageRender,
         subscription,
     }
 }

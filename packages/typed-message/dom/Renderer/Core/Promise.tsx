@@ -1,6 +1,6 @@
 import { memo, Suspense, useContext, useMemo } from 'react'
 import type { TypedMessagePromise } from '../../../base'
-import { DefaultRenderer, MessageRenderProps } from '../Entry'
+import { TypedMessageRender, MessageRenderProps } from '../Entry'
 import { TransformerContext } from '../utils/TransformContext'
 export const TypedMessagePromiseRenderer = memo(function TypedMessagePromiseRenderer(
     props: MessageRenderProps<TypedMessagePromise>,
@@ -10,9 +10,9 @@ export const TypedMessagePromiseRenderer = memo(function TypedMessagePromiseRend
     const transform = useContext(TransformerContext)
     const message2 = useMemo(() => (value ? transform(value) : undefined), [value, transform])
 
-    if (message2) return <DefaultRenderer message={message2} />
+    if (message2) return <TypedMessageRender message={message2} />
     return (
-        <Suspense fallback={alt ? <DefaultRenderer message={alt} /> : null}>
+        <Suspense fallback={alt ? <TypedMessageRender message={alt} /> : null}>
             <Await promise={promise} />
         </Suspense>
     )

@@ -2,10 +2,11 @@ import { useState } from 'react'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { Link, Typography } from '@mui/material'
 import { TypedMessageAnchor, TypedMessage, isTypedMessageAnchor } from '@masknet/shared-base'
-import type { TypedMessageRendererProps } from '../../../components/InjectedComponents/TypedMessageRenderer'
 import { PluginTraderMessages, PluginTraderRPC } from '../messages'
 import { TagType } from '../types'
-import { registerTypedMessageRenderer } from '../../../protocols/typed-message'
+// TODO: when migrate, should have an API in the plugin infra for plugin to define render
+import { TypedMessageRenderRegistry } from '../../../../shared-ui/TypedMessageRender/registry'
+import type { MessageRenderProps } from '@masknet/typed-message/dom'
 
 export interface TypedMessageCashTrending extends Omit<TypedMessageAnchor, 'type'> {
     readonly type: 'x-cash-trending'
@@ -22,13 +23,13 @@ export function makeTypedMessageCashTrending(message: TypedMessageAnchor) {
     } as TypedMessageCashTrending
 }
 
-registerTypedMessageRenderer('x-cash-trending', {
-    component: DefaultTypedMessageCashTrendingRenderer,
-    id: 'com.maskbook.trader.x-cash-trending',
+TypedMessageRenderRegistry.registerTypedMessageRender('x-cash-trending', {
+    component: CashTrendingRenderer,
+    id: Symbol('com.maskbook.trader.x-cash-trending'),
     priority: 0,
 })
 
-function DefaultTypedMessageCashTrendingRenderer(props: TypedMessageRendererProps<TypedMessageCashTrending>) {
+function CashTrendingRenderer(props: MessageRenderProps<TypedMessageCashTrending>) {
     const chainId = useChainId()
     const [openTimer, setOpenTimer] = useState<ReturnType<typeof setTimeout> | null>(null)
     const onMouseOver = (ev: React.MouseEvent<HTMLAnchorElement>) => {

@@ -2,7 +2,7 @@ import { memo } from 'react'
 import type { TypedMessageTuple } from '../../../base'
 import type { MessageRenderProps } from '../Entry'
 import { hasCircular } from '../utils/circularDetect'
-import { DefaultRenderer } from '../Entry'
+import { TypedMessageRender } from '../Entry'
 
 export const TypedMessageTupleRenderer = memo(function TypedMessageTupleRenderer(
     props: MessageRenderProps<TypedMessageTuple>,
@@ -11,7 +11,7 @@ export const TypedMessageTupleRenderer = memo(function TypedMessageTupleRenderer
     return (
         <>
             {props.message.items.map((message, index) => (
-                <DefaultRenderer key={index} {...props} message={message} />
+                <TypedMessageRender key={index} {...props} message={message} />
             ))}
         </>
     )

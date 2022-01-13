@@ -9,7 +9,7 @@ import { extractTextFromTypedMessage } from '@masknet/shared-base'
 import type { TypedMessage, ProfileIdentifier } from '@masknet/shared-base'
 import { wrapAuthorDifferentMessage } from './authorDifferentMessage'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
-import type { MetadataRendererProps } from '../TypedMessageRenderer'
+import type { MetadataRenderProps } from '@masknet/typed-message/dom'
 import {
     useDisabledPluginSuggestionFromMeta,
     useDisabledPluginSuggestionFromPost,
@@ -20,7 +20,7 @@ const PluginRenderer = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
     (x) => x.DecryptedInspector,
 )
-function PluginRendererWithSuggestion(props: MetadataRendererProps) {
+function PluginRendererWithSuggestion(props: MetadataRenderProps) {
     const a = useDisabledPluginSuggestionFromMeta(props.metadata || new Map())
     const b = useDisabledPluginSuggestionFromPost(extractTextFromTypedMessage(props.message), [])
 
@@ -76,7 +76,7 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
         <>
             {shareMenu.ShareMenu}
             <AdditionalContent
-                metadataRenderer={{ after: PluginRendererWithSuggestion }}
+                footerMetadataRenderer={PluginRendererWithSuggestion}
                 headerActions={wrapAuthorDifferentMessage(author, postedBy, rightActions)}
                 title={t('decrypted_postbox_title')}
                 message={content}

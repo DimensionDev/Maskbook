@@ -10,8 +10,9 @@ import {
     visitEachTypedMessageChild,
 } from '@masknet/shared-base'
 import { memo } from 'react'
-import type { TypedMessageRendererProps } from './TypedMessageRenderer'
-import { registerTypedMessageRenderer } from '../../protocols/typed-message'
+import type { MessageRenderProps } from '@masknet/typed-message/dom'
+import { TypedMessageRenderRegistry } from '../../../shared-ui/TypedMessageRender/registry'
+import { startEffects } from '../../../utils-pure'
 
 const useStyle = makeStyles()((theme) => ({
     text: {
@@ -62,12 +63,16 @@ export function PayloadReplacerTransformer(message: TypedMessage): TypedMessage 
 }
 
 const MaskPayloadReplacer = memo(function MaskPayloadReplacer(
-    props: TypedMessageRendererProps<TypedMessageExtension_MaskPayloadReplacer>,
+    props: MessageRenderProps<TypedMessageExtension_MaskPayloadReplacer>,
 ) {
     return <PayloadReplacer link={props.message.link} />
 })
-registerTypedMessageRenderer(TypedMessageExtension_MaskPayloadReplacerType, {
-    component: MaskPayloadReplacer,
-    id: TypedMessageExtension_MaskPayloadReplacerType,
-    priority: 0,
-})
+
+const { run } = startEffects(import.meta.webpackHot)
+run(() =>
+    TypedMessageRenderRegistry.registerTypedMessageRender(TypedMessageExtension_MaskPayloadReplacerType, {
+        component: MaskPayloadReplacer,
+        id: Symbol(TypedMessageExtension_MaskPayloadReplacerType),
+        priority: 0,
+    }),
+)

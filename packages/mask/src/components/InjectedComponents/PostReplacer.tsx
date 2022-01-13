@@ -4,7 +4,8 @@ import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo } from 'react'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
 import { PayloadReplacerTransformer } from './PayloadReplacer'
-import { DefaultTypedMessageRenderer } from './TypedMessageRenderer'
+import { TypedMessageRender } from '@masknet/typed-message/dom'
+import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context'
 const useStyles = makeStyles()({
     root: {
         overflowWrap: 'break-word',
@@ -49,7 +50,9 @@ export function PostReplacer(props: PostReplacerProps) {
 
     return shouldReplacePost ? (
         <span className={classes.root}>
-            <DefaultTypedMessageRenderer message={processedPostMessage} />
+            <TypedMessageRenderContext>
+                <TypedMessageRender message={processedPostMessage} />
+            </TypedMessageRenderContext>
         </span>
     ) : null
 }
