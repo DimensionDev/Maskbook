@@ -5,6 +5,7 @@ export * from './binary-encode'
 export * from './deprecated-encode'
 export * from './utils'
 export * from './visitor'
+export * from './transformer'
 
 import { isCoreTypedMessages, CoreTypedMessages } from './core'
 import { isWellKnownExtensionTypedMessages, WellKnownExtensionTypedMessages } from './extension'

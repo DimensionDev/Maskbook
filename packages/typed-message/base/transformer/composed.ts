@@ -1,8 +1,10 @@
-import type { Subscription } from 'use-subscription'
-import type { TypedMessage } from '../../../base'
-import type { Transformer } from './TransformContext'
+import type { TypedMessage } from '../base'
+import type { Transformer } from './index'
 export interface ComposedTransformers {
-    subscription: Subscription<Transformer>
+    subscription: {
+        getCurrentValue: () => Transformer
+        subscribe(f: () => void): () => void
+    }
     addTransformer(transformer: Transformer, priority: number, signal?: AbortSignal): () => void
 }
 export function composeTransformer(): ComposedTransformers {
@@ -13,9 +15,9 @@ export function composeTransformer(): ComposedTransformers {
         return [...transformers].sort((a, b) => a[1] - b[1]).reduce((p, [c]) => c(p), message)
     }
 
-    const subscription: Subscription<Transformer> = {
-        getCurrentValue: () => (message) => composed(message),
-        subscribe(f) {
+    const subscription = {
+        getCurrentValue: (): Transformer => (message) => composed(message),
+        subscribe(f: () => void) {
             event.addEventListener('update', f)
             return () => {
                 event.removeEventListener('update', f)

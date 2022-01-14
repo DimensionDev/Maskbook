@@ -995,14 +995,12 @@ importers:
       '@mui/material': link:..\empty
       anchorme: ^2.1.2
       immer: ^9.0.7
-      use-subscription: ^1.5.1
       z-schema: ^5.0.2
     dependencies:
       '@msgpack/msgpack': 2.7.1
       '@mui/material': link:../empty
       anchorme: 2.1.2
       immer: 9.0.7
-      use-subscription: 1.5.1_react@18.0.0-rc.0
       z-schema: 5.0.2
 
   packages/web3-constants:

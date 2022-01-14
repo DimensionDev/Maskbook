@@ -14,7 +14,6 @@ import { TypedMessagePromiseRenderer } from './Core/Promise'
 import { TypedMessageUnknownRenderer } from './Core/Unknown'
 import { TypedMessageAnchorRenderer } from './Extension/Anchor'
 import type { MessageRenderProps } from './Entry'
-import type { Subscription } from 'use-subscription'
 
 export interface RenderConfig<T extends TypedMessage = TypedMessage> {
     component: React.ComponentType<MessageRenderProps<T>>
@@ -41,10 +40,10 @@ export function createTypedMessageRenderRegistry() {
     function getTypedMessageRender<T extends TypedMessage>(type: T['type']): RenderConfig<T> | undefined {
         return Array.from(registry.get(type)?.values() || []).sort((a, b) => b.priority - a.priority)[0]
     }
-    const subscription: Subscription<typeof getTypedMessageRender> = {
+    const subscription = {
         // generate a new function everytime to make sure old !== new
-        getCurrentValue: () => (type) => getTypedMessageRender(type),
-        subscribe: (f) => {
+        getCurrentValue: (): typeof getTypedMessageRender => (type) => getTypedMessageRender(type),
+        subscribe: (f: () => void) => {
             event.addEventListener('update', f)
             return () => event.removeEventListener('update', f)
         },
