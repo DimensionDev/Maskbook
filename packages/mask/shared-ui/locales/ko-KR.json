@@ -314,7 +314,7 @@
     "plugin_red_packet_hint": "레드 패킷이 공유된 후 24시간 후에 나머지 잔액을 인출할 수 있습니다.",
     "plugin_red_packet_token": "토큰",
     "plugin_red_packet_message_label": "제목",
-    "plugin_red_packet_create_with_token": "{{symbol}} 으로 빨간 백 만드는 중",
+    "plugin_red_packet_create_with_token": "{{amount}} {{symbol}} 으로 빨간 백 만드는 중",
     "plugin_red_packet_history_duration": "시간: {{startTime}} ~ {{endTime}} (UTC+8)",
     "plugin_red_packet_history_total_amount": "총액: {{amount}} {{symbol}}",
     "plugin_red_packet_history_total_claimed_amount": "전체: <span><strong>{{claimedAmount}}/{{amount}}</strong></span> {{symbol}}",
