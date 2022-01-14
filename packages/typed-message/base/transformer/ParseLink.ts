@@ -11,7 +11,7 @@ export function ParseLinkTransformer(message: TypedMessage): TypedMessage {
         return makeTypedMessageTupleSerializable(
             parsed.map((i) => {
                 if (i.type === 'text') return makeTypedMessageText(i.content)
-                return makeTypedMessageAnchor('normal', i.content, i.content)
+                return makeTypedMessageAnchor(i.category, i.content, i.content)
             }),
             message.meta,
         )
