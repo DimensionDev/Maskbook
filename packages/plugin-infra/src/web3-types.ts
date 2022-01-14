@@ -21,6 +21,12 @@ export enum TokenType {
     NonFungible = 'NonFungible',
 }
 
+type ColorRGB = `rgb(${number}, ${number}, ${number})`
+type ColorRGBA = `rgba(${number}, ${number}, ${number}, ${number})`
+type ColorHEX = `#${string}${string}${string}${string}${string}${string}` | `#${string}${string}${string}`
+type ColorHSL = `hsl(${number}, ${number}%, ${number}%)`
+type Color = ColorRGB | ColorRGBA | ColorHEX | ColorHSL
+
 export declare namespace Web3Plugin {
     /**
      * Plugin can declare what chain it supports to trigger side effects (e.g. create a new transaction).
@@ -47,7 +53,7 @@ export declare namespace Web3Plugin {
         /** The network icon */
         icon: URL
         /** The network icon in fixed color */
-        iconColor: string
+        iconColor: Color
         /** The network name */
         name: string
         /** Is a mainnet network */
