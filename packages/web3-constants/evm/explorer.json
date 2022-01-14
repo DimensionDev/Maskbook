@@ -1,4 +1,21 @@
 {
+    "API_KEYS": {
+        "Mainnet": ["26GHYKIAZREN4HWJ5NCICTGKC183IGXY9A"],
+        "Ropsten": [],
+        "Rinkeby": [],
+        "Kovan": [],
+        "Gorli": [],
+        "BSC": ["5FQ5JHS1BEK4186QCZASE3SD23YD8FIMM8"],
+        "BSCT": [],
+        "Matic": ["5HVFKYFPQXWNQ2TFHCAYJJZ3YIYPWQ5HP8"],
+        "Mumbai": [],
+        "Arbitrum": ["BE8VU1P9FUKRT15FBHKQMU84829VITWWF2"],
+        "Arbitrum_Rinkeby": [],
+        "xDai": [],
+        "Celo": [],
+        "Fantom": ["AST4WWPNEYDURUXG2GH32JZMYWEFDP999S"],
+        "Moonriver": ["BMUVSDQX72NTGRC1KDNGD889NJKG6H85F2"]
+    },
     "EXPLORER_API": {
         "Mainnet": "https://api.etherscan.io/api",
         "Ropsten": "",
@@ -9,28 +26,11 @@
         "BSCT": "",
         "Matic": "https://api.polygonscan.com/api",
         "Mumbai": "",
-        "Arbitrum": "",
+        "Arbitrum": "https://api.arbiscan.io/api",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
         "Fantom": "https://api.ftmscan.com/api",
         "Moonriver": "https://api-moonriver.moonscan.io/api"
-    },
-    "EXPLORER_API_KEY": {
-        "Mainnet": "99IX9MBZKG8FYQUECXDNDPATGVDDH6JCWW",
-        "Ropsten": "",
-        "Rinkeby": "",
-        "Kovan": "",
-        "Gorli": "",
-        "BSC": "7IJXTFIFB28ARWKZVA78GS29TT5YG82M5Z",
-        "BSCT": "",
-        "Matic": "PEMG6SUGQ71X55MVW2A1YK5J49V8VV6RF9",
-        "Mumbai": "",
-        "Arbitrum": "",
-        "Arbitrum_Rinkeby": "",
-        "xDai": "",
-        "Celo": "",
-        "Fantom": "",
-        "Moonriver": "BMUVSDQX72NTGRC1KDNGD889NJKG6H85F2"
     }
 }

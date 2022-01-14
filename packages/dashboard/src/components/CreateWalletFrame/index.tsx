@@ -1,6 +1,5 @@
 import { memo } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { MaskColorVar } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 
 const useStyles = makeStyles()({
     root: {

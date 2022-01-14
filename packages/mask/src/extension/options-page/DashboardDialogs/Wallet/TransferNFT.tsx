@@ -113,6 +113,7 @@ export function DashboardWalletTransferDialogNFT(props: WrappedDialogProps<{ tok
                             placeholder={t('wallet_transfer_to_address')}
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
+                            inputProps={{ spellCheck: 'false' }}
                         />
                         <Button
                             className={classes.button}

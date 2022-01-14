@@ -70,7 +70,7 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
     {
         ID: `${PLUGIN_ID}_bsct`,
         networkSupporterPluginID: PLUGIN_ID,
-        chainId: ChainId.BSC,
+        chainId: ChainId.BSCT,
         type: NetworkType.Binance,
         name: 'BSCT',
         icon: new URL('./assets/binance.png', import.meta.url),
