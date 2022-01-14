@@ -22,7 +22,7 @@ const useStyles = makeStyles()((theme) => {
             margin: theme.spacing(2, 0),
             width: '100%',
             boxSizing: 'border-box',
-            border: `1px solid ${theme.palette.divider}`,
+            border: `1px solid ${theme.palette.secondaryDivider}`,
             cursor: 'default',
             ...(isTwitter(activatedSocialNetworkUI)
                 ? {
@@ -50,7 +50,7 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'flex-end',
         },
         body: {
-            borderTop: `1px solid ${theme.palette.divider}`,
+            borderTop: `1px solid ${theme.palette.secondaryDivider}`,
             padding: theme.spacing(2),
         },
         button: {

@@ -358,7 +358,8 @@
         "walletlink",
         "WNATIVE",
         "xdescribe",
-        "xtest"
+        "xtest",
+        "txreceipt"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [

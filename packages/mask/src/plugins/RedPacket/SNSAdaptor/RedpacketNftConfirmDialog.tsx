@@ -68,7 +68,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         height: 420,
         overflowY: 'auto',
-        background: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
+        background: theme.palette.background.default,
         borderRadius: 12,
         marginTop: theme.spacing(1.5),
         marginBottom: theme.spacing(1.5),
