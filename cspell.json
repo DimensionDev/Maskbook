@@ -119,6 +119,7 @@
         "Kitts",
         "kred",
         "labelledby",
+        "lamports",
         "languagedetector",
         "lemy",
         "Leste",
@@ -204,8 +205,10 @@
         "secp",
         "Serializers",
         "shink",
+        "signup",
         "Sint",
         "solana",
+        "sollet",
         "steelblue",
         "steganographic",
         "steganography",
@@ -315,6 +318,7 @@
         "maskwallet",
         "mathwallet",
         "metadate",
+        "metaplex",
         "metaswap",
         "METASWAP",
         "Misaka",
@@ -364,7 +368,8 @@
         "walletlink",
         "WNATIVE",
         "xdescribe",
-        "xtest"
+        "xtest",
+        "txreceipt"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [

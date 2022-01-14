@@ -282,7 +282,7 @@
     "plugin_red_packet_back": "返回",
     "plugin_red_packet_token": "代幣",
     "plugin_red_packet_message_label": "標題",
-    "plugin_red_packet_create_with_token": "使用 {{symbol}} 建立紅包",
+    "plugin_red_packet_create_with_token": "使用 {{amount}} {{symbol}} 建立紅包",
     "plugin_red_packet_history_duration": "時間: {{startTime}} ~ {{endTime}} (UTC+8)",
     "plugin_red_packet_history_total_amount": "總額: {{amount}} {{symbol}}",
     "plugin_red_packet_history_total_claimed_amount": "總共: <span><strong>{{claimedAmount}}/{{amount}}</strong></span> {{symbol}}",

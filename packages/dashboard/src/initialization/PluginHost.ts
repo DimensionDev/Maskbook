@@ -29,6 +29,8 @@ const PluginHost: Plugin.__Host.Host<Plugin.Dashboard.DashboardContext> = {
                 if (type === 'memory') return InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
                 else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
             },
+            personaSign: Services.Identity.signWithPersona,
+            walletSign: Services.Ethereum.personalSign,
         }
     },
 }
