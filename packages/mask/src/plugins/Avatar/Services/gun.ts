@@ -41,5 +41,5 @@ export async function setUserAddress(userId: string, address: string) {
     }
 
     const _address = await getUserAddress(userId)
-    if (!isSameAddress(_address, address)) throw new Error('')
+    if (!isSameAddress(_address, address)) throw new Error('Gun2 is not able to save the address correctly.')
 }
