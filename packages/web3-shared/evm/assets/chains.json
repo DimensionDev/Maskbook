@@ -2640,7 +2640,7 @@
     },
     {
         "name": "Aurora BetaNet",
-        "chain": "NEAR",
+        "chain": "Aurora",
         "network": "betanet",
         "rpc": ["https://rpc.betanet.aurora.dev:8545"],
         "faucets": [],

@@ -46,8 +46,6 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
             return [TradeProvider.DODO, TradeProvider.ZRX, TradeProvider.WANNASWAP, TradeProvider.TRISOLARIS]
         case NetworkType.Fantom:
             return [TradeProvider.SUSHISWAP]
-        case NetworkType.Aurora:
-            return [TradeProvider.DODO, TradeProvider.ZRX]
         default:
             safeUnreachable(networkType)
             return []
