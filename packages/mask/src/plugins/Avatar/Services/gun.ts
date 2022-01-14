@@ -37,10 +37,12 @@ export async function setUserAddress(userId: string, address: string) {
             // @ts-expect-error
             .put(address).then!()
     } catch {
-        throw new Error('Something went wrong, and please check your connection.')
+        // do nothing
+    } finally {
+        const _address = await getUserAddress(userId)
+        if (!isSameAddress(_address, address))
+            throw new Error('Something went wrong, and please check your connection.')
     }
-    const _address = await getUserAddress(userId)
-    if (!isSameAddress(_address, address)) throw new Error('gun2 is not able to save the address correctly')
 }
 
 export async function getUserAddresses() {
