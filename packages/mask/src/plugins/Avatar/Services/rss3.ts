@@ -18,7 +18,8 @@ function CheckAddress(userId: string, sign: string, address: string) {
     try {
         const sig_address = web3.eth.accounts.recover(userId, sign)
         return isSameAddress(sig_address, address)
-    } catch {
+    } catch (err) {
+        console.error(err)
         throw new Error('Failed to recover signature.')
     }
 }
@@ -67,7 +68,9 @@ export async function saveNFTAvatarToRSS(address: string, nft: AvatarMetaDB, sig
         }
     }
 
-    await RSS3.setFileData(rss, address, '_nfts', _nfts)
+    await RSS3.setFileData(rss, address, '_nfts', _nfts).catch((error) => {
+        throw new Error(error.message)
+    })
 
     // clear cache
     if (cache.has(address)) cache.delete(address)
