@@ -383,7 +383,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                         <Typography className={classes.claimedText}>You got 1 {payload.contractName}</Typography>
                     </Box>
                 ) : (
-                    <CardMedia className={classes.image} component="div" image={rpNftImg} title="nft icon">
+                    <CardMedia className={classes.image} component="div" image={rpNftImg}>
                         <Typography className={classes.remain}>
                             {availability.claimedAmount}/{availability.totalAmount} {t('dashboard_tab_collectibles')}
                         </Typography>
