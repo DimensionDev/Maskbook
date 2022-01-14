@@ -5,9 +5,10 @@ export interface TypedMessageUnknown extends NonSerializableTypedMessage {
     readonly type: 'unknown'
     /** The unrecognized data */
     readonly raw?: unknown
+    readonly meta?: undefined
 }
 export const isTypedMessageUnknown = createIsType<TypedMessageUnknown>('unknown')
 
-export function makeTypedMessageUnknown(raw?: unknown, meta?: Meta): TypedMessageUnknown {
-    return { type: 'unknown', serializable: false, meta, raw }
+export function makeTypedMessageUnknown(raw?: unknown): TypedMessageUnknown {
+    return { type: 'unknown', serializable: false, meta: undefined, raw }
 }

@@ -22,7 +22,7 @@ function decodeTypedMessage(tm: readonly unknown[]): TypedMessage {
     if (typeof type !== 'string' && typeof type !== 'number') throw new TypeError(`${HEAD}Invalid TypedMessage`)
     if (type === TypedMessageBinaryEncodingTypeEnum.Text) return decodeTypedMessageText(tm)
     if (type === TypedMessageBinaryEncodingTypeEnum.Tuple) return decodeTypedMessageTuple(tm)
-    return makeTypedMessageUnknown(tm, decodeMetadata(tm[1]))
+    return makeTypedMessageUnknown(tm)
 }
 function decodeTypedMessageText([, version, meta, text, format]: readonly unknown[]) {
     assertNumber(version)

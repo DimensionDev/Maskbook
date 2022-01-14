@@ -1,6 +1,5 @@
 export * from './metadata'
 export * from './extract'
-export * from './flatten'
 export * from './promise'
 
 import type {

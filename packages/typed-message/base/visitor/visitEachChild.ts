@@ -1,13 +1,24 @@
-import { isTypedMessagePromise, isTypedMessageTuple, makeTypedMessageTuple } from '../core'
+import {
+    isTypedMessagePromise,
+    isTypedMessageTuple,
+    makeTypedMessageTuple,
+    makeTypedMessageTupleSerializable,
+} from '../core'
 import { isSerializableTypedMessage } from '../utils'
 import type { TypedMessage } from '../base'
 
 export type Visitor = (message: TypedMessage) => TypedMessage
 export function visitEachTypedMessageChild(node: TypedMessage, visitor: Visitor): TypedMessage {
     if (isTypedMessageTuple(node)) {
-        return makeTypedMessageTuple(node.items.map(visitor), node.meta)
-    } else if (isTypedMessagePromise(node) && node.value) {
-        return visitor(node.value)
+        const after = node.items.map(visitor)
+        if (after.every(isSerializableTypedMessage)) {
+            return makeTypedMessageTupleSerializable(after, node.meta)
+        }
+        return makeTypedMessageTuple(after, node.meta)
+    }
+
+    if (isTypedMessagePromise(node)) {
+        if (node.value) return visitor(node.value)
     }
 
     if (isSerializableTypedMessage(node) && 'alt' in node) {
