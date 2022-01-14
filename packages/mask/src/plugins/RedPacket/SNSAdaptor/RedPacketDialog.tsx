@@ -218,9 +218,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             open: true,
             state: createState,
             summary: t('plugin_red_packet_create_with_token', {
-                symbol: `${formatBalance(createSettings?.total, createSettings?.token?.decimals)} ${
-                    createSettings?.token.symbol
-                }`,
+                amount: formatBalance(createSettings?.total, createSettings?.token?.decimals),
+                symbol: createSettings?.token.symbol,
             }),
         })
     }, [createState /* update tx dialog only if state changed */])

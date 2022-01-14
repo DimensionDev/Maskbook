@@ -35,9 +35,13 @@ export async function getNFTAvatarFromRSS(userId: string, address: string) {
         nft = nfts as NFTRSSNode
     }
 
-    const sig_address = web3.eth.accounts.recover(nft.nft.userId, nft.signature)
-    if (!isSameAddress(sig_address, address)) return
-    return nft.nft
+    try {
+        const sig_address = web3.eth.accounts.recover(nft.nft.userId, nft.signature)
+        if (!isSameAddress(sig_address, address)) return
+        return nft.nft
+    } catch {
+        throw new Error('Failed to recover signature.')
+    }
 }
 
 async function _getNFTAvatarFromRSS(

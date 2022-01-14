@@ -27,6 +27,10 @@ export function callRequest(path: string, id: number, request: unknown) {
     handlePromise(id, () => read(path).request(request))
 }
 
+export function execute(path: string, id: number) {
+    handlePromise(id, () => read(path)())
+}
+
 export function bindEvent(path: string, bridgeEvent: keyof InternalEvents, event: string) {
     if (hasListened[event]) return
     hasListened[event] = true
