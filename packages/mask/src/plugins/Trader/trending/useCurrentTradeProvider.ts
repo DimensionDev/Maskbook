@@ -37,7 +37,7 @@ export function useCurrentTradeProvider(chainId?: ChainId) {
             return arbitrumNetworkTradeProvider
         case NetworkType.xDai:
             return xdaiNetworkTradeProvider
-        case NetworkType.Optimistic:
+        case NetworkType.Optimism:
             return optimisticNetworkTradeProvider
         case NetworkType.Celo:
             return celoNetworkTradeProvider

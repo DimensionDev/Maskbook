@@ -148,10 +148,10 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         isMainnet: true,
     },
     {
-        ID: `${PLUGIN_ID}_optimistic`,
+        ID: `${PLUGIN_ID}_optimism`,
         networkSupporterPluginID: PLUGIN_ID,
-        chainId: ChainId.Optimistic,
-        type: NetworkType.Optimistic,
+        chainId: ChainId.Optimism,
+        type: NetworkType.Optimism,
         name: 'Optimistic',
         icon: new URL('./assets/optimistic.png', import.meta.url),
         iconColor: 'rgb(254, 5, 33)',

@@ -8,7 +8,7 @@ export const networkNames: Record<NetworkType, string> = {
     [NetworkType.Polygon]: 'matic',
     [NetworkType.Arbitrum]: 'arbitrum',
     [NetworkType.xDai]: 'xdai',
-    [NetworkType.Optimistic]: 'optimistic',
+    [NetworkType.Optimism]: 'optimistic',
     [NetworkType.Celo]: 'celo',
     [NetworkType.Fantom]: 'fantom',
 }

@@ -44,7 +44,7 @@ currentChainIdSettings.addListener((chainId: ChainId) => {
             if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
                 currentDataProviderSettings.value = DataProvider.COIN_MARKET_CAP
             break
-        case NetworkType.Optimistic:
+        case NetworkType.Optimism:
             currentTradeProviderSettings.value = TradeProvider.UNISWAP_V3
             if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
                 currentDataProviderSettings.value = DataProvider.COIN_MARKET_CAP
@@ -83,7 +83,7 @@ currentTradeProviderSettings.addListener((tradeProvider: TradeProvider) => {
         case NetworkType.xDai:
             xdaiNetworkTradeProviderSettings.value = tradeProvider
             break
-        case NetworkType.Optimistic:
+        case NetworkType.Optimism:
             opNetworkTradeProviderSettings.value = tradeProvider
             break
         case NetworkType.Celo:

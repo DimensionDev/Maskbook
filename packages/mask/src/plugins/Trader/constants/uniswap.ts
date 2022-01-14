@@ -22,7 +22,7 @@ export const UNISWAP_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
     [ChainId.Mainnet]: [WNATIVE, DAI, USDC, USDT, WBTC].map((x) => x[ChainId.Mainnet]),
     [ChainId.Matic]: [WNATIVE, DAI, USDC, USDT, WBTC].map((x) => x[ChainId.Matic]),
     [ChainId.Rinkeby]: [WNATIVE, MSKA, MSKB, MSKC].map((x) => x[ChainId.Rinkeby]),
-    [ChainId.Optimistic]: [WNATIVE, DAI, USDC, USDT, WBTC].map((x) => x[ChainId.Optimistic]),
+    [ChainId.Optimism]: [WNATIVE, DAI, USDC, USDT, WBTC].map((x) => x[ChainId.Optimism]),
 }
 
 export const MAX_HOP = 3

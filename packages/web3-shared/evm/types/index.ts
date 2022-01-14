@@ -59,8 +59,8 @@ export enum ChainId {
     // xDai
     xDai = 100,
 
-    //Optimistic
-    Optimistic = 10,
+    // Optimism
+    Optimism = 10,
     Optimistic_Kovan = 69,
     Optimistic_Goerli = 420,
 
@@ -96,7 +96,7 @@ export enum NetworkType {
     Polygon = 'Polygon',
     Arbitrum = 'Arbitrum',
     xDai = 'xDai',
-    Optimistic = 'Optimistic',
+    Optimism = 'Optimism',
     Celo = 'Celo',
     Fantom = 'Fantom',
 }

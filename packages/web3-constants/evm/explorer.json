@@ -32,8 +32,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "https://blockscout.com/xdai/mainnet/api",
         "Optimistic": "https://api-optimistic.etherscan.io/api",
-        "Optimistic_Kovan": "",
-        "Optimistic_Goerli": "",
+        "Optimistic_Kovan": "https://kovan-optimistic.etherscan.io",
+        "Optimistic_Goerli": "https://goerli-optimistic.etherscan.io",
         "Celo": "https://explorer.celo.org/api",
         "Fantom": "https://api.ftmscan.com/api"
     }

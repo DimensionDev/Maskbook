@@ -23,7 +23,7 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.Mumbai,
                     ChainId.Arbitrum,
                     ChainId.xDai,
-                    ChainId.Optimistic,
+                    ChainId.Optimism,
                 ],
             },
         },

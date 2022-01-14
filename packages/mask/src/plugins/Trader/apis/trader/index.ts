@@ -43,7 +43,7 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
             return [TradeProvider.SUSHISWAP]
         case NetworkType.Fantom:
             return [TradeProvider.SUSHISWAP]
-        case NetworkType.Optimistic:
+        case NetworkType.Optimism:
             return [TradeProvider.UNISWAP_V3]
         default:
             safeUnreachable(networkType)

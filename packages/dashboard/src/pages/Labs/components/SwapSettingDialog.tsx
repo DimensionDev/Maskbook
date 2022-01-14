@@ -110,7 +110,7 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
             onChange: (value: string) => Services.Settings.setFantomNetworkTradeProvider(Number.parseInt(value, 10)),
         },
         {
-            legend: t.labs_settings_swap_network({ network: 'Optimistic' }),
+            legend: t.labs_settings_swap_network({ network: 'Optimism' }),
             value: useOpNetworkTradeProvider(),
             options: opOptions,
             onChange: (value: string) => Services.Settings.setOpNetworkTradeProvider(Number.parseInt(value, 10)),

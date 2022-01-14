@@ -191,7 +191,7 @@ export enum NetworkType {
     Polygon = 'Polygon',
     Arbitrum = 'Arbitrum',
     xDai = 'xDai',
-    Optimistic = 'Optimistic',
+    Optimism = 'Optimism',
     Celo = 'Celo',
     Fantom = 'Fantom',
 }
