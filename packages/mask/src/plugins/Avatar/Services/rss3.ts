@@ -19,7 +19,7 @@ function CheckAddress(userId: string, sign: string, address: string) {
         const sig_address = web3.eth.accounts.recover(userId, sign)
         return isSameAddress(sig_address, address)
     } catch {
-        throw new Error('Failed to recover signature, and please check your connection.')
+        throw new Error('Failed to recover signature.')
     }
 }
 
@@ -66,11 +66,8 @@ export async function saveNFTAvatarToRSS(address: string, nft: AvatarMetaDB, sig
             nft,
         }
     }
-    try {
-        await RSS3.setFileData(rss, address, '_nfts', _nfts)
-    } catch {
-        throw new Error('Something went wrong, and please check your connection.')
-    }
+
+    await RSS3.setFileData(rss, address, '_nfts', _nfts)
 
     // clear cache
     if (cache.has(address)) cache.delete(address)
