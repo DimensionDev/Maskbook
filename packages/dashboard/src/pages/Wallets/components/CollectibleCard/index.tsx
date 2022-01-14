@@ -1,11 +1,10 @@
 import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { Box, Button, Link, Tooltip, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { CollectiblePlaceholder } from '../CollectiblePlaceHolder'
 import { useHoverDirty } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
-import { WalletIcon } from '@masknet/shared'
+import { WalletIcon, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { ChangeNetworkTip } from '../FungibleTokenTableRow/ChangeNetworkTip'
 import { useNetworkDescriptor, useWeb3State, Web3Plugin } from '@masknet/plugin-infra'
 
