@@ -102,7 +102,7 @@ export function getNetworkTypeFromChainId(chainId: ChainId, value?: boolean) {
     const map: Record<NetworkType, string> = {
         [NetworkType.Ethereum]: 'ETH',
         [NetworkType.Arbitrum]: 'Arbitrum',
-        [NetworkType.Avalanche]: 'Avalanche',
+        [NetworkType.Avalanche]: 'AVAX',
         [NetworkType.Binance]: 'BSC',
         [NetworkType.Celo]: 'CELO',
         [NetworkType.Fantom]: 'FTM',
