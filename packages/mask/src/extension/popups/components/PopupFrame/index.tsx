@@ -59,6 +59,7 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 500,
         color: theme.palette.primary.contrastText,
         textDecoration: 'none',
+        borderRadius: '4px 4px 0px 0px',
     },
     active: {
         color: theme.palette.primary.main,

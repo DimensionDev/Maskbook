@@ -410,7 +410,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 <Card className={classes.coverCard}>
                     <CardHeader
                         className={classNames(classes.title, classes.dim, classes.dimWhiteText)}
-                        title={payload.message}
+                        title={<Typography className={classes.ellipsis}>{payload.message}</Typography>}
                         subheader={
                             <span
                                 className={classNames(classes.link, classes.dimWhiteText)}

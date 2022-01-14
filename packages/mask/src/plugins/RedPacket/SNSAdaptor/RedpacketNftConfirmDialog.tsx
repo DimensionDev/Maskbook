@@ -12,7 +12,7 @@ import {
     TransactionStateType,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import classNames from 'classnames'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { Button, Grid, Link, Typography, DialogContent, List, ListItem } from '@mui/material'
@@ -26,7 +26,6 @@ import { useCompositionContext } from '@masknet/plugin-infra'
 import { RedPacketNftMetaKey } from '../constants'
 import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketRPC } from '../messages'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -68,7 +67,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         height: 420,
         overflowY: 'auto',
-        background: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
+        background: theme.palette.background.default,
         borderRadius: 12,
         marginTop: theme.spacing(1.5),
         marginBottom: theme.spacing(1.5),

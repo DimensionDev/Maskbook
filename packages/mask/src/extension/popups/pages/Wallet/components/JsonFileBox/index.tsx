@@ -7,9 +7,7 @@ import { blobToText } from '@dimensiondev/kit'
 import { useI18N } from '../../../../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
-        paddingTop: 10,
-    },
+    root: {},
     fileBox: {},
     file: {
         display: 'none',

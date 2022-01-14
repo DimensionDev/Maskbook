@@ -1,6 +1,6 @@
 import { MaskColorVar } from '@masknet/theme'
-import { formControlLabelClasses } from '@mui/material'
 import {
+    formControlLabelClasses,
     FormControl,
     FormControlLabel,
     FormControlLabelProps,

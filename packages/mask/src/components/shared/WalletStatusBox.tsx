@@ -187,7 +187,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                     )}
                 </div>
                 <div className={classes.infoRow}>
-                    <Typography className={classes.address} variant="body2">
+                    <Typography className={classes.address} variant="body2" title={account}>
                         <FormattedAddress address={account} size={4} formatter={Utils?.formatAddress} />
                     </Typography>
                     <Link
