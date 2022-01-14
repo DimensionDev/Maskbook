@@ -6,7 +6,7 @@ import { multipliedBy, rightShift } from '@masknet/web3-shared-base'
 
 type Asset = Web3Plugin.Asset<Web3Plugin.FungibleToken>
 
-const debankSupportedChains = ['eth', 'bsc', 'xdai', 'matic', 'avax', 'arb']
+const debankSupportedChains = ['eth', 'bsc', 'xdai', 'matic', 'avax', 'arb', 'aurora']
 
 export function formatAssets(data: WalletTokenRecord[]): Asset[] {
     return data
