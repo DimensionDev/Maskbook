@@ -12,10 +12,10 @@
         "Arbitrum": ["BE8VU1P9FUKRT15FBHKQMU84829VITWWF2"],
         "Arbitrum_Rinkeby": [],
         "xDai": [],
-        "Celo": [],
-        "Fantom": ["AST4WWPNEYDURUXG2GH32JZMYWEFDP999S"],
         "Avalanche": [],
-        "Avalanche_Fuji": []
+        "Avalanche_Fuji": [],
+        "Celo": [],
+        "Fantom": ["AST4WWPNEYDURUXG2GH32JZMYWEFDP999S"]
     },
     "EXPLORER_API": {
         "Mainnet": "https://api.etherscan.io/api",
@@ -30,9 +30,9 @@
         "Arbitrum": "https://api.arbiscan.io/api",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
-        "Celo": "",
-        "Fantom": "https://api.ftmscan.com/api",
         "Avalanche": "https://api.snowtrace.io/api",
-        "Avalanche_Fuji": "https://api-testnet.snowtrace.io/api"
+        "Avalanche_Fuji": "https://api-testnet.snowtrace.io/api",
+        "Celo": "",
+        "Fantom": "https://api.ftmscan.com/api"
     }
 }
