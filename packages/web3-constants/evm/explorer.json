@@ -14,7 +14,7 @@
         "xDai": "",
         "Celo": "",
         "Fantom": "https://api.ftmscan.com/api",
-        "Moonriver": ""
+        "Moonriver": "https://api-moonriver.moonscan.io/api"
     },
     "EXPLORER_API_KEY": {
         "Mainnet": "99IX9MBZKG8FYQUECXDNDPATGVDDH6JCWW",
@@ -31,6 +31,6 @@
         "xDai": "",
         "Celo": "",
         "Fantom": "",
-        "Moonriver": ""
+        "Moonriver": "BMUVSDQX72NTGRC1KDNGD889NJKG6H85F2"
     }
 }

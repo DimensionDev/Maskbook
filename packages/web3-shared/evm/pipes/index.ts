@@ -111,7 +111,7 @@ export const resolveChainColor = createLookupTableResolver<ChainId, string>(
         [ChainId.xDai]: 'rgb(73, 169, 166)',
         [ChainId.Celo]: 'rgb(53, 208, 127)',
         [ChainId.Fantom]: 'rgb(19, 181, 236)',
-        [ChainId.Moonriver]: 'rgb(242 183 6)',
+        [ChainId.Moonriver]: 'rgb(242, 183, 6)',
     },
     'rgb(214, 217, 220)',
 )
