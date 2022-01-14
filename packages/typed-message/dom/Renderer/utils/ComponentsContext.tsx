@@ -14,7 +14,8 @@ export const ImageDefault: MessageRenderUIComponentsContext['Image'] = (props) =
 export interface MessageRenderUIComponentsContext {
     Text?: React.ComponentType<{ children: string; fontSize?: number }>
     Link?: React.ComponentType<{
-        href: string
+        href?: string
+        category: 'normal' | 'hash' | 'cash' | 'user'
         children: string
         fontSize?: number
     }>

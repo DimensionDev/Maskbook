@@ -33,7 +33,7 @@ function parseText(
                 .map((x) => (x === '\n' ? <br /> : <Text children={x} fontSize={fontSize} />))
         }
         if (x.content.match(/^https?:\/\//gi)) x.content = 'http://' + x.content
-        return <Link children={x.content} href={x.content} fontSize={fontSize} />
+        return <Link category={x.category} children={x.content} href={x.content} fontSize={fontSize} />
     })
     return links
 }
