@@ -1,4 +1,5 @@
 import { delay } from '@masknet/shared-base'
+import { isSameAddress } from '@masknet/web3-shared-evm'
 import { gun2 } from '../../../network/gun/version.2'
 import { NFT_AVATAR_GUN_SERVER } from '../constants'
 
@@ -35,11 +36,11 @@ export async function setUserAddress(userId: string, address: string) {
             .get(userId)
             // @ts-expect-error
             .put(address).then!()
-
-        const address = await getUserAddress(userId)
-        if (address) return
-    } catch {}
-    throw new Error('Something went wrong, and please check your connection.')
+    } catch {
+        throw new Error('Something went wrong, and please check your connection.')
+    }
+    const _address = await getUserAddress(userId)
+    if (!isSameAddress(_address, address)) throw new Error('gun2 is not able to save the address correctly')
 }
 
 export async function getUserAddresses() {
