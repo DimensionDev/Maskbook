@@ -291,7 +291,7 @@ export async function INTERNAL_send(
         if (Flags.EIP1559_enabled && isEIP1559Valid) {
             config.gasPrice = undefined
             config.maxPriorityFeePerGas = formatGweiToWei(1.5).toString(16)
-            config.maxFeePerGas = (Number.parseInt(config.maxFeePerGas!, 16) * 0.7).toString(16)
+            config.maxFeePerGas = (Number.parseInt(config.maxFeePerGas!, 16) * 0.8).toString(16)
         } else {
             config.maxFeePerGas = undefined
             config.maxPriorityFeePerGas = undefined
