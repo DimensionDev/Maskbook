@@ -43,6 +43,9 @@ export const NFTX = createERC20Tokens('NFTX_ADDRESS', 'NFTX', 'NFTX', 18)
 export const STETH = createERC20Tokens('stETH_ADDRESS', 'stakedETH', 'stETH', 18)
 export const CUSD = createERC20Tokens('cUSD_ADDRESS', 'Celo Dollar', 'cUSD', 18)
 export const CEUR = createERC20Tokens('cEUR_ADDRESS', 'Celo Euro', 'cEUR', 18)
+export const OLO = createERC20Tokens('OLO_ADDRESS', 'OolongSwap Token', 'OLO', 18)
+export const BOBA = createERC20Tokens('BOBA_ADDRESS', 'Boba Token', 'BOBA', 18)
+export const WAIFU = createERC20Tokens('WAIFU_ADDRESS', 'WaifuToken', 'WAIFU', 18)
 
 export const WNATIVE = createERC20Tokens(
     'WNATIVE_ADDRESS',

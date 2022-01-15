@@ -213,8 +213,9 @@ export enum TradeProvider {
     DODO = 7,
     UNISWAP_V3 = 8,
     BANCOR = 9,
-    OOLONGSWAP = 11,
     OPENOCEAN = 10,
+    OOLONGSWAP = 11,
+    SWAPPERCHAN = 12,
 }
 /** Supported language settings */
 export enum LanguageOptions {

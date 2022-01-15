@@ -213,6 +213,7 @@
         "superrare",
         "sushiswap",
         "swappable",
+        "SWAPPERCHAN",
         "Swither",
         "tabindex",
         "tablist",
@@ -349,6 +350,7 @@
         "testweb",
         "tinycolor",
         "treeshake",
+        "txreceipt",
         "txts",
         "uaddr",
         "unauthenticate",
@@ -362,8 +364,7 @@
         "walletlink",
         "WNATIVE",
         "xdescribe",
-        "xtest",
-        "txreceipt"
+        "xtest"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [

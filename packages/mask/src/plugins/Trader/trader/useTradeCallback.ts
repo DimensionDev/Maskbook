@@ -92,6 +92,8 @@ export function useTradeCallback(
             return uniswapV2Like
         case TradeProvider.OOLONGSWAP:
             return uniswapV2Like
+        case TradeProvider.SWAPPERCHAN:
+            return uniswapV2Like
         case TradeProvider.SASHIMISWAP:
             return uniswapV2Like
         case TradeProvider.QUICKSWAP:

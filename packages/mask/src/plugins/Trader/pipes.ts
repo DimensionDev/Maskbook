@@ -58,6 +58,7 @@ export const resolveTradeProviderName = createLookupTableResolver<TradeProvider,
         [TradeProvider.BANCOR]: 'Bancor',
         [TradeProvider.OOLONGSWAP]: 'OolongSwap',
         [TradeProvider.OPENOCEAN]: 'OpenOcean',
+        [TradeProvider.SWAPPERCHAN]: 'SwapperChain',
     },
     (tradeProvider) => {
         throw new Error(`Unknown provider type: ${tradeProvider}`)
@@ -110,6 +111,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
             return 'https://oolongswap.com/'
         case TradeProvider.OPENOCEAN:
             return 'https://openocean.finance/classic'
+        case TradeProvider.SWAPPERCHAN:
+            return 'https://swapperchan.com/swap'
         default:
             unreachable(tradeProvider)
     }
@@ -169,6 +172,8 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             return ''
         case TradeProvider.OOLONGSWAP:
             return `https://info.oolongswap.com/#/pair/${address}`
+        case TradeProvider.SWAPPERCHAN:
+            return `https://analytics.swapperchan.com/pairs/${address}`
         case TradeProvider.OPENOCEAN:
             // TODO - OpenOcean
             return ''
@@ -262,6 +267,7 @@ export const resolveZrxTradePoolName = createLookupTableResolver<ZrxTradePool, s
         [ZrxTradePool.WaultSwap]: 'WaultSwap',
         [ZrxTradePool.xSigma]: 'xSigma',
         [ZrxTradePool.OolongSwap]: 'OolongSwap',
+        [ZrxTradePool.SwapperChan]: 'SwapperChan',
     },
     'Unknown',
 )

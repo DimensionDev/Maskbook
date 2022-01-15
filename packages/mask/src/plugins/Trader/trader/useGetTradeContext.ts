@@ -13,6 +13,10 @@ import {
     SUSHISWAP_CUSTOM_BASES,
     UNISWAP_BASE_AGAINST_TOKENS,
     UNISWAP_CUSTOM_BASES,
+    OOLONGSWAP_BASE_AGAINST_TOKENS,
+    OOLONGSWAP_CUSTOM_BASES,
+    SWAPPERCHAN_BASE_AGAINST_TOKENS,
+    SWAPPERCHAN_CUSTOM_BASES,
 } from '../constants'
 import { unreachable } from '@dimensiondev/kit'
 import { TargetChainIdContext } from './useTargetChainIdContext'
@@ -102,9 +106,21 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     INIT_CODE_HASH: getTraderConstants(chainId).OOLONGSWAP_INIT_CODE_HASH,
                     ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).OOLONGSWAP_ROUTER_ADDRESS,
                     FACTORY_CONTRACT_ADDRESS: getTraderConstants(chainId).OOLONGSWAP_FACTORY_ADDRESS,
-                    AGAINST_TOKENS: SUSHISWAP_BASE_AGAINST_TOKENS,
+                    AGAINST_TOKENS: OOLONGSWAP_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
-                    CUSTOM_TOKENS: SUSHISWAP_CUSTOM_BASES,
+                    CUSTOM_TOKENS: OOLONGSWAP_CUSTOM_BASES,
+                }
+            case TradeProvider.SWAPPERCHAN:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: getTraderConstants(chainId).SWAPPERCHAN_THEGRAPH,
+                    INIT_CODE_HASH: getTraderConstants(chainId).SWAPPERCHAN_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).SWAPPERCHAN_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: getTraderConstants(chainId).SWAPPERCHAN_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: SWAPPERCHAN_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: SWAPPERCHAN_CUSTOM_BASES,
                 }
             case TradeProvider.ZRX:
                 return {
