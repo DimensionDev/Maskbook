@@ -1,5 +1,5 @@
 import { ChainId } from '@masknet/web3-shared-evm'
-import { DAI, USDC, USDT, WBTC, WNATIVE, WNATIVE_ONLY } from './trader'
+import { DAI, USDC, USDT, WBTC, WANNA, WNATIVE, WNATIVE_ONLY } from './trader'
 import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'
 
 /**
@@ -10,5 +10,5 @@ export const WANNASWAP_CUSTOM_BASES: ERC20TokenCustomizedBase = {}
 
 export const WANNASWAP_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
     ...WNATIVE_ONLY,
-    [ChainId.Aurora]: [WNATIVE, DAI, USDC, USDT, WBTC].map((x) => x[ChainId.Aurora]),
+    [ChainId.Aurora]: [WNATIVE, WANNA, DAI, USDC, USDT, WBTC].map((x) => x[ChainId.Aurora]),
 }
