@@ -60,7 +60,12 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
     ]
     const fantomOptions = xDaiOptions
 
-    const bobaOptions = [{ label: 'OolongSwap', value: TradeProvider.OOLONGSWAP }]
+    const bobaOptions = [
+        { label: 'OolongSwap', value: TradeProvider.OOLONGSWAP },
+        { label: 'DODO', value: TradeProvider.DODO },
+        { label: 'SwapperChan', value: TradeProvider.SWAPPERCHAN },
+        { label: 'SenpaiSwap', value: TradeProvider.SENPAISWAP },
+    ]
 
     const celoOptions = [{ label: 'SushiSwap', value: TradeProvider.SUSHISWAP }]
 

@@ -216,6 +216,7 @@ export enum TradeProvider {
     OPENOCEAN = 10,
     OOLONGSWAP = 11,
     SWAPPERCHAN = 12,
+    SENPAISWAP = 13,
 }
 /** Supported language settings */
 export enum LanguageOptions {

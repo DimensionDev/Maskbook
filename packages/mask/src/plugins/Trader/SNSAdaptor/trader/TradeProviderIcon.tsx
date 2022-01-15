@@ -15,6 +15,7 @@ import { resolveTradeProviderName } from '../../pipes'
 const quickswapIcon = new URL('../../../../resources/quickswap.png', import.meta.url).toString()
 const pancakeswapIcon = new URL('../../../../resources/pancakeswap.png', import.meta.url).toString()
 const swapperchanIcon = new URL('../../../../resources/swapperchan.png', import.meta.url).toString()
+const senpaiswapIcon = new URL('../../../../resources/senpaiswap.png', import.meta.url).toString()
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -63,6 +64,14 @@ export function TradeProviderIcon(props: TradeProviderIconProps) {
                 <img
                     src={swapperchanIcon}
                     alt={resolveTradeProviderName(TradeProvider.SWAPPERCHAN)}
+                    className={classes.icon}
+                />
+            )
+        case TradeProvider.SENPAISWAP:
+            return (
+                <img
+                    src={senpaiswapIcon}
+                    alt={resolveTradeProviderName(TradeProvider.SENPAISWAP)}
                     className={classes.icon}
                 />
             )

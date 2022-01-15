@@ -15,6 +15,8 @@ import {
     OOLONGSWAP_CUSTOM_BASES,
     SWAPPERCHAN_BASE_AGAINST_TOKENS,
     SWAPPERCHAN_CUSTOM_BASES,
+    SENPAISWAP_BASE_AGAINST_TOKENS,
+    SENPAISWAP_CUSTOM_BASES,
     UNISWAP_BASE_AGAINST_TOKENS,
     UNISWAP_CUSTOM_BASES,
 } from '../constants'
@@ -125,6 +127,18 @@ export function useTradeContext(tradeProvider: TradeProvider) {
                     AGAINST_TOKENS: SWAPPERCHAN_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: SWAPPERCHAN_CUSTOM_BASES,
+                }
+            case TradeProvider.SENPAISWAP:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: TRADER_DEX.SENPAISWAP_THEGRAPH,
+                    INIT_CODE_HASH: TRADER_DEX.SENPAISWAP_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: TRADER_DEX.SENPAISWAP_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: TRADER_DEX.SENPAISWAP_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: SENPAISWAP_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: SENPAISWAP_CUSTOM_BASES,
                 }
             case TradeProvider.ZRX:
                 return {

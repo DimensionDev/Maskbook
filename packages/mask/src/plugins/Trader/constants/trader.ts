@@ -46,6 +46,7 @@ export const CEUR = createERC20Tokens('cEUR_ADDRESS', 'Celo Euro', 'cEUR', 18)
 export const OLO = createERC20Tokens('OLO_ADDRESS', 'OolongSwap Token', 'OLO', 18)
 export const BOBA = createERC20Tokens('BOBA_ADDRESS', 'Boba Token', 'BOBA', 18)
 export const WAIFU = createERC20Tokens('WAIFU_ADDRESS', 'WaifuToken', 'WAIFU', 18)
+export const SENPAI = createERC20Tokens('SENPAI_ADDRESS', 'SenpaiSwap', 'SENPAI', 18)
 
 export const WNATIVE = createERC20Tokens(
     'WNATIVE_ADDRESS',
