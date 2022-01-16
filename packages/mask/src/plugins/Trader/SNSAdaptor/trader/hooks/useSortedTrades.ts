@@ -56,9 +56,9 @@ export function useSortedTrades(traders: TradeInfo[], chainId: ChainId, gasPrice
                         let b = finalPriceB
 
                         if (!gasA && gasB) {
-                            return 1 // B goes first
-                        } else if (gasA && !gasB) {
                             return -1 // A goes first
+                        } else if (gasA && !gasB) {
+                            return 1 // B goes first
                         } else if (!gasA && !gasB) {
                             a = valueA?.outputAmount
                             b = valueB?.outputAmount
