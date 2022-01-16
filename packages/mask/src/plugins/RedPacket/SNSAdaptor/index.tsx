@@ -56,7 +56,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             RedPacketNftMetaKey,
             (_payload) => {
                 const payload = _payload as RedPacketNftJSONPayload
-                return { text: <>{payload.message ? `\u{1F9E7} ${payload.message}` : '\u{1F9E7} An NFT Lucky Drop'}</> }
+                return { text: <>&#x1F9E7; {payload.message ? payload.message : 'An NFT Lucky Drop'}</> }
             },
         ],
     ]),
