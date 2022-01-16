@@ -29,7 +29,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v2
-      - run: npx anti-trojan-source --files='packages/**/*'
+      - run: npx anti-trojan-source --files='packages/**/src/**/*.{ts,tsx,js}'
   locale-kit:
     runs-on: ubuntu-20.04
     steps:
