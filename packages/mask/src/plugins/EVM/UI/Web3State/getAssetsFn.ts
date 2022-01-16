@@ -164,7 +164,7 @@ export const getNonFungibleTokenFn =
         }
 
         const socketId = `mask.fetchNonFungibleCollectibleAsset_${address}`
-        await socket.send({
+        socket.send({
             id: socketId,
             method: 'mask.fetchNonFungibleCollectibleAsset',
             params: { address, pageSize: 40 },

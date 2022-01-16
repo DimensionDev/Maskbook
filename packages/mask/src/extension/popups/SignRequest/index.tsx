@@ -1,13 +1,11 @@
 import { ECKeyIdentifier, Identifier, delay } from '@masknet/shared-base'
 import { Box, Button, DialogActions, DialogContent, MenuItem, Select, TextField, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useEffect } from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
-import { MaskMessages } from '../../../utils'
+import { MaskMessages, useI18N } from '../../../utils'
 import { MissingParameter } from '../MissingParameter'
-import { useI18N } from '../../../utils'
 import type { SignRequest } from './utils'
 
 export default function SignRequest() {

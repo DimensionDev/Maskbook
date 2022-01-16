@@ -1,4 +1,3 @@
-import { first } from 'lodash-unified'
 import { EthereumAddress } from 'wallet.ts'
 import { toHex } from 'web3-utils'
 import type { HttpProvider } from 'web3-core'
@@ -10,11 +9,14 @@ import {
     EthereumErrorType,
     EthereumMethodType,
     EthereumRpcType,
-    EthereumTransactionConfig,
     isEIP1559Supported,
     isSameAddress,
     ProviderType,
     SendOverrides,
+    getPayloadHash,
+    getPayloadConfig,
+    getPayloadChainId,
+    getTransactionHash,
     isZeroAddress,
 } from '@masknet/web3-shared-evm'
 import type { IJsonRpcRequest } from '@walletconnect/types'
@@ -80,56 +82,6 @@ function getTo(computedPayload: UnboxPromise<ReturnType<typeof getSendTransactio
     return ''
 }
 
-function getPayloadChainId(payload: JsonRpcPayload) {
-    switch (payload.method) {
-        // here are methods that contracts may emit
-        case EthereumMethodType.ETH_CALL:
-        case EthereumMethodType.ETH_ESTIMATE_GAS:
-        case EthereumMethodType.ETH_SEND_TRANSACTION:
-            const config = first(payload.params) as { chainId?: string } | undefined
-            return typeof config?.chainId === 'string' ? Number.parseInt(config.chainId, 16) || undefined : undefined
-        default:
-            return
-    }
-}
-
-function getPayloadConfig(payload: JsonRpcPayload) {
-    switch (payload.method) {
-        case EthereumMethodType.ETH_SEND_TRANSACTION: {
-            const [config] = payload.params as [EthereumTransactionConfig]
-            return config
-        }
-        case EthereumMethodType.MASK_REPLACE_TRANSACTION: {
-            const [, config] = payload.params as [string, EthereumTransactionConfig]
-            return config
-        }
-        default:
-            return
-    }
-}
-
-function getPayloadHash(payload: JsonRpcPayload) {
-    switch (payload.method) {
-        case EthereumMethodType.ETH_SEND_TRANSACTION: {
-            return ''
-        }
-        case EthereumMethodType.MASK_REPLACE_TRANSACTION: {
-            const [hash] = payload.params as [string]
-            return hash
-        }
-        default:
-            return ''
-    }
-}
-
-function getTransactionHash(response?: JsonRpcResponse) {
-    if (!response) return ''
-    const hash = response?.result as string | undefined
-    if (typeof hash !== 'string') return ''
-    if (!/^0x([\dA-Fa-f]{64})$/.test(hash)) return ''
-    return hash
-}
-
 async function handleTransferTransaction(chainId: ChainId, payload: JsonRpcPayload) {
     if (payload.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return
     const computedPayload = await getSendTransactionComputedPayload(payload)
@@ -149,7 +101,7 @@ function handleRecentTransaction(
 ) {
     const hash = getTransactionHash(response)
     if (!hash) return
-    WalletRPC.watchTransaction(chainId, hash)
+    WalletRPC.watchTransaction(chainId, hash, payload)
     WalletRPC.addRecentTransaction(chainId, account, hash, payload)
 }
 
@@ -162,7 +114,7 @@ function handleReplaceRecentTransaction(
 ) {
     const hash = getTransactionHash(response)
     if (!hash) return
-    WalletRPC.watchTransaction(chainId, hash)
+    WalletRPC.watchTransaction(chainId, hash, payload)
     WalletRPC.replaceRecentTransaction(chainId, account, previousHash, hash, payload)
 }
 
@@ -444,12 +396,14 @@ export async function INTERNAL_send(
     async function getTransactionReceipt() {
         const [hash] = payload.params as [string]
 
+        // redirect receipt queries to tx watcher
+        const transaction = await WalletRPC.getRecentTransaction(chainIdFinally, account, hash)
+
         try {
             callback(null, {
                 id: payload.id,
                 jsonrpc: payload.jsonrpc,
-                // redirect receipt queries to tx watcher
-                result: await WalletRPC.getReceipt(chainIdFinally, hash),
+                result: transaction?.receipt ?? null,
             } as JsonRpcResponse)
         } catch {
             callback(null, {

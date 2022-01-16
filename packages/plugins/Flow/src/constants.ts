@@ -14,7 +14,7 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         type: NetworkType.Flow,
         name: 'Flow',
         icon: new URL('./assets/flow.png', import.meta.url),
-        iconColor: 'rgb(54 173 104)',
+        iconColor: 'rgb(54, 173, 104)',
         isMainnet: true,
     },
     {
@@ -24,7 +24,7 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         type: NetworkType.Flow,
         name: 'Flow Testnet',
         icon: new URL('./assets/flow.png', import.meta.url),
-        iconColor: 'rgb(54 173 104)',
+        iconColor: 'rgb(54, 173, 104)',
         isMainnet: false,
     },
 ]

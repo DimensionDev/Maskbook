@@ -39,7 +39,7 @@ const useStyles = makeStyles()((theme) => ({
         width: 48,
         height: 48,
         borderRadius: '50%',
-        backgroundColor: theme.palette.background.default,
+        backgroundColor: 'transparent',
     },
     networkIcon: {
         backgroundColor: theme.palette.background.default,

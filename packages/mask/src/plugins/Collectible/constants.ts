@@ -21,10 +21,13 @@ export const OpenSeaTraitURL =
     '/assets/known-origin?search[stringTraits][0][name]=Tag&search[stringTraits][0][values][0]='
 export const NullAddress = 'NullAddress'
 export const ReferrerAddress = ''
+export const OpenSeaMainnetURL = 'https://opensea.io'
+export const OpenSeaTestnetURL = 'https://testnets.opensea.io'
 
 export const RaribleURL = 'https://api.rarible.com/'
 export const RaribleChainURL = 'https://ethereum-api.rarible.org/'
 export const RaribleIPFSURL = 'https://ipfs.rarible.com/ipfs/'
 export const RaribleUserURL = 'https://rarible.com/user/'
 export const RaribleRopstenUserURL = 'https://ropsten.rarible.com/user/'
+export const RaribleRinkebyUserURL = 'https://rinkeby.rarible.com/user/'
 export const RaribleMainnetURL = 'https://api-mainnet.rarible.com/marketplace/api/v4/'
