@@ -108,7 +108,7 @@ function splitFields(raw: string) {
         signature: (signature === '_' ? undefined : signature) as string | undefined,
         authorPublicKey: authorPublicKey as string | undefined,
         authorUserID,
-        isPublic: isPublic === '1' ? true : false,
+        isPublic: isPublic === '1',
     }
 }
 
