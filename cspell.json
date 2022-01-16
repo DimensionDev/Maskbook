@@ -167,6 +167,7 @@
         "pancakeswap",
         "pathnames",
         "perma",
+        "pfps",
         "pid",
         "pids",
         "Plurinational",
@@ -216,6 +217,7 @@
         "Swither",
         "tabindex",
         "tablist",
+        "Testflight",
         "testid",
         "textbox",
         "thegraph",
@@ -349,6 +351,7 @@
         "testweb",
         "tinycolor",
         "treeshake",
+        "txreceipt",
         "txts",
         "uaddr",
         "unauthenticate",
@@ -362,8 +365,7 @@
         "walletlink",
         "WNATIVE",
         "xdescribe",
-        "xtest",
-        "txreceipt"
+        "xtest"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [
