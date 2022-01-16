@@ -1,3 +1,4 @@
+/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
 import {
     AESKey,
     AESAlgorithmEnum,
@@ -37,7 +38,7 @@ const importEC = CheckedError.withErr(importAsymmetryKeyFromJsonWebKeyOrSPKI, Cr
 
 export async function parse38(payload: string): PayloadParserResult {
     //#region Parse text
-    const header = '🎼4/4'
+    const header = '\u{1F3BC}4/4'
     if (!payload.startsWith(header)) return new CheckedError(PayloadException.InvalidPayload, 'Unknown version').toErr()
     let rest = payload.slice(header.length)
     // cut the tail

@@ -1,3 +1,4 @@
+/* eslint-disable @dimensiondev/no-bigint */
 import { useMemo } from 'react'
 import JSBI from 'jsbi'
 import { Percent, TradeType } from '@uniswap/sdk-core'

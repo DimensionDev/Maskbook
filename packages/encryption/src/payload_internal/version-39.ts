@@ -1,3 +1,4 @@
+/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
 import { parse40 } from './version-40'
 import { PayloadException } from '../types'
 import type { PayloadParserResult } from '.'
@@ -14,8 +15,8 @@ import { CheckedError } from '@masknet/shared-base'
 // ? Version 40:🎼2/4|ownersAESKeyEncrypted|iv|encryptedText:||
 // ? Version 39:🎼3/4|ownersAESKeyEncrypted|iv|encryptedText:||
 export async function parse39(payload: string): PayloadParserResult {
-    const v_40 = '🎼2/4'
-    const v_39 = '🎼3/4'
+    const v_40 = '\u{1F3BC}2/4'
+    const v_39 = '\u{1F3BC}3/4'
     if (!payload.startsWith(v_39)) return new CheckedError(PayloadException.UnknownVersion, null).toErr()
 
     const result = await parse40(payload.replace(v_39, v_40))

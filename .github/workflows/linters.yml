@@ -22,6 +22,14 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v2
       - run: npx prettier@2.5.0 --list-different .
+  anti-trojan-source:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v2
+      - run: npx anti-trojan-source --files='packages/**/*'
   locale-kit:
     runs-on: ubuntu-20.04
     steps:

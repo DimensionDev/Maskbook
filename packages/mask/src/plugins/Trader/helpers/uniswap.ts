@@ -1,3 +1,4 @@
+/* eslint-disable @dimensiondev/no-bigint */
 import JSBI from 'jsbi'
 import { memoize } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
