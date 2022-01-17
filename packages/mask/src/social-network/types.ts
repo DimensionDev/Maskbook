@@ -6,8 +6,8 @@ import type {
     ProfileIdentifier,
     ReadonlyIdentifierMap,
     ObservableWeakMap,
-    TypedMessage,
 } from '@masknet/shared-base'
+import type { TypedMessage } from '@masknet/typed-message/base'
 import type { PaletteMode, Theme } from '@mui/material'
 import type { InjectedDialogClassKey, InjectedDialogProps } from '../components/shared/InjectedDialog'
 import type { Profile } from '../database'

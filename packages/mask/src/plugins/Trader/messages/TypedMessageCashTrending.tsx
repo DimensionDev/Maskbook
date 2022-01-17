@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { Link, Typography } from '@mui/material'
-import { TypedMessageAnchor, TypedMessage, isTypedMessageAnchor } from '@masknet/shared-base'
+import { TypedMessageAnchor, TypedMessage, isTypedMessageAnchor } from '@masknet/typed-message/base'
 import { PluginTraderMessages, PluginTraderRPC } from '../messages'
 import { TagType } from '../types'
 // TODO: when migrate, should have an API in the plugin infra for plugin to define render

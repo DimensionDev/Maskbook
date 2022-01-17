@@ -237,10 +237,12 @@ importers:
     specifiers:
       '@dimensiondev/stego-js': 0.11.1-20201027083223-8ab41be
       '@masknet/shared-base': workspace:*
+      '@masknet/typed-message': workspace:*
       '@msgpack/msgpack': ^2.7.0
     dependencies:
       '@dimensiondev/stego-js': 0.11.1-20201027083223-8ab41be
       '@masknet/shared-base': link:../shared-base
+      '@masknet/typed-message': link:../typed-message
       '@msgpack/msgpack': 2.7.1
 
   packages/external-plugin-previewer:
@@ -579,6 +581,7 @@ importers:
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
+      '@masknet/typed-message': workspace:*
       '@servie/events': ^3.0.0
       '@types/use-subscription': ^1.0.0
       async-call-rpc: ^6.0.1
@@ -592,6 +595,7 @@ importers:
       '@masknet/shared': link:../shared
       '@masknet/shared-base': link:../shared-base
       '@masknet/theme': link:../theme
+      '@masknet/typed-message': link:../typed-message
       '@servie/events': 3.0.0
       '@types/use-subscription': 1.0.0
       async-call-rpc: 6.0.1
@@ -659,6 +663,7 @@ importers:
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
+      '@masknet/typed-message': workspace:*
       '@msgpack/msgpack': ^2.7.1
       arweave: ^1.10.3
       date-fns: ^2.27.0
@@ -673,6 +678,7 @@ importers:
       '@masknet/shared': link:../../shared
       '@masknet/shared-base': link:../../shared-base
       '@masknet/theme': link:../../theme
+      '@masknet/typed-message': link:../../typed-message
       '@msgpack/msgpack': 2.7.1
       arweave: 1.10.13
       date-fns: 2.27.0
@@ -3562,6 +3568,7 @@ packages:
 
   /@dimensiondev/eslint-plugin/0.0.1-20220117073238-5be2759_eslint@8.5.0:
     resolution: {integrity: sha512-/tJSdaZMWDBk/uZF7LgMNWleyqjwFFTnOP4YuTmxopZiJ6i3bTs+c9/klqqFonjPkMGf0fz1SrjI8TXmbTJmGw==, tarball: download/@dimensiondev/eslint-plugin/0.0.1-20220117073238-5be2759/5fba85c9906ce429dd110d7f4142f99b9f5532d9e5af30625becdf330d247c33}
+    engines: {node: '>= 14'}
     peerDependencies:
       '@typescript-eslint/experimental-utils': '*'
       eslint: '>= 8'

@@ -1,5 +1,3 @@
-export * from '../base'
-
 // Render
 export {
     TypedMessageRender,

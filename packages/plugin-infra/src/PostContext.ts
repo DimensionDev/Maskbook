@@ -1,11 +1,6 @@
 import { useObservableValues, useValueRef } from '@masknet/shared'
-import {
-    ObservableMap,
-    ObservableSet,
-    type PostIdentifier,
-    type ProfileIdentifier,
-    type TypedMessageTuple,
-} from '@masknet/shared-base'
+import { ObservableMap, ObservableSet, type PostIdentifier, type ProfileIdentifier } from '@masknet/shared-base'
+import type { TypedMessage } from '@masknet/typed-message/base'
 import { ValueRef, LiveSelector, DOMProxy } from '@dimensiondev/holoflows-kit'
 import { Context, createContext, createElement, memo, useContext } from 'react'
 import { Subscription, useSubscription } from 'use-subscription'
@@ -39,7 +34,7 @@ export interface PostContextCreation extends PostContextAuthor {
     /**
      * The raw TypedMessage that the SNS gives.
      */
-    readonly rawMessage: Subscription<TypedMessageTuple>
+    readonly rawMessage: Subscription<TypedMessage>
     readonly signal?: AbortSignal
 }
 export interface PostContext extends PostContextAuthor {
@@ -57,7 +52,7 @@ export interface PostContext extends PostContextAuthor {
     readonly mentionedLinks: Subscription<string[]>
     //#endregion
     //#region Raw post content (not decrypted)
-    readonly rawMessage: Subscription<TypedMessageTuple>
+    readonly rawMessage: Subscription<TypedMessage>
     //#endregion
     //#region Information revealed in the Mask Payload
     readonly containsMaskPayload: Subscription<boolean>

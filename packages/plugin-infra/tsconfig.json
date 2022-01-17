@@ -10,7 +10,8 @@
     { "path": "../shared/" },
     { "path": "../shared-base" },
     { "path": "../theme" },
-    { "path": "../encryption" }
+    { "path": "../encryption" },
+    { "path": "../typed-message/base" }
   ],
   "ts-node": {
     "transpileOnly": true,

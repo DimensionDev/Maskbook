@@ -1,13 +1,8 @@
 import * as Alpha38 from '../../../crypto/crypto-alpha-38'
 import { decodeArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
 import { queryPrivateKey, queryLocalKey, queryProfile } from '../../../database'
-import {
-    ProfileIdentifier,
-    PostIVIdentifier,
-    isTypedMessageText,
-    TypedMessage,
-    TypedMessageText,
-} from '@masknet/shared-base'
+import { ProfileIdentifier, PostIVIdentifier } from '@masknet/shared-base'
+import { isTypedMessageText, type TypedMessage, type TypedMessageText } from '@masknet/typed-message/base'
 import { prepareRecipientDetail } from './prepareRecipientDetail'
 import { getNetworkWorker } from '../../../social-network/worker'
 import { createPostDB, PostRecord } from '../../../../background/database/post'

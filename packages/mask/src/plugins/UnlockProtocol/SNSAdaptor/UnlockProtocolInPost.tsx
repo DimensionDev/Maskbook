@@ -1,4 +1,4 @@
-import type { TypedMessage } from '@masknet/shared-base'
+import type { TypedMessage } from '@masknet/typed-message/base'
 import { Button, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useI18N } from '../../../utils'

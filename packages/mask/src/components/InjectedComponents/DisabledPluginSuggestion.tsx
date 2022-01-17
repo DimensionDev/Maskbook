@@ -5,7 +5,7 @@ import {
     Option,
     Plugin,
 } from '@masknet/plugin-infra'
-import { extractTextFromTypedMessage } from '@masknet/shared-base'
+import { extractTextFromTypedMessage } from '@masknet/typed-message/base'
 import { Switch } from '@mui/material'
 import Services from '../../extension/service'
 import MaskPluginWrapper from '../../plugins/MaskPluginWrapper'

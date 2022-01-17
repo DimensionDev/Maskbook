@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { visitEachTypedMessageChild } from '@masknet/shared-base'
+import { visitEachTypedMessageChild } from '@masknet/typed-message/base'
 import { isCashTagMessage, makeTypedMessageCashTrending } from './messages/TypedMessageCashTrending'
 
 export const baseDeferred: Plugin.Shared.Utilities = {

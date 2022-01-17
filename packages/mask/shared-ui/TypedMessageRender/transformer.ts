@@ -3,7 +3,7 @@ import {
     FlattenTypedMessage,
     ParseLinkTransformer,
     createMaskPayloadTransform,
-} from '@masknet/typed-message/dom'
+} from '@masknet/typed-message/base'
 
 export enum Order {
     Flatten = 1000,

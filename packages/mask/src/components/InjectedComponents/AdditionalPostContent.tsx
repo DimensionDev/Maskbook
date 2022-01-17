@@ -1,7 +1,7 @@
 import { Typography, Card, Box, CircularProgress, CircularProgressProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
-import { TypedMessage, makeTypedMessageText } from '@masknet/shared-base'
+import { TypedMessage, makeTypedMessageText } from '@masknet/typed-message/base'
 import { TypedMessageRender, MessageRenderProps } from '@masknet/typed-message/dom'
 import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context'
 import CheckIcon from '@mui/icons-material/Check'

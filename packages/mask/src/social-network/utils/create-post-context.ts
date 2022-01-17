@@ -10,23 +10,25 @@ import type {
 } from '@masknet/plugin-infra'
 import {
     ALL_EVENTS,
-    extractTextFromTypedMessage,
-    makeTypedMessageTupleFromList,
     ObservableMap,
     ObservableSet,
     parseURL,
     PostIdentifier,
     ProfileIdentifier,
-    TypedMessage,
-    TypedMessageTuple,
     SubscriptionFromValueRef,
     SubscriptionDebug as debug,
     mapSubscription,
-    collectTypedMessagePromise,
     combineAbortSignal,
-    extractImageFromTypedMessage,
-    FlattenTypedMessage,
 } from '@masknet/shared-base'
+import {
+    FlattenTypedMessage,
+    extractTextFromTypedMessage,
+    collectTypedMessagePromise,
+    type TypedMessageTuple,
+    type TypedMessage,
+    makeTypedMessageTupleFromList,
+    extractImageFromTypedMessage,
+} from '@masknet/typed-message/base'
 import type { Subscription } from 'use-subscription'
 import { activatedSocialNetworkUI } from '../'
 import type { SocialNetworkEncodedPayload } from '../../../background/services/crypto/decryption'

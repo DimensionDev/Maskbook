@@ -9,5 +9,10 @@
     "resolveJsonModule": true
   },
   "include": ["./", "./**/*.json"],
-  "references": [{ "path": "../../shared-base" }, { "path": "../../shared/" }, { "path": "../../typed-message/dom" }]
+  "references": [
+    { "path": "../../shared-base" },
+    { "path": "../../shared/" },
+    { "path": "../../typed-message/base" },
+    { "path": "../../typed-message/dom" }
+  ]
 }

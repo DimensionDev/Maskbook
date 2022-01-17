@@ -2,7 +2,11 @@ import { omit } from 'lodash-unified'
 import type BigNumber from 'bignumber.js'
 import type { Result } from 'ts-results'
 import { ChainId, isNativeTokenAddress } from '@masknet/web3-shared-evm'
-import { createRenderWithMetadata, createTypedMessageMetadataReader, type TypedMessage } from '@masknet/shared-base'
+import {
+    createRenderWithMetadata,
+    createTypedMessageMetadataReader,
+    type TypedMessage,
+} from '@masknet/typed-message/base'
 import { ITO_MetaKey_1, ITO_MetaKey_2 } from '../constants'
 import type { JSON_PayloadInMask, JSON_PayloadOutMask } from '../types'
 import schemaV1 from '../schema-v1.json'

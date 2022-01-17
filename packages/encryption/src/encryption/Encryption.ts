@@ -1,7 +1,6 @@
 import type {
     PersonaIdentifier,
     ProfileIdentifier,
-    TypedMessage,
     AESCryptoKey,
     PostIVIdentifier,
     EC_Public_CryptoKey,
@@ -9,6 +8,7 @@ import type {
     ECKeyIdentifier,
     IdentifierMap,
 } from '@masknet/shared-base'
+import type { TypedMessage } from '@masknet/typed-message/base'
 
 export interface EncryptOptions {
     /** Payload version to use. */
