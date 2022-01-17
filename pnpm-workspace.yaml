@@ -31,6 +31,7 @@ packages:
   - 'packages/plugins/Flow'
   - 'packages/plugins/FileService'
   - 'packages/plugins/DAO'
+  - 'packages/plugins/NextId'
   - 'packages/plugins/RSS3'
   - 'packages/plugins/Solana'
   - 'packages/external-plugin-previewer'
