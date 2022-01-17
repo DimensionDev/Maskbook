@@ -14,7 +14,9 @@
         "xDai": "xdai-assets",
         "Celo": "celo-assets",
         "Fantom": "fantom-assets",
-        "Avalanche": "avalanche-assets"
+        "Avalanche": "avalanche-assets",
+        "Aurora": "aurora-assets",
+        "Aurora_Testnet": ""
     },
     "TRANSACTIONS_SCOPE_NAME": {
         "Mainnet": "transactions",
@@ -31,6 +33,8 @@
         "xDai": "xdai-transactions",
         "Celo": "celo-transactions",
         "Fantom": "fantom-transactions",
-        "Avalanche": "avalanche-transactions"
+        "Avalanche": "avalanche-transactions",
+        "Aurora": "aurora-transactions",
+        "Aurora_Testnet": ""
     }
 }

@@ -31,7 +31,7 @@ export function kickToUpdateTokenPrices() {
 
 const trackingContracts: Record<string, string[]> = Object.create(null)
 export function trackContract(platform: string, address: string) {
-    trackingContracts[platform] = uniq([...(trackingContracts[platform] ?? []), address.toString()])
+    trackingContracts[platform] = uniq([...(trackingContracts[platform] ?? []), address])
 }
 
 export async function updateTokenPrices() {

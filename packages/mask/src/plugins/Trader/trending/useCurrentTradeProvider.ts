@@ -8,6 +8,7 @@ import {
     celoNetworkTradeProviderSettings,
     fantomNetworkTradeProviderSettings,
     avalancheNetworkTradeProviderSettings,
+    auroraNetworkTradeProviderSettings,
 } from '../settings'
 import { ChainId, getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
@@ -24,6 +25,7 @@ export function useCurrentTradeProvider(chainId?: ChainId) {
     const celoNetworkTradeProvider = useValueRef(celoNetworkTradeProviderSettings)
     const fantomNetworkTradeProvider = useValueRef(fantomNetworkTradeProviderSettings)
     const avalancheNetworkTradeProvider = useValueRef(avalancheNetworkTradeProviderSettings)
+    const auroraNetworkTradeProvider = useValueRef(auroraNetworkTradeProviderSettings)
 
     if (!networkType) return TradeProvider.UNISWAP_V2
     switch (networkType) {
@@ -43,6 +45,8 @@ export function useCurrentTradeProvider(chainId?: ChainId) {
             return fantomNetworkTradeProvider
         case NetworkType.Avalanche:
             return avalancheNetworkTradeProvider
+        case NetworkType.Aurora:
+            return auroraNetworkTradeProvider
         default:
             unreachable(networkType)
     }

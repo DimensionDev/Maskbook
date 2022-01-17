@@ -14,7 +14,9 @@
         "xDai": ["https://rpc.xdaichain.com/"],
         "Celo": ["https://forno.celo.org"],
         "Fantom": ["https://rpcapi.fantom.network/"],
-        "Avalanche": ["https://api.avax.network/ext/bc/C/rpc"]
+        "Avalanche": ["https://api.avax.network/ext/bc/C/rpc"],
+        "Aurora": ["https://mainnet.aurora.dev"],
+        "Aurora_Testnet": ["https://testnet.aurora.dev"]
     },
     "RPC_WEIGHTS": {
         "Mainnet": [0, 0, 0, 0],
@@ -31,6 +33,8 @@
         "xDai": [0, 0, 0, 0],
         "Celo": [0, 0, 0, 0],
         "Fantom": [0, 0, 0, 0],
-        "Avalanche": [0, 0, 0, 0]
+        "Avalanche": [0, 0, 0, 0],
+        "Aurora": [0, 0, 0, 0],
+        "Aurora_Testnet": [0, 0, 0, 0]
     }
 }

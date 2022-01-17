@@ -12,6 +12,7 @@ import {
     useCeloNetworkTradeProvider,
     useFantomNetworkTradeProvider,
     useAvalancheNetworkTradeProvider,
+    useAuroraNetworkTradeProvider,
 } from '../../Settings/api'
 
 import SettingItem from './SettingItem'
@@ -66,6 +67,12 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
         { label: 'TraderJoe', value: TradeProvider.TRADERJOE },
         { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
     ]
+    const auroraOptions = [
+        { label: 'DODO', value: TradeProvider.DODO },
+        { label: 'WannaSwap', value: TradeProvider.WANNASWAP },
+        { label: 'Trisolaris', value: TradeProvider.TRISOLARIS },
+    ]
+
     const t = useDashboardI18N()
 
     const items = [
@@ -116,6 +123,12 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
             value: useAvalancheNetworkTradeProvider(),
             options: avalancheOptions,
             onChange: (value: string) => Services.Settings.setAvalancheNetworkTradeProvider(Number.parseInt(value, 10)),
+        },
+        {
+            legend: t.labs_settings_swap_network({ network: 'Aurora' }),
+            value: useAuroraNetworkTradeProvider(),
+            options: auroraOptions,
+            onChange: (value: string) => Services.Settings.setAuroraNetworkTradeProvider(Number.parseInt(value, 10)),
         },
     ]
 

@@ -110,7 +110,7 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
             ? [...renderTokens]
                   .sort(makeSortTokenFn(chainId, { isMaskBoost: true }))
                   .map((token) => ({ token: token, balance: null }))
-            : !!keyword
+            : keyword
             ? assets
             : [...assets].sort(makeSortAssertFn(chainId, { isMaskBoost: true }))
 

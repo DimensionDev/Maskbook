@@ -14,7 +14,9 @@
         "xDai": "xdai",
         "Celo": "celo",
         "Fantom": "fantom",
-        "Avalanche": "avalanche"
+        "Avalanche": "avalanche",
+        "Aurora": "aurora",
+        "Aurora_Testnet": ""
     },
     "COIN_ID": {
         "Mainnet": "ethereum",
@@ -31,6 +33,8 @@
         "xDai": "xdai",
         "Celo": "celo",
         "Fantom": "fantom",
-        "Avalanche": "avalanche"
+        "Avalanche": "avalanche",
+        "Aurora": "ethereum",
+        "Aurora_Testnet": ""
     }
 }

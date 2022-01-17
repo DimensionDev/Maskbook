@@ -14,7 +14,9 @@
         "xDai": "",
         "Celo": "",
         "Fantom": "",
-        "Avalanche": ""
+        "Avalanche": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "BULK_CHECKOUT_ADDRESS": {
         "Mainnet": "0x7d655c57f71464B6f83811C55D84009Cd9f5221C",
@@ -31,7 +33,9 @@
         "xDai": "",
         "Celo": "",
         "Fantom": "",
-        "Avalanche": ""
+        "Avalanche": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "GITCOIN_ETH_ADDRESS": {
         "Mainnet": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -48,7 +52,9 @@
         "xDai": "",
         "Celo": "",
         "Fantom": "",
-        "Avalanche": ""
+        "Avalanche": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "GITCOIN_TIP_PERCENTAGE": {
         "Mainnet": 5,
@@ -65,6 +71,8 @@
         "xDai": 5,
         "Celo": 0,
         "Fantom": 0,
-        "Avalanche": 0
+        "Avalanche": 0,
+        "Aurora": 0,
+        "Aurora_Testnet": 0
     }
 }

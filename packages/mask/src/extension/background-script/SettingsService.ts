@@ -18,6 +18,7 @@ import {
     celoNetworkTradeProviderSettings,
     fantomNetworkTradeProviderSettings,
     avalancheNetworkTradeProviderSettings,
+    auroraNetworkTradeProviderSettings,
 } from '../../plugins/Trader/settings'
 import { queryMyPersonas } from './IdentityService'
 import {
@@ -82,6 +83,8 @@ export const [getFantomNetworkTradeProvider, setFantomNetworkTradeProvider] = cr
 export const [getAvalancheNetworkTradeProvider, setAvalancheNetworkTradeProvider] = create(
     avalancheNetworkTradeProviderSettings,
 )
+
+export const [getAuroraNetworkTradeProvider, setAuroraNetworkTradeProvider] = create(auroraNetworkTradeProviderSettings)
 
 export const [getCurrentSelectedWalletProvider, setCurrentSelectedWalletProvider] = create(currentProviderSettings)
 

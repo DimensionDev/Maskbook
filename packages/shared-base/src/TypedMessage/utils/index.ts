@@ -7,7 +7,7 @@ import type {
     TypedMessage,
 } from '../base'
 import { eq } from 'lodash-unified'
-import { Err, Ok, Result } from 'ts-results'
+import { Option, Some, None } from 'ts-results'
 import { isTypedMessageImage } from '..'
 
 export function isSerializableTypedMessage(x: TypedMessage): x is SerializableTypedMessages {
@@ -36,20 +36,20 @@ export function isTypedMessageEqual(message1: TypedMessage, message2: TypedMessa
  * Get inner text from a TypedMessage
  * @param message message
  */
-export function extractTextFromTypedMessage(message: TypedMessage | null): Result<string, void> {
-    if (!message) return Err.EMPTY
-    if (isTypedMessageText(message)) return Ok(message.content)
-    if (isTypedMessageAnchor(message)) return Ok(message.content)
+export function extractTextFromTypedMessage(message: TypedMessage | null): Option<string> {
+    if (!message) return None
+    if (isTypedMessageText(message)) return Some(message.content)
+    if (isTypedMessageAnchor(message)) return Some(message.content)
     if (isTypedMessageTuple(message)) {
         const str: string[] = []
         for (const item of message.items) {
             const text = extractTextFromTypedMessage(item)
-            if (text.ok) str.push(text.val)
+            if (text.some) str.push(text.val)
         }
-        if (str.length) return Ok(str.join(' '))
-        return Err.EMPTY
+        if (str.length) return Some(str.join(' '))
+        return None
     }
-    return Err.EMPTY
+    return None
 }
 export function extractImageFromTypedMessage(
     message: TypedMessage | null,

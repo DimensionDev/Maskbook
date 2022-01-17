@@ -10,5 +10,5 @@ export const VALUABLES_VCENT_URL = 'https://v.cent.co/tweet/'
 export const PLUGIN_ID = PluginId.Valuables
 export const PLUGIN_META_KEY = `${PluginId.Valuables}:1`
 export const PLUGIN_NAME = 'vCent'
-export const PLUGIN_ICON = '🔓'
+export const PLUGIN_ICON = '\u{1F513}'
 export const PLUGIN_DESCRIPTION = 'A Plugin for https://v.cent.co/'

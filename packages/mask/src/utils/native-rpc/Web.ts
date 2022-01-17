@@ -121,6 +121,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.getxDaiNetworkTradeProvider()
             case NetworkType.Avalanche:
                 return Services.Settings.getAvalancheNetworkTradeProvider()
+            case NetworkType.Aurora:
+                return Services.Settings.getAuroraNetworkTradeProvider()
             default:
                 unreachable(network)
         }
@@ -143,6 +145,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.setFantomNetworkTradeProvider(provider)
             case NetworkType.Avalanche:
                 return Services.Settings.setAvalancheNetworkTradeProvider(provider)
+            case NetworkType.Aurora:
+                return Services.Settings.setAuroraNetworkTradeProvider(provider)
             default:
                 unreachable(network)
         }
