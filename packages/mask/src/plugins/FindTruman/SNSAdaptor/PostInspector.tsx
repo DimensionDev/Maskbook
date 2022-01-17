@@ -114,19 +114,14 @@ export function PostInspector(props: PostInspectorProps) {
     const handleSubmit = async (choice: number) => {
         const from = account
         const timestamp = getUnixTime(Date.now())
-        try {
-            if (postType === PostType.Puzzle) {
-                const target = userPuzzleStatus?.id ?? ''
-                await submitPuzzle(account, { target, from, timestamp, choice })
-            } else if (postType === PostType.Poll) {
-                const target = userPollStatus?.id ?? ''
-                await submitPoll(account, { target, from, timestamp, choice })
-            }
-            await fetchData()
-            return true
-        } catch {
-            return false
+        if (postType === PostType.Puzzle) {
+            const target = userPuzzleStatus?.id ?? ''
+            await submitPuzzle(account, { target, from, timestamp, choice })
+        } else if (postType === PostType.Poll) {
+            const target = userPollStatus?.id ?? ''
+            await submitPoll(account, { target, from, timestamp, choice })
         }
+        await fetchData()
     }
 
     return (

@@ -117,19 +117,14 @@ function ParticipateDialog(props: ParticipateDialogProps) {
         const target = pollId
         const from = account
         const timestamp = getUnixTime(Date.now())
-        try {
-            if (postType === PostType.Puzzle) {
-                await submitPuzzle(account, { target, from, timestamp, choice })
-            } else if (postType === PostType.Poll) {
-                await submitPoll(account, { target, from, timestamp, choice })
-            }
-            const polls = await fetchAllPollsOrPuzzles(account)
-            setPolls(polls)
-            onUpdate()
-            return true
-        } catch {
-            return false
+        if (postType === PostType.Puzzle) {
+            await submitPuzzle(account, { target, from, timestamp, choice })
+        } else if (postType === PostType.Poll) {
+            await submitPoll(account, { target, from, timestamp, choice })
         }
+        const polls = await fetchAllPollsOrPuzzles(account)
+        setPolls(polls)
+        onUpdate()
     }
 
     return (

@@ -1,5 +1,5 @@
 import type { PuzzleCondition, UserPollStatus } from '../types'
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Alert, Box, Card, CardContent, Chip, Snackbar, Typography } from '@mui/material'
 import { RadioButtonChecked, RadioButtonUnchecked, DoneOutlined, Send, RefreshOutlined } from '@mui/icons-material'
@@ -62,7 +62,7 @@ const useOptionsStyles = makeStyles()((theme) => {
 })
 interface OptionsViewProps {
     userStatus?: UserPollStatus
-    onSubmit(choice: number): Promise<boolean>
+    onSubmit(choice: number): Promise<void>
 }
 export default function OptionsCard(props: OptionsViewProps) {
     const { userStatus, onSubmit } = props
@@ -107,7 +107,7 @@ export default function OptionsCard(props: OptionsViewProps) {
                     variant="outlined"
                     key={option}
                     onClick={
-                        !selected && !error && userStatus.status !== 0
+                        !submitting && !selected && !error && userStatus.status !== 0
                             ? () => {
                                   setChoice(index)
                               }
@@ -193,6 +193,17 @@ export default function OptionsCard(props: OptionsViewProps) {
         })
     }
 
+    const handleSubmit = useCallback(async () => {
+        setSubmitting(true)
+        try {
+            await onSubmit(choice)
+        } catch (error) {
+            throw error
+        } finally {
+            setSubmitting(false)
+        }
+    }, [choice])
+
     const renderSubmitButton = (userStatus: UserPollStatus) => {
         const isClosed = userStatus.status === 0
         return (
@@ -211,13 +222,9 @@ export default function OptionsCard(props: OptionsViewProps) {
                     waiting={t('plugin_find_truman_submitting')}
                     failed={t('plugin_find_truman_submit_failed')}
                     complete={t('plugin_find_truman_submitted')}
-                    executor={async () => {
-                        setSubmitting(true)
-                        await onSubmit(choice)
-                        setSubmitting(false)
-                    }}
+                    executor={handleSubmit}
                     failedOnClick="use executor"
-                    startIcon={isClosed || submitting || selected ? undefined : <Send />}
+                    startIcon={isClosed || selected ? undefined : <Send />}
                     completeIcon={<DoneOutlined />}
                     failIcon={<RefreshOutlined />}
                 />

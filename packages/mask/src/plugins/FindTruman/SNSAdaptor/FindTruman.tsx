@@ -96,7 +96,7 @@ interface FindTrumanProps {
     userPollStatus?: UserPollStatus
     puzzleResult?: PuzzleResult
     pollResult?: PollResult
-    onSubmit: (choice: number) => Promise<boolean>
+    onSubmit: (choice: number) => Promise<void>
 }
 
 export function getPostTypeTitle(t: FindTrumanI18nFunction, postType: PostType) {
