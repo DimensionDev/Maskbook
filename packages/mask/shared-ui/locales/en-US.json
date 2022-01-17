@@ -885,7 +885,6 @@
     "plugin_pets_dialog_created": "Created by MintTeam",
     "plugin_pets_dialog_powered": "Powered by RSS3",
     "plugin_pets_dialog_success": "Your Non-Fungible Friend has been set up successfully",
-    "plugin_pets_dialog_notice": "Enter from your profile page to set your Non-Fungible Friend!",
     "popups_following_permissions": "The plugin ({{pluginName}}) (hosted on {{pluginURL}}) is going to request the following permissions:",
     "popups_choose_persona": "Which persona would you like to sign this message?",
     "popups_request_sign": "requested to sign the following message with your persona:",

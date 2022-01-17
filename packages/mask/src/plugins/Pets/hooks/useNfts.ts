@@ -4,37 +4,36 @@ import { OpenSea } from '@masknet/web3-providers'
 import {
     useChainId,
     useCollectibles,
-    useNFTListConstants,
     ERC721TokenDetailed,
     isSameAddress,
     ERC721ContractDetailed,
     SocketState,
 } from '@masknet/web3-shared-evm'
+import { Constant, transform } from '@masknet/web3-shared-evm/constants/utils'
 import { cloneDeep, findLastIndex } from 'lodash-unified'
 import { delay } from '@masknet/shared-base'
 import type { User, FilterContract } from '../types'
 import { Punk3D } from '../constants'
 
-function useInitNFTs() {
-    const nftList = useNFTListConstants()
-    return useMemo(
-        () =>
-            Object.keys(nftList).map((i) => {
-                const value = nftList[i as keyof typeof nftList]
-                return { name: i, contract: value || '', tokens: [] }
-            }),
-        [nftList],
-    )
+function useInitNFTs(config: Record<string, Constant> | undefined) {
+    return useMemo(() => {
+        if (!config) return []
+        const nftList = transform(config)()
+        return Object.keys(nftList).map((i) => {
+            const value = nftList[i as keyof typeof nftList]
+            return { name: i, contract: value as string, tokens: [] }
+        })
+    }, [config])
 }
 
-export function useNFTs(user: User | undefined) {
-    const initContracts = useInitNFTs()
+export function useNFTs(user: User | undefined, configNFTs: Record<string, Constant> | undefined) {
+    const initContracts = useInitNFTs(configNFTs)
     const [nfts, setNfts] = useState<FilterContract[]>(initContracts)
     const chainId = useChainId()
     const [fetchTotal, setFetchTotal] = useState<ERC721TokenDetailed[]>([])
     const { data: collectibles, state } = useCollectibles(user?.address ?? '', chainId)
-
     useEffect(() => {
+        if (!initContracts.length) return
         const tempNFTs: FilterContract[] = cloneDeep(initContracts)
         if (collectibles.length && (state === SocketState.done || state === SocketState.sent)) {
             const total = [...fetchTotal, ...collectibles]
@@ -55,16 +54,17 @@ export function useNFTs(user: User | undefined) {
         }
         setNfts(tempNFTs)
         return () => {}
-    }, [JSON.stringify(user), JSON.stringify(collectibles), state])
+    }, [JSON.stringify(user), JSON.stringify(collectibles), state, JSON.stringify(initContracts)])
     return nfts
 }
 
-export function useNFTsExtra() {
-    const initContracts = useInitNFTs()
+export function useNFTsExtra(configNFTs: Record<string, Constant> | undefined) {
+    const initContracts = useInitNFTs(configNFTs)
     const [retry, setRetry] = useState(0)
     const chainId = useChainId()
     const [extra, setExtra] = useState<ERC721ContractDetailed[]>([])
     useAsync(async () => {
+        if (!initContracts.length) return
         if (retry > 2) return
         let requests = []
         if (!extra.length) {
@@ -85,6 +85,6 @@ export function useNFTsExtra() {
         }
         setExtra(lists)
         setRetry(retry + 1)
-    }, [retry])
+    }, [retry, JSON.stringify(initContracts)])
     return extra
 }

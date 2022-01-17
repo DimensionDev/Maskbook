@@ -1,27 +1,20 @@
 import { useEffect, useState, useMemo, ReactNode } from 'react'
+import { useAsync } from 'react-use'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { isSameAddress } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import {
-    Button,
-    TextField,
-    Typography,
-    Box,
-    DialogContent,
-    Grid,
-    MenuItem,
-    Snackbar,
-    Autocomplete,
-} from '@mui/material'
+import { TextField, Typography, Box, DialogContent, Grid, MenuItem, Snackbar, Autocomplete } from '@mui/material'
+import { LoadingButton } from '@mui/lab'
 import { PluginPetMessages, PluginPetRPC } from '../messages'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { initMeta, initCollection, Punk3D, GLB3DIcon } from '../constants'
 import { PreviewBox } from './PreviewBox'
 import { PetMetaDB, FilterContract, OwnerERC721TokenInfo, ImageType } from '../types'
-import { useUser, useCurrentVisitingUser, useNFTs, useNFTsExtra } from '../hooks'
+import { useUser, useNFTs, useNFTsExtra } from '../hooks'
 import { useI18N } from '../../../utils'
 import { ShadowRootPopper } from '../../../utils/shadow-root/ShadowRootComponents'
 import { ImageLoader } from './ImageLoader'
+import type { Constant } from '@masknet/web3-shared-evm/constants/utils'
 
 const useStyles = makeStyles()((theme) => ({
     desBox: {
@@ -93,15 +86,13 @@ export function PetDialog() {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), {})
     const { open, closeDialog } = useRemoteControlledDialog(PluginPetMessages.essayDialogUpdated, () => {})
+    const [configNFTs, setConfigNFTs] = useState<Record<string, Constant> | undefined>(undefined)
+    const [loading, setLoading] = useState(false)
 
     //should not use user address here
     const user = useUser()
-    const visitor = useCurrentVisitingUser()
-    const isProfilePage = useMemo(() => {
-        return visitor.userId !== '' && visitor.userId !== '$unknown' && user.userId === visitor.userId
-    }, [user, visitor])
-    const nfts = useNFTs(isProfilePage && isSameAddress(user.address, visitor.address) ? visitor : undefined)
-    const extraData = useNFTsExtra()
+    const nfts = useNFTs(user, configNFTs)
+    const extraData = useNFTsExtra(configNFTs)
 
     const [collection, setCollection] = useState<FilterContract>(initCollection)
     const [isCollectionsError, setCollectionsError] = useState(false)
@@ -112,17 +103,16 @@ export function PetDialog() {
     const [holderChange, setHolderChange] = useState(true)
     const [tokenInfoSelect, setTokenInfoSelect] = useState<OwnerERC721TokenInfo | null>(null)
 
+    useAsync(async () => {
+        setConfigNFTs(await PluginPetRPC.getConfigEssay())
+    }, [])
+
     useEffect(() => {
-        if (open) {
-            if (!isProfilePage) {
-                closeDialogHandle()
-            }
-            return
-        }
+        if (open) return
         setMetaData(initMeta)
         setCollection(initCollection)
         setTokenInfoSelect(null)
-    }, [open, isProfilePage])
+    }, [open])
 
     let timer: NodeJS.Timeout
     const closeDialogHandle = () => {
@@ -143,13 +133,19 @@ export function PetDialog() {
             setImageError(true)
             return
         }
+        setLoading(true)
         const chosenToken = collection.tokens.find((item) => item.mediaUrl === metaData.image)
         const meta = { ...metaData }
-        meta.userId = visitor.userId
+        meta.userId = user.userId
         meta.contract = collection.contract
         meta.tokenId = chosenToken?.tokenId ?? ''
-        await PluginPetRPC.saveEssay(visitor?.address, meta, visitor?.userId ?? '')
-        closeDialogHandle()
+        try {
+            await PluginPetRPC.setUserAddress(user)
+            await PluginPetRPC.saveEssay(user.address, meta, user.userId)
+            closeDialogHandle()
+        } finally {
+            setLoading(false)
+        }
     }
 
     const onCollectionChange = (v: string) => {
@@ -164,7 +160,7 @@ export function PetDialog() {
         setTokenInfoSelect(v)
         setMetaData({
             ...metaData,
-            userId: visitor.userId,
+            userId: user.userId,
             tokenId: v?.tokenId ?? '',
             image: v?.mediaUrl ?? '',
         })
@@ -267,7 +263,7 @@ export function PetDialog() {
 
     return (
         <>
-            <InjectedDialog open={open && isProfilePage} onClose={closeDialog} title={t('plugin_pets_dialog_title')}>
+            <InjectedDialog open={open} onClose={closeDialog} title={t('plugin_pets_dialog_title')}>
                 <DialogContent>
                     <Grid container spacing={2}>
                         <Grid item xs={4}>
@@ -299,15 +295,17 @@ export function PetDialog() {
                         </Grid>
                     </Grid>
 
-                    <Button
-                        className={classes.btn}
-                        variant="contained"
+                    <LoadingButton
+                        loading={loading}
+                        color="inherit"
                         size="large"
                         fullWidth
+                        variant="contained"
+                        className={classes.btn}
                         onClick={saveHandle}
                         disabled={!collection.name || !metaData.image}>
                         {t('plugin_pets_dialog_btn')}
-                    </Button>
+                    </LoadingButton>
                     <Box className={classes.desBox}>
                         <Typography className={classes.des}>{t('plugin_pets_dialog_created')}</Typography>
                         <Typography className={classes.des}>{t('plugin_pets_dialog_powered')}</Typography>
@@ -317,7 +315,7 @@ export function PetDialog() {
             <Snackbar
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                 open={isTipShow}
-                message={isProfilePage ? t('plugin_pets_dialog_success') : t('plugin_pets_dialog_notice')}
+                message={t('plugin_pets_dialog_success')}
             />
         </>
     )

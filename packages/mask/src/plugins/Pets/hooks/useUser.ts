@@ -1,7 +1,9 @@
+import { useAsync } from 'react-use'
 import { useEffect, useState } from 'react'
-import { useAccount, useAddressNames } from '@masknet/web3-shared-evm'
+import { useAccount } from '@masknet/web3-shared-evm'
 import type { User } from '../types'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
+import { PluginPetRPC } from '../messages'
 
 export function useUser() {
     const [user, setUser] = useState<User>({ userId: '', address: '' })
@@ -14,15 +16,20 @@ export function useUser() {
     return user
 }
 
-export function useCurrentVisitingUser() {
+export function useCurrentVisitingUser(refresh?: boolean) {
     const [user, setUser] = useState<User>({ userId: '', address: '' })
     const identity = useCurrentVisitingIdentity()
-    const { value: addressNames = [] } = useAddressNames(identity)
-    useEffect(() => {
-        setUser({
-            userId: identity.identifier.userId ?? '',
-            address: addressNames.length ? addressNames[0].resolvedAddress : '',
-        })
-    }, [identity, addressNames])
+    useAsync(async () => {
+        let address = ''
+        try {
+            const response = await PluginPetRPC.getUserAddress(identity.identifier.userId ?? '')
+            if (response) address = response as string
+        } finally {
+            setUser({
+                userId: identity.identifier.userId ?? '',
+                address: address ?? '',
+            })
+        }
+    }, [identity, refresh])
     return user
 }

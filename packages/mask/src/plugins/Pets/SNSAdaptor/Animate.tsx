@@ -18,7 +18,7 @@ const AnimatePic = () => {
 
     const [start, setStart] = useState(true)
 
-    const visitor = useCurrentVisitingUser()
+    const visitor = useCurrentVisitingUser(start)
     const visitorMeta = useEssay(visitor, start)
     const defMeta = useDefaultEssay(visitor)
 

@@ -23,7 +23,6 @@ import GoodGhosting from '@masknet/web3-constants/evm/good-ghosting.json'
 import SpaceStationGalaxy from '@masknet/web3-constants/evm/space-station-galaxy.json'
 import OpenseaAPI from '@masknet/web3-constants/evm/opensea-api.json'
 import CryptoArtAI from '@masknet/web3-constants/evm/cryptoartai.json'
-import NFTList from '@masknet/web3-constants/evm/nft-list.json'
 import { hookTransform, transform, transformFromJSON } from './utils'
 
 function getEnvConstants(key: string) {
@@ -110,6 +109,3 @@ export const useCryptoArtAIConstants = hookTransform(getCryptoArtAIConstants)
 
 export const getNftRedPacketConstants = transform(NftRedPacket)
 export const useNftRedPacketConstants = hookTransform(getNftRedPacketConstants)
-
-export const getNFTListConstants = transform(NFTList)
-export const useNFTListConstants = hookTransform(getNFTListConstants)

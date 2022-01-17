@@ -13,7 +13,7 @@ export function ImageLoader(props: ImgHTMLAttributes<HTMLImageElement>) {
                 {...props}
                 onLoad={() => setLoaded(Boolean(props.src))}
                 onError={onErrorHandle}
-                style={{ display: loaded || !Boolean(props.src) ? 'block' : 'none' }}
+                style={{ display: loaded || !props.src ? 'block' : 'none' }}
             />
             {!loaded && Boolean(props.src) ? <CircularProgress size={20} /> : null}
         </>
