@@ -68,7 +68,7 @@
         "xDai": "0x54a0A221C25Fc0a347EC929cFC5db0be17fA2a2B",
         "Celo": "",
         "Fantom": "",
-        "Aurora": "0xB3F5e63B225206cA3aa2318Ec46Ffcf05c52EB78",
+        "Aurora": "0x19f179D7e0D7d9F9d5386afFF64271D98A91615B",
         "Aurora_Testnet": "0xdB93cCd481012bB5D1E2c8d0aF7C5f2940c00fdC"
     },
     "HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT": {
@@ -86,7 +86,7 @@
         "xDai": 18101937,
         "Celo": 0,
         "Fantom": 0,
-        "Aurora": 57259436,
+        "Aurora": 57552338,
         "Aurora_Testnet": 77918765
     },
     "SUBGRAPH_URL": {
