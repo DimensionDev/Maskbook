@@ -73,7 +73,6 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         border: `1px solid ${theme.palette.background.default}`,
     },
     twitterProviderBorder: {
-        border: `1px solid ${theme.palette.background.default}`,
         width: 14,
         height: 14,
     },

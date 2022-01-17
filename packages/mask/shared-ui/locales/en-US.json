@@ -261,6 +261,7 @@
     "plugin_wallet_guiding_step_2": "2. Choose Wallet",
     "plugin_wallet_connect_with": "Connect with",
     "plugin_wallet_connected_with": "Connected with",
+    "plugin_wallet_metamask_error_already_request": "You've opened the popup, please confirm.",
     "plugin_wallet_connect_tip": "Please make sure that your {{providerName}} wallet is provided by the offical <providerLink>{{providerShortenLink}}</providerLink>.",
     "plugin_wallet_collections": "Collections",
     "plugin_wallet_select_a_token": "Select a Token",

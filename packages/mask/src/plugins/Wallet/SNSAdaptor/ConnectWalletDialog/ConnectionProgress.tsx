@@ -82,7 +82,14 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                         ) : null}
                         {!loading && error ? (
                             <Typography className={classes.error} color="red" variant="body2">
-                                {error.message || `Failed to connect to ${resolveProviderName(providerType)}.`}
+                                {error.message
+                                    ? error.message.includes('Already processing eth_requestAccounts') ||
+                                      error.message.includes(
+                                          "Request of type 'wallet_requestPermissions' already pending for origin",
+                                      )
+                                        ? t('plugin_wallet_metamask_error_already_request')
+                                        : error.message
+                                    : `Failed to connect to ${resolveProviderName(providerType)}.`}
                             </Typography>
                         ) : null}
                     </Box>
