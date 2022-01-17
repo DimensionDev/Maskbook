@@ -66,7 +66,7 @@
         "Arbitrum": 102022,
         "Arbitrum_Rinkeby": 708696,
         "xDai": 17865755,
-        "Avalanche": 9469997,
+        "Avalanche": 8289892,
         "Avalanche_Fuji": 4751103,
         "Celo": 0,
         "Fantom": 0
@@ -102,7 +102,7 @@
         "Arbitrum": "0x913975af2Bb8a6Be4100D7dc5e9765B77F6A5d6c",
         "Arbitrum_Rinkeby": "0xEbd753E66649C824241E63894301BA8Db5DBF5Bb",
         "xDai": "0x71834a3FDeA3E70F14a93ED85c6be70925D0CAd9",
-        "Avalanche": "",
+        "Avalanche": "0x54a0A221C25Fc0a347EC929cFC5db0be17fA2a2B",
         "Avalanche_Fuji": "",
         "Celo": "",
         "Fantom": ""
