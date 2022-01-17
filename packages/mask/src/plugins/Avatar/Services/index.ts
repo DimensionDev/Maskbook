@@ -1,3 +1,4 @@
+import type { NetworkPluginID } from '@masknet/plugin-infra'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { personalSign } from '../../../extension/background-script/EthereumService'
 import type { AvatarMetaDB } from '../types'
@@ -5,9 +6,9 @@ import { getNFTAvatarFromJSON } from './db'
 import { getUserAddress, setUserAddress } from './gun'
 import { getNFTAvatarFromRSS, saveNFTAvatarToRSS } from './rss3'
 
-export async function getNFTAvatar(userId: string, chainId?: ChainId) {
+export async function getNFTAvatar(userId: string, networkPluginId?: NetworkPluginID, chainId?: ChainId) {
     let result
-    const address = await getUserAddress(userId, chainId)
+    const address = await getUserAddress(userId, networkPluginId, chainId)
     if (!address) {
         result = await getNFTAvatarFromJSON(userId)
         return result
@@ -21,15 +22,20 @@ export async function getNFTAvatar(userId: string, chainId?: ChainId) {
     return result
 }
 
-export async function saveNFTAvatar(address: string, nft: AvatarMetaDB, chainId?: ChainId) {
+export async function saveNFTAvatar(
+    address: string,
+    nft: AvatarMetaDB,
+    networkPluginId?: NetworkPluginID,
+    chainId?: ChainId,
+) {
     const signature = await personalSign(nft.userId, address)
-    setUserAddress(nft.userId, address, chainId)
+    setUserAddress(nft.userId, address, networkPluginId, chainId)
     const avatar = await saveNFTAvatarToRSS(address, nft, signature)
     return avatar
 }
 
-export async function getAddress(userId: string, chainId?: ChainId) {
-    const address = await getUserAddress(userId, chainId)
+export async function getAddress(userId: string, networkPluginId?: NetworkPluginID, chainId?: ChainId) {
+    const address = await getUserAddress(userId, networkPluginId, chainId)
     return (address ?? '') as string
 }
 

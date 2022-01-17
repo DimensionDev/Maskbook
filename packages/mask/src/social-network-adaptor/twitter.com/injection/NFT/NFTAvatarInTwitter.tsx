@@ -14,6 +14,7 @@ import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 import { useAsync, useLocation, useUpdateEffect, useWindowSize } from 'react-use'
 import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/RainbowBox'
 import { trim } from 'lodash-unified'
+import { usePluginIDContext } from '@masknet/plugin-infra'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -50,6 +51,7 @@ function NFTAvatarInTwitter() {
     const windowSize = useWindowSize()
     const location = useLocation()
     const chainId = useChainId()
+    const currentPluginId = usePluginIDContext()
 
     const showAvatar = useMemo(
         () => getAvatarId(identity.avatar ?? '') === avatar?.avatarId && avatar.avatarId,
@@ -93,6 +95,7 @@ function NFTAvatarInTwitter() {
                 ...NFTEvent,
                 avatarId: getAvatarId(identity.avatar ?? ''),
             } as AvatarMetaDB,
+            currentPluginId,
             chainId,
         )
 

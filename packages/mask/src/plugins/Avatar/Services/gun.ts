@@ -1,22 +1,42 @@
 import { ChainId, isSameAddress } from '@masknet/web3-shared-evm'
 import { NFT_AVATAR_GUN_SERVER } from '../constants'
 import { KeyValueAPI } from '@masknet/web3-providers'
+import { NetworkPluginID } from '@masknet/plugin-infra'
+import addSeconds from 'date-fns/addSeconds'
+import isBefore from 'date-fns/isBefore'
 
 const NFTAvatarDB = new KeyValueAPI().createJSON_Storage(NFT_AVATAR_GUN_SERVER)
 
-// After reinstalling the system, it cannot be retrieved for the first time, so it needs to be taken twice
-export async function getUserAddress(userId: string, chainId?: ChainId) {
-    const result = await NFTAvatarDB.get<Record<ChainId, string>>(userId)
-    return result?.[chainId ?? ChainId.Mainnet]
+const cache = new Map<string, [Promise<string | undefined>, Date]>()
+
+async function _getUserAddress(userId: string, networkPluginId?: NetworkPluginID, chainId?: ChainId) {
+    const result = await NFTAvatarDB.get<Record<string, string>>(userId)
+    return result?.[`${networkPluginId ?? NetworkPluginID.PLUGIN_EVM}-${chainId ?? ChainId.Mainnet}`]
 }
 
-export async function setUserAddress(userId: string, address: string, chainId?: ChainId) {
+export async function getUserAddress(userId: string, networkPluginId?: NetworkPluginID, chainId?: ChainId) {
+    let c = cache.get(userId)
+    if (!c || isBefore(new Date(), c[1])) {
+        cache.set(userId, [_getUserAddress(userId, networkPluginId, chainId), addSeconds(new Date(), 60)])
+    }
+    c = cache.get(userId)
+    return c?.[0]
+}
+
+export async function setUserAddress(
+    userId: string,
+    address: string,
+    networkPluginId?: NetworkPluginID,
+    chainId?: ChainId,
+) {
     try {
-        await NFTAvatarDB.set<Record<number, string>>(userId, { [chainId ?? ChainId.Mainnet]: address })
+        await NFTAvatarDB.set<Record<string, string>>(userId, {
+            [`${networkPluginId ?? NetworkPluginID.PLUGIN_EVM}-${chainId ?? ChainId.Mainnet}`]: address,
+        })
     } catch {
         // do nothing
     } finally {
-        const _address = await getUserAddress(userId, chainId)
+        const _address = await getUserAddress(userId, networkPluginId, chainId)
         if (!isSameAddress(_address, address))
             throw new Error('Something went wrong, and please check your connection.')
     }
