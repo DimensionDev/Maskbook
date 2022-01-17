@@ -4,7 +4,7 @@ import {
     encodeTypedMessageToDocument,
     makeTypedMessageSerializableTupleFromList,
     decodeTypedMessageFromDocument,
-} from '../src/TypedMessage'
+} from '@masknet/typed-message/base'
 
 const meta = new Map<string, any>([
     ['com.example.test', 'hi'],
