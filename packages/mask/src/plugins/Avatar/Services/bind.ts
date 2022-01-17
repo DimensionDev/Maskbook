@@ -1,13 +1,12 @@
 import { ChainId, isSameAddress } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/plugin-infra'
 import addSeconds from 'date-fns/addSeconds'
-import isBefore from 'date-fns/isBefore'
 import { KeyValue } from '@masknet/web3-providers'
 import { NFT_AVATAR_DB_NAME } from '../constants'
 
 const NFTAvatarDB = KeyValue.createJSON_Storage(NFT_AVATAR_DB_NAME)
 
-const cache = new Map<string, [Promise<string | undefined>, Date]>()
+const cache = new Map<string, [Promise<string | undefined>, number]>()
 
 async function _getUserAddress(userId: string, networkPluginId?: NetworkPluginID, chainId?: number) {
     const result = await NFTAvatarDB.get<Record<string, string>>(userId)
@@ -15,11 +14,17 @@ async function _getUserAddress(userId: string, networkPluginId?: NetworkPluginID
 }
 
 export async function getUserAddress(userId: string, networkPluginId?: NetworkPluginID, chainId?: number) {
-    let c = cache.get(userId)
-    if (!c || isBefore(new Date(), c[1])) {
-        cache.set(userId, [_getUserAddress(userId, networkPluginId, chainId), addSeconds(new Date(), 60)])
+    let c = cache.get(`${userId}-${networkPluginId ?? NetworkPluginID.PLUGIN_EVM}-${chainId ?? ChainId.Mainnet}`)
+
+    if (!c || Date.now() > c[1]) {
+        try {
+            cache.set(userId, [_getUserAddress(userId, networkPluginId, chainId), addSeconds(new Date(), 60).getTime()])
+        } catch (err) {
+            console.log(err)
+        }
     }
-    c = cache.get(userId)
+    c = cache.get(`${userId}-${networkPluginId ?? NetworkPluginID.PLUGIN_EVM}-${chainId ?? ChainId.Mainnet}`)
+
     return c?.[0]
 }
 
