@@ -1204,7 +1204,12 @@
         "rpc": ["https://rpcapi.fantom.network"],
         "faucets": [],
         "features": [],
-        "nativeCurrency": { "name": "Fantom", "symbol": "FTM", "decimals": 18 },
+        "nativeCurrency": {
+            "name": "Fantom",
+            "symbol": "FTM",
+            "decimals": 18,
+            "logoURI": "https://static.debank.com/image/ftm_token/logo_url/ftm/33fdb9c5067e94f3a1b9e78f6fa86984.png"
+        },
         "infoURL": "https://fantom.foundation",
         "shortName": "ftm",
         "chainId": 250,
