@@ -7,51 +7,42 @@ export class JSON_Storage implements StorageAPI.Storage {
     constructor(private prefix: string) {}
 
     async set<T extends {}>(key: string, value: T) {
-        return fetchJSON<void>(
+        await fetch(
             urlcat(KV_ROOT_URL, 'api/:name', {
                 name: `${this.prefix}_${key}`,
             }),
             {
                 method: 'PUT',
                 mode: 'cors',
-                credentials: 'omit',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
                 body: JSON.stringify(value),
             },
         )
     }
     async get<T>(key: string) {
-        const response = await fetchJSON<string>(
-            urlcat(KV_ROOT_URL, 'api/:name', {
-                name: `${this.prefix}_${key}`,
-            }),
-            {
-                method: 'GET',
-                mode: 'cors',
-                credentials: 'omit',
-            },
-        )
         try {
-            return JSON.parse(response) as T
+            return fetchJSON<T>(
+                urlcat(KV_ROOT_URL, 'api/:name', {
+                    name: `${this.prefix}_${key}`,
+                }),
+                {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                },
+            )
         } catch {
             return
         }
     }
-    async delete(key: string) {
-        await fetchJSON<void>(
-            urlcat(KV_ROOT_URL, 'api/:name', {
-                name: `${this.prefix}_${key}`,
-            }),
-            {
-                method: 'DELETE',
-                mode: 'cors',
-                credentials: 'omit',
-            },
-        )
-    }
 }
 
 export class KeyValueAPI implements StorageAPI.Provider {
-    createStorage(key: string): StorageAPI.Storage {
+    createJSON_Storage(key: string): StorageAPI.Storage {
         return new JSON_Storage(key)
     }
 }
