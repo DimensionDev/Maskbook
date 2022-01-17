@@ -1,0 +1,159 @@
+import { QRCode } from '@masknet/shared'
+import { makeStyles, MaskDialog, MaskColorVar, MaskLightTheme } from '@masknet/theme'
+import { Box, Button, DialogContent, ThemeProvider, Typography } from '@mui/material'
+import { MnemonicReveal } from '../../../components/Mnemonic'
+import { MiniMaskIcon, InfoIcon } from '@masknet/icons'
+import { ForwardedRef, forwardRef, useRef } from 'react'
+import { useReactToPrint } from 'react-to-print'
+import { toJpeg } from 'html-to-image'
+import { WatermarkURL } from '../../../assets'
+import { useDashboardI18N } from '../../../locales'
+
+const useStyles = makeStyles()((theme) => ({
+    preview: {
+        position: 'relative',
+        background: `url(${WatermarkURL}) repeat`,
+        backgroundSize: '140px',
+    },
+    wordClass: {
+        background: 'rgba(28, 104, 243, 0.1)',
+        color: '#1C68F3',
+    },
+    card: {
+        background: 'linear-gradient(180deg, #003EAF 0%, #1C68F3 100%)',
+        borderRadius: theme.spacing(1),
+        padding: theme.spacing(2),
+        color: '#fff',
+    },
+    name: {
+        maxWidth: 350,
+        paddingLeft: 10,
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+    },
+    infoIcon: {
+        color: MaskColorVar.secondaryInfoText,
+        fontSize: 20,
+        marginRight: 12,
+    },
+}))
+
+interface PreviewDialogProps {
+    open: boolean
+    type: 'print' | 'download'
+    personaName: string
+    id?: string
+    privateKey: string
+    words: string[]
+    onClose(): void
+}
+
+export function PreviewDialog(props: PreviewDialogProps) {
+    const { personaName, open, type, onClose } = props
+    const t = useDashboardI18N()
+    const ref = useRef(null)
+
+    const onPrint = useReactToPrint({
+        content: () => ref.current,
+    })
+
+    const onDownload = async () => {
+        if (!ref.current) return
+
+        const dataUrl = await toJpeg(ref.current, { quality: 0.95 })
+        const link = document.createElement('a')
+        link.download = `mask-persona-${personaName}.jpeg`
+        link.href = dataUrl
+        link.click()
+    }
+
+    const onClick = () => {
+        onClose()
+        type === 'print' ? onPrint() : onDownload()
+    }
+
+    return (
+        <ThemeProvider theme={MaskLightTheme}>
+            <MaskDialog
+                title={type === 'print' ? t.print_preview() : t.download_preview()}
+                open={open}
+                onClose={onClose}>
+                <DialogContent sx={{ marginTop: '-24px', padding: '0' }}>
+                    <ComponentToPrint {...props} ref={ref} />
+
+                    <Box padding={'0 24px 24px'}>
+                        <Button size="large" fullWidth onClick={onClick}>
+                            {type === 'print' ? t.print() : t.download()}
+                        </Button>
+                    </Box>
+                </DialogContent>
+            </MaskDialog>
+        </ThemeProvider>
+    )
+}
+
+const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRef<any>) => {
+    const { personaName, id, privateKey, words } = props
+    const { classes } = useStyles()
+    const t = useDashboardI18N()
+
+    return (
+        <Box
+            display="flex"
+            justifyContent="center"
+            height={'100%'}
+            padding={'24px 24px 0'}
+            ref={ref}
+            color={'#111432'}
+            sx={{ background: '#fff' }}>
+            <Box maxWidth={746} className={classes.preview}>
+                <Box className={classes.card} display="flex">
+                    <Box flex={1}>
+                        <Box display="flex" alignItems="center" paddingBottom={'8px'}>
+                            <MiniMaskIcon />
+                            <Typography fontSize={24} fontWeight={600} className={classes.name}>
+                                Persona: {personaName}
+                            </Typography>
+                        </Box>
+
+                        <Typography fontSize={14} fontWeight={600}>
+                            MASK ID:{' '}
+                            <span style={{ fontSize: 10, wordBreak: 'break-all' }}>
+                                {id?.replace('ec_key:secp256k1/', '')}
+                            </span>
+                        </Typography>
+                        <Box display="flex">
+                            <Typography fontSize={14} fontWeight={600}>
+                                Private Key:
+                            </Typography>
+                            <Typography
+                                fontSize={10}
+                                fontWeight={600}
+                                sx={{ wordBreak: 'break-all', flex: 1, padding: '0 8px' }}>
+                                {privateKey}
+                            </Typography>
+                        </Box>
+                    </Box>
+                    <QRCode
+                        text={`MASK:[${privateKey}]`}
+                        options={{ width: 136, margin: 5 }}
+                        canvasProps={{
+                            style: { display: 'block', width: 136, margin: 'auto' },
+                        }}
+                    />
+                </Box>
+                <Typography margin={'24px 0'} fontWeight={600}>
+                    Idenentity ID
+                </Typography>
+                <MnemonicReveal words={words} indexed wordClass={classes.wordClass} />
+                <Box display="flex" alignItems="center" margin={'24px 0'}>
+                    <InfoIcon className={classes.infoIcon} />
+                    <Typography fontSize={12} fontWeight={700}>
+                        {t.create_account_preview_tip()}
+                    </Typography>
+                </Box>
+            </Box>
+        </Box>
+    )
+})

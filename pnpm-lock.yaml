@@ -159,6 +159,7 @@ importers:
       color: ^4.1.0
       date-fns: 2.27.0
       history: ^5.2.0
+      html-to-image: ^1.9.0
       i18next-browser-languagedetector: ^6.1.2
       json-stable-stringify: ^1.0.1
       path-browserify: ^1.0.1
@@ -166,6 +167,7 @@ importers:
       react-hook-form: ^7.22.5
       react-router: ^6.0.0-beta.0
       react-router-dom: ^6.0.0-beta.0
+      react-to-print: ^2.14.3
       react-use: ^17.3.1
       stream-browserify: ^3.0.0
       unstated-next: ^1.1.0
@@ -202,12 +204,14 @@ importers:
       color: 4.1.0
       date-fns: 2.27.0
       history: 5.2.0
+      html-to-image: 1.9.0
       i18next-browser-languagedetector: 6.1.2
       json-stable-stringify: 1.0.1
       react-avatar-editor: 12.0.0_2a5ce53653c2861b1c74a6612fe40887
       react-hook-form: 7.22.5_react@18.0.0-rc.0
       react-router: 6.0.0-beta.4_history@5.2.0+react@18.0.0-rc.0
       react-router-dom: 6.0.0-beta.4_154c53788755629e2430b224cbac559e
+      react-to-print: 2.14.3_757a802188413a36d4f24237d13b8e90
       react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
       unstated-next: 1.1.0
       urlcat: 2.0.4
@@ -5536,7 +5540,7 @@ packages:
       nanoid: 3.1.30
       p-limit: 3.1.0
       prettier: 2.5.1
-      prop-types: 15.7.2
+      prop-types: 15.8.0
       react: 18.0.0-rc.0
       react-dom: 18.0.0-rc.0_react@18.0.0-rc.0
       react-element-to-jsx-string: 14.3.4_757a802188413a36d4f24237d13b8e90
@@ -5748,7 +5752,7 @@ packages:
       core-js: 3.19.3
       global: 4.4.0
       memoizerific: 1.11.3
-      prop-types: 15.7.2
+      prop-types: 15.8.0
       react: 18.0.0-rc.0
       react-dom: 18.0.0-rc.0_react@18.0.0-rc.0
       regenerator-runtime: 0.13.9
@@ -6162,7 +6166,7 @@ packages:
       memoizerific: 1.11.3
       overlayscrollbars: 1.13.1
       polished: 4.1.3
-      prop-types: 15.7.2
+      prop-types: 15.8.0
       react: 18.0.0-rc.0
       react-colorful: 5.5.1_757a802188413a36d4f24237d13b8e90
       react-dom: 18.0.0-rc.0_react@18.0.0-rc.0
@@ -12735,7 +12739,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.16.5
       compute-scroll-into-view: 1.0.17
-      prop-types: 15.7.2
+      prop-types: 15.8.0
       react: 18.0.0-rc.0
       react-is: 17.0.2
       tslib: 2.3.1
@@ -15557,6 +15561,10 @@ packages:
     resolution: {integrity: sha512-1qYz89hW3lFDEazhjW0yVAV87lw8lVkrJocr72XmBkMKsoSVJCQx3W8BXsC7hO2qAt8BoVjYjtAcZ9perqGnNg==}
     engines: {node: '>=8'}
     dev: true
+
+  /html-to-image/1.9.0:
+    resolution: {integrity: sha512-9gaDCIYg62Ek07F2pBk76AHgYZ2gxq2YALU7rK3gNCqXuhu6cWzsOQqM7qGbjZiOzxGzrU1deDqZpAod2NEwbA==}
+    dev: false
 
   /html-tokenize/2.0.1:
     resolution: {integrity: sha512-QY6S+hZ0f5m1WT8WffYN+Hg+xm/w5I8XeUcAq/ZYP5wVC8xbKi4Whhru3FtrAebD5EhBW8rmFzkDI6eCAuFe2w==}
@@ -20223,7 +20231,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.16.5
       invariant: 2.2.4
-      prop-types: 15.7.2
+      prop-types: 15.8.0
       react: 18.0.0-rc.0
       react-dom: 18.0.0-rc.0_react@18.0.0-rc.0
       react-fast-compare: 3.2.0
@@ -20270,7 +20278,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.16.3
       is-dom: 1.1.0
-      prop-types: 15.7.2
+      prop-types: 15.8.0
       react: 18.0.0-rc.0
     dev: true
 
@@ -20427,6 +20435,17 @@ packages:
     transitivePeerDependencies:
       - '@types/react'
     dev: true
+
+  /react-to-print/2.14.3_757a802188413a36d4f24237d13b8e90:
+    resolution: {integrity: sha512-j0EAplQGcw4ujSLfUQoIhf1PgrSLrWRh4NSAiKZdWm6YNXMioHW56cGpbKEJkCpYN1E5g3tvFVHRADn0mTKGzg==}
+    peerDependencies:
+      react: ^15.0.0 || ^16.0.0 || ^17.0.0
+      react-dom: ^15.0.0 || ^16.0.0 || ^17.0.0
+    dependencies:
+      prop-types: 15.8.0
+      react: 18.0.0-rc.0
+      react-dom: 18.0.0-rc.0_react@18.0.0-rc.0
+    dev: false
 
   /react-transition-group/4.4.2_757a802188413a36d4f24237d13b8e90:
     resolution: {integrity: sha512-/RNYfRAMlZwDSr6z4zNKV6xu53/e2BuaBbGhbyYIXTrmgu/bGHzmqOs7mJSJBHy9Ud+ApHx3QjrkKSp1pxvlFg==}
