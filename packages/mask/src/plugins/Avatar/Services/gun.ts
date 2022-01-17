@@ -1,11 +1,11 @@
 import { ChainId, isSameAddress } from '@masknet/web3-shared-evm'
 import { NFT_AVATAR_GUN_SERVER } from '../constants'
-import { KeyValueAPI } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/plugin-infra'
 import addSeconds from 'date-fns/addSeconds'
 import isBefore from 'date-fns/isBefore'
+import { KeyValue } from '@masknet/web3-providers'
 
-const NFTAvatarDB = new KeyValueAPI().createJSON_Storage(NFT_AVATAR_GUN_SERVER)
+const NFTAvatarDB = KeyValue.createJSON_Storage(NFT_AVATAR_GUN_SERVER)
 
 const cache = new Map<string, [Promise<string | undefined>, Date]>()
 
