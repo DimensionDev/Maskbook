@@ -180,7 +180,7 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
                     ),
                     endAdornment: (
                         <Typography className={classes.price}>
-                            &#x2248; <FormattedCurrency value={tokenValueUSD} sign="$" formatter={formatCurrency} />
+                            &asymp; <FormattedCurrency value={tokenValueUSD} sign="$" formatter={formatCurrency} />
                         </Typography>
                     ),
                 }}
