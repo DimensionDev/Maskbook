@@ -6,6 +6,8 @@ import { NativeExplorerAPI } from './explorer'
 import { RSS3API } from './rss3'
 import { KeyValueAPI } from './kv'
 
+export * from './kv'
+
 export * from './types'
 export * from './opensea/utils'
 

@@ -4,7 +4,7 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
-import { resolveOpenSeaLink, useWallet } from '@masknet/web3-shared-evm'
+import { resolveOpenSeaLink, useChainId, useWallet } from '@masknet/web3-shared-evm'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
 import { useNFTAvatar } from '../../../../plugins/Avatar/hooks'
 import { getAvatarId } from '../../utils/user'
@@ -49,6 +49,7 @@ function NFTAvatarInTwitter() {
     const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
     const windowSize = useWindowSize()
     const location = useLocation()
+    const chainId = useChainId()
 
     const showAvatar = useMemo(
         () => getAvatarId(identity.avatar ?? '') === avatar?.avatarId && avatar.avatarId,
@@ -86,10 +87,14 @@ function NFTAvatarInTwitter() {
             return
         }
 
-        const avatar = await PluginNFTAvatarRPC.saveNFTAvatar(wallet.address, {
-            ...NFTEvent,
-            avatarId: getAvatarId(identity.avatar ?? ''),
-        } as AvatarMetaDB)
+        const avatar = await PluginNFTAvatarRPC.saveNFTAvatar(
+            wallet.address,
+            {
+                ...NFTEvent,
+                avatarId: getAvatarId(identity.avatar ?? ''),
+            } as AvatarMetaDB,
+            chainId,
+        )
 
         setAvatar(avatar)
         MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll(

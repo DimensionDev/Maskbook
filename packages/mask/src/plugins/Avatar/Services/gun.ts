@@ -1,54 +1,23 @@
-import { delay } from '@masknet/shared-base'
-import { isSameAddress } from '@masknet/web3-shared-evm'
-import { gun2 } from '../../../network/gun/version.2'
+import { ChainId, isSameAddress } from '@masknet/web3-shared-evm'
 import { NFT_AVATAR_GUN_SERVER } from '../constants'
+import { KeyValueAPI } from '@masknet/web3-providers'
 
-const NFTAvatarGUN = gun2.get(NFT_AVATAR_GUN_SERVER)
+const NFTAvatarDB = new KeyValueAPI().createJSON_Storage(NFT_AVATAR_GUN_SERVER)
 
 // After reinstalling the system, it cannot be retrieved for the first time, so it needs to be taken twice
-export async function getUserAddress(userId: string) {
-    let result = await NFTAvatarGUN
-        //@ts-expect-error
-        .get(userId).then!()
-
-    if (!result) {
-        await delay(500)
-        result = await NFTAvatarGUN
-            //@ts-expect-error
-            .get(userId).then!()
-    }
-
-    return result
+export async function getUserAddress(userId: string, chainId?: ChainId) {
+    const result = await NFTAvatarDB.get<Record<ChainId, string>>(userId)
+    return result?.[chainId ?? ChainId.Mainnet]
 }
 
-export async function setUserAddress(userId: string, address: string) {
+export async function setUserAddress(userId: string, address: string, chainId?: ChainId) {
     try {
-        // delete userId
-        await NFTAvatarGUN
-            //@ts-expect-error
-            .get(userId)
-            //@ts-expect-error
-            .put(null).then!()
-
-        // save userId
-        await NFTAvatarGUN
-            // @ts-expect-error
-            .get(userId)
-            // @ts-expect-error
-            .put(address).then!()
+        await NFTAvatarDB.set<Record<number, string>>(userId, { [chainId ?? ChainId.Mainnet]: address })
     } catch {
         // do nothing
     } finally {
-        const _address = await getUserAddress(userId)
+        const _address = await getUserAddress(userId, chainId)
         if (!isSameAddress(_address, address))
             throw new Error('Something went wrong, and please check your connection.')
     }
-}
-
-export async function getUserAddresses() {
-    const NFTAvatarKeys = Object.keys(await NFTAvatarGUN).filter((x) => x !== '_')
-    const resultPromise = NFTAvatarKeys.map((key) => getUserAddress(key))
-    const result = (await Promise.all(resultPromise)).filter((x) => x)
-
-    return result
 }

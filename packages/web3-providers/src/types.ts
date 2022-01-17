@@ -291,7 +291,7 @@ export namespace NonFungibleTokenAPI {
 export namespace StorageAPI {
     export interface Storage {
         set<T extends {}>(key: string, value: T): Promise<void>
-        get<T>(key: string): Promise<T | void>
+        get<T>(key: string): Promise<T | undefined>
         delete?: (key: string) => Promise<void>
     }
 
