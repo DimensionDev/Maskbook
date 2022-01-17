@@ -19,8 +19,8 @@ export interface RenderProps extends MessageRenderProps {
 }
 export function TypedMessageRender(props: RenderProps) {
     const { message } = props
-    const transform = useContext(TransformerContext)
-    const message2 = useMemo(() => transform(message), [message, transform])
+    const [transform, context] = useContext(TransformerContext)
+    const message2 = useMemo(() => transform(message, context), [message, transform, context])
 
     const Render = useContext(RegistryContext)(message2.type)?.component || TypedMessageUnknownRenderer
 

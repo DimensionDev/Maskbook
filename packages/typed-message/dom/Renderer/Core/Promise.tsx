@@ -7,8 +7,8 @@ export const TypedMessagePromiseRenderer = memo(function TypedMessagePromiseRend
 ) {
     const { promise, alt, value } = props.message
 
-    const transform = useContext(TransformerContext)
-    const message2 = useMemo(() => (value ? transform(value) : undefined), [value, transform])
+    const [transform, context] = useContext(TransformerContext)
+    const message2 = useMemo(() => (value ? transform(value, context) : undefined), [value, transform, context])
 
     if (message2) return <TypedMessageRender message={message2} />
     return (

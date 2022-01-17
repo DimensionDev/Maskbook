@@ -15,4 +15,4 @@ export { MessageRenderUIComponentsContext } from './Renderer/utils/ComponentsCon
 export { RegistryContext as RenderRegistryContext } from './Renderer/utils/RegistryContext'
 
 // Transformation
-export { type Transformer, TransformerContext } from './Renderer/utils/TransformContext'
+export { TransformerContext } from './Renderer/utils/TransformContext'

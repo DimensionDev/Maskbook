@@ -1,4 +1,7 @@
 import type { TypedMessage } from '../base'
-export type Transformer = (message: TypedMessage) => TypedMessage
+import type { TransformationContext } from './context'
+export type Transformer = (message: TypedMessage, context: TransformationContext) => TypedMessage
 export * from './composed'
-export * from './Flatten'
+export * from './context'
+export { FlattenTypedMessage } from './Flatten'
+export { ParseLinkTransformer } from './ParseLink'

@@ -1,4 +1,7 @@
-import type { TypedMessage } from '../../../base'
+import type { Transformer } from '../../../base'
 import { createContext } from 'react'
-export type Transformer = (message: TypedMessage) => TypedMessage
-export const TransformerContext = createContext<Transformer>((x) => x)
+import { createTransformationContext, TransformationContext } from '../../../base/transformer/context'
+export const TransformerContext = createContext<readonly [Transformer, TransformationContext]>([
+    (x) => x,
+    createTransformationContext(),
+])
