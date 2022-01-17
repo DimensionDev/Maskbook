@@ -57,6 +57,8 @@ export const resolveTradeProviderName = createLookupTableResolver<TradeProvider,
         [TradeProvider.DODO]: 'DODO',
         [TradeProvider.BANCOR]: 'Bancor',
         [TradeProvider.OPENOCEAN]: 'OpenOcean',
+        [TradeProvider.TRISOLARIS]: 'Trisolaris',
+        [TradeProvider.WANNASWAP]: 'WannaSwap',
     },
     (tradeProvider) => {
         throw new Error(`Unknown provider type: ${tradeProvider}`)
@@ -85,6 +87,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
                     return 'https://celo.api.0x.org/'
                 case NetworkType.Fantom:
                     return 'https://fantom.api.0x.org/'
+                case NetworkType.Aurora:
+                    return 'https://aurora.api.0x.org/'
                 default:
                     safeUnreachable(networkType)
                     return ''
@@ -105,6 +109,10 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
             return 'https://app.bancor.network/eth/swap'
         case TradeProvider.OPENOCEAN:
             return 'https://openocean.finance/classic'
+        case TradeProvider.TRISOLARIS:
+            return 'https://www.trisolaris.io/#/swap'
+        case TradeProvider.WANNASWAP:
+            return 'https://wannaswap.finance/exchange/swap'
         default:
             unreachable(tradeProvider)
     }
@@ -145,6 +153,8 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
                     return `https://analytics-celo.sushi.com/pairs/${address}`
                 case NetworkType.Fantom:
                     return `https://analytics-ftm.sushi.com/pairs/${address}`
+                case NetworkType.Aurora:
+                    return `https://analytics-aurora.sushi.com/pairs/${address}`
                 default:
                     safeUnreachable(networkType)
                     return ''
@@ -162,6 +172,12 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             return ''
         case TradeProvider.OPENOCEAN:
             // TODO - OpenOcean
+            return ''
+        case TradeProvider.TRISOLARIS:
+            // TODO - add Trisolaris Analytics
+            return ''
+        case TradeProvider.WANNASWAP:
+            // TODO - add WannaSwap analytics
             return ''
         default:
             unreachable(tradeProvider)
@@ -252,6 +268,8 @@ export const resolveZrxTradePoolName = createLookupTableResolver<ZrxTradePool, s
         [ZrxTradePool.UniswapV3]: 'Uniswap V3',
         [ZrxTradePool.WaultSwap]: 'WaultSwap',
         [ZrxTradePool.xSigma]: 'xSigma',
+        [ZrxTradePool.Trisolaris]: 'Trisolaris',
+        [ZrxTradePool.WannaSwap]: 'WannaSwap',
     },
     'Unknown',
 )

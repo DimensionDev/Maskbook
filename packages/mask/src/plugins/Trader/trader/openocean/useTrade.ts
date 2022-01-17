@@ -2,16 +2,18 @@ import {
     FungibleTokenDetailed,
     isNativeTokenAddress,
     useAccount,
+    useBlockNumber,
     useRPCConstants,
     useTokenConstants,
     useTraderConstants,
 } from '@masknet/web3-shared-evm'
+import { useAsyncRetry } from 'react-use'
 import { PluginTraderRPC } from '../../messages'
 import type { TradeStrategy } from '../../types'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { useSlippageTolerance } from './useSlippageTolerance'
+import { OPENOCEAN_SUPPORTED_CHAINS } from './constants'
 import { first } from 'lodash-unified'
-import { DOUBLE_BLOCK_DELAY, useBeatRetry } from '@masknet/web3-shared-base'
 
 export function useTrade(
     strategy: TradeStrategy,
@@ -21,6 +23,7 @@ export function useTrade(
     outputToken?: FungibleTokenDetailed,
 ) {
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
+    const blockNumber = useBlockNumber()
     const slippage = useSlippageTolerance()
     const { targetChainId } = TargetChainIdContext.useContainer()
     const { RPC } = useRPCConstants(targetChainId)
@@ -28,39 +31,37 @@ export function useTrade(
     const { OPENOCEAN_ETH_ADDRESS } = useTraderConstants(targetChainId)
     const account = useAccount()
 
-    return useBeatRetry(
-        async () => {
-            if (!inputToken || !outputToken) return null
-            if (inputAmount === '0') return null
-            const sellToken = isNativeTokenAddress(inputToken.address)
-                ? { ...inputToken, address: OPENOCEAN_ETH_ADDRESS ?? '' }
-                : inputToken
-            const buyToken = isNativeTokenAddress(outputToken.address)
-                ? { ...outputToken, address: OPENOCEAN_ETH_ADDRESS ?? '' }
-                : outputToken
-            return PluginTraderRPC.swapOO({
-                isNativeSellToken: isNativeTokenAddress(inputToken.address),
-                fromToken: sellToken,
-                toToken: buyToken,
-                fromAmount: inputAmount,
-                slippage,
-                userAddr: account,
-                rpc: providerURL,
-                chainId: targetChainId,
-            })
-        },
-        DOUBLE_BLOCK_DELAY,
-        [
-            NATIVE_TOKEN_ADDRESS,
-            strategy,
-            inputAmount,
-            outputAmount,
-            inputToken?.address,
-            outputToken?.address,
+    return useAsyncRetry(async () => {
+        if (!OPENOCEAN_SUPPORTED_CHAINS.includes(targetChainId)) return null
+        if (!inputToken || !outputToken) return null
+        if (inputAmount === '0') return null
+        const sellToken = isNativeTokenAddress(inputToken.address)
+            ? { ...inputToken, address: OPENOCEAN_ETH_ADDRESS ?? '' }
+            : inputToken
+        const buyToken = isNativeTokenAddress(outputToken.address)
+            ? { ...outputToken, address: OPENOCEAN_ETH_ADDRESS ?? '' }
+            : outputToken
+        return PluginTraderRPC.swapOO({
+            isNativeSellToken: isNativeTokenAddress(inputToken.address),
+            fromToken: sellToken,
+            toToken: buyToken,
+            fromAmount: inputAmount,
             slippage,
-            account,
-            providerURL,
-            targetChainId,
-        ],
-    )
+            userAddr: account,
+            rpc: providerURL,
+            chainId: targetChainId,
+        })
+    }, [
+        NATIVE_TOKEN_ADDRESS,
+        strategy,
+        inputAmount,
+        outputAmount,
+        inputToken?.address,
+        outputToken?.address,
+        slippage,
+        blockNumber, // refresh api each block
+        account,
+        providerURL,
+        targetChainId,
+    ])
 }

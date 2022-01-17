@@ -1,3 +1,4 @@
+import type { Transaction as Web3Transaction } from 'web3-core'
 import type RSS3 from 'rss3-next'
 import type { CurrencyType } from '@masknet/plugin-infra'
 import type {
@@ -8,6 +9,21 @@ import type {
     NativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
 
+export namespace ExplorerAPI {
+    export type Transaction = Web3Transaction & {
+        status: '0' | '1'
+        confirmations: number
+    }
+
+    export interface PageInfo {
+        offset?: number
+        apikey?: string
+    }
+
+    export interface Provider {
+        getLatestTransactions(account: string, url: string, pageInfo?: PageInfo): Promise<Transaction[]>
+    }
+}
 export namespace RSS3BaseAPI {
     export interface GeneralAsset {
         platform: string
@@ -89,6 +105,10 @@ export namespace PriceAPI {
 }
 
 export namespace NonFungibleTokenAPI {
+    export enum APIEnv {
+        browser = 0,
+        proxy = 1,
+    }
     export enum OrderSide {
         Buy = 0,
         Sell = 1,
@@ -243,7 +263,7 @@ export namespace NonFungibleTokenAPI {
         pageInfo?: { [key in string]: unknown }
     }
 
-    interface ProviderPageable<T> {
+    export interface ProviderPageable<T> {
         data: T[]
         hasNextPage: boolean
         nextPageInfo?: { [key in string]: unknown }
@@ -265,5 +285,18 @@ export namespace NonFungibleTokenAPI {
             opts?: Options,
         ) => Promise<AssetOrder[]>
         getCollections?: (address: string, opts?: Options) => Promise<ProviderPageable<Collection>>
+    }
+}
+
+export namespace StorageAPI {
+    export interface Storage {
+        set<T extends {}>(key: string, value: T): Promise<void>
+        get<T>(key: string): Promise<T | void>
+        delete?: (key: string) => Promise<void>
+    }
+
+    export interface Provider {
+        createJSON_Storage?: (key: string) => Storage
+        createBinaryStorage?: (key: string) => Storage
     }
 }

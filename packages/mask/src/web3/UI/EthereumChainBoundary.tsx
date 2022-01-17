@@ -105,8 +105,14 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         ? Services.Ethereum.switchEthereumChain(expectedChainId, overrides)
                         : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account, overrides),
                 ])
+
+                // recheck
+                const chainIdHex = await Services.Ethereum.getChainId(overrides)
+                if (Number.parseInt(chainIdHex, 16) !== expectedChainId) throw new Error('Failed to switch chain.')
             } catch {
-                throw new Error(`Make sure your wallet is on the ${resolveNetworkName(networkType)} network.`)
+                throw new Error(
+                    `Switch Chain Error: Make sure your wallet is on the ${resolveNetworkName(networkType)} network.`,
+                )
             }
         }
 

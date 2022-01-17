@@ -2,7 +2,7 @@ import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { multipliedBy, pow10 } from '@masknet/web3-shared-base'
 import { useTrade as useNativeTokenTrade } from './native/useTrade'
 import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed'
-import { TagType, TradeInfo, TradeStrategy } from '../types'
+import { SwapOOData, TagType, TradeInfo, TradeStrategy } from '../types'
 import { useV2Trade as useUniswapV2Trade, useV3Trade as useUniswapV3Trade } from './uniswap/useTrade'
 import { useTradeComputed as useUniswapTradeComputed } from './uniswap/useTradeComputed'
 import { useTradeGasLimit as useUniswapTradeGasLimit } from './uniswap/useTradeGasLimit'
@@ -20,11 +20,12 @@ import { useTradeComputed as useBancorTradeComputed } from './bancor/useTradeCom
 import { useTradeGasLimit as useBancorTradeGasLimit } from './bancor/useTradeGasLimit'
 import { useTradeComputed as useOpenOceanTradeComputed } from './openocean/useTradeComputed'
 import { useTrade as useOpenOceanTrade } from './openocean/useTrade'
+import { useTradeGasLimit as useOpenOceanTradeGasLimit } from './openocean/useTradeGasLimit'
 import { TradeProvider } from '@masknet/public-api'
 import { useAvailableTraderProviders } from '../trending/useAvailableTraderProviders'
 import { useNativeTradeGasLimit } from './useNativeTradeGasLimit'
 import { TargetChainIdContext } from './useTargetChainIdContext'
-import type { TradeComputed, SwapRouteData } from '../types'
+import type { TradeComputed } from '../types'
 
 export function useAllTradeComputed(
     inputAmount: string,
@@ -185,7 +186,31 @@ export function useAllTradeComputed(
         inputToken,
         outputToken,
     )
-    const openoceanSwapEstimateGas = useDODOTradeGasLimit(openocean as TradeComputed<SwapRouteData> | null)
+    const openoceanSwapEstimateGas = useOpenOceanTradeGasLimit(openocean as TradeComputed<SwapOOData> | null)
+
+    // trisolaris
+    const trisolaris_ = useUniswapV2Trade(
+        TradeProvider.TRISOLARIS,
+        TradeStrategy.ExactIn,
+        inputAmount_,
+        '0',
+        tradeProviders.some((x) => x === TradeProvider.TRISOLARIS) ? inputToken : undefined,
+        tradeProviders.some((x) => x === TradeProvider.TRISOLARIS) ? outputToken : undefined,
+    )
+    const trisolaris = useUniswapTradeComputed(trisolaris_.value, inputToken, outputToken)
+    const trisolarisEstimateGas = useUniswapTradeGasLimit(trisolaris, TradeProvider.TRISOLARIS)
+
+    // WannaSwap
+    const wannaswap_ = useUniswapV2Trade(
+        TradeProvider.WANNASWAP,
+        TradeStrategy.ExactIn,
+        inputAmount_,
+        '0',
+        tradeProviders.some((x) => x === TradeProvider.WANNASWAP) ? inputToken : undefined,
+        tradeProviders.some((x) => x === TradeProvider.WANNASWAP) ? outputToken : undefined,
+    )
+    const wannaswap = useUniswapTradeComputed(wannaswap_.value, inputToken, outputToken)
+    const wannaSwapEstimateGas = useUniswapTradeGasLimit(wannaswap, TradeProvider.WANNASWAP)
 
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
@@ -199,6 +224,8 @@ export function useAllTradeComputed(
         { provider: TradeProvider.DODO, ...dodo_, value: dodo, gas: dodoSwapEstimateGas },
         { provider: TradeProvider.BANCOR, ...bancor_, value: bancor, gas: bancorSwapEstimateGas },
         { provider: TradeProvider.OPENOCEAN, ...openocean_, value: openocean, gas: openoceanSwapEstimateGas },
+        { provider: TradeProvider.WANNASWAP, ...wannaswap_, value: wannaswap, gas: wannaSwapEstimateGas },
+        { provider: TradeProvider.TRISOLARIS, ...trisolaris_, value: trisolaris, gas: trisolarisEstimateGas },
     ]
 
     return nativeToken_.value

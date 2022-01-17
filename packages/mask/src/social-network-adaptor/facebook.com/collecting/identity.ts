@@ -40,7 +40,7 @@ function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<Value>, signal
 // Try to resolve my identities
 const myUsernameLiveSelectorPC = new LiveSelector()
     .querySelectorAll<HTMLAnchorElement>(
-        `[data-pagelet="LeftRail"] > [data-visualcompletion="ignore-dynamic"]:first-child > div:first-child > ul [role="link"]`,
+        '[data-pagelet="LeftRail"] > [data-visualcompletion="ignore-dynamic"]:first-child > div:first-child > ul [role="link"]',
     )
 
     .filter((x) => x.innerText)

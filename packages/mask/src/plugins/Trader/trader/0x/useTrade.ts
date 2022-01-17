@@ -17,22 +17,20 @@ import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { TradeProvider } from '@masknet/public-api'
 import { DOUBLE_BLOCK_DELAY, useBeatRetry } from '@masknet/web3-shared-base'
 
+const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+
 export function getNativeTokenLabel(networkType: NetworkType) {
     switch (networkType) {
         case NetworkType.Ethereum:
             return 'ETH'
         case NetworkType.Binance:
-            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         case NetworkType.Polygon:
-            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         case NetworkType.Arbitrum:
-            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         case NetworkType.xDai:
-            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         case NetworkType.Celo:
-            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         case NetworkType.Fantom:
-            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+        case NetworkType.Aurora:
+            return NATIVE_TOKEN_ADDRESS
         default:
             safeUnreachable(networkType)
             return ''

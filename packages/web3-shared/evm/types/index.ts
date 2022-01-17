@@ -23,10 +23,8 @@ export interface PriceRecord {
 export interface CryptoPrice {
     [token: string]: PriceRecord
 }
-
-export interface BalanceOfChainRecord {
-    [chainId: number]: string
-}
+export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
+export type ChainIdRecord<T> = { [k in ChainId]: T }
 
 export interface BlockNumberOfChain {
     [chainId: string]: number
@@ -37,7 +35,6 @@ export interface BalanceOfChain {
         [account: string]: string
     }
 }
-
 // bigint is not in our list. iOS doesn't support that.
 export type Primitive = string | number | boolean | symbol | undefined | null
 
@@ -71,6 +68,13 @@ export enum ChainId {
 
     // Fantom
     Fantom = 250,
+
+    // Avalanche
+    Avalanche = 43114,
+
+    // Aurora
+    Aurora = 1313161554,
+    Aurora_Testnet = 1313161555,
 }
 
 export enum ProviderType {
@@ -100,6 +104,7 @@ export enum NetworkType {
     xDai = 'xDai',
     Celo = 'Celo',
     Fantom = 'Fantom',
+    Aurora = 'Aurora',
 }
 
 export interface Wallet {
@@ -185,6 +190,11 @@ export interface ERC721TokenDetailed {
     tokenId: string
     info: ERC721TokenInfo
     contractDetailed: ERC721ContractDetailed
+    collection?: {
+        name: string
+        image?: string
+        slug: string
+    }
 }
 
 export interface ERC721TokenRecordInDatabase extends ERC721TokenDetailed {
