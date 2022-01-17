@@ -1,3 +1,4 @@
+/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
 import { TypedMessage, isTypedMessageText, type AESJsonWebKey } from '@masknet/shared-base'
 export * from './crypto-alpha-39'
 
@@ -21,5 +22,5 @@ export function typedMessageStringify(x: TypedMessage) {
     const obj: Record<string, any> = {}
     for (const [a, b] of x.meta) obj[a] = b
 
-    return JSON.stringify(obj) + '🧩' + x.content
+    return JSON.stringify(obj) + '\u{1F9E9}' + x.content
 }

@@ -37,7 +37,7 @@ export const pluginIDSettings = createGlobalSettings<string>('pluginID', PLUGIN_
 //#region network setting
 
 /**
- * Expected Usage：export const currentImagePayloadStatus = createNetworkSettings('currentImagePayloadStatus')
+ * Expected Usage: export const currentImagePayloadStatus = createNetworkSettings('currentImagePayloadStatus')
  *
  * Work around the issue:
  *      https://github.com/microsoft/TypeScript/issues/42873

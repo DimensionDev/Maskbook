@@ -120,7 +120,7 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
                         )}
                     </Box>
                     <Box className={classes.right}>
-                        {!!excludePersonaPath ? null : (
+                        {excludePersonaPath ? null : (
                             <NavLink to={PopupRoutes.Personas} className={classes.nav} activeClassName={classes.active}>
                                 {t('personas')}
                             </NavLink>

@@ -277,7 +277,7 @@ export async function getCoinInfo(id: string) {
             price_change_percentage_1y_in_currency,
             price_change_percentage_1h_in_currency: price_change_percentage_1h,
             price_change_percentage_24h_in_currency: price_change_percentage_24h,
-            total_volume: new BigNumber(!!oneDayVolumeUSD ? oneDayVolumeUSD : oneDayVolumeUT).toNumber(),
+            total_volume: new BigNumber(oneDayVolumeUSD ? oneDayVolumeUSD : oneDayVolumeUT).toNumber(),
         },
         tickersInfo: Object.entries(pairsData)
             .sort(([, a], [, z]) => {

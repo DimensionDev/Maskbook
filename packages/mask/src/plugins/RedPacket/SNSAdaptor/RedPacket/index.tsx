@@ -110,7 +110,7 @@ export function RedPacket(props: RedPacketProps) {
         if (state.type === TransactionStateType.CONFIRMED) {
             setTransactionDialog({
                 open: true,
-                shareLink: shareLink!.toString(),
+                shareLink: shareLink!,
                 state,
                 summary: canClaim
                     ? t('plugin_red_packet_claiming_from', { name: payload.sender.name })

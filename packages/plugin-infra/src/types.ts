@@ -1,3 +1,4 @@
+/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
 import type { TypedMessage, ScopedStorage, ProfileIdentifier, PersonaIdentifier } from '@masknet/shared-base'

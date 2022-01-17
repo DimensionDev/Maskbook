@@ -1,3 +1,4 @@
+/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
 /**
  * @deprecated This version of payload is not in use.
  * Please goto Crypto alpha v38
@@ -199,7 +200,7 @@ export async function encryptWithAES(info: {
 
 //#region Comment
 function extractCommentPayload(text: string) {
-    const [_, toEnd] = text.split('🎶2/4|')
+    const [_, toEnd] = text.split('\u{1F3B6}2/4|')
     const [content, _2] = (toEnd || '').split(':||')
     if (content.length) return content
     return
@@ -226,7 +227,7 @@ export async function encryptComment(
         aesKey: key,
         iv: decodeArrayBuffer(postIV as string),
     })
-    return `🎶2/4|${encodeArrayBuffer(x.content)}:||`
+    return `\u{1F3B6}2/4|${encodeArrayBuffer(x.content)}:||`
 }
 export async function decryptComment(
     postIV: string | ArrayBuffer,
