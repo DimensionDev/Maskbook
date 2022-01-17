@@ -321,7 +321,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     }, [shareLink])
     //#endregion
 
-    if (Boolean(availabilityError))
+    if (availabilityError)
         return (
             <div className={classes.root}>
                 <Card className={classNames(classes.card, classes.errorCard)} component="article" elevation={0}>
