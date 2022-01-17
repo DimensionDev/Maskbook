@@ -14,16 +14,16 @@ async function _getUserAddress(userId: string, networkPluginId?: NetworkPluginID
 }
 
 export async function getUserAddress(userId: string, networkPluginId?: NetworkPluginID, chainId?: number) {
-    let c = cache.get(`${userId}-${networkPluginId ?? NetworkPluginID.PLUGIN_EVM}-${chainId ?? ChainId.Mainnet}`)
-
+    const key = `${userId}-${networkPluginId ?? NetworkPluginID.PLUGIN_EVM}-${chainId ?? ChainId.Mainnet}`
+    let c = cache.get(key)
     if (!c || Date.now() > c[1]) {
         try {
-            cache.set(userId, [_getUserAddress(userId, networkPluginId, chainId), addSeconds(new Date(), 60).getTime()])
+            cache.set(key, [_getUserAddress(userId, networkPluginId, chainId), addSeconds(new Date(), 60).getTime()])
         } catch (err) {
             console.log(err)
         }
     }
-    c = cache.get(`${userId}-${networkPluginId ?? NetworkPluginID.PLUGIN_EVM}-${chainId ?? ChainId.Mainnet}`)
+    c = cache.get(key)
 
     return c?.[0]
 }
