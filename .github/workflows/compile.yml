@@ -30,11 +30,11 @@ jobs:
           fetch-depth: 0
       - uses: pnpm/action-setup@v2
         with:
-          version: '6.23.1'
+          version: "6.23.1"
       - uses: actions/setup-node@v2
         with:
-          node-version: '16'
-          cache: 'pnpm'
+          node-version: "16"
+          cache: "pnpm"
       - name: Restore Webpack cache
         uses: actions/cache@v2
         with:
@@ -44,6 +44,11 @@ jobs:
           # An example caused by the webpack cache bug: https://github.com/facebook/react/issues/21587
           restore-keys: ${{ runner.os }}-extension-${{ hashFiles('pnpm-lock.yaml') }}
       - run: pnpm install
+      - run: npx gulp codegen
+      - run: npx gulp sync-languages
+      - run: npx gulp reorder-spellcheck
+      - run: npx gulp locale-kit --remove-unused-keys
+      - run: git diff --exit-code
       - run: npx gulp build-ci
       - name: Upload `MaskNetwork.base.zip`
         uses: actions/upload-artifact@v2

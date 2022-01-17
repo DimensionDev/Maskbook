@@ -59,7 +59,7 @@ export class OnDemandWorker extends EventTarget implements OnDemandWorker {
         super()
         this.__init = init
         this.inactiveTimeToTerminate = 15 * 60 * 1000
-        this.log(init[1]?.name ?? 'anomynous Worker', 'created with', ...init)
+        this.log(init[1]?.name ?? 'anonymous Worker', 'created with', ...init)
     }
     protected watchUsage() {
         const i = setInterval(() => {
