@@ -6,7 +6,7 @@ import { Some, None, Option } from 'ts-results'
  */
 export function __TwitterEncoder(text: string) {
     return `https://mask.io/?PostData_v1=${batchReplace(text, [
-        ['🎼', '%20'],
+        ['\u{1F3BC}', '%20'],
         [':||', '%40'],
         ['+', '-'],
         ['=', '_'],
@@ -17,14 +17,14 @@ export function TwitterDecoder(raw: string): Option<string> {
     if (!raw) return None
     if (!raw.includes('%20') || !raw.includes('%40')) return None
     const payloadLink = parseURL(raw)
-        .map((x) => x.replace(/…$/, ''))
+        .map((x) => x.replace(/\u2026$/, ''))
         .filter((x) => x.endsWith('%40'))[0]
     try {
         const { search, pathname } = new URL(payloadLink)
         const payload = search ? search.slice(1) : pathname.slice(1)
         if (!payload) return None
         return Some(
-            `🎼${batchReplace(
+            `\u{1F3BC}${batchReplace(
                 payload
                     // https://github.com/sindresorhus/eslint-plugin-unicorn/issues/1476
                     // eslint-disable-next-line unicorn/better-regex

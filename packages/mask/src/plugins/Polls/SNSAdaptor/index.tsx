@@ -17,7 +17,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     CompositionDialogMetadataBadgeRender: new Map([
         [PLUGIN_META_KEY, (meta: PollMetaData) => `a poll of '${meta.question}' from ${meta.sender}`],
     ]),
-    CompositionDialogEntry: { label: '🗳️ Poll', dialog: PollsDialog },
+    CompositionDialogEntry: { label: '\u{1F5F3}\uFE0F Poll', dialog: PollsDialog },
 }
 
 export default sns

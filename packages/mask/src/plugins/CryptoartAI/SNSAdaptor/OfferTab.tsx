@@ -100,7 +100,7 @@ export function OfferTab() {
                             <strong>{t('plugin_cryptoartai_price')}</strong>
                         </Typography>
                         <Typography className={classes.latest_bid} variant="body2">
-                            <strong>{(dataSource?.trade?.latestBid ?? 'Unknown') + ' Ξ'}</strong>
+                            <strong>{dataSource?.trade?.latestBid ?? 'Unknown'} &Xi;</strong>
                         </Typography>
                     </Box>
                 </Box>
