@@ -1,57 +1,56 @@
 import urlcat from 'urlcat'
 import { fetchJSON } from '../helpers'
-import type { StorageAPI } from '../types'
 import { KV_ROOT_URL } from './constants'
 
-export class JSON_Storage implements StorageAPI.Storage {
+interface Storage {
+    set<T extends {}>(key: string, value: T): Promise<void>
+    get<T>(key: string): Promise<T | void>
+    delete?: (key: string) => Promise<void>
+}
+
+interface Provider {
+    createJSON_Storage?: (key: string) => Storage
+    createBinaryStorage?: (key: string) => Storage
+}
+
+class JSON_Storage implements Storage {
     constructor(private prefix: string) {}
 
     async set<T extends {}>(key: string, value: T) {
-        return fetchJSON<void>(
+        await fetch(
             urlcat(KV_ROOT_URL, 'api/:name', {
                 name: `${this.prefix}_${key}`,
             }),
             {
                 method: 'PUT',
                 mode: 'cors',
-                credentials: 'omit',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
                 body: JSON.stringify(value),
             },
         )
     }
     async get<T>(key: string) {
-        const response = await fetchJSON<string>(
-            urlcat(KV_ROOT_URL, 'api/:name', {
-                name: `${this.prefix}_${key}`,
-            }),
-            {
-                method: 'GET',
-                mode: 'cors',
-                credentials: 'omit',
-            },
-        )
         try {
-            return JSON.parse(response) as T
+            return fetchJSON<T>(
+                urlcat(KV_ROOT_URL, 'api/:name', {
+                    name: `${this.prefix}_${key}`,
+                }),
+                {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                },
+            )
         } catch {
             return
         }
     }
-    async delete(key: string) {
-        await fetchJSON<void>(
-            urlcat(KV_ROOT_URL, 'api/:name', {
-                name: `${this.prefix}_${key}`,
-            }),
-            {
-                method: 'DELETE',
-                mode: 'cors',
-                credentials: 'omit',
-            },
-        )
-    }
 }
 
-export class KeyValueAPI implements StorageAPI.Provider {
-    createStorage(key: string): StorageAPI.Storage {
-        return new JSON_Storage(key)
-    }
+export function createJSON_Storage(key: string): Storage {
+    return new JSON_Storage(key)
 }
