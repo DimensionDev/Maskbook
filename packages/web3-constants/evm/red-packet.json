@@ -16,7 +16,9 @@
         "Optimistic_Kovan": "",
         "Optimistic_Goerli": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V2": {
         "Mainnet": "0x8D8912E1237F9FF3EF661F32743CFB276E052F98",
@@ -35,7 +37,9 @@
         "Optimistic_Kovan": "",
         "Optimistic_Goerli": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V3": {
         "Mainnet": "",
@@ -54,7 +58,9 @@
         "Optimistic_Kovan": "",
         "Optimistic_Goerli": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V4": {
         "Mainnet": "0xaBBe1101FD8fa5847c452A6D70C8655532B03C33",
@@ -73,7 +79,9 @@
         "Optimistic_Kovan": "0x68EDbfA3E564C987FaaAB54f4FD1E7567D4151Dd",
         "Optimistic_Goerli": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "0x19f179D7e0D7d9F9d5386afFF64271D98A91615B",
+        "Aurora_Testnet": "0xdB93cCd481012bB5D1E2c8d0aF7C5f2940c00fdC"
     },
     "HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT": {
         "Mainnet": 12939427,
@@ -92,7 +100,9 @@
         "Optimistic_Kovan": 442843,
         "Optimistic_Goerli": 0,
         "Celo": 0,
-        "Fantom": 0
+        "Fantom": 0,
+        "Aurora": 57552338,
+        "Aurora_Testnet": 77918765
     },
     "SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-mainnet",
@@ -111,6 +121,8 @@
         "Optimistic_Kovan": "",
         "Optimistic_Goerli": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-aurora",
+        "Aurora_Testnet": ""
     }
 }

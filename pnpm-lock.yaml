@@ -10,7 +10,7 @@ importers:
     specifiers:
       '@commitlint/cli': ^16.0.0
       '@commitlint/config-conventional': ^16.0.0
-      '@dimensiondev/eslint-plugin': ^0.0.1-20220110102506-9f382ee
+      '@dimensiondev/eslint-plugin': ^0.0.1-20220117062517-fd3cb01
       '@dimensiondev/kit': 0.0.0-20211215044858-27d964f
       '@dimensiondev/patch-package': ^6.5.0
       '@emotion/cache': ^11.7.1
@@ -89,7 +89,7 @@ importers:
     devDependencies:
       '@commitlint/cli': 16.0.0
       '@commitlint/config-conventional': 16.0.0
-      '@dimensiondev/eslint-plugin': 0.0.1-20220110102506-9f382ee_eslint@8.5.0
+      '@dimensiondev/eslint-plugin': 0.0.1-20220117062517-fd3cb01_eslint@8.5.0
       '@dimensiondev/patch-package': 6.5.0
       '@jest/globals': 27.4.4
       '@magic-works/i18n-codegen': 0.0.6_typescript@4.6.0-dev.20211202
@@ -1045,6 +1045,7 @@ importers:
   packages/web3-providers:
     specifiers:
       '@masknet/plugin-infra': workspace:*
+      '@masknet/web3-constants': workspace:*
       '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-evm': workspace:*
       bignumber.js: 9.0.1
@@ -1057,6 +1058,7 @@ importers:
       uuid: ^8.3.2
     dependencies:
       '@masknet/plugin-infra': link:../plugin-infra
+      '@masknet/web3-constants': link:../web3-constants
       '@masknet/web3-shared-base': link:../web3-shared/base
       '@masknet/web3-shared-evm': link:../web3-shared/evm
       bignumber.js: 9.0.1
@@ -3452,10 +3454,11 @@ packages:
       '@msgpack/msgpack': 1.12.2
     dev: false
 
-  /@dimensiondev/eslint-plugin/0.0.1-20220110102506-9f382ee_eslint@8.5.0:
-    resolution: {integrity: sha512-DFNWb35mRshQA4OZzRmqPAENf49I+3/2i5mY8b37oi/i3sB+WjK8Z9BQjpz8uf+lURMhs1CdzJp9oQoTA08YZg==, tarball: download/@dimensiondev/eslint-plugin/0.0.1-20220110102506-9f382ee/00bf74704d413d6c24deba9f94bcfb2e13a94634263dc71695c71630d7716785}
+  /@dimensiondev/eslint-plugin/0.0.1-20220117062517-fd3cb01_eslint@8.5.0:
+    resolution: {integrity: sha512-WtUberb1MC1s554Lm3C3mno3Nf/TdVJP80htgpNWiGOcIk+WYwQi+gWqi5IlnqGd71bYRZPYpYs2MH+GS+dbuw==, tarball: download/@dimensiondev/eslint-plugin/0.0.1-20220117062517-fd3cb01/8298f20d707432bcb777cd5084173fc894362a3496e8f8bc6a5c85070adb77cf}
     engines: {node: '>= 14'}
     peerDependencies:
+      '@typescript-eslint/experimental-utils': '*'
       eslint: '>= 8'
     dependencies:
       eslint: 8.5.0
@@ -8419,6 +8422,7 @@ packages:
   /@typescript-eslint/experimental-utils/5.8.0_7c4253b9684f61cbac963c815f3d723d:
     resolution: {integrity: sha512-KN5FvNH71bhZ8fKtL+lhW7bjm7cxs1nt+hrDZWIqb6ViCffQcWyLunGrgvISgkRojIDcXIsH+xlFfI4RCDA0xA==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    requiresBuild: true
     peerDependencies:
       eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
     dependencies:
@@ -15207,7 +15211,7 @@ packages:
       array-union: 2.1.0
       dir-glob: 3.0.1
       fast-glob: 3.2.7
-      ignore: 5.1.9
+      ignore: 5.2.0
       merge2: 1.4.1
       slash: 3.0.0
     dev: true

@@ -254,7 +254,8 @@
         "nativeCurrency": {
             "name": "Arbitrum Rinkeby Ether",
             "symbol": "ARETH",
-            "decimals": 18
+            "decimals": 18,
+            "logoURI": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
         },
         "faucets": [],
         "features": [],
@@ -331,9 +332,9 @@
         "features": [],
         "nativeCurrency": {
             "name": "Optimism Ether",
-            "symbol": "ETH",
+            "symbol": "OETH",
             "decimals": 18,
-            "logoURI": "https://static.debank.com/image/chain/logo_url/op/01ae734fe781c9c2ae6a4cc7e9244056.png"
+            "logoURI": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
         },
         "infoURL": "https://optimism.io",
         "shortName": "op",
@@ -1247,7 +1248,12 @@
         "rpc": ["https://rpcapi.fantom.network"],
         "faucets": [],
         "features": [],
-        "nativeCurrency": { "name": "Fantom", "symbol": "FTM", "decimals": 18 },
+        "nativeCurrency": {
+            "name": "Fantom",
+            "symbol": "FTM",
+            "decimals": 18,
+            "logoURI": "https://static.debank.com/image/ftm_token/logo_url/ftm/33fdb9c5067e94f3a1b9e78f6fa86984.png"
+        },
         "infoURL": "https://fantom.foundation",
         "shortName": "ftm",
         "chainId": 250,
@@ -2647,12 +2653,17 @@
     },
     {
         "name": "Aurora MainNet",
-        "chain": "NEAR",
+        "chain": "Aurora",
         "network": "mainnet",
         "rpc": ["https://rpc.mainnet.aurora.dev:8545"],
         "faucets": [],
         "features": [],
-        "nativeCurrency": { "name": "Ether", "symbol": "aETH", "decimals": 18 },
+        "nativeCurrency": {
+            "name": "Ether",
+            "symbol": "aETH",
+            "decimals": 18,
+            "logoURI": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
+        },
         "infoURL": "https://aurora.dev",
         "shortName": "aurora",
         "chainId": 1313161554,
@@ -2660,12 +2671,17 @@
     },
     {
         "name": "Aurora TestNet",
-        "chain": "NEAR",
+        "chain": "Aurora",
         "network": "testnet",
         "rpc": ["https://rpc.testnet.aurora.dev:8545"],
         "faucets": [],
         "features": [],
-        "nativeCurrency": { "name": "Ether", "symbol": "aETH", "decimals": 18 },
+        "nativeCurrency": {
+            "name": "Ether",
+            "symbol": "aETH",
+            "decimals": 18,
+            "logoURI": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
+        },
         "infoURL": "https://aurora.dev",
         "shortName": "aurora-testnet",
         "chainId": 1313161555,
@@ -2673,7 +2689,7 @@
     },
     {
         "name": "Aurora BetaNet",
-        "chain": "NEAR",
+        "chain": "Aurora",
         "network": "betanet",
         "rpc": ["https://rpc.betanet.aurora.dev:8545"],
         "faucets": [],

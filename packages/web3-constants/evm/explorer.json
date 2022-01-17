@@ -16,7 +16,9 @@
         "Optimistic_Kovan": [],
         "Optimistic_Goerli": [],
         "Celo": [],
-        "Fantom": ["AST4WWPNEYDURUXG2GH32JZMYWEFDP999S"]
+        "Fantom": ["AST4WWPNEYDURUXG2GH32JZMYWEFDP999S"],
+        "Aurora": [],
+        "Aurora_Testnet": []
     },
     "EXPLORER_API": {
         "Mainnet": "https://api.etherscan.io/api",
@@ -35,6 +37,8 @@
         "Optimistic_Kovan": "https://kovan-optimistic.etherscan.io",
         "Optimistic_Goerli": "https://goerli-optimistic.etherscan.io",
         "Celo": "https://explorer.celo.org/api",
-        "Fantom": "https://api.ftmscan.com/api"
+        "Fantom": "https://api.ftmscan.com/api",
+        "Aurora": "https://explorer.mainnet.aurora.dev/api",
+        "Aurora_Testnet": "https://explorer.testnet.aurora.dev/api"
     }
 }

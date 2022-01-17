@@ -12,11 +12,13 @@
         "Arbitrum": "arbitrum-assets",
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai-assets",
-        "Optimistic": "opt-assets",
+        "Optimistic": "optimistic-assets",
         "Optimistic_Kovan": "",
         "Optimistic_Goerli": "",
         "Celo": "celo-assets",
-        "Fantom": "fantom-assets"
+        "Fantom": "fantom-assets",
+        "Aurora": "aurora-assets",
+        "Aurora_Testnet": ""
     },
     "TRANSACTIONS_SCOPE_NAME": {
         "Mainnet": "transactions",
@@ -31,10 +33,12 @@
         "Arbitrum": "arbitrum-transactions",
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai-transactions",
-        "Optimistic": "opt-transactions",
+        "Optimistic": "optimistic-transactions",
         "Optimistic_Kovan": "",
         "Optimistic_Goerli": "",
         "Celo": "celo-transactions",
-        "Fantom": "fantom-transactions"
+        "Fantom": "fantom-transactions",
+        "Aurora": "aurora-transactions",
+        "Aurora_Testnet": ""
     }
 }

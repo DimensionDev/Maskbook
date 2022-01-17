@@ -1,5 +1,6 @@
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import { createConstantSubscription, mapSubscription } from '@masknet/shared-base'
+import { toFixed } from '@masknet/web3-shared-base'
 import {
     ChainId,
     NetworkType,
@@ -8,7 +9,6 @@ import {
     resolveBlockLinkOnExplorer,
     resolveTransactionLinkOnExplorer,
 } from '@masknet/web3-shared-solana'
-import BigNumber from 'bignumber.js'
 import { getFungibleAssets, getNonFungibleAssets } from '../../apis'
 import { formatAddress } from '../../helpers'
 import { getStorage, StorageDefaultValue } from '../../storage'
@@ -49,8 +49,8 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
         },
         Utils: {
             formatAddress,
-            formatBalance: (value) => new BigNumber(value).toFixed(),
-            formatCurrency: (value) => new BigNumber(value).toFixed(),
+            formatBalance: toFixed,
+            formatCurrency: toFixed,
 
             isChainIdValid: () => true,
 

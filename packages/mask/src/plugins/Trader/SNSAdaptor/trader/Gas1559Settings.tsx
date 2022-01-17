@@ -14,7 +14,14 @@ import { ExpandMore } from '@mui/icons-material'
 import { fromWei, toHex } from 'web3-utils'
 import { isEmpty } from 'lodash-unified'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
-import { isGreaterThan, isLessThan, isLessThanOrEqualTo, isPositive, multipliedBy } from '@masknet/web3-shared-base'
+import {
+    isGreaterThan,
+    isLessThan,
+    isLessThanOrEqualTo,
+    isPositive,
+    multipliedBy,
+    toFixed,
+} from '@masknet/web3-shared-base'
 import { isDashboardPage } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
@@ -237,8 +244,8 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(({ onCancel, onSave: o
     useEffect(() => {
         if (selected === null) return
         const { content } = options[selected]
-        setValue('maxPriorityFeePerGas', new BigNumber(content?.suggestedMaxPriorityFeePerGas ?? 0).toFixed() ?? '')
-        setValue('maxFeePerGas', new BigNumber(content?.suggestedMaxFeePerGas ?? 0).toFixed() ?? '')
+        setValue('maxPriorityFeePerGas', toFixed(content?.suggestedMaxPriorityFeePerGas))
+        setValue('maxFeePerGas', toFixed(content?.suggestedMaxFeePerGas))
     }, [selected, setValue, options])
     //#endregion
 
@@ -246,8 +253,8 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(({ onCancel, onSave: o
         if (!(gasConfig?.maxPriorityFeePerGas && gasConfig?.maxFeePerGas)) return
         const { maxFeePerGas, maxPriorityFeePerGas } = gasConfig
         setOption(null)
-        setValue('maxFeePerGas', fromWei(maxFeePerGas.toString(), 'gwei').toString())
-        setValue('maxPriorityFeePerGas', fromWei(maxPriorityFeePerGas.toString(), 'gwei').toString())
+        setValue('maxFeePerGas', fromWei(maxFeePerGas.toString(), 'gwei'))
+        setValue('maxPriorityFeePerGas', fromWei(maxPriorityFeePerGas.toString(), 'gwei'))
     }, [gasConfig, setValue])
 
     return (

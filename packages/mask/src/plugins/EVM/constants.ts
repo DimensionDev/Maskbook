@@ -4,7 +4,7 @@ import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 export const PLUGIN_ID = PluginId.EVM
 export const PLUGIN_META_KEY = `${PluginId.EVM}:1`
 export const PLUGIN_NAME = 'EVM'
-export const PLUGIN_ICON = 'Ξ'
+export const PLUGIN_ICON = '\u039E'
 export const PLUGIN_DESCRIPTION = ''
 export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
     {
@@ -52,7 +52,7 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         networkSupporterPluginID: PLUGIN_ID,
         chainId: ChainId.Gorli,
         type: NetworkType.Ethereum,
-        name: 'Görli',
+        name: 'G\xf6rli',
         icon: new URL('./assets/ethereum.png', import.meta.url),
         iconColor: 'rgb(48, 153, 242)',
         isMainnet: false,
@@ -148,13 +148,23 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         isMainnet: true,
     },
     {
-        ID: `${PLUGIN_ID}_optimism`,
+        ID: `${PLUGIN_ID}_optimistic`,
         networkSupporterPluginID: PLUGIN_ID,
-        chainId: ChainId.Optimism,
-        type: NetworkType.Optimism,
+        chainId: ChainId.Optimistic,
+        type: NetworkType.Optimistic,
         name: 'Optimistic',
         icon: new URL('./assets/optimistic.png', import.meta.url),
         iconColor: 'rgb(254, 5, 33)',
+        isMainnet: true,
+    },
+    {
+        ID: `${PLUGIN_ID}_aurora`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Aurora,
+        type: NetworkType.Aurora,
+        name: 'Aurora',
+        icon: new URL('./assets/aurora.png', import.meta.url),
+        iconColor: 'rgb(112, 212, 74)',
         isMainnet: true,
     },
 ]

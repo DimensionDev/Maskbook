@@ -16,7 +16,9 @@
         "Optimistic_Kovan": "",
         "Optimistic_Goerli": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "MASK_POOL_ADDRESS": {
         "Mainnet": "",
@@ -35,6 +37,8 @@
         "Optimistic_Kovan": "",
         "Optimistic_Goerli": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     }
 }

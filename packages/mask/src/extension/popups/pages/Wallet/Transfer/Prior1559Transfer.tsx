@@ -246,7 +246,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     const { value: minGasLimit, error } = useGasLimit(
         selectedAsset?.token.type,
         selectedAsset?.token.address,
-        rightShift(!!amount ? amount : 0, selectedAsset?.token.decimals).toFixed(),
+        rightShift(amount ? amount : 0, selectedAsset?.token.decimals).toFixed(),
         EthereumAddress.isValid(address) ? address : '',
     )
     //#endregion

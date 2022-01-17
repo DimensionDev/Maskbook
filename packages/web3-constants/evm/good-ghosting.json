@@ -16,7 +16,9 @@
         "Optimistic_Kovan": "",
         "Optimistic_Goerli": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "GOOD_GHOSTING_INCENTIVES_CONTRACT_ADDRESS": {
         "Mainnet": "",
@@ -35,6 +37,8 @@
         "Optimistic_Kovan": "",
         "Optimistic_Goerli": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     }
 }

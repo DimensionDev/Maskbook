@@ -91,9 +91,10 @@ export const getChainIdFromNetworkType = createLookupTableResolver<NetworkType, 
         [NetworkType.Polygon]: ChainId.Matic,
         [NetworkType.Arbitrum]: ChainId.Arbitrum,
         [NetworkType.xDai]: ChainId.xDai,
-        [NetworkType.Optimism]: ChainId.Optimism,
+        [NetworkType.Optimistic]: ChainId.Optimistic,
         [NetworkType.Celo]: ChainId.Celo,
         [NetworkType.Fantom]: ChainId.Fantom,
+        [NetworkType.Aurora]: ChainId.Aurora,
     },
     ChainId.Mainnet,
 )
@@ -105,9 +106,10 @@ export function getNetworkTypeFromChainId(chainId: ChainId, value?: boolean) {
         [NetworkType.Polygon]: 'Polygon',
         [NetworkType.Arbitrum]: 'Arbitrum',
         [NetworkType.xDai]: 'xDai',
-        [NetworkType.Optimism]: 'OP',
+        [NetworkType.Optimistic]: 'OP',
         [NetworkType.Celo]: 'CELO',
         [NetworkType.Fantom]: 'FTM',
+        [NetworkType.Aurora]: 'Aurora',
     }
     const chainDetailed = getChainDetailed(chainId)
     const entry = Object.entries(map).find(([key, value]) => {

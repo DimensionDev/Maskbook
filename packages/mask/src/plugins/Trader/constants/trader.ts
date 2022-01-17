@@ -29,6 +29,7 @@ export const TT01 = createERC20Tokens('TT01_ADDRESS', 'Test Token 01', 'TT01', 1
 export const TT02 = createERC20Tokens('TT02_ADDRESS', 'Test Token 02', 'TT02', 18)
 export const ETHER = createERC20Tokens('ETHER_ADDRESS', 'Ether', 'ETH', 18)
 export const QUICK = createERC20Tokens('QUICK_ADDRESS', 'Quickswap', 'QUICK', 18)
+export const WANNA = createERC20Tokens('WANNA_ADDRESS', 'Wannaswap', 'WANNA', 18)
 export const WBTC = createERC20Tokens('WBTC_ADDRESS', 'Wrapped Bitcoin', 'WBTC', 18)
 export const IGG = createERC20Tokens('IGG_ADDRESS', 'IG Gold', 'IGG', 18)
 export const OM = createERC20Tokens('OM_ADDRESS', 'OM Token', 'OM', 18)
@@ -64,11 +65,13 @@ export const WNATIVE_ONLY: ERC20AgainstToken = {
     [ChainId.Arbitrum]: [WNATIVE[ChainId.Arbitrum]],
     [ChainId.Arbitrum_Rinkeby]: [WNATIVE[ChainId.Arbitrum_Rinkeby]],
     [ChainId.xDai]: [WNATIVE[ChainId.xDai]],
-    [ChainId.Optimism]: [WNATIVE[ChainId.Optimism]],
+    [ChainId.Optimistic]: [WNATIVE[ChainId.Optimistic]],
     [ChainId.Optimistic_Kovan]: [WNATIVE[ChainId.Optimistic_Kovan]],
     [ChainId.Optimistic_Goerli]: [WNATIVE[ChainId.Optimistic_Goerli]],
     [ChainId.Celo]: [WNATIVE[ChainId.Celo]],
     [ChainId.Fantom]: [WNATIVE[ChainId.Fantom]],
+    [ChainId.Aurora]: [WNATIVE[ChainId.Aurora]],
+    [ChainId.Aurora_Testnet]: [WNATIVE[ChainId.Aurora_Testnet]],
 }
 
 export const BIPS_BASE = new BigNumber(10000)

@@ -16,6 +16,8 @@
         "Optimistic_Kovan": "",
         "Optimistic_Goerli": "",
         "Celo": "celo",
-        "Fantom": "ftm"
+        "Fantom": "ftm",
+        "Aurora": "aurora",
+        "Aurora_Testnet": ""
     }
 }

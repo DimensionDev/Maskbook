@@ -59,8 +59,8 @@ export enum ChainId {
     // xDai
     xDai = 100,
 
-    // Optimism
-    Optimism = 10,
+    // Optimistic
+    Optimistic = 10,
     Optimistic_Kovan = 69,
     Optimistic_Goerli = 420,
 
@@ -69,6 +69,13 @@ export enum ChainId {
 
     // Fantom
     Fantom = 250,
+
+    // Avalanche
+    Avalanche = 43114,
+
+    // Aurora
+    Aurora = 1313161554,
+    Aurora_Testnet = 1313161555,
 }
 
 export enum ProviderType {
@@ -96,9 +103,10 @@ export enum NetworkType {
     Polygon = 'Polygon',
     Arbitrum = 'Arbitrum',
     xDai = 'xDai',
-    Optimism = 'Optimism',
+    Optimistic = 'Optimistic',
     Celo = 'Celo',
     Fantom = 'Fantom',
+    Aurora = 'Aurora',
 }
 
 export interface Wallet {

@@ -92,7 +92,8 @@ const SUPPORTED_CHAIN_ID_LIST = [
     ChainId.xDai,
     ChainId.Celo,
     ChainId.Fantom,
-    ChainId.Optimism,
+    ChainId.Optimistic,
+    ChainId.Aurora,
 ]
 
 export interface MaskAppEntry {

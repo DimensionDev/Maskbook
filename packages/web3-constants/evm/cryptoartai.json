@@ -16,7 +16,9 @@
         "Optimistic_Kovan": "",
         "Optimistic_Goerli": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "ARTIST_ACCEPTING_BIDS_V2": {
         "Mainnet": "0x78C889749f29D2965a76Ede3BBb232A9729Ccf0b",
@@ -35,7 +37,9 @@
         "Optimistic_Kovan": "",
         "Optimistic_Goerli": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "CANFT_MARKET": {
         "Mainnet": "0x72d081953957723e540780a0C6bA31725469238E",
@@ -54,6 +58,8 @@
         "Optimistic_Kovan": "",
         "Optimistic_Goerli": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     }
 }
