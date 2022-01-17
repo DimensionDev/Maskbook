@@ -246,8 +246,8 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(({ onCancel, onSave: o
         if (!(gasConfig?.maxPriorityFeePerGas && gasConfig?.maxFeePerGas)) return
         const { maxFeePerGas, maxPriorityFeePerGas } = gasConfig
         setOption(null)
-        setValue('maxFeePerGas', fromWei(maxFeePerGas.toString(), 'gwei').toString())
-        setValue('maxPriorityFeePerGas', fromWei(maxPriorityFeePerGas.toString(), 'gwei').toString())
+        setValue('maxFeePerGas', fromWei(maxFeePerGas.toString(), 'gwei'))
+        setValue('maxPriorityFeePerGas', fromWei(maxPriorityFeePerGas.toString(), 'gwei'))
     }, [gasConfig, setValue])
 
     return (

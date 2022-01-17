@@ -146,7 +146,7 @@ export const getERC20TokenListItem =
                         <span className={classes.symbol}>{symbol}</span>
                         <span className={`${classes.name} dashboard token-list-symbol`}>
                             {name}
-                            {isAdded && <span> • Added By User</span>}
+                            {isAdded && <span> &bull; Added By User</span>}
                         </span>
                     </Typography>
                     <Typography sx={{ fontSize: 16 }} color="textSecondary" component="span">

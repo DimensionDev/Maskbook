@@ -345,7 +345,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         const gasFee = formatGweiToWei(maxFeePerGas ?? 0).multipliedBy(MIN_GAS_LIMIT)
         let amount_ = new BigNumber(tokenBalance ?? 0)
         amount_ = selectedAsset?.token.type === EthereumTokenType.Native ? amount_.minus(gasFee) : amount_
-        return formatBalance(amount_.toFixed(), selectedAsset?.token.decimals).toString()
+        return formatBalance(amount_.toFixed(), selectedAsset?.token.decimals)
     }, [selectedAsset, maxFeePerGas, minGasLimit, tokenBalance])
 
     //#region set default gasLimit
@@ -567,7 +567,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                     ),
                                     onClick: (event) => {
                                         if (!anchorEl.current) anchorEl.current = event.currentTarget
-                                        if (!!popoverContent) setPopoverOpen(true)
+                                        if (popoverContent) setPopoverOpen(true)
                                     },
                                 }}
                             />
