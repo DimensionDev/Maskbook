@@ -140,7 +140,7 @@ export function DrawDialog(props: DrawDialogProps) {
                         </Typography>
                         {paymentTokenDetailed ? (
                             <Typography color="textPrimary">
-                                <span>&ap;</span>
+                                <span>&#x2248;</span>
                                 <TokenPrice
                                     chainId={chainId}
                                     amount={formatBalance(paymentTokenPrice, paymentTokenDetailed.decimals)}
