@@ -116,7 +116,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const maxAmount = useMemo(() => {
         let amount_ = new BigNumber(tokenBalance || '0')
         amount_ = selectedToken.type === EthereumTokenType.Native ? amount_.minus(gasFee) : amount_
-        return amount_.toFixed()
+        return BigNumber.max(0, amount_).toFixed()
     }, [tokenBalance, gasPrice, selectedToken?.type, amount])
 
     const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(

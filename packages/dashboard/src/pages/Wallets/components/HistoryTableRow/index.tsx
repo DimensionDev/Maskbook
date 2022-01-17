@@ -62,7 +62,7 @@ export const HistoryTableRow = memo<HistoryTableRowProps>(({ transaction, select
 
     const transactionType = useMemo(() => {
         if (transaction.type === TransactionType.CREATE_RED_PACKET) {
-            return 'Create Luck Drop'
+            return 'Create Lucky Drop'
         }
         return (transaction.type ?? '').replace(/_/g, ' ')
     }, [transaction.type])
