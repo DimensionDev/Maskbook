@@ -60,9 +60,6 @@ const useStyles = makeStyles()((theme) => ({
     tipArrow: {
         color: '#111432',
     },
-    networkIcon: {
-        border: `1px solid ${theme.palette.background.default}`,
-    },
 }))
 
 export interface TokenTableRowProps {
@@ -95,7 +92,6 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                         />
                         <Box className={classes.chainIcon}>
                             <WalletIcon
-                                classes={{ networkIcon: classes.networkIcon }}
                                 size={16}
                                 networkIcon={networkDescriptors.find((x) => x.chainId === asset.token.chainId)?.icon}
                             />
