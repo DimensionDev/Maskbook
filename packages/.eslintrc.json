@@ -80,5 +80,13 @@
         "@typescript-eslint/prefer-string-starts-ends-with": "error",
         "@typescript-eslint/restrict-plus-operands": "off",
         "@typescript-eslint/restrict-template-expressions": "off"
-    }
+    },
+    "overrides": [
+        {
+            "files": ["./plugins/**/*"],
+            "rules": {
+                "@typescript-eslint/no-explicit-any": "error"
+            }
+        }
+    ]
 }
