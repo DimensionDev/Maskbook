@@ -387,7 +387,9 @@ export namespace Plugin.SNSAdaptor {
         /**
          * The injected UI
          */
-        children: InjectUI<{}>
+        UI?: {
+            SlideContent: InjectUI<{}>
+        }
     }
 
     export interface ProfileTab {
@@ -401,7 +403,9 @@ export namespace Plugin.SNSAdaptor {
          * Used to order the sliders
          */
         priority: number
-
+        /**
+         * The injected UI
+         */
         UI?: {
             /**
              * The injected tab content
