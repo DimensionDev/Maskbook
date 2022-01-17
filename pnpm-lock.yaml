@@ -10,7 +10,7 @@ importers:
     specifiers:
       '@commitlint/cli': ^16.0.0
       '@commitlint/config-conventional': ^16.0.0
-      '@dimensiondev/eslint-plugin': ^0.0.1-20220117052737-faa6835
+      '@dimensiondev/eslint-plugin': ^0.0.1-20220117062517-fd3cb01
       '@dimensiondev/kit': 0.0.0-20211215044858-27d964f
       '@dimensiondev/patch-package': ^6.5.0
       '@emotion/cache': ^11.7.1
@@ -89,7 +89,7 @@ importers:
     devDependencies:
       '@commitlint/cli': 16.0.0
       '@commitlint/config-conventional': 16.0.0
-      '@dimensiondev/eslint-plugin': 0.0.1-20220117052737-faa6835_7c4253b9684f61cbac963c815f3d723d
+      '@dimensiondev/eslint-plugin': 0.0.1-20220117062517-fd3cb01_eslint@8.5.0
       '@dimensiondev/patch-package': 6.5.0
       '@jest/globals': 27.4.4
       '@magic-works/i18n-codegen': 0.0.6_typescript@4.6.0-dev.20211202
@@ -3454,17 +3454,13 @@ packages:
       '@msgpack/msgpack': 1.12.2
     dev: false
 
-  /@dimensiondev/eslint-plugin/0.0.1-20220117052737-faa6835_7c4253b9684f61cbac963c815f3d723d:
-    resolution: {integrity: sha512-j8YwvYje+8DwJ2BK4Rcwm5163O/Z0wFyzw7ZOg4nrk1Y19vwdcr9XjoJBIdbf6zhmaMMouNTyMEAqypS1nuepw==, tarball: download/@dimensiondev/eslint-plugin/0.0.1-20220117052737-faa6835/371cbf5d4bbe72bc1fcded6a0d43d32d76fc2ed0aba9e65834ac4375090f9bbd}
+  /@dimensiondev/eslint-plugin/0.0.1-20220117062517-fd3cb01_eslint@8.5.0:
+    resolution: {integrity: sha512-WtUberb1MC1s554Lm3C3mno3Nf/TdVJP80htgpNWiGOcIk+WYwQi+gWqi5IlnqGd71bYRZPYpYs2MH+GS+dbuw==, tarball: download/@dimensiondev/eslint-plugin/0.0.1-20220117062517-fd3cb01/8298f20d707432bcb777cd5084173fc894362a3496e8f8bc6a5c85070adb77cf}
     peerDependencies:
+      '@typescript-eslint/experimental-utils': '*'
       eslint: '>= 8'
     dependencies:
       eslint: 8.5.0
-    optionalDependencies:
-      '@typescript-eslint/experimental-utils': 5.8.0_7c4253b9684f61cbac963c815f3d723d
-    transitivePeerDependencies:
-      - supports-color
-      - typescript
     dev: true
 
   /@dimensiondev/holoflows-kit/0.9.0-20210902104757-7c3d0d0:

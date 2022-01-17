@@ -1,4 +1,3 @@
-/* eslint-disable @dimensiondev/no-bigint */
 import { useMemo } from 'react'
 import JSBI from 'jsbi'
 import { Trade as V2Trade } from '@uniswap/v2-sdk'

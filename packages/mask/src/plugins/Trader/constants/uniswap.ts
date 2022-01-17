@@ -1,4 +1,3 @@
-/* eslint-disable @dimensiondev/no-bigint */
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Percent } from '@uniswap/sdk-core'
 import JSBI from 'jsbi'
