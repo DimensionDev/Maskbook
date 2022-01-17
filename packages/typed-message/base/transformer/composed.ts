@@ -12,7 +12,7 @@ export interface ComposedTransformers {
         signal?: AbortSignal,
     ): () => void
 }
-export function composeTransformer(): ComposedTransformers {
+export function composeTransformers(): ComposedTransformers {
     const event = new EventTarget()
     const onUpdate = () => event.dispatchEvent(new Event('update'))
     const transformers = new Set<readonly [Transformer, number]>()

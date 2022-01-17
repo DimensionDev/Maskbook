@@ -3,10 +3,10 @@ import { visitEachTypedMessageChild } from '@masknet/shared-base'
 import { isCashTagMessage, makeTypedMessageCashTrending } from './messages/TypedMessageCashTrending'
 
 export const baseDeferred: Plugin.Shared.Utilities = {
-    typedMessageTransformer: function visitor(message) {
+    typedMessageTransformer: function visitor(message, context) {
         if (isCashTagMessage(message)) {
             return makeTypedMessageCashTrending(message)
         }
-        return visitEachTypedMessageChild(message, visitor)
+        return visitEachTypedMessageChild(message, visitor, context)
     },
 }

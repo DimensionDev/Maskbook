@@ -55,7 +55,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
                     else links.add(x)
                 }
                 // Instant values
-                const message = FlattenTypedMessage(opt.rawMessage.getCurrentValue())
+                const message = FlattenTypedMessage(opt.rawMessage.getCurrentValue(), {})
                 const text = extractTextFromTypedMessage(message).unwrapOr('')
                 const link = parseURL(text).concat(opt.postMentionedLinksProvider?.getCurrentValue() || [])
                 link.forEach(addLink)
@@ -231,7 +231,7 @@ function decryptionContext(
     {
         let abort = new AbortController()
         async function decryptByPost(
-            message = FlattenTypedMessage(rawMessage.getCurrentValue()),
+            message = FlattenTypedMessage(rawMessage.getCurrentValue(), {}),
             signal = abort.signal,
         ) {
             // Instant values

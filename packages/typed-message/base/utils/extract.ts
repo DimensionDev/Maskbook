@@ -1,6 +1,6 @@
 import type { TypedMessage } from '../base'
 import { isTypedMessageText, isTypedMessageTuple, isTypedMessageImage } from '../core'
-import { isTypedMessageAnchor } from '../extension'
+import { isTypedMessageAnchor, isTypedMessageMaskPayload } from '../extension'
 import { Option, Some, None } from 'ts-results'
 
 /**
@@ -20,6 +20,9 @@ export function extractTextFromTypedMessage(message: TypedMessage | null): Optio
         if (str.length) return Some(str.join(' '))
         return None
     }
+    if (isTypedMessageMaskPayload(message)) {
+        return extractTextFromTypedMessage(message.message)
+    }
     return None
 }
 export function extractImageFromTypedMessage(
@@ -30,5 +33,8 @@ export function extractImageFromTypedMessage(
     if (isTypedMessageImage(message)) return result.concat(message.image)
     if (isTypedMessageTuple(message))
         return result.concat(message.items.flatMap((x) => extractImageFromTypedMessage(x)))
+    if (isTypedMessageMaskPayload(message)) {
+        return extractImageFromTypedMessage(message.message)
+    }
     return result
 }

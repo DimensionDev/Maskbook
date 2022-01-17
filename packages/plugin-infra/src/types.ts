@@ -1,7 +1,13 @@
 /* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
-import type { TypedMessage, ScopedStorage, ProfileIdentifier, PersonaIdentifier } from '@masknet/shared-base'
+import type {
+    TypedMessage,
+    ScopedStorage,
+    ProfileIdentifier,
+    PersonaIdentifier,
+    Transformer,
+} from '@masknet/shared-base'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
 import type { Subscription } from 'use-subscription'
@@ -143,9 +149,8 @@ export namespace Plugin.Shared {
         /**
          * A pure function that convert a TypedMessage into another one
          */
-        typedMessageTransformer?: TypedMessageTransformer
+        typedMessageTransformer?: Transformer
     }
-    export type TypedMessageTransformer = (message: TypedMessage) => TypedMessage
     /** The publisher of the plugin */
     export interface Publisher {
         /** The name of the publisher */

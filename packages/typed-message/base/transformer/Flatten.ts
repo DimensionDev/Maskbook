@@ -11,8 +11,9 @@ import {
 import type { TypedMessage } from '../base'
 import { visitEachTypedMessageChild } from '../visitor'
 import { isSerializableTypedMessage } from '..'
+import { createTransformationContext } from './context'
 
-export function FlattenTypedMessage(message: TypedMessage): TypedMessage {
+export function FlattenTypedMessage(message: TypedMessage, context = createTransformationContext()): TypedMessage {
     if (isTypedMessagePromise(message) && message.value) return message.value
     if (isTypedMessageTuple(message)) {
         const next = message.items
@@ -36,5 +37,5 @@ export function FlattenTypedMessage(message: TypedMessage): TypedMessage {
         if (next.every(isSerializableTypedMessage)) return makeTypedMessageTupleSerializable(next, message.meta)
         return makeTypedMessageTuple(next, message.meta)
     }
-    return visitEachTypedMessageChild(message, FlattenTypedMessage)
+    return visitEachTypedMessageChild(message, FlattenTypedMessage, context)
 }

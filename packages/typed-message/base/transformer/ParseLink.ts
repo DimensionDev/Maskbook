@@ -3,8 +3,9 @@ import { isTypedMessageText, makeTypedMessageTupleSerializable, makeTypedMessage
 import { makeTypedMessageAnchor } from '../extension'
 import { parseLink } from '../utils/parseLink'
 import { visitEachTypedMessageChild } from '../visitor'
+import type { TransformationContext } from './context'
 
-export function ParseLinkTransformer(message: TypedMessage): TypedMessage {
+export function ParseLinkTransformer(message: TypedMessage, context: TransformationContext): TypedMessage {
     if (isTypedMessageText(message)) {
         const parsed = parseLink(message.content)
         if (parsed.length === 1 && parsed[0].type === 'text') return message
@@ -16,5 +17,5 @@ export function ParseLinkTransformer(message: TypedMessage): TypedMessage {
             message.meta,
         )
     }
-    return visitEachTypedMessageChild(message, ParseLinkTransformer)
+    return visitEachTypedMessageChild(message, ParseLinkTransformer, context)
 }

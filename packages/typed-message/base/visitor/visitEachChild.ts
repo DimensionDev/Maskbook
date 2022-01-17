@@ -6,9 +6,14 @@ import {
 } from '../core'
 import { isSerializableTypedMessage } from '../utils'
 import type { TypedMessage } from '../base'
+import { isTypedMessageMaskPayload } from '../extension'
+import type { TransformationContext, Transformer } from '../transformer'
 
-export type Visitor = (message: TypedMessage) => TypedMessage
-export function visitEachTypedMessageChild(node: TypedMessage, visitor: Visitor): TypedMessage {
+export function visitEachTypedMessageChild(
+    node: TypedMessage,
+    visitor: Transformer,
+    context: TransformationContext,
+): TypedMessage {
     if (isTypedMessageTuple(node)) {
         const after = node.items.map(visitor)
         if (after.every(isSerializableTypedMessage)) {
@@ -18,11 +23,15 @@ export function visitEachTypedMessageChild(node: TypedMessage, visitor: Visitor)
     }
 
     if (isTypedMessagePromise(node)) {
-        if (node.value) return visitor(node.value)
+        if (node.value) return visitor(node.value, context)
+    }
+
+    if (isTypedMessageMaskPayload(node)) {
+        const next = visitor(node.message, context)
     }
 
     if (isSerializableTypedMessage(node) && 'alt' in node) {
-        const alt = visitor(node.alt)
+        const alt = visitor(node.alt, context)
         if (!isSerializableTypedMessage(alt)) {
             console.warn(
                 '[@masknet/typed-message] You must return a serializable message in this position. Original:',
