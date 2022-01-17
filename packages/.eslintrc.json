@@ -83,7 +83,7 @@
     },
     "overrides": [
         {
-            "files": ["./plugins/**/*", "./mask/src/plugins/**/*"],
+            "files": ["./plugins/**/*"],
             "rules": {
                 "@typescript-eslint/no-explicit-any": "error"
             }

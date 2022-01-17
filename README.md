@@ -1,3 +1,4 @@
+<!-- cspell:disable -->
 <a href="https://mask.io">
   <img src="https://raw.githubusercontent.com/DimensionDev/Maskbook-Website/master/img/MB--CircleCanvas--WhiteOverBlue.svg"
        width="200" height="200" title="([I:b])" alt="([I:b])">
