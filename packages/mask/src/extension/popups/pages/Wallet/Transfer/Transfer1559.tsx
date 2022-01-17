@@ -567,7 +567,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                     ),
                                     onClick: (event) => {
                                         if (!anchorEl.current) anchorEl.current = event.currentTarget
-                                        if (!!popoverContent) setPopoverOpen(true)
+                                        if (popoverContent) setPopoverOpen(true)
                                     },
                                 }}
                             />
