@@ -15,7 +15,9 @@
         "Boba": "",
         "Boba_Rinkeby": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "MASK_POOL_ADDRESS": {
         "Mainnet": "",
@@ -33,6 +35,8 @@
         "Boba": "",
         "Boba_Rinkeby": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     }
 }

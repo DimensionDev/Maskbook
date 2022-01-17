@@ -36,7 +36,7 @@ export function useTrade(
         if (!inputToken || !outputToken) return null
         if (inputAmount === '0') return null
         const sellToken = isNativeTokenAddress(inputToken.address)
-            ? { ...inputToken, address: OPENOCEAN_ETH_ADDRESS ?? ' ' }
+            ? { ...inputToken, address: OPENOCEAN_ETH_ADDRESS ?? '' }
             : inputToken
         const buyToken = isNativeTokenAddress(outputToken.address)
             ? { ...outputToken, address: OPENOCEAN_ETH_ADDRESS ?? '' }

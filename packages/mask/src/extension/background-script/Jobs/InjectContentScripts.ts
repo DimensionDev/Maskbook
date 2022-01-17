@@ -53,7 +53,7 @@ export default function (signal: AbortSignal) {
         signal.addEventListener(
             'abort',
             MaskMessages.events.maskSDKHotModuleReload.on(async () => {
-                const code = (await fetchUserScript(maskSDK_URL)) + `\n;console.log("[@masknet/sdk] SDK reloaded.")`
+                const code = (await fetchUserScript(maskSDK_URL)) + '\n;console.log("[@masknet/sdk] SDK reloaded.")'
                 for (const tab of await browser.tabs.query({})) {
                     browser.tabs.executeScript(tab.id!, { code }).then(noop)
                 }

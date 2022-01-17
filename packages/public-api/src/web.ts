@@ -194,6 +194,7 @@ export enum NetworkType {
     Boba = 'Boba',
     Celo = 'Celo',
     Fantom = 'Fantom',
+    Aurora = 'Aurora',
 }
 
 export enum DataProvider {
@@ -214,9 +215,11 @@ export enum TradeProvider {
     UNISWAP_V3 = 8,
     BANCOR = 9,
     OPENOCEAN = 10,
-    OOLONGSWAP = 11,
-    SWAPPERCHAN = 12,
-    SENPAISWAP = 13,
+    WANNASWAP = 11,
+    TRISOLARIS = 12,
+    OOLONGSWAP = 13,
+    SWAPPERCHAN = 14,
+    SENPAISWAP = 15,
 }
 /** Supported language settings */
 export enum LanguageOptions {

@@ -28,6 +28,7 @@ import {
     bobaNetworkTradeProviderSettings,
     celoNetworkTradeProviderSettings,
     fantomNetworkTradeProviderSettings,
+    auroraNetworkTradeProviderSettings,
 } from '../plugins/Trader/settings'
 import type { InternalSettings } from './createSettings'
 
@@ -58,5 +59,6 @@ export function ToBeListened(): ToBeListedSettings {
         celoNetworkTradeProviderSettings,
         bobaNetworkTradeProviderSettings,
         fantomNetworkTradeProviderSettings,
+        auroraNetworkTradeProviderSettings,
     }
 }

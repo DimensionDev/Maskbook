@@ -12,10 +12,12 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
-        "Boba": "0x3f64DFB6009d138DfD7b62916f3322A438d8b00D",
+        "Boba": "0xF9F7C1496c21bC0180f4B64daBE0754ebFc8A8c0",
         "Boba_Rinkeby": "0xdcA6F476EebCDE8FE8b072e3fC80dBC28dC209b3",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "0x05ee315E407C21a594f807D61d6CC11306D1F149",
+        "Aurora_Testnet": "0x97369fEE7db34E0BfE47861f2ec44b4378d13eB4"
     },
     "SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-nft-red-packet-mainnet",
@@ -33,6 +35,8 @@
         "Boba": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-nft-red-packet-boba",
         "Boba_Rinkeby": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-nft-red-packet-boba-rinkeby",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-nft-red-packet-aurora",
+        "Aurora_Testnet": ""
     }
 }

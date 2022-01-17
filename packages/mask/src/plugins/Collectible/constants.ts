@@ -1,7 +1,7 @@
 import { PluginId } from '@masknet/plugin-infra'
 
 export const PLUGIN_NAME = 'Collectibles'
-export const PLUGIN_ICON = '🖼️'
+export const PLUGIN_ICON = '\u{1F5BC}\uFE0F'
 export const PLUGIN_DESCRIPTION = 'An NFT collectible viewer.'
 export const PLUGIN_ID = PluginId.Collectible
 export const PLUGIN_META_KEY = `${PluginId.Collectible}:1`

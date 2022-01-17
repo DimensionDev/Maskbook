@@ -94,6 +94,12 @@ export const celoNetworkTradeProviderSettings = createGlobalSettings<TradeProvid
     { primary: () => '' },
 )
 
+export const auroraNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_ID}+aurora+tradeProvider`,
+    TradeProvider.DODO,
+    { primary: () => '' },
+)
+
 //#region trade provider general settings
 export interface TradeProviderSettings {
     pools: ZrxTradePool[]
@@ -113,6 +119,8 @@ const oolongswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradePro
 const swapperchanSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+swapperchan`, '')
 const senpaiswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+senpaiswap`, '')
 const openoceanSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+openocean`, '')
+const trisolarisSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+trisolaris`, '')
+const wannaswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+wannaswap`, '')
 
 /**
  * The general settings of specific tarde provider
@@ -147,6 +155,10 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return swapperchanSettings
         case TradeProvider.SENPAISWAP:
             return senpaiswapSettings
+        case TradeProvider.TRISOLARIS:
+            return trisolarisSettings
+        case TradeProvider.WANNASWAP:
+            return wannaswapSettings
         default:
             unreachable(tradeProvider)
     }

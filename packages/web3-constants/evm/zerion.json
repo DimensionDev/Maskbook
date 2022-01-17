@@ -15,7 +15,9 @@
         "Boba": "boba-assets",
         "Boba_Rinkeby": "",
         "Celo": "celo-assets",
-        "Fantom": "fantom-assets"
+        "Fantom": "fantom-assets",
+        "Aurora": "aurora-assets",
+        "Aurora_Testnet": ""
     },
     "TRANSACTIONS_SCOPE_NAME": {
         "Mainnet": "transactions",
@@ -33,6 +35,8 @@
         "Boba": "boba-transactions",
         "Boba_Rinkeby": "",
         "Celo": "celo-transactions",
-        "Fantom": "fantom-transactions"
+        "Fantom": "fantom-transactions",
+        "Aurora": "aurora-transactions",
+        "Aurora_Testnet": ""
     }
 }

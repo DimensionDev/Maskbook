@@ -12,10 +12,12 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
-        "Boba": "",
+        "Boba": "0x5B966f3a32Db9C180843bCb40267A66b73E4f022",
         "Boba_Rinkeby": "0xf44799D9F0aB280a5f26Fd3AB5557595948ff9E9",
-        "Celo": "",
-        "Fantom": ""
+        "Celo": "0x578a7Fee5f0D8CEc7d00578Bf37374C5b95C4b98",
+        "Fantom": "0x19f179D7e0D7d9F9d5386afFF64271D98A91615B",
+        "Aurora": "0xf5056B96ab242C566002852d0b98ce0BcDf1af51",
+        "Aurora_Testnet": "0xB4D669bc117735FdA44e90e52795132187705B21"
     },
     "MASK_BOX_CONTRACT_FROM_BLOCK": {
         "Mainnet": 13687866,
@@ -30,10 +32,12 @@
         "Arbitrum": 0,
         "Arbitrum_Rinkeby": 0,
         "xDai": 0,
-        "Boba": 0,
+        "Boba": 290596,
         "Boba_Rinkeby": 87139,
-        "Celo": 0,
-        "Fantom": 0
+        "Celo": 10431288,
+        "Fantom": 25214905,
+        "Aurora": 57259004,
+        "Aurora_Testnet": 77919118
     },
     "MASK_BOX_TEST_NFT": {
         "Mainnet": "0x56136E69A5771436a9598804c5eA792230c21181",
@@ -51,7 +55,9 @@
         "Boba": "",
         "Boba_Rinkeby": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "WHITE_LIST_QUALIFICATION_CONTRACT_ADDRESS": {
         "Mainnet": "",
@@ -69,7 +75,9 @@
         "Boba": "",
         "Boba_Rinkeby": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "SIG_VERIFY_QULIFICATION_CONTRACT_ADDRESS": {
         "Mainnet": "",
@@ -87,6 +95,8 @@
         "Boba": "",
         "Boba_Rinkeby": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     }
 }

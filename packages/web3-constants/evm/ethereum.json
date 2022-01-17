@@ -30,7 +30,9 @@
             "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/28/tokens.json"
         ],
         "Celo": [],
-        "Fantom": []
+        "Fantom": [],
+        "Aurora": [],
+        "Aurora_Testnet": []
     },
     "BALANCE_CHECKER_ADDRESS": {
         "Mainnet": "0xb1F8e55c7f64D203C1400B9D8555d050F94aDF39",
@@ -48,7 +50,9 @@
         "Boba": "0xAe5C53294003f72B27CEF476680979453193673d",
         "Boba_Rinkeby": "0x2690906609A9AF3bF08B8384CD9A0F97A88A7E9c",
         "Celo": "0x8e28F1d64ceD52b9A09aB1AA3071Aa3c05802d1F",
-        "Fantom": "0xc119574d5fb333f5ac018658d4d8b5035e16bf39"
+        "Fantom": "0xc119574d5fb333f5ac018658d4d8b5035e16bf39",
+        "Aurora": "0xC119574D5Fb333F5AC018658D4d8b5035E16bf39",
+        "Aurora_Testnet": ""
     },
     "MULTICALL_ADDRESS": {
         "Mainnet": "0x1F98415757620B543A52E61c46B32eB19261F984",
@@ -66,7 +70,9 @@
         "Boba": "0xfb91c019D9F12A0f9c23B4762fa64A34F8daDb4A",
         "Boba_Rinkeby": "0xdB93cCd481012bB5D1E2c8d0aF7C5f2940c00fdC",
         "Celo": "0x072453AdEC16cFC7FB6Af1517c3f25407180cccC",
-        "Fantom": "0x913975af2Bb8a6Be4100D7dc5e9765B77F6A5d6c"
+        "Fantom": "0x913975af2Bb8a6Be4100D7dc5e9765B77F6A5d6c",
+        "Aurora": "0x6cc1b1058F9153358278C35E0b2D382f1585854B",
+        "Aurora_Testnet": ""
     },
     "ENS_REGISTRAR_ADDRESS": {
         "Mainnet": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
@@ -84,7 +90,9 @@
         "Boba": "",
         "Boba_Rinkeby": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "ENS_REVERSE_RECORDS_ADDRESS": {
         "Mainnet": "0x3671aE578E63FdF66ad4F3E12CC0c0d71Ac7510C",
@@ -102,6 +110,8 @@
         "Boba": "",
         "Boba_Rinkeby": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     }
 }

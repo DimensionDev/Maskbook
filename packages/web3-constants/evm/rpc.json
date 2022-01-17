@@ -15,7 +15,9 @@
         "Boba": ["https://mainnet.boba.network/"],
         "Boba_Rinkeby": ["https://rinkeby.boba.network/"],
         "Celo": ["https://forno.celo.org"],
-        "Fantom": ["https://rpcapi.fantom.network/"]
+        "Fantom": ["https://rpcapi.fantom.network/"],
+        "Aurora": ["https://mainnet.aurora.dev"],
+        "Aurora_Testnet": ["https://testnet.aurora.dev"]
     },
     "RPC_WEIGHTS": {
         "Mainnet": [0, 0, 0, 0],
@@ -33,6 +35,8 @@
         "Boba": [0, 0, 0, 0],
         "Boba_Rinkeby": [0, 0, 0, 0],
         "Celo": [0, 0, 0, 0],
-        "Fantom": [0, 0, 0, 0]
+        "Fantom": [0, 0, 0, 0],
+        "Aurora": [0, 0, 0, 0],
+        "Aurora_Testnet": [0, 0, 0, 0]
     }
 }
