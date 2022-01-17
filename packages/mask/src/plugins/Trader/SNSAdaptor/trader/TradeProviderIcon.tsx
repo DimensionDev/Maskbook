@@ -10,11 +10,13 @@ import { ZRXIcon } from '../../../../resources/ZRXIcon'
 import { DODOIcon } from '../../../../resources/DODOIcon'
 import { NETSWAPIcon } from '../../../../resources/NETSWAPIcon'
 import { OpenOceanIcon } from '../../../../resources/OpenOceanIcon'
+import { TrisolarisIcon } from '../../../../resources/TrisolarisIcon'
 import { resolveTradeProviderName } from '../../pipes'
 
 const quickswapIcon = new URL('../../../../resources/quickswap.png', import.meta.url).toString()
 const pancakeswapIcon = new URL('../../../../resources/pancakeswap.png', import.meta.url).toString()
 const tethysIcon = new URL('../../../../resources/tethys.png', import.meta.url).toString()
+const wannaswapIcon = new URL('../../../../resources/wannaswap.png', import.meta.url).toString()
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -60,9 +62,13 @@ export function TradeProviderIcon(props: TradeProviderIconProps) {
             )
         case TradeProvider.TETHYS:
             return (
+                <img src={tethysIcon} alt={resolveTradeProviderName(TradeProvider.TETHYS)} className={classes.icon} />
+            )
+        case TradeProvider.WANNASWAP:
+            return (
                 <img
-                    src={tethysIcon}
-                    alt={resolveTradeProviderName(TradeProvider.PANCAKESWAP)}
+                    src={pancakeswapIcon}
+                    alt={resolveTradeProviderName(TradeProvider.WANNASWAP)}
                     className={classes.icon}
                 />
             )
@@ -74,6 +80,8 @@ export function TradeProviderIcon(props: TradeProviderIconProps) {
             return <NETSWAPIcon classes={{ root: classes.icon }} />
         case TradeProvider.OPENOCEAN:
             return <OpenOceanIcon classes={{ root: classes.icon }} />
+        case TradeProvider.TRISOLARIS:
+            return <TrisolarisIcon classes={{ root: classes.icon }} />
         default:
             unreachable(props.provider)
     }

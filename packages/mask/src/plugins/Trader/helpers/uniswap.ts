@@ -15,7 +15,7 @@ import { ONE_HUNDRED_PERCENT, WNATIVE, ZERO_PERCENT } from '../constants'
 
 export function swapErrorToUserReadableMessage(error: any): string {
     let reason: string | undefined
-    while (Boolean(error)) {
+    while (error) {
         reason = error.reason ?? error.message ?? reason
         error = error.error ?? error.data?.originalError
     }

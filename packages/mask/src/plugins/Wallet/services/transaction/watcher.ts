@@ -1,29 +1,79 @@
+import { first } from 'lodash-unified'
 import type { TransactionReceipt } from 'web3-core'
+import type { JsonRpcPayload } from 'web3-core-helpers'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { ChainId, TransactionStateType } from '@masknet/web3-shared-evm'
+import { Explorer } from '@masknet/web3-providers'
+import { ChainId, getExplorerConstants, isSameAddress, TransactionStateType } from '@masknet/web3-shared-evm'
 import * as EthereumService from '../../../../extension/background-script/EthereumService'
 import * as progress from './progress'
 import * as helpers from './helpers'
 import { currentChainIdSettings } from '../../settings'
+import { WalletRPC } from '../../messages'
 
-let timer: ReturnType<typeof setTimeout> | null = null
-const WATCHED_TRANSACTION_CHECK_DELAY = 15 * 1000 // 15s
-const WATCHED_TRANSACTION_MAP = new Map<
-    ChainId,
-    Map<
-        string,
-        {
-            at: number
-            receipt: Promise<TransactionReceipt | null> | null
-        }
-    >
->()
-const WATCHED_TRANSACTIONS_SIZE = 40
-
-function getTransactionMap(chainId: ChainId) {
-    if (!WATCHED_TRANSACTION_MAP.has(chainId)) WATCHED_TRANSACTION_MAP.set(chainId, new Map())
-    return WATCHED_TRANSACTION_MAP.get(chainId)!
+interface StorageItem {
+    at: number
+    limits: number
+    payload: JsonRpcPayload
+    receipt: Promise<TransactionReceipt | null> | null
 }
+
+class Storage {
+    static MAX_ITEM_SIZE = 40
+
+    private map = new Map<ChainId, Map<string, StorageItem>>()
+
+    private getStorage(chainId: ChainId) {
+        if (!this.map.has(chainId)) this.map.set(chainId, new Map())
+        return this.map.get(chainId)!
+    }
+
+    public hasItem(chainId: ChainId, hash: string) {
+        return this.getStorage(chainId).has(hash)
+    }
+
+    public getItem(chainId: ChainId, hash: string) {
+        return this.getStorage(chainId).get(hash)
+    }
+
+    public setItem(chainId: ChainId, hash: string, transaction: StorageItem) {
+        this.getStorage(chainId).set(hash, transaction)
+    }
+
+    public removeItem(chainId: ChainId, hash: string) {
+        this.getStorage(chainId).delete(hash)
+    }
+
+    public getItems(chainId: ChainId) {
+        const map = this.getStorage(chainId)
+        return map ? [...map.entries()].sort(([, a], [, z]) => z.at - a.at) : []
+    }
+
+    public getWatched(chainId: ChainId) {
+        return this.getItems(chainId).slice(0, Storage.MAX_ITEM_SIZE)
+    }
+
+    public getUnwatched(chainId: ChainId) {
+        return this.getItems(chainId).slice(Storage.MAX_ITEM_SIZE)
+    }
+
+    public getWatchedAccounts(chainId: ChainId) {
+        return this.getWatched(chainId)
+            .map(([_, transaction]) => helpers.getPayloadFrom(transaction.payload))
+            .filter(Boolean) as string[]
+    }
+
+    public getUnwatchedAccounts(chainId: ChainId) {
+        return this.getUnwatched(chainId)
+            .map(([_, transaction]) => helpers.getPayloadFrom(transaction.payload))
+            .filter(Boolean) as string[]
+    }
+}
+
+let timer: NodeJS.Timer | null = null
+const storage = new Storage()
+const CHECK_TIMES = 30
+const CHECK_DELAY = 30 * 1000 // seconds
+const CHECK_LATEST_SIZE = 5
 
 async function getTransactionReceipt(chainId: ChainId, hash: string) {
     try {
@@ -51,51 +101,131 @@ async function getTransactionReceipt(chainId: ChainId, hash: string) {
     }
 }
 
-async function checkReceipt() {
-    if (timer !== null) {
-        clearTimeout(timer)
-        timer = null
-    }
-
-    const chainId = currentChainIdSettings.value
-    const map = getTransactionMap(chainId)
-    const transactions = [...map.entries()].sort(([, a], [, z]) => z.at - a.at)
-    const watchedTransactions = transactions.slice(0, WATCHED_TRANSACTIONS_SIZE)
-    const unwatchedTransactions = transactions.slice(WATCHED_TRANSACTIONS_SIZE)
-    unwatchedTransactions.forEach(([hash]) => unwatchTransaction(chainId, hash))
-
-    const checkResult = await Promise.allSettled(
-        watchedTransactions.map(async ([hash, transaction]) => {
-            const receipt = await map.get(hash)?.receipt
-            if (receipt) return true
-            map.set(hash, {
-                at: transaction.at,
+async function checkReceipt(chainId: ChainId) {
+    await Promise.allSettled(
+        storage.getWatched(chainId).map(async ([hash, transaction]) => {
+            const receipt = await storage.getItem(chainId, hash)?.receipt
+            if (receipt) return
+            storage.setItem(chainId, hash, {
+                ...transaction,
                 receipt: getTransactionReceipt(chainId, hash),
             })
-            return false
         }),
     )
+}
 
-    if (checkResult.every((x) => x.status === 'fulfilled' && x.value)) return
+async function checkAccount(chainId: ChainId, account: string) {
+    const { API_KEYS = [], EXPLORER_API = '' } = getExplorerConstants(chainId)
+
+    const watchedTransactions = storage.getWatched(chainId)
+    const latestTransactions = await Explorer.getLatestTransactions(account, EXPLORER_API, {
+        offset: CHECK_LATEST_SIZE,
+        apikey: first(API_KEYS),
+    })
+
+    for (const latestTransaction of latestTransactions) {
+        const [watchedHash, watchedTransaction] =
+            watchedTransactions.find(([hash, transaction]) => {
+                // the transaction hash exact matched
+                if (latestTransaction.hash === hash) return true
+
+                // the transaction signature id exact matched
+                if (!transaction.payload) return false
+                if (helpers.getTransactionId(latestTransaction) === helpers.getPayloadId(transaction.payload))
+                    return true
+
+                // the transaction nonce exact matched
+                const config = helpers.getPayloadConfig(transaction.payload)
+                if (!config) return false
+                return (
+                    isSameAddress(latestTransaction.from, config.from as string) &&
+                    latestTransaction.nonce === config.nonce
+                )
+            }) ?? []
+
+        if (!watchedHash || !watchedTransaction?.payload || watchedHash === latestTransaction.hash) continue
+
+        // replace the original transaction in DB
+        await WalletRPC.replaceRecentTransaction(
+            chainId,
+            account,
+            watchedHash,
+            latestTransaction.hash,
+            watchedTransaction.payload,
+        )
+
+        // update receipt in cache
+        storage.removeItem(chainId, watchedHash)
+        storage.setItem(chainId, latestTransaction.hash, {
+            ...watchedTransaction,
+            payload: helpers.toPayload(latestTransaction),
+            receipt: getTransactionReceipt(chainId, latestTransaction.hash),
+        })
+    }
+}
+
+async function check() {
+    // stop any pending task
+    stopCheck()
+
+    const chainId = currentChainIdSettings.value
+
+    // unwatch legacy transactions
+    storage.getUnwatched(chainId).forEach(([hash]) => unwatchTransaction(chainId, hash))
+
+    // update limits
+    storage.getWatched(chainId).forEach(([hash, transaction]) => {
+        storage.setItem(chainId, hash, {
+            ...transaction,
+            limits: Math.max(0, transaction.limits - 1),
+        })
+    })
+
+    try {
+        await checkReceipt(chainId)
+        for (const account of storage.getWatchedAccounts(chainId)) await checkAccount(chainId, account)
+    } catch (error) {
+        // do nothing
+    }
+
+    // check if all transaction receipts were found
+    const allSettled = await Promise.allSettled(
+        storage.getWatched(chainId).map(([, transaction]) => transaction.receipt),
+    )
+    if (allSettled.every((x) => x.status === 'fulfilled' && x.value)) return
+
+    // kick to the next round
+    startCheck(true)
+}
+
+function startCheck(force: boolean) {
+    if (force) stopCheck()
+    if (timer === null) {
+        timer = setTimeout(check, CHECK_DELAY)
+    }
+}
+
+function stopCheck() {
     if (timer !== null) clearTimeout(timer)
-    timer = setTimeout(checkReceipt, WATCHED_TRANSACTION_CHECK_DELAY)
+    timer = null
 }
 
 export async function getReceipt(chainId: ChainId, hash: string) {
-    return getTransactionMap(chainId).get(hash)?.receipt ?? null
+    return storage.getItem(chainId, hash)?.receipt ?? null
 }
 
-export async function watchTransaction(chainId: ChainId, hash: string) {
-    const map = getTransactionMap(chainId)
-    if (!map.has(hash)) {
-        map.set(hash, {
+export async function watchTransaction(chainId: ChainId, hash: string, payload: JsonRpcPayload) {
+    if (!storage.hasItem(chainId, hash)) {
+        storage.setItem(chainId, hash, {
             at: Date.now(),
-            receipt: getTransactionReceipt(chainId, hash),
+            payload,
+            limits: CHECK_TIMES,
+            receipt: Promise.resolve(null),
         })
     }
-    if (timer === null) timer = setTimeout(checkReceipt, WATCHED_TRANSACTION_CHECK_DELAY)
+    startCheck(false)
 }
 
 export function unwatchTransaction(chainId: ChainId, hash: string) {
-    getTransactionMap(chainId).delete(hash)
+    storage.removeItem(chainId, hash)
 }

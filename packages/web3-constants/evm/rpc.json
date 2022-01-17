@@ -15,7 +15,9 @@
         "Celo": ["https://forno.celo.org"],
         "Metis": ["https://andromeda.metis.io/?owner=1088"],
         "Metis_Stardust": ["https://stardust.metis.io/?owner=588"],
-        "Fantom": ["https://rpcapi.fantom.network/"]
+        "Fantom": ["https://rpcapi.fantom.network/"],
+        "Aurora": ["https://mainnet.aurora.dev"],
+        "Aurora_Testnet": ["https://testnet.aurora.dev"]
     },
     "RPC_WEIGHTS": {
         "Mainnet": [0, 0, 0, 0],
@@ -33,6 +35,8 @@
         "Celo": [0, 0, 0, 0],
         "Metis": [0, 0, 0, 0],
         "Metis_Stardust": [0, 0, 0, 0],
-        "Fantom": [0, 0, 0, 0]
+        "Fantom": [0, 0, 0, 0],
+        "Aurora": [0, 0, 0, 0],
+        "Aurora_Testnet": [0, 0, 0, 0]
     }
 }

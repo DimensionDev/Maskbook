@@ -15,7 +15,9 @@
         "Celo": "celo-assets",
         "Metis": "metis-assets",
         "Metis_Stardust": "",
-        "Fantom": "fantom-assets"
+        "Fantom": "fantom-assets",
+        "Aurora": "aurora-assets",
+        "Aurora_Testnet": ""
     },
     "TRANSACTIONS_SCOPE_NAME": {
         "Mainnet": "transactions",
@@ -33,6 +35,8 @@
         "Celo": "celo-transactions",
         "Metis": "metis-transactions",
         "Metis_Stardust": "",
-        "Fantom": "fantom-transactions"
+        "Fantom": "fantom-transactions",
+        "Aurora": "aurora-transactions",
+        "Aurora_Testnet": ""
     }
 }

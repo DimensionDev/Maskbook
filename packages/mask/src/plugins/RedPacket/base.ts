@@ -4,7 +4,7 @@ import { RedPacketMetaKey, RedPacketNftMetaKey, RedPacketPluginID } from './cons
 
 export const base: Plugin.Shared.Definition = {
     ID: RedPacketPluginID,
-    icon: '🧧',
+    icon: '\u{1F9E7}',
     name: { fallback: 'Lucky drop' },
     description: {
         fallback:

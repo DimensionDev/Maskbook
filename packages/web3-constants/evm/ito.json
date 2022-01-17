@@ -15,7 +15,9 @@
         "Celo": "",
         "Metis": "",
         "Metis_Stardust": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "MASK_ITO_CONTRACT_ADDRESS": {
         "Mainnet": "0x86812da3A623ab9606976078588b80C315E55FA3",
@@ -33,7 +35,9 @@
         "Celo": "",
         "Metis": "",
         "Metis_Stardust": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "ITO2_CONTRACT_ADDRESS": {
         "Mainnet": "0xc2CFbF22d6Dc87D0eE18d38d73733524c109Ff46",
@@ -51,7 +55,9 @@
         "Celo": "0xaA5bfd7355637eA7405CB194a55303e821c4c569",
         "Metis": "",
         "Metis_Stardust": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "0x5de932BD252DD79231C9eDB5F2e30D488B785109",
+        "Aurora_Testnet": "0xdcA6F476EebCDE8FE8b072e3fC80dBC28dC209b3"
     },
     "ITO2_CONTRACT_CREATION_BLOCK_HEIGHT": {
         "Mainnet": 12766513,
@@ -69,7 +75,9 @@
         "Celo": 10278776,
         "Metis": 0,
         "Metis_Stardust": 0,
-        "Fantom": 0
+        "Fantom": 0,
+        "Aurora": 0,
+        "Aurora_Testnet": 77919102
     },
     "DEFAULT_QUALIFICATION_ADDRESS": {
         "Mainnet": "0x81b6ae377e360dcad63611846a2516f4ba8c88ac",
@@ -87,7 +95,9 @@
         "Celo": "",
         "Metis": "",
         "Metis_Stardust": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "DEFAULT_QUALIFICATION2_ADDRESS": {
         "Mainnet": "0x4dC5f343Fe57E4fbDA1B454d125D396A3181272c",
@@ -105,7 +115,9 @@
         "Celo": "",
         "Metis": "",
         "Metis_Stardust": "0xdcA6F476EebCDE8FE8b072e3fC80dBC28dC209b3",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-mainnet",
@@ -123,6 +135,8 @@
         "Celo": "",
         "Metis": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-metis",
         "Metis_Stardust": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     }
 }

@@ -59,6 +59,8 @@ export const resolveTradeProviderName = createLookupTableResolver<TradeProvider,
         [TradeProvider.NETSWAP]: 'NetSwap',
         [TradeProvider.OPENOCEAN]: 'OpenOcean',
         [TradeProvider.TETHYS]: 'Tethys',
+        [TradeProvider.TRISOLARIS]: 'Trisolaris',
+        [TradeProvider.WANNASWAP]: 'WannaSwap',
     },
     (tradeProvider) => {
         throw new Error(`Unknown provider type: ${tradeProvider}`)
@@ -89,6 +91,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
                     return 'https://metis.api.0x.org/'
                 case NetworkType.Fantom:
                     return 'https://fantom.api.0x.org/'
+                case NetworkType.Aurora:
+                    return 'https://aurora.api.0x.org/'
                 default:
                     safeUnreachable(networkType)
                     return ''
@@ -113,6 +117,10 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
             return 'https://openocean.finance/classic'
         case TradeProvider.TETHYS:
             return 'http://tethys.finance'
+        case TradeProvider.TRISOLARIS:
+            return 'https://www.trisolaris.io/#/swap'
+        case TradeProvider.WANNASWAP:
+            return 'https://wannaswap.finance/exchange/swap'
         default:
             unreachable(tradeProvider)
     }
@@ -155,6 +163,8 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
                     return `https://analytics-sushi.sushi.com/pairs/${address}`
                 case NetworkType.Fantom:
                     return `https://analytics-ftm.sushi.com/pairs/${address}`
+                case NetworkType.Aurora:
+                    return `https://analytics-aurora.sushi.com/pairs/${address}`
                 default:
                     safeUnreachable(networkType)
                     return ''
@@ -177,6 +187,12 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             return ''
         case TradeProvider.TETHYS:
             return `https://info.tethys.finance/pair/${address}`
+        case TradeProvider.TRISOLARIS:
+            // TODO - add Trisolaris Analytics
+            return ''
+        case TradeProvider.WANNASWAP:
+            // TODO - add WannaSwap analytics
+            return ''
         default:
             unreachable(tradeProvider)
     }
@@ -268,6 +284,8 @@ export const resolveZrxTradePoolName = createLookupTableResolver<ZrxTradePool, s
         [ZrxTradePool.xSigma]: 'xSigma',
         [ZrxTradePool.NetSwap]: 'NetSwap',
         [ZrxTradePool.Tethys]: 'Tethys',
+        [ZrxTradePool.Trisolaris]: 'Trisolaris',
+        [ZrxTradePool.WannaSwap]: 'WannaSwap',
     },
     'Unknown',
 )

@@ -15,7 +15,9 @@
         "Celo": "celo",
         "Metis": "metis-andromeda",
         "Metis_Stardust": "",
-        "Fantom": "fantom"
+        "Fantom": "fantom",
+        "Aurora": "aurora",
+        "Aurora_Testnet": ""
     },
     "COIN_ID": {
         "Mainnet": "ethereum",
@@ -33,6 +35,8 @@
         "Celo": "celo",
         "Metis": "metis-token",
         "Metis_Stardust": "",
-        "Fantom": "fantom"
+        "Fantom": "fantom",
+        "Aurora": "ethereum",
+        "Aurora_Testnet": ""
     }
 }

@@ -15,7 +15,9 @@
         "Celo": "",
         "Metis": "",
         "Metis_Stardust": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "API_URL": {
         "Mainnet": "https://api-v2.dhedge.org/graphql",
@@ -33,6 +35,8 @@
         "Celo": "",
         "Metis": "",
         "Metis_Stardust": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     }
 }

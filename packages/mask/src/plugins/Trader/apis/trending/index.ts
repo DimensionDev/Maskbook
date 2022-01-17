@@ -334,10 +334,10 @@ async function getCoinTrending(id: string, currency: Currency, dataProvider: Dat
                 market: marketInfo,
                 coin: {
                     id,
-                    name: token?.name,
-                    symbol: token?.symbol,
-                    decimals: Number(token?.decimals),
-                    is_mirrored: isMirroredKeyword(token?.symbol ?? ''),
+                    name: token?.name || '',
+                    symbol: token?.symbol || '',
+                    decimals: Number(token?.decimals || '0'),
+                    is_mirrored: isMirroredKeyword(token?.symbol || ''),
                     blockchain_urls: [`https://info.uniswap.org/token/${id}`, `https://etherscan.io/address/${id}`],
                     image_url: `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${id}/logo.png`,
                     platform_url: `https://info.uniswap.org/token/${id}`,
@@ -345,7 +345,7 @@ async function getCoinTrending(id: string, currency: Currency, dataProvider: Dat
                 },
                 tickers: tickersInfo,
                 lastUpdated: '',
-            } as Trending
+            }
         default:
             unreachable(dataProvider)
     }

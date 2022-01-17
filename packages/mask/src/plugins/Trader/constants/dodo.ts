@@ -11,4 +11,5 @@ export const networkNames: Record<NetworkType, string> = {
     [NetworkType.Celo]: 'celo',
     [NetworkType.Metis]: 'metis',
     [NetworkType.Fantom]: 'fantom',
+    [NetworkType.Aurora]: 'aurora',
 }

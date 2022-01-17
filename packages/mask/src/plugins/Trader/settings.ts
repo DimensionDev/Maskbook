@@ -94,6 +94,12 @@ export const metisNetworkTradeProviderSettings = createGlobalSettings<TradeProvi
     { primary: () => '' },
 )
 
+export const auroraNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_ID}+aurora+tradeProvider`,
+    TradeProvider.DODO,
+    { primary: () => '' },
+)
+
 //#region trade provider general settings
 export interface TradeProviderSettings {
     pools: ZrxTradePool[]
@@ -112,6 +118,8 @@ const bancorSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvide
 const netswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+netswap`, '')
 const tethysSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+tethys`, '')
 const openoceanSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+openocean`, '')
+const trisolarisSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+trisolaris`, '')
+const wannaswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+wannaswap`, '')
 
 /**
  * The general settings of specific tarde provider
@@ -144,6 +152,10 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return tethysSettings
         case TradeProvider.OPENOCEAN:
             return openoceanSettings
+        case TradeProvider.TRISOLARIS:
+            return trisolarisSettings
+        case TradeProvider.WANNASWAP:
+            return wannaswapSettings
         default:
             unreachable(tradeProvider)
     }

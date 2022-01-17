@@ -15,7 +15,9 @@
         "Celo": "",
         "Metis": "",
         "Metis_Stardust": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "MASK_POOL_ADDRESS": {
         "Mainnet": "",
@@ -33,6 +35,8 @@
         "Celo": "",
         "Metis": "",
         "Metis_Stardust": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     }
 }

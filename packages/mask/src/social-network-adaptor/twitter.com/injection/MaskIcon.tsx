@@ -81,6 +81,6 @@ export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal)
 }
 export const ifUsingMask = memoizePromise(
     (pid: ProfileIdentifier) =>
-        Services.Identity.queryProfile(pid).then((x) => (!!x.linkedPersona ? Promise.resolve() : Promise.reject())),
+        Services.Identity.queryProfile(pid).then((x) => (x.linkedPersona ? Promise.resolve() : Promise.reject())),
     (pid: ProfileIdentifier) => pid.toText(),
 )

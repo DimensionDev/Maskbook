@@ -194,6 +194,7 @@ export enum NetworkType {
     Celo = 'Celo',
     Metis = 'Metis',
     Fantom = 'Fantom',
+    Aurora = 'Aurora',
 }
 
 export enum DataProvider {
@@ -215,7 +216,9 @@ export enum TradeProvider {
     BANCOR = 9,
     NETSWAP = 11,
     OPENOCEAN = 10,
-    TETHYS = 12,
+    TETHYS = 13,
+    WANNASWAP = 11,
+    TRISOLARIS = 12,
 }
 /** Supported language settings */
 export enum LanguageOptions {
