@@ -36,14 +36,14 @@ import {
     createRelationDB,
     createRelationsTransaction,
     deleteProfileDB,
-    LinkedProfileDetails,
-    ProfileRecord,
     queryPersonaDB,
     queryPersonasDB,
     queryProfilesDB,
     queryRelationsPagedDB,
-    RelationRecord,
     updateRelationDB,
+    ProfileRecord,
+    LinkedProfileDetails,
+    RelationRecord,
 } from '../../../background/database/persona/db'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
 import { restoreBackup } from './WelcomeServices/restoreBackup'
