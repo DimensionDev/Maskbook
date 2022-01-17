@@ -105,7 +105,7 @@ export default function EncryptionCard(props: EncryptionCardProps) {
 
 interface ClueConditionCardProps {
     cardHeight: number
-    onClick: () => void
+    onClick(): void
     conditions: ClueCondition
 }
 

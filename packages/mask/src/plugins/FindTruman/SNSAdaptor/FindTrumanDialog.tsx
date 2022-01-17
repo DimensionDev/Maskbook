@@ -45,7 +45,7 @@ const useStyles = makeStyles()((theme, props) => ({
 }))
 
 interface FindTrumanDialogProps {
-    onClose: () => void
+    onClose(): void
     open: boolean
 }
 
@@ -154,7 +154,7 @@ const FindTrumanDialogTabValues = [FindTrumanDialogTab.Assets, FindTrumanDialogT
 interface FindTrumanDialogTabsProps
     extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {
     currentTab: FindTrumanDialogTab
-    setTab: (tab: FindTrumanDialogTab) => void
+    setTab(tab: FindTrumanDialogTab): void
 }
 
 function getFindTrumanDialogTabName(t: FindTrumanI18nFunction, type: FindTrumanDialogTab) {
