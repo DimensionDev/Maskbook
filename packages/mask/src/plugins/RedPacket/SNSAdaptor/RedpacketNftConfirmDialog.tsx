@@ -68,7 +68,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         height: 420,
         overflowY: 'auto',
-        background: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
+        background: theme.palette.background.default,
         borderRadius: 12,
         marginTop: theme.spacing(1.5),
         marginBottom: theme.spacing(1.5),
@@ -287,7 +287,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                     <Grid item xs={12}>
                         <List className={classes.tokenSelector}>
                             {tokenList.map((value, i) => (
-                                <ListItem key={i.toString()} className={classNames(classes.tokenSelectorWrapper)}>
+                                <ListItem key={i} className={classNames(classes.tokenSelectorWrapper)}>
                                     <NftImage
                                         token={value}
                                         classes={{

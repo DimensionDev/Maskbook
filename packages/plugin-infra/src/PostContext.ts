@@ -65,8 +65,6 @@ export interface PostContext extends PostContextAuthor {
     readonly mentionedLinks: Subscription<string[]>
     /** @deprecated It should appears in rawMessage */
     readonly postMetadataImages: Subscription<string[]>
-    /** @deprecated Use postMentionedLinks instead */
-    readonly postMetadataMentionedLinks: Subscription<string[]>
     //#endregion
     //#region Raw post content (not decrypted)
     readonly rawMessage: Subscription<TypedMessageTuple>

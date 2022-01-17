@@ -8,6 +8,11 @@ export function isZero(n: BigNumber.Value) {
     return n === 0 || n === '0' || new BigNumber(n).isZero()
 }
 
+/** n === 1 */
+export function isOne(n: BigNumber.Value) {
+    return n === 1 || n === '1' || new BigNumber(n).isEqualTo(ONE)
+}
+
 /** a > b */
 export function isGreaterThan(a: BigNumber.Value, b: BigNumber.Value) {
     return new BigNumber(a).isGreaterThan(b)

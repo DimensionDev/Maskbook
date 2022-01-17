@@ -1,4 +1,5 @@
 import { delay } from '@masknet/shared-base'
+import { isSameAddress } from '@masknet/web3-shared-evm'
 import { gun2 } from '../../../network/gun/version.2'
 import { NFT_AVATAR_GUN_SERVER } from '../constants'
 
@@ -21,19 +22,27 @@ export async function getUserAddress(userId: string) {
 }
 
 export async function setUserAddress(userId: string, address: string) {
-    // delete userId
-    await NFTAvatarGUN
-        //@ts-expect-error
-        .get(userId)
-        //@ts-expect-error
-        .put(null).then!()
+    try {
+        // delete userId
+        await NFTAvatarGUN
+            //@ts-expect-error
+            .get(userId)
+            //@ts-expect-error
+            .put(null).then!()
 
-    // save userId
-    await NFTAvatarGUN
-        // @ts-expect-error
-        .get(userId)
-        // @ts-expect-error
-        .put(address).then!()
+        // save userId
+        await NFTAvatarGUN
+            // @ts-expect-error
+            .get(userId)
+            // @ts-expect-error
+            .put(address).then!()
+    } catch {
+        // do nothing
+    } finally {
+        const _address = await getUserAddress(userId)
+        if (!isSameAddress(_address, address))
+            throw new Error('Something went wrong, and please check your connection.')
+    }
 }
 
 export async function getUserAddresses() {

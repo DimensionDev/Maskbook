@@ -1,5 +1,5 @@
 import { Trash2 as TrashIcon } from 'react-feather'
-import { Button } from '@mui/material'
+import { Button, Box, BoxProps } from '@mui/material'
 import { unreachable } from '@dimensiondev/kit'
 import {
     ERC20TokenDetailed,
@@ -15,7 +15,6 @@ import { DebounceButton } from '../../DashboardComponents/ActionButton'
 // eslint-disable-next-line import/no-deprecated
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 import type { Wallet } from '@masknet/web3-shared-evm'
-import { Box, BoxProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 

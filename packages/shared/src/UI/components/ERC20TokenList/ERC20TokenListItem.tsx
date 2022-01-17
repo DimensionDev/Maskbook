@@ -64,6 +64,13 @@ const useStyles = makeStyles()((theme) => ({
             background: 'rgba(250, 250, 250, 0.3)',
         },
     },
+    importButton: {
+        padding: '3px 0',
+        borderRadius: 15,
+        fontSize: 14,
+        fontWeight: 500,
+        lineHeight: '20px',
+    },
 }))
 
 export const getERC20TokenListItem =
@@ -110,10 +117,11 @@ export const getERC20TokenListItem =
                 <span>{loadingAsset ? <LoadingAnimation /> : formatBalance(data.balance ?? 0, token.decimals, 6)}</span>
             ) : (
                 <MaskLoadingButton
-                    variant="rounded"
+                    variant="contained"
                     color="primary"
                     onClick={onImport}
                     size="small"
+                    className={classes.importButton}
                     soloLoading
                     loadingIndicator={<LoadingIcon sx={{ fontSize: 14 }} />}>
                     {t.import()}

@@ -1,6 +1,7 @@
 import { forwardRef, memo } from 'react'
 import { TextFieldProps, TextField } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
+import classNames from 'classnames'
 
 const useStyles = makeStyles()(({ palette }) => ({
     textField: {
@@ -9,6 +10,10 @@ const useStyles = makeStyles()(({ palette }) => ({
     textFieldInput: {
         backgroundColor: palette.mode === 'light' ? '#F7F9FA' : palette.background.default,
         borderRadius: 6,
+    },
+    inputFocused: {
+        backgroundColor: `${palette.mode === 'light' ? '#FFFFFF' : palette.background.default} !important`,
+        boxShadow: `0 0 0 2px ${palette.mode === 'dark' ? '#4F5378' : 'rgba(28, 104, 243, 0.2)'}`,
     },
     input: {
         padding: '11px 9px',
@@ -26,10 +31,18 @@ export const StyledInput = memo(
                 {...props}
                 inputRef={ref}
                 variant="filled"
-                className={classes.textField}
+                className={classNames(classes.textField, props.className)}
                 autoComplete="off"
-                inputProps={{ className: classes.input, 'aria-autocomplete': 'none' }}
-                InputProps={{ ...props.InputProps, disableUnderline: true, classes: { root: classes.textFieldInput } }}
+                inputProps={{ className: classes.input, 'aria-autocomplete': 'none', ...props.inputProps }}
+                InputProps={{
+                    ...props.InputProps,
+                    disableUnderline: true,
+                    classes: {
+                        root: classes.textFieldInput,
+                        focused: classes.inputFocused,
+                        ...props.InputProps?.classes,
+                    },
+                }}
                 FormHelperTextProps={{ ...props.FormHelperTextProps, style: { marginLeft: 0 } }}
             />
         )

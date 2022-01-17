@@ -11,6 +11,7 @@ import {
     formatWeiToEther,
     getChainIdFromNetworkType,
     isEIP1559Supported,
+    isZeroAddress,
     NetworkType,
     useChainId,
     useERC20TokenDetailed,
@@ -156,42 +157,56 @@ const ContractInteraction = memo(() => {
 
         switch (type) {
             case EthereumRpcType.CONTRACT_INTERACTION:
-                if (request.computedPayload.name === 'approve') {
-                    return {
-                        isNativeTokenInteraction: false,
-                        typeName: t('popups_wallet_contract_interaction_approve'),
-                        tokenAddress: request.computedPayload._tx.to,
-                        to: request.computedPayload._tx.to,
-                        gas: request.computedPayload._tx.gas,
-                        gasPrice: request.computedPayload._tx.gasPrice,
-                        maxFeePerGas: request.computedPayload._tx.maxFeePerGas,
-                        maxPriorityFeePerGas: request.computedPayload._tx.maxPriorityFeePerGas,
-                        amount: request.computedPayload.parameters?.value,
-                    }
-                } else if (['transfer', 'transferFrom'].includes(request.computedPayload.name)) {
-                    return {
-                        isNativeTokenInteraction: false,
-                        typeName: t('popups_wallet_contract_interaction_transfer'),
-                        tokenAddress: request.computedPayload._tx.to,
-                        to: request.computedPayload.parameters?.to,
-                        gas: request.computedPayload._tx.gas,
-                        gasPrice: request.computedPayload._tx.gasPrice,
-                        maxFeePerGas: request.computedPayload._tx.maxFeePerGas,
-                        maxPriorityFeePerGas: request.computedPayload._tx.maxPriorityFeePerGas,
-                        amount: request.computedPayload.parameters?.value,
-                    }
-                } else {
-                    return {
-                        isNativeTokenInteraction: true,
-                        typeName: t('popups_wallet_contract_interaction'),
-                        tokenAddress: request.computedPayload._tx.to,
-                        to: request.computedPayload._tx.to,
-                        gas: request.computedPayload._tx.gas,
-                        gasPrice: request.computedPayload._tx.gasPrice,
-                        maxFeePerGas: request.computedPayload._tx.maxFeePerGas,
-                        maxPriorityFeePerGas: request.computedPayload._tx.maxPriorityFeePerGas,
-                        amount: request.computedPayload._tx.value,
-                    }
+                switch (request.computedPayload.name) {
+                    case 'approve':
+                        return {
+                            isNativeTokenInteraction: false,
+                            typeName: t('popups_wallet_contract_interaction_approve'),
+                            tokenAddress: request.computedPayload._tx.to,
+                            to: request.computedPayload._tx.to,
+                            gas: request.computedPayload._tx.gas,
+                            gasPrice: request.computedPayload._tx.gasPrice,
+                            maxFeePerGas: request.computedPayload._tx.maxFeePerGas,
+                            maxPriorityFeePerGas: request.computedPayload._tx.maxPriorityFeePerGas,
+                            amount: request.computedPayload.parameters?.value,
+                        }
+                    case 'transfer':
+                    case 'transferFrom':
+                        return {
+                            isNativeTokenInteraction: false,
+                            typeName: t('popups_wallet_contract_interaction_transfer'),
+                            tokenAddress: request.computedPayload._tx.to,
+                            to: request.computedPayload.parameters?.to,
+                            gas: request.computedPayload._tx.gas,
+                            gasPrice: request.computedPayload._tx.gasPrice,
+                            maxFeePerGas: request.computedPayload._tx.maxFeePerGas,
+                            maxPriorityFeePerGas: request.computedPayload._tx.maxPriorityFeePerGas,
+                            amount: request.computedPayload.parameters?.value,
+                        }
+                    case 'create_red_packet':
+                        return {
+                            isNativeTokenInteraction: isZeroAddress(request.computedPayload.parameters?._token_addr),
+                            typeName: t('popups_wallet_contract_interaction_create_lucky_drop'),
+                            tokenAddress: request.computedPayload.parameters?._token_addr,
+                            to: request.computedPayload._tx.to,
+                            gas: request.computedPayload._tx.gas,
+                            gasPrice: request.computedPayload._tx.gasPrice,
+                            maxFeePerGas: request.computedPayload._tx.maxFeePerGas,
+                            maxPriorityFeePerGas: request.computedPayload._tx.maxPriorityFeePerGas,
+                            amount: request.computedPayload.parameters?._total_tokens,
+                        }
+                    default:
+                        return {
+                            isNativeTokenInteraction: true,
+                            typeName: t('popups_wallet_contract_interaction'),
+                            tokenAddress: request.computedPayload._tx.to,
+                            to: request.computedPayload._tx.to,
+                            gas: request.computedPayload._tx.gas,
+                            gasPrice: request.computedPayload._tx.gasPrice,
+                            maxFeePerGas: request.computedPayload._tx.maxFeePerGas,
+                            maxPriorityFeePerGas: request.computedPayload._tx.maxPriorityFeePerGas,
+                            amount: request.computedPayload._tx.value,
+                        }
                 }
             case EthereumRpcType.SEND_ETHER:
                 return {
@@ -265,11 +280,8 @@ const ContractInteraction = memo(() => {
 
     // Wei
     const gasPriceEIP1559 = new BigNumber(maxFeePerGas ?? defaultPrices?.maxFeePerGas ?? 0, 16)
-
-    const gasPricePriorEIP1559 = (gasPrice as string) ?? defaultPrices?.gasPrice ?? 0
-    const gasFee = new BigNumber(
-        isEIP1559Supported(getChainIdFromNetworkType(networkType)) ? gasPriceEIP1559 : gasPricePriorEIP1559,
-    )
+    const gasPricePriorEIP1559 = new BigNumber((gasPrice as string) ?? defaultPrices?.gasPrice ?? 0)
+    const gasFee = (isEIP1559Supported(getChainIdFromNetworkType(networkType)) ? gasPriceEIP1559 : gasPricePriorEIP1559)
         .multipliedBy(gas ?? 0)
         .integerValue()
         .toFixed()
