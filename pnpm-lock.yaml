@@ -10,7 +10,7 @@ importers:
     specifiers:
       '@commitlint/cli': ^16.0.0
       '@commitlint/config-conventional': ^16.0.0
-      '@dimensiondev/eslint-plugin': ^0.0.1-20220117031620-1df0264
+      '@dimensiondev/eslint-plugin': ^0.0.1-20220117052737-faa6835
       '@dimensiondev/kit': 0.0.0-20211215044858-27d964f
       '@dimensiondev/patch-package': ^6.5.0
       '@emotion/cache': ^11.7.1
@@ -89,7 +89,7 @@ importers:
     devDependencies:
       '@commitlint/cli': 16.0.0
       '@commitlint/config-conventional': 16.0.0
-      '@dimensiondev/eslint-plugin': 0.0.1-20220117031620-1df0264_7c4253b9684f61cbac963c815f3d723d
+      '@dimensiondev/eslint-plugin': 0.0.1-20220117052737-faa6835_7c4253b9684f61cbac963c815f3d723d
       '@dimensiondev/patch-package': 6.5.0
       '@jest/globals': 27.4.4
       '@magic-works/i18n-codegen': 0.0.6_typescript@4.6.0-dev.20211202
@@ -3454,8 +3454,8 @@ packages:
       '@msgpack/msgpack': 1.12.2
     dev: false
 
-  /@dimensiondev/eslint-plugin/0.0.1-20220117031620-1df0264_7c4253b9684f61cbac963c815f3d723d:
-    resolution: {integrity: sha512-tiXJRPkteZa3WrulOlqhQWjtDDAJ+dfNLrFui31huBLen97dGKYHHKDifKlV6c93sLbG/uNcYt2vXSWj+pcYvg==, tarball: download/@dimensiondev/eslint-plugin/0.0.1-20220117031620-1df0264/f51c18c986b4321d773aff05a84b07e6c251cddbcac39bd596568d6486c34994}
+  /@dimensiondev/eslint-plugin/0.0.1-20220117052737-faa6835_7c4253b9684f61cbac963c815f3d723d:
+    resolution: {integrity: sha512-j8YwvYje+8DwJ2BK4Rcwm5163O/Z0wFyzw7ZOg4nrk1Y19vwdcr9XjoJBIdbf6zhmaMMouNTyMEAqypS1nuepw==, tarball: download/@dimensiondev/eslint-plugin/0.0.1-20220117052737-faa6835/371cbf5d4bbe72bc1fcded6a0d43d32d76fc2ed0aba9e65834ac4375090f9bbd}
     peerDependencies:
       eslint: '>= 8'
     dependencies:

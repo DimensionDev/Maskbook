@@ -63,6 +63,7 @@
         "@dimensiondev/no-number-constructor": "off",
         "@dimensiondev/no-simple-string-interpolation": "off",
         "@dimensiondev/no-simple-template-literal": "error",
+        "@dimensiondev/no-unneeded-to-string": "error",
         "@dimensiondev/prefer-early-return": "error",
         "@dimensiondev/prefer-location-assign": "error",
         "@dimensiondev/unicode-specific-set": "error",

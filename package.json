@@ -47,7 +47,7 @@
   "devDependencies": {
     "@commitlint/cli": "^16.0.0",
     "@commitlint/config-conventional": "^16.0.0",
-    "@dimensiondev/eslint-plugin": "^0.0.1-20220117031620-1df0264",
+    "@dimensiondev/eslint-plugin": "^0.0.1-20220117052737-faa6835",
     "@dimensiondev/patch-package": "^6.5.0",
     "@jest/globals": "^27.4.4",
     "@magic-works/i18n-codegen": "^0.0.6",
