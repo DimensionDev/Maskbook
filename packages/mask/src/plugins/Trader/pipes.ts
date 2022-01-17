@@ -59,6 +59,8 @@ export const resolveTradeProviderName = createLookupTableResolver<TradeProvider,
         [TradeProvider.OPENOCEAN]: 'OpenOcean',
         [TradeProvider.TRADERJOE]: 'TraderJoe',
         [TradeProvider.PANGOLIN]: 'PangolinDex',
+        [TradeProvider.TRISOLARIS]: 'Trisolaris',
+        [TradeProvider.WANNASWAP]: 'WannaSwap',
     },
     (tradeProvider) => {
         throw new Error(`Unknown provider type: ${tradeProvider}`)
@@ -89,6 +91,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
                     return 'https://fantom.api.0x.org/'
                 case NetworkType.Avalanche:
                     return 'https://fantom.api.0x.org/'
+                case NetworkType.Aurora:
+                    return 'https://aurora.api.0x.org/'
                 default:
                     safeUnreachable(networkType)
                     return ''
@@ -113,6 +117,10 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
             return 'https://traderjoexyz.com/#/trade'
         case TradeProvider.PANGOLIN:
             return 'https://app.pangolin.exchange/#/swap'
+        case TradeProvider.TRISOLARIS:
+            return 'https://www.trisolaris.io/#/swap'
+        case TradeProvider.WANNASWAP:
+            return 'https://wannaswap.finance/exchange/swap'
         default:
             unreachable(tradeProvider)
     }
@@ -155,6 +163,8 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
                     return `https://analytics-ftm.sushi.com/pairs/${address}`
                 case NetworkType.Avalanche:
                     return `https://analytics-avx.sushi.com/pairs/${address}`
+                case NetworkType.Aurora:
+                    return `https://analytics-aurora.sushi.com/pairs/${address}`
                 default:
                     safeUnreachable(networkType)
                     return ''
@@ -177,6 +187,12 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             return `https://analytics.traderjoexyz.com/pairs/${address}`
         case TradeProvider.PANGOLIN:
             return `https://info.pangolin.exchange/pair/${address}`
+        case TradeProvider.TRISOLARIS:
+            // TODO - add Trisolaris Analytics
+            return ''
+        case TradeProvider.WANNASWAP:
+            // TODO - add WannaSwap analytics
+            return ''
         default:
             unreachable(tradeProvider)
     }
@@ -268,6 +284,8 @@ export const resolveZrxTradePoolName = createLookupTableResolver<ZrxTradePool, s
         [ZrxTradePool.xSigma]: 'xSigma',
         [ZrxTradePool.TraderJoe]: 'TraderJoe',
         [ZrxTradePool.PangolinDex]: 'PangolinDex',
+        [ZrxTradePool.Trisolaris]: 'Trisolaris',
+        [ZrxTradePool.WannaSwap]: 'WannaSwap',
     },
     'Unknown',
 )

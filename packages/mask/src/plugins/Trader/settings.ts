@@ -94,6 +94,12 @@ export const avalancheNetworkTradeProviderSettings = createGlobalSettings<TradeP
     { primary: () => '' },
 )
 
+export const auroraNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_ID}+aurora+tradeProvider`,
+    TradeProvider.DODO,
+    { primary: () => '' },
+)
+
 //#region trade provider general settings
 export interface TradeProviderSettings {
     pools: ZrxTradePool[]
@@ -112,6 +118,8 @@ const bancorSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvide
 const traderjoeSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+traderjoe`, '')
 const pangolinSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+pangolin`, '')
 const openoceanSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+openocean`, '')
+const trisolarisSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+trisolaris`, '')
+const wannaswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+wannaswap`, '')
 
 /**
  * The general settings of specific tarde provider
@@ -144,6 +152,10 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return openoceanSettings
         case TradeProvider.PANGOLIN:
             return pangolinSettings
+        case TradeProvider.TRISOLARIS:
+            return trisolarisSettings
+        case TradeProvider.WANNASWAP:
+            return wannaswapSettings
         default:
             unreachable(tradeProvider)
     }

@@ -15,7 +15,9 @@
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "SUBGRAPH_URL": {
         "Mainnet": "",
@@ -33,6 +35,8 @@
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     }
 }

@@ -57,6 +57,8 @@ compileConstants(path.join(__dirname, 'evm'), [
     'Avalanche_Fuji',
     'Celo',
     'Fantom',
+    'Aurora',
+    'Aurora_Testnet',
 ])
 
 compileConstants(path.join(__dirname, 'solana'), ['Mainnet', 'Testnet', 'Devnet'])

@@ -15,6 +15,8 @@
         "Avalanche": "avax",
         "Avalanche_Fuji": "",
         "Celo": "celo",
-        "Fantom": "ftm"
+        "Fantom": "ftm",
+        "Aurora": "aurora",
+        "Aurora_Testnet": ""
     }
 }

@@ -15,7 +15,9 @@
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "MASK_ITO_CONTRACT_ADDRESS": {
         "Mainnet": "0x86812da3A623ab9606976078588b80C315E55FA3",
@@ -33,7 +35,9 @@
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "ITO2_CONTRACT_ADDRESS": {
         "Mainnet": "0xc2CFbF22d6Dc87D0eE18d38d73733524c109Ff46",
@@ -50,8 +54,10 @@
         "xDai": "0x913975af2Bb8a6Be4100D7dc5e9765B77F6A5d6c",
         "Avalanche": "0x452F3023f0E163056bEFFFcA719B12e0dD7Af451",
         "Avalanche_Fuji": "0xf5056B96ab242C566002852d0b98ce0BcDf1af51",
-        "Celo": "",
-        "Fantom": ""
+        "Celo": "0xaA5bfd7355637eA7405CB194a55303e821c4c569",
+        "Fantom": "",
+        "Aurora": "0x5de932BD252DD79231C9eDB5F2e30D488B785109",
+        "Aurora_Testnet": "0xdcA6F476EebCDE8FE8b072e3fC80dBC28dC209b3"
     },
     "ITO2_CONTRACT_CREATION_BLOCK_HEIGHT": {
         "Mainnet": 12766513,
@@ -68,8 +74,10 @@
         "xDai": 17865755,
         "Avalanche": 8289892,
         "Avalanche_Fuji": 4751103,
-        "Celo": 0,
-        "Fantom": 0
+        "Celo": 10278776,
+        "Fantom": "",
+        "Aurora": 0,
+        "Aurora_Testnet": 77919102
     },
     "DEFAULT_QUALIFICATION_ADDRESS": {
         "Mainnet": "0x81b6ae377e360dcad63611846a2516f4ba8c88ac",
@@ -87,7 +95,9 @@
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "DEFAULT_QUALIFICATION2_ADDRESS": {
         "Mainnet": "0x4dC5f343Fe57E4fbDA1B454d125D396A3181272c",
@@ -105,7 +115,9 @@
         "Avalanche": "0x54a0A221C25Fc0a347EC929cFC5db0be17fA2a2B",
         "Avalanche_Fuji": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-mainnet",
@@ -123,6 +135,8 @@
         "Avalanche": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-avalanche",
         "Avalanche_Fuji": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     }
 }

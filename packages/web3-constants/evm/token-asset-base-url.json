@@ -45,6 +45,8 @@
         ],
         "Avalanche_Fuji": [],
         "Celo": [],
-        "Fantom": []
+        "Fantom": [],
+        "Aurora": [],
+        "Aurora_Testnet": []
     }
 }

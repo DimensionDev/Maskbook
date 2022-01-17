@@ -1,3 +1,4 @@
+/* eslint-disable @dimensiondev/unicode-specific-set */
 import { MenuItem } from '@mui/material'
 import { useLanguage } from '../api'
 import { Services } from '../../../API'

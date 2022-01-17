@@ -194,6 +194,7 @@ export enum NetworkType {
     Avalanche = 'Avalanche',
     Celo = 'Celo',
     Fantom = 'Fantom',
+    Aurora = 'Aurora',
 }
 
 export enum DataProvider {
@@ -214,8 +215,10 @@ export enum TradeProvider {
     UNISWAP_V3 = 8,
     BANCOR = 9,
     OPENOCEAN = 10,
-    TRADERJOE = 11,
-    PANGOLIN = 12,
+    WANNASWAP = 11,
+    TRISOLARIS = 12,
+    TRADERJOE = 13,
+    PANGOLIN = 14,
 }
 /** Supported language settings */
 export enum LanguageOptions {

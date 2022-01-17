@@ -68,6 +68,13 @@ export enum ChainId {
 
     // Fantom
     Fantom = 250,
+
+    // Avalanche
+    Avalanche = 43114,
+
+    // Aurora
+    Aurora = 1313161554,
+    Aurora_Testnet = 1313161555,
 }
 
 export enum ProviderType {
@@ -98,6 +105,7 @@ export enum NetworkType {
     Avalanche = 'Avalanche',
     Celo = 'Celo',
     Fantom = 'Fantom',
+    Aurora = 'Aurora',
 }
 
 export interface Wallet {

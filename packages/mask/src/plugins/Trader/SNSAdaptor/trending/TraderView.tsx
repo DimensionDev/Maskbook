@@ -130,14 +130,16 @@ export function TraderView(props: TraderViewProps) {
     } = coinId ? trendingById : trendingByKeyword
     //#endregion
 
+    const coinSymbol = (trending?.coin.symbol || '').toLowerCase()
+
     //#region swap
     const {
         value: tokenDetailed,
         error: tokenDetailedError,
         loading: loadingTokenDetailed,
     } = useFungibleTokenDetailed(
-        trending?.coin.symbol.toLowerCase() === 'eth' ? EthereumTokenType.Native : EthereumTokenType.ERC20,
-        trending?.coin.symbol.toLowerCase() === 'eth' ? '' : trending?.coin.contract_address ?? '',
+        coinSymbol === 'eth' ? EthereumTokenType.Native : EthereumTokenType.ERC20,
+        coinSymbol === 'eth' ? '' : trending?.coin.contract_address ?? '',
     )
     //#endregion
 
@@ -204,8 +206,7 @@ export function TraderView(props: TraderViewProps) {
     //#region if the coin is a native token or contract address exists
 
     const isSwappable =
-        (!!trending?.coin.contract_address ||
-            ['eth', 'matic', 'bnb', 'avax'].includes(trending?.coin.symbol.toLowerCase() ?? '')) &&
+        (!!trending?.coin.contract_address || ['eth', 'matic', 'bnb', 'avax'].includes(coinSymbol)) &&
         chainIdValid &&
         tradeProviders.length
     //#endregion
