@@ -11,6 +11,10 @@ import type {
 } from './type'
 import type { ProfileIdentifier, PersonaIdentifier } from '@masknet/shared-base'
 
+export async function consistentPersonaDBWriteAccess(action: () => Promise<void>) {
+    await action()
+}
+
 export async function createPersonaDB(record: PersonaRecord): Promise<void> {
     return
 }
@@ -47,7 +51,7 @@ export async function updatePersonaDB( // Do a copy here. We need to delete keys
         linkedProfiles: 'replace' | 'merge'
         explicitUndefinedField: 'ignore' | 'delete field'
     },
-    t: PersonasTransaction<'readwrite'>,
+    t?: PersonasTransaction<'readwrite'>,
 ): Promise<void> {
     return
 }
@@ -55,7 +59,7 @@ export async function updatePersonaDB( // Do a copy here. We need to delete keys
 export async function createOrUpdatePersonaDB(
     record: Partial<PersonaRecord> & Pick<PersonaRecord, 'identifier' | 'publicKey'>,
     howToMerge: Parameters<typeof updatePersonaDB>[1] & { protectPrivateKey?: boolean },
-    t: PersonasTransaction<'readwrite'>,
+    t?: PersonasTransaction<'readwrite'>,
 ): Promise<void> {}
 
 /**
@@ -64,7 +68,7 @@ export async function createOrUpdatePersonaDB(
 export async function deletePersonaDB(
     id: PersonaIdentifier,
     confirm: 'delete even with private' | "don't delete if have private key",
-    t: PersonasTransaction<'readwrite'>,
+    t?: PersonasTransaction<'readwrite'>,
 ): Promise<void> {}
 
 /**
@@ -79,7 +83,7 @@ export async function safeDeletePersonaDB(
 /**
  * Create a new profile.
  */
-export async function createProfileDB(record: ProfileRecordDB, t: ProfileTransaction<'readwrite'>): Promise<void> {}
+export async function createProfileDB(record: ProfileRecordDB, t?: ProfileTransaction<'readwrite'>): Promise<void> {}
 
 /**
  * Query a profile.
@@ -121,12 +125,12 @@ export async function queryProfilesPagedDB(
  */
 export async function updateProfileDB(
     updating: Partial<ProfileRecord> & Pick<ProfileRecord, 'identifier'>,
-    t: ProfileTransaction<'readwrite'>,
+    t?: ProfileTransaction<'readwrite'>,
 ): Promise<void> {
     return
 }
 
-export async function createOrUpdateProfileDB(rec: ProfileRecord, t: ProfileTransaction<'readwrite'>): Promise<void> {}
+export async function createOrUpdateProfileDB(rec: ProfileRecord, t?: ProfileTransaction<'readwrite'>): Promise<void> {}
 
 /**
  * Detach a profile from it's linking persona.
@@ -148,14 +152,14 @@ export async function attachProfileDB(): Promise<void> {
 /**
  * Delete a profile
  */
-export async function deleteProfileDB(id: ProfileIdentifier, t: ProfileTransaction<'readwrite'>): Promise<void> {}
+export async function deleteProfileDB(id: ProfileIdentifier, t?: ProfileTransaction<'readwrite'>): Promise<void> {}
 
 /**
  * Create a new Relation
  */
 export async function createRelationDB(
     record: Omit<RelationRecord, 'network'>,
-    t: RelationTransaction<'readwrite'>,
+    t?: RelationTransaction<'readwrite'>,
     silent = false,
 ): Promise<void> {
     return
@@ -187,6 +191,6 @@ export async function queryRelationsPagedDB(
  */
 export async function updateRelationDB(
     updating: Omit<RelationRecord, 'network'>,
-    t: RelationTransaction<'readwrite'>,
+    t?: RelationTransaction<'readwrite'>,
     silent = false,
 ): Promise<void> {}
