@@ -1,4 +1,4 @@
-import type { NonSerializableTypedMessage, Meta } from '../base'
+import type { NonSerializableTypedMessage } from '../base'
 import { createIsType } from '../utils/internal'
 
 export interface TypedMessageUnknown extends NonSerializableTypedMessage {

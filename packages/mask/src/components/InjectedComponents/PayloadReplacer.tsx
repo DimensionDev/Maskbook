@@ -31,7 +31,7 @@ interface TypedMessageExtension_MaskPayloadReplacer extends TypedMessage {
 // match the link version payload
 const shouldReplace = /^https?:\/\/mask(\.io|book\.com)\/\?postdata_v/i
 // match the text version payload
-const shouldReplace2 = /(🎼[\w+/=|]+:\|\|)/gi
+const shouldReplace2 = /(\u{1F3BC}[\w+/=|]+:\|\|)/giu
 const PayloadReplacer = memo(({ link }: { link?: string }) => {
     const { t } = useI18N()
     const { classes } = useStyle()
@@ -51,7 +51,7 @@ export function PayloadReplacerTransformer(message: TypedMessage): TypedMessage 
             return alt
         }
     } else if (isTypedMessageText(message)) {
-        if (!message.content.includes('🎼')) return message
+        if (!message.content.includes('\u{1F3BC}')) return message
         const split = message.content.split(shouldReplace2)
         if (split.length === 1) return message
         const alt: TypedMessageExtension_MaskPayloadReplacer = {
