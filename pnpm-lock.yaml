@@ -10,7 +10,7 @@ importers:
     specifiers:
       '@commitlint/cli': ^16.0.0
       '@commitlint/config-conventional': ^16.0.0
-      '@dimensiondev/eslint-plugin': ^0.0.1-20220117004654-4b20e8a
+      '@dimensiondev/eslint-plugin': ^0.0.1-20220117031620-1df0264
       '@dimensiondev/kit': 0.0.0-20211215044858-27d964f
       '@dimensiondev/patch-package': ^6.5.0
       '@emotion/cache': ^11.7.1
@@ -89,7 +89,7 @@ importers:
     devDependencies:
       '@commitlint/cli': 16.0.0
       '@commitlint/config-conventional': 16.0.0
-      '@dimensiondev/eslint-plugin': 0.0.1-20220117004654-4b20e8a_7c4253b9684f61cbac963c815f3d723d
+      '@dimensiondev/eslint-plugin': 0.0.1-20220117031620-1df0264_7c4253b9684f61cbac963c815f3d723d
       '@dimensiondev/patch-package': 6.5.0
       '@jest/globals': 27.4.4
       '@magic-works/i18n-codegen': 0.0.6_typescript@4.6.0-dev.20211202
@@ -3454,8 +3454,8 @@ packages:
       '@msgpack/msgpack': 1.12.2
     dev: false
 
-  /@dimensiondev/eslint-plugin/0.0.1-20220117004654-4b20e8a_7c4253b9684f61cbac963c815f3d723d:
-    resolution: {integrity: sha512-EUsKt/lsHP0Ep9nFq/66l6vsotDrbH/MlxIDP5m2tOoiy03436HEJEJ+ckYDmvlh2SGz8jtVFpj8nf5XjZOsQQ==, tarball: download/@dimensiondev/eslint-plugin/0.0.1-20220117004654-4b20e8a/509bce90fce30411e1bfa29ba76fe303116fabb81bed64e6ae13248674a86ce0}
+  /@dimensiondev/eslint-plugin/0.0.1-20220117031620-1df0264_7c4253b9684f61cbac963c815f3d723d:
+    resolution: {integrity: sha512-tiXJRPkteZa3WrulOlqhQWjtDDAJ+dfNLrFui31huBLen97dGKYHHKDifKlV6c93sLbG/uNcYt2vXSWj+pcYvg==, tarball: download/@dimensiondev/eslint-plugin/0.0.1-20220117031620-1df0264/f51c18c986b4321d773aff05a84b07e6c251cddbcac39bd596568d6486c34994}
     peerDependencies:
       eslint: '>= 8'
     dependencies:
@@ -8425,6 +8425,7 @@ packages:
   /@typescript-eslint/experimental-utils/5.8.0_7c4253b9684f61cbac963c815f3d723d:
     resolution: {integrity: sha512-KN5FvNH71bhZ8fKtL+lhW7bjm7cxs1nt+hrDZWIqb6ViCffQcWyLunGrgvISgkRojIDcXIsH+xlFfI4RCDA0xA==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    requiresBuild: true
     peerDependencies:
       eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
     dependencies:
