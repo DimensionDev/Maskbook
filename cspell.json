@@ -1,4 +1,5 @@
 {
+    "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/master/cspell.schema.json",
     "dictionaries": ["typescript", "node", "html", "css", "fonts"],
     "ignorePaths": [
         ".github",
@@ -21,6 +22,7 @@
         "AMPL",
         "Ampleforth",
         "anchorme",
+        "anomynous",
         "apikey",
         "arbitrum",
         "ARETH",
@@ -146,6 +148,7 @@
         "metas",
         "metaverse",
         "millify",
+        "mintue",
         "misoperation",
         "monofont",
         "monospace",
@@ -373,7 +376,7 @@
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [
         {
-            "filename": "web3-contracts/types/GoodGhostingIncentives.d.ts",
+            "filename": "packages/web3-contracts/types/GoodGhostingIncentives.d.ts",
             "ignoreWords": ["Adming", "ditribution"]
         }
     ]

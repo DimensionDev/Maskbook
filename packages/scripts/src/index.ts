@@ -13,7 +13,7 @@ export {
 export { ciBuild } from './extension'
 export { buildNetlify } from './netlify'
 export { syncLanguages } from './locale-kit-next'
-export { reorderSpellcheck } from './spellcheck'
+export { reorderSpellcheck, spellcheck } from './spellcheck'
 
 // Sub-projects build commands
 export { buildInjectedScript, watchInjectedScript } from './projects/injected-scripts'

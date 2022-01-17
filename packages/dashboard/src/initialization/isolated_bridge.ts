@@ -4,7 +4,7 @@ import { serializer } from '@masknet/shared-base'
 import { PluginMessages, setMessages, setPluginMessages, setPluginServices, setService } from '../API'
 
 class WebExtensionExternalChannel extends WebExtensionMessage<any> {
-    /* spell-checker: disable-next-line */
+    /* cspell:ignore jkoeaghipilijlahjplgbfiocjhldnap */
     constructor(domain: string, id = 'jkoeaghipilijlahjplgbfiocjhldnap') {
         super({ externalExtensionID: id, domain })
     }

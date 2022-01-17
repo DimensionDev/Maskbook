@@ -16,7 +16,7 @@
     "postinstall": "patch-package",
     "prepare": "husky install",
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
-    "spellcheck": "cspell lint --no-must-find-files"
+    "spellcheck": "gulp spellcheck"
   },
   "dependencies": {
     "@dimensiondev/kit": "0.0.0-20211215044858-27d964f",

@@ -1,8 +1,8 @@
 import { readFile, writeFile } from 'fs/promises'
 import { resolve } from 'path'
-import { ROOT_PATH } from '../utils'
+import { ROOT_PATH, shell } from '../utils'
 import { prettier } from '../utils/prettier'
-import { parseArgs, task } from '../utils'
+import { task } from '../utils'
 
 const CONFIGURE_PATH = resolve(ROOT_PATH, 'cspell.json')
 
@@ -39,3 +39,10 @@ export async function reorderSpellcheck() {
 }
 
 task(reorderSpellcheck, 'reorder-spellcheck', 'Run Spellcheck reorder words.')
+
+export async function spellcheck() {
+    await reorderSpellcheck()
+    return shell`cspell lint --no-must-find-files --no-progress --relative 'packages/**/*'`
+}
+
+task(spellcheck, 'spellcheck', 'Run Spellcheck')

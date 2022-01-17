@@ -28,7 +28,7 @@ Mask Network fetches on-chain data from various data sources. Therefore, you can
 
 #### Learn more
 
-- https://api.coingecko.com/api/v3/asset_platforms
+- <https://api.coingecko.com/api/v3/asset_platforms>
 
 ### Token List
 
@@ -44,10 +44,10 @@ Mask Network has integrated Uniswap V2 and Uniswap V3 into the trader plugin. If
 
 For API-based DEX, please ref to how other DEXes integrated:
 
-| DEX       | Pull Request Link                                  |
-| --------- | -------------------------------------------------- |
-| DODO      | https://github.com/DimensionDev/Maskbook/pull/3882 |
-| OpenOcean | https://github.com/DimensionDev/Maskbook/pull/5198 |
+| DEX       | Pull Request Link                                    |
+| --------- | ---------------------------------------------------- |
+| DODO      | <https://github.com/DimensionDev/Maskbook/pull/3882> |
+| OpenOcean | <https://github.com/DimensionDev/Maskbook/pull/5198> |
 
 ### Deploy Contracts
 
@@ -74,6 +74,8 @@ Before we ship the chain to the user, we need to do basic ability checks.
 - [ ] Check if the gas estimate dialog is working.
   - Setup the chain for CoinGecko API.
 
+<!-- cspell:ignore jkoeaghipilijlahjplgbfiocjhldnap -->
+
 Goto `chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/dashboard.html#/wallets/transfer` and check the estimated USD value is working.
 
 ![image](https://user-images.githubusercontent.com/52657989/144754866-9c5f389b-6eb4-4325-8f3d-ae53ee6e3b4a.png)
@@ -87,9 +89,9 @@ Goto `chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/dashboard.html#/wallet
 
 ## Learn More
 
-| Chain    | Pull Request Link                                  |
-| -------- | -------------------------------------------------- |
-| CELO     | https://github.com/DimensionDev/Maskbook/pull/5052 |
-| Fantom   | https://github.com/DimensionDev/Maskbook/pull/5036 |
-| xDai     | https://github.com/DimensionDev/Maskbook/pull/4140 |
-| Arbitrum | https://github.com/DimensionDev/Maskbook/pull/3558 |
+| Chain    | Pull Request Link                                    |
+| -------- | ---------------------------------------------------- |
+| CELO     | <https://github.com/DimensionDev/Maskbook/pull/5052> |
+| Fantom   | <https://github.com/DimensionDev/Maskbook/pull/5036> |
+| xDai     | <https://github.com/DimensionDev/Maskbook/pull/4140> |
+| Arbitrum | <https://github.com/DimensionDev/Maskbook/pull/3558> |

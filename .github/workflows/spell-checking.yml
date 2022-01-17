@@ -1,4 +1,4 @@
-name: Check Spell
+name: Spellcheck
 
 on:
   pull_request:
@@ -17,7 +17,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
-      - name: Check Spell
-        run: |
-          git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
-          git diff --name-only origin/${{ github.event.pull_request.base.ref }} | xargs npx cspell lint --no-must-find-files
+      - run: git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
+      - name: Spellcheck
+        run: git diff --name-only origin/${{ github.event.pull_request.base.ref }} | xargs npx cspell lint --no-must-find-files --no-progress --relative
