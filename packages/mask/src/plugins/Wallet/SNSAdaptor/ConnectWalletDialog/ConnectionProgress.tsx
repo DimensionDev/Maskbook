@@ -93,7 +93,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                     </Box>
                     {!connected && error ? (
                         <ActionButton color="primary" variant="contained" onClick={retry} disabled={loading}>
-                            {t('retry')}
+                            {t('plugin_wallet_connect_with_retry')}
                         </ActionButton>
                     ) : null}
                 </Box>
