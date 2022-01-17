@@ -15,7 +15,9 @@
         "Fuse": "",
         "Fuse_Sparknet": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "SUBGRAPH_URL": {
         "Mainnet": "",
@@ -33,6 +35,8 @@
         "Fuse": "",
         "Fuse_Sparknet": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     }
 }

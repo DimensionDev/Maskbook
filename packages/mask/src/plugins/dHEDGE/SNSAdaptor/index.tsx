@@ -25,10 +25,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     DecryptedInspector: function Component(props) {
-        const text = useMemo(() => extractTextFromTypedMessage(props.message), [props.message])
-        const links = useMemo(() => parseURL(text.val || ''), [text.val])
+        const links = useMemo(() => {
+            const x = extractTextFromTypedMessage(props.message)
+            if (x.none) return null
+            return parseURL(x.val)
+        }, [props.message])
+        if (!links) return null
         const pool = getPoolFromLinks(links)
-        if (!text.ok) return null
         if (!pool?.address) return null
         return <Renderer link={pool.link} address={pool.address} />
     },

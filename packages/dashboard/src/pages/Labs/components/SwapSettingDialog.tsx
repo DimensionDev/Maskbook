@@ -12,6 +12,7 @@ import {
     useFuseNetworkTradeProvider,
     useCeloNetworkTradeProvider,
     useFantomNetworkTradeProvider,
+    useAuroraNetworkTradeProvider,
 } from '../../Settings/api'
 
 import SettingItem from './SettingItem'
@@ -68,6 +69,12 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
         { label: 'ElkFinance', value: TradeProvider.ELKFINANCE },
     ]
 
+    const auroraOptions = [
+        { label: 'DODO', value: TradeProvider.DODO },
+        { label: 'WannaSwap', value: TradeProvider.WANNASWAP },
+        { label: 'Trisolaris', value: TradeProvider.TRISOLARIS },
+    ]
+
     const t = useDashboardI18N()
 
     const items = [
@@ -118,6 +125,12 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
             value: useFuseNetworkTradeProvider(),
             options: fuseOptions,
             onChange: (value: string) => Services.Settings.setFuseNetworkTradeProvider(+value),
+        },
+        {
+            legend: t.labs_settings_swap_network({ network: 'Aurora' }),
+            value: useAuroraNetworkTradeProvider(),
+            options: auroraOptions,
+            onChange: (value: string) => Services.Settings.setAuroraNetworkTradeProvider(Number.parseInt(value, 10)),
         },
     ]
 

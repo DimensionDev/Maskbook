@@ -23,17 +23,14 @@ export interface PriceRecord {
 export interface CryptoPrice {
     [token: string]: PriceRecord
 }
-
-export interface BalanceOfChainRecord {
-    [chainId: number]: string
-}
+export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
+export type ChainIdRecord<T> = { [k in ChainId]: T }
 
 export interface BalanceOfChains {
     [provider: string]: {
         [chainId: number]: string
     }
 }
-
 // bigint is not in our list. iOS doesn't support that.
 export type Primitive = string | number | boolean | symbol | undefined | null
 
@@ -71,6 +68,13 @@ export enum ChainId {
 
     // Fantom
     Fantom = 250,
+
+    // Avalanche
+    Avalanche = 43114,
+
+    // Aurora
+    Aurora = 1313161554,
+    Aurora_Testnet = 1313161555,
 }
 
 export enum ProviderType {
@@ -101,6 +105,7 @@ export enum NetworkType {
     Fuse = 'Fuse',
     Celo = 'Celo',
     Fantom = 'Fantom',
+    Aurora = 'Aurora',
 }
 
 export interface Wallet {

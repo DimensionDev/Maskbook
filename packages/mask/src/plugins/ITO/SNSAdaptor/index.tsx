@@ -16,6 +16,7 @@ import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { CompositionDialog } from './CompositionDialog'
 import { set } from 'lodash-unified'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { MarketsIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -49,7 +50,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
         dialog({ open, onClose }) {
             return <CompositionDialog open={open} onConfirm={onClose} onClose={onClose} />
         },
-        label: { fallback: '🚀 ITO' },
+        label: {
+            fallback: (
+                <>
+                    <MarketsIcon style={{ width: 16, height: 16 }} />
+                    ITO
+                </>
+            ),
+        },
     },
 }
 

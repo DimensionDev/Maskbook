@@ -28,6 +28,10 @@
         "Fuse": [],
         "Fuse_Sparknet": [],
         "Celo": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/42220/tokens.json"],
-        "Fantom": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/250/tokens.json"]
+        "Fantom": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/250/tokens.json"],
+        "Aurora": [
+            "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/1313161554/tokens.json"
+        ],
+        "Aurora_Testnet": ""
     }
 }

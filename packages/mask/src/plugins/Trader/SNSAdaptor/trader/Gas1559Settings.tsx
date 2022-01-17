@@ -108,10 +108,10 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         borderRadius: isDashboard ? 8 : 24,
     },
     cancelButton: {
-        backgroundColor: !isDashboard ? MaskColorVar.twitterBg : undefined,
-        color: !isDashboard ? MaskColorVar.twitterButton : undefined,
+        backgroundColor: !isDashboard ? theme.palette.background.default : undefined,
+        color: !isDashboard ? theme.palette.text.strong : undefined,
         '&:hover': {
-            backgroundColor: !isDashboard ? `${MaskColorVar.twitterBg}!important` : undefined,
+            backgroundColor: !isDashboard ? `${theme.palette.background.default}!important` : undefined,
         },
     },
 }))
@@ -246,8 +246,8 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(({ onCancel, onSave: o
         if (!(gasConfig?.maxPriorityFeePerGas && gasConfig?.maxFeePerGas)) return
         const { maxFeePerGas, maxPriorityFeePerGas } = gasConfig
         setOption(null)
-        setValue('maxFeePerGas', fromWei(maxFeePerGas.toString(), 'gwei').toString())
-        setValue('maxPriorityFeePerGas', fromWei(maxPriorityFeePerGas.toString(), 'gwei').toString())
+        setValue('maxFeePerGas', fromWei(maxFeePerGas.toString(), 'gwei'))
+        setValue('maxPriorityFeePerGas', fromWei(maxPriorityFeePerGas.toString(), 'gwei'))
     }, [gasConfig, setValue])
 
     return (
