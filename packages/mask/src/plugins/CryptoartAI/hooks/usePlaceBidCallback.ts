@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import BigNumber from 'bignumber.js'
 import {
     ZERO_ADDRESS,
     TransactionEventType,
@@ -10,6 +9,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { useCryptoArtAI_Contract } from './useCryptoArtAI_Contract'
+import { toFixed } from '@masknet/web3-shared-base'
 
 export function usePlaceBidCallback(is24Auction: boolean, editionNumber: string) {
     const account = useAccount()
@@ -40,13 +40,13 @@ export function usePlaceBidCallback(is24Auction: boolean, editionNumber: string)
             // estimate gas and compose transaction
             const config = {
                 from: account,
-                value: new BigNumber(priceInWei).toFixed(),
+                value: toFixed(priceInWei),
                 gas: !is24Auction
                     ? await artistAcceptingBidsV2_contract?.methods
                           .placeBid(editionNumber)
                           .estimateGas({
                               from: account,
-                              value: new BigNumber(priceInWei).toFixed(),
+                              value: toFixed(priceInWei),
                           })
                           .catch((error) => {
                               setPlaceBidState({
@@ -59,7 +59,7 @@ export function usePlaceBidCallback(is24Auction: boolean, editionNumber: string)
                           .placeBid(editionNumber, ZERO_ADDRESS)
                           .estimateGas({
                               from: account,
-                              value: new BigNumber(priceInWei).toFixed(),
+                              value: toFixed(priceInWei),
                           })
                           .catch((error) => {
                               setPlaceBidState({
