@@ -14,7 +14,8 @@
         "xDai": "",
         "Celo": "",
         "Fantom": "",
-        "Moonriver": ""
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "API_URL": {
         "Mainnet": "https://api-v2.dhedge.org/graphql",
@@ -31,6 +32,7 @@
         "xDai": "",
         "Celo": "",
         "Fantom": "",
-        "Moonriver": ""
+        "Aurora": "",
+        "Aurora_Testnet": ""
     }
 }

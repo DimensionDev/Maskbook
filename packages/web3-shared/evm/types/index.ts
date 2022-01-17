@@ -67,6 +67,13 @@ export enum ChainId {
 
     // Moonriver
     Moonriver = 1285,
+
+    // Avalanche
+    Avalanche = 43114,
+
+    // Aurora
+    Aurora = 1313161554,
+    Aurora_Testnet = 1313161555,
 }
 
 export enum ProviderType {
@@ -97,6 +104,7 @@ export enum NetworkType {
     Celo = 'Celo',
     Fantom = 'Fantom',
     Moonriver = 'Moonriver',
+    Aurora = 'Aurora',
 }
 
 export interface Wallet {

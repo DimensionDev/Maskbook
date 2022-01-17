@@ -14,6 +14,7 @@
         "xDai": "xdai",
         "Celo": "celo",
         "Fantom": "ftm",
-        "Moonriver": "movr"
+        "Aurora": "aurora",
+        "Aurora_Testnet": ""
     }
 }

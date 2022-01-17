@@ -14,7 +14,8 @@
         "xDai": "xdai-assets",
         "Celo": "celo-assets",
         "Fantom": "fantom-assets",
-        "Moonriver": "moonriver-assets"
+        "Aurora": "aurora-assets",
+        "Aurora_Testnet": ""
     },
     "TRANSACTIONS_SCOPE_NAME": {
         "Mainnet": "transactions",
@@ -31,6 +32,7 @@
         "xDai": "xdai-transactions",
         "Celo": "celo-transactions",
         "Fantom": "fantom-transactions",
-        "Moonriver": "moonriver-transactions"
+        "Aurora": "aurora-transactions",
+        "Aurora_Testnet": ""
     }
 }

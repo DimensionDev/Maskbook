@@ -49,7 +49,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
             setOpen(open)
             if (content) UI.current?.setMessage(content)
             if (options?.target) UI.current?.setEncryptionKind(options.target)
-            if (options?.startupPlugin) UI.current?.startPlugin(options.startupPlugin!)
+            if (options?.startupPlugin) UI.current?.startPlugin(options.startupPlugin)
         })
     }, [type])
     useEffect(() => {

@@ -14,7 +14,8 @@
         "xDai": "",
         "Celo": "",
         "Fantom": "",
-        "Moonriver": ""
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "BULK_CHECKOUT_ADDRESS": {
         "Mainnet": "0x7d655c57f71464B6f83811C55D84009Cd9f5221C",
@@ -31,7 +32,8 @@
         "xDai": "",
         "Celo": "",
         "Fantom": "",
-        "Moonriver": ""
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "GITCOIN_ETH_ADDRESS": {
         "Mainnet": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -48,7 +50,8 @@
         "xDai": "",
         "Celo": "",
         "Fantom": "",
-        "Moonriver": ""
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "GITCOIN_TIP_PERCENTAGE": {
         "Mainnet": 5,
@@ -63,8 +66,9 @@
         "Arbitrum": 5,
         "Arbitrum_Rinkeby": 5,
         "xDai": 5,
-        "Celo": 0,
-        "Fantom": 0,
-        "Moonriver": 0
+        "Celo": 5,
+        "Fantom": 5,
+        "Aurora": 5,
+        "Aurora_Testnet": 0
     }
 }

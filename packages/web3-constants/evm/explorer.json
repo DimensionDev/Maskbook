@@ -14,7 +14,8 @@
         "xDai": [],
         "Celo": [],
         "Fantom": ["AST4WWPNEYDURUXG2GH32JZMYWEFDP999S"],
-        "Moonriver": ["BMUVSDQX72NTGRC1KDNGD889NJKG6H85F2"]
+        "Aurora": [],
+        "Aurora_Testnet": []
     },
     "EXPLORER_API": {
         "Mainnet": "https://api.etherscan.io/api",
@@ -28,9 +29,10 @@
         "Mumbai": "",
         "Arbitrum": "https://api.arbiscan.io/api",
         "Arbitrum_Rinkeby": "",
-        "xDai": "",
-        "Celo": "",
+        "xDai": "https://blockscout.com/xdai/mainnet/api",
+        "Celo": "https://explorer.celo.org/api",
         "Fantom": "https://api.ftmscan.com/api",
-        "Moonriver": "https://api-moonriver.moonscan.io/api"
+        "Aurora": "https://explorer.mainnet.aurora.dev/api",
+        "Aurora_Testnet": "https://explorer.testnet.aurora.dev/api"
     }
 }

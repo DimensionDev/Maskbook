@@ -12,6 +12,7 @@ import { PluginTraderRPC } from '../../messages'
 import type { TradeStrategy } from '../../types'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { useSlippageTolerance } from './useSlippageTolerance'
+import { OPENOCEAN_SUPPORTED_CHAINS } from './constants'
 import { first } from 'lodash-unified'
 
 export function useTrade(
@@ -31,6 +32,7 @@ export function useTrade(
     const account = useAccount()
 
     return useAsyncRetry(async () => {
+        if (!OPENOCEAN_SUPPORTED_CHAINS.includes(targetChainId)) return null
         if (!inputToken || !outputToken) return null
         if (inputAmount === '0') return null
         const sellToken = isNativeTokenAddress(inputToken.address)

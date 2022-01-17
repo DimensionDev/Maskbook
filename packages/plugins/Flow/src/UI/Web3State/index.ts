@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js'
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import {
     NetworkType,
@@ -11,6 +10,7 @@ import { createConstantSubscription, mapSubscription } from '@masknet/shared-bas
 import { getStorage, StorageDefaultValue } from '../../storage'
 import { formatAddress } from '../../helpers'
 import { getFungibleAssets } from '../../apis'
+import { toFixed } from '@masknet/web3-shared-base'
 
 function createSubscriptionFromChainId<T>(getter: (value: typeof StorageDefaultValue.chainId) => T) {
     return mapSubscription(getStorage().chainId.subscription, getter)
@@ -49,8 +49,8 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
         },
         Utils: {
             formatAddress,
-            formatBalance: (value) => new BigNumber(value).toFixed(),
-            formatCurrency: (value) => new BigNumber(value).toFixed(),
+            formatBalance: toFixed,
+            formatCurrency: toFixed,
 
             isChainIdValid: () => true,
 

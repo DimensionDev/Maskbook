@@ -127,5 +127,6 @@ export async function getSupportedNetworks() {
         Flags.celo_enabled ? NetworkType.Celo : undefined,
         Flags.fantom_enabled ? NetworkType.Fantom : undefined,
         Flags.moonriver_enabled ? NetworkType.Moonriver : undefined,
+        Flags.aurora_enabled ? NetworkType.Aurora : undefined,
     ].filter(Boolean) as NetworkType[]
 }

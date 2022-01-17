@@ -31,6 +31,7 @@ export function getNativeTokenLabel(networkType: NetworkType) {
         case NetworkType.Celo:
         case NetworkType.Fantom:
         case NetworkType.Moonriver:
+        case NetworkType.Aurora:
             return NATIVE_TOKEN_ADDRESS
         default:
             safeUnreachable(networkType)

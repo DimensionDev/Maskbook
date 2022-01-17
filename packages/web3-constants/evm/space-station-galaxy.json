@@ -14,7 +14,8 @@
         "xDai": "",
         "Celo": "",
         "Fantom": "",
-        "Moonriver": ""
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "SUBGRAPH_URL": {
         "Mainnet": "",
@@ -31,6 +32,7 @@
         "xDai": "",
         "Celo": "",
         "Fantom": "",
-        "Moonriver": ""
+        "Aurora": "",
+        "Aurora_Testnet": ""
     }
 }

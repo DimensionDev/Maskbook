@@ -14,7 +14,8 @@
         "xDai": "xdai",
         "Celo": "celo",
         "Fantom": "fantom",
-        "Moonriver": "moonriver"
+        "Aurora": "aurora",
+        "Aurora_Testnet": ""
     },
     "COIN_ID": {
         "Mainnet": "ethereum",
@@ -31,6 +32,7 @@
         "xDai": "xdai",
         "Celo": "celo",
         "Fantom": "fantom",
-        "Moonriver": "moonriver"
+        "Aurora": "ethereum",
+        "Aurora_Testnet": ""
     }
 }
