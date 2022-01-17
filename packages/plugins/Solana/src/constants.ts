@@ -4,7 +4,7 @@ import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-solana'
 export const PLUGIN_META_KEY = 'com.mask.solana'
 export const PLUGIN_ID = 'com.mask.solana'
 export const PLUGIN_NAME = 'Solana Chain'
-export const PLUGIN_ICON = '🌅'
+export const PLUGIN_ICON = '\u{1F305}'
 export const PLUGIN_DESCRIPTION = ''
 export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
     {

@@ -310,7 +310,7 @@ export const TransferERC721 = memo(() => {
                                     InputProps={{
                                         onClick: (event) => {
                                             if (!anchorEl.current) anchorEl.current = event.currentTarget
-                                            if (!!ensContent) setPopoverOpen(true)
+                                            if (ensContent) setPopoverOpen(true)
                                             setMinPopoverWidth(event.currentTarget.clientWidth)
                                         },
                                         spellCheck: false,

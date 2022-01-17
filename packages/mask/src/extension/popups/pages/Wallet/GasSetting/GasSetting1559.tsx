@@ -241,14 +241,11 @@ export const GasSetting1559 = memo(() => {
             if (value?.computedPayload._tx.maxFeePerGas && value?.computedPayload._tx.maxPriorityFeePerGas) {
                 setValue(
                     'maxPriorityFeePerGas',
-                    fromWei(
-                        new BigNumber(value.computedPayload._tx.maxPriorityFeePerGas).toString(),
-                        'gwei',
-                    ).toString(),
+                    fromWei(new BigNumber(value.computedPayload._tx.maxPriorityFeePerGas).toString(), 'gwei'),
                 )
                 setValue(
                     'maxFeePerGas',
-                    fromWei(new BigNumber(value.computedPayload._tx.maxFeePerGas).toFixed(), 'gwei').toString(),
+                    fromWei(new BigNumber(value.computedPayload._tx.maxFeePerGas).toFixed(), 'gwei'),
                 )
             } else {
                 setOption(1)

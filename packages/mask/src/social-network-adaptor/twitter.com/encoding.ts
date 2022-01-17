@@ -29,7 +29,7 @@ export const twitterEncoding = {
     /**
      * @link https://github.com/DimensionDev/Maskbook/issues/191
      */
-    publicKeyEncoder: (text: string) => `🎭${ICAO9303Checksum.encode(text)}🎭`,
+    publicKeyEncoder: (text: string) => `\u{1F3AD}${ICAO9303Checksum.encode(text)}\u{1F3AD}`,
     publicKeyDecoder: (text: string): string[] => {
         const r = regexMatchAll(text, /([\d+/=A-Za-z]{20,60})/)
         if (isNull(r)) {

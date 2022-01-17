@@ -70,7 +70,7 @@ export const postNameParser = (node: HTMLElement) => {
 
 export const postAvatarParser = (node: HTMLElement) => {
     const tweetElement = node.querySelector('[data-testid="tweet"]') ?? node
-    const avatarElement = tweetElement.children[0].querySelector<HTMLImageElement>(`img[src*="twimg.com"]`)
+    const avatarElement = tweetElement.children[0].querySelector<HTMLImageElement>('img[src*="twimg.com"]')
     return avatarElement ? avatarElement.src : undefined
 }
 
