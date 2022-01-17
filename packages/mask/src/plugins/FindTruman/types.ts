@@ -57,6 +57,13 @@ export interface FindTrumanConst {
     discoveryUrl: string
     discoveryLabel: string
     locales: Record<string, string>
+    storyId: string
+    ftgAddress: string
+    getPoapUrl: string
+    boxImg: string
+    ftgImg: string
+    poapImg: string
+    ftgPartLogoImg: string
     t: FindTrumanI18nFunction
 }
 
@@ -76,6 +83,18 @@ export interface UserStoryStatus {
         failed: number
         waiting: number
     }
+    critical: {
+        total: number
+        correct: number
+        wrong: number
+        waiting: number
+    }
+    nonCritical: {
+        total: number
+        correct: number
+        wrong: number
+        waiting: number
+    }
 }
 
 export interface UserCount {
@@ -83,7 +102,7 @@ export interface UserCount {
     value: number
 }
 
-export interface UserPuzzleStatus {
+export interface UserPollStatus {
     id: string
     story: StoryInfo
     status: number // 1: opening, 0: finished
@@ -96,18 +115,9 @@ export interface UserPuzzleStatus {
     critical: boolean
 }
 
-export interface UserPollStatus {
-    id: string
-    story: StoryInfo
-    history: PollHistory[]
-    status: number // 1: opening, 0: finished
-    question: string
-    options: string[]
-    count?: UserCount[]
-    choice: number
-    conditions: PuzzleCondition[]
-    notMeetConditions: PuzzleCondition[]
-    critical: boolean
+export interface UserPollOrPuzzleStatus extends UserPollStatus {
+    type: PostType.Poll | PostType.Puzzle
+    result: number
 }
 
 export interface PuzzleResult {
@@ -122,7 +132,6 @@ export interface PuzzleResult {
 export interface PollResult {
     id: string
     question: string
-    history: PollHistory[]
     story: StoryInfo
     options: string[]
     result: number
@@ -143,11 +152,102 @@ export interface SubmitPollParams {
     choice: number
 }
 
+export enum ClueConditionType {
+    And = 'and',
+    Or = 'or',
+    Erc721 = 'hold-erc721',
+    Erc20 = 'hold-erc20',
+}
+
+export interface ClueCondition {
+    type: ClueConditionType
+    chain: string
+    chainId: number
+    address: string
+    minAmount: number
+    name: string
+    img: string
+    url: string
+    conditions?: ClueCondition[]
+}
+
 export interface DecryptedClue {
     decrypted: boolean
-    conditions?: PuzzleCondition[]
+    conditions?: ClueCondition
     frontImg: string
     backImg: string
+}
+
+export interface PoapInfo {
+    id: number
+    img: string
+    name: string
+}
+
+export interface MysteryBox {
+    id: number
+    owner: string
+    giver: string
+    givenTime: string
+    isOpened: boolean
+    openTime: string
+    partType: number
+    partKind: number
+    mintTaskId: number
+    isMinted: boolean
+    mintTime: string
+    nftId: number
+}
+
+export interface Quest {
+    id: number
+    title: string
+    desc: string
+    startFrom: string
+    endTo: string
+}
+
+export enum PartType {
+    Head = 1,
+    Skin = 2,
+    Clothes = 3,
+    Mask = 4,
+    Background = 5,
+}
+
+export interface Part {
+    tokenId: number
+    type: PartType
+    kind: number
+    name: string
+    img: string
+    used: boolean
+}
+
+export interface UserPartsInfo {
+    boxes: MysteryBox[]
+    quests: Quest[]
+    parts: Part[]
+}
+
+export interface FtgInfo {
+    name: string
+    image: string
+    description: string
+    tokenId: string
+}
+
+export interface ExchangeStatus {
+    parts?: Part[]
+    status: number
+}
+
+export interface OpenMysteryBoxParams {
+    timestamp: number
+    address: string
+    rawdata: {
+        boxId: number
+    }
 }
 
 export class FindTrumanRemoteError extends Error {

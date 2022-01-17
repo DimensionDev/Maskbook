@@ -36,10 +36,9 @@ const FlipCard: React.FC<ReactFlipCardProps> = (props) => {
     const [rotation, setRotation] = useState(FlipCardRotateDegree.noFlipped)
 
     useEffect(() => {
-        if (props.isFlipped !== isFlipped) {
-            setFlipped(props.isFlipped)
-            setRotation((c) => c + FlipCardRotateDegree.frontRotate)
-        }
+        if (props.isFlipped === isFlipped) return
+        setFlipped(props.isFlipped)
+        setRotation((c) => c + FlipCardRotateDegree.frontRotate)
     }, [props.isFlipped])
 
     const getComponent = (key: FlipCardChildType) => {
@@ -83,7 +82,7 @@ const FlipCard: React.FC<ReactFlipCardProps> = (props) => {
         },
         container: {
             perspective: '1000px',
-            zIndex: `${cardZIndex}`,
+            zIndex: cardZIndex,
         },
         flipper: {
             height: '100%',

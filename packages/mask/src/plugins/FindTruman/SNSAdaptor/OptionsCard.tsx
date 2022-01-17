@@ -1,26 +1,12 @@
-import type { PuzzleCondition, UserPollStatus, UserPuzzleStatus } from '../types'
-import { PostType } from '../types'
+import type { PuzzleCondition, UserPollStatus } from '../types'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
-import {
-    Alert,
-    Box,
-    Card,
-    CardContent,
-    Chip,
-    Snackbar,
-    Step,
-    StepContent,
-    StepLabel,
-    Stepper,
-    Typography,
-} from '@mui/material'
+import { Alert, Box, Card, CardContent, Chip, Snackbar, Typography } from '@mui/material'
 import { RadioButtonChecked, RadioButtonUnchecked, DoneOutlined, Send, RefreshOutlined } from '@mui/icons-material'
 import NoNftCard from './NoNftCard'
-import { useChainId, useWeb3 } from '@masknet/web3-shared-evm'
+import { useChainId } from '@masknet/web3-shared-evm'
 import { FindTrumanContext } from '../context'
 import { BorderLinearProgress } from './ResultCard'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useOptionsStyles = makeStyles()((theme) => {
@@ -75,39 +61,27 @@ const useOptionsStyles = makeStyles()((theme) => {
     }
 })
 interface OptionsViewProps {
-    type: PostType
-    userStatus?: UserPuzzleStatus | UserPollStatus
+    userStatus?: UserPollStatus
     onSubmit(choice: number): Promise<boolean>
 }
 export default function OptionsCard(props: OptionsViewProps) {
-    const { type, userStatus, onSubmit } = props
+    const { userStatus, onSubmit } = props
     const [selected, setSelected] = useState(true)
     const [choice, setChoice] = useState(userStatus ? userStatus.choice : -1)
     const [submitting, setSubmitting] = useState(false)
-    const [error, setError] = useState<'' | 'unsupported-chain' | 'insufficient-nft'>('')
+    const [error, setError] = useState<'' | 'insufficient-nft'>('')
     const [unmeetCondition, setUnmeetCondition] = useState<PuzzleCondition[]>([])
     const [snackVisible, setSnackVisible] = useState(false)
 
     const { classes } = useOptionsStyles()
     const chainId = useChainId()
-    const { address: account, t } = useContext(FindTrumanContext)
-    const web3 = useWeb3(false)
-    const ref = useRef<HTMLDivElement | null>(null)
+    const { t } = useContext(FindTrumanContext)
     const parentRef = useRef<HTMLDivElement | null>(null)
 
     useEffect(() => {
         setError('')
-        setUnmeetCondition([])
-        if (userStatus) {
-            for (const condition of userStatus.conditions) {
-                if (condition.chainId !== chainId) {
-                    setError('unsupported-chain')
-                    return
-                }
-            }
-            setUnmeetCondition(userStatus ? userStatus.notMeetConditions : [])
-            userStatus?.notMeetConditions.length > 0 && setError('insufficient-nft')
-        }
+        setUnmeetCondition(userStatus?.notMeetConditions || [])
+        userStatus && userStatus.notMeetConditions.length > 0 && setError('insufficient-nft')
     }, [chainId, userStatus])
 
     useEffect(() => {
@@ -115,7 +89,7 @@ export default function OptionsCard(props: OptionsViewProps) {
         setSelected(userStatus ? userStatus.choice !== -1 : true)
     }, [userStatus])
 
-    const renderOptions = (userStatus: UserPuzzleStatus | UserPollStatus) => {
+    const renderOptions = (userStatus: UserPollStatus) => {
         const showCount = !!userStatus.count
         const total = userStatus.count
             ? userStatus.count.reduce((total, e) => {
@@ -219,7 +193,7 @@ export default function OptionsCard(props: OptionsViewProps) {
         })
     }
 
-    const renderSubmitButton = (userStatus: UserPuzzleStatus | UserPollStatus) => {
+    const renderSubmitButton = (userStatus: UserPollStatus) => {
         const isClosed = userStatus.status === 0
         return (
             <div style={{ textAlign: 'right', marginTop: '8px', paddingBottom: '8px' }}>
@@ -251,102 +225,6 @@ export default function OptionsCard(props: OptionsViewProps) {
         )
     }
 
-    const renderStepper = (userStatus: UserPuzzleStatus | UserPollStatus, vertical: boolean) => {
-        return (
-            <Box
-                ref={ref}
-                className={vertical ? classes.verticalScrollBar : classes.horizontalScrollBar}
-                style={vertical ? { overflowY: 'auto' } : { overflowX: 'auto' }}>
-                <div
-                    style={
-                        vertical
-                            ? {
-                                  maxHeight:
-                                      (userStatus as UserPollStatus).history.length > 0
-                                          ? (userStatus as UserPollStatus).history.length * 200
-                                          : '100%',
-                              }
-                            : {
-                                  width:
-                                      (userStatus as UserPollStatus).history.length > 0
-                                          ? (userStatus as UserPollStatus).history.length * 800
-                                          : '100%',
-                              }
-                    }>
-                    <Stepper
-                        activeStep={(userStatus as UserPollStatus).history.length}
-                        orientation={vertical ? 'vertical' : 'horizontal'}
-                        alternativeLabel={!vertical}>
-                        {(userStatus as UserPollStatus).history.map((e, index) => {
-                            return vertical ? (
-                                <Step key={index} completed={false} expanded>
-                                    <StepLabel>
-                                        <Typography variant="h6" color="text.primary" gutterBottom={false}>
-                                            {e.poll}
-                                        </Typography>
-                                    </StepLabel>
-                                    <StepContent>
-                                        <Alert
-                                            icon={false}
-                                            severity="info"
-                                            sx={{ textAlign: 'left', padding: '2px 8px', borderRadius: '6px' }}>
-                                            {e.result}
-                                        </Alert>
-                                    </StepContent>
-                                </Step>
-                            ) : (
-                                <Step key={index} completed={false}>
-                                    <StepLabel>
-                                        <Box>
-                                            <Typography variant="h6" color="text.primary" gutterBottom={false}>
-                                                {e.poll}
-                                            </Typography>
-                                            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                                                <Alert
-                                                    icon={false}
-                                                    severity="info"
-                                                    sx={{ textAlign: 'left', width: 250 }}>
-                                                    {e.result}
-                                                </Alert>
-                                            </Box>
-                                        </Box>
-                                    </StepLabel>
-                                </Step>
-                            )
-                        })}
-                        {vertical ? (
-                            <Step key="latest" completed={false} expanded>
-                                <StepLabel>
-                                    <Box>
-                                        <Typography variant="h6" color="text.primary" gutterBottom>
-                                            {userStatus.question}
-                                        </Typography>
-                                    </Box>
-                                </StepLabel>
-                                <StepContent>
-                                    {renderOptions(userStatus)}
-                                    {!error && renderSubmitButton(userStatus)}
-                                </StepContent>
-                            </Step>
-                        ) : (
-                            <Step key="latest" completed={false}>
-                                <StepLabel>
-                                    <Box>
-                                        <Typography variant="h6" color="text.primary" gutterBottom>
-                                            {userStatus.question}
-                                        </Typography>
-                                        {renderOptions(userStatus)}
-                                        {!error && renderSubmitButton(userStatus)}
-                                    </Box>
-                                </StepLabel>
-                            </Step>
-                        )}
-                    </Stepper>
-                </div>
-            </Box>
-        )
-    }
-
     return (
         <CardContent ref={parentRef}>
             <Snackbar
@@ -363,29 +241,16 @@ export default function OptionsCard(props: OptionsViewProps) {
                     <Typography variant="h6" color="textPrimary" paddingLeft={1} paddingRight={1} marginBottom={2}>
                         {userStatus.question}
                     </Typography>
-                    {(type === PostType.Puzzle || type === PostType.Poll) && (
+                    {renderOptions(userStatus)}
+                    {!error && renderSubmitButton(userStatus)}
+                    {unmeetCondition.length > 0 && (
                         <>
-                            {renderOptions(userStatus)}
-                            {!error && renderSubmitButton(userStatus)}
+                            <Alert severity="info" sx={{ mb: 1 }}>
+                                {t('plugin_find_truman_insufficient_nft')}
+                            </Alert>
+                            <NoNftCard conditions={unmeetCondition} />
                         </>
                     )}
-                    {error === 'unsupported-chain' && (
-                        <Alert
-                            icon={false}
-                            severity="info"
-                            sx={{ marginTop: 1, justifyContent: 'center', textAlign: 'center' }}>
-                            <div>
-                                {t('plugin_find_truman_unsupported_chain', {
-                                    chain: userStatus.conditions[0]?.chain || '',
-                                })}
-                            </div>
-                            <EthereumChainBoundary noSwitchNetworkTip chainId={userStatus.conditions[0]?.chainId} />
-                        </Alert>
-                    )}
-                    {unmeetCondition.length > 0 && (
-                        <Alert severity="info">{t('plugin_find_truman_insufficient_nft')}</Alert>
-                    )}
-                    {unmeetCondition.length > 0 && <NoNftCard conditions={unmeetCondition} />}
                 </>
             )}
         </CardContent>

@@ -1,11 +1,12 @@
-import { Alert, CardContent, Typography, Divider } from '@mui/material'
+import { Alert, Box, Card, CardContent, Divider, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useContext, useState } from 'react'
 import { fetchClue } from '../Worker/apis'
 import { FindTrumanContext } from '../context'
-import NoNftCard from './NoNftCard'
 import { useAsync } from 'react-use'
 import FlipCard from './FlipCard'
+import type { ClueCondition } from '../types'
+import { ClueConditionType } from '../types'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -28,6 +29,14 @@ const useStyles = makeStyles()((theme) => {
             '& a': {
                 color: theme.palette.text.primary,
             },
+        },
+        card: {
+            borderRadius: '6px',
+            ':not(:last-child)': {
+                marginBottom: '8px',
+            },
+            display: 'flex',
+            flexDirection: 'column',
         },
     }
 })
@@ -78,9 +87,8 @@ export default function EncryptionCard(props: EncryptionCardProps) {
                                         style={{ width: '100%', objectFit: 'cover', cursor: 'pointer' }}
                                     />
                                 ) : clue.conditions ? (
-                                    <NoNftCard
+                                    <ClueConditionCard
                                         cardHeight={backImgHeight}
-                                        sx={{ marginTop: 0 }}
                                         onClick={() => setFlipped(false)}
                                         conditions={clue.conditions}
                                     />
@@ -92,5 +100,69 @@ export default function EncryptionCard(props: EncryptionCardProps) {
             )}
             {error && <Alert severity="info">{t('plugin_find_truman_decrypt_error_clue_id')}</Alert>}
         </CardContent>
+    )
+}
+
+interface ClueConditionCardProps {
+    cardHeight: number
+    onClick: () => void
+    conditions: ClueCondition
+}
+
+function ClueConditionCard(props: ClueConditionCardProps) {
+    const { cardHeight, onClick, conditions } = props
+    const { classes } = useStyles()
+    const { t } = useContext(FindTrumanContext)
+
+    return (
+        <Card
+            className={classes.card}
+            variant="outlined"
+            onClick={() => {
+                onClick()
+            }}
+            sx={{ height: cardHeight || 'auto', cursor: 'pointer' }}>
+            <CardContent>
+                <Typography variant="h6" component="div">
+                    {t('plugin_find_truman_decrypt_tip')}
+                </Typography>
+                <Divider sx={{ margin: '8px 0' }} />
+                <Box>
+                    {conditions.conditions?.map((condition, index) => {
+                        switch (condition.type) {
+                            case ClueConditionType.Erc721:
+                                return (
+                                    <div key={index}>
+                                        <Typography variant="body1" fontWeight="bold" color="text.primary" gutterBottom>
+                                            {index + 1}. {condition.minAmount} {condition.name}
+                                        </Typography>
+                                    </div>
+                                )
+                            case ClueConditionType.Or:
+                                return (
+                                    condition.conditions && (
+                                        <div key={index}>
+                                            <Typography variant="body1" fontWeight="bold" color="text.primary">
+                                                {index + 1}. {t('plugin_find_truman_decrypt_tip_community')}
+                                            </Typography>
+                                            <ul>
+                                                {condition.conditions.map((c, index) => (
+                                                    <li key={c.name}>
+                                                        <Typography key={c.name} variant="body2" color="text.primary">
+                                                            {c.minAmount} {c.name}
+                                                        </Typography>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )
+                                )
+                            default:
+                                return null
+                        }
+                    })}
+                </Box>
+            </CardContent>
+        </Card>
     )
 }

@@ -1,5 +1,4 @@
-import { CardContent, Grid, Typography, Box, Divider } from '@mui/material'
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
+import { Box, CardContent, Grid, Typography } from '@mui/material'
 import type { UserStoryStatus } from '../types'
 import { BorderLinearProgress } from './ResultCard'
 import { useContext } from 'react'
@@ -39,33 +38,33 @@ export default function StageCard(props: StageCardProps) {
                         <Grid item sm={6} xs={12}>
                             <Box sx={{ padding: '0 24px' }}>
                                 <Typography variant="h6" color="text.primary" gutterBottom>
-                                    {t('plugin_find_truman_status_puzzle')}
+                                    {t('plugin_find_truman_dialog_critical')}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary" gutterBottom>
                                     {t('plugin_find_truman_puzzle_rate')}
-                                    {userStoryStatus.puzzles.total > 0
+                                    {userStoryStatus.critical.total > 0
                                         ? (
-                                              (userStoryStatus.puzzles.solved * 100) /
-                                              userStoryStatus.puzzles.total
+                                              (userStoryStatus.critical.correct * 100) /
+                                              userStoryStatus.critical.total
                                           ).toFixed(2)
                                         : '0.00'}
                                     %
                                 </Typography>
                                 {renderProgress(
-                                    userStoryStatus.puzzles.total,
-                                    userStoryStatus.puzzles.solved,
+                                    userStoryStatus.critical.total,
+                                    userStoryStatus.critical.correct,
                                     'success',
                                 )}
-                                {userStoryStatus.puzzles.waiting === 1 && (
+                                {userStoryStatus.critical.waiting === 1 && (
                                     <Typography variant="body2" color="text.secondary" gutterBottom>
-                                        {userStoryStatus.puzzles.waiting}
+                                        {userStoryStatus.critical.waiting}
                                         {t('plugin_find_truman_puzzle_to_be_revealed')}
                                     </Typography>
                                 )}
-                                {userStoryStatus.puzzles.waiting > 1 && (
+                                {userStoryStatus.critical.waiting > 1 && (
                                     <Typography variant="body2" color="text.secondary" gutterBottom>
-                                        {userStoryStatus.puzzles.waiting}
-                                        {t('plugin_find_truman_puzzles_to_be_revealed')}
+                                        {userStoryStatus.critical.waiting}
+                                        {t('plugin_find_truman_polls_to_be_revealed')}
                                     </Typography>
                                 )}
                             </Box>
@@ -73,41 +72,38 @@ export default function StageCard(props: StageCardProps) {
                         <Grid item sm={6} xs={12}>
                             <Box sx={{ padding: '0 24px' }}>
                                 <Typography variant="h6" color="text.primary" gutterBottom>
-                                    {t('plugin_find_truman_status_poll')}
+                                    {t('plugin_find_truman_dialog_noncritical')}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary" gutterBottom>
                                     {t('plugin_find_truman_voting_rate')}
-                                    {userStoryStatus.polls.total > 0
-                                        ? ((userStoryStatus.polls.hit * 100) / userStoryStatus.polls.total).toFixed(2)
+                                    {userStoryStatus.nonCritical.total > 0
+                                        ? (
+                                              (userStoryStatus.nonCritical.correct * 100) /
+                                              userStoryStatus.nonCritical.total
+                                          ).toFixed(2)
                                         : '0.00'}
                                     %
                                 </Typography>
-                                {renderProgress(userStoryStatus.polls.total, userStoryStatus.polls.hit, 'secondary')}
-                                {userStoryStatus.polls.waiting === 1 && (
+                                {renderProgress(
+                                    userStoryStatus.nonCritical.total,
+                                    userStoryStatus.nonCritical.correct,
+                                    'secondary',
+                                )}
+                                {userStoryStatus.nonCritical.waiting === 1 && (
                                     <Typography variant="body2" color="text.secondary" gutterBottom>
-                                        {userStoryStatus.polls.waiting}
+                                        {userStoryStatus.nonCritical.waiting}
                                         {t('plugin_find_truman_poll_to_be_revealed')}
                                     </Typography>
                                 )}
-                                {userStoryStatus.polls.waiting > 1 && (
+                                {userStoryStatus.nonCritical.waiting > 1 && (
                                     <Typography variant="body2" color="text.secondary" gutterBottom>
-                                        {userStoryStatus.polls.waiting}
+                                        {userStoryStatus.nonCritical.waiting}
                                         {t('plugin_find_truman_polls_to_be_revealed')}
                                     </Typography>
                                 )}
                             </Box>
                         </Grid>
                     </Grid>
-                    <Divider sx={{ marginTop: 2, marginBottom: 2 }} variant="middle" />
-                    <Box padding="0 24px">
-                        <Typography
-                            sx={{ display: 'flex', alignItems: 'center' }}
-                            variant="body2"
-                            color="textSecondary">
-                            <InfoOutlinedIcon sx={{ fontSize: '16px', mr: '4px' }} />
-                            {t('plugin_find_truman_status_critical_desc')}
-                        </Typography>
-                    </Box>
                 </Box>
             )}
         </CardContent>

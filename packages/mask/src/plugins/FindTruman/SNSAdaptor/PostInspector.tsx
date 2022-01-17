@@ -9,7 +9,6 @@ import {
     PuzzleResult,
     StoryInfo,
     UserPollStatus,
-    UserPuzzleStatus,
     UserStoryStatus,
 } from '../types'
 import { useAccount } from '@masknet/web3-shared-evm'
@@ -60,7 +59,7 @@ export function PostInspector(props: PostInspectorProps) {
     )
     const [storyInfo, setStoryInfo] = useState<StoryInfo>()
     const [userStoryStatus, setUserStoryStatus] = useState<UserStoryStatus>()
-    const [userPuzzleStatus, setUserPuzzleStatus] = useState<UserPuzzleStatus>()
+    const [userPuzzleStatus, setUserPuzzleStatus] = useState<UserPollStatus>()
     const [userPollStatus, setUserPollStatus] = useState<UserPollStatus>()
     const [puzzleResult, setPuzzleResult] = useState<PuzzleResult>()
     const [pollResult, setPollResult] = useState<PollResult>()

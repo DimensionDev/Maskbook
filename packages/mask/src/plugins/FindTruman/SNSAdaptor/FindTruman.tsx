@@ -1,8 +1,8 @@
 import { useContext, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { FindTrumanContext } from '../context'
-import { Alert, Box, Card, CardHeader, CardMedia, Chip, Skeleton, Tooltip, Typography, Avatar } from '@mui/material'
-import type { PollResult, PuzzleResult, StoryInfo, UserPollStatus, UserPuzzleStatus, UserStoryStatus } from '../types'
+import { Alert, Avatar, Box, Card, CardHeader, CardMedia, Chip, Skeleton, Tooltip, Typography } from '@mui/material'
+import type { PollResult, PuzzleResult, StoryInfo, UserPollStatus, UserStoryStatus } from '../types'
 import { FindTrumanI18nFunction, PostType } from '../types'
 import ResultCard from './ResultCard'
 import OptionsCard from './OptionsCard'
@@ -92,14 +92,14 @@ interface FindTrumanProps {
     clueId: string
     storyInfo?: StoryInfo
     userStoryStatus?: UserStoryStatus
-    userPuzzleStatus?: UserPuzzleStatus
+    userPuzzleStatus?: UserPollStatus
     userPollStatus?: UserPollStatus
     puzzleResult?: PuzzleResult
     pollResult?: PollResult
     onSubmit: (choice: number) => Promise<boolean>
 }
 
-function getPostTypeTitle(t: FindTrumanI18nFunction, postType: PostType) {
+export function getPostTypeTitle(t: FindTrumanI18nFunction, postType: PostType) {
     switch (postType) {
         case PostType.Poll:
             return t('plugin_find_truman_status_poll')
@@ -141,9 +141,9 @@ export function FindTruman(props: FindTrumanProps) {
         if (postType === PostType.Status) {
             return <StageCard userStoryStatus={userStoryStatus} />
         } else if (postType === PostType.Puzzle && userPuzzleStatus) {
-            return <OptionsCard type={PostType.Puzzle} onSubmit={onSubmit} userStatus={userPuzzleStatus} />
+            return <OptionsCard onSubmit={onSubmit} userStatus={userPuzzleStatus} />
         } else if (postType === PostType.Poll && userPollStatus) {
-            return <OptionsCard type={PostType.Poll} onSubmit={onSubmit} userStatus={userPollStatus} />
+            return <OptionsCard onSubmit={onSubmit} userStatus={userPollStatus} />
         } else if (postType === PostType.PuzzleResult && puzzleResult) {
             return <ResultCard type={PostType.PuzzleResult} userStatus={userPuzzleStatus} result={puzzleResult} />
         } else if (postType === PostType.PollResult && pollResult) {

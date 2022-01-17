@@ -2,15 +2,20 @@ import urlcat from 'urlcat'
 import Services from '../../../../extension/service'
 import {
     DecryptedClue,
+    ExchangeStatus,
     FindTrumanConst,
     FindTrumanRemoteError,
+    MysteryBox,
+    OpenMysteryBoxParams,
+    PoapInfo,
     PollResult,
     PuzzleResult,
     StoryInfo,
     SubmitPollParams,
     SubmitPuzzleParams,
+    UserPartsInfo,
+    UserPollOrPuzzleStatus,
     UserPollStatus,
-    UserPuzzleStatus,
     UserStoryStatus,
 } from '../../types'
 
@@ -47,7 +52,7 @@ export function fetchUserStoryStatus(storyId: string, uaddr: string) {
 }
 
 export function fetchUserPuzzleStatus(puzzleId: string, uaddr: string) {
-    return request<UserPuzzleStatus>(urlcat('/puzzles/:puzzleId/status', { puzzleId, uaddr }))
+    return request<UserPollStatus>(urlcat('/puzzles/:puzzleId/status', { puzzleId, uaddr }))
 }
 
 export function fetchUserPollStatus(pollId: string, uaddr: string) {
@@ -84,4 +89,39 @@ export function fetchUserParticipatedStoryStatus(uaddr: string) {
 
 export function fetchClue(clueId: string, uaddr: string) {
     return request<DecryptedClue>(urlcat('/clues/:clueId', { clueId, uaddr }))
+}
+
+export function fetchUserPoap(uaddr: string) {
+    return request<PoapInfo[]>(urlcat('/ftpoap', { uaddr }))
+}
+
+export function fetchMysteryBoxInfo(id: number) {
+    return request<MysteryBox>(urlcat('/mystery-boxes/:id', { id }))
+}
+
+export async function openMysteryBox(address: string, data: OpenMysteryBoxParams) {
+    const sig = await Services.Ethereum.personalSign(JSON.stringify(data), address)
+    return request<MysteryBox>('/mystery-boxes/_/open', {
+        method: 'POST',
+        body: JSON.stringify({ data, sig }),
+    })
+}
+
+export function fetchUserPartsInfo(uaddr: string) {
+    return request<UserPartsInfo>(urlcat('/assets/parts_with_additional', { uaddr }))
+}
+
+export function fetchExchangeStatus(uaddr: string) {
+    return request<ExchangeStatus>(urlcat('/assets/exchange_status', { uaddr }))
+}
+
+export function fetchAllPollsOrPuzzles(uaddr: string) {
+    return request<UserPollOrPuzzleStatus[]>(urlcat('/polls_or_puzzles', { uaddr }))
+}
+
+export function exchangeFtgWhitelist() {
+    return request(urlcat('/assets/exchange_ftg_airdrop_whitelist', {}), {
+        method: 'POST',
+        body: JSON.stringify({}),
+    })
 }

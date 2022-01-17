@@ -362,7 +362,11 @@
         "irss",
         "CELO",
         "flac",
-        "clueid"
+        "clueid",
+        "ftpoap",
+        "ftgs",
+        "poaps",
+        "rawdata"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [
