@@ -72,6 +72,7 @@ export function Trader(props: TraderProps) {
             dispatchTradeStore,
         ],
         allTradeComputed,
+        setTemporarySlippage,
     } = AllProviderTradeContext.useContainer()
     //#endregion
 
@@ -221,14 +222,17 @@ export function Trader(props: TraderProps) {
         gasConfig,
     )
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
+
     const onConfirmDialogConfirm = useCallback(async () => {
         setOpenConfirmDialog(false)
         await delay(100)
         await tradeCallback()
+        setTemporarySlippage(undefined)
     }, [tradeCallback])
 
     const onConfirmDialogClose = useCallback(() => {
         setOpenConfirmDialog(false)
+        setTemporarySlippage(undefined)
     }, [])
     //#endregion
 
@@ -387,7 +391,11 @@ export function Trader(props: TraderProps) {
                 gasPrice={gasPrice}
                 onSwitch={onSwitchToken}
             />
-            {focusedTrade?.value && !isNativeTokenWrapper(focusedTrade.value) && inputToken && outputToken ? (
+            {openConfirmDialog &&
+            focusedTrade?.value &&
+            !isNativeTokenWrapper(focusedTrade.value) &&
+            inputToken &&
+            outputToken ? (
                 <ConfirmDialog
                     wallet={wallet}
                     open={openConfirmDialog}

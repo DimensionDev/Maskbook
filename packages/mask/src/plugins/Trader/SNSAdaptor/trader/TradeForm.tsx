@@ -6,7 +6,7 @@ import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mu
 import type { FungibleTokenDetailed, Wallet } from '@masknet/web3-shared-evm'
 import { EthereumTokenType, formatBalance, formatPercentage } from '@masknet/web3-shared-evm'
 import { isLessThan, rightShift } from '@masknet/web3-shared-base'
-import { TokenPanelType, TradeInfo, WarningLevel } from '../../types'
+import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
 import { FormattedBalance, SelectTokenChip, useRemoteControlledDialog } from '@masknet/shared'
@@ -18,7 +18,7 @@ import { isNativeTokenWrapper, toBips } from '../../helpers'
 import { currentSlippageSettings } from '../../settings'
 import TuneIcon from '@mui/icons-material/Tune'
 import { MINIMUM_AMOUNT } from '../../constants'
-import { resolveTradeProviderName, resolveUniswapWarningLevel } from '../../pipes'
+import { resolveTradeProviderName } from '../../pipes'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
@@ -27,6 +27,7 @@ import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary
 import { useUpdateEffect } from 'react-use'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { isDashboardPage } from '@masknet/shared-base'
+import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => {
     return {
@@ -246,11 +247,6 @@ export const TradeForm = memo<AllTradeFormProps>(
                     symbol: inputToken?.symbol,
                 })
             if (focusedTrade?.value && !focusedTrade.value.outputAmount) return t('plugin_trader_no_enough_liquidity')
-            if (
-                focusedTrade?.value &&
-                resolveUniswapWarningLevel(focusedTrade.value.priceImpact) === WarningLevel.BLOCKED
-            )
-                return t('plugin_trader_error_price_impact_too_high')
             return ''
         }, [
             inputAmount,
@@ -327,6 +323,8 @@ export const TradeForm = memo<AllTradeFormProps>(
         useUpdateEffect(() => {
             userSelected.current = false
         }, [inputAmount, inputToken, outputToken])
+
+        const isGreatThanSlippageSetting = useGreatThanSlippageSetting(focusedTrade?.value?.priceImpact)
 
         return (
             <Box className={classes.root}>
@@ -500,22 +498,36 @@ export const TradeForm = memo<AllTradeFormProps>(
                                             </Tooltip>
                                         </Box>
                                     }
-                                    render={(disable: boolean) => (
-                                        <ActionButton
-                                            fullWidth
-                                            variant="contained"
-                                            disabled={
-                                                focusedTrade?.loading ||
-                                                !focusedTrade?.value ||
-                                                !!validationMessage ||
-                                                disable
-                                            }
-                                            classes={{ root: classes.button, disabled: classes.disabledButton }}
-                                            color="primary"
-                                            onClick={onSwap}>
-                                            {validationMessage || nativeWrapMessage}
-                                        </ActionButton>
-                                    )}
+                                    render={(disable: boolean) =>
+                                        isGreatThanSlippageSetting ? (
+                                            <ActionButton
+                                                fullWidth
+                                                variant="contained"
+                                                color="error"
+                                                disabled={focusedTrade?.loading || !focusedTrade?.value || disable}
+                                                classes={{ root: classes.button, disabled: classes.disabledButton }}
+                                                onClick={onSwap}>
+                                                {t('plugin_trader_confirm_price_impact', {
+                                                    percent: formatPercentage(focusedTrade?.value?.priceImpact ?? 0),
+                                                })}
+                                            </ActionButton>
+                                        ) : (
+                                            <ActionButton
+                                                fullWidth
+                                                variant="contained"
+                                                disabled={
+                                                    focusedTrade?.loading ||
+                                                    !focusedTrade?.value ||
+                                                    !!validationMessage ||
+                                                    disable
+                                                }
+                                                classes={{ root: classes.button, disabled: classes.disabledButton }}
+                                                color="primary"
+                                                onClick={onSwap}>
+                                                {validationMessage || nativeWrapMessage}
+                                            </ActionButton>
+                                        )
+                                    }
                                 />
                             </EthereumChainBoundary>
                         </Box>

@@ -18,11 +18,13 @@ const UNISWAP_BIPS_BASE = JSBI.BigInt(10_000)
 /**
  * Returns the swap calls that can be used to make the trade
  * @param trade trade to execute
+ * @param allowedSlippage user allowed slippage
  * @param tradeProvider
  */
 export function useSwapParameters(
     trade: TradeComputed<Trade> | null, // trade to execute, required
     tradeProvider?: TradeProvider,
+    allowedSlippage: number = SLIPPAGE_DEFAULT, // in bips
 ) {
     const account = useAccount()
     const context = useGetTradeContext(tradeProvider)
@@ -35,7 +37,7 @@ export function useSwapParameters(
         if (!account || !trade?.trade_ || !deadline) return []
 
         const { trade_ } = trade
-        const allowedSlippage_ = new Percent(JSBI.BigInt(SLIPPAGE_DEFAULT), UNISWAP_BIPS_BASE)
+        const allowedSlippage_ = new Percent(JSBI.BigInt(allowedSlippage), UNISWAP_BIPS_BASE)
 
         if (trade_ instanceof V2Trade) {
             if (!routerV2Contract) return []
@@ -81,5 +83,5 @@ export function useSwapParameters(
                 },
             ]
         }
-    }, [account, SLIPPAGE_DEFAULT, deadline, trade, routerV2Contract, swapRouterContract])
+    }, [account, allowedSlippage, deadline, trade, routerV2Contract, swapRouterContract])
 }

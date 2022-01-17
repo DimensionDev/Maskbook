@@ -178,7 +178,7 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(({ onCancel,
 
     return (
         <>
-            <Accordion className={classes.accordion} elevation={0}>
+            <Accordion className={classes.accordion} elevation={0} defaultExpanded>
                 <AccordionSummary className={classes.summary} expandIcon={<ExpandMore />}>
                     <Typography className={classes.heading}>{t('popups_wallet_gas_price')}</Typography>
                     <Typography className={classes.accordingTitle}>

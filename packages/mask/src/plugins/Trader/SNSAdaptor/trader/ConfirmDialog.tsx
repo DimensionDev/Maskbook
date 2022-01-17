@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ExternalLink } from 'react-feather'
 import BigNumber from 'bignumber.js'
 import { Alert, Box, Button, DialogActions, DialogContent, Link, Typography } from '@mui/material'
@@ -11,17 +11,21 @@ import {
     createNativeToken,
     formatBalance,
     formatEthereumAddress,
+    formatPercentage,
     formatWeiToEther,
     resolveAddressLinkOnExplorer,
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
 import { InfoIcon, RetweetIcon, CramIcon } from '@masknet/icons'
-import { multipliedBy } from '@masknet/web3-shared-base'
+import { isZero, multipliedBy } from '@masknet/web3-shared-base'
 import { isDashboardPage } from '@masknet/shared-base'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { currentSlippageSettings } from '../../settings'
 import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 import { useUpdateEffect } from 'react-use'
+import { ONE_BIPS } from '../../constants'
+import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
+import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     section: {
@@ -55,7 +59,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     },
     error: {
         backgroundColor: MaskColorVar.redMain.alpha(0.1),
-        color: '#F4212E',
+        color: isDashboard ? MaskColorVar.redMain : theme.palette.error.main,
         marginTop: 12,
         fontSize: 12,
         lineHeight: '16px',
@@ -94,12 +98,15 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         paddingBottom: 40,
     },
     accept: {
-        backgroundColor: '#F4212E',
+        backgroundColor: isDashboard ? MaskColorVar.redMain : theme.palette.error.main,
         fontWeight: 600,
         fontSize: 14,
         lineHeight: '20px',
         padding: '10px 16px',
         borderRadius: 20,
+    },
+    warning: {
+        color: `${isDashboard ? MaskColorVar.redMain : theme.palette.error.main}!important`,
     },
 }))
 
@@ -117,25 +124,27 @@ export interface ConfirmDialogUIProps extends withClasses<never> {
 
 export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     const { t } = useI18N()
-    const cacheTrade = useRef<TradeComputed | null>(null)
+    const { open, trade, wallet, inputToken, outputToken, onConfirm, onClose, gas, gasPrice } = props
+
+    const [cacheTrade, setCacheTrade] = useState<TradeComputed | undefined>(trade)
     const [priceUpdated, setPriceUpdated] = useState(false)
     const currentSlippage = useValueRef(currentSlippageSettings)
     const isDashboard = isDashboardPage()
     const classes = useStylesExtends(useStyles({ isDashboard }), props)
-    const { open, trade, wallet, inputToken, outputToken, onConfirm, onClose, gas, gasPrice } = props
-    const { inputAmount, outputAmount } = trade
 
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+    const { setTemporarySlippage, temporarySlippage } = AllProviderTradeContext.useContainer()
     const [priceReversed, setPriceReversed] = useState(false)
 
     //#region detect price changing
-    const [executionPrice, setExecutionPrice] = useState<BigNumber | undefined>(trade.executionPrice)
+    const [executionPrice, setExecutionPrice] = useState<BigNumber | undefined>(cacheTrade?.executionPrice)
     useEffect(() => {
         if (open) setExecutionPrice(undefined)
     }, [open])
     useEffect(() => {
-        if (typeof executionPrice === 'undefined') setExecutionPrice(trade.executionPrice)
-    }, [trade, executionPrice])
+        if (!cacheTrade) return
+        if (typeof executionPrice === 'undefined') setExecutionPrice(cacheTrade.executionPrice)
+    }, [cacheTrade, executionPrice])
     //#endregion
 
     //#region gas price
@@ -152,21 +161,37 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     )
     //#endregion
 
-    const staled = !!(executionPrice && !executionPrice.isEqualTo(trade.executionPrice))
+    const staled = !!(executionPrice && !executionPrice.isEqualTo(cacheTrade?.executionPrice ?? 0))
+
+    const isGreatThanSlippageSetting = useGreatThanSlippageSetting(cacheTrade?.priceImpact)
+
+    const onAccept = useCallback(() => {
+        setPriceUpdated(false)
+        setCacheTrade(trade)
+    }, [trade])
+
+    const onConfirmPriceImpact = useCallback(() => {
+        if (!cacheTrade?.priceImpact) return
+        setTemporarySlippage(new BigNumber(cacheTrade?.priceImpact.multipliedBy(10000).toFixed(0)).toNumber())
+    }, [cacheTrade?.priceImpact])
 
     useUpdateEffect(() => {
         if (open) return
         setPriceUpdated(false)
-        cacheTrade.current = null
+        setCacheTrade(undefined)
     }, [open])
 
     useUpdateEffect(() => {
         if (!open) return
-        if (!cacheTrade.current) cacheTrade.current = trade
-        else if (cacheTrade.current?.outputAmount !== trade.outputAmount) {
+        if (!cacheTrade) setCacheTrade(trade)
+        else if (!priceUpdated && !cacheTrade.outputAmount.isEqualTo(trade.outputAmount)) {
             setPriceUpdated(true)
         }
-    }, [open, trade])
+    }, [open, trade, cacheTrade])
+
+    if (!cacheTrade) return null
+
+    const { inputAmount, outputAmount } = cacheTrade
 
     return (
         <>
@@ -271,14 +296,25 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                         </Typography>
                     </Box>
                     <Box className={classes.section}>
+                        <Typography>{t('plugin_trader_price_impact')}</Typography>
+                        <Typography
+                            className={isGreatThanSlippageSetting || temporarySlippage ? classes.warning : undefined}>
+                            {cacheTrade?.priceImpact?.isLessThan(ONE_BIPS)
+                                ? '<0.01%'
+                                : formatPercentage(cacheTrade.priceImpact)}
+                        </Typography>
+                    </Box>
+                    <Box className={classes.section}>
                         <Typography>{t('plugin_trader_confirm_max_price_slippage')}</Typography>
-                        <Typography>{currentSlippage / 100}%</Typography>
+                        <Typography className={temporarySlippage ? classes.warning : undefined}>
+                            {(temporarySlippage ?? currentSlippage) / 100}%
+                        </Typography>
                     </Box>
                     <Box className={classes.section}>
                         <Typography>{t('plugin_trader_confirm_minimum_received')}</Typography>
-                        <Typography>
+                        <Typography className={temporarySlippage ? classes.warning : undefined}>
                             <FormattedBalance
-                                value={trade.minimumReceived}
+                                value={cacheTrade.minimumReceived}
                                 decimals={outputToken.decimals}
                                 significant={6}
                                 symbol={outputToken.symbol}
@@ -286,7 +322,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                             />
                         </Typography>
                     </Box>
-                    {gasFee ? (
+                    {!isZero(gasFee) ? (
                         <Box className={classes.section}>
                             <Typography>{t('plugin_trader_gas')}</Typography>
                             <Typography>
@@ -310,33 +346,52 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                             severity="error"
                             icon={<CramIcon className={classes.alertIcon} />}
                             action={
-                                <Button variant="contained" color="error" className={classes.accept}>
-                                    Accept
+                                <Button variant="contained" color="error" className={classes.accept} onClick={onAccept}>
+                                    {t('plugin_trader_accept')}
                                 </Button>
                             }>
-                            Price updated
+                            {t('plugin_trader_price_updated')}
                         </Alert>
                     ) : (
                         <Alert
                             className={classes.alert}
                             icon={<InfoIcon className={classes.alertIcon} />}
                             severity="info">
-                            {t('plugin_trader_confirm_tips')}
+                            {isGreatThanSlippageSetting
+                                ? t('plugin_trader_price_impact_warning_tips')
+                                : t('plugin_trader_confirm_tips')}
                         </Alert>
                     )}
                 </DialogContent>
-                <DialogActions className={classes.actions}>
-                    <Button
-                        classes={{ root: classes.button }}
-                        color="primary"
-                        size="large"
-                        variant="contained"
-                        fullWidth
-                        disabled={staled}
-                        onClick={onConfirm}>
-                        Confirm Swap
-                    </Button>
-                </DialogActions>
+                {!priceUpdated ? (
+                    <DialogActions className={classes.actions}>
+                        {isGreatThanSlippageSetting ? (
+                            <Button
+                                classes={{ root: classes.button }}
+                                color="error"
+                                size="large"
+                                variant="contained"
+                                fullWidth
+                                disabled={staled}
+                                onClick={onConfirmPriceImpact}>
+                                {t('plugin_trader_confirm_price_impact', {
+                                    percent: formatPercentage(cacheTrade.priceImpact),
+                                })}
+                            </Button>
+                        ) : (
+                            <Button
+                                classes={{ root: classes.button }}
+                                color="primary"
+                                size="large"
+                                variant="contained"
+                                fullWidth
+                                disabled={staled}
+                                onClick={onConfirm}>
+                                {t('plugin_trader_confirm_swap')}
+                            </Button>
+                        )}
+                    </DialogActions>
+                ) : null}
             </InjectedDialog>
         </>
     )

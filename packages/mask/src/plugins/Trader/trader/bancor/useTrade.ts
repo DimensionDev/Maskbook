@@ -20,9 +20,11 @@ export function useTrade(
     outputAmountWei: string,
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
+    temporarySlippage?: number,
 ) {
     const blockNumber = useBlockNumber()
-    const slippage = useSlippageTolerance()
+    const slippageSetting = useSlippageTolerance()
+    const slippage = temporarySlippage || slippageSetting
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
     const { BANCOR_ETH_ADDRESS } = useTraderConstants(chainId)
