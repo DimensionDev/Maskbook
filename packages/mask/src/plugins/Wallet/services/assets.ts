@@ -1,5 +1,5 @@
 import { unreachable } from '@dimensiondev/kit'
-import { leftShift, multipliedBy, rightShift } from '@masknet/web3-shared-base'
+import { leftShift, multipliedBy, rightShift, toFixed } from '@masknet/web3-shared-base'
 import {
     Asset,
     ChainId,
@@ -163,7 +163,7 @@ function formatAssetsFromDebank(data: WalletTokenRecord[], network?: NetworkType
                           ),
                 balance: rightShift(y.amount, y.decimals).toFixed(),
                 price: {
-                    [CurrencyType.USD]: new BigNumber(y.price ?? 0).toFixed(),
+                    [CurrencyType.USD]: toFixed(y.price),
                 },
                 value: {
                     [CurrencyType.USD]: multipliedBy(y.price ?? 0, y.amount).toFixed(),
