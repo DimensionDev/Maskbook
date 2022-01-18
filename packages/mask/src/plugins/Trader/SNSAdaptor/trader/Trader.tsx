@@ -364,14 +364,14 @@ export function Trader(props: TraderProps) {
         })
     })
 
+    // #region if trade has been changed, update the focused trade
     useUpdateEffect(() => {
-        if (!openConfirmDialog) return
-        const target = allTradeComputed.find((x) => focusedTrade?.provider === x.provider)
-
-        if (target?.value?.outputAmount && focusedTrade?.value?.outputAmount.isEqualTo(target.value.outputAmount)) {
-            setFocusTrade(target)
-        }
-    }, [focusedTrade, allTradeComputed, openConfirmDialog])
+        setFocusTrade((prev) => {
+            const target = allTradeComputed.find((x) => prev?.provider === x.provider)
+            return target ?? prev
+        })
+    }, [allTradeComputed])
+    // #endregion
 
     return (
         <div className={classes.root}>
@@ -391,11 +391,7 @@ export function Trader(props: TraderProps) {
                 gasPrice={gasPrice}
                 onSwitch={onSwitchToken}
             />
-            {openConfirmDialog &&
-            focusedTrade?.value &&
-            !isNativeTokenWrapper(focusedTrade.value) &&
-            inputToken &&
-            outputToken ? (
+            {focusedTrade?.value && !isNativeTokenWrapper(focusedTrade.value) && inputToken && outputToken ? (
                 <ConfirmDialog
                     wallet={wallet}
                     open={openConfirmDialog}

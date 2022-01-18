@@ -126,7 +126,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     const { t } = useI18N()
     const { open, trade, wallet, inputToken, outputToken, onConfirm, onClose, gas, gasPrice } = props
 
-    const [cacheTrade, setCacheTrade] = useState<TradeComputed | undefined>(trade)
+    const [cacheTrade, setCacheTrade] = useState<TradeComputed | undefined>()
     const [priceUpdated, setPriceUpdated] = useState(false)
     const currentSlippage = useValueRef(currentSlippageSettings)
     const isDashboard = isDashboardPage()
@@ -185,19 +185,27 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
         setTemporarySlippage(new BigNumber(cacheTrade?.priceImpact.multipliedBy(10000).toFixed(0)).toNumber())
     }, [cacheTrade?.priceImpact])
 
+    // #region when dialog has been closed, reset state
     useUpdateEffect(() => {
         if (open) return
         setPriceUpdated(false)
         setCacheTrade(undefined)
     }, [open])
+    // #endregion
 
+    // #region when output amount or minimum received has been changed
     useUpdateEffect(() => {
         if (!open) return
         if (!cacheTrade) setCacheTrade(trade)
-        else if (!priceUpdated && !cacheTrade.outputAmount.isEqualTo(trade.outputAmount)) {
+        else if (
+            !priceUpdated &&
+            (!cacheTrade.outputAmount.isEqualTo(trade.outputAmount) ||
+                !cacheTrade.minimumReceived.isEqualTo(trade.minimumReceived))
+        ) {
             setPriceUpdated(true)
         }
     }, [open, trade, cacheTrade])
+    // #endregion
 
     if (!cacheTrade) return null
 

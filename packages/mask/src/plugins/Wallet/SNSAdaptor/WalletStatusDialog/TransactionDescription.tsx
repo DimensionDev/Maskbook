@@ -42,7 +42,7 @@ function getTransactionDescription(
         case EthereumRpcType.CONTRACT_INTERACTION:
             switch (computedPayload.name) {
                 case 'approve':
-                    return `Approve spend limit ${getTokenAmountDescription(
+                    return `Approve spend ${getTokenAmountDescription(
                         computedPayload.parameters?.value,
                         tokenDetailed,
                     )}`
