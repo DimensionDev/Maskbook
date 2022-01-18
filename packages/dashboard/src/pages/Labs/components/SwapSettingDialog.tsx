@@ -40,6 +40,7 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
         { label: '0x', value: TradeProvider.ZRX },
         { label: 'DODO', value: TradeProvider.DODO },
         { label: 'OpenOcean', value: TradeProvider.OPENOCEAN },
+        { label: 'Solarbeam', value: TradeProvider.SOLARBEAM },
     ]
 
     const bscOptions = [
@@ -48,6 +49,7 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
         { label: '0x', value: TradeProvider.ZRX },
         { label: 'DODO', value: TradeProvider.DODO },
         { label: 'OpenOcean', value: TradeProvider.OPENOCEAN },
+        { label: 'Solarbeam', value: TradeProvider.SOLARBEAM },
     ]
 
     const arbitrumOptions = [
@@ -58,6 +60,7 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
     const xDaiOptions = [
         { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
         { label: 'OpenOcean', value: TradeProvider.OPENOCEAN },
+        { label: 'Solarbeam', value: TradeProvider.SOLARBEAM },
     ]
     const fantomOptions = xDaiOptions
 
@@ -76,6 +79,7 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
         { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
         { label: 'Solarbeam', value: TradeProvider.SOLARBEAM },
         { label: 'DODO', value: TradeProvider.DODO },
+        { label: 'Huckleberry', value: TradeProvider.HUCKLEBERRY },
     ]
 
     const t = useDashboardI18N()

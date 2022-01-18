@@ -15,6 +15,8 @@ import { resolveTradeProviderName } from '../../pipes'
 const quickswapIcon = new URL('../../../../resources/quickswap.png', import.meta.url).toString()
 const pancakeswapIcon = new URL('../../../../resources/pancakeswap.png', import.meta.url).toString()
 const wannaswapIcon = new URL('../../../../resources/wannaswap.png', import.meta.url).toString()
+const solarbeamIcon = new URL('../../../../resources/solarbeam.png', import.meta.url).toString()
+const huckleberryIcon = new URL('../../../../resources/huckleberry.png', import.meta.url).toString()
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -61,8 +63,24 @@ export function TradeProviderIcon(props: TradeProviderIconProps) {
         case TradeProvider.WANNASWAP:
             return (
                 <img
-                    src={pancakeswapIcon}
-                    alt={resolveTradeProviderName(TradeProvider.PANCAKESWAP)}
+                    src={wannaswapIcon}
+                    alt={resolveTradeProviderName(TradeProvider.WANNASWAP)}
+                    className={classes.icon}
+                />
+            )
+        case TradeProvider.SOLARBEAM:
+            return (
+                <img
+                    src={solarbeamIcon}
+                    alt={resolveTradeProviderName(TradeProvider.SOLARBEAM)}
+                    className={classes.icon}
+                />
+            )
+        case TradeProvider.HUCKLEBERRY:
+            return (
+                <img
+                    src={huckleberryIcon}
+                    alt={resolveTradeProviderName(TradeProvider.HUCKLEBERRY)}
                     className={classes.icon}
                 />
             )

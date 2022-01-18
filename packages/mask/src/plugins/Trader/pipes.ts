@@ -60,6 +60,7 @@ export const resolveTradeProviderName = createLookupTableResolver<TradeProvider,
         [TradeProvider.TRISOLARIS]: 'Trisolaris',
         [TradeProvider.WANNASWAP]: 'WannaSwap',
         [TradeProvider.SOLARBEAM]: 'Solarbeam',
+        [TradeProvider.HUCKLEBERRY]: 'HuckleBerry',
     },
     (tradeProvider) => {
         throw new Error(`Unknown provider type: ${tradeProvider}`)
@@ -125,6 +126,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
             return 'https://wannaswap.finance/exchange/swap'
         case TradeProvider.SOLARBEAM:
             return 'https://app.solarbeam.io/exchange/swap'
+        case TradeProvider.HUCKLEBERRY:
+            return 'https://www.huckleberry.finance/#/swap'
         default:
             unreachable(tradeProvider)
     }
@@ -201,6 +204,8 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             // TODO - add WannaSwap analytics
             return ''
         case TradeProvider.SOLARBEAM:
+            return `https://analytics.solarbeam.io/pairs/${address}`
+        case TradeProvider.HUCKLEBERRY:
             return `https://analytics.solarbeam.io/pairs/${address}`
         default:
             unreachable(tradeProvider)
@@ -294,6 +299,7 @@ export const resolveZrxTradePoolName = createLookupTableResolver<ZrxTradePool, s
         [ZrxTradePool.Trisolaris]: 'Trisolaris',
         [ZrxTradePool.WannaSwap]: 'WannaSwap',
         [ZrxTradePool.Solarbeam]: 'Solarbeam',
+        [ZrxTradePool.Huckleberry]: 'huckleberry',
     },
     'Unknown',
 )

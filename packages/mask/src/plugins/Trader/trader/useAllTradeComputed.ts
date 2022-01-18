@@ -224,6 +224,18 @@ export function useAllTradeComputed(
     const solarbeam = useUniswapTradeComputed(solarbeam_.value, inputToken, outputToken)
     const solarbeamEstimateGas = useUniswapTradeGasLimit(solarbeam, TradeProvider.SOLARBEAM)
 
+    // Huckleberry
+    const huckleberry_ = useUniswapV2Trade(
+        TradeProvider.HUCKLEBERRY,
+        TradeStrategy.ExactIn,
+        inputAmount_,
+        '0',
+        tradeProviders.some((x) => x === TradeProvider.HUCKLEBERRY) ? inputToken : undefined,
+        tradeProviders.some((x) => x === TradeProvider.HUCKLEBERRY) ? outputToken : undefined,
+    )
+    const huckleberry = useUniswapTradeComputed(huckleberry_.value, inputToken, outputToken)
+    const huckleberryEstimateGas = useUniswapTradeGasLimit(huckleberry, TradeProvider.HUCKLEBERRY)
+
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
         { provider: TradeProvider.SUSHISWAP, ...sushiSwap_, value: sushiSwap, gas: sushiSwapEstimateGas },
@@ -239,6 +251,7 @@ export function useAllTradeComputed(
         { provider: TradeProvider.WANNASWAP, ...wannaswap_, value: wannaswap, gas: wannaSwapEstimateGas },
         { provider: TradeProvider.TRISOLARIS, ...trisolaris_, value: trisolaris, gas: trisolarisEstimateGas },
         { provider: TradeProvider.SOLARBEAM, ...solarbeam_, value: solarbeam, gas: solarbeamEstimateGas },
+        { provider: TradeProvider.HUCKLEBERRY, ...huckleberry_, value: huckleberry, gas: huckleberryEstimateGas },
     ]
 
     return nativeToken_.value

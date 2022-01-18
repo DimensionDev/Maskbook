@@ -118,6 +118,7 @@ const openoceanSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProv
 const trisolarisSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+trisolaris`, '')
 const wannaswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+wannaswap`, '')
 const solarbeamSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+solarbeam`, '')
+const huckleberrySettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+huckleberry`, '')
 
 /**
  * The general settings of specific tarde provider
@@ -152,6 +153,8 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return wannaswapSettings
         case TradeProvider.SOLARBEAM:
             return solarbeamSettings
+        case TradeProvider.HUCKLEBERRY:
+            return huckleberrySettings
         default:
             unreachable(tradeProvider)
     }

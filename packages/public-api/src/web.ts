@@ -223,6 +223,7 @@ export enum TradeProvider {
     WANNASWAP = 11,
     TRISOLARIS = 12,
     SOLARBEAM = 13,
+    HUCKLEBERRY = 14,
 }
 /** Supported language settings */
 export enum LanguageOptions {

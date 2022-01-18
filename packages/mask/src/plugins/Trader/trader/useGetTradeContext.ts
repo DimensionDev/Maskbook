@@ -136,6 +136,18 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: SOLARBEAM_CUSTOM_BASES,
                 }
+            case TradeProvider.HUCKLEBERRY:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.HUCKLEBERRY_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.HUCKLEBERRY_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.HUCKLEBERRY_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.HUCKLEBERRY_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: HUCKLEBERRY_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: HUCKLEBERRY_CUSTOM_BASES,
+                }
             case TradeProvider.ZRX:
                 return {
                     TYPE: tradeProvider,
