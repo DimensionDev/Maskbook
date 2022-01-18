@@ -55,7 +55,9 @@ If there is no one deployed [these contracts](https://github.com/DimensionDev/mi
 
 - [ ] Multicall Contract
 - [ ] BalanceChecker
-- [ ] Other contracts from the Mask team
+- [ ] [Mask Box](https://github.com/DimensionDev/MysteryBox/tree/add_more_networks)
+- [ ] [Red Packet and NFT Packet](https://github.com/DimensionDev/RedPacket/tree/add_more_networks)
+- [ ] [ITO](https://github.com/DimensionDev/InitialTwitterOffering/tree/add_more_networks)
 
 Congratulation! You have done the coding part.
 
