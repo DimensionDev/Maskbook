@@ -9,6 +9,11 @@ export const ZRX_BASE_URL: Record<NetworkType, string> = {
     [NetworkType.Celo]: 'https://celo.api.0x.org/',
     [NetworkType.Fantom]: 'https://fantom.api.0x.org/',
     [NetworkType.Aurora]: 'https://aurora.api.0x.org/',
+    [NetworkType.Boba]: '',
+    [NetworkType.Fuse]: '',
+    [NetworkType.Metis]: '',
+    [NetworkType.Avalanche]: '',
+    [NetworkType.Optimistic]: '',
 }
 
 export const ZRX_AFFILIATE_ADDRESS = '0x934B510D4C9103E6a87AEf13b816fb080286D649'
