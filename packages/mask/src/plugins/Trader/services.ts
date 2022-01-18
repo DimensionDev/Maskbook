@@ -65,6 +65,13 @@ currentChainIdSettings.addListener((chainId: ChainId) => {
             if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
                 currentDataProviderSettings.value = DataProvider.COIN_GECKO
             break
+
+        case NetworkType.Boba:
+        case NetworkType.Fuse:
+        case NetworkType.Metis:
+        case NetworkType.Avalanche:
+        case NetworkType.Optimistic:
+            throw new Error(`To be implement network: ${networkType}`)
         default:
             unreachable(networkType)
     }
@@ -101,6 +108,12 @@ currentTradeProviderSettings.addListener((tradeProvider: TradeProvider) => {
         case NetworkType.Aurora:
             auroraNetworkTradeProviderSettings.value = tradeProvider
             break
+        case NetworkType.Boba:
+        case NetworkType.Fuse:
+        case NetworkType.Metis:
+        case NetworkType.Avalanche:
+        case NetworkType.Optimistic:
+            throw new Error(`To be implement network: ${networkType}`)
         default:
             unreachable(networkType)
     }
