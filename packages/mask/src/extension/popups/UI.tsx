@@ -21,7 +21,6 @@ const SwapPage = lazy(() => import('./pages/Swap'))
 const RequestPermissionPage = lazy(() => import('./RequestPermission'))
 const PermissionAwareRedirect = lazy(() => import('./PermissionAwareRedirect'))
 const ThirdPartyRequestPermission = lazy(() => import('./ThirdPartyRequestPermission'))
-const SignRequest = lazy(() => import('./SignRequest'))
 const PersonaSignRequest = lazy(() => import('./PersonaSignRequest'))
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
@@ -46,9 +45,6 @@ export default function Popups() {
                             </Route>
                             <Route path={PopupRoutes.ThirdPartyRequestPermission} exact>
                                 <ThirdPartyRequestPermission />
-                            </Route>
-                            <Route path={PopupRoutes.SignRequest} exact>
-                                <SignRequest />
                             </Route>
                             <Route children={<Redirect to={PopupRoutes.Personas} />} />
                         </Switch>

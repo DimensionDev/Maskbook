@@ -7,7 +7,7 @@ export { __deprecated__getStorage, __deprecated__setStorage } from './storage'
 export { resolveTCOLink } from '../../../../shared'
 export { fetch, fetchJSON } from '../../../../background/services/helper/fetch'
 export { requestExtensionPermission, queryExtensionPermission } from './extensionPermission'
-export { createPersonaPayload } from './nextId'
+export { createPersonaPayload, queryExistedBinding } from './nextId'
 
 export async function openPopupWindow(route?: PopupRoutes, params?: Record<string, any>) {
     const windows = await browser.windows.getAll()

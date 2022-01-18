@@ -14,7 +14,7 @@ import { queryPersonasWithPrivateKey } from '../../../../background/database/per
 import { openPopupWindow } from '../HelperService'
 export interface SignRequest {
     /** Use that who to sign this message. */
-    identifier: string
+    identifier?: string
     /** The message to be signed. */
     message: string
     /** Use what method to sign this message? */
@@ -40,10 +40,10 @@ export async function signWithPersona({ message, method, identifier }: SignReque
     await openPopupWindow(PopupRoutes.PersonaSignRequest, { message, requestID, identifier })
 
     const waitForApprove = new Promise<PersonaIdentifier>((resolve, reject) => {
-        delay(1000 * 60 * 3).then(() => reject(new Error('Timeout')))
+        delay(1000 * 60).then(() => reject(new Error('Timeout')))
         MaskMessages.events.personaSignRequest.on((approval) => {
             if (approval.requestID !== requestID) return
-            if (!approval.selectedPersona) reject()
+            if (!approval.selectedPersona) reject(new Error('Persona Rejected'))
             resolve(approval.selectedPersona!)
         })
     })

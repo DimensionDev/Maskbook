@@ -81,10 +81,10 @@ const PersonaSignRequest = memo(() => {
     const history = useHistory()
     const location = useLocation()
     const { classes } = useStyles()
-    const personas = useMyPersonas()
     const [requestID, setRequestID] = useState<string>()
     const [message, setMessage] = useState<string>()
     const [selected, setSelected] = useState<Persona>()
+    const personas = useMyPersonas()
 
     useEffect(() => {
         if (!personas.length) return
@@ -92,7 +92,7 @@ const PersonaSignRequest = memo(() => {
         const messageInURL = url.get('message')
         const requestIDInURL = url.get('requestID')
         const identifierInURL = url.get('identifier')
-        const selectedPersona = personas.find((x) => x.identifier.toText() === identifierInURL)
+        const selectedPersona = personas.find((x) => x.identifier.toText() === identifierInURL) ?? personas[0]
 
         if (!messageInURL || !requestIDInURL || !selectedPersona) {
             history.replace(PopupRoutes.Wallet)
@@ -112,11 +112,13 @@ const PersonaSignRequest = memo(() => {
                 ECKeyIdentifier,
             ).unwrap(),
         })
+        window.close()
     }
 
     const onCancel = () => {
         if (!requestID) return
         MaskMessages.events.personaSignRequest.sendToBackgroundPage({ requestID })
+        window.close()
     }
 
     return (
@@ -133,7 +135,7 @@ const PersonaSignRequest = memo(() => {
             </Typography>
             <Typography className={classes.message}>{message}</Typography>
             <div className={classes.controller}>
-                <Button className={classes.button} onClick={window.close}>
+                <Button className={classes.button} onClick={onCancel}>
                     {t('cancel')}
                 </Button>
                 <Button className={classes.button} onClick={onSign} variant="contained">

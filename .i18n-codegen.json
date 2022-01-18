@@ -147,8 +147,8 @@
             }
         },
         {
-            "input": "./packages/plugins/NextId/src/locales/en-US.json",
-            "output": "./packages/plugins/NextId/src/locales/i18n_generated",
+            "input": "./packages/mask/src/plugins/NextID/locales/en-US.json",
+            "output": "./packages/mask/src/plugins/NextID/locales/i18n_generated",
             "parser": "i18next",
             "generator": {
                 "type": "i18next/react-hooks",
