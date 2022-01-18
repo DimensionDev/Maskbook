@@ -6,19 +6,11 @@ import { getUserAddress, setUserAddress } from './bind'
 import { getNFTAvatarFromRSS, saveNFTAvatarToRSS } from './rss3'
 
 export async function getNFTAvatar(userId: string, networkPluginId?: NetworkPluginID, chainId?: number) {
-    let result
     const address = await getUserAddress(userId, networkPluginId, chainId)
-    if (!address) {
-        result = await getNFTAvatarFromJSON(userId)
-        return result
+    if (address) {
+        return getNFTAvatarFromRSS(userId, address)
     }
-
-    result = await getNFTAvatarFromRSS(userId, address)
-    if (!result) {
-        result = await getNFTAvatarFromJSON(userId)
-    }
-
-    return result
+    return getNFTAvatarFromJSON(userId)
 }
 
 export async function saveNFTAvatar(

@@ -9,8 +9,12 @@ const NFTAvatarDB = KeyValue.createJSON_Storage(NFT_AVATAR_DB_NAME)
 const cache = new Map<string, [Promise<string | undefined>, number]>()
 
 async function _getUserAddress(userId: string, networkPluginId?: NetworkPluginID, chainId?: number) {
-    const result = await NFTAvatarDB.get<Record<string, string>>(userId)
-    return result?.[`${networkPluginId ?? NetworkPluginID.PLUGIN_EVM}-${chainId ?? ChainId.Mainnet}`]
+    try {
+        const result = await NFTAvatarDB.get<Record<string, string>>(userId)
+        return result?.[`${networkPluginId ?? NetworkPluginID.PLUGIN_EVM}-${chainId ?? ChainId.Mainnet}`]
+    } catch {
+        return
+    }
 }
 
 export async function getUserAddress(userId: string, networkPluginId?: NetworkPluginID, chainId?: number) {
