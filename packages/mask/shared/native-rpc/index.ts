@@ -1,8 +1,15 @@
 import { AsyncCall, AsyncCallOptions, _AsyncVersionOf } from 'async-call-rpc/full'
 import { AndroidGeckoViewChannel } from './Android.channel'
 import { iOSWebkitChannel } from './iOS.channel'
-import { MaskNetworkAPI } from './Web'
 import type { AndroidNativeAPIs, iOSNativeAPIs } from '@masknet/public-api'
+
+/**
+ * Typescript will not add the file to the project dependency tree
+ * but webpack will do constant folding
+ */
+//@ts-ignore
+// eslint-disable-next-line no-useless-concat
+const MaskNetworkAPI = import('../../src/utils/native-rpc/' + 'Web.ts')
 
 // This module won't be used in Web. Let it not effecting HMR.
 if (process.env.architecture === 'web' && import.meta.webpackHot) import.meta.webpackHot.accept()
