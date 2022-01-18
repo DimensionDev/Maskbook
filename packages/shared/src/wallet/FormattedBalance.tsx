@@ -1,7 +1,6 @@
 import { FC, Fragment } from 'react'
 import type { BigNumber } from 'bignumber.js'
-import { makeStyles } from '@masknet/theme'
-import { useStylesExtends } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
     balance: {

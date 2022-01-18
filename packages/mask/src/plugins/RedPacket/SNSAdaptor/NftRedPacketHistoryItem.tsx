@@ -131,6 +131,12 @@ const useStyles = makeStyles()((theme) => {
                 color: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.26)' : 'rgba(255, 255, 255, 0.3)',
             },
         },
+        ellipsis: {
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            maxWidth: 360,
+        },
     }
 })
 
@@ -153,10 +159,9 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
             WalletMessages.events.walletStatusDialogUpdated,
         )
         const handleSend = useCallback(() => {
-            if (canSend && contractDetailed && isPasswordValid) {
-                onSend(history, contractDetailed)
-                closeWalletStatusDialog()
-            }
+            if (!(canSend && contractDetailed && isPasswordValid)) return
+            onSend(history, contractDetailed)
+            closeWalletStatusDialog()
         }, [onSend, closeWalletStatusDialog, canSend, history, contractDetailed, isPasswordValid])
 
         const { value: redpacketStatus } = useAvailabilityNftRedPacket(history.rpid, account)
@@ -179,12 +184,17 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                         classes={{ icon: classes.icon }}
                         address={contractDetailed?.address ?? ''}
                         name={contractDetailed?.name ?? '-'}
-                        logoURI={contractDetailed?.iconURL ?? ''}
+                        logoURI={
+                            contractDetailed?.iconURL ??
+                            new URL('../../../resources/maskFilledIcon.png', import.meta.url).toString()
+                        }
                     />
                     <Box className={classes.content}>
                         <section className={classes.section}>
                             <div>
-                                <Typography variant="body1" className={classNames(classes.title, classes.message)}>
+                                <Typography
+                                    variant="body1"
+                                    className={classNames(classes.title, classes.message, classes.ellipsis)}>
                                     {history.message === '' ? t('plugin_red_packet_best_wishes') : history.message}
                                 </Typography>
                                 <Typography variant="body1" className={classNames(classes.info, classes.message)}>

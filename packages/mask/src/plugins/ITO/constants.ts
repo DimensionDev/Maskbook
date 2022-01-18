@@ -1,6 +1,8 @@
-export const ITO_MetaKey_1 = 'com.maskbook.ito:1'
-export const ITO_MetaKey_2 = 'com.maskbook.ito:2'
-export const ITO_PluginID = 'com.maskbook.ito'
+import { PluginId } from '@masknet/plugin-infra'
+
+export const ITO_PluginID = PluginId.ITO
+export const ITO_MetaKey_1 = `${PluginId.ITO}:1`
+export const ITO_MetaKey_2 = `${PluginId.ITO}:2`
 export const ITO_EXCHANGE_RATION_MAX = 6
 export const ITO_CONTRACT_BASE_TIMESTAMP = new Date('2021-03-29T00:00:00.000Z').getTime()
 

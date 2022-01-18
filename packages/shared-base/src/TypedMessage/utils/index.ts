@@ -1,26 +1,20 @@
 import { isTypedMessageAnchor } from '../extension'
 import { isTypedMessageText, isTypedMessageTuple, TypedMessageTuple } from '../core'
 import type {
-    NonSerializableTypedMessage,
     NonSerializableWithAltTypedMessage,
     SerializableTypedMessage,
     SerializableTypedMessages,
     TypedMessage,
 } from '../base'
 import { eq } from 'lodash-unified'
-import { Err, Ok, Result } from 'ts-results'
+import { Option, Some, None } from 'ts-results'
+import { isTypedMessageImage } from '..'
 
 export function isSerializableTypedMessage(x: TypedMessage): x is SerializableTypedMessages {
     if ((x as SerializableTypedMessage<number>).serializable) return true
     const y = x as NonSerializableWithAltTypedMessage
     if (y.serializable === false && y.alt) return true
     return false
-}
-
-export function normalizeTypedMessage(x: SerializableTypedMessages): SerializableTypedMessages
-export function normalizeTypedMessage(x: NonSerializableTypedMessage): NonSerializableTypedMessage
-export function normalizeTypedMessage(x: TypedMessage): TypedMessage {
-    return x
 }
 
 /**
@@ -42,18 +36,30 @@ export function isTypedMessageEqual(message1: TypedMessage, message2: TypedMessa
  * Get inner text from a TypedMessage
  * @param message message
  */
-export function extractTextFromTypedMessage(message: TypedMessage | null): Result<string, void> {
-    if (message === null) return Err.EMPTY
-    if (isTypedMessageText(message)) return Ok(message.content)
-    if (isTypedMessageAnchor(message)) return Ok(message.content)
+export function extractTextFromTypedMessage(message: TypedMessage | null): Option<string> {
+    if (!message) return None
+    if (isTypedMessageText(message)) return Some(message.content)
+    if (isTypedMessageAnchor(message)) return Some(message.content)
     if (isTypedMessageTuple(message)) {
         const str: string[] = []
         for (const item of message.items) {
             const text = extractTextFromTypedMessage(item)
-            if (text.ok) str.push(text.val)
+            if (text.some) str.push(text.val)
         }
-        if (str.length) return Ok(str.join(' '))
-        return Err.EMPTY
+        if (str.length) return Some(str.join(' '))
+        return None
     }
-    return Err.EMPTY
+    return None
 }
+export function extractImageFromTypedMessage(
+    message: TypedMessage | null,
+    result: (string | Blob)[] = [],
+): (string | Blob)[] {
+    if (!message) return result
+    if (isTypedMessageImage(message)) return result.concat(message.image)
+    if (isTypedMessageTuple(message))
+        return result.concat(message.items.flatMap((x) => extractImageFromTypedMessage(x)))
+    return result
+}
+export * from '../transforms/flatten'
+export * from '../transforms/promise'

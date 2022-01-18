@@ -8,7 +8,7 @@ import { Button, Link, List } from '@mui/material'
 import {
     ChainId,
     EthereumRpcType,
-    isNative,
+    isNativeTokenAddress,
     isSameAddress,
     resolveTransactionLinkOnExplorer,
     useChainId,
@@ -104,7 +104,8 @@ export const ActivityList = memo<ActivityListProps>(({ tokenAddress }) => {
     const dataSource =
         transactions?.filter((transaction) => {
             if (!tokenAddress) return true
-            else if (isNative(tokenAddress)) return transaction.computedPayload?.type === EthereumRpcType.SEND_ETHER
+            else if (isNativeTokenAddress(tokenAddress))
+                return transaction.computedPayload?.type === EthereumRpcType.SEND_ETHER
             else if (
                 transaction.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION &&
                 (transaction.computedPayload?.name === 'transfer' ||
@@ -140,7 +141,10 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }
                     const toAddress = getToAddress(transaction.receipt, transaction.computedPayload)
                     return (
                         <Link
-                            href={resolveTransactionLinkOnExplorer(chainId, transaction.hash)}
+                            href={resolveTransactionLinkOnExplorer(
+                                chainId,
+                                transaction.receipt?.transactionHash ?? transaction.hash,
+                            )}
                             target="_blank"
                             rel="noopener noreferrer"
                             key={index}

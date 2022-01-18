@@ -1,5 +1,4 @@
 {
-    "display_name": "플러그인: 파일 서비스",
     "on_insert": "파일 사용",
     "uploading_preparing": "준비 중",
     "uploading_estimating_time": "남은 시간 계산 중",
@@ -14,8 +13,6 @@
     "on_encrypt_it": "암호화하기",
     "use_cdn": "Meson CDN를 이용하기",
     "legal_text": "이 플러그인을 이용하면 <terms>이용약관</terms>과 <policy>개인정보처리방침</policy>을 동의함으로 간주합니다",
-    "legal_terms_link": "https://legal.mask.io/arweave/file-service/plugin-terms.html",
-    "legal_policy_link": "https://legal.mask.io/arweave/file-service/privacy-policy-uploader.html",
     "drop_indicator": "파일을 끌어들여 업로드하기",
     "drop_hint_1": "크기 제한: {{limit}}.",
     "drop_hint_2": "이 파일 즉시 업로드되겠습니다. 취소가 불가능합니다.",

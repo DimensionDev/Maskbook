@@ -1,0 +1,38 @@
+{
+    "API_KEYS": {
+        "Mainnet": ["26GHYKIAZREN4HWJ5NCICTGKC183IGXY9A"],
+        "Ropsten": [],
+        "Rinkeby": [],
+        "Kovan": [],
+        "Gorli": [],
+        "BSC": ["5FQ5JHS1BEK4186QCZASE3SD23YD8FIMM8"],
+        "BSCT": [],
+        "Matic": ["5HVFKYFPQXWNQ2TFHCAYJJZ3YIYPWQ5HP8"],
+        "Mumbai": [],
+        "Arbitrum": ["BE8VU1P9FUKRT15FBHKQMU84829VITWWF2"],
+        "Arbitrum_Rinkeby": [],
+        "xDai": [],
+        "Celo": [],
+        "Fantom": ["AST4WWPNEYDURUXG2GH32JZMYWEFDP999S"],
+        "Aurora": [],
+        "Aurora_Testnet": []
+    },
+    "EXPLORER_API": {
+        "Mainnet": "https://api.etherscan.io/api",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "https://api.bscscan.com/api",
+        "BSCT": "",
+        "Matic": "https://api.polygonscan.com/api",
+        "Mumbai": "",
+        "Arbitrum": "https://api.arbiscan.io/api",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "https://blockscout.com/xdai/mainnet/api",
+        "Celo": "https://explorer.celo.org/api",
+        "Fantom": "https://api.ftmscan.com/api",
+        "Aurora": "https://explorer.mainnet.aurora.dev/api",
+        "Aurora_Testnet": "https://explorer.testnet.aurora.dev/api"
+    }
+}

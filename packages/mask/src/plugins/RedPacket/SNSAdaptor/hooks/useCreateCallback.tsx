@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js'
 import { omit } from 'lodash-unified'
 import { useCallback, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
@@ -17,7 +16,7 @@ import {
     useTokenConstants,
     useTransactionState,
 } from '@masknet/web3-shared-evm'
-import { isLessThan } from '@masknet/web3-shared-base'
+import { isLessThan, toFixed } from '@masknet/web3-shared-base'
 import { useRedPacketContract } from './useRedPacketContract'
 
 export interface RedPacketSettings {
@@ -104,7 +103,7 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
         const params = Object.values(omit(paramsObj, ['token'])) as MethodParameters
 
         let gasError = null as Error | null
-        const value = new BigNumber(paramsObj.token?.type === EthereumTokenType.Native ? total : '0').toFixed()
+        const value = toFixed(paramsObj.token?.type === EthereumTokenType.Native ? total : 0)
 
         const gas = await (redPacketContract as HappyRedPacketV4).methods
             .create_red_packet(...params)
@@ -157,7 +156,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
         })
 
         // estimate gas and compose transaction
-        const value = new BigNumber(token.type === EthereumTokenType.Native ? paramsObj.total : '0').toFixed()
+        const value = toFixed(token.type === EthereumTokenType.Native ? paramsObj.total : 0)
         const config = {
             from: account,
             value,
@@ -171,7 +170,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                 .send(config as PayableTx)
                 .on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
                     setCreateState({
-                        type: TransactionStateType.WAIT_FOR_CONFIRMING,
+                        type: TransactionStateType.HASH,
                         hash,
                     })
                     transactionHashRef.current = hash

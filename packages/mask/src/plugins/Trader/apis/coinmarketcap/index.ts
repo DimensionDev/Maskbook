@@ -189,13 +189,7 @@ export interface HistoricalCoinInfo {
     symbol: string
 }
 
-export async function getHistorical(
-    id: string,
-    currency: string,
-    startDate: Date,
-    endDate: Date,
-    interval: string = '1d',
-) {
+export async function getHistorical(id: string, currency: string, startDate: Date, endDate: Date, interval = '1d') {
     const params = new URLSearchParams('format=chart_crypto_details')
     params.append('convert', currency)
     params.append('id', id)

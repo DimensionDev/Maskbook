@@ -29,7 +29,7 @@ export function useERC721TokenDetailed(
                 hasTokenDetailed: true,
                 name: info.name ?? tokenDetailedRef.current.info.name,
             }
-    }, [tokenId, contractDetailed, erc721TokenContract, GET_SINGLE_ASSET_URL])
+    }, [tokenId, JSON.stringify(contractDetailed), erc721TokenContract, GET_SINGLE_ASSET_URL])
 
     return { asyncRetry, tokenDetailed: tokenDetailedRef.current }
 }
@@ -64,6 +64,7 @@ export async function getERC721TokenDetailedFromOpensea(
                 description: data.description,
                 mediaUrl: data.image_url || data.animation_url,
                 owner: first(data.top_ownerships)?.owner.address ?? '',
+                hasTokenDetailed: true,
             },
             tokenId,
         )

@@ -101,8 +101,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
             })
         return stringify(connectedPersonas)
     },
-    app_isPluginEnabled: ({ pluginID }) => Services.Settings.getPluginEnabled(pluginID),
-    app_setPluginStatus: ({ pluginID, enabled }) => Services.Settings.setPluginEnabled(pluginID, enabled),
+    app_isPluginEnabled: ({ pluginID }) => Services.Settings.getPluginMinimalModeEnabled(pluginID).then((x) => !x),
+    app_setPluginStatus: ({ pluginID, enabled }) => Services.Settings.setPluginMinimalModeEnabled(pluginID, !enabled),
     setting_getNetworkTraderProvider: ({ network }) => {
         switch (network) {
             case NetworkType.Ethereum:
@@ -115,6 +115,12 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.getArbitrumNetworkTradeProvider()
             case NetworkType.xDai:
                 return Services.Settings.getxDaiNetworkTradeProvider()
+            case NetworkType.Celo:
+                return Services.Settings.getCeloNetworkTradeProvider()
+            case NetworkType.Fantom:
+                return Services.Settings.getxDaiNetworkTradeProvider()
+            case NetworkType.Aurora:
+                return Services.Settings.getAuroraNetworkTradeProvider()
             default:
                 unreachable(network)
         }
@@ -131,6 +137,12 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.setArbitrumNetworkTradeProvider(provider)
             case NetworkType.xDai:
                 return Services.Settings.setxDaiNetworkTradeProvider(provider)
+            case NetworkType.Celo:
+                return Services.Settings.setCeloNetworkTradeProvider(provider)
+            case NetworkType.Fantom:
+                return Services.Settings.setFantomNetworkTradeProvider(provider)
+            case NetworkType.Aurora:
+                return Services.Settings.setAuroraNetworkTradeProvider(provider)
             default:
                 unreachable(network)
         }

@@ -1,5 +1,4 @@
 import { useMemo } from 'react'
-import BigNumber from 'bignumber.js'
 import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
@@ -7,9 +6,9 @@ import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleTab } from './CollectibleTab'
 import { OrderRow } from './OrderRow'
 import { TableListPagination } from './Pagination'
-import { CollectibleProvider } from '../types'
 import { LoadingTable } from './LoadingTable'
-import { isZero } from '@masknet/web3-shared-base'
+import { isOne, isZero } from '@masknet/web3-shared-base'
+import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -43,14 +42,14 @@ export function OfferTab() {
     const { asset, provider, offers, offerPage, setOfferPage } = CollectibleState.useContainer()
 
     const isDifferenceToken = useMemo(() => {
-        if (provider === CollectibleProvider.OPENSEA) {
+        if (provider === NonFungibleAssetProvider.OPENSEA) {
             return (
-                offers.some(
+                offers.value?.data.some(
                     (item) =>
                         (item.payment_token_contract?.symbol !== 'WETH' &&
                             item.payment_token_contract?.symbol !== 'ETH') ||
-                        (item.quantity && new BigNumber(item.quantity).toString() !== '1'),
-                ) && offers.filter((item) => isZero(item.expiration_time ?? 0)).length === 0
+                        (item.quantity && !isOne(item.quantity)),
+                ) && offers.value.data.filter((item) => isZero(item.expiration_time ?? 0)).length === 0
             )
         } else {
             return false
@@ -58,12 +57,12 @@ export function OfferTab() {
     }, [provider, offers])
 
     const dataSource = useMemo(() => {
-        if (!offers.length) return []
-        return offers
+        if (!offers.value?.data.length) return []
+        return offers.value.data
     }, [offers])
 
     if (asset.loading) return <LoadingTable />
-    if (!offers.length || asset.error || !dataSource.length)
+    if (!offers.value?.data.length || asset.error || !dataSource.length)
         return (
             <Table size="small" stickyHeader>
                 <TableBody className={classes.empty}>
@@ -98,7 +97,7 @@ export function OfferTab() {
                         ) : (
                             <>
                                 <TableCell>{t('plugin_collectible_price')}</TableCell>
-                                {provider === CollectibleProvider.OPENSEA ? (
+                                {provider === NonFungibleAssetProvider.OPENSEA ? (
                                     <TableCell>{t('plugin_collectible_expiration')}</TableCell>
                                 ) : null}
                             </>
@@ -110,7 +109,7 @@ export function OfferTab() {
                         <OrderRow key={order.order_hash} order={order} isDifferenceToken={isDifferenceToken} />
                     ))}
                 </TableBody>
-                {(provider === CollectibleProvider.OPENSEA && dataSource.length) || offerPage > 0 ? (
+                {(provider === NonFungibleAssetProvider.OPENSEA && dataSource.length) || offerPage > 0 ? (
                     <TableListPagination
                         handlePrevClick={() => setOfferPage((prev) => prev - 1)}
                         handleNextClick={() => setOfferPage((prev) => prev + 1)}

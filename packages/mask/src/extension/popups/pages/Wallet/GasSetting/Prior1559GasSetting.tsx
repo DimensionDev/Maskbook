@@ -1,10 +1,12 @@
 import { makeStyles } from '@masknet/theme'
+import { isLessThan } from '@masknet/web3-shared-base'
 import { memo, useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../../../utils'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import {
+    ChainId,
     EthereumRpcType,
     formatGweiToWei,
     formatWeiToEther,
@@ -12,6 +14,7 @@ import {
     useChainId,
     useNativeTokenDetailed,
     useWeb3,
+    ChainIdOptionalRecord,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { z as zod } from 'zod'
@@ -86,6 +89,11 @@ const useStyles = makeStyles()((theme) => ({
         color: '#ffffff!important',
     },
 }))
+
+const minGasPriceOfChain: ChainIdOptionalRecord<string> = {
+    [ChainId.BSC]: '0x12a05f200', // 5
+    [ChainId.Matic]: '0x6fc23ac00', // 30
+}
 
 export const Prior1559GasSetting = memo(() => {
     const { classes } = useStyles()
@@ -196,12 +204,17 @@ export const Prior1559GasSetting = memo(() => {
         ) {
             // if rpc payload contain gas price, set it to default values
             if (value?.computedPayload._tx.gasPrice) {
+                const minGasPrice = minGasPriceOfChain[chainId]
+                // if the gas price in payload is lower than minimum value
+                if (minGasPrice && isLessThan(value.computedPayload._tx.gasPrice as number, minGasPrice)) {
+                    setValue('gasPrice', formatWeiToGwei(minGasPrice).toString())
+                }
                 setValue('gasPrice', formatWeiToGwei(value.computedPayload._tx.gasPrice as number).toString())
             } else {
                 setOption(1)
             }
         }
-    }, [value, setValue])
+    }, [value, setValue, chainId])
 
     useUpdateEffect(() => {
         if (gas) setValue('gasLimit', new BigNumber(gas).toString())
@@ -213,19 +226,17 @@ export const Prior1559GasSetting = memo(() => {
 
     const [{ loading }, handleConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
-            if (value) {
-                const config = value.payload.params.map((param) => ({
-                    ...param,
-                    gas: toHex(new BigNumber(data.gasLimit).toString()),
-                    gasPrice: toHex(formatGweiToWei(data.gasPrice).toString()),
-                }))
-
-                await WalletRPC.updateUnconfirmedRequest({
-                    ...value.payload,
-                    params: config,
-                })
-                history.goBack()
-            }
+            if (!value) return
+            const config = value.payload.params.map((param) => ({
+                ...param,
+                gas: toHex(new BigNumber(data.gasLimit).toString()),
+                gasPrice: toHex(formatGweiToWei(data.gasPrice).toString()),
+            }))
+            await WalletRPC.updateUnconfirmedRequest({
+                ...value.payload,
+                params: config,
+            })
+            history.goBack()
         },
         [value],
     )

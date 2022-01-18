@@ -10,6 +10,7 @@ import { useGetTradeContext } from '../useGetTradeContext'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { numberToHex } from 'web3-utils'
 import { useTargetBlockNumber } from '../useTargetBlockNumber'
+import { EMPTY_LIST } from '../../../../../utils-pure'
 
 export enum PairState {
     NOT_EXISTS = 0,
@@ -25,9 +26,9 @@ export function usePairs(tradeProvider: TradeProvider, tokenPairs: readonly Toke
     const { targetChainId } = TargetChainIdContext.useContainer()
 
     const listOfPairAddress = useMemo(() => {
-        if (!context) return []
+        if (!context) return EMPTY_LIST
         const { FACTORY_CONTRACT_ADDRESS, INIT_CODE_HASH } = context
-        if (!FACTORY_CONTRACT_ADDRESS || !INIT_CODE_HASH) return []
+        if (!FACTORY_CONTRACT_ADDRESS || !INIT_CODE_HASH) return EMPTY_LIST
         return tokenPairs.map(([tokenA, tokenB]) =>
             tokenA && tokenB && !tokenA.equals(tokenB)
                 ? getPairAddress(FACTORY_CONTRACT_ADDRESS, INIT_CODE_HASH, tokenA, tokenB)
@@ -50,7 +51,7 @@ export function usePairs(tradeProvider: TradeProvider, tokenPairs: readonly Toke
 
     const asyncResults = useAsyncRetry(
         () => callback(calls, { chainId: numberToHex(targetChainId) }),
-        [calls, targetChainId],
+        [calls, callback, targetChainId],
     )
 
     // compose reserves from multicall results
@@ -85,8 +86,8 @@ export function usePairs(tradeProvider: TradeProvider, tokenPairs: readonly Toke
             return [
                 PairState.EXISTS,
                 new Pair(
-                    CurrencyAmount.fromRawAmount(token0, reserve0.toString()),
-                    CurrencyAmount.fromRawAmount(token1, reserve1.toString()),
+                    CurrencyAmount.fromRawAmount(token0, reserve0),
+                    CurrencyAmount.fromRawAmount(token1, reserve1),
                 ),
             ] as const
         })

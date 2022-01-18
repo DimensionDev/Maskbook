@@ -1,22 +1,20 @@
 import { ChangeEvent, memo, useCallback, useMemo } from 'react'
 import { useI18N } from '../../../../utils'
-import { FungibleTokenDetailed, isSameAddress } from '@masknet/web3-shared-evm'
+import { FungibleTokenDetailed, isZeroAddress, formatBalance, formatCurrency } from '@masknet/web3-shared-evm'
 import { Box, Chip, chipClasses, TextField, Typography } from '@mui/material'
-import { FormattedBalance, SelectTokenChip, SelectTokenChipProps } from '@masknet/shared'
+import { FormattedBalance, SelectTokenChip, SelectTokenChipProps, FormattedCurrency } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
-import { ZERO_ADDRESS, ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
-import { FormattedCurrency } from '@masknet/shared'
-import { formatBalance, formatCurrency } from '@masknet/web3-shared-evm'
 import { isDashboardPage } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     filledInput: {
         borderRadius: 12,
         padding: 12,
-        background: isDashboard ? MaskColorVar.primaryBackground2 : MaskColorVar.twitterInputBackground,
-        border: `1px solid ${isDashboard ? MaskColorVar.lineLight : MaskColorVar.twitterBorderLine}`,
+        background: isDashboard ? MaskColorVar.primaryBackground2 : theme.palette.background.default,
+        border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.divider}`,
         position: 'relative',
     },
     balance: {
@@ -51,12 +49,12 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         position: 'absolute',
         top: 18,
         right: 12,
-        color: isDashboard ? MaskColorVar.normalText : MaskColorVar.twitterSecond,
+        color: isDashboard ? MaskColorVar.normalText : theme.palette.text.secondary,
     },
     selectedTokenChip: {
-        borderRadius: `22px!important`,
+        borderRadius: '22px!important',
         height: 'auto',
-        backgroundColor: isDashboard ? MaskColorVar.input : MaskColorVar.twitterInput,
+        backgroundColor: isDashboard ? MaskColorVar.input : theme.palette.background.input,
         [`& .${chipClasses.label}`]: {
             paddingTop: 10,
             paddingBottom: 10,
@@ -70,7 +68,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         height: '28px!important',
     },
     noToken: {
-        borderRadius: `18px !important`,
+        borderRadius: '18px !important',
         backgroundColor: theme.palette.primary.main,
         [`& .${chipClasses.label}`]: {
             paddingTop: 9,
@@ -119,11 +117,11 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
 
         const tokenPrice = useTokenPrice(
             chainId,
-            !isSameAddress(token?.address, ZERO_ADDRESS) ? token?.address.toLowerCase() : undefined,
+            !isZeroAddress(token?.address) ? token?.address.toLowerCase() : undefined,
         )
 
         const tokenValueUSD = useMemo(
-            () => (amount ? new BigNumber(amount).times(tokenPrice).toFixed(2).toString() : '0'),
+            () => (amount ? new BigNumber(amount).times(tokenPrice).toFixed(2) : '0'),
             [amount, tokenPrice],
         )
 
@@ -182,11 +180,11 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
                     ),
                     endAdornment: (
                         <Typography className={classes.price}>
-                            ≈ <FormattedCurrency value={tokenValueUSD} sign="$" formatter={formatCurrency} />
+                            &asymp; <FormattedCurrency value={tokenValueUSD} sign="$" formatter={formatCurrency} />
                         </Typography>
                     ),
                 }}
-                inputProps={{ className: classes.input }}
+                inputProps={{ className: classes.input, autoComplete: 'off' }}
             />
         )
     },

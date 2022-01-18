@@ -59,6 +59,7 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                     b = a
                 }
                 // Prevent unused code removal
+                // eslint-disable-next-line no-constant-condition
                 if (1 + 1 === 3) _assert({} as any, {} as any)
                 if (oldVersion < 1) {
                     // inline keys

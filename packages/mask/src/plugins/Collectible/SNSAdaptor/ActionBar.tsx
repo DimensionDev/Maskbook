@@ -26,7 +26,8 @@ export interface ActionBarProps {}
 export function ActionBar(props: ActionBarProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { asset, token, assetOrder } = CollectibleState.useContainer()
+    const { asset, assetOrder } = CollectibleState.useContainer()
+    const assets = asset.value
 
     const {
         open: openCheckoutDialog,
@@ -43,7 +44,7 @@ export function ActionBar(props: ActionBarProps) {
     if (!asset.value) return null
     return (
         <Box className={classes.root} sx={{ marginTop: 1 }} display="flex" justifyContent="center">
-            {!asset.value.is_owner && asset.value.is_auction && assetOrder.value ? (
+            {!asset.value.isOwner && asset.value.is_auction && assetOrder.value ? (
                 <ActionButton
                     className={classes.button}
                     color="primary"
@@ -52,7 +53,7 @@ export function ActionBar(props: ActionBarProps) {
                     {t('plugin_collectible_buy_now')}
                 </ActionButton>
             ) : null}
-            {!asset.value.is_owner && asset.value.is_auction ? (
+            {!asset.value.isOwner && asset.value.is_auction ? (
                 <ActionButton
                     className={classes.button}
                     color="primary"
@@ -63,7 +64,7 @@ export function ActionBar(props: ActionBarProps) {
                 </ActionButton>
             ) : null}
 
-            {!asset.value.is_owner && !asset.value.is_auction ? (
+            {!asset.value.isOwner && !asset.value.is_auction ? (
                 <ActionButton
                     className={classes.button}
                     color="primary"
@@ -72,7 +73,7 @@ export function ActionBar(props: ActionBarProps) {
                     {t('plugin_collectible_make_offer')}
                 </ActionButton>
             ) : null}
-            {asset.value.is_owner ? (
+            {assets?.isOwner ? (
                 <ActionButton
                     className={classes.button}
                     color="primary"
@@ -82,8 +83,8 @@ export function ActionBar(props: ActionBarProps) {
                 </ActionButton>
             ) : null}
             <CheckoutDialog
-                assetOrder={assetOrder}
                 asset={asset}
+                order={assetOrder}
                 open={openCheckoutDialog}
                 onClose={onCloseCheckoutDialog}
             />

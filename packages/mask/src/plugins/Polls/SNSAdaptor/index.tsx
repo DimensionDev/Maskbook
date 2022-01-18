@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base'
-import { POLL_META_KEY_1 } from '../constants'
+import { PLUGIN_META_KEY } from '../constants'
 import type { PollMetaData } from '../types'
 import { PollMetadataReader } from '../helpers'
 import PollsDialog from './PollsDialog'
@@ -15,9 +15,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <PollsInPost {...props} />
     },
     CompositionDialogMetadataBadgeRender: new Map([
-        [POLL_META_KEY_1, (meta: PollMetaData) => `a poll of '${meta.question}' from ${meta.sender}`],
+        [PLUGIN_META_KEY, (meta: PollMetaData) => `a poll of '${meta.question}' from ${meta.sender}`],
     ]),
-    CompositionDialogEntry: { label: '🗳️ Poll', dialog: PollsDialog },
+    CompositionDialogEntry: { label: '\u{1F5F3}\uFE0F Poll', dialog: PollsDialog },
 }
 
 export default sns

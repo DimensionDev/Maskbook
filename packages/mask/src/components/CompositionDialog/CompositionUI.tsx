@@ -4,6 +4,7 @@ import { LoadingButton } from '@mui/lab'
 import type { TypedMessage } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
+import { ImagePayloadIcon } from '@masknet/icons'
 import { Send } from '@mui/icons-material'
 import { PluginEntryRender, PluginEntryRenderRef } from './PluginEntryRender'
 import { TypedMessageEditor, TypedMessageEditorRef } from './TypedMessageEditor'
@@ -21,7 +22,7 @@ import { Trans } from 'react-i18next'
 const useStyles = makeStyles()({
     root: {
         '& > *': {
-            marginBottom: `10px !important`,
+            marginBottom: '10px !important',
         },
     },
     flex: {
@@ -36,7 +37,7 @@ const useStyles = makeStyles()({
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center',
-        '& > *': { marginLeft: `12px !important` },
+        '& > *': { marginLeft: '12px !important' },
     },
 })
 
@@ -131,6 +132,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                 checked={imagePayloadSelected}
                 label={
                     <>
+                        <ImagePayloadIcon style={{ width: 16, height: 16 }} />
                         {t('post_dialog__image_payload')}
                         {Flags.image_payload_marked_as_beta && (
                             <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />

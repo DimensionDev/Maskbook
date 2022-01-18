@@ -1,7 +1,7 @@
 import type { TagType } from './types'
 import type { DataProvider, TradeProvider } from '@masknet/public-api'
 import { createPluginMessage, PluginMessageEmitter, createPluginRPC } from '@masknet/plugin-infra'
-import { PLUGIN_IDENTIFIER } from './constants'
+import { PLUGIN_ID } from './constants'
 import type { TraderProps } from './SNSAdaptor/trader/Trader'
 import type { GasOptionConfig } from '../../../../web3-shared/evm'
 
@@ -52,5 +52,5 @@ export interface TraderMessage {
 }
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
-export const PluginTraderMessages: PluginMessageEmitter<TraderMessage> = createPluginMessage(PLUGIN_IDENTIFIER)
-export const PluginTraderRPC = createPluginRPC(PLUGIN_IDENTIFIER, () => import('./services'), PluginTraderMessages.rpc)
+export const PluginTraderMessages: PluginMessageEmitter<TraderMessage> = createPluginMessage(PLUGIN_ID)
+export const PluginTraderRPC = createPluginRPC(PLUGIN_ID, () => import('./services'), PluginTraderMessages.rpc)

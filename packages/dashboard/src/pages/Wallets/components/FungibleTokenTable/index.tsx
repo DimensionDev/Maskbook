@@ -87,7 +87,7 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
 
     useEffect(() => {
         PluginMessages.Wallet.events.erc20TokensUpdated.on(() =>
-            setTimeout(() => setTokenUpdateCount(tokenUpdateCount + 1), 100),
+            setTimeout(() => setTokenUpdateCount((prev) => prev + 1), 100),
         )
     }, [])
 

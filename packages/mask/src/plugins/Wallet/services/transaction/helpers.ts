@@ -72,14 +72,14 @@ export function getPayloadId(payload: JsonRpcPayload) {
 export function getTransactionId(transaction: Transaction | null) {
     if (!transaction) return ''
     const { from, to, input, value } = transaction
-    return sha3([from, to, input || '0x0', toHex(value) || '0x0'].join('_')) ?? ''
+    return sha3([from, to, input || '0x0', toHex(value || '0x0') || '0x0'].join('_')) ?? ''
 }
 
 export function getReceiptStatus(receipt: TransactionReceipt | null) {
     if (!receipt) return TransactionStatusType.NOT_DEPEND
     const status = receipt.status as unknown as string
-    if (receipt.status === false || ['0x', '0x0'].includes(status)) return TransactionStatusType.FAILED
-    if (receipt.status === true || ['0x1'].includes(status)) {
+    if (receipt.status === false || ['0', '0x', '0x0'].includes(status)) return TransactionStatusType.FAILED
+    if (receipt.status === true || ['1', '0x1'].includes(status)) {
         if (isSameAddress(receipt.from, receipt.to)) return TransactionStatusType.CANCELLED
         return TransactionStatusType.SUCCEED
     }

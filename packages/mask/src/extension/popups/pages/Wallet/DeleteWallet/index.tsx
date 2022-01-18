@@ -154,7 +154,7 @@ const DeleteWallet = memo(() => {
 
                 <Typography className={classes.label}>{t('popups_wallet_confirm_payment_password')}</Typography>
                 <PasswordField
-                    placeholder="Input your password"
+                    placeholder={t('popups_wallet_backup_input_password')}
                     value={password}
                     error={!!errorMessage}
                     helperText={errorMessage}

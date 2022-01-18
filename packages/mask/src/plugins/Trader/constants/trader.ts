@@ -5,6 +5,7 @@ import type { ERC20AgainstToken } from './types'
 
 export const USDC = createERC20Tokens('USDC_ADDRESS', 'USD Coin', 'USDC', 6)
 export const USDT = createERC20Tokens('USDT_ADDRESS', 'Tether USD', 'USDT', 6)
+export const fUSDT = createERC20Tokens('fUSDT_ADDRESS', 'Frapped USDT', 'fUSDT', 6)
 export const HUSD = createERC20Tokens('HUSD_ADDRESS', 'Huobi USD', 'HUSD', 6)
 export const BUSD = createERC20Tokens('BUSD_ADDRESS', 'Huobi USD', 'BUSD', 6)
 export const COMP = createERC20Tokens('COMP_ADDRESS', 'Compound', 'COMP', 18)
@@ -28,6 +29,7 @@ export const TT01 = createERC20Tokens('TT01_ADDRESS', 'Test Token 01', 'TT01', 1
 export const TT02 = createERC20Tokens('TT02_ADDRESS', 'Test Token 02', 'TT02', 18)
 export const ETHER = createERC20Tokens('ETHER_ADDRESS', 'Ether', 'ETH', 18)
 export const QUICK = createERC20Tokens('QUICK_ADDRESS', 'Quickswap', 'QUICK', 18)
+export const WANNA = createERC20Tokens('WANNA_ADDRESS', 'Wannaswap', 'WANNA', 18)
 export const WBTC = createERC20Tokens('WBTC_ADDRESS', 'Wrapped Bitcoin', 'WBTC', 18)
 export const IGG = createERC20Tokens('IGG_ADDRESS', 'IG Gold', 'IGG', 18)
 export const OM = createERC20Tokens('OM_ADDRESS', 'OM Token', 'OM', 18)
@@ -40,6 +42,8 @@ export const CAKE = createERC20Tokens('CAKE_ADDRESS', 'PancakeSwap Token', 'CAKE
 export const maUSDC = createERC20Tokens('maUSDC_ADDRESS', 'Matic Aave interest bearing USDC', 'maUSDC', 6)
 export const NFTX = createERC20Tokens('NFTX_ADDRESS', 'NFTX', 'NFTX', 18)
 export const STETH = createERC20Tokens('stETH_ADDRESS', 'stakedETH', 'stETH', 18)
+export const CUSD = createERC20Tokens('cUSD_ADDRESS', 'Celo Dollar', 'cUSD', 18)
+export const CEUR = createERC20Tokens('cEUR_ADDRESS', 'Celo Euro', 'cEUR', 18)
 
 export const WNATIVE = createERC20Tokens(
     'WNATIVE_ADDRESS',
@@ -61,6 +65,10 @@ export const WNATIVE_ONLY: ERC20AgainstToken = {
     [ChainId.Arbitrum]: [WNATIVE[ChainId.Arbitrum]],
     [ChainId.Arbitrum_Rinkeby]: [WNATIVE[ChainId.Arbitrum_Rinkeby]],
     [ChainId.xDai]: [WNATIVE[ChainId.xDai]],
+    [ChainId.Celo]: [WNATIVE[ChainId.Celo]],
+    [ChainId.Fantom]: [WNATIVE[ChainId.Fantom]],
+    [ChainId.Aurora]: [WNATIVE[ChainId.Aurora]],
+    [ChainId.Aurora_Testnet]: [WNATIVE[ChainId.Aurora_Testnet]],
 }
 
 export const BIPS_BASE = new BigNumber(10000)

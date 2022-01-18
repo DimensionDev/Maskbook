@@ -22,6 +22,8 @@ import {
     useERC721ContractDetailed,
     useMaskBoxConstants,
     ZERO_ADDRESS,
+    isZeroAddress,
+    isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { BoxInfo, BoxState } from '../type'
@@ -33,12 +35,13 @@ import { useMaskBoxPurchasedTokens } from './useMaskBoxPurchasedTokens'
 import { formatCountdown } from '../helpers/formatCountdown'
 import { useOpenBoxTransaction } from './useOpenBoxTransaction'
 import { useMaskBoxMetadata } from './useMaskBoxMetadata'
-import { useHeartBit } from './useHeartBit'
+import { useHeartBeat } from './useHeartBeat'
 import { useIsWhitelisted } from './useIsWhitelisted'
 import { isGreaterThanOrEqualTo, isLessThanOrEqualTo, isZero, multipliedBy } from '@masknet/web3-shared-base'
 
 function useContext(initialState?: { boxId: string }) {
-    const heartBit = useHeartBit()
+    const now = new Date()
+    const heartBeat = useHeartBeat()
     const account = useAccount()
     const chainId = useChainId()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(ChainId.Mainnet)
@@ -65,7 +68,7 @@ function useContext(initialState?: { boxId: string }) {
     const { value: paymentTokens = [] } = useFungibleTokensDetailed(
         maskBoxStatus?.payment?.map(([address]) => {
             return {
-                type: isSameAddress(address, ZERO_ADDRESS) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
+                type: isNativeTokenAddress(address) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
                 address,
             }
         }) ?? [],
@@ -83,16 +86,15 @@ function useContext(initialState?: { boxId: string }) {
         loading: loadingBoxInfo,
         retry: retryBoxInfo,
     } = useAsyncRetry<BoxInfo | null>(async () => {
-        if (!maskBoxInfo || !maskBoxStatus || isSameAddress(maskBoxInfo?.creator ?? ZERO_ADDRESS, ZERO_ADDRESS))
-            return null
+        if (!maskBoxInfo || !maskBoxStatus || isZeroAddress(maskBoxInfo?.creator ?? ZERO_ADDRESS)) return null
         const personalLimit = Number.parseInt(maskBoxInfo.personal_limit, 10)
         const remaining = Number.parseInt(maskBoxStatus.remaining, 10) // the current balance of the creator's account
         const total = Number.parseInt(maskBoxStatus.total, 10) // the total amount of tokens in the box
         const totalComputed = total && remaining && remaining > total ? remaining : total
         const sold = Math.max(0, totalComputed - remaining)
         const personalRemaining = Math.max(0, personalLimit - purchasedTokens.length)
-        const startAt = Number.parseInt(maskBoxCreationSuccessEvent?.returnValues.start_time ?? '0', 10)
-        const endAt = Number.parseInt(maskBoxCreationSuccessEvent?.returnValues.end_time ?? '0', 10)
+        const startAt = Number.parseInt(maskBoxCreationSuccessEvent?.returnValues.start_time || '0', 10)
+        const endAt = Number.parseInt(maskBoxCreationSuccessEvent?.returnValues.end_time || '0', 10)
         const info: BoxInfo = {
             boxId,
             creator: maskBoxInfo.creator,
@@ -104,6 +106,7 @@ function useContext(initialState?: { boxId: string }) {
             availableAmount: Math.min(personalRemaining, remaining),
             startAt: startAt === 0 ? subDays(new Date(), 1) : fromUnixTime(startAt),
             endAt: endAt === 0 ? addDays(new Date(), 1) : fromUnixTime(endAt),
+            started: maskBoxStatus.started,
             total: totalComputed,
             sold,
             canceled: maskBoxStatus.canceled,
@@ -134,23 +137,22 @@ function useContext(initialState?: { boxId: string }) {
 
     const boxState = useMemo(() => {
         if (errorMaskBoxInfo || errorMaskBoxStatus || errorBoxInfo) return BoxState.ERROR
-        if (loadingMaskBoxInfo || loadingMaskBoxStatus || loadingBoxInfo) return BoxState.UNKNOWN
+        if (loadingMaskBoxInfo || loadingMaskBoxStatus || loadingBoxInfo) {
+            if (!maskBoxInfo && !boxInfo) return BoxState.UNKNOWN
+        }
         if (maskBoxInfo && !boxInfo) return BoxState.UNKNOWN
         if (!maskBoxInfo || !maskBoxStatus || !boxInfo) return BoxState.NOT_FOUND
         if (maskBoxStatus.canceled) return BoxState.CANCELED
-        const now = new Date()
         if (isGreaterThanOrEqualTo(boxInfo.tokenIdsPurchased.length, boxInfo.personalLimit)) return BoxState.DRAWED_OUT
         if (isLessThanOrEqualTo(boxInfo.remaining, 0)) return BoxState.SOLD_OUT
-        if (boxInfo.startAt > now) return BoxState.NOT_READY
+        if (boxInfo.startAt > now || !boxInfo.started) return BoxState.NOT_READY
         if (boxInfo.endAt < now || maskBoxStatus?.expired) return BoxState.EXPIRED
         return BoxState.READY
-    }, [boxInfo, loadingBoxInfo, errorBoxInfo, maskBoxInfo, loadingMaskBoxInfo, errorMaskBoxInfo, heartBit])
+    }, [boxInfo, loadingBoxInfo, errorBoxInfo, maskBoxInfo, loadingMaskBoxInfo, errorMaskBoxInfo, heartBeat])
 
     const isWhitelisted = useIsWhitelisted(boxInfo?.qualificationAddress, account)
     const isQualifiedByContract =
-        boxInfo?.qualificationAddress && !isSameAddress(boxInfo?.qualificationAddress, ZERO_ADDRESS)
-            ? isWhitelisted
-            : true
+        boxInfo?.qualificationAddress && !isZeroAddress(boxInfo?.qualificationAddress) ? isWhitelisted : true
 
     //#region check holder min token
     const { value: holderToken } = useERC20TokenDetailed(boxInfo?.holderTokenAddress)
@@ -171,10 +173,10 @@ function useContext(initialState?: { boxId: string }) {
             case BoxState.EXPIRED:
                 return 'Ended'
             case BoxState.NOT_READY:
-                const now = Date.now()
+                const nowAt = now.getTime()
                 const startAt = boxInfo?.startAt.getTime() ?? 0
-                if (startAt <= now) return 'Loading...'
-                const countdown = formatCountdown(startAt - now)
+                if (startAt <= nowAt) return 'Syncing status...'
+                const countdown = formatCountdown(startAt, nowAt)
                 return countdown ? `Start sale in ${countdown}` : 'Loading...'
             case BoxState.SOLD_OUT:
                 return 'Sold Out'
@@ -187,7 +189,16 @@ function useContext(initialState?: { boxId: string }) {
             default:
                 unreachable(boxState)
         }
-    }, [boxState, heartBit])
+    }, [boxState, boxInfo?.startAt, heartBeat])
+
+    useEffect(() => {
+        if (!boxInfo || boxInfo.started) return
+
+        if (boxInfo.startAt < now) {
+            retryMaskBoxStatus()
+        }
+    }, [boxInfo, heartBeat])
+
     //#endregion
 
     //#region the box metadata
@@ -254,8 +265,8 @@ function useContext(initialState?: { boxId: string }) {
     const canPurchase = !isBalanceInsufficient && isQualified && !!boxInfo?.personalRemaining
     const allowToPurchase = boxState === BoxState.READY
     const isAllowanceEnough = isNativeToken ? true : costAmount.lte(erc20Allowance ?? '0')
-    const { value: openBoxTransactionGasLimit = 0 } = useAsyncRetry(async () => {
-        if (!openBoxTransaction || !canPurchase || !allowToPurchase || !isAllowanceEnough) return 0
+    const { value: openBoxTransactionGasLimit } = useAsyncRetry(async () => {
+        if (!openBoxTransaction || !canPurchase || !allowToPurchase || !isAllowanceEnough) return
         const estimatedGas = await openBoxTransaction.method.estimateGas(omit(openBoxTransaction.config, 'gas'))
         return new BigNumber(estimatedGas).toNumber()
     }, [openBoxTransaction, canPurchase, allowToPurchase, isAllowanceEnough])

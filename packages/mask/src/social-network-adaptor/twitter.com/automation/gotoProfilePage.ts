@@ -5,6 +5,6 @@ export function gotoProfilePageTwitter(profile: ProfileIdentifier) {
     ;(document.querySelector(`[href="${path}"]`) as HTMLElement | undefined)?.click()
     setTimeout(() => {
         // The classic way
-        if (!location.pathname.startsWith(path)) location.pathname = path
+        if (!location.pathname.startsWith(path)) location.assign(path)
     }, 400)
 }

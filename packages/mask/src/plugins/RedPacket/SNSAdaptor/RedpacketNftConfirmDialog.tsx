@@ -2,7 +2,6 @@ import { useMemo, useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import {
     formatEthereumAddress,
-    isNative,
     resolveAddressLinkOnExplorer,
     useChainId,
     useWallet,
@@ -11,6 +10,7 @@ import {
     ERC721TokenDetailed,
     useWeb3,
     TransactionStateType,
+    isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import classNames from 'classnames'
@@ -68,7 +68,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         height: 420,
         overflowY: 'auto',
-        background: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
+        background: theme.palette.background.default,
         borderRadius: 12,
         marginTop: theme.spacing(1.5),
         marginBottom: theme.spacing(1.5),
@@ -139,6 +139,11 @@ const useStyles = makeStyles()((theme) => ({
         width: 64,
         height: 64,
     },
+    ellipsis: {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+    },
 }))
 export interface RedpacketNftConfirmDialogProps {
     open: boolean
@@ -174,7 +179,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
         WalletMessages.events.walletStatusDialogUpdated,
     )
 
-    const isSending = createState.type === TransactionStateType.WAIT_FOR_CONFIRMING
+    const isSending = [TransactionStateType.WAIT_FOR_CONFIRMING, TransactionStateType.HASH].includes(createState.type)
     const onSendTx = useCallback(() => createCallback(publicKey), [publicKey])
     const [txid, setTxid] = useState('')
     const onSendPost = useCallback(
@@ -197,7 +202,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
         [duration, message, senderName, contract, privateKey, txid],
     )
     useEffect(() => {
-        if (createState.type === TransactionStateType.WAIT_FOR_CONFIRMING && createState.hash) {
+        if (createState.type === TransactionStateType.HASH && createState.hash) {
             setTxid(createState.hash)
             RedPacketRPC.addRedPacketNft({ id: createState.hash, password: privateKey, contract_version: 1 })
         }
@@ -235,7 +240,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                             align="right"
                             className={classNames(classes.account, classes.bold, classes.text)}>
                             ({wallet?.name}) {formatEthereumAddress(account, 4)}
-                            {isNative(wallet?.address!) ? null : (
+                            {isNativeTokenAddress(wallet) ? null : (
                                 <Link
                                     color="textPrimary"
                                     className={classes.link}
@@ -258,7 +263,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                             variant="body1"
                             color="textPrimary"
                             align="right"
-                            className={(classes.text, classes.bold)}>
+                            className={(classes.text, classes.bold, classes.ellipsis)}>
                             {message}
                         </Typography>
                     </Grid>
@@ -282,7 +287,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                     <Grid item xs={12}>
                         <List className={classes.tokenSelector}>
                             {tokenList.map((value, i) => (
-                                <ListItem key={i.toString()} className={classNames(classes.tokenSelectorWrapper)}>
+                                <ListItem key={i} className={classNames(classes.tokenSelectorWrapper)}>
                                     <NftImage
                                         token={value}
                                         classes={{

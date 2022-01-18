@@ -154,8 +154,8 @@ export async function signTransaction(
             gas_limit: config.gas?.toString() ?? '0x0',
             gas_price: config.gasPrice?.toString() ?? '0x0',
             chain_id: config.chainId ? toHex(config.chainId?.toString()) : '0x1',
-            max_fee_per_gas: config.maxFeePerGas?.toString() ?? '0x0',
-            max_inclusion_fee_per_gas: config.maxFeePerGas?.toString() ?? '0x0',
+            max_fee_per_gas: config.maxFeePerGas ?? '0x0',
+            max_inclusion_fee_per_gas: config.maxFeePerGas ?? '0x0',
             nonce: config.nonce ? toHex(config.nonce) : '0x0',
             to_address: config.to,
             payload: config.data ? encodeText(config.data) : new Uint8Array(),
@@ -174,6 +174,7 @@ export async function deriveWallet(name: string) {
     let latestDerivationPath = primaryWallet.latestDerivationPath ?? primaryWallet.derivationPath
     if (!latestDerivationPath) throw new Error('Failed to derive wallet without derivation path.')
 
+    // eslint-disable-next-line no-constant-condition
     while (true) {
         derivedTimes += 1
 
