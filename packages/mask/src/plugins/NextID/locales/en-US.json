@@ -5,6 +5,8 @@
     "verify_wallet_button": "Verify your wallet",
     "add_wallet_button": "Add wallet",
     "verify_wallet_dialog_title": "Verify your wallet",
+    "unbind_dialog_title": "Unbind wallet",
     "persona_sign": "Persona Sign",
-    "wallet_sign": "Wallet Sign"
+    "wallet_sign": "Wallet Sign",
+    "unbind_or": "or"
 }

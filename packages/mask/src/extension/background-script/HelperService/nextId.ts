@@ -35,22 +35,23 @@ interface PayloadResponse {
 
 export async function bindProof(
     persona: PersonaIdentifier,
+    action: 'create' | 'delete',
     platform: string,
     identity: string,
-    walletSignature: string,
-    signature: string,
+    walletSignature?: string,
+    signature?: string,
 ) {
     const publicKey = await queryPersonaHexPublicKey(persona)
     if (!publicKey) return
 
     const requestBody = {
-        action: 'create',
+        action,
         platform,
         identity,
         public_key: publicKey,
         extra: {
-            wallet_signature: toBase64(fromHex(walletSignature)),
-            signature: toBase64(fromHex(signature)),
+            ...(walletSignature ? { wallet_signature: toBase64(fromHex(walletSignature)) } : {}),
+            ...(signature ? { signature: toBase64(fromHex(signature)) } : {}),
         },
     }
 
@@ -66,25 +67,30 @@ async function queryPersonaHexPublicKey(persona: PersonaIdentifier) {
     if (!personaPublicKey?.x || !personaPublicKey?.y) return null
     const arr = compressSecp256k1Point(personaPublicKey.x, personaPublicKey.y)
 
-    return toHex(arr)
+    return `0x${toHex(arr)}`
 }
 
 export async function queryExistedBinding(persona: PersonaIdentifier) {
     const publicKey = await queryPersonaHexPublicKey(persona)
     if (!publicKey) return
 
-    const response = await fetch(urlcat(BASE_URL, '/v1/proof', { platform: 'nextid', identity: `0x${publicKey}` }))
+    const response = await fetch(urlcat(BASE_URL, '/v1/proof', { platform: 'nextid', identity: publicKey }))
 
     const result = (await response.json()) as QueryBindingResponse
     return result.ids[0]
 }
 
-export async function createPersonaPayload(persona: PersonaIdentifier, identity: string, platform: string) {
+export async function createPersonaPayload(
+    persona: PersonaIdentifier,
+    action: 'create' | 'delete',
+    identity: string,
+    platform: string,
+) {
     const publicKey = await queryPersonaHexPublicKey(persona)
     if (!publicKey) return
 
     const requestBody: CreatePayloadBody = {
-        action: 'create',
+        action,
         platform,
         identity,
         public_key: publicKey,
