@@ -208,12 +208,6 @@ export declare namespace Web3Plugin {
         [chainId: number]: Record<string, string> | undefined
     }
 
-    export interface BalanceOfChain {
-        [chainId: string]: {
-            [account: string]: string
-        }
-    }
-
     export namespace ObjectCapabilities {
         export interface SharedState {
             allowTestnet?: Subscription<boolean>

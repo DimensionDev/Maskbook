@@ -1,10 +1,18 @@
-import { useWeb3StateContext } from '../context'
 import type { ChainId } from '../types'
 import { useAccount, useChainId } from '..'
+import { useWeb3 } from '.'
+import { useAsyncRetry } from 'react-use'
 
-export function useBalance(chainId?: ChainId, account?: string) {
+export function useBalance(expectedChainId?: ChainId, expectedAccount?: string) {
     const defaultChainId = useChainId()
     const defaultAccount = useAccount()
-    const { balanceOfChain } = useWeb3StateContext()
-    return balanceOfChain[chainId ?? defaultChainId]?.[account ?? defaultAccount] ?? '0'
+
+    const chainId = expectedChainId ?? defaultChainId
+    const account = expectedAccount ?? defaultAccount
+
+    const web3 = useWeb3(true, chainId)
+
+    return useAsyncRetry(async () => {
+        return web3.eth.getBalance(account)
+    }, [web3, account])
 }

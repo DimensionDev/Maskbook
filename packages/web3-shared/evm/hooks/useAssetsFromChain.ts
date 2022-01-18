@@ -7,7 +7,7 @@ import { getChainDetailed, EMPTY_LIST } from '../utils'
 import { useBalance } from '.'
 
 export function useAssetsFromChain(tokens: FungibleTokenDetailed[], chainId?: ChainId) {
-    const balance = useBalance(chainId)
+    const { value: balance = '0' } = useBalance(chainId)
     const chainDetailed = useChainDetailed()
     const passedChainDetailed = getChainDetailed(chainId)
 

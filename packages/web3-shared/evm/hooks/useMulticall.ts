@@ -105,8 +105,8 @@ export type MulticallState =
 export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?: number) {
     const currentChainId = useChainId()
     const chainId = targetChainId ?? currentChainId
-    const currentBlockNumber = useBlockNumber()
-    const blockNumber = targetBlockNumber ?? currentBlockNumber
+    const { value: defaultBlockNumber = 0 } = useBlockNumber()
+    const blockNumber = targetBlockNumber ?? defaultBlockNumber
     const multicallContract = useMulticallContract(chainId)
     const [multicallState, setMulticallState] = useState<MulticallState>({
         type: MulticallStateType.UNKNOWN,

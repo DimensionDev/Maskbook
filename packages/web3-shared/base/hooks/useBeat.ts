@@ -18,3 +18,13 @@ export function useBeatRetry<T>(fn: () => Promise<T>, delay = 1000, deps: Depend
     const beat = useBeat(delay)
     return useAsyncRetry(fn, [beat].concat(deps))
 }
+
+export function useSingleBlockBeatRetry<T>(fn: () => Promise<T>, deps: DependencyList = []): AsyncStateRetry<T> {
+    const beat = useBeat(SINGLE_BLOCK_DELAY)
+    return useAsyncRetry(fn, deps)
+}
+
+export function useDoubleBlockBeatRetry<T>(fn: () => Promise<T>, deps: DependencyList = []): AsyncStateRetry<T> {
+    const beat = useBeat(DOUBLE_BLOCK_DELAY)
+    return useAsyncRetry(fn, deps)
+}

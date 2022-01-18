@@ -1,6 +1,5 @@
-import type { ChainId } from '@masknet/web3-shared-evm'
-import { AllProviderTradeActionType, AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext'
 import {
+    ChainId,
     EthereumTokenType,
     isSameAddress,
     useAccount,
@@ -8,9 +7,8 @@ import {
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
 import { useAsync } from 'react-use'
-import { currentBalancesSettings } from '../../../../Wallet/settings'
+import { AllProviderTradeActionType, AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext'
 import Services from '../../../../../extension/service'
-import { WalletRPC } from '../../../../Wallet/messages'
 
 export function useUpdateBalance(chainId: ChainId, currentChainId: ChainId) {
     const currentAccount = useAccount()
@@ -36,22 +34,10 @@ export function useUpdateBalance(chainId: ChainId, currentChainId: ChainId) {
         }
 
         if (chainId && currentProvider && currentAccount) {
-            const cacheBalance = currentBalancesSettings.value[currentProvider]?.[chainId]
-
-            let balance: string
-
-            if (cacheBalance) balance = cacheBalance
-            else {
-                balance = await Services.Ethereum.getBalance(currentAccount, {
-                    chainId: chainId,
-                    providerType: currentProvider,
-                })
-                await WalletRPC.updateBalances({
-                    [currentProvider]: {
-                        [chainId]: balance,
-                    },
-                })
-            }
+            const balance = await Services.Ethereum.getBalance(currentAccount, {
+                chainId: chainId,
+                providerType: currentProvider,
+            })
 
             dispatchTradeStore({
                 type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,

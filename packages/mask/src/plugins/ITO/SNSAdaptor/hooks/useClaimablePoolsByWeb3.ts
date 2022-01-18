@@ -10,9 +10,9 @@ import {
     EthereumTokenType,
     useGetPastLogsParams,
     ChainId,
+    useBlockNumber,
 } from '@masknet/web3-shared-evm'
 import type { ClaimablePool } from '../../types'
-import { useBlockNumberOfChain } from './useBlockNumberOfChain'
 import Services from '../../../../extension/service'
 
 const SWAP_SUCCESS_TOPIC = sha3('SwapSuccess(bytes32,address,address,address,uint256,uint256,uint128,bool)')
@@ -28,19 +28,19 @@ const SWAP_SUCCESS_TYPES = [
 export function useClaimablePoolsByWeb3(chainId: ChainId) {
     const web3 = useWeb3()
     const account = useAccount()
-    const currentBlock = useBlockNumberOfChain(chainId)
+    const { value: blockNumber = 0 } = useBlockNumber(chainId)
     const { ITO2_CONTRACT_CREATION_BLOCK_HEIGHT: fromBlock, ITO2_CONTRACT_ADDRESS: address } = useITOConstants(chainId)
 
     // https://github.com/binance-chain/bsc/issues/113
     // getPastLogs block range limitations on BSC is only 5000, which is absurd. Sometimes 4500 also fails.
     const maxBlockRange = chainId === ChainId.BSC ? 4500 : 10000
-    const queryParams = useGetPastLogsParams(fromBlock, currentBlock, maxBlockRange, {
+    const queryParams = useGetPastLogsParams(fromBlock, blockNumber, maxBlockRange, {
         address,
         topics: [SWAP_SUCCESS_TOPIC],
     })
 
     return useAsyncRetry(async () => {
-        if (!currentBlock) return []
+        if (!blockNumber) return []
         const logs = flatten<Log>(
             await Promise.all(
                 queryParams.map((queryParam: PastLogsOptions) =>
@@ -64,5 +64,5 @@ export function useClaimablePoolsByWeb3(chainId: ChainId) {
             }
             return acc
         }, [])
-    }, [account, address, chainId, JSON.stringify(queryParams), currentBlock])
+    }, [account, address, chainId, JSON.stringify(queryParams), blockNumber])
 }

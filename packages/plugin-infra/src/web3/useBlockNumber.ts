@@ -1,26 +1,14 @@
-import { useState, useEffect } from 'react'
-import { useChainId } from '.'
+import { useAsyncRetry } from 'react-use'
+import { useChainId, useWeb3State } from '.'
 import type { NetworkPluginID } from '..'
-import { usePluginWeb3StateContext } from './Context'
 
-/**
- * Get the current block number of current chain
- */
-export function useBlockNumber(chainId?: number, pluginID?: NetworkPluginID) {
+export function useBlockNumber(expectedChainId?: number, pluginID?: NetworkPluginID) {
+    const { Provider } = useWeb3State()
     const defaultChainId = useChainId(pluginID)
-    const { blockNumberOfChain } = usePluginWeb3StateContext(pluginID)
-    return blockNumberOfChain?.[chainId ?? defaultChainId] ?? 0
-}
 
-/**
- * Get the current block number only once
- * @returns
- */
-export function useBlockNumberOnce(chainId?: number, pluginID?: NetworkPluginID) {
-    const blockNumber = useBlockNumber(chainId, pluginID)
-    const [blockNumberOnce, setBlockNumberOnce] = useState(0)
-    useEffect(() => {
-        if (blockNumberOnce === 0 && blockNumber > 0) setBlockNumberOnce(blockNumber)
-    }, [blockNumber])
-    return blockNumberOnce
+    const chainId = expectedChainId ?? defaultChainId
+
+    return useAsyncRetry(async () => {
+        return Provider?.getLatestBlockNumber(chainId)
+    }, [Provider, chainId])
 }

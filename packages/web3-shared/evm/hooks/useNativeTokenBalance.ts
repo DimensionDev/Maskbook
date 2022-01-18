@@ -8,7 +8,7 @@ import { useBalance } from './useBalance'
  */
 export function useNativeTokenBalance() {
     const account = useAccount()
-    const balance = useBalance()
+    const { value: balance = '0' } = useBalance()
     return useAsyncRetry(async () => {
         if (!account) return
         return balance

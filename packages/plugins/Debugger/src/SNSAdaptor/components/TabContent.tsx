@@ -66,8 +66,8 @@ export function TabContent({ identity, addressNames }: TabContentProps) {
         )
     }
 
-    const balance = useBalance()
-    const blockNumber = useBlockNumber()
+    const { value: balance = '0' } = useBalance()
+    const { value: blockNumber = 0 } = useBlockNumber()
 
     return (
         <>

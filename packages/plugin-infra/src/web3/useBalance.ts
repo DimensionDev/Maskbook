@@ -1,10 +1,16 @@
+import { useAsyncRetry } from 'react-use'
 import { useAccount, useChainId } from '.'
-import type { NetworkPluginID } from '..'
-import { usePluginWeb3StateContext } from './Context'
+import { NetworkPluginID, useWeb3State } from '..'
 
-export function useBalance(chainId?: number, account?: string, pluginID?: NetworkPluginID) {
+export function useBalance(expectedChainId?: number, expectedAccount?: string, pluginID?: NetworkPluginID) {
+    const { Provider } = useWeb3State()
     const defaultChainId = useChainId(pluginID)
     const defaultAccount = useAccount(pluginID)
-    const { balanceOfChain } = usePluginWeb3StateContext(pluginID)
-    return balanceOfChain?.[chainId ?? defaultChainId]?.[(account ?? defaultAccount).toLowerCase()] ?? '0'
+
+    const chainId = expectedChainId ?? defaultChainId
+    const account = expectedAccount ?? defaultAccount
+
+    return useAsyncRetry(async () => {
+        return Provider?.getLatestBalance(chainId, account) ?? '0'
+    }, [account, chainId, Provider])
 }
