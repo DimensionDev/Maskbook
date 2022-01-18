@@ -87,9 +87,9 @@ Goto `chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/dashboard.html#/wallet
 
   - Setup metadata and RPC for the chain.
   - Transaction sent to wallet with medium gas fee setting.
-  - Required to unlock ERC-20 token before swap.
+  - Required to unlock ERC20 token before swapping ERC20 to any other tokens.
 
-- [ ] Transfer token in Dashboard's transfer page and Mask popup wallet.
+- [ ] Transfer token on the transfer page of Dashboard and the wallet tab of the plugin popup.
 
 ## Learn More
 
