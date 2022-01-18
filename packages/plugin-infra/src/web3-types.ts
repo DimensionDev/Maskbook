@@ -280,7 +280,7 @@ export declare namespace Web3Plugin {
             trustToken: (token: Token) => Promise<void>
             blockToken: (token: Token) => Promise<void>
         }
-        export interface TransactionState {
+        export interface ProviderState {
             /** Get latest transactions of given account. */
             getTransactions: (
                 address: string,
@@ -288,6 +288,10 @@ export declare namespace Web3Plugin {
                 network: NetworkDescriptor,
                 pagination?: Pagination,
             ) => Promise<Transaction[]>
+            /** Get latest block number of given chain. */
+            getLatestBlockNumber: (chainId: number) => Promise<number>
+            /** Get latest balance of given account. */
+            getLatestBalance: (chainId: number, account: string) => Promise<string>
         }
         export interface TokenListState {
             /** Get the token lists of supported fungible tokens. */
@@ -333,7 +337,7 @@ export declare namespace Web3Plugin {
             Asset?: AssetState
             NameService?: NameServiceState
             Token?: TokenState
-            Transaction?: TransactionState
+            Provider?: ProviderState
             TokenList?: TokenListState
             Utils?: Others
         }
