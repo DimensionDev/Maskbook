@@ -195,7 +195,6 @@ export enum NetworkType {
     Fantom = 'Fantom',
     Avalanche = 'Avalanche',
     Aurora = 'Aurora',
-    Avalanche = 'Avalanche',
     Boba = 'Boba',
     Fuse = 'Fuse',
     Metis = 'Metis',

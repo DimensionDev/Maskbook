@@ -112,7 +112,6 @@ export enum NetworkType {
     xDai = 'xDai',
     Celo = 'Celo',
     Fantom = 'Fantom',
-    Avalanche = 'Avalanche',
     Aurora = 'Aurora',
     Avalanche = 'Avalanche',
     Boba = 'Boba',

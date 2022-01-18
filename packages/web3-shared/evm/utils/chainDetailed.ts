@@ -115,18 +115,6 @@ const chainNameMap: Record<NetworkType, string> = {
     [NetworkType.Optimistic]: 'Optimistic',
 }
 export function getNetworkTypeFromChainId(chainId: ChainId, value?: boolean) {
-    const map: Record<NetworkType, string> = {
-        [NetworkType.Ethereum]: 'ETH',
-        [NetworkType.Binance]: 'BSC',
-        [NetworkType.Polygon]: 'Polygon',
-        [NetworkType.Arbitrum]: 'Arbitrum',
-        [NetworkType.xDai]: 'xDai',
-        [NetworkType.Celo]: 'CELO',
-        [NetworkType.Fantom]: 'FTM',
-        [NetworkType.Avalanche]: 'AVAX',
-        [NetworkType.Aurora]: 'Aurora',
-    }
-
     const chainDetailed = getChainDetailed(chainId)
     const entry = Object.entries(chainNameMap).find(([_, value]) => {
         if (value === chainDetailed?.chain) return true
