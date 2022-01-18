@@ -6,7 +6,7 @@ import { MiniMaskIcon, InfoIcon } from '@masknet/icons'
 import { ForwardedRef, forwardRef, useRef } from 'react'
 import { useReactToPrint } from 'react-to-print'
 import { toJpeg } from 'html-to-image'
-import { MaskBlueURL, WatermarkURL } from '../../../assets'
+import { WatermarkURL } from '../../../assets'
 import { useDashboardI18N } from '../../../locales'
 import { delay } from '@masknet/shared-base'
 
