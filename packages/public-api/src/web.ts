@@ -192,9 +192,13 @@ export enum NetworkType {
     Arbitrum = 'Arbitrum',
     xDai = 'xDai',
     Celo = 'Celo',
-    Metis = 'Metis',
     Fantom = 'Fantom',
     Aurora = 'Aurora',
+    Avalanche = 'Avalanche',
+    Boba = 'Boba',
+    Fuse = 'Fuse',
+    Metis = 'Metis',
+    Optimistic = 'Optimistic',
 }
 
 export enum DataProvider {

@@ -22,6 +22,7 @@ import {
     isLessThanOrEqualTo,
     isPositive,
     multipliedBy,
+    toFixed,
 } from '@masknet/web3-shared-base'
 
 const HIGH_FEE_WARNING_MULTIPLIER = 1.5
@@ -191,7 +192,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                             className={selectedGasOption === gasOption ? classes.selected : undefined}>
                             <Typography className={classes.optionsTitle}>{title}</Typography>
                             <Typography component="div">
-                                {new BigNumber(content?.suggestedMaxFeePerGas ?? 0).toFixed(2)}
+                                {toFixed(content?.suggestedMaxFeePerGas, 2)}
                                 <Typography variant="inherit">Gwei</Typography>
                             </Typography>
                             <Typography className={classes.gasUSD}>

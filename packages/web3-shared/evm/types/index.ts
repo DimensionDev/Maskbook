@@ -62,10 +62,6 @@ export enum ChainId {
     // Celo
     Celo = 42220,
 
-    // Metis
-    Metis = 1088,
-    Metis_Stardust = 588,
-
     // Fantom
     Fantom = 250,
 
@@ -75,6 +71,19 @@ export enum ChainId {
     // Aurora
     Aurora = 1313161554,
     Aurora_Testnet = 1313161555,
+
+    // Fuse
+    Fuse = 122,
+
+    // Boba
+    Boba = 288,
+
+    // Metis
+    Metis = 1088,
+    Metis_Stardust = 588,
+
+    // Optimistic
+    Optimistic = 10,
 }
 
 export enum ProviderType {
@@ -103,9 +112,13 @@ export enum NetworkType {
     Arbitrum = 'Arbitrum',
     xDai = 'xDai',
     Celo = 'Celo',
-    Metis = 'Metis',
     Fantom = 'Fantom',
     Aurora = 'Aurora',
+    Avalanche = 'Avalanche',
+    Boba = 'Boba',
+    Fuse = 'Fuse',
+    Metis = 'Metis',
+    Optimistic = 'Optimistic',
 }
 
 export interface Wallet {

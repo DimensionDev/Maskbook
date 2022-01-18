@@ -48,6 +48,12 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
             return [TradeProvider.SUSHISWAP]
         case NetworkType.Aurora:
             return [TradeProvider.DODO, TradeProvider.WANNASWAP, TradeProvider.TRISOLARIS]
+        case NetworkType.Boba:
+        case NetworkType.Fuse:
+        case NetworkType.Avalanche:
+        case NetworkType.Optimistic:
+            console.error('To be implement network: ', networkType)
+            return []
         default:
             safeUnreachable(networkType)
             return []
