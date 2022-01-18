@@ -112,6 +112,18 @@ export const VerifyWalletDialog = memo<VerifyWalletDialogProps>(({ open, onClose
         return Services.Ethereum.personalSign(message, account)
     }, [personaSignState.value])
 
+    useAsyncRetry(async () => {
+        if (!personaSignState.value || !walletSignState.value) return
+        await Services.Helper.bindProof(
+            currentIdentifier,
+            'ethereum',
+            account,
+            walletSignState.value,
+            personaSignState.value.signature.signature,
+        )
+        onClose()
+    }, [walletSignState.value, personaSignState.value])
+
     // move to panel
     return (
         <MaskDialog

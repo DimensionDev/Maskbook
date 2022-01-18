@@ -37,6 +37,8 @@ export function NextIdPage({}: NextIDPageProps) {
         return Services.Helper.queryExistedBinding(currentIdentifier)
     }, [currentIdentifier])
 
+    console.log(bindings)
+
     if (loading || loadingIdentifier) return <Box>Loading</Box>
 
     if (bindings?.proofs.length) {

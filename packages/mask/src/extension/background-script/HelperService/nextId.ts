@@ -1,4 +1,4 @@
-import { toHex, PersonaIdentifier, compressSecp256k1Point } from '@masknet/shared-base'
+import { toHex, PersonaIdentifier, compressSecp256k1Point, fromHex, toBase64 } from '@masknet/shared-base'
 import { queryPublicKey } from '../../../database'
 import urlcat from 'urlcat'
 
@@ -33,10 +33,10 @@ interface PayloadResponse {
     sign_payload: string
 }
 
-async function bindProof(
+export async function bindProof(
     persona: PersonaIdentifier,
-    identity: string,
     platform: string,
+    identity: string,
     walletSignature: string,
     signature: string,
 ) {
@@ -49,8 +49,8 @@ async function bindProof(
         identity,
         public_key: publicKey,
         extra: {
-            wallet_signature: walletSignature,
-            signature: signature,
+            wallet_signature: toBase64(fromHex(walletSignature)),
+            signature: toBase64(fromHex(signature)),
         },
     }
 
@@ -73,7 +73,7 @@ export async function queryExistedBinding(persona: PersonaIdentifier) {
     const publicKey = await queryPersonaHexPublicKey(persona)
     if (!publicKey) return
 
-    const response = await fetch(urlcat(BASE_URL, '/v1/proof/', { platform: 'nextid', identity: publicKey }))
+    const response = await fetch(urlcat(BASE_URL, '/v1/proof', { platform: 'nextid', identity: `0x${publicKey}` }))
 
     const result = (await response.json()) as QueryBindingResponse
     return result.ids[0]
