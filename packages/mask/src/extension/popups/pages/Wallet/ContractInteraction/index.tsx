@@ -400,18 +400,17 @@ const ContractInteraction = memo(() => {
                         </Typography>
                     </div>
 
-                    <div className={classes.item} style={{ marginTop: 10 }}>
-                        <Typography className={classes.label}>
-                            {t('popups_wallet_contract_interaction_total')}
-                        </Typography>
-                        <Typography className={classes.gasPrice}>
-                            {isGreaterThan(totalUSD, pow10(9)) ? (
-                                'infinite'
-                            ) : (
+                    {!isGreaterThan(totalUSD, pow10(9)) ? (
+                        <div className={classes.item} style={{ marginTop: 10 }}>
+                            <Typography className={classes.label}>
+                                {t('popups_wallet_contract_interaction_total')}
+                            </Typography>
+
+                            <Typography className={classes.gasPrice}>
                                 <FormattedCurrency value={totalUSD} sign="$" formatter={formatCurrency} />
-                            )}
-                        </Typography>
-                    </div>
+                            </Typography>
+                        </div>
+                    ) : null}
                 </div>
             </main>
             <div className={classes.bottom}>
