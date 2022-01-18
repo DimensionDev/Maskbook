@@ -34,7 +34,7 @@ export const PersonaCreate = () => {
     const onNext = async () => {
         const personas = await Services.Identity.queryMyPersonas()
         let existing = false
-        for (let i in personas) {
+        for (const i in personas) {
             if (personas[i].nickname === personaName) {
                 existing = true
                 break

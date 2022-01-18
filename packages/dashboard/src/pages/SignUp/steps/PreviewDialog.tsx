@@ -82,7 +82,7 @@ export function PreviewDialog(props: PreviewDialogProps) {
                 <DialogContent sx={{ marginTop: '-24px', padding: '0' }}>
                     <ComponentToPrint {...props} ref={ref} />
 
-                    <Box padding={'0 24px 24px'}>
+                    <Box padding="0 24px 24px">
                         <Button size="large" fullWidth onClick={onClick}>
                             {type === 'print' ? t.print() : t.download()}
                         </Button>
@@ -102,15 +102,15 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
         <Box
             display="flex"
             justifyContent="center"
-            height={'100%'}
-            padding={'24px 24px 0'}
+            height="100%"
+            padding="24px 24px 0"
             ref={ref}
-            color={'#111432'}
+            color="#111432"
             sx={{ background: '#fff' }}>
             <Box maxWidth={746} className={classes.preview}>
                 <Box className={classes.card} display="flex" alignItems="center">
                     <Box flex={1}>
-                        <Box display="flex" alignItems="center" paddingBottom={'8px'}>
+                        <Box display="flex" alignItems="center" paddingBottom="8px">
                             <MiniMaskIcon />
                             <Typography fontSize={24} fontWeight={600} className={classes.name}>
                                 {t.persona()}: {personaName}
@@ -146,11 +146,11 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
                         qrStyle="dots"
                     />
                 </Box>
-                <Typography margin={'24px 0'} fontWeight={600}>
+                <Typography margin="24px 0" fontWeight={600}>
                     {t.create_account_identity_id()}
                 </Typography>
                 <MnemonicReveal words={words} indexed wordClass={classes.wordClass} />
-                <Box display="flex" alignItems="center" margin={'24px 0'}>
+                <Box display="flex" alignItems="center" margin="24px 0">
                     <InfoIcon className={classes.infoIcon} />
                     <Typography fontSize={12} fontWeight={700}>
                         {t.create_account_preview_tip()}

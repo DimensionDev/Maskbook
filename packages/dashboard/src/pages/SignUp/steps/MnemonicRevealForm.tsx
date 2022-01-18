@@ -85,7 +85,7 @@ export const MnemonicRevealForm = memo(() => {
         // handle refresh page after create
         const pageRefreshHandler = async () => {
             const personas = await Services.Identity.queryMyPersonas()
-            for (let i in personas) {
+            for (const i in personas) {
                 if (personas[i].nickname === state.personaName) {
                     const id = personas[i].identifier
                     Services.Identity.deletePersona(id, 'delete even with private')
