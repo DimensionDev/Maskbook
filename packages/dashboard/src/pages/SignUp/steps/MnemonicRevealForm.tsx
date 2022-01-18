@@ -1,10 +1,9 @@
-import { memo, useCallback, useEffect, useState } from 'react'
-import { some } from 'lodash-unified'
+import { memo, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, Stack, Box, IconButton } from '@mui/material'
 import RefreshIcon from '@mui/icons-material/Refresh'
 import { MaskColorVar, useCustomSnackbar } from '@masknet/theme'
-import { DashboardRoutes, delay, ECKeyIdentifier, Identifier } from '@masknet/shared-base'
+import { DashboardRoutes, ECKeyIdentifier } from '@masknet/shared-base'
 import { MaskAlert } from '../../../components/MaskAlert'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
 import {

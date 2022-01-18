@@ -45,7 +45,7 @@ export const PersonaCreate = () => {
             return setError(t.create_account_persona_exists())
         }
 
-        await navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.MnemonicReveal}`, {
+        navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.MnemonicReveal}`, {
             replace: true,
             state: {
                 personaName,
