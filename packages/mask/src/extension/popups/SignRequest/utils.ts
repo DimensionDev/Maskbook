@@ -6,6 +6,7 @@ export interface SignRequest {
     // TODO: support sign binary (u8[])
     message: string
     requestID: string
+    identifier: string
     // TODO: support sign with wallet
     // TODO: support non-eth sign
     // TODO: support sign with given candidate (not displaying persona selector)
