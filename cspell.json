@@ -271,6 +271,7 @@
         "cryptopunks",
         "Csvg",
         "CUSD",
+        "deattach",
         "Defi",
         "devnet",
         "Dnoxg",
@@ -345,6 +346,7 @@
         "testweb",
         "tinycolor",
         "treeshake",
+        "txreceipt",
         "txts",
         "uaddr",
         "unauthenticate",
@@ -358,8 +360,7 @@
         "walletlink",
         "WNATIVE",
         "xdescribe",
-        "xtest",
-        "txreceipt"
+        "xtest"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [
