@@ -10,6 +10,7 @@ import { MaskSharpIcon } from '../../resources/MaskIcon'
 import { useMount } from 'react-use'
 import { hasNativeAPI, nativeAPI } from '../../utils'
 import { userGuideStatus } from '../../settings/settings'
+import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 
 interface BannerUIProps extends withClasses<never | 'header' | 'content' | 'actions' | 'buttonText'> {
     description?: string
@@ -48,11 +49,11 @@ export interface BannerProps extends Partial<BannerUIProps> {}
 
 export function Banner(props: BannerProps) {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
+    const personaConnectStatus = usePersonaConnectStatus()
     const { nextStep } = props
     const networkIdentifier = activatedSocialNetworkUI.networkIdentifier
     const identities = useMyIdentities()
     const [value, onChange] = useState('')
-    const userGuideVal = useValueRef(userGuideStatus[networkIdentifier])
     const defaultNextStep = useCallback(() => {
         if (nextStep === 'hidden') return
         if (!networkIdentifier) {
@@ -61,7 +62,11 @@ export function Banner(props: BannerProps) {
             return
         }
 
-        hasNativeAPI ? nativeAPI?.api.misc_openDashboardView() : Services.Welcome.openOptionsPage(DashboardRoutes.Setup)
+        hasNativeAPI
+            ? nativeAPI?.api.misc_openDashboardView()
+            : Services.Welcome.openOptionsPage(
+                  personaConnectStatus.hasPersona ? DashboardRoutes.Personas : DashboardRoutes.Setup,
+              )
     }, [networkIdentifier, nextStep])
     const defaultUserName = networkIdentifier
         ? {
