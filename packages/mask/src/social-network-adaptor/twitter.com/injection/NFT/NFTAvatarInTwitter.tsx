@@ -1,7 +1,7 @@
 import { createReactRootShadowed, MaskMessages, NFTAvatarEvent, startWatch } from '../../../../utils'
 import { searchTwitterAvatarLinkSelector, searchTwitterAvatarSelector } from '../../utils/selector'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { resolveOpenSeaLink, useChainId, useWallet } from '@masknet/web3-shared-evm'
@@ -52,6 +52,7 @@ function NFTAvatarInTwitter() {
     const location = useLocation()
     const chainId = useChainId()
     const currentPluginId = usePluginIDContext()
+    const { showSnackbar } = useCustomSnackbar()
 
     const showAvatar = useMemo(
         () => getAvatarId(identity.avatar ?? '') === avatar?.avatarId && avatar.avatarId,
@@ -92,7 +93,14 @@ function NFTAvatarInTwitter() {
         const avatar = await PluginNFTAvatarRPC.saveNFTAvatar(wallet.address, {
             ...NFTEvent,
             avatarId: getAvatarId(identity.avatar ?? ''),
-        } as AvatarMetaDB)
+        } as AvatarMetaDB).catch((error) => {
+            showSnackbar(error.message, { variant: 'error' })
+            return
+        })
+        if (!avatar) {
+            showSnackbar('save nft avatar Error', { variant: 'error' })
+            return
+        }
 
         setAvatar(avatar)
         MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll(
@@ -105,7 +113,7 @@ function NFTAvatarInTwitter() {
         )
 
         setNFTEvent(undefined)
-    }, [identity.avatar])
+    }, [identity.avatar, showSnackbar, NFTEvent])
 
     useEffect(() => {
         setAvatar(_avatar)

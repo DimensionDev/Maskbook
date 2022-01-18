@@ -34,6 +34,7 @@ async function fetchFromOpenSea<T>(url: string, chainId: ChainId, apiKey?: strin
             headers: { 'x-api-key': apiKey ?? OPENSEA_API_KEY, Accept: 'application/json' },
             ...(currentEnv === NonFungibleTokenAPI.APIEnv.browser && { mode: 'cors' }),
         })
+        if (response.status === 404) return
         return response.json() as Promise<T>
     } catch {
         return

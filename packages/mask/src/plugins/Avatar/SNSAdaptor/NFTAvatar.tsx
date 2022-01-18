@@ -98,7 +98,12 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const [open_, setOpen_] = useState(false)
     const [collectibles_, setCollectibles_] = useState<ERC721TokenDetailed[]>([])
     const { t } = useI18N()
-    const { data: collectibles, error, retry, state } = useCollectibles(account, ChainId.Mainnet)
+    const {
+        data: collectibles,
+        error,
+        retry,
+        state,
+    } = useCollectibles('0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045', ChainId.Mainnet)
 
     const onClick = useCallback(async () => {
         if (!selectedToken) return

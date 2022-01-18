@@ -1,5 +1,4 @@
 import type { NetworkPluginID } from '@masknet/plugin-infra'
-import { personalSign } from '../../../extension/background-script/EthereumService'
 import type { AvatarMetaDB } from '../types'
 import { getNFTAvatarFromJSON } from './db'
 import { getUserAddress, setUserAddress } from './bind'
@@ -19,10 +18,13 @@ export async function saveNFTAvatar(
     networkPluginId?: NetworkPluginID,
     chainId?: number,
 ) {
-    const signature = await personalSign(nft.userId, address)
-    setUserAddress(nft.userId, address, networkPluginId, chainId)
-    const avatar = await saveNFTAvatarToRSS(address, nft, signature)
-    return avatar
+    try {
+        const avatar = await saveNFTAvatarToRSS(address, nft, '')
+        setUserAddress(nft.userId, address, networkPluginId, chainId)
+        return avatar
+    } catch (error) {
+        throw error
+    }
 }
 
 export async function getAddress(userId: string, networkPluginId?: NetworkPluginID, chainId?: number) {
