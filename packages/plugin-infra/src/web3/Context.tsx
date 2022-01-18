@@ -31,8 +31,6 @@ function usePluginWeb3State(pluginID: string, context: Record<string, Web3Plugin
     const allowTestnet = useSubscription(Shared?.allowTestnet ?? FALSE)
     const chainId = useSubscription(Shared?.chainId ?? ZERO)
     const account = useSubscription(Shared?.account ?? EMPTY_STRING)
-    const balanceOfChain = useSubscription(Shared?.balanceOfChain ?? NULL)
-    const blockNumberOfChain = useSubscription(Shared?.blockNumberOfChain ?? NULL)
     const networkType = useSubscription(Shared?.networkType ?? EMPTY_STRING)
     const providerType = useSubscription(Shared?.providerType ?? EMPTY_STRING)
     const assetType = useSubscription(Shared?.assetType ?? EMPTY_STRING)
@@ -50,8 +48,6 @@ function usePluginWeb3State(pluginID: string, context: Record<string, Web3Plugin
         allowTestnet,
         chainId,
         account,
-        balanceOfChain,
-        blockNumberOfChain,
         networkType,
         providerType,
         assetType,

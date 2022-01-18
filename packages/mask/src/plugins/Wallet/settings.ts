@@ -1,5 +1,4 @@
 import { isEqual } from 'lodash-unified'
-import type { Web3Plugin } from '@masknet/plugin-infra'
 import { createGlobalSettings } from '../../settings/createSettings'
 import { i18n } from '../../../shared-ui/locales_legacy'
 import {
@@ -99,29 +98,8 @@ export const currentGasOptionsSettings = createGlobalSettings<GasOptions | null>
     (a: GasOptions | null, b: GasOptions | null) => isEqual(a, b),
 )
 
-/**
- * ERC20 Token prices or native token prices
- */
 export const currentTokenPricesSettings = createGlobalSettings<CryptoPrice>(
     `${PLUGIN_ID}+tokenPrices`,
-    {},
-    {
-        primary: () => 'DO NOT DISPLAY IT IN UI',
-    },
-    (a, b) => isEqual(a, b),
-)
-
-export const currentBlockNumberOfChainSettings = createGlobalSettings<Web3Plugin.BlockNumberOfChain>(
-    `${PLUGIN_ID}+blockNumberOfChain`,
-    {},
-    {
-        primary: () => 'DO NOT DISPLAY IT IN UI',
-    },
-    (a, b) => isEqual(a, b),
-)
-
-export const currentBalanceOfChainSettings = createGlobalSettings<Web3Plugin.BalanceOfChain>(
-    `${PLUGIN_ID}+balanceOfChain`,
     {},
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',

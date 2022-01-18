@@ -214,10 +214,6 @@ export declare namespace Web3Plugin {
         }
     }
 
-    export interface BlockNumberOfChain {
-        [chainId: string]: number
-    }
-
     export namespace ObjectCapabilities {
         export interface SharedState {
             allowTestnet?: Subscription<boolean>
@@ -225,10 +221,6 @@ export declare namespace Web3Plugin {
             chainId?: Subscription<number>
             /** The address of the currently chosen wallet. */
             account?: Subscription<string>
-            /** The tracked balance of chain. */
-            balanceOfChain?: Subscription<BalanceOfChain>
-            /** The tracked block height of chain. */
-            blockNumberOfChain?: Subscription<BlockNumberOfChain>
             /** The network type. */
             networkType?: Subscription<string | undefined>
             /** The wallet provider type. */

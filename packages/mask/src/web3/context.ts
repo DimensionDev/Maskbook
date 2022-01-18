@@ -22,8 +22,6 @@ import {
     currentMaskWalletChainIdSettings,
     currentMaskWalletNetworkSettings,
     currentMaskWalletAccountSettings,
-    currentBalanceOfChainSettings,
-    currentBlockNumberOfChainSettings,
 } from '../plugins/Wallet/settings'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import type { InternalSettings } from '../settings/createSettings'
@@ -92,8 +90,6 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
                 return () => void [a(), b(), c()]
             },
         ),
-        balanceOfChain: createSubscriptionFromSettings(currentBalanceOfChainSettings),
-        blockNumberOfChain: createSubscriptionFromSettings(currentBlockNumberOfChainSettings),
         tokenPrices: createSubscriptionFromSettings(currentTokenPricesSettings),
         walletPrimary: createSubscriptionFromAsync(
             WalletRPC.getWalletPrimary,

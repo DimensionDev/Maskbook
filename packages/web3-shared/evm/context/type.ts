@@ -16,8 +16,6 @@ import type {
     AddressName,
     CryptoPrice,
     ERC721TokenCollectionInfo,
-    BalanceOfChain,
-    BlockNumberOfChain,
 } from '../types'
 import type { ProviderProxy } from '@masknet/web3-shared-base'
 
@@ -25,8 +23,6 @@ export interface Web3ProviderType {
     allowTestnet: Subscription<boolean>
     chainId: Subscription<ChainId>
     account: Subscription<string>
-    balanceOfChain: Subscription<BalanceOfChain>
-    blockNumberOfChain: Subscription<BlockNumberOfChain>
     provider: Subscription<Provider>
     networkType: Subscription<NetworkType>
     providerType: Subscription<ProviderType>

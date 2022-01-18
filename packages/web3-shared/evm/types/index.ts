@@ -26,10 +26,6 @@ export interface CryptoPrice {
 export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
 export type ChainIdRecord<T> = { [k in ChainId]: T }
 
-export interface BlockNumberOfChain {
-    [chainId: string]: number
-}
-
 export interface BalanceOfChain {
     [chainId: string]: {
         [account: string]: string

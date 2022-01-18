@@ -46,16 +46,6 @@ export const Web3Context: Web3ProviderType = {
         {},
         Messages.events.currentTokenPricesSettings.on,
     ),
-    balanceOfChain: createSubscriptionFromAsync(
-        Services.Settings.getBalanceOfChain,
-        {},
-        Messages.events.currentBalanceOfChainSettings.on,
-    ),
-    blockNumberOfChain: createSubscriptionFromAsync(
-        Services.Settings.getBlockNumberOfChain,
-        {},
-        Messages.events.currentBlockNumberOfChainSettings.on,
-    ),
     chainId: createSubscriptionFromAsync(
         Services.Settings.getChainId,
         ChainId.Mainnet,
