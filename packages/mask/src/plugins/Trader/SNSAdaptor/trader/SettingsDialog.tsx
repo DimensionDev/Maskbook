@@ -80,16 +80,19 @@ export function SettingsDialog(props: SettingsDialogProps) {
         setWarningVisible(unconfirmedSlippage >= WARNING_SLIPPAGE)
     }, [unconfirmedSlippage])
 
+    const onSaveSlippage = useCallback(() => {
+        currentSlippageSettings.value = unconfirmedSlippage
+    }, [unconfirmedSlippage])
+
     const onSubmit = useCallback(
         (gasConfig?: GasOptionConfig) => {
-            currentSlippageSettings.value = unconfirmedSlippage
             setGasConfig(gasConfig)
             setDialog({
                 open: false,
                 gasConfig,
             })
         },
-        [unconfirmedSlippage, closeDialog],
+        [closeDialog],
     )
 
     return (
@@ -113,9 +116,19 @@ export function SettingsDialog(props: SettingsDialogProps) {
                     ) : null}
                 </Accordion>
                 {networkType === NetworkType.Ethereum ? (
-                    <Gas1559Settings onCancel={closeDialog} onSave={onSubmit} gasConfig={gasConfig} />
+                    <Gas1559Settings
+                        onCancel={closeDialog}
+                        onSave={onSubmit}
+                        gasConfig={gasConfig}
+                        onSaveSlippage={onSaveSlippage}
+                    />
                 ) : (
-                    <GasPrior1559Settings onCancel={closeDialog} onSave={onSubmit} gasConfig={gasConfig} />
+                    <GasPrior1559Settings
+                        onCancel={closeDialog}
+                        onSave={onSubmit}
+                        gasConfig={gasConfig}
+                        onSaveSlippage={onSaveSlippage}
+                    />
                 )}
             </DialogContent>
         </InjectedDialog>

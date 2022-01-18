@@ -829,7 +829,6 @@
     "popups_wallet_signature_request": "签名请求",
     "popups_wallet_signature_request_message": "信息",
     "popups_wallet_contract_interaction": "合约交互",
-    "popups_wallet_contract_interaction_approve": "批准",
     "popups_wallet_contract_interaction_transfer": "转账",
     "popups_wallet_contract_interaction_gas_fee": "Gas fee",
     "popups_wallet_contract_interaction_edit": "编辑",

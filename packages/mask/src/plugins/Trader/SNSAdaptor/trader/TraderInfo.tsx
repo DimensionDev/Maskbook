@@ -29,7 +29,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         position: 'relative',
     },
     warning: {
-        borderColor: `${isDashboard ? MaskColorVar.redMain : theme.palette.error.main} !important`,
+        borderColor: isDashboard ? MaskColorVar.redMain : theme.palette.error.main,
     },
     warningText: {
         fontSize: 16,

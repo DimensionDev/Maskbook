@@ -165,6 +165,16 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
 
     const isGreatThanSlippageSetting = useGreatThanSlippageSetting(cacheTrade?.priceImpact)
 
+    const alertTip = useMemo(() => {
+        if (currentSlippage >= 150 && currentSlippage < 1000) return null
+
+        return (
+            <Alert className={classes.alert} icon={<InfoIcon className={classes.alertIcon} />} severity="info">
+                {currentSlippage < 150 ? t('plugin_trader_confirm_tips') : t('plugin_trader_price_impact_warning_tips')}
+            </Alert>
+        )
+    }, [currentSlippage])
+
     const onAccept = useCallback(() => {
         setPriceUpdated(false)
         setCacheTrade(trade)
@@ -353,14 +363,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                             {t('plugin_trader_price_updated')}
                         </Alert>
                     ) : (
-                        <Alert
-                            className={classes.alert}
-                            icon={<InfoIcon className={classes.alertIcon} />}
-                            severity="info">
-                            {isGreatThanSlippageSetting
-                                ? t('plugin_trader_price_impact_warning_tips')
-                                : t('plugin_trader_confirm_tips')}
-                        </Alert>
+                        alertTip
                     )}
                 </DialogContent>
                 {!priceUpdated ? (
