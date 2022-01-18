@@ -1,4 +1,4 @@
-name: Build
+name: Netlify Build
 
 on:
   push:
@@ -29,11 +29,11 @@ jobs:
           fetch-depth: 0
       - uses: pnpm/action-setup@v2
         with:
-          version: '6.23.1'
+          version: 6.23.1
       - uses: actions/setup-node@v2
         with:
-          node-version: '16'
-          cache: 'pnpm'
+          node-version: 16
+          cache: pnpm
       - name: Restore Webpack cache
         uses: actions/cache@v2
         with:
@@ -49,10 +49,10 @@ jobs:
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.2
         with:
-          publish-dir: './packages/netlify/'
+          publish-dir: ./packages/netlify/
           production-branch: develop
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          deploy-message: "Deploy from GitHub Actions"
+          deploy-message: Deploy from GitHub Actions
           enable-commit-comment: false
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
