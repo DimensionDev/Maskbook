@@ -50,7 +50,7 @@ function useContext(initialState?: { boxId: string }) {
     const [boxId, setBoxId] = useState(initialState?.boxId ?? '')
     const [paymentTokenAddress, setPaymentTokenAddress] = useState('')
 
-    //#region the box info
+    // #region the box info
     const {
         value: maskBoxInfo = null,
         error: errorMaskBoxInfo,
@@ -154,13 +154,13 @@ function useContext(initialState?: { boxId: string }) {
     const isQualifiedByContract =
         boxInfo?.qualificationAddress && !isZeroAddress(boxInfo?.qualificationAddress) ? isWhitelisted : true
 
-    //#region check holder min token
+    // #region check holder min token
     const { value: holderToken } = useERC20TokenDetailed(boxInfo?.holderTokenAddress)
     const { value: holderTokenBalance = '0' } = useERC20TokenBalance(holderToken?.address)
     const holderMinTokenAmountBN = new BigNumber(boxInfo?.holderMinTokenAmount ?? 0)
     const isQualified =
         (isZero(holderMinTokenAmountBN) || holderMinTokenAmountBN.lte(holderTokenBalance)) && isQualifiedByContract
-    //#endregion
+    // #endregion
 
     const boxStateMessage = useMemo(() => {
         switch (boxState) {
@@ -199,17 +199,17 @@ function useContext(initialState?: { boxId: string }) {
         }
     }, [boxInfo, heartBeat])
 
-    //#endregion
+    // #endregion
 
-    //#region the box metadata
+    // #region the box metadata
     const { value: boxMetadata, retry: retryBoxMetadata } = useMaskBoxMetadata(boxId, boxInfo?.creator ?? '')
-    //#endregion
+    // #endregion
 
-    //#region the erc721 contract detailed
+    // #region the erc721 contract detailed
     const { value: contractDetailed } = useERC721ContractDetailed(maskBoxInfo?.nft_address)
-    //#endregion
+    // #endregion
 
-    //#region the payment count
+    // #region the payment count
     const [paymentCount, setPaymentCount] = useState(1)
     const setPaymentCount_ = useCallback(
         (count: number) => {
@@ -217,17 +217,17 @@ function useContext(initialState?: { boxId: string }) {
         },
         [boxInfo?.personalRemaining],
     )
-    //#endregion
+    // #endregion
 
-    //#region token ids
+    // #region token ids
     const [lastAllTokenIds, setLastAllTokenIds] = useState<string[]>([])
     const [lastPurchasedTokenIds, setLastPurchasedTokenIds] = useState<string[]>([])
     const refreshLastPurchasedTokenIds = useCallback(() => {
         setLastPurchasedTokenIds((tokenIds) => uniq([...tokenIds, ...purchasedTokens]))
     }, [purchasedTokens.length])
-    //#endregion
+    // #endregion
 
-    //#region the payment token
+    // #region the payment token
     const { value: paymentNativeTokenBalance = '0' } = useNativeTokenBalance()
     const { value: paymentERC20TokenBalance = '0' } = useERC20TokenBalance(
         isSameAddress(paymentTokenAddress, NATIVE_TOKEN_ADDRESS) ? '' : paymentTokenAddress,
@@ -246,9 +246,9 @@ function useContext(initialState?: { boxId: string }) {
         const firstPaymentTokenAddress = first(boxInfo?.payments)?.token.address
         if (paymentTokenAddress === '' && firstPaymentTokenAddress) setPaymentTokenAddress(firstPaymentTokenAddress)
     }, [paymentTokenAddress, boxInfo?.payments.map((x) => x.token.address).join()])
-    //#endregion
+    // #endregion
 
-    //#region transactions
+    // #region transactions
     const [openBoxTransactionOverrides, setOpenBoxTransactionOverrides] = useState<NonPayableTx | null>(null)
     const openBoxTransaction = useOpenBoxTransaction(
         boxId,
@@ -270,7 +270,7 @@ function useContext(initialState?: { boxId: string }) {
         const estimatedGas = await openBoxTransaction.method.estimateGas(omit(openBoxTransaction.config, 'gas'))
         return new BigNumber(estimatedGas).toNumber()
     }, [openBoxTransaction, canPurchase, allowToPurchase, isAllowanceEnough])
-    //#endregion
+    // #endregion
 
     return {
         // box id
