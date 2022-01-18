@@ -155,7 +155,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
             case NetworkType.Metis:
             case NetworkType.Avalanche:
             case NetworkType.Optimistic:
-                throw new Error(`To be implement network: ${networkType}`)
+                throw new Error(`To be implement network: ${network}`)
             default:
                 unreachable(network)
         }
