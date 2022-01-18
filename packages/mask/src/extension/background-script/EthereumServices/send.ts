@@ -150,7 +150,7 @@ export async function INTERNAL_send(
         providerType = currentProviderSettings.value,
     }: SendOverrides = {},
 ) {
-    if (process.env.NODE_ENV === 'development' && debugModeSetting.value) {
+    if (process.env.NODE_ENV === 'development') {
         console.table(payload)
         console.debug(new Error().stack)
     }
@@ -397,7 +397,9 @@ export async function INTERNAL_send(
         const [hash] = payload.params as [string]
 
         // redirect receipt queries to tx watcher
-        const transaction = await WalletRPC.getRecentTransaction(chainIdFinally, account, hash)
+        const transaction = await WalletRPC.getRecentTransaction(chainIdFinally, account, hash, {
+            receipt: true,
+        })
 
         try {
             callback(null, {

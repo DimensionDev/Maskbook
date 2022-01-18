@@ -3,12 +3,16 @@ import { createContainer } from 'unstated-next'
 import { useAssets, useTrustedERC20Tokens, Asset, useChainDetailed } from '@masknet/web3-shared-evm'
 import { useRecentTransactions } from '../../../../../plugins/Wallet/hooks/useRecentTransactions'
 import type { RecentTransaction } from '../../../../../plugins/Wallet/services'
+import { tr } from 'date-fns/locale'
 
 function useWalletContext() {
     const chainDetailed = useChainDetailed()
     const erc20Tokens = useTrustedERC20Tokens()
     const { value: assets, loading } = useAssets(erc20Tokens)
-    const { value: transactions } = useRecentTransactions()
+    const { value: transactions } = useRecentTransactions({
+        receipt: true,
+        computedPayload: true,
+    })
     const [currentToken, setCurrentToken] = useState<Asset>()
     const [transaction, setTransaction] = useState<RecentTransaction | null>()
 

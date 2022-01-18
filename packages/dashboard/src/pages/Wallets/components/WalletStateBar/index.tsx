@@ -49,7 +49,9 @@ export const WalletStateBar = memo(() => {
     const wallet = useWallet()
     const networkDescriptor = useNetworkDescriptor()
     const providerDescriptor = useProviderDescriptor()
-    const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)
+    const { value: pendingTransactions = [] } = useRecentTransactions({
+        status: TransactionStatusType.NOT_DEPEND,
+    })
 
     const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
         PluginMessages.Wallet.events.walletStatusDialogUpdated,

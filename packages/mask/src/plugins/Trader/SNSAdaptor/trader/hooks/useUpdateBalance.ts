@@ -5,12 +5,13 @@ import {
     useAccount,
     useProviderType,
     useTokenConstants,
+    useWeb3,
 } from '@masknet/web3-shared-evm'
 import { useAsync } from 'react-use'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext'
-import Services from '../../../../../extension/service'
 
 export function useUpdateBalance(chainId: ChainId, currentChainId: ChainId) {
+    const web3 = useWeb3(true, chainId)
     const currentAccount = useAccount()
     const currentProvider = useProviderType()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
@@ -34,10 +35,7 @@ export function useUpdateBalance(chainId: ChainId, currentChainId: ChainId) {
         }
 
         if (chainId && currentProvider && currentAccount) {
-            const balance = await Services.Ethereum.getBalance(currentAccount, {
-                chainId: chainId,
-                providerType: currentProvider,
-            })
+            const balance = await web3.eth.getBalance(currentAccount)
 
             dispatchTradeStore({
                 type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
@@ -53,5 +51,5 @@ export function useUpdateBalance(chainId: ChainId, currentChainId: ChainId) {
                         : '0',
             })
         }
-    }, [inputToken, outputToken, currentAccount, currentProvider, chainId, currentChainId, NATIVE_TOKEN_ADDRESS])
+    }, [web3, inputToken, outputToken, currentAccount, currentProvider, chainId, currentChainId, NATIVE_TOKEN_ADDRESS])
 }
