@@ -88,7 +88,7 @@
     "setup_guide_connect_auto": "Connect",
     "setup_guide_connect_failed": "Re-Connect",
     "user_guide_tip_connected": "You have connected to this account successfully.",
-    "setup_guide_say_hello_content": "Hellow Mask world. This is my first encrypted message. Install https://mask.io... to send me encrypted post. Follow @realMaskNetwork to explore Web 3.0.",
+    "setup_guide_say_hello_content": "Hellow Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post. Follow @realMaskNetwork to explore Web 3.0.",
     "setup_guide_pin_tip_0": "Don't forget to pin Mask Network in your browser toolbar to access web 3.0 easily.",
     "setup_guide_pin_tip_1": "Click on ",
     "setup_guide_pin_tip_1_s": " at top right of your browser.",

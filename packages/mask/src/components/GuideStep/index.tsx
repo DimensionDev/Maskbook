@@ -140,7 +140,8 @@ export default function GuideStep({
     }
 
     const onTry = () => {
-        onSkip()
+        setOpen(false)
+        userGuideStatus[ui.networkIdentifier].value = 'completed'
         onComplete?.()
     }
 
