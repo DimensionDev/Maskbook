@@ -317,6 +317,8 @@ export declare namespace Web3Plugin {
             resolveDomainLink?: (domain: string) => string
             isValidDomain?: (domain: string) => boolean
             formatDomainName?: (domain?: string, size?: number) => string | undefined
+
+            getAverageBlockDelay?: (chainId: number, scale?: number) => number
         }
         export interface Capabilities {
             Shared?: SharedState

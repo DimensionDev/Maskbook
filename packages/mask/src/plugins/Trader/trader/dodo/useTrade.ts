@@ -11,7 +11,7 @@ import type { TradeStrategy } from '../../types'
 import { useSlippageTolerance } from './useSlippageTolerance'
 import { first } from 'lodash-unified'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
-import { useDoubleBlockBeatRetry } from '@masknet/web3-shared-base'
+import { useDoubleBlockBeatRetry } from '@masknet/plugin-infra'
 
 export function useTrade(
     strategy: TradeStrategy,

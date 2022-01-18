@@ -12,7 +12,7 @@ import type { TradeStrategy } from '../../types'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { useSlippageTolerance } from './useSlippageTolerance'
 import { OPENOCEAN_SUPPORTED_CHAINS } from './constants'
-import { useDoubleBlockBeatRetry } from '@masknet/web3-shared-base'
+import { useDoubleBlockBeatRetry } from '@masknet/plugin-infra'
 
 export function useTrade(
     strategy: TradeStrategy,

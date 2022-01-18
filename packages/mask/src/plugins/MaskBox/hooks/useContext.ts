@@ -36,7 +36,7 @@ import { formatCountdown } from '../helpers/formatCountdown'
 import { useOpenBoxTransaction } from './useOpenBoxTransaction'
 import { useMaskBoxMetadata } from './useMaskBoxMetadata'
 import { useIsWhitelisted } from './useIsWhitelisted'
-import { useBeat, isGreaterThanOrEqualTo, isLessThanOrEqualTo, isZero, multipliedBy } from '@masknet/web3-shared-base'
+import { isGreaterThanOrEqualTo, isLessThanOrEqualTo, isZero, multipliedBy, useBeat } from '@masknet/web3-shared-base'
 
 function useContext(initialState?: { boxId: string }) {
     const now = new Date()

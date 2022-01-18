@@ -15,7 +15,7 @@ import { useTradeProviderSettings } from '../useTradeSettings'
 import { currentNetworkSettings } from '../../../Wallet/settings'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { TradeProvider } from '@masknet/public-api'
-import { useDoubleBlockBeatRetry } from '@masknet/web3-shared-base'
+import { useDoubleBlockBeatRetry } from '@masknet/plugin-infra'
 
 const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 

@@ -10,7 +10,8 @@ import { PluginTraderRPC } from '../../messages'
 import { TradeStrategy } from '../../types'
 import { useSlippageTolerance } from './useSlippageTolerance'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
-import { leftShift, useDoubleBlockBeatRetry } from '@masknet/web3-shared-base'
+import { leftShift } from '@masknet/web3-shared-base'
+import { useDoubleBlockBeatRetry } from '@masknet/plugin-infra'
 
 export function useTrade(
     strategy: TradeStrategy,
