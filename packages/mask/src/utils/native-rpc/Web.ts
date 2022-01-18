@@ -119,6 +119,15 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.getCeloNetworkTradeProvider()
             case NetworkType.Fantom:
                 return Services.Settings.getxDaiNetworkTradeProvider()
+            case NetworkType.Aurora:
+                return Services.Settings.getAuroraNetworkTradeProvider()
+
+            case NetworkType.Boba:
+            case NetworkType.Fuse:
+            case NetworkType.Metis:
+            case NetworkType.Avalanche:
+            case NetworkType.Optimistic:
+                throw new Error(`To be implement network: ${network}`)
             default:
                 unreachable(network)
         }
@@ -139,6 +148,14 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.setCeloNetworkTradeProvider(provider)
             case NetworkType.Fantom:
                 return Services.Settings.setFantomNetworkTradeProvider(provider)
+            case NetworkType.Aurora:
+                return Services.Settings.setAuroraNetworkTradeProvider(provider)
+            case NetworkType.Boba:
+            case NetworkType.Fuse:
+            case NetworkType.Metis:
+            case NetworkType.Avalanche:
+            case NetworkType.Optimistic:
+                throw new Error(`To be implement network: ${network}`)
             default:
                 unreachable(network)
         }

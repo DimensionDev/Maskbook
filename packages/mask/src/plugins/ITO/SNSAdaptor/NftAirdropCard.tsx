@@ -225,7 +225,7 @@ export function NftAirdropCard(props: NftAirdropCardProps) {
             <div className={classes.claimParent}>
                 {campaignInfos.map((v, i) => {
                     return v.claimableInfo.claimable ? (
-                        <div key={i.toString()}>
+                        <div key={i}>
                             <ClaimItem campaignInfo={v.campaignInfo} claimed={v.claimableInfo.claimed} retry={retry} />
                         </div>
                     ) : null
@@ -233,7 +233,7 @@ export function NftAirdropCard(props: NftAirdropCardProps) {
             </div>
             <Typography className={classes.text}>
                 {t('plugin_ito_total_claimable_count')}
-                {`${claimableCount} ${claimableCount > 1 ? 'items' : 'item'}`},
+                {claimableCount} {claimableCount > 1 ? 'items' : 'item'},
             </Typography>
 
             <Typography className={classes.subText}>{t('plugin_airdrop_nft_check_address')}</Typography>

@@ -4,12 +4,12 @@ import { PLUGIN_ID } from './constants'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
-    icon: '🎁',
+    icon: '\u{1F381}',
     name: { fallback: 'MaskBox' },
     description: { fallback: 'The mystery box with NFT inside which is provided by Mask Network.' },
     publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
     enableRequirement: {
-        architecture: { app: false, web: true },
+        architecture: { app: true, web: true },
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
     },

@@ -21,6 +21,7 @@ export const MaskGreyIcon: typeof SvgIcon = createPaletteAwareIcon(
             fill="#15171A"
         />
     </g>,
+    undefined,
     '0 0 120 120',
     [130, 40],
 )

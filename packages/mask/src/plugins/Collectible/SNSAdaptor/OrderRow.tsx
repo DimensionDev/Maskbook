@@ -1,5 +1,4 @@
 import { useMemo } from 'react'
-import BigNumber from 'bignumber.js'
 import { Avatar, Link, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 
@@ -9,7 +8,7 @@ import {
     NonFungibleAssetProvider,
     resolveAddressLinkOnExplorer,
 } from '@masknet/web3-shared-evm'
-import { isZero } from '@masknet/web3-shared-base'
+import { isOne, isZero } from '@masknet/web3-shared-base'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { Account } from './Account'
 import { FormattedBalance } from '@masknet/shared'
@@ -116,7 +115,7 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                         <Typography className={classes.content}>
                             <FormattedBalance
                                 value={order.quantity ?? 0}
-                                decimals={new BigNumber(order.quantity ?? 0).toString() !== '1' ? 8 : 0}
+                                decimals={!isOne(order.quantity ?? 0) ? 8 : 0}
                                 formatter={formatBalance}
                             />
                         </Typography>

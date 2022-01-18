@@ -71,13 +71,16 @@ function usePluginsWeb3State() {
     const pluginStateEVM = usePluginWeb3State(NetworkPluginID.PLUGIN_EVM, context)
     const pluginStateFlow = usePluginWeb3State(NetworkPluginID.PLUGIN_FLOW, context)
     const pluginStateTerra = usePluginWeb3State(NetworkPluginID.PLUGIN_TERRA, context)
+    const pluginStateSolana = usePluginWeb3State(NetworkPluginID.PLUGIN_SOLANA, context)
     return useMemo(
         () => ({
             [NetworkPluginID.PLUGIN_EVM]: pluginStateEVM,
             [NetworkPluginID.PLUGIN_FLOW]: pluginStateFlow,
             [NetworkPluginID.PLUGIN_TERRA]: pluginStateTerra,
         }),
-        [pluginStateEVM, pluginStateFlow, pluginStateTerra],
+        [pluginStateEVM, pluginStateFlow, pluginStateSolana, pluginStateTerra],
+            [NetworkPluginID.PLUGIN_SOLANA]: pluginStateSolana,
+        }),
     )
 }
 

@@ -71,5 +71,6 @@ export const SettingsLanguageIcon: typeof SvgIcon = createPaletteAwareIcon(
             </clipPath>
         </defs>
     </g>,
+    undefined,
     '0 0 24 24',
 )

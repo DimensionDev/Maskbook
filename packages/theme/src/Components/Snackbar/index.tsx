@@ -11,8 +11,7 @@ import {
     SnackbarAction,
     OptionsObject,
 } from 'notistack'
-import { Typography } from '@mui/material'
-import { IconButton } from '@mui/material'
+import { Typography, IconButton } from '@mui/material'
 import classnames from 'classnames'
 import { Close as CloseIcon } from '@mui/icons-material'
 import WarningIcon from '@mui/icons-material/Warning'

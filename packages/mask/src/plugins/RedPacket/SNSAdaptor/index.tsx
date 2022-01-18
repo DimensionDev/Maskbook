@@ -20,6 +20,7 @@ import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '../types'
 import RedPacketDialog from './RedPacketDialog'
 import { RedPacketInPost } from './RedPacketInPost'
 import { RedPacketNftInPost } from './RedPacketNftInPost'
+import { RedPacketIcon } from '@masknet/icons'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -55,13 +56,20 @@ const sns: Plugin.SNSAdaptor.Definition = {
             RedPacketNftMetaKey,
             (_payload) => {
                 const payload = _payload as RedPacketNftJSONPayload
-                return { text: <>{payload.message ? `🧧 ${payload.message}` : '🧧 An NFT Lucky Drop'}</> }
+                return { text: <>&#x1F9E7; {payload.message ? payload.message : 'An NFT Lucky Drop'}</> }
             },
         ],
     ]),
     CompositionDialogEntry: {
         dialog: RedPacketDialog,
-        label: { fallback: '💰 Lucky Drop' },
+        label: {
+            fallback: (
+                <>
+                    <RedPacketIcon style={{ width: 16, height: 16 }} />
+                    Luck drop
+                </>
+            ),
+        },
     },
 }
 interface ERC20RedpacketBadgeProps {
@@ -77,7 +85,7 @@ function ERC20RedpacketBadge(props: ERC20RedpacketBadgeProps) {
         payload.token?.type === EthereumTokenType.Native ? chainDetailed?.nativeCurrency : payload.token ?? fetchedToken
     return (
         <>
-            🧧 A Lucky Drop with {formatBalance(payload.total, tokenDetailed?.decimals ?? 0)} $
+            &#x1F9E7; A Lucky Drop with {formatBalance(payload.total, tokenDetailed?.decimals ?? 0)} $
             {tokenDetailed?.symbol ?? tokenDetailed?.name ?? 'Token'} from {payload.sender.name}
         </>
     )

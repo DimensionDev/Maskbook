@@ -1,10 +1,9 @@
-import './setup'
+import { ECDH_K256_PublicKey } from './setup'
 import { test, expect } from '@jest/globals'
 import { None, Some } from 'ts-results'
 import { encodePayload, AESAlgorithmEnum, parsePayload, PayloadWellFormed, PublicKeyAlgorithmEnum } from '../src'
 import { importAESFromJWK, importAsymmetryKeyFromJsonWebKeyOrSPKI } from '../src/utils'
 import { ProfileIdentifier } from '@masknet/shared-base'
-import { ECDH_K256_PublicKey } from './setup'
 
 test('Encode v37 payload', async () => {
     const payload: PayloadWellFormed.Payload = {

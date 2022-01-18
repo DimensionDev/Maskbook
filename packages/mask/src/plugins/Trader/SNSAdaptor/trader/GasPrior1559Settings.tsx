@@ -100,10 +100,10 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         borderRadius: isDashboard ? 8 : 24,
     },
     cancelButton: {
-        backgroundColor: !isDashboard ? MaskColorVar.twitterBg : undefined,
-        color: !isDashboard ? MaskColorVar.twitterButton : undefined,
+        backgroundColor: !isDashboard ? theme.palette.background.default : undefined,
+        color: !isDashboard ? theme.palette.text.strong : undefined,
         '&:hover': {
-            backgroundColor: !isDashboard ? `${MaskColorVar.twitterBg}!important` : undefined,
+            backgroundColor: !isDashboard ? `${theme.palette.background.default}!important` : undefined,
         },
     },
 }))
@@ -166,14 +166,13 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(({ onCancel,
     //#endregion
 
     useUpdateEffect(() => {
-        if (gasConfig?.gasPrice && gasOptions) {
-            const gasPrice = new BigNumber(gasConfig.gasPrice)
-            if (gasPrice.isEqualTo(gasOptions.standard)) setOption(0)
-            else if (gasPrice.isEqualTo(gasOptions.fast)) setOption(1)
-            else {
-                setCustomGasPrice(formatWeiToGwei(gasPrice).toString())
-                setOption(2)
-            }
+        if (!(gasConfig?.gasPrice && gasOptions)) return
+        const gasPrice = new BigNumber(gasConfig.gasPrice)
+        if (gasPrice.isEqualTo(gasOptions.standard)) setOption(0)
+        else if (gasPrice.isEqualTo(gasOptions.fast)) setOption(1)
+        else {
+            setCustomGasPrice(formatWeiToGwei(gasPrice).toString())
+            setOption(2)
         }
     }, [gasConfig, gasOptions])
 
