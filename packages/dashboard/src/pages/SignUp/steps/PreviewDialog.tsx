@@ -35,7 +35,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     infoIcon: {
         color: MaskColorVar.secondaryInfoText,
-        fontSize: 20,
+        fontSize: 24,
         marginRight: 12,
     },
 }))
@@ -139,8 +139,8 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
                     </Box>
                     <QRCode
                         value={`MASK:[${privateKey}]`}
-                        ecLevel="M"
-                        size={124}
+                        ecLevel="L"
+                        size={120}
                         quietZone={6}
                         logoImage={MaskBlueURL.toString()}
                         logoWidth={28}
