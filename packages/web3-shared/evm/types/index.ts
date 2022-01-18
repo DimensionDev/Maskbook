@@ -59,10 +59,6 @@ export enum ChainId {
     // xDai
     xDai = 100,
 
-    // Fuse
-    Fuse = 122,
-    Fuse_Sparknet = 123,
-
     // Celo
     Celo = 42220,
 
@@ -75,6 +71,19 @@ export enum ChainId {
     // Aurora
     Aurora = 1313161554,
     Aurora_Testnet = 1313161555,
+
+    // Fuse
+    Fuse = 122,
+    Fuse_Sparknet = 123,
+
+    // Boba
+    Boba = 288,
+
+    // Metis
+    Metis = 1088,
+
+    // Optimistic
+    Optimistic = 10,
 }
 
 export enum ProviderType {
@@ -102,10 +111,14 @@ export enum NetworkType {
     Polygon = 'Polygon',
     Arbitrum = 'Arbitrum',
     xDai = 'xDai',
-    Fuse = 'Fuse',
     Celo = 'Celo',
     Fantom = 'Fantom',
     Aurora = 'Aurora',
+    Avalanche = 'Avalanche',
+    Boba = 'Boba',
+    Fuse = 'Fuse',
+    Metis = 'Metis',
+    Optimistic = 'Optimistic',
 }
 
 export interface Wallet {
