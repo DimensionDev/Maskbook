@@ -12,6 +12,7 @@ export * from './watcher'
 export interface RecentTransaction {
     at: Date
     hash: string
+    hashReplacement?: string
     status: TransactionStatusType
     receipt?: TransactionReceipt | null
     payload?: JsonRpcPayload
@@ -56,14 +57,17 @@ export async function getRecentTransactions(chainId: ChainId, address: string): 
                     (await (hashReplacement ? watcher.getReceipt(chainId, hashReplacement) : null))
 
                 // if it cannot found receipt, then start the watching progress
+                // in case the user just refreshed the background page
                 if (!receipt) {
-                    watcher.watchTransaction(chainId, hash)
-                    if (hashReplacement) watcher.watchTransaction(chainId, hashReplacement)
+                    watcher.watchTransaction(chainId, hash, payload)
+                    if (hashReplacement && payloadReplacement)
+                        watcher.watchTransaction(chainId, hashReplacement, payloadReplacement)
                 }
 
                 return {
                     at,
-                    hash: receipt?.transactionHash ?? hash,
+                    hash,
+                    hashReplacement,
                     status: helpers.getReceiptStatus(receipt),
                     receipt,
                     payload,

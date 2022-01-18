@@ -232,7 +232,7 @@ export function Collectible(props: CollectibleProps) {
                                                     ? assetSource?.latestBidVo?.priceInEth
                                                     : assetSource?.trade?.latestBid,
                                                 price: 'Unknown',
-                                                symbol: ' Ξ',
+                                                symbol: ' \u039E',
                                                 soldNum:
                                                     assetSource?.soldNum === assetSource?.totalAvailable
                                                         ? assetSource?.soldNum
@@ -256,7 +256,7 @@ export function Collectible(props: CollectibleProps) {
                                                     ? assetSource?.latestBidVo?.priceInEth
                                                     : assetSource?.trade?.latestBid,
                                                 price: assetSource?.priceInEth,
-                                                symbol: ' Ξ',
+                                                symbol: ' \u039E',
                                                 soldNum:
                                                     assetSource?.soldNum &&
                                                     assetSource?.soldNum === assetSource?.totalAvailable
@@ -278,7 +278,7 @@ export function Collectible(props: CollectibleProps) {
                                             i18nKey="plugin_cryptoartai_sold_description"
                                             values={{
                                                 soldPrice: soldPrice,
-                                                symbol: ' Ξ',
+                                                symbol: ' \u039E',
                                                 soldNum:
                                                     assetSource?.soldNum === assetSource?.totalAvailable
                                                         ? assetSource?.soldNum
