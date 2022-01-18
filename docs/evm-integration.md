@@ -81,9 +81,15 @@ Goto `chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/dashboard.html#/wallet
 - [ ] Trade with the DEX on the chain.
 
   - Integrate a DEX for the chain.
+  - Estimate gas will be showed on DEX card and sort correctly.
 
 - [ ] Send a transaction and check if the explorer links are working.
+
   - Setup metadata and RPC for the chain.
+  - Transaction sent to wallet with medium gas fee setting.
+  - Required to unlock ERC-20 token before swap.
+
+- [ ] Transfer token in Dashboard's transfer page and Mask popup wallet.
 
 ## Learn More
 
