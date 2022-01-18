@@ -89,11 +89,9 @@ export function PetDialog() {
     const [configNFTs, setConfigNFTs] = useState<Record<string, Constant> | undefined>(undefined)
     const [loading, setLoading] = useState(false)
 
-    //should not use user address here
     const user = useUser()
     const nfts = useNFTs(user, configNFTs)
     const extraData = useNFTsExtra(configNFTs)
-
     const [collection, setCollection] = useState<FilterContract>(initCollection)
     const [isCollectionsError, setCollectionsError] = useState(false)
 

@@ -1,18 +1,18 @@
 import { useAsync } from 'react-use'
 import { useEffect, useState } from 'react'
-import { useAccount } from '@masknet/web3-shared-evm'
+import { useWallet } from '@masknet/web3-shared-evm'
 import type { User } from '../types'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 import { PluginPetRPC } from '../messages'
 
 export function useUser() {
     const [user, setUser] = useState<User>({ userId: '', address: '' })
-    const account = useAccount()
+    const wallet = useWallet()
     const whoAmI = useLastRecognizedIdentity()
     useEffect(() => {
-        if (!(account && whoAmI?.identifier?.userId)) return
-        setUser({ userId: whoAmI.identifier.userId, address: account })
-    }, [account, whoAmI])
+        if (!(wallet?.address && whoAmI?.identifier?.userId)) return
+        setUser({ userId: whoAmI.identifier.userId, address: wallet?.address })
+    }, [wallet, whoAmI])
     return user
 }
 
