@@ -212,6 +212,18 @@ export function useAllTradeComputed(
     const wannaswap = useUniswapTradeComputed(wannaswap_.value, inputToken, outputToken)
     const wannaSwapEstimateGas = useUniswapTradeGasLimit(wannaswap, TradeProvider.WANNASWAP)
 
+    // Solarbeam
+    const solarbeam_ = useUniswapV2Trade(
+        TradeProvider.SOLARBEAM,
+        TradeStrategy.ExactIn,
+        inputAmount_,
+        '0',
+        tradeProviders.some((x) => x === TradeProvider.SOLARBEAM) ? inputToken : undefined,
+        tradeProviders.some((x) => x === TradeProvider.SOLARBEAM) ? outputToken : undefined,
+    )
+    const solarbeam = useUniswapTradeComputed(solarbeam_.value, inputToken, outputToken)
+    const solarbeamEstimateGas = useUniswapTradeGasLimit(solarbeam, TradeProvider.SOLARBEAM)
+
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
         { provider: TradeProvider.SUSHISWAP, ...sushiSwap_, value: sushiSwap, gas: sushiSwapEstimateGas },
@@ -226,6 +238,7 @@ export function useAllTradeComputed(
         { provider: TradeProvider.OPENOCEAN, ...openocean_, value: openocean, gas: openoceanSwapEstimateGas },
         { provider: TradeProvider.WANNASWAP, ...wannaswap_, value: wannaswap, gas: wannaSwapEstimateGas },
         { provider: TradeProvider.TRISOLARIS, ...trisolaris_, value: trisolaris, gas: trisolarisEstimateGas },
+        { provider: TradeProvider.SOLARBEAM, ...solarbeam_, value: solarbeam, gas: solarbeamEstimateGas },
     ]
 
     return nativeToken_.value

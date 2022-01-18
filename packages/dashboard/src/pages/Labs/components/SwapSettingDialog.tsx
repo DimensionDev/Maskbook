@@ -12,6 +12,7 @@ import {
     useCeloNetworkTradeProvider,
     useFantomNetworkTradeProvider,
     useAuroraNetworkTradeProvider,
+    useMoonriverNetworkTradeProvider,
 } from '../../Settings/api'
 
 import SettingItem from './SettingItem'
@@ -60,12 +61,21 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
     ]
     const fantomOptions = xDaiOptions
 
-    const celoOptions = [{ label: 'SushiSwap', value: TradeProvider.SUSHISWAP }]
+    const celoOptions = [
+        { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
+        { label: 'Solarbeam', value: TradeProvider.SOLARBEAM },
+    ]
 
     const auroraOptions = [
         { label: 'DODO', value: TradeProvider.DODO },
         { label: 'WannaSwap', value: TradeProvider.WANNASWAP },
         { label: 'Trisolaris', value: TradeProvider.TRISOLARIS },
+    ]
+
+    const moonriverOptions = [
+        { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
+        { label: 'Solarbeam', value: TradeProvider.SOLARBEAM },
+        { label: 'DODO', value: TradeProvider.DODO },
     ]
 
     const t = useDashboardI18N()
@@ -118,6 +128,12 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
             value: useAuroraNetworkTradeProvider(),
             options: auroraOptions,
             onChange: (value: string) => Services.Settings.setAuroraNetworkTradeProvider(Number.parseInt(value, 10)),
+        },
+        {
+            legend: t.labs_settings_swap_network({ network: 'Moonriver' }),
+            value: useMoonriverNetworkTradeProvider(),
+            options: moonriverOptions,
+            onChange: (value: string) => Services.Settings.setMoonriverNetworkTradeProvider(Number.parseInt(value, 10)),
         },
     ]
 

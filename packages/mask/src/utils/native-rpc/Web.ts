@@ -120,7 +120,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
             case NetworkType.Fantom:
                 return Services.Settings.getxDaiNetworkTradeProvider()
             case NetworkType.Moonriver:
-                return Services.Settings.getMrvNetworkTradeProvider()
+                return Services.Settings.getMoonriverNetworkTradeProvider()
             case NetworkType.Aurora:
                 return Services.Settings.getAuroraNetworkTradeProvider()
 
@@ -151,7 +151,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
             case NetworkType.Fantom:
                 return Services.Settings.setFantomNetworkTradeProvider(provider)
             case NetworkType.Moonriver:
-                return Services.Settings.setMrvNetworkTradeProvider(provider)
+                return Services.Settings.setMoonriverNetworkTradeProvider(provider)
             case NetworkType.Aurora:
                 return Services.Settings.setAuroraNetworkTradeProvider(provider)
             case NetworkType.Boba:

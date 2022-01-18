@@ -44,6 +44,11 @@ export const NFTX = createERC20Tokens('NFTX_ADDRESS', 'NFTX', 'NFTX', 18)
 export const STETH = createERC20Tokens('stETH_ADDRESS', 'stakedETH', 'stETH', 18)
 export const CUSD = createERC20Tokens('cUSD_ADDRESS', 'Celo Dollar', 'cUSD', 18)
 export const CEUR = createERC20Tokens('cEUR_ADDRESS', 'Celo Euro', 'cEUR', 18)
+export const mcEUR = createERC20Tokens('mcEUR_ADDRESS', 'Moola Celo Euro', 'mCEUR', 18)
+export const mCELO = createERC20Tokens('mcEUR_ADDRESS', 'Moola CELO', 'mCELO', 18)
+export const mCUSD = createERC20Tokens('mCUSD_ADDRESS', 'Moola cUSD', 'mCUSD', 18)
+export const SOLAR = createERC20Tokens('SOLAR_ADDRESS', 'Solarbeam Token', 'SOLAR', 18)
+export const CBTC = createERC20Tokens('CBTC_ADDRESS', 'Wrapped Bitcoin', 'cBTC', 18)
 
 export const WNATIVE = createERC20Tokens(
     'WNATIVE_ADDRESS',

@@ -17,6 +17,8 @@ import {
     WANNASWAP_CUSTOM_BASES,
     TRISOLARIS_CUSTOM_BASES,
     TRISOLARIS_BASE_AGAINST_TOKENS,
+    SOLARBEAM_CUSTOM_BASES,
+    SOLARBEAM_BASE_AGAINST_TOKENS,
 } from '../constants'
 import type { TradeContext as TradeContext_ } from '../types'
 import { TargetChainIdContext } from './useTargetChainIdContext'
@@ -124,6 +126,18 @@ export function useTradeContext(tradeProvider: TradeProvider) {
                     AGAINST_TOKENS: TRISOLARIS_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: TRISOLARIS_CUSTOM_BASES,
+                }
+            case TradeProvider.SOLARBEAM:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.SOLARBEAM_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.SOLARBEAM_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.SOLARBEAM_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.SOLARBEAM_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: SOLARBEAM_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: SOLARBEAM_CUSTOM_BASES,
                 }
             case TradeProvider.ZRX:
                 return {

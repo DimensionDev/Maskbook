@@ -112,7 +112,8 @@ const chainNameMap: Record<NetworkType, string> = {
     [NetworkType.Boba]: 'Boba',
     [NetworkType.Fuse]: 'Fuse',
     [NetworkType.Metis]: 'Metis',
-    [NetworkType.Optimistic]: 'Optimistic',
+    [NetworkType.Optimistic]: 'OP',
+    [NetworkType.Moonriver]: 'MOVR',
 }
 export function getNetworkTypeFromChainId(chainId: ChainId, value?: boolean) {
     const chainDetailed = getChainDetailed(chainId)

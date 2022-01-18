@@ -48,6 +48,11 @@ export const [useAuroraNetworkTradeProvider] = createGlobalState(
     Messages.events.auroraNetworkTradeProviderSettings.on,
 )
 
+export const [useMoonriverNetworkTradeProvider] = createGlobalState(
+    Services.Settings.getMoonriverNetworkTradeProvider,
+    Messages.events.moonriverNetworkTradeProviderSettings.on,
+)
+
 const BASE_RUL = 'https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com/api'
 
 interface BackupBaseRequest {

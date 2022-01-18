@@ -222,6 +222,7 @@ export enum TradeProvider {
     OPENOCEAN = 10,
     WANNASWAP = 11,
     TRISOLARIS = 12,
+    SOLARBEAM = 13,
 }
 /** Supported language settings */
 export enum LanguageOptions {
