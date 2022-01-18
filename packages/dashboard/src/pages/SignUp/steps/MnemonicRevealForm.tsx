@@ -84,7 +84,7 @@ export const MnemonicRevealForm = memo(() => {
 
     useEffect(() => {
         // handle refresh page after create
-        const pageRefresHandler = async () => {
+        const pageRefreshHandler = async () => {
             const personas = await Services.Identity.queryMyPersonas()
             for (let i in personas) {
                 if (personas[i].nickname === state.personaName) {
@@ -95,7 +95,7 @@ export const MnemonicRevealForm = memo(() => {
             }
         }
 
-        pageRefresHandler()
+        pageRefreshHandler()
     }, [])
 
     return (
