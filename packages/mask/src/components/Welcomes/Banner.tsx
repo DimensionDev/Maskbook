@@ -4,12 +4,10 @@ import { IconButton } from '@mui/material'
 import { useLastRecognizedIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import Services from '../../extension/service'
 import { activatedSocialNetworkUI } from '../../social-network'
-import { useValueRef } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { MaskSharpIcon } from '../../resources/MaskIcon'
 import { useMount } from 'react-use'
 import { hasNativeAPI, nativeAPI } from '../../utils'
-import { userGuideStatus } from '../../settings/settings'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 
 interface BannerUIProps extends withClasses<never | 'header' | 'content' | 'actions' | 'buttonText'> {
