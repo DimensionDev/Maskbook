@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { MaskTextField } from '@masknet/theme'
 import {
     Body,
@@ -10,11 +10,10 @@ import {
 } from '../../../components/RegisterFrame/ColumnContentLayout'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
-import { Box, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import { useDashboardI18N } from '../../../locales'
 import { SignUpRoutePath } from '../routePath'
 import { ButtonContainer } from '../../../components/RegisterFrame/ButtonContainer'
-import { LoadingButton } from '../../../components/LoadingButton'
 import { Services } from '../../../API'
 
 const Label = ({ value }: { value: string }) => (
@@ -80,14 +79,9 @@ export const PersonaCreate = () => {
                         helperText={error}
                     />
                     <ButtonContainer>
-                        <LoadingButton
-                            size="large"
-                            variant="rounded"
-                            color="primary"
-                            onClick={onNext}
-                            disabled={!personaName}>
+                        <Button size="large" variant="rounded" color="primary" onClick={onNext} disabled={!personaName}>
                             {t.next()}
-                        </LoadingButton>
+                        </Button>
                     </ButtonContainer>
                 </Box>
             </Body>

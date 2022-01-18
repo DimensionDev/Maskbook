@@ -1,4 +1,4 @@
-import { QRCode } from '@masknet/shared'
+import { QRCode } from 'react-qrcode-logo'
 import { makeStyles, MaskDialog, MaskColorVar, MaskLightTheme } from '@masknet/theme'
 import { Box, Button, DialogContent, ThemeProvider, Typography } from '@mui/material'
 import { MnemonicReveal } from '../../../components/Mnemonic'
@@ -6,14 +6,14 @@ import { MiniMaskIcon, InfoIcon } from '@masknet/icons'
 import { ForwardedRef, forwardRef, useRef } from 'react'
 import { useReactToPrint } from 'react-to-print'
 import { toJpeg } from 'html-to-image'
-import { WatermarkURL } from '../../../assets'
+import { MaskBlueURL, WatermarkURL } from '../../../assets'
 import { useDashboardI18N } from '../../../locales'
 
 const useStyles = makeStyles()((theme) => ({
     preview: {
         position: 'relative',
         background: `url(${WatermarkURL}) repeat`,
-        backgroundSize: '140px',
+        backgroundSize: '141px',
     },
     wordClass: {
         background: 'rgba(28, 104, 243, 0.1)',
@@ -108,24 +108,24 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
             color={'#111432'}
             sx={{ background: '#fff' }}>
             <Box maxWidth={746} className={classes.preview}>
-                <Box className={classes.card} display="flex">
+                <Box className={classes.card} display="flex" alignItems="center">
                     <Box flex={1}>
                         <Box display="flex" alignItems="center" paddingBottom={'8px'}>
                             <MiniMaskIcon />
                             <Typography fontSize={24} fontWeight={600} className={classes.name}>
-                                Persona: {personaName}
+                                {t.persona()}: {personaName}
                             </Typography>
                         </Box>
 
                         <Typography fontSize={14} fontWeight={600}>
-                            MASK ID:{' '}
+                            {t.create_account_mask_id()}:{' '}
                             <span style={{ fontSize: 10, wordBreak: 'break-all' }}>
                                 {id?.replace('ec_key:secp256k1/', '')}
                             </span>
                         </Typography>
                         <Box display="flex">
                             <Typography fontSize={14} fontWeight={600}>
-                                Private Key:
+                                {t.create_account_private_key()}:
                             </Typography>
                             <Typography
                                 fontSize={10}
@@ -136,15 +136,18 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
                         </Box>
                     </Box>
                     <QRCode
-                        text={`MASK:[${privateKey}]`}
-                        options={{ width: 136, margin: 5 }}
-                        canvasProps={{
-                            style: { display: 'block', width: 136, margin: 'auto' },
-                        }}
+                        value={`MASK:[${privateKey}]`}
+                        ecLevel="M"
+                        size={124}
+                        quietZone={6}
+                        logoImage={MaskBlueURL.toString()}
+                        logoWidth={28}
+                        logoHeight={28}
+                        qrStyle="dots"
                     />
                 </Box>
                 <Typography margin={'24px 0'} fontWeight={600}>
-                    Idenentity ID
+                    {t.create_account_identity_id()}
                 </Typography>
                 <MnemonicReveal words={words} indexed wordClass={classes.wordClass} />
                 <Box display="flex" alignItems="center" margin={'24px 0'}>
