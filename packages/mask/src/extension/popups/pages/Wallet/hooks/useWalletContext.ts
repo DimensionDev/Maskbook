@@ -3,7 +3,6 @@ import { createContainer } from 'unstated-next'
 import { useAssets, useTrustedERC20Tokens, Asset, useChainDetailed } from '@masknet/web3-shared-evm'
 import { useRecentTransactions } from '../../../../../plugins/Wallet/hooks/useRecentTransactions'
 import type { RecentTransaction } from '../../../../../plugins/Wallet/services'
-import { tr } from 'date-fns/locale'
 
 function useWalletContext() {
     const chainDetailed = useChainDetailed()

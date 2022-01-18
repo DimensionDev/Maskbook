@@ -274,10 +274,6 @@ export declare namespace Web3Plugin {
                 network: NetworkDescriptor,
                 pagination?: Pagination,
             ) => Promise<Transaction[]>
-            /** Get latest block number of given chain. */
-            getLatestBlockNumber: (chainId: number) => Promise<number>
-            /** Get latest balance of given account. */
-            getLatestBalance: (chainId: number, account: string) => Promise<string>
         }
         export interface TokenListState {
             /** Get the token lists of supported fungible tokens. */
@@ -296,6 +292,9 @@ export declare namespace Web3Plugin {
             ) => Promise<TokenList[]>
         }
         export interface Others {
+            getLatestBlockNumber?: (chainId: number) => Promise<number>
+            getLatestBalance?: (chainId: number, account: string) => Promise<string>
+
             isChainIdValid?: (chainId: number, allowTestnet: boolean) => boolean
             getChainDetailed?: (chainId: number) => ChainDetailed | undefined
             getFungibleTokenMetadata?: (token: FungibleToken) => Promise<FungibleTokenMetadata>

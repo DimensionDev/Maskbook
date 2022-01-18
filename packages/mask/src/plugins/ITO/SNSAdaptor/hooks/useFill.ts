@@ -62,11 +62,11 @@ type paramsObjType = {
 }
 
 export function useFillCallback(poolSettings?: PoolSettings) {
+    const { t } = useI18N()
     const web3 = useWeb3()
     const account = useAccount()
     const chainId = useChainId()
     const { contract: ITO_Contract } = useITO_Contract()
-    const { t } = useI18N()
     const [fillState, setFillState] = useTransactionState()
     const [fillSettings, setFillSettings] = useState(poolSettings)
     const paramResult = useFillParams(poolSettings)

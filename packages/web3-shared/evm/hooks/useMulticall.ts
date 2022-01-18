@@ -165,7 +165,7 @@ export function useMulticallStateDecoded<
     K extends keyof T['methods'],
     R extends UnboxTransactionObject<ReturnType<T['methods'][K]>>,
 >(contracts: T[], names: K[], state: MulticallState, chainId?: ChainId) {
-    const web3 = useWeb3(false, chainId)
+    const web3 = useWeb3(chainId)
     type Result = { succeed: boolean; gasUsed: string } & ({ error: any; value: null } | { error: null; value: R })
     return useMemo(() => {
         if (state.type !== MulticallStateType.SUCCEED) return []

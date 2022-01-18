@@ -1,27 +1,18 @@
 import { OpenSeaPort } from 'opensea-js'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { request, requestSend } from '../../../extension/background-script/EthereumService'
+import { ChainId, createExternalProvider } from '@masknet/web3-shared-evm'
+import { request } from '../../../extension/background-script/EthereumService'
 import { resolveOpenSeaNetwork } from '../pipes'
 import { OpenSeaAPI_Key, ReferrerAddress } from '../constants'
 
-function createExternalProvider() {
-    return {
-        isMetaMask: false,
-        isStatus: true,
-        host: '',
-        path: '',
-        sendAsync: requestSend,
-        send: requestSend,
-        request,
-    }
-}
-
 function createOpenSeaPortChain(chainId: ChainId.Mainnet | ChainId.Rinkeby) {
-    const config = {
-        networkName: resolveOpenSeaNetwork(chainId),
-        apiKey: OpenSeaAPI_Key,
-    }
-    return new OpenSeaPort(createExternalProvider(), config, console.log)
+    return new OpenSeaPort(
+        createExternalProvider(request),
+        {
+            networkName: resolveOpenSeaNetwork(chainId),
+            apiKey: OpenSeaAPI_Key,
+        },
+        console.log,
+    )
 }
 
 function createOpenSeaPort(chainId?: ChainId) {

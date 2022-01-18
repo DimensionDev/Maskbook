@@ -26,31 +26,11 @@ import {
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import type { InternalSettings } from '../settings/createSettings'
 import { Flags } from '../../shared'
-import { createExternalProvider } from './helpers'
 import Services from '../extension/service'
 import { getProxyWebsocketInstance } from '@masknet/web3-shared-base'
 
 function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderType {
-    const Web3Provider = createExternalProvider(
-        () =>
-            isMask
-                ? {
-                      account: currentMaskWalletAccountSettings.value,
-                      chainId: currentMaskWalletChainIdSettings.value,
-                      providerType: ProviderType.MaskWallet,
-                  }
-                : {
-                      account: currentAccountSettings.value,
-                      chainId: currentChainIdSettings.value,
-                      providerType: currentProviderSettings.value,
-                  },
-        () => ({
-            popupsWindow: !disablePopup,
-        }),
-    )
-
     return {
-        provider: createStaticSubscription(() => Web3Provider),
         allowTestnet: createStaticSubscription(() => Flags.wallet_allow_testnet),
         chainId: createSubscriptionFromSettings(isMask ? currentMaskWalletChainIdSettings : currentChainIdSettings),
         account: createSubscriptionFromAsync(
@@ -117,10 +97,26 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
             WalletMessages.events.erc1155TokensUpdated.on,
         ),
         portfolioProvider: createSubscriptionFromSettings(currentFungibleAssetDataProviderSettings),
+
         addToken: WalletRPC.addToken,
         removeToken: WalletRPC.removeToken,
         trustToken: WalletRPC.trustToken,
         blockToken: WalletRPC.blockToken,
+
+        request: Services.Ethereum.request,
+        getSendOverrides: () =>
+            isMask
+                ? {
+                      account: currentMaskWalletAccountSettings.value,
+                      chainId: currentMaskWalletChainIdSettings.value,
+                      providerType: ProviderType.MaskWallet,
+                  }
+                : {
+                      account: currentAccountSettings.value,
+                      chainId: currentChainIdSettings.value,
+                      providerType: currentProviderSettings.value,
+                  },
+        getRequestOptions: () => ({ popupsWindow: !disablePopup }),
 
         getAssetsList: WalletRPC.getAssetsList,
         getAssetsListNFT: WalletRPC.getAssetsListNFT,

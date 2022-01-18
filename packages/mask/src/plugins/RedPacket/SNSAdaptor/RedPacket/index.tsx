@@ -40,6 +40,7 @@ export function RedPacket(props: RedPacketProps) {
 
     const { t } = useI18N()
     const { classes } = useStyles()
+
     // context
     const web3 = useWeb3()
     const account = useAccount()
