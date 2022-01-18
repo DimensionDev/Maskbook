@@ -31,6 +31,6 @@
             "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/1313161554/tokens.json"
         ],
         "Aurora_Testnet": "",
-        "Moonriver": ""
+        "Moonriver": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/1285/tokens.json"]
     }
 }
