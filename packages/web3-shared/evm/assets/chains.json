@@ -2105,7 +2105,7 @@
             "decimals": 18,
             "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/network/avalanche.jpg"
         },
-        "infoURL": "https://www.avax.network/",
+        "infoURL": "https://snowtrace.io/",
         "shortName": "AVAX",
         "chainId": 43114,
         "networkId": 43114,

@@ -30,9 +30,10 @@ export function getNativeTokenLabel(networkType: NetworkType) {
         case NetworkType.xDai:
         case NetworkType.Celo:
         case NetworkType.Fantom:
-        case NetworkType.Avalanche:
         case NetworkType.Aurora:
             return NATIVE_TOKEN_ADDRESS
+        case NetworkType.Avalanche:
+            return 'AVAX'
         default:
             safeUnreachable(networkType)
             return ''

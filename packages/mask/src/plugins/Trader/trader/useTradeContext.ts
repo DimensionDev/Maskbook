@@ -29,7 +29,6 @@ export const TradeContext = createContext<TradeContext_ | null>(null)
 
 export function useTradeContext(tradeProvider: TradeProvider) {
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-    const DEX_TRADE = getTraderConstants(chainId)
     return useMemo<TradeContext_>(() => {
         const DEX_TRADE = getTraderConstants(chainId)
         switch (tradeProvider) {

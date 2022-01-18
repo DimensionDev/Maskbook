@@ -90,7 +90,7 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
                 case NetworkType.Fantom:
                     return 'https://fantom.api.0x.org/'
                 case NetworkType.Avalanche:
-                    return 'https://fantom.api.0x.org/'
+                    return 'https://avalanche.api.0x.org/'
                 case NetworkType.Aurora:
                     return 'https://aurora.api.0x.org/'
                 default:
