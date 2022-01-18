@@ -17,17 +17,21 @@ interface Configure {
     ignoreWords?: string[]
 }
 
-function sort(values?: string[]) {
-    if (!values) return
+function sort(values: string[] = []) {
     values = [...new Set(values)]
     values.sort((a, b) => a.localeCompare(b, 'en-US', { numeric: true }))
+    if (values.length === 0) return
     return values
 }
 
 function sortConfigure(configure: Configure) {
     configure.ignorePaths = sort(configure.ignorePaths)
-    configure.words = sort(configure.words)
-    configure.ignoreWords = sort(configure.ignoreWords)
+    configure.words = sort(configure.words?.map(toLowerCase))
+    configure.ignoreWords = sort(configure.ignoreWords?.map(toLowerCase))
+}
+
+function toLowerCase(input: string) {
+    return input.toLowerCase()
 }
 
 export async function reorderSpellcheck() {
