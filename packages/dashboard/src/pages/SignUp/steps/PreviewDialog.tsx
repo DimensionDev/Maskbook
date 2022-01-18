@@ -137,16 +137,7 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
                             </Typography>
                         </Box>
                     </Box>
-                    <QRCode
-                        value={`MASK:[${privateKey}]`}
-                        ecLevel="L"
-                        size={120}
-                        quietZone={6}
-                        logoImage={MaskBlueURL.toString()}
-                        logoWidth={28}
-                        logoHeight={28}
-                        qrStyle="dots"
-                    />
+                    <QRCode value={`MASK:[${privateKey}]`} ecLevel="L" size={120} quietZone={6} qrStyle="dots" />
                 </Box>
                 <Typography margin="24px 0" fontWeight={600}>
                     {t.create_account_identity_id()}
