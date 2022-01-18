@@ -1,4 +1,4 @@
-import { throttle, DebouncedFunc, noop, uniq, uniqBy } from 'lodash-unified'
+import { throttle, DebouncedFunc, uniq, uniqBy } from 'lodash-unified'
 import { EthereumAddress } from 'wallet.ts'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
@@ -58,6 +58,7 @@ const createBalanceUpdater = (signal: AbortSignal) => {
         if (signal.aborted) return
 
         console.log(`DEBUG: updateBalanceOfChain ${chainId} after ${Date.now() - last}`)
+
         last = Date.now()
 
         currentBalanceOfChainSettings.value = {
@@ -97,25 +98,15 @@ export function updateBlockNumber(chainId = currentChainIdSettings.value) {
 
 export function updateBalance(chainId = currentChainIdSettings.value, account = currentAccountSettings.value) {
     const pairs = [
-        [account, chainId] as const,
-        [currentAccountSettings.value, currentChainIdSettings.value] as const,
-        [currentMaskWalletAccountSettings.value, currentMaskWalletChainIdSettings.value] as const,
+        [chainId, account] as const,
+        [currentChainIdSettings.value, currentAccountSettings.value] as const,
+        [currentMaskWalletChainIdSettings.value, currentMaskWalletAccountSettings.value] as const,
     ]
-    uniqBy(pairs, ([account, chainId]) => `${account.toLowerCase()}_${chainId}`).forEach(([account, chainId]) => {
+    uniqBy(pairs, ([chainId, account]) => `${account.toLowerCase()}_${chainId}`).forEach(([chainId, account]) => {
         balanceUpdater.update(chainId, chainId, account)
     })
 }
 
-run(() => {
-    balanceUpdater.build(createBalanceUpdater)
-    blockNumberUpdater.build(createBlockNumberUpdater)
-
-    setInterval(() => {
-        updateBalance()
-        updateBlockNumber()
-    }, 5000)
-    return noop
-})
 run(() =>
     currentChainIdSettings.addListener(() => {
         balanceUpdater.build(createBalanceUpdater)

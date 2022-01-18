@@ -22,11 +22,12 @@ export enum TokenType {
     NonFungible = 'NonFungible',
 }
 
-type ColorRGB = `rgb(${number}, ${number}, ${number})`
-type ColorRGBA = `rgba(${number}, ${number}, ${number}, ${number})`
-type ColorHEX = `#${string}${string}${string}${string}${string}${string}` | `#${string}${string}${string}`
-type ColorHSL = `hsl(${number}, ${number}%, ${number}%)`
-type Color = ColorRGB | ColorRGBA | ColorHEX | ColorHSL
+export type Color =
+    | `rgb(${number}, ${number}, ${number})`
+    | `rgba(${number}, ${number}, ${number}, ${number})`
+    | `#${string}${string}${string}${string}${string}${string}`
+    | `#${string}${string}${string}`
+    | `hsl(${number}, ${number}%, ${number}%)`
 
 export declare namespace Web3Plugin {
     /**
@@ -273,7 +274,7 @@ export declare namespace Web3Plugin {
             lookup?: (domain: string) => Promise<string | undefined>
             reverse?: (address: string) => Promise<string | undefined>
         }
-        export interface TokenManage {
+        export interface TokenState {
             addToken: (token: Token) => Promise<void>
             removeToken: (token: Token) => Promise<void>
             trustToken: (token: Token) => Promise<void>
@@ -331,7 +332,7 @@ export declare namespace Web3Plugin {
             Shared?: SharedState
             Asset?: AssetState
             NameService?: NameServiceState
-            Token?: TokenManage
+            Token?: TokenState
             Transaction?: TransactionState
             TokenList?: TokenListState
             Utils?: Others
