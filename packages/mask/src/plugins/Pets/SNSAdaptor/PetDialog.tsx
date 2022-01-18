@@ -228,7 +228,7 @@ export function PetDialog() {
                 )}
             />
         )
-    }, [nfts])
+    }, [nfts, extraData])
 
     const tokensRender = useMemo(() => {
         return (
