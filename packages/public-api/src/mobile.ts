@@ -14,13 +14,20 @@ export interface SharedNativeAPIs {
     /**
      * DB JSON RPC
      */
-    query_personas(params: {
+    query_persona(params: {
         identifier?: string
         hasPrivateKey?: boolean
         includeLogout?: boolean
         nameContains?: string
         pageOption?: PageOption
     }): Promise<PersonaRecord>
+    query_personas(params: {
+        identifier?: string
+        hasPrivateKey?: boolean
+        includeLogout?: boolean
+        nameContains?: string
+        pageOption?: PageOption
+    }): Promise<PersonaRecord[]>
     update_persona(params: {
         persona: PersonaRecord
         options: {

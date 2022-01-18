@@ -9,8 +9,18 @@ import type {
     RelationRecord,
     RelationTransaction,
 } from './type'
-import type { ProfileIdentifier, PersonaIdentifier } from '@masknet/shared-base'
-
+import {
+    ProfileIdentifier,
+    PersonaIdentifier,
+    Identifier,
+    IdentifierMap,
+    ECKeyIdentifier,
+    EC_Public_JsonWebKey,
+    EC_Private_JsonWebKey,
+    AESJsonWebKey,
+} from '@masknet/shared-base'
+import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
+import type { PersonaRecord as NativePersonaRecord } from '@masknet/public-api'
 export async function consistentPersonaDBWriteAccess(action: () => Promise<void>) {
     await action()
 }
@@ -31,11 +41,23 @@ export async function queryPersonaDB(
     t?: PersonasTransaction<'readonly'>,
     isIncludeLogout?: boolean,
 ): Promise<PersonaRecord | null> {
-    return null
+    if (!hasNativeAPI) return null
+    const x = await nativeAPI?.api.query_persona({
+        identifier: query.toText(),
+        includeLogout: isIncludeLogout,
+    })
+    if (!x) return null
+    return personaRecordOutDB(x)
 }
 
 export async function queryPersonasWithPrivateKey(): Promise<PersonaRecordWithPrivateKey[]> {
-    return []
+    if (!hasNativeAPI) return []
+    const results = await nativeAPI?.api.query_personas({
+        hasPrivateKey: true,
+    })
+
+    if (!results) return []
+    return results.map((x) => personaRecordOutDB(x)) as PersonaRecordWithPrivateKey[]
 }
 
 /**
@@ -194,3 +216,18 @@ export async function updateRelationDB(
     t?: RelationTransaction<'readwrite'>,
     silent = false,
 ): Promise<void> {}
+
+// #region out db & to db
+function personaRecordOutDB(x: NativePersonaRecord): PersonaRecord {
+    return {
+        ...x,
+        publicKey: x.publicKey as JsonWebKey as unknown as EC_Public_JsonWebKey,
+        privateKey: x.privateKey as JsonWebKey as unknown as EC_Private_JsonWebKey,
+        localKey: x.localKey as JsonWebKey as unknown as AESJsonWebKey,
+        identifier: Identifier.fromString(x.identifier, ECKeyIdentifier).unwrap(),
+        linkedProfiles: new IdentifierMap(x.linkedProfiles, ProfileIdentifier),
+        createdAt: new Date(x.createAt),
+        updatedAt: new Date(x.updateAt),
+    }
+}
+// #endregion
