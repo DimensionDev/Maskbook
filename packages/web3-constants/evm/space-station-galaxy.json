@@ -15,7 +15,8 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": ""
+        "Aurora_Testnet": "",
+        "Moonriver": ""
     },
     "SUBGRAPH_URL": {
         "Mainnet": "",
@@ -33,6 +34,7 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": ""
+        "Aurora_Testnet": "",
+        "Moonriver": ""
     }
 }

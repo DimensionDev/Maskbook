@@ -19,6 +19,8 @@ import {
     TRISOLARIS_CUSTOM_BASES,
     SOLARBEAM_BASE_AGAINST_TOKENS,
     SOLARBEAM_CUSTOM_BASES,
+    HUCKLEBERRY_BASE_AGAINST_TOKENS,
+    HUCKLEBERRY_CUSTOM_BASES,
 } from '../constants'
 import { unreachable } from '@dimensiondev/kit'
 import { TargetChainIdContext } from './useTargetChainIdContext'

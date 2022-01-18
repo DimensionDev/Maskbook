@@ -123,7 +123,6 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.getMoonriverNetworkTradeProvider()
             case NetworkType.Aurora:
                 return Services.Settings.getAuroraNetworkTradeProvider()
-
             case NetworkType.Boba:
             case NetworkType.Fuse:
             case NetworkType.Metis:
