@@ -47,6 +47,11 @@ export function useCurrentTradeProvider(chainId?: ChainId) {
             return fantomNetworkTradeProvider
         case NetworkType.Aurora:
             return auroraNetworkTradeProvider
+        case NetworkType.Fuse:
+        case NetworkType.Metis:
+        case NetworkType.Avalanche:
+        case NetworkType.Optimistic:
+            throw new Error(`To be implement network: ${networkType}`)
         default:
             unreachable(networkType)
     }
