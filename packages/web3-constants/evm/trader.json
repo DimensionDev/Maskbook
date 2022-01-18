@@ -159,7 +159,7 @@
         "Arbitrum": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3",
         "Arbitrum_Rinkeby": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3",
         "xDai": "",
-        "Optimistic": "",
+        "Optimistic": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3",
         "Optimistic_Kovan": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3",
         "Optimistic_Goerli": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3",
         "Celo": "",

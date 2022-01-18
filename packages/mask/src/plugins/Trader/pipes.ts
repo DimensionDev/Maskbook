@@ -91,6 +91,13 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
                     return 'https://fantom.api.0x.org/'
                 case NetworkType.Aurora:
                     return 'https://aurora.api.0x.org/'
+                case NetworkType.Boba:
+                case NetworkType.Fuse:
+                case NetworkType.Metis:
+                case NetworkType.Avalanche:
+                case NetworkType.Optimistic:
+                    console.error('To be implement network: ', networkType)
+                    return ''
                 default:
                     safeUnreachable(networkType)
                     return ''
@@ -159,6 +166,13 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
                     return `https://analytics-ftm.sushi.com/pairs/${address}`
                 case NetworkType.Aurora:
                     return `https://analytics-aurora.sushi.com/pairs/${address}`
+                case NetworkType.Boba:
+                case NetworkType.Fuse:
+                case NetworkType.Metis:
+                case NetworkType.Avalanche:
+                case NetworkType.Optimistic:
+                    console.error('To be implement network: ', networkType)
+                    return ''
                 default:
                     safeUnreachable(networkType)
                     return ''
