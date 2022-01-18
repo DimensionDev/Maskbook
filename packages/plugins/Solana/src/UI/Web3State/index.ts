@@ -1,6 +1,5 @@
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import { createConstantSubscription, mapSubscription } from '@masknet/shared-base'
-import BigNumber from 'bignumber.js'
 import { toFixed } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -51,7 +50,7 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
         Utils: {
             formatAddress,
             formatBalance: toFixed,
-            formatCurrency: (value) => new BigNumber(value).toFixed(),
+            formatCurrency: (value) => toFixed(value),
 
             isChainIdValid: () => true,
 
