@@ -8,6 +8,7 @@ import type { Pagination, Plugin, Pageable } from './types'
 export enum NetworkPluginID {
     PLUGIN_EVM = 'com.mask.evm',
     PLUGIN_FLOW = 'com.mask.flow',
+    PLUGIN_SOLANA = 'com.mask.solana',
 }
 
 export enum CurrencyType {

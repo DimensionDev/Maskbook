@@ -157,7 +157,7 @@ export default function OptionsCard(props: OptionsViewProps) {
             const count = userStatus.count ? userStatus.count.find((e) => e.choice === index)?.value || 0 : 0
             const percent = (total > 0 ? (count * 100) / total : 0).toFixed(2)
 
-            return !!userStatus.count ? (
+            return userStatus.count ? (
                 <Card
                     sx={choice !== index ? { cursor: 'pointer' } : {}}
                     className={classes.progressOption}

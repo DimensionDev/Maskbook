@@ -101,7 +101,7 @@ export const ActivityListItem = memo<ActivityListItemProps>(
                     ) : (
                         <Typography className={classes.secondaryDesc}>
                             {transaction.at ? `${formatDateTime(transaction.at, 'MMM dd')}.  ` : null}
-                            {!!toAddress
+                            {toAddress
                                 ? t('popups_wallet_activity_to_address', {
                                       address: Utils?.formatDomainName?.(domain) || formatEthereumAddress(toAddress, 4),
                                   })

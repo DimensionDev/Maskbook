@@ -31,6 +31,7 @@ import {
     isLessThanOrEqualTo,
     isPositive,
     multipliedBy,
+    toFixed,
 } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -241,15 +242,9 @@ export const GasSetting1559 = memo(() => {
             if (value?.computedPayload._tx.maxFeePerGas && value?.computedPayload._tx.maxPriorityFeePerGas) {
                 setValue(
                     'maxPriorityFeePerGas',
-                    fromWei(
-                        new BigNumber(value.computedPayload._tx.maxPriorityFeePerGas).toString(),
-                        'gwei',
-                    ).toString(),
+                    fromWei(toFixed(value.computedPayload._tx.maxPriorityFeePerGas), 'gwei'),
                 )
-                setValue(
-                    'maxFeePerGas',
-                    fromWei(new BigNumber(value.computedPayload._tx.maxFeePerGas).toFixed(), 'gwei').toString(),
-                )
+                setValue('maxFeePerGas', fromWei(toFixed(value.computedPayload._tx.maxFeePerGas), 'gwei'))
             } else {
                 setOption(1)
             }
@@ -348,7 +343,7 @@ export const GasSetting1559 = memo(() => {
                         className={selected === index ? classes.selected : undefined}>
                         <Typography className={classes.optionsTitle}>{title}</Typography>
                         <Typography component="div">
-                            {new BigNumber(content?.suggestedMaxFeePerGas ?? 0).toFixed(2)}
+                            {toFixed(content?.suggestedMaxFeePerGas, 2)}
                             <Typography variant="inherit">{t('wallet_transfer_gwei')}</Typography>
                         </Typography>
                         <Typography className={classes.gasUSD}>

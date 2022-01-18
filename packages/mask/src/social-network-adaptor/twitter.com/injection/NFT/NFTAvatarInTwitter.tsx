@@ -71,6 +71,7 @@ function NFTAvatarInTwitter() {
         setNFTEvent(data)
     }
 
+    // After the avatar is set, it cannot be saved immediately, and must wait until the avatar of twitter is updated
     useAsync(async () => {
         if (!wallet || !NFTAvatar) return
 

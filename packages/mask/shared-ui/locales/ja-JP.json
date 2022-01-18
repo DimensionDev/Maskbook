@@ -163,7 +163,7 @@
     "plugin_red_packet_refunding_for": "{{balance}} {{symbol}} の投げ銭を払い戻し中",
     "plugin_red_packet_amount_per_share": "1株当たりの金額",
     "plugin_red_packet_send_symbol": "{{symbol}} を送る",
-    "plugin_red_packet_create_with_token": "{{amount}} {{symbol}} で投げ銭を作成する",
+    "plugin_red_packet_create_with_token": "{{symbol}} で投げ銭を作成する",
     "plugin_gitcoin_readme": "このサービスを利用するにあたり、寄付金額の 5% が <fund>Gitcoin grants development fund</fund> に寄付されます",
     "plugin_gitcoin_select_a_token": "トークンを選択する",
     "plugin_gitcoin_enter_an_amount": "量を決める",

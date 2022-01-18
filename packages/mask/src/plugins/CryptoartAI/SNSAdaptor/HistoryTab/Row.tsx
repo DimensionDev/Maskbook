@@ -89,7 +89,7 @@ export function Row({ event, chainId }: Props) {
             </TableCell>
             <TableCell>
                 <Typography className={classes.ethPrice} variant="body2">
-                    {event.priceInEth} Ξ
+                    {event.priceInEth} &Xi;
                 </Typography>
                 <Typography className={classes.usdcPrice} variant="body2">
                     (${event.priceInUsd})

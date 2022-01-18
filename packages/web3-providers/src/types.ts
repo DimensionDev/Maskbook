@@ -287,3 +287,16 @@ export namespace NonFungibleTokenAPI {
         getCollections?: (address: string, opts?: Options) => Promise<ProviderPageable<Collection>>
     }
 }
+
+export namespace StorageAPI {
+    export interface Storage {
+        set<T extends {}>(key: string, value: T): Promise<void>
+        get<T>(key: string): Promise<T | void>
+        delete?: (key: string) => Promise<void>
+    }
+
+    export interface Provider {
+        createJSON_Storage?: (key: string) => Storage
+        createBinaryStorage?: (key: string) => Storage
+    }
+}

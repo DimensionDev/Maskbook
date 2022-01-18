@@ -4,7 +4,7 @@ import type { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra'
 import { makeStyles } from '@masknet/theme'
 import { Box, ImageList, ImageListItem, List, ListItem, Typography } from '@mui/material'
 import { ProviderIcon } from './ProviderIcon'
-import { useI18N } from '../../../../utils'
+import { ShadowRootTooltip, useI18N } from '../../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -112,18 +112,20 @@ export function PluginProviderRender({
                                         setUndeterminedPluginID(network.networkSupporterPluginID as NetworkPluginID)
                                         setUndeterminedNetworkID(network.ID)
                                     }}>
-                                    <div className={classes.iconWrapper}>
-                                        {NetworkIconClickBait ? (
-                                            <NetworkIconClickBait network={network}>
+                                    <ShadowRootTooltip title={network.name} placement="top">
+                                        <div className={classes.iconWrapper}>
+                                            {NetworkIconClickBait ? (
+                                                <NetworkIconClickBait network={network}>
+                                                    <ImageIcon icon={network.icon} />
+                                                </NetworkIconClickBait>
+                                            ) : (
                                                 <ImageIcon icon={network.icon} />
-                                            </NetworkIconClickBait>
-                                        ) : (
-                                            <ImageIcon icon={network.icon} />
-                                        )}
-                                        {undeterminedNetworkID === network.ID && (
-                                            <SuccessIcon className={classes.checkedBadge} />
-                                        )}
-                                    </div>
+                                            )}
+                                            {undeterminedNetworkID === network.ID && (
+                                                <SuccessIcon className={classes.checkedBadge} />
+                                            )}
+                                        </div>
+                                    </ShadowRootTooltip>
                                 </ListItem>
                             ))}
                     </List>
