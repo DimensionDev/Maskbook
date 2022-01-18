@@ -123,6 +123,13 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.getMrvNetworkTradeProvider()
             case NetworkType.Aurora:
                 return Services.Settings.getAuroraNetworkTradeProvider()
+
+            case NetworkType.Boba:
+            case NetworkType.Fuse:
+            case NetworkType.Metis:
+            case NetworkType.Avalanche:
+            case NetworkType.Optimistic:
+                throw new Error(`To be implement network: ${network}`)
             default:
                 unreachable(network)
         }
@@ -147,6 +154,12 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.setMrvNetworkTradeProvider(provider)
             case NetworkType.Aurora:
                 return Services.Settings.setAuroraNetworkTradeProvider(provider)
+            case NetworkType.Boba:
+            case NetworkType.Fuse:
+            case NetworkType.Metis:
+            case NetworkType.Avalanche:
+            case NetworkType.Optimistic:
+                throw new Error(`To be implement network: ${network}`)
             default:
                 unreachable(network)
         }

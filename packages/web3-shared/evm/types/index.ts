@@ -74,6 +74,18 @@ export enum ChainId {
     // Aurora
     Aurora = 1313161554,
     Aurora_Testnet = 1313161555,
+
+    // Fuse
+    Fuse = 122,
+
+    // Boba
+    Boba = 288,
+
+    // Metis
+    Metis = 1088,
+
+    // Optimistic
+    Optimistic = 10,
 }
 
 export enum ProviderType {
@@ -105,6 +117,11 @@ export enum NetworkType {
     Fantom = 'Fantom',
     Moonriver = 'Moonriver',
     Aurora = 'Aurora',
+    Avalanche = 'Avalanche',
+    Boba = 'Boba',
+    Fuse = 'Fuse',
+    Metis = 'Metis',
+    Optimistic = 'Optimistic',
 }
 
 export interface Wallet {

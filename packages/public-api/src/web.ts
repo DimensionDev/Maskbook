@@ -195,6 +195,11 @@ export enum NetworkType {
     Fantom = 'Fantom',
     Moonriver = 'Moonriver',
     Aurora = 'Aurora',
+    Avalanche = 'Avalanche',
+    Boba = 'Boba',
+    Fuse = 'Fuse',
+    Metis = 'Metis',
+    Optimistic = 'Optimistic',
 }
 
 export enum DataProvider {
