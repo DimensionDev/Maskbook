@@ -89,15 +89,10 @@ function NFTAvatarInTwitter() {
             return
         }
 
-        const avatar = await PluginNFTAvatarRPC.saveNFTAvatar(
-            wallet.address,
-            {
-                ...NFTEvent,
-                avatarId: getAvatarId(identity.avatar ?? ''),
-            } as AvatarMetaDB,
-            currentPluginId,
-            chainId,
-        )
+        const avatar = await PluginNFTAvatarRPC.saveNFTAvatar(wallet.address, {
+            ...NFTEvent,
+            avatarId: getAvatarId(identity.avatar ?? ''),
+        } as AvatarMetaDB)
 
         setAvatar(avatar)
         MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll(
