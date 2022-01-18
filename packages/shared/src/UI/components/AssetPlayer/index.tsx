@@ -1,4 +1,4 @@
-import { memo, useRef, useCallback, useState, useEffect } from 'react'
+import { memo, useRef, useCallback, useState, useEffect, useMemo } from 'react'
 import { ChainId, getRPCConstants } from '@masknet/web3-shared-evm'
 import { first } from 'lodash-unified'
 import IframeResizer, { IFrameComponent } from 'iframe-resizer-react'
@@ -92,41 +92,38 @@ export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconPro
 
     type ERC721TokenNameMsg = { message: { type: 'name'; name: string } | { type: 'sourceType'; name: string } }
     //#region resource loaded error
-    const onMessage = useCallback(({ message }: { message: { name: string } | ERC721TokenNameMsg }) => {
-        if ((message as { name: string })?.name === 'Error') {
-            setPlayerState(AssetPlayerState.ERROR)
-        }
-        if ((message as ERC721TokenNameMsg).message?.type === 'name') {
-            props.setERC721TokenName?.((message as ERC721TokenNameMsg).message.name)
-        }
-        if ((message as ERC721TokenNameMsg).message?.type === 'sourceType') {
-            props.setSourceType?.((message as ERC721TokenNameMsg).message.name)
-        }
-    }, [])
+    const onMessage = useCallback(
+        ({
+            message,
+        }: {
+            message: { name: string } | ERC721TokenNameMsg | { type: 'webglContextLost' } | { type: 'reload' }
+        }) => {
+            if ((message as { name: string })?.name === 'Error') {
+                setPlayerState(AssetPlayerState.ERROR)
+            }
+            if ((message as { type: 'webglContextLost' })?.type === 'webglContextLost') {
+                setHidden(true)
+                setPlayerState(AssetPlayerState.LOADING)
+                setTimeout(() => setHidden(false), 1000)
+            }
+            if ((message as ERC721TokenNameMsg).message?.type === 'name') {
+                props.setERC721TokenName?.((message as ERC721TokenNameMsg).message.name)
+            }
+            if ((message as ERC721TokenNameMsg).message?.type === 'sourceType') {
+                props.setSourceType?.((message as ERC721TokenNameMsg).message.name)
+            }
+        },
+        [],
+    )
     //#endregion
 
     useUpdateEffect(() => {
         setIframe()
     }, [setIframe])
 
-    return (
-        <>
-            <Box
-                className={
-                    playerState === AssetPlayerState.ERROR ? classes.errorPlaceholder : classes.loadingPlaceholder
-                }
-                style={{ display: playerState === AssetPlayerState.NORMAL ? 'none' : undefined }}>
-                {playerState === AssetPlayerState.ERROR ? (
-                    props.fallbackImage ? (
-                        <img className={classes.loadingFailImage} src={props.fallbackImage.toString()} />
-                    ) : (
-                        <MaskGreyIcon className={classes.errorIcon} viewBox="0 0 36 36" {...iconProps} />
-                    )
-                ) : (
-                    props.loadingIcon ?? <AssetLoadingIcon className={classes.loadingIcon} />
-                )}
-            </Box>
-            {hidden ? null : (
+    const IframeResizerMemo = useMemo(
+        () =>
+            hidden ? null : (
                 <IframeResizer
                     src={mediaViewerUrl}
                     onInit={(iframe: IFrameComponent) => {
@@ -149,7 +146,28 @@ export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconPro
                     allow="autoplay"
                     allowFullScreen
                 />
-            )}
+            ),
+        [hidden, playerState, classes, mediaViewerUrl],
+    )
+
+    return (
+        <>
+            <Box
+                className={
+                    playerState === AssetPlayerState.ERROR ? classes.errorPlaceholder : classes.loadingPlaceholder
+                }
+                style={{ display: playerState === AssetPlayerState.NORMAL ? 'none' : undefined }}>
+                {playerState === AssetPlayerState.ERROR ? (
+                    props.fallbackImage ? (
+                        <img className={classes.loadingFailImage} src={props.fallbackImage.toString()} />
+                    ) : (
+                        <MaskGreyIcon className={classes.errorIcon} viewBox="0 0 36 36" {...iconProps} />
+                    )
+                ) : (
+                    props.loadingIcon ?? <AssetLoadingIcon className={classes.loadingIcon} />
+                )}
+            </Box>
+            {IframeResizerMemo}
         </>
     )
 })
