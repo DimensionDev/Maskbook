@@ -185,18 +185,16 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
         setTemporarySlippage(new BigNumber(cacheTrade?.priceImpact.multipliedBy(10000).toFixed(0)).toNumber())
     }, [cacheTrade?.priceImpact])
 
-    // #region when dialog has been closed, reset state
+    // #region update cache trade and price updated state
     useUpdateEffect(() => {
-        if (open) return
-        setPriceUpdated(false)
-        setCacheTrade(undefined)
-    }, [open])
-    // #endregion
-
-    // #region when output amount or minimum received has been changed
-    useUpdateEffect(() => {
-        if (!open) return
+        // when dialog has been closed, reset state
+        if (!open) {
+            setPriceUpdated(false)
+            setCacheTrade(undefined)
+            return
+        }
         if (!cacheTrade) setCacheTrade(trade)
+        // when output amount or minimum received has been changed
         else if (
             !priceUpdated &&
             (!cacheTrade.outputAmount.isEqualTo(trade.outputAmount) ||
