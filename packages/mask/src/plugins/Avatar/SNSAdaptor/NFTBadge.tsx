@@ -33,8 +33,12 @@ function formatPrice(amount: string, symbol: string) {
     return `${_amount.div(1e6).toFixed(1)}M ${symbol}`
 }
 
-function formatText(symbol: string, length: number) {
-    return symbol.length > length ? `${symbol.slice(0, length)}...` : symbol
+function formatText(name: string, tokenId: string) {
+    const _name = name.replace(/#\d*/, '')
+    if (tokenId.length > 10) {
+        return `${_name.trim()} #${tokenId.substr(0, 6)}...${tokenId.substr(-4)}`
+    }
+    return `${_name} #${tokenId}`
 }
 
 export function NFTBadge(props: NFTBadgeProps) {
@@ -62,7 +66,11 @@ export function NFTBadge(props: NFTBadgeProps) {
                     strokeWidth={14}
                     stroke="black"
                     fontSize={9}
-                    text={loading ? 'loading...' : `${name} ${slug.toLowerCase() === 'ens' ? 'ENS' : ''}`}
+                    text={
+                        loading
+                            ? 'loading...'
+                            : `${formatText(name, avatar.tokenId)} ${slug.toLowerCase() === 'ens' ? 'ENS' : ''}`
+                    }
                     price={loading ? '' : formatPrice(amount, symbol)}
                 />
             </Link>
