@@ -92,14 +92,17 @@ export function Trader(props: TraderProps) {
     //#endregion
 
     const updateTradingCoin = useCallback(
-        (type: any, coin?: Coin) => {
+        (
+            type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN | AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
+            coin?: Coin,
+        ) => {
             if (!coin?.contract_address) return
             dispatchTradeStore({
                 type,
                 token: createERC20Token(chainId, coin.contract_address, decimals, coin.name, coin.symbol),
             })
         },
-        [chainId],
+        [chainId, decimals],
     )
     useEffect(() => {
         updateTradingCoin(AllProviderTradeActionType.UPDATE_INPUT_TOKEN, defaultFromCoin)
@@ -124,18 +127,9 @@ export function Trader(props: TraderProps) {
             })
         }
         if (!outputToken) {
-            updateTradingCoin(AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN, outputToken)
+            updateTradingCoin(AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN, coin)
         }
-    }, [
-        coin,
-        NATIVE_TOKEN_ADDRESS,
-        inputToken,
-        outputToken,
-        currentChainId,
-        targetChainId,
-        decimals,
-        updateTradingCoin,
-    ])
+    }, [coin, NATIVE_TOKEN_ADDRESS, inputToken, outputToken, currentChainId, targetChainId, updateTradingCoin])
 
     const onInputAmountChange = useCallback((amount: string) => {
         dispatchTradeStore({
