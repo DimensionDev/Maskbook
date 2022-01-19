@@ -32,7 +32,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
 
         const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
 
-        //#region Get gas options from debank
+        // #region Get gas options from debank
         const { value: gasOptions, loading: getGasOptionsLoading } = useAsync(async () => {
             const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
             if (!response) return { slow: 0, standard: 0, fast: 0 }
@@ -42,7 +42,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                 fast: response.data.fast.price,
             }
         }, [chainId])
-        //#endregion
+        // #endregion
 
         const options = useMemo(
             () => [

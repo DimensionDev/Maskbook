@@ -107,7 +107,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
 
     const { value: domain } = useReverseAddress(account)
 
-    //#region copy addr to clipboard
+    // #region copy addr to clipboard
     const [, copyToClipboard] = useCopyToClipboard()
     const onCopy = useSnackbarCallback(
         async (ev: React.MouseEvent<HTMLAnchorElement>) => {
@@ -120,19 +120,19 @@ export function WalletStatusBox(props: WalletStatusBox) {
         undefined,
         t('copy_success_of_wallet_addr'),
     )
-    //#endregion
+    // #endregion
 
-    //#region change provider
+    // #region change provider
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
-    //#endregion
+    // #endregion
 
-    //#region walletconnect
+    // #region walletconnect
     const { setDialog: setWalletConnectDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletConnectQRCodeDialogUpdated,
     )
-    //#endregion
+    // #endregion
 
     const onDisconnect = useCallback(async () => {
         switch (providerType) {

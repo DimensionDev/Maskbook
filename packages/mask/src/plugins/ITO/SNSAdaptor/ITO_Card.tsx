@@ -40,7 +40,7 @@ const useStyles = makeStyles()((theme) => ({
         color: '#fff',
     },
     button: {
-        //TODO: https://github.com/mui-org/material-ui/issues/25011
+        // TODO: https://github.com/mui-org/material-ui/issues/25011
         '&[disabled]': {
             opacity: 0.5,
             color: '#fff',
@@ -61,14 +61,14 @@ export function ITO_Card(props: ITO_CardProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { value: packet, loading: packetLoading, error: packetError, retry: packetRetry } = useMaskITO_Packet()
 
-    //#region claim
+    // #region claim
     const [claimState, claimCallback, resetClaimCallback] = useMaskClaimCallback()
     const onClaimButtonClick = useCallback(() => {
         claimCallback()
     }, [claimCallback])
-    //#endregion
+    // #endregion
 
-    //#region transaction dialog
+    // #region transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
     const postLink = usePostLink()
     const shareLink = activatedSocialNetworkUI.utils
@@ -109,14 +109,14 @@ export function ITO_Card(props: ITO_CardProps) {
             summary: `Claiming ${formatBalance(packet.claimable, 18, 6)} ${token?.symbol ?? 'Token'}.`,
         })
     }, [claimState /* update tx dialog only if state changed */])
-    //#endregion
+    // #endregion
 
-    //#region update parent amount
+    // #region update parent amount
     useEffect(() => {
         if (!packet) return
         onUpdateAmount(packet.claimable)
     }, [packet, onUpdateAmount])
-    //#endregion
+    // #endregion
 
     if (!token) return null
 
