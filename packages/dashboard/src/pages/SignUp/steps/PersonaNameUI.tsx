@@ -27,19 +27,19 @@ export interface PersonaNameUIProps {
     onNext(personaName: string): void
 }
 
-export const PersonaNameUI = ({ onNext }: PersonaNameUIProps) => {
+export const PersonaNameUI = ({ onNext, error }: PersonaNameUIProps) => {
     const t = useDashboardI18N()
     const navigate = useNavigate()
 
     const [personaName, setPersonaName] = useState('')
-    const [error, setError] = useState('')
+    const [helper, setHelper] = useState('')
 
     useEffect(() => {
-        setError('')
+        setHelper('')
     }, [personaName])
 
     useEffect(() => {
-        setError(error)
+        if (error) setHelper(error)
     }, [error])
 
     return (
@@ -60,8 +60,8 @@ export const PersonaNameUI = ({ onNext }: PersonaNameUIProps) => {
                         InputProps={{ disableUnderline: true }}
                         onChange={(e) => setPersonaName(e.currentTarget.value)}
                         inputProps={{ maxLength: 24 }}
-                        error={!!error}
-                        helperText={error}
+                        error={!!helper}
+                        helperText={helper}
                     />
                     <ButtonContainer>
                         <Button

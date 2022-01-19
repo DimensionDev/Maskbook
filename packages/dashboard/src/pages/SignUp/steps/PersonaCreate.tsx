@@ -13,6 +13,8 @@ export const PersonaCreate = () => {
     const [error, setError] = useState('')
 
     const onNext = async (personaName: string) => {
+        setError('')
+
         const personas = await Services.Identity.queryMyPersonas()
         let existing = false
         for (const i in personas) {

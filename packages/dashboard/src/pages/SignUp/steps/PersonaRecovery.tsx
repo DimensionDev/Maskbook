@@ -32,6 +32,7 @@ export const PersonaRecovery = () => {
 
     const onNext = useCallback(
         async (personaName: string) => {
+            setError('')
             try {
                 const identifier = state?.mnemonic
                     ? await createPersona(state?.mnemonic.join(' '), personaName)
