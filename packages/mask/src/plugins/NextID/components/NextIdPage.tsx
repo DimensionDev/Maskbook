@@ -1,6 +1,6 @@
 import { useI18N } from '../locales'
 import { makeStyles } from '@masknet/theme'
-import { Box, Button, Stack, Typography } from '@mui/material'
+import { Box, Button, Skeleton, Stack, Typography } from '@mui/material'
 import { useState } from 'react'
 import { BindDialog } from './BindDialog'
 import { useAsync, useAsyncRetry, useCounter } from 'react-use'
@@ -17,6 +17,13 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: theme.palette.background.default,
         borderRadius: 8,
         alignItems: 'center',
+    },
+    skeleton: {
+        borderRadius: 8,
+        margin: theme.spacing(1),
+        marginTop: 0,
+        backgroundColor: theme.palette.background.default,
+        height: '48px',
     },
 }))
 
@@ -40,7 +47,19 @@ export function NextIdPage({}: NextIDPageProps) {
         return Services.Helper.queryExistedBinding(currentIdentifier)
     }, [currentIdentifier, count])
 
-    if (loading || loadingIdentifier) return <Box>Loading</Box>
+    if (loading || loadingIdentifier) {
+        return (
+            <>
+                {Array.from({ length: 2 })
+                    .fill(0)
+                    .map((_, i) => (
+                        <div key={i}>
+                            <Skeleton className={classes.skeleton} animation="wave" variant="rectangular" />
+                        </div>
+                    ))}
+            </>
+        )
+    }
 
     if (bindings?.proofs.length) {
         return (
