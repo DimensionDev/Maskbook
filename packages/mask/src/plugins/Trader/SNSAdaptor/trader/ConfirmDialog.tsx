@@ -143,10 +143,6 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     useEffect(() => {
         if (open) setExecutionPrice(undefined)
     }, [open])
-    useEffect(() => {
-        if (!cacheTrade) return
-        if (typeof executionPrice === 'undefined') setExecutionPrice(cacheTrade.executionPrice)
-    }, [cacheTrade, executionPrice])
     // #endregion
 
     // #region gas price
@@ -180,6 +176,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     const onAccept = useCallback(() => {
         setPriceUpdated(false)
         setCacheTrade(trade)
+        setExecutionPrice(trade.executionPrice)
     }, [trade])
 
     const onConfirmPriceImpact = useCallback(() => {
@@ -197,13 +194,11 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
             setCacheTrade(undefined)
             return
         }
-        if (!cacheTrade) setCacheTrade(trade)
+        if (!cacheTrade) {
+            setCacheTrade(trade)
+        }
         // when output amount or minimum received has been changed
-        else if (
-            !priceUpdated &&
-            (!cacheTrade.outputAmount.isEqualTo(trade.outputAmount) ||
-                !cacheTrade.minimumReceived.isEqualTo(trade.minimumReceived))
-        ) {
+        else if (!priceUpdated && !cacheTrade.outputAmount.isEqualTo(trade.outputAmount)) {
             setPriceUpdated(true)
         }
     }, [open, trade, cacheTrade])
