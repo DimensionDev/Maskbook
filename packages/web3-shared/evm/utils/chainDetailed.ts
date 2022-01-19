@@ -99,6 +99,7 @@ export const getChainIdFromNetworkType = createLookupTableResolver<NetworkType, 
     ChainId.Mainnet,
 )
 
+// The value should be same as chain field in packages/web3-shared/evm/assets/chains.json
 const chainNameMap: Record<NetworkType, string> = {
     [NetworkType.Ethereum]: 'ETH',
     [NetworkType.Binance]: 'BSC',
@@ -108,7 +109,7 @@ const chainNameMap: Record<NetworkType, string> = {
     [NetworkType.Celo]: 'CELO',
     [NetworkType.Fantom]: 'FTM',
     [NetworkType.Aurora]: 'Aurora',
-    [NetworkType.Avalanche]: 'Avalanche',
+    [NetworkType.Avalanche]: 'AVAX',
     [NetworkType.Boba]: 'Boba',
     [NetworkType.Fuse]: 'Fuse',
     [NetworkType.Metis]: 'Metis',
