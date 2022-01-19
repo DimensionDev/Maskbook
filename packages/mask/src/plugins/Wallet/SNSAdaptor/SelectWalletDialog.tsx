@@ -28,13 +28,13 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     const wallets = useWallets(ProviderType.MaskWallet)
     const selectedWallet = useWallet()
 
-    //#region remote controlled dialog logic
+    // #region remote controlled dialog logic
     const [networkType, setNetworkType] = useState<NetworkType | undefined>()
     const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.selectWalletDialogUpdated, (ev) => {
         if (!ev.open) return
         setNetworkType(ev.networkType)
     })
-    //#endregion
+    // #endregion
 
     const onSelect = useCallback(
         async (address: string) => {
@@ -48,7 +48,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
         [networkType, closeDialog],
     )
 
-    //#region create new wallet
+    // #region create new wallet
     const history = useHistory()
     const onCreate = useCallback(async () => {
         closeDialog()
@@ -56,7 +56,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
         if (isEnvironment(Environment.ManifestOptions)) history.push('')
         else await Services.Welcome.openOptionsPage(DashboardRoutes.CreateMaskWallet, `create=${Date.now()}`)
     }, [history, closeDialog])
-    //#endregion
+    // #endregion
 
     return (
         <InjectedDialog open={open} onClose={closeDialog} title={t('plugin_wallet_select_a_wallet')} maxWidth="xs">

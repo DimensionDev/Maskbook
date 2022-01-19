@@ -8,7 +8,7 @@ import { useWeb3 } from './useWeb3'
 import { useBlockNumber } from './useBlockNumber'
 import { useChainId } from './useChainId'
 
-//#region types
+// #region types
 // [target, gasLimit, callData]
 type Call = [string, number, string]
 
@@ -21,9 +21,9 @@ const CONSERVATIVE_BLOCK_GAS_LIMIT = 10_000_000
 // the default value for calls that don't specify gasRequired
 const DEFAULT_GAS_REQUIRED = 200_000
 const DEFAULT_GAS_LIMIT = 1_000_000
-//#endregion
+// #endregion
 
-//#region cached results
+// #region cached results
 const cachedResults: {
     [chainId: number]: {
         blockNumber: number
@@ -79,9 +79,9 @@ function chunkArray(items: Call[], gasLimit = CONSERVATIVE_BLOCK_GAS_LIMIT * 10)
     if (currentChunk.length > 0) chunks.push(currentChunk)
     return chunks
 }
-//#endregion
+// #endregion
 
-//#region useMulticallCallback
+// #region useMulticallCallback
 export enum MulticallStateType {
     UNKNOWN = 0,
     /** Wait for tx call */
@@ -157,9 +157,9 @@ export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?
     )
     return [multicallState, multicallCallback] as const
 }
-//#endregion
+// #endregion
 
-//#region useMulticallStateDecoded
+// #region useMulticallStateDecoded
 export function useMulticallStateDecoded<
     T extends BaseContract,
     K extends keyof T['methods'],
@@ -187,7 +187,7 @@ export function useMulticallStateDecoded<
         })
     }, [web3, contracts.map((x) => x.options.address).join(), names.join(), state])
 }
-//#endregion
+// #endregion
 
 export function useSingleContractMultipleData<T extends BaseContract, K extends keyof T['methods']>(
     contract: T | null,

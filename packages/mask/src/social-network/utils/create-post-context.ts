@@ -27,15 +27,15 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
         const cancel: (Function | undefined)[] = []
         opt.signal?.addEventListener('abort', () => cancel.forEach((fn) => fn?.()))
 
-        //#region Post text content
+        // #region Post text content
         const postContent = new ValueRef(extractText())
         cancel.push(opt.rawMessage.subscribe(() => (postContent.value = extractText())))
         function extractText() {
             return extractTextFromTypedMessage(opt.rawMessage.getCurrentValue()).unwrapOr('')
         }
-        //#endregion
+        // #endregion
 
-        //#region Mentioned links
+        // #region Mentioned links
         const links = new ObservableSet<string>()
         cancel.push(
             postContent.addListener((post) => {
@@ -60,9 +60,9 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             getCurrentValue: () => [...links],
             subscribe: (sub) => links.event.on(ALL_EVENTS, sub),
         })
-        //#endregion
+        // #endregion
 
-        //#region Parse payload
+        // #region Parse payload
         const postPayload = new ValueRef<Result<Payload, unknown>>(Err(new Error('Empty')))
         parsePayload()
         cancel.push(postContent.addListener(parsePayload))
@@ -81,7 +81,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             }
             if (postPayload.value.err) postPayload.value = lastResult
         }
-        //#endregion
+        // #endregion
         const author: PostContextAuthor = {
             avatarURL: opt.avatarURL,
             nickname: opt.nickname,

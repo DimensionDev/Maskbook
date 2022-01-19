@@ -124,7 +124,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         [onClose, chainId, senderName],
     )
 
-    //#region blocking
+    // #region blocking
     // password should remain the same rather than change each time when createState change,
     //  otherwise password in database would be different from creating red-packet.
     const [createSettings, createState, createCallback, resetCreateCallback] = useCreateCallback(
@@ -132,7 +132,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         contract_version,
         publicKey,
     )
-    //#endregion
+    // #endregion
 
     // assemble JSON payload
     const payload = useRef<RedPacketJSONPayload>({
@@ -151,7 +151,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         payload.current.network = getChainName(chainId)
     }, [chainId, networkType, contract_version, createState])
 
-    //#region remote controlled transaction dialog
+    // #region remote controlled transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         (ev) => {
@@ -223,7 +223,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             }),
         })
     }, [createState /* update tx dialog only if state changed */])
-    //#endregion
+    // #endregion
 
     const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
     const onBack = useCallback(() => {
