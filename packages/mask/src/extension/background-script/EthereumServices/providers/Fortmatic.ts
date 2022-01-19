@@ -6,7 +6,7 @@ import { ChainId, EthereumMethodType } from '@masknet/web3-shared-evm'
 import { EVM_Messages } from '../../../../plugins/EVM/messages'
 import { resetAccount } from '../../../../plugins/Wallet/services'
 
-//#region redirect requests to the content page
+// #region redirect requests to the content page
 let id = 0
 
 async function request(requestArguments: RequestArguments) {
@@ -57,7 +57,7 @@ function send(payload: JsonRpcPayload, callback: (error: Error | null, response?
             callback(error)
         })
 }
-//#endregion
+// #endregion
 
 let web3: Web3 | null = null
 

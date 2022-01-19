@@ -110,16 +110,16 @@ export function TraderView(props: TraderViewProps) {
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP_INFO ? 1 : 0)
     const chainIdValid = useChainIdValid()
 
-    //#region track network type
+    // #region track network type
     const networkType = useNetworkType()
     useEffect(() => setTabIndex(0), [networkType])
-    //#endregion
+    // #endregion
 
-    //#region multiple coins share the same symbol
+    // #region multiple coins share the same symbol
     const { value: coins = [] } = useAvailableCoins(tagType, name, dataProvider)
-    //#endregion
+    // #endregion
 
-    //#region merge trending
+    // #region merge trending
     const coinId = usePreferredCoinId(name, dataProvider)
     const trendingById = useTrendingById(name ? '' : coinId, dataProvider)
     const trendingByKeyword = useTrendingByKeyword(tagType, coinId ? '' : name, dataProvider)
@@ -128,11 +128,11 @@ export function TraderView(props: TraderViewProps) {
         error: trendingError,
         loading: loadingTrending,
     } = coinId ? trendingById : trendingByKeyword
-    //#endregion
+    // #endregion
 
     const coinSymbol = (trending?.coin.symbol || '').toLowerCase()
 
-    //#region swap
+    // #region swap
     const {
         value: tokenDetailed,
         error: tokenDetailedError,
@@ -141,9 +141,9 @@ export function TraderView(props: TraderViewProps) {
         coinSymbol === 'eth' ? EthereumTokenType.Native : EthereumTokenType.ERC20,
         coinSymbol === 'eth' ? '' : trending?.coin.contract_address ?? '',
     )
-    //#endregion
+    // #endregion
 
-    //#region stats
+    // #region stats
     const [days, setDays] = useState(Days.ONE_WEEK)
     const {
         value: stats = [],
@@ -155,31 +155,31 @@ export function TraderView(props: TraderViewProps) {
         currency: trending?.currency,
         days,
     })
-    //#endregion
+    // #endregion
 
-    //#region trader context
+    // #region trader context
     const tradeContext = useTradeContext(tradeProvider)
-    //#endregion
+    // #endregion
 
-    //#region current data provider switcher
+    // #region current data provider switcher
     const DataProviderSwitcher = useSettingsSwitcher(
         currentDataProviderSettings,
         dataProviders,
         resolveDataProviderName,
     )
-    //#endregion
+    // #endregion
 
-    //#region api ready callback
+    // #region api ready callback
     useEffect(() => {
         props.onUpdate?.()
     }, [tabIndex, loadingTrending])
-    //#endregion
+    // #endregion
 
-    //#region no available providers
+    // #region no available providers
     if (dataProviders.length === 0) return null
-    //#endregion
+    // #endregion
 
-    //#region error handling
+    // #region error handling
     // error: unknown coin or api error
     if (trendingError)
         return (
@@ -201,17 +201,17 @@ export function TraderView(props: TraderViewProps) {
                 TrendingCardProps={{ classes: { root: classes.root } }}
             />
         )
-    //#endregion
+    // #endregion
 
-    //#region if the coin is a native token or contract address exists
+    // #region if the coin is a native token or contract address exists
 
     const isSwappable =
         (!!trending?.coin.contract_address || ['eth', 'matic', 'bnb'].includes(coinSymbol)) &&
         chainIdValid &&
         tradeProviders.length
-    //#endregion
+    // #endregion
 
-    //#region display loading skeleton
+    // #region display loading skeleton
     if (!currency || !trending || loadingTrending)
         return (
             <TrendingViewSkeleton
@@ -219,9 +219,9 @@ export function TraderView(props: TraderViewProps) {
                 TrendingCardProps={{ classes: { root: classes.root } }}
             />
         )
-    //#endregion
+    // #endregion
 
-    //#region tabs
+    // #region tabs
     const { coin, market, tickers } = trending
     const tabs = [
         <Tab className={classes.tab} key="market" label={t('plugin_trader_tab_market')} />,
@@ -229,7 +229,7 @@ export function TraderView(props: TraderViewProps) {
         <Tab className={classes.tab} key="exchange" label={t('plugin_trader_tab_exchange')} />,
         isSwappable ? <Tab className={classes.tab} key="swap" label={t('plugin_trader_tab_swap')} /> : null,
     ].filter(Boolean)
-    //#endregion
+    // #endregion
 
     return (
         <TradeContext.Provider value={tradeContext}>

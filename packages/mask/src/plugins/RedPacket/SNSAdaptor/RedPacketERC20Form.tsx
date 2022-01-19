@@ -93,7 +93,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const chainId = useChainId()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
 
-    //#region select token
+    // #region select token
     const { value: nativeTokenDetailed } = useNativeTokenDetailed()
     const [token = nativeTokenDetailed, setToken] = useState<FungibleTokenDetailed | undefined>(origin?.token)
     const [id] = useState(uuid())
@@ -117,9 +117,9 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             },
         })
     }, [id, token?.address])
-    //#endregion
+    // #endregion
 
-    //#region packet settings
+    // #region packet settings
     const [isRandom, setRandom] = useState(origin?.isRandom ? 1 : 0)
     const [message, setMessage] = useState(origin?.message || t('plugin_red_packet_best_wishes'))
     const currentIdentity = useCurrentIdentity()
@@ -163,7 +163,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         token?.type ?? EthereumTokenType.Native,
         token?.address ?? '',
     )
-    //#endregion
+    // #endregion
 
     const validationMessage = useMemo(() => {
         if (!token) return t('plugin_wallet_select_a_token')

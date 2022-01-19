@@ -125,13 +125,13 @@ export const GasSetting1559 = memo(() => {
 
     const { value, loading: getValueLoading } = useUnconfirmedRequest()
 
-    //#region Get suggest gas options data from meta swap api
+    // #region Get suggest gas options data from meta swap api
     const { value: gasOptions, loading: getGasOptionsLoading } = useAsync(async () => {
         return WalletRPC.getEstimateGasFees(chainId)
     }, [chainId])
-    //#endregion
+    // #endregion
 
-    //#region Gas options
+    // #region Gas options
     const options = useMemo(
         () => [
             {
@@ -149,9 +149,9 @@ export const GasSetting1559 = memo(() => {
         ],
         [gasOptions],
     )
-    //#endregion
+    // #endregion
 
-    //#region If the payload type be SEND_ETHER or CONTRACT_INTERACTION, get the gas from the payload
+    // #region If the payload type be SEND_ETHER or CONTRACT_INTERACTION, get the gas from the payload
     const gas = useMemo(() => {
         if (
             value &&
@@ -162,9 +162,9 @@ export const GasSetting1559 = memo(() => {
         }
         return 0
     }, [value])
-    //#endregion
+    // #endregion
 
-    //#region If the payload type be SEND_ETHER or CONTRACT_INTERACTION, estimate min gas limit by tx data
+    // #region If the payload type be SEND_ETHER or CONTRACT_INTERACTION, estimate min gas limit by tx data
     const { value: minGasLimit } = useAsync(async () => {
         if (
             value &&
@@ -186,9 +186,9 @@ export const GasSetting1559 = memo(() => {
 
         return 0
     }, [value, web3])
-    //#endregion
+    // #endregion
 
-    //#region Form field define schema
+    // #region Form field define schema
     const schema = useMemo(() => {
         return zod
             .object({
@@ -210,7 +210,7 @@ export const GasSetting1559 = memo(() => {
                 path: ['maxFeePerGas'],
             })
     }, [minGasLimit, gasOptions])
-    //#endregion
+    // #endregion
 
     const {
         control,
@@ -233,7 +233,7 @@ export const GasSetting1559 = memo(() => {
         },
     })
 
-    //#region If the payload type be SEND_ETHER or CONTRACT_INTERACTION and there are maxFeePerGas and maxPriorityFeePerGas parameters on tx, set them to the form data
+    // #region If the payload type be SEND_ETHER or CONTRACT_INTERACTION and there are maxFeePerGas and maxPriorityFeePerGas parameters on tx, set them to the form data
     useUpdateEffect(() => {
         if (
             value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
@@ -250,22 +250,22 @@ export const GasSetting1559 = memo(() => {
             }
         }
     }, [value, setValue])
-    //#endregion
+    // #endregion
 
-    //#region Set gas on tx to form data
+    // #region Set gas on tx to form data
     useUpdateEffect(() => {
         if (gas) setValue('gasLimit', new BigNumber(gas).toString())
     }, [gas, setValue])
-    //#endregion
+    // #endregion
 
-    //#region If the selected changed, set the value on the option to the form data
+    // #region If the selected changed, set the value on the option to the form data
     useEffect(() => {
         if (selected === null) return
         const { content } = options[selected]
         setValue('maxPriorityFeePerGas', new BigNumber(content?.suggestedMaxPriorityFeePerGas ?? 0).toString() ?? '')
         setValue('maxFeePerGas', new BigNumber(content?.suggestedMaxFeePerGas ?? 0).toString() ?? '')
     }, [selected, setValue, options])
-    //#endregion
+    // #endregion
 
     const [{ loading }, handleConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
@@ -290,7 +290,7 @@ export const GasSetting1559 = memo(() => {
 
     const [maxPriorityFeePerGas, maxFeePerGas, gasLimit] = watch(['maxPriorityFeePerGas', 'maxFeePerGas', 'gasLimit'])
 
-    //#region These are additional form rules that need to be prompted for but do not affect the validation of the form
+    // #region These are additional form rules that need to be prompted for but do not affect the validation of the form
     const maxPriorFeeHelperText = useMemo(() => {
         if (getGasOptionsLoading) return undefined
         if (isLessThan(maxPriorityFeePerGas, gasOptions?.low?.suggestedMaxPriorityFeePerGas ?? 0))
@@ -318,17 +318,17 @@ export const GasSetting1559 = memo(() => {
             return t('wallet_transfer_error_max_fee_too_high')
         return undefined
     }, [maxFeePerGas, gasOptions, getGasOptionsLoading])
-    //endregion
+    // #endregion
 
-    //#region If the payload is consumed it needs to be redirected
+    // #region If the payload is consumed it needs to be redirected
     useUpdateEffect(() => {
         if (!value && !getValueLoading) {
             history.replace(PopupRoutes.Wallet)
         }
     }, [value, getValueLoading])
-    //#endregion
+    // #endregion
 
-    //#region If the estimate gas be 0, Set error
+    // #region If the estimate gas be 0, Set error
     useUpdateEffect(() => {
         if (!getGasLimitError) setError('gasLimit', { message: 'Cant not get estimate gas from contract' })
     }, [getGasLimitError])
