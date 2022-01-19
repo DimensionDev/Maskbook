@@ -1,4 +1,4 @@
-//#region dhedge types
+// #region dhedge types
 
 import type { ChainId } from '@masknet/web3-shared-evm'
 
@@ -50,4 +50,4 @@ export interface PerformanceHistory {
     history: PoolHistory[]
 }
 
-//#endregion dhedge types
+// #endregion dhedge types

@@ -159,7 +159,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                     {approveStateType === ApproveStateType.PENDING
                         ? t('plugin_ito_unlocking_symbol', { symbol: token.symbol })
                         : `Updating ${token.symbol}`}
-                    &mldr;
+                    &hellip;
                 </ActionButton>
             </Grid>
         )
