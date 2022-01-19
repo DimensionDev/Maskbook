@@ -6,7 +6,7 @@ import { DeleteIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { CopyIconButton } from './CopyIconButton'
 import { ExternalLink } from 'react-feather'
-import { useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
+import { NetworkPluginID, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
 import { useI18N } from '../locales'
 import { ImageIcon } from '@masknet/shared'
 
@@ -51,7 +51,8 @@ export const BindingItem = memo<Item>(({ platform, identity, onUnBind }) => {
     const t = useI18N()
     const { Utils } = useWeb3State() ?? {}
     const { classes } = useStyles()
-    const networkDescriptor = useNetworkDescriptor()
+    const networkDescriptor = useNetworkDescriptor(undefined, NetworkPluginID.PLUGIN_EVM)
+    console.log(networkDescriptor)
 
     if (platform === Platform.ethereum) {
         return (

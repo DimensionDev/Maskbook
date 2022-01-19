@@ -1,12 +1,17 @@
 import { memo } from 'react'
 import { useI18N } from '../locales'
-import { useAsyncFn, useAsyncRetry } from 'react-use'
+import { useAsyncRetry } from 'react-use'
 import Services from '../../../extension/service'
 import { isSameAddress } from '@masknet/web3-shared-evm'
 import type { Persona } from '../../../database'
 import type { Binding } from '../types'
 import { BindPanelUI } from './BindPanelUI'
 import { useAccount } from '@masknet/plugin-infra'
+import { useCustomSnackbar } from '@masknet/theme'
+import { delay } from '@masknet/shared-base'
+import { useBindPayload } from '../hooks/useBindPayload'
+import { usePersonaSign } from '../hooks/usePersonaSign'
+import { useWalletSign } from '../hooks/useWalletSign'
 
 interface BindDialogProps {
     open: boolean
@@ -19,40 +24,38 @@ interface BindDialogProps {
 export const BindDialog = memo<BindDialogProps>(({ open, onClose, persona, onBind, bounds }) => {
     const account = useAccount()
     const t = useI18N()
+    const { showSnackbar } = useCustomSnackbar()
     const currentIdentifier = persona.identifier
     const isBound = !!bounds.find((x) => isSameAddress(x.identity, account))
 
-    const { value: message } = useAsyncRetry(() => {
-        if (!currentIdentifier || !account) return Promise.resolve(null)
-        return Services.Helper.createPersonaPayload(currentIdentifier, 'create', account, 'ethereum')
-    }, [currentIdentifier])
-
-    const [personaSignState, handlePersonaSign] = useAsyncFn(async () => {
-        if (!message || !currentIdentifier || isBound) return
-        return Services.Identity.signWithPersona({
-            method: 'eth',
-            message: message,
-            identifier: currentIdentifier.toText(),
-        })
-    }, [message, currentIdentifier, account, isBound])
-
-    const [walletSignState, handleWalletSign] = useAsyncFn(async () => {
-        if (!account || !message || isBound) return
-        return Services.Ethereum.personalSign(message, account)
-    }, [personaSignState.value, account, message, isBound])
+    const { value: message } = useBindPayload('create', account, currentIdentifier)
+    const [personaSignState, handlePersonaSign] = usePersonaSign(message, currentIdentifier)
+    const [walletSignState, handleWalletSign] = useWalletSign(message, account)
 
     useAsyncRetry(async () => {
         if (!personaSignState.value || !walletSignState.value || isBound) return
-        await Services.Helper.bindProof(
-            currentIdentifier,
-            'create',
-            'ethereum',
-            account,
-            walletSignState.value,
-            personaSignState.value.signature.signature,
-        )
-        onBind()
-        onClose()
+        try {
+            await Services.Helper.bindProof(
+                currentIdentifier,
+                'create',
+                'ethereum',
+                account,
+                walletSignState.value,
+                personaSignState.value.signature.signature,
+            )
+            showSnackbar(t.notify_wallet_sign_request_title(), {
+                variant: 'success',
+                message: t.notify_wallet_sign_request_success(),
+            })
+            await delay(2000)
+            onBind()
+            onClose()
+        } catch {
+            showSnackbar(t.notify_wallet_sign_request_title(), {
+                variant: 'error',
+                message: t.notify_wallet_sign_request_failed(),
+            })
+        }
     }, [walletSignState.value, personaSignState.value, isBound])
 
     return (

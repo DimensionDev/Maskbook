@@ -17,6 +17,7 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: theme.palette.background.default,
         borderRadius: 8,
         alignItems: 'center',
+        color: theme.palette.text.primary,
     },
     skeleton: {
         borderRadius: 8,

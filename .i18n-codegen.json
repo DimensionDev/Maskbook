@@ -153,7 +153,7 @@
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
-                "namespace": "com.mask.nextid",
+                "namespace": "com.mask.next_id",
                 "trans": "Translate",
                 "sourceMap": "inline"
             }

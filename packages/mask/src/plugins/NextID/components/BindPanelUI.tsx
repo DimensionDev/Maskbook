@@ -48,7 +48,8 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.primary,
     },
     done: {
-        background: '#60DFAB',
+        background: '#60DFAB !important',
+        color: `${theme.palette.text.primary} !important`,
     },
     loadingIcon: {
         position: 'relative',
@@ -125,6 +126,10 @@ export const BindPanelUI = memo<BindPanelUIProps>(
         const isDisableWalletSign = action === 'delete' ? false : isBound
         const isDisablePersonaSign = action === 'delete' ? !isBound : isBound
 
+        const isWalletSigned = !!signature.wallet.value
+        const isPersonaSigned = !!signature.persona.value
+        console.log(isWalletSigned)
+
         return (
             <InjectedDialog open={open} title={title} onClose={onClose}>
                 <DialogContent style={{ minWidth: 515 }}>
@@ -154,20 +159,20 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                             <Box
                                 className={classNames(
                                     classes.stepNumber,
-                                    signature.persona.value ? classes.stepNumberDone : null,
+                                    isPersonaSigned ? classes.stepNumberDone : null,
                                 )}>
                                 1
                             </Box>
                             <Box
                                 className={classNames(
                                     classes.stepLine,
-                                    signature.persona.value ? classes.stepLineDone : null,
+                                    isPersonaSigned || isWalletSigned ? classes.stepLineDone : null,
                                 )}
                             />
                             <Box
                                 className={classNames(
                                     classes.stepNumber,
-                                    signature.wallet.value ? classes.stepNumberDone : null,
+                                    isWalletSigned ? classes.stepNumberDone : null,
                                 )}>
                                 2
                             </Box>
@@ -175,19 +180,29 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                     )}
                 </DialogContent>
                 <DialogActions>
-                    <Stack direction="row" mb="24px" width="100%" justifyContent="space-around" alignItems="center">
+                    <Stack
+                        direction="row"
+                        mb="24px"
+                        mt="24px"
+                        width="100%"
+                        justifyContent="space-around"
+                        alignItems="center">
                         <LoadingButton
-                            disabled={isDisablePersonaSign}
+                            disabled={isDisablePersonaSign || !!isPersonaSigned}
                             classes={{
                                 loadingIndicatorEnd: classes.loadingIcon,
                             }}
                             loadingPosition="end"
                             style={{ width: '40%' }}
-                            className={signature.persona.value ? classes.done : ''}
+                            className={isPersonaSigned ? classes.done : ''}
                             loading={signature.persona.loading}
                             variant="contained"
                             onClick={onPersonaSign}
-                            endIcon={signature.persona.value ? <DoneIcon /> : null}
+                            endIcon={
+                                isPersonaSigned ? (
+                                    <DoneIcon sx={{ color: (theme) => theme.palette.text.primary }} />
+                                ) : null
+                            }
                             loadingIndicator={<LoadingAnimation />}>
                             {t.persona_sign()}
                         </LoadingButton>
@@ -197,13 +212,17 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                                 loadingIndicatorEnd: classes.loadingIcon,
                             }}
                             loadingPosition="end"
-                            disabled={isDisableWalletSign || !isCurrentAccount}
+                            disabled={isDisableWalletSign || !isCurrentAccount || !!isWalletSigned}
                             style={{ width: '40%' }}
-                            className={signature.wallet.value ? classes.done : ''}
+                            className={isWalletSigned ? classes.done : ''}
                             loading={signature.wallet.loading}
                             variant="contained"
                             onClick={onWalletSign}
-                            endIcon={signature.wallet.value ? <DoneIcon /> : null}
+                            endIcon={
+                                isWalletSigned ? (
+                                    <DoneIcon sx={{ color: (theme) => theme.palette.text.primary }} />
+                                ) : null
+                            }
                             loadingIndicator={<LoadingAnimation />}>
                             {!isCurrentAccount && action === 'delete'
                                 ? t.unbind_wallet_same_account_error()

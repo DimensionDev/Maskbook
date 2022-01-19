@@ -12,5 +12,14 @@
     "wallet_sign": "Wallet Sign",
     "unbind_or": "or",
     "copied": "copied",
-    "view_on_explorer": "View on explorer"
+    "view_on_explorer": "View on explorer",
+    "notify_persona_sign": "Persona Sign",
+    "notify_persona_sign_confirm": "Confirm this sign in your Personas",
+    "notify_persona_sign_cancel": "Your wallet cancelled the sign",
+    "notify_wallet_sign": "Wallet Sign",
+    "notify_wallet_sign_confirm": "Confirm this sign in your wallet",
+    "notify_wallet_sign_cancel": "Your wallet cancelled the sign",
+    "notify_wallet_sign_request_title": "Wallet Sign",
+    "notify_wallet_sign_request_success": "Signature success",
+    "notify_wallet_sign_request_failed": "Signature failed"
 }
