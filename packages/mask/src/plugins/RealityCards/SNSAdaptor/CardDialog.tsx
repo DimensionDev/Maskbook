@@ -112,7 +112,7 @@ export function CardDialog(props: CardDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    //#region context
+    // #region context
     const account = useAccount()
     const token = useBaseToken()
 
@@ -127,7 +127,7 @@ export function CardDialog(props: CardDialogProps) {
     const isOwner = useMemo(() => {
         return isSameAddress(card.originalNft.owner.id, account)
     }, [card.originalNft.owner.id, account])
-    //#endregion
+    // #endregion
 
     useEffect(() => {
         setDuration(
@@ -144,16 +144,16 @@ export function CardDialog(props: CardDialogProps) {
         onClose()
     }
 
-    //#region balance
+    // #region balance
     const {
         value: tokenBalance = '0',
         loading: loadingTokenBalance,
         error: errorTokenBalance,
         retry: tokenBalanceRetry,
     } = useUserDeposit()
-    //#endregion
+    // #endregion
 
-    //#region priceHourly
+    // #region priceHourly
     const priceHourly = new BigNumber(formatAmount(new BigNumber(inputPrice ?? 0), token.decimals))
     const pricePerMinute = useMemo(() => {
         return priceHourly.div(60)
@@ -185,14 +185,14 @@ export function CardDialog(props: CardDialogProps) {
     const minRentalDurationSecond = useMemo(() => {
         return new BigNumber(market.minRentalDayDivisor).dividedBy(24)
     }, [market.minRentalDayDivisor])
-    //#endregion
+    // #endregion
 
-    //#region blocking
+    // #region blocking
     const [rentState, rentCallback, resetRentCallback] = useRentCallback(market, pricePerDay.toString(), card, duration)
     const [exitState, exitCallback, resetExitCallback] = useExitCallback(market, card)
-    //#endregion
+    // #endregion
 
-    //#region on close transaction dialog
+    // #region on close transaction dialog
     const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         useCallback(
@@ -211,7 +211,7 @@ export function CardDialog(props: CardDialogProps) {
             [rentState, onDialogClose, exitState],
         ),
     )
-    //#endregion
+    // #endregion
 
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
     const shareLink = activatedSocialNetworkUI.utils
@@ -269,9 +269,9 @@ export function CardDialog(props: CardDialogProps) {
             }),
         })
     }, [exitState, card.outcomeName])
-    //#endregion
+    // #endregion
 
-    //#region validation
+    // #region validation
     const priceValidationMessage = useMemo(() => {
         if (!priceHourly || priceHourly.isZero() || priceHourly.isNaN())
             return t('wallet_transfer_error_amount_absence')
@@ -297,7 +297,7 @@ export function CardDialog(props: CardDialogProps) {
             })
         return ''
     }, [account, priceHourly, token, tokenBalance])
-    //#endregion
+    // #endregion
 
     if (!token) return null
     return (
@@ -317,7 +317,7 @@ export function CardDialog(props: CardDialogProps) {
                     <>
                         {isOwner ? (
                             <Typography color="green" variant="h6" align="center">
-                                ✅ {t('plugin_realitycards_currently_own_card')}
+                                &#x2705; {t('plugin_realitycards_currently_own_card')}
                             </Typography>
                         ) : null}
 

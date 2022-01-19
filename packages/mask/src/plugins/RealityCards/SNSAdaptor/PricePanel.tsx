@@ -82,7 +82,7 @@ export function PricePanel(props: PricePanelProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    //#region update amount by self
+    // #region update amount by self
     const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
         () => ({
             RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${token?.decimals}}$`), // .ddd...d
@@ -98,7 +98,7 @@ export function PricePanel(props: PricePanelProps) {
         },
         [onAmountChange, RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT],
     )
-    //#endregion
+    // #endregion
 
     return (
         <TextField

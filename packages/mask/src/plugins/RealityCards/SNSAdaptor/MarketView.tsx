@@ -11,10 +11,9 @@ import {
     Link,
     Chip,
 } from '@mui/material'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
-import { useState } from 'react'
 import { useMarketBySlug } from '../hooks/useMarket'
 import { Card as RCCard, Market, MarketState } from '../types'
 import { formatBalance, resolveAddressLinkOnExplorer, useChainId } from '@masknet/web3-shared-evm'
@@ -224,7 +223,7 @@ function MarketDetails(props: MarketDetailsProps) {
                         <MarketDescriptionIcon />
                     </Link>
                 </Tooltip>
-                {!!market.giveawayText ? (
+                {market.giveawayText ? (
                     <Tooltip
                         title="Token Giveaway"
                         arrow
