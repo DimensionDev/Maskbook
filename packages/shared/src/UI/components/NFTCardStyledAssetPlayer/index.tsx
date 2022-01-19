@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { CircularProgress } from '@mui/material'
+import { CircularProgress, useTheme } from '@mui/material'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { AssetPlayer } from '../AssetPlayer'
@@ -41,6 +41,11 @@ export function NFTCardStyledAssetPlayer(props: NFTLuckyDropStyledAssetPlayerPro
     const { chainId, contractAddress, tokenId, fallbackImage, url, setERC721TokenName, renderOrder, setSourceType } =
         props
     const classes = useStylesExtends(useStyles(), props)
+    const theme = useTheme()
+    const fallbackImageURL =
+        theme.palette.mode === 'dark'
+            ? new URL('./nft_token_fallback_dark.png', import.meta.url)
+            : new URL('./nft_token_fallback.png', import.meta.url)
     return (
         <AssetPlayer
             erc721Token={{
@@ -58,7 +63,7 @@ export function NFTCardStyledAssetPlayer(props: NFTLuckyDropStyledAssetPlayerPro
             setSourceType={setSourceType}
             // It would fail to render as loading too many(>200) iframe at once.
             renderTimeout={renderOrder ? 20000 * Math.floor(renderOrder / 100) : undefined}
-            fallbackImage={fallbackImage ?? new URL('./nft_token_fallback.png', import.meta.url)}
+            fallbackImage={fallbackImage ?? fallbackImageURL}
             loadingIcon={<CircularProgress size={20} className={classes.loadingNftImg} />}
             classes={{
                 iframe: classNames(classes.wrapper, classes.iframe),
