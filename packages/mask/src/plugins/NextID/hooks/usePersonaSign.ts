@@ -10,7 +10,7 @@ export const usePersonaSign = (message?: string, currentIdentifier?: ECKeyIdenti
     return useAsyncFn(async () => {
         if (!message || !currentIdentifier) return
         try {
-            showSnackbar(t.notify_persona_sign(), { variant: 'info', message: t.notify_persona_sign_confirm() })
+            showSnackbar(t.notify_persona_sign(), { processing: true, message: t.notify_persona_sign_confirm() })
             const result = await Services.Identity.signWithPersona({
                 method: 'eth',
                 message: message,

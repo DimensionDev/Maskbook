@@ -10,7 +10,7 @@ export const useWalletSign = (message?: string, address?: string) => {
     return useAsyncFn(async () => {
         if (!address || !message) return
         try {
-            showSnackbar(t.notify_wallet_sign(), { variant: 'info', message: t.notify_wallet_sign_confirm() })
+            showSnackbar(t.notify_wallet_sign(), { processing: true, message: t.notify_wallet_sign_confirm() })
             const result = await Services.Ethereum.personalSign(message, address)
             return result
         } catch {

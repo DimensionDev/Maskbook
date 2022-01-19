@@ -6,6 +6,6 @@ export const useBindPayload = (action: 'delete' | 'create', address?: string, cu
     return useAsyncRetry(() => {
         if (!address) return Promise.resolve(undefined)
         if (!currentIdentifier || !address) return Promise.resolve(undefined)
-        return Services.Helper.createPersonaPayload(currentIdentifier, 'delete', address, 'ethereum')
+        return Services.Helper.createPersonaPayload(currentIdentifier, action, address, 'ethereum')
     }, [currentIdentifier, address])
 }
