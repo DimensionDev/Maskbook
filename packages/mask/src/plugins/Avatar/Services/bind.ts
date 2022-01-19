@@ -18,7 +18,7 @@ async function getUserAddressFromGUN(userId: string): Promise<string | undefined
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < READ_GUN_RETRIES; i++) {
         const result = await NFTAvatarGUN
-            //@ts-expect-error
+            // @ts-expect-error
             .get(userId).then!()
         if (result) return result
         await delay(500)
@@ -28,6 +28,10 @@ async function getUserAddressFromGUN(userId: string): Promise<string | undefined
 
 function getKey(networkPluginId = NetworkPluginID.PLUGIN_EVM, chainId: number = ChainId.Mainnet) {
     return `${networkPluginId}-${chainId}`
+}
+
+function getCacheKey(userId: string, networkPluginId = NetworkPluginID.PLUGIN_EVM, chainId: number = ChainId.Mainnet) {
+    return `${userId}-${networkPluginId}-${chainId}`
 }
 
 async function _getUserAddress(userId: string, networkPluginId?: NetworkPluginID, chainId?: number) {
@@ -46,10 +50,10 @@ async function _getUserAddress(userId: string, networkPluginId?: NetworkPluginID
 }
 
 export async function getUserAddress(userId: string, networkPluginId?: NetworkPluginID, chainId?: number) {
-    let c = cache.get(getKey(networkPluginId, chainId))
+    let c = cache.get(getCacheKey(userId, networkPluginId, chainId))
     if (!c || Date.now() > c[1]) {
         try {
-            cache.set(getKey(networkPluginId, chainId), [
+            cache.set(getCacheKey(userId, networkPluginId, chainId), [
                 _getUserAddress(userId, networkPluginId, chainId),
                 addSeconds(new Date(), 60).getTime(),
             ])
@@ -57,7 +61,7 @@ export async function getUserAddress(userId: string, networkPluginId?: NetworkPl
             console.log(err)
         }
     }
-    c = cache.get(getKey(networkPluginId, chainId))
+    c = cache.get(getCacheKey(userId, networkPluginId, chainId))
 
     return c?.[0]
 }
