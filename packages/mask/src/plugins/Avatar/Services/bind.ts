@@ -26,8 +26,8 @@ async function getUserAddressFromGUN(userId: string): Promise<string | undefined
     return
 }
 
-function getKey(networkPluginId?: NetworkPluginID, chainId?: number) {
-    return `${networkPluginId ?? NetworkPluginID.PLUGIN_EVM}-${chainId ?? ChainId.Mainnet}`
+function getKey(networkPluginId = NetworkPluginID.PLUGIN_EVM, chainId: number = ChainId.Mainnet) {
+    return `${networkPluginId}-${chainId}`
 }
 
 async function _getUserAddress(userId: string, networkPluginId?: NetworkPluginID, chainId?: number) {

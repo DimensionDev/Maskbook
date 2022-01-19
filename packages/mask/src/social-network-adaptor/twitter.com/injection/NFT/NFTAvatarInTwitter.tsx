@@ -1,10 +1,10 @@
 import { createReactRootShadowed, MaskMessages, NFTAvatarEvent, startWatch } from '../../../../utils'
 import { searchTwitterAvatarLinkSelector, searchTwitterAvatarSelector } from '../../utils/selector'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
-import { resolveOpenSeaLink, useChainId, useWallet } from '@masknet/web3-shared-evm'
+import { resolveOpenSeaLink, useWallet } from '@masknet/web3-shared-evm'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
 import { useNFTAvatar } from '../../../../plugins/Avatar/hooks'
 import { getAvatarId } from '../../utils/user'
@@ -14,7 +14,6 @@ import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 import { useAsync, useLocation, useUpdateEffect, useWindowSize } from 'react-use'
 import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/RainbowBox'
 import { trim } from 'lodash-unified'
-import { usePluginIDContext } from '@masknet/plugin-infra'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -39,9 +38,6 @@ const useStyles = makeStyles()(() => ({
         width: '19px !important',
         height: '19px !important',
     },
-    snackbar: {
-        position: 'relative',
-    },
 }))
 
 function NFTAvatarInTwitter() {
@@ -53,9 +49,6 @@ function NFTAvatarInTwitter() {
     const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
     const windowSize = useWindowSize()
     const location = useLocation()
-    const chainId = useChainId()
-    const currentPluginId = usePluginIDContext()
-    const { showSnackbar } = useCustomSnackbar()
 
     const showAvatar = useMemo(
         () => getAvatarId(identity.avatar ?? '') === avatar?.avatarId && avatar.avatarId,
@@ -97,15 +90,11 @@ function NFTAvatarInTwitter() {
             ...NFTEvent,
             avatarId: getAvatarId(identity.avatar ?? ''),
         } as AvatarMetaDB).catch((error) => {
-            showSnackbar(error.message, {
-                variant: 'error',
-            })
+            window.alert(error.message)
             return
         })
         if (!avatar) {
-            showSnackbar('Failed to save NFT Avatar.', {
-                variant: 'error',
-            })
+            window.alert('Failed to save NFT Avatar.')
             return
         }
 
