@@ -4,7 +4,6 @@ import {
     EthereumTokenType,
     ChainId,
     getSavingsConstants,
-    formatBalance,
     createContract,
     FungibleTokenDetailed,
 } from '@masknet/web3-shared-evm'
@@ -42,8 +41,9 @@ export class LidoProtocol implements SavingsProtocol {
     public image = 'lido'
     public base = 'ETH'
     public pair = 'stETH'
+    public decimals = 18
     public apr = '0.00'
-    public balance = '0.00'
+    public balance = new BigNumber('0')
     public availableNetworks: SavingsNetwork[] = [
         {
             chainId: ChainId.Mainnet,
@@ -103,14 +103,12 @@ export class LidoProtocol implements SavingsProtocol {
                 LidoABI as AbiItem[],
             )
             const balance = await contract?.methods.balanceOf(account).call()
-            const formattedBalance = formatBalance(balance, 18, 6)
-
-            this.balance = formattedBalance
-            return formattedBalance
+            this.balance = new BigNumber(balance || '0')
+            return this.balance
         } catch (error) {
             console.log('LDO `getBalance()` error', error)
-            this.balance = '0.00'
-            return '0.00'
+            this.balance = new BigNumber('0')
+            return this.balance
         }
     }
 

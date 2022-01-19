@@ -23,13 +23,14 @@ export interface SavingsProtocol {
     image: string
     base: string
     pair: string
+    decimals: number
     availableNetworks: SavingsNetwork[]
     apr: string
-    balance: string
+    balance: BigNumber
 
     getFungibleTokenDetails(chainId: ChainId): FungibleTokenDetailed
     getApr(): Promise<string>
-    getBalance(chainId: ChainId, web3: Web3, account: string): Promise<string>
+    getBalance(chainId: ChainId, web3: Web3, account: string): Promise<BigNumber.Value>
     depositEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value): Promise<BigNumber.Value>
     deposit(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value): Promise<boolean>
     withdrawEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value): Promise<BigNumber.Value>

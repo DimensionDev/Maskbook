@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js'
 import { useAsync } from 'react-use'
 import { Box, Grid, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useWeb3, useAccount } from '@masknet/web3-shared-evm'
+import { useWeb3, useAccount, formatBalance } from '@masknet/web3-shared-evm'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { IconURLs } from './IconURL'
 import { useI18N } from '../../../utils'
@@ -128,7 +128,9 @@ export function SavingsTable({ chainId, tab, mappableProtocols, setSelectedProto
                                 <Typography variant="body1">{protocol.apr}%</Typography>
                             </Grid>
                             <Grid item xs={3} className={classes.tableCell}>
-                                <Typography variant="body1">{protocol.balance}</Typography>
+                                <Typography variant="body1">
+                                    {formatBalance(protocol.balance, protocol.decimals, 6)}
+                                </Typography>
                             </Grid>
                             <Grid item xs={3} className={classes.tableCell}>
                                 <Button

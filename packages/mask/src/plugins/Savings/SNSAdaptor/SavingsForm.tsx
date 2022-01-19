@@ -52,7 +52,7 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
     //#region form variables
     const tokenAmount = new BigNumber(rightShift(inputAmount || '0', 18))
     const inputAsBN = new BigNumber(rightShift(inputAmount, 18))
-    const balanceAsBN = new BigNumber(TabType.Deposit ? nativeTokenBalance || '0' : protocol.balance)
+    const balanceAsBN = TabType.Deposit ? new BigNumber(nativeTokenBalance || '0') : protocol.balance
 
     useAsync(async () => {
         if (!(inputAsBN.toNumber() > 0)) return
@@ -78,7 +78,7 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
         }
 
         return ''
-    }, [inputAmount, tokenAmount, nativeTokenBalance, protocol.balance])
+    }, [inputAmount, tokenAmount, nativeTokenBalance, balanceAsBN])
 
     const tokenPrice = useTokenPrice(chainId, undefined)
 
