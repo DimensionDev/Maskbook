@@ -31,10 +31,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     DecryptedInspector: function Component(props) {
-        const text = useMemo(() => extractTextFromTypedMessage(props.message), [props.message])
-        const links = useMemo(() => parseURL(text?.val ?? ''), [text.val])
+        const links = useMemo(() => {
+            const text = extractTextFromTypedMessage(props.message)
+            if (text.none) return []
+            return parseURL(text?.val ?? '')
+        }, [props.message])
         const market = getMarketFromLinks(links)
-        if (text.none) return null
         if (!market?.slug) return null
         return <Renderer link={market.link} slug={market.slug} />
     },
