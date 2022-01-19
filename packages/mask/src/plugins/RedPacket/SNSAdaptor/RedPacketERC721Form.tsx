@@ -84,7 +84,7 @@ const useStyles = makeStyles()((theme) => {
             borderRadius: 8,
             padding: 0,
             marginBottom: theme.spacing(2.5),
-            background: theme.palette.background.default,
+            background: theme.palette.background.paper,
             width: 120,
             height: 180,
             overflow: 'hidden',
@@ -99,7 +99,7 @@ const useStyles = makeStyles()((theme) => {
         addWrapper: {
             cursor: 'pointer',
             alignItems: 'center',
-            background: theme.palette.background.default,
+            background: `${theme.palette.background.default} !important`,
             justifyContent: 'center',
         },
         addIcon: {
