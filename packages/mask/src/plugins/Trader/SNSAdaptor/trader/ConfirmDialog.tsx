@@ -138,7 +138,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     const { setTemporarySlippage, temporarySlippage } = AllProviderTradeContext.useContainer()
     const [priceReversed, setPriceReversed] = useState(false)
 
-    //#region detect price changing
+    // #region detect price changing
     const [executionPrice, setExecutionPrice] = useState<BigNumber | undefined>(cacheTrade?.executionPrice)
     useEffect(() => {
         if (open) setExecutionPrice(undefined)
@@ -147,9 +147,9 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
         if (!cacheTrade) return
         if (typeof executionPrice === 'undefined') setExecutionPrice(cacheTrade.executionPrice)
     }, [cacheTrade, executionPrice])
-    //#endregion
+    // #endregion
 
-    //#region gas price
+    // #region gas price
     const nativeToken = createNativeToken(chainId)
     const tokenPrice = useNativeTokenPrice(chainId)
 
@@ -161,7 +161,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
         () => (gasFee ? new BigNumber(formatWeiToEther(gasFee).times(tokenPrice).toFixed(2)) : '0'),
         [gasFee, tokenPrice],
     )
-    //#endregion
+    // #endregion
 
     const staled = !!(executionPrice && !executionPrice.isEqualTo(cacheTrade?.executionPrice ?? 0))
 

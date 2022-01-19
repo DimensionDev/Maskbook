@@ -160,7 +160,7 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(
             return WalletRPC.getEstimateGasFees(chainId)
         }, [chainId])
 
-        //region Gas Options
+        // #region Gas Options
         const options = useMemo(
             () => [
                 {
@@ -198,7 +198,7 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(
 
         const [maxPriorityFeePerGas, maxFeePerGas] = watch(['maxPriorityFeePerGas', 'maxFeePerGas'])
 
-        //#region These are additional form rules that need to be prompted for but do not affect the validation of the form
+        // #region These are additional form rules that need to be prompted for but do not affect the validation of the form
         const maxPriorFeeHelperText = useMemo(() => {
             if (getGasOptionsLoading) return undefined
             if (isLessThan(maxPriorityFeePerGas, gasOptions?.low?.suggestedMaxPriorityFeePerGas ?? 0))
@@ -226,9 +226,9 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(
                 return t('wallet_transfer_error_max_fee_too_high')
             return undefined
         }, [maxFeePerGas, gasOptions, getGasOptionsLoading])
-        //endregion
+        // #endregion
 
-        //#region Confirm function
+        // #region Confirm function
         const handleConfirm = useCallback(
             (data: zod.infer<typeof schema>) => {
                 onSave_({
@@ -240,16 +240,16 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(
         )
 
         const onSave = handleSubmit(handleConfirm)
-        //#endregion
+        // #endregion
 
-        //#region If the selected changed, set the value on the option to the form data
+        // #region If the selected changed, set the value on the option to the form data
         useEffect(() => {
             if (selected === null) return
             const { content } = options[selected]
             setValue('maxPriorityFeePerGas', toFixed(content?.suggestedMaxPriorityFeePerGas))
             setValue('maxFeePerGas', toFixed(content?.suggestedMaxFeePerGas))
         }, [selected, setValue, options])
-        //#endregion
+        // #endregion
 
         useEffect(() => {
             if (!(gasConfig?.maxPriorityFeePerGas && gasConfig?.maxFeePerGas)) return

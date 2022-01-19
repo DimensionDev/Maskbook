@@ -22,7 +22,7 @@ export const ButtonTab = forwardRef<HTMLButtonElement, ButtonTabProps>((props, r
         if (!activated && onChange) onChange(event, String(value))
         if (onClick) onClick(event)
     }
-    //TODO: replace secondary to correct theme color
+    // TODO: replace secondary to correct theme color
     return (
         <TabButtonWrap
             ref={ref}

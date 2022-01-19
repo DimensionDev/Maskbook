@@ -124,7 +124,7 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
         const [selected, setOption] = useState<number>(1)
         const [customGasPrice, setCustomGasPrice] = useState('0')
 
-        //#region Get gas options from debank
+        // #region Get gas options from debank
         const { value: gasOptions } = useAsync(async () => {
             const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
             if (!response) return { slow: 0, standard: 0, fast: 0 }
@@ -135,7 +135,7 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
                 fast: response.data.fast.price,
             }
         }, [chainId])
-        //#endregion
+        // #endregion
 
         const options = useMemo(
             () => [
@@ -159,13 +159,13 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
         const { value: nativeToken } = useNativeTokenDetailed()
         const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
 
-        //#region Confirm function
+        // #region Confirm function
         const handleConfirm = useCallback(() => {
             onSave_({
                 gasPrice: toHex(new BigNumber(options[selected].gasPrice).toString()),
             })
         }, [selected, options])
-        //#endregion
+        // #endregion
 
         useUpdateEffect(() => {
             if (!(gasConfig?.gasPrice && gasOptions)) return

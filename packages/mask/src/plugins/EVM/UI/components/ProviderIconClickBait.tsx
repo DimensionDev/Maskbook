@@ -21,7 +21,7 @@ export function ProviderIconClickBait({
     onClick,
     onSubmit,
 }: Web3Plugin.UI.ProviderIconClickBaitProps) {
-    //#region connect wallet dialog
+    // #region connect wallet dialog
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.connectWalletDialogUpdated,
         (ev) => {
@@ -29,7 +29,7 @@ export function ProviderIconClickBait({
             if (ev.result) onSubmit?.(network, provider)
         },
     )
-    //#endregion
+    // #endregion
 
     const providerType = provider.type as ProviderType
     const networkType = network.type as NetworkType

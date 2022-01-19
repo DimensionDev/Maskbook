@@ -19,13 +19,13 @@ export interface Currency {
     space: string
 }
 
-//#region get all currency
+// #region get all currency
 export function getAllCurrencies(): Currency[] {
     return []
 }
-//#endregion
+// #endregion
 
-//#region get all coins
+// #region get all coins
 export interface Coin {
     id: number
     name: string
@@ -52,9 +52,9 @@ export async function getAllCoins() {
         status: Status
     }>
 }
-//#endregion
+// #endregion
 
-//#regin get quote info
+// #regin get quote info
 export interface QuotesInfo {
     circulating_supply: number
     cmc_rank: number
@@ -103,9 +103,9 @@ export async function getQuotesInfo(id: string, currency: string) {
         }
     }
 }
-//#endregion
+// #endregion
 
-//#region get coin info
+// #region get coin info
 export interface PlatformInfo {
     coin: {
         id: string
@@ -176,9 +176,9 @@ export async function getCoinInfo(id: string) {
         status: response.status,
     }
 }
-//#endregion
+// #endregion
 
-//#region historical
+// #region historical
 export type Stat = [number, number, number]
 export interface HistoricalCoinInfo {
     id: number
@@ -205,9 +205,9 @@ export async function getHistorical(id: string, currency: string, startDate: Dat
         status: Status
     }>
 }
-//#endregion
+// #endregion
 
-//#region latest market pairs
+// #region latest market pairs
 export interface Pair {
     exchange: {
         id: number
@@ -281,4 +281,4 @@ export async function getLatestMarketPairs(id: string, currency: string) {
         }
     }
 }
-//#endregion
+// #endregion

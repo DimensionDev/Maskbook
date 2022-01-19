@@ -33,15 +33,15 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     const chainIdValid = useChainIdValid()
     const nativeTokenBalance = useNativeTokenBalance()
 
-    //#region remote controlled confirm risk warning
+    // #region remote controlled confirm risk warning
     const { isConfirmed: isRiskWarningConfirmed, openDialog: openRiskWarningDialog } = useWalletRiskWarningDialog()
-    //#endregion
+    // #endregion
 
-    //#region remote controlled select provider dialog
+    // #region remote controlled select provider dialog
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
-    //#endregion
+    // #endregion
 
     if (!account)
         return (

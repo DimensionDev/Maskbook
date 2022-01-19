@@ -68,9 +68,9 @@ export function SettingsDialog(props: SettingsDialogProps) {
     const [unconfirmedSlippage, setUnconfirmedSlippage] = useState(slippage)
     const [warningVisible, setWarningVisible] = useState(unconfirmedSlippage >= WARNING_SLIPPAGE)
 
-    //#region remote controlled dialog
+    // #region remote controlled dialog
     const { open, setDialog, closeDialog } = useRemoteControlledDialog(PluginTraderMessages.swapSettingsUpdated)
-    //#endregion
+    // #endregion
 
     useEffect(() => {
         setUnconfirmedSlippage(slippage)
