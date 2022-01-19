@@ -47,13 +47,15 @@ const useStyles = makeStyles()(() => {
 })
 
 export interface TraderProps extends withClasses<'root'> {
+    defaultFromCoin?: Coin
+    defaultToCoin?: Coin
     coin?: Coin
     tokenDetailed?: FungibleTokenDetailed
     chainId?: ChainId
 }
 
 export function Trader(props: TraderProps) {
-    const { coin, tokenDetailed, chainId: targetChainId } = props
+    const { defaultFromCoin, defaultToCoin, coin, tokenDetailed, chainId: targetChainId } = props
     const { decimals } = tokenDetailed ?? coin ?? {}
     const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
     const wallet = useWallet()
@@ -89,6 +91,25 @@ export function Trader(props: TraderProps) {
     }, [chainId, chainIdValid])
     //#endregion
 
+    const updateTradingCoin = useCallback(
+        (type: any, coin?: Coin) => {
+            if (!coin) return
+            dispatchTradeStore({
+                type,
+                token: coin.contract_address
+                    ? createERC20Token(chainId, coin.contract_address, decimals, coin.name, coin.symbol)
+                    : undefined,
+            })
+        },
+        [chainId],
+    )
+    useEffect(() => {
+        updateTradingCoin(AllProviderTradeActionType.UPDATE_INPUT_TOKEN, defaultFromCoin)
+    }, [updateTradingCoin, defaultFromCoin])
+    useEffect(() => {
+        updateTradingCoin(AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN, defaultToCoin)
+    }, [updateTradingCoin, defaultToCoin])
+
     //#region if coin be changed, update output token
     useEffect(() => {
         if (!coin || currentChainId !== targetChainId) return
@@ -105,14 +126,18 @@ export function Trader(props: TraderProps) {
             })
         }
         if (!outputToken) {
-            dispatchTradeStore({
-                type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
-                token: coin.contract_address
-                    ? createERC20Token(chainId, coin.contract_address, decimals, coin.name, coin.symbol)
-                    : undefined,
-            })
+            updateTradingCoin(AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN, outputToken)
         }
-    }, [coin, NATIVE_TOKEN_ADDRESS, inputToken, outputToken, currentChainId, targetChainId, decimals])
+    }, [
+        coin,
+        NATIVE_TOKEN_ADDRESS,
+        inputToken,
+        outputToken,
+        currentChainId,
+        targetChainId,
+        decimals,
+        updateTradingCoin,
+    ])
 
     const onInputAmountChange = useCallback((amount: string) => {
         dispatchTradeStore({
