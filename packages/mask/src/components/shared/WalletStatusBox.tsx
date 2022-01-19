@@ -69,11 +69,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     linkIcon: {
         marginRight: theme.spacing(1),
     },
-    dashboardProvider: {
-        border: `1px solid ${theme.palette.background.default}`,
-    },
     twitterProviderBorder: {
-        border: `1px solid ${theme.palette.background.default}`,
         width: 14,
         height: 14,
     },
@@ -111,7 +107,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
 
     const { value: domain } = useReverseAddress(account)
 
-    //#region copy addr to clipboard
+    // #region copy addr to clipboard
     const [, copyToClipboard] = useCopyToClipboard()
     const onCopy = useSnackbarCallback(
         async (ev: React.MouseEvent<HTMLAnchorElement>) => {
@@ -124,19 +120,19 @@ export function WalletStatusBox(props: WalletStatusBox) {
         undefined,
         t('copy_success_of_wallet_addr'),
     )
-    //#endregion
+    // #endregion
 
-    //#region change provider
+    // #region change provider
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
-    //#endregion
+    // #endregion
 
-    //#region walletconnect
+    // #region walletconnect
     const { setDialog: setWalletConnectDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletConnectQRCodeDialogUpdated,
     )
-    //#endregion
+    // #endregion
 
     const onDisconnect = useCallback(async () => {
         switch (providerType) {
@@ -159,9 +155,6 @@ export function WalletStatusBox(props: WalletStatusBox) {
     return account ? (
         <section className={classNames(classes.currentAccount, props.isDashboard ? classes.dashboardBackground : '')}>
             <WalletIcon
-                classes={{
-                    providerIcon: props.isDashboard ? classes.dashboardProvider : classes.twitterProviderBorder,
-                }}
                 size={48}
                 badgeSize={16}
                 networkIcon={providerDescriptor?.icon} // switch providerIcon and networkIcon to meet design
@@ -187,7 +180,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                     )}
                 </div>
                 <div className={classes.infoRow}>
-                    <Typography className={classes.address} variant="body2">
+                    <Typography className={classes.address} variant="body2" title={account}>
                         <FormattedAddress address={account} size={4} formatter={Utils?.formatAddress} />
                     </Typography>
                     <Link

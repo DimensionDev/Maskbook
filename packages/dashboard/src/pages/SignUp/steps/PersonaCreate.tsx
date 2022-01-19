@@ -8,12 +8,11 @@ import {
     PersonaLogoBox,
     SignUpAccountLogo,
 } from '../../../components/RegisterFrame/ColumnContentLayout'
-import { DashboardRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, delay } from '@masknet/shared-base'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
 import { Box, Typography } from '@mui/material'
 import { useDashboardI18N } from '../../../locales'
 import { SignUpRoutePath } from '../routePath'
-import { delay } from '@masknet/shared-base'
 import { useCreatePersonaByPrivateKey, useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2'
 import { Services } from '../../../API'
 import { ButtonContainer } from '../../../components/RegisterFrame/ButtonContainer'

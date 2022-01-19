@@ -1,7 +1,6 @@
 import { formatFileSize } from '@dimensiondev/kit'
-import { useCustomSnackbar } from '@masknet/theme'
+import { useCustomSnackbar, makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
 import { isNil } from 'lodash-unified'
 import { UploadCloud } from 'react-feather'
 import { useDropArea } from 'react-use'

@@ -13,6 +13,12 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai",
         "Celo": "celo",
-        "Fantom": "ftm"
+        "Fantom": "ftm",
+        "Aurora": "aurora",
+        "Aurora_Testnet": "",
+        "Avalanche": "avax",
+        "Boba": "boba",
+        "Metis": "metis",
+        "Optimistic": "op"
     }
 }

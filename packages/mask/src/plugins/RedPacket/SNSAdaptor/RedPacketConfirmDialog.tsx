@@ -27,9 +27,9 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         fontWeight: 300,
         borderRadius: 8,
-        backgroundColor: '#f7f9fa',
-        color: '#15181B',
-        padding: theme.spacing(1, 0),
+        backgroundColor: theme.palette.background.default,
+        color: theme.palette.text.primary,
+        padding: theme.spacing(1.2),
         marginBottom: theme.spacing(1),
     },
     token: {
@@ -169,7 +169,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
             </Grid>
             <Grid item xs={12}>
                 <Paper className={classes.hit}>
-                    <Typography variant="body1" align="center">
+                    <Typography variant="body1" align="center" style={{ fontSize: 14, lineHeight: '20px' }}>
                         {t('plugin_red_packet_hint')}
                     </Typography>
                 </Paper>

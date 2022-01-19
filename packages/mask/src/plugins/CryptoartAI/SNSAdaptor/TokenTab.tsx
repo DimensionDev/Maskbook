@@ -124,7 +124,7 @@ export function TokenTab(props: TokenTabProps) {
                         <Typography variant="body2" style={{ marginRight: '20px' }}>
                             {t('plugin_collectible_view_on')}{' '}
                             <Link href={assetSource?.linkWithCreation} target="_blank" rel="noopener noreferrer">
-                                ΞEtherscan
+                                &Xi;Etherscan
                             </Link>
                         </Typography>
                     ) : null}

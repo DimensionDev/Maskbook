@@ -67,7 +67,7 @@ interface PollCardProps {
 export function PollCardUI(props: PollCardProps) {
     const { poll, onClick, vote, status } = props
     const { classes } = useStyles()
-    const isClosed = Date.now() > poll.end_time ? true : false
+    const isClosed = Date.now() > poll.end_time
     const { t } = useI18N()
     const lang = useLanguage()
 

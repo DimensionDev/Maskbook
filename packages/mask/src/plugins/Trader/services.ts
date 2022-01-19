@@ -13,6 +13,7 @@ import {
     xdaiNetworkTradeProviderSettings,
     celoNetworkTradeProviderSettings,
     fantomNetworkTradeProviderSettings,
+    auroraNetworkTradeProviderSettings,
 } from './settings'
 import { DataProvider, TradeProvider } from '@masknet/public-api'
 
@@ -53,6 +54,18 @@ currentChainIdSettings.addListener((chainId: ChainId) => {
             if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
                 currentDataProviderSettings.value = DataProvider.COIN_MARKET_CAP
             break
+        case NetworkType.Aurora:
+            currentTradeProviderSettings.value = TradeProvider.DODO
+            if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
+                currentDataProviderSettings.value = DataProvider.COIN_GECKO
+            break
+
+        case NetworkType.Boba:
+        case NetworkType.Fuse:
+        case NetworkType.Metis:
+        case NetworkType.Avalanche:
+        case NetworkType.Optimistic:
+            throw new Error(`To be implement network: ${networkType}`)
         default:
             unreachable(networkType)
     }
@@ -83,6 +96,15 @@ currentTradeProviderSettings.addListener((tradeProvider: TradeProvider) => {
         case NetworkType.Fantom:
             fantomNetworkTradeProviderSettings.value = tradeProvider
             break
+        case NetworkType.Aurora:
+            auroraNetworkTradeProviderSettings.value = tradeProvider
+            break
+        case NetworkType.Boba:
+        case NetworkType.Fuse:
+        case NetworkType.Metis:
+        case NetworkType.Avalanche:
+        case NetworkType.Optimistic:
+            throw new Error(`To be implement network: ${networkType}`)
         default:
             unreachable(networkType)
     }

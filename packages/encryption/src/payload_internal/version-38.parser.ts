@@ -1,3 +1,4 @@
+/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
 import {
     AESKey,
     AESAlgorithmEnum,
@@ -36,17 +37,17 @@ const JSONParse = JSONParseF(CryptoException.InvalidCryptoKey, CryptoException.I
 const importEC = CheckedError.withErr(importAsymmetryKeyFromJsonWebKeyOrSPKI, CryptoException.InvalidCryptoKey)
 
 export async function parse38(payload: string): PayloadParserResult {
-    //#region Parse text
-    const header = '🎼4/4'
+    // #region Parse text
+    const header = '\u{1F3BC}4/4'
     if (!payload.startsWith(header)) return new CheckedError(PayloadException.InvalidPayload, 'Unknown version').toErr()
     let rest = payload.slice(header.length)
     // cut the tail
     rest = rest.slice(0, rest.lastIndexOf(':||'))
 
     const { AESKeyEncrypted, encryptedText, iv, signature, authorPublicKey, authorUserID, isPublic } = splitFields(rest)
-    //#endregion
+    // #endregion
 
-    //#region Normalization
+    // #region Normalization
     const raw_iv = decodeUint8ArrayCrypto(iv).andThen(assertIVLengthEq16)
     const raw_aes = decodeUint8ArrayCrypto(AESKeyEncrypted)
     const encryption: PayloadParseResult.EndToEndEncryption | PayloadParseResult.PublicEncryption = isPublic
@@ -89,7 +90,7 @@ export async function parse38(payload: string): PayloadParserResult {
         }
     }
     return Ok(normalized)
-    //#endregion
+    // #endregion
 }
 
 // ? Version 38:🎼4/4|AESKeyEncrypted|iv|encryptedText|signature|authorPublicKey?|publicShared?|authorIdentifier?:||
@@ -107,7 +108,7 @@ function splitFields(raw: string) {
         signature: (signature === '_' ? undefined : signature) as string | undefined,
         authorPublicKey: authorPublicKey as string | undefined,
         authorUserID,
-        isPublic: isPublic === '1' ? true : false,
+        isPublic: isPublic === '1',
     }
 }
 

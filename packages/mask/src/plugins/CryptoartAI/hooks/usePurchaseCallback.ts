@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import BigNumber from 'bignumber.js'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import {
     TransactionEventType,
@@ -9,6 +8,7 @@ import {
     useChainId,
 } from '@masknet/web3-shared-evm'
 import { useCryptoArtAI_Contract } from './useCryptoArtAI_Contract'
+import { toFixed } from '@masknet/web3-shared-base'
 
 export function usePurchaseCallback(editionNumber: string, priceInWei: number) {
     const account = useAccount()
@@ -32,12 +32,12 @@ export function usePurchaseCallback(editionNumber: string, priceInWei: number) {
         // estimate gas and compose transaction
         const config = {
             from: account,
-            value: new BigNumber(priceInWei).toFixed(),
+            value: toFixed(priceInWei),
             gas: await knownOriginDigitalAssetV2_contract.methods
                 .purchase(editionNumber)
                 .estimateGas({
                     from: account,
-                    value: new BigNumber(priceInWei).toFixed(),
+                    value: toFixed(priceInWei),
                 })
                 .catch((error) => {
                     setPurchaseState({

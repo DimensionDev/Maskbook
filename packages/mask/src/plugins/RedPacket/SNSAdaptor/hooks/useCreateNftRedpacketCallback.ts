@@ -53,7 +53,7 @@ export function useCreateNftRedpacketCallback(
                 type: TransactionStateType.WAIT_FOR_CONFIRMING,
             })
 
-            //#region check ownership
+            // #region check ownership
             type CheckMethodParameters = Parameters<NftRedPacket['methods']['check_ownership']>
 
             const checkParams: CheckMethodParameters = [tokenIdList, contractAddress]
@@ -68,7 +68,7 @@ export function useCreateNftRedpacketCallback(
                 return
             }
 
-            //#endregion
+            // #endregion
 
             type FillMethodParameters = Parameters<NftRedPacket['methods']['create_red_packet']>
 
