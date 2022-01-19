@@ -39,6 +39,9 @@ const useStyles = makeStyles()(() => ({
         width: '19px !important',
         height: '19px !important',
     },
+    snackbar: {
+        position: 'relative',
+    },
 }))
 
 function NFTAvatarInTwitter() {
@@ -94,11 +97,16 @@ function NFTAvatarInTwitter() {
             ...NFTEvent,
             avatarId: getAvatarId(identity.avatar ?? ''),
         } as AvatarMetaDB).catch((error) => {
-            showSnackbar(error.message, { variant: 'error' })
+            console.log(error.message)
+            showSnackbar(error.message, {
+                variant: 'error',
+            })
             return
         })
         if (!avatar) {
-            showSnackbar('save nft avatar Error', { variant: 'error' })
+            showSnackbar('Failed to save NFT Avatar.', {
+                variant: 'error',
+            })
             return
         }
 
@@ -113,7 +121,7 @@ function NFTAvatarInTwitter() {
         )
 
         setNFTEvent(undefined)
-    }, [identity.avatar, showSnackbar, NFTEvent])
+    }, [identity.avatar])
 
     useEffect(() => {
         setAvatar(_avatar)
