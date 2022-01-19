@@ -401,7 +401,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         },
         [tokenDetailedSelectedList, setTokenDetailedSelectedList, tokenIdFilterList],
     )
-    //#region fetch token detail
+    // #region fetch token detail
     const onSearch = useCallback(async () => {
         setLoadingToken(true)
         const _tokenDetailed = await erc721TokenDetailedCallback()
@@ -421,7 +421,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
 
     const isOwner = isSameAddress(account, tokenDetailed?.info.owner) || tokenDetailedSelectedList.length > 0
     const isAdded = existTokenDetailedList.map((t) => t.tokenId).includes(tokenDetailed?.tokenId ?? '')
-    //#endregion
+    // #endregion
 
     const onFilter = useCallback(() => {
         if (!/^(\s?(\d+)?\s?,?)+$/.test(tokenIdListInput)) return

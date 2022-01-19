@@ -231,7 +231,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
         }
     }, [address, EthereumAddress.isValid, methods.clearErrors])
 
-    //#region Set default gas price
+    // #region Set default gas price
     useAsync(async () => {
         const gasOptions = await WalletRPC.getGasPriceDictFromDeBank(chainId)
         const gasPrice = methods.getValues('gasPrice')
@@ -240,16 +240,16 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
             methods.setValue('gasPrice', formatWeiToGwei(gasPrice).toString())
         }
     }, [methods.setValue, methods.getValues, chainId])
-    //#endregion
+    // #endregion
 
-    //#region Get min gas limit with amount and recipient address
+    // #region Get min gas limit with amount and recipient address
     const { value: minGasLimit, error } = useGasLimit(
         selectedAsset?.token.type,
         selectedAsset?.token.address,
         rightShift(amount ? amount : 0, selectedAsset?.token.decimals).toFixed(),
         EthereumAddress.isValid(address) ? address : '',
     )
-    //#endregion
+    // #endregion
 
     const { value: tokenBalance = '0' } = useFungibleTokenBalance(
         selectedAsset?.token?.type ?? EthereumTokenType.Native,
@@ -266,13 +266,13 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
         return amount_.toFixed()
     }, [selectedAsset?.balance, gasPrice, selectedAsset?.token.type, tokenBalance])
 
-    //#region set default gasLimit
+    // #region set default gasLimit
     useUpdateEffect(() => {
         if (!minGasLimit) return
         methods.setValue('gasLimit', minGasLimit.toString())
         setMinGasLimitContext(minGasLimit)
     }, [minGasLimit, methods.setValue])
-    //#endregion
+    // #endregion
 
     const [_, transferCallback] = useTokenTransferCallback(
         selectedAsset?.token.type ?? EthereumTokenType.Native,

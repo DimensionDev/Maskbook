@@ -45,7 +45,7 @@ export function RedPacket(props: RedPacketProps) {
     const account = useAccount()
     const networkType = useNetworkType()
 
-    //#region token detailed
+    // #region token detailed
     const {
         value: availability,
         computed: availabilityComputed,
@@ -63,11 +63,11 @@ export function RedPacket(props: RedPacketProps) {
         payload.token?.address ?? payload.token_address ?? '',
     )
     const token = payload.token ?? tokenDetailed
-    //#endregion
+    // #endregion
 
     const { canFetch, canClaim, canRefund, listOfStatus } = availabilityComputed
 
-    //#region remote controlled transaction dialog
+    // #region remote controlled transaction dialog
     const postLink = usePostLink()
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
@@ -126,7 +126,7 @@ export function RedPacket(props: RedPacketProps) {
             revalidateAvailability()
         }
     }, [claimState, refundState /* update tx dialog only if state changed */])
-    //#endregion
+    // #endregion
 
     const onClaimOrRefund = useCallback(async () => {
         if (canClaim) await claimCallback()

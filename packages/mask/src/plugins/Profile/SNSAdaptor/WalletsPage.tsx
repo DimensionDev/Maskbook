@@ -55,14 +55,14 @@ export function WalletsPage() {
         WalletMessages.events.walletStatusDialogUpdated,
     )
 
-    //#region copy addr to clipboard
+    // #region copy addr to clipboard
     const [, copyToClipboard] = useCopyToClipboard()
     const onCopy = useSnackbarCallback({
         executor: async (ev: React.MouseEvent<HTMLAnchorElement>, address) => copyToClipboard(address),
         deps: [],
         successText: t('copy_success_of_wallet_addr'),
     })
-    //#endregion
+    // #endregion
 
     const walletsList = useMemo(() => {
         return (

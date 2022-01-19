@@ -6,7 +6,7 @@ type InStore = {
     value: unknown
 }
 
-//#region Schema
+// #region Schema
 
 export interface PluginDatabase extends DBSchema {
     PluginStore: {
@@ -17,7 +17,7 @@ export interface PluginDatabase extends DBSchema {
         key: string
     }
 }
-//#endregion
+// #endregion
 
 const db = createDBAccess(() => {
     return openDB<PluginDatabase>('maskbook-plugin-data', 2, {

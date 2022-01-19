@@ -22,7 +22,7 @@ export async function getAllPoolsAsSeller(
 
     if (!EXPLORER_API || !ITO2_CONTRACT_ADDRESS || !startBlock) return []
 
-    //#region
+    // #region
     // 1. Filter out `Fill_Pool` transactions,
     // 2. Retrieve payload major data from its decoded input param.
     const response = await fetch(
@@ -91,16 +91,16 @@ export async function getAllPoolsAsSeller(
                     chain_id: chainId,
                     regions,
                     block_number: Number(cur.blockNumber),
-                    //#region Retrieve at step 3
+                    // #region Retrieve at step 3
                     pid: '',
                     creation_time: 0,
-                    //#endregion
-                    //#region Retrieve at step 4
+                    // #endregion
+                    // #region Retrieve at step 4
                     total_remaining: '',
-                    //#endregion
-                    //#region Retrieve from database
+                    // #endregion
+                    // #region Retrieve from database
                     password: '',
-                    //#endregion
+                    // #endregion
                 }
 
                 return acc.concat({ payload, hash: cur.hash })
@@ -110,9 +110,9 @@ export async function getAllPoolsAsSeller(
         },
         [],
     )
-    //#endregion
+    // #endregion
 
-    //#region
+    // #region
     // 3. Decode event log to retrieve `pid` and `creation_time` for payload.
     type FillPoolSuccessEventParams = {
         id: string
@@ -154,7 +154,7 @@ export async function getAllPoolsAsSeller(
             }
         }),
     )
-    //#endregion
+    // #endregion
 
     return eventLogResponse
         .map((v) => (v.status === 'fulfilled' && v.value ? v.value : null))

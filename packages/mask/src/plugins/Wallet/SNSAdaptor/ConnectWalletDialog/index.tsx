@@ -33,7 +33,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     const [providerType, setProviderType] = useState<ProviderType | undefined>()
     const [networkType, setNetworkType] = useState<NetworkType | undefined>()
 
-    //#region remote controlled dialog
+    // #region remote controlled dialog
     const { open, setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.connectWalletDialogUpdated,
         (ev) => {
@@ -42,13 +42,13 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             setNetworkType(ev.networkType)
         },
     )
-    //#endregion
+    // #endregion
 
-    //#region walletconnect
+    // #region walletconnect
     const { setDialog: setWalletConnectDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletConnectQRCodeDialogUpdated,
     )
-    //#endregion
+    // #endregion
 
     const connectTo = useCallback(async () => {
         if (!networkType) throw new Error('Unknown network type.')
