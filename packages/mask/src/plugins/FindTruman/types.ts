@@ -7,7 +7,7 @@ export enum PostType {
     Encryption = 'encryption',
 }
 
-export type FindTrumanI18nFunction = (id: string, options?: { [key: string]: string | number }) => string
+export type FindTrumanI18nFunction = (id: string) => string
 
 export interface ProposalIdentifier {
     address: string
@@ -191,12 +191,13 @@ export interface MysteryBox {
     givenTime: string
     isOpened: boolean
     openTime: string
-    partType: number
+    partType: PartType
     partKind: number
     mintTaskId: number
     isMinted: boolean
     mintTime: string
     nftId: number
+    img: string
 }
 
 export interface Quest {

@@ -4,16 +4,13 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { makeStyles, useStylesExtends, useTabs } from '@masknet/theme'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
-import { useI18N } from '../../../utils'
 import AssetsPanel from './AssetsPanel'
 import ParticipatePanel from './ParticipatePanel'
-import { useContext, useEffect, useState } from 'react'
-import type { FindTrumanConst, FindTrumanI18nFunction } from '../types'
+import { useContext } from 'react'
+import type { FindTrumanI18nFunction } from '../types'
 import { FindTrumanContext } from '../context'
 import { useAccount } from '@masknet/plugin-infra'
-import { FindTruman_Const } from '../constants'
-import { fetchConst } from '../Worker/apis'
-import { FindTrumanI18n } from '../i18n'
+import { useConst } from './hooks/useConst'
 
 const useStyles = makeStyles()((theme, props) => ({
     wrapper: {
@@ -53,38 +50,16 @@ export function FindTrumanDialog(props: FindTrumanDialogProps) {
     const { open, onClose } = props
     const { classes } = useStyles()
     const account = useAccount()
-    const { i18n } = useI18N()
-    const [consts, setConsts] = useState<FindTrumanConst>()
-    const [findTrumanI18n, setFindTrumanI18n] = useState<FindTrumanI18nFunction>(
-        () => (key: string, options: any) => key,
-    )
+    const { consts, t } = useConst()
 
     const [currentTab, onChange, tabs] = useTabs(FindTrumanDialogTab.Assets, FindTrumanDialogTab.Participate)
-
-    useEffect(() => {
-        if (!FindTruman_Const.initialized) {
-            FindTruman_Const.init((resolve, reject) => {
-                fetchConst(i18n.language)
-                    .then((res) => {
-                        resolve({ ...res, t: new FindTrumanI18n(res.locales || {}).t })
-                    })
-                    .catch((error) => {
-                        reject(error)
-                    })
-            })
-        }
-        FindTruman_Const.then((res) => {
-            setConsts(res)
-            res && setFindTrumanI18n(() => res.t)
-        })
-    }, [])
 
     return (
         <FindTrumanContext.Provider
             value={{
                 address: account,
                 const: consts,
-                t: findTrumanI18n,
+                t,
             }}>
             <InjectedDialog open={open} onClose={onClose} title="FindTruman">
                 <DialogContent className={classes.wrapper}>

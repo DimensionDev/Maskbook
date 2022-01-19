@@ -2,13 +2,13 @@ import { useAccount } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { useControlledDialog } from '../../../utils'
 import { useAsyncRetry } from 'react-use'
-import { fetchMysteryBoxInfo, fetchUserPartsInfo, openMysteryBox } from '../Worker/apis'
+import { fetchUserPartsInfo, openMysteryBox } from '../Worker/apis'
 import type { FindTrumanI18nFunction, MysteryBox, Part, Quest } from '../types'
 import { PartType } from '../types'
 import { Box, Button, Chip, DialogContent, Grid, Skeleton, Tooltip, Typography } from '@mui/material'
 import formatDateTime from 'date-fns/format'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { LoadingButton } from '@mui/lab'
 import getUnixTime from 'date-fns/getUnixTime'
 import { FindTrumanContext } from '../context'
@@ -110,7 +110,7 @@ export default function PartsPanel(props: PartsPanelProps) {
                     <PartSkeleton />
                 </Grid>
             ) : partsInfo ? (
-                <Grid alignItems="flex-end" container spacing={2}>
+                <Grid alignItems="center" container spacing={2}>
                     {partsInfo.boxes.map((box) => (
                         <Grid key={box.id} item xs={3}>
                             <MysteryBoxItem account={account} onOpened={() => retry()} box={box} />
@@ -212,27 +212,9 @@ function QuestItem(props: { quest: Quest }) {
 
 function MysteryBoxItem(props: { account: string; box: MysteryBox; onOpened: () => void }) {
     const { account, box, onOpened } = props
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { t, const: consts } = useContext(FindTrumanContext)
     const [loading, setLoading] = useState(box.isOpened && !box.isMinted)
-
-    const startPolling = () => {
-        const polling = setInterval(async () => {
-            try {
-                const boxInfo = await fetchMysteryBoxInfo(box.id)
-                if (boxInfo.isMinted) {
-                    polling && clearInterval(polling)
-                    setLoading(false)
-                    onOpened()
-                }
-            } catch (error) {
-                polling && clearInterval(polling)
-                setLoading(false)
-                onOpened()
-            }
-        }, 2000)
-        return polling
-    }
 
     const handleOpenBox = async () => {
         try {
@@ -244,42 +226,43 @@ function MysteryBoxItem(props: { account: string; box: MysteryBox; onOpened: () 
                     boxId: box.id,
                 },
             })
-            startPolling()
-        } catch (error) {
-            onOpened()
+        } finally {
             setLoading(false)
+            onOpened()
         }
     }
-
-    useEffect(() => {
-        let polling: NodeJS.Timer | null
-        if (box.isOpened && !box.isMinted) {
-            polling = startPolling()
-        }
-        return () => {
-            polling && clearInterval(polling)
-        }
-    }, [box])
 
     return (
         <div>
             <div className={classes.ribbonWrapper}>
-                <img className={classes.cover} src={consts?.boxImg} />
-                <div className={classes.ribbon}>
-                    <Typography className={classes.ribbonContent} variant="body2">
-                        {t('plugin_find_truman_dialog_ribbon_openable')}
-                    </Typography>
+                <img className={classes.cover} src={box.isOpened ? box.img : consts?.boxImg} />
+                <div className={box.isOpened ? cx(classes.ribbon, classes.ribbonGray) : classes.ribbon}>
+                    {box.isOpened ? (
+                        <Typography className={cx(classes.ribbonContent, classes.ribbonContentGray)} variant="body2">
+                            {t('plugin_find_truman_dialog_ribbon_minted')}
+                        </Typography>
+                    ) : (
+                        <Typography className={classes.ribbonContent} variant="body2">
+                            {t('plugin_find_truman_dialog_ribbon_openable')}
+                        </Typography>
+                    )}
                 </div>
             </div>
-            <LoadingButton
-                loading={loading}
-                size="small"
-                color="primary"
-                variant="contained"
-                fullWidth
-                onClick={handleOpenBox}>
-                {t('plugin_find_truman_dialog_open')}
-            </LoadingButton>
+            {box.isOpened ? (
+                <Box height="30px">
+                    <Chip size="small" label={getPartName(t, box.partType)} color="primary" />
+                </Box>
+            ) : (
+                <LoadingButton
+                    loading={loading}
+                    size="small"
+                    color="primary"
+                    variant="contained"
+                    fullWidth
+                    onClick={handleOpenBox}>
+                    {t('plugin_find_truman_dialog_open')}
+                </LoadingButton>
+            )}
         </div>
     )
 }

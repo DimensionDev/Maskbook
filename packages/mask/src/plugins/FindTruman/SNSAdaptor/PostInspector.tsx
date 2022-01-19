@@ -1,20 +1,10 @@
 import { FindTrumanContext } from '../context'
 import { LoadingFailCard } from './LoadingFailCard'
 import { FindTruman } from './FindTruman'
-import {
-    FindTrumanConst,
-    FindTrumanI18nFunction,
-    PollResult,
-    PostType,
-    PuzzleResult,
-    StoryInfo,
-    UserPollStatus,
-    UserStoryStatus,
-} from '../types'
+import { PollResult, PostType, PuzzleResult, StoryInfo, UserPollStatus, UserStoryStatus } from '../types'
 import { useAccount } from '@masknet/web3-shared-evm'
 import { useEffect, useState } from 'react'
 import {
-    fetchConst,
     fetchPollResult,
     fetchPuzzleResult,
     fetchStoryInfo,
@@ -24,10 +14,8 @@ import {
     submitPoll,
     submitPuzzle,
 } from '../Worker/apis'
-import { FindTruman_Const } from '../constants'
-import { useI18N } from '../../../utils'
-import { FindTrumanI18n } from '../i18n'
 import getUnixTime from 'date-fns/getUnixTime'
+import { useConst } from './hooks/useConst'
 
 export interface PostInspectorProps {
     url: string
@@ -36,7 +24,7 @@ export interface PostInspectorProps {
 export function PostInspector(props: PostInspectorProps) {
     const { url } = props
     const account = useAccount().toLowerCase()
-    const { i18n } = useI18N()
+    const { consts, t } = useConst()
 
     const [, , , _storyId, , _targetId] = new URL(url).hash.split('/')
     const storyId = _storyId ? _storyId : ''
@@ -54,35 +42,13 @@ export function PostInspector(props: PostInspectorProps) {
         ? PostType.PollResult
         : PostType.Status
 
-    const [findTrumanI18n, setFindTrumanI18n] = useState<FindTrumanI18nFunction>(
-        () => (key: string, options: any) => key,
-    )
     const [storyInfo, setStoryInfo] = useState<StoryInfo>()
     const [userStoryStatus, setUserStoryStatus] = useState<UserStoryStatus>()
     const [userPuzzleStatus, setUserPuzzleStatus] = useState<UserPollStatus>()
     const [userPollStatus, setUserPollStatus] = useState<UserPollStatus>()
     const [puzzleResult, setPuzzleResult] = useState<PuzzleResult>()
     const [pollResult, setPollResult] = useState<PollResult>()
-    const [consts, setConsts] = useState<FindTrumanConst>()
     const [clueId, setClueId] = useState('')
-
-    useEffect(() => {
-        if (!FindTruman_Const.initialized) {
-            FindTruman_Const.init((resolve, reject) => {
-                fetchConst(i18n.language)
-                    .then((res) => {
-                        resolve({ ...res, t: new FindTrumanI18n(res.locales || {}).t })
-                    })
-                    .catch((error) => {
-                        reject(error)
-                    })
-            })
-        }
-        FindTruman_Const.then((res) => {
-            setConsts(res)
-            res && setFindTrumanI18n(() => res.t)
-        })
-    }, [])
 
     useEffect(() => {
         fetchData()
@@ -129,7 +95,7 @@ export function PostInspector(props: PostInspectorProps) {
             value={{
                 address: account,
                 const: consts,
-                t: findTrumanI18n,
+                t,
             }}>
             <LoadingFailCard
                 title=""

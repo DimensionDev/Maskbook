@@ -155,7 +155,8 @@ function FtgItem(props: { ftg: FtgInfo }) {
                                 <Link
                                     href={`https://etherscan.io/address/${consts.ftgAddress}`}
                                     variant="body1"
-                                    target="_blank">
+                                    target="_blank"
+                                    rel="noopener noreferrer">
                                     view
                                 </Link>
                             </Box>
