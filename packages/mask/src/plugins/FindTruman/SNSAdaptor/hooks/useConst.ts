@@ -11,13 +11,7 @@ export function useConst() {
     useEffect(() => {
         if (!FindTruman_Const.initialized) {
             FindTruman_Const.init((resolve, reject) => {
-                fetchConst(i18n.language)
-                    .then((res) => {
-                        resolve(res)
-                    })
-                    .catch((error) => {
-                        reject(error)
-                    })
+                fetchConst(i18n.language).then(resolve).catch(reject)
             })
         }
         FindTruman_Const.then((res) => {
