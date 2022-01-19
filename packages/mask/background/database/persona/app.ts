@@ -49,6 +49,19 @@ export async function queryPersonaDB(
     return personaRecordOutDB(x)
 }
 
+export async function queryPersonasDB(
+    query: (record: PersonaRecord) => boolean,
+    t?: PersonasTransaction<'readonly'>,
+    isIncludeLogout?: boolean,
+): Promise<PersonaRecord[]> {
+    const results = await nativeAPI?.api.query_personas({
+        includeLogout: isIncludeLogout,
+    })
+
+    if (!results) return []
+    return results.map((x) => personaRecordOutDB(x))
+}
+
 export async function queryPersonasWithPrivateKey(): Promise<PersonaRecordWithPrivateKey[]> {
     const results = await nativeAPI?.api.query_personas({
         hasPrivateKey: true,

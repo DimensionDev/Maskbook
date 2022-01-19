@@ -188,7 +188,7 @@ export async function createReadonlyPersonaTransaction() {
     return createTransaction(await db(), 'readonly')
 }
 
-//#region Plain methods
+// #region Plain methods
 /** Create a new Persona. */
 export async function createPersonaDB(record: PersonaRecord, t: PersonasTransaction<'readwrite'>): Promise<void> {
     await t.objectStore('personas').add(personaRecordToDB(record))
@@ -580,7 +580,7 @@ export async function queryRelationsPagedDB(
 
         firstRecord = false
 
-        //after this record
+        // after this record
         if (
             options.after?.linked.toText() === cursor?.value.linked &&
             options.after?.profile.toText() === cursor?.value.profile
@@ -625,9 +625,9 @@ export async function updateRelationDB(
     }
 }
 
-//#endregion
+// #endregion
 
-//#region out db & to db
+// #region out db & to db
 function profileToDB(x: ProfileRecord): ProfileRecordDB {
     return {
         ...x,
@@ -681,4 +681,4 @@ function relationRecordOutDB(x: RelationRecordDB): RelationRecord {
     }
 }
 
-//#endregion
+// #endregion
