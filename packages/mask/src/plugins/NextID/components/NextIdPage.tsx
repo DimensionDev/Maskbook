@@ -31,12 +31,13 @@ const useStyles = makeStyles()((theme) => ({
 interface NextIDPageProps {}
 
 export function NextIdPage({}: NextIDPageProps) {
+    const t = useI18N()
+    const { classes } = useStyles()
     const [openBindDialog, toggleBindDialog] = useState(false)
     const [unbindAddress, setUnBindAddress] = useState<string>()
     const [count, { inc }] = useCounter(0)
-    const t = useI18N()
-    const { classes } = useStyles()
     const personas = useMyPersonas()
+
     const { value: currentIdentifier, loading: loadingIdentifier } = useAsyncRetry(
         () => Services.Settings.getCurrentPersonaIdentifier(),
         [],
@@ -76,7 +77,7 @@ export function NextIdPage({}: NextIDPageProps) {
                             />
                         ))}
                     </Box>
-                    <Stack justifyContent="center" direction="row">
+                    <Stack justifyContent="center" direction="row" mt="24px">
                         <Button variant="contained" onClick={() => toggleBindDialog(true)}>
                             {t.add_wallet_button()}
                         </Button>
@@ -108,7 +109,7 @@ export function NextIdPage({}: NextIDPageProps) {
         <>
             <Box>
                 <Typography className={classes.tip}>{t.connect_wallet_tip()}</Typography>
-                <Stack justifyContent="center" direction="row">
+                <Stack justifyContent="center" direction="row" mt="24px">
                     <Button variant="contained" onClick={() => toggleBindDialog(true)}>
                         {t.verify_wallet_button()}
                     </Button>

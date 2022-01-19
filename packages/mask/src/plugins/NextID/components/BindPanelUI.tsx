@@ -10,6 +10,7 @@ import type { Persona } from '../../../database'
 import { formatFingerprint, LoadingAnimation } from '@masknet/shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import classNames from 'classnames'
+import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     persona: {
@@ -69,7 +70,7 @@ const useStyles = makeStyles()((theme) => ({
         color: '#60DFAB',
     },
     stepLine: {
-        border: `0.5px solid ${getMaskColor(theme).twitterMain}`,
+        borderTop: `1px solid ${getMaskColor(theme).twitterMain}`,
         height: 0,
         width: '60%',
         marginLeft: '24px',
@@ -107,6 +108,8 @@ interface BindPanelUIProps {
     onWalletSign(): void
 }
 
+const SUPPORTED_PLUGINS = [NetworkPluginID.PLUGIN_EVM]
+
 export const BindPanelUI = memo<BindPanelUIProps>(
     ({
         onPersonaSign,
@@ -122,6 +125,8 @@ export const BindPanelUI = memo<BindPanelUIProps>(
     }) => {
         const t = useI18N()
         const { classes } = useStyles()
+        const pluginId = usePluginIDContext()
+        const isSupported = SUPPORTED_PLUGINS.includes(pluginId)
 
         const isDisableWalletSign = action === 'delete' ? false : isBound
         const isDisablePersonaSign = action === 'delete' ? !isBound : isBound
@@ -154,6 +159,7 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                     {isBound && action === 'create' && (
                         <Typography className={classes.error}>{t.bind_wallet_bound_error()}</Typography>
                     )}
+                    {!isSupported && <Typography className={classes.error}>{t.unsupported_network()}</Typography>}
                     {action === 'create' && (
                         <Stack direction="row" alignItems="center" justifyContent="center" px="16%" pt="24px">
                             <Box
@@ -188,7 +194,7 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                         justifyContent="space-around"
                         alignItems="center">
                         <LoadingButton
-                            disabled={isDisablePersonaSign || !!isPersonaSigned}
+                            disabled={isDisablePersonaSign || !!isPersonaSigned || !isSupported}
                             classes={{
                                 loadingIndicatorEnd: classes.loadingIcon,
                             }}
@@ -212,7 +218,7 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                                 loadingIndicatorEnd: classes.loadingIcon,
                             }}
                             loadingPosition="end"
-                            disabled={isDisableWalletSign || !isCurrentAccount || !!isWalletSigned}
+                            disabled={isDisableWalletSign || !isCurrentAccount || !!isWalletSigned || !isSupported}
                             style={{ width: '40%' }}
                             className={isWalletSigned ? classes.done : ''}
                             loading={signature.wallet.loading}
