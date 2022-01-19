@@ -38,7 +38,7 @@ export const RestoreFromMnemonic = () => {
                 await changeCurrentPersona(persona.identifier)
                 navigate(DashboardRoutes.Personas, { replace: true })
             } else {
-                navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.PersonaCreate}`, {
+                navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.PersonaRecovery}`, {
                     replace: false,
                     state: { mnemonic: values },
                 })
