@@ -103,7 +103,7 @@ export class LidoProtocol implements SavingsProtocol {
                 LidoABI as AbiItem[],
             )
             const balance = await contract?.methods.balanceOf(account).call()
-            const formattedBalance = formatBalance(balance, 18, 4)
+            const formattedBalance = formatBalance(balance, 18, 6)
 
             this.balance = formattedBalance
             return formattedBalance

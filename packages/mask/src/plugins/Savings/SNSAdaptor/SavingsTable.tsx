@@ -128,16 +128,7 @@ export function SavingsTable({ chainId, tab, mappableProtocols, setSelectedProto
                                 <Typography variant="body1">{protocol.apr}%</Typography>
                             </Grid>
                             <Grid item xs={3} className={classes.tableCell}>
-                                <Typography variant="body1">
-                                    {Number(protocol.balance) !== 0
-                                        ? Number(protocol.balance) < 0.000001
-                                            ? '< 0.000001'
-                                            : Number(protocol.balance).toLocaleString(undefined, {
-                                                  minimumFractionDigits: 6,
-                                                  maximumFractionDigits: 6,
-                                              })
-                                        : 0}
-                                </Typography>
+                                <Typography variant="body1">{protocol.balance}</Typography>
                             </Grid>
                             <Grid item xs={3} className={classes.tableCell}>
                                 <Button
