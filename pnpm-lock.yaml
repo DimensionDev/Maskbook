@@ -598,6 +598,7 @@ importers:
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
       '@msgpack/msgpack': ^2.7.1
+      '@masknet/web3-kit': workspace:*
       arweave: ^1.10.3
       date-fns: ^2.27.0
       ipfs-http-client: ^54.0.2
@@ -614,6 +615,7 @@ importers:
       '@masknet/shared-base': link:../../shared-base
       '@masknet/theme': link:../../theme
       '@msgpack/msgpack': 2.7.1
+      '@masknet/web3-kit': link:../../web3-kit
       arweave: 1.10.13
       date-fns: 2.27.0
       ipfs-http-client: 54.0.2
