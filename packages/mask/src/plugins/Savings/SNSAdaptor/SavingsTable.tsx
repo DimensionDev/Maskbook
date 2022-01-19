@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js'
 import { useAsync } from 'react-use'
 import { Box, Grid, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import { FormattedBalance } from '@masknet/shared'
 import { useWeb3, useAccount, formatBalance } from '@masknet/web3-shared-evm'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { IconURLs } from './IconURL'
@@ -84,26 +85,20 @@ export function SavingsTable({ chainId, tab, mappableProtocols, setSelectedProto
 
     return (
         <Box className={classes.containerWrap}>
-            {mappableProtocols.length === 0 ? (
-                <Typography variant="h5" textAlign="center">
-                    {t('plugin_no_protocol_available')}
-                </Typography>
-            ) : (
-                <Grid container spacing={0} className={classes.tableHeader}>
-                    <Grid item xs={4} className={classes.tableCell}>
-                        <Typography variant="body1">{t('plugin_savings_type')}</Typography>
-                    </Grid>
-                    <Grid item xs={2} className={classes.tableCell}>
-                        <Typography variant="body1"> {t('plugin_savings_apy')}</Typography>
-                    </Grid>
-                    <Grid item xs={3} className={classes.tableCell}>
-                        <Typography variant="body1">{t('plugin_savings_wallet')}</Typography>
-                    </Grid>
-                    <Grid item xs={3} className={classes.tableCell}>
-                        <Typography variant="body1">{t('plugin_savings_operation')}</Typography>
-                    </Grid>
+            <Grid container spacing={0} className={classes.tableHeader}>
+                <Grid item xs={4} className={classes.tableCell}>
+                    <Typography variant="body1">{t('plugin_savings_type')}</Typography>
                 </Grid>
-            )}
+                <Grid item xs={2} className={classes.tableCell}>
+                    <Typography variant="body1"> {t('plugin_savings_apy')}</Typography>
+                </Grid>
+                <Grid item xs={3} className={classes.tableCell}>
+                    <Typography variant="body1">{t('plugin_savings_wallet')}</Typography>
+                </Grid>
+                <Grid item xs={3} className={classes.tableCell}>
+                    <Typography variant="body1">{t('plugin_savings_operation')}</Typography>
+                </Grid>
+            </Grid>
 
             {mappableProtocols.map((categorizedProtocol) => {
                 const protocols = categorizedProtocol.protocols
@@ -129,7 +124,12 @@ export function SavingsTable({ chainId, tab, mappableProtocols, setSelectedProto
                             </Grid>
                             <Grid item xs={3} className={classes.tableCell}>
                                 <Typography variant="body1">
-                                    {formatBalance(protocol.balance, protocol.decimals, 6)}
+                                    <FormattedBalance
+                                        value={protocol.balance}
+                                        decimals={protocol.decimals}
+                                        significant={6}
+                                        formatter={formatBalance}
+                                    />
                                 </Typography>
                             </Grid>
                             <Grid item xs={3} className={classes.tableCell}>

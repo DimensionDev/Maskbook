@@ -90,8 +90,7 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
 
     //#region trade state
     const {
-        tradeState: [{ inputToken, outputToken }, dispatchTradeStore],
-        allTradeComputed,
+        tradeState: [_, dispatchTradeStore],
     } = AllProviderTradeContext.useContainer()
     //#endregion
 

@@ -141,7 +141,7 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
         if (!noUpdateEffect) {
             setState((prev) => (prev === 'init' ? prev : 'init'))
         }
-    }, [executor])
+    }, [executor, noUpdateEffect])
 
     if (state === 'wait')
         return <Button {...b} startIcon={circle} disabled={!waitingOnClick} children={waiting} onClick={cancel} />
