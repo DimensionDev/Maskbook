@@ -110,6 +110,8 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     },
 }))
 
+const PERCENT_DENOMINATOR = 10000
+
 export interface ConfirmDialogUIProps extends withClasses<never> {
     open: boolean
     trade: TradeComputed
@@ -182,7 +184,9 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
 
     const onConfirmPriceImpact = useCallback(() => {
         if (!cacheTrade?.priceImpact) return
-        setTemporarySlippage(new BigNumber(cacheTrade?.priceImpact.multipliedBy(10000).toFixed(0)).toNumber())
+        setTemporarySlippage(
+            new BigNumber(cacheTrade?.priceImpact.multipliedBy(PERCENT_DENOMINATOR).toFixed(0)).toNumber(),
+        )
     }, [cacheTrade?.priceImpact])
 
     // #region update cache trade and price updated state
