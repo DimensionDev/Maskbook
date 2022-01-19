@@ -93,7 +93,7 @@ export function Trader(props: TraderProps) {
 
     const updateTradingCoin = useCallback(
         (type: any, coin?: Coin) => {
-            if (!coin) return
+            if (!coin?.contract_address) return
             dispatchTradeStore({
                 type,
                 token: coin.contract_address
