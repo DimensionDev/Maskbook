@@ -58,23 +58,10 @@ export function MarketDescriptionPopup(props: MarketDetailsProps) {
 export function MarketDescriptionIcon() {
     return (
         <svg viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg" height="18">
-            <path d="M0 3.9375H1.3125V2.625H0V3.9375Z" fill="currentColor" />
-            <path d="M0 1.3125H1.3125V0H0V1.3125Z" fill="currentColor" />
-            <path d="M2.625 14.4375H3.9375V13.125H2.625V14.4375Z" fill="currentColor" />
-            <path d="M0 6.5625H1.3125V5.25H0V6.5625Z" fill="currentColor" />
-            <path d="M0 14.4375H1.3125V13.125H0V14.4375Z" fill="currentColor" />
-            <path d="M0 11.8125H1.3125V10.5H0V11.8125Z" fill="currentColor" />
-            <path d="M0 9.1875H1.3125V7.875H0V9.1875Z" fill="currentColor" />
-            <path d="M2.625 1.3125H3.9375V0H2.625V1.3125Z" fill="currentColor" />
-            <path d="M17.0625 1.3125H18.375V0H17.0625V1.3125Z" fill="currentColor" />
-            <path d="M19.6875 9.1875H21V7.875H19.6875V9.1875Z" fill="currentColor" />
-            <path d="M19.6875 6.5625H21V5.25H19.6875V6.5625Z" fill="currentColor" />
-            <path d="M19.6875 3.9375H21V2.625H19.6875V3.9375Z" fill="currentColor" />
-            <path d="M19.6875 14.4375H21V13.125H19.6875V14.4375Z" fill="currentColor" />
-            <path d="m17.062 14.438h1.3125v-1.3125h-1.3125v1.3125z" fill="currentColor" />
-            <path d="M19.6875 11.8125H21V10.5H19.6875V11.8125Z" fill="currentColor" />
-            <path d="M19.6875 0V1.3125H21V0H19.6875Z" fill="currentColor" />
-            <path d="M15.75 0H5.25V14.4375H15.75V0Z" fill="currentColor" />
+            <path
+                d="M0 4h1.3V2.5H0V4ZM0 1.3h1.3V0H0v1.3ZM2.6 14.4H4v-1.3H2.6v1.3ZM0 6.6h1.3V5.3H0v1.3ZM0 14.4h1.3v-1.3H0v1.3ZM0 11.8h1.3v-1.3H0v1.3ZM0 9.2h1.3V7.9H0v1.3ZM2.6 1.3H4V0H2.6v1.3ZM17 1.3h1.4V0H17v1.3ZM19.7 9.2H21V7.9h-1.3v1.3ZM19.7 6.6H21V5.3h-1.3v1.3ZM19.7 4H21V2.5h-1.3V4ZM19.7 14.4H21v-1.3h-1.3v1.3ZM17 14.4h1.4v-1.3H17v1.3zM19.7 11.8H21v-1.3h-1.3v1.3ZM19.7 0v1.3H21V0h-1.3ZM15.8 0H5.2v14.4h10.6V0Z"
+                fill="currentColor"
+            />
         </svg>
     )
 }
