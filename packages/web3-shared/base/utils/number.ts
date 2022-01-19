@@ -62,3 +62,10 @@ export function leftShift(n: BigNumber.Value, m: number | undefined | null) {
 export function dividedBy(a: BigNumber.Value, b: BigNumber.Value) {
     return new BigNumber(a).dividedBy(b)
 }
+
+export function toFixed(value: BigNumber.Value | undefined): string
+export function toFixed(value: BigNumber.Value | undefined, decimalPlaces: number): string
+export function toFixed(value: BigNumber.Value = 0, decimalPlaces?: number) {
+    const n = new BigNumber(value)
+    return decimalPlaces ? n.toFixed(decimalPlaces) : n.toFixed()
+}

@@ -353,7 +353,7 @@
     "plugin_red_packet_hint": "你可以在红包发送的24小时后提取红包余额。",
     "plugin_red_packet_token": "代币",
     "plugin_red_packet_message_label": "标题",
-    "plugin_red_packet_create_with_token": "使用 {{amount}} {{symbol}} 创建红包",
+    "plugin_red_packet_create_with_token": "使用 {{symbol}} 创建红包",
     "plugin_red_packet_history_duration": "时间: {{startTime}} ~ {{endTime}} (UTC+8)",
     "plugin_red_packet_history_total_amount": "总额: {{amount}} {{symbol}}",
     "plugin_red_packet_history_total_claimed_amount": "总额： <span><strong>{{claimedAmount}}/{{amount}}</strong></span> {{symbol}}",

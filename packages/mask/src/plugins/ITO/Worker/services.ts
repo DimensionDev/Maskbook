@@ -19,16 +19,16 @@ export async function getPool(pid: string) {
 export async function getAllPoolsAsSeller(address: string, endBlock: number, chainId: ChainId) {
     const { ITO2_CONTRACT_CREATION_BLOCK_HEIGHT } = getITOConstants(chainId)
 
-    //#region Get data from chain.
+    // #region Get data from chain.
     const poolsFromChain = await chain.getAllPoolsAsSeller(
         chainId,
         ITO2_CONTRACT_CREATION_BLOCK_HEIGHT,
         endBlock,
         address,
     )
-    //#endregion
+    // #endregion
 
-    //#region Inject password from database
+    // #region Inject password from database
     const poolsFromDB = await database.getAllPoolsAsSeller(poolsFromChain.map((x) => x.pool.pid))
     return poolsFromChain
         .map((x) => {
@@ -43,7 +43,7 @@ export async function getAllPoolsAsSeller(address: string, endBlock: number, cha
             }
         })
         .filter((x) => x.pool.chain_id === chainId)
-    //#endregion
+    // #endregion
 }
 
 export async function getAllPoolsAsBuyer(address: string, chainId: ChainId) {

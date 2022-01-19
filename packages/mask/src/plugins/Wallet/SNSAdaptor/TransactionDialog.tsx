@@ -47,7 +47,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
 
     const chainId = useChainId()
 
-    //#region remote controlled dialog
+    // #region remote controlled dialog
     const [state, setState] = useState<TransactionState | null>(null)
     const [shareLink, setShareLink] = useState('')
     const [summary, setSummary] = useState('')
@@ -67,7 +67,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
         if (shareLink) window.open(shareLink, '_blank', 'noopener noreferrer')
         closeDialog()
     }, [shareLink, closeDialog])
-    //#endregion
+    // #endregion
 
     if (!state) return null
     return (

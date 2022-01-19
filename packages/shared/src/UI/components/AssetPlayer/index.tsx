@@ -58,15 +58,15 @@ export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconPro
     const classes = useStylesExtends(useStyles(), props)
     const [playerState, setPlayerState] = useState(url ? AssetPlayerState.LOADING : AssetPlayerState.ERROR)
 
-    //#region If onResized is not triggered within the specified time, set player state to error
+    // #region If onResized is not triggered within the specified time, set player state to error
     const [, cancel, reset] = useTimeoutFn(() => {
         if (playerState !== AssetPlayerState.NORMAL) {
             setPlayerState(AssetPlayerState.ERROR)
         }
     }, TIMEOUT)
-    //#endregion
+    // #endregion
 
-    //#region setup iframe when url and options be changed
+    // #region setup iframe when url and options be changed
     const setIframe = useCallback(() => {
         // if iframe isn't be init or the load error has been existed
         if (!ref.current || playerState === AssetPlayerState.ERROR) return
@@ -84,15 +84,15 @@ export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconPro
             return
         }
     }, [url, type, JSON.stringify(options), playerState])
-    //endregion
+    // #endregion
 
-    //#region resource loaded error
+    // #region resource loaded error
     const onMessage = useCallback(({ message }: { message: { name: string } }) => {
         if (message?.name === 'Error') {
             setPlayerState(AssetPlayerState.ERROR)
         }
     }, [])
-    //#endregion
+    // #endregion
 
     useUpdateEffect(() => {
         setIframe()

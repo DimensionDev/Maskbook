@@ -11,9 +11,9 @@ export async function parsePayload(payload: unknown): PayloadParserResult {
         return parse37(payload.slice())
     }
     if (typeof payload === 'string') {
-        if (payload.startsWith('🎼4/4')) return parse38(payload)
-        if (payload.startsWith('🎼3/4')) return parse39(payload)
-        if (payload.startsWith('🎼2/4')) return parse40(payload)
+        if (payload.startsWith('\u{1F3BC}4/4')) return parse38(payload)
+        if (payload.startsWith('\u{1F3BC}3/4')) return parse39(payload)
+        if (payload.startsWith('\u{1F3BC}2/4')) return parse40(payload)
     }
     return new CheckedError(PayloadException.UnknownVersion, null).toErr()
 }

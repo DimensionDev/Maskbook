@@ -104,7 +104,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const [priceReversed, setPriceReversed] = useState(false)
 
-    //#region detect price changing
+    // #region detect price changing
     const [executionPrice, setExecutionPrice] = useState<BigNumber | undefined>(trade.executionPrice)
     useEffect(() => {
         if (open) setExecutionPrice(undefined)
@@ -112,9 +112,9 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     useEffect(() => {
         if (typeof executionPrice === 'undefined') setExecutionPrice(trade.executionPrice)
     }, [trade, executionPrice])
-    //#endregion
+    // #endregion
 
-    //#region gas price
+    // #region gas price
     const nativeToken = createNativeToken(chainId)
     const tokenPrice = useNativeTokenPrice(chainId)
 
@@ -126,7 +126,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
         () => (gasFee ? new BigNumber(formatWeiToEther(gasFee).times(tokenPrice).toFixed(2)) : '0'),
         [gasFee, tokenPrice],
     )
-    //#endregion
+    // #endregion
 
     const staled = !!(executionPrice && !executionPrice.isEqualTo(trade.executionPrice))
 

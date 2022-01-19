@@ -26,7 +26,7 @@ export async function getRedPacketHistory(address: string, chainId: ChainId, end
         address,
     )
 
-    //#region Inject password from database
+    // #region Inject password from database
     const redpacketsFromDatabase = await database.getAllRedpackets(redpacketsFromChain.map((x) => x.txid))
     return redpacketsFromChain.map((x) => {
         const record = redpacketsFromDatabase.find((y) => y.id === x.txid)
@@ -36,7 +36,7 @@ export async function getRedPacketHistory(address: string, chainId: ChainId, end
             password: record.password,
         }
     })
-    //#endregion
+    // #endregion
 }
 
 export async function getNftRedPacketHistory(address: string, chainId: ChainId, page: number) {
