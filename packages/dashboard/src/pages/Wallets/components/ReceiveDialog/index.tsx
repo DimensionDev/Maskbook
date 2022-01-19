@@ -68,7 +68,7 @@ export const ReceiveDialogUI = memo<ReceiveDialogUIProps>(
             deps: [],
             successText: t.wallets_address_copied(),
         })
-        //TODO: The <QRCode /> text prop protocol maybe correct and requires confirmation
+        // TODO: The <QRCode /> text prop protocol maybe correct and requires confirmation
         return (
             <MaskDialog
                 open={open}

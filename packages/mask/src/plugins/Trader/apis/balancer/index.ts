@@ -11,7 +11,7 @@ import type { Route } from '../../types'
 import { fetchBlockNumbersByTimestamps } from '../blocks'
 import { fetchLBP_PoolsByTokenAddress, fetchLBP_PoolTokenPrices, fetchLBP_PoolTokens } from '../LBP'
 
-//#region create cached SOR
+// #region create cached SOR
 const createSOR_ = memoize(
     (chainId: ChainId) => {
         const { RPC } = getRPCConstants(chainId)
@@ -37,7 +37,7 @@ function createSOR(chainId: ChainId) {
 
     return sor
 }
-//#endregion
+// #endregion
 
 export async function updatePools(force = false, chainId?: ChainId) {
     const currentChainId = chainId ?? currentChainIdSettings.value

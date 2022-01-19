@@ -52,7 +52,7 @@ export function useAllTradeComputed(
 
     const nativeTradeGasLimit = useNativeTradeGasLimit(nativeToken, targetChainId)
 
-    //uniswap-v2
+    // uniswap-v2
     const uniswapV2_ = useUniswapV2Trade(
         TradeProvider.UNISWAP_V2,
         TradeStrategy.ExactIn,

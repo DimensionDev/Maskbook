@@ -91,7 +91,7 @@ export interface Availability {
     qualification_addr?: string
 }
 
-//#region SpaceStation
+// #region SpaceStation
 export interface ClaimableCount {
     maxCount: number
     usedCount: number
@@ -114,4 +114,4 @@ export interface ClaimParams {
     powahs: number[]
     nftCoreAddress: string
 }
-//#endregion
+// #endregion

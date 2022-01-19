@@ -119,7 +119,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     const [keyword, setKeyword] = useState('')
     const account = useAccount()
 
-    //#region remote controlled dialog
+    // #region remote controlled dialog
     const { open, setDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectNftContractDialogUpdated,
         (ev) => {
@@ -145,7 +145,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
             uuid: id,
         })
     }, [id, setDialog])
-    //#endregion
+    // #endregion
 
     const { value: assets } = useNFTBalance(account, !open)
 
@@ -160,7 +160,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
             ? unionBy([...assets, ...allContractsInDb], 'contractDetailed.address')
             : allContractsInDb
 
-    //#region fuse
+    // #region fuse
     const fuse = useMemo(
         () =>
             new Fuse(contractList, {
@@ -177,7 +177,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     )
 
     const searchedTokenList = fuse.search(keyword).map((x) => x.item)
-    //#endregion
+    // #endregion
 
     return (
         <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_select_a_nft_contract')} maxWidth="xs">
