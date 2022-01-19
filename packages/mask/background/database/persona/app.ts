@@ -19,7 +19,7 @@ import {
     EC_Private_JsonWebKey,
     AESJsonWebKey,
 } from '@masknet/shared-base'
-import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
+import { nativeAPI } from '../../../shared/native-rpc'
 import type { PersonaRecord as NativePersonaRecord } from '@masknet/public-api'
 export async function consistentPersonaDBWriteAccess(action: () => Promise<void>) {
     await action()
@@ -41,7 +41,6 @@ export async function queryPersonaDB(
     t?: PersonasTransaction<'readonly'>,
     isIncludeLogout?: boolean,
 ): Promise<PersonaRecord | null> {
-    if (!hasNativeAPI) return null
     const x = await nativeAPI?.api.query_persona({
         identifier: query.toText(),
         includeLogout: isIncludeLogout,
@@ -51,7 +50,6 @@ export async function queryPersonaDB(
 }
 
 export async function queryPersonasWithPrivateKey(): Promise<PersonaRecordWithPrivateKey[]> {
-    if (!hasNativeAPI) return []
     const results = await nativeAPI?.api.query_personas({
         hasPrivateKey: true,
     })

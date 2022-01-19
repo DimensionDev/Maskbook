@@ -1,3 +1,4 @@
+import { hasNativeAPI } from '../../../shared/native-rpc'
 export * from './type'
 
 export const {
@@ -27,7 +28,7 @@ export const {
 } = new Proxy({} as any as typeof import('./web'), {
     get(_, key) {
         return async function () {
-            if (process.env.arch === 'app') {
+            if (hasNativeAPI) {
                 return import('./app').then((x) => (x as any)[key])
             }
 
