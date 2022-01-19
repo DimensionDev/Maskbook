@@ -210,7 +210,7 @@ function createSubscriptionFromAsync<T>(
 function getEventTarget() {
     const event = new EventTarget()
     const EVENT = 'event'
-    let timer: NodeJS.Timeout
+    let timer: ReturnType<typeof setTimeout>
     function trigger() {
         clearTimeout(timer)
         // delay to update state to ensure that all settings to be synced globally

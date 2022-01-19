@@ -86,8 +86,8 @@ export function usePairs(tradeProvider: TradeProvider, tokenPairs: readonly Toke
             return [
                 PairState.EXISTS,
                 new Pair(
-                    CurrencyAmount.fromRawAmount(token0, reserve0.toString()),
-                    CurrencyAmount.fromRawAmount(token1, reserve1.toString()),
+                    CurrencyAmount.fromRawAmount(token0, reserve0),
+                    CurrencyAmount.fromRawAmount(token1, reserve1),
                 ),
             ] as const
         })

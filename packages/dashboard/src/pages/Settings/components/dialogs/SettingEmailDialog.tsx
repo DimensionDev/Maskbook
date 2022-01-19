@@ -1,7 +1,7 @@
 import ConfirmDialog from '../../../../components/ConfirmDialog'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { Box, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, CountdownButton, MaskTextField, useCustomSnackbar } from '@masknet/theme'
 import { UserContext } from '../../hooks/UserContext'
 import { useDashboardI18N } from '../../../../locales'
 import {
@@ -15,7 +15,6 @@ import {
     VerifyCodeRequest,
 } from '../../api'
 import { emailRegexp } from '../../regexp'
-import { CountdownButton, MaskTextField, useCustomSnackbar } from '@masknet/theme'
 import { Locale, Scenario, AccountType } from '../../type'
 import { decryptBackup, encryptBackup } from '@masknet/backup-format'
 import { encode } from '@msgpack/msgpack'

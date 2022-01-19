@@ -1,12 +1,11 @@
 import { Box, Button, Link, Stack, Typography } from '@mui/material'
 import { memo, ReactNode, useCallback, useMemo } from 'react'
 import { FileMessageIcon, ITOIcon, MessageIcon, PollIcon, RedPacketIcon } from '@masknet/icons'
-import { getMaskColor, MaskColorVar } from '@masknet/theme'
+import { getMaskColor, MaskColorVar, makeStyles } from '@masknet/theme'
 import { Services } from '../../../../API'
 import type { PostRecord } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../../locales'
 import { PersonaContext } from '../../hooks/usePersonaContext'
-import { makeStyles } from '@masknet/theme'
 import { PluginId } from '@masknet/plugin-infra'
 
 const MSG_DELIMITER = '2c1aca02'

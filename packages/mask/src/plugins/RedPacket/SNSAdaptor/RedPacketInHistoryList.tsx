@@ -7,7 +7,7 @@ import { Box, ListItem, Typography, Popper, useMediaQuery, Theme } from '@mui/ma
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import { RedPacketJSONPayload, RedPacketStatus, RedPacketJSONPayloadFromChain } from '../types'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog, TokenIcon } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import {
     formatBalance,
@@ -18,7 +18,6 @@ import {
     useFungibleTokenDetailed,
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
-import { TokenIcon } from '@masknet/shared'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { StyledLinearProgress } from '../../ITO/SNSAdaptor/StyledLinearProgress'
@@ -212,7 +211,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
 
     const historyToken = (history as RedPacketJSONPayload).token ?? tokenDetailed
 
-    //#region remote controlled transaction dialog
+    // #region remote controlled transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
     )
@@ -236,25 +235,25 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
             revalidateAvailability()
         }
     }, [refundState /* update tx dialog only if state changed */])
-    //#endregion
+    // #endregion
 
     const onSendOrRefund = useCallback(async () => {
         if (canRefund) await refundCallback()
         if (canSend) onSelect({ ...history, token: historyToken })
     }, [onSelect, refundCallback, canRefund, canSend, history])
 
-    //#region password lost tips
+    // #region password lost tips
     const [anchorEl, setAnchorEl] = useState<(EventTarget & HTMLButtonElement) | null>(null)
     const openPopper = Boolean(anchorEl)
-    //#endregion
+    // #endregion
 
-    //#region refund time
+    // #region refund time
     const refundDuration =
         canSend && !isPasswordValid
             ? intervalToDuration({ start: Date.now(), end: nextDay(history.creation_time, 1) })
             : null
     const formatRefundDuration = `${refundDuration?.hours}h ${refundDuration?.minutes}m`
-    //#endregion
+    // #endregion
 
     return (
         <ListItem className={classes.root}>

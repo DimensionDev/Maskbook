@@ -299,7 +299,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
 
     const previewNftImg = new URL('./assets/nft-preview.png', import.meta.url).toString()
     const rpNftImg = new URL('./assets/redpacket.nft.png', import.meta.url).toString()
-    //#region on share
+    // #region on share
     const postLink = usePostLink()
     const networkType = useNetworkType()
     const shareLink = activatedSocialNetworkUI.utils
@@ -333,7 +333,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const onShare = useCallback(() => {
         if (shareLink) window.open(shareLink, '_blank', 'noopener noreferrer')
     }, [shareLink])
-    //#endregion
+    // #endregion
 
     if (isFailedToLoading)
         return (
@@ -414,7 +414,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 <Card className={classes.coverCard}>
                     <CardHeader
                         className={classNames(classes.title, classes.dim, classes.dimWhiteText)}
-                        title={payload.message}
+                        title={<Typography className={classes.ellipsis}>{payload.message}</Typography>}
                         subheader={
                             <span
                                 className={classNames(classes.link, classes.dimWhiteText)}

@@ -66,15 +66,19 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
         setTab(AssetTab.Token)
     }, [pluginId])
 
+    const showCollectibles = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginId)
+
     return (
         <>
             <ContentContainer sx={{ marginTop: 3, display: 'flex', flexDirection: 'column' }}>
                 <TabContext value={currentTab}>
                     <Box className={classes.caption}>
                         <TabList onChange={onChange}>
-                            {assetTabs.map((key) => (
-                                <Tab key={key} value={key} label={assetTabsLabel[key]} />
-                            ))}
+                            {assetTabs
+                                .filter((x) => showCollectibles || x === AssetTab.Token)
+                                .map((key) => (
+                                    <Tab key={key} value={key} label={assetTabsLabel[key]} />
+                                ))}
                         </TabList>
                         {pluginId === NetworkPluginID.PLUGIN_EVM && (
                             <Button

@@ -1,3 +1,4 @@
+/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
 import type { SocialNetwork } from '../../social-network'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { i18n } from '../../../shared-ui/locales_legacy'
@@ -16,12 +17,12 @@ function deconstructAlpha40_Or_Alpha39_Or_Alpha38(str: string, throws = false): 
     // ? if publicShared is true, that means AESKeyEncrypted is shared with public
     // ? "1" treated as true, "0" or not defined treated as false
     // ? authorIdentifier is encoded as `${network}/${id}`
-    const isVersion40 = str.includes('🎼2/4')
-    const isVersion39 = str.includes('🎼3/4')
-    const isVersion38 = str.includes('🎼4/4')
-    str = str.replace('🎼2/4', '🎼3/4')
-    str = str.replace('🎼3/4', '🎼4/4')
-    const [_, payloadStart] = str.split('🎼4/4|')
+    const isVersion40 = str.includes('\u{1F3BC}2/4')
+    const isVersion39 = str.includes('\u{1F3BC}3/4')
+    const isVersion38 = str.includes('\u{1F3BC}4/4')
+    str = str.replace('\u{1F3BC}2/4', '\u{1F3BC}3/4')
+    str = str.replace('\u{1F3BC}3/4', '\u{1F3BC}4/4')
+    const [_, payloadStart] = str.split('\u{1F3BC}4/4|')
     if (!payloadStart)
         if (throws) throw new Error(i18n.t('payload_not_found'))
         else return null
@@ -61,7 +62,7 @@ function deconstructAlpha40_Or_Alpha39_Or_Alpha38(str: string, throws = false): 
 
 function deconstructAlpha41(str: string, throws = false): null | never {
     // 🎼1/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
-    if (str.includes('🎼1/4') && str.includes(':||'))
+    if (str.includes('\u{1F3BC}1/4') && str.includes(':||'))
         if (throws) throw new Error(i18n.t('payload_throw_in_alpha41'))
         else return null
     return null
@@ -88,7 +89,7 @@ export function deconstructPayload(str: string, networkDecoder?: Decoder): Resul
             if (payload) return Ok(payload)
         }
     }
-    if (str.includes('🎼') && str.includes(':||')) return Err(new TypeError(i18n.t('service_unknown_payload')))
+    if (str.includes('\u{1F3BC}') && str.includes(':||')) return Err(new TypeError(i18n.t('service_unknown_payload')))
     return Err(new TypeError(i18n.t('payload_not_found')))
 }
 
@@ -106,5 +107,5 @@ export function constructAlpha38(data: PayloadAlpha38, encoder?: Encoder) {
         data.sharedPublic ? '1' : '0',
         userID.includes('|') ? undefined : btoa(userID),
     ]
-    return encoder(`🎼4/4|${fields.join('|')}:||`)
+    return encoder(`\u{1F3BC}4/4|${fields.join('|')}:||`)
 }

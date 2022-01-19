@@ -305,7 +305,7 @@ export async function queryPostPagedDB(
     return data
 }
 
-//#region db in and out
+// #region db in and out
 function postOutDB(db: PostDBRecord): PostRecord {
     const { identifier, foundAt, postBy, recipients, postCryptoKey, encryptBy, interestedMeta, summary, url } = db
     if (typeof recipients === 'object') {
@@ -333,9 +333,9 @@ function postToDB(out: PostRecord): PostDBRecord {
         encryptBy: out.encryptBy?.toText(),
     }
 }
-//#endregion
+// #endregion
 
-//#region types
+// #region types
 /**
  * When you change this, change RecipientReasonJSON as well!
  */
@@ -400,4 +400,4 @@ interface PostDB extends DBSchema {
         }
     }
 }
-//#endregion
+// #endregion

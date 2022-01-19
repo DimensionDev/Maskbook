@@ -1,6 +1,5 @@
 import { Button, styled, FilledInput, Tab, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { ButtonGroupTabList, MaskColorVar, useTabs } from '@masknet/theme'
+import { makeStyles, ButtonGroupTabList, MaskColorVar, useTabs } from '@masknet/theme'
 import { memo } from 'react'
 import { RefreshIcon } from '@masknet/icons'
 import { MnemonicReveal } from '../../../../components/Mnemonic'

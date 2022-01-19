@@ -3,7 +3,7 @@ import { ExternalLink } from 'react-feather'
 import BigNumber from 'bignumber.js'
 import { Alert, Box, Button, DialogActions, DialogContent, Link, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
-import { FormattedAddress, FormattedBalance, useValueRef } from '@masknet/shared'
+import { FormattedAddress, FormattedBalance, useValueRef, TokenIcon } from '@masknet/shared'
 import type { TradeComputed } from '../../types'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import type { FungibleTokenDetailed, Wallet } from '@masknet/web3-shared-evm'
@@ -16,7 +16,6 @@ import {
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
 import { InfoIcon, RetweetIcon } from '@masknet/icons'
-import { TokenIcon } from '@masknet/shared'
 import { multipliedBy } from '@masknet/web3-shared-base'
 import { isDashboardPage } from '@masknet/shared-base'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
@@ -105,7 +104,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const [priceReversed, setPriceReversed] = useState(false)
 
-    //#region detect price changing
+    // #region detect price changing
     const [executionPrice, setExecutionPrice] = useState<BigNumber | undefined>(trade.executionPrice)
     useEffect(() => {
         if (open) setExecutionPrice(undefined)
@@ -113,9 +112,9 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     useEffect(() => {
         if (typeof executionPrice === 'undefined') setExecutionPrice(trade.executionPrice)
     }, [trade, executionPrice])
-    //#endregion
+    // #endregion
 
-    //#region gas price
+    // #region gas price
     const nativeToken = createNativeToken(chainId)
     const tokenPrice = useNativeTokenPrice(chainId)
 
@@ -127,7 +126,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
         () => (gasFee ? new BigNumber(formatWeiToEther(gasFee).times(tokenPrice).toFixed(2)) : '0'),
         [gasFee, tokenPrice],
     )
-    //#endregion
+    // #endregion
 
     const staled = !!(executionPrice && !executionPrice.isEqualTo(trade.executionPrice))
 

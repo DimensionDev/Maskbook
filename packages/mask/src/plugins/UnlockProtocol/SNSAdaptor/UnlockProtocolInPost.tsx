@@ -24,7 +24,7 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
     useEffect(() => {
         const metadata = UnlockProtocolMetadataReader(props.message.meta)
         if (metadata.ok) {
-            if (!!address) {
+            if (address) {
                 const data: { locks: Record<string, object> } = { locks: {} }
                 metadata.val.unlockLocks.forEach((locks) => {
                     PluginUnlockProtocolRPC.verifyPurchase(address, locks.unlocklock, locks.chainid).then((res) => {
@@ -58,7 +58,7 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
             }
         }
     }, [chain, address])
-    if (!!content) {
+    if (content) {
         const jsx = message
             ? renderWithUnlockProtocolMetadata(props.message.meta, (r) => {
                   return (
@@ -74,7 +74,7 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
             : null
 
         return <>{jsx}</>
-    } else if (!!redirectUrl) {
+    } else if (redirectUrl) {
         const jsx = message
             ? renderWithUnlockProtocolMetadata(props.message.meta, (r) => {
                   return (

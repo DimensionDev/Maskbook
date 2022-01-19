@@ -1,14 +1,14 @@
 import { COIN_GECKO_BASE_URL } from '../../constants'
 import { Flags } from '../../../../../shared'
 
-//#region get currency
+// #region get currency
 export async function getAllCurrencies() {
     const response = await fetch(`${COIN_GECKO_BASE_URL}/simple/supported_vs_currencies`, { cache: 'force-cache' })
     return response.json() as Promise<string[]>
 }
-//#endregion
+// #endregion
 
-//#region get coins list
+// #region get coins list
 export interface Coin {
     id: string
     name: string
@@ -19,9 +19,9 @@ export async function getAllCoins() {
     const response = await fetch(`${COIN_GECKO_BASE_URL}/coins/list`, { cache: 'force-cache' })
     return response.json() as Promise<Coin[]>
 }
-//#endregion
+// #endregion
 
-//#region get coin info
+// #region get coin info
 export interface CoinInfo {
     asset_platform_id: string
     block_time_in_minutes: number
@@ -115,9 +115,9 @@ export async function getCoinInfo(coinId: string) {
     )
     return response.json() as Promise<CoinInfo>
 }
-//#endregion
+// #endregion
 
-//#region get price chart
+// #region get price chart
 export type Stat = [number, number]
 
 export async function getPriceStats(coinId: string, currencyId: string, days: number) {
@@ -134,4 +134,4 @@ export async function getPriceStats(coinId: string, currencyId: string, days: nu
         total_volumes: Stat[]
     }>
 }
-//#endregion
+// #endregion
