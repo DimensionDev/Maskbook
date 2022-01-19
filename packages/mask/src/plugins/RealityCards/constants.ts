@@ -9,3 +9,4 @@ export const VALID_CHAINS_ID = [ChainId.Matic]
 export const MINIMUM_ACCEPTED_PRICE = 1 * 10 ** 6 // 1 USDC
 
 export const USDC = createERC20Tokens('USDC_ADDRESS', 'USD Coin', 'USDC', 6)
+export const SIGNIFICANT_DIGITS = 2

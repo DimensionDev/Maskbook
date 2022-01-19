@@ -9,6 +9,7 @@ import { formatBalance, formatEthereumAddress, formatPercentage, isSameAddress }
 import { useBaseToken } from '../hooks/useBaseToken'
 import BigNumber from 'bignumber.js'
 import { FormattedAddress } from '@masknet/shared'
+import { SIGNIFICANT_DIGITS } from '../constants'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -56,8 +57,8 @@ export function CardView(props: CardViewProps) {
     const [cardDialogOpen, setCardDialogOpen] = useState(false)
     const isWinner = isSameAddress(card.id, market.winningOutcome?.id ?? '')
     const token = useBaseToken()
-    const priceHourly = new BigNumber(card.price).div(24).toFixed(2)
-    const share = new BigNumber(card.price).div(market.sumOfAllPrices).toFixed(2)
+    const priceHourly = new BigNumber(card.price).div(24).toFixed(SIGNIFICANT_DIGITS)
+    const share = new BigNumber(card.price).div(market.sumOfAllPrices).toFixed(SIGNIFICANT_DIGITS)
     const ownerAddress = market.state === MarketState.Open ? card.originalNft.owner.id : card.longestOwner.id
 
     return (
@@ -73,7 +74,7 @@ export function CardView(props: CardViewProps) {
                     <Box>
                         <Typography variant="h6">{card.outcomeName}</Typography>
                         <Typography variant="body1" component="strong" sx={{ fontSize: '1.2rem' }} gutterBottom>
-                            {formatBalance(priceHourly, token.decimals)}
+                            {formatBalance(priceHourly, token.decimals, SIGNIFICANT_DIGITS)}
                         </Typography>
                         <Typography variant="caption" component="span" gutterBottom>
                             {' '}

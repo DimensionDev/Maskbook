@@ -69,29 +69,29 @@ export function DepositDialog(props: DepositDialogProps) {
         onClose()
     }
 
-    //#region context
+    // #region context
     const account = useAccount()
-    //#endregion
+    // #endregion
 
     const token = useBaseToken()
-    //#region balance
+    // #region balance
     const {
         value: tokenBalance = '0',
         loading: loadingTokenBalance,
         error: errorTokenBalance,
         retry: tokenBalanceRetry,
     } = useFungibleTokenBalance(token.type, token.address)
-    //#endregion
+    // #endregion
 
-    //#region amount
+    // #region amount
     const amount = new BigNumber(formatAmount(new BigNumber(_inputAmount ?? 0), token.decimals))
-    //#endregion
+    // #endregion
 
-    //#region blocking
+    // #region blocking
     const [depositState, depositCallback, resetDepositCallback] = useDepositCallback(amount.toString())
-    //#endregion
+    // #endregion
 
-    //#region Swap
+    // #region Swap
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(
         PluginTraderMessages.swapDialogUpdated,
         useCallback(
@@ -118,9 +118,9 @@ export function DepositDialog(props: DepositDialogProps) {
             },
         })
     }, [token])
-    //#endregion
+    // #endregion
 
-    //#region on close transaction dialog
+    // #region on close transaction dialog
     const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         useCallback(
@@ -140,9 +140,9 @@ export function DepositDialog(props: DepositDialogProps) {
             [depositState],
         ),
     )
-    //#endregion
+    // #endregion
 
-    //#region open the transaction dialog
+    // #region open the transaction dialog
     useEffect(() => {
         if (!token || !open) return
         if (depositState.type === TransactionStateType.UNKNOWN) {
@@ -155,19 +155,19 @@ export function DepositDialog(props: DepositDialogProps) {
             summary: t('plugin_realitycards_deposit_summary', { amount: _inputAmount, symbol: token.symbol }),
         })
     }, [depositState, token, _inputAmount])
-    //#endregion
+    // #endregion
 
-    //#region submit button
+    // #region submit button
     const validationMessage = useMemo(() => {
         if (!account) return t('plugin_wallet_connect_a_wallet')
-        if (!amount || amount.isZero()) return t('wallet_transfer_error_amount_absence')
+        if (!amount || amount.isZero() || amount.isNaN()) return t('wallet_transfer_error_amount_absence')
         if (amount.isGreaterThan(tokenBalance))
             return t('wallet_transfer_error_insufficient_balance', {
                 symbol: token.symbol,
             })
         return ''
     }, [account, amount, token, tokenBalance])
-    //#endregion
+    // #endregion
 
     if (!token) return null
     return (

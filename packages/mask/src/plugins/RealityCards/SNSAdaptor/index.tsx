@@ -32,14 +32,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal) {},
     DecryptedInspector: function Component(props) {
         const text = useMemo(() => extractTextFromTypedMessage(props.message), [props.message])
-        const links = useMemo(() => parseURL(text.val || ''), [text.val])
+        const links = useMemo(() => parseURL(text?.val ?? ''), [text.val])
         const market = getMarketFromLinks(links)
-        if (!text.ok) return null
+        if (text.none) return null
         if (!market?.slug) return null
         return <Renderer link={market.link} slug={market.slug} />
     },
     PostInspector: function Component() {
-        const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.mentionedLinks())
+        const links = usePostInfoDetails.mentionedLinks()
         const market = getMarketFromLinks(links)
         if (!market?.slug) return null
         return <Renderer link={market.link} slug={market.slug} />
