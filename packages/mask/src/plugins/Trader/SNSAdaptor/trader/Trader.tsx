@@ -96,9 +96,7 @@ export function Trader(props: TraderProps) {
             if (!coin?.contract_address) return
             dispatchTradeStore({
                 type,
-                token: coin.contract_address
-                    ? createERC20Token(chainId, coin.contract_address, decimals, coin.name, coin.symbol)
-                    : undefined,
+                token: createERC20Token(chainId, coin.contract_address, decimals, coin.name, coin.symbol),
             })
         },
         [chainId],
