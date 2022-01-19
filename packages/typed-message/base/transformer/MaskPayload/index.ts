@@ -1,5 +1,5 @@
 import type { TypedMessage } from '../../base'
-import { isTypedMessageText, isTypedMessageTuple } from '../../core'
+import { isTypedMessageImage, isTypedMessageText, isTypedMessageTuple, TypedMessageImage } from '../../core'
 import { isTypedMessageAnchor, isTypedMessageMaskPayload, makeTypedMessageAnchor } from '../../extension'
 import { visitEachTypedMessageChild } from '../../visitor'
 import type { TransformationContext } from '../context'
@@ -34,10 +34,10 @@ export interface MaskPayloadTransformOptions {
      * TypedMessagePromise (alt = TypedMessageText("waiting key on gun")) resolves to
      * TypedMessageMaskPayload (message = TypedMessageText("hey this is an encrypted message!"))
      */
-    decrypt(payloadLike: string): TypedMessage
-    decryptImage(payloadLike: string): TypedMessage
+    transformText(payloadLike: string, context: TransformationContext): TypedMessage
+    transformImage(image: TypedMessageImage, context: TransformationContext): TypedMessage
 }
-export function createMaskPayloadTransform() {
+export function createMaskPayloadTransform(options: MaskPayloadTransformOptions) {
     return function MaskPayloadTransform(message: TypedMessage, context: TransformationContext) {
         // We don't transform nested message
 
@@ -48,13 +48,14 @@ export function createMaskPayloadTransform() {
 
         // Note: there maybe more than 1 payload in the message. Make sure both of them are handled.
         if (isTypedMessageAnchor(message)) {
-            if (message.content.match(linkPayload)) {
-                return makeTypedMessageAnchor('normal', 'https://mask.io/', 'Mask Network')
-            }
+            if (message.content.match(linkPayload)) return options.transformText(message.content, context)
+            if (message.href.match(linkPayload)) return options.transformText(message.href, context)
+        } else if (isTypedMessageImage(message)) {
+            return options.transformImage(message, context)
         } else if (isTypedMessageText(message)) {
             // Not detect link form here. Only detect raw form (used on FB) in this branch.
             if (message.content.match(linkPayload)) {
-                return makeTypedMessageAnchor('normal', 'https://mask.io/', 'This is a Mask Payload~')
+                return makeTypedMessageAnchor('normal', 'https://mask.io/', 'This is a Mask Payload```')
             }
         } else if (isTypedMessageTuple(message)) {
             // Visit each child here, when a raw form or link form is detected,

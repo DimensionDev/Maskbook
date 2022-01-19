@@ -15,6 +15,7 @@ import type { PostInfo } from './PostInfo'
 import type { GrayscaleAlgorithm } from '@masknet/encryption'
 import type { createSNSAdaptorSpecializedPostContext } from './utils/create-post-context'
 import type { Subscription } from 'use-subscription'
+import type { SocialNetworkEnum } from '@masknet/encryption'
 
 type ClassNameMap<ClassKey extends string = string> = { [P in ClassKey]: string }
 // Don't define values in namespaces
@@ -51,6 +52,7 @@ export namespace SocialNetwork {
         shouldActivate(location: Location | URL): boolean
         /** This provider is not ready for production, Mask will not use it in production */
         notReadyForProduction?: boolean
+        network: SocialNetworkEnum
     }
 }
 export namespace SocialNetworkUI {

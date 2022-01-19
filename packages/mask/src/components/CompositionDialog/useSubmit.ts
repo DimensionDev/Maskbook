@@ -11,6 +11,7 @@ import type { SubmitComposition } from './CompositionUI'
 import { unreachable } from '@dimensiondev/kit'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { isFacebook } from '../../social-network-adaptor/facebook.com/base'
+import { socialNetworkEncoder } from '@masknet/encryption'
 
 export function useSubmit(onClose: () => void) {
     const { t } = useI18N()
@@ -27,12 +28,13 @@ export function useSubmit(onClose: () => void) {
                     unreachable('Cannot figure out current profile' as never),
             )
 
-            const [encrypted, token] = await Services.Crypto.encryptTo(
+            const [_encrypted, token] = await Services.Crypto.encryptTo(
                 content,
                 target === 'Everyone' ? [] : target.map((x) => x.identifier),
                 whoAmI?.identifier ?? currentProfile,
                 target === 'Everyone',
             )
+            const encrypted = socialNetworkEncoder(activatedSocialNetworkUI.network, _encrypted)
             const redPacketPreText =
                 isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
                     ? t('additional_post_box__encrypted_post_pre_red_packet_twitter_official_account', {

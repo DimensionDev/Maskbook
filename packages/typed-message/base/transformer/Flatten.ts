@@ -11,13 +11,13 @@ import {
 import type { TypedMessage } from '../base'
 import { visitEachTypedMessageChild } from '../visitor'
 import { isSerializableTypedMessage } from '..'
-import { createTransformationContext } from './context'
+import { emptyTransformationContext } from './context'
 
-export function FlattenTypedMessage(message: TypedMessage, context = createTransformationContext()): TypedMessage {
+export function FlattenTypedMessage(message: TypedMessage, context = emptyTransformationContext): TypedMessage {
     if (isTypedMessagePromise(message) && message.value) return message.value
     if (isTypedMessageTuple(message)) {
         const next = message.items
-            .map(FlattenTypedMessage)
+            .map((x) => FlattenTypedMessage(x, context))
             .flatMap((x) => (isTypedMessageTuple(x) ? (x.meta ? x : x.items) : x))
             .filter((x) => !isTypedMessageEmpty(x))
             .reduce<TypedMessage[]>((result, current) => {

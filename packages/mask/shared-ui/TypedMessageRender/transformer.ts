@@ -1,9 +1,4 @@
-import {
-    composeTransformers,
-    FlattenTypedMessage,
-    ParseLinkTransformer,
-    createMaskPayloadTransform,
-} from '@masknet/typed-message/base'
+import { composeTransformers, FlattenTypedMessage, ParseLinkTransformer } from '@masknet/typed-message/base'
 
 export enum Order {
     Flatten = 1000,
@@ -24,5 +19,4 @@ export const TypedMessageTransformers = composeTransformers()
 export const TypedMessagePluginTransformers = composeTransformers()
 TypedMessageTransformers.addTransformer(FlattenTypedMessage, Order.Flatten)
 TypedMessageTransformers.addTransformer(ParseLinkTransformer, Order.ParseLink)
-TypedMessageTransformers.addTransformer(createMaskPayloadTransform(), Order.MaskPayload)
 TypedMessageTransformers.addTransformer(TypedMessagePluginTransformers.subscription, Order.Plugins)

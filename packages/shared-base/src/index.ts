@@ -1,4 +1,4 @@
-export { serializer } from './serializer'
+export { serializer, registerSerializableClass } from './serializer'
 export { IdentifierMap, ReadonlyIdentifierMap } from './Identifier/IdentifierMap'
 export * from './collections'
 export * from './Identifier/type'

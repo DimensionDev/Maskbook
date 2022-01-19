@@ -1,6 +1,6 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { encodeArrayBuffer, encodeText } from '@dimensiondev/kit'
-import { DecryptProgress, DecryptProgressKind, SocialNetworkEnum } from '@masknet/encryption'
+import type { DecryptProgress, SocialNetworkEnum } from '@masknet/encryption'
 import type {
     MaskPayloadContext,
     PostContext,
@@ -33,8 +33,6 @@ import type { Subscription } from 'use-subscription'
 import { activatedSocialNetworkUI } from '../'
 import type { SocialNetworkEncodedPayload } from '../../../background/services/crypto/decryption'
 import { nonNullable } from '../../../utils-pure'
-import { CurrentIdentitySubscription } from '../../components/DataSource/useActivatedUI'
-import { ServicesWithProgress } from '../../extension/service'
 import { FACEBOOK_ID } from '../../social-network-adaptor/facebook.com/base'
 import { resolveFacebookLink } from '../../social-network-adaptor/facebook.com/utils/resolveFacebookLink'
 
@@ -276,44 +274,42 @@ function decryptionContext(
     }
 
     async function decryption(key: string, signal: AbortSignal, payloads: SocialNetworkEncodedPayload[]) {
-        const decryption = ServicesWithProgress.decryptionWithSocialNetworkDecoding(payloads, {
-            currentSocialNetwork,
-            authorHint: author.getCurrentValue(),
-            currentProfile: CurrentIdentitySubscription.getCurrentValue()?.identifier,
-            postURL: url.getCurrentValue()?.toString(),
-        })
-        const currentPassIDs = new Set<string>()
-        signal.addEventListener('abort', () => {
-            currentPassIDs.forEach((id) => {
-                providerMap.delete(id)
-                map.delete(id)
-            })
-        })
-
-        for await (const [decryptionID, progress] of decryption) {
-            if (signal.aborted) return
-            const currentID = `${key}-${decryptionID}`
-            currentPassIDs.add(currentID)
-            if (!map.has(decryptionID)) {
-                const provider = new MaskPayloadContextProvider(currentID)
-                providerMap.set(currentID, provider)
-                map.set(currentID, provider.context)
-            }
-
-            const provider = providerMap.get(currentID)!
-            if (
-                progress.type === DecryptProgressKind.Success ||
-                progress.type === DecryptProgressKind.Error ||
-                progress.type === DecryptProgressKind.Progress
-            ) {
-                provider.pushDecryptionProgress(progress)
-            } else {
-                const { iv, claimedAuthor, publicShared } = progress
-                if (typeof publicShared === 'boolean') provider.setPublicShared(publicShared)
-                if (iv) provider.setIV(iv)
-                if (claimedAuthor) provider.setAuthor(claimedAuthor)
-            }
-        }
+        // const decryption = ServicesWithProgress.decryptionWithSocialNetworkDecoding(payloads, {
+        //     currentSocialNetwork,
+        //     authorHint: author.getCurrentValue(),
+        //     currentProfile: CurrentIdentitySubscription.getCurrentValue()?.identifier,
+        //     postURL: url.getCurrentValue()?.toString(),
+        // })
+        // const currentPassIDs = new Set<string>()
+        // signal.addEventListener('abort', () => {
+        //     currentPassIDs.forEach((id) => {
+        //         providerMap.delete(id)
+        //         map.delete(id)
+        //     })
+        // })
+        // for await (const [decryptionID, progress] of decryption) {
+        //     if (signal.aborted) return
+        //     const currentID = `${key}-${decryptionID}`
+        //     currentPassIDs.add(currentID)
+        //     if (!map.has(decryptionID)) {
+        //         const provider = new MaskPayloadContextProvider(currentID)
+        //         providerMap.set(currentID, provider)
+        //         map.set(currentID, provider.context)
+        //     }
+        //     const provider = providerMap.get(currentID)!
+        //     if (
+        //         progress.type === DecryptProgressKind.Success ||
+        //         progress.type === DecryptProgressKind.Error ||
+        //         progress.type === DecryptProgressKind.Progress
+        //     ) {
+        //         provider.pushDecryptionProgress(progress)
+        //     } else {
+        //         const { iv, claimedAuthor, publicShared } = progress
+        //         if (typeof publicShared === 'boolean') provider.setPublicShared(publicShared)
+        //         if (iv) provider.setIV(iv)
+        //         if (claimedAuthor) provider.setAuthor(claimedAuthor)
+        //     }
+        // }
     }
 
     return map

@@ -21,6 +21,8 @@ import { getCurrentSNSNetwork } from '../social-network-adaptor/utils'
 import { createPluginHost } from '../plugin-infra/host'
 import { definedSocialNetworkUIs } from './define'
 import { setupShadowRootPortal, MaskMessages } from '../utils'
+import { registerMaskPayloadTransformer } from './defaults/maskPayload'
+import { SocialNetworkEnum } from '@masknet/encryption'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
@@ -42,6 +44,7 @@ export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
     utils: { createPostContext: null! },
     notReadyForProduction: true,
     declarativePermissions: { origins: [] },
+    network: SocialNetworkEnum.Unknown,
 }
 export let globalUIState: Readonly<SocialNetworkUI.State> = {} as any
 
@@ -69,6 +72,16 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     i18nOverwrite()
     const state = await ui.init(signal)
+
+    {
+        let f = registerMaskPayloadTransformer(ui.network)
+        import.meta.webpackHot &&
+            import.meta.webpackHot.accept('./defaults/maskPayload.ts', () => {
+                f()
+                f = registerMaskPayloadTransformer(ui.network)
+            })
+        signal.addEventListener('abort', () => f())
+    }
     globalUIState = { ...state, ...managedStateCreator() }
 
     ui.customization.paletteMode?.start(signal)

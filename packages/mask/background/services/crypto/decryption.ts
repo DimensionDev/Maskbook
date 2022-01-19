@@ -186,6 +186,8 @@ function getNetworkHint(x: SocialNetworkEnum) {
     if (x === SocialNetworkEnum.Twitter) return 'twitter-'
     if (x === SocialNetworkEnum.Minds) return 'minds-'
     if (x === SocialNetworkEnum.Instagram) return 'instagram-'
+    if (x === SocialNetworkEnum.Unknown)
+        throw new TypeError('[@masknet/encryption] Current SNS network is not correctly configured.')
     unreachable(x)
 }
 

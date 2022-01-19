@@ -1,6 +1,6 @@
 import { useMemo, useContext } from 'react'
 import type { TypedMessage } from '../../base'
-import { TypedMessageUnknownRenderer } from './Core/Unknown'
+import { TypedMessageUnknownRenderer as TypedMessageUnknownRender } from './Core/Unknown'
 import { __allowTextEnlargeContext } from './utils/AllowTextEnlargeContext'
 import { RegistryContext } from './utils/RegistryContext'
 import { TransformerContext } from './utils/TransformContext'
@@ -19,15 +19,13 @@ export interface RenderProps extends MessageRenderProps {
 }
 export function TypedMessageRender(props: RenderProps) {
     const { message } = props
-    const [transform, context] = useContext(TransformerContext)
-    const message2 = useMemo(() => transform(message, context), [message, transform, context])
-
-    const Render = useContext(RegistryContext)(message2.type)?.component || TypedMessageUnknownRenderer
-
+    const Registry = useContext(RegistryContext)
     if (message.type === 'empty') return null
+
+    const Render = Registry(message.type)?.component || TypedMessageUnknownRender
     return (
         <__allowTextEnlargeContext.Provider value={!!props.allowTextEnlarge}>
-            <Render message={message2} />
+            <Render message={message} />
         </__allowTextEnlargeContext.Provider>
     )
 }
