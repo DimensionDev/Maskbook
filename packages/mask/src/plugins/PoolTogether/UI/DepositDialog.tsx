@@ -90,7 +90,7 @@ export function DepositDialog() {
     // context
     const account = useAccount()
 
-    //#region remote controlled dialog
+    // #region remote controlled dialog
     const { open, closeDialog } = useRemoteControlledDialog(PluginPoolTogetherMessages.DepositDialogUpdated, (ev) => {
         if (!ev.open) return
         setPool(ev.pool)
@@ -99,9 +99,9 @@ export function DepositDialog() {
     const onClose = useCallback(() => {
         closeDialog()
     }, [closeDialog])
-    //#endregion
+    // #endregion
 
-    //#region select token
+    // #region select token
     const { setDialog: setSelectTokenDialogOpen } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
         useCallback(
@@ -124,9 +124,9 @@ export function DepositDialog() {
             },
         })
     }, [id, token?.address])
-    //#endregion
+    // #endregion
 
-    //#region amount
+    // #region amount
     const [rawAmount, setRawAmount] = useState('')
     const amount = rightShift(rawAmount || '0', token?.decimals)
     const {
@@ -134,7 +134,7 @@ export function DepositDialog() {
         loading: loadingTokenBalance,
         retry: retryLoadTokenBalance,
     } = useFungibleTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
-    //#endregion
+    // #endregion
 
     useEffect(() => {
         setOdds(
@@ -148,7 +148,7 @@ export function DepositDialog() {
         )
     }, [rawAmount])
 
-    //#region blocking
+    // #region blocking
     const [depositState, depositCallback, resetDepositCallback] = useDepositCallback(
         pool?.prizePool.address ?? '',
         amount.toFixed(),
@@ -156,9 +156,9 @@ export function DepositDialog() {
         ZERO_ADDRESS, // TODO: according to reference at 18 Jul 2021: https://github.com/pooltogether/pooltogether-community-ui/blob/a827bf7932eb6cd7870df99da66d0843abcf727d/lib/components/DepositUI.jsx#L25
         token,
     )
-    //#endregion
+    // #endregion
 
-    //#region Swap
+    // #region Swap
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(
         PluginTraderMessages.swapDialogUpdated,
         useCallback(
@@ -185,9 +185,9 @@ export function DepositDialog() {
             },
         })
     }, [token, openSwapDialog])
-    //#endregion
+    // #endregion
 
-    //#region transaction dialog
+    // #region transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
@@ -235,9 +235,9 @@ export function DepositDialog() {
             summary: `Depositing ${formatBalance(amount, token.decimals)}${token.symbol} on ${pool?.name} pool.`,
         })
     }, [depositState /* update tx dialog only if state changed */])
-    //#endregion
+    // #endregion
 
-    //#region submit button
+    // #region submit button
     const validationMessage = useMemo(() => {
         if (!account) return t('plugin_wallet_connect_a_wallet')
         if (!amount || amount.isZero()) return t('plugin_pooltogether_enter_an_amount')
@@ -247,7 +247,7 @@ export function DepositDialog() {
             })
         return ''
     }, [account, amount.toFixed(), token, tokenBalance])
-    //#endregion
+    // #endregion
 
     const prizePeriodSeconds = Number.parseInt(pool?.config.prizePeriodSeconds ?? '', 10)
 

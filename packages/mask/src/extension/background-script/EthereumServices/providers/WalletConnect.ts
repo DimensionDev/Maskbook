@@ -38,7 +38,7 @@ export async function createConnectorIfNeeded() {
     return createConnector()
 }
 
-//#region rpc
+// #region rpc
 export async function signPersonalMessage(data: string, address: string, password: string) {
     if (!connector) throw new Error('Connection Lost.')
     return (await connector.signPersonalMessage([data, address, password])) as string
@@ -48,7 +48,7 @@ export async function sendCustomRequest(payload: IJsonRpcRequest) {
     if (!connector) throw new Error('Connection Lost.')
     return (await connector.sendCustomRequest(payload as IJsonRpcRequest)) as JsonRpcResponse
 }
-//#endregion
+// #endregion
 
 // Wrap promise as PromiEvent because WalletConnect returns transaction hash only
 // docs: https://docs.walletconnect.org/client-api
@@ -57,7 +57,7 @@ export function createWeb3({ chainId = currentChainIdSettings.value }: { chainId
         chainId,
     })
 }
-//#endregion
+// #endregion
 
 /**
  * Request accounts from WalletConnect

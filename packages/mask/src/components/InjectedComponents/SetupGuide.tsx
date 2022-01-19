@@ -35,7 +35,7 @@ export enum SetupGuideStep {
     Close = 'close',
 }
 
-//#region wizard dialog
+// #region wizard dialog
 const wizardTheme = extendsTheme((theme: Theme) => ({
     components: {
         MuiOutlinedInput: {
@@ -304,9 +304,9 @@ function WizardDialog(props: WizardDialogProps) {
         </ThemeProvider>
     )
 }
-//#endregion
+// #endregion
 
-//#region find username
+// #region find username
 const useFindUsernameStyles = makeStyles()((theme) => ({
     input: {
         marginTop: '30px !important',
@@ -434,9 +434,9 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
         />
     )
 }
-//#endregion
+// #endregion
 
-//#region setup guide ui
+// #region setup guide ui
 interface SetupGuideUIProps {
     persona: PersonaIdentifier
     onClose?: () => void
@@ -448,7 +448,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const ui = activatedSocialNetworkUI
     const [step, setStep] = useState(SetupGuideStep.FindUsername)
 
-    //#region parse setup status
+    // #region parse setup status
     const lastStateRef = currentSetupGuideStatus[ui.networkIdentifier]
     const lastState_ = useValueRef(lastStateRef)
     const lastState = useMemo<SetupGuideCrossContextStatus>(() => {
@@ -461,9 +461,9 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     useEffect(() => {
         setStep(lastState.status ?? SetupGuideStep.Close)
     }, [step, setStep, lastState])
-    //#endregion
+    // #endregion
 
-    //#region setup username
+    // #region setup username
     const lastRecognized = useLastRecognizedIdentity()
     const getUsername = () =>
         lastState.username || (lastRecognized.identifier.isUnknown ? '' : lastRecognized.identifier.userId)
@@ -475,7 +475,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
             }),
         [username],
     )
-    //#endregion
+    // #endregion
 
     const onConnect = async () => {
         // attach persona with SNS profile
@@ -506,9 +506,9 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         />
     ) : null
 }
-//#endregion
+// #endregion
 
-//#region setup guide
+// #region setup guide
 const useSetupGuideStyles = makeStyles()({
     root: {
         position: 'fixed',
@@ -528,4 +528,4 @@ export function SetupGuide(props: SetupGuideProps) {
         </div>
     )
 }
-//#endregion
+// #endregion

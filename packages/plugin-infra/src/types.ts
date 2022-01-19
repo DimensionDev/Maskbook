@@ -1,3 +1,4 @@
+/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
 import type {
@@ -259,7 +260,7 @@ export namespace Plugin.SNSAdaptor {
         /** This UI will be rendered as tabs on the profile page */
         ProfileTabs?: ProfileTab[]
     }
-    //#region Composition entry
+    // #region Composition entry
     /**
      * The entry has two type:
      *
@@ -309,9 +310,9 @@ export namespace Plugin.SNSAdaptor {
         text: string | React.ReactChild
         tooltip?: React.ReactChild
     }
-    //#endregion
+    // #endregion
 
-    //#region Toolbar entry
+    // #region Toolbar entry
     export interface ToolbarEntry {
         image: string
         // TODO: remove string
@@ -333,7 +334,7 @@ export namespace Plugin.SNSAdaptor {
         // TODO: add support for onClick event.
         onClick: 'openCompositionEntry'
     }
-    //#endregion
+    // #endregion
 
     export interface ApplicationEntry {
         /**
@@ -584,17 +585,17 @@ export namespace Plugin.GeneralUI {
 
     export namespace MetadataRender {
         export type MetadataReader<T> = (meta: TypedMessage['meta']) => Result<T, unknown>
-        //#region Static render
+        // #region Static render
         // new Map([ [reader, react component] ])
         export type StaticRender<T = any> = ReadonlyMap<MetadataReader<T>, StaticRenderComponent<T>>
         export type StaticRenderComponent<T> = Omit<React.ForwardRefExoticComponent<StaticRenderProps<T>>, 'propTypes'>
         export type StaticRenderProps<T> = Context<T> & React.RefAttributes<RenderActions<T>> & { metadata: T }
-        //#endregion
-        //#region DynamicRender
+        // #endregion
+        // #region DynamicRender
         export type DynamicRender = Omit<React.ForwardRefExoticComponent<DynamicRenderProps>, 'propTypes'>
         export type DynamicRenderProps = Context<unknown> &
             React.RefAttributes<RenderActions<unknown>> & { metadata: TypedMessage['meta'] }
-        //#endregion
+        // #endregion
         export type RenderActions<T> = {
             /**
              * This action make the render into the edit state.

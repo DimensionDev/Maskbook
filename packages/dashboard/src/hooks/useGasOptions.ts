@@ -15,7 +15,7 @@ export function useGasOptions() {
         return WalletRPC.getEstimateGasFees(chainId)
     }, [is1559Supported, chainId])
 
-    //#region Get gas options from debank
+    // #region Get gas options from debank
     const { value: gasFromDebank, loading: getFromDebankLoading } = useAsync(async () => {
         if (is1559Supported) return
         const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
@@ -26,7 +26,7 @@ export function useGasOptions() {
             high: response.data.fast.price,
         }
     }, [is1559Supported, chainId])
-    //#endregion
+    // #endregion
 
     const gasOptions = is1559Supported ? gasFromMetaMask : gasFromDebank
 

@@ -72,14 +72,14 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
             chainId,
         )
 
-    //#region add token by address
+    // #region add token by address
     const matchedTokenAddress = useMemo(() => {
         if (!keyword || !isValidAddress(keyword) || erc20TokensDetailedLoading) return
         return keyword
     }, [keyword, erc20TokensDetailedLoading])
 
     const { value: searchedToken, loading: searchedTokenLoading } = useERC20TokenDetailed(matchedTokenAddress ?? '')
-    //#endregion
+    // #endregion
 
     const filteredTokens = erc20TokensDetailed.filter(
         (token) =>
@@ -110,7 +110,7 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
             ? [...renderTokens]
                   .sort(makeSortTokenFn(chainId, { isMaskBoost: true }))
                   .map((token) => ({ token: token, balance: null }))
-            : !!keyword
+            : keyword
             ? assets
             : [...assets].sort(makeSortAssertFn(chainId, { isMaskBoost: true }))
 

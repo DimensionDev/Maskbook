@@ -15,8 +15,7 @@ import {
     isSameAddress,
     useITOConstants,
 } from '@masknet/web3-shared-evm'
-import { isPositive, isZero } from '@masknet/web3-shared-base'
-import BigNumber from 'bignumber.js'
+import { isPositive, isZero, toFixed } from '@masknet/web3-shared-base'
 import { useCallback } from 'react'
 import type { TransactionReceipt } from 'web3-core'
 import Web3Utils from 'web3-utils'
@@ -167,7 +166,7 @@ export function useSwapCallback(
         ] as Parameters<ITO2['methods']['swap']>
 
         // estimate gas and compose transaction
-        const value = new BigNumber(token.type === EthereumTokenType.Native ? total : '0').toFixed()
+        const value = toFixed(token.type === EthereumTokenType.Native ? total : 0)
         const config = {
             from: account,
             gas: isQualificationHasLucky
