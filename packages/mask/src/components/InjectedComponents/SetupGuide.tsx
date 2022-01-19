@@ -5,7 +5,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { useValueRef } from '@masknet/shared'
 import { useI18N, MaskMessages } from '../../utils'
-import { activatedSocialNetworkUI } from '../../social-network'
+import { activatedSocialNetworkUI, SocialNetworkUI } from '../../social-network'
 import { currentSetupGuideStatus, dismissPinExtensionTip, userGuideStatus } from '../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
 import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '@masknet/shared-base'
@@ -406,10 +406,17 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const [username, setUsername] = useState(getUsername)
 
     useEffect(() => {
-        activatedSocialNetworkUI.collecting.identityProvider?.recognized.addListener((val) => {
+        const handler = (val: SocialNetworkUI.CollectingCapabilities.IdentityResolved) => {
             if (username === '' && !val.identifier.isUnknown) setUsername(val.identifier.userId)
-        })
+        }
+        activatedSocialNetworkUI.collecting.identityProvider?.recognized.addListener(handler)
 
+        return () => {
+            activatedSocialNetworkUI.collecting.identityProvider?.recognized.removeListener(handler)
+        }
+    }, [username])
+
+    useEffect(() => {
         if (username || ui.networkIdentifier !== 'twitter.com') return
         // In order to collect user info after login, need to reload twitter once
         let reloaded = false
