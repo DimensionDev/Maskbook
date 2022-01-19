@@ -19,10 +19,25 @@ import { useNetworkSelector } from './useNetworkSelector'
 const useStyles = makeStyles()((theme) => ({
     bar: {
         minWidth: 80,
-        borderRadius: 30,
         lineHeight: '28px',
         height: '28px',
         cursor: 'pointer',
+        position: 'relative',
+        '&::after': {
+            borderRadius: 30,
+            pointerEvents: 'none',
+            content: '""',
+            inset: 0,
+            margin: 'auto',
+            position: 'absolute',
+            backgroundColor: 'var(--network-icon-color, transparent)',
+            opacity: 0.1,
+            zIndex: 0,
+        },
+        '& > span': {
+            position: 'relative',
+            zIndex: 1,
+        },
     },
     dot: {
         position: 'relative',
@@ -114,7 +129,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
                 direction="row"
                 alignItems="center"
                 justifyContent="center"
-                sx={{ background: network.iconColor.replace(')', ', 0.1)'), px: 2, mr: 1 }}
+                sx={{ '--network-icon-color': network.iconColor, px: 2, mr: 1 }}
                 color={network.iconColor ?? ''}
                 className={classes.bar}
                 onClick={openMenu}>

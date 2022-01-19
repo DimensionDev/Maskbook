@@ -166,17 +166,17 @@ function useToolbox() {
     const chainDetailed = useChainDetailed()
     const { Utils } = useWeb3State()
 
-    //#region recent pending transactions
+    // #region recent pending transactions
     const { value: pendingTransactions = [] } = useRecentTransactions({
         status: TransactionStatusType.NOT_DEPEND,
     })
-    //#endregion
+    // #endregion
 
-    //#region Wallet
+    // #region Wallet
     const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
     )
-    //#endregion
+    // #endregion
 
     const isWalletValid = !!account && selectedWallet && chainIdValid
 

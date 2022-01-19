@@ -11,7 +11,7 @@ import { useAsync } from 'react-use'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext'
 
 export function useUpdateBalance(chainId: ChainId, currentChainId: ChainId) {
-    const web3 = useWeb3(chainId)
+    const web3 = useWeb3({ chainId })
     const currentAccount = useAccount()
     const currentProvider = useProviderType()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()

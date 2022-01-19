@@ -81,7 +81,7 @@ class Draggable extends React.PureComponent {
     override render() {
         return (
             <div
-                //@ts-ignore
+                // @ts-ignore
                 ref={this.ref}
                 onMouseDown={this.onMouseDown.bind(this)}
                 style={{

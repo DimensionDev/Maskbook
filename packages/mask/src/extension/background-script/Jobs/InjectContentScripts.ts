@@ -24,7 +24,7 @@ export default function (signal: AbortSignal) {
         if (!Flags.support_declarative_user_script) {
             const detail: browser.extensionTypes.InjectDetails = { runAt: 'document_start', frameId: arg.frameId }
 
-            //#region Injected script
+            // #region Injected script
             if (Flags.has_firefox_xray_vision) {
                 browser.tabs.executeScript(arg.tabId, { ...detail, file: injectedScriptURL })
             } else {
@@ -35,14 +35,14 @@ export default function (signal: AbortSignal) {
                         : await injectedScript
                 browser.tabs.executeScript(arg.tabId, { ...detail, code }).catch(HandleError(arg))
             }
-            //#endregion
+            // #endregion
 
-            //#region Mask SDK
+            // #region Mask SDK
             if (Flags.mask_SDK_ready) {
                 const code = process.env.NODE_ENV === 'development' ? await fetchUserScript(maskSDK_URL) : await maskSDK
                 browser.tabs.executeScript(arg.tabId, { ...detail, code }).catch(HandleError(arg))
             }
-            //#endregion
+            // #endregion
         }
         injectContentScript(arg.tabId, arg.frameId).catch(HandleError(arg))
     }

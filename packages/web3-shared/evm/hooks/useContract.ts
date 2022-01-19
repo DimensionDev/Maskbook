@@ -21,7 +21,7 @@ export function createContract<T extends BaseContract>(web3: Web3, address: stri
  * @param ABI
  */
 export function useContract<T extends BaseContract>(address = '', ABI: AbiItem[] = [], chainId?: ChainId) {
-    const web3 = useWeb3(chainId)
+    const web3 = useWeb3({ chainId })
     return useMemo(() => createContract<T>(web3, address, ABI), [web3, address, ABI])
 }
 
@@ -31,7 +31,7 @@ export function useContract<T extends BaseContract>(address = '', ABI: AbiItem[]
  * @param ABI
  */
 export function useContracts<T extends BaseContract>(listOfAddress: string[], ABI: AbiItem[] = [], chainId?: ChainId) {
-    const web3 = useWeb3(chainId)
+    const web3 = useWeb3({ chainId })
     const contracts = useMemo(
         () => listOfAddress.map((address) => createContract<T>(web3, address, ABI)),
         [web3, JSON.stringify(listOfAddress), ABI],

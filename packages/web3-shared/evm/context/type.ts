@@ -1,4 +1,4 @@
-import type { provider as Provider, RequestArguments } from 'web3-core'
+import type { RequestArguments } from 'web3-core'
 import type { Subscription } from 'use-subscription'
 import type {
     ChainId,

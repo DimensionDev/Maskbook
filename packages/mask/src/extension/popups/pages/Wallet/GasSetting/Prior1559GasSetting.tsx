@@ -108,7 +108,7 @@ export const Prior1559GasSetting = memo(() => {
 
     const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
 
-    //#region Get gas options from debank
+    // #region Get gas options from debank
     const { value: gasOptions } = useAsync(async () => {
         const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
         if (!response) return { slow: 0, standard: 0, fast: 0 }
@@ -119,7 +119,7 @@ export const Prior1559GasSetting = memo(() => {
             fast: response.data.fast.price,
         }
     }, [chainId])
-    //#endregion
+    // #endregion
 
     const options = useMemo(
         () => [
@@ -249,7 +249,7 @@ export const Prior1559GasSetting = memo(() => {
         }
     }, [value, getValueLoading])
 
-    //#region If the estimate gas be 0, Set error
+    // #region If the estimate gas be 0, Set error
     useUpdateEffect(() => {
         if (!getGasLimitError) setError('gasLimit', { message: 'Cant not get estimate gas from contract' })
     }, [getGasLimitError])

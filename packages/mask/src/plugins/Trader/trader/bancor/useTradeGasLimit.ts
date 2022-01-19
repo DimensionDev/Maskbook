@@ -10,7 +10,7 @@ import { PluginTraderRPC } from '../../messages'
 export function useTradeGasLimit(tradeComputed: TradeComputed<SwapBancorRequest> | null): AsyncState<number> {
     const { targetChainId } = TargetChainIdContext.useContainer()
     const account = useAccount()
-    const web3 = useWeb3(targetChainId)
+    const web3 = useWeb3({ chainId: targetChainId })
 
     const trade: SwapBancorRequest | null = useMemo(() => {
         if (!account || !tradeComputed?.trade_) return null

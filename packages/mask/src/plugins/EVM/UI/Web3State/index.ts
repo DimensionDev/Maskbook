@@ -115,15 +115,15 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
     }
     state.Utils = state.Utils ?? {
         getLatestBalance: (chainId: ChainId, account: string) => {
-            const web3 = createWeb3(context.request, {
+            const web3 = createWeb3(context.request, () => ({
                 chainId,
-            })
+            }))
             return web3.eth.getBalance(account)
         },
         getLatestBlockNumber: (chainId: ChainId) => {
-            const web3 = createWeb3(context.request, {
+            const web3 = createWeb3(context.request, () => ({
                 chainId,
-            })
+            }))
             return web3.eth.getBlockNumber()
         },
 

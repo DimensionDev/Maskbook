@@ -52,14 +52,8 @@ export function createWeb3(
         overrides?: SendOverrides,
         options?: RequestOptions,
     ) => Promise<T>,
-    overrides?: SendOverrides,
-    options?: RequestOptions,
+    getOverrides?: () => SendOverrides,
+    getOptions?: () => RequestOptions,
 ) {
-    return new Web3(
-        createExternalProvider(
-            request,
-            () => overrides ?? {},
-            () => options ?? {},
-        ),
-    )
+    return new Web3(createExternalProvider(request, getOverrides, getOptions))
 }
