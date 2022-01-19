@@ -94,7 +94,7 @@ export function ShadowRootStyleProvider(props: ShadowRootStyleProviderProps) {
 function init({ shadow }: ShadowRootStyleProviderProps) {
     const head = shadow.appendChild(createElement('head', 'css-container'))
 
-    //#region Emotion
+    // #region Emotion
     const MuiInsertionPoint = head.appendChild(createElement('div', 'mui-area'))
     const TSSInsertionPoint = head.appendChild(createElement('div', 'tss-area'))
     // emotion doesn't allow numbers appears in the key
@@ -113,6 +113,6 @@ function init({ shadow }: ShadowRootStyleProviderProps) {
     })
     emotionRegistryMap.set(shadow, new EmotionInformativeSheetsRegistry(muiEmotionCache))
     emotion2RegistryMap.set(shadow, new EmotionInformativeSheetsRegistry(tssEmotionCache))
-    //#endregion
+    // #endregion
     return { muiEmotionCache, tssEmotionCache }
 }

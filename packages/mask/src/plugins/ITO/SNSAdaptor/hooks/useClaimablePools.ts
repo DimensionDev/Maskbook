@@ -10,6 +10,7 @@ import {
     ChainId,
     FungibleToken,
 } from '@masknet/web3-shared-evm'
+import isAfter from 'date-fns/isAfter'
 import { useClaimablePoolsBySubgraph } from './useClaimablePoolsBySubgraph'
 import { checkAvailability } from '../../Worker/apis/checkAvailability'
 import { useMemo } from 'react'
@@ -26,15 +27,15 @@ export function useClaimablePools(chainId: ChainId, isMainnetOld = false) {
     const account = useAccount()
     const { ITO_CONTRACT_ADDRESS, ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
     const contractAddress = isMainnetOld ? ITO_CONTRACT_ADDRESS : ITO2_CONTRACT_ADDRESS
-    //#region fetch claimable pool
+    // #region fetch claimable pool
     const { value: poolsFromSubgraph = [], loading: loadingSubgraph } = useClaimablePoolsBySubgraph(chainId)
     const { value: poolsFromWeb3 = [], loading: loadingWeb3 } = useClaimablePoolsByWeb3(chainId)
     const loadingPool = loadingSubgraph || loadingWeb3
     const isPoolsFromWeb3Empty = poolsFromWeb3.length === 0
     const _pools = unionBy(poolsFromWeb3, poolsFromSubgraph, 'pid')
-    //#endregion
+    // #endregion
 
-    //#region fetch list of token detail
+    // #region fetch list of token detail
     const _tokens = useMemo(
         () =>
             _pools.reduce<Pick<FungibleToken, 'address' | 'type'>[]>((acc, cur) => {
@@ -55,7 +56,7 @@ export function useClaimablePools(chainId: ChainId, isMainnetOld = false) {
               }
               return p
           })
-    //#endregion
+    // #endregion
 
     const loading = loadingPool || loadingTokens
 
@@ -81,12 +82,13 @@ export function useClaimablePools(chainId: ChainId, isMainnetOld = false) {
                     Number(raw.availability.end_time) * 1000 < Number(raw.availability.unlock_time) * 1000,
             )
             .map((raw) => {
+                const unlockTime = Number(raw.availability.unlock_time) * 1000
                 return {
                     pids: [raw.pid],
                     amount: Number(raw.availability.swapped),
                     token: raw.token,
-                    isClaimable: raw.availability.unlocked,
-                    unlockTime: new Date(Number(raw.availability.unlock_time) * 1000),
+                    isClaimable: isAfter(Date.now(), unlockTime),
+                    unlockTime: new Date(unlockTime),
                 }
             })
             .reduce((acc: SwappedToken[], cur) => {

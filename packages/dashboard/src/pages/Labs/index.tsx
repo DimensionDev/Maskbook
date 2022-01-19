@@ -22,7 +22,7 @@ import {
 import { useDashboardI18N } from '../../locales'
 import MarketTrendSettingDialog from './components/MarketTrendSettingDialog'
 import { useAccount } from '@masknet/web3-shared-evm'
-import { Services, PluginMessages } from '../../API'
+import { Messages, Services, PluginMessages } from '../../API'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { TUTORIAL_URLS_EN } from './constants'
 import { ContentContainer } from '../../components/ContentContainer'
@@ -73,6 +73,14 @@ export default function Plugins() {
         [PluginId.RealityCards]: true,
     })
 
+    useEffect(
+        () =>
+            Messages.events.pluginMinimalModeChanged.on(([id, newValue]) =>
+                setPluginStatus({ ...pluginStatus, [id]: newValue }),
+            ),
+        [pluginStatus],
+    )
+
     const plugins = [
         {
             id: PluginId.RedPacket,
@@ -109,6 +117,7 @@ export default function Plugins() {
             icon: <SwapServiceIcon />,
             enabled: pluginStatus[PluginId.Trader],
             setting: true,
+            hideSwitch: true,
         },
         {
             id: PluginId.Transak,
@@ -116,6 +125,7 @@ export default function Plugins() {
             desc: t.labs_transak_desc(),
             icon: <TransakIcon />,
             enabled: pluginStatus[PluginId.Transak],
+            hideSwitch: true,
         },
         {
             id: PluginId.Collectible,
@@ -198,7 +208,7 @@ export default function Plugins() {
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
     async function onSwitch(id: string, checked: boolean) {
-        await Services.Settings.setPluginEnabled(id, checked)
+        await Services.Settings.setPluginMinimalModeEnabled(id, !checked)
         setPluginStatus({ ...pluginStatus, [id]: checked })
     }
 
@@ -224,7 +234,7 @@ export default function Plugins() {
 
     useEffect(() => {
         Object.values(PluginId).forEach(async (id) => {
-            const enabled = await Services.Settings.getPluginEnabled(id)
+            const enabled = await Services.Settings.getPluginMinimalModeEnabled(id)
             setPluginStatus((status) => ({ ...status, [id]: enabled }))
         })
     }, [])
@@ -256,6 +266,7 @@ export default function Plugins() {
                             onSwitch={onSwitch}
                             onTutorial={onTutorial}
                             onSetting={p.setting ? onSetting : undefined}
+                            hideSwitch={p.hideSwitch}
                         />
                     ))}
                 </Box>

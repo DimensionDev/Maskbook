@@ -1,6 +1,5 @@
-import type { i18n } from 'i18next'
+import type { i18n, TOptions } from 'i18next'
 import { initReactI18next, useTranslation as useTranslation_, UseTranslationOptions } from 'react-i18next'
-import type { TOptions } from 'i18next'
 import type en from '../../shared-ui/locales/en-US.json'
 import i18nNextInstance from '../../shared-ui/locales_legacy'
 import { languageSettings } from '../settings/settings'

@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
     tabs: {
         borderTop: `solid 1px ${theme.palette.divider}`,
         borderBottom: `solid 1px ${theme.palette.divider}`,
-        backgroundColor: `#1b1b21`,
+        backgroundColor: '#1b1b21',
     },
     tab: {
         fontFamily: 'inherit',

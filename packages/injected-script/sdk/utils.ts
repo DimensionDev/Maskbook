@@ -10,7 +10,7 @@ export function sendEvent<K extends keyof InternalEvents>(name: K, ...params: In
     )
 }
 const promisePool = new Map<number, [resolve: Function, reject: Function]>()
-let id: number = 1
+let id = 1
 export function createPromise<T>(callback: (id: number) => void) {
     return new Promise<T>((resolve, reject) => {
         id += 1

@@ -220,7 +220,7 @@ export function useFillParams(poolSettings: PoolSettings | undefined) {
         )
 
         const paramsObj: paramsObjType = {
-            //#region tx function params
+            // #region tx function params
             password: FAKE_SIGN_PASSWORD,
             startTime: startTime_,
             endTime: endTime_,
@@ -232,16 +232,16 @@ export function useFillParams(poolSettings: PoolSettings | undefined) {
             total,
             limit,
             qualificationAddress,
-            //#endregion
+            // #endregion
 
-            //#region params for FE verify and fill settings
+            // #region params for FE verify and fill settings
             exchangeAmountsDivided,
             now,
             invalidTokenAt,
             exchangeAmounts,
             exchangeTokens,
             token,
-            //#endregion
+            // #endregion
         }
 
         if (!checkParams(paramsObj)) return null

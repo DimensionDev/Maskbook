@@ -1,9 +1,14 @@
 {
     "root": true,
     "parser": "@typescript-eslint/parser",
-    "parserOptions": { "ecmaVersion": 7, "sourceType": "module", "project": "./tsconfig.eslint.json" },
+    "parserOptions": {
+        "ecmaVersion": 7,
+        "sourceType": "module",
+        "project": "./tsconfig.eslint.json",
+        "warnOnUnsupportedTypeScriptVersion": false
+    },
     "extends": ["../.eslintrc.json", "plugin:import/typescript"],
-    "plugins": ["@typescript-eslint", "unused-imports", "lodash", "import", "unicorn", "react", "react-hooks"],
+    "plugins": ["@typescript-eslint", "@dimensiondev", "unused-imports", "import", "unicorn", "react", "react-hooks"],
     "rules": {
         "no-restricted-imports": [
             "error",
@@ -21,6 +26,16 @@
         "yoda": "error",
         "radix": "error",
         "eqeqeq": ["error", "always"],
+        "spaced-comment": ["error", "always", { "line": { "markers": ["/"] } }],
+        "no-cond-assign": "error",
+        "no-constant-condition": "error",
+        "no-extra-boolean-cast": "error",
+        "no-script-url": "error",
+        "no-throw-literal": "error",
+        "no-unmodified-loop-condition": "error",
+        "no-unneeded-ternary": "error",
+        "no-useless-concat": "error",
+        "no-loss-of-precision": "error",
         "prefer-regex-literals": "error",
         "react/jsx-boolean-value": "error",
         "react/jsx-curly-brace-presence": ["warn", { "props": "never", "children": "never" }],
@@ -30,9 +45,8 @@
         "react/self-closing-comp": ["warn", { "component": true, "html": true }],
         "react-hooks/exhaustive-deps": "off",
         "react-hooks/rules-of-hooks": "error",
-        "import/no-deprecated": "warn",
-        "lodash/import-scope": ["error", "member"],
-        "unused-imports/no-unused-imports-ts": "warn",
+        "import/no-deprecated": "error",
+        "import/no-duplicates": "error",
         "unicorn/better-regex": "error",
         "unicorn/catch-error-name": ["error", { "ignore": ["^err$"] }],
         "unicorn/no-instanceof-array": "error",
@@ -43,19 +57,43 @@
         "unicorn/prefer-dom-node-dataset": "error",
         "unicorn/prefer-number-properties": "error",
         "unicorn/throw-new-error": "error",
+        "unused-imports/no-unused-imports-ts": "error",
+        "@dimensiondev/no-bigint": "error",
+        "@dimensiondev/no-jsx-template-literal": "error",
+        "@dimensiondev/no-locale-case": "error",
+        "@dimensiondev/no-number-constructor": "off",
+        "@dimensiondev/no-simple-string-interpolation": "off",
+        "@dimensiondev/no-simple-template-literal": "error",
+        "@dimensiondev/no-unneeded-to-string": "error",
+        "@dimensiondev/prefer-early-return": "error",
+        "@dimensiondev/prefer-location-assign": "error",
+        "@dimensiondev/unicode-specific-set": "error",
         "@typescript-eslint/await-thenable": "error",
+        "@typescript-eslint/no-base-to-string": "off",
         "@typescript-eslint/no-for-in-array": "error",
         "@typescript-eslint/no-implied-eval": "error",
+        "@typescript-eslint/no-inferrable-types": "error",
         "@typescript-eslint/no-invalid-this": "error",
         "@typescript-eslint/no-loop-func": "error",
         "@typescript-eslint/no-this-alias": "error",
+        "@typescript-eslint/prefer-enum-initializers": "error",
         "@typescript-eslint/prefer-for-of": "error",
         "@typescript-eslint/prefer-includes": "error",
+        "@typescript-eslint/prefer-literal-enum-member": "error",
         "@typescript-eslint/prefer-nullish-coalescing": "error",
         "@typescript-eslint/prefer-optional-chain": "error",
         "@typescript-eslint/prefer-reduce-type-parameter": "error",
+        "@typescript-eslint/prefer-regexp-exec": "off",
         "@typescript-eslint/prefer-string-starts-ends-with": "error",
-        "@typescript-eslint/prefer-enum-initializers": "error",
-        "@typescript-eslint/prefer-literal-enum-member": "error"
-    }
+        "@typescript-eslint/restrict-plus-operands": "off",
+        "@typescript-eslint/restrict-template-expressions": "off"
+    },
+    "overrides": [
+        {
+            "files": ["./plugins/**/*"],
+            "rules": {
+                "@typescript-eslint/no-explicit-any": "error"
+            }
+        }
+    ]
 }

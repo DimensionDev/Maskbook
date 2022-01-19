@@ -23,17 +23,14 @@ export interface PriceRecord {
 export interface CryptoPrice {
     [token: string]: PriceRecord
 }
-
-export interface BalanceOfChainRecord {
-    [chainId: number]: string
-}
+export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
+export type ChainIdRecord<T> = { [k in ChainId]: T }
 
 export interface BalanceOfChains {
     [provider: string]: {
         [chainId: number]: string
     }
 }
-
 // bigint is not in our list. iOS doesn't support that.
 export type Primitive = string | number | boolean | symbol | undefined | null
 
@@ -67,6 +64,25 @@ export enum ChainId {
 
     // Fantom
     Fantom = 250,
+
+    // Avalanche
+    Avalanche = 43114,
+
+    // Aurora
+    Aurora = 1313161554,
+    Aurora_Testnet = 1313161555,
+
+    // Fuse
+    Fuse = 122,
+
+    // Boba
+    Boba = 288,
+
+    // Metis
+    Metis = 1088,
+
+    // Optimistic
+    Optimistic = 10,
 }
 
 export enum ProviderType {
@@ -96,6 +112,12 @@ export enum NetworkType {
     xDai = 'xDai',
     Celo = 'Celo',
     Fantom = 'Fantom',
+    Aurora = 'Aurora',
+    Avalanche = 'Avalanche',
+    Boba = 'Boba',
+    Fuse = 'Fuse',
+    Metis = 'Metis',
+    Optimistic = 'Optimistic',
 }
 
 export interface Wallet {
@@ -123,7 +145,7 @@ export interface Wallet {
     hasDerivationPath: boolean
 }
 
-//#region Ether
+// #region Ether
 export interface NativeToken {
     type: EthereumTokenType.Native
     address: string
@@ -136,9 +158,9 @@ export interface NativeTokenDetailed extends NativeToken {
     decimals: number
     logoURI?: string
 }
-//#endregion
+// #endregion
 
-//#region ERC20
+// #region ERC20
 export interface ERC20Token {
     type: EthereumTokenType.ERC20
     address: string
@@ -151,9 +173,9 @@ export interface ERC20TokenDetailed extends ERC20Token {
     decimals: number
     logoURI?: string[]
 }
-//#endregion
+// #endregion
 
-//#region ERC721
+// #region ERC721
 export interface ERC721Token {
     type: EthereumTokenType.ERC721
     address: string
@@ -181,6 +203,11 @@ export interface ERC721TokenDetailed {
     tokenId: string
     info: ERC721TokenInfo
     contractDetailed: ERC721ContractDetailed
+    collection?: {
+        name: string
+        image?: string
+        slug: string
+    }
 }
 
 export interface ERC721TokenRecordInDatabase extends ERC721TokenDetailed {
@@ -193,9 +220,9 @@ export interface ERC721TokenCollectionInfo {
     slug: string
 }
 
-//#endregion
+// #endregion
 
-//#region ERC1155
+// #region ERC1155
 export interface ERC1155Token {
     type: EthereumTokenType.ERC1155
     address: string
@@ -217,19 +244,19 @@ export interface ERC1155TokenAssetDetailed extends ERC1155TokenDetailed {
         properties?: Record<string, string | any[] | Record<string, any>>
     }
 }
-//#endregion
+// #endregion
 
-//#region fungible token
+// #region fungible token
 export type FungibleToken = NativeToken | ERC20Token
 export type FungibleTokenDetailed = NativeTokenDetailed | ERC20TokenDetailed
-//#endregion
+// #endregion
 
-//#region non-fungible token
+// #region non-fungible token
 export type NonFungibleToken = ERC721Token | ERC1155Token
 export type NonFungibleTokenDetailed = ERC721TokenDetailed | ERC1155TokenDetailed
-//#endregion
+// #endregion
 
-//#region token out of mask
+// #region token out of mask
 export type FungibleTokenOutMask = Omit<FungibleTokenDetailed, 'chainId'> & {
     chain_id: ChainId
 }
@@ -237,7 +264,7 @@ export type FungibleTokenOutMask = Omit<FungibleTokenDetailed, 'chainId'> & {
 export type ERC721TokenOutMask = Omit<ERC721TokenDetailed, 'chainId'> & {
     chain_id: ChainId
 }
-//#endregion
+// #endregion
 
 interface TokenDetailedMap {
     [EthereumTokenType.Native]: NativeTokenDetailed
@@ -620,7 +647,7 @@ export interface Transaction {
     transactionType: string
 }
 
-//#region address name
+// #region address name
 export enum AddressNameType {
     ADDRESS = 'ADDRESS',
     ENS = 'ENS',
@@ -636,7 +663,7 @@ export interface AddressName {
     label: string
     resolvedAddress: string
 }
-//#endregion
+// #endregion
 
 export enum GasOption {
     Low = 'low',

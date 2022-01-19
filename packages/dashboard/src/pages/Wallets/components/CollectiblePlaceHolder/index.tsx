@@ -1,7 +1,6 @@
 import { memo } from 'react'
 import { MiniMaskIcon } from '@masknet/icons'
-import { makeStyles } from '@masknet/theme'
-import { MaskColorVar } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { WalletIcon } from '@masknet/shared'
 import { Box } from '@mui/material'

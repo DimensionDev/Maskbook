@@ -12,6 +12,7 @@ const useStyles = makeStyles()((theme) => ({
     disabledTab: {
         opacity: 0.5,
     },
+    flexContainer: {},
 }))
 
 interface TabPanelProps extends BoxProps {
@@ -21,7 +22,7 @@ interface TabPanelProps extends BoxProps {
 }
 
 export interface AbstractTabProps
-    extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {
+    extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper' | 'flexContainer'> {
     tabs: (Omit<TabPanelProps, 'height' | 'minHeight'> & {
         cb?: () => void
         disableFocusRipple?: boolean
@@ -49,6 +50,7 @@ export default function AbstractTab(props: AbstractTabProps) {
                     className={classes.tabs}
                     classes={{
                         indicator: classes.indicator,
+                        flexContainer: classes.flexContainer,
                     }}
                     value={index ? index : value ? value : 0}
                     TabIndicatorProps={{ style: tabIndicatorStyle }}

@@ -19,7 +19,7 @@ export interface Asset {
 export interface OpenSeaAssetContract extends OpenSeaFees {
     name: string
     address: string
-    type: string
+    asset_contract_type: string
     schema_name: string
     seller_fee_basis_points: number
     buyer_fee_basis_points: number
@@ -93,8 +93,8 @@ export interface OpenSeaResponse extends Asset {
     is_presale: boolean
     image_url: string
     image_preview_url: string
-    image_url_original: string
-    image_url_thumbnail: string
+    image_original_url: string
+    image_thumbnail_url: string
     opensea_link: string
     external_link: string
     traits: {

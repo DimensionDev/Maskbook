@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useState, useLayoutEffect, useRef } from 'react'
 import { flatten, uniq } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
-import { useCustomSnackbar, VariantType, SnackbarProvider } from '@masknet/theme'
+import { useCustomSnackbar, VariantType, SnackbarProvider, makeStyles } from '@masknet/theme'
 import { FormattedBalance, useRemoteControlledDialog } from '@masknet/shared'
 import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
 import {
     formatBalance,
     TransactionStateType,
@@ -214,6 +213,15 @@ interface ClaimAllDialogProps {
     open: boolean
 }
 
+const SUPPORTED_CHAIN_ID_LIST = [
+    ChainId.Mainnet,
+    ChainId.BSC,
+    ChainId.Matic,
+    ChainId.Arbitrum,
+    ChainId.xDai,
+    ChainId.Fantom,
+]
+
 export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { t } = useI18N()
     const { open, onClose } = props
@@ -227,11 +235,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     } = useSpaceStationCampaignInfo(account, Flags.nft_airdrop_enabled)
 
     const [chainId, setChainId] = useState(
-        [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai, ChainId.Fantom].includes(
-            currentChainId,
-        )
-            ? currentChainId
-            : ChainId.Mainnet,
+        SUPPORTED_CHAIN_ID_LIST.includes(currentChainId) ? currentChainId : ChainId.Mainnet,
     )
     const { value: swappedTokens, loading, retry } = useClaimablePools(chainId)
     const { ITO_CONTRACT_ADDRESS: ITO_CONTRACT_ADDRESS_MAINNET } = useITOConstants(ChainId.Mainnet)
@@ -368,14 +372,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                             chainId={chainId}
                             setChainId={setChainId}
                             classes={classes}
-                            chains={[
-                                ChainId.Mainnet,
-                                ChainId.BSC,
-                                ChainId.Matic,
-                                ChainId.Arbitrum,
-                                ChainId.xDai,
-                                ChainId.Fantom,
-                            ]}
+                            chains={SUPPORTED_CHAIN_ID_LIST}
                         />
                     </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>
