@@ -9,7 +9,7 @@ import {
     SocialNetworkEnumToProfileDomain,
     AsymmetryCryptoKey,
     socialNetworkDecoder,
-    steganographyDecodeImageUrl,
+    steganographyDecodeImage,
     DecryptError,
     ErrorReasons,
 } from '@masknet/encryption'
@@ -20,7 +20,6 @@ import {
     PostIVIdentifier,
     ProfileIdentifier,
 } from '@masknet/shared-base'
-import EventIterator from 'event-iterator'
 import { queryPersonaByProfileDB } from '../../database/persona/db'
 import {
     decryptByLocalKey,
@@ -48,41 +47,36 @@ export interface DecryptionContext {
 }
 export type SocialNetworkEncodedPayload =
     | { type: 'text'; text: string }
-    // | { type: 'image'; image: Uint8Array }
-    | { type: 'image-url'; url: string }
+    | { type: 'image'; image: Blob }
+    | { type: 'image-url'; image: string }
 const downloadImage = (url: string): Promise<ArrayBuffer> => fetch(url).then((x) => x.arrayBuffer())
+
+/**
+ *
+ * @param encoded If the encoded content is a text, it should only contain 1 payload. Extra payload will be ignored.
+ * @param context
+ */
 export async function* decryptionWithSocialNetworkDecoding(
-    encoded: SocialNetworkEncodedPayload[],
+    encoded: SocialNetworkEncodedPayload,
     context: DecryptionContext,
-) {
-    yield* new EventIterator<[id: string, progress: DecryptProgress | DecryptionInfo]>((flow) => {
-        const globalID = 0
-        for (const e of encoded) {
-            let decoded: string[] | Promise<string[]> = []
-            if (e.type === 'text') {
-                decoded = socialNetworkDecoder(context.currentSocialNetwork, e.text)
-            } else if (e.type === 'image-url') {
-                if (!context.authorHint || context.authorHint.isUnknown) {
-                    flow.push([globalID + '', new DecryptError(ErrorReasons.UnrecognizedAuthor, undefined)])
-                    return
-                }
-                const result = steganographyDecodeImageUrl(e.url, {
-                    pass: context.authorHint.toText(),
-                    downloadImage,
-                }).then((val) => socialNetworkDecoder(context.currentSocialNetwork, val))
-                decoded = result
-            }
-            async function main() {
-                let localID = 0
-                for (const each of await decoded) {
-                    localID += 1
-                    const ID = `${globalID}-${localID}`
-                    for await (const x of decryption(each, context)) flow.push([ID, x])
-                }
-            }
-            main()
+): AsyncGenerator<DecryptProgress | DecryptionInfo, void, undefined> {
+    let decoded: string
+    if (encoded.type === 'text') {
+        decoded = socialNetworkDecoder(context.currentSocialNetwork, encoded.text)[0]
+    } else {
+        if (!context.authorHint || context.authorHint.isUnknown) {
+            return yield new DecryptError(ErrorReasons.UnrecognizedAuthor, undefined)
         }
-    })
+        const result = await steganographyDecodeImage(encoded.image, {
+            pass: context.authorHint.toText(),
+            downloadImage,
+        })
+        const val = socialNetworkDecoder(context.currentSocialNetwork, result)[0]
+        decoded = val[0]
+    }
+
+    if (!decoded) return yield new DecryptError(ErrorReasons.NoPayloadFound, undefined)
+    yield* decryption(decoded, context)
 }
 export async function* decryption(payload: string | Uint8Array, context: DecryptionContext) {
     const parse = await parsePayload(payload)

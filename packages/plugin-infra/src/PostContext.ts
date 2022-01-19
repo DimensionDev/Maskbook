@@ -4,7 +4,7 @@ import type { TypedMessage } from '@masknet/typed-message/base'
 import { ValueRef, LiveSelector, DOMProxy } from '@dimensiondev/holoflows-kit'
 import { Context, createContext, createElement, memo, useContext } from 'react'
 import { Subscription, useSubscription } from 'use-subscription'
-import type { DecryptProgress, SocialNetworkEnum } from '@masknet/encryption'
+import type { SocialNetworkEnum } from '@masknet/encryption'
 export interface PostContextSNSActions {
     getURLFromPostIdentifier?(post: PostIdentifier): URL | null
     /** This used for encode/decode */
@@ -55,18 +55,11 @@ export interface PostContext extends PostContextAuthor {
     readonly rawMessage: Subscription<TypedMessage>
     //#endregion
     //#region Information revealed in the Mask Payload
-    readonly containsMaskPayload: Subscription<boolean>
+    // TODO:
+    // readonly containsMaskPayload: Subscription<boolean>
     encryptPostComment(comment: string): Promise<string>
     decryptPostComment(comment: string): Promise<string>
-    readonly maskPayloads: ObservableMap<string, MaskPayloadContext>
     //#endregion
-}
-export interface MaskPayloadContext {
-    readonly claimedAuthor: Subscription<ProfileIdentifier | null>
-    readonly decrypted: Subscription<DecryptProgress[]>
-    readonly iv: Subscription<Uint8Array | null>
-    readonly publicShared: Subscription<boolean | null>
-    readonly id: string
 }
 export type PostInfo = PostContext
 

@@ -152,6 +152,7 @@ export enum ErrorReasons {
     // Not used in this library.
     UnrecognizedAuthor = '[@masknet/encryption] No author is recognized which is required for the image steganography decoding.',
     CurrentProfileDoesNotConnectedToPersona = '[@masknet/encryption] Cannot decrypt by E2E because no persona is linked with the current profile.',
+    NoPayloadFound = '[@masknet/encryption] No payload found in this material.',
 }
 export class DecryptError extends Error {
     static Reasons = ErrorReasons

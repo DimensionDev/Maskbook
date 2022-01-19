@@ -19,10 +19,9 @@ export function makeTypedMessagePromise<T extends TypedMessage = TypedMessage>(
     const x: TypedMessagePromise<T> = {
         type: 'promise',
         serializable: false,
-        promise,
+        promise: promise.then((y) => ((x as any).value = y)),
         alt,
         meta: undefined,
     }
-    promise.then((y) => ((x as any).value = y))
     return x
 }

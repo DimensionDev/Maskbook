@@ -20,14 +20,17 @@ export function registerMaskPayloadTransformer(network: SocialNetworkEnum) {
             removePostfixText: [],
             transformText(text, context) {
                 const { authorHint, currentProfile, postURL } = context
-                const generator = ServicesWithProgress.decryptionWithSocialNetworkDecoding([{ type: 'text', text }], {
-                    currentSocialNetwork: network,
-                    authorHint: authorHint ? new ProfileIdentifier(authorHint.network, authorHint.userId) : null,
-                    currentProfile: currentProfile
-                        ? new ProfileIdentifier(currentProfile.network, currentProfile.userId)
-                        : null,
-                    postURL,
-                })
+                const generator = ServicesWithProgress.decryptionWithSocialNetworkDecoding(
+                    { type: 'text', text },
+                    {
+                        currentSocialNetwork: network,
+                        authorHint: authorHint ? new ProfileIdentifier(authorHint.network, authorHint.userId) : null,
+                        currentProfile: currentProfile
+                            ? new ProfileIdentifier(currentProfile.network, currentProfile.userId)
+                            : null,
+                        postURL,
+                    },
+                )
                 const f = iter(generator, context)
                 return makeTypedMessagePromise(generator.next().then(f))
             },
@@ -39,7 +42,7 @@ export function registerMaskPayloadTransformer(network: SocialNetworkEnum) {
                 const { authorHint, currentProfile, postURL } = context
                 // Note: image decryption requires authorHint. If this field is missing, we shall early return.
                 const generator = ServicesWithProgress.decryptionWithSocialNetworkDecoding(
-                    [{ type: 'image-url', url: image.image }],
+                    { type: 'image-url', image: image.image },
                     {
                         currentSocialNetwork: network,
                         authorHint: new ProfileIdentifier(authorHint.network, authorHint.userId),
@@ -57,20 +60,15 @@ export function registerMaskPayloadTransformer(network: SocialNetworkEnum) {
     )
 }
 
-function iter(
-    gen: AsyncGenerator<[id: string, progress: DecryptProgress | DecryptionInfo], void, undefined>,
-    context: TransformationContext,
-) {
-    return function iter_inner(
-        result: IteratorResult<[id: string, progress: DecryptProgress | DecryptionInfo]>,
-    ): TypedMessage {
+function iter(gen: AsyncGenerator<DecryptProgress | DecryptionInfo, void, undefined>, context: TransformationContext) {
+    return function iter_inner(result: IteratorResult<DecryptProgress | DecryptionInfo>): TypedMessage {
         // should not happen.
         if (result.done) {
             console.warn('Unreachable case')
             return makeTypedMessageEmpty()
         }
 
-        const progress = result.value[1]
+        const progress = result.value
         if (progress.type === DecryptProgressKind.Info) {
             context.reportDecryptedInfo?.(progress.iv, progress.claimedAuthor, progress.publicShared)
             return makeTypedMessagePromise(

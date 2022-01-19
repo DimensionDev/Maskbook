@@ -4,7 +4,7 @@ import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { CommentBox, CommentBoxProps } from '../../../components/InjectedComponents/CommentBox'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { makeStyles } from '@masknet/theme'
-import { usePostInfoDetails, usePostInfo, PostInfoProvider } from '../../../components/DataSource/usePostInfo'
+import { usePostInfo, PostInfoProvider } from '../../../components/DataSource/usePostInfo'
 import { noop } from 'lodash-unified'
 import { MaskMessages } from '../../../utils/messages'
 import { startWatch } from '../../../utils/watcher'
@@ -28,7 +28,8 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
 ) {
     const CommentBoxUI = memo(function CommentBoxUI({ dom }: { dom: HTMLElement | null }) {
         const info = usePostInfo()!
-        const hasMask = usePostInfoDetails.containsMaskPayload()
+        // TODO:
+        const hasMask = true // usePostInfoDetails.containsMaskPayload()
         const { encryptPostComment } = info
         const { classes } = useCustomStyles()
         const props = additionPropsToCommentBox(classes)

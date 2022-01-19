@@ -81,14 +81,15 @@ function registerPostCollectorInner(
                 collectLinks(tweetNode, refs, cancel)
             }
             run()
-            cancel.addEventListener(
-                'abort',
-                info.containsMaskPayload.subscribe(() => {
-                    const noMaskPayload = !info.containsMaskPayload.getCurrentValue()
-                    if (noMaskPayload && refs.postMetadataImages.size === 0) return
-                    updateProfileInfo(info)
-                }),
-            )
+            // TODO:
+            // cancel.addEventListener(
+            //     'abort',
+            //     info.containsMaskPayload.subscribe(() => {
+            //         const noMaskPayload = !info.containsMaskPayload.getCurrentValue()
+            //         if (noMaskPayload && refs.postMetadataImages.size === 0) return
+            //         updateProfileInfo(info)
+            //     }),
+            // )
             injectMaskIconToPostTwitter(info, cancel)
             postStore.set(proxy, info)
             return {

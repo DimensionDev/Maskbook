@@ -10,10 +10,7 @@ function getShadowRoot(node: HTMLElement) {
     return dom
 }
 export function injectPostInspectorInstagram(signal: AbortSignal, current: PostInfo) {
-    return injectPostInspectorDefault(
-        {
-            injectionPoint: (post) => getShadowRoot(post.suggestedInjectionPoint),
-        },
-        () => ({ slotPosition: 'after' }),
-    )(current, signal)
+    return injectPostInspectorDefault({
+        injectionPoint: (post) => getShadowRoot(post.suggestedInjectionPoint),
+    })(current, signal)
 }
