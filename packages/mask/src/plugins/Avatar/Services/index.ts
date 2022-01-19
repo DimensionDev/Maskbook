@@ -20,7 +20,7 @@ export async function saveNFTAvatar(
 ) {
     try {
         const avatar = await saveNFTAvatarToRSS(address, nft, '')
-        setUserAddress(nft.userId, address, networkPluginId, chainId)
+        await setUserAddress(nft.userId, address, networkPluginId, chainId)
         return avatar
     } catch (error) {
         throw error

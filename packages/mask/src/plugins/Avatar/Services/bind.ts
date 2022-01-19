@@ -26,12 +26,16 @@ async function getUserAddressFromGUN(userId: string): Promise<string | undefined
     return
 }
 
+function getKey(networkPluginId?: NetworkPluginID, chainId?: number) {
+    return `${networkPluginId ?? NetworkPluginID.PLUGIN_EVM}-${chainId ?? ChainId.Mainnet}`
+}
+
 async function _getUserAddress(userId: string, networkPluginId?: NetworkPluginID, chainId?: number) {
     try {
         const result = await NFTAvatarDB.get<{ networkPluginId: string; chainId: number; address: string }>(userId)
         if (!result || !result?.address) {
             const result = await NFTAvatarDBStorage.get<Record<string, string>>(userId)
-            const address = result?.[`${networkPluginId ?? NetworkPluginID.PLUGIN_EVM}-${chainId ?? ChainId.Mainnet}`]
+            const address = result?.[getKey(networkPluginId, chainId)]
             if (address) return address
             return getUserAddressFromGUN(userId)
         }
@@ -42,16 +46,18 @@ async function _getUserAddress(userId: string, networkPluginId?: NetworkPluginID
 }
 
 export async function getUserAddress(userId: string, networkPluginId?: NetworkPluginID, chainId?: number) {
-    const key = `${userId}-${networkPluginId ?? NetworkPluginID.PLUGIN_EVM}-${chainId ?? ChainId.Mainnet}`
-    let c = cache.get(key)
+    let c = cache.get(getKey(networkPluginId, chainId))
     if (!c || Date.now() > c[1]) {
         try {
-            cache.set(key, [_getUserAddress(userId, networkPluginId, chainId), addSeconds(new Date(), 60).getTime()])
+            cache.set(getKey(networkPluginId, chainId), [
+                _getUserAddress(userId, networkPluginId, chainId),
+                addSeconds(new Date(), 60).getTime(),
+            ])
         } catch (err) {
             console.log(err)
         }
     }
-    c = cache.get(key)
+    c = cache.get(getKey(networkPluginId, chainId))
 
     return c?.[0]
 }
@@ -64,7 +70,7 @@ export async function setUserAddress(
 ) {
     try {
         await NFTAvatarDBStorage.set<Record<string, string>>(userId, {
-            [`${networkPluginId ?? NetworkPluginID.PLUGIN_EVM}-${chainId ?? ChainId.Mainnet}`]: address,
+            [getKey(networkPluginId, chainId)]: address,
         })
 
         await NFTAvatarDB.set<{ networkPluginId: string; chainId: number; address: string }>(userId, {

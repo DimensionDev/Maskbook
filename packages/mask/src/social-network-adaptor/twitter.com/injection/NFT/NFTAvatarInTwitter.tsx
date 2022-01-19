@@ -97,7 +97,6 @@ function NFTAvatarInTwitter() {
             ...NFTEvent,
             avatarId: getAvatarId(identity.avatar ?? ''),
         } as AvatarMetaDB).catch((error) => {
-            console.log(error.message)
             showSnackbar(error.message, {
                 variant: 'error',
             })
