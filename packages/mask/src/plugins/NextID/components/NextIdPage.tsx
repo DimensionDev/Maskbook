@@ -31,7 +31,7 @@ interface NextIDPageProps {}
 
 export function NextIdPage({}: NextIDPageProps) {
     const [openBindDialog, toggleBindDialog] = useState(false)
-    const [openUnBindDialog, toggleUnBindDialog] = useState(false)
+    const [unbindAddress, setUnBindAddress] = useState<string>()
     const [count, { inc }] = useCounter(0)
     const t = useI18N()
     const { classes } = useStyles()
@@ -71,7 +71,7 @@ export function NextIdPage({}: NextIDPageProps) {
                                 key={x.identity}
                                 platform={x.platform as Platform}
                                 identity={x.identity}
-                                onUnBind={() => toggleUnBindDialog(true)}
+                                onUnBind={setUnBindAddress}
                             />
                         ))}
                     </Box>
@@ -90,10 +90,10 @@ export function NextIdPage({}: NextIDPageProps) {
                         onBind={() => inc(1)}
                     />
                 )}
-                {openUnBindDialog && currentPersona && (
+                {unbindAddress && currentPersona && (
                     <UnBindDialog
-                        open={openUnBindDialog}
-                        onClose={() => toggleUnBindDialog(false)}
+                        unbindAddress={unbindAddress}
+                        onClose={() => setUnBindAddress(undefined)}
                         persona={currentPersona}
                         onUnBind={() => inc(1)}
                         bounds={bindings?.proofs ?? []}

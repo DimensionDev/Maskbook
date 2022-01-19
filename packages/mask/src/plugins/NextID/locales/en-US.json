@@ -6,6 +6,7 @@
     "add_wallet_button": "Add wallet",
     "verify_wallet_dialog_title": "Verify your wallet",
     "bind_wallet_bound_error": "The wallet address is already tied to persona.",
+    "unbind_wallet_same_account_error": "Please change wallet",
     "unbind_dialog_title": "Unbind wallet",
     "persona_sign": "Persona Sign",
     "wallet_sign": "Wallet Sign",

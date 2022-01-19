@@ -44,7 +44,7 @@ const useStyles = makeStyles()((theme) => ({
 interface Item {
     platform: Platform
     identity: string
-    onUnBind(): void
+    onUnBind(address: string): void
 }
 
 export const BindingItem = memo<Item>(({ platform, identity, onUnBind }) => {
@@ -76,11 +76,10 @@ export const BindingItem = memo<Item>(({ platform, identity, onUnBind }) => {
                     </Link>
                 </Stack>
                 <Box>
-                    <DeleteIcon className={classes.trashIcon} onClick={onUnBind} />
+                    <DeleteIcon className={classes.trashIcon} onClick={() => onUnBind(identity)} />
                 </Box>
             </Stack>
         )
     }
-
     return null
 })
