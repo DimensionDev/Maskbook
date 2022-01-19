@@ -15,8 +15,8 @@ import { ITO_MetadataReader, payloadIntoMask } from './helpers'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { CompositionDialog } from './CompositionDialog'
 import { set } from 'lodash-unified'
-import { ToolIconURLs } from '../../../resources/tool-icon'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { MarketsIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -35,7 +35,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const payload = ITO_MetadataReader(props.message.meta)
         if (!payload.ok) return null
         return (
-            <MaskPluginWrapper pluginName="ITO">
+            <MaskPluginWrapper pluginName="ITO" publisher={base.publisher}>
                 <EthereumChainBoundary chainId={payload.val.chain_id}>
                     <PostInspector payload={set(payloadIntoMask(payload.val), 'token', payload.val.token)} />
                 </EthereumChainBoundary>
@@ -50,11 +50,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
         dialog({ open, onClose }) {
             return <CompositionDialog open={open} onConfirm={onClose} onClose={onClose} />
         },
-        label: { fallback: '🚀 ITO' },
-    },
-    ToolbarEntry: {
-        ...ToolIconURLs.markets,
-        onClick: 'openCompositionEntry',
+        label: {
+            fallback: (
+                <>
+                    <MarketsIcon style={{ width: 16, height: 16 }} />
+                    ITO
+                </>
+            ),
+        },
     },
 }
 

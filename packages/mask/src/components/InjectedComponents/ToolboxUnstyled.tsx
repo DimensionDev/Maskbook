@@ -24,7 +24,6 @@ import {
 } from '@masknet/plugin-infra'
 import { useCallback, useMemo } from 'react'
 import { useRemoteControlledDialog, WalletIcon } from '@masknet/shared'
-import { ProfileIdentifier, DashboardRoutes } from '@masknet/shared-base'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { hasNativeAPI, nativeAPI, useI18N } from '../../utils'
 import { useRecentTransactions } from '../../plugins/Wallet/hooks/useRecentTransactions'
@@ -32,17 +31,13 @@ import GuideStep from '../GuideStep'
 import { MaskFilledIcon } from '../../resources/MaskIcon'
 import { makeStyles } from '@masknet/theme'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
-import { useMyPersonas } from '../DataSource/useMyPersonas'
-import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
-import { activatedSocialNetworkUI } from '../../social-network'
-import { Services } from '../../extension/service'
-import { currentSetupGuideStatus } from '../../settings/settings'
-import { SetupGuideStep } from './SetupGuide'
-import stringify from 'json-stable-stringify'
+import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 
 const useStyles = makeStyles()((theme) => ({
-    font: {
+    title: {
         color: theme.palette.mode === 'dark' ? theme.palette.text.primary : 'rgb(15, 20, 25)',
+        display: 'flex',
+        alignItems: 'center',
     },
     paper: {
         borderRadius: 4,
@@ -102,37 +97,18 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
 
     const networkDescriptor = useNetworkDescriptor()
     const providerDescriptor = useProviderDescriptor()
-
-    const personas = useMyPersonas()
-    const lastRecognized = useLastRecognizedIdentity()
-
-    const personaConnected = useMemo(() => {
-        const id = new ProfileIdentifier(activatedSocialNetworkUI.networkIdentifier, lastRecognized.identifier.userId)
-        let connected = false
-        personas.forEach((p) => {
-            if (p.linkedProfiles.get(id)) {
-                connected = true
-            }
-        })
-        return connected
-    }, [personas, lastRecognized, activatedSocialNetworkUI])
+    const personaConnectStatus = usePersonaConnectStatus()
 
     const title = useMemo(() => {
-        return !personas.length ? t('create_persona') : !personaConnected ? t('connect_persona') : walletTitle
-    }, [personas, personaConnected, walletTitle, t])
+        return !personaConnectStatus.hasPersona
+            ? t('create_persona')
+            : !personaConnectStatus.connected
+            ? t('connect_persona')
+            : walletTitle
+    }, [personaConnectStatus, walletTitle, t])
 
-    const onClick = async () => {
-        if (!personas.length) {
-            Services.Welcome.openOptionsPage(DashboardRoutes.Setup)
-        } else if (!personaConnected) {
-            const currentPersona = await Services.Settings.getCurrentPersonaIdentifier()
-            currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier].value = stringify({
-                status: SetupGuideStep.FindUsername,
-                persona: currentPersona?.toText(),
-            })
-        } else {
-            openWallet()
-        }
+    const onClick = () => {
+        personaConnectStatus.action ? personaConnectStatus.action() : openWallet()
     }
 
     return (
@@ -161,7 +137,7 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
                                             justifyContent: 'space-between',
                                             alignItems: 'center',
                                         }}>
-                                        <Typography className={classes.font}>{title}</Typography>
+                                        <Typography className={classes.title}>{title}</Typography>
                                         {shouldDisplayChainIndicator ? (
                                             <FiberManualRecordIcon
                                                 className={classes.chainIcon}
@@ -211,12 +187,12 @@ function useToolbox() {
             return Utils?.formatDomainName?.(domain) || Utils?.formatAddress?.(account, 4) || account
         return (
             <>
-                <span>
+                <span style={{ marginRight: 12 }}>
                     {t('plugin_wallet_pending_transactions', {
                         count: pendingTransactions.length,
                     })}
                 </span>
-                <CircularProgress sx={{ marginLeft: 1.5 }} thickness={6} size={20} color="inherit" />
+                <CircularProgress thickness={6} size={20} color="inherit" />
             </>
         )
     }

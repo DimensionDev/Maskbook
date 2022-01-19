@@ -3,8 +3,6 @@ import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
 import Link from '@mui/material/Link'
 import BigNumber from 'bignumber.js'
 import { useNFT } from '../hooks'
-import { useNFTVerified } from '../hooks/useNFTVerified'
-import { useUserOwnerAddress } from '../hooks/useUserOwnerAddress'
 import type { AvatarMetaDB } from '../types'
 import { NFTAvatarRing } from './NFTAvatarRing'
 
@@ -40,7 +38,7 @@ function formatText(symbol: string, length: number) {
 }
 
 export function NFTBadge(props: NFTBadgeProps) {
-    const { avatar, size = 140, width = 15 } = props
+    const { avatar, size = 140 } = props
     const classes = useStylesExtends(useStyles(), props)
 
     const { value = { amount: '0', symbol: 'ETH', name: '', owner: '' }, loading } = useNFT(
@@ -48,9 +46,7 @@ export function NFTBadge(props: NFTBadgeProps) {
         avatar.tokenId,
     )
 
-    const address = useUserOwnerAddress(avatar.userId)
-    const { amount, symbol, name, owner } = value
-    const { loading: loadingNFTVerified, value: NFTVerified } = useNFTVerified(avatar.address)
+    const { amount, symbol, name } = value
 
     return (
         <div
@@ -66,7 +62,8 @@ export function NFTBadge(props: NFTBadgeProps) {
                     strokeWidth={14}
                     stroke="black"
                     fontSize={9}
-                    text={loading || loadingNFTVerified ? 'loading...' : `${name} ${formatPrice(amount)} ${symbol}`}
+                    text={loading ? 'loading...' : name}
+                    price={loading ? '' : `${formatPrice(amount)} ${symbol}`}
                 />
             </Link>
         </div>

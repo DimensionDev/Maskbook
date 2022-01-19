@@ -8,14 +8,15 @@ import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { PluginTraderMessages } from '../../messages'
 import { Trader, TraderProps } from './Trader'
 import { useI18N } from '../../../../utils'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
 import { NetworkTab } from '../../../../components/shared/NetworkTab'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { WalletRPC } from '../../../Wallet/messages'
+import { EMPTY_LIST } from '../../../../../utils-pure'
 import { isDashboardPage } from '@masknet/shared-base'
 
-const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
+const useStyles = makeStyles()((theme) => ({
     walletStatusBox: {
         width: 535,
         margin: '24px auto',
@@ -28,7 +29,6 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     tab: {
         height: 36,
         minHeight: 36,
-        backgroundColor: isDashboard ? `${MaskColorVar.primaryBackground2}!important` : undefined,
     },
     tabPaper: {
         backgroundColor: 'inherit',
@@ -39,10 +39,6 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         minHeight: 36,
         margin: '0 auto',
         borderRadius: 4,
-        '& .Mui-selected': {
-            color: '#ffffff',
-            backgroundColor: `${theme.palette.primary.main}!important`,
-        },
     },
     indicator: {
         display: 'none',
@@ -70,7 +66,7 @@ interface TraderDialogProps {
 export function TraderDialog({ open, onClose }: TraderDialogProps) {
     const isDashboard = isDashboardPage()
     const { t } = useI18N()
-    const { classes } = useStyles({ isDashboard })
+    const { classes } = useStyles()
     const currentChainId = useChainId()
     const chainIdValid = useChainIdValid()
     const [traderProps, setTraderProps] = useState<TraderProps>()
@@ -83,7 +79,7 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
         },
     )
 
-    const { value: chains } = useAsync(async () => {
+    const { value: chains = EMPTY_LIST } = useAsync(async () => {
         const networks = await WalletRPC.getSupportedNetworks()
         return networks.map((network) => getChainIdFromNetworkType(network))
     }, [])
@@ -116,12 +112,7 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                             </div>
                         ) : null}
                         <div className={classes.abstractTabWrapper}>
-                            <NetworkTab
-                                chainId={chainId}
-                                setChainId={setChainId}
-                                classes={classes}
-                                chains={chains ?? []}
-                            />
+                            <NetworkTab chainId={chainId} setChainId={setChainId} classes={classes} chains={chains} />
                         </div>
                         <Trader {...traderProps} chainId={chainId} classes={{ root: classes.tradeRoot }} />
                     </DialogContent>

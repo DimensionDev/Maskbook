@@ -1,5 +1,4 @@
 import { Identifier } from './type'
-import { serialize } from '../serializer'
 import { immerable } from 'immer'
 
 /**
@@ -100,7 +99,6 @@ export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<
         return this.entries()
     }
 }
-serialize('IdentifierMap')(IdentifierMap)
 IdentifierMap.prototype[Symbol.toStringTag] = 'IdentifierMap'
 
 export type ReadonlyIdentifierMap<IdentifierType extends Identifier, T> = ReadonlyMap<IdentifierType, T> & {

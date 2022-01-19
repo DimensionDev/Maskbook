@@ -46,6 +46,8 @@ export interface InternalEvents {
     //#endregion
 
     //#region Solana inpage provider bridge
+    /** Request the bridge to call function. */
+    solanaBridgeExecute: [path: string, req_id: number]
     /** Request the bridge to listen on an event. */
     solanaBridgeRequestListen: [eventName: string]
     /** When a event happened. */
@@ -93,6 +95,7 @@ export function encodeEvent<T extends keyof InternalEvents>(key: T, args: Intern
 export function decodeEvent(data: string): EventItemBeforeSerialization {
     const result = parse(data)
     // Do not throw new Error cause it requires a global lookup.
+    // eslint-disable-next-line
     if (!isEventItemBeforeSerialization(result)) throw null
     return result
 }

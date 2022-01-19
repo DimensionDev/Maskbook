@@ -25,6 +25,9 @@ import {
     binanceNetworkTradeProviderSettings,
     arbitrumNetworkTradeProviderSettings,
     xdaiNetworkTradeProviderSettings,
+    celoNetworkTradeProviderSettings,
+    fantomNetworkTradeProviderSettings,
+    auroraNetworkTradeProviderSettings,
 } from '../plugins/Trader/settings'
 import type { InternalSettings } from './createSettings'
 
@@ -52,5 +55,8 @@ export function ToBeListened(): ToBeListedSettings {
         binanceNetworkTradeProviderSettings,
         arbitrumNetworkTradeProviderSettings,
         xdaiNetworkTradeProviderSettings,
+        celoNetworkTradeProviderSettings,
+        fantomNetworkTradeProviderSettings,
+        auroraNetworkTradeProviderSettings,
     }
 }

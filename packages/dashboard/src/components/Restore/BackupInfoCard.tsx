@@ -10,15 +10,6 @@ interface BackupInfoProps {
 }
 
 export const BackupInfoCard = memo(({ info }: BackupInfoProps) => {
-    const economizeAbstract = (str: string) => {
-        if (!str.length) return <div>error</div>
-        if (str.length < 30) return <div>{str}</div>
-        return (
-            <Tooltip title={str} placement="top" arrow>
-                <div>{str.substr(0, 30) + '...' + '(' + str.split(',').length + ')'}</div>
-            </Tooltip>
-        )
-    }
     return (
         <Card variant="background">
             <Grid
@@ -47,3 +38,15 @@ export const BackupInfoCard = memo(({ info }: BackupInfoProps) => {
         </Card>
     )
 })
+
+function economizeAbstract(input: string) {
+    if (!input.length) return <div>error</div>
+    if (input.length < 30) return <div>{input}</div>
+    return (
+        <Tooltip title={input} placement="top" arrow>
+            <div>
+                {input.slice(0, 30)}...({input.split(',').length})
+            </div>
+        </Tooltip>
+    )
+}

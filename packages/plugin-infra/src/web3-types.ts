@@ -1,7 +1,6 @@
 import type { BigNumber } from 'bignumber.js'
 import type { Subscription } from 'use-subscription'
-import type { Pagination, Plugin } from './types'
-import type { Pageable } from './types'
+import type { Pagination, Plugin, Pageable } from './types'
 
 /**
  * A network plugin defines the way to connect to a single chain.
@@ -9,6 +8,7 @@ import type { Pageable } from './types'
 export enum NetworkPluginID {
     PLUGIN_EVM = 'com.mask.evm',
     PLUGIN_FLOW = 'com.mask.flow',
+    PLUGIN_SOLANA = 'com.mask.solana',
 }
 
 export enum CurrencyType {
@@ -21,6 +21,12 @@ export enum TokenType {
     Fungible = 'Fungible',
     NonFungible = 'NonFungible',
 }
+
+type ColorRGB = `rgb(${number}, ${number}, ${number})`
+type ColorRGBA = `rgba(${number}, ${number}, ${number}, ${number})`
+type ColorHEX = `#${string}${string}${string}${string}${string}${string}` | `#${string}${string}${string}`
+type ColorHSL = `hsl(${number}, ${number}%, ${number}%)`
+type Color = ColorRGB | ColorRGBA | ColorHEX | ColorHSL
 
 export declare namespace Web3Plugin {
     /**
@@ -48,7 +54,7 @@ export declare namespace Web3Plugin {
         /** The network icon */
         icon: URL
         /** The network icon in fixed color */
-        iconColor: string
+        iconColor: Color
         /** The network name */
         name: string
         /** Is a mainnet network */

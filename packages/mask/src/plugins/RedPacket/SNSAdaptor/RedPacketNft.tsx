@@ -216,6 +216,13 @@ const useStyles = makeStyles()((theme) => ({
             borderColor: 'white',
         },
     },
+    ellipsis: {
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        maxWidth: 400,
+        fontSize: '1.5rem',
+    },
 }))
 export interface RedPacketNftProps {
     payload: RedPacketNftJSONPayload
@@ -283,7 +290,12 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         }
 
         resetCallback()
-    }, [claimState, retryAvailability])
+    }, [claimState.type, retryAvailability])
+
+    useEffect(() => {
+        retryAvailability()
+        resetCallback()
+    }, [account])
 
     const previewNftImg = new URL('./assets/nft-preview.png', import.meta.url).toString()
     const rpNftImg = new URL('./assets/redpacket.nft.png', import.meta.url).toString()
@@ -354,7 +366,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             <Card className={classes.card} component="article" elevation={0}>
                 <CardHeader
                     className={classNames(classes.title, availability.isEnd ? classes.hide : '', classes.whiteText)}
-                    title={payload.message}
+                    title={<Typography className={classes.ellipsis}>{payload.message}</Typography>}
                     subheader={
                         <span
                             className={classNames(classes.link, classes.whiteText)}
@@ -393,7 +405,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                         className={classes.whiteText}>
-                        Mask.io
+                        <Typography variant="body1">Mask.io</Typography>
                     </Link>
                     <Typography variant="body1">From: @{payload.senderName}</Typography>
                 </div>
@@ -402,7 +414,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 <Card className={classes.coverCard}>
                     <CardHeader
                         className={classNames(classes.title, classes.dim, classes.dimWhiteText)}
-                        title={payload.message}
+                        title={<Typography className={classes.ellipsis}>{payload.message}</Typography>}
                         subheader={
                             <span
                                 className={classNames(classes.link, classes.dimWhiteText)}
@@ -418,7 +430,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                         </Typography>
                     </div>
                 </Card>
-            ) : (
+            ) : availability.isClaimedAll || availability.isCompleted ? null : (
                 <Grid container spacing={2} className={classes.buttonWrapper}>
                     <Grid item xs={availability.isClaimed ? 12 : 6}>
                         <Button className={classes.button} fullWidth onClick={onShare} size="large" variant="contained">

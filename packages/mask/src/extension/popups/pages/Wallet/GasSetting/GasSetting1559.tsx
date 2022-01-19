@@ -31,6 +31,7 @@ import {
     isLessThanOrEqualTo,
     isPositive,
     multipliedBy,
+    toFixed,
 } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -241,15 +242,9 @@ export const GasSetting1559 = memo(() => {
             if (value?.computedPayload._tx.maxFeePerGas && value?.computedPayload._tx.maxPriorityFeePerGas) {
                 setValue(
                     'maxPriorityFeePerGas',
-                    fromWei(
-                        new BigNumber(value.computedPayload._tx.maxPriorityFeePerGas).toString(),
-                        'gwei',
-                    ).toString(),
+                    fromWei(toFixed(value.computedPayload._tx.maxPriorityFeePerGas), 'gwei'),
                 )
-                setValue(
-                    'maxFeePerGas',
-                    fromWei(new BigNumber(value.computedPayload._tx.maxFeePerGas).toFixed(), 'gwei').toString(),
-                )
+                setValue('maxFeePerGas', fromWei(toFixed(value.computedPayload._tx.maxFeePerGas), 'gwei'))
             } else {
                 setOption(1)
             }
@@ -265,35 +260,28 @@ export const GasSetting1559 = memo(() => {
 
     //#region If the selected changed, set the value on the option to the form data
     useEffect(() => {
-        if (selected !== null) {
-            setValue(
-                'maxPriorityFeePerGas',
-                new BigNumber(options[selected].content?.suggestedMaxPriorityFeePerGas ?? 0).toString() ?? '',
-            )
-            setValue(
-                'maxFeePerGas',
-                new BigNumber(options[selected].content?.suggestedMaxFeePerGas ?? 0).toString() ?? '',
-            )
-        }
+        if (selected === null) return
+        const { content } = options[selected]
+        setValue('maxPriorityFeePerGas', new BigNumber(content?.suggestedMaxPriorityFeePerGas ?? 0).toString() ?? '')
+        setValue('maxFeePerGas', new BigNumber(content?.suggestedMaxFeePerGas ?? 0).toString() ?? '')
     }, [selected, setValue, options])
     //#endregion
 
     const [{ loading }, handleConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
-            if (value) {
-                const config = value.payload.params.map((param) => ({
-                    ...param,
-                    gas: toHex(new BigNumber(data.gasLimit).toString()),
-                    maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toString()),
-                    maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toString()),
-                }))
+            if (!value) return
+            const config = value.payload.params.map((param) => ({
+                ...param,
+                gas: toHex(new BigNumber(data.gasLimit).toString()),
+                maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toString()),
+                maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toString()),
+            }))
 
-                await WalletRPC.updateUnconfirmedRequest({
-                    ...value.payload,
-                    params: config,
-                })
-                history.goBack()
-            }
+            await WalletRPC.updateUnconfirmedRequest({
+                ...value.payload,
+                params: config,
+            })
+            history.goBack()
         },
         [value, history],
     )
@@ -355,7 +343,7 @@ export const GasSetting1559 = memo(() => {
                         className={selected === index ? classes.selected : undefined}>
                         <Typography className={classes.optionsTitle}>{title}</Typography>
                         <Typography component="div">
-                            {new BigNumber(content?.suggestedMaxFeePerGas ?? 0).toFixed(2)}
+                            {toFixed(content?.suggestedMaxFeePerGas, 2)}
                             <Typography variant="inherit">{t('wallet_transfer_gwei')}</Typography>
                         </Typography>
                         <Typography className={classes.gasUSD}>

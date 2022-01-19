@@ -23,17 +23,14 @@ export interface PriceRecord {
 export interface CryptoPrice {
     [token: string]: PriceRecord
 }
-
-export interface BalanceOfChainRecord {
-    [chainId: number]: string
-}
+export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
+export type ChainIdRecord<T> = { [k in ChainId]: T }
 
 export interface BalanceOfChains {
     [provider: string]: {
         [chainId: number]: string
     }
 }
-
 // bigint is not in our list. iOS doesn't support that.
 export type Primitive = string | number | boolean | symbol | undefined | null
 
@@ -61,6 +58,19 @@ export enum ChainId {
 
     // xDai
     xDai = 100,
+
+    // Celo
+    Celo = 42220,
+
+    // Fantom
+    Fantom = 250,
+
+    // Avalanche
+    Avalanche = 43114,
+
+    // Aurora
+    Aurora = 1313161554,
+    Aurora_Testnet = 1313161555,
 }
 
 export enum ProviderType {
@@ -88,6 +98,9 @@ export enum NetworkType {
     Polygon = 'Polygon',
     Arbitrum = 'Arbitrum',
     xDai = 'xDai',
+    Celo = 'Celo',
+    Fantom = 'Fantom',
+    Aurora = 'Aurora',
 }
 
 export interface Wallet {
@@ -173,6 +186,11 @@ export interface ERC721TokenDetailed {
     tokenId: string
     info: ERC721TokenInfo
     contractDetailed: ERC721ContractDetailed
+    collection?: {
+        name: string
+        image?: string
+        slug: string
+    }
 }
 
 export interface ERC721TokenRecordInDatabase extends ERC721TokenDetailed {
@@ -546,6 +564,8 @@ export enum FungibleAssetProvider {
 
 export enum NonFungibleAssetProvider {
     OPENSEA = 'OpenSea',
+    RARIBLE = 'Rarible',
+    NFTSCAN = 'NFTScan',
 }
 
 export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<infer R>
@@ -612,13 +632,13 @@ export interface Transaction {
 
 //#region address name
 export enum AddressNameType {
-    ADDRESS = 1,
-    ENS = 2,
-    UNS = 3,
-    DNS = 4,
-    RSS3 = 5,
-    GUN = 6,
-    THE_GRAPH = 7,
+    ADDRESS = 'ADDRESS',
+    ENS = 'ENS',
+    UNS = 'UNS',
+    DNS = 'DNS',
+    RSS3 = 'RSS3',
+    GUN = 'GUN',
+    THE_GRAPH = 'THE_GRAPH',
 }
 
 export interface AddressName {

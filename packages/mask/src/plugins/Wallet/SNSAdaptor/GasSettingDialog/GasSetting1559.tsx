@@ -22,6 +22,7 @@ import {
     isLessThanOrEqualTo,
     isPositive,
     multipliedBy,
+    toFixed,
 } from '@masknet/web3-shared-base'
 
 const HIGH_FEE_WARNING_MULTIPLIER = 1.5
@@ -118,17 +119,16 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
 
         //#region If the selected changed, set the value on the option to the form data
         useEffect(() => {
-            if (selectedGasOption !== null) {
-                clearErrors(['maxPriorityFeePerGas', 'maxFeePerGas'])
-                setValue(
-                    'maxPriorityFeePerGas',
-                    new BigNumber(currentGasOption?.content?.suggestedMaxPriorityFeePerGas ?? 0).toString() ?? '',
-                )
-                setValue(
-                    'maxFeePerGas',
-                    new BigNumber(currentGasOption?.content?.suggestedMaxFeePerGas ?? 0).toString() ?? '',
-                )
-            }
+            if (selectedGasOption === null) return
+            clearErrors(['maxPriorityFeePerGas', 'maxFeePerGas'])
+            setValue(
+                'maxPriorityFeePerGas',
+                new BigNumber(currentGasOption?.content?.suggestedMaxPriorityFeePerGas ?? 0).toString() ?? '',
+            )
+            setValue(
+                'maxFeePerGas',
+                new BigNumber(currentGasOption?.content?.suggestedMaxFeePerGas ?? 0).toString() ?? '',
+            )
         }, [currentGasOption, setValue, options])
         //#endregion
 
@@ -192,7 +192,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                             className={selectedGasOption === gasOption ? classes.selected : undefined}>
                             <Typography className={classes.optionsTitle}>{title}</Typography>
                             <Typography component="div">
-                                {new BigNumber(content?.suggestedMaxFeePerGas ?? 0).toFixed(2)}
+                                {toFixed(content?.suggestedMaxFeePerGas, 2)}
                                 <Typography variant="inherit">Gwei</Typography>
                             </Typography>
                             <Typography className={classes.gasUSD}>

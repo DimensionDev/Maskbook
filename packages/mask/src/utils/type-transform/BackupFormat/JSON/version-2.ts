@@ -6,10 +6,11 @@ import {
     type EC_Public_JsonWebKey,
     type EC_Private_JsonWebKey,
     ProfileIdentifier,
+    type RelationFavor,
+    ECKeyIdentifierFromJsonWebKey,
 } from '@masknet/shared-base'
 import { twitterBase } from '../../../../social-network-adaptor/twitter.com/base'
 import { facebookBase } from '../../../../social-network-adaptor/facebook.com/base'
-import { type RelationFavor, ECKeyIdentifierFromJsonWebKey } from '@masknet/shared-base'
 
 export type RecipientReasonJSON = (
     | { type: 'auto-share' }

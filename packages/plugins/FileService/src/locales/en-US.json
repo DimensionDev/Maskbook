@@ -1,5 +1,7 @@
 {
-    "display_name": "Plugin: File Service",
+    "__display_name": "Plugin: File Service",
+    "__description": "Upload and share files on top of Arweave network. Store data, permanently.",
+    "__composition_entry": "📃 File Service",
     "on_insert": "Use the file",
     "uploading_preparing": "Preparing",
     "uploading_estimating_time": "Estimating time…",

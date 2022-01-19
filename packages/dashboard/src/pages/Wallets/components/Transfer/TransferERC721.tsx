@@ -310,9 +310,10 @@ export const TransferERC721 = memo(() => {
                                     InputProps={{
                                         onClick: (event) => {
                                             if (!anchorEl.current) anchorEl.current = event.currentTarget
-                                            if (!!ensContent) setPopoverOpen(true)
+                                            if (ensContent) setPopoverOpen(true)
                                             setMinPopoverWidth(event.currentTarget.clientWidth)
                                         },
+                                        spellCheck: false,
                                     }}
                                     label={t.wallets_transfer_to_address()}
                                 />
@@ -373,6 +374,7 @@ export const TransferERC721 = memo(() => {
                                 control={control}
                                 render={(field) => (
                                     <SelectNFTList
+                                        error={!!errors.tokenId}
                                         onSelect={(value) => setValue('tokenId', value)}
                                         list={
                                             defaultToken

@@ -5,8 +5,7 @@ import { Skeleton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { usePostInfoDetails } from '@masknet/plugin-infra'
-import { extractTextFromTypedMessage } from '@masknet/shared-base'
-import { parseURL } from '@masknet/shared-base'
+import { extractTextFromTypedMessage, parseURL } from '@masknet/shared-base'
 import { PostInspector } from './PostInspector'
 
 const useStyles = makeStyles()((theme) => {
@@ -61,14 +60,16 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     DecryptedInspector: function Component(props): JSX.Element | null {
-        const text = useMemo(() => extractTextFromTypedMessage(props.message), [props.message])
-        const link = useMemo(() => parseURL(text.val || ''), [text.val]).find(isFindTrumanURL)
-        if (!text.ok) return null
+        const link = useMemo(() => {
+            const x = extractTextFromTypedMessage(props.message)
+            if (x.none) return null
+            return parseURL(x.val).find(isFindTrumanURL)
+        }, [props.message])
         if (!link) return null
         return <Renderer url={link} />
     },
     PostInspector: function Component(): JSX.Element | null {
-        const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks())
+        const links = usePostInfoDetails.mentionedLinks()
         const link = links.find(isFindTrumanURL)
         if (!link) return null
         return <Renderer url={link} />

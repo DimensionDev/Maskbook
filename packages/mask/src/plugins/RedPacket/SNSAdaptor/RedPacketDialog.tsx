@@ -34,10 +34,7 @@ const useStyles = makeStyles()((theme) => ({
         paddingTop: 50,
     },
     tabs: {
-        top: 0,
-        left: 0,
-        right: 0,
-        position: 'absolute',
+        borderBottom: `1px solid ${theme.palette.divider}`,
     },
     dialogContent: {
         padding: 0,
@@ -46,6 +43,18 @@ const useStyles = makeStyles()((theme) => ({
         position: 'sticky',
         top: 0,
         zIndex: 5000,
+    },
+    indicator: {
+        display: 'none',
+    },
+    tab: {
+        maxWidth: 120,
+    },
+    focusTab: {
+        borderBottom: `2px solid ${theme.palette.primary.main}`,
+    },
+    flexContainer: {
+        justifyContent: 'space-around',
     },
 }))
 
@@ -194,7 +203,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         // storing the created red packet in DB, it helps retrieve red packet password later
         // save to the database early, otherwise red-packet would lose when close the tx dialog or
         //  web page before create successfully.
-        if (createState.type === TransactionStateType.WAIT_FOR_CONFIRMING && createState.hash) {
+        if (createState.type === TransactionStateType.HASH && createState.hash) {
             payload.current.txid = createState.hash
             const record: RedPacketRecord = {
                 id: createState.hash!,
@@ -209,9 +218,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             open: true,
             state: createState,
             summary: t('plugin_red_packet_create_with_token', {
-                symbol: `${formatBalance(createSettings?.total, createSettings?.token?.decimals)} ${
-                    createSettings?.token.symbol
-                }`,
+                amount: formatBalance(createSettings?.total, createSettings?.token?.decimals),
+                symbol: createSettings?.token.symbol,
             }),
         })
     }, [createState /* update tx dialog only if state changed */])
@@ -231,7 +239,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const tokenState = useState(RpTypeTabs.ERC20)
 
-    const dialogContentHeight = state[0] === DialogTabs.past ? 600 : tokenState[0] === RpTypeTabs.ERC20 ? 350 : 540
+    const dialogContentHeight = state[0] === DialogTabs.past ? 600 : tokenState[0] === RpTypeTabs.ERC20 ? 350 : 640
 
     const tabProps: AbstractTabProps = {
         tabs: [
@@ -257,8 +265,12 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         ],
         state,
         classes: {
-            // focusTab: classes.focusTab,
+            focusTab: classes.focusTab,
             tabPaper: classes.tabPaper,
+            tab: classes.tab,
+            flexContainer: classes.flexContainer,
+            indicator: classes.indicator,
+            tabs: classes.tabs,
         },
     }
 
@@ -266,7 +278,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const title = isCreating ? t('plugin_red_packet_display_name') : t('plugin_red_packet_details')
 
     return (
-        <InjectedDialog open={props.open} title={title} onClose={onClose}>
+        <InjectedDialog open={props.open} title={title} onClose={onClose} disableTitleBorder>
             <DialogContent className={classes.dialogContent}>
                 {step === CreateRedPacketPageStep.NewRedPacketPage ? (
                     <AbstractTab height={dialogContentHeight} {...tabProps} />

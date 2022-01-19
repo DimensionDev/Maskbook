@@ -7,6 +7,7 @@ import { FileInfoMetadataReader } from '../helpers'
 import type { FileInfo } from '../types'
 import FileServiceDialog from './MainDialog'
 import { Preview } from './Preview'
+import { FileServiceIcon } from '@masknet/icons'
 
 const definition: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -21,14 +22,15 @@ const definition: Plugin.SNSAdaptor.Definition = {
         [META_KEY_2, onAttachedFile],
     ]),
     CompositionDialogEntry: {
-        label: '📃 File Service',
+        label: {
+            fallback: (
+                <>
+                    <FileServiceIcon style={{ width: 16, height: 16 }} />
+                    File Service
+                </>
+            ),
+        },
         dialog: FileServiceDialog,
-    },
-    ToolbarEntry: {
-        image: new URL('./files.png', import.meta.url).toString(),
-        label: 'File Service',
-        priority: 980,
-        onClick: 'openCompositionEntry',
     },
 }
 

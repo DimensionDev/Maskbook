@@ -11,6 +11,7 @@
     "@masknet/shared": "workspace:*",
     "@masknet/shared-base": "workspace:*",
     "@masknet/theme": "workspace:*",
+    "@masknet/icons": "workspace:*",
     "@msgpack/msgpack": "^2.7.1",
     "@masknet/web3-kit": "workspace:*",
     "arweave": "^1.10.3",

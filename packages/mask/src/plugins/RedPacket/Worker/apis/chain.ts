@@ -1,14 +1,15 @@
+import urlcat from 'urlcat'
+import type BigNumber from 'bignumber.js'
+import { first } from 'lodash-unified'
 import {
     ChainId,
-    getChainConstants,
+    getExplorerConstants,
     getRedPacketConstants,
     isSameAddress,
     getChainName,
 } from '@masknet/web3-shared-evm'
-import urlcat from 'urlcat'
 import { Interface } from '@ethersproject/abi'
 import type { RedPacketJSONPayloadFromChain } from '../../types'
-import type BigNumber from 'bignumber.js'
 import { getTransactionReceipt } from '../../../../extension/background-script/EthereumService'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import { checkAvailability } from './checkAvailability'
@@ -21,7 +22,7 @@ export async function getRedPacketHistory(
     endBlock: number,
     senderAddress: string,
 ) {
-    const { EXPLORER_API, EXPLORER_API_KEY } = getChainConstants(chainId)
+    const { EXPLORER_API, API_KEYS = [] } = getExplorerConstants(chainId)
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = getRedPacketConstants(chainId)
     if (!EXPLORER_API || !HAPPY_RED_PACKET_ADDRESS_V4 || !startBlock) return []
 
@@ -30,7 +31,7 @@ export async function getRedPacketHistory(
     // 2. Retrieve payload major data from its decoded input param.
     const response = await fetch(
         urlcat(EXPLORER_API, {
-            apikey: EXPLORER_API_KEY,
+            apikey: first(API_KEYS),
             action: 'txlist',
             module: 'account',
             sort: 'desc',

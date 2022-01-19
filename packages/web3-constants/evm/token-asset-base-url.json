@@ -38,6 +38,10 @@
         ],
         "Arbitrum": [],
         "Arbitrum_Rinkeby": [],
-        "xDai": []
+        "xDai": [],
+        "Celo": [],
+        "Fantom": [],
+        "Aurora": [],
+        "Aurora_Testnet": []
     }
 }

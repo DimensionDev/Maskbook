@@ -3,7 +3,14 @@ import { DialogContent, Box, Card, CardContent, CardActions, Link } from '@mui/m
 import { makeStyles } from '@masknet/theme'
 import { first } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
-import { FungibleTokenDetailed, isNative, useFungibleTokenWatched, useChainId } from '@masknet/web3-shared-evm'
+import {
+    FungibleTokenDetailed,
+    useFungibleTokenWatched,
+    useChainId,
+    isNativeTokenAddress,
+    formatBalance,
+    TransactionStateType,
+} from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -12,10 +19,8 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '../../Wallet/messages'
 import type { useAsset } from '../hooks/useAsset'
-import { formatBalance, TransactionStateType } from '@masknet/web3-shared-evm'
-import { resolvePaymentTokensOnCryptoartAI } from '../pipes'
+import { resolvePaymentTokensOnCryptoartAI, resolveAssetLinkOnCryptoartAI } from '../pipes'
 import { usePlaceBidCallback } from '../hooks/usePlaceBidCallback'
-import { resolveAssetLinkOnCryptoartAI } from '../pipes'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
@@ -213,7 +218,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                             amount={amount}
                             balance={balance.value ?? '0'}
                             token={token.value as FungibleTokenDetailed}
-                            disableNativeToken={!paymentTokens.some((x: any) => isNative(x.address))}
+                            disableNativeToken={!paymentTokens.some(isNativeTokenAddress)}
                             onAmountChange={setAmount}
                             onTokenChange={setToken}
                             TokenAmountPanelProps={{

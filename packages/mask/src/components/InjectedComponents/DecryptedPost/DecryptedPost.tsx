@@ -20,9 +20,13 @@ import { DecryptPostSuccess, DecryptPostSuccessProps } from './DecryptedPostSucc
 import { DecryptPostAwaiting, DecryptPostAwaitingProps } from './DecryptPostAwaiting'
 import { DecryptPostFailed, DecryptPostFailedProps } from './DecryptPostFailed'
 import { DecryptedPostDebug } from './DecryptedPostDebug'
-import { usePostClaimedAuthor, usePostInfoDetails, usePostInfoSharedPublic } from '../../DataSource/usePostInfo'
+import {
+    usePostClaimedAuthor,
+    usePostInfoDetails,
+    usePostInfoSharedPublic,
+    usePostInfo,
+} from '../../DataSource/usePostInfo'
 import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorHelpers'
-import { usePostInfo } from '../../../components/DataSource/usePostInfo'
 
 function progressReducer(
     state: { key: string; progress: SuccessDecryption | FailureDecryption | DecryptionProgress }[],
@@ -67,10 +71,10 @@ export interface DecryptPostProps {
 }
 export function DecryptPost(props: DecryptPostProps) {
     const { whoAmI, profiles, alreadySelectedPreviously, onDecrypted } = props
-    const deconstructedPayload = usePostInfoDetails.postPayload()
+    const deconstructedPayload = usePostInfoDetails.containingMaskPayload()
     const authorInPayload = usePostClaimedAuthor()
     const current = usePostInfo()!
-    const currentPostBy = usePostInfoDetails.postBy()
+    const currentPostBy = usePostInfoDetails.author()
     const decryptedPayloadForImage = usePostInfoDetails.decryptedPayloadForImage()
     const postBy = or(authorInPayload, currentPostBy)
     const postMetadataImages = usePostInfoDetails.postMetadataImages()

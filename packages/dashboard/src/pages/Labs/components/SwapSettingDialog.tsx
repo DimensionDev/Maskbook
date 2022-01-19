@@ -9,6 +9,9 @@ import {
     usePolygonNetworkTradeProvider,
     useArbitrumNetworkTradeProvider,
     useXDaiNetworkTradeProvider,
+    useCeloNetworkTradeProvider,
+    useFantomNetworkTradeProvider,
+    useAuroraNetworkTradeProvider,
 } from '../../Settings/api'
 
 import SettingItem from './SettingItem'
@@ -27,6 +30,7 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
         { label: 'Balancer', value: TradeProvider.BALANCER },
         { label: 'DODO', value: TradeProvider.DODO },
         { label: 'Bancor', value: TradeProvider.BANCOR },
+        { label: 'OpenOcean', value: TradeProvider.OPENOCEAN },
     ]
 
     const polygonOptions = [
@@ -34,6 +38,7 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
         { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
         { label: '0x', value: TradeProvider.ZRX },
         { label: 'DODO', value: TradeProvider.DODO },
+        { label: 'OpenOcean', value: TradeProvider.OPENOCEAN },
     ]
 
     const bscOptions = [
@@ -41,11 +46,27 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
         { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
         { label: '0x', value: TradeProvider.ZRX },
         { label: 'DODO', value: TradeProvider.DODO },
+        { label: 'OpenOcean', value: TradeProvider.OPENOCEAN },
     ]
 
-    const arbitrumOptions = [{ label: 'UniSwap V3', value: TradeProvider.UNISWAP_V3 }]
+    const arbitrumOptions = [
+        { label: 'UniSwap V3', value: TradeProvider.UNISWAP_V3 },
+        { label: 'OpenOcean', value: TradeProvider.OPENOCEAN },
+    ]
 
-    const xDaiOptions = [{ label: 'SushiSwap', value: TradeProvider.SUSHISWAP }]
+    const xDaiOptions = [
+        { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
+        { label: 'OpenOcean', value: TradeProvider.OPENOCEAN },
+    ]
+    const fantomOptions = xDaiOptions
+
+    const celoOptions = [{ label: 'SushiSwap', value: TradeProvider.SUSHISWAP }]
+
+    const auroraOptions = [
+        { label: 'DODO', value: TradeProvider.DODO },
+        { label: 'WannaSwap', value: TradeProvider.WANNASWAP },
+        { label: 'Trisolaris', value: TradeProvider.TRISOLARIS },
+    ]
 
     const t = useDashboardI18N()
 
@@ -54,31 +75,49 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
             legend: t.labs_settings_swap_network({ network: 'ETH' }),
             value: useEthereumNetworkTradeProvider(),
             options: ethOptions,
-            onChange: (value: any) => Services.Settings.setEthNetworkTradeProvider(+value),
+            onChange: (value: string) => Services.Settings.setEthNetworkTradeProvider(Number.parseInt(value, 10)),
         },
         {
             legend: t.labs_settings_swap_network({ network: 'Polygon/Matic' }),
             value: usePolygonNetworkTradeProvider(),
             options: polygonOptions,
-            onChange: (value: any) => Services.Settings.setPolygonNetworkTradeProvider(+value),
+            onChange: (value: string) => Services.Settings.setPolygonNetworkTradeProvider(Number.parseInt(value, 10)),
         },
         {
             legend: t.labs_settings_swap_network({ network: 'BSC' }),
             value: useBinanceNetworkTradeProvider(),
             options: bscOptions,
-            onChange: (value: any) => Services.Settings.setBinanceNetworkTradeProvider(+value),
+            onChange: (value: string) => Services.Settings.setBinanceNetworkTradeProvider(Number.parseInt(value, 10)),
         },
         {
             legend: t.labs_settings_swap_network({ network: 'Arbitrum' }),
             value: useArbitrumNetworkTradeProvider(),
             options: arbitrumOptions,
-            onChange: (value: any) => Services.Settings.setArbitrumNetworkTradeProvider(+value),
+            onChange: (value: string) => Services.Settings.setArbitrumNetworkTradeProvider(Number.parseInt(value, 10)),
         },
         {
             legend: t.labs_settings_swap_network({ network: 'xDai' }),
             value: useXDaiNetworkTradeProvider(),
             options: xDaiOptions,
-            onChange: (value: any) => Services.Settings.setxDaiNetworkTradeProvider(+value),
+            onChange: (value: string) => Services.Settings.setxDaiNetworkTradeProvider(Number.parseInt(value, 10)),
+        },
+        {
+            legend: t.labs_settings_swap_network({ network: 'Celo' }),
+            value: useCeloNetworkTradeProvider(),
+            options: celoOptions,
+            onChange: (value: string) => Services.Settings.setCeloNetworkTradeProvider(Number.parseInt(value, 10)),
+        },
+        {
+            legend: t.labs_settings_swap_network({ network: 'Fantom' }),
+            value: useFantomNetworkTradeProvider(),
+            options: fantomOptions,
+            onChange: (value: string) => Services.Settings.setFantomNetworkTradeProvider(Number.parseInt(value, 10)),
+        },
+        {
+            legend: t.labs_settings_swap_network({ network: 'Aurora' }),
+            value: useAuroraNetworkTradeProvider(),
+            options: auroraOptions,
+            onChange: (value: string) => Services.Settings.setAuroraNetworkTradeProvider(Number.parseInt(value, 10)),
         },
     ]
 
