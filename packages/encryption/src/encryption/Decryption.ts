@@ -52,7 +52,7 @@ export async function* decrypt(options: DecryptOptions, io: DecryptIO): AsyncIte
         const author = _author.unwrapOr(None)
 
         // ! Try to decrypt this post as author (using ownersAESKeyEncrypted field)
-        //#region
+        // #region
         const hasAuthorLocalKey = author.some ? io.hasLocalKeyOf(author.val).catch(() => false) : Promise.resolve(false)
         if (ownersAESKeyEncrypted.ok) {
             try {
@@ -76,10 +76,10 @@ export async function* decrypt(options: DecryptOptions, io: DecryptIO): AsyncIte
             }
             // fall through
         }
-        //#endregion
+        // #endregion
 
         // ! Try to decrypt this post via ECDH
-        //#region
+        // #region
         const authorPublicKey = _authorPublicKey.unwrapOr(None)
         if (version === -37) {
             return yield* v37ECDHE(io, ephemeralPublicKey, iv, encrypted, options.signal)
@@ -94,7 +94,7 @@ export async function* decrypt(options: DecryptOptions, io: DecryptIO): AsyncIte
             if (!authorECPub.val) return yield new DecryptError(ErrorReasons.AuthorPublicKeyNotFound, undefined)
             return yield* v38To40StaticECDH(version, io, authorECPub.val, iv, encrypted, options.signal)
         }
-        //#endregion
+        // #endregion
     }
     unreachable(encryption)
 }

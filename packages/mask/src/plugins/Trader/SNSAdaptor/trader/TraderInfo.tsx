@@ -77,12 +77,12 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
     const { classes } = useStyles({ isDashboard })
     const { targetChainId } = TargetChainIdContext.useContainer()
 
-    //#region refresh pools
+    // #region refresh pools
     useAsyncRetry(async () => {
         // force update balancer's pools each time user enters into the swap tab
         if (trade.provider === TradeProvider.BALANCER) await PluginTraderRPC.updatePools(true, targetChainId)
     }, [trade.provider, targetChainId])
-    //#endregion
+    // #endregion
 
     const nativeToken = createNativeToken(targetChainId)
     const tokenPrice = useNativeTokenPrice(targetChainId)
@@ -92,7 +92,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
     }, [trade.gas?.value, gasPrice])
 
     const feeValueUSD = useMemo(
-        () => (gasFee ? new BigNumber(formatWeiToEther(gasFee).times(tokenPrice).toFixed(2).toString()) : '0'),
+        () => (gasFee ? new BigNumber(formatWeiToEther(gasFee).times(tokenPrice).toFixed(2)) : '0'),
         [gasFee, tokenPrice],
     )
 

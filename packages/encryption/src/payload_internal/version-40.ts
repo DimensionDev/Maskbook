@@ -1,3 +1,4 @@
+/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
 import type { PayloadParseResult, Signature } from '../payload'
 import { Ok } from 'ts-results'
 import { PayloadException } from '../types'
@@ -12,17 +13,17 @@ const decodeUint8Array = decodeUint8ArrayF(PayloadException.InvalidPayload, Payl
 // ? Older version is lacking of signature, like:
 // ? Version 40:🎼2/4|ownersAESKeyEncrypted|iv|encryptedText:||
 export async function parse40(payload: string): PayloadParserResult {
-    //#region Parse string
-    const header = '🎼2/4|'
+    // #region Parse string
+    const header = '\u{1F3BC}2/4|'
     if (!payload.startsWith(header)) return new CheckedError(PayloadException.DecodeFailed, 'Unknown version').toErr()
     let rest = payload.slice(header.length)
     // cut the tail
     rest = rest.slice(0, rest.lastIndexOf(':||'))
 
     const [ownersAESKeyEncrypted, iv, encryptedText, signature] = rest.split('|')
-    //#endregion
+    // #endregion
 
-    //#region Normalization
+    // #region Normalization
     const encryption: PayloadParseResult.EndToEndEncryption = {
         type: 'E2E',
         ephemeralPublicKey: {},
@@ -47,5 +48,5 @@ export async function parse40(payload: string): PayloadParserResult {
         }
     }
     return Ok(normalized)
-    //#endregion
+    // #endregion
 }

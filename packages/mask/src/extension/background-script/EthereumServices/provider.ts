@@ -8,7 +8,7 @@ import * as CustomNetwork from './providers/CustomNetwork'
 import * as Injected from './providers/Injected'
 import * as Fortmatic from './providers/Fortmatic'
 
-//#region connect WalletConnect
+// #region connect WalletConnect
 // step 1:
 // Generate the connection URI and render a QRCode for scanning by the user
 export async function createConnectionURI() {
@@ -48,7 +48,7 @@ export async function createWalletConnect() {
 export async function cancelWalletConnect() {
     rejectConnect?.(new Error('Failed to connect to WalletConnect.'))
 }
-//#endregion
+// #endregion
 
 export async function connectMaskWallet(networkType: NetworkType) {
     const { accounts, chainId } = await MaskWallet.requestAccounts(networkType)
@@ -66,7 +66,7 @@ export async function connectMetaMask() {
     }
 }
 
-//#region fortmatic
+// #region fortmatic
 export async function connectFortmatic(expectedChainId: ChainId) {
     const { accounts, chainId } = await Fortmatic.requestAccounts(expectedChainId)
     return {
@@ -78,7 +78,7 @@ export async function connectFortmatic(expectedChainId: ChainId) {
 export async function disconnectFortmatic(expectedChainId: ChainId) {
     await Fortmatic.dismissAccounts(expectedChainId)
 }
-//#endregion
+// #endregion
 
 export async function connectCustomNetwork() {
     const { accounts, chainId } = await CustomNetwork.requestAccounts()
@@ -88,7 +88,7 @@ export async function connectCustomNetwork() {
     }
 }
 
-//#region connect injected provider
+// #region connect injected provider
 export async function connectInjected() {
     const { accounts, chainId } = await Injected.requestAccounts()
     return {
@@ -109,4 +109,4 @@ export async function notifyInjectedEvent(name: string, event: unknown, provider
             throw new Error(`Unknown event name: ${name}.`)
     }
 }
-//#endregion
+// #endregion

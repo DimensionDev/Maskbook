@@ -60,12 +60,12 @@ export function PerformanceChart(props: PerformanceChartProps) {
 
     const [period, setPeriod] = useState(Period.D1)
 
-    //#region fetch pool history
+    // #region fetch pool history
     const { value: perfHistory, error, loading, retry } = useFetchPoolHistory(pool.address, period)
     const stats: Stat[] = perfHistory?.map((row) => [Number(row.timestamp), Number(row.performance)]) ?? []
-    //#endregion
+    // #endregion
 
-    //#region make chart responsive
+    // #region make chart responsive
     const { width } = useWindowSize()
     const [responsiveWidth, setResponsiveWidth] = useState(DEFAULT_DIMENSION.width)
     const [responsiveHeight, setResponsiveHeight] = useState(DEFAULT_DIMENSION.height)
@@ -75,7 +75,7 @@ export function PerformanceChart(props: PerformanceChartProps) {
         setResponsiveWidth(rootRef.current.getBoundingClientRect().width || DEFAULT_DIMENSION.width)
         setResponsiveHeight(rootRef.current.getBoundingClientRect().height || DEFAULT_DIMENSION.height)
     }, [width /* redraw canvas if window width resize */])
-    //#endregion
+    // #endregion
 
     const dimension = {
         ...DEFAULT_DIMENSION,

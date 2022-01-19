@@ -6,6 +6,7 @@ import { sendEvent, rejectPromise, resolvePromise } from './utils'
 
 export { bridgedEthereumProvider } from './bridgedEthereum'
 export { bridgedCoin98Provider } from './bridgedCoin98'
+export { bridgedSolanaProvider } from './bridgedSolana'
 
 export function pasteText(text: string) {
     sendEvent('paste', text)
@@ -39,7 +40,6 @@ document.addEventListener(CustomEventId, (e) => {
             return onCoin98Event(...r[1])
         case 'solanaBridgeOnEvent':
             return onSolanaEvent(...r[1])
-
         case 'ethBridgeSendRequest':
         case 'ethBridgePrimitiveAccess':
         case 'ethBridgeRequestListen':
@@ -49,6 +49,7 @@ document.addEventListener(CustomEventId, (e) => {
         case 'solanaBridgeSendRequest':
         case 'solanaBridgePrimitiveAccess':
         case 'solanaBridgeRequestListen':
+        case 'solanaBridgeExecute':
         case 'input':
         case 'paste':
         case 'pasteImage':

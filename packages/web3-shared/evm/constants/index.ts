@@ -5,6 +5,7 @@ import CoinGecko from '@masknet/web3-constants/evm/coingecko.json'
 import CoinMarketCap from '@masknet/web3-constants/evm/coinmarketcap.json'
 import Zerion from '@masknet/web3-constants/evm/zerion.json'
 import Gitcoin from '@masknet/web3-constants/evm/gitcoin.json'
+import OpenOcean from '@masknet/web3-constants/evm/openocean.json'
 import ITO from '@masknet/web3-constants/evm/ito.json'
 import LBP from '@masknet/web3-constants/evm/lbp.json'
 import RedPacket from '@masknet/web3-constants/evm/red-packet.json'
@@ -55,6 +56,9 @@ export const useZerionConstants = hookTransform(getZerionConstants)
 
 export const getGitcoinConstants = transform(Gitcoin)
 export const useGitcoinConstants = hookTransform(getGitcoinConstants)
+
+export const getOpenOceanConstants = transform(OpenOcean)
+export const useOpenOceanConstants = hookTransform(getOpenOceanConstants)
 
 export const getITOConstants = transform(ITO)
 export const useITOConstants = hookTransform(getITOConstants)

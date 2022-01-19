@@ -52,7 +52,7 @@ export function useAllTradeComputed(
 
     const nativeTradeGasLimit = useNativeTradeGasLimit(nativeToken, targetChainId)
 
-    //uniswap-v2
+    // uniswap-v2
     const uniswapV2_ = useUniswapV2Trade(
         TradeProvider.UNISWAP_V2,
         TradeStrategy.ExactIn,
@@ -188,6 +188,30 @@ export function useAllTradeComputed(
     )
     const openoceanSwapEstimateGas = useOpenOceanTradeGasLimit(openocean as TradeComputed<SwapOOData> | null)
 
+    // trisolaris
+    const trisolaris_ = useUniswapV2Trade(
+        TradeProvider.TRISOLARIS,
+        TradeStrategy.ExactIn,
+        inputAmount_,
+        '0',
+        tradeProviders.some((x) => x === TradeProvider.TRISOLARIS) ? inputToken : undefined,
+        tradeProviders.some((x) => x === TradeProvider.TRISOLARIS) ? outputToken : undefined,
+    )
+    const trisolaris = useUniswapTradeComputed(trisolaris_.value, inputToken, outputToken)
+    const trisolarisEstimateGas = useUniswapTradeGasLimit(trisolaris, TradeProvider.TRISOLARIS)
+
+    // WannaSwap
+    const wannaswap_ = useUniswapV2Trade(
+        TradeProvider.WANNASWAP,
+        TradeStrategy.ExactIn,
+        inputAmount_,
+        '0',
+        tradeProviders.some((x) => x === TradeProvider.WANNASWAP) ? inputToken : undefined,
+        tradeProviders.some((x) => x === TradeProvider.WANNASWAP) ? outputToken : undefined,
+    )
+    const wannaswap = useUniswapTradeComputed(wannaswap_.value, inputToken, outputToken)
+    const wannaSwapEstimateGas = useUniswapTradeGasLimit(wannaswap, TradeProvider.WANNASWAP)
+
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
         { provider: TradeProvider.SUSHISWAP, ...sushiSwap_, value: sushiSwap, gas: sushiSwapEstimateGas },
@@ -200,6 +224,8 @@ export function useAllTradeComputed(
         { provider: TradeProvider.DODO, ...dodo_, value: dodo, gas: dodoSwapEstimateGas },
         { provider: TradeProvider.BANCOR, ...bancor_, value: bancor, gas: bancorSwapEstimateGas },
         { provider: TradeProvider.OPENOCEAN, ...openocean_, value: openocean, gas: openoceanSwapEstimateGas },
+        { provider: TradeProvider.WANNASWAP, ...wannaswap_, value: wannaswap, gas: wannaSwapEstimateGas },
+        { provider: TradeProvider.TRISOLARIS, ...trisolaris_, value: trisolaris, gas: trisolarisEstimateGas },
     ]
 
     return nativeToken_.value
