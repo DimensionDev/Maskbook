@@ -35,7 +35,7 @@ export type RelationTransaction<Mode extends 'readonly' | 'readwrite'> = IDBPSaf
     Mode
 >
 
-//#region Type
+// #region Type
 export type PersonaRecordDB = Omit<PersonaRecord, 'identifier' | 'linkedProfiles'> & {
     identifier: string
     linkedProfiles: Map<string, LinkedProfileDetails>
@@ -132,4 +132,4 @@ export interface LinkedProfileDetails {
 
 export type PersonaRecordWithPrivateKey = PersonaRecord & Required<Pick<PersonaRecord, 'privateKey'>>
 
-//#endregion
+// #endregion
