@@ -1,16 +1,18 @@
 import { Box, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { memo } from 'react'
 import { useI18N } from '../locales'
-import { getMaskColor, makeStyles, MaskDialog } from '@masknet/theme'
+import { getMaskColor, makeStyles } from '@masknet/theme'
 import { MasksIcon } from '@masknet/icons'
 import { formatFingerprint, LoadingAnimation } from '@masknet/shared'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import Services from '../../../extension/service'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
-import { useAccount } from '@masknet/web3-shared-evm'
+import { isSameAddress, useAccount } from '@masknet/web3-shared-evm'
 import DoneIcon from '@mui/icons-material/Done'
 import { LoadingButton } from '@mui/lab'
 import type { Persona } from '../../../database'
+import type { Binding } from '../types'
+import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 
 const useStyles = makeStyles()((theme) => ({
     persona: {
@@ -75,8 +77,10 @@ const useStyles = makeStyles()((theme) => ({
 
 interface VerifyWalletDialogProps {
     open: boolean
-    onClose(): void
     persona: Persona
+    onUnBind(): void
+    onClose(): void
+    bounds: Binding[]
 }
 
 enum SignSteps {
@@ -84,11 +88,12 @@ enum SignSteps {
     walletSign = 'walletSign',
 }
 
-export const UnBindDialog = memo<VerifyWalletDialogProps>(({ open, onClose, persona }) => {
+export const UnBindDialog = memo<VerifyWalletDialogProps>(({ open, onClose, persona, onUnBind, bounds }) => {
     const account = useAccount()
     const t = useI18N()
     const { classes } = useStyles()
     const currentIdentifier = persona.identifier
+    const isBound = !!bounds.find((x) => isSameAddress(x.identity, account))
 
     const { value: message } = useAsyncRetry(() => {
         if (!currentIdentifier || !account) return Promise.resolve(null)
@@ -107,7 +112,7 @@ export const UnBindDialog = memo<VerifyWalletDialogProps>(({ open, onClose, pers
     const [walletSignState, handleWalletSign] = useAsyncFn(async () => {
         if (!account || !message) return
         return Services.Ethereum.personalSign(message, account)
-    }, [personaSignState.value])
+    }, [personaSignState.value, account, message])
 
     useAsyncRetry(async () => {
         if (!personaSignState.value && !walletSignState.value) return
@@ -119,12 +124,13 @@ export const UnBindDialog = memo<VerifyWalletDialogProps>(({ open, onClose, pers
             walletSignState.value,
             personaSignState.value?.signature.signature,
         )
+        onUnBind()
         onClose()
     }, [walletSignState.value, personaSignState.value])
 
     // move to panel
     return (
-        <MaskDialog DialogProps={{ scroll: 'paper' }} open={open} title={t.unbind_dialog_title()} onClose={onClose}>
+        <InjectedDialog open={open} title={t.unbind_dialog_title()} onClose={onClose}>
             <DialogContent style={{ minWidth: 515 }}>
                 <Box>
                     <Typography className={classes.subTitle}>{t.persona()}</Typography>
@@ -167,6 +173,7 @@ export const UnBindDialog = memo<VerifyWalletDialogProps>(({ open, onClose, pers
                             loadingIndicatorEnd: classes.loadingIcon,
                         }}
                         loadingPosition="end"
+                        disabled={!isBound}
                         style={{ width: '40%' }}
                         className={walletSignState.value ? classes.done : ''}
                         loading={walletSignState.loading}
@@ -178,6 +185,6 @@ export const UnBindDialog = memo<VerifyWalletDialogProps>(({ open, onClose, pers
                     </LoadingButton>
                 </Stack>
             </DialogActions>
-        </MaskDialog>
+        </InjectedDialog>
     )
 })

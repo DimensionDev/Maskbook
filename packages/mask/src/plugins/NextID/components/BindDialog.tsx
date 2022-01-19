@@ -1,16 +1,19 @@
 import { Box, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { memo } from 'react'
 import { useI18N } from '../locales'
-import { getMaskColor, makeStyles, MaskDialog } from '@masknet/theme'
+import { getMaskColor, makeStyles } from '@masknet/theme'
 import { MasksIcon } from '@masknet/icons'
 import { formatFingerprint, LoadingAnimation } from '@masknet/shared'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import Services from '../../../extension/service'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
-import { useAccount } from '@masknet/web3-shared-evm'
+import { isSameAddress, useAccount } from '@masknet/web3-shared-evm'
 import DoneIcon from '@mui/icons-material/Done'
 import { LoadingButton } from '@mui/lab'
 import type { Persona } from '../../../database'
+import classNames from 'classnames'
+import type { Binding } from '../types'
+import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 
 const useStyles = makeStyles()((theme) => ({
     persona: {
@@ -57,12 +60,19 @@ const useStyles = makeStyles()((theme) => ({
         border: `1px solid ${getMaskColor(theme).twitterMain}`,
         borderRadius: '50%',
     },
+    stepNumberDone: {
+        border: '1px solid #60DFAB',
+        color: '#60DFAB',
+    },
     stepLine: {
-        border: `1px solid ${getMaskColor(theme).twitterMain}`,
+        border: `0.5px solid ${getMaskColor(theme).twitterMain}`,
         height: 0,
         width: '60%',
         marginLeft: '24px',
         marginRight: '24px',
+    },
+    stepLineDone: {
+        border: '0.5px solid #60DFAB',
     },
     done: {
         background: '#60DFAB',
@@ -71,19 +81,27 @@ const useStyles = makeStyles()((theme) => ({
         position: 'relative',
         right: -6,
     },
+    error: {
+        color: getMaskColor(theme).redMain,
+        paddingLeft: theme.spacing(0.5),
+        borderLeft: `solid 2px ${getMaskColor(theme).redMain}`,
+    },
 }))
 
-interface VerifyWalletDialogProps {
+interface BindDialogProps {
     open: boolean
     onClose(): void
+    onBind(): void
     persona: Persona
+    bounds: Binding[]
 }
 
-export const BindDialog = memo<VerifyWalletDialogProps>(({ open, onClose, persona }) => {
+export const BindDialog = memo<BindDialogProps>(({ open, onClose, persona, onBind, bounds }) => {
     const account = useAccount()
     const t = useI18N()
     const { classes } = useStyles()
     const currentIdentifier = persona.identifier
+    const isBound = !!bounds.find((x) => isSameAddress(x.identity, account))
 
     const { value: message } = useAsyncRetry(() => {
         if (!currentIdentifier || !account) return Promise.resolve(null)
@@ -91,21 +109,21 @@ export const BindDialog = memo<VerifyWalletDialogProps>(({ open, onClose, person
     }, [currentIdentifier])
 
     const [personaSignState, handlePersonaSign] = useAsyncFn(async () => {
-        if (!message || !currentIdentifier) return
+        if (!message || !currentIdentifier || isBound) return
         return Services.Identity.signWithPersona({
             method: 'eth',
             message: message,
             identifier: currentIdentifier.toText(),
         })
-    }, [message, currentIdentifier, account])
+    }, [message, currentIdentifier, account, isBound])
 
     const [walletSignState, handleWalletSign] = useAsyncFn(async () => {
-        if (!account || !message) return
+        if (!account || !message || isBound) return
         return Services.Ethereum.personalSign(message, account)
-    }, [personaSignState.value])
+    }, [personaSignState.value, account, message, isBound])
 
     useAsyncRetry(async () => {
-        if (!personaSignState.value || !walletSignState.value) return
+        if (!personaSignState.value || !walletSignState.value || isBound) return
         await Services.Helper.bindProof(
             currentIdentifier,
             'create',
@@ -114,16 +132,13 @@ export const BindDialog = memo<VerifyWalletDialogProps>(({ open, onClose, person
             walletSignState.value,
             personaSignState.value.signature.signature,
         )
+        onBind()
         onClose()
-    }, [walletSignState.value, personaSignState.value])
+    }, [walletSignState.value, personaSignState.value, isBound])
 
     // move to panel
     return (
-        <MaskDialog
-            DialogProps={{ scroll: 'paper' }}
-            open={open}
-            title={t.verify_wallet_dialog_title()}
-            onClose={onClose}>
+        <InjectedDialog open={open} title={t.verify_wallet_dialog_title()} onClose={onClose}>
             <DialogContent style={{ minWidth: 515 }}>
                 <Box>
                     <Typography className={classes.subTitle}>{t.persona()}</Typography>
@@ -143,10 +158,25 @@ export const BindDialog = memo<VerifyWalletDialogProps>(({ open, onClose, person
                     <Typography className={classes.subTitle}>{t.wallet()}</Typography>
                     <WalletStatusBox />
                 </Box>
+                {isBound && <Typography className={classes.error}>{t.bind_wallet_bound_error()}</Typography>}
                 <Stack direction="row" alignItems="center" justifyContent="center" px="16%" pt="24px">
-                    <Box className={classes.stepNumber}>1</Box>
-                    <Box className={classes.stepLine} />
-                    <Box className={classes.stepNumber}>2</Box>
+                    <Box
+                        className={classNames(
+                            classes.stepNumber,
+                            personaSignState.value ? classes.stepNumberDone : null,
+                        )}>
+                        1
+                    </Box>
+                    <Box
+                        className={classNames(classes.stepLine, personaSignState.value ? classes.stepLineDone : null)}
+                    />
+                    <Box
+                        className={classNames(
+                            classes.stepNumber,
+                            walletSignState.value ? classes.stepNumberDone : null,
+                        )}>
+                        2
+                    </Box>
                 </Stack>
             </DialogContent>
             <DialogActions>
@@ -155,6 +185,7 @@ export const BindDialog = memo<VerifyWalletDialogProps>(({ open, onClose, person
                         classes={{
                             loadingIndicatorEnd: classes.loadingIcon,
                         }}
+                        disabled={isBound}
                         loadingPosition="end"
                         style={{ width: '45%' }}
                         className={personaSignState.value?.signature ? classes.done : ''}
@@ -169,6 +200,7 @@ export const BindDialog = memo<VerifyWalletDialogProps>(({ open, onClose, person
                         classes={{
                             loadingIndicatorEnd: classes.loadingIcon,
                         }}
+                        disabled={isBound}
                         loadingPosition="end"
                         style={{ width: '45%' }}
                         className={walletSignState.value ? classes.done : ''}
@@ -181,6 +213,6 @@ export const BindDialog = memo<VerifyWalletDialogProps>(({ open, onClose, person
                     </LoadingButton>
                 </Stack>
             </DialogActions>
-        </MaskDialog>
+        </InjectedDialog>
     )
 })

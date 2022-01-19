@@ -1,9 +1,9 @@
 import { useI18N } from '../locales'
 import { makeStyles } from '@masknet/theme'
-import { Box, Button, Stack } from '@mui/material'
+import { Box, Button, Stack, Typography } from '@mui/material'
 import { useState } from 'react'
 import { BindDialog } from './BindDialog'
-import { useAsync, useAsyncRetry } from 'react-use'
+import { useAsync, useAsyncRetry, useCounter } from 'react-use'
 import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
 import Services from '../../../extension/service'
 import { BindingItem } from './BindingItem'
@@ -25,6 +25,7 @@ interface NextIDPageProps {}
 export function NextIdPage({}: NextIDPageProps) {
     const [openBindDialog, toggleBindDialog] = useState(false)
     const [openUnBindDialog, toggleUnBindDialog] = useState(false)
+    const [count, { inc }] = useCounter(0)
     const t = useI18N()
     const { classes } = useStyles()
     const personas = useMyPersonas()
@@ -37,7 +38,7 @@ export function NextIdPage({}: NextIDPageProps) {
     const { value: bindings, loading } = useAsync(() => {
         if (!currentIdentifier) return Promise.resolve(null)
         return Services.Helper.queryExistedBinding(currentIdentifier)
-    }, [currentIdentifier, openUnBindDialog, openBindDialog])
+    }, [currentIdentifier, count])
 
     if (loading || loadingIdentifier) return <Box>Loading</Box>
 
@@ -66,6 +67,8 @@ export function NextIdPage({}: NextIDPageProps) {
                         open={openBindDialog}
                         onClose={() => toggleBindDialog(false)}
                         persona={currentPersona}
+                        bounds={bindings?.proofs ?? []}
+                        onBind={() => inc(1)}
                     />
                 )}
                 {openUnBindDialog && currentPersona && (
@@ -73,6 +76,8 @@ export function NextIdPage({}: NextIDPageProps) {
                         open={openUnBindDialog}
                         onClose={() => toggleUnBindDialog(false)}
                         persona={currentPersona}
+                        onUnBind={() => inc(1)}
+                        bounds={bindings?.proofs ?? []}
                     />
                 )}
             </>
@@ -82,7 +87,7 @@ export function NextIdPage({}: NextIDPageProps) {
     return (
         <>
             <Box>
-                <Box className={classes.tip}>{t.connect_wallet_tip()}</Box>
+                <Typography className={classes.tip}>{t.connect_wallet_tip()}</Typography>
                 <Stack justifyContent="center" direction="row">
                     <Button variant="contained" onClick={() => toggleBindDialog(true)}>
                         {t.verify_wallet_button()}
@@ -90,7 +95,13 @@ export function NextIdPage({}: NextIDPageProps) {
                 </Stack>
             </Box>
             {openBindDialog && currentPersona && (
-                <BindDialog open={openBindDialog} onClose={() => toggleBindDialog(false)} persona={currentPersona} />
+                <BindDialog
+                    open={openBindDialog}
+                    onClose={() => toggleBindDialog(false)}
+                    persona={currentPersona}
+                    bounds={bindings?.proofs ?? []}
+                    onBind={() => inc(1)}
+                />
             )}
         </>
     )

@@ -5,8 +5,11 @@
     "verify_wallet_button": "Verify your wallet",
     "add_wallet_button": "Add wallet",
     "verify_wallet_dialog_title": "Verify your wallet",
+    "bind_wallet_bound_error": "The wallet address is already tied to persona.",
     "unbind_dialog_title": "Unbind wallet",
     "persona_sign": "Persona Sign",
     "wallet_sign": "Wallet Sign",
-    "unbind_or": "or"
+    "unbind_or": "or",
+    "copied": "copied",
+    "view_on_explorer": "View on explorer"
 }
