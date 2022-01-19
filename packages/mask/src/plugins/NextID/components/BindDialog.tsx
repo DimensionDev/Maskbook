@@ -2,10 +2,11 @@ import { memo } from 'react'
 import { useI18N } from '../locales'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import Services from '../../../extension/service'
-import { isSameAddress, useAccount } from '@masknet/web3-shared-evm'
+import { isSameAddress } from '@masknet/web3-shared-evm'
 import type { Persona } from '../../../database'
 import type { Binding } from '../types'
 import { BindPanelUI } from './BindPanelUI'
+import { useAccount } from '@masknet/plugin-infra'
 
 interface BindDialogProps {
     open: boolean

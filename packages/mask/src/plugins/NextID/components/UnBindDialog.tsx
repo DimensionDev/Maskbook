@@ -22,9 +22,9 @@ export const UnBindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onCl
     const isBound = !!bounds.find((x) => isSameAddress(x.identity, unbindAddress))
 
     const { value: message } = useAsyncRetry(() => {
-        if (!currentIdentifier || !account) return Promise.resolve(null)
-        return Services.Helper.createPersonaPayload(currentIdentifier, 'delete', account, 'ethereum')
-    }, [currentIdentifier])
+        if (!currentIdentifier || !unbindAddress) return Promise.resolve(null)
+        return Services.Helper.createPersonaPayload(currentIdentifier, 'delete', unbindAddress, 'ethereum')
+    }, [currentIdentifier, unbindAddress])
 
     const [personaSignState, handlePersonaSign] = useAsyncFn(async () => {
         if (!message || !currentIdentifier) return
@@ -33,12 +33,12 @@ export const UnBindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onCl
             message: message,
             identifier: currentIdentifier.toText(),
         })
-    }, [message, currentIdentifier, account])
+    }, [message, currentIdentifier, unbindAddress])
 
     const [walletSignState, handleWalletSign] = useAsyncFn(async () => {
-        if (!account || !message) return
-        return Services.Ethereum.personalSign(message, account)
-    }, [personaSignState.value, account, message])
+        if (!unbindAddress || !message) return
+        return Services.Ethereum.personalSign(message, unbindAddress)
+    }, [personaSignState.value, unbindAddress, message])
 
     useAsyncRetry(async () => {
         if (!personaSignState.value && !walletSignState.value) return

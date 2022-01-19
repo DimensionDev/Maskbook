@@ -149,9 +149,6 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                     {isBound && action === 'create' && (
                         <Typography className={classes.error}>{t.bind_wallet_bound_error()}</Typography>
                     )}
-                    {!isCurrentAccount && action === 'delete' && (
-                        <Typography className={classes.error}>{t.unbind_wallet_same_account_error()}</Typography>
-                    )}
                     {action === 'create' && (
                         <Stack direction="row" alignItems="center" justifyContent="center" px="16%" pt="24px">
                             <Box
@@ -208,7 +205,9 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                             onClick={onWalletSign}
                             endIcon={signature.wallet.value ? <DoneIcon /> : null}
                             loadingIndicator={<LoadingAnimation />}>
-                            {t.wallet_sign()}
+                            {!isCurrentAccount && action === 'delete'
+                                ? t.unbind_wallet_same_account_error()
+                                : t.wallet_sign()}
                         </LoadingButton>
                     </Stack>
                 </DialogActions>
