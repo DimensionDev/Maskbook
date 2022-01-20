@@ -26,10 +26,10 @@ import { HelpOutline, ArrowDownward } from '@mui/icons-material'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
 import { useUpdateEffect } from 'react-use'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
-import { isDashboardPage } from '@masknet/shared-base'
+import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
 
-const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => {
+const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((theme, { isDashboard, isPopup }) => {
     return {
         root: {
             display: 'flex',
@@ -130,7 +130,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             // Just for design
             backgroundColor: isDashboard ? MaskColorVar.mainBackground : theme.palette.background.paper,
             position: 'sticky',
-            bottom: -20,
+            bottom: isPopup ? -12 : -20,
         },
         noToken: {
             borderRadius: '18px !important',
@@ -204,9 +204,9 @@ export const TradeForm = memo<AllTradeFormProps>(
     }) => {
         const userSelected = useRef(false)
         const isDashboard = isDashboardPage()
-
+        const isPopup = isPopupPage()
         const { t } = useI18N()
-        const { classes } = useStyles({ isDashboard })
+        const { classes } = useStyles({ isDashboard, isPopup })
         const { targetChainId: chainId } = TargetChainIdContext.useContainer()
         const [isExpand, setIsExpand] = useState(false)
 

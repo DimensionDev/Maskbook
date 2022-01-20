@@ -151,7 +151,7 @@ export function usePopupsMaskFullPageTheme() {
         theme.palette.background.paper = '#ffffff'
         theme.palette.primary = {
             ...theme.palette.primary,
-            main: '#1D9BF0',
+            main: '#1c68f3',
         }
 
         const colorSchema = twitterColorSchema.light
