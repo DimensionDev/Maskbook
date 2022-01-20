@@ -90,10 +90,14 @@ function NFTAvatarInTwitter() {
             ...NFTEvent,
             avatarId: getAvatarId(identity.avatar ?? ''),
         } as AvatarMetaDB).catch((error) => {
+            setNFTEvent(undefined)
+            setAvatar(undefined)
             window.alert(error.message)
             return
         })
         if (!avatar) {
+            setNFTEvent(undefined)
+            setAvatar(undefined)
             window.alert('Failed to save NFT Avatar.')
             return
         }
