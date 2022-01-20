@@ -69,7 +69,7 @@ export function PreviewDialog(props: PreviewDialogProps) {
     }
 
     const onClick = async () => {
-        type === 'print' ? await onPrint() : await onDownload()
+        type === 'print' ? onPrint() : await onDownload()
         onClose()
     }
 
