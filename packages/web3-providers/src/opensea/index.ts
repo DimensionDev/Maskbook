@@ -61,7 +61,7 @@ function createERC721TokenFromAsset(
     chainId: ChainId,
     asset: OpenSeaResponse,
 ): ERC721TokenDetailed {
-    const imageURL = asset?.image_url ?? asset?.image_preview_url ?? asset?.image_original_url
+    const imageURL = asset?.image_original_url ?? asset?.image_url ?? asset?.image_preview_url ?? ''
     return createERC721Token(
         createERC721ContractFromAssetContract(asset?.asset_contract?.address, chainId, asset?.asset_contract),
         {
