@@ -5,8 +5,7 @@ import type { AvatarMetaDB } from '../types'
 
 export function useNFTAvatar(userId: string): AsyncState<AvatarMetaDB | undefined> {
     return useAsync(async () => {
-        if (!userId) return
-        if (userId === '$unknown') return
+        if (!userId || userId === '$unknown') return
         return PluginNFTAvatarRPC.getNFTAvatar(userId)
     }, [userId])
 }
