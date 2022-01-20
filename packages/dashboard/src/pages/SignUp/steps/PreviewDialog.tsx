@@ -8,7 +8,6 @@ import { useReactToPrint } from 'react-to-print'
 import { toJpeg } from 'html-to-image'
 import { WatermarkURL } from '../../../assets'
 import { useDashboardI18N } from '../../../locales'
-import { delay } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     preview: {
@@ -66,13 +65,12 @@ export function PreviewDialog(props: PreviewDialogProps) {
         const link = document.createElement('a')
         link.download = `mask-persona-${personaName}.jpeg`
         link.href = dataUrl
-        await delay(300)
         link.click()
     }
 
-    const onClick = () => {
+    const onClick = async () => {
+        type === 'print' ? await onPrint() : await onDownload()
         onClose()
-        type === 'print' ? onPrint() : onDownload()
     }
 
     return (
