@@ -37,10 +37,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 24,
         marginRight: 12,
     },
-    title: {
-        minWidth: 80,
-        display: 'inline-block',
-    },
 }))
 
 interface PreviewDialogProps {
@@ -121,22 +117,23 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
                             </Typography>
                         </Box>
 
-                        <Typography fontWeight={600}>
-                            <Typography fontSize={14} fontWeight={600} className={classes.title}>
+                        <Box display="flex" alignItems="center">
+                            <Typography fontSize={14} fontWeight={600} width={88}>
                                 {t.create_account_mask_id()}
                             </Typography>
-                            <span style={{ fontSize: 10, wordBreak: 'break-all', padding: '0 8px' }}>
+                            <Typography fontSize={10} fontWeight={600} sx={{ wordBreak: 'break-all', flex: 1 }}>
                                 {id?.replace('ec_key:secp256k1/', '')}
-                            </span>
-                        </Typography>
+                            </Typography>
+                        </Box>
+
                         <Box display="flex">
-                            <Typography fontSize={14} fontWeight={600} className={classes.title}>
+                            <Typography fontSize={14} fontWeight={600} width={88}>
                                 {t.create_account_private_key()}
                             </Typography>
                             <Typography
                                 fontSize={10}
                                 fontWeight={600}
-                                sx={{ wordBreak: 'break-all', flex: 1, padding: '0 8px' }}>
+                                sx={{ wordBreak: 'break-all', flex: 1, paddingRight: '8px' }}>
                                 {privateKey}
                             </Typography>
                         </Box>
