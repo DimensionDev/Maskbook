@@ -45,7 +45,7 @@ async function _getUserAddress(userId: string, networkPluginId?: NetworkPluginID
         }
         return result.address
     } catch {
-        return
+        return getUserAddressFromGUN(userId)
     }
 }
 
