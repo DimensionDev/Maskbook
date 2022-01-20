@@ -19,24 +19,24 @@ export async function discoverRedPacket(record: RedPacketRecord) {
 export async function getRedPacketHistory(address: string, chainId: ChainId, endBlock: number) {
     const { HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT } = getRedPacketConstants(chainId)
 
-    //#region Get data from thegraph
+    // #region Get data from thegraph
     const redpacketsFromSubgraph = await subgraph.getRedPacketHistory(address, chainId)
-    //#endregion
+    // #endregion
 
-    //#region Get data from chain which has not been synced by thegraph.
+    // #region Get data from chain which has not been synced by thegraph.
     const latestPoolFromSubgraph = redpacketsFromSubgraph[0]
     const startBlockNumberFromChain = getLatestBlockNumberFromSubgraph(
         latestPoolFromSubgraph,
         HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT,
     )
     const redpacketsFromChain = await chain.getRedPacketHistory(chainId, startBlockNumberFromChain, endBlock, address)
-    //#endregion
+    // #endregion
 
     const redpacketsFromNetwork = (
         redpacketsFromChain as (RedPacketJSONPayloadFromChain | RedPacketJSONPayload)[]
     ).concat(redpacketsFromSubgraph)
 
-    //#region Inject password from database
+    // #region Inject password from database
     const redpacketsFromDatabase = await database.getAllRedpackets(redpacketsFromNetwork.map((x) => x.txid))
     return redpacketsFromNetwork.map((x) => {
         const record = redpacketsFromDatabase.find((y) => y.id === x.txid)
@@ -46,7 +46,7 @@ export async function getRedPacketHistory(address: string, chainId: ChainId, end
             password: record.password,
         }
     })
-    //#endregion
+    // #endregion
 }
 
 export async function getNftRedPacketHistory(address: string, chainId: ChainId, page: number) {

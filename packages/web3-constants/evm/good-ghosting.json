@@ -13,7 +13,9 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "GOOD_GHOSTING_INCENTIVES_CONTRACT_ADDRESS": {
         "Mainnet": "",
@@ -29,6 +31,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     }
 }

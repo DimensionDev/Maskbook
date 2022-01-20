@@ -80,7 +80,7 @@ function Content() {
     )
 
     useEffect(() => {
-        setTooltipsVisible(listRef.current.map((element) => (element.offsetWidth === choiceMaxWidth ? true : false)))
+        setTooltipsVisible(listRef.current.map((element) => element.offsetWidth === choiceMaxWidth))
     }, [])
 
     const dataForCsv = useMemo(

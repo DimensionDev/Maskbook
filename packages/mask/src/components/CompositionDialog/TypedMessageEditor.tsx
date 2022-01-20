@@ -7,9 +7,7 @@ import {
 } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { InputBase, Alert, Button } from '@mui/material'
-import { useCallback, useImperativeHandle, useState } from 'react'
-import { useRef } from 'react'
-import { forwardRef, memo } from 'react'
+import { useCallback, useImperativeHandle, useState, useRef, forwardRef, memo } from 'react'
 import { useI18N } from '../../utils'
 import { BadgeRenderer } from './BadgeRenderer'
 

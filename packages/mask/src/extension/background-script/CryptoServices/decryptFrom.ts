@@ -1,6 +1,6 @@
 import * as Alpha40 from '../../../crypto/crypto-alpha-40'
 import * as Alpha39 from '../../../crypto/crypto-alpha-39'
-import { GunAPI as Gun2, GunAPISubscribe as Gun2Subscribe, GunWorker } from '../../../network/gun/'
+import { GunAPI as Gun2, GunAPISubscribe as Gun2Subscribe, GunWorker, GunAPI } from '../../../network/gun/'
 import { decodeText } from '@dimensiondev/kit'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { i18n } from '../../../../shared-ui/locales_legacy'
@@ -19,7 +19,6 @@ import type { TypedMessage, AESJsonWebKey, Payload } from '@masknet/shared-base'
 import stringify from 'json-stable-stringify'
 import type { SharedAESKeyGun2 } from '../../../network/gun/version.2'
 import { MaskMessages } from '../../../utils/messages'
-import { GunAPI } from '../../../network/gun'
 import { Err, Ok, Result } from 'ts-results'
 import { decodeTextPayloadWorker } from '../../../social-network/utils/text-payload-worker'
 import { steganographyDownloadImage } from './utils'
@@ -320,7 +319,7 @@ async function* decryptFromImageUrlWithProgress_raw(
         pass: author.toText(),
         downloadImage: steganographyDownloadImage,
     })
-    if (!post.startsWith('🎼') && !/https:\/\/.+\..+\/(\?PostData_v\d=)?%20(.+)%40/.test(post))
+    if (!post.startsWith('\u{1F3BC}') && !/https:\/\/.+\..+\/(\?PostData_v\d=)?%20(.+)%40/.test(post))
         return makeError(i18n.t('service_decode_image_payload_failed'), true)
     const worker = await Result.wrapAsync(() => getNetworkWorker(author))
     if (worker.err) return makeError(worker.val as Error)

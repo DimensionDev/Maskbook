@@ -20,9 +20,13 @@ import { DecryptPostSuccess, DecryptPostSuccessProps } from './DecryptedPostSucc
 import { DecryptPostAwaiting, DecryptPostAwaitingProps } from './DecryptPostAwaiting'
 import { DecryptPostFailed, DecryptPostFailedProps } from './DecryptPostFailed'
 import { DecryptedPostDebug } from './DecryptedPostDebug'
-import { usePostClaimedAuthor, usePostInfoDetails, usePostInfoSharedPublic } from '../../DataSource/usePostInfo'
+import {
+    usePostClaimedAuthor,
+    usePostInfoDetails,
+    usePostInfoSharedPublic,
+    usePostInfo,
+} from '../../DataSource/usePostInfo'
 import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorHelpers'
-import { usePostInfo } from '../../../components/DataSource/usePostInfo'
 
 function progressReducer(
     state: { key: string; progress: SuccessDecryption | FailureDecryption | DecryptionProgress }[],
@@ -87,15 +91,15 @@ export function DecryptPost(props: DecryptPostProps) {
         }
     }, [props.requestAppendRecipients, postBy, whoAmI])
 
-    //#region Debug info
+    // #region Debug info
     const [debugHash, setDebugHash] = useState<string>('Unknown')
-    //#endregion
+    // #endregion
 
-    //#region Progress
+    // #region Progress
     const [progress, dispatch] = useReducer(progressReducer, [])
-    //#endregion
+    // #endregion
 
-    //#region decrypt
+    // #region decrypt
 
     // pass 1:
     // decrypt post content and image attachments
@@ -179,7 +183,7 @@ export function DecryptPost(props: DecryptPostProps) {
         if (firstSucceedDecrypted?.progress.type !== 'success') return
         onDecrypted(makeTypedMessageTuple([firstSucceedDecrypted.progress.content]))
     }, [firstSucceedDecrypted, onDecrypted])
-    //#endregion
+    // #endregion
 
     // it's not a secret post
     if (!deconstructedPayload.ok && progress.every((x) => x.progress.internal)) return null

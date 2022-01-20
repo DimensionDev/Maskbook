@@ -49,7 +49,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants()
     const chainId = useChainId()
 
-    //#region select token
+    // #region select token
     const [token, setToken] = useState<ERC20TokenDetailed>(tokens[0])
     const [id] = useState(uuid())
     const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
@@ -75,15 +75,15 @@ export function UnlockDialog(props: UnlockDialogProps) {
             },
         })
     }, [id, token?.address])
-    //#endregion
-    //#region amount
+    // #endregion
+    // #region amount
     const [rawAmount, setRawAmount] = useState('')
     const amount = rightShift(rawAmount || '0', token?.decimals)
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
         token?.type ?? EthereumTokenType.Native,
         token?.address ?? '',
     )
-    //#endregion
+    // #endregion
     if (!tokens.length) return <Typography>{t('plugin_ito_empty_token')}</Typography>
     return (
         <div className={classes.root}>

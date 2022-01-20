@@ -91,7 +91,7 @@ export const Upload: React.FC = () => {
                 <FormControlLabel
                     control={
                         <Checkbox
-                            color="secondary"
+                            color="primary"
                             checked={encrypted}
                             onChange={(event) => setEncrypted(event.target.checked)}
                         />
@@ -102,7 +102,7 @@ export const Upload: React.FC = () => {
                 <FormControlLabel
                     control={
                         <Checkbox
-                            color="secondary"
+                            color="primary"
                             checked={useCDN}
                             onChange={(event) => setUseCDN(event.target.checked)}
                         />

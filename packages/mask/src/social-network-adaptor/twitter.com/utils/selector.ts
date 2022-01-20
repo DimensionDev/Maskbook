@@ -13,7 +13,7 @@ const querySelectorAll = <T extends E>(selector: string) => {
     return new LiveSelector().querySelectorAll<T>(selector)
 }
 
-//#region "Enhanced Profile"
+// #region "Enhanced Profile"
 export const searchProfileSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-label][role="navigation"]')
 export const searchProfileTabListLastChildSelector: () => LiveSelector<E, true> = () => {
@@ -71,7 +71,7 @@ export const bioCardSelector = <SingleMode extends boolean = true>(singleMode = 
         ].join(),
         singleMode,
     )
-//#endregion
+// #endregion
 
 export const rootSelector: () => LiveSelector<E, true> = () => querySelector<E>('#react-root')
 
@@ -131,7 +131,7 @@ export const bioPageUserIDSelector = (selector: () => LiveSelector<HTMLSpanEleme
     selector().map((x) => (x.parentElement?.nextElementSibling as HTMLElement).innerText.replace('@', ''))
 export const floatingBioCardSelector = () =>
     querySelector<HTMLSpanElement>(
-        `[style~="left:"] a[role=link] > div:first-child > div:first-child > div:first-child[dir="auto"]`,
+        '[style~="left:"] a[role=link] > div:first-child > div:first-child > div:first-child[dir="auto"]',
     )
 
 export const postsImageSelector = (node: HTMLElement) =>
@@ -199,7 +199,7 @@ export const selfInfoSelectors = () => ({
     userAvatar: p(avatar, 1),
 })
 
-//#region nft avatar
+// #region nft avatar
 export const searchProfileAvatarSelector = () => {
     return querySelectorAll<E>('[data-testid="fileInput"]').at(1).closest<E>(4)
 }
@@ -230,19 +230,19 @@ export const searchProfileSetAvatarSelector = () =>
               .closest<E>(4)
               .querySelector('div > div:nth-child(2) >div > div:nth-child(2)')
         : searchProfessionalButtonSelector().closest<E>(3).querySelector('div > div:nth-child(2) > div:nth-child(2)')
-//#endregion
+// #endregion
 
-//#region avatar selector
+// #region avatar selector
 export const searchTwitterAvatarLinkSelector: () => LiveSelector<E, true> = () =>
     querySelector<E, true>('[data-testid="UserProfileHeader_Items"]').closest<E>(2).querySelector('div  a')
 
 export const searchTwitterAvatarSelector = () =>
     querySelector<E, true>('[data-testid="UserProfileHeader_Items"]').closest<E>(2).querySelector('img').closest<E>(1)
-//#endregion
+// #endregion
 
-//#region twitter avatar
+// #region twitter avatar
 export const searchUseCellSelector = () => querySelector<E>('[data-testid="UserCell"]')
-//#endregion
+// #endregion
 
 export const searchTweetAvatarSelector = () =>
     querySelector<E, false>('[data-testid="tweetButtonInline"]').closest<E>(7)
