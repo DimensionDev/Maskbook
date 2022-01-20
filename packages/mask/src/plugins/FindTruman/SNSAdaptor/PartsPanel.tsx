@@ -73,7 +73,7 @@ const useStyles = makeStyles()((theme, props) => ({
         zIndex: 1,
     },
     ribbonContentGray: {
-        backgroundColor: '#bfbfbf',
+        backgroundColor: '#8c8c8c',
     },
     cover: {
         width: '120px',
@@ -111,6 +111,11 @@ export default function PartsPanel(props: PartsPanelProps) {
                 </Grid>
             ) : partsInfo ? (
                 <Grid alignItems="center" container spacing={2}>
+                    {partsInfo.quests.map((quest) => (
+                        <Grid key={quest.id} item xs={3}>
+                            <QuestItem quest={quest} />
+                        </Grid>
+                    ))}
                     {partsInfo.boxes.map((box) => (
                         <Grid key={box.id} item xs={3}>
                             <MysteryBoxItem account={account} onOpened={() => retry()} box={box} />
@@ -119,11 +124,6 @@ export default function PartsPanel(props: PartsPanelProps) {
                     {partsInfo.parts.map((part) => (
                         <Grid key={part.tokenId} item xs={3}>
                             <PartItem part={part} />
-                        </Grid>
-                    ))}
-                    {partsInfo.quests.map((quest) => (
-                        <Grid key={quest.id} item xs={3}>
-                            <QuestItem quest={quest} />
                         </Grid>
                     ))}
                 </Grid>
@@ -191,9 +191,6 @@ function QuestItem(props: { quest: Quest }) {
 
     return (
         <div>
-            <Typography textAlign="center" variant="body2" color="text.secondary" gutterBottom>
-                {formatDateTime(new Date(quest.startFrom), 'yyyy-MM-dd')}
-            </Typography>
             <div className={classes.ribbonWrapper}>
                 <img className={classes.cover} src={consts?.boxImg} />
                 <div className={cx(classes.ribbon, classes.ribbonGray)}>
@@ -249,7 +246,7 @@ function MysteryBoxItem(props: { account: string; box: MysteryBox; onOpened: () 
                 </div>
             </div>
             {box.isOpened ? (
-                <Box height="30px">
+                <Box display="flex" alignItems="center" height="30px">
                     <Chip size="small" label={getPartName(t, box.partType)} color="primary" />
                 </Box>
             ) : (
