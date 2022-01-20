@@ -3,8 +3,7 @@ import type { Part } from '../types'
 import type { SxProps } from '@mui/system'
 import type { Theme } from '@mui/material/styles'
 import { makeStyles } from '@masknet/theme'
-import { useContext } from 'react'
-import { FindTrumanContext } from '../context'
+import { PartType } from '../types'
 
 const useStyles = makeStyles()((theme, props) => ({
     box: {
@@ -27,6 +26,14 @@ const useStyles = makeStyles()((theme, props) => ({
     },
 }))
 
+const PartZIndex: Record<PartType, number> = {
+    [PartType.Background]: 1,
+    [PartType.Skin]: 2,
+    [PartType.Clothes]: 3,
+    [PartType.Head]: 4,
+    [PartType.Mask]: 5,
+}
+
 interface FusionFtgProps {
     parts: Part[]
     sx?: SxProps<Theme>
@@ -34,14 +41,17 @@ interface FusionFtgProps {
 export default function FusionFtg(props: FusionFtgProps) {
     const { parts, sx } = props
     const { classes } = useStyles()
-    const { const: consts } = useContext(FindTrumanContext)
 
     return (
         <Box className={classes.box} sx={{ ...sx }}>
-            {parts.map((part, index) => (
-                <img className={classes.part} key={part.tokenId} src={part.img} style={{ zIndex: index + 1 }} />
+            {parts.map((part) => (
+                <img
+                    className={classes.part}
+                    key={part.tokenId}
+                    src={part.img}
+                    style={{ zIndex: PartZIndex[part.type] }}
+                />
             ))}
-            <img className={classes.part} src={consts?.ftgPartLogoImg} style={{ zIndex: 10 }} />
         </Box>
     )
 }
