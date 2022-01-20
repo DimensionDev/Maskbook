@@ -7,7 +7,7 @@ export enum PostType {
     Encryption = 'encryption',
 }
 
-export type FindTrumanI18nFunction = (id: string) => string
+export type FindTrumanI18nFunction = (id: string, options?: { [key: string]: string | number }) => string
 
 export interface ProposalIdentifier {
     address: string

@@ -174,13 +174,13 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     )
     // #endregion
 
-    //#region FindTruman
+    // #region FindTruman
     const {
         open: isFindTrumanDialogOpen,
         onOpen: onFindTrumanDialogOpen,
         onClose: onFindTrumanDialogClose,
     } = useControlledDialog()
-    //#endregion
+    // #endregion
 
     function createEntry(
         title: string,
