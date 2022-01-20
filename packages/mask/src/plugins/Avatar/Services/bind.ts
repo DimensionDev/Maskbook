@@ -87,6 +87,6 @@ export async function setUserAddress(
     } finally {
         const _address = await getUserAddress(userId, networkPluginId, chainId)
         if (!isSameAddress(_address, address))
-            throw new Error('Something went wrong, and please check your connection.')
+            throw new Error('Network issues, please make sure you are connected to the appropriate internet.')
     }
 }
