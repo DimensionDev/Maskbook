@@ -128,6 +128,7 @@ export function SavingsTable({ chainId, tab, mappableProtocols, setSelectedProto
                                         value={protocol.balance}
                                         decimals={protocol.decimals}
                                         significant={6}
+                                        minimumBalance={0.000001}
                                         formatter={formatBalance}
                                     />
                                 </Typography>

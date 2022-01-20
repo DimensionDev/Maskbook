@@ -13,13 +13,22 @@ export interface FormattedBalanceProps extends withClasses<'balance' | 'symbol'>
     decimals?: number
     significant?: number
     symbol?: string
+    minimumBalance?: number
     formatter?: (value: BigNumber.Value, decimals?: number, significant?: number) => string
 }
 
 export const FormattedBalance: FC<FormattedBalanceProps> = (props) => {
-    const { value, decimals, significant, symbol, formatter = (value) => value } = props
-    const formatted = formatter(value ?? '0', decimals, significant)
+    const { value, decimals, significant, symbol, minimumBalance, formatter = (value) => value } = props
+    const formatted =
+        Number(formatter(value ?? '0', decimals, significant)) === 0
+            ? '0'
+            : minimumBalance
+            ? Number(formatter(value ?? '0', decimals, significant)) < minimumBalance
+                ? '<' + minimumBalance.toString()
+                : formatter(value ?? '0', decimals, significant)
+            : formatter(value ?? '0', decimals, significant)
     const classes = useStylesExtends(useStyles(), props)
+
     if (symbol)
         return (
             <Fragment>

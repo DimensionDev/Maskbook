@@ -13,7 +13,9 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "LIDO_STETH": {
         "Mainnet": "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84",
@@ -29,7 +31,9 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "LIDO_REFERRAL_ADDRESS": {
         "Mainnet": "0x278D7e418a28ff763eEeDf29238CD6dfcade3A3a",
@@ -45,6 +49,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     }
 }
