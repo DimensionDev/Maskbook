@@ -4,8 +4,6 @@ import classNames from 'classnames'
 import { useI18N } from '../../../utils'
 import type { OwnerERC721TokenInfo } from '../types'
 import ModelView from './ModelView'
-import { useState } from 'react'
-import { GlbTransferIcon, Punk3D } from '../constants'
 
 export const useStyles = makeStyles()((theme) => ({
     box: {
@@ -115,17 +113,11 @@ interface Props {
     message?: string
     imageUrl?: string
     tokenInfo?: OwnerERC721TokenInfo | null
-    glbTransferHandle?: (transfer: boolean) => void
 }
 
 export function PreviewBox(props: Props) {
     const classes = useStylesExtends(useStyles(), {})
     const { t } = useI18N()
-    const [glbShow, setGlbShow] = useState(false)
-    const handleGLBTransfer = () => {
-        setGlbShow(!glbShow)
-        props.glbTransferHandle?.(!glbShow)
-    }
     return (
         <div className={classes.box}>
             {props.message && (
@@ -138,13 +130,13 @@ export function PreviewBox(props: Props) {
                 </div>
             )}
             {props.imageUrl &&
-                (glbShow ? (
+                (props.tokenInfo?.glbSupport ? (
                     <ModelView
                         styleContent={{
                             width: '100%',
                             height: 150,
                         }}
-                        source={Punk3D.url}
+                        source={props.imageUrl}
                     />
                 ) : (
                     <img className={classes.image} src={props.imageUrl} />
@@ -154,9 +146,6 @@ export function PreviewBox(props: Props) {
                     <Typography color="textPrimary">{t('plugin_pets_dialog_preview')}</Typography>
                 </div>
             )}
-            {props.tokenInfo?.glbSupport ? (
-                <img src={GlbTransferIcon} className={classes.glbTransfer} onClick={handleGLBTransfer} />
-            ) : null}
         </div>
     )
 }

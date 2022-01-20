@@ -7,7 +7,7 @@ import { TextField, Typography, Box, DialogContent, Grid, MenuItem, Snackbar, Au
 import { LoadingButton } from '@mui/lab'
 import { PluginPetMessages, PluginPetRPC } from '../messages'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { initMeta, initCollection, Punk3D, GLB3DIcon } from '../constants'
+import { initMeta, initCollection, GLB3DIcon } from '../constants'
 import { PreviewBox } from './PreviewBox'
 import { PetMetaDB, FilterContract, OwnerERC721TokenInfo, ImageType } from '../types'
 import { useUser, useNFTs, useNFTsExtra } from '../hooks'
@@ -161,6 +161,7 @@ export function PetDialog() {
             userId: user.userId,
             tokenId: v?.tokenId ?? '',
             image: v?.mediaUrl ?? '',
+            type: v?.glbSupport ? ImageType.GLB : ImageType.NORMAL,
         })
         setImageError(false)
     }
@@ -169,14 +170,6 @@ export function PetDialog() {
         if (v.length <= 100) {
             setMetaData({ ...metaData, word: v })
         }
-    }
-
-    const setGlbSelect = (select: boolean) => {
-        setMetaData({
-            ...metaData,
-            image: select ? Punk3D.url : tokenInfoSelect?.mediaUrl ?? '',
-            type: select ? ImageType.GLB : ImageType.NORMAL,
-        })
     }
 
     const imageChose = useMemo(() => {
@@ -240,7 +233,7 @@ export function PetDialog() {
                 PopperComponent={ShadowRootPopper}
                 renderOption={(props, option) => (
                     <Box component="li" className={classes.itemFix} {...props}>
-                        <img className={classes.thumbnail} src={option.mediaUrl} />
+                        {!option.glbSupport ? <img className={classes.thumbnail} src={option.mediaUrl} /> : null}
                         <Typography>{option.name}</Typography>
                         {option.glbSupport ? <img className={classes.glbIcon} src={GLB3DIcon} /> : null}
                     </Box>
@@ -265,12 +258,7 @@ export function PetDialog() {
                 <DialogContent>
                     <Grid container spacing={2}>
                         <Grid item xs={4}>
-                            <PreviewBox
-                                message={metaData.word}
-                                imageUrl={imageChose}
-                                tokenInfo={tokenInfoSelect}
-                                glbTransferHandle={setGlbSelect}
-                            />
+                            <PreviewBox message={metaData.word} imageUrl={imageChose} tokenInfo={tokenInfoSelect} />
                         </Grid>
                         <Grid item xs={8}>
                             {nftsRender}

@@ -41,8 +41,12 @@ export function useNFTs(user: User | undefined, configNFTs: Record<string, Const
             for (const NFT of total) {
                 const sameNFT = tempNFTs.find((temp) => isSameAddress(temp.contract, NFT.contractDetailed.address))
                 if (!sameNFT) continue
-                const glbSupport =
+                const isPunk =
                     isSameAddress(NFT.contractDetailed.address, Punk3D.contract) && NFT.tokenId === Punk3D.tokenId
+                if (isPunk) {
+                    NFT.info.mediaUrl = Punk3D.url
+                }
+                const glbSupport = NFT.info.mediaUrl?.endsWith('.glb') || isPunk
                 const item = { ...NFT.info, tokenId: NFT.tokenId, glbSupport }
                 const sameTokenIndex = findLastIndex(sameNFT.tokens, (v) => v.tokenId === NFT.tokenId)
                 if (sameTokenIndex === -1) {

@@ -5,7 +5,7 @@ import classNames from 'classnames'
 import Drag from './Drag'
 import ModelView from './ModelView'
 import { useStyles as boxUseStyles } from './PreviewBox'
-import { DragIcon, Punk3D } from '../constants'
+import { DragIcon } from '../constants'
 import type { ShowMeta } from '../types'
 
 const useStyles = makeStyles()(() => ({
@@ -51,7 +51,7 @@ export function ModelNFT(props: ModelNFTProps) {
                     width: 250,
                     height: 300,
                 }}
-                source={Punk3D.url}
+                source={showMeta?.image ?? ''}
             />
             <Drag moveHandle={moveHandle} baseWidth={40} baseHeight={40}>
                 <div style={{ position: 'absolute' }}>

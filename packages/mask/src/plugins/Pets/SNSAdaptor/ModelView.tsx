@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react'
 import '@webcomponents/custom-elements'
 import '@google/model-viewer/dist/model-viewer'
+import { Punk3D } from '../constants'
 
 declare global {
     namespace JSX {
@@ -20,7 +21,7 @@ const ModelView = (props: ModelViewProps) => {
     return (
         <div style={styleContent}>
             <model-viewer
-                style={{ width: '90%', height: '100%', top: '5%', margin: 'auto' }}
+                style={{ width: '90%', height: '100%', top: source === Punk3D.url ? '5%' : 0, margin: 'auto' }}
                 src={source}
                 shadow-intensity="1"
                 camera-controls
