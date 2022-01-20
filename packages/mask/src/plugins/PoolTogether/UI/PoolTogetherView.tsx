@@ -110,12 +110,12 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
     const { classes } = useStyles()
     const [pools, setPools] = useState<Pool[]>([])
 
-    //#region pools
+    // #region pools
     const { value: _pools = [], error: error, loading: loading, retry: retry } = usePools()
     _pools.sort((x, y) => Number(y.prize.weeklyTotalValueUsd) - Number(x.prize.weeklyTotalValueUsd))
-    //#endregion
+    // #endregion
 
-    //#region mask pool
+    // #region mask pool
     const { MASK_POOL_ADDRESS, MASK_POOL_SUBGRAPH } = usePoolTogetherConstants()
     const {
         value: maskPool,
@@ -123,15 +123,15 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
         loading: loadingMask,
         retry: retryMask,
     } = usePool(MASK_POOL_ADDRESS, MASK_POOL_SUBGRAPH, true)
-    //#endregion
+    // #endregion
 
-    //#region tabs
+    // #region tabs
     const [tabIndex, setTabIndex] = useState(0)
     const tabs = [
         <Tab className={classes.tab} key="pools" label={t('plugin_pooltogether_tab_pools')} />,
         <Tab className={classes.tab} key="account" label={t('plugin_pooltogether_tab_account')} />,
     ].filter(Boolean)
-    //#endregion
+    // #endregion
 
     useEffect(() => {
         if (maskPool) {

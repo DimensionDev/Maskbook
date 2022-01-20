@@ -29,7 +29,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
     const [availableDataProviders, setAvailableDataProviders] = useState<DataProvider[]>([])
     const [availableTradeProviders, setAvailableTradeProviders] = useState<TradeProvider[]>([])
 
-    //#region select token and provider dialog could be open by trending view
+    // #region select token and provider dialog could be open by trending view
     const onFreezed = useCallback((ev) => setFreezed(ev.open), [])
     useRemoteControlledDialog(WalletMessages.events.transactionDialogUpdated, onFreezed)
     useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated, onFreezed)
@@ -39,9 +39,9 @@ export function TrendingPopper(props: TrendingPopperProps) {
     useRemoteControlledDialog(WalletMessages.events.walletConnectQRCodeDialogUpdated, onFreezed)
     useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated, onFreezed)
     useRemoteControlledDialog(PluginTraderMessages.swapSettingsUpdated, onFreezed)
-    //#endregion
+    // #endregion
 
-    //#region open or close popper
+    // #region open or close popper
     // open popper from message center
     useEffect(
         () =>
@@ -83,7 +83,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
         )
             setAnchorEl(null)
     }, [anchorEl, Math.floor(position.y / 50)])
-    //#endregion
+    // #endregion
 
     if (locked) return null
     if (!anchorEl || !type) return null

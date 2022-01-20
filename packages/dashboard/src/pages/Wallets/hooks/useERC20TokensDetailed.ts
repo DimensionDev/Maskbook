@@ -16,9 +16,9 @@ export function useERC20TokensDetailed() {
     const { value: erc20TokensDetailed = [], loading: erc20TokensDetailedLoading } =
         useERC20TokensDetailedFromTokenLists(ERC20)
 
-    //#region mask token
+    // #region mask token
     const { MASK_ADDRESS } = useTokenConstants()
-    //#endregion
+    // #endregion
 
     const tokens = useMemo(
         () =>

@@ -144,20 +144,20 @@ export function Collectible(props: CollectibleProps) {
     const chainId = useChainId()
     const { token, asset, provider, tabIndex, setTabIndex } = CollectibleState.useContainer()
 
-    //#region sync with settings
+    // #region sync with settings
     const collectibleProviderOptions = getEnumAsArray(NonFungibleAssetProvider)
     const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
         currentNonFungibleAssetProviderSettings.value = option.value as NonFungibleAssetProvider
     }, [])
-    //#endregion
+    // #endregion
 
-    //#region provider switcher
+    // #region provider switcher
     const CollectibleProviderSwitcher = useSettingsSwitcher(
         currentNonFungibleAssetProviderSettings,
         getEnumAsArray(NonFungibleAssetProvider).map((x) => x.value),
         resolveCollectibleProviderName,
     )
-    //#endregion
+    // #endregion
 
     if (!asset.value || !token)
         return (
