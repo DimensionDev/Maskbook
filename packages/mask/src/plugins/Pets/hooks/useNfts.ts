@@ -74,7 +74,7 @@ export function useNFTsExtra(configNFTs: Record<string, Constant> | undefined) {
         if (!extra.length) {
             requests = initContracts.map((nft) => OpenSea.getContract(nft.contract, chainId))
         } else {
-            //openSea api request should not immediately
+            // openSea api request should not immediately
             await delay(3000)
             requests = extra.map((nft, index) => {
                 if (nft.symbol && nft.name !== 'Unknown Token') {
