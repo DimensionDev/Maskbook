@@ -260,7 +260,7 @@ function ContractListItem(props: ContractListItemProps) {
     return (
         <div style={{ position: 'relative' }}>
             <ListItem className={classes.listItem} onClick={() => onSubmit(contract.contractDetailed)}>
-                <img className={classes.icon} src={contract.contractDetailed.iconURL ?? blockie} />
+                <img className={classes.icon} src={contract.contractDetailed.iconURL || blockie} />
 
                 <Typography className={classes.contractName}>
                     {contract.contractDetailed.name}{' '}
