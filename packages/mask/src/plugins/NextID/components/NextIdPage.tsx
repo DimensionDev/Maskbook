@@ -4,11 +4,11 @@ import { Box, Button, Skeleton, Stack, Typography } from '@mui/material'
 import { useState } from 'react'
 import { BindDialog } from './BindDialog'
 import { useAsync, useAsyncRetry, useCounter } from 'react-use'
-import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
 import Services from '../../../extension/service'
 import { BindingItem } from './BindingItem'
 import type { Platform } from '../types'
 import { UnBindDialog } from './UnBindDialog'
+import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 
 const useStyles = makeStyles()((theme) => ({
     tip: {
@@ -33,16 +33,21 @@ interface NextIDPageProps {}
 export function NextIdPage({}: NextIDPageProps) {
     const t = useI18N()
     const { classes } = useStyles()
+    const currentProfileIdentifier = useLastRecognizedIdentity()
+
     const [openBindDialog, toggleBindDialog] = useState(false)
     const [unbindAddress, setUnBindAddress] = useState<string>()
     const [count, { inc }] = useCounter(0)
-    const personas = useMyPersonas()
 
     const { value: currentIdentifier, loading: loadingIdentifier } = useAsyncRetry(
         () => Services.Settings.getCurrentPersonaIdentifier(),
         [],
     )
-    const currentPersona = personas.find((x) => x.identifier.equals(currentIdentifier))
+
+    const { value: currentPersona } = useAsyncRetry(() => {
+        if (!currentProfileIdentifier) return Promise.resolve(undefined)
+        return Services.Identity.queryPersonaByProfile(currentProfileIdentifier.identifier)
+    }, [currentProfileIdentifier])
 
     const { value: bindings, loading } = useAsync(() => {
         if (!currentIdentifier) return Promise.resolve(null)

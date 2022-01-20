@@ -125,7 +125,7 @@ const PersonaSignRequest = memo(() => {
         <main className={classes.container}>
             <div className={classes.info}>
                 <Typography className={classes.title}>{t('popups_persona_sign_request_title')}</Typography>
-                <Typography className={classes.personaName}>{t('popups_persona_sign_request_persona_name')}</Typography>
+                <Typography className={classes.personaName}>{selected?.nickname}</Typography>
                 <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
                     {selected?.fingerprint}
                 </Typography>

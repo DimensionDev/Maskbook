@@ -8,7 +8,6 @@ import {
     personaRecordToPersona,
     queryAvatarDataURL,
     queryPersona,
-    queryPersonaRecord,
     queryPostPagedDB,
     queryProfile,
     queryProfilesWithQuery,
@@ -62,7 +61,7 @@ assertEnvironment(Environment.ManifestBackground)
 export { validateMnemonic } from '../../utils/mnemonic-code'
 
 // #region Profile
-export { queryProfile, queryProfilePaged } from '../../database'
+export { queryProfile, queryProfilePaged, queryPersonaByProfile } from '../../database'
 
 export function queryProfiles(network?: string): Promise<Profile[]> {
     return queryProfilesWithQuery(network)
