@@ -1,9 +1,9 @@
-import BigNumber from 'bignumber.js'
 import { useAsync } from 'react-use'
 import { Box, Grid, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { FormattedBalance } from '@masknet/shared'
 import { useWeb3, useAccount, formatBalance } from '@masknet/web3-shared-evm'
+import { isZero, leftShift } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { IconURLs } from './IconURL'
 import { useI18N } from '../../../utils'
@@ -128,7 +128,7 @@ export function SavingsTable({ chainId, tab, mappableProtocols, setSelectedProto
                                         value={protocol.balance}
                                         decimals={protocol.decimals}
                                         significant={6}
-                                        minimumBalance={0.000001}
+                                        minimumBalance={leftShift(10, protocol.decimals - 6)}
                                         formatter={formatBalance}
                                     />
                                 </Typography>
@@ -137,9 +137,7 @@ export function SavingsTable({ chainId, tab, mappableProtocols, setSelectedProto
                                 <Button
                                     variant="contained"
                                     color="primary"
-                                    disabled={
-                                        tab === TabType.Withdraw ? new BigNumber(protocol.balance).isZero() : false
-                                    }
+                                    disabled={tab === TabType.Withdraw ? isZero(protocol.balance) : false}
                                     onClick={() => {
                                         setSelectedProtocol(protocol.type)
                                         setTab(tab)

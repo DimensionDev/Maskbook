@@ -7,6 +7,7 @@
     "@masknet/icons": "workspace:*",
     "@masknet/shared-base": "workspace:*",
     "@masknet/theme": "workspace:*",
+    "@masknet/web3-shared-base": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
     "anchorme": "^2.1.2",
     "bignumber.js": "^9.0.2",

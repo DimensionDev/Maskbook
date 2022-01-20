@@ -49,7 +49,7 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
 
     const { value: nativeTokenBalance } = useFungibleTokenBalance(EthereumTokenType.Native, '', targetChainId)
 
-    //#region form variables
+    // #region form variables
     const tokenAmount = new BigNumber(rightShift(inputAmount || '0', 18))
     const inputAsBN = new BigNumber(rightShift(inputAmount, 18))
     const balanceAsBN = TabType.Deposit ? new BigNumber(nativeTokenBalance || '0') : protocol.balance
@@ -64,9 +64,9 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
         setEstimatedGas(gasEstimate)
         setLoading(false)
     }, [protocol, chainId, inputAmount])
-    //#endregion
+    // #endregion
 
-    //#region form validation
+    // #region form validation
     const validationMessage = useMemo(() => {
         if (tokenAmount.isZero() || !inputAmount) return t('plugin_trader_error_amount_absence')
         if (isLessThan(inputAsBN, 0)) return t('plugin_trade_error_input_amount_less_minimum_amount')
@@ -83,16 +83,16 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
     const tokenPrice = useTokenPrice(chainId, undefined)
 
     const tokenValueUSD = useMemo(
-        () => (inputAmount ? new BigNumber(inputAmount).times(tokenPrice).toFixed(2).toString() : '0'),
+        () => (inputAmount ? new BigNumber(inputAmount).times(tokenPrice).toFixed(2) : '0'),
         [inputAmount, tokenPrice],
     )
-    //#endregion
+    // #endregion
 
-    //#region trade state
+    // #region trade state
     const {
         tradeState: [_, dispatchTradeStore],
     } = AllProviderTradeContext.useContainer()
-    //#endregion
+    // #endregion
 
     const needsSwap = protocol.type === ProtocolType.Lido && tab === TabType.Withdraw
 
@@ -120,7 +120,7 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
                         </Typography>
                     ) : (
                         <Typography variant="body2" textAlign="right" className={classes.tokenValueUSD}>
-                            ≈ <FormattedCurrency value={tokenValueUSD} sign="$" formatter={formatCurrency} />
+                            &asymp; <FormattedCurrency value={tokenValueUSD} sign="$" formatter={formatCurrency} />
                             {estimatedGas > 0 ? (
                                 <span className={classes.gasFee}>+ {formatBalance(estimatedGas, 18)} ETH</span>
                             ) : (

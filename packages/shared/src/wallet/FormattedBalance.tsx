@@ -1,5 +1,6 @@
 import { FC, Fragment } from 'react'
 import type { BigNumber } from 'bignumber.js'
+import { isZero, isLessThan } from '@masknet/web3-shared-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
@@ -13,20 +14,16 @@ export interface FormattedBalanceProps extends withClasses<'balance' | 'symbol'>
     decimals?: number
     significant?: number
     symbol?: string
-    minimumBalance?: number
+    minimumBalance?: BigNumber.Value
     formatter?: (value: BigNumber.Value, decimals?: number, significant?: number) => string
 }
 
 export const FormattedBalance: FC<FormattedBalanceProps> = (props) => {
     const { value, decimals, significant, symbol, minimumBalance, formatter = (value) => value } = props
-    const formatted =
-        Number(formatter(value ?? '0', decimals, significant)) === 0
-            ? '0'
-            : minimumBalance
-            ? Number(formatter(value ?? '0', decimals, significant)) < minimumBalance
-                ? '<' + minimumBalance.toString()
-                : formatter(value ?? '0', decimals, significant)
-            : formatter(value ?? '0', decimals, significant)
+    let formatted = formatter(value ?? '0', decimals, significant)
+    if (minimumBalance && value && !isZero(formatted) && isLessThan(value, minimumBalance)) {
+        formatted = '<' + formatter(minimumBalance, decimals, significant)
+    }
     const classes = useStylesExtends(useStyles(), props)
 
     if (symbol)
