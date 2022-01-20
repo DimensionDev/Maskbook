@@ -51,7 +51,6 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
         case NetworkType.Boba:
         case NetworkType.Fuse:
         case NetworkType.Metis:
-        case NetworkType.Avalanche:
         case NetworkType.Optimistic:
             console.error('To be implement network: ', networkType)
             return []
