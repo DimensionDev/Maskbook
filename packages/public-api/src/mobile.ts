@@ -1,4 +1,12 @@
-import type { JsonRpcPayload, JsonRpcResponse, PersonaRecord, PageOption, ProfileRecord } from './types'
+import type {
+    JsonRpcPayload,
+    JsonRpcResponse,
+    PersonaRecord,
+    PageOption,
+    ProfileRecord,
+    LinkedProfileDetails,
+    RelationRecord,
+} from './types'
 
 /**
  * APIs that both Android and iOS implements and have the same API signature
@@ -14,6 +22,7 @@ export interface SharedNativeAPIs {
     /**
      * DB JSON RPC
      */
+    create_persona(params: { persona: PersonaRecord }): Promise<PersonaRecord | undefined>
     query_persona(params: {
         identifier?: string
         hasPrivateKey?: boolean
@@ -28,35 +37,66 @@ export interface SharedNativeAPIs {
         nameContains?: string
         pageOption?: PageOption
     }): Promise<PersonaRecord[]>
+    query_persona_by_profile(params: {
+        options?: {
+            profileIdentifier: string
+            hasPrivateKey?: boolean
+            includeLogout?: boolean
+            nameContains?: string
+            pageOption?: PageOption
+        }
+    }): Promise<PersonaRecord | undefined>
     update_persona(params: {
-        persona: PersonaRecord
-        options: {
+        persona: Partial<PersonaRecord>
+        options?: {
             linkedProfileMergePolicy?: 0 | 1
             deleteUndefinedFields?: boolean
             protectPrivateKey?: boolean
             createWhenNotExist?: boolean
         }
     }): Promise<void>
-    delete_persona(params: { identifier: string; options: { safeDelete?: boolean } }): Promise<void>
+    delete_persona(params: { identifier: string; options?: { safeDelete?: boolean } }): Promise<void>
+    create_profile(params: { profile: ProfileRecord }): Promise<ProfileRecord | undefined>
+    query_profile(params: {
+        options?: {
+            identifier: string
+            network?: string
+            nameContains?: string
+            pageOption?: PageOption
+        }
+    }): Promise<ProfileRecord | undefined>
     query_profiles(params: {
-        identifier?: string
+        identifiers?: string[]
         network?: string
         nameContains?: string
-        pageOption: PageOption
-    }): Promise<ProfileRecord>
+        hasLinkedPersona?: boolean
+        pageOption?: PageOption
+    }): Promise<ProfileRecord[]>
     update_profile(params: {
-        profile: ProfileRecord
-        options: {
+        profile: Partial<ProfileRecord>
+        options?: {
             createWhenNotExist?: boolean
         }
     }): Promise<void>
     delete_profile(params: { identifier: string }): Promise<void>
-    attachProfile(params: {
+    attach_profile(params: {
         profileIdentifier: string
         personaIdentifier: string
-        state: string // ?
+        state: LinkedProfileDetails
     }): Promise<void>
-    deattachProfile(params: { identifier: string }): Promise<void>
+    detach_profile(params: { identifier: string }): Promise<void>
+    create_relation(params: { relation: Omit<RelationRecord, 'network'> }): Promise<RelationRecord | undefined>
+    query_relations(params: {
+        options?: {
+            personaIdentifier?: string
+            network?: string
+            nameContains?: string
+            favor?: string
+            pageOption?: PageOption
+        }
+    }): Promise<RelationRecord[]>
+    update_relation(params: { relation: Omit<RelationRecord, 'network'> }): Promise<RelationRecord>
+    delete_relation(params: { personaIdentifier: string; profileIdentifier: string }): Promise<void>
 }
 /**
  * APIs that only implemented by iOS Mask Network

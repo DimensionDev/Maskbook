@@ -65,11 +65,11 @@ export { validateMnemonic } from '../../utils/mnemonic-code'
 export { queryProfile, queryProfilePaged } from '../../database'
 
 export function queryProfiles(network?: string): Promise<Profile[]> {
-    return queryProfilesWithQuery(network)
+    return queryProfilesWithQuery({ network })
 }
 
 export function queryProfilesWithIdentifiers(identifiers: ProfileIdentifier[]) {
-    return queryProfilesWithQuery((record) => identifiers.some((x) => record.identifier.equals(x)))
+    return queryProfilesWithQuery({ identifiers })
 }
 export async function queryMyProfiles(network?: string): Promise<Profile[]> {
     const myPersonas = (await queryMyPersonas(network)).filter((x) => !x.uninitialized)
@@ -304,10 +304,15 @@ export async function createNewRelation(
     await createRelationDB({ profile, linked, favor }, t)
 }
 
+export async function queryRelations(): Promise<RelationRecord[]> {
+    return queryRelations()
+}
+
 export async function queryRelationPaged(
     options: {
         network: string
         after?: RelationRecord
+        pageOffset?: number
     },
     count: number,
 ): Promise<RelationRecord[]> {
@@ -332,7 +337,7 @@ export async function resolveIdentity(identifier: ProfileIdentifier): Promise<vo
     const unknown = new ProfileIdentifier(identifier.network, '$unknown')
     const self = new ProfileIdentifier(identifier.network, '$self')
 
-    const r = await queryProfilesDB((x) => x.identifier.equals(unknown) || x.identifier.equals(self))
+    const r = await queryProfilesDB({ identifiers: [unknown, self] })
     if (!r.length) return
     const final = {
         ...r.reduce((p, c) => ({ ...p, ...c })),

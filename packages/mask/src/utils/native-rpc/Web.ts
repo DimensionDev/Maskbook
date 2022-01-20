@@ -340,6 +340,20 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         const { activatedSocialNetworkUI } = await import('../../social-network')
         return activatedSocialNetworkUI.collecting.identityProvider?.recognized.value.identifier.toText()
     },
+    get_all_indexedDB_records: async () => {
+        const personas = await Services.Identity.queryPersonas()
+        const profiles = await Services.Identity.queryProfiles()
+        const relations = await Services.Identity.queryRelations()
+        return {
+            personas: personas.map(personaFormatter),
+            profiles: profiles.map(profileFormatter),
+            relations: relations.map((x) => ({
+                ...x,
+                profile: x.profile.toText(),
+                linked: x.linked.toText(),
+            })),
+        }
+    },
 }
 
 function wrapWithAssert(env: Environment, f: Function) {

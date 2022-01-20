@@ -84,11 +84,9 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
 
     async function backProfiles(of?: ProfileIdentifier[]) {
         const data = (
-            await queryProfilesDB((p) => {
-                if (of === undefined) return true
-                if (!of.some((x) => x.equals(p.identifier))) return false
-                if (!p.linkedPersona) return false
-                return true
+            await queryProfilesDB({
+                identifiers: of,
+                hasLinkedPersona: true,
             })
         ).map(ProfileRecordToJSONFormat)
         profiles.push(...data)

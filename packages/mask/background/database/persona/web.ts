@@ -382,19 +382,29 @@ export async function queryProfileDB(
  * Query many profiles.
  */
 export async function queryProfilesDB(
-    network: string | ((record: ProfileRecord) => boolean),
+    query: {
+        network?: string
+        identifiers?: ProfileIdentifier[]
+        hasLinkedPersona?: boolean
+    },
     t?: ProfileTransaction<'readonly'>,
 ): Promise<ProfileRecord[]> {
     t = t || createTransaction(await db(), 'readonly')('profiles')
     const result: ProfileRecord[] = []
-    if (typeof network === 'string') {
-        result.push(
-            ...(await t.objectStore('profiles').index('network').getAll(IDBKeyRange.only(network))).map(profileOutDB),
-        )
-    } else {
+
+    if (query.network) {
+        const results = await t.objectStore('profiles').index('network').getAll(IDBKeyRange.only(query.network))
+
+        results.forEach((each) => {
+            const out = profileOutDB(each)
+            if (query.hasLinkedPersona && !out.linkedPersona) return
+            result.push(out)
+        })
+    } else if (query.identifiers?.length) {
         for await (const each of t.objectStore('profiles').iterate()) {
             const out = profileOutDB(each.value)
-            if (network(out)) result.push(out)
+            if (query.hasLinkedPersona && !out.linkedPersona) continue
+            if (query.identifiers.some((x) => out.identifier.equals(x))) result.push(out)
         }
     }
     return result
@@ -410,6 +420,11 @@ const fuse = new Fuse([] as ProfileRecord[], {
     ],
 })
 
+/**
+ * @deprecated
+ * @param options
+ * @param count
+ */
 export async function queryProfilesPagedDB(
     options: {
         after?: ProfileIdentifier
@@ -560,6 +575,7 @@ export async function queryRelationsPagedDB(
     options: {
         network: string
         after?: RelationRecord
+        pageOffset?: number
     },
     count: number,
 ) {

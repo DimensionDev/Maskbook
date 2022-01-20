@@ -37,8 +37,8 @@ export interface PersonaRecord {
     localKey?: AESJsonWebKey
     nickname?: string
     linkedProfiles: Map<string, LinkedProfileDetails>
-    createAt: number
-    updateAt: number
+    createdAt: number
+    updatedAt: number
     hasLogout?: boolean
     uninitialized?: boolean
 }
@@ -48,8 +48,21 @@ export interface ProfileRecord {
     nickname?: string
     localKey?: AESJsonWebKey
     linkedPersona?: string
-    createAt?: number
-    updateAt?: number
+    createdAt: number
+    updatedAt: number
+}
+
+export enum RelationFavor {
+    COLLECTED = -1,
+    UNCOLLECTED = 1,
+    DEPRECATED = 0,
+}
+
+export interface RelationRecord {
+    profile: string
+    linked: string
+    network: string
+    favor: RelationFavor
 }
 
 export type PageOption = {

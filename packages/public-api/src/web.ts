@@ -1,4 +1,7 @@
+import type { RelationFavor, RelationRecord } from './types'
+
 // This interface uses by-name style JSON RPC.
+
 /**
  * Methods starts with "SNSAdaptor_" can only be called in SNS Adaptor.
  * Other methods can only be called in the background page.
@@ -78,19 +81,11 @@ export interface MaskNetworkAPIs {
     wallet_updateEthereumChainId(params: { chainId: number }): Promise<void>
     wallet_getLegacyWalletInfo(): Promise<WalletInfo[]>
     SNSAdaptor_getCurrentDetectedProfile(): Promise<ProfileIdentifier_string | undefined>
-}
-
-export interface RelationRecord {
-    profile: ProfileIdentifier_string
-    linked: PersonaIdentifier_string
-    network: string
-    favor: RelationFavor
-}
-
-export enum RelationFavor {
-    COLLECTED = -1,
-    UNCOLLECTED = 1,
-    DEPRECATED = 0,
+    get_all_indexedDB_records(): Promise<{
+        personas: Persona[]
+        profiles: Profile[]
+        relations: RelationRecord[]
+    }>
 }
 
 export interface WalletInfo {
