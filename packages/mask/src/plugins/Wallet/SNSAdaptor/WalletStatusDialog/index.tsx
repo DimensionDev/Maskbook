@@ -44,7 +44,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     const { classes } = useStyles()
     const chainIdValid = useChainIdValid()
 
-    //#region remote controlled dialog logic
+    // #region remote controlled dialog logic
     const { open, closeDialog: _closeDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
     )
@@ -56,7 +56,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
             open: false,
         })
     }, [])
-    //#endregion
+    // #endregion
 
     return (
         <InjectedDialog title="Mask Network" open={open} onClose={closeDialog} maxWidth="sm">

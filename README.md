@@ -1,3 +1,4 @@
+<!-- cspell:disable -->
 <a href="https://mask.io">
   <img src="https://raw.githubusercontent.com/DimensionDev/Maskbook-Website/master/img/MB--CircleCanvas--WhiteOverBlue.svg"
        width="200" height="200" title="([I:b])" alt="([I:b])">
@@ -25,7 +26,6 @@ For general introductions, see [Mask.io](https://mask.io).
 
 - [Mask Network on Chrome Web Store][client-chrome]
 - [Mask Network on Firefox Addon Store][client-firefox] (Works on Firefox for Android too!)
-
 
 - [Mask Network for iOS][client-ios]
 - (Testflight!) [Mask Network for iOS Testflight][client-ios-testflight]

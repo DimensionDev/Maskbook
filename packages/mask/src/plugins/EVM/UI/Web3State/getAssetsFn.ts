@@ -8,7 +8,6 @@ import {
     getERC721TokenAssetFromChain,
     getEthereumConstants,
     getRPCConstants,
-    getTokenConstants,
     isSameAddress,
     Web3ProviderType,
     FungibleAssetProvider,
@@ -36,7 +35,6 @@ export const getFungibleAssetsFn =
 
         const web3 = new Web3(provider)
         const { BALANCE_CHECKER_ADDRESS } = getEthereumConstants(chainId)
-        const { NATIVE_TOKEN_ADDRESS } = getTokenConstants()
         const socketId = `mask.fetchFungibleTokenAsset_${address}`
         let dataFromProvider = await socket.sendAsync<Web3Plugin.Asset<Web3Plugin.FungibleToken>>({
             id: socketId,
@@ -107,15 +105,20 @@ export const getFungibleAssetsFn =
                 (t) =>
                     t.isMainnet &&
                     !allTokens.find(
-                        (x) => x.token.chainId === t.chainId && isSameAddress(x.token.id, NATIVE_TOKEN_ADDRESS),
+                        (x) =>
+                            x.token.chainId === t.chainId &&
+                            isSameAddress(x.token.id, createNativeToken(x.chainId).address),
                     ),
             )
-            .map((x) => ({
-                id: NATIVE_TOKEN_ADDRESS!,
-                chainId: x.chainId,
-                token: { ...createNativeToken(x.chainId), id: NATIVE_TOKEN_ADDRESS!, type: TokenType.Fungible },
-                balance: '0',
-            }))
+            .map((x) => {
+                const nativeToken = createNativeToken(x.chainId)
+                return {
+                    id: nativeToken.address,
+                    chainId: x.chainId,
+                    token: { ...nativeToken, id: nativeToken.address!, type: TokenType.Fungible },
+                    balance: '0',
+                }
+            })
 
         return uniqBy(
             [...nativeTokens, ...allTokens],

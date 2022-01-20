@@ -16,7 +16,7 @@ export type WellKnownCoreTypedMessages =
     | TypedMessageUnknown
     | TypedMessageEmpty
     | TypedMessagePromise
-//#region Text
+// #region Text
 export type TypedMessageText = TypedMessageTextV1
 /** A text message */
 export interface TypedMessageTextV1 extends SerializableTypedMessage<1> {
@@ -28,8 +28,8 @@ export const isTypedMessageText = composeSome(isTypedMessageTextV1) as (x: Typed
 export function makeTypedMessageText(text: string, meta?: Meta): TypedMessageTextV1 {
     return { type: 'text', version: 1, serializable: true, content: text, meta }
 }
-//#endregion
-//#region Image
+// #endregion
+// #region Image
 export type TypedMessageImage = TypedMessageImageV1
 /**
  * A single image
@@ -50,8 +50,8 @@ export function makeTypedMessageImage(
 ): TypedMessageImageV1 {
     return { type: 'image', serializable: false, image, width: size?.width, height: size?.height, meta }
 }
-//#endregion
-//#region Tuple
+// #endregion
+// #region Tuple
 
 /** Multiple TypedMessages (ordered) */
 export interface TypedMessageTuple<T extends readonly TypedMessage[] = readonly TypedMessage[]> extends TypedMessage {
@@ -91,8 +91,8 @@ export function makeTypedMessageSerializableTupleFromList<
 >(...args: T): TypedMessageTupleSerializable<T> {
     return { type: 'tuple', version: 1, items: args, serializable: true }
 }
-//#endregion
-//#region unknown and empty
+// #endregion
+// #region unknown and empty
 export interface TypedMessageUnknown extends NonSerializableTypedMessage {
     readonly type: 'unknown'
     /** The unrecognized data */
@@ -110,8 +110,8 @@ export const isTypedMessageEmpty = createIsType<TypedMessageEmpty>('empty')
 export function makeTypedMessageEmpty(meta?: Meta): TypedMessageEmpty {
     return { type: 'empty', serializable: true, version: 1, meta }
 }
-//#endregion
-//#region Promise
+// #endregion
+// #region Promise
 export interface TypedMessagePromise<T extends TypedMessage = TypedMessage> extends NonSerializableTypedMessage {
     readonly type: 'promise'
     readonly promise: Promise<T>
@@ -125,7 +125,7 @@ export function makeTypedMessagePromise<T extends TypedMessage = TypedMessage>(
     promise.then((y) => ((x as any).value = y))
     return x
 }
-//#endregion
+// #endregion
 export const isWellKnownCoreTypedMessages = composeSome(
     isTypedMessageText,
     isTypedMessageImage,

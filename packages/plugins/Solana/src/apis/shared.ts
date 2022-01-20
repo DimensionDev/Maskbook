@@ -6,7 +6,7 @@ export const SPL_TOKEN_PROGRAM_ID = TOKEN_PROGRAM_ID.toBase58()
 
 interface RpcOptions {
     method: string
-    params?: any[]
+    params?: unknown[]
 }
 
 export interface RpcResponse<T> {

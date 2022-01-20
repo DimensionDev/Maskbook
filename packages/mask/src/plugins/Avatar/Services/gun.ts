@@ -8,13 +8,13 @@ const NFTAvatarGUN = gun2.get(NFT_AVATAR_GUN_SERVER)
 // After reinstalling the system, it cannot be retrieved for the first time, so it needs to be taken twice
 export async function getUserAddress(userId: string) {
     let result = await NFTAvatarGUN
-        //@ts-expect-error
+        // @ts-expect-error
         .get(userId).then!()
 
     if (!result) {
         await delay(500)
         result = await NFTAvatarGUN
-            //@ts-expect-error
+            // @ts-expect-error
             .get(userId).then!()
     }
 
@@ -25,9 +25,9 @@ export async function setUserAddress(userId: string, address: string) {
     try {
         // delete userId
         await NFTAvatarGUN
-            //@ts-expect-error
+            // @ts-expect-error
             .get(userId)
-            //@ts-expect-error
+            // @ts-expect-error
             .put(null).then!()
 
         // save userId

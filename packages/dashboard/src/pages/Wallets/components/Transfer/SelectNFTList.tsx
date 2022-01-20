@@ -10,10 +10,11 @@ interface SelectNFTListProps {
     list: ERC721TokenDetailed[]
     selectedTokenId: string
     loading: boolean
+    error?: boolean
     onSelect(tokenId: string): void
 }
 
-export const SelectNFTList = memo<SelectNFTListProps>(({ list, onSelect, selectedTokenId, loading }) => {
+export const SelectNFTList = memo<SelectNFTListProps>(({ list, onSelect, selectedTokenId, loading, error }) => {
     const t = useDashboardI18N()
 
     const renderStatus = useMemo(() => {
@@ -43,6 +44,12 @@ export const SelectNFTList = memo<SelectNFTListProps>(({ list, onSelect, selecte
             sx={{
                 width: 640,
                 borderRadius: '12px',
+                ...(error
+                    ? {
+                          boxShadow: `0 0 0 4px ${MaskColorVar.redMain.alpha(0.2)}`,
+                          border: `1px solid ${MaskColorVar.redMain.alpha(0.8)}`,
+                      }
+                    : {}),
                 background: (theme) =>
                     theme.palette.mode === 'dark' ? MaskColorVar.lightBackground : MaskColorVar.normalBackground,
             }}>
