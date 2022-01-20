@@ -4,10 +4,10 @@ import { makeStyles } from '@masknet/theme'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import type { GameAssets, GoodGhostingInfo, LendingPoolData, Player } from '../types'
 import { CircularDataDisplay } from './CircularDataDisplay'
-import BigNumber from 'bignumber.js'
 import { useGameToken, useRewardToken } from '../hooks/usePoolData'
 import { useI18N } from '../../../utils'
 import { getGameFinancialData, getPlayerStandings, getReadableInterval } from '../utils'
+import { toFixed } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     infoRow: {
@@ -153,7 +153,7 @@ export function GameStatsView(props: GameStatsViewProps) {
                         <div className={classes.circularData}>
                             <CircularDataDisplay
                                 header={t('plugin_good_ghosting_pool_earnings')}
-                                title={new BigNumber(formatBalance(poolEarnings, gameToken.decimals)).toFixed(2)}
+                                title={toFixed(formatBalance(poolEarnings, gameToken.decimals), 2)}
                                 subtitle={gameToken.symbol}
                             />
                         </div>
@@ -164,7 +164,7 @@ export function GameStatsView(props: GameStatsViewProps) {
                         <div className={classes.circularData}>
                             <CircularDataDisplay
                                 header={t('plugin_good_ghosting_extra_rewards')}
-                                title={new BigNumber(formatBalance(extraRewards, rewardToken.decimals)).toFixed(2)}
+                                title={toFixed(formatBalance(extraRewards, rewardToken.decimals), 2)}
                                 subtitle={rewardToken.symbol}
                             />
                         </div>

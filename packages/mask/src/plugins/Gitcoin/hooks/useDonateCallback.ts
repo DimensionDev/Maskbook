@@ -1,4 +1,5 @@
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
+import { toFixed } from '@masknet/web3-shared-base'
 import {
     EthereumTokenType,
     FungibleTokenDetailed,
@@ -60,7 +61,7 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
         })
 
         // estimate gas and compose transaction
-        const value = new BigNumber(token.type === EthereumTokenType.Native ? amount : 0).toFixed()
+        const value = toFixed(token.type === EthereumTokenType.Native ? amount : 0)
         const config = {
             from: account,
             gas: await bulkCheckoutContract.methods

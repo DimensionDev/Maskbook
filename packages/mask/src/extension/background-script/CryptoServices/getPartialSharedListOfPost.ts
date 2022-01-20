@@ -2,8 +2,8 @@ import { Profile, queryProfile } from '../../../database'
 import { ProfileIdentifier, Identifier, PostIVIdentifier } from '@masknet/shared-base'
 import { queryPostDB } from '../../../../background/database/post'
 import { GunAPI } from '../../../network/gun'
-//#endregion
-//#region Append Recipients in future
+// #endregion
+// #region Append Recipients in future
 /**
  * Get already shared target of the post
  * @param postSalt

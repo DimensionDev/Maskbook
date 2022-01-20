@@ -15,7 +15,7 @@ import {
 import { useDashboardI18N } from '../../../../locales'
 import { ChangeNetworkTip } from './ChangeNetworkTip'
 import { getTokenUSDValue } from '../../utils/getTokenUSDValue'
-import { pow10 } from '@masknet/web3-shared-base'
+import { pow10, toFixed } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -101,9 +101,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                 </Box>
             </TableCell>
             <TableCell className={classes.cell} align="center" variant="body">
-                <Typography>
-                    {new BigNumber(Utils?.formatBalance?.(asset.balance, asset.token.decimals) ?? '').toFixed(6)}
-                </Typography>
+                <Typography>{toFixed(Utils?.formatBalance?.(asset.balance, asset.token.decimals) ?? '', 6)}</Typography>
             </TableCell>
             <TableCell className={classes.cell} align="center" variant="body">
                 <Typography>

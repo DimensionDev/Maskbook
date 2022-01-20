@@ -8,7 +8,7 @@ export function useGasOptions() {
     const chainId = useChainId()
     const { t } = useI18N()
 
-    //#region Get gas options from debank
+    // #region Get gas options from debank
     const { value: gasOptions } = useAsync(async () => {
         const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
         if (!response) return { slow: 0, standard: 0, fast: 0 }
@@ -19,7 +19,7 @@ export function useGasOptions() {
             fast: data.fast.price,
         }
     }, [chainId])
-    //#endregion
+    // #endregion
 
     const options = useMemo(
         () => [

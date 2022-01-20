@@ -3460,6 +3460,7 @@ packages:
 
   /@dimensiondev/eslint-plugin/0.0.1-20220117062517-fd3cb01_eslint@8.5.0:
     resolution: {integrity: sha512-WtUberb1MC1s554Lm3C3mno3Nf/TdVJP80htgpNWiGOcIk+WYwQi+gWqi5IlnqGd71bYRZPYpYs2MH+GS+dbuw==, tarball: download/@dimensiondev/eslint-plugin/0.0.1-20220117062517-fd3cb01/8298f20d707432bcb777cd5084173fc894362a3496e8f8bc6a5c85070adb77cf}
+    engines: {node: '>= 14'}
     peerDependencies:
       '@typescript-eslint/experimental-utils': '*'
       eslint: '>= 8'
