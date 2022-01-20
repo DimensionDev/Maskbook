@@ -37,6 +37,10 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 24,
         marginRight: 12,
     },
+    title: {
+        minWidth: 80,
+        display: 'inline-block',
+    },
 }))
 
 interface PreviewDialogProps {
@@ -117,15 +121,17 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
                             </Typography>
                         </Box>
 
-                        <Typography fontSize={14} fontWeight={600}>
-                            {t.create_account_mask_id()}:{' '}
-                            <span style={{ fontSize: 10, wordBreak: 'break-all' }}>
+                        <Typography fontWeight={600}>
+                            <Typography fontSize={14} fontWeight={600} className={classes.title}>
+                                {t.create_account_mask_id()}
+                            </Typography>
+                            <span style={{ fontSize: 10, wordBreak: 'break-all', padding: '0 8px' }}>
                                 {id?.replace('ec_key:secp256k1/', '')}
                             </span>
                         </Typography>
                         <Box display="flex">
-                            <Typography fontSize={14} fontWeight={600}>
-                                {t.create_account_private_key()}:
+                            <Typography fontSize={14} fontWeight={600} className={classes.title}>
+                                {t.create_account_private_key()}
                             </Typography>
                             <Typography
                                 fontSize={10}
