@@ -5,7 +5,7 @@ import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
 import { LoadingButton } from '@mui/lab'
 import DoneIcon from '@mui/icons-material/Done'
 import { useI18N } from '../locales'
-import { getMaskColor, makeStyles } from '@masknet/theme'
+import { getMaskColor, makeStyles, MaskColorVar } from '@masknet/theme'
 import type { Persona } from '../../../database'
 import { formatFingerprint, LoadingAnimation } from '@masknet/shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -31,12 +31,12 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         fontSize: 14,
-        color: '#1C68F3',
+        color: theme.palette.text.primary,
         fontWeight: 500,
     },
     identifier: {
         fontSize: 12,
-        color: '#1C68F3',
+        color: theme.palette.text.primary,
         display: 'flex',
         alignItems: 'center',
         wordBreak: 'break-all',
@@ -50,7 +50,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     done: {
         background: '#60DFAB !important',
-        color: `${theme.palette.text.primary} !important`,
+        color: `${MaskColorVar.white} !important`,
     },
     loadingIcon: {
         position: 'relative',
@@ -133,11 +133,10 @@ export const BindPanelUI = memo<BindPanelUIProps>(
 
         const isWalletSigned = !!signature.wallet.value
         const isPersonaSigned = !!signature.persona.value
-        console.log(isWalletSigned)
 
         return (
             <InjectedDialog open={open} title={title} onClose={onClose}>
-                <DialogContent style={{ minWidth: 515 }}>
+                <DialogContent style={{ padding: '24px' }}>
                     <Box>
                         <Typography className={classes.subTitle}>{t.persona()}</Typography>
                         <Stack direction="row" className={classes.persona}>
@@ -161,11 +160,11 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                     )}
                     {!isSupported && <Typography className={classes.error}>{t.unsupported_network()}</Typography>}
                     {action === 'create' && (
-                        <Stack direction="row" alignItems="center" justifyContent="center" px="16%" pt="24px">
+                        <Stack direction="row" alignItems="center" justifyContent="center" px="16%" pt="12px">
                             <Box
                                 className={classNames(
                                     classes.stepNumber,
-                                    isPersonaSigned ? classes.stepNumberDone : null,
+                                    isPersonaSigned || isWalletSigned ? classes.stepNumberDone : null,
                                 )}>
                                 1
                             </Box>
@@ -178,57 +177,43 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                             <Box
                                 className={classNames(
                                     classes.stepNumber,
-                                    isWalletSigned ? classes.stepNumberDone : null,
+                                    isWalletSigned && isPersonaSigned ? classes.stepNumberDone : null,
                                 )}>
                                 2
                             </Box>
                         </Stack>
                     )}
                 </DialogContent>
-                <DialogActions>
-                    <Stack
-                        direction="row"
-                        mb="24px"
-                        mt="24px"
-                        width="100%"
-                        justifyContent="space-around"
-                        alignItems="center">
+                <DialogActions style={{ margin: '0 24px 24px 24px', padding: 0 }}>
+                    <Stack direction="row" gap={2} width="100%" justifyContent="space-between" alignItems="center">
                         <LoadingButton
+                            fullWidth
                             disabled={isDisablePersonaSign || !!isPersonaSigned || !isSupported}
                             classes={{
                                 loadingIndicatorEnd: classes.loadingIcon,
                             }}
                             loadingPosition="end"
-                            style={{ width: '40%' }}
                             className={isPersonaSigned ? classes.done : ''}
                             loading={signature.persona.loading}
                             variant="contained"
                             onClick={onPersonaSign}
-                            endIcon={
-                                isPersonaSigned ? (
-                                    <DoneIcon sx={{ color: (theme) => theme.palette.text.primary }} />
-                                ) : null
-                            }
+                            endIcon={isPersonaSigned ? <DoneIcon sx={{ color: MaskColorVar.white }} /> : null}
                             loadingIndicator={<LoadingAnimation />}>
                             {t.persona_sign()}
                         </LoadingButton>
                         {action === 'delete' && <Box> {t.unbind_or()} </Box>}
                         <LoadingButton
+                            fullWidth
                             classes={{
                                 loadingIndicatorEnd: classes.loadingIcon,
                             }}
                             loadingPosition="end"
                             disabled={isDisableWalletSign || !isCurrentAccount || !!isWalletSigned || !isSupported}
-                            style={{ width: '40%' }}
                             className={isWalletSigned ? classes.done : ''}
                             loading={signature.wallet.loading}
                             variant="contained"
                             onClick={onWalletSign}
-                            endIcon={
-                                isWalletSigned ? (
-                                    <DoneIcon sx={{ color: (theme) => theme.palette.text.primary }} />
-                                ) : null
-                            }
+                            endIcon={isWalletSigned ? <DoneIcon sx={{ color: MaskColorVar.white }} /> : null}
                             loadingIndicator={<LoadingAnimation />}>
                             {!isCurrentAccount && action === 'delete'
                                 ? t.unbind_wallet_same_account_error()

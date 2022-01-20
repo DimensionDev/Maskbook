@@ -51,7 +51,7 @@ export const BindingItem = memo<Item>(({ platform, identity, onUnBind }) => {
     const t = useI18N()
     const { Utils } = useWeb3State() ?? {}
     const { classes } = useStyles()
-    const networkDescriptor = useNetworkDescriptor(undefined, NetworkPluginID.PLUGIN_EVM)
+    const networkDescriptor = useNetworkDescriptor(1, NetworkPluginID.PLUGIN_EVM)
 
     if (platform === Platform.ethereum) {
         return (

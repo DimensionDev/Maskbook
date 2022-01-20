@@ -38,7 +38,7 @@ export const UnBindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onCl
                 currentIdentifier,
                 'delete',
                 'ethereum',
-                account,
+                unbindAddress,
                 walletSignState.value,
                 personaSignState.value?.signature.signature,
             )
@@ -46,8 +46,8 @@ export const UnBindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onCl
                 variant: 'success',
                 message: t.notify_wallet_sign_request_success(),
             })
-            onUnBind()
             await delay(2000)
+            onUnBind()
             onClose()
         } catch {
             showSnackbar(t.notify_wallet_sign_request_title(), {
@@ -55,7 +55,7 @@ export const UnBindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onCl
                 message: t.notify_wallet_sign_request_failed(),
             })
         }
-    }, [walletSignState.value, personaSignState.value])
+    }, [walletSignState.value, personaSignState.value, unbindAddress])
 
     return (
         <BindPanelUI
