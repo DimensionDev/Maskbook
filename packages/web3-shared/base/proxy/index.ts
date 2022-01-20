@@ -40,7 +40,7 @@ export class ProviderProxy {
     private readonly _globalNotify?: NotifyFn
 
     constructor(point: string, notifyFn?: NotifyFn) {
-        this._socket = new ReconnectingWebSocket(point)
+        this._socket = new ReconnectingWebSocket(point, undefined, { minUptime: 20000 })
         this._pool = new Map<string, SocketPoolItem>()
         this._globalNotify = notifyFn
     }
@@ -161,7 +161,7 @@ const SOCKET_POINT =
     // workaround, should create a stage env for QA testing
     process.env.NODE_ENV === 'production' && process.env.channel === 'stable'
         ? 'wss://hyper-proxy.r2d2.to'
-        : 'wss://hyper-proxy-development.mask-reverse-proxy.workers.dev'
+        : 'wss://hyper-proxy-development.laanfor.workers.dev'
 
 enum SocketState {
     CONNECTING = 0,
