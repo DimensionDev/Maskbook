@@ -21,7 +21,7 @@ import Services from '../../../../extension/service'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
-        padding: theme.spacing(5),
+        padding: theme.spacing(2.5),
     },
 }))
 
