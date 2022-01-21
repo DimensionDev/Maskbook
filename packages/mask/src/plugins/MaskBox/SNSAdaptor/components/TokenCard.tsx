@@ -20,16 +20,22 @@ const useStyles = makeStyles()((theme) => ({
 export interface TokenCardProps {
     tokenId: string
     contractDetailed: ERC721ContractDetailed
+    renderOrder: number
 }
 
 export const TokenCard = memo<TokenCardProps>((props: TokenCardProps) => {
-    const { contractDetailed, tokenId } = props
+    const { contractDetailed, tokenId, renderOrder } = props
     const { classes } = useStyles()
     const { tokenDetailed } = useERC721TokenDetailed(contractDetailed, tokenId)
 
     return tokenDetailed ? (
         <>
-            <CollectibleCard readonly provider={NonFungibleAssetProvider.OPENSEA} token={tokenDetailed} />
+            <CollectibleCard
+                readonly
+                provider={NonFungibleAssetProvider.OPENSEA}
+                token={tokenDetailed}
+                renderOrder={renderOrder}
+            />
             <div className={classes.title}>
                 <Typography className={classes.name} color="textSecondary" variant="body2">
                     {tokenDetailed.info.name ?? tokenId}

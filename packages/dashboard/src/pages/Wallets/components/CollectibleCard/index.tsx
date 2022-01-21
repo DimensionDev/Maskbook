@@ -4,7 +4,7 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { CollectiblePlaceholder } from '../CollectiblePlaceHolder'
 import { useHoverDirty } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
-import { WalletIcon } from '@masknet/shared'
+import { WalletIcon, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { ChangeNetworkTip } from '../FungibleTokenTableRow/ChangeNetworkTip'
 import { useNetworkDescriptor, useWeb3State, Web3Plugin } from '@masknet/plugin-infra'
 
@@ -29,7 +29,9 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         overflow: 'hidden',
     },
-    imgContainer: {
+    mediaContainer: {
+        position: 'absolute',
+        zIndex: 1,
         width: '100%',
         height: 186,
         backgroundColor: theme.palette.mode === 'dark' ? MaskColorVar.lineLight : '#f6f6f7',
@@ -50,6 +52,7 @@ const useStyles = makeStyles()((theme) => ({
         top: 8,
         height: 20,
         width: 20,
+        zIndex: 20,
     },
     tip: {
         padding: theme.spacing(1),
@@ -58,15 +61,40 @@ const useStyles = makeStyles()((theme) => ({
     tipArrow: {
         color: '#111432',
     },
+    loadingFailImage: {
+        minHeight: '0px !important',
+        maxWidth: 'none',
+        transform: 'translateY(10px)',
+        width: 64,
+        height: 64,
+    },
+    wrapper: {
+        width: '100%',
+        minWidth: 140,
+        height: '100%',
+        minHeight: 186,
+    },
+    linkWrapper: {
+        position: 'relative',
+        width: 140,
+        height: 186,
+    },
+    blocker: {
+        position: 'absolute',
+        zIndex: 2,
+        width: 140,
+        height: 186,
+    },
 }))
 
 export interface CollectibleCardProps {
     chainId: number
     token: Web3Plugin.NonFungibleToken
     onSend(): void
+    renderOrder: number
 }
 
-export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onSend }) => {
+export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onSend, renderOrder }) => {
     const t = useDashboardI18N()
     const { Utils } = useWeb3State()
     const { classes } = useStyles()
@@ -90,6 +118,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
                     <Link
                         target="_blank"
                         rel="noopener noreferrer"
+                        className={classes.linkWrapper}
                         href={
                             Utils?.resolveNonFungibleTokenLink?.(
                                 token.contract?.chainId,
@@ -97,10 +126,18 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
                                 token.tokenId,
                             ) ?? '#'
                         }>
-                        <div className={classes.imgContainer}>
-                            <img
-                                src={token.metadata.assetURL || token.metadata.iconURL}
-                                style={{ objectFit: 'contain', width: '100%', height: '100%' }}
+                        <div className={classes.blocker} />
+                        <div className={classes.mediaContainer}>
+                            <NFTCardStyledAssetPlayer
+                                contractAddress={token.contract.address}
+                                chainId={token.contract.chainId}
+                                renderOrder={renderOrder}
+                                url={token.metadata.assetURL || token.metadata.iconURL}
+                                tokenId={token.tokenId}
+                                classes={{
+                                    loadingFailImage: classes.loadingFailImage,
+                                    wrapper: classes.wrapper,
+                                }}
                             />
                         </div>
                     </Link>

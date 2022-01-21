@@ -288,7 +288,7 @@ export async function INTERNAL_send(
         // the estimation of metamask of `maxFeePerGas` = 1 * block.baseFeePerGas,
         // since the estimation of web3.js = 2 * block.baseFeePerGas which is too high
         // that would almost always causes an undesired warning tip.
-        if (Flags.EIP1559_enabled && isEIP1559Valid) {
+        if (Flags.EIP1559_enabled && isEIP1559Valid && isEIP1559Supported(chainIdFinally)) {
             config.gasPrice = undefined
             config.maxPriorityFeePerGas = formatGweiToWei(1.5).toString(16)
             config.maxFeePerGas = (Number.parseInt(config.maxFeePerGas!, 16) * 0.8).toString(16)
