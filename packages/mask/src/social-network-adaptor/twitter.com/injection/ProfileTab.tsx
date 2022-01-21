@@ -135,11 +135,11 @@ export function ProfileTabAtTwitter() {
 }
 
 export function injectProfileTabAtTwitter(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())
     let tabInjected = false
     const contentWatcher = new MutationObserverWatcher(searchProfileTabPageSelector()).useForeach((node, key, meta) => {
         const elePage = searchProfileTabPageSelector().evaluate()
         if (elePage && !tabInjected) {
+            const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())
             startWatch(watcher, signal)
             createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabAtTwitter />)
             tabInjected = true
