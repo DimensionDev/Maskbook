@@ -62,4 +62,11 @@ export class RSS3API implements RSS3BaseAPI.Provider {
         }>(url)
         return rsp?.profile
     }
+    async getNFTs(address: string) {
+        const url = urlcat(RSS3_ENDPOINT, '/assets/list', {
+            personaID: address,
+            type: RSS3BaseAPI.AssetType.NFT,
+        })
+        return fetchJSON<RSS3BaseAPI.GeneralAssetResponse>(url)
+    }
 }

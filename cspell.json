@@ -148,6 +148,7 @@
         "metas",
         "metaverse",
         "millify",
+        "mintable",
         "misoperation",
         "monofont",
         "monospace",
@@ -177,6 +178,7 @@
         "pid",
         "pids",
         "Plurinational",
+        "plusplus",
         "Polkadot",
         "Pooltogether",
         "popper",
@@ -261,8 +263,7 @@
         "xlarge",
         "xlink",
         "zerion",
-        "Zubin",
-        "mintable"
+        "Zubin"
     ],
     "ignoreWords": [
         "AICANFT",
