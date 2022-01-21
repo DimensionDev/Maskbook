@@ -112,6 +112,7 @@ export function PetDialog() {
         setMetaData(initMeta)
         setCollection(initCollection)
         setTokenInfoSelect(null)
+        setInputTokenName('')
     }, [open])
 
     let timer: NodeJS.Timeout
