@@ -139,7 +139,7 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
             const width = ref.current.offsetWidth
             const height = ref.current.offsetHeight - 60
             const baseSize = Math.floor(width / ITEM_SIZE.width) * Math.floor(height / ITEM_SIZE.height)
-            setLoadingSize((prev) => prev ?? Math.floor(baseSize * 0.8))
+            setLoadingSize((prev) => prev || Math.max(Math.floor(baseSize * 0.8), 10))
         }, [ref.current])
 
         return (

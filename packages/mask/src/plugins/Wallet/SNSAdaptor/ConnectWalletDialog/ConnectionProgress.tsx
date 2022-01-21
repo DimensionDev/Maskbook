@@ -60,44 +60,46 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
     const providerDescriptor = useProviderDescriptor(providerType, NetworkPluginID.PLUGIN_EVM)
 
     return (
-        <Paper elevation={0}>
-            <Card className={`${classes.content} dashboard-style`} elevation={0}>
-                <Box display="flex" alignItems="center">
-                    <ImageIcon icon={providerDescriptor?.icon} />
-                    <Box display="flex" flex={1} flexDirection="column" sx={{ marginLeft: 2 }}>
-                        {connected ? (
-                            <Typography>
-                                {t('plugin_wallet_connected_with')} {resolveProviderName(providerType)}
-                            </Typography>
-                        ) : (
-                            <Typography>
-                                {t('plugin_wallet_connect_with')} {resolveProviderName(providerType)}
-                            </Typography>
-                        )}
-                        {loading ? (
-                            <Box display="flex" alignItems="center">
-                                <CircularProgress size={14} color="primary" sx={{ marginRight: 1 }} />
-                                <Typography variant="body2">{t('initializing')}</Typography>
-                            </Box>
-                        ) : null}
-                        {!loading && error ? (
-                            <Typography className={classes.error} color="red" variant="body2">
-                                {error.message?.includes('Already processing eth_requestAccounts') ||
-                                error.message?.includes(
-                                    "Request of type 'wallet_requestPermissions' already pending for origin",
-                                )
-                                    ? t('plugin_wallet_metamask_error_already_request')
-                                    : 'Error connecting.'}
-                            </Typography>
+        <>
+            <Paper elevation={0}>
+                <Card className={`${classes.content} dashboard-style`} elevation={0}>
+                    <Box display="flex" alignItems="center">
+                        <ImageIcon icon={providerDescriptor?.icon} />
+                        <Box display="flex" flex={1} flexDirection="column" sx={{ marginLeft: 2 }}>
+                            {connected ? (
+                                <Typography>
+                                    {t('plugin_wallet_connected_with')} {resolveProviderName(providerType)}
+                                </Typography>
+                            ) : (
+                                <Typography>
+                                    {t('plugin_wallet_connect_with')} {resolveProviderName(providerType)}
+                                </Typography>
+                            )}
+                            {loading ? (
+                                <Box display="flex" alignItems="center">
+                                    <CircularProgress size={14} color="primary" sx={{ marginRight: 1 }} />
+                                    <Typography variant="body2">{t('initializing')}</Typography>
+                                </Box>
+                            ) : null}
+                            {!loading && error ? (
+                                <Typography className={classes.error} color="red" variant="body2">
+                                    {error.message?.includes('Already processing eth_requestAccounts') ||
+                                    error.message?.includes(
+                                        "Request of type 'wallet_requestPermissions' already pending for origin",
+                                    )
+                                        ? t('plugin_wallet_metamask_error_already_request')
+                                        : 'Error connecting.'}
+                                </Typography>
+                            ) : null}
+                        </Box>
+                        {!connected && error ? (
+                            <ActionButton color="primary" variant="contained" onClick={retry} disabled={loading}>
+                                {t('plugin_wallet_connect_with_retry')}
+                            </ActionButton>
                         ) : null}
                     </Box>
-                    {!connected && error ? (
-                        <ActionButton color="primary" variant="contained" onClick={retry} disabled={loading}>
-                            {t('plugin_wallet_connect_with_retry')}
-                        </ActionButton>
-                    ) : null}
-                </Box>
-            </Card>
+                </Card>
+            </Paper>
             <Card className={classes.tipContent} elevation={0}>
                 <FlashIcon />
                 <Typography className={classes.tipContentText} variant="body2">
@@ -122,6 +124,6 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                     />
                 </Typography>
             </Card>
-        </Paper>
+        </>
     )
 }
