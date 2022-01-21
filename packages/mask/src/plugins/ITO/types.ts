@@ -1,4 +1,5 @@
 import type { ChainId, FungibleTokenDetailed, FungibleTokenOutMask } from '@masknet/web3-shared-evm'
+import type BigNumber from 'bignumber.js'
 
 export interface JSON_PayloadInMask {
     contract_address: string
@@ -39,6 +40,14 @@ export interface PoolFromNetwork {
 export interface ClaimablePool {
     pid: string
     token: FungibleTokenDetailed
+}
+
+export interface SwappedTokenType {
+    pids: string[]
+    amount: BigNumber
+    token: FungibleTokenDetailed
+    isClaimable: boolean
+    unlockTime: Date
 }
 
 export interface JSON_PayloadOutMask extends Omit<JSON_PayloadInMask, 'token' | 'exchange_tokens'> {

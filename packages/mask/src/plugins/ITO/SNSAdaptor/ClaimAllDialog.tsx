@@ -7,6 +7,7 @@ import { FormattedBalance, useRemoteControlledDialog } from '@masknet/shared'
 import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@mui/material'
 import {
     formatBalance,
+    useERC20TokenDetailed,
     TransactionStateType,
     resolveTransactionLinkOnExplorer,
     useITOConstants,
@@ -22,12 +23,13 @@ import { Flags } from '../../../../shared'
 import { useSpaceStationCampaignInfo } from './hooks/useSpaceStationCampaignInfo'
 import { NftAirdropCard } from './NftAirdropCard'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { useClaimablePools, SwappedToken } from './hooks/useClaimablePools'
+import { useClaimAll } from './hooks/useClaimAll'
 import { WalletMessages } from '../../Wallet/messages'
 import { useClaimCallback } from './hooks/useClaimCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import type { SwappedTokenType } from '../types'
 import { base as ITO_Definition } from '../base'
 
 interface StyleProps {
@@ -232,11 +234,9 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const [chainId, setChainId] = useState(
         SUPPORTED_CHAIN_ID_LIST.includes(currentChainId) ? currentChainId : ChainId.Mainnet,
     )
-    const { value: swappedTokens, loading, retry } = useClaimablePools(chainId)
-    const { ITO_CONTRACT_ADDRESS: ITO_CONTRACT_ADDRESS_MAINNET } = useITOConstants(ChainId.Mainnet)
+    const { value: swappedTokens, loading, retry } = useClaimAll(account)
+
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
-    // Todo: Remove the code after the period that old ITO is being used and continues to be used for a while
-    const { value: swappedTokensOld, loading: loadingOld, retry: retryOld } = useClaimablePools(chainId, true)
     const { showSnackbar } = useCustomSnackbar()
     const popEnqueueSnackbar = useCallback(
         (variant: VariantType) =>
@@ -251,16 +251,11 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         [showSnackbar],
     )
     const claimablePids = uniq(flatten(swappedTokens?.filter((t) => t.isClaimable).map((t) => t.pids)))
-    const claimablePidsOld = uniq(flatten(swappedTokensOld?.filter((t) => t.isClaimable).map((t) => t.pids)))
+
     const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(claimablePids, ITO2_CONTRACT_ADDRESS)
-    const [claimStateOld, resetClaimCallbackOld] = useClaimCallback(claimablePidsOld, ITO_CONTRACT_ADDRESS_MAINNET)
     const showNftAirdrop = chainId === ChainId.Matic && campaignInfos && Flags.nft_airdrop_enabled
     const { classes } = useStyles({
-        shortITOwrapper:
-            (showNftAirdrop &&
-                (!swappedTokens || swappedTokens.length === 0) &&
-                (!swappedTokensOld || swappedTokensOld.length === 0)) ||
-            !showNftAirdrop,
+        shortITOwrapper: (showNftAirdrop && (!swappedTokens || swappedTokens.length === 0)) || !showNftAirdrop,
     })
     const [initLoading, setInitLoading] = useState(true)
     useLayoutEffect(() => {
@@ -276,19 +271,11 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         (ev) => {
             if (ev.open) return
 
-            if (claimState.type === TransactionStateType.FAILED || claimStateOld.type === TransactionStateType.FAILED)
-                popEnqueueSnackbar('error')
+            if (claimState.type === TransactionStateType.FAILED) popEnqueueSnackbar('error')
 
             if (claimState.type === TransactionStateType.CONFIRMED) {
                 resetClaimCallback()
                 retry()
-                onClose()
-                popEnqueueSnackbar('success')
-            }
-
-            if (claimStateOld.type === TransactionStateType.CONFIRMED) {
-                resetClaimCallbackOld()
-                retryOld()
                 onClose()
                 popEnqueueSnackbar('success')
             }
@@ -297,33 +284,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
 
     useEffect(() => {
         resetClaimCallback()
-        resetClaimCallbackOld()
     }, [chainId])
-
-    useEffect(() => {
-        if (claimStateOld.type === TransactionStateType.UNKNOWN) return
-
-        if (claimStateOld.type === TransactionStateType.HASH) {
-            const { hash } = claimStateOld
-            setTimeout(() => {
-                window.open(resolveTransactionLinkOnExplorer(chainId, hash), '_blank', 'noopener noreferrer')
-            }, 2000)
-            return
-        }
-        const claimableTokens = swappedTokensOld?.filter((t) => t.isClaimable)
-        const summary = claimableTokens
-            ? 'Claim ' +
-              new Intl.ListFormat('en').format(
-                  claimableTokens.map((t) => formatBalance(t.amount, t.token.decimals) + ' ' + t.token.symbol),
-              )
-            : ''
-        setClaimTransactionDialog({
-            open: true,
-            state: claimStateOld,
-            title: t('plugin_ito_claim_all_title'),
-            summary,
-        })
-    }, [claimStateOld, swappedTokensOld /* update tx dialog only if state changed */])
 
     useEffect(() => {
         if (claimState.type === TransactionStateType.UNKNOWN) return
@@ -381,40 +342,20 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                             />
                         ) : null}
 
-                        {loading || loadingOld || initLoading || !swappedTokens || !swappedTokensOld ? (
+                        {loading || initLoading || !swappedTokens ? (
                             <div className={classes.emptyContentWrapper}>
                                 <CircularProgress size={24} />
                             </div>
-                        ) : swappedTokens.length > 0 || swappedTokensOld.length > 0 ? (
-                            <>
-                                {swappedTokensOld.length > 0 ? (
-                                    <div className={classes.content}>
-                                        {swappedTokens.length > 0 && swappedTokensOld.length > 0 ? (
-                                            <Typography color="textPrimary" className={classes.contentTitle}>
-                                                {t('plugin_ito_claim_all_old_contract')}
-                                            </Typography>
-                                        ) : null}
-                                        <Content swappedTokens={swappedTokensOld} />
-                                    </div>
-                                ) : null}
-                                {swappedTokens.length > 0 ? (
-                                    <div className={classes.content}>
-                                        {swappedTokens.length > 0 && swappedTokensOld.length > 0 ? (
-                                            <Typography color="textPrimary" className={classes.contentTitle}>
-                                                {t('plugin_ito_claim_all_new_contract')}
-                                            </Typography>
-                                        ) : null}
-                                        <Content swappedTokens={swappedTokens} />
-                                    </div>
-                                ) : null}
-                            </>
+                        ) : swappedTokens.length > 0 ? (
+                            <div className={classes.content}>
+                                <Content swappedTokens={swappedTokens} />
+                            </div>
                         ) : !showNftAirdrop && !loadingAirdrop ? (
                             <div className={classes.emptyContentWrapper}>
                                 <Typography color="textPrimary">{t('plugin_ito_no_claimable_token')} </Typography>
                             </div>
                         ) : null}
                         {(swappedTokens && swappedTokens.length > 0) ||
-                        (swappedTokensOld && swappedTokensOld.length > 0) ||
                         (chainId === ChainId.Matic && Flags.nft_airdrop_enabled) ? (
                             <div className={classes.actionButtonWrapper}>
                                 <EthereumChainBoundary
@@ -427,7 +368,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                         fontSize: 18,
                                         fontWeight: 400,
                                     }}>
-                                    {swappedTokens?.length || swappedTokensOld?.length ? (
+                                    {swappedTokens?.length ? (
                                         <EthereumWalletConnectedBoundary
                                             classes={{
                                                 connectWallet: classes.claimAllButton,
@@ -455,7 +396,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
 }
 
 interface ContentProps {
-    swappedTokens: SwappedToken[]
+    swappedTokens: SwappedTokenType[]
 }
 
 function Content(props: ContentProps) {
@@ -474,15 +415,16 @@ function Content(props: ContentProps) {
 
 interface SwappedTokensProps {
     i: number
-    swappedToken: SwappedToken
+    swappedToken: SwappedTokenType
 }
 
 function SwappedToken({ i, swappedToken }: SwappedTokensProps) {
     const { t } = useI18N()
     const theme = useTheme()
     const { classes } = useStyles({ shortITOwrapper: false })
+    const { value: token } = useERC20TokenDetailed(swappedToken.token.address)
 
-    return swappedToken.token ? (
+    return token ? (
         <ListItem key={i} className={classes.tokenCard}>
             <div
                 className={classNames(
@@ -501,7 +443,7 @@ function SwappedToken({ i, swappedToken }: SwappedTokensProps) {
                         />
                     )}
                     <span>
-                        {swappedToken.token.symbol}{' '}
+                        {token.symbol}{' '}
                         {swappedToken.isClaimable
                             ? t('plugin_ito_claim_all_status_unclaimed')
                             : t('plugin_ito_claim_all_status_locked')}
@@ -527,8 +469,8 @@ function SwappedToken({ i, swappedToken }: SwappedTokensProps) {
                         symbol: classes.tokenSymbol,
                     }}
                     value={swappedToken.amount}
-                    decimals={swappedToken.token.decimals}
-                    symbol={swappedToken.token.symbol}
+                    decimals={token.decimals}
+                    symbol={token.symbol}
                     formatter={formatBalance}
                 />
             </Typography>
