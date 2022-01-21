@@ -151,12 +151,12 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
                 ) : (
                     <Box>
                         <div className={classes.root}>
-                            {dataSource.map((x, i) => (
-                                <div className={classes.card} key={x.id}>
+                            {dataSource.map((x, index) => (
+                                <div className={classes.card} key={index}>
                                     <CollectibleCard
                                         chainId={chainId}
                                         token={x}
-                                        renderOrder={i}
+                                        renderOrder={index}
                                         // TODO: transfer not support multi chain, should remove is after supported
                                         onSend={() => onSend(x as unknown as any)}
                                     />
