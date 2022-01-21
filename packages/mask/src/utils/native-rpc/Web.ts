@@ -237,6 +237,10 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         const privateKey = await Services.Identity.exportPersonaPrivateKey(stringToPersonaIdentifier(identifier))
         return privateKey
     },
+    persona_queryPersonaByPrivateKey: async ({ privateKey }) => {
+        const persona = await Services.Identity.queryPersonaByPrivateKey(privateKey)
+        return persona ? personaFormatter(persona) : undefined
+    },
     persona_getCurrentPersonaIdentifier: async () => {
         const identifier = await Services.Settings.getCurrentPersonaIdentifier()
         return identifier?.toText()

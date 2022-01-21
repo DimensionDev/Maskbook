@@ -57,6 +57,7 @@ export interface MaskNetworkAPIs {
     persona_backupBase64(params: { identifier: PersonaIdentifier_string }): Promise<string>
     persona_backupJson(params: { identifier: PersonaIdentifier_string }): Promise<unknown>
     persona_backupPrivateKey(params: { identifier: PersonaIdentifier_string }): Promise<string | undefined>
+    persona_queryPersonaByPrivateKey(params: { privateKey: string }): Promise<Persona | undefined>
     persona_getCurrentPersonaIdentifier(): Promise<string | undefined>
     persona_setCurrentPersonaIdentifier(params: { identifier: PersonaIdentifier_string }): Promise<void>
     persona_getOwnedPersonaInformation(params: { identifier: PersonaIdentifier_string }): Promise<PersonaInformation>
