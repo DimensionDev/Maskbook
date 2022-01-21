@@ -50,7 +50,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1),
     },
     description: {
-        background: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
+        background: theme.palette.mode === 'light' ? '#F7F9FA' : '#2F3336',
         alignSelf: 'stretch',
     },
     name: {
@@ -87,14 +87,21 @@ interface CollectibleItemProps {
     wallet?: Wallet
     token: ERC721TokenDetailed
     readonly?: boolean
+    renderOrder: number
 }
 
 function CollectibleItem(props: CollectibleItemProps) {
-    const { provider, wallet, token, readonly } = props
+    const { provider, wallet, token, readonly, renderOrder } = props
     const { classes } = useStyles()
     return (
         <div className={classes.card}>
-            <CollectibleCard token={token} provider={provider} wallet={wallet} readonly={readonly} />
+            <CollectibleCard
+                token={token}
+                provider={provider}
+                wallet={wallet}
+                readonly={readonly}
+                renderOrder={renderOrder}
+            />
             <div className={classes.description}>
                 <Typography className={classes.name} color="textPrimary" variant="body2">
                     {token.info.name}
@@ -155,6 +162,7 @@ function CollectibleListUI(props: CollectibleListUIProps) {
                     <Box className={classes.root}>
                         {collectibles.map((x, i) => (
                             <CollectibleItem
+                                renderOrder={i}
                                 token={x}
                                 provider={provider}
                                 wallet={wallet}
