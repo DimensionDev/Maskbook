@@ -836,6 +836,7 @@ importers:
       '@rollup/plugin-commonjs': ^21.0.1
       '@rollup/plugin-json': ^4.1.0
       '@rollup/plugin-node-resolve': ^13.0.6
+      '@rollup/plugin-replace': ^3.0.1
       '@rollup/plugin-sucrase': ^4.0.1
       date-fns: ^2.27.0
       rollup: ^2.60.1
@@ -852,10 +853,11 @@ importers:
       '@rollup/plugin-commonjs': 21.0.1_rollup@2.62.0
       '@rollup/plugin-json': 4.1.0_rollup@2.62.0
       '@rollup/plugin-node-resolve': 13.1.1_rollup@2.62.0
+      '@rollup/plugin-replace': 3.0.1_rollup@2.62.0
       '@rollup/plugin-sucrase': 4.0.1_rollup@2.62.0
       date-fns: 2.27.0
       rollup: 2.62.0
-      rollup-plugin-dts: 4.0.1_f989a9f75f95e6331defeb4529ad92f3
+      rollup-plugin-dts: 4.0.1_rollup@2.62.0
 
   packages/public-api:
     specifiers: {}
@@ -5366,6 +5368,16 @@ packages:
       deepmerge: 4.2.2
       is-module: 1.0.0
       resolve: 1.20.0
+      rollup: 2.62.0
+    dev: true
+
+  /@rollup/plugin-replace/3.0.1_rollup@2.62.0:
+    resolution: {integrity: sha512-989J5oRzf3mm0pO/0djTijdfEh9U3n63BIXN5X7T4U9BP+fN4oxQ6DvDuBvFaHA6scaHQRclqmKQEkBhB7k7Hg==}
+    peerDependencies:
+      rollup: ^1.20.0 || ^2.0.0
+    dependencies:
+      '@rollup/pluginutils': 3.1.0_rollup@2.62.0
+      magic-string: 0.25.7
       rollup: 2.62.0
     dev: true
 
@@ -21348,7 +21360,7 @@ packages:
     dependencies:
       bn.js: 5.2.0
 
-  /rollup-plugin-dts/4.0.1_f989a9f75f95e6331defeb4529ad92f3:
+  /rollup-plugin-dts/4.0.1_rollup@2.62.0:
     resolution: {integrity: sha512-DNv5F8pro/r0Hkx3JWKRtJZocDnqXfgypoajeiaNq134rYaFcEIl/oas5PogD1qexMadVijsHyVko1Chig0OOQ==}
     engines: {node: '>=v12.22.6'}
     peerDependencies:
@@ -21357,7 +21369,6 @@ packages:
     dependencies:
       magic-string: 0.25.7
       rollup: 2.62.0
-      typescript: 4.6.0-dev.20211202
     optionalDependencies:
       '@babel/code-frame': 7.16.0
     dev: true

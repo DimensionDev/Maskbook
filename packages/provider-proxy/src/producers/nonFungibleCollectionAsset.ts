@@ -1,5 +1,6 @@
 import type { Web3Plugin } from '@masknet/plugin-infra'
-import { getNFTScanNFTList } from '@masknet/web3-providers'
+import { getNFTScanNFTList, getOpenSeaCollectionList } from '@masknet/web3-providers'
+import { collectAllPageDate } from '../helper/request'
 import type { ProducerArgBase, ProducerKeyFunction, ProducerPushFunction, RPCMethodRegistrationValue } from '../types'
 
 interface NonFungibleCollectibleAssetArgs extends ProducerArgBase {
@@ -28,11 +29,11 @@ const nonFungibleCollectionAsset = async (
         })),
     )
 
-    // const collectionsFromOpenSea = await collectAllPageDate<Web3Plugin.NonFungibleContract>(
-    //     (page: number) => getOpenSeaCollectionList(openSeaApiKey, address, page, pageSize),
-    //     pageSize,
-    // )
-    // await push(collectionsFromOpenSea)
+    const collectionsFromOpenSea = await collectAllPageDate<Web3Plugin.NonFungibleContract>(
+        (page: number) => getOpenSeaCollectionList(openSeaApiKey, address, page, pageSize),
+        pageSize,
+    )
+    await push(collectionsFromOpenSea)
 }
 
 const producer: RPCMethodRegistrationValue<Web3Plugin.NonFungibleContract, NonFungibleCollectibleAssetArgs> = {
