@@ -116,3 +116,8 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
         }
     }
 }
+
+export function getNFTScanNFTList(address: string) {
+    const nftScanAPI = new NFTScanAPI()
+    return nftScanAPI.getContractBalance(address)
+}

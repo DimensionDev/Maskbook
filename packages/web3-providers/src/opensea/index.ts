@@ -352,6 +352,12 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
                 name: x.name,
                 image: x.image_url || undefined,
                 slug: x.slug,
+                id: x.slug,
+                chainId,
+                symbol: x.primary_asset_contracts?.[0]?.symbol,
+                address: x.primary_asset_contracts?.[0]?.address,
+                iconURL: x.image_url,
+                balance: x.owned_asset_count,
             })) ?? []
 
         return {
