@@ -66,15 +66,10 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                     <Box display="flex" alignItems="center">
                         <ImageIcon icon={providerDescriptor?.icon} />
                         <Box display="flex" flex={1} flexDirection="column" sx={{ marginLeft: 2 }}>
-                            {connected ? (
-                                <Typography>
-                                    {t('plugin_wallet_connected_with')} {resolveProviderName(providerType)}
-                                </Typography>
-                            ) : (
-                                <Typography>
-                                    {t('plugin_wallet_connect_with')} {resolveProviderName(providerType)}
-                                </Typography>
-                            )}
+                            <Typography>
+                                {t(connected ? 'plugin_wallet_connected_with' : 'plugin_wallet_connect_with')}{' '}
+                                {resolveProviderName(providerType)}
+                            </Typography>
                             {loading ? (
                                 <Box display="flex" alignItems="center">
                                     <CircularProgress size={14} color="primary" sx={{ marginRight: 1 }} />
