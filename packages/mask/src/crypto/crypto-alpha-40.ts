@@ -16,7 +16,7 @@ export type PublishedAESKeyRecordV40 = {
     key: PublishedAESKey
     name: string
 }
-//#region Derive AES Key from ECDH key
+// #region Derive AES Key from ECDH key
 /**
  * Derive the key from your private ECDH key and someone else's ECDH key.
  * If the key is ECDSA, it will be transform to ECDH.
@@ -56,8 +56,8 @@ async function deriveAESKey(
     const key = await CryptoWorker.raw_to_aes(password)
     return { key, salt: _salt, iv }
 }
-//#endregion
-//#region encrypt text
+// #endregion
+// #region encrypt text
 /**
  * Encrypt 1 to 1
  */
@@ -155,7 +155,7 @@ export async function encrypt1ToN(info: {
     const othersAESKeyEncrypted = await generateOthersAESKeyEncrypted(-40, AESKey, privateKeyECDH, othersPublicKeyECDH)
     return { encryptedContent, iv, version: -40, ownersAESKeyEncrypted, othersAESKeyEncrypted, postAESKey: AESKey }
 }
-//#endregion
+// #endregion
 
 export async function extractAESKeyInMessage(
     version: -40 | -39 | -38,
@@ -196,9 +196,9 @@ export async function encryptWithAES(info: {
     const encrypted = await CryptoWorker.encrypt_aes_gcm(info.aesKey, iv, content)
     return { content: encrypted, iv }
 }
-//#endregion
+// #endregion
 
-//#region Comment
+// #region Comment
 function extractCommentPayload(text: string) {
     const [_, toEnd] = text.split('\u{1F3B6}2/4|')
     const [content, _2] = (toEnd || '').split(':||')
@@ -251,7 +251,7 @@ export async function decryptComment(
         return null
     }
 }
-//#endregion
+// #endregion
 
 export function typedMessageStringify(x: any) {
     throw new Error('Not supported typed message in version older than v39.')

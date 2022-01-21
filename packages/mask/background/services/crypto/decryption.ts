@@ -87,7 +87,7 @@ export async function* decryption(payload: string | Uint8Array, context: Decrypt
     if (currentProfile?.isUnknown) currentProfile = null
     if (authorHint?.isUnknown) authorHint = null
 
-    //#region Identify the PostIdentifier
+    // #region Identify the PostIdentifier
     const iv = parse.val.encryption.unwrapOr(null)?.iv.unwrapOr(null)
     {
         if (!iv) return null
@@ -99,7 +99,7 @@ export async function* decryption(payload: string | Uint8Array, context: Decrypt
         SocialNetworkEnumToProfileDomain(currentSocialNetwork),
         encodeArrayBuffer(iv.buffer),
     )
-    //#endregion
+    // #endregion
 
     // TODO: read in-memory cache to avoid db lookup
 

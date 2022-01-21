@@ -38,28 +38,28 @@ export interface PostContextCreation extends PostContextAuthor {
     readonly signal?: AbortSignal
 }
 export interface PostContext extends PostContextAuthor {
-    //#region DOM knowledge
+    // #region DOM knowledge
     get rootNode(): HTMLElement | null
     readonly rootElement: DOMProxy
     readonly suggestedInjectionPoint: HTMLElement
-    //#endregion
+    // #endregion
     readonly comment: undefined | PostContextComment
-    //#region Metadata of a post (author, mentioned items, ...)
+    // #region Metadata of a post (author, mentioned items, ...)
     /** Auto computed */
     readonly identifier: Subscription<null | PostIdentifier<ProfileIdentifier>>
     readonly url: Subscription<URL | null>
     // Meta
     readonly mentionedLinks: Subscription<string[]>
-    //#endregion
-    //#region Raw post content (not decrypted)
+    // #endregion
+    // #region Raw post content (not decrypted)
     readonly rawMessage: Subscription<TypedMessage>
-    //#endregion
-    //#region Information revealed in the Mask Payload
+    // #endregion
+    // #region Information revealed in the Mask Payload
     // TODO:
     // readonly containsMaskPayload: Subscription<boolean>
     encryptPostComment(comment: string): Promise<string>
     decryptPostComment(comment: string): Promise<string>
-    //#endregion
+    // #endregion
 }
 export type PostInfo = PostContext
 

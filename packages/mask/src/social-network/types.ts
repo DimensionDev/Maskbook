@@ -12,10 +12,9 @@ import type { PaletteMode, Theme } from '@mui/material'
 import type { InjectedDialogClassKey, InjectedDialogProps } from '../components/shared/InjectedDialog'
 import type { Profile } from '../database'
 import type { PostInfo } from './PostInfo'
-import type { GrayscaleAlgorithm } from '@masknet/encryption'
+import type { GrayscaleAlgorithm, SocialNetworkEnum } from '@masknet/encryption'
 import type { createSNSAdaptorSpecializedPostContext } from './utils/create-post-context'
 import type { Subscription } from 'use-subscription'
-import type { SocialNetworkEnum } from '@masknet/encryption'
 
 type ClassNameMap<ClassKey extends string = string> = { [P in ClassKey]: string }
 // Don't define values in namespaces

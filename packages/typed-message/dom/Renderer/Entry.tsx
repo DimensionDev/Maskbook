@@ -1,9 +1,8 @@
-import { useMemo, useContext } from 'react'
+import { useContext } from 'react'
 import type { TypedMessage } from '../../base'
 import { TypedMessageUnknownRenderer as TypedMessageUnknownRender } from './Core/Unknown'
 import { __allowTextEnlargeContext } from './utils/AllowTextEnlargeContext'
 import { RegistryContext } from './utils/RegistryContext'
-import { TransformerContext } from './utils/TransformContext'
 export interface MetadataRenderProps {
     metadata: TypedMessage['meta']
     message: TypedMessage

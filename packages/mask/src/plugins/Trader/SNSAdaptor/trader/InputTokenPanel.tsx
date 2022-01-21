@@ -97,7 +97,7 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
         const { t } = useI18N()
         const { classes } = useStyles({ isDashboard })
 
-        //#region update amount by self
+        // #region update amount by self
         const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
             () => ({
                 RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${token?.decimals}}$`), // .ddd...d
@@ -180,7 +180,7 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
                     ),
                     endAdornment: (
                         <Typography className={classes.price}>
-                            &#x2248; <FormattedCurrency value={tokenValueUSD} sign="$" formatter={formatCurrency} />
+                            &asymp; <FormattedCurrency value={tokenValueUSD} sign="$" formatter={formatCurrency} />
                         </Typography>
                     ),
                 }}

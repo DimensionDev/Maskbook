@@ -30,7 +30,7 @@ export function SelectTokenAmountPanel(props: SelectTokenAmountPanelProps) {
         TokenAmountPanelProps,
     } = props
 
-    //#region select token
+    // #region select token
     const [id] = useState(uuid())
     const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
@@ -51,7 +51,7 @@ export function SelectTokenAmountPanel(props: SelectTokenAmountPanelProps) {
             FungibleTokenListProps,
         })
     }, [id, disableNativeToken, disableSearchBar, FungibleTokenListProps])
-    //#endregion
+    // #endregion
 
     return (
         <TokenAmountPanel

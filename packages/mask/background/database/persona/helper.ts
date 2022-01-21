@@ -11,7 +11,7 @@ import {
 import type { IDBPSafeTransaction } from '../utils/openDB'
 import { createReadonlyPersonaTransaction, PersonaDB } from './db'
 
-//#region Local key helpers
+// #region Local key helpers
 /**
  * If has local key of a profile in the database.
  * @param id Profile Identifier
@@ -71,9 +71,9 @@ async function getLocalKeyOf(
     const persona = await tx.objectStore('personas').get(profile.linkedPersona.toText())
     return persona?.localKey
 }
-//#endregion
+// #endregion
 
-//#region ECDH
+// #region ECDH
 export async function deriveAESByECDH(pub: EC_Public_CryptoKey, extractable = true) {
     const curve = (pub.algorithm as EcKeyAlgorithm).namedCurve || ''
     const sameCurvePrivateKeys = new Map<string, EC_Private_JsonWebKey>()
@@ -149,7 +149,7 @@ export async function deriveAESByECDH_version38_or_older(
 
     return new IdentifierMap<ECKeyIdentifier, R>(next_map, ECKeyIdentifier)
 }
-//#endregion
+// #endregion
 
 function abort() {
     throw new Error('Cancelled')

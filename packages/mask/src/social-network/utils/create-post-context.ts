@@ -29,7 +29,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
         const cancel: (Function | undefined)[] = []
         opt.signal?.addEventListener('abort', () => cancel.forEach((fn) => fn?.()))
 
-        //#region Mentioned links
+        // #region Mentioned links
         const links = new ObservableSet<string>()
         {
             const isFB = activatedSocialNetworkUI.networkIdentifier === FACEBOOK_ID
@@ -67,7 +67,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             getCurrentValue: () => [...links],
             subscribe: (sub) => links.event.on(ALL_EVENTS, sub),
         })
-        //#endregion
+        // #endregion
         const author: PostContextAuthor = {
             avatarURL: opt.avatarURL,
             nickname: opt.nickname,
