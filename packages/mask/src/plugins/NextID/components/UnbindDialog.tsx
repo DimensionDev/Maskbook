@@ -5,12 +5,12 @@ import Services from '../../../extension/service'
 import { isSameAddress, useAccount } from '@masknet/web3-shared-evm'
 import type { Persona } from '../../../database'
 import type { Binding } from '../types'
-import { BindPanelUI } from './BindPanelUI'
 import { useCustomSnackbar } from '@masknet/theme'
 import { usePersonaSign } from '../hooks/usePersonaSign'
 import { useWalletSign } from '../hooks/useWalletSign'
 import { useBindPayload } from '../hooks/useBindPayload'
 import { delay } from '@masknet/shared-base'
+import { UnbindPanelUI } from './UnbindPanelUI'
 
 interface VerifyWalletDialogProps {
     unbindAddress: string
@@ -20,7 +20,7 @@ interface VerifyWalletDialogProps {
     bounds: Binding[]
 }
 
-export const UnBindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onClose, persona, onUnBind, bounds }) => {
+export const UnbindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onClose, persona, onUnBind, bounds }) => {
     const account = useAccount()
     const t = useI18N()
     const { showSnackbar } = useCustomSnackbar()
@@ -58,14 +58,13 @@ export const UnBindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onCl
     }, [walletSignState.value, personaSignState.value, unbindAddress])
 
     return (
-        <BindPanelUI
+        <UnbindPanelUI
             title={t.unbind_dialog_title()}
             onClose={onClose}
             open={!!unbindAddress}
             currentPersona={persona}
             onPersonaSign={handlePersonaSign}
             onWalletSign={handleWalletSign}
-            action="delete"
             isCurrentAccount={isSameAddress(account, unbindAddress)}
             signature={{
                 persona: {

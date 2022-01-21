@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import { Box, DialogContent, Stack, Typography } from '@mui/material'
 import { MasksIcon } from '@masknet/icons'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
@@ -10,6 +10,7 @@ import type { Persona } from '../../../database'
 import { formatFingerprint, LoadingAnimation } from '@masknet/shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
+import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 
 const useStyles = makeStyles()((theme) => ({
     persona: {
@@ -56,7 +57,6 @@ const useStyles = makeStyles()((theme) => ({
         right: -6,
     },
     error: {
-        marginTop: '14px',
         color: getMaskColor(theme).redMain,
         paddingLeft: theme.spacing(0.5),
         borderLeft: `solid 2px ${getMaskColor(theme).redMain}`,
@@ -86,7 +86,12 @@ interface BindPanelUIProps {
 
 const SUPPORTED_PLUGINS = [NetworkPluginID.PLUGIN_EVM]
 
-export const BindPanelUI = memo<BindPanelUIProps>(
+export enum DialogTabs {
+    persona = 0,
+    wallet = 1,
+}
+
+export const UnbindPanelUI = memo<BindPanelUIProps>(
     ({ onPersonaSign, onWalletSign, currentPersona, signature, isBound, title, onClose, open, isCurrentAccount }) => {
         const t = useI18N()
         const { classes } = useStyles()
@@ -95,15 +100,64 @@ export const BindPanelUI = memo<BindPanelUIProps>(
 
         const isWalletSigned = !!signature.wallet.value
         const isPersonaSigned = !!signature.persona.value
+        const state = useState(DialogTabs.persona)
 
-        return (
-            <InjectedDialog open={open} title={title} onClose={onClose}>
-                <DialogContent style={{ padding: '24px' }}>
-                    <Box>
-                        <Typography className={classes.subTitle}>{t.wallet()}</Typography>
-                        <WalletStatusBox disableChange />
-                        {isBound && <Typography className={classes.error}>{t.bind_wallet_bound_error()}</Typography>}
+        const tabProps: AbstractTabProps = {
+            tabs: [
+                {
+                    label: t.persona(),
+                    children: (
                         <Box mt={3}>
+                            <Typography className={classes.subTitle}>{t.persona()}</Typography>
+                            <Stack direction="row" className={classes.persona}>
+                                <div className={classes.iconContainer}>
+                                    <MasksIcon style={{ fontSize: '48px' }} />
+                                </div>
+                                <div>
+                                    <Typography className={classes.name}>{currentPersona?.nickname}</Typography>
+                                    <Typography className={classes.identifier}>
+                                        {formatFingerprint(currentPersona?.identifier.compressedPoint ?? '', 10)}
+                                    </Typography>
+                                </div>
+                            </Stack>
+                            {!isSupported && (
+                                <Typography className={classes.error}>{t.unsupported_network()}</Typography>
+                            )}
+                            <Typography my={3}>{t.unbind_persona_tip()}</Typography>
+                            <LoadingButton
+                                fullWidth
+                                disabled={!isBound || !!isPersonaSigned || !isSupported}
+                                classes={{
+                                    loadingIndicatorEnd: classes.loadingIcon,
+                                }}
+                                loadingPosition="end"
+                                className={isPersonaSigned ? classes.done : ''}
+                                loading={signature.persona.loading}
+                                variant="contained"
+                                onClick={onPersonaSign}
+                                endIcon={isPersonaSigned ? <DoneIcon sx={{ color: MaskColorVar.white }} /> : null}
+                                loadingIndicator={<LoadingAnimation />}>
+                                {isPersonaSigned ? t.done() : t.persona_sign()}
+                            </LoadingButton>
+                        </Box>
+                    ),
+                    sx: { p: 0 },
+                },
+                {
+                    label: t.wallet(),
+                    children: (
+                        <Box mt={3}>
+                            <Typography className={classes.subTitle}>{t.wallet()}</Typography>
+                            <WalletStatusBox disableChange />
+                            {!isSupported && (
+                                <Typography className={classes.error}>{t.unsupported_network()}</Typography>
+                            )}
+                            {!isCurrentAccount && (
+                                <Typography className={classes.error}>
+                                    {t.unbind_wallet_same_account_error()}
+                                </Typography>
+                            )}
+                            <Typography my={3}>{t.unbind_wallet_tip()}</Typography>
                             <LoadingButton
                                 fullWidth
                                 classes={{
@@ -120,39 +174,17 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                                 {isWalletSigned ? t.done() : t.wallet_sign()}
                             </LoadingButton>
                         </Box>
-                    </Box>
-                    {!isSupported && <Typography className={classes.error}>{t.unsupported_network()}</Typography>}
-                    <Box mt={3}>
-                        <Typography className={classes.subTitle}>{t.persona()}</Typography>
-                        <Stack direction="row" className={classes.persona} mb={3}>
-                            <div className={classes.iconContainer}>
-                                <MasksIcon style={{ fontSize: '48px' }} />
-                            </div>
-                            <div>
-                                <Typography className={classes.name}>{currentPersona?.nickname}</Typography>
-                                <Typography className={classes.identifier}>
-                                    {formatFingerprint(currentPersona?.identifier.compressedPoint ?? '', 10)}
-                                </Typography>
-                            </div>
-                        </Stack>
-                        <Box mt={3}>
-                            <LoadingButton
-                                fullWidth
-                                disabled={isBound || !!isPersonaSigned || !isSupported}
-                                classes={{
-                                    loadingIndicatorEnd: classes.loadingIcon,
-                                }}
-                                loadingPosition="end"
-                                className={isPersonaSigned ? classes.done : ''}
-                                loading={signature.persona.loading}
-                                variant="contained"
-                                onClick={onPersonaSign}
-                                endIcon={isPersonaSigned ? <DoneIcon sx={{ color: MaskColorVar.white }} /> : null}
-                                loadingIndicator={<LoadingAnimation />}>
-                                {isPersonaSigned ? t.done() : t.persona_sign()}
-                            </LoadingButton>
-                        </Box>
-                    </Box>
+                    ),
+                    sx: { p: 0 },
+                },
+            ],
+            state,
+        }
+
+        return (
+            <InjectedDialog open={open} title={title} onClose={onClose}>
+                <DialogContent style={{ padding: '24px' }}>
+                    <AbstractTab height="auto" {...tabProps} />
                 </DialogContent>
             </InjectedDialog>
         )

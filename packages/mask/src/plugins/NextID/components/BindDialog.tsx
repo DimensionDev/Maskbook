@@ -66,7 +66,6 @@ export const BindDialog = memo<BindDialogProps>(({ open, onClose, persona, onBin
             currentPersona={persona}
             onPersonaSign={handlePersonaSign}
             onWalletSign={handleWalletSign}
-            action="create"
             isCurrentAccount
             signature={{
                 persona: {

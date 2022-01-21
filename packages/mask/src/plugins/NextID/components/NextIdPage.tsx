@@ -7,7 +7,7 @@ import { useAsync, useAsyncRetry, useCounter } from 'react-use'
 import Services from '../../../extension/service'
 import { BindingItem } from './BindingItem'
 import type { Platform } from '../types'
-import { UnBindDialog } from './UnBindDialog'
+import { UnbindDialog } from './UnBindDialog'
 import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
 
@@ -119,7 +119,7 @@ export function NextIdPage({}: NextIDPageProps) {
                     />
                 )}
                 {unbindAddress && currentPersona && (
-                    <UnBindDialog
+                    <UnbindDialog
                         unbindAddress={unbindAddress}
                         onClose={() => setUnBindAddress(undefined)}
                         persona={currentPersona}
@@ -134,7 +134,10 @@ export function NextIdPage({}: NextIDPageProps) {
     return (
         <>
             <Box>
-                <Typography className={classes.tip}>{t.connect_wallet_tip()}</Typography>
+                <Box className={classes.tip}>
+                    <Typography>{t.connect_wallet_tip_intro()}</Typography>
+                    <Typography>{t.connect_wallet_tip()}</Typography>
+                </Box>
                 <Stack justifyContent="center" direction="row" mt="24px">
                     <Button variant="contained" onClick={() => toggleBindDialog(true)}>
                         {t.verify_wallet_button()}
