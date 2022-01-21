@@ -223,7 +223,12 @@ export async function queryPersonaDB(
  * Query many Personas.
  */
 export async function queryPersonasDB(
-    query: (record: PersonaRecord) => boolean,
+    query?: {
+        identifiers?: PersonaIdentifier[]
+        hasPrivateKey?: boolean
+        nameContains?: string
+        initialized?: boolean
+    },
     t?: PersonasTransaction<'readonly'>,
     isIncludeLogout?: boolean,
 ): Promise<PersonaRecord[]> {
@@ -231,7 +236,15 @@ export async function queryPersonasDB(
     const records: PersonaRecord[] = []
     for await (const each of t.objectStore('personas')) {
         const out = personaRecordOutDB(each.value)
-        if (query(out) && (isIncludeLogout || !out.hasLogout)) records.push(out)
+        if (
+            (query?.hasPrivateKey && !out.privateKey) ||
+            (query?.nameContains && out.nickname !== query.nameContains) ||
+            (query?.identifiers && !query.identifiers.some((x) => x.equals(out.identifier))) ||
+            (query?.initialized && out.uninitialized)
+        )
+            continue
+
+        if (isIncludeLogout || !out.hasLogout) records.push(out)
     }
     return records
 }

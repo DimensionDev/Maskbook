@@ -1,4 +1,4 @@
-import type { RelationFavor, RelationRecord } from './types'
+import type { PersonaRecord, ProfileRecord, RelationFavor, RelationRecord } from './types'
 
 // This interface uses by-name style JSON RPC.
 
@@ -82,8 +82,8 @@ export interface MaskNetworkAPIs {
     wallet_getLegacyWalletInfo(): Promise<WalletInfo[]>
     SNSAdaptor_getCurrentDetectedProfile(): Promise<ProfileIdentifier_string | undefined>
     get_all_indexedDB_records(): Promise<{
-        personas: Persona[]
-        profiles: Profile[]
+        personas: PersonaRecord[]
+        profiles: ProfileRecord[]
         relations: RelationRecord[]
     }>
 }

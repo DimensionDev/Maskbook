@@ -28,6 +28,7 @@ export interface SharedNativeAPIs {
         hasPrivateKey?: boolean
         includeLogout?: boolean
         nameContains?: string
+        initialized?: boolean
         pageOption?: PageOption
     }): Promise<PersonaRecord>
     query_personas(params: {
@@ -35,6 +36,7 @@ export interface SharedNativeAPIs {
         hasPrivateKey?: boolean
         includeLogout?: boolean
         nameContains?: string
+        initialized?: boolean
         pageOption?: PageOption
     }): Promise<PersonaRecord[]>
     query_persona_by_profile(params: {
@@ -43,6 +45,7 @@ export interface SharedNativeAPIs {
             hasPrivateKey?: boolean
             includeLogout?: boolean
             nameContains?: string
+            initialized?: boolean
             pageOption?: PageOption
         }
     }): Promise<PersonaRecord | undefined>

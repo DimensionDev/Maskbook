@@ -68,6 +68,10 @@ export function queryProfiles(network?: string): Promise<Profile[]> {
     return queryProfilesWithQuery({ network })
 }
 
+export async function queryProfileRecord() {
+    return queryProfilesDB({})
+}
+
 export function queryProfilesWithIdentifiers(identifiers: ProfileIdentifier[]) {
     return queryProfilesWithQuery({ identifiers })
 }
@@ -130,10 +134,14 @@ export async function queryPersonaByMnemonic(mnemonic: string, password: '') {
 }
 export async function queryPersonas(identifier?: PersonaIdentifier, requirePrivateKey = false): Promise<Persona[]> {
     if (typeof identifier === 'undefined')
-        return (await queryPersonasDB((k) => (requirePrivateKey ? !!k.privateKey : true))).map(personaRecordToPersona)
+        return (await queryPersonasDB({ hasPrivateKey: requirePrivateKey })).map(personaRecordToPersona)
     const x = await queryPersonaDB(identifier)
     if (!x || (!x.privateKey && requirePrivateKey)) return []
     return [personaRecordToPersona(x)]
+}
+
+export async function queryPersonaRecords() {
+    return queryPersonasDB()
 }
 
 export function queryMyPersonas(network?: string): Promise<Persona[]> {
