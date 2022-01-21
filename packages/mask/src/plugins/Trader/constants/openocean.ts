@@ -15,6 +15,5 @@ export const networkNames: Record<NetworkType, string> = {
     [NetworkType.Boba]: '',
     [NetworkType.Fuse]: '',
     [NetworkType.Metis]: '',
-    [NetworkType.Avalanche]: '',
     [NetworkType.Optimistic]: '',
 }

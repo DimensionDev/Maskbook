@@ -50,7 +50,6 @@ export function useCurrentTradeProvider(chainId?: ChainId) {
         case NetworkType.Boba:
         case NetworkType.Fuse:
         case NetworkType.Metis:
-        case NetworkType.Avalanche:
         case NetworkType.Optimistic:
             throw new Error(`To be implement network: ${networkType}`)
         default:
