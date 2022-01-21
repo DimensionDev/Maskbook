@@ -35,6 +35,11 @@ const useOptionsStyles = makeStyles()((theme) => {
             padding: '8px',
             transition: 'all .3s',
         },
+        blockChipSelected: {
+            '&:hover': {
+                backgroundColor: theme.palette.primary.main,
+            },
+        },
         checkIcon: {},
         horizontalScrollBar: {
             '::-webkit-scrollbar': {
@@ -73,7 +78,7 @@ export default function OptionsCard(props: OptionsViewProps) {
     const [unmeetCondition, setUnmeetCondition] = useState<PuzzleCondition[]>([])
     const [snackVisible, setSnackVisible] = useState(false)
 
-    const { classes } = useOptionsStyles()
+    const { classes, cx } = useOptionsStyles()
     const chainId = useChainId()
     const { t } = useContext(FindTrumanContext)
     const parentRef = useRef<HTMLDivElement | null>(null)
@@ -99,6 +104,7 @@ export default function OptionsCard(props: OptionsViewProps) {
         return userStatus.options.map((option, index) => {
             const count = userStatus.count ? userStatus.count.find((e) => e.choice === index)?.value || 0 : 0
             const percent = (total > 0 ? (count * 100) / total : 0).toFixed(2)
+            const isSelected = choice === index
 
             return userStatus.count ? (
                 <Card
@@ -133,7 +139,7 @@ export default function OptionsCard(props: OptionsViewProps) {
                                 {option}
                             </Typography>
                         </Box>
-                        {choice === index ? (
+                        {isSelected ? (
                             <Chip
                                 icon={<RadioButtonChecked />}
                                 size="small"
@@ -165,7 +171,7 @@ export default function OptionsCard(props: OptionsViewProps) {
                 <Box key={index} sx={{ position: 'relative' }}>
                     <Chip
                         id="submit"
-                        className={classes.blockChip}
+                        className={cx(classes.blockChip, isSelected && classes.blockChipSelected)}
                         label={
                             <div
                                 style={{
@@ -183,10 +189,10 @@ export default function OptionsCard(props: OptionsViewProps) {
                                 : undefined
                         }
                         disabled={submitting}
-                        deleteIcon={choice === index ? <DoneOutlined /> : undefined}
-                        onDelete={choice === index ? () => {} : undefined}
-                        color={showCount ? 'default' : choice === index ? 'primary' : 'default'}
-                        variant={showCount ? 'outlined' : choice === index ? 'filled' : 'outlined'}
+                        deleteIcon={isSelected ? <DoneOutlined /> : undefined}
+                        onDelete={isSelected ? () => {} : undefined}
+                        color={showCount ? 'default' : isSelected ? 'primary' : 'default'}
+                        variant={showCount ? 'outlined' : isSelected ? 'filled' : 'outlined'}
                     />
                 </Box>
             )

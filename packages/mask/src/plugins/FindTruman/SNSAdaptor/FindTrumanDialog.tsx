@@ -87,7 +87,7 @@ export function FindTrumanDialog(props: FindTrumanDialogProps) {
     )
 }
 
-const useTabsStyles = makeStyles()((theme) => ({
+export const useTabsStyles = makeStyles()((theme) => ({
     tab: {
         height: 36,
         minHeight: 36,

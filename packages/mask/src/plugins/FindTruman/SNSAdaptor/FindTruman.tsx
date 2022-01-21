@@ -84,6 +84,11 @@ const useStyles = makeStyles()((theme) => {
             backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
             cursor: 'pointer',
         },
+        chip: {
+            '&:hover': {
+                backgroundColor: theme.palette.primary.main,
+            },
+        },
     }
 })
 
@@ -199,7 +204,12 @@ export function FindTruman(props: FindTrumanProps) {
                                                 {isNoncritical && <Avatar className={classes.n}>N</Avatar>}
                                             </Box>
                                         </Tooltip>
-                                        <Chip color="primary" size="small" label={getPostTypeTitle(t, postType)} />
+                                        <Chip
+                                            className={classes.chip}
+                                            color="primary"
+                                            size="small"
+                                            label={getPostTypeTitle(t, postType)}
+                                        />
                                     </Box>
                                 </Box>
                             )

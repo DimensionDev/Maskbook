@@ -1,8 +1,9 @@
 import { useAccount } from '@masknet/web3-shared-evm'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends, useTabs } from '@masknet/theme'
 import { useAsyncRetry } from 'react-use'
 import { fetchAllPollsOrPuzzles, fetchUserStoryStatus, submitPoll, submitPuzzle } from '../Worker/apis'
-import { Button, Card, DialogActions, DialogContent } from '@mui/material'
+import { Box, Button, Card, DialogActions, DialogContent } from '@mui/material'
+import { TabContext, TabPanel } from '@mui/lab'
 import StageCard from './StageCard'
 import { useControlledDialog } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -12,6 +13,8 @@ import ResultCard from './ResultCard'
 import getUnixTime from 'date-fns/getUnixTime'
 import { PostType, UserPollOrPuzzleStatus } from '../types'
 import { FindTrumanContext } from '../context'
+import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
+import { useTabsStyles } from './FindTrumanDialog'
 
 const useStyles = makeStyles()((theme, props) => ({
     panel: {},
@@ -32,6 +35,28 @@ const useStyles = makeStyles()((theme, props) => ({
             marginBottom: theme.spacing(2),
         },
     },
+    abstractTabWrapper: {
+        position: 'sticky',
+        top: 0,
+        width: '100%',
+        zIndex: 2,
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(2),
+        backgroundColor: theme.palette.background.paper,
+    },
+    tabPaneWrapper: {
+        width: '100%',
+        marginBottom: '24px',
+    },
+    tabPane: {
+        width: 535,
+        margin: '0 auto',
+        padding: 0,
+    },
+    dialogWrapper: {
+        paddingBottom: '0px !important',
+        paddingTop: '0px !important',
+    },
 }))
 
 interface ParticipatePanelProps {
@@ -44,7 +69,6 @@ export default function ParticipatePanel(props: ParticipatePanelProps) {
     const { t } = useContext(FindTrumanContext)
     const account = useAccount()
 
-    const [critical, setCritical] = useState(false)
     const { open: isDialogOpen, onOpen: onDialogOpen, onClose: onDialogClose } = useControlledDialog()
 
     const { value: userStoryStatus, retry: onUpdate } = useAsyncRetry(async () => {
@@ -63,47 +87,38 @@ export default function ParticipatePanel(props: ParticipatePanelProps) {
                             color="primary"
                             variant="contained"
                             onClick={() => {
-                                setCritical(true)
                                 onDialogOpen()
                             }}>
-                            {t('plugin_find_truman_dialog_critical')}
-                        </Button>
-                        <Button
-                            fullWidth
-                            color="primary"
-                            variant="outlined"
-                            onClick={() => {
-                                setCritical(false)
-                                onDialogOpen()
-                            }}>
-                            {t('plugin_find_truman_dialog_noncritical')}
+                            {t('plugin_find_truman_dialog_view_all')}
                         </Button>
                     </DialogActions>
                 </>
             )}
-            <ParticipateDialog
-                account={account}
-                critical={critical}
-                open={isDialogOpen}
-                onClose={onDialogClose}
-                onUpdate={onUpdate}
-            />
+            <ParticipateDialog account={account} open={isDialogOpen} onClose={onDialogClose} onUpdate={onUpdate} />
         </div>
     )
 }
 
+enum ParticipationType {
+    Critical = 'critical',
+    NonCritical = 'non-critical',
+}
+
+const ParticipationTabValues = [ParticipationType.Critical, ParticipationType.NonCritical]
+
 interface ParticipateDialogProps {
     account: string
-    critical: boolean
     open: boolean
     onClose: () => void
     onUpdate: () => void
 }
 
 function ParticipateDialog(props: ParticipateDialogProps) {
-    const { account, critical, open, onClose, onUpdate } = props
+    const { account, open, onClose, onUpdate } = props
     const { classes } = useStyles()
     const { t } = useContext(FindTrumanContext)
+
+    const [currentTab, onChange, tabs] = useTabs(ParticipationType.Critical, ParticipationType.NonCritical)
 
     const [polls, setPolls] = useState<UserPollOrPuzzleStatus[]>([])
 
@@ -127,45 +142,80 @@ function ParticipateDialog(props: ParticipateDialogProps) {
         onUpdate()
     }
 
+    const renderPoll = (poll: UserPollOrPuzzleStatus) => {
+        return poll.status ? (
+            <Card key={`${poll.type}_${poll.id}`} variant="outlined" className={classes.wrapper}>
+                <OptionsCard
+                    userStatus={poll}
+                    onSubmit={async (choice) => {
+                        return handleSubmit(poll.type, poll.id, choice)
+                    }}
+                />
+            </Card>
+        ) : (
+            <Card key={`${poll.type}_${poll.id}`} variant="outlined" className={classes.wrapper}>
+                <ResultCard
+                    type={poll.type}
+                    userStatus={poll}
+                    result={{
+                        ...poll,
+                        correct: poll.result,
+                        count: poll.count || [],
+                    }}
+                />
+            </Card>
+        )
+    }
+
     return (
-        <InjectedDialog
-            title={t(
-                critical ? 'plugin_find_truman_dialog_critical_title' : 'plugin_find_truman_dialog_noncritical_title',
-            )}
-            open={open}
-            onClose={onClose}>
-            <DialogContent>
-                {polls
-                    ?.filter((e) => e.critical === critical)
-                    .map((p) => {
-                        if (p.status) {
-                            return (
-                                <Card key={`${p.type}_${p.id}`} variant="outlined" className={classes.wrapper}>
-                                    <OptionsCard
-                                        userStatus={p}
-                                        onSubmit={async (choice) => {
-                                            return handleSubmit(p.type, p.id, choice)
-                                        }}
-                                    />
-                                </Card>
-                            )
-                        } else {
-                            return (
-                                <Card key={`${p.type}_${p.id}`} variant="outlined" className={classes.wrapper}>
-                                    <ResultCard
-                                        type={p.type}
-                                        userStatus={p}
-                                        result={{
-                                            ...p,
-                                            correct: p.result,
-                                            count: p.count || [],
-                                        }}
-                                    />
-                                </Card>
-                            )
-                        }
-                    })}
+        <InjectedDialog title={t('plugin_find_truman_dialog_participation_title')} open={open} onClose={onClose}>
+            <DialogContent className={classes.dialogWrapper}>
+                <TabContext value={currentTab}>
+                    <div className={classes.abstractTabWrapper}>
+                        <FindTrumanDialogTabs currentTab={currentTab} setTab={(tab) => onChange(null, tab)} />
+                    </div>
+                    <Box className={classes.tabPaneWrapper}>
+                        <TabPanel className={classes.tabPane} value={ParticipationType.Critical}>
+                            {polls?.filter((e) => e.critical).map((p) => renderPoll(p))}
+                        </TabPanel>
+                        <TabPanel className={classes.tabPane} value={ParticipationType.NonCritical}>
+                            {polls?.filter((e) => !e.critical).map((p) => renderPoll(p))}
+                        </TabPanel>
+                    </Box>
+                </TabContext>
             </DialogContent>
         </InjectedDialog>
     )
+}
+
+interface ParticipationTabsProps
+    extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {
+    currentTab: ParticipationType
+    setTab(tab: ParticipationType): void
+}
+
+function FindTrumanDialogTabs(props: ParticipationTabsProps) {
+    const classes = useStylesExtends(useTabsStyles(), props)
+    const { t } = useContext(FindTrumanContext)
+    const { currentTab, setTab } = props
+
+    const tabProps: AbstractTabProps = {
+        tabs: [
+            {
+                label: <span>{t('plugin_find_truman_dialog_critical')}</span>,
+                sx: { p: 0 },
+                cb: () => setTab(ParticipationType.Critical),
+            },
+            {
+                label: <span>{t('plugin_find_truman_dialog_noncritical')}</span>,
+                sx: { p: 0 },
+                cb: () => setTab(ParticipationType.NonCritical),
+            },
+        ],
+        index: ParticipationTabValues.indexOf(currentTab),
+        classes,
+        hasOnlyOneChild: true,
+    }
+
+    return <AbstractTab {...tabProps} />
 }
