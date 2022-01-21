@@ -16,7 +16,7 @@ export function useUser() {
     return user
 }
 
-export function useCurrentVisitingUser(refresh?: boolean) {
+export function useCurrentVisitingUser(refresh?: number) {
     const [user, setUser] = useState<User>({ userId: '', address: '' })
     const identity = useCurrentVisitingIdentity()
     useAsync(async () => {

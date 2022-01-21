@@ -6,7 +6,7 @@ import type { User } from '../types'
 import { Punk3D, DEFAULT_SET_WORD, MASK_TWITTER, DEFAULT_PUNK_MASK_WORD } from './../constants'
 import { getAssetAsBlobURL } from '../../../utils'
 
-export function useEssay(user: User, refresh?: boolean) {
+export function useEssay(user: User, refresh?: number) {
     return useAsync(async () => {
         if (!user.address) return null
         const metaData = await PluginPetRPC.getEssay(user.address)

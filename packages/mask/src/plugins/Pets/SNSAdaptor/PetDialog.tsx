@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo, ReactNode } from 'react'
 import { useAsync } from 'react-use'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { isSameAddress } from '@masknet/web3-shared-evm'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles, useStylesExtends, useCustomSnackbar } from '@masknet/theme'
 import { TextField, Typography, Box, DialogContent, Grid, MenuItem, Snackbar, Autocomplete } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { PluginPetMessages, PluginPetRPC } from '../messages'
@@ -85,7 +85,8 @@ const useStyles = makeStyles()((theme) => ({
 export function PetDialog() {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), {})
-    const { open, closeDialog } = useRemoteControlledDialog(PluginPetMessages.essayDialogUpdated, () => {})
+    const { showSnackbar } = useCustomSnackbar()
+    const { open, closeDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated, () => {})
     const [configNFTs, setConfigNFTs] = useState<Record<string, Constant> | undefined>(undefined)
     const [loading, setLoading] = useState(false)
 
@@ -100,6 +101,7 @@ export function PetDialog() {
     const [isTipShow, setTipShow] = useState(false)
     const [holderChange, setHolderChange] = useState(true)
     const [tokenInfoSelect, setTokenInfoSelect] = useState<OwnerERC721TokenInfo | null>(null)
+    const [inputTokenName, setInputTokenName] = useState('')
 
     useAsync(async () => {
         setConfigNFTs(await PluginPetRPC.getConfigEssay())
@@ -120,6 +122,7 @@ export function PetDialog() {
         timer = setTimeout(() => {
             setTipShow(false)
         }, 2000)
+        PluginPetMessages.events.setResult.sendToAll(Math.random())
     }
 
     const saveHandle = async () => {
@@ -141,6 +144,8 @@ export function PetDialog() {
             await PluginPetRPC.setUserAddress(user)
             await PluginPetRPC.saveEssay(user.address, meta, user.userId)
             closeDialogHandle()
+        } catch {
+            showSnackbar(t('plugin_pets_dialog_fail'), { variant: 'error' })
         } finally {
             setLoading(false)
         }
@@ -150,12 +155,21 @@ export function PetDialog() {
         const matched = nfts.find((item) => item.name === v)
         if (matched) {
             setCollection(matched)
+            setTokenInfoSelect(null)
+            setInputTokenName('')
+            setMetaData({
+                ...metaData,
+                userId: user.userId,
+                tokenId: '',
+                image: '',
+            })
         }
         setCollectionsError(false)
     }
 
     const onImageChange = (v: OwnerERC721TokenInfo | null) => {
         setTokenInfoSelect(v)
+        setInputTokenName(v?.name ?? '')
         setMetaData({
             ...metaData,
             userId: user.userId,
@@ -227,6 +241,7 @@ export function PetDialog() {
                 disablePortal
                 id="token-box"
                 options={collection.tokens}
+                inputValue={inputTokenName}
                 onChange={(_event, newValue) => onImageChange(newValue)}
                 getOptionLabel={(option) => option.name ?? ''}
                 PaperComponent={({ children }) => paperComponent(children)}
@@ -250,7 +265,7 @@ export function PetDialog() {
                 )}
             />
         )
-    }, [collection.tokens])
+    }, [collection.tokens, tokenInfoSelect])
 
     return (
         <>

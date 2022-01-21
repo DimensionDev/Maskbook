@@ -149,7 +149,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     // #endregion
 
     // #region pet friends
-    const { setDialog: setPetDialog } = useRemoteControlledDialog(PluginPetMessages.essayDialogUpdated)
+    const { setDialog: setPetDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated)
     // #endregion
 
     // #region second level entry dialog

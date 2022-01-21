@@ -4,6 +4,7 @@ import { useEssay, useDefaultEssay, useCurrentVisitingUser } from '../hooks'
 import { ModelNFT } from './ModelNFT'
 import { NormalNFT } from './NormalNFT'
 import { ImageType, ShowMeta } from '../types'
+import { PluginPetMessages } from '../messages'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -17,9 +18,10 @@ const AnimatePic = () => {
     const classes = useStylesExtends(useStyles(), {})
 
     const [start, setStart] = useState(true)
+    const [refresh, setRefresh] = useState(0)
 
-    const visitor = useCurrentVisitingUser(start)
-    const visitorMeta = useEssay(visitor, start)
+    const visitor = useCurrentVisitingUser(refresh)
+    const visitorMeta = useEssay(visitor, refresh)
     const defMeta = useDefaultEssay(visitor)
 
     const [showMeta, setShowMeta] = useState<ShowMeta | undefined>(undefined)
@@ -35,6 +37,7 @@ const AnimatePic = () => {
     const handleMouseLeave = () => setInfoShow(false)
 
     useEffect(() => {
+        PluginPetMessages.events.setResult.on(async (number) => setRefresh(number))
         let count = 0
         const timer = setInterval(() => {
             const check = count % 9 < 5

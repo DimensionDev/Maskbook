@@ -198,7 +198,7 @@ export default function Plugins() {
 
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
-    const { openDialog: openEssayDialog } = useRemoteControlledDialog(PluginMessages.Pets.essayDialogUpdated)
+    const { openDialog: openEssayDialog } = useRemoteControlledDialog(PluginMessages.Pets.events.essayDialogUpdated)
 
     async function onSwitch(id: string, checked: boolean) {
         await Services.Settings.setPluginMinimalModeEnabled(id, !checked)
