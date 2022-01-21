@@ -8,6 +8,7 @@ import {
     personaRecordToPersona,
     queryAvatarDataURL,
     queryPersona,
+    queryPersonaRecord,
     queryPostPagedDB,
     queryProfile,
     queryProfilesWithQuery,

@@ -1,7 +1,7 @@
 import { useI18N } from '../locales'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Skeleton, Stack, Typography } from '@mui/material'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { BindDialog } from './BindDialog'
 import { useAsync, useAsyncRetry, useCounter } from 'react-use'
 import Services from '../../../extension/service'
@@ -9,6 +9,7 @@ import { BindingItem } from './BindingItem'
 import type { Platform } from '../types'
 import { UnBindDialog } from './UnBindDialog'
 import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
+import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
 
 const useStyles = makeStyles()((theme) => ({
     tip: {
@@ -34,10 +35,22 @@ export function NextIdPage({}: NextIDPageProps) {
     const t = useI18N()
     const { classes } = useStyles()
     const currentProfileIdentifier = useLastRecognizedIdentity()
+    const personaConnectStatus = usePersonaConnectStatus()
 
     const [openBindDialog, toggleBindDialog] = useState(false)
     const [unbindAddress, setUnBindAddress] = useState<string>()
     const [count, { inc }] = useCounter(0)
+
+    const personaActionButton = useMemo(() => {
+        if (!personaConnectStatus.action) return null
+
+        const button = personaConnectStatus.hasPersona ? t.connect_persona() : t.create_persona()
+        return (
+            <Button variant="contained" onClick={personaConnectStatus.action}>
+                {button}
+            </Button>
+        )
+    }, [personaConnectStatus, t])
 
     const { value: currentIdentifier, loading: loadingIdentifier } = useAsyncRetry(
         () => Services.Settings.getCurrentPersonaIdentifier(),
@@ -53,6 +66,14 @@ export function NextIdPage({}: NextIDPageProps) {
         if (!currentIdentifier) return Promise.resolve(null)
         return Services.Helper.queryExistedBinding(currentIdentifier)
     }, [currentIdentifier, count])
+
+    if (personaActionButton) {
+        return (
+            <Stack justifyContent="center" direction="row" mt="24px">
+                {personaActionButton}
+            </Stack>
+        )
+    }
 
     if (loading || loadingIdentifier) {
         return (

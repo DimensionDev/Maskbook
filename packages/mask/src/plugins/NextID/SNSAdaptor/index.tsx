@@ -10,7 +10,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         {
             ID: `${PLUGIN_ID}_tabContent`,
             label: 'Wallet',
-            priority: 99999,
+            priority: 10,
             UI: {
                 TabContent: NextIdPage,
             },

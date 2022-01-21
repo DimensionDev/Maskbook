@@ -22,5 +22,9 @@
     "notify_wallet_sign_cancel": "Your wallet cancelled the sign",
     "notify_wallet_sign_request_title": "Wallet Sign",
     "notify_wallet_sign_request_success": "Signature success",
-    "notify_wallet_sign_request_failed": "Signature failed"
+    "notify_wallet_sign_request_failed": "Signature failed",
+    "create_persona": "Create persona",
+    "connect_persona": "Connect persona",
+    "please_create_persona": "Please create persona",
+    "please_connect_persona": "Please connect persona"
 }
