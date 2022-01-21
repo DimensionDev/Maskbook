@@ -84,7 +84,7 @@ export namespace RSS3BaseAPI {
         getFootprints(address: string): Promise<GeneralAssetResponse | undefined>
         getNameInfo(id: string): Promise<NameInfo | undefined>
         getProfileInfo(address: string): Promise<ProfileInfo | undefined>
-        getNFTs(address: string): Promise<GeneralAssetResponse | undefined>
+        getNFTs(address: string): Promise<NonFungibleTokenAPI.Asset[] | undefined>
     }
 }
 

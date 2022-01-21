@@ -67,6 +67,34 @@ export class RSS3API implements RSS3BaseAPI.Provider {
             personaID: address,
             type: RSS3BaseAPI.AssetType.NFT,
         })
-        return fetchJSON<RSS3BaseAPI.GeneralAssetResponse>(url)
+
+        const assetResponse = await fetchJSON<RSS3BaseAPI.GeneralAssetResponse>(url)
+        if (!assetResponse.status) return []
+        return assetResponse.assets.map((asset) => {
+            return {
+                is_verified: false,
+                is_auction: false,
+                image_url: asset.info.image_preview_url ?? '',
+                asset_contract: null,
+                current_price: null,
+                current_symbol: '',
+                owner: null,
+                creator: null,
+                token_id: asset.id.substr(asset.id.lastIndexOf('-') + 1),
+                token_address: asset.id.substr(0, asset.id.indexOf('-')),
+                traits: [],
+                safelist_request_status: '',
+                description: '',
+                name: asset.info.title ?? '',
+                collection_name: asset.info.collection ?? '',
+                animation_url: asset.info.animation_url ?? '',
+                end_time: asset.info.end_date ? new Date(asset.info.end_date) : null,
+                order_payment_tokens: [],
+                offer_payment_tokens: [],
+                slug: null,
+                top_ownerships: [],
+                response_: asset,
+            }
+        })
     }
 }
