@@ -67,6 +67,7 @@ export namespace RSS3BaseAPI {
     export enum AssetType {
         GitcoinDonation = 'Gitcoin-Donation',
         POAP = 'POAP',
+        NFT = 'NFT',
     }
 
     export interface NameInfo {
@@ -83,6 +84,7 @@ export namespace RSS3BaseAPI {
         getFootprints(address: string): Promise<GeneralAssetResponse | undefined>
         getNameInfo(id: string): Promise<NameInfo | undefined>
         getProfileInfo(address: string): Promise<ProfileInfo | undefined>
+        getNFTs(address: string): Promise<GeneralAssetResponse | undefined>
     }
 }
 
@@ -295,13 +297,13 @@ export namespace NonFungibleTokenAPI {
 export namespace StorageAPI {
     export interface Storage {
         set<T extends {}>(key: string, value: T): Promise<void>
-        get<T>(key: string): Promise<T | void>
-        delete?: (key: string) => Promise<void>
+        get<T>(key: string): Promise<T | undefined>
+        delete?(key: string): Promise<void>
     }
 
     export interface Provider {
-        createJSON_Storage?: (key: string) => Storage
-        createBinaryStorage?: (key: string) => Storage
+        createJSON_Storage?(key: string): Storage
+        createBinaryStorage?(key: string): Storage
     }
 }
 
