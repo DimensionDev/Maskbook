@@ -66,7 +66,11 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
         setTab(AssetTab.Token)
     }, [pluginId])
 
-    const showCollectibles = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginId)
+    const showCollectibles = [
+        NetworkPluginID.PLUGIN_EVM,
+        NetworkPluginID.PLUGIN_SOLANA,
+        NetworkPluginID.PLUGIN_FLOW,
+    ].includes(pluginId)
 
     return (
         <>
