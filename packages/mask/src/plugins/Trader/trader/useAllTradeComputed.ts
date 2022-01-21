@@ -200,7 +200,7 @@ export function useAllTradeComputed(
         tradeProviders.some((x) => x === TradeProvider.PANGOLIN) ? outputToken : undefined,
     )
     const pangolindex = useUniswapTradeComputed(pangolindex_.value, inputToken, outputToken)
-    const pangolindexEstimateGas = useUniswapTradeGasLimit(pangolindex, TradeProvider.PANGOLIN)
+    const pangolinEstimateGas = useUniswapTradeGasLimit(pangolindex, TradeProvider.PANGOLIN)
 
     // openocean
     const openocean_ = useOpenOceanTrade(TradeStrategy.ExactIn, inputAmount_, '0', inputToken, outputToken)
@@ -248,7 +248,7 @@ export function useAllTradeComputed(
         { provider: TradeProvider.DODO, ...dodo_, value: dodo, gas: dodoSwapEstimateGas },
         { provider: TradeProvider.BANCOR, ...bancor_, value: bancor, gas: bancorSwapEstimateGas },
         { provider: TradeProvider.TRADERJOE, ...traderJoe_, value: traderJoe, gas: traderJoeEstimateGas },
-        { provider: TradeProvider.PANGOLIN, ...pangolindex_, value: pangolindex, gas: pangolindexEstimateGas },
+        { provider: TradeProvider.PANGOLIN, ...pangolindex_, value: pangolindex, gas: pangolinEstimateGas },
         { provider: TradeProvider.OPENOCEAN, ...openocean_, value: openocean, gas: openoceanSwapEstimateGas },
         { provider: TradeProvider.WANNASWAP, ...wannaswap_, value: wannaswap, gas: wannaSwapEstimateGas },
         { provider: TradeProvider.TRISOLARIS, ...trisolaris_, value: trisolaris, gas: trisolarisEstimateGas },
