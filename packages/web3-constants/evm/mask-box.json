@@ -41,7 +41,7 @@
     },
     "MASK_BOX_TEST_NFT": {
         "Mainnet": "0x56136E69A5771436a9598804c5eA792230c21181",
-        "Ropsten": "",
+        "Ropsten": "0x4c73F4DC55Ef094259570892F52717cF19c62283",
         "Rinkeby": "0x0c8FB5C985E00fb1D002b6B9700084492Fb4B9A8",
         "Kovan": "",
         "Gorli": "",
@@ -54,17 +54,17 @@
         "xDai": "",
         "Boba": "",
         "Boba_Rinkeby": "",
-        "Celo": "",
-        "Fantom": "",
-        "Aurora": "",
+        "Celo": "0x066804d9123bF2609Ed4A4a40b1177a9c5a9Ed51",
+        "Fantom": "0x05ee315E407C21a594f807D61d6CC11306D1F149",
+        "Aurora": "0x83D6b366f21e413f214EB077D5378478e71a5eD2",
         "Aurora_Testnet": ""
     },
     "WHITE_LIST_QUALIFICATION_CONTRACT_ADDRESS": {
         "Mainnet": "",
-        "Ropsten": "",
+        "Ropsten": "0x3011dF5b0Be18A56693cC062Cb61a160dca571C3",
         "Rinkeby": "0x996A9DCe6247cd8AaFA60de34cDD5332d9AdE702",
         "Kovan": "",
-        "Gorli": "",
+        "Gorli": "0xfE14631D3C2364171694EBcA05CAD08A54B2b07a",
         "BSC": "",
         "BSCT": "",
         "Matic": "",
@@ -76,7 +76,7 @@
         "Boba_Rinkeby": "",
         "Celo": "",
         "Fantom": "",
-        "Aurora": "",
+        "Aurora": "0x83D6b366f21e413f214EB077D5378478e71a5eD2",
         "Aurora_Testnet": ""
     },
     "SIG_VERIFY_QULIFICATION_CONTRACT_ADDRESS": {

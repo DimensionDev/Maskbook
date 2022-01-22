@@ -32,7 +32,7 @@
         "Arbitrum": "https://api.arbiscan.io/api",
         "Arbitrum_Rinkeby": "",
         "xDai": "https://blockscout.com/xdai/mainnet/api",
-        "Boba": "",
+        "Boba": "https://blockexplorer.boba.network/api",
         "Boba_Rinkeby": "",
         "Celo": "https://explorer.celo.org/api",
         "Fantom": "https://api.ftmscan.com/api",

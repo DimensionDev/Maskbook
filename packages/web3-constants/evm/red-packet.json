@@ -74,8 +74,8 @@
         "xDai": "0x54a0A221C25Fc0a347EC929cFC5db0be17fA2a2B",
         "Boba": "0x578a7Fee5f0D8CEc7d00578Bf37374C5b95C4b98",
         "Boba_Rinkeby": "0xB4D669bc117735FdA44e90e52795132187705B21",
-        "Celo": "",
-        "Fantom": "",
+        "Celo": "0xab7b1be4233a04e5c43a810e75657eced8e5463b",
+        "Fantom": "0x578a7Fee5f0D8CEc7d00578Bf37374C5b95C4b98",
         "Aurora": "0x19f179D7e0D7d9F9d5386afFF64271D98A91615B",
         "Aurora_Testnet": "0xdB93cCd481012bB5D1E2c8d0aF7C5f2940c00fdC"
     },
@@ -94,8 +94,8 @@
         "xDai": 18101937,
         "Boba": 284557,
         "Boba_Rinkeby": 87121,
-        "Celo": 0,
-        "Fantom": 0,
+        "Celo": 10413552,
+        "Fantom": 25112473,
         "Aurora": 57552338,
         "Aurora_Testnet": 77918765
     },
@@ -114,8 +114,8 @@
         "xDai": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-xdai",
         "Boba": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-boba",
         "Boba_Rinkeby": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-boba-rinkeby",
-        "Celo": "",
-        "Fantom": "",
+        "Celo": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-celo",
+        "Fantom": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-fantom",
         "Aurora": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-aurora",
         "Aurora_Testnet": ""
     }
