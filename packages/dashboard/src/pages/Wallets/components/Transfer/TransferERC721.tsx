@@ -117,15 +117,15 @@ export const TransferERC721 = memo(() => {
 
     const allFormFields = watch()
 
-    //#region resolve ENS domain
+    // #region resolve ENS domain
     const {
         value: registeredAddress = '',
         error: resolveDomainError,
         loading: resolveDomainLoading,
     } = useLookupAddress(allFormFields.recipient, NetworkPluginID.PLUGIN_EVM)
-    //#endregion
+    // #endregion
 
-    //#region check contract address and account address
+    // #region check contract address and account address
     useAsync(async () => {
         const recipient = allFormFields.recipient
         setRecipientError(null)
@@ -147,7 +147,7 @@ export const TransferERC721 = memo(() => {
             })
         }
     }, [allFormFields.recipient, clearErrors, registeredAddress])
-    //#endregion
+    // #endregion
 
     const erc721GasLimit = useGasLimit(
         EthereumTokenType.ERC721,

@@ -6,17 +6,17 @@ export const apply: <T extends (...args: any[]) => any>(
 export const { error, warn } = console
 
 const { defineProperties } = Object
-//#region document.activeElement
+// #region document.activeElement
 const DocumentActiveElementGetter = Object.getOwnPropertyDescriptors(
     Object.getPrototypeOf(Object.getPrototypeOf(document)),
 ).activeElement.get!
 export const getDocumentActiveElement = (): Element => apply(DocumentActiveElementGetter, document, [])
-//#endregion
-//#region CustomEvent.prototype.detail
+// #endregion
+// #region CustomEvent.prototype.detail
 const CustomEventDetailGetter = Object.getOwnPropertyDescriptor(CustomEvent.prototype, 'detail')!.get!
 export const getCustomEventDetail = (e: CustomEvent) => apply(CustomEventDetailGetter, e, [])
-//#endregion
-//#region new Map()
+// #endregion
+// #region new Map()
 const { Map: _xray_Map } = globalThis
 const XRayMapOriginalProtoDesc = Object.getOwnPropertyDescriptors(_xray_Map.prototype)
 export function xray_Map() {
@@ -24,7 +24,7 @@ export function xray_Map() {
     defineProperties(map, XRayMapOriginalProtoDesc)
     return map
 }
-//#endregion
+// #endregion
 export const {
     Proxy: no_xray_Proxy,
     Event: no_xray_Event,

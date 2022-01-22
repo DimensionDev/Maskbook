@@ -86,7 +86,7 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
 
     const loading = (loadingFromChain || loadingBalanceFromNFTscan) && !balance
 
-    //#region select contract
+    // #region select contract
     const [id] = useState(uuid())
 
     const { setDialog: setNftContractDialog } = useRemoteControlledDialog(
@@ -106,7 +106,7 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
             uuid: id,
         })
     }, [setNftContractDialog, uuid])
-    //#endregion
+    // #endregion
 
     return (
         <Box className={classes.root}>

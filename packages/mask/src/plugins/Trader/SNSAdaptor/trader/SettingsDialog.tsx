@@ -51,9 +51,9 @@ export function SettingsDialog(props: SettingsDialogProps) {
     const [gasConfig, setGasConfig] = useState<GasOptionConfig>()
     const [unconfirmedSlippage, setUnconfirmedSlippage] = useState(slippage)
 
-    //#region remote controlled dialog
+    // #region remote controlled dialog
     const { open, setDialog, closeDialog } = useRemoteControlledDialog(PluginTraderMessages.swapSettingsUpdated)
-    //#endregion
+    // #endregion
 
     useEffect(() => {
         setUnconfirmedSlippage(slippage)

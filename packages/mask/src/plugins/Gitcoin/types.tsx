@@ -7,8 +7,8 @@ export enum GitcoinGrantFailedReason {
     FetchFailed = 1,
 }
 
-//#endregion
-//#region gitcoin
+// #endregion
+// #region gitcoin
 export interface GitcoinDonationPayload {
     donor_address: string
     donation_address: string
