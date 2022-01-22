@@ -7,7 +7,7 @@ import { useAsync, useAsyncRetry, useCounter } from 'react-use'
 import Services from '../../../extension/service'
 import { BindingItem } from './BindingItem'
 import type { Platform } from '../types'
-import { UnbindDialog } from './UnBindDialog'
+import { UnbindDialog } from './UnbindDialog'
 import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
 

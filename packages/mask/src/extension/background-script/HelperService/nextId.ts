@@ -102,6 +102,6 @@ export async function createPersonaPayload(
         mode: 'cors',
     })
 
-    const result = (await response.json()) as PayloadResponse
+    const result: PayloadResponse = await response.json()
     return JSON.stringify(JSON.parse(result.sign_payload))
 }
