@@ -1,4 +1,4 @@
-import { AttachmentOptions, Provider, ProviderAgent } from '../types'
+import { AttachmentOptions, LandingPageMetadata, Provider, ProviderAgent } from '../types'
 import arweave from './arweave'
 import ipfs from './ipfs'
 import swarm from './swarm'
@@ -19,7 +19,7 @@ export async function* upload(provider: Provider, id: string) {
     }
 }
 
-export async function uploadLandingPage(provider: Provider, metadata: any) {
+export async function uploadLandingPage(provider: Provider, metadata: LandingPageMetadata) {
     return allProviders[provider]?.uploadLandingPage(metadata)
 }
 

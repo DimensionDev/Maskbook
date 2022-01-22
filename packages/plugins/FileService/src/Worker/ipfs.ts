@@ -40,7 +40,7 @@ class IPFSAgent implements ProviderAgent {
     }
 
     async uploadLandingPage(metadata: LandingPageMetadata) {
-        const linkPrefix: string = 'https://ipfs.infura.io/ipfs'
+        const linkPrefix = 'https://ipfs.infura.io/ipfs'
         const encodedMetadata = JSON.stringify({
             name: metadata.name,
             size: metadata.size,

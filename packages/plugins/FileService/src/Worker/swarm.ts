@@ -19,7 +19,7 @@ class SwarmAgent implements ProviderAgent {
     bee!: Bee
 
     init() {
-        if (this.bee) return 
+        if (this.bee) return
         this.bee = createBee()
     }
 

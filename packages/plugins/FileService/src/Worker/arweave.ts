@@ -6,7 +6,7 @@ import { isEmpty } from 'lodash-unified'
 import { landing, mesonPrefix } from '../constants'
 import { sign } from './remote-signing'
 import TOKEN from './arweave-token.json'
-import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types'
+import type { ProviderAgent, JWKInterface, LandingPageMetadata, AttachmentOptions } from '../types'
 import { makeFileKeySigned } from '../helpers'
 
 class ArweaveAgent implements ProviderAgent {
@@ -68,7 +68,7 @@ class ArweaveAgent implements ProviderAgent {
 
     async makePayload(data: Uint8Array, type: string) {
         this.init()
-        const transaction = await this.instance.createTransaction({ data }, TOKEN as any)
+        const transaction = await this.instance.createTransaction({ data }, TOKEN as JWKInterface)
         transaction.addTag('Content-Type', type)
         await sign(transaction)
         return transaction
