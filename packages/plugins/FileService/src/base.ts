@@ -1,9 +1,10 @@
-import type { Plugin } from '@masknet/plugin-infra'
-import { PluginID_FileService } from '@masknet/shared-base'
+import { Plugin, PluginId } from '@masknet/plugin-infra'
+import { FileServiceIcon } from '@masknet/icons'
 import { languages } from './locales/languages'
+
 export const base: Plugin.Shared.Definition = {
-    ID: PluginID_FileService,
-    icon: '📃',
+    ID: PluginId.FileService,
+    icon: FileServiceIcon,
     name: { fallback: 'File Service', i18nKey: '__display_name' },
     description: {
         fallback: 'Upload and share files on top of Arweave network. Store data, permanently.',

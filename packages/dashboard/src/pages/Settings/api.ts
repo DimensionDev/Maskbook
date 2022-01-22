@@ -33,10 +33,19 @@ export const [useXDaiNetworkTradeProvider] = createGlobalState(
     Services.Settings.getxDaiNetworkTradeProvider,
     Messages.events.xdaiNetworkTradeProviderSettings.on,
 )
+export const [useFantomNetworkTradeProvider] = createGlobalState(
+    Services.Settings.getFantomNetworkTradeProvider,
+    Messages.events.fantomNetworkTradeProviderSettings.on,
+)
 
 export const [useCeloNetworkTradeProvider] = createGlobalState(
     Services.Settings.getCeloNetworkTradeProvider,
     Messages.events.celoNetworkTradeProviderSettings.on,
+)
+
+export const [useAuroraNetworkTradeProvider] = createGlobalState(
+    Services.Settings.getAuroraNetworkTradeProvider,
+    Messages.events.auroraNetworkTradeProviderSettings.on,
 )
 
 const BASE_RUL = 'https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com/api'

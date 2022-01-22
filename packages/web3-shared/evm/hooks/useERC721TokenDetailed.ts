@@ -64,6 +64,7 @@ export async function getERC721TokenDetailedFromOpensea(
                 description: data.description,
                 mediaUrl: data.image_url || data.animation_url,
                 owner: first(data.top_ownerships)?.owner.address ?? '',
+                hasTokenDetailed: true,
             },
             tokenId,
         )
@@ -75,12 +76,19 @@ export async function getERC721TokenDetailedFromChain(
     contractDetailed: ERC721ContractDetailed,
     erc721TokenContract: ERC721,
     tokenId: string,
+    owner?: string,
+    queryTokenURI = true,
 ) {
     if (!contractDetailed) return
     try {
-        const tokenURI = await safeNonPayableTransactionCall(erc721TokenContract.methods.tokenURI(tokenId))
-        const owner = await safeNonPayableTransactionCall(erc721TokenContract.methods.ownerOf(tokenId))
-        const tokenInfo = { owner, tokenURI, name: `#${tokenId}`, hasTokenDetailed: false }
+        const tokenInfo = {
+            owner: owner ?? (await safeNonPayableTransactionCall(erc721TokenContract.methods.ownerOf(tokenId))),
+            tokenURI: queryTokenURI
+                ? await safeNonPayableTransactionCall(erc721TokenContract.methods.tokenURI(tokenId))
+                : '',
+            name: `#${tokenId}`,
+            hasTokenDetailed: false,
+        }
         return createERC721Token(contractDetailed, tokenInfo, tokenId)
     } catch (err) {
         return

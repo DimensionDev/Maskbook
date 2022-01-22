@@ -192,6 +192,13 @@ export enum NetworkType {
     Arbitrum = 'Arbitrum',
     xDai = 'xDai',
     Celo = 'Celo',
+    Fantom = 'Fantom',
+    Aurora = 'Aurora',
+    Avalanche = 'Avalanche',
+    Boba = 'Boba',
+    Fuse = 'Fuse',
+    Metis = 'Metis',
+    Optimistic = 'Optimistic',
 }
 
 export enum DataProvider {
@@ -211,6 +218,9 @@ export enum TradeProvider {
     DODO = 7,
     UNISWAP_V3 = 8,
     BANCOR = 9,
+    OPENOCEAN = 10,
+    WANNASWAP = 11,
+    TRISOLARIS = 12,
 }
 /** Supported language settings */
 export enum LanguageOptions {

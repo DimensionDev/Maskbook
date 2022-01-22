@@ -1,6 +1,5 @@
 import { lazy, Suspense } from 'react'
-import { Redirect, Route, Switch } from 'react-router-dom'
-import { HashRouter } from 'react-router-dom'
+import { Redirect, Route, Switch, HashRouter } from 'react-router-dom'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra'
 import { PopupRoutes } from '@masknet/shared-base'
 // eslint-disable-next-line import/no-deprecated

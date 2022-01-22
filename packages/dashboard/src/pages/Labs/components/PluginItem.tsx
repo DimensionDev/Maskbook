@@ -1,7 +1,6 @@
 import { SettingsIcon, TutorialIcon } from '@masknet/icons'
-import { MaskColorVar } from '@masknet/theme'
+import { MaskColorVar, makeStyles } from '@masknet/theme'
 import { Avatar, Box, ListItem, ListItemAvatar, ListItemText, styled, listItemTextClasses } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
 import type { ReactNode } from 'react'
 import SettingSwitch from '../../Settings/components/SettingSwitch'
 import { Twitter, Facebook, Explore } from './Actions'
@@ -58,6 +57,7 @@ export interface PluginItemProps {
     desc: string
     icon?: ReactNode
     enabled?: boolean
+    hideSwitch?: boolean
     onSwitch: (id: string, checked: boolean) => void
     onTwitter?: (id: string) => void
     onFacebook?: (id: string) => void
@@ -72,7 +72,20 @@ export function PluginItemPlaceholder() {
 }
 
 export default function PluginItem(props: PluginItemProps) {
-    const { id, title, desc, icon, enabled, onSwitch, onTwitter, onFacebook, onExplore, onSetting, onTutorial } = props
+    const {
+        id,
+        title,
+        desc,
+        icon,
+        enabled = false,
+        hideSwitch,
+        onSwitch,
+        onTwitter,
+        onFacebook,
+        onExplore,
+        onSetting,
+        onTutorial,
+    } = props
     const { classes } = useStyles()
     return (
         <Box className={classes.root}>
@@ -98,7 +111,7 @@ export default function PluginItem(props: PluginItemProps) {
                         {onExplore ? <Explore onClick={() => onExplore(id)} /> : null}
                     </Box>
                 ) : null}
-                {id ? (
+                {!hideSwitch ? (
                     <SettingSwitch
                         size="small"
                         checked={enabled}

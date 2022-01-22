@@ -4,7 +4,6 @@ import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-unified'
 import { Box, InputAdornment } from '@mui/material'
 import { makeStyles } from '../../makeStyles'
-import { MaskColorVar } from '../../constants'
 import { MaskSearchableItemInList } from './MaskSearchableItemInList'
 import { MaskTextField, MaskTextFieldProps } from '../TextField'
 import { SearchIcon } from '@masknet/icons'
@@ -66,7 +65,7 @@ export function SearchableList<T>({
     const { height, itemSize, ...rest } = FixedSizeListProps
     const { InputProps, ...textFieldPropsRest } = SearchFieldProps ?? {}
 
-    //#region fuse
+    // #region fuse
     const fuse = useMemo(
         () =>
             new Fuse(data, {
@@ -77,15 +76,15 @@ export function SearchableList<T>({
             }),
         [data, searchKey],
     )
-    //#endregion
+    // #endregion
 
-    //#region create searched data
+    // #region create searched data
     const readyToRenderData = useMemo(() => {
         if (!keyword || onSearch) return data
         const filtered = [...fuse.search(keyword).map((x: any) => x.item)]
         return itemKey ? uniqBy(filtered, (x) => x[itemKey]) : filtered
     }, [keyword, fuse, data])
-    //#endregion
+    // #endregion
 
     const handleSearch = (word: string) => {
         setKeyword(word)
@@ -147,7 +146,7 @@ const useStyles = makeStyles()((theme) => ({
         },
         '& > div::-webkit-scrollbar-thumb': {
             borderRadius: '4px',
-            backgroundColor: MaskColorVar.normalBackground,
+            backgroundColor: theme.palette.background.default,
         },
     },
 }))

@@ -18,7 +18,7 @@ import { PostProviderFacebook } from './collecting/posts'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide'
-import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/esm/grayscale'
+import { GrayscaleAlgorithm } from '@masknet/encryption'
 import { PaletteModeProviderFacebook, useThemeFacebookVariant } from './customization/custom'
 import { unreachable } from '@dimensiondev/kit'
 import { makeStyles } from '@masknet/theme'
@@ -104,7 +104,7 @@ const facebookUI: SocialNetworkUI.Definition = {
             profilePage(profile) {
                 // there is no PWA way on Facebook desktop.
                 // mobile not tested
-                location.href = getProfilePageUrlAtFacebook(profile)
+                location.assign(getProfilePageUrlAtFacebook(profile))
             },
             newsFeed() {
                 const homeLink = document.querySelector<HTMLAnchorElement>(
@@ -114,7 +114,7 @@ const facebookUI: SocialNetworkUI.Definition = {
                     ].join(','),
                 )
                 if (homeLink) homeLink.click()
-                else if (location.pathname !== '/') location.pathname = '/'
+                else if (location.pathname !== '/') location.assign('/')
             },
         },
         maskCompositionDialog: { open: taskOpenComposeBoxFacebook },

@@ -32,7 +32,7 @@ Mask Network fetches on-chain data from various data sources. Therefore, you can
 
 ### Token List
 
-The team maintains a token list https://github.com/DimensionDev/Mask-Token-List. So free feel to create one for the chain. And add the token list link to `packages/web3-constants/evm/token-list.json`.
+The team maintains a token list <https://github.com/DimensionDev/Mask-Token-List>. So free feel to create one for the chain. And add the token list link to `packages/web3-constants/evm/token-list.json`.
 
 ### Token Icon
 
@@ -81,9 +81,15 @@ Goto `chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/dashboard.html#/wallet
 - [ ] Trade with the DEX on the chain.
 
   - Integrate a DEX for the chain.
+  - Estimate gas will be showed on DEX card and sort correctly.
 
 - [ ] Send a transaction and check if the explorer links are working.
+
   - Setup metadata and RPC for the chain.
+  - Transaction sent to wallet with medium gas fee setting.
+  - Required to unlock ERC20 token before swapping ERC20 to any other tokens.
+
+- [ ] Transfer token on the transfer page of Dashboard and the wallet tab of the plugin popup.
 
 ## Learn More
 

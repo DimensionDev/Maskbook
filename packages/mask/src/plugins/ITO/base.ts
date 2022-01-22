@@ -1,10 +1,10 @@
 import { NetworkPluginID, Plugin } from '@masknet/plugin-infra'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { ITO_PluginID } from './constants'
+import { ITO_MetaKey_1, ITO_MetaKey_2, ITO_PluginID } from './constants'
 
 export const base: Plugin.Shared.Definition = {
     ID: ITO_PluginID,
-    icon: '🚀',
+    icon: '\u{1F680}',
     name: { fallback: 'ITO' },
     description: {
         fallback: 'Participate in Public Offering on Twitter.',
@@ -27,4 +27,5 @@ export const base: Plugin.Shared.Definition = {
             },
         },
     },
+    contribution: { metadataKeys: new Set([ITO_MetaKey_1, ITO_MetaKey_2]) },
 }

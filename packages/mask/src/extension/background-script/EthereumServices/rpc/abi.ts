@@ -29,7 +29,7 @@ export function readABI(sig?: string) {
     return ABI_MAP.get(sig)
 }
 
-//#region construct built-in abis
+// #region construct built-in abis
 function constructABI(abi: AbiItem[]) {
     abi.forEach((x) => {
         if (x.type !== 'function') return
@@ -63,4 +63,4 @@ constructABI(MaskBox as AbiItem[])
 constructABI(ERC20 as AbiItem[])
 constructABI(RouterV2ABI as AbiItem[]) // uniswap V2 like
 constructABI(SwapRouter as AbiItem[]) // uniswap V3 like
-//#endregion
+// #endregion

@@ -1,39 +1,38 @@
-import { personalSign } from '../../../extension/background-script/EthereumService'
+import type { NetworkPluginID } from '@masknet/plugin-infra'
 import type { AvatarMetaDB } from '../types'
 import { getNFTAvatarFromJSON } from './db'
-import { getUserAddress, setUserAddress } from './gun'
+import { getUserAddress, setUserAddress } from './bind'
 import { getNFTAvatarFromRSS, saveNFTAvatarToRSS } from './rss3'
 
-export async function getNFTAvatar(userId: string) {
-    let result
-    const address = await getUserAddress(userId)
-    if (!address) {
-        result = await getNFTAvatarFromJSON(userId)
-        return result
+export async function getNFTAvatar(userId: string, networkPluginId?: NetworkPluginID, chainId?: number) {
+    const address = await getUserAddress(userId, networkPluginId, chainId)
+    if (address) {
+        return getNFTAvatarFromRSS(userId, address)
     }
-
-    result = await getNFTAvatarFromRSS(userId, address)
-    if (!result) {
-        result = await getNFTAvatarFromJSON(userId)
-    }
-    return result
+    return getNFTAvatarFromJSON(userId)
 }
 
-export async function saveNFTAvatar(address: string, nft: AvatarMetaDB) {
-    const signature = await personalSign(nft.userId, address)
-    setUserAddress(nft.userId, address)
-    const avatar = await saveNFTAvatarToRSS(address, nft, signature)
-    return avatar
+export async function saveNFTAvatar(
+    address: string,
+    nft: AvatarMetaDB,
+    networkPluginId?: NetworkPluginID,
+    chainId?: number,
+) {
+    try {
+        const avatar = await saveNFTAvatarToRSS(address, nft, '')
+        await setUserAddress(nft.userId, address, networkPluginId, chainId)
+        return avatar
+    } catch (error) {
+        throw error
+    }
 }
 
-export async function getAddress(userId: string) {
-    const address = await getUserAddress(userId)
+export async function getAddress(userId: string, networkPluginId?: NetworkPluginID, chainId?: number) {
+    const address = await getUserAddress(userId, networkPluginId, chainId)
     return (address ?? '') as string
 }
 
 export { getNFTContractVerifiedFromJSON } from './verified'
-export { getUserAddresses } from './gun'
-export { getRSSNode } from './rss3'
 
 export async function getImage(image: string): Promise<string> {
     const response = await globalThis.fetch(image)

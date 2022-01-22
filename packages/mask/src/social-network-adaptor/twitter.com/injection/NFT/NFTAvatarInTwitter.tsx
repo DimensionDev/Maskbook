@@ -3,17 +3,17 @@ import { searchTwitterAvatarLinkSelector, searchTwitterAvatarSelector } from '..
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useState, useEffect, useMemo, useRef } from 'react'
-
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
-import { useWallet } from '@masknet/web3-shared-evm'
+import { resolveOpenSeaLink, useWallet } from '@masknet/web3-shared-evm'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
 import { useNFTAvatar } from '../../../../plugins/Avatar/hooks'
 import { getAvatarId } from '../../utils/user'
 import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
 import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
-import { useMount, useUpdateEffect, useWindowSize } from 'react-use'
+import { useAsync, useLocation, useUpdateEffect, useWindowSize } from 'react-use'
 import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/RainbowBox'
+import { trim } from 'lodash-unified'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -42,12 +42,18 @@ const useStyles = makeStyles()(() => ({
 
 function NFTAvatarInTwitter() {
     const rainBowElement = useRef<Element | null>()
+    const borderElement = useRef<Element | null>()
     const identity = useCurrentVisitingIdentity()
     const wallet = useWallet()
     const { value: _avatar } = useNFTAvatar(identity.identifier.userId)
     const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
-
     const windowSize = useWindowSize()
+    const location = useLocation()
+
+    const showAvatar = useMemo(
+        () => getAvatarId(identity.avatar ?? '') === avatar?.avatarId && avatar.avatarId,
+        [avatar?.avatarId, identity.avatar],
+    )
 
     const size = useMemo(() => {
         const ele = searchTwitterAvatarSelector().evaluate()
@@ -65,7 +71,8 @@ function NFTAvatarInTwitter() {
         setNFTEvent(data)
     }
 
-    useEffect(() => {
+    // After the avatar is set, it cannot be saved immediately, and must wait until the avatar of twitter is updated
+    useAsync(async () => {
         if (!wallet || !NFTAvatar) return
 
         if (!NFTEvent?.address || !NFTEvent?.tokenId) {
@@ -79,20 +86,32 @@ function NFTAvatarInTwitter() {
             return
         }
 
-        PluginNFTAvatarRPC.saveNFTAvatar(wallet.address, {
+        const avatar = await PluginNFTAvatarRPC.saveNFTAvatar(wallet.address, {
             ...NFTEvent,
             avatarId: getAvatarId(identity.avatar ?? ''),
-        } as AvatarMetaDB).then((avatar: AvatarMetaDB | undefined) => {
-            setAvatar(avatar)
-            MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll(
-                avatar ?? {
-                    userId: identity.identifier.userId,
-                    avatarId: getAvatarId(identity.avatar ?? ''),
-                    address: '',
-                    tokenId: '',
-                },
-            )
+        } as AvatarMetaDB).catch((error) => {
+            setNFTEvent(undefined)
+            setAvatar(undefined)
+            window.alert(error.message)
+            return
         })
+        if (!avatar) {
+            setNFTEvent(undefined)
+            setAvatar(undefined)
+            window.alert('Sorry, failed to save NFT Avatar. Please set again.')
+            return
+        }
+
+        setAvatar(avatar)
+        MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll(
+            avatar ?? {
+                userId: identity.identifier.userId,
+                avatarId: getAvatarId(identity.avatar ?? ''),
+                address: '',
+                tokenId: '',
+            },
+        )
+
         setNFTEvent(undefined)
     }, [identity.avatar])
 
@@ -104,7 +123,7 @@ function NFTAvatarInTwitter() {
         return MaskMessages.events.NFTAvatarUpdated.on((data) => onUpdate(data))
     }, [onUpdate])
 
-    useMount(() => {
+    useEffect(() => {
         const linkDom = searchTwitterAvatarLinkSelector().evaluate()
 
         if (linkDom?.firstElementChild && linkDom.childNodes.length === 4) {
@@ -112,11 +131,12 @@ function NFTAvatarInTwitter() {
 
             if (linkParentDom) linkParentDom.style.overflow = 'visible'
 
-            // remove useless border
-            linkDom.removeChild(linkDom.firstElementChild)
-
             // create rainbow shadow border
-            if (linkDom.firstElementChild.tagName !== 'style') {
+            if (linkDom.lastElementChild?.tagName !== 'STYLE') {
+                borderElement.current = linkDom.firstElementChild
+
+                // remove useless border
+                linkDom.removeChild(linkDom.firstElementChild)
                 const style = document.createElement('style')
                 style.innerText = `
                 ${rainbowBorderKeyFrames.styles}
@@ -129,17 +149,53 @@ function NFTAvatarInTwitter() {
                 }
             `
                 rainBowElement.current = linkDom.firstElementChild
-                linkDom.firstElementChild.classList.add('rainbowBorder')
-                linkDom.insertBefore(style, linkDom.firstChild)
+                if (showAvatar) linkDom.firstElementChild.classList.add('rainbowBorder')
+                linkDom.appendChild(style)
             }
         }
-    })
+    }, [location.pathname])
+
+    useEffect(() => {
+        const linkDom = searchTwitterAvatarLinkSelector().evaluate()
+        if (showAvatar) {
+            if (borderElement.current && linkDom?.firstElementChild === borderElement.current) {
+                linkDom?.removeChild(linkDom.firstElementChild)
+            }
+
+            rainBowElement.current?.classList.add('rainbowBorder')
+        } else {
+            // recovery Twitter profile avatar style
+            if (borderElement.current && linkDom?.firstElementChild !== borderElement.current) {
+                linkDom?.insertBefore(borderElement.current, linkDom.firstChild)
+            }
+
+            rainBowElement.current?.classList.remove('rainbowBorder')
+        }
+    }, [showAvatar])
 
     useUpdateEffect(() => {
-        if (!avatar) {
-            rainBowElement.current?.classList.remove('rainbowBorder')
-        } else {
-            rainBowElement.current?.classList.add('rainbowBorder')
+        if (
+            location.pathname &&
+            location.pathname.split('/').length === 2 &&
+            trim(location.pathname, '/') !== identity.identifier.userId
+        ) {
+            setAvatar(undefined)
+        }
+    }, [location, identity])
+
+    useUpdateEffect(() => {
+        const linkParentDom = searchTwitterAvatarLinkSelector().evaluate()?.closest('div')
+
+        if (!avatar || !linkParentDom) return
+
+        const handler = () => {
+            window.open(resolveOpenSeaLink(avatar.address, avatar.tokenId), '_blank')
+        }
+
+        linkParentDom.addEventListener('click', handler)
+
+        return () => {
+            linkParentDom.removeEventListener('click', handler)
         }
     }, [avatar])
 
@@ -147,7 +203,7 @@ function NFTAvatarInTwitter() {
 
     return (
         <>
-            {getAvatarId(identity.avatar ?? '') === avatar.avatarId && avatar.avatarId ? (
+            {showAvatar ? (
                 <NFTBadge
                     avatar={avatar}
                     size={size}

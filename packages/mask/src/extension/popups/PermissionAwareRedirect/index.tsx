@@ -20,11 +20,10 @@ function Inner({ url, context }: { url: string; context: string }) {
         return browser.permissions.contains({ origins: [getHostPermissionFieldFromURL(url)] })
     }, [url])
     useEffect(() => {
-        if (hasPermission) {
-            const u = new URL(url)
-            u.searchParams.append('mask_context', context)
-            location.href = u.toString()
-        }
+        if (!hasPermission) return
+        const parsed = new URL(url)
+        parsed.searchParams.append('mask_context', context)
+        location.assign(parsed.toString())
     }, [hasPermission, url])
     return (
         <PermissionAwareRedirectUI

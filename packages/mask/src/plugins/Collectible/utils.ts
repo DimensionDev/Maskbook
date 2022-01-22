@@ -27,7 +27,7 @@ export function getAssetInfoFromURL(url?: string) {
     if (!url) return null
     const _url = new URL(url)
 
-    //#region opensea
+    // #region opensea
     const openSeaMatched = _url.pathname.match(openseaPathnameRegexMatcher)
     if (openSeaMatched) {
         return {
@@ -36,9 +36,9 @@ export function getAssetInfoFromURL(url?: string) {
             token_id: openSeaMatched[2],
         }
     }
-    //#endregion
+    // #endregion
 
-    //#region rarible
+    // #region rarible
     const raribleMatched = _url.pathname.match(rariblePathnameRegexMatcher)
     if (raribleMatched) {
         return {
@@ -51,7 +51,7 @@ export function getAssetInfoFromURL(url?: string) {
             token_id: raribleMatched[2],
         }
     }
-    //#endregion
+    // #endregion
 
     // nothing matched
     return

@@ -31,5 +31,6 @@ export const SettingsSyncIcon: typeof SvgIcon = createPaletteAwareIcon(
             fill="#fff"
         />
     </g>,
+    undefined,
     '0 0 24 24',
 )

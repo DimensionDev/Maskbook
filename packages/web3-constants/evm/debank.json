@@ -12,6 +12,9 @@
         "Arbitrum": "arb",
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai",
-        "Celo": "celo"
+        "Celo": "celo",
+        "Fantom": "ftm",
+        "Aurora": "aurora",
+        "Aurora_Testnet": ""
     }
 }

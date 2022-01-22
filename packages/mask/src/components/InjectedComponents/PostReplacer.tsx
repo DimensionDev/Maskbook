@@ -25,11 +25,11 @@ export interface PostReplacerProps {
 
 export function PostReplacer(props: PostReplacerProps) {
     const { classes } = useStyles()
-    const postMessage = usePostInfoDetails.postMessage()
-    const postPayload = usePostInfoDetails.postPayload()
+    const postMessage = usePostInfoDetails.rawMessage()
+    const postPayload = usePostInfoDetails.containingMaskPayload()
     const allPostReplacement = useValueRef(allPostReplacementSettings)
 
-    const plugins = useActivatedPluginsSNSAdaptor()
+    const plugins = useActivatedPluginsSNSAdaptor(false)
     const processedPostMessage = useMemo(
         () =>
             plugins.reduce((x, plugin) => {

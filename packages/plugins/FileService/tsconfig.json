@@ -12,6 +12,7 @@
     { "path": "../../plugin-infra" },
     { "path": "../../shared-base" },
     { "path": "../../shared" },
+    { "path": "../../icons" },
     { "path": "../Wallet" }
   ]
 }

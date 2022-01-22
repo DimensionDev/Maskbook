@@ -101,8 +101,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
             })
         return stringify(connectedPersonas)
     },
-    app_isPluginEnabled: ({ pluginID }) => Services.Settings.getPluginEnabled(pluginID),
-    app_setPluginStatus: ({ pluginID, enabled }) => Services.Settings.setPluginEnabled(pluginID, enabled),
+    app_isPluginEnabled: ({ pluginID }) => Services.Settings.getPluginMinimalModeEnabled(pluginID).then((x) => !x),
+    app_setPluginStatus: ({ pluginID, enabled }) => Services.Settings.setPluginMinimalModeEnabled(pluginID, !enabled),
     setting_getNetworkTraderProvider: ({ network }) => {
         switch (network) {
             case NetworkType.Ethereum:
@@ -117,6 +117,17 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.getxDaiNetworkTradeProvider()
             case NetworkType.Celo:
                 return Services.Settings.getCeloNetworkTradeProvider()
+            case NetworkType.Fantom:
+                return Services.Settings.getxDaiNetworkTradeProvider()
+            case NetworkType.Aurora:
+                return Services.Settings.getAuroraNetworkTradeProvider()
+
+            case NetworkType.Boba:
+            case NetworkType.Fuse:
+            case NetworkType.Metis:
+            case NetworkType.Avalanche:
+            case NetworkType.Optimistic:
+                throw new Error(`To be implement network: ${network}`)
             default:
                 unreachable(network)
         }
@@ -135,6 +146,16 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.setxDaiNetworkTradeProvider(provider)
             case NetworkType.Celo:
                 return Services.Settings.setCeloNetworkTradeProvider(provider)
+            case NetworkType.Fantom:
+                return Services.Settings.setFantomNetworkTradeProvider(provider)
+            case NetworkType.Aurora:
+                return Services.Settings.setAuroraNetworkTradeProvider(provider)
+            case NetworkType.Boba:
+            case NetworkType.Fuse:
+            case NetworkType.Metis:
+            case NetworkType.Avalanche:
+            case NetworkType.Optimistic:
+                throw new Error(`To be implement network: ${network}`)
             default:
                 unreachable(network)
         }

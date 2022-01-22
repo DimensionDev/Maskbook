@@ -29,7 +29,7 @@ async function getToken() {
 async function fetchAsset<T>(path: string, body?: unknown) {
     const response = await fetch(urlcat(NFTSCAN_BASE_API, path), {
         method: 'POST',
-        headers: { 'Access-Token': await getToken() },
+        headers: { 'Access-Token': await getToken(), 'Content-type': 'application/json' },
         body: JSON.stringify(body),
     })
     if (!response.ok) return
@@ -65,13 +65,16 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
             erc: 'erc721',
             user_address: address,
         })
-        if (!response) return []
+        if (!response?.data) return []
         return response.data
             .map((x) => {
                 const contractDetailed = createERC721ContractDetailed(
                     ChainId.Mainnet,
                     x.nft_contract_address,
                     x.nft_platform_name,
+                    undefined,
+                    undefined,
+                    x.nft_platform_image,
                 )
                 const balance = x.nft_asset.length
                 return { contractDetailed, balance }
@@ -96,11 +99,20 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
             total: number
         }>('getAllNftByUserAddress', {
             page_size: size,
-            page_index: page,
+            page_index: page + 1,
             use_address: from,
             erc: 'erc721',
         })
-        if (!response) return []
-        return response.data.content.map(createERC721TokenAsset)
+        if (!response?.data)
+            return {
+                data: [],
+                hasNextPage: false,
+            }
+        const data = response.data.content.map(createERC721TokenAsset)
+        const total = response.data.total
+        return {
+            data,
+            hasNextPage: total - (page + 1) * size > 0,
+        }
     }
 }

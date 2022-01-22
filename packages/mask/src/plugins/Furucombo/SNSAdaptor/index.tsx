@@ -14,17 +14,16 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     DecryptedInspector: function Comp(props) {
-        const text = useMemo(() => extractTextFromTypedMessage(props.message), [props.message])
-        const link = useMemo(() => parseURL(text.val || ''), [text.val]).find(isFurucomboLink)
-        if (!text.ok) return null
+        const link = useMemo(() => {
+            const x = extractTextFromTypedMessage(props.message)
+            if (x.none) return null
+            return parseURL(x.val).find(isFurucomboLink)
+        }, [props.message])
         if (!link) return null
         return <Renderer url={link} />
     },
     PostInspector: function Component() {
-        const link = usePostInfoDetails
-            .postMetadataMentionedLinks()
-            .concat(usePostInfoDetails.postMentionedLinks())
-            .find(isFurucomboLink)
+        const link = usePostInfoDetails.mentionedLinks().find(isFurucomboLink)
         if (!link) return null
         return <Renderer url={link} />
     },

@@ -24,8 +24,7 @@ import {
 import { CoinMenu, CoinMenuOption } from './CoinMenu'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
 import { CoinSafetyAlert } from './CoinSafetyAlert'
-import { PLUGIN_IDENTIFIER as TRANSAK_PLUGIN_ID } from '../../../Transak/constants'
-import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
+import { PluginId, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -126,8 +125,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    //#region buy
-    const transakPluginEnabled = useActivatedPluginsSNSAdaptor().find((x) => x.ID === TRANSAK_PLUGIN_ID)
+    // #region buy
+    const transakPluginEnabled = useActivatedPluginsSNSAdaptor('any').find((x) => x.ID === PluginId.Transak)
     const account = useAccount()
     const isAllowanceCoin = useTransakAllowanceCoin(coin)
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
@@ -139,18 +138,18 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
             address: account,
         })
     }, [account, trending?.coin?.symbol])
-    //#endregion
+    // #endregion
 
-    //#region sync with settings
+    // #region sync with settings
     const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
         currentDataProviderSettings.value = option.value as DataProvider
     }, [])
     const onTradeProviderChange = useCallback((option: FootnoteMenuOption) => {
         currentTradeProviderSettings.value = option.value as TradeProvider
     }, [])
-    //#endregion
+    // #endregion
 
-    //#region switch between coins with the same symbol
+    // #region switch between coins with the same symbol
     const currentPreferredCoinIdSettings = useValueRef(getCurrentPreferredCoinIdSettings(dataProvider))
     const onCoinMenuChange = useCallback(
         (option: CoinMenuOption) => {
@@ -160,7 +159,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         },
         [dataProvider, currentPreferredCoinIdSettings],
     )
-    //#endregion
+    // #endregion
 
     return (
         <TrendingCard {...TrendingCardProps}>

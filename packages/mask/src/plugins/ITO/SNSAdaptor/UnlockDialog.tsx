@@ -2,7 +2,7 @@ import { Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState } from 'react'
 import { v4 as uuid } from 'uuid'
-import { FormattedAddress, useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import {
@@ -49,7 +49,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants()
     const chainId = useChainId()
 
-    //#region select token
+    // #region select token
     const [token, setToken] = useState<ERC20TokenDetailed>(tokens[0])
     const [id] = useState(uuid())
     const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
@@ -75,15 +75,15 @@ export function UnlockDialog(props: UnlockDialogProps) {
             },
         })
     }, [id, token?.address])
-    //#endregion
-    //#region amount
+    // #endregion
+    // #region amount
     const [rawAmount, setRawAmount] = useState('')
     const amount = rightShift(rawAmount || '0', token?.decimals)
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
         token?.type ?? EthereumTokenType.Native,
         token?.address ?? '',
     )
-    //#endregion
+    // #endregion
     if (!tokens.length) return <Typography>{t('plugin_ito_empty_token')}</Typography>
     return (
         <div className={classes.root}>
@@ -103,23 +103,18 @@ export function UnlockDialog(props: UnlockDialogProps) {
             {ITO2_CONTRACT_ADDRESS ? (
                 <Typography className={classes.tip} variant="body2" color="textSecondary">
                     <Trans
+                        i18nKey="plugin_ito_unlock_tip"
                         components={{
-                            link: (
+                            contractLink: (
                                 <Link
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     href={resolveAddressLinkOnExplorer(chainId, ITO2_CONTRACT_ADDRESS)}
                                 />
                             ),
-                            address: (
-                                <FormattedAddress
-                                    address={ITO2_CONTRACT_ADDRESS}
-                                    size={4}
-                                    formatter={formatEthereumAddress}
-                                />
-                            ),
                         }}
                         values={{
+                            address: formatEthereumAddress(ITO2_CONTRACT_ADDRESS, 4),
                             symbol: token.symbol ?? 'Unknown',
                         }}
                     />

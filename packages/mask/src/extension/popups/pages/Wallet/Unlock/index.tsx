@@ -68,13 +68,9 @@ const Unlock = memo(() => {
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
 
     useAsync(async () => {
-        if (isLocked === false && !getLockStatusLoading) {
-            const from = new URLSearchParams(location.search).get('from')
-            history.replace({
-                pathname: from ?? PopupRoutes.Wallet,
-                search: location.search,
-            })
-        }
+        if (!(isLocked === false && !getLockStatusLoading)) return
+        const from = new URLSearchParams(location.search).get('from')
+        history.replace({ pathname: from ?? PopupRoutes.Wallet, search: location.search })
     }, [isLocked, getLockStatusLoading, location.search])
 
     return (

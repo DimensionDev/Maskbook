@@ -21,7 +21,7 @@ export async function assertPersonaDBConsistency(
         diag.push(w)
     }
     if (diag.length) {
-        const warn = `PersonaDB is in the inconsistency state`
+        const warn = 'PersonaDB is in the inconsistency state'
         console.warn(warn)
         console.info(await t.objectStore('personas').getAll())
         console.info(await t.objectStore('profiles').getAll())
