@@ -346,9 +346,9 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         return activatedSocialNetworkUI.collecting.identityProvider?.recognized.value.identifier.toText()
     },
     get_all_indexedDB_records: async () => {
-        const personas = await Services.Identity.queryPersonaRecords()
-        const profiles = await Services.Identity.queryProfileRecord()
-        const relations = await Services.Identity.queryRelations()
+        const personas = await Services.Identity.queryPersonaRecordsFromIndexedDB()
+        const profiles = await Services.Identity.queryProfileRecordFromIndexedDB()
+        const relations = await Services.Identity.queryRelationsRecordFromIndexedDB()
         return {
             personas: personas.map((x) => ({
                 mnemonic: x.mnemonic,

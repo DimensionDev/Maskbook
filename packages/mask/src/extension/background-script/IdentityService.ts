@@ -45,6 +45,11 @@ import {
     LinkedProfileDetails,
     RelationRecord,
 } from '../../../background/database/persona/db'
+import {
+    queryPersonasDB as queryPersonasFromIndexedDB,
+    queryProfilesDB as queryProfilesFromIndexedDB,
+    queryRelations as queryRelationsFromIndexedDB,
+} from '../../../background/database/persona/web'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
 import { restoreBackup } from './WelcomeServices/restoreBackup'
 import { restoreNewIdentityWithMnemonicWord } from './WelcomeService'
@@ -68,8 +73,8 @@ export function queryProfiles(network?: string): Promise<Profile[]> {
     return queryProfilesWithQuery({ network })
 }
 
-export async function queryProfileRecord() {
-    return queryProfilesDB({})
+export async function queryProfileRecordFromIndexedDB() {
+    return queryProfilesFromIndexedDB({})
 }
 
 export function queryProfilesWithIdentifiers(identifiers: ProfileIdentifier[]) {
@@ -140,8 +145,8 @@ export async function queryPersonas(identifier?: PersonaIdentifier, requirePriva
     return [personaRecordToPersona(x)]
 }
 
-export async function queryPersonaRecords() {
-    return queryPersonasDB()
+export async function queryPersonaRecordsFromIndexedDB() {
+    return queryPersonasFromIndexedDB()
 }
 
 export function queryMyPersonas(network?: string): Promise<Persona[]> {
@@ -312,8 +317,8 @@ export async function createNewRelation(
     await createRelationDB({ profile, linked, favor }, t)
 }
 
-export async function queryRelations(): Promise<RelationRecord[]> {
-    return queryRelations()
+export async function queryRelationsRecordFromIndexedDB(): Promise<RelationRecord[]> {
+    return queryRelationsFromIndexedDB(() => true)
 }
 
 export async function queryRelationPaged(
