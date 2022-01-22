@@ -7,6 +7,6 @@ export function newPostCompositionInstagram(signal: AbortSignal) {
 
     createReactRootShadowed(shadow, { signal }).render(<Entry />)
 
-    document.body.appendChild(container)
+    document.body.append(container)
     signal.addEventListener('abort', () => container.remove())
 }

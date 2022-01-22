@@ -1,0 +1,9 @@
+{
+    "$schema": "https://json.schemastore.org/eslintrc",
+    "plugins": ["unused-imports", "import"],
+    "rules": {
+        "import/no-deprecated": "error",
+        "import/no-duplicates": "error",
+        "unused-imports/no-unused-imports-ts": "error"
+    }
+}

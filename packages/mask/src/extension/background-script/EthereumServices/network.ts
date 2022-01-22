@@ -106,14 +106,14 @@ export async function getPendingTransactions(address: string, overrides?: SendOv
         },
         overrides,
     )
-    const transactions = await request<string[]>(
+
+    return request<string[]>(
         {
             method: EthereumMethodType.ETH_GET_FILTER_CHANGES,
             params: [filterId],
         },
         overrides,
     )
-    return transactions
 }
 
 export async function call(config: TransactionConfig, overrides?: SendOverrides) {

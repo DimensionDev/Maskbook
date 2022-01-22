@@ -1,0 +1,55 @@
+{
+    "$schema": "https://json.schemastore.org/eslintrc",
+    "plugins": ["@typescript-eslint"],
+    "rules": {
+        "@typescript-eslint/ban-types": [
+            "error",
+            {
+                "types": {
+                    "Function": false,
+                    "Object": false,
+                    "{}": false,
+                    "Boolean": { "fixWith": "boolean" },
+                    "String": { "fixWith": "string" },
+                    "Number": { "fixWith": "number" }
+                }
+            }
+        ],
+        "@typescript-eslint/await-thenable": "error",
+        "@typescript-eslint/no-base-to-string": "off",
+        "@typescript-eslint/no-for-in-array": "error",
+        "@typescript-eslint/no-implied-eval": "error",
+        "@typescript-eslint/no-inferrable-types": "error",
+        "@typescript-eslint/no-invalid-this": "error",
+        "@typescript-eslint/no-loop-func": "error",
+        "@typescript-eslint/no-this-alias": "error",
+        "@typescript-eslint/prefer-enum-initializers": "error",
+        "@typescript-eslint/prefer-for-of": "error",
+        "@typescript-eslint/prefer-includes": "error",
+        "@typescript-eslint/prefer-literal-enum-member": "error",
+        "@typescript-eslint/prefer-nullish-coalescing": "error",
+        "@typescript-eslint/prefer-optional-chain": "error",
+        "@typescript-eslint/prefer-reduce-type-parameter": "error",
+        "@typescript-eslint/prefer-regexp-exec": "off",
+        "@typescript-eslint/prefer-string-starts-ends-with": "error",
+        "@typescript-eslint/restrict-plus-operands": "off",
+        "@typescript-eslint/restrict-template-expressions": "off"
+    },
+    "overrides": [
+        {
+            "files": ["./plugins/**/*"],
+            "rules": {
+                "@typescript-eslint/no-explicit-any": "error",
+                "@typescript-eslint/ban-ts-comment": [
+                    "off",
+                    {
+                        "ts-expect-error": "allow-with-description",
+                        "ts-ignore": "allow-with-description",
+                        "ts-nocheck": "allow-with-description",
+                        "ts-check": false
+                    }
+                ]
+            }
+        }
+    ]
+}

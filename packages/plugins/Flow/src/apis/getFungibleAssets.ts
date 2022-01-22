@@ -112,5 +112,5 @@ export async function getFungibleAssets(
 
     return allSettled
         .map((x) => (x.status === 'fulfilled' ? x.value : null))
-        .filter(Boolean) as Web3Plugin.Asset<Web3Plugin.FungibleToken>[]
+        .filter((value): value is Web3Plugin.Asset<Web3Plugin.FungibleToken> => value !== null)
 }

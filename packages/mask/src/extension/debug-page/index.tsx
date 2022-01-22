@@ -5,5 +5,5 @@ import { Entry } from './Entry'
 const container = document.createElement('main')
 
 ReactDOM.render(<Entry />, container, () => {
-    document.body.appendChild(container)
+    document.body.append(container)
 })

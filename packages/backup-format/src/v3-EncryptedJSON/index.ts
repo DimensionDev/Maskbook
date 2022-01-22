@@ -22,8 +22,8 @@ export async function decryptBackup(password: BufferSource, data: ArrayBuffer) {
     const aes = await getAESFromPassword(password, pbkdf2IV)
 
     const AESParam: AesGcmParams = { name: 'AES-GCM', iv: encryptIV }
-    const decryptedBackup = await crypto.subtle.decrypt(AESParam, aes, encrypted)
-    return decryptedBackup
+
+    return crypto.subtle.decrypt(AESParam, aes, encrypted)
 }
 
 async function createAESFromPassword(password: BufferSource) {
@@ -41,12 +41,12 @@ async function createAESFromPassword(password: BufferSource) {
 
 async function getAESFromPassword(password: BufferSource, iv: Uint8Array) {
     const pbkdf = await crypto.subtle.importKey('raw', password, 'PBKDF2', false, ['deriveBits', 'deriveKey'])
-    const aes = await crypto.subtle.deriveKey(
+
+    return crypto.subtle.deriveKey(
         { name: 'PBKDF2', salt: iv, iterations: 10000, hash: 'SHA-256' },
         pbkdf,
         { name: 'AES-GCM', length: 256 },
         true,
         ['encrypt', 'decrypt'],
     )
-    return aes
 }

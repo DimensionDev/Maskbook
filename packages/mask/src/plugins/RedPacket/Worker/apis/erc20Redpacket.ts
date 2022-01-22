@@ -124,7 +124,7 @@ export async function getRedPacketHistory(address: string, chainId: ChainId) {
                 token.symbol = getChainDetailed(chainId)?.nativeCurrency.symbol
             }
 
-            const redpacketPayload: RedPacketJSONPayload = {
+            return {
                 contract_address: x.contract_address,
                 rpid: x.rpid,
                 txid: x.txid,
@@ -145,9 +145,7 @@ export async function getRedPacketHistory(address: string, chainId: ChainId) {
                 claimers: x.claimers,
                 total_remaining: x.total_remaining,
                 block_number: x.block_number,
-            }
-
-            return redpacketPayload
+            } as RedPacketJSONPayload
         })
         .sort((a, b) => b.creation_time - a.creation_time)
 }

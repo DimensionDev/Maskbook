@@ -761,12 +761,11 @@ function personaRecordToDB(x: PersonaRecord): PersonaRecordDB {
 function personaRecordOutDB(x: PersonaRecordDB): PersonaRecord {
     // @ts-ignore
     delete x.hasPrivateKey
-    const obj: PersonaRecord = {
+    return {
         ...x,
         identifier: Identifier.fromString(x.identifier, ECKeyIdentifier).unwrap(),
         linkedProfiles: new IdentifierMap(x.linkedProfiles, ProfileIdentifier),
     }
-    return obj
 }
 
 function relationRecordToDB(x: Omit<RelationRecord, 'network'>): RelationRecordDB {

@@ -95,8 +95,7 @@ export function createGlobalSettings<T extends browser.storage.StorageValue>(
     UITexts: SettingsTexts,
     comparer: (a: T, b: T) => boolean = (a, b) => a === b,
 ) {
-    const settings = createInternalSettings(`settings+${key}`, value, comparer)
-    return settings
+    return createInternalSettings(`settings+${key}`, value, comparer)
 }
 
 export interface NetworkSettings<T> {

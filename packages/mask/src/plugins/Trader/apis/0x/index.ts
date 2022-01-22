@@ -32,6 +32,5 @@ export async function swapQuote(request: SwapQuoteRequest, networkType: NetworkT
     if (serverErrorResponse.reason)
         throw new Error(first(validationErrorResponse.validationErrors)?.reason || 'Unknown Error')
 
-    const successResponse = response_ as SwapQuoteResponse
-    return successResponse
+    return response_ as SwapQuoteResponse
 }

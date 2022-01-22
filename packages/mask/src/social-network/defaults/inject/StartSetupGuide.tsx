@@ -11,7 +11,7 @@ export function createTaskStartSetupGuideDefault() {
     let shadowRoot: ShadowRoot
     return (signal: AbortSignal, for_: PersonaIdentifier) => {
         const dom = document.createElement('span')
-        document.body.appendChild(dom)
+        document.body.append(dom)
         const root = createReactRootShadowed(
             shadowRoot || (shadowRoot = dom.attachShadow({ mode: Flags.using_ShadowDOM_attach_mode })),
             { signal },

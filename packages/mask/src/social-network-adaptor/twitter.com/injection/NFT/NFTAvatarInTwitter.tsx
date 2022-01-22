@@ -136,7 +136,7 @@ function NFTAvatarInTwitter() {
                 borderElement.current = linkDom.firstElementChild
 
                 // remove useless border
-                linkDom.removeChild(linkDom.firstElementChild)
+                linkDom.firstElementChild.remove()
                 const style = document.createElement('style')
                 style.innerText = `
                 ${rainbowBorderKeyFrames.styles}
@@ -150,7 +150,7 @@ function NFTAvatarInTwitter() {
             `
                 rainBowElement.current = linkDom.firstElementChild
                 if (showAvatar) linkDom.firstElementChild.classList.add('rainbowBorder')
-                linkDom.appendChild(style)
+                linkDom.append(style)
             }
         }
     }, [location.pathname])
@@ -159,14 +159,14 @@ function NFTAvatarInTwitter() {
         const linkDom = searchTwitterAvatarLinkSelector().evaluate()
         if (showAvatar) {
             if (borderElement.current && linkDom?.firstElementChild === borderElement.current) {
-                linkDom?.removeChild(linkDom.firstElementChild)
+                linkDom.firstElementChild.remove()
             }
 
             rainBowElement.current?.classList.add('rainbowBorder')
         } else {
             // recovery Twitter profile avatar style
             if (borderElement.current && linkDom?.firstElementChild !== borderElement.current) {
-                linkDom?.insertBefore(borderElement.current, linkDom.firstChild)
+                linkDom.firstChild.before(borderElement.current)
             }
 
             rainBowElement.current?.classList.remove('rainbowBorder')

@@ -1,0 +1,14 @@
+{
+    "$schema": "https://json.schemastore.org/eslintrc",
+    "plugins": ["unicorn"],
+    "rules": {
+        "unicorn/better-regex": "error",
+        "unicorn/catch-error-name": ["error", { "ignore": ["^err$"] }],
+        "unicorn/no-instanceof-array": "error",
+        "unicorn/no-new-array": "error",
+        "unicorn/no-new-buffer": "error",
+        "unicorn/prefer-date-now": "error",
+        "unicorn/prefer-number-properties": "error",
+        "unicorn/throw-new-error": "error"
+    }
+}

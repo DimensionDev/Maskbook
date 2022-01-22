@@ -152,6 +152,5 @@ export async function vote(identifier: ProposalIdentifier, choice: number, addre
         body: JSON.stringify({ msg, sig, address }),
     })
 
-    const result: VoteSuccess = await response.json()
-    return result
+    return response.json() as Promise<VoteSuccess>
 }

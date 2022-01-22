@@ -67,12 +67,12 @@ export async function getFungibleAssets(
     pagination?: Pagination,
 ): Promise<Web3Plugin.Asset<Web3Plugin.FungibleToken>[]> {
     const allSettled = await Promise.allSettled([
-        getSolanaBalance(network.chainId, address).then((x) => [x]),
+        getSolanaBalance(network.chainId, address),
         getSplTokenList(network.chainId, address),
     ])
 
     return allSettled
         .map((x) => (x.status === 'fulfilled' ? x.value : null))
         .flat()
-        .filter(Boolean) as Web3Plugin.Asset<Web3Plugin.FungibleToken>[]
+        .filter((value): value is Web3Plugin.Asset<Web3Plugin.FungibleToken> => value !== null)
 }

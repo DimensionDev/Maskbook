@@ -1,0 +1,36 @@
+{
+    "$schema": "https://dimensiondev.github.io/eslint-plugin/src/schema.json",
+    "plugins": ["@dimensiondev"],
+    "rules": {
+        "@dimensiondev/no-bigint": "error",
+        "@dimensiondev/no-jsx-template-literal": "error",
+        "@dimensiondev/no-locale-case": "error",
+        "@dimensiondev/no-redundant-variable": "error",
+        "@dimensiondev/no-simple-template-literal": "error",
+        "@dimensiondev/no-single-return": "error",
+        "@dimensiondev/no-unneeded-flat-map": "error",
+        "@dimensiondev/no-unneeded-to-string": "error",
+        "@dimensiondev/prefer-early-return": "error",
+        "@dimensiondev/unicode-specific-set": "error",
+        "@dimensiondev/browser/prefer-add-event-listener": "error",
+        "@dimensiondev/browser/prefer-location-assign": "error",
+        "@dimensiondev/browser/prefer-modern-dom-apis": "error"
+    },
+    "overrides": [
+        {
+            "files": ["./plugins/**/*"],
+            "rules": {
+                "@dimensiondev/ban-eslint-disable": "error",
+                "@dimensiondev/no-builtin-base64": "error",
+                "@dimensiondev/no-default-error": "error",
+                "@dimensiondev/no-implicit-array-sort": "error",
+                "@dimensiondev/no-number-constructor": "error",
+                "@dimensiondev/no-simple-string-interpolation": "error",
+                "@dimensiondev/no-then": "error",
+                "@dimensiondev/no-timer": "error",
+                "@dimensiondev/no-unsafe-date": "error",
+                "@dimensiondev/prefer-return-type-annotation": "error"
+            }
+        }
+    ]
+}

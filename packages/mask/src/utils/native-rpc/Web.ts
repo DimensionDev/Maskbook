@@ -90,14 +90,13 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
             .filter((p) => !p.uninitialized)
             .map((p) => {
                 const profiles = [...p.linkedProfiles]
-                const providers = [...definedSocialNetworkWorkers].map((i) => {
+                return [...definedSocialNetworkWorkers].map((i) => {
                     const profile = profiles.find(([key]) => key.network === i.networkIdentifier)
                     return {
                         network: i.networkIdentifier,
                         connected: !!profile,
                     }
                 })
-                return providers
             })
         return stringify(connectedPersonas)
     },
@@ -247,8 +246,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         return encodeArrayBuffer(encodeText(JSON.stringify(file)))
     },
     persona_backupPrivateKey: async ({ identifier }) => {
-        const privateKey = await Services.Identity.exportPersonaPrivateKey(stringToPersonaIdentifier(identifier))
-        return privateKey
+        return Services.Identity.exportPersonaPrivateKey(stringToPersonaIdentifier(identifier))
     },
     persona_getCurrentPersonaIdentifier: async () => {
         const identifier = await Services.Settings.getCurrentPersonaIdentifier()

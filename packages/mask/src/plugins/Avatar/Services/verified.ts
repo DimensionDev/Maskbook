@@ -13,8 +13,8 @@ async function fetchData() {
         credentials: 'omit',
     })
     if (!response.ok) return []
-    const json = (await response.json()) as NFTVerified[]
-    return json
+
+    return response.json() as Promise<NFTVerified[]>
 }
 
 async function _fetch() {

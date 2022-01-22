@@ -11,7 +11,6 @@ export function useNFT(address: string, tokenId: string) {
             NFTCache.set(`${address}-${tokenId}`, f)
         }
 
-        const ret = await f
-        return ret
+        return f
     }, [address, tokenId, NFTCache, getNFT])
 }

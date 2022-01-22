@@ -294,7 +294,8 @@ function useMetadataDebugger(context: CompositionContext, Editor: TypedMessageEd
         const meta = Editor?.value.meta ?? new Map()
         setTimeout(() => __configureMetadataDebugger(meta))
     }
-    const UI = [
+
+    return [
         isDebug && <Chip key="debug" label="Post metadata inspector" onClick={__syncMetadataDebugger} />,
         isDebug && __MetadataDebuggerMeta && (
             <DebugMetadataInspector
@@ -312,5 +313,4 @@ function useMetadataDebugger(context: CompositionContext, Editor: TypedMessageEd
             />
         ),
     ]
-    return UI
 }

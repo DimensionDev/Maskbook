@@ -25,11 +25,11 @@ export async function generateOthersAESKeyEncrypted(
         privateKeyECDH,
         othersPublicKeyECDH_,
     )
-    const othersAESKeyEncrypted_ = othersAESKeyEncrypted.map<PublishedAESKeyRecordV39OrV38>((key) => ({
+
+    return othersAESKeyEncrypted.map<PublishedAESKeyRecordV39OrV38>((key) => ({
         aesKey: key.key,
         receiverKey: othersPublicKeyECDH[Number.parseInt(key.name, 10)],
     }))
-    return othersAESKeyEncrypted_
 }
 /**
  * Encrypt 1 to N

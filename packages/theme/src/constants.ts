@@ -202,8 +202,7 @@ export const MaskColorVar: Record<keyof typeof LightColor, MaskCSSVariableColor>
             target[key] = (defaultValue?: string) => {
                 // it might be an object when used in styled components.
                 if (typeof defaultValue !== 'string') defaultValue = undefined
-                const x = `var(--mask-${cssVar}${defaultValue ? ', ' + defaultValue : ''})`
-                return x
+                return `var(--mask-${cssVar}${defaultValue ? ', ' + defaultValue : ''})`
             }
             target[key][Symbol.toPrimitive] = () => `var(--mask-${cssVar})`
             target[key].alpha = (alpha: number) => `rgba(var(--mask-${cssVar}-fragment), ${alpha})`

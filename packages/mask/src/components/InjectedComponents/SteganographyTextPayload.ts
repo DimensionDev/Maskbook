@@ -15,6 +15,6 @@ export async function SteganographyTextPayload(template: ImageTemplateTypes, tex
         grayscaleAlgorithm:
             activatedSocialNetworkUI.configuration.steganography?.grayscaleAlgorithm ?? GrayscaleAlgorithm.NONE,
     })
-    const blob = new Blob([secretImage], { type: 'image/png' })
-    return blob
+
+    return new Blob([secretImage], { type: 'image/png' })
 }

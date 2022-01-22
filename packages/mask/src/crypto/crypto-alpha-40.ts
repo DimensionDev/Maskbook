@@ -219,10 +219,8 @@ export async function extractAESKeyInMessage(
     const iv = typeof _iv === 'string' ? decodeArrayBuffer(_iv) : _iv
     const encryptedKey =
         typeof encodedEncryptedKey === 'string' ? decodeArrayBuffer(encodedEncryptedKey) : encodedEncryptedKey
-    const decryptedAESKeyJWK = JSON.parse(
-        decodeText(await decryptWithAES({ aesKey: myLocalKey, iv, encrypted: encryptedKey })),
-    )
-    return decryptedAESKeyJWK
+
+    return JSON.parse(decodeText(await decryptWithAES({ aesKey: myLocalKey, iv, encrypted: encryptedKey })))
 }
 /**
  * Decrypt 1 to N message that send by myself
@@ -276,8 +274,8 @@ function extractCommentPayload(text: string) {
 const getCommentKey = memoizePromise(
     async function (postIV: string, postContent: string) {
         const pbkdf = await CryptoWorker.import_pbkdf2(encodeText(postContent))
-        const aes = await derive_AES_GCM_256_Key_From_PBKDF2(pbkdf, encodeText(postIV))
-        return aes
+
+        return derive_AES_GCM_256_Key_From_PBKDF2(pbkdf, encodeText(postIV))
     },
     (a, b) => a + b,
 )

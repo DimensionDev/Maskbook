@@ -207,7 +207,7 @@ async function getCoinTrending(id: string, currency: Currency, dataProvider: Dat
                         ...info.links.chat_url,
                         ...info.links.official_forum_url,
                     ].filter(Boolean),
-                    source_code_urls: Object.values(info.links.repos_url).flatMap((x) => x),
+                    source_code_urls: Object.values(info.links.repos_url).flat(),
                     home_urls: info.links.homepage.filter(Boolean),
                     blockchain_urls: uniq(
                         [platform_url, ...info.links.blockchain_site].filter(Boolean).map((url) => url.toLowerCase()),

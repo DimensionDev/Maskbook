@@ -1,3 +1,4 @@
+import { isSameAddress } from '@masknet/web3-shared-evm'
 import { GraphQLClient, gql } from 'graphql-request'
 import stringify from 'json-stable-stringify'
 import urlcat from 'urlcat'
@@ -21,7 +22,7 @@ export interface verifyHolderResponse {
     }[]
 }
 
-const verifyHolder = async <verifyHolderResponse>(_lockAddress: String, _holder: String, _chain: number) => {
+const verifyHolder = async (_lockAddress: string, _holder: string, _chain: number): Promise<verifyHolderResponse> => {
     const query = gql`
         query keyHolders($address: String!) {
             keyHolders(where: { address: $address }) {
@@ -38,8 +39,8 @@ const verifyHolder = async <verifyHolderResponse>(_lockAddress: String, _holder:
     const variables = {
         address: _holder,
     }
-    const data = await graphQLClients[_chain].request(query, variables)
-    return data
+
+    return graphQLClients[_chain].request(query, variables)
 }
 
 const verifyActiveLock = (data: { lock: string; address: string; chain: number }) => {
@@ -59,7 +60,7 @@ const verifyActiveLock = (data: { lock: string; address: string; chain: number }
     })
 }
 
-export const verifyPurchase = async (_userAddress: String, _lockAddress: String, _lockChain: number) => {
+export const verifyPurchase = async (_userAddress: string, _lockAddress: string, _lockChain: number) => {
     const query = gql`
         query locks($address: String!) {
             locks(where: { address: $address }) {
@@ -72,22 +73,19 @@ export const verifyPurchase = async (_userAddress: String, _lockAddress: String,
             }
         }
     `
+    interface Lock {
+        owner: string
+        keys: Array<{ owner: { id: string } }>
+    }
     const variables = {
         address: _lockAddress,
     }
-    let flag = false
-    const data = await graphQLClients[_lockChain].request(query, variables)
-    if (data.locks[0].owner === _userAddress.toLowerCase()) {
-        flag = true
-    } else if (data.locks[0].keys.length) {
-        data.locks[0].keys.forEach((key: { owner: { id: string } }) => {
-            if (key.owner.id === _userAddress.toLowerCase()) flag = true
-        })
-    }
-    return flag
+    const { locks } = await graphQLClients[_lockChain].request<{ locks: Lock[] }>(query, variables)
+    if (isSameAddress(locks[0].owner, _userAddress)) return true
+    return locks[0]?.keys?.some((key) => isSameAddress(key.owner.id, _userAddress))
 }
 
-export const getLocks = async <UnlockLocks>(_address1: String) => {
+export const getLocks = async <UnlockLocks>(_address1: string) => {
     const query = gql`
         query lockManager($address: String!) {
             lockManagers(where: { address: $address }) {

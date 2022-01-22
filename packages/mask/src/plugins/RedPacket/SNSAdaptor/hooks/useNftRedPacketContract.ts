@@ -5,6 +5,5 @@ import type { AbiItem } from 'web3-utils'
 
 export function useNftRedPacketContract() {
     const { RED_PACKET_NFT_ADDRESS } = useNftRedPacketConstants()
-    const contract = useContract<NftRedPacket>(RED_PACKET_NFT_ADDRESS, NftRedPacketABI as AbiItem[])
-    return contract
+    return useContract<NftRedPacket>(RED_PACKET_NFT_ADDRESS, NftRedPacketABI as AbiItem[])
 }

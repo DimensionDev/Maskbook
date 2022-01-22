@@ -14,7 +14,9 @@ export function setupPortalShadowRoot(
     preventEventPropagationList: (keyof HTMLElementEventMap)[],
 ) {
     if (mountingPoint) return mountingShadowRoot!
-    mountingShadowRoot = document.body.appendChild(document.createElement('div')).attachShadow(init)
+    const mounting = document.createElement('div')
+    document.body.append(mounting)
+    mountingShadowRoot = mounting.attachShadow(init)
     for (const each of preventEventPropagationList) {
         mountingShadowRoot.addEventListener(each, (e) => e.stopPropagation())
     }

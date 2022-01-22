@@ -14,33 +14,32 @@ import { useI18N } from '../../utils'
 function useDisabledPlugins() {
     const activated = new Set(useActivatedPluginsSNSAdaptor('any').map((x) => x.ID))
     const minimalMode = new Set(useActivatedPluginsSNSAdaptor(true).map((x) => x.ID))
-    const disabledPlugins = [...registeredPlugins].filter((x) => !activated.has(x.ID) || minimalMode.has(x.ID))
-    return disabledPlugins
+
+    return [...registeredPlugins].filter((x) => !activated.has(x.ID) || minimalMode.has(x.ID))
 }
 
 export function useDisabledPluginSuggestionFromPost(postContent: Option<string>, metaLinks: string[]) {
     const disabled = useDisabledPlugins().filter((x) => x.contribution?.postContent)
 
     const { some } = postContent
-    const matches = disabled.filter((x) => {
+
+    return disabled.filter((x) => {
         for (const pattern of x.contribution!.postContent!) {
             if (some && postContent.val.match(pattern)) return true
             if (metaLinks.some((link) => link.match(pattern))) return true
         }
         return false
     })
-    return matches
 }
 
 export function useDisabledPluginSuggestionFromMeta(meta: ReadonlyMap<string, unknown>) {
     const disabled = useDisabledPlugins().filter((x) => x.contribution?.metadataKeys)
     const keys = [...meta.keys()]
 
-    const matches = disabled.filter((x) => {
+    return disabled.filter((x) => {
         const contributes = x.contribution!.metadataKeys!
         return keys.some((key) => contributes.has(key))
     })
-    return matches
 }
 
 export function PossiblePluginSuggestionPostInspector() {

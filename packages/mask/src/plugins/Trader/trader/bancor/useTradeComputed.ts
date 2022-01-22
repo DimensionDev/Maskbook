@@ -9,7 +9,7 @@ export function useTradeComputed(
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
 ) {
-    return useMemo(() => {
+    return useMemo((): TradeComputed<SwapBancorRequest> | null => {
         if (!trade) return null
         if (!inputToken || !outputToken) return null
 
@@ -17,7 +17,7 @@ export function useTradeComputed(
         const outputAmountWei = rightShift(trade.toAmount || '0', outputToken.decimals)
         const minimumReceivedWei = rightShift(trade.minimumReceived, outputToken.decimals)
 
-        const tradeComputed: TradeComputed<SwapBancorRequest> = {
+        return {
             strategy,
             inputToken,
             outputToken,
@@ -30,6 +30,5 @@ export function useTradeComputed(
             priceImpact: ZERO,
             trade_: { ...trade },
         }
-        return tradeComputed
     }, [trade, strategy, inputToken, outputToken])
 }

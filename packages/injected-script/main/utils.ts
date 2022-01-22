@@ -87,11 +87,11 @@ export function constructXrayUnwrappedFilesFromUintLike(
 ) {
     const binary = unwrapXRay_CPPBindingObject(Uint8Array.from(xray_fileContent))
     const blob = new no_xray_Blob([binary], { type: format })
-    const file = new no_xray_File([blob], fileName, {
+
+    return new no_xray_File([blob], fileName, {
         lastModified: now(),
         type: format,
     })
-    return file
 }
 export async function handlePromise(id: number, promise: () => any) {
     try {

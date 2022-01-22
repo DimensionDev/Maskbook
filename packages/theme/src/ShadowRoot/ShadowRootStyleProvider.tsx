@@ -95,8 +95,9 @@ function init({ shadow }: ShadowRootStyleProviderProps) {
     const head = shadow.appendChild(createElement('head', 'css-container'))
 
     // #region Emotion
-    const MuiInsertionPoint = head.appendChild(createElement('div', 'mui-area'))
-    const TSSInsertionPoint = head.appendChild(createElement('div', 'tss-area'))
+    const MuiInsertionPoint = createElement('div', 'mui-area')
+    const TSSInsertionPoint = createElement('div', 'tss-area')
+    head.append(MuiInsertionPoint, TSSInsertionPoint)
     // emotion doesn't allow numbers appears in the key
     const instanceID = Math.random().toString(36).slice(2).replace(/\d/g, 'x')
     const muiEmotionCache = createEmotionCache({

@@ -12,8 +12,7 @@ export function useAssetsByTokenList(tokens: FungibleTokenDetailed[], targetChai
     useEffect(() => {
         setTokensForAsset((oldTokensForAsset) => {
             const uniqTokens = uniqBy([...tokens, ...oldTokensForAsset], (x) => x.address)
-            const sortedTokens = sortBy(uniqTokens, (x) => x.address)
-            return sortedTokens
+            return sortBy(uniqTokens, (x) => x.address)
         })
     }, [tokens.map((x) => x.address.slice(0, 5)).join('')])
 

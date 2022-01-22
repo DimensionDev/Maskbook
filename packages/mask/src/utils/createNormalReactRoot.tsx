@@ -6,7 +6,7 @@ export function createNormalReactRoot(jsx: JSX.Element, container?: HTMLElement)
     if (!container) container = document.getElementById('root') ?? void 0
     if (!container) {
         container = document.createElement('div')
-        document.body.appendChild(container)
+        document.body.append(container)
     }
 
     if (process.env.NODE_ENV === 'development') {

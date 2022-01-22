@@ -10,8 +10,7 @@ function getTwitterId(ele: HTMLElement) {
         '[dir="ltr"] > span',
     ) as HTMLSpanElement
     if (!twitterIdNode) return
-    const twitterId = twitterIdNode.innerText.trim().replace('@', '')
-    return twitterId
+    return twitterIdNode.innerText.trim().replace('@', '')
 }
 
 function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {

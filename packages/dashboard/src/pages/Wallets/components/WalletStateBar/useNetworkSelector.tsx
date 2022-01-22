@@ -26,7 +26,7 @@ export const useNetworkSelector = () => {
     const networkDescriptors = useNetworkDescriptors()
     const { NetworkIconClickBait } = useWeb3UI().SelectNetworkMenu ?? {}
 
-    const networkMenu = useMenu(
+    return useMenu(
         ...(networkDescriptors
             ?.filter((x) => x.isMainnet)
             .map((network) => {
@@ -53,6 +53,4 @@ export const useNetworkSelector = () => {
                 )
             }) ?? []),
     )
-
-    return networkMenu
 }

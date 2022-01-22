@@ -204,7 +204,7 @@ export function useSingleContractMultipleData<T extends BaseContract, K extends 
             gasLimit,
             contract.methods[names[i]](...data).encodeABI() as string,
         ])
-    }, [contract?.options.address, names.join(), callDatas.flatMap((x) => x).join()])
+    }, [contract?.options.address, names.join(), callDatas.flat().join()])
     const [state, callback] = useMulticallCallback(chainId, blockNumber)
     const results = useMulticallStateDecoded(
         Array.from({ length: calls.length }).fill(contract) as T[],
@@ -252,7 +252,7 @@ export function useMultipleContractMultipleData<T extends BaseContract, K extend
                 gasLimit,
                 contract.methods[names[i]](callDatas[i]).encodeABI() as string,
             ]),
-        [contracts.map((x) => x.options.address).join(), names.join(), callDatas.flatMap((x) => x).join(), gasLimit],
+        [contracts.map((x) => x.options.address).join(), names.join(), callDatas.flat().join(), gasLimit],
     )
     const [state, callback] = useMulticallCallback(chainId)
     const results = useMulticallStateDecoded(contracts, names, state, chainId)

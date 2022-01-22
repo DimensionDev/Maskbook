@@ -72,7 +72,7 @@ export async function getLegacyWalletRecords() {
 async function getAllWalletRecords() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet')
     const records = await t.objectStore('Wallet').getAll()
-    const wallets = (
+    return (
         await Promise.all<LegacyWalletRecord>(
             records.map(async (record) => {
                 const walletRecord = LegacyWalletRecordOutDB(record)
@@ -83,7 +83,6 @@ async function getAllWalletRecords() {
             }),
         )
     ).sort(sortWallet)
-    return wallets
 }
 
 async function makePrivateKey(record: LegacyWalletRecord) {

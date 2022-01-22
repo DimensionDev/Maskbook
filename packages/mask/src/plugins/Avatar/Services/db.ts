@@ -12,8 +12,8 @@ async function fetchData() {
         credentials: 'omit',
     })
     if (!response.ok) return []
-    const json = (await response.json()) as AvatarMetaDB[]
-    return json
+
+    return response.json() as Promise<AvatarMetaDB[]>
 }
 
 async function _fetch() {

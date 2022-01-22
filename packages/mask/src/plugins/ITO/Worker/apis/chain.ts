@@ -273,7 +273,7 @@ export async function getClaimAllPools(chainId: ChainId, endBlock: number, swapp
         .filter((v) => Boolean(v)) as SwappedTokenType[]
 
     // 5. merge same swap token pools into one
-    const swappedTokenList = swappedTokenUnmergedList.reduce((acc: SwappedTokenType[], cur) => {
+    return swappedTokenUnmergedList.reduce((acc: SwappedTokenType[], cur) => {
         if (acc.some(checkClaimable(cur)) && cur.isClaimable) {
             // merge same claimable tokens to one
             const existToken = acc.find(checkClaimable(cur))
@@ -289,8 +289,6 @@ export async function getClaimAllPools(chainId: ChainId, endBlock: number, swapp
         }
         return acc
     }, [])
-
-    return swappedTokenList
 }
 
 function mergeTokens(a: SwappedTokenType, b: SwappedTokenType) {

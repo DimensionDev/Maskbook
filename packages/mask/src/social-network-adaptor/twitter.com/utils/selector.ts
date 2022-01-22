@@ -168,13 +168,9 @@ export const postsContentSelector = () =>
             if (textElement) return textElement
 
             // There's no textElement as there's only a twitter summary card parsed by a single url.
-            const summaryCardElement = x
-                .querySelector('[role="group"]')
-                ?.parentElement?.querySelector('[data-testid="card.wrapper"]')?.previousElementSibling as
-                | HTMLDivElement
-                | undefined
 
-            return summaryCardElement
+            return x.querySelector('[role="group"]')?.parentElement?.querySelector('[data-testid="card.wrapper"]')
+                ?.previousElementSibling as HTMLDivElement | undefined
         }), // timeline page for new twitter
     )
 
