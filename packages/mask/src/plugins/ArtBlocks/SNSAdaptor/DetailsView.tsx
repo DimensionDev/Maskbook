@@ -61,6 +61,11 @@ export function DetailsView(props: DetailsViewProps) {
     const { t } = useI18N()
     const chainId = useChainId()
 
+    const dot = ' \u2022 '
+    const artistName = ` ${project.artistName}`
+    const invocations = `${project.invocations} of ${project.maxInvocations}`
+    const price = `${formatWeiToEther(new BigNumber(project.pricePerTokenInWei))} `
+
     return (
         <div className={classes.root}>
             <Box className={classes.container}>
@@ -82,9 +87,9 @@ export function DetailsView(props: DetailsViewProps) {
                         rel="noopener noreferrer"
                         target="_blank"
                         title={`${resolveLinkOnArtBlocks(chainId as number)}/user/${project.artistAddress}`}>
-                        {` ${project.artistName}`}
+                        {artistName}
                     </Link>
-                    {`  •  `}
+                    {dot}
                     <Link href={project.website} rel="noopener noreferrer" target="_blank" title={project.website}>
                         {t('plugin_artblocks_website')}
                     </Link>
@@ -100,13 +105,13 @@ export function DetailsView(props: DetailsViewProps) {
                 <Box className={classes.meta_row}>
                     <Typography variant="body2">{t('plugin_artblocks_price_row')} </Typography>
                     <Typography variant="body2">
-                        {`${formatWeiToEther(new BigNumber(project.pricePerTokenInWei))} `}
+                        {price}
                         {project.currencyAddress === null ? 'ETH' : project.currencySymbol}
                     </Typography>
                 </Box>
                 <Box className={classes.meta_row}>
                     <Typography variant="body2">{t('plugin_artblocks_minted_row')} </Typography>
-                    <Typography variant="body2">{`${project.invocations} of ${project.maxInvocations}`}</Typography>
+                    <Typography variant="body2">{invocations}</Typography>
                 </Box>
 
                 <Box className={classes.meta_row}>
@@ -130,12 +135,12 @@ export function DetailsView(props: DetailsViewProps) {
                 <Box className={classes.meta_row}>
                     <Typography variant="body2">{t('plugin_artblocks_contract_row')}</Typography>
                     <Link
-                        href={resolveAddressLinkOnExplorer(chainId, project.contract.id.toString())}
+                        href={resolveAddressLinkOnExplorer(chainId, project.contract.id)}
                         target="_blank"
                         rel="noopener noreferrer">
                         <Typography variant="body2">
                             <FormattedAddress
-                                address={project.contract.id.toString()}
+                                address={project.contract.id}
                                 size={4}
                                 formatter={formatEthereumAddress}
                             />

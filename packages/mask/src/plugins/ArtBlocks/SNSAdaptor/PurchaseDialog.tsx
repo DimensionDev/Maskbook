@@ -76,7 +76,6 @@ export function PurchaseDialog(props: ActionBarProps) {
         return leftShift(project.pricePerTokenInWei, token.value?.decimals)
     }, [project.pricePerTokenInWei, token.value?.decimals])
 
-    //#region submit button
     const validationMessage = useMemo(() => {
         const balance_ = leftShift(balance.value ?? '0', token.value?.decimals)
 
@@ -85,7 +84,6 @@ export function PurchaseDialog(props: ActionBarProps) {
 
         return ''
     }, [price, balance.value, token.value?.decimals, ToS_Checked])
-    //#endregion
 
     return (
         <InjectedDialog title={t('plugin_artblocks_purchase')} open={open} onClose={onClose}>

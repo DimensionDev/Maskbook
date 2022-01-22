@@ -80,6 +80,9 @@ export function Collectible(props: CollectibleProps) {
     ]
     const pages = [<CollectionView key="project" project={project} />, <DetailsView key="details" project={project} />]
 
+    const invocations = `\u2022 ${project.invocations} of ${project.maxInvocations} minted `
+    const price = `\u2022 ${formatWeiToEther(project.pricePerTokenInWei)} ${project?.currencySymbol}`
+
     return (
         <>
             <Card className={classes.root}>
@@ -105,8 +108,8 @@ export function Collectible(props: CollectibleProps) {
                                 rel="noopener noreferrer">
                                 {project.artistName}
                             </Link>{' '}
-                            {`• ${project.invocations} of ${project.maxInvocations} minted `}
-                            {`• ${formatWeiToEther(project.pricePerTokenInWei)} ${project?.currencySymbol}`}
+                            {invocations}
+                            {price}
                         </Typography>
                     }
                 />
