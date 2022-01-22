@@ -100,7 +100,7 @@ export const auroraNetworkTradeProviderSettings = createGlobalSettings<TradeProv
     { primary: () => '' },
 )
 
-//#region trade provider general settings
+// #region trade provider general settings
 export interface TradeProviderSettings {
     pools: ZrxTradePool[]
 }
@@ -160,9 +160,9 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             unreachable(tradeProvider)
     }
 }
-//#endregion
+// #endregion
 
-//#region data provider general settings
+// #region data provider general settings
 const coinGeckoSettings = createInternalSettings(`${PLUGIN_ID}+currentCoinGeckoSettings`, '')
 const coinMarketCapSettings = createInternalSettings(`${PLUGIN_ID}+currentCoinMarketCapSettings`, '')
 const coinUniswapSettings = createInternalSettings(`${PLUGIN_ID}+currentCoinUniswapSettings`, '')
@@ -182,9 +182,9 @@ export function getCurrentDataProviderGeneralSettings(dataProvider: DataProvider
             unreachable(dataProvider)
     }
 }
-//#endregion
+// #endregion
 
-//#region the user preferred coin id
+// #region the user preferred coin id
 const coinGeckoPreferredCoinId = createInternalSettings<string>(`${PLUGIN_ID}+currentCoinGeckoPreferredCoinId`, '{}')
 const coinMarketCapPreferredCoinId = createInternalSettings<string>(
     `${PLUGIN_ID}+currentCoinMarketCapPreferredCoinId`,
@@ -207,7 +207,7 @@ export function getCurrentPreferredCoinIdSettings(dataProvider: DataProvider) {
             unreachable(dataProvider)
     }
 }
-//#endregion
+// #endregion
 
 /**
  * The approved tokens from uniswap

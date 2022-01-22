@@ -36,7 +36,7 @@ function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<Value>, signal
         .then((id) => id && assign({ ...ref.value, identifier: new ProfileIdentifier('facebook.com', id) }))
 }
 
-//#region LS
+// #region LS
 // Try to resolve my identities
 const myUsernameLiveSelectorPC = new LiveSelector()
     .querySelectorAll<HTMLAnchorElement>(
@@ -49,4 +49,4 @@ const myUsernameLiveSelectorMobile = new LiveSelector().querySelector<HTMLAnchor
 )
 
 type Value = SocialNetworkUI.CollectingCapabilities.IdentityResolved
-//#endregion
+// #endregion

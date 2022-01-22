@@ -139,7 +139,8 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
             const width = ref.current.offsetWidth
             const height = ref.current.offsetHeight - 60
             const baseSize = Math.floor(width / ITEM_SIZE.width) * Math.floor(height / ITEM_SIZE.height)
-            setLoadingSize((prev) => prev ?? Math.floor(baseSize * 0.8))
+            // Ensure load 10 NFTs at least.
+            setLoadingSize((prev) => prev || Math.max(Math.floor(baseSize * 0.8), 10))
         }, [ref.current])
 
         return (
@@ -151,11 +152,12 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
                 ) : (
                     <Box>
                         <div className={classes.root}>
-                            {dataSource.map((x) => (
-                                <div className={classes.card} key={x.id}>
+                            {dataSource.map((x, index) => (
+                                <div className={classes.card} key={index}>
                                     <CollectibleCard
                                         chainId={chainId}
                                         token={x}
+                                        renderOrder={index}
                                         // TODO: transfer not support multi chain, should remove is after supported
                                         onSend={() => onSend(x as unknown as any)}
                                     />
@@ -164,6 +166,7 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
                         </div>
                     </Box>
                 )}
+
                 {showPagination ? (
                     <Box className={classes.footer}>
                         <TablePagination

@@ -209,32 +209,32 @@ export const TradeForm = memo<AllTradeFormProps>(
         const { targetChainId: chainId } = TargetChainIdContext.useContainer()
         const [isExpand, setIsExpand] = useState(false)
 
-        //#region approve token
+        // #region approve token
         const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(
             focusedTrade?.value ?? null,
             focusedTrade?.provider,
             inputToken,
         )
 
-        //#region token balance
+        // #region token balance
         const inputTokenBalanceAmount = new BigNumber(inputTokenBalance || '0')
-        //#endregion
+        // #endregion
 
-        //#region get the best trade
+        // #region get the best trade
         const bestTrade = useMemo(() => first(trades), [trades])
-        //#endregion
+        // #endregion
 
-        //#region remote controlled swap settings dialog
+        // #region remote controlled swap settings dialog
         const { openDialog: openSwapSettingDialog } = useRemoteControlledDialog(
             PluginTraderMessages.swapSettingsUpdated,
         )
-        //#endregion
+        // #endregion
 
-        //#region form controls
+        // #region form controls
         const inputTokenTradeAmount = rightShift(inputAmount || '0', inputToken?.decimals)
-        //#endregion
+        // #endregion
 
-        //#region UI logic
+        // #region UI logic
         // validate form return a message if an error exists
         const validationMessage = useMemo(() => {
             if (inputTokenTradeAmount.isZero()) return t('plugin_trader_error_amount_absence')
@@ -261,9 +261,9 @@ export const TradeForm = memo<AllTradeFormProps>(
             inputTokenBalanceAmount.toFixed(),
             inputTokenTradeAmount.toFixed(),
         ])
-        //#endregion
+        // #endregion
 
-        //#region native wrap message
+        // #region native wrap message
         const nativeWrapMessage = useMemo(() => {
             if (focusedTrade?.value) {
                 if (isNativeTokenWrapper(focusedTrade.value)) {
@@ -281,7 +281,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                 return t('plugin_trader_no_trade')
             }
         }, [focusedTrade, outputToken])
-        //#endregion
+        // #endregion
 
         useUpdateEffect(() => {
             setIsExpand(false)

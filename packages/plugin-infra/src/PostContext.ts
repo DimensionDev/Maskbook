@@ -51,13 +51,13 @@ export interface PostContextCreation extends PostContextAuthor {
     readonly signal?: AbortSignal
 }
 export interface PostContext extends PostContextAuthor {
-    //#region DOM knowledge
+    // #region DOM knowledge
     get rootNode(): HTMLElement | null
     readonly rootElement: DOMProxy
     readonly suggestedInjectionPoint: HTMLElement
-    //#endregion
+    // #endregion
     readonly comment: undefined | PostContextComment
-    //#region Metadata of a post (author, mentioned items, ...)
+    // #region Metadata of a post (author, mentioned items, ...)
     /** Auto computed */
     readonly identifier: Subscription<null | PostIdentifier<ProfileIdentifier>>
     readonly url: Subscription<URL | null>
@@ -65,15 +65,15 @@ export interface PostContext extends PostContextAuthor {
     readonly mentionedLinks: Subscription<string[]>
     /** @deprecated It should appears in rawMessage */
     readonly postMetadataImages: Subscription<string[]>
-    //#endregion
-    //#region Raw post content (not decrypted)
+    // #endregion
+    // #region Raw post content (not decrypted)
     readonly rawMessage: Subscription<TypedMessageTuple>
     // TODO: should be a Subscription
     readonly rawMessagePiped: ValueRef<TypedMessageTuple>
     /** @deprecated Use postMessage or transformedPostContent (depends on your usage) instead */
     readonly postContent: Subscription<string>
-    //#endregion
-    //#region Post payload discovered in the rawMessage
+    // #endregion
+    // #region Post payload discovered in the rawMessage
     readonly containingMaskPayload: Subscription<Result<Payload, unknown>>
     /** @deprecated Use postPayload instead */
     readonly decryptedPayloadForImage: ValueRef<Payload | null>
@@ -83,7 +83,7 @@ export interface PostContext extends PostContextAuthor {
      * undefined => payload not found
      */
     readonly publicShared: Subscription<boolean | undefined>
-    //#endregion
+    // #endregion
 }
 export type PostInfo = PostContext
 

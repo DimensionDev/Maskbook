@@ -60,7 +60,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants()
 
-    //#region step
+    // #region step
     const [step, setStep] = useState(ITOCreateFormPageStep.NewItoPage)
 
     const onNext = useCallback(() => {
@@ -70,16 +70,16 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const onBack = useCallback(() => {
         if (step === ITOCreateFormPageStep.ConfirmItoPage) setStep(ITOCreateFormPageStep.NewItoPage)
     }, [step])
-    //#endregion
+    // #endregion
 
     const [poolSettings, setPoolSettings] = useState<PoolSettings>()
 
-    //#region blocking
+    // #region blocking
     const [fillSettings, fillState, fillCallback, resetFillCallback] = useFillCallback(poolSettings)
     const onDone = useCallback(() => {
         fillCallback()
     }, [fillCallback])
-    //#endregion
+    // #endregion
 
     const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
@@ -143,7 +143,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
         },
     )
 
-    //#region tabs
+    // #region tabs
     const state = useState<DialogTabs>(DialogTabs.create)
 
     const onCreateOrSelect = useCallback(
@@ -219,7 +219,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
         ],
         state,
     }
-    //#endregion
+    // #endregion
 
     // open the transaction dialog
     useEffect(() => {
@@ -233,7 +233,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             }),
         })
     }, [fillState, poolSettings, setTransactionDialog])
-    //#endregion
+    // #endregion
 
     useEffect(() => {
         if (!ITO2_CONTRACT_ADDRESS) onClose()

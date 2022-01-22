@@ -46,7 +46,7 @@ interface PoolStatsProps {
 export function PoolStats(props: PoolStatsProps) {
     const { pool } = props
     const { classes } = useStyles()
-    //#region process stats
+    // #region process stats
     const valueManaged = formatAmountPostfix(formatBalance(pool?.totalValue, DIGIT_LENGTH))
     const lifeTimeReturn = new BigNumber(formatBalance(pool.performance, DIGIT_LENGTH)).minus(1).multipliedBy(100)
 
@@ -54,7 +54,7 @@ export function PoolStats(props: PoolStatsProps) {
     // pool detail contains raw html and need to sanitize before use
     const cleanDescription = DOMPurify.sanitize(pool.poolDetails)
     const [expanded, setExpanded] = useState(cleanDescription.length < POOL_DESCRIPTION_LIMIT)
-    //#endregion
+    // #endregion
 
     return (
         <div className={classes.root}>

@@ -67,6 +67,7 @@ export namespace RSS3BaseAPI {
     export enum AssetType {
         GitcoinDonation = 'Gitcoin-Donation',
         POAP = 'POAP',
+        NFT = 'NFT',
     }
 
     export interface NameInfo {
@@ -83,6 +84,7 @@ export namespace RSS3BaseAPI {
         getFootprints(address: string): Promise<GeneralAssetResponse | undefined>
         getNameInfo(id: string): Promise<NameInfo | undefined>
         getProfileInfo(address: string): Promise<ProfileInfo | undefined>
+        getNFTs(address: string): Promise<GeneralAssetResponse | undefined>
     }
 }
 
@@ -291,12 +293,52 @@ export namespace NonFungibleTokenAPI {
 export namespace StorageAPI {
     export interface Storage {
         set<T extends {}>(key: string, value: T): Promise<void>
-        get<T>(key: string): Promise<T | void>
-        delete?: (key: string) => Promise<void>
+        get<T>(key: string): Promise<T | undefined>
+        delete?(key: string): Promise<void>
     }
 
     export interface Provider {
-        createJSON_Storage?: (key: string) => Storage
-        createBinaryStorage?: (key: string) => Storage
+        createJSON_Storage?(key: string): Storage
+        createBinaryStorage?(key: string): Storage
+    }
+}
+
+export namespace SecurityAPI {
+    export interface Holder {
+        address?: string
+        locked?: 0 | 1
+        tag?: string
+        is_contract?: 0 | 1
+        balance?: number
+        percent?: number
+    }
+
+    export interface ContractSecurity {
+        is_open_source?: 0 | 1
+        is_proxy?: 0 | 1
+        is_mintable?: 0 | 1
+        can_take_back_ownership?: string
+        owner_address?: string
+    }
+
+    export interface TokenSecurity {
+        holder_count?: number
+        total_supply?: number
+        holders?: Holder[]
+
+        lp_holder_count?: number
+        lp_total_supply?: number
+        lp_holders?: Holder[]
+
+        is_true_token?: 0 | 1
+        is_verifiable_team?: 0 | 1
+        is_airdrop_scam?: 0 | 1
+    }
+
+    export interface Provider {
+        getTokenSecurity(
+            chainId: number,
+            listOfAddress: string[],
+        ): Promise<Record<string, ContractSecurity & TokenSecurity> | void>
     }
 }
