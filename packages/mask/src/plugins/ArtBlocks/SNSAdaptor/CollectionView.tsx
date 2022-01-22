@@ -41,8 +41,11 @@ const useStyles = makeStyles()((theme) => {
         active: {
             display: 'block',
         },
+        buttonPrev: {
+            marginRight: theme.spacing(0.5),
+        },
         buttonNext: {
-            paddingRight: theme.spacing(0),
+            marginLeft: theme.spacing(0.5),
         },
         tokenTitle: {
             display: 'flex',
@@ -58,6 +61,9 @@ const useStyles = makeStyles()((theme) => {
         tokenIdRedirectionIcon: {
             verticalAlign: 'text-bottom',
             marginLeft: theme.spacing(0.5),
+        },
+        stepper: {
+            backgroundColor: 'white',
         },
     }
 })
@@ -105,13 +111,14 @@ export function CollectionView(props: CollectionProps) {
                         href={`${resolveLinkOnArtBlocks(chainId as number)}/token/${currentSelectedToken.tokenId}`}
                         target="_blank">
                         <Typography className={classes.title}>
-                            {`#${currentSelectedToken.tokenId}`}{' '}
+                            #{currentSelectedToken.tokenId}
                             <OpenInNew className={classes.tokenIdRedirectionIcon} fontSize="small" />
                         </Typography>
                     </Link>
                 )}
 
                 <MobileStepper
+                    className={classes.stepper}
                     variant="text"
                     steps={maxSteps}
                     position="static"
@@ -120,6 +127,7 @@ export function CollectionView(props: CollectionProps) {
                         <Button
                             className={classes.buttonNext}
                             size="small"
+                            variant="text"
                             onClick={handleNext}
                             disabled={activeStep === maxSteps}>
                             Next
@@ -127,7 +135,12 @@ export function CollectionView(props: CollectionProps) {
                         </Button>
                     }
                     backButton={
-                        <Button size="small" onClick={handleBack} disabled={activeStep === 1}>
+                        <Button
+                            className={classes.buttonPrev}
+                            size="small"
+                            variant="text"
+                            onClick={handleBack}
+                            disabled={activeStep === 1}>
                             {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
                             Back
                         </Button>

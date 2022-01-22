@@ -57,7 +57,7 @@ function registerPostCollectorInner(
             const profileIdentifier = info.author.getCurrentValue()
             Services.Identity.updateProfileInfo(profileIdentifier, {
                 nickname: info.nickname.getCurrentValue(),
-                avatarURL: info.avatarURL.getCurrentValue(),
+                avatarURL: info.avatarURL.getCurrentValue()?.toString(),
             })
             if (currentProfile?.linkedPersona) {
                 Services.Identity.createNewRelation(profileIdentifier, currentProfile.linkedPersona.identifier)
