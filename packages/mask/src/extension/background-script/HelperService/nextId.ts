@@ -2,7 +2,10 @@ import { toHex, PersonaIdentifier, compressSecp256k1Point, fromHex, toBase64 } f
 import { queryPublicKey } from '../../../database'
 import urlcat from 'urlcat'
 
-const BASE_URL = 'https://js43x8ol17.execute-api.ap-east-1.amazonaws.com/api/'
+const BASE_URL =
+    process.env.channel === 'stable' && process.env.NODE_ENV === 'production'
+        ? 'https://proof-service.next.id/'
+        : 'https://js43x8ol17.execute-api.ap-east-1.amazonaws.com/api/'
 
 interface QueryBinding {
     platform: string
@@ -74,7 +77,9 @@ export async function queryExistedBinding(persona: PersonaIdentifier) {
     const publicKey = await queryPersonaHexPublicKey(persona)
     if (!publicKey) return
 
-    const response = await fetch(urlcat(BASE_URL, '/v1/proof', { platform: 'nextid', identity: publicKey }))
+    const response = await fetch(urlcat(BASE_URL, '/v1/proof', { platform: 'nextid', identity: publicKey }), {
+        mode: 'cors',
+    })
 
     const result = (await response.json()) as QueryBindingResponse
     return result.ids[0]
