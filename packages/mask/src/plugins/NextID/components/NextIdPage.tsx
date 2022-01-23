@@ -52,20 +52,15 @@ export function NextIdPage({}: NextIDPageProps) {
         )
     }, [personaConnectStatus, t])
 
-    const { value: currentIdentifier, loading: loadingIdentifier } = useAsyncRetry(
-        () => Services.Settings.getCurrentPersonaIdentifier(),
-        [],
-    )
-
-    const { value: currentPersona } = useAsyncRetry(() => {
+    const { value: currentPersona, loading: loadingPersona } = useAsyncRetry(() => {
         if (!currentProfileIdentifier) return Promise.resolve(undefined)
         return Services.Identity.queryPersonaByProfile(currentProfileIdentifier.identifier)
     }, [currentProfileIdentifier])
 
     const { value: bindings, loading } = useAsync(() => {
-        if (!currentIdentifier) return Promise.resolve(null)
-        return Services.Helper.queryExistedBinding(currentIdentifier)
-    }, [currentIdentifier, count])
+        if (!currentPersona) return Promise.resolve(null)
+        return Services.Helper.queryExistedBinding(currentPersona.identifier)
+    }, [currentPersona, count])
 
     if (personaActionButton) {
         return (
@@ -75,7 +70,7 @@ export function NextIdPage({}: NextIDPageProps) {
         )
     }
 
-    if (loading || loadingIdentifier) {
+    if (loading || loadingPersona) {
         return (
             <>
                 {Array.from({ length: 2 })
