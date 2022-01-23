@@ -15,6 +15,32 @@ import { TradeProvider } from '@masknet/public-api'
 
 const UNISWAP_BIPS_BASE = JSBI.BigInt(10_000)
 
+// Pangolin and TraderJoe have modified uniswap contracts
+type SwapParams = Parameters<typeof Router.swapCallParameters>
+const swapCallParameters = (trade: SwapParams[0], options: SwapParams[1], tradeProvider?: TradeProvider) => {
+    const parameters = Router.swapCallParameters(trade, options)
+    if (tradeProvider === TradeProvider.PANGOLIN || tradeProvider === TradeProvider.TRADERJOE) {
+        switch (parameters.methodName) {
+            case 'swapTokensForExactETH':
+                parameters.methodName = 'swapTokensForExactAVAX'
+                break
+            case 'swapExactTokensForETHSupportingFeeOnTransferTokens':
+                parameters.methodName = 'swapExactTokensForAVAXSupportingFeeOnTransferTokens'
+                break
+            case 'swapExactTokensForETH':
+                parameters.methodName = 'swapExactTokensForAVAX'
+                break
+            case 'swapExactETHForTokensSupportingFeeOnTransferTokens':
+                parameters.methodName = 'swapExactAVAXForTokensSupportingFeeOnTransferTokens'
+                break
+            case 'swapExactETHForTokens':
+                parameters.methodName = 'swapExactAVAXForTokens'
+                break
+        }
+    }
+    return parameters
+}
+
 /**
  * Returns the swap calls that can be used to make the trade
  * @param trade trade to execute
@@ -40,56 +66,30 @@ export function useSwapParameters(
         if (trade_ instanceof V2Trade) {
             if (!routerV2Contract) return []
 
-            type SwapParams = Parameters<typeof Router.swapCallParameters>
-            const swapCallParameters = (
-                trade: SwapParams[0],
-                options: SwapParams[1],
-                tradeProvider?: TradeProvider,
-            ) => {
-                const parameters = Router.swapCallParameters(trade, options)
-                if (
-                    tradeProvider === TradeProvider.PANGOLIN ||
-                    (TradeProvider.TRADERJOE && tradeProvider !== TradeProvider.SUSHISWAP)
-                ) {
-                    switch (parameters.methodName) {
-                        case 'swapTokensForExactETH':
-                            parameters.methodName = 'swapTokensForExactAVAX'
-                            break
-                        case 'swapExactTokensForETHSupportingFeeOnTransferTokens':
-                            parameters.methodName = 'swapExactTokensForAVAXSupportingFeeOnTransferTokens'
-                            break
-                        case 'swapExactTokensForETH':
-                            parameters.methodName = 'swapExactTokensForAVAX'
-                            break
-                        case 'swapExactETHForTokensSupportingFeeOnTransferTokens':
-                            parameters.methodName = 'swapExactAVAXForTokensSupportingFeeOnTransferTokens'
-                            break
-                        case 'swapExactETHForTokens':
-                            parameters.methodName = 'swapExactAVAXForTokens'
-                            break
-                        case 'WETH':
-                            parameters.methodName = 'WAVAX'
-                            break
-                    }
-                }
-                return parameters
-            }
             const parameters = [
-                swapCallParameters(trade_, {
-                    feeOnTransfer: false,
-                    allowedSlippage: allowedSlippage_,
-                    recipient: account,
-                    ttl: deadline.toNumber(),
-                }),
-            ]
-            if (trade_.tradeType === TradeType.EXACT_INPUT)
-                parameters.push(
-                    swapCallParameters(trade_, {
-                        feeOnTransfer: true,
+                swapCallParameters(
+                    trade_,
+                    {
+                        feeOnTransfer: false,
                         allowedSlippage: allowedSlippage_,
                         recipient: account,
                         ttl: deadline.toNumber(),
-                    }),
+                    },
+                    tradeProvider,
+                ),
+            ]
+            if (trade_.tradeType === TradeType.EXACT_INPUT)
+                parameters.push(
+                    swapCallParameters(
+                        trade_,
+                        {
+                            feeOnTransfer: true,
+                            allowedSlippage: allowedSlippage_,
+                            recipient: account,
+                            ttl: deadline.toNumber(),
+                        },
+                        tradeProvider,
+                    ),
                 )
             return parameters.map(({ methodName, args, value }) => {
                 return {

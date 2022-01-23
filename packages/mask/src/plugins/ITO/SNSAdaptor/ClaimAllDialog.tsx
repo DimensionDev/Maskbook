@@ -333,7 +333,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                     </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>
                         {(showNftAirdrop || loadingAirdrop) &&
-                        SUPPORTED_CHAIN_ID_LIST.includes(chainId) &&
+                        chainId === ChainId.Matic &&
                         Flags.nft_airdrop_enabled ? (
                             <NftAirdropCard
                                 campaignInfos={campaignInfos!}
@@ -356,7 +356,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                             </div>
                         ) : null}
                         {(swappedTokens && swappedTokens.length > 0) ||
-                        (SUPPORTED_CHAIN_ID_LIST.includes(chainId) && Flags.nft_airdrop_enabled) ? (
+                        (chainId === ChainId.Matic && Flags.nft_airdrop_enabled) ? (
                             <div className={classes.actionButtonWrapper}>
                                 <EthereumChainBoundary
                                     chainId={chainId}
