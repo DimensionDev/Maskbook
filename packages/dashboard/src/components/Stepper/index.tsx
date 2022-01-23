@@ -54,10 +54,9 @@ export const Stepper = (props: StepperProps) => {
 
     useEffect(() => {
         Children.forEach(props.children, (child: ReactElement<StepProps>) => {
-            if (isValidElement(child)) {
-                const name = child.props.name
-                setSteps(name, child)
-            }
+            if (!isValidElement(child)) return
+            const name = child.props.name
+            setSteps(name, child)
         })
     }, [])
 

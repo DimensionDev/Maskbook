@@ -14,17 +14,16 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     DecryptedInspector(props) {
-        const text = useMemo(() => extractTextFromTypedMessage(props.message), [props.message])
-        const link = useMemo(() => parseURL(text.val || ''), [text.val]).find(isMaskBox)
-        if (!text.ok) return null
+        const link = useMemo(() => {
+            const x = extractTextFromTypedMessage(props.message)
+            if (x.none) return null
+            return parseURL(x.val).find(isMaskBox)
+        }, [props.message])
         if (!link) return null
         return <Renderer url={link} />
     },
     PostInspector: function Component() {
-        const link = usePostInfoDetails
-            .postMetadataMentionedLinks()
-            .concat(usePostInfoDetails.mentionedLinks())
-            .find(isMaskBox)
+        const link = usePostInfoDetails.mentionedLinks().find(isMaskBox)
         if (!link) return null
         return <Renderer url={link} />
     },
@@ -39,7 +38,7 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     if (!chainId || !boxId) return null
 
     return (
-        <MaskPluginWrapper pluginName="MaskBox">
+        <MaskPluginWrapper pluginName="MaskBox" publisher={base.publisher}>
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
                 <EthereumChainBoundary chainId={Number.parseInt(chainId, 10)}>
                     <Context.Provider initialState={{ boxId }}>

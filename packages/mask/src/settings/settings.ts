@@ -22,30 +22,30 @@ export const allPostReplacementSettings = createGlobalSettings<boolean>('post re
     secondary: () => i18n.t('settings_post_replacement_desc'),
 })
 
-//#region appearance
+// #region appearance
 export const appearanceSettings = createGlobalSettings<Appearance>('appearance', Appearance.default, {
     primary: () => i18n.t('settings_appearance'),
     secondary: () => i18n.t('settings_appearance_secondary'),
 })
-//#endregion
+// #endregion
 
-//#region language
+// #region language
 export const languageSettings = createGlobalSettings<LanguageOptions>('language', LanguageOptions.__auto__, {
     primary: () => i18n.t('settings_language'),
     secondary: () => i18n.t('settings_language_secondary'),
 })
-//#endregion
+// #endregion
 
-//#region web3 plugin ID
+// #region web3 plugin ID
 export const pluginIDSettings = createGlobalSettings<string>('pluginID', PLUGIN_ID, {
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
-//#endregion
+// #endregion
 
-//#region network setting
+// #region network setting
 
 /**
- * Expected Usage：export const currentImagePayloadStatus = createNetworkSettings('currentImagePayloadStatus')
+ * Expected Usage: export const currentImagePayloadStatus = createNetworkSettings('currentImagePayloadStatus')
  *
  * Work around the issue:
  *      https://github.com/microsoft/TypeScript/issues/42873
@@ -73,8 +73,12 @@ export const userGuideStatus: NetworkSettings<string> = createNetworkSettings('u
  * use `useActivatedPluginsSNSAdaptor().find((x) => x.ID === PLUGIN_ID)` or
  * `useActivatedPluginsDashboard().find((x) => x.ID === PLUGIN_ID)` instead
  */
-export const currentPluginEnabledStatus: NetworkSettings<boolean> = createNetworkSettings('pluginsEnabled', true)
-//#endregion
+// This was "currentPluginEnabled" before, but we used it to represent minimal mode now to make the settings be able to migrate.
+export const currentPluginMinimalModeNOTEnabled: NetworkSettings<boolean> = createNetworkSettings(
+    'pluginsEnabled',
+    true,
+)
+// #endregion
 
 export const launchPageSettings = createGlobalSettings<LaunchPage>('launchPage', LaunchPage.dashboard, {
     primary: () => i18n.t('settings_launch_page'),

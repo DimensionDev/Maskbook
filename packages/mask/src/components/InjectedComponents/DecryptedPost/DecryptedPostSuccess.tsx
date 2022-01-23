@@ -1,22 +1,43 @@
 import { memo } from 'react'
 import { useI18N } from '../../../utils'
-import { AdditionalContent, AdditionalContentProps } from '../AdditionalPostContent'
+import { AdditionalContent } from '../AdditionalPostContent'
 import { useShareMenu } from '../SelectPeopleDialog'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Link } from '@mui/material'
 import type { Profile } from '../../../database'
+import { extractTextFromTypedMessage } from '@masknet/shared-base'
 import type { TypedMessage, ProfileIdentifier } from '@masknet/shared-base'
 import { wrapAuthorDifferentMessage } from './authorDifferentMessage'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
+import type { MetadataRendererProps } from '../TypedMessageRenderer'
+import {
+    useDisabledPluginSuggestionFromMeta,
+    useDisabledPluginSuggestionFromPost,
+    PossiblePluginSuggestionUI,
+} from '../DisabledPluginSuggestion'
 
-const PluginRenderer = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (x) => x.DecryptedInspector)
+const PluginRenderer = createInjectHooksRenderer(
+    useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
+    (x) => x.DecryptedInspector,
+)
+function PluginRendererWithSuggestion(props: MetadataRendererProps) {
+    const a = useDisabledPluginSuggestionFromMeta(props.metadata || new Map())
+    const b = useDisabledPluginSuggestionFromPost(extractTextFromTypedMessage(props.message), [])
+
+    const suggest = Array.from(new Set(a.concat(b)))
+    return (
+        <>
+            <PossiblePluginSuggestionUI plugins={suggest} />
+            <PluginRenderer {...props} />
+        </>
+    )
+}
 export interface DecryptPostSuccessProps extends withClasses<never> {
     data: { content: TypedMessage }
     requestAppendRecipients?(to: Profile[]): Promise<void>
     alreadySelectedPreviously: Profile[]
     profiles: Profile[]
-    sharedPublic?: boolean
-    AdditionalContentProps?: Partial<AdditionalContentProps>
+    sharedPublic?: boolean | null
     /** The author in the payload */
     author?: ProfileIdentifier
     /** The author of the encrypted post */
@@ -46,7 +67,7 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
         props.requestAppendRecipients || (async () => {}),
         props.alreadySelectedPreviously,
     )
-    const rightActions = props.requestAppendRecipients && !props.sharedPublic && (
+    const rightActions = props.requestAppendRecipients && props.sharedPublic === false && (
         <Link color="primary" onClick={shareMenu.showShare} className={classes.addRecipientsLink}>
             {t('decrypted_postbox_add_recipients')}
         </Link>
@@ -55,11 +76,10 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
         <>
             {shareMenu.ShareMenu}
             <AdditionalContent
-                metadataRenderer={{ after: PluginRenderer }}
+                metadataRenderer={{ after: PluginRendererWithSuggestion }}
                 headerActions={wrapAuthorDifferentMessage(author, postedBy, rightActions)}
                 title={t('decrypted_postbox_title')}
                 message={content}
-                {...props.AdditionalContentProps}
             />
         </>
     )

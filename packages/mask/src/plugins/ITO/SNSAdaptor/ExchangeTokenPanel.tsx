@@ -79,7 +79,7 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
     } = props
     const { t } = useI18N()
     const { classes } = useStyles()
-    //#region select token dialog
+    // #region select token dialog
     const [id] = useState(uuid())
     const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
@@ -102,14 +102,14 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
             },
         })
     }, [id, isSell, exchangeToken, excludeTokensAddress.sort().join(), selectedTokensAddress.sort().join()])
-    //#endregion
+    // #endregion
 
-    //#region balance
+    // #region balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
         exchangeToken?.type ?? EthereumTokenType.Native,
         exchangeToken?.address ?? '',
     )
-    //#endregion
+    // #endregion
 
     const [inputAmountForUI, setInputAmountForUI] = useState('')
 

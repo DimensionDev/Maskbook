@@ -1,5 +1,4 @@
 import { useMemo } from 'react'
-import BigNumber from 'bignumber.js'
 import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
@@ -8,7 +7,7 @@ import { CollectibleTab } from './CollectibleTab'
 import { OrderRow } from './OrderRow'
 import { TableListPagination } from './Pagination'
 import { LoadingTable } from './LoadingTable'
-import { isZero } from '@masknet/web3-shared-base'
+import { isOne, isZero } from '@masknet/web3-shared-base'
 import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
@@ -49,7 +48,7 @@ export function OfferTab() {
                     (item) =>
                         (item.payment_token_contract?.symbol !== 'WETH' &&
                             item.payment_token_contract?.symbol !== 'ETH') ||
-                        (item.quantity && new BigNumber(item.quantity).toString() !== '1'),
+                        (item.quantity && !isOne(item.quantity)),
                 ) && offers.value.data.filter((item) => isZero(item.expiration_time ?? 0)).length === 0
             )
         } else {

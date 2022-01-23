@@ -1,10 +1,9 @@
 import { TabList, TabPanel, TabContext, tabPanelClasses } from '@mui/lab'
 import { Tab, styled, tabClasses, tabsClasses, InputBase, inputBaseClasses } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useState } from 'react'
 import { useAsync } from 'react-use'
 import ConfirmDialog from '../../../../components/ConfirmDialog'
-import { MaskColorVar } from '@masknet/theme'
 import FileUpload from '../../../../components/FileUpload'
 import { Services } from '../../../../API'
 import BackupPreviewCard from '../BackupPreviewCard'
@@ -26,11 +25,11 @@ const StyledTab: typeof Tab = styled(Tab)(() => ({
         flex: 1,
         background: MaskColorVar.secondaryBackground,
         textTransform: 'none',
-        [`&:first-of-type`]: {
+        '&:first-of-type': {
             borderTopLeftRadius: 4,
             borderBottomLeftRadius: 4,
         },
-        [`&:last-of-type`]: {
+        '&:last-of-type': {
             borderTopRightRadius: 4,
             borderBottomRightRadius: 4,
         },

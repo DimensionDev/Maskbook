@@ -19,7 +19,7 @@ export interface InternalEvents {
      */
     hookInputUploadOnce: [format: string, fileName: string, file: number[]]
 
-    //#region Eth inpage provider bridge
+    // #region Eth inpage provider bridge
     /** Request the bridge to listen on an event. */
     ethBridgeRequestListen: [eventName: string]
     /** When a event happened. */
@@ -30,9 +30,9 @@ export interface InternalEvents {
     ethBridgePrimitiveAccess: [req_id: number, property: string]
     /** Wait until window.ethereum appears */
     untilEthBridgeOnline: [req_id: number]
-    //#endregion
+    // #endregion
 
-    //#region Eth inpage provider bridge
+    // #region Eth inpage provider bridge
     /** Request the bridge to listen on an event. */
     coin98BridgeRequestListen: [eventName: string]
     /** When a event happened. */
@@ -43,9 +43,11 @@ export interface InternalEvents {
     coin98BridgePrimitiveAccess: [req_id: number, property: string]
     /** Wait until window.ethereum appears */
     untilCoin98BridgeOnline: [req_id: number]
-    //#endregion
+    // #endregion
 
-    //#region Solana inpage provider bridge
+    // #region Solana inpage provider bridge
+    /** Request the bridge to call function. */
+    solanaBridgeExecute: [path: string, req_id: number]
     /** Request the bridge to listen on an event. */
     solanaBridgeRequestListen: [eventName: string]
     /** When a event happened. */
@@ -56,7 +58,7 @@ export interface InternalEvents {
     solanaBridgePrimitiveAccess: [req_id: number, property: string]
     /** Wait until window.solana appears */
     untilSolanaBridgeOnline: [req_id: number]
-    //#endregion
+    // #endregion
 
     /** A simple RPC. */
     // Not using async-call-rpc because we need to make sure every intrinsics
@@ -93,6 +95,7 @@ export function encodeEvent<T extends keyof InternalEvents>(key: T, args: Intern
 export function decodeEvent(data: string): EventItemBeforeSerialization {
     const result = parse(data)
     // Do not throw new Error cause it requires a global lookup.
+    // eslint-disable-next-line
     if (!isEventItemBeforeSerialization(result)) throw null
     return result
 }

@@ -5,7 +5,7 @@ import { Flags } from '../../../../../shared'
 import { ChainId, ProviderType, useAccount, useChainId } from '@masknet/web3-shared-evm'
 import { getRegisteredWeb3Networks, NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra'
 import { currentMaskWalletAccountSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
-import { ChainIcon, useMenu, useValueRef, WalletIcon } from '@masknet/shared'
+import { ChainIcon, useMenuConfig, useValueRef, WalletIcon } from '@masknet/shared'
 import { ArrowDownRound } from '@masknet/icons'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 
@@ -39,6 +39,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     networkName: {
         marginLeft: 10,
+    },
+    menu: {
+        maxHeight: 466,
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
 }))
 
@@ -81,8 +87,8 @@ export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork,
     const { classes } = useStyles()
     const networks = getRegisteredWeb3Networks()
 
-    const [menu, openMenu] = useMenu(
-        ...(networks
+    const [menu, openMenu] = useMenuConfig(
+        networks
             ?.filter((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM)
             .filter((x) => (Flags.support_testnet_switch ? true : x.isMainnet))
             .map((network) => {
@@ -101,7 +107,10 @@ export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork,
                         <Typography sx={{ marginLeft: 1 }}>{network.name}</Typography>
                     </MenuItem>
                 )
-            }) ?? []),
+            }) ?? [],
+        {
+            classes: { paper: classes.menu },
+        },
     )
 
     return (

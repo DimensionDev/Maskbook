@@ -29,7 +29,7 @@ export const twitterEncoding = {
     /**
      * @link https://github.com/DimensionDev/Maskbook/issues/191
      */
-    publicKeyEncoder: (text: string) => `🎭${ICAO9303Checksum.encode(text)}🎭`,
+    publicKeyEncoder: (text: string) => `\u{1F3AD}${ICAO9303Checksum.encode(text)}\u{1F3AD}`,
     publicKeyDecoder: (text: string): string[] => {
         const r = regexMatchAll(text, /([\d+/=A-Za-z]{20,60})/)
         if (isNull(r)) {
@@ -52,7 +52,7 @@ export const twitterEncoding = {
     },
 }
 
-function regexMatchAll(str: string, regexp: RegExp, index: number = 1) {
+function regexMatchAll(str: string, regexp: RegExp, index = 1) {
     const gPos = regexp.flags.indexOf('g')
     const withoutG = gPos >= 0 ? `${regexp.flags.slice(0, gPos)}${regexp.flags.slice(gPos + 1)}` : regexp.flags
     const o = new RegExp(regexp.source, withoutG)

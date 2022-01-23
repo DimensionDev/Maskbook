@@ -51,7 +51,7 @@ export interface LandingPageMetadata {
 }
 
 export async function uploadLandingPage(metadata: LandingPageMetadata) {
-    let linkPrefix: string = 'https://arweave.net'
+    let linkPrefix = 'https://arweave.net'
     if (metadata.useCDN) {
         linkPrefix = mesonPrefix
     }
@@ -72,7 +72,7 @@ export async function uploadLandingPage(metadata: LandingPageMetadata) {
 }
 
 async function makePayload(data: Uint8Array, type: string) {
-    const transaction = await instance.createTransaction({ data }, TOKEN as any)
+    const transaction = await instance.createTransaction({ data }, { ...TOKEN, e: '' })
     transaction.addTag('Content-Type', type)
     await sign(transaction)
     return transaction

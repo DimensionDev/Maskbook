@@ -61,15 +61,18 @@ export async function replaceRecentTransaction(
     address: string,
     oldHash: string,
     newHash: string,
-    payload?: JsonRpcPayload,
+    newPayload?: JsonRpcPayload,
 ) {
     const now = new Date()
     const recordId = getRecordId(chainId, address)
     const chunk = await PluginDB.get('recent-transactions', recordId)
     const transaction = chunk?.transactions.find((x) => x.hash === oldHash)
     if (!transaction) throw new Error('Failed to find the old transaction.')
+    if (transaction.hash === newHash) return
     transaction.hashReplacement = newHash
-    transaction.payloadReplacement = payload
+    if (newPayload) {
+        transaction.payloadReplacement = newPayload
+    }
     await PluginDB.add({
         type: 'recent-transactions',
         id: recordId,
