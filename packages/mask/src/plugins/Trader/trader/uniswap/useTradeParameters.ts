@@ -21,6 +21,9 @@ const swapCallParameters = (trade: SwapParams[0], options: SwapParams[1], tradeP
     const parameters = Router.swapCallParameters(trade, options)
     if (tradeProvider === TradeProvider.PANGOLIN || tradeProvider === TradeProvider.TRADERJOE) {
         switch (parameters.methodName) {
+            case 'WETH':
+                parameters.methodName = 'WAVAX'
+                break
             case 'swapTokensForExactETH':
                 parameters.methodName = 'swapTokensForExactAVAX'
                 break
