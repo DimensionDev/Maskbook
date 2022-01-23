@@ -1,8 +1,9 @@
-import { memo, useCallback, useState } from 'react'
+import { memo, useState } from 'react'
 import { IconProps, Tooltip, useTheme } from '@mui/material'
 import { CopyIcon } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../locales'
+import { useSnackbarCallback } from '@masknet/shared'
 
 export interface CopyIconButtonProps extends IconProps {
     text: string
@@ -14,18 +15,11 @@ export const CopyIconButton = memo<CopyIconButtonProps>(({ text, ...props }) => 
     const [, copyToClipboard] = useCopyToClipboard()
     const [open, setOpen] = useState(false)
 
-    const onCopy = useCallback(
-        (e: React.MouseEvent) => {
-            e.preventDefault()
-            e.stopPropagation()
-            copyToClipboard(text)
-            setOpen(true)
-            setTimeout(() => {
-                setOpen(false)
-            }, 5000)
-        },
-        [text, copyToClipboard],
-    )
+    const onCopy = useSnackbarCallback({
+        executor: async () => copyToClipboard(text),
+        deps: [],
+        successText: t.copy_success_of_wallet_address(),
+    })
 
     return (
         <Tooltip

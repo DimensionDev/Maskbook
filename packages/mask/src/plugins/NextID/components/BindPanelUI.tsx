@@ -44,12 +44,15 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 18,
         lineHeight: '24px',
         fontWeight: 600,
-        marginBottom: 11.5,
         color: theme.palette.text.primary,
+    },
+    deneText: {
+        color: '#60DFAB',
     },
     done: {
         background: '#60DFAB !important',
         color: `${MaskColorVar.white} !important`,
+        opacity: '1 !important',
     },
     loadingIcon: {
         position: 'relative',
@@ -100,8 +103,22 @@ export const BindPanelUI = memo<BindPanelUIProps>(
             <InjectedDialog open={open} title={title} onClose={onClose}>
                 <DialogContent style={{ padding: '24px' }}>
                     <Box>
-                        <Typography className={classes.subTitle}>{t.wallet()}</Typography>
-                        <WalletStatusBox disableChange />
+                        <Stack alignItems="center" direction="row" justifyContent="space-between" mb={1.25}>
+                            <Typography className={classes.subTitle}>{t.wallet()}</Typography>
+                            <Typography>
+                                <Typography
+                                    variant="body2"
+                                    className={isWalletSigned ? classes.deneText : ''}
+                                    component="span">
+                                    1
+                                </Typography>
+                                <Typography variant="body2" component="span">
+                                    {' '}
+                                    / 2{' '}
+                                </Typography>
+                            </Typography>
+                        </Stack>
+                        <WalletStatusBox />
                         {isBound && <Typography className={classes.error}>{t.bind_wallet_bound_error()}</Typography>}
                         <Box mt={3}>
                             <LoadingButton
@@ -110,7 +127,7 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                                     loadingIndicatorEnd: classes.loadingIcon,
                                 }}
                                 loadingPosition="end"
-                                disabled={!isCurrentAccount || !!isWalletSigned || !isSupported}
+                                disabled={!isCurrentAccount || isBound || !!isWalletSigned || !isSupported}
                                 className={isWalletSigned ? classes.done : ''}
                                 loading={signature.wallet.loading}
                                 variant="contained"
@@ -123,7 +140,21 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                     </Box>
                     {!isSupported && <Typography className={classes.error}>{t.unsupported_network()}</Typography>}
                     <Box mt={3}>
-                        <Typography className={classes.subTitle}>{t.persona()}</Typography>
+                        <Stack alignItems="center" direction="row" justifyContent="space-between" mb={1.25}>
+                            <Typography className={classes.subTitle}>{t.persona()}</Typography>
+                            <Typography>
+                                <Typography
+                                    variant="body2"
+                                    className={isPersonaSigned ? classes.deneText : ''}
+                                    component="span">
+                                    2
+                                </Typography>
+                                <Typography component="span" variant="body2">
+                                    {' '}
+                                    / 2{' '}
+                                </Typography>
+                            </Typography>
+                        </Stack>
                         <Stack direction="row" className={classes.persona} mb={3}>
                             <div className={classes.iconContainer}>
                                 <MasksIcon style={{ fontSize: '48px' }} />

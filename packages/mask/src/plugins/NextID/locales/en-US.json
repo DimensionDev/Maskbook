@@ -29,5 +29,6 @@
     "please_connect_persona": "Please connect persona",
     "unbind_persona_tip": "Choose either your Persona or the currently bound wallet to sign to unbind.",
     "unbind_wallet_tip": "Choose either your Persona or the currently bound wallet to sign to unbind.",
-    "done": "Done"
+    "done": "Done",
+    "copy_success_of_wallet_address": "Copy wallet address successfully!"
 }
