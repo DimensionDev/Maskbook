@@ -50,7 +50,7 @@ export async function bindProof(
     const requestBody = {
         action,
         platform,
-        identity,
+        identity: publicKey,
         public_key: publicKey,
         extra: {
             ...(walletSignature ? { wallet_signature: toBase64(fromHex(walletSignature)) } : {}),
