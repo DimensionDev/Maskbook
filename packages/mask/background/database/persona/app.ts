@@ -418,7 +418,7 @@ function profileRecordOutDB(x: NativeProfileRecord): ProfileRecord {
     return {
         localKey: x.localKey as JsonWebKey as unknown as AESJsonWebKey,
         identifier: Identifier.fromString(x.identifier, ProfileIdentifier).unwrap(),
-        linkedPersona: Identifier.fromString(x.identifier, ECKeyIdentifier).unwrap(),
+        linkedPersona: x.linkedPersona ? Identifier.fromString(x.linkedPersona, ECKeyIdentifier).unwrap() : undefined,
         createdAt: new Date(x.createdAt),
         updatedAt: new Date(x.updatedAt),
     }
