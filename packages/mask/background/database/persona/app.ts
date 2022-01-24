@@ -397,7 +397,7 @@ function personaRecordOutDB(x: NativePersonaRecord): PersonaRecord {
         privateKey: x.privateKey as JsonWebKey as unknown as EC_Private_JsonWebKey,
         localKey: x.localKey as JsonWebKey as unknown as AESJsonWebKey,
         identifier: Identifier.fromString(x.identifier, ECKeyIdentifier).unwrap(),
-        linkedProfiles: new IdentifierMap(x.linkedProfiles, ProfileIdentifier),
+        linkedProfiles: new IdentifierMap(new Map(Object.entries(x.linkedProfiles)), ProfileIdentifier),
         createdAt: new Date(x.createdAt),
         updatedAt: new Date(x.updatedAt),
     }

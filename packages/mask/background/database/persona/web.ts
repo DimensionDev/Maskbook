@@ -28,6 +28,7 @@ import type {
     RelationRecordDB,
     PersonaRecord,
 } from './type'
+import { isEmpty } from 'lodash-unified'
 /**
  * Database structure:
  *
@@ -404,6 +405,14 @@ export async function queryProfilesDB(
 ): Promise<ProfileRecord[]> {
     t = t || createTransaction(await db(), 'readonly')('profiles')
     const result: ProfileRecord[] = []
+
+    if (isEmpty(query)) {
+        const results = await t.objectStore('profiles').getAll()
+        results.forEach((each) => {
+            const out = profileOutDB(each)
+            result.push(out)
+        })
+    }
 
     if (query.network) {
         const results = await t.objectStore('profiles').index('network').getAll(IDBKeyRange.only(query.network))
