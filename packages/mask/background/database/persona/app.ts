@@ -371,7 +371,7 @@ function personaRecordToDB(x: PersonaRecord): NativePersonaRecord {
         privateKey: x.privateKey as JsonWebKey as unknown as Native_EC_Private_JsonWebKey,
         localKey: x.localKey as JsonWebKey as unknown as Native_AESJsonWebKey,
         identifier: x.identifier.toText(),
-        linkedProfiles: x.linkedProfiles.__raw_map__,
+        linkedProfiles: Object.fromEntries(x.linkedProfiles.__raw_map__),
         createdAt: x.createdAt.getTime(),
         updatedAt: x.createdAt.getTime(),
     }
@@ -385,7 +385,7 @@ function partialPersonaRecordToDB(
         privateKey: x.privateKey as JsonWebKey as unknown as Native_EC_Private_JsonWebKey,
         localKey: x.localKey as JsonWebKey as unknown as Native_AESJsonWebKey,
         identifier: x.identifier.toText(),
-        linkedProfiles: x.linkedProfiles?.__raw_map__,
+        linkedProfiles: x.linkedProfiles?.__raw_map__ ? Object.fromEntries(x.linkedProfiles.__raw_map__) : {},
         createdAt: x.createdAt?.getTime(),
         updatedAt: x.createdAt?.getTime(),
     }
