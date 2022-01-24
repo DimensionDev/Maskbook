@@ -9,5 +9,5 @@ export function useFetchToken(tokenId: number) {
         if (!tokenId) return null
 
         return fetchToken(chainId, tokenId)
-    }, [tokenId])
+    }, [chainId, tokenId])
 }

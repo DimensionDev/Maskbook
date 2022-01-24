@@ -79,7 +79,7 @@ export function PurchaseDialog(props: ActionBarProps) {
     const validationMessage = useMemo(() => {
         const balance_ = leftShift(balance.value ?? '0', token.value?.decimals)
 
-        // if (balance_.isZero() || price.isGreaterThan(balance_)) return t('plugin_collectible_insufficient_balance')
+        if (balance_.isZero() || price.isGreaterThan(balance_)) return t('plugin_collectible_insufficient_balance')
         if (!ToS_Checked) return t('plugin_artblocks_check_tos_document')
 
         return ''

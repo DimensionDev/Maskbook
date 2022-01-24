@@ -5,7 +5,7 @@ import { MobileStepper, Button, Box, Paper, Typography, Skeleton, Link } from '@
 import { KeyboardArrowLeft, KeyboardArrowRight, OpenInNew } from '@mui/icons-material'
 import { makeStyles } from '@masknet/theme'
 import { useChainId } from '@masknet/web3-shared-evm'
-import { resolveImageLinkOnArtBlocks, resolveLinkOnArtBlocks } from '../pipes'
+import { resolveImageLinkOnArtBlocks, resolveTokenLinkOnArtBlocks } from '../pipes'
 import { buildTokenId } from '../utils'
 import type { Project } from '../types'
 
@@ -79,7 +79,7 @@ export function CollectionView(props: CollectionProps) {
     const { project } = props
     const [isImageLoaded, setIsImageLoaded] = useState(false)
     const [activeStep, setActiveStep] = useState(1)
-    const chainId = useChainId()
+    const chainId = useChainId() as number
 
     const currentSelectedToken = {
         tokenId: buildTokenId(Number(project.projectId), activeStep - 1),
@@ -101,15 +101,15 @@ export function CollectionView(props: CollectionProps) {
         setIsImageLoaded(true)
     }
 
+    const tokenLink = resolveTokenLinkOnArtBlocks(chainId, currentSelectedToken.tokenId)
+
     return (
         <Box className={classes.root}>
             <Paper square elevation={0} className={classes.paper}>
                 {!isImageLoaded ? (
                     <Skeleton className={classes.skeletonTitle} animation="wave" variant="rectangular" />
                 ) : (
-                    <Link
-                        href={`${resolveLinkOnArtBlocks(chainId as number)}/token/${currentSelectedToken.tokenId}`}
-                        target="_blank">
+                    <Link href={tokenLink} target="_blank">
                         <Typography className={classes.title}>
                             #{currentSelectedToken.tokenId}
                             <OpenInNew className={classes.tokenIdRedirectionIcon} fontSize="small" />
@@ -152,13 +152,11 @@ export function CollectionView(props: CollectionProps) {
                 <Skeleton className={classes.skeletonImage} animation="wave" variant="rectangular" />
             ) : null}
 
-            <Link
-                href={`${resolveLinkOnArtBlocks(chainId as number)}/token/${currentSelectedToken.tokenId}`}
-                target="_blank">
+            <Link href={tokenLink} target="_blank">
                 <img
                     className={isImageLoaded ? undefined : classes.hidden}
                     width="100%"
-                    src={`${resolveImageLinkOnArtBlocks(chainId as number)}/${currentSelectedToken?.tokenId}.png`}
+                    src={resolveImageLinkOnArtBlocks(chainId, `${currentSelectedToken?.tokenId}.png`)}
                     alt=""
                     onLoad={handleImageLoad}
                 />

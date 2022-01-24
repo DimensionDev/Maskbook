@@ -7,7 +7,7 @@ import { DetailsView } from './DetailsView'
 import { formatWeiToEther, useChainId } from '@masknet/web3-shared-evm'
 import { useFetchProject } from '../hooks/useProject'
 import { ActionBar } from './ActionBar'
-import { resolveLinkOnArtBlocks } from '../pipes'
+import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes'
 import { ArtBlocksLogoUrl } from '../constants'
 import { MaskTextIcon } from '../../../resources/MaskIcon'
 
@@ -80,8 +80,8 @@ export function Collectible(props: CollectibleProps) {
     ]
     const pages = [<CollectionView key="project" project={project} />, <DetailsView key="details" project={project} />]
 
-    const invocations = `\u2022 ${project.invocations} of ${project.maxInvocations} minted `
-    const price = `\u2022 ${formatWeiToEther(project.pricePerTokenInWei)} ${project?.currencySymbol}`
+    const invocations = ` ${project.invocations} of ${project.maxInvocations} minted `
+    const price = ` ${formatWeiToEther(project.pricePerTokenInWei)} ${project?.currencySymbol}`
 
     return (
         <>
@@ -91,7 +91,7 @@ export function Collectible(props: CollectibleProps) {
                     title={
                         <Typography>
                             <Link
-                                href={`${resolveLinkOnArtBlocks(chainId as number)}/project/${project.projectId}`}
+                                href={resolveProjectLinkOnArtBlocks(chainId, project.projectId)}
                                 title={project.name}
                                 target="_blank"
                                 rel="noopener noreferrer">
@@ -102,14 +102,14 @@ export function Collectible(props: CollectibleProps) {
                     subheader={
                         <Typography>
                             <Link
-                                href={`${resolveLinkOnArtBlocks(chainId as number)}/user/${project.artistAddress}`}
+                                href={resolveUserLinkOnArtBlocks(chainId, project.artistAddress)}
                                 title={project.artistAddress}
                                 target="_blank"
                                 rel="noopener noreferrer">
                                 {project.artistName}
                             </Link>{' '}
-                            {invocations}
-                            {price}
+                            &bull;{invocations}
+                            &bull;{price}
                         </Typography>
                     }
                 />

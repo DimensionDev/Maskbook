@@ -10,7 +10,5 @@ export function useArtBlocksContract() {
         GEN_ART_721_MINTER,
         ArtBlocksCoreContractABI as AbiItem[],
     )
-    return {
-        genArt721MinterContract: genArt721MinterContract,
-    }
+    return genArt721MinterContract
 }

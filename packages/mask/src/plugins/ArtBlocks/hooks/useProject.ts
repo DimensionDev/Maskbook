@@ -9,5 +9,5 @@ export function useFetchProject(projectId: string) {
         if (!projectId) return null
 
         return fetchProject(chainId, projectId)
-    }, [])
+    }, [chainId, projectId])
 }

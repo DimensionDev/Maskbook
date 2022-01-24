@@ -1,38 +1,45 @@
 import { ChainId, createLookupTableResolver } from '@masknet/web3-shared-evm'
+import urlcat from 'urlcat'
 import {
     ArtBlocksRopstenUrl,
     ArtBlocksMainnetUrl,
     ArtBlocksMainnetHostImageUrl,
     ArtBlocksRopstenHostImageUrl,
-    ArtBlocksRopstenLiveUrl,
-    ArtBlocksMainnetLiveUrl,
     ArtBlocksMainnetSubgraphLink,
     ArtBlocksRopstenSubgraphLink,
 } from '../constants'
 
-export const resolveLinkOnArtBlocks = createLookupTableResolver<ChainId.Mainnet | ChainId.Ropsten, string>(
-    {
-        [ChainId.Mainnet]: ArtBlocksMainnetUrl,
-        [ChainId.Ropsten]: ArtBlocksRopstenUrl,
-    },
-    ArtBlocksMainnetUrl,
-)
+export const resolveTokenLinkOnArtBlocks = (chainId: ChainId, tokenId: number) => {
+    if (chainId === ChainId.Ropsten) {
+        return urlcat(ArtBlocksRopstenUrl, '/token/:tokenId', { tokenId })
+    }
 
-export const resolveImageLinkOnArtBlocks = createLookupTableResolver<ChainId.Mainnet | ChainId.Ropsten, string>(
-    {
-        [ChainId.Mainnet]: ArtBlocksMainnetHostImageUrl,
-        [ChainId.Ropsten]: ArtBlocksRopstenHostImageUrl,
-    },
-    ArtBlocksMainnetHostImageUrl,
-)
+    return urlcat(ArtBlocksMainnetUrl, '/token/:tokenId', { tokenId })
+}
 
-export const resolveLiveLinkOnArtBlocks = createLookupTableResolver<ChainId.Mainnet | ChainId.Ropsten, string>(
-    {
-        [ChainId.Mainnet]: ArtBlocksMainnetLiveUrl,
-        [ChainId.Ropsten]: ArtBlocksRopstenLiveUrl,
-    },
-    ArtBlocksMainnetLiveUrl,
-)
+export const resolveProjectLinkOnArtBlocks = (chainId: ChainId, projectId: string) => {
+    if (chainId === ChainId.Ropsten) {
+        return urlcat(ArtBlocksRopstenUrl, '/project/:projectId', { projectId })
+    }
+
+    return urlcat(ArtBlocksMainnetUrl, '/project/:projectId', { projectId })
+}
+
+export const resolveUserLinkOnArtBlocks = (chainId: ChainId, address: string) => {
+    if (chainId === ChainId.Ropsten) {
+        return urlcat(ArtBlocksRopstenUrl, '/user/:address', { address })
+    }
+
+    return urlcat(ArtBlocksMainnetUrl, '/user/:address', { address })
+}
+
+export const resolveImageLinkOnArtBlocks = (chainId: ChainId, tokenImage: string) => {
+    if (chainId === ChainId.Ropsten) {
+        return urlcat(ArtBlocksRopstenHostImageUrl, '/:tokenImage', { tokenImage })
+    }
+
+    return urlcat(ArtBlocksMainnetHostImageUrl, '/:tokenImage', { tokenImage })
+}
 
 export const resolveSubgraphLinkOnArtBlocks = createLookupTableResolver<ChainId.Mainnet | ChainId.Ropsten, string>(
     {

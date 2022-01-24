@@ -15,7 +15,7 @@ export function usePurchaseCallback(projectId: string, amount: string, tokenType
     const account = useAccount()
     const chainId = useChainId()
 
-    const { genArt721MinterContract } = useArtBlocksContract()
+    const genArt721MinterContract = useArtBlocksContract()
     const [purchaseState, setPurchaseState] = useTransactionState()
 
     const purchaseCallback = useCallback(async () => {

@@ -11,7 +11,7 @@ import { OpenInNew } from '@mui/icons-material'
 import { Typography, Box, Link } from '@mui/material'
 import BigNumber from 'bignumber.js'
 import { useI18N } from '../../../utils'
-import { resolveLinkOnArtBlocks } from '../pipes'
+import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes'
 import type { Project } from '../types'
 
 const useStyles = makeStyles()((theme) => {
@@ -59,9 +59,8 @@ export function DetailsView(props: DetailsViewProps) {
     const { classes } = useStyles()
     const { project } = props
     const { t } = useI18N()
-    const chainId = useChainId()
+    const chainId = useChainId() as number
 
-    const dot = ' \u2022 '
     const artistName = ` ${project.artistName}`
     const invocations = `${project.invocations} of ${project.maxInvocations}`
     const price = `${formatWeiToEther(new BigNumber(project.pricePerTokenInWei))} `
@@ -73,7 +72,7 @@ export function DetailsView(props: DetailsViewProps) {
                     {project.name}
                     <Link
                         className={classes.nameRedirectionLink}
-                        href={`${resolveLinkOnArtBlocks(chainId as number)}/project/${project.projectId}`}
+                        href={resolveProjectLinkOnArtBlocks(chainId, project.projectId)}
                         title={project.name}
                         target="_blank"
                         rel="noopener noreferrer">
@@ -83,13 +82,13 @@ export function DetailsView(props: DetailsViewProps) {
                 <Typography variant="body2">
                     {t('plugin_artblocks_created_by')}
                     <Link
-                        href={`${resolveLinkOnArtBlocks(chainId as number)}/user/${project.artistAddress}`}
+                        href={resolveUserLinkOnArtBlocks(chainId, project.artistAddress)}
                         rel="noopener noreferrer"
                         target="_blank"
-                        title={`${resolveLinkOnArtBlocks(chainId as number)}/user/${project.artistAddress}`}>
+                        title={resolveUserLinkOnArtBlocks(chainId, project.artistAddress)}>
                         {artistName}
                     </Link>
-                    {dot}
+                    &nbsp;&bull;&nbsp;
                     <Link href={project.website} rel="noopener noreferrer" target="_blank" title={project.website}>
                         {t('plugin_artblocks_website')}
                     </Link>
@@ -106,7 +105,7 @@ export function DetailsView(props: DetailsViewProps) {
                     <Typography variant="body2">{t('plugin_artblocks_price_row')} </Typography>
                     <Typography variant="body2">
                         {price}
-                        {project.currencyAddress === null ? 'ETH' : project.currencySymbol}
+                        {project.currencySymbol === null ? 'ETH' : project.currencySymbol}
                     </Typography>
                 </Box>
                 <Box className={classes.meta_row}>
