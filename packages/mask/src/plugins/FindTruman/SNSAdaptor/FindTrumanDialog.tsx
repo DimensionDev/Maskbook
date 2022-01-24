@@ -92,7 +92,7 @@ export const useTabsStyles = makeStyles()((theme) => ({
         height: 36,
         minHeight: 36,
         fontWeight: 300,
-        background: theme.palette.mode === 'light' ? '#F6F8F8' : '#17191D',
+        backgroundColor: `${theme.palette.background.default}!important`,
         marginRight: 1,
         '&:last-child': {
             marginRight: 0,
@@ -104,10 +104,10 @@ export const useTabsStyles = makeStyles()((theme) => ({
         minHeight: 36,
         margin: '0 auto',
         borderRadius: 4,
-        backgroundColor: theme.palette.background.default,
+        backgroundColor: theme.palette.background.paper,
         '& .Mui-selected': {
             color: theme.palette.primary.contrastText,
-            backgroundColor: theme.palette.primary.main,
+            backgroundColor: `${theme.palette.primary.main}!important`,
         },
         '& .MuiTabs-flexContainer': {
             display: 'grid',

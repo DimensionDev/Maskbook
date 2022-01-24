@@ -32,7 +32,7 @@ const useResultStyles = makeStyles()((theme) => {
     return {
         answerChip: {
             backgroundColor: theme.palette.mode === 'light' ? '#2e7d32' : '#66bb6a',
-            color: theme.palette.mode === 'light' ? '#fff' : 'rgba(0, 0, 0, 0.87)',
+            color: theme.palette.mode === 'light' ? '#fff' : '#EFF3F4',
         },
     }
 })
