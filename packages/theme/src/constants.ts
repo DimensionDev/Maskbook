@@ -172,7 +172,7 @@ export function applyMaskColorVars(node: HTMLElement, scheme: PaletteMode) {
             rule += `    --mask-${kebabCase(key)}: ${ns[key]};\n`
             rule += `    --mask-${kebabCase(key)}-fragment: ${getRGBFragment(ns, key)};\n`
         }
-        node.innerHTML = rule + '}'
+        node.textContent = rule + '}'
     } else {
         for (const key in ns) {
             node.style.setProperty('--mask-' + kebabCase(key), ns[key])
@@ -187,7 +187,7 @@ function getRGBFragment(x: Record<string, string>, key: string) {
     return [r, g, b].join(', ')
 }
 
-type MaskCSSVariableColor = string & {
+export type MaskCSSVariableColor = string & {
     /** Append alpha channel to the original color */
     alpha(alpha: number): string
 } & ((defaultValue?: string) => string)
