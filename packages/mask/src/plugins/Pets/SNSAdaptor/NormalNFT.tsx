@@ -1,6 +1,6 @@
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box } from '@mui/material'
-import { useStyles as boxUseStyles } from './PreviewBox'
+import { useStyles as useBoxStyles } from './PreviewBox'
 import classNames from 'classnames'
 import Drag from './Drag'
 import type { ShowMeta } from '../types'
@@ -59,7 +59,7 @@ interface NormalNFTProps {
 export function NormalNFT(props: NormalNFTProps) {
     const { start, infoShow, showMeta, handleClose } = props
     const classes = useStylesExtends(useStyles(), {})
-    const boxClasses = useStylesExtends(boxUseStyles(), {})
+    const boxClasses = useStylesExtends(useBoxStyles(), {})
 
     return (
         <Drag baseWidth={150} baseHeight={150}>

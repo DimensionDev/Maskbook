@@ -33,7 +33,7 @@ export const useStyles = makeStyles()((theme) => ({
         color: '#222',
         textAlign: 'center',
         marginBottom: '12px',
-        '&:before': {
+        '&::before': {
             content: '""',
             width: '8px',
             height: '8px',
@@ -132,7 +132,7 @@ export function PreviewBox(props: Props) {
             {props.imageUrl &&
                 (props.tokenInfo?.glbSupport ? (
                     <ModelView
-                        styleContent={{
+                        style={{
                             width: '100%',
                             height: 150,
                         }}

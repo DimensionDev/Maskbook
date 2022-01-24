@@ -1,7 +1,14 @@
-import type { CSSProperties } from 'react'
+import type { FC, HTMLProps } from 'react'
 import '@webcomponents/custom-elements'
 import '@google/model-viewer/dist/model-viewer'
 import { Punk3D } from '../constants'
+
+interface ModelViewElementProps extends HTMLProps<HTMLDivElement> {
+    'shadow-intensity': string
+    'camera-controls': boolean
+    'auto-rotate': boolean
+    ar: boolean
+}
 
 declare global {
     namespace JSX {
@@ -11,15 +18,13 @@ declare global {
     }
 }
 
-interface ModelViewProps {
-    styleContent?: CSSProperties | undefined
+interface ModelViewProps extends HTMLProps<HTMLDivElement> {
     source: string
 }
 
-const ModelView = (props: ModelViewProps) => {
-    const { styleContent, source } = props
+const ModelView: FC<ModelViewProps> = ({ source, ...rest }) => {
     return (
-        <div style={styleContent}>
+        <div {...rest}>
             <model-viewer
                 style={{ width: '90%', height: '100%', top: source === Punk3D.url ? '5%' : 0, margin: 'auto' }}
                 src={source}

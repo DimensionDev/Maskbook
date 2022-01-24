@@ -3,8 +3,7 @@ import { useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
 import { PluginPetRPC } from '../messages'
 import type { User } from '../types'
-import { Punk3D, DEFAULT_SET_WORD, MASK_TWITTER, DEFAULT_PUNK_MASK_WORD } from './../constants'
-import { getAssetAsBlobURL } from '../../../utils'
+import { Punk3D, DEFAULT_SET_WORD, MASK_TWITTER, DEFAULT_PUNK_MASK_WORD, PunkIcon } from './../constants'
 
 export function useEssay(user: User, refresh?: number) {
     return useAsync(async () => {
@@ -16,7 +15,6 @@ export function useEssay(user: User, refresh?: number) {
 
 export function useDefaultEssay(user: User) {
     const [essayMeta, setEssayMeta] = useState<ShowMeta | undefined>(undefined)
-    const PunkIcon = getAssetAsBlobURL(new URL('../assets/punk2d.png', import.meta.url))
     useEffect(() => {
         if (user?.userId || user?.userId !== '$unknown') {
             setEssayMeta({

@@ -44,7 +44,7 @@ export function ModelNFT(props: ModelNFTProps) {
     return (
         <div>
             <ModelView
-                styleContent={{
+                style={{
                     position: 'fixed',
                     right: position.x,
                     bottom: position.y,
@@ -59,11 +59,7 @@ export function ModelNFT(props: ModelNFTProps) {
                 </div>
                 {start && showMeta?.word ? (
                     <Box className={classes.wordContent}>
-                        <Box
-                            className={classNames(classes.word, {
-                                [boxClasses.msgBox]: true,
-                                [boxClasses.wordShow]: true,
-                            })}>
+                        <Box className={classNames(classes.word, boxClasses.msgBox, boxClasses.wordShow)}>
                             {showMeta?.word}
                         </Box>
                     </Box>

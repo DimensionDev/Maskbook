@@ -16,7 +16,7 @@ export function useUser() {
     return user
 }
 
-export function useCurrentVisitingUser(refresh?: number) {
+export function useCurrentVisitingUser(flag?: number) {
     const [user, setUser] = useState<User>({ userId: '', address: '' })
     const identity = useCurrentVisitingIdentity()
     useAsync(async () => {
@@ -27,9 +27,9 @@ export function useCurrentVisitingUser(refresh?: number) {
         } finally {
             setUser({
                 userId: identity.identifier.userId ?? '',
-                address: address ?? '',
+                address: address,
             })
         }
-    }, [identity, refresh])
+    }, [identity, flag])
     return user
 }

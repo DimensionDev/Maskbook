@@ -3,7 +3,7 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useEssay, useDefaultEssay, useCurrentVisitingUser } from '../hooks'
 import { ModelNFT } from './ModelNFT'
 import { NormalNFT } from './NormalNFT'
-import { ImageType, ShowMeta } from '../types'
+import { ImageType } from '../types'
 import { PluginPetMessages } from '../messages'
 
 const useStyles = makeStyles()(() => ({
@@ -23,21 +23,18 @@ const AnimatePic = () => {
     const visitor = useCurrentVisitingUser(refresh)
     const visitorMeta = useEssay(visitor, refresh)
     const defMeta = useDefaultEssay(visitor)
+    const showMeta = visitorMeta ?? defMeta
 
-    const [showMeta, setShowMeta] = useState<ShowMeta | undefined>(undefined)
     const [hidden, setHidden] = useState(false)
     const [infoShow, setInfoShow] = useState(false)
-
-    useEffect(() => {
-        setShowMeta(visitorMeta ?? defMeta)
-    }, [visitor, visitorMeta, defMeta])
 
     const handleClose = () => setHidden(true)
     const handleMouseEnter = () => setInfoShow(true)
     const handleMouseLeave = () => setInfoShow(false)
 
+    const refreshHandle = async (data: number) => setRefresh(data)
     useEffect(() => {
-        PluginPetMessages.events.setResult.on(async (number) => setRefresh(number))
+        PluginPetMessages.events.setResult.on(refreshHandle)
         let count = 0
         const timer = setInterval(() => {
             const check = count % 9 < 5
@@ -46,6 +43,7 @@ const AnimatePic = () => {
         }, 1000)
         return () => {
             clearInterval(timer)
+            PluginPetMessages.events.setResult.off(refreshHandle)
         }
     }, [])
     if (!visitor.userId || visitor.userId === '$unknown' || hidden || !showMeta?.image) return null

@@ -137,10 +137,12 @@ export function PetDialog() {
         }
         setLoading(true)
         const chosenToken = collection.tokens.find((item) => item.mediaUrl === metaData.image)
-        const meta = { ...metaData }
-        meta.userId = user.userId
-        meta.contract = collection.contract
-        meta.tokenId = chosenToken?.tokenId ?? ''
+        const meta = {
+            ...metaData,
+            userId: user.userId,
+            contract: collection.contract,
+            tokenId: chosenToken?.tokenId ?? '',
+        }
         try {
             await PluginPetRPC.setUserAddress(user)
             await PluginPetRPC.saveEssay(user.address, meta, user.userId)
@@ -191,7 +193,7 @@ export function PetDialog() {
         if (!metaData.image) return ''
         const imageChosen = collection.tokens.find((item) => item.tokenId === metaData.tokenId)
         return imageChosen?.mediaUrl
-    }, [metaData.image])
+    }, [metaData.image, collection.tokens])
 
     const renderImg = (address: string) => {
         const matched = extraData.find((item) => isSameAddress(item.address, address))

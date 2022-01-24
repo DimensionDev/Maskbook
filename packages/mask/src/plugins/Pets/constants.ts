@@ -32,3 +32,4 @@ export const GLB3DIcon = new URL('./assets/glb3D.png', import.meta.url).toString
 export const CloseIcon = new URL('./assets/close.png', import.meta.url).toString()
 export const DragIcon = new URL('./assets/drag.png', import.meta.url).toString()
 export const DefaultIcon = new URL('./assets/defaultIcon.png', import.meta.url).toString()
+export const PunkIcon = new URL('./assets/punk2d.png', import.meta.url).toString()
