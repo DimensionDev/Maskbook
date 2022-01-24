@@ -1,5 +1,5 @@
 import stringify from 'json-stable-stringify'
-import { MaskNetworkAPIs, RelationFavor } from '@masknet/public-api'
+import type { MaskNetworkAPIs, RelationFavor } from '@masknet/public-api'
 import { encodeArrayBuffer, encodeText } from '@dimensiondev/kit'
 import { Environment, assertEnvironment } from '@dimensiondev/holoflows-kit'
 import { ECKeyIdentifier, Identifier, ProfileIdentifier } from '@masknet/shared-base'

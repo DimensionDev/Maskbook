@@ -62,6 +62,8 @@ const pancakeswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradePr
 const balancerSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+balancer`, '')
 const dodoSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+dodo`, '')
 const bancorSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+bancor`, '')
+const traderjoeSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+traderjoe`, '')
+const pangolinSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+pangolin`, '')
 const openoceanSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+openocean`, '')
 const trisolarisSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+trisolaris`, '')
 const wannaswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+wannaswap`, '')
@@ -91,8 +93,12 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return dodoSettings
         case TradeProvider.BANCOR:
             return bancorSettings
+        case TradeProvider.TRADERJOE:
+            return traderjoeSettings
         case TradeProvider.OPENOCEAN:
             return openoceanSettings
+        case TradeProvider.PANGOLIN:
+            return pangolinSettings
         case TradeProvider.TRISOLARIS:
             return trisolarisSettings
         case TradeProvider.WANNASWAP:

@@ -52,7 +52,6 @@ export const [getTokenPrices, setTokenPrices] = create(currentTokenPricesSetting
 export const [getGasOptions, setGasOptions] = create(currentGasOptionsSettings)
 export const [getGasPrice, setGasPrice] = create(currentGasOptionsSettings)
 export const [getTrendingDataSource, setTrendingDataSource] = create(currentDataProviderSettings)
-
 export const [getCurrentSelectedWalletProvider, setCurrentSelectedWalletProvider] = create(currentProviderSettings)
 
 export const [getCurrentSelectedWalletNetwork, setCurrentSelectedWalletNetwork] = create(currentNetworkSettings)
