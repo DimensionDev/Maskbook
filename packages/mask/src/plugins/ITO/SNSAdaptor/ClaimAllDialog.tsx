@@ -237,14 +237,15 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const [chainId, setChainId] = useState(
         SUPPORTED_CHAIN_ID_LIST.includes(currentChainId) ? currentChainId : ChainId.Mainnet,
     )
-    const { value: _swappedTokens, loading, retry } = useClaimAll(account, chainId)
-    const { value: swappedTokensWithDetailed = [] } = useFungibleTokensDetailed(
+    const { value: _swappedTokens, loading: _loading, retry } = useClaimAll(account, chainId)
+    const { value: swappedTokensWithDetailed = [], loading: loadingTokenDetailed } = useFungibleTokensDetailed(
         (_swappedTokens ?? []).map((t) => ({
             address: t.token.address,
             type: EthereumTokenType.ERC20,
         })),
         chainId,
     )
+    const loading = _loading || loadingTokenDetailed
     const swappedTokens = _swappedTokens?.map((t) => {
         const tokenDetailed = swappedTokensWithDetailed.find((v) => isSameAddress(t.token.address, v.address))
         if (tokenDetailed) t.token = tokenDetailed
