@@ -48,5 +48,5 @@ export function useUpdateBalance(chainId: ChainId) {
                     ? balance.value
                     : '0',
         })
-    }, [inputToken, outputToken, NATIVE_TOKEN_ADDRESS, balance])
+    }, [inputToken, outputToken, NATIVE_TOKEN_ADDRESS, balance.value])
 }

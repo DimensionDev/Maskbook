@@ -14,7 +14,7 @@ export function useAssetsFromChain(tokens: FungibleTokenDetailed[], chainId?: Ch
     const currentAccount = useAccount()
     const currentProvider = useProviderType()
     const currentChainId = useChainId()
-    const balance = useChainBalance(currentAccount, chainId ?? currentChainId, currentProvider)
+    const { value: balance } = useChainBalance(currentAccount, chainId ?? currentChainId, currentProvider)
     const chainDetailed = useChainDetailed()
     const passedChainDetailed = getChainDetailed(chainId)
 
@@ -32,7 +32,7 @@ export function useAssetsFromChain(tokens: FungibleTokenDetailed[], chainId?: Ch
                       {
                           chain,
                           token: nativeToken,
-                          balance,
+                          balance: balance || '0',
                       },
                   ]
                 : []),
