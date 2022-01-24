@@ -15,7 +15,6 @@ import type {
     Transaction,
     AddressName,
     CryptoPrice,
-    BalanceOfChains,
     ERC721TokenCollectionInfo,
 } from '../types'
 import type { ProviderProxy } from '@masknet/web3-shared-base'
@@ -25,7 +24,6 @@ export interface Web3ProviderType {
     chainId: Subscription<ChainId>
     account: Subscription<string>
     balance: Subscription<string>
-    balances: Subscription<BalanceOfChains>
     blockNumber: Subscription<number>
     provider: Subscription<Provider>
     networkType: Subscription<NetworkType>

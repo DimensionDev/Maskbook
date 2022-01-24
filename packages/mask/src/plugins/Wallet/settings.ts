@@ -9,7 +9,6 @@ import {
     FungibleAssetProvider,
     ProviderType,
     LockStatus,
-    BalanceOfChains,
 } from '@masknet/web3-shared-evm'
 import { PLUGIN_ID } from './constants'
 import { isEqual } from 'lodash-unified'
@@ -117,18 +116,6 @@ export const currentGasOptionsSettings = createGlobalSettings<GasOptions | null>
  */
 export const currentTokenPricesSettings = createGlobalSettings<CryptoPrice>(
     `${PLUGIN_ID}+tokenPrices`,
-    {},
-    {
-        primary: () => 'DO NOT DISPLAY IT IN UI',
-    },
-    (a, b) => isEqual(a, b),
-)
-
-/**
- * ERC20 Token balances
- */
-export const currentBalancesSettings = createGlobalSettings<BalanceOfChains>(
-    `${PLUGIN_ID}+balances`,
     {},
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',
