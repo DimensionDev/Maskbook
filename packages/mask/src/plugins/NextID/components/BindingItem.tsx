@@ -44,10 +44,11 @@ const useStyles = makeStyles()((theme) => ({
 interface Item {
     platform: Platform
     identity: string
+    enableAction: boolean
     onUnBind(address: string): void
 }
 
-export const BindingItem = memo<Item>(({ platform, identity, onUnBind }) => {
+export const BindingItem = memo<Item>(({ platform, identity, enableAction, onUnBind }) => {
     const t = useI18N()
     const { Utils } = useWeb3State() ?? {}
     const { classes } = useStyles()
@@ -76,7 +77,7 @@ export const BindingItem = memo<Item>(({ platform, identity, onUnBind }) => {
                     </Link>
                 </Stack>
                 <Box>
-                    <DeleteIcon className={classes.trashIcon} onClick={() => onUnBind(identity)} />
+                    {enableAction && <DeleteIcon className={classes.trashIcon} onClick={() => onUnBind(identity)} />}
                 </Box>
             </Stack>
         )

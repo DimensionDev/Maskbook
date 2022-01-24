@@ -1,6 +1,13 @@
-import { toHex, PersonaIdentifier, compressSecp256k1Point, fromHex, toBase64 } from '@masknet/shared-base'
-import { queryPublicKey } from '../../../database'
+import {
+    toHex,
+    PersonaIdentifier,
+    compressSecp256k1Point,
+    fromHex,
+    toBase64,
+    decompressSecp256k1Key,
+} from '@masknet/shared-base'
 import urlcat from 'urlcat'
+import { KeyValue } from '@masknet/web3-providers'
 
 const BASE_URL =
     process.env.channel === 'stable' && process.env.NODE_ENV === 'production'
@@ -36,6 +43,19 @@ interface PayloadResponse {
     sign_payload: string
 }
 
+export const KV_SERVER_RUL = 'https://kv.r2d2.to/'
+export const NEXT_ID_KV_PREFIX = 'nextid.persona'
+
+const NextIDDBStorage = KeyValue.createJSON_Storage(NEXT_ID_KV_PREFIX)
+
+export async function updateNextIDRelationFromKV(sns: string, username: string, value: string) {
+    await NextIDDBStorage.set(`${sns}_${username}`, value)
+}
+
+export async function getNextIDRelationFromKV(sns: string, username: string) {
+    return NextIDDBStorage.get<string>(`${sns}_${username}`)
+}
+
 export async function bindProof(
     persona: PersonaIdentifier,
     action: 'create' | 'delete',
@@ -66,9 +86,10 @@ export async function bindProof(
 }
 
 async function queryPersonaHexPublicKey(persona: PersonaIdentifier) {
-    const personaPublicKey = await queryPublicKey(persona)
-    if (!personaPublicKey?.x || !personaPublicKey?.y) return null
-    const arr = compressSecp256k1Point(personaPublicKey.x, personaPublicKey.y)
+    console.log(persona)
+    const key256 = decompressSecp256k1Key(persona.compressedPoint)
+    if (!key256.x || !key256.y) return null
+    const arr = compressSecp256k1Point(key256.x, key256.y)
 
     return `0x${toHex(arr)}`
 }

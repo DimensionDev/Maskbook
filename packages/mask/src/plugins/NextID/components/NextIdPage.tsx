@@ -8,8 +8,10 @@ import Services from '../../../extension/service'
 import { BindingItem } from './BindingItem'
 import type { Platform } from '../types'
 import { UnbindDialog } from './UnbindDialog'
-import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
+import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
+import { ECKeyIdentifier, Identifier } from '@masknet/shared-base'
+import { activatedSocialNetworkUI } from '../../../social-network'
 
 const useStyles = makeStyles()((theme) => ({
     tip: {
@@ -35,11 +37,14 @@ export function NextIdPage({}: NextIDPageProps) {
     const t = useI18N()
     const { classes } = useStyles()
     const currentProfileIdentifier = useLastRecognizedIdentity()
+    const visitingPersonaIdentifier = useCurrentVisitingIdentity()
     const personaConnectStatus = usePersonaConnectStatus()
 
     const [openBindDialog, toggleBindDialog] = useState(false)
     const [unbindAddress, setUnBindAddress] = useState<string>()
     const [count, { inc }] = useCounter(0)
+
+    const isOwn = currentProfileIdentifier.identifier.toText() === visitingPersonaIdentifier.identifier.toText()
 
     const personaActionButton = useMemo(() => {
         if (!personaConnectStatus.action) return null
@@ -57,10 +62,31 @@ export function NextIdPage({}: NextIDPageProps) {
         return Services.Identity.queryPersonaByProfile(currentProfileIdentifier.identifier)
     }, [currentProfileIdentifier])
 
-    const { value: bindings, loading } = useAsync(() => {
-        if (!currentPersona) return Promise.resolve(null)
-        return Services.Helper.queryExistedBinding(currentPersona.identifier)
-    }, [currentPersona, count])
+    const { value: bindings, loading } = useAsync(async () => {
+        if (!currentPersona) return
+        if (isOwn) {
+            return Services.Helper.queryExistedBinding(currentPersona.identifier)
+        }
+        // fetch visiting public key from kv server
+        const identifierStringInKV = await Services.Helper.getNextIDRelationFromKV(
+            activatedSocialNetworkUI.name,
+            visitingPersonaIdentifier.identifier.userId,
+        )
+
+        if (identifierStringInKV) {
+            const personaFromKV = Identifier.fromString(identifierStringInKV, ECKeyIdentifier).unwrapOr(undefined)
+            if (personaFromKV) {
+                return Services.Helper.queryExistedBinding(personaFromKV)
+            }
+        }
+
+        // fetch visiting public key from local
+        if (!visitingPersonaIdentifier) return Promise.resolve(null)
+        const visitingPersona = await Services.Identity.queryPersonaByProfile(visitingPersonaIdentifier.identifier)
+
+        if (!visitingPersona) return Promise.resolve(null)
+        return Services.Helper.queryExistedBinding(visitingPersona.identifier)
+    }, [currentPersona, count, visitingPersonaIdentifier])
 
     if (personaActionButton) {
         return (
@@ -91,6 +117,7 @@ export function NextIdPage({}: NextIDPageProps) {
                     <Box>
                         {bindings.proofs.map((x) => (
                             <BindingItem
+                                enableAction={isOwn}
                                 key={x.identity}
                                 platform={x.platform as Platform}
                                 identity={x.identity}
@@ -98,13 +125,15 @@ export function NextIdPage({}: NextIDPageProps) {
                             />
                         ))}
                     </Box>
-                    <Stack justifyContent="center" direction="row" mt="24px">
-                        <Button variant="contained" onClick={() => toggleBindDialog(true)}>
-                            {t.add_wallet_button()}
-                        </Button>
-                    </Stack>
+                    {isOwn && (
+                        <Stack justifyContent="center" direction="row" mt="24px">
+                            <Button variant="contained" onClick={() => toggleBindDialog(true)}>
+                                {t.add_wallet_button()}
+                            </Button>
+                        </Stack>
+                    )}
                 </Box>
-                {openBindDialog && currentPersona && (
+                {openBindDialog && currentPersona && isOwn && (
                     <BindDialog
                         open={openBindDialog}
                         onClose={() => toggleBindDialog(false)}
@@ -113,7 +142,7 @@ export function NextIdPage({}: NextIDPageProps) {
                         onBind={() => inc(1)}
                     />
                 )}
-                {unbindAddress && currentPersona && (
+                {unbindAddress && currentPersona && isOwn && (
                     <UnbindDialog
                         unbindAddress={unbindAddress}
                         onClose={() => setUnBindAddress(undefined)}
@@ -133,13 +162,15 @@ export function NextIdPage({}: NextIDPageProps) {
                     <Typography>{t.connect_wallet_tip_intro()}</Typography>
                     <Typography>{t.connect_wallet_tip()}</Typography>
                 </Box>
-                <Stack justifyContent="center" direction="row" mt="24px">
-                    <Button variant="contained" onClick={() => toggleBindDialog(true)}>
-                        {t.verify_wallet_button()}
-                    </Button>
-                </Stack>
+                {isOwn && (
+                    <Stack justifyContent="center" direction="row" mt="24px">
+                        <Button variant="contained" onClick={() => toggleBindDialog(true)}>
+                            {t.verify_wallet_button()}
+                        </Button>
+                    </Stack>
+                )}
             </Box>
-            {openBindDialog && currentPersona && (
+            {openBindDialog && currentPersona && isOwn && (
                 <BindDialog
                     open={openBindDialog}
                     onClose={() => toggleBindDialog(false)}

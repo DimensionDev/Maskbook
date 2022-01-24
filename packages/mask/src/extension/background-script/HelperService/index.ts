@@ -7,7 +7,13 @@ export { __deprecated__getStorage, __deprecated__setStorage } from './storage'
 export { resolveTCOLink } from '../../../../shared'
 export { fetch, fetchJSON } from '../../../../background/services/helper/fetch'
 export { requestExtensionPermission, queryExtensionPermission } from './extensionPermission'
-export { createPersonaPayload, queryExistedBinding, bindProof } from './nextId'
+export {
+    createPersonaPayload,
+    queryExistedBinding,
+    bindProof,
+    updateNextIDRelationFromKV,
+    getNextIDRelationFromKV,
+} from './nextId'
 export { fromHex, toBase64URL } from '@masknet/shared-base'
 
 export async function openPopupWindow(route?: PopupRoutes, params?: Record<string, any>) {
