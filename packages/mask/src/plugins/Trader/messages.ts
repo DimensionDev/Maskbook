@@ -10,7 +10,6 @@ interface CashTagEvent {
     type: TagType
     element: HTMLAnchorElement | null
     dataProviders: DataProvider[]
-    tradeProviders: TradeProvider[]
 }
 
 interface SwapSettingsEvent {

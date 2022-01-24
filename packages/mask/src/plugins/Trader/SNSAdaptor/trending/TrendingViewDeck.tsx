@@ -8,7 +8,7 @@ import { first, last } from 'lodash-unified'
 import { FormattedCurrency, useValueRef, useRemoteControlledDialog, TokenIcon } from '@masknet/shared'
 import { useI18N } from '../../../../utils'
 import type { Coin, Currency, Stat, Trending } from '../../types'
-import { DataProvider, TradeProvider } from '@masknet/public-api'
+import { DataProvider } from '@masknet/public-api'
 import { PriceChanged } from './PriceChanged'
 import { Linking } from './Linking'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
@@ -16,11 +16,7 @@ import { PluginTransakMessages } from '../../../Transak/messages'
 import { useAccount, formatCurrency } from '@masknet/web3-shared-evm'
 import type { FootnoteMenuOption } from '../trader/FootnoteMenu'
 import { TradeFooter } from '../trader/TradeFooter'
-import {
-    currentDataProviderSettings,
-    currentTradeProviderSettings,
-    getCurrentPreferredCoinIdSettings,
-} from '../../settings'
+import { currentDataProviderSettings, getCurrentPreferredCoinIdSettings } from '../../settings'
 import { CoinMenu, CoinMenuOption } from './CoinMenu'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
 import { CoinSafetyAlert } from './CoinSafetyAlert'

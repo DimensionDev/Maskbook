@@ -13,22 +13,8 @@ export function TagInspector(props: TagInspectorProps) {
     useAvailableDataProviders(TagType.CASH, 'BTC')
 
     const createTrendingView = useCallback(
-        (
-            name: string,
-            type: TagType,
-            dataProviders: DataProvider[],
-            tradeProviders: TradeProvider[],
-            reposition?: () => void,
-        ) => {
-            return (
-                <TraderView
-                    name={name}
-                    tagType={type}
-                    dataProviders={dataProviders}
-                    tradeProviders={tradeProviders}
-                    onUpdate={reposition}
-                />
-            )
+        (name: string, type: TagType, dataProviders: DataProvider[], reposition?: () => void) => {
+            return <TraderView name={name} tagType={type} dataProviders={dataProviders} onUpdate={reposition} />
         },
         [],
     )

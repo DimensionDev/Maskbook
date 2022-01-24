@@ -35,18 +35,6 @@ export const currentDataProviderSettings = createGlobalSettings<DataProvider>(
     },
 )
 
-/**
- * The default trader provider
- */
-export const currentTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_ID}+tradeProvider`,
-    TradeProvider.UNISWAP_V2,
-    {
-        primary: () => i18n.t('plugin_trader_settings_trade_provider_primary'),
-        secondary: () => i18n.t('plugin_trader_settings_trade_provider_secondary'),
-    },
-)
-
 export const ethereumNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
     `${PLUGIN_ID}+ethereum+tradeProvider`,
     TradeProvider.UNISWAP_V2,
