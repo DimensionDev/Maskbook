@@ -76,10 +76,10 @@ export const MnemonicRevealForm = memo(() => {
 
     useEffect(() => {
         // handle refresh words
-        if (id) {
-            Services.Identity.deletePersona(id, 'delete even with private')
-            setId(null)
-        }
+        if (!id) return
+
+        setId(null)
+        Services.Identity.deletePersona(id, 'delete even with private')
     }, [words])
 
     useEffect(() => {
