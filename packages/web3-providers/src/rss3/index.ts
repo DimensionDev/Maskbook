@@ -1,10 +1,10 @@
 import urlcat from 'urlcat'
 import RSS3 from 'rss3-next'
 import { RSS3_ENDPOINT } from './constants'
-import { RSS3BaseAPI } from '../types'
+import { NonFungibleTokenAPI, RSS3BaseAPI } from '../types'
 import { fetchJSON } from '../helpers'
 
-export class RSS3API implements RSS3BaseAPI.Provider {
+export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provider {
     createRSS3(
         address: string,
         sign: (message: string) => Promise<string> = () => {
@@ -62,7 +62,7 @@ export class RSS3API implements RSS3BaseAPI.Provider {
         }>(url)
         return rsp?.profile
     }
-    async getNFTs(address: string) {
+    async getAssets(address: string) {
         const url = urlcat(RSS3_ENDPOINT, '/assets/list', {
             personaID: address,
             type: RSS3BaseAPI.AssetType.NFT,
