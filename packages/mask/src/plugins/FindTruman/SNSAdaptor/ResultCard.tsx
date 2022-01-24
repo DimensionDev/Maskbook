@@ -15,6 +15,7 @@ import type { PollResult, PuzzleResult, UserPollStatus } from '../types'
 import { PostType } from '../types'
 import { useContext, useState } from 'react'
 import { FindTrumanContext } from '../context'
+import { makeStyles } from '@masknet/theme'
 
 export const BorderLinearProgress: any = styled(LinearProgress)(({ theme }) => ({
     height: 10,
@@ -27,6 +28,15 @@ export const BorderLinearProgress: any = styled(LinearProgress)(({ theme }) => (
     },
 }))
 
+const useResultStyles = makeStyles()((theme) => {
+    return {
+        answerChip: {
+            backgroundColor: theme.palette.mode === 'light' ? '#2e7d32' : '#66bb6a',
+            color: theme.palette.mode === 'light' ? '#fff' : 'rgba(0, 0, 0, 0.87)',
+        },
+    }
+})
+
 interface ResultViewProps {
     type: PostType
     userStatus?: UserPollStatus
@@ -34,6 +44,7 @@ interface ResultViewProps {
 }
 export default function ResultCard(props: ResultViewProps) {
     const { type, userStatus, result } = props
+    const { classes } = useResultStyles()
     const [choice] = useState(userStatus ? userStatus.choice : -1)
 
     const { t } = useContext(FindTrumanContext)
@@ -111,6 +122,7 @@ export default function ResultCard(props: ResultViewProps) {
                                         {answer === index && (
                                             <Chip
                                                 icon={<CheckCircle />}
+                                                className={classes.answerChip}
                                                 color="success"
                                                 size="small"
                                                 label={t(
