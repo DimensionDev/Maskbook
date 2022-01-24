@@ -94,6 +94,7 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
                 slug: null,
                 top_ownerships: [],
                 response_: asset,
+                last_sale: null,
             }
         })
     }
