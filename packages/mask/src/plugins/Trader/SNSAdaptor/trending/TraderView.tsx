@@ -204,11 +204,8 @@ export function TraderView(props: TraderViewProps) {
     // #endregion
 
     // #region if the coin is a native token or contract address exists
-
-    const isSwappable =
-        (!!trending?.coin.contract_address || ['eth', 'matic', 'bnb'].includes(coinSymbol)) &&
-        chainIdValid &&
-        tradeProviders.length
+    const isNativeToken = ['eth', 'matic', 'bnb', 'avax'].includes(coinSymbol)
+    const isSwappable = (!!trending?.coin.contract_address || isNativeToken) && chainIdValid && tradeProviders.length
     // #endregion
 
     // #region display loading skeleton
