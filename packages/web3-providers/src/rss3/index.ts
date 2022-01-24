@@ -68,9 +68,9 @@ export class RSS3API implements RSS3BaseAPI.Provider {
             type: RSS3BaseAPI.AssetType.NFT,
         })
 
-        const assetResponse = await fetchJSON<RSS3BaseAPI.GeneralAssetResponse>(url)
-        if (!assetResponse.status) return []
-        return assetResponse.assets.map((asset) => {
+        const { status, assets = [] } = await fetchJSON<RSS3BaseAPI.GeneralAssetResponse>(url)
+        if (!status) return []
+        return assets.map((asset) => {
             return {
                 is_verified: false,
                 is_auction: false,
