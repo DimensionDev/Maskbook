@@ -170,6 +170,7 @@ function createNFTAsset(asset: OpenSeaResponse, chainId: ChainId): NonFungibleTo
         })),
         collection: asset.collection as unknown as NonFungibleTokenAPI.AssetCollection,
         response_: asset as any,
+        last_sale: asset.last_sale,
     }
 }
 
