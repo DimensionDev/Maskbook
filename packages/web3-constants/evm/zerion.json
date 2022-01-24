@@ -12,8 +12,12 @@
         "Arbitrum": "arbitrum-assets",
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai-assets",
+        "Avalanche": "avalanche-assets",
+        "Avalanche_Fuji": "",
         "Celo": "celo-assets",
-        "Fantom": "fantom-assets"
+        "Fantom": "fantom-assets",
+        "Aurora": "aurora-assets",
+        "Aurora_Testnet": ""
     },
     "TRANSACTIONS_SCOPE_NAME": {
         "Mainnet": "transactions",
@@ -28,7 +32,11 @@
         "Arbitrum": "arbitrum-transactions",
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai-transactions",
+        "Avalanche": "avalanche-transactions",
+        "Avalanche_Fuji": "",
         "Celo": "celo-transactions",
-        "Fantom": "fantom-transactions"
+        "Fantom": "fantom-transactions",
+        "Aurora": "aurora-transactions",
+        "Aurora_Testnet": ""
     }
 }

@@ -1,9 +1,7 @@
 name: Publish Proxy Package
 
 on:
-  push:
-    branches: [hyper-proxy-deploy]
-
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-20.04

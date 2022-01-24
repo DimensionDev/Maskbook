@@ -3,8 +3,9 @@ import { uniqBy } from 'lodash-unified'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { ChainId, SocketState } from '@masknet/web3-shared-evm'
 import {
+    ChainId,
+    SocketState,
     ERC721TokenDetailed,
     formatEthereumAddress,
     useAccount,
@@ -40,6 +41,9 @@ const useStyles = makeStyles()((theme) => ({
         flexFlow: 'row wrap',
         height: 150,
         overflowY: 'auto',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     button: {
         textAlign: 'center',
@@ -136,7 +140,11 @@ export function NFTAvatar(props: NFTAvatarProps) {
                     {account ? (
                         <Typography variant="body1" color="textPrimary" className={classes.account}>
                             {t('nft_wallet_label')}: {formatEthereumAddress(account, 4)}
-                            <Button onClick={openSelectProviderDialog} size="small" className={classes.changeButton}>
+                            <Button
+                                variant="text"
+                                onClick={openSelectProviderDialog}
+                                size="small"
+                                className={classes.changeButton}>
                                 {t('nft_wallet_change')}
                             </Button>
                         </Typography>
@@ -155,8 +163,8 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                   )
                                       .filter(
                                           (token: ERC721TokenDetailed) =>
-                                              token.info.mediaUrl &&
-                                              !token.info.mediaUrl?.match(/\.(mp4|webm|mov|ogg|mp3|wav)$/i),
+                                              token.info.imageURL &&
+                                              !token.info.imageURL?.match(/\.(mp4|webm|mov|ogg|mp3|wav)$/i),
                                       )
                                       .map((token: ERC721TokenDetailed, i) => (
                                           <NFTImage

@@ -34,6 +34,7 @@ async function fetchFromOpenSea<T>(url: string, chainId: ChainId, apiKey?: strin
             headers: { 'x-api-key': apiKey ?? OPENSEA_API_KEY, Accept: 'application/json' },
             ...(currentEnv === NonFungibleTokenAPI.APIEnv.browser && { mode: 'cors' }),
         })
+        if (response.status === 404) return
         return response.json() as Promise<T>
     } catch {
         return
@@ -61,12 +62,14 @@ function createERC721TokenFromAsset(
     chainId: ChainId,
     asset: OpenSeaResponse,
 ): ERC721TokenDetailed {
+    const imageURL = asset?.image_original_url ?? asset?.image_url ?? asset?.image_preview_url ?? ''
     return createERC721Token(
         createERC721ContractFromAssetContract(asset?.asset_contract?.address, chainId, asset?.asset_contract),
         {
             name: asset?.name ?? asset?.asset_contract.name ?? '',
             description: asset?.description ?? '',
-            mediaUrl: asset?.image_url_original ?? asset?.image_url ?? asset?.image_preview_url ?? '',
+            imageURL,
+            mediaUrl: asset?.animation_url || imageURL,
             owner: asset?.owner.address ?? '',
         },
         tokenId,
@@ -100,8 +103,8 @@ function createAssetLink(account: OpenSeaCustomAccount | undefined) {
 
 function createNFTAsset(asset: OpenSeaResponse, chainId: ChainId): NonFungibleTokenAPI.Asset {
     const desktopOrder = head(
-        asset.sell_orders?.sort((a, b) =>
-            new BigNumber(getOrderUSDPrice(a.current_price, a.payment_token_contract?.usd_price) ?? 0)
+        asset.orders?.sort((a, b) =>
+            new BigNumber(getOrderUSDPrice(b.current_price, b.payment_token_contract?.usd_price) ?? 0)
                 .minus(getOrderUSDPrice(a.current_price, a.payment_token_contract?.usd_price) ?? 0)
                 .toNumber(),
         ),
@@ -111,7 +114,7 @@ function createNFTAsset(asset: OpenSeaResponse, chainId: ChainId): NonFungibleTo
         is_verified: ['approved', 'verified'].includes(asset.collection?.safelist_request_status ?? ''),
         // it's an IOS string as my inspection
         is_auction: isAfter(Date.parse(`${asset.endTime ?? ''}Z`), Date.now()),
-        image_url: asset.image_url_original ?? asset.image_url ?? asset.image_preview_url ?? '',
+        image_url: asset.animation_url ?? asset.image_original_url ?? asset.image_url ?? asset.image_preview_url ?? '',
         asset_contract: {
             name: asset.asset_contract.name,
             description: asset.asset_contract.description,
@@ -167,6 +170,7 @@ function createNFTAsset(asset: OpenSeaResponse, chainId: ChainId): NonFungibleTo
         })),
         collection: asset.collection as unknown as NonFungibleTokenAPI.AssetCollection,
         response_: asset as any,
+        last_sale: asset.last_sale,
     }
 }
 

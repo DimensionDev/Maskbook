@@ -12,8 +12,12 @@
         "Arbitrum": "arbitrum-one",
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai",
+        "Avalanche": "avalanche",
+        "Avalanche_Fuji": "",
         "Celo": "celo",
-        "Fantom": "fantom"
+        "Fantom": "fantom",
+        "Aurora": "aurora",
+        "Aurora_Testnet": ""
     },
     "COIN_ID": {
         "Mainnet": "ethereum",
@@ -28,7 +32,11 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai",
+        "Avalanche": "avalanche-2",
+        "Avalanche_Fuji": "",
         "Celo": "celo",
-        "Fantom": "fantom"
+        "Fantom": "fantom",
+        "Aurora": "ethereum",
+        "Aurora_Testnet": ""
     }
 }

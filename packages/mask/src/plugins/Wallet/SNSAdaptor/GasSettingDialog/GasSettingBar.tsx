@@ -83,7 +83,7 @@ export function GasSettingBar(props: GasSettingBarProps) {
         <Box display="flex" flexDirection="row" alignItems="center">
             <Typography fontSize="14px" sx={{ marginRight: 1 }}>
                 <span>
-                    {formatWeiToEther(gasFee).toFixed(6)} {nativeTokenDetailed?.symbol ?? ''} ≈
+                    {formatWeiToEther(gasFee).toFixed(6)} {nativeTokenDetailed?.symbol ?? ''} &asymp;
                 </span>
                 <TokenPrice chainId={chainId} amount={formatWeiToEther(gasFee)} />
             </Typography>

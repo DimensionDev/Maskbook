@@ -56,9 +56,9 @@ export function DrawResultDialog(props: DrawResultDialogProps) {
             <DialogContent>
                 <Box className={classes.main}>
                     <Box className={classes.list} display="flex" flexWrap="wrap">
-                        {difference(boxInfo.tokenIdsPurchased, lastPurchasedTokenIds).map((x) => (
+                        {difference(boxInfo.tokenIdsPurchased, lastPurchasedTokenIds).map((x, i) => (
                             <Box className={classes.token} key={x} flex={1}>
-                                <TokenCard tokenId={x} contractDetailed={contractDetailed} />
+                                <TokenCard tokenId={x} contractDetailed={contractDetailed} renderOrder={i} />
                             </Box>
                         ))}
                     </Box>

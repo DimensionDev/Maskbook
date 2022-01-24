@@ -2,5 +2,11 @@
   "name": "@masknet/web3-shared-solana",
   "private": true,
   "main": "./dist/index.js",
-  "types": "./dist/index.d.ts"
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@masknet/web3-constants": "workspace:*",
+    "@masknet/web3-kit": "workspace:*",
+    "react-use": "^17.3.1",
+    "urlcat": "^2.0.4"
+  }
 }

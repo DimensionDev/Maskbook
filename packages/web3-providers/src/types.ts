@@ -1,3 +1,4 @@
+import type { Transaction as Web3Transaction } from 'web3-core'
 import type RSS3 from 'rss3-next'
 import type { CurrencyType } from '@masknet/plugin-infra'
 import type {
@@ -8,6 +9,21 @@ import type {
     NativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
 
+export namespace ExplorerAPI {
+    export type Transaction = Web3Transaction & {
+        status: '0' | '1'
+        confirmations: number
+    }
+
+    export interface PageInfo {
+        offset?: number
+        apikey?: string
+    }
+
+    export interface Provider {
+        getLatestTransactions(account: string, url: string, pageInfo?: PageInfo): Promise<Transaction[]>
+    }
+}
 export namespace RSS3BaseAPI {
     export interface GeneralAsset {
         platform: string
@@ -51,6 +67,7 @@ export namespace RSS3BaseAPI {
     export enum AssetType {
         GitcoinDonation = 'Gitcoin-Donation',
         POAP = 'POAP',
+        NFT = 'NFT',
     }
 
     export interface NameInfo {
@@ -160,6 +177,15 @@ export namespace NonFungibleTokenAPI {
         wiki_link?: string
         safelist_request_status: string
     }
+    export interface AssetEvent {
+        event_type: string
+        event_timestamp: number
+        auction_type: string
+        total_price: string
+        payment_token: {
+            decimals: number
+        }
+    }
 
     export interface Asset {
         is_verified: boolean
@@ -187,7 +213,7 @@ export namespace NonFungibleTokenAPI {
         top_ownerships: {
             owner: AssetOwner
         }[]
-
+        last_sale: AssetEvent | null
         response_: any
     }
 
@@ -269,5 +295,59 @@ export namespace NonFungibleTokenAPI {
             opts?: Options,
         ) => Promise<AssetOrder[]>
         getCollections?: (address: string, opts?: Options) => Promise<ProviderPageable<Collection>>
+        getAssets?: (address: string) => Promise<Asset[] | undefined>
+    }
+}
+
+export namespace StorageAPI {
+    export interface Storage {
+        set<T extends {}>(key: string, value: T): Promise<void>
+        get<T>(key: string): Promise<T | undefined>
+        delete?(key: string): Promise<void>
+    }
+
+    export interface Provider {
+        createJSON_Storage?(key: string): Storage
+        createBinaryStorage?(key: string): Storage
+    }
+}
+
+export namespace SecurityAPI {
+    export interface Holder {
+        address?: string
+        locked?: 0 | 1
+        tag?: string
+        is_contract?: 0 | 1
+        balance?: number
+        percent?: number
+    }
+
+    export interface ContractSecurity {
+        is_open_source?: 0 | 1
+        is_proxy?: 0 | 1
+        is_mintable?: 0 | 1
+        can_take_back_ownership?: string
+        owner_address?: string
+    }
+
+    export interface TokenSecurity {
+        holder_count?: number
+        total_supply?: number
+        holders?: Holder[]
+
+        lp_holder_count?: number
+        lp_total_supply?: number
+        lp_holders?: Holder[]
+
+        is_true_token?: 0 | 1
+        is_verifiable_team?: 0 | 1
+        is_airdrop_scam?: 0 | 1
+    }
+
+    export interface Provider {
+        getTokenSecurity(
+            chainId: number,
+            listOfAddress: string[],
+        ): Promise<Record<string, ContractSecurity & TokenSecurity> | void>
     }
 }

@@ -91,7 +91,7 @@ export function PreviewCard(props: PreviewCardProps) {
         }
     }, [openBoxTransaction?.config, openBoxTransactionOverrides, openBoxTransactionGasLimit])
 
-    //#region open box
+    // #region open box
     const [openBoxState, openBoxCallback, resetOpenBoxCallback] = useTransactionCallback(
         TransactionStateType.CONFIRMED,
         txConfig,
@@ -145,7 +145,7 @@ export function PreviewCard(props: PreviewCardProps) {
             summary: `Open ${boxInfo?.name ?? 'box'}...`,
         })
     }, [openBoxState.type])
-    //#endregion
+    // #endregion
 
     if (boxState === BoxState.UNKNOWN)
         return (

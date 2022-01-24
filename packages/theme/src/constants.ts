@@ -187,7 +187,7 @@ function getRGBFragment(x: Record<string, string>, key: string) {
     return [r, g, b].join(', ')
 }
 
-type MaskCSSVariableColor = string & {
+export type MaskCSSVariableColor = string & {
     /** Append alpha channel to the original color */
     alpha(alpha: number): string
 } & ((defaultValue?: string) => string)

@@ -1,10 +1,8 @@
-import { Box, Button, IconButton, Typography } from '@mui/material'
-import { Alert, AlertTitle, styled } from '@mui/material'
-import { useMemo, useState } from 'react'
+import { Box, Button, IconButton, Typography, Alert, AlertTitle, styled } from '@mui/material'
+import { useMemo, useState, useContext } from 'react'
 import { useTimeoutFn } from 'react-use'
 import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
-import { useContext } from 'react'
 import { ErrorBoundaryBuildInfoContext, ErrorBoundaryError } from './context'
 import { useSharedI18N } from '../../../locales'
 
@@ -30,7 +28,7 @@ export function CrashUI({ onRetry, subject, ...error }: CrashUIProps) {
     // It seems like DOM mutation from out of our application might conflict with React reconciliation.
     // As a temporary fix, try to recover this React tree after 200ms.
     useTimeoutFn(() => {
-        if (error.message.includes(`Failed to execute 'insertBefore' on 'Node'`)) {
+        if (error.message.includes("Failed to execute 'insertBefore' on 'Node'")) {
             onRetry()
         }
     }, 200)

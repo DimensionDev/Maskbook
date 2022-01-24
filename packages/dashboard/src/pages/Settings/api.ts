@@ -43,6 +43,16 @@ export const [useCeloNetworkTradeProvider] = createGlobalState(
     Messages.events.celoNetworkTradeProviderSettings.on,
 )
 
+export const [useAvalancheNetworkTradeProvider] = createGlobalState(
+    Services.Settings.getAvalancheNetworkTradeProvider,
+    Messages.events.avalancheNetworkTradeProviderSettings.on,
+)
+
+export const [useAuroraNetworkTradeProvider] = createGlobalState(
+    Services.Settings.getAuroraNetworkTradeProvider,
+    Messages.events.auroraNetworkTradeProviderSettings.on,
+)
+
 const BASE_RUL = 'https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com/api'
 
 interface BackupBaseRequest {
