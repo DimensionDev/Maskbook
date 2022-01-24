@@ -46,14 +46,14 @@ interface PayloadResponse {
 export const KV_SERVER_RUL = 'https://kv.r2d2.to/'
 export const NEXT_ID_KV_PREFIX = 'nextid.persona'
 
-const NextIDDBStorage = KeyValue.createJSON_Storage(NEXT_ID_KV_PREFIX)
+const NextIDStorage = KeyValue.createJSON_Storage(NEXT_ID_KV_PREFIX)
 
 export async function updateNextIDRelationFromKV(sns: string, username: string, value: string) {
-    await NextIDDBStorage.set(`${sns}_${username}`, value)
+    await NextIDStorage.set(`${sns}_${username}`, value)
 }
 
 export async function getNextIDRelationFromKV(sns: string, username: string) {
-    return NextIDDBStorage.get<string>(`${sns}_${username}`)
+    return NextIDStorage.get<string>(`${sns}_${username}`)
 }
 
 export async function bindProof(
