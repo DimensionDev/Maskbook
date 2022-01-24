@@ -89,7 +89,18 @@ function NFTAvatarInTwitter() {
         const avatar = await PluginNFTAvatarRPC.saveNFTAvatar(wallet.address, {
             ...NFTEvent,
             avatarId: getAvatarId(identity.avatar ?? ''),
-        } as AvatarMetaDB)
+        } as AvatarMetaDB).catch((error) => {
+            setNFTEvent(undefined)
+            setAvatar(undefined)
+            window.alert(error.message)
+            return
+        })
+        if (!avatar) {
+            setNFTEvent(undefined)
+            setAvatar(undefined)
+            window.alert('Sorry, failed to save NFT Avatar. Please set again.')
+            return
+        }
 
         setAvatar(avatar)
         MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll(

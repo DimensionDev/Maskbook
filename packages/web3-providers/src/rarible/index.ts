@@ -51,6 +51,7 @@ function createERC721TokenFromAsset(
     tokenId: string,
     asset?: RaribleNFTItemMapResponse,
 ): ERC721TokenDetailed {
+    const imageURL = toRaribleImage(asset?.meta.image?.url.ORIGINAL ?? asset?.meta.image?.url.PREVIEW ?? '')
     return {
         contractDetailed: {
             type: EthereumTokenType.ERC721,
@@ -62,7 +63,10 @@ function createERC721TokenFromAsset(
         info: {
             name: asset?.meta.name ?? '',
             description: asset?.meta.description ?? '',
-            mediaUrl: toRaribleImage(asset?.meta.image?.url.ORIGINAL ?? asset?.meta.image?.url.PREVIEW ?? ''),
+            mediaUrl:
+                toRaribleImage(asset?.meta.animation?.url.ORIGINAL ?? asset?.meta.animation?.url.PREVIEW ?? '') ||
+                imageURL,
+            imageURL,
             owner: asset?.owners[0],
         },
         tokenId: tokenId,

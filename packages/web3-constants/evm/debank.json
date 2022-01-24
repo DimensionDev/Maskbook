@@ -15,10 +15,6 @@
         "Celo": "celo",
         "Fantom": "ftm",
         "Aurora": "aurora",
-        "Aurora_Testnet": "",
-        "Avalanche": "avax",
-        "Boba": "boba",
-        "Metis": "metis",
-        "Optimistic": "op"
+        "Aurora_Testnet": ""
     }
 }

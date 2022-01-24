@@ -40,7 +40,7 @@ export class ProviderProxy {
     private readonly _globalNotify?: NotifyFn
 
     constructor(point: string, notifyFn?: NotifyFn) {
-        this._socket = new ReconnectingWebSocket(point)
+        this._socket = new ReconnectingWebSocket(point, undefined, { minUptime: 20000 })
         this._pool = new Map<string, SocketPoolItem>()
         this._globalNotify = notifyFn
     }

@@ -194,6 +194,7 @@ export interface ERC721TokenInfo {
     description?: string
     tokenURI?: string
     mediaUrl?: string
+    imageURL?: string
     owner?: string
     // loading tokenURI
     hasTokenDetailed?: boolean
