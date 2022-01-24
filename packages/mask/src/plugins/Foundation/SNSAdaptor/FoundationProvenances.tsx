@@ -10,14 +10,13 @@ import {
     TableCell,
     TableBody,
 } from '@mui/material'
-import { useAccount } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import type { NftHistory } from '../types'
 import { convertDate } from '../utils'
 import { makeStyles } from '@masknet/theme'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { useNativeTokenPrice } from '../../Wallet/hooks/useTokenPrice'
-import { formatEthereumAddress, useNativeTokenDetailed, formatCurrency } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, useNativeTokenDetailed, formatCurrency, useAccount } from '@masknet/web3-shared-evm'
 import { ETHIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => {
