@@ -13,10 +13,18 @@ export function useClaimAll(swapperAddress: string, chainId: ChainId) {
     }, [chainId])
 
     const { value: blockNumber = 0 } = useBlockNumberOfChain(chainId)
-    return useAsyncRetry(async () => {
+    const asyncResult = useAsyncRetry(async () => {
         if (allPoolsRef.current.length > 0) return allPoolsRef.current
         const results = await PluginITO_RPC.getClaimAllPools(chainId, blockNumber, swapperAddress)
         allPoolsRef.current = results
         return allPoolsRef.current
     }, [swapperAddress, blockNumber, chainId])
+
+    return {
+        ...asyncResult,
+        retry: () => {
+            allPoolsRef.current = []
+            asyncResult.retry()
+        },
+    }
 }

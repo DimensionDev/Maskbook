@@ -2,7 +2,7 @@ import { NetworkPluginID } from '@masknet/plugin-infra'
 import { useCallback, useEffect, useState, useLayoutEffect, useRef } from 'react'
 import { flatten, uniq } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
-import { useCustomSnackbar, VariantType, SnackbarProvider, makeStyles } from '@masknet/theme'
+import { SnackbarProvider, makeStyles } from '@masknet/theme'
 import { FormattedBalance, useRemoteControlledDialog } from '@masknet/shared'
 import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@mui/material'
 import {
@@ -252,19 +252,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         return t
     })
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
-    const { showSnackbar } = useCustomSnackbar()
-    const popEnqueueSnackbar = useCallback(
-        (variant: VariantType) =>
-            showSnackbar(t('plugin_ito_claim_all_title'), {
-                variant,
-                preventDuplicate: true,
-                anchorOrigin: {
-                    vertical: 'top',
-                    horizontal: 'right',
-                },
-            }),
-        [showSnackbar],
-    )
+
     const claimablePids = uniq(flatten(swappedTokens?.filter((t) => t.isClaimable).map((t) => t.pids)))
 
     const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(claimablePids, ITO2_CONTRACT_ADDRESS)
@@ -289,8 +277,6 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
             if (claimState.type === TransactionStateType.CONFIRMED) {
                 resetClaimCallback()
                 retry()
-                onClose()
-                popEnqueueSnackbar('success')
             }
         },
     )
@@ -394,7 +380,17 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                             <ActionButton
                                                 className={classNames(classes.actionButton, classes.claimAllButton)}
                                                 variant="contained"
-                                                disabled={claimablePids!.length === 0}
+                                                loading={[
+                                                    TransactionStateType.HASH,
+                                                    TransactionStateType.WAIT_FOR_CONFIRMING,
+                                                ].includes(claimState.type)}
+                                                disabled={
+                                                    claimablePids!.length === 0 ||
+                                                    [
+                                                        TransactionStateType.HASH,
+                                                        TransactionStateType.WAIT_FOR_CONFIRMING,
+                                                    ].includes(claimState.type)
+                                                }
                                                 size="large"
                                                 onClick={onClaimButtonClick}>
                                                 {t('plugin_ito_claim_all')}
