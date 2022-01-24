@@ -96,13 +96,11 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
     currency: Currency
     trending: Trending
     dataProvider: DataProvider
-    tradeProvider: TradeProvider
     children?: React.ReactNode
     showDataProviderIcon?: boolean
     showTradeProviderIcon?: boolean
     TrendingCardProps?: Partial<TrendingCardProps>
     dataProviders: DataProvider[]
-    tradeProviders: TradeProvider[]
 }
 
 export function TrendingViewDeck(props: TrendingViewDeckProps) {
@@ -111,14 +109,12 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         currency,
         trending,
         dataProvider,
-        tradeProvider,
         stats,
         children,
         showDataProviderIcon = false,
         showTradeProviderIcon = false,
         TrendingCardProps,
         dataProviders = [],
-        tradeProviders = [],
     } = props
     const { coin, market } = trending
 
@@ -143,9 +139,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     // #region sync with settings
     const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
         currentDataProviderSettings.value = option.value as DataProvider
-    }, [])
-    const onTradeProviderChange = useCallback((option: FootnoteMenuOption) => {
-        currentTradeProviderSettings.value = option.value as TradeProvider
     }, [])
     // #endregion
 
@@ -261,11 +254,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 showDataProviderIcon={showDataProviderIcon}
                 showTradeProviderIcon={showTradeProviderIcon}
                 dataProvider={dataProvider}
-                tradeProvider={tradeProvider}
                 dataProviders={dataProviders}
-                tradeProviders={tradeProviders}
                 onDataProviderChange={onDataProviderChange}
-                onTradeProviderChange={onTradeProviderChange}
             />
         </TrendingCard>
     )

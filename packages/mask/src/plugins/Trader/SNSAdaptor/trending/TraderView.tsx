@@ -95,13 +95,12 @@ export interface TraderViewProps {
     name: string
     tagType: TagType
     dataProviders: DataProvider[]
-    tradeProviders: TradeProvider[]
     onUpdate?: () => void
     isPopper?: boolean
 }
 
 export function TraderView(props: TraderViewProps) {
-    const { name, tagType, dataProviders, tradeProviders, isPopper = true } = props
+    const { name, tagType, dataProviders, isPopper = true } = props
 
     const { t } = useI18N()
     const { classes } = useStyles({ isPopper })
@@ -202,9 +201,7 @@ export function TraderView(props: TraderViewProps) {
     // #region if the coin is a native token or contract address exists
 
     const isSwappable =
-        (!!trending?.coin.contract_address || ['eth', 'matic', 'bnb'].includes(coinSymbol)) &&
-        chainIdValid &&
-        tradeProviders.length
+        (!!trending?.coin.contract_address || ['eth', 'matic', 'bnb'].includes(coinSymbol)) && chainIdValid
     // #endregion
 
     // #region display loading skeleton
@@ -240,11 +237,9 @@ export function TraderView(props: TraderViewProps) {
                 currency={currency}
                 trending={trending}
                 dataProvider={dataProvider}
-                tradeProvider={tradeProvider}
                 showDataProviderIcon={tabIndex < 3}
                 showTradeProviderIcon={false}
                 dataProviders={dataProviders}
-                tradeProviders={tradeProviders}
                 TrendingCardProps={{ classes: { root: classes.root } }}>
                 <Tabs
                     className={classes.tabs}
