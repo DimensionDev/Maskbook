@@ -35,18 +35,6 @@ export const currentDataProviderSettings = createGlobalSettings<DataProvider>(
     },
 )
 
-export const fantomNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_ID}+fantom+tradeProvider`,
-    TradeProvider.SUSHISWAP,
-    { primary: () => '' },
-)
-
-export const auroraNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_ID}+aurora+tradeProvider`,
-    TradeProvider.DODO,
-    { primary: () => '' },
-)
-
 // #region trade provider general settings
 export interface TradeProviderSettings {
     pools: ZrxTradePool[]
