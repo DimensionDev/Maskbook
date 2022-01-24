@@ -63,23 +63,17 @@ export default function (signal: AbortSignal) {
 }
 
 function fetchInjectContentScript(entryHTML: string) {
-    const contentScripts: string[] = []
+    const contentScripts: Array<{ code: string } | { file: string }> = []
     const task = fetch(entryHTML)
         .then((x) => x.text())
         .then((html) => {
-            // We're not going to use DOMParser because it is not available in MV3.
-            Array.from(html.matchAll(/<script src="([\w./-]+)"><\/script>/g)).forEach((script) =>
-                contentScripts.push(new URL(script[1], browser.runtime.getURL('')).pathname),
-            )
-
-            const body = html.match(/<body>(.+)<\/body>/)![1]
-            body.replace(/<script defer src="/g, '')
-                .replace(/><\/script>/g, '')
-                .split('"')
-                .forEach((script) => {
-                    if (!script) return
-                    contentScripts.push(new URL(script, browser.runtime.getURL('')).pathname)
-                })
+            const parser = new DOMParser()
+            const root = parser.parseFromString(html, 'text/html')
+            for (const script of root.querySelectorAll('script')) {
+                if (script.innerText) contentScripts.push({ code: script.innerText })
+                else if (script.src)
+                    contentScripts.push({ file: new URL(script.src, browser.runtime.getURL('')).pathname })
+            }
         })
     return async (tabID: number, frameId: number | undefined) => {
         await task
@@ -87,7 +81,7 @@ function fetchInjectContentScript(entryHTML: string) {
             const option: browser.extensionTypes.InjectDetails = {
                 runAt: 'document_idle',
                 frameId,
-                file: script,
+                ...script,
             }
             await browser.tabs.executeScript(tabID, option)
         }

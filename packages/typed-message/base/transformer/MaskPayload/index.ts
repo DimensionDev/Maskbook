@@ -54,12 +54,12 @@ export function createMaskPayloadTransform(options: MaskPayloadTransformOptions)
             return options.transformImage(message, context)
         } else if (isTypedMessageText(message)) {
             // Not detect link form here. Only detect raw form (used on FB) in this branch.
-            if (message.content.match(linkPayload)) {
+            if (message.content.match(textPayload)) {
                 return makeTypedMessageAnchor('normal', 'https://mask.io/', 'This is a Mask Payload```')
             }
         } else if (isTypedMessageTuple(message)) {
             // Visit each child here, when a raw form or link form is detected,
-            // we should check if the before/after is the text need to be elimiated.
+            // we should check if the before/after is the text need to be removed.
             // For example:
             // Tuple(
             //      Text("Keep this text! This post is encrypted by")
@@ -79,6 +79,8 @@ export function createMaskPayloadTransform(options: MaskPayloadTransformOptions)
     }
 }
 // match the link version payload
+
+/* cspell:disable-next-line */
 const linkPayload = /^https?:\/\/mask(\.io|book\.com)\/\?postdata_v/i
 // match the text version payload
-const shouldReplace2 = /(\u{1F3BC}[\w+/=|]+:\|\|)/giu
+const textPayload = /(\u{1F3BC}[\w+/=|]+:\|\|)/giu
