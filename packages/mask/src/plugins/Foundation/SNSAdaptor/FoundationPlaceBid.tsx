@@ -60,33 +60,33 @@ function HasCountdown(props: Countdown) {
 }
 
 function FoundationPlaceBid(props: Props) {
-    //#region context
+    // #region context
     const { t } = useI18N()
     const account = useAccount()
     const chainId = useChainId()
-    const testNet = chainId === 5 ? true : false
+    const testNet = chainId === 5
     const nativeTokenDetailed = useNativeTokenDetailed()
     const classes = useStylesExtends(useStyles(), props)
     const auctionId = props.nft.mostRecentAuction.id.split('-')[1]
     const dateEnding = props.nft.mostRecentAuction.dateEnding
-    //#endregion
-    //#region the selected token
+    // #endregion
+    // #region the selected token
     const [token = nativeTokenDetailed.value] = useState<FungibleTokenDetailed | undefined>(nativeTokenDetailed.value)
     const tokenBalance = useFungibleTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
-    //#endregion
+    // #endregion
 
-    //#region amount
+    // #region amount
     const [rawAmount, setRawAmount] = useState('')
     const amount = new BigNumber(rawAmount || '0').multipliedBy(pow10(18))
-    //#endregion
+    // #endregion
 
-    //#region blocking
+    // #region blocking
     const [placeBidState, PlaceBidCallback, resetCallback] = usePlaceBidCallback(auctionId, amount.toFixed())
-    //#endregion
+    // #endregion
 
-    //#region transaction dialog
+    // #region transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
-    const ShareLink = activatedSocialNetworkUI.utils
+    const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
             token
                 ? [
@@ -118,7 +118,7 @@ function FoundationPlaceBid(props: Props) {
         if (placeBidState.type === TransactionStateType.UNKNOWN) return
         setTransactionDialog({
             open: true,
-            shareLink: ShareLink,
+            shareLink,
             state: placeBidState,
             summary: t('plugin_foundation_open_dialog', {
                 amount: formatBalance(amount, token.decimals),
@@ -127,13 +127,13 @@ function FoundationPlaceBid(props: Props) {
             }),
         })
     }, [placeBidState /* update tx dialog only if state changed */])
-    //#endregion
+    // #endregion
 
-    //#region submit button
+    // #region submit button
     const validationMessage = useMemo(() => {
         if (dateEnding !== null && Math.floor(Date.now() / 1000) > Number(dateEnding))
             return t('plugin_foundation_auction_over')
-        if (props.nft.mostRecentAuction.highestBid?.bidder.id.includes(account.toLocaleLowerCase()))
+        if (props.nft.mostRecentAuction.highestBid?.bidder.id.includes(account.toLowerCase()))
             return t('plugin_foundation_you_outstanding_bid')
         if (props.nft.mostRecentAuction.reservePriceInETH > rawAmount) return t('plugin_foundation_bid_least_reserve')
         if (!token) return t('plugin_foundation_select_a_token')
@@ -145,7 +145,7 @@ function FoundationPlaceBid(props: Props) {
             })
         return ''
     }, [account, amount.toFixed(), chainId, token, tokenBalance.value ?? '0'])
-    //#endregion
+    // #endregion
     if (!auctionId) return null
 
     return (
