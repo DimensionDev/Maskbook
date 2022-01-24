@@ -10,6 +10,9 @@ import {
     useERC20TokenDetailed,
     TransactionStateType,
     resolveTransactionLinkOnExplorer,
+    useFungibleTokensDetailed,
+    EthereumTokenType,
+    isSameAddress,
     useITOConstants,
     ChainId,
     useChainId,
@@ -234,8 +237,19 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const [chainId, setChainId] = useState(
         SUPPORTED_CHAIN_ID_LIST.includes(currentChainId) ? currentChainId : ChainId.Mainnet,
     )
-    const { value: swappedTokens, loading, retry } = useClaimAll(account, chainId)
-
+    const { value: _swappedTokens, loading, retry } = useClaimAll(account, chainId)
+    const { value: swappedTokensWithDetailed = [] } = useFungibleTokensDetailed(
+        (_swappedTokens ?? []).map((t) => ({
+            address: t.token.address,
+            type: EthereumTokenType.ERC20,
+        })),
+        chainId,
+    )
+    const swappedTokens = _swappedTokens?.map((t) => {
+        const tokenDetailed = swappedTokensWithDetailed.find((v) => isSameAddress(t.token.address, v.address))
+        if (tokenDetailed) t.token = tokenDetailed
+        return t
+    })
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
     const { showSnackbar } = useCustomSnackbar()
     const popEnqueueSnackbar = useCallback(
@@ -271,8 +285,6 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         (ev) => {
             if (ev.open) return
 
-            if (claimState.type === TransactionStateType.FAILED) popEnqueueSnackbar('error')
-
             if (claimState.type === TransactionStateType.CONFIRMED) {
                 resetClaimCallback()
                 retry()
@@ -288,6 +300,11 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
 
     useEffect(() => {
         if (claimState.type === TransactionStateType.UNKNOWN) return
+
+        if (claimState.type === TransactionStateType.FAILED) {
+            setClaimTransactionDialog({ open: false })
+            return
+        }
 
         if (claimState.type === TransactionStateType.HASH) {
             const { hash } = claimState
