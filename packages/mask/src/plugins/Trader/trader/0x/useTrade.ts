@@ -35,7 +35,6 @@ export function getNativeTokenLabel(networkType: NetworkType) {
         case NetworkType.Fuse:
         case NetworkType.Metis:
         case NetworkType.Avalanche:
-            return 'AVAX'
         case NetworkType.Optimistic:
             return NATIVE_TOKEN_ADDRESS
         default:
