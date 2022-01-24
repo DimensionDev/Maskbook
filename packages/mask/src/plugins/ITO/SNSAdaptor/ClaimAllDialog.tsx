@@ -234,7 +234,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const [chainId, setChainId] = useState(
         SUPPORTED_CHAIN_ID_LIST.includes(currentChainId) ? currentChainId : ChainId.Mainnet,
     )
-    const { value: swappedTokens, loading, retry } = useClaimAll(account)
+    const { value: swappedTokens, loading, retry } = useClaimAll(account, chainId)
 
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
     const { showSnackbar } = useCustomSnackbar()
