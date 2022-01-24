@@ -348,7 +348,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                             </div>
                         ) : swappedTokens.length > 0 ? (
                             <div className={classes.content}>
-                                <Content swappedTokens={swappedTokens} />
+                                <Content swappedTokens={swappedTokens} chainId={chainId} />
                             </div>
                         ) : !showNftAirdrop && !loadingAirdrop ? (
                             <div className={classes.emptyContentWrapper}>
@@ -397,16 +397,17 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
 
 interface ContentProps {
     swappedTokens: SwappedTokenType[]
+    chainId: ChainId
 }
 
 function Content(props: ContentProps) {
     const { classes } = useStyles({ shortITOwrapper: false })
-    const { swappedTokens } = props
+    const { swappedTokens, chainId } = props
     return (
         <List className={classes.tokenCardWrapper}>
             {swappedTokens.map((swappedToken, i) => (
                 <div key={i}>
-                    <SwappedToken i={i} swappedToken={swappedToken} />
+                    <SwappedToken i={i} swappedToken={swappedToken} chainId={chainId} />
                 </div>
             ))}
         </List>
@@ -416,13 +417,14 @@ function Content(props: ContentProps) {
 interface SwappedTokensProps {
     i: number
     swappedToken: SwappedTokenType
+    chainId: ChainId
 }
 
-function SwappedToken({ i, swappedToken }: SwappedTokensProps) {
+function SwappedToken({ i, swappedToken, chainId }: SwappedTokensProps) {
     const { t } = useI18N()
     const theme = useTheme()
     const { classes } = useStyles({ shortITOwrapper: false })
-    const { value: token } = useERC20TokenDetailed(swappedToken.token.address)
+    const { value: token } = useERC20TokenDetailed(swappedToken.token.address, undefined, chainId)
 
     return token ? (
         <ListItem key={i} className={classes.tokenCard}>
