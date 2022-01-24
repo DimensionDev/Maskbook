@@ -78,6 +78,7 @@ export const MnemonicRevealForm = memo(() => {
         // handle refresh words
         if (id) {
             Services.Identity.deletePersona(id, 'delete even with private')
+            setId(null)
         }
     }, [words])
 
