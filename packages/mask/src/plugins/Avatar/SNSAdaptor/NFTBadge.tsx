@@ -34,11 +34,12 @@ function formatPrice(amount: string, symbol: string) {
 }
 
 function formatText(name: string, tokenId: string) {
-    const _name = name.replace(/#\d*/, '')
+    const _name = name.replace(/#\d*/, '').trim()
+    let token = tokenId
     if (tokenId.length > 10) {
-        return `${_name.trim()} #${tokenId.substr(0, 6)}...${tokenId.substr(-4)}`
+        token = tokenId.slice(0, 6) + '...' + tokenId.slice(-4)
     }
-    return `${_name} #${tokenId}`
+    return `${_name} #${token}`
 }
 
 export function NFTBadge(props: NFTBadgeProps) {
