@@ -133,11 +133,7 @@ export function TraderView(props: TraderViewProps) {
     const coinSymbol = (trending?.coin.symbol || '').toLowerCase()
 
     // #region swap
-    const {
-        value: tokenDetailed,
-        error: tokenDetailedError,
-        loading: loadingTokenDetailed,
-    } = useFungibleTokenDetailed(
+    const { value: tokenDetailed } = useFungibleTokenDetailed(
         coinSymbol === 'eth' ? EthereumTokenType.Native : EthereumTokenType.ERC20,
         coinSymbol === 'eth' ? '' : trending?.coin.contract_address ?? '',
     )
