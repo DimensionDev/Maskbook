@@ -31,7 +31,7 @@ const useStyles = makeStyles()((theme) => {
             backgroundColor: theme.palette.background.paper,
             marginLeft: 'auto',
             marginRight: 'auto',
-            height: 720,
+            padding: '25px 0',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
