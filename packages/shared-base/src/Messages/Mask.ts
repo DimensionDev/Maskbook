@@ -1,7 +1,7 @@
 import type { TypedMessage } from '../TypedMessage'
 import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier/type'
 import type { RelationFavor } from '../Persona/type'
-import type { Appearance, LanguageOptions, TradeProvider, DataProvider } from '../../../public-api/src/web'
+import type { Appearance, LanguageOptions, DataProvider } from '../../../public-api/src/web'
 import type {
     CryptoPrice,
     NetworkType,
@@ -28,14 +28,6 @@ export interface MaskSettingsEvents {
     currentFungibleAssetDataProviderSettings: FungibleAssetProvider
     currentNonFungibleAssetDataProviderSettings: NonFungibleAssetProvider
     currentPersonaIdentifier: string
-    ethereumNetworkTradeProviderSettings: TradeProvider
-    polygonNetworkTradeProviderSettings: TradeProvider
-    binanceNetworkTradeProviderSettings: TradeProvider
-    arbitrumNetworkTradeProviderSettings: TradeProvider
-    xdaiNetworkTradeProviderSettings: TradeProvider
-    fantomNetworkTradeProviderSettings: TradeProvider
-    celoNetworkTradeProviderSettings: TradeProvider
-    auroraNetworkTradeProviderSettings: TradeProvider
 }
 
 export interface MaskMobileOnlyEvents {

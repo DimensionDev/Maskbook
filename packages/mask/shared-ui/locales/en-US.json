@@ -439,8 +439,6 @@
     "plugin_trade_error_input_amount_less_minimum_amount": "Input amount is below the minimum amount",
     "plugin_trader_settings_data_source_primary": "Trending Data Source",
     "plugin_trader_settings_data_source_secondary": "Select the source of cryptocurrencies' trending data.",
-    "plugin_trader_settings_trade_provider_primary": "Choose Exchange Network",
-    "plugin_trader_settings_trade_provider_secondary": "Swap cryptocurrencies on different exchange networks.",
     "plugin_trader_slippage_tolerance": "Slippage Tolerance:",
     "plugin_trader_swap_from": "From",
     "plugin_trader_swap_to": "To(estimated)",

@@ -18,17 +18,7 @@ import {
     currentProviderSettings,
     currentTokenPricesSettings,
 } from '../plugins/Wallet/settings'
-import {
-    currentDataProviderSettings,
-    ethereumNetworkTradeProviderSettings,
-    polygonNetworkTradeProviderSettings,
-    binanceNetworkTradeProviderSettings,
-    arbitrumNetworkTradeProviderSettings,
-    xdaiNetworkTradeProviderSettings,
-    celoNetworkTradeProviderSettings,
-    fantomNetworkTradeProviderSettings,
-    auroraNetworkTradeProviderSettings,
-} from '../plugins/Trader/settings'
+import { currentDataProviderSettings } from '../plugins/Trader/settings'
 import type { InternalSettings } from './createSettings'
 
 type ToBeListedSettings = { [key in keyof MaskSettingsEvents]: InternalSettings<MaskSettingsEvents[key]> }
@@ -50,13 +40,5 @@ export function ToBeListened(): ToBeListedSettings {
         currentFungibleAssetDataProviderSettings,
         currentNonFungibleAssetDataProviderSettings,
         currentPersonaIdentifier,
-        ethereumNetworkTradeProviderSettings,
-        polygonNetworkTradeProviderSettings,
-        binanceNetworkTradeProviderSettings,
-        arbitrumNetworkTradeProviderSettings,
-        xdaiNetworkTradeProviderSettings,
-        celoNetworkTradeProviderSettings,
-        fantomNetworkTradeProviderSettings,
-        auroraNetworkTradeProviderSettings,
     }
 }

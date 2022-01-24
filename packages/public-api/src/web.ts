@@ -25,8 +25,6 @@ export interface MaskNetworkAPIs {
     getConnectedPersonas(): Promise<string>
     app_isPluginEnabled(params: { pluginID: string }): Promise<boolean>
     app_setPluginStatus(params: { pluginID: string; enabled: boolean }): Promise<void>
-    setting_getNetworkTraderProvider(params: { network: NetworkType }): Promise<TradeProvider | undefined>
-    setting_setNetworkTraderProvider(params: { network: NetworkType; provider: TradeProvider }): Promise<void>
     settings_getTrendingDataSource(): Promise<DataProvider>
     settings_setTrendingDataSource(params: { provider: DataProvider }): Promise<void>
     settings_getLaunchPageSettings(): Promise<LaunchPage>

@@ -35,43 +35,8 @@ export const currentDataProviderSettings = createGlobalSettings<DataProvider>(
     },
 )
 
-export const ethereumNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_ID}+ethereum+tradeProvider`,
-    TradeProvider.UNISWAP_V2,
-    { primary: () => '' },
-)
-
-export const polygonNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_ID}+polygon+tradeProvider`,
-    TradeProvider.QUICKSWAP,
-    { primary: () => '' },
-)
-
-export const binanceNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_ID}+binance+tradeProvider`,
-    TradeProvider.PANCAKESWAP,
-    { primary: () => '' },
-)
-
-export const arbitrumNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_ID}+arbitrum+tradeProvider`,
-    TradeProvider.UNISWAP_V3,
-    { primary: () => '' },
-)
-
-export const xdaiNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_ID}+xdai+tradeProvider`,
-    TradeProvider.SUSHISWAP,
-    { primary: () => '' },
-)
 export const fantomNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
     `${PLUGIN_ID}+fantom+tradeProvider`,
-    TradeProvider.SUSHISWAP,
-    { primary: () => '' },
-)
-
-export const celoNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_ID}+celo+tradeProvider`,
     TradeProvider.SUSHISWAP,
     { primary: () => '' },
 )
