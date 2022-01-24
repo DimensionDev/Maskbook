@@ -2,7 +2,6 @@ import {
     ChainId,
     useChainBalance,
     EthereumTokenType,
-    isSameAddress,
     useAccount,
     useProviderType,
     useTokenConstants,
@@ -34,19 +33,18 @@ export function useUpdateBalance(chainId: ChainId) {
     }, [currentAccount])
 
     useEffect(() => {
-        if (!balance.value) return
+        if (!balance.value || inputToken?.type !== EthereumTokenType.Native) return
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
-            balance: inputToken?.type === EthereumTokenType.Native ? balance.value : '0',
+            balance: balance.value,
         })
+    }, [inputToken, NATIVE_TOKEN_ADDRESS, balance.value])
 
+    useEffect(() => {
+        if (!balance.value || inputToken?.type !== EthereumTokenType.Native) return
         dispatchTradeStore({
-            type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
-            balance:
-                isSameAddress(outputToken?.address, NATIVE_TOKEN_ADDRESS) ||
-                outputToken?.type === EthereumTokenType.Native
-                    ? balance.value
-                    : '0',
+            type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
+            balance: balance.value,
         })
-    }, [inputToken, outputToken, NATIVE_TOKEN_ADDRESS, balance.value])
+    }, [outputToken, NATIVE_TOKEN_ADDRESS, balance.value])
 }
