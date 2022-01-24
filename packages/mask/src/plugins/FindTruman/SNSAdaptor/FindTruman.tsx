@@ -66,7 +66,7 @@ const useStyles = makeStyles()((theme) => {
         tipArrow: {
             color: '#fff',
         },
-        c: {
+        critical: {
             color: 'rgba(255,255,255,.9)',
             fontWeight: 500,
             fontSize: 14,
@@ -75,7 +75,7 @@ const useStyles = makeStyles()((theme) => {
             backgroundImage: 'linear-gradient( 135deg, #FDD819 10%, #E80505 100%)',
             cursor: 'pointer',
         },
-        n: {
+        nonCritical: {
             color: 'rgba(255,255,255,.9)',
             fontWeight: 500,
             fontSize: 14,
@@ -200,8 +200,8 @@ export function FindTruman(props: FindTrumanProps) {
                                                     : ''
                                             }>
                                             <Box>
-                                                {isCritical && <Avatar className={classes.c}>C</Avatar>}
-                                                {isNoncritical && <Avatar className={classes.n}>N</Avatar>}
+                                                {isCritical && <Avatar className={classes.critical}>C</Avatar>}
+                                                {isNoncritical && <Avatar className={classes.nonCritical}>N</Avatar>}
                                             </Box>
                                         </Tooltip>
                                         <Chip

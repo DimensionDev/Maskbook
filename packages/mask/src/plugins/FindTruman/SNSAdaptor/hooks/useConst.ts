@@ -4,8 +4,8 @@ import { useCallback, useEffect, useState } from 'react'
 import type { FindTrumanConst } from '../../types'
 import { FindTruman_Const } from '../../constants'
 
-function replaceAll(input: string, values: Record<string, string | number>) {
-    return input.replace(/{{([^}]+)}}/g, (match, p1) => values[p1]?.toString() ?? match)
+function renderString(template: string, data: Record<string, string | number>) {
+    return template.replace(/{{([^}]+)}}/g, (match, p1) => data[p1]?.toString() ?? match)
 }
 
 export function useConst() {
@@ -25,7 +25,7 @@ export function useConst() {
 
     const t = useCallback(
         (id: string, options: Record<string, string | number> = {}) => {
-            return replaceAll(consts?.locales?.[id] ?? '', options)
+            return renderString(consts?.locales?.[id] ?? '', options)
         },
         [consts],
     )

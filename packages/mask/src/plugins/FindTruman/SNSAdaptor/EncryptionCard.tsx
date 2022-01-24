@@ -70,11 +70,11 @@ export default function EncryptionCard(props: EncryptionCardProps) {
                         <div style={{ width: 250 }}>
                             <FlipCard isFlipped={flipped}>
                                 <img
-                                    onLoad={({ target }) => {
-                                        setBackImgHeight((target as HTMLElement).parentElement?.offsetHeight || 0)
+                                    onLoad={({ currentTarget }) => {
+                                        setBackImgHeight(currentTarget.parentElement?.offsetHeight || 0)
                                     }}
-                                    onClick={({ target }) => {
-                                        setBackImgHeight((target as HTMLElement).parentElement?.offsetHeight || 0)
+                                    onClick={({ currentTarget }) => {
+                                        setBackImgHeight(currentTarget.parentElement?.offsetHeight || 0)
                                         backImgHeight && setFlipped(true)
                                     }}
                                     src={clue.backImg}
@@ -118,9 +118,7 @@ function ClueConditionCard(props: ClueConditionCardProps) {
         <Card
             className={classes.card}
             variant="outlined"
-            onClick={() => {
-                onClick()
-            }}
+            onClick={onClick}
             sx={{ height: cardHeight || 'auto', cursor: 'pointer' }}>
             <CardContent>
                 <Typography variant="h6" component="div">
