@@ -28,6 +28,7 @@ const useStyles = makeStyles()((theme) => {
         },
         container: {
             width: 800,
+            maxHeight: '95vh',
             backgroundColor: theme.palette.background.paper,
             marginLeft: 'auto',
             marginRight: 'auto',
