@@ -178,6 +178,15 @@ export namespace NonFungibleTokenAPI {
         wiki_link?: string
         safelist_request_status: string
     }
+    export interface AssetEvent {
+        event_type: string
+        event_timestamp: number
+        auction_type: string
+        total_price: string
+        payment_token: {
+            decimals: number
+        }
+    }
 
     export interface Asset {
         is_verified: boolean
@@ -205,7 +214,7 @@ export namespace NonFungibleTokenAPI {
         top_ownerships: {
             owner: AssetOwner
         }[]
-
+        last_sale: AssetEvent | null
         response_: any
     }
 

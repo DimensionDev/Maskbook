@@ -87,17 +87,19 @@ export function getChainIdFromName(name: string) {
 export const getChainIdFromNetworkType = createLookupTableResolver<NetworkType, ChainId>(
     {
         [NetworkType.Ethereum]: ChainId.Mainnet,
-        [NetworkType.Binance]: ChainId.BSC,
-        [NetworkType.Polygon]: ChainId.Matic,
         [NetworkType.Arbitrum]: ChainId.Arbitrum,
-        [NetworkType.xDai]: ChainId.xDai,
+        [NetworkType.Avalanche]: ChainId.Avalanche,
+        [NetworkType.Binance]: ChainId.BSC,
         [NetworkType.Celo]: ChainId.Celo,
         [NetworkType.Fantom]: ChainId.Fantom,
+        [NetworkType.Polygon]: ChainId.Matic,
+        [NetworkType.xDai]: ChainId.xDai,
         [NetworkType.Aurora]: ChainId.Aurora,
     },
     ChainId.Mainnet,
 )
 
+// The value should be same as chain field in packages/web3-shared/evm/assets/chains.json
 const chainNameMap: Record<NetworkType, string> = {
     [NetworkType.Ethereum]: 'ETH',
     [NetworkType.Binance]: 'BSC',
@@ -107,7 +109,7 @@ const chainNameMap: Record<NetworkType, string> = {
     [NetworkType.Celo]: 'CELO',
     [NetworkType.Fantom]: 'FTM',
     [NetworkType.Aurora]: 'Aurora',
-    [NetworkType.Avalanche]: 'Avalanche',
+    [NetworkType.Avalanche]: 'AVAX',
     [NetworkType.Boba]: 'Boba',
     [NetworkType.Fuse]: 'Fuse',
     [NetworkType.Metis]: 'Metis',

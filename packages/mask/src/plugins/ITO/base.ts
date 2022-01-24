@@ -16,7 +16,14 @@ export const base: Plugin.Shared.Definition = {
         target: 'stable',
         web3: {
             [NetworkPluginID.PLUGIN_EVM]: {
-                supportedChainIds: [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai],
+                supportedChainIds: [
+                    ChainId.Mainnet,
+                    ChainId.BSC,
+                    ChainId.Matic,
+                    ChainId.Arbitrum,
+                    ChainId.xDai,
+                    ChainId.Avalanche,
+                ],
             },
         },
     },
