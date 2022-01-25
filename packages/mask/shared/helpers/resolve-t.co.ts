@@ -10,12 +10,7 @@ async function resolver(u: string) {
         referrerPolicy: 'no-referrer',
     })
     const text = await res.text()
-    // TODO: mv3 don't have DOMParser
-    const parser = new DOMParser()
-    const doc = parser.parseFromString(text, 'text/html')
-    const dom = doc.querySelector('noscript > meta') as HTMLMetaElement
-    if (!dom) return null
-    const [, url] = dom.content.split('URL=')
+    const url = text.match(/URL=(.+).><\/noscript/)?.[1]
     if (url) cache.set(u, url)
     return url ?? null
 }

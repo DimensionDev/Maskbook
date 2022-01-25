@@ -1,11 +1,19 @@
+import Web3 from 'web3'
 import type { RequestArguments } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import type { RequestOptions, SendOverrides } from '@masknet/web3-shared-evm'
-import Services from '../extension/service'
+import type { RequestOptions, SendOverrides } from '../types'
 
-export function createExternalProvider(getOverrides?: () => SendOverrides, getOptions?: () => RequestOptions) {
+export function createExternalProvider(
+    request: <T extends unknown>(
+        requestArguments: RequestArguments,
+        overrides?: SendOverrides,
+        options?: RequestOptions,
+    ) => Promise<T>,
+    getOverrides?: () => SendOverrides,
+    getOptions?: () => RequestOptions,
+) {
     const send = (payload: JsonRpcPayload, callback: (error: Error | null, response?: JsonRpcResponse) => void) => {
-        Services.Ethereum.request(
+        request(
             {
                 method: payload.method,
                 params: payload.params,
@@ -25,8 +33,6 @@ export function createExternalProvider(getOverrides?: () => SendOverrides, getOp
             },
         )
     }
-    const request = (requestArguments: RequestArguments) =>
-        Services.Ethereum.request(requestArguments, getOverrides?.(), getOptions?.())
 
     return {
         isMetaMask: false,
@@ -34,8 +40,20 @@ export function createExternalProvider(getOverrides?: () => SendOverrides, getOp
         isStatus: true,
         host: '',
         path: '',
-        request: request,
+        request: (requestArguments: RequestArguments) => request(requestArguments, getOverrides?.(), getOptions?.()),
         send,
         sendAsync: send,
     }
+}
+
+export function createWeb3(
+    request: <T extends unknown>(
+        requestArguments: RequestArguments,
+        overrides?: SendOverrides,
+        options?: RequestOptions,
+    ) => Promise<T>,
+    getOverrides?: () => SendOverrides,
+    getOptions?: () => RequestOptions,
+) {
+    return new Web3(createExternalProvider(request, getOverrides, getOptions))
 }

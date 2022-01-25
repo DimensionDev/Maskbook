@@ -18,7 +18,7 @@ interface ButtonGroupProps extends PropsWithChildren<{}> {}
 
 export const ButtonContainer = ({ children }: ButtonGroupProps) => {
     return (
-        <ButtonContainerUI my={7} direction="row" spacing={2} justifyContent="center">
+        <ButtonContainerUI my={7} direction="row" spacing={2} justifyContent="center" alignItems="center">
             {children}
         </ButtonContainerUI>
     )

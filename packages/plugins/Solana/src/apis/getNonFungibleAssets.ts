@@ -3,8 +3,7 @@ import { ChainId } from '@masknet/web3-shared-solana'
 import { Metadata } from '@metaplex-foundation/mpl-token-metadata'
 import { Pageable, Pagination, TokenType, Web3Plugin } from '@masknet/plugin-infra'
 import { fetchJSON, GetProgramAccountsResponse, requestRPC, SPL_TOKEN_PROGRAM_ID } from './shared'
-
-const ENDPOINT_KEY = 'devnet'
+import { ENDPOINT_KEY } from '../constants'
 
 interface ExternalMetadata {
     name: string
@@ -49,35 +48,35 @@ async function getNftList(chainId: ChainId, account: string) {
     if (!data.result?.length) return []
     const connection = new Connection(ENDPOINT_KEY)
     const nftTokens = data.result.filter((x) => x.account.data.parsed.info.tokenAmount.decimals === 0)
-    const promises = nftTokens.map((x) =>
-        Metadata.load(connection, x.pubkey).then(async (metadata) => {
-            if (!metadata) return null
-            const externalMeta = await fetchJSON<ExternalMetadata>(metadata.data.data.uri).catch(() => null)
-            const pubkey = metadata.pubkey.toBase58()
-            return {
-                id: pubkey,
-                tokenId: pubkey,
-                chainId: chainId,
-                type: TokenType.NonFungible,
+    const promises = nftTokens.map(async (x) => {
+        const pda = await Metadata.getPDA(x.account.data.parsed.info.mint)
+        const metadata = await Metadata.load(connection, pda)
+        if (!metadata) return null
+        const externalMeta = await fetchJSON<ExternalMetadata>(metadata.data.data.uri).catch(() => null)
+        const pubkey = pda.toBase58()
+        return {
+            id: pubkey,
+            tokenId: pubkey,
+            chainId: chainId,
+            type: TokenType.NonFungible,
+            name: metadata.data.data.name,
+            description: externalMeta?.description,
+            contract: {
                 name: metadata.data.data.name,
-                description: externalMeta?.description,
-                contract: {
-                    name: metadata.data.data.name,
-                    symbol: metadata.data.data.symbol,
-                    chainId: ChainId.Mainnet,
-                    address: pubkey,
-                    tokenId: pubkey,
-                },
-                metadata: {
-                    name: metadata.data.data.name,
-                    description: metadata.data.data.name,
-                    mediaType: externalMeta?.properties?.category || 'Unknown',
-                    iconURL: '',
-                    assetURL: externalMeta?.animation ?? externalMeta?.image ?? '',
-                },
-            } as Web3Plugin.NonFungibleToken
-        }),
-    )
+                symbol: metadata.data.data.symbol,
+                chainId: ChainId.Mainnet,
+                address: pubkey,
+                tokenId: pubkey,
+            },
+            metadata: {
+                name: metadata.data.data.name,
+                description: metadata.data.data.name,
+                mediaType: externalMeta?.properties?.category || 'Unknown',
+                iconURL: '',
+                assetURL: externalMeta?.animation ?? externalMeta?.image ?? '',
+            },
+        } as Web3Plugin.NonFungibleToken
+    })
 
     const allSettled = await Promise.allSettled(promises)
     const tokens = allSettled

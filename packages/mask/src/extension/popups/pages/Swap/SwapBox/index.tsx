@@ -3,8 +3,6 @@ import { useMemo } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import { useUpdateEffect } from 'react-use'
 import { Trader } from '../../../../../plugins/Trader/SNSAdaptor/trader/Trader'
-import { TradeContext, useTradeContext } from '../../../../../plugins/Trader/trader/useTradeContext'
-import { useCurrentTradeProvider } from '../../../../../plugins/Trader/trending/useCurrentTradeProvider'
 import type { Coin } from '../../../../../plugins/Trader/types'
 import { PopupRoutes } from '@masknet/shared-base'
 
@@ -12,8 +10,6 @@ export function SwapBox() {
     const location = useLocation()
     const history = useHistory()
     const chainId = useChainId()
-    const tradeProvider = useCurrentTradeProvider(chainId)
-    const tradeContext = useTradeContext(tradeProvider)
 
     const coin = useMemo(() => {
         if (!location.search) return undefined
@@ -31,9 +27,5 @@ export function SwapBox() {
         history.replace(PopupRoutes.Swap)
     }, [chainId])
 
-    return (
-        <TradeContext.Provider value={tradeContext}>
-            <Trader coin={coin} chainId={chainId} />
-        </TradeContext.Provider>
-    )
+    return <Trader coin={coin} chainId={chainId} />
 }

@@ -25,7 +25,8 @@ import {
 import { useCallback, useMemo } from 'react'
 import { useRemoteControlledDialog, WalletIcon } from '@masknet/shared'
 import { WalletMessages } from '../../plugins/Wallet/messages'
-import { hasNativeAPI, nativeAPI, useI18N } from '../../utils'
+import { useI18N } from '../../utils'
+import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
 import { useRecentTransactions } from '../../plugins/Wallet/hooks/useRecentTransactions'
 import GuideStep from '../GuideStep'
 import { MaskFilledIcon } from '../../resources/MaskIcon'
@@ -113,7 +114,7 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
 
     return (
         <>
-            <GuideStep step={1} total={2} tip={t('user_guide_tip_1')}>
+            <GuideStep step={1} total={3} tip={t('user_guide_tip_1')}>
                 <Container>
                     <ListItemButton onClick={onClick}>
                         <ListItemIcon>
@@ -167,7 +168,9 @@ function useToolbox() {
     const { Utils } = useWeb3State()
 
     // #region recent pending transactions
-    const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)
+    const { value: pendingTransactions = [] } = useRecentTransactions({
+        status: TransactionStatusType.NOT_DEPEND,
+    })
     // #endregion
 
     // #region Wallet
