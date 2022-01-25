@@ -25,7 +25,10 @@ export const initCollection = {
 export const Punk3D = {
     contract: '0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb',
     tokenId: '6128',
-    url: 'https://gateway.pinata.cloud/ipfs/QmZjfo1zKTfQZjqs4CaZJ7pQDZHrUBaozre8Z71c7ZXGMc',
+    url: 'https://modelviewer.dev/shared-assets/models/NeilArmstrong.glb',
+    // url: 'https://cdn.digination.io/metadata/ethereum/maskmachina/1.glb',
+    // url: 'https://media-viewer.r2d2.to/index.html?url=https://gateway.pinata.cloud/ipfs/QmZjfo1zKTfQZjqs4CaZJ7pQDZHrUBaozre8Z71c7ZXGMc&type=model/gltf-binary',
+    // url: 'https://gateway.pinata.cloud/ipfs/QmZjfo1zKTfQZjqs4CaZJ7pQDZHrUBaozre8Z71c7ZXGMc',
 }
 
 export const GLB3DIcon = new URL('./assets/glb3D.png', import.meta.url).toString()
