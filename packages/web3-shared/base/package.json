@@ -5,6 +5,7 @@
   "types": "./dist/index.d.ts",
   "dependencies": {
     "bignumber.js": "9.0.2",
+    "react-use": "^17.3.1",
     "date-fns": "^2.27.0",
     "reconnecting-websocket": "^4.4.0"
   },

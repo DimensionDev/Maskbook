@@ -4,10 +4,8 @@ import {
     isNativeTokenAddress,
     NetworkType,
     useAccount,
-    useBlockNumber,
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
-import { useAsyncRetry } from 'react-use'
 import { safeUnreachable } from '@dimensiondev/kit'
 import { ZRX_AFFILIATE_ADDRESS } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
@@ -17,6 +15,7 @@ import { useTradeProviderSettings } from '../useTradeSettings'
 import { currentNetworkSettings } from '../../../Wallet/settings'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { TradeProvider } from '@masknet/public-api'
+import { useDoubleBlockBeatRetry } from '@masknet/plugin-infra'
 
 const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 
@@ -53,11 +52,10 @@ export function useTrade(
     const account = useAccount()
     const { targetChainId } = TargetChainIdContext.useContainer()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(targetChainId)
-    const blockNumber = useBlockNumber()
 
     const slippage = useSlippageTolerance()
     const { pools } = useTradeProviderSettings(TradeProvider.ZRX)
-    return useAsyncRetry(async () => {
+    return useDoubleBlockBeatRetry(async () => {
         if (!inputToken || !outputToken) return null
         const isExactIn = strategy === TradeStrategy.ExactIn
         if (inputAmount === '0' && isExactIn) return null
@@ -92,6 +90,5 @@ export function useTrade(
         outputToken?.address,
         slippage,
         pools.length,
-        blockNumber, // refresh api each block
     ])
 }
