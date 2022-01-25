@@ -188,7 +188,6 @@
     "plugin_trader_error_amount_absence": "量を入力してください。",
     "plugin_trader_error_insufficient_balance": "{{symbol}} の残高が足りません",
     "plugin_trader_error_insufficient_lp": "流動性が足りません",
-    "plugin_trader_error_price_impact_too_high": "プライスインパクトが大きすぎます",
     "plugin_trade_error_input_amount_less_minimum_amount": "入力量は最小量を下回っています",
     "plugin_trader_settings_data_source_primary": "取引データのソース",
     "plugin_trader_settings_data_source_secondary": "暗号通貨トレンドデータのソースを選択する。",
