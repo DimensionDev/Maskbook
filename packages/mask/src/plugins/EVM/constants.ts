@@ -148,6 +148,16 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         isMainnet: true,
     },
     {
+        ID: `${PLUGIN_ID}_avalanche`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Avalanche,
+        type: NetworkType.Avalanche,
+        name: 'Avalanche',
+        icon: new URL('./assets/avalanche.png', import.meta.url),
+        iconColor: 'rgb(232, 65, 66)',
+        isMainnet: true,
+    },
+    {
         ID: `${PLUGIN_ID}_aurora`,
         networkSupporterPluginID: PLUGIN_ID,
         chainId: ChainId.Aurora,

@@ -113,7 +113,7 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
 
     return (
         <>
-            <GuideStep step={1} total={2} tip={t('user_guide_tip_1')}>
+            <GuideStep step={1} total={3} tip={t('user_guide_tip_1')}>
                 <Container>
                     <ListItemButton onClick={onClick}>
                         <ListItemIcon>
@@ -167,7 +167,9 @@ function useToolbox() {
     const { Utils } = useWeb3State()
 
     // #region recent pending transactions
-    const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)
+    const { value: pendingTransactions = [] } = useRecentTransactions({
+        status: TransactionStatusType.NOT_DEPEND,
+    })
     // #endregion
 
     // #region Wallet
