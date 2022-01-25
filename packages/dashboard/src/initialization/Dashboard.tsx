@@ -38,7 +38,7 @@ export default function DashboardRoot() {
     // migrate EVM plugin
     fixWeb3State(PluginsWeb3State[NetworkPluginID.PLUGIN_EVM], Web3Context)
 
-    //#region theme
+    // #region theme
     const appearance = useAppearance()
     const mode = useSystemPreferencePalette()
     const themes: Record<typeof appearance, Theme> = {
@@ -49,7 +49,7 @@ export default function DashboardRoot() {
     const theme = themes[appearance]
 
     applyMaskColorVars(document.body, appearance === 'default' ? mode : appearance)
-    //#endregion
+    // #endregion
 
     return (
         <Web3Provider value={Web3Context}>

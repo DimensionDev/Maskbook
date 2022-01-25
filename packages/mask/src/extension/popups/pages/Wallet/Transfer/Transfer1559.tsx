@@ -284,7 +284,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
 
     const [address, amount, maxFeePerGas] = methods.watch(['address', 'amount', 'maxFeePerGas'])
 
-    //#region resolve ENS domain
+    // #region resolve ENS domain
     const {
         value: registeredAddress = '',
         error: resolveDomainError,
@@ -299,9 +299,9 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 message: t('wallet_transfer_error_no_address_has_been_set_name'),
             })
     }, [resolveDomainError, registeredAddress, methods.setError, address, Utils])
-    //#endregion
+    // #endregion
 
-    //#region check address or registered address type
+    // #region check address or registered address type
     useAsync(async () => {
         setAddressTip(null)
         if (!address && !registeredAddress) return
@@ -325,16 +325,16 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
             })
         }
     }, [address, EthereumAddress.isValid, registeredAddress, methods.clearErrors, wallet?.address, registeredAddress])
-    //#endregion
+    // #endregion
 
-    //#region Get min gas limit with amount and recipient address
+    // #region Get min gas limit with amount and recipient address
     const { value: minGasLimit } = useGasLimit(
         selectedAsset?.token.type,
         selectedAsset?.token.address,
         rightShift(amount ?? 0, selectedAsset?.token.decimals).toFixed(),
         EthereumAddress.isValid(address) ? address : registeredAddress,
     )
-    //#endregion
+    // #endregion
 
     const { value: tokenBalance = '0' } = useFungibleTokenBalance(
         selectedAsset?.token?.type ?? EthereumTokenType.Native,
@@ -348,22 +348,22 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         return formatBalance(amount_.toFixed(), selectedAsset?.token.decimals)
     }, [selectedAsset, maxFeePerGas, minGasLimit, tokenBalance])
 
-    //#region set default gasLimit
+    // #region set default gasLimit
     useUpdateEffect(() => {
         if (!minGasLimit) return
         methods.setValue('gasLimit', minGasLimit.toString())
         setMinGasLimitContext(minGasLimit)
     }, [minGasLimit, methods.setValue])
-    //#endregion
+    // #endregion
 
-    //#region set default Max priority gas fee and max fee
+    // #region set default Max priority gas fee and max fee
     useUpdateEffect(() => {
         if (!estimateGasFees) return
         const { medium } = estimateGasFees
         methods.setValue('maxFeePerGas', new BigNumber(medium?.suggestedMaxFeePerGas ?? 0).toString())
         methods.setValue('maxPriorityFeePerGas', new BigNumber(medium?.suggestedMaxPriorityFeePerGas ?? 0).toString())
     }, [estimateGasFees, methods.setValue])
-    //#endregion
+    // #endregion
 
     const [_, transferCallback] = useTokenTransferCallback(
         selectedAsset?.token.type ?? EthereumTokenType.Native,
@@ -378,7 +378,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         async (data: zod.infer<typeof schema>) => {
             const transferAmount = rightShift(data.amount || '0', selectedAsset?.token.decimals).toFixed()
 
-            //If input address is ens domain, use registeredAddress to transfer
+            // If input address is ens domain, use registeredAddress to transfer
             if (Utils?.isValidDomain?.(data.address)) {
                 await transferCallback(transferAmount, registeredAddress, {
                     maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toString()),

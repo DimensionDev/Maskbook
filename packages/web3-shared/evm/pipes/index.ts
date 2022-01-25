@@ -26,6 +26,34 @@ export const resolveProviderName = createLookupTableResolver<ProviderType, strin
     'Unknown Network',
 )
 
+export const resolveProviderShortenLink = createLookupTableResolver<ProviderType, string>(
+    {
+        [ProviderType.MaskWallet]: 'Mask.io',
+        [ProviderType.MetaMask]: 'Metamask.io',
+        [ProviderType.WalletConnect]: 'Walletconnect.com',
+        [ProviderType.CustomNetwork]: 'Website',
+        [ProviderType.Coin98]: 'Coin98.com',
+        [ProviderType.WalletLink]: 'Walletlink.org',
+        [ProviderType.MathWallet]: 'Mathwallet.org',
+        [ProviderType.Fortmatic]: 'Fortmatic.com',
+    },
+    'website',
+)
+
+export const resolveProviderHomeLink = createLookupTableResolver<ProviderType, string>(
+    {
+        [ProviderType.MaskWallet]: 'https://mask.io',
+        [ProviderType.MetaMask]: 'https://metamask.io',
+        [ProviderType.WalletConnect]: 'https://walletconnect.com',
+        [ProviderType.CustomNetwork]: '',
+        [ProviderType.Coin98]: 'https://coin98.com',
+        [ProviderType.WalletLink]: 'https://walletlink.org',
+        [ProviderType.MathWallet]: 'https://mathwallet.org',
+        [ProviderType.Fortmatic]: 'https://fortmatic.com',
+    },
+    '',
+)
+
 export const resolveProviderDownloadLink = createLookupTableResolver<ProviderType, string>(
     {
         [ProviderType.MaskWallet]: 'https://mask.io/download-links',
@@ -64,6 +92,7 @@ export const resolveNetworkAddressPrefix = createLookupTableResolver<NetworkType
         [NetworkType.Polygon]: 'polygon',
         [NetworkType.Arbitrum]: 'arbitrum',
         [NetworkType.xDai]: 'xdai',
+        [NetworkType.Avalanche]: 'avalanche',
         [NetworkType.Celo]: 'celo',
         [NetworkType.Fantom]: 'fantom',
         [NetworkType.Moonriver]: 'moonriver',
@@ -79,6 +108,7 @@ export const resolveNetworkName = createLookupTableResolver<NetworkType, string>
         [NetworkType.Polygon]: 'Polygon',
         [NetworkType.Arbitrum]: 'Arbitrum',
         [NetworkType.xDai]: 'xDai',
+        [NetworkType.Avalanche]: 'Avalanche',
         [NetworkType.Celo]: 'Celo',
         [NetworkType.Fantom]: 'Fantom',
         [NetworkType.Moonriver]: 'Moonriver',
@@ -111,6 +141,8 @@ export const resolveChainColor = createLookupTableResolver<ChainId, string>(
         [ChainId.Arbitrum]: 'rgb(36, 150, 238)',
         [ChainId.Arbitrum_Rinkeby]: 'rgb(36, 150, 238)',
         [ChainId.xDai]: 'rgb(73, 169, 166)',
+        [ChainId.Avalanche]: 'rgb(232, 65, 66)',
+        [ChainId.Avalanche_Fuji]: 'rgb(232, 65, 66)',
         [ChainId.Celo]: 'rgb(53, 208, 127)',
         [ChainId.Fantom]: 'rgb(19, 181, 236)',
         [ChainId.Moonriver]: 'rgb(242, 183, 6)',

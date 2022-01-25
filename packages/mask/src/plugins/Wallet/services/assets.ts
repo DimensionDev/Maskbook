@@ -103,10 +103,10 @@ export async function getAssetsList(
     switch (provider) {
         case FungibleAssetProvider.ZERION:
             let result: Asset[] = []
-            //xdai-assets is not support
+            // xdai-assets is not support
             const scopes = network
                 ? [resolveZerionAssetsScopeName(network)]
-                : ['assets', 'bsc-assets', 'polygon-assets', 'arbitrum-assets']
+                : ['assets', 'bsc-assets', 'polygon-assets', 'arbitrum-assets', 'avalanche-assets']
             for (const scope of scopes) {
                 const { meta, payload } = await ZerionAPI.getAssetsList(address, scope)
                 if (meta.status !== 'ok') throw new Error('Fail to load assets.')

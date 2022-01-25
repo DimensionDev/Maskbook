@@ -222,8 +222,10 @@ export enum TradeProvider {
     OPENOCEAN = 10,
     WANNASWAP = 11,
     TRISOLARIS = 12,
-    SOLARBEAM = 13,
-    HUCKLEBERRY = 14,
+    TRADERJOE = 13,
+    PANGOLIN = 14,
+    SOLARBEAM = 15,
+    HUCKLEBERRY = 16,
 }
 /** Supported language settings */
 export enum LanguageOptions {

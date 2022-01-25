@@ -36,4 +36,5 @@ export const SUSHISWAP_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
     [ChainId.Celo]: [WNATIVE, CUSD, CEUR].map((x) => x[ChainId.Celo]),
     [ChainId.Fantom]: [WNATIVE, DAI, USDC, fUSDT, WBTC].map((x) => x[ChainId.Fantom]),
     [ChainId.Moonriver]: [WNATIVE, DAI, USDC, WBTC].map((x) => x[ChainId.Moonriver]),
+    [ChainId.Avalanche]: [WNATIVE, DAI, USDC, WBTC, USDT].map((x) => x[ChainId.Avalanche]),
 }

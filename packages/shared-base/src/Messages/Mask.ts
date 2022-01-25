@@ -36,6 +36,7 @@ export interface MaskSettingsEvents {
     fantomNetworkTradeProviderSettings: TradeProvider
     celoNetworkTradeProviderSettings: TradeProvider
     moonriverNetworkTradeProviderSettings: TradeProvider
+    avalancheNetworkTradeProviderSettings: TradeProvider
     auroraNetworkTradeProviderSettings: TradeProvider
 }
 

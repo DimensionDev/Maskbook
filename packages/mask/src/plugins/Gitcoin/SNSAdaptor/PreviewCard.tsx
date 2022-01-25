@@ -79,7 +79,7 @@ export function PreviewCard(props: PreviewCardProps) {
     const { classes } = useStyles()
     const { value: grant, error, loading, retry } = useGrant(props.id)
 
-    //#region the donation dialog
+    // #region the donation dialog
     const postLink = usePostLink()
     const { setDialog: setDonationDialog } = useRemoteControlledDialog(PluginGitcoinMessages.donationDialogUpdated)
     const onDonate = useCallback(() => {
@@ -91,7 +91,7 @@ export function PreviewCard(props: PreviewCardProps) {
             postLink,
         })
     }, [grant, setDonationDialog])
-    //#endregion
+    // #endregion
 
     if (loading) return <Typography color="textPrimary">{t('loading')}</Typography>
     if (error)

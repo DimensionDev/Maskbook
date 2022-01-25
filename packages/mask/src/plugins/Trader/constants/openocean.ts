@@ -11,10 +11,10 @@ export const networkNames: Record<NetworkType, string> = {
     [NetworkType.Celo]: 'celo',
     [NetworkType.Fantom]: 'fantom',
     [NetworkType.Moonriver]: 'moonriver',
+    [NetworkType.Avalanche]: 'avalanche',
     [NetworkType.Aurora]: 'aurora',
     [NetworkType.Boba]: '',
     [NetworkType.Fuse]: '',
     [NetworkType.Metis]: '',
-    [NetworkType.Avalanche]: '',
     [NetworkType.Optimistic]: '',
 }
