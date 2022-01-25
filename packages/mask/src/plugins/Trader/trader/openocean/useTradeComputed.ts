@@ -18,7 +18,7 @@ export function useTradeComputed(
         const inputAmount = new BigNumber(trade.fromAmount).multipliedBy(pow10(inputToken.decimals)).integerValue()
         const executionPrice = new BigNumber(trade.resPricePerToToken)
         const outputAmount = new BigNumber(trade.resAmount).multipliedBy(pow10(outputToken.decimals)).integerValue()
-        const priceImpact = new BigNumber(trade.priceImpact)
+        const priceImpact = new BigNumber(trade.priceImpact ?? 0)
         return {
             strategy,
             inputToken,

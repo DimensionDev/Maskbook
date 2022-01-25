@@ -72,6 +72,7 @@ export function Trader(props: TraderProps) {
             dispatchTradeStore,
         ],
         allTradeComputed,
+        setTemporarySlippage,
     } = AllProviderTradeContext.useContainer()
     // #endregion
 
@@ -219,14 +220,17 @@ export function Trader(props: TraderProps) {
         gasConfig,
     )
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
+
     const onConfirmDialogConfirm = useCallback(async () => {
         setOpenConfirmDialog(false)
         await delay(100)
         await tradeCallback()
+        setTemporarySlippage(undefined)
     }, [tradeCallback])
 
     const onConfirmDialogClose = useCallback(() => {
         setOpenConfirmDialog(false)
+        setTemporarySlippage(undefined)
     }, [])
     // #endregion
 
@@ -357,6 +361,15 @@ export function Trader(props: TraderProps) {
             token: undefined,
         })
     })
+
+    // #region if trade has been changed, update the focused trade
+    useUpdateEffect(() => {
+        setFocusTrade((prev) => {
+            const target = allTradeComputed.find((x) => prev?.provider === x.provider)
+            return target ?? prev
+        })
+    }, [allTradeComputed])
+    // #endregion
 
     return (
         <div className={classes.root}>
