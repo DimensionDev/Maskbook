@@ -49,7 +49,7 @@ const AnimatePic = () => {
     if (!visitor.userId || visitor.userId === '$unknown' || hidden || !showMeta?.image) return null
     return (
         <div className={classes.root} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-            {showMeta.type !== ImageType.GLB ? (
+            {showMeta.type === ImageType.GLB ? (
                 <ModelNFT start={start} showMeta={showMeta} />
             ) : (
                 <NormalNFT start={start} infoShow={infoShow} showMeta={showMeta} handleClose={handleClose} />
