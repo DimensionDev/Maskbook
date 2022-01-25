@@ -61,6 +61,7 @@ export interface OpenSeaCustomAccount {
 
 export interface OpenSeaCollection extends OpenSeaFees {
     name: string
+    address: string
     slug: string
     editors: string[]
     hidden: boolean
