@@ -24,7 +24,10 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         bottom: -2,
     },
     networkIcon: {},
-    providerIcon: {},
+    providerIcon: {
+        border: `1px solid ${theme.palette.background.default}`,
+        borderRadius: '50%',
+    },
 }))
 
 interface WalletIconProps extends withClasses<'networkIcon' | 'providerIcon'> {
