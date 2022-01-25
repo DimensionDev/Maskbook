@@ -85,7 +85,7 @@ export function CollectionView(props: CollectionProps) {
         tokenId: buildTokenId(Number(project.projectId), activeStep - 1),
         contract: { id: project.contract.id },
     }
-    const maxSteps = Number(project.invocations)
+    const maxSteps = Number.parseInt(project.invocations, 10)
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1)
