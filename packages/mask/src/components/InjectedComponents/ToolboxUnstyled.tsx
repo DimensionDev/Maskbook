@@ -34,8 +34,10 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 
 const useStyles = makeStyles()((theme) => ({
-    font: {
+    title: {
         color: theme.palette.mode === 'dark' ? theme.palette.text.primary : 'rgb(15, 20, 25)',
+        display: 'flex',
+        alignItems: 'center',
     },
     paper: {
         borderRadius: 4,
@@ -135,7 +137,7 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
                                             justifyContent: 'space-between',
                                             alignItems: 'center',
                                         }}>
-                                        <Typography className={classes.font}>{title}</Typography>
+                                        <Typography className={classes.title}>{title}</Typography>
                                         {shouldDisplayChainIndicator ? (
                                             <FiberManualRecordIcon
                                                 className={classes.chainIcon}
@@ -164,15 +166,17 @@ function useToolbox() {
     const chainDetailed = useChainDetailed()
     const { Utils } = useWeb3State()
 
-    //#region recent pending transactions
-    const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)
-    //#endregion
+    // #region recent pending transactions
+    const { value: pendingTransactions = [] } = useRecentTransactions({
+        status: TransactionStatusType.NOT_DEPEND,
+    })
+    // #endregion
 
-    //#region Wallet
+    // #region Wallet
     const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
     )
-    //#endregion
+    // #endregion
 
     const isWalletValid = !!account && selectedWallet && chainIdValid
 
@@ -185,12 +189,12 @@ function useToolbox() {
             return Utils?.formatDomainName?.(domain) || Utils?.formatAddress?.(account, 4) || account
         return (
             <>
-                <span>
+                <span style={{ marginRight: 12 }}>
                     {t('plugin_wallet_pending_transactions', {
                         count: pendingTransactions.length,
                     })}
                 </span>
-                <CircularProgress sx={{ marginLeft: 1.5 }} thickness={6} size={20} color="inherit" />
+                <CircularProgress thickness={6} size={20} color="inherit" />
             </>
         )
     }

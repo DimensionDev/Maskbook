@@ -22,7 +22,7 @@
             "main": "#FF5555"
         },
         "divider": "#EFF3F4",
-        "divider2": "#CFD9DE",
+        "secondaryDivider": "#CFD9DE",
         "action": {
             "buttonHover": "#272C30",
             "bgHover": "#EDEFEF",
@@ -52,7 +52,7 @@
             "main": "#FF5555"
         },
         "divider": "#EFF3F4",
-        "divider2": "#CFD9DE",
+        "secondaryDivider": "#CFD9DE",
         "action": {
             "buttonHover": "#272C30",
             "bgHover": "#EDEFEF",
@@ -82,7 +82,7 @@
             "main": "#FF5555"
         },
         "divider": "#38444D",
-        "divider2": "#38444D",
+        "secondaryDivider": "#38444D",
         "action": {
             "buttonHover": "#D7DBDC",
             "bgHover": "#1D2933",
@@ -106,7 +106,7 @@
             "main": "#FF5555"
         },
         "divider": "#38444D",
-        "divider2": "#38444D",
+        "secondaryDivider": "#38444D",
         "background": {
             "default": "#18232E",
             "input": "#212D39",
@@ -142,7 +142,7 @@
             "main": "#FF5555"
         },
         "divider": "#2F3336",
-        "divider2": "#2F3336",
+        "secondaryDivider": "#2F3336",
         "action": {
             "buttonHover": "#D7dBDC",
             "bgHover": "#1A1D20",
@@ -166,7 +166,7 @@
             "main": "#FF5555"
         },
         "divider": "#2F3336",
-        "divider2": "#2F3336",
+        "secondaryDivider": "#2F3336",
         "background": {
             "default": "#15171A",
             "input": "#1D2023",

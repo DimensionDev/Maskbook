@@ -52,7 +52,7 @@ export async function* decrypt(options: DecryptOptions, io: DecryptIO): AsyncIte
         const author = _author.unwrapOr(None)
 
         // ! Try to decrypt this post as author (using ownersAESKeyEncrypted field)
-        //#region
+        // #region
         const hasAuthorLocalKey = author.some ? io.hasLocalKeyOf(author.val).catch(() => false) : Promise.resolve(false)
         if (ownersAESKeyEncrypted.ok) {
             try {
@@ -76,10 +76,10 @@ export async function* decrypt(options: DecryptOptions, io: DecryptIO): AsyncIte
             }
             // fall through
         }
-        //#endregion
+        // #endregion
 
         // ! Try to decrypt this post via ECDH
-        //#region
+        // #region
         const authorPublicKey = _authorPublicKey.unwrapOr(None)
         if (version === -37) {
             return yield* v37ECDHE(io, ephemeralPublicKey, iv, encrypted, options.signal)
@@ -94,7 +94,7 @@ export async function* decrypt(options: DecryptOptions, io: DecryptIO): AsyncIte
             if (!authorECPub.val) return yield new DecryptError(ErrorReasons.AuthorPublicKeyNotFound, undefined)
             return yield* v38To40StaticECDH(version, io, authorECPub.val, iv, encrypted, options.signal)
         }
-        //#endregion
+        // #endregion
     }
     unreachable(encryption)
 }
@@ -135,13 +135,6 @@ async function* v38To40StaticECDH(
     encrypted: Uint8Array,
     signal: AbortSignal | undefined,
 ): AsyncIterableIterator<DecryptProgress> {
-    // Cannot do ECDH if no private key
-    const derivedKeys = await Result.wrapAsync(() => io.deriveAESKey(authorECPub))
-    if (derivedKeys.err) return yield new DecryptError(ErrorReasons.PrivateKeyNotFound, derivedKeys.val)
-    if (derivedKeys.val.length === 0) return yield new DecryptError(ErrorReasons.PrivateKeyNotFound, undefined)
-
-    // ECDH key derived. Now start looking for post AES key.
-
     const postAESKeyIterator = {
         '-40': async function* (iv: Uint8Array) {
             const val = await io.queryPostKey_version40(iv)
@@ -155,7 +148,10 @@ async function* v38To40StaticECDH(
         version,
         io,
         postAESKeyIterator,
-        { type: 'static', derive: derivedKeys.val },
+        {
+            type: 'static-v38-or-older',
+            derive: (postKeyIV) => io.deriveAESKey_version38_or_older(authorECPub, postKeyIV),
+        },
         iv,
         encrypted,
     )
@@ -166,7 +162,10 @@ async function* decryptByECDH(
     io: DecryptIO,
     possiblePostKeyIterator: AsyncIterableIterator<DecryptEphemeralECDH_PostKey>,
     ecdhProvider:
-        | { type: 'static'; derive: AESCryptoKey[] }
+        | {
+              type: 'static-v38-or-older'
+              derive: (postKeyIV: Uint8Array) => Promise<readonly [key: AESCryptoKey, iv: Uint8Array][]>
+          }
         // it's optional argument because the ephemeralPublicKey maybe inlined in the post payload.
         | { type: 'ephemeral'; derive: (ephemeralPublicKey?: EC_Public_CryptoKey) => Promise<AESCryptoKey[]> },
     iv: Uint8Array,
@@ -177,10 +176,13 @@ async function* decryptByECDH(
         const { encryptedPostKey, postKeyIV, ephemeralPublicKey } = _
         // TODO: how to deal with signature?
         // TODO: what to do if provider throws?
-        const derivedKeys = type === 'static' ? derive : await derive(ephemeralPublicKey)
-        for (const derivedKey of derivedKeys) {
+        const derivedKeys =
+            type === 'static-v38-or-older'
+                ? await derive(postKeyIV)
+                : await derive(ephemeralPublicKey).then((aesArr) => aesArr.map((aes) => [aes, iv] as const))
+        for (const [derivedKey, derivedKeyNewIV] of derivedKeys) {
             const possiblePostKey = await andThenAsync(
-                decryptWithAES(AESAlgorithmEnum.A256GCM, derivedKey, postKeyIV, encryptedPostKey),
+                decryptWithAES(AESAlgorithmEnum.A256GCM, derivedKey, derivedKeyNewIV, encryptedPostKey),
                 (postKeyRaw) => Result.wrapAsync(() => importAESKeyFromJWKFromTextEncoder(postKeyRaw)),
             )
             if (possiblePostKey.err) continue

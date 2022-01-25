@@ -8,9 +8,6 @@ import {
 import type { MaskSettingsEvents } from '@masknet/shared-base'
 import {
     currentAccountSettings,
-    currentBalanceSettings,
-    currentBalancesSettings,
-    currentBlockNumberSettings,
     currentChainIdSettings,
     currentNonFungibleAssetDataProviderSettings,
     currentNetworkSettings,
@@ -25,8 +22,10 @@ import {
     binanceNetworkTradeProviderSettings,
     arbitrumNetworkTradeProviderSettings,
     xdaiNetworkTradeProviderSettings,
+    avalancheNetworkTradeProviderSettings,
     celoNetworkTradeProviderSettings,
     fantomNetworkTradeProviderSettings,
+    auroraNetworkTradeProviderSettings,
 } from '../plugins/Trader/settings'
 import type { InternalSettings } from './createSettings'
 
@@ -38,9 +37,6 @@ export function ToBeListened(): ToBeListedSettings {
         languageSettings,
         debugModeSetting,
         currentChainIdSettings,
-        currentBalanceSettings,
-        currentBalancesSettings,
-        currentBlockNumberSettings,
         currentTokenPricesSettings,
         currentDataProviderSettings,
         currentProviderSettings,
@@ -54,7 +50,9 @@ export function ToBeListened(): ToBeListedSettings {
         binanceNetworkTradeProviderSettings,
         arbitrumNetworkTradeProviderSettings,
         xdaiNetworkTradeProviderSettings,
+        avalancheNetworkTradeProviderSettings,
         celoNetworkTradeProviderSettings,
         fantomNetworkTradeProviderSettings,
+        auroraNetworkTradeProviderSettings,
     }
 }

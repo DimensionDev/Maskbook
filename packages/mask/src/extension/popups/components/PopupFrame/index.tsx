@@ -59,6 +59,7 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 500,
         color: theme.palette.primary.contrastText,
         textDecoration: 'none',
+        borderRadius: '4px 4px 0px 0px',
     },
     active: {
         color: theme.palette.primary.main,
@@ -119,7 +120,7 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
                         )}
                     </Box>
                     <Box className={classes.right}>
-                        {!!excludePersonaPath ? null : (
+                        {excludePersonaPath ? null : (
                             <NavLink to={PopupRoutes.Personas} className={classes.nav} activeClassName={classes.active}>
                                 {t('personas')}
                             </NavLink>

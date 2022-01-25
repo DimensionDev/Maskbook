@@ -1,5 +1,3 @@
-import Web3 from 'web3'
-import { isSameAddress } from '@masknet/web3-shared-evm'
 import { personalSign } from '../../../extension/background-script/EthereumService'
 import type { AvatarMetaDB } from '../types'
 import addSeconds from 'date-fns/addSeconds'
@@ -10,57 +8,29 @@ interface NFTRSSNode {
     nft: AvatarMetaDB
 }
 
-const cache = new Map<
-    string,
-    [Promise<{ type: string; nfts: Record<string, NFTRSSNode> | NFTRSSNode } | undefined>, number]
->()
+const cache = new Map<string, [Promise<NFTRSSNode | undefined>, number]>()
 
 export async function getNFTAvatarFromRSS(userId: string, address: string) {
     let v = cache.get(address)
     if (!v || Date.now() > v[1]) {
-        cache.set(address, [_getNFTAvatarFromRSS(address), addSeconds(Date.now(), 60).getTime()])
+        cache.set(address, [_getNFTAvatarFromRSS(userId, address), addSeconds(Date.now(), 60).getTime()])
     }
 
     v = cache.get(address)
     const result = await v?.[0]
-    if (!result) return
-    const { type, nfts } = result
-
-    const web3 = new Web3()
-    let nft: NFTRSSNode
-    if (type === 'NFTS') {
-        const data = nfts as Record<string, NFTRSSNode>
-        nft = data[userId]
-    } else {
-        nft = nfts as NFTRSSNode
-    }
-
-    const sig_address = web3.eth.accounts.recover(nft.nft.userId, nft.signature)
-    if (!isSameAddress(sig_address, address)) return
-    return nft.nft
+    return result?.nft
 }
 
-async function _getNFTAvatarFromRSS(
-    address: string,
-): Promise<{ type: string; nfts: Record<string, NFTRSSNode> | NFTRSSNode } | undefined> {
+async function _getNFTAvatarFromRSS(userId: string, address: string): Promise<NFTRSSNode | undefined> {
     const rss = RSS3.createRSS3(address, async (message: string) => {
         return personalSign(message, address)
     })
 
     const nfts = await RSS3.getFileData<Record<string, NFTRSSNode>>(rss, address, '_nfts')
     if (nfts) {
-        return {
-            type: 'NFTS',
-            nfts,
-        }
-    } else {
-        const nft = await RSS3.getFileData<NFTRSSNode>(rss, address, '_nft')
-        if (!nft) return
-        return {
-            type: 'NFT',
-            nfts: nft,
-        }
+        return nfts[userId]
     }
+    return RSS3.getFileData<NFTRSSNode>(rss, address, '_nft')
 }
 
 export async function saveNFTAvatarToRSS(address: string, nft: AvatarMetaDB, signature: string) {

@@ -92,11 +92,11 @@ export default function OptionsCard(props: OptionsViewProps) {
     const [unmeetCondition, setUnmeetCondition] = useState<PuzzleCondition[]>([])
     const [snackVisible, setSnackVisible] = useState<boolean>(false)
 
+    const { t } = useI18N()
     const { classes } = useOptionsStyles()
     const chainId = useChainId()
     const { address: account } = useContext(FindTrumanContext)
-    const web3 = useWeb3(false)
-    const { t } = useI18N()
+    const web3 = useWeb3()
     const ref = useRef<HTMLDivElement | null>(null)
     const parentRef = useRef<HTMLDivElement | null>(null)
 
@@ -157,7 +157,7 @@ export default function OptionsCard(props: OptionsViewProps) {
             const count = userStatus.count ? userStatus.count.find((e) => e.choice === index)?.value || 0 : 0
             const percent = (total > 0 ? (count * 100) / total : 0).toFixed(2)
 
-            return !!userStatus.count ? (
+            return userStatus.count ? (
                 <Card
                     sx={choice !== index ? { cursor: 'pointer' } : {}}
                     className={classes.progressOption}

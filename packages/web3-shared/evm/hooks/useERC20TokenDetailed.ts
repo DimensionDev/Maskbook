@@ -27,8 +27,8 @@ export function useFungibleTokensDetailed(listOfToken: Pick<FungibleToken, 'addr
     const chainId = _chainId ? _chainId : currentChainId
     const listOfAddress = useMemo(() => listOfToken.map((t) => t.address), [JSON.stringify(listOfToken)])
 
-    const erc20TokenContracts = useERC20TokenContracts(listOfAddress, true)
-    const erc20TokenBytes32Contracts = useERC20TokenBytes32Contracts(listOfAddress, true)
+    const erc20TokenContracts = useERC20TokenContracts(listOfAddress)
+    const erc20TokenBytes32Contracts = useERC20TokenBytes32Contracts(listOfAddress)
 
     return useAsyncRetry<FungibleTokenDetailed[]>(
         async () =>
@@ -80,7 +80,7 @@ async function getERC20TokenDetailed(
     return createERC20Token(
         chainId,
         address,
-        typeof decimals === 'string' ? Number.parseInt(decimals, 10) : decimals,
+        typeof decimals === 'string' ? Number.parseInt(decimals ? decimals : '0', 10) : decimals,
         parseStringOrBytes32(name, nameBytes32, 'Unknown Token'),
         parseStringOrBytes32(symbol, symbolBytes32, 'Unknown'),
     )

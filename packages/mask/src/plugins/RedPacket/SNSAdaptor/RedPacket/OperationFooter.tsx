@@ -29,11 +29,11 @@ export function OperationFooter({
     const account = useAccount()
     const chainIdValid = useChainIdValid()
 
-    //#region remote controlled select provider dialog
+    // #region remote controlled select provider dialog
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
-    //#endregion
+    // #endregion
 
     const handleShare = useCallback(() => {
         if (!shareLink) return
@@ -65,7 +65,6 @@ export function OperationFooter({
                 }
                 variant="contained"
                 size="large"
-                className={classes.button}
                 onClick={onClaimOrRefund}>
                 {canClaim
                     ? claimState.type === TransactionStateType.HASH
@@ -84,12 +83,7 @@ export function OperationFooter({
                 connectWallet: classes.connectWallet,
             }}>
             <Box className={classes.footer}>
-                <ActionButton
-                    variant="contained"
-                    fullWidth
-                    size="large"
-                    onClick={handleShare}
-                    className={classes.button}>
+                <ActionButton variant="contained" fullWidth size="large" onClick={handleShare}>
                     {t('share')}
                 </ActionButton>
                 <ObtainButton />

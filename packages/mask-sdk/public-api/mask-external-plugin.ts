@@ -42,7 +42,7 @@ declare namespace Mask {
          * @remarks Since API=0
          */
         readonly metadata?: Map<string, unknown>
-        //#region Typed event listener
+        // #region Typed event listener
         addEventListener<K extends keyof SocialNetworkEventMap>(
             type: K,
             listener: (this: Document, ev: SocialNetworkEventMap[K]) => any,
@@ -63,7 +63,7 @@ declare namespace Mask {
             listener: EventListenerOrEventListenerObject,
             options?: boolean | EventListenerOptions,
         ): void
-        //#endregion
+        // #endregion
     }
     /**
      * Events supported by SocialNetwork object.

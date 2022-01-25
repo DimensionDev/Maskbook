@@ -1,5 +1,5 @@
 import { unreachable } from '@dimensiondev/kit'
-import { leftShift, multipliedBy, rightShift } from '@masknet/web3-shared-base'
+import { leftShift, multipliedBy, rightShift, toFixed } from '@masknet/web3-shared-base'
 import {
     Asset,
     ChainId,
@@ -103,10 +103,10 @@ export async function getAssetsList(
     switch (provider) {
         case FungibleAssetProvider.ZERION:
             let result: Asset[] = []
-            //xdai-assets is not support
+            // xdai-assets is not support
             const scopes = network
                 ? [resolveZerionAssetsScopeName(network)]
-                : ['assets', 'bsc-assets', 'polygon-assets', 'arbitrum-assets']
+                : ['assets', 'bsc-assets', 'polygon-assets', 'arbitrum-assets', 'avalanche-assets']
             for (const scope of scopes) {
                 const { meta, payload } = await ZerionAPI.getAssetsList(address, scope)
                 if (meta.status !== 'ok') throw new Error('Fail to load assets.')
@@ -163,7 +163,7 @@ function formatAssetsFromDebank(data: WalletTokenRecord[], network?: NetworkType
                           ),
                 balance: rightShift(y.amount, y.decimals).toFixed(),
                 price: {
-                    [CurrencyType.USD]: new BigNumber(y.price ?? 0).toFixed(),
+                    [CurrencyType.USD]: toFixed(y.price),
                 },
                 value: {
                     [CurrencyType.USD]: multipliedBy(y.price ?? 0, y.amount).toFixed(),
@@ -180,7 +180,7 @@ function formatAssetsFromZerion(
     return data.map(({ asset, quantity }) => {
         const balance = leftShift(quantity, asset.decimals).toNumber()
         const value = (asset as ZerionAsset).price?.value ?? (asset as ZerionCovalentAsset).value ?? 0
-        const isNativeToken = (symbol: string) => ['ETH', 'BNB', 'MATIC', 'ARETH'].includes(symbol)
+        const isNativeToken = (symbol: string) => ['ETH', 'BNB', 'MATIC', 'ARETH', 'AETH'].includes(symbol)
 
         return {
             token: {

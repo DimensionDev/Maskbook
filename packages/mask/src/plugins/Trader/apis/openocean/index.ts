@@ -1,7 +1,8 @@
+import urlcat from 'urlcat'
+import { leftShift } from '@masknet/web3-shared-base'
+import { getOpenOceanConstants } from '@masknet/web3-shared-evm'
 import type { SwapOOData, SwapOORequest } from '../../types/openocean'
 import { OPENOCEAN_BASE_URL } from '../../constants/openocean'
-import { leftShift } from '@masknet/web3-shared-base'
-import urlcat from 'urlcat'
 
 export async function swapOO(request: SwapOORequest): Promise<SwapOOData> {
     const response = await fetch(
@@ -15,14 +16,16 @@ export async function swapOO(request: SwapOORequest): Promise<SwapOOData> {
             slippage: request.slippage,
             disabledDexIds: '',
             account: request.userAddr,
+            referrer: getOpenOceanConstants(request.chainId).REFERRER_ADDRESS?.toLowerCase(),
         }),
     )
     const payload = await response.json()
-    const { data, outAmount, minOutAmount, to, value } = payload
+    const { data, outAmount, minOutAmount, to, value, estimatedGas } = payload
     const _resAmount = leftShift(outAmount, request.toToken.decimals).toNumber()
     const _fromAmount = leftShift(request.fromAmount, request.fromToken.decimals).toNumber()
     return {
         data,
+        estimatedGas,
         targetApproveAddr: request.fromToken.address,
         targetDecimals: request.fromToken.decimals,
         resAmount: _resAmount,

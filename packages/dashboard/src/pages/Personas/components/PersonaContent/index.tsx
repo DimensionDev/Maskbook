@@ -1,7 +1,6 @@
 import { memo, useState } from 'react'
-import { ButtonGroupTabList } from '@masknet/theme'
+import { ButtonGroupTabList, makeStyles } from '@masknet/theme'
 import { Box, Tab } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { ContactsTable } from '../ContactsTable'
 import { PostHistory } from '../PostHistory'

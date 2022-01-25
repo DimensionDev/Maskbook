@@ -1,6 +1,4 @@
-import { noop } from 'lodash-unified'
 import type { Subscription } from 'use-subscription'
-import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import {
     ChainId,
     ERC1155TokenDetailed,
@@ -11,19 +9,12 @@ import {
     EthereumTokenType,
     NetworkType,
     Web3ProviderType,
-    SendOverrides,
-    RequestOptions,
     isInjectedProvider,
 } from '@masknet/web3-shared-evm'
+import { getProxyWebsocketInstance } from '@masknet/web3-shared-base'
 import { Services, Messages, PluginServices, PluginMessages } from '../API'
 
-const Web3Provider = createExternalProvider()
-
 export const Web3Context: Web3ProviderType = {
-    provider: {
-        getCurrentValue: () => Web3Provider,
-        subscribe: () => noop,
-    },
     allowTestnet: createSubscriptionFromAsync(Services.Settings.getWalletAllowTestChain, false, () => {
         return () => {}
     }),
@@ -44,17 +35,6 @@ export const Web3Context: Web3ProviderType = {
         Services.Settings.getTokenPrices,
         {},
         Messages.events.currentTokenPricesSettings.on,
-    ),
-    balance: createSubscriptionFromAsync(Services.Settings.getBalance, '0', Messages.events.currentBalanceSettings.on),
-    balances: createSubscriptionFromAsync(
-        Services.Settings.getBalances,
-        {},
-        Messages.events.currentBalancesSettings.on,
-    ),
-    blockNumber: createSubscriptionFromAsync(
-        Services.Settings.getBlockNumber,
-        0,
-        Messages.events.currentBlockNumberSettings.on,
     ),
     chainId: createSubscriptionFromAsync(
         Services.Settings.getChainId,
@@ -107,50 +87,17 @@ export const Web3Context: Web3ProviderType = {
     trustToken: PluginServices.Wallet.trustToken,
     blockToken: PluginServices.Wallet.blockToken,
 
+    request: Services.Ethereum.request,
+
     getAssetsList: PluginServices.Wallet.getAssetsList,
     getAssetsListNFT: PluginServices.Wallet.getAssetsListNFT,
     getCollectionsNFT: PluginServices.Wallet.getCollectionsNFT,
     getAddressNamesList: PluginServices.Wallet.getAddressNames,
     getTransactionList: PluginServices.Wallet.getTransactionList,
     fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
-}
-
-export function createExternalProvider() {
-    const send = (
-        payload: JsonRpcPayload,
-        callback: (error: Error | null, response?: JsonRpcResponse) => void,
-        overrides?: SendOverrides,
-        options?: RequestOptions,
-    ) => {
-        Services.Ethereum.request(
-            {
-                method: payload.method,
-                params: payload.params,
-            },
-            overrides,
-            options,
-        ).then(
-            (result) => {
-                callback(null, {
-                    jsonrpc: '2.0',
-                    id: payload.id as number,
-                    result,
-                })
-            },
-            (error) => {
-                callback(error)
-            },
-        )
-    }
-    return {
-        isMetaMask: false,
-        isStatus: true,
-        host: '',
-        path: '',
-        request: Services.Ethereum.request,
-        send,
-        sendAsync: send,
-    }
+    providerSocket: getProxyWebsocketInstance((info) =>
+        PluginMessages.Wallet.events.socketMessageUpdated.sendToAll(info),
+    ),
 }
 
 // double check
@@ -193,7 +140,7 @@ function createSubscriptionFromAsync<T>(
 function getEventTarget() {
     const event = new EventTarget()
     const EVENT = 'event'
-    let timer: NodeJS.Timeout
+    let timer: ReturnType<typeof setTimeout>
     function trigger() {
         clearTimeout(timer)
         // delay to update state to ensure that all settings to be synced globally

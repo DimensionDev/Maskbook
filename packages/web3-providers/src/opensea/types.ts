@@ -19,7 +19,7 @@ export interface Asset {
 export interface OpenSeaAssetContract extends OpenSeaFees {
     name: string
     address: string
-    type: string
+    asset_contract_type: string
     schema_name: string
     seller_fee_basis_points: number
     buyer_fee_basis_points: number
@@ -93,8 +93,8 @@ export interface OpenSeaResponse extends Asset {
     is_presale: boolean
     image_url: string
     image_preview_url: string
-    image_url_original: string
-    image_url_thumbnail: string
+    image_original_url: string
+    image_thumbnail_url: string
     opensea_link: string
     external_link: string
     traits: {
@@ -102,7 +102,7 @@ export interface OpenSeaResponse extends Asset {
         value: string
     }[]
     num_sales: number
-    last_sale: AssetEvent | null
+    last_sale: NonFungibleTokenAPI.AssetEvent | null
     background_color: string | null
     transfer_fee: string | null
     transfer_fee_payment_token: OpenSeaFungibleToken | null
@@ -112,15 +112,6 @@ export interface OpenSeaResponse extends Asset {
     }[]
     creator: OpenSeaCustomAccount
     endTime: string
-}
-
-interface AssetEvent {
-    event_type: string
-    event_timestamp: number
-    auction_type: string
-    total_price: string
-    transaction: Transaction | null
-    payment_token: OpenSeaFungibleToken | null
 }
 
 interface Transaction {

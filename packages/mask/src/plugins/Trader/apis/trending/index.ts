@@ -74,7 +74,7 @@ export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
     }
 }
 
-//#region check a specific coin is available on specific data provider
+// #region check a specific coin is available on specific data provider
 const coinNamespace = new Map<
     DataProvider,
     {
@@ -166,9 +166,9 @@ export async function getAvailableCoins(keyword: string, type: TagType, dataProv
     const ids = coinNamespace.get(dataProvider)?.supportedSymbolIdsMap
     return ids?.get(resolveAlias(keyword, dataProvider).toLowerCase()) ?? []
 }
-//#endregion
+// #endregion
 
-//#region get trending info
+// #region get trending info
 async function getCoinTrending(id: string, currency: Currency, dataProvider: DataProvider): Promise<Trending> {
     switch (dataProvider) {
         case DataProvider.COIN_GECKO:
@@ -334,18 +334,18 @@ async function getCoinTrending(id: string, currency: Currency, dataProvider: Dat
                 market: marketInfo,
                 coin: {
                     id,
-                    name: token?.name,
-                    symbol: token?.symbol,
-                    decimals: Number(token?.decimals),
-                    is_mirrored: isMirroredKeyword(token?.symbol ?? ''),
+                    name: token?.name || '',
+                    symbol: token?.symbol || '',
+                    decimals: Number(token?.decimals || '0'),
+                    is_mirrored: isMirroredKeyword(token?.symbol || ''),
                     blockchain_urls: [`https://info.uniswap.org/token/${id}`, `https://etherscan.io/address/${id}`],
-                    image_url: `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${id}/logo.png`,
+                    image_url: `https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/ethereum/assets/${id}/logo.png`,
                     platform_url: `https://info.uniswap.org/token/${id}`,
                     contract_address: id,
                 },
                 tickers: tickersInfo,
                 lastUpdated: '',
-            } as Trending
+            }
         default:
             unreachable(dataProvider)
     }
@@ -375,9 +375,9 @@ export async function getCoinTrendingByKeyword(
         dataProvider,
     )
 }
-//#endregion
+// #endregion
 
-//#region get price stats info
+// #region get price stats info
 export async function getPriceStats(
     id: string,
     currency: Currency,
@@ -430,4 +430,4 @@ export async function getPriceStats(
             return []
     }
 }
-//#endregion
+// #endregion

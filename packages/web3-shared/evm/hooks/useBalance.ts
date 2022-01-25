@@ -1,41 +1,18 @@
-import { first } from 'lodash-unified'
-import { useAsync } from 'react-use'
-import { useWeb3StateContext } from '../context'
-import { useWeb3 } from '../hooks'
-import { ChainId, ProviderType, NetworkType } from '../types'
-import { getChainIdFromNetworkType } from '../utils'
-import { getRPCConstants } from '../constants'
+import type { ChainId } from '../types'
+import { useAccount, useChainId } from '..'
+import { useWeb3 } from '.'
+import { useAsyncRetry } from 'react-use'
 
-/**
- * Get the current block number
- */
-export function useBalance() {
-    return useWeb3StateContext().balance
-}
+export function useBalance(expectedChainId?: ChainId, expectedAccount?: string) {
+    const defaultChainId = useChainId()
+    const defaultAccount = useAccount()
 
-export function useChainBalance(account: string, chainId: ChainId, providerType: ProviderType) {
-    const web3 = useWeb3(true, chainId)
-    return useAsync(async () => (account ? web3.eth.getBalance(account) : null), [account, chainId, providerType])
-}
+    const chainId = expectedChainId ?? defaultChainId
+    const account = expectedAccount ?? defaultAccount
 
-export function useChainBalanceList(account: string, providerType: ProviderType) {
-    const web3 = useWeb3(true)
-    const chainIdList = Object.keys(NetworkType).map((x) => getChainIdFromNetworkType(x as NetworkType))
+    const web3 = useWeb3({ chainId })
 
-    return useAsync(async () => {
-        if (!account) return null
-        const allRequest = chainIdList.map(async (chainId) => {
-            const { RPC } = getRPCConstants(chainId)
-            const providerURL = first(RPC)
-            let balance = '0'
-            if (providerURL) {
-                web3.setProvider(providerURL)
-                balance = await web3.eth.getBalance(account)
-            }
-            return { balance, chainId }
-        })
-        return (await Promise.allSettled(allRequest))
-            .map((x) => (x.status === 'fulfilled' ? x.value : undefined))
-            .filter((value) => value) as { balance: string; chainId: ChainId }[]
-    }, [account, providerType])
+    return useAsyncRetry(async () => {
+        return web3.eth.getBalance(account)
+    }, [web3, account])
 }
