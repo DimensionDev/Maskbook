@@ -1,21 +1,9 @@
-import { useMemo } from 'react'
+import type { HttpProvider } from 'web3-core'
+import { useSubscription } from 'use-subscription'
 import { useWeb3Context } from '../context'
-import type { RequestOptions, SendOverrides } from '../types'
-import { createExternalProvider } from '../utils'
 
-export function useWeb3Provider(overrides?: SendOverrides, options?: RequestOptions) {
-    const { request, getSendOverrides, getRequestOptions } = useWeb3Context()
-    return useMemo(() => {
-        return createExternalProvider(
-            request,
-            () => ({
-                ...getSendOverrides?.(),
-                ...overrides,
-            }),
-            () => ({
-                ...getRequestOptions?.(),
-                ...options,
-            }),
-        )
-    }, [request, getSendOverrides, getRequestOptions, JSON.stringify(overrides), JSON.stringify(options)])
+export function useWeb3Provider() {
+    const _ = useWeb3Context()
+    const provider = useSubscription(_.provider)
+    return provider as HttpProvider
 }

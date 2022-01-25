@@ -9,12 +9,6 @@ import * as helpers from './helpers'
 export * from './progress'
 export * from './watcher'
 
-export interface RecentTransactionOptions {
-    status?: TransactionStatusType
-    receipt?: boolean
-    computedPayload?: boolean
-}
-
 export interface RecentTransaction {
     at: Date
     hash: string
@@ -48,21 +42,12 @@ export async function clearRecentTransactions(chainId: ChainId, address: string)
     await database.clearRecentTransactions(chainId, address)
 }
 
-export async function getRecentTransaction(
-    chainId: ChainId,
-    address: string,
-    hash: string,
-    options?: RecentTransactionOptions,
-) {
-    const transactions = await getRecentTransactions(chainId, address, options)
+export async function getRecentTransaction(chainId: ChainId, address: string, hash: string) {
+    const transactions = await getRecentTransactions(chainId, address)
     return transactions.find((x) => x.hash === hash)
 }
 
-export async function getRecentTransactions(
-    chainId: ChainId,
-    address: string,
-    options?: RecentTransactionOptions,
-): Promise<RecentTransaction[]> {
+export async function getRecentTransactions(chainId: ChainId, address: string): Promise<RecentTransaction[]> {
     const transactions = await database.getRecentTransactions(chainId, address)
     const allSettled = await Promise.allSettled(
         transactions.map<Promise<RecentTransaction>>(
@@ -79,35 +64,22 @@ export async function getRecentTransactions(
                         watcher.watchTransaction(chainId, hashReplacement, payloadReplacement)
                 }
 
-                const tx: RecentTransaction = {
+                return {
                     at,
                     hash,
                     hashReplacement,
+                    status: helpers.getReceiptStatus(receipt),
+                    receipt,
                     payload,
                     payloadReplacement,
-                    status: helpers.getReceiptStatus(receipt),
-                    receipt: receipt,
+                    computedPayload: await getSendTransactionComputedPayload(payloadReplacement ?? payload),
                 }
-
-                if (!options?.receipt) {
-                    delete tx.receipt
-                }
-
-                if (options?.computedPayload) {
-                    tx.computedPayload = await getSendTransactionComputedPayload(payloadReplacement ?? payload)
-                }
-
-                return tx
             },
         ),
     )
 
     // compose result
     const transaction_: RecentTransaction[] = []
-    allSettled.forEach((x) =>
-        x.status === 'fulfilled' && (typeof options?.status !== 'undefined' ? x.value.status === options?.status : true)
-            ? transaction_.push(x.value)
-            : undefined,
-    )
+    allSettled.forEach((x) => (x.status === 'fulfilled' ? transaction_.push(x.value) : undefined))
     return transaction_
 }

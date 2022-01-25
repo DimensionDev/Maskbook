@@ -44,11 +44,11 @@ export interface ERC20 extends BaseContract {
     methods: {
         name(): NonPayableTransactionObject<string>
 
-        approve(spender: string, value: number | string | BN): NonPayableTransactionObject<boolean>
+        approve(_spender: string, _value: number | string | BN): NonPayableTransactionObject<boolean>
 
         totalSupply(): NonPayableTransactionObject<string>
 
-        transferFrom(from: string, to: string, value: number | string | BN): NonPayableTransactionObject<boolean>
+        transferFrom(_from: string, _to: string, _value: number | string | BN): NonPayableTransactionObject<boolean>
 
         decimals(): NonPayableTransactionObject<string>
 
@@ -56,7 +56,7 @@ export interface ERC20 extends BaseContract {
 
         symbol(): NonPayableTransactionObject<string>
 
-        transfer(to: string, value: number | string | BN): NonPayableTransactionObject<boolean>
+        transfer(_to: string, _value: number | string | BN): NonPayableTransactionObject<boolean>
 
         allowance(_owner: string, _spender: string): NonPayableTransactionObject<string>
     }

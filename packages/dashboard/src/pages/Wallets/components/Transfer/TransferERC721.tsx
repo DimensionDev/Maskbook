@@ -55,7 +55,6 @@ type FormInputs = {
 }
 
 const GAS_LIMIT = 30000
-
 export const TransferERC721 = memo(() => {
     const t = useDashboardI18N()
     const chainId = useChainId()

@@ -9,10 +9,9 @@ export function usePower(identifier: ProposalIdentifier) {
     const { payload: proposal } = useProposal(identifier.id)
 
     const account = useAccount()
-    const { value: blockNumber = 0 } = useBlockNumber()
+    const blockNumber = useBlockNumber()
     return useAsyncRetry(async () => {
         if (!account) return 0
-        if (!blockNumber) return 0
         return (
             await PluginSnapshotRPC.getScores(
                 proposal.snapshot,

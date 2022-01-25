@@ -8,10 +8,7 @@ function useWalletContext() {
     const chainDetailed = useChainDetailed()
     const erc20Tokens = useTrustedERC20Tokens()
     const { value: assets, loading } = useAssets(erc20Tokens)
-    const { value: transactions } = useRecentTransactions({
-        receipt: true,
-        computedPayload: true,
-    })
+    const { value: transactions } = useRecentTransactions()
     const [currentToken, setCurrentToken] = useState<Asset>()
     const [transaction, setTransaction] = useState<RecentTransaction | null>()
 

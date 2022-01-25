@@ -1,5 +1,5 @@
-import { useAsyncRetry } from 'react-use'
 import { useAccount } from './useAccount'
+import { useAsyncRetry } from 'react-use'
 import { useBalance } from './useBalance'
 
 /**
@@ -8,9 +8,9 @@ import { useBalance } from './useBalance'
  */
 export function useNativeTokenBalance() {
     const account = useAccount()
-    const { value: balance = '0' } = useBalance()
+    const balance = useBalance()
     return useAsyncRetry(async () => {
-        if (!account) return
+        if (!account) return undefined
         return balance
     }, [account, balance])
 }

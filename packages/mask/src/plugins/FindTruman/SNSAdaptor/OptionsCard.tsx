@@ -92,11 +92,11 @@ export default function OptionsCard(props: OptionsViewProps) {
     const [unmeetCondition, setUnmeetCondition] = useState<PuzzleCondition[]>([])
     const [snackVisible, setSnackVisible] = useState<boolean>(false)
 
-    const { t } = useI18N()
     const { classes } = useOptionsStyles()
     const chainId = useChainId()
     const { address: account } = useContext(FindTrumanContext)
-    const web3 = useWeb3()
+    const web3 = useWeb3(false)
+    const { t } = useI18N()
     const ref = useRef<HTMLDivElement | null>(null)
     const parentRef = useRef<HTMLDivElement | null>(null)
 

@@ -1,4 +1,4 @@
-import { SelectedIcon } from '@masknet/icons'
+import { SuccessIcon } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
 import type { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra'
 import { makeStyles } from '@masknet/theme'
@@ -122,7 +122,7 @@ export function PluginProviderRender({
                                                 <ImageIcon icon={network.icon} />
                                             )}
                                             {undeterminedNetworkID === network.ID && (
-                                                <SelectedIcon className={classes.checkedBadge} />
+                                                <SuccessIcon className={classes.checkedBadge} />
                                             )}
                                         </div>
                                     </ShadowRootTooltip>

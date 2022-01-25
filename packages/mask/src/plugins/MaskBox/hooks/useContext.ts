@@ -35,12 +35,13 @@ import { useMaskBoxPurchasedTokens } from './useMaskBoxPurchasedTokens'
 import { formatCountdown } from '../helpers/formatCountdown'
 import { useOpenBoxTransaction } from './useOpenBoxTransaction'
 import { useMaskBoxMetadata } from './useMaskBoxMetadata'
+import { useHeartBeat } from './useHeartBeat'
 import { useIsWhitelisted } from './useIsWhitelisted'
-import { isGreaterThanOrEqualTo, isLessThanOrEqualTo, isZero, multipliedBy, useBeat } from '@masknet/web3-shared-base'
+import { isGreaterThanOrEqualTo, isLessThanOrEqualTo, isZero, multipliedBy } from '@masknet/web3-shared-base'
 
 function useContext(initialState?: { boxId: string }) {
     const now = new Date()
-    const beat = useBeat()
+    const heartBeat = useHeartBeat()
     const account = useAccount()
     const chainId = useChainId()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(ChainId.Mainnet)
@@ -147,7 +148,7 @@ function useContext(initialState?: { boxId: string }) {
         if (boxInfo.startAt > now || !boxInfo.started) return BoxState.NOT_READY
         if (boxInfo.endAt < now || maskBoxStatus?.expired) return BoxState.EXPIRED
         return BoxState.READY
-    }, [boxInfo, loadingBoxInfo, errorBoxInfo, maskBoxInfo, loadingMaskBoxInfo, errorMaskBoxInfo, beat])
+    }, [boxInfo, loadingBoxInfo, errorBoxInfo, maskBoxInfo, loadingMaskBoxInfo, errorMaskBoxInfo, heartBeat])
 
     const isWhitelisted = useIsWhitelisted(boxInfo?.qualificationAddress, account)
     const isQualifiedByContract =
@@ -188,7 +189,7 @@ function useContext(initialState?: { boxId: string }) {
             default:
                 unreachable(boxState)
         }
-    }, [boxState, boxInfo?.startAt, beat])
+    }, [boxState, boxInfo?.startAt, heartBeat])
 
     useEffect(() => {
         if (!boxInfo || boxInfo.started) return
@@ -196,7 +197,7 @@ function useContext(initialState?: { boxId: string }) {
         if (boxInfo.startAt < now) {
             retryMaskBoxStatus()
         }
-    }, [boxInfo, beat])
+    }, [boxInfo, heartBeat])
 
     // #endregion
 
@@ -257,7 +258,7 @@ function useContext(initialState?: { boxId: string }) {
         paymentTokenDetailed,
         openBoxTransactionOverrides,
     )
-    const { value: erc20Allowance, retry: retryAllowance } = useERC20TokenAllowance(
+    const { value: erc20Allowance } = useERC20TokenAllowance(
         isNativeToken ? undefined : paymentTokenAddress,
         MASK_BOX_CONTRACT_ADDRESS,
     )
@@ -323,7 +324,6 @@ function useContext(initialState?: { boxId: string }) {
         setOpenBoxTransactionOverrides,
 
         // retry callbacks
-        retryAllowance,
         retryMaskBoxInfo,
         retryMaskBoxStatus,
         retryBoxInfo,

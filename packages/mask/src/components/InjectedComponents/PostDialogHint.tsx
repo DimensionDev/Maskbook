@@ -10,7 +10,6 @@ import { useMyIdentities } from '../DataSource/useActivatedUI'
 import { currentSetupGuideStatus } from '../../settings/settings'
 import { activatedSocialNetworkUI } from '../../social-network'
 import classNames from 'classnames'
-import GuideStep from '../GuideStep'
 
 interface TooltipConfigProps {
     placement?: 'bottom' | 'top'
@@ -43,28 +42,25 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const EntryIconButton = memo((props: PostDialogHintUIProps) => {
-    const { t } = useI18N()
     const { size, tooltip } = props
     const classes = useStylesExtends(useStyles(), props)
 
     return (
-        <GuideStep step={3} total={3} tip={t('user_guide_tip_3')} onComplete={props.onHintButtonClicked}>
-            <Tooltip
-                title="Mask Network"
-                classes={{ tooltip: classes.tooltip }}
-                placement={tooltip?.placement}
-                disableHoverListener={tooltip?.disabled}
-                PopperProps={{
-                    disablePortal: true,
-                }}>
-                <IconButton
-                    size="large"
-                    className={classNames(classes.button, classes.iconButton)}
-                    onClick={props.onHintButtonClicked}>
-                    <MaskSharpIcon size={size} color="primary" />
-                </IconButton>
-            </Tooltip>
-        </GuideStep>
+        <Tooltip
+            title="Mask Network"
+            classes={{ tooltip: classes.tooltip }}
+            placement={tooltip?.placement}
+            disableHoverListener={tooltip?.disabled}
+            PopperProps={{
+                disablePortal: true,
+            }}>
+            <IconButton
+                size="large"
+                className={classNames(classes.button, classes.iconButton)}
+                onClick={props.onHintButtonClicked}>
+                <MaskSharpIcon size={size} color="primary" />
+            </IconButton>
+        </Tooltip>
     )
 })
 

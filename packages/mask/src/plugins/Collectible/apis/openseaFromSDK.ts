@@ -1,26 +1,37 @@
 import { OpenSeaPort } from 'opensea-js'
-import { ChainId, createExternalProvider } from '@masknet/web3-shared-evm'
-import { request } from '../../../extension/background-script/EthereumService'
+import type { ChainId } from '@masknet/web3-shared-evm'
+import { request, requestSend } from '../../../extension/background-script/EthereumService'
 import { resolveOpenSeaNetwork } from '../pipes'
 import { OpenSeaAPI_Key, ReferrerAddress } from '../constants'
+import { currentChainIdSettings } from '../../Wallet/settings'
+
+function createExternalProvider() {
+    return {
+        isMetaMask: false,
+        isStatus: true,
+        host: '',
+        path: '',
+        sendAsync: requestSend,
+        send: requestSend,
+        request,
+    }
+}
 
 function createOpenSeaPortChain(chainId: ChainId.Mainnet | ChainId.Rinkeby) {
-    return new OpenSeaPort(
-        createExternalProvider(request),
-        {
-            networkName: resolveOpenSeaNetwork(chainId),
-            apiKey: OpenSeaAPI_Key,
-        },
-        console.log,
-    )
+    const config = {
+        networkName: resolveOpenSeaNetwork(chainId),
+        apiKey: OpenSeaAPI_Key,
+    }
+    return new OpenSeaPort(createExternalProvider(), config, console.log)
 }
 
 function createOpenSeaPort(chainId?: ChainId) {
-    return createOpenSeaPortChain(chainId === ChainId.Rinkeby ? ChainId.Rinkeby : ChainId.Mainnet)
+    return createOpenSeaPortChain(chainId ?? currentChainIdSettings.value)
 }
 
-export async function getAssetFromSDK(tokenAddress: string, tokenId: string) {
-    return createOpenSeaPort().api.getAsset({ tokenAddress, tokenId })
+export async function getAssetFromSDK(tokenAddress: string, tokenId: string, chainId?: ChainId) {
+    chainId = chainId ?? currentChainIdSettings.value
+    return createOpenSeaPort(chainId).api.getAsset({ tokenAddress, tokenId })
 }
 
 export async function createBuyOrder(payload: Parameters<OpenSeaPort['createBuyOrder']>[0]) {

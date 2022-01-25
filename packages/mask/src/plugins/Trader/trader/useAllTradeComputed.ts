@@ -178,30 +178,6 @@ export function useAllTradeComputed(
     const bancor = useBancorTradeComputed(bancor_.value ?? null, TradeStrategy.ExactIn, inputToken, outputToken)
     const bancorSwapEstimateGas = useBancorTradeGasLimit(bancor)
 
-    // traderjoe
-    const traderJoe_ = useUniswapV2Trade(
-        TradeProvider.TRADERJOE,
-        TradeStrategy.ExactIn,
-        inputAmount_,
-        '0',
-        tradeProviders.some((x) => x === TradeProvider.TRADERJOE) ? inputToken : undefined,
-        tradeProviders.some((x) => x === TradeProvider.TRADERJOE) ? outputToken : undefined,
-    )
-    const traderJoe = useUniswapTradeComputed(traderJoe_.value, inputToken, outputToken)
-    const traderJoeEstimateGas = useUniswapTradeGasLimit(traderJoe, TradeProvider.TRADERJOE)
-
-    // pangolindex
-    const pangolindex_ = useUniswapV2Trade(
-        TradeProvider.PANGOLIN,
-        TradeStrategy.ExactIn,
-        inputAmount_,
-        '0',
-        tradeProviders.some((x) => x === TradeProvider.PANGOLIN) ? inputToken : undefined,
-        tradeProviders.some((x) => x === TradeProvider.PANGOLIN) ? outputToken : undefined,
-    )
-    const pangolindex = useUniswapTradeComputed(pangolindex_.value, inputToken, outputToken)
-    const pangolinEstimateGas = useUniswapTradeGasLimit(pangolindex, TradeProvider.PANGOLIN)
-
     // openocean
     const openocean_ = useOpenOceanTrade(TradeStrategy.ExactIn, inputAmount_, '0', inputToken, outputToken)
     const openocean = useOpenOceanTradeComputed(
@@ -247,8 +223,6 @@ export function useAllTradeComputed(
         { provider: TradeProvider.BALANCER, ...balancer_, value: balancer, gas: balancerSwapEstimateGas },
         { provider: TradeProvider.DODO, ...dodo_, value: dodo, gas: dodoSwapEstimateGas },
         { provider: TradeProvider.BANCOR, ...bancor_, value: bancor, gas: bancorSwapEstimateGas },
-        { provider: TradeProvider.TRADERJOE, ...traderJoe_, value: traderJoe, gas: traderJoeEstimateGas },
-        { provider: TradeProvider.PANGOLIN, ...pangolindex_, value: pangolindex, gas: pangolinEstimateGas },
         { provider: TradeProvider.OPENOCEAN, ...openocean_, value: openocean, gas: openoceanSwapEstimateGas },
         { provider: TradeProvider.WANNASWAP, ...wannaswap_, value: wannaswap, gas: wannaSwapEstimateGas },
         { provider: TradeProvider.TRISOLARIS, ...trisolaris_, value: trisolaris, gas: trisolarisEstimateGas },

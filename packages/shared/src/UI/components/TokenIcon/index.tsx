@@ -6,6 +6,7 @@ import {
     getChainDetailed,
     getTokenConstants,
     isSameAddress,
+    useBlockie,
     useChainId,
     useTokenAssetBaseURLConstants,
 } from '@masknet/web3-shared-evm'
@@ -55,6 +56,7 @@ export function TokenIcon(props: TokenIconProps) {
     const { TOKEN_ASSET_BASE_URI } = useTokenAssetBaseURLConstants(chainId)
     const fallbackLogos = getFallbackIcons(address, TOKEN_ASSET_BASE_URI ?? [])
 
+    const tokenBlockie = useBlockie(address)
     const images = _logoURI
         ? Array.isArray(_logoURI)
             ? [..._logoURI, ...fallbackLogos]
@@ -64,7 +66,7 @@ export function TokenIcon(props: TokenIconProps) {
 
     return (
         <TokenIconUI
-            logoURL={loading ? undefined : trustedLogoURI}
+            logoURL={loading || trustedLogoURI ? trustedLogoURI : tokenBlockie}
             AvatarProps={AvatarProps}
             classes={classes}
             name={name}

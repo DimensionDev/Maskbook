@@ -19,6 +19,9 @@ export function useWeb3State() {
     const _ = useWeb3Context()
     const account = useSubscription(_.account)
     const allowTestnet = useSubscription(_.allowTestnet)
+    const balance = useSubscription(_.balance)
+    const balances = useSubscription(_.balances)
+    const blockNumber = useSubscription(_.blockNumber)
     const tokenPrices = useSubscription(_.tokenPrices)
     const networkType = useSubscription(_.networkType)
     const providerType = useSubscription(_.providerType)
@@ -31,9 +34,12 @@ export function useWeb3State() {
     const erc1155Tokens = useSubscription(_.erc1155Tokens)
     const portfolioProvider = useSubscription(_.portfolioProvider)
     return {
+        balances,
         allowTestnet,
         account,
         tokenPrices,
+        balance,
+        blockNumber,
         networkType,
         providerType,
         walletPrimary,

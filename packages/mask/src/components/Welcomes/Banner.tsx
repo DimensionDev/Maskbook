@@ -4,11 +4,13 @@ import { IconButton } from '@mui/material'
 import { useLastRecognizedIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import Services from '../../extension/service'
 import { activatedSocialNetworkUI } from '../../social-network'
+import { useValueRef } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { MaskSharpIcon } from '../../resources/MaskIcon'
 import { useMount } from 'react-use'
-import { hasNativeAPI, nativeAPI } from '../../utils'
-import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
+import { hasNativeAPI, nativeAPI, useI18N } from '../../utils'
+import GuideStep from '../GuideStep'
+import { userGuideStatus } from '../../settings/settings'
 
 interface BannerUIProps extends withClasses<never | 'header' | 'content' | 'actions' | 'buttonText'> {
     description?: string
@@ -35,11 +37,14 @@ const useStyles = makeStyles()({
 
 export function BannerUI(props: BannerUIProps) {
     const classes = useStylesExtends(useStyles(), props)
+    const { t } = useI18N()
 
     return props.nextStep === 'hidden' ? null : (
-        <IconButton size="large" className={classes.buttonText} onClick={props.nextStep.onClick}>
-            <MaskSharpIcon color="primary" />
-        </IconButton>
+        <GuideStep step={2} total={2} tip={t('user_guide_tip_2')} disabled={props.description === 'decryptPostFailed'}>
+            <IconButton size="large" className={classes.buttonText} onClick={props.nextStep.onClick}>
+                <MaskSharpIcon color="primary" />
+            </IconButton>
+        </GuideStep>
     )
 }
 
@@ -47,11 +52,11 @@ export interface BannerProps extends Partial<BannerUIProps> {}
 
 export function Banner(props: BannerProps) {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
-    const personaConnectStatus = usePersonaConnectStatus()
     const { nextStep } = props
     const networkIdentifier = activatedSocialNetworkUI.networkIdentifier
     const identities = useMyIdentities()
     const [value, onChange] = useState('')
+    const userGuideVal = useValueRef(userGuideStatus[networkIdentifier])
     const defaultNextStep = useCallback(() => {
         if (nextStep === 'hidden') return
         if (!networkIdentifier) {
@@ -60,11 +65,7 @@ export function Banner(props: BannerProps) {
             return
         }
 
-        hasNativeAPI
-            ? nativeAPI?.api.misc_openDashboardView()
-            : Services.Welcome.openOptionsPage(
-                  personaConnectStatus.hasPersona ? DashboardRoutes.Personas : DashboardRoutes.Setup,
-              )
+        hasNativeAPI ? nativeAPI?.api.misc_openDashboardView() : Services.Welcome.openOptionsPage(DashboardRoutes.Setup)
     }, [networkIdentifier, nextStep])
     const defaultUserName = networkIdentifier
         ? {
@@ -78,7 +79,7 @@ export function Banner(props: BannerProps) {
     const [mounted, setMounted] = useState(false)
     useMount(() => setMounted(true))
 
-    return identities.length === 0 && mounted ? (
+    return ((userGuideVal && userGuideVal !== 'completed') || identities.length === 0) && mounted ? (
         <BannerUI
             {...props}
             username={props.username ?? defaultUserName}

@@ -12,7 +12,6 @@ export const graphEndpointKeyVal = {
     [ChainId.Rinkeby]: 'https://api.thegraph.com/subgraphs/name/unlock-protocol/unlock-rinkeby',
     [ChainId.xDai]: 'https://api.thegraph.com/subgraphs/name/unlock-protocol/xdai',
     [ChainId.Matic]: 'https://api.thegraph.com/subgraphs/name/unlock-protocol/polygon',
-    [ChainId.Avalanche]: '',
 }
 
 export const keyServerEndpoint = 'https://unlock.r2d2.to/'

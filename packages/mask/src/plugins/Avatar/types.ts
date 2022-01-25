@@ -12,7 +12,6 @@ export interface NFT {
     name: string
     image: string
     owner: string
-    slug: string
 }
 
 export interface NFTVerified {

@@ -14,10 +14,8 @@ export function useVotes(identifier: ProposalIdentifier) {
     return useSuspense<VoteItem[], [ProposalIdentifier]>(identifier.id, [identifier], cache, Suspender)
 }
 async function Suspender(identifier: ProposalIdentifier) {
-    const { value: blockNumber = 0 } = useBlockNumber()
+    const blockNumber = useBlockNumber()
     const { payload: proposal } = useProposal(identifier.id)
-
-    if (!blockNumber) return []
 
     const voters = proposal.votes.map((v) => v.voter)
     const scores = await PluginSnapshotRPC.getScores(

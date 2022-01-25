@@ -1,4 +1,3 @@
-import Ens from 'ethjs-ens'
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import {
     ChainId,
@@ -23,9 +22,8 @@ import {
     resolveDomainLink,
     formatDomainName,
     isZeroAddress,
-    createWeb3,
-    createExternalProvider,
 } from '@masknet/web3-shared-evm'
+import Ens from 'ethjs-ens'
 import { getStorage } from '../../storage'
 import { getFungibleAssetsFn, getNonFungibleTokenFn } from './getAssetsFn'
 
@@ -38,6 +36,8 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
         allowTestnet: context.allowTestnet,
         chainId: context.chainId,
         account: context.account,
+        balance: context.balance,
+        blockNumber: context.blockNumber,
         networkType: context.networkType,
         providerType: context.providerType,
         walletPrimary: context.walletPrimary,
@@ -51,6 +51,7 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
         lookup: async (domain: string) => {
             const chainId = context.chainId.getCurrentValue()
             const network = context.networkType.getCurrentValue()
+            const provider = context.provider.getCurrentValue()
 
             // Only support Ethereum on evm
             if (network !== NetworkType.Ethereum) return undefined
@@ -61,7 +62,7 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
             if (cacheAddress && isValidAddress(cacheAddress)) return cacheAddress
 
             const address = await new Ens({
-                provider: createExternalProvider(context.request, context.getSendOverrides, context.getRequestOptions),
+                provider,
                 network: chainId,
             }).lookup(domain)
 
@@ -84,6 +85,7 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
             if (!isValidAddress(address)) return undefined
             const chainId = context.chainId.getCurrentValue()
             const network = context.networkType.getCurrentValue()
+            const provider = context.provider.getCurrentValue()
 
             // Only support Ethereum on evm
             if (network !== NetworkType.Ethereum) return undefined
@@ -93,7 +95,7 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
             if (cacheDomain) return cacheDomain
 
             const domain = await new Ens({
-                provider: createExternalProvider(context.request, context.getSendOverrides, context.getRequestOptions),
+                provider,
                 network: chainId,
             }).reverse(address)
 
@@ -114,19 +116,6 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
         },
     }
     state.Utils = state.Utils ?? {
-        getLatestBalance: (chainId: ChainId, account: string) => {
-            const web3 = createWeb3(context.request, () => ({
-                chainId,
-            }))
-            return web3.eth.getBalance(account)
-        },
-        getLatestBlockNumber: (chainId: ChainId) => {
-            const web3 = createWeb3(context.request, () => ({
-                chainId,
-            }))
-            return web3.eth.getBlockNumber()
-        },
-
         getChainDetailed,
         isChainIdValid,
 
@@ -144,7 +133,7 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
         isValidDomain,
         resolveDomainLink,
         formatDomainName,
-        resolveNonFungibleTokenLink: (chainId: ChainId, address: string, tokenId: string) =>
+        resolveNonFungibleTokenLink: (chainId: number, address: string, tokenId: string) =>
             resolveCollectibleLink(chainId as ChainId, NonFungibleAssetProvider.OPENSEA, {
                 contractDetailed: { address: address },
                 tokenId: tokenId,

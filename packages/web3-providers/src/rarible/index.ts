@@ -124,7 +124,6 @@ function createNFTAsset(asset: RaribleNFTItemMapResponse, chainId: ChainId): Non
         response_: asset,
         token_id: asset.tokenId,
         safelist_request_status: '',
-        last_sale: null,
     }
 }
 

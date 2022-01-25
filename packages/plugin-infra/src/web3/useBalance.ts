@@ -1,16 +1,9 @@
-import { useAsyncRetry } from 'react-use'
-import { useAccount, useChainId } from '.'
-import { NetworkPluginID, useWeb3State } from '..'
+import type { NetworkPluginID } from '..'
+import { usePluginWeb3StateContext } from './Context'
 
-export function useBalance(expectedChainId?: number, expectedAccount?: string, pluginID?: NetworkPluginID) {
-    const { Utils } = useWeb3State()
-    const defaultChainId = useChainId(pluginID)
-    const defaultAccount = useAccount(pluginID)
-
-    const chainId = expectedChainId ?? defaultChainId
-    const account = expectedAccount ?? defaultAccount
-
-    return useAsyncRetry(async () => {
-        return Utils?.getLatestBalance?.(chainId, account) ?? '0'
-    }, [account, chainId, Utils])
+/**
+ * Get the current block number
+ */
+export function useBalance(pluginID?: NetworkPluginID) {
+    return usePluginWeb3StateContext(pluginID).balance
 }

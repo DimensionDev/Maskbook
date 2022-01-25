@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from 'react'
+import { memo, useEffect, useMemo, useState } from 'react'
 import { getERC20TokenListItem } from './ERC20TokenListItem'
 import { uniqBy } from 'lodash-unified'
 import {
@@ -101,8 +101,12 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
         chainId,
     )
 
+    useEffect(() => {
+        if (assetsError) retryLoadAsset()
+    }, [assetsError])
+
     const renderAssets =
-        !account || !!assetsError || assetsLoading || searchedTokenLoading
+        !account || assetsError || assetsLoading || searchedTokenLoading
             ? [...renderTokens]
                   .sort(makeSortTokenFn(chainId, { isMaskBoost: true }))
                   .map((token) => ({ token: token, balance: null }))

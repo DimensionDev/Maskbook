@@ -1,4 +1,4 @@
-import { first, uniqBy } from 'lodash-unified'
+import { first } from 'lodash-unified'
 import type { TransactionReceipt } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { WalletMessages } from '@masknet/plugin-wallet'
@@ -57,21 +57,15 @@ class Storage {
     }
 
     public getWatchedAccounts(chainId: ChainId) {
-        return uniqBy(
-            this.getWatched(chainId)
-                .map(([_, transaction]) => helpers.getPayloadFrom(transaction.payload))
-                .filter(Boolean) as string[],
-            (x) => x.toLowerCase(),
-        )
+        return this.getWatched(chainId)
+            .map(([_, transaction]) => helpers.getPayloadFrom(transaction.payload))
+            .filter(Boolean) as string[]
     }
 
     public getUnwatchedAccounts(chainId: ChainId) {
-        return uniqBy(
-            this.getUnwatched(chainId)
-                .map(([_, transaction]) => helpers.getPayloadFrom(transaction.payload))
-                .filter(Boolean) as string[],
-            (x) => x.toLowerCase(),
-        )
+        return this.getUnwatched(chainId)
+            .map(([_, transaction]) => helpers.getPayloadFrom(transaction.payload))
+            .filter(Boolean) as string[]
     }
 }
 

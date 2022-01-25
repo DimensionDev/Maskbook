@@ -1,5 +1,6 @@
 export * from './addressBook'
 export * from './account'
+export * from './chain'
 export * from './assets'
 export * from './transactions'
 export * from './transaction'

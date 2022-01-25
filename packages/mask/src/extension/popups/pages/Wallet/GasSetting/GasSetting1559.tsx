@@ -113,9 +113,9 @@ const useStyles = makeStyles()((theme) => ({
 const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 
 export const GasSetting1559 = memo(() => {
-    const { t } = useI18N()
     const { classes } = useStyles()
     const web3 = useWeb3()
+    const { t } = useI18N()
     const chainId = useChainId()
     const history = useHistory()
     const [selected, setOption] = useState<number | null>(null)

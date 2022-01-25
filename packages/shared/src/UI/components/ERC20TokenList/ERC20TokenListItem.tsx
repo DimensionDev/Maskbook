@@ -18,7 +18,6 @@ import { useCallback, useMemo } from 'react'
 import { LoadingIcon } from '@masknet/icons'
 import { useSharedI18N } from '../../../locales'
 import { LoadingAnimation } from '../LoadingAnimation'
-import BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -62,7 +61,7 @@ const useStyles = makeStyles()((theme) => ({
             left: 0,
             width: '100%',
             height: '100%',
-            background: 'transparent',
+            background: 'rgba(250, 250, 250, 0.3)',
         },
     },
     importButton: {
@@ -115,17 +114,7 @@ export const getERC20TokenListItem =
 
         const action = useMemo(() => {
             return !isNotAdded || isAdded || (info.inList && info.from === 'search') ? (
-                data.balance === null ? null : (
-                    <span>
-                        {loadingAsset ? (
-                            <LoadingAnimation />
-                        ) : (
-                            Number.parseFloat(
-                                new BigNumber(formatBalance(data.balance ?? 0, token.decimals, 6)).toFixed(6),
-                            )
-                        )}
-                    </span>
-                )
+                <span>{loadingAsset ? <LoadingAnimation /> : formatBalance(data.balance ?? 0, token.decimals, 6)}</span>
             ) : (
                 <MaskLoadingButton
                     variant="contained"

@@ -33,7 +33,7 @@ export function useTradeCallback(
     gasConfig?: GasOptionConfig,
 ) {
     const { targetChainId } = TargetChainIdContext.useContainer()
-    const web3 = useWeb3({ chainId: targetChainId })
+    const web3 = useWeb3(false, targetChainId)
     const account = useAccount()
     const tradeParameters = useTradeParameters(trade, tradeProvider)
 

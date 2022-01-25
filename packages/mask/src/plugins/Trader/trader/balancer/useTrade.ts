@@ -1,5 +1,10 @@
-import { useDoubleBlockBeatRetry } from '@masknet/plugin-infra'
-import { FungibleTokenDetailed, isNativeTokenAddress, useTokenConstants } from '@masknet/web3-shared-evm'
+import {
+    FungibleTokenDetailed,
+    isNativeTokenAddress,
+    useBlockNumber,
+    useTokenConstants,
+} from '@masknet/web3-shared-evm'
+import { useAsyncRetry } from 'react-use'
 import { BALANCER_SWAP_TYPE } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
 import { SwapResponse, TradeStrategy } from '../../types'
@@ -12,10 +17,11 @@ export function useTrade(
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
 ) {
+    const blockNumber = useBlockNumber()
     const { targetChainId } = TargetChainIdContext.useContainer()
     const { WNATIVE_ADDRESS } = useTokenConstants(targetChainId)
 
-    return useDoubleBlockBeatRetry(async () => {
+    return useAsyncRetry(async () => {
         if (!WNATIVE_ADDRESS) return null
         if (!inputToken || !outputToken) return null
         const isExactIn = strategy === TradeStrategy.ExactIn
@@ -34,5 +40,14 @@ export function useTrade(
         // no pool found
         if (!swaps[0].length) return null
         return { swaps, routes } as SwapResponse
-    }, [WNATIVE_ADDRESS, strategy, targetChainId, inputAmount, outputAmount, inputToken?.address, outputToken?.address])
+    }, [
+        WNATIVE_ADDRESS,
+        strategy,
+        targetChainId,
+        inputAmount,
+        outputAmount,
+        inputToken?.address,
+        outputToken?.address,
+        blockNumber, // refresh api each block
+    ])
 }

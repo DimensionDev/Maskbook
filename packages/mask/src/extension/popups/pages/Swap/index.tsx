@@ -64,9 +64,7 @@ export default function SwapPage() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const chainId = useChainId()
-    const { value: pendingTransactions = [] } = useRecentTransactions({
-        status: TransactionStatusType.NOT_DEPEND,
-    })
+    const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)
     const wallet = useWallet()
     const openPopupsWindow = useCallback(() => {
         Services.Helper.openPopupWindow(PopupRoutes.SelectWallet, {

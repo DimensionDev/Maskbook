@@ -71,7 +71,7 @@ export async function getAddressNames(identity: {
         ENS.fetchAddressNamesByTwitterId(twitterId?.toLowerCase() ?? '').then(
             (result) => result.find((x) => x.owner)?.owner ?? '',
         ),
-        PluginNFTAvatarRPC.getAddress(twitterId ?? '', identifier.network),
+        PluginNFTAvatarRPC.getAddress(twitterId ?? ''),
     ])
 
     const getSettledAddress = (result: PromiseSettledResult<string>) => {
