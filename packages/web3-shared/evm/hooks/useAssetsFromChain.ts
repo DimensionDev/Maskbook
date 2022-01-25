@@ -1,20 +1,13 @@
+import { useMemo } from 'react'
 import { first } from 'lodash-unified'
 import { Asset, ChainId, EthereumTokenType, FungibleTokenDetailed } from '../types'
 import { useTokensBalance } from './useTokensBalance'
 import { useChainDetailed } from './useChainDetailed'
-import { useChainBalance } from './useBalance'
 import { getChainDetailed, EMPTY_LIST } from '../utils'
-
-import { useMemo } from 'react'
-import { useAccount } from './useAccount'
-import { useProviderType } from './useProviderType'
-import { useChainId } from './useChainId'
+import { useBalance } from './useBalance'
 
 export function useAssetsFromChain(tokens: FungibleTokenDetailed[], chainId?: ChainId) {
-    const currentAccount = useAccount()
-    const currentProvider = useProviderType()
-    const currentChainId = useChainId()
-    const { value: balance } = useChainBalance(currentAccount, chainId ?? currentChainId, currentProvider)
+    const { value: balance = '0' } = useBalance(chainId)
     const chainDetailed = useChainDetailed()
     const passedChainDetailed = getChainDetailed(chainId)
 
@@ -32,7 +25,7 @@ export function useAssetsFromChain(tokens: FungibleTokenDetailed[], chainId?: Ch
                       {
                           chain,
                           token: nativeToken,
-                          balance: balance || '0',
+                          balance,
                       },
                   ]
                 : []),

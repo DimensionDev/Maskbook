@@ -15,14 +15,13 @@ import {
     polygonNetworkTradeProviderSettings,
     arbitrumNetworkTradeProviderSettings,
     xdaiNetworkTradeProviderSettings,
+    avalancheNetworkTradeProviderSettings,
     celoNetworkTradeProviderSettings,
     fantomNetworkTradeProviderSettings,
     auroraNetworkTradeProviderSettings,
 } from '../../plugins/Trader/settings'
 import { queryMyPersonas } from './IdentityService'
 import {
-    currentBalanceSettings,
-    currentBlockNumberSettings,
     currentAccountSettings,
     currentNetworkSettings,
     currentProviderSettings,
@@ -54,8 +53,6 @@ export const [getPluginID, setPluginID] = create(pluginIDSettings)
 export const [getTheme, setTheme] = create(appearanceSettings)
 export const [getLanguage, setLanguage] = create(languageSettings)
 export const [getChainId, setChainId] = create(currentChainIdSettings)
-export const [getBalance, setBalance] = create(currentBalanceSettings)
-export const [getBlockNumber, setBlockNumber] = create(currentBlockNumberSettings)
 export const [getTokenPrices, setTokenPrices] = create(currentTokenPricesSettings)
 export const [getGasOptions, setGasOptions] = create(currentGasOptionsSettings)
 export const [getGasPrice, setGasPrice] = create(currentGasOptionsSettings)
@@ -74,6 +71,9 @@ export const [getArbitrumNetworkTradeProvider, setArbitrumNetworkTradeProvider] 
 )
 export const [getxDaiNetworkTradeProvider, setxDaiNetworkTradeProvider] = create(xdaiNetworkTradeProviderSettings)
 
+export const [getAvalancheNetworkTradeProvider, setAvalancheNetworkTradeProvider] = create(
+    avalancheNetworkTradeProviderSettings,
+)
 export const [getCeloNetworkTradeProvider, setCeloNetworkTradeProvider] = create(celoNetworkTradeProviderSettings)
 
 export const [getFantomNetworkTradeProvider, setFantomNetworkTradeProvider] = create(fantomNetworkTradeProviderSettings)
