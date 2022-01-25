@@ -176,7 +176,7 @@ export function applyMaskColorVars(node: HTMLElement, scheme: PaletteMode) {
             rule += `    --mask-${kebabCase(key)}: ${ns[key]};\n`
             rule += `    --mask-${kebabCase(key)}-fragment: ${getRGBFragment(ns, key)};\n`
         }
-        node.innerHTML = rule + '}'
+        node.textContent = rule + '}'
     } else {
         for (const key in ns) {
             node.style.setProperty('--mask-' + kebabCase(key), ns[key])
