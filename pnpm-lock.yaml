@@ -743,8 +743,8 @@ importers:
       '@masknet/web3-providers': workspace:*
       '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-solana': workspace:*
-      '@metaplex-foundation/mpl-token-metadata': ^0.0.2
-      '@metaplex/js': ^4.11.2
+      '@metaplex-foundation/mpl-token-metadata': ^1.1.0
+      '@metaplex/js': ^4.11.7
       '@solana/spl-token': ^0.1.8
       '@solana/spl-token-registry': ^0.2.1301
       '@solana/web3.js': ^1.30.2
@@ -763,8 +763,8 @@ importers:
       '@masknet/web3-providers': link:../../web3-providers
       '@masknet/web3-shared-base': link:../../web3-shared/base
       '@masknet/web3-shared-solana': link:../../web3-shared/solana
-      '@metaplex-foundation/mpl-token-metadata': 0.0.2
-      '@metaplex/js': 4.11.2
+      '@metaplex-foundation/mpl-token-metadata': 1.1.0
+      '@metaplex/js': 4.11.7
       '@solana/spl-token': 0.1.8
       '@solana/spl-token-registry': 0.2.1301
       '@solana/web3.js': 1.31.0
@@ -4750,6 +4750,17 @@ packages:
       - utf-8-validate
     dev: false
 
+  /@metaplex-foundation/mpl-token-metadata/1.1.0:
+    resolution: {integrity: sha512-4tF+hO5H6eYJ49H72nvuID2nrD54X4yCxqKhbWLxqAI7v5vHSCH2QFVUnqbj3+P4ydxrNyof9MQm3qlzY8KU3g==}
+    dependencies:
+      '@metaplex-foundation/mpl-core': 0.0.2
+      '@solana/spl-token': 0.1.8
+      '@solana/web3.js': 1.31.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+    dev: false
+
   /@metaplex-foundation/mpl-token-vault/0.0.2:
     resolution: {integrity: sha512-JiVcow8OzUGW0KTs/E1QrAdmYGqE9EGKE6cc2gxNNBYqDeVdjYlgEa64IiGvNF9rvbI2g2Z3jw0mYuA9LD9S/A==}
     dependencies:
@@ -4761,8 +4772,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@metaplex/js/4.11.2:
-    resolution: {integrity: sha512-BJvbYGz0l8e2iZSSFMeOr4n7cNvPMYhkrl/vuXeqZR0EoyhfCQgobE2QHUyEKPMwe6VxWu9VQ7Ra1oBlhC2xTg==}
+  /@metaplex/js/4.11.7:
+    resolution: {integrity: sha512-/8X04VEHMfWF84H2DZwLY3yg0xq75vgt/VtLuChTm8iUHkj99Whnq0NLTe0OqfhiEV0qFvT5dbLFh7x2CZqrEQ==}
     dependencies:
       '@metaplex-foundation/mpl-auction': 0.0.2
       '@metaplex-foundation/mpl-core': 0.0.2
@@ -4772,7 +4783,7 @@ packages:
       '@solana/spl-token': 0.1.8
       '@solana/web3.js': 1.31.0
       '@types/bs58': 4.0.1
-      axios: 0.21.4
+      axios: 0.25.0
       bn.js: 5.2.0
       borsh: 0.4.0
       bs58: 4.0.1
@@ -9697,7 +9708,7 @@ packages:
     resolution: {integrity: sha1-LY4+XQvb1zJ/kbyBT1xXZg+Bgk0=}
     deprecated: Critical security vulnerability fixed in v0.21.1. For more information, see https://github.com/axios/axios/pull/3410
     dependencies:
-      follow-redirects: 1.14.5
+      follow-redirects: 1.14.7
       is-buffer: 1.1.6
     transitivePeerDependencies:
       - debug
@@ -9711,10 +9722,10 @@ packages:
       - debug
     dev: false
 
-  /axios/0.21.4:
-    resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
+  /axios/0.25.0:
+    resolution: {integrity: sha512-cD8FOb0tRH3uuEe6+evtAbgJtfxr7ly3fQjYcMcuPlgkwVS9xboaVIpcDV+cYQe+yGykgwZCs1pzjntcGa6l5g==}
     dependencies:
-      follow-redirects: 1.14.5
+      follow-redirects: 1.14.7
     transitivePeerDependencies:
       - debug
     dev: false
@@ -14634,6 +14645,16 @@ packages:
     peerDependenciesMeta:
       debug:
         optional: true
+
+  /follow-redirects/1.14.7:
+    resolution: {integrity: sha512-+hbxoLbFMbRKDwohX8GkTataGqO6Jb7jGwpAlwgy2bIz25XtRm7KEzJM76R1WiNT5SwZkX4Y75SwBolkpmE7iQ==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    dev: false
 
   /for-each/0.3.3:
     resolution: {integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw==}
