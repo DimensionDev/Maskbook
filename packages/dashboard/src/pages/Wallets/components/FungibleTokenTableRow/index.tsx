@@ -62,6 +62,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     networkIcon: {
         border: `1px solid ${theme.palette.background.default}`,
+        borderRadius: '50%',
     },
 }))
 
