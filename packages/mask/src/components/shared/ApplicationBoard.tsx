@@ -94,6 +94,7 @@ const SUPPORTED_CHAIN_ID_LIST = [
     ChainId.Fantom,
     ChainId.Optimistic,
     ChainId.Aurora,
+    ChainId.Avalanche,
 ]
 
 export interface MaskAppEntry {
@@ -118,7 +119,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     const currentPluginId = usePluginIDContext()
     const isFlow = currentPluginId === NetworkPluginID.PLUGIN_FLOW
 
-    //#region Encrypted message
+    // #region Encrypted message
     const openEncryptedMessage = useCallback(
         (id?: string) =>
             MaskMessages.events.requestComposition.sendToLocal({
@@ -130,25 +131,25 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             }),
         [],
     )
-    //#endregion
+    // #endregion
 
-    //#region Claim All ITO
+    // #region Claim All ITO
     const {
         open: isClaimAllDialogOpen,
         onOpen: onClaimAllDialogOpen,
         onClose: onClaimAllDialogClose,
     } = useControlledDialog()
-    //#endregion
+    // #endregion
 
-    //#region Swap
+    // #region Swap
     const { open: isSwapDialogOpen, onOpen: onSwapDialogOpen, onClose: onSwapDialogClose } = useControlledDialog()
-    //#endregion
+    // #endregion
 
-    //#region Fiat on/off ramp
+    // #region Fiat on/off ramp
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
-    //#endregion
+    // #endregion
 
-    //#region second level entry dialog
+    // #region second level entry dialog
     const {
         open: isSecondLevelEntryDialogOpen,
         onOpen: onSecondLevelEntryDialogOpen,
@@ -172,7 +173,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
         },
         [],
     )
-    //#endregion
+    // #endregion
 
     function createEntry(
         title: string,

@@ -21,7 +21,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { RedpacketMessagePanel } from './RedpacketMessagePanel'
 import { SelectNftTokenDialog, OrderedERC721Token } from './SelectNftTokenDialog'
 import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog'
-import { NftImage } from './NftImage'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { NFTSelectOption } from '../types'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants'
 
@@ -38,7 +38,7 @@ const useStyles = makeStyles()((theme) => {
         },
         nftNameWrapper: {
             width: '100%',
-            background: theme.palette.background.default,
+            background: theme.palette.background.paper,
             borderBottomRightRadius: 8,
             borderBottomLeftRadius: 8,
             paddingTop: 2,
@@ -81,10 +81,10 @@ const useStyles = makeStyles()((theme) => {
             position: 'relative',
             display: 'flex',
             flexDirection: 'column',
-            borderRadius: 6,
+            borderRadius: 8,
             padding: 0,
             marginBottom: theme.spacing(2.5),
-            background: theme.palette.background.default,
+            background: theme.palette.background.paper,
             width: 120,
             height: 180,
             overflow: 'hidden',
@@ -99,6 +99,7 @@ const useStyles = makeStyles()((theme) => {
         addWrapper: {
             cursor: 'pointer',
             alignItems: 'center',
+            background: `${theme.palette.background.default} !important`,
             justifyContent: 'center',
         },
         addIcon: {
@@ -182,6 +183,9 @@ const useStyles = makeStyles()((theme) => {
         },
         loadingOwnerList: {
             margin: '24px auto 16px',
+        },
+        iframe: {
+            minHeight: 147,
         },
     }
 })
@@ -311,25 +315,9 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     <div className={classes.tokenSelectorParent}>
                         <List className={classes.tokenSelector}>
                             {existTokenDetailedList.map((value, i) => (
-                                <ListItem key={i} className={classNames(classes.tokenSelectorWrapper)}>
-                                    <NftImage
-                                        token={value}
-                                        classes={{
-                                            loadingFailImage: classes.loadingFailImage,
-                                        }}
-                                        fallbackImage={new URL('./assets/nft_token_fallback.png', import.meta.url)}
-                                    />
-                                    <div className={classes.nftNameWrapper}>
-                                        <Typography className={classes.nftName} color="textSecondary">
-                                            {value.info.name}
-                                        </Typography>
-                                    </div>
-                                    <div className={classes.closeIconWrapperBack} onClick={() => removeToken(value)}>
-                                        <div className={classes.closeIconWrapper}>
-                                            <CloseIcon className={classes.closeIcon} />
-                                        </div>
-                                    </div>
-                                </ListItem>
+                                <div key={i}>
+                                    <NFTCard token={value} removeToken={removeToken} renderOrder={i} />
+                                </div>
                             ))}
                             <ListItem
                                 onClick={() => setOpen(true)}
@@ -386,5 +374,42 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                 />
             ) : null}
         </>
+    )
+}
+
+interface NFTCardProps {
+    token: OrderedERC721Token
+    removeToken: (token: ERC721TokenDetailed) => void
+    renderOrder: number
+}
+
+function NFTCard(props: NFTCardProps) {
+    const { token, removeToken, renderOrder } = props
+    const { classes } = useStyles()
+    const [name, setName] = useState('#' + token.tokenId)
+    return (
+        <ListItem className={classNames(classes.tokenSelectorWrapper)}>
+            <NFTCardStyledAssetPlayer
+                contractAddress={token.contractDetailed.address}
+                chainId={token.contractDetailed.chainId}
+                tokenId={token.tokenId}
+                renderOrder={renderOrder}
+                setERC721TokenName={setName}
+                classes={{
+                    loadingFailImage: classes.loadingFailImage,
+                    iframe: classes.iframe,
+                }}
+            />
+            <div className={classes.nftNameWrapper}>
+                <Typography className={classes.nftName} color="textSecondary">
+                    {name}
+                </Typography>
+            </div>
+            <div className={classes.closeIconWrapperBack} onClick={() => removeToken(token)}>
+                <div className={classes.closeIconWrapper}>
+                    <CloseIcon className={classes.closeIcon} />
+                </div>
+            </div>
+        </ListItem>
     )
 }

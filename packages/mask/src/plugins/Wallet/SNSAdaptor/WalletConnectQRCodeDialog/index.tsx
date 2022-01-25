@@ -28,12 +28,12 @@ const useStyles = makeStyles()({
 export const WalletConnectQRCodeDialog: React.FC = () => {
     const [uri, setURI] = useState('')
 
-    //#region remote controlled dialog logic
+    // #region remote controlled dialog logic
     const { open, closeDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletConnectQRCodeDialogUpdated,
         (ev) => ev.open && setURI(ev.uri),
     )
-    //#endregion
+    // #endregion
 
     let mode: QRCodeDialogProps['mode'] = 'qrcode'
     if (process.env.architecture === 'app' && process.env.engine === 'firefox') {

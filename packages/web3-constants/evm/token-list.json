@@ -28,6 +28,10 @@
         "Optimistic": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/10/tokens.json"],
         "Optimistic_Kovan": [],
         "Optimistic_Goerli": [],
+        "Avalanche": [
+            "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/43114/tokens.json"
+        ],
+        "Avalanche_Fuji": [],
         "Celo": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/42220/tokens.json"],
         "Fantom": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/250/tokens.json"],
         "Aurora": [

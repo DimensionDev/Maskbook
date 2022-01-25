@@ -56,6 +56,8 @@ compileConstants(path.join(__dirname, 'evm'), [
     'Optimistic',
     'Optimistic_Kovan',
     'Optimistic_Goerli',
+    'Avalanche',
+    'Avalanche_Fuji',
     'Celo',
     'Fantom',
     'Aurora',

@@ -47,6 +47,10 @@ export const [useOpNetworkTradeProvider] = createGlobalState(
     Services.Settings.getOpNetworkTradeProvider,
     Messages.events.opNetworkTradeProviderSettings.on,
 )
+export const [useAvalancheNetworkTradeProvider] = createGlobalState(
+    Services.Settings.getAvalancheNetworkTradeProvider,
+    Messages.events.avalancheNetworkTradeProviderSettings.on,
+)
 
 export const [useAuroraNetworkTradeProvider] = createGlobalState(
     Services.Settings.getAuroraNetworkTradeProvider,

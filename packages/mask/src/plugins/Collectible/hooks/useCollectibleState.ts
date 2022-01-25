@@ -14,11 +14,11 @@ function useCollectibleState(token?: CollectibleToken) {
 
     const asset = useAsset(token?.contractAddress ?? '', token?.tokenId ?? '', provider)
 
-    //#region asset order from sdk
+    // #region asset order from sdk
     const assetOrder = useAssetOrder(provider, token)
-    //#endregion
+    // #endregion
 
-    //#region offers
+    // #region offers
     const [offerPage, setOfferPage] = useState(0)
     const offers = useOrders(
         provider,
@@ -28,9 +28,9 @@ function useCollectibleState(token?: CollectibleToken) {
         tabIndex === CollectibleTab.OFFER ? token?.tokenId : undefined,
         OrderSide.Buy,
     )
-    //#endregion
+    // #endregion
 
-    //#region orders
+    // #region orders
     const [orderPage, setOrderPage] = useState(0)
     const orders = useOrders(
         provider,
@@ -40,9 +40,9 @@ function useCollectibleState(token?: CollectibleToken) {
         tabIndex === CollectibleTab.LISTING ? token?.tokenId : undefined,
         OrderSide.Sell,
     )
-    //#endregion
+    // #endregion
 
-    //#region events
+    // #region events
     const [eventPage, setEventPage] = useState(0)
     const events = useHistory(
         provider,
@@ -51,7 +51,7 @@ function useCollectibleState(token?: CollectibleToken) {
         tabIndex === CollectibleTab.HISTORY ? token?.contractAddress : undefined,
         tabIndex === CollectibleTab.HISTORY ? token?.tokenId : undefined,
     )
-    //#endregion
+    // #endregion
 
     return {
         token,

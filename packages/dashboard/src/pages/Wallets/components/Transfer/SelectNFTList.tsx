@@ -59,8 +59,14 @@ export const SelectNFTList = memo<SelectNFTListProps>(({ list, onSelect, selecte
                 gap={12}
                 rowHeight={186}
                 sx={{ width: '100%', height: 'auto', maxHeight: '400px', p: 2, pb: 0.5 }}>
-                {list.map((token) => (
-                    <NFTCard key={token.tokenId} token={token} selectedTokenId={selectedTokenId} onSelect={onSelect} />
+                {list.map((token, index) => (
+                    <NFTCard
+                        key={token.tokenId}
+                        token={token}
+                        selectedTokenId={selectedTokenId}
+                        onSelect={onSelect}
+                        renderOrder={index}
+                    />
                 ))}
                 {renderStatus}
             </ImageList>

@@ -30,7 +30,6 @@ export function getNativeTokenLabel(networkType: NetworkType) {
         case NetworkType.xDai:
         case NetworkType.Celo:
         case NetworkType.Fantom:
-        case NetworkType.Optimistic:
         case NetworkType.Aurora:
         case NetworkType.Boba:
         case NetworkType.Fuse:
