@@ -171,6 +171,7 @@ function createNFTAsset(asset: OpenSeaResponse, chainId: ChainId): NonFungibleTo
         })),
         collection: asset.collection as unknown as NonFungibleTokenAPI.AssetCollection,
         response_: asset as any,
+        last_sale: asset.last_sale,
     }
 }
 
@@ -352,6 +353,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
                 address: x.primary_asset_contracts?.[0]?.address,
                 iconURL: x.image_url,
                 balance: x.owned_asset_count,
+                address: x.address,
             })) ?? []
 
         return {

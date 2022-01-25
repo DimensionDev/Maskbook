@@ -1,18 +1,17 @@
-import type { ChainId } from '@masknet/web3-shared-evm'
-import { AllProviderTradeActionType, AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext'
 import {
+    ChainId,
     EthereumTokenType,
     isSameAddress,
     useAccount,
     useProviderType,
     useTokenConstants,
+    useWeb3,
 } from '@masknet/web3-shared-evm'
 import { useAsync } from 'react-use'
-import { currentBalancesSettings } from '../../../../Wallet/settings'
-import Services from '../../../../../extension/service'
-import { WalletRPC } from '../../../../Wallet/messages'
+import { AllProviderTradeActionType, AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext'
 
 export function useUpdateBalance(chainId: ChainId, currentChainId: ChainId) {
+    const web3 = useWeb3({ chainId })
     const currentAccount = useAccount()
     const currentProvider = useProviderType()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
@@ -36,22 +35,7 @@ export function useUpdateBalance(chainId: ChainId, currentChainId: ChainId) {
         }
 
         if (chainId && currentProvider && currentAccount) {
-            const cacheBalance = currentBalancesSettings.value[currentProvider]?.[chainId]
-
-            let balance: string
-
-            if (cacheBalance) balance = cacheBalance
-            else {
-                balance = await Services.Ethereum.getBalance(currentAccount, {
-                    chainId: chainId,
-                    providerType: currentProvider,
-                })
-                await WalletRPC.updateBalances({
-                    [currentProvider]: {
-                        [chainId]: balance,
-                    },
-                })
-            }
+            const balance = await web3.eth.getBalance(currentAccount)
 
             dispatchTradeStore({
                 type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
@@ -67,5 +51,5 @@ export function useUpdateBalance(chainId: ChainId, currentChainId: ChainId) {
                         : '0',
             })
         }
-    }, [inputToken, outputToken, currentAccount, currentProvider, chainId, currentChainId, NATIVE_TOKEN_ADDRESS])
+    }, [web3, inputToken, outputToken, currentAccount, currentProvider, chainId, currentChainId, NATIVE_TOKEN_ADDRESS])
 }

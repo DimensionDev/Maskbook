@@ -1,4 +1,4 @@
-import type { provider as Provider } from 'web3-core'
+import type { RequestArguments } from 'web3-core'
 import type { Subscription } from 'use-subscription'
 import type {
     ChainId,
@@ -15,8 +15,9 @@ import type {
     Transaction,
     AddressName,
     CryptoPrice,
-    BalanceOfChains,
     ERC721TokenCollectionInfo,
+    SendOverrides,
+    RequestOptions,
 } from '../types'
 import type { ProviderProxy } from '@masknet/web3-shared-base'
 
@@ -24,10 +25,6 @@ export interface Web3ProviderType {
     allowTestnet: Subscription<boolean>
     chainId: Subscription<ChainId>
     account: Subscription<string>
-    balance: Subscription<string>
-    balances: Subscription<BalanceOfChains>
-    blockNumber: Subscription<number>
-    provider: Subscription<Provider>
     networkType: Subscription<NetworkType>
     providerType: Subscription<ProviderType>
     tokenPrices: Subscription<CryptoPrice>
@@ -42,6 +39,14 @@ export interface Web3ProviderType {
     removeToken: (token: ERC20TokenDetailed | NonFungibleTokenDetailed) => Promise<void>
     trustToken: (address: string, token: ERC20TokenDetailed | NonFungibleTokenDetailed) => Promise<void>
     blockToken: (address: string, token: ERC20TokenDetailed | NonFungibleTokenDetailed) => Promise<void>
+
+    request: <T extends unknown>(
+        requestArguments: RequestArguments,
+        overrides?: SendOverrides,
+        options?: RequestOptions,
+    ) => Promise<T>
+    getSendOverrides?: () => SendOverrides
+    getRequestOptions?: () => RequestOptions
 
     getAssetsList: (address: string, provider: FungibleAssetProvider, network?: NetworkType) => Promise<Asset[]>
     getAssetsListNFT: (

@@ -1,10 +1,10 @@
 import urlcat from 'urlcat'
 import RSS3 from 'rss3-next'
 import { RSS3_ENDPOINT } from './constants'
-import { RSS3BaseAPI } from '../types'
+import { NonFungibleTokenAPI, RSS3BaseAPI } from '../types'
 import { fetchJSON } from '../helpers'
 
-export class RSS3API implements RSS3BaseAPI.Provider {
+export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provider {
     createRSS3(
         address: string,
         sign: (message: string) => Promise<string> = () => {
@@ -62,11 +62,40 @@ export class RSS3API implements RSS3BaseAPI.Provider {
         }>(url)
         return rsp?.profile
     }
-    async getNFTs(address: string) {
+    async getAssets(address: string) {
         const url = urlcat(RSS3_ENDPOINT, '/assets/list', {
             personaID: address,
             type: RSS3BaseAPI.AssetType.NFT,
         })
-        return fetchJSON<RSS3BaseAPI.GeneralAssetResponse>(url)
+
+        const { status, assets = [] } = await fetchJSON<RSS3BaseAPI.GeneralAssetResponse>(url)
+        if (!status) return []
+        return assets.map((asset) => {
+            return {
+                is_verified: false,
+                is_auction: false,
+                image_url: asset.info.image_preview_url ?? '',
+                asset_contract: null,
+                current_price: null,
+                current_symbol: '',
+                owner: null,
+                creator: null,
+                token_id: asset.id.substr(asset.id.lastIndexOf('-') + 1),
+                token_address: asset.id.substr(0, asset.id.indexOf('-')),
+                traits: [],
+                safelist_request_status: '',
+                description: '',
+                name: asset.info.title ?? '',
+                collection_name: asset.info.collection ?? '',
+                animation_url: asset.info.animation_url ?? '',
+                end_time: asset.info.end_date ? new Date(asset.info.end_date) : null,
+                order_payment_tokens: [],
+                offer_payment_tokens: [],
+                slug: null,
+                top_ownerships: [],
+                response_: asset,
+                last_sale: null,
+            }
+        })
     }
 }
