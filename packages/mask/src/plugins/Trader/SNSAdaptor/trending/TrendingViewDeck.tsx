@@ -94,7 +94,6 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
     dataProvider: DataProvider
     children?: React.ReactNode
     showDataProviderIcon?: boolean
-    showTradeProviderIcon?: boolean
     TrendingCardProps?: Partial<TrendingCardProps>
     dataProviders: DataProvider[]
 }
@@ -108,7 +107,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         stats,
         children,
         showDataProviderIcon = false,
-        showTradeProviderIcon = false,
         TrendingCardProps,
         dataProviders = [],
     } = props
@@ -248,7 +246,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                     footer: classes.footer,
                 }}
                 showDataProviderIcon={showDataProviderIcon}
-                showTradeProviderIcon={showTradeProviderIcon}
                 dataProvider={dataProvider}
                 dataProviders={dataProviders}
                 onDataProviderChange={onDataProviderChange}

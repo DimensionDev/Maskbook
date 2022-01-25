@@ -1,22 +1,15 @@
-import { useState, useEffect } from 'react'
-import { useWeb3StateContext } from '../context'
+import { useAsyncRetry } from 'react-use'
+import { useChainId, useWeb3 } from '.'
+import type { ChainId } from '..'
 
 /**
  * Get the current block number of current chain
  */
-export function useBlockNumber() {
-    return useWeb3StateContext().blockNumber
-}
+export function useBlockNumber(expectedChainId?: ChainId) {
+    const defaultChainId = useChainId()
+    const web3 = useWeb3({ chainId: expectedChainId ?? defaultChainId })
 
-/**
- * Get the current block number only once
- * @returns
- */
-export function useBlockNumberOnce() {
-    const blockNumber = useBlockNumber()
-    const [blockNumberOnce, setBlockNumberOnce] = useState(0)
-    useEffect(() => {
-        if (blockNumberOnce === 0 && blockNumber > 0) setBlockNumberOnce(blockNumber)
-    }, [blockNumber])
-    return blockNumberOnce
+    return useAsyncRetry(async () => {
+        return web3.eth.getBlockNumber()
+    }, [web3])
 }

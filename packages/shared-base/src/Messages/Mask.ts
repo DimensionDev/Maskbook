@@ -6,7 +6,6 @@ import type {
     CryptoPrice,
     NetworkType,
     ProviderType,
-    BalanceOfChains,
     FungibleAssetProvider,
     NonFungibleAssetProvider,
 } from '../../../web3-shared/evm'
@@ -17,9 +16,6 @@ export interface MaskSettingsEvents {
     debugModeSetting: boolean
     pluginIDSettings: string
     currentChainIdSettings: number
-    currentBalanceSettings: string
-    currentBalancesSettings: BalanceOfChains
-    currentBlockNumberSettings: number
     currentTokenPricesSettings: CryptoPrice
     currentDataProviderSettings: DataProvider
     currentProviderSettings: ProviderType

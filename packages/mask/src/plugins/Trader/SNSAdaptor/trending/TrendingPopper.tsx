@@ -4,7 +4,7 @@ import { useLocation, useWindowScroll } from 'react-use'
 import { PluginTraderMessages } from '../../messages'
 import { WalletMessages } from '../../../Wallet/messages'
 import type { TagType } from '../../types'
-import type { DataProvider, TradeProvider } from '@masknet/public-api'
+import type { DataProvider } from '@masknet/public-api'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginTransakMessages } from '../../../Transak/messages'
 

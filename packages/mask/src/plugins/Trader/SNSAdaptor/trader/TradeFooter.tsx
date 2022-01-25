@@ -44,7 +44,6 @@ const useStyles = makeStyles()((theme) => {
 
 export interface TradeFooterProps extends withClasses<'footer'> {
     showDataProviderIcon?: boolean
-    showTradeProviderIcon?: boolean
     dataProvider?: DataProvider
     dataProviders?: DataProvider[]
     onDataProviderChange?: (option: FootnoteMenuOption) => void

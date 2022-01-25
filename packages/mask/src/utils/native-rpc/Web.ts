@@ -1,5 +1,11 @@
 import stringify from 'json-stable-stringify'
-import type { MaskNetworkAPIs, RelationFavor } from '@masknet/public-api'
+import type {
+    MaskNetworkAPIs,
+    RelationFavor,
+    EC_Private_JsonWebKey as Native_EC_Private_JsonWebKey,
+    EC_Public_JsonWebKey as Native_EC_Public_JsonWebKey,
+    AESJsonWebKey as Native_AESJsonWebKey,
+} from '@masknet/public-api'
 import { encodeArrayBuffer, encodeText } from '@dimensiondev/kit'
 import { Environment, assertEnvironment } from '@dimensiondev/holoflows-kit'
 import { ECKeyIdentifier, Identifier, ProfileIdentifier } from '@masknet/shared-base'
@@ -193,6 +199,10 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         const privateKey = await Services.Identity.exportPersonaPrivateKey(stringToPersonaIdentifier(identifier))
         return privateKey
     },
+    persona_queryPersonaByPrivateKey: async ({ privateKey }) => {
+        const persona = await Services.Identity.queryPersonaByPrivateKey(privateKey)
+        return persona ? personaFormatter(persona) : undefined
+    },
     persona_getCurrentPersonaIdentifier: async () => {
         const identifier = await Services.Settings.getCurrentPersonaIdentifier()
         return identifier?.toText()
@@ -282,6 +292,40 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     async SNSAdaptor_getCurrentDetectedProfile() {
         const { activatedSocialNetworkUI } = await import('../../social-network')
         return activatedSocialNetworkUI.collecting.identityProvider?.recognized.value.identifier.toText()
+    },
+    get_all_indexedDB_records: async () => {
+        const personas = await Services.Identity.queryPersonaRecordsFromIndexedDB()
+        const profiles = await Services.Identity.queryProfileRecordFromIndexedDB()
+        const relations = await Services.Identity.queryRelationsRecordFromIndexedDB()
+        return {
+            personas: personas.map((x) => ({
+                mnemonic: x.mnemonic,
+                nickname: x.nickname,
+                publicKey: x.publicKey as JsonWebKey as unknown as Native_EC_Public_JsonWebKey,
+                privateKey: x.privateKey as JsonWebKey as unknown as Native_EC_Private_JsonWebKey,
+                localKey: x.localKey as JsonWebKey as unknown as Native_AESJsonWebKey,
+                identifier: x.identifier.toText(),
+                linkedProfiles: Object.fromEntries(x.linkedProfiles.__raw_map__),
+                createdAt: x.createdAt.getTime(),
+                updatedAt: x.createdAt.getTime(),
+                hasLogout: x.hasLogout,
+                uninitialized: x.uninitialized,
+            })),
+            profiles: profiles.map((x) => ({
+                identifier: x.identifier.toText(),
+                nickname: x.nickname,
+                localKey: x.localKey as JsonWebKey as unknown as Native_AESJsonWebKey,
+                linkedPersona: x.linkedPersona?.toText(),
+                createdAt: x.createdAt.getTime(),
+                updatedAt: x.updatedAt.getTime(),
+            })),
+            relations: relations.map((x) => ({
+                profile: x.profile.toText(),
+                linked: x.linked.toText(),
+                network: x.network,
+                favor: x.favor,
+            })),
+        }
     },
 }
 

@@ -192,9 +192,8 @@ export function TraderView(props: TraderViewProps) {
     // #endregion
 
     // #region if the coin is a native token or contract address exists
-
-    const isSwappable =
-        (!!trending?.coin.contract_address || ['eth', 'matic', 'bnb', 'avax'].includes(coinSymbol)) && chainIdValid
+    const isNativeToken = ['eth', 'matic', 'bnb', 'avax'].includes(coinSymbol)
+    const isSwappable = (!!trending?.coin.contract_address || isNativeToken) && chainIdValid
     // #endregion
 
     // #region display loading skeleton
@@ -230,7 +229,6 @@ export function TraderView(props: TraderViewProps) {
             trending={trending}
             dataProvider={dataProvider}
             showDataProviderIcon={tabIndex < 3}
-            showTradeProviderIcon={false}
             dataProviders={dataProviders}
             TrendingCardProps={{ classes: { root: classes.root } }}>
             <Tabs

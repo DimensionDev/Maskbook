@@ -1,52 +1,55 @@
 import {
     ChainId,
-    useChainBalance,
     EthereumTokenType,
     isSameAddress,
     useAccount,
-    useProviderType,
+    useBalance,
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
-import { AllProviderTradeActionType, AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext'
 import { useEffect } from 'react'
+import { AllProviderTradeActionType, AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext'
 
 export function useUpdateBalance(chainId: ChainId) {
     const currentAccount = useAccount()
-    const currentProvider = useProviderType()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
-    const balance = useChainBalance(currentAccount, chainId, currentProvider)
 
     const {
         tradeState: [{ inputToken, outputToken }, dispatchTradeStore],
     } = AllProviderTradeContext.useContainer()
+    const balance = useBalance(chainId)
 
     useEffect(() => {
         if (currentAccount) return
-
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
             balance: '0',
         })
+
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
             balance: '0',
         })
+        return
     }, [currentAccount])
 
     useEffect(() => {
-        if (!balance.value) return
+        if (!currentAccount) return
+        const value = inputToken?.type === EthereumTokenType.Native ? balance.value : '0'
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
-            balance: inputToken?.type === EthereumTokenType.Native ? balance.value : '0',
+            balance: value || '0',
         })
+    }, [currentAccount, inputToken?.type, balance.value])
 
+    useEffect(() => {
+        if (!currentAccount) return
+        const value =
+            outputToken?.type === EthereumTokenType.Native || isSameAddress(outputToken?.address, NATIVE_TOKEN_ADDRESS)
+                ? balance.value
+                : '0'
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
-            balance:
-                isSameAddress(outputToken?.address, NATIVE_TOKEN_ADDRESS) ||
-                outputToken?.type === EthereumTokenType.Native
-                    ? balance.value
-                    : '0',
+            balance: value || '0',
         })
-    }, [inputToken, outputToken, NATIVE_TOKEN_ADDRESS, balance])
+    }, [currentAccount, outputToken?.type, outputToken?.address, balance.value])
 }
