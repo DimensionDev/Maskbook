@@ -1,10 +1,8 @@
-import { Box, Button, IconButton, Typography } from '@mui/material'
-import { Alert, AlertTitle, styled } from '@mui/material'
-import { useMemo, useState } from 'react'
+import { Box, Button, IconButton, Typography, Alert, AlertTitle, styled } from '@mui/material'
+import { useMemo, useState, useContext } from 'react'
 import { useTimeoutFn } from 'react-use'
 import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
-import { useContext } from 'react'
 import { ErrorBoundaryBuildInfoContext, ErrorBoundaryError } from './context'
 import { useSharedI18N } from '../../../locales'
 
@@ -30,14 +28,14 @@ export function CrashUI({ onRetry, subject, ...error }: CrashUIProps) {
     // It seems like DOM mutation from out of our application might conflict with React reconciliation.
     // As a temporary fix, try to recover this React tree after 200ms.
     useTimeoutFn(() => {
-        if (error.message.includes(`Failed to execute 'insertBefore' on 'Node'`)) {
+        if (error.message.includes("Failed to execute 'insertBefore' on 'Node'")) {
             onRetry()
         }
     }, 200)
 
     // crash report, will send to GitHub
     const reportTitle = `[Crash] ${error.type}: ${error.message}`
-    const reportBody: string = `<!--Thanks for the crash report!
+    const reportBody = `<!--Thanks for the crash report!
 Please write down what you're doing when the crash happened, that will help us to fix it easier!-->
 
 I was *doing something...*, then Mask reports an error.
@@ -52,7 +50,7 @@ Error stack:
         const url = new URLSearchParams()
         url.set('title', reportTitle)
         url.set('body', reportBody)
-        return `https://github.com/DimensionDev/Maskbook/issues/new?` + url.toString()
+        return 'https://github.com/DimensionDev/Maskbook/issues/new?' + url.toString()
     }, [reportBody, reportTitle])
     return (
         <Root>

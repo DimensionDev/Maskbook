@@ -15,7 +15,7 @@ import {
 import { useDashboardI18N } from '../../../../locales'
 import { ChangeNetworkTip } from './ChangeNetworkTip'
 import { getTokenUSDValue } from '../../utils/getTokenUSDValue'
-import { pow10 } from '@masknet/web3-shared-base'
+import { pow10, toFixed } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -60,9 +60,6 @@ const useStyles = makeStyles()((theme) => ({
     tipArrow: {
         color: '#111432',
     },
-    networkIcon: {
-        border: `1px solid ${theme.palette.background.default}`,
-    },
 }))
 
 export interface TokenTableRowProps {
@@ -90,12 +87,11 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                             address={asset.token.address}
                             name={asset.token.name}
                             chainId={asset.token.chainId}
-                            logoURI={asset.token.logoURI}
+                            logoURI={asset.logoURI || asset.token.logoURI}
                             AvatarProps={{ sx: { width: 36, height: 36 } }}
                         />
                         <Box className={classes.chainIcon}>
                             <WalletIcon
-                                classes={{ networkIcon: classes.networkIcon }}
                                 size={16}
                                 networkIcon={networkDescriptors.find((x) => x.chainId === asset.token.chainId)?.icon}
                             />
@@ -105,9 +101,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                 </Box>
             </TableCell>
             <TableCell className={classes.cell} align="center" variant="body">
-                <Typography>
-                    {new BigNumber(Utils?.formatBalance?.(asset.balance, asset.token.decimals) ?? '').toFixed(6)}
-                </Typography>
+                <Typography>{toFixed(Utils?.formatBalance?.(asset.balance, asset.token.decimals) ?? '', 6)}</Typography>
             </TableCell>
             <TableCell className={classes.cell} align="center" variant="body">
                 <Typography>

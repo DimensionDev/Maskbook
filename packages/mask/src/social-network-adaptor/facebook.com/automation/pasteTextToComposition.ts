@@ -11,7 +11,7 @@ async function openPostDialogFacebook() {
     const notActivated = isMobileFacebook
         ? new LiveSelector().querySelector<HTMLDivElement>('[role="textbox"]')
         : new LiveSelector()
-              .querySelector(`[role="region"]`)
+              .querySelector('[role="region"]')
               .querySelector('textarea, [aria-multiline="true"]')
               .closest<HTMLDivElement>(1)
     const activated = new LiveSelector().querySelector<HTMLDivElement | HTMLTextAreaElement>(

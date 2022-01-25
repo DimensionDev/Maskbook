@@ -3,7 +3,7 @@ import { useI18N } from '../../../../utils'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
 import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import type { FungibleTokenDetailed, Wallet } from '@masknet/web3-shared-evm'
 import { EthereumTokenType, formatBalance, formatPercentage } from '@masknet/web3-shared-evm'
 import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo, WarningLevel } from '../../types'
@@ -19,7 +19,6 @@ import { currentSlippageSettings } from '../../settings'
 import TuneIcon from '@mui/icons-material/Tune'
 import { MINIMUM_AMOUNT } from '../../constants'
 import { resolveTradeProviderName, resolveUniswapWarningLevel } from '../../pipes'
-import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
@@ -38,11 +37,11 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         },
         reverseIcon: {
             cursor: 'pointer',
-            color: isDashboard ? `${theme.palette.text.primary}!important` : undefined,
+            color: isDashboard ? `${theme.palette.text.primary}!important` : theme.palette.text.strong,
         },
         card: {
-            backgroundColor: isDashboard ? MaskColorVar.primaryBackground2 : MaskColorVar.twitterInputBackground,
-            border: `1px solid ${isDashboard ? MaskColorVar.lineLight : MaskColorVar.twitterBorderLine}`,
+            backgroundColor: isDashboard ? MaskColorVar.primaryBackground2 : theme.palette.background.default,
+            border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.divider}`,
             borderRadius: 12,
             padding: 12,
         },
@@ -56,7 +55,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         },
 
         reverse: {
-            backgroundColor: isDashboard ? MaskColorVar.lightBackground : MaskColorVar.twitterInputBackground,
+            backgroundColor: isDashboard ? MaskColorVar.lightBackground : theme.palette.background.default,
             width: 32,
             height: 32,
             borderRadius: 16,
@@ -67,12 +66,12 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         },
         chevron: {
             fill: 'none',
-            stroke: theme.palette.text.primary,
+            stroke: isDashboard ? theme.palette.text.primary : theme.palette.text.strong,
             transition: 'all 300ms',
             cursor: 'pointer',
         },
         reverseChevron: {
-            transform: `rotate(-180deg)`,
+            transform: 'rotate(-180deg)',
             transition: 'all 300ms',
         },
         status: {
@@ -109,7 +108,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             height: 'auto',
         },
         selectedTokenChip: {
-            borderRadius: `22px!important`,
+            borderRadius: '22px!important',
             height: 'auto',
             backgroundColor: isDashboard ? MaskColorVar.input : theme.palette.background.input,
             [`& .${chipClasses.label}`]: {
@@ -133,7 +132,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             bottom: -20,
         },
         noToken: {
-            borderRadius: `18px !important`,
+            borderRadius: '18px !important',
             backgroundColor: theme.palette.primary.main,
             [`& .${chipClasses.label}`]: {
                 paddingTop: 9,
@@ -154,7 +153,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         dropIcon: {
             width: 20,
             height: 24,
-            fill: isDashboard ? theme.palette.text.primary : MaskColorVar.twitterButton,
+            fill: isDashboard ? theme.palette.text.primary : theme.palette.text.strong,
         },
         connectWallet: {
             marginTop: 0,
@@ -168,6 +167,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
 })
 
 export interface AllTradeFormProps {
+    wallet?: Wallet
     inputAmount: string
     inputToken?: FungibleTokenDetailed
     outputToken?: FungibleTokenDetailed
@@ -186,6 +186,7 @@ export interface AllTradeFormProps {
 
 export const TradeForm = memo<AllTradeFormProps>(
     ({
+        wallet,
         trades,
         inputAmount,
         inputToken,
@@ -208,32 +209,32 @@ export const TradeForm = memo<AllTradeFormProps>(
         const { targetChainId: chainId } = TargetChainIdContext.useContainer()
         const [isExpand, setIsExpand] = useState(false)
 
-        //#region approve token
+        // #region approve token
         const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(
             focusedTrade?.value ?? null,
             focusedTrade?.provider,
             inputToken,
         )
 
-        //#region token balance
+        // #region token balance
         const inputTokenBalanceAmount = new BigNumber(inputTokenBalance || '0')
-        //#endregion
+        // #endregion
 
-        //#region get the best trade
+        // #region get the best trade
         const bestTrade = useMemo(() => first(trades), [trades])
-        //#endregion
+        // #endregion
 
-        //#region remote controlled swap settings dialog
+        // #region remote controlled swap settings dialog
         const { openDialog: openSwapSettingDialog } = useRemoteControlledDialog(
             PluginTraderMessages.swapSettingsUpdated,
         )
-        //#endregion
+        // #endregion
 
-        //#region form controls
+        // #region form controls
         const inputTokenTradeAmount = rightShift(inputAmount || '0', inputToken?.decimals)
-        //#endregion
+        // #endregion
 
-        //#region UI logic
+        // #region UI logic
         // validate form return a message if an error exists
         const validationMessage = useMemo(() => {
             if (inputTokenTradeAmount.isZero()) return t('plugin_trader_error_amount_absence')
@@ -260,9 +261,9 @@ export const TradeForm = memo<AllTradeFormProps>(
             inputTokenBalanceAmount.toFixed(),
             inputTokenTradeAmount.toFixed(),
         ])
-        //#endregion
+        // #endregion
 
-        //#region native wrap message
+        // #region native wrap message
         const nativeWrapMessage = useMemo(() => {
             if (focusedTrade?.value) {
                 if (isNativeTokenWrapper(focusedTrade.value)) {
@@ -280,7 +281,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                 return t('plugin_trader_no_trade')
             }
         }, [focusedTrade, outputToken])
-        //#endregion
+        // #endregion
 
         useUpdateEffect(() => {
             setIsExpand(false)
@@ -444,20 +445,18 @@ export const TradeForm = memo<AllTradeFormProps>(
                             </IconButton>
                         </div>
                     </Box>
-                    <Box className={classes.section}>
-                        <EthereumChainBoundary
-                            chainId={chainId}
-                            noSwitchNetworkTip
-                            disablePadding
-                            ActionButtonPromiseProps={{
-                                fullWidth: true,
-                                classes: { root: classes.button, disabled: classes.disabledButton },
-                                color: 'primary',
-                                style: { padding: '13px 0', marginTop: 0 },
-                            }}>
-                            <EthereumWalletConnectedBoundary
-                                ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}
-                                classes={{ connectWallet: classes.connectWallet, button: classes.button }}>
+                    {wallet ? (
+                        <Box className={classes.section}>
+                            <EthereumChainBoundary
+                                chainId={chainId}
+                                noSwitchNetworkTip
+                                disablePadding
+                                ActionButtonPromiseProps={{
+                                    fullWidth: true,
+                                    classes: { root: classes.button, disabled: classes.disabledButton },
+                                    color: 'primary',
+                                    style: { padding: '13px 0', marginTop: 0 },
+                                }}>
                                 <EthereumERC20TokenApprovedBoundary
                                     amount={approveAmount.toFixed()}
                                     token={
@@ -518,9 +517,9 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         </ActionButton>
                                     )}
                                 />
-                            </EthereumWalletConnectedBoundary>
-                        </EthereumChainBoundary>
-                    </Box>
+                            </EthereumChainBoundary>
+                        </Box>
+                    ) : null}
                 </Box>
             </Box>
         )

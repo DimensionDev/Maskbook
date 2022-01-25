@@ -3,10 +3,7 @@ import { Typography } from '@mui/material'
 import classNames from 'classnames'
 import { useI18N } from '../../../utils'
 import type { OwnerERC721TokenInfo } from '../types'
-import { getAssetAsBlobURL } from '../../../utils'
 import ModelView from './ModelView'
-import { useState } from 'react'
-import { Punk3D } from '../constants'
 
 export const useStyles = makeStyles()((theme) => ({
     box: {
@@ -36,7 +33,7 @@ export const useStyles = makeStyles()((theme) => ({
         color: '#222',
         textAlign: 'center',
         marginBottom: '12px',
-        '&:before': {
+        '&::before': {
             content: '""',
             width: '8px',
             height: '8px',
@@ -80,7 +77,7 @@ export const useStyles = makeStyles()((theme) => ({
         lineHeight: '16px',
         color: '#222',
         textAlign: 'left',
-        wordBreak: 'break-all',
+        overflowWrap: 'break-word',
     },
     image: {
         borderRadius: '4px',
@@ -113,23 +110,14 @@ export const useStyles = makeStyles()((theme) => ({
 }))
 
 interface Props {
-    message?: string | undefined
-    imageUrl?: string | undefined
+    message?: string
+    imageUrl?: string
     tokenInfo?: OwnerERC721TokenInfo | null
-    glbTransferHandle?: (transfer: boolean) => void
 }
 
 export function PreviewBox(props: Props) {
     const classes = useStylesExtends(useStyles(), {})
     const { t } = useI18N()
-    const GlbTransferIcon = getAssetAsBlobURL(new URL('../assets/glbTransfer.png', import.meta.url))
-    const [glbShow, setGlbShow] = useState(false)
-    const handleGLBTransfer = () => {
-        setGlbShow(!glbShow)
-        if (props.glbTransferHandle) {
-            props.glbTransferHandle(!glbShow)
-        }
-    }
     return (
         <div className={classes.box}>
             {props.message && (
@@ -142,13 +130,13 @@ export function PreviewBox(props: Props) {
                 </div>
             )}
             {props.imageUrl &&
-                (glbShow ? (
+                (props.tokenInfo?.glbSupport ? (
                     <ModelView
-                        styleContent={{
+                        style={{
                             width: '100%',
                             height: 150,
                         }}
-                        source={Punk3D.url}
+                        source={props.imageUrl}
                     />
                 ) : (
                     <img className={classes.image} src={props.imageUrl} />
@@ -158,9 +146,6 @@ export function PreviewBox(props: Props) {
                     <Typography color="textPrimary">{t('plugin_pets_dialog_preview')}</Typography>
                 </div>
             )}
-            {props.tokenInfo?.glbSupport ? (
-                <img src={GlbTransferIcon} className={classes.glbTransfer} onClick={handleGLBTransfer} />
-            ) : null}
         </div>
     )
 }

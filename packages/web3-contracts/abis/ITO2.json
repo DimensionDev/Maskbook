@@ -271,7 +271,7 @@
             },
             {
                 "internalType": "bool",
-                "name": "unlocked",
+                "name": "destructed",
                 "type": "bool"
             },
             {

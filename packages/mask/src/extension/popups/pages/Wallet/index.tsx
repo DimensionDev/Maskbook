@@ -1,12 +1,11 @@
 import { WalletStartUp } from './components/StartUp'
 import { EthereumRpcType, ProviderType, useWallet, useWallets } from '@masknet/web3-shared-evm'
 import { WalletAssets } from './components/WalletAssets'
-import { Route, Switch, useHistory } from 'react-router-dom'
+import { Route, Switch, useHistory, useLocation } from 'react-router-dom'
 import { lazy, Suspense, useEffect } from 'react'
 import { PopupRoutes } from '@masknet/shared-base'
 import { WalletContext } from './hooks/useWalletContext'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder'
-import { useLocation } from 'react-router-dom'
 import { useAsyncRetry } from 'react-use'
 import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages'
 import Services from '../../../service'
@@ -78,10 +77,8 @@ export default function Wallet() {
     }, [location.search, location.pathname])
 
     useEffect(() => {
-        if (isLocked && !getLockStatusLoading && location.pathname !== PopupRoutes.Unlock) {
-            history.replace(urlcat(PopupRoutes.Unlock, { from: location.pathname }))
-            return
-        }
+        if (!(isLocked && !getLockStatusLoading && location.pathname !== PopupRoutes.Unlock)) return
+        history.replace(urlcat(PopupRoutes.Unlock, { from: location.pathname }))
     }, [isLocked, location.pathname, getLockStatusLoading])
 
     useEffect(() => {

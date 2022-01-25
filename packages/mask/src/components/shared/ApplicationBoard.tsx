@@ -85,6 +85,18 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+const SUPPORTED_CHAIN_ID_LIST = [
+    ChainId.Mainnet,
+    ChainId.BSC,
+    ChainId.Matic,
+    ChainId.Arbitrum,
+    ChainId.xDai,
+    ChainId.Celo,
+    ChainId.Fantom,
+    ChainId.Aurora,
+    ChainId.Avalanche,
+]
+
 export interface MaskAppEntry {
     title: string
     img: string
@@ -107,7 +119,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     const currentPluginId = usePluginIDContext()
     const isFlow = currentPluginId === NetworkPluginID.PLUGIN_FLOW
 
-    //#region Encrypted message
+    // #region Encrypted message
     const openEncryptedMessage = useCallback(
         (id?: string) =>
             MaskMessages.events.requestComposition.sendToLocal({
@@ -119,29 +131,29 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             }),
         [],
     )
-    //#endregion
+    // #endregion
 
-    //#region Claim All ITO
+    // #region Claim All ITO
     const {
         open: isClaimAllDialogOpen,
         onOpen: onClaimAllDialogOpen,
         onClose: onClaimAllDialogClose,
     } = useControlledDialog()
-    //#endregion
+    // #endregion
 
-    //#region Swap
+    // #region Swap
     const { open: isSwapDialogOpen, onOpen: onSwapDialogOpen, onClose: onSwapDialogClose } = useControlledDialog()
-    //#endregion
+    // #endregion
 
-    //#region Fiat on/off ramp
+    // #region Fiat on/off ramp
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
-    //#endregion
+    // #endregion
 
-    //#region pet friends
-    const { setDialog: setPetDialog } = useRemoteControlledDialog(PluginPetMessages.essayDialogUpdated)
-    //#endregion
+    // #region pet friends
+    const { setDialog: setPetDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated)
+    // #endregion
 
-    //#region second level entry dialog
+    // #region second level entry dialog
     const {
         open: isSecondLevelEntryDialogOpen,
         onOpen: onSecondLevelEntryDialogOpen,
@@ -165,7 +177,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
         },
         [],
     )
-    //#endregion
+    // #endregion
 
     function createEntry(
         title: string,
@@ -268,19 +280,19 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                             undefined,
                             true,
                         ),
+                        createEntry(
+                            'Non-F Friends',
+                            new URL('./assets/mintTeam.png', import.meta.url).toString(),
+                            () => setPetDialog({ open: true }),
+                            [ChainId.Mainnet],
+                            currentChainId !== ChainId.Mainnet,
+                            true,
+                        ),
                     ],
                     undefined,
                 ),
             undefined,
             isFlow,
-        ),
-        createEntry(
-            'Non-F Friends',
-            new URL('./assets/mintTeam.png', import.meta.url).toString(),
-            () => setPetDialog({ open: true }),
-            undefined,
-            false,
-            false,
         ),
         createEntry(
             'Investment',
@@ -294,15 +306,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                         ]),
                         createEntry('dHEDGE', new URL('./assets/dHEDGE.png', import.meta.url).toString(), () => {}),
                     ],
-                    [
-                        ChainId.Mainnet,
-                        ChainId.BSC,
-                        ChainId.Matic,
-                        ChainId.Arbitrum,
-                        ChainId.xDai,
-                        ChainId.Celo,
-                        ChainId.Fantom,
-                    ],
+                    SUPPORTED_CHAIN_ID_LIST,
                 ),
             undefined,
             true,
@@ -321,15 +325,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                             () => {},
                         ),
                     ],
-                    [
-                        ChainId.Mainnet,
-                        ChainId.BSC,
-                        ChainId.Matic,
-                        ChainId.Arbitrum,
-                        ChainId.xDai,
-                        ChainId.Celo,
-                        ChainId.Fantom,
-                    ],
+                    SUPPORTED_CHAIN_ID_LIST,
                 ),
             undefined,
             true,
@@ -358,7 +354,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                                     walletRequired && !selectedWallet ? classes.disabled : '',
                                 )}
                                 onClick={onClick}
-                                key={i.toString()}>
+                                key={i}>
                                 <img src={img} className={classes.applicationImg} />
                                 <Typography className={classes.title} color="textPrimary">
                                     {title}

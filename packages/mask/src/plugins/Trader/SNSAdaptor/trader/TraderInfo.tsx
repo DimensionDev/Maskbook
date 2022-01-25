@@ -21,8 +21,8 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     trade: {
         marginBottom: 8,
         padding: 10,
-        backgroundColor: `${isDashboard ? MaskColorVar.input : MaskColorVar.twitterBottom}!important`,
-        border: `1px solid ${isDashboard ? MaskColorVar.lineLight : MaskColorVar.twitterBorderLine}`,
+        backgroundColor: `${isDashboard ? MaskColorVar.input : theme.palette.background.paper}!important`,
+        border: `1px solid ${isDashboard ? MaskColorVar.lineLight : theme.palette.divider}`,
         borderRadius: 8,
         cursor: 'pointer',
         position: 'relative',
@@ -35,7 +35,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         wordBreak: 'keep-all',
     },
     cost: {
-        color: isDashboard ? MaskColorVar.normalText : MaskColorVar.twitterSecond,
+        color: isDashboard ? MaskColorVar.normalText : theme.palette.text.secondary,
         fontSize: 14,
         lineHeight: '20px',
         marginTop: 12,
@@ -77,12 +77,12 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
     const { classes } = useStyles({ isDashboard })
     const { targetChainId } = TargetChainIdContext.useContainer()
 
-    //#region refresh pools
+    // #region refresh pools
     useAsyncRetry(async () => {
         // force update balancer's pools each time user enters into the swap tab
         if (trade.provider === TradeProvider.BALANCER) await PluginTraderRPC.updatePools(true, targetChainId)
     }, [trade.provider, targetChainId])
-    //#endregion
+    // #endregion
 
     const nativeToken = createNativeToken(targetChainId)
     const tokenPrice = useNativeTokenPrice(targetChainId)
@@ -92,7 +92,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
     }, [trade.gas?.value, gasPrice])
 
     const feeValueUSD = useMemo(
-        () => (gasFee ? new BigNumber(formatWeiToEther(gasFee).times(tokenPrice).toFixed(2).toString()) : '0'),
+        () => (gasFee ? new BigNumber(formatWeiToEther(gasFee).times(tokenPrice).toFixed(2)) : '0'),
         [gasFee, tokenPrice],
     )
 

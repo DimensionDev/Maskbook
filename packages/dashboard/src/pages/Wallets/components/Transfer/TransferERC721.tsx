@@ -117,15 +117,15 @@ export const TransferERC721 = memo(() => {
 
     const allFormFields = watch()
 
-    //#region resolve ENS domain
+    // #region resolve ENS domain
     const {
         value: registeredAddress = '',
         error: resolveDomainError,
         loading: resolveDomainLoading,
     } = useLookupAddress(allFormFields.recipient, NetworkPluginID.PLUGIN_EVM)
-    //#endregion
+    // #endregion
 
-    //#region check contract address and account address
+    // #region check contract address and account address
     useAsync(async () => {
         const recipient = allFormFields.recipient
         setRecipientError(null)
@@ -147,7 +147,7 @@ export const TransferERC721 = memo(() => {
             })
         }
     }, [allFormFields.recipient, clearErrors, registeredAddress])
-    //#endregion
+    // #endregion
 
     const erc721GasLimit = useGasLimit(
         EthereumTokenType.ERC721,
@@ -310,9 +310,10 @@ export const TransferERC721 = memo(() => {
                                     InputProps={{
                                         onClick: (event) => {
                                             if (!anchorEl.current) anchorEl.current = event.currentTarget
-                                            if (!!ensContent) setPopoverOpen(true)
+                                            if (ensContent) setPopoverOpen(true)
                                             setMinPopoverWidth(event.currentTarget.clientWidth)
                                         },
+                                        spellCheck: false,
                                     }}
                                     label={t.wallets_transfer_to_address()}
                                 />
@@ -373,6 +374,7 @@ export const TransferERC721 = memo(() => {
                                 control={control}
                                 render={(field) => (
                                     <SelectNFTList
+                                        error={!!errors.tokenId}
                                         onSelect={(value) => setValue('tokenId', value)}
                                         list={
                                             defaultToken

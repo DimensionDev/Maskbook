@@ -157,12 +157,12 @@ export async function getAllCoinsByKeyword(keyword: string): Promise<Coin[]> {
  * @param id the token address
  */
 export async function getCoinInfo(id: string) {
-    //#region get timestamps from one hour ago, ,one day ago, a week ago
+    // #region get timestamps from one hour ago, ,one day ago, a week ago
     const { utcOneHourBack, utcOneDayBack, utcWeekBack, utcTwoWeekBack, utcOneMonthBack, utcOneYearBack } =
         getTimestampForChanges()
-    //#endregion
+    // #endregion
 
-    //#region get block from one hour ago, one day ago, a week ago
+    // #region get block from one hour ago, one day ago, a week ago
     const {
         [`t${utcOneHourBack}`]: oneHourBlock,
         [`t${utcOneDayBack}`]: oneDayBlock,
@@ -178,9 +178,9 @@ export async function getCoinInfo(id: string) {
         utcOneMonthBack,
         utcOneYearBack,
     ])
-    //#region
+    // #region
 
-    //#region get ether price
+    // #region get ether price
     const ethPrice = await fetchEtherPriceByBlockNumber()
     const {
         [`b${oneHourBlock}`]: oneHourBackEthPrice,
@@ -197,9 +197,9 @@ export async function getCoinInfo(id: string) {
         oneMonthBlock,
         oneYearBlock,
     ])
-    //#endregion
+    // #endregion
 
-    //#region get tokenData
+    // #region get tokenData
     const [
         { token, allPairs },
         { token: oneHourToken },
@@ -217,17 +217,17 @@ export async function getCoinInfo(id: string) {
         fetchTokenData(id, oneMonthBlock),
         fetchTokenData(id, oneYearBlock),
     ])
-    //#endregion
+    // #endregion
 
-    //#region calculate the trade volume and the untracked volume before day ago
+    // #region calculate the trade volume and the untracked volume before day ago
     const oneDayVolumeUSD = new BigNumber(token?.tradeVolumeUSD ?? 0).minus(oneDayToken?.tradeVolumeUSD ?? 0).toNumber()
 
     const oneDayVolumeUT = new BigNumber(token?.untrackedVolumeUSD ?? 0)
         .minus(oneDayToken?.untrackedVolumeUSD ?? 0)
         .toNumber()
-    //#endregion
+    // #endregion
 
-    //#region calculate the current price and price percent before one hour ago, one day ago, a week ago.
+    // #region calculate the current price and price percent before one hour ago, one day ago, a week ago.
     const currentPrice = new BigNumber(token?.derivedETH ?? 0).multipliedBy(ethPrice ?? 0)
 
     const price_change_percentage_1h = getPercentChange(
@@ -259,11 +259,11 @@ export async function getCoinInfo(id: string) {
         currentPrice,
         new BigNumber(oneYearToken?.derivedETH ?? 0).multipliedBy(oneYearBackEthPrice ?? 0),
     )
-    //#endregion
+    // #endregion
 
-    //#region get pairs data
+    // #region get pairs data
     const pairsData = await getBulkPairData(allPairs?.map(({ id }) => id))
-    //#endregion
+    // #endregion
 
     return {
         token,
@@ -277,7 +277,7 @@ export async function getCoinInfo(id: string) {
             price_change_percentage_1y_in_currency,
             price_change_percentage_1h_in_currency: price_change_percentage_1h,
             price_change_percentage_24h_in_currency: price_change_percentage_24h,
-            total_volume: new BigNumber(!!oneDayVolumeUSD ? oneDayVolumeUSD : oneDayVolumeUT).toNumber(),
+            total_volume: new BigNumber(oneDayVolumeUSD ? oneDayVolumeUSD : oneDayVolumeUT).toNumber(),
         },
         tickersInfo: Object.entries(pairsData)
             .sort(([, a], [, z]) => {
@@ -286,7 +286,7 @@ export async function getCoinInfo(id: string) {
             .map(([pairAddress, pairData]) => {
                 return {
                     logo_url:
-                        'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984/logo.png',
+                        'https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/ethereum/assets/0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984/logo.png',
                     trade_url: `https://info.uniswap.org/pair/${pairAddress}`,
                     market_name: 'Uniswap (V2)',
                     base_name: pairData.token0.symbol,

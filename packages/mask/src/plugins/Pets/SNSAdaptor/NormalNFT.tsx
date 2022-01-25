@@ -1,10 +1,10 @@
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box } from '@mui/material'
-import { useStyles as boxUseStyles } from './PreviewBox'
+import { useStyles as useBoxStyles } from './PreviewBox'
 import classNames from 'classnames'
-import { getAssetAsBlobURL } from '../../../utils'
 import Drag from './Drag'
 import type { ShowMeta } from '../types'
+import { CloseIcon } from '../constants'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -21,7 +21,9 @@ const useStyles = makeStyles()(() => ({
         justifyContent: 'center',
     },
     imgBox: {
-        width: '70%',
+        width: '80%',
+        height: '80%',
+        textAlign: 'center',
     },
     close: {
         width: 15,
@@ -39,7 +41,6 @@ const useStyles = makeStyles()(() => ({
     wordBox: {
         position: 'absolute',
         maxWidth: 150,
-        maxHeight: 85,
         bottom: 150,
     },
     dragImg: {
@@ -58,8 +59,7 @@ interface NormalNFTProps {
 export function NormalNFT(props: NormalNFTProps) {
     const { start, infoShow, showMeta, handleClose } = props
     const classes = useStylesExtends(useStyles(), {})
-    const boxClasses = useStylesExtends(boxUseStyles(), {})
-    const CloseIcon = getAssetAsBlobURL(new URL('../assets/close.png', import.meta.url))
+    const boxClasses = useStylesExtends(useBoxStyles(), {})
 
     return (
         <Drag baseWidth={150} baseHeight={150}>

@@ -1,4 +1,5 @@
 import type { ERC721TokenInfo } from '@masknet/web3-shared-evm'
+import type { Constant } from '@masknet/web3-shared-evm/constants/utils'
 
 export interface PetsDialogEvent {
     open: boolean
@@ -8,6 +9,12 @@ export interface EssayRSSNode {
     address: string
     signature: string
     essay: PetMetaDB
+}
+
+export interface ConfigRSSNode {
+    address: string
+    signature: string
+    essay: Record<string, Constant>
 }
 
 export enum ImageType {

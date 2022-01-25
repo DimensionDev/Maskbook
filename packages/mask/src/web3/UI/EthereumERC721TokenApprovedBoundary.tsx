@@ -93,7 +93,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
             return t('plugin_wallet_select_a_nft_contract')
         if (!owner || !EthereumAddress.isValid(owner)) return t('plugin_wallet_select_a_nft_owner')
         if (!operator || !EthereumAddress.isValid(operator)) return t('plugin_wallet_select_a_nft_operator')
-        if (!!_validationMessage) return _validationMessage
+        if (_validationMessage) return _validationMessage
         return ''
     }, [contractDetailed, owner, operator, _validationMessage])
 
@@ -110,7 +110,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
                 {t('plugin_wallet_nft_approving_all', { symbol: contractDetailed?.symbol })}
             </ActionButton>
         )
-    } else if (!!validationMessage) {
+    } else if (validationMessage) {
         return (
             <ActionButton
                 className={classes.approveButton}

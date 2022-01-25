@@ -18,26 +18,29 @@ async function fetchData() {
 }
 
 async function _fetch() {
-    const c = cache.get('verified')
-    let f, json
-    if (c) {
-        f = c[1]
-        if (!f) {
-            f = fetchData()
-            cache.set('verified', [Date.now(), f])
-        }
-        if (Date.now() - c[0] >= EXPIRED_TIME) {
-            json = await f
-            f = fetchData()
-            cache.set('verified', [Date.now(), f])
-            return json
-        }
-    } else {
-        f = fetchData()
+    let c = cache.get('verified')
+    if (!c) {
+        const f = fetchData()
         cache.set('verified', [Date.now(), f])
+    } else {
+        const [t, f] = c
+        if (!f || Date.now() - t >= EXPIRED_TIME) {
+            const _f = fetchData()
+            cache.set('verified', [Date.now(), _f])
+        }
     }
-    json = await f
-    return json
+
+    c = cache.get('verified')
+    if (!c) return []
+    const [_, f] = c
+
+    return f
+        .then((data) => data)
+        .catch((err) => {
+            console.log(err)
+            cache.delete('verified')
+            return []
+        })
 }
 
 export async function getNFTContractVerifiedFromJSON(address: string) {

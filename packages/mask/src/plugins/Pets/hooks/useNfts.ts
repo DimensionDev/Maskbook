@@ -1,61 +1,94 @@
-import { useEffect, useState } from 'react'
-import { useValueRef } from '@masknet/shared'
+import { useEffect, useMemo, useState } from 'react'
+import { useAsync } from 'react-use'
+import { OpenSea } from '@masknet/web3-providers'
 import {
     useChainId,
     useCollectibles,
-    useNFTListConstants,
     ERC721TokenDetailed,
     isSameAddress,
+    ERC721ContractDetailed,
+    SocketState,
 } from '@masknet/web3-shared-evm'
+import { Constant, transform } from '@masknet/web3-shared-evm/constants/utils'
+import { cloneDeep, findLastIndex } from 'lodash-unified'
+import { delay } from '@masknet/shared-base'
 import type { User, FilterContract } from '../types'
-import { currentNonFungibleAssetDataProviderSettings } from '../../Wallet/settings'
 import { Punk3D } from '../constants'
 
-export function useNfts(user: User) {
-    const nftList = useNFTListConstants()
-    const initContracts = Object.keys(nftList).map((i) => {
-        const value = nftList[i as keyof typeof nftList]
-        return { name: i, contract: value || '', tokens: [] }
-    })
+function useInitNFTs(config: Record<string, Constant> | undefined) {
+    return useMemo(() => {
+        if (!config) return []
+        const nftList = transform(config)()
+        return Object.keys(nftList).map((i) => {
+            const value = nftList[i as keyof typeof nftList]
+            return { name: i, contract: value as string, tokens: [] }
+        })
+    }, [config])
+}
+
+export function useNFTs(user: User | undefined, configNFTs: Record<string, Constant> | undefined) {
+    const initContracts = useInitNFTs(configNFTs)
     const [nfts, setNfts] = useState<FilterContract[]>(initContracts)
-    const [page, setPage] = useState(0)
     const chainId = useChainId()
     const [fetchTotal, setFetchTotal] = useState<ERC721TokenDetailed[]>([])
-    const provider = useValueRef(currentNonFungibleAssetDataProviderSettings)
-    const { value = { collectibles: [], hasNextPage: false } } = useCollectibles(
-        user.address,
-        chainId,
-        provider,
-        page,
-        50,
-    )
-    const { collectibles = [], hasNextPage } = value
+    const { data: collectibles, state } = useCollectibles(user?.address ?? '', chainId)
     useEffect(() => {
-        const tempNfts: FilterContract[] = initContracts
-        if (collectibles.length) {
+        if (!initContracts.length) return
+        const tempNFTs: FilterContract[] = cloneDeep(initContracts)
+        if (collectibles.length && (state === SocketState.done || state === SocketState.sent)) {
             const total = [...fetchTotal, ...collectibles]
             setFetchTotal(total)
-            total.forEach((x) => {
-                tempNfts.forEach((y, idx) => {
-                    if (isSameAddress(y.contract, x.contractDetailed.address)) {
-                        const glbSupport =
-                            isSameAddress(x.contractDetailed.address, Punk3D.contract) && x.tokenId === Punk3D.tokenId
-                        tempNfts[idx].tokens.push({ ...x.info, tokenId: x.tokenId, glbSupport })
-                    }
-                })
-            })
-        }
-        setNfts(tempNfts)
-        if (hasNextPage) {
-            const timer = setTimeout(() => {
-                setPage(page + 1)
-            }, 1000)
-            return () => {
-                clearTimeout(timer)
+            for (const NFT of total) {
+                const sameNFT = tempNFTs.find((temp) => isSameAddress(temp.contract, NFT.contractDetailed.address))
+                if (!sameNFT) continue
+                const isPunk =
+                    isSameAddress(NFT.contractDetailed.address, Punk3D.contract) && NFT.tokenId === Punk3D.tokenId
+                if (isPunk) {
+                    NFT.info.mediaUrl = Punk3D.url
+                }
+                const glbSupport = NFT.info.mediaUrl?.endsWith('.glb') || isPunk
+                const item = { ...NFT.info, tokenId: NFT.tokenId, glbSupport }
+                const sameTokenIndex = findLastIndex(sameNFT.tokens, (v) => v.tokenId === NFT.tokenId)
+                if (sameTokenIndex === -1) {
+                    sameNFT.tokens.push(item)
+                } else {
+                    sameNFT.tokens[sameTokenIndex] = item
+                }
             }
         }
+        setNfts(tempNFTs)
         return () => {}
-    }, [user, collectibles])
-
+    }, [JSON.stringify(user), JSON.stringify(collectibles), state, JSON.stringify(initContracts)])
     return nfts
+}
+
+export function useNFTsExtra(configNFTs: Record<string, Constant> | undefined) {
+    const initContracts = useInitNFTs(configNFTs)
+    const [retry, setRetry] = useState(0)
+    const chainId = useChainId()
+    const [extra, setExtra] = useState<ERC721ContractDetailed[]>([])
+    useAsync(async () => {
+        if (!initContracts.length) return
+        if (retry > 2) return
+        let requests = []
+        if (!extra.length) {
+            requests = initContracts.map((nft) => OpenSea.getContract(nft.contract, chainId))
+        } else {
+            // openSea api request should not immediately
+            await delay(3000)
+            requests = extra.map((nft, index) => {
+                if (nft.symbol && nft.name !== 'Unknown Token') {
+                    return Promise.resolve(nft)
+                }
+                return OpenSea.getContract(initContracts[index].contract, chainId)
+            })
+        }
+        const lists: ERC721ContractDetailed[] = []
+        for (const i of requests) {
+            lists.push(await i)
+        }
+        setExtra(lists)
+        setRetry(retry + 1)
+    }, [retry, JSON.stringify(initContracts)])
+    return extra
 }

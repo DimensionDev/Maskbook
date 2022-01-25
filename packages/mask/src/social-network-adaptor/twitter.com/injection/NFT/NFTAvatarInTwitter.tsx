@@ -71,6 +71,7 @@ function NFTAvatarInTwitter() {
         setNFTEvent(data)
     }
 
+    // After the avatar is set, it cannot be saved immediately, and must wait until the avatar of twitter is updated
     useAsync(async () => {
         if (!wallet || !NFTAvatar) return
 
@@ -85,10 +86,25 @@ function NFTAvatarInTwitter() {
             return
         }
 
-        const avatar = await PluginNFTAvatarRPC.saveNFTAvatar(wallet.address, {
-            ...NFTEvent,
-            avatarId: getAvatarId(identity.avatar ?? ''),
-        } as AvatarMetaDB)
+        const avatar = await PluginNFTAvatarRPC.saveNFTAvatar(
+            wallet.address,
+            {
+                ...NFTEvent,
+                avatarId: getAvatarId(identity.avatar ?? ''),
+            } as AvatarMetaDB,
+            identity.identifier.network,
+        ).catch((error) => {
+            setNFTEvent(undefined)
+            setAvatar(undefined)
+            window.alert(error.message)
+            return
+        })
+        if (!avatar) {
+            setNFTEvent(undefined)
+            setAvatar(undefined)
+            window.alert('Sorry, failed to save NFT Avatar. Please set again.')
+            return
+        }
 
         setAvatar(avatar)
         MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll(

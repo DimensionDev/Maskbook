@@ -1,29 +1,35 @@
+import { useAsync } from 'react-use'
 import { useEffect, useState } from 'react'
-import { useAccount, useAddressNames } from '@masknet/web3-shared-evm'
+import { useWallet } from '@masknet/web3-shared-evm'
 import type { User } from '../types'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
+import { PluginPetRPC } from '../messages'
 
 export function useUser() {
     const [user, setUser] = useState<User>({ userId: '', address: '' })
-    const account = useAccount()
+    const wallet = useWallet()
     const whoAmI = useLastRecognizedIdentity()
     useEffect(() => {
-        if (account && whoAmI?.identifier?.userId) {
-            setUser({ userId: whoAmI?.identifier?.userId, address: account })
-        }
-    }, [account, whoAmI])
+        if (!(wallet?.address && whoAmI?.identifier?.userId)) return
+        setUser({ userId: whoAmI.identifier.userId, address: wallet?.address })
+    }, [wallet, whoAmI])
     return user
 }
 
-export function useCurrentVisitingUser() {
+export function useCurrentVisitingUser(flag?: number) {
     const [user, setUser] = useState<User>({ userId: '', address: '' })
     const identity = useCurrentVisitingIdentity()
-    const { value: addressNames = [] } = useAddressNames(identity)
-    useEffect(() => {
-        setUser({
-            userId: identity.identifier.userId ?? '',
-            address: addressNames.length ? addressNames[0].resolvedAddress : '',
-        })
-    }, [identity, addressNames])
+    useAsync(async () => {
+        let address = ''
+        try {
+            const response = await PluginPetRPC.getUserAddress(identity.identifier.userId ?? '')
+            if (response) address = response as string
+        } finally {
+            setUser({
+                userId: identity.identifier.userId ?? '',
+                address: address,
+            })
+        }
+    }, [identity, flag])
     return user
 }

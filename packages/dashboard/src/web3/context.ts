@@ -16,6 +16,7 @@ import {
     isInjectedProvider,
 } from '@masknet/web3-shared-evm'
 import { Services, Messages, PluginServices, PluginMessages } from '../API'
+import { getProxyWebsocketInstance } from '@masknet/web3-shared-base'
 
 const Web3Provider = createExternalProvider()
 
@@ -113,6 +114,9 @@ export const Web3Context: Web3ProviderType = {
     getAddressNamesList: PluginServices.Wallet.getAddressNames,
     getTransactionList: PluginServices.Wallet.getTransactionList,
     fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
+    providerSocket: getProxyWebsocketInstance((info) =>
+        PluginMessages.Wallet.events.socketMessageUpdated.sendToAll(info),
+    ),
 }
 
 export function createExternalProvider() {
@@ -193,7 +197,7 @@ function createSubscriptionFromAsync<T>(
 function getEventTarget() {
     const event = new EventTarget()
     const EVENT = 'event'
-    let timer: NodeJS.Timeout
+    let timer: ReturnType<typeof setTimeout>
     function trigger() {
         clearTimeout(timer)
         // delay to update state to ensure that all settings to be synced globally

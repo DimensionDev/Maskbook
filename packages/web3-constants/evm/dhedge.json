@@ -12,8 +12,12 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "API_URL": {
         "Mainnet": "https://api-v2.dhedge.org/graphql",
@@ -28,7 +32,11 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     }
 }

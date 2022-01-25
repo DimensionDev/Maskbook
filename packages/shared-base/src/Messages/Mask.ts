@@ -35,6 +35,8 @@ export interface MaskSettingsEvents {
     xdaiNetworkTradeProviderSettings: TradeProvider
     fantomNetworkTradeProviderSettings: TradeProvider
     celoNetworkTradeProviderSettings: TradeProvider
+    avalancheNetworkTradeProviderSettings: TradeProvider
+    auroraNetworkTradeProviderSettings: TradeProvider
 }
 
 export interface MaskMobileOnlyEvents {
@@ -70,8 +72,7 @@ export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, Ma
     restoreSuccess: void
     profilesChanged: UpdateEvent<ProfileIdentifier>[]
     relationsChanged: RelationChangedEvent[]
-    pluginEnabled: string
-    pluginDisabled: string
+    pluginMinimalModeChanged: [id: string, newStatus: boolean]
 
     requestExtensionPermission: RequestExtensionPermissionEvent
     signRequestApproved: PersonaSignApprovedEvent

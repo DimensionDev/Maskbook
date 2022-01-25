@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useUser, useNfts, useEssay, useDefaultEssay, useCurrentVisitingUser } from '../hooks'
+import { useEssay, useDefaultEssay, useCurrentVisitingUser } from '../hooks'
 import { ModelNFT } from './ModelNFT'
 import { NormalNFT } from './NormalNFT'
-import { ImageType, ShowMeta } from '../types'
+import { ImageType } from '../types'
+import { PluginPetMessages } from '../messages'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -17,27 +18,23 @@ const AnimatePic = () => {
     const classes = useStylesExtends(useStyles(), {})
 
     const [start, setStart] = useState(true)
+    const [refresh, setRefresh] = useState(0)
 
-    const user = useUser()
-    const userMeta = useEssay(user, start)
-    const visitor = useCurrentVisitingUser()
-    const visitorNfts = useNfts(visitor)
-    const visitorMeta = useEssay(visitor, start)
-    const defMeta = useDefaultEssay(visitorNfts)
+    const visitor = useCurrentVisitingUser(refresh)
+    const visitorMeta = useEssay(visitor, refresh)
+    const defMeta = useDefaultEssay(visitor)
+    const showMeta = visitorMeta ?? defMeta
 
-    const [showMeta, setShowMeta] = useState<ShowMeta | undefined>(undefined)
-    const [show, setShow] = useState(true)
+    const [hidden, setHidden] = useState(false)
     const [infoShow, setInfoShow] = useState(false)
 
-    useEffect(() => {
-        setShowMeta((user.userId === visitor.userId ? userMeta : visitorMeta) ?? defMeta)
-    }, [userMeta, visitorMeta, defMeta])
-
-    const handleClose = () => setShow(false)
+    const handleClose = () => setHidden(true)
     const handleMouseEnter = () => setInfoShow(true)
     const handleMouseLeave = () => setInfoShow(false)
 
+    const refreshHandle = async (data: number) => setRefresh(data)
     useEffect(() => {
+        PluginPetMessages.events.setResult.on(refreshHandle)
         let count = 0
         const timer = setInterval(() => {
             const check = count % 9 < 5
@@ -46,9 +43,10 @@ const AnimatePic = () => {
         }, 1000)
         return () => {
             clearInterval(timer)
+            PluginPetMessages.events.setResult.off(refreshHandle)
         }
     }, [])
-    if (!show || !showMeta?.image) return <></>
+    if (!visitor.userId || visitor.userId === '$unknown' || hidden || !showMeta?.image) return null
     return (
         <div className={classes.root} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             {showMeta.type !== ImageType.GLB ? (

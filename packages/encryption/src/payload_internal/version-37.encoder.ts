@@ -50,7 +50,7 @@ export async function encode37(payload: PayloadWellFormed.Payload) {
 }
 function warn(key: CryptoKey, err: any) {
     console.warn(
-        `[@masknet/encryption] Failed to encode a public key object into spki format. key is`,
+        '[@masknet/encryption] Failed to encode a public key object into spki format. key is',
         key,
         'and the error is',
         err,

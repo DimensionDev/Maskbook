@@ -1,8 +1,14 @@
-import type { CSSProperties } from 'react'
+import type { FC, HTMLProps } from 'react'
 import '@webcomponents/custom-elements'
 import '@google/model-viewer/dist/model-viewer'
-import { AssetPlayer } from '@masknet/shared'
 import { Punk3D } from '../constants'
+
+interface ModelViewElementProps extends HTMLProps<HTMLDivElement> {
+    'shadow-intensity': string
+    'camera-controls': boolean
+    'auto-rotate': boolean
+    ar: boolean
+}
 
 declare global {
     namespace JSX {
@@ -12,31 +18,21 @@ declare global {
     }
 }
 
-interface ModelViewProps {
-    styleContent?: CSSProperties | undefined
+interface ModelViewProps extends HTMLProps<HTMLDivElement> {
     source: string
 }
 
-const ModelView = (props: ModelViewProps) => {
-    const { styleContent } = props
+const ModelView: FC<ModelViewProps> = ({ source, ...rest }) => {
     return (
-        <div style={styleContent}>
-            {/* <model-viewer
-                style={{ width: '90%', height: '100%', top: '5%', margin: 'auto' }}
+        <div {...rest}>
+            <model-viewer
+                style={{ width: '90%', height: '100%', top: source === Punk3D.url ? '5%' : 0, margin: 'auto' }}
                 src={source}
                 shadow-intensity="1"
                 camera-controls
                 auto-rotate
                 ar
-            /> */}
-            <div style={{ width: '90%', height: '100%', top: '5%', margin: 'auto' }}>
-                <AssetPlayer
-                    url={Punk3D.url}
-                    options={{
-                        playsInline: true,
-                    }}
-                />
-            </div>
+            />
         </div>
     )
 }

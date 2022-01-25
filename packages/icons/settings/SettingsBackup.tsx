@@ -29,5 +29,6 @@ export const SettingsBackupIcon: typeof SvgIcon = createPaletteAwareIcon(
         />
         <path d="M17 21v-8H7v8M7 3v5h8" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </g>,
+    undefined,
     '0 0 24 24',
 )
