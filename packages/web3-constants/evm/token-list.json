@@ -27,6 +27,10 @@
         "xDai": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/100/tokens.json"],
         "Boba": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/288/tokens.json"],
         "Boba_Rinkeby": [],
+        "Avalanche": [
+            "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/43114/tokens.json"
+        ],
+        "Avalanche_Fuji": [],
         "Celo": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/42220/tokens.json"],
         "Fantom": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/250/tokens.json"],
         "Aurora": [

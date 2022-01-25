@@ -7,12 +7,12 @@ export const ZRX_BASE_URL: Record<NetworkType, string> = {
     [NetworkType.Arbitrum]: 'https://arbitrum.api.0x.org/',
     [NetworkType.xDai]: 'https://xdai.api.0x.org/',
     [NetworkType.Boba]: 'https://boba.api.0x.org/',
+    [NetworkType.Avalanche]: 'https://avalanche.api.0x.org/',
     [NetworkType.Celo]: 'https://celo.api.0x.org/',
     [NetworkType.Fantom]: 'https://fantom.api.0x.org/',
     [NetworkType.Aurora]: 'https://aurora.api.0x.org/',
     [NetworkType.Fuse]: '',
     [NetworkType.Metis]: '',
-    [NetworkType.Avalanche]: '',
     [NetworkType.Optimistic]: '',
 }
 

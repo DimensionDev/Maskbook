@@ -55,6 +55,8 @@ compileConstants(path.join(__dirname, 'evm'), [
     'xDai',
     'Boba',
     'Boba_Rinkeby',
+    'Avalanche',
+    'Avalanche_Fuji',
     'Celo',
     'Fantom',
     'Aurora',

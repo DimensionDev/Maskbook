@@ -6,6 +6,7 @@ import {
     arbitrumNetworkTradeProviderSettings,
     xdaiNetworkTradeProviderSettings,
     bobaNetworkTradeProviderSettings,
+    avalancheNetworkTradeProviderSettings,
     celoNetworkTradeProviderSettings,
     fantomNetworkTradeProviderSettings,
     auroraNetworkTradeProviderSettings,
@@ -23,6 +24,7 @@ export function useCurrentTradeProvider(chainId?: ChainId) {
     const arbitrumNetworkTradeProvider = useValueRef(arbitrumNetworkTradeProviderSettings)
     const xdaiNetworkTradeProvider = useValueRef(xdaiNetworkTradeProviderSettings)
     const bobaNetworkTradeProvider = useValueRef(bobaNetworkTradeProviderSettings)
+    const avalancheNetworkTradeProvider = useValueRef(avalancheNetworkTradeProviderSettings)
     const celoNetworkTradeProvider = useValueRef(celoNetworkTradeProviderSettings)
     const fantomNetworkTradeProvider = useValueRef(fantomNetworkTradeProviderSettings)
     const auroraNetworkTradeProvider = useValueRef(auroraNetworkTradeProviderSettings)
@@ -41,6 +43,8 @@ export function useCurrentTradeProvider(chainId?: ChainId) {
             return xdaiNetworkTradeProvider
         case NetworkType.Boba:
             return bobaNetworkTradeProvider
+        case NetworkType.Avalanche:
+            return avalancheNetworkTradeProvider
         case NetworkType.Celo:
             return celoNetworkTradeProvider
         case NetworkType.Fantom:
@@ -49,7 +53,6 @@ export function useCurrentTradeProvider(chainId?: ChainId) {
             return auroraNetworkTradeProvider
         case NetworkType.Fuse:
         case NetworkType.Metis:
-        case NetworkType.Avalanche:
         case NetworkType.Optimistic:
             throw new Error(`To be implement network: ${networkType}`)
         default:

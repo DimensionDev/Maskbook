@@ -59,14 +59,15 @@ export enum ChainId {
     // xDai
     xDai = 100,
 
+    // Avalanche
+    Avalanche = 43114,
+    Avalanche_Fuji = 43113,
+
     // Celo
     Celo = 42220,
 
     // Fantom
     Fantom = 250,
-
-    // Avalanche
-    Avalanche = 43114,
 
     // Aurora
     Aurora = 1313161554,

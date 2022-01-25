@@ -60,6 +60,8 @@ export const resolveTradeProviderName = createLookupTableResolver<TradeProvider,
         [TradeProvider.OPENOCEAN]: 'OpenOcean',
         [TradeProvider.SWAPPERCHAN]: 'SwapperChain',
         [TradeProvider.SENPAISWAP]: 'SenpaiSwap',
+        [TradeProvider.TRADERJOE]: 'TraderJoe',
+        [TradeProvider.PANGOLIN]: 'PangolinDex',
         [TradeProvider.TRISOLARIS]: 'Trisolaris',
         [TradeProvider.WANNASWAP]: 'WannaSwap',
     },
@@ -92,6 +94,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
                     return 'https://celo.api.0x.org/'
                 case NetworkType.Fantom:
                     return 'https://fantom.api.0x.org/'
+                case NetworkType.Avalanche:
+                    return 'https://avalanche.api.0x.org/'
                 case NetworkType.Aurora:
                     return 'https://aurora.api.0x.org/'
                 case NetworkType.Fuse:
@@ -126,6 +130,10 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
             return 'https://swapperchan.com/swap'
         case TradeProvider.SENPAISWAP:
             return 'https://app.senpaiswap.com/#/swap'
+        case TradeProvider.TRADERJOE:
+            return 'https://traderjoexyz.com/#/trade'
+        case TradeProvider.PANGOLIN:
+            return 'https://app.pangolin.exchange/#/swap'
         case TradeProvider.TRISOLARIS:
             return 'https://www.trisolaris.io/#/swap'
         case TradeProvider.WANNASWAP:
@@ -172,11 +180,12 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
                     return `https://analytics-celo.sushi.com/pairs/${address}`
                 case NetworkType.Fantom:
                     return `https://analytics-ftm.sushi.com/pairs/${address}`
+                case NetworkType.Avalanche:
+                    return `https://analytics-avx.sushi.com/pairs/${address}`
                 case NetworkType.Aurora:
                     return `https://analytics-aurora.sushi.com/pairs/${address}`
                 case NetworkType.Fuse:
                 case NetworkType.Metis:
-                case NetworkType.Avalanche:
                 case NetworkType.Optimistic:
                     console.error('To be implement network: ', networkType)
                     return ''
@@ -204,6 +213,10 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
         case TradeProvider.OPENOCEAN:
             // TODO - OpenOcean
             return ''
+        case TradeProvider.TRADERJOE:
+            return `https://analytics.traderjoexyz.com/pairs/${address}`
+        case TradeProvider.PANGOLIN:
+            return `https://info.pangolin.exchange/pair/${address}`
         case TradeProvider.TRISOLARIS:
             // TODO - add Trisolaris Analytics
             return ''
@@ -302,6 +315,8 @@ export const resolveZrxTradePoolName = createLookupTableResolver<ZrxTradePool, s
         [ZrxTradePool.OolongSwap]: 'OolongSwap',
         [ZrxTradePool.SwapperChan]: 'SwapperChan',
         [ZrxTradePool.SenpaiSwap]: 'SenpaiSwap',
+        [ZrxTradePool.TraderJoe]: 'TraderJoe',
+        [ZrxTradePool.PangolinDex]: 'PangolinDex',
         [ZrxTradePool.Trisolaris]: 'Trisolaris',
         [ZrxTradePool.WannaSwap]: 'WannaSwap',
     },

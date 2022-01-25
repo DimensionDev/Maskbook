@@ -99,4 +99,5 @@ Goto `chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/dashboard.html#/wallet
 | Fantom       | <https://github.com/DimensionDev/Maskbook/pull/5036> |
 | xDai         | <https://github.com/DimensionDev/Maskbook/pull/4140> |
 | Arbitrum     | <https://github.com/DimensionDev/Maskbook/pull/3558> |
+| Avalanche    | <https://github.com/DimensionDev/Maskbook/pull/5289> |
 | Boba Network | <https://github.com/DimensionDev/Maskbook/pull/5310> |
