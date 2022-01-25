@@ -1,4 +1,4 @@
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Link, Stack, Typography } from '@mui/material'
 import { memo } from 'react'
 import { Platform } from '../types'
@@ -52,7 +52,7 @@ export const BindingItem = memo<Item>(({ platform, identity, enableAction, onUnB
     const t = useI18N()
     const { Utils } = useWeb3State() ?? {}
     const { classes } = useStyles()
-    const networkDescriptor = useNetworkDescriptor(1, NetworkPluginID.PLUGIN_EVM)
+    const networkDescriptor = useNetworkDescriptor(ChainId.Mainnet, NetworkPluginID.PLUGIN_EVM)
 
     if (platform === Platform.ethereum) {
         return (

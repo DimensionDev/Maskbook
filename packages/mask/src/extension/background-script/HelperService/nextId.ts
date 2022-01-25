@@ -8,6 +8,7 @@ import {
 } from '@masknet/shared-base'
 import urlcat from 'urlcat'
 import { KeyValue } from '@masknet/web3-providers'
+import { first } from 'lodash-unified'
 
 const BASE_URL =
     process.env.channel === 'stable' && process.env.NODE_ENV === 'production'
@@ -86,7 +87,6 @@ export async function bindProof(
 }
 
 async function queryPersonaHexPublicKey(persona: PersonaIdentifier) {
-    console.log(persona)
     const key256 = decompressSecp256k1Key(persona.compressedPoint)
     if (!key256.x || !key256.y) return null
     const arr = compressSecp256k1Point(key256.x, key256.y)
@@ -103,7 +103,7 @@ export async function queryExistedBinding(persona: PersonaIdentifier) {
     })
 
     const result = (await response.json()) as QueryBindingResponse
-    return result.ids[0]
+    return first(result.ids)
 }
 
 export async function createPersonaPayload(

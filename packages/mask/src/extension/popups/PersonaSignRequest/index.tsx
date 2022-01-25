@@ -101,7 +101,7 @@ const PersonaSignRequest = memo(() => {
             setMessage(messageInURL)
             setRequestID(requestIDInURL)
         }
-    }, [personas])
+    }, [personas, location.search])
 
     const onSign = () => {
         if (!requestID || !selected) return
