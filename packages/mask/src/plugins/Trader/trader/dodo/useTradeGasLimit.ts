@@ -9,7 +9,7 @@ import type { AsyncState } from 'react-use/lib/useAsyncFn'
 
 export function useTradeGasLimit(tradeComputed: TradeComputed<SwapRouteData> | null): AsyncState<number> {
     const { targetChainId } = TargetChainIdContext.useContainer()
-    const web3 = useWeb3(true, targetChainId)
+    const web3 = useWeb3({ chainId: targetChainId })
     const account = useAccount()
     const config = useMemo(() => {
         if (!account || !tradeComputed?.trade_) return null

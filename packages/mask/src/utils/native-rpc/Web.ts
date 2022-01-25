@@ -115,6 +115,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.getArbitrumNetworkTradeProvider()
             case NetworkType.xDai:
                 return Services.Settings.getxDaiNetworkTradeProvider()
+            case NetworkType.Avalanche:
+                return Services.Settings.getAvalancheNetworkTradeProvider()
             case NetworkType.Celo:
                 return Services.Settings.getCeloNetworkTradeProvider()
             case NetworkType.Fantom:
@@ -144,6 +146,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.setArbitrumNetworkTradeProvider(provider)
             case NetworkType.xDai:
                 return Services.Settings.setxDaiNetworkTradeProvider(provider)
+            case NetworkType.Avalanche:
+                return Services.Settings.setAvalancheNetworkTradeProvider(provider)
             case NetworkType.Celo:
                 return Services.Settings.setCeloNetworkTradeProvider(provider)
             case NetworkType.Fantom:

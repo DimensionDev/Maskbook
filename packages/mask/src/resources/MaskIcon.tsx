@@ -96,7 +96,7 @@ export function MaskIconOutlined(props: SvgIconProps) {
 }
 
 export function MaskSharpIcon(props: SvgIconPropsWithSize) {
-    const { size = 20, color } = props
+    const { size = 17, color } = props
     return (
         <SvgIcon style={{ width: size, height: size }} color={color} viewBox="0 0 38 38">
             <path
