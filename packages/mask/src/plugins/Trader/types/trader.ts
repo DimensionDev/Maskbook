@@ -73,6 +73,8 @@ export enum ZrxTradePool {
     xSigma = 'xSigma',
     NetSwap = 'NetSwap',
     Tethys = 'Tethys',
+    TraderJoe = 'TraderJoe',
+    PangolinDex = 'PangolinDex',
     Trisolaris = 'Trisolaris',
     WannaSwap = 'WannaSwap',
 }

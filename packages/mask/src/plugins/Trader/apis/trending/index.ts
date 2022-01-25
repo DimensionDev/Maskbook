@@ -339,7 +339,7 @@ async function getCoinTrending(id: string, currency: Currency, dataProvider: Dat
                     decimals: Number(token?.decimals || '0'),
                     is_mirrored: isMirroredKeyword(token?.symbol || ''),
                     blockchain_urls: [`https://info.uniswap.org/token/${id}`, `https://etherscan.io/address/${id}`],
-                    image_url: `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${id}/logo.png`,
+                    image_url: `https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/ethereum/assets/${id}/logo.png`,
                     platform_url: `https://info.uniswap.org/token/${id}`,
                     contract_address: id,
                 },

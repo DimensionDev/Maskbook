@@ -17,6 +17,10 @@ import {
     NETSWAP_CUSTOM_BASES,
     TETHYS_BASE_AGAINST_TOKENS,
     TETHYS_CUSTOM_BASES,
+    TRADERJOE_BASE_AGAINST_TOKENS,
+    TRADERJOE_CUSTOM_BASES,
+    PANGOLIN_BASE_AGAINST_TOKENS,
+    PANGOLIN_CUSTOM_BASES,
     WANNASWAP_BASE_AGAINST_TOKENS,
     WANNASWAP_CUSTOM_BASES,
     TRISOLARIS_BASE_AGAINST_TOKENS,
@@ -125,6 +129,30 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     AGAINST_TOKENS: TETHYS_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: TETHYS_CUSTOM_BASES,
+                }
+            case TradeProvider.TRADERJOE:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.TRADERJOE_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.TRADERJOE_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.TRADERJOE_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.TRADERJOE_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: TRADERJOE_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: TRADERJOE_CUSTOM_BASES,
+                }
+            case TradeProvider.PANGOLIN:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.PANGOLIN_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.PANGOLIN_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.PANGOLIN_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.PANGOLIN_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: PANGOLIN_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: PANGOLIN_CUSTOM_BASES,
                 }
             case TradeProvider.WANNASWAP:
                 return {

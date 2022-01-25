@@ -93,10 +93,11 @@ Goto `chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/dashboard.html#/wallet
 
 ## Learn More
 
-| Chain    | Pull Request Link                                    |
-| -------- | ---------------------------------------------------- |
-| CELO     | <https://github.com/DimensionDev/Maskbook/pull/5052> |
-| Fantom   | <https://github.com/DimensionDev/Maskbook/pull/5036> |
-| xDai     | <https://github.com/DimensionDev/Maskbook/pull/4140> |
-| Arbitrum | <https://github.com/DimensionDev/Maskbook/pull/3558> |
-| Metis    | <https://github.com/DimensionDev/Maskbook/pull/5322> |
+| Chain     | Pull Request Link                                    |
+| --------- | ---------------------------------------------------- |
+| CELO      | <https://github.com/DimensionDev/Maskbook/pull/5052> |
+| Fantom    | <https://github.com/DimensionDev/Maskbook/pull/5036> |
+| xDai      | <https://github.com/DimensionDev/Maskbook/pull/4140> |
+| Arbitrum  | <https://github.com/DimensionDev/Maskbook/pull/3558> |
+| Avalanche | <https://github.com/DimensionDev/Maskbook/pull/5289> |
+| Metis     | <https://github.com/DimensionDev/Maskbook/pull/5322> |

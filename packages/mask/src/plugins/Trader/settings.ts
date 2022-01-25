@@ -94,6 +94,12 @@ export const metisNetworkTradeProviderSettings = createGlobalSettings<TradeProvi
     { primary: () => '' },
 )
 
+export const avalancheNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_ID}+avalanche+tradeProvider`,
+    TradeProvider.SUSHISWAP,
+    { primary: () => '' },
+)
+
 export const auroraNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
     `${PLUGIN_ID}+aurora+tradeProvider`,
     TradeProvider.DODO,
@@ -117,6 +123,8 @@ const dodoSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+
 const bancorSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+bancor`, '')
 const netswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+netswap`, '')
 const tethysSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+tethys`, '')
+const traderjoeSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+traderjoe`, '')
+const pangolinSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+pangolin`, '')
 const openoceanSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+openocean`, '')
 const trisolarisSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+trisolaris`, '')
 const wannaswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+wannaswap`, '')
@@ -150,8 +158,12 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return netswapSettings
         case TradeProvider.TETHYS:
             return tethysSettings
+        case TradeProvider.TRADERJOE:
+            return traderjoeSettings
         case TradeProvider.OPENOCEAN:
             return openoceanSettings
+        case TradeProvider.PANGOLIN:
+            return pangolinSettings
         case TradeProvider.TRISOLARIS:
             return trisolarisSettings
         case TradeProvider.WANNASWAP:

@@ -8,12 +8,12 @@ export const networkNames: Record<NetworkType, string> = {
     [NetworkType.Polygon]: 'matic',
     [NetworkType.Arbitrum]: 'arbitrum',
     [NetworkType.xDai]: 'xdai',
+    [NetworkType.Avalanche]: 'avalanche',
     [NetworkType.Celo]: 'celo',
     [NetworkType.Metis]: 'metis',
     [NetworkType.Fantom]: 'fantom',
     [NetworkType.Aurora]: 'aurora',
     [NetworkType.Boba]: '',
     [NetworkType.Fuse]: '',
-    [NetworkType.Avalanche]: '',
     [NetworkType.Optimistic]: '',
 }

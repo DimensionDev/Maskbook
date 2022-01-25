@@ -11,6 +11,7 @@ import {
     polygonNetworkTradeProviderSettings,
     arbitrumNetworkTradeProviderSettings,
     xdaiNetworkTradeProviderSettings,
+    avalancheNetworkTradeProviderSettings,
     celoNetworkTradeProviderSettings,
     metisNetworkTradeProviderSettings,
     fantomNetworkTradeProviderSettings,
@@ -44,6 +45,11 @@ currentChainIdSettings.addListener((chainId: ChainId) => {
             currentTradeProviderSettings.value = TradeProvider.SUSHISWAP
             if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
                 currentDataProviderSettings.value = DataProvider.COIN_MARKET_CAP
+            break
+        case NetworkType.Avalanche:
+            currentTradeProviderSettings.value = TradeProvider.SUSHISWAP
+            if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
+                currentDataProviderSettings.value = DataProvider.COIN_GECKO
             break
         case NetworkType.Celo:
             currentTradeProviderSettings.value = TradeProvider.SUSHISWAP
@@ -95,6 +101,9 @@ currentTradeProviderSettings.addListener((tradeProvider: TradeProvider) => {
         case NetworkType.xDai:
             xdaiNetworkTradeProviderSettings.value = tradeProvider
             break
+        case NetworkType.Avalanche:
+            avalancheNetworkTradeProviderSettings.value = tradeProvider
+            break
         case NetworkType.Celo:
             celoNetworkTradeProviderSettings.value = tradeProvider
             break
@@ -109,7 +118,6 @@ currentTradeProviderSettings.addListener((tradeProvider: TradeProvider) => {
             break
         case NetworkType.Boba:
         case NetworkType.Fuse:
-        case NetworkType.Avalanche:
         case NetworkType.Optimistic:
             throw new Error(`To be implement network: ${networkType}`)
         default:

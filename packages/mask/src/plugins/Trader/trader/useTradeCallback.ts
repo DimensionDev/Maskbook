@@ -112,6 +112,10 @@ export function useTradeCallback(
             return uniswapV2Like
         case TradeProvider.TETHYS:
             return uniswapV2Like
+        case TradeProvider.TRADERJOE:
+            return uniswapV2Like
+        case TradeProvider.PANGOLIN:
+            return uniswapV2Like
         case TradeProvider.OPENOCEAN:
             return openocean
         default:
