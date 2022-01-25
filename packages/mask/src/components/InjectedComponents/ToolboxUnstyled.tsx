@@ -167,7 +167,9 @@ function useToolbox() {
     const { Utils } = useWeb3State()
 
     // #region recent pending transactions
-    const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)
+    const { value: pendingTransactions = [] } = useRecentTransactions({
+        status: TransactionStatusType.NOT_DEPEND,
+    })
     // #endregion
 
     // #region Wallet

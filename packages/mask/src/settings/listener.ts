@@ -8,9 +8,6 @@ import {
 import type { MaskSettingsEvents } from '@masknet/shared-base'
 import {
     currentAccountSettings,
-    currentBalanceSettings,
-    currentBalancesSettings,
-    currentBlockNumberSettings,
     currentChainIdSettings,
     currentNonFungibleAssetDataProviderSettings,
     currentNetworkSettings,
@@ -40,9 +37,6 @@ export function ToBeListened(): ToBeListedSettings {
         languageSettings,
         debugModeSetting,
         currentChainIdSettings,
-        currentBalanceSettings,
-        currentBalancesSettings,
-        currentBlockNumberSettings,
         currentTokenPricesSettings,
         currentDataProviderSettings,
         currentProviderSettings,

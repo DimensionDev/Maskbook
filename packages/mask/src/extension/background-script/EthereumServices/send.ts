@@ -405,7 +405,9 @@ export async function INTERNAL_send(
         const [hash] = payload.params as [string]
 
         // redirect receipt queries to tx watcher
-        const transaction = await WalletRPC.getRecentTransaction(chainIdFinally, account, hash)
+        const transaction = await WalletRPC.getRecentTransaction(chainIdFinally, account, hash, {
+            receipt: true,
+        })
 
         try {
             callback(null, {

@@ -11,7 +11,7 @@ import BigNumber from 'bignumber.js'
 export function useTradeGasLimit(tradeComputed: TradeComputed<SwapOOData> | null): AsyncState<number> {
     const { targetChainId } = TargetChainIdContext.useContainer()
 
-    const web3 = useWeb3(false, targetChainId)
+    const web3 = useWeb3({ chainId: targetChainId })
     const account = useAccount()
     const config = useMemo(() => {
         if (!account || !tradeComputed?.trade_) return null
