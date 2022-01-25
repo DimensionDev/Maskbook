@@ -31,6 +31,7 @@ export interface MaskSettingsEvents {
     xdaiNetworkTradeProviderSettings: TradeProvider
     fantomNetworkTradeProviderSettings: TradeProvider
     celoNetworkTradeProviderSettings: TradeProvider
+    avalancheNetworkTradeProviderSettings: TradeProvider
     auroraNetworkTradeProviderSettings: TradeProvider
 }
 

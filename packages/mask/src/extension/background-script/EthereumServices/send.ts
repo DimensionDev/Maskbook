@@ -18,6 +18,7 @@ import {
     getPayloadChainId,
     getTransactionHash,
     isZeroAddress,
+    formatGweiToWei,
 } from '@masknet/web3-shared-evm'
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import * as MetaMask from './providers/MetaMask'
@@ -282,9 +283,15 @@ export async function INTERNAL_send(
             config.gasPrice = await getGasPrice()
         }
 
-        // if the transaction is eip-1559, need to remove gasPrice from the config
-        if (Flags.EIP1559_enabled && isEIP1559Valid) {
+        // if the transaction is eip-1559, need to remove gasPrice from the config,
+        // and adjust the default gas web3.js setting,
+        // the estimation of metamask of `maxFeePerGas` = 1 * block.baseFeePerGas,
+        // since the estimation of web3.js = 2 * block.baseFeePerGas which is too high
+        // that would almost always causes an undesired warning tip.
+        if (Flags.EIP1559_enabled && isEIP1559Valid && isEIP1559Supported(chainIdFinally)) {
             config.gasPrice = undefined
+            config.maxPriorityFeePerGas = formatGweiToWei(1.5).toString(16)
+            config.maxFeePerGas = (Number.parseInt(config.maxFeePerGas!, 16) * 0.8).toString(16)
         } else {
             config.maxFeePerGas = undefined
             config.maxPriorityFeePerGas = undefined

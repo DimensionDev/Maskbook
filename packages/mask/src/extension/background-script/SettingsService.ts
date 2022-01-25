@@ -15,6 +15,7 @@ import {
     polygonNetworkTradeProviderSettings,
     arbitrumNetworkTradeProviderSettings,
     xdaiNetworkTradeProviderSettings,
+    avalancheNetworkTradeProviderSettings,
     celoNetworkTradeProviderSettings,
     fantomNetworkTradeProviderSettings,
     auroraNetworkTradeProviderSettings,
@@ -70,6 +71,9 @@ export const [getArbitrumNetworkTradeProvider, setArbitrumNetworkTradeProvider] 
 )
 export const [getxDaiNetworkTradeProvider, setxDaiNetworkTradeProvider] = create(xdaiNetworkTradeProviderSettings)
 
+export const [getAvalancheNetworkTradeProvider, setAvalancheNetworkTradeProvider] = create(
+    avalancheNetworkTradeProviderSettings,
+)
 export const [getCeloNetworkTradeProvider, setCeloNetworkTradeProvider] = create(celoNetworkTradeProviderSettings)
 
 export const [getFantomNetworkTradeProvider, setFantomNetworkTradeProvider] = create(fantomNetworkTradeProviderSettings)

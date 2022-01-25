@@ -80,7 +80,7 @@ async function getERC20TokenDetailed(
     return createERC20Token(
         chainId,
         address,
-        typeof decimals === 'string' ? Number.parseInt(decimals, 10) : decimals,
+        typeof decimals === 'string' ? Number.parseInt(decimals ? decimals : '0', 10) : decimals,
         parseStringOrBytes32(name, nameBytes32, 'Unknown Token'),
         parseStringOrBytes32(symbol, symbolBytes32, 'Unknown'),
     )
