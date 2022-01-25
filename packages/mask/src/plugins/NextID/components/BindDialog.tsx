@@ -12,8 +12,6 @@ import { delay } from '@masknet/shared-base'
 import { useBindPayload } from '../hooks/useBindPayload'
 import { usePersonaSign } from '../hooks/usePersonaSign'
 import { useWalletSign } from '../hooks/useWalletSign'
-import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
-import { activatedSocialNetworkUI } from '../../../social-network'
 
 interface BindDialogProps {
     open: boolean
@@ -26,7 +24,6 @@ interface BindDialogProps {
 export const BindDialog = memo<BindDialogProps>(({ open, onClose, persona, onBind, bounds }) => {
     const account = useAccount()
     const t = useI18N()
-    const visitingProfileIdentifier = useCurrentVisitingIdentity()
     const { showSnackbar } = useCustomSnackbar()
     const currentIdentifier = persona.identifier
     const isBound = !!bounds.find((x) => isSameAddress(x.identity, account))
@@ -50,11 +47,6 @@ export const BindDialog = memo<BindDialogProps>(({ open, onClose, persona, onBin
                 variant: 'success',
                 message: t.notify_wallet_sign_request_success(),
             })
-            Services.Helper.updateNextIDRelationFromKV(
-                activatedSocialNetworkUI.name,
-                visitingProfileIdentifier.identifier.userId,
-                currentIdentifier.toText(),
-            )
             await delay(2000)
             onBind()
             onClose()

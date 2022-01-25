@@ -7,7 +7,6 @@ import {
     decompressSecp256k1Key,
 } from '@masknet/shared-base'
 import urlcat from 'urlcat'
-import { KeyValue } from '@masknet/web3-providers'
 import { first } from 'lodash-unified'
 
 const BASE_URL =
@@ -42,19 +41,6 @@ interface CreatePayloadBody {
 interface PayloadResponse {
     post_content: string
     sign_payload: string
-}
-
-export const KV_SERVER_RUL = 'https://kv.r2d2.to/'
-export const NEXT_ID_KV_PREFIX = 'nextid.persona'
-
-const NextIDStorage = KeyValue.createJSON_Storage(NEXT_ID_KV_PREFIX)
-
-export async function updateNextIDRelationFromKV(sns: string, username: string, value: string) {
-    await NextIDStorage.set(`${sns}_${username}`, value)
-}
-
-export async function getNextIDRelationFromKV(sns: string, username: string) {
-    return NextIDStorage.get<string>(`${sns}_${username}`)
 }
 
 export async function bindProof(

@@ -10,8 +10,6 @@ import type { Platform } from '../types'
 import { UnbindDialog } from './UnbindDialog'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
-import { ECKeyIdentifier, Identifier } from '@masknet/shared-base'
-import { activatedSocialNetworkUI } from '../../../social-network'
 
 const useStyles = makeStyles()((theme) => ({
     tip: {
@@ -67,20 +65,7 @@ export function NextIdPage({}: NextIDPageProps) {
         if (isOwn) {
             return Services.Helper.queryExistedBinding(currentPersona.identifier)
         }
-        // fetch visiting public key from kv server
-        const identifierStringInKV = await Services.Helper.getNextIDRelationFromKV(
-            activatedSocialNetworkUI.name,
-            visitingPersonaIdentifier.identifier.userId,
-        )
 
-        if (identifierStringInKV) {
-            const personaFromKV = Identifier.fromString(identifierStringInKV, ECKeyIdentifier).unwrapOr(undefined)
-            if (personaFromKV) {
-                return Services.Helper.queryExistedBinding(personaFromKV)
-            }
-        }
-
-        // fetch visiting public key from local
         if (!visitingPersonaIdentifier) return Promise.resolve(null)
         const visitingPersona = await Services.Identity.queryPersonaByProfile(visitingPersonaIdentifier.identifier)
 
