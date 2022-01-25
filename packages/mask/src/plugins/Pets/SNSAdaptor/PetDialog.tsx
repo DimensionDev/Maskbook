@@ -115,11 +115,11 @@ export function PetDialog() {
         setInputTokenName('')
     }, [open])
 
-    let timer: NodeJS.Timeout
+    let timer: NodeJS.Timeout | null = null
     const closeDialogHandle = () => {
         setTipShow(true)
         closeDialog()
-        clearTimeout(timer)
+        if (timer !== null) clearTimeout(timer)
         timer = setTimeout(() => {
             setTipShow(false)
         }, 2000)
