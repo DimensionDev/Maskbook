@@ -104,7 +104,7 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
         openMenu(ref.current)
     }, [openMenu, ref.current])
 
-    //#region update amount by self
+    // #region update amount by self
     const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
         () => ({
             RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${token?.decimals}}$`), // .ddd...d
@@ -120,7 +120,7 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
         },
         [onAmountChange, RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT],
     )
-    //#endregion
+    // #endregion
 
     return (
         <div className={classes.root}>
@@ -129,7 +129,7 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
                     {t('plugin_collectible_price')}
                 </Typography>
                 <Typography variant="body1" color="colorPrimary">
-                    {`${t('wallet_balance')}: `}
+                    {t('wallet_balance')}:
                     <FormattedBalance
                         value={balance}
                         decimals={token?.decimals}
@@ -155,7 +155,7 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
                         min: 0,
                         minLength: MIN_AMOUNT_LENGTH,
                         maxLength: MAX_AMOUNT_LENGTH,
-                        pattern: '^[0-9]*[.,]?[0-9]*$',
+                        pattern: /^\d+[,.]?\d+$/,
                         spellCheck: false,
                         className: classes.input,
                     }}
