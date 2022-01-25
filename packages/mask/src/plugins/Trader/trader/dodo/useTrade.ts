@@ -2,17 +2,16 @@ import {
     FungibleTokenDetailed,
     isNativeTokenAddress,
     useAccount,
-    useBlockNumber,
     useRPCConstants,
     useTokenConstants,
     useTraderConstants,
 } from '@masknet/web3-shared-evm'
-import { useAsyncRetry } from 'react-use'
 import { PluginTraderRPC } from '../../messages'
 import type { TradeStrategy } from '../../types'
 import { useSlippageTolerance } from './useSlippageTolerance'
 import { first } from 'lodash-unified'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { useDoubleBlockBeatRetry } from '@masknet/plugin-infra'
 
 export function useTrade(
     strategy: TradeStrategy,
@@ -22,7 +21,6 @@ export function useTrade(
     outputToken?: FungibleTokenDetailed,
     temporarySlippage?: number,
 ) {
-    const blockNumber = useBlockNumber()
     const slippageSetting = useSlippageTolerance()
     const slippage = temporarySlippage || slippageSetting
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
@@ -32,7 +30,7 @@ export function useTrade(
     const { DODO_ETH_ADDRESS } = useTraderConstants(chainId)
     const account = useAccount()
 
-    return useAsyncRetry(async () => {
+    return useDoubleBlockBeatRetry(async () => {
         if (!inputToken || !outputToken) return null
         if (inputAmount === '0') return null
         const sellToken = isNativeTokenAddress(inputToken)
@@ -59,7 +57,6 @@ export function useTrade(
         inputToken?.address,
         outputToken?.address,
         slippage,
-        blockNumber, // refresh api each block
         account,
         providerURL,
         chainId,

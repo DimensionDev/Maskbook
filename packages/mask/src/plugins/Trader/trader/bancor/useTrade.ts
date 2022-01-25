@@ -1,18 +1,17 @@
 import {
     FungibleTokenDetailed,
     useAccount,
-    useBlockNumber,
     useTokenConstants,
     useTraderConstants,
     ChainId,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
-import { useAsyncRetry } from 'react-use'
 import { PluginTraderRPC } from '../../messages'
 import { TradeStrategy } from '../../types'
 import { useSlippageTolerance } from './useSlippageTolerance'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { leftShift } from '@masknet/web3-shared-base'
+import { useDoubleBlockBeatRetry } from '@masknet/plugin-infra'
 
 export function useTrade(
     strategy: TradeStrategy,
@@ -22,7 +21,6 @@ export function useTrade(
     outputToken?: FungibleTokenDetailed,
     temporarySlippage?: number,
 ) {
-    const blockNumber = useBlockNumber()
     const slippageSetting = useSlippageTolerance()
     const slippage = temporarySlippage || slippageSetting
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
@@ -34,7 +32,7 @@ export function useTrade(
     const outputAmount = leftShift(outputAmountWei, outputToken?.decimals).toFixed()
     const isExactIn = strategy === TradeStrategy.ExactIn
 
-    return useAsyncRetry(async () => {
+    return useDoubleBlockBeatRetry(async () => {
         if (!inputToken || !outputToken) return null
         if (inputAmountWei === '0' && isExactIn) return null
         if (outputAmountWei === '0' && !isExactIn) return null
@@ -67,7 +65,6 @@ export function useTrade(
         inputToken?.address,
         outputToken?.address,
         slippage,
-        blockNumber, // refresh api each block
         user,
         chainId,
     ])

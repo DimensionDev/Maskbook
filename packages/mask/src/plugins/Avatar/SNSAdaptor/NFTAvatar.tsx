@@ -163,8 +163,8 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                   )
                                       .filter(
                                           (token: ERC721TokenDetailed) =>
-                                              token.info.mediaUrl &&
-                                              !token.info.mediaUrl?.match(/\.(mp4|webm|mov|ogg|mp3|wav)$/i),
+                                              token.info.imageURL &&
+                                              !token.info.imageURL?.match(/\.(mp4|webm|mov|ogg|mp3|wav)$/i),
                                       )
                                       .map((token: ERC721TokenDetailed, i) => (
                                           <NFTImage

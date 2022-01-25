@@ -112,6 +112,9 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
 
 const PERCENT_DENOMINATOR = 10000
 
+const MIN_SLIPPAGE = 150
+const MAX_SLIPPAGE = 1000
+
 export interface ConfirmDialogUIProps extends withClasses<never> {
     open: boolean
     trade: TradeComputed
@@ -164,11 +167,13 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     const isGreatThanSlippageSetting = useGreatThanSlippageSetting(cacheTrade?.priceImpact)
 
     const alertTip = useMemo(() => {
-        if (currentSlippage >= 150 && currentSlippage < 1000) return null
+        if (currentSlippage >= MIN_SLIPPAGE && currentSlippage < MAX_SLIPPAGE) return null
 
         return (
             <Alert className={classes.alert} icon={<InfoIcon className={classes.alertIcon} />} severity="info">
-                {currentSlippage < 150 ? t('plugin_trader_confirm_tips') : t('plugin_trader_price_impact_warning_tips')}
+                {currentSlippage < MIN_SLIPPAGE
+                    ? t('plugin_trader_confirm_tips')
+                    : t('plugin_trader_price_impact_warning_tips')}
             </Alert>
         )
     }, [currentSlippage])

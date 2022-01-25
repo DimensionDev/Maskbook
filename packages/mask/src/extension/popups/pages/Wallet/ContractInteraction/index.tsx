@@ -11,7 +11,6 @@ import {
     formatWeiToEther,
     getChainIdFromNetworkType,
     isEIP1559Supported,
-    isZeroAddress,
     NetworkType,
     useChainId,
     useERC20TokenDetailed,
@@ -191,18 +190,6 @@ const ContractInteraction = memo(() => {
                             maxFeePerGas: request.computedPayload._tx.maxFeePerGas,
                             maxPriorityFeePerGas: request.computedPayload._tx.maxPriorityFeePerGas,
                             amount: request.computedPayload.parameters?.value,
-                        }
-                    case 'create_red_packet':
-                        return {
-                            isNativeTokenInteraction: isZeroAddress(request.computedPayload.parameters?._token_addr),
-                            typeName: t('popups_wallet_contract_interaction_create_lucky_drop'),
-                            tokenAddress: request.computedPayload.parameters?._token_addr,
-                            to: request.computedPayload._tx.to,
-                            gas: request.computedPayload._tx.gas,
-                            gasPrice: request.computedPayload._tx.gasPrice,
-                            maxFeePerGas: request.computedPayload._tx.maxFeePerGas,
-                            maxPriorityFeePerGas: request.computedPayload._tx.maxPriorityFeePerGas,
-                            amount: request.computedPayload.parameters?._total_tokens,
                         }
                     default:
                         return {
