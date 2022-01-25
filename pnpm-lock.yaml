@@ -159,13 +159,16 @@ importers:
       color: ^4.1.0
       date-fns: 2.27.0
       history: ^5.2.0
+      html-to-image: ^1.9.0
       i18next-browser-languagedetector: ^6.1.2
       json-stable-stringify: ^1.0.1
       path-browserify: ^1.0.1
       react-avatar-editor: ^12.0.0
       react-hook-form: ^7.22.5
+      react-qrcode-logo: ^2.5.0
       react-router: 6.0.0-beta.0
       react-router-dom: 6.0.0-beta.0
+      react-to-print: ^2.14.3
       react-use: ^17.3.1
       stream-browserify: ^3.0.0
       unstated-next: ^1.1.0
@@ -202,12 +205,15 @@ importers:
       color: 4.1.0
       date-fns: 2.27.0
       history: 5.2.0
+      html-to-image: 1.9.0
       i18next-browser-languagedetector: 6.1.2
       json-stable-stringify: 1.0.1
       react-avatar-editor: 12.0.0_2a5ce53653c2861b1c74a6612fe40887
       react-hook-form: 7.22.5_react@18.0.0-rc.0
+      react-qrcode-logo: 2.5.0_757a802188413a36d4f24237d13b8e90
       react-router: 6.0.0-beta.0_history@5.2.0+react@18.0.0-rc.0
       react-router-dom: 6.0.0-beta.0_154c53788755629e2430b224cbac559e
+      react-to-print: 2.14.3_757a802188413a36d4f24237d13b8e90
       react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
       unstated-next: 1.1.0
       urlcat: 2.0.4
@@ -1310,7 +1316,6 @@ packages:
   /@babel/compat-data/7.16.4:
     resolution: {integrity: sha512-1o/jo7D+kC9ZjHX5v+EHrdjl3PhxMrLSOTGsOdHJ+KL8HCaEK6ehrVL2RS6oHDZp+L7xLirLrPmQtEng769J/Q==}
     engines: {node: '>=6.9.0'}
-    dev: true
 
   /@babel/core/7.12.9:
     resolution: {integrity: sha512-gTXYh3M5wb7FRXQy+FErKFAv90BnlOuNn1QkCK2lREoPAjrQCO49+HVSrFoe5uakFAF5eenS75KbO2vQiLrTMQ==}
@@ -6307,7 +6312,10 @@ packages:
       react-textarea-autosize: 8.3.3_2fa291bfae6e56080648438396754a97
       regenerator-runtime: 0.13.9
       ts-dedent: 2.2.0
+      typescript: 4.6.0-dev.20211202
+      unfetch: 4.2.0
       util-deprecate: 1.0.2
+      webpack: 4.46.0
     transitivePeerDependencies:
       - '@types/react'
     dev: true
@@ -10017,7 +10025,7 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0-0
     dependencies:
-      '@babel/compat-data': 7.16.0
+      '@babel/compat-data': 7.16.4
       '@babel/core': 7.16.5
       '@babel/helper-define-polyfill-provider': 0.2.4_@babel+core@7.16.5
       semver: 6.3.0
@@ -15761,6 +15769,10 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /html-to-image/1.9.0:
+    resolution: {integrity: sha512-9gaDCIYg62Ek07F2pBk76AHgYZ2gxq2YALU7rK3gNCqXuhu6cWzsOQqM7qGbjZiOzxGzrU1deDqZpAod2NEwbA==}
+    dev: false
+
   /html-tokenize/2.0.1:
     resolution: {integrity: sha512-QY6S+hZ0f5m1WT8WffYN+Hg+xm/w5I8XeUcAq/ZYP5wVC8xbKi4Whhru3FtrAebD5EhBW8rmFzkDI6eCAuFe2w==}
     hasBin: true
@@ -20196,6 +20208,10 @@ packages:
     engines: {node: '>=0.6.0', teleport: '>=0.2.0'}
     dev: true
 
+  /qrcode-generator/1.4.4:
+    resolution: {integrity: sha512-HM7yY8O2ilqhmULxGMpcHSF1EhJJ9yBj8gvDEuZ6M+KGJ0YY2hKpnXvRD+hZPLrDVck3ExIGhmPtSdcjC+guuw==}
+    dev: false
+
   /qrcode/1.5.0:
     resolution: {integrity: sha512-9MgRpgVc+/+47dFvQeD6U2s0Z92EsKzcHogtum4QB+UNd025WOJSHvn/hjk9xmzj7Stj95CyUAs31mrjxliEsQ==}
     engines: {node: '>=10.13.0'}
@@ -20561,6 +20577,18 @@ packages:
       warning: 4.0.3
     dev: true
 
+  /react-qrcode-logo/2.5.0_757a802188413a36d4f24237d13b8e90:
+    resolution: {integrity: sha512-Z+Ywb2Cw3EK5csfkZHuyNpxZl5BiHxrBPAeRE3bB1qERAUMc/tMzBKpfMEb/Olti/Ic04j/DYt6ncYRLa/wFMA==}
+    peerDependencies:
+      react: '>=16.4.1'
+      react-dom: '>=16.4.1'
+    dependencies:
+      lodash.isequal: 4.5.0
+      qrcode-generator: 1.4.4
+      react: 18.0.0-rc.0
+      react-dom: 18.0.0-rc.0_react@18.0.0-rc.0
+    dev: false
+
   /react-refresh/0.10.0:
     resolution: {integrity: sha512-PgidR3wST3dDYKr6b4pJoqQFpPGNKDSCDx4cZoshjXipw3LzO7mG1My2pwEzz2JVkF+inx3xRpDeQLFQGH/hsQ==}
     engines: {node: '>=0.10.0'}
@@ -20685,6 +20713,17 @@ packages:
     transitivePeerDependencies:
       - '@types/react'
     dev: true
+
+  /react-to-print/2.14.3_757a802188413a36d4f24237d13b8e90:
+    resolution: {integrity: sha512-j0EAplQGcw4ujSLfUQoIhf1PgrSLrWRh4NSAiKZdWm6YNXMioHW56cGpbKEJkCpYN1E5g3tvFVHRADn0mTKGzg==}
+    peerDependencies:
+      react: ^15.0.0 || ^16.0.0 || ^17.0.0
+      react-dom: ^15.0.0 || ^16.0.0 || ^17.0.0
+    dependencies:
+      prop-types: 15.8.0
+      react: 18.0.0-rc.0
+      react-dom: 18.0.0-rc.0_react@18.0.0-rc.0
+    dev: false
 
   /react-transition-group/4.4.2_757a802188413a36d4f24237d13b8e90:
     resolution: {integrity: sha512-/RNYfRAMlZwDSr6z4zNKV6xu53/e2BuaBbGhbyYIXTrmgu/bGHzmqOs7mJSJBHy9Ud+ApHx3QjrkKSp1pxvlFg==}
