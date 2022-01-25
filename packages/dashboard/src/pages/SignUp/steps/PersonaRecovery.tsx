@@ -8,6 +8,7 @@ import { Services } from '../../../API'
 import { PersonaNameUI } from './PersonaNameUI'
 import { useCreatePersonaByPrivateKey, useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
+import { useAsync } from 'react-use'
 
 export const PersonaRecovery = () => {
     const t = useDashboardI18N()
@@ -21,9 +22,9 @@ export const PersonaRecovery = () => {
 
     const [error, setError] = useState('')
 
-    useEffect(() => {
+    useAsync(async () => {
         if (
-            (!state?.mnemonic || !Services.Identity.validateMnemonic(state?.mnemonic.join(' '))) &&
+            (!state?.mnemonic || (await !Services.Identity.validateMnemonic(state?.mnemonic.join(' ')))) &&
             !state?.privateKey
         ) {
             navigate(DashboardRoutes.SignUp, { replace: true })
