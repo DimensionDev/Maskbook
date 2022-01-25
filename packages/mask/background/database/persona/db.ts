@@ -2,7 +2,6 @@ import Fuse from 'fuse.js'
 import { DBSchema, openDB } from 'idb/with-async-ittr'
 import { CryptoKeyToJsonWebKey, PrototypeLess, restorePrototype } from '../../../utils-pure'
 import { createDBAccessWithAsyncUpgrade, createTransaction, IDBPSafeTransaction } from '../utils/openDB'
-import { assertPersonaDBConsistency } from './consistency'
 import {
     AESJsonWebKey,
     ECKeyIdentifier,
@@ -152,14 +151,12 @@ export async function createRelationsTransaction() {
     return createTransaction(database, 'readwrite')('relations')
 }
 
-// @deprecated Please create a transaction directly
+// TODO: rename to holdPersonaEventsWithinTransaction
 export async function consistentPersonaDBWriteAccess(
     action: (t: FullPersonaDBTransaction<'readwrite'>) => Promise<void>,
-    tryToAutoFix = true,
 ) {
-    // TODO: collect all changes on this transaction then only perform consistency check on those records.
     const database = await db()
-    let t = createTransaction(database, 'readwrite')('profiles', 'personas', 'relations')
+    const t = createTransaction(database, 'readwrite')('profiles', 'personas', 'relations')
     let finished = false
     const finish = () => (finished = true)
     t.addEventListener('abort', finish)
@@ -176,20 +173,10 @@ export async function consistentPersonaDBWriteAccess(
         if (finished) {
             console.warn('The transaction ends too early! There MUST be a bug in the program!')
             console.trace()
-            // start a new transaction to check consistency
-            t = createTransaction(database, 'readwrite')('profiles', 'personas', 'relations')
         }
-        try {
-            await assertPersonaDBConsistency(tryToAutoFix ? 'fix' : 'throw', 'full check', t)
-            resumeProfile((data) => [data.flat()])
-            resumePersona((data) => (data.length ? [undefined] : []))
-            resumeRelation((data) => [data.flat()])
-        } finally {
-            // If the consistency check throws, we drop all pending events
-            resumeProfile(() => [])
-            resumePersona(() => [])
-            resumeRelation(() => [])
-        }
+        resumeProfile((data) => [data.flat()])
+        resumePersona((data) => (data.length ? [undefined] : []))
+        resumeRelation((data) => [data.flat()])
     }
 }
 

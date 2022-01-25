@@ -26,7 +26,7 @@ export default async function cleanProfileWithNoLinkedPersona(signal: AbortSigna
             if (id.ok) cleanedList.set(id.val, undefined)
             await x.delete()
         }
-    }, false)
+    })
     await cleanAvatarDB(cleanedList)
     await cleanRelationDB(cleanedList)
 }

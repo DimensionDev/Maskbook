@@ -3,13 +3,25 @@ import {
     AESCryptoKey,
     AESJsonWebKey,
     ECKeyIdentifier,
+    ECKeyIdentifierFromJsonWebKey,
     EC_Private_JsonWebKey,
     EC_Public_CryptoKey,
+    EC_Public_JsonWebKey,
     IdentifierMap,
+    PersonaIdentifier,
     ProfileIdentifier,
 } from '@masknet/shared-base'
 import type { IDBPSafeTransaction } from '../utils/openDB'
-import { createReadonlyPersonaTransaction, PersonaDB } from './db'
+import {
+    attachProfileDB,
+    consistentPersonaDBWriteAccess,
+    createOrUpdatePersonaDB,
+    createPersonaDB,
+    createReadonlyPersonaTransaction,
+    LinkedProfileDetails,
+    PersonaDB,
+    PersonaRecord,
+} from './db'
 
 // #region Local key helpers
 /**
@@ -148,6 +160,64 @@ export async function deriveAESByECDH_version38_or_older(
     }
 
     return new IdentifierMap<ECKeyIdentifier, R>(next_map, ECKeyIdentifier)
+}
+// #endregion
+
+// #region normal functions
+export async function createPersonaByJsonWebKey(options: {
+    publicKey: EC_Public_JsonWebKey
+    privateKey: EC_Private_JsonWebKey
+    localKey?: AESJsonWebKey
+    nickname?: string
+    mnemonic?: PersonaRecord['mnemonic']
+    uninitialized?: boolean
+}): Promise<PersonaIdentifier> {
+    const identifier = ECKeyIdentifierFromJsonWebKey(options.publicKey)
+    const record: PersonaRecord = {
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        identifier: identifier,
+        linkedProfiles: new IdentifierMap(new Map(), ProfileIdentifier),
+        publicKey: options.publicKey,
+        privateKey: options.privateKey,
+        nickname: options.nickname,
+        mnemonic: options.mnemonic,
+        localKey: options.localKey,
+        hasLogout: false,
+        uninitialized: options.uninitialized,
+    }
+    await consistentPersonaDBWriteAccess((t) => createPersonaDB(record, t))
+    return identifier
+}
+
+export async function createProfileWithPersona(
+    profileID: ProfileIdentifier,
+    data: LinkedProfileDetails,
+    keys: {
+        nickname?: string
+        publicKey: EC_Public_JsonWebKey
+        privateKey?: EC_Private_JsonWebKey
+        localKey?: AESJsonWebKey
+        mnemonic?: PersonaRecord['mnemonic']
+    },
+): Promise<void> {
+    const ec_id = ECKeyIdentifierFromJsonWebKey(keys.publicKey)
+    const rec: PersonaRecord = {
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        identifier: ec_id,
+        linkedProfiles: new IdentifierMap(new Map(), ProfileIdentifier),
+        nickname: keys.nickname,
+        publicKey: keys.publicKey,
+        privateKey: keys.privateKey,
+        localKey: keys.localKey,
+        mnemonic: keys.mnemonic,
+        hasLogout: false,
+    }
+    await consistentPersonaDBWriteAccess(async (t) => {
+        await createOrUpdatePersonaDB(rec, { explicitUndefinedField: 'ignore', linkedProfiles: 'merge' }, t)
+        await attachProfileDB(profileID, ec_id, data, t)
+    })
 }
 // #endregion
 

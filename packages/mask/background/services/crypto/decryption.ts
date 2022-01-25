@@ -16,12 +16,14 @@ import {
 import {
     AESCryptoKey,
     EC_Public_CryptoKey,
+    EC_Public_JsonWebKey,
     IdentifierMap,
     PostIVIdentifier,
     ProfileIdentifier,
 } from '@masknet/shared-base'
 import { queryPersonaByProfileDB } from '../../database/persona/db'
 import {
+    createProfileWithPersona,
     decryptByLocalKey,
     deriveAESByECDH,
     deriveAESByECDH_version38_or_older,
@@ -103,13 +105,16 @@ export async function* decryption(payload: string | Uint8Array, context: Decrypt
 
     // TODO: read in-memory cache to avoid db lookup
 
+    // #region store author public key into the database
     try {
-        storeAuthorPublicKey(
-            parse.unwrap().author.unwrap().unwrap(),
-            authorHint,
-            parse.unwrap().authorPublicKey.unwrap().unwrap(),
-        )
+        const id = parse.unwrap().author.unwrap().unwrap()
+        const cacheKey = id.toText()
+        if (!hasStoredAuthorPublicKey.has(cacheKey)) {
+            storeAuthorPublicKey(id, authorHint, parse.unwrap().authorPublicKey.unwrap().unwrap())
+            hasStoredAuthorPublicKey.add(cacheKey)
+        }
     } catch {}
+    // #endregion
 
     const progress = decrypt(
         { message: parse.val },
@@ -194,18 +199,27 @@ async function getPostKeyCache(id: PostIVIdentifier) {
     return k as AESCryptoKey
 }
 
+const hasStoredAuthorPublicKey = new Set<string>()
 async function storeAuthorPublicKey(
     payloadAuthor: ProfileIdentifier,
     postAuthor: ProfileIdentifier | null,
     pub: AsymmetryCryptoKey,
 ) {
-    if (payloadAuthor.equals(postAuthor)) {
-        if (pub.algr !== PublicKeyAlgorithmEnum.secp256k1) {
-            throw new Error('TODO: support other curves')
-        }
-        // TODO: store the key
+    if (!payloadAuthor.equals(postAuthor)) {
+        // ! Author detected is not equal to AuthorHint.
+        // ! Skip store the public key because it might be a security problem.
+        return
     }
-    // ! Author detected is not equal to AuthorHint. Skip store the public key because it might be a security problem.
+    if (pub.algr !== PublicKeyAlgorithmEnum.secp256k1) {
+        throw new Error('TODO: support other curves')
+    }
+    createProfileWithPersona(
+        payloadAuthor,
+        { connectionConfirmState: 'confirmed' },
+        {
+            publicKey: (await crypto.subtle.exportKey('jwk', pub.key)) as EC_Public_JsonWebKey,
+        },
+    )
 }
 
 async function queryPublicKey(author: ProfileIdentifier | null, extractable = false, signal?: AbortSignal) {
