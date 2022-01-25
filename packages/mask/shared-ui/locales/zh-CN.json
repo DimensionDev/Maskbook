@@ -423,7 +423,6 @@
     "plugin_trader_error_amount_absence": "输入数额",
     "plugin_trader_error_insufficient_balance": "{{symbol}} 余额不足",
     "plugin_trader_error_insufficient_lp": "该交易的流动性不足",
-    "plugin_trader_error_price_impact_too_high": "价格影响过高",
     "plugin_trade_error_input_amount_less_minimum_amount": "提交兑换的数额低于最低数额",
     "plugin_trader_settings_data_source_primary": "趋势数据源",
     "plugin_trader_settings_data_source_secondary": "选择加密货币趋势数据的来源。",
