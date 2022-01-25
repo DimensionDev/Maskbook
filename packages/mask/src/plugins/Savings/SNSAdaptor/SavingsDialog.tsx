@@ -53,8 +53,6 @@ export function SavingsDialog({ open, onClose, onSwapDialogOpen }: SavingsDialog
             )
     }, [chainId])
 
-    console.log(chainId, mappableProtocols)
-
     return (
         <InjectedDialog
             open={open}

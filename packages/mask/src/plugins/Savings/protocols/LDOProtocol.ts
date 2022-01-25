@@ -6,6 +6,7 @@ import {
     getSavingsConstants,
     createContract,
     FungibleTokenDetailed,
+    ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import type { Lido } from '@masknet/web3-contracts/types/Lido'
 import LidoABI from '@masknet/web3-contracts/abis/Lido.json'
@@ -23,14 +24,14 @@ export const LidoContracts: { [key: number]: LidoContract } = {
     [ChainId.Mainnet]: {
         type: EthereumTokenType.ERC20,
         chainName: 'Ethereum',
-        ldoContract: getSavingsConstants(ChainId.Mainnet).LIDO || '',
-        stEthContract: getSavingsConstants(ChainId.Mainnet).LIDO_STETH || '',
+        ldoContract: getSavingsConstants(ChainId.Mainnet).LIDO || ZERO_ADDRESS,
+        stEthContract: getSavingsConstants(ChainId.Mainnet).LIDO_STETH || ZERO_ADDRESS,
     },
     [ChainId.Gorli]: {
         type: EthereumTokenType.ERC20,
         chainName: 'Gorli',
-        ldoContract: getSavingsConstants(ChainId.Gorli).LIDO || '',
-        stEthContract: getSavingsConstants(ChainId.Gorli).LIDO_STETH || '',
+        ldoContract: getSavingsConstants(ChainId.Gorli).LIDO || ZERO_ADDRESS,
+        stEthContract: getSavingsConstants(ChainId.Gorli).LIDO_STETH || ZERO_ADDRESS,
     },
 }
 
@@ -48,12 +49,12 @@ export class LidoProtocol implements SavingsProtocol {
         {
             chainId: ChainId.Mainnet,
             chainName: 'Ethereum',
-            contractAddress: getSavingsConstants(ChainId.Mainnet).LIDO_STETH || '',
+            contractAddress: getSavingsConstants(ChainId.Mainnet).LIDO_STETH || ZERO_ADDRESS,
         },
         {
             chainId: ChainId.Gorli,
             chainName: 'Gorli',
-            contractAddress: getSavingsConstants(ChainId.Gorli).LIDO_STETH || '',
+            contractAddress: getSavingsConstants(ChainId.Gorli).LIDO_STETH || ZERO_ADDRESS,
         },
     ]
 
@@ -99,7 +100,7 @@ export class LidoProtocol implements SavingsProtocol {
         try {
             const contract = createContract<Lido>(
                 web3,
-                getSavingsConstants(chainId).LIDO_STETH || '',
+                getSavingsConstants(chainId).LIDO_STETH || ZERO_ADDRESS,
                 LidoABI as AbiItem[],
             )
             const balance = await contract?.methods.balanceOf(account).call()
@@ -116,13 +117,11 @@ export class LidoProtocol implements SavingsProtocol {
         try {
             const contract = createContract<Lido>(
                 web3,
-                getSavingsConstants(chainId).LIDO_STETH || '',
+                getSavingsConstants(chainId).LIDO_STETH || ZERO_ADDRESS,
                 LidoABI as AbiItem[],
             )
             const gasEstimate = await contract?.methods
-                .submit(
-                    getSavingsConstants(chainId).LIDO_REFERRAL_ADDRESS || '0x0000000000000000000000000000000000000000',
-                )
+                .submit(getSavingsConstants(chainId).LIDO_REFERRAL_ADDRESS || ZERO_ADDRESS)
                 .estimateGas({
                     from: account,
                     value: value.toString(),
@@ -139,18 +138,14 @@ export class LidoProtocol implements SavingsProtocol {
         try {
             const contract = createContract<Lido>(
                 web3,
-                getSavingsConstants(chainId).LIDO_STETH || '',
+                getSavingsConstants(chainId).LIDO_STETH || ZERO_ADDRESS,
                 LidoABI as AbiItem[],
             )
-            await contract?.methods
-                .submit(
-                    getSavingsConstants(chainId).LIDO_REFERRAL_ADDRESS || '0x0000000000000000000000000000000000000000',
-                )
-                .send({
-                    from: account,
-                    value: value.toString(),
-                    gas: 300000,
-                })
+            await contract?.methods.submit(getSavingsConstants(chainId).LIDO_REFERRAL_ADDRESS || ZERO_ADDRESS).send({
+                from: account,
+                value: value.toString(),
+                gas: 300000,
+            })
 
             return true
         } catch (error) {
