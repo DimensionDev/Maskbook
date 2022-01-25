@@ -100,6 +100,19 @@ export interface SharedNativeAPIs {
     }): Promise<RelationRecord[]>
     update_relation(params: { relation: Omit<RelationRecord, 'network'> }): Promise<RelationRecord>
     delete_relation(params: { personaIdentifier: string; profileIdentifier: string }): Promise<void>
+
+    /**
+     * Mask Plugins
+     */
+    notifyRedpacket(params: {
+        redpacketPayload: any
+        postLink: string | URL
+    }): Promise<void>
+
+    claimOrRefundRedpacket(params: {
+        redpacketPayload: any
+        postLink: string | URL
+    }): Promise<void>
 }
 /**
  * APIs that only implemented by iOS Mask Network

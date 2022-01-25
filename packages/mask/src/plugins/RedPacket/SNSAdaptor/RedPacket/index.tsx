@@ -30,6 +30,8 @@ import { useClaimCallback } from '../hooks/useClaimCallback'
 import { useRefundCallback } from '../hooks/useRefundCallback'
 import { OperationFooter } from './OperationFooter'
 import { useStyles } from './useStyles'
+import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc'
+import { useAsync } from 'react-use'
 
 export interface RedPacketProps {
     payload: RedPacketJSONPayload
@@ -134,6 +136,13 @@ export function RedPacket(props: RedPacketProps) {
         else if (canRefund) await refundCallback()
     }, [canClaim, canRefund, claimCallback, refundCallback])
 
+    const onCliamOrRefundOnNative = useCallback(async () => {
+        nativeAPI?.api.claimOrRefundRedpacket({
+            redpacketPayload: payload,
+            postLink
+        })
+    }, [payload, postLink])
+
     const myStatus = useMemo(() => {
         if (token && listOfStatus.includes(RedPacketStatus.claimed))
             return t(
@@ -170,6 +179,15 @@ export function RedPacket(props: RedPacketProps) {
             shares: payload.shares ?? '-',
         })
     }, [availability, canRefund, token, t, payload, listOfStatus])
+
+    useEffect(() => {
+        if (hasNativeAPI) {
+            nativeAPI?.api.notifyRedpacket({
+                redpacketPayload: payload,
+                postLink
+            })
+        }
+    }, [payload, postLink, hasNativeAPI])
 
     // the red packet can fetch without account
     if (!availability || !token)
@@ -218,7 +236,7 @@ export function RedPacket(props: RedPacketProps) {
                     claimState={claimState}
                     refundState={refundState}
                     shareLink={shareLink}
-                    onClaimOrRefund={onClaimOrRefund}
+                    onClaimOrRefund={hasNativeAPI ? onCliamOrRefundOnNative : onClaimOrRefund}
                 />
             )}
         </EthereumChainBoundary>
