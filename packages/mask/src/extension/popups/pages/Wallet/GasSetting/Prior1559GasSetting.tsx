@@ -96,9 +96,9 @@ const minGasPriceOfChain: ChainIdOptionalRecord<string> = {
 }
 
 export const Prior1559GasSetting = memo(() => {
+    const { t } = useI18N()
     const { classes } = useStyles()
     const web3 = useWeb3()
-    const { t } = useI18N()
     const chainId = useChainId()
     const { value, loading: getValueLoading } = useUnconfirmedRequest()
     const [getGasLimitError, setGetGasLimitError] = useState(false)

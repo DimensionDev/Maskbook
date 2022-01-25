@@ -55,7 +55,7 @@ export async function taskOpenComposeBoxFacebook(
         return
     }
 
-    await delay(200)
+    await delay(2000)
     MaskMessages.events.requestComposition.sendToLocal({
         reason: 'popup',
         open: true,

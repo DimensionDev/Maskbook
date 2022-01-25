@@ -4,9 +4,9 @@ import PairABI from '@masknet/web3-contracts/abis/Pair.json'
 import { ChainId, useContract, useContracts } from '@masknet/web3-shared-evm'
 
 export function usePairContract(address: string, chainId?: ChainId) {
-    return useContract<Pair>(address, PairABI as AbiItem[], false, chainId)
+    return useContract<Pair>(address, PairABI as AbiItem[], chainId)
 }
 
 export function usePairContracts(listOfAddress: string[], chainId?: ChainId) {
-    return useContracts<Pair>(listOfAddress, PairABI as AbiItem[], false, chainId)
+    return useContracts<Pair>(listOfAddress, PairABI as AbiItem[], chainId)
 }

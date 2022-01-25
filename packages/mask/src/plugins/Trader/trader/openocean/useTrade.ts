@@ -1,19 +1,18 @@
+import { first } from 'lodash-unified'
 import {
     FungibleTokenDetailed,
     isNativeTokenAddress,
     useAccount,
-    useBlockNumber,
     useRPCConstants,
     useTokenConstants,
     useTraderConstants,
 } from '@masknet/web3-shared-evm'
-import { useAsyncRetry } from 'react-use'
 import { PluginTraderRPC } from '../../messages'
 import type { TradeStrategy } from '../../types'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { useSlippageTolerance } from './useSlippageTolerance'
 import { OPENOCEAN_SUPPORTED_CHAINS } from './constants'
-import { first } from 'lodash-unified'
+import { useDoubleBlockBeatRetry } from '@masknet/plugin-infra'
 
 export function useTrade(
     strategy: TradeStrategy,
@@ -23,7 +22,6 @@ export function useTrade(
     outputToken?: FungibleTokenDetailed,
 ) {
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
-    const blockNumber = useBlockNumber()
     const slippage = useSlippageTolerance()
     const { targetChainId } = TargetChainIdContext.useContainer()
     const { RPC } = useRPCConstants(targetChainId)
@@ -31,7 +29,7 @@ export function useTrade(
     const { OPENOCEAN_ETH_ADDRESS } = useTraderConstants(targetChainId)
     const account = useAccount()
 
-    return useAsyncRetry(async () => {
+    return useDoubleBlockBeatRetry(async () => {
         if (!OPENOCEAN_SUPPORTED_CHAINS.includes(targetChainId)) return null
         if (!inputToken || !outputToken) return null
         if (inputAmount === '0') return null
@@ -59,7 +57,6 @@ export function useTrade(
         inputToken?.address,
         outputToken?.address,
         slippage,
-        blockNumber, // refresh api each block
         account,
         providerURL,
         targetChainId,
