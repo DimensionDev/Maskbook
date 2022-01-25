@@ -8,13 +8,18 @@ import { useI18N, MaskMessages } from '../../utils'
 import { activatedSocialNetworkUI, SocialNetworkUI } from '../../social-network'
 import { currentSetupGuideStatus, dismissPinExtensionTip, userGuideStatus } from '../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
-import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '@masknet/shared-base'
+import {
+    PersonaIdentifier,
+    ProfileIdentifier,
+    Identifier,
+    ECKeyIdentifier,
+    makeTypedMessageText,
+} from '@masknet/shared-base'
 import Services from '../../extension/service'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { MaskIcon } from '../../resources/MaskIcon'
 import { useAsync, useCopyToClipboard } from 'react-use'
 import classNames from 'classnames'
-import { makeTypedMessageText } from '@masknet/shared-base'
 import ExtensionIcon from '@mui/icons-material/Extension'
 import stringify from 'json-stable-stringify'
 import { VerifiedIcon, PinIcon } from '@masknet/icons'
@@ -296,7 +301,7 @@ function FindUsername({ personaName, username, avatar, onConnect, onDone, onClos
         />
     )
 }
-//#endregion
+// #endregion
 
 interface PinExtensionProps {
     onDone?: () => void
