@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useCustomSnackbar } from '@masknet/theme'
 import { DashboardRoutes, delay } from '@masknet/shared-base'
@@ -24,6 +24,7 @@ export const PersonaRecovery = () => {
 
     useAsync(async () => {
         if (
+            // eslint-disable-next-line @typescript-eslint/await-thenable
             (!state?.mnemonic || (await !Services.Identity.validateMnemonic(state?.mnemonic.join(' ')))) &&
             !state?.privateKey
         ) {

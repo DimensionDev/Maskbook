@@ -16,7 +16,7 @@ export const PersonaCreate = () => {
         setError('')
 
         const personas = await Services.Identity.queryMyPersonas()
-        const existing = personas.some(x => x.nickname === personaName)
+        const existing = personas.some((x) => x.nickname === personaName)
 
         if (existing) {
             return setError(t.create_account_persona_exists())
