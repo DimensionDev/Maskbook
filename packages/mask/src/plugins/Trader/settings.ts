@@ -125,6 +125,7 @@ const pangolinSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvi
 const openoceanSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+openocean`, '')
 const trisolarisSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+trisolaris`, '')
 const wannaswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+wannaswap`, '')
+const jugglerredSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+jugglerred`, '')
 
 /**
  * The general settings of specific tarde provider
@@ -161,6 +162,8 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return trisolarisSettings
         case TradeProvider.WANNASWAP:
             return wannaswapSettings
+        case TradeProvider.JUGGLERRED:
+            return jugglerredSettings
         default:
             unreachable(tradeProvider)
     }

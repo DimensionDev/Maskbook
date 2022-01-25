@@ -21,6 +21,7 @@ export const UNISWAP_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
     ...WNATIVE_ONLY,
     [ChainId.Mainnet]: [WNATIVE, DAI, USDC, USDT, WBTC].map((x) => x[ChainId.Mainnet]),
     [ChainId.Matic]: [WNATIVE, DAI, USDC, USDT, WBTC].map((x) => x[ChainId.Matic]),
+    [ChainId.Optimistic]: [WNATIVE, DAI, USDC, USDT, WBTC].map((x) => x[ChainId.Optimistic]),
     [ChainId.Rinkeby]: [WNATIVE, MSKA, MSKB, MSKC].map((x) => x[ChainId.Rinkeby]),
 }
 

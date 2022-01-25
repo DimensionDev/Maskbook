@@ -236,6 +236,18 @@ export function useAllTradeComputed(
     const wannaswap = useUniswapTradeComputed(wannaswap_.value, inputToken, outputToken)
     const wannaSwapEstimateGas = useUniswapTradeGasLimit(wannaswap, TradeProvider.WANNASWAP)
 
+    // Juggler Red
+    const jugglerred_ = useUniswapV2Trade(
+        TradeProvider.JUGGLERRED,
+        TradeStrategy.ExactIn,
+        inputAmount_,
+        '0',
+        tradeProviders.some((x) => x === TradeProvider.JUGGLERRED) ? inputToken : undefined,
+        tradeProviders.some((x) => x === TradeProvider.JUGGLERRED) ? outputToken : undefined,
+    )
+    const jugglerred = useUniswapTradeComputed(jugglerred_.value, inputToken, outputToken)
+    const jugglerredEstimateGas = useUniswapTradeGasLimit(jugglerred, TradeProvider.JUGGLERRED)
+
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
         { provider: TradeProvider.SUSHISWAP, ...sushiSwap_, value: sushiSwap, gas: sushiSwapEstimateGas },
@@ -252,6 +264,7 @@ export function useAllTradeComputed(
         { provider: TradeProvider.OPENOCEAN, ...openocean_, value: openocean, gas: openoceanSwapEstimateGas },
         { provider: TradeProvider.WANNASWAP, ...wannaswap_, value: wannaswap, gas: wannaSwapEstimateGas },
         { provider: TradeProvider.TRISOLARIS, ...trisolaris_, value: trisolaris, gas: trisolarisEstimateGas },
+        { provider: TradeProvider.JUGGLERRED, ...jugglerred_, value: jugglerred, gas: jugglerredEstimateGas },
     ]
 
     return nativeToken_.value
