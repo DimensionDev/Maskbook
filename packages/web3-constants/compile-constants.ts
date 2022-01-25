@@ -55,6 +55,8 @@ compileConstants(path.join(__dirname, 'evm'), [
     'xDai',
     'Fuse',
     'Fuse_Sparknet',
+    'Avalanche',
+    'Avalanche_Fuji',
     'Celo',
     'Fantom',
     'Aurora',

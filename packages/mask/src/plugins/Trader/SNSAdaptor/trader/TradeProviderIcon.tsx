@@ -10,12 +10,14 @@ import { ZRXIcon } from '../../../../resources/ZRXIcon'
 import { DODOIcon } from '../../../../resources/DODOIcon'
 import { OpenOceanIcon } from '../../../../resources/OpenOceanIcon'
 import { FuseFiIcon } from '../../../../resources/FuseFiIcon'
+import { PangolinIcon } from '../../../../resources/PangolinIcon'
 import { TrisolarisIcon } from '../../../../resources/TrisolarisIcon'
 import { resolveTradeProviderName } from '../../pipes'
 
 const quickswapIcon = new URL('../../../../resources/quickswap.png', import.meta.url).toString()
 const pancakeswapIcon = new URL('../../../../resources/pancakeswap.png', import.meta.url).toString()
 const elkfinanceIcon = new URL('../../../../resources/elkfinance.png', import.meta.url).toString()
+const traderjoeIcon = new URL('../../../../resources/traderjoe.png', import.meta.url).toString()
 const wannaswapIcon = new URL('../../../../resources/wannaswap.png', import.meta.url).toString()
 
 const useStyles = makeStyles()((theme) => ({
@@ -80,10 +82,20 @@ export function TradeProviderIcon(props: TradeProviderIconProps) {
             return <DODOIcon classes={{ root: classes.icon }} />
         case TradeProvider.BANCOR:
             return <BancorIcon classes={{ root: classes.icon }} />
+        case TradeProvider.TRADERJOE:
+            return (
+                <img
+                    src={traderjoeIcon}
+                    alt={resolveTradeProviderName(TradeProvider.TRADERJOE)}
+                    className={classes.icon}
+                />
+            )
         case TradeProvider.OPENOCEAN:
             return <OpenOceanIcon classes={{ root: classes.icon }} />
         case TradeProvider.FUSEFI:
             return <FuseFiIcon classes={{ root: classes.icon }} />
+        case TradeProvider.PANGOLIN:
+            return <PangolinIcon classes={{ root: classes.icon }} />
         case TradeProvider.TRISOLARIS:
             return <TrisolarisIcon classes={{ root: classes.icon }} />
         default:

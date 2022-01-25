@@ -65,7 +65,7 @@ export function Trader(props: TraderProps) {
     const { t } = useI18N()
     const { setTargetChainId } = TargetChainIdContext.useContainer()
 
-    //#region trade state
+    // #region trade state
     const {
         tradeState: [
             { inputToken, outputToken, inputTokenBalance, outputTokenBalance, inputAmount },
@@ -73,13 +73,13 @@ export function Trader(props: TraderProps) {
         ],
         allTradeComputed,
     } = AllProviderTradeContext.useContainer()
-    //#endregion
+    // #endregion
 
-    //#region gas config and gas price
+    // #region gas config and gas price
     const { gasPrice, gasConfig, setGasConfig } = useGasConfig(chainId)
-    //#endregion
+    // #endregion
 
-    //#region if chain id be changed, update input token be native token
+    // #region if chain id be changed, update input token be native token
     useEffect(() => {
         if (!chainIdValid) return
         dispatchTradeStore({
@@ -87,9 +87,9 @@ export function Trader(props: TraderProps) {
             token: chainId === ChainId.Mainnet && coin?.is_mirrored ? UST[ChainId.Mainnet] : createNativeToken(chainId),
         })
     }, [chainId, chainIdValid])
-    //#endregion
+    // #endregion
 
-    //#region if coin be changed, update output token
+    // #region if coin be changed, update output token
     useEffect(() => {
         if (!coin || currentChainId !== targetChainId) return
 
@@ -121,7 +121,7 @@ export function Trader(props: TraderProps) {
         })
     }, [])
 
-    //#region update balance
+    // #region update balance
     const { value: inputTokenBalance_, loading: loadingInputTokenBalance } = useFungibleTokenBalance(
         isSameAddress(inputToken?.address, NATIVE_TOKEN_ADDRESS)
             ? EthereumTokenType.Native
@@ -212,9 +212,9 @@ export function Trader(props: TraderProps) {
         },
         [excludeTokens.join(), chainId],
     )
-    //#endregion
+    // #endregion
 
-    //#region blocking (swap)
+    // #region blocking (swap)
     const [tradeState, tradeCallback, resetTradeCallback] = useTradeCallback(
         focusedTrade?.provider,
         focusedTrade?.value,
@@ -230,9 +230,9 @@ export function Trader(props: TraderProps) {
     const onConfirmDialogClose = useCallback(() => {
         setOpenConfirmDialog(false)
     }, [])
-    //#endregion
+    // #endregion
 
-    //#region the click handler of switch arrow
+    // #region the click handler of switch arrow
     const onSwitchToken = useCallback(() => {
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
@@ -250,7 +250,7 @@ export function Trader(props: TraderProps) {
         })
     }, [dispatchTradeStore, inputToken, outputToken, inputAmount])
 
-    //#region remote controlled transaction dialog
+    // #region remote controlled transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
@@ -278,9 +278,9 @@ export function Trader(props: TraderProps) {
                 : '',
         )
         .toString()
-    //#endregion
+    // #endregion
 
-    //#region close the transaction dialog
+    // #region close the transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         (ev) => {
@@ -294,9 +294,9 @@ export function Trader(props: TraderProps) {
             resetTradeCallback()
         },
     )
-    //#endregion
+    // #endregion
 
-    //#region open the transaction dialog
+    // #region open the transaction dialog
     useEffect(() => {
         if (tradeState?.type === TransactionStateType.UNKNOWN) return
         setTransactionDialog({
@@ -305,46 +305,46 @@ export function Trader(props: TraderProps) {
             state: tradeState,
         })
     }, [tradeState /* update tx dialog only if state changed */])
-    //#endregion
+    // #endregion
 
-    //#region swap callback
+    // #region swap callback
     const onSwap = useCallback(() => {
         // no need to open the confirmation dialog if it (un)wraps the native token
         if (focusedTrade?.value && isNativeTokenWrapper(focusedTrade.value)) tradeCallback()
         else setOpenConfirmDialog(true)
     }, [focusedTrade, tradeCallback])
-    //#endregion
+    // #endregion
 
-    //#region The trades sort by best price (Estimate received * price - Gas fee * native token price)
+    // #region The trades sort by best price (Estimate received * price - Gas fee * native token price)
     const sortedAllTradeComputed = useSortedTrades(allTradeComputed, chainId, gasPrice)
-    //#endregion
+    // #endregion
 
     // Query the balance of native tokens on target chain
     useUpdateBalance(chainId, currentChainId)
     // #endregion
 
-    //#region reset focused trade when chainId, inputToken, outputToken, inputAmount be changed
+    // #region reset focused trade when chainId, inputToken, outputToken, inputAmount be changed
     useUpdateEffect(() => {
         setFocusTrade(undefined)
     }, [targetChainId, inputToken, outputToken, inputAmount])
-    //#endregion
+    // #endregion
 
-    //#region if chain id be changed, reset the chain id on context, and reset gas config
+    // #region if chain id be changed, reset the chain id on context, and reset gas config
     useEffect(() => {
         if (!chainId) return
         setTargetChainId(chainId)
         setGasConfig(undefined)
     }, [chainId])
-    //#endregion
+    // #endregion
 
-    //#region if target chain id be changed, reset output token
+    // #region if target chain id be changed, reset output token
     useUpdateEffect(() => {
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
             token: undefined,
         })
     }, [targetChainId])
-    //#endregion
+    // #endregion
 
     useEffect(() => {
         return PluginTraderMessages.swapSettingsUpdated.on((event) => {

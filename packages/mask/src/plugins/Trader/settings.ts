@@ -94,13 +94,19 @@ export const fuseNetworkTradeProviderSettings = createGlobalSettings<TradeProvid
     { primary: () => '' },
 )
 
+export const avalancheNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_ID}+avalanche+tradeProvider`,
+    TradeProvider.SUSHISWAP,
+    { primary: () => '' },
+)
+
 export const auroraNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
     `${PLUGIN_ID}+aurora+tradeProvider`,
     TradeProvider.DODO,
     { primary: () => '' },
 )
 
-//#region trade provider general settings
+// #region trade provider general settings
 export interface TradeProviderSettings {
     pools: ZrxTradePool[]
 }
@@ -115,6 +121,8 @@ const pancakeswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradePr
 const balancerSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+balancer`, '')
 const dodoSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+dodo`, '')
 const bancorSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+bancor`, '')
+const traderjoeSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+traderjoe`, '')
+const pangolinSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+pangolin`, '')
 const openoceanSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+openocean`, '')
 const fusefiSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+fusefi`, '')
 const elkfinanceSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+elkfinance`, '')
@@ -146,12 +154,16 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return dodoSettings
         case TradeProvider.BANCOR:
             return bancorSettings
+        case TradeProvider.TRADERJOE:
+            return traderjoeSettings
         case TradeProvider.OPENOCEAN:
             return openoceanSettings
         case TradeProvider.FUSEFI:
             return fusefiSettings
         case TradeProvider.ELKFINANCE:
             return elkfinanceSettings
+        case TradeProvider.PANGOLIN:
+            return pangolinSettings
         case TradeProvider.TRISOLARIS:
             return trisolarisSettings
         case TradeProvider.WANNASWAP:
@@ -160,9 +172,9 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             unreachable(tradeProvider)
     }
 }
-//#endregion
+// #endregion
 
-//#region data provider general settings
+// #region data provider general settings
 const coinGeckoSettings = createInternalSettings(`${PLUGIN_ID}+currentCoinGeckoSettings`, '')
 const coinMarketCapSettings = createInternalSettings(`${PLUGIN_ID}+currentCoinMarketCapSettings`, '')
 const coinUniswapSettings = createInternalSettings(`${PLUGIN_ID}+currentCoinUniswapSettings`, '')
@@ -182,9 +194,9 @@ export function getCurrentDataProviderGeneralSettings(dataProvider: DataProvider
             unreachable(dataProvider)
     }
 }
-//#endregion
+// #endregion
 
-//#region the user preferred coin id
+// #region the user preferred coin id
 const coinGeckoPreferredCoinId = createInternalSettings<string>(`${PLUGIN_ID}+currentCoinGeckoPreferredCoinId`, '{}')
 const coinMarketCapPreferredCoinId = createInternalSettings<string>(
     `${PLUGIN_ID}+currentCoinMarketCapPreferredCoinId`,
@@ -207,7 +219,7 @@ export function getCurrentPreferredCoinIdSettings(dataProvider: DataProvider) {
             unreachable(dataProvider)
     }
 }
-//#endregion
+// #endregion
 
 /**
  * The approved tokens from uniswap

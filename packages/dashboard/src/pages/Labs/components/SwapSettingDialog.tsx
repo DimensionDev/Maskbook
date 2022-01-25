@@ -8,6 +8,7 @@ import {
     useEthereumNetworkTradeProvider,
     usePolygonNetworkTradeProvider,
     useArbitrumNetworkTradeProvider,
+    useAvalancheNetworkTradeProvider,
     useXDaiNetworkTradeProvider,
     useFuseNetworkTradeProvider,
     useCeloNetworkTradeProvider,
@@ -68,6 +69,12 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
         { label: 'Fusefi', value: TradeProvider.FUSEFI },
         { label: 'ElkFinance', value: TradeProvider.ELKFINANCE },
     ]
+    const avalancheOptions = [
+        { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
+        { label: 'TraderJoe', value: TradeProvider.TRADERJOE },
+        { label: 'OpenOcean', value: TradeProvider.OPENOCEAN },
+        { label: 'PangolinDex', value: TradeProvider.PANGOLIN },
+    ]
 
     const auroraOptions = [
         { label: 'DODO', value: TradeProvider.DODO },
@@ -125,6 +132,12 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
             value: useFuseNetworkTradeProvider(),
             options: fuseOptions,
             onChange: (value: string) => Services.Settings.setFuseNetworkTradeProvider(+value),
+        },
+        {
+            legend: t.labs_settings_swap_network({ network: 'Avalanche' }),
+            value: useAvalancheNetworkTradeProvider(),
+            options: avalancheOptions,
+            onChange: (value: string) => Services.Settings.setAvalancheNetworkTradeProvider(Number.parseInt(value, 10)),
         },
         {
             legend: t.labs_settings_swap_network({ network: 'Aurora' }),

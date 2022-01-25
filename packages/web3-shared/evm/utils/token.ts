@@ -159,7 +159,7 @@ export function parseStringOrBytes32(
         : defaultValue
 }
 
-//#region asset sort
+// #region asset sort
 export const getTokenUSDValue = (token: Asset) => (token.value ? Number.parseFloat(token.value[CurrencyType.USD]) : 0)
 export const getBalanceValue = (asset: Asset) => Number.parseFloat(formatBalance(asset.balance, asset.token.decimals))
 export const getTokenChainIdValue = (asset: Asset) =>
@@ -248,4 +248,4 @@ export const makeSortAssertWithoutChainFn = () => {
         return 0
     }
 }
-//#endregion
+// #endregion

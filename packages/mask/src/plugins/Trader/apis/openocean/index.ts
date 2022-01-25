@@ -16,7 +16,7 @@ export async function swapOO(request: SwapOORequest): Promise<SwapOOData> {
             slippage: request.slippage,
             disabledDexIds: '',
             account: request.userAddr,
-            referrer: getOpenOceanConstants(request.chainId).REFERRER_ADDRESS,
+            referrer: getOpenOceanConstants(request.chainId).REFERRER_ADDRESS?.toLowerCase(),
         }),
     )
     const payload = await response.json()

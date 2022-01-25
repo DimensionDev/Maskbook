@@ -221,8 +221,10 @@ export enum TradeProvider {
     OPENOCEAN = 10,
     WANNASWAP = 11,
     TRISOLARIS = 12,
-    FUSEFI = 13,
-    ELKFINANCE = 14,
+    TRADERJOE = 13,
+    PANGOLIN = 14,
+    FUSEFI = 15,
+    ELKFINANCE = 16,
 }
 /** Supported language settings */
 export enum LanguageOptions {
