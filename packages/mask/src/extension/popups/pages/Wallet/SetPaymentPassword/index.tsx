@@ -124,7 +124,7 @@ const SetPaymentPassword = memo(() => {
                                     helperText={!isValid ? errors.confirm?.message : ''}
                                     type="password"
                                     variant="filled"
-                                    placeholder="Re-enter the payment password"
+                                    placeholder={t('popups_wallet_re_payment_password')}
                                 />
                             )}
                             name="confirm"

@@ -811,7 +811,6 @@
     "popups_wallet_signature_request": "서명",
     "popups_wallet_signature_request_message": "메시지",
     "popups_wallet_contract_interaction": "컨트렉트 인터액션",
-    "popups_wallet_contract_interaction_approve": "승인",
     "popups_wallet_contract_interaction_transfer": "전송",
     "popups_wallet_contract_interaction_gas_fee": "기스비",
     "popups_wallet_contract_interaction_edit": "수정",

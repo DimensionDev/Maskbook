@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react'
 import type { TradeInfo } from '../../types'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { createNativeToken, formatBalance, formatWeiToEther } from '@masknet/web3-shared-evm'
+import { createNativeToken, formatBalance, formatPercentage, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { Box, CircularProgress, TextField, Typography } from '@mui/material'
 import { resolveTradeProviderName } from '../../pipes'
 import { FormattedBalance } from '@masknet/shared'
@@ -9,13 +9,14 @@ import { isDashboardPage } from '@masknet/shared-base'
 import { multipliedBy } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../utils'
 import classnames from 'classnames'
-import { BestTradeIcon } from '@masknet/icons'
+import { BestTradeIcon, TriangleWarning } from '@masknet/icons'
 import { useAsyncRetry } from 'react-use'
 import { PluginTraderRPC } from '../../messages'
 import { TradeProvider } from '@masknet/public-api'
 import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
+import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     trade: {
@@ -26,6 +27,20 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         borderRadius: 8,
         cursor: 'pointer',
         position: 'relative',
+    },
+    warning: {
+        borderColor: isDashboard ? MaskColorVar.redMain : theme.palette.error.main,
+    },
+    warningText: {
+        fontSize: 16,
+        fontWeight: 500,
+        lineHeight: '22px',
+        position: 'absolute',
+        top: 13.5,
+        right: 10,
+        color: isDashboard ? MaskColorVar.redMain : theme.palette.error.main,
+        display: 'flex',
+        alignItems: 'center',
     },
     provider: {
         color: theme.palette.text.primary,
@@ -96,6 +111,8 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
         [gasFee, tokenPrice],
     )
 
+    const isGreatThanSlippageSetting = useGreatThanSlippageSetting(trade.value?.priceImpact)
+
     if (trade.loading)
         return (
             <Box className={classes.trade} display="flex" justifyContent="center" style={{ padding: 24 }}>
@@ -114,7 +131,11 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
             onClick={onClick}
             value={formatBalance(trade.value?.outputAmount ?? 0, trade.value?.outputToken?.decimals, 2)}
             InputProps={{
-                className: classnames(classes.trade, isFocus ? classes.focus : null),
+                className: classnames(
+                    classes.trade,
+                    isFocus ? classes.focus : null,
+                    isGreatThanSlippageSetting ? classes.warning : null,
+                ),
                 disableUnderline: true,
                 startAdornment: (
                     <Box
@@ -147,7 +168,19 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
                         ) : null}
                     </Box>
                 ),
-                endAdornment: isBest ? <BestTradeIcon className={classes.best} /> : null,
+                endAdornment: (
+                    <>
+                        {isBest ? <BestTradeIcon className={classes.best} /> : null}
+                        {isGreatThanSlippageSetting ? (
+                            <Typography className={classes.warningText}>
+                                {t('plugin_trader_price_image_value', {
+                                    percent: formatPercentage(trade.value.priceImpact),
+                                })}
+                                <TriangleWarning style={{ width: 20, height: 20 }} />
+                            </Typography>
+                        ) : null}
+                    </>
+                ),
             }}
             inputProps={{ className: classes.input, disabled: true }}
         />

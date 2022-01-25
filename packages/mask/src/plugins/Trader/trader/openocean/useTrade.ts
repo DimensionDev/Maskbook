@@ -20,9 +20,11 @@ export function useTrade(
     outputAmount: string,
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
+    temporarySlippage?: number,
 ) {
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
-    const slippage = useSlippageTolerance()
+    const slippageSetting = useSlippageTolerance()
+    const slippage = temporarySlippage || slippageSetting
     const { targetChainId } = TargetChainIdContext.useContainer()
     const { RPC } = useRPCConstants(targetChainId)
     const providerURL = first(RPC)
