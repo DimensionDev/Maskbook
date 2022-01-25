@@ -23,6 +23,7 @@ import { Services } from '../../../API'
 import PrintIcon from '@mui/icons-material/Print'
 import { PreviewDialog } from './PreviewDialog'
 import { DownloadIcon } from '@masknet/icons'
+import { useAsync } from 'react-use'
 
 export const MnemonicRevealForm = memo(() => {
     const createPersona = useCreatePersonaV2()
@@ -82,20 +83,14 @@ export const MnemonicRevealForm = memo(() => {
         Services.Identity.deletePersona(id, 'delete even with private')
     }, [words])
 
-    useEffect(() => {
+    useAsync(async () => {
         // handle refresh page after create
-        const pageRefreshHandler = async () => {
-            const personas = await Services.Identity.queryMyPersonas()
-            for (const i in personas) {
-                if (personas[i].nickname === state.personaName) {
-                    const id = personas[i].identifier
-                    Services.Identity.deletePersona(id, 'delete even with private')
-                    break
-                }
-            }
-        }
+        const personas = await Services.Identity.queryMyPersonas()
+        const persona = personas.find((p) => p.nickname === state.personaName)
 
-        pageRefreshHandler()
+        if (!persona) return
+
+        Services.Identity.deletePersona(persona.identifier, 'delete even with private')
     }, [])
 
     return (
