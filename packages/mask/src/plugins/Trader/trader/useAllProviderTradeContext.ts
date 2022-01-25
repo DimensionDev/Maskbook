@@ -74,8 +74,8 @@ function reducer(state: AllProviderTradeState, action: AllProviderSwapAction): A
 export function useAllProviderTradeContext() {
     const [tradeStore, dispatchTradeStore] = useReducer(reducer, {
         inputAmount: '',
-        inputTokenBalance: '',
-        outputTokenBalance: '',
+        inputTokenBalance: '0',
+        outputTokenBalance: '0',
     })
     const [temporarySlippage, setTemporarySlippage] = useState<number | undefined>()
     const { inputAmount, inputToken, outputToken } = tradeStore

@@ -3,53 +3,53 @@ import {
     EthereumTokenType,
     isSameAddress,
     useAccount,
-    useProviderType,
+    useBalance,
     useTokenConstants,
-    useWeb3,
 } from '@masknet/web3-shared-evm'
-import { useAsync } from 'react-use'
+import { useEffect } from 'react'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext'
 
-export function useUpdateBalance(chainId: ChainId, currentChainId: ChainId) {
-    const web3 = useWeb3({ chainId })
+export function useUpdateBalance(chainId: ChainId) {
     const currentAccount = useAccount()
-    const currentProvider = useProviderType()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
     const {
         tradeState: [{ inputToken, outputToken }, dispatchTradeStore],
     } = AllProviderTradeContext.useContainer()
+    const balance = useBalance(chainId)
 
-    return useAsync(async () => {
-        if (!currentAccount) {
-            dispatchTradeStore({
-                type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
-                balance: '0',
-            })
+    useEffect(() => {
+        if (currentAccount) return
+        dispatchTradeStore({
+            type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
+            balance: '0',
+        })
 
-            dispatchTradeStore({
-                type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
-                balance: '0',
-            })
-            return
-        }
+        dispatchTradeStore({
+            type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
+            balance: '0',
+        })
+        return
+    }, [currentAccount])
 
-        if (chainId && currentProvider && currentAccount) {
-            const balance = await web3.eth.getBalance(currentAccount)
+    useEffect(() => {
+        if (!currentAccount) return
+        const value = inputToken?.type === EthereumTokenType.Native ? balance.value : '0'
+        dispatchTradeStore({
+            type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
+            balance: value || '0',
+        })
+    }, [currentAccount, inputToken?.type, balance.value])
 
-            dispatchTradeStore({
-                type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
-                balance: inputToken?.type === EthereumTokenType.Native ? balance : '0',
-            })
-
-            dispatchTradeStore({
-                type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
-                balance:
-                    isSameAddress(outputToken?.address, NATIVE_TOKEN_ADDRESS) ||
-                    outputToken?.type === EthereumTokenType.Native
-                        ? balance
-                        : '0',
-            })
-        }
-    }, [web3, inputToken, outputToken, currentAccount, currentProvider, chainId, currentChainId, NATIVE_TOKEN_ADDRESS])
+    useEffect(() => {
+        if (!currentAccount) return
+        const value =
+            outputToken?.type === EthereumTokenType.Native || isSameAddress(outputToken?.address, NATIVE_TOKEN_ADDRESS)
+                ? balance.value
+                : '0'
+        dispatchTradeStore({
+            type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
+            balance: value || '0',
+        })
+    }, [currentAccount, outputToken?.type, outputToken?.address, balance.value])
 }

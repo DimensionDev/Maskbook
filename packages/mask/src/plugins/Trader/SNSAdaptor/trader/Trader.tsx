@@ -141,35 +141,33 @@ export function Trader(props: TraderProps) {
 
     useEffect(() => {
         if (
-            inputToken &&
-            inputToken?.type !== EthereumTokenType.Native &&
-            inputTokenBalance_ &&
-            !loadingInputTokenBalance
-        )
-            dispatchTradeStore({
-                type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
-                balance: inputTokenBalance_,
-            })
-        if (
-            outputToken &&
-            outputToken?.type !== EthereumTokenType.Native &&
-            outputTokenBalance_ &&
-            !loadingOutputTokenBalance
+            !inputToken ||
+            inputToken.type === EthereumTokenType.Native ||
+            !inputTokenBalance_ ||
+            loadingInputTokenBalance
         ) {
-            dispatchTradeStore({
-                type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
-                balance: outputTokenBalance_,
-            })
+            return
         }
-    }, [
-        inputToken,
-        outputToken,
-        inputTokenBalance_,
-        outputTokenBalance_,
-        loadingInputTokenBalance,
-        loadingOutputTokenBalance,
-        NATIVE_TOKEN_ADDRESS,
-    ])
+        dispatchTradeStore({
+            type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
+            balance: inputTokenBalance_,
+        })
+    }, [inputToken, inputTokenBalance_, loadingInputTokenBalance])
+
+    useEffect(() => {
+        if (
+            !outputToken ||
+            outputToken.type === EthereumTokenType.Native ||
+            !outputTokenBalance_ ||
+            loadingOutputTokenBalance
+        ) {
+            return
+        }
+        dispatchTradeStore({
+            type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
+            balance: outputTokenBalance_,
+        })
+    }, [outputToken, outputTokenBalance_, loadingOutputTokenBalance])
 
     // #region select token
     const excludeTokens = [inputToken, outputToken].filter(Boolean).map((x) => x?.address) as string[]
@@ -324,7 +322,7 @@ export function Trader(props: TraderProps) {
     // #endregion
 
     // Query the balance of native tokens on target chain
-    useUpdateBalance(chainId, currentChainId)
+    useUpdateBalance(chainId)
     // #endregion
 
     // #region reset focused trade when chainId, inputToken, outputToken, inputAmount be changed
