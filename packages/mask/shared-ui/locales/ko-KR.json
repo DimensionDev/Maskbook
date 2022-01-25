@@ -362,7 +362,6 @@
     "plugin_trader_error_amount_absence": "수액 입력",
     "plugin_trader_error_insufficient_balance": "{{symbol}}잔액 부족",
     "plugin_trader_error_insufficient_lp": "유동성 부족",
-    "plugin_trader_error_price_impact_too_high": "가격충격이 너무 큽니다.",
     "plugin_trade_error_input_amount_less_minimum_amount": "입력 금액은 최소 금액 이하입니다.",
     "plugin_trader_settings_data_source_primary": "트렌딩 데이터 소스",
     "plugin_trader_settings_data_source_secondary": "암호화폐의 트렌딩 데이터를 선택하세요.",
