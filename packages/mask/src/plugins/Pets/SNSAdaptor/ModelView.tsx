@@ -68,6 +68,10 @@ const useStyles = makeStyles()((theme) => ({
         width: 36,
         height: 36,
     },
+    iframe: {
+        minHeight: 1,
+        minWidth: 1,
+    },
 }))
 
 const ModelView: FC<ModelViewProps> = ({ source, ...rest }) => {
@@ -83,6 +87,7 @@ const ModelView: FC<ModelViewProps> = ({ source, ...rest }) => {
                         playsInline: true,
                     }}
                     classes={classes}
+                    showIframeFromInit
                 />
                 {/* <model-viewer
                     style={{ width: '90%', height: '100%', top: source === Punk3D.url ? '5%' : 0, margin: 'auto' }}
