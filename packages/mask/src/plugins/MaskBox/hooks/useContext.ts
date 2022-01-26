@@ -124,7 +124,7 @@ function useContext(initialState?: { boxId: string }) {
             holderTokenAddress: maskBoxInfo.holder_token_addr,
             holderMinTokenAmount: maskBoxInfo.holder_min_token_amount,
         }
-        return Promise.resolve(info)
+        return info
     }, [
         allTokens.join(),
         purchasedTokens.join(),

@@ -4,7 +4,7 @@ import { Asset, ChainId, EthereumTokenType, FungibleTokenDetailed } from '../typ
 import { useTokensBalance } from './useTokensBalance'
 import { useChainDetailed } from './useChainDetailed'
 import { getChainDetailed, EMPTY_LIST } from '../utils'
-import { useBalance } from '.'
+import { useBalance } from './useBalance'
 
 export function useAssetsFromChain(tokens: FungibleTokenDetailed[], chainId?: ChainId) {
     const { value: balance = '0' } = useBalance(chainId)
