@@ -865,7 +865,7 @@ importers:
       '@rollup/plugin-sucrase': 4.0.1_rollup@2.62.0
       date-fns: 2.27.0
       rollup: 2.62.0
-      rollup-plugin-dts: 4.0.1_rollup@2.62.0
+      rollup-plugin-dts: 4.0.1_f989a9f75f95e6331defeb4529ad92f3
 
   packages/public-api:
     specifiers: {}
@@ -17758,7 +17758,7 @@ packages:
   /jsonfile/4.0.0:
     resolution: {integrity: sha1-h3Gq4HmbZAdrdmQPygWPnBDjPss=}
     optionalDependencies:
-      graceful-fs: 4.2.8
+      graceful-fs: 4.2.9
 
   /jsonfile/6.1.0:
     resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
@@ -18067,7 +18067,7 @@ packages:
     resolution: {integrity: sha1-eUfkIUmvgNaWy/eXvKq8/h/inKg=}
     engines: {node: '>=4'}
     dependencies:
-      graceful-fs: 4.2.8
+      graceful-fs: 4.2.9
       parse-json: 2.2.0
       pify: 2.3.0
       strip-bom: 3.0.0
@@ -21496,7 +21496,7 @@ packages:
     dependencies:
       bn.js: 5.2.0
 
-  /rollup-plugin-dts/4.0.1_rollup@2.62.0:
+  /rollup-plugin-dts/4.0.1_f989a9f75f95e6331defeb4529ad92f3:
     resolution: {integrity: sha512-DNv5F8pro/r0Hkx3JWKRtJZocDnqXfgypoajeiaNq134rYaFcEIl/oas5PogD1qexMadVijsHyVko1Chig0OOQ==}
     engines: {node: '>=v12.22.6'}
     peerDependencies:
@@ -21505,6 +21505,7 @@ packages:
     dependencies:
       magic-string: 0.25.7
       rollup: 2.62.0
+      typescript: 4.6.0-dev.20211202
     optionalDependencies:
       '@babel/code-frame': 7.16.0
     dev: true

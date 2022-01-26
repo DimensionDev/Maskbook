@@ -121,6 +121,15 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
                     return 'https://api.1inch.exchange/v4.0/42220/'
                 case NetworkType.Fantom:
                     return 'https://api.1inch.exchange/v4.0/250/'
+                case NetworkType.Avalanche:
+                    return 'https://api.1inch.exchange/v4.0/43114/'
+                case NetworkType.Aurora:
+                case NetworkType.Boba:
+                case NetworkType.Fuse:
+                case NetworkType.Metis:
+                case NetworkType.Optimistic:
+                    console.error('To be implement network: ', networkType)
+                    return ''
                 default:
                     safeUnreachable(networkType)
                     return ''

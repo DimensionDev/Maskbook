@@ -9,18 +9,17 @@ import {
     TransactionStateType,
     useAccount,
     useWeb3,
+    useChainId,
 } from '@masknet/web3-shared-evm'
 import type { SwapQuoteOneResponse, TradeComputed } from '../../types'
-import { TargetChainIdContext } from '../useTargetChainIdContext'
 
 export function useTradeCallback(
     tradeComputed: TradeComputed<SwapQuoteOneResponse> | null,
     gasConfig?: GasOptionConfig,
 ) {
+    const web3 = useWeb3()
     const account = useAccount()
-    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-
-    const web3 = useWeb3(false, chainId)
+    const chainId = useChainId()
     const [tradeState, setTradeState] = useState<TransactionState>({
         type: TransactionStateType.UNKNOWN,
     })

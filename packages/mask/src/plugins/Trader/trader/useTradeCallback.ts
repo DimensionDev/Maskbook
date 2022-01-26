@@ -19,6 +19,7 @@ import { useTradeCallback as useBalancerCallback } from './balancer/useTradeCall
 import { useTradeCallback as useDODOCallback } from './dodo/useTradeCallback'
 import { useTradeCallback as useONECallback } from './1inch/useTradeCallback'
 import { useTradeCallback as useBancorCallback } from './bancor/useTradeCallback'
+import { useTradeCallback as useOpenOceanCallback } from './openocean/useTradeCallback'
 import { useExchangeProxyContract } from '../contracts/balancer/useExchangeProxyContract'
 import type { NativeTokenWrapper } from './native/useTradeComputed'
 import { isNativeTokenWrapper } from '../helpers'
@@ -73,6 +74,10 @@ export function useTradeCallback(
     const dodo = useDODOCallback(provider === TradeProvider.DODO ? tradeComputedForDODO : null)
     const one = useONECallback(provider === TradeProvider.ONE_INCH ? tradeComputedForONE : null)
     const bancor = useBancorCallback(provider === TradeProvider.BANCOR ? tradeComputedForBancor : null)
+    const openocean = useOpenOceanCallback(
+        provider === TradeProvider.OPENOCEAN ? tradeComputedForOpenOcean : null,
+        gasConfig,
+    )
 
     // the trade is an ETH-WETH pair
     const nativeTokenWrapper = useNativeTokenWrapperCallback(

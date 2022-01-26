@@ -8,4 +8,10 @@ export const ONE_INCH_BASE_URL: Record<NetworkType, string> = {
     [NetworkType.xDai]: 'https://api.1inch.exchange/v4.0/100/',
     [NetworkType.Celo]: 'https://api.1inch.exchange/v4.0/42220/',
     [NetworkType.Fantom]: 'https://api.1inch.exchange/v4.0/250/',
+    [NetworkType.Avalanche]: 'https://api.1inch.exchange/v4.0/43114/',
+    [NetworkType.Aurora]: 'https://api.1inch.exchange/v4.0/1313161554/',
+    [NetworkType.Boba]: 'https://api.1inch.exchange/v4.0/288/',
+    [NetworkType.Fuse]: 'https://api.1inch.exchange/v4.0/122/',
+    [NetworkType.Metis]: 'https://api.1inch.exchange/v4.0/1088/',
+    [NetworkType.Optimistic]: 'https://api.1inch.exchange/v4.0/10/',
 }

@@ -27,17 +27,17 @@ export function useTrade(
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
     const { RPC } = useRPCConstants(chainId)
     const providerURL = first(RPC)
-    const { DODO_ETH_ADDRESS } = useTraderConstants(chainId)
+    const { ONEINCH_ETH_ADDRESS } = useTraderConstants(chainId)
     const account = useAccount()
 
     return useAsyncRetry(async () => {
         if (!inputToken || !outputToken) return null
         if (inputAmount === '0') return null
         const sellToken = isNativeTokenAddress(inputToken)
-            ? { ...inputToken, address: DODO_ETH_ADDRESS ?? '' }
+            ? { ...inputToken, address: ONEINCH_ETH_ADDRESS ?? '' }
             : inputToken
         const buyToken = isNativeTokenAddress(outputToken)
-            ? { ...outputToken, address: DODO_ETH_ADDRESS ?? '' }
+            ? { ...outputToken, address: ONEINCH_ETH_ADDRESS ?? '' }
             : outputToken
         return PluginTraderRPC.swapRoute({
             isNativeSellToken: isNativeTokenAddress(inputToken),
