@@ -32,6 +32,7 @@ interface AssetPlayerProps
     renderTimeout?: number
     iconProps?: SvgIconProps
     fallbackImage?: URL
+    isFixedIframeSize?: boolean
     setERC721TokenName?: (name: string) => void
     setSourceType?: (type: string) => void
 }
@@ -49,8 +50,9 @@ enum AssetPlayerState {
     ERROR = 3,
 }
 
-export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconProps, ...props }) => {
+export const AssetPlayer = memo<AssetPlayerProps>((props) => {
     const ref = useRef<IFrameComponent | null>(null)
+    const { url, type, options, iconProps, isFixedIframeSize = true } = props
     const classes = useStylesExtends(useStyles(), props)
     const [hidden, setHidden] = useState(Boolean(props.renderTimeout))
     const { RPC: RPC_Entries } = getRPCConstants(props.erc721Token?.chainId)
@@ -129,7 +131,7 @@ export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconPro
     // parent of iframe changed, this time the returned `height` and `width` is right.
     // So resize the parent manually.
     useEffect(() => {
-        if (playerState !== AssetPlayerState.NORMAL) return
+        if (playerState !== AssetPlayerState.NORMAL && isFixedIframeSize) return
         const resize = (height: string) => () => {
             if (!ref.current?.parentElement) return
             ref.current.parentElement.style.height = height
