@@ -2,6 +2,8 @@ import differenceInSeconds from 'date-fns/differenceInSeconds'
 import compareAsc from 'date-fns/compareAsc'
 import ReconnectingWebSocket from 'reconnecting-websocket'
 
+/// <reference path="../env.d" />
+
 export interface MessageBase {
     id: string
 }

@@ -8,5 +8,5 @@
     "lib": ["ES2021"]
   },
   "include": ["./"],
-  "references": []
+  "references": [{ "path": "../../shared-base" }]
 }
