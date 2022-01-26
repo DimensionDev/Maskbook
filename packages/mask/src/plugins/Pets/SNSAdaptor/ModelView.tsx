@@ -46,7 +46,6 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-// AssetPlayer component case some problem when source changed
 const ModelView: FC<ModelViewProps> = ({ source, ...rest }) => {
     const { classes } = useStyles()
     return useMemo(() => {

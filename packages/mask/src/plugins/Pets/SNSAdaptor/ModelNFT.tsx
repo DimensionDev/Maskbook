@@ -27,10 +27,6 @@ const useStyles = makeStyles()(() => ({
         width: '152px !important',
         maxHeight: 85,
     },
-    glbContent: {
-        width: 200,
-        height: 150,
-    },
     glbView: {
         display: 'flex',
         alignItems: 'center',
@@ -58,12 +54,13 @@ export function ModelNFT(props: ModelNFTProps) {
     return (
         <div>
             <div
-                className={classes.glbContent}
                 style={{
                     position: 'fixed',
                     right: position.x,
                     bottom: position.y,
                     zIndex: 100,
+                    width: 200,
+                    height: 150,
                 }}>
                 <div className={classes.glbView}>
                     <ModelView className={classes.glbView} source={showMeta?.image ?? ''} />
