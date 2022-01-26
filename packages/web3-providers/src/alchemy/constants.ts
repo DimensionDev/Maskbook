@@ -1,5 +1,6 @@
 import { PluginId } from '@masknet/plugin-infra'
 
+/* cspell:disable-next-line */
 const ALCHEMY_API_KEY = 'hn5njqihbzvvn88n2e1swp6hdta9wmdn'
 
 export const ALCHEMY_URL_MAPPINGS: Record<string, string> = {
