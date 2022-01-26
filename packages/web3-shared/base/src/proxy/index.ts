@@ -2,8 +2,7 @@ import differenceInSeconds from 'date-fns/differenceInSeconds'
 import compareAsc from 'date-fns/compareAsc'
 import ReconnectingWebSocket from 'reconnecting-websocket'
 
-/// <reference path="../env.d" />
-
+/// <reference types="@masknet/global-types/webpack" />
 export interface MessageBase {
     id: string
 }
