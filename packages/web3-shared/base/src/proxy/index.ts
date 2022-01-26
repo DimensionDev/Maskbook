@@ -2,7 +2,6 @@ import differenceInSeconds from 'date-fns/differenceInSeconds'
 import compareAsc from 'date-fns/compareAsc'
 import ReconnectingWebSocket from 'reconnecting-websocket'
 
-/// <reference types="@masknet/global-types/webpack" />
 export interface MessageBase {
     id: string
 }
@@ -160,7 +159,6 @@ export class ProviderProxy {
 
 const SOCKET_POINT =
     // workaround, should create a stage env for QA testing
-    // @ts-ignore
     process.env.NODE_ENV === 'production' && process.env.channel === 'stable'
         ? 'wss://hyper-proxy.r2d2.to'
         : 'wss://hyper-proxy-development.mask-reverse-proxy.workers.dev'
