@@ -590,6 +590,7 @@ importers:
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/typed-message': workspace:*
+      '@masknet/web3-shared-base': workspace:*
       '@servie/events': ^3.0.0
       '@types/use-subscription': ^1.0.0
       async-call-rpc: ^6.0.1
@@ -604,6 +605,7 @@ importers:
       '@masknet/shared-base': link:../shared-base
       '@masknet/theme': link:../theme
       '@masknet/typed-message': link:../typed-message
+      '@masknet/web3-shared-base': link:../web3-shared/base
       '@servie/events': 3.0.0
       '@types/use-subscription': 1.0.0
       async-call-rpc: 6.0.1
@@ -17889,7 +17891,7 @@ packages:
     resolution: {integrity: sha1-lWkFcI1YtLq0wiYbBPWfMcmTdMA=}
     engines: {node: '>=0.10.0'}
     dependencies:
-      graceful-fs: 4.2.8
+      graceful-fs: 4.2.9
       parse-json: 2.2.0
       pify: 2.3.0
       pinkie-promise: 2.0.1
@@ -19547,7 +19549,7 @@ packages:
     resolution: {integrity: sha1-WcRPfuSR2nBNpBXaWkBwuk+P5EE=}
     engines: {node: '>=0.10.0'}
     dependencies:
-      graceful-fs: 4.2.8
+      graceful-fs: 4.2.9
       pify: 2.3.0
       pinkie-promise: 2.0.1
 
@@ -21262,7 +21264,7 @@ packages:
       rollup: 2.66.1
       typescript: 4.6.0-dev.20211202
     optionalDependencies:
-      '@babel/code-frame': 7.16.0
+      '@babel/code-frame': 7.16.7
     dev: true
 
   /rollup-plugin-terser/7.0.2_rollup@2.66.1:
