@@ -39,7 +39,7 @@ const NATIVE_TOKEN_SYMBOLS = CHAINS.filter((x) => x.network === 'mainnet' && x.n
     x.nativeCurrency.symbol.toLowerCase(),
 )
 export function isNativeTokenSymbol(symbol: string) {
-    return NATIVE_TOKEN_SYMBOLS.includes(symbol)
+    return NATIVE_TOKEN_SYMBOLS.includes(symbol.toLowerCase())
 }
 
 export function createERC20Token(
