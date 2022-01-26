@@ -9,6 +9,6 @@ export async function setUserAddress(user: User) {
 }
 
 export async function getUserAddress(userId: string) {
-    if (!userId || userId === '$unknown') return Promise.resolve('')
+    if (!userId || userId === '$unknown') return ''
     return storage.get(userId)
 }
