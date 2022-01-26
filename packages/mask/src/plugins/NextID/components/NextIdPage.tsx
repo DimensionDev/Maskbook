@@ -58,7 +58,7 @@ export function NextIdPage({}: NextIDPageProps) {
     const { value: currentPersona, loading: loadingPersona } = useAsyncRetry(() => {
         if (!currentProfileIdentifier) return Promise.resolve(undefined)
         return Services.Identity.queryPersonaByProfile(currentProfileIdentifier.identifier)
-    }, [currentProfileIdentifier])
+    }, [currentProfileIdentifier, personaConnectStatus.hasPersona])
 
     const { value: bindings, loading } = useAsync(async () => {
         if (!currentPersona) return
