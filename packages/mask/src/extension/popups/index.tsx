@@ -10,5 +10,4 @@ export function PermissionAwareRedirectOf(url: string, context: MaskSDK_SNS_Cont
     )
 }
 export { constructRequestPermissionURL } from './RequestPermission/utils'
-export { constructSignRequestURL } from './SignRequest/utils'
 export { getRouteURLWithNoParam } from './utils'
