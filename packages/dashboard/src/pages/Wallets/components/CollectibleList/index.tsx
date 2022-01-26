@@ -55,7 +55,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
         retry,
     } = useAsyncRetry(
         async () =>
-            Asset?.getNonFungibleAssets?.(account, { page: page, size: 20 }, undefined, selectedNetwork || undefined, {
+            Asset?.getNonFungibleAssets?.(account, { page: page, size: 20 }, undefined, selectedNetwork || network, {
                 notify: PluginMessages.Wallet.events.socketMessageUpdated.sendToAll,
             }),
         [account, Asset?.getNonFungibleAssets, network, selectedNetwork],

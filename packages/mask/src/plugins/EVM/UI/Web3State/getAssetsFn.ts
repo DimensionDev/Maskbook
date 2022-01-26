@@ -175,7 +175,7 @@ export const getNonFungibleTokenFn =
         socket.send({
             id: socketId,
             method: 'mask.fetchNonFungibleCollectibleAsset',
-            params: { address, pageSize: 40 },
+            params: { address, network, pageSize: 40 },
             notify: other?.notify as NotifyFn,
         })
 

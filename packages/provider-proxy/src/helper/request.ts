@@ -1,7 +1,7 @@
 import type { ProducerPushFunction } from '../types'
 import type { NonFungibleTokenAPI } from '@masknet/web3-providers'
 
-export async function collectAllPageDate<T>(
+export async function collectAllPageData<T>(
     fetcher: (page: number, pageInfo: { [key in string]: unknown }) => Promise<NonFungibleTokenAPI.ProviderPageable<T>>,
     pageSize: number,
     handler?: ProducerPushFunction<T>,

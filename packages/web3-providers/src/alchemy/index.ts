@@ -1,12 +1,14 @@
 import type { NonFungibleTokenAPI } from '../types'
 import urlcat from 'urlcat'
-import { ALCHEMY_URL } from './constants'
+import { ALCHEMY_URL_MAPPINGS } from './constants'
 import type { AlchemyNFTItemResponse } from './types'
 import { TokenType, Web3Plugin } from '@masknet/plugin-infra'
 import { resolveIPFSLink } from '@masknet/web3-shared-evm'
 
-async function fetchFromAlchemy<T>(path: string) {
-    const response = await fetch(urlcat(ALCHEMY_URL, path))
+async function fetchFromAlchemy<T>(path: string, network: Web3Plugin.NetworkDescriptor) {
+    const alchemyUrl = ALCHEMY_URL_MAPPINGS[network.ID]
+    if (!alchemyUrl) return {} as Promise<T>
+    const response = await fetch(urlcat(alchemyUrl, path))
     return response.json() as Promise<T>
 }
 
@@ -43,7 +45,11 @@ function createFlowNFT(token: AlchemyNFTItemResponse, owner: string): Web3Plugin
 }
 
 export class AlchemyAPI implements NonFungibleTokenAPI.Provider {
-    async getTokens(from: string, { page = 0, size = 50 }: NonFungibleTokenAPI.Options) {
+    async getTokens(
+        from: string,
+        { page = 0, size = 50 }: NonFungibleTokenAPI.Options,
+        network: Web3Plugin.NetworkDescriptor,
+    ) {
         const requestPath = urlcat('/v1/getNFTs/', {
             owner: from,
             offset: page * size,
@@ -55,7 +61,7 @@ export class AlchemyAPI implements NonFungibleTokenAPI.Provider {
             nfts: AlchemyNFTItemResponse[]
         }
 
-        const result = await fetchFromAlchemy<Payload>(requestPath)
+        const result = await fetchFromAlchemy<Payload>(requestPath, network)
         if (!result.nfts)
             return {
                 data: [],
@@ -70,7 +76,12 @@ export class AlchemyAPI implements NonFungibleTokenAPI.Provider {
     }
 }
 
-export function getAlchemyFlowNFTList(address: string, page?: number, size?: number) {
+export function getAlchemyNFTList(
+    address: string,
+    network: Web3Plugin.NetworkDescriptor,
+    page?: number,
+    size?: number,
+) {
     const alchemy = new AlchemyAPI()
-    return alchemy.getTokens(address, { page, size })
+    return alchemy.getTokens(address, { page, size }, network)
 }

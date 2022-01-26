@@ -13,7 +13,7 @@ export const getNonFungibleAssets = async (
     socket.send({
         id: socketId,
         method: 'mask.fetchFlowNonFungibleCollectibleAsset',
-        params: { address, pageSize: 100 },
+        params: { address, network, pageSize: 100 },
         notify: other?.notify as NotifyFn,
     })
     const data = socket.getResult<Web3Plugin.NonFungibleToken>(socketId)

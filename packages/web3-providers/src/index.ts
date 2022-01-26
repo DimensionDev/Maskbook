@@ -21,4 +21,4 @@ export const KeyValue = new KeyValueAPI()
 export { getOpenSeaNFTList, getOpenSeaCollectionList } from './opensea'
 export { getAssetListFromDebank } from './debank'
 export { getRaribleNFTList } from './rarible'
-export { getAlchemyFlowNFTList } from './alchemy'
+export { getAlchemyNFTList } from './alchemy'

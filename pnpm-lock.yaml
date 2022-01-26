@@ -834,6 +834,7 @@ importers:
       '@masknet/web3-providers': workspace:*
       '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-evm': workspace:*
+      '@masknet/web3-shared-flow': workspace:*
       '@rollup/plugin-alias': ^3.1.8
       '@rollup/plugin-commonjs': ^21.0.1
       '@rollup/plugin-json': ^4.1.0
@@ -848,6 +849,7 @@ importers:
       '@masknet/web3-providers': link:../web3-providers
       '@masknet/web3-shared-base': link:../web3-shared/base
       '@masknet/web3-shared-evm': link:../web3-shared/evm
+      '@masknet/web3-shared-flow': link:../web3-shared/flow
       urlcat: 2.0.4
     devDependencies:
       '@rollup/plugin-alias': 3.1.9_rollup@2.62.0
@@ -1050,6 +1052,7 @@ importers:
       '@masknet/web3-constants': workspace:*
       '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-evm': workspace:*
+      '@masknet/web3-shared-flow': workspace:*
       bignumber.js: 9.0.1
       date-fns: ^2.27.0
       json-stable-stringify: ^1.0.1
@@ -1063,6 +1066,7 @@ importers:
       '@masknet/web3-constants': link:../web3-constants
       '@masknet/web3-shared-base': link:../web3-shared/base
       '@masknet/web3-shared-evm': link:../web3-shared/evm
+      '@masknet/web3-shared-flow': link:../web3-shared/flow
       bignumber.js: 9.0.1
       date-fns: 2.27.0
       json-stable-stringify: 1.0.1
