@@ -1,8 +1,8 @@
 {
   "name": "@masknet/web3-shared-solana",
   "private": true,
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "../dist/solana/index.js",
+  "types": "../dist/solana/index.d.ts",
   "dependencies": {
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-kit": "workspace:*",

@@ -1,8 +1,8 @@
 {
   "name": "@masknet/web3-shared-evm",
   "private": true,
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "../dist/evm/index.js",
+  "types": "../dist/evm/index.d.ts",
   "sideEffects": false,
   "dependencies": {
     "@ensdomains/address-encoder": "^0.2.6",
