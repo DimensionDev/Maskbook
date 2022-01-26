@@ -17,11 +17,12 @@ import {
     consistentPersonaDBWriteAccess,
     createOrUpdatePersonaDB,
     createPersonaDB,
-    createReadonlyPersonaTransaction,
     LinkedProfileDetails,
     PersonaDB,
     PersonaRecord,
 } from './db'
+// TODO: support app
+import { createReadonlyPersonaTransaction } from './web'
 
 // #region Local key helpers
 /**
