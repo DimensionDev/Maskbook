@@ -18,7 +18,6 @@ import {
     getPayloadChainId,
     getTransactionHash,
     isZeroAddress,
-    formatGweiToWei,
 } from '@masknet/web3-shared-evm'
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import * as MetaMask from './providers/MetaMask'
@@ -291,8 +290,6 @@ export async function INTERNAL_send(
         // that would almost always causes an undesired warning tip.
         if (Flags.EIP1559_enabled && isEIP1559Valid && isEIP1559Supported(chainIdFinally)) {
             config.gasPrice = undefined
-            config.maxPriorityFeePerGas = toHex(formatGweiToWei(1.5).toFixed())
-            config.maxFeePerGas = toHex(Number.parseInt(config.maxFeePerGas!, 16) * 0.8)
         } else {
             config.maxFeePerGas = undefined
             config.maxPriorityFeePerGas = undefined

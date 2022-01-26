@@ -14,6 +14,7 @@ export function useERC20TokenTransferCallback(address?: string, amount?: string,
 
     const transferCallback = useCallback(
         async (amount?: string, recipient?: string, gasConfig?: GasConfig) => {
+            console.log('done123')
             if (!account || !recipient || !amount || isZero(amount) || !erc20Contract) {
                 setTransferState({
                     type: TransactionStateType.UNKNOWN,
