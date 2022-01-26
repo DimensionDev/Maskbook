@@ -366,8 +366,6 @@
     "plugin_trade_error_input_amount_less_minimum_amount": "입력 금액은 최소 금액 이하입니다.",
     "plugin_trader_settings_data_source_primary": "트렌딩 데이터 소스",
     "plugin_trader_settings_data_source_secondary": "암호화폐의 트렌딩 데이터를 선택하세요.",
-    "plugin_trader_settings_trade_provider_primary": "교환 네트워크 선택",
-    "plugin_trader_settings_trade_provider_secondary": "서로 다른 교환 네트워크에서 암호화폐 교환하기",
     "plugin_trader_slippage_tolerance": "슬리피지 톨러런스:",
     "plugin_trader_swap_from": "From",
     "plugin_trader_swap_to": "To(estimated)",

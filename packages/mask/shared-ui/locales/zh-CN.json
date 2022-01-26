@@ -427,8 +427,6 @@
     "plugin_trade_error_input_amount_less_minimum_amount": "提交兑换的数额低于最低数额",
     "plugin_trader_settings_data_source_primary": "趋势数据源",
     "plugin_trader_settings_data_source_secondary": "选择加密货币趋势数据的来源。",
-    "plugin_trader_settings_trade_provider_primary": "选择交易网络",
-    "plugin_trader_settings_trade_provider_secondary": "在不同的交易网络上兑换加密货币。",
     "plugin_trader_slippage_tolerance": "滑点容许值",
     "plugin_trader_swap_from": "从",
     "plugin_trader_swap_to": "至(预计)",
