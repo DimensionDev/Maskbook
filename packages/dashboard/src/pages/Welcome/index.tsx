@@ -54,7 +54,7 @@ export default function Welcome() {
         if (!iframeDocument) return
 
         const style = iframeDocument.createElement('style')
-        style.innerHTML = `
+        style.textContent = `
               h3, h6 { color: ${mode === 'dark' ? '#FFFFFF' : '#111432'}; }
               p { color: ${mode === 'dark' ? 'rgba(255, 255, 255, 0.8);' : '#7b8192'}; }
             `

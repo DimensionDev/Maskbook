@@ -49,7 +49,6 @@ function CashTrendingRenderer(props: MessageRenderProps<TypedMessageCashTrending
                     type,
                     element,
                     dataProviders,
-                    tradeProviders,
                 })
             }, 500),
         )

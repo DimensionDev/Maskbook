@@ -7,16 +7,16 @@ import {
     getERC721TokenDetailedFromChain,
     getERC721TokenAssetFromChain,
     getEthereumConstants,
-    getRPCConstants,
     isSameAddress,
     Web3ProviderType,
     FungibleAssetProvider,
+    createExternalProvider,
 } from '@masknet/web3-shared-evm'
 import { Pageable, Pagination, TokenType, Web3Plugin } from '@masknet/plugin-infra'
 import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import type { AbiItem } from 'web3-utils'
-import { first, uniqBy } from 'lodash-unified'
+import { uniqBy } from 'lodash-unified'
 import { PLUGIN_NETWORKS } from '../../constants'
 import { makeSortAssertWithoutChainFn } from '../../utils/token'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
@@ -25,7 +25,6 @@ export const getFungibleAssetsFn =
     (context: Web3ProviderType) =>
     async (address: string, providerType: string, network: Web3Plugin.NetworkDescriptor, pagination?: Pagination) => {
         const chainId = context.chainId.getCurrentValue()
-        const provider = context.provider.getCurrentValue()
         const wallet = context.wallets.getCurrentValue().find((x) => isSameAddress(x.address, address))
         const socket = await context.providerSocket
         const networks = PLUGIN_NETWORKS
@@ -33,7 +32,9 @@ export const getFungibleAssetsFn =
             .getCurrentValue()
             .filter((x) => wallet?.erc20_token_whitelist.has(formatEthereumAddress(x.address)))
 
-        const web3 = new Web3(provider)
+        const web3 = new Web3(
+            createExternalProvider(context.request, context.getSendOverrides, context.getRequestOptions),
+        )
         const { BALANCE_CHECKER_ADDRESS } = getEthereumConstants(chainId)
         const socketId = `mask.fetchFungibleTokenAsset_${address}`
         let dataFromProvider = await socket.sendAsync<Web3Plugin.Asset<Web3Plugin.FungibleToken>>({
@@ -138,28 +139,30 @@ export const getNonFungibleTokenFn =
         let tokenInDb: ERC721TokenDetailed[] = []
         // validate and show trusted erc721 token in first page
         if (pagination?.page === 0) {
-            const provider = context.provider.getCurrentValue()
             const trustedTokens = context.erc721Tokens.getCurrentValue()
             const calls = trustedTokens.map(async (x) => {
-                const web3 = new Web3(provider)
-                const { RPC } = getRPCConstants(x.contractDetailed.chainId)
-                const providerURL = first(RPC)
-                if (providerURL) {
-                    web3.setProvider(providerURL)
-                    const contract = createContract<ERC721>(web3, x.contractDetailed.address, ERC721ABI as AbiItem[])
-                    if (!contract) return null
-                    const tokenDetailed = await getERC721TokenDetailedFromChain(x.contractDetailed, contract, x.tokenId)
-                    const info = await getERC721TokenAssetFromChain(tokenDetailed?.info.tokenURI)
-                    if (tokenDetailed && info)
-                        tokenDetailed.info = {
-                            ...info,
-                            ...tokenDetailed.info,
-                            hasTokenDetailed: true,
-                            name: info.name ?? tokenDetailed.info.name,
-                        }
-                    return tokenDetailed
-                }
-                return null
+                const web3 = new Web3(
+                    createExternalProvider(
+                        context.request,
+                        () => ({
+                            ...context.getSendOverrides?.(),
+                            chainId: x.contractDetailed.chainId,
+                        }),
+                        context.getRequestOptions,
+                    ),
+                )
+                const contract = createContract<ERC721>(web3, x.contractDetailed.address, ERC721ABI as AbiItem[])
+                if (!contract) return null
+                const tokenDetailed = await getERC721TokenDetailedFromChain(x.contractDetailed, contract, x.tokenId)
+                const info = await getERC721TokenAssetFromChain(tokenDetailed?.info.tokenURI)
+                if (tokenDetailed && info)
+                    tokenDetailed.info = {
+                        ...info,
+                        ...tokenDetailed.info,
+                        hasTokenDetailed: true,
+                        name: info.name ?? tokenDetailed.info.name,
+                    }
+                return tokenDetailed
             })
 
             const fromChain = await Promise.all(calls)
@@ -174,7 +177,6 @@ export const getNonFungibleTokenFn =
         })
 
         const tokenFromProvider = socket.getResult<ERC721TokenDetailed>(socketId)
-
         const allData: Web3Plugin.NonFungibleToken[] = [...tokenInDb, ...tokenFromProvider]
             .map(
                 (x) =>
@@ -187,7 +189,11 @@ export const getNonFungibleTokenFn =
                         name: x.info.name ?? `${x.contractDetailed.name} ${x.tokenId}`,
                         description: x.info.description ?? '',
                         owner: x.info.owner,
-                        contract: { ...x.contractDetailed, type: TokenType.NonFungible },
+                        contract: {
+                            ...x.contractDetailed,
+                            type: TokenType.NonFungible,
+                            id: x.contractDetailed.address,
+                        },
                         metadata: {
                             name: x.info.name ?? `${x.contractDetailed.name} ${x.tokenId}`,
                             description: x.info.description ?? '',

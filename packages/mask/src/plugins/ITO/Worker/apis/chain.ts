@@ -249,7 +249,7 @@ export async function getClaimAllPools(chainId: ChainId, endBlock: number, swapp
     const swappedTokenUnmergedList = (
         await Promise.allSettled(
             swapRawFilteredData.map(async (value) => {
-                const result = await getTransactionReceipt(value.txHash)
+                const result = await getTransactionReceipt(value.txHash, { chainId })
                 if (!result) return null
                 const log = result.logs.find((log) => isSameAddress(log.address, ITO2_CONTRACT_ADDRESS))
                 if (!log) return null

@@ -173,7 +173,6 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                         updatePostSize(Editor.current?.estimatedLength || 0)
                     }}
                 />
-
                 <Typography>
                     <Trans
                         i18nKey="post_dialog_plugins_experimental"
@@ -185,7 +184,6 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                 <div className={classes.flex}>
                     <PluginEntryRender readonly={sending} ref={PluginEntry} />
                 </div>
-
                 <Typography>{t('post_dialog__select_recipients_title')}</Typography>
                 <div className={classes.flex}>
                     <ClickableChip
@@ -209,7 +207,6 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                         />
                     )}
                 </div>
-
                 {MoreOptions.length ? (
                     <>
                         <Typography>{t('post_dialog__more_options_title')}</Typography>

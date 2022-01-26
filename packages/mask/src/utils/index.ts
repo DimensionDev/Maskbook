@@ -1,7 +1,6 @@
 export * from './components/'
 export * from './debug'
 export * from './hooks'
-export * from './native-rpc'
 export * from './shadow-root'
 export * from './suspends'
 export * from './type-transform'

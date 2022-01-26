@@ -1,7 +1,6 @@
 import { AsyncCall, AsyncCallOptions, _AsyncVersionOf } from 'async-call-rpc/full'
 import { AndroidGeckoViewChannel } from './Android.channel'
 import { iOSWebkitChannel } from './iOS.channel'
-import { MaskNetworkAPI } from './Web'
 import type { AndroidNativeAPIs, iOSNativeAPIs } from '@masknet/public-api'
 
 // This module won't be used in Web. Let it not effecting HMR.
@@ -19,16 +18,30 @@ if (process.env.architecture === 'app') {
         parameterStructures: 'by-name',
     }
     if (process.env.engine === 'safari') {
-        const api = (sharedNativeAPI = AsyncCall<iOSNativeAPIs>(MaskNetworkAPI, {
-            ...options,
-            channel: new iOSWebkitChannel(),
-        }))
+        const api = (sharedNativeAPI = AsyncCall<iOSNativeAPIs>(
+            /**
+             * Typescript will not add the file to the project dependency tree
+             * but webpack will do constant folding
+             */
+            // @ts-ignore
+            // eslint-disable-next-line no-useless-concat
+            import('../../src/utils/native-rpc/' + 'Web.ts').then((x) => x.MaskNetworkAPI),
+            {
+                ...options,
+                channel: new iOSWebkitChannel(),
+            },
+        ))
         nativeAPI = { type: 'iOS', api }
     } else if (process.env.engine === 'firefox') {
-        const api = (sharedNativeAPI = AsyncCall<AndroidNativeAPIs>(MaskNetworkAPI, {
-            ...options,
-            channel: new AndroidGeckoViewChannel(),
-        }))
+        const api = (sharedNativeAPI = AsyncCall<AndroidNativeAPIs>(
+            // @ts-ignore
+            // eslint-disable-next-line no-useless-concat
+            import('../../src/utils/native-rpc/' + 'Web.ts').then((x) => x.MaskNetworkAPI),
+            {
+                ...options,
+                channel: new AndroidGeckoViewChannel(),
+            },
+        ))
         nativeAPI = { type: 'Android', api }
     }
 }

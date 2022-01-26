@@ -640,7 +640,7 @@ export namespace Plugin {
      * const ui = {
      *      type: 'raw' as const,
      *      init(signal, dom) {
-     *          return props => dom.innerHTML = toString(props)
+     *          return props => dom.textContent = toString(props)
      *      }
      * }
      * ```

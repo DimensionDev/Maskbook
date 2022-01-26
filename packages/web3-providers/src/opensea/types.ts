@@ -61,6 +61,7 @@ export interface OpenSeaCustomAccount {
 
 export interface OpenSeaCollection extends OpenSeaFees {
     name: string
+    address: string
     slug: string
     editors: string[]
     hidden: boolean
@@ -78,6 +79,12 @@ export interface OpenSeaCollection extends OpenSeaFees {
     external_link?: string
     wiki_link?: string
     safelist_request_status: string
+    owned_asset_count: number
+    primary_asset_contracts: {
+        address: string
+        asset_contract_type: string
+        symbol: string
+    }[]
 }
 
 export interface OpenSeaResponse extends Asset {
