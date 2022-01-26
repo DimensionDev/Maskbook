@@ -106,11 +106,13 @@ export interface SharedNativeAPIs {
      */
     notifyRedpacket(params: {
         redpacketPayload: any
+        availability: any
         postLink: string | URL
     }): Promise<void>
 
     claimOrRefundRedpacket(params: {
         redpacketPayload: any
+        availability: any
         postLink: string | URL
     }): Promise<void>
 }

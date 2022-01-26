@@ -139,9 +139,10 @@ export function RedPacket(props: RedPacketProps) {
     const onCliamOrRefundOnNative = useCallback(async () => {
         nativeAPI?.api.claimOrRefundRedpacket({
             redpacketPayload: payload,
+            availability,
             postLink
         })
-    }, [payload, postLink])
+    }, [availability, payload, postLink])
 
     const myStatus = useMemo(() => {
         if (token && listOfStatus.includes(RedPacketStatus.claimed))
@@ -181,13 +182,15 @@ export function RedPacket(props: RedPacketProps) {
     }, [availability, canRefund, token, t, payload, listOfStatus])
 
     useEffect(() => {
+        if (!availability) return
         if (hasNativeAPI) {
             nativeAPI?.api.notifyRedpacket({
                 redpacketPayload: payload,
+                availability,
                 postLink
             })
         }
-    }, [payload, postLink, hasNativeAPI])
+    }, [availability, payload, postLink, hasNativeAPI])
 
     // the red packet can fetch without account
     if (!availability || !token)
