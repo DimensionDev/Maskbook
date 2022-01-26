@@ -834,7 +834,6 @@ importers:
       '@masknet/web3-providers': workspace:*
       '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-evm': workspace:*
-      '@masknet/web3-shared-flow': workspace:*
       '@rollup/plugin-alias': ^3.1.8
       '@rollup/plugin-commonjs': ^21.0.1
       '@rollup/plugin-json': ^4.1.0
@@ -849,7 +848,6 @@ importers:
       '@masknet/web3-providers': link:../web3-providers
       '@masknet/web3-shared-base': link:../web3-shared/base
       '@masknet/web3-shared-evm': link:../web3-shared/evm
-      '@masknet/web3-shared-flow': link:../web3-shared/flow
       urlcat: 2.0.4
     devDependencies:
       '@rollup/plugin-alias': 3.1.9_rollup@2.62.0
