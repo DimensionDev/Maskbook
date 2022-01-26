@@ -33,6 +33,7 @@ interface AssetPlayerProps
     iconProps?: SvgIconProps
     fallbackImage?: URL
     isFixedIframeSize?: boolean
+    showIframeFromInit?: boolean
     setERC721TokenName?: (name: string) => void
     setSourceType?: (type: string) => void
 }
@@ -91,7 +92,6 @@ export const AssetPlayer = memo<AssetPlayerProps>((props) => {
         }
     }, [url, JSON.stringify(erc721Token), type, JSON.stringify(options), playerState])
     // endregion
-
     type ERC721TokenNameMsg = { message: { type: 'name'; name: string } | { type: 'sourceType'; name: string } }
     // #region resource loaded error
     const onMessage = useCallback(
@@ -155,7 +155,14 @@ export const AssetPlayer = memo<AssetPlayerProps>((props) => {
                         setPlayerState(AssetPlayerState.INIT)
                         setIframe()
                     }}
-                    className={playerState !== AssetPlayerState.NORMAL ? classes.hidden : classes.iframe}
+                    className={
+                        ![
+                            AssetPlayerState.NORMAL,
+                            ...(props.showIframeFromInit ? [AssetPlayerState.INIT] : []),
+                        ].includes(playerState)
+                            ? classes.hidden
+                            : classes.iframe
+                    }
                     onResized={({ type }) => {
                         if (type === 'init' || playerState === AssetPlayerState.NORMAL) return
                         setPlayerState(AssetPlayerState.NORMAL)
