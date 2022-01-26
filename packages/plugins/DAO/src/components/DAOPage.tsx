@@ -1,14 +1,14 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import IframeResizer from 'iframe-resizer-react'
-import { useTheme } from '@mui/material'
 import type { ProfileIdentifier } from '@masknet/shared-base'
+import { MaskIconPaletteContext } from '@masknet/icons'
 
 interface DAOPageProps {
     identifier?: ProfileIdentifier
 }
 
 export function DAOPage({ identifier }: DAOPageProps) {
-    const mode = useTheme().palette.mode
+    const mode = useContext(MaskIconPaletteContext)
     const [size, setSize] = useState({ height: 500, width: 1 })
     const onResized = (data: { height: number; width: number }) => setSize(data)
 

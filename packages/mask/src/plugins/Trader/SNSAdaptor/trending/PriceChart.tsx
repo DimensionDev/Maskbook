@@ -62,7 +62,7 @@ export function PriceChart(props: PriceChartProps) {
     const rootRef = useRef<HTMLDivElement>(null)
     const svgRef = useRef<SVGSVGElement>(null)
 
-    //#region make chart responsive
+    // #region make chart responsive
     const { width } = useWindowSize()
     const [responsiveWidth, setResponsiveWidth] = useState(DEFAULT_DIMENSION.width)
     const [responsiveHeight, setResponsiveHeight] = useState(DEFAULT_DIMENSION.height)
@@ -72,7 +72,7 @@ export function PriceChart(props: PriceChartProps) {
         setResponsiveWidth(rootRef.current.getBoundingClientRect().width || DEFAULT_DIMENSION.width)
         setResponsiveHeight(rootRef.current.getBoundingClientRect().height || DEFAULT_DIMENSION.height)
     }, [width /* redraw canvas if window width resize */])
-    //#endregion
+    // #endregion
 
     const dimension = {
         ...DEFAULT_DIMENSION,

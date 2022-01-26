@@ -1,3 +1,4 @@
+/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base'
 
@@ -12,8 +13,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
     // DecryptedInspector: HelloWorld,
     // GlobalInjection: GlobalComponent,
     CompositionDialogEntry: {
-        label: { i18nKey: '__entry__', fallback: '🤔 Example' },
-        onClick: () => alert('It works ™!'),
+        label: { i18nKey: '__entry__', fallback: '\u{1F914} Example' },
+        onClick: () => alert('It works \u2122!'),
     },
     // CompositionDialogEntry: {
     //     label: '🤣 Example Dialog',

@@ -1,0 +1,27 @@
+{
+  "name": "@masknet/plugin-solana",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@masknet/icons": "workspace:*",
+    "@masknet/injected-script": "workspace:*",
+    "@masknet/plugin-infra": "workspace:*",
+    "@masknet/shared": "workspace:*",
+    "@masknet/shared-base": "workspace:*",
+    "@masknet/theme": "workspace:*",
+    "@masknet/web3-providers": "workspace:*",
+    "@masknet/web3-shared-base": "workspace:*",
+    "@masknet/web3-shared-solana": "workspace:*",
+    "@metaplex-foundation/mpl-token-metadata": "^1.1.0",
+    "@metaplex/js": "^4.11.7",
+    "@solana/spl-token": "^0.1.8",
+    "@solana/spl-token-registry": "^0.2.1301",
+    "@solana/web3.js": "^1.30.2",
+    "bignumber.js": "^9.0.1",
+    "bn.js": "^4.12.0",
+    "bs58": "^4.0.1",
+    "buffer": "^6.0.3",
+    "react-use": "^17.3.1"
+  }
+}

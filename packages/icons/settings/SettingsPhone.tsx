@@ -23,5 +23,6 @@ export const SettingsPhoneIcon: typeof SvgIcon = createPaletteAwareIcon(
         />
         <path d="M12 18h.01" stroke="#fff" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
     </g>,
+    undefined,
     '0 0 24 24',
 )

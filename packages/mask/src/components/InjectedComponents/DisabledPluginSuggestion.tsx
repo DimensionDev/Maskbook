@@ -2,7 +2,7 @@ import {
     useActivatedPluginsSNSAdaptor,
     registeredPlugins,
     usePostInfoDetails,
-    Result,
+    Option,
     Plugin,
 } from '@masknet/plugin-infra'
 import { extractTextFromTypedMessage } from '@masknet/shared-base'
@@ -18,13 +18,13 @@ function useDisabledPlugins() {
     return disabledPlugins
 }
 
-export function useDisabledPluginSuggestionFromPost(postContent: Result<string, any>, metaLinks: string[]) {
+export function useDisabledPluginSuggestionFromPost(postContent: Option<string>, metaLinks: string[]) {
     const disabled = useDisabledPlugins().filter((x) => x.contribution?.postContent)
 
-    const { ok, val } = postContent
+    const { some } = postContent
     const matches = disabled.filter((x) => {
         for (const pattern of x.contribution!.postContent!) {
-            if (ok && val.match(pattern)) return true
+            if (some && postContent.val.match(pattern)) return true
             if (metaLinks.some((link) => link.match(pattern))) return true
         }
         return false
@@ -45,7 +45,7 @@ export function useDisabledPluginSuggestionFromMeta(meta: ReadonlyMap<string, un
 
 export function PossiblePluginSuggestionPostInspector() {
     const message = extractTextFromTypedMessage(usePostInfoDetails.rawMessage())
-    const metaLinks = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.mentionedLinks())
+    const metaLinks = usePostInfoDetails.mentionedLinks()
     const matches = useDisabledPluginSuggestionFromPost(message, metaLinks)
     return <PossiblePluginSuggestionUI plugins={matches} />
 }

@@ -18,11 +18,6 @@
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
     "spellcheck": "cspell lint --no-must-find-files"
   },
-  "lint-staged": {
-    "*": "prettier --write --ignore-unknown",
-    "packages/**/*.{ts,tsx,js,jsx}": "eslint -c packages/.eslintrc.json --fix",
-    "packages/mask/**/*": "node ./packages/scripts/src/bin/precommit-hook-localekit.js"
-  },
   "dependencies": {
     "@dimensiondev/kit": "0.0.0-20211215044858-27d964f",
     "@emotion/cache": "^11.7.1",
@@ -52,7 +47,7 @@
   "devDependencies": {
     "@commitlint/cli": "^16.0.0",
     "@commitlint/config-conventional": "^16.0.0",
-    "@dimensiondev/eslint-plugin": "^0.0.1-20211222115249-7984aa5",
+    "@dimensiondev/eslint-plugin": "^0.0.1-20220117062517-fd3cb01",
     "@dimensiondev/patch-package": "^6.5.0",
     "@jest/globals": "^27.4.4",
     "@magic-works/i18n-codegen": "^0.0.6",
@@ -78,7 +73,7 @@
     "ts-jest": "^27.1.2",
     "ts-node": "^10.4.0",
     "typescript": "4.6.0-dev.20211202",
-    "webpack": "5.65.0"
+    "webpack": "5.67.0"
   },
   "engines": {
     "node": ">=16.0.0",

@@ -16,7 +16,7 @@ import { SearchIcon } from '@masknet/icons'
 import CheckIcon from '@mui/icons-material/Check'
 import { Trans } from 'react-i18next'
 import { useUpdate } from 'react-use'
-import { NftImage } from './NftImage'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { findLastIndex, uniqBy } from 'lodash-unified'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants'
 
@@ -104,7 +104,11 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         marginBottom: theme.spacing(2.5),
         background: theme.palette.mode === 'light' ? '#fff' : '#2F3336',
         width: 120,
+        minHeight: 153,
         borderRadius: 8,
+    },
+    iframe: {
+        minHeight: 153,
     },
     nftNameWrapper: {
         width: '100%',
@@ -142,6 +146,9 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         marginBottom: theme.spacing(1.5),
         padding: theme.spacing(1, 1.5, 1, 1),
         boxSizing: 'border-box',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     selectWrapper: {
         background: theme.palette.mode === 'light' ? '#fff' : '#2F3336',
@@ -149,7 +156,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         overflow: 'hidden',
         padding: 0,
         flexDirection: 'column',
-        borderRadius: 6,
+        borderRadius: 8,
         height: 180,
         userSelect: 'none',
         width: 120,
@@ -165,7 +172,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
     selectWrapperNftNameWrapper: {
         width: '100%',
-        background: theme.palette.background.default,
+        background: theme.palette.background.paper,
         borderBottomRightRadius: 8,
         borderBottomLeftRadius: 8,
         overflow: 'hidden',
@@ -401,7 +408,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         },
         [tokenDetailedSelectedList, setTokenDetailedSelectedList, tokenIdFilterList],
     )
-    //#region fetch token detail
+    // #region fetch token detail
     const onSearch = useCallback(async () => {
         setLoadingToken(true)
         const _tokenDetailed = await erc721TokenDetailedCallback()
@@ -421,7 +428,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
 
     const isOwner = isSameAddress(account, tokenDetailed?.info.owner) || tokenDetailedSelectedList.length > 0
     const isAdded = existTokenDetailedList.map((t) => t.tokenId).includes(tokenDetailed?.tokenId ?? '')
-    //#endregion
+    // #endregion
 
     const onFilter = useCallback(() => {
         if (!/^(\s?(\d+)?\s?,?)+$/.test(tokenIdListInput)) return
@@ -444,8 +451,8 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                 tokenIdList: (
                     <span>
                         {nonExistedTokenIdList.map((id, i) => (
-                            <span key={i.toString()}>
-                                <span className={classes.tokenId}>{' #' + id}</span>
+                            <span key={i}>
+                                <span className={classes.tokenId}> #{id}</span>
                                 {i < nonExistedTokenIdList.length - 1 ? ', ' : ' '}
                             </span>
                         ))}
@@ -482,7 +489,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                 {t('search')}
                             </Button>
                         </div>
-                        {loadingToken || !tokenDetailed ? (
+                        {loadingToken || !tokenDetailed || !contract ? (
                             <Box className={classes.noResultBox}>
                                 <Typography>
                                     {loadingToken
@@ -494,16 +501,19 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             </Box>
                         ) : (
                             <Box className={classNames(classes.wrapper, classes.nftWrapper)}>
-                                <NftImage
-                                    token={tokenDetailed}
+                                <NFTCardStyledAssetPlayer
+                                    contractAddress={contract.address}
+                                    chainId={contract.chainId}
+                                    url={tokenDetailed.info.mediaUrl}
+                                    tokenId={tokenId}
                                     classes={{
                                         loadingFailImage: classes.loadingFailImage,
+                                        iframe: classes.iframe,
                                     }}
-                                    fallbackImage={new URL('./assets/nft_token_fallback.png', import.meta.url)}
                                 />
                                 <div className={classes.selectWrapperNftNameWrapper}>
                                     <Typography className={classes.selectWrapperNftName} color="textSecondary">
-                                        {tokenDetailed?.info.name}
+                                        {tokenDetailed.info.name}
                                     </Typography>
                                 </div>
                             </Box>
@@ -632,43 +642,16 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                             )
 
                                             return (
-                                                <ListItem
-                                                    className={classNames(
-                                                        classes.selectWrapper,
-                                                        tokenIdFilterList.length > 0 &&
-                                                            !tokenIdFilterList.includes(token.tokenId)
-                                                            ? classes.hide
-                                                            : '',
-                                                    )}
-                                                    key={i.toString()}>
-                                                    <NftImage
+                                                <div key={i}>
+                                                    <NFTCard
+                                                        findToken={findToken}
+                                                        renderOrder={i}
                                                         token={token}
-                                                        classes={{
-                                                            loadingFailImage: classes.loadingFailImage,
-                                                        }}
-                                                        fallbackImage={
-                                                            new URL('./assets/nft_token_fallback.png', import.meta.url)
-                                                        }
+                                                        tokenIdFilterList={tokenIdFilterList}
+                                                        selectToken={selectToken}
+                                                        isSelectSharesExceed={isSelectSharesExceed}
                                                     />
-                                                    <div className={classes.selectWrapperNftNameWrapper}>
-                                                        <Typography
-                                                            className={classes.selectWrapperNftName}
-                                                            color="textSecondary">
-                                                            {token?.info.name}
-                                                        </Typography>
-                                                    </div>
-
-                                                    <div
-                                                        className={classNames(
-                                                            classes.checkbox,
-                                                            findToken ? classes.checked : '',
-                                                        )}
-                                                        onClick={(event) =>
-                                                            selectToken(token, findToken, event.shiftKey, token.index)
-                                                        }>
-                                                        {findToken ? <CheckIcon className={classes.checkIcon} /> : null}
-                                                    </div>
-                                                </ListItem>
+                                                </div>
                                             )
                                         })}
                                         {loadingOwnerList ? (
@@ -739,5 +722,55 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                 </DialogContent>
             )}
         </InjectedDialog>
+    )
+}
+
+interface NFTCardProps {
+    findToken: OrderedERC721Token | undefined
+    token: OrderedERC721Token
+    tokenIdFilterList: string[]
+    isSelectSharesExceed: boolean
+    renderOrder: number
+    selectToken: (
+        token: OrderedERC721Token,
+        findToken: OrderedERC721Token | undefined,
+        shiftKey: boolean,
+        index: number,
+    ) => void
+}
+
+function NFTCard(props: NFTCardProps) {
+    const { findToken, token, tokenIdFilterList, isSelectSharesExceed, renderOrder, selectToken } = props
+    const { classes } = useStyles({ isSelectSharesExceed })
+    const [name, setName] = useState('#' + token.tokenId)
+    return (
+        <ListItem
+            className={classNames(
+                classes.selectWrapper,
+                tokenIdFilterList.length > 0 && !tokenIdFilterList.includes(token.tokenId) ? classes.hide : '',
+            )}>
+            <NFTCardStyledAssetPlayer
+                contractAddress={token.contractDetailed.address}
+                tokenId={token.tokenId}
+                renderOrder={renderOrder}
+                chainId={token.contractDetailed.chainId}
+                classes={{
+                    loadingFailImage: classes.loadingFailImage,
+                    iframe: classes.iframe,
+                }}
+                setERC721TokenName={setName}
+            />
+            <div className={classes.selectWrapperNftNameWrapper}>
+                <Typography className={classes.selectWrapperNftName} color="textSecondary">
+                    {name}
+                </Typography>
+            </div>
+
+            <div
+                className={classNames(classes.checkbox, findToken ? classes.checked : '')}
+                onClick={(event) => selectToken(token, findToken, event.shiftKey, token.index)}>
+                {findToken ? <CheckIcon className={classes.checkIcon} /> : null}
+            </div>
+        </ListItem>
     )
 }

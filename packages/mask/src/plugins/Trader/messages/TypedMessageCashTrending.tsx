@@ -30,7 +30,7 @@ registerTypedMessageRenderer('x-cash-trending', {
 
 function DefaultTypedMessageCashTrendingRenderer(props: TypedMessageRendererProps<TypedMessageCashTrending>) {
     const chainId = useChainId()
-    const [openTimer, setOpenTimer] = useState<NodeJS.Timeout | null>(null)
+    const [openTimer, setOpenTimer] = useState<ReturnType<typeof setTimeout> | null>(null)
     const onMouseOver = (ev: React.MouseEvent<HTMLAnchorElement>) => {
         // cache for async operations
         const element = ev.currentTarget
@@ -48,7 +48,6 @@ function DefaultTypedMessageCashTrendingRenderer(props: TypedMessageRendererProp
                     type,
                     element,
                     dataProviders,
-                    tradeProviders,
                 })
             }, 500),
         )

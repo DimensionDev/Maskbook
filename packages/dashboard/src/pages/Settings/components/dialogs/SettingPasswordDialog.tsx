@@ -37,6 +37,8 @@ export default function SettingPasswordDialog({ open, onClose, onSet }: SettingP
             }
         }
 
+        if (!newPassword) return setValidState(false)
+
         const matched = newPassword === repeatPassword
         setMatchState(matched)
 
@@ -53,8 +55,6 @@ export default function SettingPasswordDialog({ open, onClose, onSet }: SettingP
     }
 
     const validCheck = () => {
-        if (!newPassword) return
-
         const isValid = passwordRegexp.test(newPassword)
         setValidState(isValid)
     }

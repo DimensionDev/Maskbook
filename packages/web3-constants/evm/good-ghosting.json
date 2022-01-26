@@ -12,8 +12,12 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "GOOD_GHOSTING_INCENTIVES_CONTRACT_ADDRESS": {
         "Mainnet": "",
@@ -28,7 +32,11 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     }
 }

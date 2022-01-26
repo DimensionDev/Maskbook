@@ -6,7 +6,7 @@ export function encodeTypedMessageV38Format(message: TypedMessageText) {
     const encoder = new TextEncoder()
     if (message.meta?.size) {
         const rec = Object.fromEntries(message.meta.entries())
-        return encoder.encode(`${JSON.stringify(rec)}🧩${message.content}`)
+        return encoder.encode(`${JSON.stringify(rec)}\u{1F9E9}${message.content}`)
     }
     return encoder.encode(message.content)
 }
@@ -18,8 +18,8 @@ export function decodeTypedMessageV38ToV40Format(raw: Uint8Array, version: -38 |
 
     if (version === -38) {
         const maybeMetadata = (() => {
-            if (!val.includes('🧩')) return None
-            const [maybeJSON] = val.split('🧩')
+            if (!val.includes('\u{1F9E9}')) return None
+            const [maybeJSON] = val.split('\u{1F9E9}')
             return Result.wrap(() => JSON.parse(maybeJSON))
                 .toOption()
                 .map((val) => {
@@ -29,7 +29,7 @@ export function decodeTypedMessageV38ToV40Format(raw: Uint8Array, version: -38 |
         })()
         return Ok(
             maybeMetadata.some
-                ? makeTypedMessageText(val.replace(/.+🧩/, ''), maybeMetadata.val)
+                ? makeTypedMessageText(val.replace(/.+\u{1F9E9}/u, ''), maybeMetadata.val)
                 : makeTypedMessageText(val),
         )
     }
