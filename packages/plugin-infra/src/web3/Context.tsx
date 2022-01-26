@@ -10,6 +10,7 @@ const ZERO_STRING = createConstantSubscription('0')
 const USD_CURRENCY = createConstantSubscription(CurrencyType.USD)
 const EMPTY_STRING = createConstantSubscription('')
 const EMPTY_ARRAY = createConstantSubscription([])
+const EMPTY_OBJECT = createConstantSubscription({})
 const FALSE = createConstantSubscription(false)
 const NULL = createConstantSubscription(null)
 
@@ -30,8 +31,6 @@ function usePluginWeb3State(pluginID: string, context: Record<string, Web3Plugin
     const allowTestnet = useSubscription(Shared?.allowTestnet ?? FALSE)
     const chainId = useSubscription(Shared?.chainId ?? ZERO)
     const account = useSubscription(Shared?.account ?? EMPTY_STRING)
-    const balance = useSubscription(Shared?.balance ?? ZERO_STRING)
-    const blockNumber = useSubscription(Shared?.blockNumber ?? ZERO)
     const networkType = useSubscription(Shared?.networkType ?? EMPTY_STRING)
     const providerType = useSubscription(Shared?.providerType ?? EMPTY_STRING)
     const assetType = useSubscription(Shared?.assetType ?? EMPTY_STRING)
@@ -49,8 +48,6 @@ function usePluginWeb3State(pluginID: string, context: Record<string, Web3Plugin
         allowTestnet,
         chainId,
         account,
-        balance,
-        blockNumber,
         networkType,
         providerType,
         assetType,
