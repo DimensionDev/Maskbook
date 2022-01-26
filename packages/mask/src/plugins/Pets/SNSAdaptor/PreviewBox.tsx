@@ -18,6 +18,7 @@ export const useStyles = makeStyles()((theme) => ({
         marginTop: '16px',
         boxSizing: 'border-box',
         padding: '8px',
+        overflow: 'hidden',
     },
     msgBox: {
         width: '80%',
@@ -107,6 +108,10 @@ export const useStyles = makeStyles()((theme) => ({
         bottom: '-10px',
         cursor: 'pointer',
     },
+    glbView: {
+        width: '100%',
+        height: 150,
+    },
 }))
 
 interface Props {
@@ -131,13 +136,9 @@ export function PreviewBox(props: Props) {
             )}
             {props.imageUrl &&
                 (props.tokenInfo?.glbSupport ? (
-                    <ModelView
-                        style={{
-                            width: '100%',
-                            height: 150,
-                        }}
-                        source={props.imageUrl}
-                    />
+                    <div>
+                        <ModelView className={classes.glbView} source={props.imageUrl} />
+                    </div>
                 ) : (
                     <img className={classes.image} src={props.imageUrl} />
                 ))}

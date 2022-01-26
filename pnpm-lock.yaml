@@ -282,7 +282,6 @@ importers:
       '@ethersproject/address': ^5.0.4
       '@ethersproject/providers': ^5.0.9
       '@ethersproject/solidity': ^5.0.4
-      '@google/model-viewer': ^1.9.2
       '@hookform/resolvers': 2.8.3
       '@masknet/dashboard': workspace:*
       '@masknet/encryption': workspace:^0.0.0
@@ -335,7 +334,6 @@ importers:
       '@uniswap/v3-sdk': ^3.3.2
       '@unstoppabledomains/resolution': ^5.0.1
       '@walletconnect/client': ^1.2.2
-      '@webcomponents/custom-elements': ^1.5.0
       anchorme: ^2.1.2
       assert: ^2.0.0
       async-call-rpc: ^6.0.1
@@ -421,7 +419,6 @@ importers:
       '@ethersproject/address': 5.4.0
       '@ethersproject/providers': 5.4.2
       '@ethersproject/solidity': 5.4.0
-      '@google/model-viewer': 1.9.2
       '@hookform/resolvers': 2.8.3_react-hook-form@7.22.5
       '@masknet/dashboard': link:../dashboard
       '@masknet/encryption': link:../encryption
@@ -468,7 +465,6 @@ importers:
       '@uniswap/v3-sdk': 3.3.2
       '@unstoppabledomains/resolution': 5.0.1
       '@walletconnect/client': 1.4.1
-      '@webcomponents/custom-elements': 1.5.0
       anchorme: 2.1.2
       assert: 2.0.0
       async-call-rpc: 6.0.1
@@ -4304,11 +4300,6 @@ packages:
   /@gar/promisify/1.1.2:
     resolution: {integrity: sha512-82cpyJyKRoQoRi+14ibCeGPu0CwypgtBAdBhq1WfvagpCZNKqwXbKwXllYSMG91DhmG4jt9gN8eP6lGOtozuaw==}
     dev: true
-
-  /@google/model-viewer/1.9.2:
-    resolution: {integrity: sha512-bFn6TJPvPHZDPQ0vYOx1O57A5t4cVjpxaYyYeq2OqOpbZ6+Rkq1PLdyYx8Do7Id1ZPr6WqOaIAxajZ7Jy56G/g==}
-    engines: {node: '>=6.0.0'}
-    dev: false
 
   /@hookform/resolvers/2.8.3_react-hook-form@7.22.5:
     resolution: {integrity: sha512-9G6/vCUNvg3O4MeAK4l749syOz/2r1DF/Pq3Njuk3sI4ObHoRyV0nxio5NrNLGC+7N1Ixu9vJ/loNhaUNXTX6A==}
@@ -8892,10 +8883,6 @@ packages:
       '@webassemblyjs/wast-parser': 1.9.0
       '@xtuc/long': 4.2.2
     dev: true
-
-  /@webcomponents/custom-elements/1.5.0:
-    resolution: {integrity: sha512-c+7jPQCs9h/BYVcZ2Kna/3tsl3A/9EyXfvWjp5RiTDm1OpTcbZaCa1z4RNcTe/hUtXaqn64JjNW1yrWT+rZ8gg==}
-    dev: false
 
   /@webpack-cli/configtest/1.1.0_webpack-cli@4.9.1+webpack@5.65.0:
     resolution: {integrity: sha512-ttOkEkoalEHa7RaFYpM0ErK1xc4twg3Am9hfHhL7MVqlHebnkYd2wuI/ZqTDj0cVzZho6PdinY0phFZV3O0Mzg==}

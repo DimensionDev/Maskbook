@@ -9,9 +9,10 @@ import { DragIcon } from '../constants'
 import type { ShowMeta } from '../types'
 
 const useStyles = makeStyles()(() => ({
-    modelContent: {
-        width: 250,
-        height: 300,
+    dragContent: {
+        position: 'absolute',
+        bottom: -25,
+        right: 0,
     },
     dragImg: {
         width: 15,
@@ -19,12 +20,24 @@ const useStyles = makeStyles()(() => ({
     },
     wordContent: {
         position: 'absolute',
-        right: 40,
-        marginTop: -340,
+        left: 12,
+        bottom: 150,
     },
     word: {
         width: '152px !important',
         maxHeight: 85,
+    },
+    glbContent: {
+        width: 200,
+        height: 150,
+    },
+    glbView: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
+        width: '100%',
+        height: '100%',
     },
 }))
 
@@ -41,20 +54,23 @@ export function ModelNFT(props: ModelNFTProps) {
     const moveHandle = (x: number, y: number) => {
         setPosition({ x, y })
     }
+
     return (
         <div>
-            <ModelView
+            <div
+                className={classes.glbContent}
                 style={{
                     position: 'fixed',
                     right: position.x,
                     bottom: position.y,
-                    width: 250,
-                    height: 300,
-                }}
-                source={showMeta?.image ?? ''}
-            />
-            <Drag moveHandle={moveHandle} baseWidth={40} baseHeight={40}>
-                <div style={{ position: 'absolute' }}>
+                    zIndex: 100,
+                }}>
+                <div className={classes.glbView}>
+                    <ModelView className={classes.glbView} source={showMeta?.image ?? ''} />
+                </div>
+            </div>
+            <Drag moveHandle={moveHandle} baseWidth={200} baseHeight={150}>
+                <div className={classes.dragContent}>
                     <img className={classes.dragImg} src={DragIcon} />
                 </div>
                 {start && showMeta?.word ? (

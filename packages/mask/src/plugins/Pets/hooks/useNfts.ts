@@ -14,6 +14,7 @@ import { cloneDeep, findLastIndex } from 'lodash-unified'
 import { delay } from '@masknet/shared-base'
 import type { User, FilterContract } from '../types'
 import { Punk3D } from '../constants'
+import { RaribleIPFSURL } from '../../Collectible/constants'
 
 function useInitNFTs(config: Record<string, Constant> | undefined) {
     return useMemo(() => {
@@ -47,6 +48,9 @@ export function useNFTs(user: User | undefined, configNFTs: Record<string, Const
                     NFT.info.mediaUrl = Punk3D.url
                 }
                 const glbSupport = NFT.info.mediaUrl?.endsWith('.glb') || isPunk
+                if (NFT.info.mediaUrl?.includes('ipfs://')) {
+                    NFT.info.mediaUrl = NFT.info.mediaUrl.replace('ipfs://', RaribleIPFSURL)
+                }
                 const item = { ...NFT.info, tokenId: NFT.tokenId, glbSupport }
                 const sameTokenIndex = findLastIndex(sameNFT.tokens, (v) => v.tokenId === NFT.tokenId)
                 if (sameTokenIndex === -1) {
