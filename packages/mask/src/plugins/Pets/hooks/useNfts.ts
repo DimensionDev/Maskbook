@@ -87,10 +87,7 @@ export function useNFTsExtra(configNFTs: Record<string, Constant> | undefined) {
                 return OpenSea.getContract(initContracts[index].contract, chainId)
             })
         }
-        const lists: ERC721ContractDetailed[] = []
-        for (const i of requests) {
-            lists.push(await i)
-        }
+        const lists: ERC721ContractDetailed[] = await Promise.all(requests)
         setExtra(lists)
         setRetry(retry + 1)
     }, [retry, JSON.stringify(initContracts)])
