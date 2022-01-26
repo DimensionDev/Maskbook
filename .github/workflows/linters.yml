@@ -80,8 +80,7 @@ jobs:
           node-version: '16'
           cache: 'pnpm'
       - run: pnpm install
-      - run: pnpm run lint:ci -- --max-warnings=0
-      - run: pnpm run lint:ci -- --format=junit --output-file=reports/junit/eslint-results.xml
+      - run: pnpm run lint:ci
       - name: Upload eslint report
         uses: actions/upload-artifact@v2
         with:

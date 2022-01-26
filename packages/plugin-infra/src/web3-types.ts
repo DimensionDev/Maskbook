@@ -163,11 +163,13 @@ export declare namespace Web3Plugin {
     }
 
     export interface NonFungibleContract {
+        id: string
         chainId: number
         name: string
         symbol: string
         address: string
         iconURL?: string
+        balance?: number
     }
 
     export interface FungibleTokenMetadata {

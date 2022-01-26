@@ -1,7 +1,7 @@
 import type { TypedMessage } from '../TypedMessage'
 import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier/type'
 import type { RelationFavor } from '../Persona/type'
-import type { Appearance, LanguageOptions, TradeProvider, DataProvider } from '../../../public-api/src/web'
+import type { Appearance, LanguageOptions, DataProvider } from '../../../public-api/src/web'
 import type {
     CryptoPrice,
     NetworkType,
@@ -24,15 +24,6 @@ export interface MaskSettingsEvents {
     currentFungibleAssetDataProviderSettings: FungibleAssetProvider
     currentNonFungibleAssetDataProviderSettings: NonFungibleAssetProvider
     currentPersonaIdentifier: string
-    ethereumNetworkTradeProviderSettings: TradeProvider
-    polygonNetworkTradeProviderSettings: TradeProvider
-    binanceNetworkTradeProviderSettings: TradeProvider
-    arbitrumNetworkTradeProviderSettings: TradeProvider
-    xdaiNetworkTradeProviderSettings: TradeProvider
-    fantomNetworkTradeProviderSettings: TradeProvider
-    celoNetworkTradeProviderSettings: TradeProvider
-    avalancheNetworkTradeProviderSettings: TradeProvider
-    auroraNetworkTradeProviderSettings: TradeProvider
 }
 
 export interface MaskMobileOnlyEvents {
@@ -71,7 +62,7 @@ export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, Ma
     pluginMinimalModeChanged: [id: string, newStatus: boolean]
 
     requestExtensionPermission: RequestExtensionPermissionEvent
-    signRequestApproved: PersonaSignApprovedEvent
+    personaSignRequest: PersonaSignRequestEvent
     maskSDKHotModuleReload: void
     __kv_backend_persistent__: [string, unknown]
     __kv_backend_in_memory__: [string, unknown]
@@ -126,7 +117,7 @@ export type RelationChangedEvent = UpdateEvent<ProfileIdentifier> & {
     favor: RelationFavor
 }
 
-export interface PersonaSignApprovedEvent {
+export interface PersonaSignRequestEvent {
     requestID: string
-    selectedPersona: PersonaIdentifier
+    selectedPersona?: PersonaIdentifier
 }
