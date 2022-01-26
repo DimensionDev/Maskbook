@@ -7,6 +7,7 @@ import { RSS3API } from './rss3'
 import { KeyValueAPI } from './kv'
 
 export * from './types'
+export * from './helpers'
 export * from './opensea/utils'
 
 export const OpenSea = new OpenSeaAPI()

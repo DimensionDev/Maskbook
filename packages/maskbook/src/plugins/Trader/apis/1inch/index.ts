@@ -18,14 +18,15 @@ export async function swapOneQuote(request: SwapQuoteOneRequest, networkType: Ne
     })
     if (request.slippage) params.slippage = new BigNumber(request.slippage).dividedBy(BIPS_BASE).toFixed()
 
-    const response =
-        (await fetch(urlcat(ONE_INCH_BASE_URL[networkType], 'swap', params))) ||
-        (await fetch(urlcat(ONE_INCH_BASE_URL[networkType], 'quote', params)))
+    const swapUrl = urlcat(ONE_INCH_BASE_URL[networkType], 'swap', params)
+    const quoteUrl = urlcat(ONE_INCH_BASE_URL[networkType], 'quote', params)
+    const response = (await fetch(swapUrl)) || (await fetch(quoteUrl))
+
     const response_ = (await response.json()) as SwapQuoteOneResponse | SwapOneErrorResponse
 
     const validationErrorResponse = response_ as SwapOneValidationErrorResponse
     if (validationErrorResponse.code)
-        throw new Error(first(validationErrorResponse.validationErrors)?.reason ?? 'Unknown Error')
+        throw new Error(first(validationErrorResponse.validationErrors)?.reason || 'Unknown Error')
 
     const serverErrorResponse = response_ as SwapOneServerErrorResponse
     if (serverErrorResponse.reason)

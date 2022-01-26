@@ -23,11 +23,11 @@ export function useTrade(
 ) {
     const blockNumber = useBlockNumber()
     const slippage = useSlippageTolerance()
-    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
-    const { RPC } = useRPCConstants(chainId)
+    const { targetChainId } = TargetChainIdContext.useContainer()
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(targetChainId)
+    const { RPC } = useRPCConstants(targetChainId)
     const providerURL = first(RPC)
-    const { ONEINCH_ETH_ADDRESS } = useTraderConstants(chainId)
+    const { ONEINCH_ETH_ADDRESS } = useTraderConstants(targetChainId)
     const account = useAccount()
 
     return useAsyncRetry(async () => {
@@ -39,15 +39,15 @@ export function useTrade(
         const buyToken = isNativeTokenAddress(outputToken)
             ? { ...outputToken, address: ONEINCH_ETH_ADDRESS ?? '' }
             : outputToken
-        return PluginTraderRPC.swapRoute({
+        return PluginTraderRPC.swapOneQuote({
             isNativeSellToken: isNativeTokenAddress(inputToken),
-            fromToken: sellToken,
-            toToken: buyToken,
-            fromAmount: inputAmount,
-            slippage: slippage / 100,
-            userAddr: account,
+            fromTokenAddress: sellToken,
+            toTokenAddress: buyToken,
+            amount: inputAmount,
+            slippage: slippage,
+            fromAddress: account,
             rpc: providerURL,
-            chainId,
+            chainId: targetChainId,
         })
     }, [
         NATIVE_TOKEN_ADDRESS,
@@ -60,6 +60,5 @@ export function useTrade(
         blockNumber, // refresh api each block
         account,
         providerURL,
-        chainId,
     ])
 }

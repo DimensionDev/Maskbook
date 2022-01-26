@@ -8,17 +8,20 @@ import type {
     SwapOneServerErrorResponse,
     SwapOneValidationErrorResponse,
 } from '../../types'
-import type { NetworkType } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
 
-export async function swapOneQuote(request: SwapQuoteOneRequest, networkType: NetworkType) {
+import { getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared-evm'
+
+export async function swapOneQuote(request: SwapQuoteOneRequest) {
     const params: Record<string, string | number> = {}
     Object.entries(request).map(([key, value]) => {
         params[key] = value
     })
     if (request.slippage) params.slippage = new BigNumber(request.slippage).dividedBy(BIPS_BASE).toFixed()
 
-    const response = await fetch(urlcat(ONE_INCH_BASE_URL[networkType], 'quote' || 'swap', params))
+    const netType: NetworkType = getNetworkTypeFromChainId(request.chainId)!
+
+    const response = await fetch(urlcat(ONE_INCH_BASE_URL[netType], 'swap', params))
     const response_ = (await response.json()) as SwapQuoteOneResponse | SwapOneErrorResponse
 
     const validationErrorResponse = response_ as SwapOneValidationErrorResponse
