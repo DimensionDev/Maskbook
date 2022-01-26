@@ -32,8 +32,8 @@ const AnimatePic = () => {
     const handleMouseEnter = () => setInfoShow(true)
     const handleMouseLeave = () => setInfoShow(false)
 
-    const refreshHandle = async (data: number) => setRefresh(data)
     useEffect(() => {
+        const refreshHandle = async (data: number) => setRefresh(data)
         PluginPetMessages.events.setResult.on(refreshHandle)
         let count = 0
         const timer = setInterval(() => {

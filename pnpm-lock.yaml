@@ -288,7 +288,7 @@ importers:
       '@ethersproject/address': ^5.0.4
       '@ethersproject/providers': ^5.0.9
       '@ethersproject/solidity': ^5.0.4
-      '@hookform/resolvers': 2.8.3
+      '@hookform/resolvers': 2.8.5
       '@masknet/dashboard': workspace:*
       '@masknet/encryption': workspace:^0.0.0
       '@masknet/external-plugin-previewer': workspace:*
@@ -425,7 +425,7 @@ importers:
       '@ethersproject/address': 5.4.0
       '@ethersproject/providers': 5.4.2
       '@ethersproject/solidity': 5.4.0
-      '@hookform/resolvers': 2.8.3_react-hook-form@7.22.5
+      '@hookform/resolvers': 2.8.5_react-hook-form@7.22.5
       '@masknet/dashboard': link:../dashboard
       '@masknet/encryption': link:../encryption
       '@masknet/external-plugin-previewer': link:../external-plugin-previewer
@@ -4311,14 +4311,6 @@ packages:
   /@gar/promisify/1.1.2:
     resolution: {integrity: sha512-82cpyJyKRoQoRi+14ibCeGPu0CwypgtBAdBhq1WfvagpCZNKqwXbKwXllYSMG91DhmG4jt9gN8eP6lGOtozuaw==}
     dev: true
-
-  /@hookform/resolvers/2.8.3_react-hook-form@7.22.5:
-    resolution: {integrity: sha512-9G6/vCUNvg3O4MeAK4l749syOz/2r1DF/Pq3Njuk3sI4ObHoRyV0nxio5NrNLGC+7N1Ixu9vJ/loNhaUNXTX6A==}
-    peerDependencies:
-      react-hook-form: ^7.0.0
-    dependencies:
-      react-hook-form: 7.22.5_react@18.0.0-rc.0
-    dev: false
 
   /@hookform/resolvers/2.8.5_react-hook-form@7.22.5:
     resolution: {integrity: sha512-n7eFm4snsejpfZVH8q2NU7YJbsGhF61IHB0TxgK11nmg08RymEr3KscnbTAZaPd9RaXa3vUPoULgBRN2nVDtMg==}
