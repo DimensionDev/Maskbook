@@ -121,6 +121,28 @@ export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconPro
         setIframe()
     }, [setIframe])
 
+    // Workaround for a bug of `iframe-resizer-react`:
+    // When the content of iframe loaded, `IframeResizer` triggers a `size` event,
+    // but the `height` and `width` value of that `size` event isn't equal to the content.
+    // (Sometimes it doesn't matter, if the size of iframe has been set fixed already)
+    // Meanwhile `IframeResizer` triggers a `resize` event when the size of
+    // parent of iframe changed, this time the returned `height` and `width` is right.
+    // So resize the parent manually.
+    useEffect(() => {
+        if (!(playerState === AssetPlayerState.NORMAL)) return
+        const resize = (height: string) => () => {
+            if (!ref.current?.parentElement) return
+            ref.current.parentElement.style.height = height
+        }
+        const noSenseHeight = '100px'
+        const timerOne = setTimeout(resize(noSenseHeight), 100)
+        const timerTwo = setTimeout(resize(''), 150)
+        return () => {
+            clearTimeout(timerOne)
+            clearTimeout(timerTwo)
+        }
+    }, [playerState, ref.current])
+
     const IframeResizerMemo = useMemo(
         () =>
             hidden ? null : (
@@ -143,6 +165,7 @@ export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconPro
                     checkOrigin={false}
                     onMessage={onMessage}
                     frameBorder="0"
+                    resizeFrom="child"
                     allow="autoplay"
                     allowFullScreen
                 />
