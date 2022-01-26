@@ -26,11 +26,6 @@ export interface CryptoPrice {
 export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
 export type ChainIdRecord<T> = { [k in ChainId]: T }
 
-export interface BalanceOfChains {
-    [provider: string]: {
-        [chainId: number]: string
-    }
-}
 // bigint is not in our list. iOS doesn't support that.
 export type Primitive = string | number | boolean | symbol | undefined | null
 
@@ -224,6 +219,7 @@ export interface ERC721TokenCollectionInfo {
     name: string
     image?: string
     slug: string
+    address: string
 }
 
 // #endregion

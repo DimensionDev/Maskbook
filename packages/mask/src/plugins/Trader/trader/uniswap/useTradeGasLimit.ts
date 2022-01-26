@@ -31,7 +31,7 @@ interface FailedCall extends SwapCallEstimate {
 
 export function useTradeGasLimit(trade: TradeComputed<Trade> | null, tradeProvider: TradeProvider): AsyncState<number> {
     const { targetChainId } = TargetChainIdContext.useContainer()
-    const web3 = useWeb3(false, targetChainId)
+    const web3 = useWeb3({ chainId: targetChainId })
     const account = useAccount()
     const tradeParameters = useTradeParameters(trade, tradeProvider)
 

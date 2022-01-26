@@ -10,7 +10,7 @@ import * as sdk from './maskwallet'
 import * as database from './database'
 import * as password from './password'
 import * as EthereumServices from '../../../../extension/background-script/EthereumService'
-import { hasNativeAPI } from '../../../../utils'
+import { hasNativeAPI } from '../../../../../shared/native-rpc'
 import type { WalletRecord } from './type'
 
 function bumpDerivationPath(path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`) {

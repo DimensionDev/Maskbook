@@ -1,5 +1,5 @@
 import { Route, Routes, useParams } from 'react-router-dom'
-import { ConnectSocialMedia, MnemonicRevealForm, PersonaCreate } from './steps'
+import { ConnectSocialMedia, MnemonicRevealForm, PersonaCreate, PersonaRecovery } from './steps'
 import { SignUpRoutePath } from './routePath'
 
 const Actions = () => {
@@ -10,6 +10,8 @@ const Actions = () => {
             return <MnemonicRevealForm />
         case SignUpRoutePath.PersonaCreate:
             return <PersonaCreate />
+        case SignUpRoutePath.PersonaRecovery:
+            return <PersonaRecovery />
         case SignUpRoutePath.ConnectSocialMedia:
             return <ConnectSocialMedia />
         default:
@@ -21,7 +23,7 @@ export const SignUpRoutes = () => {
     return (
         <Routes>
             <Route path=":action" element={<Actions />} />
-            <Route path="*" element={<MnemonicRevealForm />} />
+            <Route path="*" element={<PersonaCreate />} />
         </Routes>
     )
 }
