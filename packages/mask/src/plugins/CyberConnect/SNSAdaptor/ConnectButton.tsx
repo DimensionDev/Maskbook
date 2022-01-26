@@ -6,6 +6,7 @@ import CyberConnect, { Env } from '@cyberlab/cyberconnect'
 import { PluginCyberConnectRPC } from '../messages'
 import classname from 'classnames'
 import { CircularProgress } from '@mui/material'
+import { useAsync } from 'react-use'
 const useStyles = makeStyles()((theme) => ({
     button: {
         width: '350px',
@@ -93,36 +94,29 @@ export default function ConnectButton({ address }: { address: string }) {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const logoIcon = getAssetAsBlobURL(new URL('../assets/logo-white.svg', import.meta.url))
 
-    useEffect(() => {
-        if (address && myAddress !== address) {
-            ;(async function () {
-                const res = await PluginCyberConnectRPC.fetchFollowStatus(myAddress, address)
-                console.log(res)
-                setIsFollowing(res.data.followStatus.isFollowing)
-            })()
-        }
+    useAsync(async () => {
+        if (!(address && myAddress !== address)) return
+        const res = await PluginCyberConnectRPC.fetchFollowStatus(myAddress, address)
+        setIsFollowing(res.data.followStatus.isFollowing)
     }, [address])
 
     useEffect(() => {
-        if (web3.eth.currentProvider) {
-            const ccInstance = new CyberConnect({
-                provider: web3.eth.currentProvider,
-                namespace: 'Mask',
-                env: process.env.NODE_ENV === 'production' ? Env.PRODUCTION : Env.STAGING,
-            })
-            setCc(ccInstance)
-        }
+        if (!web3.eth.currentProvider) return
+        const ccInstance = new CyberConnect({
+            provider: web3.eth.currentProvider,
+            namespace: 'Mask',
+            env: process.env.NODE_ENV === 'production' ? Env.PRODUCTION : Env.STAGING,
+        })
+        setCc(ccInstance)
     }, [web3])
 
     const follow = () => {
         setIsLoading(true)
         cc?.connect(address)
             .then((res: any) => {
-                console.log(res)
                 setIsFollowing(false)
             })
             .catch((error: any) => {
-                console.log(error)
                 setIsLoading(false)
             })
     }

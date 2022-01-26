@@ -8,7 +8,6 @@ export async function fetchProposal(id: string) {
     const now = Date.now()
     const isStart = proposal.start * 1000 < now
     const isEnd = proposal.end * 1000 < now
-    console.log(id)
     return { ...proposal, address: proposal.author, isStart, isEnd, votes } as unknown as Proposal
 }
 

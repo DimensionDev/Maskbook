@@ -6,7 +6,7 @@ import TabContext from '@mui/lab/TabContext'
 import TabList from '@mui/lab/TabList'
 import TabPanel from '@mui/lab/TabPanel'
 import Avatar from 'boring-avatars'
-import { shortenAddress } from '../utils/helper'
+import { formateEthereumAddress } from '../utils/helper'
 const useStyles = makeStyles()((theme) => ({
     tabContext: {
         marginTop: '20px',
@@ -38,7 +38,9 @@ export default function FollowTab({ followingList, followerList }: { followingLi
                     <Avatar square={false} name={identity.ens || identity.address} size={40} />
                 </div>
                 <div className={classes.user}>
-                    <div className={classes.userName}>{identity.ens || shortenAddress(identity.address, 16)}</div>
+                    <div className={classes.userName}>
+                        {identity.ens || formateEthereumAddress(identity.address, 16)}
+                    </div>
                     <div className={classes.namespace}>From {identity.namespace}</div>
                 </div>
             </div>

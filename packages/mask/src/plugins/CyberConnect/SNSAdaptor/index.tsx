@@ -4,8 +4,7 @@ import { useMemo, Suspense } from 'react'
 import { Skeleton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
-import { extractTextFromTypedMessage } from '../../../protocols/typed-message'
-import { parseURL } from '@masknet/shared'
+import { parseURL, extractTextFromTypedMessage } from '@masknet/shared-base'
 import Profile from './Profile'
 
 const useStyles = makeStyles()((theme) => {

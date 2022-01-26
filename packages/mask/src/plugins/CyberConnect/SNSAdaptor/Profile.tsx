@@ -7,7 +7,7 @@ import { useWeb3 } from '@masknet/web3-shared-evm'
 import { getAssetAsBlobURL } from '../../../utils'
 import ConnectButton from './ConnectButton'
 import FollowTab from './FollowTab'
-import { shortenAddress } from '../utils/helper'
+import { formateEthereumAddress } from '../utils/helper'
 const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
@@ -100,9 +100,9 @@ const Profile = ({ url }: { url: string }) => {
     return (
         <div className={classes.root}>
             <div className={classes.avatar}>
-                <Avatar name={queryAddress} square={true} size={350} />
+                {identity?.avatar ? <img src={identity.avatar} /> : <Avatar name={queryAddress} square size={350} />}
             </div>
-            <div className={classes.userName}>{shortenAddress(queryAddress, 14)}</div>
+            <div className={classes.userName}>{formateEthereumAddress(queryAddress, 14)}</div>
 
             {!identity ? (
                 <Skeleton width={400} height={40} />

@@ -1,4 +1,4 @@
-export function shortenAddress(address?: string, length: number = 16): string {
+export function formateEthereumAddress(address?: string, length = 16): string {
     if (!address) {
         return ''
     }
