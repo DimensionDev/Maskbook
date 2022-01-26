@@ -35,7 +35,7 @@ import { PluginTraderMessages } from '../../Trader/messages'
 import { Trans } from 'react-i18next'
 import getUnixTime from 'date-fns/getUnixTime'
 import type { useAsset } from '../../EVM/hooks'
-import { rightShift, ZERO } from '@masknet/web3-shared-base/utils/number'
+import { rightShift, ZERO } from '@masknet/web3-shared-base'
 import type { Coin } from '../../Trader/types'
 import { isWyvernSchemaName } from '../utils'
 
