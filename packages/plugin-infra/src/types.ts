@@ -696,6 +696,7 @@ export enum PluginId {
     CryptoArtAI = 'com.maskbook.cryptoartai',
     dHEDGE = 'org.dhedge',
     EVM = 'com.mask.evm',
+    NextID = 'com.mask.next_id',
     External = 'io.mask.external',
     Furucombo = 'app.furucombo',
     Gitcoin = 'co.gitcoin',
