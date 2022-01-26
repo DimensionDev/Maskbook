@@ -80,7 +80,7 @@ function Badge({ payload }: BadgeProps) {
         : payload.message.split(MSG_DELIMITER)[0] ?? formatEthereumAddress(payload.seller.address, 4)
     return loadingToken ? null : (
         <div className={classes.root}>
-            <ItoLabelIcon size={14} />
+            <ItoLabelIcon size={24} />
             <span className={classes.span}>
                 A ITO with {balance} ${symbol} from {sellerName}
             </span>
