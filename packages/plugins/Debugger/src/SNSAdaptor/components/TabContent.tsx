@@ -1,4 +1,4 @@
-import type { Plugin } from '@masknet/plugin-infra'
+import { Plugin, useBalance, useBlockNumber } from '@masknet/plugin-infra'
 import { Box, List, ListItem, ListItemText, Typography } from '@mui/material'
 
 export interface TabContentProps {
@@ -66,8 +66,16 @@ export function TabContent({ identity, addressNames }: TabContentProps) {
         )
     }
 
+    const { value: balance = '0' } = useBalance()
+    const { value: blockNumber = 0 } = useBlockNumber()
+
     return (
         <>
+            <Typography color="textPrimary" variant="h6">
+                Balance {balance} <br />
+                BlockNumber {blockNumber} <br />
+            </Typography>
+
             <Typography color="textPrimary" variant="h6">
                 Identity
             </Typography>

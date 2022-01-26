@@ -106,10 +106,6 @@ export namespace PriceAPI {
 }
 
 export namespace NonFungibleTokenAPI {
-    export enum APIEnv {
-        browser = 0,
-        proxy = 1,
-    }
     export enum OrderSide {
         Buy = 0,
         Sell = 1,
