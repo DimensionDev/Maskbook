@@ -1,20 +1,13 @@
+import { useMemo } from 'react'
 import { first } from 'lodash-unified'
 import { Asset, ChainId, EthereumTokenType, FungibleTokenDetailed } from '../types'
 import { useTokensBalance } from './useTokensBalance'
 import { useChainDetailed } from './useChainDetailed'
-import { useBalance } from './useBalance'
 import { getChainDetailed, EMPTY_LIST } from '../utils'
-import { useProviderType } from './useProviderType'
-import { useBalances } from './useBalances'
-import { useMemo } from 'react'
+import { useBalance } from './useBalance'
 
 export function useAssetsFromChain(tokens: FungibleTokenDetailed[], chainId?: ChainId) {
-    const providerType = useProviderType()
-    const balances = useBalances()
-    const currentBalance = useBalance()
-
-    const balance =
-        chainId && balances && balances[providerType] && providerType ? balances[providerType][chainId] : currentBalance
+    const { value: balance = '0' } = useBalance(chainId)
     const chainDetailed = useChainDetailed()
     const passedChainDetailed = getChainDetailed(chainId)
 

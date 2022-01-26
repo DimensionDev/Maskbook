@@ -14,6 +14,7 @@ import { EntrySecondLevelDialog } from './EntrySecondLevelDialog'
 import { NetworkTab } from './NetworkTab'
 import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialog'
 import { NetworkPluginID, PluginId, usePluginIDContext } from '@masknet/plugin-infra'
+import { FindTrumanDialog } from '../../plugins/FindTruman/SNSAdaptor/FindTrumanDialog'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -175,6 +176,14 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     )
     // #endregion
 
+    // #region FindTruman
+    const {
+        open: isFindTrumanDialogOpen,
+        onOpen: onFindTrumanDialogOpen,
+        onClose: onFindTrumanDialogClose,
+    } = useControlledDialog()
+    // #endregion
+
     function createEntry(
         title: string,
         img: string,
@@ -318,6 +327,14 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             undefined,
             true,
         ),
+        createEntry(
+            'FindTruman',
+            new URL('./assets/findtruman.png', import.meta.url).toString(),
+            onFindTrumanDialogOpen,
+            [ChainId.Mainnet],
+            false,
+            true,
+        ),
     ]
 
     return (
@@ -363,6 +380,9 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                     chains={secondLevelEntryChains}
                     closeDialog={onSecondLevelEntryDialogClose}
                 />
+            ) : null}
+            {isFindTrumanDialogOpen ? (
+                <FindTrumanDialog open={isFindTrumanDialogOpen} onClose={onFindTrumanDialogClose} />
             ) : null}
         </>
     )

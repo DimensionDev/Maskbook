@@ -52,6 +52,8 @@ const useStyles = makeStyles()((theme) => ({
         bottom: 0,
         height: 16,
         width: 16,
+        border: `1px solid ${theme.palette.background.default}`,
+        borderRadius: '50%',
     },
     tip: {
         padding: theme.spacing(1),

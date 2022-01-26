@@ -1,12 +1,11 @@
 import type { TypedMessage } from '../TypedMessage'
 import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier/type'
 import type { RelationFavor } from '../Persona/type'
-import type { Appearance, LanguageOptions, TradeProvider, DataProvider } from '../../../public-api/src/web'
+import type { Appearance, LanguageOptions, DataProvider } from '../../../public-api/src/web'
 import type {
     CryptoPrice,
     NetworkType,
     ProviderType,
-    BalanceOfChains,
     FungibleAssetProvider,
     NonFungibleAssetProvider,
 } from '../../../web3-shared/evm'
@@ -17,9 +16,6 @@ export interface MaskSettingsEvents {
     debugModeSetting: boolean
     pluginIDSettings: string
     currentChainIdSettings: number
-    currentBalanceSettings: string
-    currentBalancesSettings: BalanceOfChains
-    currentBlockNumberSettings: number
     currentTokenPricesSettings: CryptoPrice
     currentDataProviderSettings: DataProvider
     currentProviderSettings: ProviderType
@@ -28,16 +24,6 @@ export interface MaskSettingsEvents {
     currentFungibleAssetDataProviderSettings: FungibleAssetProvider
     currentNonFungibleAssetDataProviderSettings: NonFungibleAssetProvider
     currentPersonaIdentifier: string
-    ethereumNetworkTradeProviderSettings: TradeProvider
-    polygonNetworkTradeProviderSettings: TradeProvider
-    binanceNetworkTradeProviderSettings: TradeProvider
-    arbitrumNetworkTradeProviderSettings: TradeProvider
-    xdaiNetworkTradeProviderSettings: TradeProvider
-    bobaNetworkTradeProviderSettings: TradeProvider
-    fantomNetworkTradeProviderSettings: TradeProvider
-    celoNetworkTradeProviderSettings: TradeProvider
-    avalancheNetworkTradeProviderSettings: TradeProvider
-    auroraNetworkTradeProviderSettings: TradeProvider
 }
 
 export interface MaskMobileOnlyEvents {

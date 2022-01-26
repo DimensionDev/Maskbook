@@ -3,18 +3,18 @@ import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Portal, Typography, styled } from '@mui/material'
 import classNames from 'classnames'
 import { PropsWithChildren, useRef, cloneElement, useEffect, ReactElement, useState } from 'react'
-import { userGuideStatus } from '../../settings/settings'
+import { sayHelloShowed, userGuideStatus } from '../../settings/settings'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { useI18N } from '../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
         position: 'absolute',
-        boxShadow: '0 0 20px 3000px rgba(0,0,0,.5)',
+        boxShadow: `0 0 0 3000px ${theme.palette.mode === 'light' ? 'rgba(0,0,0,.3)' : 'rgba(110,118,125,.3)'}`,
+        borderRadius: 8,
     },
     target: {
         background: 'transparent',
-        borderRadius: '4px',
     },
     mask: {
         position: 'fixed',
@@ -26,19 +26,21 @@ const useStyles = makeStyles()((theme) => ({
     },
     card: {
         position: 'absolute',
-        left: -10,
+        left: 0,
         width: 256,
         padding: '16px',
         borderRadius: '16px',
-        background: theme.palette.mode === 'light' ? 'rgba(15, 20, 25, 0.8)' : '#fff',
-        color: theme.palette.mode === 'light' ? '#fff' : '#111432',
+        background: 'rgba(0,0,0,.85)',
+        boxShadow: '0 4px 8px rgba(0,0,0,.1)',
+        boxSizing: 'border-box',
+        color: '#fff',
         '&.arrow-top:after': {
             content: '""',
             display: 'inline-block',
             width: 0,
             height: 0,
             border: 'solid 8px transparent',
-            borderBottomColor: theme.palette.mode === 'light' ? 'rgba(15, 20, 25, 0.8)' : '#fff',
+            borderBottomColor: 'rgba(0,0,0,.85)',
             borderBottomWidth: '13px',
             borderTopWidth: 0,
             position: 'absolute',
@@ -51,7 +53,7 @@ const useStyles = makeStyles()((theme) => ({
             width: 0,
             height: 0,
             border: 'solid 8px transparent',
-            borderTopColor: theme.palette.mode === 'light' ? 'rgba(15, 20, 25, 0.8)' : '#fff',
+            borderTopColor: 'rgba(0,0,0,.85)',
             borderTopWidth: '13px',
             borderBottomWidth: 0,
             position: 'absolute',
@@ -61,28 +63,28 @@ const useStyles = makeStyles()((theme) => ({
     },
     buttonContainer: {
         display: 'flex',
-        justifyContent: 'space-evenly',
+        justifyContent: 'space-between',
         paddingTop: '16px',
     },
 }))
 
 const ActionButton = styled('div')(({ theme }) => ({
     boxSizing: 'border-box',
-    width: '80px',
-    height: '26px',
-    lineHeight: '26px',
-    borderRadius: 15,
+    width: 104,
+    height: 32,
+    lineHeight: '32px',
+    borderRadius: 16,
     textAlign: 'center',
     border: 'solid 1px #000',
-    borderColor: theme.palette.mode === 'light' ? '#fff' : 'rgba(15, 20, 25, 0.8)',
+    borderColor: '#fff',
     cursor: 'pointer',
     fontFamily: 'PingFang SC',
 }))
 
 const NextButton = styled(ActionButton)({
     border: 'none',
-    color: '#fff',
-    background: '#1C68F3',
+    color: '#111418',
+    background: '#fff',
 })
 
 export interface GuideStepProps extends PropsWithChildren<{}> {
@@ -127,6 +129,7 @@ export default function GuideStep({
     const onSkip = () => {
         setOpen(false)
         userGuideStatus[ui.networkIdentifier].value = 'completed'
+        sayHelloShowed[ui.networkIdentifier].value = true
     }
 
     const onNext = () => {
@@ -137,7 +140,8 @@ export default function GuideStep({
     }
 
     const onTry = () => {
-        onSkip()
+        setOpen(false)
+        userGuideStatus[ui.networkIdentifier].value = 'completed'
         onComplete?.()
     }
 
@@ -193,19 +197,24 @@ export default function GuideStep({
                                             arrow ? (bottomAvailable ? 'arrow-top' : 'arrow-bottom') : '',
                                         )}
                                         style={{
+                                            left: clientRect.width < 50 ? -clientRect.width / 2 : 0,
                                             [bottomAvailable ? 'top' : 'bottom']: clientRect.height + 16,
                                         }}>
                                         <div style={{ paddingBottom: '16px' }}>
                                             <Typography sx={{ fontSize: 20 }}>
-                                                <span style={{ color: '#1C68F3' }}>{step}</span>/{total}
+                                                {step}/{total}
                                             </Typography>
                                         </div>
                                         <div>
-                                            <Typography>{tip}</Typography>
+                                            <Typography fontSize={14} fontWeight={600}>
+                                                {tip}
+                                            </Typography>
                                         </div>
                                         <div className={classes.buttonContainer}>
                                             {step === total ? (
-                                                <NextButton onClick={onTry}>{t('try')}</NextButton>
+                                                <NextButton style={{ width: '100%' }} onClick={onTry}>
+                                                    {t('try')}
+                                                </NextButton>
                                             ) : (
                                                 <>
                                                     <ActionButton onClick={onSkip}>{t('skip')}</ActionButton>

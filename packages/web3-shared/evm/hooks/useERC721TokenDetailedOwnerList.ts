@@ -15,7 +15,7 @@ export const ERC721_ENUMERABLE_INTERFACE_ID = '0x780e9d63'
 export function useERC721TokenDetailedOwnerList(contractDetailed: ERC721ContractDetailed | undefined, owner: string) {
     const { GET_ASSETS_URL } = useOpenseaAPIConstants()
     const chainId = useChainId()
-    const erc721TokenContract = useERC721TokenContract(contractDetailed?.address ?? '', true)
+    const erc721TokenContract = useERC721TokenContract(contractDetailed?.address ?? '')
     const allListRef = useRef<ERC721TokenDetailed[]>([])
     const [refreshing, setRefreshing] = useState(false)
 

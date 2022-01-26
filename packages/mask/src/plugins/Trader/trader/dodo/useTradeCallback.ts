@@ -12,7 +12,7 @@ export function useTradeCallback(
 ) {
     const account = useAccount()
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-    const web3 = useWeb3(false, chainId)
+    const web3 = useWeb3({ chainId })
 
     const [tradeState, setTradeState] = useState<TransactionState>({
         type: TransactionStateType.UNKNOWN,
