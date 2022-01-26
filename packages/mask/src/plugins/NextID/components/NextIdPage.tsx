@@ -66,10 +66,10 @@ export function NextIdPage({}: NextIDPageProps) {
             return Services.Helper.queryExistedBinding(currentPersona.identifier)
         }
 
-        if (!visitingPersonaIdentifier) return Promise.resolve(null)
+        if (!visitingPersonaIdentifier) return null
         const visitingPersona = await Services.Identity.queryPersonaByProfile(visitingPersonaIdentifier.identifier)
 
-        if (!visitingPersona) return Promise.resolve(null)
+        if (!visitingPersona) return null
         return Services.Helper.queryExistedBinding(visitingPersona.identifier)
     }, [currentPersona, count, visitingPersonaIdentifier])
 

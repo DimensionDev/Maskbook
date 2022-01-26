@@ -9,7 +9,7 @@ export const useWalletSign = (message?: string, address?: string) => {
 
     const [state, fn] = useAsyncFn(
         async (changed: boolean) => {
-            if (changed) return Promise.resolve(undefined)
+            if (changed) return undefined
             if (!address || !message) return
             try {
                 showSnackbar(t.notify_wallet_sign(), { processing: true, message: t.notify_wallet_sign_confirm() })
