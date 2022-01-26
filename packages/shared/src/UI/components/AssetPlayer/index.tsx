@@ -129,7 +129,7 @@ export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconPro
     // parent of iframe changed, this time the returned `height` and `width` is right.
     // So resize the parent manually.
     useEffect(() => {
-        if (!(playerState === AssetPlayerState.NORMAL)) return
+        if (playerState !== AssetPlayerState.NORMAL) return
         const resize = (height: string) => () => {
             if (!ref.current?.parentElement) return
             ref.current.parentElement.style.height = height
