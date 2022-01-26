@@ -135,7 +135,7 @@ export function RedPacket(props: RedPacketProps) {
         else if (canRefund) await refundCallback()
     }, [canClaim, canRefund, claimCallback, refundCallback])
 
-    const onCliamOrRefundOnNative = useCallback(async () => {
+    const onClaimOrRefundOnNative = useCallback(async () => {
         if (!availability) return
         nativeAPI?.api.claimOrRefundRedpacket({
             redpacketPayload: payload,
@@ -251,7 +251,7 @@ export function RedPacket(props: RedPacketProps) {
                     claimState={claimState}
                     refundState={refundState}
                     shareLink={shareLink}
-                    onClaimOrRefund={hasNativeAPI ? onCliamOrRefundOnNative : onClaimOrRefund}
+                    onClaimOrRefund={hasNativeAPI ? onClaimOrRefundOnNative : onClaimOrRefund}
                 />
             )}
         </EthereumChainBoundary>
