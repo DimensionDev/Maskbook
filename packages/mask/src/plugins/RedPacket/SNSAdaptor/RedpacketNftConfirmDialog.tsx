@@ -12,7 +12,7 @@ import {
     TransactionStateType,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import classNames from 'classnames'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { Button, Grid, Link, Typography, DialogContent, List, ListItem } from '@mui/material'
@@ -26,7 +26,6 @@ import { useCompositionContext } from '@masknet/plugin-infra'
 import { RedPacketNftMetaKey } from '../constants'
 import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketRPC } from '../messages'
-import { NftImage } from './NftImage'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -68,7 +67,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         height: 420,
         overflowY: 'auto',
-        background: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
+        background: theme.palette.background.default,
         borderRadius: 12,
         marginTop: theme.spacing(1.5),
         marginBottom: theme.spacing(1.5),
@@ -92,7 +91,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     nftNameWrapper: {
         width: '100%',
-        background: theme.palette.mode === 'light' ? 'none' : '#2F3336',
+        background: theme.palette.background.paper,
         borderBottomRightRadius: 8,
         borderBottomLeftRadius: 8,
         paddingTop: 2,
@@ -138,6 +137,9 @@ const useStyles = makeStyles()((theme) => ({
         transform: 'translateY(10px)',
         width: 64,
         height: 64,
+    },
+    iframe: {
+        minHeight: 147,
     },
     ellipsis: {
         overflow: 'hidden',
@@ -287,21 +289,9 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                     <Grid item xs={12}>
                         <List className={classes.tokenSelector}>
                             {tokenList.map((value, i) => (
-                                <ListItem key={i} className={classNames(classes.tokenSelectorWrapper)}>
-                                    <NftImage
-                                        token={value}
-                                        classes={{
-                                            loadingFailImage: classes.loadingFailImage,
-                                        }}
-                                        fallbackImage={new URL('./assets/nft_token_fallback.png', import.meta.url)}
-                                    />
-
-                                    <div className={classes.nftNameWrapper}>
-                                        <Typography className={classes.nftName} color="textSecondary">
-                                            {value.info.name}
-                                        </Typography>
-                                    </div>
-                                </ListItem>
+                                <div key={i}>
+                                    <NFTCard token={value} renderOrder={i} />
+                                </div>
                             ))}
                         </List>
                     </Grid>
@@ -355,5 +345,37 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                 </Grid>
             </DialogContent>
         </InjectedDialog>
+    )
+}
+
+interface NFTCardProps {
+    token: ERC721TokenDetailed
+    renderOrder: number
+}
+
+function NFTCard(props: NFTCardProps) {
+    const { token, renderOrder } = props
+    const { classes } = useStyles()
+    const [name, setName] = useState('#' + token.tokenId)
+    return (
+        <ListItem className={classNames(classes.tokenSelectorWrapper)}>
+            <NFTCardStyledAssetPlayer
+                contractAddress={token.contractDetailed.address}
+                chainId={token.contractDetailed.chainId}
+                tokenId={token.tokenId}
+                renderOrder={renderOrder}
+                setERC721TokenName={setName}
+                classes={{
+                    loadingFailImage: classes.loadingFailImage,
+                    iframe: classes.iframe,
+                }}
+            />
+
+            <div className={classes.nftNameWrapper}>
+                <Typography className={classes.nftName} color="textSecondary">
+                    {name}
+                </Typography>
+            </div>
+        </ListItem>
     )
 }

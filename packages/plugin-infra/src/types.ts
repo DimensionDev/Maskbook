@@ -1,8 +1,16 @@
+/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
-import type { TypedMessage, TypedMessageTuple, ScopedStorage, ProfileIdentifier } from '@masknet/shared-base'
+import type {
+    TypedMessage,
+    TypedMessageTuple,
+    ScopedStorage,
+    ProfileIdentifier,
+    PersonaIdentifier,
+} from '@masknet/shared-base'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
+import type { Subscription } from 'use-subscription'
 
 export declare namespace Plugin {
     /**
@@ -62,6 +70,10 @@ export namespace Plugin.Shared {
          * A lightweight K/V storage used to store some simple data.
          */
         createKVStorage<T extends object>(type: 'memory' | 'persistent', defaultValues: T): ScopedStorage<T>
+        /** Sign a message with persona */
+        personaSign(payload: PersonaSignRequest): Promise<PersonaSignResult>
+        /** Sign a message with wallet */
+        walletSign(message: string, address: string): Promise<string>
     }
     export interface Definition {
         /**
@@ -193,11 +205,35 @@ export namespace Plugin.Shared {
         // TODO: implement this flag when there is use case.
         // UX_NEED_APPROVAL_manualMinimalMode?: boolean
     }
+
+    export interface PersonaSignRequest {
+        /** The message to be signed. */
+        message: string
+        /** Use what method to sign this message? */
+        method: 'eth'
+    }
+    export interface PersonaSignResult {
+        /** The persona user selected to sign the message */
+        persona: PersonaIdentifier
+        signature: {
+            // type from ethereumjs-util
+            // raw: ECDSASignature
+            EIP2098: string
+            signature: string
+        }
+        /** Persona converted to a wallet address */
+        address: string
+        /** Message in hex */
+        messageHex: string
+    }
 }
 
 /** This part runs in the SNSAdaptor */
 export namespace Plugin.SNSAdaptor {
-    export interface SNSAdaptorContext extends Shared.SharedContext {}
+    export interface SNSAdaptorContext extends Shared.SharedContext {
+        /** Get current persona */
+        currentPersona: Subscription<PersonaIdentifier | undefined>
+    }
     export interface Definition extends Shared.DefinitionDeferred<SNSAdaptorContext> {
         /** This UI will be rendered for each post found. */
         PostInspector?: InjectUI<{}>
@@ -224,7 +260,7 @@ export namespace Plugin.SNSAdaptor {
         /** This UI will be rendered as tabs on the profile page */
         ProfileTabs?: ProfileTab[]
     }
-    //#region Composition entry
+    // #region Composition entry
     /**
      * The entry has two type:
      *
@@ -274,9 +310,9 @@ export namespace Plugin.SNSAdaptor {
         text: string | React.ReactChild
         tooltip?: React.ReactChild
     }
-    //#endregion
+    // #endregion
 
-    //#region Toolbar entry
+    // #region Toolbar entry
     export interface ToolbarEntry {
         image: string
         // TODO: remove string
@@ -298,7 +334,7 @@ export namespace Plugin.SNSAdaptor {
         // TODO: add support for onClick event.
         onClick: 'openCompositionEntry'
     }
-    //#endregion
+    // #endregion
 
     export interface ApplicationEntry {
         /**
@@ -549,17 +585,17 @@ export namespace Plugin.GeneralUI {
 
     export namespace MetadataRender {
         export type MetadataReader<T> = (meta: TypedMessage['meta']) => Result<T, unknown>
-        //#region Static render
+        // #region Static render
         // new Map([ [reader, react component] ])
         export type StaticRender<T = any> = ReadonlyMap<MetadataReader<T>, StaticRenderComponent<T>>
         export type StaticRenderComponent<T> = Omit<React.ForwardRefExoticComponent<StaticRenderProps<T>>, 'propTypes'>
         export type StaticRenderProps<T> = Context<T> & React.RefAttributes<RenderActions<T>> & { metadata: T }
-        //#endregion
-        //#region DynamicRender
+        // #endregion
+        // #region DynamicRender
         export type DynamicRender = Omit<React.ForwardRefExoticComponent<DynamicRenderProps>, 'propTypes'>
         export type DynamicRenderProps = Context<unknown> &
             React.RefAttributes<RenderActions<unknown>> & { metadata: TypedMessage['meta'] }
-        //#endregion
+        // #endregion
         export type RenderActions<T> = {
             /**
              * This action make the render into the edit state.
@@ -610,7 +646,7 @@ export namespace Plugin {
      * const ui = {
      *      type: 'raw' as const,
      *      init(signal, dom) {
-     *          return props => dom.innerHTML = toString(props)
+     *          return props => dom.textContent = toString(props)
      *      }
      * }
      * ```

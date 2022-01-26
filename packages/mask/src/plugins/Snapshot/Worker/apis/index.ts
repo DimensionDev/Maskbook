@@ -124,7 +124,7 @@ export async function getScores(
     )
     return scores.map((score) =>
         transform(score, function (result: { [key in string]: number }, val, key: string) {
-            result[key.toString().toLowerCase()] = val
+            result[key.toLowerCase()] = val
         }),
     )
 }

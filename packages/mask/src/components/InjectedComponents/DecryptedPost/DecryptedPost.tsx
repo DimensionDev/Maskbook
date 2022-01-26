@@ -91,15 +91,15 @@ export function DecryptPost(props: DecryptPostProps) {
         }
     }, [props.requestAppendRecipients, postBy, whoAmI])
 
-    //#region Debug info
+    // #region Debug info
     const [debugHash, setDebugHash] = useState<string>('Unknown')
-    //#endregion
+    // #endregion
 
-    //#region Progress
+    // #region Progress
     const [progress, dispatch] = useReducer(progressReducer, [])
-    //#endregion
+    // #endregion
 
-    //#region decrypt
+    // #region decrypt
 
     // pass 1:
     // decrypt post content and image attachments
@@ -183,7 +183,7 @@ export function DecryptPost(props: DecryptPostProps) {
         if (firstSucceedDecrypted?.progress.type !== 'success') return
         onDecrypted(makeTypedMessageTuple([firstSucceedDecrypted.progress.content]))
     }, [firstSucceedDecrypted, onDecrypted])
-    //#endregion
+    // #endregion
 
     // it's not a secret post
     if (!deconstructedPayload.ok && progress.every((x) => x.progress.internal)) return null

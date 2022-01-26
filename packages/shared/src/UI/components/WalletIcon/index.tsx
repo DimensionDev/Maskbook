@@ -24,7 +24,10 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         bottom: -2,
     },
     networkIcon: {},
-    providerIcon: {},
+    providerIcon: {
+        border: `1px solid ${theme.palette.background.default}`,
+        borderRadius: '50%',
+    },
 }))
 
 interface WalletIconProps extends withClasses<'networkIcon' | 'providerIcon'> {
@@ -39,13 +42,13 @@ export const WalletIcon = (props: WalletIconProps) => {
     const { size = 24, badgeSize = 14, inverse = false, networkIcon, providerIcon } = props
     const classes = useStylesExtends(useStyles({ size: badgeSize > size ? badgeSize : size }), props)
 
-    //#region icon names
+    // #region icon names
     const names = [
         classNames(classes.mainIcon, classes.networkIcon),
         classNames(classes.badgeIcon, classes.providerIcon),
     ]
     if (inverse) names.reverse()
-    //#endregion
+    // #endregion
 
     return (
         <div

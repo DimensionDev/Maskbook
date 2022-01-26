@@ -44,13 +44,13 @@ export function HistoryTab(props: HistoryTabProps) {
     const { classes } = useStyles()
     const { provider, events, eventPage, setEventPage } = CollectibleState.useContainer()
 
-    //#region If there is a different asset, the unit price and quantity should be displayed
+    // #region If there is a different asset, the unit price and quantity should be displayed
     const isDifferenceToken = useMemo(() => {
         if (provider === NonFungibleAssetProvider.OPENSEA)
             return events.value?.data.some((item) => item.price?.asset?.asset_contract.symbol !== 'ETH')
         else return false
     }, [events.value, provider])
-    //#endregion
+    // #endregion
 
     if (events.loading)
         return (

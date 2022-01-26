@@ -14,6 +14,7 @@ import { EntrySecondLevelDialog } from './EntrySecondLevelDialog'
 import { NetworkTab } from './NetworkTab'
 import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialog'
 import { NetworkPluginID, PluginId, usePluginIDContext } from '@masknet/plugin-infra'
+import { FindTrumanDialog } from '../../plugins/FindTruman/SNSAdaptor/FindTrumanDialog'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -92,6 +93,8 @@ const SUPPORTED_CHAIN_ID_LIST = [
     ChainId.xDai,
     ChainId.Celo,
     ChainId.Fantom,
+    ChainId.Aurora,
+    ChainId.Avalanche,
 ]
 
 export interface MaskAppEntry {
@@ -116,7 +119,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     const currentPluginId = usePluginIDContext()
     const isFlow = currentPluginId === NetworkPluginID.PLUGIN_FLOW
 
-    //#region Encrypted message
+    // #region Encrypted message
     const openEncryptedMessage = useCallback(
         (id?: string) =>
             MaskMessages.events.requestComposition.sendToLocal({
@@ -128,25 +131,25 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             }),
         [],
     )
-    //#endregion
+    // #endregion
 
-    //#region Claim All ITO
+    // #region Claim All ITO
     const {
         open: isClaimAllDialogOpen,
         onOpen: onClaimAllDialogOpen,
         onClose: onClaimAllDialogClose,
     } = useControlledDialog()
-    //#endregion
+    // #endregion
 
-    //#region Swap
+    // #region Swap
     const { open: isSwapDialogOpen, onOpen: onSwapDialogOpen, onClose: onSwapDialogClose } = useControlledDialog()
-    //#endregion
+    // #endregion
 
-    //#region Fiat on/off ramp
+    // #region Fiat on/off ramp
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
-    //#endregion
+    // #endregion
 
-    //#region second level entry dialog
+    // #region second level entry dialog
     const {
         open: isSecondLevelEntryDialogOpen,
         onOpen: onSecondLevelEntryDialogOpen,
@@ -170,7 +173,15 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
         },
         [],
     )
-    //#endregion
+    // #endregion
+
+    // #region FindTruman
+    const {
+        open: isFindTrumanDialogOpen,
+        onOpen: onFindTrumanDialogOpen,
+        onClose: onFindTrumanDialogClose,
+    } = useControlledDialog()
+    // #endregion
 
     function createEntry(
         title: string,
@@ -315,6 +326,14 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             undefined,
             true,
         ),
+        createEntry(
+            'FindTruman',
+            new URL('./assets/findtruman.png', import.meta.url).toString(),
+            onFindTrumanDialogOpen,
+            [ChainId.Mainnet],
+            false,
+            true,
+        ),
     ]
 
     return (
@@ -360,6 +379,9 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                     chains={secondLevelEntryChains}
                     closeDialog={onSecondLevelEntryDialogClose}
                 />
+            ) : null}
+            {isFindTrumanDialogOpen ? (
+                <FindTrumanDialog open={isFindTrumanDialogOpen} onClose={onFindTrumanDialogClose} />
             ) : null}
         </>
     )

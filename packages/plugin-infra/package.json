@@ -10,11 +10,12 @@
     "@masknet/shared": "workspace:*",
     "@masknet/shared-base": "workspace:*",
     "@masknet/theme": "workspace:*",
+    "@masknet/web3-shared-base": "workspace:*",
     "@servie/events": "^3.0.0",
     "@types/use-subscription": "^1.0.0",
     "async-call-rpc": "^6.0.1",
     "bignumber.js": "^9.0.2",
-    "react-use": "^17.3.1",
+    "react-use": "^17.3.2",
     "unstated-next": "^1.1.0",
     "use-subscription": "^1.5.1"
   }

@@ -319,7 +319,7 @@ async function* decryptFromImageUrlWithProgress_raw(
         pass: author.toText(),
         downloadImage: steganographyDownloadImage,
     })
-    if (!post.startsWith('🎼') && !/https:\/\/.+\..+\/(\?PostData_v\d=)?%20(.+)%40/.test(post))
+    if (!post.startsWith('\u{1F3BC}') && !/https:\/\/.+\..+\/(\?PostData_v\d=)?%20(.+)%40/.test(post))
         return makeError(i18n.t('service_decode_image_payload_failed'), true)
     const worker = await Result.wrapAsync(() => getNetworkWorker(author))
     if (worker.err) return makeError(worker.val as Error)

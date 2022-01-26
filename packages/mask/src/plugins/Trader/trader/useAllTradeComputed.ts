@@ -31,6 +31,7 @@ export function useAllTradeComputed(
     inputAmount: string,
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
+    temporarySlippage?: number,
 ): TradeInfo[] {
     const { targetChainId } = TargetChainIdContext.useContainer()
     const inputTokenProduct = pow10(inputToken?.decimals ?? 0)
@@ -52,7 +53,7 @@ export function useAllTradeComputed(
 
     const nativeTradeGasLimit = useNativeTradeGasLimit(nativeToken, targetChainId)
 
-    //uniswap-v2
+    // uniswap-v2
     const uniswapV2_ = useUniswapV2Trade(
         TradeProvider.UNISWAP_V2,
         TradeStrategy.ExactIn,
@@ -65,6 +66,7 @@ export function useAllTradeComputed(
         uniswapV2_.value,
         tradeProviders.some((x) => x === TradeProvider.UNISWAP_V2) ? inputToken : undefined,
         tradeProviders.some((x) => x === TradeProvider.UNISWAP_V2) ? outputToken : undefined,
+        temporarySlippage,
     )
     const uniswapV2EstimateGas = useUniswapTradeGasLimit(uniswapV2, TradeProvider.UNISWAP_V2)
 
@@ -77,7 +79,7 @@ export function useAllTradeComputed(
         tradeProviders.some((x) => x === TradeProvider.SUSHISWAP) ? inputToken : undefined,
         tradeProviders.some((x) => x === TradeProvider.SUSHISWAP) ? outputToken : undefined,
     )
-    const sushiSwap = useUniswapTradeComputed(sushiSwap_.value, inputToken, outputToken)
+    const sushiSwap = useUniswapTradeComputed(sushiSwap_.value, inputToken, outputToken, temporarySlippage)
     const sushiSwapEstimateGas = useUniswapTradeGasLimit(sushiSwap, TradeProvider.SUSHISWAP)
 
     // sashimi swap
@@ -89,7 +91,7 @@ export function useAllTradeComputed(
         tradeProviders.some((x) => x === TradeProvider.SASHIMISWAP) ? inputToken : undefined,
         tradeProviders.some((x) => x === TradeProvider.SASHIMISWAP) ? outputToken : undefined,
     )
-    const sashimiSwap = useUniswapTradeComputed(sashimiSwap_.value, inputToken, outputToken)
+    const sashimiSwap = useUniswapTradeComputed(sashimiSwap_.value, inputToken, outputToken, temporarySlippage)
     const sashimiSwapEstimateGas = useUniswapTradeGasLimit(sashimiSwap, TradeProvider.SASHIMISWAP)
 
     // quick swap
@@ -101,7 +103,7 @@ export function useAllTradeComputed(
         tradeProviders.some((x) => x === TradeProvider.QUICKSWAP) ? inputToken : undefined,
         tradeProviders.some((x) => x === TradeProvider.QUICKSWAP) ? outputToken : undefined,
     )
-    const quickSwap = useUniswapTradeComputed(quickSwap_.value, inputToken, outputToken)
+    const quickSwap = useUniswapTradeComputed(quickSwap_.value, inputToken, outputToken, temporarySlippage)
     const quickSwapEstimateGas = useUniswapTradeGasLimit(quickSwap, TradeProvider.QUICKSWAP)
 
     // pancake swap
@@ -113,7 +115,7 @@ export function useAllTradeComputed(
         tradeProviders.some((x) => x === TradeProvider.PANCAKESWAP) ? inputToken : undefined,
         tradeProviders.some((x) => x === TradeProvider.PANCAKESWAP) ? outputToken : undefined,
     )
-    const pancakeSwap = useUniswapTradeComputed(pancakeSwap_.value, inputToken, outputToken)
+    const pancakeSwap = useUniswapTradeComputed(pancakeSwap_.value, inputToken, outputToken, temporarySlippage)
     const pancakeSwapEstimateGas = useUniswapTradeGasLimit(pancakeSwap, TradeProvider.PANCAKESWAP)
 
     // uniswap-v3 like providers
@@ -124,7 +126,7 @@ export function useAllTradeComputed(
         tradeProviders.some((x) => x === TradeProvider.UNISWAP_V3) ? inputToken : undefined,
         tradeProviders.some((x) => x === TradeProvider.UNISWAP_V3) ? outputToken : undefined,
     )
-    const uniswapV3 = useUniswapTradeComputed(uniswapV3_.value, inputToken, outputToken)
+    const uniswapV3 = useUniswapTradeComputed(uniswapV3_.value, inputToken, outputToken, temporarySlippage)
     const uniswapV3SwapEstimateGas = useUniswapTradeGasLimit(uniswapV3, TradeProvider.UNISWAP_V3)
 
     // zrx
@@ -163,6 +165,7 @@ export function useAllTradeComputed(
         '0',
         tradeProviders.some((x) => x === TradeProvider.DODO) ? inputToken : undefined,
         tradeProviders.some((x) => x === TradeProvider.DODO) ? outputToken : undefined,
+        temporarySlippage,
     )
     const dodo = useDODOTradeComputed(dodo_.value ?? null, TradeStrategy.ExactIn, inputToken, outputToken)
     const dodoSwapEstimateGas = useDODOTradeGasLimit(dodo)
@@ -174,12 +177,44 @@ export function useAllTradeComputed(
         '0',
         tradeProviders.some((x) => x === TradeProvider.BANCOR) ? inputToken : undefined,
         tradeProviders.some((x) => x === TradeProvider.BANCOR) ? outputToken : undefined,
+        temporarySlippage,
     )
     const bancor = useBancorTradeComputed(bancor_.value ?? null, TradeStrategy.ExactIn, inputToken, outputToken)
     const bancorSwapEstimateGas = useBancorTradeGasLimit(bancor)
 
+    // traderjoe
+    const traderJoe_ = useUniswapV2Trade(
+        TradeProvider.TRADERJOE,
+        TradeStrategy.ExactIn,
+        inputAmount_,
+        '0',
+        tradeProviders.some((x) => x === TradeProvider.TRADERJOE) ? inputToken : undefined,
+        tradeProviders.some((x) => x === TradeProvider.TRADERJOE) ? outputToken : undefined,
+    )
+    const traderJoe = useUniswapTradeComputed(traderJoe_.value, inputToken, outputToken)
+    const traderJoeEstimateGas = useUniswapTradeGasLimit(traderJoe, TradeProvider.TRADERJOE)
+
+    // pangolindex
+    const pangolindex_ = useUniswapV2Trade(
+        TradeProvider.PANGOLIN,
+        TradeStrategy.ExactIn,
+        inputAmount_,
+        '0',
+        tradeProviders.some((x) => x === TradeProvider.PANGOLIN) ? inputToken : undefined,
+        tradeProviders.some((x) => x === TradeProvider.PANGOLIN) ? outputToken : undefined,
+    )
+    const pangolindex = useUniswapTradeComputed(pangolindex_.value, inputToken, outputToken)
+    const pangolinEstimateGas = useUniswapTradeGasLimit(pangolindex, TradeProvider.PANGOLIN)
+
     // openocean
-    const openocean_ = useOpenOceanTrade(TradeStrategy.ExactIn, inputAmount_, '0', inputToken, outputToken)
+    const openocean_ = useOpenOceanTrade(
+        TradeStrategy.ExactIn,
+        inputAmount_,
+        '0',
+        inputToken,
+        outputToken,
+        temporarySlippage,
+    )
     const openocean = useOpenOceanTradeComputed(
         openocean_.value ?? null,
         TradeStrategy.ExactIn,
@@ -187,6 +222,30 @@ export function useAllTradeComputed(
         outputToken,
     )
     const openoceanSwapEstimateGas = useOpenOceanTradeGasLimit(openocean as TradeComputed<SwapOOData> | null)
+
+    // trisolaris
+    const trisolaris_ = useUniswapV2Trade(
+        TradeProvider.TRISOLARIS,
+        TradeStrategy.ExactIn,
+        inputAmount_,
+        '0',
+        tradeProviders.some((x) => x === TradeProvider.TRISOLARIS) ? inputToken : undefined,
+        tradeProviders.some((x) => x === TradeProvider.TRISOLARIS) ? outputToken : undefined,
+    )
+    const trisolaris = useUniswapTradeComputed(trisolaris_.value, inputToken, outputToken)
+    const trisolarisEstimateGas = useUniswapTradeGasLimit(trisolaris, TradeProvider.TRISOLARIS)
+
+    // WannaSwap
+    const wannaswap_ = useUniswapV2Trade(
+        TradeProvider.WANNASWAP,
+        TradeStrategy.ExactIn,
+        inputAmount_,
+        '0',
+        tradeProviders.some((x) => x === TradeProvider.WANNASWAP) ? inputToken : undefined,
+        tradeProviders.some((x) => x === TradeProvider.WANNASWAP) ? outputToken : undefined,
+    )
+    const wannaswap = useUniswapTradeComputed(wannaswap_.value, inputToken, outputToken)
+    const wannaSwapEstimateGas = useUniswapTradeGasLimit(wannaswap, TradeProvider.WANNASWAP)
 
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
@@ -199,7 +258,11 @@ export function useAllTradeComputed(
         { provider: TradeProvider.BALANCER, ...balancer_, value: balancer, gas: balancerSwapEstimateGas },
         { provider: TradeProvider.DODO, ...dodo_, value: dodo, gas: dodoSwapEstimateGas },
         { provider: TradeProvider.BANCOR, ...bancor_, value: bancor, gas: bancorSwapEstimateGas },
+        { provider: TradeProvider.TRADERJOE, ...traderJoe_, value: traderJoe, gas: traderJoeEstimateGas },
+        { provider: TradeProvider.PANGOLIN, ...pangolindex_, value: pangolindex, gas: pangolinEstimateGas },
         { provider: TradeProvider.OPENOCEAN, ...openocean_, value: openocean, gas: openoceanSwapEstimateGas },
+        { provider: TradeProvider.WANNASWAP, ...wannaswap_, value: wannaswap, gas: wannaSwapEstimateGas },
+        { provider: TradeProvider.TRISOLARIS, ...trisolaris_, value: trisolaris, gas: trisolarisEstimateGas },
     ]
 
     return nativeToken_.value

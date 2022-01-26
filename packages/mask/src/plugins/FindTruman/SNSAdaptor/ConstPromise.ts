@@ -42,6 +42,7 @@ export default class FindTrumanConstPromise {
         }
     }
 
+    // eslint-disable-next-line unicorn/no-thenable
     then(successCallback: (value?: FindTrumanConst) => void, failCallback?: (err: any) => void) {
         if (this.status === Status.FULFILLED) {
             successCallback(this.value)
