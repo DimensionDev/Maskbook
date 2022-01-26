@@ -137,10 +137,17 @@ export function RedPacket(props: RedPacketProps) {
     }, [canClaim, canRefund, claimCallback, refundCallback])
 
     const onCliamOrRefundOnNative = useCallback(async () => {
+        if (!availability) return
         nativeAPI?.api.claimOrRefundRedpacket({
             redpacketPayload: payload,
-            availability,
-            postLink
+            availability: {
+                token_address: availability.token_address,
+                balance: availability.balance,
+                total: availability.total,
+                claimed: availability.claimed,
+                expired: availability.expired
+            },
+            postLink: postLink.toString()
         })
     }, [availability, payload, postLink])
 
@@ -186,8 +193,14 @@ export function RedPacket(props: RedPacketProps) {
         if (hasNativeAPI) {
             nativeAPI?.api.notifyRedpacket({
                 redpacketPayload: payload,
-                availability,
-                postLink
+                availability: {
+                    token_address: availability.token_address,
+                    balance: availability.balance,
+                    total: availability.total,
+                    claimed: availability.claimed,
+                    expired: availability.expired
+                },
+                postLink: postLink.toString()
             })
         }
     }, [availability, payload, postLink, hasNativeAPI])

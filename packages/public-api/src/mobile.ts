@@ -6,6 +6,7 @@ import type {
     ProfileRecord,
     LinkedProfileDetails,
     RelationRecord,
+    RedPacketAvailability,
 } from './types'
 
 /**
@@ -106,13 +107,13 @@ export interface SharedNativeAPIs {
      */
     notifyRedpacket(params: {
         redpacketPayload: any
-        availability: any
+        availability: RedPacketAvailability
         postLink: string | URL
     }): Promise<void>
 
     claimOrRefundRedpacket(params: {
         redpacketPayload: any
-        availability: any
+        availability: RedPacketAvailability
         postLink: string | URL
     }): Promise<void>
 }

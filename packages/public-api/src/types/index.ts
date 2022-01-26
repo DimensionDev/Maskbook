@@ -69,3 +69,11 @@ export type PageOption = {
     pageSize: number
     pageOffset: number
 }
+
+export interface RedPacketAvailability {
+    token_address: string
+    balance: string
+    total: string
+    claimed: string
+    expired: boolean
+}
