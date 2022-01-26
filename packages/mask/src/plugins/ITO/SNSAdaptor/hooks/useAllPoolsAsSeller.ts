@@ -1,13 +1,13 @@
+import { useRef, useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { PluginITO_RPC } from '../../messages'
 import type { PoolFromNetwork } from '../../types'
-import { useBlockNumberOnce, useChainId } from '@masknet/web3-shared-evm'
-import { useRef, useEffect } from 'react'
+import { useBlockNumber, useChainId } from '@masknet/web3-shared-evm'
 
 export function useAllPoolsAsSeller(address: string) {
     const allPoolsRef = useRef<PoolFromNetwork[]>([])
     const chainId = useChainId()
-    const blockNumber = useBlockNumberOnce()
+    const { value: blockNumber = 0 } = useBlockNumber()
 
     useEffect(() => {
         allPoolsRef.current = []

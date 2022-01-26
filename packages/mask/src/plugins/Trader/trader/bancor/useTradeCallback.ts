@@ -8,7 +8,7 @@ import { TargetChainIdContext } from '../useTargetChainIdContext'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest> | null, gasConfig?: GasOptionConfig) {
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-    const web3 = useWeb3(false, chainId)
+    const web3 = useWeb3({ chainId })
     const account = useAccount()
     const [tradeState, setTradeState] = useState<TransactionState>({
         type: TransactionStateType.UNKNOWN,
