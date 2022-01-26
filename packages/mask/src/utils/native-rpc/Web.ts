@@ -18,11 +18,6 @@ import { WalletRPC } from '../../plugins/Wallet/messages'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { MaskMessages } from '../messages'
 import type { PersonaInformation } from '@masknet/shared-base'
-import type {
-    EC_Private_JsonWebKey as Native_EC_Private_JsonWebKey,
-    EC_Public_JsonWebKey as Native_EC_Public_JsonWebKey,
-    AESJsonWebKey as Native_AESJsonWebKey,
-} from '@masknet/public-api'
 
 const stringToPersonaIdentifier = (str: string) => Identifier.fromString(str, ECKeyIdentifier).unwrap()
 const stringToProfileIdentifier = (str: string) => Identifier.fromString(str, ProfileIdentifier).unwrap()
