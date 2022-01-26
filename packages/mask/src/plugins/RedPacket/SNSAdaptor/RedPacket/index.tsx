@@ -31,7 +31,6 @@ import { useRefundCallback } from '../hooks/useRefundCallback'
 import { OperationFooter } from './OperationFooter'
 import { useStyles } from './useStyles'
 import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc'
-import { useAsync } from 'react-use'
 
 export interface RedPacketProps {
     payload: RedPacketJSONPayload
