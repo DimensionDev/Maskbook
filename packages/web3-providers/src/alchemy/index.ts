@@ -35,6 +35,7 @@ function createFlowNFT(token: AlchemyNFTItemResponse, owner: string): Web3Plugin
             assetURL: toHttpImage(token.media.uri),
         },
         contract: {
+            id: token.contract.address,
             name: token.contract.name,
             symbol: token.contract.name,
             iconURL: token.contract.externalDomain,
