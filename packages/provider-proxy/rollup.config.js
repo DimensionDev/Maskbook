@@ -4,6 +4,7 @@ import sucrase from '@rollup/plugin-sucrase'
 import json from '@rollup/plugin-json'
 import alias from '@rollup/plugin-alias'
 import dts from 'rollup-plugin-dts'
+import replace from '@rollup/plugin-replace'
 
 const config = {
     input: './src/index.ts',
@@ -22,6 +23,9 @@ const config = {
             ],
         }),
         sucrase({ transforms: ['typescript', 'jsx'] }),
+        replace({
+            'process.env.PROVIDER_API_ENV': JSON.stringify('proxy'),
+        }),
     ],
     external: (id) => {
         if (id.startsWith('.')) return false

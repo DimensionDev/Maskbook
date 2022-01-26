@@ -7,7 +7,7 @@ import {
     ECKeyIdentifier,
 } from '@masknet/shared-base'
 import { restorePrototype } from '../../../utils-pure'
-import type { FullPersonaDBTransaction } from './db'
+import type { FullPersonaDBTransaction } from './type'
 
 type ReadwriteFullPersonaDBTransaction = FullPersonaDBTransaction<'readwrite'>
 

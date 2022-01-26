@@ -20,7 +20,6 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.Mainnet,
                     ChainId.BSC,
                     ChainId.Matic,
-                    ChainId.Mumbai,
                     ChainId.Arbitrum,
                     ChainId.xDai,
                     ChainId.Fuse,

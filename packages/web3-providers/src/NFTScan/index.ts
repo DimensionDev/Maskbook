@@ -5,6 +5,7 @@ import urlcat from 'urlcat'
 import type { NonFungibleTokenAPI } from '..'
 import { NFTSCAN_ACCESS_TOKEN_URL, NFTSCAN_BASE_API } from './constants'
 import type { NFTScanAsset, NFT_Assets } from './types'
+import { isProxyENV } from '../helpers'
 
 const tokenCache = new Map<'token', { token: string; expiration: Date }>()
 
@@ -13,7 +14,7 @@ async function getToken() {
     if (token && isBefore(Date.now(), token.expiration)) {
         return token.token
     }
-    const response = await fetch(NFTSCAN_ACCESS_TOKEN_URL, { mode: 'cors' })
+    const response = await fetch(NFTSCAN_ACCESS_TOKEN_URL, { ...(!isProxyENV && { mode: 'cors' }) })
     const {
         data,
     }: {
@@ -115,4 +116,9 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
             hasNextPage: total - (page + 1) * size > 0,
         }
     }
+}
+
+export function getNFTScanNFTList(address: string) {
+    const nftScanAPI = new NFTScanAPI()
+    return nftScanAPI.getContractBalance(address)
 }

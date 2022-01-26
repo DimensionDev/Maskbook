@@ -2641,6 +2641,13 @@
             "logoURI": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
         },
         "infoURL": "https://aurora.dev",
+        "explorers": [
+            {
+                "name": "Blockscout",
+                "url": "https://explorer.mainnet.aurora.dev/",
+                "standard": "EIP3091"
+            }
+        ],
         "shortName": "aurora",
         "chainId": 1313161554,
         "networkId": 1313161554

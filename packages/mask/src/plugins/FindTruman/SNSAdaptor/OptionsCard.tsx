@@ -1,31 +1,13 @@
-import type { PuzzleCondition, UserPollStatus, UserPuzzleStatus } from '../types'
-import { FindTrumanPostType } from '../types'
-import { useContext, useEffect, useRef, useState } from 'react'
-import { useI18N } from '../../../utils'
+import type { PuzzleCondition, UserPollStatus } from '../types'
+import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
-import {
-    Alert,
-    Box,
-    Card,
-    CardContent,
-    Chip,
-    Step,
-    StepContent,
-    StepLabel,
-    Stepper,
-    Typography,
-    Snackbar,
-} from '@mui/material'
-import { RadioButtonChecked, RadioButtonUnchecked, DoneOutlined, Send } from '@mui/icons-material'
-import LoadingButton from '@mui/lab/LoadingButton'
+import { Alert, Box, Card, CardContent, Chip, Snackbar, Typography } from '@mui/material'
+import { RadioButtonChecked, RadioButtonUnchecked, DoneOutlined, Send, RefreshOutlined } from '@mui/icons-material'
 import NoNftCard from './NoNftCard'
-import { createContract, useChainId, useWeb3 } from '@masknet/web3-shared-evm'
+import { useChainId } from '@masknet/web3-shared-evm'
 import { FindTrumanContext } from '../context'
-import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
-import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
-import type { AbiItem } from 'web3-utils'
 import { BorderLinearProgress } from './ResultCard'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useOptionsStyles = makeStyles()((theme) => {
     return {
@@ -53,6 +35,11 @@ const useOptionsStyles = makeStyles()((theme) => {
             padding: '8px',
             transition: 'all .3s',
         },
+        blockChipSelected: {
+            '&:hover': {
+                backgroundColor: theme.palette.primary.main,
+            },
+        },
         checkIcon: {},
         horizontalScrollBar: {
             '::-webkit-scrollbar': {
@@ -79,74 +66,35 @@ const useOptionsStyles = makeStyles()((theme) => {
     }
 })
 interface OptionsViewProps {
-    type: FindTrumanPostType
-    userStatus?: UserPuzzleStatus | UserPollStatus
-    onSubmit: (choice: number) => Promise<boolean>
+    userStatus?: UserPollStatus
+    onSubmit(choice: number): Promise<void>
 }
 export default function OptionsCard(props: OptionsViewProps) {
-    const { type, userStatus, onSubmit } = props
-    const [selected, setSelected] = useState<boolean>(true)
-    const [choice, setChoice] = useState<number>(userStatus ? userStatus.choice : -1)
-    const [submitting, setSubmitting] = useState<boolean>(false)
-    const [error, setError] = useState<'' | 'unsupported-chain' | 'insufficient-nft'>('')
+    const { userStatus, onSubmit } = props
+    const [selected, setSelected] = useState(true)
+    const [choice, setChoice] = useState(userStatus ? userStatus.choice : -1)
+    const [submitting, setSubmitting] = useState(false)
+    const [error, setError] = useState<'' | 'insufficient-nft'>('')
     const [unmeetCondition, setUnmeetCondition] = useState<PuzzleCondition[]>([])
-    const [snackVisible, setSnackVisible] = useState<boolean>(false)
+    const [snackVisible, setSnackVisible] = useState(false)
 
-    const { classes } = useOptionsStyles()
+    const { classes, cx } = useOptionsStyles()
     const chainId = useChainId()
-    const { address: account } = useContext(FindTrumanContext)
-    const web3 = useWeb3(false)
-    const { t } = useI18N()
-    const ref = useRef<HTMLDivElement | null>(null)
+    const { t } = useContext(FindTrumanContext)
     const parentRef = useRef<HTMLDivElement | null>(null)
 
     useEffect(() => {
-        checkCondition()
+        setError('')
+        setUnmeetCondition(userStatus?.notMeetConditions || [])
+        userStatus && userStatus.notMeetConditions.length > 0 && setError('insufficient-nft')
     }, [chainId, userStatus])
 
     useEffect(() => {
         setChoice(userStatus ? userStatus.choice : -1)
         setSelected(userStatus ? userStatus.choice !== -1 : true)
-        setTimeout(() => {
-            type === FindTrumanPostType.Poll &&
-                ref?.current?.scrollTo({
-                    left: ref.current.scrollWidth,
-                    behavior: 'smooth',
-                })
-        }, 500)
     }, [userStatus])
 
-    const checkCondition = async () => {
-        setError('')
-        setUnmeetCondition([])
-        if (userStatus) {
-            for (const condition of userStatus.conditions) {
-                if (condition.chainId !== chainId) {
-                    setError('unsupported-chain')
-                    return
-                }
-            }
-            const _unmeetCondition: PuzzleCondition[] = []
-            for (const condition of userStatus.conditions) {
-                const { type, address, minAmount } = condition
-                switch (type) {
-                    case 'hold-erc721':
-                        const contract = createContract<ERC721>(web3, address, ERC721ABI as AbiItem[])
-                        const res = contract && (await contract.methods.balanceOf(account).call())
-                        if (Number(res) < minAmount) {
-                            setError('insufficient-nft')
-                            _unmeetCondition.push(condition)
-                        }
-                        break
-                    case 'hold-erc1155':
-                        break
-                }
-            }
-            setUnmeetCondition(_unmeetCondition)
-        }
-    }
-
-    const renderOptions = (userStatus: UserPuzzleStatus | UserPollStatus) => {
+    const renderOptions = (userStatus: UserPollStatus) => {
         const showCount = !!userStatus.count
         const total = userStatus.count
             ? userStatus.count.reduce((total, e) => {
@@ -156,6 +104,7 @@ export default function OptionsCard(props: OptionsViewProps) {
         return userStatus.options.map((option, index) => {
             const count = userStatus.count ? userStatus.count.find((e) => e.choice === index)?.value || 0 : 0
             const percent = (total > 0 ? (count * 100) / total : 0).toFixed(2)
+            const isSelected = choice === index
 
             return userStatus.count ? (
                 <Card
@@ -164,7 +113,7 @@ export default function OptionsCard(props: OptionsViewProps) {
                     variant="outlined"
                     key={option}
                     onClick={
-                        !selected && !error && userStatus.status !== 0
+                        !submitting && !selected && !error && userStatus.status !== 0
                             ? () => {
                                   setChoice(index)
                               }
@@ -190,14 +139,14 @@ export default function OptionsCard(props: OptionsViewProps) {
                                 {option}
                             </Typography>
                         </Box>
-                        {choice === index ? (
+                        {isSelected ? (
                             <Chip
                                 icon={<RadioButtonChecked />}
                                 size="small"
                                 color="primary"
                                 label={t('plugin_find_truman_selected')}
                             />
-                        ) : (
+                        ) : selected ? null : (
                             <Chip
                                 sx={{ cursor: 'pointer' }}
                                 icon={<RadioButtonUnchecked />}
@@ -222,7 +171,7 @@ export default function OptionsCard(props: OptionsViewProps) {
                 <Box key={index} sx={{ position: 'relative' }}>
                     <Chip
                         id="submit"
-                        className={classes.blockChip}
+                        className={cx(classes.blockChip, isSelected && classes.blockChipSelected)}
                         label={
                             <div
                                 style={{
@@ -240,134 +189,51 @@ export default function OptionsCard(props: OptionsViewProps) {
                                 : undefined
                         }
                         disabled={submitting}
-                        deleteIcon={choice === index ? <DoneOutlined /> : undefined}
-                        onDelete={choice === index ? () => {} : undefined}
-                        color={showCount ? 'default' : choice === index ? 'primary' : 'default'}
-                        variant={showCount ? 'outlined' : choice === index ? 'filled' : 'outlined'}
+                        deleteIcon={isSelected ? <DoneOutlined /> : undefined}
+                        onDelete={isSelected ? () => {} : undefined}
+                        color={showCount ? 'default' : isSelected ? 'primary' : 'default'}
+                        variant={showCount ? 'outlined' : isSelected ? 'filled' : 'outlined'}
                     />
                 </Box>
             )
         })
     }
 
-    const renderSubmitButton = (userStatus: UserPuzzleStatus | UserPollStatus) => {
+    const handleSubmit = useCallback(async () => {
+        setSubmitting(true)
+        try {
+            await onSubmit(choice)
+        } catch (error) {
+            throw error
+        } finally {
+            setSubmitting(false)
+        }
+    }, [choice])
+
+    const renderSubmitButton = (userStatus: UserPollStatus) => {
+        const isClosed = userStatus.status === 0
         return (
             <div style={{ textAlign: 'right', marginTop: '8px', paddingBottom: '8px' }}>
-                <LoadingButton
-                    disabled={userStatus.status === 0 || choice === -1}
-                    onClick={() => {
-                        setSubmitting(true)
-                        onSubmit(choice)
-                            .then((res) => {
-                                setSubmitting(false)
-                            })
-                            .catch((error) => {
-                                setSnackVisible(true)
-                                setSubmitting(false)
-                            })
-                    }}
-                    endIcon={<Send />}
-                    loading={submitting}
-                    loadingPosition="end"
-                    variant="contained">
-                    {t(userStatus.status === 0 ? 'plugin_find_truman_vote_finish' : 'plugin_find_truman_submit')}
-                </LoadingButton>
-            </div>
-        )
-    }
-
-    const renderStepper = (userStatus: UserPuzzleStatus | UserPollStatus, vertical: boolean) => {
-        return (
-            <div
-                ref={ref}
-                className={vertical ? classes.verticalScrollBar : classes.horizontalScrollBar}
-                style={vertical ? { overflowY: 'auto' } : { overflowX: 'auto' }}>
-                <div
-                    style={
-                        vertical
-                            ? {
-                                  maxHeight:
-                                      (userStatus as UserPollStatus).history.length > 0
-                                          ? (userStatus as UserPollStatus).history.length * 200
-                                          : '100%',
-                              }
-                            : {
-                                  width:
-                                      (userStatus as UserPollStatus).history.length > 0
-                                          ? (userStatus as UserPollStatus).history.length * 800
-                                          : '100%',
-                              }
-                    }>
-                    <Stepper
-                        activeStep={(userStatus as UserPollStatus).history.length}
-                        orientation={vertical ? 'vertical' : 'horizontal'}
-                        alternativeLabel={!vertical}>
-                        {(userStatus as UserPollStatus).history.map((e, index) => {
-                            return vertical ? (
-                                <Step key={index} completed={false} expanded>
-                                    <StepLabel>
-                                        <Typography variant="h6" color="text.primary" gutterBottom={false}>
-                                            {e.poll}
-                                        </Typography>
-                                    </StepLabel>
-                                    <StepContent>
-                                        <Alert
-                                            icon={false}
-                                            severity="info"
-                                            sx={{ textAlign: 'left', padding: '2px 8px', borderRadius: '6px' }}>
-                                            {e.result}
-                                        </Alert>
-                                    </StepContent>
-                                </Step>
-                            ) : (
-                                <Step key={index} completed={false}>
-                                    <StepLabel>
-                                        <Box>
-                                            <Typography variant="h6" color="text.primary" gutterBottom={false}>
-                                                {e.poll}
-                                            </Typography>
-                                            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                                                <Alert
-                                                    icon={false}
-                                                    severity="info"
-                                                    sx={{ textAlign: 'left', width: 250 }}>
-                                                    {e.result}
-                                                </Alert>
-                                            </Box>
-                                        </Box>
-                                    </StepLabel>
-                                </Step>
-                            )
-                        })}
-                        {vertical ? (
-                            <Step key="latest" completed={false} expanded>
-                                <StepLabel>
-                                    <Box>
-                                        <Typography variant="h6" color="text.primary" gutterBottom>
-                                            {userStatus.question}
-                                        </Typography>
-                                    </Box>
-                                </StepLabel>
-                                <StepContent>
-                                    {renderOptions(userStatus)}
-                                    {!error && !selected && renderSubmitButton(userStatus)}
-                                </StepContent>
-                            </Step>
-                        ) : (
-                            <Step key="latest" completed={false}>
-                                <StepLabel>
-                                    <Box>
-                                        <Typography variant="h6" color="text.primary" gutterBottom>
-                                            {userStatus.question}
-                                        </Typography>
-                                        {renderOptions(userStatus)}
-                                        {!error && !selected && renderSubmitButton(userStatus)}
-                                    </Box>
-                                </StepLabel>
-                            </Step>
-                        )}
-                    </Stepper>
-                </div>
+                <ActionButtonPromise
+                    color={selected ? 'success' : 'primary'}
+                    variant="contained"
+                    disabled={selected || isClosed || choice === -1}
+                    init={t(
+                        selected
+                            ? 'plugin_find_truman_submitted'
+                            : isClosed
+                            ? 'plugin_find_truman_vote_finish'
+                            : 'plugin_find_truman_submit',
+                    )}
+                    waiting={t('plugin_find_truman_submitting')}
+                    failed={t('plugin_find_truman_submit_failed')}
+                    complete={t('plugin_find_truman_submitted')}
+                    executor={handleSubmit}
+                    failedOnClick="use executor"
+                    startIcon={isClosed || selected ? undefined : <Send />}
+                    completeIcon={<DoneOutlined />}
+                    failIcon={<RefreshOutlined />}
+                />
             </div>
         )
     }
@@ -385,29 +251,19 @@ export default function OptionsCard(props: OptionsViewProps) {
             </Snackbar>
             {userStatus && (
                 <>
-                    {(type === FindTrumanPostType.Puzzle || type === FindTrumanPostType.Poll) && (
+                    <Typography variant="h6" color="textPrimary" paddingLeft={1} paddingRight={1} marginBottom={2}>
+                        {userStatus.question}
+                    </Typography>
+                    {renderOptions(userStatus)}
+                    {!error && renderSubmitButton(userStatus)}
+                    {unmeetCondition.length > 0 && (
                         <>
-                            {renderOptions(userStatus)}
-                            {!error && !selected && renderSubmitButton(userStatus)}
+                            <Alert severity="info" sx={{ mb: 1 }}>
+                                {t('plugin_find_truman_insufficient_nft')}
+                            </Alert>
+                            <NoNftCard conditions={unmeetCondition} />
                         </>
                     )}
-                    {error === 'unsupported-chain' && (
-                        <Alert
-                            icon={false}
-                            severity="info"
-                            sx={{ marginTop: 1, justifyContent: 'center', textAlign: 'center' }}>
-                            <div>
-                                {t('plugin_find_truman_unsupported_chain', {
-                                    chain: userStatus.conditions[0]?.chain || '',
-                                })}
-                            </div>
-                            <EthereumChainBoundary noSwitchNetworkTip chainId={userStatus.conditions[0]?.chainId} />
-                        </Alert>
-                    )}
-                    {error === 'insufficient-nft' && (
-                        <Alert severity="info">{t('plugin_find_truman_insufficient_nft')}</Alert>
-                    )}
-                    {error === 'insufficient-nft' && <NoNftCard conditions={unmeetCondition} />}
                 </>
             )}
         </CardContent>

@@ -36,7 +36,7 @@ import {
 } from '../../../plugins/Wallet/settings'
 import { debugModeSetting } from '../../../settings/settings'
 import { Flags } from '../../../../shared'
-import { nativeAPI } from '../../../utils/native-rpc'
+import { nativeAPI } from '../../../../shared/native-rpc'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { getSendTransactionComputedPayload } from './rpc'
 import { getError, hasError } from './error'
@@ -53,6 +53,7 @@ function isReadOnlyMethod(payload: JsonRpcPayload) {
         EthereumMethodType.ETH_GET_BALANCE,
         EthereumMethodType.ETH_GET_TRANSACTION_BY_HASH,
         EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
+        EthereumMethodType.MASK_GET_TRANSACTION_RECEIPT,
         EthereumMethodType.ETH_GET_TRANSACTION_COUNT,
         EthereumMethodType.ETH_ESTIMATE_GAS,
         EthereumMethodType.ETH_CALL,
@@ -404,7 +405,9 @@ export async function INTERNAL_send(
         const [hash] = payload.params as [string]
 
         // redirect receipt queries to tx watcher
-        const transaction = await WalletRPC.getRecentTransaction(chainIdFinally, account, hash)
+        const transaction = await WalletRPC.getRecentTransaction(chainIdFinally, account, hash, {
+            receipt: true,
+        })
 
         try {
             callback(null, {
