@@ -46,7 +46,7 @@ export const RestoreFromPrivateKey = memo(() => {
                 await delay(100)
                 navigate(DashboardRoutes.Personas)
             } else {
-                navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.PersonaCreate}`, {
+                navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.PersonaRecovery}`, {
                     replace: false,
                     state: { privateKey: data.privateKey },
                 })

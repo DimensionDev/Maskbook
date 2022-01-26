@@ -62,13 +62,14 @@ function createERC721TokenFromAsset(
     chainId: ChainId,
     asset: OpenSeaResponse,
 ): ERC721TokenDetailed {
+    const imageURL = asset?.image_original_url ?? asset?.image_url ?? asset?.image_preview_url ?? ''
     return createERC721Token(
         createERC721ContractFromAssetContract(asset?.asset_contract?.address, chainId, asset?.asset_contract),
         {
             name: asset?.name ?? asset?.asset_contract.name ?? '',
             description: asset?.description ?? '',
-            mediaUrl:
-                asset?.animation_url ?? asset.image_original_url ?? asset?.image_url ?? asset?.image_preview_url ?? '',
+            imageURL,
+            mediaUrl: asset?.animation_url || imageURL,
             owner: asset?.owner.address ?? '',
         },
         tokenId,
@@ -169,6 +170,7 @@ function createNFTAsset(asset: OpenSeaResponse, chainId: ChainId): NonFungibleTo
         })),
         collection: asset.collection as unknown as NonFungibleTokenAPI.AssetCollection,
         response_: asset as any,
+        last_sale: asset.last_sale,
     }
 }
 
@@ -351,6 +353,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
                 name: x.name,
                 image: x.image_url || undefined,
                 slug: x.slug,
+                address: x.address,
             })) ?? []
 
         return {

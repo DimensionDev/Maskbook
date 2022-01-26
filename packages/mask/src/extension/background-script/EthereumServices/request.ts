@@ -15,7 +15,7 @@ import {
 import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { INTERNAL_nativeSend, INTERNAL_send } from './send'
 import { defer } from '@masknet/shared-base'
-import { hasNativeAPI, nativeAPI } from '../../../utils/native-rpc'
+import { hasNativeAPI, nativeAPI } from '../../../../shared/native-rpc'
 import { openPopupWindow } from '../HelperService'
 import Services from '../../service'
 

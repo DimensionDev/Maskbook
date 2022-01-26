@@ -24,12 +24,12 @@ import { isNativeTokenWrapper } from '../helpers'
 import { useGetTradeContext } from './useGetTradeContext'
 import { TargetChainIdContext } from './useTargetChainIdContext'
 import type { GasOptionConfig } from '@masknet/web3-shared-evm'
-import { SLIPPAGE_DEFAULT } from '../constants'
 
 export function useTradeCallback(
     provider?: TradeProvider,
     tradeComputed?: TradeComputed<unknown> | null,
     gasConfig?: GasOptionConfig,
+    allowedSlippage?: number,
 ) {
     // trade context
     const context = useGetTradeContext(provider)
@@ -54,15 +54,15 @@ export function useTradeCallback(
         ? (tradeComputed as TradeComputed<SwapOOSuccessResponse>)
         : null
     // uniswap like providers
-    const uniswapV2Like = useUniswapCallback(tradeComputedForUniswapV2Like, provider, gasConfig)
-    const uniswapV3Like = useUniswapCallback(tradeComputedForUniswapV3Like, provider, gasConfig)
+    const uniswapV2Like = useUniswapCallback(tradeComputedForUniswapV2Like, provider, gasConfig, allowedSlippage)
+    const uniswapV3Like = useUniswapCallback(tradeComputedForUniswapV3Like, provider, gasConfig, allowedSlippage)
 
     // balancer
     const exchangeProxyContract = useExchangeProxyContract(targetChainId)
     const balancer = useBalancerCallback(
         provider === TradeProvider.BALANCER ? tradeComputedForBalancer : null,
         exchangeProxyContract,
-        SLIPPAGE_DEFAULT,
+        allowedSlippage,
         gasConfig,
     )
 
@@ -108,6 +108,10 @@ export function useTradeCallback(
             return dodo
         case TradeProvider.BANCOR:
             return bancor
+        case TradeProvider.TRADERJOE:
+            return uniswapV2Like
+        case TradeProvider.PANGOLIN:
+            return uniswapV2Like
         case TradeProvider.OPENOCEAN:
             return openocean
         default:
