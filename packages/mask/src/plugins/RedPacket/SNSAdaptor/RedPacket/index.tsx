@@ -144,7 +144,8 @@ export function RedPacket(props: RedPacketProps) {
                 balance: availability.balance,
                 total: availability.total,
                 claimed: availability.claimed,
-                expired: availability.expired
+                expired: availability.expired,
+                claimed_amount: (availability as RedPacketAvailability).claimed_amount,
             },
             postLink: postLink.toString()
         })
@@ -197,7 +198,8 @@ export function RedPacket(props: RedPacketProps) {
                     balance: availability.balance,
                     total: availability.total,
                     claimed: availability.claimed,
-                    expired: availability.expired
+                    expired: availability.expired,
+                    claimed_amount: (availability as RedPacketAvailability).claimed_amount,
                 },
                 postLink: postLink.toString()
             })

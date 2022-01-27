@@ -76,4 +76,5 @@ export interface RedPacketAvailability {
     total: string
     claimed: string
     expired: boolean
+    claimed_amount?: string
 }
