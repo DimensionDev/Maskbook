@@ -250,3 +250,6 @@ export const searchTweetAvatarSelector = () =>
     querySelector<E, false>('[data-testid="tweetButtonInline"]').closest<E>(7)
 
 export const searchRetweetAvatarSelector = () => querySelector<E, false>('[data-testid="tweetButton"]').closest<E>(6)
+
+export const searchTwitterAvatarNFTSelector = () =>
+    querySelector<E>('a[href*=nft]').closest<E>(1).querySelector('a  div:nth-child(3) > div')

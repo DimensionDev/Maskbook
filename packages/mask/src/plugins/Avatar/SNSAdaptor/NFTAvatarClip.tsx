@@ -1,0 +1,161 @@
+import { keyframes, makeStyles, useStylesExtends } from '@masknet/theme'
+import { useNFT } from '../hooks'
+import type { AvatarMetaDB } from '../types'
+import { formatPrice, formatText } from '../utils'
+
+interface NFTAvatarClipProps extends withClasses<'root' | 'text' | 'icon'> {
+    id: string
+    width: number
+    height: number
+    avatar: AvatarMetaDB
+    viewBox: string
+}
+
+const rainbow_animation = keyframes`
+    0% {
+        background-position: 100% 0%;
+    }
+    100% {
+        background-position: 0 100%;
+    }
+`
+
+const useStyles = makeStyles()((theme) => ({
+    root: {},
+    border: {
+        transform: 'scaleY(1.05) translate(0px, -5px)',
+    },
+    text: {
+        transform: 'scaleY(1.3) translate(0px, 4px)',
+    },
+    price: {
+        transform: 'translate(0px, -3px)',
+    },
+}))
+
+export function NFTAvatarClip(props: NFTAvatarClipProps) {
+    const { id, width, height, avatar, viewBox } = props
+    const classes = useStylesExtends(useStyles(), props)
+    const { value = { amount: '0', symbol: 'ETH', name: '', slug: '' }, loading } = useNFT(
+        avatar.address,
+        avatar.tokenId,
+    )
+    const { amount, symbol, name, slug } = value
+    return (
+        <svg className={classes.root} width={width} height={height} id={id} viewBox={viewBox}>
+            <defs>
+                <path
+                    d="M6.74789 118.43C14.0458 133.777 22.5561 148.517 32.1979 162.51L35.3079 167.02C39.1367 172.575 44.155 177.208 49.9981 180.581C55.8413 183.954 62.3625 185.983 69.0879 186.52L74.5479 186.96C91.4873 188.32 108.508 188.32 125.448 186.96L130.908 186.52C137.638 185.976 144.163 183.938 150.006 180.554C155.85 177.17 160.865 172.526 164.688 166.96L167.798 162.45C177.44 148.457 185.95 133.717 193.248 118.37"
+                    id={`${id}-price-path`}
+                />
+                <path
+                    d="M6.74789,69.55C14.0458,54.2034 22.5561,39.4634 32.1979,25.47L35.3079,20.96C39.1367,15.4049 44.155,10.7724 49.9981,7.3994C55.8413,4.02636 62.3625,1.99743 69.0879,1.46004L74.5479,1.02004C91.4873,-0.340012 108.508,-0.340012 125.448,1.02004L130.908,1.46004C137.633,1.99743 144.155,4.02636 149.998,7.3994C155.841,10.7724 160.859,15.4049 164.688,20.96L167.798,25.43C177.44,39.4234 185.95,54.1634 193.248,69.51"
+                    id={`${id}-name-path`}
+                />
+
+                <path
+                    id={`${id}-border-path`}
+                    d="M193.248 69.51C185.95 54.1634 177.44 39.4234 167.798 25.43L164.688 20.96C160.859 15.4049 155.841 10.7724 149.998 7.3994C144.155 4.02636 137.633 1.99743 130.908 1.46004L125.448 1.02004C108.508 -0.340012 91.4873 -0.340012 74.5479 1.02004L69.0879 1.46004C62.3625 1.99743 55.8413 4.02636 49.9981 7.3994C44.155 10.7724 39.1367 15.4049 35.3079 20.96L32.1979 25.47C22.5561 39.4634 14.0458 54.2034 6.74789 69.55L4.39789 74.49C1.50233 80.5829 0 87.2441 0 93.99C0 100.736 1.50233 107.397 4.39789 113.49L6.74789 118.43C14.0458 133.777 22.5561 148.517 32.1979 162.51L35.3079 167.02C39.1367 172.575 44.155 177.208 49.9981 180.581C55.8413 183.954 62.3625 185.983 69.0879 186.52L74.5479 186.96C91.4873 188.32 108.508 188.32 125.448 186.96L130.908 186.52C137.638 185.976 144.163 183.938 150.006 180.554C155.85 177.17 160.865 172.526 164.688 166.96L167.798 162.45C177.44 148.457 185.95 133.717 193.248 118.37L195.598 113.43C198.493 107.337 199.996 100.676 199.996 93.93C199.996 87.1841 198.493 80.5229 195.598 74.43L193.248 69.51Z"
+                />
+
+                <linearGradient id={`${id}-gradient`} x1="0%" y1="0%" x2="100%" y2="0">
+                    <stop offset="0%" stopColor="#00f8ff" />
+                    <stop offset="20%" stopColor="#a4ff00" />
+                    <stop offset="40%" stopColor="#f7275e" />
+                    <stop offset="60%" stopColor="#ffd300" />
+                    <stop offset="80%" stopColor="#ff8a00" />
+                    <stop offset="100%" stopColor="#00f8ff" />
+                </linearGradient>
+
+                <filter id={`#${id}-filter`} x="0" y="0" width="200%" height="200%">
+                    <feMorphology in="SourceAlpha" result="expanded" operator="dilate" radius="1" />
+                    <feFlood result="color" />
+                    <feComposite in="color" in2="expanded" operator="in" />
+                    <feComposite in="SourceGraphic" />
+                </filter>
+
+                <linearGradient id={`${id}-border-gradient`} x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="red">
+                        <animate attributeName="stop-color" values="red; blue" dur="1s" repeatCount="indefinite" />
+                    </stop>
+                    <stop offset="100%" stopColor="blue">
+                        <animate attributeName="stop-color" values="blue; red" dur="1s" repeatCount="indefinite" />
+                    </stop>
+                </linearGradient>
+            </defs>
+
+            <g>
+                <pattern id={`${id}-pattern`} x="0" y="0" width="300%" height="100%" patternUnits="userSpaceOnUse">
+                    <circle cx={width / 2} cy={height / 2} r={width + 1} fill={`url(#${id}-gradient)`}>
+                        <animateTransform
+                            attributeName="transform"
+                            type="rotate"
+                            dur="10s"
+                            repeatCount="indefinite"
+                            from={`0 ${width / 2} ${width / 2}`}
+                            to={`360 ${width / 2} ${width / 2}`}
+                        />
+                    </circle>
+                </pattern>
+
+                <use
+                    xlinkHref={`#${id}-border-path`}
+                    fill="none"
+                    strokeWidth="40"
+                    stroke="black"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    x={0}
+                    y={0}
+                    width={width}
+                    height={height}
+                />
+
+                <use
+                    xlinkHref={`#${id}-border-path`}
+                    fill="none"
+                    strokeWidth="4"
+                    stroke={`url(#${id}-gradient)`}
+                    strokeLinejoin="round"
+                    strokeLinecap="round"
+                    x={0}
+                    y={0}
+                    width={width}
+                    height={height}
+                    className={classes.border}
+                />
+
+                <text
+                    x="0%"
+                    textAnchor="middle"
+                    fill={`url(#${id}-pattern)`}
+                    fontFamily="sans-serif"
+                    className={classes.text}>
+                    <textPath
+                        xlinkHref={`#${id}-name-path`}
+                        startOffset="50%"
+                        rotate="auto"
+                        dominantBaseline="mathematical">
+                        <tspan fontWeight="bold" fontSize="12">
+                            {loading
+                                ? 'loading...'
+                                : `${formatText(name, avatar.tokenId)} ${slug.toLowerCase() === 'ens' ? 'ENS' : ''}`}
+                        </tspan>
+                    </textPath>
+                </text>
+                <text
+                    x="0%"
+                    textAnchor="middle"
+                    fill={`url(#${id}-pattern)`}
+                    fontFamily="sans-serif"
+                    className={classes.price}>
+                    <textPath xlinkHref={`#${id}-price-path`} startOffset="50%" rotate="auto" dominantBaseline="auto">
+                        <tspan fontWeight="bold" fontSize="12">
+                            {loading ? '' : formatPrice('1234', symbol)}
+                        </tspan>
+                    </textPath>
+                </text>
+            </g>
+        </svg>
+    )
+}
