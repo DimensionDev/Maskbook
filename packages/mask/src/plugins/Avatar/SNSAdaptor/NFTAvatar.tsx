@@ -162,13 +162,12 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                       [...collectibles_, ...collectibles],
                                       (x) => x.contractDetailed.address && x.tokenId,
                                   ).map((token: ERC721TokenDetailed, i) => (
-                                      <div key={i}>
-                                          <NFTImageCollectibleAvatar
-                                              token={token}
-                                              selectedToken={selectedToken}
-                                              setSelectedToken={setSelectedToken}
-                                          />
-                                      </div>
+                                      <NFTImageCollectibleAvatar
+                                          key={i}
+                                          token={token}
+                                          selectedToken={selectedToken}
+                                          setSelectedToken={setSelectedToken}
+                                      />
                                   ))}
                         </Box>
                         <Box className={classes.buttons}>
