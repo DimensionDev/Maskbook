@@ -6,7 +6,7 @@ import {
 } from '../core'
 import { isSerializableTypedMessage } from '../utils'
 import type { TypedMessage } from '../base'
-import { isTypedMessageMaskPayload } from '../extension'
+import { isTypedMessageMaskPayload, makeTypedMessageMaskPayload } from '../extension'
 import type { TransformationContext, Transformer } from '../transformer'
 
 export function visitEachTypedMessageChild(
@@ -23,11 +23,12 @@ export function visitEachTypedMessageChild(
     }
 
     if (isTypedMessagePromise(node)) {
-        if (node.value) return visitor(node.value, context)
+        if (node.promise.value) return visitor(node.promise.value, context)
     }
 
     if (isTypedMessageMaskPayload(node)) {
         const next = visitor(node.message, context)
+        return makeTypedMessageMaskPayload(next, node.meta)
     }
 
     if (isSerializableTypedMessage(node) && 'alt' in node) {

@@ -3,8 +3,7 @@ import { createIsType } from '../utils/internal'
 
 export interface TypedMessagePromise<T extends TypedMessage = TypedMessage> extends NonSerializableTypedMessage {
     readonly type: 'promise'
-    readonly promise: Promise<T>
-    readonly value?: T
+    readonly promise: Promise<T> & { value?: T }
     readonly meta?: undefined
     /** What to display when the message is not ready. */
     readonly alt?: TypedMessage
@@ -19,7 +18,7 @@ export function makeTypedMessagePromise<T extends TypedMessage = TypedMessage>(
     const x: TypedMessagePromise<T> = {
         type: 'promise',
         serializable: false,
-        promise: promise.then((y) => ((x as any).value = y)),
+        promise: promise.then((y) => (x.promise.value = y)),
         alt,
         meta: undefined,
     }
