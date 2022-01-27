@@ -14,6 +14,7 @@ export const graphEndpointKeyVal = {
     [ChainId.Matic]: 'https://api.thegraph.com/subgraphs/name/unlock-protocol/polygon',
     [ChainId.Boba]: 'https://api.thegraph.com/subgraphs/name/unlock-protocol/boba',
     [ChainId.Avalanche]: '',
+    [ChainId.Boba]: '',
 }
 
 export const keyServerEndpoint = 'https://unlock.r2d2.to/'
