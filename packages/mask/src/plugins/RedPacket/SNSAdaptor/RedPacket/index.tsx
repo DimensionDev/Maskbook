@@ -149,7 +149,7 @@ export function RedPacket(props: RedPacketProps) {
             },
             postLink: postLink.toString()
         })
-    }, [availability, payload, postLink])
+    }, [availability, JSON.stringify(payload), postLink])
 
     const myStatus = useMemo(() => {
         if (token && listOfStatus.includes(RedPacketStatus.claimed))
@@ -204,7 +204,7 @@ export function RedPacket(props: RedPacketProps) {
                 postLink: postLink.toString()
             })
         }
-    }, [availability, payload, postLink, hasNativeAPI])
+    }, [availability, JSON.stringify(payload), postLink, hasNativeAPI])
 
     // the red packet can fetch without account
     if (!availability || !token)
