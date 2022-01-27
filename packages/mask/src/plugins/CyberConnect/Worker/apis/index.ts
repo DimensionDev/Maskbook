@@ -21,6 +21,8 @@ export async function fetchIdentity(address: string) {
         identity(address: $address) {
             address
             ens
+            domain
+            avatar
             followerCount(namespace:"")
             followingCount(namespace:"")
             followings(first: $first, after: $after){

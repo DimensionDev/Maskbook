@@ -1,4 +1,4 @@
-import type { Plugin } from '@masknet/plugin-infra'
+import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
 import { base } from '../base'
 import { useMemo, Suspense } from 'react'
 import { Skeleton } from '@mui/material'
@@ -47,18 +47,19 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     DecryptedInspector: function Component(props): JSX.Element | null {
-        const text = useMemo(() => extractTextFromTypedMessage(props.message), [props.message])
-        const link = useMemo(() => parseURL(text.val || ''), [text.val]).find(isCyberConnectUrl)
-        if (!text.ok) return null
+        const link = useMemo(() => {
+            const x = extractTextFromTypedMessage(props.message)
+            if (x.none) return null
+            return parseURL(x.val).find(isCyberConnectUrl)
+        }, [props.message])
         if (!link) return null
         return <Renderer url={link} />
     },
-    // PostInspector: function Component(): JSX.Element | null {
-    //     const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks())
-    //     const link = links.find(isCyberConnectUrl)
-    //     if (!link) return null
-    //     return <Renderer url={link} />
-    // },
+    PostInspector: function Component(): JSX.Element | null {
+        const link = usePostInfoDetails.mentionedLinks().find(isCyberConnectUrl)
+        if (!link) return null
+        return <Renderer url={link} />
+    },
 }
 
 export default sns

@@ -18,6 +18,9 @@ const useStyles = makeStyles()((theme) => ({
     },
     avatar: {
         width: '350px',
+        height: '350px',
+        borderRadius: '10px',
+        overflow: 'hidden',
         svg: {
             borderRadius: '4px',
         },
@@ -100,7 +103,11 @@ const Profile = ({ url }: { url: string }) => {
     return (
         <div className={classes.root}>
             <div className={classes.avatar}>
-                {identity?.avatar ? <img src={identity.avatar} /> : <Avatar name={queryAddress} square size={350} />}
+                {identity?.avatar ? (
+                    <img src={identity.avatar} alt="" width={350} height={350} />
+                ) : (
+                    <Avatar name={queryAddress} square size={350} />
+                )}
             </div>
             <div className={classes.userName}>{formateEthereumAddress(queryAddress, 14)}</div>
 
