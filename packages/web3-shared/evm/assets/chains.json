@@ -337,7 +337,7 @@
     },
     {
         "name": "Boba Network",
-        "chain": "BOBA",
+        "chain": "Boba",
         "network": "mainnet",
         "rpc": ["https://mainnet.boba.network/"],
         "faucets": [],
@@ -362,7 +362,7 @@
     },
     {
         "name": "Boba Network Rinkeby",
-        "chain": "BOBA",
+        "chain": "Boba",
         "network": "testnet",
         "rpc": ["https://rinkeby.boba.network/"],
         "faucets": [],
