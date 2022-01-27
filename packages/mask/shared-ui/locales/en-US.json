@@ -792,6 +792,7 @@
     "plugin_pooltogether_no_pool": "There is no pool on this network.",
     "plugin_pooltogether_pool_ended": "Awarded",
     "plugin_pooltogether_deposit": "Deposit {{token}}",
+    "plugin_pooltogether_deposit_msg": "Deposit",
     "plugin_pooltogether_apr": "Earn {{apr}}% APR in {{token}}",
     "plugin_pooltogether_view_pool": "View pool",
     "plugin_pooltogether_prize": "{{period}} Prize",
