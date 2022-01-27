@@ -1,7 +1,6 @@
 import { useContext } from 'react'
 import type { TypedMessage } from '../../base'
 import { TypedMessageUnknownRenderer as TypedMessageUnknownRender } from './Core/Unknown'
-import { __allowTextEnlargeContext } from './utils/AllowTextEnlargeContext'
 import { RegistryContext } from './utils/RegistryContext'
 export interface MetadataRenderProps {
     metadata: TypedMessage['meta']
@@ -22,9 +21,16 @@ export function TypedMessageRender(props: RenderProps) {
     if (message.type === 'empty') return null
 
     const Render = Registry(message.type)?.component || TypedMessageUnknownRender
-    return (
-        <__allowTextEnlargeContext.Provider value={!!props.allowTextEnlarge}>
-            <Render message={message} />
-        </__allowTextEnlargeContext.Provider>
-    )
+    if (process.env.NODE_ENV === 'development') {
+        return (
+            <span
+                data-kind={message.type}
+                ref={(ref) => {
+                    if (ref) (ref as any).message = message
+                }}>
+                <Render message={message} />
+            </span>
+        )
+    }
+    return <Render message={message} />
 }

@@ -5,13 +5,12 @@ import { parseLink } from '../../../base/utils/parseLink'
 /** @internal */
 export interface RenderTextProps {
     text: string
-    allowTextEnlarge: boolean
 }
 
 /** @internal */
 export const RenderText = memo(function RenderText(props: RenderTextProps) {
     const { Link = LinkDefault!, Text = TextDefault! } = useContext(MessageRenderUIComponentsContext)
-    return createElement(Fragment, {}, ...parseText(props.text, props.allowTextEnlarge, { Link, Text }))
+    return createElement(Fragment, {}, ...parseText(props.text, false, { Link, Text }))
 })
 
 function parseText(
@@ -32,7 +31,7 @@ function parseText(
                 .split(/(\n)/g)
                 .map((x) => (x === '\n' ? <br /> : <Text children={x} fontSize={fontSize} />))
         }
-        if (x.content.match(/^https?:\/\//gi)) x.content = 'http://' + x.content
+        if (x.category === 'normal' && !x.content.match(/^https?:\/\//gi)) x.content = 'http://' + x.content
         return <Link category={x.category} children={x.content} href={x.content} fontSize={fontSize} />
     })
     return links
