@@ -133,7 +133,9 @@ async function handleNonce(
     // nonce too low
     // nonce too high
     // transaction too old
-    if (/\bnonce|transaction\b/im.test(message) && /\b(low|high|old)\b/im.test(message)) resetNonce(account)
+    const isGeneralErrorNonce = /\bnonce|transaction\b/im.test(message) && /\b(low|high|old)\b/im.test(message)
+    const isAuroraErrorNonce = message.includes('ERR_INCORRECT_NONCE')
+    if (isGeneralErrorNonce || isAuroraErrorNonce) resetNonce(account)
     else if (!error_) commitNonce(account)
 }
 
