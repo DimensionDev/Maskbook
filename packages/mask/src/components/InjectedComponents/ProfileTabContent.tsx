@@ -52,6 +52,10 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? [])
         .filter((z) => z.Utils?.shouldDisplay?.(identity, addressNames) ?? true)
         .sort((a, z) => {
+            // order those tabs from next id first
+            if (a.pluginID === PluginId.NextID) return -1
+            if (z.pluginID === PluginId.NextID) return 1
+
             // order those tabs from collectible first
             if (a.pluginID === PluginId.Collectible) return -1
             if (z.pluginID === PluginId.Collectible) return 1

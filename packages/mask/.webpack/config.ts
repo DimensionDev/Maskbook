@@ -339,6 +339,7 @@ function addHTMLEntry(options: HTMLPlugin.Options & { secp256k1?: boolean; sourc
         templateContent,
         inject: 'body',
         scriptLoading: 'defer',
+        minify: false,
         ...options,
     })
 }

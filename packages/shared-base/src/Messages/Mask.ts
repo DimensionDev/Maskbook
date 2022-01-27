@@ -62,7 +62,7 @@ export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, Ma
     pluginMinimalModeChanged: [id: string, newStatus: boolean]
 
     requestExtensionPermission: RequestExtensionPermissionEvent
-    signRequestApproved: PersonaSignApprovedEvent
+    personaSignRequest: PersonaSignRequestEvent
     maskSDKHotModuleReload: void
     __kv_backend_persistent__: [string, unknown]
     __kv_backend_in_memory__: [string, unknown]
@@ -117,7 +117,7 @@ export type RelationChangedEvent = UpdateEvent<ProfileIdentifier> & {
     favor: RelationFavor
 }
 
-export interface PersonaSignApprovedEvent {
+export interface PersonaSignRequestEvent {
     requestID: string
-    selectedPersona: PersonaIdentifier
+    selectedPersona?: PersonaIdentifier
 }
