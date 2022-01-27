@@ -24,11 +24,7 @@ const define: SocialNetworkUI.Definition = {
         identityProvider: IdentityProviderInstagram,
         postsProvider: PostProviderInstagram,
     },
-    configuration: {
-        setupWizard: {
-            disableSayHello: true,
-        },
-    },
+    configuration: {},
     customization: {},
     init(signal) {
         const friends = stateCreator.friends()

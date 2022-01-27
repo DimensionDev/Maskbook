@@ -6,7 +6,6 @@ const origins = ['https://mobile.twitter.com/*', 'https://twitter.com/*']
 export const twitterBase: SocialNetwork.Base = {
     networkIdentifier: id,
     network: SocialNetworkEnum.Twitter,
-    name: 'twitter',
     declarativePermissions: { origins },
     shouldActivate(location) {
         return location.hostname.endsWith('twitter.com')

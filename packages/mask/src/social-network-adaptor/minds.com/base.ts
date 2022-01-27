@@ -6,7 +6,6 @@ const origins = ['https://www.minds.com/*', 'https://minds.com/*', 'https://cdn.
 export const mindsBase: SocialNetwork.Base = {
     networkIdentifier: MINDS_ID,
     network: SocialNetworkEnum.Minds,
-    name: 'minds',
     declarativePermissions: { origins },
     shouldActivate(location) {
         return location.hostname.endsWith('minds.com')

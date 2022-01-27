@@ -7,7 +7,6 @@ export const FACEBOOK_ID = 'facebook.com'
 export const facebookBase: SocialNetwork.Base = {
     networkIdentifier: FACEBOOK_ID,
     network: SocialNetworkEnum.Facebook,
-    name: 'facebook',
     declarativePermissions: { origins },
     shouldActivate(location) {
         return location.hostname.endsWith(FACEBOOK_ID)

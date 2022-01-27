@@ -6,7 +6,6 @@ const origins = ['https://www.instagram.com/*', 'https://m.instagram.com/*', 'ht
 export const instagramBase: SocialNetwork.Base = {
     networkIdentifier: id,
     network: SocialNetworkEnum.Instagram,
-    name: 'instagram',
     declarativePermissions: { origins },
     shouldActivate(location) {
         return location.host.endsWith(id)
