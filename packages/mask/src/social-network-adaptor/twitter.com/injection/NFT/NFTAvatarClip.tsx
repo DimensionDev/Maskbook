@@ -1,8 +1,9 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useMemo } from 'react'
 import { useWindowSize } from 'react-use'
-import { useNFTAvatar } from '../../../../plugins/Avatar/hooks'
+import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { NFTAvatarClip } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip'
 import { createReactRootShadowed, startWatch } from '../../../../utils'
 import { searchTwitterAvatarNFTSelector } from '../../utils/selector'
@@ -26,9 +27,10 @@ const useStyles = makeStyles()(() => ({
 }))
 
 function NFTAvatarClipInTwitter() {
-    const { value: avatar } = useNFTAvatar('lelenei1')
     const { classes } = useStyles()
     const windowSize = useWindowSize()
+    const identity = useCurrentVisitingIdentity()
+
     const size = useMemo(() => {
         const ele = searchTwitterAvatarNFTSelector().evaluate()
         if (!ele) return 134.5
@@ -36,11 +38,11 @@ function NFTAvatarClipInTwitter() {
         return Number.parseInt(style.width.replace('px', '') ?? 0, 10)
     }, [windowSize])
 
-    if (!avatar) return null
+    if (!ProfileIdentifier.getUserName(identity.identifier)) return null
     return (
         <NFTAvatarClip
             id="TwitterAvatarClip"
-            avatar={avatar}
+            screenName={identity.identifier.userId}
             width={size}
             height={size}
             viewBox="0 0 200 188"

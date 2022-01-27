@@ -1,14 +1,14 @@
 import { keyframes, makeStyles, useStylesExtends } from '@masknet/theme'
 import { useNFT } from '../hooks'
-import type { AvatarMetaDB } from '../types'
+import { useNFTContainerAtTwitter } from '../hooks/userNFTContainerAtTwitter'
 import { formatPrice, formatText } from '../utils'
 
 interface NFTAvatarClipProps extends withClasses<'root' | 'text' | 'icon'> {
     id: string
     width: number
     height: number
-    avatar: AvatarMetaDB
     viewBox: string
+    screenName: string
 }
 
 const rainbow_animation = keyframes`
@@ -34,13 +34,17 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function NFTAvatarClip(props: NFTAvatarClipProps) {
-    const { id, width, height, avatar, viewBox } = props
+    const { id, width, height, viewBox, screenName } = props
     const classes = useStylesExtends(useStyles(), props)
-    const { value = { amount: '0', symbol: 'ETH', name: '', slug: '' }, loading } = useNFT(
-        avatar.address,
-        avatar.tokenId,
+    const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName)
+
+    const { value = { amount: '0', symbol: 'ETH', name: '', slug: '' }, loading: loadingNFT } = useNFT(
+        avatarMetadata?.data.user.result.nft_avatar_metadata.smart_contract.address ?? '',
+        avatarMetadata?.data.user.result.nft_avatar_metadata.token_id ?? '',
     )
     const { amount, symbol, name, slug } = value
+
+    if (!avatarMetadata?.data.user.result.has_nft_avatar) return null
     return (
         <svg className={classes.root} width={width} height={height} id={id} viewBox={viewBox}>
             <defs>
@@ -66,13 +70,6 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
                     <stop offset="80%" stopColor="#ff8a00" />
                     <stop offset="100%" stopColor="#00f8ff" />
                 </linearGradient>
-
-                <filter id={`#${id}-filter`} x="0" y="0" width="200%" height="200%">
-                    <feMorphology in="SourceAlpha" result="expanded" operator="dilate" radius="1" />
-                    <feFlood result="color" />
-                    <feComposite in="color" in2="expanded" operator="in" />
-                    <feComposite in="SourceGraphic" />
-                </filter>
 
                 <linearGradient id={`${id}-border-gradient`} x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%" stopColor="red">
@@ -137,9 +134,12 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
                         rotate="auto"
                         dominantBaseline="mathematical">
                         <tspan fontWeight="bold" fontSize="12">
-                            {loading
+                            {loading || loadingNFT
                                 ? 'loading...'
-                                : `${formatText(name, avatar.tokenId)} ${slug.toLowerCase() === 'ens' ? 'ENS' : ''}`}
+                                : `${formatText(
+                                      name,
+                                      avatarMetadata?.data.user.result.nft_avatar_metadata.token_id ?? '',
+                                  )} ${slug.toLowerCase() === 'ens' ? 'ENS' : ''}`}
                         </tspan>
                     </textPath>
                 </text>
@@ -151,7 +151,7 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
                     className={classes.price}>
                     <textPath xlinkHref={`#${id}-price-path`} startOffset="50%" rotate="auto" dominantBaseline="auto">
                         <tspan fontWeight="bold" fontSize="12">
-                            {loading ? '' : formatPrice('1234', symbol)}
+                            {loading || loadingNFT ? '' : formatPrice(amount, symbol)}
                         </tspan>
                     </textPath>
                 </text>
