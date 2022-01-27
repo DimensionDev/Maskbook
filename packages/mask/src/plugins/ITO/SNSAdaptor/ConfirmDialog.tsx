@@ -11,7 +11,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { ONE } from '@masknet/web3-shared-base'
 import { Card, Grid, IconButton, Link, Paper, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { getMaskColor, makeStyles } from '@masknet/theme'
 import LaunchIcon from '@mui/icons-material/Launch'
 import RepeatIcon from '@mui/icons-material/Repeat'
 import formatDateTime from 'date-fns/format'
@@ -67,7 +67,7 @@ const useStyles = makeStyles()((theme) => ({
     title: {
         padding: theme.spacing(2),
         textAlign: 'center',
-        color: theme.palette.text.secondary,
+        color: theme.palette.text.primary,
         fontSize: 18,
     },
     line: {
@@ -93,7 +93,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     buttonText: {
-        color: '#fff',
+        color: getMaskColor(theme).twitterButtonText,
     },
     link: {
         padding: 0,
