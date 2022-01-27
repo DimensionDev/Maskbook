@@ -30,7 +30,7 @@ const resolveRaribleUserNetwork = createLookupTableResolver<ChainId.Mainnet | Ch
 
 async function fetchFromRarible<T>(url: string, path: string, init?: RequestInit) {
     const response = await fetch(urlcat(url, path), {
-        ...(!isProxyENV && { mode: 'cors' }),
+        ...(!isProxyENV() && { mode: 'cors' }),
         ...init,
     })
     return response.json() as Promise<T>
