@@ -8,14 +8,25 @@ const useStyles = makeStyles()((theme) => ({
         display: 'none',
     },
     button: {
-        border: `1px solid ${theme.palette.text.primary} !important`,
+        border: `1px solid ${theme.palette.divider} !important`,
         color: theme.palette.text.primary,
         borderRadius: 9999,
+        '&:hover': {
+            boxShadow: theme.borderShadow,
+            backgroundColor: 'transparent',
+            color: theme.palette.primary.main,
+            border: `1px solid ${theme.palette.primary.main} !important`,
+        },
     },
     selected: {
         border: `1px solid ${theme.palette.primary.main} !important`,
         color: theme.palette.primary.main,
         borderRadius: 9999,
+        '&:hover': {
+            boxShadow: theme.borderShadow,
+            backgroundColor: 'transparent',
+            color: theme.palette.primary.main,
+        },
     },
 }))
 

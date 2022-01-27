@@ -27,7 +27,8 @@
             "buttonHover": "#272C30",
             "bgHover": "#EDEFEF",
             "mask": "rgba(0, 0, 0, 0.4)"
-        }
+        },
+        "borderShadow": "0px 0px 16px 0px #65778633"
     },
     "light_high_contrast": {
         "grey": {
@@ -87,7 +88,8 @@
             "buttonHover": "#D7DBDC",
             "bgHover": "#1D2933",
             "mask": "rgba(91, 112, 131, 0.4)"
-        }
+        },
+        "borderShadow": "0px 0px 16px 0px #8899A633"
     },
     "dark_high_contrast": {
         "grey": {
@@ -147,7 +149,8 @@
             "buttonHover": "#D7dBDC",
             "bgHover": "#1A1D20",
             "mask": "rgba(91, 112, 131, 0.4)"
-        }
+        },
+        "borderShadow": "0px 0px 16px 0px #FFFFFF33"
     },
     "darker_high_contrast": {
         "grey": {

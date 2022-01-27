@@ -77,6 +77,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
             theme.palette.divider = colorSchema.divider
             theme.palette.secondaryDivider = colorSchema.secondaryDivider
             theme.shape.borderRadius = isMobileTwitter ? 0 : 15
+            theme.borderShadow = colorSchema.borderShadow
             theme.breakpoints.values = { xs: 0, sm: 687, md: 1024, lg: 1280, xl: 1920 }
             theme.components = theme.components || {}
             const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`

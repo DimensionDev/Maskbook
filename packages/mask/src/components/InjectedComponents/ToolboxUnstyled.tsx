@@ -124,6 +124,7 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
                                     badgeSize={badgeSize}
                                     networkIcon={providerDescriptor?.icon} // switch the icon to meet design
                                     providerIcon={networkDescriptor?.icon}
+                                    isBadgeBorderColorNotDefault
                                 />
                             ) : (
                                 <MaskFilledIcon size={iconSize} />
