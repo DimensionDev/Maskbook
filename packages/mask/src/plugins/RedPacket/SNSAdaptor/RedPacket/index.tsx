@@ -147,7 +147,7 @@ export function RedPacket(props: RedPacketProps) {
                 expired: availability.expired,
                 claimed_amount: (availability as RedPacketAvailability).claimed_amount,
             },
-            postLink: postLink.toString()
+            postLink: postLink.toString(),
         })
     }, [availability, JSON.stringify(payload), postLink])
 
@@ -201,7 +201,7 @@ export function RedPacket(props: RedPacketProps) {
                     expired: availability.expired,
                     claimed_amount: (availability as RedPacketAvailability).claimed_amount,
                 },
-                postLink: postLink.toString()
+                postLink: postLink.toString(),
             })
         }
     }, [availability, JSON.stringify(payload), postLink, hasNativeAPI])
