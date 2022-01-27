@@ -17,6 +17,7 @@ import { useI18N } from '../../../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { AddNFT } from './AddNFT'
 import { NFTImage } from './NFTImage'
+import { useImageNFTFilter } from '../hooks/useImageNFTFilter'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -160,20 +161,14 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                 : uniqBy(
                                       [...collectibles_, ...collectibles],
                                       (x) => x.contractDetailed.address && x.tokenId,
-                                  )
-                                      .filter(
-                                          (token: ERC721TokenDetailed) =>
-                                              token.info.mediaUrl &&
-                                              !token.info.mediaUrl?.match(/\.(mp4|webm|mov|ogg|mp3|wav)$/i),
-                                      )
-                                      .map((token: ERC721TokenDetailed, i) => (
-                                          <NFTImage
-                                              token={token}
-                                              key={i}
-                                              selectedToken={selectedToken}
-                                              onChange={setSelectedToken}
-                                          />
-                                      ))}
+                                  ).map((token: ERC721TokenDetailed, i) => (
+                                      <NFTImageCollectibleAvatar
+                                          key={i}
+                                          token={token}
+                                          selectedToken={selectedToken}
+                                          setSelectedToken={setSelectedToken}
+                                      />
+                                  ))}
                         </Box>
                         <Box className={classes.buttons}>
                             <Button variant="outlined" size="small" onClick={() => setOpen_(true)}>
@@ -194,4 +189,21 @@ export function NFTAvatar(props: NFTAvatarProps) {
             <AddNFT open={open_} onClose={() => setOpen_(false)} onAddClick={onAddClick} />
         </>
     )
+}
+interface NFTImageCollectibleAvatarProps {
+    token: ERC721TokenDetailed
+    setSelectedToken: React.Dispatch<React.SetStateAction<ERC721TokenDetailed | undefined>>
+    selectedToken?: ERC721TokenDetailed
+}
+
+function NFTImageCollectibleAvatar({ token, setSelectedToken, selectedToken }: NFTImageCollectibleAvatarProps) {
+    const { classes } = useStyles()
+    const { value: imageToken, loading } = useImageNFTFilter(token)
+    if (loading)
+        return (
+            <div className={classes.skeletonBox}>
+                <Skeleton animation="wave" variant="rectangular" className={classes.skeleton} />
+            </div>
+        )
+    return imageToken ? <NFTImage token={imageToken} selectedToken={selectedToken} onChange={setSelectedToken} /> : null
 }

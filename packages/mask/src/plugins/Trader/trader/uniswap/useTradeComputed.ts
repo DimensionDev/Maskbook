@@ -2,7 +2,13 @@ import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { ZERO } from '@masknet/web3-shared-base'
 import { Trade as V2Trade } from '@uniswap/v2-sdk'
 import { TradeType } from '@uniswap/sdk-core'
-import { uniswapCurrencyAmountTo, uniswapPercentTo, uniswapPriceTo, uniswapTokenTo } from '../../helpers'
+import {
+    toUniswapPercent,
+    uniswapCurrencyAmountTo,
+    uniswapPercentTo,
+    uniswapPriceTo,
+    uniswapTokenTo,
+} from '../../helpers'
 import { Trade, TradeComputed, TradeStrategy } from '../../types'
 import { useSlippageTolerance } from './useSlippageTolerance'
 import { useTradeBreakdown } from './useTradeBreakdown'
@@ -11,10 +17,11 @@ export function useTradeComputed(
     trade: Trade | null,
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
+    temporarySlippage?: number,
 ): TradeComputed<Trade> | null {
-    const slippage = useSlippageTolerance()
+    const slippageSetting = useSlippageTolerance()
     const breakdown = useTradeBreakdown(trade)
-
+    const slippage = temporarySlippage ? toUniswapPercent(temporarySlippage, 10000) : slippageSetting
     if (!trade) return null
 
     return {

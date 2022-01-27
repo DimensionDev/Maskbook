@@ -40,7 +40,7 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
     const targetChainId = chainId
 
     const { value: nativeTokenDetailed } = useNativeTokenDetailed()
-    const web3 = useWeb3(false, targetChainId)
+    const web3 = useWeb3({ chainId })
     const account = useAccount()
 
     const [inputAmount, setInputAmount] = useState('')

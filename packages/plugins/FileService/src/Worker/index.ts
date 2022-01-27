@@ -14,17 +14,15 @@ const worker: Plugin.Worker.Definition = {
             const files = await getAllFiles()
             const result = files?.length ? new Some(files) : None
 
-            return Promise.resolve(result)
+            return result
         },
         onRestore: async (files: FileInfo[]) => {
-            return Promise.resolve(
-                Result.wrap(() => {
-                    files.map(async (file) => {
-                        file.createdAt = new Date(file.createdAt)
-                        await setFileInfo(file)
-                    })
-                }),
-            )
+            return Result.wrap(() => {
+                files.map(async (file) => {
+                    file.createdAt = new Date(file.createdAt)
+                    await setFileInfo(file)
+                })
+            })
         },
     },
 }

@@ -72,7 +72,7 @@ export function SavingsTable({ chainId, tab, mappableProtocols, setSelectedProto
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const web3 = useWeb3(false, chainId)
+    const web3 = useWeb3({ chainId })
     const account = useAccount()
 
     // Only fetch protocol APR and Balance on chainId change

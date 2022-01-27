@@ -1,4 +1,4 @@
-import { SuccessIcon } from '@masknet/icons'
+import { SelectedIcon } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
 import type { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra'
 import { makeStyles } from '@masknet/theme'
@@ -52,6 +52,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 14,
         background: '#fff',
         borderRadius: '50%',
+        border: `1px solid ${theme.palette.background.default}`,
     },
     alert: {
         fontSize: 12,
@@ -122,7 +123,7 @@ export function PluginProviderRender({
                                                 <ImageIcon icon={network.icon} />
                                             )}
                                             {undeterminedNetworkID === network.ID && (
-                                                <SuccessIcon className={classes.checkedBadge} />
+                                                <SelectedIcon className={classes.checkedBadge} />
                                             )}
                                         </div>
                                     </ShadowRootTooltip>

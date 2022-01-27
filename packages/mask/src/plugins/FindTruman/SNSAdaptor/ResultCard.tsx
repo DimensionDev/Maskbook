@@ -11,10 +11,11 @@ import {
     Card,
 } from '@mui/material'
 import { Adjust, CheckCircle } from '@mui/icons-material'
-import type { PollResult, PuzzleResult, UserPollStatus, UserPuzzleStatus } from '../types'
-import { FindTrumanPostType } from '../types'
-import { useState } from 'react'
-import { useI18N } from '../../../utils'
+import type { PollResult, PuzzleResult, UserPollStatus } from '../types'
+import { PostType } from '../types'
+import { useContext, useState } from 'react'
+import { FindTrumanContext } from '../context'
+import { makeStyles } from '@masknet/theme'
 
 export const BorderLinearProgress: any = styled(LinearProgress)(({ theme }) => ({
     height: 10,
@@ -27,16 +28,26 @@ export const BorderLinearProgress: any = styled(LinearProgress)(({ theme }) => (
     },
 }))
 
+const useResultStyles = makeStyles()((theme) => {
+    return {
+        answerChip: {
+            backgroundColor: theme.palette.mode === 'light' ? '#2e7d32' : '#66bb6a',
+            color: theme.palette.mode === 'light' ? '#fff' : '#EFF3F4',
+        },
+    }
+})
+
 interface ResultViewProps {
-    type: FindTrumanPostType
-    userStatus?: UserPuzzleStatus | UserPollStatus
+    type: PostType
+    userStatus?: UserPollStatus
     result?: PuzzleResult | PollResult
 }
 export default function ResultCard(props: ResultViewProps) {
     const { type, userStatus, result } = props
-    const [choice] = useState<number>(userStatus ? userStatus.choice : -1)
+    const { classes } = useResultStyles()
+    const [choice] = useState(userStatus ? userStatus.choice : -1)
 
-    const { t } = useI18N()
+    const { t } = useContext(FindTrumanContext)
 
     const total =
         result?.count && result.count.length > 0
@@ -46,7 +57,7 @@ export default function ResultCard(props: ResultViewProps) {
             : 1
 
     const answer = result
-        ? type === FindTrumanPostType.PuzzleResult
+        ? type === PostType.PuzzleResult
             ? (result as PuzzleResult).correct
             : (result as PollResult).result
         : -1
@@ -56,7 +67,7 @@ export default function ResultCard(props: ResultViewProps) {
             {answer === -1 && (
                 <Alert severity="info">
                     {t(
-                        type === FindTrumanPostType.PuzzleResult
+                        type === PostType.PuzzleResult
                             ? 'plugin_find_truman_puzzle_underway'
                             : 'plugin_find_truman_voting_underway',
                     )}
@@ -64,7 +75,7 @@ export default function ResultCard(props: ResultViewProps) {
             )}
             {answer !== -1 && result && (
                 <>
-                    <Typography color="textPrimary" marginBottom={2}>
+                    <Typography variant="h6" color="textPrimary" paddingLeft={1} paddingRight={1} marginBottom={2}>
                         {result.question}
                     </Typography>
                     {result.options.map((option, index) => {
@@ -111,10 +122,11 @@ export default function ResultCard(props: ResultViewProps) {
                                         {answer === index && (
                                             <Chip
                                                 icon={<CheckCircle />}
+                                                className={classes.answerChip}
                                                 color="success"
                                                 size="small"
                                                 label={t(
-                                                    type === FindTrumanPostType.PuzzleResult
+                                                    type === PostType.PuzzleResult
                                                         ? 'plugin_find_truman_answer'
                                                         : 'plugin_find_truman_result',
                                                 )}

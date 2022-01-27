@@ -84,11 +84,9 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
 
     async function backProfiles(of?: ProfileIdentifier[]) {
         const data = (
-            await queryProfilesDB((p) => {
-                if (of === undefined) return true
-                if (!of.some((x) => x.equals(p.identifier))) return false
-                if (!p.linkedPersona) return false
-                return true
+            await queryProfilesDB({
+                identifiers: of,
+                hasLinkedPersona: true,
             })
         ).map(ProfileRecordToJSONFormat)
         profiles.push(...data)
@@ -97,12 +95,10 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
     async function backupPersonas(of?: PersonaIdentifier[]) {
         const data = (
             await queryPersonasDB(
-                (p) => {
-                    if (p.uninitialized) return false
-                    if (opts.hasPrivateKeyOnly && !p.privateKey) return false
-                    if (of === undefined) return true
-                    if (!of.some((x) => x.equals(p.identifier))) return false
-                    return true
+                {
+                    initialized: true,
+                    hasPrivateKey: opts.hasPrivateKeyOnly,
+                    identifiers: of,
                 },
                 undefined,
                 true,

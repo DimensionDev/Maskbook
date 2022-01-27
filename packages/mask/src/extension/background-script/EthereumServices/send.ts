@@ -18,6 +18,7 @@ import {
     getPayloadChainId,
     getTransactionHash,
     isZeroAddress,
+    formatGweiToWei,
 } from '@masknet/web3-shared-evm'
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import * as MetaMask from './providers/MetaMask'
@@ -35,7 +36,7 @@ import {
 } from '../../../plugins/Wallet/settings'
 import { debugModeSetting } from '../../../settings/settings'
 import { Flags } from '../../../../shared'
-import { nativeAPI } from '../../../utils/native-rpc'
+import { nativeAPI } from '../../../../shared/native-rpc'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { getSendTransactionComputedPayload } from './rpc'
 import { getError, hasError } from './error'
@@ -52,6 +53,7 @@ function isReadOnlyMethod(payload: JsonRpcPayload) {
         EthereumMethodType.ETH_GET_BALANCE,
         EthereumMethodType.ETH_GET_TRANSACTION_BY_HASH,
         EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
+        EthereumMethodType.MASK_GET_TRANSACTION_RECEIPT,
         EthereumMethodType.ETH_GET_TRANSACTION_COUNT,
         EthereumMethodType.ETH_ESTIMATE_GAS,
         EthereumMethodType.ETH_CALL,
@@ -131,7 +133,9 @@ async function handleNonce(
     // nonce too low
     // nonce too high
     // transaction too old
-    if (/\bnonce|transaction\b/im.test(message) && /\b(low|high|old)\b/im.test(message)) resetNonce(account)
+    const isGeneralErrorNonce = /\bnonce|transaction\b/im.test(message) && /\b(low|high|old)\b/im.test(message)
+    const isAuroraErrorNonce = message.includes('ERR_INCORRECT_NONCE')
+    if (isGeneralErrorNonce || isAuroraErrorNonce) resetNonce(account)
     else if (!error_) commitNonce(account)
 }
 
@@ -282,9 +286,15 @@ export async function INTERNAL_send(
             config.gasPrice = await getGasPrice()
         }
 
-        // if the transaction is eip-1559, need to remove gasPrice from the config
-        if (Flags.EIP1559_enabled && isEIP1559Valid) {
+        // if the transaction is eip-1559, need to remove gasPrice from the config,
+        // and adjust the default gas web3.js setting,
+        // the estimation of metamask of `maxFeePerGas` = 1 * block.baseFeePerGas,
+        // since the estimation of web3.js = 2 * block.baseFeePerGas which is too high
+        // that would almost always causes an undesired warning tip.
+        if (Flags.EIP1559_enabled && isEIP1559Valid && isEIP1559Supported(chainIdFinally)) {
             config.gasPrice = undefined
+            config.maxPriorityFeePerGas = toHex(formatGweiToWei(1.5).toFixed())
+            config.maxFeePerGas = toHex(Number.parseInt(config.maxFeePerGas!, 16) * 0.8)
         } else {
             config.maxFeePerGas = undefined
             config.maxPriorityFeePerGas = undefined

@@ -43,3 +43,4 @@ export const NETWORK_ENDPOINTS: Record<ChainId, string> = {
     [ChainId.Testnet]: 'https://api.testnet.solana.com',
     [ChainId.Devnet]: 'https://api.devnet.solana.com',
 }
+export const ENDPOINT_KEY = 'mainnet-beta'

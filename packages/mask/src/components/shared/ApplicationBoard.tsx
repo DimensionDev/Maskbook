@@ -9,6 +9,7 @@ import { useControlledDialog } from '../../utils/hooks/useControlledDialog'
 import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
 import { ITO_PluginID } from '../../plugins/ITO/constants'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
+import { PluginPetMessages } from '../../plugins/Pets/messages'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { EntrySecondLevelDialog } from './EntrySecondLevelDialog'
 import { NetworkTab } from './NetworkTab'
@@ -17,6 +18,7 @@ import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialo
 import { AllProviderTradeContext } from '../../plugins/Trader/trader/useAllProviderTradeContext'
 import { TargetChainIdContext } from '../../plugins/Trader/trader/useTargetChainIdContext'
 import { NetworkPluginID, PluginId, usePluginIDContext } from '@masknet/plugin-infra'
+import { FindTrumanDialog } from '../../plugins/FindTruman/SNSAdaptor/FindTrumanDialog'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -96,6 +98,7 @@ const SUPPORTED_CHAIN_ID_LIST = [
     ChainId.Celo,
     ChainId.Fantom,
     ChainId.Aurora,
+    ChainId.Avalanche,
 ]
 
 export interface MaskAppEntry {
@@ -158,6 +161,10 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
     // #endregion
 
+    // #region pet friends
+    const { setDialog: setPetDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated)
+    // #endregion
+
     // #region second level entry dialog
     const {
         open: isSecondLevelEntryDialogOpen,
@@ -182,6 +189,14 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
         },
         [],
     )
+    // #endregion
+
+    // #region FindTruman
+    const {
+        open: isFindTrumanDialogOpen,
+        onOpen: onFindTrumanDialogOpen,
+        onClose: onFindTrumanDialogClose,
+    } = useControlledDialog()
     // #endregion
 
     function createEntry(
@@ -292,6 +307,14 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                             undefined,
                             true,
                         ),
+                        createEntry(
+                            'Non-F Friends',
+                            new URL('./assets/mintTeam.png', import.meta.url).toString(),
+                            () => setPetDialog({ open: true }),
+                            [ChainId.Mainnet],
+                            currentChainId !== ChainId.Mainnet,
+                            true,
+                        ),
                     ],
                     undefined,
                 ),
@@ -333,6 +356,14 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             undefined,
             true,
         ),
+        createEntry(
+            'FindTruman',
+            new URL('./assets/findtruman.png', import.meta.url).toString(),
+            onFindTrumanDialogOpen,
+            [ChainId.Mainnet],
+            false,
+            true,
+        ),
     ]
 
     return (
@@ -370,14 +401,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                 {isClaimAllDialogOpen ? (
                     <ClaimAllDialog open={isClaimAllDialogOpen} onClose={onClaimAllDialogClose} />
                 ) : null}
-                {isSavingsDialogOpen ? (
-                    <SavingsDialog
-                        open={isSavingsDialogOpen}
-                        onClose={onSavingsDialogClose}
-                        onSwapDialogOpen={onSwapDialogOpen}
-                    />
-                ) : null}
-                {isSwapDialogOpen ? <TraderDialog open={isSwapDialogOpen} onClose={onSwapDialogClose} /> : null}
+
                 {isSecondLevelEntryDialogOpen ? (
                     <EntrySecondLevelDialog
                         title={secondLevelEntryDialogTitle}
@@ -385,6 +409,18 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                         entries={secondLevelEntries}
                         chains={secondLevelEntryChains}
                         closeDialog={onSecondLevelEntryDialogClose}
+                    />
+                ) : null}
+                {isFindTrumanDialogOpen ? (
+                    <FindTrumanDialog open={isFindTrumanDialogOpen} onClose={onFindTrumanDialogClose} />
+                ) : null}
+
+                {isSwapDialogOpen ? <TraderDialog open={isSwapDialogOpen} onClose={onSwapDialogClose} /> : null}
+                {isSavingsDialogOpen ? (
+                    <SavingsDialog
+                        open={isSavingsDialogOpen}
+                        onClose={onSavingsDialogClose}
+                        onSwapDialogOpen={onSwapDialogOpen}
                     />
                 ) : null}
             </AllProviderTradeContext.Provider>
