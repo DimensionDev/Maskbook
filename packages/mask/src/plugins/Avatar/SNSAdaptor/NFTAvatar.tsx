@@ -197,6 +197,13 @@ interface NFTImageCollectibleAvatarProps {
 }
 
 function NFTImageCollectibleAvatar({ token, setSelectedToken, selectedToken }: NFTImageCollectibleAvatarProps) {
-    const { value: imageToken } = useImageNFTFilter(token)
+    const { classes } = useStyles()
+    const { value: imageToken, loading } = useImageNFTFilter(token)
+    if (loading)
+        return (
+            <div className={classes.skeletonBox}>
+                <Skeleton animation="wave" variant="rectangular" className={classes.skeleton} />
+            </div>
+        )
     return imageToken ? <NFTImage token={imageToken} selectedToken={selectedToken} onChange={setSelectedToken} /> : null
 }
