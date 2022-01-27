@@ -16,10 +16,10 @@ export function useGasConfig(chainId: ChainId) {
             } else {
                 if (isEIP1559Supported(chainId)) {
                     const response = await WalletRPC.getEstimateGasFees(chainId)
-                    const maxFeePerGas = formatGweiToWei(response?.medium?.suggestedMaxFeePerGas ?? 0).toFixed()
+                    const maxFeePerGas = formatGweiToWei(response?.medium?.suggestedMaxFeePerGas ?? 0).toFixed(0)
                     const maxPriorityFeePerGas = formatGweiToWei(
                         response?.medium?.suggestedMaxPriorityFeePerGas ?? 0,
-                    ).toFixed()
+                    ).toFixed(0)
                     setGasConfig({
                         maxFeePerGas,
                         maxPriorityFeePerGas,
