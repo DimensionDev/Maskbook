@@ -1,5 +1,5 @@
 import type { TagType } from './types'
-import type { DataProvider, TradeProvider } from '@masknet/public-api'
+import type { DataProvider } from '@masknet/public-api'
 import { createPluginMessage, PluginMessageEmitter, createPluginRPC } from '@masknet/plugin-infra'
 import { PLUGIN_ID } from './constants'
 import type { TraderProps } from './SNSAdaptor/trader/Trader'
@@ -10,7 +10,6 @@ interface CashTagEvent {
     type: TagType
     element: HTMLAnchorElement | null
     dataProviders: DataProvider[]
-    tradeProviders: TradeProvider[]
 }
 
 interface SwapSettingsEvent {

@@ -6,6 +6,7 @@
  */
 
 declare namespace __WebpackModuleApi {
+    type ModuleId = any
     interface HotNotifierInfo {
         type:
             | 'self-declined'

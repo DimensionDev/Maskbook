@@ -16,15 +16,20 @@ const WordCard = styled(Typography)(
 
 export interface MnemonicRevealProps {
     words: string[]
+    indexed?: boolean
+    wordClass?: string
 }
 
 export function MnemonicReveal(props: MnemonicRevealProps) {
-    const { words } = props
+    const { words, indexed, wordClass } = props
     return (
         <Grid container spacing={2}>
             {words.map((item, index) => (
                 <Grid item xs={3} key={index}>
-                    <WordCard>{item}</WordCard>
+                    <WordCard className={wordClass}>
+                        {indexed ? `${index + 1}. ` : ''}
+                        {item}
+                    </WordCard>
                 </Grid>
             ))}
         </Grid>

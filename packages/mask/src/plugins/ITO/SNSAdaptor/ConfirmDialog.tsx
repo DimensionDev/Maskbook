@@ -11,7 +11,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { ONE } from '@masknet/web3-shared-base'
 import { Card, Grid, IconButton, Link, Paper, Typography } from '@mui/material'
-import { getMaskColor, makeStyles } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import LaunchIcon from '@mui/icons-material/Launch'
 import RepeatIcon from '@mui/icons-material/Repeat'
 import formatDateTime from 'date-fns/format'
@@ -86,14 +86,10 @@ const useStyles = makeStyles()((theme) => ({
         wordBreak: 'keep-all',
     },
     button: {
-        color: '#fff',
         padding: theme.spacing(2),
         [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
             padding: theme.spacing(0, 0, 1, 0),
         },
-    },
-    buttonText: {
-        color: getMaskColor(theme).twitterButtonText,
     },
     link: {
         padding: 0,
@@ -313,7 +309,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     </ActionButton>
                 </Grid>
                 <Grid item lg={6} xs={12} className={classes.button}>
-                    <ActionButton className={classes.buttonText} fullWidth variant="contained" onClick={onDone}>
+                    <ActionButton fullWidth variant="contained" onClick={onDone}>
                         {t('plugin_ito_send_text', {
                             total: formatBalance(poolSettings?.total, poolSettings?.token?.decimals),
                             symbol: poolSettings?.token?.symbol,

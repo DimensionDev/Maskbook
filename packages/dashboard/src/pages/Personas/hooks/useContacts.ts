@@ -21,6 +21,7 @@ export const useContacts = (network: string, page: number, size = 20) => {
             {
                 network,
                 after: lastValue,
+                pageOffset: page * size,
             },
             size,
         )

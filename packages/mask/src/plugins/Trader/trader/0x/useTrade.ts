@@ -48,12 +48,14 @@ export function useTrade(
     outputAmount: string,
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
+    temporarySlippage?: number,
 ) {
     const account = useAccount()
     const { targetChainId } = TargetChainIdContext.useContainer()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(targetChainId)
 
-    const slippage = useSlippageTolerance()
+    const slippageSetting = useSlippageTolerance()
+    const slippage = temporarySlippage || slippageSetting
     const { pools } = useTradeProviderSettings(TradeProvider.ZRX)
     return useDoubleBlockBeatRetry(async () => {
         if (!inputToken || !outputToken) return null

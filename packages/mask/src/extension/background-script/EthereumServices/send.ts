@@ -36,7 +36,7 @@ import {
 } from '../../../plugins/Wallet/settings'
 import { debugModeSetting } from '../../../settings/settings'
 import { Flags } from '../../../../shared'
-import { nativeAPI } from '../../../utils/native-rpc'
+import { nativeAPI } from '../../../../shared/native-rpc'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { getSendTransactionComputedPayload } from './rpc'
 import { getError, hasError } from './error'
@@ -291,8 +291,8 @@ export async function INTERNAL_send(
         // that would almost always causes an undesired warning tip.
         if (Flags.EIP1559_enabled && isEIP1559Valid && isEIP1559Supported(chainIdFinally)) {
             config.gasPrice = undefined
-            config.maxPriorityFeePerGas = formatGweiToWei(1.5).toString(16)
-            config.maxFeePerGas = (Number.parseInt(config.maxFeePerGas!, 16) * 0.8).toString(16)
+            config.maxPriorityFeePerGas = toHex(formatGweiToWei(1.5).toFixed())
+            config.maxFeePerGas = toHex(Number.parseInt(config.maxFeePerGas!, 16) * 0.8)
         } else {
             config.maxFeePerGas = undefined
             config.maxPriorityFeePerGas = undefined
@@ -405,9 +405,7 @@ export async function INTERNAL_send(
         const [hash] = payload.params as [string]
 
         // redirect receipt queries to tx watcher
-        const transaction = await WalletRPC.getRecentTransaction(chainIdFinally, account, hash, {
-            receipt: true,
-        })
+        const transaction = await WalletRPC.getRecentTransaction(chainIdFinally, account, hash)
 
         try {
             callback(null, {
