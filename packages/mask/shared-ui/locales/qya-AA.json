@@ -522,7 +522,7 @@
     "plugin_ito_error_qualification_start_time": "crwdns5063:0crwdne5063:0",
     "plugin_ito_error_invalid_qualification": "crwdns5067:0crwdne5067:0",
     "plugin_ito_unlock_time_cert": "crwdns10245:0{{date}}crwdne10245:0",
-    "plugin_ito_unlock_time": "crwdns5069:0{{zone}}crwdne5069:0",
+    "plugin_ito_unlock_time": "crwdns5069:0crwdne5069:0",
     "plugin_ito_launch_campaign": "crwdns10247:0crwdne10247:0",
     "plugin_ito_total_claimable_count": "crwdns10249:0crwdne10249:0",
     "plugin_ito_qualification_label": "crwdns5071:0crwdne5071:0",
