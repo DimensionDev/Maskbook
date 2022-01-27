@@ -1,14 +1,26 @@
 import type { TypedMessageMaskPayload } from '@masknet/typed-message/base'
 import { MessageRenderProps, TypedMessageRender } from '@masknet/typed-message/dom'
 import { styled } from '@mui/material'
+import { MaskBlueIcon } from '@masknet/icons'
+import { ShadowRootTooltip } from '../shadow-root/ShadowRootComponents'
+
 export function MaskPayloadRender(props: MessageRenderProps<TypedMessageMaskPayload>) {
     return (
         <Round>
+            <ShadowRootTooltip title="Encrypted by Mask">
+                <Icon />
+            </ShadowRootTooltip>
             <TypedMessageRender message={props.message.message} />
         </Round>
     )
 }
 
-const Round = styled('span')`
-    border: 1px solid green;
+const Icon = styled(MaskBlueIcon)`
+    float: right;
+    margin-left: 6px;
+`
+const Round = styled('div')`
+    border: 1px solid rgb(28, 104, 243);
+    padding: 0px 6px;
+    display: inline-block;
 `

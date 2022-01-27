@@ -1,9 +1,10 @@
-import { RenderRegistryContext, TransformerContext } from '@masknet/typed-message/dom'
+import { MessageRenderUIComponentsContext, RenderRegistryContext, TransformerContext } from '@masknet/typed-message/dom'
 import { TypedMessageRenderRegistry } from './registry'
 import { TypedMessageTransformers } from './transformer'
 import { useSubscription } from 'use-subscription'
 import { emptyTransformationContext, TransformationContext } from '@masknet/typed-message/base'
 import { useMemo } from 'react'
+import { Text, Anchor } from './Components/Text'
 
 export function TypedMessageRenderContext(props: React.PropsWithChildren<{ context?: TransformationContext }>) {
     const registry = useSubscription(TypedMessageRenderRegistry.subscription)
@@ -13,8 +14,10 @@ export function TypedMessageRenderContext(props: React.PropsWithChildren<{ conte
     }, [f, props.context])
 
     return (
-        <RenderRegistryContext.Provider value={registry}>
-            <TransformerContext.Provider value={val}>{props.children}</TransformerContext.Provider>
-        </RenderRegistryContext.Provider>
+        <MessageRenderUIComponentsContext.Provider value={{ Text, Link: Anchor }}>
+            <RenderRegistryContext.Provider value={registry}>
+                <TransformerContext.Provider value={val}>{props.children}</TransformerContext.Provider>
+            </RenderRegistryContext.Provider>
+        </MessageRenderUIComponentsContext.Provider>
     )
 }

@@ -71,10 +71,7 @@ function iter(gen: AsyncGenerator<DecryptProgress | DecryptionInfo, void, undefi
         const progress = result.value
         if (progress.type === DecryptProgressKind.Info) {
             context.reportDecryptedInfo?.(progress.iv, progress.claimedAuthor, progress.publicShared)
-            return makeTypedMessagePromise(
-                gen.next().then(iter_inner),
-                makeTypedMessageText('~~ Mask payload image is decrypting ~~'),
-            )
+            return makeTypedMessagePromise(gen.next().then(iter_inner), makeTypedMessageText('[Mask]'))
         } else if (progress.type === DecryptProgressKind.Success) {
             return makeTypedMessageMaskPayload(progress.content)
         } else if (progress.type === DecryptProgressKind.Error) {
