@@ -1,6 +1,6 @@
 import { useCallback, useState, useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { DialogContent, List, ListItem, Typography, Box, Link } from '@mui/material'
+import { DialogContent, List, ListItem, Typography, Box, Link, Avatar } from '@mui/material'
 import {
     ChainId,
     ERC721ContractDetailed,
@@ -9,7 +9,6 @@ import {
     useAccount,
     useERC721Tokens,
     formatEthereumAddress,
-    useBlockie,
     useERC721ContractDetailed,
 } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -255,13 +254,11 @@ function ContractListItem(props: ContractListItemProps) {
     const { onSubmit, contract } = props
     const { classes } = useStyles()
     const chainId = useChainId()
-    const blockie = useBlockie(contract.contractDetailed.address)
 
     return (
         <div style={{ position: 'relative' }}>
             <ListItem className={classes.listItem} onClick={() => onSubmit(contract.contractDetailed)}>
-                <img className={classes.icon} src={contract.contractDetailed.iconURL || blockie} />
-
+                <Avatar className={classes.icon} src={contract.contractDetailed.iconURL} />
                 <Typography className={classes.contractName}>
                     {contract.contractDetailed.name}{' '}
                     {contract.contractDetailed.symbol ? '(' + contract.contractDetailed.symbol + ')' : ''}
