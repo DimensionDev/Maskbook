@@ -21,6 +21,7 @@ import {
     PostIVIdentifier,
     ProfileIdentifier,
 } from '@masknet/shared-base'
+import { noop } from 'lodash-unified'
 import { queryPersonaByProfileDB } from '../../database/persona/db'
 import {
     createProfileWithPersona,
@@ -110,7 +111,7 @@ export async function* decryption(payload: string | Uint8Array, context: Decrypt
         const id = parse.unwrap().author.unwrap().unwrap()
         const cacheKey = id.toText()
         if (!hasStoredAuthorPublicKey.has(cacheKey)) {
-            storeAuthorPublicKey(id, authorHint, parse.unwrap().authorPublicKey.unwrap().unwrap())
+            storeAuthorPublicKey(id, authorHint, parse.unwrap().authorPublicKey.unwrap().unwrap()).catch(noop)
             hasStoredAuthorPublicKey.add(cacheKey)
         }
     } catch {}
@@ -213,7 +214,7 @@ async function storeAuthorPublicKey(
     if (pub.algr !== PublicKeyAlgorithmEnum.secp256k1) {
         throw new Error('TODO: support other curves')
     }
-    createProfileWithPersona(
+    return createProfileWithPersona(
         payloadAuthor,
         { connectionConfirmState: 'confirmed' },
         {
