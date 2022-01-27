@@ -284,10 +284,6 @@ export async function INTERNAL_send(
         }
 
         // if the transaction is eip-1559, need to remove gasPrice from the config,
-        // and adjust the default gas web3.js setting,
-        // the estimation of metamask of `maxFeePerGas` = 1 * block.baseFeePerGas,
-        // since the estimation of web3.js = 2 * block.baseFeePerGas which is too high
-        // that would almost always causes an undesired warning tip.
         if (Flags.EIP1559_enabled && isEIP1559Valid && isEIP1559Supported(chainIdFinally)) {
             config.gasPrice = undefined
         } else {

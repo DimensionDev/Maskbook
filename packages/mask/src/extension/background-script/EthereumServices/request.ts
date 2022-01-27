@@ -2,12 +2,15 @@ import type { RequestArguments, TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import {
     EthereumMethodType,
+    formatGweiToWei,
+    isEIP1559Supported,
     ProviderType,
     RequestOptions,
     SendOverrides,
     TransactionStateType,
 } from '@masknet/web3-shared-evm'
 import {
+    currentChainIdSettings,
     currentMaskWalletAccountSettings,
     currentMaskWalletChainIdSettings,
     currentProviderSettings,
@@ -18,6 +21,7 @@ import { defer } from '@masknet/shared-base'
 import { hasNativeAPI, nativeAPI } from '../../../../shared/native-rpc'
 import { openPopupWindow } from '../HelperService'
 import Services from '../../service'
+import { toHex } from 'web3-utils'
 
 let id = 0
 
@@ -79,11 +83,23 @@ export async function requestSend(
 ) {
     id += 1
     const notifyProgress = isSendMethod(payload.method as EthereumMethodType)
-    const { providerType = currentProviderSettings.value } = overrides ?? {}
+    const { providerType = currentProviderSettings.value, chainId = currentChainIdSettings.value } = overrides ?? {}
     const { popupsWindow = true } = options ?? {}
+
     const payload_ = {
         ...payload,
         id,
+    }
+    // The default value set by web3.js is too small, replace maxFee with the api
+    if (isEIP1559Supported(chainId)) {
+        const results = await WalletRPC.getEstimateGasFees(chainId)
+        if (results?.medium && payload_.params[0]?.maxFeePerGas && payload_.params[0]?.maxPriorityFeePerGas) {
+            payload_.params[0] = {
+                ...payload_.params[0],
+                maxFeePerGas: toHex(formatGweiToWei(results.medium.suggestedMaxFeePerGas).toFixed(0)),
+                maxPriorityFeePerGas: toHex(formatGweiToWei(results.medium.suggestedMaxPriorityFeePerGas).toFixed(0)),
+            }
+        }
     }
     const hijackedCallback = (error: Error | null, response?: JsonRpcResponse) => {
         if (error && notifyProgress)
