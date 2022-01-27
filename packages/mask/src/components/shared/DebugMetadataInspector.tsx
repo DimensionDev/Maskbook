@@ -15,7 +15,7 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { InjectedDialog } from './InjectedDialog'
 import { isDataMatchJSONSchema, getKnownMetadataKeys, getMetadataSchema } from '@masknet/typed-message/base'
-import { ShadowRootPopper } from '../../utils/shadow-root/ShadowRootComponents'
+import { ShadowRootPopper } from '../../../shared-ui/shadow-root/ShadowRootComponents'
 import { useState } from 'react'
 import { useI18N } from '../../utils'
 

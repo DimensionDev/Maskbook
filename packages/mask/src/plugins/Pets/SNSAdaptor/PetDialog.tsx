@@ -12,7 +12,7 @@ import { PreviewBox } from './PreviewBox'
 import { PetMetaDB, FilterContract, OwnerERC721TokenInfo, ImageType } from '../types'
 import { useUser, useNFTs, useNFTsExtra } from '../hooks'
 import { useI18N } from '../../../utils'
-import { ShadowRootPopper } from '../../../utils/shadow-root/ShadowRootComponents'
+import { ShadowRootPopper } from '../../../../shared-ui/shadow-root/ShadowRootComponents'
 import { ImageLoader } from './ImageLoader'
 import type { Constant } from '@masknet/web3-shared-evm/constants/utils'
 

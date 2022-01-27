@@ -1,5 +1,5 @@
 export * from './renderInShadowRoot'
-export * from './ShadowRootComponents'
+export * from '../../../shared-ui/shadow-root/ShadowRootComponents'
 export {
     usePortalShadowRoot,
     createShadowRootForwardedComponent,
