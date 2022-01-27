@@ -1,6 +1,7 @@
+import urlcat from 'urlcat'
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import urlcat from 'urlcat'
+import { escapeRegExp } from 'lodash-unified'
 
 interface NFTContainer {
     has_nft_avatar: boolean
@@ -36,38 +37,41 @@ interface AvatarMetadata {
     }
 }
 
-const MAIN_SCRIPT_SELECTOR = 'script[src*="client-web/main"]'
-const NFT_SCRIPT_SELECTOR = 'script[src*="client-web/bundle.UserNft"]'
+function getScriptURL(content: string, name: string) {
+    const matchURL = new RegExp(
+        `${escapeRegExp(`https://abs.twimg.com/responsive-web/client-web/${name}.`)}\\w+${escapeRegExp('.js')}`,
+        'm',
+    )
+    const [url] = content.match(matchURL) ?? []
+    return url
+}
 
-function useScriptContent(selector: string) {
+function useScriptContent(url: string) {
     return useAsyncRetry(async () => {
-        if (!selector) return
-        const script = document.querySelector(selector)
-        const url = script?.getAttribute('src')
-        if (!url) return
-        const respnose = await fetch(url, {
-            method: 'GET',
-        })
-        return respnose.text()
-    }, [selector])
+        if (!url) return ''
+        const response = await fetch(url)
+        return response.text()
+    }, [url])
 }
 
 function useBearerToken() {
-    const { value: content } = useScriptContent(MAIN_SCRIPT_SELECTOR)
+    const { value: swContent } = useScriptContent('https://twitter.com/sw.js')
+    const { value: mainContent } = useScriptContent(getScriptURL(swContent ?? '', 'main'))
     return useMemo(() => {
-        if (!content) return
-        const [, token] = content.match(/s="(\w+%3D\w+)"/) ?? []
+        if (!mainContent) return
+        const [, token] = mainContent.match(/s="(\w+%3D\w+)"/) ?? []
         return token
-    }, [content])
+    }, [mainContent])
 }
 
 function useQueryToken() {
-    const { value: content } = useScriptContent(NFT_SCRIPT_SELECTOR)
+    const { value: swContent } = useScriptContent('https://twitter.com/sw.js')
+    const { value: nftContent } = useScriptContent(getScriptURL(swContent ?? '', 'bundle.UserNft'))
     return useMemo(() => {
-        if (!content) return
-        const [, token] = content.match(/{\s?id:\s?"([\w-]+)"/) ?? []
+        if (!nftContent) return
+        const [, token] = nftContent.match(/{\s?id:\s?"([\w-]+)"/) ?? []
         return token
-    }, [content])
+    }, [nftContent])
 }
 
 function useCSRFToken() {
@@ -87,14 +91,16 @@ export function useNFTContainerAtTwitter(screenName: string) {
     return useAsyncRetry(async () => {
         if (!bearerToken || !queryToken || !csrfToken) return
         const response = await fetch(
-            urlcat('https://twitter.com/i/api/graphql/:queryToken/userNftContainer_Query?variables=:queries', {
-                queryToken,
-                queries: encodeURIComponent(
+            urlcat(
+                `https://twitter.com/i/api/graphql/:queryToken/userNftContainer_Query?variables=${encodeURIComponent(
                     JSON.stringify({
                         screenName,
                     }),
-                ),
-            }),
+                )}`,
+                {
+                    queryToken,
+                },
+            ),
             {
                 headers: {
                     authorization: `Bearer ${bearerToken}`,
