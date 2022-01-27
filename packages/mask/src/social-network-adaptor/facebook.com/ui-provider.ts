@@ -159,8 +159,6 @@ const facebookUI: SocialNetworkUI.Definition = {
                 image: true,
             },
         },
-        // Not supported yet
-        enhancedPostRenderer: undefined,
         userBadge: undefined,
         searchResult: undefined,
         setupPrompt: injectSetupPromptFacebook,

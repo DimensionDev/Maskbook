@@ -100,7 +100,6 @@ export namespace SocialNetworkUI {
             /** Inject the UI that used to open the composition UI */
             newPostComposition?: NewPostComposition
             commentComposition?: CommentComposition
-            enhancedPostRenderer?(signal: AbortSignal, current: PostInfo): void
             /** Display the additional content (decrypted, plugin, ...) below the post */
             postInspector?(signal: AbortSignal, current: PostInfo): void
             /** Inject a tool box that displayed in the navigation bar of the SNS */

@@ -17,7 +17,6 @@ import { injectSearchResultBoxAtTwitter } from './injection/SearchResultBox'
 import { injectProfileSliderAtTwitter } from './injection/ProfileSlider'
 import { injectProfileTabAtTwitter } from './injection/ProfileTab'
 import { injectProfileTabContentAtTwitter } from './injection/ProfileTabContent'
-import { injectPostReplacerAtTwitter } from './injection/PostReplacer'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector'
 import { injectSetupPromptAtTwitter } from './injection/SetupPrompt'
 import { injectPostBoxComposed } from './injection/inject'
@@ -152,7 +151,6 @@ const twitterUI: SocialNetworkUI.Definition = {
         profileTab: injectProfileTabAtTwitter,
         profileTabContent: injectProfileTabContentAtTwitter,
         profileSlider: injectProfileSliderAtTwitter,
-        enhancedPostRenderer: injectPostReplacerAtTwitter,
         pageInspector: injectPageInspectorDefault(),
         postInspector: injectPostInspectorAtTwitter,
         setupPrompt: injectSetupPromptAtTwitter,

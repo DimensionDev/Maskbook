@@ -1,6 +1,7 @@
+import { FlattenTypedMessage } from '..'
 import type { TypedMessage } from '../../base'
 import { isTypedMessageImage, isTypedMessageText, isTypedMessageTuple, TypedMessageImage } from '../../core'
-import { isTypedMessageAnchor, isTypedMessageMaskPayload, makeTypedMessageAnchor } from '../../extension'
+import { isTypedMessageAnchor, isTypedMessageMaskPayload } from '../../extension'
 import { visitEachTypedMessageChild } from '../../visitor'
 import type { TransformationContext } from '../context'
 
@@ -39,6 +40,7 @@ export interface MaskPayloadTransformOptions {
 }
 export function createMaskPayloadTransform(options: MaskPayloadTransformOptions) {
     return function MaskPayloadTransform(message: TypedMessage, context: TransformationContext) {
+        message = FlattenTypedMessage(message, context)
         // We don't transform nested message
 
         // When a false positive payload detected,
@@ -53,11 +55,13 @@ export function createMaskPayloadTransform(options: MaskPayloadTransformOptions)
         } else if (isTypedMessageImage(message)) {
             return options.transformImage(message, context)
         } else if (isTypedMessageText(message)) {
+            // TODO: there maybe more than 1 payload to parse.
             // Not detect link form here. Only detect raw form (used on FB) in this branch.
             if (message.content.match(textPayload)) {
-                return makeTypedMessageAnchor('normal', 'https://mask.io/', 'This is a Mask Payload```')
+                return options.transformText(message.content, context)
             }
         } else if (isTypedMessageTuple(message)) {
+            // TODO: there maybe more than 1 payload to parse.
             // Visit each child here, when a raw form or link form is detected,
             // we should check if the before/after is the text need to be removed.
             // For example:
