@@ -20,6 +20,7 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
     const gasPrice = customGasPrice || defaultGasPrice
     const { gasOptions } = useGasOptions()
 
+    console.log(gasOptions)
     const { setDialog: setGasSettingDialog, closeDialog } = useRemoteControlledDialog(
         WalletMessages.events.gasSettingDialogUpdated,
     )
@@ -66,7 +67,7 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
         } else {
             setCustomGasPrice(gasOptions.medium as number)
         }
-    }, [chainId])
+    }, [chainId, gasOptions?.medium])
 
     const gasConfig = useMemo(() => {
         return is1559Supported
