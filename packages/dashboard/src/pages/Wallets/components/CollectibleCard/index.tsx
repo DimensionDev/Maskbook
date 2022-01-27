@@ -91,6 +91,9 @@ const useStyles = makeStyles()((theme) => ({
         width: 140,
         height: 186,
     },
+    iframe: {
+        height: '160px !important',
+    },
 }))
 
 export interface CollectibleCardProps {
@@ -147,6 +150,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
                                 classes={{
                                     loadingFailImage: classes.loadingFailImage,
                                     wrapper: classes.wrapper,
+                                    iframe: classes.iframe,
                                 }}
                             />
                         </div>

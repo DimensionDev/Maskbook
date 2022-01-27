@@ -37,6 +37,7 @@ export function useCollectibles(address: string, chainId: ChainId | null, depend
         ],
         (a, b) => isSameAddress(a.contractDetailed.address, b.contractDetailed.address) && a.tokenId === b.tokenId,
     )
+    console.log({ data })
     return {
         data: all as ERC721TokenDetailed[],
         state,

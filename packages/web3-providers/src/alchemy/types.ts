@@ -1,19 +1,11 @@
-export interface AlchemyNFTItemResponse {
+export interface AlchemyNFTItemDetailedResponse {
     contract: {
         name: string
         address: string
         externalDomain: string
-        contractMetadata: {
-            storagePath: string
-            publicPath: string
-            publicCollectionName: string
-        }
     }
     id: {
         tokenId: string
-        tokenMetadata: {
-            uuid: string
-        }
     }
     title: string
     description: string
@@ -21,10 +13,35 @@ export interface AlchemyNFTItemResponse {
         uri: string
         mimeType: string
     }
+}
+
+export interface AlchemyNFTItemMetadataResponse {
+    contract: {
+        address: string
+    }
+    id: {
+        tokenId: string
+    }
+    title: string
+    description: string
+    externalDomainViewUrl: string
+    media: {
+        uri: string
+    }[]
+    alternateMedia: { uri: string }[]
     metadata: {
-        metadata: {
-            name: string
-            value: string
-        }[]
+        name: string
+        image: string
+        attributes: { trait_type: string; value: string }[]
+    }
+    timeLastUpdated: string
+}
+
+export interface AlchemyNFTItemResponse {
+    contract: {
+        address: string
+    }
+    id: {
+        tokenId: string
     }
 }

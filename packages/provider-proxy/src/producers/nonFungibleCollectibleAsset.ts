@@ -1,4 +1,4 @@
-import { getOpenSeaNFTList, getRaribleNFTList, getAlchemyNFTList } from '@masknet/web3-providers'
+import { getAlchemyNFTList } from '@masknet/web3-providers'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import type { ProducerArgBase, ProducerKeyFunction, ProducerPushFunction, RPCMethodRegistrationValue } from '../types'
 import { collectAllPageData } from '../helper/request'
@@ -18,19 +18,27 @@ const nonFungibleCollectibleAsset = async (
     const size = 50
     const openSeaApiKey = await getKeys('opensea')
     try {
-        await collectAllPageData<ERC721TokenDetailed>(
-            (page) => getOpenSeaNFTList(openSeaApiKey, address, page, size),
-            size,
-            push,
-        )
+        // await collectAllPageData<ERC721TokenDetailed>(
+        //     (page) => getOpenSeaNFTList(openSeaApiKey, address, page, size),
+        //     size,
+        //     push,
+        // )
 
-        const r = await getAlchemyNFTList(address, network)
-    } finally {
         await collectAllPageData<ERC721TokenDetailed>(
-            (page, pageInfo) => getRaribleNFTList(openSeaApiKey, address, page, size, pageInfo),
+            (page) =>
+                getAlchemyNFTList(address, network, page, size) as Promise<{
+                    data: ERC721TokenDetailed[]
+                    hasNextPage: boolean
+                }>,
             size,
             push,
         )
+    } finally {
+        // await collectAllPageData<ERC721TokenDetailed>(
+        //     (page, pageInfo) => getRaribleNFTList(openSeaApiKey, address, page, size, pageInfo),
+        //     size,
+        //     push,
+        // )
     }
 }
 

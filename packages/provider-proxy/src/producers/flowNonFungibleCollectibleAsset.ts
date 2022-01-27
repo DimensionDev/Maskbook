@@ -17,7 +17,11 @@ const flowNonFungibleCollectibleAsset = async (
     const size = 50
 
     await collectAllPageData<Web3Plugin.NonFungibleToken>(
-        (page) => getAlchemyNFTList(address, network, page, size),
+        (page) =>
+            getAlchemyNFTList(address, network, page, size) as Promise<{
+                data: Web3Plugin.NonFungibleToken[]
+                hasNextPage: boolean
+            }>,
         size,
         push,
     )
