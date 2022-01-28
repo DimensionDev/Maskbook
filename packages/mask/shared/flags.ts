@@ -54,7 +54,7 @@ export const Flags = {
     avalanche_enabled: true,
     fantom_enabled: true,
     flow_enabled: true,
-    celo_enabled: true,
+    celo_enabled: false,
     aurora_enabled: true,
     nft_airdrop_enabled: false,
 
