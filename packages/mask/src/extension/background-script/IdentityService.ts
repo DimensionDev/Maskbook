@@ -44,6 +44,7 @@ import {
     ProfileRecord,
     LinkedProfileDetails,
     RelationRecord,
+    queryRelations,
 } from '../../../background/database/persona/db'
 import {
     queryPersonasDB as queryPersonasFromIndexedDB,
@@ -284,6 +285,7 @@ export async function patchCreateOrUpdateRelation(
 export async function patchCreateNewRelation(relations: Omit<RelationRecord, 'network'>[]) {
     await consistentPersonaDBWriteAccess(async (t) => {
         for (const relation of relations) {
+            queryRelations()
             const relationInDB = await t
                 .objectStore('relations')
                 .get([relation.linked.toText(), relation.profile.toText()])
@@ -318,7 +320,7 @@ export async function createNewRelation(
 }
 
 export async function queryRelationsRecordFromIndexedDB(): Promise<RelationRecord[]> {
-    return queryRelationsFromIndexedDB(() => true)
+    return queryRelationsFromIndexedDB()
 }
 
 export async function queryRelationPaged(
