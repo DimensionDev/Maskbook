@@ -32,16 +32,11 @@ import {
     currentChainIdSettings,
     currentProviderSettings,
 } from '../../../plugins/Wallet/settings'
-import { debugModeSetting } from '../../../settings/settings'
 import { Flags } from '../../../../shared'
 import { nativeAPI } from '../../../../shared/native-rpc'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { getSendTransactionComputedPayload } from './rpc'
 import { getError, hasError } from './error'
-
-function parseGasPrice(price: string | undefined) {
-    return Number.parseInt(price ?? '0x0', 16)
-}
 
 function isReadOnlyMethod(payload: JsonRpcPayload) {
     return [
@@ -152,10 +147,6 @@ export async function INTERNAL_send(
         providerType = currentProviderSettings.value,
     }: SendOverrides = {},
 ) {
-    if (process.env.NODE_ENV === 'development' && debugModeSetting.value) {
-        console.table(payload)
-        console.debug(new Error().stack)
-    }
     const chainIdFinally = getPayloadChainId(payload) ?? chainId
     const wallet = providerType === ProviderType.MaskWallet ? await getWallet(account) : null
     const privKey = isSignableMethod(payload) && wallet ? await WalletRPC.exportPrivateKey(wallet.address) : undefined

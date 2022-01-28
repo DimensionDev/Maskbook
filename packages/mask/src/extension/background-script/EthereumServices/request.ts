@@ -55,12 +55,12 @@ function isSendMethod(method: EthereumMethodType) {
     return method === EthereumMethodType.ETH_SEND_TRANSACTION
 }
 
-export async function request<T extends unknown>(
+export function request<T extends unknown>(
     requestArguments: RequestArguments,
     overrides?: SendOverrides,
     options?: RequestOptions,
 ) {
-    return new Promise<T>(async (resolve, reject) => {
+    return new Promise<T>((resolve, reject) => {
         requestSend(
             {
                 jsonrpc: '2.0',
