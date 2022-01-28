@@ -4,6 +4,7 @@ import {
     EthereumMethodType,
     EthereumTransactionConfig,
     formatGweiToWei,
+    formatWeiToGwei,
     isEIP1559Supported,
     ProviderType,
     RequestOptions,
@@ -104,7 +105,7 @@ export async function requestSend(
                 results?.low?.suggestedMaxFeePerGas &&
                 results?.medium &&
                 isLessThan(
-                    config?.maxFeePerGas ? formatGweiToWei(config.maxFeePerGas) : 0,
+                    config?.maxFeePerGas ? formatWeiToGwei(config.maxFeePerGas) : 0,
                     results.low.suggestedMaxFeePerGas,
                 )
             ) {
