@@ -71,7 +71,7 @@ export function NextIdPage({}: NextIDPageProps) {
 
         if (!visitingPersona) return null
         return Services.Helper.queryExistedBinding(visitingPersona.identifier)
-    }, [currentPersona, count, visitingPersonaIdentifier])
+    }, [currentPersona, count, visitingPersonaIdentifier, isOwn])
 
     if (personaActionButton) {
         return (
