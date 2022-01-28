@@ -228,6 +228,8 @@ export function CollectionList({ address }: { address: string }) {
         return collectibles.filter((item) => !item.collection)
     }, [collections?.length, collectibles?.length])
 
+    console.log(renderWithRarible)
+
     if (loadingCollectionDone !== SocketState.done) {
         return (
             <Box className={classes.root}>
@@ -261,7 +263,9 @@ export function CollectionList({ address }: { address: string }) {
     return (
         <Box>
             {(collections ?? []).map((x, i) => {
-                const renderCollectibles = collectibles.filter((c) => c.contractDetailed.address === x.address)
+                const renderCollectibles = collectibles.filter(
+                    (c) => c.contractDetailed.address === x.address || c.collection?.slug === x.slug,
+                )
                 return (
                     <Box key={i}>
                         <Box display="flex" alignItems="center" sx={{ marginTop: '16px' }}>
