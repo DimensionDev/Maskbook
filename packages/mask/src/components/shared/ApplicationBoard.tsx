@@ -249,7 +249,6 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                 default:
                     handle = () => undefined
             }
-
             const supportedNetwork = entry.supportedNetworkList?.find((v) => v.network === currentPluginId)
 
             acc.push(
@@ -308,8 +307,8 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             ) : null}
             <section className={classes.applicationWrapper}>
                 {(secondEntries ?? firstEntries.filter((entry) => entry.displayLevel !== 2)).map(
-                    ({ title, img, onClick, supportedChains, hidden, walletRequired, displayLevel }, i) =>
-                        (!supportedChains || supportedChains?.includes(chainId)) && !hidden ? (
+                    ({ title, img, onClick, supportedChains, hidden, walletRequired }, i) =>
+                        (!supportedChains || supportedChains?.includes(currentChainId)) && !hidden ? (
                             <div
                                 className={classNames(
                                     classes.applicationBox,
