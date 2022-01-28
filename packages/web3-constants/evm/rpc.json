@@ -1,6 +1,6 @@
 {
     "RPC": {
-        "Mainnet": ["https://mainnet.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"],
+        "Mainnet": ["https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"],
         "Ropsten": ["https://ropsten.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"],
         "Rinkeby": ["https://rinkeby.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"],
         "Kovan": ["https://kovan.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"],

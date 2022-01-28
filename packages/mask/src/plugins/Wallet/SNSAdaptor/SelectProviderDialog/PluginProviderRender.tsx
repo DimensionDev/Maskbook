@@ -1,3 +1,4 @@
+import { first } from 'lodash-unified'
 import { SelectedIcon } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
 import type { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra'
@@ -142,7 +143,9 @@ export function PluginProviderRender({
                                 ProviderIconClickBait ? (
                                     <ProviderIconClickBait
                                         key={provider.ID}
-                                        network={networks.find((x) => x.ID === undeterminedNetworkID)!}
+                                        network={
+                                            networks.find((x) => x.ID === undeterminedNetworkID) ?? first(networks)!
+                                        }
                                         provider={provider}
                                         onSubmit={onSubmit}>
                                         <ImageListItem key={provider.ID}>
