@@ -1,5 +1,6 @@
 import type { Keyframes } from '@emotion/serialize'
 import { keyframes, makeStyles, useStylesExtends } from '@masknet/theme'
+import classNames from 'classnames'
 import { useNFT } from '../hooks'
 import { useNFTContainerAtTwitter } from '../hooks/userNFTContainerAtTwitter'
 import { formatPrice, formatText } from '../utils'
@@ -37,13 +38,17 @@ const rainbowBorderKeyFrames: Keyframes = keyframes`
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
-    border: {
-        transform: 'scaleY(1.05) translate(0px, -5px)',
+    miniBorder: {
+        transform: 'scale(0.9) translate(10px, 10px)',
+        strokeWidth: 12,
     },
     borderPath: {
+        transform: 'scaleY(1.05) translate(0px, -5px)',
+        strokeWidth: 4,
+    },
+    rainbowBorder: {
         animation: `${rainbowBorderKeyFrames} 6s linear infinite`,
         transition: '1s ease',
-        transform: 'scaleY(1.05) translate(0px, -5px)',
     },
     text: {
         transform: 'translate(1px, -5px) ',
@@ -136,14 +141,13 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
                 <use
                     xlinkHref={`#${id}-border-path`}
                     fill="none"
-                    strokeWidth="4"
                     strokeLinejoin="round"
                     strokeLinecap="round"
                     x={0}
                     y={0}
                     width={width}
                     height={height}
-                    className={classes.borderPath}
+                    className={classNames(classes.rainbowBorder, classes.borderPath)}
                 />
 
                 <text
@@ -209,14 +213,13 @@ export function NFTAvatarMiniClip(props: NFTAvatarClipProps) {
             <use
                 xlinkHref={`#${id}-border-path`}
                 fill="none"
-                strokeWidth="24"
                 strokeLinejoin="round"
                 strokeLinecap="round"
                 x={0}
                 y={0}
                 width={width}
                 height={height}
-                className={classes.borderPath}
+                className={classNames(classes.rainbowBorder, classes.miniBorder)}
             />
         </svg>
     )
