@@ -92,31 +92,33 @@ export async function requestSend(
         id,
     }
 
-    // If the default gas config be less than low option, force reset it
-    if (isEIP1559Supported(chainId)) {
-        const results = await WalletRPC.getEstimateGasFees(chainId)
+    if (payload_.method === EthereumMethodType.ETH_SEND_TRANSACTION) {
+        // If the default gas config be less than low option, force reset it
+        if (isEIP1559Supported(chainId)) {
+            const results = await WalletRPC.getEstimateGasFees(chainId)
 
-        if (
-            results?.low?.suggestedMaxFeePerGas &&
-            payload_.params[0]?.maxFeePerGas &&
-            isLessThan(payload_.params[0].maxFeePerGas, results.low.suggestedMaxFeePerGas)
-        ) {
-            payload_.params[0] = {
-                ...payload_.params[0],
-                maxFeePerGas: toHex(formatGweiToWei(results.low.suggestedMaxFeePerGas).toFixed(0)),
-                maxPriorityFeePerGas: toHex(formatGweiToWei(results.low.suggestedMaxPriorityFeePerGas).toFixed(0)),
+            if (
+                results?.low?.suggestedMaxFeePerGas &&
+                payload_.params[0]?.maxFeePerGas &&
+                isLessThan(payload_.params[0].maxFeePerGas, results.low.suggestedMaxFeePerGas)
+            ) {
+                payload_.params[0] = {
+                    ...payload_.params[0],
+                    maxFeePerGas: toHex(formatGweiToWei(results.low.suggestedMaxFeePerGas).toFixed(0)),
+                    maxPriorityFeePerGas: toHex(formatGweiToWei(results.low.suggestedMaxPriorityFeePerGas).toFixed(0)),
+                }
             }
-        }
-    } else {
-        const results = await WalletRPC.getGasPriceDictFromDeBank(chainId)
-        if (
-            results?.data.slow.price &&
-            payload_.params[0]?.gasPrice &&
-            isLessThan(results.data.slow.price, payload_.params[0].gasPrice)
-        ) {
-            payload_.params[0] = {
-                ...payload_.params[0],
-                gasPrice: toHex(results.data.slow.price),
+        } else {
+            const results = await WalletRPC.getGasPriceDictFromDeBank(chainId)
+            if (
+                results?.data.slow.price &&
+                payload_.params[0]?.gasPrice &&
+                isLessThan(results.data.slow.price, payload_.params[0].gasPrice)
+            ) {
+                payload_.params[0] = {
+                    ...payload_.params[0],
+                    gasPrice: toHex(results.data.slow.price),
+                }
             }
         }
     }
