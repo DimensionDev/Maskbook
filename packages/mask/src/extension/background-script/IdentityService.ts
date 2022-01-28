@@ -314,7 +314,7 @@ export async function createNewRelation(
     favor = RelationFavor.UNCOLLECTED,
 ) {
     const t = await createRelationsTransaction()
-    const relationInDB = await t.objectStore('relations').get([linked.toText(), profile.toText()])
+    const relationInDB = await queryRelations(linked, profile)
     if (relationInDB) return
 
     await createRelationDB({ profile, linked, favor }, t)
