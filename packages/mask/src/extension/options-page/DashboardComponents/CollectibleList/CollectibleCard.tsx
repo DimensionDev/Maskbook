@@ -5,7 +5,7 @@ import {
     ERC721TokenDetailed,
     resolveCollectibleLink,
     NonFungibleAssetProvider,
-    useImageNFTFilter,
+    useImageChecker,
 } from '@masknet/web3-shared-evm'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { ActionsBarNFT } from '../ActionsBarNFT'
@@ -75,7 +75,7 @@ export function CollectibleCard(props: CollectibleCardProps) {
         theme.palette.mode === 'dark'
             ? new URL('./nft_token_fallback_dark.png', import.meta.url)
             : new URL('./nft_token_fallback.png', import.meta.url)
-    const { value: ImageToken, loading } = useImageNFTFilter(token)
+    const { value: isImageToken, loading } = useImageChecker(token.info.mediaUrl)
     return (
         <Link
             target="_blank"
@@ -90,7 +90,7 @@ export function CollectibleCard(props: CollectibleCardProps) {
                 {token.info.mediaUrl ? (
                     loading ? (
                         <Image component="img" width={172} height={172} loading src="" />
-                    ) : ImageToken ? (
+                    ) : isImageToken ? (
                         <Image
                             component="img"
                             width={172}
