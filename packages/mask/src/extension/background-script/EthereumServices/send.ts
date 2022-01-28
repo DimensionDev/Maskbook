@@ -27,7 +27,6 @@ import * as Fortmatic from './providers/Fortmatic'
 import { getWallet } from '../../../plugins/Wallet/services'
 import { createWeb3 } from './web3'
 import { commitNonce, getNonce, resetNonce } from './nonce'
-import { getGasPrice } from './network'
 import {
     currentAccountSettings,
     currentChainIdSettings,
