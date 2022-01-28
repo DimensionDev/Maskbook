@@ -1,14 +1,42 @@
 {
     "RPC": {
-        "Mainnet": ["https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"],
-        "Ropsten": ["https://ropsten.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"],
-        "Rinkeby": ["https://rinkeby.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"],
-        "Kovan": ["https://kovan.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"],
-        "Gorli": ["https://goerli.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"],
+        "Mainnet": [
+            "https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
+            "https://mainnet.infura.io/v3/d65858b010d249419cf8687eca12b094",
+            "https://mainnet.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"
+        ],
+        "Ropsten": [
+            "https://ropsten.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
+            "https://ropsten.infura.io/v3/d65858b010d249419cf8687eca12b094",
+            "https://ropsten.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"
+        ],
+        "Rinkeby": [
+            "https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
+            "https://rinkeby.infura.io/v3/d65858b010d249419cf8687eca12b094",
+            "https://rinkeby.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"
+        ],
+        "Kovan": [
+            "https://kovan.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
+            "https://kovan.infura.io/v3/d65858b010d249419cf8687eca12b094",
+            "https://kovan.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"
+        ],
+        "Gorli": [
+            "https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
+            "https://goerli.infura.io/v3/d65858b010d249419cf8687eca12b094",
+            "https://goerli.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"
+        ],
         "BSC": ["https://bsc-dataseed.binance.org/"],
         "BSCT": ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
-        "Matic": ["https://polygon-mainnet.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"],
-        "Mumbai": ["https://polygon-mumbai.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"],
+        "Matic": [
+            "https://polygon-mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
+            "https://polygon-mainnet.infura.io/v3/d65858b010d249419cf8687eca12b094",
+            "https://polygon-mainnet.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"
+        ],
+        "Mumbai": [
+            "https://polygon-mumbai.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
+            "https://polygon-mumbai.infura.io/v3/d65858b010d249419cf8687eca12b094",
+            "https://polygon-mumbai.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"
+        ],
         "Arbitrum": ["https://arb1.arbitrum.io/rpc"],
         "Arbitrum_Rinkeby": ["https://rinkeby.arbitrum.io/rpc"],
         "xDai": ["https://rpc.xdaichain.com/"],
@@ -20,23 +48,23 @@
         "Aurora_Testnet": ["https://testnet.aurora.dev"]
     },
     "RPC_WEIGHTS": {
-        "Mainnet": [0, 0, 0, 0],
-        "Ropsten": [0, 0, 0, 0],
-        "Rinkeby": [0, 0, 0, 0],
-        "Kovan": [0, 0, 0, 0],
-        "Gorli": [0, 0, 0, 0],
-        "BSC": [0, 0, 0, 0],
-        "BSCT": [0, 0, 0, 0],
-        "Matic": [0, 0, 0, 0],
-        "Mumbai": [0, 0, 0, 0],
-        "Arbitrum": [0, 0, 0, 0],
-        "Arbitrum_Rinkeby": [0, 0, 0, 0],
-        "xDai": [0, 0, 0, 0],
-        "Avalanche": [0, 0, 0, 0],
-        "Avalanche_Fuji": [0, 0, 0, 0],
-        "Celo": [0, 0, 0, 0],
-        "Fantom": [0, 0, 0, 0],
-        "Aurora": [0, 0, 0, 0],
-        "Aurora_Testnet": [0, 0, 0, 0]
+        "Mainnet": [0, 1, 2],
+        "Ropsten": [0, 1, 2],
+        "Rinkeby": [0, 1, 2],
+        "Kovan": [0, 1, 2],
+        "Gorli": [0, 1, 2],
+        "BSC": [0, 0, 0],
+        "BSCT": [0, 0, 0],
+        "Matic": [0, 1, 2],
+        "Mumbai": [0, 1, 2],
+        "Arbitrum": [0, 0, 0],
+        "Arbitrum_Rinkeby": [0, 0, 0],
+        "xDai": [0, 0, 0],
+        "Avalanche": [0, 0, 0],
+        "Avalanche_Fuji": [0, 0, 0],
+        "Celo": [0, 0, 0],
+        "Fantom": [0, 0, 0],
+        "Aurora": [0, 0, 0],
+        "Aurora_Testnet": [0, 0, 0]
     }
 }
