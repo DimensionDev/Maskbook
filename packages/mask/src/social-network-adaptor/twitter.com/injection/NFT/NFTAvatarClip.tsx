@@ -1,5 +1,4 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useMemo } from 'react'
 import { useWindowSize } from 'react-use'
@@ -13,6 +12,10 @@ export function injectNFTAvatarClipInTwitter(signal: AbortSignal) {
     startWatch(watcher, signal)
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarClipInTwitter />)
 }
+
+// from twitter page
+const ViewBoxWidth = 200
+const ViewBoxHeight = 188
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -38,14 +41,15 @@ function NFTAvatarClipInTwitter() {
         return Number.parseInt(style.width.replace('px', '') ?? 0, 10)
     }, [windowSize])
 
-    if (!ProfileIdentifier.getUserName(identity.identifier)) return null
+    //  if (!ProfileIdentifier.getUserName(identity.identifier)) return null
     return (
         <NFTAvatarClip
             id="TwitterAvatarClip"
             screenName={identity.identifier.userId}
             width={size}
             height={size}
-            viewBox="0 0 200 188"
+            viewBoxWidth={ViewBoxWidth}
+            viewBoxHeight={ViewBoxHeight}
             classes={{ root: classes.root, text: classes.text, icon: classes.icon }}
         />
     )

@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useAsyncRetry, useMount } from 'react-use'
+import { useAsyncRetry } from 'react-use'
 import urlcat from 'urlcat'
 
 interface NFTContainer {
