@@ -12,10 +12,6 @@ export function injectNFTAvatarClipInTwitter(signal: AbortSignal) {
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarClipInTwitter />)
 }
 
-// from twitter page
-const ViewBoxWidth = 200
-const ViewBoxHeight = 188
-
 const useStyles = makeStyles()(() => ({
     root: {
         position: 'absolute',
@@ -54,8 +50,6 @@ function NFTAvatarClipInTwitter() {
             screenName={twitterId ?? ''}
             width={size}
             height={size}
-            viewBoxWidth={ViewBoxWidth}
-            viewBoxHeight={ViewBoxHeight}
             classes={{ root: classes.root, text: classes.text, icon: classes.icon }}
         />
     )
