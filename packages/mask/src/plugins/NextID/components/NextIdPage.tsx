@@ -143,15 +143,14 @@ export function NextIdPage({}: NextIDPageProps) {
     return (
         <>
             <Box>
-                {!isOwn && (
-                    <Box className={classes.tip}>
-                        <Typography>{t.connect_wallet__other_user_tip_intro()}</Typography>
-                    </Box>
-                )}
-                {isOwn && (
+                {isOwn ? (
                     <Box className={classes.tip}>
                         <Typography>{t.connect_wallet_tip_intro()}</Typography>
                         <Typography>{t.connect_wallet_tip()}</Typography>
+                    </Box>
+                ) : (
+                    <Box className={classes.tip}>
+                        <Typography>{t.connect_wallet__other_user_tip_intro()}</Typography>
                     </Box>
                 )}
                 {isOwn && (
