@@ -2,12 +2,16 @@ import type { RequestArguments, TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import {
     EthereumMethodType,
+    EthereumTransactionConfig,
+    formatGweiToWei,
+    isEIP1559Supported,
     ProviderType,
     RequestOptions,
     SendOverrides,
     TransactionStateType,
 } from '@masknet/web3-shared-evm'
 import {
+    currentChainIdSettings,
     currentMaskWalletAccountSettings,
     currentMaskWalletChainIdSettings,
     currentProviderSettings,
@@ -18,6 +22,8 @@ import { defer } from '@masknet/shared-base'
 import { hasNativeAPI, nativeAPI } from '../../../../shared/native-rpc'
 import { openPopupWindow } from '../HelperService'
 import Services from '../../service'
+import { toHex } from 'web3-utils'
+import { isLessThan } from '@masknet/web3-shared-base'
 
 let id = 0
 
@@ -79,12 +85,48 @@ export async function requestSend(
 ) {
     id += 1
     const notifyProgress = isSendMethod(payload.method as EthereumMethodType)
-    const { providerType = currentProviderSettings.value } = overrides ?? {}
+    const { providerType = currentProviderSettings.value, chainId = currentChainIdSettings.value } = overrides ?? {}
     const { popupsWindow = true } = options ?? {}
+
     const payload_ = {
         ...payload,
         id,
     }
+
+    if (payload_.method === EthereumMethodType.ETH_SEND_TRANSACTION) {
+        const [config] = payload_.params as [EthereumTransactionConfig]
+
+        // If the default gas config be less than low option, force reset it
+        if (isEIP1559Supported(chainId)) {
+            const results = await WalletRPC.getEstimateGasFees(chainId)
+
+            if (
+                results?.low?.suggestedMaxFeePerGas &&
+                results?.medium &&
+                isLessThan(
+                    config?.maxFeePerGas ? formatGweiToWei(config.maxFeePerGas) : 0,
+                    results.low.suggestedMaxFeePerGas,
+                )
+            ) {
+                payload_.params[0] = {
+                    ...config,
+                    maxFeePerGas: toHex(formatGweiToWei(results.medium.suggestedMaxFeePerGas).toFixed(0)),
+                    maxPriorityFeePerGas: toHex(
+                        formatGweiToWei(results.medium.suggestedMaxPriorityFeePerGas).toFixed(0),
+                    ),
+                }
+            }
+        } else {
+            const results = await WalletRPC.getGasPriceDictFromDeBank(chainId)
+            if (results?.data.slow.price && isLessThan((config?.gasPrice as string) ?? 0, results.data.slow.price)) {
+                payload_.params[0] = {
+                    ...config,
+                    gasPrice: toHex(results.data.normal.price),
+                }
+            }
+        }
+    }
+
     const hijackedCallback = (error: Error | null, response?: JsonRpcResponse) => {
         if (error && notifyProgress)
             WalletRPC.notifyPayloadProgress(payload_, {
