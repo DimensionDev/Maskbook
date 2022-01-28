@@ -270,21 +270,8 @@ export async function INTERNAL_send(
         // add chain id
         if (!config.chainId) config.chainId = chainIdFinally
 
-        // pricing transaction
-        const isGasPriceValid = parseGasPrice(config.gasPrice as string) > 0
-        const isEIP1559Valid =
-            parseGasPrice(config.maxFeePerGas as string) > 0 && parseGasPrice(config.maxPriorityFeePerGas as string) > 0
-
-        if (Flags.EIP1559_enabled && isEIP1559Supported(chainIdFinally) && !isEIP1559Valid && !isGasPriceValid) {
-            callback(new Error('Invalid EIP1159 payload.'))
-            return
-        }
-        if (!isGasPriceValid) {
-            config.gasPrice = await getGasPrice()
-        }
-
         // if the transaction is eip-1559, need to remove gasPrice from the config,
-        if (Flags.EIP1559_enabled && isEIP1559Valid && isEIP1559Supported(chainIdFinally)) {
+        if (Flags.EIP1559_enabled && isEIP1559Supported(chainIdFinally)) {
             config.gasPrice = undefined
         } else {
             config.maxFeePerGas = undefined
