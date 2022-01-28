@@ -1,6 +1,6 @@
 import type { Keyframes } from '@emotion/serialize'
 import { keyframes, makeStyles, useStylesExtends } from '@masknet/theme'
-import { useNFTAvatar } from '../hooks'
+import { useNFT } from '../hooks'
 import { useNFTContainerAtTwitter } from '../hooks/userNFTContainerAtTwitter'
 import { formatPrice, formatText } from '../utils'
 
@@ -55,13 +55,7 @@ const useStyles = makeStyles()((theme) => ({
 export function NFTAvatarClip(props: NFTAvatarClipProps) {
     const { id, width, height, viewBoxHeight, viewBoxWidth, screenName } = props
     const classes = useStylesExtends(useStyles(), props)
-    const { loading, value: avatar } = useNFTAvatar('lelenei1')
 
-    const { loading: loading1, value: avatarMetadata } = useNFTContainerAtTwitter(screenName)
-
-    console.log(avatar)
-
-    /*
     const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName)
 
     console.log(screenName)
@@ -72,14 +66,8 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
         avatarMetadata?.data.user.result.nft_avatar_metadata.token_id ?? '',
     )
 
-    const {amount, name, symbol, slug} =  value
+    const { amount, name, symbol, slug } = value
     if (!avatarMetadata?.data.user.result.has_nft_avatar) return null
-    */
-    const amount = '110'
-    const symbol = 'ETH'
-    const name = 'abcefai Week Abo'
-    const slug = ''
-    const loadingNFT = false
 
     return (
         <svg
@@ -173,8 +161,7 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
                                 ? 'loading...'
                                 : `${formatText(
                                       name,
-                                      // avatarMetadata?.data.user.result.nft_avatar_metadata.token_id ?? '',
-                                      '1234567',
+                                      avatarMetadata?.data.user.result.nft_avatar_metadata.token_id ?? '',
                                   )} ${slug.toLowerCase() === 'ens' ? 'ENS' : ''}`}
                         </tspan>
                     </textPath>
@@ -187,7 +174,7 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
                     className={classes.price}>
                     <textPath xlinkHref={`#${id}-price-path`} startOffset="50%" rotate="auto" dominantBaseline="auto">
                         <tspan fontWeight="bold" fontSize="12">
-                            {loading || loadingNFT ? '' : formatPrice('100', symbol)}
+                            {loading || loadingNFT ? '' : formatPrice(amount, symbol)}
                         </tspan>
                     </textPath>
                 </text>
