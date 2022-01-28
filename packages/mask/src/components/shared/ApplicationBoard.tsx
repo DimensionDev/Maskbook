@@ -99,6 +99,7 @@ export interface MaskAppEntry {
     walletRequired: boolean
     priority: number
     categoryID?: string
+    displayLevel?: number
 }
 
 interface MaskApplicationBoxProps {
@@ -191,6 +192,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
         walletRequired = true,
         priority = 0,
         categoryID?: string,
+        displayLevel?: number,
     ) {
         return {
             title,
@@ -201,73 +203,72 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             walletRequired,
             priority,
             categoryID,
+            displayLevel,
         }
     }
 
-    const _firstEntries = snsAdaptorPlugins
-        .reduce((acc: MaskAppEntry[], p) => {
-            p.ApplicationEntries?.map((entry) => {
-                let handle
-                switch (entry.conduct.type) {
-                    case ApplicationEntryConduct.EncryptedMessage:
-                        handle = () =>
-                            openEncryptedMessage(
-                                (entry.conduct as Plugin.SNSAdaptor.ApplicationEntryForEncryptedmsg).id,
-                            )
-                        break
-                    case ApplicationEntryConduct.Link:
-                        handle = () =>
-                            window.open(
-                                (entry.conduct as Plugin.SNSAdaptor.ApplicationEntryForLink).url,
-                                '_blank',
-                                'noopener noreferrer',
-                            )
-                        break
-                    case ApplicationEntryConduct.Custom:
-                        switch (entry.label) {
-                            case 'Claim':
-                                handle = onClaimAllDialogOpen
-                                break
-                            case 'Swap':
-                                handle = onSwapDialogOpen
-                                break
-                            case 'Fiat On-Ramp':
-                                handle = () => setBuyDialog({ open: true, address: account })
-                                break
-                            case 'Non-F Friends':
-                                handle = () => setPetDialog({ open: true })
-                                break
-                            case 'FindTruman':
-                                handle = onFindTrumanDialogOpen
-                                break
-                            default:
-                                handle = () => undefined
-                        }
+    const _firstEntries = snsAdaptorPlugins.reduce((acc: MaskAppEntry[], p) => {
+        p.ApplicationEntries?.map((entry) => {
+            let handle
 
-                        break
-                    default:
-                        handle = () => undefined
-                }
+            switch (entry.conduct.type) {
+                case ApplicationEntryConduct.EncryptedMessage:
+                    handle = () =>
+                        openEncryptedMessage((entry.conduct as Plugin.SNSAdaptor.ApplicationEntryForEncryptedmsg).id)
+                    break
+                case ApplicationEntryConduct.Link:
+                    handle = () =>
+                        window.open(
+                            (entry.conduct as Plugin.SNSAdaptor.ApplicationEntryForLink).url,
+                            '_blank',
+                            'noopener noreferrer',
+                        )
+                    break
+                case ApplicationEntryConduct.Custom:
+                    switch (entry.label) {
+                        case 'Claim':
+                            handle = onClaimAllDialogOpen
+                            break
+                        case 'Swap':
+                            handle = onSwapDialogOpen
+                            break
+                        case 'Fiat On-Ramp':
+                            handle = () => setBuyDialog({ open: true, address: account })
+                            break
+                        case 'Non-F Friends':
+                            handle = () => setPetDialog({ open: true })
+                            break
+                        case 'FindTruman':
+                            handle = onFindTrumanDialogOpen
+                            break
+                        default:
+                            handle = () => undefined
+                    }
 
-                const supportedNetwork = entry.supportedNetworkList?.find((v) => v.network === currentPluginId)
+                    break
+                default:
+                    handle = () => undefined
+            }
 
-                acc.push(
-                    createEntry(
-                        entry.label,
-                        entry.icon,
-                        handle,
-                        supportedNetwork?.chainIdList,
-                        !supportedNetwork && entry.walletRequired,
-                        entry.walletRequired,
-                        entry.priority,
-                        entry.categoryID,
-                    ),
-                )
-            })
+            const supportedNetwork = entry.supportedNetworkList?.find((v) => v.network === currentPluginId)
 
-            return acc
-        }, [])
-        .sort((a, b) => a.priority - b.priority)
+            acc.push(
+                createEntry(
+                    entry.label,
+                    entry.icon,
+                    handle,
+                    supportedNetwork?.chainIdList,
+                    !supportedNetwork && entry.walletRequired,
+                    entry.walletRequired,
+                    entry.priority,
+                    entry.categoryID,
+                    entry.displayLevel,
+                ),
+            )
+        })
+
+        return acc
+    }, [])
 
     const categoryEntries = snsAdaptorPlugins.reduce((acc: MaskAppEntry[], p) => {
         p.declareApplicationCategories?.map((category) => {
@@ -284,14 +285,14 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                     undefined,
                     category.networkPluginId !== currentPluginId,
                     true,
-                    9999,
+                    category.priority,
                 ),
             )
         })
         return acc
     }, [])
 
-    const firstEntries = _firstEntries.concat(categoryEntries)
+    const firstEntries = _firstEntries.concat(categoryEntries).sort((a, b) => a.priority - b.priority)
 
     return (
         <>
@@ -306,8 +307,8 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                 </div>
             ) : null}
             <section className={classes.applicationWrapper}>
-                {(secondEntries ?? firstEntries).map(
-                    ({ title, img, onClick, supportedChains, hidden, walletRequired }, i) =>
+                {(secondEntries ?? firstEntries.filter((entry) => entry.displayLevel !== 2)).map(
+                    ({ title, img, onClick, supportedChains, hidden, walletRequired, displayLevel }, i) =>
                         (!supportedChains || supportedChains?.includes(chainId)) && !hidden ? (
                             <div
                                 className={classNames(

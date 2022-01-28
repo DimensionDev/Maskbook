@@ -1,10 +1,10 @@
-import type { Plugin } from '@masknet/plugin-infra'
+import { Plugin, ApplicationEntryConduct, usePostInfoDetails, NetworkPluginID } from '@masknet/plugin-infra'
 import { base } from '../base'
 import { useMemo, Suspense } from 'react'
 import { Skeleton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
-import { usePostInfoDetails } from '@masknet/plugin-infra'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { extractTextFromTypedMessage, parseURL } from '@masknet/shared-base'
 import { PostInspector } from './PostInspector'
 
@@ -85,6 +85,16 @@ const sns: Plugin.SNSAdaptor.Definition = {
         if (!link) return null
         return <Renderer url={link} />
     },
+    ApplicationEntries: [
+        {
+            icon: new URL('./findtruman.png', import.meta.url),
+            label: 'FindTruman',
+            priority: 12,
+            conduct: { type: ApplicationEntryConduct.Custom },
+            supportedNetworkList: [{ network: NetworkPluginID.PLUGIN_EVM, chainIdList: [ChainId.Mainnet] }],
+            walletRequired: true,
+        },
+    ],
 }
 
 export default sns

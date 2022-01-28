@@ -79,6 +79,10 @@ export declare namespace Web3Plugin {
         ID: string
         /** The category icon */
         icon: URL
+        /**
+         * Used to order the toolbars
+         */
+        priority: number
         /** The category name */
         name: string
         /** The category network plugin id */

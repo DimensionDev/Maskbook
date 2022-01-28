@@ -354,6 +354,10 @@ export namespace Plugin.SNSAdaptor {
          */
         label: I18NStringField | string
         /**
+         * showing at which level of level dialog, `undefined` means all shows
+         */
+        displayLevel?: number
+        /**
          * Also an entrance in a sub-folder
          */
         categoryID?: string

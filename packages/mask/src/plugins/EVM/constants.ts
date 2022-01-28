@@ -223,6 +223,7 @@ export const PLUGIN_APPLICATION_CATEGORIES: Web3Plugin.ApplicationCategoryDescri
     {
         ID: `${PLUGIN_ID}_category_nfts`,
         name: 'NFTs',
+        priority: 9,
         icon: new URL('./assets/nfts.png', import.meta.url),
         networkPluginId: NetworkPluginID.PLUGIN_EVM,
     },

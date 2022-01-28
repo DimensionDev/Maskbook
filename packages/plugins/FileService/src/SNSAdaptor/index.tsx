@@ -34,7 +34,7 @@ const definition: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            icon: new URL('./assets/files.png', import.meta.url),
+            icon: new URL('./files.png', import.meta.url),
             label: 'File Service',
             priority: 2,
             conduct: { type: ApplicationEntryConduct.EncryptedMessage, id: FileServicePluginID },
