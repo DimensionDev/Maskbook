@@ -1,6 +1,4 @@
-import type { TypedMessage } from '../../../base'
-
-export function hasCircular(message: TypedMessage) {
+export function hasCircular(message: object) {
     try {
         JSON.stringify(message)
         return false

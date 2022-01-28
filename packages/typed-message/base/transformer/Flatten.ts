@@ -10,7 +10,7 @@ import {
 } from '../core'
 import type { TypedMessage } from '../base'
 import { visitEachTypedMessageChild } from '../visitor'
-import { isSerializableTypedMessage } from '..'
+import { isSerializableTypedMessage } from '../utils'
 import { emptyTransformationContext } from './context'
 
 export function FlattenTypedMessage(message: TypedMessage, context = emptyTransformationContext): TypedMessage {

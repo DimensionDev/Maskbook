@@ -15,7 +15,11 @@ export function visitEachTypedMessageChild(
     context: TransformationContext,
 ): TypedMessage {
     if (isTypedMessageTuple(node)) {
-        const after = node.items.map((x) => visitor(x, context))
+        const after = node.items.flatMap((x) => {
+            const next = visitor(x, context)
+            if (isTypedMessageTuple(next)) return next.items
+            return next
+        })
         if (after.every(isSerializableTypedMessage)) {
             return makeTypedMessageTupleSerializable(after, node.meta)
         }

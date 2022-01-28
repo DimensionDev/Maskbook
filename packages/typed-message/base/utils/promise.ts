@@ -3,12 +3,6 @@ import { isTypedMessagePromise, isTypedMessageTuple } from '../core'
 import type { TypedMessage } from '../base'
 import { emptyTransformationContext } from '../transformer'
 
-export function hasPromise(x: TypedMessage) {
-    if (isTypedMessagePromise(x)) return true
-    if (isTypedMessageTuple(x)) return x.items.some(hasPromise)
-    return false
-}
-
 export function collectTypedMessagePromise(
     x: TypedMessage,
     result: Promise<TypedMessage>[] = [],

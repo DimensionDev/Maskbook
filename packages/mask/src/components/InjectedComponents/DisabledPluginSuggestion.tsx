@@ -32,8 +32,9 @@ export function useDisabledPluginSuggestionFromPost(postContent: Option<string>,
     return matches
 }
 
-export function useDisabledPluginSuggestionFromMeta(meta: ReadonlyMap<string, unknown>) {
+export function useDisabledPluginSuggestionFromMeta(meta: undefined | ReadonlyMap<string, unknown>) {
     const disabled = useDisabledPlugins().filter((x) => x.contribution?.metadataKeys)
+    if (!meta) return []
     const keys = [...meta.keys()]
 
     const matches = disabled.filter((x) => {

@@ -12,7 +12,7 @@ export enum Order {
  * sns_parsed_message
  * |> flatten
  * |> parse links and tags (@user, #tag, $NAME)
- * |> TODO: Mask Payload parser
+ * |> Mask Payload parser (installed in SNS Adaptor starts)
  * |> plugins
  */
 export const TypedMessageTransformers = composeTransformers()
