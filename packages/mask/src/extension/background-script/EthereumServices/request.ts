@@ -22,6 +22,7 @@ import { hasNativeAPI, nativeAPI } from '../../../../shared/native-rpc'
 import { openPopupWindow } from '../HelperService'
 import Services from '../../service'
 import { toHex } from 'web3-utils'
+import { isLessThan } from '@masknet/web3-shared-base'
 
 let id = 0
 
@@ -90,17 +91,36 @@ export async function requestSend(
         ...payload,
         id,
     }
-    // The default value set by web3.js is too small, replace maxFee with the api
+
+    // If the default gas config be less than low option, force reset it
     if (isEIP1559Supported(chainId)) {
         const results = await WalletRPC.getEstimateGasFees(chainId)
-        if (results?.medium && payload_.params[0]?.maxFeePerGas && payload_.params[0]?.maxPriorityFeePerGas) {
+
+        if (
+            results?.low?.suggestedMaxFeePerGas &&
+            payload_.params[0]?.maxFeePerGas &&
+            isLessThan(payload_.params[0].maxFeePerGas, results.low.suggestedMaxFeePerGas)
+        ) {
             payload_.params[0] = {
                 ...payload_.params[0],
-                maxFeePerGas: toHex(formatGweiToWei(results.medium.suggestedMaxFeePerGas).toFixed(0)),
-                maxPriorityFeePerGas: toHex(formatGweiToWei(results.medium.suggestedMaxPriorityFeePerGas).toFixed(0)),
+                maxFeePerGas: toHex(formatGweiToWei(results.low.suggestedMaxFeePerGas).toFixed(0)),
+                maxPriorityFeePerGas: toHex(formatGweiToWei(results.low.suggestedMaxPriorityFeePerGas).toFixed(0)),
+            }
+        }
+    } else {
+        const results = await WalletRPC.getGasPriceDictFromDeBank(chainId)
+        if (
+            results?.data.slow.price &&
+            payload_.params[0]?.gasPrice &&
+            isLessThan(results.data.slow.price, payload_.params[0].gasPrice)
+        ) {
+            payload_.params[0] = {
+                ...payload_.params[0],
+                gasPrice: toHex(results.data.slow.price),
             }
         }
     }
+
     const hijackedCallback = (error: Error | null, response?: JsonRpcResponse) => {
         if (error && notifyProgress)
             WalletRPC.notifyPayloadProgress(payload_, {
