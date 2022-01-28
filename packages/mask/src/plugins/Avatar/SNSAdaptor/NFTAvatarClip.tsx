@@ -209,7 +209,7 @@ export function NFTAvatarMiniClip(props: NFTAvatarClipProps) {
             <use
                 xlinkHref={`#${id}-border-path`}
                 fill="none"
-                strokeWidth="8"
+                strokeWidth="20"
                 strokeLinejoin="round"
                 strokeLinecap="round"
                 x={0}
