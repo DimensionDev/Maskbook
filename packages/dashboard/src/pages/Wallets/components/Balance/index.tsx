@@ -61,6 +61,7 @@ const ButtonGroup = styled('div')`
     grid-template-columns: repeat(4, 1fr);
     & > * {
         font-size: 12px;
+        white-space: nowrap;
         & .${buttonClasses.endIcon} > *:nth-of-type(1) {
             font-size: 16px;
             fill: none;
