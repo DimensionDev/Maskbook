@@ -406,6 +406,7 @@ function partialPersonaRecordToDB(
     x: Readonly<Partial<PersonaRecord> & Pick<PersonaRecord, 'identifier'>>,
 ): Partial<NativePersonaRecord> {
     return {
+        ...x,
         publicKey: x.publicKey as JsonWebKey as unknown as Native_EC_Public_JsonWebKey,
         privateKey: x.privateKey as JsonWebKey as unknown as Native_EC_Private_JsonWebKey,
         localKey: x.localKey as JsonWebKey as unknown as Native_AESJsonWebKey,
@@ -418,6 +419,7 @@ function partialPersonaRecordToDB(
 
 function personaRecordOutDB(x: NativePersonaRecord): PersonaRecord {
     return {
+        ...x,
         publicKey: x.publicKey as JsonWebKey as unknown as EC_Public_JsonWebKey,
         privateKey: x.privateKey as JsonWebKey as unknown as EC_Private_JsonWebKey,
         localKey: x.localKey as JsonWebKey as unknown as AESJsonWebKey,
@@ -441,6 +443,7 @@ function profileRecordToDB(x: ProfileRecord): NativeProfileRecord {
 
 function profileRecordOutDB(x: NativeProfileRecord): ProfileRecord {
     return {
+        nickname: x.nickname,
         localKey: x.localKey as JsonWebKey as unknown as AESJsonWebKey,
         identifier: Identifier.fromString(x.identifier, ProfileIdentifier).unwrap(),
         linkedPersona: x.linkedPersona ? Identifier.fromString(x.linkedPersona, ECKeyIdentifier).unwrap() : undefined,
