@@ -1,6 +1,6 @@
 import { memo, useContext, useEffect, useState } from 'react'
 import type { TypedMessageImage } from '../../../base'
-import { withMetadata } from '../MetadataRender'
+import { useMetadataRender } from '../MetadataRender'
 import { MessageRenderUIComponentsContext, ImageDefault } from '../utils/ComponentsContext'
 
 export const TypedMessageImageRenderer = memo(function TypedMessageImageRenderer(props: TypedMessageImage) {
@@ -21,5 +21,10 @@ export const TypedMessageImageRenderer = memo(function TypedMessageImageRenderer
     const finalSrc = blobSrc || image
     if (typeof finalSrc !== 'string') return null
 
-    return withMetadata(props, <Image src={finalSrc} width={width} height={height} />)
+    return (
+        <>
+            <Image src={finalSrc} width={width} height={height} />
+            {useMetadataRender(props)}
+        </>
+    )
 })

@@ -12,7 +12,6 @@ export const TypedMessagePromiseRenderer = memo(function TypedMessagePromiseRend
     }, [promise, _])
 
     const transformedValue = useTransformedValue(promise.value)
-    transformedValue && console.log(transformedValue)
     if (transformedValue) return <TypedMessageRender message={transformedValue} />
     return (
         <Suspense fallback={alt ? <TypedMessageRender message={alt} /> : null}>

@@ -1,14 +1,8 @@
 import { useContext } from 'react'
 import { MessageRenderUIComponentsContext } from './utils/ComponentsContext'
 import type { TypedMessage } from '../../base'
-
-export function withMetadata(props: TypedMessage, jsx: React.ReactElement) {
+export function useMetadataRender(message: TypedMessage) {
     const { Metadata } = useContext(MessageRenderUIComponentsContext)
-    if (!Metadata) return jsx
-    return (
-        <>
-            {jsx}
-            <Metadata metadata={props.meta} message={props} />
-        </>
-    )
+    if (!Metadata || !message.meta) return null
+    return <Metadata metadata={message.meta} message={message} />
 }
