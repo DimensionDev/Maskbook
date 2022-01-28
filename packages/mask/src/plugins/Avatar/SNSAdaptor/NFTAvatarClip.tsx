@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
         transform: 'scaleY(1.05) translate(0px, -5px)',
     },
     text: {
-        transform: 'translate(1px, -3px) ',
+        transform: 'translate(1px, -5px) ',
     },
     price: {
         transform: 'translate(0px, -3px) ',
@@ -123,7 +123,7 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
                 <use
                     xlinkHref={`#${id}-border-path`}
                     fill="none"
-                    strokeWidth="40"
+                    strokeWidth="30"
                     stroke="black"
                     strokeLinecap="round"
                     strokeLinejoin="round"
