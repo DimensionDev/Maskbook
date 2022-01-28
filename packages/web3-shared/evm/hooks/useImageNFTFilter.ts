@@ -1,4 +1,4 @@
-import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import type { ERC721TokenDetailed } from '../types'
 import { useAsync } from 'react-use'
 
 // filter out nft with image resource

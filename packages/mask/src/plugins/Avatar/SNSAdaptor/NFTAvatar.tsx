@@ -11,13 +11,13 @@ import {
     useAccount,
     useChainId,
     useCollectibles,
+    useImageNFTFilter,
 } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, Typography } from '@mui/material'
 import { useI18N } from '../../../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { AddNFT } from './AddNFT'
 import { NFTImage } from './NFTImage'
-import { useImageNFTFilter } from '../hooks/useImageNFTFilter'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
