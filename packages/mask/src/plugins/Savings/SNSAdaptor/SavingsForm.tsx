@@ -50,9 +50,12 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
     const { value: nativeTokenBalance } = useFungibleTokenBalance(EthereumTokenType.Native, '', targetChainId)
 
     // #region form variables
-    const tokenAmount = new BigNumber(rightShift(inputAmount || '0', 18))
-    const inputAsBN = new BigNumber(rightShift(inputAmount, 18))
-    const balanceAsBN = TabType.Deposit ? new BigNumber(nativeTokenBalance || '0') : protocol.balance
+    const tokenAmount = useMemo(() => new BigNumber(rightShift(inputAmount || '0', 18)), [inputAmount])
+    const inputAsBN = useMemo(() => new BigNumber(rightShift(inputAmount, 18)), [inputAmount])
+    const balanceAsBN = useMemo(
+        () => (TabType.Deposit ? new BigNumber(nativeTokenBalance || '0') : protocol.balance),
+        [nativeTokenBalance, protocol.balance],
+    )
 
     useAsync(async () => {
         if (!(inputAsBN.toNumber() > 0)) return
