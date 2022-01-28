@@ -7,7 +7,7 @@ import { ShadowRootTooltip, useI18N } from '../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     chip: {
-        maxWidth: 300,
+        maxWidth: 500,
     },
 }))
 

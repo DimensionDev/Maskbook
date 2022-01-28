@@ -1,9 +1,9 @@
-import { Card, Link } from '@mui/material'
+import { Card, Link, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Wallet, ERC721TokenDetailed, resolveCollectibleLink, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
-import { MaskSharpIconOfSize } from '../../../../resources/MaskIcon'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { ActionsBarNFT } from '../ActionsBarNFT'
+import { Image } from '../../../../components/shared/Image'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -64,6 +64,12 @@ export interface CollectibleCardProps {
 export function CollectibleCard(props: CollectibleCardProps) {
     const { wallet, token, provider, readonly, renderOrder } = props
     const { classes } = useStyles()
+    const isImage = /\.(gif|svg|png|webp|jpg)$/.test(token.info.mediaUrl ?? '')
+    const theme = useTheme()
+    const fallbackImageURL =
+        theme.palette.mode === 'dark'
+            ? new URL('./nft_token_fallback_dark.png', import.meta.url)
+            : new URL('./nft_token_fallback.png', import.meta.url)
 
     return (
         <Link
@@ -77,19 +83,41 @@ export function CollectibleCard(props: CollectibleCardProps) {
                     <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} token={token} />
                 )}
                 {token.info.mediaUrl ? (
-                    <NFTCardStyledAssetPlayer
-                        contractAddress={token.contractDetailed.address}
-                        chainId={token.contractDetailed.chainId}
-                        url={token.info.mediaUrl}
-                        renderOrder={renderOrder}
-                        tokenId={token.tokenId}
-                        classes={{
-                            loadingFailImage: classes.loadingFailImage,
-                            wrapper: classes.wrapper,
-                        }}
-                    />
+                    isImage ? (
+                        <Image
+                            component="img"
+                            width={172}
+                            height={172}
+                            style={{ objectFit: 'cover' }}
+                            src={token.info.mediaUrl}
+                            onError={(event) => {
+                                const target = event.currentTarget as HTMLImageElement
+                                target.src = fallbackImageURL.toString()
+                                target.classList.add(classes.loadingFailImage ?? '')
+                            }}
+                        />
+                    ) : (
+                        <NFTCardStyledAssetPlayer
+                            contractAddress={token.contractDetailed.address}
+                            chainId={token.contractDetailed.chainId}
+                            url={token.info.mediaUrl}
+                            renderOrder={renderOrder}
+                            tokenId={token.tokenId}
+                            classes={{
+                                loadingFailImage: classes.loadingFailImage,
+                                wrapper: classes.wrapper,
+                            }}
+                        />
+                    )
                 ) : (
-                    <MaskSharpIconOfSize classes={{ root: classes.placeholderIcon }} size={22} />
+                    <Image
+                        component="img"
+                        width={172}
+                        height={172}
+                        style={{ objectFit: 'cover' }}
+                        src={fallbackImageURL.toString()}
+                        className={classes.loadingFailImage}
+                    />
                 )}
             </Card>
         </Link>
