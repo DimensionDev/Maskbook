@@ -90,6 +90,10 @@ export interface SharedNativeAPIs {
     }): Promise<void>
     detach_profile(params: { identifier: string }): Promise<void>
     create_relation(params: { relation: Omit<RelationRecord, 'network'> }): Promise<RelationRecord | undefined>
+    query_relation(params: {
+        personaIdentifier?: string
+        profileIdentifier?: string
+    }): Promise<RelationRecord[]>
     query_relations(params: {
         options?: {
             personaIdentifier?: string

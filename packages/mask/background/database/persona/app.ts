@@ -307,11 +307,36 @@ export async function createRelationDB(
         MaskMessages.events.relationsChanged.sendToAll([{ of: record.profile, reason: 'update', favor: record.favor }])
 }
 
+// export async function queryRelations(
+//     query: (record: RelationRecord) => boolean,
+//     t?: RelationTransaction<'readonly'>,
+// ): Promise<RelationRecord[]> {
+//     const results = await nativeAPI?.api.query_relations({})
+
+//     if (!results?.length) return []
+//     return results.map((x) => relationRecordOutDB(x))
+// }
+
 export async function queryRelations(
-    query: (record: RelationRecord) => boolean,
-    t?: RelationTransaction<'readonly'>,
-): Promise<RelationRecord[]> {
-    const results = await nativeAPI?.api.query_relations({})
+    personaIdentifier?: PersonaIdentifier,
+    profileIdentifier?: ProfileIdentifier,
+    t?: RelationTransaction<'readonly'>
+) {
+    const results: NativeRelationRecord[] = []
+    if (personaIdentifier && profileIdentifier) {
+        const relations = await nativeAPI?.api.query_relation({
+            personaIdentifier: personaIdentifier.toText(),
+            profileIdentifier: profileIdentifier.toText()
+        })
+        if (relations) {
+            results.push(...relations)
+        }
+    } else {
+        const relations = await nativeAPI?.api.query_relation({})
+        if (relations) {
+            results.push(...relations)
+        }
+    }
 
     if (!results?.length) return []
     return results.map((x) => relationRecordOutDB(x))

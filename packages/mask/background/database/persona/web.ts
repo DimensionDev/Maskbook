@@ -577,17 +577,43 @@ export async function createRelationDB(
         MaskMessages.events.relationsChanged.sendToAll([{ of: record.profile, reason: 'update', favor: record.favor }])
 }
 
-export async function queryRelations(query: (record: RelationRecord) => boolean, t?: RelationTransaction<'readonly'>) {
+export async function queryRelations(
+    personaIdentifier?: PersonaIdentifier,
+    profileIdentifier?: ProfileIdentifier,
+    t?: RelationTransaction<'readonly'>
+) {
     t = t || createTransaction(await db(), 'readonly')('relations')
     const records: RelationRecord[] = []
-
-    for await (const each of t.objectStore('relations')) {
-        const out = relationRecordOutDB(each.value)
-        if (query(out)) records.push(out)
+    if (personaIdentifier && profileIdentifier) {
+        const relationsInDB = await t
+                .objectStore('relations')
+                .get([personaIdentifier.toText(), profileIdentifier.toText()])
+    
+        relationsInDB.forEach((each) => {
+            const out = relationRecordOutDB(each)
+            records.push(out)
+        })
+    } else {
+        for await (const each of t.objectStore('relations')) {
+            const out = relationRecordOutDB(each.value)
+            records.push(out)
+        }
     }
-
+    
     return records
 }
+
+// export async function queryRelations(query: (record: RelationRecord) => boolean, t?: RelationTransaction<'readonly'>) {
+//     t = t || createTransaction(await db(), 'readonly')('relations')
+//     const records: RelationRecord[] = []
+
+//     for await (const each of t.objectStore('relations')) {
+//         const out = relationRecordOutDB(each.value)
+//         if (query(out)) records.push(out)
+//     }
+
+//     return records
+// }
 
 /**
  * Query relations by paged
