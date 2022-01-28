@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
         strokeWidth: 4,
     },
     borderPath: {
-        transform: 'scaleY(1.05) translate(0px, -5px)',
+        transform: 'scale(0.98, 1.035) translate(3px, -2px)',
         strokeWidth: 4,
     },
     rainbowBorder: {
