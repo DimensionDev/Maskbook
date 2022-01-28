@@ -11,7 +11,6 @@ import {
     formatWeiToEther,
     getChainIdFromNetworkType,
     isEIP1559Supported,
-    NetworkType,
     useChainId,
     useERC20TokenDetailed,
     useNativeTokenDetailed,
@@ -31,6 +30,7 @@ import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
 import { toHex } from 'web3-utils'
 import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
 import { isGreaterThan, leftShift, pow10 } from '@masknet/web3-shared-base'
+import { CopyIconButton } from '../../../components/CopyIconButton'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -61,6 +61,9 @@ const useStyles = makeStyles()(() => ({
         fontSize: 12,
         lineHeight: '16px',
         marginBottom: 10,
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     content: {
         flex: 1,
@@ -128,6 +131,11 @@ const useStyles = makeStyles()(() => ({
         color: '#15181B',
         margin: '10px 0',
     },
+    copy: {
+        fontSize: 12,
+        stroke: '#7B8192',
+        cursor: 'pointer',
+    },
 }))
 
 const ContractInteraction = memo(() => {
@@ -160,7 +168,7 @@ const ContractInteraction = memo(() => {
                     case 'approve':
                         return {
                             isNativeTokenInteraction: false,
-                            typeName: t('popups_wallet_contract_interaction_approve'),
+                            typeName: t('popups_wallet_token_unlock_permission'),
                             tokenAddress: request.computedPayload._tx.to,
                             to: request.computedPayload._tx.to,
                             gas: request.computedPayload._tx.gas,
@@ -228,14 +236,14 @@ const ContractInteraction = memo(() => {
 
     // gas price
     const { value: defaultPrices } = useAsync(async () => {
-        if (networkType === NetworkType.Ethereum && !maxFeePerGas && !maxPriorityFeePerGas) {
+        if (isEIP1559Supported(chainId) && !maxFeePerGas && !maxPriorityFeePerGas) {
             const response = await WalletRPC.getEstimateGasFees(chainId)
             // Gwei to wei
             return {
                 maxPriorityFeePerGas: toHex(
-                    formatGweiToWei(response?.medium?.suggestedMaxPriorityFeePerGas ?? 0).toString(),
+                    formatGweiToWei(response?.medium?.suggestedMaxPriorityFeePerGas ?? 0).toFixed(0),
                 ),
-                maxFeePerGas: toHex(formatGweiToWei(response?.medium?.suggestedMaxFeePerGas ?? 0).toString()),
+                maxFeePerGas: toHex(formatGweiToWei(response?.medium?.suggestedMaxFeePerGas ?? 0).toFixed(0)),
             }
         } else if (!gasPrice) {
             const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
@@ -321,6 +329,11 @@ const ContractInteraction = memo(() => {
                     ) : null}
                     <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
                         {to}
+                        {request?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION &&
+                        request.computedPayload.name === 'approve' &&
+                        to ? (
+                            <CopyIconButton text={to} className={classes.copy} />
+                        ) : null}
                     </Typography>
                 </div>
                 <div className={classes.content}>
@@ -333,7 +346,7 @@ const ContractInteraction = memo(() => {
                             <>
                                 <Typography className={classes.amount}>
                                     {isGreaterThan(formatBalance(tokenAmount, tokenDecimals), pow10(9)) ? (
-                                        'infinite'
+                                        t('popups_wallet_token_infinite_unlock')
                                     ) : (
                                         <FormattedBalance
                                             value={tokenAmount}
@@ -344,11 +357,9 @@ const ContractInteraction = memo(() => {
                                     )}
                                 </Typography>
                                 <Typography>
-                                    {isGreaterThan(tokenValueUSD, pow10(9)) ? (
-                                        'infinite'
-                                    ) : (
+                                    {!isGreaterThan(tokenValueUSD, pow10(9)) ? (
                                         <FormattedCurrency value={tokenValueUSD} sign="$" formatter={formatCurrency} />
-                                    )}
+                                    ) : null}
                                 </Typography>
                             </>
                         ) : null}
@@ -375,18 +386,17 @@ const ContractInteraction = memo(() => {
                         </Typography>
                     </div>
 
-                    <div className={classes.item} style={{ marginTop: 10 }}>
-                        <Typography className={classes.label}>
-                            {t('popups_wallet_contract_interaction_total')}
-                        </Typography>
-                        <Typography className={classes.gasPrice}>
-                            {isGreaterThan(totalUSD, pow10(9)) ? (
-                                'infinite'
-                            ) : (
+                    {!isGreaterThan(totalUSD, pow10(9)) ? (
+                        <div className={classes.item} style={{ marginTop: 10 }}>
+                            <Typography className={classes.label}>
+                                {t('popups_wallet_contract_interaction_total')}
+                            </Typography>
+
+                            <Typography className={classes.gasPrice}>
                                 <FormattedCurrency value={totalUSD} sign="$" formatter={formatCurrency} />
-                            )}
-                        </Typography>
-                    </div>
+                            </Typography>
+                        </div>
+                    ) : null}
                 </div>
             </main>
             <div className={classes.bottom}>

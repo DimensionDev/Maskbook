@@ -17,8 +17,6 @@ commands:
 jobs:
   install_dependencies:
     executor: mask_node
-    environment:
-      WEB3_CONSTANTS_RPC: ${WEB3_CONSTANTS_RPC}
     steps:
       - checkout
       - restore_cache:

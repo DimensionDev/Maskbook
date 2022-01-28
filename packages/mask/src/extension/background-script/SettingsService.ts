@@ -8,18 +8,7 @@ import {
     currentPluginMinimalModeNOTEnabled,
     pluginIDSettings,
 } from '../../settings/settings'
-import {
-    currentDataProviderSettings,
-    ethereumNetworkTradeProviderSettings,
-    binanceNetworkTradeProviderSettings,
-    polygonNetworkTradeProviderSettings,
-    arbitrumNetworkTradeProviderSettings,
-    xdaiNetworkTradeProviderSettings,
-    avalancheNetworkTradeProviderSettings,
-    celoNetworkTradeProviderSettings,
-    fantomNetworkTradeProviderSettings,
-    auroraNetworkTradeProviderSettings,
-} from '../../plugins/Trader/settings'
+import { currentDataProviderSettings } from '../../plugins/Trader/settings'
 import { queryMyPersonas } from './IdentityService'
 import {
     currentAccountSettings,
@@ -57,29 +46,6 @@ export const [getTokenPrices, setTokenPrices] = create(currentTokenPricesSetting
 export const [getGasOptions, setGasOptions] = create(currentGasOptionsSettings)
 export const [getGasPrice, setGasPrice] = create(currentGasOptionsSettings)
 export const [getTrendingDataSource, setTrendingDataSource] = create(currentDataProviderSettings)
-export const [getEthereumNetworkTradeProvider, setEthNetworkTradeProvider] = create(
-    ethereumNetworkTradeProviderSettings,
-)
-export const [getPolygonNetworkTradeProvider, setPolygonNetworkTradeProvider] = create(
-    polygonNetworkTradeProviderSettings,
-)
-export const [getBinanceNetworkTradeProvider, setBinanceNetworkTradeProvider] = create(
-    binanceNetworkTradeProviderSettings,
-)
-export const [getArbitrumNetworkTradeProvider, setArbitrumNetworkTradeProvider] = create(
-    arbitrumNetworkTradeProviderSettings,
-)
-export const [getxDaiNetworkTradeProvider, setxDaiNetworkTradeProvider] = create(xdaiNetworkTradeProviderSettings)
-
-export const [getAvalancheNetworkTradeProvider, setAvalancheNetworkTradeProvider] = create(
-    avalancheNetworkTradeProviderSettings,
-)
-export const [getCeloNetworkTradeProvider, setCeloNetworkTradeProvider] = create(celoNetworkTradeProviderSettings)
-
-export const [getFantomNetworkTradeProvider, setFantomNetworkTradeProvider] = create(fantomNetworkTradeProviderSettings)
-
-export const [getAuroraNetworkTradeProvider, setAuroraNetworkTradeProvider] = create(auroraNetworkTradeProviderSettings)
-
 export const [getCurrentSelectedWalletProvider, setCurrentSelectedWalletProvider] = create(currentProviderSettings)
 
 export const [getCurrentSelectedWalletNetwork, setCurrentSelectedWalletNetwork] = create(currentNetworkSettings)

@@ -7,8 +7,8 @@ import { activatedSocialNetworkUI } from '../../social-network'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { MaskSharpIcon } from '../../resources/MaskIcon'
 import { useMount } from 'react-use'
-import { hasNativeAPI, nativeAPI } from '../../utils'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
+import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
 
 interface BannerUIProps extends withClasses<never | 'header' | 'content' | 'actions' | 'buttonText'> {
     description?: string

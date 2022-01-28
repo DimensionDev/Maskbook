@@ -1,6 +1,6 @@
 import { DialogContent, Card, Grid, Alert, Box, Typography, Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useI18N } from '../../../utils'
 import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
 import { useAccount } from '@masknet/web3-shared-evm'
@@ -8,6 +8,7 @@ import { fetchConst, fetchUserParticipatedStoryStatus } from '../Worker/apis'
 import type { UserStoryStatus, FindTrumanConst } from '../types'
 import { BorderLinearProgress } from './ResultCard'
 import { FindTruman_Const } from '../constants'
+import { FindTrumanContext } from '../context'
 
 interface Props extends InjectedDialogProps {
     onClose: () => void
@@ -41,7 +42,8 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 const FindTrumanDialog: React.FC<Props> = (props) => {
-    const { t, i18n } = useI18N()
+    const { i18n } = useI18N()
+    const { t } = useContext(FindTrumanContext)
     const { classes } = useStyles()
     const account = useAccount().toLowerCase()
     const [statuses, setStatuses] = useState<UserStoryStatus[]>([])

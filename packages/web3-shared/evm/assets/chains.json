@@ -185,7 +185,7 @@
             "logoURI": "https://static.debank.com/image/matic_token/logo_url/matic/e5a8a2860ba5cf740a474dcab796dc63.png"
         },
         "faucets": [],
-        "features": [],
+        "features": ["EIP1559"],
         "explorers": [
             {
                 "name": "matic",
@@ -209,7 +209,7 @@
             "decimals": 18
         },
         "faucets": ["https://faucet.matic.network/"],
-        "features": [],
+        "features": ["EIP1559"],
         "explorers": [
             {
                 "name": "matic",
@@ -2641,6 +2641,13 @@
             "logoURI": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
         },
         "infoURL": "https://aurora.dev",
+        "explorers": [
+            {
+                "name": "Blockscout",
+                "url": "https://explorer.mainnet.aurora.dev/",
+                "standard": "EIP3091"
+            }
+        ],
         "shortName": "aurora",
         "chainId": 1313161554,
         "networkId": 1313161554
