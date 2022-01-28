@@ -6,6 +6,7 @@ import {
     formatBalance,
     useFungibleTokenDetailed,
     EthereumTokenType,
+    ChainId,
 } from '@masknet/web3-shared-evm'
 import { PostInspector } from './PostInspector'
 import { base } from '../base'
@@ -67,7 +68,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
             priority: 3,
             conduct: { type: ApplicationEntryConduct.EncryptedMessage, id: ITO_PluginID },
             supportedNetworkList: [
-                { network: NetworkPluginID.PLUGIN_EVM, chainIdList: PLUGIN_NETWORKS.map((network) => network.chainId) },
+                {
+                    network: NetworkPluginID.PLUGIN_EVM,
+                    chainIdList: PLUGIN_NETWORKS.filter((network) => network.chainId !== ChainId.Aurora).map(
+                        (network) => network.chainId,
+                    ),
+                },
             ],
             walletRequired: true,
         },
@@ -77,7 +83,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
             priority: 4,
             conduct: { type: ApplicationEntryConduct.Custom },
             supportedNetworkList: [
-                { network: NetworkPluginID.PLUGIN_EVM, chainIdList: PLUGIN_NETWORKS.map((network) => network.chainId) },
+                {
+                    network: NetworkPluginID.PLUGIN_EVM,
+                    chainIdList: PLUGIN_NETWORKS.filter((network) => network.chainId !== ChainId.Aurora).map(
+                        (network) => network.chainId,
+                    ),
+                },
             ],
             walletRequired: true,
         },
