@@ -6,7 +6,6 @@ import { PluginTraderMessages, PluginTraderRPC } from '../messages'
 import { TagType } from '../types'
 // TODO: when migrate, should have an API in the plugin infra for plugin to define render
 import { TypedMessageRenderRegistry } from '../../../../shared-ui/TypedMessageRender/registry'
-import type { MessageRenderProps } from '@masknet/typed-message/dom'
 
 export interface TypedMessageCashTrending extends Omit<TypedMessageAnchor, 'type'> {
     readonly type: 'x-cash-trending'
@@ -29,7 +28,7 @@ TypedMessageRenderRegistry.registerTypedMessageRender('x-cash-trending', {
     priority: 0,
 })
 
-function CashTrendingRenderer(props: MessageRenderProps<TypedMessageCashTrending>) {
+function CashTrendingRenderer(props: TypedMessageCashTrending) {
     const chainId = useChainId()
     const [openTimer, setOpenTimer] = useState<ReturnType<typeof setTimeout> | null>(null)
     const onMouseOver = (ev: React.MouseEvent<HTMLAnchorElement>) => {
@@ -38,11 +37,10 @@ function CashTrendingRenderer(props: MessageRenderProps<TypedMessageCashTrending
         if (openTimer !== null) clearTimeout(openTimer)
         setOpenTimer(
             setTimeout(async () => {
-                if (props.message.category !== 'cash' && props.message.category !== 'hash') return
-                const { name, category } = props.message
+                if (props.category !== 'cash' && props.category !== 'hash') return
+                const { name, category } = props
                 const type = category === 'cash' ? TagType.CASH : TagType.HASH
                 const dataProviders = await PluginTraderRPC.getAvailableDataProviders(type, name)
-                const tradeProviders = await PluginTraderRPC.getAvailableTraderProviders(chainId)
                 if (!dataProviders.length) return
                 PluginTraderMessages.cashTagObserved.sendToLocal({
                     name,
@@ -61,8 +59,8 @@ function CashTrendingRenderer(props: MessageRenderProps<TypedMessageCashTrending
     }
     return (
         <Typography component="span" color="textPrimary" variant="body1">
-            <Link href={props.message.href} onMouseOver={onMouseOver} onMouseLeave={onMouseLeave} onClick={onClick}>
-                {props.message.content}
+            <Link href={props.href} onMouseOver={onMouseOver} onMouseLeave={onMouseLeave} onClick={onClick}>
+                {props.content}
             </Link>
         </Typography>
     )

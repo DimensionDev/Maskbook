@@ -5,6 +5,8 @@ import { TypedMessageRender, useTransformedValue } from '@masknet/typed-message/
 import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context'
 import type { TransformationContext, TypedMessage } from '@masknet/typed-message/base'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI'
+import { PluginRendererWithSuggestion } from './DecryptedPostMetadataRender'
+
 const useStyles = makeStyles()({
     root: {
         overflowWrap: 'break-word',
@@ -40,7 +42,9 @@ export function PostReplacer(props: PostReplacerProps) {
 
     return shouldReplacePost ? (
         <span className={classes.root}>
-            <TypedMessageRenderContext context={initialTransformationContext}>
+            <TypedMessageRenderContext
+                context={initialTransformationContext}
+                metadataRender={PluginRendererWithSuggestion}>
                 <Transformer message={postMessage} />
             </TypedMessageRenderContext>
         </span>

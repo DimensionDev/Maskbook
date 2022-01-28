@@ -2,7 +2,7 @@ import { Typography, Card, Box, CircularProgress, CircularProgressProps } from '
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import { TypedMessage, makeTypedMessageText } from '@masknet/typed-message/base'
-import { TypedMessageRender, MessageRenderProps } from '@masknet/typed-message/dom'
+import { TypedMessageRender, MetadataRenderProps } from '@masknet/typed-message/dom'
 import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context'
 import CheckIcon from '@mui/icons-material/Check'
 import CloseIcon from '@mui/icons-material/Close'
@@ -14,7 +14,7 @@ export enum AdditionalIcon {
     check = 'check',
     error = 'error',
 }
-export interface AdditionalContentProps extends Pick<MessageRenderProps, 'footerMetadataRenderer'> {
+export interface AdditionalContentProps {
     title: string
     titleIcon?: keyof typeof AdditionalIcon
     headerActions?: React.ReactNode

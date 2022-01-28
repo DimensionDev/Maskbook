@@ -13,10 +13,9 @@ import { TypedMessageTupleRenderer } from './Core/Tuple'
 import { TypedMessagePromiseRenderer } from './Core/Promise'
 import { TypedMessageUnknownRenderer } from './Core/Unknown'
 import { TypedMessageAnchorRenderer } from './Extension/Anchor'
-import type { MessageRenderProps } from './Entry'
 
 export interface RenderConfig<T extends TypedMessage = TypedMessage> {
-    component: React.ComponentType<MessageRenderProps<T>>
+    component: React.ComponentType<T>
     priority: number
     id: symbol
 }

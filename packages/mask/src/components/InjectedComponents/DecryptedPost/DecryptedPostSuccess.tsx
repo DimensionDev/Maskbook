@@ -5,33 +5,10 @@ import { useShareMenu } from '../SelectPeopleDialog'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Link } from '@mui/material'
 import type { Profile } from '../../../database'
-import { extractTextFromTypedMessage, type TypedMessage } from '@masknet/typed-message/base'
+import type { TypedMessage } from '@masknet/typed-message/base'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import { wrapAuthorDifferentMessage } from './authorDifferentMessage'
-import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
-import type { MetadataRenderProps } from '@masknet/typed-message/dom'
-import {
-    useDisabledPluginSuggestionFromMeta,
-    useDisabledPluginSuggestionFromPost,
-    PossiblePluginSuggestionUI,
-} from '../DisabledPluginSuggestion'
 
-const PluginRenderer = createInjectHooksRenderer(
-    useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
-    (x) => x.DecryptedInspector,
-)
-function PluginRendererWithSuggestion(props: MetadataRenderProps) {
-    const a = useDisabledPluginSuggestionFromMeta(props.metadata || new Map())
-    const b = useDisabledPluginSuggestionFromPost(extractTextFromTypedMessage(props.message), [])
-
-    const suggest = Array.from(new Set(a.concat(b)))
-    return (
-        <>
-            <PossiblePluginSuggestionUI plugins={suggest} />
-            <PluginRenderer {...props} />
-        </>
-    )
-}
 export interface DecryptPostSuccessProps extends withClasses<never> {
     data: { content: TypedMessage }
     requestAppendRecipients?(to: Profile[]): Promise<void>
@@ -76,7 +53,6 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
         <>
             {shareMenu.ShareMenu}
             <AdditionalContent
-                footerMetadataRenderer={PluginRendererWithSuggestion}
                 headerActions={wrapAuthorDifferentMessage(author, postedBy, rightActions)}
                 title={t('decrypted_postbox_title')}
                 message={content}

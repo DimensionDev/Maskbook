@@ -1,11 +1,9 @@
 import { memo, Suspense, useEffect, useState } from 'react'
 import type { TypedMessagePromise } from '../../../base'
-import { TypedMessageRender, MessageRenderProps } from '../Entry'
+import { TypedMessageRender } from '../Entry'
 import { useTransformedValue } from '../utils/TransformContext'
-export const TypedMessagePromiseRenderer = memo(function TypedMessagePromiseRenderer(
-    props: MessageRenderProps<TypedMessagePromise>,
-) {
-    const { promise, alt } = props.message
+export const TypedMessagePromiseRenderer = memo(function TypedMessagePromiseRenderer(props: TypedMessagePromise) {
+    const { promise, alt } = props
     const _ = useState(0)[1]
     const rerender = () => _(Math.random())
 

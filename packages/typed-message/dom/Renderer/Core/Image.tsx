@@ -1,14 +1,11 @@
 import { memo, useContext, useEffect, useState } from 'react'
 import type { TypedMessageImage } from '../../../base'
-import type { MessageRenderProps } from '../Entry'
 import { withMetadata } from '../MetadataRender'
 import { MessageRenderUIComponentsContext, ImageDefault } from '../utils/ComponentsContext'
 
-export const TypedMessageImageRenderer = memo(function TypedMessageImageRenderer(
-    props: MessageRenderProps<TypedMessageImage>,
-) {
+export const TypedMessageImageRenderer = memo(function TypedMessageImageRenderer(props: TypedMessageImage) {
     const { Image = ImageDefault! } = useContext(MessageRenderUIComponentsContext)
-    const { image, width, height } = props.message
+    const { image, width, height } = props
     const [blobSrc, setBlobSrc] = useState<string | null>(null)
 
     useEffect(() => {

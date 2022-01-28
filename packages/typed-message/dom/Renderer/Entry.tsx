@@ -6,14 +6,11 @@ export interface MetadataRenderProps {
     metadata: TypedMessage['meta']
     message: TypedMessage
 }
-export interface MessageRenderProps<T extends TypedMessage = TypedMessage> {
-    /** The TypedMessage */
-    message: T
-    footerMetadataRenderer?: React.ComponentType<MetadataRenderProps>
-}
-export interface RenderProps extends MessageRenderProps {
+export interface RenderProps {
     /** TODO: remove this property */
     allowTextEnlarge?: boolean
+    metadataRenderer?: React.ComponentType<MetadataRenderProps>
+    message: TypedMessage
 }
 export function TypedMessageRender(props: RenderProps) {
     const { message } = props
@@ -28,9 +25,9 @@ export function TypedMessageRender(props: RenderProps) {
                 ref={(ref) => {
                     if (ref) (ref as any).message = message
                 }}>
-                <Render message={message} />
+                <Render {...message} />
             </span>
         )
     }
-    return <Render message={message} />
+    return <Render {...message} />
 }
