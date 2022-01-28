@@ -28,8 +28,6 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                 const info = getInjectNodeInfo(ele.firstChild as HTMLElement)
                 if (!info) return
 
-                console.log(info)
-
                 const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
                 proxy.realCurrent = info.element.firstChild as HTMLElement
 

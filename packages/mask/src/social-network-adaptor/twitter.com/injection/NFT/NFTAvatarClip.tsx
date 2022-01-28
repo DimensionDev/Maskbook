@@ -1,7 +1,8 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
+import { isZero } from '@masknet/web3-shared-base'
 import { useMemo } from 'react'
-import { useWindowSize } from 'react-use'
+import { useLocation, useWindowSize } from 'react-use'
 import { NFTAvatarClip } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip'
 import { createReactRootShadowed, startWatch } from '../../../../utils'
 import { searchTwitterAvatarNFTSelector } from '../../utils/selector'
@@ -27,10 +28,11 @@ const useStyles = makeStyles()(() => ({
 function NFTAvatarClipInTwitter() {
     const { classes } = useStyles()
     const windowSize = useWindowSize()
+    const location = useLocation()
 
     const size = useMemo(() => {
         const ele = searchTwitterAvatarNFTSelector().evaluate()
-        if (!ele) return 134.5
+        if (!ele) return 0
         const style = window.getComputedStyle(ele)
         return Number.parseInt(style.width.replace('px', '') ?? 0, 10)
     }, [windowSize])
@@ -42,12 +44,13 @@ function NFTAvatarClipInTwitter() {
         if (!path) return
         const [, userId] = path.match(/^\/(\w+)\/nft$/) ?? []
         return userId
-    }, [location.pathname])
+    }, [location])
 
+    if (isZero(size) || !twitterId) return null
     return (
         <NFTAvatarClip
             id="TwitterAvatarClip"
-            screenName={twitterId ?? ''}
+            screenName={twitterId}
             width={size}
             height={size}
             classes={{ root: classes.root, text: classes.text, icon: classes.icon }}
