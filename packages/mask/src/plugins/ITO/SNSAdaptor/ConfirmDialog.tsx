@@ -203,7 +203,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
 
                 <Grid item xs={6}>
                     <Paper className={classes.label}>
-                        <Typography>{t('plugin_ito_allocation_per_wallet')}</Typography>
+                        <Typography>{t('plugin_ito_allocation_per_wallet_title')}</Typography>
                     </Paper>
                 </Grid>
                 <Grid item xs={6}>
@@ -221,7 +221,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
 
                 <Grid item xs={6}>
                     <Paper className={classes.label}>
-                        <Typography>{t('plugin_ito_begin_time')}</Typography>
+                        <Typography>{t('plugin_ito_begin_time_title')}</Typography>
                     </Paper>
                 </Grid>
                 <Grid item xs={6}>
@@ -232,7 +232,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
 
                 <Grid item xs={6}>
                     <Paper className={classes.label}>
-                        <Typography>{t('plugin_ito_end_time')}</Typography>
+                        <Typography>{t('plugin_ito_end_time_title')}</Typography>
                     </Paper>
                 </Grid>
                 <Grid item xs={6}>
