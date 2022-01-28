@@ -39,15 +39,12 @@ const rainbowBorderKeyFrames: Keyframes = keyframes`
 const useStyles = makeStyles()((theme) => ({
     root: {},
     miniBorder: {
-        transform: 'scale(0.94) translate(7px, 6px)',
-        strokeWidth: 4,
+        transform: 'scale(0.9) translate(10px, 10px)',
+        strokeWidth: 12,
     },
     borderPath: {
-        transform: 'scale(0.98, 1.035) translate(3px, -2px)',
+        transform: 'scaleY(1.05) translate(0px, -5px)',
         strokeWidth: 4,
-    },
-    background: {
-        transform: 'scale(1, 1.05) translate(1px, -3px)',
     },
     rainbowBorder: {
         animation: `${rainbowBorderKeyFrames} 6s linear infinite`,
@@ -139,7 +136,6 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
                     y={0}
                     width={width}
                     height={height}
-                    className={classes.background}
                 />
 
                 <use
