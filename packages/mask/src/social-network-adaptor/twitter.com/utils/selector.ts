@@ -253,3 +253,5 @@ export const searchRetweetAvatarSelector = () => querySelector<E, false>('[data-
 
 export const searchTwitterAvatarNFTSelector = () =>
     querySelector<E>('a[href*=nft]').closest<E>(1).querySelector('a  div:nth-child(3) > div')
+
+export const searchTwitterAvatarNFTLinkSelector = () => querySelector<E>('a[href*=nft]')

@@ -1,11 +1,11 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { isZero } from '@masknet/web3-shared-base'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useLocation, useWindowSize } from 'react-use'
 import { NFTAvatarClip } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip'
 import { createReactRootShadowed, startWatch } from '../../../../utils'
-import { searchTwitterAvatarNFTSelector } from '../../utils/selector'
+import { searchTwitterAvatarNFTLinkSelector, searchTwitterAvatarNFTSelector } from '../../utils/selector'
 
 export function injectNFTAvatarClipInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarNFTSelector())
@@ -44,6 +44,17 @@ function NFTAvatarClipInTwitter() {
         if (!path) return
         const [, userId] = path.match(/^\/(\w+)\/nft$/) ?? []
         return userId
+    }, [location])
+
+    useEffect(() => {
+        const link = searchTwitterAvatarNFTLinkSelector().evaluate()?.firstChild as HTMLElement
+        if (!link) return
+        link.style.width = ''
+        link.style.height = ''
+        return () => {
+            link.style.height = 'calc(100% - 4px)'
+            link.style.width = 'calc(100% - 4px)'
+        }
     }, [location])
 
     if (isZero(size) || !twitterId) return null
