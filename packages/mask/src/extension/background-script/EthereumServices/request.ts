@@ -2,6 +2,7 @@ import type { RequestArguments, TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import {
     EthereumMethodType,
+    EthereumTransactionConfig,
     formatGweiToWei,
     isEIP1559Supported,
     ProviderType,
@@ -93,31 +94,34 @@ export async function requestSend(
     }
 
     if (payload_.method === EthereumMethodType.ETH_SEND_TRANSACTION) {
+        const [config] = payload_.params as [EthereumTransactionConfig]
+
         // If the default gas config be less than low option, force reset it
         if (isEIP1559Supported(chainId)) {
             const results = await WalletRPC.getEstimateGasFees(chainId)
 
             if (
                 results?.low?.suggestedMaxFeePerGas &&
-                payload_.params[0]?.maxFeePerGas &&
-                isLessThan(payload_.params[0].maxFeePerGas, results.low.suggestedMaxFeePerGas)
+                results?.medium &&
+                isLessThan(
+                    config?.maxFeePerGas ? formatGweiToWei(config.maxFeePerGas) : 0,
+                    results.low.suggestedMaxFeePerGas,
+                )
             ) {
                 payload_.params[0] = {
-                    ...payload_.params[0],
-                    maxFeePerGas: toHex(formatGweiToWei(results.low.suggestedMaxFeePerGas).toFixed(0)),
-                    maxPriorityFeePerGas: toHex(formatGweiToWei(results.low.suggestedMaxPriorityFeePerGas).toFixed(0)),
+                    ...config,
+                    maxFeePerGas: toHex(formatGweiToWei(results.medium.suggestedMaxFeePerGas).toFixed(0)),
+                    maxPriorityFeePerGas: toHex(
+                        formatGweiToWei(results.medium.suggestedMaxPriorityFeePerGas).toFixed(0),
+                    ),
                 }
             }
         } else {
             const results = await WalletRPC.getGasPriceDictFromDeBank(chainId)
-            if (
-                results?.data.slow.price &&
-                payload_.params[0]?.gasPrice &&
-                isLessThan(results.data.slow.price, payload_.params[0].gasPrice)
-            ) {
+            if (results?.data.slow.price && isLessThan((config?.gasPrice as string) ?? 0, results.data.slow.price)) {
                 payload_.params[0] = {
-                    ...payload_.params[0],
-                    gasPrice: toHex(results.data.slow.price),
+                    ...config,
+                    gasPrice: toHex(results.data.normal.price),
                 }
             }
         }
