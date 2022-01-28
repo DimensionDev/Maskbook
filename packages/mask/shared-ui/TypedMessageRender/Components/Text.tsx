@@ -8,7 +8,7 @@ export const Text: MessageRenderUIComponentsContext['Text'] = (props) => (
     />
 )
 
-// TODO: provide SNS-aware #hast $link and @metion support
+// TODO: provide SNS-aware #hast $link and @mention support
 export const Anchor: MessageRenderUIComponentsContext['Link'] = (props) => (
     <Link
         sx={{ fontSize: props.fontSize ? `${Math.max(props.fontSize, 14)}px` : undefined }}
