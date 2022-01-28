@@ -585,14 +585,13 @@ export async function queryRelations(
     t = t || createTransaction(await db(), 'readonly')('relations')
     const records: RelationRecord[] = []
     if (personaIdentifier && profileIdentifier) {
-        const relationsInDB = await t
+        const relationInDB = await t
                 .objectStore('relations')
                 .get([personaIdentifier.toText(), profileIdentifier.toText()])
-    
-        relationsInDB.forEach((each) => {
-            const out = relationRecordOutDB(each)
+        if (relationInDB) {
+            const out = relationRecordOutDB(relationInDB)
             records.push(out)
-        })
+        }
     } else {
         for await (const each of t.objectStore('relations')) {
             const out = relationRecordOutDB(each.value)
