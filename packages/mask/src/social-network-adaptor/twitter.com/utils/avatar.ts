@@ -1,6 +1,6 @@
 import { getAvatarId } from './user'
 
-const ClipPath = 'url("#hex-hw-shapeClip-clipConfig")'
+const ClipPath = 'url("#hex-hw-shapeclip-clipconfig")'
 
 export function getInjectNodeInfo(ele: HTMLElement) {
     const imgEle = (ele.firstChild as HTMLElement).querySelector('img')
