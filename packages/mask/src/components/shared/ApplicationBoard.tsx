@@ -15,8 +15,6 @@ import { EntrySecondLevelDialog } from './EntrySecondLevelDialog'
 import { NetworkTab } from './NetworkTab'
 import { SavingsDialog } from '../../plugins/Savings/SNSAdaptor/SavingsDialog'
 import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialog'
-import { AllProviderTradeContext } from '../../plugins/Trader/trader/useAllProviderTradeContext'
-import { TargetChainIdContext } from '../../plugins/Trader/trader/useTargetChainIdContext'
 import { NetworkPluginID, PluginId, usePluginIDContext } from '@masknet/plugin-infra'
 import { FindTrumanDialog } from '../../plugins/FindTruman/SNSAdaptor/FindTrumanDialog'
 
@@ -408,16 +406,11 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                 />
             ) : null}
             {isFindTrumanDialogOpen ? <FindTrumanDialog open onClose={onFindTrumanDialogClose} /> : null}
+            {isSwapDialogOpen ? <TraderDialog open onClose={onSwapDialogClose} /> : null}
 
-            <TargetChainIdContext.Provider>
-                <AllProviderTradeContext.Provider>
-                    {isSwapDialogOpen ? <TraderDialog open onClose={onSwapDialogClose} /> : null}
-
-                    {isSavingsDialogOpen ? (
-                        <SavingsDialog open onClose={onSavingsDialogClose} onSwapDialogOpen={onSwapDialogOpen} />
-                    ) : null}
-                </AllProviderTradeContext.Provider>
-            </TargetChainIdContext.Provider>
+            {isSavingsDialogOpen ? (
+                <SavingsDialog open onClose={onSavingsDialogClose} onSwapDialogOpen={onSwapDialogOpen} />
+            ) : null}
         </>
     )
 }

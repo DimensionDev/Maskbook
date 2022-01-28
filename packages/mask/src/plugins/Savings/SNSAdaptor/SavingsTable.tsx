@@ -78,7 +78,7 @@ export function SavingsTable({ chainId, tab, mappableProtocols, setSelectedProto
     // Only fetch protocol APR and Balance on chainId change
     useAsync(async () => {
         for (const protocol of SavingsProtocols) {
-            await protocol.getApy()
+            await protocol.getApr()
             await protocol.getBalance(chainId, web3, account)
         }
     }, [chainId])
@@ -90,7 +90,7 @@ export function SavingsTable({ chainId, tab, mappableProtocols, setSelectedProto
                     <Typography variant="body1">{t('plugin_savings_type')}</Typography>
                 </Grid>
                 <Grid item xs={2} className={classes.tableCell}>
-                    <Typography variant="body1"> {t('plugin_savings_apy')}</Typography>
+                    <Typography variant="body1"> {t('plugin_savings_apr')}</Typography>
                 </Grid>
                 <Grid item xs={3} className={classes.tableCell}>
                     <Typography variant="body1">{t('plugin_savings_wallet')}</Typography>
@@ -120,7 +120,7 @@ export function SavingsTable({ chainId, tab, mappableProtocols, setSelectedProto
                                 </div>
                             </Grid>
                             <Grid item xs={2} className={classes.tableCell}>
-                                <Typography variant="body1">{protocol.apy}%</Typography>
+                                <Typography variant="body1">{protocol.apr}%</Typography>
                             </Grid>
                             <Grid item xs={3} className={classes.tableCell}>
                                 <Typography variant="body1">

@@ -134,10 +134,10 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
             <div className={classes.infoRow}>
                 <Typography variant="body1" className={classes.infoRowLeft}>
                     <img src={IconURLs[protocol.image]} className={classes.rowImage} />
-                    {protocol.pair} {t('plugin_savings_apy')}%
+                    {protocol.pair} {t('plugin_savings_apr')}%
                 </Typography>
                 <Typography variant="body1" className={classes.infoRowRight}>
-                    {protocol.apy}%
+                    {protocol.apr}%
                 </Typography>
             </div>
 

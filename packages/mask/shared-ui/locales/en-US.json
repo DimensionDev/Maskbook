@@ -428,7 +428,7 @@
     "plugin_savings": "Savings",
     "plugin_savings_type": "Type",
     "plugin_no_protocol_available": "No savings protocols available on this network",
-    "plugin_savings_apy": "APY",
+    "plugin_savings_apr": "APR",
     "plugin_savings_wallet": "Wallet",
     "plugin_savings_operation": "Operation",
     "plugin_savings_amount": "Amount",
