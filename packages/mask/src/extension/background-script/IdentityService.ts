@@ -270,9 +270,11 @@ export async function patchCreateOrUpdateRelation(
     await consistentPersonaDBWriteAccess(async (t) => {
         for (const persona of personas) {
             for (const profile of profiles) {
-                const relationInDB = await t.objectStore('relations').get([persona.toText(), profile.toText()])
-                if (relationInDB) {
-                    await updateRelationDB({ profile: profile, linked: persona, favor: defaultFavor }, t, true)
+                let relationsInDB = await queryRelations(persona, profile)
+                if (relationsInDB) {
+                    for (const _ of relationsInDB) {
+                        await updateRelation(profile, persona, defaultFavor)
+                    }
                     continue
                 }
                 await createRelationDB({ profile: profile, linked: persona, favor: defaultFavor }, t, true)
@@ -285,13 +287,12 @@ export async function patchCreateOrUpdateRelation(
 export async function patchCreateNewRelation(relations: Omit<RelationRecord, 'network'>[]) {
     await consistentPersonaDBWriteAccess(async (t) => {
         for (const relation of relations) {
-            queryRelations()
-            const relationInDB = await t
-                .objectStore('relations')
-                .get([relation.linked.toText(), relation.profile.toText()])
+            let relationsInDB = await queryRelations(relation.linked, relation.profile)
 
-            if (relationInDB) {
-                await updateRelationDB(relation, t, true)
+            if (relationsInDB) {
+                for (const relation of relationsInDB) {
+                    await updateRelationDB(relation, t, true)
+                }
                 continue
             }
 
