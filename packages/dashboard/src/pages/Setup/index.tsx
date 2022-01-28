@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles'
 import { Box, Container, Stack, Typography } from '@mui/material'
 import { RestoreIcon, SignUpAccountIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
-import { RoutePaths } from '../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { useNavigate } from 'react-router-dom'
 import { ActionCard } from '../../components/ActionCard'
 
@@ -20,7 +20,7 @@ const Setup = () => {
 
     return (
         <ColumnLayout>
-            <Container sx={{ paddingBottom: (theme) => `${theme.spacing(8)}` }}>
+            <Container sx={{ paddingBottom: (theme) => theme.spacing(8) }}>
                 <Box textAlign="center" paddingBottom="32px">
                     <Title>
                         <Typography variant="h3">{t.setup_page_title()}</Typography>
@@ -37,7 +37,7 @@ const Setup = () => {
                         action={{
                             type: 'primary',
                             text: t.setup_page_create_account_button(),
-                            handler: () => navigate(RoutePaths.SignUp),
+                            handler: () => navigate(DashboardRoutes.SignUp),
                         }}
                     />
                     <ActionCard
@@ -47,7 +47,7 @@ const Setup = () => {
                         action={{
                             type: 'secondary',
                             text: t.setup_page_create_restore_button(),
-                            handler: () => navigate(RoutePaths.SignIn),
+                            handler: () => navigate(DashboardRoutes.SignIn),
                         }}
                     />
                 </Stack>

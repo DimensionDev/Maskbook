@@ -125,9 +125,9 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                                 onClick={() => onApprove(true)}
                                 {...props.ActionButtonProps}>
                                 <span className={classes.buttonLabel}>{t('plugin_wallet_token_unlock')}</span>
-                                <span className={classes.buttonAmount}>{`${formatBalance(amount, token.decimals, 2)} ${
-                                    token?.symbol ?? 'Token'
-                                }`}</span>
+                                <span className={classes.buttonAmount}>
+                                    {formatBalance(amount, token.decimals, 2)} {token?.symbol ?? 'Token'}
+                                </span>
                             </ActionButton>
                         </Grid>
                     ) : null}
@@ -159,7 +159,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                     {approveStateType === ApproveStateType.PENDING
                         ? t('plugin_ito_unlocking_symbol', { symbol: token.symbol })
                         : `Updating ${token.symbol}`}
-                    …
+                    &hellip;
                 </ActionButton>
             </Grid>
         )

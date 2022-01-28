@@ -1,7 +1,6 @@
 import { memo, useCallback, useEffect, useState } from 'react'
 import { Alert, Box, Button, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { MaskColorVar } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InfoIcon, RefreshIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../../../locales'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
@@ -10,7 +9,7 @@ import { VerifyMnemonicDialog } from '../VerifyMnemonicDialog'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { PluginServices, Services } from '../../../../API'
-import { RoutePaths } from '../../../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 import type { Search } from 'history'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useMnemonicWordsPuzzle } from '../../../../hooks/useMnemonicWordsPuzzle'
@@ -80,7 +79,7 @@ const CreateMnemonic = memo(() => {
     const location = useLocation() as { search: Search; state: { password: string } }
     const navigate = useNavigate()
     const [open, setOpen] = useState(false)
-    const [words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback] = useMnemonicWordsPuzzle()
+    const { words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback } = useMnemonicWordsPuzzle()
     const [searchParams] = useSearchParams()
     const { value: hasPassword, loading, retry } = useAsyncRetry(PluginServices.Wallet.hasPassword, [])
 
@@ -98,7 +97,7 @@ const CreateMnemonic = memo(() => {
         // if the name doesn't exist, navigate to form page
         if (!name) {
             resetCallback()
-            navigate(RoutePaths.CreateMaskWalletForm)
+            navigate(DashboardRoutes.CreateMaskWalletForm)
             return
         }
 

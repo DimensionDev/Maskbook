@@ -100,25 +100,25 @@ export function PoolView(props: PoolViewProps) {
     const { classes } = useStyles()
     const currentChainId = useChainId()
 
-    //#region allowed tokens
+    // #region allowed tokens
     const { value: pool, error, loading, retry } = useFetchPool(props.address ?? '')
 
-    //#region susd token
+    // #region susd token
     const {
         value: allowedTokens,
         loading: loadingAllowedTokens,
         retry: retryAllowedTokens,
         error: errorAllowedTokens,
     } = usePoolDepositAssets(pool)
-    //#endregion
+    // #endregion
 
-    //#region tabs
+    // #region tabs
     const [tabIndex, setTabIndex] = useState(0)
     const tabs = [
         <Tab className={classes.tab} key="stats" label={t('plugin_dhedge_tab_stats')} />,
         <Tab className={classes.tab} key="chart" label={t('plugin_dhedge_tab_chart')} />,
     ].filter(Boolean)
-    //#endregion
+    // #endregion
 
     if (loading || loadingAllowedTokens)
         return (

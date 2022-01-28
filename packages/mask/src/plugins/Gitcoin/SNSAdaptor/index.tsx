@@ -3,13 +3,12 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, Plugin, useChainId } from '@masknet/plugin-infra'
 import { SnackbarContent } from '@mui/material'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
-import { extractTextFromTypedMessage } from '../../../protocols/typed-message'
+import { extractTextFromTypedMessage, parseURL } from '@masknet/shared-base'
 import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
 import { PreviewCard } from './PreviewCard'
 import { base } from '../base'
 import { PLUGIN_NAME, PLUGIN_META_KEY } from '../constants'
 import { DonateDialog } from './DonateDialog'
-import { parseURL } from '../../../utils/utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const isGitcoin = (x: string): boolean => /^https:\/\/gitcoin.co\/grants\/\d+/.test(x)
@@ -19,9 +18,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     DecryptedInspector: function Comp(props) {
-        const text = useMemo(() => extractTextFromTypedMessage(props.message), [props.message])
-        const link = useMemo(() => parseURL(text.val || ''), [text.val]).find(isGitcoin)
-        if (!text.ok) return null
+        const link = useMemo(() => {
+            const x = extractTextFromTypedMessage(props.message)
+            if (x.none) return null
+            return parseURL(x.val).find(isGitcoin)
+        }, [props.message])
         if (!link) return null
         return <Renderer url={link} />
     },
@@ -30,7 +31,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <DonateDialog />
     },
     PostInspector() {
-        const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks())
+        const links = usePostInfoDetails.mentionedLinks()
 
         const link = links.find(isGitcoin)
         if (!link) return null

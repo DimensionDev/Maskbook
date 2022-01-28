@@ -12,20 +12,19 @@ import {
     Divider,
     CircularProgress,
 } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles, useStylesExtends, usePortalShadowRoot } from '@masknet/theme'
 import AddIcon from '@mui/icons-material/Add'
 import addDate from 'date-fns/add'
-import { usePortalShadowRoot } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import type { PollGunDB } from '../Services'
 import { PollCardUI } from './Polls'
 import type { PollMetaData } from '../types'
-import { POLL_META_KEY_1 } from '../constants'
+import { PLUGIN_META_KEY } from '../constants'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { PluginPollRPC } from '../messages'
-import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
+import { useCompositionContext } from '@masknet/plugin-infra'
 
 const useNewPollStyles = makeStyles()((theme) => ({
     menuPaper: {
@@ -255,8 +254,8 @@ export default function PollsDialog(props: PollsDialogProps) {
     }
 
     const insertPoll = (data?: PollMetaData | null) => {
-        if (data) attachMetadata(POLL_META_KEY_1, data)
-        else dropMetadata(POLL_META_KEY_1)
+        if (data) attachMetadata(PLUGIN_META_KEY, data)
+        else dropMetadata(PLUGIN_META_KEY)
         props.onClose()
     }
 

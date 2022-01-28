@@ -2,10 +2,7 @@ import { LiveSelector } from '@dimensiondev/holoflows-kit'
 
 type E = HTMLElement
 
-const querySelector = <T extends E, SingleMode extends boolean = true>(
-    selector: string,
-    singleMode: boolean = true,
-) => {
+const querySelector = <T extends E, SingleMode extends boolean = true>(selector: string, singleMode = true) => {
     const ls = new LiveSelector<T, SingleMode>().querySelector<T>(selector)
     return (singleMode ? ls.enableSingleMode() : ls) as LiveSelector<T, SingleMode>
 }
@@ -26,7 +23,7 @@ export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('m-newsfeed m-composer', true)
 
 export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('.m-sidebarNavigation__list li:nth-child(11)')
+    querySelector<E>('.m-sidebarNavigation__list li:nth-child(7)')
 
 export const postEditorDraftContentSelector = () => {
     return querySelector<HTMLElement>('m-composer__modal m-composer__textarea textarea.m-composerTextarea__message')

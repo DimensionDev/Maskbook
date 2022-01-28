@@ -1,0 +1,1035 @@
+[
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_editionNumber",
+                "type": "uint256"
+            }
+        ],
+        "name": "increaseBid",
+        "outputs": [
+            {
+                "name": "success",
+                "type": "bool"
+            }
+        ],
+        "payable": true,
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "_editionNumber",
+                "type": "uint256"
+            }
+        ],
+        "name": "highestBidForEdition",
+        "outputs": [
+            {
+                "name": "_bidder",
+                "type": "address"
+            },
+            {
+                "name": "_value",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "_operator",
+                "type": "address"
+            },
+            {
+                "name": "_role",
+                "type": "string"
+            }
+        ],
+        "name": "checkRole",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_editionNumber",
+                "type": "uint256"
+            }
+        ],
+        "name": "withdrawBid",
+        "outputs": [
+            {
+                "name": "success",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "ROLE_WHITELISTED",
+        "outputs": [
+            {
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "_operator",
+                "type": "address"
+            },
+            {
+                "name": "_role",
+                "type": "string"
+            }
+        ],
+        "name": "hasRole",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_operators",
+                "type": "address[]"
+            }
+        ],
+        "name": "removeAddressesFromWhitelist",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_withdrawalAccount",
+                "type": "address"
+            }
+        ],
+        "name": "withdrawStuckEther",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_operator",
+                "type": "address"
+            }
+        ],
+        "name": "removeAddressFromWhitelist",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_editionNumber",
+                "type": "uint256"
+            }
+        ],
+        "name": "acceptBid",
+        "outputs": [
+            {
+                "name": "tokenId",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "addedEditions",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256[]"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [],
+        "name": "unpause",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_minBidAmount",
+                "type": "uint256"
+            }
+        ],
+        "name": "setMinBidAmount",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "editionHighestBid",
+        "outputs": [
+            {
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "minBidAmount",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "editionsOnceEnabledForAuctions",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "paused",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "_editionNumber",
+                "type": "uint256"
+            }
+        ],
+        "name": "editionController",
+        "outputs": [
+            {
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_editionNumber",
+                "type": "uint256"
+            }
+        ],
+        "name": "rejectBid",
+        "outputs": [
+            {
+                "name": "success",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "koCommissionAccount",
+        "outputs": [
+            {
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [],
+        "name": "renounceOwnership",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_editionNumber",
+                "type": "uint256"
+            }
+        ],
+        "name": "disableEdition",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "editionNumberToArtistControlAddress",
+        "outputs": [
+            {
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_operator",
+                "type": "address"
+            }
+        ],
+        "name": "addAddressToWhitelist",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [],
+        "name": "pause",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "_editionNumber",
+                "type": "uint256"
+            }
+        ],
+        "name": "auctionDetails",
+        "outputs": [
+            {
+                "name": "_enabled",
+                "type": "bool"
+            },
+            {
+                "name": "_bidder",
+                "type": "address"
+            },
+            {
+                "name": "_value",
+                "type": "uint256"
+            },
+            {
+                "name": "_controller",
+                "type": "address"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_editionNumber",
+                "type": "uint256"
+            }
+        ],
+        "name": "enableEditionForArtist",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_editionNumber",
+                "type": "uint256"
+            },
+            {
+                "name": "_bidder",
+                "type": "address"
+            },
+            {
+                "name": "_amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "manualOverrideEditionHighestBidAndBidder",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+            {
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_koCommissionAccount",
+                "type": "address"
+            }
+        ],
+        "name": "setKoCommissionAccount",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_editionNumber",
+                "type": "uint256"
+            }
+        ],
+        "name": "cancelAuction",
+        "outputs": [
+            {
+                "name": "success",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_editionNumber",
+                "type": "uint256"
+            },
+            {
+                "name": "_bidder",
+                "type": "address"
+            }
+        ],
+        "name": "manualDeleteEditionBids",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_editionNumber",
+                "type": "uint256"
+            }
+        ],
+        "name": "placeBid",
+        "outputs": [
+            {
+                "name": "success",
+                "type": "bool"
+            }
+        ],
+        "payable": true,
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "_operator",
+                "type": "address"
+            }
+        ],
+        "name": "whitelist",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_editionNumber",
+                "type": "uint256"
+            },
+            {
+                "name": "_address",
+                "type": "address"
+            }
+        ],
+        "name": "setArtistsControlAddressAndEnabledEdition",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_withdrawalAccount",
+                "type": "address"
+            },
+            {
+                "name": "_amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "withdrawStuckEtherOfAmount",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_kodaAddress",
+                "type": "address"
+            }
+        ],
+        "name": "setKodavV2",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "enabledEditions",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_editionNumber",
+                "type": "uint256"
+            },
+            {
+                "name": "_address",
+                "type": "address"
+            }
+        ],
+        "name": "setArtistsControlAddress",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "kodaAddress",
+        "outputs": [
+            {
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_operators",
+                "type": "address[]"
+            }
+        ],
+        "name": "addAddressesToWhitelist",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "_editionNumber",
+                "type": "uint256"
+            }
+        ],
+        "name": "isEditionEnabled",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_editionNumber",
+                "type": "uint256"
+            }
+        ],
+        "name": "enableEdition",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_newOwner",
+                "type": "address"
+            }
+        ],
+        "name": "transferOwnership",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "_kodaAddress",
+                "type": "address"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "_bidder",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "name": "_editionNumber",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "name": "_amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "BidPlaced",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "_bidder",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "name": "_editionNumber",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "name": "_amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "BidIncreased",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "_bidder",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "name": "_editionNumber",
+                "type": "uint256"
+            }
+        ],
+        "name": "BidWithdrawn",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "_bidder",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "name": "_editionNumber",
+                "type": "uint256"
+            },
+            {
+                "indexed": true,
+                "name": "_tokenId",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "name": "_amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "BidAccepted",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "_caller",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "name": "_bidder",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "name": "_editionNumber",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "name": "_amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "BidRejected",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "_editionNumber",
+                "type": "uint256"
+            },
+            {
+                "indexed": true,
+                "name": "_bidder",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "name": "_amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "BidderRefunded",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "_editionNumber",
+                "type": "uint256"
+            }
+        ],
+        "name": "AuctionCancelled",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "_editionNumber",
+                "type": "uint256"
+            },
+            {
+                "indexed": true,
+                "name": "_auctioneer",
+                "type": "address"
+            }
+        ],
+        "name": "AuctionEnabled",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "_editionNumber",
+                "type": "uint256"
+            },
+            {
+                "indexed": true,
+                "name": "_auctioneer",
+                "type": "address"
+            }
+        ],
+        "name": "AuctionDisabled",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [],
+        "name": "Pause",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [],
+        "name": "Unpause",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "operator",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "name": "role",
+                "type": "string"
+            }
+        ],
+        "name": "RoleAdded",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "operator",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "name": "role",
+                "type": "string"
+            }
+        ],
+        "name": "RoleRemoved",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "previousOwner",
+                "type": "address"
+            }
+        ],
+        "name": "OwnershipRenounced",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "previousOwner",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "name": "newOwner",
+                "type": "address"
+            }
+        ],
+        "name": "OwnershipTransferred",
+        "type": "event"
+    }
+]

@@ -1,6 +1,6 @@
 import { Suspense, useMemo } from 'react'
 import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
-import { extractTextFromTypedMessage, parseURL } from '@masknet/shared'
+import { extractTextFromTypedMessage, parseURL } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { SnackbarContent } from '@mui/material'
 import { base } from '../base'
@@ -16,14 +16,16 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     DecryptedInspector: function Component(props) {
-        const text = useMemo(() => extractTextFromTypedMessage(props.message), [props.message])
-        const link = useMemo(() => parseURL(text.val || ''), [text.val]).find(isPoolTogetherUrl)
-        if (!text.ok) return null
+        const link = useMemo(() => {
+            const x = extractTextFromTypedMessage(props.message)
+            if (x.none) return null
+            return parseURL(x.val).find(isPoolTogetherUrl)
+        }, [props.message])
         if (!link) return null
         return <Renderer url={link} />
     },
     PostInspector: function Component() {
-        const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks())
+        const links = usePostInfoDetails.mentionedLinks()
         const link = links.find(isPoolTogetherUrl)
 
         if (!link) return null

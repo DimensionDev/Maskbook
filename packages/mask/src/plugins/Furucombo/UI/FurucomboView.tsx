@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
     tabs: {
         borderTop: `solid 1px ${theme.palette.divider}`,
         borderBottom: `solid 1px ${theme.palette.divider}`,
-        backgroundColor: `#1b1b21`,
+        backgroundColor: '#1b1b21',
     },
     tab: {
         fontFamily: 'inherit',
@@ -98,7 +98,7 @@ export function FurucomboView(props: PoolViewProps) {
 
     const investable = investables.find(
         (investable: Investable) =>
-            isSameAddress(investable.token.address, props.address) &&
+            isSameAddress(investable.address, props.address) &&
             investable.chainId === currentChainId &&
             investable.category === props.category,
     )

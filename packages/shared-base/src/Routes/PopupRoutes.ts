@@ -28,5 +28,6 @@ export enum PopupRoutes {
     RequestPermission = '/request-permission',
     ThirdPartyRequestPermission = '/3rd-request-permission',
     SignRequest = '/sign-request',
+    PersonaSignRequest = '/persona/sign-request',
     Swap = '/swap',
 }

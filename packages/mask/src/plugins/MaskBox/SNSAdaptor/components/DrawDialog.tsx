@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import BigNumber from 'bignumber.js'
 import { useContainer } from 'unstated-next'
 import { makeStyles } from '@masknet/theme'
 import { Add, Remove } from '@mui/icons-material'
@@ -10,7 +9,6 @@ import {
     formatBalance,
     formatEthereumAddress,
     useAccount,
-    useProviderType,
     useChainId,
     useMaskBoxConstants,
     EthereumTokenType,
@@ -23,6 +21,7 @@ import type { BoxInfo } from '../../type'
 import { GasSettingBar } from '../../../Wallet/SNSAdaptor/GasSettingDialog/GasSettingBar'
 import { TokenPrice } from '../../../../components/shared/TokenPrice'
 import { Context } from '../../hooks/useContext'
+import { multipliedBy } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
@@ -52,10 +51,10 @@ const useStyles = makeStyles()((theme) => ({
     field: {
         borderRadius: 0,
         padding: theme.spacing(0),
-        height: `25px !important`,
+        height: '25px !important',
         minWidth: 0,
         minHeight: 0,
-        outline: `none !important`,
+        outline: 'none !important',
         borderColor: `${theme.palette.divider} !important`,
     },
     textfield: {
@@ -115,7 +114,6 @@ export function DrawDialog(props: DrawDialogProps) {
     const providerDescriptor = useProviderDescriptor()
     const account = useAccount()
     const chainId = useChainId()
-    const providerType = useProviderType()
 
     const onCount = useCallback(
         (step: number) => {
@@ -132,7 +130,7 @@ export function DrawDialog(props: DrawDialogProps) {
                         <Typography color="textPrimary">
                             <span className={classes.value}>
                                 <FormattedBalance
-                                    value={new BigNumber(paymentTokenPrice).multipliedBy(paymentCount)}
+                                    value={multipliedBy(paymentTokenPrice, paymentCount)}
                                     decimals={paymentTokenDetailed?.decimals ?? 0}
                                     formatter={formatBalance}
                                     significant={6}
@@ -142,7 +140,7 @@ export function DrawDialog(props: DrawDialogProps) {
                         </Typography>
                         {paymentTokenDetailed ? (
                             <Typography color="textPrimary">
-                                <span>≈</span>
+                                <span>&asymp;</span>
                                 <TokenPrice
                                     chainId={chainId}
                                     amount={formatBalance(paymentTokenPrice, paymentTokenDetailed.decimals)}
@@ -190,7 +188,7 @@ export function DrawDialog(props: DrawDialogProps) {
                                             title: 'Token Amount',
                                             inputMode: 'decimal',
                                             min: 0,
-                                            max: 999,
+                                            max: 255,
                                             minLength: 1,
                                             pattern: '^[0-9]*[.,]?[0-9]*$',
                                             spellCheck: false,
@@ -256,7 +254,7 @@ export function DrawDialog(props: DrawDialogProps) {
                                 </Typography>
                                 <Box className={classes.content}>
                                     <GasSettingBar
-                                        gasLimit={openBoxTransactionGasLimit}
+                                        gasLimit={openBoxTransactionGasLimit || 0}
                                         onChange={setOpenBoxTransactionOverrides}
                                     />
                                 </Box>
@@ -267,7 +265,7 @@ export function DrawDialog(props: DrawDialogProps) {
 
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
-                        amount={new BigNumber(paymentTokenPrice).multipliedBy(paymentCount).toFixed()}
+                        amount={multipliedBy(paymentTokenPrice, paymentCount).toFixed()}
                         spender={MASK_BOX_CONTRACT_ADDRESS}
                         token={
                             paymentTokenDetailed?.type === EthereumTokenType.ERC20 ? paymentTokenDetailed : undefined

@@ -84,11 +84,11 @@ export function VotingCard() {
             ))}
             <EthereumWalletConnectedBoundary
                 classes={{ connectWallet: classes.button, unlockMetaMask: classes.button }}
-                offChain={true}>
+                offChain>
                 <Button
                     className={classes.button}
                     variant="contained"
-                    disabled={choice === 0 || !Boolean(account) || !Boolean(power)}
+                    disabled={choice === 0 || !account || !power}
                     onClick={() => setOpen(true)}>
                     {Boolean(power) && Boolean(account) ? t('plugin_snapshot_vote') : t('plugin_snapshot_no_power')}
                 </Button>

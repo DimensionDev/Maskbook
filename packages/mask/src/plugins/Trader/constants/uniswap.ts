@@ -12,11 +12,15 @@ export const UNISWAP_CUSTOM_BASES: ERC20TokenCustomizedBase = {
     [ChainId.Mainnet]: {
         [AMPL[ChainId.Mainnet].address]: [DAI, WNATIVE].map((x) => x[ChainId.Mainnet]),
     },
+    [ChainId.Matic]: {
+        [AMPL[ChainId.Matic].address]: [DAI, WNATIVE].map((x) => x[ChainId.Matic]),
+    },
 }
 
 export const UNISWAP_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
     ...WNATIVE_ONLY,
     [ChainId.Mainnet]: [WNATIVE, DAI, USDC, USDT, WBTC].map((x) => x[ChainId.Mainnet]),
+    [ChainId.Matic]: [WNATIVE, DAI, USDC, USDT, WBTC].map((x) => x[ChainId.Matic]),
     [ChainId.Rinkeby]: [WNATIVE, MSKA, MSKB, MSKC].map((x) => x[ChainId.Rinkeby]),
 }
 

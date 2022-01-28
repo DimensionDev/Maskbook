@@ -1,7 +1,9 @@
-import { Box, CardMedia, Typography, Card, CardContent, CardActions, Button } from '@mui/material'
+import { Button, Card, CardActions, CardContent, CardMedia, Grid, Theme, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../utils'
 import type { PuzzleCondition } from '../types'
+import { useContext } from 'react'
+import { FindTrumanContext } from '../context'
+import type { SxProps } from '@mui/system'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -10,8 +12,12 @@ const useStyles = makeStyles()((theme) => {
             ':not(:last-child)': {
                 marginBottom: '8px',
             },
+            display: 'flex',
+            flexDirection: 'column',
         },
-        content: {},
+        content: {
+            flex: 1,
+        },
         title: {
             fontSize: '16px',
             fontWeight: 'bold',
@@ -23,43 +29,52 @@ const useStyles = makeStyles()((theme) => {
 
 interface NoNftCardProps {
     conditions: PuzzleCondition[]
+    sx?: SxProps<Theme>
 }
 export default function NoNftCard(props: NoNftCardProps) {
-    const { conditions } = props
+    const { conditions, sx } = props
     const { classes } = useStyles()
-    const { t } = useI18N()
+    const { t } = useContext(FindTrumanContext)
 
     const renderNftCard = (title: string, img: string, url: string, count: number, address: string) => {
         return (
-            <Card key={address} className={classes.card} variant="outlined">
-                <CardMedia component="img" image={img} />
-                <CardContent className={classes.content}>
-                    <Typography gutterBottom variant="h5" component="div">
-                        {title}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                        {t(count > 1 ? 'plugin_find_truman_buy_nfts_tip' : 'plugin_find_truman_buy_nft_tip', { count })}
-                    </Typography>
-                </CardContent>
-                <CardActions sx={{ justifyContent: 'flex-end' }} className={classes.content}>
-                    <Button
-                        component="a"
-                        href={url}
-                        variant="contained"
-                        target="_blank"
-                        size={conditions.length > 1 ? 'small' : 'medium'}>
-                        {t('plugin_find_truman_buy')}
-                    </Button>
-                </CardActions>
-            </Card>
+            <Grid key={title} item xs={6}>
+                <Card key={address} className={classes.card} variant="outlined">
+                    <CardMedia component="img" image={img} />
+                    <CardContent className={classes.content}>
+                        <Typography gutterBottom variant="h5" component="div">
+                            {title}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                            {t('plugin_find_truman_buy_nft_tip', {
+                                count,
+                                name: title,
+                            })}
+                        </Typography>
+                    </CardContent>
+                    <CardActions sx={{ justifyContent: 'flex-end' }}>
+                        <Button
+                            onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                                e.stopPropagation()
+                            }}
+                            component="a"
+                            href={url}
+                            variant="contained"
+                            target="_blank"
+                            size="small">
+                            {t('plugin_find_truman_buy')}
+                        </Button>
+                    </CardActions>
+                </Card>
+            </Grid>
         )
     }
 
     return (
-        <Box sx={{ marginTop: 1 }}>
+        <Grid container spacing={2} justifyContent="space-around" sx={{ ...(sx || {}) }}>
             {conditions.map((condition) =>
                 renderNftCard(condition.name, condition.img, condition.url, condition.minAmount, condition.address),
             )}
-        </Box>
+        </Grid>
     )
 }

@@ -3,6 +3,7 @@ import { Box, Card, Grid, Stack, Typography } from '@mui/material'
 import formatDateTime from 'date-fns/format'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import type { BackupFileInfo } from '../../pages/Settings/type'
+import Tooltip from '@mui/material/Tooltip'
 
 interface BackupInfoProps {
     info: BackupFileInfo
@@ -20,7 +21,7 @@ export const BackupInfoCard = memo(({ info }: BackupInfoProps) => {
                 sx={{ padding: '8px' }}>
                 <Grid item xs={10}>
                     <Stack spacing={1}>
-                        <Typography variant="body2">{info.abstract}</Typography>
+                        <Typography variant="body2">{economizeAbstract(info.abstract)}</Typography>
                         <Typography variant="body2">
                             {formatDateTime(fromUnixTime(info.uploadedAt), 'yyyy-MM-dd HH:mm')}
                         </Typography>
@@ -37,3 +38,15 @@ export const BackupInfoCard = memo(({ info }: BackupInfoProps) => {
         </Card>
     )
 })
+
+function economizeAbstract(input: string) {
+    if (!input.length) return <div>error</div>
+    if (input.length < 30) return <div>{input}</div>
+    return (
+        <Tooltip title={input} placement="top" arrow>
+            <div>
+                {input.slice(0, 30)}...({input.split(',').length})
+            </div>
+        </Tooltip>
+    )
+}

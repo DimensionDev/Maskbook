@@ -105,7 +105,7 @@ export interface OpenSeaAssetEventResponse {
     edges: OpenSeaAssetEvent[]
 }
 
-//#region opensea fetch response
+// #region opensea fetch response
 export interface OpenSeaFees {
     opensea_seller_fee_basis_points: number
     opensea_buyer_fee_basis_points: number
@@ -188,6 +188,9 @@ export interface AssetOrder {
     quantity: string
     expiration_time: number
     order_hash: string
+    base_price?: string
+    currentPrice?: string
+    paymentTokenContract?: OpenSeaFungibleToken
 }
 
 export interface OpenSeaResponse extends Asset {
@@ -242,4 +245,4 @@ export interface Transaction {
     timestamp: number
 }
 
-//#endregion
+// #endregion

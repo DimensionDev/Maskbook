@@ -1,5 +1,5 @@
 import { api } from '@dimensiondev/mask-wallet-core/proto'
-import { OnDemandWorker } from '../../../../../web-workers/OnDemandWorker'
+import { OnDemandWorker } from '../../../../../../utils-pure'
 import type { Input, Output } from '../../../../../../web-workers/wallet'
 
 type Request = InstanceType<typeof api.MWRequest>

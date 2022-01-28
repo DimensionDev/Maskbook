@@ -1,7 +1,7 @@
 import type { SocialNetwork } from '../../social-network/types'
 import { facebookBase } from './base'
 import { getPostUrlAtFacebook, isValidFacebookUsername } from './utils/parse-username'
-import { PostIdentifier, ProfileIdentifier } from '@masknet/shared'
+import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { deconstructPayload } from '../../utils'
 import { createSNSAdaptorSpecializedPostContext } from '../../social-network/utils/create-post-context'
 

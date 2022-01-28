@@ -4,7 +4,7 @@ import { useNativeTokenWrapperContract } from '../contracts/useWrappedEtherContr
 import { useAccount } from './useAccount'
 import { useTransactionState } from './useTransactionState'
 import { ChainId, GasOptionConfig, TransactionStateType, TransactionEventType } from '../types'
-import { isLessThan, isZero } from '../utils'
+import { isLessThan, isZero } from '@masknet/web3-shared-base'
 
 export function useNativeTokenWrapperCallback(chainId?: ChainId) {
     const account = useAccount()

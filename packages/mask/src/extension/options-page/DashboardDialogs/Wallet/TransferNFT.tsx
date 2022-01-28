@@ -42,7 +42,7 @@ export function DashboardWalletTransferDialogNFT(props: WrappedDialogProps<{ tok
     const [address, setAddress] = useState('')
     const { collectiblesRetry } = useContext(CollectibleContext)
 
-    //#region transfer tokens
+    // #region transfer tokens
     const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
         token.contractDetailed.type,
         token.contractDetailed.address,
@@ -51,9 +51,9 @@ export function DashboardWalletTransferDialogNFT(props: WrappedDialogProps<{ tok
     const onTransfer = useCallback(async () => {
         await transferCallback(token.tokenId, address)
     }, [transferCallback, token.tokenId, address])
-    //#endregion
+    // #endregion
 
-    //#region remote controlled transaction dialog
+    // #region remote controlled transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         useCallback(
@@ -77,28 +77,28 @@ export function DashboardWalletTransferDialogNFT(props: WrappedDialogProps<{ tok
             summary: `Transfer ${token.info.name} to ${formatEthereumAddress(address, 4)}.`,
         })
     }, [transferState /* update tx dialog only if state changed */])
-    //#endregion
+    // #endregion
 
-    //#region validation
+    // #region validation
     const validationMessage = useMemo(() => {
         if (!address) return t('wallet_transfer_error_address_absence')
         if (!EthereumAddress.isValid(address)) return t('wallet_transfer_error_invalid_address')
         return ''
     }, [address, token])
-    //#endregion
+    // #endregion
 
     return (
         <DashboardDialogCore {...props}>
             <DashboardDialogWrapper
                 primary={t('wallet_transfer_title')}
                 icon={
-                    token.info.image ? (
+                    token.info.mediaUrl ? (
                         <Image
                             component="img"
                             width={160}
                             height={220}
                             style={{ objectFit: 'contain' }}
-                            src={token.info.image}
+                            src={token.info.mediaUrl}
                         />
                     ) : (
                         <MaskIconOutlined className={classes.placeholder} />
@@ -113,6 +113,7 @@ export function DashboardWalletTransferDialogNFT(props: WrappedDialogProps<{ tok
                             placeholder={t('wallet_transfer_to_address')}
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
+                            inputProps={{ spellCheck: 'false' }}
                         />
                         <Button
                             className={classes.button}

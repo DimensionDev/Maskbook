@@ -1,6 +1,6 @@
 import { memo, MutableRefObject, useEffect, useMemo, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { RoutePaths } from '../../../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { styled, useTheme } from '@mui/material/styles'
 import { useDashboardI18N } from '../../../../locales'
 import { Button } from '@mui/material'
@@ -70,7 +70,7 @@ const Welcome = memo(() => {
         if (!iframeDocument) return
 
         const style = iframeDocument.createElement('style')
-        style.innerHTML = `
+        style.textContent = `
               h3, h6 { color: ${mode === 'dark' ? '#D4D4D4' : '#111432'}; }
               p { color: ${mode === 'dark' ? '#D4D4D4;' : '#7b8192'}; }
               body::-webkit-scrollbar {
@@ -120,7 +120,7 @@ const Welcome = memo(() => {
             privacyPolicyURL={privacyPolicyURL}
             iframeLoadHandler={handleIFrameLoad}
             agreeHandler={() =>
-                navigate(urlcat(RoutePaths.CreateMaskWalletForm, { chainId: searchParams.get('chainId') }))
+                navigate(urlcat(DashboardRoutes.CreateMaskWalletForm, { chainId: searchParams.get('chainId') }))
             }
             cancelHandler={() => window.close()}
         />

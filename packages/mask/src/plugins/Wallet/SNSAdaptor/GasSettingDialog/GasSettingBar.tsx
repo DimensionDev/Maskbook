@@ -14,6 +14,7 @@ import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { Box, IconButton, Typography } from '@mui/material'
 import { WalletMessages } from '../../messages'
 import { TokenPrice } from '../../../../components/shared/TokenPrice'
+import { multipliedBy } from '@masknet/web3-shared-base'
 
 export interface GasSettingBarProps {
     gasLimit: number
@@ -72,7 +73,8 @@ export function GasSettingBar(props: GasSettingBarProps) {
     }, [])
 
     const gasFee = useMemo(() => {
-        return new BigNumber(gasLimit).multipliedBy(
+        return multipliedBy(
+            gasLimit,
             isEIP1559Supported(chainId) && maxFee ? new BigNumber(maxFee) : gasPrice ?? gasPriceDefault,
         )
     }, [chainId, gasLimit, gasPrice, maxFee, gasPriceDefault])
@@ -81,7 +83,7 @@ export function GasSettingBar(props: GasSettingBarProps) {
         <Box display="flex" flexDirection="row" alignItems="center">
             <Typography fontSize="14px" sx={{ marginRight: 1 }}>
                 <span>
-                    {formatWeiToEther(gasFee).toFixed(6)} {nativeTokenDetailed?.symbol ?? ''} ≈
+                    {formatWeiToEther(gasFee).toFixed(6)} {nativeTokenDetailed?.symbol ?? ''} &asymp;
                 </span>
                 <TokenPrice chainId={chainId} amount={formatWeiToEther(gasFee)} />
             </Typography>

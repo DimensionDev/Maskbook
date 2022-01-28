@@ -10,7 +10,7 @@ import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
 import { useCustomSnackbar } from '@masknet/theme'
 import { useAsyncFn } from 'react-use'
 import { useNavigate } from 'react-router-dom'
-import { RoutePaths } from '../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { Step, Stepper } from '../Stepper'
 import { LoadingCard } from './steps/LoadingCard'
 import { decryptBackup } from '@masknet/backup-format'
@@ -143,7 +143,7 @@ export const RestoreFromCloud = memo(() => {
 
     const onCloseSynchronizePassword = () => {
         toggleSynchronizePasswordDialog(false)
-        navigate(RoutePaths.Personas, { replace: true })
+        navigate(DashboardRoutes.Personas, { replace: true })
     }
 
     useEffect(() => {

@@ -1,13 +1,11 @@
 import {
     FungibleTokenDetailed,
     getNetworkTypeFromChainId,
-    isNative,
+    isNativeTokenAddress,
     NetworkType,
     useAccount,
-    useBlockNumber,
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
-import { useAsyncRetry } from 'react-use'
 import { safeUnreachable } from '@dimensiondev/kit'
 import { ZRX_AFFILIATE_ADDRESS } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
@@ -17,19 +15,27 @@ import { useTradeProviderSettings } from '../useTradeSettings'
 import { currentNetworkSettings } from '../../../Wallet/settings'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { TradeProvider } from '@masknet/public-api'
+import { useDoubleBlockBeatRetry } from '@masknet/plugin-infra'
+
+const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 
 export function getNativeTokenLabel(networkType: NetworkType) {
     switch (networkType) {
         case NetworkType.Ethereum:
             return 'ETH'
         case NetworkType.Binance:
-            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         case NetworkType.Polygon:
-            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         case NetworkType.Arbitrum:
-            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         case NetworkType.xDai:
-            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+        case NetworkType.Celo:
+        case NetworkType.Fantom:
+        case NetworkType.Aurora:
+        case NetworkType.Boba:
+        case NetworkType.Fuse:
+        case NetworkType.Metis:
+        case NetworkType.Avalanche:
+        case NetworkType.Optimistic:
+            return NATIVE_TOKEN_ADDRESS
         default:
             safeUnreachable(networkType)
             return ''
@@ -42,24 +48,25 @@ export function useTrade(
     outputAmount: string,
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
+    temporarySlippage?: number,
 ) {
     const account = useAccount()
     const { targetChainId } = TargetChainIdContext.useContainer()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(targetChainId)
-    const blockNumber = useBlockNumber()
 
-    const slippage = useSlippageTolerance()
+    const slippageSetting = useSlippageTolerance()
+    const slippage = temporarySlippage || slippageSetting
     const { pools } = useTradeProviderSettings(TradeProvider.ZRX)
-    return useAsyncRetry(async () => {
+    return useDoubleBlockBeatRetry(async () => {
         if (!inputToken || !outputToken) return null
         const isExactIn = strategy === TradeStrategy.ExactIn
         if (inputAmount === '0' && isExactIn) return null
         if (outputAmount === '0' && !isExactIn) return null
 
-        const sellToken = isNative(inputToken.address)
+        const sellToken = isNativeTokenAddress(inputToken)
             ? getNativeTokenLabel(getNetworkTypeFromChainId(targetChainId) ?? currentNetworkSettings.value)
             : inputToken.address
-        const buyToken = isNative(outputToken.address)
+        const buyToken = isNativeTokenAddress(outputToken)
             ? getNativeTokenLabel(getNetworkTypeFromChainId(targetChainId) ?? currentNetworkSettings.value)
             : outputToken.address
         return PluginTraderRPC.swapQuote(
@@ -85,6 +92,5 @@ export function useTrade(
         outputToken?.address,
         slippage,
         pools.length,
-        blockNumber, // refresh api each block
     ])
 }

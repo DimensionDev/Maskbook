@@ -1,10 +1,10 @@
-import { Web3Plugin, NetworkPluginID } from '@masknet/plugin-infra'
+import { Web3Plugin, NetworkPluginID, PluginId } from '@masknet/plugin-infra'
 import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 
-export const PLUGIN_META_KEY = 'com.mask.evm'
-export const PLUGIN_ID = 'com.mask.evm'
+export const PLUGIN_ID = PluginId.EVM
+export const PLUGIN_META_KEY = `${PluginId.EVM}:1`
 export const PLUGIN_NAME = 'EVM'
-export const PLUGIN_ICON = 'Ξ'
+export const PLUGIN_ICON = '\u039E'
 export const PLUGIN_DESCRIPTION = ''
 export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
     {
@@ -52,7 +52,7 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         networkSupporterPluginID: PLUGIN_ID,
         chainId: ChainId.Gorli,
         type: NetworkType.Ethereum,
-        name: 'Görli',
+        name: 'G\xf6rli',
         icon: new URL('./assets/ethereum.png', import.meta.url),
         iconColor: 'rgb(48, 153, 242)',
         isMainnet: false,
@@ -70,7 +70,7 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
     {
         ID: `${PLUGIN_ID}_bsct`,
         networkSupporterPluginID: PLUGIN_ID,
-        chainId: ChainId.BSC,
+        chainId: ChainId.BSCT,
         type: NetworkType.Binance,
         name: 'BSCT',
         icon: new URL('./assets/binance.png', import.meta.url),
@@ -125,6 +125,46 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         name: 'xDai',
         icon: new URL('./assets/xdai.png', import.meta.url),
         iconColor: 'rgb(73, 169, 166)',
+        isMainnet: true,
+    },
+    {
+        ID: `${PLUGIN_ID}_celo`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Celo,
+        type: NetworkType.Celo,
+        name: 'Celo',
+        icon: new URL('./assets/celo.png', import.meta.url),
+        iconColor: 'rgb(53, 208, 127)',
+        isMainnet: true,
+    },
+    {
+        ID: `${PLUGIN_ID}_fantom`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Fantom,
+        type: NetworkType.Fantom,
+        name: 'Fantom',
+        icon: new URL('./assets/fantom.png', import.meta.url),
+        iconColor: 'rgb(73, 169, 166)',
+        isMainnet: true,
+    },
+    {
+        ID: `${PLUGIN_ID}_avalanche`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Avalanche,
+        type: NetworkType.Avalanche,
+        name: 'Avalanche',
+        icon: new URL('./assets/avalanche.png', import.meta.url),
+        iconColor: 'rgb(232, 65, 66)',
+        isMainnet: true,
+    },
+    {
+        ID: `${PLUGIN_ID}_aurora`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Aurora,
+        type: NetworkType.Aurora,
+        name: 'Aurora',
+        icon: new URL('./assets/aurora.png', import.meta.url),
+        iconColor: 'rgb(112, 212, 74)',
         isMainnet: true,
     },
 ]

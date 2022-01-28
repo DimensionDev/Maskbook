@@ -15,7 +15,7 @@ import {
 import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { INTERNAL_nativeSend, INTERNAL_send } from './send'
 import { defer } from '@masknet/shared-base'
-import { hasNativeAPI, nativeAPI } from '../../../utils/native-rpc'
+import { hasNativeAPI, nativeAPI } from '../../../../shared/native-rpc'
 import { openPopupWindow } from '../HelperService'
 import Services from '../../service'
 
@@ -173,16 +173,23 @@ export async function replaceRequest(hash: string, payload: JsonRpcPayload, over
     if (!pid || payload.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return
 
     const [config] = payload.params as [TransactionConfig]
-    return request<string>({
-        method: EthereumMethodType.MASK_REPLACE_TRANSACTION,
-        params: [
-            hash,
-            {
-                ...config,
-                ...overrides,
-            },
-        ],
-    })
+    return request<string>(
+        {
+            method: EthereumMethodType.MASK_REPLACE_TRANSACTION,
+            params: [
+                hash,
+                {
+                    ...config,
+                    ...overrides,
+                },
+            ],
+        },
+        {
+            account: currentMaskWalletAccountSettings.value,
+            chainId: currentMaskWalletChainIdSettings.value,
+            providerType: ProviderType.MaskWallet,
+        },
+    )
 }
 
 export async function cancelRequest(hash: string, payload: JsonRpcPayload, overrides?: TransactionConfig) {

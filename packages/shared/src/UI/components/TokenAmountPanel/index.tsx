@@ -1,12 +1,11 @@
 import { ChangeEvent, useCallback, useMemo } from 'react'
 import { Box, Chip, ChipProps, InputProps, StandardTextFieldProps, Typography } from '@mui/material'
-import { makeStyles, MaskTextField } from '@masknet/theme'
+import { makeStyles, MaskTextField, useStylesExtends } from '@masknet/theme'
 import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
 import { SelectTokenChip, SelectTokenChipProps } from '../SelectTokenChip'
 import { FungibleTokenDetailed, formatBalance } from '@masknet/web3-shared-evm'
 import { useSharedI18N } from '../../../locales'
-import { useStylesExtends } from '@masknet/theme'
 import { FormattedBalance } from '../../../wallet'
 
 const MIN_AMOUNT_LENGTH = 1
@@ -83,7 +82,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
     const t = useSharedI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    //#region update amount by self
+    // #region update amount by self
     const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
         () => ({
             RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${token?.decimals}}$`), // .ddd...d
@@ -99,7 +98,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
         },
         [onAmountChange, RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT],
     )
-    //#endregion
+    // #endregion
 
     return (
         <MaskTextField

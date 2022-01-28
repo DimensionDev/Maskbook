@@ -12,8 +12,8 @@ import { parseStringOrBytes32, createERC20Token, createNativeToken } from '../ut
 export function useERC20TokenDetailed(address?: string, token?: Partial<ERC20TokenDetailed>, targetChainId?: ChainId) {
     const currentChainId = useChainId()
     const chainId = targetChainId ?? currentChainId
-    const erc20TokenContract = useERC20TokenContract(address)
-    const erc20TokenBytes32Contract = useERC20TokenBytes32Contract(address)
+    const erc20TokenContract = useERC20TokenContract(address, chainId)
+    const erc20TokenBytes32Contract = useERC20TokenBytes32Contract(address, chainId)
 
     return useAsyncRetry(async () => {
         if (!address) return
@@ -27,8 +27,8 @@ export function useFungibleTokensDetailed(listOfToken: Pick<FungibleToken, 'addr
     const chainId = _chainId ? _chainId : currentChainId
     const listOfAddress = useMemo(() => listOfToken.map((t) => t.address), [JSON.stringify(listOfToken)])
 
-    const erc20TokenContracts = useERC20TokenContracts(listOfAddress, true)
-    const erc20TokenBytes32Contracts = useERC20TokenBytes32Contracts(listOfAddress, true)
+    const erc20TokenContracts = useERC20TokenContracts(listOfAddress)
+    const erc20TokenBytes32Contracts = useERC20TokenBytes32Contracts(listOfAddress)
 
     return useAsyncRetry<FungibleTokenDetailed[]>(
         async () =>
@@ -80,7 +80,7 @@ async function getERC20TokenDetailed(
     return createERC20Token(
         chainId,
         address,
-        typeof decimals === 'string' ? Number.parseInt(decimals, 10) : decimals,
+        typeof decimals === 'string' ? Number.parseInt(decimals ? decimals : '0', 10) : decimals,
         parseStringOrBytes32(name, nameBytes32, 'Unknown Token'),
         parseStringOrBytes32(symbol, symbolBytes32, 'Unknown'),
     )

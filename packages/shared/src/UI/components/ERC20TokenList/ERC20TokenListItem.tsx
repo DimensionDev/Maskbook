@@ -2,6 +2,7 @@ import { ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import classNames from 'classnames'
 import {
     Asset,
+    currySameAddress,
     ERC20TokenDetailed,
     formatBalance,
     FungibleTokenDetailed,
@@ -17,6 +18,7 @@ import { useCallback, useMemo } from 'react'
 import { LoadingIcon } from '@masknet/icons'
 import { useSharedI18N } from '../../../locales'
 import { LoadingAnimation } from '../LoadingAnimation'
+import BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -25,7 +27,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     list: {
         maxHeight: '100%',
-        paddingLeft: theme.spacing(1),
+        padding: theme.spacing(1.5),
         borderRadius: theme.spacing(1),
     },
     text: {
@@ -43,15 +45,13 @@ const useStyles = makeStyles()((theme) => ({
     name: {
         display: 'block',
         lineHeight: '20px',
-        fontSize: 12,
-    },
-    secondary: {
-        fontSize: 14,
-        textAlign: 'right',
+        fontSize: 16,
+        // TODO: Should align dashboard and twitter theme in common component, depend twitter theme
+        color: theme.palette.mode === 'dark' ? '#6E767D' : '#536471',
     },
     symbol: {
         lineHeight: '20px',
-        fontSize: 14,
+        fontSize: 16,
     },
     import: {
         '&:before': {
@@ -62,8 +62,15 @@ const useStyles = makeStyles()((theme) => ({
             left: 0,
             width: '100%',
             height: '100%',
-            background: 'rgba(250, 250, 250, 0.3)',
+            background: 'transparent',
         },
+    },
+    importButton: {
+        padding: '3px 0',
+        borderRadius: 15,
+        fontSize: 14,
+        fontWeight: 500,
+        lineHeight: '20px',
     },
 }))
 
@@ -75,6 +82,8 @@ export const getERC20TokenListItem =
             from: 'search' | 'defaultList'
             inList: boolean
         },
+        selectedTokens: string[],
+        loadingAsset: boolean,
         account?: string,
     ) =>
     ({ data, onSelect }: MaskSearchableListItemProps<Asset>) => {
@@ -106,22 +115,37 @@ export const getERC20TokenListItem =
 
         const action = useMemo(() => {
             return !isNotAdded || isAdded || (info.inList && info.from === 'search') ? (
-                <span>{data.balance ? formatBalance(data.balance, token.decimals, 6) : <LoadingAnimation />}</span>
+                data.balance === null ? null : (
+                    <span>
+                        {loadingAsset ? (
+                            <LoadingAnimation />
+                        ) : (
+                            Number.parseFloat(
+                                new BigNumber(formatBalance(data.balance ?? 0, token.decimals, 6)).toFixed(6),
+                            )
+                        )}
+                    </span>
+                )
             ) : (
                 <MaskLoadingButton
-                    variant="rounded"
+                    variant="contained"
                     color="primary"
                     onClick={onImport}
                     size="small"
+                    className={classes.importButton}
                     soloLoading
-                    loadingIndicator={<LoadingIcon sx={{ fontSize: 16 }} />}>
+                    loadingIndicator={<LoadingIcon sx={{ fontSize: 14 }} />}>
                     {t.import()}
                 </MaskLoadingButton>
             )
-        }, [info, isNotAdded, isAdded])
+        }, [info, isNotAdded, isAdded, data.balance])
 
         return (
-            <ListItem button className={classes.list} onClick={handleTokenSelect}>
+            <ListItem
+                button
+                className={`${classes.list} dashboard token-list`}
+                onClick={handleTokenSelect}
+                disabled={selectedTokens.some(currySameAddress(address))}>
                 <ListItemIcon>
                     <TokenIcon classes={{ icon: classes.icon }} address={address} name={name} logoURI={logoURI} />
                 </ListItemIcon>
@@ -131,12 +155,12 @@ export const getERC20TokenListItem =
                         color="textPrimary"
                         component="span">
                         <span className={classes.symbol}>{symbol}</span>
-                        <span className={classes.name}>
+                        <span className={`${classes.name} dashboard token-list-symbol`}>
                             {name}
-                            {isAdded && <span> • Added By User</span>}
+                            {isAdded && <span> &bull; Added By User</span>}
                         </span>
                     </Typography>
-                    <Typography sx={{ fontSize: 14 }} color="textSecondary" component="span">
+                    <Typography sx={{ fontSize: 16 }} color="textSecondary" component="span">
                         {action}
                     </Typography>
                 </ListItemText>

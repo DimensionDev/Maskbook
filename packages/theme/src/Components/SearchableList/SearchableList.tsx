@@ -4,10 +4,9 @@ import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-unified'
 import { Box, InputAdornment } from '@mui/material'
 import { makeStyles } from '../../makeStyles'
-import { Search } from '@mui/icons-material'
-import { MaskColorVar } from '../../constants'
 import { MaskSearchableItemInList } from './MaskSearchableItemInList'
 import { MaskTextField, MaskTextFieldProps } from '../TextField'
+import { SearchIcon } from '@masknet/icons'
 
 export interface MaskSearchableListProps<T> {
     /** The list data should be render */
@@ -26,7 +25,10 @@ export interface MaskSearchableListProps<T> {
     onSelect(selected: T): void
     /** The hook when search */
     onSearch?(key: string): void
-    textFieldProps?: MaskTextFieldProps
+    /** Props for search box */
+    SearchFieldProps?: MaskTextFieldProps
+    /** Show search bar */
+    disableSearch?: boolean
 }
 
 /**
@@ -52,15 +54,18 @@ export function SearchableList<T>({
     placeholder,
     onSelect,
     onSearch,
+    disableSearch,
     searchKey,
     itemRender,
     FixedSizeListProps = {},
-    textFieldProps,
+    SearchFieldProps,
 }: MaskSearchableListProps<T>) {
     const [keyword, setKeyword] = useState('')
     const { classes } = useStyles()
     const { height, itemSize, ...rest } = FixedSizeListProps
-    //#region fuse
+    const { InputProps, ...textFieldPropsRest } = SearchFieldProps ?? {}
+
+    // #region fuse
     const fuse = useMemo(
         () =>
             new Fuse(data, {
@@ -71,15 +76,15 @@ export function SearchableList<T>({
             }),
         [data, searchKey],
     )
-    //#endregion
+    // #endregion
 
-    //#region create searched data
+    // #region create searched data
     const readyToRenderData = useMemo(() => {
         if (!keyword || onSearch) return data
         const filtered = [...fuse.search(keyword).map((x: any) => x.item)]
         return itemKey ? uniqBy(filtered, (x) => x[itemKey]) : filtered
     }, [keyword, fuse, data])
-    //#endregion
+    // #endregion
 
     const handleSearch = (word: string) => {
         setKeyword(word)
@@ -88,30 +93,33 @@ export function SearchableList<T>({
 
     return (
         <div className={classes.container}>
-            <Box pt={0.5}>
-                <MaskTextField
-                    placeholder="Search"
-                    autoFocus
-                    fullWidth
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <Search />
-                            </InputAdornment>
-                        ),
-                    }}
-                    onChange={(e) => handleSearch(e.currentTarget.value)}
-                    {...textFieldProps}
-                />
-            </Box>
+            {!disableSearch && (
+                <Box pt={0.5}>
+                    <MaskTextField
+                        placeholder="Search"
+                        autoFocus
+                        fullWidth
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon />
+                                </InputAdornment>
+                            ),
+                            ...InputProps,
+                        }}
+                        onChange={(e) => handleSearch(e.currentTarget.value)}
+                        {...textFieldPropsRest}
+                    />
+                </Box>
+            )}
             {placeholder}
             {!placeholder && (
                 <div className={classes.list}>
                     <FixedSizeList
                         width="100%"
                         height={height ?? 300}
-                        overscanCount={5}
-                        itemSize={itemSize ?? 60}
+                        overscanCount={25}
+                        itemSize={itemSize ?? 100}
                         itemData={{
                             dataSet: readyToRenderData,
                             onSelect: onSelect,
@@ -128,7 +136,7 @@ export function SearchableList<T>({
 const useStyles = makeStyles()((theme) => ({
     container: {},
     list: {
-        marginTop: theme.spacing(1),
+        marginTop: theme.spacing(1.5),
         '& > div::-webkit-scrollbar': {
             width: '7px',
         },
@@ -138,7 +146,7 @@ const useStyles = makeStyles()((theme) => ({
         },
         '& > div::-webkit-scrollbar-thumb': {
             borderRadius: '4px',
-            backgroundColor: MaskColorVar.normalBackground,
+            backgroundColor: theme.palette.background.default,
         },
     },
 }))

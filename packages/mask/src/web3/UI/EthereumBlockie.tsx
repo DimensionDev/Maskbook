@@ -24,7 +24,7 @@ export function EthereumBlockie(props: EthereumBlockieProps) {
 
     return (
         <Avatar className={classes.icon} src={blockie}>
-            {name?.substr(0, 1).toLocaleUpperCase()}
+            {name?.substr(0, 1).toUpperCase()}
         </Avatar>
     )
 }

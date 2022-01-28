@@ -2,14 +2,13 @@ import {
     EthereumTokenType,
     formatBalance,
     FungibleTokenDetailed,
-    isZero,
     TransactionStateType,
     useAccount,
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
+import { isZero, rightShift } from '@masknet/web3-shared-base'
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -63,12 +62,11 @@ export function InvestDialog() {
     // context
     const account = useAccount()
 
-    //#region remote controlled dialog
+    // #region remote controlled dialog
     const { open, closeDialog } = useRemoteControlledDialog(PluginDHedgeMessages.InvestDialogUpdated, (ev) => {
-        if (ev.open) {
-            setPool(ev.pool)
-            setAllowedTokens(ev.tokens)
-        }
+        if (!ev.open) return
+        setPool(ev.pool)
+        setAllowedTokens(ev.tokens)
     })
     const onClose = useCallback(() => {
         setPool(undefined)
@@ -76,9 +74,9 @@ export function InvestDialog() {
         setToken(undefined)
         closeDialog()
     }, [closeDialog])
-    //#endregion
+    // #endregion
 
-    //#region select token
+    // #region select token
     const { setDialog: setSelectTokenDialogOpen } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
         useCallback(
@@ -94,28 +92,28 @@ export function InvestDialog() {
             open: true,
             uuid: id,
             disableNativeToken: true,
-            FixedTokenListProps: {
+            FungibleTokenListProps: {
                 whitelist: allowedTokens,
             },
         })
     }, [id, token?.address, allowedTokens])
-    //#endregion
+    // #endregion
 
-    //#region amount
+    // #region amount
     const [rawAmount, setRawAmount] = useState('')
-    const amount = new BigNumber(rawAmount || '0').shiftedBy(token?.decimals ?? 0)
+    const amount = rightShift(rawAmount || '0', token?.decimals)
     const {
         value: tokenBalance = '0',
         loading: loadingTokenBalance,
         retry: retryLoadTokenBalance,
     } = useFungibleTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
-    //#endregion
+    // #endregion
 
-    //#region blocking
+    // #region blocking
     const [investState, investCallback, resetInvestCallback] = useInvestCallback(pool, amount.toFixed(), token)
-    //#endregion
+    // #endregion
 
-    //#region Swap
+    // #region Swap
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(
         PluginTraderMessages.swapDialogUpdated,
         useCallback(
@@ -142,9 +140,9 @@ export function InvestDialog() {
             },
         })
     }, [token, openSwapDialog])
-    //#endregion
+    // #endregion
 
-    //#region transaction dialog
+    // #region transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
@@ -192,9 +190,9 @@ export function InvestDialog() {
             summary: `Investing ${formatBalance(amount, token.decimals)}${token.symbol} on ${pool?.name} pool.`,
         })
     }, [investState /* update tx dialog only if state changed */])
-    //#endregion
+    // #endregion
 
-    //#region submit button
+    // #region submit button
     const validationMessage = useMemo(() => {
         if (!account) return t('plugin_wallet_connect_a_wallet')
         if (!amount || amount.isZero()) return t('plugin_dhedge_enter_an_amount')
@@ -204,7 +202,7 @@ export function InvestDialog() {
             })
         return ''
     }, [account, amount.toFixed(), token, tokenBalance])
-    //#endregion
+    // #endregion
 
     if (!pool) return null
     return (

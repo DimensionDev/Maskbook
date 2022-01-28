@@ -1,4 +1,4 @@
-import type { AESJsonWebKey } from './utils'
+import type { AESJsonWebKey } from '@masknet/shared-base'
 
 export interface AESMethods {
     // length 128 or 192 is not used

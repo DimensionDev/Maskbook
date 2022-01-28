@@ -14,6 +14,7 @@ import formatDuration from 'date-fns/formatDuration'
 import isBefore from 'date-fns/isBefore'
 import { CurrencyType, TransactionStateType } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
+import { isZero, multipliedBy, ZERO } from '@masknet/web3-shared-base'
 
 export enum PlayerStatus {
     Winning = 'winning',
@@ -94,8 +95,8 @@ export function getGameFinancialData(
     playerStandings: PlayerStandings,
     assets: GameAssets,
 ) {
-    const rawPoolInterest = new BigNumber(poolData.totalAdai).isZero()
-        ? new BigNumber(0)
+    const rawPoolInterest = isZero(poolData.totalAdai)
+        ? ZERO
         : new BigNumber(poolData.totalAdai).minus(info.totalGamePrincipal)
     const gameInterest = new BigNumber(info.gameHasEnded ? info.totalGameInterest : rawPoolInterest).multipliedBy(
         assets.gameAsset?.price ? assets.gameAsset?.price[CurrencyType.USD] : 1,
@@ -116,7 +117,7 @@ export function getGameFinancialData(
     const dateAfterDuration = addSeconds(baseDate, info.segmentLength * (info.lastSegment + 1))
     const gameDuration = differenceInDays(dateAfterDuration, baseDate)
 
-    const expectedPayment = new BigNumber(info.segmentPayment).multipliedBy(info.lastSegment)
+    const expectedPayment = multipliedBy(info.segmentPayment, info.lastSegment)
     const dividend = winnerGains.multipliedBy(365)
     const divisor = expectedPayment
         .multipliedBy(gameDuration)
@@ -128,7 +129,7 @@ export function getGameFinancialData(
         poolAPY,
         poolEarnings: info.gameHasEnded ? new BigNumber(info.totalGameInterest) : rawPoolInterest,
         extraRewards: info.gameHasEnded
-            ? new BigNumber(playerStandings.winning).multipliedBy(info.rewardsPerPlayer)
+            ? multipliedBy(playerStandings.winning, info.rewardsPerPlayer)
             : new BigNumber(poolData.reward).plus(poolData.incentives),
     } as GameFinancialData
 }

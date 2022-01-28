@@ -1,25 +1,16 @@
-import { ECKeyIdentifier, Identifier, PersonaIdentifier } from '@masknet/shared'
+import { ECKeyIdentifier, Identifier, PersonaIdentifier } from '@masknet/shared-base'
 import { head } from 'lodash-unified'
 import type { InternalSettings } from '../../settings/createSettings'
 import {
     appearanceSettings,
     currentPersonaIdentifier,
     languageSettings,
-    currentPluginEnabledStatus,
+    currentPluginMinimalModeNOTEnabled,
     pluginIDSettings,
 } from '../../settings/settings'
-import {
-    currentDataProviderSettings,
-    ethereumNetworkTradeProviderSettings,
-    binanceNetworkTradeProviderSettings,
-    polygonNetworkTradeProviderSettings,
-    arbitrumNetworkTradeProviderSettings,
-    xdaiNetworkTradeProviderSettings,
-} from '../../plugins/Trader/settings'
+import { currentDataProviderSettings } from '../../plugins/Trader/settings'
 import { queryMyPersonas } from './IdentityService'
 import {
-    currentBalanceSettings,
-    currentBlockNumberSettings,
     currentAccountSettings,
     currentNetworkSettings,
     currentProviderSettings,
@@ -27,15 +18,13 @@ import {
     currentFungibleAssetDataProviderSettings,
     currentNonFungibleAssetDataProviderSettings,
     currentGasOptionsSettings,
-    currentEtherPriceSettings,
     currentTokenPricesSettings,
     currentMaskWalletLockStatusSettings,
     currentMaskWalletAccountSettings,
     currentMaskWalletChainIdSettings,
     currentMaskWalletNetworkSettings,
-    currentBalancesSettings,
 } from '../../plugins/Wallet/settings'
-import { Flags } from '../../../shared'
+import { Flags, MaskMessages } from '../../../shared'
 import { indexedDB_KVStorageBackend, inMemory_KVStorageBackend } from '../../../background/database/kv-storage'
 
 function create<T>(settings: InternalSettings<T>) {
@@ -53,28 +42,10 @@ export const [getPluginID, setPluginID] = create(pluginIDSettings)
 export const [getTheme, setTheme] = create(appearanceSettings)
 export const [getLanguage, setLanguage] = create(languageSettings)
 export const [getChainId, setChainId] = create(currentChainIdSettings)
-export const [getBalance, setBalance] = create(currentBalanceSettings)
-export const [getBalances, setBalances] = create(currentBalancesSettings)
-export const [getBlockNumber, setBlockNumber] = create(currentBlockNumberSettings)
-export const [getEtherPrice, setEtherPrice] = create(currentEtherPriceSettings)
 export const [getTokenPrices, setTokenPrices] = create(currentTokenPricesSettings)
 export const [getGasOptions, setGasOptions] = create(currentGasOptionsSettings)
 export const [getGasPrice, setGasPrice] = create(currentGasOptionsSettings)
 export const [getTrendingDataSource, setTrendingDataSource] = create(currentDataProviderSettings)
-export const [getEthereumNetworkTradeProvider, setEthNetworkTradeProvider] = create(
-    ethereumNetworkTradeProviderSettings,
-)
-export const [getPolygonNetworkTradeProvider, setPolygonNetworkTradeProvider] = create(
-    polygonNetworkTradeProviderSettings,
-)
-export const [getBinanceNetworkTradeProvider, setBinanceNetworkTradeProvider] = create(
-    binanceNetworkTradeProviderSettings,
-)
-export const [getArbitrumNetworkTradeProvider, setArbitrumNetworkTradeProvider] = create(
-    arbitrumNetworkTradeProviderSettings,
-)
-export const [getxDaiNetworkTradeProvider, setxDaiNetworkTradeProvider] = create(xdaiNetworkTradeProviderSettings)
-
 export const [getCurrentSelectedWalletProvider, setCurrentSelectedWalletProvider] = create(currentProviderSettings)
 
 export const [getCurrentSelectedWalletNetwork, setCurrentSelectedWalletNetwork] = create(currentNetworkSettings)
@@ -122,11 +93,13 @@ export async function setCurrentPersonaIdentifier(x: PersonaIdentifier) {
     await currentPersonaIdentifier.readyPromise
     currentPersonaIdentifier.value = x.toText()
 }
-export async function getPluginEnabled(id: string) {
-    return currentPluginEnabledStatus['plugin:' + id].value
+export async function getPluginMinimalModeEnabled(id: string) {
+    return !currentPluginMinimalModeNOTEnabled['plugin:' + id].value
 }
-export async function setPluginEnabled(id: string, enabled: boolean) {
-    currentPluginEnabledStatus['plugin:' + id].value = enabled
+export async function setPluginMinimalModeEnabled(id: string, enabled: boolean) {
+    currentPluginMinimalModeNOTEnabled['plugin:' + id].value = !enabled
+
+    MaskMessages.events.pluginMinimalModeChanged.sendToAll([id, enabled])
 }
 
 export async function openTab(url: string) {

@@ -1,15 +1,11 @@
 import { useState } from 'react'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { Link, Typography } from '@mui/material'
-import {
-    TypedMessageAnchor,
-    registerTypedMessageRenderer,
-    TypedMessage,
-    isTypedMessageAnchor,
-} from '../../../protocols/typed-message'
+import { TypedMessageAnchor, TypedMessage, isTypedMessageAnchor } from '@masknet/shared-base'
 import type { TypedMessageRendererProps } from '../../../components/InjectedComponents/TypedMessageRenderer'
 import { PluginTraderMessages, PluginTraderRPC } from '../messages'
 import { TagType } from '../types'
+import { registerTypedMessageRenderer } from '../../../protocols/typed-message'
 
 export interface TypedMessageCashTrending extends Omit<TypedMessageAnchor, 'type'> {
     readonly type: 'x-cash-trending'
@@ -34,7 +30,7 @@ registerTypedMessageRenderer('x-cash-trending', {
 
 function DefaultTypedMessageCashTrendingRenderer(props: TypedMessageRendererProps<TypedMessageCashTrending>) {
     const chainId = useChainId()
-    const [openTimer, setOpenTimer] = useState<NodeJS.Timeout | null>(null)
+    const [openTimer, setOpenTimer] = useState<ReturnType<typeof setTimeout> | null>(null)
     const onMouseOver = (ev: React.MouseEvent<HTMLAnchorElement>) => {
         // cache for async operations
         const element = ev.currentTarget
@@ -52,7 +48,6 @@ function DefaultTypedMessageCashTrendingRenderer(props: TypedMessageRendererProp
                     type,
                     element,
                     dataProviders,
-                    tradeProviders,
                 })
             }, 500),
         )

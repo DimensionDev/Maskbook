@@ -1,16 +1,8 @@
-import { Card, CircularProgress, Link } from '@mui/material'
+import { Card, Link, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import {
-    Wallet,
-    useChainId,
-    ERC721TokenDetailed,
-    resolveCollectibleLink,
-    NonFungibleAssetProvider,
-} from '@masknet/web3-shared-evm'
-import { MaskSharpIconOfSize } from '../../../../resources/MaskIcon'
+import { Wallet, ERC721TokenDetailed, resolveCollectibleLink, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { ActionsBarNFT } from '../ActionsBarNFT'
-import { useAsyncRetry } from 'react-use'
-import { Video } from '../../../../components/shared/Video'
 import { Image } from '../../../../components/shared/Image'
 
 const useStyles = makeStyles()((theme) => ({
@@ -19,8 +11,11 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 4,
-        position: 'relative',
-        backgroundColor: theme.palette.background.paper,
+        position: 'absolute',
+        zIndex: 1,
+        backgroundColor: theme.palette.background.default,
+        width: 172,
+        height: 172,
     },
     icon: {
         top: theme.spacing(1),
@@ -35,7 +30,24 @@ const useStyles = makeStyles()((theme) => ({
         height: 64,
         opacity: 0.1,
     },
-    video: {
+    loadingFailImage: {
+        minHeight: '0px !important',
+        maxWidth: 'none',
+        width: 64,
+        height: 64,
+    },
+    wrapper: {
+        width: '172px !important',
+        height: '172px !important',
+    },
+    blocker: {
+        position: 'absolute',
+        zIndex: 2,
+        width: 172,
+        height: 172,
+    },
+    linkWrapper: {
+        position: 'relative',
         width: 172,
         height: 172,
     },
@@ -46,56 +58,68 @@ export interface CollectibleCardProps {
     wallet?: Wallet
     token: ERC721TokenDetailed
     readonly?: boolean
+    renderOrder: number
 }
 
 export function CollectibleCard(props: CollectibleCardProps) {
-    const { wallet, token, provider, readonly } = props
+    const { wallet, token, provider, readonly, renderOrder } = props
     const { classes } = useStyles()
-    const chainId = useChainId()
-
-    const { loading, value } = useAsyncRetry(async () => {
-        if (!token.info.image) return
-
-        const blob = await (await fetch(token.info.image)).blob()
-        return blob
-    }, [token])
-
-    const isVideo = value?.type.match(/^video/)?.[0]
-    const isHtml = !!value?.type.match(/^text/)?.[0]
+    const isImage = /\.(gif|svg|png|webp|jpg)$/.test(token.info.mediaUrl ?? '')
+    const theme = useTheme()
+    const fallbackImageURL =
+        theme.palette.mode === 'dark'
+            ? new URL('./nft_token_fallback_dark.png', import.meta.url)
+            : new URL('./nft_token_fallback.png', import.meta.url)
 
     return (
-        <>
-            {loading ? (
-                <CircularProgress />
-            ) : (
-                <Link target="_blank" rel="noopener noreferrer" href={resolveCollectibleLink(chainId, provider, token)}>
-                    <Card className={classes.root} style={{ width: 172, height: 172 }}>
-                        {readonly || !wallet ? null : (
-                            <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} token={token} />
-                        )}
-                        {token.info.image ? (
-                            isVideo ? (
-                                <Video
-                                    src={value ?? token.info.image}
-                                    VideoProps={{ className: classes.video, autoPlay: true, loop: true }}
-                                />
-                            ) : isHtml ? (
-                                <iframe src={token.info.image} />
-                            ) : (
-                                <Image
-                                    component="img"
-                                    width={172}
-                                    height={172}
-                                    style={{ objectFit: 'cover' }}
-                                    src={value ?? token.info.image}
-                                />
-                            )
-                        ) : (
-                            <MaskSharpIconOfSize classes={{ root: classes.placeholderIcon }} size={22} />
-                        )}
-                    </Card>
-                </Link>
-            )}
-        </>
+        <Link
+            target="_blank"
+            rel="noopener noreferrer"
+            className={classes.linkWrapper}
+            href={resolveCollectibleLink(token.contractDetailed.chainId, provider, token)}>
+            <div className={classes.blocker} />
+            <Card className={classes.root}>
+                {readonly || !wallet ? null : (
+                    <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} token={token} />
+                )}
+                {token.info.mediaUrl ? (
+                    isImage ? (
+                        <Image
+                            component="img"
+                            width={172}
+                            height={172}
+                            style={{ objectFit: 'cover' }}
+                            src={token.info.mediaUrl}
+                            onError={(event) => {
+                                const target = event.currentTarget as HTMLImageElement
+                                target.src = fallbackImageURL.toString()
+                                target.classList.add(classes.loadingFailImage ?? '')
+                            }}
+                        />
+                    ) : (
+                        <NFTCardStyledAssetPlayer
+                            contractAddress={token.contractDetailed.address}
+                            chainId={token.contractDetailed.chainId}
+                            url={token.info.mediaUrl}
+                            renderOrder={renderOrder}
+                            tokenId={token.tokenId}
+                            classes={{
+                                loadingFailImage: classes.loadingFailImage,
+                                wrapper: classes.wrapper,
+                            }}
+                        />
+                    )
+                ) : (
+                    <Image
+                        component="img"
+                        width={172}
+                        height={172}
+                        style={{ objectFit: 'cover' }}
+                        src={fallbackImageURL.toString()}
+                        className={classes.loadingFailImage}
+                    />
+                )}
+            </Card>
+        </Link>
     )
 }

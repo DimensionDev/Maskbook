@@ -1,7 +1,7 @@
 import { AsyncCall, AsyncCallOptions, AsyncGeneratorCall } from 'async-call-rpc/full'
 import { WorkerChannel } from 'async-call-rpc/utils/web/worker'
 import { serializer } from '@masknet/shared-base'
-import { OnDemandWorker } from '../../web-workers/OnDemandWorker'
+import { OnDemandWorker } from '../../../utils-pure'
 import type { _AsyncVersionOf, _AsyncGeneratorVersionOf } from 'async-call-rpc/full'
 
 export let GunWorker: OnDemandWorker | undefined

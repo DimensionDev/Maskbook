@@ -4,14 +4,13 @@ import { Box, Button } from '@mui/material'
 import { useDashboardI18N } from '../../locales'
 import { MaskAlert } from '../MaskAlert'
 import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { SubmitHandler, useForm, Controller } from 'react-hook-form'
 import { Services } from '../../API'
 import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Controller } from 'react-hook-form'
 import { z } from 'zod'
 import { useNavigate } from 'react-router-dom'
-import { RoutePaths } from '../../type'
+import { DashboardRoutes, delay } from '@masknet/shared-base'
 import { SignUpRoutePath } from '../../pages/SignUp/routePath'
 type FormInputs = {
     privateKey: string
@@ -43,9 +42,11 @@ export const RestoreFromPrivateKey = memo(() => {
             const persona = await Services.Identity.queryPersonaByPrivateKey(data.privateKey)
             if (persona) {
                 await changeCurrentPersona(persona.identifier)
-                navigate(RoutePaths.Personas)
+                // Waiting persona changed event notify
+                await delay(100)
+                navigate(DashboardRoutes.Personas)
             } else {
-                navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.PersonaCreate}`, {
+                navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.PersonaRecovery}`, {
                     replace: false,
                     state: { privateKey: data.privateKey },
                 })

@@ -12,8 +12,8 @@ export interface RedPacketInPostProps {
 export function RedPacketInPost(props: RedPacketInPostProps) {
     const { payload } = props
 
-    //#region discover red packet
-    const postIdentifier = usePostInfoDetails.postIdentifier()
+    // #region discover red packet
+    const postIdentifier = usePostInfoDetails.identifier()
     const fromUrl =
         postIdentifier && !postIdentifier.isUnknown
             ? activatedSocialNetworkUI.utils.getPostURL?.(postIdentifier)?.toString()
@@ -29,7 +29,7 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
         }
         RedPacketRPC.discoverRedPacket(record)
     }, [fromUrl])
-    //#endregion
+    // #endregion
 
     return <RedPacket payload={payload} />
 }

@@ -1,5 +1,5 @@
 import { IntervalWatcher, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { delay, timeout } from '../../../utils/utils'
+import { delay, timeout } from '@masknet/shared-base'
 import { isMobileFacebook } from '../utils/isMobile'
 import type { SocialNetworkUI } from '../../../social-network/types'
 import { untilDocumentReady } from '../../../utils/dom'
@@ -11,7 +11,7 @@ async function openPostDialogFacebook() {
     const notActivated = isMobileFacebook
         ? new LiveSelector().querySelector<HTMLDivElement>('[role="textbox"]')
         : new LiveSelector()
-              .querySelector(`[role="region"]`)
+              .querySelector('[role="region"]')
               .querySelector('textarea, [aria-multiline="true"]')
               .closest<HTMLDivElement>(1)
     const activated = new LiveSelector().querySelector<HTMLDivElement | HTMLTextAreaElement>(

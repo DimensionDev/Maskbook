@@ -10,7 +10,7 @@ import * as sdk from './maskwallet'
 import * as database from './database'
 import * as password from './password'
 import * as EthereumServices from '../../../../extension/background-script/EthereumService'
-import { hasNativeAPI } from '../../../../utils'
+import { hasNativeAPI } from '../../../../../shared/native-rpc'
 import type { WalletRecord } from './type'
 
 function bumpDerivationPath(path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`) {
@@ -154,8 +154,8 @@ export async function signTransaction(
             gas_limit: config.gas?.toString() ?? '0x0',
             gas_price: config.gasPrice?.toString() ?? '0x0',
             chain_id: config.chainId ? toHex(config.chainId?.toString()) : '0x1',
-            max_fee_per_gas: config.maxFeePerGas?.toString() ?? '0x0',
-            max_inclusion_fee_per_gas: config.maxFeePerGas?.toString() ?? '0x0',
+            max_fee_per_gas: config.maxFeePerGas ?? '0x0',
+            max_inclusion_fee_per_gas: config.maxFeePerGas ?? '0x0',
             nonce: config.nonce ? toHex(config.nonce) : '0x0',
             to_address: config.to,
             payload: config.data ? encodeText(config.data) : new Uint8Array(),
@@ -171,48 +171,52 @@ export async function deriveWallet(name: string) {
     if (!primaryWallet?.storedKeyInfo) throw new Error('Cannot find the primary wallet.')
 
     let derivedTimes = 0
-    let derivationPath = primaryWallet.derivationPath
+    let latestDerivationPath = primaryWallet.latestDerivationPath ?? primaryWallet.derivationPath
+    if (!latestDerivationPath) throw new Error('Failed to derive wallet without derivation path.')
 
+    // eslint-disable-next-line no-constant-condition
     while (true) {
         derivedTimes += 1
 
         // protect from endless looping
         if (derivedTimes >= MAX_DERIVE_COUNT) {
             await database.updateWallet(primaryWallet.address, {
-                derivationPath,
+                latestDerivationPath,
             })
             throw new Error('Exceed the max derivation times.')
         }
 
         // bump index
-        derivationPath = bumpDerivationPath(derivationPath)
+        latestDerivationPath = bumpDerivationPath(latestDerivationPath)
 
         // derive a new wallet
         const created = await sdk.createAccountOfCoinAtPath({
             coin: api.Coin.Ethereum,
             name,
             password: password_,
-            derivationPath,
+            derivationPath: latestDerivationPath,
             StoredKeyData: primaryWallet.storedKeyInfo.data,
         })
-        if (!created?.account?.address) throw new Error(`Failed to create account at path: ${derivationPath}.`)
+        if (!created?.account?.address) throw new Error(`Failed to create account at path: ${latestDerivationPath}.`)
 
         // check its existence in DB
         if (await database.hasWallet(created.account.address)) continue
 
         // update the primary wallet
         await database.updateWallet(primaryWallet.address, {
-            derivationPath,
+            latestDerivationPath,
         })
 
-        // found a valid candidate, import it by its private key
+        // found a valid candidate, get the private key of it
         const exported = await sdk.exportPrivateKeyOfPath({
             coin: api.Coin.Ethereum,
             password: password_,
-            derivationPath,
+            derivationPath: latestDerivationPath,
             StoredKeyData: primaryWallet.storedKeyInfo.data,
         })
-        if (!exported?.privateKey) throw new Error(`Failed to export private key at path: ${derivationPath}`)
+        if (!exported?.privateKey) throw new Error(`Failed to export private key at path: ${latestDerivationPath}`)
+
+        // import the candidate by the private key
         return recoverWalletFromPrivateKey(name, exported.privateKey)
     }
 }

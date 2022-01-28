@@ -1,0 +1,42 @@
+{
+    "PLATFORM_ID": {
+        "Mainnet": "ethereum",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "binance-smart-chain",
+        "BSCT": "",
+        "Matic": "polygon-pos",
+        "Mumbai": "",
+        "Arbitrum": "arbitrum-one",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "xdai",
+        "Avalanche": "avalanche",
+        "Avalanche_Fuji": "",
+        "Celo": "celo",
+        "Fantom": "fantom",
+        "Aurora": "aurora",
+        "Aurora_Testnet": ""
+    },
+    "COIN_ID": {
+        "Mainnet": "ethereum",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "binancecoin",
+        "BSCT": "",
+        "Matic": "matic-network",
+        "Mumbai": "arbitrum-one",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "xdai",
+        "Avalanche": "avalanche-2",
+        "Avalanche_Fuji": "",
+        "Celo": "celo",
+        "Fantom": "fantom",
+        "Aurora": "ethereum",
+        "Aurora_Testnet": ""
+    }
+}

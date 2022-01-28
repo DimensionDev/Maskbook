@@ -2,5 +2,10 @@
     "error_boundary_crash_title": "{{subject}} 遇到了一個錯誤：",
     "error_boundary_try_to_recover": "嘗試恢復",
     "error_boundary_report_github": "透過 GitHub 反饋",
-    "error_boundary_report_email": "透過 Email 反饋"
+    "error_boundary_report_email": "透過 Email 反饋",
+    "snackbar_done": "完成",
+    "import": "導入",
+    "balance": "餘額",
+    "select_token": "選擇一種代幣",
+    "erc20_token_list_placeholder": "代幣名稱或合約地址"
 }

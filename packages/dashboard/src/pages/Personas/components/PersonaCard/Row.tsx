@@ -3,7 +3,8 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { PublicKeyIcon, SettingsIcon } from '@masknet/icons'
 import { Box, IconButton, MenuItem, Stack, Typography } from '@mui/material'
 import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine'
-import { PersonaIdentifier, ProfileIdentifier, ProfileInformation, useMenu } from '@masknet/shared'
+import { PersonaIdentifier, ProfileIdentifier, ProfileInformation, DashboardRoutes } from '@masknet/shared-base'
+import { useMenu } from '@masknet/shared'
 import { useDashboardI18N } from '../../../../locales'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { RenameDialog } from '../RenameDialog'
@@ -12,7 +13,6 @@ import { useToggle } from 'react-use'
 import { UploadAvatarDialog } from '../UploadAvatarDialog'
 import { MaskAvatar } from '../../../../components/MaskAvatar'
 import { ExportPrivateKeyDialog } from '../ExportPrivateKeyDialog'
-import { RoutePaths } from '../../../../type'
 import { useNavigate } from 'react-router-dom'
 import { LogoutPersonaDialog } from '../LogoutPersonaDialog'
 import { UserContext } from '../../../Settings/hooks/UserContext'
@@ -118,7 +118,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
         <MenuItem onClick={exportPrivateKeyConfirmedPasswordCallback}>
             <MenuText>{t.personas_export_private()}</MenuText>
         </MenuItem>,
-        <MenuItem onClick={() => navigate(RoutePaths.Settings, { state: { open: 'setting' } })}>
+        <MenuItem onClick={() => navigate(DashboardRoutes.Settings, { state: { open: 'setting' } })}>
             <MenuText>{t.settings_global_backup_title()}</MenuText>
         </MenuItem>,
         <MenuItem onClick={logoutConfirmedPasswordCallback} style={{ color: MaskColorVar.redMain }}>

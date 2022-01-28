@@ -1,12 +1,16 @@
 import { Fragment, useEffect, useMemo, useReducer, useState } from 'react'
-import { makeTypedMessageTuple, TypedMessageTuple } from '@masknet/shared'
+import {
+    delay,
+    makeTypedMessageTuple,
+    TypedMessageTuple,
+    type ProfileIdentifier,
+    type Payload,
+} from '@masknet/shared-base'
 import { or } from '@masknet/theme'
 import { unreachable } from '@dimensiondev/kit'
 
-import { delay } from '../../../utils/utils'
 import { ServicesWithProgress } from '../../../extension/service'
 import type { Profile } from '../../../database'
-import type { ProfileIdentifier } from '../../../database/type'
 import type {
     DecryptionProgress,
     FailureDecryption,
@@ -16,10 +20,13 @@ import { DecryptPostSuccess, DecryptPostSuccessProps } from './DecryptedPostSucc
 import { DecryptPostAwaiting, DecryptPostAwaitingProps } from './DecryptPostAwaiting'
 import { DecryptPostFailed, DecryptPostFailedProps } from './DecryptPostFailed'
 import { DecryptedPostDebug } from './DecryptedPostDebug'
-import { usePostClaimedAuthor, usePostInfoDetails, usePostInfoSharedPublic } from '../../DataSource/usePostInfo'
+import {
+    usePostClaimedAuthor,
+    usePostInfoDetails,
+    usePostInfoSharedPublic,
+    usePostInfo,
+} from '../../DataSource/usePostInfo'
 import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorHelpers'
-import { usePostInfo } from '../../../components/DataSource/usePostInfo'
-import type { Payload } from '../../../utils/type-transform/Payload'
 
 function progressReducer(
     state: { key: string; progress: SuccessDecryption | FailureDecryption | DecryptionProgress }[],
@@ -64,10 +71,10 @@ export interface DecryptPostProps {
 }
 export function DecryptPost(props: DecryptPostProps) {
     const { whoAmI, profiles, alreadySelectedPreviously, onDecrypted } = props
-    const deconstructedPayload = usePostInfoDetails.postPayload()
+    const deconstructedPayload = usePostInfoDetails.containingMaskPayload()
     const authorInPayload = usePostClaimedAuthor()
     const current = usePostInfo()!
-    const currentPostBy = usePostInfoDetails.postBy()
+    const currentPostBy = usePostInfoDetails.author()
     const decryptedPayloadForImage = usePostInfoDetails.decryptedPayloadForImage()
     const postBy = or(authorInPayload, currentPostBy)
     const postMetadataImages = usePostInfoDetails.postMetadataImages()
@@ -84,15 +91,15 @@ export function DecryptPost(props: DecryptPostProps) {
         }
     }, [props.requestAppendRecipients, postBy, whoAmI])
 
-    //#region Debug info
+    // #region Debug info
     const [debugHash, setDebugHash] = useState<string>('Unknown')
-    //#endregion
+    // #endregion
 
-    //#region Progress
+    // #region Progress
     const [progress, dispatch] = useReducer(progressReducer, [])
-    //#endregion
+    // #endregion
 
-    //#region decrypt
+    // #region decrypt
 
     // pass 1:
     // decrypt post content and image attachments
@@ -176,7 +183,7 @@ export function DecryptPost(props: DecryptPostProps) {
         if (firstSucceedDecrypted?.progress.type !== 'success') return
         onDecrypted(makeTypedMessageTuple([firstSucceedDecrypted.progress.content]))
     }, [firstSucceedDecrypted, onDecrypted])
-    //#endregion
+    // #endregion
 
     // it's not a secret post
     if (!deconstructedPayload.ok && progress.every((x) => x.progress.internal)) return null

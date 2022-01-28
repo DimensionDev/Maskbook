@@ -61,7 +61,7 @@ export function ProfileInList(props: ProfileInListProps) {
                     <Highlighter
                         highlightClassName={classes.highlighted}
                         searchWords={[props.search ?? '']}
-                        autoEscape={true}
+                        autoEscape
                         textToHighlight={name}
                     />
                 }
@@ -69,7 +69,7 @@ export function ProfileInList(props: ProfileInListProps) {
                     <Highlighter
                         highlightClassName={classes.highlighted}
                         searchWords={[props.search ?? '']}
-                        autoEscape={true}
+                        autoEscape
                         textToHighlight={secondary}
                     />
                 }

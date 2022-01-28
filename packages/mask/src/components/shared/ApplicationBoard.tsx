@@ -1,12 +1,13 @@
 import { useCallback, useState } from 'react'
 import classNames from 'classnames'
 import { Typography } from '@mui/material'
-import { makeStyles, getMaskColor } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { ChainId, useChainId, useAccount, useWallet } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { MaskMessages } from '../../utils/messages'
 import { useControlledDialog } from '../../utils/hooks/useControlledDialog'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
+import { PluginPetMessages } from '../../plugins/Pets/messages'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { EntrySecondLevelDialog } from './EntrySecondLevelDialog'
 import { NetworkTab } from './NetworkTab'
@@ -18,6 +19,7 @@ import {
     ApplicationEntryConduct,
     I18NStringField,
 } from '@masknet/plugin-infra'
+import { FindTrumanDialog } from '../../plugins/FindTruman/SNSAdaptor/FindTrumanDialog'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -56,7 +58,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: getMaskColor(theme).twitterBackground,
+        backgroundColor: theme.palette.background.default,
         borderRadius: '8px',
         cursor: 'pointer',
         height: 100,
@@ -110,9 +112,9 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     const account = useAccount()
     const selectedWallet = useWallet()
     const currentPluginId = usePluginIDContext()
-    const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor()
+    const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
 
-    //#region Encrypted message
+    // #region Encrypted message
     const openEncryptedMessage = useCallback(
         (id?: string) =>
             MaskMessages.events.requestComposition.sendToLocal({
@@ -124,25 +126,29 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             }),
         [],
     )
-    //#endregion
+    // #endregion
 
-    //#region Claim All ITO
+    // #region Claim All ITO
     const {
         open: isClaimAllDialogOpen,
         onOpen: onClaimAllDialogOpen,
         onClose: onClaimAllDialogClose,
     } = useControlledDialog()
-    //#endregion
+    // #endregion
 
-    //#region Swap
+    // #region Swap
     const { open: isSwapDialogOpen, onOpen: onSwapDialogOpen, onClose: onSwapDialogClose } = useControlledDialog()
-    //#endregion
+    // #endregion
 
-    //#region Fiat on/off ramp
+    // #region Fiat on/off ramp
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
-    //#endregion
+    // #endregion
 
-    //#region second level entry dialog
+    // #region pet friends
+    const { setDialog: setPetDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated)
+    // #endregion
+
+    // #region second level entry dialog
     const {
         open: isSecondLevelEntryDialogOpen,
         onOpen: onSecondLevelEntryDialogOpen,
@@ -166,7 +172,15 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
         },
         [],
     )
-    //#endregion
+    // #endregion
+
+    // #region FindTruman
+    const {
+        open: isFindTrumanDialogOpen,
+        onOpen: onFindTrumanDialogOpen,
+        onClose: onFindTrumanDialogClose,
+    } = useControlledDialog()
+    // #endregion
 
     function createEntry(
         title: string | I18NStringField,
@@ -220,6 +234,12 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                             case 'Fiat On-Ramp':
                                 handle = () => setBuyDialog({ open: true, address: account })
                                 break
+                            case 'Non-F Friends':
+                                handle = () => setPetDialog({ open: true })
+                                break
+                            case 'FindTruman':
+                                handle = onFindTrumanDialogOpen
+                                break
                             default:
                                 handle = () => undefined
                         }
@@ -237,7 +257,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                         entry.icon,
                         handle,
                         supportedNetwork?.chainIdList,
-                        !Boolean(supportedNetwork) && entry.walletRequired,
+                        !supportedNetwork && entry.walletRequired,
                         entry.walletRequired,
                         entry.priority,
                         entry.categoryID,
@@ -295,7 +315,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                                     walletRequired && !selectedWallet ? classes.disabled : '',
                                 )}
                                 onClick={onClick}
-                                key={i.toString()}>
+                                key={i}>
                                 <img src={img} className={classes.applicationImg} />
                                 <Typography className={classes.title} color="textPrimary">
                                     {title}
@@ -316,6 +336,9 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                     chains={secondLevelEntryChains}
                     closeDialog={onSecondLevelEntryDialogClose}
                 />
+            ) : null}
+            {isFindTrumanDialogOpen ? (
+                <FindTrumanDialog open={isFindTrumanDialogOpen} onClose={onFindTrumanDialogClose} />
             ) : null}
         </>
     )

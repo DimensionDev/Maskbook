@@ -15,6 +15,15 @@ import { WalletRPC } from '../../messages'
 import { useNativeTokenPrice } from '../../hooks/useTokenPrice'
 import { useGasSettingStyles } from './useGasSettingStyles'
 import type { GasSettingProps } from './types'
+import {
+    isGreaterThan,
+    isGreaterThanOrEqualTo,
+    isLessThan,
+    isLessThanOrEqualTo,
+    isPositive,
+    multipliedBy,
+    toFixed,
+} from '@masknet/web3-shared-base'
 
 const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 
@@ -27,13 +36,13 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
         const { value: nativeToken } = useNativeTokenDetailed()
         const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
 
-        //#region Get suggest gas options data from meta swap api
+        // #region Get suggest gas options data from meta swap api
         const { value: gasOptions, loading: getGasOptionsLoading } = useAsync(async () => {
             return WalletRPC.getEstimateGasFees(chainId)
         }, [chainId])
-        //#endregion
+        // #endregion
 
-        //#region Gas options
+        // #region Gas options
         const options = useMemo(
             () => [
                 {
@@ -54,10 +63,10 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
             ],
             [gasOptions],
         )
-        //#endregion
+        // #endregion
         const currentGasOption = options.find((opt) => opt.gasOption === selectedGasOption)
 
-        //#region Form field define schema
+        // #region Form field define schema
         const schema = useMemo(() => {
             return zod
                 .object({
@@ -65,24 +74,21 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                         .string()
                         .min(1, t('wallet_transfer_error_gas_limit_absence'))
                         .refine(
-                            (gasLimit) => new BigNumber(gasLimit).isGreaterThanOrEqualTo(minGasLimit),
+                            (gasLimit) => isGreaterThanOrEqualTo(gasLimit, minGasLimit),
                             t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimit }),
                         ),
                     maxPriorityFeePerGas: zod
                         .string()
                         .min(1, t('wallet_transfer_error_max_priority_fee_absence'))
-                        .refine(
-                            (value) => new BigNumber(value).isPositive(),
-                            t('wallet_transfer_error_max_priority_gas_fee_positive'),
-                        ),
+                        .refine(isPositive, t('wallet_transfer_error_max_priority_gas_fee_positive')),
                     maxFeePerGas: zod.string().min(1, t('wallet_transfer_error_max_fee_absence')),
                 })
-                .refine((data) => new BigNumber(data.maxPriorityFeePerGas).isLessThanOrEqualTo(data.maxFeePerGas), {
+                .refine((data) => isLessThanOrEqualTo(data.maxPriorityFeePerGas, data.maxFeePerGas), {
                     message: t('wallet_transfer_error_max_priority_gas_fee_imbalance'),
                     path: ['maxFeePerGas'],
                 })
         }, [minGasLimit, gasOptions])
-        //#endregion
+        // #endregion
 
         const {
             control,
@@ -105,27 +111,26 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
             },
         })
 
-        //#region Set gas on tx to form data
+        // #region Set gas on tx to form data
         useUpdateEffect(() => {
             if (gasLimit) setValue('gasLimit', new BigNumber(gasLimit).toString())
         }, [gasLimit, setValue])
-        //#endregion
+        // #endregion
 
-        //#region If the selected changed, set the value on the option to the form data
+        // #region If the selected changed, set the value on the option to the form data
         useEffect(() => {
-            if (selectedGasOption !== null) {
-                clearErrors(['maxPriorityFeePerGas', 'maxFeePerGas'])
-                setValue(
-                    'maxPriorityFeePerGas',
-                    new BigNumber(currentGasOption?.content?.suggestedMaxPriorityFeePerGas ?? 0).toString() ?? '',
-                )
-                setValue(
-                    'maxFeePerGas',
-                    new BigNumber(currentGasOption?.content?.suggestedMaxFeePerGas ?? 0).toString() ?? '',
-                )
-            }
+            if (selectedGasOption === null) return
+            clearErrors(['maxPriorityFeePerGas', 'maxFeePerGas'])
+            setValue(
+                'maxPriorityFeePerGas',
+                new BigNumber(currentGasOption?.content?.suggestedMaxPriorityFeePerGas ?? 0).toString() ?? '',
+            )
+            setValue(
+                'maxFeePerGas',
+                new BigNumber(currentGasOption?.content?.suggestedMaxFeePerGas ?? 0).toString() ?? '',
+            )
         }, [currentGasOption, setValue, options])
-        //#endregion
+        // #endregion
 
         const handleConfirm = useCallback(
             (data: zod.infer<typeof schema>) => {
@@ -147,16 +152,15 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
             'gasLimit',
         ])
 
-        //#region These are additional form rules that need to be prompted for but do not affect the validation of the form
+        // #region These are additional form rules that need to be prompted for but do not affect the validation of the form
         const maxPriorFeeHelperText = useMemo(() => {
             if (getGasOptionsLoading) return undefined
-            if (new BigNumber(maxPriorityFeePerGas).isLessThan(gasOptions?.low?.suggestedMaxPriorityFeePerGas ?? 0))
+            if (isLessThan(maxPriorityFeePerGas, gasOptions?.low?.suggestedMaxPriorityFeePerGas ?? 0))
                 return t('wallet_transfer_error_max_priority_gas_fee_too_low')
             if (
-                new BigNumber(maxPriorityFeePerGas).isGreaterThan(
-                    new BigNumber(gasOptions?.high?.suggestedMaxPriorityFeePerGas ?? 0).multipliedBy(
-                        HIGH_FEE_WARNING_MULTIPLIER,
-                    ),
+                isGreaterThan(
+                    maxPriorityFeePerGas,
+                    multipliedBy(gasOptions?.high?.suggestedMaxPriorityFeePerGas ?? 0, HIGH_FEE_WARNING_MULTIPLIER),
                 )
             )
                 return t('wallet_transfer_error_max_priority_gas_fee_too_high')
@@ -165,19 +169,18 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
 
         const maxFeeGasHelperText = useMemo(() => {
             if (getGasOptionsLoading) return undefined
-            if (new BigNumber(maxFeePerGas).isLessThan(gasOptions?.estimatedBaseFee ?? 0))
+            if (isLessThan(maxFeePerGas, gasOptions?.estimatedBaseFee ?? 0))
                 return t('wallet_transfer_error_max_fee_too_low')
             if (
-                new BigNumber(maxFeePerGas).isGreaterThan(
-                    new BigNumber(gasOptions?.high?.suggestedMaxFeePerGas ?? 0).multipliedBy(
-                        HIGH_FEE_WARNING_MULTIPLIER,
-                    ),
+                isGreaterThan(
+                    maxFeePerGas,
+                    multipliedBy(gasOptions?.high?.suggestedMaxFeePerGas ?? 0, HIGH_FEE_WARNING_MULTIPLIER),
                 )
             )
                 return t('wallet_transfer_error_max_fee_too_high')
             return undefined
         }, [maxFeePerGas, gasOptions, getGasOptionsLoading])
-        //endregion
+        // #endregion
 
         return (
             <>
@@ -189,7 +192,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                             className={selectedGasOption === gasOption ? classes.selected : undefined}>
                             <Typography className={classes.optionsTitle}>{title}</Typography>
                             <Typography component="div">
-                                {new BigNumber(content?.suggestedMaxFeePerGas ?? 0).toFixed(2)}
+                                {toFixed(content?.suggestedMaxFeePerGas, 2)}
                                 <Typography variant="inherit">Gwei</Typography>
                             </Typography>
                             <Typography className={classes.gasUSD}>

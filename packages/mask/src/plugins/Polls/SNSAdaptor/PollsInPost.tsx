@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
-import type { TypedMessage } from '../../../protocols/typed-message'
+import type { TypedMessage } from '@masknet/shared-base'
 import { PluginPollRPC } from '../messages'
 import { renderWithPollMetadata, PollMetadataReader } from '../helpers'
 import type { PollGunDB } from '../Services'

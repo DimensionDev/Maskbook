@@ -1,11 +1,11 @@
-import { openDB, DBSchema } from 'idb/with-async-ittr-cjs'
+import { openDB, DBSchema } from 'idb/with-async-ittr'
 import { Identifier, IdentifierMap, PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { createDBAccess, createTransaction, IDBPSafeTransaction } from '../utils/openDB'
 
 const pendingUpdate = new IdentifierMap<IdentifierWithAvatar, Partial<AvatarMetadataRecord>>(new Map())
 let pendingUpdateTimer: ReturnType<typeof setTimeout> | null
 
-//#region Schema
+// #region Schema
 export type IdentifierWithAvatar = ProfileIdentifier | PersonaIdentifier
 type AvatarRecord = ArrayBuffer
 interface AvatarMetadataRecord {
@@ -25,7 +25,7 @@ export interface AvatarDBSchema extends DBSchema {
         key: string
     }
 }
-//#endregion
+// #endregion
 export const createAvatarDBAccess = createDBAccess(() => {
     return openDB<AvatarDBSchema>('maskbook-avatar-cache', 1, {
         upgrade(db, oldVersion, newVersion, transaction) {

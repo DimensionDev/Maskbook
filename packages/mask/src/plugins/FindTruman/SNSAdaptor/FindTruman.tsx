@@ -1,10 +1,9 @@
 import { useContext, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { FindTrumanContext } from '../context'
-import { Alert, Box, Card, CardHeader, CardMedia, Chip, Skeleton, Typography } from '@mui/material'
-import type { PollResult, PuzzleResult, StoryInfo, UserPollStatus, UserPuzzleStatus, UserStoryStatus } from '../types'
-import { FindTrumanPostType } from '../types'
-import { I18NFunction, useI18N } from '../../../utils'
+import { Alert, Avatar, Box, Card, CardHeader, CardMedia, Chip, Skeleton, Tooltip, Typography } from '@mui/material'
+import type { PollResult, PuzzleResult, StoryInfo, UserPollStatus, UserStoryStatus } from '../types'
+import { FindTrumanI18nFunction, PostType } from '../types'
 import ResultCard from './ResultCard'
 import OptionsCard from './OptionsCard'
 import Footer from './Footer'
@@ -67,32 +66,55 @@ const useStyles = makeStyles()((theme) => {
         tipArrow: {
             color: '#fff',
         },
+        critical: {
+            color: 'rgba(255,255,255,.9)',
+            fontWeight: 500,
+            fontSize: 14,
+            width: 24,
+            height: 24,
+            backgroundImage: 'linear-gradient( 135deg, #FDD819 10%, #E80505 100%)',
+            cursor: 'pointer',
+        },
+        nonCritical: {
+            color: 'rgba(255,255,255,.9)',
+            fontWeight: 500,
+            fontSize: 14,
+            width: 24,
+            height: 24,
+            backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
+            cursor: 'pointer',
+        },
+        chip: {
+            '&:hover': {
+                backgroundColor: theme.palette.primary.main,
+            },
+        },
     }
 })
 
 interface FindTrumanProps {
-    postType: FindTrumanPostType
-    encryptionPayload: string
+    postType: PostType
+    clueId: string
     storyInfo?: StoryInfo
     userStoryStatus?: UserStoryStatus
-    userPuzzleStatus?: UserPuzzleStatus
+    userPuzzleStatus?: UserPollStatus
     userPollStatus?: UserPollStatus
     puzzleResult?: PuzzleResult
     pollResult?: PollResult
-    onSubmit: (choice: number) => Promise<boolean>
+    onSubmit(choice: number): Promise<void>
 }
 
-function getPostTypeTitle(t: I18NFunction, postType: FindTrumanPostType) {
+export function getPostTypeTitle(t: FindTrumanI18nFunction, postType: PostType) {
     switch (postType) {
-        case FindTrumanPostType.Poll:
+        case PostType.Poll:
             return t('plugin_find_truman_status_poll')
-        case FindTrumanPostType.Puzzle:
+        case PostType.Puzzle:
             return t('plugin_find_truman_status_puzzle')
-        case FindTrumanPostType.PuzzleResult:
+        case PostType.PuzzleResult:
             return t('plugin_find_truman_status_puzzle_result')
-        case FindTrumanPostType.PollResult:
+        case PostType.PollResult:
             return t('plugin_find_truman_status_poll_result')
-        case FindTrumanPostType.Status:
+        case PostType.Status:
             return t('plugin_find_truman_status_result')
         default:
             return ''
@@ -101,10 +123,10 @@ function getPostTypeTitle(t: I18NFunction, postType: FindTrumanPostType) {
 
 export function FindTruman(props: FindTrumanProps) {
     const { classes } = useStyles()
-    const { address } = useContext(FindTrumanContext)
+    const { address, t } = useContext(FindTrumanContext)
     const {
         postType,
-        encryptionPayload,
+        clueId,
         storyInfo,
         userStoryStatus,
         userPuzzleStatus,
@@ -113,18 +135,31 @@ export function FindTruman(props: FindTrumanProps) {
         pollResult,
         onSubmit,
     } = props
-    const { t } = useI18N()
 
-    const [loadImg, setLoadImg] = useState<boolean>(true)
+    const [loadImg, setLoadImg] = useState(true)
 
-    const voted =
-        (userPuzzleStatus && userPuzzleStatus.choice !== -1) || (userPollStatus && userPollStatus.choice !== -1)
-    const notVoted =
-        (userPuzzleStatus && userPuzzleStatus.choice === -1) || (userPollStatus && userPollStatus.choice === -1)
+    const isCritical = userPuzzleStatus?.critical || userPollStatus?.critical
+    const isNoncritical =
+        (userPuzzleStatus && !userPuzzleStatus.critical) || (userPollStatus && !userPollStatus.critical)
+
+    const renderCard = () => {
+        if (postType === PostType.Status) {
+            return <StageCard userStoryStatus={userStoryStatus} />
+        } else if (postType === PostType.Puzzle && userPuzzleStatus) {
+            return <OptionsCard onSubmit={onSubmit} userStatus={userPuzzleStatus} />
+        } else if (postType === PostType.Poll && userPollStatus) {
+            return <OptionsCard onSubmit={onSubmit} userStatus={userPollStatus} />
+        } else if (postType === PostType.PuzzleResult && puzzleResult) {
+            return <ResultCard type={PostType.PuzzleResult} userStatus={userPuzzleStatus} result={puzzleResult} />
+        } else if (postType === PostType.PollResult && pollResult) {
+            return <ResultCard type={PostType.PollResult} userStatus={userPollStatus} result={pollResult} />
+        }
+        return null
+    }
 
     return (
         <Card className={classes.root} elevation={0}>
-            {postType !== FindTrumanPostType.Encryption ? (
+            {postType !== PostType.Encryption ? (
                 <>
                     <CardMedia
                         onLoad={() => {
@@ -150,53 +185,40 @@ export function FindTruman(props: FindTrumanProps) {
                                     <Typography className={classes.title} component="b" sx={{ marginRight: 0.5 }}>
                                         {storyInfo.name}
                                     </Typography>
-                                    <Box>
-                                        {notVoted && (
-                                            <Chip
-                                                sx={{ marginRight: '8px' }}
-                                                size="small"
-                                                label={t('plugin_find_truman_have_not_voted')}
-                                                color="default"
-                                                variant="filled"
-                                            />
-                                        )}
-                                        {voted && (
-                                            <Chip
-                                                sx={{ marginRight: '8px' }}
-                                                size="small"
-                                                label={t('plugin_find_truman_have_voted')}
-                                                color="success"
-                                                variant="filled"
-                                            />
-                                        )}
-                                        <Chip color="primary" size="small" label={getPostTypeTitle(t, postType)} />
+                                    <Box display="flex" columnGap={1}>
+                                        <Tooltip
+                                            PopperProps={{
+                                                disablePortal: true,
+                                            }}
+                                            arrow
+                                            placement="top"
+                                            title={
+                                                isCritical
+                                                    ? t('plugin_find_truman_status_critical')
+                                                    : isNoncritical
+                                                    ? t('plugin_find_truman_status_noncritical')
+                                                    : ''
+                                            }>
+                                            <Box>
+                                                {isCritical && <Avatar className={classes.critical}>C</Avatar>}
+                                                {isNoncritical && <Avatar className={classes.nonCritical}>N</Avatar>}
+                                            </Box>
+                                        </Tooltip>
+                                        <Chip
+                                            className={classes.chip}
+                                            color="primary"
+                                            size="small"
+                                            label={getPostTypeTitle(t, postType)}
+                                        />
                                     </Box>
                                 </Box>
                             )
                         }
                     />
-                    {postType === FindTrumanPostType.Status && <StageCard userStoryStatus={userStoryStatus} />}
-                    {postType === FindTrumanPostType.Puzzle && userPuzzleStatus && (
-                        <OptionsCard
-                            type={FindTrumanPostType.Puzzle}
-                            onSubmit={onSubmit}
-                            userStatus={userPuzzleStatus}
-                        />
-                    )}
-                    {postType === FindTrumanPostType.Poll && userPollStatus && (
-                        <OptionsCard type={FindTrumanPostType.Poll} onSubmit={onSubmit} userStatus={userPollStatus} />
-                    )}
-                    {(postType === FindTrumanPostType.PuzzleResult || postType === FindTrumanPostType.PollResult) &&
-                        (puzzleResult || pollResult) && (
-                            <ResultCard
-                                type={postType}
-                                userStatus={userPuzzleStatus || userPollStatus}
-                                result={puzzleResult || pollResult}
-                            />
-                        )}
+                    {renderCard()}
                 </>
             ) : (
-                <EncryptionCard payload={encryptionPayload} />
+                <EncryptionCard clueId={clueId} />
             )}
             {!address && (
                 <Box sx={{ padding: '0 16px' }}>

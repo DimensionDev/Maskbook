@@ -11,7 +11,6 @@ import {
 } from '@masknet/web3-shared-evm'
 import { DialogContent, Link, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { v4 as uuid } from 'uuid'
@@ -28,6 +27,7 @@ import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { useDonateCallback } from '../hooks/useDonateCallback'
 import { PluginGitcoinMessages } from '../messages'
+import { rightShift } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -67,7 +67,7 @@ export function DonateDialog(props: DonateDialogProps) {
     const nativeTokenDetailed = useNativeTokenDetailed()
     const { BULK_CHECKOUT_ADDRESS } = useGitcoinConstants()
 
-    //#region remote controlled dialog
+    // #region remote controlled dialog
     const { open, closeDialog: closeDonationDialog } = useRemoteControlledDialog(
         PluginGitcoinMessages.donationDialogUpdated,
         (ev) => {
@@ -77,16 +77,16 @@ export function DonateDialog(props: DonateDialogProps) {
             setPostLink(ev.postLink)
         },
     )
-    //#endregion
+    // #endregion
 
-    //#region the selected token
+    // #region the selected token
     const [token = nativeTokenDetailed.value, setToken] = useState<FungibleTokenDetailed | undefined>(
         nativeTokenDetailed.value,
     )
     const tokenBalance = useFungibleTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
-    //#endregion
+    // #endregion
 
-    //#region select token dialog
+    // #region select token dialog
     const [id] = useState(uuid())
     const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
@@ -103,23 +103,23 @@ export function DonateDialog(props: DonateDialogProps) {
             open: true,
             uuid: id,
             disableNativeToken: false,
-            FixedTokenListProps: {
+            FungibleTokenListProps: {
                 selectedTokens: token ? [token.address] : [],
             },
         })
     }, [id, token?.address])
-    //#endregion
+    // #endregion
 
-    //#region amount
+    // #region amount
     const [rawAmount, setRawAmount] = useState('')
-    const amount = new BigNumber(rawAmount || '0').shiftedBy(token?.decimals ?? 0)
-    //#endregion
+    const amount = rightShift(rawAmount || '0', token?.decimals)
+    // #endregion
 
-    //#region blocking
+    // #region blocking
     const [donateState, donateCallback, resetDonateCallback] = useDonateCallback(address ?? '', amount.toFixed(), token)
-    //#endregion
+    // #endregion
 
-    //#region transaction dialog
+    // #region transaction dialog
 
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
     const shareLink = activatedSocialNetworkUI.utils
@@ -163,9 +163,9 @@ export function DonateDialog(props: DonateDialogProps) {
             summary: `Donating ${formatBalance(amount, token.decimals)} ${token.symbol} for ${title}.`,
         })
     }, [donateState /* update tx dialog only if state changed */])
-    //#endregion
+    // #endregion
 
-    //#region submit button
+    // #region submit button
     const validationMessage = useMemo(() => {
         if (!token) return t('plugin_gitcoin_select_a_token')
         if (!account) return t('plugin_wallet_connect_a_wallet')
@@ -177,7 +177,7 @@ export function DonateDialog(props: DonateDialogProps) {
             })
         return ''
     }, [account, address, amount.toFixed(), chainId, token, tokenBalance.value ?? '0'])
-    //#endregion
+    // #endregion
 
     if (!token || !address) return null
 

@@ -1,5 +1,5 @@
-import { TypedMessage, makeTypedMessageText, isTypedMessageText } from '../protocols/typed-message'
-import type { AESJsonWebKey } from '../modules/CryptoAlgorithm/interfaces/utils'
+/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
+import { TypedMessage, makeTypedMessageText, isTypedMessageText, type AESJsonWebKey } from '@masknet/shared-base'
 export * from './crypto-alpha-39'
 
 // @ts-ignore
@@ -22,15 +22,15 @@ export function typedMessageStringify(x: TypedMessage) {
     const obj: Record<string, any> = {}
     for (const [a, b] of x.meta) obj[a] = b
 
-    return JSON.stringify(obj) + '🧩' + x.content
+    return JSON.stringify(obj) + '\u{1F9E9}' + x.content
 }
 export function typedMessageParse(x: string) {
-    const [maybeMetadata, ...end] = x.split('🧩')
+    const [maybeMetadata, ...end] = x.split('\u{1F9E9}')
     try {
         const json: unknown = JSON.parse(maybeMetadata)
         if (typeof json !== 'object' || json === null || Object.keys(json).length === 0)
             throw new Error('Not a metadata')
-        return makeTypedMessageText(end.join('🧩'), new Map(Object.entries(json)))
+        return makeTypedMessageText(end.join('\u{1F9E9}'), new Map(Object.entries(json)))
     } catch {}
     return makeTypedMessageText(x)
 }

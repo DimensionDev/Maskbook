@@ -1,4 +1,5 @@
-import { isZero, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import { isZero } from '@masknet/web3-shared-base'
 import { TradeStrategy } from '../../types'
 import { toUniswapCurrencyAmount, toUniswapCurrency } from '../../helpers'
 import { useV2BestTradeExactIn, useV2BestTradeExactOut } from './useV2BestTrade'
@@ -21,7 +22,6 @@ function useTrade(
         !outputToken ||
         (inputAmount === '0' && isExactIn) ||
         (outputAmount === '0' && !isExactIn)
-
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const inputCurrency = toUniswapCurrency(chainId, inputToken)
     const outputCurrency = toUniswapCurrency(chainId, outputToken)
@@ -55,14 +55,14 @@ export function useV2Trade(
         outputToken,
     )
 
-    //#region v2
+    // #region v2
     const v2BestTradeExactIn = useV2BestTradeExactIn(tradeProvider, isExactIn ? tradeAmount : undefined, outputCurrency)
     const v2BestTradeExactOut = useV2BestTradeExactOut(
         tradeProvider,
         inputCurrency,
         !isExactIn ? tradeAmount : undefined,
     )
-    //#endregion
+    // #endregion
 
     const v2Trade = isExactIn ? v2BestTradeExactIn : v2BestTradeExactOut
 
@@ -95,10 +95,10 @@ export function useV3Trade(
         outputToken,
     )
 
-    //#region v2
+    // #region v3
     const v3BestTradeExactIn = useV3BestTradeExactIn(isExactIn ? tradeAmount : undefined, outputCurrency)
     const v3BestTradeExactOut = useV3BestTradeExactOut(inputCurrency, !isExactIn ? tradeAmount : undefined)
-    //#endregion
+    // #endregion
 
     const v3Trade = isExactIn ? v3BestTradeExactIn : v3BestTradeExactOut
 

@@ -1,37 +1,40 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useAsync } from 'react-use'
-import { DecryptPost, DecryptPostProps } from './DecryptedPost/DecryptedPost'
-import { AddToKeyStore, AddToKeyStoreProps } from './AddToKeyStore'
+import { DecryptPost } from './DecryptedPost/DecryptedPost'
+import { AddToKeyStore } from './AddToKeyStore'
 import Services from '../../extension/service'
-import { ProfileIdentifier } from '../../database/type'
+import {
+    ProfileIdentifier,
+    type TypedMessageTuple,
+    type PayloadAlpha40_Or_Alpha39,
+    type PayloadAlpha38,
+} from '@masknet/shared-base'
 import type { Profile } from '../../database'
 import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'
 import { useValueRef } from '@masknet/shared'
 import { debugModeSetting } from '../../settings/settings'
 import { DebugList } from '../DebugModeUI/DebugList'
-import type { TypedMessageTuple } from '@masknet/shared'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
-import type { PayloadAlpha40_Or_Alpha39, PayloadAlpha38 } from '../../utils/type-transform/Payload'
 import { decodePublicKeyUI } from '../../social-network/utils/text-payload-ui'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
+import { PossiblePluginSuggestionPostInspector } from './DisabledPluginSuggestion'
 
-const PluginHooksRenderer = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (plugin) => plugin.PostInspector)
+const PluginHooksRenderer = createInjectHooksRenderer(
+    useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
+    (plugin) => plugin.PostInspector,
+)
 
 export interface PostInspectorProps {
     onDecrypted(post: TypedMessageTuple): void
     needZip(): void
-    DecryptPostProps?: Partial<DecryptPostProps>
-    DecryptPostComponent?: React.ComponentType<DecryptPostProps>
-    AddToKeyStoreProps?: Partial<AddToKeyStoreProps>
-    AddToKeyStoreComponent?: React.ComponentType<AddToKeyStoreProps>
     /** @default 'before' */
     slotPosition?: 'before' | 'after'
 }
 export function PostInspector(props: PostInspectorProps) {
-    const postBy = usePostInfoDetails.postBy()
+    const postBy = usePostInfoDetails.author()
     const postContent = usePostInfoDetails.postContent()
-    const encryptedPost = usePostInfoDetails.postPayload()
-    const postId = usePostInfoDetails.postIdentifier()
+    const encryptedPost = usePostInfoDetails.containingMaskPayload()
+    const postId = usePostInfoDetails.identifier()
     const decryptedPayloadForImage = usePostInfoDetails.decryptedPayloadForImage()
     const postImages = usePostInfoDetails.postMetadataImages()
     const isDebugging = useValueRef(debugModeSetting)
@@ -65,9 +68,8 @@ export function PostInspector(props: PostInspectorProps) {
 
     if (encryptedPost.ok || postImages.length) {
         if (!isDebugging) props.needZip()
-        const DecryptPostX = props.DecryptPostComponent || DecryptPost
         return withAdditionalContent(
-            <DecryptPostX
+            <DecryptPost
                 onDecrypted={props.onDecrypted}
                 requestAppendRecipients={
                     // So should not create new data on version -40
@@ -96,15 +98,10 @@ export function PostInspector(props: PostInspectorProps) {
                 alreadySelectedPreviously={alreadySelectedPreviously}
                 profiles={friends}
                 whoAmI={whoAmI ? whoAmI.identifier : ProfileIdentifier.unknown}
-                {...props.DecryptPostProps}
             />,
         )
     } else if (provePost.length) {
-        const AddToKeyStoreX = props.AddToKeyStoreComponent || AddToKeyStore
-        if (!AddToKeyStoreX) return null
-        return withAdditionalContent(
-            <AddToKeyStoreX postBy={postBy} provePost={postContent} {...props.AddToKeyStoreProps} />,
-        )
+        return withAdditionalContent(<AddToKeyStore postBy={postBy} provePost={postContent} />)
     }
     return withAdditionalContent(null)
     function withAdditionalContent(x: JSX.Element | null) {
@@ -116,6 +113,7 @@ export function PostInspector(props: PostInspectorProps) {
                 ) : null}
                 {props.slotPosition !== 'after' && slot}
                 {x}
+                <PossiblePluginSuggestionPostInspector />
                 <PluginHooksRenderer />
                 {debugInfo}
                 {props.slotPosition !== 'before' && slot}

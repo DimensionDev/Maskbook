@@ -1,5 +1,5 @@
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { useReducer } from 'react'
+import { useReducer, useState } from 'react'
 import { useAllTradeComputed } from './useAllTradeComputed'
 import { createContainer } from 'unstated-next'
 
@@ -74,15 +74,17 @@ function reducer(state: AllProviderTradeState, action: AllProviderSwapAction): A
 export function useAllProviderTradeContext() {
     const [tradeStore, dispatchTradeStore] = useReducer(reducer, {
         inputAmount: '',
-        inputTokenBalance: '',
-        outputTokenBalance: '',
+        inputTokenBalance: '0',
+        outputTokenBalance: '0',
     })
-
+    const [temporarySlippage, setTemporarySlippage] = useState<number | undefined>()
     const { inputAmount, inputToken, outputToken } = tradeStore
-    const allTradeComputed = useAllTradeComputed(inputAmount, inputToken, outputToken)
+    const allTradeComputed = useAllTradeComputed(inputAmount, inputToken, outputToken, temporarySlippage)
 
     return {
         tradeState: [tradeStore, dispatchTradeStore] as const,
+        temporarySlippage,
+        setTemporarySlippage,
         allTradeComputed,
     }
 }

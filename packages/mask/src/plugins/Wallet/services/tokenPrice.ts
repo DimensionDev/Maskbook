@@ -1,5 +1,5 @@
 import { CryptoPrice, CurrencyType } from '@masknet/web3-shared-evm'
-import { pollingTask } from '@masknet/shared'
+import { pollingTask } from '@masknet/shared-base'
 import { getTokenPrices, getNativeTokenPrice } from '../../../extension/background-script/EthereumService'
 import { startEffects } from '../../../../utils-pure'
 import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
@@ -31,7 +31,7 @@ export function kickToUpdateTokenPrices() {
 
 const trackingContracts: Record<string, string[]> = Object.create(null)
 export function trackContract(platform: string, address: string) {
-    trackingContracts[platform] = uniq([...(trackingContracts[platform] ?? []), address.toString()])
+    trackingContracts[platform] = uniq([...(trackingContracts[platform] ?? []), address])
 }
 
 export async function updateTokenPrices() {

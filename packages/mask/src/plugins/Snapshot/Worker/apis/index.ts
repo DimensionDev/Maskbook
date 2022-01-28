@@ -1,7 +1,8 @@
-import ss from '@dimensiondev/snapshot.js'
+import ss from '@snapshot-labs/snapshot.js'
 import type { Proposal, Profile3Box, ProposalIdentifier, VoteSuccess, RawVote, Strategy } from '../../types'
 import Services from '../../../../extension/service'
 import { transform } from 'lodash-unified'
+import { SNAPSHOT_GET_SCORE_API } from '../../constants'
 
 export async function fetchProposal(id: string) {
     const { votes, proposal } = await fetchProposalFromGraphql(id)
@@ -12,7 +13,7 @@ export async function fetchProposal(id: string) {
 }
 
 async function fetchProposalFromGraphql(id: string) {
-    const response = await fetch(`https://hub.snapshot.org/graphql`, {
+    const response = await fetch('https://hub.snapshot.org/graphql', {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -117,13 +118,13 @@ export async function getScores(
         space,
         strategies,
         network,
-        provider,
         voters,
         blockTag,
+        SNAPSHOT_GET_SCORE_API,
     )
     return scores.map((score) =>
         transform(score, function (result: { [key in string]: number }, val, key: string) {
-            result[key.toString().toLowerCase()] = val
+            result[key.toLowerCase()] = val
         }),
     )
 }
@@ -143,7 +144,7 @@ export async function vote(identifier: ProposalIdentifier, choice: number, addre
 
     const sig = await Services.Ethereum.personalSign(msg, address)
 
-    const response = await fetch(`https://hub.snapshot.org/api/msg`, {
+    const response = await fetch('https://hub.snapshot.org/api/msg', {
         method: 'POST',
         headers: {
             Accept: 'application/json',

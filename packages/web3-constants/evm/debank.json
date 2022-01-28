@@ -1,0 +1,22 @@
+{
+    "CHAIN_ID": {
+        "Mainnet": "eth",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "bsc",
+        "BSCT": "",
+        "Matic": "matic",
+        "Mumbai": "",
+        "Arbitrum": "arb",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "xdai",
+        "Avalanche": "avax",
+        "Avalanche_Fuji": "",
+        "Celo": "celo",
+        "Fantom": "ftm",
+        "Aurora": "aurora",
+        "Aurora_Testnet": ""
+    }
+}
