@@ -20,11 +20,12 @@ function parseText(
 ) {
     const { Link, Text } = components
     const fontSize =
-        allowTextEnlarge && Array.from(string).length < 45
+        14 *
+        (allowTextEnlarge && Array.from(string).length < 45
             ? 1.5
             : allowTextEnlarge && Array.from(string).length < 85
             ? 1.2
-            : 1
+            : 1)
     const links = parseLink(string).flatMap((x) => {
         if (x.type === 'text') {
             return x.content

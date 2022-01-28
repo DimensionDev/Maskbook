@@ -7,8 +7,6 @@ export interface MetadataRenderProps {
     message: TypedMessage
 }
 export interface RenderProps {
-    /** TODO: remove this property */
-    allowTextEnlarge?: boolean
     metadataRenderer?: React.ComponentType<MetadataRenderProps>
     message: TypedMessage
 }
