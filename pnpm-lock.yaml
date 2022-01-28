@@ -378,6 +378,7 @@ importers:
       millify: ^4.0.0
       next-tick: ^1.0.0
       opensea-js: ^1.2.7
+      p-throttle: ^5.0.0
       promievent: ^0.1.4
       protobufjs: ^6.11.2
       react-devtools-core: ^4.23.0
@@ -507,6 +508,7 @@ importers:
       millify: 4.0.0
       next-tick: 1.1.0
       opensea-js: 1.2.7
+      p-throttle: 5.0.0
       promievent: 0.1.5
       protobufjs: 6.11.2
       react-draggable: 4.4.4_757a802188413a36d4f24237d13b8e90
@@ -1114,6 +1116,7 @@ importers:
       ethereum-blockies: ^0.1.1
       fortmatic: ^2.2.1
       fuse.js: ^6.5.3
+      p-throttle: ^5.0.0
       punycode: ^2.1.1
       react-use: ^17.3.2
       unstated-next: ^1.1.0
@@ -1137,6 +1140,7 @@ importers:
       ethereum-blockies: 0.1.1
       fortmatic: 2.2.1
       fuse.js: 6.5.3
+      p-throttle: 5.0.0
       punycode: 2.1.1
       react-use: 17.3.2_757a802188413a36d4f24237d13b8e90
       unstated-next: 1.1.0
@@ -19241,6 +19245,11 @@ packages:
       '@types/retry': 0.12.1
       retry: 0.13.1
     dev: true
+
+  /p-throttle/5.0.0:
+    resolution: {integrity: sha512-iXBFjW4kP/5Ivw7uC9EDnj+/xo3pNn4Rws3zgMGPwXnWTv1M3P0LVdZxLrqRUI5JK0Fp3Du0bt6lCaVrI3WF7g==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dev: false
 
   /p-timeout/1.2.1:
     resolution: {integrity: sha1-XrOzU7f86Z8QGhA4iAuwVOu+o4Y=}

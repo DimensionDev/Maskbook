@@ -28,6 +28,12 @@ import {
 } from '@masknet/web3-shared-evm'
 import { getStorage } from '../../storage'
 import { getFungibleAssetsFn, getNonFungibleTokenFn } from './getAssetsFn'
+import pThrottle from 'p-throttle'
+
+const throttle = pThrottle({
+    limit: 1,
+    interval: 5000,
+})
 
 const ZERO_X_ERROR_ADDRESS = '0x'
 
@@ -120,12 +126,12 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
             }))
             return web3.eth.getBalance(account)
         },
-        getLatestBlockNumber: (chainId: ChainId) => {
+        getLatestBlockNumber: throttle((chainId: ChainId) => {
             const web3 = createWeb3(context.request, () => ({
                 chainId,
             }))
             return web3.eth.getBlockNumber()
-        },
+        }),
 
         getChainDetailed,
         isChainIdValid,
