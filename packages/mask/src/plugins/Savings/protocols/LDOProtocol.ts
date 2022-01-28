@@ -43,7 +43,7 @@ export class LidoProtocol implements SavingsProtocol {
     public base = 'ETH'
     public pair = 'stETH'
     public decimals = 18
-    public apr = '0.00'
+    public apy = '0.00'
     public balance = new BigNumber('0')
     public availableNetworks: SavingsNetwork[] = [
         {
@@ -81,17 +81,17 @@ export class LidoProtocol implements SavingsProtocol {
         }
     }
 
-    public async getApr() {
+    public async getApy() {
         try {
             const LidoAprUrl = 'https://cors.r2d2.to/?https://stake.lido.fi/api/steth-apr'
             const response = await fetch(LidoAprUrl)
-            const apr = await response.text()
-            this.apr = apr
-            return apr
+            const apy = await response.text()
+            this.apy = apy
+            return apy
         } catch (error) {
-            console.log('LDO `getApr()` error', error)
+            console.log('LDO `getApy()` error', error)
             // Default APR is 5.30%
-            this.apr = '5.30'
+            this.apy = '5.30'
             return '5.30'
         }
     }

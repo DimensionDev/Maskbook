@@ -3,6 +3,8 @@ import { ChainId, getChainIdFromNetworkType, useChainId, useChainIdValid } from 
 import { DialogContent } from '@mui/material'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { useRemoteControlledDialog } from '@masknet/shared'
+import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
+import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { PluginTraderMessages } from '../../messages'
 import { Trader, TraderProps } from './Trader'
 import { useI18N } from '../../../../utils'
@@ -93,25 +95,29 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
     }, [currentChainId])
 
     return (
-        <InjectedDialog
-            open={open || remoteOpen}
-            onClose={() => {
-                onClose?.()
-                setTraderProps(undefined)
-                closeDialog()
-            }}
-            title={t('plugin_trader_swap')}>
-            <DialogContent className={classes.content}>
-                {!isDashboard ? (
-                    <div className={classes.walletStatusBox}>
-                        <WalletStatusBox />
-                    </div>
-                ) : null}
-                <div className={classes.abstractTabWrapper}>
-                    <NetworkTab chainId={chainId} setChainId={setChainId} classes={classes} chains={chains} />
-                </div>
-                <Trader {...traderProps} chainId={chainId} classes={{ root: classes.tradeRoot }} />
-            </DialogContent>
-        </InjectedDialog>
+        <TargetChainIdContext.Provider>
+            <AllProviderTradeContext.Provider>
+                <InjectedDialog
+                    open={open || remoteOpen}
+                    onClose={() => {
+                        onClose?.()
+                        setTraderProps(undefined)
+                        closeDialog()
+                    }}
+                    title={t('plugin_trader_swap')}>
+                    <DialogContent className={classes.content}>
+                        {!isDashboard ? (
+                            <div className={classes.walletStatusBox}>
+                                <WalletStatusBox />
+                            </div>
+                        ) : null}
+                        <div className={classes.abstractTabWrapper}>
+                            <NetworkTab chainId={chainId} setChainId={setChainId} classes={classes} chains={chains} />
+                        </div>
+                        <Trader {...traderProps} chainId={chainId} classes={{ root: classes.tradeRoot }} />
+                    </DialogContent>
+                </InjectedDialog>
+            </AllProviderTradeContext.Provider>
+        </TargetChainIdContext.Provider>
     )
 }

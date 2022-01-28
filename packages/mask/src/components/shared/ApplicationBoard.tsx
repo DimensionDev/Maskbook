@@ -367,63 +367,57 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     ]
 
     return (
-        <TargetChainIdContext.Provider>
-            <AllProviderTradeContext.Provider>
-                {secondEntryChainTabs?.length ? (
-                    <div className={classes.abstractTabWrapper}>
-                        <NetworkTab
-                            chainId={chainId}
-                            setChainId={setChainId}
-                            classes={classes}
-                            chains={secondEntryChainTabs}
-                        />
-                    </div>
-                ) : null}
-                <section className={classes.applicationWrapper}>
-                    {(secondEntries ?? firstLevelEntries).map(
-                        ({ title, img, onClick, supportedChains, hidden, walletRequired }, i) =>
-                            (!supportedChains || supportedChains?.includes(chainId)) && !hidden ? (
-                                <div
-                                    className={classNames(
-                                        classes.applicationBox,
-                                        walletRequired && !selectedWallet ? classes.disabled : '',
-                                    )}
-                                    onClick={onClick}
-                                    key={i}>
-                                    <img src={img} className={classes.applicationImg} />
-                                    <Typography className={classes.title} color="textPrimary">
-                                        {title}
-                                    </Typography>
-                                </div>
-                            ) : null,
-                    )}
-                </section>
-                {isClaimAllDialogOpen ? (
-                    <ClaimAllDialog open={isClaimAllDialogOpen} onClose={onClaimAllDialogClose} />
-                ) : null}
-
-                {isSecondLevelEntryDialogOpen ? (
-                    <EntrySecondLevelDialog
-                        title={secondLevelEntryDialogTitle}
-                        open={isSecondLevelEntryDialogOpen}
-                        entries={secondLevelEntries}
-                        chains={secondLevelEntryChains}
-                        closeDialog={onSecondLevelEntryDialogClose}
+        <>
+            {secondEntryChainTabs?.length ? (
+                <div className={classes.abstractTabWrapper}>
+                    <NetworkTab
+                        chainId={chainId}
+                        setChainId={setChainId}
+                        classes={classes}
+                        chains={secondEntryChainTabs}
                     />
-                ) : null}
-                {isFindTrumanDialogOpen ? (
-                    <FindTrumanDialog open={isFindTrumanDialogOpen} onClose={onFindTrumanDialogClose} />
-                ) : null}
+                </div>
+            ) : null}
+            <section className={classes.applicationWrapper}>
+                {(secondEntries ?? firstLevelEntries).map(
+                    ({ title, img, onClick, supportedChains, hidden, walletRequired }, i) =>
+                        (!supportedChains || supportedChains?.includes(chainId)) && !hidden ? (
+                            <div
+                                className={classNames(
+                                    classes.applicationBox,
+                                    walletRequired && !selectedWallet ? classes.disabled : '',
+                                )}
+                                onClick={onClick}
+                                key={i}>
+                                <img src={img} className={classes.applicationImg} />
+                                <Typography className={classes.title} color="textPrimary">
+                                    {title}
+                                </Typography>
+                            </div>
+                        ) : null,
+                )}
+            </section>
+            {isClaimAllDialogOpen ? <ClaimAllDialog open onClose={onClaimAllDialogClose} /> : null}
+            {isSecondLevelEntryDialogOpen ? (
+                <EntrySecondLevelDialog
+                    title={secondLevelEntryDialogTitle}
+                    open
+                    entries={secondLevelEntries}
+                    chains={secondLevelEntryChains}
+                    closeDialog={onSecondLevelEntryDialogClose}
+                />
+            ) : null}
+            {isFindTrumanDialogOpen ? <FindTrumanDialog open onClose={onFindTrumanDialogClose} /> : null}
 
-                {isSwapDialogOpen ? <TraderDialog open={isSwapDialogOpen} onClose={onSwapDialogClose} /> : null}
-                {isSavingsDialogOpen ? (
-                    <SavingsDialog
-                        open={isSavingsDialogOpen}
-                        onClose={onSavingsDialogClose}
-                        onSwapDialogOpen={onSwapDialogOpen}
-                    />
-                ) : null}
-            </AllProviderTradeContext.Provider>
-        </TargetChainIdContext.Provider>
+            <TargetChainIdContext.Provider>
+                <AllProviderTradeContext.Provider>
+                    {isSwapDialogOpen ? <TraderDialog open onClose={onSwapDialogClose} /> : null}
+
+                    {isSavingsDialogOpen ? (
+                        <SavingsDialog open onClose={onSavingsDialogClose} onSwapDialogOpen={onSwapDialogOpen} />
+                    ) : null}
+                </AllProviderTradeContext.Provider>
+            </TargetChainIdContext.Provider>
+        </>
     )
 }

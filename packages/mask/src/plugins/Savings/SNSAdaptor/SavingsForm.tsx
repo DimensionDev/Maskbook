@@ -137,7 +137,7 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
                     {protocol.pair} {t('plugin_savings_apy')}%
                 </Typography>
                 <Typography variant="body1" className={classes.infoRowRight}>
-                    {protocol.apr}%
+                    {protocol.apy}%
                 </Typography>
             </div>
 

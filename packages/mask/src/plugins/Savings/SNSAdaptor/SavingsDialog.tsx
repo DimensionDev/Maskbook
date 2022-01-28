@@ -7,6 +7,8 @@ import { useI18N } from '../../../utils'
 import { EMPTY_LIST } from '../../../../utils-pure'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
+import { AllProviderTradeContext } from '../../Trader/trader/useAllProviderTradeContext'
+import { TargetChainIdContext } from '../../Trader/trader/useTargetChainIdContext'
 import { FolderTabPanel, FolderTabs } from '@masknet/theme'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { WalletRPC } from '../../Wallet/messages'
@@ -54,67 +56,76 @@ export function SavingsDialog({ open, onClose, onSwapDialogOpen }: SavingsDialog
     }, [chainId])
 
     return (
-        <InjectedDialog
-            open={open}
-            onClose={() => {
-                if (selectedProtocol === null) {
-                    onClose?.()
-                } else {
-                    setSelectedProtocol(null)
-                }
-            }}
-            title={t('plugin_savings')}>
-            <DialogContent>
-                {!isDashboard ? (
-                    <div className={classes.walletStatusBox}>
-                        <WalletStatusBox />
-                    </div>
-                ) : null}
+        <TargetChainIdContext.Provider>
+            <AllProviderTradeContext.Provider>
+                <InjectedDialog
+                    open
+                    onClose={() => {
+                        if (selectedProtocol === null) {
+                            onClose?.()
+                        } else {
+                            setSelectedProtocol(null)
+                        }
+                    }}
+                    title={t('plugin_savings')}>
+                    <DialogContent>
+                        {!isDashboard ? (
+                            <div className={classes.walletStatusBox}>
+                                <WalletStatusBox />
+                            </div>
+                        ) : null}
 
-                {selectedProtocol === null ? (
-                    <>
-                        <div className={classes.abstractTabWrapper}>
-                            <NetworkTab chainId={chainId} setChainId={setChainId} classes={classes} chains={chains} />
-                        </div>
-                        <div className={classes.tableTabWrapper}>
-                            {mappableProtocols.length === 0 ? (
-                                <Typography variant="h5" textAlign="center">
-                                    {t('plugin_no_protocol_available')}
-                                </Typography>
-                            ) : (
-                                <FolderTabs>
-                                    <FolderTabPanel label="DEPOSIT">
-                                        <SavingsTable
-                                            chainId={chainId}
-                                            tab={TabType.Deposit}
-                                            mappableProtocols={mappableProtocols}
-                                            setSelectedProtocol={setSelectedProtocol}
-                                            setTab={setTab}
-                                        />
-                                    </FolderTabPanel>
-                                    <FolderTabPanel label="WITHDRAW">
-                                        <SavingsTable
-                                            chainId={chainId}
-                                            tab={TabType.Withdraw}
-                                            mappableProtocols={mappableProtocols}
-                                            setSelectedProtocol={setSelectedProtocol}
-                                            setTab={setTab}
-                                        />
-                                    </FolderTabPanel>
-                                </FolderTabs>
-                            )}
-                        </div>
-                    </>
-                ) : (
-                    <SavingsForm
-                        tab={tab}
-                        chainId={chainId}
-                        selectedProtocol={selectedProtocol}
-                        onClose={onClose}
-                        onSwapDialogOpen={onSwapDialogOpen}
-                    />
-                )}
-            </DialogContent>
-        </InjectedDialog>
+                        {selectedProtocol === null ? (
+                            <>
+                                <div className={classes.abstractTabWrapper}>
+                                    <NetworkTab
+                                        chainId={chainId}
+                                        setChainId={setChainId}
+                                        classes={classes}
+                                        chains={chains}
+                                    />
+                                </div>
+                                <div className={classes.tableTabWrapper}>
+                                    {mappableProtocols.length === 0 ? (
+                                        <Typography variant="h5" textAlign="center">
+                                            {t('plugin_no_protocol_available')}
+                                        </Typography>
+                                    ) : (
+                                        <FolderTabs>
+                                            <FolderTabPanel label="DEPOSIT">
+                                                <SavingsTable
+                                                    chainId={chainId}
+                                                    tab={TabType.Deposit}
+                                                    mappableProtocols={mappableProtocols}
+                                                    setSelectedProtocol={setSelectedProtocol}
+                                                    setTab={setTab}
+                                                />
+                                            </FolderTabPanel>
+                                            <FolderTabPanel label="WITHDRAW">
+                                                <SavingsTable
+                                                    chainId={chainId}
+                                                    tab={TabType.Withdraw}
+                                                    mappableProtocols={mappableProtocols}
+                                                    setSelectedProtocol={setSelectedProtocol}
+                                                    setTab={setTab}
+                                                />
+                                            </FolderTabPanel>
+                                        </FolderTabs>
+                                    )}
+                                </div>
+                            </>
+                        ) : (
+                            <SavingsForm
+                                tab={tab}
+                                chainId={chainId}
+                                selectedProtocol={selectedProtocol}
+                                onClose={onClose}
+                                onSwapDialogOpen={onSwapDialogOpen}
+                            />
+                        )}
+                    </DialogContent>
+                </InjectedDialog>
+            </AllProviderTradeContext.Provider>
+        </TargetChainIdContext.Provider>
     )
 }
