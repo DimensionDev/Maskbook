@@ -39,8 +39,8 @@ const rainbowBorderKeyFrames: Keyframes = keyframes`
 const useStyles = makeStyles()((theme) => ({
     root: {},
     miniBorder: {
-        transform: 'scale(0.9) translate(10px, 10px)',
-        strokeWidth: 12,
+        transform: 'scale(0.94) translate(7px, 6px)',
+        strokeWidth: 4,
     },
     borderPath: {
         transform: 'scaleY(1.05) translate(0px, -5px)',
