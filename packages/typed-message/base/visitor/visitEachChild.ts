@@ -1,10 +1,11 @@
 import {
     isTypedMessagePromise,
     isTypedMessageTuple,
+    makeTypedMessagePromise,
     makeTypedMessageTuple,
     makeTypedMessageTupleSerializable,
 } from '../core'
-import { isSerializableTypedMessage } from '../utils'
+import { isNonSerializableTypedMessageWithAlt, isSerializableTypedMessage } from '../utils'
 import type { TypedMessage } from '../base'
 import { isTypedMessageMaskPayload, makeTypedMessageMaskPayload } from '../extension'
 import type { TransformationContext, Transformer } from '../transformer'
@@ -24,18 +25,15 @@ export function visitEachTypedMessageChild(
             return makeTypedMessageTupleSerializable(after, node.meta)
         }
         return makeTypedMessageTuple(after, node.meta)
-    }
-
-    if (isTypedMessagePromise(node)) {
+    } else if (isTypedMessagePromise(node)) {
+        // we ignore alt if promise is resolved.
         if (node.promise.value) return visitor(node.promise.value, context)
-    }
-
-    if (isTypedMessageMaskPayload(node)) {
+        else if (node.alt) return makeTypedMessagePromise(node.promise, visitor(node.alt, context))
+        return node
+    } else if (isTypedMessageMaskPayload(node)) {
         const next = visitor(node.message, context)
         return makeTypedMessageMaskPayload(next, node.meta)
-    }
-
-    if (isSerializableTypedMessage(node) && 'alt' in node) {
+    } else if (isNonSerializableTypedMessageWithAlt(node)) {
         const alt = visitor(node.alt, context)
         if (!isSerializableTypedMessage(alt)) {
             console.warn(
@@ -48,7 +46,8 @@ export function visitEachTypedMessageChild(
             return node
         }
         return { ...node, alt } as TypedMessage
+    } else {
+        // return node with no child
+        return node
     }
-    // return node with no child
-    return node
 }

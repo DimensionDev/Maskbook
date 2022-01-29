@@ -11,11 +11,14 @@ import type {
 import { isTypedMessageTuple, TypedMessageTuple } from '../core'
 import { eq } from 'lodash-unified'
 
+export function isNonSerializableTypedMessageWithAlt(x: TypedMessage): x is NonSerializableWithAltTypedMessage {
+    const y = x as NonSerializableWithAltTypedMessage
+    if (y.serializable !== false) return false
+    return isSerializableTypedMessage(y.alt)
+}
 export function isSerializableTypedMessage(x: TypedMessage): x is SerializableTypedMessages {
     if ((x as SerializableTypedMessage<number>).serializable) return true
-    const y = x as NonSerializableWithAltTypedMessage
-    if (y.serializable === false && y.alt) return true
-    return false
+    return isNonSerializableTypedMessageWithAlt(x)
 }
 
 /**

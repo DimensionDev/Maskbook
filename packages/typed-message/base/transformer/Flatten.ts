@@ -11,9 +11,9 @@ import {
 import type { TypedMessage } from '../base'
 import { visitEachTypedMessageChild } from '../visitor'
 import { isSerializableTypedMessage } from '../utils'
-import { emptyTransformationContext } from './context'
+import { emptyTransformationContext, TransformationContext } from './context'
 
-export function FlattenTypedMessage(message: TypedMessage, context = emptyTransformationContext): TypedMessage {
+export function FlattenTypedMessage(message: TypedMessage, context: TransformationContext): TypedMessage {
     if (isTypedMessagePromise(message) && message.promise.value) return message.promise.value
     if (isTypedMessageTuple(message)) {
         const next = message.items
@@ -39,3 +39,4 @@ export function FlattenTypedMessage(message: TypedMessage, context = emptyTransf
     }
     return visitEachTypedMessageChild(message, FlattenTypedMessage, context)
 }
+FlattenTypedMessage.NoContext = (message: TypedMessage) => FlattenTypedMessage(message, emptyTransformationContext)

@@ -7,7 +7,6 @@ export interface MetadataRenderProps {
     message: TypedMessage
 }
 export interface RenderProps {
-    metadataRenderer?: React.ComponentType<MetadataRenderProps>
     message: TypedMessage
 }
 export function TypedMessageRender(props: RenderProps) {
