@@ -199,7 +199,7 @@ export const selfInfoSelectors = () => ({
     userAvatar: p(avatar, 1),
 })
 
-// #region nft avatar
+// #region twitter nft avatar
 export const searchProfileAvatarSelector = () => {
     return querySelectorAll<E>('[data-testid="fileInput"]').at(1).closest<E>(4)
 }
@@ -219,7 +219,7 @@ export const searchAvatarSelectorImage = () =>
         .closest<HTMLDivElement>(2)
         .querySelector<HTMLDivElement>('div > div > :nth-child(2) > div > img')
 
-export const searchAvatarOpenFileSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1)
+export const searchTwitterAvatarOpenFilesSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1)
 export const searchProfileSaveSelector = () => querySelector<E>('[data-testid="Profile_Save_Button"]')
 
 export const searchProfessionalButtonSelector = () => querySelector<E>('[data-testid*="ProfessionalButton"]')
