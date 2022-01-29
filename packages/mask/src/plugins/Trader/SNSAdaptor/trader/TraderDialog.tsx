@@ -66,7 +66,7 @@ interface TraderDialogProps {
 export function TraderDialog({ open, onClose }: TraderDialogProps) {
     const isDashboard = isDashboardPage()
     const pluginID = usePluginIDContext()
-    const chainIdList = Trader_Definition.enableRequirement.web3?.[pluginID]?.supportedChainIds!
+    const chainIdList = Trader_Definition.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? []
     const { t } = useI18N()
     const { classes } = useStyles()
     const currentChainId = useChainId()

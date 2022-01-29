@@ -224,7 +224,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { t } = useI18N()
     const { open, onClose } = props
     const pluginId = usePluginIDContext()
-    const chainIdList = ITO_Definition.enableRequirement.web3?.[pluginId]?.supportedChainIds!
+    const chainIdList = ITO_Definition.enableRequirement.web3?.[pluginId]?.supportedChainIds ?? []
     const DialogRef = useRef<HTMLDivElement>(null)
     const account = useAccount()
     const currentChainId = useChainId()
