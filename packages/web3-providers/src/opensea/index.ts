@@ -351,6 +351,8 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
                 chainId,
                 symbol: x.primary_asset_contracts?.[0]?.symbol,
                 address: x.primary_asset_contracts?.[0]?.address,
+                // workaround: rarible collection have multi contract
+                addresses: x.primary_asset_contracts?.map((x) => x.address),
                 iconURL: x.image_url,
                 balance: x.owned_asset_count,
             })) ?? []

@@ -3,6 +3,7 @@ import { useValueRef } from '@masknet/shared'
 import {
     ChainId,
     ERC721TokenDetailed,
+    isSameAddress,
     NonFungibleAssetProvider,
     SocketState,
     useCollectibles,
@@ -261,7 +262,11 @@ export function CollectionList({ address }: { address: string }) {
     return (
         <Box>
             {(collections ?? []).map((x, i) => {
-                const renderCollectibles = collectibles.filter((c) => c.contractDetailed.address === x.address)
+                const renderCollectibles = collectibles.filter(
+                    (c) =>
+                        c.contractDetailed.address === x.address ||
+                        x.addresses?.find((r) => isSameAddress(r, c.contractDetailed.address)),
+                )
                 return (
                     <Box key={i}>
                         <Box display="flex" alignItems="center" sx={{ marginTop: '16px' }}>
