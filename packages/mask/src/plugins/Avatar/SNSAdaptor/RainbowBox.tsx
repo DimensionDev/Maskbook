@@ -2,8 +2,7 @@ import { keyframes, makeStyles, useStylesExtends } from '@masknet/theme'
 import type { Keyframes } from '@emotion/serialize'
 
 export const rainbowBorderKeyFrames: Keyframes = keyframes`
-    0%,
-    to {
+    0%, to {
         border-color: #00f8ff;
         box-shadow: 0 5px 15px rgba(0, 248, 255, 0.4), 0 10px 30px rgba(37, 41, 46, 0.2);
     }
