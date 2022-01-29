@@ -14,8 +14,8 @@ const NFTAvatarDBStorage = (network: string) => KeyValue.createJSON_Storage(NFT_
 
 const cache = new Map<string, [Promise<string | undefined>, number]>()
 
-function timeout<T>(promise: PromiseLike<T>, time: number): Promise<T | undefined> {
-    return Promise.race([promise, new Promise<undefined>((resolve) => setTimeout(() => resolve(undefined), time))])
+function timeout<T>(promise: PromiseLike<T>, duration: number): Promise<T | undefined> {
+    return Promise.race([promise, new Promise<void>((resolve) => setTimeout(() => resolve(), duration))])
 }
 
 async function getDataFromGUN(userId: string) {
