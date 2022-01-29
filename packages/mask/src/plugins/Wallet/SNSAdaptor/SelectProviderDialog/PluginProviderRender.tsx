@@ -1,11 +1,12 @@
 import { first } from 'lodash-unified'
 import { SelectedIcon } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
-import type { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra'
+import { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra'
 import { makeStyles } from '@masknet/theme'
 import { Box, ImageList, ImageListItem, List, ListItem, Typography } from '@mui/material'
 import { ProviderIcon } from './ProviderIcon'
 import { ShadowRootTooltip, useI18N } from '../../../../utils'
+import { isDashboardPage } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -96,6 +97,10 @@ export function PluginProviderRender({
     const { classes } = useStyles()
     const { t } = useI18N()
 
+    const isSolana = undeterminedPluginID === NetworkPluginID.PLUGIN_SOLANA
+    const isDashboard = isDashboardPage()
+    const showProviders = !isSolana || !isDashboard
+
     return (
         <>
             <Box className={classes.root}>
@@ -132,34 +137,36 @@ export function PluginProviderRender({
                             ))}
                     </List>
                 </section>
-                <section className={classes.section}>
-                    <Typography className={classes.title} variant="h2" component="h2">
-                        {t('plugin_wallet_guiding_step_2')}
-                    </Typography>
-                    <ImageList className={classes.grid} gap={8} cols={3} rowHeight={130}>
-                        {providers
-                            .filter((x) => x.providerAdaptorPluginID === undeterminedPluginID)
-                            .map((provider) =>
-                                ProviderIconClickBait ? (
-                                    <ProviderIconClickBait
-                                        key={provider.ID}
-                                        network={
-                                            networks.find((x) => x.ID === undeterminedNetworkID) ?? first(networks)!
-                                        }
-                                        provider={provider}
-                                        onSubmit={onSubmit}>
+                {showProviders ? (
+                    <section className={classes.section}>
+                        <Typography className={classes.title} variant="h2" component="h2">
+                            {t('plugin_wallet_guiding_step_2')}
+                        </Typography>
+                        <ImageList className={classes.grid} gap={8} cols={3} rowHeight={130}>
+                            {providers
+                                .filter((x) => x.providerAdaptorPluginID === undeterminedPluginID)
+                                .map((provider) =>
+                                    ProviderIconClickBait ? (
+                                        <ProviderIconClickBait
+                                            key={provider.ID}
+                                            network={
+                                                networks.find((x) => x.ID === undeterminedNetworkID) ?? first(networks)!
+                                            }
+                                            provider={provider}
+                                            onSubmit={onSubmit}>
+                                            <ImageListItem key={provider.ID}>
+                                                <ProviderIcon icon={provider.icon} name={provider.name} />
+                                            </ImageListItem>
+                                        </ProviderIconClickBait>
+                                    ) : (
                                         <ImageListItem key={provider.ID}>
                                             <ProviderIcon icon={provider.icon} name={provider.name} />
                                         </ImageListItem>
-                                    </ProviderIconClickBait>
-                                ) : (
-                                    <ImageListItem key={provider.ID}>
-                                        <ProviderIcon icon={provider.icon} name={provider.name} />
-                                    </ImageListItem>
-                                ),
-                            )}
-                    </ImageList>
-                </section>
+                                    ),
+                                )}
+                        </ImageList>
+                    </section>
+                ) : null}
             </Box>
         </>
     )
