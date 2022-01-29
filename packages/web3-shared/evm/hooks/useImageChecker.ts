@@ -1,17 +1,15 @@
-import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { useAsync } from 'react-use'
 
 // filter out nft with image resource
-export function useImageNFTFilter(collectible: ERC721TokenDetailed) {
+export function useImageChecker(url: string | undefined) {
     return useAsync(async () => {
-        if (!collectible.info?.imageURL) return null
-        const { pathname } = new URL(collectible.info?.imageURL ?? '')
-        if (/\.(gif|svg|png|webp|jpg|jpeg)$/.test(pathname)) return collectible
-        if (/\.(mp4|webm|mov|ogg|mp3|wav)$/.test(pathname)) return null
-        const contentType = await getContentType(collectible.info?.imageURL ?? '')
-        if (contentType.startsWith('image/')) return collectible
-        return null
-    }, [collectible])
+        if (!url) return false
+        const { pathname } = new URL(url)
+        if (/\.(gif|svg|png|webp|jpg|jpeg)$/.test(pathname)) return true
+        if (/\.(mp4|webm|mov|ogg|mp3|wav)$/.test(pathname)) return false
+        const contentType = await getContentType(url)
+        return contentType.startsWith('image/')
+    }, [url])
 }
 
 async function getContentType(url: string) {

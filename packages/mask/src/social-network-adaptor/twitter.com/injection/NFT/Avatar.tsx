@@ -4,6 +4,7 @@ import { createReactRootShadowed, startWatch } from '../../../../utils'
 import { Flags } from '../../../../../shared'
 import { getInjectNodeInfo } from '../../utils/avatar'
 import { postAvatarsContentSelector } from '../../utils/selector'
+import { NFTAvatarMiniClip } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip'
 
 function getTwitterId(ele: HTMLElement) {
     const twitterIdNode = (ele.firstChild?.nextSibling as HTMLElement).querySelector(
@@ -39,12 +40,16 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                             top: 0,
                             zIndex: 2,
                         }}>
-                        <NFTBadgeTimeline
-                            userId={twitterId}
-                            avatarId={info.avatarId}
-                            width={info.width - 4}
-                            height={info.height - 4}
-                        />
+                        {info.isTwitterNFT ? (
+                            <NFTAvatarMiniClip width={info.width} height={info.height} screenName={twitterId} />
+                        ) : (
+                            <NFTBadgeTimeline
+                                userId={twitterId}
+                                avatarId={info.avatarId}
+                                width={info.width - 4}
+                                height={info.height - 4}
+                            />
+                        )}
                     </div>,
                 )
                 remover = root.destory

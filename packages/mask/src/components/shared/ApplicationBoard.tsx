@@ -119,7 +119,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     const account = useAccount()
     const selectedWallet = useWallet()
     const currentPluginId = usePluginIDContext()
-    const isFlow = currentPluginId === NetworkPluginID.PLUGIN_FLOW
+    const isNotEvm = currentPluginId !== NetworkPluginID.PLUGIN_EVM
 
     // #region Encrypted message
     const openEncryptedMessage = useCallback(
@@ -221,7 +221,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             new URL('./assets/lucky_drop.png', import.meta.url).toString(),
             () => openEncryptedMessage(RedPacketPluginID),
             undefined,
-            isFlow,
+            isNotEvm,
         ),
         createEntry(
             'File Service',
@@ -236,21 +236,21 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             new URL('./assets/token.png', import.meta.url).toString(),
             () => openEncryptedMessage(ITO_PluginID),
             undefined,
-            isFlow,
+            isNotEvm,
         ),
         createEntry(
             'Claim',
             new URL('./assets/gift.png', import.meta.url).toString(),
             onClaimAllDialogOpen,
             undefined,
-            isFlow,
+            isNotEvm,
         ),
         createEntry(
             'Mask Bridge',
             new URL('./assets/bridge.png', import.meta.url).toString(),
             () => window.open('https://bridge.mask.io/#/', '_blank', 'noopener noreferrer'),
             undefined,
-            isFlow,
+            isNotEvm,
             false,
         ),
         createEntry(
@@ -258,7 +258,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             new URL('./assets/mask_box.png', import.meta.url).toString(),
             () => window.open('https://box.mask.io/#/', '_blank', 'noopener noreferrer'),
             undefined,
-            isFlow,
+            isNotEvm,
             false,
         ),
         createEntry(
@@ -273,7 +273,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             new URL('./assets/swap.png', import.meta.url).toString(),
             onSwapDialogOpen,
             undefined,
-            isFlow,
+            isNotEvm,
         ),
         createEntry(
             'Fiat On-Ramp',
@@ -317,7 +317,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                     undefined,
                 ),
             undefined,
-            isFlow,
+            isNotEvm,
         ),
         createEntry(
             'Investment',

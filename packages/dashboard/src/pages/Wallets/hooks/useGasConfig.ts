@@ -66,7 +66,7 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
         } else {
             setCustomGasPrice(gasOptions.medium as number)
         }
-    }, [chainId])
+    }, [chainId, gasOptions?.medium])
 
     const gasConfig = useMemo(() => {
         return is1559Supported
