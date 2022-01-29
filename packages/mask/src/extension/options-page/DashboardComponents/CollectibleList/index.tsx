@@ -264,7 +264,7 @@ export function CollectionList({ address }: { address: string }) {
             {(collections ?? []).map((x, i) => {
                 const renderCollectibles = collectibles.filter(
                     (c) =>
-                        c.contractDetailed.address === x.address ||
+                        isSameAddress(c.contractDetailed.address, x.address) ||
                         x.addresses?.find((r) => isSameAddress(r, c.contractDetailed.address)),
                 )
                 return (
