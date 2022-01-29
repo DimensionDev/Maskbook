@@ -321,7 +321,7 @@ export async function queryRelations(
     personaIdentifier?: PersonaIdentifier,
     profileIdentifier?: ProfileIdentifier,
     t?: RelationTransaction<'readonly'>
-) {
+): Promise<RelationRecord[]> {
     const results: NativeRelationRecord[] = []
     if (personaIdentifier && profileIdentifier) {
         const relations = await nativeAPI?.api.query_relation({
