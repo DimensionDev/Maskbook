@@ -9,6 +9,7 @@ import { useControlledDialog } from '../../utils/hooks/useControlledDialog'
 import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
 import { ITO_PluginID } from '../../plugins/ITO/constants'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
+import { PluginPetMessages } from '../../plugins/Pets/messages'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { EntrySecondLevelDialog } from './EntrySecondLevelDialog'
 import { NetworkTab } from './NetworkTab'
@@ -150,6 +151,10 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
     // #endregion
 
+    // #region pet friends
+    const { setDialog: setPetDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated)
+    // #endregion
+
     // #region second level entry dialog
     const {
         open: isSecondLevelEntryDialogOpen,
@@ -283,6 +288,14 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                             new URL('./assets/valuables.png', import.meta.url).toString(),
                             () => {},
                             undefined,
+                            true,
+                        ),
+                        createEntry(
+                            'Non-F Friends',
+                            new URL('./assets/mintTeam.png', import.meta.url).toString(),
+                            () => setPetDialog({ open: true }),
+                            [ChainId.Mainnet],
+                            currentChainId !== ChainId.Mainnet,
                             true,
                         ),
                     ],

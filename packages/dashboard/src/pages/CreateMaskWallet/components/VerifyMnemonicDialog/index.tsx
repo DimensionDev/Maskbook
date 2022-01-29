@@ -173,6 +173,7 @@ export const VerifyMnemonicDialogUI = memo<VerifyMnemonicDialogUIProps>(
                                 ) : null}
 
                                 <LoadingButton
+                                    variant="contained"
                                     loading={loading}
                                     fullWidth
                                     className={classes.button}
