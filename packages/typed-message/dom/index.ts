@@ -1,6 +1,6 @@
 // Render
-export { TypedMessageRender, type RenderProps, type MetadataRenderProps } from './Renderer/Entry'
-export { useMetadataRender } from './Renderer/MetadataRender'
+export { TypedMessageRender, type RenderProps } from './Renderer/Entry'
+export { useMetadataRender, type MetadataRenderProps } from './Renderer/MetadataRender'
 
 // Render Registry
 export { type RenderConfig, createTypedMessageRenderRegistry } from './Renderer/registry'

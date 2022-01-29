@@ -1,5 +1,5 @@
-import { createContext, memo } from 'react'
-import type { MetadataRenderProps } from '../Entry'
+import { createContext } from 'react'
+import type { MetadataRenderProps } from '../MetadataRender'
 
 /** @internal */
 export const TextDefault: MessageRenderUIComponentsContext['Text'] = (props) => <span>{props.children}</span>

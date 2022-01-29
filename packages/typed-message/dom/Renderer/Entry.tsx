@@ -2,10 +2,6 @@ import { useContext } from 'react'
 import type { TypedMessage } from '../../base'
 import { TypedMessageUnknownRenderer as TypedMessageUnknownRender } from './Core/Unknown'
 import { RegistryContext } from './utils/RegistryContext'
-export interface MetadataRenderProps {
-    metadata: TypedMessage['meta']
-    message: TypedMessage
-}
 export interface RenderProps {
     message: TypedMessage
 }
