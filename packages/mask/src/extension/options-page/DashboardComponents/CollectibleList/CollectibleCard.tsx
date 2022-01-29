@@ -110,6 +110,20 @@ export function CollectibleCard(props: CollectibleCardProps) {
                             url={token.info.mediaUrl}
                             renderOrder={renderOrder}
                             tokenId={token.tokenId}
+                            fallbackResourceLoader={
+                                <Image
+                                    component="img"
+                                    width={172}
+                                    height={172}
+                                    style={{ objectFit: 'cover' }}
+                                    src={token.info.imageURL ?? ''}
+                                    onError={(event) => {
+                                        const target = event.currentTarget as HTMLImageElement
+                                        target.src = fallbackImageURL.toString()
+                                        target.classList.add(classes.loadingFailImage ?? '')
+                                    }}
+                                />
+                            }
                             classes={{
                                 loadingFailImage: classes.loadingFailImage,
                                 wrapper: classes.wrapper,
