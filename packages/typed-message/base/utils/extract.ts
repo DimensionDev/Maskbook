@@ -1,7 +1,8 @@
 import type { TypedMessage } from '../base'
-import { isTypedMessageText, isTypedMessageTuple, isTypedMessageImage } from '../core'
-import { isTypedMessageAnchor, isTypedMessageMaskPayload } from '../extension'
+import { isTypedMessageText, isTypedMessageImage } from '../core'
+import { isTypedMessageAnchor } from '../extension'
 import { Option, Some, None } from 'ts-results'
+import { forEachTypedMessageChild } from '../visitor/forEachChild'
 
 /**
  * Get inner text from a TypedMessage
@@ -9,32 +10,21 @@ import { Option, Some, None } from 'ts-results'
  */
 export function extractTextFromTypedMessage(message: TypedMessage | null): Option<string> {
     if (!message) return None
-    if (isTypedMessageText(message)) return Some(message.content)
-    if (isTypedMessageAnchor(message)) return Some(message.content)
-    if (isTypedMessageTuple(message)) {
-        const str: string[] = []
-        for (const item of message.items) {
-            const text = extractTextFromTypedMessage(item)
-            if (text.some) str.push(text.val)
-        }
-        if (str.length) return Some(str.join(' '))
-        return None
-    }
-    if (isTypedMessageMaskPayload(message)) {
-        return extractTextFromTypedMessage(message.message)
-    }
+    const text: string[] = []
+    forEachTypedMessageChild(message, function visitor() {
+        if (isTypedMessageText(message)) text.push(message.content)
+        else if (isTypedMessageAnchor(message)) text.push(message.content)
+        else forEachTypedMessageChild(message, visitor)
+    })
+    if (text.length) return Some(text.join(' '))
     return None
 }
-export function extractImageFromTypedMessage(
-    message: TypedMessage | null,
-    result: (string | Blob)[] = [],
-): (string | Blob)[] {
-    if (!message) return result
-    if (isTypedMessageImage(message)) return result.concat(message.image)
-    if (isTypedMessageTuple(message))
-        return result.concat(message.items.flatMap((x) => extractImageFromTypedMessage(x)))
-    if (isTypedMessageMaskPayload(message)) {
-        return extractImageFromTypedMessage(message.message)
-    }
-    return result
+export function extractImageFromTypedMessage(message: TypedMessage | null): (string | Blob)[] {
+    if (!message) return []
+    const image: (string | Blob)[] = []
+    forEachTypedMessageChild(message, function visitor(message) {
+        if (isTypedMessageImage(message)) return image.push(message.image)
+        return forEachTypedMessageChild(message, visitor)
+    })
+    return image
 }
