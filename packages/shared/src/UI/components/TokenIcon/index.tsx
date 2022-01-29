@@ -13,7 +13,7 @@ import { Avatar, AvatarProps } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useImageFailOver } from '../../hooks'
 import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
-
+import defaultIconColors from './constants'
 function getFallbackIcons(address: string, baseURIs: string[]) {
     const checkSummedAddress = formatEthereumAddress(address)
 
@@ -80,10 +80,16 @@ export interface TokenIconUIProps extends withClasses<'icon'> {
 
 export const TokenIconUI = memo<TokenIconUIProps>((props) => {
     const { logoURL, AvatarProps, name } = props
+    const backgroundColorIndex = name?.split('')?.reduce((total, cur) => total + Number(cur?.charCodeAt(0)), 0)
+    const backgroundColor = backgroundColorIndex ? defaultIconColors?.[backgroundColorIndex % 5] : undefined
     const classes = useStylesExtends(useStyles(), props)
 
     return (
-        <Avatar className={classes.icon} src={logoURL} {...AvatarProps}>
+        <Avatar
+            className={classes.icon}
+            style={{ backgroundColor: logoURL ? undefined : backgroundColor }}
+            src={logoURL}
+            {...AvatarProps}>
             {name?.substr(0, 1).toUpperCase()}
         </Avatar>
     )

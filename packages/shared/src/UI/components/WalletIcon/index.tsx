@@ -7,34 +7,31 @@ interface StyleProps {
     isBadgeBorderColorNotDefault?: boolean
 }
 
-const useStyles = makeStyles<StyleProps>()((theme, props) => {
-    console.log('theme', theme, props)
-    return {
-        root: {
-            position: 'relative',
-            display: 'flex',
-            height: props.size,
-            width: props.size,
-        },
-        mainIcon: {
-            display: 'block',
-            width: '100%',
-            height: '100%',
-        },
-        badgeIcon: {
-            position: 'absolute',
-            right: -2,
-            bottom: -2,
-        },
-        networkIcon: {},
-        providerIcon: {
-            border: `1px solid ${
-                props?.isBadgeBorderColorNotDefault ? theme.palette.background.paper : theme.palette.background.default
-            }`,
-            borderRadius: '50%',
-        },
-    }
-})
+const useStyles = makeStyles<StyleProps>()((theme, props) => ({
+    root: {
+        position: 'relative',
+        display: 'flex',
+        height: props.size,
+        width: props.size,
+    },
+    mainIcon: {
+        display: 'block',
+        width: '100%',
+        height: '100%',
+    },
+    badgeIcon: {
+        position: 'absolute',
+        right: -2,
+        bottom: -2,
+    },
+    networkIcon: {},
+    providerIcon: {
+        border: `1px solid ${
+            props?.isBadgeBorderColorNotDefault ? theme.palette.background.paper : theme.palette.background.default
+        }`,
+        borderRadius: '50%',
+    },
+}))
 
 interface WalletIconProps extends withClasses<'networkIcon' | 'providerIcon'> {
     size?: number
