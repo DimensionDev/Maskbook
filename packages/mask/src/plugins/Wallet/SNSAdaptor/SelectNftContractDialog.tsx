@@ -1,6 +1,6 @@
 import { useCallback, useState, useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { DialogContent, List, ListItem, Typography, Box, Link } from '@mui/material'
+import { DialogContent, List, ListItem, Typography, Box, Link, Avatar } from '@mui/material'
 import {
     ChainId,
     ERC721ContractDetailed,
@@ -19,7 +19,6 @@ import { EthereumAddress } from 'wallet.ts'
 import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import Fuse from 'fuse.js'
-import classNames from 'classnames'
 import { unionBy } from 'lodash-unified'
 import { useNFTBalance } from '../../EVM/hooks'
 import type { NonFungibleTokenAPI } from '@masknet/web3-providers'
@@ -259,20 +258,14 @@ function ContractListItem(props: ContractListItemProps) {
     return (
         <div style={{ position: 'relative' }}>
             <ListItem className={classes.listItem} onClick={() => onSubmit(contract.contractDetailed)}>
-                {contract.contractDetailed.iconURL ? (
-                    <img className={classes.icon} src={contract.contractDetailed.iconURL} />
-                ) : null}
+                <Avatar className={classes.icon} src={contract.contractDetailed.iconURL} />
                 <Typography className={classes.contractName}>
                     {contract.contractDetailed.name}{' '}
                     {contract.contractDetailed.symbol ? '(' + contract.contractDetailed.symbol + ')' : ''}
                 </Typography>
                 {contract.balance ? <Typography className={classes.balance}>{contract.balance}</Typography> : null}
             </ListItem>
-            <div
-                className={classNames(
-                    classes.address,
-                    contract.contractDetailed.iconURL ? '' : classes.addressNoImage,
-                )}>
+            <div className={classes.address}>
                 <span onClick={() => onSubmit(contract.contractDetailed)}>{contract.contractDetailed.address}</span>
                 <Link
                     href={resolveAddressLinkOnExplorer(chainId, contract.contractDetailed.address)}
