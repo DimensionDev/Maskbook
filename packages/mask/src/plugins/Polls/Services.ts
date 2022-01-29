@@ -55,6 +55,7 @@ export async function createNewPoll(poll: NewPollProps) {
 function GunTextRandom(l: number) {
     let s = ''
     l = l || 24 // you are not going to make a 0 length random number, so no need to check type
+    /* cspell:disable-next-line */
     const c = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXZabcdefghijklmnopqrstuvwxyz'
     while (l > 0) {
         s += c.charAt(Math.floor(Math.random() * c.length))
