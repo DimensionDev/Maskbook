@@ -13,7 +13,7 @@ export function createProvider(url: string) {
     const provider =
         providerPool.get(url) ??
         new MaskWallet.providers.HttpProvider(url, {
-            timeout: 5000, // ms
+            timeout: 20000, // ms
             // @ts-ignore
             clientConfig: {
                 keepalive: true,

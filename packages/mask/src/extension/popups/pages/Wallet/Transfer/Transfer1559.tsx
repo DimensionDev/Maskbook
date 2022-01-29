@@ -8,10 +8,12 @@ import {
     formatGweiToEther,
     formatGweiToWei,
     isSameAddress,
+    NetworkType,
     useChainId,
     useFungibleTokenBalance,
     useGasLimit,
     useNativeTokenDetailed,
+    useNetworkType,
     useTokenTransferCallback,
     useWallet,
 } from '@masknet/web3-shared-evm'
@@ -180,6 +182,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     const wallet = useWallet()
 
     const chainId = useChainId()
+    const network = useNetworkType()
     const history = useHistory()
 
     const [minGasLimitContext, setMinGasLimitContext] = useState(0)
@@ -290,20 +293,31 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         error: resolveDomainError,
         loading: resolveDomainLoading,
     } = useLookupAddress(address, NetworkPluginID.PLUGIN_EVM)
-
-    useUpdateEffect(() => {
-        // The input is ens domain but the binding address cannot be found
-        if (Utils?.isValidDomain?.(address) && (resolveDomainError || !registeredAddress))
-            setAddressTip({
-                type: TransferAddressError.RESOLVE_FAILED,
-                message: t('wallet_transfer_error_no_address_has_been_set_name'),
-            })
-    }, [resolveDomainError, registeredAddress, methods.setError, address, Utils])
     // #endregion
 
     // #region check address or registered address type
     useAsync(async () => {
+        // Only ethereum currently supports ens
+        if (address.includes('.eth') && network !== NetworkType.Ethereum) {
+            setAddressTip({
+                type: TransferAddressError.NETWORK_NOT_SUPPORT,
+                message: t('wallet_transfer_error_no_support_ens'),
+            })
+            return
+        }
+
+        // The input is ens domain but the binding address cannot be found
+        if (Utils?.isValidDomain?.(address) && (resolveDomainError || !registeredAddress)) {
+            setAddressTip({
+                type: TransferAddressError.RESOLVE_FAILED,
+                message: t('wallet_transfer_error_no_address_has_been_set_name'),
+            })
+            return
+        }
+
+        // clear error tip
         setAddressTip(null)
+
         if (!address && !registeredAddress) return
         if (!EthereumAddress.isValid(address) && !EthereumAddress.isValid(registeredAddress)) return
         methods.clearErrors('address')
@@ -324,7 +338,15 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 message: t('wallet_transfer_error_is_contract_address'),
             })
         }
-    }, [address, EthereumAddress.isValid, registeredAddress, methods.clearErrors, wallet?.address, registeredAddress])
+    }, [
+        address,
+        EthereumAddress.isValid,
+        registeredAddress,
+        methods.clearErrors,
+        wallet?.address,
+        resolveDomainError,
+        Utils,
+    ])
     // #endregion
 
     // #region Get min gas limit with amount and recipient address
@@ -381,16 +403,16 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
             // If input address is ens domain, use registeredAddress to transfer
             if (Utils?.isValidDomain?.(data.address)) {
                 await transferCallback(transferAmount, registeredAddress, {
-                    maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toString()),
-                    maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toString()),
+                    maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
+                    maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
                     gas: new BigNumber(data.gasLimit).toNumber(),
                 })
                 return
             }
 
             await transferCallback(transferAmount, data.address, {
-                maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toString()),
-                maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toString()),
+                maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
+                maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
                 gas: new BigNumber(data.gasLimit).toNumber(),
             })
         },

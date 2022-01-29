@@ -477,7 +477,14 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     }
 
     const onCreate = async () => {
-        ui.automation.maskCompositionDialog?.open?.(makeTypedMessageText(t('setup_guide_say_hello_content')), {
+        let content = t('setup_guide_say_hello_content')
+        if (ui.networkIdentifier === 'twitter.com') {
+            content += t('setup_guide_say_hello_follow', { account: '@realMaskNetwork' })
+        } else if (ui.networkIdentifier === 'facebook.com') {
+            content += t('setup_guide_say_hello_follow', { account: '@masknetwork' })
+        }
+
+        ui.automation.maskCompositionDialog?.open?.(makeTypedMessageText(content), {
             target: 'Everyone',
         })
     }

@@ -83,7 +83,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                                         "Request of type 'wallet_requestPermissions' already pending for origin",
                                     )
                                         ? t('plugin_wallet_metamask_error_already_request')
-                                        : 'Error connecting.'}
+                                        : error.message ?? 'Something went wrong.'}
                                 </Typography>
                             ) : null}
                         </Box>
