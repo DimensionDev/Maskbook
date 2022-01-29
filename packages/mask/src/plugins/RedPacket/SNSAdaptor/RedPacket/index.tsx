@@ -137,7 +137,7 @@ export function RedPacket(props: RedPacketProps) {
 
     const onClaimOrRefundOnNative = useCallback(async () => {
         if (!availability) return
-        nativeAPI?.api.claimOrRefundRedpacket({
+        await nativeAPI?.api.claimOrRefundRedpacket({
             redpacketPayload: payload,
             availability: {
                 token_address: availability.token_address,

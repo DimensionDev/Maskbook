@@ -271,7 +271,7 @@ export async function patchCreateOrUpdateRelation(
         for (const persona of personas) {
             for (const profile of profiles) {
                 let relationsInDB = await queryRelations(persona, profile)
-                if (relationsInDB) {
+                if (relationsInDB.length > 0) {
                     for (const _ of relationsInDB) {
                         await updateRelation(profile, persona, defaultFavor)
                     }
@@ -289,7 +289,7 @@ export async function patchCreateNewRelation(relations: Omit<RelationRecord, 'ne
         for (const relation of relations) {
             let relationsInDB = await queryRelations(relation.linked, relation.profile)
 
-            if (relationsInDB) {
+            if (relationsInDB.length > 0) {
                 for (const relation of relationsInDB) {
                     await updateRelationDB(relation, t, true)
                 }
