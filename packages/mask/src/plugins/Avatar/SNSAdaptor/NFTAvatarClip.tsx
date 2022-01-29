@@ -42,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
     root: {},
     miniBorder: {
         transform: 'scale(0.9) translate(10px, 10px)',
-        strokeWidth: 12,
+        strokeWidth: 6,
     },
     borderPath: {
         transform: 'scaleY(1.05) translate(0px, -5px)',
@@ -56,7 +56,7 @@ const useStyles = makeStyles()((theme) => ({
         transform: 'translate(1px, -5px) ',
     },
     price: {
-        transform: 'translate(0px, 1px) ',
+        transform: 'translate(0px, -2px) ',
     },
     namePath: {
         transform: 'scale(0.9) translate(10px, 10px)',
