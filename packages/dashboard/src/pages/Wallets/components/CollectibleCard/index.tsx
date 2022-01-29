@@ -6,13 +6,7 @@ import { useHoverDirty } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
 import { WalletIcon, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { ChangeNetworkTip } from '../FungibleTokenTableRow/ChangeNetworkTip'
-import {
-    NetworkPluginID,
-    useNetworkDescriptor,
-    usePluginIDContext,
-    useWeb3State,
-    Web3Plugin,
-} from '@masknet/plugin-infra'
+import { useNetworkDescriptor, usePluginIDContext, useWeb3State, Web3Plugin } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -115,9 +109,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
         setHoveringTooltip(false)
     }, [chainId])
 
-    // Sending NFT is only available on EVM currently.
-    const sendable = currentPluginId === NetworkPluginID.PLUGIN_EVM
-    const showSendButton = (isHovering || isHoveringTooltip) && sendable
+    const showSendButton = isHovering || isHoveringTooltip
 
     let nftLink
     if (Utils?.resolveNonFungibleTokenLink && token.contract) {
@@ -172,7 +164,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
                                         size="small"
                                         fullWidth
                                         disabled={!isOnCurrentChain}
-                                        onClick={sendable ? onSend : undefined}
+                                        onClick={onSend}
                                         variant="rounded"
                                         style={{ boxShadow: 'none' }}
                                         sx={{ fontWeight: 'bolder', height: '28px' }}>
