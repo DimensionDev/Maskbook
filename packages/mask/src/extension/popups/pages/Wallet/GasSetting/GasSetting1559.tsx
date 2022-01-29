@@ -278,8 +278,8 @@ export const GasSetting1559 = memo(() => {
             const config = value.payload.params.map((param) => ({
                 ...param,
                 gas: toHex(new BigNumber(data.gasLimit).toString()),
-                maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toString()),
-                maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toString()),
+                maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
+                maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
             }))
 
             await WalletRPC.updateUnconfirmedRequest({

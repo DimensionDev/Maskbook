@@ -18,6 +18,7 @@ import {
     getChainShortName,
     getChainIdFromNetworkType,
     ERC721TokenCollectionInfo,
+    isNativeTokenSymbol as isNativeToken,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { values } from 'lodash-unified'
@@ -180,7 +181,6 @@ function formatAssetsFromZerion(
     return data.map(({ asset, quantity }) => {
         const balance = leftShift(quantity, asset.decimals).toNumber()
         const value = (asset as ZerionAsset).price?.value ?? (asset as ZerionCovalentAsset).value ?? 0
-        const isNativeToken = (symbol: string) => ['ETH', 'BNB', 'MATIC', 'ARETH', 'AETH', 'MOVR'].includes(symbol)
 
         return {
             token: {
