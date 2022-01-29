@@ -195,7 +195,7 @@
         ],
         "infoURL": "https://matic.network/"
     },
-  {
+    {
         "name": "Matic Testnet Mumbai",
         "chainId": 80001,
         "fullName": "Polygon",
