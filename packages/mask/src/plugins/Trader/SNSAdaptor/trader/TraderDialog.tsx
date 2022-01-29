@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { usePluginIDContext } from '@masknet/plugin-infra'
+import { usePluginIDContext, useActivatedPlugin, PluginId } from '@masknet/plugin-infra'
 import { ChainId, useChainId, useChainIdValid } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
@@ -14,7 +14,6 @@ import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
 import { NetworkTab } from '../../../../components/shared/NetworkTab'
 import { useUpdateEffect } from 'react-use'
 import { isDashboardPage } from '@masknet/shared-base'
-import { base as Trader_Definition } from '../../base'
 
 const useStyles = makeStyles()((theme) => ({
     walletStatusBox: {
@@ -66,7 +65,8 @@ interface TraderDialogProps {
 export function TraderDialog({ open, onClose }: TraderDialogProps) {
     const isDashboard = isDashboardPage()
     const pluginID = usePluginIDContext()
-    const chainIdList = Trader_Definition.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? []
+    const traderDefinition = useActivatedPlugin(PluginId.Trader, 'any')
+    const chainIdList = traderDefinition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? []
     const { t } = useI18N()
     const { classes } = useStyles()
     const currentChainId = useChainId()

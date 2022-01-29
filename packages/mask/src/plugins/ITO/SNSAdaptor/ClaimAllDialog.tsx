@@ -1,4 +1,4 @@
-import { usePluginIDContext } from '@masknet/plugin-infra'
+import { usePluginIDContext, PluginId, useActivatedPlugin } from '@masknet/plugin-infra'
 import { useCallback, useEffect, useState, useLayoutEffect, useRef } from 'react'
 import { flatten, uniq } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
@@ -33,7 +33,6 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import type { SwappedTokenType } from '../types'
-import { base as ITO_Definition } from '../base'
 
 interface StyleProps {
     shortITOwrapper: boolean
@@ -223,8 +222,9 @@ interface ClaimAllDialogProps {
 export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { t } = useI18N()
     const { open, onClose } = props
+    const ITO_Definition = useActivatedPlugin(PluginId.ITO, 'any')
     const pluginId = usePluginIDContext()
-    const chainIdList = ITO_Definition.enableRequirement.web3?.[pluginId]?.supportedChainIds ?? []
+    const chainIdList = ITO_Definition?.enableRequirement.web3?.[pluginId]?.supportedChainIds ?? []
     const DialogRef = useRef<HTMLDivElement>(null)
     const account = useAccount()
     const currentChainId = useChainId()
