@@ -3,11 +3,10 @@ import { NetworkPluginID } from '@masknet/plugin-infra'
 import addSeconds from 'date-fns/addSeconds'
 import { KeyValue } from '@masknet/web3-providers'
 import { NFT_AVATAR_DB_NAME, NFT_AVATAR_DB_NAME_STORAGE } from '../constants'
-// import { gun2 } from '../../../network/gun/version.2'
-// import { delay } from '@masknet/shared-base'
+import { getGunData } from '@masknet/gun-utils'
+import { delay } from '@masknet/shared-base'
 
-// const NFTAvatarGUN = gun2.get(NFT_AVATAR_GUN_ROOT_NODE)
-// const READ_GUN_RETRIES = 10
+const READ_GUN_RETRIES = 10
 
 const NFTAvatarDB = (network: string) => KeyValue.createJSON_Storage(NFT_AVATAR_DB_NAME + '_' + network)
 const NFTAvatarDBStorage = (network: string) => KeyValue.createJSON_Storage(NFT_AVATAR_DB_NAME_STORAGE + '_' + network)
@@ -15,13 +14,11 @@ const NFTAvatarDBStorage = (network: string) => KeyValue.createJSON_Storage(NFT_
 const cache = new Map<string, [Promise<string | undefined>, number]>()
 
 async function getUserAddressFromGUN(userId: string): Promise<string | undefined> {
-    // for (let i = 0; i < READ_GUN_RETRIES; i++) {
-    //     const result = await NFTAvatarGUN
-    //         // @ts-expect-error
-    //         .get(userId).then!()
-    //     if (result) return result
-    //     await delay(500)
-    // }
+    for (let i = 0; i < READ_GUN_RETRIES; i += 1) {
+        const result = await getGunData(NFT_AVATAR_DB_NAME, userId)
+        if (typeof result === 'string') return result
+        await delay(500)
+    }
     return
 }
 

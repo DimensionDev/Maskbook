@@ -21,6 +21,7 @@ export async function GUN_queryPostKey_version40(
 
     type DataOnGun = { encryptedKey: string; salt: string }
     function isValidData(x: typeof result): x is DataOnGun {
+        if (typeof x !== 'object') return false
         if (!x) return false
 
         const { encryptedKey, salt: encryptedKeyIV } = x
