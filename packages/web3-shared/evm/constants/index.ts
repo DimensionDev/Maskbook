@@ -33,7 +33,7 @@ function getEnvConstants(key: string) {
     }
 }
 
-export { ZERO_ADDRESS, FAKE_SIGN_PASSWORD, EthereumNameType } from './specific'
+export * from './specific'
 
 export const getAirdropConstants = transform(Airdrop)
 export const useAirdropConstants = hookTransform(getAirdropConstants)

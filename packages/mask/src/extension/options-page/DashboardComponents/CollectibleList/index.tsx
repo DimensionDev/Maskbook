@@ -266,8 +266,8 @@ export function CollectionList({ address }: { address: string }) {
                     <Box key={i}>
                         <Box display="flex" alignItems="center" sx={{ marginTop: '16px' }}>
                             <Box className={classes.collectionWrap}>
-                                {x.image ? (
-                                    <Image component="img" className={classes.collectionImg} src={x.image} />
+                                {x.iconURL ? (
+                                    <Image component="img" className={classes.collectionImg} src={x.iconURL} />
                                 ) : null}
                             </Box>
                             <Typography

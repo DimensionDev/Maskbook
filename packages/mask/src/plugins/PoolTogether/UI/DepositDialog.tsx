@@ -298,7 +298,7 @@ export function DepositDialog() {
                                     onClick={depositCallback}
                                     variant="contained"
                                     loading={loadingTokenBalance}>
-                                    {validationMessage || t('plugin_pooltogether_deposit')}
+                                    {validationMessage || t('plugin_pooltogether_deposit_msg')}
                                 </ActionButton>
                             </EthereumERC20TokenApprovedBoundary>
                         )}

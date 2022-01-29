@@ -36,9 +36,10 @@ const withErrorMiddleware =
     async (res: Response) => {
         const result = await handler(res)
         if (!res.ok) {
-            return Promise.reject<T>({ status: res.status, ...result })
+            // eslint-disable-next-line no-throw-literal
+            throw { status: res.status, ...result }
         }
-        return Promise.resolve<T>(result)
+        return result
     }
 
 const fetchBase = <T = any>(

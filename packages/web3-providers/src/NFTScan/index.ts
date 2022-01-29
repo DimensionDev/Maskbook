@@ -14,7 +14,7 @@ async function getToken() {
     if (token && isBefore(Date.now(), token.expiration)) {
         return token.token
     }
-    const response = await fetch(NFTSCAN_ACCESS_TOKEN_URL, { ...(!isProxyENV && { mode: 'cors' }) })
+    const response = await fetch(NFTSCAN_ACCESS_TOKEN_URL, { ...(!isProxyENV() && { mode: 'cors' }) })
     const {
         data,
     }: {
