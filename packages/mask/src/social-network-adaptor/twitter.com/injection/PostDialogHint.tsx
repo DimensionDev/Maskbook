@@ -52,7 +52,10 @@ function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
     const onHintButtonClicked = useCallback(() => {
         const content = sayHelloShowed[twitterBase.networkIdentifier].value
             ? undefined
-            : makeTypedMessageText(t('setup_guide_say_hello_content'))
+            : makeTypedMessageText(
+                  t('setup_guide_say_hello_content') +
+                      t('setup_guide_say_hello_follow', { account: '@realMaskNetwork' }),
+              )
         MaskMessages.events.requestComposition.sendToLocal({ reason, open: true, content })
         sayHelloShowed[twitterBase.networkIdentifier].value = true
     }, [reason])

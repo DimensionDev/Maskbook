@@ -136,7 +136,7 @@ export function ProfileTabAtTwitter() {
 
 export function injectProfileTabAtTwitter(signal: AbortSignal) {
     let tabInjected = false
-    const contentWatcher = new MutationObserverWatcher(searchProfileTabPageSelector()).useForeach((node, key, meta) => {
+    const contentWatcher = new MutationObserverWatcher(searchProfileTabPageSelector()).useForeach(() => {
         const elePage = searchProfileTabPageSelector().evaluate()
         if (elePage && !tabInjected) {
             const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())

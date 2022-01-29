@@ -1,5 +1,5 @@
 import { describe, test, expect, beforeEach, afterEach, jest, afterAll, beforeAll } from '@jest/globals'
-import { SocketPoolItem, ProviderProxy } from '../proxy'
+import { SocketPoolItem, ProviderProxy } from '../src/proxy'
 import * as mockWS from 'jest-websocket-mock'
 import addSeconds from 'date-fns/addSeconds'
 

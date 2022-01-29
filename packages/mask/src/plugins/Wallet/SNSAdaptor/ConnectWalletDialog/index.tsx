@@ -103,24 +103,27 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
         // connection failed
         if (!account || !networkType) throw new Error(`Failed to connect to ${resolveProviderName(providerType)}.`)
 
-        // the coin98 wallet cannot handle add/switch RPC provider correctly
-        // it will always add a new RPC provider even if the network exists
-        if (chainId !== expectedChainId && providerType !== ProviderType.Coin98) {
+        // switch to the expected chain
+        if (chainId !== expectedChainId) {
             try {
                 const overrides = {
                     chainId: expectedChainId,
                     providerType,
                 }
 
-                await Promise.race([
-                    (async () => {
-                        await delay(30 /* seconds */ * 1000 /* milliseconds */)
-                        throw new Error('Timeout!')
-                    })(),
-                    networkType === NetworkType.Ethereum
-                        ? Services.Ethereum.switchEthereumChain(ChainId.Mainnet, overrides)
-                        : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account, overrides),
-                ])
+                // the coin98 wallet cannot handle add/switch RPC provider correctly
+                // it will always add a new RPC provider even if the network exists
+                if (providerType !== ProviderType.Coin98) {
+                    await Promise.race([
+                        (async () => {
+                            await delay(30 /* seconds */ * 1000 /* milliseconds */)
+                            throw new Error('Timeout!')
+                        })(),
+                        networkType === NetworkType.Ethereum
+                            ? Services.Ethereum.switchEthereumChain(ChainId.Mainnet, overrides)
+                            : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account, overrides),
+                    ])
+                }
 
                 // recheck
                 const chainIdHex = await Services.Ethereum.getChainId(overrides)

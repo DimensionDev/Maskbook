@@ -103,6 +103,16 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             },
                         },
                     },
+                    {
+                        props: { color: 'error' },
+                        style: {
+                            backgroundColor: theme.palette.error.main,
+                            color: theme.palette.common.white,
+                            '&:hover': {
+                                backgroundColor: '#f53b47',
+                            },
+                        },
+                    },
                 ],
                 styleOverrides: {
                     root: {

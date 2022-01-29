@@ -261,7 +261,7 @@ export function PoolView(props: PoolProps) {
                 </Grid>
                 <Grid item>
                     <Button className={classes.deposit} variant="contained" fullWidth size="small" onClick={onDeposit}>
-                        {t('plugin_pooltogether_deposit', { token: token.symbol })}
+                        {t('plugin_pooltogether_deposit', { token: token.symbol ?? '' })}
                     </Button>
                 </Grid>
                 <Grid container item className={classes.info}>

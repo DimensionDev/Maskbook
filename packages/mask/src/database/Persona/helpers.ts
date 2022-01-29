@@ -102,8 +102,8 @@ export async function queryPersona(identifier: PersonaIdentifier): Promise<Perso
 /**
  * Select a set of Profiles
  */
-export async function queryProfilesWithQuery(query?: Parameters<typeof queryProfilesDB>[0]): Promise<Profile[]> {
-    const _ = await queryProfilesDB(query || ((_) => true))
+export async function queryProfilesWithQuery(query: Parameters<typeof queryProfilesDB>[0]): Promise<Profile[]> {
+    const _ = await queryProfilesDB(query)
     return Promise.all(_.map(profileRecordToProfile))
 }
 
@@ -111,7 +111,7 @@ export async function queryProfilesWithQuery(query?: Parameters<typeof queryProf
  * Select a set of Personas
  */
 export async function queryPersonasWithQuery(query?: Parameters<typeof queryPersonasDB>[0]): Promise<Persona[]> {
-    const _ = await queryPersonasDB(query || ((_) => true))
+    const _ = await queryPersonasDB(query)
     return _.map(personaRecordToPersona)
 }
 
@@ -148,7 +148,7 @@ export async function logoutPersona(identifier: PersonaIdentifier) {
 }
 
 export async function renamePersona(identifier: PersonaIdentifier, nickname: string) {
-    const personas = await queryPersonasWithQuery(({ nickname: name }) => name === nickname)
+    const personas = await queryPersonasWithQuery({ nameContains: nickname })
     if (personas.length > 0) {
         throw new Error('Nickname already exists')
     }
@@ -210,7 +210,7 @@ export async function createPersonaByMnemonic(
 }
 
 export async function createPersonaByMnemonicV2(mnemonicWord: string, nickname: string | undefined, password: string) {
-    const personas = await queryPersonasWithQuery(({ nickname: name }) => name === nickname)
+    const personas = await queryPersonasWithQuery({ nameContains: nickname })
     if (personas.length > 0) throw new Error('Nickname already exists')
 
     const verify = validateMnemonic(mnemonicWord)

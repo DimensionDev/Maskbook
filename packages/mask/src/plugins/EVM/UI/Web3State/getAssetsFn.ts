@@ -189,7 +189,11 @@ export const getNonFungibleTokenFn =
                         name: x.info.name ?? `${x.contractDetailed.name} ${x.tokenId}`,
                         description: x.info.description ?? '',
                         owner: x.info.owner,
-                        contract: { ...x.contractDetailed, type: TokenType.NonFungible },
+                        contract: {
+                            ...x.contractDetailed,
+                            type: TokenType.NonFungible,
+                            id: x.contractDetailed.address,
+                        },
                         metadata: {
                             name: x.info.name ?? `${x.contractDetailed.name} ${x.tokenId}`,
                             description: x.info.description ?? '',
