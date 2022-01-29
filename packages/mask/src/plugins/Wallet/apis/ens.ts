@@ -1,15 +1,20 @@
 import stringify from 'json-stable-stringify'
 
+const subgraphURL = 'https://api.thegraph.com/subgraphs/name/dimensiondev/ens-text-resolver-subgraph'
+const TIMEOUT = 3000
 async function fetchFromENSTextResolverSubgraph<T>(query: string) {
-    const subgraphURL = 'https://api.thegraph.com/subgraphs/name/dimensiondev/ens-text-resolver-subgraph'
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), TIMEOUT)
     const response = await fetch(subgraphURL, {
         method: 'POST',
         mode: 'cors',
         body: stringify({ query }),
+        signal: controller.signal,
     })
     const { data } = (await response.json()) as {
         data: T
     }
+    clearTimeout(timer)
     return data
 }
 
