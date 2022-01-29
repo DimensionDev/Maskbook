@@ -1,19 +1,21 @@
 import type { Keyframes } from '@emotion/serialize'
 import { keyframes, makeStyles, useStylesExtends } from '@masknet/theme'
 import classNames from 'classnames'
+import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 import { useNFT } from '../hooks'
 import { useNFTContainerAtTwitter } from '../hooks/userNFTContainerAtTwitter'
 import { formatPrice, formatText } from '../utils'
+import { v4 as uuid } from 'uuid'
 
 // from twitter page
 const ViewBoxWidth = 200
 const ViewBoxHeight = 188
 
 interface NFTAvatarClipProps extends withClasses<'root' | 'text' | 'icon'> {
-    id: string
+    id?: string
     width: number
     height: number
-    screenName: string
+    screenName?: string
     viewBoxHeight?: number
     viewBoxWidth?: number
 }
@@ -57,7 +59,7 @@ const useStyles = makeStyles()((theme) => ({
         transform: 'translate(1px, -5px) ',
     },
     price: {
-        transform: 'translate(0px, -3px) ',
+        transform: 'translate(0px, 1px) ',
     },
     namePath: {
         transform: 'scale(0.9) translate(10px, 10px)',
@@ -65,10 +67,10 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function NFTAvatarClip(props: NFTAvatarClipProps) {
-    const { id, width, height, viewBoxHeight = ViewBoxHeight, viewBoxWidth = ViewBoxWidth, screenName } = props
+    const { id = uuid(), width, height, viewBoxHeight = ViewBoxHeight, viewBoxWidth = ViewBoxWidth, screenName } = props
     const classes = useStylesExtends(useStyles(), props)
 
-    const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName)
+    const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName ?? '')
 
     const { value = { amount: '0', symbol: 'ETH', name: '', slug: '' }, loading: loadingNFT } = useNFT(
         avatarMetadata?.data.user.result.nft_avatar_metadata.smart_contract.address ?? '',
@@ -193,10 +195,10 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
 }
 
 export function NFTAvatarMiniClip(props: NFTAvatarClipProps) {
-    const { id, width, height, viewBoxHeight = ViewBoxHeight, viewBoxWidth = ViewBoxWidth, screenName } = props
+    const { id = uuid(), width, height, viewBoxHeight = ViewBoxHeight, viewBoxWidth = ViewBoxWidth, screenName } = props
     const classes = useStylesExtends(useStyles(), props)
-
-    const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName)
+    const identity = useLastRecognizedIdentity()
+    const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName ?? identity.identifier.userId)
 
     if (loading || !avatarMetadata?.data.user.result.has_nft_avatar) return null
 

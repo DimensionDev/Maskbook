@@ -41,12 +41,7 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                             zIndex: 2,
                         }}>
                         {info.isTwitterNFT ? (
-                            <NFTAvatarMiniClip
-                                id="TwitterAvatarMiniClip"
-                                width={info.width}
-                                height={info.height}
-                                screenName={twitterId}
-                            />
+                            <NFTAvatarMiniClip width={info.width} height={info.height} screenName={twitterId} />
                         ) : (
                             <NFTBadgeTimeline
                                 userId={twitterId}

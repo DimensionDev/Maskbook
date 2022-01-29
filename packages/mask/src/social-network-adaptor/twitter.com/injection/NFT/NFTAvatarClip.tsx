@@ -60,7 +60,6 @@ function NFTAvatarClipInTwitter() {
     if (isZero(size) || !twitterId) return null
     return (
         <NFTAvatarClip
-            id="TwitterAvatarClip"
             screenName={twitterId}
             width={size}
             height={size}
