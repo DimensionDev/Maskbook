@@ -76,7 +76,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
     const onSend = useCallback(
         (detail: Web3Plugin.NonFungibleToken) => {
             // Sending NFT is only available on EVM currently.
-            if (currentPluginId === NetworkPluginID.PLUGIN_EVM) return
+            if (currentPluginId !== NetworkPluginID.PLUGIN_EVM) return
             navigate(DashboardRoutes.WalletsTransfer, {
                 state: {
                     type: TransferTab.Collectibles,
