@@ -11,10 +11,10 @@ async function fetchFromENSTextResolverSubgraph<T>(query: string) {
         body: stringify({ query }),
         signal: controller.signal,
     })
+    clearTimeout(timer)
     const { data } = (await response.json()) as {
         data: T
     }
-    clearTimeout(timer)
     return data
 }
 
