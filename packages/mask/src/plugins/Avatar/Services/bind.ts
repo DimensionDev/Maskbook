@@ -8,7 +8,7 @@ import { delay } from '@masknet/shared-base'
 
 const NFTAvatarGUN = gun2.get(NFT_AVATAR_DB_NAME)
 const READ_GUN_RETRIES = 10
-const READ_GUN_TIMEOUT = 60 * 1000 // timeout 1 minute
+const READ_GUN_TIMEOUT = 15 * 1000 // timeout 1 minute
 
 const NFTAvatarDB = (network: string) => KeyValue.createJSON_Storage(NFT_AVATAR_DB_NAME + '_' + network)
 const NFTAvatarDBStorage = (network: string) => KeyValue.createJSON_Storage(NFT_AVATAR_DB_NAME_STORAGE + '_' + network)
