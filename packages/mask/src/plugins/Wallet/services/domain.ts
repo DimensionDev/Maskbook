@@ -1,5 +1,6 @@
 import { EthereumAddress } from 'wallet.ts'
 import { AddressName, AddressNameType, ChainId, isZeroAddress, ProviderType } from '@masknet/web3-shared-evm'
+import { timeout } from '@masknet/shared-base'
 import * as ENS from '../apis/ens'
 import { createWeb3 } from '../../../extension/background-script/EthereumServices/web3'
 import { PluginProfileRPC } from '../../Profile/messages'
@@ -60,8 +61,11 @@ export async function getAddressNames(identity: {
     const allSettled = await Promise.allSettled([
         getResolvedENS(ethereumName),
         PluginProfileRPC.getRSS3AddressById(RSS3Id),
-        ENS.fetchAddressNamesByTwitterId(twitterId?.toLowerCase() ?? '').then(
-            (result) => result.find((x) => x.owner)?.owner ?? '',
+        timeout(
+            ENS.fetchAddressNamesByTwitterId(twitterId?.toLowerCase() ?? '').then(
+                (result) => result.find((x) => x.owner)?.owner ?? '',
+            ),
+            3000,
         ),
         PluginNFTAvatarRPC.getAddress(twitterId ?? '', identifier.network),
     ])
