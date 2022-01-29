@@ -185,11 +185,35 @@
             "logoURI": "https://static.debank.com/image/matic_token/logo_url/matic/e5a8a2860ba5cf740a474dcab796dc63.png"
         },
         "faucets": [],
-        "features": [],
+        "features": ["EIP1559"],
         "explorers": [
             {
                 "name": "matic",
                 "url": "https://polygonscan.com",
+                "standard": "EIP3091"
+            }
+        ],
+        "infoURL": "https://matic.network/"
+    },
+  {
+        "name": "Matic Testnet Mumbai",
+        "chainId": 80001,
+        "fullName": "Polygon",
+        "shortName": "maticmum",
+        "chain": "Matic",
+        "network": "testnet",
+        "networkId": 80001,
+        "nativeCurrency": {
+            "name": "Matic",
+            "symbol": "tMATIC",
+            "decimals": 18
+        },
+        "faucets": ["https://faucet.matic.network/"],
+        "features": ["EIP1559"],
+        "explorers": [
+            {
+                "name": "matic",
+                "url": "https://explorer-mumbai.maticvigil.com",
                 "standard": "EIP3091"
             }
         ],

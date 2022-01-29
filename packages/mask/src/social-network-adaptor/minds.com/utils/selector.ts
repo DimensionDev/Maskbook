@@ -23,7 +23,7 @@ export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('m-newsfeed m-composer', true)
 
 export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('.m-sidebarNavigation__list li:nth-child(11)')
+    querySelector<E>('.m-sidebarNavigation__list li:nth-child(7)')
 
 export const postEditorDraftContentSelector = () => {
     return querySelector<HTMLElement>('m-composer__modal m-composer__textarea textarea.m-composerTextarea__message')

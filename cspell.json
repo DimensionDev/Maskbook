@@ -259,6 +259,7 @@
         "WAVAX",
         "webextension",
         "webm",
+        "webp",
         "withdrawed",
         "wmatic",
         "wnative",
@@ -384,7 +385,11 @@
         "walletlink",
         "WNATIVE",
         "xdescribe",
-        "xtest"
+        "xtest",
+        "circleci",
+        "cibuilds",
+        "nounset",
+        "REPONAME"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [
