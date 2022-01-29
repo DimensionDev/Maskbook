@@ -83,6 +83,9 @@ const useStyles = makeStyles()((theme) => ({
             textDecoration: 'none',
         },
     },
+    addressText: {
+        fontSize: 12,
+    },
     addressNoImage: {
         left: '16px !important',
     },
@@ -261,12 +264,16 @@ function ContractListItem(props: ContractListItemProps) {
                 <Avatar className={classes.icon} src={contract.contractDetailed.iconURL} />
                 <Typography className={classes.contractName}>
                     {contract.contractDetailed.name}{' '}
-                    {contract.contractDetailed.symbol ? '(' + contract.contractDetailed.symbol + ')' : ''}
+                    {contract.contractDetailed.symbol && contract.contractDetailed.symbol !== 'UNKNOWN'
+                        ? '(' + contract.contractDetailed.symbol + ')'
+                        : ''}
                 </Typography>
                 {contract.balance ? <Typography className={classes.balance}>{contract.balance}</Typography> : null}
             </ListItem>
             <div className={classes.address}>
-                <span onClick={() => onSubmit(contract.contractDetailed)}>{contract.contractDetailed.address}</span>
+                <Typography onClick={() => onSubmit(contract.contractDetailed)} className={classes.addressText}>
+                    {contract.contractDetailed.address}
+                </Typography>
                 <Link
                     href={resolveAddressLinkOnExplorer(chainId, contract.contractDetailed.address)}
                     target="_blank"
