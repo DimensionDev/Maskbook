@@ -4,7 +4,6 @@ import addSeconds from 'date-fns/addSeconds'
 import { KeyValue } from '@masknet/web3-providers'
 import { NFT_AVATAR_DB_NAME, NFT_AVATAR_DB_NAME_STORAGE } from '../constants'
 import { gun2 } from '../../../network/gun/version.2'
-import { delay } from '@masknet/shared-base'
 
 const NFTAvatarGUN = gun2.get(NFT_AVATAR_DB_NAME)
 const READ_GUN_RETRIES = 10
@@ -26,14 +25,9 @@ async function getDataFromGUN(userId: string) {
             .get(userId).then!()
     )
 }
+
 async function getUserAddressFromGUN(userId: string): Promise<string | undefined> {
-    // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < READ_GUN_RETRIES; i++) {
-        const result = await timeout(getDataFromGUN(userId), READ_GUN_TIMEOUT)
-        if (result) return result
-        await delay(500)
-    }
-    return
+    return timeout(getDataFromGUN(userId), READ_GUN_TIMEOUT)
 }
 
 function getKey(networkPluginId = NetworkPluginID.PLUGIN_EVM, chainId: number = ChainId.Mainnet) {
