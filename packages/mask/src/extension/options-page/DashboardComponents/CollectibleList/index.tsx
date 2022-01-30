@@ -117,24 +117,13 @@ interface CollectibleListUIProps extends withClasses<'empty' | 'button' | 'text'
     wallet?: Wallet
     collectibles: ERC721TokenDetailed[]
     loading: boolean
-    balance: number
     collectiblesRetry: () => void
     error: string | undefined
     readonly?: boolean
     hasRetry?: boolean
 }
 function CollectibleListUI(props: CollectibleListUIProps) {
-    const {
-        provider,
-        wallet,
-        collectibles,
-        loading,
-        balance,
-        collectiblesRetry,
-        error,
-        readonly,
-        hasRetry = true,
-    } = props
+    const { provider, wallet, collectibles, loading, collectiblesRetry, error, readonly, hasRetry = true } = props
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
@@ -143,7 +132,7 @@ function CollectibleListUI(props: CollectibleListUIProps) {
     return (
         <CollectibleContext.Provider value={{ collectiblesRetry }}>
             <Box className={classes.container}>
-                {loading && collectibles.length !== balance && (
+                {loading && (
                     <Box className={classes.root}>
                         {Array.from({ length: 3 })
                             .fill(0)
@@ -190,7 +179,6 @@ function CollectibleListUI(props: CollectibleListUIProps) {
 }
 
 export interface CollectibleListProps extends withClasses<'empty' | 'button'> {
-    balance: number
     address: string
     collection?: string
     collectibles: ERC721TokenDetailed[]
@@ -200,7 +188,7 @@ export interface CollectibleListProps extends withClasses<'empty' | 'button'> {
 }
 
 export function CollectibleList(props: CollectibleListProps) {
-    const { address, balance, collectibles, error, loading, retry } = props
+    const { address, collectibles, error, loading, retry } = props
     const provider = useValueRef(currentNonFungibleAssetDataProviderSettings)
     const classes = props.classes ?? {}
 
@@ -213,7 +201,6 @@ export function CollectibleList(props: CollectibleListProps) {
             collectiblesRetry={retry}
             error={error}
             readonly
-            balance={balance}
             hasRetry={!!address}
         />
     )
@@ -300,7 +287,6 @@ export function CollectionList({ address }: { address: string }) {
                             </Typography>
                         </Box>
                         <CollectibleList
-                            balance={x.balance ?? 1}
                             address={address}
                             collection={x.slug}
                             retry={() => {
@@ -326,7 +312,6 @@ export function CollectionList({ address }: { address: string }) {
                     </Box>
                     <CollectibleList
                         address={address}
-                        balance={1}
                         collection="Rarible"
                         retry={() => {
                             retryFetchCollectible()
