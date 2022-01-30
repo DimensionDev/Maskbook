@@ -33,6 +33,10 @@ export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
         '[data-testid="primaryColumn"] [role="navigation"] ~ [aria-labelledby^="accessible-list"] [role="heading"] ~ div[aria-label]',
     )
+
+export const searchInjectSpanSelector = () =>
+    searchProfileTabPageSelector().querySelector('[data-testid="tweet"]').querySelector('a span')
+
 export const searchProfileEmptySelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] [data-testid="emptyState"]')
 export const searchProfileActiveTabSelector: () => LiveSelector<E, true> = () =>
