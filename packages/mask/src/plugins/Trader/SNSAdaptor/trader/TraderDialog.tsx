@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { ChainId, getChainIdFromNetworkType, useChainId, useChainIdValid } from '@masknet/web3-shared-evm'
+import { usePluginIDContext, useActivatedPlugin, PluginId } from '@masknet/plugin-infra'
+import { ChainId, useChainId, useChainIdValid } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -11,9 +12,7 @@ import { useI18N } from '../../../../utils'
 import { makeStyles } from '@masknet/theme'
 import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
 import { NetworkTab } from '../../../../components/shared/NetworkTab'
-import { useAsync, useUpdateEffect } from 'react-use'
-import { WalletRPC } from '../../../Wallet/messages'
-import { EMPTY_LIST } from '../../../../../utils-pure'
+import { useUpdateEffect } from 'react-use'
 import { isDashboardPage } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -65,6 +64,9 @@ interface TraderDialogProps {
 
 export function TraderDialog({ open, onClose }: TraderDialogProps) {
     const isDashboard = isDashboardPage()
+    const pluginID = usePluginIDContext()
+    const traderDefinition = useActivatedPlugin(PluginId.Trader, 'any')
+    const chainIdList = traderDefinition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? []
     const { t } = useI18N()
     const { classes } = useStyles()
     const currentChainId = useChainId()
@@ -78,11 +80,6 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
             if (ev?.traderProps) setTraderProps(ev.traderProps)
         },
     )
-
-    const { value: chains = EMPTY_LIST } = useAsync(async () => {
-        const networks = await WalletRPC.getSupportedNetworks()
-        return networks.map((network) => getChainIdFromNetworkType(network))
-    }, [])
 
     useEffect(() => {
         if (!chainIdValid) closeDialog()
@@ -112,7 +109,12 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                             </div>
                         ) : null}
                         <div className={classes.abstractTabWrapper}>
-                            <NetworkTab chainId={chainId} setChainId={setChainId} classes={classes} chains={chains} />
+                            <NetworkTab
+                                chainId={chainId}
+                                setChainId={setChainId}
+                                classes={classes}
+                                chains={chainIdList}
+                            />
                         </div>
                         <Trader {...traderProps} chainId={chainId} classes={{ root: classes.tradeRoot }} />
                     </DialogContent>

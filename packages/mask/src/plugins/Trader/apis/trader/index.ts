@@ -39,7 +39,7 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
         case NetworkType.Arbitrum:
             return [TradeProvider.UNISWAP_V3, TradeProvider.OPENOCEAN, TradeProvider.DODO]
         case NetworkType.xDai:
-            return [TradeProvider.SUSHISWAP]
+            return [TradeProvider.SUSHISWAP, TradeProvider.OPENOCEAN]
         case NetworkType.Avalanche:
             return [TradeProvider.SUSHISWAP, TradeProvider.OPENOCEAN, TradeProvider.TRADERJOE, TradeProvider.PANGOLIN]
         case NetworkType.xDai:

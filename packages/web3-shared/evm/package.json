@@ -12,7 +12,6 @@
     "@masknet/web3-shared-base": "workspace:*",
     "@types/ethereum-blockies": "^0.1.0",
     "@types/punycode": "^2.1.0",
-    "@unstoppabledomains/resolution": "^5.0.1",
     "bignumber.js": "9.0.2",
     "ethereum-blockies": "^0.1.1",
     "fortmatic": "^2.2.1",

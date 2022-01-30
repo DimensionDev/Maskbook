@@ -34,6 +34,7 @@ interface AssetPlayerProps
     fallbackImage?: URL
     isFixedIframeSize?: boolean
     showIframeFromInit?: boolean
+    fallbackResourceLoader?: JSX.Element
     setERC721TokenName?: (name: string) => void
     setSourceType?: (type: string) => void
 }
@@ -53,7 +54,7 @@ enum AssetPlayerState {
 
 export const AssetPlayer = memo<AssetPlayerProps>((props) => {
     const ref = useRef<IFrameComponent | null>(null)
-    const { url, type, options, iconProps, isFixedIframeSize = true } = props
+    const { url, type, options, iconProps, isFixedIframeSize = true, fallbackResourceLoader } = props
     const classes = useStylesExtends(useStyles(), props)
     const [hidden, setHidden] = useState(Boolean(props.renderTimeout))
     const { RPC: RPC_Entries } = getRPCConstants(props.erc721Token?.chainId)
@@ -189,15 +190,14 @@ export const AssetPlayer = memo<AssetPlayerProps>((props) => {
                     playerState === AssetPlayerState.ERROR ? classes.errorPlaceholder : classes.loadingPlaceholder
                 }
                 style={{ display: playerState === AssetPlayerState.NORMAL ? 'none' : undefined }}>
-                {playerState === AssetPlayerState.ERROR ? (
-                    props.fallbackImage ? (
-                        <img className={classes.loadingFailImage} src={props.fallbackImage.toString()} />
-                    ) : (
-                        <MaskPlaceholder className={classes.errorIcon} {...iconProps} />
-                    )
-                ) : (
-                    props.loadingIcon ?? <AssetLoadingIcon className={classes.loadingIcon} />
-                )}
+                {playerState === AssetPlayerState.ERROR
+                    ? props.fallbackResourceLoader ??
+                      (props.fallbackImage ? (
+                          <img className={classes.loadingFailImage} src={props.fallbackImage.toString()} />
+                      ) : (
+                          <MaskPlaceholder className={classes.errorIcon} {...iconProps} />
+                      ))
+                    : props.loadingIcon ?? <AssetLoadingIcon className={classes.loadingIcon} />}
             </Box>
             {IframeResizerMemo}
         </>
