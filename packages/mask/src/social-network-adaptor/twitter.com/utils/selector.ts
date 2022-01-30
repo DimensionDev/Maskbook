@@ -35,7 +35,7 @@ export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
     )
 
 export const searchInjectSpanSelector = () =>
-    searchProfileTabPageSelector().querySelector('[data-testid="tweet"]').querySelector('a span')
+    searchProfileTabPageSelector().querySelector('[data-testid="tweet"]').querySelector('div')
 
 export const searchProfileEmptySelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] [data-testid="emptyState"]')
