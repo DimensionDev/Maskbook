@@ -896,6 +896,7 @@
     "plugin_pets_dialog_powered": "crwdns13161:0crwdne13161:0",
     "plugin_pets_dialog_success": "crwdns13163:0crwdne13163:0",
     "plugin_pets_dialog_fail": "crwdns13165:0crwdne13165:0",
+    "plugin_pets_dialog_check_title": "crwdns13245:0crwdne13245:0",
     "popups_following_permissions": "crwdns10271:0{{pluginName}}crwdnd10271:0{{pluginURL}}crwdne10271:0",
     "popups_permissions": "crwdns10281:0crwdne10281:0",
     "popups_sites": "crwdns10283:0crwdne10283:0",
