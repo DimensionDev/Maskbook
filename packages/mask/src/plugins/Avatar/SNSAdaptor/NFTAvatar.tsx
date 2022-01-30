@@ -11,13 +11,13 @@ import {
     useAccount,
     useChainId,
     useCollectibles,
+    useImageChecker,
 } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, Typography } from '@mui/material'
 import { useI18N } from '../../../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { AddNFT } from './AddNFT'
 import { NFTImage } from './NFTImage'
-import { useImageNFTFilter } from '../hooks/useImageNFTFilter'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -198,12 +198,12 @@ interface NFTImageCollectibleAvatarProps {
 
 function NFTImageCollectibleAvatar({ token, setSelectedToken, selectedToken }: NFTImageCollectibleAvatarProps) {
     const { classes } = useStyles()
-    const { value: imageToken, loading } = useImageNFTFilter(token)
+    const { value: isImageToken, loading } = useImageChecker(token.info?.imageURL)
     if (loading)
         return (
             <div className={classes.skeletonBox}>
                 <Skeleton animation="wave" variant="rectangular" className={classes.skeleton} />
             </div>
         )
-    return imageToken ? <NFTImage token={imageToken} selectedToken={selectedToken} onChange={setSelectedToken} /> : null
+    return isImageToken ? <NFTImage token={token} selectedToken={selectedToken} onChange={setSelectedToken} /> : null
 }

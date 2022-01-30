@@ -1,4 +1,4 @@
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import { EMPTY_LIST, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { multipliedBy, pow10 } from '@masknet/web3-shared-base'
 import { useTrade as useNativeTokenTrade } from './native/useTrade'
 import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed'
@@ -38,7 +38,7 @@ export function useAllTradeComputed(
     const inputAmount_ = multipliedBy(inputAmount || '0', inputTokenProduct)
         .integerValue()
         .toFixed()
-    const { value: tradeProviders = [] } = useAvailableTraderProviders(TagType.CASH, 'MASK', targetChainId)
+    const { value: tradeProviders = EMPTY_LIST } = useAvailableTraderProviders(TagType.CASH, 'MASK', targetChainId)
 
     // NATIVE-WNATIVE pair
     const nativeToken_ = useNativeTokenTrade(inputToken, outputToken)

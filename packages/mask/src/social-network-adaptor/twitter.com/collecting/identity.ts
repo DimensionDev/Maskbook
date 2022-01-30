@@ -80,6 +80,8 @@ function resolveCurrentVisitingIdentityInner(
         })
     }
 
+    assign()
+
     createWatcher(avatarSelector)
     createWatcher(avatarMetaSelector)
 }
