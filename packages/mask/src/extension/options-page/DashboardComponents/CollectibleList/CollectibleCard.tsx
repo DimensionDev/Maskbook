@@ -117,7 +117,7 @@ export function CollectibleCard(props: CollectibleCardProps) {
                 {token.info.mediaUrl ? (
                     loading ? (
                         <Image component="img" width={172} height={172} loading src="" />
-                    ) : isImageToken ? (
+                    ) : isImageToken && imageLinkWithLazy ? (
                         <Image
                             component="img"
                             width={172}
