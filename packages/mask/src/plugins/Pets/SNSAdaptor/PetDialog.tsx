@@ -56,7 +56,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
     },
     btn: {
-        marginTop: theme.spacing(8),
+        margin: theme.spacing(8, 0, 2),
     },
     thumbnail: {
         width: 25,
@@ -312,7 +312,13 @@ export function PetDialog() {
                             />
                         </Grid>
                     </Grid>
-
+                    <FormControlLabel
+                        control={
+                            <Checkbox checked={checked} onChange={(e) => (petShowSettings.value = e.target.checked)} />
+                        }
+                        label={t('plugin_pets_dialog_check_title')}
+                        sx={{ marginTop: '4px' }}
+                    />
                     <LoadingButton
                         loading={loading}
                         color="inherit"
@@ -324,13 +330,6 @@ export function PetDialog() {
                         disabled={!collection.name || !metaData.image}>
                         {t('plugin_pets_dialog_btn')}
                     </LoadingButton>
-                    <FormControlLabel
-                        control={
-                            <Checkbox checked={checked} onChange={(e) => (petShowSettings.value = e.target.checked)} />
-                        }
-                        label={t('plugin_pets_dialog_check_title')}
-                        sx={{ marginTop: '4px' }}
-                    />
                     <Box className={classes.desBox}>
                         <Typography className={classes.des}>{t('plugin_pets_dialog_created')}</Typography>
                         <Typography className={classes.des}>{t('plugin_pets_dialog_powered')}</Typography>
