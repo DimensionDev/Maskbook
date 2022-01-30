@@ -41,8 +41,10 @@ const rainbowBorderKeyFrames: Keyframes = keyframes`
 const useStyles = makeStyles()((theme) => ({
     root: {},
     miniBorder: {
-        transform: 'scale(0.94) translate(7px, 6px)',
+        transform: 'scale(0.94) translate(7px, 6px) translateZ(0)',
         strokeWidth: 6,
+        stroke: '#00f8ff',
+        fill: 'none',
     },
     borderPath: {
         transform: 'scale(0.98, 1.035) translate(3px, -2px)',
@@ -50,33 +52,99 @@ const useStyles = makeStyles()((theme) => ({
     },
     background: {
         transform: 'scale(1, 1.05) translate(1px, -3px)',
+        fill: 'none',
+        strokeWidth: 30,
+        stroke: 'black',
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round',
     },
     rainbowBorder: {
         animation: `${rainbowBorderKeyFrames} 6s linear infinite`,
         transition: '1s ease',
+        fill: 'none',
+        strokeLinejoin: 'round',
+        strokeLinecap: 'round',
     },
     text: {
         transform: 'translate(1px, -5px) ',
     },
     price: {
-        transform: 'translate(0px, 1px) ',
+        transform: 'translate(0px, -5px) ',
     },
     namePath: {
         transform: 'scale(0.9) translate(10px, 10px)',
     },
 }))
 
+interface NamePathProps extends withClasses<'root'> {
+    id: string
+}
+function NamePath(props: NamePathProps) {
+    const classes = useStylesExtends(useStyles(), props)
+    return (
+        <path
+            className={classes.root}
+            d="M6.74789,69.55C14.0458,54.2034 22.5561,39.4634 32.1979,25.47L35.3079,20.96C39.1367,15.4049 44.155,10.7724 49.9981,7.3994C55.8413,4.02636 62.3625,1.99743 69.0879,1.46004L74.5479,1.02004C91.4873,-0.340012 108.508,-0.340012 125.448,1.02004L130.908,1.46004C137.633,1.99743 144.155,4.02636 149.998,7.3994C155.841,10.7724 160.859,15.4049 164.688,20.96L167.798,25.43C177.44,39.4234 185.95,54.1634 193.248,69.51"
+            id={props.id}
+        />
+    )
+}
+
+interface PricePathProps {
+    id: string
+}
+
+function PricePath({ id }: PricePathProps) {
+    return (
+        <path
+            d="M6.74789 118.43C14.0458 133.777 22.5561 148.517 32.1979 162.51L35.3079 167.02C39.1367 172.575 44.155 177.208 49.9981 180.581C55.8413 183.954 62.3625 185.983 69.0879 186.52L74.5479 186.96C91.4873 188.32 108.508 188.32 125.448 186.96L130.908 186.52C137.638 185.976 144.163 183.938 150.006 180.554C155.85 177.17 160.865 172.526 164.688 166.96L167.798 162.45C177.44 148.457 185.95 133.717 193.248 118.37"
+            id={id}
+        />
+    )
+}
+
+interface BorderPathProps {
+    id: string
+}
+
+function BorderPath({ id }: BorderPathProps) {
+    return (
+        <path
+            id={id}
+            d="M193.248 69.51C185.95 54.1634 177.44 39.4234 167.798 25.43L164.688 20.96C160.859 15.4049 155.841 10.7724 149.998 7.3994C144.155 4.02636 137.633 1.99743 130.908 1.46004L125.448 1.02004C108.508 -0.340012 91.4873 -0.340012 74.5479 1.02004L69.0879 1.46004C62.3625 1.99743 55.8413 4.02636 49.9981 7.3994C44.155 10.7724 39.1367 15.4049 35.3079 20.96L32.1979 25.47C22.5561 39.4634 14.0458 54.2034 6.74789 69.55L4.39789 74.49C1.50233 80.5829 0 87.2441 0 93.99C0 100.736 1.50233 107.397 4.39789 113.49L6.74789 118.43C14.0458 133.777 22.5561 148.517 32.1979 162.51L35.3079 167.02C39.1367 172.575 44.155 177.208 49.9981 180.581C55.8413 183.954 62.3625 185.983 69.0879 186.52L74.5479 186.96C91.4873 188.32 108.508 188.32 125.448 186.96L130.908 186.52C137.638 185.976 144.163 183.938 150.006 180.554C155.85 177.17 160.865 172.526 164.688 166.96L167.798 162.45C177.44 148.457 185.95 133.717 193.248 118.37L195.598 113.43C198.493 107.337 199.996 100.676 199.996 93.93C199.996 87.1841 198.493 80.5229 195.598 74.43L193.248 69.51Z"
+        />
+    )
+}
+
+interface TextProps extends withClasses<'root'> {
+    xlinkHref?: string
+    fontSize?: number
+    text?: string
+    fill?: string
+}
+
+function Text(props: TextProps) {
+    const { xlinkHref, fontSize = 12, text, fill } = props
+    const classes = useStylesExtends(useStyles(), props)
+    return (
+        <text x="0%" textAnchor="middle" fill={fill} fontFamily="sans-serif" className={classes.root}>
+            <textPath xlinkHref={xlinkHref} startOffset="50%" rotate="auto" dominantBaseline="mathematical">
+                <tspan fontWeight="bold" fontSize={fontSize}>
+                    {text}
+                </tspan>
+            </textPath>
+        </text>
+    )
+}
+
 export function NFTAvatarClip(props: NFTAvatarClipProps) {
     const { id = uuid(), width, height, viewBoxHeight = ViewBoxHeight, viewBoxWidth = ViewBoxWidth, screenName } = props
     const classes = useStylesExtends(useStyles(), props)
-
     const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName ?? '')
-
     const { value = { amount: '0', symbol: 'ETH', name: '', slug: '' }, loading: loadingNFT } = useNFT(
         avatarMetadata?.data.user.result.nft_avatar_metadata.smart_contract.address ?? '',
         avatarMetadata?.data.user.result.nft_avatar_metadata.token_id ?? '',
     )
-
     const { amount, name, symbol, slug } = value
     if (!avatarMetadata?.data.user.result.has_nft_avatar) return null
 
@@ -88,19 +156,9 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
             id={id}
             viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}>
             <defs>
-                <path
-                    d="M6.74789 118.43C14.0458 133.777 22.5561 148.517 32.1979 162.51L35.3079 167.02C39.1367 172.575 44.155 177.208 49.9981 180.581C55.8413 183.954 62.3625 185.983 69.0879 186.52L74.5479 186.96C91.4873 188.32 108.508 188.32 125.448 186.96L130.908 186.52C137.638 185.976 144.163 183.938 150.006 180.554C155.85 177.17 160.865 172.526 164.688 166.96L167.798 162.45C177.44 148.457 185.95 133.717 193.248 118.37"
-                    id={`${id}-price-path`}
-                />
-                <path
-                    className={classes.namePath}
-                    d="M6.74789,69.55C14.0458,54.2034 22.5561,39.4634 32.1979,25.47L35.3079,20.96C39.1367,15.4049 44.155,10.7724 49.9981,7.3994C55.8413,4.02636 62.3625,1.99743 69.0879,1.46004L74.5479,1.02004C91.4873,-0.340012 108.508,-0.340012 125.448,1.02004L130.908,1.46004C137.633,1.99743 144.155,4.02636 149.998,7.3994C155.841,10.7724 160.859,15.4049 164.688,20.96L167.798,25.43C177.44,39.4234 185.95,54.1634 193.248,69.51"
-                    id={`${id}-name-path`}
-                />
-                <path
-                    id={`${id}-border-path`}
-                    d="M193.248 69.51C185.95 54.1634 177.44 39.4234 167.798 25.43L164.688 20.96C160.859 15.4049 155.841 10.7724 149.998 7.3994C144.155 4.02636 137.633 1.99743 130.908 1.46004L125.448 1.02004C108.508 -0.340012 91.4873 -0.340012 74.5479 1.02004L69.0879 1.46004C62.3625 1.99743 55.8413 4.02636 49.9981 7.3994C44.155 10.7724 39.1367 15.4049 35.3079 20.96L32.1979 25.47C22.5561 39.4634 14.0458 54.2034 6.74789 69.55L4.39789 74.49C1.50233 80.5829 0 87.2441 0 93.99C0 100.736 1.50233 107.397 4.39789 113.49L6.74789 118.43C14.0458 133.777 22.5561 148.517 32.1979 162.51L35.3079 167.02C39.1367 172.575 44.155 177.208 49.9981 180.581C55.8413 183.954 62.3625 185.983 69.0879 186.52L74.5479 186.96C91.4873 188.32 108.508 188.32 125.448 186.96L130.908 186.52C137.638 185.976 144.163 183.938 150.006 180.554C155.85 177.17 160.865 172.526 164.688 166.96L167.798 162.45C177.44 148.457 185.95 133.717 193.248 118.37L195.598 113.43C198.493 107.337 199.996 100.676 199.996 93.93C199.996 87.1841 198.493 80.5229 195.598 74.43L193.248 69.51Z"
-                />
+                <NamePath id={`${id}-name-path`} classes={{ root: classes.namePath }} />
+                <PricePath id={`${id}-price-path`} />
+                <BorderPath id={`${id}-border-path`} />
 
                 <linearGradient id={`${id}-gradient`} x1="0%" y1="0%" x2="100%" y2="0">
                     <stop offset="0%" stopColor="#00f8ff" />
@@ -130,65 +188,32 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
                     </circle>
                 </pattern>
 
-                <use
-                    xlinkHref={`#${id}-border-path`}
-                    fill="none"
-                    strokeWidth="30"
-                    stroke="black"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    x={0}
-                    y={0}
-                    width={width}
-                    height={height}
-                    className={classes.background}
-                />
+                <use xlinkHref={`#${id}-border-path`} className={classes.background} />
 
                 <use
                     xlinkHref={`#${id}-border-path`}
-                    fill="none"
-                    strokeLinejoin="round"
-                    strokeLinecap="round"
-                    x={0}
-                    y={0}
-                    width={width}
-                    height={height}
                     className={classNames(classes.rainbowBorder, classes.borderPath)}
                 />
 
-                <text
-                    x="0%"
-                    textAnchor="middle"
+                <Text
+                    xlinkHref={`#${id}-name-path`}
                     fill={`url(#${id}-pattern)`}
-                    fontFamily="sans-serif"
-                    className={classes.text}>
-                    <textPath
-                        xlinkHref={`#${id}-name-path`}
-                        startOffset="50%"
-                        rotate="auto"
-                        dominantBaseline="mathematical">
-                        <tspan fontWeight="bold" fontSize="12">
-                            {loading || loadingNFT
-                                ? 'loading...'
-                                : `${formatText(
-                                      name,
-                                      avatarMetadata?.data.user.result.nft_avatar_metadata.token_id ?? '',
-                                  )} ${slug.toLowerCase() === 'ens' ? 'ENS' : ''}`}
-                        </tspan>
-                    </textPath>
-                </text>
-                <text
-                    x="0%"
-                    textAnchor="middle"
+                    text={
+                        loading || loadingNFT
+                            ? 'loading...'
+                            : `${formatText(
+                                  name,
+                                  avatarMetadata?.data.user.result.nft_avatar_metadata.token_id ?? '',
+                              )} ${slug.toLowerCase() === 'ens' ? 'ENS' : ''}`
+                    }
+                    classes={{ root: classes.text }}
+                />
+                <Text
                     fill={`url(#${id}-pattern)`}
-                    fontFamily="sans-serif"
-                    className={classes.price}>
-                    <textPath xlinkHref={`#${id}-price-path`} startOffset="50%" rotate="auto" dominantBaseline="auto">
-                        <tspan fontWeight="bold" fontSize="12">
-                            {loading || loadingNFT ? '' : formatPrice(amount, symbol)}
-                        </tspan>
-                    </textPath>
-                </text>
+                    xlinkHref={`#${id}-price-path`}
+                    classes={{ root: classes.price }}
+                    text={loading || loadingNFT ? '' : formatPrice(amount, symbol)}
+                />
             </g>
         </svg>
     )
@@ -210,23 +235,14 @@ export function NFTAvatarMiniClip(props: NFTAvatarClipProps) {
             id={id}
             viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}>
             <defs>
-                <path
-                    id={`${id}-border-path`}
-                    d="M193.248 69.51C185.95 54.1634 177.44 39.4234 167.798 25.43L164.688 20.96C160.859 15.4049 155.841 10.7724 149.998 7.3994C144.155 4.02636 137.633 1.99743 130.908 1.46004L125.448 1.02004C108.508 -0.340012 91.4873 -0.340012 74.5479 1.02004L69.0879 1.46004C62.3625 1.99743 55.8413 4.02636 49.9981 7.3994C44.155 10.7724 39.1367 15.4049 35.3079 20.96L32.1979 25.47C22.5561 39.4634 14.0458 54.2034 6.74789 69.55L4.39789 74.49C1.50233 80.5829 0 87.2441 0 93.99C0 100.736 1.50233 107.397 4.39789 113.49L6.74789 118.43C14.0458 133.777 22.5561 148.517 32.1979 162.51L35.3079 167.02C39.1367 172.575 44.155 177.208 49.9981 180.581C55.8413 183.954 62.3625 185.983 69.0879 186.52L74.5479 186.96C91.4873 188.32 108.508 188.32 125.448 186.96L130.908 186.52C137.638 185.976 144.163 183.938 150.006 180.554C155.85 177.17 160.865 172.526 164.688 166.96L167.798 162.45C177.44 148.457 185.95 133.717 193.248 118.37L195.598 113.43C198.493 107.337 199.996 100.676 199.996 93.93C199.996 87.1841 198.493 80.5229 195.598 74.43L193.248 69.51Z"
-                />
+                <BorderPath id={`${id}-border-path`} />
             </defs>
-
-            <use
-                xlinkHref={`#${id}-border-path`}
-                fill="none"
-                strokeLinejoin="round"
-                strokeLinecap="round"
-                x={0}
-                y={0}
-                width={width}
-                height={height}
-                className={classNames(classes.rainbowBorder, classes.miniBorder)}
-            />
+            <g>
+                <use
+                    xlinkHref={`#${id}-border-path`}
+                    className={classNames(classes.rainbowBorder, classes.miniBorder)}
+                />
+            </g>
         </svg>
     )
 }

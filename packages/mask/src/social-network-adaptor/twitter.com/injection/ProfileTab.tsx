@@ -4,6 +4,7 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createReactRootShadowed, startWatch, untilElementAvailable } from '../../../utils'
 import {
     searchAppBarBackSelector,
+    searchInjectSpanSelector,
     searchNewTweetButtonSelector,
     searchProfileEmptySelector,
     searchProfileTabListLastChildSelector,
@@ -96,8 +97,13 @@ async function clear() {
     const eleEmpty = searchProfileEmptySelector().evaluate()
     if (eleEmpty) eleEmpty.style.display = 'none'
 
+    // hide rainbow
+    const span = searchInjectSpanSelector().evaluate() as HTMLElement
+    span.style.display = 'none'
+
     // hide the content page
     await untilElementAvailable(searchProfileTabPageSelector())
+
     const elePage = searchProfileTabPageSelector().evaluate()
     if (elePage) elePage.style.visibility = 'hidden'
 }
@@ -108,6 +114,10 @@ function reset() {
 
     const eleEmpty = searchProfileEmptySelector().evaluate()
     if (eleEmpty) eleEmpty.style.display = ''
+
+    const span = searchInjectSpanSelector().evaluate() as HTMLElement
+    span.style.display = ''
+
     const elePage = searchProfileTabPageSelector().evaluate()
     if (elePage) elePage.style.visibility = 'visible'
 
