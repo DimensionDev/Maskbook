@@ -308,7 +308,7 @@ export function CollectionList({ address }: { address: string }) {
                                 retryFetchCollection()
                             }}
                             collectibles={renderCollectibles}
-                            loading={isLoading}
+                            loading={loadingCollectibleDone !== SocketState.done && renderCollectibles.length === 0}
                         />
                     </Box>
                 )
