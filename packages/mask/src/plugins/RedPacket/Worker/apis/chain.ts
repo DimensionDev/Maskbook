@@ -26,7 +26,7 @@ export async function getRedPacketHistory(
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = getRedPacketConstants(chainId)
     if (!EXPLORER_API || !HAPPY_RED_PACKET_ADDRESS_V4 || !startBlock) return []
 
-    //#region
+    // #region
     // 1. Filter out `create_red_packet` transactions,
     // 2. Retrieve payload major data from its decoded input param.
     const response = await fetch(
@@ -93,17 +93,17 @@ export async function getRedPacketHistory(
                         name: decodedInputParam._name,
                         message: decodedInputParam._message,
                     },
-                    //#region Retrieve at step 3
+                    // #region Retrieve at step 3
                     rpid: '',
                     creation_time: 0,
-                    //#endregion
-                    //#region Retrieve at step 4
+                    // #endregion
+                    // #region Retrieve at step 4
                     total_remaining: '',
                     claimers: [],
-                    //#endregion
-                    //#region Retrieve from database
+                    // #endregion
+                    // #region Retrieve from database
                     password: '',
-                    //#endregion
+                    // #endregion
                 }
                 return acc.concat(redpacketPayload)
             } catch {
@@ -112,9 +112,9 @@ export async function getRedPacketHistory(
         },
         [],
     )
-    //#endregion
+    // #endregion
 
-    //#region
+    // #region
     // 3. Decode CreationSuccess event log to retrieve `rpid` and `creation_time` for payload
     type CreationSuccessEventParams = {
         id: string
@@ -153,7 +153,7 @@ export async function getRedPacketHistory(
             return payload
         }),
     )
-    //#endregion
+    // #endregion
 
     return eventLogResponse
         .map((v) => (v.status === 'fulfilled' && v.value ? v.value : null))

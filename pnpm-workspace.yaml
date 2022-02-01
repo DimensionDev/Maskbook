@@ -35,6 +35,7 @@ packages:
   - 'packages/plugins/DAO'
   - 'packages/plugins/RSS3'
   - 'packages/plugins/Solana'
+  - 'packages/plugins/Terra'
   - 'packages/external-plugin-previewer'
   - 'packages/backup-format'
   - 'packages/encryption'

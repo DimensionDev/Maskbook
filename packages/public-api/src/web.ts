@@ -1,4 +1,7 @@
+import type { PersonaRecord, ProfileRecord, RelationFavor, RelationRecord } from './types'
+
 // This interface uses by-name style JSON RPC.
+
 /**
  * Methods starts with "SNSAdaptor_" can only be called in SNS Adaptor.
  * Other methods can only be called in the background page.
@@ -25,8 +28,6 @@ export interface MaskNetworkAPIs {
     getConnectedPersonas(): Promise<string>
     app_isPluginEnabled(params: { pluginID: string }): Promise<boolean>
     app_setPluginStatus(params: { pluginID: string; enabled: boolean }): Promise<void>
-    setting_getNetworkTraderProvider(params: { network: NetworkType }): Promise<TradeProvider | undefined>
-    setting_setNetworkTraderProvider(params: { network: NetworkType; provider: TradeProvider }): Promise<void>
     settings_getTrendingDataSource(): Promise<DataProvider>
     settings_setTrendingDataSource(params: { provider: DataProvider }): Promise<void>
     settings_getLaunchPageSettings(): Promise<LaunchPage>
@@ -57,6 +58,7 @@ export interface MaskNetworkAPIs {
     persona_backupBase64(params: { identifier: PersonaIdentifier_string }): Promise<string>
     persona_backupJson(params: { identifier: PersonaIdentifier_string }): Promise<unknown>
     persona_backupPrivateKey(params: { identifier: PersonaIdentifier_string }): Promise<string | undefined>
+    persona_queryPersonaByPrivateKey(params: { privateKey: string }): Promise<Persona | undefined>
     persona_getCurrentPersonaIdentifier(): Promise<string | undefined>
     persona_setCurrentPersonaIdentifier(params: { identifier: PersonaIdentifier_string }): Promise<void>
     persona_getOwnedPersonaInformation(params: { identifier: PersonaIdentifier_string }): Promise<PersonaInformation>
@@ -78,19 +80,11 @@ export interface MaskNetworkAPIs {
     wallet_updateEthereumChainId(params: { chainId: number }): Promise<void>
     wallet_getLegacyWalletInfo(): Promise<WalletInfo[]>
     SNSAdaptor_getCurrentDetectedProfile(): Promise<ProfileIdentifier_string | undefined>
-}
-
-export interface RelationRecord {
-    profile: ProfileIdentifier_string
-    linked: PersonaIdentifier_string
-    network: string
-    favor: RelationFavor
-}
-
-export enum RelationFavor {
-    COLLECTED = -1,
-    UNCOLLECTED = 1,
-    DEPRECATED = 0,
+    get_all_indexedDB_records(): Promise<{
+        personas: PersonaRecord[]
+        profiles: ProfileRecord[]
+        relations: RelationRecord[]
+    }>
 }
 
 export interface WalletInfo {
@@ -221,6 +215,8 @@ export enum TradeProvider {
     OPENOCEAN = 10,
     WANNASWAP = 11,
     TRISOLARIS = 12,
+    TRADERJOE = 13,
+    PANGOLIN = 14,
 }
 /** Supported language settings */
 export enum LanguageOptions {

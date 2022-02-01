@@ -8,6 +8,10 @@ import { hasEditor, isCompose } from '../utils/postBox'
 import { startWatch } from '../../../utils/watcher'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { alpha } from '@mui/material'
+import { twitterBase } from '../base'
+import { sayHelloShowed } from '../../../settings/settings'
+import { makeTypedMessageText } from '@masknet/shared-base'
+import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     iconButton: {
@@ -44,10 +48,17 @@ function renderPostDialogHintTo<T>(reason: 'timeline' | 'popup', ls: LiveSelecto
 
 function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
     const { classes } = useStyles()
-    const onHintButtonClicked = useCallback(
-        () => MaskMessages.events.requestComposition.sendToLocal({ reason, open: true }),
-        [reason],
-    )
+    const { t } = useI18N()
+    const onHintButtonClicked = useCallback(() => {
+        const content = sayHelloShowed[twitterBase.networkIdentifier].value
+            ? undefined
+            : makeTypedMessageText(
+                  t('setup_guide_say_hello_content') +
+                      t('setup_guide_say_hello_follow', { account: '@realMaskNetwork' }),
+              )
+        MaskMessages.events.requestComposition.sendToLocal({ reason, open: true, content })
+        sayHelloShowed[twitterBase.networkIdentifier].value = true
+    }, [reason])
     return (
         <PostDialogHint
             classes={{ iconButton: classes.iconButton, tooltip: classes.tooltip }}

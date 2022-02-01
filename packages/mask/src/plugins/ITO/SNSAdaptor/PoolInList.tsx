@@ -140,7 +140,7 @@ export function PoolInList(props: PoolInListProps) {
     const { classes } = useStyles()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
-    //#region Fetch tokens detailed
+    // #region Fetch tokens detailed
     const { value: _tokenDetailed } = useFungibleTokenDetailed(
         EthereumTokenType.ERC20,
         (pool as JSON_PayloadFromChain).token_address ?? (pool as JSON_PayloadInMask).token.address,
@@ -159,9 +159,9 @@ export function PoolInList(props: PoolInListProps) {
 
     const { value: _exchangeTokens } = useFungibleTokensDetailed(_poolTokens)
     const exchangeTokens = (pool as JSON_PayloadInMask).exchange_tokens ?? _exchangeTokens
-    //#endregion
+    // #endregion
 
-    //#region Calculate out exchange_out_volumes
+    // #region Calculate out exchange_out_volumes
     const exchangeOutVolumes =
         exchange_out_volumes.length === exchange_in_volumes.length
             ? exchange_out_volumes
@@ -170,15 +170,15 @@ export function PoolInList(props: PoolInListProps) {
                   new BigNumber(v).div(pool.exchange_amounts[i * 2]).times(pool.exchange_amounts[i * 2 + 1]),
               )
             : []
-    //#endregion
+    // #endregion
 
-    //#region withdraw
+    // #region withdraw
     const [destructState, destructCallback, resetDestructCallback] = useDestructCallback(pool.contract_address)
     useTransactionDialog(null, destructState, TransactionStateType.CONFIRMED, () => {
         onRetry()
         resetDestructCallback()
     })
-    //#endregion
+    // #endregion
 
     const account = useAccount()
     const { computed: availabilityComputed, loading: loadingAvailability } = useAvailabilityComputed(pool)

@@ -24,7 +24,7 @@ export default function (signal: AbortSignal) {
         if (!Flags.support_declarative_user_script) {
             const detail: browser.extensionTypes.InjectDetails = { runAt: 'document_start', frameId: arg.frameId }
 
-            //#region Injected script
+            // #region Injected script
             if (Flags.has_firefox_xray_vision) {
                 browser.tabs.executeScript(arg.tabId, { ...detail, file: injectedScriptURL })
             } else {
@@ -35,14 +35,14 @@ export default function (signal: AbortSignal) {
                         : await injectedScript
                 browser.tabs.executeScript(arg.tabId, { ...detail, code }).catch(HandleError(arg))
             }
-            //#endregion
+            // #endregion
 
-            //#region Mask SDK
+            // #region Mask SDK
             if (Flags.mask_SDK_ready) {
                 const code = process.env.NODE_ENV === 'development' ? await fetchUserScript(maskSDK_URL) : await maskSDK
                 browser.tabs.executeScript(arg.tabId, { ...detail, code }).catch(HandleError(arg))
             }
-            //#endregion
+            // #endregion
         }
         injectContentScript(arg.tabId, arg.frameId).catch(HandleError(arg))
     }
@@ -63,17 +63,23 @@ export default function (signal: AbortSignal) {
 }
 
 function fetchInjectContentScript(entryHTML: string) {
-    const contentScripts: Array<{ code: string } | { file: string }> = []
+    const contentScripts: string[] = []
     const task = fetch(entryHTML)
         .then((x) => x.text())
         .then((html) => {
-            const parser = new DOMParser()
-            const root = parser.parseFromString(html, 'text/html')
-            for (const script of root.querySelectorAll('script')) {
-                if (script.innerText) contentScripts.push({ code: script.innerText })
-                else if (script.src)
-                    contentScripts.push({ file: new URL(script.src, browser.runtime.getURL('')).pathname })
-            }
+            // We're not going to use DOMParser because it is not available in MV3.
+            Array.from(html.matchAll(/<script src="([\w./-]+)"><\/script>/g)).forEach((script) =>
+                contentScripts.push(new URL(script[1], browser.runtime.getURL('')).pathname),
+            )
+
+            const body = html.match(/<body>(.+)<\/body>/)![1]
+            body.replace(/<script defer src="/g, '')
+                .replace(/><\/script>/g, '')
+                .split('"')
+                .forEach((script) => {
+                    if (!script) return
+                    contentScripts.push(new URL(script, browser.runtime.getURL('')).pathname)
+                })
         })
     return async (tabID: number, frameId: number | undefined) => {
         await task
@@ -81,7 +87,7 @@ function fetchInjectContentScript(entryHTML: string) {
             const option: browser.extensionTypes.InjectDetails = {
                 runAt: 'document_idle',
                 frameId,
-                ...script,
+                file: script,
             }
             await browser.tabs.executeScript(tabID, option)
         }

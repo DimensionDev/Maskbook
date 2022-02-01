@@ -147,6 +147,18 @@
             }
         },
         {
+            "input": "./packages/mask/src/plugins/NextID/locales/en-US.json",
+            "output": "./packages/mask/src/plugins/NextID/locales/i18n_generated",
+            "parser": "i18next",
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useI18N",
+                "namespace": "com.mask.next_id",
+                "trans": "Translate",
+                "sourceMap": "inline"
+            }
+        },
+        {
             "input": "./packages/plugins/Terra/src/locales/en-US.json",
             "output": "./packages/plugins/Terra/src/locales/i18n_generated",
             "parser": "i18next",

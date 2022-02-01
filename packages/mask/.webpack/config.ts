@@ -72,6 +72,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@masknet/icons': join(__dirname, '../../icons/index.ts'),
                     '@masknet/web3-kit': join(__dirname, '../../web3-kit/src/'),
                     '@masknet/web3-providers': join(__dirname, '../../web3-providers/src'),
+                    '@masknet/web3-shared-base': join(__dirname, '../../web3-shared/base/src'),
                     '@masknet/web3-shared-evm': join(__dirname, '../../web3-shared/evm/'),
                     '@masknet/web3-shared-flow': join(__dirname, '../../web3-shared/flow/'),
                     '@masknet/web3-shared-terra': join(__dirname, '../../web3-shared/terra/'),
@@ -84,6 +85,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@masknet/plugin-rss3': join(__dirname, '../../plugins/RSS3/src/'),
                     '@masknet/plugin-dao': join(__dirname, '../../plugins/DAO/src/'),
                     '@masknet/plugin-solana': join(__dirname, '../../plugins/Solana/src/'),
+                    '@masknet/plugin-terra': join(__dirname, '../../plugins/Terra/src/'),
                     '@masknet/plugin-wallet': join(__dirname, '../../plugins/Wallet/src/'),
                     '@masknet/plugin-file-service': join(__dirname, '../../plugins/FileService/src/'),
                     '@masknet/external-plugin-previewer': join(__dirname, '../../external-plugin-previewer/src/'),
@@ -249,6 +251,9 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
             globalObject: 'globalThis',
             publicPath: '/',
             clean: mode === 'production',
+            trustedTypes: {
+                policyName: 'webpack',
+            },
         },
         ignoreWarnings: [/Failed to parse source map/],
         // @ts-ignore
@@ -268,10 +273,14 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         debug: normalizeEntryDescription(join(__dirname, '../src/extension/debug-page/index.tsx')),
     })
     baseConfig.plugins!.push(
-        addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html' }),
-        addHTMLEntry({ chunks: ['popups'], filename: 'popups.html' }),
-        addHTMLEntry({ chunks: ['contentScript'], filename: 'generated__content__script.html' }),
-        addHTMLEntry({ chunks: ['debug'], filename: 'debug.html' }),
+        addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html', sourceMap: !!sourceMapKind }),
+        addHTMLEntry({ chunks: ['popups'], filename: 'popups.html', sourceMap: !!sourceMapKind }),
+        addHTMLEntry({
+            chunks: ['contentScript'],
+            filename: 'generated__content__script.html',
+            sourceMap: !!sourceMapKind,
+        }),
+        addHTMLEntry({ chunks: ['debug'], filename: 'debug.html', sourceMap: !!sourceMapKind }),
     )
     // background
     if (runtime.manifest === 3) {
@@ -283,7 +292,14 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
     } else {
         entries.background = normalizeEntryDescription(join(__dirname, '../src/background-service.ts'))
         plugins.push(new WebExtensionPlugin({ background: { entry: 'background', manifest: 2 } }))
-        plugins.push(addHTMLEntry({ chunks: ['background'], filename: 'background.html', secp256k1: true }))
+        plugins.push(
+            addHTMLEntry({
+                chunks: ['background'],
+                filename: 'background.html',
+                secp256k1: true,
+                sourceMap: !!sourceMapKind,
+            }),
+        )
     }
     for (const entry in entries) {
         withReactDevTools(entries[entry])
@@ -305,7 +321,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         }
     }
 }
-function addHTMLEntry(options: HTMLPlugin.Options & { secp256k1?: boolean } = {}) {
+function addHTMLEntry(options: HTMLPlugin.Options & { secp256k1?: boolean; sourceMap: boolean }) {
     let templateContent = readFileSync(join(__dirname, './template.html'), 'utf8')
     if (options.secp256k1) {
         templateContent = templateContent.replace(
@@ -313,10 +329,17 @@ function addHTMLEntry(options: HTMLPlugin.Options & { secp256k1?: boolean } = {}
             '<script src="/polyfill/secp256k1.js"></script>',
         )
     }
+    if (options.sourceMap) {
+        templateContent = templateContent.replace(
+            `<!-- CSP -->`,
+            `<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval'; require-trusted-types-for 'script'; trusted-types default webpack">`,
+        )
+    }
     return new HTMLPlugin({
         templateContent,
         inject: 'body',
         scriptLoading: 'defer',
+        minify: false,
         ...options,
     })
 }

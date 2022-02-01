@@ -1,7 +1,7 @@
 import stringify from 'json-stable-stringify'
 
+const subgraphURL = 'https://api.thegraph.com/subgraphs/name/dimensiondev/ens-text-resolver-subgraph'
 async function fetchFromENSTextResolverSubgraph<T>(query: string) {
-    const subgraphURL = 'https://api.thegraph.com/subgraphs/name/dimensiondev/ens-text-resolver-subgraph'
     const response = await fetch(subgraphURL, {
         method: 'POST',
         mode: 'cors',
@@ -14,6 +14,7 @@ async function fetchFromENSTextResolverSubgraph<T>(query: string) {
 }
 
 export async function fetchAddressNamesByTwitterId(twitterId: string) {
+    if (!twitterId) return []
     const data = await fetchFromENSTextResolverSubgraph<{
         twitterHandle?: {
             domains: {

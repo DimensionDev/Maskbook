@@ -5,15 +5,16 @@ import { useBlockNumber, useMaskBoxConstants } from '@masknet/web3-shared-evm'
 import { useMaskBoxContract } from './useMaskBoxContract'
 
 // dynamically set the block range window size
-const FRAGMENT_SIZE = 5000
+const FRAGMENT_SIZE = 3000
 const MAX_PAGE_SIZE = 10
 
 export function useMaskBoxCreationSuccessEvent(creatorAddress: string, tokenAddress: string, boxId: string) {
-    const blockNumber = useBlockNumber()
+    const { value: blockNumber = 0 } = useBlockNumber()
     const maskBoxContract = useMaskBoxContract()
     const { MASK_BOX_CONTRACT_FROM_BLOCK = Math.max(0, blockNumber - FRAGMENT_SIZE) } = useMaskBoxConstants()
 
     return useAsyncRetry(async () => {
+        if (!blockNumber) return null
         if (!maskBoxContract) return null
 
         const getPastEvents = (fromBlock: number, toBlock: number) => {
