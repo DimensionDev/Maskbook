@@ -131,6 +131,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         settings!,
         contract_version,
         publicKey,
+        privateKey,
     )
     // #endregion
 

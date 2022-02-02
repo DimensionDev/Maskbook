@@ -116,7 +116,12 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
     }, [redPacketSettings, account, redPacketContract]).value
 }
 
-export function useCreateCallback(redPacketSettings: RedPacketSettings, version: number, publicKey: string) {
+export function useCreateCallback(
+    redPacketSettings: RedPacketSettings,
+    version: number,
+    publicKey: string,
+    privateKey: string,
+) {
     const account = useAccount()
     const chainId = useChainId()
     const [createState, setCreateState] = useTransactionState()
@@ -154,6 +159,14 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
         setCreateState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
+
+        if (!privateKey) {
+            setCreateState({
+                type: TransactionStateType.FAILED,
+                error: new Error('Something went wrong, please try again'),
+            })
+            return
+        }
 
         // estimate gas and compose transaction
         const value = toFixed(token.type === EthereumTokenType.Native ? paramsObj.total : 0)
@@ -201,7 +214,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                     reject(error)
                 })
         })
-    }, [account, redPacketContract, redPacketSettings, chainId, paramResult])
+    }, [account, redPacketContract, redPacketSettings, chainId, paramResult, privateKey])
 
     const resetCallback = useCallback(() => {
         setCreateState({
