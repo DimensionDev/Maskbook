@@ -14,7 +14,7 @@ import { isDashboardPage } from '@masknet/shared-base'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { WalletMessages } from '../../messages'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
-import { hasNativeAPI, nativeAPI } from '../../../../utils'
+import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc'
 import { PluginProviderRender } from './PluginProviderRender'
 import { pluginIDSettings } from '../../../../settings/settings'
 
@@ -34,16 +34,16 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    //#region remote controlled dialog logic
+    // #region remote controlled dialog logic
     const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
-    //#endregion
+    // #endregion
 
-    //#region native app
+    // #region native app
     useEffect(() => {
         if (!open) return
         if (hasNativeAPI) nativeAPI?.api.misc_openCreateWalletView()
     }, [open])
-    //#endregion
+    // #endregion
 
     const isDashboard = isDashboardPage()
     const networks = getRegisteredWeb3Networks()

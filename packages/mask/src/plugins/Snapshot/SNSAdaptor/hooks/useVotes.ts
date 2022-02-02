@@ -14,7 +14,7 @@ export function useVotes(identifier: ProposalIdentifier) {
     return useSuspense<VoteItem[], [ProposalIdentifier]>(identifier.id, [identifier], cache, Suspender)
 }
 async function Suspender(identifier: ProposalIdentifier) {
-    const blockNumber = useBlockNumber()
+    const { value: blockNumber = 0 } = useBlockNumber()
     const { payload: proposal } = useProposal(identifier.id)
 
     const voters = proposal.votes.map((v) => v.voter)

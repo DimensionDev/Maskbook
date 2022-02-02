@@ -21,7 +21,7 @@ import Services from '../../../../extension/service'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
-        padding: theme.spacing(5),
+        padding: theme.spacing(2.5),
     },
 }))
 
@@ -33,7 +33,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     const [providerType, setProviderType] = useState<ProviderType | undefined>()
     const [networkType, setNetworkType] = useState<NetworkType | undefined>()
 
-    //#region remote controlled dialog
+    // #region remote controlled dialog
     const { open, setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.connectWalletDialogUpdated,
         (ev) => {
@@ -42,13 +42,13 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             setNetworkType(ev.networkType)
         },
     )
-    //#endregion
+    // #endregion
 
-    //#region walletconnect
+    // #region walletconnect
     const { setDialog: setWalletConnectDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletConnectQRCodeDialogUpdated,
     )
-    //#endregion
+    // #endregion
 
     const connectTo = useCallback(async () => {
         if (!networkType) throw new Error('Unknown network type.')
@@ -103,24 +103,27 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
         // connection failed
         if (!account || !networkType) throw new Error(`Failed to connect to ${resolveProviderName(providerType)}.`)
 
-        // the coin98 wallet cannot handle add/switch RPC provider correctly
-        // it will always add a new RPC provider even if the network exists
-        if (chainId !== expectedChainId && providerType !== ProviderType.Coin98) {
+        // switch to the expected chain
+        if (chainId !== expectedChainId) {
             try {
                 const overrides = {
                     chainId: expectedChainId,
                     providerType,
                 }
 
-                await Promise.race([
-                    (async () => {
-                        await delay(30 /* seconds */ * 1000 /* milliseconds */)
-                        throw new Error('Timeout!')
-                    })(),
-                    networkType === NetworkType.Ethereum
-                        ? Services.Ethereum.switchEthereumChain(ChainId.Mainnet, overrides)
-                        : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account, overrides),
-                ])
+                // the coin98 wallet cannot handle add/switch RPC provider correctly
+                // it will always add a new RPC provider even if the network exists
+                if (providerType !== ProviderType.Coin98) {
+                    await Promise.race([
+                        (async () => {
+                            await delay(30 /* seconds */ * 1000 /* milliseconds */)
+                            throw new Error('Timeout!')
+                        })(),
+                        networkType === NetworkType.Ethereum
+                            ? Services.Ethereum.switchEthereumChain(ChainId.Mainnet, overrides)
+                            : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account, overrides),
+                    ])
+                }
 
                 // recheck
                 const chainIdHex = await Services.Ethereum.getChainId(overrides)

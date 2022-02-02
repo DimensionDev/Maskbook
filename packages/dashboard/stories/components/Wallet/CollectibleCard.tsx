@@ -22,6 +22,7 @@ export const CollectibleCard = of({
                 mediaType: '',
             },
             contract: {
+                id: 'address',
                 address: 'address',
                 chainId: 1,
                 name: '',

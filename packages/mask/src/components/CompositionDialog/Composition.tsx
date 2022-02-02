@@ -18,7 +18,7 @@ let openOnInitAnswered = false
 export function Composition({ type = 'timeline', requireClipboardPermission }: PostDialogProps) {
     const { t } = useI18N()
 
-    //#region Open
+    // #region Open
     const [open, setOpen] = useState(false)
     const onClose = useCallback(() => {
         setOpen(false)
@@ -60,11 +60,11 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
             UI.current.setMessage(message)
         })
     }, [open])
-    //#endregion
+    // #endregion
 
-    //#region submit
+    // #region submit
     const onSubmit_ = useSubmit(onClose)
-    //#endregion
+    // #endregion
 
     const UI = useRef<CompositionRef>(null)
 

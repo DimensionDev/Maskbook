@@ -7,10 +7,10 @@ import {
     resolveAddressLinkOnExplorer,
 } from '@masknet/web3-shared-flow'
 import { createConstantSubscription, mapSubscription } from '@masknet/shared-base'
+import { toFixed } from '@masknet/web3-shared-base'
 import { getStorage, StorageDefaultValue } from '../../storage'
 import { formatAddress } from '../../helpers'
 import { getFungibleAssets } from '../../apis'
-import { toFixed } from '@masknet/web3-shared-base'
 
 function createSubscriptionFromChainId<T>(getter: (value: typeof StorageDefaultValue.chainId) => T) {
     return mapSubscription(getStorage().chainId.subscription, getter)
@@ -50,7 +50,7 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
         Utils: {
             formatAddress,
             formatBalance: toFixed,
-            formatCurrency: toFixed,
+            formatCurrency: (value, sign = '') => `${sign}${toFixed(value)}`,
 
             isChainIdValid: () => true,
 

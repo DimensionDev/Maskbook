@@ -44,6 +44,7 @@ export * from './hooks'
 export * from './ShadowRoot'
 export * from './UIHelper/custom-ui-helper'
 export { getMaskColor, useMaskColor, MaskColorVar, applyMaskColorVars } from './constants'
+export type { MaskCSSVariableColor } from './constants'
 
 const query = '(prefers-color-scheme: dark)'
 export function useSystemPreferencePalette(): PaletteMode {
