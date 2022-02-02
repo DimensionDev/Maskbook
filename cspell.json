@@ -1,5 +1,11 @@
 {
-    "dictionaries": ["typescript", "node", "html", "css", "fonts"],
+    "dictionaries": [
+        "typescript",
+        "node",
+        "html",
+        "css",
+        "fonts"
+    ],
     "ignorePaths": [
         ".github",
         ".prettierignore",
@@ -210,6 +216,7 @@
         "secp",
         "Serializers",
         "shink",
+        "Shoyu",
         "signup",
         "Sint",
         "solana",
@@ -391,11 +398,16 @@
         "xdescribe",
         "xtest"
     ],
-    "ignoreRegExpList": ["/@servie/"],
+    "ignoreRegExpList": [
+        "/@servie/"
+    ],
     "overrides": [
         {
             "filename": "web3-contracts/types/GoodGhostingIncentives.d.ts",
-            "ignoreWords": ["Adming", "ditribution"]
+            "ignoreWords": [
+                "Adming",
+                "ditribution"
+            ]
         }
     ]
 }
