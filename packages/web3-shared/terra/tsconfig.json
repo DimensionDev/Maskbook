@@ -2,7 +2,7 @@
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
     "rootDir": "./",
-    "outDir": "../dist/terra",
+    "outDir": "../dist/solana",
     "tsBuildInfoFile": "../dist/terra.tsbuildinfo"
   },
   "include": ["./", "./**/*.json"],

@@ -76,8 +76,6 @@ function usePluginsWeb3State() {
             [NetworkPluginID.PLUGIN_TERRA]: pluginStateTerra,
         }),
         [pluginStateEVM, pluginStateFlow, pluginStateSolana, pluginStateTerra],
-            [NetworkPluginID.PLUGIN_SOLANA]: pluginStateSolana,
-        }),
     )
 }
 

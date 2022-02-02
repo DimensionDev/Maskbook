@@ -6,7 +6,7 @@
   "dependencies": {
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-kit": "workspace:*",
-    "react-use": "^17.3.1",
+    "react-use": "^17.3.2",
     "urlcat": "^2.0.4"
   }
 }

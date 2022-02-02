@@ -41,6 +41,20 @@ document.addEventListener(CustomEventId, (e) => {
         case 'solanaBridgeOnEvent':
             return
 
+        // terra
+        case 'terraBridgeRequestListen':
+            return apply(bindEvent, null, ['terra', 'terraBridgeOnEvent', ...r[1]])
+        case 'terraBridgeExecute':
+            return apply(execute, null, [...r[1]])
+        case 'terraBridgeSendRequest':
+            return apply(callRequest, null, ['terra', ...r[1]])
+        case 'terraBridgePrimitiveAccess':
+            return apply(access, null, ['terra', ...r[1]])
+        case 'untilTerraBridgeOnline':
+            return apply(until, null, ['terra', ...r[1]])
+        case 'terraBridgeOnEvent':
+            return
+
         // ethereum
         case 'ethBridgeRequestListen':
             return apply(bindEvent, null, ['ethereum', 'ethBridgeOnEvent', ...r[1]])

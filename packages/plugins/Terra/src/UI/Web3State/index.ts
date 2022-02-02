@@ -1,5 +1,6 @@
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import { createConstantSubscription, mapSubscription } from '@masknet/shared-base'
+import { toFixed } from '@masknet/web3-shared-base'
 import {
     ChainId,
     NetworkType,
@@ -8,7 +9,7 @@ import {
     resolveBlockLinkOnExplorer,
     resolveTransactionLinkOnExplorer,
 } from '@masknet/web3-shared-terra'
-import BigNumber from 'bignumber.js'
+import { getFungibleAssets, getNonFungibleAssets } from '../../apis'
 import { formatAddress } from '../../helpers'
 import { getStorage, StorageDefaultValue } from '../../storage'
 
@@ -17,7 +18,7 @@ function createSubscriptionFromPublicKey<T>(getter: (value: typeof StorageDefaul
 }
 
 export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilities.Capabilities {
-    const chainId = ChainId.MainnetBeta
+    const chainId = ChainId.Mainnet
 
     return {
         Shared: {
@@ -29,7 +30,7 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
                 if (!publicKey) return []
                 return [
                     {
-                        name: 'Solana',
+                        name: 'Terra',
                         address: publicKey,
                         hasDerivationPath: false,
                         hasStoredKeyInfo: false,
@@ -37,16 +38,19 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
                 ]
             }),
             chainId: createConstantSubscription(chainId),
-            networkType: createConstantSubscription(NetworkType.Solana),
+            networkType: createConstantSubscription(NetworkType.Terra),
             providerType: createSubscriptionFromPublicKey((publicKey) => {
-                return publicKey ? ProviderType.Sollet : undefined
+                return publicKey ? ProviderType.TerraStation : undefined
             }),
         },
-        Asset: {},
+        Asset: {
+            getFungibleAssets,
+            getNonFungibleAssets,
+        },
         Utils: {
             formatAddress,
-            formatBalance: (value) => new BigNumber(value).toFixed(),
-            formatCurrency: (value) => new BigNumber(value).toFixed(),
+            formatBalance: toFixed,
+            formatCurrency: (value) => toFixed(value),
 
             isChainIdValid: () => true,
 

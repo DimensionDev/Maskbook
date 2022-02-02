@@ -1,7 +1,7 @@
 export enum ChainId {
-    ColumbusMainnet = 'columbus-3',
-    SojuTestnet = 'soju-0013',
-    VodkaTestnet = 'vodka-0001',
+    Mainnet = 101,
+    Testnet = 102,
+    Devnet = 103,
 }
 
 export enum NetworkType {

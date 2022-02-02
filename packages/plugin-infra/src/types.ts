@@ -711,6 +711,7 @@ export enum PluginId {
     Debugger = 'io.mask.debugger',
     Example = 'io.mask.example',
     Flow = 'com.mask.flow',
+    Terra = 'com.mask.terra',
     RSS3 = 'bio.rss3',
     RedPacket = 'com.maskbook.red_packet',
     Pets = 'com.maskbook.pets',

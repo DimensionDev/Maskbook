@@ -7,6 +7,7 @@ import { sendEvent, rejectPromise, resolvePromise } from './utils'
 export { bridgedEthereumProvider } from './bridgedEthereum'
 export { bridgedCoin98Provider } from './bridgedCoin98'
 export { bridgedSolanaProvider } from './bridgedSolana'
+export { bridgedTerraProvider } from './bridgedTerra'
 
 export function pasteText(text: string) {
     sendEvent('paste', text)
@@ -50,6 +51,10 @@ document.addEventListener(CustomEventId, (e) => {
         case 'solanaBridgePrimitiveAccess':
         case 'solanaBridgeRequestListen':
         case 'solanaBridgeExecute':
+        case 'terraBridgeSendRequest':
+        case 'terraBridgePrimitiveAccess':
+        case 'terraBridgeRequestListen':
+        case 'terraBridgeExecute':
         case 'input':
         case 'paste':
         case 'pasteImage':

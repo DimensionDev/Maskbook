@@ -60,6 +60,21 @@ export interface InternalEvents {
     untilSolanaBridgeOnline: [req_id: number]
     // #endregion
 
+    // #region Terra inpage provider bridge
+    /** Request the bridge to call function. */
+    terraBridgeExecute: [path: string, req_id: number]
+    /** Request the bridge to listen on an event. */
+    terraBridgeRequestListen: [eventName: string]
+    /** When a event happened. */
+    terraBridgeOnEvent: [eventName: string, data: unknown[]]
+    /** Send JSON RPC request. */
+    terraBridgeSendRequest: [req_id: number, request: unknown]
+    /** Access primitive property on the window.terra object. */
+    terraBridgePrimitiveAccess: [req_id: number, property: string]
+    /** Wait until window.solana appears */
+    untilTerraBridgeOnline: [req_id: number]
+    // #endregion
+
     /** A simple RPC. */
     // Not using async-call-rpc because we need to make sure every intrinsics
     // we're using is captured.

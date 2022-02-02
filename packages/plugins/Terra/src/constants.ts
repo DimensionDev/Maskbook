@@ -1,41 +1,31 @@
 import type { Web3Plugin } from '@masknet/plugin-infra'
-import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-solana'
+import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-terra'
 
 export const PLUGIN_META_KEY = 'com.mask.terra'
 export const PLUGIN_ID = 'com.mask.terra'
 export const PLUGIN_NAME = 'Terra Chain'
-export const PLUGIN_ICON = '🛰️'
+export const PLUGIN_ICON = '\u{1F305}'
 export const PLUGIN_DESCRIPTION = ''
 export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
     {
         ID: `${PLUGIN_ID}_terra`,
         networkSupporterPluginID: PLUGIN_ID,
-        chainId: ChainId.ColumbusMainnet,
+        chainId: ChainId.Mainnet,
         type: NetworkType.Terra,
-        name: 'Terra',
+        name: 'Solana',
         icon: new URL('./assets/terra.png', import.meta.url),
-        iconColor: 'rgb(83 148 248)',
+        iconColor: '#5d6fc0',
         isMainnet: true,
     },
     {
-        ID: `${PLUGIN_ID}_terra`,
+        ID: `${PLUGIN_ID}_terra_testnet`,
         networkSupporterPluginID: PLUGIN_ID,
-        chainId: ChainId.VodkaTestnet,
+        chainId: ChainId.Testnet,
         type: NetworkType.Terra,
-        name: 'Terra',
+        name: 'Solana Testnet',
         icon: new URL('./assets/terra.png', import.meta.url),
-        iconColor: 'rgb(83 148 248)',
-        isMainnet: true,
-    },
-    {
-        ID: `${PLUGIN_ID}_terra`,
-        networkSupporterPluginID: PLUGIN_ID,
-        chainId: ChainId.SojuTestnet,
-        type: NetworkType.Terra,
-        name: 'Terra',
-        icon: new URL('./assets/terra.png', import.meta.url),
-        iconColor: 'rgb(83 148 248)',
-        isMainnet: true,
+        iconColor: '#5d6fc0',
+        isMainnet: false,
     },
 ]
 export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
@@ -43,7 +33,13 @@ export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
         ID: `${PLUGIN_ID}_terrastation`,
         providerAdaptorPluginID: PLUGIN_ID,
         type: ProviderType.TerraStation,
-        name: 'TerraStation',
-        icon: new URL('./assets/TerraStation.png', import.meta.url),
+        name: 'Phantom',
+        icon: new URL('./assets/terrastation.png', import.meta.url),
     },
 ]
+
+export const NETWORK_ENDPOINTS: Record<ChainId, string> = {
+    [ChainId.Mainnet]: 'http://public-node.terra.dev:26657/',
+    [ChainId.Testnet]: 'http://public-node.terra.dev:26657/',
+}
+export const ENDPOINT_KEY = 'mainnet-beta'

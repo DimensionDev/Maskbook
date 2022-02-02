@@ -779,23 +779,47 @@ importers:
   packages/plugins/Terra:
     specifiers:
       '@masknet/icons': workspace:*
+      '@masknet/injected-script': workspace:*
       '@masknet/plugin-infra': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
+      '@masknet/web3-providers': workspace:*
+      '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-terra': workspace:*
-      '@terra-money/terra.js': ^3.0.2
-      bignumber.js: ^9.0.1
-      react-use: ^17.3.1
+      '@metaplex-foundation/mpl-token-metadata': ^1.1.0
+      '@metaplex/js': ^4.11.7
+      '@solana/spl-token': ^0.1.8
+      '@solana/spl-token-registry': ^0.2.1301
+      '@solana/web3.js': ^1.30.2
+      '@terra-money/core': 2.0.9
+      '@terra-money/terra.js': 3.0.6
+      bignumber.js: ^9.0.2
+      bn.js: ^4.12.0
+      bs58: ^4.0.1
+      buffer: ^6.0.3
+      react-use: ^17.3.2
     dependencies:
       '@masknet/icons': link:../../icons
+      '@masknet/injected-script': link:../../injected-script
       '@masknet/plugin-infra': link:../../plugin-infra
       '@masknet/shared': link:../../shared
       '@masknet/shared-base': link:../../shared-base
       '@masknet/theme': link:../../theme
+      '@masknet/web3-providers': link:../../web3-providers
+      '@masknet/web3-shared-base': link:../../web3-shared/base
       '@masknet/web3-shared-terra': link:../../web3-shared/terra
-      '@terra-money/terra.js': 3.0.4
+      '@metaplex-foundation/mpl-token-metadata': 1.1.0
+      '@metaplex/js': 4.11.7
+      '@solana/spl-token': 0.1.8
+      '@solana/spl-token-registry': 0.2.1301
+      '@solana/web3.js': 1.31.0
+      '@terra-money/core': 2.0.9_typescript@4.6.0-dev.20211202
+      '@terra-money/terra.js': 3.0.6
       bignumber.js: 9.0.2
+      bn.js: 4.12.0
+      bs58: 4.0.1
+      buffer: 6.0.3
       react-use: 17.3.2_757a802188413a36d4f24237d13b8e90
 
   packages/plugins/Wallet:
@@ -1202,7 +1226,7 @@ importers:
     specifiers:
       '@masknet/web3-constants': workspace:*
       '@masknet/web3-kit': workspace:*
-      react-use: ^17.3.1
+      react-use: ^17.3.2
       urlcat: ^2.0.4
     dependencies:
       '@masknet/web3-constants': link:../../web3-constants
@@ -7454,8 +7478,29 @@ packages:
       defer-to-connect: 1.1.3
     dev: false
 
-  /@terra-money/terra.js/3.0.4:
-    resolution: {integrity: sha512-PEYaPs0p521njZyD6a7aH6KrXRKdj4+j7kboM4qGc8FS/lKPFQUgacsVSlbAK0sYX/tOhINvN7eudwRBwuJVhw==}
+  /@terra-money/amino-js/0.2.0:
+    resolution: {integrity: sha512-Oj4e2S/1RvVLEjfqvLT3zDwWSFRRNPF6OovngJAtOeigQ8Vgea/eloMxVR4WNTesk1Z1QsovYTBGRqxV9bkgGA==}
+    dev: false
+
+  /@terra-money/core/2.0.9_typescript@4.6.0-dev.20211202:
+    resolution: {integrity: sha512-gUVmAmxoEczmw96ToAQq0jY6VvFGNZiyTrg9aQXbXjFLHhvlP9fDVQR8T8E8Bed3p2FJW6366z5JezW2MdYm8Q==}
+    dependencies:
+      '@terra-money/amino-js': 0.2.0
+      '@types/chai': 4.3.0
+      '@types/mocha': 5.2.7
+      '@types/secp256k1': 3.5.3
+      bech32: 1.1.4
+      bip32: 2.0.6
+      bip39: 3.0.4
+      crypto-js: 3.3.0
+      secp256k1: 4.0.2
+      ts-node: 8.10.2_typescript@4.6.0-dev.20211202
+    transitivePeerDependencies:
+      - typescript
+    dev: false
+
+  /@terra-money/terra.js/3.0.6:
+    resolution: {integrity: sha512-JA+FoJlZi8Q81Gy5IfnJjKyyBuH3NftuG5pr3ZvVWTm9IezM6WsMLhgsA0BNaCsOABapK1bFk3hWCkP03leW/g==}
     engines: {node: '>=14'}
     dependencies:
       '@terra-money/terra.proto': 0.1.7
@@ -7463,14 +7508,14 @@ packages:
       bech32: 2.0.0
       bip32: 2.0.6
       bip39: 3.0.4
-      bufferutil: 4.0.3
+      bufferutil: 4.0.6
       decimal.js: 10.3.1
       jscrypto: 1.0.3
       readable-stream: 3.6.0
       secp256k1: 4.0.2
       tmp: 0.2.1
-      utf-8-validate: 5.0.5
-      ws: 7.5.6_72ef9f06cb99540da679cbf1bf7a3256
+      utf-8-validate: 5.0.8
+      ws: 7.5.6_bffff4271b89d628e8333ead80d3d8e8
     transitivePeerDependencies:
       - debug
     dev: false
@@ -7578,6 +7623,10 @@ packages:
     resolution: {integrity: sha512-yfAgiWgVLjFCmRv8zAcOIHywYATEwiTVccTLnRp6UxTNavT55M9d/uhK3T03St/+8/z/wW+CRjGKUNmEqoHHCA==}
     dependencies:
       base-x: 3.0.8
+    dev: false
+
+  /@types/chai/4.3.0:
+    resolution: {integrity: sha512-/ceqdqeRraGolFTcfoXNiqjyQhZzbINDngeoAq9GoHa8PPK1yNzTaxWjA6BFWp5Ua9JpXEMSS4s5i9tS0hOJtw==}
     dev: false
 
   /@types/chrome/0.0.136:
@@ -8022,6 +8071,10 @@ packages:
   /@types/minimist/1.2.2:
     resolution: {integrity: sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==}
 
+  /@types/mocha/5.2.7:
+    resolution: {integrity: sha512-NYrtPht0wGzhwe9+/idPaBB+TqkY9AhTvOLMkThm0IoEfLaiVQZwBwyJ5puCkO3AUCWrmcoePjp2mbFocKy4SQ==}
+    dev: false
+
   /@types/node-fetch/2.5.12:
     resolution: {integrity: sha512-MKgC4dlq4kKNa/mYrwpKfzQMB5X3ee5U6fSprkKpToBqBmX4nFZL9cW5jl6sWn+xpRJ7ypWh2yyqqr8UUCstSw==}
     dependencies:
@@ -8214,6 +8267,12 @@ packages:
 
   /@types/scheduler/0.16.2:
     resolution: {integrity: sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==}
+
+  /@types/secp256k1/3.5.3:
+    resolution: {integrity: sha512-NGcsPDR0P+Q71O63e2ayshmiZGAwCOa/cLJzOIuhOiDvmbvrCIiVtEpqdCJGogG92Bnr6tw/6lqVBsRMEl15OQ==}
+    dependencies:
+      '@types/node': 16.11.21
+    dev: false
 
   /@types/secp256k1/4.0.3:
     resolution: {integrity: sha512-Da66lEIFeIz9ltsdMZcpQvmrmmoqrfju8pm1BH8WbYjZSwUgCwXLb9C+9XYogwBITnbsSaMdVPb2ekf7TV+03w==}
@@ -9299,7 +9358,6 @@ packages:
 
   /arg/4.1.3:
     resolution: {integrity: sha512-58S9QDqG0Xx27YwPSt9fJxivjYl432YCwfDMfZ+71RAqUrZef7LrKQZ3LHLOwCS4FLNBplP533Zx895SeOCHvA==}
-    dev: true
 
   /argparse/1.0.10:
     resolution: {integrity: sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==}
@@ -9680,7 +9738,7 @@ packages:
   /axios/0.24.0:
     resolution: {integrity: sha512-Q6cWsys88HoPgAaFAVUb0WpPk0O8iTeisR9IMqy9G8AbO4NlpVknrnQS03zzF9PGAWgO3cgletO3VjV/P7VztA==}
     dependencies:
-      follow-redirects: 1.14.5
+      follow-redirects: 1.14.7
     transitivePeerDependencies:
       - debug
     dev: false
@@ -10566,7 +10624,7 @@ packages:
     resolution: {integrity: sha512-HpV5OMLLGTjSVblmrtYRfFFKuQB+GArM0+XP8HGWfJ5vxYBqo+DesvJwOdC2WJ3bCkZShGf0QIfoIpeomVzVdA==}
     engines: {node: '>=6.0.0'}
     dependencies:
-      '@types/node': 16.11.17
+      '@types/node': 16.11.21
       bs58check: 2.1.2
       create-hash: 1.2.0
       create-hmac: 1.1.7
@@ -10896,7 +10954,6 @@ packages:
     dependencies:
       node-gyp-build: 4.3.0
     dev: false
-    optional: true
 
   /builtin-modules/1.1.1:
     resolution: {integrity: sha1-Jw8HbFpywC9bZaR9+Uxf46J4iS8=}
@@ -23214,6 +23271,21 @@ packages:
       yn: 2.0.0
     dev: false
 
+  /ts-node/8.10.2_typescript@4.6.0-dev.20211202:
+    resolution: {integrity: sha512-ISJJGgkIpDdBhWVu3jufsWpK3Rzo7bdiIXJjQc0ynKxVOVcg2oIrf2H2cejminGrptVc6q6/uynAHNCuWGbpVA==}
+    engines: {node: '>=6.0.0'}
+    hasBin: true
+    peerDependencies:
+      typescript: '>=2.7'
+    dependencies:
+      arg: 4.1.3
+      diff: 4.0.2
+      make-error: 1.3.6
+      source-map-support: 0.5.21
+      typescript: 4.6.0-dev.20211202
+      yn: 3.1.1
+    dev: false
+
   /ts-pnp/1.2.0_typescript@4.6.0-dev.20211202:
     resolution: {integrity: sha512-csd+vJOb/gkzvcCHgTGSChYpy5f1/XKNsmvBGO4JXS+z1v2HobugDz4s1IeFXM3wZB44uczs+eazB5Q/ccdhQw==}
     engines: {node: '>=6'}
@@ -23871,7 +23943,6 @@ packages:
     dependencies:
       node-gyp-build: 4.3.0
     dev: false
-    optional: true
 
   /utf8/2.1.2:
     resolution: {integrity: sha1-H6DZJw6b6FDZsFAn9jUZv0ZFfZY=}
@@ -25103,7 +25174,7 @@ packages:
         optional: true
     dev: true
 
-  /ws/7.5.6_72ef9f06cb99540da679cbf1bf7a3256:
+  /ws/7.5.6_bffff4271b89d628e8333ead80d3d8e8:
     resolution: {integrity: sha512-6GLgCqo2cy2A2rjCNFlxQS6ZljG/coZfZXclldI8FB/1G3CCI36Zd8xy2HrFVACi8tfk5XrgLQEk+P0Tnz9UcA==}
     engines: {node: '>=8.3.0'}
     peerDependencies:
@@ -25115,8 +25186,8 @@ packages:
       utf-8-validate:
         optional: true
     dependencies:
-      bufferutil: 4.0.3
-      utf-8-validate: 5.0.5
+      bufferutil: 4.0.6
+      utf-8-validate: 5.0.8
     dev: false
 
   /ws/8.4.0:
@@ -25432,7 +25503,6 @@ packages:
   /yn/3.1.1:
     resolution: {integrity: sha512-Ux4ygGWsu2c7isFWe8Yu1YluJmqVhxqK2cLXNQA5AcC3QfbGNpM7fu0Y8b/z16pXLnFxZYvWhd3fhBY9DLmC6Q==}
     engines: {node: '>=6'}
-    dev: true
 
   /yocto-queue/0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}

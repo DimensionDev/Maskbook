@@ -1,0 +1,18 @@
+{
+    "TERRASWASWAP_FACTORY_ADDRESS": {
+        "Mainnet": "terra1ulgw0td86nvs4wtpsc80thv6xelk76ut7a7apj",
+        "Testnet": "terra18qpjm4zkvqnpjpw0zn0tdr8gdzvt8au35v45xf"
+    },
+    "TERRASWASWAP_PAIR_CODE_ID": {
+        "Mainnet": 4,
+        "Testnet": 7869
+    },
+    "TERRASWASWAP_TOKEN_CODE_ID": {
+        "Mainnet": 3,
+        "Testnet": 148
+    },
+    "TERRASWASWAP_ROUTER_ADDRESS": {
+        "Mainnet": "terra19qx5xe6q9ll4w0890ux7lv2p4mf3csd4qvt3ex",
+        "Testnet": "terra14z80rwpd0alzj4xdtgqdmcqt9wd9xj5ffd60wp"
+    }
+}
