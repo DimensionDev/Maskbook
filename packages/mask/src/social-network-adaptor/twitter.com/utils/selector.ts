@@ -33,6 +33,7 @@ export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
         '[data-testid="primaryColumn"] [role="navigation"] ~ [aria-labelledby^="accessible-list"] [role="heading"] ~ div[aria-label]',
     )
+
 export const searchProfileEmptySelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] [data-testid="emptyState"]')
 export const searchProfileActiveTabSelector: () => LiveSelector<E, true> = () =>

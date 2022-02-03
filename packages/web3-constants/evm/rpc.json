@@ -2,33 +2,54 @@
     "RPC": {
         "Mainnet": [
             "https://mainnet.infura.io/v3/d65858b010d249419cf8687eca12b094",
-            "https://mainnet.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"
+            "https://mainnet.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb",
+            "https://mainnet.infura.io/v3/a9d66980bf334e59a42ca19095f3daeb",
+            "https://mainnet.infura.io/v3/f39cc8734e294fba9c3938486df2b1bc",
+            "https://mainnet.infura.io/v3/659123dd11294baf8a294d7a11cec92c"
         ],
         "Ropsten": [
             "https://ropsten.infura.io/v3/d65858b010d249419cf8687eca12b094",
-            "https://ropsten.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"
+            "https://ropsten.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb",
+            "https://ropsten.infura.io/v3/a9d66980bf334e59a42ca19095f3daeb",
+            "https://ropsten.infura.io/v3/f39cc8734e294fba9c3938486df2b1bc",
+            "https://ropsten.infura.io/v3/659123dd11294baf8a294d7a11cec92c"
         ],
         "Rinkeby": [
             "https://rinkeby.infura.io/v3/d65858b010d249419cf8687eca12b094",
-            "https://rinkeby.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"
+            "https://rinkeby.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb",
+            "https://rinkeby.infura.io/v3/a9d66980bf334e59a42ca19095f3daeb",
+            "https://rinkeby.infura.io/v3/f39cc8734e294fba9c3938486df2b1bc",
+            "https://rinkeby.infura.io/v3/659123dd11294baf8a294d7a11cec92c"
         ],
         "Kovan": [
             "https://kovan.infura.io/v3/d65858b010d249419cf8687eca12b094",
-            "https://kovan.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"
+            "https://kovan.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb",
+            "https://kovan.infura.io/v3/a9d66980bf334e59a42ca19095f3daeb",
+            "https://kovan.infura.io/v3/f39cc8734e294fba9c3938486df2b1bc",
+            "https://kovan.infura.io/v3/659123dd11294baf8a294d7a11cec92c"
         ],
         "Gorli": [
             "https://goerli.infura.io/v3/d65858b010d249419cf8687eca12b094",
-            "https://goerli.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"
+            "https://goerli.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb",
+            "https://goerli.infura.io/v3/a9d66980bf334e59a42ca19095f3daeb",
+            "https://goerli.infura.io/v3/f39cc8734e294fba9c3938486df2b1bc",
+            "https://goerli.infura.io/v3/659123dd11294baf8a294d7a11cec92c"
         ],
         "BSC": ["https://bsc-dataseed.binance.org/"],
         "BSCT": ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
         "Matic": [
             "https://polygon-mainnet.infura.io/v3/d65858b010d249419cf8687eca12b094",
-            "https://polygon-mainnet.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"
+            "https://polygon-mainnet.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb",
+            "https://polygon-mainnet.infura.io/v3/a9d66980bf334e59a42ca19095f3daeb",
+            "https://polygon-mainnet.infura.io/v3/f39cc8734e294fba9c3938486df2b1bc",
+            "https://polygon-mainnet.infura.io/v3/659123dd11294baf8a294d7a11cec92c"
         ],
         "Mumbai": [
             "https://polygon-mumbai.infura.io/v3/d65858b010d249419cf8687eca12b094",
-            "https://polygon-mumbai.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"
+            "https://polygon-mumbai.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb",
+            "https://polygon-mumbai.infura.io/v3/a9d66980bf334e59a42ca19095f3daeb",
+            "https://polygon-mumbai.infura.io/v3/f39cc8734e294fba9c3938486df2b1bc",
+            "https://polygon-mumbai.infura.io/v3/659123dd11294baf8a294d7a11cec92c"
         ],
         "Arbitrum": ["https://arb1.arbitrum.io/rpc"],
         "Arbitrum_Rinkeby": ["https://rinkeby.arbitrum.io/rpc"],
@@ -41,23 +62,23 @@
         "Aurora_Testnet": ["https://testnet.aurora.dev"]
     },
     "RPC_WEIGHTS": {
-        "Mainnet": [0, 0, 1, 1],
-        "Ropsten": [0, 0, 1, 1],
-        "Rinkeby": [0, 0, 1, 1],
-        "Kovan": [0, 0, 1, 1],
-        "Gorli": [0, 0, 1, 1],
-        "BSC": [0, 0, 0, 0],
-        "BSCT": [0, 0, 0, 0],
-        "Matic": [0, 0, 1, 1],
-        "Mumbai": [0, 0, 1, 1],
-        "Arbitrum": [0, 0, 0, 0],
-        "Arbitrum_Rinkeby": [0, 0, 0, 0],
-        "xDai": [0, 0, 0, 0],
-        "Avalanche": [0, 0, 0, 0],
-        "Avalanche_Fuji": [0, 0, 0, 0],
-        "Celo": [0, 0, 0, 0],
-        "Fantom": [0, 0, 0, 0],
-        "Aurora": [0, 0, 0, 0],
-        "Aurora_Testnet": [0, 0, 0, 0]
+        "Mainnet": [0, 1, 2, 3, 4],
+        "Ropsten": [0, 1, 2, 3, 4],
+        "Rinkeby": [0, 1, 2, 3, 4],
+        "Kovan": [0, 1, 2, 3, 4],
+        "Gorli": [0, 1, 2, 3, 4],
+        "BSC": [0, 0, 0, 0, 0],
+        "BSCT": [0, 0, 0, 0, 0],
+        "Matic": [0, 1, 2, 3, 4],
+        "Mumbai": [0, 1, 2, 3, 4],
+        "Arbitrum": [0, 0, 0, 0, 0],
+        "Arbitrum_Rinkeby": [0, 0, 0, 0, 0],
+        "xDai": [0, 0, 0, 0, 0],
+        "Avalanche": [0, 0, 0, 0, 0],
+        "Avalanche_Fuji": [0, 0, 0, 0, 0],
+        "Celo": [0, 0, 0, 0, 0],
+        "Fantom": [0, 0, 0, 0, 0],
+        "Aurora": [0, 0, 0, 0, 0],
+        "Aurora_Testnet": [0, 0, 0, 0, 0]
     }
 }
