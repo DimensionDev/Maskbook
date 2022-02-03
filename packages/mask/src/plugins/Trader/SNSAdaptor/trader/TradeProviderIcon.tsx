@@ -17,6 +17,8 @@ const quickswapIcon = new URL('../../../../resources/quickswap.png', import.meta
 const pancakeswapIcon = new URL('../../../../resources/pancakeswap.png', import.meta.url).toString()
 const traderjoeIcon = new URL('../../../../resources/traderjoe.png', import.meta.url).toString()
 const wannaswapIcon = new URL('../../../../resources/wannaswap.png', import.meta.url).toString()
+const spookyswapIcon = new URL('../../../../resources/spookyswap.svg', import.meta.url).toString()
+const spiritswapIcon = new URL('../../../../resources/spiritswap.png', import.meta.url).toString()
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -63,8 +65,8 @@ export function TradeProviderIcon(props: TradeProviderIconProps) {
         case TradeProvider.WANNASWAP:
             return (
                 <img
-                    src={pancakeswapIcon}
-                    alt={resolveTradeProviderName(TradeProvider.PANCAKESWAP)}
+                    src={wannaswapIcon}
+                    alt={resolveTradeProviderName(TradeProvider.WANNASWAP)}
                     className={classes.icon}
                 />
             )
@@ -77,6 +79,22 @@ export function TradeProviderIcon(props: TradeProviderIconProps) {
                 <img
                     src={traderjoeIcon}
                     alt={resolveTradeProviderName(TradeProvider.TRADERJOE)}
+                    className={classes.icon}
+                />
+            )
+        case TradeProvider.SPIRITSWAP:
+            return (
+                <img
+                    src={spiritswapIcon}
+                    alt={resolveTradeProviderName(TradeProvider.SPIRITSWAP)}
+                    className={classes.icon}
+                />
+            )
+        case TradeProvider.SPOOKYSWAP:
+            return (
+                <img
+                    src={spookyswapIcon}
+                    alt={resolveTradeProviderName(TradeProvider.SPOOKYSWAP)}
                     className={classes.icon}
                 />
             )

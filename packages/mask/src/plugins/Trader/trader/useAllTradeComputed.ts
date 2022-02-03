@@ -247,6 +247,30 @@ export function useAllTradeComputed(
     const wannaswap = useUniswapTradeComputed(wannaswap_.value, inputToken, outputToken)
     const wannaSwapEstimateGas = useUniswapTradeGasLimit(wannaswap, TradeProvider.WANNASWAP)
 
+    // SpiritSwap
+    const spiritswap_ = useUniswapV2Trade(
+        TradeProvider.SPIRITSWAP,
+        TradeStrategy.ExactIn,
+        inputAmount_,
+        '0',
+        tradeProviders.some((x) => x === TradeProvider.SPIRITSWAP) ? inputToken : undefined,
+        tradeProviders.some((x) => x === TradeProvider.SPIRITSWAP) ? outputToken : undefined,
+    )
+    const spiritswap = useUniswapTradeComputed(spiritswap_.value, inputToken, outputToken)
+    const spiritSwapEstimateGas = useUniswapTradeGasLimit(spiritswap, TradeProvider.SPIRITSWAP)
+
+    // spookyswap
+    const spookyswap_ = useUniswapV2Trade(
+        TradeProvider.SPOOKYSWAP,
+        TradeStrategy.ExactIn,
+        inputAmount_,
+        '0',
+        tradeProviders.some((x) => x === TradeProvider.SPOOKYSWAP) ? inputToken : undefined,
+        tradeProviders.some((x) => x === TradeProvider.SPOOKYSWAP) ? outputToken : undefined,
+    )
+    const spookyswap = useUniswapTradeComputed(spookyswap_.value, inputToken, outputToken)
+    const spookySwapEstimateGas = useUniswapTradeGasLimit(spookyswap, TradeProvider.SPOOKYSWAP)
+
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
         { provider: TradeProvider.SUSHISWAP, ...sushiSwap_, value: sushiSwap, gas: sushiSwapEstimateGas },
@@ -263,6 +287,8 @@ export function useAllTradeComputed(
         { provider: TradeProvider.OPENOCEAN, ...openocean_, value: openocean, gas: openoceanSwapEstimateGas },
         { provider: TradeProvider.WANNASWAP, ...wannaswap_, value: wannaswap, gas: wannaSwapEstimateGas },
         { provider: TradeProvider.TRISOLARIS, ...trisolaris_, value: trisolaris, gas: trisolarisEstimateGas },
+        { provider: TradeProvider.SPIRITSWAP, ...spiritswap_, value: spiritswap, gas: spiritSwapEstimateGas },
+        { provider: TradeProvider.SPOOKYSWAP, ...spookyswap_, value: spookyswap, gas: spookySwapEstimateGas },
     ]
 
     return nativeToken_.value

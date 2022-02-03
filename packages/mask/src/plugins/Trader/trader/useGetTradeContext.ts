@@ -21,6 +21,10 @@ import {
     WANNASWAP_CUSTOM_BASES,
     TRISOLARIS_BASE_AGAINST_TOKENS,
     TRISOLARIS_CUSTOM_BASES,
+    SPIRITSWAP_BASE_AGAINST_TOKENS,
+    SPIRITSWAP_CUSTOM_BASES,
+    SPOOKYSWAP_BASE_AGAINST_TOKENS,
+    SPOOKYSWAP_CUSTOM_BASES,
 } from '../constants'
 import { unreachable } from '@dimensiondev/kit'
 import { TargetChainIdContext } from './useTargetChainIdContext'
@@ -149,6 +153,30 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     AGAINST_TOKENS: TRISOLARIS_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: TRISOLARIS_CUSTOM_BASES,
+                }
+            case TradeProvider.SPOOKYSWAP:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.SPOOKYSWAP_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.SPOOKYSWAP_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.SPOOKYSWAP_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.SPOOKYSWAP_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: SPOOKYSWAP_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: SPOOKYSWAP_CUSTOM_BASES,
+                }
+            case TradeProvider.SPIRITSWAP:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.SPIRITSWAP_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.SPIRITSWAP_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.SPIRITSWAP_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.SPIRITSWAP_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: SPIRITSWAP_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: SPIRITSWAP_CUSTOM_BASES,
                 }
             case TradeProvider.ZRX:
                 return {
