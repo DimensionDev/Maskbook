@@ -336,11 +336,13 @@ export function CreateForm(props: CreateFormProps) {
         [startTime],
     )
 
-    const StartTime = <DateTimePanel label={t('plugin_ito_begin_time')} onChange={handleStartTime} date={startTime} />
+    const StartTime = (
+        <DateTimePanel label={t('plugin_ito_begin_time_title')} onChange={handleStartTime} date={startTime} />
+    )
 
     const EndTime = (
         <DateTimePanel
-            label={t('plugin_ito_end_time')}
+            label={t('plugin_ito_end_time_title')}
             onChange={handleEndTime}
             min={formatDateTime(startTime, "yyyy-MM-dd'T00:00")}
             date={endTime}
@@ -377,7 +379,7 @@ export function CreateForm(props: CreateFormProps) {
             <Box className={classes.line}>
                 <TextField
                     className={classes.input}
-                    label={t('plugin_ito_allocation_per_wallet')}
+                    label={t('plugin_ito_allocation_per_wallet_title')}
                     onChange={onTotalOfPerWalletChange}
                     value={totalOfPerWallet}
                     InputLabelProps={{

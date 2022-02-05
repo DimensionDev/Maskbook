@@ -10,7 +10,14 @@ import { PluginMessages } from '../../../../API'
 import { useNavigate } from 'react-router'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { TransferTab } from '../Transfer'
-import { useNetworkDescriptor, useWeb3State as useWeb3PluginState, Web3Plugin, useAccount } from '@masknet/plugin-infra'
+import {
+    useNetworkDescriptor,
+    useWeb3State as useWeb3PluginState,
+    Web3Plugin,
+    useAccount,
+    usePluginIDContext,
+    NetworkPluginID,
+} from '@masknet/plugin-infra'
 import { useAsyncRetry } from 'react-use'
 
 const useStyles = makeStyles()({
@@ -65,15 +72,19 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
         setRenderData(render)
     }, [value.data, loadingSize, page])
 
+    const currentPluginId = usePluginIDContext()
     const onSend = useCallback(
-        (detail: Web3Plugin.NonFungibleToken) =>
+        (detail: Web3Plugin.NonFungibleToken) => {
+            // Sending NFT is only available on EVM currently.
+            if (currentPluginId !== NetworkPluginID.PLUGIN_EVM) return
             navigate(DashboardRoutes.WalletsTransfer, {
                 state: {
                     type: TransferTab.Collectibles,
                     erc721Token: detail,
                 },
-            }),
-        [],
+            })
+        },
+        [currentPluginId],
     )
 
     useEffect(() => {
@@ -139,7 +150,8 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
             const width = ref.current.offsetWidth
             const height = ref.current.offsetHeight - 60
             const baseSize = Math.floor(width / ITEM_SIZE.width) * Math.floor(height / ITEM_SIZE.height)
-            setLoadingSize((prev) => prev ?? Math.floor(baseSize * 0.8))
+            // Ensure load 10 NFTs at least.
+            setLoadingSize((prev) => prev || Math.max(Math.floor(baseSize * 0.8), 10))
         }, [ref.current])
 
         return (
@@ -151,11 +163,12 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
                 ) : (
                     <Box>
                         <div className={classes.root}>
-                            {dataSource.map((x) => (
-                                <div className={classes.card} key={x.id}>
+                            {dataSource.map((x, index) => (
+                                <div className={classes.card} key={index}>
                                     <CollectibleCard
                                         chainId={chainId}
                                         token={x}
+                                        renderOrder={index}
                                         // TODO: transfer not support multi chain, should remove is after supported
                                         onSend={() => onSend(x as unknown as any)}
                                     />
@@ -164,6 +177,7 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
                         </div>
                     </Box>
                 )}
+
                 {showPagination ? (
                     <Box className={classes.footer}>
                         <TablePagination

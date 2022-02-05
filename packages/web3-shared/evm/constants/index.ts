@@ -26,15 +26,18 @@ import CryptoArtAI from '@masknet/web3-constants/evm/cryptoartai.json'
 import { hookTransform, transform, transformFromJSON } from './utils'
 import RealityCards from '@masknet/web3-constants/evm/reality-cards.json'
 
-function getEnvConstants(key: string) {
+function getEnvConstants(key: 'WEB3_CONSTANTS_RPC') {
     try {
-        return process.env[key] ?? ''
+        const map = {
+            WEB3_CONSTANTS_RPC: process.env.WEB3_CONSTANTS_RPC,
+        }
+        return map[key] ?? ''
     } catch {
         return ''
     }
 }
 
-export { ZERO_ADDRESS, FAKE_SIGN_PASSWORD, EthereumNameType } from './specific'
+export * from './specific'
 
 export const getAirdropConstants = transform(Airdrop)
 export const useAirdropConstants = hookTransform(getAirdropConstants)
@@ -84,7 +87,7 @@ export const useMaskBoxConstants = hookTransform(getMaskBoxConstants)
 export const getRPCConstants = transformFromJSON(getEnvConstants('WEB3_CONSTANTS_RPC'), RPC)
 export const useRPCConstants = hookTransform(getRPCConstants)
 
-export const getExplorerConstants = transformFromJSON(getEnvConstants('WEB3_CONSTANTS_EXPLORER'), Explorer)
+export const getExplorerConstants = transform(Explorer)
 export const useExplorerConstants = hookTransform(getExplorerConstants)
 
 export const getTokenListConstants = transform(TokenList)

@@ -1,6 +1,6 @@
 import { EthereumAddress } from 'wallet.ts'
-import { Resolution } from '@unstoppabledomains/resolution'
 import { AddressName, AddressNameType, ChainId, isZeroAddress, ProviderType } from '@masknet/web3-shared-evm'
+import { timeout } from '@masknet/shared-base'
 import * as ENS from '../apis/ens'
 import { createWeb3 } from '../../../extension/background-script/EthereumServices/web3'
 import { PluginProfileRPC } from '../../Profile/messages'
@@ -41,12 +41,6 @@ async function getResolvedENS(label: string) {
     return web3.eth.ens.getAddress(label)
 }
 
-async function getResolvedUNS(label: string) {
-    const resolution = new Resolution()
-    const result = await resolution.records(label, ['crypto.ETH.address'])
-    return result['crypto.ETH.address']
-}
-
 export async function getAddressNames(identity: {
     identifier: {
         userId: string
@@ -66,12 +60,14 @@ export async function getAddressNames(identity: {
 
     const allSettled = await Promise.allSettled([
         getResolvedENS(ethereumName),
-        getResolvedUNS(ethereumName),
         PluginProfileRPC.getRSS3AddressById(RSS3Id),
-        ENS.fetchAddressNamesByTwitterId(twitterId?.toLowerCase() ?? '').then(
-            (result) => result.find((x) => x.owner)?.owner ?? '',
+        timeout(
+            ENS.fetchAddressNamesByTwitterId(twitterId?.toLowerCase() ?? '').then(
+                (result) => result.find((x) => x.owner)?.owner ?? '',
+            ),
+            3000,
         ),
-        PluginNFTAvatarRPC.getAddress(twitterId ?? ''),
+        PluginNFTAvatarRPC.getAddress(twitterId ?? '', identifier.network),
     ])
 
     const getSettledAddress = (result: PromiseSettledResult<string>) => {
@@ -79,10 +75,9 @@ export async function getAddressNames(identity: {
     }
 
     const addressENS = getSettledAddress(allSettled[0])
-    const addressUNS = getSettledAddress(allSettled[1])
-    const addressRSS3 = getSettledAddress(allSettled[2])
-    const addressTheGraph = getSettledAddress(allSettled[3])
-    const addressGUN = getSettledAddress(allSettled[4])
+    const addressRSS3 = getSettledAddress(allSettled[1])
+    const addressTheGraph = getSettledAddress(allSettled[2])
+    const addressGUN = getSettledAddress(allSettled[3])
 
     return [
         isValidAddress(address)
@@ -97,13 +92,6 @@ export async function getAddressNames(identity: {
                   type: AddressNameType.ENS,
                   label: ethereumName,
                   resolvedAddress: addressENS,
-              }
-            : null,
-        isValidAddress(addressUNS)
-            ? {
-                  type: AddressNameType.UNS,
-                  label: ethereumName,
-                  resolvedAddress: addressUNS,
               }
             : null,
         isValidAddress(addressRSS3)

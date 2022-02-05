@@ -646,7 +646,7 @@ export namespace Plugin {
      * const ui = {
      *      type: 'raw' as const,
      *      init(signal, dom) {
-     *          return props => dom.innerHTML = toString(props)
+     *          return props => dom.textContent = toString(props)
      *      }
      * }
      * ```
@@ -696,6 +696,7 @@ export enum PluginId {
     CryptoArtAI = 'com.maskbook.cryptoartai',
     dHEDGE = 'org.dhedge',
     EVM = 'com.mask.evm',
+    NextID = 'com.mask.next_id',
     External = 'io.mask.external',
     Furucombo = 'app.furucombo',
     Gitcoin = 'co.gitcoin',

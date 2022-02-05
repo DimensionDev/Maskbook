@@ -1,9 +1,9 @@
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
 import Link from '@mui/material/Link'
-import BigNumber from 'bignumber.js'
 import { useNFT } from '../hooks'
 import type { AvatarMetaDB } from '../types'
+import { formatPrice, formatText } from '../utils'
 import { NFTAvatarRing } from './NFTAvatarRing'
 
 const useStyles = makeStyles()((theme) => ({
@@ -24,29 +24,16 @@ interface NFTBadgeProps extends withClasses<'root' | 'text' | 'icon'> {
     width?: number
 }
 
-function formatPrice(amount: string) {
-    const _amount = new BigNumber(amount ?? '0')
-    if (_amount.isZero()) return '0'
-    if (_amount.isLessThan(1)) return _amount.toFixed(2)
-    if (_amount.isLessThan(1e3)) return _amount.toFixed(1)
-    if (_amount.isLessThan(1e6)) return `${_amount.div(1e6).toFixed(1)}K`
-    return `${_amount.div(1e6).toFixed(1)}M`
-}
-
-function formatText(symbol: string, length: number) {
-    return symbol.length > length ? `${symbol.slice(0, length)}...` : symbol
-}
-
 export function NFTBadge(props: NFTBadgeProps) {
     const { avatar, size = 140 } = props
     const classes = useStylesExtends(useStyles(), props)
 
-    const { value = { amount: '0', symbol: 'ETH', name: '', owner: '' }, loading } = useNFT(
+    const { value = { amount: '0', symbol: 'ETH', name: '', slug: '' }, loading } = useNFT(
         avatar.address,
         avatar.tokenId,
     )
 
-    const { amount, symbol, name } = value
+    const { amount, symbol, name, slug } = value
 
     return (
         <div
@@ -62,8 +49,12 @@ export function NFTBadge(props: NFTBadgeProps) {
                     strokeWidth={14}
                     stroke="black"
                     fontSize={9}
-                    text={loading ? 'loading...' : name}
-                    price={loading ? '' : `${formatPrice(amount)} ${symbol}`}
+                    text={
+                        loading
+                            ? 'loading...'
+                            : `${formatText(name, avatar.tokenId)} ${slug.toLowerCase() === 'ens' ? 'ENS' : ''}`
+                    }
+                    price={loading ? '' : formatPrice(amount, symbol)}
                 />
             </Link>
         </div>

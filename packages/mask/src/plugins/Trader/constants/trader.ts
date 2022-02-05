@@ -4,7 +4,9 @@ import BigNumber from 'bignumber.js'
 import type { ERC20AgainstToken } from './types'
 
 export const USDC = createERC20Tokens('USDC_ADDRESS', 'USD Coin', 'USDC', 6)
+export const USDCe = createERC20Tokens('USDC_ADDRESS', 'USD Coin', 'USDCe', 6)
 export const USDT = createERC20Tokens('USDT_ADDRESS', 'Tether USD', 'USDT', 6)
+export const USDTe = createERC20Tokens('USDT_ADDRESS', 'Tether USD', 'USDT.e', 6)
 export const fUSDT = createERC20Tokens('fUSDT_ADDRESS', 'Frapped USDT', 'fUSDT', 6)
 export const HUSD = createERC20Tokens('HUSD_ADDRESS', 'Huobi USD', 'HUSD', 6)
 export const BUSD = createERC20Tokens('BUSD_ADDRESS', 'Huobi USD', 'BUSD', 6)
@@ -16,6 +18,7 @@ export const MSKC = createERC20Tokens('MSKC_ADDRESS', 'Mask C', 'MSKC', 18)
 export const MSKD = createERC20Tokens('MSKD_ADDRESS', 'Mask D', 'MSKD', 18)
 export const MSKE = createERC20Tokens('MSKE_ADDRESS', 'Mask E', 'MSKE', 18)
 export const DAI = createERC20Tokens('DAI_ADDRESS', 'Dai Stablecoin', 'DAI', 18)
+export const DAIe = createERC20Tokens('DAI_ADDRESS', 'Dai Stablecoin', 'DAI.e', 18)
 export const AMPL = createERC20Tokens('AMPL_ADDRESS', 'Ampleforth', 'AMPL', 18)
 export const OKB = createERC20Tokens('OKB_ADDRESS', 'Ampleforth', 'OKB', 18)
 export const UST = createERC20Tokens('UST_ADDRESS', 'Wrapped UST Token', 'UST', 18)
@@ -31,6 +34,7 @@ export const ETHER = createERC20Tokens('ETHER_ADDRESS', 'Ether', 'ETH', 18)
 export const QUICK = createERC20Tokens('QUICK_ADDRESS', 'Quickswap', 'QUICK', 18)
 export const WANNA = createERC20Tokens('WANNA_ADDRESS', 'Wannaswap', 'WANNA', 18)
 export const WBTC = createERC20Tokens('WBTC_ADDRESS', 'Wrapped Bitcoin', 'WBTC', 18)
+export const WBTCe = createERC20Tokens('WBTC_ADDRESS', 'Wrapped Bitcoin', 'WBTCe', 18)
 export const IGG = createERC20Tokens('IGG_ADDRESS', 'IG Gold', 'IGG', 18)
 export const OM = createERC20Tokens('OM_ADDRESS', 'OM Token', 'OM', 18)
 export const SUSHI = createERC20Tokens('SUSHI_ADDRESS', 'SushiToken', 'SUSHI', 18)
@@ -44,6 +48,8 @@ export const NFTX = createERC20Tokens('NFTX_ADDRESS', 'NFTX', 'NFTX', 18)
 export const STETH = createERC20Tokens('stETH_ADDRESS', 'stakedETH', 'stETH', 18)
 export const CUSD = createERC20Tokens('cUSD_ADDRESS', 'Celo Dollar', 'cUSD', 18)
 export const CEUR = createERC20Tokens('cEUR_ADDRESS', 'Celo Euro', 'cEUR', 18)
+export const JOE = createERC20Tokens('JOE_ADDRESS', 'JoeToken', 'JOE', 18)
+export const PNG = createERC20Tokens('PNG_ADDRESS', 'Pangolin', 'PNG', 18)
 
 export const WNATIVE = createERC20Tokens(
     'WNATIVE_ADDRESS',
@@ -65,6 +71,8 @@ export const WNATIVE_ONLY: ERC20AgainstToken = {
     [ChainId.Arbitrum]: [WNATIVE[ChainId.Arbitrum]],
     [ChainId.Arbitrum_Rinkeby]: [WNATIVE[ChainId.Arbitrum_Rinkeby]],
     [ChainId.xDai]: [WNATIVE[ChainId.xDai]],
+    [ChainId.Avalanche]: [WNATIVE[ChainId.Avalanche]],
+    [ChainId.Avalanche_Fuji]: [WNATIVE[ChainId.Avalanche_Fuji]],
     [ChainId.Celo]: [WNATIVE[ChainId.Celo]],
     [ChainId.Fantom]: [WNATIVE[ChainId.Fantom]],
     [ChainId.Aurora]: [WNATIVE[ChainId.Aurora]],

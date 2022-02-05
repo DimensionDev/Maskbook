@@ -286,7 +286,7 @@ export async function getCoinInfo(id: string) {
             .map(([pairAddress, pairData]) => {
                 return {
                     logo_url:
-                        'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984/logo.png',
+                        'https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/ethereum/assets/0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984/logo.png',
                     trade_url: `https://info.uniswap.org/pair/${pairAddress}`,
                     market_name: 'Uniswap (V2)',
                     base_name: pairData.token0.symbol,

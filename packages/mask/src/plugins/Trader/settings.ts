@@ -35,65 +35,6 @@ export const currentDataProviderSettings = createGlobalSettings<DataProvider>(
     },
 )
 
-/**
- * The default trader provider
- */
-export const currentTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_ID}+tradeProvider`,
-    TradeProvider.UNISWAP_V2,
-    {
-        primary: () => i18n.t('plugin_trader_settings_trade_provider_primary'),
-        secondary: () => i18n.t('plugin_trader_settings_trade_provider_secondary'),
-    },
-)
-
-export const ethereumNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_ID}+ethereum+tradeProvider`,
-    TradeProvider.UNISWAP_V2,
-    { primary: () => '' },
-)
-
-export const polygonNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_ID}+polygon+tradeProvider`,
-    TradeProvider.QUICKSWAP,
-    { primary: () => '' },
-)
-
-export const binanceNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_ID}+binance+tradeProvider`,
-    TradeProvider.PANCAKESWAP,
-    { primary: () => '' },
-)
-
-export const arbitrumNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_ID}+arbitrum+tradeProvider`,
-    TradeProvider.UNISWAP_V3,
-    { primary: () => '' },
-)
-
-export const xdaiNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_ID}+xdai+tradeProvider`,
-    TradeProvider.SUSHISWAP,
-    { primary: () => '' },
-)
-export const fantomNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_ID}+fantom+tradeProvider`,
-    TradeProvider.SUSHISWAP,
-    { primary: () => '' },
-)
-
-export const celoNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_ID}+celo+tradeProvider`,
-    TradeProvider.SUSHISWAP,
-    { primary: () => '' },
-)
-
-export const auroraNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_ID}+aurora+tradeProvider`,
-    TradeProvider.DODO,
-    { primary: () => '' },
-)
-
 // #region trade provider general settings
 export interface TradeProviderSettings {
     pools: ZrxTradePool[]
@@ -109,6 +50,8 @@ const pancakeswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradePr
 const balancerSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+balancer`, '')
 const dodoSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+dodo`, '')
 const bancorSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+bancor`, '')
+const traderjoeSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+traderjoe`, '')
+const pangolinSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+pangolin`, '')
 const openoceanSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+openocean`, '')
 const trisolarisSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+trisolaris`, '')
 const wannaswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+wannaswap`, '')
@@ -138,8 +81,12 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return dodoSettings
         case TradeProvider.BANCOR:
             return bancorSettings
+        case TradeProvider.TRADERJOE:
+            return traderjoeSettings
         case TradeProvider.OPENOCEAN:
             return openoceanSettings
+        case TradeProvider.PANGOLIN:
+            return pangolinSettings
         case TradeProvider.TRISOLARIS:
             return trisolarisSettings
         case TradeProvider.WANNASWAP:

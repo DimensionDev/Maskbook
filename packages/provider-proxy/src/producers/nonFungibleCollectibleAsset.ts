@@ -1,4 +1,4 @@
-import { getOpenSeaNFTList, getRaribleNFTList } from '@masknet/web3-providers'
+import { getOpenSeaNFTList, getRaribleNFTList, getNFTScanNFTs } from '@masknet/web3-providers'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import type { ProducerArgBase, ProducerKeyFunction, ProducerPushFunction, RPCMethodRegistrationValue } from '../types'
 import { collectAllPageDate } from '../helper/request'
@@ -23,11 +23,25 @@ const nonFungibleCollectibleAsset = async (
             push,
         )
     } finally {
-        await collectAllPageDate<ERC721TokenDetailed>(
-            (page, pageInfo) => getRaribleNFTList(openSeaApiKey, address, page, size, pageInfo),
-            size,
-            push,
-        )
+        try {
+            await collectAllPageDate<ERC721TokenDetailed>(
+                (page, pageInfo) => getRaribleNFTList(openSeaApiKey, address, page, size, pageInfo),
+                size,
+                push,
+            )
+        } finally {
+            await collectAllPageDate<ERC721TokenDetailed>(
+                (page) => getNFTScanNFTs(address, 'erc721', page, size),
+                size,
+                push,
+            )
+
+            await collectAllPageDate<ERC721TokenDetailed>(
+                (page) => getNFTScanNFTs(address, 'erc1155', page, size),
+                size,
+                push,
+            )
+        }
     }
 }
 
