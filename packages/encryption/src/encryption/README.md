@@ -1,6 +1,6 @@
-## Term:
+# Term
 
-### Local key:
+## Local key
 
 An AES key that never exported.
 
@@ -8,7 +8,7 @@ It is connected to the Persona or the Profile.
 
 It is used to encrypt some message to themselves to allow them to decrypt the message later.
 
-## Steps:
+## Steps
 
 1. Convert TypedMessage to string (v38) or Uint8Array (v37).
 2. Encrypt the message.
