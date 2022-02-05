@@ -661,12 +661,12 @@ importers:
       '@masknet/web3-kit': workspace:*
       '@msgpack/msgpack': ^2.7.1
       arweave: ^1.10.3
-      ipfs-http-client: ^54.0.2
-      urlcat: ^2.0.4
       date-fns: ^2.28.0
+      ipfs-http-client: ^54.0.2
       react-feather: ^2.0.9
       react-router-dom: '5'
       react-use: ^17.3.2
+      urlcat: ^2.0.4
     dependencies:
       '@dimensiondev/common-protocols': 1.6.0-20210723072221-8f46a92
       '@ethersphere/bee-js': 3.1.0
@@ -679,12 +679,12 @@ importers:
       '@masknet/web3-kit': link:../../web3-kit
       '@msgpack/msgpack': 2.7.1
       arweave: 1.10.13
-      ipfs-http-client: 54.0.2
-      urlcat: 2.0.4
       date-fns: 2.28.0
+      ipfs-http-client: 54.0.2
       react-feather: 2.0.9_react@18.0.0-rc.0
       react-router-dom: 5.3.0_react@18.0.0-rc.0
       react-use: 17.3.2_757a802188413a36d4f24237d13b8e90
+      urlcat: 2.0.4
 
   packages/plugins/Flow:
     specifiers:
@@ -1205,6 +1205,21 @@ packages:
       web3: 0.20.7
     dev: false
 
+  /@0xproject/abi-gen/0.1.2:
+    resolution: {integrity: sha512-vwArB0lTTuInOWTh5KeeNeJTswrGJrHebau8sdrG8TBNiVwAAehthfWflieMRKK54D11Z+7TO8fupCMa7BaoxA==}
+    hasBin: true
+    dependencies:
+      '@0xproject/utils': 0.2.4
+      chalk: 2.4.2
+      glob: 7.2.0
+      handlebars: 4.7.7
+      lodash: 4.17.21
+      mkdirp: 0.5.5
+      to-snake-case: 1.0.0
+      web3: 0.20.7
+      yargs: 10.1.2
+    dev: false
+
   /@0xproject/abi-gen/0.1.7:
     resolution: {integrity: sha512-mFFprGLVYHl9sD6PGwcAwTqncueqfau6wPGwJV7mQ/Vj3thMo17BY8xzpeSIkXjrdo6lZHlzyVUVrEA1krfjSw==}
     hasBin: true
@@ -1309,13 +1324,6 @@ packages:
     resolution: {integrity: sha512-iTASGs+HTFK5E4ZqcMsHmeJ4zodyq8L38lZV33jwqcBJYoUt3HjN4+ot+O9/0b+ke8ddE7UgOtVuZN/OkV19/g==}
     engines: {node: 4.x || >=6.0.0}
     dev: false
-
-  /@babel/code-frame/7.10.4:
-    resolution: {integrity: sha512-vG6SvB6oYEhvgisZNFRmRCUkLz11c7rp+tbNTynGqc6mS1d5ATd/sGyV6W0KZZnXRKMTzZDRgQT3Ou9jhpAfUg==}
-    dependencies:
-      '@babel/highlight': 7.16.0
-    dev: true
-
 
   /@babel/code-frame/7.16.0:
     resolution: {integrity: sha512-IF4EOMEV+bfYwOmNxGzSnjR2EmQod7f1UXOpZM3l4i4o4QNwzjtJAu/HxdjHq0aYBvdqMuQEY1eg0nqW9ZPORA==}
@@ -13008,11 +13016,6 @@ packages:
       encoding: 0.1.13
     dev: false
 
-  /electron-to-chromium/1.4.16:
-    resolution: {integrity: sha512-BQb7FgYwnu6haWLU63/CdVW+9xhmHls3RCQUFiV4lvw3wimEHTVcUk2hkuZo76QhR8nnDdfZE7evJIZqijwPdA==}
-    dev: true
-
-
   /electron-to-chromium/1.4.28:
     resolution: {integrity: sha512-Gzbf0wUtKfyPaqf0Plz+Ctinf9eQIzxEqBHwSvbGfeOm9GMNdLxyu1dNiCUfM+x6r4BE0xUJNh3Nmg9gfAtTmg==}
 
@@ -16149,7 +16152,7 @@ packages:
     resolution: {integrity: sha512-61eOyzh7zH1ks/56hPudW6pbqsOdoHSYMVjuqlIlZGjyg0svR6DHlCcaeSJfWW8t6dsPl1n7qKBdk8ZqPzXuLA==}
     dependencies:
       interface-store: 2.0.1
-      nanoid: 3.1.30
+      nanoid: 3.2.0
       uint8arrays: 3.0.0
     dev: false
 
@@ -16231,7 +16234,7 @@ packages:
       multiaddr: 10.0.1
       multiaddr-to-uri: 8.0.0
       multiformats: 9.5.9
-      nanoid: 3.1.30
+      nanoid: 3.2.0
       parse-duration: 1.0.2
       timeout-abort-controller: 1.1.1
       uint8arrays: 3.0.0
@@ -16287,7 +16290,7 @@ packages:
       it-glob: 1.0.2
       it-to-stream: 1.0.0
       merge-options: 3.0.4
-      nanoid: 3.1.30
+      nanoid: 3.2.0
       native-fetch: 3.0.0_@achingbrain+node-fetch@2.6.7
       node-fetch: /@achingbrain/node-fetch/2.6.7
       react-native-fetch-api: 2.0.0
@@ -19096,10 +19099,6 @@ packages:
       - domexception
     dev: false
 
-  /node-forge/0.10.0:
-    resolution: {integrity: sha512-PPmu8eEeG9saEUvI97fm4OYxXVB6bFvyNTyiUOBichBpFG8A1Ljw3bY62+5oOjDEMHRnd0Y7HQ+x7uzxOzC6JA==}
-    engines: {node: '>= 6.0.0'}
-    
   /node-forge/1.2.1:
     resolution: {integrity: sha512-Fcvtbb+zBcZXbTTVwqGA5W+MKBj56UjVRevvchv5XrcyXbmNdesfZL37nlcWOfpgHhgmxApw3tQbTr4CqNmX4w==}
     engines: {node: '>= 6.13.0'}
@@ -25808,12 +25807,12 @@ packages:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==}
     dev: true
 
-  github.com/ProjectOpenSea/wyvern-js/1e69699e8ba39edcb177b503caeaaefbf0c31385:
-    resolution: {commit: 1e69699e8ba39edcb177b503caeaaefbf0c31385, repo: git+ssh://git@github.com/ProjectOpenSea/wyvern-js.git, type: git}
+  github.com/ProjectOpenSea/wyvern-js/6f85f1b42f0962d2cc8e97b7e7f680865e3f26c1:
+    resolution: {commit: 6f85f1b42f0962d2cc8e97b7e7f680865e3f26c1, repo: git+ssh://git@github.com/ProjectOpenSea/wyvern-js.git, type: git}
     name: wyvern-js
     version: 3.2.0
     dependencies:
-      '@0xproject/abi-gen': 0.1.7
+      '@0xproject/abi-gen': 0.1.2
       '@0xproject/assert': 0.0.11
       '@0xproject/json-schemas': 0.7.24
       '@0xproject/utils': 0.1.3
@@ -25870,7 +25869,7 @@ packages:
       bignumber.js: 6.0.0
       typed-promisify: 0.4.0
       web3-provider-engine: 13.8.0
-      wyvern-js: github.com/ProjectOpenSea/wyvern-js/1e69699e8ba39edcb177b503caeaaefbf0c31385
+      wyvern-js: github.com/ProjectOpenSea/wyvern-js/6f85f1b42f0962d2cc8e97b7e7f680865e3f26c1
     transitivePeerDependencies:
       - debug
     dev: false
