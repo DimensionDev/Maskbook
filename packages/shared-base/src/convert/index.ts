@@ -6,6 +6,9 @@ export function fromBase64URL(x: string) {
 export function toBase64URL(x: BufferSource) {
     return Convert.ToBase64Url(x)
 }
+export function toBase64(x: BufferSource) {
+    return Convert.ToBase64(x)
+}
 export function toHex(x: BufferSource) {
     return Convert.ToHex(x)
 }

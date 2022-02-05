@@ -29,11 +29,11 @@ export function OperationFooter({
     const account = useAccount()
     const chainIdValid = useChainIdValid()
 
-    //#region remote controlled select provider dialog
+    // #region remote controlled select provider dialog
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
-    //#endregion
+    // #endregion
 
     const handleShare = useCallback(() => {
         if (!shareLink) return

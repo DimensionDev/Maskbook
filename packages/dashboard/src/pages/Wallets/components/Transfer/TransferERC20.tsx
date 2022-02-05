@@ -84,13 +84,13 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const nativeToken = useNativeTokenDetailed()
     const nativeTokenPrice = useNativeTokenPrice()
 
-    //#region resolve ENS domain
+    // #region resolve ENS domain
     const {
         value: registeredAddress = '',
         error: resolveDomainError,
         loading: resolveDomainLoading,
     } = useLookupAddress(address, NetworkPluginID.PLUGIN_EVM)
-    //#endregion
+    // #endregion
 
     // transfer amount
     const transferAmount = rightShift(amount || '0', selectedToken.decimals).toFixed()
@@ -101,6 +101,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         EthereumAddress.isValid(address) ? address : registeredAddress,
     )
     const { gasConfig, onCustomGasSetting, gasLimit, maxFee } = useGasConfig(gasLimit_, 30000)
+
     const gasPrice = gasConfig.gasPrice || defaultGasPrice
 
     useEffect(() => {
@@ -135,7 +136,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         return
     }, [transferAmount, address, memo, selectedToken.decimals, transferCallback, gasConfig, registeredAddress, Utils])
 
-    //#region validation
+    // #region validation
     const validationMessage = useMemo(() => {
         if (!transferAmount || isZero(transferAmount)) return t.wallets_transfer_error_amount_absence()
         if (isGreaterThan(rightShift(amount, selectedToken.decimals), maxAmount))
@@ -160,7 +161,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         resolveDomainError,
         network,
     ])
-    //#endregion
+    // #endregion
 
     useEffect(() => {
         const ALLOWED_TYPES = [TransactionStateType.FAILED, TransactionStateType.HASH]

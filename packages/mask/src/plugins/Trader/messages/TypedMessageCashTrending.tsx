@@ -48,7 +48,6 @@ function DefaultTypedMessageCashTrendingRenderer(props: TypedMessageRendererProp
                     type,
                     element,
                     dataProviders,
-                    tradeProviders,
                 })
             }, 500),
         )

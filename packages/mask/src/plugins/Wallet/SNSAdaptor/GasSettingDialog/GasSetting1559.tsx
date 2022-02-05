@@ -1,6 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { formatGweiToEther, useChainId, useNativeTokenDetailed, GasOption } from '@masknet/web3-shared-evm'
-import { toWei } from 'web3-utils'
+import {
+    formatGweiToEther,
+    useChainId,
+    useNativeTokenDetailed,
+    GasOption,
+    formatGweiToWei,
+} from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import BigNumber from 'bignumber.js'
@@ -36,13 +41,13 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
         const { value: nativeToken } = useNativeTokenDetailed()
         const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
 
-        //#region Get suggest gas options data from meta swap api
+        // #region Get suggest gas options data from meta swap api
         const { value: gasOptions, loading: getGasOptionsLoading } = useAsync(async () => {
             return WalletRPC.getEstimateGasFees(chainId)
         }, [chainId])
-        //#endregion
+        // #endregion
 
-        //#region Gas options
+        // #region Gas options
         const options = useMemo(
             () => [
                 {
@@ -63,10 +68,10 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
             ],
             [gasOptions],
         )
-        //#endregion
+        // #endregion
         const currentGasOption = options.find((opt) => opt.gasOption === selectedGasOption)
 
-        //#region Form field define schema
+        // #region Form field define schema
         const schema = useMemo(() => {
             return zod
                 .object({
@@ -88,7 +93,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                     path: ['maxFeePerGas'],
                 })
         }, [minGasLimit, gasOptions])
-        //#endregion
+        // #endregion
 
         const {
             control,
@@ -111,13 +116,13 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
             },
         })
 
-        //#region Set gas on tx to form data
+        // #region Set gas on tx to form data
         useUpdateEffect(() => {
             if (gasLimit) setValue('gasLimit', new BigNumber(gasLimit).toString())
         }, [gasLimit, setValue])
-        //#endregion
+        // #endregion
 
-        //#region If the selected changed, set the value on the option to the form data
+        // #region If the selected changed, set the value on the option to the form data
         useEffect(() => {
             if (selectedGasOption === null) return
             clearErrors(['maxPriorityFeePerGas', 'maxFeePerGas'])
@@ -130,14 +135,14 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                 new BigNumber(currentGasOption?.content?.suggestedMaxFeePerGas ?? 0).toString() ?? '',
             )
         }, [currentGasOption, setValue, options])
-        //#endregion
+        // #endregion
 
         const handleConfirm = useCallback(
             (data: zod.infer<typeof schema>) => {
                 onConfirm?.({
                     gasLimit: data.gasLimit,
-                    maxFee: toWei(data.maxFeePerGas, 'gwei'),
-                    priorityFee: toWei(data.maxPriorityFeePerGas, 'gwei'),
+                    maxFee: formatGweiToWei(data.maxFeePerGas).toFixed(0),
+                    priorityFee: formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0),
                     gasOption: selectedGasOption,
                 })
             },
@@ -152,7 +157,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
             'gasLimit',
         ])
 
-        //#region These are additional form rules that need to be prompted for but do not affect the validation of the form
+        // #region These are additional form rules that need to be prompted for but do not affect the validation of the form
         const maxPriorFeeHelperText = useMemo(() => {
             if (getGasOptionsLoading) return undefined
             if (isLessThan(maxPriorityFeePerGas, gasOptions?.low?.suggestedMaxPriorityFeePerGas ?? 0))
@@ -180,7 +185,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                 return t('wallet_transfer_error_max_fee_too_high')
             return undefined
         }, [maxFeePerGas, gasOptions, getGasOptionsLoading])
-        //endregion
+        // #endregion
 
         return (
             <>

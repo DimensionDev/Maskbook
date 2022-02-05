@@ -135,7 +135,8 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         name: 'Celo',
         icon: new URL('./assets/celo.png', import.meta.url),
         iconColor: 'rgb(53, 208, 127)',
-        isMainnet: true,
+        // hide celo
+        isMainnet: false,
     },
     {
         ID: `${PLUGIN_ID}_fantom`,
@@ -145,6 +146,16 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         name: 'Fantom',
         icon: new URL('./assets/fantom.png', import.meta.url),
         iconColor: 'rgb(73, 169, 166)',
+        isMainnet: true,
+    },
+    {
+        ID: `${PLUGIN_ID}_avalanche`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Avalanche,
+        type: NetworkType.Avalanche,
+        name: 'Avalanche',
+        icon: new URL('./assets/avalanche.png', import.meta.url),
+        iconColor: 'rgb(232, 65, 66)',
         isMainnet: true,
     },
     {

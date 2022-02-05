@@ -39,7 +39,7 @@ export async function popUnconfirmedRequest() {
         requests: requests.slice(1),
     }
     await t.objectStore('UnconfirmedRequestChunk').put(chunk)
-    //TODO: hasRequest is not the best definition
+    // TODO: hasRequest is not the best definition
     WalletMessages.events.requestsUpdated.sendToAll({ hasRequest: false })
     return payload
 }

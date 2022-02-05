@@ -4,7 +4,7 @@ import { CollectibleState } from '../hooks/useCollectibleState'
 import { AssetPlayer } from '@masknet/shared'
 import { useMemo } from 'react'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     body: {
         display: 'flex',
         justifyContent: 'center',
@@ -16,11 +16,29 @@ const useStyles = makeStyles()({
     },
     errorPlaceholder: {
         padding: '82px 0',
+        backgroundColor: theme.palette.background.default,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 12,
+        width: '100%',
     },
     loadingPlaceholder: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
         padding: '74px 0',
     },
-})
+    loadingIcon: {
+        width: 36,
+        height: 52,
+    },
+    errorIcon: {
+        width: 36,
+        height: 36,
+    },
+}))
 
 export interface ArticleTabProps {}
 
@@ -39,10 +57,8 @@ export function ArticleTab(props: ArticleTabProps) {
                         options={{
                             playsInline: true,
                         }}
-                        classes={{
-                            errorPlaceholder: classes.errorPlaceholder,
-                            loadingPlaceholder: classes.loadingPlaceholder,
-                        }}
+                        classes={classes}
+                        isFixedIframeSize={false}
                     />
                 </div>
             </CollectibleTab>

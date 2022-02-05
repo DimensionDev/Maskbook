@@ -74,7 +74,7 @@ export default function Plugins() {
     useEffect(
         () =>
             Messages.events.pluginMinimalModeChanged.on(([id, newValue]) =>
-                setPluginStatus({ ...pluginStatus, [id]: newValue }),
+                setPluginStatus({ ...pluginStatus, [id]: !newValue }),
             ),
         [pluginStatus],
     )
@@ -198,6 +198,8 @@ export default function Plugins() {
 
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
+    const { openDialog: openEssayDialog } = useRemoteControlledDialog(PluginMessages.Pets.events.essayDialogUpdated)
+
     async function onSwitch(id: string, checked: boolean) {
         await Services.Settings.setPluginMinimalModeEnabled(id, !checked)
         setPluginStatus({ ...pluginStatus, [id]: checked })
@@ -226,7 +228,7 @@ export default function Plugins() {
     useEffect(() => {
         Object.values(PluginId).forEach(async (id) => {
             const enabled = await Services.Settings.getPluginMinimalModeEnabled(id)
-            setPluginStatus((status) => ({ ...status, [id]: enabled }))
+            setPluginStatus((status) => ({ ...status, [id]: !enabled }))
         })
     }, [])
 
@@ -234,13 +236,14 @@ export default function Plugins() {
         const search = new URLSearchParams(location.search)
         const open = search.get('open')
         const code = search.get('code')
-
         if (open === 'Transak') {
             openTransakDialog(code ?? '')
         } else if (open === 'Swap') {
             openSwapDialog()
+        } else if (open === 'Pets') {
+            openEssayDialog()
         }
-    }, [location.search, openTransakDialog, openSwapDialog])
+    }, [location.search, openTransakDialog, openSwapDialog, openEssayDialog])
 
     return (
         <PageFrame title={t.labs()} primaryAction={<WalletStateBar />}>

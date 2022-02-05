@@ -8,10 +8,12 @@ import {
     formatGweiToEther,
     formatGweiToWei,
     isSameAddress,
+    NetworkType,
     useChainId,
     useFungibleTokenBalance,
     useGasLimit,
     useNativeTokenDetailed,
+    useNetworkType,
     useTokenTransferCallback,
     useWallet,
 } from '@masknet/web3-shared-evm'
@@ -180,6 +182,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     const wallet = useWallet()
 
     const chainId = useChainId()
+    const network = useNetworkType()
     const history = useHistory()
 
     const [minGasLimitContext, setMinGasLimitContext] = useState(0)
@@ -284,26 +287,37 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
 
     const [address, amount, maxFeePerGas] = methods.watch(['address', 'amount', 'maxFeePerGas'])
 
-    //#region resolve ENS domain
+    // #region resolve ENS domain
     const {
         value: registeredAddress = '',
         error: resolveDomainError,
         loading: resolveDomainLoading,
     } = useLookupAddress(address, NetworkPluginID.PLUGIN_EVM)
+    // #endregion
 
-    useUpdateEffect(() => {
+    // #region check address or registered address type
+    useAsync(async () => {
+        // Only ethereum currently supports ens
+        if (address.includes('.eth') && network !== NetworkType.Ethereum) {
+            setAddressTip({
+                type: TransferAddressError.NETWORK_NOT_SUPPORT,
+                message: t('wallet_transfer_error_no_support_ens'),
+            })
+            return
+        }
+
         // The input is ens domain but the binding address cannot be found
-        if (Utils?.isValidDomain?.(address) && (resolveDomainError || !registeredAddress))
+        if (Utils?.isValidDomain?.(address) && (resolveDomainError || !registeredAddress)) {
             setAddressTip({
                 type: TransferAddressError.RESOLVE_FAILED,
                 message: t('wallet_transfer_error_no_address_has_been_set_name'),
             })
-    }, [resolveDomainError, registeredAddress, methods.setError, address, Utils])
-    //#endregion
+            return
+        }
 
-    //#region check address or registered address type
-    useAsync(async () => {
+        // clear error tip
         setAddressTip(null)
+
         if (!address && !registeredAddress) return
         if (!EthereumAddress.isValid(address) && !EthereumAddress.isValid(registeredAddress)) return
         methods.clearErrors('address')
@@ -324,17 +338,25 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 message: t('wallet_transfer_error_is_contract_address'),
             })
         }
-    }, [address, EthereumAddress.isValid, registeredAddress, methods.clearErrors, wallet?.address, registeredAddress])
-    //#endregion
+    }, [
+        address,
+        EthereumAddress.isValid,
+        registeredAddress,
+        methods.clearErrors,
+        wallet?.address,
+        resolveDomainError,
+        Utils,
+    ])
+    // #endregion
 
-    //#region Get min gas limit with amount and recipient address
+    // #region Get min gas limit with amount and recipient address
     const { value: minGasLimit } = useGasLimit(
         selectedAsset?.token.type,
         selectedAsset?.token.address,
         rightShift(amount ?? 0, selectedAsset?.token.decimals).toFixed(),
         EthereumAddress.isValid(address) ? address : registeredAddress,
     )
-    //#endregion
+    // #endregion
 
     const { value: tokenBalance = '0' } = useFungibleTokenBalance(
         selectedAsset?.token?.type ?? EthereumTokenType.Native,
@@ -348,22 +370,22 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         return formatBalance(amount_.toFixed(), selectedAsset?.token.decimals)
     }, [selectedAsset, maxFeePerGas, minGasLimit, tokenBalance])
 
-    //#region set default gasLimit
+    // #region set default gasLimit
     useUpdateEffect(() => {
         if (!minGasLimit) return
         methods.setValue('gasLimit', minGasLimit.toString())
         setMinGasLimitContext(minGasLimit)
     }, [minGasLimit, methods.setValue])
-    //#endregion
+    // #endregion
 
-    //#region set default Max priority gas fee and max fee
+    // #region set default Max priority gas fee and max fee
     useUpdateEffect(() => {
         if (!estimateGasFees) return
         const { medium } = estimateGasFees
         methods.setValue('maxFeePerGas', new BigNumber(medium?.suggestedMaxFeePerGas ?? 0).toString())
         methods.setValue('maxPriorityFeePerGas', new BigNumber(medium?.suggestedMaxPriorityFeePerGas ?? 0).toString())
     }, [estimateGasFees, methods.setValue])
-    //#endregion
+    // #endregion
 
     const [_, transferCallback] = useTokenTransferCallback(
         selectedAsset?.token.type ?? EthereumTokenType.Native,
@@ -378,19 +400,19 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         async (data: zod.infer<typeof schema>) => {
             const transferAmount = rightShift(data.amount || '0', selectedAsset?.token.decimals).toFixed()
 
-            //If input address is ens domain, use registeredAddress to transfer
+            // If input address is ens domain, use registeredAddress to transfer
             if (Utils?.isValidDomain?.(data.address)) {
                 await transferCallback(transferAmount, registeredAddress, {
-                    maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toString()),
-                    maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toString()),
+                    maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
+                    maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
                     gas: new BigNumber(data.gasLimit).toNumber(),
                 })
                 return
             }
 
             await transferCallback(transferAmount, data.address, {
-                maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toString()),
-                maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toString()),
+                maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
+                maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
                 gas: new BigNumber(data.gasLimit).toNumber(),
             })
         },
