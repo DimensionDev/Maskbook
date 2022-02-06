@@ -1,10 +1,10 @@
-<!-- markdownlint-disable first-line-heading -->
 <!-- cspell:disable -->
+<!-- markdownlint-disable no-inline-html first-line-heading -->
 <a href="https://mask.io">
   <img src="https://dimensiondev.github.io/Mask-VI/assets/Logo/MB--Logo--Geo--ForceCircle--Blue.svg"
        width="200" height="200" title="([I:b])" alt="([I:b])">
 </a>
-<!-- markdownlint-enable first-line-heading -->
+<!-- markdownlint-enable no-inline-html first-line-heading -->
 
 # Mask Network
 
