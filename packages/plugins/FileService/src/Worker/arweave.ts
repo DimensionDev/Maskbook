@@ -2,11 +2,12 @@ import { Attachment } from '@dimensiondev/common-protocols'
 import { encodeText } from '@dimensiondev/kit'
 import Arweave from 'arweave/web'
 import type Transaction from 'arweave/web/lib/transaction'
+import type { JWKInterface } from 'arweave/web/lib/wallet'
 import { isEmpty } from 'lodash-unified'
 import { landing, mesonPrefix } from '../constants'
 import { sign } from './remote-signing'
 import TOKEN from './arweave-token.json'
-import type { ProviderAgent, JWKInterface, LandingPageMetadata, AttachmentOptions } from '../types'
+import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types'
 import { makeFileKeySigned } from '../helpers'
 
 class ArweaveAgent implements ProviderAgent {

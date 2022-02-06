@@ -48,18 +48,3 @@ export interface FileInfo {
 export type FileInfoV1 = Omit<FileInfo, 'type' | 'provider'> & {
     type: 'arweave'
 }
-
-export interface JWKPublicInterface {
-    kty: string
-    e: string
-    n: string
-}
-
-export interface JWKInterface extends JWKPublicInterface {
-    d?: string
-    p?: string
-    q?: string
-    dp?: string
-    dq?: string
-    qi?: string
-}
