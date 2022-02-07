@@ -13,6 +13,7 @@ export const DEFAULT_SUPPORTED_TWITTER_IDS = [
     'sharkdao',
     'CrayonFinance',
     'merge_dao',
+    /* cspell:disable-next-line */
     'DAOTaiFung',
     'Tile_DAO',
     /* cspell:disable-next-line */
