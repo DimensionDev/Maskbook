@@ -11,6 +11,7 @@ import type {
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
 import type { Subscription } from 'use-subscription'
+import type { PostInfo } from './PostContext'
 
 export declare namespace Plugin {
     /**
@@ -237,6 +238,8 @@ export namespace Plugin.SNSAdaptor {
     export interface Definition extends Shared.DefinitionDeferred<SNSAdaptorContext> {
         /** This UI will be rendered for each post found. */
         PostInspector?: InjectUI<{}>
+        /** This UI will be rendered for action of each post found. */
+        PostActions?: InjectUI<{}>
         /** This UI will be rendered for each decrypted post. */
         DecryptedInspector?: InjectUI<{ message: TypedMessage }>
         /** This UI will be rendered under the Search of the SNS. */
@@ -705,6 +708,7 @@ export enum PluginId {
     Poll = 'com.maskbook.poll',
     Profile = 'com.mask.profile',
     Trader = 'com.maskbook.trader',
+    Tip = 'com.maskbook.tip',
     Transak = 'com.maskbook.transak',
     Valuables = 'com.maskbook.tweet',
     DAO = 'money.juicebox',

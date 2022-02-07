@@ -25,6 +25,7 @@ import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/
 import { injectMaskUserBadgeAtTwitter } from './injection/MaskIcon'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector'
+import { injectPostActionsAtTwitter } from './injection/PostActions'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { unreachable } from '@dimensiondev/kit'
 import { makeStyles } from '@masknet/theme'
@@ -156,6 +157,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         enhancedPostRenderer: injectPostReplacerAtTwitter,
         pageInspector: injectPageInspectorDefault(),
         postInspector: injectPostInspectorAtTwitter,
+        postActions: injectPostActionsAtTwitter,
         setupPrompt: injectSetupPromptAtTwitter,
         newPostComposition: {
             start: injectPostBoxComposed,

@@ -1,3 +1,4 @@
+export * from './Currency'
 export * from './FileService'
 export * from './Markets'
 export * from './SwapService'

@@ -10,3 +10,8 @@ export async function fetchJSON<T = unknown>(requestInfo: RequestInfo, requestIn
     const res = await globalThis.fetch(requestInfo, requestInit)
     return res.json()
 }
+
+const CORS_PROXY = 'https://cors.r2d2.to'
+export function courier(url: string) {
+    return [CORS_PROXY, url].join('?')
+}

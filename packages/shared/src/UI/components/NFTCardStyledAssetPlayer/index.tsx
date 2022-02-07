@@ -26,8 +26,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface NFTLuckyDropStyledAssetPlayerProps
-    extends withClasses<'loadingFailImage' | 'iframe' | 'wrapper' | 'loadingPlaceholder'> {
+interface Props extends withClasses<'loadingFailImage' | 'iframe' | 'wrapper' | 'loadingPlaceholder'> {
     chainId: ChainId
     contractAddress: string
     tokenId: string
@@ -38,7 +37,7 @@ interface NFTLuckyDropStyledAssetPlayerProps
     setERC721TokenName?: (name: string) => void
     setSourceType?: (type: string) => void
 }
-export function NFTCardStyledAssetPlayer(props: NFTLuckyDropStyledAssetPlayerProps) {
+export function NFTCardStyledAssetPlayer(props: Props) {
     const {
         chainId,
         contractAddress,

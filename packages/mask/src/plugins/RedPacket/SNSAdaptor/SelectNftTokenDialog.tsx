@@ -301,7 +301,7 @@ export interface SelectNftTokenDialogProps extends withClasses<never> {
     open: boolean
     loadingOwnerList: boolean
     onClose: () => void
-    contract: ERC721ContractDetailed | undefined
+    contract: ERC721ContractDetailed | null | undefined
     existTokenDetailedList: OrderedERC721Token[]
     tokenDetailedOwnerList: OrderedERC721Token[]
     setExistTokenDetailedList: React.Dispatch<React.SetStateAction<OrderedERC721Token[]>>
