@@ -1,6 +1,5 @@
-import { Suspense, useMemo } from 'react'
+import { useMemo } from 'react'
 import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
-import { SnackbarContent } from '@mui/material'
 import { base } from '../base'
 import { extractTextFromTypedMessage, parseURL } from '@masknet/shared-base'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
@@ -39,13 +38,11 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
 
     return (
         <MaskPluginWrapper pluginName="MaskBox" publisher={base.publisher}>
-            <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
-                <EthereumChainBoundary chainId={Number.parseInt(chainId, 10)}>
-                    <Context.Provider initialState={{ boxId }}>
-                        <PreviewCard />
-                    </Context.Provider>
-                </EthereumChainBoundary>
-            </Suspense>
+            <EthereumChainBoundary chainId={Number.parseInt(chainId, 10)}>
+                <Context.Provider initialState={{ boxId }}>
+                    <PreviewCard />
+                </Context.Provider>
+            </EthereumChainBoundary>
         </MaskPluginWrapper>
     )
 }

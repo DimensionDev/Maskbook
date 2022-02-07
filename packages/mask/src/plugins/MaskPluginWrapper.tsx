@@ -7,9 +7,10 @@ import { isTwitter } from '../social-network-adaptor/twitter.com/base'
 import { usePersonaConnectStatus } from '../components/DataSource/usePersonaConnectStatus'
 import { useI18N } from '../utils'
 import { Box } from '@mui/system'
-import { Plugin, usePluginI18NField } from '@masknet/plugin-infra'
+import { Plugin, usePluginI18NField, PluginI18NFieldRender } from '@masknet/plugin-infra'
 
 interface PluginWrapperProps extends React.PropsWithChildren<{}> {
+    pluginID?: string
     pluginName: string
     width?: number
     action?: ReactNode
@@ -94,7 +95,11 @@ export default function MaskPluginWrapper(props: PluginWrapperProps) {
                 </Typography>
                 <Link href={publisher.link} underline="none" target="_blank" rel="noopener">
                     <Typography variant="h6" fontSize="1.1rem" fontWeight="400" color={MaskColorVar.textPrimary}>
-                        {publisher.name.fallback}
+                        {props.pluginID ? (
+                            <PluginI18NFieldRender pluginID={props.pluginID} field={publisher.name} />
+                        ) : (
+                            publisher.name.fallback
+                        )}
                     </Typography>
                 </Link>
             </Box>
@@ -128,6 +133,7 @@ export function generatePluginWrapper(plugin: Plugin.Shared.Definition) {
             <MaskPluginWrapper
                 pluginName={t(plugin.ID, plugin.name)}
                 publisher={plugin.publisher}
+                pluginID={plugin.ID}
                 children={props.children}
             />
         )

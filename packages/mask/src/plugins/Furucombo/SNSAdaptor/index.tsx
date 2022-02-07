@@ -1,6 +1,5 @@
-import { Suspense, useMemo } from 'react'
+import { useMemo } from 'react'
 import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
-import { SnackbarContent } from '@mui/material'
 import { base } from '../base'
 import { extractTextFromTypedMessage, parseURL } from '@masknet/shared-base'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
@@ -34,11 +33,9 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
 
     return (
         <MaskPluginWrapper pluginName="Furucombo">
-            <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
-                <EthereumChainBoundary chainId={Number.parseInt(chainId, 10)}>
-                    <FurucomboView category={category} address={address} />
-                </EthereumChainBoundary>
-            </Suspense>
+            <EthereumChainBoundary chainId={Number.parseInt(chainId, 10)}>
+                <FurucomboView category={category} address={address} />
+            </EthereumChainBoundary>
         </MaskPluginWrapper>
     )
 }
