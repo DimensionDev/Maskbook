@@ -185,7 +185,7 @@
             "logoURI": "https://static.debank.com/image/matic_token/logo_url/matic/e5a8a2860ba5cf740a474dcab796dc63.png"
         },
         "faucets": [],
-        "features": [],
+        "features": ["EIP1559"],
         "explorers": [
             {
                 "name": "matic",
@@ -209,7 +209,7 @@
             "decimals": 18
         },
         "faucets": ["https://faucet.matic.network/"],
-        "features": [],
+        "features": ["EIP1559"],
         "explorers": [
             {
                 "name": "matic",

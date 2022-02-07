@@ -1,5 +1,7 @@
 # TypedMessage binary format
 
+<!-- markdownlint-disable no-duplicate-heading -->
+
 ## Design target
 
 - MUST be a binary format.

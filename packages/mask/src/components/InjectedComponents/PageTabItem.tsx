@@ -9,13 +9,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     button: {
         border: `1px solid ${theme.palette.text.primary} !important`,
-        color: theme.palette.text.primary,
+        color: `${theme.palette.text.primary} !important`,
         borderRadius: 9999,
     },
     selected: {
         border: `1px solid ${theme.palette.primary.main} !important`,
-        color: theme.palette.primary.main,
-        borderRadius: 9999,
+        color: `${theme.palette.primary.main} !important`,
     },
 }))
 

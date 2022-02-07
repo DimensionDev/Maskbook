@@ -1,4 +1,4 @@
-import { NetworkPluginID } from '@masknet/plugin-infra'
+import { usePluginIDContext, PluginId, useActivatedPlugin } from '@masknet/plugin-infra'
 import { useCallback, useEffect, useState, useLayoutEffect, useRef } from 'react'
 import { flatten, uniq } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
@@ -33,7 +33,6 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import type { SwappedTokenType } from '../types'
-import { base as ITO_Definition } from '../base'
 
 interface StyleProps {
     shortITOwrapper: boolean
@@ -220,11 +219,12 @@ interface ClaimAllDialogProps {
     open: boolean
 }
 
-const SUPPORTED_CHAIN_ID_LIST = ITO_Definition.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds!
-
 export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { t } = useI18N()
     const { open, onClose } = props
+    const ITO_Definition = useActivatedPlugin(PluginId.ITO, 'any')
+    const pluginId = usePluginIDContext()
+    const chainIdList = ITO_Definition?.enableRequirement.web3?.[pluginId]?.supportedChainIds ?? []
     const DialogRef = useRef<HTMLDivElement>(null)
     const account = useAccount()
     const currentChainId = useChainId()
@@ -234,9 +234,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         retry: retryAirdrop,
     } = useSpaceStationCampaignInfo(account, Flags.nft_airdrop_enabled)
 
-    const [chainId, setChainId] = useState(
-        SUPPORTED_CHAIN_ID_LIST.includes(currentChainId) ? currentChainId : ChainId.Mainnet,
-    )
+    const [chainId, setChainId] = useState(chainIdList.includes(currentChainId) ? currentChainId : ChainId.Mainnet)
     const { value: _swappedTokens, loading: _loading, retry } = useClaimAll(account, chainId)
     const { value: swappedTokensWithDetailed = [], loading: loadingTokenDetailed } = useFungibleTokensDetailed(
         (_swappedTokens ?? []).map((t) => ({
@@ -328,12 +326,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                         <WalletStatusBox />
                     </div>
                     <div className={classes.abstractTabWrapper}>
-                        <NetworkTab
-                            chainId={chainId}
-                            setChainId={setChainId}
-                            classes={classes}
-                            chains={SUPPORTED_CHAIN_ID_LIST}
-                        />
+                        <NetworkTab chainId={chainId} setChainId={setChainId} classes={classes} chains={chainIdList} />
                     </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>
                         {(showNftAirdrop || loadingAirdrop) &&

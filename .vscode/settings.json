@@ -25,9 +25,6 @@
         }
     ],
     "cSpell.words": ["Reificated"],
-    "markdownlint.config": {
-        "no-inline-html": false
-    },
     "files.associations": {
         "**/.env/*": "ini"
     },

@@ -101,6 +101,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         EthereumAddress.isValid(address) ? address : registeredAddress,
     )
     const { gasConfig, onCustomGasSetting, gasLimit, maxFee } = useGasConfig(gasLimit_, 30000)
+
     const gasPrice = gasConfig.gasPrice || defaultGasPrice
 
     useEffect(() => {

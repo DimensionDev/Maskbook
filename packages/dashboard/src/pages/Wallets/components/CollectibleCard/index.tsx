@@ -172,7 +172,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
                                         size="small"
                                         fullWidth
                                         disabled={!isOnCurrentChain}
-                                        onClick={sendable ? onSend : undefined}
+                                        onClick={onSend}
                                         variant="rounded"
                                         style={{ boxShadow: 'none' }}
                                         sx={{ fontWeight: 'bolder', height: '28px' }}>
