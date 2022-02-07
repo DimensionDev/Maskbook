@@ -581,6 +581,7 @@ importers:
       '@types/use-subscription': ^1.0.0
       async-call-rpc: ^6.0.1
       bignumber.js: ^9.0.2
+      react-i18next: ^11.15.3
       react-use: ^17.3.2
       unstated-next: ^1.1.0
       use-subscription: ^1.5.1
@@ -597,6 +598,8 @@ importers:
       react-use: 17.3.2_757a802188413a36d4f24237d13b8e90
       unstated-next: 1.1.0
       use-subscription: 1.5.1_react@18.0.0-rc.0
+    devDependencies:
+      react-i18next: 11.15.3_5f1f718baae1643018ff61bbe4484af0
 
   packages/plugins/DAO:
     specifiers:
@@ -15613,7 +15616,6 @@ packages:
     resolution: {integrity: sha512-KknJ50kTInJ7qIScF3jeaFRpMpE8/lfiTdzf/twXyPBLAGrLRTmkz3AdTnKeh40X8k9L2fdYwEp/42WGXIRGcg==}
     dependencies:
       void-elements: 3.1.0
-    dev: false
 
   /html-tags/3.1.0:
     resolution: {integrity: sha512-1qYz89hW3lFDEazhjW0yVAV87lw8lVkrJocr72XmBkMKsoSVJCQx3W8BXsC7hO2qAt8BoVjYjtAcZ9perqGnNg==}
@@ -20293,7 +20295,6 @@ packages:
       i18next: 21.6.9
       react: 18.0.0-rc.0
       react-dom: 18.0.0-rc.0_react@18.0.0-rc.0
-    dev: false
 
   /react-inspector/5.1.1_react@18.0.0-rc.0:
     resolution: {integrity: sha512-GURDaYzoLbW8pMGXwYPDBIv6nqei4kK7LPRZ9q9HCZF54wqXz/dnylBp/kfE9XmekBhHvLDdcYeyIwSrvtOiWg==}
@@ -23965,7 +23966,6 @@ packages:
   /void-elements/3.1.0:
     resolution: {integrity: sha1-YU9/v42AHwu18GYfWy9XhXUOTwk=}
     engines: {node: '>=0.10.0'}
-    dev: false
 
   /vscode-uri/3.0.3:
     resolution: {integrity: sha512-EcswR2S8bpR7fD0YPeS7r2xXExrScVMxg4MedACaWHEtx9ftCF/qHG1xGkolzTPcEmjTavCQgbVzHUIdTMzFGA==}
