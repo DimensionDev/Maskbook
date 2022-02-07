@@ -79,7 +79,7 @@ export function CollectionView(props: CollectionProps) {
     const { project } = props
     const [isImageLoaded, setIsImageLoaded] = useState(false)
     const [activeStep, setActiveStep] = useState(1)
-    const chainId = useChainId() as number
+    const chainId = useChainId()
 
     const currentSelectedToken = {
         tokenId: buildTokenId(Number(project.projectId), activeStep - 1),
