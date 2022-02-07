@@ -15,10 +15,12 @@ import {
     useDisabledPluginSuggestionFromPost,
     PossiblePluginSuggestionUI,
 } from '../DisabledPluginSuggestion'
+import { generatePluginWrapper } from '../../../plugins/MaskPluginWrapper'
 
 const PluginRenderer = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
     (x) => x.DecryptedInspector,
+    (x) => generatePluginWrapper(x.ID, x.name),
 )
 function PluginRendererWithSuggestion(props: MetadataRendererProps) {
     const a = useDisabledPluginSuggestionFromMeta(props.metadata || new Map())

@@ -7,7 +7,7 @@ import { isTwitter } from '../social-network-adaptor/twitter.com/base'
 import { usePersonaConnectStatus } from '../components/DataSource/usePersonaConnectStatus'
 import { useI18N } from '../utils'
 import { Box } from '@mui/system'
-import type { Plugin } from '@masknet/plugin-infra'
+import { Plugin, I18NStringField, usePluginI18NField } from '@masknet/plugin-infra'
 
 interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     pluginName: string
@@ -119,4 +119,11 @@ export default function MaskPluginWrapper(props: PluginWrapperProps) {
         </div>
     )
     return <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />} children={inner} />
+}
+
+export function generatePluginWrapper(pluginID: string, pluginName: I18NStringField) {
+    return function PluginWrapper(props: React.PropsWithChildren<{}>) {
+        const t = usePluginI18NField()
+        return <MaskPluginWrapper pluginName={t(pluginID, pluginName)} children={props.children} />
+    }
 }
