@@ -23,7 +23,7 @@ import { generatePluginWrapper } from '../../plugins/MaskPluginWrapper'
 const PluginHooksRenderer = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
     (plugin) => plugin.PostInspector,
-    (x) => generatePluginWrapper(x.ID, x.name),
+    generatePluginWrapper,
 )
 
 export interface PostInspectorProps {
