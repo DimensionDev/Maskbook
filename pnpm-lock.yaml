@@ -25808,7 +25808,7 @@ packages:
     dev: true
 
   github.com/ProjectOpenSea/wyvern-js/6f85f1b42f0962d2cc8e97b7e7f680865e3f26c1:
-    resolution: {commit: 6f85f1b42f0962d2cc8e97b7e7f680865e3f26c1, repo: git+ssh://git@github.com/ProjectOpenSea/wyvern-js.git, type: git}
+    resolution: {tarball: https://codeload.github.com/ProjectOpenSea/wyvern-js/tar.gz/6f85f1b42f0962d2cc8e97b7e7f680865e3f26c1}
     name: wyvern-js
     version: 3.2.0
     dependencies:
