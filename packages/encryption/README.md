@@ -6,7 +6,7 @@ This package is designed with OCap and prepared to run under SES.
 
 ## Decryption process
 
-```
+```plain
 raw message (text or image)
 |> Social Network decoding (socialNetworkID)
 |> Standard Decryption

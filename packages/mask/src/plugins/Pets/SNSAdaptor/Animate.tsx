@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { useValueRef } from '@masknet/shared'
 import { useEssay, useDefaultEssay, useCurrentVisitingUser } from '../hooks'
 import { ModelNFT } from './ModelNFT'
 import { NormalNFT } from './NormalNFT'
 import { ImageType } from '../types'
 import { PluginPetMessages } from '../messages'
+import { petShowSettings } from '../settings'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -17,6 +19,8 @@ const useStyles = makeStyles()(() => ({
 const AnimatePic = () => {
     const classes = useStylesExtends(useStyles(), {})
 
+    const petShow = useValueRef<boolean>(petShowSettings)
+
     const [start, setStart] = useState(true)
     const [refresh, setRefresh] = useState(0)
 
@@ -25,10 +29,9 @@ const AnimatePic = () => {
     const defMeta = useDefaultEssay(visitor)
     const showMeta = visitorMeta ?? defMeta
 
-    const [hidden, setHidden] = useState(false)
     const [infoShow, setInfoShow] = useState(false)
 
-    const handleClose = () => setHidden(true)
+    const handleClose = () => (petShowSettings.value = false)
     const handleMouseEnter = () => setInfoShow(true)
     const handleMouseLeave = () => setInfoShow(false)
 
@@ -46,7 +49,7 @@ const AnimatePic = () => {
             PluginPetMessages.events.setResult.off(refreshHandle)
         }
     }, [])
-    if (!visitor.userId || visitor.userId === '$unknown' || hidden || !showMeta?.image) return null
+    if (!petShow || !visitor.userId || visitor.userId === '$unknown' || !showMeta?.image) return null
     return (
         <div
             className={classes.root}

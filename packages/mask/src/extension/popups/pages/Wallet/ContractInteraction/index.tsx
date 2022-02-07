@@ -11,7 +11,6 @@ import {
     formatWeiToEther,
     getChainIdFromNetworkType,
     isEIP1559Supported,
-    NetworkType,
     useChainId,
     useERC20TokenDetailed,
     useNativeTokenDetailed,
@@ -237,14 +236,14 @@ const ContractInteraction = memo(() => {
 
     // gas price
     const { value: defaultPrices } = useAsync(async () => {
-        if (networkType === NetworkType.Ethereum && !maxFeePerGas && !maxPriorityFeePerGas) {
+        if (isEIP1559Supported(chainId) && !maxFeePerGas && !maxPriorityFeePerGas) {
             const response = await WalletRPC.getEstimateGasFees(chainId)
             // Gwei to wei
             return {
                 maxPriorityFeePerGas: toHex(
-                    formatGweiToWei(response?.medium?.suggestedMaxPriorityFeePerGas ?? 0).toString(),
+                    formatGweiToWei(response?.medium?.suggestedMaxPriorityFeePerGas ?? 0).toFixed(0),
                 ),
-                maxFeePerGas: toHex(formatGweiToWei(response?.medium?.suggestedMaxFeePerGas ?? 0).toString()),
+                maxFeePerGas: toHex(formatGweiToWei(response?.medium?.suggestedMaxFeePerGas ?? 0).toFixed(0)),
             }
         } else if (!gasPrice) {
             const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)

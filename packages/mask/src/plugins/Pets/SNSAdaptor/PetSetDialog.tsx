@@ -1,7 +1,18 @@
 import { useEffect, useState, useMemo, ReactNode } from 'react'
 import { isSameAddress } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends, useCustomSnackbar } from '@masknet/theme'
-import { TextField, Typography, Box, Grid, MenuItem, Snackbar, Autocomplete } from '@mui/material'
+import { useValueRef } from '@masknet/shared'
+import {
+    TextField,
+    Typography,
+    Box,
+    Grid,
+    MenuItem,
+    Snackbar,
+    Autocomplete,
+    FormControlLabel,
+    Checkbox,
+} from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import type { Constant } from '@masknet/web3-shared-evm/constants/utils'
 import { PluginPetMessages, PluginPetRPC } from '../messages'
@@ -12,11 +23,13 @@ import { useUser, useNFTs, useNFTsExtra } from '../hooks'
 import { useI18N } from '../../../utils'
 import { ShadowRootPopper } from '../../../utils/shadow-root/ShadowRootComponents'
 import { ImageLoader } from './ImageLoader'
+import { petShowSettings } from '../settings'
 
 const useStyles = makeStyles()((theme) => ({
     desBox: {
         display: 'flex',
         justifyContent: 'space-between',
+        marginTop: theme.spacing(3),
     },
     des: {
         color: '#7b8192',
@@ -40,7 +53,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
     },
     btn: {
-        margin: theme.spacing(8, 0, 4),
+        margin: theme.spacing(8, 0, 2),
     },
     thumbnail: {
         width: 25,
@@ -89,6 +102,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const classes = useStylesExtends(useStyles(), {})
     const { showSnackbar } = useCustomSnackbar()
     const [loading, setLoading] = useState(false)
+    const checked = useValueRef<boolean>(petShowSettings)
 
     const user = useUser()
     const nfts = useNFTs(user, configNFTs)
@@ -290,7 +304,13 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                         />
                     </Grid>
                 </Grid>
-
+                <FormControlLabel
+                    control={
+                        <Checkbox checked={checked} onChange={(e) => (petShowSettings.value = e.target.checked)} />
+                    }
+                    label={t('plugin_pets_dialog_check_title')}
+                    sx={{ marginTop: '4px' }}
+                />
                 <LoadingButton
                     loading={loading}
                     color="inherit"

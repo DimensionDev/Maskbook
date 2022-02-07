@@ -16,21 +16,15 @@ const querySelectorAll = <T extends E>(selector: string) => {
 // #region "Enhanced Profile"
 export const searchProfileSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-label][role="navigation"]')
-export const searchProfileTabListLastChildSelector: () => LiveSelector<E, true> = () => {
-    const q = querySelector<E>(
-        '[data-testid="primaryColumn"] > div > div >div >div >:nth-child(2)>div>div>:nth-child(2)>div>:nth-child(2)>div>:last-child',
-    )
 
-    if (!q.evaluate()) {
-        return querySelector<E>(
-            '[data-testid="primaryColumn"] > div > :nth-child(2) > div > div > :nth-child(2) >div>:last-child',
-        )
-    }
-    return q
-}
+export const searchProfileTabListLastChildSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-testid="primaryColumn"] [role="navigation"] [data-testid="ScrollSnap-nextButtonWrapper"]')
 
 export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="primaryColumn"] [role="navigation"] ~ div [role="heading"] ~ div[aria-label]')
+    querySelector<E>(
+        '[data-testid="primaryColumn"] [role="navigation"] ~ [aria-labelledby^="accessible-list"] [role="heading"] ~ div[aria-label]',
+    )
+
 export const searchProfileEmptySelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] [data-testid="emptyState"]')
 export const searchProfileActiveTabSelector: () => LiveSelector<E, true> = () =>
@@ -56,7 +50,9 @@ export const searchNewTweetButtonSelector: () => LiveSelector<E, true> = () => {
 export const searchNickNameSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="UserProfileHeader_Items"]')
 export const searchAvatarSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="primaryColumn"] a[role="link"][href$="/photo"] img')
+    querySelector<E>(
+        '[data-testid="primaryColumn"] a[role="link"][href$="/header_photo"] + [class] img[src*="profile_images"]',
+    )
 export const searchAvatarMetaSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('head > meta[property="og:image"]:last-child')
 
@@ -250,3 +246,8 @@ export const searchTweetAvatarSelector = () =>
     querySelector<E, false>('[data-testid="tweetButtonInline"]').closest<E>(7)
 
 export const searchRetweetAvatarSelector = () => querySelector<E, false>('[data-testid="tweetButton"]').closest<E>(6)
+
+export const searchTwitterAvatarNFTSelector = () =>
+    querySelector<E>('a[href*=nft]').closest<E>(1).querySelector('a  div:nth-child(3) > div')
+
+export const searchTwitterAvatarNFTLinkSelector = () => querySelector<E>('a[href*=nft]')

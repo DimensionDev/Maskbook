@@ -8,9 +8,12 @@ export const PLUGIN_NAME = 'DAO'
 export const SUPPORTED_TWITTER_IDS = [
     'ConstitutionDAO',
     'juiceboxETH',
+    'AssangeDAO',
+    'OfficialMoonDAO',
     'TheSpiceDAO',
     /* cspell:disable-next-line */
     'sharkdao',
+    'CrayonFinance',
     'merge_dao',
     /* cspell:disable-next-line */
     'DAOTaiFung',
