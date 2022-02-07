@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base'
-import { PLUGIN_ID, SUPPORTED_TWITTER_IDS } from '../constants'
+import { PLUGIN_ID } from '../constants'
 import { DAOPage } from '../components/DAOPage'
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -17,10 +17,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 },
             },
             Utils: {
-                shouldDisplay: (identity) => {
+                shouldDisplay: (identity, _addressNames, daoTabTwitterIdList) => {
                     return (
                         !identity?.identifier.isUnknown &&
-                        SUPPORTED_TWITTER_IDS.some((x) => x.toLowerCase() === identity?.identifier.userId.toLowerCase())
+                        (daoTabTwitterIdList ?? []).some(
+                            (x) => x.toLowerCase() === identity?.identifier.userId.toLowerCase(),
+                        )
                     )
                 },
             },
