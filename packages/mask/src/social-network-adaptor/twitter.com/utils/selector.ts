@@ -18,7 +18,9 @@ export const searchProfileSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-label][role="navigation"]')
 
 export const searchProfileTabListLastChildSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="primaryColumn"] [role="navigation"] [data-testid="ScrollSnap-nextButtonWrapper"]')
+    querySelector<E>(
+        '[data-testid="primaryColumn"] div + [role="navigation"][aria-label] [data-testid="ScrollSnap-nextButtonWrapper"]',
+    )
 
 export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
