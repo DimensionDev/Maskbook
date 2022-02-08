@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react'
-import { makeStyles } from '@masknet/theme'
-import Avatar from 'boring-avatars'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { PluginCyberConnectRPC } from '../messages'
 import { Skeleton } from '@mui/material'
-import { useWeb3 } from '@masknet/web3-shared-evm'
-import { getAssetAsBlobURL } from '../../../utils'
+import { useWeb3, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import Avatar from 'boring-avatars'
 import ConnectButton from './ConnectButton'
 import FollowTab from './FollowTab'
-import { formateEthereumAddress } from '../utils/helper'
+import { useAsyncRetry } from 'react-use'
 const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
@@ -17,12 +16,18 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
     },
     avatar: {
-        width: '350px',
-        height: '350px',
+        width: '300px',
+        height: '300px',
         borderRadius: '10px',
         overflow: 'hidden',
         svg: {
             borderRadius: '4px',
+        },
+        transition: 'all .3s ease',
+        '&:hover': {
+            borderRadius: '40px',
+            transform: 'rotate(-5deg)',
+            boxShadow: '0 40px 80px rgba(0, 0, 0, 0.5)',
         },
     },
     userName: {
@@ -50,66 +55,41 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: '15px',
         cursor: 'pointer',
     },
+    author: {
+        fill: MaskColorVar.secondaryBackground,
+        cursor: 'pointer',
+    },
 }))
 const Profile = ({ url }: { url: string }) => {
     const { classes } = useStyles()
     const [, , , , queryAddress] = url.split('/')
-    const [identity, setIdentity] = useState<any>(null)
-    const [ensAvatar, setEnsAvatar] = useState<string>('')
     const web3 = useWeb3()
+    const [ethAddress, setEthAddress] = useState('')
+    const { value: identity } = useAsyncRetry(async () => {
+        const res = await PluginCyberConnectRPC.fetchIdentity(queryAddress)
+        return res.data.identity
+    }, [queryAddress])
 
-    const [ethAddress, setEthAddress] = useState<string>('')
-    const SocialMedia = [
-        {
-            name: 'opensea',
-            icon: getAssetAsBlobURL(new URL('../assets/Opensea.png', import.meta.url)),
-            link: 'https://opensea.io/',
-        },
-        {
-            name: 'rarible',
-            icon: getAssetAsBlobURL(new URL('../assets/Rarible.png', import.meta.url)),
-            link: 'https://rarible.com/user/',
-        },
-        {
-            name: 'foundation',
-            icon: getAssetAsBlobURL(new URL('../assets/Foundation.png', import.meta.url)),
-            link: 'https://foundation.app/',
-        },
-        {
-            name: 'context',
-            icon: getAssetAsBlobURL(new URL('../assets/Context.png', import.meta.url)),
-            link: 'https://context.app/',
-        },
-    ]
     useEffect(() => {
         if (queryAddress.endsWith('.eth')) {
             web3.eth.ens.getAddress(queryAddress).then((res) => {
                 setEthAddress(res)
             })
-            // web3.eth.ens.getText('avatar').then((res)=>{
-            //     console.log(res);
-            // })
         } else {
             setEthAddress(queryAddress)
         }
-    }, [queryAddress])
-    useEffect(() => {
-        ;(async function () {
-            const res = await PluginCyberConnectRPC.fetchIdentity(queryAddress)
-            setIdentity(res.data.identity)
-        })()
     }, [queryAddress])
 
     return (
         <div className={classes.root}>
             <div className={classes.avatar}>
                 {identity?.avatar ? (
-                    <img src={identity.avatar} alt="" width={350} height={350} />
+                    <img src={identity.avatar} alt="" width={300} height={300} />
                 ) : (
-                    <Avatar name={queryAddress} square size={350} />
+                    <Avatar name={queryAddress} square size={300} />
                 )}
             </div>
-            <div className={classes.userName}>{formateEthereumAddress(queryAddress, 14)}</div>
+            <div className={classes.userName}>{formatEthereumAddress(queryAddress, 14)}</div>
 
             {!identity ? (
                 <Skeleton width={400} height={40} />
@@ -117,32 +97,8 @@ const Profile = ({ url }: { url: string }) => {
                 <div className={classes.address}>{identity.address}</div>
             )}
 
-            <div className={classes.socialMedia}>
-                {ethAddress ? (
-                    SocialMedia.map((s) => {
-                        return (
-                            <img
-                                key={s.name}
-                                className={classes.icon}
-                                src={s.icon}
-                                alt="social media"
-                                onClick={() => {
-                                    window.open(s.link + ethAddress)
-                                }}
-                            />
-                        )
-                    })
-                ) : (
-                    <Skeleton width={400} height={40} />
-                )}
-            </div>
+            {ethAddress ? <ConnectButton address={ethAddress} /> : <Skeleton width={400} height={68} />}
 
-            {/* {!identity ? (
-                <Skeleton width={400} height={100} />
-            ) : (
-                <RelationShip followingCount={identity.followingCount} followerCount={identity.followerCount} />
-            )} */}
-            {ethAddress ? <ConnectButton address={ethAddress} /> : <Skeleton width={400} height={40} />}
             {!identity ? (
                 <Skeleton width={400} height={100} />
             ) : (

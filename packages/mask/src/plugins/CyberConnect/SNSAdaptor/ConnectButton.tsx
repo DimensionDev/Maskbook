@@ -1,7 +1,6 @@
-import { getAssetAsBlobURL } from '../../../utils'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { useWeb3, useAccount } from '@masknet/web3-shared-evm'
+import { useWeb3, useAccount, isSameAddress } from '@masknet/web3-shared-evm'
 import CyberConnect, { Env } from '@cyberlab/cyberconnect'
 import { PluginCyberConnectRPC } from '../messages'
 import classname from 'classnames'
@@ -12,11 +11,10 @@ const useStyles = makeStyles()((theme) => ({
         width: '350px',
         display: 'flex',
         alignItems: 'center',
-        // justifyContent: 'center',
         background: '#000',
         fontSize: '20px',
         color: '#fff',
-        marginTop: '40px',
+        marginTop: '30px',
         borderRadius: '4px',
         padding: '20px 20px 20px 30px',
         transition: 'all .3s ease',
@@ -89,13 +87,12 @@ export default function ConnectButton({ address }: { address: string }) {
     const { classes } = useStyles()
     const web3 = useWeb3()
     const myAddress = useAccount()
-    const [cc, setCc] = useState<any>(null)
-    const [isFollowing, setIsFollowing] = useState<boolean>(false)
-    const [isLoading, setIsLoading] = useState<boolean>(false)
-    const logoIcon = getAssetAsBlobURL(new URL('../assets/logo-white.svg', import.meta.url))
+    const [cc, setCc] = useState<CyberConnect | null>(null)
+    const [isFollowing, setIsFollowing] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
     useAsync(async () => {
-        if (!(address && myAddress !== address)) return
+        if (!address && isSameAddress(myAddress, address)) return
         const res = await PluginCyberConnectRPC.fetchFollowStatus(myAddress, address)
         setIsFollowing(res.data.followStatus.isFollowing)
     }, [address])
@@ -110,27 +107,26 @@ export default function ConnectButton({ address }: { address: string }) {
         setCc(ccInstance)
     }, [web3])
 
-    const follow = () => {
+    const follow = useCallback(() => {
         setIsLoading(true)
-        cc?.connect(address)
-            .then((res: any) => {
-                setIsFollowing(false)
-            })
-            .catch((error: any) => {
-                setIsLoading(false)
-            })
-    }
+        if (cc) {
+            cc.connect(address)
+                .then(() => {
+                    setIsFollowing(true)
+                })
+                .finally(() => {
+                    setIsLoading(false)
+                })
+        }
+    }, [cc])
 
-    return myAddress && myAddress.toLowerCase() !== address.toLowerCase() ? (
+    return myAddress && !isSameAddress(myAddress, address) ? (
         <div
             className={classname(classes.button, {
                 [classes.isFollowing]: isFollowing,
             })}
             onClick={() => {
-                if (!isFollowing) {
-                    follow()
-                } else {
-                }
+                if (!isFollowing) follow()
             }}>
             {!isLoading ? (
                 <>

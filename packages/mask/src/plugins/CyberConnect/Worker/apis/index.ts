@@ -1,4 +1,32 @@
-async function query(data: any) {
+export interface IQuery {
+    query: string
+    variables: Record<string, string | number>
+}
+
+export interface IFollowIdentity {
+    address: string
+    ens: string
+    namespace: string
+}
+export interface IIdentity {
+    address: string
+    avatar: string
+    domain: string
+    ens: string
+    followerCount: number
+    followingCount: number
+    followers: {
+        list: IFollowIdentity[]
+    }
+    followings: {
+        list: IFollowIdentity[]
+    }
+}
+export interface IFollowStatus {
+    isFollowing: boolean
+    isFollowed: boolean
+}
+async function query(data: IQuery) {
     const endpiont =
         process.env.NODE_ENV === 'production'
             ? 'https://api.cybertino.io/connect/'
@@ -15,7 +43,7 @@ async function query(data: any) {
     })
     return res.json()
 }
-export async function fetchIdentity(address: string) {
+export async function fetchIdentity(address: string): Promise<{ data: { identity: IIdentity } }> {
     const data = {
         query: `query Identity($address: String!, $first: Int, $after: String) {
         identity(address: $address) {
@@ -29,7 +57,6 @@ export async function fetchIdentity(address: string) {
                 list {
                     address
                     ens
-                    alias
                     namespace
                 }
             }
@@ -37,7 +64,6 @@ export async function fetchIdentity(address: string) {
                 list {
                     address
                     ens
-                    alias
                     namespace
                 }
             }
@@ -52,7 +78,10 @@ export async function fetchIdentity(address: string) {
     const res = await query(data)
     return res
 }
-export async function fetchFollowStatus(fromAddr: string, toAddr: string) {
+export async function fetchFollowStatus(
+    fromAddr: string,
+    toAddr: string,
+): Promise<{ data: { followStatus: IFollowStatus } }> {
     const data = {
         query: `query FollowStatus(
             $fromAddr: String!
