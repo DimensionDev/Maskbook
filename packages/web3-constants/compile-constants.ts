@@ -48,6 +48,7 @@ async function getTokenNames(): Promise<string[]> {
 
 compileConstants(path.join(__dirname, 'evm'))
 
+// cspell:disable-next-line
 compileConstants(path.join(__dirname, 'solana'), ['Mainnet', 'Testnet', 'Devnet'])
 
 compileConstants(path.join(__dirname, 'flow'), ['Mainnet', 'Testnet'])

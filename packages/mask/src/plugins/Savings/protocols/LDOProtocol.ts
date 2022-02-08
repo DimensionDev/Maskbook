@@ -13,6 +13,8 @@ import LidoABI from '@masknet/web3-contracts/abis/Lido.json'
 import BigNumber from 'bignumber.js'
 import { ProtocolCategory, SavingsNetwork, SavingsProtocol, ProtocolType } from '../types'
 
+// cspell:ignore STETH
+
 export interface LidoContract {
     type: EthereumTokenType
     chainName: string

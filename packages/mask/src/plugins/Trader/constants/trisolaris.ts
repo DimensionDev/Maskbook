@@ -1,3 +1,4 @@
+// cspell:disable
 import { ChainId } from '@masknet/web3-shared-evm'
 import { DAI, MSKA, MSKB, MSKC, USDC, USDT, WBTC, WNATIVE, WNATIVE_ONLY } from './trader'
 import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'

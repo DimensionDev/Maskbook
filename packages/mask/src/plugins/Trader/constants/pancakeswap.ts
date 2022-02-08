@@ -1,3 +1,4 @@
+// cspell:ignore btcb wnative
 import { ChainId } from '@masknet/web3-shared-evm'
 import { BTCB, BUSD, DAI, ETHER, UST, WNATIVE, WNATIVE_ONLY } from './trader'
 import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'

@@ -5,6 +5,8 @@ import { useTokenConstants } from '../constants'
 import { useContract } from '../hooks/useContract'
 import type { ChainId } from '../types'
 
+// cspell:ignore wnative
+
 export function useNativeTokenWrapperContract(chainId?: ChainId) {
     const { WNATIVE_ADDRESS } = useTokenConstants(chainId)
     return useContract<WETH>(WNATIVE_ADDRESS, WETH_ABI as AbiItem[])

@@ -5,6 +5,8 @@ import { terser } from 'rollup-plugin-terser'
 import json from '@rollup/plugin-json'
 import { join } from 'path'
 
+// cspell:ignore iife
+
 export default [
     {
         input: join(__dirname, './ecmascript/index.ts'),

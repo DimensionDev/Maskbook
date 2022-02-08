@@ -1,14 +1,10 @@
 {
     "$schema": "https://github.com/streetsidesoftware/cspell/raw/main/cspell.schema.json",
-    "dictionaries": ["typescript", "node", "html", "css", "fonts", "web3-tokens", "trader-tokens"],
+    "dictionaries": ["typescript", "node", "html", "css", "fonts", "web3-tokens"],
     "dictionaryDefinitions": [
         {
             "name": "web3-tokens",
             "path": "packages/web3-constants/tokens.txt"
-        },
-        {
-            "name": "trader-tokens",
-            "path": "packages/mask/src/plugins/Trader/constants/tokens.txt"
         }
     ],
     "useGitignore": true,
@@ -16,24 +12,25 @@
         "useCache": true
     },
     "ignorePaths": [
+        "!locales/en-us.json",
         ".*ignore",
+        ".eslintrc.json",
         ".github",
         ".lintstagedrc.mjs",
         ".prettierignore",
+        "*.d.ts",
+        "*.html",
+        "*.json",
         "*.snap",
-        "**/.eslintrc.json",
-        "**/*.d.ts",
-        "**/*.html",
-        "**/*.json",
-        "**/dist/**",
-        "**/node_modules/**",
-        "**/package.json",
-        "**/pnpm-lock.yaml",
-        "**/qya-aa.json",
         "*generated*",
+        "dist",
+        "locales/*.json",
+        "node_modules",
+        "package.json",
         "packages/mask/src/plugins/ito/assets/regions.json",
         "packages/mask/src/resources",
         "packages/web3-contracts/{abis,types}",
+        "packages/web3-shared/evm/assets/**/*.json",
         "patches/**",
         "pnpm-lock.yaml"
     ],
@@ -82,6 +79,7 @@
         "multicall",
         "multihop",
         "newsfeed",
+        "nft",
         "nftscan",
         "opensea",
         "overridable",
@@ -114,22 +112,7 @@
         "webextension",
         "zerion"
     ],
-    "ignoreWords": [
-        "avator",
-        "blocto",
-        "chainid",
-        "defi",
-        "devnet",
-        "ethjs",
-        "hookform",
-        "iife",
-        "locationchange",
-        "nft",
-        "onflow",
-        "usei18n",
-        "wmatic",
-        "wnative"
-    ],
+    "ignoreWords": ["hookform", "locationchange", "onflow", "usei18n"],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [
         {
@@ -141,40 +124,56 @@
             "ignoreWords": ["algr", "steganographic", "stego"]
         },
         {
-            "filename": "packages/web3-shared/evm/assets/**/*.json",
-            "ignoreWords": ["görli"]
-        },
-        {
-            "filename": "packages/web3-providers",
-            "ignoreWords": ["poap", "unstake"]
-        },
-        {
             "filename": "packages/mask/{src,background}/database",
             "ignoreWords": ["idbp"]
         },
         {
-            "filename": "packages/mask/src/plugins/RedPacket",
-            "ignoreWords": ["ifclaimed", "nftred", "redpacket", "rpid", "txid"]
+            "filename": "packages/mask/src/plugins/Collectible",
+            "ignoreWords": ["enjin", "unreviewed"]
         },
         {
-            "filename": "packages/mask/src/plugins/UnlockProtocol",
-            "ignoreWords": ["unlocklock", "unlockprotocol"]
+            "filename": "packages/mask/src/plugins/CryptoartAI",
+            "ignoreWords": ["avator", "cryptoart", "cryptoartai", "wnative"]
         },
         {
-            "filename": "packages/mask/src/plugins/Wallet",
-            "ignoreWords": ["cipherparams", "ciphertext", "dklen", "kdfparams", "metaswap", "redpacket", "unstake"]
+            "filename": "packages/mask/src/plugins/dHEDGE",
+            "ignoreWords": ["dhedge"]
         },
         {
             "filename": "packages/mask/src/plugins/FindTruman",
             "ignoreWords": ["consts", "findtruman", "poap", "poaps", "rawdata"]
         },
         {
+            "filename": "packages/mask/src/plugins/Furucombo",
+            "ignoreWords": ["furucombo", "wmatic"]
+        },
+        {
             "filename": "packages/mask/src/plugins/GoodGhosting",
-            "ignoreWords": ["datas"]
+            "ignoreWords": ["datas", "wnative"]
         },
         {
             "filename": "packages/mask/src/plugins/ITO",
-            "ignoreWords": ["addrs", "amountstate", "gamification", "pids", "powahs"]
+            "ignoreWords": ["addrs", "amountstate", "defi", "gamification", "pids", "powahs"]
+        },
+        {
+            "filename": ["packages/plugins/Flow", "packages/web3-shared/flow"],
+            "ignoreWords": ["blocto"]
+        },
+        {
+            "filename": "packages/mask/src/plugins/MaskBox",
+            "ignoreWords": ["drawed"]
+        },
+        {
+            "filename": "packages/mask/src/plugins/PoolTogether",
+            "ignoreWords": ["pooltogether", "timelock"]
+        },
+        {
+            "filename": "packages/mask/src/plugins/RedPacket",
+            "ignoreWords": ["ifclaimed", "nftred", "redpacket", "rpid", "txid"]
+        },
+        {
+            "filename": "packages/mask/src/plugins/Snapshot",
+            "ignoreWords": ["millify"]
         },
         {
             "filename": "packages/mask/src/plugins/Trader",
@@ -190,52 +189,37 @@
                 "sushiswap",
                 "traderjoe",
                 "trisolaris",
-                "wannaswap"
+                "wannaswap",
+                "wnative"
             ]
         },
         {
-            "filename": "packages/mask/src/plugins/PoolTogether",
-            "ignoreWords": ["pooltogether", "timelock"]
-        },
-        {
-            "filename": "packages/mask/src/plugins/Furucombo",
-            "ignoreWords": ["furucombo"]
-        },
-        {
-            "filename": "packages/mask/src/plugins/dHEDGE",
-            "ignoreWords": ["dhedge"]
-        },
-        {
-            "filename": "packages/mask/src/plugins/Collectible",
-            "ignoreWords": ["enjin", "unreviewed"]
-        },
-        {
-            "filename": "packages/mask/src/plugins/MaskBox",
-            "ignoreWords": ["drawed"]
+            "filename": "packages/mask/src/plugins/UnlockProtocol",
+            "ignoreWords": ["chainid", "unlocklock", "unlockprotocol"]
         },
         {
             "filename": "packages/mask/src/plugins/VCent",
             "ignoreWords": ["vcent"]
         },
         {
+            "filename": "packages/mask/src/plugins/Wallet",
+            "ignoreWords": ["cipherparams", "ciphertext", "dklen", "kdfparams", "metaswap", "redpacket", "unstake"]
+        },
+        {
             "filename": "packages/plugins/FileService",
             "ignoreWords": ["arweave", "fileservice", "unencrypted"]
-        },
-        {
-            "filename": "packages/mask/src/plugins/CryptoartAI",
-            "ignoreWords": ["cryptoart", "cryptoartai"]
-        },
-        {
-            "filename": "packages/mask/src/plugins/Snapshot",
-            "ignoreWords": ["millify"]
         },
         {
             "filename": "packages/plugins/RSS3",
             "ignoreWords": ["poap"]
         },
         {
-            "filename": "packages/plugins/Solana",
-            "ignoreWords": ["metaplex"]
+            "filename": ["packages/plugins/Solana", "packages/web3-shared/solana"],
+            "ignoreWords": ["devnet", "metaplex"]
+        },
+        {
+            "filename": "packages/web3-providers",
+            "ignoreWords": ["poap", "unstake"]
         }
     ]
 }

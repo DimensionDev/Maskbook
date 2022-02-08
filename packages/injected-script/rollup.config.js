@@ -1,5 +1,7 @@
 import sucrase from '@rollup/plugin-sucrase'
 
+// cspell:ignore iife
+
 export default {
     input: 'main/index.ts',
     output: {

@@ -1,3 +1,4 @@
+// cspell:ignore ethjs
 import Ens from 'ethjs-ens'
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import {

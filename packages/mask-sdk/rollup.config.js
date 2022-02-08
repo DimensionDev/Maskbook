@@ -1,6 +1,8 @@
 import sucrase from '@rollup/plugin-sucrase'
 import node from '@rollup/plugin-node-resolve'
 
+// cspell:ignore iife
+
 export default {
     input: 'main/index.ts',
     output: {

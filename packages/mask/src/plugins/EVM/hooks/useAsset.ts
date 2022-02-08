@@ -10,6 +10,8 @@ import {
 import { EVM_RPC } from '../messages'
 import { resolveAvatarLinkOnCurrentProvider } from '../../Collectible/pipes'
 
+// cspell:ignore wnative
+
 export function useAsset(address: string, tokenId: string, provider: NonFungibleAssetProvider) {
     const account = useAccount()
     const chainId = useChainId()

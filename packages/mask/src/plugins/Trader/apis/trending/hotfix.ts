@@ -13,7 +13,7 @@ import HASHTAG_KEYWORDS from './hashtag.json'
 import { currentNetworkSettings } from '../../../Wallet/settings'
 import { getEnumAsArray } from '@dimensiondev/kit'
 
-// cspell:ignore hashmasks swaptoken
+// cspell:ignore hashmasks swaptoken nftx
 
 const BLACKLIST_MAP: {
     [key in DataProvider]: {
