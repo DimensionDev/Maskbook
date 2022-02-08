@@ -30,7 +30,7 @@ For general introductions, see [Mask.io](https://mask.io).
 - [Mask Network on Firefox Addon Store][client-firefox] (Works on Firefox for Android too!)
 
 - [Mask Network for iOS][client-ios]
-- (Test Flight!) [Mask Network for iOS TestFlight][client-ios-testflight]
+- (TestFlight!) [Mask Network for iOS TestFlight][client-ios-testflight]
 - (Beta!) [Mask Network for Android][client-android]
 
 ## Useful Links

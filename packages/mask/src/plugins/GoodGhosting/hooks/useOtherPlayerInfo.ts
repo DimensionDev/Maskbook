@@ -8,10 +8,10 @@ import type { GoodGhostingInfo, Player } from '../types'
 export function useOtherPlayerInfo(info: GoodGhostingInfo) {
     const contract = useGoodGhostingContract(info.contractAddress)
 
-    const { addressNames, addressCallDataItems } = useMemo(
+    const { addressNames, addressCallDatas } = useMemo(
         () => ({
             addressNames: Array(info.numberOfPlayers).fill('iterablePlayers'),
-            addressCallDataItems: Array(info.numberOfPlayers)
+            addressCallDatas: Array(info.numberOfPlayers)
                 .fill('')
                 .map((_, i) => [i]),
         }),
@@ -21,7 +21,7 @@ export function useOtherPlayerInfo(info: GoodGhostingInfo) {
     const [addressResults, addressCalls, _, addressCallback] = useSingleContractMultipleData(
         contract,
         addressNames,
-        addressCallDataItems,
+        addressCallDatas,
     )
 
     const {
