@@ -50,7 +50,6 @@ export async function queryPersonaByProfileDB(
     })
 
     if (!x) return null
-
     return personaRecordOutDB(x)
 }
 
@@ -310,13 +309,13 @@ export async function createRelationDB(
 export async function queryRelations(
     personaIdentifier?: PersonaIdentifier,
     profileIdentifier?: ProfileIdentifier,
-    t?: RelationTransaction<'readonly'>
+    t?: RelationTransaction<'readonly'>,
 ): Promise<RelationRecord[]> {
     const results: NativeRelationRecord[] = []
     if (personaIdentifier && profileIdentifier) {
         const relations = await nativeAPI?.api.query_relation({
             personaIdentifier: personaIdentifier.toText(),
-            profileIdentifier: profileIdentifier.toText()
+            profileIdentifier: profileIdentifier.toText(),
         })
         if (relations) {
             results.push(...relations)
