@@ -82,6 +82,7 @@ export const serializer: Serialization = {
         if (!typeson) setup()
         return typeson!.encapsulate(from)
     },
+    // cspell:disable-next-line
     deserialization(to: string) {
         if (!typeson) setup()
         try {
