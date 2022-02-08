@@ -1,7 +1,5 @@
 # External plugins
 
-<!-- cspell:ignore everytime -->
-
 ## Plugin management (TBD)
 
 Priority (highest to lowest):
@@ -16,4 +14,4 @@ Priority (highest to lowest):
 - Permission (only applicable for `Precise`, must grant case-by-case)
 - Auto load unknown plugins (Not applicable for `Publisher`)
 - Auto update plugins periodically
-- Auto update everytime I use it (might cause too many web requests)
+- Auto update every-time I use it (might cause too many web requests)
