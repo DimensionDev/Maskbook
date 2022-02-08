@@ -7,6 +7,10 @@ const querySelector = <T extends E, SingleMode extends boolean = true>(selector:
     return (singleMode ? ls.enableSingleMode() : ls) as LiveSelector<T, SingleMode>
 }
 
+const querySelectorAll = <T extends E>(selector: string) => {
+    return new LiveSelector().querySelectorAll<T>(selector)
+}
+
 export const searchAvatarSelector: () => LiveSelector<E, true> = () => querySelector<E>('[href="/me/"] image')
 
 export const searchNickNameSelector: () => LiveSelector<E, true> = () => querySelector<E>('[href="/me/"] span > span')
@@ -19,7 +23,9 @@ export const bioDescriptionSelector = () =>
 export const searchFacebookAvatarListSelector = () =>
     querySelector('[role="dialog"] input[type=file]').closest(3).querySelector('div')
 
-export const searchFacebookAvatarSelector = () => querySelector('[role="img"]')
+export const searchFacebookAvatarSelector = () => querySelector('[role="button"] [role="img"]')
+
+export const searchFaceBookPostAvatarSelector = () => querySelectorAll('[type="nested/pressable"] svg')
 
 export const searchFacebookAvatarOpenFilesSelector = () => querySelector('[role="dialog"] input[type=file] ~ div')
 
