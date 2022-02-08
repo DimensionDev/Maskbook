@@ -168,6 +168,16 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         iconColor: 'rgb(112, 212, 74)',
         isMainnet: true,
     },
+    {
+        ID: `${PLUGIN_ID}_cronos`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Cronos,
+        type: NetworkType.Cronos,
+        name: 'Aurora',
+        icon: new URL('./assets/cronos.png', import.meta.url),
+        iconColor: 'rgb(6, 18, 34)',
+        isMainnet: true,
+    },
 ]
 export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
     {

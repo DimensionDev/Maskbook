@@ -56,6 +56,8 @@ export async function getAsset(options: AssetOption) {
             return
         case NonFungibleAssetProvider.RARIBLE:
             return Rarible.getAsset(options.address, options.tokenId, { chainId: options.chainId })
+        case NonFungibleAssetProvider.AGORA:
+            return Rarible.getAsset(options.address, options.tokenId, { chainId: options.chainId })
         default:
             unreachable(options.provider)
     }
@@ -74,6 +76,8 @@ export async function getOrders(options: OrderOption) {
             return []
         case NonFungibleAssetProvider.RARIBLE:
             return Rarible.getOrders(address, tokenId, side, { chainId })
+        case NonFungibleAssetProvider.AGORA:
+            return Rarible.getOrders(address, tokenId, side, { chainId })
         default:
             unreachable(provider)
     }
@@ -87,6 +91,8 @@ export async function getListings(options: ListOption) {
         case NonFungibleAssetProvider.NFTSCAN:
             return []
         case NonFungibleAssetProvider.RARIBLE:
+            return Rarible.getListings(address, tokenId, { chainId })
+        case NonFungibleAssetProvider.AGORA:
             return Rarible.getListings(address, tokenId, { chainId })
         default:
             unreachable(provider)
@@ -102,6 +108,8 @@ export async function getHistory(options: HistoryOption) {
             return []
         case NonFungibleAssetProvider.RARIBLE:
             return Rarible.getHistory(address, tokenId)
+        case NonFungibleAssetProvider.AGORA:
+            return Rarible.getHistory(address, tokenId)
         default:
             unreachable(provider)
     }
@@ -115,6 +123,8 @@ export async function getCollections(options: CollectionOption) {
         case NonFungibleAssetProvider.RARIBLE:
             return defaultPageableData
         case NonFungibleAssetProvider.NFTSCAN:
+            return defaultPageableData
+        case NonFungibleAssetProvider.AGORA:
             return defaultPageableData
         default:
             unreachable(provider)

@@ -56,6 +56,7 @@ export const Flags = {
     flow_enabled: true,
     celo_enabled: true,
     aurora_enabled: true,
+    cronos_enabled: true,
     nft_airdrop_enabled: false,
 
     // #region Functionality missing / broken

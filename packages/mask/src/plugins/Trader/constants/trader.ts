@@ -50,6 +50,10 @@ export const CUSD = createERC20Tokens('cUSD_ADDRESS', 'Celo Dollar', 'cUSD', 18)
 export const CEUR = createERC20Tokens('cEUR_ADDRESS', 'Celo Euro', 'cEUR', 18)
 export const JOE = createERC20Tokens('JOE_ADDRESS', 'JoeToken', 'JOE', 18)
 export const PNG = createERC20Tokens('PNG_ADDRESS', 'Pangolin', 'PNG', 18)
+export const VVS = createERC20Tokens('VVS_ADDRESS', 'VVSToken', 'VVS', 18)
+export const SMOL = createERC20Tokens('SMOL_ADDRESS', 'SmolSwap', 'Smol', 18)
+export const MMF = createERC20Tokens('MMF_ADDRESS', 'Mad Meerkat Finance', 'MMF', 18)
+export const CRONA = createERC20Tokens('CRONA_ADDRESS', 'CronaSwap Token', 'CRONA', 18)
 
 export const WNATIVE = createERC20Tokens(
     'WNATIVE_ADDRESS',
@@ -77,6 +81,7 @@ export const WNATIVE_ONLY: ERC20AgainstToken = {
     [ChainId.Fantom]: [WNATIVE[ChainId.Fantom]],
     [ChainId.Aurora]: [WNATIVE[ChainId.Aurora]],
     [ChainId.Aurora_Testnet]: [WNATIVE[ChainId.Aurora_Testnet]],
+    [ChainId.Cronos]: [WNATIVE[ChainId.Cronos]],
 }
 
 export const BIPS_BASE = new BigNumber(10000)

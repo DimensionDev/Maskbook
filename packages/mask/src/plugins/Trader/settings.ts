@@ -55,6 +55,10 @@ const pangolinSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvi
 const openoceanSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+openocean`, '')
 const trisolarisSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+trisolaris`, '')
 const wannaswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+wannaswap`, '')
+const vvsfinanceSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+vvsfinance`, '')
+const smolswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+smolswap`, '')
+const cronaswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+cronaswap`, '')
+const mmfinanceSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+mmfinance`, '')
 
 /**
  * The general settings of specific tarde provider
@@ -91,6 +95,14 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return trisolarisSettings
         case TradeProvider.WANNASWAP:
             return wannaswapSettings
+        case TradeProvider.VVSFINANCE:
+            return vvsfinanceSettings
+        case TradeProvider.SMOLSWAP:
+            return smolswapSettings
+        case TradeProvider.CRONASWAP:
+            return cronaswapSettings
+        case TradeProvider.MMFINANCE:
+            return mmfinanceSettings
         default:
             unreachable(tradeProvider)
     }

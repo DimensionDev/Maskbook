@@ -79,6 +79,9 @@ export enum ChainId {
 
     // Optimistic
     Optimistic = 10,
+
+    // Cronos
+    Cronos = 25,
 }
 
 export enum ProviderType {
@@ -114,6 +117,7 @@ export enum NetworkType {
     Fuse = 'Fuse',
     Metis = 'Metis',
     Optimistic = 'Optimistic',
+    Cronos = 'Cronos',
 }
 
 export interface Wallet {
@@ -582,6 +586,7 @@ export enum NonFungibleAssetProvider {
     OPENSEA = 'OpenSea',
     RARIBLE = 'Rarible',
     NFTSCAN = 'NFTScan',
+    AGORA = 'AGORA',
 }
 
 export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<infer R>

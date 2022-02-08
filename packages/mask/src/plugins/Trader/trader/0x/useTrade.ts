@@ -35,6 +35,7 @@ export function getNativeTokenLabel(networkType: NetworkType) {
         case NetworkType.Metis:
         case NetworkType.Avalanche:
         case NetworkType.Optimistic:
+        case NetworkType.Cronos:
             return NATIVE_TOKEN_ADDRESS
         default:
             safeUnreachable(networkType)

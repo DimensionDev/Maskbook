@@ -15,6 +15,11 @@ const useStyles = makeStyles()({
         height: 16,
         verticalAlign: 'bottom',
     },
+    agora: {
+        width: 16,
+        height: 16,
+        verticalAlign: 'bottom',
+    },
     NFTScan: {
         width: 16,
         height: 16,
@@ -23,6 +28,7 @@ const useStyles = makeStyles()({
 })
 
 const NFTScanIcon = new URL('../../../resources/NFTScanIcon.png', import.meta.url).toString()
+const AgoraIcon = new URL('../../../resources/agoracro.png', import.meta.url).toString()
 
 export interface CollectibleProviderIconProps {
     provider: NonFungibleAssetProvider
@@ -37,6 +43,8 @@ export function CollectibleProviderIcon(props: CollectibleProviderIconProps) {
             return <OpenSeaIcon classes={{ root: classes.opensea }} viewBox="0 0 16 16" />
         case NonFungibleAssetProvider.RARIBLE:
             return <RaribleIcon classes={{ root: classes.rarible }} viewBox="0 0 16 16" />
+        case NonFungibleAssetProvider.AGORA:
+            return <img src={AgoraIcon} className={classes.agora} />
         default:
             unreachable(props.provider)
     }

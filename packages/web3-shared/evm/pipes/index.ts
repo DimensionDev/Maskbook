@@ -96,6 +96,7 @@ export const resolveNetworkAddressPrefix = createLookupTableResolver<NetworkType
         [NetworkType.Celo]: 'celo',
         [NetworkType.Fantom]: 'fantom',
         [NetworkType.Aurora]: 'Aurora',
+        [NetworkType.Cronos]: 'Cronos',
     },
     'ethereum',
 )
@@ -111,6 +112,7 @@ export const resolveNetworkName = createLookupTableResolver<NetworkType, string>
         [NetworkType.Celo]: 'Celo',
         [NetworkType.Fantom]: 'Fantom',
         [NetworkType.Aurora]: 'Aurora',
+        [NetworkType.Cronos]: 'Cronos',
     },
     'Unknown',
 )
@@ -145,6 +147,7 @@ export const resolveChainColor = createLookupTableResolver<ChainId, string>(
         [ChainId.Fantom]: 'rgb(19, 181, 236)',
         [ChainId.Aurora]: 'rgb(112, 212, 74)',
         [ChainId.Aurora_Testnet]: 'rgb(112, 212, 74)',
+        [ChainId.Cronos]: 'rgb(6, 18, 34)',
     },
     'rgb(214, 217, 220)',
 )
@@ -189,6 +192,8 @@ export function resolveCollectibleProviderLink(chainId: ChainId, provider: NonFu
             return 'https://rarible.com'
         case NonFungibleAssetProvider.NFTSCAN:
             return 'https://nftscan.com'
+        case NonFungibleAssetProvider.AGORA:
+            return 'https://agoracro.com/'
         default:
             unreachable(provider)
     }
@@ -203,6 +208,8 @@ export function resolveCollectibleAssetLink(chainId: ChainId, provider: NonFungi
         case NonFungibleAssetProvider.RARIBLE:
             return ''
         case NonFungibleAssetProvider.NFTSCAN:
+            return ''
+        case NonFungibleAssetProvider.AGORA:
             return ''
         default:
             unreachable(provider)
@@ -223,6 +230,8 @@ export function resolveCollectibleLink(
         case NonFungibleAssetProvider.RARIBLE:
             return ''
         case NonFungibleAssetProvider.NFTSCAN:
+            return ''
+        case NonFungibleAssetProvider.AGORA:
             return ''
         default:
             unreachable(provider)

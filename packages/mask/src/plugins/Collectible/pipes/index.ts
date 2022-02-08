@@ -88,6 +88,13 @@ export const resolveLinkOnRarible = createLookupTableResolver<ChainId, string>(
     'https://rarible.com',
 )
 
+export const resolveLinkOnAgora = createLookupTableResolver<ChainId, string>(
+    {
+        [ChainId.Cronos]: 'https://agoracro.com/',
+    },
+    'https://agoracro.com/',
+)
+
 export function resolveTraitLinkOnOpenSea(chainId: ChainId, slug: string, search: string, value: string) {
     if (chainId === ChainId.Rinkeby) {
         return `https://testnets.opensea.io/assets/${slug}?search[stringTraits][0][name]=${search}&search[stringTraits][0][values][0]=${value}`
@@ -108,6 +115,8 @@ export function resolveAssetLinkOnCurrentProvider(
         case NonFungibleAssetProvider.RARIBLE:
             return urlcat(resolveLinkOnRarible(chainId), '/token/:address/:id', { address, id })
         case NonFungibleAssetProvider.NFTSCAN:
+            return ''
+        case NonFungibleAssetProvider.AGORA:
             return ''
         default:
             return ''
@@ -139,6 +148,8 @@ export function resolveAvatarLinkOnCurrentProvider(chainId: ChainId, asset: any,
         case NonFungibleAssetProvider.RARIBLE:
             return urlcat(resolveLinkOnRarible(chainId), `/collection/${asset.token_address ?? ''}`)
         case NonFungibleAssetProvider.NFTSCAN:
+            return ''
+        case NonFungibleAssetProvider.AGORA:
             return ''
         default:
             return ''

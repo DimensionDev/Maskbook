@@ -21,6 +21,14 @@ import {
     WANNASWAP_CUSTOM_BASES,
     TRISOLARIS_BASE_AGAINST_TOKENS,
     TRISOLARIS_CUSTOM_BASES,
+    VVSFINANCE_BASE_AGAINST_TOKENS,
+    VVSFINANCE_CUSTOM_BASES,
+    SMOLSWAP_BASE_AGAINST_TOKENS,
+    SMOLSWAP_CUSTOM_BASES,
+    CRONASWAP_BASE_AGAINST_TOKENS,
+    CRONASWAP_CUSTOM_BASES,
+    MMFINANCE_BASE_AGAINST_TOKENS,
+    MMFINANCE_CUSTOM_BASES,
 } from '../constants'
 import { unreachable } from '@dimensiondev/kit'
 import { TargetChainIdContext } from './useTargetChainIdContext'
@@ -149,6 +157,54 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     AGAINST_TOKENS: TRISOLARIS_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: TRISOLARIS_CUSTOM_BASES,
+                }
+            case TradeProvider.VVSFINANCE:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.VVSFINANCE_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.VVSFINANCE_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.VVSFINANCE_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.VVSFINANCE_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: VVSFINANCE_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: VVSFINANCE_CUSTOM_BASES,
+                }
+            case TradeProvider.CRONASWAP:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.CRONASWAP_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.CRONASWAP_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.CRONASWAP_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.CRONASWAP_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: CRONASWAP_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: CRONASWAP_CUSTOM_BASES,
+                }
+            case TradeProvider.SMOLSWAP:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.SMOLSWAP_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.SMOLSWAP_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.SMOLSWAP_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.SMOLSWAP_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: SMOLSWAP_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: SMOLSWAP_CUSTOM_BASES,
+                }
+            case TradeProvider.MMFINANCE:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.MMFINANCE_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.MMFINANCE_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.MMFINANCE_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.MMFINANCE_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: MMFINANCE_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: MMFINANCE_CUSTOM_BASES,
                 }
             case TradeProvider.ZRX:
                 return {

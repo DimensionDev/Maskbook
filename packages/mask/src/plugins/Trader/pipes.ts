@@ -61,6 +61,8 @@ export const resolveTradeProviderName = createLookupTableResolver<TradeProvider,
         [TradeProvider.PANGOLIN]: 'PangolinDex',
         [TradeProvider.TRISOLARIS]: 'Trisolaris',
         [TradeProvider.WANNASWAP]: 'WannaSwap',
+        [TradeProvider.VVSFINANCE]: 'VvsFinance',
+        [TradeProvider.SMOLSWAP]: 'SmolSwap',
     },
     (tradeProvider) => {
         throw new Error(`Unknown provider type: ${tradeProvider}`)
@@ -98,6 +100,7 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
                 case NetworkType.Metis:
                 case NetworkType.Avalanche:
                 case NetworkType.Optimistic:
+                case NetworkType.Cronos:
                     console.error('To be implement network: ', networkType)
                     return ''
                 default:
@@ -128,6 +131,14 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
             return 'https://www.trisolaris.io/#/swap'
         case TradeProvider.WANNASWAP:
             return 'https://wannaswap.finance/exchange/swap'
+        case TradeProvider.VVSFINANCE:
+            return 'https://vvs.finance/swap'
+        case TradeProvider.SMOLSWAP:
+            return 'https://www.smolswap.com/swap'
+        case TradeProvider.CRONASWAP:
+            return 'https://app.cronaswap.org/swap'
+        case TradeProvider.MMFINANCE:
+            return 'https://mm.finance/swap'
         default:
             unreachable(tradeProvider)
     }
@@ -176,6 +187,7 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
                 case NetworkType.Fuse:
                 case NetworkType.Metis:
                 case NetworkType.Optimistic:
+                case NetworkType.Cronos:
                     console.error('To be implement network: ', networkType)
                     return ''
                 default:
@@ -205,6 +217,18 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             return ''
         case TradeProvider.WANNASWAP:
             // TODO - add WannaSwap analytics
+            return ''
+        case TradeProvider.VVSFINANCE:
+            // TODO - add vvsfinance analytics
+            return ''
+        case TradeProvider.SMOLSWAP:
+            // TODO - add smolswap analytics
+            return ''
+        case TradeProvider.MMFINANCE:
+            // TODO - add mmfinance analytics
+            return ''
+        case TradeProvider.CRONASWAP:
+            // TODO - add crona swap analytics
             return ''
         default:
             unreachable(tradeProvider)
@@ -299,6 +323,8 @@ export const resolveZrxTradePoolName = createLookupTableResolver<ZrxTradePool, s
         [ZrxTradePool.PangolinDex]: 'PangolinDex',
         [ZrxTradePool.Trisolaris]: 'Trisolaris',
         [ZrxTradePool.WannaSwap]: 'WannaSwap',
+        [ZrxTradePool.Vvsfinance]: 'VvsFinance',
+        [ZrxTradePool.SmolSwap]: 'SmolSwap',
     },
     'Unknown',
 )

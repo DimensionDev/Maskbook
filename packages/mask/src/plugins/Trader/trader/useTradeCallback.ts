@@ -100,6 +100,14 @@ export function useTradeCallback(
             return uniswapV2Like
         case TradeProvider.TRISOLARIS:
             return uniswapV2Like
+        case TradeProvider.VVSFINANCE:
+            return uniswapV2Like
+        case TradeProvider.SMOLSWAP:
+            return uniswapV2Like
+        case TradeProvider.MMFINANCE:
+            return uniswapV2Like
+        case TradeProvider.CRONASWAP:
+            return uniswapV2Like
         case TradeProvider.ZRX:
             return zrx
         case TradeProvider.BALANCER:
