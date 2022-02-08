@@ -34,6 +34,7 @@ export async function saveNFTAvatar(
 }
 
 export async function getAddress(userId: string, network: string, networkPluginId?: NetworkPluginID, chainId?: number) {
+    if (!userId) return ''
     const address = await getUserAddress(userId, network, networkPluginId, chainId)
     return (address ?? '') as string
 }

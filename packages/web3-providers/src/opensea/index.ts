@@ -14,7 +14,7 @@ import isAfter from 'date-fns/isAfter'
 import { head, uniqBy } from 'lodash-unified'
 import urlcat from 'urlcat'
 import type { NonFungibleTokenAPI } from '../types'
-import { getOrderUnitPrice, getOrderUSDPrice } from './utils'
+import { getOrderUnitPrice, getOrderUSDPrice, toImage } from './utils'
 import type {
     OpenSeaAssetContract,
     OpenSeaAssetEvent,
@@ -70,7 +70,7 @@ function createERC721TokenFromAsset(
             name: asset?.name ?? asset?.asset_contract.name ?? '',
             description: asset?.description ?? '',
             imageURL,
-            mediaUrl: asset?.animation_url ?? asset?.image_original_url ?? imageURL,
+            mediaUrl: asset?.animation_url ?? toImage(asset?.image_original_url ?? imageURL),
             owner: asset?.owner.address ?? '',
         },
         tokenId,
@@ -351,6 +351,8 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
                 chainId,
                 symbol: x.primary_asset_contracts?.[0]?.symbol,
                 address: x.primary_asset_contracts?.[0]?.address,
+                // workaround: rarible collection have multi contract
+                addresses: x.primary_asset_contracts?.map((x) => x.address),
                 iconURL: x.image_url,
                 balance: x.owned_asset_count,
             })) ?? []
