@@ -580,14 +580,14 @@ export async function createRelationDB(
 export async function queryRelations(
     personaIdentifier?: PersonaIdentifier,
     profileIdentifier?: ProfileIdentifier,
-    t?: RelationTransaction<'readonly'>
+    t?: RelationTransaction<'readonly'>,
 ) {
     t = t || createTransaction(await db(), 'readonly')('relations')
     const records: RelationRecord[] = []
     if (personaIdentifier && profileIdentifier) {
         const relationInDB = await t
-                .objectStore('relations')
-                .get([personaIdentifier.toText(), profileIdentifier.toText()])
+            .objectStore('relations')
+            .get([personaIdentifier.toText(), profileIdentifier.toText()])
         if (relationInDB) {
             const out = relationRecordOutDB(relationInDB)
             records.push(out)
@@ -598,7 +598,7 @@ export async function queryRelations(
             records.push(out)
         }
     }
-    
+
     return records
 }
 
