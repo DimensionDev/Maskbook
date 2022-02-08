@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { useAsync } from 'react-use'
 import { fetchUserPoap } from '../Worker/apis'
 import { Box, Button, Grid, Skeleton, Typography } from '@mui/material'
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import { FindTrumanContext } from '../context'
 
 const useStyles = makeStyles()((theme, props) => ({

@@ -1,3 +1,5 @@
+<!-- cspell:ignore jkoeaghipilijlahjplgbfiocjhldnap -->
+
 # Chrome Web Store
 
 - [ ] Install as a new user, set up Facebook

@@ -13,6 +13,7 @@ function setupChromium() {
     window.history.replaceState = new no_xray_Proxy(history.replaceState, {
         apply(target, thisArg, params: any) {
             const val = apply(target, thisArg, params)
+            // cspell:ignore replacestate locationchange
             apply(dispatchEvent, window, [new no_xray_Event('replacestate')])
             apply(dispatchEvent, window, [new no_xray_Event('locationchange')])
             return val

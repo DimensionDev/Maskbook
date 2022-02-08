@@ -141,6 +141,7 @@ function getPostID(node: DOMProxy, root: HTMLElement): null | string {
         return id.searchParams.get('id') || ''
     } else {
         // In single url
+        // cspell:ignore perma fbid
         if (location.href.match(/plugins.+(perma.+story_fbid%3D|posts%2F)?/)) {
             const url = new URL(location.href)
             return url.searchParams.get('id')

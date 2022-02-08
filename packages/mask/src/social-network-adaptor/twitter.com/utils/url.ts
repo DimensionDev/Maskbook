@@ -1,3 +1,5 @@
+// cspell:ignore twimg
+
 export const twitterUrl = {
     hostIdentifier: 'twitter.com',
     hostLeadingUrl: 'https://twitter.com',

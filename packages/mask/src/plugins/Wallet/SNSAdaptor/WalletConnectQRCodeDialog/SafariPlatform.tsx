@@ -17,6 +17,8 @@ interface WalletProvider {
     protocol: string
 }
 
+// cspell:ignore imtokenv2
+
 const providers: WalletProvider[] = [
     { name: 'MetaMask', logo: MetaMaskIcon, protocol: 'https://metamask.app.link/wc' },
     { name: 'Rainbow', logo: RainbowIcon, protocol: 'https://rnbwapp.com/wc' },

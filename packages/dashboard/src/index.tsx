@@ -8,6 +8,8 @@ import './initialization/i18n'
 import ReactDOM from 'react-dom'
 import Dashboard from './initialization/Dashboard'
 
+// cspell:ignore northcutt
+
 if (import.meta.webpackHot) {
     import.meta.webpackHot.accept()
 } else if (location.host === 'compassionate-northcutt-326a3a.netlify.app') {

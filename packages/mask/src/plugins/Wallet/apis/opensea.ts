@@ -2,6 +2,8 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
 import { OPENSEA_API_KEY } from '../constants'
 
+// cspell:ignore presale
+
 interface AssetContract {
     address: string
     asset_contract_type: string

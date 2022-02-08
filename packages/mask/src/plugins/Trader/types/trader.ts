@@ -15,6 +15,7 @@ export enum WarningLevel {
     BLOCKED = 5,
 }
 
+// cspell:disable
 // ZRX supported source swap list
 // Learn more: https://matcha.xyz/
 export enum ZrxTradePool {
@@ -76,6 +77,7 @@ export enum ZrxTradePool {
     Trisolaris = 'Trisolaris',
     WannaSwap = 'WannaSwap',
 }
+// cspell:enable
 
 export interface TradeComputed<T = unknown> {
     strategy: TradeStrategy

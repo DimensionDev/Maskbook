@@ -5,6 +5,8 @@ import * as chain from './apis/chain'
 import * as database from './database'
 import * as nftDb from './databaseForNft'
 
+// cspell:ignore redpackets
+
 export { addRedPacketNft, getRedPacketNft, updateRedPacketNft } from './databaseForNft'
 
 export async function discoverRedPacket(record: RedPacketRecord) {

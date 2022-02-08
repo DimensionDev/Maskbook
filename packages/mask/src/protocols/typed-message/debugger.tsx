@@ -1,3 +1,5 @@
+// cspell:ignore jsonml
+
 // @ts-ignore
 const React = require('jsx-jsonml-devtools-renderer') as any
 import {

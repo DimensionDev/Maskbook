@@ -1,3 +1,4 @@
+// cspell:ignore algr
 import type { ShaName } from './interface'
 import type { AESName } from './interface.aes'
 import type { PBKDF2UnknownKey, AESJsonWebKey } from '@masknet/shared-base'

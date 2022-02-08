@@ -1,3 +1,4 @@
+// cspell:ignore txreceipt
 export interface Transaction {
     blockNumber: string
     timeStamp: string

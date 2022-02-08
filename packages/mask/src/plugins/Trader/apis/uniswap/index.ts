@@ -19,6 +19,8 @@ import {
 import { fetchLatestBlocks } from '../uniswap-health'
 import { isGreaterThan, isLessThanOrEqualTo } from '@masknet/web3-shared-base'
 
+// cspell:ignore nrge nrgt
+
 type Value = string | number | BigNumber | undefined
 
 /**

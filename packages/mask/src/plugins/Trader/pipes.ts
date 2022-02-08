@@ -240,6 +240,7 @@ export const resolveUniswapWarningLevelColor = createLookupTableResolver<Warning
     '#27ae60',
 )
 
+// cspell:disable
 export const resolveZrxTradePoolName = createLookupTableResolver<ZrxTradePool, string>(
     {
         [ZrxTradePool.ZRX]: '0x',
@@ -302,3 +303,4 @@ export const resolveZrxTradePoolName = createLookupTableResolver<ZrxTradePool, s
     },
     'Unknown',
 )
+// cspell:enable

@@ -7,6 +7,8 @@ import type {
     WyvernSchemaName,
 } from 'opensea-js/lib/types'
 
+// cspell:ignore presale
+
 export type CreateSellOrderPayload = Parameters<OpenSeaPort['createSellOrder']>[0]
 
 export interface OpenSeaCustomTrait {

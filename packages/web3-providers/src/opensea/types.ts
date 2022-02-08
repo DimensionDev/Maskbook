@@ -1,5 +1,7 @@
 import type { NonFungibleTokenAPI } from '..'
 
+// cspell:ignore presale
+
 export interface OpenSeaFees {
     opensea_seller_fee_basis_points: number
     opensea_buyer_fee_basis_points: number

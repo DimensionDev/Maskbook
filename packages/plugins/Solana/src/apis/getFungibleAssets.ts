@@ -5,6 +5,8 @@ import { createFungibleAsset, createFungibleToken } from '../helpers'
 import { TokenListProvider, TokenInfo } from '@solana/spl-token-registry'
 import { GetAccountInfoResponse, GetProgramAccountsResponse, requestRPC, SPL_TOKEN_PROGRAM_ID } from './shared'
 
+// cspell:ignore lamports
+
 async function getSolanaBalance(chainId: ChainId, account: string) {
     const { SOL_ADDRESS = '' } = getTokenConstants(chainId)
     const price = await CoinGecko.getTokenPrice('solana', CurrencyType.USD)

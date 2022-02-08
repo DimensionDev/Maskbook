@@ -1,5 +1,7 @@
 # Debug page
 
+<!-- cspell:ignore gundb -->
+
 ## Feature Set
 
 - [x] Backup Database

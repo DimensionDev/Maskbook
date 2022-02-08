@@ -9,7 +9,9 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { base } from '../base'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
-const isGoodGhosting = (x: string): boolean => /^https:\/\/goodghosting.com/.test(x)
+// cspell:ignore goodghosting
+
+const isGoodGhosting = (x: string) => /^https:\/\/goodghosting.com/.test(x)
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,

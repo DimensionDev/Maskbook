@@ -687,9 +687,8 @@ export enum CurrentSNSNetwork {
     Minds = 4,
 }
 
-/**
- * All integrated Plugin IDs
- */
+/** All integrated Plugin IDs */
+// cspell:disable
 export enum PluginId {
     Avatar = 'com.maskbook.avatar',
     Collectible = 'com.maskbook.collectibles',
@@ -721,6 +720,7 @@ export enum PluginId {
     UnlockProtocol = 'com.maskbook.unlockprotocol',
     FileService = 'com.maskbook.fileservice',
 }
+// cspell:enable
 
 export interface Pagination {
     /** The item size of each page. */

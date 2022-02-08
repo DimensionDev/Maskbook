@@ -1,3 +1,4 @@
+// cspell:disable
 const data: Partial<Navigator> = {
     // @ts-ignore
     __proto__: null,

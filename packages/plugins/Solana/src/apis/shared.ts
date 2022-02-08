@@ -2,6 +2,8 @@ import type { ChainId } from '@masknet/web3-shared-solana'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { NETWORK_ENDPOINTS } from '../constants'
 
+// cspell:ignore lamports
+
 export const SPL_TOKEN_PROGRAM_ID = TOKEN_PROGRAM_ID.toBase58()
 
 interface RpcOptions {

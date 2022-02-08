@@ -11,6 +11,8 @@ import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { useCryptoArtAI_Contract } from './useCryptoArtAI_Contract'
 import { toFixed } from '@masknet/web3-shared-base'
 
+// cspell:ignore anft
+
 export function usePlaceBidCallback(is24Auction: boolean, editionNumber: string) {
     const account = useAccount()
     const chainId = useChainId()

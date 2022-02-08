@@ -3,6 +3,8 @@ import { useEffect, RefObject } from 'react'
 import stringify from 'json-stable-stringify'
 import type { Dimension } from './useDimension'
 
+// cspell:ignore steelblue
+
 export function useLineChart(
     svgRef: RefObject<SVGSVGElement>,
     data: { date: Date; value: number }[],

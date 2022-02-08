@@ -36,6 +36,7 @@ export function getProfileIdentifierAtFacebook(
             const currentProfile = getCurrentIdentifier()
             let avatar: string | null = null
             try {
+                // cspell:ignore clearfix
                 const image = dom!.closest('.clearfix')!.parentElement!.querySelector('img')!
                 avatar = image.src
                 if (allowCollectInfo && image.getAttribute('aria-label') === nickname && nickname) {

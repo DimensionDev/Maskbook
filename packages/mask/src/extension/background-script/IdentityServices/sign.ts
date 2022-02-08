@@ -1,3 +1,4 @@
+// cspell:ignore ecsign
 import {
     keccakFromString,
     ecsign,

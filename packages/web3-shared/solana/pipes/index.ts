@@ -2,6 +2,8 @@ import urlcat from 'urlcat'
 import { createLookupTableResolver } from '@masknet/web3-kit'
 import { ChainId, ProviderType } from '../types'
 
+// cspell:ignore sollet
+
 export const resolveChainName = createLookupTableResolver<ChainId, string>(
     {
         [ChainId.Mainnet]: 'mainnet',

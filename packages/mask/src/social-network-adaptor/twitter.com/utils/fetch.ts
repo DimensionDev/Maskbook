@@ -13,6 +13,8 @@ import {
 } from '@masknet/shared-base'
 import { collectNodeText, collectTwitterEmoji } from '../../../utils'
 
+// cspell:ignore twimg
+
 /**
  * @example
  * parseNameArea("nickname@handle")

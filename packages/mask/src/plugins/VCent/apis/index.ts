@@ -1,5 +1,7 @@
 import { TWEET_BASE_URL } from '../constants'
 
+// cspell:ignore txid
+
 export interface TweetData {
     id: string
     tweet_id: string

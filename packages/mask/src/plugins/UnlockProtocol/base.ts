@@ -7,7 +7,11 @@ export const base: Plugin.Shared.Definition = {
     icon: pluginIcon,
     name: { fallback: pluginName },
     description: { fallback: pluginDescription },
-    publisher: { name: { fallback: 'Zubin Choudhary' }, link: 'https://www.iamzub.in' },
+    publisher: {
+        // cspell:disable-next-line
+        name: { fallback: 'Zubin Choudhary' },
+        link: 'https://www.iamzub.in',
+    },
     enableRequirement: {
         architecture: { app: true, web: true },
         networks: { type: 'opt-out', networks: {} },

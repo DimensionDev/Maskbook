@@ -8,6 +8,8 @@ import { usePostInfoDetails } from '@masknet/plugin-infra'
 import { extractTextFromTypedMessage, parseURL } from '@masknet/shared-base'
 import { PostInspector } from './PostInspector'
 
+// cspell:ignore clueid
+
 const useStyles = makeStyles()((theme) => {
     return {
         skeleton: {

@@ -1,3 +1,4 @@
+// cspell:ignore idbp
 import type { KVStorageBackend } from './types'
 // This package is used in jest. Import from the esm version will fail the test.
 // eslint-disable-next-line no-restricted-imports

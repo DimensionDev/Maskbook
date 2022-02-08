@@ -28,8 +28,8 @@ export function keyToJWK(key: string, type: 'public' | 'private'): JsonWebKey {
         kty: 'EC',
         d: type === 'private' ? base64(privKey.toArray()) : undefined,
     }
-    function base64(nums: number[]) {
-        return toBase64URL(new Uint8Array(nums).buffer)
+    function base64(values: number[]) {
+        return toBase64URL(Uint8Array.from(values).buffer)
     }
 }
 

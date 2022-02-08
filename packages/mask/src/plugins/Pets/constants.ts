@@ -2,6 +2,8 @@ import { mediaViewerUrl } from '@masknet/shared'
 import urlcat from 'urlcat'
 import { ImageType } from './types'
 
+// cspell:ignore gltf
+
 export const PetsPluginID = 'com.maskbook.pets'
 export const TWITTER = 'twitter.com'
 export const MASK_TWITTER = 'realMaskNetwork'

@@ -113,6 +113,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 javascript: {
                     // Treat as missing export as error
                     strictExportPresence: true,
+                    // cspell:disable-next-line
                     // gun and @unstoppabledomains/resolution
                     exprContextCritical: false,
                 },

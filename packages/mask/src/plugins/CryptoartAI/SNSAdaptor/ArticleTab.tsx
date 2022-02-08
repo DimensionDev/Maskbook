@@ -3,6 +3,8 @@ import { makeStyles } from '@masknet/theme'
 import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
 
+// cspell:ignore webm
+
 const useStyles = makeStyles()({
     body: {
         display: 'flex',

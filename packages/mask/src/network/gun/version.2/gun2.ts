@@ -1,6 +1,8 @@
 import Gun from 'gun/gun'
 import { gunServers } from '../../gun-servers'
 
+// cspell:ignore radisk
+
 export type PersonOnGun2 = {
     /** @deprecated if you want to use it, cast it to string. */
     //   provePostId?: unknown

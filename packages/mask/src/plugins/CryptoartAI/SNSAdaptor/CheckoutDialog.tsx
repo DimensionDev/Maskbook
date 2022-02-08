@@ -17,6 +17,8 @@ import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 
+// cspell:ignore webm
+
 const useStyles = makeStyles()((theme) => {
     return {
         content: {

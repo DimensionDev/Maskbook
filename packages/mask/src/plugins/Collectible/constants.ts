@@ -1,5 +1,7 @@
 import { PluginId } from '@masknet/plugin-infra'
 
+// cspell:ignore qlurl
+
 export const PLUGIN_NAME = 'Collectibles'
 export const PLUGIN_ICON = '\u{1F5BC}\uFE0F'
 export const PLUGIN_DESCRIPTION = 'An NFT collectible viewer.'

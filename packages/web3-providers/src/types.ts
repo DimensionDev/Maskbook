@@ -9,6 +9,8 @@ import type {
     NativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
 
+// cspell:ignore mintable
+
 export namespace ExplorerAPI {
     export type Transaction = Web3Transaction & {
         status: '0' | '1'

@@ -32,6 +32,8 @@ const BLACKLIST_MAP: {
     },
 }
 
+// cspell:ignore nyfi
+
 const KEYWORD_ALIAS_MAP: {
     [key in DataProvider]: {
         [key in NetworkType]?: Record<string, string>

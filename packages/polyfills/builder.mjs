@@ -71,6 +71,8 @@ await writeFile(versionFilePath, polyfillVersion)
 // You can also pass this directly to "rollup.watch"
 // rollup.watch(options)
 
+// cspell:ignore clonable
+
 // In Firefox, the last completion value will be used as the result of the polyfill execution
 // and it will try to transmit the value to the background. If the value is a non-clonable value, it will reject the Promise.
 // By adding a ";null;" in the end to fix this problem.

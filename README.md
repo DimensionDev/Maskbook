@@ -1,4 +1,4 @@
-<!-- cspell:disable -->
+<!-- cspell:ignore jkoeaghipilijlahjplgbfiocjhldnap pfps -->
 <!-- markdownlint-disable no-inline-html first-line-heading -->
 <a href="https://mask.io">
   <img src="https://dimensiondev.github.io/Mask-VI/assets/Logo/MB--Logo--Geo--ForceCircle--Blue.svg"
@@ -30,7 +30,7 @@ For general introductions, see [Mask.io](https://mask.io).
 - [Mask Network on Firefox Addon Store][client-firefox] (Works on Firefox for Android too!)
 
 - [Mask Network for iOS][client-ios]
-- (Testflight!) [Mask Network for iOS Testflight][client-ios-testflight]
+- (Test Flight!) [Mask Network for iOS TestFlight][client-ios-testflight]
 - (Beta!) [Mask Network for Android][client-android]
 
 ## Useful Links

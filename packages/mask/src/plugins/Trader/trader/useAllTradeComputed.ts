@@ -182,7 +182,7 @@ export function useAllTradeComputed(
     const bancor = useBancorTradeComputed(bancor_.value ?? null, TradeStrategy.ExactIn, inputToken, outputToken)
     const bancorSwapEstimateGas = useBancorTradeGasLimit(bancor)
 
-    // traderjoe
+    // cspell:ignore traderjoe
     const traderJoe_ = useUniswapV2Trade(
         TradeProvider.TRADERJOE,
         TradeStrategy.ExactIn,
@@ -194,7 +194,7 @@ export function useAllTradeComputed(
     const traderJoe = useUniswapTradeComputed(traderJoe_.value, inputToken, outputToken)
     const traderJoeEstimateGas = useUniswapTradeGasLimit(traderJoe, TradeProvider.TRADERJOE)
 
-    // pangolindex
+    // cspell:ignore pangolindex
     const pangolindex_ = useUniswapV2Trade(
         TradeProvider.PANGOLIN,
         TradeStrategy.ExactIn,

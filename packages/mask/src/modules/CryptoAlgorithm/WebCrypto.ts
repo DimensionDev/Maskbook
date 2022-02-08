@@ -1,3 +1,4 @@
+// cspell:ignore algr
 import type { CryptoAlgorithmProviderMethods } from './interfaces/interface'
 import {
     JsonWebKeyToCryptoKey,

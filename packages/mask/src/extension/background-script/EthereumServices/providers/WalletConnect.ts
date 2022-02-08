@@ -7,6 +7,8 @@ import * as MaskWallet from './MaskWallet'
 import { resetAccount, updateAccount } from '../../../../plugins/Wallet/services'
 import { currentChainIdSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
 
+// cspell:ignore promi
+
 let connector: WalletConnect | null = null
 
 /**

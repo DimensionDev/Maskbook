@@ -1,6 +1,8 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { PLUGIN_ID, PLUGIN_ICON, PLUGIN_NAME, PLUGIN_DESCRIPTION } from './constants'
 
+// cspell:ignore goodghosting
+
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
     icon: PLUGIN_ICON,

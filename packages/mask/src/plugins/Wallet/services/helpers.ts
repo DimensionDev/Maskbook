@@ -1,3 +1,4 @@
+// cspell:ignore idbp
 import { omit } from 'lodash-unified'
 import type { IDBPSafeTransaction } from '../../../../background/database/utils/openDB'
 import type { WalletDB } from '../database/Wallet.db'

@@ -16,6 +16,8 @@ import { checkAvailability } from './checkAvailability'
 
 const interFace = new Interface(REDPACKET_ABI)
 
+// cspell:ignore ifrandom
+
 export async function getRedPacketHistory(
     chainId: ChainId,
     startBlock: number | undefined,

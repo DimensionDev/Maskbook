@@ -15,9 +15,9 @@ import { useImageFailOver } from '../../hooks'
 import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
 
 function getFallbackIcons(address: string, baseURIs: string[]) {
-    const checkSummedAddress = formatEthereumAddress(address)
+    const checksummedAddress = formatEthereumAddress(address)
 
-    if (isSameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS, checkSummedAddress)) {
+    if (isSameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS, checksummedAddress)) {
         return baseURIs.map((x) => `${x}/info/logo.png`)
     }
 
@@ -25,7 +25,7 @@ function getFallbackIcons(address: string, baseURIs: string[]) {
     if (specialIcon) return [specialIcon.logo_url]
 
     // load from remote
-    return baseURIs.map((x) => `${x}/assets/${checkSummedAddress}/logo.png`)
+    return baseURIs.map((x) => `${x}/assets/${checksummedAddress}/logo.png`)
 }
 const useStyles = makeStyles()((theme) => ({
     icon: {

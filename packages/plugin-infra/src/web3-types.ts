@@ -124,6 +124,7 @@ export declare namespace Web3Plugin {
 
     export interface AddressName {
         id: string
+        // cspell:disable-next-line
         /** eg. vitalik.eth */
         label: string
         /** eg. 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045 */

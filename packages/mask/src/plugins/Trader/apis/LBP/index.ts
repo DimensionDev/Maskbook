@@ -2,6 +2,8 @@ import { getLBPConstants } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
 import { currentChainIdSettings } from '../../../Wallet/settings'
 
+// cspell:ignore denorm
+
 async function fetchFromBalancerPoolSubgraph<T>(query: string) {
     const subgraphURL = getLBPConstants(currentChainIdSettings.value).BALANCER_POOLS_SUBGRAPH_URL
     if (!subgraphURL) return null

@@ -111,6 +111,7 @@ async function fetchUserScript(url: string) {
 
 function HandleError(arg: unknown): (reason: Error) => void {
     return (error) => {
+        // cspell:ignore clonable
         const ignoredErrorMessages = ['non-structured-clonable data', 'No tab with id']
         if (ignoredErrorMessages.some((x) => error.message.includes(x))) {
             // It's okay we don't need the result, happened on Firefox

@@ -1,5 +1,7 @@
 # Contracts
 
+<!-- cspell:disable -->
+
 ## Compile contracts typing
 
 ```console

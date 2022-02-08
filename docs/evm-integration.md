@@ -1,5 +1,7 @@
 # A new EVM-compatible chain to Mask Network
 
+<!-- cspell:ignore jkoeaghipilijlahjplgbfiocjhldnap -->
+
 It's easy to integrate an EVM-compatible chain into Mask Network. After you add a new `ChainId` and `NetworkType` in `packages/web3-shared/evm/types/index.ts`. You can follow the TypeScript compiler. By fixing these errors, the integration progress will keep moving forward. Here is a complete instruction list to ensure you wouldn't miss anything.
 
 ## Integration Instructions

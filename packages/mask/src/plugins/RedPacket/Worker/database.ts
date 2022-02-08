@@ -3,6 +3,8 @@ import type { RedPacketRecord, RedPacketRecordInDatabase, RedPacketNftRecordInDa
 import { RedPacketPluginID } from '../constants'
 import { createPluginDatabase } from '../../../database/Plugin'
 
+// cspell:ignore redpackets
+
 export const RedPacketDatabase = createPluginDatabase<RedPacketRecordInDatabase | RedPacketNftRecordInDatabase>(
     RedPacketPluginID,
 )

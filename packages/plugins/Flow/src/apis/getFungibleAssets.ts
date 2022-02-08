@@ -4,6 +4,8 @@ import { CoinGecko } from '@masknet/web3-providers'
 import { createFungibleAsset, createFungibleToken } from '../helpers'
 import { rightShift } from '@masknet/web3-shared-base'
 
+// cspell:ignore fusd
+
 async function getTokenBalance(
     chainId: ChainId,
     account: string,

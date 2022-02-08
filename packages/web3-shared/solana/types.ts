@@ -1,3 +1,5 @@
+// cspell:ignore sollet
+
 export enum ChainId {
     Mainnet = 101,
     Testnet = 102,

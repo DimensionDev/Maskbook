@@ -11,6 +11,8 @@ import type { Route } from '../../types'
 import { fetchBlockNumbersByTimestamps } from '../blocks'
 import { fetchLBP_PoolsByTokenAddress, fetchLBP_PoolTokenPrices, fetchLBP_PoolTokens } from '../LBP'
 
+// cspell:ignore denorm
+
 // #region create cached SOR
 const createSOR_ = memoize(
     (chainId: ChainId) => {

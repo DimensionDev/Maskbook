@@ -1,6 +1,5 @@
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
-import type React from 'react'
 import PoapPanel from './PoapPanel'
 import PartsPanel from './PartsPanel'
 import FtgPanel from './FtgPanel'

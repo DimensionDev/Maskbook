@@ -10,6 +10,8 @@ import { formatEthereumAddress, useWallet } from '@masknet/web3-shared-evm'
 import { CopyIconButton } from '../../../../components/CopyIconButton'
 import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
 
+// cspell:ignore Horiz
+
 const useStyles = makeStyles()({
     container: {
         padding: '12px 10px',

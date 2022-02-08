@@ -5,6 +5,8 @@ import { fallbackLng } from '@masknet/shared-base'
 import { addDashboardI18N } from '../locales/languages'
 import { initReactI18next } from 'react-i18next'
 
+// cspell:ignore lngs
+
 i18n.use(Detector).init({
     keySeparator: false,
     interpolation: {

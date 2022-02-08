@@ -192,19 +192,19 @@ export function useMulticallStateDecoded<
 export function useSingleContractMultipleData<T extends BaseContract, K extends keyof T['methods']>(
     contract: T | null,
     names: K[],
-    callDatas: Parameters<T['methods'][K]>[],
+    callDataItems: Parameters<T['methods'][K]>[],
     gasLimit = DEFAULT_GAS_LIMIT,
     chainId?: ChainId,
     blockNumber?: number,
 ) {
     const calls = useMemo(() => {
         if (!contract) return []
-        return callDatas.map<Call>((data, i) => [
+        return callDataItems.map<Call>((data, i) => [
             contract.options.address,
             gasLimit,
             contract.methods[names[i]](...data).encodeABI() as string,
         ])
-    }, [contract?.options.address, names.join(), callDatas.flatMap((x) => x).join()])
+    }, [contract?.options.address, names.join(), callDataItems.flatMap((x) => x).join()])
     const [state, callback] = useMulticallCallback(chainId, blockNumber)
     const results = useMulticallStateDecoded(
         Array.from({ length: calls.length }).fill(contract) as T[],

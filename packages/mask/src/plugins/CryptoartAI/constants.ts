@@ -25,6 +25,7 @@ export const mainNetwork = {
 
 export const testNetwork = {
     contractAddress: '0x54395e6c737734D3de29Fc62C10a3ed51eFA2E8A',
+    // cspell:ignore testweb
     hostname: 'testweb.cryptoart.ai',
     endpoint: 'https://apitest.cryptoart.ai',
     paymentToken: {

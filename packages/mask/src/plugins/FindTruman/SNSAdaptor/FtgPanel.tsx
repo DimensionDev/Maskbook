@@ -9,6 +9,8 @@ import { useContext } from 'react'
 import { FindTrumanContext } from '../context'
 import { getPartName } from './PartsPanel'
 
+// cspell:ignore ftgs
+
 const useStyles = makeStyles()((theme) => ({
     ftgCover: {
         width: '150px',

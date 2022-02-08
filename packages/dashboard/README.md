@@ -1,5 +1,7 @@
 # Dashboard
 
+<!-- cspell:ignore jkoeaghipilijlahjplgbfiocjhldnap -->
+
 The developing new dashboard.
 
 Expected to working in three mode:

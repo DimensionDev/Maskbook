@@ -39,6 +39,8 @@ async function request<T>(url: string, options?: RequestInit) {
     return data
 }
 
+// cspell:ignore uaddr ftpoap
+
 export function fetchConst(lang: string) {
     return request<FindTrumanConst>(urlcat('/consts', { l: lang }))
 }

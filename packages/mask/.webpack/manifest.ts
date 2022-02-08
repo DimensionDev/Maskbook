@@ -92,6 +92,7 @@ function stableDevelopmentExtensionID(manifest: Manifest) {
 }
 
 function acceptExternalConnect(manifest: Manifest) {
+    // cspell:ignore northcutt
     manifest.externally_connectable = {
         ids: ['*'],
         // It seems like *.netlify.app or *compassionate-northcutt-326a3a.netlify.app does not work so it is not possible to provide a preview for PRs

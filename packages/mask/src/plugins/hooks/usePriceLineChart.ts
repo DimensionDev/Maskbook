@@ -3,6 +3,8 @@ import type { Dimension } from './useDimension'
 import { formatCurrency } from '@masknet/web3-shared-evm'
 import { useLineChart } from './useLineChart'
 
+// cspell:ignore steelblue
+
 export function usePriceLineChart(
     svgRef: RefObject<SVGSVGElement>,
     data: { date: Date; value: number }[],

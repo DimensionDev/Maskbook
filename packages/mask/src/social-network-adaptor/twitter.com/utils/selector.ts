@@ -3,6 +3,8 @@ import { regexMatch } from '../../../utils/utils'
 import { isMobileTwitter } from './isMobile'
 import { isCompose } from './postBox'
 
+// cspell:ignore progressbar
+
 type E = HTMLElement
 
 const querySelector = <T extends E, SingleMode extends boolean = true>(selector: string, singleMode = true) => {

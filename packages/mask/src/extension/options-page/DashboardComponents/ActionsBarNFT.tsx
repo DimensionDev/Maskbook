@@ -8,6 +8,8 @@ import { useMenu, useI18N } from '../../../utils'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardWalletHideTokenConfirmDialog, DashboardWalletTransferDialogNFT } from '../DashboardDialogs/Wallet'
 
+// cspell:ignore Horiz
+
 const useStyles = makeStyles()((theme) => ({
     more: {
         color: theme.palette.text.primary,

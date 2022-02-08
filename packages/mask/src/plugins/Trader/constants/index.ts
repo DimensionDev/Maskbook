@@ -10,6 +10,7 @@ export * from './pancakeswap'
 export * from './dodo'
 export * from './bancor'
 export * from './traderjoe'
+// cspell:ignore pangolindex
 export * from './pangolindex'
 export * from './wannaswap'
 export * from './trisolaris'

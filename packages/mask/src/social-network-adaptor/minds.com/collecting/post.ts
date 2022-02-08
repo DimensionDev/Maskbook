@@ -19,6 +19,8 @@ import { postContentSelector } from '../utils/selector'
 import { getCurrentIdentifier } from '../../utils'
 import Services from '../../../extension/service'
 
+// cspell:ignore xlarge
+
 export const PostProviderMinds: Next.CollectingCapabilities.PostsProvider = {
     posts: creator.EmptyPostProviderState(),
     start(signal) {

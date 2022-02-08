@@ -2,6 +2,7 @@
 #
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
+# cspell:disable
 version: 2.1
 executors:
   mask_node:

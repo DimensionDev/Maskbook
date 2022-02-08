@@ -2,7 +2,8 @@ import { promises as fs } from 'fs'
 import path from 'path'
 import { run } from '../web3-contracts/utils'
 
-async function compileConstants(folderPath: string, names: string[]) {
+async function compileConstants(folderPath: string, names?: string[]) {
+    names ??= await getTokenNames()
     // fix constants
     for (const file of await fs.readdir(folderPath)) {
         const filePath = path.resolve(folderPath, file)
@@ -40,26 +41,12 @@ function getDefaultValue(value: unknown) {
     return null
 }
 
-compileConstants(path.join(__dirname, 'evm'), [
-    'Mainnet',
-    'Ropsten',
-    'Rinkeby',
-    'Kovan',
-    'Gorli',
-    'BSC',
-    'BSCT',
-    'Matic',
-    'Mumbai',
-    'Arbitrum',
-    'Arbitrum_Rinkeby',
-    'xDai',
-    'Avalanche',
-    'Avalanche_Fuji',
-    'Celo',
-    'Fantom',
-    'Aurora',
-    'Aurora_Testnet',
-])
+async function getTokenNames(): Promise<string[]> {
+    const names = await fs.readFile(path.join(__dirname, 'tokens.txt'), 'utf-8')
+    return names.trim().split('\n')
+}
+
+compileConstants(path.join(__dirname, 'evm'))
 
 compileConstants(path.join(__dirname, 'solana'), ['Mainnet', 'Testnet', 'Devnet'])
 

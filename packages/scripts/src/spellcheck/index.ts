@@ -29,6 +29,9 @@ function sortConfigure(configure: Configure) {
     configure.ignorePaths = sort(configure.ignorePaths)
     configure.words = sort(configure.words)
     configure.ignoreWords = sort(configure.ignoreWords)
+
+    const words = new Set(configure.words ?? [])
+    configure.ignoreWords = configure.ignoreWords?.filter((word) => !words.has(word))
 }
 
 export async function reorderSpellcheck() {
