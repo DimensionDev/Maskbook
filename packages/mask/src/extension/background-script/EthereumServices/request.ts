@@ -55,30 +55,7 @@ function isSendMethod(method: EthereumMethodType) {
     return method === EthereumMethodType.ETH_SEND_TRANSACTION
 }
 
-export function request<T extends unknown>(
-    requestArguments: RequestArguments,
-    overrides?: SendOverrides,
-    options?: RequestOptions,
-) {
-    return new Promise<T>((resolve, reject) => {
-        requestSend(
-            {
-                jsonrpc: '2.0',
-                id,
-                params: [],
-                ...requestArguments,
-            },
-            (error, response) => {
-                if (error || response?.error) reject(error ?? response?.error)
-                else resolve(response?.result)
-            },
-            overrides,
-            options,
-        )
-    })
-}
-
-export async function requestSend(
+async function requestSend(
     payload: JsonRpcPayload,
     callback: (error: Error | null, response?: JsonRpcResponse) => void,
     overrides?: SendOverrides,
@@ -175,6 +152,29 @@ export async function requestSend(
             },
         })
     getSendMethod()(payload_, hijackedCallback, overrides)
+}
+
+export async function request<T extends unknown>(
+    requestArguments: RequestArguments,
+    overrides?: SendOverrides,
+    options?: RequestOptions,
+) {
+    return new Promise<T>(async (resolve, reject) => {
+        requestSend(
+            {
+                jsonrpc: '2.0',
+                id,
+                params: [],
+                ...requestArguments,
+            },
+            (error, response) => {
+                if (error || response?.error) reject(error ?? response?.error)
+                else resolve(response?.result)
+            },
+            overrides,
+            options,
+        )
+    })
 }
 
 export async function confirmRequest(payload: JsonRpcPayload) {

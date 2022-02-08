@@ -1,9 +1,20 @@
 import { useEffect, useState, useMemo, ReactNode } from 'react'
 import { useAsync } from 'react-use'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog, useValueRef } from '@masknet/shared'
 import { isSameAddress } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends, useCustomSnackbar } from '@masknet/theme'
-import { TextField, Typography, Box, DialogContent, Grid, MenuItem, Snackbar, Autocomplete } from '@mui/material'
+import {
+    TextField,
+    Typography,
+    Box,
+    DialogContent,
+    Grid,
+    MenuItem,
+    Snackbar,
+    Autocomplete,
+    FormControlLabel,
+    Checkbox,
+} from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { PluginPetMessages, PluginPetRPC } from '../messages'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -15,11 +26,13 @@ import { useI18N } from '../../../utils'
 import { ShadowRootPopper } from '../../../utils/shadow-root/ShadowRootComponents'
 import { ImageLoader } from './ImageLoader'
 import type { Constant } from '@masknet/web3-shared-evm/constants/utils'
+import { petShowSettings } from '../settings'
 
 const useStyles = makeStyles()((theme) => ({
     desBox: {
         display: 'flex',
         justifyContent: 'space-between',
+        marginTop: theme.spacing(3),
     },
     des: {
         color: '#7b8192',
@@ -43,7 +56,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
     },
     btn: {
-        margin: theme.spacing(8, 0, 4),
+        margin: theme.spacing(8, 0, 2),
     },
     thumbnail: {
         width: 25,
@@ -89,6 +102,7 @@ export function PetDialog() {
     const { open, closeDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated, () => {})
     const [configNFTs, setConfigNFTs] = useState<Record<string, Constant> | undefined>(undefined)
     const [loading, setLoading] = useState(false)
+    const checked = useValueRef<boolean>(petShowSettings)
 
     const user = useUser()
     const nfts = useNFTs(user, configNFTs)
@@ -298,7 +312,13 @@ export function PetDialog() {
                             />
                         </Grid>
                     </Grid>
-
+                    <FormControlLabel
+                        control={
+                            <Checkbox checked={checked} onChange={(e) => (petShowSettings.value = e.target.checked)} />
+                        }
+                        label={t('plugin_pets_dialog_check_title')}
+                        sx={{ marginTop: '4px' }}
+                    />
                     <LoadingButton
                         loading={loading}
                         color="inherit"

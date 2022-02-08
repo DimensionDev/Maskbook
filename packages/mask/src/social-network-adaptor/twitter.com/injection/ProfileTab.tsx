@@ -98,6 +98,7 @@ async function clear() {
 
     // hide the content page
     await untilElementAvailable(searchProfileTabPageSelector())
+
     const elePage = searchProfileTabPageSelector().evaluate()
     if (elePage) elePage.style.visibility = 'hidden'
 }
@@ -108,6 +109,7 @@ function reset() {
 
     const eleEmpty = searchProfileEmptySelector().evaluate()
     if (eleEmpty) eleEmpty.style.display = ''
+
     const elePage = searchProfileTabPageSelector().evaluate()
     if (elePage) elePage.style.visibility = 'visible'
 

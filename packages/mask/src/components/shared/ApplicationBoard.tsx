@@ -13,6 +13,7 @@ import { PluginPetMessages } from '../../plugins/Pets/messages'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { EntrySecondLevelDialog } from './EntrySecondLevelDialog'
 import { NetworkTab } from './NetworkTab'
+import { SavingsDialog } from '../../plugins/Savings/SNSAdaptor/SavingsDialog'
 import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialog'
 import { NetworkPluginID, PluginId, usePluginIDContext } from '@masknet/plugin-infra'
 import { FindTrumanDialog } from '../../plugins/FindTruman/SNSAdaptor/FindTrumanDialog'
@@ -118,7 +119,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     const account = useAccount()
     const selectedWallet = useWallet()
     const currentPluginId = usePluginIDContext()
-    const isFlow = currentPluginId === NetworkPluginID.PLUGIN_FLOW
+    const isNotEvm = currentPluginId !== NetworkPluginID.PLUGIN_EVM
 
     // #region Encrypted message
     const openEncryptedMessage = useCallback(
@@ -139,6 +140,14 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
         open: isClaimAllDialogOpen,
         onOpen: onClaimAllDialogOpen,
         onClose: onClaimAllDialogClose,
+    } = useControlledDialog()
+    // #endregion
+
+    // #region Savings
+    const {
+        open: isSavingsDialogOpen,
+        onOpen: onSavingsDialogOpen,
+        onClose: onSavingsDialogClose,
     } = useControlledDialog()
     // #endregion
 
@@ -212,7 +221,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             new URL('./assets/lucky_drop.png', import.meta.url).toString(),
             () => openEncryptedMessage(RedPacketPluginID),
             undefined,
-            isFlow,
+            isNotEvm,
         ),
         createEntry(
             'File Service',
@@ -227,21 +236,21 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             new URL('./assets/token.png', import.meta.url).toString(),
             () => openEncryptedMessage(ITO_PluginID),
             undefined,
-            isFlow,
+            isNotEvm,
         ),
         createEntry(
             'Claim',
             new URL('./assets/gift.png', import.meta.url).toString(),
             onClaimAllDialogOpen,
             undefined,
-            isFlow,
+            isNotEvm,
         ),
         createEntry(
             'Mask Bridge',
             new URL('./assets/bridge.png', import.meta.url).toString(),
             () => window.open('https://bridge.mask.io/#/', '_blank', 'noopener noreferrer'),
             undefined,
-            isFlow,
+            isNotEvm,
             false,
         ),
         createEntry(
@@ -249,7 +258,14 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             new URL('./assets/mask_box.png', import.meta.url).toString(),
             () => window.open('https://box.mask.io/#/', '_blank', 'noopener noreferrer'),
             undefined,
-            isFlow,
+            isNotEvm,
+            false,
+        ),
+        createEntry(
+            'Savings',
+            new URL('./assets/savings.png', import.meta.url).toString(),
+            onSavingsDialogOpen,
+            undefined,
             false,
         ),
         createEntry(
@@ -257,7 +273,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             new URL('./assets/swap.png', import.meta.url).toString(),
             onSwapDialogOpen,
             undefined,
-            isFlow,
+            isNotEvm,
         ),
         createEntry(
             'Fiat On-Ramp',
@@ -301,7 +317,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                     undefined,
                 ),
             undefined,
-            isFlow,
+            isNotEvm,
         ),
         createEntry(
             'Investment',
@@ -320,7 +336,6 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             undefined,
             true,
         ),
-        createEntry('Saving', new URL('./assets/saving.png', import.meta.url).toString(), undefined, undefined, true),
         createEntry(
             'Alternative',
             new URL('./assets/more.png', import.meta.url).toString(),
@@ -380,21 +395,21 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                         ) : null,
                 )}
             </section>
-            {isClaimAllDialogOpen ? (
-                <ClaimAllDialog open={isClaimAllDialogOpen} onClose={onClaimAllDialogClose} />
-            ) : null}
-            {isSwapDialogOpen ? <TraderDialog open={isSwapDialogOpen} onClose={onSwapDialogClose} /> : null}
+            {isClaimAllDialogOpen ? <ClaimAllDialog open onClose={onClaimAllDialogClose} /> : null}
             {isSecondLevelEntryDialogOpen ? (
                 <EntrySecondLevelDialog
                     title={secondLevelEntryDialogTitle}
-                    open={isSecondLevelEntryDialogOpen}
+                    open
                     entries={secondLevelEntries}
                     chains={secondLevelEntryChains}
                     closeDialog={onSecondLevelEntryDialogClose}
                 />
             ) : null}
-            {isFindTrumanDialogOpen ? (
-                <FindTrumanDialog open={isFindTrumanDialogOpen} onClose={onFindTrumanDialogClose} />
+            {isFindTrumanDialogOpen ? <FindTrumanDialog open onClose={onFindTrumanDialogClose} /> : null}
+            {isSwapDialogOpen ? <TraderDialog open onClose={onSwapDialogClose} /> : null}
+
+            {isSavingsDialogOpen ? (
+                <SavingsDialog open onClose={onSavingsDialogClose} onSwapDialogOpen={onSwapDialogOpen} />
             ) : null}
         </>
     )
