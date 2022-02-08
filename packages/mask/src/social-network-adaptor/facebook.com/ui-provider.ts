@@ -26,6 +26,7 @@ import { ProfileIdentifier } from '@masknet/shared-base'
 import { globalUIState } from '../../social-network'
 import { injectToolboxHintAtFacebook as injectToolboxAtFacebook } from './injection/Toolbar'
 import { injectProfileNFTAvatarInFaceBook } from './injection/NFT/ProfileNFTAvatar'
+import { injectNFTAvatarInFacebook } from './injection/NFT/NFTAvatarInFacebook'
 
 const useInjectedDialogClassesOverwriteFacebook = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -181,6 +182,7 @@ const facebookUI: SocialNetworkUI.Definition = {
             ),
         },
         enhancedProfileNFTAvatar: injectProfileNFTAvatarInFaceBook,
+        profileAvatar: injectNFTAvatarInFacebook,
         postInspector: injectPostInspectorFacebook,
         pageInspector: injectPageInspectorDefault(),
         setupWizard: createTaskStartSetupGuideDefault(),

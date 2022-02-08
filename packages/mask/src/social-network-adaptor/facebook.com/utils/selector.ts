@@ -19,16 +19,18 @@ export const bioDescriptionSelector = () =>
 export const searchFacebookAvatarListSelector = () =>
     querySelector('[role="dialog"] input[type=file]').closest(3).querySelector('div')
 
+export const searchFacebookAvatarSelector = () => querySelector('[role="img"]')
+
 export const searchFacebookAvatarOpenFilesSelector = () => querySelector('[role="dialog"] input[type=file] ~ div')
 
 export const searchFacebookSaveAvatarButtonSelector = () =>
     new LiveSelector()
-        .querySelector('[role="dialog"] [aria-pressed="false"]')
-        .closest<HTMLDivElement>(4)
+        .querySelector('[role="dialog"] [role="slider"]')
+        .closest<HTMLDivElement>(7)
         .querySelectorAll('div')
         .map((x) => x.parentElement?.parentElement)
         .at(-1)
 
 export const searchFacebookConfirmAvatarImageSelector = () =>
-    querySelector('[role="dialog"] [aria-pressed="false"]').closest<HTMLDivElement>(4).querySelector('img')
+    querySelector('[role="dialog"] [role="slider"]').closest<HTMLDivElement>(7).querySelector('img')
 // #region
