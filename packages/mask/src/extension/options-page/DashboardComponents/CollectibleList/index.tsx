@@ -211,7 +211,7 @@ export function CollectionList({ address }: { address: string }) {
     const chainId = ChainId.Mainnet
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [selectedCollection, setSelectedCollection] = useState<ERC721TokenCollectionInfo>()
+    const [selectedCollection, setSelectedCollection] = useState<ERC721TokenCollectionInfo | 'all'>('all')
 
     const {
         data: collections,
@@ -232,14 +232,16 @@ export function CollectionList({ address }: { address: string }) {
     }, [collections?.length, collectibles?.length])
 
     const renderCollectibles = useMemo(() => {
+        if (selectedCollection === 'all') return collectibles
+        if (!selectedCollection) return collectibles.filter((x) => !x.collection)
+
         return (collectibles ?? []).filter((x) => {
-            if (!selectedCollection) return true
             return (
                 isSameAddress(selectedCollection.address, x.contractDetailed.address) ||
                 selectedCollection.addresses?.find((r) => isSameAddress(r, x.contractDetailed.address))
             )
         })
-    }, [selectedCollection?.address, collectibles.length])
+    }, [selectedCollection, collectibles.length])
 
     if (loadingCollectionDone !== SocketState.done) {
         return <LoadingCollectible />
@@ -256,15 +258,29 @@ export function CollectionList({ address }: { address: string }) {
 
     return (
         <Box>
-            {!selectedCollection && loadingCollectibleDone && (
+            {selectedCollection === 'all' && loadingCollectibleDone && (
                 <Stack justifyContent="flex-end">
-                    <Typography align="right">All({collectibles.length})</Typography>
+                    <Typography align="right">All {collectibles.length ? `(${collectibles.length})` : null}</Typography>
                 </Stack>
             )}
             <Stack spacing={2} direction="row">
                 <Box sx={{ flexGrow: 1 }}>
                     <Box>
-                        {selectedCollection && (
+                        {!selectedCollection && selectedCollection !== 'all' && (
+                            <Box display="flex" alignItems="center" sx={{ marginBottom: '16px' }}>
+                                <Typography
+                                    className={classes.name}
+                                    color="textPrimary"
+                                    variant="body2"
+                                    sx={{ fontSize: '16px' }}>
+                                    Other
+                                    {loadingCollectibleDone && renderCollectibles.length
+                                        ? `(${renderCollectibles.length})`
+                                        : null}
+                                </Typography>
+                            </Box>
+                        )}
+                        {selectedCollection && selectedCollection !== 'all' && (
                             <Box display="flex" alignItems="center" sx={{ marginBottom: '16px' }}>
                                 <Box className={classes.collectionWrap}>
                                     {selectedCollection.iconURL ? (

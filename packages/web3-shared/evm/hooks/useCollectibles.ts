@@ -22,7 +22,7 @@ export function useCollectibles(address: string, chainId: ChainId | null, depend
     const id = `mask.fetchNonFungibleCollectibleAsset_${address}_${chainId}`
     const message = {
         id: dependReady === undefined ? id : dependReady ? id : '',
-        method: 'mask.fetchNonFungibleCollectibleAsset',
+        method: 'mask.fetchNonFungibleCollectibleAssetV2',
         params: {
             address: address,
             pageSize: 30,
