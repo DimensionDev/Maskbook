@@ -266,7 +266,8 @@
         "xlarge",
         "xlink",
         "zerion",
-        "Zubin"
+        "Zubin",
+        "pressable"
     ],
     "ignoreWords": [
         "AICANFT",
