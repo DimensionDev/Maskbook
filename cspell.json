@@ -18,6 +18,7 @@
     "ignorePaths": [
         ".*ignore",
         ".github",
+        ".lintstagedrc.mjs",
         ".prettierignore",
         "*.snap",
         "**/.eslintrc.json",
