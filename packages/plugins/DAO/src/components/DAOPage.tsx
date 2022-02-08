@@ -7,6 +7,8 @@ interface DAOPageProps {
     identifier?: ProfileIdentifier
 }
 
+// cspell:ignore resizer
+
 export function DAOPage({ identifier }: DAOPageProps) {
     const mode = useContext(MaskIconPaletteContext)
     const [size, setSize] = useState({ height: 500, width: 1 })

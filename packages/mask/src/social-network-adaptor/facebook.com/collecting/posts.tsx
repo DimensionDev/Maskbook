@@ -50,6 +50,7 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
             const commentSelectorMobile = root
                 .clone()
                 .map((x) => x.parentElement)
+                // cspell:disable-next-line
                 .querySelectorAll<HTMLElement>('[data-commentid]')
 
             const commentsSelector = isMobileFacebook ? commentSelectorMobile : commentSelectorPC

@@ -1,6 +1,5 @@
-import Typeson from 'typeson'
-
 // cspell:disable
+import Typeson from 'typeson'
 
 // @ts-ignore
 import builtins from 'typeson-registry/dist/presets/builtin' // @ts-ignore

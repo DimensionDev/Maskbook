@@ -3,6 +3,8 @@ import type { BackupFormat, Instance, ObjectStore } from './types'
 import typeson from './typeson'
 import { useI18N } from '../../utils'
 
+// cspell:ignore typeson
+
 export const DatabaseOps: React.FC = () => {
     const { t } = useI18N()
     const onBackup = async () => {

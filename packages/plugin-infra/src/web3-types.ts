@@ -2,6 +2,8 @@ import type { BigNumber } from 'bignumber.js'
 import type { Subscription } from 'use-subscription'
 import type { Pagination, Plugin, Pageable } from './types'
 
+// cspell:ignore solana
+
 /**
  * A network plugin defines the way to connect to a single chain.
  */

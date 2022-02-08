@@ -8,6 +8,8 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, SvgIconProps } from '@mui/material'
 import { AssetLoadingIcon, MaskPlaceholder } from '@masknet/icons'
 
+// cspell:ignore resizer
+
 interface ERC721TokenQuery {
     contractAddress: string
     tokenId: string

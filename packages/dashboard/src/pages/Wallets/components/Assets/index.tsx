@@ -13,6 +13,8 @@ import type { Web3Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
 import { v4 as uuid } from 'uuid'
 
+// cspell:ignore solana
+
 const useStyles = makeStyles()((theme) => ({
     caption: {
         paddingRight: theme.spacing(2.5),

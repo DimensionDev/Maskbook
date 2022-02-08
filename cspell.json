@@ -12,7 +12,6 @@
         "useCache": true
     },
     "ignorePaths": [
-        "!locales/en-us.json",
         ".*ignore",
         ".eslintrc.json",
         ".github",
@@ -24,7 +23,7 @@
         "*.snap",
         "*generated*",
         "dist",
-        "locales/*.json",
+        "locales/qya-aa.json",
         "node_modules",
         "package.json",
         "packages/mask/src/plugins/ito/assets/regions.json",
@@ -32,7 +31,8 @@
         "packages/web3-contracts/{abis,types}",
         "packages/web3-shared/evm/assets/**/*.json",
         "patches/**",
-        "pnpm-lock.yaml"
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml"
     ],
     "words": [
         "aave",
@@ -47,9 +47,7 @@
         "blockies",
         "boba",
         "caip",
-        "checksummed",
         "codegen",
-        "commentid",
         "contenteditable",
         "contrib",
         "contribs",
@@ -91,9 +89,7 @@
         "qrcode",
         "rarible",
         "realmasknetwork",
-        "resizer",
         "secp",
-        "solana",
         "steganography",
         "swappable",
         "swither",
@@ -103,7 +99,6 @@
         "thegraph",
         "tokenid",
         "transak",
-        "typeson",
         "unstyled",
         "urlcat",
         "walletconnect",
@@ -118,6 +113,10 @@
         {
             "filename": "**/*.md",
             "ignoreWords": ["guanbinrui", "pnpm", "pnpx", "yisiliu", "zhouhancheng"]
+        },
+        {
+            "filename": "packages/injected-script",
+            "ignoreWords": ["solana"]
         },
         {
             "filename": "packages/encryption",
@@ -215,7 +214,7 @@
         },
         {
             "filename": ["packages/plugins/Solana", "packages/web3-shared/solana"],
-            "ignoreWords": ["devnet", "metaplex"]
+            "ignoreWords": ["devnet", "metaplex", "solana"]
         },
         {
             "filename": "packages/web3-providers",

@@ -1,17 +1,16 @@
+// cspell:disable
 /// <reference path="./typeson.d.ts" />
 import Typeson from 'typeson'
 import type { Serialization } from 'async-call-rpc'
 import { Ok, Err, Some, None } from 'ts-results'
 import * as BN from 'bignumber.js'
 
-// cspell:disable
 // @ts-ignore
 import builtins from 'typeson-registry/dist/presets/builtin' // @ts-ignore
 import blob from 'typeson-registry/dist/types/blob' // @ts-ignore
 import file from 'typeson-registry/dist/types/file' // @ts-ignore
 import fileList from 'typeson-registry/dist/types/filelist' // @ts-ignore
 import imageBitMap from 'typeson-registry/dist/types/imagebitmap' // @ts-ignore
-// cspell:enable
 import num from 'typeson-registry/dist/presets/special-numbers'
 import { IdentifierMap } from '../Identifier/IdentifierMap'
 import {
@@ -21,8 +20,6 @@ import {
     PostIVIdentifier,
     ProfileIdentifier,
 } from '../Identifier/type'
-
-// cspell:ignore builtins
 
 let typeson: Typeson | undefined
 function setup() {

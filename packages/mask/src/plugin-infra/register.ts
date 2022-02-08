@@ -1,6 +1,8 @@
 // If your plugin also works in isolated dashboard, please also register it in
 // packages/dashboard/src/initialization/plugins.ts
 
+// cspell:disable
+
 import '@masknet/plugin-example'
 import '@masknet/plugin-debugger'
 import '@masknet/plugin-flow'
@@ -8,7 +10,6 @@ import '@masknet/plugin-file-service'
 import '@masknet/plugin-rss3'
 import '@masknet/plugin-dao'
 import '@masknet/plugin-solana'
-// cspell:disable
 import '../plugins/Wallet'
 import '../plugins/EVM'
 import '../plugins/RedPacket'

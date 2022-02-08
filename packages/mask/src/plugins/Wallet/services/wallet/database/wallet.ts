@@ -18,6 +18,8 @@ import { PluginDB } from '../../../database/Plugin.db'
 import { currentMaskWalletAccountSettings, currentAccountSettings, currentProviderSettings } from '../../../settings'
 import type { WalletRecord } from '../type'
 
+// cspell:ignore checksummed
+
 function WalletRecordOutDB(record: WalletRecord) {
     return {
         ...omit(record, 'type'),

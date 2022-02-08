@@ -14,6 +14,8 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useImageFailOver } from '../../hooks'
 import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
 
+// cspell:ignore checksummed
+
 function getFallbackIcons(address: string, baseURIs: string[]) {
     const checksummedAddress = formatEthereumAddress(address)
 

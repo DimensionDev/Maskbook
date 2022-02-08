@@ -4,6 +4,8 @@ import { useSubscription } from 'use-subscription'
 import { CurrencyType, NetworkPluginID, Web3Plugin } from '../web3-types'
 import { createConstantSubscription } from '@masknet/shared-base'
 
+// cspell:ignore solana
+
 // constant subscriptions
 const ZERO = createConstantSubscription(0)
 const ZERO_STRING = createConstantSubscription('0')
