@@ -53,7 +53,6 @@ const useStyles = makeStyles()((theme) => ({
         height: 14,
         background: '#fff',
         borderRadius: '50%',
-        border: `1px solid ${theme.palette.background.default}`,
     },
     alert: {
         fontSize: 12,

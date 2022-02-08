@@ -10,6 +10,7 @@ import {
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { ActionsBarNFT } from '../ActionsBarNFT'
 import { Image } from '../../../../components/shared/Image'
+import { useEffect, useRef, useState } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -70,6 +71,31 @@ export interface CollectibleCardProps {
 export function CollectibleCard(props: CollectibleCardProps) {
     const { wallet, token, provider, readonly, renderOrder } = props
     const { classes } = useStyles()
+    const imgRef = useRef<HTMLAnchorElement>(null)
+    const [imageLinkWithLazy, setImageLinkWithLazy] = useState<string>('')
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((item) => {
+                    if (!item.isIntersecting) return
+                    setImageLinkWithLazy(token.info.mediaUrl!)
+                    observer.unobserve(item.target)
+                })
+            },
+            {
+                rootMargin: '0px 0px 1000px 0px',
+                threshold: 0.1,
+            },
+        )
+
+        observer.observe(imgRef.current!)
+
+        return () => {
+            observer.unobserve(imgRef.current!)
+        }
+    }, [])
+
     const theme = useTheme()
     const fallbackImageURL =
         theme.palette.mode === 'dark'
@@ -78,6 +104,7 @@ export function CollectibleCard(props: CollectibleCardProps) {
     const { value: isImageToken, loading } = useImageChecker(token.info.mediaUrl)
     return (
         <Link
+            ref={imgRef}
             target="_blank"
             rel="noopener noreferrer"
             className={classes.linkWrapper}
@@ -90,13 +117,13 @@ export function CollectibleCard(props: CollectibleCardProps) {
                 {token.info.mediaUrl ? (
                     loading ? (
                         <Image component="img" width={172} height={172} loading src="" />
-                    ) : isImageToken ? (
+                    ) : isImageToken && imageLinkWithLazy ? (
                         <Image
                             component="img"
                             width={172}
                             height={172}
                             style={{ objectFit: 'cover' }}
-                            src={token.info.mediaUrl}
+                            src={imageLinkWithLazy}
                             onError={(event) => {
                                 const target = event.currentTarget as HTMLImageElement
                                 target.src = fallbackImageURL.toString()

@@ -60,7 +60,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     rainbowBorder: {
         animation: `${rainbowBorderKeyFrames} 6s linear infinite`,
-        transition: '1s ease',
+        transition: 'none',
         fill: 'none',
         strokeLinejoin: 'round',
         strokeLinecap: 'round',
