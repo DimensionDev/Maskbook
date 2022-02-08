@@ -11,6 +11,7 @@
             "path": "packages/mask/src/plugins/Trader/constants/tokens.txt"
         }
     ],
+    "useGitignore": true,
     "cache": {
         "useCache": true
     },
@@ -287,6 +288,7 @@
         },
         {
             "filename": [
+                ".*ignore",
                 "**/.eslintrc.json",
                 "**/qya-AA.json",
                 "**/pnpm-lock.yaml",
