@@ -213,9 +213,10 @@ export interface ERC721TokenRecordInDatabase extends ERC721TokenDetailed {
 
 export interface ERC721TokenCollectionInfo {
     name: string
-    image?: string
+    iconURL?: string
     slug: string
     address: string
+    addresses?: string[]
 }
 
 // #endregion

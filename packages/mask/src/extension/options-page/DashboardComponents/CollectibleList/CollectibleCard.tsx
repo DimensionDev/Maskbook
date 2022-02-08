@@ -1,9 +1,16 @@
-import { Card, Link } from '@mui/material'
+import { Card, Link, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { Wallet, ERC721TokenDetailed, resolveCollectibleLink, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
-import { MaskSharpIconOfSize } from '../../../../resources/MaskIcon'
+import {
+    Wallet,
+    ERC721TokenDetailed,
+    resolveCollectibleLink,
+    NonFungibleAssetProvider,
+    useImageChecker,
+} from '@masknet/web3-shared-evm'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { ActionsBarNFT } from '../ActionsBarNFT'
+import { Image } from '../../../../components/shared/Image'
+import { useEffect, useRef, useState } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -64,9 +71,40 @@ export interface CollectibleCardProps {
 export function CollectibleCard(props: CollectibleCardProps) {
     const { wallet, token, provider, readonly, renderOrder } = props
     const { classes } = useStyles()
+    const imgRef = useRef<HTMLAnchorElement>(null)
+    const [imageLinkWithLazy, setImageLinkWithLazy] = useState<string>('')
 
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((item) => {
+                    if (!item.isIntersecting) return
+                    setImageLinkWithLazy(token.info.mediaUrl!)
+                    observer.unobserve(item.target)
+                })
+            },
+            {
+                rootMargin: '0px 0px 1000px 0px',
+                threshold: 0.1,
+            },
+        )
+
+        observer.observe(imgRef.current!)
+
+        return () => {
+            observer.unobserve(imgRef.current!)
+        }
+    }, [])
+
+    const theme = useTheme()
+    const fallbackImageURL =
+        theme.palette.mode === 'dark'
+            ? new URL('./nft_token_fallback_dark.png', import.meta.url)
+            : new URL('./nft_token_fallback.png', import.meta.url)
+    const { value: isImageToken, loading } = useImageChecker(token.info.mediaUrl)
     return (
         <Link
+            ref={imgRef}
             target="_blank"
             rel="noopener noreferrer"
             className={classes.linkWrapper}
@@ -77,19 +115,57 @@ export function CollectibleCard(props: CollectibleCardProps) {
                     <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} token={token} />
                 )}
                 {token.info.mediaUrl ? (
-                    <NFTCardStyledAssetPlayer
-                        contractAddress={token.contractDetailed.address}
-                        chainId={token.contractDetailed.chainId}
-                        url={token.info.mediaUrl}
-                        renderOrder={renderOrder}
-                        tokenId={token.tokenId}
-                        classes={{
-                            loadingFailImage: classes.loadingFailImage,
-                            wrapper: classes.wrapper,
-                        }}
-                    />
+                    loading ? (
+                        <Image component="img" width={172} height={172} loading src="" />
+                    ) : isImageToken && imageLinkWithLazy ? (
+                        <Image
+                            component="img"
+                            width={172}
+                            height={172}
+                            style={{ objectFit: 'cover' }}
+                            src={imageLinkWithLazy}
+                            onError={(event) => {
+                                const target = event.currentTarget as HTMLImageElement
+                                target.src = fallbackImageURL.toString()
+                                target.classList.add(classes.loadingFailImage ?? '')
+                            }}
+                        />
+                    ) : (
+                        <NFTCardStyledAssetPlayer
+                            contractAddress={token.contractDetailed.address}
+                            chainId={token.contractDetailed.chainId}
+                            url={token.info.mediaUrl}
+                            renderOrder={renderOrder}
+                            tokenId={token.tokenId}
+                            fallbackResourceLoader={
+                                <Image
+                                    component="img"
+                                    width={172}
+                                    height={172}
+                                    style={{ objectFit: 'cover' }}
+                                    src={token.info.imageURL ?? ''}
+                                    onError={(event) => {
+                                        const target = event.currentTarget as HTMLImageElement
+                                        target.src = fallbackImageURL.toString()
+                                        target.classList.add(classes.loadingFailImage ?? '')
+                                    }}
+                                />
+                            }
+                            classes={{
+                                loadingFailImage: classes.loadingFailImage,
+                                wrapper: classes.wrapper,
+                            }}
+                        />
+                    )
                 ) : (
-                    <MaskSharpIconOfSize classes={{ root: classes.placeholderIcon }} size={22} />
+                    <Image
+                        component="img"
+                        width={172}
+                        height={172}
+                        style={{ objectFit: 'cover' }}
+                        src={fallbackImageURL.toString()}
+                        className={classes.loadingFailImage}
+                    />
                 )}
             </Card>
         </Link>

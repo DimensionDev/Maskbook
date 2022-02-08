@@ -232,8 +232,8 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(
         const handleConfirm = useCallback(
             (data: zod.infer<typeof schema>) => {
                 onSave_({
-                    maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed()),
-                    maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed()),
+                    maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
+                    maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
                 })
             },
             [onSave_],

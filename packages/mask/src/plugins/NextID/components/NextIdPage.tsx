@@ -66,12 +66,12 @@ export function NextIdPage({}: NextIDPageProps) {
             return Services.Helper.queryExistedBinding(currentPersona.identifier)
         }
 
-        if (!visitingPersonaIdentifier) return Promise.resolve(null)
+        if (!visitingPersonaIdentifier) return null
         const visitingPersona = await Services.Identity.queryPersonaByProfile(visitingPersonaIdentifier.identifier)
 
-        if (!visitingPersona) return Promise.resolve(null)
+        if (!visitingPersona) return null
         return Services.Helper.queryExistedBinding(visitingPersona.identifier)
-    }, [currentPersona, count, visitingPersonaIdentifier])
+    }, [currentPersona, count, visitingPersonaIdentifier, isOwn])
 
     if (personaActionButton) {
         return (
@@ -143,10 +143,16 @@ export function NextIdPage({}: NextIDPageProps) {
     return (
         <>
             <Box>
-                <Box className={classes.tip}>
-                    <Typography>{t.connect_wallet_tip_intro()}</Typography>
-                    <Typography>{t.connect_wallet_tip()}</Typography>
-                </Box>
+                {isOwn ? (
+                    <Box className={classes.tip}>
+                        <Typography>{t.connect_wallet_tip_intro()}</Typography>
+                        <Typography>{t.connect_wallet_tip()}</Typography>
+                    </Box>
+                ) : (
+                    <Box className={classes.tip}>
+                        <Typography>{t.connect_wallet__other_user_tip_intro()}</Typography>
+                    </Box>
+                )}
                 {isOwn && (
                     <Stack justifyContent="center" direction="row" mt="24px">
                         <Button variant="contained" onClick={() => toggleBindDialog(true)}>

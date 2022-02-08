@@ -1,6 +1,8 @@
 import type { EventBasedChannel } from 'async-call-rpc/full'
 
+// cspell:disable-next-line
 const key = 'maskbookjsonrpc'
+
 export class iOSWebkitChannel implements EventBasedChannel {
     constructor() {
         document.addEventListener(key, (e) => {

@@ -12,11 +12,11 @@ You can set error message with i18n, you can read this file to learn about [i18n
 import { z as zod } from 'zod'
 
 export function ComponentForm() {
-  const t = useComponentI18N() // Set errror messge with i18n.
+  const t = useComponentI18N() // Set error message with i18n.
   const schema = zod.object({
     name: zod.string(), // string
     age: zod.number(t.needBeNumber()).positive(t.needGreaterThanZero()), // > 0
-    country: zod.string(t.countyNeedBeString()).optional(), // string | undefiend
+    country: zod.string(t.countyNeedBeString()).optional(), // string | undefined
     address: zod
       .string()
       .min(1)
@@ -43,7 +43,7 @@ const methods = useForm<formType>({
 })
 ```
 
-`react-hook-form` provides [optional argumenjs](https://react-hook-form.com/api/useform), you can change it on demand.
+`react-hook-form` provides [optional arguments](https://react-hook-form.com/api/useform), you can change it on demand.
 
 ### 3. Create form UI with `Controller` and Material-UI component
 

@@ -4,6 +4,7 @@ import Services from '../service'
 import { WalletRPC, WalletMessages } from '../../plugins/Wallet/messages'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { PluginTraderMessages, PluginTraderRPC } from '../../plugins/Trader/messages'
+import { PluginPetMessages } from '../../plugins/Pets/messages'
 import { MaskMessages } from '../../utils/messages'
 import { startPluginDashboard } from '@masknet/plugin-infra'
 import { createPluginHost } from '../../plugin-infra/host'
@@ -16,6 +17,7 @@ const msg: DashboardPluginMessages = {
     Wallet: WalletMessages,
     Swap: PluginTraderMessages,
     Transak: PluginTransakMessages,
+    Pets: PluginPetMessages,
 }
 const rpc: DashboardPluginServices = {
     Wallet: WalletRPC,

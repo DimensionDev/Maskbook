@@ -5,9 +5,13 @@ import { styled, ListItemButton, Typography, ListItemIcon, useMediaQuery } from 
 
 const mindsBreakPoint = 1221 /** px */
 
-const Container = styled('div')``
+const Container = styled('div')`
+    height: 45px;
+    margin-bottom: 10px;
+`
 const Item = styled(ListItemButton)`
     border-radius: 8px;
+    height: 45px;
     padding: 4px 12px 4px 0;
     color: ${({ theme }) => (theme.palette.mode === 'dark' ? '#b8c1ca' : '#72727c')};
     &:hover {
@@ -32,6 +36,7 @@ const Text = styled(Typography)`
 const Icon = styled(ListItemIcon)`
     color: inherit;
     min-width: 48px;
+    margin-left: 6px;
     @media screen and (max-width: ${mindsBreakPoint}px) {
         min-width: 0;
     }
