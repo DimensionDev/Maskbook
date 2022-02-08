@@ -20,7 +20,13 @@ import { TrendingViewDeck } from './TrendingViewDeck'
 import { currentDataProviderSettings } from '../../settings'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
-import { EthereumTokenType, useFungibleTokenDetailed, useChainIdValid, useNetworkType } from '@masknet/web3-shared-evm'
+import {
+    EthereumTokenType,
+    useFungibleTokenDetailed,
+    useChainIdValid,
+    useNetworkType,
+    isNativeTokenSymbol,
+} from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
     return {
@@ -193,8 +199,7 @@ export function TraderView(props: TraderViewProps) {
     // #endregion
 
     // #region if the coin is a native token or contract address exists
-    const isNativeToken = ['eth', 'matic', 'bnb', 'avax'].includes(coinSymbol)
-    const isSwappable = (!!trending?.coin.contract_address || isNativeToken) && chainIdValid
+    const isSwappable = (!!trending?.coin.contract_address || isNativeTokenSymbol(coinSymbol)) && chainIdValid
     // #endregion
 
     // #region display loading skeleton

@@ -9,4 +9,5 @@ export const OPENOCEAN_SUPPORTED_CHAINS = [
     ChainId.Fantom,
     ChainId.Arbitrum,
     ChainId.Avalanche,
+    ChainId.Boba,
 ]

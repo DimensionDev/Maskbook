@@ -30,7 +30,7 @@ const resolveRaribleUserNetwork = createLookupTableResolver<ChainId.Mainnet | Ch
 
 async function fetchFromRarible<T>(url: string, path: string, init?: RequestInit) {
     const response = await fetch(urlcat(url, path), {
-        ...(!isProxyENV && { mode: 'cors' }),
+        ...(!isProxyENV() && { mode: 'cors' }),
         ...init,
     })
     return response.json() as Promise<T>
@@ -171,7 +171,9 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider {
                 hasNextPage: false,
             }
 
-        const data = asset.items.map((asset) => createERC721TokenFromAsset(asset.contract, asset.tokenId, asset))
+        const data = asset.items
+            .map((asset) => createERC721TokenFromAsset(asset.contract, asset.tokenId, asset))
+            .filter((x) => x.info?.owner?.toLowerCase() === from.toLowerCase())
         return {
             data,
             hasNextPage: !!asset.continuation,

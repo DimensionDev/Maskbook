@@ -95,6 +95,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.injection.openNFTAvatar?.(signal)
     ui.injection.postAndReplyNFTAvatar?.(signal)
     ui.injection.collectionAvatar?.(signal)
+    ui.injection.avatarClipNFT?.(signal)
 
     startPluginSNSAdaptor(
         getCurrentSNSNetwork(ui.networkIdentifier),

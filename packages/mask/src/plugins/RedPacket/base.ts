@@ -26,6 +26,7 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.Boba,
                     ChainId.Fantom,
                     ChainId.Avalanche,
+                    ChainId.Aurora,
                 ],
             },
         },

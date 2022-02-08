@@ -58,6 +58,7 @@ export function ArticleTab(props: ArticleTabProps) {
                             playsInline: true,
                         }}
                         classes={classes}
+                        isFixedIframeSize={false}
                     />
                 </div>
             </CollectibleTab>

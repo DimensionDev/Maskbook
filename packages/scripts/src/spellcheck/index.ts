@@ -19,6 +19,7 @@ interface Configure {
 
 function sort(values?: string[]) {
     if (!values) return
+    values = values.map((value) => value.toLowerCase())
     values = [...new Set(values)]
     values.sort((a, b) => a.localeCompare(b, 'en-US', { numeric: true }))
     return values
