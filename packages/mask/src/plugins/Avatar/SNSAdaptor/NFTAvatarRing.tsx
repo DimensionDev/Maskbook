@@ -89,12 +89,8 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
                 </text>
 
                 <text x="0%" textAnchor="middle" fill={`url(#${id}-pattern)`} fontFamily="sans-serif">
-                    <textPath
-                        xlinkHref={`#${id}-path-price`}
-                        startOffset="50%"
-                        rotate="auto"
-                        dominantBaseline="mathematical">
-                        <tspan fontWeight="bold" fontSize={fontSize}>
+                    <textPath xlinkHref={`#${id}-path-price`} startOffset="50%" rotate="auto">
+                        <tspan fontWeight="bold" fontSize={fontSize} dy="0.5em">
                             {price}
                         </tspan>
                     </textPath>
