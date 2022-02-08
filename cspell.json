@@ -59,16 +59,9 @@
         "contribs",
         "cooldown",
         "counterparty",
-        "crwdne",
-        "cunha",
-        "cura",
-        "d'ivoire",
-        "darussalam",
         "datas",
         "debank",
         "denorm",
-        "describedby",
-        "deserialization",
         "destory",
         "dfyn",
         "dhedge",
@@ -96,7 +89,6 @@
         "geckoview",
         "gltf",
         "goodghosting",
-        "görli",
         "gundb",
         "hashmasks",
         "hexlify",
@@ -124,19 +116,16 @@
         "labelledby",
         "lamports",
         "languagedetector",
-        "lemy",
         "leste",
         "linkedin",
         "linkswap",
         "locationchange",
-        "lowercased",
         "maarten",
         "macbinary",
         "majeure",
         "marino",
         "markdownlint",
         "maskbook",
-        "maskbookjsonrpc",
         "maskface",
         "masknet",
         "masknetwork",
@@ -145,7 +134,6 @@
         "mastdon",
         "mayen",
         "merkle",
-        "messagepack",
         "metas",
         "metaverse",
         "millify",
@@ -286,17 +274,11 @@
         "clueid",
         "consts",
         "cotm",
-        "crwdnd",
-        "crwdns",
         "cryptoart",
         "cryptoartai",
-        "cryptopunks",
-        "csvg",
         "cusd",
         "defi",
         "devnet",
-        "dnoxg",
-        "dodoapi",
         "drawed",
         "energi",
         "enjin",
@@ -323,8 +305,6 @@
         "immerable",
         "inpage",
         "irss",
-        "isfacebook",
-        "jkoeaghipilijlahjplgbfiocjhldnap",
         "jsxs",
         "koda",
         "kodav",
@@ -393,8 +373,24 @@
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [
         {
-            "filename": "web3-contracts/types/GoodGhostingIncentives.d.ts",
+            "filename": "**/*.md",
+            "ignoreWords": ["guanbinrui", "jkoeaghipilijlahjplgbfiocjhldnap", "pnpx", "yisiliu", "zhouhancheng"]
+        },
+        {
+            "filename": "packages/web3-contracts/types/GoodGhostingIncentives.d.ts",
             "ignoreWords": ["adming", "ditribution"]
+        },
+        {
+            "filename": "packages/web3-shared/evm/assets/**/*.json",
+            "ignoreWords": ["görli"]
+        },
+        {
+            "filename": "packages/mask/src/plugins/ITO/assets/regions.json",
+            "enabled": false
+        },
+        {
+            "filename": "**/qya-AA.json",
+            "enabled": false
         }
     ]
 }
