@@ -1,7 +1,8 @@
-import { createContext, useEffect, useMemo } from 'react'
-import { useValueRef } from '@masknet/shared'
+import { createContext, useEffect, useMemo, useState } from 'react'
+import { TokenIcon, useValueRef } from '@masknet/shared'
 import {
     ChainId,
+    ERC721TokenCollectionInfo,
     ERC721TokenDetailed,
     isSameAddress,
     NonFungibleAssetProvider,
@@ -10,13 +11,14 @@ import {
     useCollections,
     Wallet,
 } from '@masknet/web3-shared-evm'
-import { Box, Button, Skeleton, Typography } from '@mui/material'
+import { Box, Button, Skeleton, Stack, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { currentNonFungibleAssetDataProviderSettings } from '../../../../plugins/Wallet/settings'
 import { useI18N } from '../../../../utils'
 import { CollectibleCard } from './CollectibleCard'
 import { Image } from '../../../../components/shared/Image'
 import { WalletMessages } from '@masknet/plugin-wallet'
+import { LoadingCollectible } from './LoadingCollectible'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -180,7 +182,6 @@ function CollectibleListUI(props: CollectibleListUIProps) {
 
 export interface CollectibleListProps extends withClasses<'empty' | 'button'> {
     address: string
-    collection?: string
     collectibles: ERC721TokenDetailed[]
     error?: string
     loading: boolean
@@ -210,6 +211,7 @@ export function CollectionList({ address }: { address: string }) {
     const chainId = ChainId.Mainnet
     const { t } = useI18N()
     const { classes } = useStyles()
+    const [selectedCollection, setSelectedCollection] = useState<ERC721TokenCollectionInfo>()
 
     const {
         data: collections,
@@ -229,25 +231,18 @@ export function CollectionList({ address }: { address: string }) {
         return collectibles.filter((item) => !item.collection)
     }, [collections?.length, collectibles?.length])
 
+    const renderCollectibles = useMemo(() => {
+        return (collectibles ?? []).filter((x) => {
+            if (!selectedCollection) return true
+            return (
+                isSameAddress(selectedCollection.address, x.contractDetailed.address) ||
+                selectedCollection.addresses?.find((r) => isSameAddress(r, x.contractDetailed.address))
+            )
+        })
+    }, [selectedCollection?.address, collectibles.length])
+
     if (loadingCollectionDone !== SocketState.done) {
-        return (
-            <Box className={classes.root}>
-                {Array.from({ length: 3 })
-                    .fill(0)
-                    .map((_, i) => (
-                        <Box className={classes.card} display="flex" flexDirection="column" key={i}>
-                            <Skeleton animation="wave" variant="rectangular" width={172} height={172} />
-                            <Skeleton
-                                animation="wave"
-                                variant="text"
-                                width={172}
-                                height={20}
-                                style={{ marginTop: 4 }}
-                            />
-                        </Box>
-                    ))}
-            </Box>
-        )
+        return <LoadingCollectible />
     }
 
     if (!isLoading && !collections.length)
@@ -261,34 +256,39 @@ export function CollectionList({ address }: { address: string }) {
 
     return (
         <Box>
-            {(collections ?? []).map((x, i) => {
-                const renderCollectibles = collectibles.filter(
-                    (c) =>
-                        isSameAddress(c.contractDetailed.address, x.address) ||
-                        x.addresses?.find((r) => isSameAddress(r, c.contractDetailed.address)),
-                )
-                return (
-                    <Box key={i}>
-                        <Box display="flex" alignItems="center" sx={{ marginTop: '16px' }}>
-                            <Box className={classes.collectionWrap}>
-                                {x.iconURL ? (
-                                    <Image component="img" className={classes.collectionImg} src={x.iconURL} />
-                                ) : null}
+            {!selectedCollection && loadingCollectibleDone && (
+                <Stack justifyContent="flex-end">
+                    <Typography align="right">All({collectibles.length})</Typography>
+                </Stack>
+            )}
+            <Stack spacing={2} direction="row">
+                <Box sx={{ flexGrow: 1 }}>
+                    <Box>
+                        {selectedCollection && (
+                            <Box display="flex" alignItems="center" sx={{ marginBottom: '16px' }}>
+                                <Box className={classes.collectionWrap}>
+                                    {selectedCollection.iconURL ? (
+                                        <Image
+                                            component="img"
+                                            className={classes.collectionImg}
+                                            src={selectedCollection.iconURL}
+                                        />
+                                    ) : null}
+                                </Box>
+                                <Typography
+                                    className={classes.name}
+                                    color="textPrimary"
+                                    variant="body2"
+                                    sx={{ fontSize: '16px' }}>
+                                    {selectedCollection.name}
+                                    {loadingCollectibleDone && renderCollectibles.length
+                                        ? `(${renderCollectibles.length})`
+                                        : null}
+                                </Typography>
                             </Box>
-                            <Typography
-                                className={classes.name}
-                                color="textPrimary"
-                                variant="body2"
-                                sx={{ fontSize: '16px' }}>
-                                {x.name}
-                                {loadingCollectibleDone && renderCollectibles.length
-                                    ? `(${renderCollectibles.length})`
-                                    : null}
-                            </Typography>
-                        </Box>
+                        )}
                         <CollectibleList
                             address={address}
-                            collection={x.slug}
                             retry={() => {
                                 retryFetchCollectible()
                                 retryFetchCollection()
@@ -297,31 +297,34 @@ export function CollectionList({ address }: { address: string }) {
                             loading={loadingCollectibleDone !== SocketState.done && renderCollectibles.length === 0}
                         />
                     </Box>
-                )
-            })}
-            {!!renderWithRarible.length && (
-                <Box key="rarible">
-                    <Box display="flex" alignItems="center" sx={{ marginTop: '16px' }}>
-                        <Typography
-                            className={classes.name}
-                            color="textPrimary"
-                            variant="body2"
-                            sx={{ fontSize: '16px' }}>
-                            Rarible ({renderWithRarible.length})
-                        </Typography>
-                    </Box>
-                    <CollectibleList
-                        address={address}
-                        collection="Rarible"
-                        retry={() => {
-                            retryFetchCollectible()
-                            retryFetchCollection()
-                        }}
-                        collectibles={renderWithRarible}
-                        loading={false}
-                    />
                 </Box>
-            )}
+                <Box>
+                    {(collections ?? []).map((x, i) => {
+                        return (
+                            <Box display="flex" key={i} alignItems="center" sx={{ marginTop: '16px' }}>
+                                <Box className={classes.collectionWrap} onClick={() => setSelectedCollection(x)}>
+                                    {x.iconURL ? (
+                                        <Image component="img" className={classes.collectionImg} src={x.iconURL} />
+                                    ) : (
+                                        <TokenIcon address={x.address} />
+                                    )}
+                                </Box>
+                            </Box>
+                        )
+                    })}
+                    {!!renderWithRarible.length && (
+                        <Box display="flex" alignItems="center" key="other" sx={{ marginTop: '16px' }}>
+                            <Typography
+                                className={classes.name}
+                                color="textPrimary"
+                                variant="body2"
+                                sx={{ fontSize: '16px' }}>
+                                Other
+                            </Typography>
+                        </Box>
+                    )}
+                </Box>
+            </Stack>
         </Box>
     )
 }
