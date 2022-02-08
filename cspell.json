@@ -401,7 +401,7 @@
             "filename": "**/qya-AA.json",
             "enabled": false
         },
-              {
+        {
             "filename": "packages/web3-contracts/types/RealityCardsMarket.d.ts",
             "ignoreWords": ["Seperator", "realitio"]
         },
