@@ -35,7 +35,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { width, height, radius = '10
         width,
         height,
         boxShadow: '0 5px 15px rgba(0, 248, 255, 0.4), 0 10px 30px rgba(37, 41, 46, 0.2)',
-        transition: '.125s ease',
+        transition: 'none',
         borderRadius: radius,
         display: 'flex',
         justifyContent: 'center',

@@ -25,9 +25,12 @@ import OpenseaAPI from '@masknet/web3-constants/evm/opensea-api.json'
 import CryptoArtAI from '@masknet/web3-constants/evm/cryptoartai.json'
 import { hookTransform, transform, transformFromJSON } from './utils'
 
-function getEnvConstants(key: string) {
+function getEnvConstants(key: 'WEB3_CONSTANTS_RPC') {
     try {
-        return process.env[key] ?? ''
+        const map = {
+            WEB3_CONSTANTS_RPC: process.env.WEB3_CONSTANTS_RPC,
+        }
+        return map[key] ?? ''
     } catch {
         return ''
     }
@@ -83,7 +86,7 @@ export const useMaskBoxConstants = hookTransform(getMaskBoxConstants)
 export const getRPCConstants = transformFromJSON(getEnvConstants('WEB3_CONSTANTS_RPC'), RPC)
 export const useRPCConstants = hookTransform(getRPCConstants)
 
-export const getExplorerConstants = transformFromJSON(getEnvConstants('WEB3_CONSTANTS_EXPLORER'), Explorer)
+export const getExplorerConstants = transform(Explorer)
 export const useExplorerConstants = hookTransform(getExplorerConstants)
 
 export const getTokenListConstants = transform(TokenList)
