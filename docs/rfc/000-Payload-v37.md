@@ -1,5 +1,7 @@
 # Payload version -37
 
+<!-- markdownlint-disable no-duplicate-heading -->
+
 ## Design target
 
 - MUST be a binary format.
