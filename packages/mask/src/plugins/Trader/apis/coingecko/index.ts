@@ -1,6 +1,8 @@
 import { COIN_GECKO_BASE_URL } from '../../constants'
 import { Flags } from '../../../../../shared'
 
+// cspell:ignore bitcointalk
+
 // #region get currency
 export async function getAllCurrencies() {
     const response = await fetch(`${COIN_GECKO_BASE_URL}/simple/supported_vs_currencies`, { cache: 'force-cache' })

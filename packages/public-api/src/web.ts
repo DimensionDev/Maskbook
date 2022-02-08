@@ -201,6 +201,7 @@ export enum DataProvider {
     UNISWAP_INFO = 2,
 }
 
+// cspell:disable
 export enum TradeProvider {
     UNISWAP_V2 = 0,
     ZRX = 1,
@@ -218,6 +219,8 @@ export enum TradeProvider {
     TRADERJOE = 13,
     PANGOLIN = 14,
 }
+// cspell:enable
+
 /** Supported language settings */
 export enum LanguageOptions {
     __auto__ = 'auto',

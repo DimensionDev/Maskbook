@@ -6,6 +6,8 @@ import alias from '@rollup/plugin-alias'
 import dts from 'rollup-plugin-dts'
 import replace from '@rollup/plugin-replace'
 
+// cspell:ignore treeshake
+
 const config = {
     input: './src/index.ts',
     output: {

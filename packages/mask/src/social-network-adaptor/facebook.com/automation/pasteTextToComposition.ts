@@ -6,6 +6,8 @@ import { untilDocumentReady } from '../../../utils/dom'
 import { MaskMessages } from '../../../utils/messages'
 import { inputText, pasteText } from '@masknet/injected-script'
 
+// cspell:ignore textbox
+
 async function openPostDialogFacebook() {
     await untilDocumentReady()
     const notActivated = isMobileFacebook

@@ -20,6 +20,8 @@ import { twitterShared } from '../shared'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context'
 import { getCurrentIdentifier } from '../../utils'
 
+// cspell:ignore steganographic
+
 function registerPostCollectorInner(
     postStore: Next.CollectingCapabilities.PostsProvider['posts'],
     cancel: AbortSignal,

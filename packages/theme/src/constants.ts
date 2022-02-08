@@ -1,3 +1,4 @@
+// cspell:ignore tinycolor
 import { PaletteMode, Theme, useTheme } from '@mui/material'
 import { kebabCase } from 'lodash-unified'
 import parseColor from 'tinycolor2'

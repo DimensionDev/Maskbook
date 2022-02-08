@@ -3,6 +3,8 @@ import type { AvatarMetaDB } from '../types'
 import addSeconds from 'date-fns/addSeconds'
 import { RSS3 } from '@masknet/web3-providers'
 
+// cspell:ignore nftrss
+
 interface NFTRSSNode {
     signature: string
     nft: AvatarMetaDB

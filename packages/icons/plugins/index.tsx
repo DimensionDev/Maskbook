@@ -1,3 +1,4 @@
+// cspell:ignore dhedge
 export * from './FileService'
 export * from './Markets'
 export * from './SwapService'

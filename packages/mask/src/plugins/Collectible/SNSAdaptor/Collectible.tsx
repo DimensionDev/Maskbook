@@ -1,3 +1,4 @@
+// cspell:ignore switcher
 import { ReactElement, useCallback } from 'react'
 import { Box, Button, CardActions, CardContent, CardHeader, Link, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'

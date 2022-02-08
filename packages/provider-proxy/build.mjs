@@ -5,6 +5,8 @@ import { join, resolve } from 'path'
 import { fileURLToPath } from 'url'
 import { format as formatDate } from 'date-fns'
 
+// cspell:ignore pnpm
+
 const __file = fileURLToPath(import.meta.url)
 const __dirname = resolve(__file, '../')
 const __root = join(__dirname, './dist')

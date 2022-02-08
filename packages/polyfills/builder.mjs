@@ -5,6 +5,8 @@ import { readFile, writeFile } from 'fs/promises'
 import { createRequire } from 'module'
 import { createHash } from 'crypto'
 
+// cspell:ignore pnpm
+
 // https://github.com/rollup/rollup/issues/4253
 // import loadConfigFile from 'rollup/dist/loadConfigFile.js'
 function loadConfigFile(...args) {
@@ -38,12 +40,12 @@ await builder({
     summary: {
         comment: { size: false, modules: true },
     },
-    filename: fileURLToPath(new URL(`./dist/ecmascript.js`, import.meta.url)),
+    filename: fileURLToPath(new URL('./dist/ecmascript.js', import.meta.url)),
 })
 
-process.chdir(fileURLToPath(new URL(`./dist/`, import.meta.url)))
+process.chdir(fileURLToPath(new URL('./dist/', import.meta.url)))
 
-const { options, warnings } = await loadConfigFile(fileURLToPath(new URL('rollup.config.js', import.meta.url)), {
+const { options, warnings } = await loadConfigFile(fileURLToPath(new URL('./rollup.config.js', import.meta.url)), {
     format: 'es',
 })
 warnings.flush()
@@ -52,10 +54,10 @@ for (const optionsObj of options) {
     await Promise.all(optionsObj.output.map(bundle.write))
 }
 
-const elliptic = await readFile(fileURLToPath(new URL(`./dist/internal_elliptic.js`, import.meta.url)), 'utf-8')
+const elliptic = await readFile(fileURLToPath(new URL('./dist/internal_elliptic.js', import.meta.url)), 'utf-8')
 const liner = await readFile(require.resolve('webcrypto-liner/build/webcrypto-liner.shim.min.mjs'), 'utf-8')
 await writeFile(
-    fileURLToPath(new URL(`./dist/secp256k1.js`, import.meta.url)),
+    fileURLToPath(new URL('./dist/secp256k1.js', import.meta.url)),
     `${elliptic};
 ${liner};`,
 )

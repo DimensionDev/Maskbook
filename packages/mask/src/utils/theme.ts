@@ -16,6 +16,8 @@ import { Subscription, useSubscription } from 'use-subscription'
 import produce, { setAutoFreeze } from 'immer'
 import twitterColorSchema from '../social-network-adaptor/twitter.com/customization/twitter-color-schema.json'
 
+// cspell:ignore monofont monospace consolas
+
 function getFontFamily(monospace?: boolean) {
     // We want to look native.
 

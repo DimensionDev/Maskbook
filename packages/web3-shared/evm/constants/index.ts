@@ -1,3 +1,4 @@
+// cspell:disable
 import Airdrop from '@masknet/web3-constants/evm/airdrop.json'
 import Ethereum from '@masknet/web3-constants/evm/ethereum.json'
 import DeBank from '@masknet/web3-constants/evm/debank.json'

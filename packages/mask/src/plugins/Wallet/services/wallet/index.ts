@@ -1,3 +1,4 @@
+// cspell:ignore maskwallet
 import * as bip39 from 'bip39'
 import { first, last } from 'lodash-unified'
 import { toHex } from 'web3-utils'

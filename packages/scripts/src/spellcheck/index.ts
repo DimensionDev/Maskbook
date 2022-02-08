@@ -11,7 +11,7 @@ interface RootConfigure extends Configure {
 }
 
 interface Configure {
-    filename?: string
+    filename?: string | string[]
     ignorePaths?: string[]
     words?: string[]
     ignoreWords?: string[]

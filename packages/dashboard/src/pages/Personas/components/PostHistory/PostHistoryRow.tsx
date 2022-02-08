@@ -32,6 +32,7 @@ const parseFileServiceMessage = (body: any) => {
     )
 }
 
+// cspell:disable
 const SUPPORT_PLUGIN: Record<
     string,
     { pluginId: null | string; icon: ReactNode; messageParse: (body: any) => ReactNode }
@@ -72,6 +73,7 @@ const SUPPORT_PLUGIN: Record<
         messageParse: (body: any) => body.question,
     },
 }
+// cspell:enable
 
 interface PostHistoryRowProps {
     post: PostRecord

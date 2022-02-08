@@ -18,6 +18,8 @@ import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialo
 import { NetworkPluginID, PluginId, usePluginIDContext } from '@masknet/plugin-infra'
 import { FindTrumanDialog } from '../../plugins/FindTruman/SNSAdaptor/FindTrumanDialog'
 
+// cspell:ignore findtruman
+
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
         position: 'sticky',

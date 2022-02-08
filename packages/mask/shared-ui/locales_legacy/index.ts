@@ -9,7 +9,7 @@ import { fallbackLng } from '@masknet/shared-base'
 // @ts-ignore in case circle dependency make typescript complains
 import { addDashboardI18N } from '@masknet/dashboard'
 
-// cspell:ignore lngs
+// cspell:ignore lngs languagedetector
 
 i18nNextInstance.use(Detector).init({
     keySeparator: false,

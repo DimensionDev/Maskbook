@@ -1,3 +1,4 @@
+// cspell:ignore pvtsutils
 import { Convert } from 'pvtsutils'
 
 export function fromBase64URL(x: string) {

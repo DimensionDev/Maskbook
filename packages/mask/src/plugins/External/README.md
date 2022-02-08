@@ -1,5 +1,7 @@
 # External plugins
 
+<!-- cspell:ignore everytime -->
+
 ## Plugin management (TBD)
 
 Priority (highest to lowest):

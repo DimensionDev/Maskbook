@@ -3,6 +3,8 @@ import { useValueRef } from '@masknet/shared'
 import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
 import type { InternalSettings } from '../../settings/createSettings'
 
+// cspell:ignore switcher
+
 export function useSettingsSwitcher<T extends string | number, S extends InternalSettings<T>>(
     settings: S,
     options: T[],

@@ -6,6 +6,7 @@ import { createWeb3 } from '../../../extension/background-script/EthereumService
 import { PluginProfileRPC } from '../../Profile/messages'
 import { PluginNFTAvatarRPC } from '../../Avatar/messages'
 
+// cspell:disable-next-line
 const ENS_RE = /\S{1,256}\.(eth|kred|xyz|luxe)\b/
 const ADDRESS_FULL = /0x\w+/
 const RSS3_URL_RE = /https?:\/\/(?<name>[\w.]+)\.rss3\.bio/

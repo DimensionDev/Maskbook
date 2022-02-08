@@ -1,5 +1,7 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
 
+// cspell:ignore usermenu
+
 type E = HTMLElement
 
 const querySelector = <T extends E, SingleMode extends boolean = true>(selector: string, singleMode = true) => {

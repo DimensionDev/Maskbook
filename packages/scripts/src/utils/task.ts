@@ -1,5 +1,9 @@
 import type { TaskFunction } from 'gulp'
-import { shell, awaitChildProcess } from './'
+import { shell } from './run'
+import { awaitChildProcess } from './awaitChildProcess'
+
+// cspell:ignore pnpm
+
 export function task(f: TaskFunction, name: string, description: string, flags?: TaskFunction['flags']): TaskFunction {
     f.displayName = name
     f.description = description

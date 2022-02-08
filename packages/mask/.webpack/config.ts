@@ -18,6 +18,8 @@ import { BuildFlags, normalizeBuildFlags, computedBuildFlags } from './flags'
 
 import './clean-hmr'
 
+// cspell:ignore inpage
+
 export function createConfiguration(rawFlags: BuildFlags): Configuration {
     const normalizedFlags = normalizeBuildFlags(rawFlags)
     const { sourceMapKind } = computedBuildFlags(normalizedFlags)
@@ -142,6 +144,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                             transform: {
                                 react: {
                                     runtime: 'automatic',
+                                    // cspell:disable-next-line
                                     useBuiltins: true,
                                     refresh: reactRefresh && {
                                         refreshReg: '$RefreshReg$',

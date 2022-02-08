@@ -1,3 +1,4 @@
+// cspell:ignore notistack
 import { forwardRef, useRef, memo, useCallback } from 'react'
 import { keyframes } from 'tss-react'
 import {

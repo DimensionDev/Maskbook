@@ -19,6 +19,8 @@ import { LoadingButton } from '../LoadingButton'
 import PasswordField from '../PasswordField'
 import { useCustomSnackbar } from '@masknet/theme'
 
+// cspell:ignore macbinary
+
 enum RestoreStatus {
     WaitingInput = 0,
     Verifying = 1,

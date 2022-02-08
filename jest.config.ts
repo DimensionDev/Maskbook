@@ -5,6 +5,8 @@
 import type { InitialOptionsTsJest } from 'ts-jest/dist/types'
 import { defaultsESM as tsjPreset } from 'ts-jest/presets'
 
+// cspell:ignore serializers
+
 Error.stackTraceLimit = Infinity
 const config: InitialOptionsTsJest = {
     transform: {

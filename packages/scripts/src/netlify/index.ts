@@ -6,6 +6,8 @@ import { codegen } from '../codegen'
 const SITES_PATH = resolve(NETLIFY_PATH, 'sites')
 const STATIC_PATH = resolve(NETLIFY_PATH, 'storybook-static')
 
+// cspell:ignore pnpm
+
 // prettier-ignore
 const dashboardSB = createBuildStorybook6(
     resolve(PKG_PATH, 'dashboard'),

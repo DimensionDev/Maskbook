@@ -11,6 +11,8 @@ import { Version } from './Version'
 import links from './links.json'
 import { ABOUT_DIALOG_BACKGROUND } from '../../assets'
 
+// cspell:ignore maskface
+
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
         width: 580,

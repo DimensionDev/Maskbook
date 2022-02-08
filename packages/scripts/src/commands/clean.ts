@@ -4,6 +4,8 @@ import { join } from 'path'
 import { promisify } from 'util'
 const rm = promisify(rimraf)
 
+// cspell:ignore pnpm
+
 interface Args {
     deps: boolean
 }

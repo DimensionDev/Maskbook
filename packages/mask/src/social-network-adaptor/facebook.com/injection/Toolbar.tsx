@@ -2,6 +2,9 @@ import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-k
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { startWatch } from '../../../utils/watcher'
 import { ToolboxAtFacebook } from './ToolbarUI'
+
+// cspell:ignore pagelet
+
 export function injectToolboxHintAtFacebook(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(
         new LiveSelector().querySelector<HTMLLIElement>('[data-pagelet="LeftRail"] li:nth-child(2)'),

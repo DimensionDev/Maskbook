@@ -1,4 +1,4 @@
-// cspell:ignore twimg
+// cspell:ignore twimg formating canonify
 
 export const twitterUrl = {
     hostIdentifier: 'twitter.com',

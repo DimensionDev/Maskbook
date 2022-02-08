@@ -1,3 +1,4 @@
+// cspell:ignore switcher
 export * from './useControlledDialog'
 export * from './useMatchXS'
 export * from './useMenu'

@@ -2,6 +2,8 @@ import { useTheme, SvgIcon, SvgIconProps, Theme } from '@mui/material'
 import { forwardRef, memo, ForwardedRef, useContext } from 'react'
 import { MaskIconPaletteContext } from './MaskIconPaletteContext'
 
+// cspell:ignore viewbox
+
 /** @internal */
 export type Size = [width: number | undefined, height: number | undefined]
 /** @internal */

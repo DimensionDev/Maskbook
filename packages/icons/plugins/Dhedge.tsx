@@ -1,6 +1,8 @@
 import { createIcon } from '../utils'
 import type { SvgIcon } from '@mui/material'
 
+// cspell:ignore dhedge
+
 export const DhedgeIcon: typeof SvgIcon = createIcon(
     'Dhedge',
     <g>

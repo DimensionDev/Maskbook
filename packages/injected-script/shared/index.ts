@@ -1,6 +1,8 @@
 import type { RequestArguments } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 
+// cspell:ignore inpage
+
 export const CustomEventId = 'c8a6c18e-f6a3-472a-adf3-5335deb80db6'
 export interface InternalEvents {
     /** Simulate a paste event on the activeElement */

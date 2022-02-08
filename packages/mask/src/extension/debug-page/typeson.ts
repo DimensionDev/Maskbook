@@ -1,5 +1,7 @@
 import Typeson from 'typeson'
 
+// cspell:disable
+
 // @ts-ignore
 import builtins from 'typeson-registry/dist/presets/builtin' // @ts-ignore
 import num from 'typeson-registry/dist/presets/special-numbers' // @ts-ignore

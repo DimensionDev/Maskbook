@@ -8,6 +8,8 @@ import { useWeb3 } from './useWeb3'
 import { useBlockNumber } from './useBlockNumber'
 import { useChainId } from './useChainId'
 
+// cspell:ignore datas
+
 // #region types
 // [target, gasLimit, callData]
 type Call = [string, number, string]

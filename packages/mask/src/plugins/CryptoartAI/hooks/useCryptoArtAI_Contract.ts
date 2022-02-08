@@ -1,4 +1,4 @@
-// cspell:ignore canft anft
+// cspell:ignore canft anft aicanft
 import type { AbiItem } from 'web3-utils'
 import KnownOriginDigitalAssetV2_ABI from '@masknet/web3-contracts/abis/CryptoArtAIKnownOriginDigitalAssetV2.json'
 import ArtistAcceptingBidsV2_ABI from '@masknet/web3-contracts/abis/CryptoArtAIArtistAcceptingBidsV2.json'

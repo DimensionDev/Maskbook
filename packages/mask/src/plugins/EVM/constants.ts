@@ -169,6 +169,7 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         isMainnet: true,
     },
 ]
+// cspell:disable
 export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
     {
         ID: `${PLUGIN_ID}_maskwallet`,

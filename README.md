@@ -1,4 +1,4 @@
-<!-- cspell:ignore jkoeaghipilijlahjplgbfiocjhldnap pfps -->
+<!-- cspell:ignore jkoeaghipilijlahjplgbfiocjhldnap pfps circleci -->
 <!-- markdownlint-disable no-inline-html first-line-heading -->
 <a href="https://mask.io">
   <img src="https://dimensiondev.github.io/Mask-VI/assets/Logo/MB--Logo--Geo--ForceCircle--Blue.svg"

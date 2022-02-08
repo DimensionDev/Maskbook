@@ -1,3 +1,4 @@
+// cspell:ignore switcher
 import { useState, useEffect } from 'react'
 import { Link, Tab, Tabs } from '@mui/material'
 import { makeStyles } from '@masknet/theme'

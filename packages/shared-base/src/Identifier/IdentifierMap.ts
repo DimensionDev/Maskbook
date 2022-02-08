@@ -1,3 +1,4 @@
+// cspell:ignore immerable
 import { Identifier } from './type'
 import { immerable } from 'immer'
 

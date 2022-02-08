@@ -1,4 +1,7 @@
 import parser from 'anchorme'
+
+// cspell:ignore anchorme
+
 export function parseURL(text: string) {
     const lib = (parser as any as { default: typeof parser }).default || parser
     // CJS-ESM compatibility

@@ -8,6 +8,8 @@ import { updateAccount } from '../../../../plugins/Wallet/services'
 import { currentChainIdSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
 import { replaceRecentTransaction } from '../../../../plugins/Wallet/services/transaction/database'
 
+// cspell:ignore inpage
+
 let provider: MetaMaskInpageProvider | null = null
 let web3: Web3 | null = null
 

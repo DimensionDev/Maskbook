@@ -5,6 +5,8 @@ import { getProfileIdentifierAtFacebook, getUserID } from '../utils/getProfileId
 import { isMobileFacebook } from '../utils/isMobile'
 import { ProfileIdentifier } from '@masknet/shared-base'
 
+// cspell:ignore visualcompletion pagelet
+
 export const IdentityProviderFacebook: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: true,
     recognized: creator.EmptyIdentityResolveProviderState(),

@@ -1,5 +1,7 @@
 import type { ZrxTradePool } from './trader'
 
+// cspell:ignore porportion
+
 export interface SwapOrder {
     chainId: string
     exchangeAddress: string

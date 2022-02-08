@@ -1,6 +1,8 @@
 import { merge } from 'lodash-unified'
 import { timeout } from '@masknet/shared-base'
 
+// cspell:ignore mutex
+
 /**
  * Make sure that the storage is used serially.
  */
