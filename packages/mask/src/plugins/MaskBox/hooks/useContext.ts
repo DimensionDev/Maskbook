@@ -35,13 +35,12 @@ import { useMaskBoxPurchasedTokens } from './useMaskBoxPurchasedTokens'
 import { formatCountdown } from '../helpers/formatCountdown'
 import { useOpenBoxTransaction } from './useOpenBoxTransaction'
 import { useMaskBoxMetadata } from './useMaskBoxMetadata'
-import { useHeartBeat } from './useHeartBeat'
 import { useIsWhitelisted } from './useIsWhitelisted'
-import { isGreaterThanOrEqualTo, isLessThanOrEqualTo, isZero, multipliedBy } from '@masknet/web3-shared-base'
+import { isGreaterThanOrEqualTo, isLessThanOrEqualTo, isZero, multipliedBy, useBeat } from '@masknet/web3-shared-base'
 
 function useContext(initialState?: { boxId: string }) {
     const now = new Date()
-    const heartBeat = useHeartBeat()
+    const beat = useBeat()
     const account = useAccount()
     const chainId = useChainId()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(ChainId.Mainnet)
@@ -125,7 +124,7 @@ function useContext(initialState?: { boxId: string }) {
             holderTokenAddress: maskBoxInfo.holder_token_addr,
             holderMinTokenAmount: maskBoxInfo.holder_min_token_amount,
         }
-        return Promise.resolve(info)
+        return info
     }, [
         allTokens.join(),
         purchasedTokens.join(),
@@ -148,7 +147,7 @@ function useContext(initialState?: { boxId: string }) {
         if (boxInfo.startAt > now || !boxInfo.started) return BoxState.NOT_READY
         if (boxInfo.endAt < now || maskBoxStatus?.expired) return BoxState.EXPIRED
         return BoxState.READY
-    }, [boxInfo, loadingBoxInfo, errorBoxInfo, maskBoxInfo, loadingMaskBoxInfo, errorMaskBoxInfo, heartBeat])
+    }, [boxInfo, loadingBoxInfo, errorBoxInfo, maskBoxInfo, loadingMaskBoxInfo, errorMaskBoxInfo, beat])
 
     const isWhitelisted = useIsWhitelisted(boxInfo?.qualificationAddress, account)
     const isQualifiedByContract =
@@ -189,7 +188,7 @@ function useContext(initialState?: { boxId: string }) {
             default:
                 unreachable(boxState)
         }
-    }, [boxState, boxInfo?.startAt, heartBeat])
+    }, [boxState, boxInfo?.startAt, beat])
 
     useEffect(() => {
         if (!boxInfo || boxInfo.started) return
@@ -197,7 +196,7 @@ function useContext(initialState?: { boxId: string }) {
         if (boxInfo.startAt < now) {
             retryMaskBoxStatus()
         }
-    }, [boxInfo, heartBeat])
+    }, [boxInfo, beat])
 
     // #endregion
 
@@ -258,7 +257,7 @@ function useContext(initialState?: { boxId: string }) {
         paymentTokenDetailed,
         openBoxTransactionOverrides,
     )
-    const { value: erc20Allowance } = useERC20TokenAllowance(
+    const { value: erc20Allowance, retry: retryAllowance } = useERC20TokenAllowance(
         isNativeToken ? undefined : paymentTokenAddress,
         MASK_BOX_CONTRACT_ADDRESS,
     )
@@ -324,6 +323,7 @@ function useContext(initialState?: { boxId: string }) {
         setOpenBoxTransactionOverrides,
 
         // retry callbacks
+        retryAllowance,
         retryMaskBoxInfo,
         retryMaskBoxStatus,
         retryBoxInfo,

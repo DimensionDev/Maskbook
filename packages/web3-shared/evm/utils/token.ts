@@ -20,6 +20,7 @@ import {
 import { getChainDetailed, getChainIdFromName } from './chainDetailed'
 import { formatBalance } from './formatter'
 import { isSameAddress } from './address'
+import CHAINS from '../assets/chains.json'
 
 export function createNativeToken(chainId: ChainId): NativeTokenDetailed {
     const chainDetailed = getChainDetailed(chainId)
@@ -32,6 +33,13 @@ export function createNativeToken(chainId: ChainId): NativeTokenDetailed {
         address: NATIVE_TOKEN_ADDRESS,
         ...chainDetailed.nativeCurrency,
     }
+}
+
+const NATIVE_TOKEN_SYMBOLS = CHAINS.filter((x) => x.network === 'mainnet' && x.nativeCurrency).map((x) =>
+    x.nativeCurrency.symbol.toLowerCase(),
+)
+export function isNativeTokenSymbol(symbol: string) {
+    return NATIVE_TOKEN_SYMBOLS.includes(symbol.toLowerCase())
 }
 
 export function createERC20Token(

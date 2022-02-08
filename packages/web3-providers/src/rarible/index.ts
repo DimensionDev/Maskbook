@@ -18,6 +18,7 @@ import {
 import { RaribleUserURL, RaribleRopstenUserURL, RaribleMainnetURL, RaribleChainURL, RaribleURL } from './constants'
 import { toRaribleImage } from './utils'
 import { NonFungibleTokenAPI } from '..'
+import { isProxyENV } from '../helpers'
 
 const resolveRaribleUserNetwork = createLookupTableResolver<ChainId.Mainnet | ChainId.Ropsten, string>(
     {
@@ -27,10 +28,9 @@ const resolveRaribleUserNetwork = createLookupTableResolver<ChainId.Mainnet | Ch
     RaribleUserURL,
 )
 
-async function fetchFromRarible<T>(url: string, path: string, init?: RequestInit, env?: NonFungibleTokenAPI.APIEnv) {
-    const currentEnv = env ?? NonFungibleTokenAPI.APIEnv.browser
+async function fetchFromRarible<T>(url: string, path: string, init?: RequestInit) {
     const response = await fetch(urlcat(url, path), {
-        ...(currentEnv === NonFungibleTokenAPI.APIEnv.browser && { mode: 'cors' }),
+        ...(!isProxyENV() && { mode: 'cors' }),
         ...init,
     })
     return response.json() as Promise<T>
@@ -124,6 +124,7 @@ function createNFTAsset(asset: RaribleNFTItemMapResponse, chainId: ChainId): Non
         response_: asset,
         token_id: asset.tokenId,
         safelist_request_status: '',
+        last_sale: null,
     }
 }
 
@@ -141,10 +142,6 @@ function _getAsset(address: string, tokenId: string) {
 }
 
 export class RaribleAPI implements NonFungibleTokenAPI.Provider {
-    private readonly _env: NonFungibleTokenAPI.APIEnv
-    constructor(env?: NonFungibleTokenAPI.APIEnv) {
-        this._env = env ?? NonFungibleTokenAPI.APIEnv.browser
-    }
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: { chainId?: ChainId } = {}) {
         const asset = await _getAsset(address, tokenId)
         if (!asset) return
@@ -167,14 +164,16 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider {
             continuation: string
             items: RaribleNFTItemMapResponse[]
         }
-        const asset = await fetchFromRarible<Payload>(RaribleURL, requestPath, undefined, this._env)
+        const asset = await fetchFromRarible<Payload>(RaribleURL, requestPath, undefined)
         if (!asset)
             return {
                 data: [],
                 hasNextPage: false,
             }
 
-        const data = asset.items.map((asset) => createERC721TokenFromAsset(asset.contract, asset.tokenId, asset))
+        const data = asset.items
+            .map((asset) => createERC721TokenFromAsset(asset.contract, asset.tokenId, asset))
+            .filter((x) => x.info?.owner?.toLowerCase() === from.toLowerCase())
         return {
             data,
             hasNextPage: !!asset.continuation,
@@ -340,6 +339,6 @@ export function getRaribleNFTList(
     size?: number,
     pageInfo?: { [key in string]: unknown },
 ) {
-    const rarible = new RaribleAPI(NonFungibleTokenAPI.APIEnv.proxy)
+    const rarible = new RaribleAPI()
     return rarible.getTokens(address, { page, size, pageInfo })
 }

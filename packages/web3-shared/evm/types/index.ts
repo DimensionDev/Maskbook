@@ -26,11 +26,6 @@ export interface CryptoPrice {
 export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
 export type ChainIdRecord<T> = { [k in ChainId]: T }
 
-export interface BalanceOfChains {
-    [provider: string]: {
-        [chainId: number]: string
-    }
-}
 // bigint is not in our list. iOS doesn't support that.
 export type Primitive = string | number | boolean | symbol | undefined | null
 
@@ -59,14 +54,15 @@ export enum ChainId {
     // xDai
     xDai = 100,
 
+    // Avalanche
+    Avalanche = 43114,
+    Avalanche_Fuji = 43113,
+
     // Celo
     Celo = 42220,
 
     // Fantom
     Fantom = 250,
-
-    // Avalanche
-    Avalanche = 43114,
 
     // Aurora
     Aurora = 1313161554,
@@ -217,8 +213,10 @@ export interface ERC721TokenRecordInDatabase extends ERC721TokenDetailed {
 
 export interface ERC721TokenCollectionInfo {
     name: string
-    image?: string
+    iconURL?: string
     slug: string
+    address: string
+    addresses?: string[]
 }
 
 // #endregion

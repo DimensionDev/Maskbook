@@ -18,7 +18,6 @@ import {
     getPayloadChainId,
     getTransactionHash,
     isZeroAddress,
-    formatGweiToWei,
 } from '@masknet/web3-shared-evm'
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import * as MetaMask from './providers/MetaMask'
@@ -28,22 +27,16 @@ import * as Fortmatic from './providers/Fortmatic'
 import { getWallet } from '../../../plugins/Wallet/services'
 import { createWeb3 } from './web3'
 import { commitNonce, getNonce, resetNonce } from './nonce'
-import { getGasPrice } from './network'
 import {
     currentAccountSettings,
     currentChainIdSettings,
     currentProviderSettings,
 } from '../../../plugins/Wallet/settings'
-import { debugModeSetting } from '../../../settings/settings'
 import { Flags } from '../../../../shared'
-import { nativeAPI } from '../../../utils/native-rpc'
+import { nativeAPI } from '../../../../shared/native-rpc'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { getSendTransactionComputedPayload } from './rpc'
 import { getError, hasError } from './error'
-
-function parseGasPrice(price: string | undefined) {
-    return Number.parseInt(price ?? '0x0', 16)
-}
 
 function isReadOnlyMethod(payload: JsonRpcPayload) {
     return [
@@ -53,6 +46,7 @@ function isReadOnlyMethod(payload: JsonRpcPayload) {
         EthereumMethodType.ETH_GET_BALANCE,
         EthereumMethodType.ETH_GET_TRANSACTION_BY_HASH,
         EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
+        EthereumMethodType.MASK_GET_TRANSACTION_RECEIPT,
         EthereumMethodType.ETH_GET_TRANSACTION_COUNT,
         EthereumMethodType.ETH_ESTIMATE_GAS,
         EthereumMethodType.ETH_CALL,
@@ -132,7 +126,9 @@ async function handleNonce(
     // nonce too low
     // nonce too high
     // transaction too old
-    if (/\bnonce|transaction\b/im.test(message) && /\b(low|high|old)\b/im.test(message)) resetNonce(account)
+    const isGeneralErrorNonce = /\bnonce|transaction\b/im.test(message) && /\b(low|high|old)\b/im.test(message)
+    const isAuroraErrorNonce = message.includes('ERR_INCORRECT_NONCE')
+    if (isGeneralErrorNonce || isAuroraErrorNonce) resetNonce(account)
     else if (!error_) commitNonce(account)
 }
 
@@ -151,10 +147,6 @@ export async function INTERNAL_send(
         providerType = currentProviderSettings.value,
     }: SendOverrides = {},
 ) {
-    if (process.env.NODE_ENV === 'development' && debugModeSetting.value) {
-        console.table(payload)
-        console.debug(new Error().stack)
-    }
     const chainIdFinally = getPayloadChainId(payload) ?? chainId
     const wallet = providerType === ProviderType.MaskWallet ? await getWallet(account) : null
     const privKey = isSignableMethod(payload) && wallet ? await WalletRPC.exportPrivateKey(wallet.address) : undefined
@@ -270,28 +262,9 @@ export async function INTERNAL_send(
         // add chain id
         if (!config.chainId) config.chainId = chainIdFinally
 
-        // pricing transaction
-        const isGasPriceValid = parseGasPrice(config.gasPrice as string) > 0
-        const isEIP1559Valid =
-            parseGasPrice(config.maxFeePerGas as string) > 0 && parseGasPrice(config.maxPriorityFeePerGas as string) > 0
-
-        if (Flags.EIP1559_enabled && isEIP1559Supported(chainIdFinally) && !isEIP1559Valid && !isGasPriceValid) {
-            callback(new Error('Invalid EIP1159 payload.'))
-            return
-        }
-        if (!isGasPriceValid) {
-            config.gasPrice = await getGasPrice()
-        }
-
         // if the transaction is eip-1559, need to remove gasPrice from the config,
-        // and adjust the default gas web3.js setting,
-        // the estimation of metamask of `maxFeePerGas` = 1 * block.baseFeePerGas,
-        // since the estimation of web3.js = 2 * block.baseFeePerGas which is too high
-        // that would almost always causes an undesired warning tip.
-        if (Flags.EIP1559_enabled && isEIP1559Valid && isEIP1559Supported(chainIdFinally)) {
+        if (Flags.EIP1559_enabled && isEIP1559Supported(chainIdFinally)) {
             config.gasPrice = undefined
-            config.maxPriorityFeePerGas = formatGweiToWei(1.5).toString(16)
-            config.maxFeePerGas = (Number.parseInt(config.maxFeePerGas!, 16) * 0.8).toString(16)
         } else {
             config.maxFeePerGas = undefined
             config.maxPriorityFeePerGas = undefined
@@ -404,7 +377,9 @@ export async function INTERNAL_send(
         const [hash] = payload.params as [string]
 
         // redirect receipt queries to tx watcher
-        const transaction = await WalletRPC.getRecentTransaction(chainIdFinally, account, hash)
+        const transaction = await WalletRPC.getRecentTransaction(chainIdFinally, account, hash, {
+            receipt: true,
+        })
 
         try {
             callback(null, {

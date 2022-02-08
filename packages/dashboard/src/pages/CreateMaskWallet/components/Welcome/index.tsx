@@ -70,7 +70,7 @@ const Welcome = memo(() => {
         if (!iframeDocument) return
 
         const style = iframeDocument.createElement('style')
-        style.innerHTML = `
+        style.textContent = `
               h3, h6 { color: ${mode === 'dark' ? '#D4D4D4' : '#111432'}; }
               p { color: ${mode === 'dark' ? '#D4D4D4;' : '#7b8192'}; }
               body::-webkit-scrollbar {

@@ -1,8 +1,8 @@
-import { NetworkPluginID } from '@masknet/plugin-infra'
+import { usePluginIDContext, PluginId, useActivatedPlugin } from '@masknet/plugin-infra'
 import { useCallback, useEffect, useState, useLayoutEffect, useRef } from 'react'
 import { flatten, uniq } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
-import { useCustomSnackbar, VariantType, SnackbarProvider, makeStyles } from '@masknet/theme'
+import { SnackbarProvider, makeStyles } from '@masknet/theme'
 import { FormattedBalance, useRemoteControlledDialog } from '@masknet/shared'
 import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@mui/material'
 import {
@@ -10,6 +10,9 @@ import {
     useERC20TokenDetailed,
     TransactionStateType,
     resolveTransactionLinkOnExplorer,
+    useFungibleTokensDetailed,
+    EthereumTokenType,
+    isSameAddress,
     useITOConstants,
     ChainId,
     useChainId,
@@ -30,7 +33,6 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import type { SwappedTokenType } from '../types'
-import { base as ITO_Definition } from '../base'
 
 interface StyleProps {
     shortITOwrapper: boolean
@@ -217,11 +219,12 @@ interface ClaimAllDialogProps {
     open: boolean
 }
 
-const SUPPORTED_CHAIN_ID_LIST = ITO_Definition.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds!
-
 export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { t } = useI18N()
     const { open, onClose } = props
+    const ITO_Definition = useActivatedPlugin(PluginId.ITO, 'any')
+    const pluginId = usePluginIDContext()
+    const chainIdList = ITO_Definition?.enableRequirement.web3?.[pluginId]?.supportedChainIds ?? []
     const DialogRef = useRef<HTMLDivElement>(null)
     const account = useAccount()
     const currentChainId = useChainId()
@@ -231,25 +234,23 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         retry: retryAirdrop,
     } = useSpaceStationCampaignInfo(account, Flags.nft_airdrop_enabled)
 
-    const [chainId, setChainId] = useState(
-        SUPPORTED_CHAIN_ID_LIST.includes(currentChainId) ? currentChainId : ChainId.Mainnet,
+    const [chainId, setChainId] = useState(chainIdList.includes(currentChainId) ? currentChainId : ChainId.Mainnet)
+    const { value: _swappedTokens, loading: _loading, retry } = useClaimAll(account, chainId)
+    const { value: swappedTokensWithDetailed = [], loading: loadingTokenDetailed } = useFungibleTokensDetailed(
+        (_swappedTokens ?? []).map((t) => ({
+            address: t.token.address,
+            type: EthereumTokenType.ERC20,
+        })),
+        chainId,
     )
-    const { value: swappedTokens, loading, retry } = useClaimAll(account)
-
+    const loading = _loading || loadingTokenDetailed
+    const swappedTokens = _swappedTokens?.map((t) => {
+        const tokenDetailed = swappedTokensWithDetailed.find((v) => isSameAddress(t.token.address, v.address))
+        if (tokenDetailed) t.token = tokenDetailed
+        return t
+    })
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
-    const { showSnackbar } = useCustomSnackbar()
-    const popEnqueueSnackbar = useCallback(
-        (variant: VariantType) =>
-            showSnackbar(t('plugin_ito_claim_all_title'), {
-                variant,
-                preventDuplicate: true,
-                anchorOrigin: {
-                    vertical: 'top',
-                    horizontal: 'right',
-                },
-            }),
-        [showSnackbar],
-    )
+
     const claimablePids = uniq(flatten(swappedTokens?.filter((t) => t.isClaimable).map((t) => t.pids)))
 
     const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(claimablePids, ITO2_CONTRACT_ADDRESS)
@@ -271,13 +272,9 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         (ev) => {
             if (ev.open) return
 
-            if (claimState.type === TransactionStateType.FAILED) popEnqueueSnackbar('error')
-
             if (claimState.type === TransactionStateType.CONFIRMED) {
                 resetClaimCallback()
                 retry()
-                onClose()
-                popEnqueueSnackbar('success')
             }
         },
     )
@@ -288,6 +285,11 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
 
     useEffect(() => {
         if (claimState.type === TransactionStateType.UNKNOWN) return
+
+        if (claimState.type === TransactionStateType.FAILED) {
+            setClaimTransactionDialog({ open: false })
+            return
+        }
 
         if (claimState.type === TransactionStateType.HASH) {
             const { hash } = claimState
@@ -324,12 +326,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                         <WalletStatusBox />
                     </div>
                     <div className={classes.abstractTabWrapper}>
-                        <NetworkTab
-                            chainId={chainId}
-                            setChainId={setChainId}
-                            classes={classes}
-                            chains={SUPPORTED_CHAIN_ID_LIST}
-                        />
+                        <NetworkTab chainId={chainId} setChainId={setChainId} classes={classes} chains={chainIdList} />
                     </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>
                         {(showNftAirdrop || loadingAirdrop) &&
@@ -348,7 +345,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                             </div>
                         ) : swappedTokens.length > 0 ? (
                             <div className={classes.content}>
-                                <Content swappedTokens={swappedTokens} />
+                                <Content swappedTokens={swappedTokens} chainId={chainId} />
                             </div>
                         ) : !showNftAirdrop && !loadingAirdrop ? (
                             <div className={classes.emptyContentWrapper}>
@@ -376,7 +373,17 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                             <ActionButton
                                                 className={classNames(classes.actionButton, classes.claimAllButton)}
                                                 variant="contained"
-                                                disabled={claimablePids!.length === 0}
+                                                loading={[
+                                                    TransactionStateType.HASH,
+                                                    TransactionStateType.WAIT_FOR_CONFIRMING,
+                                                ].includes(claimState.type)}
+                                                disabled={
+                                                    claimablePids!.length === 0 ||
+                                                    [
+                                                        TransactionStateType.HASH,
+                                                        TransactionStateType.WAIT_FOR_CONFIRMING,
+                                                    ].includes(claimState.type)
+                                                }
                                                 size="large"
                                                 onClick={onClaimButtonClick}>
                                                 {t('plugin_ito_claim_all')}
@@ -397,16 +404,17 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
 
 interface ContentProps {
     swappedTokens: SwappedTokenType[]
+    chainId: ChainId
 }
 
 function Content(props: ContentProps) {
     const { classes } = useStyles({ shortITOwrapper: false })
-    const { swappedTokens } = props
+    const { swappedTokens, chainId } = props
     return (
         <List className={classes.tokenCardWrapper}>
             {swappedTokens.map((swappedToken, i) => (
                 <div key={i}>
-                    <SwappedToken i={i} swappedToken={swappedToken} />
+                    <SwappedToken i={i} swappedToken={swappedToken} chainId={chainId} />
                 </div>
             ))}
         </List>
@@ -416,13 +424,14 @@ function Content(props: ContentProps) {
 interface SwappedTokensProps {
     i: number
     swappedToken: SwappedTokenType
+    chainId: ChainId
 }
 
-function SwappedToken({ i, swappedToken }: SwappedTokensProps) {
+function SwappedToken({ i, swappedToken, chainId }: SwappedTokensProps) {
     const { t } = useI18N()
     const theme = useTheme()
     const { classes } = useStyles({ shortITOwrapper: false })
-    const { value: token } = useERC20TokenDetailed(swappedToken.token.address)
+    const { value: token } = useERC20TokenDetailed(swappedToken.token.address, undefined, chainId)
 
     return token ? (
         <ListItem key={i} className={classes.tokenCard}>

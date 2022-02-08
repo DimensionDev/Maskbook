@@ -33,13 +33,23 @@ interface NFTLuckyDropStyledAssetPlayerProps
     tokenId: string
     url?: string
     fallbackImage?: URL
+    fallbackResourceLoader?: JSX.Element
     renderOrder?: number
     setERC721TokenName?: (name: string) => void
     setSourceType?: (type: string) => void
 }
 export function NFTCardStyledAssetPlayer(props: NFTLuckyDropStyledAssetPlayerProps) {
-    const { chainId, contractAddress, tokenId, fallbackImage, url, setERC721TokenName, renderOrder, setSourceType } =
-        props
+    const {
+        chainId,
+        contractAddress,
+        tokenId,
+        fallbackImage,
+        fallbackResourceLoader,
+        url,
+        setERC721TokenName,
+        renderOrder,
+        setSourceType,
+    } = props
     const classes = useStylesExtends(useStyles(), props)
     const theme = useTheme()
     const fallbackImageURL =
@@ -72,6 +82,7 @@ export function NFTCardStyledAssetPlayer(props: NFTLuckyDropStyledAssetPlayerPro
                 loadingFailImage: classes.loadingFailImage,
                 loadingIcon: classes.loadingIcon,
             }}
+            fallbackResourceLoader={fallbackResourceLoader}
         />
     )
 }

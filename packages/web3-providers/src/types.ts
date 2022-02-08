@@ -84,7 +84,6 @@ export namespace RSS3BaseAPI {
         getFootprints(address: string): Promise<GeneralAssetResponse | undefined>
         getNameInfo(id: string): Promise<NameInfo | undefined>
         getProfileInfo(address: string): Promise<ProfileInfo | undefined>
-        getNFTs(address: string): Promise<GeneralAssetResponse | undefined>
     }
 }
 
@@ -107,10 +106,6 @@ export namespace PriceAPI {
 }
 
 export namespace NonFungibleTokenAPI {
-    export enum APIEnv {
-        browser = 0,
-        proxy = 1,
-    }
     export enum OrderSide {
         Buy = 0,
         Sell = 1,
@@ -178,6 +173,15 @@ export namespace NonFungibleTokenAPI {
         wiki_link?: string
         safelist_request_status: string
     }
+    export interface AssetEvent {
+        event_type: string
+        event_timestamp: number
+        auction_type: string
+        total_price: string
+        payment_token: {
+            decimals: number
+        }
+    }
 
     export interface Asset {
         is_verified: boolean
@@ -205,7 +209,7 @@ export namespace NonFungibleTokenAPI {
         top_ownerships: {
             owner: AssetOwner
         }[]
-
+        last_sale: AssetEvent | null
         response_: any
     }
 
@@ -287,6 +291,7 @@ export namespace NonFungibleTokenAPI {
             opts?: Options,
         ) => Promise<AssetOrder[]>
         getCollections?: (address: string, opts?: Options) => Promise<ProviderPageable<Collection>>
+        getAssets?: (address: string) => Promise<Asset[] | undefined>
     }
 }
 

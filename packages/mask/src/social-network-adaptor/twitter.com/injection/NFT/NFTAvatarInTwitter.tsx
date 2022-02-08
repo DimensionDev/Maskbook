@@ -86,10 +86,14 @@ function NFTAvatarInTwitter() {
             return
         }
 
-        const avatar = await PluginNFTAvatarRPC.saveNFTAvatar(wallet.address, {
-            ...NFTEvent,
-            avatarId: getAvatarId(identity.avatar ?? ''),
-        } as AvatarMetaDB).catch((error) => {
+        const avatar = await PluginNFTAvatarRPC.saveNFTAvatar(
+            wallet.address,
+            {
+                ...NFTEvent,
+                avatarId: getAvatarId(identity.avatar ?? ''),
+            } as AvatarMetaDB,
+            identity.identifier.network,
+        ).catch((error) => {
             setNFTEvent(undefined)
             setAvatar(undefined)
             window.alert(error.message)

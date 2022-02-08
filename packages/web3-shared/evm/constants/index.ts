@@ -24,17 +24,21 @@ import SpaceStationGalaxy from '@masknet/web3-constants/evm/space-station-galaxy
 import OpenseaAPI from '@masknet/web3-constants/evm/opensea-api.json'
 import CryptoArtAI from '@masknet/web3-constants/evm/cryptoartai.json'
 import ArtBlocks from '@masknet/web3-constants/evm/artblocks.json'
+import Savings from '@masknet/web3-constants/evm/savings.json'
 import { hookTransform, transform, transformFromJSON } from './utils'
 
-function getEnvConstants(key: string) {
+function getEnvConstants(key: 'WEB3_CONSTANTS_RPC') {
     try {
-        return process.env[key] ?? ''
+        const map = {
+            WEB3_CONSTANTS_RPC: process.env.WEB3_CONSTANTS_RPC,
+        }
+        return map[key] ?? ''
     } catch {
         return ''
     }
 }
 
-export { ZERO_ADDRESS, FAKE_SIGN_PASSWORD, EthereumNameType } from './specific'
+export * from './specific'
 
 export const getAirdropConstants = transform(Airdrop)
 export const useAirdropConstants = hookTransform(getAirdropConstants)
@@ -84,7 +88,7 @@ export const useMaskBoxConstants = hookTransform(getMaskBoxConstants)
 export const getRPCConstants = transformFromJSON(getEnvConstants('WEB3_CONSTANTS_RPC'), RPC)
 export const useRPCConstants = hookTransform(getRPCConstants)
 
-export const getExplorerConstants = transformFromJSON(getEnvConstants('WEB3_CONSTANTS_EXPLORER'), Explorer)
+export const getExplorerConstants = transform(Explorer)
 export const useExplorerConstants = hookTransform(getExplorerConstants)
 
 export const getTokenListConstants = transform(TokenList)
@@ -113,3 +117,6 @@ export const useArtBlocksConstants = hookTransform(getArtBlocksConstants)
 
 export const getNftRedPacketConstants = transform(NftRedPacket)
 export const useNftRedPacketConstants = hookTransform(getNftRedPacketConstants)
+
+export const getSavingsConstants = transform(Savings)
+export const useSavingsConstants = hookTransform(getSavingsConstants)
