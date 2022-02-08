@@ -77,14 +77,14 @@
         "Arbitrum": [0, 0, 0, 0, 0],
         "Arbitrum_Rinkeby": [0, 0, 0, 0, 0],
         "xDai": [0, 0, 0, 0, 0],
+        "Optimistic": [0, 0, 0, 0],
+        "Optimistic_Kovan": [0, 0, 0, 0],
+        "Optimistic_Goerli": [0, 0, 0, 0],
         "Avalanche": [0, 0, 0, 0, 0],
         "Avalanche_Fuji": [0, 0, 0, 0, 0],
         "Celo": [0, 0, 0, 0, 0],
         "Fantom": [0, 0, 0, 0, 0],
         "Aurora": [0, 0, 0, 0, 0],
-        "Aurora_Testnet": [0, 0, 0, 0, 0],
-        "Optimistic": [0, 0, 0, 0],
-        "Optimistic_Kovan": [0, 0, 0, 0],
-        "Optimistic_Goerli": [0, 0, 0, 0]
+        "Aurora_Testnet": [0, 0, 0, 0, 0]
     }
 }
