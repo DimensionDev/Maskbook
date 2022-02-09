@@ -356,7 +356,7 @@ export enum EthereumMethodType {
     ETH_CALL = 'eth_call',
     ETH_SIGN = 'eth_sign',
     ETH_DECRYPT = 'eth_decrypt',
-    ETH_SIGN_TYPED_DATA = 'eth_signTypedData',
+    ETH_SIGN_TYPED_DATA = 'eth_signTypedData_v3',
     ETH_SIGN_TRANSACTION = 'eth_signTransaction',
     ETH_GET_LOGS = 'eth_getLogs',
     ETH_GET_ENCRYPTION_PUBLIC_KEY = 'eth_getEncryptionPublicKey',

@@ -1,8 +1,8 @@
 import ss from '@snapshot-labs/snapshot.js'
 import type { Proposal, Profile3Box, ProposalIdentifier, VoteSuccess, RawVote, Strategy } from '../../types'
-import Services from '../../../../extension/service'
 import { transform } from 'lodash-unified'
 import { SNAPSHOT_GET_SCORE_API } from '../../constants'
+import Services from '../../../../extension/service'
 
 export async function fetchProposal(id: string) {
     const { votes, proposal } = await fetchProposalFromGraphql(id)
@@ -112,7 +112,6 @@ export async function getScores(
     space: string,
     strategies: Strategy[],
 ) {
-    const provider = ss.utils.getProvider(network)
     const blockTag = Number(snapshot) > blockNumber ? 'latest' : Number(snapshot)
     const scores: { [key in string]: number }[] = await ss.utils.getScores(
         space,
@@ -130,27 +129,78 @@ export async function getScores(
 }
 
 export async function vote(identifier: ProposalIdentifier, choice: number, address: string) {
-    const msg = JSON.stringify({
-        version: '0.1.3',
-        timestamp: (Date.now() / 1e3).toFixed(),
+    const message = {
+        from: address,
         space: identifier.space,
-        type: 'vote',
-        payload: {
-            proposal: identifier.id,
-            choice,
-            metadata: {},
-        },
-    })
+        timestamp: Math.floor(Date.now() / 1e3),
+        proposal: identifier.id,
+        choice,
+        metadata: JSON.stringify({}),
+    }
 
-    const sig = await Services.Ethereum.personalSign(msg, address)
+    const domain = {
+        name: 'snapshot',
+        version: '0.1.4',
+    }
 
-    const response = await fetch('https://hub.snapshot.org/api/msg', {
+    const types = {
+        Vote: [
+            {
+                name: 'from',
+                type: 'address',
+            },
+            {
+                name: 'space',
+                type: 'string',
+            },
+            {
+                name: 'timestamp',
+                type: 'uint64',
+            },
+            {
+                name: 'proposal',
+                type: 'string',
+            },
+            {
+                name: 'choice',
+                type: 'uint32',
+            },
+            {
+                name: 'metadata',
+                type: 'string',
+            },
+        ],
+    }
+
+    const data = {
+        message,
+        domain,
+        types,
+    }
+
+    const sig = await Services.Ethereum.typedDataSign(
+        address,
+        JSON.stringify({
+            domain,
+            types: {
+                EIP712Domain: [
+                    { name: 'name', type: 'string' },
+                    { name: 'version', type: 'string' },
+                ],
+                Vote: types.Vote,
+            },
+            primaryType: 'Vote',
+            message,
+        }),
+    )
+
+    const response = await fetch('https://cors.r2d2.to/?https://hub.snapshot.org/api/msg', {
         method: 'POST',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ msg, sig, address }),
+        body: JSON.stringify({ data, sig, address }),
     })
 
     const result: VoteSuccess = await response.json()
