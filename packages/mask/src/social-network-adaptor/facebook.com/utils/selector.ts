@@ -11,6 +11,9 @@ const querySelectorAll = <T extends E>(selector: string) => {
     return new LiveSelector().querySelectorAll<T>(selector)
 }
 
+export const searchUserIdOnMobileSelector: () => LiveSelector<E, true> = () =>
+    querySelector<HTMLMetaElement>('div[data-sigil$="profile"] a')
+
 export const searchAvatarSelector: () => LiveSelector<E, true> = () => querySelector<E>('[href="/me/"] image')
 
 export const searchNickNameSelector: () => LiveSelector<E, true> = () => querySelector<E>('[href="/me/"] span > span')
@@ -24,6 +27,9 @@ export const searchFacebookAvatarListSelector = () =>
     querySelector('[role="dialog"] input[type=file] + [role="button"]').closest(3).querySelector('div')
 
 export const searchFacebookAvatarSelector = () => querySelector('[role="button"] [role="img"]')
+
+export const searchFacebookAvatarOnMobileSelector = () =>
+    querySelector('[data-sigil="timeline-cover"] i[aria-label$="picture"]')
 
 export const searchFaceBookPostAvatarSelector = () => querySelectorAll('[type="nested/pressable"] svg')
 

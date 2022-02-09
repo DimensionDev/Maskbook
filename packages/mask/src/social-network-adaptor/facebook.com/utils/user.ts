@@ -1,5 +1,11 @@
-import { bioDescriptionSelector, searchAvatarSelector, searchNickNameSelector } from './selector'
+import {
+    bioDescriptionSelector,
+    searchAvatarSelector,
+    searchFacebookAvatarOnMobileSelector,
+    searchNickNameSelector,
+} from './selector'
 import { collectNodeText } from '../../../utils'
+import { isMobileFacebook } from './isMobile'
 
 export const getNickName = () => {
     const node = searchNickNameSelector().evaluate()
@@ -9,9 +15,15 @@ export const getNickName = () => {
 }
 
 export const getAvatar = () => {
-    const node = searchAvatarSelector().evaluate() as HTMLImageElement
+    const node = isMobileFacebook
+        ? searchFacebookAvatarOnMobileSelector().evaluate()
+        : (searchAvatarSelector().evaluate() as HTMLImageElement)
     if (!node) return
-    const imageURL = node.getAttribute('xlink:href') ?? ''
+
+    const imageURL =
+        (isMobileFacebook
+            ? node.style.background.match(/\(["']?(.*?)["']?\)/)?.[1]
+            : node.getAttribute('xlink:href')) ?? ''
 
     return imageURL.trim()
 }

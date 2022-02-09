@@ -4,7 +4,7 @@ import { creator, SocialNetworkUI } from '../../../social-network'
 import { getProfileIdentifierAtFacebook, getUserID } from '../utils/getProfileIdentifier'
 import { isMobileFacebook } from '../utils/isMobile'
 import { delay, ProfileIdentifier } from '@masknet/shared-base'
-import { searchAvatarSelector } from '../utils/selector'
+import { searchAvatarSelector, searchUserIdOnMobileSelector } from '../utils/selector'
 import { getAvatar, getBioDescription, getNickName } from '../utils/user'
 
 export const IdentityProviderFacebook: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
@@ -42,7 +42,7 @@ function resolveCurrentVisitingIdentityInner(
     ref: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
-    const avatarSelector = searchAvatarSelector()
+    const selector = isMobileFacebook ? searchUserIdOnMobileSelector() : searchAvatarSelector()
 
     const assign = async () => {
         await delay(500)
@@ -51,6 +51,7 @@ function resolveCurrentVisitingIdentityInner(
         const handle = await fetch('/me', { method: 'HEAD', signal: cancel })
             .then((x) => x.url)
             .then(getUserID)
+
         const avatar = getAvatar()
 
         ref.value = {
@@ -77,7 +78,7 @@ function resolveCurrentVisitingIdentityInner(
         })
     }
 
-    createWatcher(avatarSelector)
+    createWatcher(selector)
 }
 
 export const CurrentVisitingIdentityProviderFacebook: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
