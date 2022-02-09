@@ -65,8 +65,8 @@ export function WalletRiskWarningDialog() {
     const { open, setDialog } = useRemoteControlledDialog(WalletMessages.events.walletRiskWarningDialogUpdated)
 
     const onClose = useCallback(async () => {
-        if (account) await WalletRPC.setRiskWarningConfirmed(account, false)
         setDialog({ open: false, type: 'cancel' })
+        if (account) await WalletRPC.setRiskWarningConfirmed(account, false)
     }, [setDialog])
 
     const onConfirm = useCallback(async () => {
@@ -77,8 +77,8 @@ export function WalletRiskWarningDialog() {
             })
             return
         }
-        await WalletRPC.confirmRiskWarning(account)
         setDialog({ open: false, type: 'confirm' })
+        await WalletRPC.confirmRiskWarning(account)
     }, [showSnackbar, account, setDialog])
 
     return (
