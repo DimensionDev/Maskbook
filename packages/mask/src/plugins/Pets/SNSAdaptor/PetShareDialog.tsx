@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Button, Typography, Box } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { useI18N } from '../../../utils'
@@ -28,7 +28,7 @@ interface PetSetDialogProps {
 
 export function PetShareDialog({ onClose }: PetSetDialogProps) {
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), {})
+    const { classes } = useStyles()
     const shareLink = activatedSocialNetworkUI.utils.getShareLinkURL?.('')
 
     const onShareClick = useCallback(() => {

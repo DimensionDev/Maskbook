@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useAsync } from 'react-use'
+import { useAsync, useTimeout } from 'react-use'
 import type { Constant } from '@masknet/web3-shared-evm/constants/utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { DialogContent } from '@mui/material'
@@ -19,6 +19,7 @@ export function PetDialog() {
     const { open, closeDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated, () => {})
     const [step, setStep] = useState(PetFriendNFTStep.SetFriendNFT)
     const [configNFTs, setConfigNFTs] = useState<Record<string, Constant> | undefined>(undefined)
+    const [isReady, cancel] = useTimeout(500)
 
     useAsync(async () => {
         setConfigNFTs(await PluginPetRPC.getConfigEssay())
@@ -26,13 +27,9 @@ export function PetDialog() {
 
     const handleSetDialogClose = () => setStep(PetFriendNFTStep.ShareFriendNFT)
 
-    let timer: NodeJS.Timeout | null = null
     const handleClose = () => {
         closeDialog()
-        if (timer !== null) clearTimeout(timer)
-        timer = setTimeout(() => {
-            setStep(PetFriendNFTStep.SetFriendNFT)
-        }, 500)
+        isReady() ? setStep(PetFriendNFTStep.SetFriendNFT) : cancel()
     }
 
     return (

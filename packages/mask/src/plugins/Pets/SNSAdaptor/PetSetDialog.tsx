@@ -1,4 +1,5 @@
-import { useEffect, useState, useMemo, ReactNode } from 'react'
+import { useState, useMemo, ReactNode } from 'react'
+import { useTimeout } from 'react-use'
 import { isSameAddress } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends, useCustomSnackbar } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared'
@@ -103,6 +104,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const { showSnackbar } = useCustomSnackbar()
     const [loading, setLoading] = useState(false)
     const checked = useValueRef<boolean>(petShowSettings)
+    const [isReady, cancel] = useTimeout(2000)
 
     const user = useUser()
     const nfts = useNFTs(user, configNFTs)
@@ -117,21 +119,10 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const [tokenInfoSelect, setTokenInfoSelect] = useState<OwnerERC721TokenInfo | null>(null)
     const [inputTokenName, setInputTokenName] = useState('')
 
-    useEffect(() => {
-        setMetaData(initMeta)
-        setCollection(initCollection)
-        setTokenInfoSelect(null)
-        setInputTokenName('')
-    }, [])
-
-    let timer: NodeJS.Timeout | null = null
     const closeDialogHandle = () => {
         setIsTipShow(true)
         onClose()
-        if (timer !== null) clearTimeout(timer)
-        timer = setTimeout(() => {
-            setIsTipShow(false)
-        }, 2000)
+        isReady() ? setIsTipShow(false) : cancel()
         PluginPetMessages.events.setResult.sendToAll(Math.random())
     }
 
