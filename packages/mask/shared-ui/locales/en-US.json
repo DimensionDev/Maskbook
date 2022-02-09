@@ -1019,5 +1019,13 @@
     "nft_button_add_collectible": "Add Collectible",
     "nft_avatar": "NFT Avatar",
     "plugin_profile_no_wallets": "Connect your wallet here.<br/>This section will be shown to your encrypted friends.<br/>The display content includes digital art, donations, badges<br/>and other public information on chain.",
-    "plugin_vcent_last_offer_at": "LATEST OFFER at"
+    "plugin_vcent_last_offer_at": "LATEST OFFER at",
+    "plugin_ideamarket_ideamarket": "Ideamarket",
+    "plugin_ideamarket_token_not_found": "Idea not found",
+    "plugin_ideamarket_smthg_wrong": "Something went wrong",
+    "plugin_ideamarket_tab_bought_together": "Bought together",
+    "plugin_ideamarket_tab_content": "Content",
+    "plugin_ideamarket_mutual_holders": "Mutual holders",
+    "plugin_ideamarket_mutual_tokens": "Mutual tokens",
+    "plugin_ideamarket_details": "Details"
 }
