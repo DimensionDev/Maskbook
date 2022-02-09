@@ -13,6 +13,7 @@ import { PluginPetMessages } from '../../plugins/Pets/messages'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { EntrySecondLevelDialog } from './EntrySecondLevelDialog'
 import { NetworkTab } from './NetworkTab'
+import { SavingsDialog } from '../../plugins/Savings/SNSAdaptor/SavingsDialog'
 import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialog'
 import { NetworkPluginID, PluginId, usePluginIDContext } from '@masknet/plugin-infra'
 import { FindTrumanDialog } from '../../plugins/FindTruman/SNSAdaptor/FindTrumanDialog'
@@ -142,6 +143,14 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     } = useControlledDialog()
     // #endregion
 
+    // #region Savings
+    const {
+        open: isSavingsDialogOpen,
+        onOpen: onSavingsDialogOpen,
+        onClose: onSavingsDialogClose,
+    } = useControlledDialog()
+    // #endregion
+
     // #region Swap
     const { open: isSwapDialogOpen, onOpen: onSwapDialogOpen, onClose: onSwapDialogClose } = useControlledDialog()
     // #endregion
@@ -253,6 +262,13 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             false,
         ),
         createEntry(
+            'Savings',
+            new URL('./assets/savings.png', import.meta.url).toString(),
+            onSavingsDialogOpen,
+            undefined,
+            false,
+        ),
+        createEntry(
             'Swap',
             new URL('./assets/swap.png', import.meta.url).toString(),
             onSwapDialogOpen,
@@ -320,7 +336,6 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             undefined,
             true,
         ),
-        createEntry('Saving', new URL('./assets/saving.png', import.meta.url).toString(), undefined, undefined, true),
         createEntry(
             'Alternative',
             new URL('./assets/more.png', import.meta.url).toString(),
@@ -380,21 +395,21 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                         ) : null,
                 )}
             </section>
-            {isClaimAllDialogOpen ? (
-                <ClaimAllDialog open={isClaimAllDialogOpen} onClose={onClaimAllDialogClose} />
-            ) : null}
-            {isSwapDialogOpen ? <TraderDialog open={isSwapDialogOpen} onClose={onSwapDialogClose} /> : null}
+            {isClaimAllDialogOpen ? <ClaimAllDialog open onClose={onClaimAllDialogClose} /> : null}
             {isSecondLevelEntryDialogOpen ? (
                 <EntrySecondLevelDialog
                     title={secondLevelEntryDialogTitle}
-                    open={isSecondLevelEntryDialogOpen}
+                    open
                     entries={secondLevelEntries}
                     chains={secondLevelEntryChains}
                     closeDialog={onSecondLevelEntryDialogClose}
                 />
             ) : null}
-            {isFindTrumanDialogOpen ? (
-                <FindTrumanDialog open={isFindTrumanDialogOpen} onClose={onFindTrumanDialogClose} />
+            {isFindTrumanDialogOpen ? <FindTrumanDialog open onClose={onFindTrumanDialogClose} /> : null}
+            {isSwapDialogOpen ? <TraderDialog open onClose={onSwapDialogClose} /> : null}
+
+            {isSavingsDialogOpen ? (
+                <SavingsDialog open onClose={onSavingsDialogClose} onSwapDialogOpen={onSwapDialogOpen} />
             ) : null}
         </>
     )

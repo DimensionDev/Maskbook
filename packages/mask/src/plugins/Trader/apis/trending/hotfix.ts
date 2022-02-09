@@ -26,7 +26,7 @@ const BLACKLIST_MAP: {
     [DataProvider.COIN_GECKO]: {
         [NetworkType.Ethereum]: ['swaptoken', 'nftx-hashmasks-index'],
     },
-    // use token address as id and all letters should be lowercased
+    // use token address as id and all letters should be lower-case
     [DataProvider.UNISWAP_INFO]: {
         [NetworkType.Ethereum]: [],
     },
