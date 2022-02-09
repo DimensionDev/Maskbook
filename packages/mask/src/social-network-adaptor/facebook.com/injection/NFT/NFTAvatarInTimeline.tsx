@@ -1,14 +1,18 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createReactRootShadowed, startWatch } from '../../../../utils'
 import { getInjectNodeInfo } from '../../utils/avatar'
-import { searchFaceBookPostAvatarSelector } from '../../utils/selector'
+import { searchFaceBookPostAvatarOnMobileSelector, searchFaceBookPostAvatarSelector } from '../../utils/selector'
 import { Flags } from '../../../../../shared'
 import { NFTBadgeTimeline } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeline'
+import { isMobileFacebook } from '../../utils/isMobile'
 
 function getFacebookId(element: HTMLElement) {
-    const node = element.parentNode?.parentNode as HTMLLinkElement
+    const node = (isMobileFacebook ? element.firstChild : element.parentNode?.parentNode) as HTMLLinkElement
     if (!node) return
-    return new URL(node.href).searchParams.get('id')
+    if (!isMobileFacebook) return new URL(node.href).searchParams.get('id')
+    const match = node.href.match(/lst=(\w+)/)
+    if (!match) return
+    return match[1]
 }
 
 function _(selector: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
@@ -62,5 +66,5 @@ function _(selector: () => LiveSelector<HTMLElement, false>, signal: AbortSignal
 }
 
 export async function injectUserNFTAvatarAtFacebook(signal: AbortSignal) {
-    _(searchFaceBookPostAvatarSelector, signal)
+    _(isMobileFacebook ? searchFaceBookPostAvatarOnMobileSelector : searchFaceBookPostAvatarSelector, signal)
 }

@@ -33,6 +33,8 @@ export const searchFacebookAvatarOnMobileSelector = () =>
 
 export const searchFaceBookPostAvatarSelector = () => querySelectorAll('[type="nested/pressable"] svg')
 
+export const searchFaceBookPostAvatarOnMobileSelector = () => querySelectorAll('[data-gt=\'{"tn":"~"}\']')
+
 export const searchFacebookAvatarOpenFilesSelector = () => querySelector('[role="dialog"] input[type=file] ~ div')
 
 export const searchFacebookSaveAvatarButtonSelector = () =>
