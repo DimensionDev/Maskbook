@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { PluginCyberConnectRPC } from '../messages'
 import { Skeleton } from '@mui/material'
-import { useWeb3, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import Avatar from 'boring-avatars'
 import ConnectButton from './ConnectButton'
 import FollowTab from './FollowTab'
@@ -63,21 +62,9 @@ const useStyles = makeStyles()((theme) => ({
 const Profile = ({ url }: { url: string }) => {
     const { classes } = useStyles()
     const [, , , , queryAddress] = url.split('/')
-    const web3 = useWeb3()
-    const [ethAddress, setEthAddress] = useState('')
-    const { value: identity } = useAsyncRetry(async () => {
+    const { value: identity, loading } = useAsyncRetry(async () => {
         const res = await PluginCyberConnectRPC.fetchIdentity(queryAddress)
         return res.data.identity
-    }, [queryAddress])
-
-    useEffect(() => {
-        if (queryAddress.endsWith('.eth')) {
-            web3.eth.ens.getAddress(queryAddress).then((res) => {
-                setEthAddress(res)
-            })
-        } else {
-            setEthAddress(queryAddress)
-        }
     }, [queryAddress])
 
     return (
@@ -97,7 +84,13 @@ const Profile = ({ url }: { url: string }) => {
                 <div className={classes.address}>{identity.address}</div>
             )}
 
-            {ethAddress ? <ConnectButton address={ethAddress} /> : <Skeleton width={400} height={68} />}
+            {!loading ? (
+                identity ? (
+                    <ConnectButton address={identity?.address} />
+                ) : null
+            ) : (
+                <Skeleton width={400} height={68} />
+            )}
 
             {!identity ? (
                 <Skeleton width={400} height={100} />
