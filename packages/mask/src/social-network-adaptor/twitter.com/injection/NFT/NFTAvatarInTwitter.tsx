@@ -187,7 +187,6 @@ function NFTAvatarInTwitter() {
 
     useUpdateEffect(() => {
         const linkParentDom = searchTwitterAvatarLinkSelector().evaluate()?.closest('div')
-
         if (!avatar || !linkParentDom || !showAvatar) return
 
         const handler = () => {

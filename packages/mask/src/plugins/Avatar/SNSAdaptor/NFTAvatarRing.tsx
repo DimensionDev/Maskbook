@@ -20,7 +20,7 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
     const { classes } = useStyles()
     const { stroke, strokeWidth, fontSize, text, width, id, price } = props
 
-    const avatarSize = width + 3
+    const avatarSize = width + 1
     const R = avatarSize / 2
     const path_r = R - strokeWidth + fontSize / 2
     const x1 = R - path_r
@@ -59,7 +59,14 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
                     </linearGradient>
                 </defs>
 
-                <circle cx={R} cy={R} r={R - strokeWidth / 2} fill="none" stroke={stroke} strokeWidth={strokeWidth} />
+                <circle
+                    cx={R}
+                    cy={R}
+                    r={R - strokeWidth / 2 + 1}
+                    fill="none"
+                    stroke={stroke}
+                    strokeWidth={strokeWidth}
+                />
                 <pattern id={`${id}-pattern`} x="0" y="0" width="300%" height="100%" patternUnits="userSpaceOnUse">
                     <circle cx={R} cy={R} r={R} fill={`url(#${id}-gradient)`}>
                         <animateTransform
@@ -82,12 +89,8 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
                 </text>
 
                 <text x="0%" textAnchor="middle" fill={`url(#${id}-pattern)`} fontFamily="sans-serif">
-                    <textPath
-                        xlinkHref={`#${id}-path-price`}
-                        startOffset="50%"
-                        rotate="auto"
-                        dominantBaseline="mathematical">
-                        <tspan fontWeight="bold" fontSize={fontSize}>
+                    <textPath xlinkHref={`#${id}-path-price`} startOffset="50%" rotate="auto">
+                        <tspan fontWeight="bold" fontSize={fontSize} dy="0.5em">
                             {price}
                         </tspan>
                     </textPath>
