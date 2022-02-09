@@ -189,8 +189,7 @@ function NFTAvatarInTwitter() {
 
     useUpdateEffect(() => {
         const linkParentDom = searchTwitterAvatarLinkSelector().evaluate()?.closest('div')
-
-        if (!avatar || !linkParentDom) return
+        if (!avatar || !linkParentDom || !showAvatar) return
 
         const handler = () => {
             window.open(resolveOpenSeaLink(avatar.address, avatar.tokenId), '_blank')
