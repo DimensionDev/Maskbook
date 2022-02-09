@@ -1,5 +1,5 @@
 import { ChainId } from '@masknet/web3-shared-evm'
-import { USDC, USDT, WBTC, WNATIVE, OLO, BOBA, WNATIVE_ONLY } from './trader'
+import { USDC, USDT, WBTC, WNATIVE, WAIFU, BOBA, WNATIVE_ONLY } from './trader'
 import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'
 
 /**
@@ -10,5 +10,5 @@ export const SWAPPERCHAN_CUSTOM_BASES: ERC20TokenCustomizedBase = {}
 
 export const SWAPPERCHAN_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
     ...WNATIVE_ONLY,
-    [ChainId.Boba]: [WNATIVE, USDC, USDT, WBTC, OLO, BOBA].map((x) => x[ChainId.Boba]),
+    [ChainId.Boba]: [WNATIVE, USDC, USDT, WBTC, WAIFU, BOBA].map((x) => x[ChainId.Boba]),
 }
