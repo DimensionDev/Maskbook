@@ -1,0 +1,26 @@
+{
+  "name": "@masknet/web3-ui",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@masknet/plugin-infra": "workspace:*",
+    "@masknet/shared": "workspace:*",
+    "@masknet/web3-shared-evm": "workspace:*",
+    "@masknet/shared-base": "workspace:*",
+    "@masknet/injected-script": "workspace:*",
+    "@masknet/theme": "workspace:*",
+    "react-use": "^17.3.2",
+    "lodash-unified": "1.0.1",
+    "use-subscription": "^1.5.1",
+    "@mui/material": "5.2.5",
+    "date-fns":"2.28.0",
+    "uuid": "^8.3.2",
+    "classnames": "^2.3.1",
+    "wallet.ts": "^1.0.1",
+    "@mui/icons-material": "5.2.5",
+    "@mui/system":"5.2.5",
+    "@dimensiondev/kit": "0.0.0-20211215044858-27d964f",
+    "bignumber.js": "9.0.2"
+  }
+}

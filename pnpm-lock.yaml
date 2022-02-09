@@ -1176,6 +1176,46 @@ importers:
       react-use: 17.3.2_757a802188413a36d4f24237d13b8e90
       urlcat: 2.0.4
 
+  packages/web3-ui:
+    specifiers:
+      '@dimensiondev/kit': 0.0.0-20211215044858-27d964f
+      '@masknet/injected-script': workspace:*
+      '@masknet/plugin-infra': workspace:*
+      '@masknet/shared': workspace:*
+      '@masknet/shared-base': workspace:*
+      '@masknet/theme': workspace:*
+      '@masknet/web3-shared-evm': workspace:*
+      '@mui/icons-material': 5.2.5
+      '@mui/material': 5.2.5
+      '@mui/system': 5.2.5
+      bignumber.js: 9.0.2
+      classnames: ^2.3.1
+      date-fns: 2.28.0
+      lodash-unified: 1.0.1
+      react-use: ^17.3.2
+      use-subscription: ^1.5.1
+      uuid: ^8.3.2
+      wallet.ts: ^1.0.1
+    dependencies:
+      '@dimensiondev/kit': 0.0.0-20211215044858-27d964f_903ac568566cb9483e6a82070d95c042
+      '@masknet/injected-script': link:../injected-script
+      '@masknet/plugin-infra': link:../plugin-infra
+      '@masknet/shared': link:../shared
+      '@masknet/shared-base': link:../shared-base
+      '@masknet/theme': link:../theme
+      '@masknet/web3-shared-evm': link:../web3-shared/evm
+      '@mui/icons-material': 5.2.5_695e98f08a2d125282e19cae338368d2
+      '@mui/material': 5.2.5_811d2bc6069f340521b4a59905442643
+      '@mui/system': 5.2.5_78136fa2e471fe4795d123fe9b8f9a75
+      bignumber.js: 9.0.2
+      classnames: 2.3.1
+      date-fns: 2.28.0
+      lodash-unified: 1.0.1_bd4845f8c1bf1d81a616b60758034d0a
+      react-use: 17.3.2_757a802188413a36d4f24237d13b8e90
+      use-subscription: 1.5.1_react@18.0.0-rc.0
+      uuid: 8.3.2
+      wallet.ts: 1.0.1
+
 packages:
 
   /0x.js/0.29.2:
@@ -4763,7 +4803,7 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@babel/runtime': 7.16.5
+      '@babel/runtime': 7.16.7
       '@mui/material': 5.2.5_811d2bc6069f340521b4a59905442643
       '@types/react': 17.0.38
       react: 18.0.0-rc.0
@@ -4832,7 +4872,7 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@babel/runtime': 7.16.5
+      '@babel/runtime': 7.16.7
       '@emotion/react': 11.7.1_2fa291bfae6e56080648438396754a97
       '@emotion/styled': 11.6.0_e0f2ce61d672e052c2dabbceabccaca0
       '@mui/base': 5.0.0-alpha.61_2f50eb45a1501445764b3dbbd8573d7c
@@ -4844,7 +4884,7 @@ packages:
       clsx: 1.1.1
       csstype: 3.0.10
       hoist-non-react-statics: 3.3.2
-      prop-types: 15.8.0
+      prop-types: 15.8.1
       react: 18.0.0-rc.0
       react-dom: 18.0.0-rc.0_react@18.0.0-rc.0
       react-is: 17.0.2
@@ -4861,10 +4901,10 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@babel/runtime': 7.16.5
+      '@babel/runtime': 7.16.7
       '@mui/utils': 5.2.3_react@18.0.0-rc.0
       '@types/react': 17.0.38
-      prop-types: 15.8.0
+      prop-types: 15.8.1
       react: 18.0.0-rc.0
     dev: false
 
@@ -4881,11 +4921,11 @@ packages:
       '@emotion/styled':
         optional: true
     dependencies:
-      '@babel/runtime': 7.16.5
+      '@babel/runtime': 7.16.7
       '@emotion/cache': 11.7.1
       '@emotion/react': 11.7.1_2fa291bfae6e56080648438396754a97
       '@emotion/styled': 11.6.0_e0f2ce61d672e052c2dabbceabccaca0
-      prop-types: 15.8.0
+      prop-types: 15.8.1
       react: 18.0.0-rc.0
     dev: false
 
@@ -4905,7 +4945,7 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@babel/runtime': 7.16.5
+      '@babel/runtime': 7.16.7
       '@emotion/react': 11.7.1_2fa291bfae6e56080648438396754a97
       '@emotion/styled': 11.6.0_e0f2ce61d672e052c2dabbceabccaca0
       '@mui/private-theming': 5.2.3_2fa291bfae6e56080648438396754a97
@@ -4915,7 +4955,7 @@ packages:
       '@types/react': 17.0.38
       clsx: 1.1.1
       csstype: 3.0.10
-      prop-types: 15.8.0
+      prop-types: 15.8.1
       react: 18.0.0-rc.0
     dev: false
 
