@@ -4,16 +4,10 @@ import { first } from 'lodash-unified'
 import { Box, CircularProgress } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useAddressNames } from '@masknet/web3-shared-evm'
-import {
-    createInjectHooksRenderer,
-    useActivatedPluginsSNSAdaptor,
-    useDaoTabTwitterIdList,
-    DEFAULT_SUPPORTED_TWITTER_IDS,
-    Plugin,
-    PluginId,
-} from '@masknet/plugin-infra'
+import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor, Plugin, PluginId } from '@masknet/plugin-infra'
 import { PageTab } from '../InjectedComponents/PageTab'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
+import { useDaoTabTwitterIdList, DEFAULT_SUPPORTED_TWITTER_IDS } from '../../utils/hooks/useDaoTabTwitterIdList'
 import { MaskMessages, useI18N } from '../../utils'
 import { useCurrentVisitingIdentity } from '../DataSource/useActivatedUI'
 
