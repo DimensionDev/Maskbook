@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { useWeb3, useAccount, isSameAddress } from '@masknet/web3-shared-evm'
 import CyberConnect, { Env } from '@cyberlab/cyberconnect'
 import { PluginCyberConnectRPC } from '../messages'
-import classname from 'classnames'
+import classNames from 'classnames'
 import { CircularProgress } from '@mui/material'
 import { useAsync } from 'react-use'
 const useStyles = makeStyles()((theme) => ({
@@ -92,7 +92,7 @@ export default function ConnectButton({ address }: { address: string }) {
     const [isLoading, setIsLoading] = useState(false)
 
     useAsync(async () => {
-        if (!address && isSameAddress(myAddress, address)) return
+        if (isSameAddress(myAddress, address)) return
         const res = await PluginCyberConnectRPC.fetchFollowStatus(myAddress, address)
         setIsFollowing(res.data.followStatus.isFollowing)
     }, [address])
@@ -108,21 +108,22 @@ export default function ConnectButton({ address }: { address: string }) {
     }, [web3])
 
     const follow = useCallback(() => {
-        setIsLoading(true)
-        if (cc) {
-            cc.connect(address)
-                .then(() => {
-                    setIsFollowing(true)
-                })
-                .finally(() => {
-                    setIsLoading(false)
-                })
+        if (!cc) {
+            return
         }
+        setIsLoading(true)
+        cc.connect(address)
+            .then(() => {
+                setIsFollowing(true)
+            })
+            .finally(() => {
+                setIsLoading(false)
+            })
     }, [cc])
 
-    return myAddress && !isSameAddress(myAddress, address) ? (
+    return !isSameAddress(myAddress, address) ? (
         <div
-            className={classname(classes.button, {
+            className={classNames(classes.button, {
                 [classes.isFollowing]: isFollowing,
             })}
             onClick={() => {

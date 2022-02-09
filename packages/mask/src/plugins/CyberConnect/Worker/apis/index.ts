@@ -27,11 +27,11 @@ export interface IFollowStatus {
     isFollowed: boolean
 }
 async function query(data: IQuery) {
-    const endpiont =
+    const url =
         process.env.NODE_ENV === 'production'
             ? 'https://api.cybertino.io/connect/'
             : 'https://api.stg.cybertino.io/connect/'
-    const res = await fetch(endpiont, {
+    const res = await fetch(url, {
         method: 'POST',
         mode: 'cors',
         cache: 'no-cache',
