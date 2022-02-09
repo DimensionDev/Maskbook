@@ -26,6 +26,8 @@ export const bioDescriptionSelector = () =>
 export const searchFacebookAvatarListSelector = () =>
     querySelector('[role="dialog"] input[type=file] + [role="button"]').closest(3).querySelector('div')
 
+export const searchFacebookAvatarMobileListSelector = () => querySelector('#nuxChoosePhotoButton').closest<E>(6)
+
 export const searchFacebookAvatarSelector = () => querySelector('[role="button"] [role="img"]')
 
 export const searchFacebookAvatarOnMobileSelector = () =>
@@ -36,6 +38,8 @@ export const searchFaceBookPostAvatarSelector = () => querySelectorAll('[type="n
 export const searchFaceBookPostAvatarOnMobileSelector = () => querySelectorAll('[data-gt=\'{"tn":"~"}\']')
 
 export const searchFacebookAvatarOpenFilesSelector = () => querySelector('[role="dialog"] input[type=file] ~ div')
+
+export const searchFacebookAvatarOpenFilesOnMobileSelector = () => querySelector('#nuxChoosePhotoButton ~ input')
 
 export const searchFacebookSaveAvatarButtonSelector = () =>
     new LiveSelector()

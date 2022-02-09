@@ -6,6 +6,8 @@ import { blobToArrayBuffer } from '@dimensiondev/kit'
 import { hookInputUploadOnce } from '@masknet/injected-script'
 import {
     searchFacebookAvatarListSelector,
+    searchFacebookAvatarMobileListSelector,
+    searchFacebookAvatarOpenFilesOnMobileSelector,
     searchFacebookAvatarOpenFilesSelector,
     searchFacebookConfirmAvatarImageSelector,
     searchFacebookSaveAvatarButtonSelector,
@@ -15,19 +17,25 @@ import { toPNG } from '../../../../plugins/Avatar/utils'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { getAvatarId } from '../../utils/user'
+import { isMobileFacebook } from '../../utils/isMobile'
 
 export async function injectProfileNFTAvatarInFaceBook(signal: AbortSignal) {
-    // The first step in setting an avatar
-    const watcher = new MutationObserverWatcher(searchFacebookAvatarListSelector())
-    startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarInFacebookFirstStep />)
+    if (!isMobileFacebook) {
+        // The first step in setting an avatar
+        const watcher = new MutationObserverWatcher(searchFacebookAvatarListSelector())
+        startWatch(watcher, signal)
+        createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarInFacebookFirstStep />)
 
-    // The second step in setting an avatar
-    const saveButtonWatcher = new MutationObserverWatcher(searchFacebookSaveAvatarButtonSelector())
-    startWatch(saveButtonWatcher, signal)
-    createReactRootShadowed(saveButtonWatcher.firstDOMProxy.afterShadow, { signal }).render(
-        <NFTAvatarInFacebookSecondStep />,
-    )
+        // The second step in setting an avatar
+        const saveButtonWatcher = new MutationObserverWatcher(searchFacebookSaveAvatarButtonSelector())
+        startWatch(saveButtonWatcher, signal)
+        createReactRootShadowed(saveButtonWatcher.firstDOMProxy.afterShadow, { signal }).render(
+            <NFTAvatarInFacebookSecondStep />,
+        )
+    }
+    const watcher = new MutationObserverWatcher(searchFacebookAvatarMobileListSelector())
+    startWatch(watcher, signal)
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarListInFaceBookMobile />)
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -96,4 +104,41 @@ function NFTAvatarInFacebookSecondStep() {
         return () => save.removeEventListener('click', handler)
     }, [])
     return null
+}
+
+async function changeImageToActiveElementsOnMobile(image: File | Blob): Promise<void> {
+    const imageBuffer = await blobToArrayBuffer(image)
+    hookInputUploadOnce('image/png', 'avatar.png', new Uint8Array(imageBuffer))
+    searchFacebookAvatarOpenFilesOnMobileSelector().evaluate()?.click()
+}
+
+const useMobileStyles = makeStyles()({
+    root: {
+        backgroundColor: '#ffffff',
+    },
+})
+
+function NFTAvatarListInFaceBookMobile() {
+    const { classes } = useMobileStyles()
+    const identity = useCurrentVisitingIdentity()
+
+    const onChange = useCallback(
+        async (token: ERC721TokenDetailed) => {
+            if (!token.info.imageURL) return
+            const image = await toPNG(token.info.imageURL)
+            if (!image) return
+
+            await changeImageToActiveElementsOnMobile(image)
+
+            MaskMessages.events.NFTAvatarUpdated.sendToLocal({
+                userId: identity.identifier.userId,
+                avatarId: '',
+                address: token.contractDetailed.address,
+                tokenId: token.tokenId,
+            })
+        },
+        [identity],
+    )
+
+    return <NFTAvatar onChange={onChange} classes={classes} />
 }
