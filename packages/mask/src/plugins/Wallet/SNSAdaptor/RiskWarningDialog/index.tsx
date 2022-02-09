@@ -77,8 +77,8 @@ export function WalletRiskWarningDialog() {
             })
             return
         }
-        setDialog({ open: false, type: 'confirm' })
         await WalletRPC.confirmRiskWarning(account)
+        setDialog({ open: false, type: 'confirm' })
     }, [showSnackbar, account, setDialog])
 
     return (
