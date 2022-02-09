@@ -24,7 +24,7 @@ import { useI18N } from '../../../../utils'
 import { TradeForm } from './TradeForm'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import { UST } from '../../constants'
-import { SelectTokenDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
+import { WalletMessages } from '@masknet/plugin-wallet'
 import { useUnmount, useUpdateEffect } from 'react-use'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
 import { activatedSocialNetworkUI } from '../../../../social-network'
@@ -37,6 +37,7 @@ import { PluginTraderMessages } from '../../messages'
 import { SettingsDialog } from './SettingsDialog'
 import { useSortedTrades } from './hooks/useSortedTrades'
 import { useUpdateBalance } from './hooks/useUpdateBalance'
+import { usePickToken } from '../../../EVM/contexts'
 
 const useStyles = makeStyles()(() => {
     return {
@@ -205,42 +206,21 @@ export function Trader(props: TraderProps) {
 
     // #region select token
     const excludeTokens = [inputToken, outputToken].filter(Boolean).map((x) => x?.address) as string[]
-    const [focusedTokenPanelType, setFocusedTokenPanelType] = useState(TokenPanelType.Input)
 
-    const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectTokenDialogUpdated,
-        useCallback(
-            (ev: SelectTokenDialogEvent) => {
-                if (ev.open || !ev.token || ev.uuid !== String(focusedTokenPanelType)) return
-                dispatchTradeStore({
-                    type:
-                        focusedTokenPanelType === TokenPanelType.Input
-                            ? AllProviderTradeActionType.UPDATE_INPUT_TOKEN
-                            : AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
-                    token: ev.token,
-                })
-                if (focusedTokenPanelType === TokenPanelType.Input) {
-                    dispatchTradeStore({
-                        type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,
-                        amount: '',
-                    })
-                }
-            },
-            [dispatchTradeStore, focusedTokenPanelType],
-        ),
-    )
-
+    const pickToken = usePickToken()
     const onTokenChipClick = useCallback(
-        (type: TokenPanelType) => {
-            setFocusedTokenPanelType(type)
-            setSelectTokenDialog({
+        async (panelType: TokenPanelType) => {
+            const picked = await pickToken({
                 chainId,
-                open: true,
-                uuid: String(type),
                 disableNativeToken: false,
-                FungibleTokenListProps: {
-                    selectedTokens: excludeTokens,
-                },
+                selectedTokens: excludeTokens,
+            })
+            dispatchTradeStore({
+                type:
+                    panelType === TokenPanelType.Input
+                        ? AllProviderTradeActionType.UPDATE_INPUT_TOKEN
+                        : AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
+                token: picked,
             })
         },
         [excludeTokens.join(), chainId],

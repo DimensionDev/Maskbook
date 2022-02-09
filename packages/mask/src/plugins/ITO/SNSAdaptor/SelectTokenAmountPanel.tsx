@@ -1,9 +1,8 @@
-import { useState, useCallback } from 'react'
-import { v4 as uuid } from 'uuid'
+import type { ERC20TokenListProps } from '@masknet/shared'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { ERC20TokenListProps, useRemoteControlledDialog } from '@masknet/shared'
-import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
+import { useCallback } from 'react'
 import { TokenAmountPanel, TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
+import { usePickToken } from '../../EVM/contexts'
 
 export interface SelectTokenAmountPanelProps {
     amount: string
@@ -31,26 +30,15 @@ export function SelectTokenAmountPanel(props: SelectTokenAmountPanelProps) {
     } = props
 
     // #region select token
-    const [id] = useState(uuid())
-    const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectTokenDialogUpdated,
-        useCallback(
-            (ev: SelectTokenDialogEvent) => {
-                if (ev.open || !ev.token || ev.uuid !== id) return
-                onTokenChange(ev.token)
-            },
-            [id, onTokenChange],
-        ),
-    )
-    const onSelectTokenChipClick = useCallback(() => {
-        setSelectTokenDialog({
-            open: true,
-            uuid: id,
+    const pickToken = usePickToken()
+    const onSelectTokenChipClick = useCallback(async () => {
+        const picked = await pickToken({
             disableNativeToken,
             disableSearchBar,
-            FungibleTokenListProps,
+            ...FungibleTokenListProps,
         })
-    }, [id, disableNativeToken, disableSearchBar, FungibleTokenListProps])
+        onTokenChange(picked)
+    }, [disableNativeToken, disableSearchBar, FungibleTokenListProps])
     // #endregion
 
     return (

@@ -1,34 +1,34 @@
 import { useRemoteControlledDialog } from '@masknet/shared'
+import { keyframes, makeStyles } from '@masknet/theme'
+import { isZero, rightShift } from '@masknet/web3-shared-base'
 import {
     EthereumTokenType,
     formatBalance,
     FungibleTokenDetailed,
     TransactionStateType,
     useAccount,
-    ZERO_ADDRESS,
     useFungibleTokenBalance,
+    ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
-import { isZero, rightShift } from '@masknet/web3-shared-base'
 import { DialogContent, Grid, Typography } from '@mui/material'
-import { keyframes, makeStyles } from '@masknet/theme'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { v4 as uuid } from 'uuid'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
+import { usePickToken } from '../../EVM/contexts'
 import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
-import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
+import { WalletMessages } from '../../Wallet/messages'
 import { useDepositCallback } from '../hooks/useDepositCallback'
 import { PluginPoolTogetherMessages } from '../messages'
 import type { Pool } from '../types'
 import { calculateOdds, getPrizePeriod } from '../utils'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 
 const rainbow_animation = keyframes`
     0% {
@@ -82,7 +82,6 @@ const useStyles = makeStyles()((theme) => ({
 export function DepositDialog() {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [id] = useState(uuid())
     const [pool, setPool] = useState<Pool>()
     const [token, setToken] = useState<FungibleTokenDetailed>()
     const [odds, setOdds] = useState<string>()
@@ -102,28 +101,16 @@ export function DepositDialog() {
     // #endregion
 
     // #region select token
-    const { setDialog: setSelectTokenDialogOpen } = useRemoteControlledDialog(
-        WalletMessages.events.selectTokenDialogUpdated,
-        useCallback(
-            (ev: SelectTokenDialogEvent) => {
-                if (ev.open || !ev.token || ev.uuid !== id) return
-                setToken(ev.token)
-            },
-            [id],
-        ),
-    )
-    const onSelectTokenChipClick = useCallback(() => {
+    const pickToken = usePickToken()
+    const onSelectTokenChipClick = useCallback(async () => {
         if (!token) return
-        setSelectTokenDialogOpen({
-            open: true,
-            uuid: id,
+        const picked = await pickToken({
             disableNativeToken: true,
-            FungibleTokenListProps: {
-                selectedTokens: [token.address],
-                whitelist: [token.address],
-            },
+            selectedTokens: [token.address],
+            whitelist: [token.address],
         })
-    }, [id, token?.address])
+        setToken(picked)
+    }, [token, pickToken])
     // #endregion
 
     // #region amount
@@ -220,7 +207,7 @@ export function DepositDialog() {
                 if (depositState.type === TransactionStateType.HASH) setRawAmount('')
                 resetDepositCallback()
             },
-            [id, depositState, retryLoadTokenBalance, retryLoadTokenBalance, onClose],
+            [depositState, retryLoadTokenBalance, retryLoadTokenBalance, onClose],
         ),
     )
 

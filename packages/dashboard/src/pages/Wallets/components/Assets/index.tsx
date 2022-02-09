@@ -1,17 +1,15 @@
-import { memo, useEffect, useState } from 'react'
-import { ContentContainer } from '../../../../components/ContentContainer'
-import { TabContext, TabList, TabPanel } from '@mui/lab'
-import { Box, Button, Tab } from '@mui/material'
-import { makeStyles, useTabs } from '@masknet/theme'
-import { FungibleTokenTable } from '../FungibleTokenTable'
-import { useDashboardI18N } from '../../../../locales'
-import { CollectibleList } from '../CollectibleList'
-import { AddCollectibleDialog } from '../AddCollectibleDialog'
-import { useRemoteControlledDialog } from '@masknet/shared'
-import { PluginMessages } from '../../../../API'
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
-import { v4 as uuid } from 'uuid'
+import { makeStyles, useTabs } from '@masknet/theme'
+import { TabContext, TabList, TabPanel } from '@mui/lab'
+import { Box, Button, Tab } from '@mui/material'
+import { memo, useEffect, useState } from 'react'
+import { usePickToken } from '../../../../../../mask/src/plugins/EVM/contexts'
+import { ContentContainer } from '../../../../components/ContentContainer'
+import { useDashboardI18N } from '../../../../locales'
+import { AddCollectibleDialog } from '../AddCollectibleDialog'
+import { CollectibleList } from '../CollectibleList'
+import { FungibleTokenTable } from '../FungibleTokenTable'
 
 const useStyles = makeStyles()((theme) => ({
     caption: {
@@ -48,7 +46,6 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
     const t = useDashboardI18N()
     const pluginId = usePluginIDContext()
     const { classes } = useStyles()
-    const [id] = useState(uuid())
     const assetTabsLabel: Record<AssetTab, string> = {
         [AssetTab.Token]: t.wallets_assets_token(),
         [AssetTab.Investment]: t.wallets_assets_investment(),
@@ -58,15 +55,13 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
     const [currentTab, onChange, , setTab] = useTabs(AssetTab.Token, AssetTab.Collectibles)
 
     const [addCollectibleOpen, setAddCollectibleOpen] = useState(false)
-    const { setDialog: setSelectToken } = useRemoteControlledDialog(
-        PluginMessages.Wallet.events.selectTokenDialogUpdated,
-    )
 
     useEffect(() => {
         setTab(AssetTab.Token)
     }, [pluginId])
 
     const showCollectibles = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginId)
+    const pickToken = usePickToken()
 
     return (
         <>
@@ -85,15 +80,16 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
                                 size="small"
                                 color="secondary"
                                 className={classes.addCustomTokenButton}
-                                onClick={() =>
-                                    currentTab === AssetTab.Token
-                                        ? setSelectToken({
-                                              open: true,
-                                              uuid: id,
-                                              FungibleTokenListProps: { whitelist: [] },
-                                          })
-                                        : setAddCollectibleOpen(true)
-                                }>
+                                onClick={async () => {
+                                    if (currentTab === AssetTab.Token) {
+                                        // TODO handle result
+                                        await pickToken({
+                                            whitelist: [],
+                                        })
+                                    } else {
+                                        setAddCollectibleOpen(true)
+                                    }
+                                }}>
                                 +{' '}
                                 {currentTab === AssetTab.Token
                                     ? t.wallets_add_token()

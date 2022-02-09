@@ -18,6 +18,7 @@ import type { Profile } from '../../database'
 import { CompositionContext } from '@masknet/plugin-infra'
 import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
 import { Trans } from 'react-i18next'
+import { EvmContextProvider } from '../../plugins/EVM/contexts'
 
 const useStyles = makeStyles()({
     root: {
@@ -182,7 +183,9 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     />
                 </Typography>
                 <div className={classes.flex}>
-                    <PluginEntryRender readonly={sending} ref={PluginEntry} />
+                    <EvmContextProvider>
+                        <PluginEntryRender readonly={sending} ref={PluginEntry} />
+                    </EvmContextProvider>
                 </div>
                 <Typography>{t('post_dialog__select_recipients_title')}</Typography>
                 <div className={classes.flex}>

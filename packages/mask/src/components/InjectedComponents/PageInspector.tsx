@@ -4,6 +4,7 @@ import { Button, Box, Typography } from '@mui/material'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 import { useMatchXS, MaskMessages, useI18N } from '../../utils'
 import { useAutoPasteFailedDialog } from './AutoPasteFailedDialog'
+import { EvmContextProvider } from '../../plugins/EVM/contexts'
 
 const PluginRender = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useAnyMode,
@@ -60,7 +61,9 @@ export function PageInspector(props: PageInspectorProps) {
     return (
         <>
             {JSX}
-            <PluginRender />
+            <EvmContextProvider>
+                <PluginRender />
+            </EvmContextProvider>
         </>
     )
 }
