@@ -17,7 +17,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 },
             },
             Utils: {
-                shouldDisplay: (identity, _addressNames, daoTabTwitterIdList) => {
+                shouldDisplay: (identity, _addressNames, daoTabTwitterIdList: string[]) => {
                     return (
                         !identity?.identifier.isUnknown &&
                         (daoTabTwitterIdList ?? []).some(
