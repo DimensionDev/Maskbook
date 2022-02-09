@@ -1,8 +1,8 @@
 import ss from '@snapshot-labs/snapshot.js'
 import type { Proposal, Profile3Box, ProposalIdentifier, VoteSuccess, RawVote, Strategy } from '../../types'
+import Services from '../../../../extension/service'
 import { transform } from 'lodash-unified'
 import { SNAPSHOT_GET_SCORE_API } from '../../constants'
-import Services from '../../../../extension/service'
 
 export async function fetchProposal(id: string) {
     const { votes, proposal } = await fetchProposalFromGraphql(id)
@@ -194,7 +194,7 @@ export async function vote(identifier: ProposalIdentifier, choice: number, addre
         }),
     )
 
-    const response = await fetch('https://cors.r2d2.to/?https://hub.snapshot.org/api/msg', {
+    const response = await fetch('https://hub.snapshot.org/api/msg', {
         method: 'POST',
         headers: {
             Accept: 'application/json',
