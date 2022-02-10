@@ -99,7 +99,7 @@ export function VotingCard() {
                 onClose={() => setOpen(false)}
                 choiceText={choices[choice - 1]}
                 snapshot={proposal.snapshot}
-                space={identifier.space}
+                powerSymbol={proposal.space.symbol}
                 power={power}
                 onVoteConfirm={onVoteConfirm}
             />
