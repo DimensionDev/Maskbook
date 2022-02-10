@@ -128,13 +128,13 @@ export async function getScores(
     )
 }
 
-export async function vote(identifier: ProposalIdentifier, choice: number, address: string) {
+export async function vote(identifier: ProposalIdentifier, choice: number, address: string, voteType: string) {
     const message = {
         from: address,
         space: identifier.space,
         timestamp: Math.floor(Date.now() / 1e3),
         proposal: identifier.id,
-        choice,
+        choice: voteType === 'single-choice' ? choice : [choice],
         metadata: JSON.stringify({}),
     }
 
@@ -163,7 +163,7 @@ export async function vote(identifier: ProposalIdentifier, choice: number, addre
             },
             {
                 name: 'choice',
-                type: 'uint32',
+                type: voteType === 'single-choice' ? 'uint32' : 'uint32[]',
             },
             {
                 name: 'metadata',

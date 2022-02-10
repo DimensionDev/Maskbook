@@ -37,6 +37,7 @@ export interface Proposal {
     authorName: string | null
     authorAvatar: string | null
     network: string
+    type: string
     votes: RawVote[]
 }
 

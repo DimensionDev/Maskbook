@@ -251,7 +251,7 @@ export async function INTERNAL_send(
                 const signed = signTypedData({
                     privateKey: toBuffer('0x' + privKey),
                     data: JSON.parse(dataToSign),
-                    version: SignTypedDataVersion.V3,
+                    version: SignTypedDataVersion.V4,
                 })
                 try {
                     callback(null, {
