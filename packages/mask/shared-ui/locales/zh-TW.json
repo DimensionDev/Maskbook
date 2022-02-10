@@ -69,6 +69,7 @@
     "user_guide_tip_connected": "已成功連接此帳號",
     "import": "導入",
     "no_search_result": "沒有結果",
+    "unlock": "解鎖",
     "payload_bad": "這篇貼文似乎被破壞了。Mask 無法解密它。",
     "payload_incomplete": "這篇貼文不完整。你需要查看全文才能解密。",
     "payload_not_found": "找不到貼文。",
