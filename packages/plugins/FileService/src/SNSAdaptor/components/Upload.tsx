@@ -120,11 +120,7 @@ export const Upload: React.FC = () => {
         provider === Provider.arweave ? (
             <FormControlLabel
                 control={
-                    <Checkbox
-                        color="primary"
-                        checked={useCDN}
-                        onChange={(event) => setUseCDN(event.target.checked)}
-                    />
+                    <Checkbox color="primary" checked={useCDN} onChange={(event) => setUseCDN(event.target.checked)} />
                 }
                 className={classes.usedCDN}
                 label={t.use_cdn()}
