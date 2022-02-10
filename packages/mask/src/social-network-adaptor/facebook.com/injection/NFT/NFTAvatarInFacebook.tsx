@@ -89,12 +89,7 @@ function NFTAvatarInFacebook() {
     }, [])
 
     useAsync(async () => {
-        if (!wallet) return
-        if (_avatar) return
-        if (!NFTEvent?.address || !NFTEvent?.tokenId) {
-            setAvatar(undefined)
-            return
-        }
+        if (!wallet || !NFTEvent?.address || !NFTEvent?.tokenId || !NFTEvent?.avatarId) return
 
         try {
             const avatarInfo = await PluginNFTAvatarRPC.saveNFTAvatar(
