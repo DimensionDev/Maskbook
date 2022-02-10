@@ -23,13 +23,20 @@ export async function openPopupWindow(route?: PopupRoutes, params?: Record<strin
     if (popup) {
         await browser.windows.update(currentPopupWindowId, { focused: true })
     } else {
+        const exclusionDetectLocked = [PopupRoutes.PersonaSignRequest]
         const locked = await isLocked()
 
-        const url = urlcat('popups.html#', locked ? PopupRoutes.Unlock : route ?? PopupRoutes.Wallet, {
-            toBeClose: 1,
-            from: locked && route ? route : null,
-            ...params,
-        })
+        const url = urlcat(
+            'popups.html#',
+            locked && !exclusionDetectLocked.includes(route ?? PopupRoutes.Wallet)
+                ? PopupRoutes.Unlock
+                : route ?? PopupRoutes.Wallet,
+            {
+                toBeClose: 1,
+                from: locked && route ? route : null,
+                ...params,
+            },
+        )
 
         let left: number
         let top: number
