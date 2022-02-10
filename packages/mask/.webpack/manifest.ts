@@ -32,6 +32,8 @@ function modify(manifest: Manifest, flags: NormalizedFlags) {
         manifest.name += ' (Beta)'
     } else if (flags.channel === 'insider') {
         manifest.name += ' (Nightly)'
+    } else if (flags.channel === 'stable') {
+        stableDevelopmentExtensionID(manifest)
     }
     if (flags.mode === 'development') {
         manifest.name += ' (dev)'
