@@ -44,6 +44,12 @@ export const searchFacebookAvatarOpenFilesOnMobileSelector = () =>
 
 export const searchFacebookSaveAvatarButtonOnMobileSelector = () => querySelector('#nuxUploadPhotoButton')
 
+export const searchFacebookProfileSettingButtonSelector = () =>
+    querySelector('[role="button"] [role="img"]').closest(10).querySelector('input[type="file"] ~ div').closest<E>(2)
+
+export const searchFacebookEditProfileSelector = () =>
+    querySelector('[role="button"] [role="img"]').closest(1).querySelector<E>('i[data-visualcompletion="css-img"]')
+
 export const searchFacebookSaveAvatarButtonSelector = () =>
     new LiveSelector()
         .querySelector('[role="dialog"] [role="slider"]')
