@@ -233,8 +233,6 @@ export function TraderView(props: TraderViewProps) {
             currency={currency}
             trending={trending}
             dataProvider={dataProvider}
-            showDataProviderIcon={tabIndex < 3}
-            dataProviders={dataProviders}
             TrendingCardProps={{ classes: { root: classes.root } }}>
             <Tabs
                 className={classes.tabs}

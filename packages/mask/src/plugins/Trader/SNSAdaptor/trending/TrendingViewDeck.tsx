@@ -14,9 +14,7 @@ import { Linking } from './Linking'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
 import { PluginTransakMessages } from '../../../Transak/messages'
 import { useAccount, formatCurrency } from '@masknet/web3-shared-evm'
-import type { FootnoteMenuOption } from '../trader/FootnoteMenu'
-import { TradeFooter } from '../trader/TradeFooter'
-import { currentDataProviderSettings, getCurrentPreferredCoinIdSettings } from '../../settings'
+import { getCurrentPreferredCoinIdSettings } from '../../settings'
 import { CoinMenu, CoinMenuOption } from './CoinMenu'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
 import { CoinSafetyAlert } from './CoinSafetyAlert'
@@ -93,23 +91,11 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
     trending: Trending
     dataProvider: DataProvider
     children?: React.ReactNode
-    showDataProviderIcon?: boolean
     TrendingCardProps?: Partial<TrendingCardProps>
-    dataProviders: DataProvider[]
 }
 
 export function TrendingViewDeck(props: TrendingViewDeckProps) {
-    const {
-        coins,
-        currency,
-        trending,
-        dataProvider,
-        stats,
-        children,
-        showDataProviderIcon = false,
-        TrendingCardProps,
-        dataProviders = [],
-    } = props
+    const { coins, currency, trending, dataProvider, stats, children, TrendingCardProps } = props
     const { coin, market } = trending
 
     const { t } = useI18N()
@@ -128,12 +114,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
             address: account,
         })
     }, [account, trending?.coin?.symbol])
-    // #endregion
-
-    // #region sync with settings
-    const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
-        currentDataProviderSettings.value = option.value as DataProvider
-    }, [])
     // #endregion
 
     // #region switch between coins with the same symbol
@@ -240,16 +220,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                     {children}
                 </Paper>
             </CardContent>
-
-            <TradeFooter
-                classes={{
-                    footer: classes.footer,
-                }}
-                showDataProviderIcon={showDataProviderIcon}
-                dataProvider={dataProvider}
-                dataProviders={dataProviders}
-                onDataProviderChange={onDataProviderChange}
-            />
         </TrendingCard>
     )
 }
