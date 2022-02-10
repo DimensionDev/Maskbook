@@ -4,6 +4,7 @@ import {
     usePostInfoDetails,
     Option,
     Plugin,
+    usePluginI18NField,
 } from '@masknet/plugin-infra'
 import { extractTextFromTypedMessage } from '@masknet/shared-base'
 import { Switch } from '@mui/material'
@@ -51,6 +52,7 @@ export function PossiblePluginSuggestionPostInspector() {
 }
 export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefinition[] }) {
     const { t } = useI18N()
+    const t2 = usePluginI18NField()
     const { plugins } = props
     if (!plugins.length) return null
     return (
@@ -58,7 +60,7 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
             {plugins.map((x) => (
                 <MaskPostExtraInfoWrapper
                     key={x.ID}
-                    title={t('plugin_not_enabled', { plugin: x.name.fallback })}
+                    title={t('plugin_not_enabled', { plugin: t2(x.ID, x.name) })}
                     action={
                         <Switch
                             sx={{ marginRight: '-12px' }}
