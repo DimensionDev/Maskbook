@@ -8,7 +8,7 @@ import {
 import { extractTextFromTypedMessage } from '@masknet/shared-base'
 import { Switch } from '@mui/material'
 import Services from '../../extension/service'
-import MaskPluginWrapper from '../../plugins/MaskPluginWrapper'
+import MaskPostExtraInfoWrapper from '../../plugins/MaskPluginWrapper'
 import { useI18N } from '../../utils'
 
 function useDisabledPlugins() {
@@ -56,9 +56,9 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
     return (
         <>
             {plugins.map((x) => (
-                <MaskPluginWrapper
+                <MaskPostExtraInfoWrapper
                     key={x.ID}
-                    pluginName={t('plugin_not_enabled', { plugin: x.name.fallback })}
+                    title={t('plugin_not_enabled', { plugin: x.name.fallback })}
                     action={
                         <Switch
                             sx={{ marginRight: '-12px' }}

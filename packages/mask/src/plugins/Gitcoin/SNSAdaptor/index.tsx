@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, Plugin, useChainId } from '@masknet/plugin-infra'
-import MaskPluginWrapper from '../../MaskPluginWrapper'
+import { NetworkPluginID, Plugin, useChainId, usePluginWrapper } from '@masknet/plugin-infra'
 import { extractTextFromTypedMessage, parseURL } from '@masknet/shared-base'
 import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
 import { PreviewCard } from './PreviewCard'
@@ -41,12 +40,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     const [id = ''] = props.url.match(/\d+/) ?? []
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    usePluginWrapper(true)
     return (
-        <MaskPluginWrapper pluginName="Gitcoin">
-            <EthereumChainBoundary chainId={isGitCoinSupported(chainId) ? chainId : ChainId.Mainnet}>
-                <PreviewCard id={id} />
-            </EthereumChainBoundary>
-        </MaskPluginWrapper>
+        <EthereumChainBoundary chainId={isGitCoinSupported(chainId) ? chainId : ChainId.Mainnet}>
+            <PreviewCard id={id} />
+        </EthereumChainBoundary>
     )
 }
 

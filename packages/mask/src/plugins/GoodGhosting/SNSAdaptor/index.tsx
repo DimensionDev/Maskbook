@@ -1,7 +1,5 @@
-import { Suspense, useMemo } from 'react'
-import type { Plugin } from '@masknet/plugin-infra'
-import { SnackbarContent } from '@mui/material'
-import MaskPluginWrapper from '../../MaskPluginWrapper'
+import { useMemo } from 'react'
+import { Plugin, usePluginWrapper } from '@masknet/plugin-infra'
 import { extractTextFromTypedMessage, parseURL } from '@masknet/shared-base'
 import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
 import { PreviewCard } from '../UI/PreviewCard'
@@ -37,15 +35,12 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     if (id) {
         id = id.replace('pools/', '')
     }
+    usePluginWrapper(true)
 
     return (
-        <MaskPluginWrapper pluginName="GoodGhosting">
-            <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
-                <EthereumChainBoundary chainId={ChainId.Matic}>
-                    <PreviewCard id={id} />
-                </EthereumChainBoundary>
-            </Suspense>
-        </MaskPluginWrapper>
+        <EthereumChainBoundary chainId={ChainId.Matic}>
+            <PreviewCard id={id} />
+        </EthereumChainBoundary>
     )
 }
 

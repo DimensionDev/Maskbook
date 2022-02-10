@@ -1,7 +1,9 @@
 import type { Plugin } from '../types'
-import React, { useEffect, useState, useRef, memo, createContext, useContext } from 'react'
+import { useEffect, useState, useRef, memo, createContext, useContext } from 'react'
 import { ErrorBoundary } from '@masknet/shared'
-import { usePluginI18NField, PluginWrapperProvider } from '../hooks'
+import { usePluginI18NField, PluginWrapperComponent, PluginWrapperMethods } from '../hooks'
+import { emptyPluginWrapperMethods, PluginWrapperMethodsContext } from '../hooks/usePluginWrapper'
+
 type Inject<T> = Plugin.InjectUI<T>
 type Raw<T> = Plugin.InjectUIRaw<T>
 
@@ -9,14 +11,19 @@ const PropsContext = createContext<unknown>(null)
 export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared.Definition, PropsType>(
     usePlugins: () => PluginDefinition[],
     pickInjectorHook: (plugin: PluginDefinition) => undefined | Inject<PropsType>,
-    maskWrapperProvider?: (plugin: PluginDefinition) => React.ComponentType<React.PropsWithChildren<{}>>,
+    PluginWrapperComponent?: PluginWrapperComponent<PluginDefinition>,
 ) {
     function usePluginWrapperProvider(element: JSX.Element | null, plugin: PluginDefinition) {
-        const Wrapper = useRef<React.ComponentType<{}> | false>()
-        if (Wrapper.current === undefined || Wrapper.current === null) {
-            Wrapper.current = maskWrapperProvider?.(plugin) || false
+        const ref = useRef<PluginWrapperMethods>(emptyPluginWrapperMethods)
+        if (PluginWrapperComponent) {
+            return (
+                <PluginWrapperComponent definition={plugin} ref={ref}>
+                    <PluginWrapperMethodsContext.Provider value={ref.current || emptyPluginWrapperMethods}>
+                        {element}
+                    </PluginWrapperMethodsContext.Provider>
+                </PluginWrapperComponent>
+            )
         }
-        if (Wrapper.current) return <PluginWrapperProvider value={Wrapper.current}>{element}</PluginWrapperProvider>
         return element
     }
     function SinglePluginWithinErrorBoundary({ plugin }: { plugin: PluginDefinition }) {
