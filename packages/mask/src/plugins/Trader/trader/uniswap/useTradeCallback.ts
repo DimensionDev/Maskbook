@@ -145,13 +145,11 @@ export function useTradeCallback(
                     ...('gasEstimate' in bestCallOption
                         ? {
                               gas: bestCallOption.gasEstimate.toFixed(),
-                              gasPrice: bestCallOption.gasEstimate.toFixed(),
                               maxFeePerGas: bestCallOption.gasEstimate.toFixed(),
                               maxPriorityFeePerGas: 1,
                           }
                         : {}),
                     ...(!value || /^0x0*$/.test(value) ? {} : { value }),
-                    ...gasConfig,
                 }
 
                 const tx = FeeMarketEIP1559Transaction.fromTxData(rawTx)
