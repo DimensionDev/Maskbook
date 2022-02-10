@@ -144,13 +144,7 @@ export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SNSAdapto
             <MaskPostExtraInfoWrapper
                 title={title || t(ID, name)}
                 width={width}
-                publisher={
-                    publisher ? (
-                        <Link href={publisher.link} underline="none" target="_blank" rel="noopener">
-                            <PluginI18NFieldRender pluginID={ID} field={publisher.name} />
-                        </Link>
-                    ) : undefined
-                }
+                publisher={publisher ? <PluginI18NFieldRender pluginID={ID} field={publisher.name} /> : undefined}
                 publisherLink={publisher?.link}
                 children={props.children}
             />
