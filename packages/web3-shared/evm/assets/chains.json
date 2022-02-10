@@ -349,7 +349,7 @@
             "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/token/eth.jpg"
         },
         "infoURL": "https://boba.network",
-        "shortName": "eth",
+        "shortName": "boba",
         "chainId": 288,
         "networkId": 288,
         "explorers": [
