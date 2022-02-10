@@ -42,6 +42,7 @@ importers:
       eslint-plugin-react-hooks: ^4.3.0
       eslint-plugin-unicorn: ^40.1.0
       eslint-plugin-unused-imports: ^2.0.0
+      graphql-request: ^4.0.0
       gulp: ^4.0.2
       husky: ^7.0.4
       i18next: ^21.6.9
@@ -77,6 +78,7 @@ importers:
       '@types/react': 17.0.38
       '@types/react-dom': 17.0.11
       '@types/web': 0.0.50
+      graphql-request: 4.0.0
       i18next: 21.6.9
       lodash: 4.17.21
       lodash-es: 4.17.21
@@ -15173,6 +15175,16 @@ packages:
       extract-files: 9.0.0
       form-data: 3.0.1
       graphql: 15.5.3
+    dev: false
+
+  /graphql-request/4.0.0:
+    resolution: {integrity: sha512-cdqQLCXlBGkaLdkLYRl4LtkwaZU6TfpE7/tnUQFl3wXfUPWN74Ov+Q61VuIh+AltS789YfGB6whghmCmeXLvTw==}
+    peerDependencies:
+      graphql: 14 - 16
+    dependencies:
+      cross-fetch: 3.1.4
+      extract-files: 9.0.0
+      form-data: 3.0.1
     dev: false
 
   /graphql/15.5.3:
