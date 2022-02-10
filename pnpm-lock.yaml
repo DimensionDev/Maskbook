@@ -25320,13 +25320,8 @@ packages:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==}
     dev: true
 
-<<<<<<< HEAD
-  github.com/ProjectOpenSea/wyvern-js/4d8994219ba202d72159f0e85999af1aa8e0dcf4:
-    resolution: {tarball: https://codeload.github.com/ProjectOpenSea/wyvern-js/tar.gz/4d8994219ba202d72159f0e85999af1aa8e0dcf4}
-=======
   github.com/ProjectOpenSea/wyvern-js/6f85f1b42f0962d2cc8e97b7e7f680865e3f26c1:
     resolution: {tarball: https://codeload.github.com/ProjectOpenSea/wyvern-js/tar.gz/6f85f1b42f0962d2cc8e97b7e7f680865e3f26c1}
->>>>>>> develop
     name: wyvern-js
     version: 3.2.0
     dependencies:
