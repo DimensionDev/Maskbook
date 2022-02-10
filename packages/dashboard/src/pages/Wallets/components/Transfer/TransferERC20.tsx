@@ -2,6 +2,7 @@ import { MaskColorVar, MaskTextField } from '@masknet/theme'
 import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/material'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
+    addGasMargin,
     EthereumTokenType,
     formatWeiToEther,
     FungibleTokenDetailed,
@@ -110,7 +111,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
 
     const gasFee = useMemo(() => {
         const price = is1559Supported && maxFee ? new BigNumber(maxFee) : gasPrice
-        return multipliedBy(gasLimit, price)
+        return multipliedBy(addGasMargin(gasLimit), price)
     }, [gasLimit, gasPrice, maxFee, is1559Supported])
     const gasFeeInUsd = formatWeiToEther(gasFee).multipliedBy(nativeTokenPrice)
 
