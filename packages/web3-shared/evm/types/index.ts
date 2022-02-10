@@ -399,7 +399,7 @@ export enum EthereumRpcType {
 
     // sign
     SIGN = 'eth_sign',
-    SIGN_TYPED_DATA = 'eth_signTypedData',
+    SIGN_TYPED_DATA = 'eth_signTypedData_v3',
 
     // decrypt
     ETH_DECRYPT = 'eth_decrypt',

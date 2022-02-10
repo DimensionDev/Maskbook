@@ -2,6 +2,7 @@ import { EthereumAddress } from 'wallet.ts'
 import { toHex } from 'web3-utils'
 import type { HttpProvider } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import { toBuffer } from 'ethereumjs-util'
 import { safeUnreachable } from '@dimensiondev/kit'
 import {
     addGasMargin,
@@ -37,6 +38,7 @@ import { nativeAPI } from '../../../../shared/native-rpc'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { getSendTransactionComputedPayload } from './rpc'
 import { getError, hasError } from './error'
+import { signTypedData, SignTypedDataVersion } from '@metamask/eth-sig-util'
 
 function isReadOnlyMethod(payload: JsonRpcPayload) {
     return [
@@ -246,8 +248,12 @@ export async function INTERNAL_send(
         const [address, dataToSign] = payload.params as [string, string]
         switch (providerType) {
             case ProviderType.MaskWallet:
+                const signed = signTypedData({
+                    privateKey: toBuffer('0x' + privKey),
+                    data: JSON.parse(dataToSign),
+                    version: SignTypedDataVersion.V3,
+                })
                 try {
-                    const signed = await web3.eth.sign(dataToSign, address)
                     callback(null, {
                         jsonrpc: '2.0',
                         id: payload.id as number,
