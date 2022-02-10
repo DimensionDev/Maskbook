@@ -109,18 +109,16 @@ export async function fetch3BoxProfiles(addresses: string[]): Promise<Profile3Bo
 export async function getScores(
     snapshot: string,
     voters: string[],
-    blockNumber: number,
     network: string,
     space: string,
     strategies: Strategy[],
 ) {
-    const blockTag = Number(snapshot) > blockNumber ? 'latest' : Number(snapshot)
     const scores: { [key in string]: number }[] = await ss.utils.getScores(
         space,
         strategies,
         network,
         voters,
-        blockTag,
+        Number(snapshot),
         SNAPSHOT_GET_SCORE_API,
     )
     return scores.map((score) =>
