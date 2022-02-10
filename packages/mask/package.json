@@ -123,7 +123,8 @@
     "web3-utils": "1.5.2",
     "webextension-polyfill": "^0.8.0",
     "z-schema": "^5.0.2",
-    "zod": "3.11.6"
+    "zod": "3.11.6",
+    "@ethereumjs/tx": "3.5.0"
   },
   "devDependencies": {
     "@dimensiondev/webextension-shim": "0.0.3-20210823035705-4257e12",

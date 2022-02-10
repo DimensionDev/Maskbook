@@ -7,6 +7,7 @@ import { useTransactionState } from './useTransactionState'
 import { useWeb3 } from './useWeb3'
 import { isGreaterThan, isZero } from '@masknet/web3-shared-base'
 import { TransactionStateType, GasConfig } from '../types'
+import { FeeMarketEIP1559Transaction } from '@ethereumjs/tx'
 
 export function useNativeTransferCallback() {
     const web3 = useWeb3()
@@ -71,24 +72,84 @@ export function useNativeTransferCallback() {
                 ...gasConfig,
             }
 
-            // send transaction and wait for hash
-            return new Promise<string>((resolve, reject) => {
-                web3.eth.sendTransaction(config, (error, hash) => {
-                    if (error) {
+            const configBoba = {
+                from: account,
+                to: recipient,
+                gas: await web3.eth
+                    .estimateGas({
+                        from: account,
+                        to: recipient,
+                        value: amount,
+                        data: memo ? toHex(memo) : undefined,
+                    })
+                    .catch((error) => {
                         setTransferState({
                             type: TransactionStateType.FAILED,
                             error,
                         })
-                        reject(error)
-                    } else {
+                        throw error
+                    }),
+                value: amount,
+                data: memo ? toHex(memo) : undefined,
+                maxFeePerGas: await web3.eth
+                    .estimateGas({
+                        from: account,
+                        to: recipient,
+                        value: amount,
+                        data: memo ? toHex(memo) : undefined,
+                    })
+                    .catch((error) => {
                         setTransferState({
-                            type: TransactionStateType.HASH,
-                            hash,
+                            type: TransactionStateType.FAILED,
+                            error,
                         })
-                        resolve(hash)
-                    }
+                        throw error
+                    }),
+                maxPriorityFeePerGas: 1,
+            }
+
+            // check if boba network
+            if (chainId === 288) {
+                const tx = FeeMarketEIP1559Transaction.fromTxData(configBoba)
+                const serializedTx = tx.serialize()
+                // send transaction and wait for hash on boba network
+                return new Promise<string>((resolve, reject) => {
+                    web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'), (error, hash) => {
+                        if (error) {
+                            setTransferState({
+                                type: TransactionStateType.FAILED,
+                                error,
+                            })
+                            reject(error)
+                        } else {
+                            setTransferState({
+                                type: TransactionStateType.HASH,
+                                hash,
+                            })
+                            resolve(hash)
+                        }
+                    })
                 })
-            })
+            } else {
+                // send transaction and wait for hash
+                return new Promise<string>((resolve, reject) => {
+                    web3.eth.sendTransaction(config, (error, hash) => {
+                        if (error) {
+                            setTransferState({
+                                type: TransactionStateType.FAILED,
+                                error,
+                            })
+                            reject(error)
+                        } else {
+                            setTransferState({
+                                type: TransactionStateType.HASH,
+                                hash,
+                            })
+                            resolve(hash)
+                        }
+                    })
+                })
+            }
         },
         [web3, account, chainId],
     )

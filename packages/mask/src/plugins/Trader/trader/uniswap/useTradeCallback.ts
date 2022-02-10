@@ -7,6 +7,7 @@ import type { SwapCall, Trade, TradeComputed } from '../../types'
 import { swapErrorToUserReadableMessage } from '../../helpers'
 import type { TradeProvider } from '@masknet/public-api'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { FeeMarketEIP1559Transaction } from '@ethereumjs/tx'
 
 interface FailedCall {
     parameters: SwapParameters
@@ -122,29 +123,42 @@ export function useTradeCallback(
             bestCallOption = firstNoErrorCall
         }
 
-        return new Promise<string>(async (resolve, reject) => {
-            if (!bestCallOption) {
-                setTradeState({
-                    type: TransactionStateType.FAILED,
-                    error: new Error('Bad call options.'),
-                })
-                return
-            }
+        // check if boba network
+        if (targetChainId === 288) {
+            return new Promise<string>(async (resolve, reject) => {
+                if (!bestCallOption) {
+                    setTradeState({
+                        type: TransactionStateType.FAILED,
+                        error: new Error('Bad call options.'),
+                    })
+                    return
+                }
 
-            const {
-                call: { address, calldata, value },
-            } = bestCallOption
+                const {
+                    call: { address, calldata, value },
+                } = bestCallOption
 
-            web3.eth.sendTransaction(
-                {
+                const rawTx = {
                     from: account,
                     to: address,
                     data: calldata,
-                    ...('gasEstimate' in bestCallOption ? { gas: bestCallOption.gasEstimate.toFixed() } : {}),
+                    ...('gasEstimate' in bestCallOption
+                        ? {
+                              gas: bestCallOption.gasEstimate.toFixed(),
+                              gasPrice: bestCallOption.gasEstimate.toFixed(),
+                              maxFeePerGas: bestCallOption.gasEstimate.toFixed(),
+                              maxPriorityFeePerGas: 1,
+                          }
+                        : {}),
                     ...(!value || /^0x0*$/.test(value) ? {} : { value }),
                     ...gasConfig,
-                },
-                async (error, hash) => {
+                }
+
+                const tx = FeeMarketEIP1559Transaction.fromTxData(rawTx)
+
+                const serializedTx = tx.serialize()
+
+                web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'), async (error, hash) => {
                     if (error) {
                         if ((error as any)?.code) {
                             const error_ = new Error(
@@ -170,9 +184,61 @@ export function useTradeCallback(
                         })
                         resolve(hash)
                     }
-                },
-            )
-        })
+                })
+            })
+        } else {
+            return new Promise<string>(async (resolve, reject) => {
+                if (!bestCallOption) {
+                    setTradeState({
+                        type: TransactionStateType.FAILED,
+                        error: new Error('Bad call options.'),
+                    })
+                    return
+                }
+
+                const {
+                    call: { address, calldata, value },
+                } = bestCallOption
+
+                web3.eth.sendTransaction(
+                    {
+                        from: account,
+                        to: address,
+                        data: calldata,
+                        ...('gasEstimate' in bestCallOption ? { gas: bestCallOption.gasEstimate.toFixed() } : {}),
+                        ...(!value || /^0x0*$/.test(value) ? {} : { value }),
+                        ...gasConfig,
+                    },
+                    async (error, hash) => {
+                        if (error) {
+                            if ((error as any)?.code) {
+                                const error_ = new Error(
+                                    (error as any)?.message === 'Unable to add more requests.'
+                                        ? 'Unable to add more requests.'
+                                        : 'Transaction rejected.',
+                                )
+                                setTradeState({
+                                    type: TransactionStateType.FAILED,
+                                    error: error_,
+                                })
+                                reject(error_)
+                            } else {
+                                setTradeState({
+                                    type: TransactionStateType.FAILED,
+                                    error: new Error(`Swap failed: ${swapErrorToUserReadableMessage(error)}`),
+                                })
+                            }
+                        } else {
+                            setTradeState({
+                                type: TransactionStateType.HASH,
+                                hash: hash,
+                            })
+                            resolve(hash)
+                        }
+                    },
+                )
+            })
+        }
     }, [web3, account, tradeParameters, gasConfig])
 
     const resetCallback = useCallback(() => {
