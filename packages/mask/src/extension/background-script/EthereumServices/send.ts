@@ -247,7 +247,21 @@ export async function INTERNAL_send(
     async function typedDataSign() {
         const [address, dataToSign] = payload.params as [string, string]
         switch (providerType) {
-            case ProviderType.MaskWallet:
+            case ProviderType.MetaMask:
+                provider?.send(payload, callback)
+                break
+            case ProviderType.WalletConnect:
+                try {
+                    callback(null, {
+                        jsonrpc: '2.0',
+                        id: payload.id as number,
+                        result: await WalletConnect.signTypedDataMessage(address, dataToSign),
+                    })
+                } catch (error) {
+                    callback(getError(error, null, EthereumErrorType.ERR_SIGN_MESSAGE))
+                }
+                break
+            default:
                 const signed = signTypedData({
                     privateKey: toBuffer('0x' + privKey),
                     data: JSON.parse(dataToSign),
@@ -262,20 +276,6 @@ export async function INTERNAL_send(
                 } catch (error) {
                     callback(getError(error, null, EthereumErrorType.ERR_SIGN_MESSAGE))
                 }
-                break
-            case ProviderType.WalletConnect:
-                try {
-                    callback(null, {
-                        jsonrpc: '2.0',
-                        id: payload.id as number,
-                        result: await WalletConnect.signTypedDataMessage(address, dataToSign),
-                    })
-                } catch (error) {
-                    callback(getError(error, null, EthereumErrorType.ERR_SIGN_MESSAGE))
-                }
-                break
-            default:
-                provider?.send(payload, callback)
         }
     }
 
