@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
         textDecoration: 'none !important',
     },
     loading: {
-        color: theme.palette.text.primary,
+        color: theme.palette.background.paper,
     },
 }))
 
@@ -108,6 +108,7 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                         color="primary"
                         variant="contained"
                         fullWidth
+                        disabled={loading}
                         onClick={onVoteConfirm}>
                         {loading ? (
                             <CircularProgress size={16} className={classes.loading} />
