@@ -145,18 +145,18 @@ export function useTradeCallback(
                     ...('gasEstimate' in bestCallOption
                         ? {
                               gas: bestCallOption.gasEstimate.toFixed(),
-                              maxFeePerGas: bestCallOption.gasEstimate.toFixed(),
-                              maxPriorityFeePerGas: 1,
+                              maxFeePerGas: '1.5',
+                              maxPriorityFeePerGas: '1.5',
                           }
                         : {}),
                     ...(!value || /^0x0*$/.test(value) ? {} : { value }),
                 }
 
                 const tx = FeeMarketEIP1559Transaction.fromTxData(rawTx)
-
                 const serializedTx = tx.serialize()
+                const signedTransaction = await web3.eth.sign('0x' + serializedTx.toString('hex'), account)
 
-                web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'), async (error, hash) => {
+                web3.eth.sendSignedTransaction(signedTransaction, async (error, hash) => {
                     if (error) {
                         if ((error as any)?.code) {
                             const error_ = new Error(

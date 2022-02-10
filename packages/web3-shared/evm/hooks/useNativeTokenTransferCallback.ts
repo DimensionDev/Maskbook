@@ -105,16 +105,17 @@ export function useNativeTransferCallback() {
                         })
                         throw error
                     }),
-                maxPriorityFeePerGas: 1,
+                maxPriorityFeePerGas: '1.5',
             }
 
             // check if boba network
             if (chainId === 288) {
                 const tx = FeeMarketEIP1559Transaction.fromTxData(configBoba)
                 const serializedTx = tx.serialize()
+                const signedTransaction = await web3.eth.sign('0x' + serializedTx.toString('hex'), account)
                 // send transaction and wait for hash on boba network
                 return new Promise<string>((resolve, reject) => {
-                    web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'), (error, hash) => {
+                    web3.eth.sendSignedTransaction(signedTransaction, (error, hash) => {
                         if (error) {
                             setTransferState({
                                 type: TransactionStateType.FAILED,
