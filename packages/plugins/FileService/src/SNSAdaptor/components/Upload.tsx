@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
-        height: 260,
+        height: 300,
     },
     upload: {
         flex: 1,
@@ -106,11 +106,12 @@ export const Upload: React.FC = () => {
             key={config.provider}
             control={
                 <Radio
-                    color="secondary"
+                    color="primary"
                     checked={provider === config.provider}
                     onChange={() => setProvider(config.provider)}
                 />
             }
+            className={classes.encrypted}
             label={config.name}
         />
     ))
@@ -120,7 +121,7 @@ export const Upload: React.FC = () => {
             <FormControlLabel
                 control={
                     <Checkbox
-                        color="secondary"
+                        color="primary"
                         checked={useCDN}
                         onChange={(event) => setUseCDN(event.target.checked)}
                     />
@@ -140,7 +141,7 @@ export const Upload: React.FC = () => {
                 <FormControlLabel
                     control={
                         <Checkbox
-                            color="secondary"
+                            color="primary"
                             checked={encrypted}
                             onChange={(event) => setEncrypted(event.target.checked)}
                         />

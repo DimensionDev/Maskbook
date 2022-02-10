@@ -10,6 +10,8 @@ import { META_KEY_2 } from '../constants'
 import { Exchange } from './hooks/Exchange'
 import type { FileInfo } from '../types'
 import { useCompositionContext } from '@masknet/plugin-infra'
+import { useHistory } from 'react-router-dom'
+import { FileRouter } from '../constants'
 
 interface Props {
     onClose: () => void
@@ -43,6 +45,7 @@ const useStyles = makeStyles()((theme) => ({
 const FileServiceDialog: React.FC<Props> = (props) => {
     const t = useI18N()
     const { classes } = useStyles()
+    const history = useHistory()
     const { showSnackbar } = useCustomSnackbar()
     const [uploading, setUploading] = useState(false)
     const [selectedFileInfo, setSelectedFileInfo] = useState<FileInfo | null>(null)

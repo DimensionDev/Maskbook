@@ -80,7 +80,7 @@ export const RecentFiles: React.FC<Props> = ({ files, onMore }) => {
     const { classes: itemIconClasses } = useItemIconStyles()
     const { classes: itemTextClasses } = useItemTextStyles()
     const onClick = (info: FileInfo) => () => {
-        history.replace(FileRouter.uploaded, info)
+        history.push(FileRouter.uploaded, info)
     }
     const renderItem = (file: FileInfo, index: number) => (
         <ListItem classes={itemClasses} key={index} onClick={onClick(file)}>
