@@ -10,8 +10,6 @@ import { META_KEY_2 } from '../constants'
 import { Exchange } from './hooks/Exchange'
 import type { FileInfo } from '../types'
 import { useCompositionContext } from '@masknet/plugin-infra'
-import { useHistory } from 'react-router-dom'
-import { FileRouter } from '../constants'
 
 interface Props {
     onClose: () => void
@@ -45,7 +43,6 @@ const useStyles = makeStyles()((theme) => ({
 const FileServiceDialog: React.FC<Props> = (props) => {
     const t = useI18N()
     const { classes } = useStyles()
-    const history = useHistory()
     const { showSnackbar } = useCustomSnackbar()
     const [uploading, setUploading] = useState(false)
     const [selectedFileInfo, setSelectedFileInfo] = useState<FileInfo | null>(null)
@@ -65,12 +62,28 @@ const FileServiceDialog: React.FC<Props> = (props) => {
         closeWalletStatusDialog()
         props.onClose()
     }
+
+    let onDialogCloseCallback: Function | null = null
+    const callDialogClose = () => {
+        try {
+            if (onDialogCloseCallback) onDialogCloseCallback()
+        } catch (error) {}
+        onDialogCloseCallback = null
+    }
+
     const onDecline = () => {
+        if (onDialogCloseCallback) {
+            callDialogClose()
+            return
+        }
         if (!uploading) {
             props.onClose()
             return
         }
         showSnackbar(t.uploading_on_cancel())
+    }
+    const onDialogClose = (cb: Function) => {
+        onDialogCloseCallback = cb
     }
     return (
         <MaskDialog
@@ -79,7 +92,7 @@ const FileServiceDialog: React.FC<Props> = (props) => {
             title={t.__display_name()}
             onClose={onDecline}>
             <DialogContent style={{ minWidth: 515 }}>
-                <Exchange onUploading={setUploading} onInsert={setSelectedFileInfo}>
+                <Exchange onDialogClose={onDialogClose} onUploading={setUploading} onInsert={setSelectedFileInfo}>
                     <Entry />
                 </Exchange>
             </DialogContent>

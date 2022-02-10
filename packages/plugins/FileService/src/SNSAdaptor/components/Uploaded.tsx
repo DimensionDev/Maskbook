@@ -51,7 +51,7 @@ export const Uploaded: React.FC = () => {
     const t = useI18N()
     const { classes } = useStyles()
     const history = useHistory()
-    const { onInsert } = useExchange()
+    const { onInsert, onDialogClose } = useExchange()
     const { state } = useLocation<FileInfo>()
     useEffect(() => {
         onInsert(state)
@@ -60,6 +60,9 @@ export const Uploaded: React.FC = () => {
         onInsert(null)
         history.replace(FileRouter.upload)
     }
+
+    // return upload route
+    onDialogClose(onBack)
     const onPreview = (event: React.MouseEvent) => {
         // ! THIS METHOD IS ONLY IN THE DEBUGGER !
         // ! Trigger: [Shift Key] + [Click] !
