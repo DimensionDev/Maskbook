@@ -52,7 +52,13 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const { value: daoTabTwitterIdList = DEFAULT_SUPPORTED_TWITTER_IDS } = useDaoTabTwitterIdList()
     const tabs = useActivatedPluginsSNSAdaptor('any')
         .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? [])
-        .filter((z) => z.Utils?.shouldDisplay?.(identity, addressNames, daoTabTwitterIdList) ?? true)
+        .filter(
+            (z) =>
+                z.Utils?.shouldDisplay?.(identity, addressNames, {
+                    type: 'daoTabTwitterIdList',
+                    items: daoTabTwitterIdList,
+                }) ?? true,
+        )
         .sort((a, z) => {
             // order those tabs from next id first
             if (a.pluginID === PluginId.NextID) return -1

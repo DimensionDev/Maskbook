@@ -412,7 +412,11 @@ export namespace Plugin.SNSAdaptor {
             /**
              * If it returns false, this tab will not be displayed.
              */
-            shouldDisplay?(identity?: ProfileIdentity, addressNames?: ProfileAddress[], extraInfo?: any): boolean
+            shouldDisplay?(
+                identity?: ProfileIdentity,
+                addressNames?: ProfileAddress[],
+                extraInfo?: { type: 'daoTabTwitterIdList'; items: string[] },
+            ): boolean
 
             /**
              * Sort address name in expected order.
