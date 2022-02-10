@@ -38,8 +38,9 @@ const useStyles = makeStyles()((theme) => ({
         textAlign: 'center',
         wordBreak: 'break-word',
         marginTop: '20px',
+        color: MaskColorVar.textPrimary,
     },
-    address: { marginTop: '20px', opacity: 0.6 },
+    address: { marginTop: '20px', opacity: 0.6, color: MaskColorVar.textPrimary },
     socialMedia: {
         width: '100%',
         display: 'flex',

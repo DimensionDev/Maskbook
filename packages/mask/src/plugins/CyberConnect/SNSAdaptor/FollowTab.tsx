@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import Box from '@mui/material/Box'
 import Tab from '@mui/material/Tab'
 import TabContext from '@mui/lab/TabContext'
@@ -11,7 +11,6 @@ import type { IFollowIdentity } from '../Worker/apis'
 const useStyles = makeStyles()((theme) => ({
     tabContext: {
         marginTop: '20px',
-        background: '#fff',
     },
     tabPanel: {
         height: '400px',
@@ -59,19 +58,18 @@ export default function FollowTab({
                 <TabList
                     sx={{
                         width: '100%',
-                        background: '#fff',
-                        color: '#000',
+                        color: MaskColorVar.cyberconnectPrimary,
                         fontSize: '18px',
                         ' .MuiTabs-indicator': {
-                            backgroundColor: '#000',
+                            backgroundColor: MaskColorVar.cyberconnectPrimary,
                             height: '3px',
                         },
                         ' .Mui-selected': {
-                            color: '#000 !important',
+                            color: MaskColorVar.cyberconnectPrimary + '!important',
                             opacity: 1,
                         },
                         ' .MuiTab-textColorPrimary': {
-                            color: '#000',
+                            color: MaskColorVar.cyberconnectPrimary + '!important',
                             fontSize: '18px',
                             textAlign: 'center',
                         },
@@ -84,7 +82,10 @@ export default function FollowTab({
             <TabPanel
                 className={classes.tabPanel}
                 value="1"
-                sx={{ backgroundColor: '#fff', color: '#000', width: '100%' }}>
+                sx={{
+                    color: MaskColorVar.cyberconnectPrimary,
+                    width: '100%',
+                }}>
                 {followingList.map((f: IFollowIdentity) => {
                     return <FollowRow key={f.address} identity={f} />
                 })}
@@ -92,7 +93,10 @@ export default function FollowTab({
             <TabPanel
                 className={classes.tabPanel}
                 value="2"
-                sx={{ backgroundColor: '#fff', color: '#000', width: '100%' }}>
+                sx={{
+                    color: MaskColorVar.cyberconnectPrimary,
+                    width: '100%',
+                }}>
                 {followerList.map((f: IFollowIdentity) => {
                     return <FollowRow key={f.address} identity={f} />
                 })}
