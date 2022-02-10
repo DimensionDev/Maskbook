@@ -14,6 +14,7 @@ export enum ProtocolCategory {
 
 export enum ProtocolType {
     Lido = 0,
+    AAVE = 1,
 }
 
 export interface SavingsProtocol {
@@ -29,7 +30,7 @@ export interface SavingsProtocol {
     balance: BigNumber
 
     getFungibleTokenDetails(chainId: ChainId): FungibleTokenDetailed
-    getApr(): Promise<string>
+    getApr(chainId?: ChainId): Promise<string>
     getBalance(chainId: ChainId, web3: Web3, account: string): Promise<BigNumber.Value>
     depositEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value): Promise<BigNumber.Value>
     deposit(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value): Promise<boolean>
