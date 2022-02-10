@@ -242,6 +242,37 @@ export async function INTERNAL_send(
         }
     }
 
+    async function typedDataSign() {
+        const [address, dataToSign] = payload.params as [string, string]
+        switch (providerType) {
+            case ProviderType.MaskWallet:
+                try {
+                    const signed = await web3.eth.sign(dataToSign, address)
+                    callback(null, {
+                        jsonrpc: '2.0',
+                        id: payload.id as number,
+                        result: signed,
+                    })
+                } catch (error) {
+                    callback(getError(error, null, EthereumErrorType.ERR_SIGN_MESSAGE))
+                }
+                break
+            case ProviderType.WalletConnect:
+                try {
+                    callback(null, {
+                        jsonrpc: '2.0',
+                        id: payload.id as number,
+                        result: await WalletConnect.signTypedDataMessage(address, dataToSign),
+                    })
+                } catch (error) {
+                    callback(getError(error, null, EthereumErrorType.ERR_SIGN_MESSAGE))
+                }
+                break
+            default:
+                provider?.send(payload, callback)
+        }
+    }
+
     async function sendTransaction() {
         const hash = getPayloadHash(payload)
         const config = getPayloadConfig(payload)
@@ -403,6 +434,9 @@ export async function INTERNAL_send(
                 break
             case EthereumMethodType.PERSONAL_SIGN:
                 await personalSign()
+                break
+            case EthereumMethodType.ETH_SIGN_TYPED_DATA:
+                await typedDataSign()
                 break
             case EthereumMethodType.ETH_SEND_TRANSACTION:
                 await sendTransaction()
