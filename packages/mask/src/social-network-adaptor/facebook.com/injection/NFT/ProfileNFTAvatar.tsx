@@ -18,6 +18,7 @@ import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { getAvatarId } from '../../utils/user'
 import { isMobileFacebook } from '../../utils/isMobile'
+import { InMemoryStorages } from '../../../../../shared'
 
 export async function injectProfileNFTAvatarInFaceBook(signal: AbortSignal) {
     if (!isMobileFacebook) {
@@ -108,8 +109,20 @@ function NFTAvatarInFacebookSecondStep() {
 
 async function changeImageToActiveElementsOnMobile(image: File | Blob): Promise<void> {
     const imageBuffer = await blobToArrayBuffer(image)
-    hookInputUploadOnce('image/png', 'avatar.png', new Uint8Array(imageBuffer))
-    searchFacebookAvatarOpenFilesOnMobileSelector().evaluate()?.click()
+
+    const input = searchFacebookAvatarOpenFilesOnMobileSelector().evaluate()
+
+    if (input) {
+        input.style.visibility = 'unset'
+        input.focus()
+        hookInputUploadOnce('image/png', 'avatar.png', new Uint8Array(imageBuffer), true)
+        input.style.visibility = 'hidden'
+
+        const file = new File([image], 'avatar.png', { type: 'image/png', lastModified: Date.now() })
+        const container = new DataTransfer()
+        container.items.add(file)
+        input.files = container.files
+    }
 }
 
 const useMobileStyles = makeStyles()({
@@ -130,12 +143,9 @@ function NFTAvatarListInFaceBookMobile() {
 
             await changeImageToActiveElementsOnMobile(image)
 
-            MaskMessages.events.NFTAvatarUpdated.sendToLocal({
-                userId: identity.identifier.userId,
-                avatarId: '',
-                address: token.contractDetailed.address,
-                tokenId: token.tokenId,
-            })
+            InMemoryStorages.FacebookNFTEventOnMobile.storage.userId.setValue(identity.identifier.userId)
+            InMemoryStorages.FacebookNFTEventOnMobile.storage.address.setValue(token.contractDetailed.address)
+            InMemoryStorages.FacebookNFTEventOnMobile.storage.tokenId.setValue(token.tokenId)
         },
         [identity],
     )

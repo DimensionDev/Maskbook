@@ -14,6 +14,7 @@ import { useNFTAvatar } from '../../../../plugins/Avatar/hooks'
 import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
 import { makeStyles } from '@masknet/theme'
 import { isMobileFacebook } from '../../utils/isMobile'
+import { InMemoryStorages } from '../../../../../shared'
 
 export function injectNFTAvatarInFacebook(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchFacebookAvatarSelector())
@@ -45,6 +46,12 @@ const useStyles = makeStyles()(() => ({
         height: '19px !important',
     },
 }))
+
+const clearStorages = () => {
+    InMemoryStorages.FacebookNFTEventOnMobile.storage.userId.setValue('')
+    InMemoryStorages.FacebookNFTEventOnMobile.storage.address.setValue('')
+    InMemoryStorages.FacebookNFTEventOnMobile.storage.tokenId.setValue('')
+}
 
 function NFTAvatarInFacebook() {
     const { classes } = useStyles()
@@ -88,30 +95,60 @@ function NFTAvatarInFacebook() {
         )
     }, [])
 
+    // Because of the mobile upload step, need to use memory storage to store NFTEven
     useAsync(async () => {
-        if (!wallet || !NFTEvent?.address || !NFTEvent?.tokenId || !NFTEvent?.avatarId) return
+        const storages = InMemoryStorages.FacebookNFTEventOnMobile.storage
 
-        try {
-            const avatarInfo = await PluginNFTAvatarRPC.saveNFTAvatar(
-                wallet.address,
-                { ...NFTEvent, avatarId: getAvatarId(identity.avatar ?? '') } as AvatarMetaDB,
-                identity.identifier.network,
-            )
-            if (!avatarInfo) {
+        if (!wallet) return
+        if (NFTEvent?.address && NFTEvent?.tokenId && NFTEvent?.avatarId) {
+            try {
+                const avatarInfo = await PluginNFTAvatarRPC.saveNFTAvatar(
+                    wallet.address,
+                    { ...NFTEvent, avatarId: getAvatarId(identity.avatar ?? '') } as AvatarMetaDB,
+                    identity.identifier.network,
+                )
+                if (!avatarInfo) {
+                    setNFTEvent(undefined)
+                    setAvatar(undefined)
+                    window.alert('Sorry, failed to save NFT Avatar. Please set again.')
+                    return
+                }
+
+                setAvatar(avatarInfo)
+
+                setNFTEvent(undefined)
+            } catch (error: any) {
                 setNFTEvent(undefined)
                 setAvatar(undefined)
-                window.alert('Sorry, failed to save NFT Avatar. Please set again.')
+                window.alert(error.message)
                 return
             }
-
-            setAvatar(avatarInfo)
-
-            setNFTEvent(undefined)
-        } catch (error: any) {
-            setNFTEvent(undefined)
-            setAvatar(undefined)
-            window.alert(error.message)
-            return
+        } else if (storages.address.value && storages.userId.value && storages.tokenId.value) {
+            try {
+                const avatarInfo = await PluginNFTAvatarRPC.saveNFTAvatar(
+                    wallet.address,
+                    {
+                        userId: storages.userId.value,
+                        tokenId: storages.tokenId.value,
+                        address: storages.address.value,
+                        avatarId: getAvatarId(identity.avatar ?? ''),
+                    } as AvatarMetaDB,
+                    identity.identifier.network,
+                )
+                if (!avatarInfo) {
+                    clearStorages()
+                    setAvatar(undefined)
+                    window.alert('Sorry, failed to save NFT Avatar. Please set again.')
+                    return
+                }
+                setAvatar(avatarInfo)
+                clearStorages()
+            } catch (error: any) {
+                clearStorages()
+                setAvatar(undefined)
+                window.alert(error.message)
+                return
+            }
         }
     }, [identity.avatar])
 

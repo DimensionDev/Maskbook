@@ -39,7 +39,10 @@ export const searchFaceBookPostAvatarOnMobileSelector = () => querySelectorAll('
 
 export const searchFacebookAvatarOpenFilesSelector = () => querySelector('[role="dialog"] input[type=file] ~ div')
 
-export const searchFacebookAvatarOpenFilesOnMobileSelector = () => querySelector('#nuxChoosePhotoButton ~ input')
+export const searchFacebookAvatarOpenFilesOnMobileSelector = () =>
+    querySelector<HTMLInputElement>('#nuxChoosePhotoButton ~ input')
+
+export const searchFacebookSaveAvatarButtonOnMobileSelector = () => querySelector('#nuxUploadPhotoButton')
 
 export const searchFacebookSaveAvatarButtonSelector = () =>
     new LiveSelector()
