@@ -29,6 +29,10 @@ const useStyles = makeStyles()(() => ({
         zIndex: 2,
         width: '100%',
         height: '100%',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
     },
     text: {
         fontSize: '20px !important',
@@ -128,6 +132,7 @@ function NFTAvatarInTwitter() {
     }, [onUpdate])
 
     useEffect(() => {
+        if (!showAvatar) return
         const linkDom = searchTwitterAvatarLinkSelector().evaluate()
 
         if (linkDom?.firstElementChild && linkDom.childNodes.length === 4) {
@@ -157,25 +162,18 @@ function NFTAvatarInTwitter() {
                 linkDom.appendChild(style)
             }
         }
-    }, [location.pathname])
 
-    useEffect(() => {
-        const linkDom = searchTwitterAvatarLinkSelector().evaluate()
-        if (showAvatar) {
-            if (borderElement.current && linkDom?.firstElementChild === borderElement.current) {
-                linkDom?.removeChild(linkDom.firstElementChild)
+        return () => {
+            if (linkDom?.lastElementChild?.tagName === 'STYLE') {
+                linkDom.removeChild(linkDom.lastElementChild)
             }
 
-            rainBowElement.current?.classList.add('rainbowBorder')
-        } else {
-            // recovery Twitter profile avatar style
             if (borderElement.current && linkDom?.firstElementChild !== borderElement.current) {
                 linkDom?.insertBefore(borderElement.current, linkDom.firstChild)
+                rainBowElement.current?.classList.remove('rainbowBorder')
             }
-
-            rainBowElement.current?.classList.remove('rainbowBorder')
         }
-    }, [showAvatar])
+    }, [location.pathname, showAvatar])
 
     useUpdateEffect(() => {
         if (
@@ -189,8 +187,7 @@ function NFTAvatarInTwitter() {
 
     useUpdateEffect(() => {
         const linkParentDom = searchTwitterAvatarLinkSelector().evaluate()?.closest('div')
-
-        if (!avatar || !linkParentDom) return
+        if (!avatar || !linkParentDom || !showAvatar) return
 
         const handler = () => {
             window.open(resolveOpenSeaLink(avatar.address, avatar.tokenId), '_blank')

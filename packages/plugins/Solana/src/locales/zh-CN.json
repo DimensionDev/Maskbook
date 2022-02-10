@@ -1,1 +1,5 @@
-{}
+{
+    "button_log_in": "登入",
+    "button_log_out": "登出",
+    "button_sign_up": "注册"
+}
