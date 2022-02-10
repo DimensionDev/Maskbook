@@ -176,12 +176,12 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         if (resolveDomainLoading) return
         if (registeredAddress) {
             return (
-                <Link
-                    href={Utils?.resolveDomainLink?.(address)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    underline="none">
-                    <Box style={{ padding: 10 }}>
+                <Box style={{ padding: 10 }}>
+                    <Link
+                        href={Utils?.resolveDomainLink?.(address)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="none">
                         <Typography
                             fontSize={16}
                             lineHeight="22px"
@@ -193,8 +193,8 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                         <Typography fontSize={14} lineHeight="20px" style={{ color: MaskColorVar.textSecondary }}>
                             <FormattedAddress address={registeredAddress} size={4} formatter={Utils?.formatAddress} />
                         </Typography>
-                    </Box>
-                </Link>
+                    </Link>
+                </Box>
             )
         }
 

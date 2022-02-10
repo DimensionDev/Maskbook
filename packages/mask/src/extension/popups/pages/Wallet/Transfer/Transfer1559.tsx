@@ -455,12 +455,12 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
 
         if (registeredAddress && !resolveDomainError && Utils?.resolveDomainLink)
             return (
-                <Link
-                    href={Utils.resolveDomainLink(address)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    underline="none">
-                    <Box display="flex" justifyContent="space-between" alignItems="center" py={2.5} px={1.5}>
+                <Box display="flex" justifyContent="space-between" alignItems="center" py={2.5} px={1.5}>
+                    <Link
+                        href={Utils.resolveDomainLink(address)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="none">
                         <Box>
                             <Typography className={classes.domainName}>{address}</Typography>
                             <Typography className={classes.registeredAddress}>
@@ -471,9 +471,9 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                                 />
                             </Typography>
                         </Box>
-                        <RightIcon />
-                    </Box>
-                </Link>
+                    </Link>
+                    <RightIcon />
+                </Box>
             )
 
         return
