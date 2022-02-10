@@ -363,7 +363,7 @@ importers:
       event-iterator: ^2.0.0
       fuse.js: ^6.5.3
       graphql: ^15.5.1
-      graphql-request: ^3.4.0
+      graphql-request: ^4.0.0
       gun: ^0.2020.1234
       history: ^5.2.0
       html-webpack-plugin: ^5.5.0
@@ -493,7 +493,7 @@ importers:
       event-iterator: 2.0.0
       fuse.js: 6.5.3
       graphql: 15.5.3
-      graphql-request: 3.5.0_graphql@15.5.3
+      graphql-request: 4.0.0_graphql@15.5.3
       gun: 0.2020.1234
       history: 5.2.0
       https-browserify: 1.0.0
@@ -15254,10 +15254,10 @@ packages:
     resolution: {integrity: sha512-NtNxqUcXgpW2iMrfqSfR73Glt39K+BLwWsPs94yR63v45T0Wbej7eRmL5cWfwEgqXnmjQp3zaJTshdRW/qC2ZQ==}
     requiresBuild: true
 
-  /graphql-request/3.5.0_graphql@15.5.3:
-    resolution: {integrity: sha512-Io89QpfU4rqiMbqM/KwMBzKaDLOppi8FU8sEccCE4JqCgz95W9Q8bvxQ4NfPALLSMvg9nafgg8AkYRmgKSlukA==}
+  /graphql-request/4.0.0_graphql@15.5.3:
+    resolution: {integrity: sha512-cdqQLCXlBGkaLdkLYRl4LtkwaZU6TfpE7/tnUQFl3wXfUPWN74Ov+Q61VuIh+AltS789YfGB6whghmCmeXLvTw==}
     peerDependencies:
-      graphql: 14.x || 15.x
+      graphql: 14 - 16
     dependencies:
       cross-fetch: 3.1.4
       extract-files: 9.0.0
@@ -16626,8 +16626,10 @@ packages:
   /isomorphic-unfetch/2.1.1:
     resolution: {integrity: sha512-nd8AULy4i2rA8dv0nOBT9xieIegd3xi7NDxTQ9+iNXDTyaG6VbUYW3F+TdMRqxqXhDFWM2k7fttKx9W2Wd8JpQ==}
     dependencies:
-      node-fetch: 2.6.6
+      node-fetch: 2.6.7
       unfetch: 3.1.2
+    transitivePeerDependencies:
+      - encoding
     dev: false
 
   /isomorphic-ws/4.0.1_ws@7.5.5:
@@ -18778,13 +18780,6 @@ packages:
     engines: {node: 4.x || >=6.0.0}
     dev: false
 
-  /node-fetch/2.6.6:
-    resolution: {integrity: sha512-Z8/6vRlTUChSdIgMa51jxQ4lrw/Jy5SOW10ObaA47/RElsAN2c5Pn8bTgFGWn/ibwzXTE8qwr1Yzx28vsecXEA==}
-    engines: {node: 4.x || >=6.0.0}
-    dependencies:
-      whatwg-url: 5.0.0
-    dev: false
-
   /node-fetch/2.6.7:
     resolution: {integrity: sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==}
     engines: {node: 4.x || >=6.0.0}
@@ -18795,7 +18790,6 @@ packages:
         optional: true
     dependencies:
       whatwg-url: 5.0.0
-    dev: true
 
   /node-forge/1.2.1:
     resolution: {integrity: sha512-Fcvtbb+zBcZXbTTVwqGA5W+MKBj56UjVRevvchv5XrcyXbmNdesfZL37nlcWOfpgHhgmxApw3tQbTr4CqNmX4w==}
@@ -19161,6 +19155,7 @@ packages:
       wyvern-schemas: github.com/ProjectOpenSea/wyvern-schemas/e1a08fcf8ce2b11a0fe9cbdc7c9f77c59fadef26
     transitivePeerDependencies:
       - debug
+      - encoding
     dev: false
 
   /optionator/0.8.3:
