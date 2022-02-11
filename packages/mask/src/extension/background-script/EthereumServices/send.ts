@@ -398,6 +398,13 @@ export async function INTERNAL_send(
 
     try {
         switch (payload.method) {
+            case EthereumMethodType.ETH_ACCOUNTS:
+                callback(null, {
+                    id: payload.id,
+                    jsonrpc: payload.jsonrpc,
+                    result: [account],
+                } as JsonRpcResponse)
+                break
             case EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT:
                 await getTransactionReceipt()
                 break

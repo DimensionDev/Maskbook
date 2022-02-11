@@ -77,7 +77,7 @@ const Profile = ({ url }: { url: string }) => {
                     <Avatar name={queryAddress} square size={300} />
                 )}
             </div>
-            <div className={classes.userName}>{formatEthereumAddress(queryAddress, 14)}</div>
+            <div className={classes.userName}>{identity?.ens || formatEthereumAddress(queryAddress, 4)}</div>
 
             {!identity ? (
                 <Skeleton width={400} height={40} />

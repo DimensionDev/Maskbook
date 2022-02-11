@@ -126,12 +126,8 @@ export default function ConnectButton({ address }: { address: string }) {
     }, [cc, myAddress])
 
     return blockChainNetwork !== NetworkPluginID.PLUGIN_EVM ? (
-        <Typography variant="body2" sx={{ marginTop: 2 }}>
+        <Typography variant="body2" sx={{ marginTop: 2, color: MaskColorVar.cyberconnectPrimary }}>
             Please switch to EVM based wallet to follow
-        </Typography>
-    ) : providerType !== 'MetaMask' ? (
-        <Typography variant="body2" sx={{ marginTop: 2 }}>
-            Please switch your Mask wallet into Metamask to follow
         </Typography>
     ) : !isSameAddress(myAddress, address) ? (
         <div
