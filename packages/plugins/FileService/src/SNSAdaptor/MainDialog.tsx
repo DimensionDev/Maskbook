@@ -63,7 +63,7 @@ const FileServiceDialog: React.FC<Props> = (props) => {
         props.onClose()
     }
 
-    let onDialogCloseCallback: Function | null = null
+    let onDialogCloseCallback: DialogCloseCallback | null = null
     const callDialogClose = () => {
         try {
             onDialogCloseCallback?.()
