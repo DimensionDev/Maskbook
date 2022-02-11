@@ -317,7 +317,9 @@ function MarketDetails(props: MarketDetailsProps) {
                                                 {day}
                                             </Typography>
                                         </Box>
-                                        <Box>d</Box>
+                                        <Box>
+                                            <Typography>d</Typography>
+                                        </Box>
                                     </Grid>
                                     <Grid item container sx={{ width: 'auto', mr: 0.5 }} alignItems="flex-end">
                                         <Box>
