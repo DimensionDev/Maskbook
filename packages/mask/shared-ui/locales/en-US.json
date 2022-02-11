@@ -421,6 +421,7 @@
     "plugin_trader_circulating_supply": "Circulating Supply",
     "plugin_trader_volume_24": "Volume (24h)",
     "plugin_trader_market_cap": "Market Cap",
+    "plugin_trader_data_source": "Data Source",
     "plugin_trader_price_updated": "Price Updated",
     "plugin_trader_view_pair_analytics": "View pair analytics",
     "plugin_savings": "Savings",

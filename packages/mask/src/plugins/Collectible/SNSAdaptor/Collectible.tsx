@@ -1,11 +1,13 @@
-import type { ReactElement } from 'react'
-import { Box, Button, CardContent, CardHeader, Link, Paper, Tab, Tabs, Typography } from '@mui/material'
+import { ReactElement, useCallback } from 'react'
+import { Box, Button, CardActions, CardContent, CardHeader, Link, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
+import { findIndex } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
 import isValidDate from 'date-fns/isValid'
 import isAfter from 'date-fns/isAfter'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import { useI18N, useSettingsSwitcher } from '../../../utils'
 import { ArticleTab } from './ArticleTab'
 import { TokenTab } from './TokenTab'
@@ -15,11 +17,13 @@ import { HistoryTab } from './HistoryTab'
 import { LinkingAvatar } from './LinkingAvatar'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleCard } from './CollectibleCard'
+import { CollectibleProviderIcon } from './CollectibleProviderIcon'
 import { CollectibleTab } from '../types'
 import { resolveAssetLinkOnCurrentProvider, resolveCollectibleProviderName } from '../pipes'
 import { ActionBar } from './ActionBar'
 import { NonFungibleAssetProvider, useChainId } from '@masknet/web3-shared-evm'
 import { getEnumAsArray } from '@dimensiondev/kit'
+import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/FootnoteMenu'
 import { LoadingAnimation } from '@masknet/shared'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { currentNonFungibleAssetProviderSettings } from '../settings'
@@ -30,6 +34,7 @@ const useStyles = makeStyles()((theme) => {
             width: '100%',
             border: `solid 1px ${theme.palette.divider}`,
             padding: 0,
+            marginBottom: 12,
         },
         content: {
             width: '100%',
@@ -47,6 +52,13 @@ const useStyles = makeStyles()((theme) => {
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
+        },
+        footer: {
+            marginTop: -1, // merge duplicate borders
+            zIndex: 1,
+            position: 'relative',
+            borderTop: `solid 1px ${theme.palette.divider}`,
+            justifyContent: 'space-between',
         },
         tabs: {
             height: 'var(--tabHeight)',
@@ -74,6 +86,15 @@ const useStyles = makeStyles()((theme) => {
                 color: theme.palette.text.primary,
                 fontWeight: 300,
             },
+        },
+        footMenu: {
+            color: theme.palette.text.secondary,
+            fontSize: 10,
+            display: 'flex',
+            alignItems: 'center',
+        },
+        footName: {
+            marginLeft: theme.spacing(0.5),
         },
         countdown: {
             fontSize: 12,
@@ -107,6 +128,13 @@ export function Collectible(props: CollectibleProps) {
     const { classes } = useStyles()
     const chainId = useChainId()
     const { token, asset, provider, tabIndex, setTabIndex } = CollectibleState.useContainer()
+
+    // #region sync with settings
+    const collectibleProviderOptions = getEnumAsArray(NonFungibleAssetProvider)
+    const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
+        currentNonFungibleAssetProviderSettings.value = option.value as NonFungibleAssetProvider
+    }, [])
+    // #endregion
 
     // #region provider switcher
     const CollectibleProviderSwitcher = useSettingsSwitcher(
@@ -243,6 +271,28 @@ export function Collectible(props: CollectibleProps) {
                         )) || <>{renderTab(tabIndex)}</>}
                     </Paper>
                 </CardContent>
+                <CardActions className={classes.footer}>
+                    {/* flex to make foot menu right */}
+                    <div />
+                    <div className={classes.footMenu}>
+                        <FootnoteMenu
+                            options={collectibleProviderOptions.map((x) => ({
+                                name: (
+                                    <>
+                                        <CollectibleProviderIcon provider={x.value} />
+                                        <span className={classes.footName}>
+                                            {resolveCollectibleProviderName(x.value)}
+                                        </span>
+                                    </>
+                                ),
+                                value: x.value,
+                            }))}
+                            selectedIndex={findIndex(collectibleProviderOptions, (x) => x.value === provider)}
+                            onChange={onDataProviderChange}
+                        />
+                        <ArrowDropDownIcon />
+                    </div>
+                </CardActions>
             </CollectibleCard>
             {endDate && isValidDate(endDate) && isAfter(endDate, Date.now()) && (
                 <Box sx={{ marginTop: 1 }}>

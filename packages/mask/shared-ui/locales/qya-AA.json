@@ -421,6 +421,7 @@
     "plugin_trader_circulating_supply": "crwdns10229:0crwdne10229:0",
     "plugin_trader_volume_24": "crwdns10231:0crwdne10231:0",
     "plugin_trader_market_cap": "crwdns10233:0crwdne10233:0",
+    "plugin_trader_data_source": "crwdns10235:0crwdne10235:0",
     "plugin_trader_price_updated": "crwdns10237:0crwdne10237:0",
     "plugin_trader_view_pair_analytics": "crwdns10239:0crwdne10239:0",
     "plugin_savings": "crwdns13250:0crwdne13250:0",

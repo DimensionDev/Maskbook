@@ -337,6 +337,7 @@
     "plugin_trader_circulating_supply": "유통량",
     "plugin_trader_volume_24": "거래량 (24시간)",
     "plugin_trader_market_cap": "시가 총액",
+    "plugin_trader_data_source": "데이터 소스",
     "plugin_trader_price_updated": "가격은 업데이트뒤었습니다",
     "plugin_trader_view_pair_analytics": "페어 분석 보기",
     "plugin_trader_swap": "스왑",
