@@ -25,7 +25,7 @@ const useStyles = makeStyles()((theme) => ({
     here: {
         fontSize: 14,
         lineHeight: 2.5,
-        color: theme.palette.grey[100],
+        color: theme.palette.mode === 'dark' ? theme.palette.grey[100] : theme.palette.grey[500],
         userSelect: 'none',
     },
     hint: {

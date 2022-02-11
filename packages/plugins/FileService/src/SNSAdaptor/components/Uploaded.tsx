@@ -42,6 +42,14 @@ const useStyles = makeStyles()({
         flexDirection: 'column',
         justifyContent: 'center',
     },
+    change: {
+        fontSize: 14,
+        margin: '0 auto',
+        display: 'flex',
+        padding: '0 60px',
+        flexDirection: 'column',
+        justifyContent: 'center',
+    },
     info: {
         margin: 0,
     },
@@ -88,10 +96,13 @@ export const Uploaded: React.FC = () => {
                         <span>{'  '}</span>
                         <span>{formatDateTime(state.createdAt, 'yyyy-MM-dd HH:mm:ss')}</span>
                     </p>
-                    <Button onClick={onBack} variant="contained">
+                    {/* <Button onClick={onBack} variant="contained">
                         {t.on_change_file()}
-                    </Button>
+                    </Button> */}
                 </Typography>
+                <Button className={classes.change} onClick={onBack} variant="contained">
+                    {t.on_change_file()}
+                </Button>
             </Grid>
         </Grid>
     )

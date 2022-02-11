@@ -1,11 +1,11 @@
 import { noop, omit } from 'lodash-unified'
 import { createContext, useContext } from 'react'
-import type { FileInfo } from '../../types'
+import type { FileInfo, DialogCloseCallback } from '../../types'
 
 export interface Props {
     onInsert(info: FileInfo | null): void
     onUploading(enabled: boolean): void
-    onDialogClose(cb: Function): void
+    onDialogClose(cb: DialogCloseCallback): void
 }
 
 const Context = createContext<Props>({
