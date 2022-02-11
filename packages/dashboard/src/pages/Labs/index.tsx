@@ -30,6 +30,7 @@ import { PoolTogetherURL } from '../../assets'
 import { DHEDGEIcon } from '../../../../mask/src/resources/DHEDGEIcon'
 import TutorialDialog from './components/TutorialDialog'
 import { PluginId } from '@masknet/plugin-infra'
+import ArtBlocksIcon from '../../../../mask/src/plugins/ArtBlocks/SNSAdaptor/ArtBlocksIcon'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -69,6 +70,7 @@ export default function Plugins() {
         [PluginId.MaskBox]: true,
         [PluginId.GoodGhosting]: true,
         [PluginId.PoolTogether]: true,
+        [PluginId.ArtBlocks]: true,
     })
 
     useEffect(
@@ -180,6 +182,13 @@ export default function Plugins() {
             desc: t.labs_pool_together_desc(),
             icon: <PoolTogetherIcon />,
             enabled: pluginStatus[PluginId.PoolTogether],
+        },
+        {
+            id: PluginId.ArtBlocks,
+            title: t.labs_art_blocks(),
+            desc: t.labs_art_blocks_desc(),
+            icon: <ArtBlocksIcon />,
+            enabled: pluginStatus[PluginId.ArtBlocks],
         },
     ]
 
