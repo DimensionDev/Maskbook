@@ -96,9 +96,6 @@ export const Uploaded: React.FC = () => {
                         <span>{'  '}</span>
                         <span>{formatDateTime(state.createdAt, 'yyyy-MM-dd HH:mm:ss')}</span>
                     </p>
-                    {/* <Button onClick={onBack} variant="contained">
-                        {t.on_change_file()}
-                    </Button> */}
                 </Typography>
                 <Button className={classes.change} onClick={onBack} variant="contained">
                     {t.on_change_file()}
