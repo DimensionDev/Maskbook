@@ -1,5 +1,5 @@
 import { createContext, useEffect, useMemo, useState } from 'react'
-import { TokenIcon, useValueRef } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared'
 import {
     ChainId,
     ERC721TokenCollectionInfo,
@@ -11,18 +11,29 @@ import {
     useCollections,
     Wallet,
 } from '@masknet/web3-shared-evm'
-import { Box, Button, Skeleton, Stack, Typography } from '@mui/material'
+import { Box, Button, Skeleton, Stack, styled, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { currentNonFungibleAssetDataProviderSettings } from '../../../../plugins/Wallet/settings'
 import { useI18N } from '../../../../utils'
 import { CollectibleCard } from './CollectibleCard'
-import { Image } from '../../../../components/shared/Image'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { LoadingCollectible } from './LoadingCollectible'
+import { CollectionIcon } from './CollectionIcon'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
 }>(null!)
+
+const AllNetworkButton = styled(Button)(({ theme }) => ({
+    display: 'inline-block',
+    padding: 0,
+    borderRadius: '50%',
+    fontSize: 12,
+    '&:hover': {
+        boxShadow: 'none',
+    },
+    opacity: 0.5,
+}))
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -82,6 +93,21 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         height: '100%',
         borderRadius: '50%',
+    },
+    networkSelected: {
+        background: theme.palette.primary.main,
+        color: '#ffffff',
+        opacity: 1,
+        '&:after': {
+            content: '""',
+            position: 'absolute',
+            bottom: -8,
+            right: (30 - 4) / 2,
+            display: 'inline-block',
+            width: 4,
+            height: 4,
+            borderRadius: '50%',
+        },
     },
 }))
 
@@ -258,12 +284,24 @@ export function CollectionList({ address }: { address: string }) {
 
     return (
         <Box>
-            {selectedCollection === 'all' && loadingCollectibleDone && (
-                <Stack justifyContent="flex-end">
-                    <Typography align="right">All {collectibles.length ? `(${collectibles.length})` : null}</Typography>
-                </Stack>
-            )}
-            <Stack spacing={2} direction="row">
+            <Stack display="inline-flex">
+                <AllNetworkButton
+                    className={classes.networkSelected}
+                    sx={{
+                        width: 30,
+                        height: 30,
+                        minHeight: 30,
+                        minWidth: 30,
+                        lineHeight: `${30}px`,
+                    }}
+                    onClick={() => {}}>
+                    ALL
+                </AllNetworkButton>
+                <Typography align="center" color={(theme) => theme.palette.primary.main} fontSize="12px">
+                    All {collectibles.length ? `(${collectibles.length})` : null}
+                </Typography>
+            </Stack>
+            <Stack spacing={1} direction="row">
                 <Box sx={{ flexGrow: 1 }}>
                     <Box>
                         {!selectedCollection && selectedCollection !== 'all' && (
@@ -282,15 +320,7 @@ export function CollectionList({ address }: { address: string }) {
                         )}
                         {selectedCollection && selectedCollection !== 'all' && (
                             <Box display="flex" alignItems="center" sx={{ marginBottom: '16px' }}>
-                                <Box className={classes.collectionWrap}>
-                                    {selectedCollection.iconURL ? (
-                                        <Image
-                                            component="img"
-                                            className={classes.collectionImg}
-                                            src={selectedCollection.iconURL}
-                                        />
-                                    ) : null}
-                                </Box>
+                                <CollectionIcon collection={selectedCollection} />
                                 <Typography
                                     className={classes.name}
                                     color="textPrimary"
@@ -317,19 +347,29 @@ export function CollectionList({ address }: { address: string }) {
                 <Box>
                     {(collections ?? []).map((x, i) => {
                         return (
-                            <Box display="flex" key={i} alignItems="center" sx={{ marginTop: '16px' }}>
-                                <Box className={classes.collectionWrap} onClick={() => setSelectedCollection(x)}>
-                                    {x.iconURL ? (
-                                        <Image component="img" className={classes.collectionImg} src={x.iconURL} />
-                                    ) : (
-                                        <TokenIcon address={x.address} />
-                                    )}
-                                </Box>
+                            <Box
+                                display="flex"
+                                key={i}
+                                alignItems="center"
+                                justifyContent="center"
+                                sx={{ marginTop: '8px', marginBottom: '12px', minWidth: 30, maxHeight: 24 }}>
+                                <CollectionIcon
+                                    selectedCollection={
+                                        selectedCollection === 'all' ? undefined : selectedCollection?.address
+                                    }
+                                    collection={x}
+                                    onClick={() => setSelectedCollection(x)}
+                                />
                             </Box>
                         )
                     })}
                     {!!renderWithRarible.length && (
-                        <Box display="flex" alignItems="center" key="other" sx={{ marginTop: '16px' }}>
+                        <Box
+                            key="other"
+                            display="flex"
+                            alignItems="center"
+                            justifyContent="center"
+                            sx={{ marginTop: '8px', marginBottom: '12px', minWidth: 30, maxHeight: 24 }}>
                             <Typography
                                 className={classes.name}
                                 color="textPrimary"
