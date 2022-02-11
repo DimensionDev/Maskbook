@@ -47,13 +47,10 @@ export default function CompletionCard(props: CompletionCardProps) {
 
     useEffect(() => {
         setError('')
-        completionStatus && completionStatus.notMeetConditions.length > 0 && setError('insufficient-nft')
-    }, [completionStatus])
-
-    useEffect(() => {
         if (!completionStatus) return
-        completionStatus.answered && setQuestions(completionStatus.questions)
+        setQuestions(completionStatus.questions)
         setSubmitted(completionStatus.answered)
+        !!completionStatus.notMeetConditions.length && setError('insufficient-nft')
     }, [completionStatus])
 
     const handleSubmit = useCallback(async () => {
@@ -101,7 +98,7 @@ export default function CompletionCard(props: CompletionCardProps) {
                         {completionStatus.title}
                     </Typography>
                     <Box marginBottom={2}>
-                        {completionStatus.questions.map((question, index) => (
+                        {questions.map((question, index) => (
                             <Box key={question.id} marginBottom={2}>
                                 {completionStatus.answersPublished ? (
                                     <TextField
