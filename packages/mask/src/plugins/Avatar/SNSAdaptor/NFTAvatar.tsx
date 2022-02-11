@@ -7,8 +7,6 @@ import {
     ChainId,
     SocketState,
     ERC721TokenDetailed,
-    formatEthereumAddress,
-    useAccount,
     useChainId,
     useCollectibles,
     useImageChecker,
@@ -18,6 +16,7 @@ import { useI18N } from '../../../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { AddNFT } from './AddNFT'
 import { NFTImage } from './NFTImage'
+import { useAccount, useWeb3State } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -99,6 +98,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const [open_, setOpen_] = useState(false)
     const [collectibles_, setCollectibles_] = useState<ERC721TokenDetailed[]>([])
     const { t } = useI18N()
+    const { Utils } = useWeb3State()
     const { data: collectibles, error, retry, state } = useCollectibles(account, ChainId.Mainnet)
 
     const onClick = useCallback(async () => {
@@ -140,7 +140,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                     </Typography>
                     {account ? (
                         <Typography variant="body1" color="textPrimary" className={classes.account}>
-                            {t('nft_wallet_label')}: {formatEthereumAddress(account, 4)}
+                            {t('nft_wallet_label')}: {Utils?.formatAddress?.(account, 4) || account}
                             <Button
                                 variant="text"
                                 onClick={openSelectProviderDialog}
