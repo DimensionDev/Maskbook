@@ -12,16 +12,11 @@ import type { Project } from '../types'
 const useStyles = makeStyles()((theme) => {
     return {
         root: {
-            flex: 1,
-            overflow: 'auto',
-            maxHeight: 350,
             borderRadius: 0,
             scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
-            padding: theme.spacing(4),
-            paddingTop: theme.spacing(1),
         },
         title: {
             marginLeft: theme.spacing(2),
@@ -32,9 +27,11 @@ const useStyles = makeStyles()((theme) => {
             alignItems: 'center',
             justifyContent: 'space-between',
             bgcolor: 'background.default',
+            paddingRight: theme.spacing(1),
+            paddingLeft: theme.spacing(1),
         },
-        skeletonImage: { height: 250 },
-        skeletonTitle: { height: 20, width: '30%' },
+        skeletonImage: { height: 304 },
+        skeletonTitle: { height: 20, width: '30%', marginLeft: theme.spacing(2) },
         hidden: {
             display: 'none',
         },
@@ -64,6 +61,12 @@ const useStyles = makeStyles()((theme) => {
         },
         stepper: {
             backgroundColor: 'inherit',
+        },
+        imageContainer: {
+            textAlign: 'center',
+        },
+        image: {
+            maxHeight: 300,
         },
     }
 })
@@ -152,15 +155,16 @@ export function CollectionView(props: CollectionProps) {
                 <Skeleton className={classes.skeletonImage} animation="wave" variant="rectangular" />
             ) : null}
 
-            <Link href={tokenLink} target="_blank">
-                <img
-                    className={isImageLoaded ? undefined : classes.hidden}
-                    width="100%"
-                    src={resolveImageLinkOnArtBlocks(chainId, `${currentSelectedToken?.tokenId}.png`)}
-                    alt=""
-                    onLoad={handleImageLoad}
-                />
-            </Link>
+            <div className={classes.imageContainer}>
+                <Link href={tokenLink} target="_blank">
+                    <img
+                        className={isImageLoaded ? classes.image : classes.hidden}
+                        src={resolveImageLinkOnArtBlocks(chainId, `${currentSelectedToken?.tokenId}.png`)}
+                        alt="collection collectible"
+                        onLoad={handleImageLoad}
+                    />
+                </Link>
+            </div>
         </Box>
     )
 }
