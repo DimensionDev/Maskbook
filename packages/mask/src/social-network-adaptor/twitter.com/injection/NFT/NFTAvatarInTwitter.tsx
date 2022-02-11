@@ -23,6 +23,7 @@ export function injectNFTAvatarInTwitter(signal: AbortSignal) {
 
 const useStyles = makeStyles()(() => ({
     root: {
+        transform: 'scale(1.03)',
         position: 'absolute',
         textAlign: 'center',
         color: 'white',
