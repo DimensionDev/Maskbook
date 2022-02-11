@@ -31,6 +31,7 @@ export const Punk3D = {
     contract: '0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb',
     tokenId: '6128',
     url: urlcat(mediaViewerUrl, {
+        /* cspell:disable-next-line */
         url: resolveIPFSLink('QmZjfo1zKTfQZjqs4CaZJ7pQDZHrUBaozre8Z71c7ZXGMc'),
         type: 'model/gltf-binary',
     }),
