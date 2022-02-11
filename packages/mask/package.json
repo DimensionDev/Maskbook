@@ -132,7 +132,6 @@
     "@nice-labs/emit-file-webpack-plugin": "^1.1.2",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.4",
     "@swc/core": "^1.2.133",
-    "@types/webpack-dev-server": "^4.7.2",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
     "copy-webpack-plugin": "^10.2.1",

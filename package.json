@@ -1,6 +1,6 @@
 {
   "name": "mask-network",
-  "packageManager": "pnpm@6.30.0",
+  "packageManager": "pnpm@6.30.1",
   "version": "2.4.0",
   "private": true,
   "license": "AGPL-3.0-or-later",
