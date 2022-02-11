@@ -18,6 +18,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             },
             Utils: {
                 shouldDisplay: (identity, _addressNames, extraData) => {
+                    if (extraData?.type !== 'daoTabTwitterIdList') return false
                     const { items: daoTabTwitterIdList } = extraData as {
                         type: 'daoTabTwitterIdList'
                         items: string[]
