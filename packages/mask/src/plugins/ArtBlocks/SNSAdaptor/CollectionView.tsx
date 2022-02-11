@@ -63,7 +63,7 @@ const useStyles = makeStyles()((theme) => {
             marginLeft: theme.spacing(0.5),
         },
         stepper: {
-            backgroundColor: 'white',
+            backgroundColor: 'inherit',
         },
     }
 })
