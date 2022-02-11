@@ -6,7 +6,7 @@ const useStyles = makeStyles()((theme) => ({
         color: 'inherit',
         fontSize: 'inherit',
         fontFamily: 'sans-serif',
-        '& p': {
+        '& p, & li': {
             margin: 0,
             fontSize: 12,
         },
@@ -14,7 +14,7 @@ const useStyles = makeStyles()((theme) => ({
             marginTop: theme.spacing(0.5),
         },
         '& h1, & h2, & h3, & h4, & h5, & h6': {
-            fontSize: 15,
+            fontSize: 14,
         },
         '& img': {
             maxWidth: '100%',
