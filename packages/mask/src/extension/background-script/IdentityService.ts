@@ -315,7 +315,7 @@ export async function createNewRelation(
 ) {
     const t = await createRelationsTransaction()
     const relationInDB = await queryRelations(linked, profile)
-    if (!relationInDB.length) return
+    if (relationInDB.length > 0) return
 
     await createRelationDB({ profile, linked, favor }, t)
 }
