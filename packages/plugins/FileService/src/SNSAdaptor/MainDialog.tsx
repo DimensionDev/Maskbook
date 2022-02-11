@@ -8,7 +8,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { Entry } from './components'
 import { META_KEY_2 } from '../constants'
 import { Exchange } from './hooks/Exchange'
-import type { FileInfo, DialogCloseCb } from '../types'
+import type { FileInfo, DialogCloseCallback } from '../types'
 import { useCompositionContext } from '@masknet/plugin-infra'
 
 interface Props {
@@ -63,7 +63,7 @@ const FileServiceDialog: React.FC<Props> = (props) => {
         props.onClose()
     }
 
-    let onDialogCloseCallback: DialogCloseCb | null
+    let onDialogCloseCallback: DialogCloseCallback | null
     const callDialogClose = () => {
         try {
             onDialogCloseCallback?.()
@@ -82,7 +82,7 @@ const FileServiceDialog: React.FC<Props> = (props) => {
         }
         showSnackbar(t.uploading_on_cancel())
     }
-    const onDialogClose = (cb: DialogCloseCb) => {
+    const onDialogClose = (cb: DialogCloseCallback) => {
         onDialogCloseCallback = cb
     }
     return (
