@@ -313,6 +313,7 @@ importers:
       '@masknet/web3-providers': workspace:*
       '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-evm': workspace:*
+      '@metamask/eth-sig-util': ^4.0.0
       '@msgpack/msgpack': ^2.7.1
       '@nice-labs/emit-file-webpack-plugin': ^1.1.2
       '@pmmmwh/react-refresh-webpack-plugin': ^0.5.4
@@ -448,6 +449,7 @@ importers:
       '@masknet/web3-providers': link:../web3-providers
       '@masknet/web3-shared-base': link:../web3-shared/base
       '@masknet/web3-shared-evm': link:../web3-shared/evm
+      '@metamask/eth-sig-util': 4.0.0
       '@msgpack/msgpack': 2.7.1
       '@servie/events': 3.0.0
       '@sinonjs/text-encoding': 0.7.1
@@ -4583,6 +4585,17 @@ packages:
   /@mdx-js/util/1.6.22:
     resolution: {integrity: sha512-H1rQc1ZOHANWBvPcW+JpGwr+juXSxM8Q8YCkm3GhZd8REu1fHR3z99CErO1p9pkcfcxZnMdIZdIsXkOHY0NilA==}
     dev: true
+
+  /@metamask/eth-sig-util/4.0.0:
+    resolution: {integrity: sha512-LczOjjxY4A7XYloxzyxJIHONELmUxVZncpOLoClpEcTiebiVdM46KRPYXGuULro9oNNR2xdVx3yoKiQjdfWmoA==}
+    engines: {node: '>=12.0.0'}
+    dependencies:
+      ethereumjs-abi: 0.6.8
+      ethereumjs-util: 6.2.1
+      ethjs-util: 0.1.6
+      tweetnacl: 1.0.3
+      tweetnacl-util: 0.15.1
+    dev: false
 
   /@metamask/inpage-provider/8.1.0:
     resolution: {integrity: sha512-RB2tUfj3DITNqjsFB0UvBGQYtsUHMGccsbA+2BkeE6h/UNTmc3onwmLY6z2yrEPZywpHJvj1FMiORdvtQPhOVg==}

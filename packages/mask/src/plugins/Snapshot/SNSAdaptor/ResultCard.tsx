@@ -124,7 +124,7 @@ function Content() {
                                     disablePortal: true,
                                 }}
                                 title={
-                                    <Typography color="textPrimary" className={classes.ellipsisText}>
+                                    <Typography className={classes.ellipsisText}>
                                         {result.powerDetail.reduce((sum, cur, i) => {
                                             const name =
                                                 millify(cur.power, { precision: 2, lowercase: true }) + ' ' + cur.name
