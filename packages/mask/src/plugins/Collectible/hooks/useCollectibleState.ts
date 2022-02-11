@@ -6,6 +6,9 @@ import { useAsset, useHistory, useOrders } from '../../EVM/hooks'
 import { useAssetOrder } from './useAssetOrder'
 import { useValueRef } from '@masknet/shared'
 import { currentNonFungibleAssetProviderSettings } from '../settings'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+// Make TypeScript happy
+type T = AsyncStateRetry<CollectibleToken | null>
 
 function useCollectibleState(token?: CollectibleToken) {
     const [tabIndex, setTabIndex] = useState(CollectibleTab.ARTICLE)
