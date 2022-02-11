@@ -8,12 +8,13 @@ const useStyles = makeStyles()((theme) => ({
         fontFamily: 'sans-serif',
         '& p': {
             margin: 0,
+            fontSize: 12,
         },
         '& p + p': {
             marginTop: theme.spacing(0.5),
         },
         '& h1, & h2, & h3, & h4, & h5, & h6': {
-            fontSize: 14,
+            fontSize: 15,
         },
         '& img': {
             maxWidth: '100%',
