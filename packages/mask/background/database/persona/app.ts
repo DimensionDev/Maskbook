@@ -33,6 +33,10 @@ export async function consistentPersonaDBWriteAccess(action: () => Promise<void>
     await action()
 }
 
+export async function createRelationsTransaction() {
+    return
+}
+
 export async function createPersonaDB(record: PersonaRecord): Promise<void> {
     await nativeAPI?.api.create_persona({
         persona: personaRecordToDB(record),
