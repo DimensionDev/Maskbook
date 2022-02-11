@@ -94,11 +94,11 @@ export class AAVEProtocol implements SavingsProtocol {
 
     public async getApr(chainId?: ChainId) {
         try {
-            const subgraphUrl = AaveContracts[chainId ?? ChainId.Kovan].subgraphUrl
+            const subgraphUrl = getSavingsConstants(chainId ?? ChainId.Kovan).AAVE_SUBGRAPHS || ''
             const body = JSON.stringify({
                 query: `{
                 reserves (where: {
-                    underlyingAsset: "${AaveContracts[chainId ?? ChainId.Kovan].aaveContract}"
+                    underlyingAsset: "${getSavingsConstants(chainId ?? ChainId.Kovan).AAVE || ZERO_ADDRESS}"
                 }) {
                     id
                     name
@@ -134,11 +134,11 @@ export class AAVEProtocol implements SavingsProtocol {
 
     public async getBalance(chainId: ChainId, web3: Web3, account: string) {
         try {
-            const subgraphUrl = AaveContracts[chainId ?? ChainId.Kovan].subgraphUrl
+            const subgraphUrl = getSavingsConstants(chainId ?? ChainId.Kovan).AAVE_SUBGRAPHS || ''
             const reserveBody = JSON.stringify({
                 query: `{
                 reserves (where: {
-                    underlyingAsset: "${AaveContracts[chainId ?? ChainId.Kovan].aaveContract}"
+                    underlyingAsset: "${getSavingsConstants(chainId ?? ChainId.Kovan).AAVE || ZERO_ADDRESS}"
                 }) {
                     id
                     name
