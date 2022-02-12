@@ -266,7 +266,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             new URL('./assets/savings.png', import.meta.url).toString(),
             onSavingsDialogOpen,
             undefined,
-            false,
+            isNotEvm,
         ),
         createEntry(
             'Swap',
