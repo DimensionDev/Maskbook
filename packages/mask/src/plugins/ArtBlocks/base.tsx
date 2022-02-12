@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { ARTBLOCKS_PLUGIN_ID, PLUGIN_NAME } from './constants'
+import { ARTBLOCKS_PLUGIN_ID, PLUGIN_NAME, URL_PATTERN } from './constants'
 import ArtBlocksIcon from './SNSAdaptor/ArtBlocksIcon'
 
 export const base: Plugin.Shared.Definition = {
@@ -15,5 +15,8 @@ export const base: Plugin.Shared.Definition = {
         architecture: { app: false, web: true },
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
+    },
+    contribution: {
+        postContent: new Set([URL_PATTERN]),
     },
 }

@@ -12,7 +12,7 @@ export const ArtBlocksRopstenSubgraphLink =
 
 export const ArtBlocksRopstenUrl = 'https://artist-staging.artblocks.io'
 export const ArtBlocksMainnetUrl = 'https://artblocks.io'
-
+export const URL_PATTERN = /https:\/\/(www.artblocks.io|artist-staging.artblocks.io)\/project\/(\d+)/
 export const ArtBlocksMainnetHostImageUrl = 'https://artblocks-mainnet.s3.amazonaws.com'
 export const ArtBlocksRopstenHostImageUrl = 'https://artblocks-artists-staging.s3.amazonaws.com'
 
