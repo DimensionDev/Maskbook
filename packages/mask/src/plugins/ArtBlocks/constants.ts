@@ -1,6 +1,9 @@
-export const artBlocksHostnames = ['artist-staging.artblocks.io', 'artblocks.io', 'www.artblocks.io']
-export const artBlocksPathnameRegexMatcher = /^\/project\/(\d+)/
+export const ARTBLOCKS_PLUGIN_ID = 'io.artblocks'
 export const PLUGIN_NAME = 'ArtBlocks'
+export const TESTNET_HOSTNAME = 'artist-staging.artblocks.io'
+export const MAINNET_HOSTNAME = 'www.artblocks.io'
+export const artBlocksHostnames = [TESTNET_HOSTNAME, MAINNET_HOSTNAME]
+export const artBlocksPathnameRegexMatcher = /^\/project\/(\d+)/
 export const ArtBlocksLogoUrl = 'https://www.artblocks.io/_next/image?url=%2Fsquig.png&w=48&q=75'
 
 export const ArtBlocksMainnetSubgraphLink = 'https://api.thegraph.com/subgraphs/name/artblocks/art-blocks'
