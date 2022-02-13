@@ -366,6 +366,10 @@ export enum EthereumMethodType {
     MASK_REPLACE_TRANSACTION = 'mask_replaceTransaction',
     MASK_LOGIN_FORTMATIC = 'mask_loginFortmatic',
     MASK_LOGOUT_FORTMATIC = 'mask_logoutFortmatic',
+
+    // optimistic, boba
+    ROLLUP_GET_INFO = 'rollup_getInfo',
+    ROLLUP_GAS_PRICES = 'rollup_gasPrices',
 }
 
 export enum EthereumErrorType {
