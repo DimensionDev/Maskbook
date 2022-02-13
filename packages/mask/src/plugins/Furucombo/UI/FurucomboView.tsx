@@ -1,9 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress, useChainId } from '@masknet/web3-shared-evm'
-import { Card, CardContent, CardActions, Tabs, Tab, Typography, Link, Paper } from '@mui/material'
+import { Card, CardContent, Tabs, Tab, Typography, Paper } from '@mui/material'
 import { useState } from 'react'
-import { FurucomboIcon } from '../../../resources/FurucomboIcon'
-import { MaskTextIcon } from '../../../resources/MaskIcon'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useFetchPools } from '../hooks/usePool'
 import type { Investable } from '../types'
@@ -34,41 +32,6 @@ const useStyles = makeStyles()((theme) => ({
     tab: {
         fontFamily: 'inherit',
         color: 'white',
-    },
-    footer: {
-        marginTop: -1, // merge duplicate borders
-        zIndex: 1,
-        position: 'relative',
-        borderTop: `solid 1px ${theme.palette.divider}`,
-        justifyContent: 'space-between',
-    },
-    footnote: {
-        fontSize: 10,
-        marginRight: theme.spacing(1),
-    },
-    footLink: {
-        cursor: 'pointer',
-        marginRight: theme.spacing(0.5),
-        '&:last-child': {
-            marginRight: 0,
-        },
-    },
-    footMenu: {
-        color: theme.palette.text.secondary,
-        fontSize: 10,
-        display: 'flex',
-        alignItems: 'center',
-    },
-    footName: {
-        marginLeft: theme.spacing(0.5),
-    },
-    mask: {
-        width: 40,
-        height: 10,
-    },
-    furucombo: {
-        height: 16,
-        margin: theme.spacing(-0.5, 0.25),
     },
 }))
 
@@ -119,7 +82,7 @@ export function FurucomboView(props: PoolViewProps) {
                     variant="fullWidth"
                     indicatorColor="primary"
                     textColor="secondary"
-                    onChange={(event: React.SyntheticEvent, newValue: number) => setTabIndex(newValue)}>
+                    onChange={(_, newValue: number) => setTabIndex(newValue)}>
                     <Tab value={0} className={classes.tab} key={0} label={t('plugin_furucombo_tab_pool')} />,
                     <Tab value={1} className={classes.tab} key={1} label={t('plugin_furucombo_tab_investments')} />,
                 </Tabs>
@@ -128,33 +91,6 @@ export function FurucomboView(props: PoolViewProps) {
                     {tabIndex === 1 ? <InvestmentsView investables={investables} /> : null}
                 </Paper>
             </CardContent>
-            <CardActions className={classes.footer}>
-                <Typography className={classes.footnote} variant="subtitle2">
-                    <span>{t('plugin_powered_by')} </span>
-                    <Link
-                        className={classes.footLink}
-                        color="textSecondary"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        title="Mask"
-                        href="https://mask.io">
-                        <MaskTextIcon classes={{ root: classes.mask }} viewBox="0 0 80 20" />
-                    </Link>
-                </Typography>
-                <Typography className={classes.footnote} variant="subtitle2">
-                    <span>{t('supported_by')}</span>
-                    <Link
-                        className={classes.footLink}
-                        target="_blank"
-                        color="textSecondary"
-                        rel="noopener noreferrer"
-                        title="Furucombo"
-                        href="https://furucombo.app">
-                        <FurucomboIcon className={classes.furucombo} />
-                        {t('plugin_furucombo_name')}
-                    </Link>
-                </Typography>
-            </CardActions>
         </Card>
     )
 }

@@ -12,7 +12,7 @@
     "@masknet/shared": "workspace:*",
     "@masknet/shared-base": "workspace:*",
     "@masknet/theme": "workspace:*",
-    "@msgpack/msgpack": "^2.7.1",
+    "@msgpack/msgpack": "^2.7.2",
     "@masknet/web3-kit": "workspace:*",
     "arweave": "^1.10.3",
     "ipfs-http-client": "^54.0.2",
