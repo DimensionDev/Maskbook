@@ -1,4 +1,4 @@
-import { Emitter, ALL_EVENTS } from '@servie/events'
+import { Emitter } from '@servie/events'
 import { noop } from 'lodash-unified'
 import type { Plugin } from '../types'
 import { getPluginDefine, registeredPluginIDs, registeredPlugins } from './store'
@@ -50,19 +50,18 @@ export function createManager<
 
     function startDaemon(host: Plugin.__Host.Host<Context>, extraCheck?: (id: string) => boolean) {
         _host = host
-        const { enabled, signal, addI18NResource, minimalMode } = _host
-        const removeListener1 = enabled.events.on(ALL_EVENTS, checkRequirementAndStartOrStop)
-        const removeListener2 = minimalMode.events.on('enabled', (id) => {
+        const { signal, addI18NResource, minimalMode } = _host
+        const removeListener1 = minimalMode.events.on('enabled', (id) => {
             minimalModePluginIDs.add(id)
             events.emit('minimalModeChanged', id, true)
         })
-        const removeListener3 = minimalMode.events.on('disabled', (id) => {
+        const removeListener2 = minimalMode.events.on('disabled', (id) => {
             minimalModePluginIDs.delete(id)
             events.emit('minimalModeChanged', id, false)
         })
 
         signal?.addEventListener('abort', () => [...activated.keys()].forEach(stopPlugin))
-        signal?.addEventListener('abort', () => void [removeListener1(), removeListener2(), removeListener3()])
+        signal?.addEventListener('abort', () => void [removeListener1(), removeListener2()])
 
         for (const plugin of registeredPlugins) {
             plugin.i18n && addI18NResource(plugin.ID, plugin.i18n)
@@ -78,7 +77,6 @@ export function createManager<
         async function meetRequirement(id: string) {
             const define = getPluginDefine(id)
             if (!define) return false
-            if (!(await enabled.isEnabled(id))) return false
             if (extraCheck && !extraCheck(id)) return false
             return true
         }
