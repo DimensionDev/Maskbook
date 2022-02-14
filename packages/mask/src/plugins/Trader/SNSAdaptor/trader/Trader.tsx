@@ -131,7 +131,7 @@ export function Trader(props: TraderProps) {
                   )
                 : undefined,
         })
-    }, [defaultInputCoin])
+    }, [defaultInputCoin, chainId])
 
     const onInputAmountChange = useCallback((amount: string) => {
         dispatchTradeStore({

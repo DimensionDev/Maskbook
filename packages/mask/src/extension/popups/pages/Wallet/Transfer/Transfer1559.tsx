@@ -419,8 +419,6 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         [selectedAsset, transferCallback, registeredAddress, Utils],
     )
 
-    console.log(error)
-
     const [menu, openMenu] = useMenu(
         <MenuItem className={classes.expand} key="expand">
             <Typography className={classes.title}>{t('wallet_transfer_between_my_accounts')}</Typography>
