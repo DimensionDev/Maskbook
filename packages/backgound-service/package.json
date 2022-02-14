@@ -1,0 +1,11 @@
+{
+  "name": "@masknet/background-service",
+  "private": true,
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
+  "dependencies": {
+    "@masknet/shared": "workspace:*",
+    "@masknet/shared-base": "workspace:*",
+    "idb": "^7.0.0"
+  }
+}

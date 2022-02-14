@@ -123,6 +123,16 @@ importers:
       typescript: 4.6.1-rc
       webpack: 5.68.0_@swc+core@1.2.138
 
+  packages/background-service:
+    specifiers:
+      '@masknet/shared': workspace:*
+      '@masknet/shared-base': workspace:*
+      idb: ^7.0.0
+    dependencies:
+      '@masknet/shared': link:../shared
+      '@masknet/shared-base': link:../shared-base
+      idb: 7.0.0
+
   packages/backup-format:
     specifiers:
       '@msgpack/msgpack': ^2.7.2

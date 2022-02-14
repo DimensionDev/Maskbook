@@ -11,6 +11,7 @@ packages:
   - 'packages/injected-script'
   - 'packages/mask-sdk'
   - 'packages/public-api'
+  - 'packages/background-service'
   - 'packages/shared-base'
   - 'packages/shared'
   - 'packages/web3-kit'
