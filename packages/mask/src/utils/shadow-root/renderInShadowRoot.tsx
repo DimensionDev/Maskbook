@@ -1,5 +1,5 @@
 import { createReactRootShadowedPartial, setupPortalShadowRoot, CSSVariableInjector } from '@masknet/theme'
-import { Flags } from '../../../shared'
+import { Flags } from '@masknet/shared'
 import { MaskUIRoot } from '../../UIRoot'
 import { useClassicMaskSNSTheme } from '../theme'
 import { createRoot } from 'react-dom'

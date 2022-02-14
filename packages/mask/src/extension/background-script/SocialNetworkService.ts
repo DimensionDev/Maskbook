@@ -1,5 +1,5 @@
 import { definedSocialNetworkUIs, getNetworkWorker, loadSocialNetworkUI } from '../../social-network'
-import { Flags } from '../../../shared'
+import { Flags } from '@masknet/shared'
 import { requestSNSAdaptorPermission } from '../../social-network/utils/permissions'
 
 import { currentSetupGuideStatus } from '../../settings/settings'

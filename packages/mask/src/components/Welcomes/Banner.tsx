@@ -8,7 +8,7 @@ import { DashboardRoutes } from '@masknet/shared-base'
 import { MaskSharpIcon } from '../../resources/MaskIcon'
 import { useMount } from 'react-use'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
-import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
+import { hasNativeAPI, nativeAPI } from '@masknet/shared'
 
 interface BannerUIProps extends withClasses<never | 'header' | 'content' | 'actions' | 'buttonText'> {
     description?: string

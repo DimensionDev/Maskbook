@@ -5,12 +5,11 @@ import { WalletRPC, WalletMessages } from '../../plugins/Wallet/messages'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { PluginTraderMessages, PluginTraderRPC } from '../../plugins/Trader/messages'
 import { PluginPetMessages } from '../../plugins/Pets/messages'
-import { MaskMessages } from '../../utils/messages'
+import { MaskMessages, InMemoryStorages, PersistentStorages } from '@masknet/shared'
 import { startPluginDashboard } from '@masknet/plugin-infra'
 import { createPluginHost } from '../../plugin-infra/host'
 import type { DashboardPluginMessages, DashboardPluginServices } from '@masknet/shared'
 import { createNormalReactRoot } from '../../utils/createNormalReactRoot'
-import { InMemoryStorages, PersistentStorages } from '../../../shared/kv-storage'
 import { status } from '../../setup.ui'
 
 const msg: DashboardPluginMessages = {

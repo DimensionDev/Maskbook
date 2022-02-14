@@ -4,7 +4,7 @@ import { createPluginHost } from '../../plugin-infra/host'
 import { Services } from '../service'
 import { status } from '../../setup.ui'
 import Popups from './UI'
-import { InMemoryStorages, PersistentStorages } from '../../../shared/kv-storage'
+import { InMemoryStorages, PersistentStorages } from '@masknet/shared'
 
 status.then(() => createNormalReactRoot(<Popups />))
 

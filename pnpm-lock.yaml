@@ -904,11 +904,13 @@ importers:
     specifiers:
       '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
       '@masknet/icons': workspace:*
+      '@masknet/public-api': workspace:*
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-evm': workspace:*
       anchorme: ^2.1.2
+      async-call-rpc: ^6.0.1
       bignumber.js: ^9.0.2
       classnames: ^2.3.1
       iframe-resizer-react: ^1.1.0
@@ -919,14 +921,17 @@ importers:
       urlcat: ^2.0.4
       use-subscription: ^1.5.1
       uuid: ^8.3.2
+      web-ext-types: ^3.1.0
     dependencies:
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
       '@masknet/icons': link:../icons
+      '@masknet/public-api': link:../public-api
       '@masknet/shared-base': link:../shared-base
       '@masknet/theme': link:../theme
       '@masknet/web3-shared-base': link:../web3-shared/base
       '@masknet/web3-shared-evm': link:../web3-shared/evm
       anchorme: 2.1.2
+      async-call-rpc: 6.0.1
       bignumber.js: 9.0.2
       classnames: 2.3.1
       iframe-resizer-react: 1.1.0_757a802188413a36d4f24237d13b8e90
@@ -937,6 +942,7 @@ importers:
       urlcat: 2.0.4
       use-subscription: 1.5.1_react@18.0.0-rc.0
       uuid: 8.3.2
+      web-ext-types: 3.2.1
 
   packages/shared-base:
     specifiers:

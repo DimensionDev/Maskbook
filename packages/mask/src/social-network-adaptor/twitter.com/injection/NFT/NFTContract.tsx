@@ -1,7 +1,7 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { NFTContractImage } from '../../../../plugins/Avatar/SNSAdaptor/NFTContractImage'
 import { createReactRootShadowed, startWatch } from '../../../../utils'
-import { Flags } from '../../../../../shared'
+import { Flags } from '@masknet/shared'
 import { postAvatarsContentSelector } from '../../utils/selector'
 
 function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {

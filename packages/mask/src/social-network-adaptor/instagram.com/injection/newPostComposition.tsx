@@ -1,4 +1,4 @@
-import { Flags } from '../../../../shared'
+import { Flags } from '@masknet/shared'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { Entry } from './Entry'
 export function newPostCompositionInstagram(signal: AbortSignal) {

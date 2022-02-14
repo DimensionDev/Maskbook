@@ -5,7 +5,7 @@
 import type { EC_Public_JsonWebKey } from '@masknet/shared-base'
 import Gun from 'gun'
 import 'gun/sea'
-import { memoizePromise } from '../../../../utils-pure'
+import { memoizePromise } from '@masknet/shared'
 
 /**
  * @param version current payload version

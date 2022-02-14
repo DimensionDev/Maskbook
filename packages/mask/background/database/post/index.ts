@@ -11,7 +11,7 @@ import {
     ProfileIdentifier,
 } from '@masknet/shared-base'
 import { DBSchema, openDB } from 'idb/with-async-ittr'
-import { CryptoKeyToJsonWebKey, PrototypeLess, restorePrototype, restorePrototypeArray } from '../../../utils-pure'
+import { CryptoKeyToJsonWebKey, PrototypeLess, restorePrototype, restorePrototypeArray } from '@masknet/shared'
 import { createDBAccessWithAsyncUpgrade, createTransaction, IDBPSafeTransaction } from '../utils/openDB'
 
 type UpgradeKnowledge = { version: 4; data: Map<string, AESJsonWebKey> } | undefined

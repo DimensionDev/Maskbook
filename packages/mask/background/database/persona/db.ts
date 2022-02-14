@@ -1,4 +1,4 @@
-import { hasNativeAPI } from '../../../shared/native-rpc'
+import { hasNativeAPI } from '@masknet/shared'
 export * from './type'
 
 export const {

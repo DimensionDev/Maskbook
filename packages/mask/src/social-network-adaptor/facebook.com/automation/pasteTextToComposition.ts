@@ -3,7 +3,7 @@ import { delay, timeout } from '@masknet/shared-base'
 import { isMobileFacebook } from '../utils/isMobile'
 import type { SocialNetworkUI } from '../../../social-network/types'
 import { untilDocumentReady } from '../../../utils/dom'
-import { MaskMessages } from '../../../utils/messages'
+import { MaskMessages } from '@masknet/shared'
 import { inputText, pasteText } from '@masknet/injected-script'
 
 async function openPostDialogFacebook() {

@@ -5,8 +5,7 @@ import Services from '../../../extension/service'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { MaskIcon } from '../../../resources/MaskIcon'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
-import { memoizePromise } from '../../../../utils-pure'
-import { Flags } from '../../../../shared'
+import { memoizePromise, Flags } from '@masknet/shared'
 import { startWatch } from '../../../utils/watcher'
 
 function Icon(props: { size: number }) {

@@ -9,6 +9,8 @@
     "@masknet/theme": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
+    "@masknet/public-api": "workspace:*",
+    "async-call-rpc": "^6.0.1",
     "anchorme": "^2.1.2",
     "bignumber.js": "^9.0.2",
     "classnames": "^2.3.1",
@@ -19,6 +21,7 @@
     "react-use": "^17.3.2",
     "urlcat": "^2.0.4",
     "use-subscription": "^1.5.1",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "web-ext-types": "^3.1.0"
   }
 }

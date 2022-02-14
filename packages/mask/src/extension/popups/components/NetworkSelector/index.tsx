@@ -1,11 +1,10 @@
 import { memo, useCallback } from 'react'
 import { Box, MenuItem, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { Flags } from '../../../../../shared'
+import { Flags, ChainIcon, useMenuConfig, useValueRef, WalletIcon } from '@masknet/shared'
 import { ChainId, ProviderType, useAccount, useChainId } from '@masknet/web3-shared-evm'
 import { getRegisteredWeb3Networks, NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra'
 import { currentMaskWalletAccountSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
-import { ChainIcon, useMenuConfig, useValueRef, WalletIcon } from '@masknet/shared'
 import { ArrowDownRound } from '@masknet/icons'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 

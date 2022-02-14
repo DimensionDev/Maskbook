@@ -17,8 +17,7 @@ import {
     currentProviderSettings,
 } from '../settings'
 import { getWallets, hasWallet, updateWallet } from './wallet'
-import { hasNativeAPI, nativeAPI } from '../../../../shared/native-rpc'
-import { Flags } from '../../../../shared'
+import { hasNativeAPI, nativeAPI, Flags } from '@masknet/shared'
 
 export async function updateAccount(
     options: {

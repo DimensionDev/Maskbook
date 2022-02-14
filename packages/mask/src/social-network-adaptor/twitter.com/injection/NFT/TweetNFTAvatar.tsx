@@ -1,7 +1,7 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { NFTBadgeTweet } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTweet'
 import { createReactRootShadowed, startWatch } from '../../../../utils'
-import { Flags } from '../../../../../shared'
+import { Flags } from '@masknet/shared'
 import { getInjectNodeInfo } from '../../utils/avatar'
 import { searchRetweetAvatarSelector, searchTweetAvatarSelector } from '../../utils/selector'
 import { NFTAvatarMiniClip } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip'

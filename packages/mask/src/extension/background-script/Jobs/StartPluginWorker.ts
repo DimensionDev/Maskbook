@@ -1,5 +1,5 @@
 import { startPluginWorker, Plugin } from '@masknet/plugin-infra'
-import { InMemoryStorages, PersistentStorages } from '../../../../shared'
+import { InMemoryStorages, PersistentStorages } from '@masknet/shared'
 import { createPluginDatabase } from '../../../database/Plugin'
 import { createPluginHost } from '../../../plugin-infra/host'
 import { Services } from '../../service'

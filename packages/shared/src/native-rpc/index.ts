@@ -1,4 +1,4 @@
-import { AsyncCall, AsyncCallOptions, _AsyncVersionOf } from 'async-call-rpc/full'
+import { AsyncCall, AsyncCallOptions, _AsyncVersionOf } from 'async-call-rpc'
 import { AndroidGeckoViewChannel } from './Android.channel'
 import { iOSWebkitChannel } from './iOS.channel'
 import type { AndroidNativeAPIs, iOSNativeAPIs } from '@masknet/public-api'

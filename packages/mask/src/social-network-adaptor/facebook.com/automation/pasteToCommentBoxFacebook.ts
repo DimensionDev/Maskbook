@@ -1,7 +1,7 @@
 import { selectElementContents } from '../../../utils/utils'
 import { delay } from '@masknet/shared-base'
 import { isMobileFacebook } from '../utils/isMobile'
-import { MaskMessages } from '../../../utils/messages'
+import { MaskMessages } from '@masknet/shared'
 import type { PostInfo } from '../../../social-network/PostInfo'
 import { inputText, pasteText } from '@masknet/injected-script'
 

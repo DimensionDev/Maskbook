@@ -8,7 +8,7 @@ import { clickSeeMore } from '../injection/PostInspector'
 import { startWatch } from '../../../utils/watcher'
 import { facebookShared } from '../shared'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context'
-import { Flags } from '../../../../shared'
+import { Flags } from '@masknet/shared'
 import { collectNodeText } from '../../../utils'
 import { None, Some, Option } from 'ts-results'
 

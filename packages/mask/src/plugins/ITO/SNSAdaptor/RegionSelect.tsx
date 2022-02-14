@@ -15,7 +15,7 @@ import {
 } from '@mui/material'
 
 import { useI18N, usePortalShadowRoot } from '../../../utils'
-import { Flags } from '../../../../shared'
+import { Flags } from '@masknet/shared'
 import { useRegionList } from './hooks/useRegion'
 import type { RegionCode } from './hooks/useRegion'
 

@@ -1,5 +1,5 @@
 import type { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { Flags } from '../../shared'
+import { Flags } from '@masknet/shared'
 
 export function startWatch<T extends MutationObserverWatcher<any, any, any, any>>(watcher: T, signal: AbortSignal) {
     watcher

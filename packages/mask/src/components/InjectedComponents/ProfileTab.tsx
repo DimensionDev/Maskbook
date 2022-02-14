@@ -1,7 +1,7 @@
 import { ReactElement, useCallback, useState } from 'react'
 import classnames from 'classnames'
 import { Typography } from '@mui/material'
-import { MaskMessages } from '../../utils'
+import { MaskMessages } from '@masknet/shared'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 
 export interface ProfileTabProps extends withClasses<'tab' | 'button' | 'selected'> {

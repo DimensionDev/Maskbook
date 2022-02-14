@@ -1,8 +1,7 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import { useValueRef } from '@masknet/shared'
+import { useValueRef, MaskMessages } from '@masknet/shared'
 import Services from '../../extension/service'
 import { PersonaArrayComparer } from '../../utils/comparer'
-import { MaskMessages } from '../../utils/messages'
 import type { Persona } from '../../database'
 import { debounce } from 'lodash-unified'
 

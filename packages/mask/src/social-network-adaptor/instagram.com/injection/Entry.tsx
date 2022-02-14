@@ -3,7 +3,7 @@ import { Create } from '@mui/icons-material'
 import { Composition } from '../../../components/CompositionDialog/Composition'
 import { useState, useEffect } from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { MaskMessages } from '../../../utils'
+import { MaskMessages } from '@masknet/shared'
 
 const Container = styled('div')`
     position: fixed;

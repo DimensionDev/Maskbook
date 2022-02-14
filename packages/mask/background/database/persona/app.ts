@@ -19,7 +19,6 @@ import {
     EC_Private_JsonWebKey,
     AESJsonWebKey,
 } from '@masknet/shared-base'
-import { nativeAPI } from '../../../shared/native-rpc'
 import type {
     PersonaRecord as NativePersonaRecord,
     ProfileRecord as NativeProfileRecord,
@@ -28,7 +27,7 @@ import type {
     EC_Public_JsonWebKey as Native_EC_Public_JsonWebKey,
     AESJsonWebKey as Native_AESJsonWebKey,
 } from '@masknet/public-api'
-import { MaskMessages } from '../../../shared'
+import { MaskMessages, nativeAPI } from '@masknet/shared'
 export async function consistentPersonaDBWriteAccess(action: () => Promise<void>) {
     await action()
 }

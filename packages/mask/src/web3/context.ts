@@ -25,7 +25,7 @@ import {
 } from '../plugins/Wallet/settings'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import type { InternalSettings } from '../settings/createSettings'
-import { Flags } from '../../shared'
+import { Flags } from '@masknet/shared'
 import Services from '../extension/service'
 import { getProxyWebsocketInstance } from '@masknet/web3-shared-base'
 

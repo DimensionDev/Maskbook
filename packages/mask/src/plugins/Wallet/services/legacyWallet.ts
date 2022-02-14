@@ -11,7 +11,7 @@ import { currySameAddress, isSameAddress, ProviderType } from '@masknet/web3-sha
 import { LegacyWalletRecordOutDB } from './helpers'
 import { currentAccountSettings, currentProviderSettings } from '../settings'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../constants'
-import { hasNativeAPI } from '../../../../shared/native-rpc'
+import { hasNativeAPI } from '@masknet/shared'
 import { getAccounts } from '../../../extension/background-script/EthereumService'
 
 function sortWallet(a: LegacyWalletRecord, b: LegacyWalletRecord) {

@@ -1,6 +1,6 @@
 import type { IDBPSafeTransaction } from '../utils/openDB'
 import type { DBSchema } from 'idb/with-async-ittr'
-import type { PrototypeLess } from '../../../utils-pure'
+import type { PrototypeLess } from '@masknet/shared'
 import type {
     PersonaIdentifier,
     AESJsonWebKey,

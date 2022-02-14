@@ -4,7 +4,7 @@
  * Please goto Crypto alpha v38
  */
 import { encodeText, encodeArrayBuffer, decodeArrayBuffer, decodeText, concatArrayBuffer } from '@dimensiondev/kit'
-import { memoizePromise } from '../../utils-pure'
+import { memoizePromise } from '@masknet/shared'
 import { i18n } from '../../shared-ui/locales_legacy'
 import { CryptoWorker } from '../modules/workers'
 import { EC_Private_JsonWebKey, EC_Public_JsonWebKey, AESJsonWebKey, makeTypedMessageText } from '@masknet/shared-base'

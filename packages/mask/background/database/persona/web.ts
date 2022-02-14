@@ -1,6 +1,5 @@
 import Fuse from 'fuse.js'
 import { openDB } from 'idb/with-async-ittr'
-import { CryptoKeyToJsonWebKey, restorePrototype } from '../../../utils-pure'
 import { createDBAccessWithAsyncUpgrade, createTransaction } from '../utils/openDB'
 import { assertPersonaDBConsistency } from './consistency'
 import {
@@ -12,7 +11,7 @@ import {
     ProfileIdentifier,
     RelationFavor,
 } from '@masknet/shared-base'
-import { MaskMessages } from '../../../shared'
+import { MaskMessages, restorePrototype, CryptoKeyToJsonWebKey } from '@masknet/shared'
 import type {
     FullPersonaDBTransaction,
     ProfileTransaction,

@@ -1,5 +1,5 @@
 import { CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from '../../constants'
-import { Flags } from '../../../../../shared'
+import { Flags } from '@masknet/shared'
 import getUnixTime from 'date-fns/getUnixTime'
 
 export interface Status {

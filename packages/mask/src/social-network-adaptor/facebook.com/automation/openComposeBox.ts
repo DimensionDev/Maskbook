@@ -1,5 +1,6 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
-import { MaskMessages, CompositionRequest } from '../../../utils/messages'
+import type { CompositionRequest } from '../../../utils/messages'
+import { MaskMessages } from '@masknet/shared'
 import { i18n } from '../../../../shared-ui/locales_legacy'
 import { untilDocumentReady } from '../../../utils/dom'
 import { makeTypedMessageText, TypedMessage, delay } from '@masknet/shared-base'

@@ -1,6 +1,5 @@
 import { noop } from 'lodash-unified'
-import { MaskMessages } from '../../../utils'
-import { Flags } from '../../../../shared'
+import { MaskMessages, Flags } from '@masknet/shared'
 
 type Args = browser.webNavigation.TransitionNavListener extends browser.webNavigation.NavListener<infer U> ? U : never
 export default function (signal: AbortSignal) {

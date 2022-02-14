@@ -1,4 +1,5 @@
-import { createReactRootShadowed, MaskMessages, NFTAvatarEvent, startWatch } from '../../../../utils'
+import { createReactRootShadowed, NFTAvatarEvent, startWatch } from '../../../../utils'
+import { MaskMessages } from '@masknet/shared'
 import { searchTwitterAvatarLinkSelector, searchTwitterAvatarSelector } from '../../utils/selector'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'

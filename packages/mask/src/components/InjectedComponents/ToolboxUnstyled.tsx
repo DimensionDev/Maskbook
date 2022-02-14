@@ -23,10 +23,9 @@ import {
     useReverseAddress,
 } from '@masknet/plugin-infra'
 import { useCallback, useMemo } from 'react'
-import { useRemoteControlledDialog, WalletIcon } from '@masknet/shared'
+import { useRemoteControlledDialog, WalletIcon, nativeAPI, hasNativeAPI } from '@masknet/shared'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
-import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
 import { useRecentTransactions } from '../../plugins/Wallet/hooks/useRecentTransactions'
 import GuideStep from '../GuideStep'
 import { MaskFilledIcon } from '../../resources/MaskIcon'

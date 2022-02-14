@@ -3,7 +3,7 @@ import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-k
 import { postEditorInTimelineSelector, postEditorInPopupSelector } from '../utils/selector'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
-import { MaskMessages } from '../../../utils/messages'
+import { MaskMessages } from '@masknet/shared'
 import { hasEditor, isCompose } from '../utils/postBox'
 import { startWatch } from '../../../utils/watcher'
 import { makeStyles, MaskColorVar } from '@masknet/theme'

@@ -2,7 +2,8 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useState } from 'react'
 import { blobToArrayBuffer } from '@dimensiondev/kit'
-import { createReactRootShadowed, MaskMessages, NFTAvatarEvent, startWatch } from '../../../../utils'
+import { createReactRootShadowed, NFTAvatarEvent, startWatch } from '../../../../utils'
+import { MaskMessages } from '@masknet/shared'
 import {
     searchAvatarOpenFileSelector,
     searchProfessionalButtonSelector,

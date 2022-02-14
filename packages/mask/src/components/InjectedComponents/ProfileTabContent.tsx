@@ -7,7 +7,8 @@ import { useAddressNames } from '@masknet/web3-shared-evm'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor, Plugin, PluginId } from '@masknet/plugin-infra'
 import { PageTab } from '../InjectedComponents/PageTab'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
-import { MaskMessages, useI18N } from '../../utils'
+import { useI18N } from '../../utils'
+import { MaskMessages } from '@masknet/shared'
 import { useCurrentVisitingIdentity } from '../DataSource/useActivatedUI'
 
 function getTabContent(tabId: string) {

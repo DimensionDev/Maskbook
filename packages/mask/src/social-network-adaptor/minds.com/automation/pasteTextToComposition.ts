@@ -1,6 +1,6 @@
 import type { SocialNetworkUI } from '../../../social-network'
 import { untilElementAvailable } from '../../../utils/dom'
-import { MaskMessages } from '../../../utils/messages'
+import { MaskMessages } from '@masknet/shared'
 import { selectElementContents } from '../../../utils/utils'
 import { delay } from '@masknet/shared-base'
 import { inputText } from '@masknet/injected-script'

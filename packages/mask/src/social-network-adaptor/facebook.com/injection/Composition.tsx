@@ -4,7 +4,7 @@ import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShad
 import { Composition } from '../../../components/CompositionDialog/Composition'
 import { isMobileFacebook } from '../utils/isMobile'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
-import { MaskMessages } from '../../../utils/messages'
+import { MaskMessages } from '@masknet/shared'
 import { startWatch } from '../../../utils/watcher'
 import { taskOpenComposeBoxFacebook } from '../automation/openComposeBox'
 import { makeStyles } from '@masknet/theme'

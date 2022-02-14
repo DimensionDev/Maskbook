@@ -1,5 +1,5 @@
 import type { KVStorageBackend } from '@masknet/shared-base'
-import { setupMaskKVStorageBackend } from '../shared/kv-storage'
+import { setupMaskKVStorageBackend } from '@masknet/shared'
 import Services from './extension/service'
 
 const memory: KVStorageBackend = {

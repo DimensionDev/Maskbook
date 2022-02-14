@@ -1,6 +1,6 @@
 import { CircularProgress } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { MaskMessages } from '../../../utils'
+import { MaskMessages } from '@masknet/shared'
 import { useNFTAvatar } from '../hooks'
 import type { AvatarMetaDB } from '../types'
 import { RainbowBox } from './RainbowBox'

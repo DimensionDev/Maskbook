@@ -1,5 +1,5 @@
 import type { AESCryptoKey, PostIVIdentifier } from '@masknet/shared-base'
-import { CryptoKeyToJsonWebKey } from '../../../utils-pure'
+import { CryptoKeyToJsonWebKey } from '@masknet/shared'
 import { createTransaction } from '../utils/openDB'
 import { PostDBAccess, queryPostDB, createPostDB, updatePostDB, PostRecord } from './index'
 

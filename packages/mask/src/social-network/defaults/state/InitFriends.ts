@@ -2,7 +2,7 @@ import { IdentifierMap, ProfileIdentifier } from '@masknet/shared-base'
 import produce from 'immer'
 import type { Profile } from '../../../database'
 import Services from '../../../extension/service'
-import { MaskMessages } from '../../../utils/messages'
+import { MaskMessages } from '@masknet/shared'
 import type { SocialNetworkUI } from '../../types'
 
 function hasFingerprint(x: Profile) {
