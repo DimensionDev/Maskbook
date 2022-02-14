@@ -1,4 +1,4 @@
-import type { Plugin } from '@masknet/plugin-infra'
+import { Plugin, usePluginWrapper } from '@masknet/plugin-infra'
 import {
     ChainId,
     EthereumTokenType,
@@ -7,7 +7,6 @@ import {
     getChainIdFromName,
     useERC20TokenDetailed,
 } from '@masknet/web3-shared-evm'
-import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { base } from '../base'
 import { RedPacketMetaKey, RedPacketNftMetaKey } from '../constants'
 import {
@@ -22,26 +21,30 @@ import { RedPacketInPost } from './RedPacketInPost'
 import { RedPacketNftInPost } from './RedPacketNftInPost'
 import { RedPacketIcon } from '@masknet/icons'
 
+function Render(props: React.PropsWithChildren<{ name: string }>) {
+    usePluginWrapper(true, { name: props.name })
+    return <>{props.children}</>
+}
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     DecryptedInspector(props) {
         if (RedPacketMetadataReader(props.message.meta).ok)
             return (
-                <MaskPluginWrapper pluginName="Lucky Drop" publisher={base.publisher}>
+                <Render name="Lucky Drop">
                     {renderWithRedPacketMetadata(props.message.meta, (r) => (
                         <RedPacketInPost payload={r} />
                     ))}
-                </MaskPluginWrapper>
+                </Render>
             )
 
         if (RedPacketNftMetadataReader(props.message.meta).ok)
             return (
-                <MaskPluginWrapper pluginName="NFT Lucky Drop" publisher={base.publisher}>
+                <Render name="NFT Lucky Drop">
                     {renderWithRedPacketNftMetadata(props.message.meta, (r) => (
                         <RedPacketNftInPost payload={r} />
                     ))}
-                </MaskPluginWrapper>
+                </Render>
             )
         return null
     },
