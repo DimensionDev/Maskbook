@@ -2,6 +2,7 @@ import { MaskColorVar, MaskTextField } from '@masknet/theme'
 import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/material'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
+    addGasMargin,
     EthereumTokenType,
     formatWeiToEther,
     FungibleTokenDetailed,
@@ -100,7 +101,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         transferAmount,
         EthereumAddress.isValid(address) ? address : registeredAddress,
     )
-    const { gasConfig, onCustomGasSetting, gasLimit, maxFee } = useGasConfig(gasLimit_, 30000)
+    const { gasConfig, onCustomGasSetting, gasLimit, maxFee } = useGasConfig(gasLimit_, GAS_LIMIT)
 
     const gasPrice = gasConfig.gasPrice || defaultGasPrice
 
@@ -115,10 +116,13 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const gasFeeInUsd = formatWeiToEther(gasFee).multipliedBy(nativeTokenPrice)
 
     const maxAmount = useMemo(() => {
+        const price = is1559Supported && maxFee ? new BigNumber(maxFee) : gasPrice
+        const gasFee = multipliedBy(addGasMargin(gasLimit), price)
+
         let amount_ = new BigNumber(tokenBalance || '0')
         amount_ = selectedToken.type === EthereumTokenType.Native ? amount_.minus(gasFee) : amount_
         return BigNumber.max(0, amount_).toFixed()
-    }, [tokenBalance, gasPrice, selectedToken?.type, amount])
+    }, [tokenBalance, gasPrice, selectedToken?.type, amount, gasLimit, maxFee, is1559Supported])
 
     const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
         tokenType,
