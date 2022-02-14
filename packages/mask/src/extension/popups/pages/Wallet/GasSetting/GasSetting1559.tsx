@@ -24,6 +24,15 @@ import { useHistory } from 'react-router-dom'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { PopupRoutes } from '@masknet/shared-base'
 import { toHex, fromWei } from 'web3-utils'
+import {
+    isGreaterThan,
+    isGreaterThanOrEqualTo,
+    isLessThan,
+    isLessThanOrEqualTo,
+    isPositive,
+    multipliedBy,
+    toFixed,
+} from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -104,9 +113,9 @@ const useStyles = makeStyles()((theme) => ({
 const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 
 export const GasSetting1559 = memo(() => {
+    const { t } = useI18N()
     const { classes } = useStyles()
     const web3 = useWeb3()
-    const { t } = useI18N()
     const chainId = useChainId()
     const history = useHistory()
     const [selected, setOption] = useState<number | null>(null)
@@ -116,13 +125,13 @@ export const GasSetting1559 = memo(() => {
 
     const { value, loading: getValueLoading } = useUnconfirmedRequest()
 
-    //#region Get suggest gas options data from meta swap api
+    // #region Get suggest gas options data from meta swap api
     const { value: gasOptions, loading: getGasOptionsLoading } = useAsync(async () => {
         return WalletRPC.getEstimateGasFees(chainId)
     }, [chainId])
-    //#endregion
+    // #endregion
 
-    //#region Gas options
+    // #region Gas options
     const options = useMemo(
         () => [
             {
@@ -140,9 +149,9 @@ export const GasSetting1559 = memo(() => {
         ],
         [gasOptions],
     )
-    //#endregion
+    // #endregion
 
-    //#region If the payload type be SEND_ETHER or CONTRACT_INTERACTION, get the gas from the payload
+    // #region If the payload type be SEND_ETHER or CONTRACT_INTERACTION, get the gas from the payload
     const gas = useMemo(() => {
         if (
             value &&
@@ -153,9 +162,9 @@ export const GasSetting1559 = memo(() => {
         }
         return 0
     }, [value])
-    //#endregion
+    // #endregion
 
-    //#region If the payload type be SEND_ETHER or CONTRACT_INTERACTION, estimate min gas limit by tx data
+    // #region If the payload type be SEND_ETHER or CONTRACT_INTERACTION, estimate min gas limit by tx data
     const { value: minGasLimit } = useAsync(async () => {
         if (
             value &&
@@ -177,9 +186,9 @@ export const GasSetting1559 = memo(() => {
 
         return 0
     }, [value, web3])
-    //#endregion
+    // #endregion
 
-    //#region Form field define schema
+    // #region Form field define schema
     const schema = useMemo(() => {
         return zod
             .object({
@@ -187,24 +196,21 @@ export const GasSetting1559 = memo(() => {
                     .string()
                     .min(1, t('wallet_transfer_error_gas_limit_absence'))
                     .refine(
-                        (gasLimit) => new BigNumber(gasLimit).isGreaterThanOrEqualTo(minGasLimit ?? 0),
+                        (gasLimit) => isGreaterThanOrEqualTo(gasLimit, minGasLimit ?? 0),
                         t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimit }),
                     ),
                 maxPriorityFeePerGas: zod
                     .string()
                     .min(1, t('wallet_transfer_error_max_priority_fee_absence'))
-                    .refine(
-                        (value) => new BigNumber(value).isPositive(),
-                        t('wallet_transfer_error_max_priority_gas_fee_positive'),
-                    ),
+                    .refine(isPositive, t('wallet_transfer_error_max_priority_gas_fee_positive')),
                 maxFeePerGas: zod.string().min(1, t('wallet_transfer_error_max_fee_absence')),
             })
-            .refine((data) => new BigNumber(data.maxPriorityFeePerGas).isLessThanOrEqualTo(data.maxFeePerGas), {
+            .refine((data) => isLessThanOrEqualTo(data.maxPriorityFeePerGas, data.maxFeePerGas), {
                 message: t('wallet_transfer_error_max_priority_gas_fee_imbalance'),
                 path: ['maxFeePerGas'],
             })
     }, [minGasLimit, gasOptions])
-    //#endregion
+    // #endregion
 
     const {
         control,
@@ -227,68 +233,60 @@ export const GasSetting1559 = memo(() => {
         },
     })
 
-    //#region If the payload type be SEND_ETHER or CONTRACT_INTERACTION and there are maxFeePerGas and maxPriorityFeePerGas parameters on tx, set them to the form data
+    // #region If the payload type be SEND_ETHER or CONTRACT_INTERACTION and there are maxFeePerGas and maxPriorityFeePerGas parameters on tx, set them to the form data
     useUpdateEffect(() => {
         if (
             value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
             value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION
         ) {
-            if (value?.computedPayload._tx.maxFeePerGas && value?.computedPayload._tx.maxPriorityFeePerGas) {
+            if (
+                value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION &&
+                !['transfer', 'transferFrom', 'approve'].includes(value?.computedPayload.name)
+            ) {
+                setOption(1)
+            } else if (value?.computedPayload._tx.maxFeePerGas && value?.computedPayload._tx.maxPriorityFeePerGas) {
                 setValue(
                     'maxPriorityFeePerGas',
-                    fromWei(
-                        new BigNumber(value.computedPayload._tx.maxPriorityFeePerGas).toString(),
-                        'gwei',
-                    ).toString(),
+                    fromWei(toFixed(value.computedPayload._tx.maxPriorityFeePerGas), 'gwei'),
                 )
-                setValue(
-                    'maxFeePerGas',
-                    fromWei(new BigNumber(value.computedPayload._tx.maxFeePerGas).toFixed(), 'gwei').toString(),
-                )
+                setValue('maxFeePerGas', fromWei(toFixed(value.computedPayload._tx.maxFeePerGas), 'gwei'))
             } else {
                 setOption(1)
             }
         }
     }, [value, setValue])
-    //#endregion
+    // #endregion
 
-    //#region Set gas on tx to form data
+    // #region Set gas on tx to form data
     useUpdateEffect(() => {
         if (gas) setValue('gasLimit', new BigNumber(gas).toString())
     }, [gas, setValue])
-    //#endregion
+    // #endregion
 
-    //#region If the selected changed, set the value on the option to the form data
+    // #region If the selected changed, set the value on the option to the form data
     useEffect(() => {
-        if (selected !== null) {
-            setValue(
-                'maxPriorityFeePerGas',
-                new BigNumber(options[selected].content?.suggestedMaxPriorityFeePerGas ?? 0).toString() ?? '',
-            )
-            setValue(
-                'maxFeePerGas',
-                new BigNumber(options[selected].content?.suggestedMaxFeePerGas ?? 0).toString() ?? '',
-            )
-        }
+        if (selected === null) return
+        const { content } = options[selected]
+        setValue('maxPriorityFeePerGas', new BigNumber(content?.suggestedMaxPriorityFeePerGas ?? 0).toString() ?? '')
+        setValue('maxFeePerGas', new BigNumber(content?.suggestedMaxFeePerGas ?? 0).toString() ?? '')
     }, [selected, setValue, options])
-    //#endregion
+    // #endregion
 
     const [{ loading }, handleConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
-            if (value) {
-                const config = value.payload.params.map((param) => ({
-                    ...param,
-                    gas: toHex(new BigNumber(data.gasLimit).toString()),
-                    maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toString()),
-                    maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toString()),
-                }))
+            if (!value) return
+            const config = value.payload.params.map((param) => ({
+                ...param,
+                gas: toHex(new BigNumber(data.gasLimit).toString()),
+                maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
+                maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
+            }))
 
-                await WalletRPC.updateUnconfirmedRequest({
-                    ...value.payload,
-                    params: config,
-                })
-                history.goBack()
-            }
+            await WalletRPC.updateUnconfirmedRequest({
+                ...value.payload,
+                params: config,
+            })
+            history.goBack()
         },
         [value, history],
     )
@@ -297,16 +295,15 @@ export const GasSetting1559 = memo(() => {
 
     const [maxPriorityFeePerGas, maxFeePerGas, gasLimit] = watch(['maxPriorityFeePerGas', 'maxFeePerGas', 'gasLimit'])
 
-    //#region These are additional form rules that need to be prompted for but do not affect the validation of the form
+    // #region These are additional form rules that need to be prompted for but do not affect the validation of the form
     const maxPriorFeeHelperText = useMemo(() => {
         if (getGasOptionsLoading) return undefined
-        if (new BigNumber(maxPriorityFeePerGas).isLessThan(gasOptions?.low?.suggestedMaxPriorityFeePerGas ?? 0))
+        if (isLessThan(maxPriorityFeePerGas, gasOptions?.low?.suggestedMaxPriorityFeePerGas ?? 0))
             return t('wallet_transfer_error_max_priority_gas_fee_too_low')
         if (
-            new BigNumber(maxPriorityFeePerGas).isGreaterThan(
-                new BigNumber(gasOptions?.high?.suggestedMaxPriorityFeePerGas ?? 0).multipliedBy(
-                    HIGH_FEE_WARNING_MULTIPLIER,
-                ),
+            isGreaterThan(
+                maxPriorityFeePerGas,
+                multipliedBy(gasOptions?.high?.suggestedMaxPriorityFeePerGas ?? 0, HIGH_FEE_WARNING_MULTIPLIER),
             )
         )
             return t('wallet_transfer_error_max_priority_gas_fee_too_high')
@@ -315,27 +312,28 @@ export const GasSetting1559 = memo(() => {
 
     const maxFeeGasHelperText = useMemo(() => {
         if (getGasOptionsLoading) return undefined
-        if (new BigNumber(maxFeePerGas).isLessThan(gasOptions?.estimatedBaseFee ?? 0))
+        if (isLessThan(maxFeePerGas, gasOptions?.estimatedBaseFee ?? 0))
             return t('wallet_transfer_error_max_fee_too_low')
         if (
-            new BigNumber(maxFeePerGas).isGreaterThan(
-                new BigNumber(gasOptions?.high?.suggestedMaxFeePerGas ?? 0).multipliedBy(HIGH_FEE_WARNING_MULTIPLIER),
+            isGreaterThan(
+                maxFeePerGas,
+                multipliedBy(gasOptions?.high?.suggestedMaxFeePerGas ?? 0, HIGH_FEE_WARNING_MULTIPLIER),
             )
         )
             return t('wallet_transfer_error_max_fee_too_high')
         return undefined
     }, [maxFeePerGas, gasOptions, getGasOptionsLoading])
-    //endregion
+    // #endregion
 
-    //#region If the payload is consumed it needs to be redirected
+    // #region If the payload is consumed it needs to be redirected
     useUpdateEffect(() => {
         if (!value && !getValueLoading) {
             history.replace(PopupRoutes.Wallet)
         }
     }, [value, getValueLoading])
-    //#endregion
+    // #endregion
 
-    //#region If the estimate gas be 0, Set error
+    // #region If the estimate gas be 0, Set error
     useUpdateEffect(() => {
         if (!getGasLimitError) setError('gasLimit', { message: 'Cant not get estimate gas from contract' })
     }, [getGasLimitError])
@@ -350,7 +348,7 @@ export const GasSetting1559 = memo(() => {
                         className={selected === index ? classes.selected : undefined}>
                         <Typography className={classes.optionsTitle}>{title}</Typography>
                         <Typography component="div">
-                            {new BigNumber(content?.suggestedMaxFeePerGas ?? 0).toFixed(2)}
+                            {toFixed(content?.suggestedMaxFeePerGas, 2)}
                             <Typography variant="inherit">{t('wallet_transfer_gwei')}</Typography>
                         </Typography>
                         <Typography className={classes.gasUSD}>

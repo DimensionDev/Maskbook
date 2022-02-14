@@ -24,7 +24,7 @@ const ONE_TRILLION = ONE_BILLION * 1000
  * formatAmountPostfix(20000.123);
  * // returns 20.1K
  **/
-export function formatAmountPostfix(input: BigNumber.Value) {
+export function formatAmountPostfix(input: BigNumber.Value): string {
     let postfix = ''
     let amount = new BigNumber(input)
 

@@ -1,4 +1,4 @@
-import type { EC_Public_JsonWebKey, EC_Private_JsonWebKey, JsonWebKeyPair } from './utils'
+import type { EC_Public_JsonWebKey, EC_Private_JsonWebKey, JsonWebKeyPair } from '@masknet/shared-base'
 export interface BlockChainMethods {
     /** Blockchain related fns */
     generate_ecdh_k256_from_mnemonic(password: string): PromiseLike<MnemonicWordDetail>

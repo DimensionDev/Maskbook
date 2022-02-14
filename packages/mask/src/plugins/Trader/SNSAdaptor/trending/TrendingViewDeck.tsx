@@ -8,7 +8,7 @@ import { first, last } from 'lodash-unified'
 import { FormattedCurrency, useValueRef, useRemoteControlledDialog, TokenIcon } from '@masknet/shared'
 import { useI18N } from '../../../../utils'
 import type { Coin, Currency, Stat, Trending } from '../../types'
-import { DataProvider, TradeProvider } from '@masknet/public-api'
+import { DataProvider } from '@masknet/public-api'
 import { PriceChanged } from './PriceChanged'
 import { Linking } from './Linking'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
@@ -16,16 +16,11 @@ import { PluginTransakMessages } from '../../../Transak/messages'
 import { useAccount, formatCurrency } from '@masknet/web3-shared-evm'
 import type { FootnoteMenuOption } from '../trader/FootnoteMenu'
 import { TradeFooter } from '../trader/TradeFooter'
-import {
-    currentDataProviderSettings,
-    currentTradeProviderSettings,
-    getCurrentPreferredCoinIdSettings,
-} from '../../settings'
+import { currentDataProviderSettings, getCurrentPreferredCoinIdSettings } from '../../settings'
 import { CoinMenu, CoinMenuOption } from './CoinMenu'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
 import { CoinSafetyAlert } from './CoinSafetyAlert'
-import { PLUGIN_IDENTIFIER as TRANSAK_PLUGIN_ID } from '../../../Transak/constants'
-import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
+import { PluginId, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -97,13 +92,10 @@ export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | '
     currency: Currency
     trending: Trending
     dataProvider: DataProvider
-    tradeProvider: TradeProvider
     children?: React.ReactNode
     showDataProviderIcon?: boolean
-    showTradeProviderIcon?: boolean
     TrendingCardProps?: Partial<TrendingCardProps>
     dataProviders: DataProvider[]
-    tradeProviders: TradeProvider[]
 }
 
 export function TrendingViewDeck(props: TrendingViewDeckProps) {
@@ -112,22 +104,19 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         currency,
         trending,
         dataProvider,
-        tradeProvider,
         stats,
         children,
         showDataProviderIcon = false,
-        showTradeProviderIcon = false,
         TrendingCardProps,
         dataProviders = [],
-        tradeProviders = [],
     } = props
     const { coin, market } = trending
 
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    //#region buy
-    const transakPluginEnabled = useActivatedPluginsSNSAdaptor().find((x) => x.ID === TRANSAK_PLUGIN_ID)
+    // #region buy
+    const transakPluginEnabled = useActivatedPluginsSNSAdaptor('any').find((x) => x.ID === PluginId.Transak)
     const account = useAccount()
     const isAllowanceCoin = useTransakAllowanceCoin(coin)
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
@@ -139,18 +128,15 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
             address: account,
         })
     }, [account, trending?.coin?.symbol])
-    //#endregion
+    // #endregion
 
-    //#region sync with settings
+    // #region sync with settings
     const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
         currentDataProviderSettings.value = option.value as DataProvider
     }, [])
-    const onTradeProviderChange = useCallback((option: FootnoteMenuOption) => {
-        currentTradeProviderSettings.value = option.value as TradeProvider
-    }, [])
-    //#endregion
+    // #endregion
 
-    //#region switch between coins with the same symbol
+    // #region switch between coins with the same symbol
     const currentPreferredCoinIdSettings = useValueRef(getCurrentPreferredCoinIdSettings(dataProvider))
     const onCoinMenuChange = useCallback(
         (option: CoinMenuOption) => {
@@ -160,7 +146,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         },
         [dataProvider, currentPreferredCoinIdSettings],
     )
-    //#endregion
+    // #endregion
 
     return (
         <TrendingCard {...TrendingCardProps}>
@@ -260,13 +246,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                     footer: classes.footer,
                 }}
                 showDataProviderIcon={showDataProviderIcon}
-                showTradeProviderIcon={showTradeProviderIcon}
                 dataProvider={dataProvider}
-                tradeProvider={tradeProvider}
                 dataProviders={dataProviders}
-                tradeProviders={tradeProviders}
                 onDataProviderChange={onDataProviderChange}
-                onTradeProviderChange={onTradeProviderChange}
             />
         </TrendingCard>
     )

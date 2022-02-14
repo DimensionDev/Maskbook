@@ -4,9 +4,9 @@ import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { useAccount } from '@masknet/web3-shared-evm'
 import { PluginMessages, Services } from '../../../API'
-import { PLUGIN_IDS } from '../../../pages/Labs/constants'
 import { PersonaContext } from '../../../pages/Personas/hooks/usePersonaContext'
-import { RoutePaths } from '../../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
+import { PluginId } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -57,7 +57,7 @@ export const FeaturePromotions = memo(() => {
 
     const openTwitter = (pluginId: string) => async () => {
         if (!currentPersona) {
-            navigate(RoutePaths.SignUp)
+            navigate(DashboardRoutes.SignUp)
             return
         }
         if (isConnectedTwitter) {
@@ -73,7 +73,7 @@ export const FeaturePromotions = memo(() => {
         <div className={classes.container}>
             <img
                 className={classes.img}
-                onClick={openTwitter(PLUGIN_IDS.RED_PACKET)}
+                onClick={openTwitter(PluginId.RedPacket)}
                 src={new URL('./SendLuckyDrop.png', import.meta.url).toString()}
             />
             <img

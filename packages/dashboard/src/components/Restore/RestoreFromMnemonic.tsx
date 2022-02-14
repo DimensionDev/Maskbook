@@ -8,7 +8,7 @@ import { MaskAlert } from '../MaskAlert'
 import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
 import { Services } from '../../API'
 import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
-import { RoutePaths } from '../../type'
+import { DashboardRoutes, delay } from '@masknet/shared-base'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { SignUpRoutePath } from '../../pages/SignUp/routePath'
@@ -36,9 +36,11 @@ export const RestoreFromMnemonic = () => {
             const persona = await Services.Identity.queryPersonaByMnemonic(values.join(' '), '')
             if (persona) {
                 await changeCurrentPersona(persona.identifier)
-                navigate(RoutePaths.Personas, { replace: true })
+                // Waiting persona changed event notify
+                await delay(100)
+                navigate(DashboardRoutes.Personas, { replace: true })
             } else {
-                navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.PersonaCreate}`, {
+                navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.PersonaRecovery}`, {
                     replace: false,
                     state: { mnemonic: values },
                 })
@@ -69,7 +71,6 @@ export const RestoreFromMnemonic = () => {
                 <LoadingButton
                     variant="rounded"
                     size="large"
-                    color="primary"
                     onClick={handleImport}
                     disabled={some(values, (value) => !value)}>
                     {t.confirm()}

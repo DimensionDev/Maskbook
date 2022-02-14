@@ -9,10 +9,10 @@ import type {
     TransactionState,
     Wallet,
     GasOption,
+    ChainId,
 } from '@masknet/web3-shared-evm'
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
-import { PLUGIN_IDENTIFIER } from './constants'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { PLUGIN_ID } from './constants'
 
 export type TransactionDialogEvent =
     | {
@@ -109,7 +109,7 @@ export type SelectTokenDialogEvent =
           chainId?: ChainId
           disableNativeToken?: boolean
           disableSearchBar?: boolean
-          FixedTokenListProps?: {
+          FungibleTokenListProps?: {
               keyword?: string
               whitelist?: string[]
               blacklist?: string[]
@@ -126,20 +126,6 @@ export type SelectTokenDialogEvent =
            */
           token?: FungibleTokenDetailed
       }
-export type SelectERC20TokenDialogEvent =
-    | {
-          open: true
-          props?: {
-              whitelist?: string[]
-              blacklist?: string[]
-              tokens?: FungibleTokenDetailed[]
-              selectedTokens?: string[]
-              onSelect?(token: FungibleTokenDetailed | null): void
-          }
-      }
-    | {
-          open: false
-      }
 
 export type SelectNftContractDialogEvent = {
     open: boolean
@@ -149,6 +135,13 @@ export type SelectNftContractDialogEvent = {
      * The selected detailed nft contract.
      */
     contract?: ERC721ContractDetailed
+}
+
+export type SocketMessageUpdatedEvent = {
+    id: string
+    done: boolean
+    error?: unknown
+    from: 'cache' | 'remote'
 }
 
 export interface WalletMessage {
@@ -217,11 +210,6 @@ export interface WalletMessage {
      */
     restoreLegacyWalletDialogUpdated: RestoreLegacyWalletDialogEvent
 
-    /**
-     * Select token dialog
-     */
-    selectERC20TokenDialogUpdated: SelectERC20TokenDialogEvent
-
     walletsUpdated: void
     phrasesUpdated: void
     addressBookUpdated: void
@@ -237,11 +225,12 @@ export interface WalletMessage {
     erc1155TokensUpdated: void
     /** true: Now locked; false: Now unlocked */
     walletLockStatusUpdated: boolean
+    socketMessageUpdated: SocketMessageUpdatedEvent
 
     rpc: unknown
 }
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
 export const WalletMessages: { events: PluginMessageEmitter<WalletMessage> } = {
-    events: createPluginMessage<WalletMessage>(PLUGIN_IDENTIFIER),
+    events: createPluginMessage<WalletMessage>(PLUGIN_ID),
 }

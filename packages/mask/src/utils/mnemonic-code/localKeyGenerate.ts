@@ -1,6 +1,6 @@
 import { encodeText } from '@dimensiondev/kit'
 import { CryptoWorker } from '../../modules/workers'
-import type { EC_Public_JsonWebKey, AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
+import type { EC_Public_JsonWebKey, AESJsonWebKey } from '@masknet/shared-base'
 import { derive_AES_GCM_256_Key_From_PBKDF2 } from '../../modules/CryptoAlgorithm/helper'
 
 /**

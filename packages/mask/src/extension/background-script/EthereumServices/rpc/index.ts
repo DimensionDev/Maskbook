@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js'
 import * as ABICoder from 'web3-eth-abi'
 import {
     isSameAddress,
@@ -6,17 +5,17 @@ import {
     EthereumRpcType,
     EthereumMethodType,
     getChainDetailedCAIP,
-    getTokenConstants,
+    ZERO_ADDRESS,
+    isZeroAddress,
 } from '@masknet/web3-shared-evm'
 import type { TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { getCode } from '../network'
 import { readABI } from './abi'
+import { isZero } from '@masknet/web3-shared-base'
 
 // fix the type error
 const coder = ABICoder as unknown as ABICoder.AbiCoder
-
-const { ZERO_ADDRESS = '' } = getTokenConstants()
 
 function isEmptyHex(hex: string) {
     return !hex || ['0x', '0x0'].includes(hex)
@@ -60,8 +59,8 @@ export async function getComputedPayload(payload: JsonRpcPayload): Promise<Ether
         case EthereumMethodType.ETH_SIGN_TYPED_DATA:
             return {
                 type: EthereumRpcType.SIGN_TYPED_DATA,
-                to: payload.params[1],
-                data: payload.params[0],
+                to: payload.params[0],
+                data: payload.params[1],
             }
 
         // decrypt
@@ -134,7 +133,7 @@ export async function getSendTransactionComputedPayload(payload: JsonRpcPayload)
         }
 
         // contract deployment
-        if (isSameAddress(to, ZERO_ADDRESS)) {
+        if (isZeroAddress(to)) {
             return {
                 type: EthereumRpcType.CONTRACT_DEPLOYMENT,
                 code: data,
@@ -144,7 +143,7 @@ export async function getSendTransactionComputedPayload(payload: JsonRpcPayload)
     }
 
     if (to) {
-        let code: string = ''
+        let code = ''
         try {
             code = await getCode(to)
         } catch {
@@ -152,7 +151,7 @@ export async function getSendTransactionComputedPayload(payload: JsonRpcPayload)
         }
 
         // cancel tx
-        if (isSameAddress(from, to) && new BigNumber(value).isZero()) {
+        if (isSameAddress(from, to) && isZero(value)) {
             return {
                 type: EthereumRpcType.CANCEL,
                 _tx: config,

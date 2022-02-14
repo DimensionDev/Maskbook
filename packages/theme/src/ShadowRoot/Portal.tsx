@@ -93,7 +93,7 @@ function IsolatedRender({ container, root, style, children, findMountingShadowRe
     }, [containerInUse, root])
 
     useEffect(() => {
-        if (findMountingShadowRef && style.innerHTML !== css) style.innerHTML = css
+        if (findMountingShadowRef && style.textContent !== css) style.textContent = css
     }, [style, css, findMountingShadowRef])
 
     return children as any

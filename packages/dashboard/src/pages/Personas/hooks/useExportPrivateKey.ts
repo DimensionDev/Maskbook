@@ -1,5 +1,5 @@
 import { useAsync } from 'react-use'
-import type { PersonaIdentifier } from '@masknet/shared'
+import type { PersonaIdentifier } from '@masknet/shared-base'
 import { Services } from '../../../API'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
 

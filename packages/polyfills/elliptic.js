@@ -1,3 +1,4 @@
 import elliptic from 'elliptic'
-// @ts-ignore
+import { Buffer } from './node_modules/buffer/index'
 globalThis.elliptic = elliptic
+globalThis.Buffer = Buffer

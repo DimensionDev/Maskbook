@@ -14,7 +14,7 @@ export function useMenu(...elements: Array<JSX.Element | null>) {
     return useMenuConfig(elements, {})
 }
 
-export interface useMenuConfig {}
+export interface useMenuConfig extends Partial<MenuProps> {}
 export function useMenuConfig(
     elements: Array<JSX.Element | null>,
     config: useMenuConfig,
@@ -42,7 +42,7 @@ export function useMenuConfig(
     const close = useCallback(() => setOpen(false), [])
     const Menu = useContext(useMenuContext)
     return [
-        <Menu open={status} onClose={close} onClick={close} anchorEl={anchorEl}>
+        <Menu key="menu" open={status} onClose={close} onClick={close} anchorEl={anchorEl} {...config}>
             {elements?.map((element, key) =>
                 isValidElement<object>(element) ? cloneElement(element, { ...element.props, key }) : element,
             )}

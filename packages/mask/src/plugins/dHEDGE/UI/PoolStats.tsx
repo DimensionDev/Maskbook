@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import type { Pool } from '../types'
 import { Divider, Grid, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import { formatAmountPostfix } from '../utils'
-import { MaskColorVar } from '@masknet/theme'
 import DOMPurify from 'isomorphic-dompurify'
 import { POOL_DESCRIPTION_LIMIT } from '../constants'
 import BigNumber from 'bignumber.js'
@@ -47,7 +46,7 @@ interface PoolStatsProps {
 export function PoolStats(props: PoolStatsProps) {
     const { pool } = props
     const { classes } = useStyles()
-    //#region process stats
+    // #region process stats
     const valueManaged = formatAmountPostfix(formatBalance(pool?.totalValue, DIGIT_LENGTH))
     const lifeTimeReturn = new BigNumber(formatBalance(pool.performance, DIGIT_LENGTH)).minus(1).multipliedBy(100)
 
@@ -55,7 +54,7 @@ export function PoolStats(props: PoolStatsProps) {
     // pool detail contains raw html and need to sanitize before use
     const cleanDescription = DOMPurify.sanitize(pool.poolDetails)
     const [expanded, setExpanded] = useState(cleanDescription.length < POOL_DESCRIPTION_LIMIT)
-    //#endregion
+    // #endregion
 
     return (
         <div className={classes.root}>
@@ -115,31 +114,33 @@ export function PoolStats(props: PoolStatsProps) {
                     </Grid>
                 </Grid>
             </div>
-            <Divider />
             {cleanDescription ? (
-                <div className={classes.description}>
-                    <Typography variant="h6" color="textPrimary">
-                        <Trans i18nKey="plugin_dhedge_strategy" />
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                        <span
-                            dangerouslySetInnerHTML={{
-                                __html: expanded
-                                    ? cleanDescription
-                                    : cleanDescription.slice(0, POOL_DESCRIPTION_LIMIT).concat('...'),
-                            }}
-                        />
-                    </Typography>
-                    {cleanDescription.length > POOL_DESCRIPTION_LIMIT ? (
-                        <Typography variant="body2" color="primary" onClick={() => setExpanded(!expanded)}>
-                            {expanded ? (
-                                <Trans i18nKey="plugin_dhedge_see_less" />
-                            ) : (
-                                <Trans i18nKey="plugin_dhedge_see_more" />
-                            )}
+                <>
+                    <Divider />
+                    <div className={classes.description}>
+                        <Typography variant="h6" color="textPrimary">
+                            <Trans i18nKey="plugin_dhedge_strategy" />
                         </Typography>
-                    ) : null}
-                </div>
+                        <Typography variant="body2" color="textSecondary">
+                            <span
+                                dangerouslySetInnerHTML={{
+                                    __html: expanded
+                                        ? cleanDescription
+                                        : cleanDescription.slice(0, POOL_DESCRIPTION_LIMIT).concat('...'),
+                                }}
+                            />
+                        </Typography>
+                        {cleanDescription.length > POOL_DESCRIPTION_LIMIT ? (
+                            <Typography variant="body2" color="primary" onClick={() => setExpanded(!expanded)}>
+                                {expanded ? (
+                                    <Trans i18nKey="plugin_dhedge_see_less" />
+                                ) : (
+                                    <Trans i18nKey="plugin_dhedge_see_more" />
+                                )}
+                            </Typography>
+                        ) : null}
+                    </div>
+                </>
             ) : null}
         </div>
     )

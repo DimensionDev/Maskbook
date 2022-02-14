@@ -1,6 +1,7 @@
 import { makeStyles } from '@masknet/theme'
-import { Typography } from '@mui/material'
-import { NonFungibleAssetProvider, ERC721ContractDetailed, useERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import { ERC721ContractDetailed, NonFungibleAssetProvider, useERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import { Typography, CircularProgress } from '@mui/material'
+import { memo } from 'react'
 import { CollectibleCard } from '../../../../extension/options-page/DashboardComponents/CollectibleList/CollectibleCard'
 
 const useStyles = makeStyles()((theme) => ({
@@ -19,27 +20,29 @@ const useStyles = makeStyles()((theme) => ({
 export interface TokenCardProps {
     tokenId: string
     contractDetailed: ERC721ContractDetailed
+    renderOrder: number
 }
 
-export function TokenCard(props: TokenCardProps) {
-    const { contractDetailed, tokenId } = props
+export const TokenCard = memo<TokenCardProps>((props: TokenCardProps) => {
+    const { contractDetailed, tokenId, renderOrder } = props
     const { classes } = useStyles()
-    const {
-        value: tokenDetailed = {
-            tokenId,
-            contractDetailed,
-            info: {},
-        },
-    } = useERC721TokenDetailed(contractDetailed, tokenId)
+    const { tokenDetailed } = useERC721TokenDetailed(contractDetailed, tokenId)
 
-    return (
+    return tokenDetailed ? (
         <>
-            <CollectibleCard readonly provider={NonFungibleAssetProvider.OPENSEA} token={tokenDetailed} />
+            <CollectibleCard
+                readonly
+                provider={NonFungibleAssetProvider.OPENSEA}
+                token={tokenDetailed}
+                renderOrder={renderOrder}
+            />
             <div className={classes.title}>
                 <Typography className={classes.name} color="textSecondary" variant="body2">
                     {tokenDetailed.info.name ?? tokenId}
                 </Typography>
             </div>
         </>
+    ) : (
+        <CircularProgress />
     )
-}
+})

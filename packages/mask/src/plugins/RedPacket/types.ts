@@ -7,7 +7,7 @@ import type {
     ERC721TokenOutMask,
 } from '@masknet/web3-shared-evm'
 
-//#region erc20 red packet
+// #region erc20 red packet
 export interface RedPacketRecord {
     id: string
     /** From twitter/facebook url */
@@ -78,9 +78,9 @@ export interface RedpacketAvailability {
     expired: boolean
     claimed_amount: string
 }
-//#endregion
+// #endregion
 
-//#region nft red packet
+// #region nft red packet
 export interface RedPacketNftJSONPayload {
     id: string
     txid: string
@@ -105,6 +105,11 @@ export interface NftRedPacketJSONPayload extends RedPacketBasic {
     network?: string
     token_type: EthereumTokenType.ERC721
     token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
+}
+
+export enum NFTSelectOption {
+    All = 'All',
+    Partial = 'Partial',
 }
 
 interface ERC721TokenContract {
@@ -150,7 +155,7 @@ export interface RedPacketNftRecordInDatabase extends RedPacketNftRecord {
     /** An unique record type in DB */
     type: 'red-packet-nft'
 }
-//#endregion
+// #endregion
 
 export enum DialogTabs {
     create = 0,

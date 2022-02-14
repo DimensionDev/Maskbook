@@ -7,6 +7,7 @@
     { "path": "./packages/mask-sdk/main" },
     { "path": "./packages/mask-sdk/public-api" },
     { "path": "./packages/dashboard" },
+    { "path": "./packages/provider-proxy" },
     // Storybooks are considered as a "project" not depended by any other project
     { "path": "./packages/dashboard/stories" },
     { "path": "./packages/theme/stories" },
@@ -58,7 +59,7 @@
 
     // Language and Environment
     "jsx": "react-jsx",
-    "lib": ["ES2020"], // don't add "DOM", we use @types/web
+    "lib": ["ES2022"], // don't add "DOM", we use @types/web
     "target": "ES2019",
     "useDefineForClassFields": true,
 
@@ -74,6 +75,6 @@
     "compilerOptions": {
       "module": "CommonJS"
     },
-    "transpileOnly": true
+    "swc": true
   }
 }

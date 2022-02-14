@@ -6,7 +6,6 @@ import {
     getNetworkTypeFromChainId,
     NetworkType,
     ProviderType,
-    resolveProviderName,
 } from '@masknet/web3-shared-evm'
 import {
     currentMaskWalletAccountSettings,
@@ -18,7 +17,7 @@ import {
     currentProviderSettings,
 } from '../settings'
 import { getWallets, hasWallet, updateWallet } from './wallet'
-import { hasNativeAPI, nativeAPI } from '../../../utils'
+import { hasNativeAPI, nativeAPI } from '../../../../shared/native-rpc'
 import { Flags } from '../../../../shared'
 
 export async function updateAccount(
@@ -47,9 +46,7 @@ export async function updateAccount(
         providerType !== ProviderType.MaskWallet &&
         !(await hasWallet(account))
     ) {
-        await updateWallet(account, {
-            name: name || resolveProviderName(providerType),
-        })
+        await updateWallet(account, {})
     }
 
     // update global settings
@@ -97,7 +94,7 @@ export async function resetAccount(
     if (providerType) currentProviderSettings.value = providerType
 }
 
-//#region select wallet with popups
+// #region select wallet with popups
 let callbackMemorized: (accounts: string[], chainId: ChainId) => void | undefined
 
 export async function selectAccountPrepare(callback: (accounts: string[], chainId: ChainId) => void) {
@@ -107,7 +104,7 @@ export async function selectAccountPrepare(callback: (accounts: string[], chainI
 export async function selectAccount(accounts: string[], chainId: ChainId) {
     callbackMemorized?.(accounts, chainId)
 }
-//#endregion
+// #endregion
 
 export async function setDefaultWallet() {
     if (currentAccountSettings.value) return
@@ -127,5 +124,9 @@ export async function getSupportedNetworks() {
         Flags.polygon_enabled ? NetworkType.Polygon : undefined,
         Flags.arbitrum_enabled ? NetworkType.Arbitrum : undefined,
         Flags.xdai_enabled ? NetworkType.xDai : undefined,
+        Flags.celo_enabled ? NetworkType.Celo : undefined,
+        Flags.fantom_enabled ? NetworkType.Fantom : undefined,
+        Flags.avalanche_enabled ? NetworkType.Avalanche : undefined,
+        Flags.aurora_enabled ? NetworkType.Aurora : undefined,
     ].filter(Boolean) as NetworkType[]
 }

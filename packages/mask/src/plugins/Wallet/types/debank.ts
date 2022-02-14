@@ -5,8 +5,7 @@ export enum DebankTransactionDirection {
 
 export interface DictItem {
     id: string
-    cn: string
-    en: string
+    name: string
 }
 
 export interface ProjectItem {
@@ -98,6 +97,7 @@ export interface HistoryRecord {
 
 export interface BalanceRecord {
     balance: number
+    // TODO: convert to enum
     chain: 'eth' | 'bsc' | string
     decimals: number
     display_symbol: null

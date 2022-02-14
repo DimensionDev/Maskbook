@@ -8,6 +8,7 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { useGrant } from '../hooks/useGrant'
 import { PluginGitcoinMessages } from '../messages'
 import urlcat from 'urlcat'
+import { usePostLink } from '../../../components/DataSource/usePostInfo'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -78,7 +79,8 @@ export function PreviewCard(props: PreviewCardProps) {
     const { classes } = useStyles()
     const { value: grant, error, loading, retry } = useGrant(props.id)
 
-    //#region the donation dialog
+    // #region the donation dialog
+    const postLink = usePostLink()
     const { setDialog: setDonationDialog } = useRemoteControlledDialog(PluginGitcoinMessages.donationDialogUpdated)
     const onDonate = useCallback(() => {
         if (!grant) return
@@ -86,9 +88,10 @@ export function PreviewCard(props: PreviewCardProps) {
             open: true,
             address: grant.admin_address,
             title: grant.title,
+            postLink,
         })
     }, [grant, setDonationDialog])
-    //#endregion
+    // #endregion
 
     if (loading) return <Typography color="textPrimary">{t('loading')}</Typography>
     if (error)

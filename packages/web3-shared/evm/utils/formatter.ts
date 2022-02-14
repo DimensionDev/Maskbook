@@ -1,11 +1,10 @@
 import { BigNumber } from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
-import { pow10 } from './number'
+import { multipliedBy, pow10 } from '@masknet/web3-shared-base'
 import { isValidDomain } from './domain'
 
 export function formatPercentage(value: BigNumber.Value) {
-    const percentage = new BigNumber(value)
-        .multipliedBy(100)
+    const percentage = multipliedBy(value, 100)
         .toFixed(2)
         .replace(/\.?0+$/, '')
     return `${percentage}%`
@@ -16,7 +15,7 @@ export function formatPrice(price: BigNumber.Value, decimalPlaces = 6) {
 }
 
 export function formatAmount(amount: BigNumber.Value = '0', decimals = 0) {
-    return new BigNumber(amount).multipliedBy(pow10(decimals)).toFixed()
+    return new BigNumber(amount).shiftedBy(decimals).toFixed()
 }
 
 export function formatBalance(rawValue: BigNumber.Value = '0', decimals = 0, significant = decimals) {
@@ -79,46 +78,18 @@ export function formatNumberString(str: string, size = 0) {
     return `${str.substr(0, size)}...${str.substr(-size)}`
 }
 
-export function formatAmountPrecision(
-    amount?: BigNumber.Value,
-    token_decimals?: number,
-    decimalPlaces = 6,
-    precision = 12,
-): string {
-    const _amount = new BigNumber(formatBalance(amount, token_decimals))
-    const _decimalPlaces = decimalPlaces < 0 ? 6 : decimalPlaces
-    const _precision = precision < 0 ? 12 : precision
-
-    if (_amount.isZero()) {
-        return '0'
-    }
-
-    if (_amount.isLessThan(1)) {
-        return _amount.toFixed(_precision)
-    }
-
-    const len = _amount.precision() - _amount.decimalPlaces()
-    if (len <= _decimalPlaces) {
-        return _amount.toPrecision(len + _decimalPlaces)
-    } else if (len >= _precision) {
-        return _amount.toPrecision(len)
-    }
-
-    return _amount.toPrecision(_precision)
-}
-
 export function formatWeiToGwei(value: BigNumber.Value) {
-    return new BigNumber(value).idiv(10 ** 9)
+    return new BigNumber(value).shiftedBy(-9).integerValue()
 }
 
 export function formatWeiToEther(value: BigNumber.Value) {
-    return new BigNumber(value).div(new BigNumber(10 ** 18))
+    return new BigNumber(value).shiftedBy(-18)
 }
 
 export function formatGweiToWei(value: BigNumber.Value) {
-    return new BigNumber(value).multipliedBy(10 ** 9)
+    return new BigNumber(value).shiftedBy(9)
 }
 
 export function formatGweiToEther(value: BigNumber.Value) {
-    return new BigNumber(value).div(10 ** 9)
+    return new BigNumber(value).shiftedBy(-9)
 }

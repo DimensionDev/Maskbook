@@ -11,7 +11,13 @@
         "Mumbai": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "MASK_POOL_ADDRESS": {
         "Mainnet": "",
@@ -25,6 +31,12 @@
         "Mumbai": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     }
 }

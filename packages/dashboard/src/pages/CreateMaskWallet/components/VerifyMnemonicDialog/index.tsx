@@ -1,15 +1,14 @@
 import { memo, useState } from 'react'
 import { Box, Typography, styled, Button, Dialog, DialogTitle, DialogContent } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { LoadingButton } from '@mui/lab'
-import { MaskColorVar } from '@masknet/theme'
 import { useSnackbarCallback } from '@masknet/shared'
 import { SuccessIcon, CopyIcon } from '@masknet/icons'
 import { DesktopMnemonicConfirm } from '../../../../components/Mnemonic'
 import { useDashboardI18N } from '../../../../locales'
 import { useCopyToClipboard } from 'react-use'
 import { useNavigate } from 'react-router-dom'
-import { RoutePaths } from '../../../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     dialogTitle: {
@@ -105,7 +104,7 @@ export const VerifyMnemonicDialog = memo<VerifyMnemonicDialogProps>(
                 loading={loading}
                 address={address}
                 onCopy={copyWalletAddress}
-                onDoneClick={() => navigate(RoutePaths.Wallets)}
+                onDoneClick={() => navigate(DashboardRoutes.Wallets)}
             />
         )
     },
@@ -174,6 +173,7 @@ export const VerifyMnemonicDialogUI = memo<VerifyMnemonicDialogUIProps>(
                                 ) : null}
 
                                 <LoadingButton
+                                    variant="contained"
                                     loading={loading}
                                     fullWidth
                                     className={classes.button}

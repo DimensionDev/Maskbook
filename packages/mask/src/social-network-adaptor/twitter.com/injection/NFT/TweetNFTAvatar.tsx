@@ -4,6 +4,7 @@ import { createReactRootShadowed, startWatch } from '../../../../utils'
 import { Flags } from '../../../../../shared'
 import { getInjectNodeInfo } from '../../utils/avatar'
 import { searchRetweetAvatarSelector, searchTweetAvatarSelector } from '../../utils/selector'
+import { NFTAvatarMiniClip } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip'
 
 function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
     startWatch(
@@ -19,8 +20,12 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                 proxy.realCurrent = info.element.firstChild as HTMLElement
                 const root = createReactRootShadowed(proxy.afterShadow, { signal })
                 root.render(
-                    <div style={{ position: 'absolute', top: -2, left: -2, zIndex: -1 }}>
-                        <NFTBadgeTweet width={info.width} height={info.height} avatarId={info.avatarId} />
+                    <div style={{ position: 'absolute', top: 0, left: 0, zIndex: 2 }}>
+                        {info.isTwitterNFT ? (
+                            <NFTAvatarMiniClip width={info.width} height={info.height} />
+                        ) : (
+                            <NFTBadgeTweet width={info.width - 4} height={info.height - 4} avatarId={info.avatarId} />
+                        )}
                     </div>,
                 )
                 remover = root.destory

@@ -4,14 +4,13 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { PersonaCard } from '../PersonaCard'
 import { useDashboardI18N } from '../../../../locales'
-import type { PersonaIdentifier, PersonaInformation } from '@masknet/shared'
-import { RoutePaths } from '../../../../type'
+import { PersonaIdentifier, PersonaInformation, DashboardRoutes } from '@masknet/shared-base'
 import { useNavigate } from 'react-router-dom'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
         // material-ui toolbar height
-        top: `64px`,
+        top: '64px',
         padding: theme.spacing(3, 3.75, 11.25, 3.75),
         background: MaskColorVar.suspensionBackground,
     },
@@ -98,10 +97,12 @@ export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
                             )
                         })}
                         <Box className={classes.buttons}>
-                            <Button onClick={() => navigate(RoutePaths.SignUp)}>{t.personas_add_persona()}</Button>
+                            <Button onClick={() => navigate(DashboardRoutes.SignUp)}>{t.personas_add_persona()}</Button>
                             <Button
                                 color="warning"
-                                onClick={() => navigate(RoutePaths.SignIn, { state: { from: RoutePaths.Personas } })}>
+                                onClick={() =>
+                                    navigate(DashboardRoutes.SignIn, { state: { from: DashboardRoutes.Personas } })
+                                }>
                                 {t.recovery()}
                             </Button>
                         </Box>
@@ -111,7 +112,7 @@ export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
                             fullWidth
                             sx={{ mb: 2 }}
                             color="warning"
-                            onClick={() => navigate(RoutePaths.Settings, { state: { open: 'setting' } })}>
+                            onClick={() => navigate(DashboardRoutes.Settings, { state: { open: 'setting' } })}>
                             {t.settings_global_backup_title()}
                         </Button>
                     </Box>

@@ -28,7 +28,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     cancel: {
-        backgroundColor: getMaskColor(theme).twitterBackground,
+        backgroundColor: theme.palette.background.default,
         border: 'none',
     },
     title: {
@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: 'rgba(255, 95, 95, 0.2)',
     },
     wallet: {
-        backgroundColor: getMaskColor(theme).twitterBackground,
+        backgroundColor: theme.palette.background.default,
         marginTop: theme.spacing(2),
         padding: theme.spacing(2),
         borderRadius: theme.spacing(1),
@@ -65,8 +65,8 @@ export function WalletRiskWarningDialog() {
     const { open, setDialog } = useRemoteControlledDialog(WalletMessages.events.walletRiskWarningDialogUpdated)
 
     const onClose = useCallback(async () => {
-        if (account) await WalletRPC.setRiskWarningConfirmed(account, false)
         setDialog({ open: false, type: 'cancel' })
+        if (account) await WalletRPC.setRiskWarningConfirmed(account, false)
     }, [setDialog])
 
     const onConfirm = useCallback(async () => {

@@ -6,6 +6,26 @@ import { PostDialogHint } from '../../../components/InjectedComponents/PostDialo
 import { MaskMessages } from '../../../utils/messages'
 import { hasEditor, isCompose } from '../utils/postBox'
 import { startWatch } from '../../../utils/watcher'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { alpha } from '@mui/material'
+import { twitterBase } from '../base'
+import { sayHelloShowed } from '../../../settings/settings'
+import { makeTypedMessageText } from '@masknet/shared-base'
+import { useI18N } from '../../../utils'
+
+const useStyles = makeStyles()((theme) => ({
+    iconButton: {
+        '&:hover': {
+            background: alpha(theme.palette.primary.main, 0.1),
+        },
+    },
+    tooltip: {
+        marginTop: '2px !important',
+        borderRadius: 2,
+        padding: 4,
+        background: MaskColorVar.twitterTooltipBg,
+    },
+}))
 
 export function injectPostDialogHintAtTwitter(signal: AbortSignal) {
     const emptyNode = document.createElement('div')
@@ -27,9 +47,24 @@ function renderPostDialogHintTo<T>(reason: 'timeline' | 'popup', ls: LiveSelecto
 }
 
 function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
-    const onHintButtonClicked = useCallback(
-        () => MaskMessages.events.requestComposition.sendToLocal({ reason, open: true }),
-        [reason],
+    const { classes } = useStyles()
+    const { t } = useI18N()
+    const onHintButtonClicked = useCallback(() => {
+        const content = sayHelloShowed[twitterBase.networkIdentifier].value
+            ? undefined
+            : makeTypedMessageText(
+                  t('setup_guide_say_hello_content') +
+                      t('setup_guide_say_hello_follow', { account: '@realMaskNetwork' }),
+              )
+        MaskMessages.events.requestComposition.sendToLocal({ reason, open: true, content })
+        sayHelloShowed[twitterBase.networkIdentifier].value = true
+    }, [reason])
+    return (
+        <PostDialogHint
+            classes={{ iconButton: classes.iconButton, tooltip: classes.tooltip }}
+            size={17}
+            onHintButtonClicked={onHintButtonClicked}
+            tooltip={{ disabled: false }}
+        />
     )
-    return <PostDialogHint onHintButtonClicked={onHintButtonClicked} />
 }

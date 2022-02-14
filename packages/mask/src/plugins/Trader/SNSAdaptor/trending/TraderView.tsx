@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Link, Tab, Tabs } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useValueRef } from '@masknet/shared'
 import { useI18N, useSettingsSwitcher } from '../../../../utils'
 import type { TagType } from '../../types'
-import { DataProvider, TradeProvider } from '@masknet/public-api'
+import { DataProvider } from '@masknet/public-api'
 import { resolveDataProviderName, resolveDataProviderLink } from '../../pipes'
 import { useTrendingById, useTrendingByKeyword } from '../../trending/useTrending'
 import { TickersTable } from './TickersTable'
@@ -13,7 +12,6 @@ import { PriceChart } from './PriceChart'
 import { usePriceStats } from '../../trending/usePriceStats'
 import { Days, PriceChartDaysControl } from './PriceChartDaysControl'
 import { useCurrentDataProvider } from '../../trending/useCurrentDataProvider'
-import { useCurrentTradeProvider } from '../../trending/useCurrentTradeProvider'
 import { TradeView } from '../trader/TradeView'
 import { CoinMarketPanel } from './CoinMarketPanel'
 import { TrendingViewError } from './TrendingViewError'
@@ -22,20 +20,23 @@ import { TrendingViewDeck } from './TrendingViewDeck'
 import { currentDataProviderSettings } from '../../settings'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
-import { EthereumTokenType, useFungibleTokenDetailed, useChainIdValid } from '@masknet/web3-shared-evm'
-import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
-import { currentNetworkSettings } from '../../../Wallet/settings'
+import {
+    EthereumTokenType,
+    useFungibleTokenDetailed,
+    useChainIdValid,
+    useNetworkType,
+    isNativeTokenSymbol,
+} from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
     return {
         root: props.isPopper
             ? {
                   width: 450,
-                  boxShadow: `${
+                  boxShadow:
                       theme.palette.mode === 'dark'
                           ? 'rgba(255, 255, 255, 0.2) 0px 0px 15px, rgba(255, 255, 255, 0.15) 0px 0px 3px 1px'
-                          : 'rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px'
-                  }`,
+                          : 'rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px',
               }
             : {
                   width: '100%',
@@ -98,32 +99,29 @@ export interface TraderViewProps {
     name: string
     tagType: TagType
     dataProviders: DataProvider[]
-    tradeProviders: TradeProvider[]
     onUpdate?: () => void
     isPopper?: boolean
 }
 
 export function TraderView(props: TraderViewProps) {
-    const { name, tagType, dataProviders, tradeProviders, isPopper = true } = props
+    const { name, tagType, dataProviders, isPopper = true } = props
 
     const { t } = useI18N()
-
     const { classes } = useStyles({ isPopper })
     const dataProvider = useCurrentDataProvider(dataProviders)
-    const tradeProvider = useCurrentTradeProvider()
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP_INFO ? 1 : 0)
     const chainIdValid = useChainIdValid()
 
-    //#region track network type
-    const networkType = useValueRef(currentNetworkSettings)
+    // #region track network type
+    const networkType = useNetworkType()
     useEffect(() => setTabIndex(0), [networkType])
-    //#endregion
+    // #endregion
 
-    //#region multiple coins share the same symbol
+    // #region multiple coins share the same symbol
     const { value: coins = [] } = useAvailableCoins(tagType, name, dataProvider)
-    //#endregion
+    // #endregion
 
-    //#region merge trending
+    // #region merge trending
     const coinId = usePreferredCoinId(name, dataProvider)
     const trendingById = useTrendingById(name ? '' : coinId, dataProvider)
     const trendingByKeyword = useTrendingByKeyword(tagType, coinId ? '' : name, dataProvider)
@@ -132,20 +130,18 @@ export function TraderView(props: TraderViewProps) {
         error: trendingError,
         loading: loadingTrending,
     } = coinId ? trendingById : trendingByKeyword
-    //#endregion
+    // #endregion
 
-    //#region swap
-    const {
-        value: tokenDetailed,
-        error: tokenDetailedError,
-        loading: loadingTokenDetailed,
-    } = useFungibleTokenDetailed(
-        trending?.coin.symbol.toLowerCase() === 'eth' ? EthereumTokenType.Native : EthereumTokenType.ERC20,
-        trending?.coin.symbol.toLowerCase() === 'eth' ? '' : trending?.coin.contract_address ?? '',
+    const coinSymbol = (trending?.coin.symbol || '').toLowerCase()
+
+    // #region swap
+    const { value: tokenDetailed } = useFungibleTokenDetailed(
+        coinSymbol === 'eth' ? EthereumTokenType.Native : EthereumTokenType.ERC20,
+        coinSymbol === 'eth' ? '' : trending?.coin.contract_address ?? '',
     )
-    //#endregion
+    // #endregion
 
-    //#region stats
+    // #region stats
     const [days, setDays] = useState(Days.ONE_WEEK)
     const {
         value: stats = [],
@@ -157,31 +153,27 @@ export function TraderView(props: TraderViewProps) {
         currency: trending?.currency,
         days,
     })
-    //#endregion
+    // #endregion
 
-    //#region trader context
-    const tradeContext = useTradeContext(tradeProvider)
-    //#endregion
-
-    //#region current data provider switcher
+    // #region current data provider switcher
     const DataProviderSwitcher = useSettingsSwitcher(
         currentDataProviderSettings,
         dataProviders,
         resolveDataProviderName,
     )
-    //#endregion
+    // #endregion
 
-    //#region api ready callback
+    // #region api ready callback
     useEffect(() => {
         props.onUpdate?.()
     }, [tabIndex, loadingTrending])
-    //#endregion
+    // #endregion
 
-    //#region no available providers
+    // #region no available providers
     if (dataProviders.length === 0) return null
-    //#endregion
+    // #endregion
 
-    //#region error handling
+    // #region error handling
     // error: unknown coin or api error
     if (trendingError)
         return (
@@ -203,18 +195,13 @@ export function TraderView(props: TraderViewProps) {
                 TrendingCardProps={{ classes: { root: classes.root } }}
             />
         )
-    //#endregion
+    // #endregion
 
-    //#region if the coin is a native token or contract address exists
+    // #region if the coin is a native token or contract address exists
+    const isSwappable = (!!trending?.coin.contract_address || isNativeTokenSymbol(coinSymbol)) && chainIdValid
+    // #endregion
 
-    const isSwappable =
-        (!!trending?.coin.contract_address ||
-            ['eth', 'matic', 'bnb'].includes(trending?.coin.symbol.toLowerCase() ?? '')) &&
-        chainIdValid &&
-        tradeProviders.length
-    //#endregion
-
-    //#region display loading skeleton
+    // #region display loading skeleton
     if (!currency || !trending || loadingTrending)
         return (
             <TrendingViewSkeleton
@@ -222,9 +209,9 @@ export function TraderView(props: TraderViewProps) {
                 TrendingCardProps={{ classes: { root: classes.root } }}
             />
         )
-    //#endregion
+    // #endregion
 
-    //#region tabs
+    // #region tabs
     const { coin, market, tickers } = trending
     const tabs = [
         <Tab className={classes.tab} key="market" label={t('plugin_trader_tab_market')} />,
@@ -232,67 +219,62 @@ export function TraderView(props: TraderViewProps) {
         <Tab className={classes.tab} key="exchange" label={t('plugin_trader_tab_exchange')} />,
         isSwappable ? <Tab className={classes.tab} key="swap" label={t('plugin_trader_tab_swap')} /> : null,
     ].filter(Boolean)
-    //#endregion
+    // #endregion
 
     return (
-        <TradeContext.Provider value={tradeContext}>
-            <TrendingViewDeck
-                classes={{
-                    body: classes.body,
-                    footer: classes.footer,
-                    content: classes.content,
-                }}
-                stats={stats}
-                coins={coins}
-                currency={currency}
-                trending={trending}
-                dataProvider={dataProvider}
-                tradeProvider={tradeProvider}
-                showDataProviderIcon={tabIndex < 3}
-                showTradeProviderIcon={false}
-                dataProviders={dataProviders}
-                tradeProviders={tradeProviders}
-                TrendingCardProps={{ classes: { root: classes.root } }}>
-                <Tabs
-                    className={classes.tabs}
-                    indicatorColor="primary"
-                    textColor="primary"
-                    variant="fullWidth"
-                    value={tabIndex}
-                    onChange={(ev: React.ChangeEvent<{}>, newValue: number) => setTabIndex(newValue)}
-                    TabIndicatorProps={{
-                        style: {
-                            display: 'none',
-                        },
-                    }}>
-                    {tabs}
-                </Tabs>
-                {tabIndex === 0 ? <CoinMarketPanel dataProvider={dataProvider} trending={trending} /> : null}
-                {tabIndex === 1 ? (
-                    <>
-                        {market ? <PriceChangedTable market={market} /> : null}
-                        <PriceChart
-                            classes={{ root: classes.priceChartRoot }}
-                            coin={coin}
-                            currency={currency}
-                            stats={stats}
-                            retry={retryStats}
-                            loading={loadingStats}>
-                            <PriceChartDaysControl days={days} onDaysChange={setDays} />
-                        </PriceChart>
-                    </>
-                ) : null}
-                {tabIndex === 2 ? <TickersTable tickers={tickers} dataProvider={dataProvider} /> : null}
-                {tabIndex === 3 && isSwappable ? (
-                    <TradeView
-                        classes={{ root: classes.tradeViewRoot }}
-                        TraderProps={{
-                            coin,
-                            tokenDetailed,
-                        }}
-                    />
-                ) : null}
-            </TrendingViewDeck>
-        </TradeContext.Provider>
+        <TrendingViewDeck
+            classes={{
+                body: classes.body,
+                footer: classes.footer,
+                content: classes.content,
+            }}
+            stats={stats}
+            coins={coins}
+            currency={currency}
+            trending={trending}
+            dataProvider={dataProvider}
+            showDataProviderIcon={tabIndex < 3}
+            dataProviders={dataProviders}
+            TrendingCardProps={{ classes: { root: classes.root } }}>
+            <Tabs
+                className={classes.tabs}
+                indicatorColor="primary"
+                textColor="primary"
+                variant="fullWidth"
+                value={tabIndex}
+                onChange={(ev: React.ChangeEvent<{}>, newValue: number) => setTabIndex(newValue)}
+                TabIndicatorProps={{
+                    style: {
+                        display: 'none',
+                    },
+                }}>
+                {tabs}
+            </Tabs>
+            {tabIndex === 0 ? <CoinMarketPanel dataProvider={dataProvider} trending={trending} /> : null}
+            {tabIndex === 1 ? (
+                <>
+                    {market ? <PriceChangedTable market={market} /> : null}
+                    <PriceChart
+                        classes={{ root: classes.priceChartRoot }}
+                        coin={coin}
+                        currency={currency}
+                        stats={stats}
+                        retry={retryStats}
+                        loading={loadingStats}>
+                        <PriceChartDaysControl days={days} onDaysChange={setDays} />
+                    </PriceChart>
+                </>
+            ) : null}
+            {tabIndex === 2 ? <TickersTable tickers={tickers} dataProvider={dataProvider} /> : null}
+            {tabIndex === 3 && isSwappable ? (
+                <TradeView
+                    classes={{ root: classes.tradeViewRoot }}
+                    TraderProps={{
+                        coin,
+                        tokenDetailed,
+                    }}
+                />
+            ) : null}
+        </TrendingViewDeck>
     )
 }

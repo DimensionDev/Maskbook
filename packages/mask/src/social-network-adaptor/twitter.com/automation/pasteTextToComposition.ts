@@ -1,4 +1,4 @@
-import { delay } from '../../../utils/utils'
+import { delay } from '@masknet/shared-base'
 import { inputText, pasteText } from '@masknet/injected-script'
 import { postEditorDraftContentSelector, newPostButtonSelector } from '../utils/selector'
 import type { SocialNetworkUI } from '../../../social-network'

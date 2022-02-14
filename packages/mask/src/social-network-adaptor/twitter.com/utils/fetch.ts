@@ -10,7 +10,7 @@ import {
     isTypedMessageEmpty,
     isTypedMessageText,
     TypedMessageText,
-} from '@masknet/shared'
+} from '@masknet/shared-base'
 import { collectNodeText, collectTwitterEmoji } from '../../../utils'
 
 /**
@@ -70,7 +70,7 @@ export const postNameParser = (node: HTMLElement) => {
 
 export const postAvatarParser = (node: HTMLElement) => {
     const tweetElement = node.querySelector('[data-testid="tweet"]') ?? node
-    const avatarElement = tweetElement.children[0].querySelector<HTMLImageElement>(`img[src*="twimg.com"]`)
+    const avatarElement = tweetElement.children[0].querySelector<HTMLImageElement>('img[src*="twimg.com"]')
     return avatarElement ? avatarElement.src : undefined
 }
 
@@ -90,7 +90,7 @@ export const postContentMessageParser = (node: HTMLElement) => {
             const href = anchor.getAttribute('title') ?? anchor.getAttribute('href')
             const content = anchor.textContent
             if (!content) return makeTypedMessageEmpty()
-            return makeTypedMessageAnchor(resolve(content), href ?? 'javascript: void 0;', content)
+            return makeTypedMessageAnchor(resolve(content), href ?? '', content)
         } else if (node instanceof HTMLImageElement) {
             const image = node
             const src = image.getAttribute('src')

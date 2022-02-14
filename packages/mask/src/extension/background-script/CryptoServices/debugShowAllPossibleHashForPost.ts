@@ -1,10 +1,10 @@
-import type { PostIVIdentifier } from '../../../database/type'
+import type { PostIVIdentifier } from '@masknet/shared-base'
 import { hashPostSalt, hashCryptoKey, hashCryptoKeyUnstable } from '../../../network/gun/version.2/hash'
 import { queryProfilesWithQuery, queryPublicKey } from '../../../database'
 import { getNetworkWorkerUninitialized } from '../../../social-network/worker'
 
 export async function debugShowAllPossibleHashForPost(post: PostIVIdentifier, payloadVersion: -38 | -39 | -40) {
-    const friends = await queryProfilesWithQuery((x) => x.identifier.network === post.network)
+    const friends = await queryProfilesWithQuery({ network: post.network })
     const gunHint = getNetworkWorkerUninitialized(post.network)?.gunNetworkHint
     return Promise.all(
         friends

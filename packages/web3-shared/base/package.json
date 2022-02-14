@@ -1,0 +1,16 @@
+{
+  "name": "@masknet/web3-shared-base",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "bignumber.js": "9.0.2",
+    "date-fns": "^2.28.0",
+    "react-use": "^17.3.2",
+    "reconnecting-websocket": "^4.4.0"
+  },
+  "devDependencies": {
+    "jest-websocket-mock": "^2.3.0",
+    "mock-socket": "^9.1.2"
+  }
+}

@@ -1,4 +1,4 @@
-import type { PersonaIdentifier } from '../../../database/type'
+import type { PersonaIdentifier } from '@masknet/shared-base'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { SetupGuide } from '../../../components/InjectedComponents/SetupGuide'
 import { Flags } from '../../../../shared'

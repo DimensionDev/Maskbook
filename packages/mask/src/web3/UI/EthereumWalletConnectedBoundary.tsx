@@ -5,7 +5,8 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
-import { isZero, useAccount, useChainIdValid, useNativeTokenBalance } from '@masknet/web3-shared-evm'
+import { useAccount, useChainIdValid, useNativeTokenBalance } from '@masknet/web3-shared-evm'
+import { isZero } from '@masknet/web3-shared-base'
 import { useWalletRiskWarningDialog } from '../../plugins/Wallet/hooks/useWalletRiskWarningDialog'
 
 const useStyles = makeStyles()((theme) => ({
@@ -32,15 +33,15 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
     const chainIdValid = useChainIdValid()
     const nativeTokenBalance = useNativeTokenBalance()
 
-    //#region remote controlled confirm risk warning
+    // #region remote controlled confirm risk warning
     const { isConfirmed: isRiskWarningConfirmed, openDialog: openRiskWarningDialog } = useWalletRiskWarningDialog()
-    //#endregion
+    // #endregion
 
-    //#region remote controlled select provider dialog
+    // #region remote controlled select provider dialog
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
-    //#endregion
+    // #endregion
 
     if (!account)
         return (

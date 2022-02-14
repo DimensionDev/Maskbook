@@ -17,7 +17,7 @@ export function useMnemonicWordsPuzzle() {
         retry: wordsRetry,
     } = useAsyncRetry(() => WalletRPC.createMnemonicWords(), [])
 
-    //#region generate some mask indexes randomly which should be filled by the user
+    // #region generate some mask indexes randomly which should be filled by the user
     const [seed, setSeed] = useState(0)
     const indexes = useMemo(
         () =>
@@ -28,15 +28,15 @@ export function useMnemonicWordsPuzzle() {
             ).slice(0, PUZZLE_SIZE),
         [seed, words],
     )
-    //#endregion
+    // #endregion
 
-    //#region a serial of words and the user gonna complete those empty ones
+    // #region a serial of words and the user gonna complete those empty ones
     const puzzleWords = useMemo(() => {
         const words_ = words.slice(0)
         for (let i = 0; i < indexes.length; i += 1) words_[indexes[i]] = answerWords[i] ?? ''
         return words_
     }, [answerWords, indexes, words])
-    //#endregion
+    // #endregion
 
     const answerCallback = useCallback(
         (word: string, index: number) => {

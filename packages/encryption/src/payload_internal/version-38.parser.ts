@@ -1,3 +1,4 @@
+/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
 import {
     AESKey,
     AESAlgorithmEnum,
@@ -17,12 +18,17 @@ import {
     importAsymmetryKeyFromJsonWebKeyOrSPKI,
     JSONParseF,
 } from '../utils'
-import { Convert } from 'pvtsutils'
-import { isPoint, isPointCompressed, pointCompress } from 'tiny-secp256k1'
 import type { PayloadParserResult } from '.'
 import { get_v38PublicSharedCryptoKey } from './shared'
 import { encodeText } from '@dimensiondev/kit'
-import { andThenAsync, CheckedError, Identifier, OptionalResult, ProfileIdentifier } from '@masknet/shared-base'
+import {
+    andThenAsync,
+    CheckedError,
+    Identifier,
+    OptionalResult,
+    ProfileIdentifier,
+    decompressSecp256k1Point,
+} from '@masknet/shared-base'
 
 const decodeUint8Array = decodeUint8ArrayF(PayloadException.InvalidPayload, PayloadException.DecodeFailed)
 const decodeUint8ArrayCrypto = decodeUint8ArrayF(CryptoException.InvalidCryptoKey, CryptoException.InvalidCryptoKey)
@@ -31,17 +37,17 @@ const JSONParse = JSONParseF(CryptoException.InvalidCryptoKey, CryptoException.I
 const importEC = CheckedError.withErr(importAsymmetryKeyFromJsonWebKeyOrSPKI, CryptoException.InvalidCryptoKey)
 
 export async function parse38(payload: string): PayloadParserResult {
-    //#region Parse text
-    const header = '🎼4/4'
+    // #region Parse text
+    const header = '\u{1F3BC}4/4'
     if (!payload.startsWith(header)) return new CheckedError(PayloadException.InvalidPayload, 'Unknown version').toErr()
     let rest = payload.slice(header.length)
     // cut the tail
     rest = rest.slice(0, rest.lastIndexOf(':||'))
 
     const { AESKeyEncrypted, encryptedText, iv, signature, authorPublicKey, authorUserID, isPublic } = splitFields(rest)
-    //#endregion
+    // #endregion
 
-    //#region Normalization
+    // #region Normalization
     const raw_iv = decodeUint8ArrayCrypto(iv).andThen(assertIVLengthEq16)
     const raw_aes = decodeUint8ArrayCrypto(AESKeyEncrypted)
     const encryption: PayloadParseResult.EndToEndEncryption | PayloadParseResult.PublicEncryption = isPublic
@@ -84,7 +90,7 @@ export async function parse38(payload: string): PayloadParserResult {
         }
     }
     return Ok(normalized)
-    //#endregion
+    // #endregion
 }
 
 // ? Version 38:🎼4/4|AESKeyEncrypted|iv|encryptedText|signature|authorPublicKey?|publicShared?|authorIdentifier?:||
@@ -102,7 +108,7 @@ function splitFields(raw: string) {
         signature: (signature === '_' ? undefined : signature) as string | undefined,
         authorPublicKey: authorPublicKey as string | undefined,
         authorUserID,
-        isPublic: isPublic === '1' ? true : false,
+        isPublic: isPublic === '1',
     }
 }
 
@@ -129,10 +135,14 @@ async function decodePublicSharedAESKey(
 async function decodeECDHPublicKey(
     compressedPublic: string,
 ): Promise<OptionalResult<AsymmetryCryptoKey, CryptoException>> {
-    const key = decodeUint8ArrayCrypto(compressedPublic).andThen(decompressK256Point)
+    const key = decodeUint8ArrayCrypto(compressedPublic).andThen((val) =>
+        Result.wrap(() => decompressSecp256k1Point(val)).mapErr(
+            (e) => new CheckedError(CryptoException.InvalidCryptoKey, e),
+        ),
+    )
 
     if (key.err) return key
-    const [x, y] = key.val
+    const { x, y } = key.val
     const jwk: JsonWebKey = {
         crv: 'K-256',
         ext: true,
@@ -147,13 +157,4 @@ async function decodeECDHPublicKey(
         algr: PublicKeyAlgorithmEnum.secp256k1,
         key: imported.val,
     })
-}
-
-function decompressK256Point(point: Uint8Array) {
-    if (!isPoint(point)) return new CheckedError(CryptoException.InvalidCryptoKey, null).toErr()
-    const uncompressed: Uint8Array = isPointCompressed(point) ? pointCompress(point, false) : point
-    const len = (uncompressed.length - 1) / 2
-    const x = uncompressed.slice(1, len + 1)
-    const y = uncompressed.slice(len + 1)
-    return Ok([Convert.ToBase64Url(x), Convert.ToBase64Url(y)] as readonly [x: string, y: string])
 }

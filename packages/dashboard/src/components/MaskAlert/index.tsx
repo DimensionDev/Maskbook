@@ -9,8 +9,8 @@ const InfoAlert = styled(Alert)(({ theme }) => ({
         display: 'flex',
         alignItems: 'center',
         lineHeight: '16px',
-        color: `${MaskColorVar.secondaryInfoText}`,
-        fontSize: `${theme.typography.caption.fontSize}`,
+        color: MaskColorVar.secondaryInfoText,
+        fontSize: theme.typography.caption.fontSize,
     },
     [`&  > .${alertClasses.icon}`]: {
         alignItems: 'center',
@@ -20,45 +20,45 @@ const InfoAlert = styled(Alert)(({ theme }) => ({
     },
     // standard
     [`&.${alertClasses.standardInfo}`]: {
-        backgroundColor: `${getMaskColor(theme).infoBackground}`,
+        backgroundColor: getMaskColor(theme).infoBackground,
     },
     [`&.${alertClasses.standardInfo} .${alertClasses.icon}`]: {
-        color: `${getMaskColor(theme).secondaryInfoText}`,
+        color: getMaskColor(theme).secondaryInfoText,
     },
     [`&.${alertClasses.standardInfo} .${alertClasses.action}`]: {
-        color: `${getMaskColor(theme).secondaryInfoText}`,
+        color: getMaskColor(theme).secondaryInfoText,
     },
     // error
     [`&.${alertClasses.standardError}`]: {
-        backgroundColor: `${MaskColorVar.redMain.alpha(0.1)}`,
+        backgroundColor: MaskColorVar.redMain.alpha(0.1),
     },
     [`&.${alertClasses.standardError} .${alertClasses.icon}`]: {
-        color: `${getMaskColor(theme).redMain}`,
+        color: getMaskColor(theme).redMain,
         'path:first-child': {
-            fill: `${MaskColorVar.redMain.alpha(0.5)}`,
+            fill: MaskColorVar.redMain.alpha(0.5),
         },
         path: {
-            fill: `${getMaskColor(theme).redMain}`,
+            fill: getMaskColor(theme).redMain,
         },
     },
     [`&.${alertClasses.standardError} .${alertClasses.action}`]: {
-        color: `${getMaskColor(theme).redMain}`,
+        color: getMaskColor(theme).redMain,
     },
     [`&.${alertClasses.standardError} .${alertClasses.message}`]: {
-        color: `${getMaskColor(theme).redMain}`,
+        color: getMaskColor(theme).redMain,
     },
     // success
     [`&.${alertClasses.standardSuccess}`]: {
-        backgroundColor: `${MaskColorVar.greenMain.alpha(0.1)}`,
+        backgroundColor: MaskColorVar.greenMain.alpha(0.1),
     },
     [`&.${alertClasses.standardSuccess} .${alertClasses.icon}`]: {
-        color: `${getMaskColor(theme).greenMain}`,
+        color: getMaskColor(theme).greenMain,
     },
     [`&.${alertClasses.standardSuccess} .${alertClasses.action}`]: {
-        color: `${getMaskColor(theme).greenMain}`,
+        color: getMaskColor(theme).greenMain,
     },
     [`&.${alertClasses.standardSuccess} .${alertClasses.message}`]: {
-        color: `${getMaskColor(theme).greenMain}`,
+        color: getMaskColor(theme).greenMain,
     },
 }))
 

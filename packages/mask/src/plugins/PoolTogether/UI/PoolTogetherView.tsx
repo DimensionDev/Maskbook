@@ -1,12 +1,9 @@
 import { RefreshIcon } from '@masknet/icons'
 import { DarkColor } from '@masknet/theme/constants'
 import { usePoolTogetherConstants } from '@masknet/web3-shared-evm'
-import { Card, CardActions, CardContent, CircularProgress, Link, Paper, Tab, Tabs, Typography } from '@mui/material'
+import { Card, CardContent, CircularProgress, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import React, { useState } from 'react'
-import { useEffect } from 'react'
-import { MaskTextIcon } from '../../../resources/MaskIcon'
-import { PoolTogetherIcon } from '../../../resources/PoolTogetherIcon'
+import React, { useState, useEffect } from 'react'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { usePool, usePools } from '../hooks/usePools'
 import type { Pool } from '../types'
@@ -61,42 +58,6 @@ const useStyles = makeStyles()((theme) => ({
         minHeight: 'unset',
         minWidth: 'unset',
     },
-    footer: {
-        marginTop: -1, // merge duplicate borders
-        zIndex: 1,
-        position: 'relative',
-        borderTop: `solid 1px ${theme.palette.divider}`,
-        justifyContent: 'space-between',
-    },
-    footnote: {
-        fontSize: 10,
-        marginRight: theme.spacing(1),
-    },
-    footLink: {
-        cursor: 'pointer',
-        marginRight: theme.spacing(0.5),
-        '&:last-child': {
-            marginRight: 0,
-        },
-    },
-    footMenu: {
-        color: theme.palette.text.secondary,
-        fontSize: 10,
-        display: 'flex',
-        alignItems: 'center',
-    },
-    footName: {
-        marginLeft: theme.spacing(0.5),
-    },
-    mask: {
-        width: 40,
-        height: 10,
-    },
-    pooltogether: {
-        height: 10,
-        width: 10,
-        marginLeft: theme.spacing(0.5),
-    },
     progress: {
         bottom: theme.spacing(1),
         right: theme.spacing(1),
@@ -111,12 +72,12 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
     const { classes } = useStyles()
     const [pools, setPools] = useState<Pool[]>([])
 
-    //#region pools
+    // #region pools
     const { value: _pools = [], error: error, loading: loading, retry: retry } = usePools()
     _pools.sort((x, y) => Number(y.prize.weeklyTotalValueUsd) - Number(x.prize.weeklyTotalValueUsd))
-    //#endregion
+    // #endregion
 
-    //#region mask pool
+    // #region mask pool
     const { MASK_POOL_ADDRESS, MASK_POOL_SUBGRAPH } = usePoolTogetherConstants()
     const {
         value: maskPool,
@@ -124,15 +85,15 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
         loading: loadingMask,
         retry: retryMask,
     } = usePool(MASK_POOL_ADDRESS, MASK_POOL_SUBGRAPH, true)
-    //#endregion
+    // #endregion
 
-    //#region tabs
+    // #region tabs
     const [tabIndex, setTabIndex] = useState(0)
     const tabs = [
         <Tab className={classes.tab} key="pools" label={t('plugin_pooltogether_tab_pools')} />,
         <Tab className={classes.tab} key="account" label={t('plugin_pooltogether_tab_account')} />,
     ].filter(Boolean)
-    //#endregion
+    // #endregion
 
     useEffect(() => {
         if (maskPool) {
@@ -176,31 +137,6 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
                     {tabIndex === 1 ? <Account pools={pools} /> : null}
                 </Paper>
             </CardContent>
-            <CardActions className={classes.footer}>
-                <Typography color={DarkColor.textSecondary} className={classes.footnote} variant="subtitle2">
-                    <span>{t('plugin_powered_by')} </span>
-                    <Link
-                        className={classes.footLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        title="Mask"
-                        href="https://mask.io">
-                        <MaskTextIcon classes={{ root: classes.mask }} viewBox="0 0 80 20" />
-                    </Link>
-                </Typography>
-                <Typography className={classes.footnote} color={DarkColor.textSecondary} variant="subtitle2">
-                    <span>{t('supported_by')}</span>
-                    <Link
-                        className={classes.footLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        title="PoolTogether"
-                        href="https://pooltogether.com/">
-                        <PoolTogetherIcon classes={{ root: classes.pooltogether }} />
-                        oolTogether
-                    </Link>
-                </Typography>
-            </CardActions>
         </Card>
     )
 }

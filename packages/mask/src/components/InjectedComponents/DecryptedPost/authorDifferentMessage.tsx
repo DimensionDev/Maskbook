@@ -1,4 +1,4 @@
-import { Identifier, ProfileIdentifier } from '../../../database/type'
+import { Identifier, ProfileIdentifier } from '@masknet/shared-base'
 import { i18n } from '../../../../shared-ui/locales_legacy'
 
 type T = ProfileIdentifier | undefined

@@ -1,8 +1,6 @@
-import { ProfileIdentifier } from '../../../database/type'
 import { queryPublicKey } from '../../../database'
-import { IdentifierMap } from '../../../database/IdentifierMap'
-import type { RecipientDetail, RecipientReason } from '../../../database/post'
-import type { EC_Public_JsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
+import type { RecipientDetail, RecipientReason } from '../../../../background/database/post'
+import { ProfileIdentifier, IdentifierMap, type EC_Public_JsonWebKey } from '@masknet/shared-base'
 
 export async function prepareRecipientDetail(to: ProfileIdentifier[]) {
     const recipients = new IdentifierMap<ProfileIdentifier, RecipientDetail>(new Map(), ProfileIdentifier)

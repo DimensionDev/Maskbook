@@ -1,8 +1,7 @@
-import { makeTypedMessageText, TypedMessage } from '../../../protocols/typed-message'
+import { makeTypedMessageText, TypedMessage, delay } from '@masknet/shared-base'
 import { untilDocumentReady } from '../../../utils/dom'
 import { i18n } from '../../../../shared-ui/locales_legacy'
 import { MaskMessages, CompositionRequest } from '../../../utils/messages'
-import { delay } from '../../../utils/utils'
 import { composeButtonSelector, composeDialogIndicatorSelector, composeTextareaSelector } from '../utils/selector'
 
 export async function openComposeBoxMinds(content: string | TypedMessage, options?: CompositionRequest['options']) {

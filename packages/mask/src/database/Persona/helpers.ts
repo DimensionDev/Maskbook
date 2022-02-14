@@ -1,4 +1,3 @@
-import { ProfileIdentifier, PersonaIdentifier, ECKeyIdentifierFromJsonWebKey } from '../type'
 import type { Profile, Persona } from './types'
 import {
     ProfileRecord,
@@ -18,20 +17,23 @@ import {
     updatePersonaDB,
     createOrUpdatePersonaDB,
     queryProfilesPagedDB,
-} from './Persona.db'
-import { IdentifierMap } from '../IdentifierMap'
+} from '../../../background/database/persona/db'
 import { queryAvatarDataURL } from '../../../background/database/avatar-cache/avatar'
 import {
     generate_ECDH_256k1_KeyPair_ByMnemonicWord,
     recover_ECDH_256k1_KeyPair_ByMnemonicWord,
 } from '../../utils/mnemonic-code'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
-import type {
-    EC_Public_JsonWebKey,
-    AESJsonWebKey,
-    EC_Private_JsonWebKey,
-} from '../../modules/CryptoAlgorithm/interfaces/utils'
 import { validateMnemonic } from 'bip39'
+import {
+    ProfileIdentifier,
+    type PersonaIdentifier,
+    IdentifierMap,
+    type EC_Public_JsonWebKey,
+    type EC_Private_JsonWebKey,
+    type AESJsonWebKey,
+    ECKeyIdentifierFromJsonWebKey,
+} from '@masknet/shared-base'
 
 export async function profileRecordToProfile(record: ProfileRecord): Promise<Profile> {
     const rec = { ...record }
@@ -100,8 +102,8 @@ export async function queryPersona(identifier: PersonaIdentifier): Promise<Perso
 /**
  * Select a set of Profiles
  */
-export async function queryProfilesWithQuery(query?: Parameters<typeof queryProfilesDB>[0]): Promise<Profile[]> {
-    const _ = await queryProfilesDB(query || ((_) => true))
+export async function queryProfilesWithQuery(query: Parameters<typeof queryProfilesDB>[0]): Promise<Profile[]> {
+    const _ = await queryProfilesDB(query)
     return Promise.all(_.map(profileRecordToProfile))
 }
 
@@ -109,7 +111,7 @@ export async function queryProfilesWithQuery(query?: Parameters<typeof queryProf
  * Select a set of Personas
  */
 export async function queryPersonasWithQuery(query?: Parameters<typeof queryPersonasDB>[0]): Promise<Persona[]> {
-    const _ = await queryPersonasDB(query || ((_) => true))
+    const _ = await queryPersonasDB(query)
     return _.map(personaRecordToPersona)
 }
 
@@ -146,7 +148,7 @@ export async function logoutPersona(identifier: PersonaIdentifier) {
 }
 
 export async function renamePersona(identifier: PersonaIdentifier, nickname: string) {
-    const personas = await queryPersonasWithQuery(({ nickname: name }) => name === nickname)
+    const personas = await queryPersonasWithQuery({ nameContains: nickname })
     if (personas.length > 0) {
         throw new Error('Nickname already exists')
     }
@@ -208,7 +210,7 @@ export async function createPersonaByMnemonic(
 }
 
 export async function createPersonaByMnemonicV2(mnemonicWord: string, nickname: string | undefined, password: string) {
-    const personas = await queryPersonasWithQuery(({ nickname: name }) => name === nickname)
+    const personas = await queryPersonasWithQuery({ nameContains: nickname })
     if (personas.length > 0) throw new Error('Nickname already exists')
 
     const verify = validateMnemonic(mnemonicWord)

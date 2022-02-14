@@ -1,4 +1,4 @@
-import { Box, Typography, List, ListItem } from '@mui/material'
+import { Box, Typography, List, ListItem, CircularProgress } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useState, useCallback, useEffect, useMemo } from 'react'
 import { useI18N } from '../../../utils'
@@ -15,11 +15,15 @@ import {
     useChainId,
     useNftRedPacketConstants,
 } from '@masknet/web3-shared-evm'
+import CheckIcon from '@mui/icons-material/Check'
 import CloseIcon from '@mui/icons-material/Close'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { RedpacketMessagePanel } from './RedpacketMessagePanel'
-import { SelectNftTokenDialog } from './SelectNftTokenDialog'
+import { SelectNftTokenDialog, OrderedERC721Token } from './SelectNftTokenDialog'
 import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { NFTSelectOption } from '../types'
+import { NFT_RED_PACKET_MAX_SHARES } from '../constants'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -34,7 +38,7 @@ const useStyles = makeStyles()((theme) => {
         },
         nftNameWrapper: {
             width: '100%',
-            background: theme.palette.mode === 'light' ? 'none' : '#2F3336',
+            background: theme.palette.background.paper,
             borderBottomRightRadius: 8,
             borderBottomLeftRadius: 8,
             paddingTop: 2,
@@ -49,11 +53,6 @@ const useStyles = makeStyles()((theme) => {
         },
         inputShrinkLabel: {
             transform: 'translate(17px, -3px) scale(0.75) !important',
-        },
-        imgWrapper: {
-            height: 160,
-            width: '100%',
-            overflow: 'hidden',
         },
         input: {
             flex: 1,
@@ -73,7 +72,7 @@ const useStyles = makeStyles()((theme) => {
             width: '100%',
             height: 200,
             overflowY: 'auto',
-            background: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
+            background: theme.palette.background.default,
             borderRadius: 12,
             padding: theme.spacing(1.5, 1.5, 1, 1),
             boxSizing: 'border-box',
@@ -82,16 +81,16 @@ const useStyles = makeStyles()((theme) => {
             position: 'relative',
             display: 'flex',
             flexDirection: 'column',
-            borderRadius: 6,
+            borderRadius: 8,
             padding: 0,
             marginBottom: theme.spacing(2.5),
-            background: theme.palette.mode === 'light' ? '#fff' : '#2F3336',
+            background: theme.palette.background.paper,
             width: 120,
             height: 180,
             overflow: 'hidden',
         },
         tokenSelectorParent: {
-            background: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
+            background: theme.palette.background.default,
             borderRadius: 12,
             paddingBottom: 5,
             marginTop: theme.spacing(1.5),
@@ -100,6 +99,7 @@ const useStyles = makeStyles()((theme) => {
         addWrapper: {
             cursor: 'pointer',
             alignItems: 'center',
+            background: `${theme.palette.background.default} !important`,
             justifyContent: 'center',
         },
         addIcon: {
@@ -132,6 +132,61 @@ const useStyles = makeStyles()((theme) => {
             cursor: 'pointer',
             color: 'rgba(255, 95, 95, 1)',
         },
+        loadingFailImage: {
+            minHeight: '0px !important',
+            maxWidth: 'none',
+            transform: 'translateY(10px)',
+            width: 64,
+            height: 64,
+        },
+        selectWrapper: {
+            display: 'flex',
+            alignItems: 'center',
+            margin: '16px 0 8px 0',
+        },
+        option: {
+            display: 'flex',
+            alignItems: 'center',
+            cursor: 'pointer',
+        },
+        optionLeft: {
+            marginRight: '16px',
+        },
+        checkIcon: {
+            width: 15,
+            height: 15,
+            color: '#fff',
+        },
+        checkIconWrapper: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            cursor: 'pointer',
+            width: 17,
+            height: 17,
+            borderRadius: 999,
+            marginRight: 5,
+            border: '1px solid #6E748E',
+            backgroundColor: 'white',
+        },
+        checked: {
+            borderColor: '#1D9BF0 !important',
+            background: '#1D9BF0 !important',
+        },
+        approveAllTip: {
+            color: '#FF5F5F',
+            margin: '0px 4px 24px 4px',
+        },
+        disabledSelector: {
+            opacity: 0.5,
+            pointerEvents: 'none',
+        },
+        loadingOwnerList: {
+            margin: '24px auto 16px',
+        },
+        iframe: {
+            minHeight: 147,
+        },
     }
 })
 interface RedPacketERC721FormProps {
@@ -143,36 +198,42 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const { classes } = useStyles()
     const [open, setOpen] = useState(false)
     const [balance, setBalance] = useState(0)
+    const [selectOption, setSelectOption] = useState<NFTSelectOption | undefined>(undefined)
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
     const account = useAccount()
     const chainId = useChainId()
     const [contract, setContract] = useState<ERC721ContractDetailed>()
-    const [existTokenDetailedList, setExistTokenDetailedList] = useState<ERC721TokenDetailed[]>([])
+    const [existTokenDetailedList, setExistTokenDetailedList] = useState<OrderedERC721Token[]>([])
     const [message, setMessage] = useState('Best Wishes!')
-    const [offset, setOffset] = useState(0)
     const {
-        asyncRetry: { value = { tokenDetailedOwnerList: [], loadMore: true }, loading: loadingOwnerList },
+        asyncRetry: { loading: loadingOwnerList },
+        tokenDetailedOwnerList: _tokenDetailedOwnerList = [],
         clearTokenDetailedOwnerList,
-    } = useERC721TokenDetailedOwnerList(contract, account, offset)
-
-    const { tokenDetailedOwnerList, loadMore } = value
-
-    const addOffset = useCallback(() => (loadMore ? setOffset(offset + 1) : void 0), [offset, loadMore])
-
+    } = useERC721TokenDetailedOwnerList(contract, account)
+    const tokenDetailedOwnerList = _tokenDetailedOwnerList.map((v, index) => ({ ...v, index } as OrderedERC721Token))
     const removeToken = useCallback((token: ERC721TokenDetailed) => {
         setExistTokenDetailedList((list) => list.filter((t) => t.tokenId !== token.tokenId))
     }, [])
 
+    const maxSelectShares = Math.min(NFT_RED_PACKET_MAX_SHARES, tokenDetailedOwnerList.length)
+
     const clearToken = useCallback(() => {
-        setOffset(0)
         setExistTokenDetailedList([])
         clearTokenDetailedOwnerList()
         setOpenConfirmDialog(false)
-    }, [clearTokenDetailedOwnerList, setOffset])
+    }, [clearTokenDetailedOwnerList])
 
     const clearContract = useCallback(() => {
         setContract(undefined)
     }, [])
+
+    useEffect(() => {
+        if (loadingOwnerList) {
+            setSelectOption(undefined)
+        } else if (!selectOption) {
+            setSelectOption(NFTSelectOption.Partial)
+        }
+    }, [tokenDetailedOwnerList, selectOption, loadingOwnerList])
 
     useEffect(() => {
         clearToken()
@@ -201,24 +262,62 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     onBalanceChange={setBalance}
                 />
                 {contract && balance ? (
+                    loadingOwnerList ? (
+                        <CircularProgress size={24} className={classes.loadingOwnerList} />
+                    ) : (
+                        <Box className={classes.selectWrapper}>
+                            <div
+                                className={classNames(
+                                    classes.optionLeft,
+                                    classes.option,
+                                    tokenDetailedOwnerList.length === 0 ? classes.disabledSelector : null,
+                                )}
+                                onClick={() => {
+                                    setSelectOption(NFTSelectOption.All)
+                                    setExistTokenDetailedList(tokenDetailedOwnerList.slice(0, maxSelectShares))
+                                }}>
+                                <div
+                                    className={classNames(
+                                        classes.checkIconWrapper,
+                                        selectOption === NFTSelectOption.All ? classes.checked : '',
+                                    )}>
+                                    <CheckIcon className={classes.checkIcon} />
+                                </div>
+                                <Typography color="textPrimary">
+                                    {tokenDetailedOwnerList.length === 0
+                                        ? 'All'
+                                        : t('plugin_red_packet_nft_select_all_option', {
+                                              total: Math.min(NFT_RED_PACKET_MAX_SHARES, tokenDetailedOwnerList.length),
+                                          })}
+                                </Typography>
+                            </div>
+                            <div
+                                className={classes.option}
+                                onClick={() => {
+                                    setSelectOption(NFTSelectOption.Partial)
+                                    setExistTokenDetailedList([])
+                                }}>
+                                <div
+                                    className={classNames(
+                                        classes.checkIconWrapper,
+                                        selectOption === NFTSelectOption.Partial ? classes.checked : '',
+                                    )}>
+                                    <CheckIcon className={classes.checkIcon} />
+                                </div>
+                                <Typography color="textPrimary">
+                                    {t('plugin_red_packet_nft_select_partially_option')}
+                                </Typography>
+                            </div>
+                        </Box>
+                    )
+                ) : null}
+                {contract && balance && selectOption === NFTSelectOption.Partial && !loadingOwnerList ? (
                     <div className={classes.tokenSelectorParent}>
                         <List className={classes.tokenSelector}>
                             {existTokenDetailedList.map((value, i) => (
-                                <ListItem key={i.toString()} className={classNames(classes.tokenSelectorWrapper)}>
-                                    <div className={classes.imgWrapper}>
-                                        <img className={classes.nftImg} src={value.info.image} />
-                                    </div>
-                                    <div className={classes.nftNameWrapper}>
-                                        <Typography className={classes.nftName} color="textSecondary">
-                                            {value.info.name}
-                                        </Typography>
-                                    </div>
-                                    <div className={classes.closeIconWrapperBack} onClick={() => removeToken(value)}>
-                                        <div className={classes.closeIconWrapper}>
-                                            <CloseIcon className={classes.closeIcon} />
-                                        </div>
-                                    </div>
-                                </ListItem>
+                                <div key={i}>
+                                    <NFTCard token={value} removeToken={removeToken} renderOrder={i} />
+                                </div>
                             ))}
                             <ListItem
                                 onClick={() => setOpen(true)}
@@ -231,6 +330,11 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                 <div className={classes.line}>
                     <RedpacketMessagePanel onChange={(val: string) => setMessage(val)} message={message} />
                 </div>
+                {contract && balance && !loadingOwnerList ? (
+                    <Typography className={classes.approveAllTip}>
+                        {t('plugin_red_packet_nft_approve_all_tip')}
+                    </Typography>
+                ) : null}
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC721TokenApprovedBoundary
                         validationMessage={validationMessage}
@@ -257,7 +361,6 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     setExistTokenDetailedList={setExistTokenDetailedList}
                     tokenDetailedOwnerList={tokenDetailedOwnerList}
                     loadingOwnerList={loadingOwnerList}
-                    addOffset={addOffset}
                 />
             ) : null}
             {openConfirmDialog && contract ? (
@@ -271,5 +374,42 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                 />
             ) : null}
         </>
+    )
+}
+
+interface NFTCardProps {
+    token: OrderedERC721Token
+    removeToken: (token: ERC721TokenDetailed) => void
+    renderOrder: number
+}
+
+function NFTCard(props: NFTCardProps) {
+    const { token, removeToken, renderOrder } = props
+    const { classes } = useStyles()
+    const [name, setName] = useState('#' + token.tokenId)
+    return (
+        <ListItem className={classNames(classes.tokenSelectorWrapper)}>
+            <NFTCardStyledAssetPlayer
+                contractAddress={token.contractDetailed.address}
+                chainId={token.contractDetailed.chainId}
+                tokenId={token.tokenId}
+                renderOrder={renderOrder}
+                setERC721TokenName={setName}
+                classes={{
+                    loadingFailImage: classes.loadingFailImage,
+                    iframe: classes.iframe,
+                }}
+            />
+            <div className={classes.nftNameWrapper}>
+                <Typography className={classes.nftName} color="textSecondary">
+                    {name}
+                </Typography>
+            </div>
+            <div className={classes.closeIconWrapperBack} onClick={() => removeToken(token)}>
+                <div className={classes.closeIconWrapper}>
+                    <CloseIcon className={classes.closeIcon} />
+                </div>
+            </div>
+        </ListItem>
     )
 }

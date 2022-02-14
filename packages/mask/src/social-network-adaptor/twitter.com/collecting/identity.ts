@@ -1,11 +1,11 @@
 import { isNil } from 'lodash-unified'
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { selfInfoSelectors, searchAvatarSelector, searchAvatarMetaSelector } from '../utils/selector'
-import { ProfileIdentifier } from '../../../database/type'
+import { ProfileIdentifier, delay } from '@masknet/shared-base'
 import { creator, SocialNetworkUI as Next } from '../../../social-network'
+import Services from '../../../extension/service'
 import { twitterBase } from '../base'
-import { getAvatar, getBioDescription, getNickname, getTwitterId } from '../utils/user'
-import { delay } from '@masknet/shared-base'
+import { getAvatar, getBioDescription, getNickname, getTwitterId, getPersonalHomepage } from '../utils/user'
 
 function resolveLastRecognizedIdentityInner(
     ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
@@ -43,6 +43,7 @@ function resolveCurrentVisitingIdentityInner(
     const assign = async () => {
         await delay(500)
         const bio = getBioDescription()
+        const homepage = getPersonalHomepage()
         const nickname = getNickname()
         const handle = getTwitterId()
         const avatar = getAvatar()
@@ -53,6 +54,13 @@ function resolveCurrentVisitingIdentityInner(
             avatar,
             bio,
         }
+        Services.Helper.resolveTCOLink(homepage).then((link) => {
+            if (cancel?.aborted || !link) return
+            ref.value = {
+                ...ref.value,
+                homepage: link,
+            }
+        })
     }
     const createWatcher = (selector: LiveSelector<HTMLElement, boolean>) => {
         const watcher = new MutationObserverWatcher(selector)
@@ -71,6 +79,8 @@ function resolveCurrentVisitingIdentityInner(
             watcher.stopWatch()
         })
     }
+
+    assign()
 
     createWatcher(avatarSelector)
     createWatcher(avatarMetaSelector)

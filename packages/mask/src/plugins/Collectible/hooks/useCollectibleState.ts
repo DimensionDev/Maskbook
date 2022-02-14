@@ -1,48 +1,60 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { createContainer } from 'unstated-next'
 import { OrderSide } from 'opensea-js/lib/types'
-import { useValueRef } from '@masknet/shared'
-import { currentCollectibleProviderSettings } from '../settings'
 import { CollectibleTab, CollectibleToken } from '../types'
-import { useAsset } from './useAsset'
-import { useEvents } from './useEvents'
+import { useAsset, useHistory, useOrders } from '../../EVM/hooks'
 import { useAssetOrder } from './useAssetOrder'
+import { useValueRef } from '@masknet/shared'
+import { currentNonFungibleAssetProviderSettings } from '../settings'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+// Make TypeScript happy
+type T = AsyncStateRetry<CollectibleToken | null>
 
 function useCollectibleState(token?: CollectibleToken) {
     const [tabIndex, setTabIndex] = useState(CollectibleTab.ARTICLE)
 
-    const provider = useValueRef(currentCollectibleProviderSettings)
-    const asset = useAsset(provider, token)
+    const provider = useValueRef(currentNonFungibleAssetProviderSettings)
 
-    //#region asset order
+    const asset = useAsset(token?.contractAddress ?? '', token?.tokenId ?? '', provider)
+
+    // #region asset order from sdk
     const assetOrder = useAssetOrder(provider, token)
-    //#endregion
+    // #endregion
 
-    //#region offers
+    // #region offers
     const [offerPage, setOfferPage] = useState(0)
-    const offers = useMemo(() => {
-        if (!asset.value?.orders) return []
-        const _orders = asset.value?.orders?.filter((x) => x.side === OrderSide.Buy)
+    const offers = useOrders(
+        provider,
+        offerPage,
+        50,
+        tabIndex === CollectibleTab.OFFER ? token?.contractAddress : undefined,
+        tabIndex === CollectibleTab.OFFER ? token?.tokenId : undefined,
+        OrderSide.Buy,
+    )
+    // #endregion
 
-        return _orders.slice(offerPage * 10, (offerPage + 1) * 10)
-    }, [asset.value?.orders, offerPage])
-    //#endregion
-
-    //#region orders
+    // #region orders
     const [orderPage, setOrderPage] = useState(0)
-    const orders = useMemo(() => {
-        if (!asset.value?.orders) return []
-        const _orders = asset.value?.orders?.filter((x) => x.side === OrderSide.Sell)
+    const orders = useOrders(
+        provider,
+        orderPage,
+        50,
+        tabIndex === CollectibleTab.LISTING ? token?.contractAddress : undefined,
+        tabIndex === CollectibleTab.LISTING ? token?.tokenId : undefined,
+        OrderSide.Sell,
+    )
+    // #endregion
 
-        return _orders.slice(orderPage * 10, (orderPage + 1) * 10)
-    }, [asset.value?.orders, orderPage])
-    //#endregion
-
-    //#region events
+    // #region events
     const [eventPage, setEventPage] = useState(0)
-    const events = useEvents(provider, tabIndex === CollectibleTab.HISTORY ? token : undefined, eventPage, 10)
-
-    //#endregion
+    const events = useHistory(
+        provider,
+        eventPage,
+        50,
+        tabIndex === CollectibleTab.HISTORY ? token?.contractAddress : undefined,
+        tabIndex === CollectibleTab.HISTORY ? token?.tokenId : undefined,
+    )
+    // #endregion
 
     return {
         token,

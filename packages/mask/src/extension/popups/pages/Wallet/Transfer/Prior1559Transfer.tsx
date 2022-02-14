@@ -1,4 +1,4 @@
-import { memo, SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react'
+import { memo, ReactElement, SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react'
 import { useI18N } from '../../../../../utils'
 import { z as zod } from 'zod'
 import BigNumber from 'bignumber.js'
@@ -10,15 +10,14 @@ import {
     formatGweiToWei,
     formatWeiToGwei,
     formatEthereumAddress,
-    isGreaterThan,
-    isZero,
-    pow10,
     useChainId,
     useGasLimit,
     useTokenTransferCallback,
     useWallet,
     useFungibleTokenBalance,
+    isSameAddress,
 } from '@masknet/web3-shared-evm'
+import { isZero, isGreaterThan, isGreaterThanOrEqualTo, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
@@ -34,6 +33,8 @@ import { useHistory } from 'react-router-dom'
 import { LoadingButton } from '@mui/lab'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { toHex } from 'web3-utils'
+import Services from '../../../../service'
+import { TransferAddressError } from '../type'
 
 const useStyles = makeStyles()({
     container: {
@@ -130,6 +131,12 @@ const useStyles = makeStyles()({
         lineHeight: '22px',
         fontWeight: 500,
     },
+    normalMessage: {
+        color: '#111432',
+        fontSize: 16,
+        lineHeight: '22px',
+        fontWeight: 500,
+    },
 })
 
 export interface Prior1559TransferProps {
@@ -146,32 +153,29 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     const [minGasLimitContext, setMinGasLimitContext] = useState(0)
     const history = useHistory()
 
+    const [addressTip, setAddressTip] = useState<{ type: TransferAddressError; message: string } | null>()
+
     const schema = useMemo(() => {
         return zod.object({
             address: zod
                 .string()
                 .min(1, t('wallet_transfer_error_address_absence'))
-                .refine((address) => EthereumAddress.isValid(address), t('wallet_transfer_error_invalid_address'))
-                .refine((address) => address !== wallet?.address, t('wallet_transfer_error_address_absence')),
+                .refine(EthereumAddress.isValid, t('wallet_transfer_error_invalid_address')),
             amount: zod
                 .string()
                 .refine((amount) => {
-                    const transferAmount = new BigNumber(amount || '0').multipliedBy(
-                        pow10(selectedAsset?.token.decimals ?? 0),
-                    )
+                    const transferAmount = rightShift(amount || '0', selectedAsset?.token.decimals)
                     return !!transferAmount || !isZero(transferAmount)
                 }, t('wallet_transfer_error_amount_absence'))
                 .refine((amount) => {
-                    const transferAmount = new BigNumber(amount || '0').multipliedBy(
-                        pow10(selectedAsset?.token.decimals ?? 0),
-                    )
+                    const transferAmount = rightShift(amount || '0', selectedAsset?.token.decimals)
                     return !isGreaterThan(transferAmount, selectedAsset?.balance ?? 0)
                 }, t('wallet_transfer_error_insufficient_balance', { token: selectedAsset?.token.symbol })),
             gasLimit: zod
                 .string()
                 .min(1, t('wallet_transfer_error_gas_limit_absence'))
                 .refine(
-                    (gasLimit) => new BigNumber(gasLimit).isGreaterThanOrEqualTo(minGasLimitContext),
+                    (gasLimit) => isGreaterThanOrEqualTo(gasLimit, minGasLimitContext),
                     t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimitContext }),
                 ),
             gasPrice: zod.string().min(1, t('wallet_transfer_error_gas_price_absence')),
@@ -196,7 +200,38 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
 
     const [address, amount, gasPrice] = methods.watch(['address', 'amount', 'gasPrice'])
 
-    //#region Set default gas price
+    useAsync(async () => {
+        setAddressTip(null)
+        if (!address || !EthereumAddress.isValid(address)) return
+
+        methods.clearErrors('address')
+
+        if (address.includes('.eth')) {
+            setAddressTip({
+                type: TransferAddressError.NETWORK_NOT_SUPPORT,
+                message: t('wallet_transfer_error_no_support_ens'),
+            })
+            return
+        }
+
+        if (isSameAddress(address, wallet?.address)) {
+            setAddressTip({
+                type: TransferAddressError.SAME_ACCOUNT,
+                message: t('wallet_transfer_error_same_address_with_current_account'),
+            })
+            return
+        }
+        const result = await Services.Ethereum.getCode(address)
+
+        if (result !== '0x') {
+            setAddressTip({
+                type: TransferAddressError.CONTRACT_ADDRESS,
+                message: t('wallet_transfer_error_is_contract_address'),
+            })
+        }
+    }, [address, EthereumAddress.isValid, methods.clearErrors])
+
+    // #region Set default gas price
     useAsync(async () => {
         const gasOptions = await WalletRPC.getGasPriceDictFromDeBank(chainId)
         const gasPrice = methods.getValues('gasPrice')
@@ -205,16 +240,16 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
             methods.setValue('gasPrice', formatWeiToGwei(gasPrice).toString())
         }
     }, [methods.setValue, methods.getValues, chainId])
-    //#endregion
+    // #endregion
 
-    //#region Get min gas limit with amount and recipient address
+    // #region Get min gas limit with amount and recipient address
     const { value: minGasLimit, error } = useGasLimit(
         selectedAsset?.token.type,
         selectedAsset?.token.address,
-        new BigNumber(!!amount ? amount : 0).multipliedBy(pow10(selectedAsset?.token.decimals ?? 0)).toFixed(),
+        rightShift(amount ? amount : 0, selectedAsset?.token.decimals).toFixed(),
         EthereumAddress.isValid(address) ? address : '',
     )
-    //#endregion
+    // #endregion
 
     const { value: tokenBalance = '0' } = useFungibleTokenBalance(
         selectedAsset?.token?.type ?? EthereumTokenType.Native,
@@ -225,20 +260,19 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
         let amount_ = new BigNumber(tokenBalance || '0')
         amount_ =
             selectedAsset?.token.type === EthereumTokenType.Native
-                ? amount_.minus(new BigNumber(30000).multipliedBy(gasPrice))
+                ? amount_.minus(multipliedBy(30000, gasPrice))
                 : amount_
 
         return amount_.toFixed()
     }, [selectedAsset?.balance, gasPrice, selectedAsset?.token.type, tokenBalance])
 
-    //#region set default gasLimit
+    // #region set default gasLimit
     useUpdateEffect(() => {
-        if (minGasLimit) {
-            methods.setValue('gasLimit', `${minGasLimit}`)
-            setMinGasLimitContext(minGasLimit)
-        }
+        if (!minGasLimit) return
+        methods.setValue('gasLimit', minGasLimit.toString())
+        setMinGasLimitContext(minGasLimit)
     }, [minGasLimit, methods.setValue])
-    //#endregion
+    // #endregion
 
     const [_, transferCallback] = useTokenTransferCallback(
         selectedAsset?.token.type ?? EthereumTokenType.Native,
@@ -251,9 +285,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
 
     const [{ loading }, onSubmit] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
-            const transferAmount = new BigNumber(data.amount || '0')
-                .multipliedBy(pow10(selectedAsset?.token.decimals || 0))
-                .toFixed()
+            const transferAmount = rightShift(data.amount || '0', selectedAsset?.token.decimals).toFixed()
             await transferCallback(transferAmount, data.address, {
                 gasPrice: toHex(formatGweiToWei(data.gasPrice).toString()),
                 gas: new BigNumber(data.gasLimit).toNumber(),
@@ -281,6 +313,22 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
             ))}
         </Collapse>,
     )
+    const popoverContent = useMemo(() => {
+        if (!addressTip) return
+
+        return (
+            <Box py={2.5} px={1.5}>
+                <Typography
+                    className={
+                        addressTip.type === TransferAddressError.SAME_ACCOUNT
+                            ? classes.normalMessage
+                            : classes.errorMessage
+                    }>
+                    {addressTip.message}
+                </Typography>
+            </Box>
+        )
+    }, [address, addressTip])
 
     return (
         <FormProvider {...methods}>
@@ -294,7 +342,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                 handleConfirm={methods.handleSubmit(onSubmit)}
                 confirmLoading={loading}
                 maxAmount={maxAmount}
-                hasEnsSuffix={address.includes('.eth')}
+                popoverContent={popoverContent}
             />
             {otherWallets ? menu : null}
         </FormProvider>
@@ -311,7 +359,7 @@ export interface Prior1559TransferUIProps {
     handleConfirm: () => void
     confirmLoading: boolean
     maxAmount: string
-    hasEnsSuffix: boolean
+    popoverContent?: ReactElement
 }
 
 type TransferFormData = {
@@ -332,7 +380,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
         handleCancel,
         confirmLoading,
         maxAmount,
-        hasEnsSuffix,
+        popoverContent,
     }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
@@ -352,8 +400,8 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
         } = useFormContext<TransferFormData>()
 
         useUpdateEffect(() => {
-            setPopoverOpen(hasEnsSuffix && !!anchorEl.current)
-        }, [hasEnsSuffix])
+            setPopoverOpen(Boolean(popoverContent && anchorEl.current))
+        }, [popoverContent])
 
         return (
             <>
@@ -375,7 +423,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                                     ),
                                     onClick: (event) => {
                                         if (!anchorEl.current) anchorEl.current = event.currentTarget
-                                        if (hasEnsSuffix) setPopoverOpen(true)
+                                        if (popoverContent) setPopoverOpen(true)
                                     },
                                 }}
                             />
@@ -391,11 +439,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                             vertical: 'bottom',
                             horizontal: 'left',
                         }}>
-                        <Box py={2.5} px={1.5}>
-                            <Typography className={classes.errorMessage}>
-                                {t('wallet_transfer_error_no_support_ens')}
-                            </Typography>
-                        </Box>
+                        {popoverContent}
                     </Popover>
                     <Typography className={classes.label}>
                         <span>{t('popups_wallet_choose_token')}</span>

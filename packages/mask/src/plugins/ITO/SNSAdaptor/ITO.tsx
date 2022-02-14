@@ -1,22 +1,19 @@
 import {
-    formatAmountPrecision,
     formatBalance,
     formatEthereumAddress,
     FungibleTokenDetailed,
     getChainDetailed,
     isSameAddress,
     currySameAddress,
-    isZero,
-    pow10,
     resolveLinkOnExplorer,
     TransactionStateType,
     useAccount,
     useChainId,
     useChainIdValid,
     useTokenConstants,
-    ZERO,
-    isGreaterThan,
+    isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
+import { isZero, ZERO, isGreaterThan } from '@masknet/web3-shared-base'
 import { Box, Card, Grid, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
@@ -26,10 +23,9 @@ import formatDateTime from 'date-fns/format'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { TokenIcon } from '@masknet/shared'
+import { TokenIcon, useRemoteControlledDialog } from '@masknet/shared'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { getAssetAsBlobURL, getTextUILength, useI18N } from '../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '../../Wallet/messages'
 import { ITO_EXCHANGE_RATION_MAX, MSG_DELIMITER, TIME_WAIT_BLOCKCHAIN } from '../constants'
 import { sortTokens } from './helpers'
@@ -44,8 +40,7 @@ import { StyledLinearProgress } from './StyledLinearProgress'
 import { SwapGuide, SwapStatus } from './SwapGuide'
 import urlcat from 'urlcat'
 import { startCase } from 'lodash-unified'
-import { FACEBOOK_ID } from '../../../social-network-adaptor/facebook.com/base'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
+import { FACEBOOK_ID, isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 
 export interface IconProps {
@@ -66,9 +61,10 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         minHeight: 405,
         boxSizing: 'border-box',
         backgroundAttachment: 'local',
-        backgroundPosition: '0 0',
+        backgroundPosition: '-40px 0',
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
+        backgroundColor: '#FF5238',
         borderRadius: theme.spacing(1),
         paddingLeft: theme.spacing(4),
         paddingRight: theme.spacing(1),
@@ -93,7 +89,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         whiteSpace: 'nowrap',
     },
     status: {
-        background: 'rgba(20, 23, 26, 0.6)',
+        background: theme.palette.mode === 'light' ? 'rgba(20, 23, 26, 0.6)' : 'rgba(239, 243, 244, 0.6)',
         padding: '5px 16px',
         whiteSpace: 'nowrap',
         borderRadius: 10,
@@ -101,10 +97,11 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     totalText: {
         display: 'flex',
         alignItems: 'center',
+        fontSize: 12,
     },
     tokenLink: {
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'self-start',
         color: '#fff',
     },
     tokenIcon: {
@@ -112,7 +109,9 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         height: 24,
     },
     totalIcon: {
-        marginLeft: theme.spacing(1),
+        marginLeft: theme.spacing(0.5),
+        width: 16,
+        height: 16,
         cursor: 'pointer',
     },
     progressWrap: {
@@ -127,11 +126,14 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         bottom: theme.spacing(2),
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center',
+        alignItems: 'self-end',
+    },
+    footerInfo: {
+        fontSize: 12,
     },
     fromText: {
         opacity: 0.6,
-        transform: 'translateY(5px)',
+        fontSize: 14,
     },
     rationWrap: {
         marginBottom: theme.spacing(1),
@@ -139,8 +141,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         alignItems: 'center',
         '& > span': {
             marginLeft: theme.spacing(1),
-            fontSize: 14,
-            '& > b': {
+            fontSize: 12,
+            '& > strong': {
                 fontSize: 16,
                 fontWeight: 'bold',
             },
@@ -150,8 +152,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         marginTop: theme.spacing(1),
     },
     actionButton: {
-        color: '#fff',
-        minHeight: 'auto',
         width: '100%',
     },
     textProviderErr: {
@@ -179,9 +179,13 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     textInOneLine: {
         whiteSpace: 'nowrap',
     },
+    claimDate: {
+        marginTop: 16,
+        color: '#F4212E',
+    },
 }))
 
-//#region token item
+// #region token item
 interface TokenItemProps {
     price: string
     token: FungibleTokenDetailed
@@ -209,7 +213,7 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
         </>
     )
 }
-//#endregion
+// #endregion
 
 export interface ITO_Props {
     pid: string
@@ -245,7 +249,7 @@ export function ITO(props: ITO_Props) {
         tokenNumber: exchange_tokens.length,
         snsId: activatedSocialNetworkUI.networkIdentifier,
     })
-    //#region token detailed
+    // #region token detailed
     const {
         value: availability,
         computed: availabilityComputed,
@@ -256,7 +260,7 @@ export function ITO(props: ITO_Props) {
 
     const { listOfStatus, startTime, unlockTime, isUnlocked, hasLockTime, endTime, qualificationAddress } =
         availabilityComputed
-    //#endregion
+    // #endregion
 
     const total = new BigNumber(payload_total)
     const total_remaining = new BigNumber(availability?.remaining ?? '0')
@@ -268,26 +272,25 @@ export function ITO(props: ITO_Props) {
     const isRegionAllow =
         !isRegionRestrict || !currentRegion || (!loadingRegion && allowRegions.includes(currentRegion.code))
 
-    //#region if qualified
+    // #region if qualified
     type Qual_V2 = { qualified: boolean; errorMsg: string }
     const {
         value: ifQualified = false,
         loading: loadingIfQualified,
         retry: retryIfQualified,
     } = useIfQualified(qualificationAddress, payload.contract_address)
-    //#endregion
+    // #endregion
 
-    const isAccountSeller =
-        payload.seller.address.toLowerCase() === account.toLowerCase() && chainId === payload.chain_id
+    const isAccountSeller = isSameAddress(payload.seller.address, account) && chainId === payload.chain_id
     const noRemain = total_remaining.isZero()
 
-    //#region remote controlled select provider dialog
+    // #region remote controlled select provider dialog
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
-    //#endregion
+    // #endregion
 
-    //#region buy info
+    // #region buy info
     const { value: tradeInfo, loading: loadingTradeInfo, retry: retryPoolTradeInfo } = usePoolTradeInfo(pid, account)
     const isBuyer =
         chainId === payload.chain_id && (isGreaterThan(availability?.swapped ?? 0, 0) || Boolean(availability?.claimed))
@@ -309,11 +312,11 @@ export function ITO(props: ITO_Props) {
         .toString()
     const canWithdraw = useMemo(
         () =>
+            !availability?.destructed &&
             isAccountSeller &&
-            !tradeInfo?.destructInfo &&
-            !availability?.exchanged_tokens.every((t) => t === '0') &&
+            !availability?.exchanged_tokens.every(isZero) &&
             (listOfStatus.includes(ITO_Status.expired) || noRemain),
-        [tradeInfo, listOfStatus, isAccountSeller, noRemain],
+        [tradeInfo, listOfStatus, isAccountSeller, noRemain, loadingTradeInfo],
     )
 
     const refundAmount = useMemo(() => {
@@ -327,14 +330,14 @@ export function ITO(props: ITO_Props) {
     const onShareSuccess = useCallback(async () => {
         window.open(shareSuccessLink, '_blank', 'noopener noreferrer')
     }, [shareSuccessLink])
-    //#endregion
+    // #endregion
 
     const retryITOCard = useCallback(() => {
         retryPoolTradeInfo()
         retryAvailability()
     }, [retryPoolTradeInfo, retryAvailability])
 
-    //#region claim
+    // #region claim
     const [claimState, claimCallback, resetClaimCallback] = useClaimCallback([pid], payload.contract_address)
     const onClaimButtonClick = useCallback(() => {
         claimCallback()
@@ -344,14 +347,22 @@ export function ITO(props: ITO_Props) {
         WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
-            if (claimState.type !== TransactionStateType.CONFIRMED) return
-            resetClaimCallback()
-            retryITOCard()
+
+            if (
+                claimState.type !== TransactionStateType.CONFIRMED ||
+                (claimState.type === TransactionStateType.CONFIRMED && claimState.no !== 0)
+            )
+                return
+            window.location.reload()
         },
     )
 
     useEffect(() => {
-        if (claimState.type === TransactionStateType.UNKNOWN) return
+        if (
+            claimState.type === TransactionStateType.UNKNOWN ||
+            (claimState.type === TransactionStateType.CONFIRMED && claimState.no !== 0)
+        )
+            return
         setClaimTransactionDialog({
             open: true,
             state: claimState,
@@ -361,7 +372,7 @@ export function ITO(props: ITO_Props) {
         })
     }, [claimState /* update tx dialog only if state changed */])
 
-    //#endregion
+    // #endregion
 
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
@@ -390,14 +401,13 @@ export function ITO(props: ITO_Props) {
         setOpenClaimDialog(true)
     }, [])
 
-    //#region withdraw
+    // #region withdraw
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
             if (destructState.type !== TransactionStateType.CONFIRMED) return
-            resetDestructCallback()
-            retryITOCard()
+            window.location.reload()
         },
     )
 
@@ -419,7 +429,7 @@ export function ITO(props: ITO_Props) {
     }, [endTime, listOfStatus])
 
     useEffect(() => {
-        if (destructState.type === TransactionStateType.UNKNOWN) return
+        if (destructState.type === TransactionStateType.UNKNOWN || !canWithdraw) return
         let summary = t('plugin_ito_withdraw')
         if (!noRemain) {
             summary += ' ' + formatBalance(total_remaining, token.decimals) + ' ' + token.symbol
@@ -436,12 +446,12 @@ export function ITO(props: ITO_Props) {
             state: destructState,
             summary,
         })
-    }, [destructState])
+    }, [destructState, canWithdraw])
 
     const onWithdraw = useCallback(async () => {
         destructCallback(payload.pid)
     }, [destructCallback, payload.pid])
-    //#endregion
+    // #endregion
 
     const swapStatusText = useMemo(() => {
         if (listOfStatus.includes(ITO_Status.waited)) return t('plugin_ito_status_no_start')
@@ -458,16 +468,15 @@ export function ITO(props: ITO_Props) {
             return t('plugin_ito_out_of_stock_hit')
         }
 
-        const _text =
-            Number(availability?.swapped) > 0
-                ? t('plugin_ito_your_swapped_amount', {
-                      amount: formatBalance(availability?.swapped ?? 0, token.decimals),
-                      symbol: token.symbol,
-                  })
-                : t('plugin_ito_your_claimed_amount', {
-                      amount: formatBalance(tradeInfo?.buyInfo?.amount_bought ?? 0, token.decimals),
-                      symbol: token.symbol,
-                  })
+        const _text = new BigNumber(availability?.swapped || 0).isGreaterThan(0)
+            ? t('plugin_ito_your_swapped_amount', {
+                  amount: formatBalance(availability?.swapped || 0, token.decimals),
+                  symbol: token.symbol,
+              })
+            : t('plugin_ito_your_claimed_amount', {
+                  amount: formatBalance(tradeInfo?.buyInfo?.amount_bought || 0, token.decimals),
+                  symbol: token.symbol,
+              })
 
         if (refundAmount.isZero() || refundAmount.isLessThan(0)) {
             return `${_text}.`
@@ -489,7 +498,7 @@ export function ITO(props: ITO_Props) {
 
     const footerStartTime = useMemo(() => {
         return (
-            <Typography variant="body1">
+            <Typography variant="body1" className={classes.footerInfo}>
                 {t('plugin_ito_list_start_date', { date: formatDateTime(startTime, 'yyyy-MM-dd HH:mm') })}
             </Typography>
         )
@@ -497,7 +506,7 @@ export function ITO(props: ITO_Props) {
 
     const footerEndTime = useMemo(
         () => (
-            <Typography variant="body1">
+            <Typography variant="body1" className={classes.footerInfo}>
                 {t('plugin_ito_swap_end_date', { date: formatDateTime(endTime, 'yyyy-MM-dd HH:mm') })}
             </Typography>
         ),
@@ -507,8 +516,20 @@ export function ITO(props: ITO_Props) {
     const footerSwapInfo = useMemo(
         () => (
             <>
-                <Typography variant="body1">{swapResultText}</Typography>
+                <Typography variant="body1" className={classes.footerInfo}>
+                    {swapResultText}
+                </Typography>
                 {footerEndTime}
+                {hasLockTime &&
+                !isUnlocked &&
+                unlockTime > Date.now() &&
+                new BigNumber(availability?.swapped || 0).isGreaterThan(0) ? (
+                    <Typography className={classes.footerInfo}>
+                        {t('plugin_ito_wait_unlock_time', {
+                            unlockTime: formatDateTime(unlockTime!, 'yyyy-MM-dd HH:mm'),
+                        })}
+                    </Typography>
+                ) : null}
             </>
         ),
         [footerEndTime, swapResultText],
@@ -517,7 +538,7 @@ export function ITO(props: ITO_Props) {
     const footerNormal = useMemo(
         () => (
             <>
-                <Typography variant="body1">
+                <Typography variant="body1" className={classes.footerInfo}>
                     {t('plugin_ito_allocation_per_wallet', {
                         limit: formatBalance(limit, token.decimals),
                         token: token.symbol,
@@ -549,8 +570,8 @@ export function ITO(props: ITO_Props) {
                 </Box>
                 <Typography variant="body2" className={classes.totalText}>
                     {t('plugin_ito_swapped_status', {
-                        remain: formatAmountPrecision(sold, token.decimals),
-                        total: formatAmountPrecision(total, token.decimals),
+                        remain: formatBalance(sold, token.decimals),
+                        total: formatBalance(total, token.decimals),
                         token: token.symbol,
                     })}
                     <Link
@@ -579,8 +600,8 @@ export function ITO(props: ITO_Props) {
                                     price={formatBalance(
                                         new BigNumber(exchange_amounts[i * 2])
                                             .dividedBy(exchange_amounts[i * 2 + 1])
-                                            .multipliedBy(pow10(token.decimals - exchangeToken.decimals))
-                                            .multipliedBy(pow10(exchangeToken.decimals))
+                                            .shiftedBy(token.decimals - exchangeToken.decimals)
+                                            .shiftedBy(exchangeToken.decimals)
                                             .integerValue(),
                                         exchangeToken.decimals,
                                     )}
@@ -591,7 +612,7 @@ export function ITO(props: ITO_Props) {
                         ))}
                 </Box>
                 <Box className={classes.footer}>
-                    <div>
+                    <div className={classes.footerInfo}>
                         {isBuyer
                             ? footerSwapInfo
                             : listOfStatus.includes(ITO_Status.expired)
@@ -599,7 +620,7 @@ export function ITO(props: ITO_Props) {
                             : footerNormal}
                     </div>
                     <Typography variant="body1" className={classes.fromText}>
-                        {`From: @${sellerName}`}
+                        From: @{sellerName}
                     </Typography>
                 </Box>
             </Card>
@@ -614,16 +635,10 @@ export function ITO(props: ITO_Props) {
                         className={classes.actionButton}>
                         {t('plugin_ito_region_ban')}
                     </ActionButton>
-                ) : total_remaining.isZero() && !isBuyer && !canWithdraw ? (
-                    <ActionButton
-                        disabled
-                        onClick={() => undefined}
-                        variant="contained"
-                        size="large"
-                        className={classes.actionButton}>
-                        {t('plugin_ito_status_out_of_stock')}
-                    </ActionButton>
-                ) : loadingTradeInfo || loadingAvailability ? (
+                ) : (noRemain || listOfStatus.includes(ITO_Status.expired)) &&
+                  !canWithdraw &&
+                  ((availability?.claimed && hasLockTime) || !hasLockTime) ? null : loadingTradeInfo ||
+                  loadingAvailability ? (
                     <ActionButton
                         disabled
                         onClick={() => undefined}
@@ -640,18 +655,10 @@ export function ITO(props: ITO_Props) {
                         className={classes.actionButton}>
                         {t('plugin_wallet_connect_a_wallet')}
                     </ActionButton>
-                ) : canWithdraw ? (
-                    <ActionButton
-                        onClick={onWithdraw}
-                        variant="contained"
-                        size="large"
-                        className={classes.actionButton}>
-                        {t('plugin_ito_withdraw')}
-                    </ActionButton>
                 ) : isBuyer ? (
                     <Grid container spacing={2}>
                         {hasLockTime ? (
-                            <Grid item xs={6}>
+                            <Grid item xs={noRemain || listOfStatus.includes(ITO_Status.expired) ? 12 : 6}>
                                 {isUnlocked ? (
                                     !availability?.claimed ? (
                                         <ActionButton
@@ -664,16 +671,15 @@ export function ITO(props: ITO_Props) {
                                                 ? t('plugin_ito_claiming')
                                                 : t('plugin_ito_claim')}
                                         </ActionButton>
-                                    ) : (
+                                    ) : canWithdraw ? (
                                         <ActionButton
-                                            onClick={() => undefined}
-                                            disabled
+                                            onClick={onWithdraw}
                                             variant="contained"
                                             size="large"
                                             className={classes.actionButton}>
-                                            {t('plugin_ito_claimed')}
+                                            {t('plugin_ito_withdraw')}
                                         </ActionButton>
-                                    )
+                                    ) : null
                                 ) : (
                                     <ActionButton
                                         onClick={() => undefined}
@@ -681,24 +687,43 @@ export function ITO(props: ITO_Props) {
                                         disabled
                                         size="large"
                                         className={classNames(classes.actionButton, classes.textInOneLine)}>
-                                        {t('plugin_ito_wait_unlock_time', {
-                                            unlockTime: formatDateTime(unlockTime!, 'yyyy-MM-dd HH:mm'),
-                                        })}
+                                        {t('plugin_ito_claim')}
                                     </ActionButton>
                                 )}
                             </Grid>
+                        ) : canWithdraw ? (
+                            <Grid item xs={12}>
+                                <ActionButton
+                                    onClick={onWithdraw}
+                                    variant="contained"
+                                    size="large"
+                                    className={classes.actionButton}>
+                                    {t('plugin_ito_withdraw')}
+                                </ActionButton>
+                            </Grid>
                         ) : null}
-                        <Grid item xs={hasLockTime ? 6 : 12}>
-                            <ActionButton
-                                onClick={onShareSuccess}
-                                variant="contained"
-                                size="large"
-                                className={classes.actionButton}>
-                                {t('plugin_ito_share')}
-                            </ActionButton>
-                        </Grid>
+                        {noRemain || listOfStatus.includes(ITO_Status.expired) ? null : (
+                            <Grid item xs={hasLockTime ? 6 : 12}>
+                                <ActionButton
+                                    onClick={onShareSuccess}
+                                    variant="contained"
+                                    size="large"
+                                    className={classes.actionButton}>
+                                    {t('plugin_ito_share')}
+                                </ActionButton>
+                            </Grid>
+                        )}
                     </Grid>
-                ) : !ifQualified || !(ifQualified as Qual_V2).qualified ? (
+                ) : canWithdraw ? (
+                    <ActionButton
+                        onClick={onWithdraw}
+                        variant="contained"
+                        size="large"
+                        className={classes.actionButton}>
+                        {t('plugin_ito_withdraw')}
+                    </ActionButton>
+                ) : (!ifQualified || !(ifQualified as Qual_V2).qualified) &&
+                  !isNativeTokenAddress(qualificationAddress) ? (
                     <ActionButton
                         onClick={retryIfQualified}
                         loading={loadingIfQualified}
@@ -713,16 +738,7 @@ export function ITO(props: ITO_Props) {
                             ? startCase((ifQualified as Qual_V2).errorMsg)
                             : null}
                     </ActionButton>
-                ) : listOfStatus.includes(ITO_Status.expired) ? (
-                    <ActionButton
-                        disabled
-                        onClick={() => undefined}
-                        variant="contained"
-                        size="large"
-                        className={classes.actionButton}>
-                        {t('plugin_ito_expired')}
-                    </ActionButton>
-                ) : listOfStatus.includes(ITO_Status.waited) ? (
+                ) : listOfStatus.includes(ITO_Status.expired) ? null : listOfStatus.includes(ITO_Status.waited) ? (
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
                             <ActionButton
@@ -746,11 +762,29 @@ export function ITO(props: ITO_Props) {
                         ) : undefined}
                     </Grid>
                 ) : listOfStatus.includes(ITO_Status.started) ? (
-                    <ActionButton onClick={onClaim} variant="contained" size="large" className={classes.actionButton}>
-                        <Typography>{t('plugin_ito_enter')}</Typography>
-                    </ActionButton>
+                    <Grid container spacing={2}>
+                        <Grid item xs={6}>
+                            <ActionButton
+                                onClick={onClaim}
+                                variant="contained"
+                                size="large"
+                                className={classes.actionButton}>
+                                {t('plugin_ito_enter')}
+                            </ActionButton>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <ActionButton
+                                onClick={onShareSuccess}
+                                variant="contained"
+                                size="large"
+                                className={classes.actionButton}>
+                                {t('plugin_ito_share')}
+                            </ActionButton>
+                        </Grid>
+                    </Grid>
                 ) : null}
             </Box>
+
             <SwapGuide
                 status={claimDialogStatus}
                 total_remaining={total_remaining}

@@ -1,10 +1,8 @@
 import { memo } from 'react'
 import { MiniMaskIcon } from '@masknet/icons'
-import { makeStyles } from '@masknet/theme'
-import { MaskColorVar } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { WalletIcon } from '@masknet/shared'
-import type { ChainId } from '@masknet/web3-shared-evm'
 import { Box } from '@mui/material'
 import { useNetworkDescriptor } from '@masknet/plugin-infra'
 
@@ -40,7 +38,7 @@ const useStyles = makeStyles()({
 })
 
 export interface CollectiblePlaceHolderProps {
-    chainId: ChainId
+    chainId?: number
 }
 
 export const CollectiblePlaceholder = memo<CollectiblePlaceHolderProps>(({ chainId }) => {

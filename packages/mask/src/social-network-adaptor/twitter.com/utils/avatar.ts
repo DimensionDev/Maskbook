@@ -1,5 +1,7 @@
 import { getAvatarId } from './user'
 
+const ClipPath = 'url("#hex-hw-shapeclip-clipconfig")'
+
 export function getInjectNodeInfo(ele: HTMLElement) {
     const imgEle = (ele.firstChild as HTMLElement).querySelector('img')
     if (!imgEle) return
@@ -8,6 +10,12 @@ export function getInjectNodeInfo(ele: HTMLElement) {
     if (!nftDom) return
 
     nftDom.style.overflow = 'unset'
+    const avatarParent = nftDom.parentElement
+    let isTwitterNFT = false
+    if (avatarParent) {
+        const style = window.getComputedStyle(avatarParent)
+        isTwitterNFT = style.clipPath === ClipPath
+    }
 
     const width = Number(window.getComputedStyle(nftDom).width.replace('px', '') ?? 0)
     const height = Number(window.getComputedStyle(nftDom).height.replace('px', '') ?? 0)
@@ -17,5 +25,5 @@ export function getInjectNodeInfo(ele: HTMLElement) {
     const avatarId = getAvatarId((imgEle as HTMLImageElement).src)
     if (!avatarId) return
 
-    return { element: nftDom, width, height, avatarId }
+    return { element: nftDom, width, height, avatarId, isTwitterNFT }
 }

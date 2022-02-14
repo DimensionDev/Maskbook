@@ -86,16 +86,7 @@ interface PoolProps {
 export function PoolView(props: PoolProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
-    const {
-        category,
-        chainId,
-        token: { address },
-        name,
-        protocol,
-        liquidity,
-        apy,
-        angels,
-    } = props.investable
+    const { category, chainId, address, name, protocol, liquidity, apy, angels } = props.investable
 
     const displayRewardIcon = (rewardToken: Token) => {
         if (rewardToken.symbol === 'WMATIC') return <WmaticIcon />

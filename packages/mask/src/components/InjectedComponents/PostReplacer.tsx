@@ -1,11 +1,11 @@
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
+import { useValueRef } from '@masknet/shared'
 import {
     isTypedMessagePromise,
     isTypedMessageTuple,
     isWellKnownTypedMessages,
     makeTypedMessageTuple,
-    useValueRef,
-} from '@masknet/shared'
+} from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo } from 'react'
 import { Result } from 'ts-results'
@@ -25,11 +25,11 @@ export interface PostReplacerProps {
 
 export function PostReplacer(props: PostReplacerProps) {
     const { classes } = useStyles()
-    const postMessage = usePostInfoDetails.postMessage()
-    const postPayload = usePostInfoDetails.postPayload()
+    const postMessage = usePostInfoDetails.rawMessage()
+    const postPayload = usePostInfoDetails.containingMaskPayload()
     const allPostReplacement = useValueRef(allPostReplacementSettings)
 
-    const plugins = useActivatedPluginsSNSAdaptor()
+    const plugins = useActivatedPluginsSNSAdaptor(false)
     const processedPostMessage = useMemo(
         () =>
             plugins.reduce((x, plugin) => {

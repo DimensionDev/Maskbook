@@ -1,12 +1,11 @@
 import type { TypedMessage } from '../TypedMessage'
 import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier/type'
 import type { RelationFavor } from '../Persona/type'
-import type { Appearance, LanguageOptions, TradeProvider, DataProvider } from '../../../public-api/src/web'
+import type { Appearance, LanguageOptions, DataProvider } from '../../../public-api/src/web'
 import type {
     CryptoPrice,
     NetworkType,
     ProviderType,
-    BalanceOfChains,
     FungibleAssetProvider,
     NonFungibleAssetProvider,
 } from '../../../web3-shared/evm'
@@ -17,9 +16,6 @@ export interface MaskSettingsEvents {
     debugModeSetting: boolean
     pluginIDSettings: string
     currentChainIdSettings: number
-    currentBalanceSettings: string
-    currentBalancesSettings: BalanceOfChains
-    currentBlockNumberSettings: number
     currentTokenPricesSettings: CryptoPrice
     currentDataProviderSettings: DataProvider
     currentProviderSettings: ProviderType
@@ -28,11 +24,6 @@ export interface MaskSettingsEvents {
     currentFungibleAssetDataProviderSettings: FungibleAssetProvider
     currentNonFungibleAssetDataProviderSettings: NonFungibleAssetProvider
     currentPersonaIdentifier: string
-    ethereumNetworkTradeProviderSettings: TradeProvider
-    polygonNetworkTradeProviderSettings: TradeProvider
-    binanceNetworkTradeProviderSettings: TradeProvider
-    arbitrumNetworkTradeProviderSettings: TradeProvider
-    xdaiNetworkTradeProviderSettings: TradeProvider
 }
 
 export interface MaskMobileOnlyEvents {
@@ -46,7 +37,7 @@ export interface MaskSNSEvents {
     requestComposition: CompositionRequest
     replaceComposition: TypedMessage
     // TODO: move to plugin message
-    profileNFTsPageUpdated: ProfileNFTsPageEvent
+    profileTabUpdated: ProfileNFTsPageEvent
     // TODO: move to plugin message
     profileNFTsTabUpdated: 'reset'
     NFTAvatarUpdated: NFTAvatarEvent
@@ -68,11 +59,10 @@ export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, Ma
     restoreSuccess: void
     profilesChanged: UpdateEvent<ProfileIdentifier>[]
     relationsChanged: RelationChangedEvent[]
-    pluginEnabled: string
-    pluginDisabled: string
+    pluginMinimalModeChanged: [id: string, newStatus: boolean]
 
     requestExtensionPermission: RequestExtensionPermissionEvent
-    signRequestApproved: PersonaSignApprovedEvent
+    personaSignRequest: PersonaSignRequestEvent
     maskSDKHotModuleReload: void
     __kv_backend_persistent__: [string, unknown]
     __kv_backend_in_memory__: [string, unknown]
@@ -127,7 +117,7 @@ export type RelationChangedEvent = UpdateEvent<ProfileIdentifier> & {
     favor: RelationFavor
 }
 
-export interface PersonaSignApprovedEvent {
+export interface PersonaSignRequestEvent {
     requestID: string
-    selectedPersona: PersonaIdentifier
+    selectedPersona?: PersonaIdentifier
 }

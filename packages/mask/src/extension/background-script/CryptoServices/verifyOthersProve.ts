@@ -1,5 +1,4 @@
-import { decompressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Compression'
-import { ECKeyIdentifierFromJsonWebKey, ProfileIdentifier } from '../../../database/type'
+import { type ProfileIdentifier, decompressSecp256k1Key, ECKeyIdentifierFromJsonWebKey } from '@masknet/shared-base'
 import { decodePublicKeyWorker } from '../../../social-network/utils/text-payload-worker'
 import { createProfileWithPersona, queryPersonaRecord } from '../../../database'
 
@@ -9,7 +8,7 @@ export async function verifyOthersProve(bio: string | { raw: string }, others: P
     const publicKey = compressedX
         .map((x) => {
             try {
-                return decompressSecp256k1Key(x, 'public')
+                return decompressSecp256k1Key(x)
             } catch {
                 return null
             }

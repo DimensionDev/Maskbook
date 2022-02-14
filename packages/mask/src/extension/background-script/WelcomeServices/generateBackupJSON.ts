@@ -4,19 +4,18 @@ import {
     BackupPreview,
     getBackupPreviewInfo,
 } from '../../../utils/type-transform/BackupFormat/JSON/latest'
-import { queryPersonasDB, queryProfilesDB, queryRelations } from '../../../database/Persona/Persona.db'
-import { queryPostsDB } from '../../../database/post'
+import { queryPersonasDB, queryProfilesDB, queryRelations } from '../../../../background/database/persona/db'
+import { queryPostsDB } from '../../../../background/database/post'
 import { PersonaRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PersonaRecord'
 import { ProfileRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/ProfileRecord'
 import { PostRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PostRecord'
-import { Identifier, PersonaIdentifier, ProfileIdentifier } from '../../../database/type'
+import { Identifier, PersonaIdentifier, ProfileIdentifier, timeout } from '@masknet/shared-base'
 import { exportMnemonic, exportPrivateKey, getLegacyWallets, getWallets } from '../../../plugins/Wallet/services'
 import {
     LegacyWalletRecordToJSONFormat,
     WalletRecordToJSONFormat,
 } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
 import { activatedPluginsWorker } from '@masknet/plugin-infra'
-import { timeout } from '@masknet/shared'
 import { RelationRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/RelationRecord'
 
 export type { BackupPreview } from '../../../utils/type-transform/BackupFormat/JSON/latest'
@@ -85,11 +84,9 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
 
     async function backProfiles(of?: ProfileIdentifier[]) {
         const data = (
-            await queryProfilesDB((p) => {
-                if (of === undefined) return true
-                if (!of.some((x) => x.equals(p.identifier))) return false
-                if (!p.linkedPersona) return false
-                return true
+            await queryProfilesDB({
+                identifiers: of,
+                hasLinkedPersona: true,
             })
         ).map(ProfileRecordToJSONFormat)
         profiles.push(...data)
@@ -98,12 +95,10 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
     async function backupPersonas(of?: PersonaIdentifier[]) {
         const data = (
             await queryPersonasDB(
-                (p) => {
-                    if (p.uninitialized) return false
-                    if (opts.hasPrivateKeyOnly && !p.privateKey) return false
-                    if (of === undefined) return true
-                    if (!of.some((x) => x.equals(p.identifier))) return false
-                    return true
+                {
+                    initialized: true,
+                    hasPrivateKey: opts.hasPrivateKeyOnly,
+                    identifiers: of,
                 },
                 undefined,
                 true,
@@ -151,7 +146,7 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
                         const result = await timeout(backupCreator!(), 3000)
                         if (result.none) return
                         // We limit the plugin contributed backups must be simple objects.
-                        // We may allow plugin to store binary if we're moving to binary backup format like messagepack.
+                        // We may allow plugin to store binary if we're moving to binary backup format like MessagePack.
                         plugins[plugin.ID] = result.map(JSON.stringify).map(JSON.parse).val
                     }
                     if (process.env.NODE_ENV === 'development') return backupPlugin()
