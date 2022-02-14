@@ -67,6 +67,7 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'center',
             alignItems: 'center',
             display: 'flex',
+            borderTop: '1px solid transparent',
         },
         selected: {
             borderTop: `1px solid ${props.hover}`,
