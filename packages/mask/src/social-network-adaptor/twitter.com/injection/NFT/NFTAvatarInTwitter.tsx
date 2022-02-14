@@ -207,6 +207,7 @@ function NFTAvatarInTwitter() {
         <>
             {showAvatar ? (
                 <NFTBadge
+                    hasRainbow={false}
                     avatar={avatar}
                     size={size}
                     width={15}
