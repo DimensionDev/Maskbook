@@ -1,12 +1,11 @@
-import { GraphQLClient, gql } from 'graphql-request'
+import { gql, GraphQLClient } from 'graphql-request'
 import stringify from 'json-stable-stringify'
 import urlcat from 'urlcat'
 import { graphEndpointKeyVal, keyServerEndpoint } from './constants'
 
 const graphQLClients: { [key: string]: GraphQLClient } = {}
-
 for (const [key, url] of Object.entries(graphEndpointKeyVal)) {
-    graphQLClients[key] = new GraphQLClient(url)
+    graphQLClients[key] = new GraphQLClient(url, { headers: {} })
 }
 
 export interface verifyHolderResponse {

@@ -44,8 +44,6 @@ importers:
       eslint-plugin-react-hooks: ^4.3.0
       eslint-plugin-unicorn: ^40.1.0
       eslint-plugin-unused-imports: ^2.0.0
-      graphql: ^16.3.0
-      graphql-request: ^4.0.0
       gulp: ^4.0.2
       husky: ^7.0.4
       i18next: ^21.6.11
@@ -82,8 +80,6 @@ importers:
       '@types/react': 17.0.39
       '@types/react-dom': 17.0.11
       '@types/web': 0.0.52
-      graphql: 16.3.0
-      graphql-request: 4.0.0_graphql@16.3.0
       i18next: 21.6.11
       lodash: 4.17.21
       lodash-es: 4.17.21
