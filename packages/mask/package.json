@@ -16,6 +16,7 @@
     "@masknet/dashboard": "workspace:*",
     "@masknet/encryption": "workspace:^0.0.0",
     "@masknet/external-plugin-previewer": "workspace:*",
+    "@masknet/gun-utils": "workspace:*",
     "@masknet/icons": "workspace:*",
     "@masknet/injected-script": "workspace:*",
     "@masknet/plugin-dao": "workspace:*",
