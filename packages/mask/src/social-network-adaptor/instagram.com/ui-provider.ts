@@ -8,6 +8,9 @@ import { pasteInstagram } from '@masknet/injected-script'
 import { injectPostInspectorInstagram } from './injection/post-inspector'
 import { newPostCompositionInstagram } from './injection/newPostComposition'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles'
+import { injectProfileTabAtInstagram } from './injection/web3tab/ProfileTab'
+import { injectProfileTabContentAtInstagram } from './injection/web3tab/ProfileTabContent'
+import { CurrentVisitingIdentityProviderInstagram } from './collecting/indentity'
 
 const define: SocialNetworkUI.Definition = {
     ...instagramShared,
@@ -22,6 +25,7 @@ const define: SocialNetworkUI.Definition = {
     },
     collecting: {
         identityProvider: IdentityProviderInstagram,
+        currentVisitingIdentityProvider: CurrentVisitingIdentityProviderInstagram,
         postsProvider: PostProviderInstagram,
     },
     configuration: {
@@ -40,6 +44,8 @@ const define: SocialNetworkUI.Definition = {
     injection: {
         setupWizard: createTaskStartSetupGuideDefault(),
         postInspector: injectPostInspectorInstagram,
+        profileTab: injectProfileTabAtInstagram,
+        profileTabContent: injectProfileTabContentAtInstagram,
         newPostComposition: {
             start: newPostCompositionInstagram,
             supportedInputTypes: { text: true, image: true },
