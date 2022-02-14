@@ -8,6 +8,6 @@ This packages wrap Gun with a developer-friendly API. Before using, please make 
 - There is no "private server", you cannot create a fresh "gun" world that only contains our data.
 - DO NOT publish sensitive information on Gun.
 
-For more information, please access https://gun.eco/.
+For more information, please access [Gun.js](https://gun.eco/).
 
 It is especially important to understand how Gun is modeling "Array of data".

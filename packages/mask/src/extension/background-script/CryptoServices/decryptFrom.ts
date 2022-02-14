@@ -249,14 +249,14 @@ async function* decryptFromPayloadWithProgress_raw(
 
         // Failed, we have to wait for the future info from gun.
         if (version === -40) return makeError(i18n.t('service_not_share_target'))
-        const subscriptor = GUN_queryPostKey_version39Or38(
+        const subscription = GUN_queryPostKey_version39Or38(
             version,
             new Uint8Array(decodeArrayBuffer(iv)),
             await minePublic,
             authorNetworkWorker.val.gunNetworkHint,
             new AbortController().signal,
         )
-        for await (const aes of subscriptor) {
+        for await (const aes of subscription) {
             console.log('New key received, trying', aes)
             try {
                 return await decryptWith(aes)
