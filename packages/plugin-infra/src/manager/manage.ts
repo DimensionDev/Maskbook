@@ -1,3 +1,4 @@
+import { ObservableSet } from '@masknet/shared-base'
 import { Emitter } from '@servie/events'
 import { noop } from 'lodash-unified'
 import type { Plugin } from '../types'
@@ -18,7 +19,15 @@ export function createManager<
     }
     const resolved = new Map<string, T>()
     const activated = new Map<string, ActivatedPluginInstance>()
-    const minimalModePluginIDs = new Set<string>()
+    const minimalModePluginIDs = (() => {
+        const value = new ObservableSet<string>()
+        value.event.on('add', (id) => id.forEach((id) => events.emit('minimalModeChanged', id, true)))
+        value.event.on('delete', (id) => events.emit('minimalModeChanged', id, false))
+        value.clear = () => {
+            throw new TypeError('[@masknet/plugin-infra] Cannot clear minimal mode plugin IDs')
+        }
+        return value
+    })()
     let _host: Plugin.__Host.Host<Context> = undefined!
     const events = new Emitter<{
         activateChanged: [id: string, enabled: boolean]
@@ -41,24 +50,16 @@ export function createManager<
             } as Iterable<T>,
         },
         minimalMode: {
-            *[Symbol.iterator]() {
-                yield* minimalModePluginIDs
-            },
-        },
+            [Symbol.iterator]: () => minimalModePluginIDs.values(),
+        } as Iterable<string>,
         events,
     }
 
     function startDaemon(host: Plugin.__Host.Host<Context>, extraCheck?: (id: string) => boolean) {
         _host = host
         const { signal, addI18NResource, minimalMode } = _host
-        const removeListener1 = minimalMode.events.on('enabled', (id) => {
-            minimalModePluginIDs.add(id)
-            events.emit('minimalModeChanged', id, true)
-        })
-        const removeListener2 = minimalMode.events.on('disabled', (id) => {
-            minimalModePluginIDs.delete(id)
-            events.emit('minimalModeChanged', id, false)
-        })
+        const removeListener1 = minimalMode.events.on('enabled', (id) => minimalModePluginIDs.add(id))
+        const removeListener2 = minimalMode.events.on('disabled', (id) => minimalModePluginIDs.delete(id))
 
         signal?.addEventListener('abort', () => [...activated.keys()].forEach(stopPlugin))
         signal?.addEventListener('abort', () => void [removeListener1(), removeListener2()])
