@@ -4,10 +4,10 @@ import { useWeb3, isSameAddress } from '@masknet/web3-shared-evm'
 import { useAccount, usePluginIDContext, NetworkPluginID, usePluginWeb3StateContext } from '@masknet/plugin-infra'
 import CyberConnect, { Env } from '@cyberlab/cyberconnect'
 import { PluginCyberConnectRPC } from '../messages'
-import classNames from 'classnames'
 import { CircularProgress, useTheme, Typography } from '@mui/material'
 import { useAsync } from 'react-use'
-const useStyles = makeStyles()((theme) => ({
+
+const useStyles = makeStyles()(() => ({
     button: {
         width: '350px',
         display: 'flex',
@@ -72,7 +72,6 @@ const Logo = function () {
                 xmlns="http://www.w3.org/2000/svg">
                 <path d="M0.21737 1.67136L5.84807 7.30347C6.03273 7.48961 6.13636 7.74119 6.13636 8.0034C6.13636 8.26561 6.03273 8.51719 5.84807 8.70333L0.21737 14.334C0.150231 14.4011 0.0969715 14.4808 0.0606343 14.5685C0.024297 14.6562 0.0055959 14.7502 0.0055959 14.8451C0.0055959 14.9401 0.024297 15.0341 0.0606343 15.1218C0.0969715 15.2095 0.150231 15.2891 0.21737 15.3562L0.643293 15.7822C0.710401 15.8493 0.790081 15.9026 0.877779 15.9389C0.965476 15.9752 1.05947 15.9939 1.1544 15.9939C1.24933 15.9939 1.34332 15.9752 1.43102 15.9389C1.51872 15.9026 1.5984 15.8493 1.66551 15.7822L8.54132 8.90636C8.66087 8.78702 8.75572 8.64527 8.82043 8.48923C8.88514 8.3332 8.91845 8.16594 8.91845 7.99701C8.91845 7.82809 8.88514 7.66083 8.82043 7.50479C8.75572 7.34876 8.66087 7.20701 8.54132 7.08767L1.66551 0.211857C1.58716 0.13357 1.49189 0.0743072 1.38704 0.0386179C1.28218 0.00292854 1.17054 -0.00822914 1.0607 0.00600124C0.894222 0.0315557 0.740666 0.110823 0.623418 0.231735L0.211694 0.644885C0.144112 0.712348 0.0905984 0.792554 0.0542609 0.880862C0.0179234 0.969169 -0.000517259 1.06382 1.1038e-05 1.15931C0.000539335 1.2548 0.0200247 1.34923 0.0573371 1.43713C0.0946495 1.52503 0.149046 1.60464 0.21737 1.67136Z" />
             </svg>
-            {MaskColorVar.twitterBottom.fontcolor}
             <svg
                 className={classes.reverse}
                 width="9"
@@ -86,14 +85,13 @@ const Logo = function () {
     )
 }
 export default function ConnectButton({ address }: { address: string }) {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const web3 = useWeb3()
     const myAddress = useAccount()
     const [cc, setCc] = useState<CyberConnect | null>(null)
     const [isFollowing, setIsFollowing] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const blockChainNetwork = usePluginIDContext()
-    const { providerType } = usePluginWeb3StateContext()
     useAsync(async () => {
         if (isSameAddress(myAddress, address)) return
         const res = await PluginCyberConnectRPC.fetchFollowStatus(myAddress, address)
@@ -131,7 +129,7 @@ export default function ConnectButton({ address }: { address: string }) {
         </Typography>
     ) : !isSameAddress(myAddress, address) ? (
         <div
-            className={classNames(classes.button, {
+            className={cx(classes.button, {
                 [classes.isFollowing]: isFollowing,
             })}
             onClick={() => {

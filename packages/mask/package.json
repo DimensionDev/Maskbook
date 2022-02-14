@@ -19,6 +19,7 @@
     "@masknet/external-plugin-previewer": "workspace:*",
     "@masknet/icons": "workspace:*",
     "@masknet/injected-script": "workspace:*",
+    "@masknet/plugin-cyberconnect": "workspace:*",
     "@masknet/plugin-dao": "workspace:*",
     "@masknet/plugin-debugger": "workspace:*",
     "@masknet/plugin-example": "workspace:*",
