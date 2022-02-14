@@ -15,6 +15,7 @@ import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/Aave
 import AaveLendingPoolABI from '@masknet/web3-contracts/abis/AaveLendingPool.json'
 import BigNumber from 'bignumber.js'
 import { ProtocolCategory, SavingsNetwork, SavingsProtocol, ProtocolType } from '../types'
+import { pow10, ZERO } from '@masknet/web3-shared-base'
 
 export interface AaveContract {
     type: EthereumTokenType
@@ -31,7 +32,7 @@ export const AaveContracts: { [key: number]: AaveContract } = {
         chainName: 'Ethereum',
         subgraphUrl: getSavingsConstants(ChainId.Mainnet).AAVE_SUBGRAPHS || '',
         aaveLendingPoolAddressProviderContract:
-            getSavingsConstants(ChainId.Mainnet).AAVELendingPoolAddressProviderContract || ZERO_ADDRESS,
+            getSavingsConstants(ChainId.Mainnet).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS,
         aaveContract: getSavingsConstants(ChainId.Mainnet).AAVE || ZERO_ADDRESS,
         stEthContract: getSavingsConstants(ChainId.Mainnet).LIDO_STETH || ZERO_ADDRESS,
     },
@@ -40,7 +41,7 @@ export const AaveContracts: { [key: number]: AaveContract } = {
         chainName: 'Kovan',
         subgraphUrl: getSavingsConstants(ChainId.Kovan).AAVE_SUBGRAPHS || '',
         aaveLendingPoolAddressProviderContract:
-            getSavingsConstants(ChainId.Kovan).AAVELendingPoolAddressProviderContract || ZERO_ADDRESS,
+            getSavingsConstants(ChainId.Kovan).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS,
         aaveContract: getSavingsConstants(ChainId.Kovan).AAVE || ZERO_ADDRESS,
         stEthContract: getSavingsConstants(ChainId.Kovan).LIDO_STETH || ZERO_ADDRESS,
     },
@@ -51,11 +52,11 @@ export class AAVEProtocol implements SavingsProtocol {
     public type = ProtocolType.AAVE
     public name = 'AAVE'
     public image = 'aave'
-    public base = 'ETH'
+    public base = 'AAVE'
     public pair = 'aAAVE'
     public decimals = 18
     public apr = '0.00'
-    public balance = new BigNumber('0')
+    public balance = ZERO
     public availableNetworks: SavingsNetwork[] = [
         {
             chainId: ChainId.Mainnet,
@@ -68,6 +69,8 @@ export class AAVEProtocol implements SavingsProtocol {
             contractAddress: getSavingsConstants(ChainId.Kovan).AAVE || ZERO_ADDRESS,
         },
     ]
+
+    public readonly DEFAULT_APR = '0.17'
 
     public getFungibleTokenDetails(chainId: ChainId): FungibleTokenDetailed {
         let contractAddress = ''
@@ -85,10 +88,7 @@ export class AAVEProtocol implements SavingsProtocol {
             symbol: 'aAAVE',
             decimals: 18,
             name: 'AAVE Interest Bearing AAVE',
-            logoURI: [
-                // 'https://static.debank.com/image/eth_token/logo_url/0xae7ab96520de3a18e5e111b5eaab095312d7fe84/f768023f77be7a2ea23c37f25b272048.png',
-                'https://tokens.1inch.io/0xffc97d72e13e01096502cb8eb52dee56f74dad7b.png',
-            ],
+            logoURI: ['https://tokens.1inch.io/0xffc97d72e13e01096502cb8eb52dee56f74dad7b.png'],
         }
     }
 
@@ -115,10 +115,20 @@ export class AAVEProtocol implements SavingsProtocol {
                 headers: { 'Content-Type': 'application/json' },
                 body: body,
             })
-            const fullResponse = await response.json()
+            const fullResponse: {
+                data: {
+                    reserves: {
+                        id: string
+                        name: string
+                        decimals: number
+                        underlyingAsset: string
+                        liquidityRate: number
+                    }[]
+                }
+            } = await response.json()
             const liquidityRate = +fullResponse.data.reserves[0].liquidityRate
 
-            const RAY = 10 ** 27 // 10 to the power 27
+            const RAY = pow10(27) // 10 to the power 27
             const SECONDS_PER_YEAR = 31536000
             // APY and APR are returned here as decimals, multiply by 100 to get the percents
             const apr = liquidityRate / RAY
@@ -127,8 +137,8 @@ export class AAVEProtocol implements SavingsProtocol {
         } catch (error) {
             console.log('AAVE `getApr()` error', error)
             // Default APR
-            this.apr = '0.17'
-            return '0.17'
+            this.apr = this.DEFAULT_APR
+            return this.apr
         }
     }
 
@@ -152,7 +162,16 @@ export class AAVEProtocol implements SavingsProtocol {
                 headers: { 'Content-Type': 'application/json' },
                 body: reserveBody,
             })
-            const fullResponse = await reserveResponse.json()
+            const fullResponse: {
+                data: {
+                    reserves: {
+                        id: string
+                        name: string
+                        decimals: number
+                        underlyingAsset: string
+                    }[]
+                }
+            } = await reserveResponse.json()
             const reserveId = fullResponse.data.reserves[0].id
 
             // Get User Reserve
@@ -184,7 +203,15 @@ export class AAVEProtocol implements SavingsProtocol {
                 headers: { 'Content-Type': 'application/json' },
                 body: userReserveBody,
             })
-            const userResponse = await userReserveResponse.json()
+
+            const userResponse: {
+                data: {
+                    userReserves: {
+                        scaledATokenBalance: string
+                        currentATokenBalance: string
+                    }[]
+                }
+            } = await userReserveResponse.json()
 
             const balance = userResponse.data.userReserves[0].currentATokenBalance
             this.balance = new BigNumber(balance || '0')
@@ -198,9 +225,11 @@ export class AAVEProtocol implements SavingsProtocol {
 
     public async depositEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
         try {
+            const aaveLPoolAddress =
+                getSavingsConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS
             const lPoolAdressProviderContract = createContract<AaveLendingPoolAddressProvider>(
                 web3,
-                getSavingsConstants(chainId).AAVELendingPoolAddressProviderContract || ZERO_ADDRESS,
+                aaveLPoolAddress,
                 AaveLendingPoolAddressProviderABI as AbiItem[],
             )
 
@@ -228,7 +257,7 @@ export class AAVEProtocol implements SavingsProtocol {
         try {
             const lPoolAdressProviderContract = createContract<AaveLendingPoolAddressProvider>(
                 web3,
-                getSavingsConstants(chainId).AAVELendingPoolAddressProviderContract || ZERO_ADDRESS,
+                getSavingsConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS,
                 AaveLendingPoolAddressProviderABI as AbiItem[],
             )
 
@@ -240,11 +269,13 @@ export class AAVEProtocol implements SavingsProtocol {
                 AaveLendingPoolABI as AbiItem[],
             )
 
+            const gasEstimate = await this.depositEstimate(account, chainId, web3, value)
+
             await contract?.methods
                 .deposit(getSavingsConstants(chainId).AAVE || ZERO_ADDRESS, value.toString(), account, '0')
                 .send({
                     from: account,
-                    gas: 300000,
+                    gas: gasEstimate.toNumber(),
                 })
             return true
         } catch (error) {
@@ -257,7 +288,7 @@ export class AAVEProtocol implements SavingsProtocol {
         try {
             const lPoolAdressProviderContract = createContract<AaveLendingPoolAddressProvider>(
                 web3,
-                getSavingsConstants(chainId).AAVELendingPoolAddressProviderContract || ZERO_ADDRESS,
+                getSavingsConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS,
                 AaveLendingPoolAddressProviderABI as AbiItem[],
             )
 
@@ -284,12 +315,13 @@ export class AAVEProtocol implements SavingsProtocol {
         try {
             const lPoolAdressProviderContract = createContract<AaveLendingPoolAddressProvider>(
                 web3,
-                getSavingsConstants(chainId).AAVELendingPoolAddressProviderContract || ZERO_ADDRESS,
+                getSavingsConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS,
                 AaveLendingPoolAddressProviderABI as AbiItem[],
             )
 
             const poolAddress = await lPoolAdressProviderContract?.methods.getLendingPool().call()
 
+            const gasEstimate = await this.withdrawEstimate(account, chainId, web3, value)
             const contract = createContract<AaveLendingPool>(
                 web3,
                 poolAddress || ZERO_ADDRESS,
@@ -299,6 +331,7 @@ export class AAVEProtocol implements SavingsProtocol {
                 .withdraw(getSavingsConstants(chainId).AAVE || ZERO_ADDRESS, value.toString(), account)
                 .send({
                     from: account,
+                    gas: gasEstimate.toNumber(),
                 })
             return true
         } catch (error) {

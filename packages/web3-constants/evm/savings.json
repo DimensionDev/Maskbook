@@ -81,7 +81,7 @@
         "Aurora_Testnet": ""
     },
 
-    "AAVELendingPoolAddressProviderContract": {
+    "AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS": {
         "Mainnet": "0xb53c1a33016b2dc2ff3653530bff1848a515c8c5",
         "Ropsten": "",
         "Rinkeby": "",
