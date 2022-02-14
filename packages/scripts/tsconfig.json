@@ -11,7 +11,7 @@
       "module": "CommonJS",
       "noEmit": false
     },
-    "transpileOnly": true
+    "swc": true
   },
   "include": ["./src"]
 }
