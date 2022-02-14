@@ -125,13 +125,23 @@ importers:
 
   packages/background-service:
     specifiers:
+      '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
+      '@masknet/public-api': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
+      async-call-rpc: ^6.0.1
+      fuse.js: ^6.5.3
       idb: ^7.0.0
+      safari-14-idb-fix: ^3.0.0
     dependencies:
+      '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
+      '@masknet/public-api': link:../public-api
       '@masknet/shared': link:../shared
       '@masknet/shared-base': link:../shared-base
+      async-call-rpc: 6.0.1
+      fuse.js: 6.5.3
       idb: 7.0.0
+      safari-14-idb-fix: 3.0.0
 
   packages/backup-format:
     specifiers:
@@ -304,6 +314,7 @@ importers:
       '@ethersproject/providers': ^5.0.9
       '@ethersproject/solidity': ^5.0.4
       '@hookform/resolvers': 2.8.8
+      '@masknet/background-service': workspace:*
       '@masknet/dashboard': workspace:*
       '@masknet/encryption': workspace:^0.0.0
       '@masknet/external-plugin-previewer': workspace:*
@@ -439,6 +450,7 @@ importers:
       '@ethersproject/providers': 5.4.2
       '@ethersproject/solidity': 5.4.0
       '@hookform/resolvers': 2.8.8_react-hook-form@7.27.0
+      '@masknet/background-service': link:../background-service
       '@masknet/dashboard': link:../dashboard
       '@masknet/encryption': link:../encryption
       '@masknet/external-plugin-previewer': link:../external-plugin-previewer

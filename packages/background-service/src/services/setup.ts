@@ -10,16 +10,18 @@ assertEnvironment(Environment.ManifestBackground)
 const SERVICE_HMR_EVENT = 'service-hmr'
 const message = new WebExtensionMessage<Record<string, any>>({ domain: 'services' })
 
-// #region Setup services
-const _service: Record<keyof Services, void> = {
-    Crypto: setup('Crypto', () => import('./crypto')),
-}
-const _service_generator: Record<keyof GeneratorServices, void> = {}
+export const serviceHmrSetup = () => {
+    // #region Setup services
+    const _service: Record<keyof Services, void> = {
+        Crypto: setup('Crypto', () => import('./crypto')),
+    }
+    const _service_generator: Record<keyof GeneratorServices, void> = {}
 
-if (import.meta.webpackHot) {
-    import.meta.webpackHot.accept(['./crypto'], () => globalThis.dispatchEvent(new Event(SERVICE_HMR_EVENT)))
+    if (import.meta.webpackHot) {
+        import.meta.webpackHot.accept(['./crypto'], () => globalThis.dispatchEvent(new Event(SERVICE_HMR_EVENT)))
+    }
+    // #endregion
 }
-// #endregion
 
 function setup(key: keyof Services, implementation: () => Promise<any>, isGenerator = false) {
     const serviceChannel = message.events[key].bind(MessageTarget.Broadcast)

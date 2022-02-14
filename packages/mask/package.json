@@ -28,6 +28,7 @@
     "@masknet/plugin-solana": "workspace:*",
     "@masknet/plugin-wallet": "workspace:*",
     "@masknet/public-api": "workspace:*",
+    "@masknet/background-service": "workspace:*",
     "@masknet/sdk": "workspace:*",
     "@masknet/shared": "workspace:*",
     "@masknet/shared-base": "workspace:*",

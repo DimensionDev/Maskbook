@@ -1,2 +1,4 @@
-import '../background/setup'
-import '../background/services/setup'
+import * as backgroundService from '@masknet/background-service'
+
+backgroundService.serviceSetup()
+backgroundService.serviceHmrSetup()

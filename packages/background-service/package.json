@@ -6,6 +6,11 @@
   "dependencies": {
     "@masknet/shared": "workspace:*",
     "@masknet/shared-base": "workspace:*",
-    "idb": "^7.0.0"
+    "@masknet/public-api": "workspace:*",
+    "idb": "^7.0.0",
+    "@dimensiondev/holoflows-kit": "^0.9.0-20210902104757-7c3d0d0",
+    "fuse.js": "^6.5.3",
+    "async-call-rpc": "^6.0.1",
+    "safari-14-idb-fix": "^3.0.0"
   }
 }
