@@ -25,6 +25,7 @@ const config = {
         sucrase({ transforms: ['typescript', 'jsx'] }),
         replace({
             'process.env.PROVIDER_API_ENV': JSON.stringify('proxy'),
+            'process.env.PROXY_VERSION': JSON.stringify(process.env.PROXY_VERSION),
         }),
     ],
     external: (id) => {
