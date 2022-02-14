@@ -10,7 +10,7 @@ import { newPostCompositionInstagram } from './injection/newPostComposition'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles'
 import { injectProfileTabAtInstagram } from './injection/web3tab/ProfileTab'
 import { injectProfileTabContentAtInstagram } from './injection/web3tab/ProfileTabContent'
-import { CurrentVisitingIdentityProviderInstagram } from './collecting/indentity'
+import { CurrentVisitingIdentityProviderInstagram } from './collecting/identity'
 
 const define: SocialNetworkUI.Definition = {
     ...instagramShared,
