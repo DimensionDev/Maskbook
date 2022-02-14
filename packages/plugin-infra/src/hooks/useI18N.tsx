@@ -1,5 +1,5 @@
-import type { I18NFieldOrReactNode, I18NStringField } from '@masknet/plugin-infra'
 import { useTranslation } from 'react-i18next'
+import type { I18NFieldOrReactNode, I18NStringField } from '../types'
 
 export interface PluginI18NFieldRenderProps {
     field: I18NFieldOrReactNode

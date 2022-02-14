@@ -226,12 +226,12 @@ export const TransferERC721 = memo(() => {
         if (resolveDomainLoading) return
         if (registeredAddress) {
             return (
-                <Link
-                    href={Utils?.resolveDomainLink?.(allFormFields.recipient)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    underline="none">
-                    <Box style={{ padding: 10 }}>
+                <Box style={{ padding: 10 }}>
+                    <Link
+                        href={Utils?.resolveDomainLink?.(allFormFields.recipient)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="none">
                         <Typography
                             fontSize={16}
                             lineHeight="22px"
@@ -242,8 +242,8 @@ export const TransferERC721 = memo(() => {
                         <Typography fontSize={14} lineHeight="20px" style={{ color: MaskColorVar.textSecondary }}>
                             <FormattedAddress address={registeredAddress} size={4} formatter={Utils?.formatAddress} />
                         </Typography>
-                    </Box>
-                </Link>
+                    </Link>
+                </Box>
             )
         }
 

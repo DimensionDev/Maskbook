@@ -2,7 +2,6 @@ import { PluginSnapshotRPC } from '../../messages'
 import type { VoteItem, ProposalIdentifier } from '../../types'
 import { useSuspense } from '../../../../utils/hooks/useSuspense'
 import { useProposal } from './useProposal'
-import { useBlockNumber } from '@masknet/web3-shared-evm'
 
 const cache = new Map<string, [0, Promise<void>] | [1, VoteItem[]] | [2, Error]>()
 export function votesRetry() {
@@ -14,14 +13,12 @@ export function useVotes(identifier: ProposalIdentifier) {
     return useSuspense<VoteItem[], [ProposalIdentifier]>(identifier.id, [identifier], cache, Suspender)
 }
 async function Suspender(identifier: ProposalIdentifier) {
-    const { value: blockNumber = 0 } = useBlockNumber()
     const { payload: proposal } = useProposal(identifier.id)
 
     const voters = proposal.votes.map((v) => v.voter)
     const scores = await PluginSnapshotRPC.getScores(
         proposal.snapshot,
         voters,
-        blockNumber,
         proposal.network,
         identifier.space,
         proposal.strategies,
@@ -61,7 +58,7 @@ async function Suspender(identifier: ProposalIdentifier) {
                 authorIpfsHash: v.id,
                 balance: scores.reduce((a, b) => a + (b[v.voter.toLowerCase()] ? b[v.voter.toLowerCase()] : 0), 0),
                 scores: strategies.map((_strategy, i) => scores[i][v.voter] || 0),
-                strategySymbol: strategies[0].params.symbol,
+                strategySymbol: proposal.space.symbol ?? strategies[0].params.symbol,
                 authorName: profileEntries[v.voter.toLowerCase()]?.name,
                 authorAvatar: profileEntries[v.voter.toLowerCase()]?.image,
                 timestamp: v.created,
