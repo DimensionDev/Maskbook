@@ -5,7 +5,7 @@ import { graphEndpointKeyVal, keyServerEndpoint } from './constants'
 
 const graphQLClients: { [key: string]: GraphQLClient } = {}
 for (const [key, url] of Object.entries(graphEndpointKeyVal)) {
-    graphQLClients[key] = new GraphQLClient(url, { headers: {} })
+    graphQLClients[key] = new GraphQLClient(url)
 }
 
 export interface verifyHolderResponse {
@@ -103,16 +103,17 @@ export const getLocks = async <UnlockLocks>(_address1: String) => {
     }
 
     const dataRes: Array<{ lock: { chain: number; name: string; price?: string; address: string } }> = []
-
     for (const key of Object.keys(graphEndpointKeyVal)) {
-        const data = await graphQLClients[key].request(query, variables)
-        data.lockManagers.forEach(
-            (element: { lock: { chain: number; name: string; price?: string; address: string } }) => {
-                element.lock.chain = Number.parseInt(key, 10)
-                dataRes.push(element)
-            },
+        graphQLClients[key].request(query, variables).then((data) =>
+            data.lockManagers.forEach(
+                (element: { lock: { chain: number; name: string; price?: string; address: string } }) => {
+                    element.lock.chain = Number.parseInt(key, 10)
+                    dataRes.push(element)
+                },
+            ),
         )
     }
+
     return dataRes
 }
 
