@@ -152,6 +152,12 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                         },
                     },
                 },
+                {
+                    test: /\.m?js/,
+                    resolve: {
+                        fullySpecified: false,
+                    },
+                },
             ],
         },
         plugins: [

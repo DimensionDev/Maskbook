@@ -5,7 +5,7 @@
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@dimensiondev/common-protocols": "1.6.0-20210723072221-8f46a92",
-    "@ethersphere/bee-js": "^3.1.0",
+    "@ethersphere/bee-js": "^3.3.0",
     "@masknet/icons": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/plugin-wallet": "workspace:*",
