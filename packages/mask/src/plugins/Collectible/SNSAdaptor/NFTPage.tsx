@@ -1,6 +1,6 @@
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Box, MenuItem, Button } from '@mui/material'
-import { ShadowRootMenu, useI18N } from '../../../utils'
+import { ShadowRootMenu } from '../../../utils'
 import type { AddressName } from '@masknet/web3-shared-evm'
 import { CollectionList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
 import { useState } from 'react'
@@ -51,7 +51,6 @@ export interface NFTPageProps {
 export function NFTPage(props: NFTPageProps) {
     const { addressNames } = props
     const { classes } = useStyles()
-    const { t } = useI18N()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
     const [selectedAddress, setSelectedAddress] = useState(first(addressNames))

@@ -2,13 +2,12 @@ import { createContext, useEffect, useMemo, useState } from 'react'
 import { useValueRef } from '@masknet/shared'
 import {
     ChainId,
-    ERC721TokenCollectionInfo,
+    ERC721ContractDetailed,
     ERC721TokenDetailed,
     isSameAddress,
     NonFungibleAssetProvider,
     SocketState,
     useCollectibles,
-    useCollections,
     Wallet,
 } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, Stack, styled, Typography } from '@mui/material'
@@ -17,8 +16,8 @@ import { currentNonFungibleAssetDataProviderSettings } from '../../../../plugins
 import { useI18N } from '../../../../utils'
 import { CollectibleCard } from './CollectibleCard'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { LoadingCollectible } from './LoadingCollectible'
 import { CollectionIcon } from './CollectionIcon'
+import { uniqBy } from 'lodash-unified'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -98,15 +97,8 @@ const useStyles = makeStyles()((theme) => ({
         background: theme.palette.primary.main,
         color: '#ffffff',
         opacity: 1,
-        '&:after': {
-            content: '""',
-            position: 'absolute',
-            bottom: -8,
-            right: (30 - 4) / 2,
-            display: 'inline-block',
-            width: 4,
-            height: 4,
-            borderRadius: '50%',
+        '&:hover': {
+            background: theme.palette.primary.main,
         },
     },
 }))
@@ -237,43 +229,38 @@ export function CollectionList({ address }: { address: string }) {
     const chainId = ChainId.Mainnet
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [selectedCollection, setSelectedCollection] = useState<ERC721TokenCollectionInfo | 'all'>('all')
+    const [selectedCollection, setSelectedCollection] = useState<ERC721ContractDetailed | 'all'>('all')
 
-    const {
-        data: collections,
-        retry: retryFetchCollection,
-        state: loadingCollectionDone,
-    } = useCollections(address, chainId)
     const {
         data: collectibles,
         state: loadingCollectibleDone,
         retry: retryFetchCollectible,
-    } = useCollectibles(address, chainId, !!collections.length)
+    } = useCollectibles(address, chainId)
 
-    const isLoading = loadingCollectibleDone !== SocketState.done || loadingCollectionDone !== SocketState.done
+    const isLoading = loadingCollectibleDone !== SocketState.done
 
     const renderWithRarible = useMemo(() => {
         if (isLoading) return []
         return collectibles.filter((item) => !item.collection)
-    }, [collections?.length, collectibles?.length])
+    }, [collectibles?.length])
 
     const renderCollectibles = useMemo(() => {
         if (selectedCollection === 'all') return collectibles
         if (!selectedCollection) return collectibles.filter((x) => !x.collection)
 
         return (collectibles ?? []).filter((x) => {
-            return (
-                isSameAddress(selectedCollection.address, x.contractDetailed.address) ||
-                selectedCollection.addresses?.find((r) => isSameAddress(r, x.contractDetailed.address))
-            )
+            return isSameAddress(selectedCollection.address, x.contractDetailed.address)
         })
     }, [selectedCollection, collectibles.length])
 
-    if (loadingCollectionDone !== SocketState.done) {
-        return <LoadingCollectible />
-    }
+    const collections = useMemo(() => {
+        return uniqBy(
+            collectibles.map((x) => x.contractDetailed),
+            (x) => x.address.toLowerCase(),
+        )
+    }, [collectibles.length])
 
-    if (!isLoading && !collections.length)
+    if (!isLoading && !collectibles.length)
         return (
             <Box display="flex" alignItems="center" justifyContent="center">
                 <Typography color="textPrimary" sx={{ paddingTop: 4, paddingBottom: 4 }}>
@@ -305,7 +292,7 @@ export function CollectionList({ address }: { address: string }) {
                 <Box sx={{ flexGrow: 1 }}>
                     <Box>
                         {!selectedCollection && selectedCollection !== 'all' && (
-                            <Box display="flex" alignItems="center" sx={{ marginBottom: '16px' }}>
+                            <Box display="flex" alignItems="center">
                                 <Typography
                                     className={classes.name}
                                     color="textPrimary"
@@ -319,7 +306,7 @@ export function CollectionList({ address }: { address: string }) {
                             </Box>
                         )}
                         {selectedCollection && selectedCollection !== 'all' && (
-                            <Box display="flex" alignItems="center" sx={{ marginBottom: '16px' }}>
+                            <Box display="flex" alignItems="center">
                                 <CollectionIcon collection={selectedCollection} />
                                 <Typography
                                     className={classes.name}
@@ -337,7 +324,6 @@ export function CollectionList({ address }: { address: string }) {
                             address={address}
                             retry={() => {
                                 retryFetchCollectible()
-                                retryFetchCollection()
                             }}
                             collectibles={renderCollectibles}
                             loading={loadingCollectibleDone !== SocketState.done && renderCollectibles.length === 0}
@@ -345,7 +331,7 @@ export function CollectionList({ address }: { address: string }) {
                     </Box>
                 </Box>
                 <Box>
-                    {(collections ?? []).map((x, i) => {
+                    {collections.map((x, i) => {
                         return (
                             <Box
                                 display="flex"

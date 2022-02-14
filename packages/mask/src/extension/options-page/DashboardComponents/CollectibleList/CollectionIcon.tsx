@@ -1,10 +1,10 @@
-import type { ERC721TokenCollectionInfo } from '@masknet/web3-shared-evm'
 import { memo } from 'react'
 import { Box, Tooltip } from '@mui/material'
 import { Image } from '../../../../components/shared/Image'
 import { makeStyles } from '@masknet/theme'
 import { TokenIcon } from '@masknet/shared'
 import classNames from 'classnames'
+import type { ERC721ContractDetailed } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     collectionWrap: {
@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface CollectionIconProps {
     selectedCollection?: string
-    collection: ERC721TokenCollectionInfo
+    collection: ERC721ContractDetailed
     onClick?(): void
 }
 
