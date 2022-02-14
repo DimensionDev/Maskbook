@@ -63,7 +63,7 @@ export const RestoreFromLocal = memo(() => {
 
         setRestoreStatus(RestoreStatus.Verifying)
         try {
-            const backupInfo = await Services.Welcome.parseBackupStr(backupValue)
+            const backupInfo = Services.Welcome.parseBackupStr(backupValue)
 
             if (backupInfo) {
                 setJSON(backupInfo.info)

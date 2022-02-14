@@ -65,7 +65,7 @@ export const RestoreFromCloud = memo(() => {
                 return t.sign_in_account_cloud_backup_decrypt_failed()
             }
 
-            const backupInfo = await Services.Welcome.parseBackupStr(backupText)
+            const backupInfo = Services.Welcome.parseBackupStr(backupText)
             if (backupInfo) {
                 setBackupId(backupInfo.id)
                 setAccount({ type, value: accountValue, password })
