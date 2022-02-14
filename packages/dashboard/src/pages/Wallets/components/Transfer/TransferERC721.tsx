@@ -226,7 +226,7 @@ export const TransferERC721 = memo(() => {
         if (resolveDomainLoading) return
         if (registeredAddress) {
             return (
-                <Box style={{ padding: 10 }}>
+                <Box style={{ padding: 10, display: 'flex', justifyContent: 'flex-start' }}>
                     <Link
                         href={Utils?.resolveDomainLink?.(allFormFields.recipient)}
                         target="_blank"
