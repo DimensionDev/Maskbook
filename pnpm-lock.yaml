@@ -263,6 +263,14 @@ importers:
       '@masknet/theme': link:../theme
       ef.js: 0.14.2
 
+  packages/gun-utils:
+    specifiers:
+      event-iterator: ^2.0.0
+      gun: ^0.2020.1234
+    dependencies:
+      event-iterator: 2.0.0
+      gun: 0.2020.1234
+
   packages/icons:
     specifiers:
       '@emotion/server': ^11.4.0
@@ -297,6 +305,7 @@ importers:
       '@masknet/dashboard': workspace:*
       '@masknet/encryption': workspace:^0.0.0
       '@masknet/external-plugin-previewer': workspace:*
+      '@masknet/gun-utils': workspace:*
       '@masknet/icons': workspace:*
       '@masknet/injected-script': workspace:*
       '@masknet/plugin-dao': workspace:*
@@ -432,6 +441,7 @@ importers:
       '@masknet/dashboard': link:../dashboard
       '@masknet/encryption': link:../encryption
       '@masknet/external-plugin-previewer': link:../external-plugin-previewer
+      '@masknet/gun-utils': link:../gun-utils
       '@masknet/icons': link:../icons
       '@masknet/injected-script': link:../injected-script
       '@masknet/plugin-dao': link:../plugins/DAO
@@ -15334,7 +15344,7 @@ packages:
     resolution: {integrity: sha512-RqlGDDze1U7gdRZCHx8VMBi0dzyJL4C6jQHwOuFjH9aldGcCQPN0HyVaKVn6jNHgS1AAbTBod4KCfMRXda+eZg==}
     engines: {node: '>=0.8.4'}
     dependencies:
-      ws: 7.5.5
+      ws: 7.5.7
     optionalDependencies:
       '@peculiar/webcrypto': 1.2.3
       emailjs: 2.2.0
@@ -25078,7 +25088,6 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
-    dev: true
 
   /ws/8.5.0:
     resolution: {integrity: sha512-BWX0SWVgLPzYwF8lTzEy1egjhS4S4OEAHfsO8o65WOVsrnSRGaSiUaa9e0ggGlkMTtBlmOpEXiie9RUcBO86qg==}
