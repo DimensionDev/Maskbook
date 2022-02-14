@@ -4,7 +4,7 @@ import { ShadowRootMenu, useI18N } from '../../../utils'
 import type { AddressName } from '@masknet/web3-shared-evm'
 import { CollectionList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
 import { useState } from 'react'
-import { first } from 'lodash-unified'
+import { first, uniqBy } from 'lodash-unified'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 
@@ -71,10 +71,10 @@ export function NFTPage(props: NFTPageProps) {
                 onClose={onClose}
                 anchorEl={anchorEl}
                 PaperProps={{ style: { maxHeight: 192 } }}>
-                {(addressNames ?? []).map((x) => {
+                {uniqBy(addressNames ?? [], (x) => x.resolvedAddress.toLowerCase()).map((x) => {
                     return (
                         <MenuItem key={x.resolvedAddress} value={x.resolvedAddress} onClick={() => onSelect(x)}>
-                            {formatEthereumAddress(x.label, 5)}
+                            {x.type}: {formatEthereumAddress(x.label, 5)}
                         </MenuItem>
                     )
                 })}
