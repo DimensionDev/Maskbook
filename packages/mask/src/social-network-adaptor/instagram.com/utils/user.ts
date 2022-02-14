@@ -9,7 +9,6 @@ import {
 
 export function getBioDescription() {
     const bio = bioDescriptionSelector().evaluate()
-    console.log(bio)
     return bio ? collectNodeText(bio) : ''
 }
 

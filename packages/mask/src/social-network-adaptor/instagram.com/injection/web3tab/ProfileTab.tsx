@@ -1,5 +1,5 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { Web3TabIcon } from '@masknet/icons'
+import { CollectibleIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { ProfileTab } from '../../../../components/InjectedComponents/ProfileTab'
 import { createReactRootShadowed, startWatch } from '../../../../utils'
@@ -33,8 +33,9 @@ function getStyleProps() {
     const style = eleTab ? window.getComputedStyle(eleTab) : EMPTY_STYLE
 
     const activeTab = searchProfileActiveTabSelector().evaluate() as Element
+    console.log(activeTab)
     const activeStyle = activeTab ? window.getComputedStyle(activeTab) : EMPTY_STYLE
-
+    console.log(activeStyle.color)
     return {
         color: style.color,
         font: style.font,
@@ -68,12 +69,13 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
         },
         selected: {
-            borderTop: `1px solid ${props.line}`,
+            borderTop: `1px solid ${props.hover}`,
             color: props.hover,
         },
         line: {},
         icon: {
             fontSize: props.fontSize,
+            fill: props.color,
             color: props.color,
             paddingRight: 4,
         },
@@ -107,7 +109,7 @@ export function ProfileTabAtInstagram() {
     return (
         <ProfileTab
             title="Web3"
-            icon={<Web3TabIcon className={classes.icon} />}
+            icon={<CollectibleIcon className={classes.icon} />}
             classes={classes}
             reset={reset}
             clear={clear}

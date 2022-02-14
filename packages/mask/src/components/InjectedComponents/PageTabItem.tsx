@@ -15,6 +15,7 @@ const useStyles = makeStyles()((theme) => ({
     selected: {
         border: `1px solid ${theme.palette.primary.main} !important`,
         color: `${theme.palette.primary.main} !important`,
+        borderRadius: 9999,
     },
 }))
 
