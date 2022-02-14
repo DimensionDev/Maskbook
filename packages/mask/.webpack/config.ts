@@ -153,7 +153,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     },
                 },
                 {
-                    test: /\.m?js/,
+                    test: /(ethersphere).+\.m?js/,
                     resolve: {
                         fullySpecified: false,
                     },
