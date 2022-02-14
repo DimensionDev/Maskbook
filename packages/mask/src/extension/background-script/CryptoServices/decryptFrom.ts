@@ -33,11 +33,6 @@ type Progress = (
     /** if this is true, this progress should not cause UI change. */
     internal: boolean
 }
-type DebugInfo = {
-    debug: 'debug_finding_hash'
-    hash: [string, string]
-    type: 'debug'
-}
 type SuccessThrough = 'author_key_not_found' | 'post_key_cached' | 'normal_decrypted'
 type Success = {
     type: 'success'
@@ -55,7 +50,7 @@ type Failure = {
 export type SuccessDecryption = Success
 export type FailureDecryption = Failure
 export type DecryptionProgress = Progress
-type ReturnOfDecryptPostContentWithProgress = AsyncGenerator<Failure | Progress | DebugInfo, Success | Failure, void>
+type ReturnOfDecryptPostContentWithProgress = AsyncGenerator<Failure | Progress, Success | Failure, void>
 
 const successDecryptionCache = new Map<string, Success>()
 const makeSuccessResultF =
@@ -181,16 +176,6 @@ async function* decryptFromPayloadWithProgress_raw(
         if (!mine?.privateKey) return makeError(DecryptFailedReason.MyCryptoKeyNotFound)
 
         const { publicKey: minePublic, privateKey: minePrivate } = mine
-        const networkWorker = getNetworkWorkerUninitialized(whoAmI)
-        try {
-            // eslint-disable-next-line
-            if (version === -40) throw ''
-            const gunNetworkHint = networkWorker!.gunNetworkHint
-            const { keyHash, postHash } = await (
-                await import('../../../network/gun/version.2/hash')
-            ).calculatePostKeyPartition(version, iv, minePublic, gunNetworkHint)
-            yield { type: 'debug', debug: 'debug_finding_hash', hash: [postHash, keyHash] }
-        } catch {}
         if (cachedPostResult) return makeSuccessResult(cachedPostResult, ['post_key_cached'])
 
         let lastError: unknown
