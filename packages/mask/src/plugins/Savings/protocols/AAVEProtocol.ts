@@ -55,7 +55,7 @@ export class AAVEProtocol implements SavingsProtocol {
     public pair = 'aAAVE'
     public decimals = 18
     public apr = '0.00'
-    public balance = new BigNumber('0')
+    public balance = ZERO
     public availableNetworks: SavingsNetwork[] = [
         {
             chainId: ChainId.Mainnet,
