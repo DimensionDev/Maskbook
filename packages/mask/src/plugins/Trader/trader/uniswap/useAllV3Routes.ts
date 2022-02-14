@@ -19,24 +19,28 @@ function computeAllRoutes(
     const tokenOut = currencyOut?.wrapped
     if (!tokenIn || !tokenOut) throw new Error('Missing tokenIn/tokenOut')
 
-    for (const pool of pools) {
-        if (currentPath.includes(pool) || !pool.involvesToken(tokenIn)) continue
+    try {
+        for (const pool of pools) {
+            if (currentPath.includes(pool) || !pool.involvesToken(tokenIn)) continue
 
-        const outputToken = pool.token0.equals(tokenIn) ? pool.token1 : pool.token0
-        if (outputToken.equals(tokenOut)) {
-            allPaths.push(new Route([...currentPath, pool], startCurrencyIn, currencyOut))
-        } else if (maxHops > 1) {
-            computeAllRoutes(
-                outputToken,
-                currencyOut,
-                pools,
-                chainId,
-                [...currentPath, pool],
-                allPaths,
-                startCurrencyIn,
-                maxHops - 1,
-            )
+            const outputToken = pool.token0.equals(tokenIn) ? pool.token1 : pool.token0
+            if (outputToken.equals(tokenOut)) {
+                allPaths.push(new Route([...currentPath, pool], startCurrencyIn, currencyOut))
+            } else if (maxHops > 1) {
+                computeAllRoutes(
+                    outputToken,
+                    currencyOut,
+                    pools,
+                    chainId,
+                    [...currentPath, pool],
+                    allPaths,
+                    startCurrencyIn,
+                    maxHops - 1,
+                )
+            }
         }
+    } catch {
+        return []
     }
 
     return allPaths

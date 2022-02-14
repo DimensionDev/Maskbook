@@ -44,6 +44,11 @@ export async function signPersonalMessage(data: string, address: string, passwor
     return (await connector.signPersonalMessage([data, address, password])) as string
 }
 
+export async function signTypedDataMessage(data: string, address: string) {
+    if (!connector) throw new Error('Connection Lost.')
+    return (await connector.signTypedData([data, address])) as string
+}
+
 export async function sendCustomRequest(payload: IJsonRpcRequest) {
     if (!connector) throw new Error('Connection Lost.')
     return (await connector.sendCustomRequest(payload as IJsonRpcRequest)) as JsonRpcResponse
