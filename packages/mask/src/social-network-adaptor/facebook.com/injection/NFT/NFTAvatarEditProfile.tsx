@@ -26,6 +26,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         fontSize: props.fontSize,
         marginTop: props.marginTop,
         marginRight: theme.spacing(0.5),
+        borderRadius: 6,
+        border: 'none',
     },
 }))
 

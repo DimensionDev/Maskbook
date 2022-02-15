@@ -28,7 +28,6 @@ function _(selector: () => LiveSelector<HTMLElement | SVGElement, false>, signal
 
             const run = async () => {
                 const facebookId = getFacebookId(element)
-                console.log(facebookId)
                 if (!facebookId) return
 
                 const info = getInjectNodeInfo(element)
