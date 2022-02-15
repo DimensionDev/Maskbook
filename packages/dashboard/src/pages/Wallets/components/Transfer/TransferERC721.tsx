@@ -41,6 +41,7 @@ import { NetworkType } from '@masknet/public-api'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { multipliedBy } from '@masknet/web3-shared-base'
 import { Services } from '../../../../API'
+import { RightIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     disabled: {
@@ -226,7 +227,7 @@ export const TransferERC721 = memo(() => {
         if (resolveDomainLoading) return
         if (registeredAddress) {
             return (
-                <Box style={{ padding: 10, display: 'flex', justifyContent: 'flex-start' }}>
+                <Box style={{ padding: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Link
                         href={Utils?.resolveDomainLink?.(allFormFields.recipient)}
                         target="_blank"
@@ -243,6 +244,7 @@ export const TransferERC721 = memo(() => {
                             <FormattedAddress address={registeredAddress} size={4} formatter={Utils?.formatAddress} />
                         </Typography>
                     </Link>
+                    <RightIcon />
                 </Box>
             )
         }

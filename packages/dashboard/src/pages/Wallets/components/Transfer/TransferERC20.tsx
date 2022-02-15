@@ -31,6 +31,7 @@ import { useUpdateEffect } from 'react-use'
 import { v4 as uuid } from 'uuid'
 import { PluginMessages } from '../../../../API'
 import type { SelectTokenDialogEvent } from '@masknet/plugin-wallet'
+import { RightIcon } from '@masknet/icons'
 
 interface TransferERC20Props {
     token: FungibleTokenDetailed
@@ -180,7 +181,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         if (resolveDomainLoading) return
         if (registeredAddress) {
             return (
-                <Box style={{ padding: 10, display: 'flex', justifyContent: 'flex-start' }}>
+                <Box style={{ padding: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Link
                         href={Utils?.resolveDomainLink?.(address)}
                         target="_blank"
@@ -198,6 +199,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                             <FormattedAddress address={registeredAddress} size={4} formatter={Utils?.formatAddress} />
                         </Typography>
                     </Link>
+                    <RightIcon />
                 </Box>
             )
         }
