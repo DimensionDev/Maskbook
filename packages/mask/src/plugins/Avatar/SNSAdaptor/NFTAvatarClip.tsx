@@ -3,7 +3,7 @@ import { keyframes, makeStyles, useStylesExtends } from '@masknet/theme'
 import classNames from 'classnames'
 import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 import { useNFT } from '../hooks'
-import { useNFTContainerAtTwitter } from '../hooks/userNFTContainerAtTwitter'
+import { useNFTContainerAtTwitter } from '../hooks/useNFTContainerAtTwitter'
 import { formatPrice, formatText } from '../utils'
 import { v4 as uuid } from 'uuid'
 

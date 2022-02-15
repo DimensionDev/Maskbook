@@ -655,6 +655,7 @@ export enum AddressNameType {
     RSS3 = 'RSS3',
     GUN = 'GUN',
     THE_GRAPH = 'THE_GRAPH',
+    TWITTER = 'TWITTER',
 }
 
 export interface AddressName {
