@@ -1,15 +1,18 @@
 import {
     bioDescriptionSelector,
+    bioDescriptionSelectorOnMobile,
     searchAvatarSelector,
     searchFacebookAvatarOnMobileSelector,
     searchNickNameSelector,
+    searchNickNameSelectorOnMobile,
     searchUserIdSelector,
+    searchUserIdSelectorOnMobile,
 } from './selector'
 import { collectNodeText } from '../../../utils'
 import { isMobileFacebook } from './isMobile'
 
 export const getNickName = () => {
-    const node = searchNickNameSelector().evaluate()
+    const node = isMobileFacebook ? searchNickNameSelectorOnMobile().evaluate() : searchNickNameSelector().evaluate()
     if (!node) return ''
 
     return collectNodeText(node)
@@ -30,7 +33,7 @@ export const getAvatar = () => {
 }
 
 export const getBioDescription = () => {
-    const node = bioDescriptionSelector().evaluate()
+    const node = isMobileFacebook ? bioDescriptionSelectorOnMobile().evaluate() : bioDescriptionSelector().evaluate()
 
     if (!node) return ''
 
@@ -44,14 +47,14 @@ export const getBioDescription = () => {
 }
 
 export const getFacebookId = () => {
-    const node = searchUserIdSelector().evaluate()
+    const node = isMobileFacebook ? searchUserIdSelectorOnMobile().evaluate() : searchUserIdSelector().evaluate()
 
     if (!node) return ''
     const url = new URL(node.href)
 
-    if (url.pathname === '/profile.php' && url.searchParams.get('id')) return url.searchParams.get('id')
+    if (url.pathname === '/profile.php') return url.searchParams.get(isMobileFacebook ? 'lst' : 'id')
 
-    return url.pathname.replace('/', '')
+    return url.pathname.replaceAll('/', '')
 }
 
 const FACEBOOK_AVATAR_ID_MATCH = /(\w+).(?:png|jpg|gif|bmp)/

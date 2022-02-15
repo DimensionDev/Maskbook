@@ -20,13 +20,20 @@ export const searchAvatarSelector: () => LiveSelector<HTMLImageElement, true> = 
 export const searchNickNameSelector: () => LiveSelector<HTMLSpanElement, true> = () =>
     querySelector<HTMLSpanElement>('span[dir="auto"] div h1')
 
+export const searchNickNameSelectorOnMobile: () => LiveSelector<E, true> = () => querySelector<E>('#cover-name-root h3')
+
 export const bioDescriptionSelector = () =>
     querySelector<HTMLSpanElement>('span[dir="auto"] div h1')
         .closest(7)
         .querySelector<HTMLSpanElement>('span[dir="auto"] > span')
 
+export const bioDescriptionSelectorOnMobile: () => LiveSelector<HTMLDivElement, true> = () => querySelector('#bio div')
+
 export const searchUserIdSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
-    querySelector<HTMLAnchorElement>('div[data-visualcompletion="ignore-dynamic"] > a[role="link"]')
+    querySelector<HTMLAnchorElement>('div[data-pagelet="ProfileTabs"] a[role="tab"]')
+
+export const searchUserIdSelectorOnMobile: () => LiveSelector<HTMLAnchorElement, true> = () =>
+    querySelector<HTMLAnchorElement>('#tlFeed div[data-sigil="scroll-area"] a:last-child')
 
 // #endregion facebook nft avatar
 

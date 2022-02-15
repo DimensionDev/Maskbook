@@ -8,17 +8,13 @@ import { isMobileFacebook } from '../../utils/isMobile'
 
 function getFacebookId(element: HTMLElement | SVGElement) {
     const node = (isMobileFacebook ? element.firstChild : element.parentNode?.parentNode) as HTMLLinkElement
-    if (!node) return
-    if (!isMobileFacebook) {
-        const url = new URL(node.href)
+    if (!node) return ''
+    const url = new URL(node.href)
 
-        if (url.pathname === '/profile.php' && url.searchParams.get('id')) return url.searchParams.get('id')
+    if (url.pathname === '/profile.php' && url.searchParams.get('id'))
+        return url.searchParams.get(isMobileFacebook ? 'lst' : 'id')
 
-        return url.pathname.replace('/', '')
-    }
-    const match = node.href.match(/lst=(\w+)/)
-    if (!match) return
-    return match[1]
+    return url.pathname.replace('/', '')
 }
 
 function _(selector: () => LiveSelector<HTMLElement | SVGElement, false>, signal: AbortSignal) {
@@ -28,6 +24,7 @@ function _(selector: () => LiveSelector<HTMLElement | SVGElement, false>, signal
 
             const run = async () => {
                 const facebookId = getFacebookId(element)
+
                 if (!facebookId) return
 
                 const info = getInjectNodeInfo(element)
