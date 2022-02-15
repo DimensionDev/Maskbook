@@ -25,7 +25,7 @@ if (process.env.architecture === 'app') {
              */
             // @ts-ignore
             // eslint-disable-next-line no-useless-concat
-            import('../../src/utils/native-rpc/' + 'Web.ts').then((x) => x.MaskNetworkAPI),
+            import('../../../mask/src/utils/native-rpc/' + 'Web.ts').then((x) => x.MaskNetworkAPI),
             {
                 ...options,
                 channel: new iOSWebkitChannel(),
@@ -36,7 +36,7 @@ if (process.env.architecture === 'app') {
         const api = (sharedNativeAPI = AsyncCall<AndroidNativeAPIs>(
             // @ts-ignore
             // eslint-disable-next-line no-useless-concat
-            import('../../src/utils/native-rpc/' + 'Web.ts').then((x) => x.MaskNetworkAPI),
+            import('../../../mask/src/utils/native-rpc/' + 'Web.ts').then((x) => x.MaskNetworkAPI),
             {
                 ...options,
                 channel: new AndroidGeckoViewChannel(),
