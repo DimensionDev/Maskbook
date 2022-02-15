@@ -15,6 +15,7 @@
   "references": [
     { "path": "../../public-api" },
     { "path": "../../background-service" },
+    { "path": "../../encryption" },
     { "path": "../../shared" },
     { "path": "../../shared-base" },
     { "path": "../../web3-shared/base" },
