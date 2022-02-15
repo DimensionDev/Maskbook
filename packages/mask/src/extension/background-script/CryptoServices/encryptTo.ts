@@ -14,8 +14,7 @@ import {
 } from '@masknet/shared-base'
 import { prepareRecipientDetail } from './prepareRecipientDetail'
 import { getNetworkWorker } from '../../../social-network/worker'
-import { createPostDB, PostRecord } from '../../../../background/database/post'
-import { queryPersonaByProfileDB } from '../../../../background/database/persona/db'
+import * as backgroundService from '@masknet/background-service'
 import { i18n } from '../../../../shared-ui/locales_legacy'
 import { encodeTextPayloadWorker } from '../../../social-network/utils/text-payload-worker'
 
@@ -77,7 +76,7 @@ export async function encryptTo(
         authorUserID: whoAmI,
     }
     try {
-        const publicKey = (await queryPersonaByProfileDB(whoAmI))?.publicKey
+        const publicKey = (await backgroundService.db.queryPersonaByProfileDB(whoAmI))?.publicKey
         if (publicKey) payload.authorPublicKey = compressSecp256k1Key(publicKey)
     } catch {
         // ignore
@@ -85,7 +84,7 @@ export async function encryptTo(
 
     payload.signature = '_'
 
-    const newPostRecord: PostRecord = {
+    const newPostRecord: backgroundService.PostRecord = {
         identifier: new PostIVIdentifier(whoAmI.network, payload.iv),
         postBy: whoAmI,
         postCryptoKey: postAESKey,
@@ -97,7 +96,7 @@ export async function encryptTo(
         newPostRecord.summary = getSummary(content)
         newPostRecord.interestedMeta = content.meta
     }
-    await createPostDB(newPostRecord)
+    await backgroundService.createPostDB(newPostRecord)
 
     const postAESKeyToken = encodeArrayBuffer(iv)
     const worker = await getNetworkWorker(whoAmI)!

@@ -1,5 +1,5 @@
 import { queryPublicKey } from '../../../database'
-import type { RecipientDetail, RecipientReason } from '../../../../background/database/post'
+import type { RecipientDetail, RecipientReason } from '@masknet/background-service'
 import { ProfileIdentifier, IdentifierMap, type EC_Public_JsonWebKey } from '@masknet/shared-base'
 
 export async function prepareRecipientDetail(to: ProfileIdentifier[]) {

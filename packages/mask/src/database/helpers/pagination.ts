@@ -1,5 +1,5 @@
 import type { DBSchema, IDBPCursorWithValueIteratorValue, StoreNames } from 'idb/with-async-ittr'
-import type { IDBPSafeTransaction } from '../../../background/database/utils/openDB'
+import type * as backgroundService from '@masknet/background-service'
 
 export async function queryTransactionPaged<
     DBType extends DBSchema,
@@ -7,7 +7,7 @@ export async function queryTransactionPaged<
     Mode extends 'readonly' | 'readwrite',
     RecordType extends IDBPCursorWithValueIteratorValue<DBType, TxStores, TxStores[0], unknown>['value'],
 >(
-    t: IDBPSafeTransaction<DBType, TxStores, Mode>,
+    t: backgroundService.IDBPSafeTransaction<DBType, TxStores, Mode>,
     storeName: TxStores[0],
     options: {
         skip: number

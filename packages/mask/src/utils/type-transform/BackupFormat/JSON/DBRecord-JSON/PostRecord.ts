@@ -1,4 +1,4 @@
-import type { PostRecord, RecipientDetail, RecipientReason } from '../../../../../../background/database/post'
+import type { PostRecord, RecipientDetail, RecipientReason } from '@masknet/background-service'
 import type { BackupJSONFileLatest } from '../latest'
 import type { RecipientReasonJSON } from '../version-2'
 import { encodeArrayBuffer, decodeArrayBuffer, unreachable } from '@dimensiondev/kit'

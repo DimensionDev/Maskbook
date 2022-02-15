@@ -4,8 +4,7 @@ import {
     BackupPreview,
     getBackupPreviewInfo,
 } from '../../../utils/type-transform/BackupFormat/JSON/latest'
-import { queryPersonasDB, queryProfilesDB, queryRelations } from '../../../../background/database/persona/db'
-import { queryPostsDB } from '../../../../background/database/post'
+import { queryPostsDB, db } from '@masknet/background-service'
 import { PersonaRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PersonaRecord'
 import { ProfileRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/ProfileRecord'
 import { PostRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PostRecord'
@@ -84,7 +83,7 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
 
     async function backProfiles(of?: ProfileIdentifier[]) {
         const data = (
-            await queryProfilesDB({
+            await db.queryProfilesDB({
                 identifiers: of,
                 hasLinkedPersona: true,
             })
@@ -94,7 +93,7 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
 
     async function backupPersonas(of?: PersonaIdentifier[]) {
         const data = (
-            await queryPersonasDB(
+            await db.queryPersonasDB(
                 {
                     initialized: true,
                     hasPrivateKey: opts.hasPrivateKeyOnly,
@@ -108,7 +107,7 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
     }
 
     async function backupAllRelations() {
-        const data = (await queryRelations(() => true)).map(RelationRecordToJSONFormat)
+        const data = (await db.queryRelations(() => true)).map(RelationRecordToJSONFormat)
         relations.push(...data)
     }
 

@@ -1,5 +1,5 @@
 /* eslint-disable import/no-deprecated */
-import type { LinkedProfileDetails } from '../../../../../background/database/persona/db'
+import type { LinkedProfileDetails } from '@masknet/background-service'
 import type { BackupJSONFileVersion1 } from './version-1'
 import {
     type AESJsonWebKey,

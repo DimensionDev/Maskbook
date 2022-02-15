@@ -1,6 +1,6 @@
 import { Profile, queryProfile } from '../../../database'
 import { ProfileIdentifier, Identifier, PostIVIdentifier } from '@masknet/shared-base'
-import { queryPostDB } from '../../../../background/database/post'
+import { queryPostDB } from '@masknet/background-service'
 import { GunAPI } from '../../../network/gun'
 // #endregion
 // #region Append Recipients in future

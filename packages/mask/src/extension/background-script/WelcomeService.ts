@@ -2,7 +2,7 @@ import { encodeText } from '@dimensiondev/kit'
 import { delay, type DashboardRoutes, PopupRoutes } from '@masknet/shared-base'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { createPersonaByJsonWebKey } from '../../database'
-import { attachProfileDB, LinkedProfileDetails } from '../../../background/database/persona/db'
+import { LinkedProfileDetails, db } from '@masknet/background-service'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
 import type { PersonaIdentifier, ProfileIdentifier, AESJsonWebKey } from '@masknet/shared-base'
 import { BackupOptions, generateBackupJSON } from './WelcomeServices/generateBackupJSON'
@@ -54,7 +54,7 @@ export async function restoreNewIdentityWithMnemonicWord(
         nickname: info.nickname,
     })
     if (info.whoAmI) {
-        await attachProfileDB(info.whoAmI, ecKeyID, info.details || { connectionConfirmState: 'pending' })
+        await db.attachProfileDB(info.whoAmI, ecKeyID, info.details || { connectionConfirmState: 'pending' })
     }
     return ecKeyID
 }

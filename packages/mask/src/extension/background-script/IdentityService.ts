@@ -6,13 +6,10 @@ import {
     createPersonaByJsonWebKey,
     loginPersona,
     personaRecordToPersona,
-    queryAvatarDataURL,
     queryPersona,
     queryPersonaRecord,
-    queryPostPagedDB,
     queryProfile,
     queryProfilesWithQuery,
-    storeAvatar,
 } from '../../database'
 import {
     ECKeyIdentifier,
@@ -28,28 +25,7 @@ import {
     RelationFavor,
 } from '@masknet/shared-base'
 import type { Persona, Profile } from '../../database/Persona/types'
-import {
-    attachProfileDB,
-    consistentPersonaDBWriteAccess,
-    createOrUpdateProfileDB,
-    createProfileDB,
-    createRelationDB,
-    createRelationsTransaction,
-    deleteProfileDB,
-    queryPersonaDB,
-    queryPersonasDB,
-    queryProfilesDB,
-    queryRelationsPagedDB,
-    updateRelationDB,
-    ProfileRecord,
-    LinkedProfileDetails,
-    RelationRecord,
-} from '../../../background/database/persona/db'
-import {
-    queryPersonasDB as queryPersonasFromIndexedDB,
-    queryProfilesDB as queryProfilesFromIndexedDB,
-    queryRelations as queryRelationsFromIndexedDB,
-} from '../../../background/database/persona/web'
+import * as backgroundService from '@masknet/background-service'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
 import { restoreBackup } from './WelcomeServices/restoreBackup'
 import { restoreNewIdentityWithMnemonicWord } from './WelcomeService'
@@ -74,7 +50,7 @@ export function queryProfiles(network?: string): Promise<Profile[]> {
 }
 
 export async function queryProfileRecordFromIndexedDB() {
-    return queryProfilesFromIndexedDB({})
+    return backgroundService.web.queryProfilesDB({})
 }
 
 export function queryProfilesWithIdentifiers(identifiers: ProfileIdentifier[]) {
@@ -97,18 +73,20 @@ export async function updateProfileInfo(
     },
 ): Promise<void> {
     if (data.nickname) {
-        const rec: ProfileRecord = {
+        const rec: backgroundService.db.ProfileRecord = {
             identifier,
             nickname: data.nickname,
             createdAt: new Date(),
             updatedAt: new Date(),
         }
-        await consistentPersonaDBWriteAccess((t) => createOrUpdateProfileDB(rec, t))
+        await backgroundService.db.consistentPersonaDBWriteAccess((t) =>
+            backgroundService.db.createOrUpdateProfileDB(rec, t),
+        )
     }
-    if (data.avatarURL) await storeAvatar(identifier, data.avatarURL)
+    if (data.avatarURL) await backgroundService.storeAvatar(identifier, data.avatarURL)
 }
 export function removeProfile(id: ProfileIdentifier): Promise<void> {
-    return consistentPersonaDBWriteAccess((t) => deleteProfileDB(id, t))
+    return backgroundService.db.consistentPersonaDBWriteAccess((t) => backgroundService.db.deleteProfileDB(id, t))
 }
 // #endregion
 
@@ -129,7 +107,7 @@ export async function queryPersonaByMnemonic(mnemonic: string, password: '') {
 
     const { key } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonic, password)
     const identifier = ECKeyIdentifierFromJsonWebKey(key.privateKey)
-    const persona = await queryPersonaDB(identifier, undefined, true)
+    const persona = await backgroundService.db.queryPersonaDB(identifier, undefined, true)
     if (persona) {
         await loginPersona(persona.identifier)
         return persona
@@ -139,14 +117,16 @@ export async function queryPersonaByMnemonic(mnemonic: string, password: '') {
 }
 export async function queryPersonas(identifier?: PersonaIdentifier, requirePrivateKey = false): Promise<Persona[]> {
     if (typeof identifier === 'undefined')
-        return (await queryPersonasDB({ hasPrivateKey: requirePrivateKey })).map(personaRecordToPersona)
-    const x = await queryPersonaDB(identifier)
+        return (await backgroundService.db.queryPersonasDB({ hasPrivateKey: requirePrivateKey })).map(
+            personaRecordToPersona,
+        )
+    const x = await backgroundService.db.queryPersonaDB(identifier)
     if (!x || (!x.privateKey && requirePrivateKey)) return []
     return [personaRecordToPersona(x)]
 }
 
 export async function queryPersonaRecordsFromIndexedDB() {
-    return queryPersonasFromIndexedDB()
+    return backgroundService.web.queryPersonasDB()
 }
 
 export function queryMyPersonas(network?: string): Promise<Persona[]> {
@@ -170,7 +150,7 @@ export async function queryLastPersonaCreated() {
 export async function backupPersonaPrivateKey(
     identifier: PersonaIdentifier,
 ): Promise<EC_Private_JsonWebKey | undefined> {
-    const x = await queryPersonaDB(identifier)
+    const x = await backgroundService.db.queryPersonaDB(identifier)
     return x?.privateKey
 }
 
@@ -228,20 +208,20 @@ export { setupPersona, deletePersona, logoutPersona } from '../../database'
 export async function attachProfile(
     source: ProfileIdentifier,
     target: ProfileIdentifier | PersonaIdentifier,
-    data: LinkedProfileDetails,
+    data: backgroundService.db.LinkedProfileDetails,
 ): Promise<void> {
     if (target instanceof ProfileIdentifier) {
         const profile = await queryProfile(target)
         if (!profile.linkedPersona) throw new Error('target not found')
         target = profile.linkedPersona.identifier
     }
-    return attachProfileDB(source, target, data)
+    return backgroundService.db.attachProfileDB(source, target as ECKeyIdentifier, data)
 }
-export { detachProfileDB as detachProfile } from '../../../background/database/persona/db'
+export const detachProfile = backgroundService.db.detachProfileDB
 // #endregion
 
 // #region Post
-export { queryPostsDB } from '../../database'
+export const queryPostsDB = backgroundService.queryPostsDB
 
 export async function queryPagedPostHistory(
     options: {
@@ -253,7 +233,7 @@ export async function queryPagedPostHistory(
 ) {
     const currentPersona = await getCurrentPersonaIdentifier()
     if (currentPersona) {
-        return queryPostPagedDB(currentPersona, options, count)
+        return backgroundService.queryPostPagedDB(currentPersona, options, count)
     }
 
     return []
@@ -266,34 +246,42 @@ export async function patchCreateOrUpdateRelation(
     personas: PersonaIdentifier[],
     defaultFavor = RelationFavor.UNCOLLECTED,
 ) {
-    await consistentPersonaDBWriteAccess(async (t) => {
+    await backgroundService.db.consistentPersonaDBWriteAccess(async (t) => {
         for (const persona of personas) {
             for (const profile of profiles) {
                 const relationInDB = await t.objectStore('relations').get([persona.toText(), profile.toText()])
                 if (relationInDB) {
-                    await updateRelationDB({ profile: profile, linked: persona, favor: defaultFavor }, t, true)
+                    await backgroundService.db.updateRelationDB(
+                        { profile: profile, linked: persona, favor: defaultFavor },
+                        t,
+                        true,
+                    )
                     continue
                 }
-                await createRelationDB({ profile: profile, linked: persona, favor: defaultFavor }, t, true)
+                await backgroundService.db.createRelationDB(
+                    { profile: profile, linked: persona, favor: defaultFavor },
+                    t,
+                    true,
+                )
             }
         }
     })
     return
 }
 
-export async function patchCreateNewRelation(relations: Omit<RelationRecord, 'network'>[]) {
-    await consistentPersonaDBWriteAccess(async (t) => {
+export async function patchCreateNewRelation(relations: Omit<backgroundService.db.RelationRecord, 'network'>[]) {
+    await backgroundService.db.consistentPersonaDBWriteAccess(async (t) => {
         for (const relation of relations) {
             const relationInDB = await t
                 .objectStore('relations')
                 .get([relation.linked.toText(), relation.profile.toText()])
 
             if (relationInDB) {
-                await updateRelationDB(relation, t, true)
+                await backgroundService.db.updateRelationDB(relation, t, true)
                 continue
             }
 
-            await createRelationDB(
+            await backgroundService.db.createRelationDB(
                 {
                     ...relation,
                     favor: relation.favor === RelationFavor.DEPRECATED ? RelationFavor.UNCOLLECTED : relation.favor,
@@ -310,36 +298,36 @@ export async function createNewRelation(
     linked: PersonaIdentifier,
     favor = RelationFavor.UNCOLLECTED,
 ) {
-    const t = await createRelationsTransaction()
+    const t = await backgroundService.db.createRelationsTransaction()
     const relationInDB = await t.objectStore('relations').get([linked.toText(), profile.toText()])
     if (relationInDB) return
 
-    await createRelationDB({ profile, linked, favor }, t)
+    await backgroundService.db.createRelationDB({ profile, linked, favor }, t)
 }
 
-export async function queryRelationsRecordFromIndexedDB(): Promise<RelationRecord[]> {
-    return queryRelationsFromIndexedDB(() => true)
+export async function queryRelationsRecordFromIndexedDB(): Promise<backgroundService.db.RelationRecord[]> {
+    return backgroundService.web.queryRelations(() => true)
 }
 
 export async function queryRelationPaged(
     options: {
         network: string
-        after?: RelationRecord
+        after?: backgroundService.db.RelationRecord
         pageOffset?: number
     },
     count: number,
-): Promise<RelationRecord[]> {
+): Promise<backgroundService.db.RelationRecord[]> {
     const currentPersona = await getCurrentPersonaIdentifier()
     if (currentPersona) {
-        return queryRelationsPagedDB(currentPersona, options, count)
+        return backgroundService.db.queryRelationsPagedDB(currentPersona, options, count)
     }
 
     return []
 }
 
 export async function updateRelation(profile: ProfileIdentifier, linked: PersonaIdentifier, favor: RelationFavor) {
-    const t = await createRelationsTransaction()
-    await updateRelationDB({ profile, linked, favor }, t)
+    const t = await backgroundService.db.createRelationsTransaction()
+    await backgroundService.db.updateRelationDB({ profile, linked, favor }, t)
 }
 // #endregion
 /**
@@ -350,17 +338,17 @@ export async function resolveIdentity(identifier: ProfileIdentifier): Promise<vo
     const unknown = new ProfileIdentifier(identifier.network, '$unknown')
     const self = new ProfileIdentifier(identifier.network, '$self')
 
-    const r = await queryProfilesDB({ identifiers: [unknown, self] })
+    const r = await backgroundService.db.queryProfilesDB({ identifiers: [unknown, self] })
     if (!r.length) return
     const final = {
         ...r.reduce((p, c) => ({ ...p, ...c })),
         identifier,
     }
     try {
-        await consistentPersonaDBWriteAccess(async (t) => {
-            await createProfileDB(final, t)
-            await deleteProfileDB(unknown, t).catch(() => {})
-            await deleteProfileDB(self, t).catch(() => {})
+        await backgroundService.db.consistentPersonaDBWriteAccess(async (t) => {
+            await backgroundService.db.createProfileDB(final, t)
+            await backgroundService.db.deleteProfileDB(unknown, t).catch(() => {})
+            await backgroundService.db.deleteProfileDB(self, t).catch(() => {})
         })
     } catch {
         // the profile already exists
@@ -373,7 +361,7 @@ export const updateCurrentPersonaAvatar = async (avatar: Blob) => {
     const identifier = await getCurrentPersonaIdentifier()
 
     if (identifier) {
-        await storeAvatar(identifier, await blobToArrayBuffer(avatar))
+        await backgroundService.storeAvatar(identifier, await blobToArrayBuffer(avatar))
         MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
     }
 }
@@ -383,7 +371,7 @@ export const getCurrentPersonaAvatar = async () => {
     if (!identifier) return null
 
     try {
-        return await queryAvatarDataURL(identifier)
+        return await backgroundService.queryAvatarDataURL(identifier)
     } catch {
         return null
     }
@@ -403,7 +391,7 @@ export async function queryPersonaByPrivateKey(privateKeyString: string) {
     const privateKey = decode(decodeArrayBuffer(privateKeyString)) as EC_JsonWebKey
     const identifier = ECKeyIdentifierFromJsonWebKey(privateKey)
 
-    const persona = await queryPersonaDB(identifier, undefined, true)
+    const persona = await backgroundService.db.queryPersonaDB(identifier, undefined, true)
     if (persona) {
         await loginPersona(persona.identifier)
         return personaRecordToPersona(persona)

@@ -1,5 +1,5 @@
 import { omit } from 'lodash-unified'
-import type { IDBPSafeTransaction } from '../../../../background/database/utils/openDB'
+import type * as backgroundService from '@masknet/background-service'
 import type { WalletDB } from '../database/Wallet.db'
 import type {
     ERC1155TokenRecord,
@@ -19,7 +19,10 @@ import {
     ERC721TokenRecordInDatabase,
 } from '@masknet/web3-shared-evm'
 
-export async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {
+export async function getWalletByAddress(
+    t: backgroundService.IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>,
+    address: string,
+) {
     const record = await t.objectStore('Wallet').get(formatEthereumAddress(address))
     return record ? LegacyWalletRecordOutDB(record) : null
 }

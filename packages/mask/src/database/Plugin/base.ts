@@ -1,5 +1,5 @@
 import { openDB, DBSchema } from 'idb/with-async-ittr'
-import { createDBAccess } from '../../../background/database/utils/openDB'
+import { createDBAccess } from '@masknet/background-service'
 
 type InStore = {
     plugin_id: string

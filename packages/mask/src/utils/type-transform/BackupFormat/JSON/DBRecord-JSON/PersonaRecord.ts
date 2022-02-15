@@ -1,5 +1,5 @@
 import type { BackupJSONFileLatest } from '../latest'
-import type { PersonaRecord } from '../../../../../../background/database/persona/db'
+import type { PersonaRecord } from '@masknet/background-service'
 import { Identifier, ECKeyIdentifier, IdentifierMap, ProfileIdentifier } from '@masknet/shared-base'
 export function PersonaRecordToJSONFormat(persona: PersonaRecord): BackupJSONFileLatest['personas'][0] {
     return {

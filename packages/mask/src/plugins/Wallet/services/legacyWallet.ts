@@ -3,7 +3,7 @@ import { EthereumAddress, HDKey } from 'wallet.ts'
 import { BigNumber } from 'bignumber.js'
 import { ec as EC } from 'elliptic'
 import { first } from 'lodash-unified'
-import { createTransaction } from '../../../../background/database/utils/openDB'
+import * as backgroundService from '@masknet/background-service'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import type { LegacyWalletRecord } from '../database/types'
 import { fromHex, toHex } from '@masknet/shared-base'
@@ -70,7 +70,7 @@ export async function getLegacyWalletRecords() {
 }
 
 async function getAllWalletRecords() {
-    const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet')
+    const t = backgroundService.createTransaction(await createWalletDBAccess(), 'readonly')('Wallet')
     const records = await t.objectStore('Wallet').getAll()
     const wallets = (
         await Promise.all<LegacyWalletRecord>(
@@ -96,7 +96,12 @@ async function makePrivateKey(record: LegacyWalletRecord) {
 }
 
 export async function freezeLegacyWallet(address: string) {
-    const walletStore = createTransaction(await createWalletDBAccess(), 'readwrite')('Wallet').objectStore('Wallet')
+    const walletStore = backgroundService
+        .createTransaction(
+            await createWalletDBAccess(),
+            'readwrite',
+        )('Wallet')
+        .objectStore('Wallet')
     for await (const cursor of walletStore) {
         const wallet = cursor.value
         if (isSameAddress(wallet.address, address)) {

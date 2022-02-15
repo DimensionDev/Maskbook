@@ -154,6 +154,7 @@ importers:
       '@babel/core': ^7.17.2
       '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
       '@hookform/resolvers': ^2.8.8
+      '@masknet/background-service': workspace:*
       '@masknet/backup-format': workspace:*
       '@masknet/icons': workspace:*
       '@masknet/plugin-example': workspace:*
@@ -208,6 +209,7 @@ importers:
     dependencies:
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
       '@hookform/resolvers': 2.8.8_react-hook-form@7.27.0
+      '@masknet/background-service': link:../background-service
       '@masknet/backup-format': link:../backup-format
       '@masknet/icons': link:../icons
       '@masknet/plugin-example': link:../plugins/example

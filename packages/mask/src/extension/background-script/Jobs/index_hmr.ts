@@ -1,9 +1,8 @@
 import * as IsolatedDashboardBridge from './IsolatedDashboardBridge'
 import * as InjectContentScripts from './InjectContentScripts'
-import * as NewInstalled from '../../../../background/tasks/NewInstalled'
 import * as PluginWorker from './StartPluginWorker'
 import * as SettingListeners from './SettingListeners'
-import * as CleanupProfileDatabase from '../../../../background/tasks/CleanProfileAndAvatar'
+import { CleanProfileAndAvatar, NewInstalled } from '@masknet/background-service'
 
 type CancelableJob = { default: (signal: AbortSignal) => void }
 const CancelableJobs: CancelableJob[] = [
@@ -12,7 +11,7 @@ const CancelableJobs: CancelableJob[] = [
     IsolatedDashboardBridge,
     PluginWorker,
     SettingListeners,
-    CleanupProfileDatabase,
+    CleanProfileAndAvatar,
 ]
 
 const abort = new AbortController()

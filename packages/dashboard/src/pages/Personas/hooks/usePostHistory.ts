@@ -26,6 +26,6 @@ export const usePostHistory = (network: string, page: number, size = 20) => {
 
         cache.current.set(page, last(values))
 
-        return values
+        return values as PostRecord[]
     }, [page, size, network, currentPersona])
 }

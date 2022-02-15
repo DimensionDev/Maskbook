@@ -1,4 +1,4 @@
-import type { ProfileRecord } from '../../../../../../background/database/persona/db'
+import type { ProfileRecord } from '@masknet/background-service'
 import type { BackupJSONFileLatest } from '../latest'
 import { ProfileIdentifier, Identifier, ECKeyIdentifier } from '@masknet/shared-base'
 

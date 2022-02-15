@@ -1,2 +1,2 @@
-export * from './CleanProfileAndAvatar'
-export * from './NewInstalled'
+export * as CleanProfileAndAvatar from './CleanProfileAndAvatar'
+export * as NewInstalled from './NewInstalled'

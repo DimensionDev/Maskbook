@@ -9,7 +9,7 @@ import {
 } from '@masknet/shared-base'
 import { prepareRecipientDetail } from './prepareRecipientDetail'
 import { cryptoProviderTable } from './cryptoProviderTable'
-import { updatePostDB, RecipientDetail, RecipientReason } from '../../../../background/database/post'
+import * as backgroundService from '@masknet/background-service'
 import { getNetworkWorkerUninitialized } from '../../../social-network/worker'
 import { queryPrivateKey, queryLocalKey } from '../../../database'
 export async function appendShareTarget(
@@ -18,7 +18,7 @@ export async function appendShareTarget(
     iv: string,
     people: ProfileIdentifier[],
     whoAmI: ProfileIdentifier,
-    reason: RecipientReason,
+    reason: backgroundService.RecipientReason,
 ): Promise<void> {
     const cryptoProvider = cryptoProviderTable[version]
     if (typeof postAESKey === 'string') {
@@ -41,12 +41,12 @@ export async function appendShareTarget(
         )
         const gunHint = getNetworkWorkerUninitialized(whoAmI)?.gunNetworkHint
         gunHint && Gun2.publishPostAESKeyOnGun2(version, iv, gunHint, othersAESKeyEncrypted)
-        updatePostDB(
+        backgroundService.updatePostDB(
             {
                 identifier: new PostIVIdentifier(whoAmI.network, iv),
                 recipients: new IdentifierMap(
                     new Map(
-                        people.map<[string, RecipientDetail]>((identifier) => [
+                        people.map<[string, backgroundService.RecipientDetail]>((identifier) => [
                             identifier.toText(),
                             {
                                 reason: [reason],

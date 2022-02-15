@@ -1,7 +1,7 @@
 import * as bip39 from 'bip39'
 import * as wallet from 'wallet.ts'
 import { encodeArrayBuffer } from '@dimensiondev/kit'
-import type { PersonaRecord } from '../../../background/database/persona/db'
+import type { PersonaRecord } from '@masknet/background-service'
 import {
     EC_Private_JsonWebKey,
     EC_Public_JsonWebKey,

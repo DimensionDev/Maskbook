@@ -1,5 +1,5 @@
 import { DBSchema, openDB } from 'idb/with-async-ittr'
-import { createDBAccess } from '../../../../background/database/utils/openDB'
+import * as backgroundService from '@masknet/background-service'
 import type {
     ERC1155TokenRecordInDatabase,
     ERC20TokenRecordInDatabase,
@@ -13,7 +13,7 @@ function path<T>(x: T) {
     return x
 }
 
-export const createWalletDBAccess = createDBAccess(() => {
+export const createWalletDBAccess = backgroundService.createDBAccess(() => {
     return openDB<WalletDB>('maskbook-plugin-wallet', 9, {
         async upgrade(db, oldVersion, newVersion, tx) {
             function v0_v1() {

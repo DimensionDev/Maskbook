@@ -2,17 +2,10 @@ import type { ProfileIdentifier } from '@masknet/shared-base'
 import { RelationFavor } from '@masknet/shared-base'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../../utils'
 import { i18n } from '../../../../shared-ui/locales_legacy'
-import {
-    attachProfileDB,
-    consistentPersonaDBWriteAccess,
-    createOrUpdatePersonaDB,
-    createOrUpdateProfileDB,
-} from '../../../../background/database/persona/db'
 import { currySameAddress } from '@masknet/web3-shared-evm'
 import { PersonaRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PersonaRecord'
 import { ProfileRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/ProfileRecord'
 import { PostRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PostRecord'
-import { createPostDB, PostDBAccess, updatePostDB } from '../../../database'
 import { WalletRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
 import {
     getDerivableAccounts,
@@ -25,7 +18,7 @@ import { addWallet } from '../../../plugins/Wallet/services/wallet/database'
 import { patchCreateNewRelation, patchCreateOrUpdateRelation } from '../IdentityService'
 import { RelationRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/RelationRecord'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
-import { createTransaction } from '../../../../background/database/utils/openDB'
+import * as backgroundService from '@masknet/background-service'
 
 /**
  * Restore the backup
@@ -35,9 +28,9 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
     if (!data) throw new TypeError(i18n.t('service_invalid_backup_file'))
 
     {
-        await consistentPersonaDBWriteAccess(async (t) => {
+        await backgroundService.db.consistentPersonaDBWriteAccess(async (t) => {
             for (const x of data.personas) {
-                await createOrUpdatePersonaDB(
+                await backgroundService.db.createOrUpdatePersonaDB(
                     PersonaRecordFromJSONFormat(x),
                     { explicitUndefinedField: 'ignore', linkedProfiles: 'merge', protectPrivateKey: true },
                     t,
@@ -46,9 +39,14 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
 
             for (const x of data.profiles) {
                 const { linkedPersona, ...record } = ProfileRecordFromJSONFormat(x)
-                await createOrUpdateProfileDB(record, t)
+                await backgroundService.db.createOrUpdateProfileDB(record, t)
                 if (linkedPersona) {
-                    await attachProfileDB(record.identifier, linkedPersona, { connectionConfirmState: 'confirmed' }, t)
+                    await backgroundService.db.attachProfileDB(
+                        record.identifier,
+                        linkedPersona,
+                        { connectionConfirmState: 'confirmed' },
+                        t,
+                    )
                 }
             }
         })
@@ -76,13 +74,13 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
         }
     }
     {
-        const t = createTransaction(await PostDBAccess(), 'readwrite')('post')
+        const t = backgroundService.createTransaction(await backgroundService.PostDBAccess(), 'readwrite')('post')
         for (const x of data.posts) {
             const { val, err } = Result.wrap(() => PostRecordFromJSONFormat(x))
             if (err) continue
             if (await t.objectStore('post').get(val.identifier.toText())) {
-                await updatePostDB(val, 'append', t)
-            } else await createPostDB(val, t)
+                await backgroundService.updatePostDB(val, 'append', t)
+            } else await backgroundService.createPostDB(val, t)
         }
     }
 

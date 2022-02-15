@@ -1,7 +1,7 @@
 import { first } from 'lodash-unified'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import type { JsonRpcPayload } from 'web3-core-helpers'
-import { createTransaction } from '../../../../background/database/utils/openDB'
+import * as backgroundService from '@masknet/background-service'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import { openPopupWindow } from '../../../extension/background-script/HelperService'
 
@@ -13,7 +13,7 @@ function requestSorter(a: JsonRpcPayload, z: JsonRpcPayload) {
 }
 
 export async function getUnconfirmedRequests() {
-    const t = createTransaction(await createWalletDBAccess(), 'readonly')('UnconfirmedRequestChunk')
+    const t = backgroundService.createTransaction(await createWalletDBAccess(), 'readonly')('UnconfirmedRequestChunk')
     const chunk = await t.objectStore('UnconfirmedRequestChunk').get(MAIN_RECORD_ID)
     if (!chunk) return []
     return chunk.requests.slice(0, MAX_UNCONFIRMED_REQUESTS_SIZE).sort(requestSorter)
@@ -25,7 +25,7 @@ export async function topUnconfirmedRequest() {
 
 export async function popUnconfirmedRequest() {
     const now = new Date()
-    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('UnconfirmedRequestChunk')
+    const t = backgroundService.createTransaction(await createWalletDBAccess(), 'readwrite')('UnconfirmedRequestChunk')
 
     const chunk_ = await t.objectStore('UnconfirmedRequestChunk').get(MAIN_RECORD_ID)
     const requests = (chunk_?.requests ?? []).sort(requestSorter)
@@ -46,7 +46,7 @@ export async function popUnconfirmedRequest() {
 
 export async function pushUnconfirmedRequest(payload: JsonRpcPayload) {
     const now = new Date()
-    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('UnconfirmedRequestChunk')
+    const t = backgroundService.createTransaction(await createWalletDBAccess(), 'readwrite')('UnconfirmedRequestChunk')
 
     const chunk_ = await t.objectStore('UnconfirmedRequestChunk').get(MAIN_RECORD_ID)
     const requests = chunk_?.requests ?? []
@@ -76,7 +76,7 @@ export async function pushUnconfirmedRequest(payload: JsonRpcPayload) {
 
 export async function updateUnconfirmedRequest(payload: JsonRpcPayload) {
     const now = new Date()
-    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('UnconfirmedRequestChunk')
+    const t = backgroundService.createTransaction(await createWalletDBAccess(), 'readwrite')('UnconfirmedRequestChunk')
 
     const chunk_ = await t.objectStore('UnconfirmedRequestChunk').get(MAIN_RECORD_ID)
 
@@ -101,7 +101,7 @@ export async function updateUnconfirmedRequest(payload: JsonRpcPayload) {
 
 export async function deleteUnconfirmedRequest(payload: JsonRpcPayload) {
     const now = new Date()
-    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('UnconfirmedRequestChunk')
+    const t = backgroundService.createTransaction(await createWalletDBAccess(), 'readwrite')('UnconfirmedRequestChunk')
 
     const chunk_ = await t.objectStore('UnconfirmedRequestChunk').get(MAIN_RECORD_ID)
     const requests = (chunk_?.requests ?? []).filter((x) => x.id !== payload.id)
@@ -119,7 +119,7 @@ export async function deleteUnconfirmedRequest(payload: JsonRpcPayload) {
 
 export async function clearUnconfirmedRequests() {
     const now = new Date()
-    const t = createTransaction(await createWalletDBAccess(), 'readwrite')('UnconfirmedRequestChunk')
+    const t = backgroundService.createTransaction(await createWalletDBAccess(), 'readwrite')('UnconfirmedRequestChunk')
 
     const chunk_ = await t.objectStore('UnconfirmedRequestChunk').get(MAIN_RECORD_ID)
     const requests = chunk_?.requests ?? []

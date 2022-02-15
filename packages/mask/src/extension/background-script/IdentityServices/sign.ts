@@ -10,7 +10,7 @@ import {
 } from 'ethereumjs-util'
 import { MaskMessages } from '@masknet/shared'
 import { delay, PersonaIdentifier, fromBase64URL, PopupRoutes } from '@masknet/shared-base'
-import { queryPersonasWithPrivateKey } from '../../../../background/database/persona/db'
+import { db } from '@masknet/background-service'
 import { openPopupWindow } from '../HelperService'
 export interface SignRequest {
     /** Use that who to sign this message. */
@@ -48,7 +48,7 @@ export async function signWithPersona({ message, method, identifier }: SignReque
         })
     })
     const signer = await waitForApprove
-    const persona = (await queryPersonasWithPrivateKey()).find((x) => x.identifier.equals(signer))
+    const persona = (await db.queryPersonasWithPrivateKey()).find((x) => x.identifier.equals(signer))
     if (!persona) throw new Error('Persona not found')
 
     // will have problem with UTF-8?

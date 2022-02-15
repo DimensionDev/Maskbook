@@ -6,10 +6,9 @@ import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { i18n } from '../../../../shared-ui/locales_legacy'
 import { queryPersonaRecord, queryLocalKey } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier, delay } from '@masknet/shared-base'
-import { PostRecord, queryPostDB, updatePostDB } from '../../../../background/database/post'
+import * as backgroundService from '@masknet/background-service'
 import { getNetworkWorker, getNetworkWorkerUninitialized } from '../../../social-network/worker'
 import { cryptoProviderTable } from './cryptoProviderTable'
-import type { PersonaRecord } from '../../../../background/database/persona/db'
 import { verifyOthersProve } from './verifyOthersProve'
 import { publicSharedAESKey } from '../../../crypto/crypto-alpha-38'
 import { DecryptFailedReason } from '../../../utils/constants'
@@ -160,7 +159,7 @@ async function* decryptFromPayloadWithProgress_raw(
             await verifyOthersProve({ raw: data.authorPublicKey }, author).catch(console.error)
         }
         // ? Find author's public key.
-        let authorPersona!: PersonaRecord
+        let authorPersona!: backgroundService.db.PersonaRecord
         for await (const _ of asyncIteratorWithResult(findAuthorPublicKey(author, !!cachedPostResult))) {
             if (author.isUnknown) break
             if (!_.done) {
@@ -350,7 +349,7 @@ async function* findAuthorPublicKey(
     by: ProfileIdentifier,
     hasCache: boolean,
     maxIteration = 10,
-): AsyncGenerator<Progress, 'out of chance' | 'use cache' | PersonaRecord, unknown> {
+): AsyncGenerator<Progress, 'out of chance' | 'use cache' | backgroundService.db.PersonaRecord, unknown> {
     let author = await queryPersonaRecord(by)
     let iterations = 0
     while (!author?.publicKey) {
@@ -393,18 +392,18 @@ async function decryptFromCache(postPayload: Payload, by: ProfileIdentifier, dis
     const cryptoProvider = version === -40 ? Alpha40 : Alpha39
 
     const postIdentifier = new PostIVIdentifier(by.network, iv)
-    const cachedKey = await queryPostDB(postIdentifier)
+    const cachedKey = await backgroundService.queryPostDB(postIdentifier)
     if (cachedKey && !cachedKey.url && discoverURL) {
-        await updatePostDB({ identifier: postIdentifier, url: discoverURL }, 'append')
+        await backgroundService.updatePostDB({ identifier: postIdentifier, url: discoverURL }, 'append')
     }
     const setCache = (postAESKey: AESJsonWebKey) => {
-        const postUpdate: Partial<PostRecord> & Pick<PostRecord, 'identifier'> = {
+        const postUpdate: Partial<backgroundService.PostRecord> & Pick<backgroundService.PostRecord, 'identifier'> = {
             identifier: postIdentifier,
             postCryptoKey: postAESKey,
             postBy: by,
         }
         if (discoverURL) postUpdate.url = discoverURL
-        updatePostDB(postUpdate, 'append')
+        backgroundService.updatePostDB(postUpdate, 'append')
     }
     if (cachedKey?.postCryptoKey) {
         try {
