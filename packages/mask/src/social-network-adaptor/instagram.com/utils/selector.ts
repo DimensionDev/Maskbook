@@ -39,3 +39,9 @@ export const searchNickNameSelector = () =>
 
 export const searchUserIdSelector = () =>
     querySelector<HTMLDivElement>('[id="react-root"] section main header section h2')
+
+export const searchProfileTabArticlePageSelector = () =>
+    querySelector<E>('[id="react-root"] section main > div > div:last-child > article')
+
+export const searchProfileTabOtherArticlePageSelector = () =>
+    querySelector<E>('[id="react-root"] section main > div > div:last-child > div')

@@ -28,14 +28,10 @@ export function injectProfileTabAtInstagram(signal: AbortSignal) {
 
 function getStyleProps() {
     const EMPTY_STYLE = {} as CSSStyleDeclaration
-
     const eleTab = searchProfileTabSelector().evaluate() as Element
     const style = eleTab ? window.getComputedStyle(eleTab) : EMPTY_STYLE
-
     const activeTab = searchProfileActiveTabSelector().evaluate() as Element
-    console.log(activeTab)
     const activeStyle = activeTab ? window.getComputedStyle(activeTab) : EMPTY_STYLE
-    console.log(activeStyle.color)
     return {
         color: style.color,
         font: style.font,
@@ -93,7 +89,7 @@ export function ProfileTabAtInstagram() {
 
         Array.from(searchProfileTabPageSelector().evaluate()?.childNodes ?? []).map((v) => {
             const ele = v as HTMLDivElement
-            if (ele.tagName !== 'SPAN') ele.style.visibility = ''
+            if (ele.tagName !== 'SPAN') ele.style.display = ''
         })
     }
     const clear = () => {
@@ -104,7 +100,7 @@ export function ProfileTabAtInstagram() {
 
         Array.from(searchProfileTabPageSelector().evaluate()?.childNodes ?? []).map((v) => {
             const ele = v as HTMLDivElement
-            if (ele.tagName !== 'SPAN') ele.style.visibility = 'hidden'
+            if (ele.tagName !== 'SPAN') ele.style.display = 'none'
         })
     }
     return (
