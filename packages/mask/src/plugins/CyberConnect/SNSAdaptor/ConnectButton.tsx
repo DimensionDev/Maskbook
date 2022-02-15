@@ -93,7 +93,6 @@ export default function ConnectButton({ address }: { address: string }) {
     const [isFollowing, setIsFollowing] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const blockChainNetwork = usePluginIDContext()
-    const { providerType } = usePluginWeb3StateContext()
     useAsync(async () => {
         if (isSameAddress(myAddress, address)) return
         const res = await PluginCyberConnectRPC.fetchFollowStatus(myAddress, address)
