@@ -14,6 +14,7 @@
   // !       do not add dashboard/ as a reference otherwise there is a circular dependency on the type level.
   "references": [
     { "path": "../../public-api" },
+    { "path": "../../plugin-wallet" },
     { "path": "../../background-service" },
     { "path": "../../encryption" },
     { "path": "../../shared" },
