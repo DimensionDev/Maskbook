@@ -92,7 +92,7 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
         const str = tab === 'file' ? content : text
 
         if (str) {
-            const obj = Services.Welcome.parseBackupStr(str)
+            const obj = await Services.Welcome.parseBackupStr(str)
             if (obj) {
                 setJSON(obj.info)
                 setId(obj.id)
