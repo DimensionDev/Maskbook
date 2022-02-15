@@ -54,6 +54,7 @@ namespace Version38Or39 {
             async function main() {
                 const iter = subscribeGunMapData([postHash], isValidData, abortSignal)
                 for await (const data of iter) emit(data)
+                queue.stop()
             }
 
             main()

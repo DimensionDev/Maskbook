@@ -1,5 +1,5 @@
 import { EventIterator } from 'event-iterator'
-import { getGunInstance } from './instance'
+import { getGunInstance, OnCloseEvent } from './instance'
 
 function getGunNodeFromPath(path: string[]) {
     const resultNode = path.reduce((gun, path) => gun.get(path as never), getGunInstance())
@@ -65,10 +65,14 @@ export async function* subscribeGunMapData<T>(path: string[], isT: (x: unknown) 
         // gun.off() will remove ALL listener on it
         let listenerClosed = false
 
-        abortSignal.addEventListener('abort', () => {
+        function stop() {
             queue.stop()
             listenerClosed = true
-        })
+            OnCloseEvent.delete(stop)
+            console.log('stoping push events')
+        }
+        abortSignal.addEventListener('abort', stop)
+        OnCloseEvent.add(stop)
 
         const resultNode = getGunNodeFromPath(path)
 
