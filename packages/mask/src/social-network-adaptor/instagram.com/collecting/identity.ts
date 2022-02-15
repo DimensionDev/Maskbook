@@ -23,6 +23,7 @@ function resolveCurrentVisitingIdentityInner(
             nickname,
             avatar,
             bio,
+            homepage,
         }
     }
     const createWatcher = (selector: LiveSelector<HTMLElement, boolean>) => {
