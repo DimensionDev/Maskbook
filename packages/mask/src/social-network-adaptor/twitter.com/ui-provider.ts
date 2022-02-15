@@ -184,6 +184,9 @@ const twitterUI: SocialNetworkUI.Definition = {
         avatarClipNFT: injectNFTAvatarClipInTwitter,
     },
     configuration: {
+        nextIDConfig: {
+            enable: true,
+        },
         steganography: {
             password() {
                 // ! Change this might be a breaking change !

@@ -292,6 +292,7 @@ export namespace SocialNetworkUI {
     }
     export namespace Configuration {
         export interface Define {
+            nextIDConfig?: NextIDConfig
             steganography?: SteganographyConfig
             setupWizard?: SetupWizardConfig
         }
@@ -305,6 +306,9 @@ export namespace SocialNetworkUI {
         }
         export interface SetupWizardConfig {
             disableSayHello?: boolean
+        }
+        export interface NextIDConfig {
+            enable?: boolean
         }
     }
 }
