@@ -318,7 +318,7 @@ importers:
       '@hookform/resolvers': 2.8.8
       '@masknet/background-service': workspace:*
       '@masknet/dashboard': workspace:*
-      '@masknet/encryption': workspace:^0.0.0
+      '@masknet/encryption': workspace:*
       '@masknet/external-plugin-previewer': workspace:*
       '@masknet/icons': workspace:*
       '@masknet/injected-script': workspace:*

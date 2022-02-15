@@ -87,10 +87,10 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@masknet/plugin-file-service': join(__dirname, '../../plugins/FileService/src/'),
                     '@masknet/external-plugin-previewer': join(__dirname, '../../external-plugin-previewer/src/'),
                     '@masknet/public-api': join(__dirname, '../../public-api/src/'),
+                    '@masknet/encryption': join(__dirname, '../../encryption/src/'),
                     '@masknet/background-service': join(__dirname, '../../background-service/src/'),
                     '@masknet/sdk': join(__dirname, '../../mask-sdk/server/'),
                     '@masknet/backup-format': join(__dirname, '../../backup-format/src/'),
-                    '@masknet/encryption': join(__dirname, '../../encryption/src'),
                     '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
                 }
                 if (profiling) {
