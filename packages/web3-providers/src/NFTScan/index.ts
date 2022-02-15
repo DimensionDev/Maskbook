@@ -6,6 +6,7 @@ import type { NonFungibleTokenAPI } from '..'
 import { NFTSCAN_ACCESS_TOKEN_URL, NFTSCAN_BASE_API } from './constants'
 import type { NFTScanAsset, NFT_Assets } from './types'
 import { isProxyENV } from '../helpers'
+import { toNonIPFSImage } from './utils'
 
 const tokenCache = new Map<'token', { token: string; expiration: Date }>()
 
@@ -58,7 +59,7 @@ function createERC721TokenAsset(asset: NFTScanAsset) {
         {
             name: payload?.name ?? asset.nft_name ?? asset.nft_platform_name ?? '',
             description: payload?.description ?? '',
-            mediaUrl: payload?.image ?? '',
+            mediaUrl: toNonIPFSImage(asset.nft_cover ?? asset.nft_content_uri ?? payload.image ?? ''),
             owner: asset.nft_holder ?? '',
         },
         asset.token_id,

@@ -19,6 +19,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         height: '100%',
         borderRadius: '50%',
+        color: theme.palette.primary.main,
     },
     tip: {
         padding: theme.spacing(1),

@@ -10,6 +10,7 @@ import {
     NonFungibleAssetProvider,
     SocketState,
     useCollectibles,
+    useCollections,
     Wallet,
 } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, Stack, styled, Typography } from '@mui/material'
@@ -95,8 +96,14 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '50%',
     },
     networkSelected: {
+        width: 24,
+        height: 24,
+        minHeight: 24,
+        minWidth: 24,
+        lineHeight: '24px',
         background: theme.palette.primary.main,
         color: '#ffffff',
+        fontSize: 10,
         opacity: 1,
         '&:hover': {
             background: theme.palette.primary.main,
@@ -239,6 +246,8 @@ export function CollectionList({
     const [selectedCollection, setSelectedCollection] = useState<ERC721ContractDetailed | 'all' | undefined>('all')
     const { resolvedAddress: address } = addressName
 
+    const { data: collectionsFormRemote } = useCollections(address, chainId)
+
     const {
         data: collectibles,
         state: loadingCollectibleDone,
@@ -265,8 +274,20 @@ export function CollectionList({
         return uniqBy(
             collectibles.map((x) => x.contractDetailed),
             (x) => x.address.toLowerCase(),
-        )
-    }, [collectibles.length])
+        ).map((x) => {
+            const item = collectionsFormRemote.find((c) => c.address === x.address)
+            if (item) {
+                return {
+                    name: item.name,
+                    symbol: item.name,
+                    baseURI: item.iconURL,
+                    iconURL: item.iconURL,
+                    address: item.address,
+                } as ERC721ContractDetailed
+            }
+            return x
+        })
+    }, [collectibles.length, collectionsFormRemote])
 
     console.log(collections)
 
@@ -281,18 +302,9 @@ export function CollectionList({
 
     return (
         <Box>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
+            <Stack direction="row" justifyContent="space-between" alignItems="center" px={2}>
                 <Stack display="inline-flex">
-                    <AllNetworkButton
-                        className={classes.networkSelected}
-                        sx={{
-                            width: 30,
-                            height: 30,
-                            minHeight: 30,
-                            minWidth: 30,
-                            lineHeight: `${30}px`,
-                        }}
-                        onClick={() => setSelectedCollection('all')}>
+                    <AllNetworkButton className={classes.networkSelected} onClick={() => setSelectedCollection('all')}>
                         ALL
                     </AllNetworkButton>
                     <Typography align="center" color={(theme) => theme.palette.primary.main} fontSize="12px">
