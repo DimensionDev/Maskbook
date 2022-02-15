@@ -15,7 +15,7 @@ export async function getLocalImplementation<T extends object>(
     impl: () => T | Promise<T>,
     ref: object,
 ) {
-    if (!isBackground) return {}
+    if (!isBackground) return {} as T
 
     const isUpdate = RPCCache.has(ref)
     const localImpl: T = RPCCache.get(ref) || ({} as any)
