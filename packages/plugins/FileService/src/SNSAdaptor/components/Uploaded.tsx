@@ -16,6 +16,7 @@ const useStyles = makeStyles()({
         height: 250,
         flexDirection: 'column',
         justifyContent: 'space-between',
+        flexWrap: 'nowrap',
         alignItems: 'center',
         userSelect: 'none',
         paddingTop: 18,
@@ -73,7 +74,7 @@ export const Uploaded: React.FC = () => {
             <Grid item onClick={onPreview}>
                 <File width={96} height={120} />
             </Grid>
-            <Grid item>
+            <Grid item sx={{ width: '100%' }}>
                 <FileName name={state.name} />
                 <Typography component="section" className={classes.meta}>
                     <p className={classes.info}>
