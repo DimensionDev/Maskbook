@@ -1,16 +1,13 @@
 import { useCallback, useState } from 'react'
-import { MaskTextIcon } from '@masknet/icons'
 import { LoadingAnimation } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { Card, CardActions, CardContent, CardHeader, Link, Paper, Tab, Tabs, Typography } from '@mui/material'
+import { Card, CardContent, CardHeader, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { useI18N } from '../../../utils'
 import { useFetchIdeaToken } from '../hooks/useFetchIdeaToken'
 import { StatsView } from './StatsView'
 import { ChartsView } from '../SNSAdaptor/ChartsView'
 import { BoughtTogetherView } from '../SNSAdaptor/BoughtTogetherView'
 import { IdeaTokenViewDeck } from '../SNSAdaptor/IdeaTokenViewDeck'
-import IdeaMarketIcon from '../icons/IdeaMarketIcon'
-import { BASE_URL } from '../constants'
 import { ContentView } from './ContentView'
 
 const useStyles = makeStyles()((theme) => {
@@ -165,33 +162,6 @@ export function IdeaMarketView(props: IdeaMarketViewProps) {
                     {tabIndex === 3 ? <BoughtTogetherView ideaToken={ideaToken} setTabIndex={setTabIndex} /> : null}
                 </Paper>
             </CardContent>
-            <CardActions className={classes.footer}>
-                <Typography className={classes.footnote} variant="subtitle2">
-                    <span>{t('plugin_powered_by')} </span>
-                    <Link
-                        className={classes.footLink}
-                        color="textSecondary"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        title="Mask"
-                        href="https://mask.io">
-                        <MaskTextIcon classes={{ root: classes.mask }} viewBox="0 0 80 20" />
-                    </Link>
-                </Typography>
-                <Typography className={classes.footnote} variant="subtitle2">
-                    <span>{t('supported_by')}</span>
-                    <Link
-                        className={classes.footLink}
-                        target="_blank"
-                        color="textSecondary"
-                        rel="noopener noreferrer"
-                        title="dHEDGE"
-                        href={BASE_URL}>
-                        <IdeaMarketIcon height="10px" />
-                        {t('plugin_ideamarket_ideamarket')}
-                    </Link>
-                </Typography>
-            </CardActions>
         </Card>
     )
 }

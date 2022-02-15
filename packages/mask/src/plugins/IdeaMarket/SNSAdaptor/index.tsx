@@ -1,8 +1,7 @@
-import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
+import { Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { uniq } from 'lodash-unified'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { base } from '../base'
 import { checkUrl, getAssetInfoFromURL } from '../utils'
 import { IdeaMarketView } from './IdeaMarketView'
@@ -24,11 +23,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
 export default sns
 
 function Renderer(props: { marketName: string; ideaName: string }) {
+    usePluginWrapper(true)
     return (
-        <MaskPluginWrapper pluginName="IdeaMarket">
-            <EthereumChainBoundary chainId={ChainId.Arbitrum}>
-                <IdeaMarketView marketName={props.marketName} ideaName={props.ideaName} />
-            </EthereumChainBoundary>
-        </MaskPluginWrapper>
+        <EthereumChainBoundary chainId={ChainId.Arbitrum}>
+            <IdeaMarketView marketName={props.marketName} ideaName={props.ideaName} />
+        </EthereumChainBoundary>
     )
 }
