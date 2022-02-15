@@ -263,7 +263,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                 ? amount_.minus(multipliedBy(30000, gasPrice))
                 : amount_
 
-        return amount_.toFixed()
+        return BigNumber.max(0, amount_).toFixed()
     }, [selectedAsset?.balance, gasPrice, selectedAsset?.token.type, tokenBalance])
 
     // #region set default gasLimit
