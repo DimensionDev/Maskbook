@@ -154,6 +154,18 @@ function NFTAvatarInFacebook() {
 
     useEffect(() => setAvatar(_avatar), [_avatar, location])
 
+    // #region clear white border
+    useEffect(() => {
+        const node = searchFacebookAvatarSelector().closest<HTMLDivElement>(3).evaluate()
+        if (!node) return
+        if (showAvatar) {
+            node.setAttribute('style', 'padding: 0px')
+        } else {
+            node.removeAttribute('style')
+        }
+    }, [showAvatar])
+    // #endregion
+
     if (!avatar || !size || !showAvatar) return null
 
     return (

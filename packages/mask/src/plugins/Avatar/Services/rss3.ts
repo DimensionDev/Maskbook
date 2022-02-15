@@ -11,12 +11,13 @@ interface NFTRSSNode {
 const cache = new Map<string, [Promise<NFTRSSNode | undefined>, number]>()
 
 export async function getNFTAvatarFromRSS(userId: string, address: string) {
-    let v = cache.get(address)
+    const key = `${address}, ${userId}`
+    let v = cache.get(key)
     if (!v || Date.now() > v[1]) {
-        cache.set(address, [_getNFTAvatarFromRSS(userId, address), addSeconds(Date.now(), 60).getTime()])
+        cache.set(key, [_getNFTAvatarFromRSS(userId, address), addSeconds(Date.now(), 60).getTime()])
     }
 
-    v = cache.get(address)
+    v = cache.get(key)
     const result = await v?.[0]
     return result?.nft
 }
