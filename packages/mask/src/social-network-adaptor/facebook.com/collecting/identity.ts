@@ -5,7 +5,7 @@ import { getProfileIdentifierAtFacebook, getUserID } from '../utils/getProfileId
 import { isMobileFacebook } from '../utils/isMobile'
 import { delay, ProfileIdentifier } from '@masknet/shared-base'
 import { searchAvatarSelector, searchUserIdOnMobileSelector } from '../utils/selector'
-import { getAvatar, getBioDescription, getNickName } from '../utils/user'
+import { getAvatar, getBioDescription, getFacebookId, getNickName } from '../utils/user'
 
 export const IdentityProviderFacebook: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: true,
@@ -48,9 +48,7 @@ function resolveCurrentVisitingIdentityInner(
         await delay(500)
         const nickname = getNickName()
         const bio = getBioDescription()
-        const handle = await fetch('/me', { method: 'HEAD', signal: cancel })
-            .then((x) => x.url)
-            .then(getUserID)
+        const handle = getFacebookId()
 
         const avatar = getAvatar()
 
@@ -77,6 +75,8 @@ function resolveCurrentVisitingIdentityInner(
             watcher.stopWatch()
         })
     }
+
+    assign()
 
     createWatcher(selector)
 }

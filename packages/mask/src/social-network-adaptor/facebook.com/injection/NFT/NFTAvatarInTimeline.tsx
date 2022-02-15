@@ -6,7 +6,7 @@ import { Flags } from '../../../../../shared'
 import { NFTBadgeTimeline } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeline'
 import { isMobileFacebook } from '../../utils/isMobile'
 
-function getFacebookId(element: HTMLElement) {
+function getFacebookId(element: HTMLElement | SVGElement) {
     const node = (isMobileFacebook ? element.firstChild : element.parentNode?.parentNode) as HTMLLinkElement
     if (!node) return
     if (!isMobileFacebook) return new URL(node.href).searchParams.get('id')
@@ -15,7 +15,7 @@ function getFacebookId(element: HTMLElement) {
     return match[1]
 }
 
-function _(selector: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
+function _(selector: () => LiveSelector<HTMLElement | SVGElement, false>, signal: AbortSignal) {
     startWatch(
         new MutationObserverWatcher(selector()).useForeach((element, key) => {
             let remove = () => {}

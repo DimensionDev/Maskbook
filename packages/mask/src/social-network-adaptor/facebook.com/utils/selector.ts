@@ -11,15 +11,22 @@ const querySelectorAll = <T extends E>(selector: string) => {
     return new LiveSelector().querySelectorAll<T>(selector)
 }
 
-export const searchUserIdOnMobileSelector: () => LiveSelector<E, true> = () =>
-    querySelector<HTMLMetaElement>('div[data-sigil$="profile"] a')
+export const searchUserIdOnMobileSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
+    querySelector<HTMLAnchorElement>('div[data-sigil$="profile"] a')
 
-export const searchAvatarSelector: () => LiveSelector<E, true> = () => querySelector<E>('[href="/me/"] image')
+export const searchAvatarSelector: () => LiveSelector<HTMLImageElement, true> = () =>
+    querySelector<HTMLImageElement>('[role="link"] [role="img"] image, [role="button"] [role="img"] image')
 
-export const searchNickNameSelector: () => LiveSelector<E, true> = () => querySelector<E>('[href="/me/"] span > span')
+export const searchNickNameSelector: () => LiveSelector<HTMLSpanElement, true> = () =>
+    querySelector<HTMLSpanElement>('span[dir="auto"] div h1')
 
 export const bioDescriptionSelector = () =>
-    querySelector('[role="main"] h1').closest(5).querySelector<HTMLSpanElement>('span > span')
+    querySelector<HTMLSpanElement>('span[dir="auto"] div h1')
+        .closest(7)
+        .querySelector<HTMLSpanElement>('span[dir="auto"] > span')
+
+export const searchUserIdSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
+    querySelector<HTMLAnchorElement>('div[data-visualcompletion="ignore-dynamic"] > a[role="link"]')
 
 // #endregion facebook nft avatar
 
@@ -28,12 +35,14 @@ export const searchFacebookAvatarListSelector = () =>
 
 export const searchFacebookAvatarMobileListSelector = () => querySelector('#nuxChoosePhotoButton').closest<E>(6)
 
-export const searchFacebookAvatarSelector = () => querySelector('[role="button"] [role="img"]')
+export const searchFacebookAvatarSelector = () =>
+    querySelector('[role="button"] [role="img"], [role="link"] [role="img"]')
 
 export const searchFacebookAvatarOnMobileSelector = () =>
     querySelector('[data-sigil="timeline-cover"] i[aria-label$="picture"]')
 
-export const searchFaceBookPostAvatarSelector = () => querySelectorAll('[type="nested/pressable"] svg')
+export const searchFaceBookPostAvatarSelector = () =>
+    new LiveSelector<SVGElement, false>().querySelectorAll<SVGElement>('[type="nested/pressable"] svg')
 
 export const searchFaceBookPostAvatarOnMobileSelector = () => querySelectorAll('[data-gt=\'{"tn":"~"}\']')
 

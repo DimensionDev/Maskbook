@@ -3,6 +3,7 @@ import {
     searchAvatarSelector,
     searchFacebookAvatarOnMobileSelector,
     searchNickNameSelector,
+    searchUserIdSelector,
 } from './selector'
 import { collectNodeText } from '../../../utils'
 import { isMobileFacebook } from './isMobile'
@@ -17,7 +18,7 @@ export const getNickName = () => {
 export const getAvatar = () => {
     const node = isMobileFacebook
         ? searchFacebookAvatarOnMobileSelector().evaluate()
-        : (searchAvatarSelector().evaluate() as HTMLImageElement)
+        : searchAvatarSelector().evaluate()
     if (!node) return
 
     const imageURL =
@@ -29,8 +30,6 @@ export const getAvatar = () => {
 }
 
 export const getBioDescription = () => {
-    if (!location.pathname.includes('profile.php')) return
-
     const node = bioDescriptionSelector().evaluate()
 
     if (!node) return ''
@@ -42,6 +41,17 @@ export const getBioDescription = () => {
             return ''
         })
         .join('')
+}
+
+export const getFacebookId = () => {
+    const node = searchUserIdSelector().evaluate()
+
+    if (!node) return ''
+    const url = new URL(node.href)
+
+    if (url.pathname === '/profile.php' && url.searchParams.get('id')) return url.searchParams.get('id')
+
+    return url.pathname.replace('/', '')
 }
 
 const FACEBOOK_AVATAR_ID_MATCH = /(\w+).(?:png|jpg|gif|bmp)/

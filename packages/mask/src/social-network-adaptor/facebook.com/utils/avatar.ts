@@ -1,7 +1,7 @@
 import { getAvatarId } from './user'
 import { isMobileFacebook } from './isMobile'
 
-export function getInjectNodeInfo(element: HTMLElement) {
+export function getInjectNodeInfo(element: HTMLElement | SVGElement) {
     if (!isMobileFacebook) {
         const imgEle = element.querySelector<SVGImageElement>('image')
         if (!imgEle) return

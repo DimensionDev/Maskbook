@@ -11,6 +11,7 @@ export async function getNFTAvatar(
     chainId?: number,
 ) {
     const address = await getUserAddress(userId, network, networkPluginId, chainId)
+
     if (address) {
         return getNFTAvatarFromRSS(userId, address)
     }
