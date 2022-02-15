@@ -2,7 +2,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID } from '@masknet/plugin-infra'
 import { CYBERCONNECT_PLUGIN_ID } from './constants'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { CyberConnectIcon } from '../../resources/CyberConnectIcon'
+import { CyberConnectIcon } from './assets/CyberConnectIcon'
 export const base: Plugin.Shared.Definition = {
     ID: CYBERCONNECT_PLUGIN_ID,
     icon: <CyberConnectIcon />,

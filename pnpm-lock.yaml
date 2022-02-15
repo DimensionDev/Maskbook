@@ -300,6 +300,7 @@ importers:
       '@masknet/external-plugin-previewer': workspace:*
       '@masknet/icons': workspace:*
       '@masknet/injected-script': workspace:*
+      '@masknet/plugin-cyberconnect': workspace:*
       '@masknet/plugin-dao': workspace:*
       '@masknet/plugin-debugger': workspace:*
       '@masknet/plugin-example': workspace:*
@@ -437,6 +438,7 @@ importers:
       '@masknet/external-plugin-previewer': link:../external-plugin-previewer
       '@masknet/icons': link:../icons
       '@masknet/injected-script': link:../injected-script
+      '@masknet/plugin-cyberconnect': link:../plugins/CyberConnect
       '@masknet/plugin-dao': link:../plugins/DAO
       '@masknet/plugin-debugger': link:../plugins/Debugger
       '@masknet/plugin-example': link:../plugins/example
@@ -606,6 +608,24 @@ importers:
       use-subscription: 1.5.1_react@18.0.0-rc.0
     devDependencies:
       react-i18next: 11.15.4_881b2a51613eca9a23c14f7ecef9122a
+
+  packages/plugins/CyberConnect:
+    specifiers:
+      '@cyberlab/cyberconnect': ^4.2.0
+      '@masknet/plugin-infra': workspace:*
+      '@masknet/shared-base': workspace:*
+      '@masknet/theme': workspace:*
+      '@masknet/web3-shared-evm': workspace:*
+      boring-avatars: ^1.5.8
+      react-use: ^17.3.2
+    dependencies:
+      '@cyberlab/cyberconnect': 4.2.2
+      '@masknet/plugin-infra': link:../../plugin-infra
+      '@masknet/shared-base': link:../../shared-base
+      '@masknet/theme': link:../../theme
+      '@masknet/web3-shared-evm': link:../../web3-shared/evm
+      boring-avatars: 1.6.1
+      react-use: 17.3.2_757a802188413a36d4f24237d13b8e90
 
   packages/plugins/DAO:
     specifiers:
