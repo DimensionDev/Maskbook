@@ -28,7 +28,7 @@ export const getUserId = () => {
 }
 
 export const getAvatar = () => {
-    const node = searchAvatarSelector().evaluate() as HTMLImageElement
+    const node = searchAvatarSelector().evaluate()
     if (!node) return ''
 
     const imageURL = node.getAttribute('src') ?? ''

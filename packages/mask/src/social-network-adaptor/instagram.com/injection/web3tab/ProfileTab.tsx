@@ -1,36 +1,43 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { CollectibleIcon } from '@masknet/icons'
+import { combineAbortSignal } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { ProfileTab } from '../../../../components/InjectedComponents/ProfileTab'
 import { createReactRootShadowed, startWatch } from '../../../../utils'
 import {
     searchProfileActiveTabSelector,
-    searchProfileTabListLastChildSelector,
     searchProfileTabPageSelector,
     searchProfileTabSelector,
+    searchProfileTabListLastChildSelector,
 } from '../../utils/selector'
 
 export function injectProfileTabAtInstagram(signal: AbortSignal) {
     let tabInjected = false
 
-    const contentWatcher = new MutationObserverWatcher(searchProfileTabPageSelector()).useForeach(() => {
-        const elePage = searchProfileTabPageSelector().evaluate()
-        if (elePage && !tabInjected) {
-            const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())
-            startWatch(watcher, signal)
-            createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabAtInstagram />)
-            tabInjected = true
-        }
-    })
+    const contentWatcher = new MutationObserverWatcher(searchProfileTabPageSelector()).useForeach(
+        (node, key, proxy) => {
+            const subController = new AbortController()
+            const subSignal = combineAbortSignal(signal, subController.signal)
+            const elePage = proxy.realCurrent
+            if (elePage && !tabInjected) {
+                const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())
+                startWatch(watcher, subSignal)
+                createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabAtInstagram />)
+                tabInjected = true
+            }
+
+            return () => subController.abort()
+        },
+    )
 
     startWatch(contentWatcher, signal)
 }
 
 function getStyleProps() {
     const EMPTY_STYLE = {} as CSSStyleDeclaration
-    const eleTab = searchProfileTabSelector().evaluate() as Element
+    const eleTab = searchProfileTabSelector().evaluate()
     const style = eleTab ? window.getComputedStyle(eleTab) : EMPTY_STYLE
-    const activeTab = searchProfileActiveTabSelector().evaluate() as Element
+    const activeTab = searchProfileActiveTabSelector().evaluate()
     const activeStyle = activeTab ? window.getComputedStyle(activeTab) : EMPTY_STYLE
     return {
         color: style.color,

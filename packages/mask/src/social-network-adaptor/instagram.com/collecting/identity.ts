@@ -1,7 +1,6 @@
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { ProfileIdentifier, delay } from '@masknet/shared-base'
 import { creator, SocialNetworkUI as Next } from '../../../social-network'
-import Services from '../../../extension/service'
 import { instagramBase } from '../base'
 import { searchAvatarSelector } from '../utils/selector'
 import { getAvatar, getBioDescription, getNickname, getPersonalHomepage, getUserId } from '../utils/user'
@@ -25,13 +24,6 @@ function resolveCurrentVisitingIdentityInner(
             avatar,
             bio,
         }
-        Services.Helper.resolveTCOLink(homepage).then((link) => {
-            if (cancel?.aborted || !link) return
-            ref.value = {
-                ...ref.value,
-                homepage: link,
-            }
-        })
     }
     const createWatcher = (selector: LiveSelector<HTMLElement, boolean>) => {
         const watcher = new MutationObserverWatcher(selector)
