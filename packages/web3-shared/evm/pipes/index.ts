@@ -172,7 +172,7 @@ export function resolveBlockLinkOnExplorer(chainId: ChainId, block: string): str
 }
 
 export function resolveIPFSLink(ipfs: string): string {
-    return urlcat('https://coldcdn.com/api/cdn/2qkkg9/ipfs/:ipfs', { ipfs })
+    return urlcat('https://coldcdn.com/api/cdn/mipfsygtms/ipfs/:ipfs', { ipfs })
 }
 
 export function resolveDomainLink(domain?: string) {
