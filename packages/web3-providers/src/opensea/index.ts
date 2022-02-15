@@ -284,7 +284,8 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
                         ['non-fungible', 'semi-fungible'].includes(x.asset_contract.asset_contract_type) ||
                         ['ERC721', 'ERC1155'].includes(x.asset_contract.schema_name),
                 )
-                .map((asset: OpenSeaResponse) => createERC721TokenFromAsset(from, asset.token_id, chainId, asset)) ?? []
+                .map((asset: OpenSeaResponse) => createERC721TokenFromAsset(from, asset.token_id, chainId, asset))
+                .map((x) => ({ ...x, provideBy: 'OpenSea' })) ?? []
         return {
             data: assets,
             hasNextPage: assets.length === size,
