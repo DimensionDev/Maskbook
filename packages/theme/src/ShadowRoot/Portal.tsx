@@ -2,13 +2,15 @@ import { useRef, useEffect, forwardRef, useState, useContext } from 'react'
 import { useCurrentShadowRootStyles } from './ShadowRootStyleProvider'
 import type { PopperProps } from '@mui/material'
 import { NoEffectUsePortalShadowRootContext } from './context'
+import { useTheme } from '@mui/material'
+import { useCSSVariableInjector } from './CSSVariableInjector'
 
 /**
  * ! Do not export !
  *
  * You SHOULD NOT use this in React directly
  */
-let mountingPoint: HTMLDivElement
+let mountingPoint: HTMLElement
 let mountingShadowRoot: ShadowRoot
 export function setupPortalShadowRoot(
     init: ShadowRootInit,
@@ -19,7 +21,7 @@ export function setupPortalShadowRoot(
     for (const each of preventEventPropagationList) {
         mountingShadowRoot.addEventListener(each, (e) => e.stopPropagation())
     }
-    mountingPoint = mountingShadowRoot.appendChild(document.createElement('div'))
+    mountingPoint = mountingShadowRoot.appendChild(document.createElement('main'))
     return mountingShadowRoot!
 }
 
@@ -39,7 +41,7 @@ export function setupPortalShadowRoot(
  *      />
  * ))
  */
-export function usePortalShadowRoot(renderer: (container: HTMLDivElement | undefined) => null | JSX.Element) {
+export function usePortalShadowRoot(renderer: (container: HTMLElement | undefined) => null | JSX.Element) {
     // we ignore the changes on this property during multiple render
     // so we can violates the React hooks rule and still be safe.
     const disabled = useRef(useContext(NoEffectUsePortalShadowRootContext)).current
@@ -50,11 +52,17 @@ export function usePortalShadowRoot(renderer: (container: HTMLDivElement | undef
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const doms = useSideEffectRef(() => {
         const root = document.createElement('div')
-        const container = root.appendChild(document.createElement('div'))
-        const style = root.appendChild(document.createElement('style'))
-        return { root, container, style }
+        const shadow = root.attachShadow({ mode: 'open' })
+
+        const head = shadow.appendChild(document.createElement('head'))
+        const style = head.appendChild(document.createElement('style'))
+
+        const container = shadow.appendChild(document.createElement('main'))
+        return { root, shadow, head, container, style }
     })
-    const { container } = doms
+    const { container, head } = doms
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useCSSVariableInjector(useTheme, head)
 
     return (
         <IsolatedRender {...doms} findMountingShadowRef={findMountingShadowRef}>
@@ -75,7 +83,7 @@ type IsolatedRenderProps = React.PropsWithChildren<{
     style: HTMLStyleElement
     findMountingShadowRef: HTMLSpanElement | null
 }>
-function IsolatedRender({ container, root, style, children, findMountingShadowRef }: IsolatedRenderProps) {
+function IsolatedRender({ root, container, style, children, findMountingShadowRef }: IsolatedRenderProps) {
     const update = useUpdate()
     const css = useCurrentShadowRootStyles(findMountingShadowRef)
     const containerInUse = container.children.length !== 0
@@ -87,9 +95,9 @@ function IsolatedRender({ container, root, style, children, findMountingShadowRe
 
     useEffect(() => {
         if (!containerInUse) return root.remove()
-        const shadow = PortalShadowRoot()
-        if (root.parentElement === shadow) return
-        shadow.appendChild(root)
+        const portalContainer = PortalShadowRoot()
+        if (root.parentElement === portalContainer) return
+        portalContainer.appendChild(root)
     }, [containerInUse, root])
 
     useEffect(() => {
