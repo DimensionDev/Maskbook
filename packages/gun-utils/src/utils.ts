@@ -69,7 +69,6 @@ export async function* subscribeGunMapData<T>(path: string[], isT: (x: unknown) 
             queue.stop()
             listenerClosed = true
             OnCloseEvent.delete(stop)
-            console.log('stoping push events')
         }
         abortSignal.addEventListener('abort', stop)
         OnCloseEvent.add(stop)
