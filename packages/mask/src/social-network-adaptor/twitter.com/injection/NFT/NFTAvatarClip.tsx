@@ -1,7 +1,7 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { isZero } from '@masknet/web3-shared-base'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useLocation, useWindowSize } from 'react-use'
 import { NFTAvatarClip } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip'
 import { createReactRootShadowed, startWatch } from '../../../../utils'
@@ -29,6 +29,7 @@ function NFTAvatarClipInTwitter() {
     const { classes } = useStyles()
     const windowSize = useWindowSize()
     const location = useLocation()
+    const borderElement = useRef<Element | null>()
 
     const size = useMemo(() => {
         const ele = searchTwitterAvatarNFTSelector().evaluate()
@@ -47,13 +48,21 @@ function NFTAvatarClipInTwitter() {
     }, [location])
 
     useEffect(() => {
-        const link = searchTwitterAvatarNFTLinkSelector().evaluate()?.firstChild as HTMLElement
-        if (!link) return
-        link.style.width = ''
-        link.style.height = ''
+        const linkDom = searchTwitterAvatarNFTLinkSelector().evaluate()
+        if (linkDom?.firstElementChild && linkDom.childNodes.length === 4) {
+            borderElement.current = linkDom.firstElementChild
+            // remove useless border
+            linkDom.removeChild(linkDom.firstElementChild)
+        }
+
+        const first = linkDom?.firstChild as HTMLDivElement
+        first.style.width = ''
+        first.style.height = ''
+
         return () => {
-            link.style.height = 'calc(100% - 4px)'
-            link.style.width = 'calc(100% - 4px)'
+            if (borderElement.current && borderElement.current !== linkDom?.firstElementChild) {
+                linkDom?.insertBefore(borderElement.current, linkDom.firstChild)
+            }
         }
     }, [location])
 
