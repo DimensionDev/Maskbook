@@ -91,7 +91,7 @@ const FileServiceDialog: React.FC<Props> = (props) => {
             open={props.open}
             title={t.__display_name()}
             onClose={onDecline}>
-            <DialogContent style={{ minWidth: 515 }}>
+            <DialogContent>
                 <Exchange onDialogClose={onDialogClose} onUploading={setUploading} onInsert={setSelectedFileInfo}>
                     <Entry />
                 </Exchange>

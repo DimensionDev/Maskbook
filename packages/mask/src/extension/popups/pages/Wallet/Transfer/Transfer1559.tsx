@@ -365,11 +365,10 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     )
 
     const maxAmount = useMemo(() => {
-        const gasFee = formatGweiToWei(new BigNumber(maxFeePerGas ?? 0)).multipliedBy(addGasMargin(MIN_GAS_LIMIT))
-
+        const gasFee = formatGweiToWei(maxFeePerGas ?? 0).multipliedBy(addGasMargin(minGasLimit ?? MIN_GAS_LIMIT))
         let amount_ = new BigNumber(tokenBalance ?? 0)
         amount_ = selectedAsset?.token.type === EthereumTokenType.Native ? amount_.minus(gasFee) : amount_
-        return formatBalance(amount_.toFixed(), selectedAsset?.token.decimals)
+        return formatBalance(BigNumber.max(0, amount_).toFixed(), selectedAsset?.token.decimals)
     }, [selectedAsset, maxFeePerGas, minGasLimit, tokenBalance])
 
     // #region set default gasLimit
@@ -398,7 +397,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         methods.setValue('amount', maxAmount)
     }, [methods.setValue, maxAmount])
 
-    const [{ loading }, onSubmit] = useAsyncFn(
+    const [{ loading, error }, onSubmit] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             const transferAmount = rightShift(data.amount || '0', selectedAsset?.token.decimals).toFixed()
 

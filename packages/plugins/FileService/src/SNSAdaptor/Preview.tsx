@@ -12,7 +12,6 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         alignItems: 'center',
-        width: 345,
         border: `1px solid ${theme.palette.divider}`,
         boxSizing: 'border-box',
         borderRadius: 12,

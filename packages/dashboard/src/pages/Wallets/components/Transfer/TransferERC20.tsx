@@ -31,12 +31,13 @@ import { useUpdateEffect } from 'react-use'
 import { v4 as uuid } from 'uuid'
 import { PluginMessages } from '../../../../API'
 import type { SelectTokenDialogEvent } from '@masknet/plugin-wallet'
+import { RightIcon } from '@masknet/icons'
 
 interface TransferERC20Props {
     token: FungibleTokenDetailed
 }
 
-const GAS_LIMIT = 30000
+const GAS_LIMIT = 21000
 export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const t = useDashboardI18N()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
@@ -101,7 +102,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         transferAmount,
         EthereumAddress.isValid(address) ? address : registeredAddress,
     )
-    const { gasConfig, onCustomGasSetting, gasLimit, maxFee } = useGasConfig(gasLimit_, 30000)
+    const { gasConfig, onCustomGasSetting, gasLimit, maxFee } = useGasConfig(gasLimit_, GAS_LIMIT)
 
     const gasPrice = gasConfig.gasPrice || defaultGasPrice
 
@@ -111,15 +112,18 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
 
     const gasFee = useMemo(() => {
         const price = is1559Supported && maxFee ? new BigNumber(maxFee) : gasPrice
-        return multipliedBy(addGasMargin(gasLimit), price)
+        return multipliedBy(gasLimit, price)
     }, [gasLimit, gasPrice, maxFee, is1559Supported])
     const gasFeeInUsd = formatWeiToEther(gasFee).multipliedBy(nativeTokenPrice)
 
     const maxAmount = useMemo(() => {
+        const price = is1559Supported && maxFee ? new BigNumber(maxFee) : gasPrice
+        const gasFee = multipliedBy(addGasMargin(gasLimit), price)
+
         let amount_ = new BigNumber(tokenBalance || '0')
         amount_ = selectedToken.type === EthereumTokenType.Native ? amount_.minus(gasFee) : amount_
         return BigNumber.max(0, amount_).toFixed()
-    }, [tokenBalance, gasPrice, selectedToken?.type, amount])
+    }, [tokenBalance, gasPrice, selectedToken?.type, amount, gasLimit, maxFee, is1559Supported])
 
     const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
         tokenType,
@@ -177,7 +181,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         if (resolveDomainLoading) return
         if (registeredAddress) {
             return (
-                <Box style={{ padding: 10 }}>
+                <Box style={{ padding: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Link
                         href={Utils?.resolveDomainLink?.(address)}
                         target="_blank"
@@ -195,6 +199,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                             <FormattedAddress address={registeredAddress} size={4} formatter={Utils?.formatAddress} />
                         </Typography>
                     </Link>
+                    <RightIcon />
                 </Box>
             )
         }

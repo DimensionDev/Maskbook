@@ -31,7 +31,6 @@ const useStyles = makeStyles()({
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
-        width: 400,
     },
 })
 
@@ -121,7 +120,7 @@ export const Uploading: React.FC = () => {
             <Grid item>
                 <File width={96} height={120} />
             </Grid>
-            <Grid item>
+            <Grid item sx={{ width: '100%' }}>
                 <FileName name={state.name} />
                 <ProgressBar preparing={preparing} fileSize={state.size} sendSize={sendSize} startedAt={startedAt} />
             </Grid>
