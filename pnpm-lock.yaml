@@ -609,6 +609,24 @@ importers:
     devDependencies:
       react-i18next: 11.15.4_881b2a51613eca9a23c14f7ecef9122a
 
+  packages/plugins/CyberConnect:
+    specifiers:
+      '@cyberlab/cyberconnect': ^4.2.2
+      '@masknet/plugin-infra': workspace:*
+      '@masknet/shared-base': workspace:*
+      '@masknet/theme': workspace:*
+      '@masknet/web3-shared-evm': workspace:*
+      boring-avatars: ^1.5.8
+      react-use: ^17.3.2
+    dependencies:
+      '@cyberlab/cyberconnect': 4.2.2
+      '@masknet/plugin-infra': link:../../plugin-infra
+      '@masknet/shared-base': link:../../shared-base
+      '@masknet/theme': link:../../theme
+      '@masknet/web3-shared-evm': link:../../web3-shared/evm
+      boring-avatars: 1.6.1
+      react-use: 17.3.2_757a802188413a36d4f24237d13b8e90
+
   packages/plugins/DAO:
     specifiers:
       '@masknet/icons': workspace:*
