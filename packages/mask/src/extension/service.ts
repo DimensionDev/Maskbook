@@ -7,8 +7,6 @@ import {
     AsyncCallOptions,
     CallbackBasedChannel,
     EventBasedChannel,
-    _AsyncVersionOf,
-    _AsyncGeneratorVersionOf,
 } from 'async-call-rpc/full'
 import { isEnvironment, Environment, WebExtensionMessage, MessageTarget } from '@dimensiondev/holoflows-kit'
 import { serializer, getLocalImplementation } from '@masknet/shared-base'
@@ -35,11 +33,7 @@ export const Services = {
     ThirdPartyPlugin: add(() => import('./background-script/ThirdPartyPlugin'), 'ThirdPartyPlugin'),
 }
 export default Services
-export const ServicesWithProgress: _AsyncGeneratorVersionOf<typeof import('./service-generator')> = add(
-    () => import('./service-generator'),
-    'ServicesWithProgress',
-    true,
-) as any
+export const ServicesWithProgress = add(() => import('./service-generator'), 'ServicesWithProgress', true)
 
 if (process.env.manifest === '2' && import.meta.webpackHot && isEnvironment(Environment.ManifestBackground)) {
     import.meta.webpackHot.accept(
@@ -64,19 +58,19 @@ if (process.env.manifest === '2' && import.meta.webpackHot && isEnvironment(Envi
  * @param key Name of the service. Used for better debugging.
  * @param generator Is the service is a generator?
  */
-function add<T extends object>(impl: () => Promise<T>, key: string, generator = false): _AsyncVersionOf<T> {
+function add<T>(impl: () => Promise<T>, key: string, generator = false): T {
     const channel: EventBasedChannel | CallbackBasedChannel = message.events[key].bind(MessageTarget.Broadcast)
 
     const isBackground = isEnvironment(Environment.ManifestBackground)
-    const RPC = (generator ? AsyncGeneratorCall : AsyncCall) as any as typeof AsyncCall
-    const load = () => getLocalImplementation<T>(isBackground, `Services.${key}`, impl, channel)
+    const RPC: (impl: any, opts: AsyncCallOptions) => T = (generator ? AsyncGeneratorCall : AsyncCall) as any
+    const load = () => getLocalImplementation(isBackground, `Services.${key}`, impl, channel)
     const localImplementation = load()
     // No HMR support in MV3
     process.env.manifest === '2' &&
         isBackground &&
         import.meta.webpackHot &&
         document.addEventListener(SERVICE_HMR_EVENT, load)
-    const service = RPC<T>(localImplementation, {
+    const service = RPC(localImplementation, {
         key,
         serializer,
         log,
@@ -94,5 +88,5 @@ function add<T extends object>(impl: () => Promise<T>, key: string, generator = 
         Reflect.set(globalThis, key + 'Service', service)
         if (isBackground) Reflect.set(Services, key, service)
     }
-    return service
+    return service as any
 }

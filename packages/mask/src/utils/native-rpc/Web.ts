@@ -118,7 +118,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     settings_setLanguage: ({ language }) => Services.Settings.setLanguage(language),
     settings_createBackupJson: (options) => Services.Welcome.generateBackupJSON(options),
     settings_getBackupPreviewInfo: async ({ backupInfo }) => {
-        const data = await Services.Welcome.parseBackupStr(backupInfo)
+        const data = Services.Welcome.parseBackupStr(backupInfo)
         return data?.info
     },
     settings_restoreBackup: ({ backupInfo }) => {
