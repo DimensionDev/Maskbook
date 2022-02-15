@@ -1,9 +1,11 @@
 import { createContext, useEffect, useMemo, useState } from 'react'
 import { useValueRef } from '@masknet/shared'
 import {
+    AddressName,
     ChainId,
     ERC721ContractDetailed,
     ERC721TokenDetailed,
+    formatEthereumAddress,
     isSameAddress,
     NonFungibleAssetProvider,
     SocketState,
@@ -18,6 +20,7 @@ import { CollectibleCard } from './CollectibleCard'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { CollectionIcon } from './CollectionIcon'
 import { uniqBy } from 'lodash-unified'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -48,9 +51,7 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         height: '100%',
     },
-    button: {
-        marginTop: theme.spacing(1),
-    },
+    button: {},
     container: {
         height: 'calc(100% - 52px)',
         overflow: 'auto',
@@ -225,11 +226,18 @@ export function CollectibleList(props: CollectibleListProps) {
     )
 }
 
-export function CollectionList({ address }: { address: string }) {
+export function CollectionList({
+    addressName,
+    onSelectAddress,
+}: {
+    addressName: AddressName
+    onSelectAddress: (event: React.MouseEvent<HTMLButtonElement>) => void
+}) {
     const chainId = ChainId.Mainnet
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [selectedCollection, setSelectedCollection] = useState<ERC721ContractDetailed | 'all'>('all')
+    const [selectedCollection, setSelectedCollection] = useState<ERC721ContractDetailed | 'all' | undefined>('all')
+    const { resolvedAddress: address } = addressName
 
     const {
         data: collectibles,
@@ -260,6 +268,8 @@ export function CollectionList({ address }: { address: string }) {
         )
     }, [collectibles.length])
 
+    console.log(collections)
+
     if (!isLoading && !collectibles.length)
         return (
             <Box display="flex" alignItems="center" justifyContent="center">
@@ -271,24 +281,32 @@ export function CollectionList({ address }: { address: string }) {
 
     return (
         <Box>
-            <Stack display="inline-flex">
-                <AllNetworkButton
-                    className={classes.networkSelected}
-                    sx={{
-                        width: 30,
-                        height: 30,
-                        minHeight: 30,
-                        minWidth: 30,
-                        lineHeight: `${30}px`,
-                    }}
-                    onClick={() => {}}>
-                    ALL
-                </AllNetworkButton>
-                <Typography align="center" color={(theme) => theme.palette.primary.main} fontSize="12px">
-                    All {collectibles.length ? `(${collectibles.length})` : null}
-                </Typography>
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <Stack display="inline-flex">
+                    <AllNetworkButton
+                        className={classes.networkSelected}
+                        sx={{
+                            width: 30,
+                            height: 30,
+                            minHeight: 30,
+                            minWidth: 30,
+                            lineHeight: `${30}px`,
+                        }}
+                        onClick={() => setSelectedCollection('all')}>
+                        ALL
+                    </AllNetworkButton>
+                    <Typography align="center" color={(theme) => theme.palette.primary.main} fontSize="12px">
+                        All {collectibles.length ? `(${collectibles.length})` : null}
+                    </Typography>
+                </Stack>
+                <Box display="flex" alignItems="center" justifyContent="flex-end" flexWrap="wrap">
+                    <Button onClick={onSelectAddress} className={classes.button} variant="outlined" size="small">
+                        {formatEthereumAddress(addressName.label, 5)}
+                        <KeyboardArrowDownIcon />
+                    </Button>
+                </Box>
             </Stack>
-            <Stack spacing={1} direction="row">
+            <Stack spacing={1} direction="row" mt={1.5}>
                 <Box sx={{ flexGrow: 1 }}>
                     <Box>
                         {!selectedCollection && selectedCollection !== 'all' && (
@@ -322,9 +340,7 @@ export function CollectionList({ address }: { address: string }) {
                         )}
                         <CollectibleList
                             address={address}
-                            retry={() => {
-                                retryFetchCollectible()
-                            }}
+                            retry={retryFetchCollectible}
                             collectibles={renderCollectibles}
                             loading={loadingCollectibleDone !== SocketState.done && renderCollectibles.length === 0}
                         />
@@ -356,13 +372,12 @@ export function CollectionList({ address }: { address: string }) {
                             alignItems="center"
                             justifyContent="center"
                             sx={{ marginTop: '8px', marginBottom: '12px', minWidth: 30, maxHeight: 24 }}>
-                            <Typography
-                                className={classes.name}
-                                color="textPrimary"
-                                variant="body2"
-                                sx={{ fontSize: '16px' }}>
-                                Other
-                            </Typography>
+                            <CollectionIcon
+                                selectedCollection={
+                                    selectedCollection === 'all' ? undefined : selectedCollection?.address
+                                }
+                                onClick={() => setSelectedCollection(undefined)}
+                            />
                         </Box>
                     )}
                 </Box>

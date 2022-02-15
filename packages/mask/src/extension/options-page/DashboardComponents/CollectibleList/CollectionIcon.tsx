@@ -32,12 +32,15 @@ const useStyles = makeStyles()((theme) => ({
 
 interface CollectionIconProps {
     selectedCollection?: string
-    collection: ERC721ContractDetailed
+    collection?: ERC721ContractDetailed
     onClick?(): void
 }
 
 export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, selectedCollection }) => {
     const { classes } = useStyles()
+    if (!collection) {
+        return <TokenIcon classes={{ icon: classes.collectionImg }} name="other" address="other" />
+    }
     return (
         <Tooltip
             classes={{ tooltip: classes.tip }}

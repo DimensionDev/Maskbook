@@ -1,12 +1,11 @@
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import { Box, MenuItem, Button } from '@mui/material'
+import { MenuItem } from '@mui/material'
 import { ShadowRootMenu } from '../../../utils'
 import type { AddressName } from '@masknet/web3-shared-evm'
 import { CollectionList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
 import { useState } from 'react'
 import { first, uniqBy } from 'lodash-unified'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -73,18 +72,12 @@ export function NFTPage(props: NFTPageProps) {
                 {uniqBy(addressNames ?? [], (x) => x.resolvedAddress.toLowerCase()).map((x) => {
                     return (
                         <MenuItem key={x.resolvedAddress} value={x.resolvedAddress} onClick={() => onSelect(x)}>
-                            {x.type}: {formatEthereumAddress(x.label, 5)}
+                            {formatEthereumAddress(x.label, 5)}
                         </MenuItem>
                     )
                 })}
             </ShadowRootMenu>
-            <Box className={classes.note} display="flex" alignItems="center" justifyContent="flex-end" flexWrap="wrap">
-                <Button onClick={onOpen} className={classes.button} variant="outlined">
-                    {formatEthereumAddress(selectedAddress.label, 5)}
-                    <KeyboardArrowDownIcon />
-                </Button>
-            </Box>
-            <CollectionList address={selectedAddress.resolvedAddress ?? ''} />
+            <CollectionList addressName={selectedAddress ?? undefined} onSelectAddress={onOpen} />
         </div>
     )
 }
