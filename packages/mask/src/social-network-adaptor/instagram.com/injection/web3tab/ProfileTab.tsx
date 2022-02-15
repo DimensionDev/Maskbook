@@ -33,9 +33,7 @@ function getStyleProps() {
     const style = eleTab ? window.getComputedStyle(eleTab) : EMPTY_STYLE
 
     const activeTab = searchProfileActiveTabSelector().evaluate() as Element
-    console.log(activeTab)
     const activeStyle = activeTab ? window.getComputedStyle(activeTab) : EMPTY_STYLE
-    console.log(activeStyle.color)
     return {
         color: style.color,
         font: style.font,
