@@ -4,7 +4,7 @@ import { serializer } from '@masknet/shared-base'
 import { PluginMessages, setMessages, setPluginMessages, setPluginServices, setService } from '../API'
 
 class WebExtensionExternalChannel extends WebExtensionMessage<any> {
-    /* spell-checker: disable-next-line */
+    // cspell:disable-next-line
     constructor(domain: string, id = 'jkoeaghipilijlahjplgbfiocjhldnap') {
         super({ externalExtensionID: id, domain })
     }
@@ -24,7 +24,8 @@ function installPluginService() {
     const Wallet = channelOf('com.maskbook.wallet')
     const Transak = channelOf('com.maskbook.transak')
     const Swap = channelOf('com.maskbook.trader')
-    setPluginMessages({ Wallet, Transak, Swap })
+    const Pets = channelOf('com.maskbook.pets')
+    setPluginMessages({ Wallet, Transak, Swap, Pets })
     setPluginServices({
         Wallet: initRPCBridge(PluginMessages.Wallet.events.rpc),
         Swap: initRPCBridge(PluginMessages.Swap.rpc),

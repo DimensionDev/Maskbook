@@ -6,7 +6,13 @@ import { useHoverDirty } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
 import { WalletIcon, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { ChangeNetworkTip } from '../FungibleTokenTableRow/ChangeNetworkTip'
-import { useNetworkDescriptor, useWeb3State, Web3Plugin } from '@masknet/plugin-infra'
+import {
+    NetworkPluginID,
+    useNetworkDescriptor,
+    usePluginIDContext,
+    useWeb3State,
+    Web3Plugin,
+} from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -103,29 +109,33 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
     const isHovering = useHoverDirty(ref)
     const networkDescriptor = useNetworkDescriptor(token.contract?.chainId)
     const isOnCurrentChain = useMemo(() => chainId === token.contract?.chainId, [chainId, token])
+    const currentPluginId = usePluginIDContext()
 
     useEffect(() => {
         setHoveringTooltip(false)
     }, [chainId])
 
+    // Sending NFT is only available on EVM currently.
+    const sendable = currentPluginId === NetworkPluginID.PLUGIN_EVM
+    const showSendButton = (isHovering || isHoveringTooltip) && sendable
+
+    let nftLink
+    if (Utils?.resolveNonFungibleTokenLink && token.contract) {
+        nftLink = Utils?.resolveNonFungibleTokenLink?.(token.contract?.chainId, token.contract.address, token.tokenId)
+    }
+
     return (
-        <Box className={`${classes.container} ${isHoveringTooltip || isHovering ? classes.hover : ''}`} ref={ref}>
+        <Box className={`${classes.container} ${isHovering || isHoveringTooltip ? classes.hover : ''}`} ref={ref}>
             <div className={classes.card}>
                 <Box className={classes.chainIcon}>
                     <WalletIcon networkIcon={networkDescriptor?.icon} size={20} />
                 </Box>
                 {(token.metadata?.assetURL || token.metadata?.iconURL) && token.contract ? (
                     <Link
-                        target="_blank"
+                        target={nftLink ? '_blank' : '_self'}
                         rel="noopener noreferrer"
                         className={classes.linkWrapper}
-                        href={
-                            Utils?.resolveNonFungibleTokenLink?.(
-                                token.contract?.chainId,
-                                token.contract.address,
-                                token.tokenId,
-                            ) ?? '#'
-                        }>
+                        href={nftLink}>
                         <div className={classes.blocker} />
                         <div className={classes.mediaContainer}>
                             <NFTCardStyledAssetPlayer
@@ -147,7 +157,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
                     </Box>
                 )}
                 <Box className={classes.description} py={1} px={3}>
-                    {isHovering || isHoveringTooltip ? (
+                    {showSendButton ? (
                         <Box>
                             <Tooltip
                                 onOpen={() => setHoveringTooltip(true)}

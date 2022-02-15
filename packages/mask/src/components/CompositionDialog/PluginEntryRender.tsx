@@ -3,10 +3,11 @@ import {
     useActivatedPluginSNSAdaptor_Web3Supported,
     useActivatedPluginsSNSAdaptor,
     Plugin,
+    PluginI18NFieldRender,
+    usePluginI18NField,
 } from '@masknet/plugin-infra'
 import { ErrorBoundary } from '@masknet/shared'
 import { Result } from 'ts-results'
-import { PluginI18NFieldRender, usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
 import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
 import { ITO_PluginID } from '../../plugins/ITO/constants'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'

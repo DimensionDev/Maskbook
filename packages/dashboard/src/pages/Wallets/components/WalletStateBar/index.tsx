@@ -143,7 +143,12 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
                     direction="row"
                     alignItems="center"
                     justifyContent="center"
-                    sx={{ px: 2, background: MaskColorVar.orangeMain.alpha(0.1), color: MaskColorVar.orangeMain }}
+                    sx={{
+                        borderRadius: 9999,
+                        px: 2,
+                        background: MaskColorVar.orangeMain.alpha(0.1),
+                        color: MaskColorVar.orangeMain,
+                    }}
                     className={classes.bar}>
                     <LoadingAnimation sx={{ fontSize: 12, mr: 0.8, color: MaskColorVar.orangeMain }} />
                     <Typography component="span" fontSize={12} display="inline-block">

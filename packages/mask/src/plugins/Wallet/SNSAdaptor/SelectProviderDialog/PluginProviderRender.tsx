@@ -1,10 +1,11 @@
 import { SelectedIcon } from '@masknet/icons'
-import { ImageIcon } from '@masknet/shared'
 import type { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra'
+import { ImageIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Box, ImageList, ImageListItem, List, ListItem, Typography } from '@mui/material'
-import { ProviderIcon } from './ProviderIcon'
+import { first } from 'lodash-unified'
 import { ShadowRootTooltip, useI18N } from '../../../../utils'
+import { ProviderIcon } from './ProviderIcon'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -141,7 +142,9 @@ export function PluginProviderRender({
                                 ProviderIconClickBait ? (
                                     <ProviderIconClickBait
                                         key={provider.ID}
-                                        network={networks.find((x) => x.ID === undeterminedNetworkID)!}
+                                        network={
+                                            networks.find((x) => x.ID === undeterminedNetworkID) ?? first(networks)!
+                                        }
                                         provider={provider}
                                         onSubmit={onSubmit}>
                                         <ImageListItem key={provider.ID}>

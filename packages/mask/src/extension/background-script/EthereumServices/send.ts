@@ -2,6 +2,7 @@ import { EthereumAddress } from 'wallet.ts'
 import { toHex } from 'web3-utils'
 import type { HttpProvider } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import { toBuffer } from 'ethereumjs-util'
 import { safeUnreachable } from '@dimensiondev/kit'
 import {
     addGasMargin,
@@ -18,7 +19,6 @@ import {
     getPayloadChainId,
     getTransactionHash,
     isZeroAddress,
-    formatGweiToWei,
 } from '@masknet/web3-shared-evm'
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import * as MetaMask from './providers/MetaMask'
@@ -28,22 +28,17 @@ import * as Fortmatic from './providers/Fortmatic'
 import { getWallet } from '../../../plugins/Wallet/services'
 import { createWeb3 } from './web3'
 import { commitNonce, getNonce, resetNonce } from './nonce'
-import { getGasPrice } from './network'
 import {
     currentAccountSettings,
     currentChainIdSettings,
     currentProviderSettings,
 } from '../../../plugins/Wallet/settings'
-import { debugModeSetting } from '../../../settings/settings'
 import { Flags } from '../../../../shared'
 import { nativeAPI } from '../../../../shared/native-rpc'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { getSendTransactionComputedPayload } from './rpc'
 import { getError, hasError } from './error'
-
-function parseGasPrice(price: string | undefined) {
-    return Number.parseInt(price ?? '0x0', 16)
-}
+import { signTypedData, SignTypedDataVersion } from '@metamask/eth-sig-util'
 
 function isReadOnlyMethod(payload: JsonRpcPayload) {
     return [
@@ -133,7 +128,9 @@ async function handleNonce(
     // nonce too low
     // nonce too high
     // transaction too old
-    if (/\bnonce|transaction\b/im.test(message) && /\b(low|high|old)\b/im.test(message)) resetNonce(account)
+    const isGeneralErrorNonce = /\bnonce|transaction\b/im.test(message) && /\b(low|high|old)\b/im.test(message)
+    const isAuroraErrorNonce = message.includes('ERR_INCORRECT_NONCE')
+    if (isGeneralErrorNonce || isAuroraErrorNonce) resetNonce(account)
     else if (!error_) commitNonce(account)
 }
 
@@ -152,10 +149,6 @@ export async function INTERNAL_send(
         providerType = currentProviderSettings.value,
     }: SendOverrides = {},
 ) {
-    if (process.env.NODE_ENV === 'development' && debugModeSetting.value) {
-        console.table(payload)
-        console.debug(new Error().stack)
-    }
     const chainIdFinally = getPayloadChainId(payload) ?? chainId
     const wallet = providerType === ProviderType.MaskWallet ? await getWallet(account) : null
     const privKey = isSignableMethod(payload) && wallet ? await WalletRPC.exportPrivateKey(wallet.address) : undefined
@@ -251,6 +244,41 @@ export async function INTERNAL_send(
         }
     }
 
+    async function typedDataSign() {
+        const [address, dataToSign] = payload.params as [string, string]
+        switch (providerType) {
+            case ProviderType.MaskWallet:
+                const signed = signTypedData({
+                    privateKey: toBuffer('0x' + privKey),
+                    data: JSON.parse(dataToSign),
+                    version: SignTypedDataVersion.V4,
+                })
+                try {
+                    callback(null, {
+                        jsonrpc: '2.0',
+                        id: payload.id as number,
+                        result: signed,
+                    })
+                } catch (error) {
+                    callback(getError(error, null, EthereumErrorType.ERR_SIGN_MESSAGE))
+                }
+                break
+            case ProviderType.WalletConnect:
+                try {
+                    callback(null, {
+                        jsonrpc: '2.0',
+                        id: payload.id as number,
+                        result: await WalletConnect.signTypedDataMessage(address, dataToSign),
+                    })
+                } catch (error) {
+                    callback(getError(error, null, EthereumErrorType.ERR_SIGN_MESSAGE))
+                }
+                break
+            default:
+                provider?.send(payload, callback)
+        }
+    }
+
     async function sendTransaction() {
         const hash = getPayloadHash(payload)
         const config = getPayloadConfig(payload)
@@ -271,28 +299,9 @@ export async function INTERNAL_send(
         // add chain id
         if (!config.chainId) config.chainId = chainIdFinally
 
-        // pricing transaction
-        const isGasPriceValid = parseGasPrice(config.gasPrice as string) > 0
-        const isEIP1559Valid =
-            parseGasPrice(config.maxFeePerGas as string) > 0 && parseGasPrice(config.maxPriorityFeePerGas as string) > 0
-
-        if (Flags.EIP1559_enabled && isEIP1559Supported(chainIdFinally) && !isEIP1559Valid && !isGasPriceValid) {
-            callback(new Error('Invalid EIP1159 payload.'))
-            return
-        }
-        if (!isGasPriceValid) {
-            config.gasPrice = await getGasPrice()
-        }
-
         // if the transaction is eip-1559, need to remove gasPrice from the config,
-        // and adjust the default gas web3.js setting,
-        // the estimation of metamask of `maxFeePerGas` = 1 * block.baseFeePerGas,
-        // since the estimation of web3.js = 2 * block.baseFeePerGas which is too high
-        // that would almost always causes an undesired warning tip.
-        if (Flags.EIP1559_enabled && isEIP1559Valid && isEIP1559Supported(chainIdFinally)) {
+        if (Flags.EIP1559_enabled && isEIP1559Supported(chainIdFinally)) {
             config.gasPrice = undefined
-            config.maxPriorityFeePerGas = formatGweiToWei(1.5).toString(16)
-            config.maxFeePerGas = (Number.parseInt(config.maxFeePerGas!, 16) * 0.8).toString(16)
         } else {
             config.maxFeePerGas = undefined
             config.maxPriorityFeePerGas = undefined
@@ -431,6 +440,9 @@ export async function INTERNAL_send(
                 break
             case EthereumMethodType.PERSONAL_SIGN:
                 await personalSign()
+                break
+            case EthereumMethodType.ETH_SIGN_TYPED_DATA:
+                await typedDataSign()
                 break
             case EthereumMethodType.ETH_SEND_TRANSACTION:
                 await sendTransaction()

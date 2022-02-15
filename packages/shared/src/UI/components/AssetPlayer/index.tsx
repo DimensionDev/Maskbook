@@ -32,6 +32,9 @@ interface AssetPlayerProps
     renderTimeout?: number
     iconProps?: SvgIconProps
     fallbackImage?: URL
+    isFixedIframeSize?: boolean
+    showIframeFromInit?: boolean
+    fallbackResourceLoader?: JSX.Element
     setERC721TokenName?: (name: string) => void
     setSourceType?: (type: string) => void
 }
@@ -49,8 +52,9 @@ enum AssetPlayerState {
     ERROR = 3,
 }
 
-export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconProps, ...props }) => {
+export const AssetPlayer = memo<AssetPlayerProps>((props) => {
     const ref = useRef<IFrameComponent | null>(null)
+    const { url, type, options, iconProps, isFixedIframeSize = true, fallbackResourceLoader } = props
     const classes = useStylesExtends(useStyles(), props)
     const [hidden, setHidden] = useState(Boolean(props.renderTimeout))
     const { RPC: RPC_Entries } = getRPCConstants(props.erc721Token?.chainId)
@@ -89,7 +93,6 @@ export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconPro
         }
     }, [url, JSON.stringify(erc721Token), type, JSON.stringify(options), playerState])
     // endregion
-
     type ERC721TokenNameMsg = { message: { type: 'name'; name: string } | { type: 'sourceType'; name: string } }
     // #region resource loaded error
     const onMessage = useCallback(
@@ -121,6 +124,28 @@ export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconPro
         setIframe()
     }, [setIframe])
 
+    // Workaround for a bug of `iframe-resizer-react`:
+    // When the content of iframe loaded, `IframeResizer` triggers a `size` event,
+    // but the `height` and `width` value of that `size` event isn't equal to the content.
+    // (Sometimes it doesn't matter, if the size of iframe has been set fixed already)
+    // Meanwhile `IframeResizer` triggers a `resize` event when the size of
+    // parent of iframe changed, this time the returned `height` and `width` is right.
+    // So resize the parent manually.
+    useEffect(() => {
+        if (playerState !== AssetPlayerState.NORMAL && isFixedIframeSize) return
+        const resize = (height: string) => () => {
+            if (!ref.current?.parentElement) return
+            ref.current.parentElement.style.height = height
+        }
+        const noSenseHeight = '100px'
+        const timerOne = setTimeout(resize(noSenseHeight), 100)
+        const timerTwo = setTimeout(resize(''), 150)
+        return () => {
+            clearTimeout(timerOne)
+            clearTimeout(timerTwo)
+        }
+    }, [playerState, ref.current])
+
     const IframeResizerMemo = useMemo(
         () =>
             hidden ? null : (
@@ -131,7 +156,14 @@ export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconPro
                         setPlayerState(AssetPlayerState.INIT)
                         setIframe()
                     }}
-                    className={playerState !== AssetPlayerState.NORMAL ? classes.hidden : classes.iframe}
+                    className={
+                        ![
+                            AssetPlayerState.NORMAL,
+                            ...(props.showIframeFromInit ? [AssetPlayerState.INIT] : []),
+                        ].includes(playerState)
+                            ? classes.hidden
+                            : classes.iframe
+                    }
                     onResized={({ type }) => {
                         if (type === 'init' || playerState === AssetPlayerState.NORMAL) return
                         setPlayerState(AssetPlayerState.NORMAL)
@@ -143,6 +175,7 @@ export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconPro
                     checkOrigin={false}
                     onMessage={onMessage}
                     frameBorder="0"
+                    resizeFrom="child"
                     allow="autoplay"
                     allowFullScreen
                 />
@@ -157,15 +190,14 @@ export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconPro
                     playerState === AssetPlayerState.ERROR ? classes.errorPlaceholder : classes.loadingPlaceholder
                 }
                 style={{ display: playerState === AssetPlayerState.NORMAL ? 'none' : undefined }}>
-                {playerState === AssetPlayerState.ERROR ? (
-                    props.fallbackImage ? (
-                        <img className={classes.loadingFailImage} src={props.fallbackImage.toString()} />
-                    ) : (
-                        <MaskPlaceholder className={classes.errorIcon} {...iconProps} />
-                    )
-                ) : (
-                    props.loadingIcon ?? <AssetLoadingIcon className={classes.loadingIcon} />
-                )}
+                {playerState === AssetPlayerState.ERROR
+                    ? props.fallbackResourceLoader ??
+                      (props.fallbackImage ? (
+                          <img className={classes.loadingFailImage} src={props.fallbackImage.toString()} />
+                      ) : (
+                          <MaskPlaceholder className={classes.errorIcon} {...iconProps} />
+                      ))
+                    : props.loadingIcon ?? <AssetLoadingIcon className={classes.loadingIcon} />}
             </Box>
             {IframeResizerMemo}
         </>

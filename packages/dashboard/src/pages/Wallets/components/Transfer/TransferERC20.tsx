@@ -2,6 +2,7 @@ import { MaskColorVar, MaskTextField } from '@masknet/theme'
 import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/material'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
+    addGasMargin,
     EthereumTokenType,
     formatWeiToEther,
     FungibleTokenDetailed,
@@ -101,6 +102,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         EthereumAddress.isValid(address) ? address : registeredAddress,
     )
     const { gasConfig, onCustomGasSetting, gasLimit, maxFee } = useGasConfig(gasLimit_, 30000)
+
     const gasPrice = gasConfig.gasPrice || defaultGasPrice
 
     useEffect(() => {
@@ -109,7 +111,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
 
     const gasFee = useMemo(() => {
         const price = is1559Supported && maxFee ? new BigNumber(maxFee) : gasPrice
-        return multipliedBy(gasLimit, price)
+        return multipliedBy(addGasMargin(gasLimit), price)
     }, [gasLimit, gasPrice, maxFee, is1559Supported])
     const gasFeeInUsd = formatWeiToEther(gasFee).multipliedBy(nativeTokenPrice)
 
@@ -175,12 +177,12 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         if (resolveDomainLoading) return
         if (registeredAddress) {
             return (
-                <Link
-                    href={Utils?.resolveDomainLink?.(address)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    underline="none">
-                    <Box style={{ padding: 10 }}>
+                <Box style={{ padding: 10 }}>
+                    <Link
+                        href={Utils?.resolveDomainLink?.(address)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="none">
                         <Typography
                             fontSize={16}
                             lineHeight="22px"
@@ -192,8 +194,8 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                         <Typography fontSize={14} lineHeight="20px" style={{ color: MaskColorVar.textSecondary }}>
                             <FormattedAddress address={registeredAddress} size={4} formatter={Utils?.formatAddress} />
                         </Typography>
-                    </Box>
-                </Link>
+                    </Link>
+                </Box>
             )
         }
 

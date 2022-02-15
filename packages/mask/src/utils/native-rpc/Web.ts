@@ -1,6 +1,12 @@
 import stringify from 'json-stable-stringify'
-import { MaskNetworkAPIs, NetworkType, RelationFavor } from '@masknet/public-api'
-import { encodeArrayBuffer, encodeText, unreachable } from '@dimensiondev/kit'
+import type {
+    MaskNetworkAPIs,
+    RelationFavor,
+    EC_Private_JsonWebKey as Native_EC_Private_JsonWebKey,
+    EC_Public_JsonWebKey as Native_EC_Public_JsonWebKey,
+    AESJsonWebKey as Native_AESJsonWebKey,
+} from '@masknet/public-api'
+import { encodeArrayBuffer, encodeText } from '@dimensiondev/kit'
 import { Environment, assertEnvironment } from '@dimensiondev/holoflows-kit'
 import { ECKeyIdentifier, Identifier, ProfileIdentifier } from '@masknet/shared-base'
 import { definedSocialNetworkWorkers } from '../../social-network/define'
@@ -12,11 +18,6 @@ import { WalletRPC } from '../../plugins/Wallet/messages'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { MaskMessages } from '../messages'
 import type { PersonaInformation } from '@masknet/shared-base'
-import type {
-    EC_Private_JsonWebKey as Native_EC_Private_JsonWebKey,
-    EC_Public_JsonWebKey as Native_EC_Public_JsonWebKey,
-    AESJsonWebKey as Native_AESJsonWebKey,
-} from '@masknet/public-api'
 
 const stringToPersonaIdentifier = (str: string) => Identifier.fromString(str, ECKeyIdentifier).unwrap()
 const stringToProfileIdentifier = (str: string) => Identifier.fromString(str, ProfileIdentifier).unwrap()
@@ -108,67 +109,6 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     },
     app_isPluginEnabled: ({ pluginID }) => Services.Settings.getPluginMinimalModeEnabled(pluginID).then((x) => !x),
     app_setPluginStatus: ({ pluginID, enabled }) => Services.Settings.setPluginMinimalModeEnabled(pluginID, !enabled),
-    setting_getNetworkTraderProvider: ({ network }) => {
-        switch (network) {
-            case NetworkType.Ethereum:
-                return Services.Settings.getEthereumNetworkTradeProvider()
-            case NetworkType.Binance:
-                return Services.Settings.getBinanceNetworkTradeProvider()
-            case NetworkType.Polygon:
-                return Services.Settings.getPolygonNetworkTradeProvider()
-            case NetworkType.Arbitrum:
-                return Services.Settings.getArbitrumNetworkTradeProvider()
-            case NetworkType.xDai:
-                return Services.Settings.getxDaiNetworkTradeProvider()
-            case NetworkType.Avalanche:
-                return Services.Settings.getAvalancheNetworkTradeProvider()
-            case NetworkType.Celo:
-                return Services.Settings.getCeloNetworkTradeProvider()
-            case NetworkType.Fantom:
-                return Services.Settings.getxDaiNetworkTradeProvider()
-            case NetworkType.Aurora:
-                return Services.Settings.getAuroraNetworkTradeProvider()
-
-            case NetworkType.Boba:
-            case NetworkType.Fuse:
-            case NetworkType.Metis:
-            case NetworkType.Avalanche:
-            case NetworkType.Optimistic:
-                throw new Error(`To be implement network: ${network}`)
-            default:
-                unreachable(network)
-        }
-    },
-    setting_setNetworkTraderProvider: ({ network, provider }) => {
-        switch (network) {
-            case NetworkType.Ethereum:
-                return Services.Settings.setEthNetworkTradeProvider(provider)
-            case NetworkType.Binance:
-                return Services.Settings.setBinanceNetworkTradeProvider(provider)
-            case NetworkType.Polygon:
-                return Services.Settings.setPolygonNetworkTradeProvider(provider)
-            case NetworkType.Arbitrum:
-                return Services.Settings.setArbitrumNetworkTradeProvider(provider)
-            case NetworkType.xDai:
-                return Services.Settings.setxDaiNetworkTradeProvider(provider)
-            case NetworkType.Avalanche:
-                return Services.Settings.setAvalancheNetworkTradeProvider(provider)
-            case NetworkType.Celo:
-                return Services.Settings.setCeloNetworkTradeProvider(provider)
-            case NetworkType.Fantom:
-                return Services.Settings.setFantomNetworkTradeProvider(provider)
-            case NetworkType.Aurora:
-                return Services.Settings.setAuroraNetworkTradeProvider(provider)
-            case NetworkType.Boba:
-            case NetworkType.Fuse:
-            case NetworkType.Metis:
-            case NetworkType.Avalanche:
-            case NetworkType.Optimistic:
-                throw new Error(`To be implement network: ${network}`)
-            default:
-                unreachable(network)
-        }
-    },
     settings_getTrendingDataSource: () => Services.Settings.getTrendingDataSource(),
     settings_setTrendingDataSource: ({ provider }) => Services.Settings.setTrendingDataSource(provider),
     settings_getLaunchPageSettings: async () => launchPageSettings.value,
@@ -178,7 +118,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     settings_setLanguage: ({ language }) => Services.Settings.setLanguage(language),
     settings_createBackupJson: (options) => Services.Welcome.generateBackupJSON(options),
     settings_getBackupPreviewInfo: async ({ backupInfo }) => {
-        const data = Services.Welcome.parseBackupStr(backupInfo)
+        const data = await Services.Welcome.parseBackupStr(backupInfo)
         return data?.info
     },
     settings_restoreBackup: ({ backupInfo }) => {
