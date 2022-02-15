@@ -611,7 +611,7 @@ importers:
 
   packages/plugins/CyberConnect:
     specifiers:
-      '@cyberlab/cyberconnect': ^4.2.0
+      '@cyberlab/cyberconnect': ^4.2.2
       '@masknet/plugin-infra': workspace:*
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*

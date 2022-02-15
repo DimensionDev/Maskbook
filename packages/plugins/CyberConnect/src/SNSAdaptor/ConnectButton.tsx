@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useWeb3, isSameAddress } from '@masknet/web3-shared-evm'
-import { useAccount, usePluginIDContext, NetworkPluginID, usePluginWeb3StateContext } from '@masknet/plugin-infra'
+import { useAccount, usePluginIDContext, NetworkPluginID } from '@masknet/plugin-infra'
 import CyberConnect, { Env } from '@cyberlab/cyberconnect'
 import { PluginCyberConnectRPC } from '../messages'
 import { CircularProgress, useTheme, Typography } from '@mui/material'
