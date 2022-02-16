@@ -2,7 +2,7 @@ import { useWeb3State } from '@masknet/plugin-infra'
 import { SelectTokenDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { EthereumTokenType, TransactionStateType, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
+import { EthereumTokenType, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
 import { Box, FormControl, FormControlLabel, MenuItem, Radio, RadioGroup, Select, Typography } from '@mui/material'
 import { FC, memo, useCallback, useRef, useState } from 'react'
 import { v4 as uuid } from 'uuid'
@@ -20,9 +20,6 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             flexDirection: 'column',
         },
-        receiver: {
-            width: '100%',
-        },
         button: {
             marginTop: theme.spacing(1.5),
         },
@@ -33,11 +30,11 @@ export const TipForm: FC = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const {
-        receiver,
-        receivers: receiverAddresses,
+        recipient,
+        recipients: recipientAddresses,
         tipType,
         setTipType,
-        setReceiver,
+        setRecipient,
         token,
         setToken,
         amount,
@@ -76,14 +73,14 @@ export const TipForm: FC = memo(() => {
 
     return (
         <Box className={classes.root}>
-            <Typography>To {receiver}</Typography>
+            <Typography>To</Typography>
 
             <FormControl fullWidth>
                 <Select
                     ref={selectRef}
-                    value={receiver}
+                    value={recipient}
                     onChange={(e) => {
-                        setReceiver(e.target.value)
+                        setRecipient(e.target.value)
                     }}
                     MenuProps={{
                         anchorOrigin: {
@@ -95,7 +92,7 @@ export const TipForm: FC = memo(() => {
                             invisible: true,
                         },
                     }}>
-                    {receiverAddresses.map((address) => (
+                    {recipientAddresses.map((address) => (
                         <MenuItem key={address} value={address}>
                             {Utils?.formatDomainName?.(address) || address}
                         </MenuItem>

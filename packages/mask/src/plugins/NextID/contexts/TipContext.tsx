@@ -24,12 +24,12 @@ import {
 import { TipTask, TipType } from '../types'
 
 interface ContextOptions {
-    receiver: string
-    setReceiver: Dispatch<SetStateAction<string>>
+    recipient: string
+    setRecipient: Dispatch<SetStateAction<string>>
     tipType: TipType
     setTipType: Dispatch<SetStateAction<TipType>>
-    receivers: string[]
-    setReceivers: Dispatch<SetStateAction<string[]>>
+    recipients: string[]
+    setRecipients: Dispatch<SetStateAction<string[]>>
     token: FungibleTokenDetailed | null
     setToken: Dispatch<SetStateAction<FungibleTokenDetailed | null>>
     amount: string
@@ -41,12 +41,12 @@ interface ContextOptions {
 }
 
 export const TipContext = createContext<ContextOptions>({
-    receiver: '',
-    setReceiver: noop,
+    recipient: '',
+    setRecipient: noop,
     tipType: TipType.NFT,
     setTipType: noop,
-    receivers: [],
-    setReceivers: noop,
+    recipients: [],
+    setRecipients: noop,
     token: null,
     setToken: noop,
     amount: '',
@@ -62,8 +62,8 @@ interface Props {
 }
 
 export const TipTaskProvider: FC<Props> = ({ children, task }) => {
-    const [receiver, setReceiver] = useState('')
-    const [receivers, setReceivers] = useState<string[]>(task.addresses)
+    const [recipient, setRecipient] = useState('')
+    const [recipients, setRecipients] = useState<string[]>(task.addresses)
     const [tipType, setTipType] = useState<TipType>(TipType.NFT)
     const [amount, setAmount] = useState('0')
     const [erc721Contract, setErc721Contract] = useState<ContextOptions['erc721Contract']>(null)
@@ -72,17 +72,17 @@ export const TipTaskProvider: FC<Props> = ({ children, task }) => {
     const [erc721TokenId, setErc721TokenId] = useState<ContextOptions['erc721TokenId']>(null)
 
     useEffect(() => {
-        setReceiver(task.to || '')
+        setRecipient(task.to || '')
     }, [task.to])
 
     useEffect(() => {
-        setReceivers(task.addresses)
+        setRecipients(task.addresses)
     }, [task.addresses])
 
     useEffect(() => {
-        if (receiver || receivers.length === 0) return
-        setReceiver(receivers[0])
-    }, [receiver, receivers])
+        if (recipient || recipients.length === 0) return
+        setRecipient(recipients[0])
+    }, [recipient, recipients])
 
     useEffect(() => {
         if (token || !nativeTokenDetailed) return
@@ -91,10 +91,10 @@ export const TipTaskProvider: FC<Props> = ({ children, task }) => {
 
     const contextValue = useMemo(() => {
         return {
-            receiver,
-            setReceiver,
-            receivers,
-            setReceivers,
+            recipient,
+            setRecipient,
+            recipients,
+            setRecipients,
             tipType,
             setTipType,
             token,
@@ -106,7 +106,7 @@ export const TipTaskProvider: FC<Props> = ({ children, task }) => {
             erc721Contract,
             setErc721Contract,
         }
-    }, [receiver, receivers, tipType, amount, erc721TokenId, erc721Contract, token])
+    }, [recipient, recipients, tipType, amount, erc721TokenId, erc721Contract, token])
     return <TipContext.Provider value={contextValue}>{children}</TipContext.Provider>
 }
 
@@ -115,7 +115,7 @@ type TipTuple = [state: TransactionState, sendTip: () => Promise<void>]
 function useTokenTipTuple(): TipTuple {
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const context = useContext(TipContext)
-    const { token, amount, receiver } = context
+    const { token, amount, recipient } = context
 
     const isNativeToken = isSameAddress(token?.address, NATIVE_TOKEN_ADDRESS)
 
@@ -126,25 +126,26 @@ function useTokenTipTuple(): TipTuple {
     )
     const sendTip = useCallback(async () => {
         const transferAmount = rightShift(amount || '0', token?.decimals || 0).toFixed()
-        await transferCallback(transferAmount, receiver)
+        await transferCallback(transferAmount, recipient)
         resetTransferCallback()
-    }, [amount, token, receiver, transferCallback])
+    }, [amount, token, recipient, transferCallback, resetTransferCallback])
 
     return [transferState, sendTip]
 }
 
 function useNftTipTuple(): TipTuple {
     const context = useContext(TipContext)
-    const { amount, receiver } = context
+    const { recipient, erc721TokenId, erc721Contract } = context
 
     const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
         EthereumTokenType.ERC721,
-        receiver,
+        erc721Contract?.address || '',
     )
     const sendTip = useCallback(async () => {
-        await transferCallback(amount, receiver)
+        if (!erc721TokenId) return
+        await transferCallback(erc721TokenId, recipient)
         resetTransferCallback()
-    }, [amount])
+    }, [erc721TokenId, recipient, transferCallback, resetTransferCallback])
 
     return [transferState, sendTip]
 }

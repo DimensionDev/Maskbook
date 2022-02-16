@@ -1,27 +1,32 @@
 import { makeStyles } from '@masknet/theme'
-import { EMPTY_LIST, useAccount, useChainId, useERC721TokenDetailedOwnerList } from '@masknet/web3-shared-evm'
+import { useAccount, useERC721TokenDetailedOwnerList } from '@masknet/web3-shared-evm'
 import { Button, FormControl } from '@mui/material'
 import classnames from 'classnames'
 import { FC, HTMLProps, useCallback, useMemo, useState } from 'react'
 import { SearchInput } from '../../../../../extension/options-page/DashboardComponents/SearchInput'
 import { useI18N } from '../../../../../utils'
 import { ERC721ContractSelectPanel } from '../../../../../web3/UI/ERC721ContractSelectPanel'
-import { OrderedERC721Token, SelectNftTokenDialog } from '../../../../RedPacket/SNSAdaptor/SelectNftTokenDialog'
 import { useTip } from '../../../contexts'
 import { NFTList } from './NFTList'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         flexDirection: 'column',
     },
+    selectSection: {
+        marginTop: theme.spacing(1),
+    },
     list: {
         display: 'grid',
         gridTemplateColumns: 'repeat(4, 1fr)',
+        maxHeight: 400,
+        overflow: 'auto',
         gridGap: 18,
     },
     keyword: {
         borderRadius: 6,
+        marginRight: theme.spacing(1),
     },
     searchButton: {
         borderRadius: 6,
@@ -31,7 +36,7 @@ const useStyles = makeStyles()({
         display: 'flex',
         flexDirection: 'row',
     },
-})
+}))
 
 interface Props extends HTMLProps<HTMLDivElement> {}
 
@@ -43,15 +48,11 @@ export const NFTSection: FC<Props> = ({ className, ...rest }) => {
     const onSearch = useCallback(() => {}, [])
     const [open, setOpen] = useState(false)
     const account = useAccount()
-    const [tokenList, setTokenList] = useState<OrderedERC721Token[]>(EMPTY_LIST)
     const {
-        asyncRetry: { loading: loadingOwnerList },
-        tokenDetailedOwnerList: _tokenDetailedOwnerList = [],
+        asyncRetry: { loading: loadingMyTokens },
+        tokenDetailedOwnerList: myTokens = [],
         clearTokenDetailedOwnerList,
     } = useERC721TokenDetailedOwnerList(erc721Contract, account)
-
-    const tokenDetailedOwnerList = _tokenDetailedOwnerList.map((v, index) => ({ ...v, index } as OrderedERC721Token))
-    const chainId = useChainId()
 
     const selectedIds = useMemo(() => (erc721TokenId ? [erc721TokenId] : []), [erc721TokenId])
 
@@ -65,39 +66,23 @@ export const NFTSection: FC<Props> = ({ className, ...rest }) => {
                 />
             </FormControl>
             {erc721Contract ? (
-                <div>
+                <div className={classes.selectSection}>
                     <FormControl className={classes.row}>
-                        <SearchInput label="" />
+                        <SearchInput classes={{ root: classes.keyword }} label="" />
                         <Button className={classes.searchButton} variant="contained" onClick={onSearch}>
                             {t('search')}
                         </Button>
                     </FormControl>
-                    <Button onClick={() => setOpen(true)}>Pick</Button>
                     <NFTList
                         className={classes.list}
                         selectedIds={selectedIds}
-                        tokens={[
-                            ..._tokenDetailedOwnerList,
-                            ..._tokenDetailedOwnerList,
-                            ..._tokenDetailedOwnerList,
-                            ..._tokenDetailedOwnerList,
-                            ..._tokenDetailedOwnerList,
-                        ]}
+                        tokens={myTokens}
                         onChange={(ids) => {
                             setErc721TokenId(ids.length ? ids[0] : null)
                         }}
                     />
                 </div>
             ) : null}
-            <SelectNftTokenDialog
-                open={open}
-                onClose={() => setOpen(false)}
-                contract={erc721Contract}
-                existTokenDetailedList={EMPTY_LIST}
-                setExistTokenDetailedList={setTokenList}
-                tokenDetailedOwnerList={tokenDetailedOwnerList}
-                loadingOwnerList={loadingOwnerList}
-            />
         </div>
     )
 }
