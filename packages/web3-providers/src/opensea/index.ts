@@ -345,9 +345,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
         const collections =
             response?.map((x) => ({
                 name: x.name,
-                image: x.image_url || undefined,
                 slug: x.slug,
-                id: x.slug,
                 chainId,
                 symbol: x.primary_asset_contracts?.[0]?.symbol,
                 address: x.primary_asset_contracts?.[0]?.address,

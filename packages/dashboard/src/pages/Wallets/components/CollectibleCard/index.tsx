@@ -11,7 +11,7 @@ import {
     useNetworkDescriptor,
     usePluginIDContext,
     useWeb3State,
-    Web3Plugin,
+    ERC721TokenDetailed,
 } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
@@ -95,7 +95,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface CollectibleCardProps {
     chainId: number
-    token: Web3Plugin.NonFungibleToken
+    token: ERC721TokenDetailed
     onSend(): void
     renderOrder: number
 }
@@ -107,8 +107,8 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
     const ref = useRef(null)
     const [isHoveringTooltip, setHoveringTooltip] = useState(false)
     const isHovering = useHoverDirty(ref)
-    const networkDescriptor = useNetworkDescriptor(token.contract?.chainId)
-    const isOnCurrentChain = useMemo(() => chainId === token.contract?.chainId, [chainId, token])
+    const networkDescriptor = useNetworkDescriptor(token.contractDetailed?.chainId)
+    const isOnCurrentChain = useMemo(() => chainId === token.contractDetailed?.chainId, [chainId, token])
     const currentPluginId = usePluginIDContext()
 
     useEffect(() => {
@@ -120,8 +120,12 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
     const showSendButton = (isHovering || isHoveringTooltip) && sendable
 
     let nftLink
-    if (Utils?.resolveNonFungibleTokenLink && token.contract) {
-        nftLink = Utils?.resolveNonFungibleTokenLink?.(token.contract?.chainId, token.contract.address, token.tokenId)
+    if (Utils?.resolveNonFungibleTokenLink && token.contractDetailed) {
+        nftLink = Utils?.resolveNonFungibleTokenLink?.(
+            token.contractDetailed?.chainId,
+            token.contractDetailed.address,
+            token.tokenId,
+        )
     }
 
     return (
@@ -130,7 +134,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
                 <Box className={classes.chainIcon}>
                     <WalletIcon networkIcon={networkDescriptor?.icon} size={20} />
                 </Box>
-                {(token.metadata?.assetURL || token.metadata?.iconURL) && token.contract ? (
+                {(token.info.mediaUrl || token.contractDetailed?.iconURL) && token.contractDetailed ? (
                     <Link
                         target={nftLink ? '_blank' : '_self'}
                         rel="noopener noreferrer"
@@ -139,10 +143,10 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
                         <div className={classes.blocker} />
                         <div className={classes.mediaContainer}>
                             <NFTCardStyledAssetPlayer
-                                contractAddress={token.contract.address}
-                                chainId={token.contract.chainId}
+                                contractAddress={token.contractDetailed.address}
+                                chainId={token.contractDetailed.chainId}
                                 renderOrder={renderOrder}
-                                url={token.metadata.assetURL || token.metadata.iconURL}
+                                url={token.info.mediaUrl || token.contractDetailed?.iconURL}
                                 tokenId={token.tokenId}
                                 classes={{
                                     loadingFailImage: classes.loadingFailImage,
@@ -153,7 +157,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
                     </Link>
                 ) : (
                     <Box>
-                        <CollectiblePlaceholder chainId={token.contract?.chainId} />
+                        <CollectiblePlaceholder chainId={token.contractDetailed?.chainId} />
                     </Box>
                 )}
                 <Box className={classes.description} py={1} px={3}>
@@ -163,7 +167,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
                                 onOpen={() => setHoveringTooltip(true)}
                                 onClose={() => setHoveringTooltip(false)}
                                 disableHoverListener={isOnCurrentChain}
-                                title={<ChangeNetworkTip chainId={token.contract?.chainId} />}
+                                title={<ChangeNetworkTip chainId={token.contractDetailed?.chainId} />}
                                 placement="top"
                                 classes={{ tooltip: classes.tip, arrow: classes.tipArrow }}
                                 arrow>
@@ -183,7 +187,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
                         </Box>
                     ) : (
                         <Typography className={classes.name} color="textPrimary" variant="body2" onClick={onSend}>
-                            {token.name || token.tokenId}
+                            {token.info.name || token.tokenId}
                         </Typography>
                     )}
                 </Box>

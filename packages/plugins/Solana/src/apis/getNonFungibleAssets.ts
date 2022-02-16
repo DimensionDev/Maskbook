@@ -1,7 +1,14 @@
 import { Connection } from '@metaplex/js'
 import { ChainId } from '@masknet/web3-shared-solana'
 import { Metadata } from '@metaplex-foundation/mpl-token-metadata'
-import { Pageable, Pagination, TokenType, Web3Plugin } from '@masknet/plugin-infra'
+import {
+    Pageable,
+    Pagination,
+    TokenType,
+    Web3Plugin,
+    ERC721TokenDetailed,
+    EthereumTokenType,
+} from '@masknet/plugin-infra'
 import { fetchJSON, GetProgramAccountsResponse, requestRPC, SPL_TOKEN_PROGRAM_ID } from './shared'
 import { ENDPOINT_KEY } from '../constants'
 
@@ -55,33 +62,27 @@ async function getNftList(chainId: ChainId, account: string) {
         const externalMeta = await fetchJSON<ExternalMetadata>(metadata.data.data.uri).catch(() => null)
         const pubkey = pda.toBase58()
         return {
-            id: pubkey,
             tokenId: pubkey,
-            chainId: chainId,
+            info: {
+                name: metadata.data.data.name,
+                description: externalMeta?.description,
+                mediaUrl: externalMeta?.animation ?? externalMeta?.image ?? '',
+            },
             type: TokenType.NonFungible,
-            name: metadata.data.data.name,
-            description: externalMeta?.description,
-            contract: {
+            contractDetailed: {
+                type: EthereumTokenType.ERC721,
                 name: metadata.data.data.name,
                 symbol: metadata.data.data.symbol,
                 chainId: ChainId.Mainnet,
                 address: pubkey,
-                tokenId: pubkey,
             },
-            metadata: {
-                name: metadata.data.data.name,
-                description: metadata.data.data.name,
-                mediaType: externalMeta?.properties?.category || 'Unknown',
-                iconURL: '',
-                assetURL: externalMeta?.animation ?? externalMeta?.image ?? '',
-            },
-        } as Web3Plugin.NonFungibleToken
+        } as ERC721TokenDetailed
     })
 
     const allSettled = await Promise.allSettled(promises)
     const tokens = allSettled
         .map((x) => (x.status === 'fulfilled' ? x.value : null))
-        .filter(Boolean) as Web3Plugin.NonFungibleToken[]
+        .filter(Boolean) as ERC721TokenDetailed[]
     return tokens
 }
 
@@ -90,7 +91,7 @@ export async function getNonFungibleAssets(
     pagination: Pagination,
     providerType?: string,
     network?: Web3Plugin.NetworkDescriptor,
-): Promise<Pageable<Web3Plugin.NonFungibleToken>> {
+): Promise<Pageable<ERC721TokenDetailed>> {
     const tokens = await getNftList(ChainId.Mainnet, address)
 
     return {

@@ -10,7 +10,7 @@ export const getBalanceValue = (asset: Web3Plugin.Asset<Web3Plugin.FungibleToken
 
 export const getTokenChainIdValue = (asset: Web3Plugin.Asset) => {
     const { NATIVE_TOKEN_ADDRESS } = getTokenConstants()
-    return isSameAddress(asset.token.id, NATIVE_TOKEN_ADDRESS) ? 1 / asset.token.chainId : 0
+    return isSameAddress(asset.token.address, NATIVE_TOKEN_ADDRESS) ? 1 / asset.token.chainId : 0
 }
 
 export const makeSortAssertWithoutChainFn = () => {
