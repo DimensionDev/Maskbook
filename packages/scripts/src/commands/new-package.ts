@@ -1,7 +1,7 @@
 import { resolve } from 'path'
 import { copy, ensureDir } from 'fs-extra'
 import { prompt } from 'enquirer'
-import { kebabCase, upperFirst } from 'lodash-unified'
+import { identity, kebabCase, upperFirst } from 'lodash-unified'
 import { task } from '../utils/task'
 import { ROOT_PATH } from '../utils/paths'
 import { awaitChildProcess, changeFile, shell } from '../utils'
@@ -38,7 +38,7 @@ export async function createPackageInteractive() {
         const base = 'packages/' + (packageDetail.type === 'plugin' ? 'plugins/' : '')
         packageDetail.path =
             base +
-            upperFirst(
+            (packageDetail.type === 'plugin' ? upperFirst : identity)(
                 await prompt<{ name: string }>({
                     type: 'input',
                     name: 'name',
@@ -135,7 +135,7 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
         await changeFile.JSON(resolve(packagePath, 'package.json'), (content) => {
             content.name = npmName
         })
-        await changeFile(resolve(packagePath, 'tsconfig.json'), (content) =>
+        await changeFile(resolve(ROOT_PATH, 'tsconfig.json'), (content) =>
             content.replace(INSERT_HERE, `${INSERT_HERE}\n    { "path": "./${path}/tsconfig.tests.json" },`),
         )
         await changeFile(resolve(packagePath, 'README.md'), (content) => `# ${npmName}`)
