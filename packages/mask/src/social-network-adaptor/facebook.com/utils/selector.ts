@@ -43,7 +43,7 @@ export const searchFacebookAvatarListSelector = () =>
 export const searchFacebookAvatarMobileListSelector = () => querySelector('#nuxChoosePhotoButton').closest<E>(6)
 
 export const searchFacebookAvatarSelector = () =>
-    querySelector('[role="button"] [role="img"], [role="link"] [role="img"]')
+    querySelector('[role="button"] svg[role="img"], [role="link"] svg[role="img"]')
 
 export const searchFacebookAvatarOnMobileSelector = () =>
     querySelector('[data-sigil="timeline-cover"] i[aria-label$="picture"]')
