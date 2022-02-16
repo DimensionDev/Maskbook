@@ -4,6 +4,9 @@ import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import type { IdeaToken } from '../types'
 import IdeaMarketIcon from '../icons/IdeaMarketIcon'
+import { useEffect } from 'react'
+import { useRemoteControlledDialog } from '@masknet/shared'
+import { PluginTraderMessages } from '../../Trader/messages'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -60,6 +63,8 @@ export function IdeaTokenViewDeck(props: IdeaTokenViewDeckProps) {
     const chainId = useChainId()
     const rank = `Rank ${ideaToken.rank}`.toUpperCase()
 
+    const { setDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
+
     // #region manager share
     // const managerShare = new BigNumber(pool.balanceOfManager)
     //     .dividedBy(pool.totalSupply)
@@ -78,6 +83,14 @@ export function IdeaTokenViewDeck(props: IdeaTokenViewDeckProps) {
     //     })
     // }, [pool, inputTokens, openInvestDialog])
     // #endregion
+
+    function openSwapDialog() {
+        setDialog({ open: true })
+    }
+
+    useEffect(() => {
+        setDialog({ open: true })
+    }, [])
 
     return (
         <Grid container className={classes.meta} direction="row">
@@ -123,7 +136,12 @@ export function IdeaTokenViewDeck(props: IdeaTokenViewDeckProps) {
                 </Grid>
             </Grid>
             <Grid item alignSelf="right" xs={4} textAlign="center">
-                <Button className={classes.button} variant="contained" fullWidth color="primary">
+                <Button
+                    className={classes.button}
+                    variant="contained"
+                    fullWidth
+                    color="primary"
+                    onClick={openSwapDialog}>
                     Buy some
                 </Button>
             </Grid>
