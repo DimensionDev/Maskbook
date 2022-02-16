@@ -4,6 +4,7 @@ import { ImageIcon } from '../ImageIcon'
 
 interface StyleProps {
     size: number
+    isBorderColorNotDefault?: boolean
 }
 
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
@@ -24,7 +25,12 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         bottom: -2,
     },
     networkIcon: {},
-    providerIcon: {},
+    providerIcon: {
+        border: props?.isBorderColorNotDefault
+            ? `1px solid ${theme.palette.background.paper}`
+            : `1px solid ${theme.palette.background.default}`,
+        borderRadius: '50%',
+    },
 }))
 
 interface WalletIconProps extends withClasses<'networkIcon' | 'providerIcon'> {
@@ -33,11 +39,18 @@ interface WalletIconProps extends withClasses<'networkIcon' | 'providerIcon'> {
     inverse?: boolean
     networkIcon?: URL
     providerIcon?: URL
+    isBorderColorNotDefault?: boolean
 }
 
 export const WalletIcon = (props: WalletIconProps) => {
     const { size = 24, badgeSize = 14, inverse = false, networkIcon, providerIcon } = props
-    const classes = useStylesExtends(useStyles({ size: badgeSize > size ? badgeSize : size }), props)
+    const classes = useStylesExtends(
+        useStyles({
+            size: badgeSize > size ? badgeSize : size,
+            isBorderColorNotDefault: props.isBorderColorNotDefault,
+        }),
+        props,
+    )
 
     // #region icon names
     const names = [
