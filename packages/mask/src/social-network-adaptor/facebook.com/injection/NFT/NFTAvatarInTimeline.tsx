@@ -5,6 +5,7 @@ import { searchFaceBookPostAvatarOnMobileSelector, searchFaceBookPostAvatarSelec
 import { Flags } from '../../../../../shared'
 import { NFTBadgeTimeline } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeline'
 import { isMobileFacebook } from '../../utils/isMobile'
+import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 
 function getFacebookId(element: HTMLElement | SVGElement) {
     const node = (isMobileFacebook ? element.firstChild : element.parentNode?.parentNode) as HTMLLinkElement
@@ -49,6 +50,7 @@ function _(selector: () => LiveSelector<HTMLElement | SVGElement, false>, signal
                             avatarId={info.avatarId}
                             width={info.width - 4}
                             height={info.height - 4}
+                            snsKey={RSS3_KEY_SNS.FACEBOOK}
                         />
                     </div>,
                 )

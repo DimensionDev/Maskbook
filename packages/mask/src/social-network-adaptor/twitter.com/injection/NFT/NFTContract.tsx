@@ -3,6 +3,7 @@ import { NFTContractImage } from '../../../../plugins/Avatar/SNSAdaptor/NFTContr
 import { createReactRootShadowed, startWatch } from '../../../../utils'
 import { Flags } from '../../../../../shared'
 import { postAvatarsContentSelector } from '../../utils/selector'
+import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 
 function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
     startWatch(
@@ -27,7 +28,7 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                 const root = createReactRootShadowed(proxy.afterShadow, { signal })
                 root.render(
                     <div>
-                        <NFTContractImage userId={twitterId} />
+                        <NFTContractImage userId={twitterId} snsKey={RSS3_KEY_SNS.TWITTER} />
                     </div>,
                 )
                 remover = root.destory

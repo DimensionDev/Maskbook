@@ -15,6 +15,7 @@ import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
 import { makeStyles } from '@masknet/theme'
 import { isMobileFacebook } from '../../utils/isMobile'
 import { InMemoryStorages } from '../../../../../shared'
+import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 
 export function injectNFTAvatarInFacebook(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchFacebookAvatarSelector())
@@ -59,7 +60,7 @@ function NFTAvatarInFacebook() {
     const [avatar, setAvatar] = useState<AvatarMetaDB>()
     const identity = useCurrentVisitingIdentity()
     const location = useLocation()
-    const { value: _avatar } = useNFTAvatar(identity.identifier.userId)
+    const { value: _avatar } = useNFTAvatar(identity.identifier.userId, RSS3_KEY_SNS.FACEBOOK)
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
 
@@ -106,6 +107,7 @@ function NFTAvatarInFacebook() {
                     wallet.address,
                     { ...NFTEvent, avatarId: getAvatarId(identity.avatar ?? '') } as AvatarMetaDB,
                     identity.identifier.network,
+                    RSS3_KEY_SNS.FACEBOOK,
                 )
                 if (!avatarInfo) {
                     setNFTEvent(undefined)
@@ -134,6 +136,7 @@ function NFTAvatarInFacebook() {
                         avatarId: getAvatarId(identity.avatar ?? ''),
                     } as AvatarMetaDB,
                     identity.identifier.network,
+                    RSS3_KEY_SNS.FACEBOOK,
                 )
                 if (!avatarInfo) {
                     clearStorages()

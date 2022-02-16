@@ -61,7 +61,7 @@ export const searchFacebookAvatarOpenFilesOnMobileSelector = () =>
 export const searchFacebookSaveAvatarButtonOnMobileSelector = () => querySelector('#nuxUploadPhotoButton')
 
 export const searchFacebookProfileSettingButtonSelector = () =>
-    querySelector('[role="button"] [role="img"]').closest(10).querySelector('input[type="file"] ~ div').closest<E>(2)
+    querySelector('div[data-pagelet="ProfileActions"] > div > div > div:first-child')
 
 export const searchFacebookEditProfileSelector = () =>
     querySelector('[role="button"] [role="img"]').closest(1).querySelector<E>('i[data-visualcompletion="css-img"]')
