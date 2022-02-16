@@ -5,6 +5,7 @@ import {
     searchAvatarSelector,
     searchNickNameSelector,
     personalHomepageSelector,
+    searchNFTAvatarSelector,
 } from './selector'
 import { collectNodeText } from '../../../utils'
 
@@ -35,11 +36,12 @@ export const getNickname = () => {
 export const getTwitterId = () => {
     const node = searchNickNameSelector().evaluate()?.parentElement?.parentElement?.firstChild?.nextSibling?.firstChild
         ?.firstChild?.lastChild as HTMLDivElement
-    if (!node) return ''
-
-    const twitterIdNode = node.querySelector('div span')
-    if (!twitterIdNode) return ''
-    return twitterIdNode.innerHTML.trim().replace('@', '')
+    if (node) {
+        const twitterIdNode = node.querySelector('div span')
+        if (!twitterIdNode) return ''
+        return twitterIdNode.innerHTML.trim().replace('@', '')
+    }
+    return ''
 }
 
 export const getBioDescription = () => {
@@ -53,15 +55,17 @@ export const getPersonalHomepage = () => {
 }
 
 export const getAvatar = () => {
-    const node = searchAvatarSelector().evaluate() as HTMLImageElement
-    if (!node) return ''
+    let node = searchAvatarSelector().evaluate()
+    if (!node) node = searchNFTAvatarSelector().evaluate()
+    if (node) {
+        const imageURL = node.getAttribute('src') ?? ''
+        return imageURL.trim()
+    }
 
-    const imageURL = node.getAttribute('src') ?? ''
-    return imageURL.trim()
+    return ''
 }
 
 const TWITTER_AVATAR_ID_MATCH = /^\/profile_images\/(\d+)/
-
 export const getAvatarId = (avatarURL: string) => {
     if (!avatarURL) return ''
     const _url = new URL(avatarURL)
