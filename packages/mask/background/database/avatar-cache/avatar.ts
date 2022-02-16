@@ -2,6 +2,7 @@ import { ProfileIdentifier } from '@masknet/shared-base'
 import { queryAvatarDB, isAvatarOutdatedDB, storeAvatarDB, IdentifierWithAvatar, createAvatarDBAccess } from './db'
 import { memoizePromise } from '../../../utils-pure'
 import { MaskMessages } from '../../../shared'
+import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
 import { blobToDataURL } from '@dimensiondev/kit'
 import { createTransaction } from '../utils/openDB'
 
@@ -11,6 +12,11 @@ import { createTransaction } from '../utils/openDB'
  */
 export const queryAvatarDataURL = memoizePromise(
     async function (identifier: IdentifierWithAvatar): Promise<string | undefined> {
+        if (hasNativeAPI) {
+            const avatar = await nativeAPI?.api.query_avatar({ identifier: identifier.toText() })
+            if (!avatar) throw new Error('Avatar not found')
+            return avatar
+        }
         const t = createTransaction(await createAvatarDBAccess(), 'readonly')('avatars')
         const buffer = await queryAvatarDB(t, identifier)
         if (!buffer) throw new Error('Avatar not found')
@@ -29,6 +35,10 @@ export const queryAvatarDataURL = memoizePromise(
 export async function storeAvatar(identifier: IdentifierWithAvatar, avatar: ArrayBuffer | string): Promise<void> {
     if (identifier instanceof ProfileIdentifier && identifier.isUnknown) return
     try {
+        if (hasNativeAPI) {
+            await nativeAPI?.api.store_avatar({ identifier: identifier.toText(), avatar: avatar as string })
+            return
+        }
         if (typeof avatar === 'string') {
             if (avatar.startsWith('https') === false) return
             const isOutdated = await isAvatarOutdatedDB(

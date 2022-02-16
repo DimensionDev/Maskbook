@@ -100,6 +100,8 @@ export interface SharedNativeAPIs {
     }): Promise<RelationRecord[]>
     update_relation(params: { relation: Omit<RelationRecord, 'network'> }): Promise<RelationRecord>
     delete_relation(params: { personaIdentifier: string; profileIdentifier: string }): Promise<void>
+    query_avatar(params: { identifier: string }): Promise<string>
+    store_avatar(params: { identifier: string; avatar: string }): Promise<void>
 }
 /**
  * APIs that only implemented by iOS Mask Network
