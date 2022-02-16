@@ -34,12 +34,6 @@ const useStyles = makeStyles()((theme) => ({
         margin: '0 auto',
         borderRadius: 4,
     },
-    indicator: {
-        display: 'none',
-    },
-    tabPanel: {
-        marginTop: theme.spacing(3),
-    },
 }))
 
 interface TipDialogProps {

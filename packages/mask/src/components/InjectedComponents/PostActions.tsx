@@ -1,4 +1,4 @@
-import { createInjectHooksRenderer, PostInfo, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
+import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 
 const ActionsRenderer = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,

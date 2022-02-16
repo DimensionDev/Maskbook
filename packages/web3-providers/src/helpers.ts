@@ -1,3 +1,5 @@
+import urlcat from 'urlcat'
+
 export function isProxyENV() {
     try {
         return process.env.PROVIDER_API_ENV === 'proxy'
@@ -13,5 +15,5 @@ export async function fetchJSON<T = unknown>(requestInfo: RequestInfo, requestIn
 
 const CORS_PROXY = 'https://cors.r2d2.to'
 export function courier(url: string) {
-    return [CORS_PROXY, url].join('?')
+    return urlcat(`${CORS_PROXY}?:url`, { url })
 }

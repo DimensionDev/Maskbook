@@ -3,7 +3,7 @@ import { PostActions } from '../../../components/InjectedComponents/PostActions'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import type { PostInfo } from '../../PostInfo'
 
-export function createPostActionsInjecter() {
+export function createPostActionsInjector() {
     return function injectPostActions(current: PostInfo, signal: AbortSignal) {
         const jsx = (
             <PostInfoProvider post={current}>
