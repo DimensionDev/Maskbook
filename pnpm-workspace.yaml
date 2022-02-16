@@ -2,6 +2,9 @@
 # webpack config.resolve.alias
 packages:
   - 'packages/*'
-  - 'packages/polyfills/*'
-  - 'packages/web3-shared/*'
+  - 'packages/polyfills/types'
+  - 'packages/web3-shared/base'
+  - 'packages/web3-shared/evm'
+  - 'packages/web3-shared/flow'
+  - 'packages/web3-shared/solana'
   - 'packages/plugins/*'
