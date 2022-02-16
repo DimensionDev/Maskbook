@@ -7,7 +7,7 @@ import type {
     AESJsonWebKey as Native_AESJsonWebKey,
 } from '@masknet/public-api'
 import { encodeArrayBuffer, encodeText } from '@dimensiondev/kit'
-import { Environment, assertEnvironment } from '@dimensiondev/holoflows-kit'
+import { Environment, assertEnvironment, isEnvironment } from '@dimensiondev/holoflows-kit'
 import { ECKeyIdentifier, Identifier, ProfileIdentifier } from '@masknet/shared-base'
 import { definedSocialNetworkWorkers } from '../../social-network/define'
 import { launchPageSettings } from '../../settings/settings'
@@ -292,6 +292,28 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     async SNSAdaptor_getCurrentDetectedProfile() {
         const { activatedSocialNetworkUI } = await import('../../social-network')
         return activatedSocialNetworkUI.collecting.identityProvider?.recognized.value.identifier.toText()
+    },
+    async getCurrentDetectedProfile_delegate_to_SNSAdaptor() {
+        if (isEnvironment(Environment.ManifestBackground)) {
+            return new Promise((resolve) => {
+                MaskMessages.events.Native_delegate_getCurrentDetectedProfile.sendToVisiblePages(['request'])
+                const removeListener = MaskMessages.events.Native_delegate_getCurrentDetectedProfile.on(
+                    ([type, data]) => {
+                        if (type === 'request') return
+                        resolve(data)
+                        removeListener()
+                    },
+                )
+                setTimeout(() => {
+                    removeListener()
+                    resolve(undefined)
+                }, 500)
+            })
+        } else {
+            console.warn('This should not happen.')
+            const { activatedSocialNetworkUI } = await import('../../social-network')
+            return activatedSocialNetworkUI.collecting.identityProvider?.recognized.value.identifier.toText()
+        }
     },
     get_all_indexedDB_records: async () => {
         const personas = await Services.Identity.queryPersonaRecordsFromIndexedDB()

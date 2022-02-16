@@ -17,6 +17,31 @@ export interface LinkedProfileDetails {
 }
 
 // These type MUST be sync with packages/shared-base/src/crypto/JWKType
+export interface JsonWebKey {
+    alg?: string
+    crv?: string
+    d?: string
+    dp?: string
+    dq?: string
+    e?: string
+    ext?: boolean
+    k?: string
+    key_ops?: string[]
+    kty?: string
+    n?: string
+    oth?: RsaOtherPrimesInfo[]
+    p?: string
+    q?: string
+    qi?: string
+    use?: string
+    x?: string
+    y?: string
+}
+export interface RsaOtherPrimesInfo {
+    d?: string
+    r?: string
+    t?: string
+}
 export interface EC_Public_JsonWebKey extends JsonWebKey, Nominal<'EC public'> {}
 export interface EC_Private_JsonWebKey extends JsonWebKey, Nominal<'EC private'> {}
 export interface AESJsonWebKey extends JsonWebKey, Nominal<'AES'> {}
