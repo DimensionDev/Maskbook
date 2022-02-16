@@ -64,7 +64,7 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
                 return
             } else {
                 if (data?.id) {
-                    Services.Welcome.checkPermissionsAndRestore(data.id)
+                    await Services.Welcome.checkPermissionsAndRestore(data.id)
                 }
 
                 restoreCallback()

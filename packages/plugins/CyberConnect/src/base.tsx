@@ -10,7 +10,7 @@ export const base: Plugin.Shared.Definition = {
     description: {
         fallback: 'A plugin for https://cyberconnect.me/',
     },
-    publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
+    publisher: { name: { fallback: 'CyberConnect' }, link: 'https://github.com/cyberconnecthq' },
     enableRequirement: {
         architecture: { app: false, web: true },
         networks: { type: 'opt-out', networks: {} },
