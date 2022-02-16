@@ -10,20 +10,23 @@ import { createTransaction } from '../utils/openDB'
  * Get a (cached) blob url for an identifier. No cache for native api.
  * ? Because of cross-origin restrictions, we cannot use blob url here. sad :(
  */
-export const queryAvatarDataURL = memoizePromise(
-    async function (identifier: IdentifierWithAvatar): Promise<string | undefined> {
-        if (hasNativeAPI) {
-            const avatar = await nativeAPI?.api.query_avatar({ identifier: identifier.toText() })
-            if (!avatar) throw new Error('Avatar not found')
-            return avatar
-        }
-        const t = createTransaction(await createAvatarDBAccess(), 'readonly')('avatars')
-        const buffer = await queryAvatarDB(t, identifier)
-        if (!buffer) throw new Error('Avatar not found')
-        return blobToDataURL(new Blob([buffer], { type: 'image/png' }))
-    },
-    (id) => (hasNativeAPI ? Date.now().toString() : id.toText()),
-)
+export const queryAvatarDataURL = (
+    hasNativeAPI
+        ? async function (identifier: IdentifierWithAvatar): Promise<string | undefined> {
+              return nativeAPI?.api.query_avatar({ identifier: identifier.toText() })
+          }
+        : memoizePromise(
+              async function (identifier: IdentifierWithAvatar): Promise<string | undefined> {
+                  const t = createTransaction(await createAvatarDBAccess(), 'readonly')('avatars')
+                  const buffer = await queryAvatarDB(t, identifier)
+                  if (!buffer) throw new Error('Avatar not found')
+                  return blobToDataURL(new Blob([buffer], { type: 'image/png' }))
+              },
+              (id) => id.toText(),
+          )
+) as (number | ((identifier: IdentifierWithAvatar) => Promise<string | undefined>)) & {
+    cache?: Map<string, unknown>
+}
 
 /**
  * Store an avatar with a url for an identifier.
@@ -36,6 +39,8 @@ export async function storeAvatar(identifier: IdentifierWithAvatar, avatar: Arra
     if (identifier instanceof ProfileIdentifier && identifier.isUnknown) return
     try {
         if (hasNativeAPI) {
+            // ArrayBuffer is unreachable on Native side.
+            if (typeof avatar !== 'string') return
             await nativeAPI?.api.store_avatar({ identifier: identifier.toText(), avatar: avatar as string })
             return
         }
@@ -62,7 +67,7 @@ export async function storeAvatar(identifier: IdentifierWithAvatar, avatar: Arra
     } catch (error) {
         console.error('[AvatarDB] Store avatar failed', error)
     } finally {
-        queryAvatarDataURL.cache.delete(identifier.toText())
+        queryAvatarDataURL.cache?.delete(identifier.toText())
         if (identifier instanceof ProfileIdentifier) {
             MaskMessages.events.profilesChanged.sendToAll([{ of: identifier, reason: 'update' }])
         }
