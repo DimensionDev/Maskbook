@@ -145,9 +145,8 @@ async function createNewPackage({ i18n, path, npmName, type, pluginID }: Package
         await changeFile(resolve(ROOT_PATH, 'packages/mask/package.json'), (content) =>
             content.replaceAll(/workspace:\^undefined/g, 'workspace:*'),
         )
-        await changeFile(resolve(ROOT_PATH, 'pnpm-lock.yaml'), (content) =>
-            content.replaceAll(/workspace:\^undefined/g, 'workspace:*'),
-        )
+        // regenerate lockfile
+        await awaitChildProcess(shell.cwd(ROOT_PATH)`pnpm install -C packages/mask ${npmName}`)
     } else {
     }
 }
