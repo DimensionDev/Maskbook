@@ -105,9 +105,9 @@ async function createNewPackage({ i18n, path, npmName, type, pluginID }: Package
         await changeFile.typescript(resolve(packagePath, 'src/constants.ts'), (content) =>
             content.replace('PluginId.Example', `PluginId.${NormativeName}`),
         )
-        await changeFile.JSON(resolve(packagePath, 'package.json'), (content) =>
-            content.replace('@masknet/plugin-template', npmName),
-        )
+        await changeFile.JSON(resolve(packagePath, 'package.json'), (content) => {
+            content.name = npmName
+        })
 
         /**
          * .i18n-codegen.json
