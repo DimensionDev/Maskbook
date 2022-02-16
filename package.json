@@ -83,8 +83,7 @@
   },
   "pnpm": {
     "overrides": {
-      "xhr2-cookies": "link:./package-overrides/xhr2-cookies",
-      "@types/node": "^16.11.6"
+      "@types/node": "^17.0.17"
     }
   }
 }
