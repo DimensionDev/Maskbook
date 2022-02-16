@@ -15,7 +15,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
     },
     selectSection: {
-        marginTop: theme.spacing(1),
+        marginTop: theme.spacing(1.5),
     },
     list: {
         display: 'grid',
@@ -26,7 +26,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     keyword: {
         borderRadius: 6,
-        marginRight: theme.spacing(1),
+        marginRight: theme.spacing(1.5),
     },
     searchButton: {
         borderRadius: 6,

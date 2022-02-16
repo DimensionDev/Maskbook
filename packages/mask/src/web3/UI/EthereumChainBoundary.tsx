@@ -31,6 +31,7 @@ import { pluginIDSettings } from '../../settings/settings'
 const useStyles = makeStyles()(() => ({}))
 
 export interface EthereumChainBoundaryProps extends withClasses<'switchButton'> {
+    className?: string
     chainId: ChainId
     noSwitchNetworkTip?: boolean
     disablePadding?: boolean
@@ -131,6 +132,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const renderBox = (children?: React.ReactNode) => {
         return (
             <Box
+                className={props.className}
                 display="flex"
                 flexDirection="column"
                 alignItems="center"

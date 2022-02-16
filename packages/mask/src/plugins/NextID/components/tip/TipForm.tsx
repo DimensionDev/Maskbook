@@ -8,9 +8,9 @@ import { FC, memo, useCallback, useRef, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
-import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
+import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
-import { useTip } from '../../contexts'
+import { TargetChainIdContext, useTip } from '../../contexts'
 import { TipType } from '../../types'
 import { NFTSection } from './NFTSection'
 
@@ -20,14 +20,34 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             flexDirection: 'column',
         },
-        button: {
+        tipButton: {
             marginTop: theme.spacing(1.5),
+            fontSize: 16,
+        },
+        button: {
+            width: '100%',
+            fontSize: 16,
+            lineHeight: '22px',
+            fontWeight: 600,
+            padding: '10px 0',
+            borderRadius: 24,
+            height: 'auto',
+            marginTop: theme.spacing(1.5),
+        },
+        disabledButton: {
+            fontSize: 16,
+            lineHeight: '22px',
+            fontWeight: 600,
+            padding: '10px 0',
+            borderRadius: 24,
+            height: 'auto',
         },
     }
 })
 
 export const TipForm: FC = memo(() => {
     const { t } = useI18N()
+    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const { classes } = useStyles()
     const {
         recipient,
@@ -130,17 +150,25 @@ export const TipForm: FC = memo(() => {
                 <NFTSection />
             )}
 
-            <EthereumWalletConnectedBoundary>
+            <EthereumChainBoundary
+                chainId={chainId}
+                noSwitchNetworkTip
+                disablePadding
+                ActionButtonPromiseProps={{
+                    fullWidth: true,
+                    classes: { root: classes.button, disabled: classes.disabledButton },
+                    color: 'primary',
+                }}>
                 <ActionButton
                     variant="contained"
                     size="large"
-                    className={classes.button}
+                    className={classes.tipButton}
                     fullWidth
                     disabled={false}
                     onClick={sendTip}>
                     {t('plugin_tip_send')}
                 </ActionButton>
-            </EthereumWalletConnectedBoundary>
+            </EthereumChainBoundary>
         </Box>
     )
 })
