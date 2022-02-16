@@ -9,7 +9,7 @@ maintainer:
 
 ## Run
 
-> npx gulp create-package
+> npx gulp new-pkg
 
 To create a new plugin
 

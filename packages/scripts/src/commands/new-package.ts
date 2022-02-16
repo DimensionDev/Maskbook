@@ -64,7 +64,7 @@ export async function createPackageInteractive() {
 
     return createNewPackage(packageDetail)
 }
-task(createPackageInteractive, 'create-package', 'Create a new package interactively')
+task(createPackageInteractive, 'new-pkg', 'Create a new package interactively')
 
 const INSERT_HERE = '// @masknet/scripts: insert-here'
 async function createNewPackage({ path, npmName, type, pluginID }: PackageOptions) {
