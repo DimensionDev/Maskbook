@@ -656,7 +656,7 @@ importers:
   packages/plugins/FileService:
     specifiers:
       '@dimensiondev/common-protocols': 1.6.0-20210723072221-8f46a92
-      '@ethersphere/bee-js': ^3.3.0
+      '@ethersphere/bee-js': ^3.3.1
       '@masknet/icons': workspace:*
       '@masknet/plugin-infra': workspace:*
       '@masknet/plugin-wallet': workspace:*
@@ -674,7 +674,7 @@ importers:
       urlcat: ^2.0.4
     dependencies:
       '@dimensiondev/common-protocols': 1.6.0-20210723072221-8f46a92
-      '@ethersphere/bee-js': 3.3.0
+      '@ethersphere/bee-js': 3.3.1
       '@masknet/icons': link:../../icons
       '@masknet/plugin-infra': link:../../plugin-infra
       '@masknet/plugin-wallet': link:../Wallet
@@ -3867,8 +3867,8 @@ packages:
       ethereumjs-util: 7.1.3
     dev: false
 
-  /@ethersphere/bee-js/3.3.0:
-    resolution: {integrity: sha512-kCY6BA6SnhShceprRPHT+DwXFZwL77Vfa7BYSDg5MWS69Yc2vDVgPjqEUO/S8Mj+4Cb1RJ2/5+KycueB71icCQ==}
+  /@ethersphere/bee-js/3.3.1:
+    resolution: {integrity: sha512-4XiyUD9sYZJ5Wac4/2oRKDfoUlQjea3xxMj80nqsDCUfrUTzIGwTdRbLSA7LhINbCZMP7vn9EVRq/DYe0kFGOA==}
     engines: {bee: 1.4.3-1213e063, beeApiVersion: 2.0.0, beeDebugApiVersion: 1.2.1, node: '>=12.0.0', npm: '>=6.0.0'}
     dependencies:
       '@types/readable-stream': 2.3.13
@@ -3879,7 +3879,6 @@ packages:
       js-sha3: 0.8.0
       ky: 0.25.1
       ky-universal: 0.8.2_9d16fb08bee5537b54f3df10881f880a
-      readable-stream: 3.6.0
       semver: 7.3.5
       tar-js: 0.3.0
       utf-8-validate: 5.0.8
@@ -14216,7 +14215,7 @@ packages:
       is-stream: 1.1.0
       npm-run-path: 2.0.2
       p-finally: 1.0.0
-      signal-exit: 3.0.6
+      signal-exit: 3.0.7
       strip-eof: 1.0.0
     dev: false
 
@@ -22180,10 +22179,10 @@ packages:
 
   /signal-exit/3.0.6:
     resolution: {integrity: sha512-sDl4qMFpijcGw22U5w63KmD3cZJfBuFlVNbVMKje2keoKML7X2UzWbc4XrmEbDwg0NXJc3yv4/ox7b+JWb57kQ==}
+    dev: true
 
   /signal-exit/3.0.7:
     resolution: {integrity: sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==}
-    dev: true
 
   /simple-concat/1.0.1:
     resolution: {integrity: sha512-cSFtAPtRhljv69IK0hTVZQ+OfE9nePi/rtJmw5UjHeVyVroEqJXP1sFztKUy1qU+xvz3u/sfYJLa947b7nAN2Q==}
