@@ -408,9 +408,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             {isFindTrumanDialogOpen ? <FindTrumanDialog open onClose={onFindTrumanDialogClose} /> : null}
             {isSwapDialogOpen ? <TraderDialog open onClose={onSwapDialogClose} /> : null}
 
-            {isSavingsDialogOpen ? (
-                <SavingsDialog open onClose={onSavingsDialogClose} onSwapDialogOpen={onSwapDialogOpen} />
-            ) : null}
+            {isSavingsDialogOpen ? <SavingsDialog open onClose={onSavingsDialogClose} /> : null}
         </>
     )
 }
