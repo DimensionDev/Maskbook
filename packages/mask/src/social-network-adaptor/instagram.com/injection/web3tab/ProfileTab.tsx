@@ -60,6 +60,7 @@ const useStyles = makeStyles()((theme) => {
             display: '-webkit-box',
             alignItems: 'center',
             justifyContent: 'center',
+            marginRight: 60,
         },
         button: {
             color: props.color,
