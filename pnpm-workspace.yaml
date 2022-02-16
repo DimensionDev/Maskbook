@@ -25,6 +25,7 @@ packages:
   - 'packages/icons'
   - 'packages/theme'
   - 'packages/plugin-infra'
+  - 'packages/plugins/template'
   - 'packages/plugins/example'
   - 'packages/plugins/Debugger'
   - 'packages/plugins/Wallet'
@@ -37,3 +38,5 @@ packages:
   - 'packages/backup-format'
   - 'packages/encryption'
   - 'packages/provider-proxy'
+  - 'packages/plugins/t'
+  - 'packages/plugins/t'

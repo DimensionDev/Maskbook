@@ -803,6 +803,16 @@ importers:
       '@masknet/plugin-infra': link:../../plugin-infra
       ts-results: 3.3.0
 
+  packages/plugins/template:
+    specifiers:
+      '@masknet/plugin-infra': workspace:*
+      '@masknet/shared': workspace:*
+      '@masknet/shared-base': workspace:*
+    dependencies:
+      '@masknet/plugin-infra': link:../../plugin-infra
+      '@masknet/shared': link:../../shared
+      '@masknet/shared-base': link:../../shared-base
+
   packages/polyfills:
     specifiers:
       '@rollup/plugin-commonjs': ^21.0.1
@@ -875,11 +885,14 @@ importers:
 
   packages/scripts:
     specifiers:
+      '@types/fs-extra': ^9.0.13
       '@types/gulp': ^4.0.9
       '@types/lodash': ^4.14.178
       '@types/proper-lockfile': ^4.1.2
       '@types/rimraf': ^3.0.2
       chalk: ^4.1.2
+      enquirer: ^2.3.6
+      fs-extra: ^10.0.0
       gulp-zip: ^5.1.0
       proper-lockfile: ^4.1.1
       rimraf: ^3.0.2
@@ -888,11 +901,14 @@ importers:
     dependencies:
       '@types/rimraf': 3.0.2
       chalk: 4.1.2
+      enquirer: 2.3.6
+      fs-extra: 10.0.0
       gulp-zip: 5.1.0_gulp@4.0.2
       proper-lockfile: 4.1.2
       rimraf: 3.0.2
       yargs: 17.3.1
     devDependencies:
+      '@types/fs-extra': 9.0.13
       '@types/gulp': 4.0.9
       '@types/lodash': 4.14.178
       '@types/proper-lockfile': 4.1.2
@@ -7922,6 +7938,12 @@ packages:
     resolution: {integrity: sha512-BsPXH/irW0ht0Ji6iw/jJaK8Lj3FJemon2gvEqHKpCdDCeemHa+rI3WBGq5z7cDMZgoLjY40oninGxqk+8NzNQ==}
     dev: false
 
+  /@types/fs-extra/9.0.13:
+    resolution: {integrity: sha512-nEnwB++1u5lVDM2UI4c1+5R+FYaKfaAzS4OococimjVm3nQw3TuzH5UNsocrcTBbhnerblyHj4A49qXbIiZdpA==}
+    dependencies:
+      '@types/node': 16.11.24
+    dev: true
+
   /@types/geojson/7946.0.8:
     resolution: {integrity: sha512-1rkryxURpr6aWP7R786/UQOkJ3PcpQiWkAXBmdWc7ryFWqN6a4xfK7BtjXvFBKO9LjQ+MWQSWxYeZX1OApnArA==}
     dev: false
@@ -7930,14 +7952,14 @@ packages:
     resolution: {integrity: sha512-AGOUTsTdbPkRS0qDeyeS+6KypmfVpbT5j23SN8UPG63qjKXNKjXn6V9wZUr8Fin0m9l8oGYaPK8b2WUMF8xI1A==}
     dependencies:
       '@types/glob': 7.1.4
-      '@types/node': 16.11.6
+      '@types/node': 16.11.24
     dev: true
 
   /@types/glob/7.1.4:
     resolution: {integrity: sha512-w+LsMxKyYQm347Otw+IfBXOv9UWVjpHpCDdbBMt8Kz/xbvCYNjP+0qPh91Km3iKfSRLBB0P7fAMf0KHrPu+MyA==}
     dependencies:
       '@types/minimatch': 3.0.5
-      '@types/node': 16.11.6
+      '@types/node': 16.11.24
 
   /@types/glob/7.2.0:
     resolution: {integrity: sha512-ZUxbzKl0IfJILTS6t7ip5fQQM/J3TJYubDm3nMbgubNNYS62eXeUpoLUC8/7fJNiFYHTrGPQn7hspDUzIHX3UA==}
@@ -8333,7 +8355,7 @@ packages:
   /@types/undertaker/1.2.7:
     resolution: {integrity: sha512-xuY7nBwo1zSRoY2aitp/HArHfTulFAKql2Fr4b4mWbBBP+F50n7Jm6nwISTTMaDk2xvl92O10TTejVF0Q9mInw==}
     dependencies:
-      '@types/node': 16.11.6
+      '@types/node': 16.11.24
       '@types/undertaker-registry': 1.0.1
       async-done: 1.3.2
     dev: true
@@ -8353,7 +8375,7 @@ packages:
     resolution: {integrity: sha512-LgBpYIWuuGsihnlF+OOWWz4ovwCYlT03gd3DuLwex50cYZLmX3yrW+sFF9ndtmh7zcZpS6Ri47PrIu+fV+sbXw==}
     dependencies:
       '@types/glob-stream': 6.1.1
-      '@types/node': 16.11.6
+      '@types/node': 16.11.24
       '@types/vinyl': 2.0.5
     dev: true
 
@@ -8361,7 +8383,7 @@ packages:
     resolution: {integrity: sha512-1m6uReH8R/RuLVQGvTT/4LlWq67jZEUxp+FBHt0hYv2BT7TUwFbKI0wa7JZVEU/XtlcnX1QcTuZ36es4rGj7jg==}
     dependencies:
       '@types/expect': 1.20.4
-      '@types/node': 16.11.6
+      '@types/node': 16.11.24
     dev: true
 
   /@types/web/0.0.52:
@@ -9216,6 +9238,11 @@ packages:
     resolution: {integrity: sha512-hHUXGagefjN2iRrID63xckIvotOXOojhQKWIPUZ4mNUZ9nLZW+7FMNoE1lOkEhNWYsx/7ysGIuJYCiMAA9FnrA==}
     engines: {node: '>=6'}
     dev: true
+
+  /ansi-colors/4.1.1:
+    resolution: {integrity: sha512-JoX0apGbHaUJBNl6yF+p6JAFYZ666/hhCGKN5t9QFjbJQKUU/g8MNbFDbvfrgKXvI1QpZplPOnwIo99lX/AAmA==}
+    engines: {node: '>=6'}
+    dev: false
 
   /ansi-escapes/4.3.2:
     resolution: {integrity: sha512-gKXj5ALrKWQLsYG9jlTRmR/xKluxHV+Z9QEwNIgCfM1/uwPMCuzVVnh5mwTd+OuBZcwSIMbqssNWRm1lE51QaQ==}
@@ -13181,6 +13208,13 @@ packages:
       tapable: 2.2.1
     dev: true
 
+  /enquirer/2.3.6:
+    resolution: {integrity: sha512-yjNnPr315/FjS4zIsUxYguYUPP2e1NK4d7E7ZOLiyYCcbFBiTMyID+2wvm2w6+pZ/odMA7cRkjhsPbltwBOrLg==}
+    engines: {node: '>=8.6'}
+    dependencies:
+      ansi-colors: 4.1.1
+    dev: false
+
   /entities/2.2.0:
     resolution: {integrity: sha512-p92if5Nz619I0w+akJrLZH0MX0Pb5DX39XOwQTtXSdQQOaYH03S1uIQp4mhOZtAXrxq4ViO67YTiLBo2638o9A==}
     dev: true
@@ -14787,7 +14821,6 @@ packages:
       graceful-fs: 4.2.9
       jsonfile: 6.1.0
       universalify: 2.0.0
-    dev: true
 
   /fs-extra/4.0.3:
     resolution: {integrity: sha512-q6rbdDd1o2mAnQreO7YADIxf/Whx4AHBiRf6d+/cVT8h44ss+lHgxf1FemcqDnQt9X3ct4McHr+JMGlYSsK7Cg==}
@@ -17573,7 +17606,6 @@ packages:
       universalify: 2.0.0
     optionalDependencies:
       graceful-fs: 4.2.9
-    dev: true
 
   /jsonify/0.0.0:
     resolution: {integrity: sha1-LHS27kHZPKUbe1qu6PUDYx0lKnM=}
@@ -23696,7 +23728,6 @@ packages:
   /universalify/2.0.0:
     resolution: {integrity: sha512-hAZsKq7Yy11Zu1DE0OzWjw7nnLZmJZYTDZZyEFHZdUhV8FkH5MCfoU1XMaxXovpyW5nq5scPqq0ZDP9Zyl04oQ==}
     engines: {node: '>= 10.0.0'}
-    dev: true
 
   /unpipe/1.0.0:
     resolution: {integrity: sha1-sr9O6FFKrmFltIF4KdIbLvSZBOw=}
