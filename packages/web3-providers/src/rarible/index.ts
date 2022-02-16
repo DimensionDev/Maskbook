@@ -171,7 +171,9 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider {
                 hasNextPage: false,
             }
 
-        const data = asset.items.map((asset) => createERC721TokenFromAsset(asset.contract, asset.tokenId, asset))
+        const data = asset.items
+            .map((asset) => createERC721TokenFromAsset(asset.contract, asset.tokenId, asset))
+            .filter((x) => x.info?.owner?.toLowerCase() === from.toLowerCase())
         return {
             data,
             hasNextPage: !!asset.continuation,

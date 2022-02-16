@@ -34,16 +34,20 @@ function computeRealizedLPFeePercent(trade: Trade): Percent {
 
 // computes price breakdown for the trade
 function computeRealizedLPFeeAmount(trade?: Trade | null): CurrencyAmount<Currency> | undefined {
-    if (trade) {
-        const realizedLPFee = computeRealizedLPFeePercent(trade)
+    try {
+        if (trade) {
+            const realizedLPFee = computeRealizedLPFeePercent(trade)
 
-        // the amount of the input that accrues to LPs
-        return CurrencyAmount.fromRawAmount(
-            trade.inputAmount.currency,
-            trade.inputAmount.multiply(realizedLPFee).quotient,
-        )
+            // the amount of the input that accrues to LPs
+            return CurrencyAmount.fromRawAmount(
+                trade.inputAmount.currency,
+                trade.inputAmount.multiply(realizedLPFee).quotient,
+            )
+        }
+        return undefined
+    } catch {
+        return undefined
     }
-    return undefined
 }
 
 export function useTradeBreakdown(trade: Trade | null) {

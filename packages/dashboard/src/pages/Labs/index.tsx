@@ -74,7 +74,7 @@ export default function Plugins() {
     useEffect(
         () =>
             Messages.events.pluginMinimalModeChanged.on(([id, newValue]) =>
-                setPluginStatus({ ...pluginStatus, [id]: newValue }),
+                setPluginStatus({ ...pluginStatus, [id]: !newValue }),
             ),
         [pluginStatus],
     )
@@ -228,7 +228,7 @@ export default function Plugins() {
     useEffect(() => {
         Object.values(PluginId).forEach(async (id) => {
             const enabled = await Services.Settings.getPluginMinimalModeEnabled(id)
-            setPluginStatus((status) => ({ ...status, [id]: enabled }))
+            setPluginStatus((status) => ({ ...status, [id]: !enabled }))
         })
     }, [])
 

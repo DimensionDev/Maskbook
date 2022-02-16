@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import type { NotifyFn, RequestMessage } from '@masknet/web3-shared-base'
 import { v4 as uuid } from 'uuid'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { getProxyWebsocketInstance } from '@masknet/web3-shared-base'
 
 type SocketMessage = Omit<RequestMessage, 'notify'>
@@ -17,7 +17,7 @@ export const useSocket = <T>(message: SocketMessage) => {
     const [data, setData] = useState<T[]>([])
     const [state, setState] = useState(SocketState.init)
     const [error, setError] = useState<unknown>()
-    const [id] = useState(uuid())
+    const [id, setId] = useState(uuid())
     const { value: socket, loading } = useAsyncRetry(getProxyWebsocketInstance, [])
 
     const { retry } = useAsyncRetry(async () => {
@@ -39,7 +39,19 @@ export const useSocket = <T>(message: SocketMessage) => {
         // Get data from cache
         setData(socket.getResult<T>(requestId))
         setState(SocketState.sent)
-    }, [message.id, socket, loading])
+    }, [message.id, socket, loading, id])
 
-    return { data: data ?? [], state, error, retry }
+    const handleRetry = useCallback(() => {
+        setId(uuid())
+        setState(SocketState.sent)
+        setData([])
+        retry()
+    }, [retry])
+
+    return {
+        data: data ?? [],
+        state,
+        error,
+        retry: handleRetry,
+    }
 }

@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
         textDecoration: 'none !important',
     },
     loading: {
-        color: theme.palette.text.primary,
+        color: theme.palette.background.paper,
     },
 }))
 
@@ -51,7 +51,7 @@ interface VoteConfirmDialogProps {
     open: boolean
     loading: boolean
     snapshot: string
-    space: string
+    powerSymbol: string
     onClose: () => void
     onVoteConfirm: () => void
     choiceText: string
@@ -59,7 +59,7 @@ interface VoteConfirmDialogProps {
 }
 
 export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
-    const { open, onClose, onVoteConfirm, choiceText, snapshot, space, power = 0, loading } = props
+    const { open, onClose, onVoteConfirm, choiceText, snapshot, powerSymbol, power = 0, loading } = props
     const { t } = useI18N()
 
     const { classes } = useStyles()
@@ -93,7 +93,7 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                                 </Link>
                             </InfoField>
                             <InfoField title={t('plugin_snapshot_vote_power')}>
-                                {millify(power, { precision: 2, lowercase: true })} {space.toUpperCase()}
+                                {millify(power, { precision: 2, lowercase: true })} {powerSymbol.toUpperCase()}
                             </InfoField>
                         </Box>
                     </CardContent>
@@ -108,6 +108,7 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                         color="primary"
                         variant="contained"
                         fullWidth
+                        disabled={loading}
                         onClick={onVoteConfirm}>
                         {loading ? (
                             <CircularProgress size={16} className={classes.loading} />

@@ -32,13 +32,17 @@ export function useV3BestTradeExactIn(
     const quoterContract = useQuoterContract(targetChainId)
     const { routes, loading: routesLoading } = useAllV3Routes(amountIn?.currency, currencyOut)
     const quoteExactInInputs = useMemo(() => {
-        return routes.map(
-            (route) =>
-                [encodeRouteToPath(route, false), amountIn ? `0x${amountIn.quotient.toString(16)}` : undefined] as [
-                    string,
-                    string,
-                ],
-        )
+        try {
+            return routes.map(
+                (route) =>
+                    [encodeRouteToPath(route, false), amountIn ? `0x${amountIn.quotient.toString(16)}` : undefined] as [
+                        string,
+                        string,
+                    ],
+            )
+        } catch {
+            return []
+        }
     }, [amountIn, routes])
 
     const { value: blockNumber } = useTargetBlockNumber(targetChainId)
@@ -110,15 +114,23 @@ export function useV3BestTradeExactIn(
             }
         }
 
-        return {
-            value: Trade.createUncheckedTrade({
-                route: bestRoute,
-                tradeType: TradeType.EXACT_INPUT,
-                inputAmount: amountIn,
-                outputAmount: CurrencyAmount.fromRawAmount(currencyOut, amountOut),
-            }),
-            loading: false,
-            error: undefined,
+        try {
+            return {
+                value: Trade.createUncheckedTrade({
+                    route: bestRoute,
+                    tradeType: TradeType.EXACT_INPUT,
+                    inputAmount: amountIn,
+                    outputAmount: CurrencyAmount.fromRawAmount(currencyOut, amountOut),
+                }),
+                loading: false,
+                error: undefined,
+            }
+        } catch {
+            return {
+                value: undefined,
+                loading: false,
+                error: new Error('Uniswap SDK Error'),
+            }
         }
     })()
 
@@ -141,13 +153,17 @@ export function useV3BestTradeExactOut(
     const { targetChainId } = TargetChainIdContext.useContainer()
     const quoterContract = useQuoterContract(targetChainId)
     const quoteExactOutInputs = useMemo(() => {
-        return routes.map(
-            (route) =>
-                [encodeRouteToPath(route, true), amountOut ? `0x${amountOut.quotient.toString(16)}` : undefined] as [
-                    string,
-                    string,
-                ],
-        )
+        try {
+            return routes.map(
+                (route) =>
+                    [
+                        encodeRouteToPath(route, true),
+                        amountOut ? `0x${amountOut.quotient.toString(16)}` : undefined,
+                    ] as [string, string],
+            )
+        } catch {
+            return []
+        }
     }, [amountOut, routes])
 
     const { value: blockNumber } = useTargetBlockNumber(targetChainId)
@@ -218,15 +234,23 @@ export function useV3BestTradeExactOut(
             }
         }
 
-        return {
-            value: Trade.createUncheckedTrade({
-                route: bestRoute,
-                tradeType: TradeType.EXACT_OUTPUT,
-                inputAmount: CurrencyAmount.fromRawAmount(currencyIn, amountIn),
-                outputAmount: amountOut,
-            }),
-            loading: false,
-            error: undefined,
+        try {
+            return {
+                value: Trade.createUncheckedTrade({
+                    route: bestRoute,
+                    tradeType: TradeType.EXACT_OUTPUT,
+                    inputAmount: CurrencyAmount.fromRawAmount(currencyIn, amountIn),
+                    outputAmount: amountOut,
+                }),
+                loading: false,
+                error: undefined,
+            }
+        } catch {
+            return {
+                value: undefined,
+                loading: false,
+                error: new Error('Uniswap SDK Error.'),
+            }
         }
     })()
 

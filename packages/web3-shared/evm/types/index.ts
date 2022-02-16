@@ -213,9 +213,10 @@ export interface ERC721TokenRecordInDatabase extends ERC721TokenDetailed {
 
 export interface ERC721TokenCollectionInfo {
     name: string
-    image?: string
+    iconURL?: string
     slug: string
     address: string
+    addresses?: string[]
 }
 
 // #endregion
@@ -355,7 +356,7 @@ export enum EthereumMethodType {
     ETH_CALL = 'eth_call',
     ETH_SIGN = 'eth_sign',
     ETH_DECRYPT = 'eth_decrypt',
-    ETH_SIGN_TYPED_DATA = 'eth_signTypedData',
+    ETH_SIGN_TYPED_DATA = 'eth_signTypedData_v4',
     ETH_SIGN_TRANSACTION = 'eth_signTransaction',
     ETH_GET_LOGS = 'eth_getLogs',
     ETH_GET_ENCRYPTION_PUBLIC_KEY = 'eth_getEncryptionPublicKey',
@@ -398,7 +399,7 @@ export enum EthereumRpcType {
 
     // sign
     SIGN = 'eth_sign',
-    SIGN_TYPED_DATA = 'eth_signTypedData',
+    SIGN_TYPED_DATA = 'eth_signTypedData_v4',
 
     // decrypt
     ETH_DECRYPT = 'eth_decrypt',
