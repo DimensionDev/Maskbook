@@ -1,7 +1,7 @@
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { ERC721TokenDetailed, useChainId } from '@masknet/web3-shared-evm'
-import { Checkbox, List, ListItem, ListProps } from '@mui/material'
+import { Checkbox, List, ListItem } from '@mui/material'
 import classnames from 'classnames'
 import { noop } from 'lodash-unified'
 import { FC, useCallback } from 'react'

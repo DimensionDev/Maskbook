@@ -11,7 +11,6 @@ import type {
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
 import type { Subscription } from 'use-subscription'
-import type { PostInfo } from './PostContext'
 
 export declare namespace Plugin {
     /**
