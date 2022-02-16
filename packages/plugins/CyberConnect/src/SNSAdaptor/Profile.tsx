@@ -63,7 +63,11 @@ const useStyles = makeStyles()((theme) => ({
 const Profile = ({ url }: { url: string }) => {
     const { classes } = useStyles()
     const [, , , , queryAddress] = url.split('/')
-    const { value: identity, loading } = useAsyncRetry(async () => {
+    const {
+        value: identity,
+        loading,
+        retry,
+    } = useAsyncRetry(async () => {
         const res = await PluginCyberConnectRPC.fetchIdentity(queryAddress)
         return res.data.identity
     }, [queryAddress])
@@ -87,7 +91,7 @@ const Profile = ({ url }: { url: string }) => {
 
             {!loading ? (
                 identity ? (
-                    <ConnectButton address={identity?.address} />
+                    <ConnectButton address={identity?.address} refreshFollowList={retry} />
                 ) : null
             ) : (
                 <Skeleton width={400} height={68} />

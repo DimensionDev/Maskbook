@@ -40,7 +40,6 @@ const useStyles = makeStyles()(() => ({
     },
     isFollowing: {
         '&:hover': {
-            cursor: 'not-allowed',
             opacity: 1,
         },
         '>svg': {
@@ -84,7 +83,13 @@ const Logo = function () {
         </>
     )
 }
-export default function ConnectButton({ address }: { address: string }) {
+export default function ConnectButton({
+    address,
+    refreshFollowList,
+}: {
+    address: string
+    refreshFollowList: () => void
+}) {
     const { classes, cx } = useStyles()
     const web3 = useWeb3()
     const myAddress = useAccount()
@@ -109,19 +114,31 @@ export default function ConnectButton({ address }: { address: string }) {
         setCc(ccInstance)
     }, [web3, myAddress])
 
-    const follow = useCallback(() => {
+    const handleClick = useCallback(() => {
         if (!cc) {
             return
         }
         setIsLoading(true)
-        cc.connect(address)
-            .then(() => {
-                setIsFollowing(true)
-            })
-            .finally(() => {
-                setIsLoading(false)
-            })
-    }, [cc, myAddress])
+        if (!isFollowing) {
+            cc.connect(address)
+                .then(() => {
+                    setIsFollowing(true)
+                    refreshFollowList()
+                })
+                .finally(() => {
+                    setIsLoading(false)
+                })
+        } else {
+            cc.disconnect(address)
+                .then(() => {
+                    setIsFollowing(false)
+                    refreshFollowList()
+                })
+                .finally(() => {
+                    setIsLoading(false)
+                })
+        }
+    }, [cc, myAddress, isFollowing])
 
     return blockChainNetwork !== NetworkPluginID.PLUGIN_EVM ? (
         <Typography variant="body2" sx={{ marginTop: 2, color: MaskColorVar.cyberconnectPrimary }}>
@@ -133,14 +150,14 @@ export default function ConnectButton({ address }: { address: string }) {
                 [classes.isFollowing]: isFollowing,
             })}
             onClick={() => {
-                if (!isFollowing) follow()
+                handleClick()
             }}>
             {!isLoading ? (
                 <>
                     <Logo /> {!isFollowing ? 'Follow Now' : 'Following'}
                 </>
             ) : (
-                <CircularProgress size={30} sx={{ marginLeft: '124px' }} />
+                <CircularProgress size={30} sx={{ marginLeft: '154px' }} />
             )}
         </div>
     ) : null
