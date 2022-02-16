@@ -61,10 +61,10 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                     ...addressNames,
                     {
                         type: AddressNameType.TWITTER,
-                        label: twitterAddressName?.data.user.result.has_nft_avatar
+                        label: twitterAddressName?.data.user.result?.has_nft_avatar
                             ? twitterAddressName?.data.user.result.nft_avatar_metadata.smart_contract.address
                             : '',
-                        resolvedAddress: twitterAddressName?.data.user.result.has_nft_avatar
+                        resolvedAddress: twitterAddressName?.data.user.result?.has_nft_avatar
                             ? twitterAddressName?.data.user.result.nft_avatar_metadata.smart_contract.address
                             : '',
                     },
@@ -135,10 +135,10 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                         ...addressNames,
                         {
                             type: AddressNameType.TWITTER,
-                            label: twitterAddressName?.data.user.result.has_nft_avatar
+                            label: twitterAddressName?.data.user.result?.has_nft_avatar
                                 ? twitterAddressName?.data.user.result.nft_avatar_metadata.smart_contract.address
                                 : '',
-                            resolvedAddress: twitterAddressName?.data.user.result.has_nft_avatar
+                            resolvedAddress: twitterAddressName?.data.user.result?.has_nft_avatar
                                 ? twitterAddressName?.data.user.result.nft_avatar_metadata.smart_contract.address
                                 : '',
                         },
