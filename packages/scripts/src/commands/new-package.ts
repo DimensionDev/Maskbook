@@ -114,6 +114,7 @@ async function createNewPackage({ i18n, path, npmName, type, pluginID }: Package
          * packages/plugins/tsconfig.json
          * packages/plugin-infra/src/types.ts
          * packages/mask/src/plugin-infra/register.ts
+         * packages/mask/package.json
          */
         const INSERT_HERE = '// @masknet/scripts: insert-here'
         await changeFile.JSON(resolve(ROOT_PATH, '.i18n-codegen.json'), (content) => {
@@ -134,13 +135,19 @@ async function createNewPackage({ i18n, path, npmName, type, pluginID }: Package
             content.references.push({ path: `./${NormativeName}/` })
         })
         await changeFile.typescript(resolve(ROOT_PATH, 'packages/plugin-infra/src/types.ts'), (content) =>
-            content.replace(INSERT_HERE, `${NormativeName} = ${pluginID}\n${INSERT_HERE}`),
+            content.replace(INSERT_HERE, `${NormativeName} = '${pluginID}'\n${INSERT_HERE}`),
         )
         await changeFile.typescript(
             resolve(ROOT_PATH, `packages/mask/src/plugin-infra/register.ts`),
-            (content) => `${content}\nimport '${npmName}'`,
+            (content) => `${content}import '${npmName}'`,
         )
         await awaitChildProcess(shell.cwd(ROOT_PATH)`pnpm install -C packages/mask ${npmName}`)
+        await changeFile(resolve(ROOT_PATH, 'packages/mask/package.json'), (content) =>
+            content.replaceAll(/workspace:\^undefined/g, 'workspace:*'),
+        )
+        await changeFile(resolve(ROOT_PATH, 'pnpm-lock.yaml'), (content) =>
+            content.replaceAll(/workspace:\^undefined/g, 'workspace:*'),
+        )
     } else {
     }
 }
