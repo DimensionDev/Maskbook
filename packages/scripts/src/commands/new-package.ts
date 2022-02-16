@@ -136,8 +136,8 @@ async function createNewPackage({ i18n, path, npmName, type, pluginID }: Package
         await changeFile(resolve(ROOT_PATH, 'packages/mask/package.json'), (content) =>
             content.replaceAll(/workspace:\^undefined/g, 'workspace:*'),
         )
-        // regenerate lockfile
-        await awaitChildProcess(shell.cwd(ROOT_PATH)`pnpm install --prefer-offline -C packages/mask ${npmName}`)
+        // regenerate lockfile and install dependencies for newly installed packages
+        await awaitChildProcess(shell.cwd(ROOT_PATH)`pnpm install --prefer-offline`)
     } else {
     }
 }

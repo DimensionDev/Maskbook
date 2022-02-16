@@ -6,6 +6,7 @@
   "dependencies": {
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/shared": "workspace:*",
-    "@masknet/shared-base": "workspace:*"
+    "@masknet/shared-base": "workspace:*",
+    "react-use": "^17.3.2"
   }
 }
