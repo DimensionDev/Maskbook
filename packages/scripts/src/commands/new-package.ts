@@ -124,8 +124,6 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
         await changeFile(resolve(ROOT_PATH, 'packages/mask/package.json'), (content) =>
             content.replaceAll(/workspace:\^undefined/g, 'workspace:*'),
         )
-        // regenerate lockfile and install dependencies for newly installed packages
-        await awaitChildProcess(shell.cwd(ROOT_PATH)`pnpm install --prefer-offline`)
     } else {
         // cp -r packages/empty packages/NEW_PACKAGE
         await copy(resolve(ROOT_PATH, 'packages/empty'), packagePath, {
@@ -141,4 +139,7 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
             content.replace(INSERT_HERE, `${INSERT_HERE}\n    { "path": "./${path}/tsconfig.tests.json" },`),
         )
     }
+
+    // regenerate lockfile and install dependencies for newly installed packages
+    await awaitChildProcess(shell.cwd(ROOT_PATH)`pnpm install --prefer-offline`)
 }
