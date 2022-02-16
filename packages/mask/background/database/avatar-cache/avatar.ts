@@ -24,7 +24,7 @@ export const queryAvatarDataURL = (
               },
               (id) => id.toText(),
           )
-) as (number | ((identifier: IdentifierWithAvatar) => Promise<string | undefined>)) & {
+) as ((identifier: IdentifierWithAvatar) => Promise<string | undefined>) & {
     cache?: Map<string, unknown>
 }
 
