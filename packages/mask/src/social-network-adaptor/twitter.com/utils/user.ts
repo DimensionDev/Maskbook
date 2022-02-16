@@ -38,9 +38,19 @@ export const getTwitterId = () => {
         ?.firstChild?.lastChild as HTMLDivElement
     if (node) {
         const twitterIdNode = node.querySelector('div span')
-        if (!twitterIdNode) return ''
-        return twitterIdNode.innerHTML.trim().replace('@', '')
+        if (twitterIdNode) return twitterIdNode.innerHTML.trim().replace('@', '')
     }
+
+    let ele = searchAvatarSelector().evaluate()?.closest('a')
+    if (!ele) ele = searchNFTAvatarSelector().evaluate()?.closest('a')
+    if (ele) {
+        const link = ele.getAttribute('href')
+        if (link) {
+            const [, userId] = link.match(/^\/(\w+)\/(photo|nft)$/) ?? []
+            return userId
+        }
+    }
+
     return ''
 }
 

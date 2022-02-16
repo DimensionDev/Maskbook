@@ -7,7 +7,6 @@ export interface TabContentProps {
 }
 
 export function TabContent({ identity, addressNames }: TabContentProps) {
-    console.log(identity)
     const renderIdentity = () => {
         return (
             <List>
