@@ -6,13 +6,15 @@ import en_US from './en-US.json'
 export const languages = {
     en: en_US,
 }
+import { createI18NBundle } from '@masknet/shared-base'
+export const add__template__I18N = createI18NBundle('__template__', languages)
 // @ts-ignore
 if (import.meta.webpackHot) {
     // @ts-ignore
     import.meta.webpackHot.accept(['./en-US.json'], () =>
         globalThis.dispatchEvent?.(
             new CustomEvent('MASK_I18N_HMR', {
-                detail: ['io.mask.example', { en: en_US }],
+                detail: ['__template__', { en: en_US }],
             }),
         ),
     )

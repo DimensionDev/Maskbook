@@ -26,6 +26,7 @@ packages:
   - 'packages/icons'
   - 'packages/theme'
   - 'packages/plugin-infra'
+  - 'packages/plugins/template'
   - 'packages/plugins/example'
   - 'packages/plugins/Debugger'
   - 'packages/plugins/Wallet'
