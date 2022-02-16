@@ -7,7 +7,7 @@ import { blobToDataURL } from '@dimensiondev/kit'
 import { createTransaction } from '../utils/openDB'
 
 /**
- * Get a (cached) blob url for an identifier.
+ * Get a (cached) blob url for an identifier. No cache for native api.
  * ? Because of cross-origin restrictions, we cannot use blob url here. sad :(
  */
 export const queryAvatarDataURL = memoizePromise(
@@ -22,7 +22,7 @@ export const queryAvatarDataURL = memoizePromise(
         if (!buffer) throw new Error('Avatar not found')
         return blobToDataURL(new Blob([buffer], { type: 'image/png' }))
     },
-    (id) => id.toText(),
+    (id) => (hasNativeAPI ? Date.now().toString() : id.toText()),
 )
 
 /**
