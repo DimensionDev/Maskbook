@@ -1,7 +1,7 @@
 import { resolve } from 'path'
 import { copy, ensureDir } from 'fs-extra'
 import { prompt } from 'enquirer'
-import { kebabCase } from 'lodash-unified'
+import { kebabCase, upperFirst } from 'lodash-unified'
 import { task } from '../utils/task'
 import { ROOT_PATH } from '../utils/paths'
 import { awaitChildProcess, changeFile, shell } from '../utils'
@@ -18,25 +18,21 @@ export async function createPackageInteractive() {
     const packageDetail: PackageOptions = {
         path: '',
         npmName: '',
-        type: (
-            await prompt<{ type: 'plugin' | 'package' }>({
-                type: 'select',
-                name: 'type',
-                choices: ['plugin', 'package'],
-                message: 'What type of package do you want to create?',
-            })
-        ).type,
+        type: await prompt<{ type: 'plugin' | 'package' }>({
+            type: 'select',
+            name: 'type',
+            choices: ['plugin', 'package'],
+            message: 'What type of package do you want to create?',
+        }).then((x) => x.type),
         i18n: true,
     }
 
     if (packageDetail.type === 'plugin') {
-        packageDetail.pluginID = (
-            await prompt<{ pluginID: string }>({
-                type: 'input',
-                message: 'What is the plugin ID? (e.g. "io.mask.example-plugin")',
-                name: 'pluginID',
-            })
-        ).pluginID
+        packageDetail.pluginID = await prompt<{ pluginID: string }>({
+            type: 'input',
+            message: 'What is the plugin ID? (e.g. "io.mask.example-plugin")',
+            name: 'pluginID',
+        }).then((x) => x.pluginID)
     }
 
     // Choose monorepo folder name
@@ -44,13 +40,14 @@ export async function createPackageInteractive() {
         const base = 'packages/' + (packageDetail.type === 'plugin' ? 'plugins/' : '')
         packageDetail.path =
             base +
-            (
+            upperFirst(
                 await prompt<{ name: string }>({
                     type: 'input',
                     name: 'name',
                     message: 'Create a new package at: ' + base,
-                })
-            ).name
+                }).then((x) => x.name),
+            )
+        packageDetail.path
     }
 
     // Choose npm package name
@@ -58,29 +55,23 @@ export async function createPackageInteractive() {
         const suggestedNpmPackageName = kebabCase(packageDetail.path.split('/').at(-1))
         packageDetail.npmName =
             '@masknet/' +
-            (
-                await prompt<{ npmName: string }>({
-                    type: 'input',
-                    name: 'npmName',
-                    message: 'What is the npm package name? @masknet/',
-                    initial:
-                        packageDetail.type === 'package'
-                            ? suggestedNpmPackageName
-                            : 'plugin-' + suggestedNpmPackageName,
-                })
-            ).npmName
+            (await prompt<{ npmName: string }>({
+                type: 'input',
+                name: 'npmName',
+                message: 'What is the npm package name? @masknet/',
+                initial:
+                    packageDetail.type === 'package' ? suggestedNpmPackageName : 'plugin-' + suggestedNpmPackageName,
+            }).then((x) => x.npmName))
     }
 
     if (packageDetail.type === 'plugin') packageDetail.i18n = true
     else {
-        packageDetail.i18n = (
-            await prompt<{ i18n: boolean }>({
-                type: 'confirm',
-                name: 'i18n',
-                message: 'Add i18n support for this package?',
-                initial: true,
-            })
-        ).i18n
+        packageDetail.i18n = await prompt<{ i18n: boolean }>({
+            type: 'confirm',
+            name: 'i18n',
+            message: 'Add i18n support for this package?',
+            initial: true,
+        }).then((x) => x.i18n)
     }
 
     return createNewPackage(packageDetail)
