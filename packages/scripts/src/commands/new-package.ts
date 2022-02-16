@@ -132,12 +132,12 @@ async function createNewPackage({ i18n, path, npmName, type, pluginID }: Package
             resolve(ROOT_PATH, `packages/mask/src/plugin-infra/register.ts`),
             (content) => `${content}import '${npmName}'`,
         )
-        await awaitChildProcess(shell.cwd(ROOT_PATH)`pnpm install -C packages/mask ${npmName}`)
+        await awaitChildProcess(shell.cwd(ROOT_PATH)`pnpm install --prefer-offline -C packages/mask ${npmName}`)
         await changeFile(resolve(ROOT_PATH, 'packages/mask/package.json'), (content) =>
             content.replaceAll(/workspace:\^undefined/g, 'workspace:*'),
         )
         // regenerate lockfile
-        await awaitChildProcess(shell.cwd(ROOT_PATH)`pnpm install -C packages/mask ${npmName}`)
+        await awaitChildProcess(shell.cwd(ROOT_PATH)`pnpm install --prefer-offline -C packages/mask ${npmName}`)
     } else {
     }
 }

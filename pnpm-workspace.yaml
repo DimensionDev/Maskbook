@@ -38,3 +38,4 @@ packages:
   - 'packages/backup-format'
   - 'packages/encryption'
   - 'packages/provider-proxy'
+  - 'packages/plugins/Play'

@@ -720,6 +720,7 @@ export enum PluginId {
     PoolTogether = 'com.pooltogether',
     UnlockProtocol = 'com.maskbook.unlockprotocol',
     FileService = 'com.maskbook.fileservice',
+    Play = 'io.play',
     // @masknet/scripts: insert-here
 }
 
