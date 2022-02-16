@@ -129,6 +129,17 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     function $unknownIdentityResolution() {
         const provider = ui.collecting.identityProvider
         provider?.start(signal)
+        MaskMessages.events.Native_delegate_getCurrentDetectedProfile.on(
+            ([type]) => {
+                if (type === 'request') {
+                    MaskMessages.events.Native_delegate_getCurrentDetectedProfile.sendToBackgroundPage([
+                        'response',
+                        provider?.recognized.value.identifier.toText(),
+                    ])
+                }
+            },
+            { signal },
+        )
         if (provider?.hasDeprecatedPlaceholderName) {
             provider.recognized.addListener((id) => {
                 if (signal.aborted) return
