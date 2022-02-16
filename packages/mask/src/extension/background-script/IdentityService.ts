@@ -248,6 +248,7 @@ export async function queryPagedPostHistory(
         network: string
         userIds: string[]
         after?: PostIVIdentifier
+        pageOffset?: number
     },
     count: number,
 ) {
