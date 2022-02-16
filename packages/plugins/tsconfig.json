@@ -1,6 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "references": [
+    { "path": "./template/" },
     { "path": "./example/" },
     { "path": "./Debugger/" },
     { "path": "./Flow/" },

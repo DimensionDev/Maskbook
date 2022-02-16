@@ -1,5 +1,3 @@
-export { clean, help } from './commands'
-export { localeKit } from './locale-kit'
 export {
     codegen,
     codegenWatch,
@@ -12,6 +10,10 @@ export {
 } from './codegen'
 export { ciBuild } from './extension'
 export { buildNetlify } from './netlify'
+
+// Tools
+export { clean, help, createPackageInteractive } from './commands'
+export { localeKit } from './locale-kit'
 export { syncLanguages } from './locale-kit-next'
 export { reorderSpellcheck } from './spellcheck'
 

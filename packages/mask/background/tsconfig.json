@@ -10,5 +10,10 @@
     "lib": ["ES2021", "WebWorker"]
   },
   "include": ["./"],
-  "references": [{ "path": "../shared" }, { "path": "../utils-pure" }, { "path": "../../encryption" }]
+  "references": [
+    { "path": "../shared" },
+    { "path": "../utils-pure" },
+    { "path": "../../encryption" },
+    { "path": "../../gun-utils" }
+  ]
 }

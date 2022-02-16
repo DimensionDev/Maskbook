@@ -1,7 +1,7 @@
 import { Profile, queryProfile } from '../../../database'
 import { ProfileIdentifier, Identifier, PostIVIdentifier } from '@masknet/shared-base'
 import { queryPostDB } from '../../../../background/database/post'
-import { GunAPI } from '../../../network/gun'
+
 // #endregion
 // #region Append Recipients in future
 /**
@@ -18,15 +18,6 @@ export async function getPartialSharedListOfPost(
     if (nameInDB === 'everyone') return []
     if (!nameInDB) return []
     nameInDB.forEach((_, x) => ids.add(x.toText()))
-    if (version === -40) {
-        // eslint-disable-next-line import/no-deprecated
-        const post = await GunAPI.getVersion1PostByHash(postSalt)
-        if (!post) return []
-        delete post._
-        const nameInGun = Object.keys(post)
-        // ? version 40 is for old facebook only
-        nameInGun.forEach((x) => ids.add(new ProfileIdentifier('facebook.com', x).toText()))
-    }
     return Promise.all(
         Array.from(ids)
             .map((x) => Identifier.fromString(x, ProfileIdentifier))

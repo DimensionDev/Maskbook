@@ -20,8 +20,6 @@ const approvedList = new Map([
     ['html-parse-stringify2', 'github:locize/html-parse-stringify2'],
     /* cspell:disable-next-line */
     ['async-eventemitter', 'github:ahultgren/async-eventemitter#fa06e39e56786ba541c180061dbf2c0a5bbf951c'],
-    // !!! Relative path
-    ['xhr2-cookies', 'link:./package-overrides/xhr2-cookies'],
 ])
 
 /**
