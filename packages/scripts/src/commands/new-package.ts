@@ -9,7 +9,6 @@ import { awaitChildProcess, changeFile, shell } from '../utils'
 type PackageOptions = {
     type: 'plugin' | 'package'
     path: string
-    i18n: boolean
     npmName: string
     pluginID?: string
 }
@@ -24,7 +23,6 @@ export async function createPackageInteractive() {
             choices: ['plugin', 'package'],
             message: 'What type of package do you want to create?',
         }).then((x) => x.type),
-        i18n: true,
     }
 
     if (packageDetail.type === 'plugin') {
@@ -64,21 +62,12 @@ export async function createPackageInteractive() {
             }).then((x) => x.npmName))
     }
 
-    if (packageDetail.type === 'plugin') packageDetail.i18n = true
-    else {
-        packageDetail.i18n = await prompt<{ i18n: boolean }>({
-            type: 'confirm',
-            name: 'i18n',
-            message: 'Add i18n support for this package?',
-            initial: true,
-        }).then((x) => x.i18n)
-    }
-
     return createNewPackage(packageDetail)
 }
 task(createPackageInteractive, 'create-package', 'Create a new package interactively')
 
-async function createNewPackage({ i18n, path, npmName, type, pluginID }: PackageOptions) {
+const INSERT_HERE = '// @masknet/scripts: insert-here'
+async function createNewPackage({ path, npmName, type, pluginID }: PackageOptions) {
     await changeFile(resolve(ROOT_PATH, 'pnpm-workspace.yaml'), (content) => content + `  - '${path}'\n`)
 
     const packagePath = resolve(ROOT_PATH, path)
@@ -107,7 +96,6 @@ async function createNewPackage({ i18n, path, npmName, type, pluginID }: Package
          * packages/mask/src/plugin-infra/register.ts
          * packages/mask/package.json
          */
-        const INSERT_HERE = '// @masknet/scripts: insert-here'
         await changeFile.JSON(resolve(ROOT_PATH, '.i18n-codegen.json'), (content) => {
             content.list.push({
                 input: `./${path}/src/locales/en-US.json`,
@@ -139,5 +127,18 @@ async function createNewPackage({ i18n, path, npmName, type, pluginID }: Package
         // regenerate lockfile and install dependencies for newly installed packages
         await awaitChildProcess(shell.cwd(ROOT_PATH)`pnpm install --prefer-offline`)
     } else {
+        // cp -r packages/empty packages/NEW_PACKAGE
+        await copy(resolve(ROOT_PATH, 'packages/empty'), packagePath, {
+            filter: (src) => {
+                if (src.includes('node_modules') || src.includes('dist')) return false
+                return true
+            },
+        })
+        await changeFile.JSON(resolve(packagePath, 'package.json'), (content) => {
+            content.name = npmName
+        })
+        await changeFile(resolve(packagePath, 'tsconfig.json'), (content) =>
+            content.replace(INSERT_HERE, `${INSERT_HERE}\n    { "path": "./${path}/tsconfig.tests.json" },`),
+        )
     }
 }
