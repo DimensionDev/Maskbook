@@ -61,7 +61,7 @@ export interface PostRecord {
     /**
      * Receivers
      */
-    recipients: 'everyone' | Record<string, RecipientDetail>
+    recipients: Record<string, RecipientDetail>
     /** @deprecated */
     recipientGroups?: unknown
     /**

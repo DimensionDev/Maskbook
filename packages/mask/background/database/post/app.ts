@@ -1,6 +1,13 @@
 import type { PostRecord as NativePostRecord } from '@masknet/public-api'
-import type { PostRecord, PostReadWriteTransaction, PostReadOnlyTransaction } from './type'
-import { PostIVIdentifier, Identifier, AESJsonWebKey, IdentifierMap, PersonaIdentifier } from '@masknet/shared-base'
+import type { PostRecord, PostReadWriteTransaction, PostReadOnlyTransaction, RecipientDetail } from './type'
+import {
+    PostIVIdentifier,
+    Identifier,
+    AESJsonWebKey,
+    IdentifierMap,
+    PersonaIdentifier,
+    ProfileIdentifier,
+} from '@masknet/shared-base'
 import { nativeAPI } from '../../../shared/native-rpc'
 
 export async function createPostDB(record: PostRecord, t?: PostReadWriteTransaction) {
@@ -58,7 +65,7 @@ function postInNative(record: Partial<PostRecord> & Pick<PostRecord, 'identifier
         postCryptoKey: record.postCryptoKey,
         recipients:
             record.recipients === 'everyone'
-                ? 'everyone'
+                ? Object.fromEntries([])
                 : record.recipients
                 ? Object.fromEntries(record.recipients.__raw_map__)
                 : undefined,
@@ -72,13 +79,13 @@ function postInNative(record: Partial<PostRecord> & Pick<PostRecord, 'identifier
 
 function postOutNative(record: NativePostRecord): PostRecord {
     return {
-        postBy: Identifier.fromString(record.postBy).unwrap(),
-        identifier: Identifier.fromString(record.identifier).unwrap(),
+        postBy: Identifier.fromString(record.postBy).unwrap() as unknown as ProfileIdentifier,
+        identifier: Identifier.fromString(record.identifier).unwrap() as unknown as PostIVIdentifier,
         postCryptoKey: record.postCryptoKey as unknown as AESJsonWebKey,
-        recipients:
-            record.recipients === 'everyone'
-                ? 'everyone'
-                : new IdentifierMap(new Map(Object.entries(record.recipients))),
+        recipients: new IdentifierMap(new Map(Object.entries(record.recipients))) as unknown as IdentifierMap<
+            ProfileIdentifier,
+            RecipientDetail
+        >,
         foundAt: new Date(record.foundAt),
         encryptBy: record.encryptBy ? Identifier.fromString(record.encryptBy).unwrap() : undefined,
         url: record.url,
