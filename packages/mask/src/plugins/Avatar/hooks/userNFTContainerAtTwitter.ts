@@ -104,12 +104,18 @@ export function useNFTContainerAtTwitter(screenName: string) {
                 },
             },
         )
-        return response.json() as Promise<{
+        const result = (await response.json()) as {
             data: {
                 user: {
                     result: NFTContainer
                 }
             }
-        }>
+        }
+
+        return {
+            tokenId: result.data.user.result.nft_avatar_metadata.token_id,
+            hasNFTAvatar: result.data.user.result.has_nft_avatar,
+            contractAddress: result.data.user.result.nft_avatar_metadata.smart_contract.address,
+        }
     }, [bearerToken, csrfToken, queryToken, screenName])
 }

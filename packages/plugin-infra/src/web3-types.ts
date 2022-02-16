@@ -1,6 +1,7 @@
 import type { BigNumber } from 'bignumber.js'
 import type { Subscription } from 'use-subscription'
 import type { Pagination, Plugin, Pageable } from './types'
+import type { ERC721TokenDetailed } from './web3-token-types'
 
 /**
  * A network plugin defines the way to connect to a single chain.
@@ -148,14 +149,12 @@ export declare namespace Web3Plugin {
     }
 
     export interface Token {
-        id: string
         chainId: number
+        address: string
     }
 
     export interface FungibleToken extends Token {
-        id: string
         type: TokenType.Fungible
-        address: string
         decimals?: number
         name: string
         symbol: string
@@ -163,41 +162,11 @@ export declare namespace Web3Plugin {
     }
 
     export interface NonFungibleContract {
-        id: string
         chainId: number
         name: string
         symbol: string
         address: string
         iconURL?: string
-        balance?: number
-    }
-
-    export interface FungibleTokenMetadata {
-        name: string
-        symbol: string
-        decimals: number
-        iconURL?: string
-        token: FungibleToken
-    }
-
-    export interface NonFungibleTokenMetadata {
-        name: string
-        description: string
-        mediaType: string
-        iconURL?: string
-        assetURL?: string
-    }
-
-    export interface NonFungibleToken extends Token {
-        // chainId_contractAddress_tokenId
-        id: string
-        tokenId: string
-        type: TokenType.NonFungible
-        name: string
-        description?: string
-        owner?: string
-        metadata?: NonFungibleTokenMetadata
-        contract?: NonFungibleContract
     }
 
     export interface TokenList {
@@ -240,7 +209,7 @@ export declare namespace Web3Plugin {
             /** The user added fungible tokens. */
             fungibleTokens?: Subscription<FungibleToken[]>
             /** The user added non-fungible tokens. */
-            nonFungibleTokens?: Subscription<NonFungibleToken[]>
+            nonFungibleTokens?: Subscription<ERC721TokenDetailed[]>
         }
         export interface AssetState {
             /** Get fungible assets of given account. */
@@ -258,7 +227,7 @@ export declare namespace Web3Plugin {
                 providerType?: string,
                 network?: NetworkDescriptor,
                 other?: { [key in string]: unknown },
-            ) => Promise<Pageable<NonFungibleToken>>
+            ) => Promise<Pageable<ERC721TokenDetailed>>
         }
         export interface NameServiceState {
             lookup?: (domain: string) => Promise<string | undefined>
@@ -301,8 +270,6 @@ export declare namespace Web3Plugin {
 
             isChainIdValid?: (chainId: number, allowTestnet: boolean) => boolean
             getChainDetailed?: (chainId: number) => ChainDetailed | undefined
-            getFungibleTokenMetadata?: (token: FungibleToken) => Promise<FungibleTokenMetadata>
-            getNonFungibleTokenMetadata?: (token: NonFungibleToken) => Promise<NonFungibleTokenMetadata>
 
             formatAddress?: (address: string, size?: number) => string
             formatCurrency?: (value: BigNumber.Value, sign?: string, symbol?: string) => string

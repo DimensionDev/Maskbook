@@ -19,7 +19,6 @@ export function formatAssets(data: WalletTokenRecord[]): Asset[] {
                 id: address,
                 chainId: chainIdFromChain,
                 token: {
-                    id: address,
                     address: address,
                     chainId: chainIdFromChain,
                     type: TokenType.Fungible,

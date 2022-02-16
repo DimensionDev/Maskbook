@@ -10,7 +10,6 @@ export function createFungibleToken(
     decimals: number,
 ): Web3Plugin.FungibleToken {
     return {
-        id: address,
         chainId,
         type: TokenType.Fungible,
         address,

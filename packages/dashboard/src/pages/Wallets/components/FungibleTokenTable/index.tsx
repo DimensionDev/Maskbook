@@ -96,7 +96,7 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
             open: true,
             traderProps: {
                 coin: {
-                    id: token.id,
+                    id: token.address,
                     name: token.name ?? '',
                     symbol: token.symbol ?? '',
                     contract_address: token.address,

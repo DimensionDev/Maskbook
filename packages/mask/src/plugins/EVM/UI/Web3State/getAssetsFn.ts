@@ -2,7 +2,6 @@ import Web3 from 'web3'
 import {
     createContract,
     createNativeToken,
-    ERC721TokenDetailed,
     formatEthereumAddress,
     getERC721TokenDetailedFromChain,
     getERC721TokenAssetFromChain,
@@ -12,7 +11,7 @@ import {
     FungibleAssetProvider,
     createExternalProvider,
 } from '@masknet/web3-shared-evm'
-import { Pageable, Pagination, TokenType, Web3Plugin } from '@masknet/plugin-infra'
+import { Pageable, Pagination, TokenType, Web3Plugin, ERC721TokenDetailed } from '@masknet/plugin-infra'
 import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import type { AbiItem } from 'web3-utils'
@@ -91,7 +90,7 @@ export const getFungibleAssetsFn =
                 chainId: chainId,
                 token: {
                     ...trustedTokens[idx],
-                    id: trustedTokens[idx].address,
+                    address: trustedTokens[idx].address,
                     type: TokenType.Fungible,
                     name: trustedTokens[idx].name ?? 'Unknown Token',
                     symbol: trustedTokens[idx].symbol ?? 'Unknown',
@@ -109,7 +108,7 @@ export const getFungibleAssetsFn =
                     !allTokens.find(
                         (x) =>
                             x.token.chainId === t.chainId &&
-                            isSameAddress(x.token.id, createNativeToken(x.chainId).address),
+                            isSameAddress(x.token.address, createNativeToken(x.chainId).address),
                     ),
             )
             .map((x) => {
@@ -124,7 +123,7 @@ export const getFungibleAssetsFn =
 
         return uniqBy(
             [...nativeTokens, ...allTokens],
-            (x) => `${x.token.chainId}_${formatEthereumAddress(x.token.id)}`,
+            (x) => `${x.token.chainId}_${formatEthereumAddress(x.token.address)}`,
         ).sort(makeSortAssertWithoutChainFn())
     }
 
@@ -136,7 +135,7 @@ export const getNonFungibleTokenFn =
         providerType?: string,
         network?: Web3Plugin.NetworkDescriptor,
         other?: { [key in string]: unknown },
-    ): Promise<Pageable<Web3Plugin.NonFungibleToken>> => {
+    ): Promise<Pageable<ERC721TokenDetailed>> => {
         const socket = await getProxyWebsocketInstance()
         let tokenInDb: ERC721TokenDetailed[] = []
         // validate and show trusted erc721 token in first page
@@ -180,34 +179,9 @@ export const getNonFungibleTokenFn =
         })
 
         const tokenFromProvider = socket.getResult<ERC721TokenDetailed>(socketId)
-        const allData: Web3Plugin.NonFungibleToken[] = [...tokenInDb, ...tokenFromProvider]
-            .map(
-                (x) =>
-                    ({
-                        ...x,
-                        id: `${x.contractDetailed.address}_${x.tokenId}`,
-                        tokenId: x.tokenId,
-                        chainId: x.contractDetailed.chainId,
-                        type: TokenType.NonFungible,
-                        name: x.info.name ?? `${x.contractDetailed.name} ${x.tokenId}`,
-                        description: x.info.description ?? '',
-                        owner: x.info.owner,
-                        contract: {
-                            ...x.contractDetailed,
-                            type: TokenType.NonFungible,
-                            id: x.contractDetailed.address,
-                        },
-                        metadata: {
-                            name: x.info.name ?? `${x.contractDetailed.name} ${x.tokenId}`,
-                            description: x.info.description ?? '',
-                            mediaType: 'Unknown',
-                            iconURL: x.contractDetailed.iconURL,
-                            assetURL: x.info.mediaUrl,
-                        },
-                    } as Web3Plugin.NonFungibleToken),
-            )
-            .filter((x) => isSameAddress(x.owner, address))
-            .filter((x) => !network || x.chainId === network.chainId)
+        const allData: ERC721TokenDetailed[] = [...tokenInDb, ...tokenFromProvider]
+            .filter((x) => isSameAddress(x.info.owner, address))
+            .filter((x) => !network || x.contractDetailed.chainId === network.chainId)
 
         return {
             hasNextPage: tokenFromProvider.length === pagination?.size ?? 20,

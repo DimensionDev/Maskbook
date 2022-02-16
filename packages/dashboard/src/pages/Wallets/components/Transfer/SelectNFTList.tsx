@@ -1,4 +1,4 @@
-import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import type { ERC721TokenDetailed } from '@masknet/plugin-infra'
 import { memo, useMemo } from 'react'
 import { Box, ImageList, Typography, ImageListItem, Stack } from '@mui/material'
 import { NFTCard } from './NFTCard'

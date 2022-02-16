@@ -17,6 +17,7 @@ import {
     useAccount,
     usePluginIDContext,
     NetworkPluginID,
+    ERC721TokenDetailed,
 } from '@masknet/plugin-infra'
 import { useAsyncRetry } from 'react-use'
 
@@ -53,7 +54,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
     const { Asset } = useWeb3PluginState()
     const network = useNetworkDescriptor()
     const [loadingSize, setLoadingSize] = useState(0)
-    const [renderData, setRenderData] = useState<Web3Plugin.NonFungibleToken[]>([])
+    const [renderData, setRenderData] = useState<ERC721TokenDetailed[]>([])
 
     const {
         value = { data: EMPTY_LIST, hasNextPage: false },
@@ -76,7 +77,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
 
     const currentPluginId = usePluginIDContext()
     const onSend = useCallback(
-        (detail: Web3Plugin.NonFungibleToken) => {
+        (detail: ERC721TokenDetailed) => {
             // Sending NFT is only available on EVM currently.
             if (currentPluginId !== NetworkPluginID.PLUGIN_EVM) return
             navigate(DashboardRoutes.WalletsTransfer, {
@@ -125,8 +126,8 @@ export interface CollectibleListUIProps {
     isEmpty: boolean
     showPagination: boolean
     chainId: number
-    dataSource: Web3Plugin.NonFungibleToken[]
-    onSend(detail: Web3Plugin.NonFungibleToken): void
+    dataSource: ERC721TokenDetailed[]
+    onSend(detail: ERC721TokenDetailed): void
     setLoadingSize(fn: (pre: number | undefined) => number): void
 }
 

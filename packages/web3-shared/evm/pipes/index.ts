@@ -2,9 +2,8 @@ import urlcat from 'urlcat'
 import { unreachable } from '@dimensiondev/kit'
 import {
     ChainId,
-    ERC20Token,
-    ERC721Token,
-    NativeToken,
+    NonFungibleToken,
+    FungibleToken,
     NetworkType,
     ProviderType,
     NonFungibleAssetProvider,
@@ -159,7 +158,7 @@ export function resolveTransactionLinkOnExplorer(chainId: ChainId, tx: string) {
     return urlcat(resolveLinkOnExplorer(chainId), '/tx/:tx', { tx })
 }
 
-export function resolveTokenLinkOnExplorer({ chainId, address }: NativeToken | ERC20Token | ERC721Token) {
+export function resolveTokenLinkOnExplorer({ chainId, address }: NonFungibleToken | FungibleToken) {
     return urlcat(resolveLinkOnExplorer(chainId), '/token/:address', { address })
 }
 
