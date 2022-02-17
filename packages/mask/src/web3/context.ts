@@ -128,13 +128,15 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
             if (identity.identifier.network === 'twitter.com') {
                 const result = await UserNFTContainerAtTwitter.getUserNftContainer(identity.identifier.userId ?? '')
                 if (result)
-                    addressNames.push({
-                        type: AddressNameType.TWITTER_BLUE,
-                        label: result.address,
-                        resolvedAddress: result.address,
-                    })
+                    return [
+                        ...addressNames,
+                        {
+                            type: AddressNameType.TWITTER_BLUE,
+                            label: result.address,
+                            resolvedAddress: result.address,
+                        },
+                    ]
             }
-
             return addressNames
         },
         getTransactionList: WalletRPC.getTransactionList,
