@@ -3,7 +3,7 @@ import { searchFacebookAvatarOnMobileSelector, searchFacebookAvatarSelector } fr
 import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils'
 import { useEffect, useMemo, useState } from 'react'
 import type { NFTAvatarEvent } from '@masknet/shared-base'
-import { pickBy } from 'lodash-unified'
+import { max, pickBy } from 'lodash-unified'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { useAsync, useLocation, useWindowSize } from 'react-use'
 import { useWallet } from '@masknet/plugin-infra'
@@ -82,10 +82,10 @@ function NFTAvatarInFacebook() {
             : searchFacebookAvatarSelector().evaluate()
         if (ele) {
             const style = window.getComputedStyle(ele)
-            return Number.parseInt(style.width.replace('px', '') ?? 0, 10)
+            return max([148, Number.parseInt(style.width.replace('px', '') ?? 0, 10)])
         }
         return 0
-    }, [windowSize, isMobileFacebook])
+    }, [windowSize, isMobileFacebook, avatar])
 
     useEffect(() => {
         return MaskMessages.events.NFTAvatarUpdated.on((data) =>

@@ -38,7 +38,9 @@ export const searchUserIdSelectorOnMobile: () => LiveSelector<HTMLAnchorElement,
 // #endregion facebook nft avatar
 
 export const searchFacebookAvatarListSelector = () =>
-    querySelector('[role="dialog"] input[type=file] + [role="button"]').closest(3).querySelector('div')
+    querySelector('[role="dialog"] > div > div > div > input[type=file] + [role="button"]')
+        .closest(3)
+        .querySelector('div')
 
 export const searchFacebookAvatarMobileListSelector = () => querySelector('#nuxChoosePhotoButton').closest<E>(6)
 
