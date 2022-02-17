@@ -11,3 +11,4 @@ packages/netlify/sites
 public/
 scripts/
 packages/dashboard/storybook-static/
+packages/theme/storybook-static/
