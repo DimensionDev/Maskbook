@@ -7,11 +7,12 @@ import {
     IdentifierMap,
     PersonaIdentifier,
     ProfileIdentifier,
+    ECKeyIdentifier,
 } from '@masknet/shared-base'
 import { nativeAPI } from '../../../shared/native-rpc'
 
 export async function createPostDB(record: PostRecord, t?: PostReadWriteTransaction) {
-    return nativeAPI?.api.create_post({ post: postInNative(record) })
+    return nativeAPI?.api.create_post({ post: postInNative(record) as NativePostRecord })
 }
 
 export async function updatePostDB(
@@ -58,23 +59,23 @@ export async function queryPostPagedDB(
     return results.map((r) => postOutNative(r))
 }
 
-function postInNative(record: Partial<PostRecord> & Pick<PostRecord, 'identifier'>): NativePostRecord {
+function postInNative(record: Partial<PostRecord> & Pick<PostRecord, 'identifier'>): Partial<NativePostRecord> {
     return {
         postBy: record.postBy ? record.postBy.toText() : undefined,
         identifier: record.identifier.toText(),
         postCryptoKey: record.postCryptoKey,
         recipients:
             record.recipients === 'everyone'
-                ? Object.fromEntries([])
+                ? Object.fromEntries(new Map())
                 : record.recipients
                 ? Object.fromEntries(record.recipients.__raw_map__)
                 : undefined,
-        foundAt: record.foundAt ? record.foundAt.getTime() : undefined,
+        foundAt: record.foundAt?.getTime(),
         encryptBy: record.encryptBy?.toText(),
         url: record.url,
         summary: record.summary,
         interestedMeta: record.interestedMeta,
-    } as NativePostRecord
+    }
 }
 
 function postOutNative(record: NativePostRecord): PostRecord {
@@ -87,11 +88,13 @@ function postOutNative(record: NativePostRecord): PostRecord {
             RecipientDetail
         >,
         foundAt: new Date(record.foundAt),
-        encryptBy: record.encryptBy ? Identifier.fromString(record.encryptBy).unwrap() : undefined,
+        encryptBy: record.encryptBy
+            ? (Identifier.fromString(record.encryptBy).unwrap() as unknown as ECKeyIdentifier)
+            : undefined,
         url: record.url,
         summary: record.summary,
         interestedMeta: record.interestedMeta,
-    } as PostRecord
+    }
 }
 
 // #region Not available on native.
