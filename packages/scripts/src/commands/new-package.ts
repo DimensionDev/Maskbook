@@ -123,7 +123,7 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
             content.replaceAll(/workspace:\^undefined/g, 'workspace:*'),
         )
         await changeFile(resolve(ROOT_PATH, 'tsconfig.json'), (content) =>
-            content.replace(INSERT_HERE + ' 3', `\n      "${npmName}": ["./${path}/src"],\n      ${INSERT_HERE} 3`),
+            content.replace(INSERT_HERE + ' 3', `"${npmName}": ["./${path}/src"],\n      ${INSERT_HERE} 3`),
         )
     } else {
         // cp -r packages/empty packages/NEW_PACKAGE
@@ -139,7 +139,7 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
         await changeFile(resolve(ROOT_PATH, 'tsconfig.json'), (content) =>
             content
                 .replace(INSERT_HERE + ' 1', `${INSERT_HERE} 1\n    { "path": "./${path}/tsconfig.tests.json" },`)
-                .replace(INSERT_HERE + ' 2', `\n      "${npmName}": ["./${path}/src"],\n      ${INSERT_HERE} 2`),
+                .replace(INSERT_HERE + ' 2', `"${npmName}": ["./${path}/src"],\n      ${INSERT_HERE} 2`),
         )
         await changeFile(resolve(packagePath, 'README.md'), () => `# ${npmName}`)
     }
