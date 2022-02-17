@@ -22,9 +22,7 @@ export function useAddressNames(
     return useAsyncRetry(async () => {
         const addressNames = await getAddressNamesList(identity)
         if (identity.identifier.network === 'twitter.com') {
-            const { address } = await UserNFTContainerAtTwitter.getNFTContainerAtTwitter(
-                identity.identifier.userId ?? '',
-            )
+            const { address } = await UserNFTContainerAtTwitter.getUserNftContainer(identity.identifier.userId ?? '')
             if (address)
                 addressNames.push({
                     type: AddressNameType.TWITTER_BLUE,

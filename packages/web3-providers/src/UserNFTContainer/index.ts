@@ -85,7 +85,7 @@ export class UserNFTContainerAtTwitterAPI implements UserNFTContainerAPI.Provide
     async getUserNftContainer(screenName: string): Promise<{ address: string; token_id: string } | undefined> {
         const { bearerToken, queryToken, csrfToken } = await getTokens()
         if (!bearerToken || !queryToken || !csrfToken) return
-        const result = await getUserNftContainer(screenName, bearerToken, queryToken, csrfToken)
+        const result = await getUserNftContainer(screenName, queryToken, bearerToken, csrfToken)
         if (!result?.data?.user?.result?.has_nft_avatar) return
         return {
             address: result.data.user.result.nft_avatar_metadata.smart_contract.address,
