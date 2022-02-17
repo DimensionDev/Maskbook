@@ -28,6 +28,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 90,
         width: 90,
         borderRadius: 8,
+        objectFit: 'cover',
     },
     title: {
         color: theme.palette.text.primary,
@@ -44,6 +45,7 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
         flexDirection: 'column',
         justifyContent: 'space-around',
+        fontFamily: '-apple-system,system-ui,sans-serif',
     },
     infoRow: {
         whiteSpace: 'nowrap',

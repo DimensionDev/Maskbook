@@ -1,12 +1,10 @@
-import urlcat from 'urlcat'
 import { makeStyles } from '@masknet/theme'
-import { Box, CircularProgress, Link, List, ListItem, Typography } from '@mui/material'
-import { AddressName, EMPTY_LIST } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../locales'
-import type { GeneralAssetWithTags } from '../../types'
+import { Link, List, ListItem } from '@mui/material'
+import urlcat from 'urlcat'
 import { RSS3_DEFAULT_IMAGE } from '../../constants'
-import { DonationCard } from '../components'
-import { useDonations } from '../hooks'
+import { useI18N } from '../../locales'
+import type { GeneralAsset, GeneralAssetWithTags } from '../../types'
+import { DonationCard, StatusBox } from '../components'
 
 const getDonationLink = (label: string, donation: GeneralAssetWithTags) => {
     const { platform, identity, id, type } = donation
@@ -50,30 +48,17 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface DonationPageProps {
-    addressName?: AddressName
+    donations: GeneralAsset[]
+    loading?: boolean
+    addressLabel: string
 }
 
-export function DonationPage(props: DonationPageProps) {
-    const { addressName } = props
+export function DonationPage({ donations, loading, addressLabel }: DonationPageProps) {
     const { classes } = useStyles()
-    const { value: donations = EMPTY_LIST, loading } = useDonations(addressName?.resolvedAddress ?? '')
     const t = useI18N()
 
-    if (!addressName) return null
-
-    if (loading) {
-        return (
-            <Box className={classes.statusBox}>
-                <CircularProgress />
-            </Box>
-        )
-    }
-    if (!donations.length) {
-        return (
-            <Box className={classes.statusBox}>
-                <Typography color="textPrimary">No data.</Typography>
-            </Box>
-        )
+    if (loading || !donations.length) {
+        return <StatusBox loading={loading} empty={!donations.length} />
     }
     return (
         <List className={classes.list}>
@@ -81,7 +66,7 @@ export function DonationPage(props: DonationPageProps) {
                 <ListItem key={donation.id} className={classes.listItem}>
                     <Link
                         className={classes.link}
-                        href={getDonationLink(addressName.label, donation)}
+                        href={getDonationLink(addressLabel, donation)}
                         target="_blank"
                         rel="noopener noreferrer">
                         <DonationCard
