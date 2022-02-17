@@ -1,9 +1,5 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import {
-    searchFacebookAvatarContainerSelector,
-    searchFacebookEditProfileSelector,
-    searchFacebookProfileSettingButtonSelector,
-} from '../../utils/selector'
+import { searchFacebookEditProfileSelector, searchFacebookProfileSettingButtonSelector } from '../../utils/selector'
 import { createReactRootShadowed, startWatch } from '../../../../utils'
 import { useEffect, useState } from 'react'
 import { useLocationChange } from '../../../../utils/hooks/useLocationChange'
@@ -13,7 +9,7 @@ import { makeStyles } from '@masknet/theme'
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchFacebookProfileSettingButtonSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
+    createReactRootShadowed(watcher.firstDOMProxy.beforeShadow, { signal }).render(
         <OpenNFTAvatarEditProfileButtonInFaceBook />,
     )
 }
@@ -33,7 +29,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         backgroundColor: props.backgroundColor,
         marginRight: theme.spacing(0.5),
         marginLeft: theme.spacing(1.25),
-        borderRadius: 6,
+        borderRadius: '6px !important',
         border: 'none',
 
         // TODO: Replace with theme color
@@ -68,23 +64,12 @@ function OpenNFTAvatarEditProfileButtonInFaceBook() {
         })
     }
 
-    const setContainerStyle = () => {
-        const container = searchFacebookAvatarContainerSelector().evaluate()
-        if (container) {
-            container.style.display = 'flex'
-            const storyButton = container.querySelector('div')
-            if (storyButton) storyButton.style.width = 'auto'
-        }
-    }
-
     useEffect(() => {
         setStyleWithSelector()
-        setContainerStyle()
     }, [])
 
     useLocationChange(() => {
         setStyleWithSelector()
-        setContainerStyle()
     })
 
     const { classes } = useStyles(style)
