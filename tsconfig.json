@@ -21,7 +21,7 @@
   ],
   "compilerOptions": {
     "paths": {
-      # Why?
+      // # Why?
       // TypeScript project reference requires manually declaring all referenced projects.
 
       // For example, we have 2 projects A and B under /projects/a and /projects/b and B depends on A,
