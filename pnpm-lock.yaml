@@ -745,6 +745,7 @@ importers:
       '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-evm': workspace:*
       bignumber.js: ^9.0.2
+      classnames: ^2.3.1
       date-fns: ^2.28.0
       react-use: ^17.3.2
       urlcat: ^2.0.4
@@ -758,6 +759,7 @@ importers:
       '@masknet/web3-shared-base': link:../../web3-shared/base
       '@masknet/web3-shared-evm': link:../../web3-shared/evm
       bignumber.js: 9.0.2
+      classnames: 2.3.1
       date-fns: 2.28.0
       react-use: 17.3.2_757a802188413a36d4f24237d13b8e90
       urlcat: 2.0.4
