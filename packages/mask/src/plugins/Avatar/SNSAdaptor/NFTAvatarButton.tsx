@@ -41,7 +41,8 @@ export function NFTAvatarButton(props: NFTAvatarButtonProps) {
     return (
         <div className={classes.root} onClick={onClick}>
             <Typography variant="body1" className={classes.text}>
-                &#x1F525;{t('nft_avatar')}
+                &#x1F525;
+                <span style={{ marginLeft: 4 }}>{t('nft_avatar')}</span>
                 {props.showSetting ? <GearSettingsIcon className={classes.icon} /> : null}
             </Typography>
         </div>

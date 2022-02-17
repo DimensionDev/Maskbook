@@ -42,6 +42,9 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         marginLeft: theme.spacing(1.25),
         borderRadius: 6,
         border: 'none',
+
+        // TODO: Replace with theme color
+        color: 'var(--primary-button-text)',
     },
 }))
 
