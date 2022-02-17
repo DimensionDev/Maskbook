@@ -17,6 +17,7 @@ import {
     SwapServiceIcon,
     TransakIcon,
     ValuablesIcon,
+    CyberConnectIcon,
 } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import MarketTrendSettingDialog from './components/MarketTrendSettingDialog'
@@ -69,6 +70,7 @@ export default function Plugins() {
         [PluginId.MaskBox]: true,
         [PluginId.GoodGhosting]: true,
         [PluginId.PoolTogether]: true,
+        [PluginId.CyberConnect]: true,
     })
 
     useEffect(
@@ -180,6 +182,13 @@ export default function Plugins() {
             desc: t.labs_pool_together_desc(),
             icon: <PoolTogetherIcon />,
             enabled: pluginStatus[PluginId.PoolTogether],
+        },
+        {
+            id: PluginId.CyberConnect,
+            title: t.labs_cyber_connect(),
+            desc: t.labs_cyber_connect_desc(),
+            icon: <CyberConnectIcon />,
+            enabled: pluginStatus[PluginId.CyberConnect],
         },
     ]
 

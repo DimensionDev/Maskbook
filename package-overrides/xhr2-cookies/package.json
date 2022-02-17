@@ -1,6 +1,0 @@
-{
-  "name": "xhr2-cookies",
-  "type": "module",
-  "main": "./index.cjs",
-  "module": "./index.mjs"
-}
