@@ -115,7 +115,7 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
             content.replace(INSERT_HERE, `${NormativeName} = '${pluginID}'\n${INSERT_HERE}`),
         )
         await changeFile.typescript(
-            resolve(ROOT_PATH, `packages/mask/src/plugin-infra/register.ts`),
+            resolve(ROOT_PATH, `packages/mask/src/plugin-infra/register.js`),
             (content) => `${content}import '${npmName}'`,
         )
         await awaitChildProcess(shell.cwd(ROOT_PATH)`pnpm install --prefer-offline -C packages/mask ${npmName}`)
