@@ -68,8 +68,6 @@ task(createPackageInteractive, 'new-pkg', 'Create a new package interactively')
 
 const INSERT_HERE = '// @masknet/scripts: insert-here'
 async function createNewPackage({ path, npmName, type, pluginID }: PackageOptions) {
-    await changeFile(resolve(ROOT_PATH, 'pnpm-workspace.yaml'), (content) => content + `  - '${path}'\n`)
-
     const packagePath = resolve(ROOT_PATH, path)
     await ensureDir(packagePath)
 
