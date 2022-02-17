@@ -348,6 +348,8 @@
     "labs_settings_swap": "交易所设置",
     "labs_settings_swap_network": "{{network}} 网络默认交易所",
     "labs_pets_desc": "探索NFT无尽的可能性。以革命性的方式在社交媒体上展示您的 NFT。",
+    "labs_cyber_connect": "CyberConnect",
+    "labs_cyber_connect_desc": "去中心化社交图谱，以用户为中心的Web3基础设施",
     "labs_setup_tutorial": "教程",
     "labs_do_not_show_again": "不再提醒",
     "dashboard_mobile_test": "参加移动端测试",
