@@ -122,6 +122,9 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
         await changeFile(resolve(ROOT_PATH, 'packages/mask/package.json'), (content) =>
             content.replaceAll(/workspace:\^undefined/g, 'workspace:*'),
         )
+        await changeFile(resolve(ROOT_PATH, 'tsconfig.json'), (content) =>
+            content.replace(INSERT_HERE + ' 3', `\n      "${npmName}": ["./${path}/src"],\n      ${INSERT_HERE} 3`),
+        )
     } else {
         // cp -r packages/empty packages/NEW_PACKAGE
         await copy(resolve(ROOT_PATH, 'packages/empty'), packagePath, {
@@ -134,9 +137,11 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
             content.name = npmName
         })
         await changeFile(resolve(ROOT_PATH, 'tsconfig.json'), (content) =>
-            content.replace(INSERT_HERE, `${INSERT_HERE}\n    { "path": "./${path}/tsconfig.tests.json" },`),
+            content
+                .replace(INSERT_HERE + ' 1', `${INSERT_HERE} 1\n    { "path": "./${path}/tsconfig.tests.json" },`)
+                .replace(INSERT_HERE + ' 2', `\n      "${npmName}": ["./${path}/src"],\n      ${INSERT_HERE} 2`),
         )
-        await changeFile(resolve(packagePath, 'README.md'), (content) => `# ${npmName}`)
+        await changeFile(resolve(packagePath, 'README.md'), () => `# ${npmName}`)
     }
 
     // regenerate lockfile and install dependencies for newly installed packages

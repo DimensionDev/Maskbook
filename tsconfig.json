@@ -12,7 +12,7 @@
     { "path": "./packages/dashboard/stories" },
     { "path": "./packages/theme/stories" },
     // Tests
-    // @masknet/scripts: insert-here
+    // @masknet/scripts: insert-here 1
     { "path": "./packages/backup-format/tsconfig.tests.json" },
     { "path": "./packages/encryption/tsconfig.tests.json" },
     { "path": "./packages/shared-base/tsconfig.tests.json" },
@@ -79,6 +79,7 @@
       "@masknet/web3-shared-evm": ["./packages/web3-shared/evm/src"],
       "@masknet/web3-shared-flow": ["./packages/web3-shared/flow/src"],
       "@masknet/web3-shared-solana": ["./packages/web3-shared/solana/src"],
+      // @masknet/scripts: insert-here 2
 
       // Plugins
       "@masknet/plugin-dao": ["./packages/plugins/DAO/src"],
@@ -89,6 +90,7 @@
       "@masknet/plugin-rss3": ["./packages/plugins/RSS3/src"],
       "@masknet/plugin-solana": ["./packages/plugins/Solana/src"],
       "@masknet/plugin-template": ["./packages/plugins/template/src"],
+      // @masknet/scripts: insert-here 3
       "@masknet/plugin-wallet": ["./packages/plugins/Wallet/src"]
     },
     // Classification follows https://www.typescriptlang.org/tsconfig
