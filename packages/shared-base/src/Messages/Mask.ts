@@ -43,7 +43,7 @@ export interface MaskSNSEvents {
     NFTAvatarUpdated: NFTAvatarEvent
     NFTAvatarTimelineUpdated: NFTAvatarEvent
     nftAvatarSettingDialogUpdated: NFTAvatarSettingDialogEvent
-    Native_delegate_getCurrentDetectedProfile: [type: 'request'] | [type: 'response', answer: string | undefined]
+    Native_visibleSNS_currentDetectedProfileUpdated: string
 }
 
 export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, MaskSNSEvents {
