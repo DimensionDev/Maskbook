@@ -9,10 +9,10 @@ export const getNonFungibleAssets = async (
     other?: { [key in string]: unknown },
 ): Promise<Pageable<ERC721TokenDetailed>> => {
     const socket = await getProxyWebsocketInstance()
-    const socketId = `mask.fetchFlowNonFungibleCollectibleAsset_${address}`
+    const socketId = `mask.fetchNonFungibleCollectibleAsset_${address}_${network?.ID}`
     socket.send({
         id: socketId,
-        method: 'mask.fetchFlowNonFungibleCollectibleAsset',
+        method: 'mask.fetchNonFungibleCollectibleAsset',
         params: { address, network, pageSize: 100 },
         notify: other?.notify as NotifyFn,
     })

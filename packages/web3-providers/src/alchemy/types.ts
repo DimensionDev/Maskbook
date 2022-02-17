@@ -11,13 +11,14 @@ export interface AlchemyNFTItemDetailedResponse {
     description: string
     media: {
         uri: string
-        mimeType: string
     }
     tokenUri?: string
 }
 
 export interface AlchemyNFTItemMetadataResponse {
     contract: {
+        name: string
+        externalDomain: string
         address: string
     }
     id: {

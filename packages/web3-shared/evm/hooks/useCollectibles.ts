@@ -19,7 +19,6 @@ export function useCollections(address: string, chainId: ChainId | null) {
 
 export function useCollectibles(address: string, chainId: ChainId | null, dependReady?: boolean) {
     const { erc721Tokens } = useWeb3Context()
-    console.log({ chainId })
     const id = `mask.fetchNonFungibleCollectibleAsset_${address}_${chainId}`
     const message = {
         id: dependReady === undefined ? id : dependReady ? id : '',
@@ -38,7 +37,6 @@ export function useCollectibles(address: string, chainId: ChainId | null, depend
         ],
         (a, b) => isSameAddress(a.contractDetailed.address, b.contractDetailed.address) && a.tokenId === b.tokenId,
     )
-    console.log({ data })
     return {
         data: all as ERC721TokenDetailed[],
         state,

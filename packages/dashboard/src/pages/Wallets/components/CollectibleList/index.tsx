@@ -14,7 +14,6 @@ import {
     useNetworkDescriptor,
     useWeb3State as useWeb3PluginState,
     Web3Plugin,
-    useAccount,
     usePluginIDContext,
     NetworkPluginID,
     ERC721TokenDetailed,
@@ -50,7 +49,7 @@ const ITEM_SIZE = {
 export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) => {
     const [page, setPage] = useState(0)
     const navigate = useNavigate()
-    const account = useAccount()
+    const account = '0x9eef2e4511390ce4'
     const { Asset } = useWeb3PluginState()
     const network = useNetworkDescriptor()
     const [loadingSize, setLoadingSize] = useState(0)

@@ -170,7 +170,7 @@ export const getNonFungibleTokenFn =
             tokenInDb = fromChain.filter(Boolean) as any[]
         }
 
-        const socketId = `mask.fetchNonFungibleCollectibleAsset_${address}_${network?.chainId}`
+        const socketId = `mask.fetchNonFungibleCollectibleAsset_${address}_${network?.ID}`
         socket.send({
             id: socketId,
             method: 'mask.fetchNonFungibleCollectibleAsset',

@@ -10,11 +10,27 @@ interface Payload {
     nfts: AlchemyNFTItemDetailedResponse[]
 }
 
-async function fetchFromAlchemyFlow(path: string, network: Web3Plugin.NetworkDescriptor) {
+interface RawPayload {
+    ownerAddress: string
+    nfts: AlchemyNFTItemMetadataResponse[]
+}
+
+async function fetchFromAlchemyFlow(path: string, network: Web3Plugin.NetworkDescriptor): Promise<Payload> {
     const alchemyUrl = ALCHEMY_URL_MAPPINGS[network.ID]
     if (!alchemyUrl) return {} as Promise<Payload>
     const response = await fetch(urlcat(alchemyUrl, path))
-    return response.json() as Promise<Payload>
+    const rawData = (await response.json()) as RawPayload
+    const nfts: AlchemyNFTItemDetailedResponse[] = rawData.nfts.map((x) => {
+        const uri =
+            typeof x.media?.[0]?.uri === 'string'
+                ? x.media?.[0]?.uri
+                : x.media?.[0]?.uri?.raw || x.media?.[0]?.uri?.gateway
+
+        const tokenUri = x.tokenUri?.raw || x.tokenUri?.gateway
+        return { ...x, media: { uri }, tokenUri }
+    })
+
+    return { ...rawData, nfts }
 }
 
 async function fetchFromAlchemyEVM(path: string, network: Web3Plugin.NetworkDescriptor, owner: string) {
@@ -48,7 +64,6 @@ async function fetchFromAlchemyEVM(path: string, network: Web3Plugin.NetworkDesc
                     (typeof tokenMetaData.media?.[0]?.uri === 'string'
                         ? tokenMetaData.media?.[0]?.uri
                         : tokenMetaData.media?.[0]?.uri?.raw || tokenMetaData.media?.[0]?.uri?.gateway),
-                mimeType: '',
             },
             tokenUri: tokenMetaData.tokenUri?.raw || tokenMetaData.tokenUri?.gateway,
         } as AlchemyNFTItemDetailedResponse
@@ -99,7 +114,7 @@ export class AlchemyAPI implements NonFungibleTokenAPI.Provider {
         { page = 0, size = 50 }: NonFungibleTokenAPI.Options,
         network: Web3Plugin.NetworkDescriptor,
     ) {
-        const requestPath = urlcat('/v1/getNFTs/', {
+        const requestPath = urlcat(`${PluginId.Flow}_flow` === network.ID ? '/getNFTs/' : '/v1/getNFTs/', {
             owner: from,
             offset: page * size,
             limit: size,
@@ -114,6 +129,7 @@ export class AlchemyAPI implements NonFungibleTokenAPI.Provider {
                 data: [],
                 hasNextPage: false,
             }
+        console.log({ nfts: JSON.stringify(result.nfts) })
         const data = result.nfts.map((nft) => createNFT(nft, result.ownerAddress, network.chainId))
         return {
             data,
