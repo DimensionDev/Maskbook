@@ -43,9 +43,14 @@ async function fetchFromAlchemyEVM(path: string, network: Web3Plugin.NetworkDesc
             title: tokenMetaData.title,
             description: tokenMetaData.description,
             media: {
-                uri: tokenMetaData.metadata.image || tokenMetaData.media?.[0]?.uri,
+                uri:
+                    tokenMetaData.metadata.image ||
+                    (typeof tokenMetaData.media?.[0]?.uri === 'string'
+                        ? tokenMetaData.media?.[0]?.uri
+                        : tokenMetaData.media?.[0]?.uri?.raw || tokenMetaData.media?.[0]?.uri?.gateway),
                 mimeType: '',
             },
+            tokenUri: tokenMetaData.tokenUri?.raw || tokenMetaData.tokenUri?.gateway,
         } as AlchemyNFTItemDetailedResponse
     })
 
@@ -61,17 +66,17 @@ async function fetchFromAlchemyEVM(path: string, network: Web3Plugin.NetworkDesc
 
 export function toHttpImage(url?: string) {
     if (!url) return ''
-    if (url.startsWith('ipfs://')) return resolveIPFSLink(url.replace(/^ipfs:\/\//g, ''))
+    if (url.startsWith?.('ipfs://')) return resolveIPFSLink(url.replace(/^ipfs:\/\//g, ''))
     return url
 }
 
-function createNFT(token: AlchemyNFTItemDetailedResponse, owner: string): ERC721TokenDetailed {
+function createNFT(token: AlchemyNFTItemDetailedResponse, owner: string, chainId: number): ERC721TokenDetailed {
     return {
         tokenId: token.id.tokenId,
         info: {
             name: token.title,
             description: token.description,
-            tokenURI: '',
+            tokenURI: token.tokenUri,
             mediaUrl: toHttpImage(token.media.uri),
             imageURL: toHttpImage(token.media.uri),
             owner,
@@ -80,7 +85,7 @@ function createNFT(token: AlchemyNFTItemDetailedResponse, owner: string): ERC721
         contractDetailed: {
             type: EthereumTokenType.ERC721,
             address: token.contract.address,
-            chainId: 1,
+            chainId,
             name: token.contract.name,
             symbol: token.contract.name,
             iconURL: token.contract.externalDomain,
@@ -109,7 +114,7 @@ export class AlchemyAPI implements NonFungibleTokenAPI.Provider {
                 data: [],
                 hasNextPage: false,
             }
-        const data = result.nfts.map((nft) => createNFT(nft, result.ownerAddress))
+        const data = result.nfts.map((nft) => createNFT(nft, result.ownerAddress, network.chainId))
         return {
             data,
             hasNextPage: page === 0,

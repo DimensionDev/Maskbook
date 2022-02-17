@@ -504,6 +504,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                 <NFTCardStyledAssetPlayer
                                     contractAddress={contract.address}
                                     chainId={contract.chainId}
+                                    tokenURI={tokenDetailed.info.tokenURI}
                                     url={tokenDetailed.info.mediaUrl}
                                     tokenId={tokenId}
                                     classes={{
@@ -752,6 +753,7 @@ function NFTCard(props: NFTCardProps) {
             <NFTCardStyledAssetPlayer
                 contractAddress={token.contractDetailed.address}
                 tokenId={token.tokenId}
+                tokenURI={token.info.tokenURI}
                 renderOrder={renderOrder}
                 chainId={token.contractDetailed.chainId}
                 classes={{

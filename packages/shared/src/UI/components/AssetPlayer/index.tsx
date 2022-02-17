@@ -12,6 +12,7 @@ interface ERC721TokenQuery {
     contractAddress: string
     tokenId: string
     chainId: ChainId
+    tokenURI?: string
 }
 
 interface AssetPlayerProps

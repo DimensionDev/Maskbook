@@ -26,11 +26,12 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface NFTLuckyDropStyledAssetPlayerProps
+interface NFTStyledAssetPlayerProps
     extends withClasses<'loadingFailImage' | 'iframe' | 'wrapper' | 'loadingPlaceholder'> {
     chainId: ChainId
     contractAddress: string
     tokenId: string
+    tokenURI?: string
     url?: string
     fallbackImage?: URL
     fallbackResourceLoader?: JSX.Element
@@ -38,11 +39,12 @@ interface NFTLuckyDropStyledAssetPlayerProps
     setERC721TokenName?: (name: string) => void
     setSourceType?: (type: string) => void
 }
-export function NFTCardStyledAssetPlayer(props: NFTLuckyDropStyledAssetPlayerProps) {
+export function NFTCardStyledAssetPlayer(props: NFTStyledAssetPlayerProps) {
     const {
         chainId,
         contractAddress,
         tokenId,
+        tokenURI,
         fallbackImage,
         fallbackResourceLoader,
         url,
@@ -56,12 +58,14 @@ export function NFTCardStyledAssetPlayer(props: NFTLuckyDropStyledAssetPlayerPro
         theme.palette.mode === 'dark'
             ? new URL('./nft_token_fallback_dark.png', import.meta.url)
             : new URL('./nft_token_fallback.png', import.meta.url)
+    console.log({ chainId, contractAddress, tokenId, tokenURI })
     return (
         <AssetPlayer
             erc721Token={{
                 chainId,
                 contractAddress,
-                tokenId: tokenId,
+                tokenId,
+                tokenURI,
             }}
             url={url}
             options={{

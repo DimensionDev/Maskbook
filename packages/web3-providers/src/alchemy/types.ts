@@ -13,6 +13,7 @@ export interface AlchemyNFTItemDetailedResponse {
         uri: string
         mimeType: string
     }
+    tokenUri?: string
 }
 
 export interface AlchemyNFTItemMetadataResponse {
@@ -26,8 +27,17 @@ export interface AlchemyNFTItemMetadataResponse {
     description: string
     externalDomainViewUrl: string
     media: {
-        uri: string
+        uri:
+            | string
+            | {
+                  raw: string
+                  gateway: string
+              }
     }[]
+    tokenUri: {
+        raw: string
+        gateway: string
+    }
     alternateMedia: { uri: string }[]
     metadata: {
         name: string

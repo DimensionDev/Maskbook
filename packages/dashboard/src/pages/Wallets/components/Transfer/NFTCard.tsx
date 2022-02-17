@@ -106,6 +106,7 @@ export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect, r
                 contractAddress={token.contractDetailed.address}
                 chainId={token.contractDetailed.chainId}
                 tokenId={token.tokenId}
+                tokenURI={token.info.tokenURI}
                 setERC721TokenName={setName}
                 renderOrder={renderOrder}
                 classes={{

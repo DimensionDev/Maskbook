@@ -137,6 +137,7 @@ export function CollectibleCard(props: CollectibleCardProps) {
                             url={token.info.mediaUrl}
                             renderOrder={renderOrder}
                             tokenId={token.tokenId}
+                            tokenURI={token.info.tokenURI}
                             fallbackResourceLoader={
                                 <Image
                                     component="img"

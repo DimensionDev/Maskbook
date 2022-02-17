@@ -30,7 +30,7 @@ const flowNonFungibleCollectibleAsset = async (
 const producer: RPCMethodRegistrationValue<ERC721TokenDetailed, FlowNonFungibleTokenAssetArgs> = {
     method: 'mask.fetchFlowNonFungibleCollectibleAsset',
     producer: flowNonFungibleCollectibleAsset,
-    distinctBy: (item) => item.contractDetailed.address + item.tokenId,
+    distinctBy: (item) => `${item.contractDetailed.address}_${item.tokenId}`,
 }
 
 export default producer

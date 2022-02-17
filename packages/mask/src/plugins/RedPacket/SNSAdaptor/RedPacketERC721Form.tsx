@@ -393,6 +393,7 @@ function NFTCard(props: NFTCardProps) {
                 contractAddress={token.contractDetailed.address}
                 chainId={token.contractDetailed.chainId}
                 tokenId={token.tokenId}
+                tokenURI={token.info.tokenURI}
                 renderOrder={renderOrder}
                 setERC721TokenName={setName}
                 classes={{

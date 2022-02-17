@@ -170,7 +170,7 @@ export const getNonFungibleTokenFn =
             tokenInDb = fromChain.filter(Boolean) as any[]
         }
 
-        const socketId = `mask.fetchNonFungibleCollectibleAsset_${address}`
+        const socketId = `mask.fetchNonFungibleCollectibleAsset_${address}_${network?.chainId}`
         socket.send({
             id: socketId,
             method: 'mask.fetchNonFungibleCollectibleAsset',
@@ -182,7 +182,7 @@ export const getNonFungibleTokenFn =
         const allData: ERC721TokenDetailed[] = [...tokenInDb, ...tokenFromProvider]
             .filter((x) => isSameAddress(x.info.owner, address))
             .filter((x) => !network || x.contractDetailed.chainId === network.chainId)
-
+        console.log({ allData, tokenFromProvider, address, network, socketId })
         return {
             hasNextPage: tokenFromProvider.length === pagination?.size ?? 20,
             currentPage: pagination?.page ?? 0,

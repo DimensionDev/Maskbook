@@ -19,6 +19,7 @@ export function useCollections(address: string, chainId: ChainId | null) {
 
 export function useCollectibles(address: string, chainId: ChainId | null, dependReady?: boolean) {
     const { erc721Tokens } = useWeb3Context()
+    console.log({ chainId })
     const id = `mask.fetchNonFungibleCollectibleAsset_${address}_${chainId}`
     const message = {
         id: dependReady === undefined ? id : dependReady ? id : '',

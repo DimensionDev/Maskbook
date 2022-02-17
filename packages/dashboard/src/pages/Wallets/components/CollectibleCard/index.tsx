@@ -137,7 +137,11 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
                 <Box className={classes.chainIcon}>
                     <WalletIcon networkIcon={networkDescriptor?.icon} size={20} />
                 </Box>
-                {(token.info.mediaUrl || token.contractDetailed?.iconURL) && token.contractDetailed ? (
+                {(token.info.mediaUrl ||
+                    token.contractDetailed?.iconURL ||
+                    token.info.imageURL ||
+                    token.info.tokenURI) &&
+                token.contractDetailed ? (
                     <Link
                         target={nftLink ? '_blank' : '_self'}
                         rel="noopener noreferrer"
@@ -150,6 +154,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
                                 chainId={token.contractDetailed.chainId}
                                 renderOrder={renderOrder}
                                 url={token.info.mediaUrl || token.contractDetailed?.iconURL}
+                                tokenURI={token.info.tokenURI}
                                 tokenId={token.tokenId}
                                 classes={{
                                     loadingFailImage: classes.loadingFailImage,
@@ -191,7 +196,8 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
                         </Box>
                     ) : (
                         <Typography className={classes.name} color="textPrimary" variant="body2" onClick={onSend}>
-                            {token.info.name || token.tokenId}
+                            {token.info.name ||
+                                '#' + Number.parseInt(token.tokenId, token.tokenId.startsWith('0x') ? 16 : 10)}
                         </Typography>
                     )}
                 </Box>
