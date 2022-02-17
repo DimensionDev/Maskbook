@@ -3,7 +3,6 @@ import { AddressName, AddressNameType, ChainId, isZeroAddress, ProviderType } fr
 import { createWeb3 } from '../../../extension/background-script/EthereumServices/web3'
 import { PluginProfileRPC } from '../../Profile/messages'
 import { PluginNFTAvatarRPC } from '../../Avatar/messages'
-import { getNFTContainerAtTwitter } from '../../Avatar/hooks/useNFTContainerAtTwitter'
 
 const ENS_RE = /\S{1,256}\.(eth|kred|xyz|luxe)\b/
 const ADDRESS_FULL = /0x\w+/
@@ -60,7 +59,6 @@ export async function getAddressNames(identity: {
         getResolvedENS(ethereumName),
         PluginProfileRPC.getRSS3AddressById(RSS3Id),
         PluginNFTAvatarRPC.getAddress(identifier.userId ?? '', identifier.network),
-        getNFTContainerAtTwitter(identifier.userId ?? ''),
     ])
 
     const getSettledAddress = (result: PromiseSettledResult<string>) => {
@@ -70,7 +68,6 @@ export async function getAddressNames(identity: {
     const addressENS = getSettledAddress(allSettled[0])
     const addressRSS3 = getSettledAddress(allSettled[1])
     const addressGUN = getSettledAddress(allSettled[2])
-    const addressTwitterBlue = getSettledAddress(allSettled[3])
 
     return [
         isValidAddress(address)
@@ -99,14 +96,6 @@ export async function getAddressNames(identity: {
                   type: AddressNameType.GUN,
                   label: addressGUN,
                   resolvedAddress: addressGUN,
-              }
-            : null,
-
-        isValidAddress(addressTwitterBlue)
-            ? {
-                  type: AddressNameType.TWITTER_BLUE,
-                  label: addressTwitterBlue,
-                  resolvedAddress: addressTwitterBlue,
               }
             : null,
     ].filter(Boolean) as AddressName[]

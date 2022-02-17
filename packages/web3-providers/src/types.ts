@@ -347,3 +347,48 @@ export namespace SecurityAPI {
         ): Promise<Record<string, ContractSecurity & TokenSecurity> | void>
     }
 }
+
+export namespace UserNFTContainerAPI {
+    export interface NFTContainer {
+        has_nft_avatar: boolean
+        nft_avatar_metadata: AvatarMetadata
+    }
+
+    export interface AvatarMetadata {
+        token_id: string
+        smart_contract: {
+            __typename: 'ERC721' | 'ERC1155'
+            __isSmartContract: 'ERC721'
+            network: 'Ethereum'
+            address: string
+        }
+        metadata: {
+            creator_username: string
+            creator_address: string
+            name: string
+            description?: string
+            collection: {
+                name: string
+                metadata: {
+                    image_url: string
+                    verified: boolean
+                    description: string
+                    name: string
+                }
+            }
+            traits: {
+                trait_type: string
+                value: string
+            }[]
+        }
+    }
+    export interface Provider {
+        getUserNftContainerAtTwitter: (screenName: string) => Promise<
+            | {
+                  address: string
+                  token_id: string
+              }
+            | undefined
+        >
+    }
+}
