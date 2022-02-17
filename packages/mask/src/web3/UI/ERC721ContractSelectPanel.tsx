@@ -64,7 +64,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
 
 export interface ERC721TokenSelectPanelProps {
     onContractChange: (contract: ERC721ContractDetailed) => void
-    onBalanceChange: (balance: number) => void
+    onBalanceChange?: (balance: number) => void
     contract: ERC721ContractDetailed | null | undefined
 }
 export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
@@ -83,7 +83,7 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
     const balance = balanceFromChain ? Number(balanceFromChain) : balanceFromNFTscan ?? 0
 
     useEffect(() => {
-        onBalanceChange(balance)
+        onBalanceChange?.(balance)
     }, [onBalanceChange, balance])
 
     const loading = (loadingFromChain || loadingBalanceFromNFTscan) && !balance
