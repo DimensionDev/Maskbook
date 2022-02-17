@@ -6,6 +6,7 @@
     "tsBuildInfoFile": "./dist/src.tsbuildinfo"
   },
   "include": ["./src", "./src/**/*.json"],
+  "exclude": ["./src/initialization/plugins.js"],
   "references": [
     { "path": "../public-api" },
     { "path": "../theme/" },
