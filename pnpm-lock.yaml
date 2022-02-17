@@ -1110,6 +1110,7 @@ importers:
       '@masknet/shared-base': workspace:*
       '@masknet/web3-constants': workspace:*
       '@masknet/web3-contracts': workspace:*
+      '@masknet/web3-providers': workspace:*
       '@masknet/web3-shared-base': workspace:*
       '@types/ethereum-blockies': ^0.1.0
       '@types/punycode': ^2.1.0
@@ -1133,6 +1134,7 @@ importers:
       '@masknet/shared-base': link:../../shared-base
       '@masknet/web3-constants': link:../../web3-constants
       '@masknet/web3-contracts': link:../../web3-contracts
+      '@masknet/web3-providers': link:../../web3-providers
       '@masknet/web3-shared-base': link:../base
       '@types/ethereum-blockies': 0.1.0
       '@types/punycode': 2.1.0

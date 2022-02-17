@@ -383,7 +383,7 @@ export namespace UserNFTContainerAPI {
         }
     }
     export interface Provider {
-        getUserNftContainerAtTwitter: (screenName: string) => Promise<
+        getUserNftContainer: (screenName: string) => Promise<
             | {
                   address: string
                   token_id: string
