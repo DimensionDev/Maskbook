@@ -275,7 +275,7 @@ export function CollectionList({
             collectibles.map((x) => x.contractDetailed),
             (x) => x.address.toLowerCase(),
         ).map((x) => {
-            const item = collectionsFormRemote.find((c) => c.address === x.address)
+            const item = collectionsFormRemote.find((c) => isSameAddress(c.address, x.address))
             if (item) {
                 return {
                     name: item.name,
@@ -306,7 +306,9 @@ export function CollectionList({
                         ALL
                     </AllNetworkButton>
                     <Typography align="center" color={(theme) => theme.palette.primary.main} fontSize="12px">
-                        All {collectibles.length ? `(${collectibles.length})` : null}
+                        {t('dashboard_collectible_menu_all', {
+                            count: collectibles.length,
+                        })}
                     </Typography>
                 </Stack>
                 <Box display="flex" alignItems="center" justifyContent="flex-end" flexWrap="wrap">

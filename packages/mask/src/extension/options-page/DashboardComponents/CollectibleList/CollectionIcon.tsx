@@ -5,6 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { TokenIcon } from '@masknet/shared'
 import classNames from 'classnames'
 import type { ERC721ContractDetailed } from '@masknet/web3-shared-evm'
+import { isSameAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     collectionWrap: {
@@ -53,7 +54,7 @@ export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, 
             <Box
                 className={classNames(
                     classes.collectionWrap,
-                    collection.address === selectedCollection ? classes.selected : '',
+                    isSameAddress(collection.address, selectedCollection) ? classes.selected : '',
                 )}
                 onClick={onClick}>
                 {collection.iconURL ? (
