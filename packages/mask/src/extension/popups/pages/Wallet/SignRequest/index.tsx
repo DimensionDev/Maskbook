@@ -90,7 +90,10 @@ const SignRequest = memo(() => {
     const [transferError, setTransferError] = useState(false)
 
     const { data, address } = useMemo(() => {
-        if (value?.computedPayload?.type === EthereumRpcType.SIGN) {
+        if (
+            value?.computedPayload?.type === EthereumRpcType.SIGN ||
+            value?.computedPayload?.type === EthereumRpcType.SIGN_TYPED_DATA
+        ) {
             let message = value.computedPayload.data
             try {
                 message = toUtf8(message)

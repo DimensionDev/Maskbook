@@ -17,7 +17,6 @@ const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
-        height: 260,
     },
     upload: {
         flex: 1,

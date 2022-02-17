@@ -12,6 +12,7 @@
     { "path": "./packages/dashboard/stories" },
     { "path": "./packages/theme/stories" },
     // Tests
+    // @masknet/scripts: insert-here
     { "path": "./packages/backup-format/tsconfig.tests.json" },
     { "path": "./packages/encryption/tsconfig.tests.json" },
     { "path": "./packages/shared-base/tsconfig.tests.json" },
@@ -75,6 +76,6 @@
     "compilerOptions": {
       "module": "CommonJS"
     },
-    "transpileOnly": true
+    "swc": true
   }
 }

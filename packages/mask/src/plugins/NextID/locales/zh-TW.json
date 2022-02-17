@@ -1,1 +1,8 @@
-{}
+{
+    "wallet": "錢包",
+    "add_wallet_button": "新增錢包",
+    "bind_wallet_bound_error": "此錢包地址已被綁定",
+    "notify_wallet_sign_request_success": "簽署成功",
+    "notify_wallet_sign_request_failed": "簽署失敗",
+    "done": "完成"
+}

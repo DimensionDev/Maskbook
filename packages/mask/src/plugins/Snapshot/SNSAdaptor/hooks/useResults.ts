@@ -53,5 +53,7 @@ async function Suspender(identifier: ProposalIdentifier) {
 }
 
 function voteForChoice(votes: VoteItem[], i: number) {
-    return votes.filter((vote) => (vote.choiceIndex ? vote.choiceIndex === i + 1 : vote.choiceIndexes?.includes(i + 1)))
+    return votes.filter((vote) =>
+        vote.choiceIndex ? vote.choiceIndex === i + 1 : vote.choices?.map((c) => c.index)?.includes(i + 1),
+    )
 }
