@@ -1,5 +1,9 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { searchFacebookEditProfileSelector, searchFacebookProfileSettingButtonSelector } from '../../utils/selector'
+import {
+    searchFacebookAvatarContainerSelector,
+    searchFacebookEditProfileSelector,
+    searchFacebookProfileSettingButtonSelector,
+} from '../../utils/selector'
 import { createReactRootShadowed, startWatch } from '../../../../utils'
 import { useEffect, useState } from 'react'
 import { useLocationChange } from '../../../../utils/hooks/useLocationChange'
@@ -12,6 +16,13 @@ export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
         <OpenNFTAvatarEditProfileButtonInFaceBook />,
     )
+
+    const container = searchFacebookAvatarContainerSelector().evaluate()
+    if (container) {
+        container.style.display = 'flex'
+        const storyButton = container.querySelector('div')
+        if (storyButton) storyButton.style.width = 'auto'
+    }
 }
 
 interface StyleProps {
@@ -28,6 +39,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         marginTop: props.marginTop,
         backgroundColor: props.backgroundColor,
         marginRight: theme.spacing(0.5),
+        marginLeft: theme.spacing(1.25),
         borderRadius: 6,
         border: 'none',
     },
@@ -55,7 +67,7 @@ function OpenNFTAvatarEditProfileButtonInFaceBook() {
         setStyle({
             fontSize: Number(editCss.fontSize.replace('px', '')),
             marginTop: Number(editCss.paddingTop.replace('px', '')),
-            minHeight: Number(editCss.height.replace('px', '')),
+            minHeight: 36,
             backgroundColor: buttonCss.backgroundColor,
         })
     }

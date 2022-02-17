@@ -60,6 +60,9 @@ export const searchFacebookAvatarOpenFilesOnMobileSelector = () =>
 
 export const searchFacebookSaveAvatarButtonOnMobileSelector = () => querySelector('#nuxUploadPhotoButton')
 
+export const searchFacebookAvatarContainerSelector = () =>
+    querySelector('div[data-pagelet="ProfileActions"] > div > div')
+
 export const searchFacebookProfileSettingButtonSelector = () =>
     querySelector('div[data-pagelet="ProfileActions"] > div > div > div:first-child')
 
