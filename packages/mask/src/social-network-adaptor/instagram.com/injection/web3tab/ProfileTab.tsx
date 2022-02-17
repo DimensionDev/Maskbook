@@ -96,7 +96,7 @@ export function ProfileTabAtInstagram() {
             activeTab.style.color = ''
         }
 
-        Array.from(searchProfileTabPageSelector().evaluate()?.childNodes ?? []).map((v) => {
+        Array.from(searchProfileTabPageSelector().evaluate()?.childNodes ?? []).forEach((v) => {
             const ele = v as HTMLDivElement
             if (ele.tagName !== 'SPAN') ele.style.display = ''
         })
@@ -108,7 +108,7 @@ export function ProfileTabAtInstagram() {
             activeTab.style.borderTop = 'none'
             activeTab.style.color = style.color
         }
-        Array.from(searchProfileTabPageSelector().evaluate()?.childNodes ?? []).map((v) => {
+        Array.from(searchProfileTabPageSelector().evaluate()?.childNodes ?? []).forEach((v) => {
             const ele = v as HTMLDivElement
             if (ele.tagName !== 'SPAN') ele.style.display = 'none'
         })

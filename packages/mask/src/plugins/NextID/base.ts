@@ -9,7 +9,14 @@ export const base: Plugin.Shared.Definition = {
     publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
     enableRequirement: {
         architecture: { app: false, web: true },
-        networks: { type: 'opt-out', networks: { [CurrentSNSNetwork.Instagram]: true } },
+        networks: {
+            type: 'opt-out',
+            networks: {
+                [CurrentSNSNetwork.Instagram]: true,
+                [CurrentSNSNetwork.Facebook]: true,
+                [CurrentSNSNetwork.Minds]: true,
+            },
+        },
         target: 'stable',
     },
     experimentalMark: true,
