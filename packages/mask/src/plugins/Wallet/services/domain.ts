@@ -3,7 +3,7 @@ import { AddressName, AddressNameType, ChainId, isZeroAddress, ProviderType } fr
 import { createWeb3 } from '../../../extension/background-script/EthereumServices/web3'
 import { PluginProfileRPC } from '../../Profile/messages'
 import { PluginNFTAvatarRPC } from '../../Avatar/messages'
-import { getNFTContainerAtTwitter } from '../../Avatar/utils'
+import { getNFTContainerAtTwitter } from '../../Avatar/hooks/useNFTContainerAtTwitter'
 
 const ENS_RE = /\S{1,256}\.(eth|kred|xyz|luxe)\b/
 const ADDRESS_FULL = /0x\w+/
