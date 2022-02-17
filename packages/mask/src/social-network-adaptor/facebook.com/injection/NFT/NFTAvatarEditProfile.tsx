@@ -16,13 +16,6 @@ export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
         <OpenNFTAvatarEditProfileButtonInFaceBook />,
     )
-
-    const container = searchFacebookAvatarContainerSelector().evaluate()
-    if (container) {
-        container.style.display = 'flex'
-        const storyButton = container.querySelector('div')
-        if (storyButton) storyButton.style.width = 'auto'
-    }
 }
 
 interface StyleProps {
@@ -74,9 +67,25 @@ function OpenNFTAvatarEditProfileButtonInFaceBook() {
             backgroundColor: buttonCss.backgroundColor,
         })
     }
-    useEffect(setStyleWithSelector, [])
 
-    useLocationChange(setStyleWithSelector)
+    const setContainerStyle = () => {
+        const container = searchFacebookAvatarContainerSelector().evaluate()
+        if (container) {
+            container.style.display = 'flex'
+            const storyButton = container.querySelector('div')
+            if (storyButton) storyButton.style.width = 'auto'
+        }
+    }
+
+    useEffect(() => {
+        setStyleWithSelector()
+        setContainerStyle()
+    }, [])
+
+    useLocationChange(() => {
+        setStyleWithSelector()
+        setContainerStyle()
+    })
 
     const { classes } = useStyles(style)
 
