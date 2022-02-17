@@ -54,7 +54,7 @@
       // because those projects (if they're correctly configured) is installed in the node_modules,
       // so if any toolchain does not support the "paths" feature, it will still work.
 
-      // This will bring another problem: now we can reference a project without installing it as a monorepo dependencies,
+      // This will bring another problem: now we can reference a project without installing it as a monorepo dependency,
       // which is unwanted. We need to take care of this.
 
       "@masknet/backup-format": ["./packages/backup-format/src"],
