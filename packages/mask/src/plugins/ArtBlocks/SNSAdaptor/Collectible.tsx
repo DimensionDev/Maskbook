@@ -1,5 +1,5 @@
 import { useI18N } from '../../../utils'
-import { Tab, Tabs, Paper, Card, CardHeader, CardContent, CardActions, Link, Typography, Avatar } from '@mui/material'
+import { Tab, Tabs, Paper, Card, CardHeader, CardContent, Link, Typography, Avatar } from '@mui/material'
 import { useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { CollectionView } from './CollectionView'
@@ -9,7 +9,6 @@ import { useFetchProject } from '../hooks/useProject'
 import { ActionBar } from './ActionBar'
 import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes'
 import { ArtBlocksLogoUrl } from '../constants'
-import { MaskTextIcon } from '../../../resources/MaskIcon'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -25,7 +24,7 @@ const useStyles = makeStyles()((theme) => {
             borderBottom: `solid 1px ${theme.palette.divider}`,
         },
         content: {
-            padding: 0,
+            padding: '0 !important',
         },
         footer: {
             marginTop: -1, // merge duplicate borders
@@ -129,20 +128,6 @@ export function Collectible(props: CollectibleProps) {
                     </Tabs>
                     <Paper>{pages[tabIndex]}</Paper>
                 </CardContent>
-                <CardActions className={classes.footer}>
-                    <Typography className={classes.footnote} variant="subtitle2">
-                        <span>{t('plugin_powered_by')} </span>
-                        <Link
-                            className={classes.footLink}
-                            color="textSecondary"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            title="Mask"
-                            href="https://mask.io">
-                            <MaskTextIcon classes={{ root: classes.mask }} viewBox="0 0 80 20" />
-                        </Link>
-                    </Typography>
-                </CardActions>
             </Card>
             <ActionBar project={project} />
         </>

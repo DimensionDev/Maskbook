@@ -1,13 +1,10 @@
-import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
+import { Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra'
 import { uniq } from 'lodash-unified'
 import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils'
 
 import { base } from '../base'
 import { getTypedMessageContent } from '../../../protocols/typed-message'
-import MaskPluginWrapper from '../../MaskPluginWrapper'
-import { PLUGIN_NAME } from '../constants'
 import { Collectible } from './Collectible'
-import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -27,14 +24,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
 }
 
-function Renderer(props: { chainId: ChainId; projectId: string }) {
-    return (
-        <MaskPluginWrapper pluginName={PLUGIN_NAME}>
-            <EthereumChainBoundary chainId={props.chainId}>
-                <Collectible projectId={props.projectId} />
-            </EthereumChainBoundary>
-        </MaskPluginWrapper>
-    )
+function Renderer(props: React.PropsWithChildren<{ chainId: ChainId; projectId: string }>) {
+    usePluginWrapper(true)
+    return <Collectible projectId={props.projectId} />
 }
 
 export default sns
