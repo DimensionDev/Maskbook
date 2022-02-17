@@ -3,12 +3,13 @@ import { CollectibleIcon } from '@masknet/icons'
 import { combineAbortSignal } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { ProfileTab } from '../../../../components/InjectedComponents/ProfileTab'
-import { createReactRootShadowed, startWatch } from '../../../../utils'
+import { createReactRootShadowed, startWatch, untilElementAvailable } from '../../../../utils'
 import {
     searchProfileActiveTabSelector,
     searchProfileTabPageSelector,
     searchProfileTabSelector,
     searchProfileTabListLastChildSelector,
+    searchUserIdSelector,
 } from '../../utils/selector'
 
 export function injectProfileTabAtInstagram(signal: AbortSignal) {
@@ -37,7 +38,7 @@ function getStyleProps() {
     const EMPTY_STYLE = {} as CSSStyleDeclaration
     const eleTab = searchProfileTabSelector().evaluate()
     const style = eleTab ? window.getComputedStyle(eleTab) : EMPTY_STYLE
-    const activeTab = searchProfileActiveTabSelector().evaluate()
+    const activeTab = searchUserIdSelector().evaluate()
     const activeStyle = activeTab ? window.getComputedStyle(activeTab) : EMPTY_STYLE
     return {
         color: style.color,
@@ -79,8 +80,6 @@ const useStyles = makeStyles()(() => {
         line: {},
         icon: {
             fontSize: props.fontSize,
-            fill: props.color,
-            color: props.color,
             paddingRight: 4,
         },
     }
@@ -101,13 +100,16 @@ export function ProfileTabAtInstagram() {
             if (ele.tagName !== 'SPAN') ele.style.display = ''
         })
     }
-    const clear = () => {
+    const clear = async () => {
         const style = getStyleProps()
         const activeTab = searchProfileActiveTabSelector().evaluate()
         if (activeTab?.style) {
             activeTab.style.borderTop = 'none'
             activeTab.style.color = style.color
         }
+        // hide the content page
+        await untilElementAvailable(searchProfileTabPageSelector())
+
         Array.from(searchProfileTabPageSelector().evaluate()?.childNodes ?? []).forEach((v) => {
             const ele = v as HTMLDivElement
             if (ele.tagName !== 'SPAN') ele.style.display = 'none'
