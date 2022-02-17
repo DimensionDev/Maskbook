@@ -66,7 +66,6 @@ const useStyles = makeStyles()((theme) => {
             color: props.color,
             font: props.font,
             fontSize: props.fontSize,
-            marginLeft: 4,
             height: props.height,
             justifyContent: 'center',
             alignItems: 'center',
