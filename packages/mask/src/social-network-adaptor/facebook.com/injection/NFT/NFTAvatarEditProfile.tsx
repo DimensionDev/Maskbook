@@ -26,14 +26,12 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         minHeight: props.minHeight,
         fontSize: props.fontSize,
         marginTop: props.marginTop,
-        backgroundColor: props.backgroundColor,
+        backgroundColor: '#fff!important',
         marginRight: theme.spacing(0.5),
         marginLeft: theme.spacing(1.25),
         borderRadius: '6px !important',
-        border: 'none',
-
-        // TODO: Replace with theme color
-        color: 'var(--primary-button-text)',
+        border: 'none !important',
+        color: '#050505!important',
     },
 }))
 
