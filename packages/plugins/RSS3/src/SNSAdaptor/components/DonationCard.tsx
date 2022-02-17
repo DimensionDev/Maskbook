@@ -23,12 +23,12 @@ export const DonationCard = ({ imageUrl, name, contribCount, contribDetails }: D
                     {name}
                 </Typography>
                 <div className="flex flex-row w-full overflow-y-auto gap-x-6">
-                    <div className="text-donation">
+                    <div>
                         <Typography variant="subtitle1">{contribCount}</Typography>
                         <Typography variant="subtitle1">Contrib</Typography>
                     </div>
                     {contribDetails.map((contrib, i) => (
-                        <div key={i} className="text-donation">
+                        <div key={i}>
                             <Typography variant="subtitle1">{contrib.amount}</Typography>
                             <Typography variant="subtitle1">{contrib.token}</Typography>
                         </div>
