@@ -50,7 +50,7 @@ function getStyleProps() {
     }
 }
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles()(() => {
     const props = getStyleProps()
     return {
         root: {
@@ -90,9 +90,11 @@ export function ProfileTabAtInstagram() {
     const { classes } = useStyles()
 
     const reset = () => {
-        const activeTab = searchProfileActiveTabSelector().evaluate() as HTMLDivElement
-        activeTab.style.borderTop = ''
-        activeTab.style.color = ''
+        const activeTab = searchProfileActiveTabSelector().evaluate()
+        if (activeTab?.style) {
+            activeTab.style.borderTop = ''
+            activeTab.style.color = ''
+        }
 
         Array.from(searchProfileTabPageSelector().evaluate()?.childNodes ?? []).map((v) => {
             const ele = v as HTMLDivElement
@@ -101,10 +103,11 @@ export function ProfileTabAtInstagram() {
     }
     const clear = () => {
         const style = getStyleProps()
-        const activeTab = searchProfileActiveTabSelector().evaluate() as HTMLDivElement
-        activeTab.style.borderTop = 'none'
-        activeTab.style.color = style.color
-
+        const activeTab = searchProfileActiveTabSelector().evaluate()
+        if (activeTab?.style) {
+            activeTab.style.borderTop = 'none'
+            activeTab.style.color = style.color
+        }
         Array.from(searchProfileTabPageSelector().evaluate()?.childNodes ?? []).map((v) => {
             const ele = v as HTMLDivElement
             if (ele.tagName !== 'SPAN') ele.style.display = 'none'
