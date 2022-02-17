@@ -142,7 +142,7 @@ export default function ConnectButton({
 
     return blockChainNetwork !== NetworkPluginID.PLUGIN_EVM ? (
         <Typography variant="body2" sx={{ marginTop: 2, color: MaskColorVar.cyberconnectPrimary }}>
-            Please switch to EVM based wallet to follow
+            Please switch to EVM-based wallet to follow
         </Typography>
     ) : !isSameAddress(myAddress, address) ? (
         <div

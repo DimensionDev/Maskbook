@@ -27,4 +27,5 @@ export const base: Plugin.Shared.Definition = {
             },
         },
     },
+    contribution: { postContent: new Set([/https:\/\/app.cyberconnect.me/]) },
 }

@@ -70,7 +70,7 @@ export async function fetchIdentity(address: string): Promise<{ data: { identity
         }
     }`,
         variables: {
-            address,
+            address: address.toLowerCase(),
             first: 100,
             after: '',
         },
@@ -93,8 +93,8 @@ export async function fetchFollowStatus(
             }
           }`,
         variables: {
-            fromAddr,
-            toAddr,
+            fromAddr: fromAddr.toLowerCase(),
+            toAddr: toAddr.toLowerCase(),
         },
     }
     const res = await query(data)
