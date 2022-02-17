@@ -1,10 +1,9 @@
 import { EthereumAddress } from 'wallet.ts'
 import { AddressName, AddressNameType, ChainId, isZeroAddress, ProviderType } from '@masknet/web3-shared-evm'
-import { timeout } from '@masknet/shared-base'
-import * as ENS from '../apis/ens'
 import { createWeb3 } from '../../../extension/background-script/EthereumServices/web3'
 import { PluginProfileRPC } from '../../Profile/messages'
 import { PluginNFTAvatarRPC } from '../../Avatar/messages'
+import { getNFTContainerAtTwitter } from '../../Avatar/utils'
 
 const ENS_RE = /\S{1,256}\.(eth|kred|xyz|luxe)\b/
 const ADDRESS_FULL = /0x\w+/
@@ -18,7 +17,7 @@ function isValidAddress(address: string) {
 function getEthereumName(twitterId: string, nickname: string, bio: string) {
     const [matched] = nickname.match(ENS_RE) ?? bio.match(ENS_RE) ?? []
     if (matched) return matched
-    return twitterId && !twitterId.endsWith('.eth') ? `${twitterId}.eth` : ''
+    return twitterId && !twitterId.endsWith('.eth') ? `${twitterId}.eth` : twitterId
 }
 
 function getRSS3Id(nickname: string, profileURL: string, bio: string) {
@@ -52,22 +51,16 @@ export async function getAddressNames(identity: {
     homepage?: string
 }) {
     const { identifier, bio = '', nickname = '', homepage = '' } = identity
-    const twitterId = identifier.network === 'twitter.com' ? identifier.userId : ''
 
     const address = getAddress(bio)
-    const ethereumName = getEthereumName(twitterId ?? '', nickname, bio)
+    const ethereumName = getEthereumName(identifier.userId ?? '', nickname, bio)
     const RSS3Id = getRSS3Id(nickname, homepage, bio)
 
     const allSettled = await Promise.allSettled([
         getResolvedENS(ethereumName),
         PluginProfileRPC.getRSS3AddressById(RSS3Id),
-        timeout(
-            ENS.fetchAddressNamesByTwitterId(twitterId?.toLowerCase() ?? '').then(
-                (result) => result.find((x) => x.owner)?.owner ?? '',
-            ),
-            3000,
-        ),
-        PluginNFTAvatarRPC.getAddress(twitterId ?? '', identifier.network),
+        PluginNFTAvatarRPC.getAddress(identifier.userId ?? '', identifier.network),
+        getNFTContainerAtTwitter(identifier.userId ?? ''),
     ])
 
     const getSettledAddress = (result: PromiseSettledResult<string>) => {
@@ -76,8 +69,8 @@ export async function getAddressNames(identity: {
 
     const addressENS = getSettledAddress(allSettled[0])
     const addressRSS3 = getSettledAddress(allSettled[1])
-    const addressTheGraph = getSettledAddress(allSettled[2])
-    const addressGUN = getSettledAddress(allSettled[3])
+    const addressGUN = getSettledAddress(allSettled[2])
+    const addressTwitterBlue = getSettledAddress(allSettled[3])
 
     return [
         isValidAddress(address)
@@ -108,11 +101,12 @@ export async function getAddressNames(identity: {
                   resolvedAddress: addressGUN,
               }
             : null,
-        isValidAddress(addressTheGraph)
+
+        isValidAddress(addressTwitterBlue)
             ? {
-                  type: AddressNameType.THE_GRAPH,
-                  label: addressTheGraph,
-                  resolvedAddress: addressTheGraph,
+                  type: AddressNameType.TWITTER_BLUE,
+                  label: addressTwitterBlue,
+                  resolvedAddress: addressTwitterBlue,
               }
             : null,
     ].filter(Boolean) as AddressName[]

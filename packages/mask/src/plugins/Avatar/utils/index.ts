@@ -1,4 +1,4 @@
-import { isNull } from 'lodash-unified'
+import { escapeRegExp, isNull } from 'lodash-unified'
 import { ChainId, NonFungibleAssetProvider, formatBalance } from '@masknet/web3-shared-evm'
 import { EVM_RPC } from '../../EVM/messages'
 import Services from '../../../extension/service'
@@ -91,3 +91,26 @@ export function formatText(name: string, tokenId: string) {
     }
     return `${_name} #${token}`
 }
+
+export function getScriptURL(content: string, name: string) {
+    const matchURL = new RegExp(
+        `${escapeRegExp(`https://abs.twimg.com/responsive-web/client-web/${name}.`)}\\w+${escapeRegExp('.js')}`,
+        'm',
+    )
+    const [url] = content.match(matchURL) ?? []
+    return url
+}
+
+export function getScriptContentMatched(content: string, regexp: RegExp) {
+    const [, matched] = content.match(regexp) ?? []
+    return matched
+}
+
+export function getCSRFToken() {
+    const ct0 = document.cookie.split('; ').find((x) => x.includes('ct0'))
+    if (!ct0) return ''
+    const [, value] = ct0.split('=')
+    return value
+}
+
+export * from './userNFTContainerAtTwitter'

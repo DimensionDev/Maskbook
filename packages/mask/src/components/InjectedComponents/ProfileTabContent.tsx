@@ -3,13 +3,12 @@ import { useUpdateEffect } from 'react-use'
 import { first } from 'lodash-unified'
 import { Box, CircularProgress } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { AddressNameType, useAddressNames } from '@masknet/web3-shared-evm'
+import { useAddressNames } from '@masknet/web3-shared-evm'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor, Plugin, PluginId } from '@masknet/plugin-infra'
 import { PageTab } from '../InjectedComponents/PageTab'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 import { MaskMessages, useI18N } from '../../utils'
 import { useCurrentVisitingIdentity } from '../DataSource/useActivatedUI'
-import { useNFTContainerAtTwitter } from '../../plugins/Avatar/hooks/useNFTContainerAtTwitter'
 
 function getTabContent(tabId: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
@@ -49,27 +48,9 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const identity = useCurrentVisitingIdentity()
     const { value: addressNames = [], loading: loadingAddressNames } = useAddressNames(identity)
 
-    const { loading: loadingTwitterAddressName, value: twitterAddressName } = useNFTContainerAtTwitter(
-        identity.identifier.userId,
-    )
-
     const tabs = useActivatedPluginsSNSAdaptor('any')
         .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? [])
-        .filter(
-            (z) =>
-                z.Utils?.shouldDisplay?.(identity, [
-                    ...addressNames,
-                    {
-                        type: AddressNameType.TWITTER_BLUE,
-                        label: twitterAddressName?.data?.user?.result?.has_nft_avatar
-                            ? twitterAddressName?.data.user.result.nft_avatar_metadata.smart_contract.address
-                            : '',
-                        resolvedAddress: twitterAddressName?.data?.user?.result?.has_nft_avatar
-                            ? twitterAddressName?.data.user.result.nft_avatar_metadata.smart_contract.address
-                            : '',
-                    },
-                ]) ?? true,
-        )
+        .filter((z) => z.Utils?.shouldDisplay?.(identity, addressNames) ?? true)
         .sort((a, z) => {
             // order those tabs from next id first
             if (a.pluginID === PluginId.NextID) return -1
@@ -111,7 +92,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     if (hidden) return null
 
-    if (loadingAddressNames || loadingTwitterAddressName)
+    if (loadingAddressNames)
         return (
             <div className={classes.root}>
                 <Box
@@ -130,21 +111,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                 <PageTab tabs={tabs} selectedTab={selectedTabComputed} onChange={setSelectedTab} />
             </div>
             <div className={classes.content}>
-                <ContentComponent
-                    addressNames={[
-                        ...addressNames,
-                        {
-                            type: AddressNameType.TWITTER_BLUE,
-                            label: twitterAddressName?.data?.user?.result?.has_nft_avatar
-                                ? twitterAddressName?.data.user.result.nft_avatar_metadata.smart_contract.address
-                                : '',
-                            resolvedAddress: twitterAddressName?.data?.user?.result?.has_nft_avatar
-                                ? twitterAddressName?.data.user.result.nft_avatar_metadata.smart_contract.address
-                                : '',
-                        },
-                    ]}
-                    identity={identity}
-                />
+                <ContentComponent addressNames={addressNames} identity={identity} />
             </div>
         </div>
     )
