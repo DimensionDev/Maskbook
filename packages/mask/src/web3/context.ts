@@ -9,6 +9,7 @@ import {
     Web3ProviderType,
     resolveProviderInjectedKey,
     isInjectedProvider,
+    AddressNameType,
 } from '@masknet/web3-shared-evm'
 import { isPopupPage } from '@masknet/shared-base'
 import { bridgedCoin98Provider, bridgedEthereumProvider } from '@masknet/injected-script'
@@ -28,6 +29,7 @@ import type { InternalSettings } from '../settings/createSettings'
 import { Flags } from '../../shared'
 import Services from '../extension/service'
 import { getProxyWebsocketInstance } from '@masknet/web3-shared-base'
+import { UserNFTContainerAtTwitter } from '@masknet/web3-providers'
 
 function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderType {
     return {
@@ -121,7 +123,20 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
         getAssetsList: WalletRPC.getAssetsList,
         getAssetsListNFT: WalletRPC.getAssetsListNFT,
         getCollectionsNFT: WalletRPC.getCollectionsNFT,
-        getAddressNamesList: WalletRPC.getAddressNames,
+        getAddressNamesList: async (identity: Parameters<typeof WalletRPC.getAddressNames>[0]) => {
+            const addressNames = await WalletRPC.getAddressNames(identity)
+            if (identity.identifier.network === 'twitter.com') {
+                const result = await UserNFTContainerAtTwitter.getUserNftContainer(identity.identifier.userId ?? '')
+                if (result)
+                    addressNames.push({
+                        type: AddressNameType.TWITTER_BLUE,
+                        label: result.address,
+                        resolvedAddress: result.address,
+                    })
+            }
+
+            return addressNames
+        },
         getTransactionList: WalletRPC.getTransactionList,
         fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
         providerSocket: getProxyWebsocketInstance((info) => WalletMessages.events.socketMessageUpdated.sendToAll(info)),
