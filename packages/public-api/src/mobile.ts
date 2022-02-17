@@ -7,6 +7,7 @@ import type {
     LinkedProfileDetails,
     RelationRecord,
 } from './types'
+import type { ProfileIdentifier_string } from './web'
 
 /**
  * APIs that both Android and iOS implements and have the same API signature
@@ -100,6 +101,7 @@ export interface SharedNativeAPIs {
     }): Promise<RelationRecord[]>
     update_relation(params: { relation: Omit<RelationRecord, 'network'> }): Promise<RelationRecord>
     delete_relation(params: { personaIdentifier: string; profileIdentifier: string }): Promise<void>
+    notify_visible_detected_profile_changed(newID: ProfileIdentifier_string): Promise<void>
 }
 /**
  * APIs that only implemented by iOS Mask Network

@@ -42,7 +42,7 @@ export interface MaskSNSEvents {
     profileNFTsTabUpdated: 'reset'
     NFTAvatarUpdated: NFTAvatarEvent
     NFTAvatarTimelineUpdated: NFTAvatarEvent
-    Native_delegate_getCurrentDetectedProfile: [type: 'request'] | [type: 'response', answer: string | undefined]
+    Native_visibleSNS_currentDetectedProfileUpdated: string
 }
 
 export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, MaskSNSEvents {
