@@ -2,8 +2,8 @@ import type { NonFungibleTokenAPI } from '../types'
 import urlcat from 'urlcat'
 import { ALCHEMY_URL_MAPPINGS } from './constants'
 import type { AlchemyNFTItemResponse, AlchemyNFTItemDetailedResponse, AlchemyNFTItemMetadataResponse } from './types'
-import { TokenType, Web3Plugin, PluginId } from '@masknet/plugin-infra'
-import { resolveIPFSLink, ERC721TokenDetailed, EthereumTokenType, ChainId } from '@masknet/web3-shared-evm'
+import { Web3Plugin, PluginId, ERC721TokenDetailed, EthereumTokenType } from '@masknet/plugin-infra'
+import { resolveIPFSLink } from '@masknet/web3-shared-evm'
 
 interface Payload {
     ownerAddress: string
@@ -65,34 +65,7 @@ export function toHttpImage(url?: string) {
     return url
 }
 
-function createFlowNFT(token: AlchemyNFTItemDetailedResponse, owner: string): Web3Plugin.NonFungibleToken {
-    return {
-        id: `${token.contract.address}_${token.id.tokenId}`,
-        chainId: 1,
-        type: TokenType.NonFungible,
-        tokenId: token.id.tokenId,
-        name: token.title,
-        description: token.description,
-        owner: owner,
-        metadata: {
-            name: token.title,
-            description: token.description,
-            mediaType: token.media.mimeType,
-            iconURL: toHttpImage(token.media.uri),
-            assetURL: toHttpImage(token.media.uri),
-        },
-        contract: {
-            id: token.contract.address,
-            name: token.contract.name,
-            symbol: token.contract.name,
-            iconURL: token.contract.externalDomain,
-            address: token.contract.address,
-            chainId: 1,
-        },
-    }
-}
-
-function createEVM_NFT(token: AlchemyNFTItemDetailedResponse, owner: string): ERC721TokenDetailed {
+function createNFT(token: AlchemyNFTItemDetailedResponse, owner: string): ERC721TokenDetailed {
     return {
         tokenId: token.id.tokenId,
         info: {
@@ -107,7 +80,7 @@ function createEVM_NFT(token: AlchemyNFTItemDetailedResponse, owner: string): ER
         contractDetailed: {
             type: EthereumTokenType.ERC721,
             address: token.contract.address,
-            chainId: ChainId.Mainnet,
+            chainId: 1,
             name: token.contract.name,
             symbol: token.contract.name,
             iconURL: token.contract.externalDomain,
@@ -136,9 +109,6 @@ export class AlchemyAPI implements NonFungibleTokenAPI.Provider {
                 data: [],
                 hasNextPage: false,
             }
-
-        const createNFT = `${PluginId.Flow}_flow` === network.ID ? createFlowNFT : createEVM_NFT
-
         const data = result.nfts.map((nft) => createNFT(nft, result.ownerAddress))
         return {
             data,

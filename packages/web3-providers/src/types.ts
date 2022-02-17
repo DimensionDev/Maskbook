@@ -285,7 +285,7 @@ export namespace NonFungibleTokenAPI {
             from: string,
             opts: Options,
             network: Web3Plugin.NetworkDescriptor,
-        ) => Promise<ProviderPageable<ERC721TokenDetailed | Web3Plugin.NonFungibleToken>>
+        ) => Promise<ProviderPageable<ERC721TokenDetailed>>
         getHistory?: (address: string, tokenId: string, opts?: Options) => Promise<History[]>
         getListings?: (address: string, tokenId: string, opts?: Options) => Promise<AssetOrder[]>
         getOffers?: (address: string, tokenId: string, opts?: Options) => Promise<AssetOrder[]>
