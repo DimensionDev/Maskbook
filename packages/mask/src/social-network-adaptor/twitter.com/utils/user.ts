@@ -41,8 +41,7 @@ export const getTwitterId = () => {
         if (twitterIdNode) return twitterIdNode.innerHTML.trim().replace('@', '')
     }
 
-    let ele = searchAvatarSelector().evaluate()?.closest('a')
-    if (!ele) ele = searchNFTAvatarSelector().evaluate()?.closest('a')
+    const ele = searchAvatarSelector().evaluate()?.closest('a') || searchNFTAvatarSelector().evaluate()?.closest('a')
     if (ele) {
         const link = ele.getAttribute('href')
         if (link) {
@@ -65,8 +64,7 @@ export const getPersonalHomepage = () => {
 }
 
 export const getAvatar = () => {
-    let node = searchAvatarSelector().evaluate()
-    if (!node) node = searchNFTAvatarSelector().evaluate()
+    const node = searchAvatarSelector().evaluate() || searchNFTAvatarSelector().evaluate()
     if (node) {
         const imageURL = node.getAttribute('src') ?? ''
         return imageURL.trim()
