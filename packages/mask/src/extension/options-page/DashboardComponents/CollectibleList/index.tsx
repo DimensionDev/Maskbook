@@ -287,9 +287,7 @@ export function CollectionList({
             }
             return x
         })
-    }, [collectibles.length, collectionsFormRemote])
-
-    console.log(collections)
+    }, [collectibles.length, collectionsFormRemote.length])
 
     if (!isLoading && !collectibles.length)
         return (

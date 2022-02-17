@@ -16,31 +16,33 @@ const nonFungibleCollectibleAsset = async (
     const size = 50
     const openSeaApiKey = await getKeys('opensea')
 
-    const fromOpenSea = collectAllPageDate<ERC721TokenDetailed>(
-        (page) => getOpenSeaNFTList(openSeaApiKey, address, page, size),
-        size,
-        push,
-    )
+    try {
+        await collectAllPageDate<ERC721TokenDetailed>(
+            (page) => getOpenSeaNFTList(openSeaApiKey, address, page, size),
+            size,
+            push,
+        )
+    } finally {
+        const fromRarible = collectAllPageDate<ERC721TokenDetailed>(
+            (page, pageInfo) => getRaribleNFTList(openSeaApiKey, address, page, size, pageInfo),
+            size,
+            push,
+        )
 
-    const fromRarible = collectAllPageDate<ERC721TokenDetailed>(
-        (page, pageInfo) => getRaribleNFTList(openSeaApiKey, address, page, size, pageInfo),
-        size,
-        push,
-    )
+        const formNFTScanERC721 = collectAllPageDate<ERC721TokenDetailed>(
+            (page) => getNFTScanNFTs(address, 'erc721', page, size),
+            size,
+            push,
+        )
 
-    const formNFTScanERC721 = collectAllPageDate<ERC721TokenDetailed>(
-        (page) => getNFTScanNFTs(address, 'erc721', page, size),
-        size,
-        push,
-    )
+        const fromNFTScanERC1155 = collectAllPageDate<ERC721TokenDetailed>(
+            (page) => getNFTScanNFTs(address, 'erc1155', page, size),
+            size,
+            push,
+        )
 
-    const fromNFTScanERC1155 = collectAllPageDate<ERC721TokenDetailed>(
-        (page) => getNFTScanNFTs(address, 'erc1155', page, size),
-        size,
-        push,
-    )
-
-    await Promise.allSettled([fromOpenSea, fromRarible, formNFTScanERC721, fromNFTScanERC1155])
+        await Promise.allSettled([fromRarible, formNFTScanERC721, fromNFTScanERC1155])
+    }
 }
 
 const producer: RPCMethodRegistrationValue<ERC721TokenDetailed, NonFungibleTokenAssetArgs> = {
