@@ -721,6 +721,7 @@ export enum PluginId {
     PoolTogether = 'com.pooltogether',
     UnlockProtocol = 'com.maskbook.unlockprotocol',
     FileService = 'com.maskbook.fileservice',
+    CyberConnect = 'me.cyberconnect.app',
     // @masknet/scripts: insert-here
 }
 

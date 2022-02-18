@@ -22,6 +22,7 @@ const useStyles = makeStyles()((theme) => {
  * https://findtruman.io/#/findtruman/stories/{storyId}
  * https://findtruman.io/#/findtruman/stories/{storyId}/puzzles/{puzzleId}
  * https://findtruman.io/#/findtruman/stories/{storyId}/polls/{pollId}
+ * https://findtruman.io/#/findtruman/stories/{storyId}/completions/{completionId}
  * https://findtruman.io/#/findtruman/stories/{storyId}/puzzle_result/{pollId}
  * https://findtruman.io/#/findtruman/stories/{storyId}/poll_result/{pollId}
  */
@@ -37,7 +38,7 @@ const isFindTrumanURL = (input: string): boolean => {
         return /^#\/encryption\?clueid=[\da-z]+$/i.test(hash)
     }
     if (hash.startsWith('#/findtruman/stories')) {
-        return /^#\/findtruman\/stories\/[\da-z]+(\/|\/(puzzle|poll)(s|_result)\/[\da-z]+\/?)?$/i.test(hash)
+        return /^#\/findtruman\/stories\/[\da-z]+(\/|\/(puzzle|poll|completion)(s|_result)\/[\da-z]+\/?)?$/i.test(hash)
     }
     return false
 }

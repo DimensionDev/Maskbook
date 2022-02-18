@@ -1,3 +1,4 @@
+// This file is a JavaScript file because it's reference to the plugins should not be counted as a project reference.
 // If your plugin also works in isolated dashboard, please also register it in
 // packages/dashboard/src/initialization/plugins.ts
 
@@ -31,6 +32,7 @@ import '../plugins/MaskBox'
 import '../plugins/NextID'
 // import '../plugins/Profile'
 import '../plugins/Pets'
+import '@masknet/plugin-cyberconnect'
 import '../plugins/CryptoartAI'
 import '../plugins/FindTruman'
 import '../plugins/ArtBlocks'
