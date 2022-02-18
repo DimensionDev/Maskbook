@@ -10,6 +10,9 @@ import {
     resolveProviderInjectedKey,
     isInjectedProvider,
     AddressNameType,
+    createWeb3,
+    ChainId,
+    createContract,
 } from '@masknet/web3-shared-evm'
 import { isPopupPage } from '@masknet/shared-base'
 import { bridgedCoin98Provider, bridgedEthereumProvider } from '@masknet/injected-script'
@@ -30,6 +33,17 @@ import { Flags } from '../../shared'
 import Services from '../extension/service'
 import { getProxyWebsocketInstance } from '@masknet/web3-shared-base'
 import { UserNFTContainerAtTwitter } from '@masknet/web3-providers'
+import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
+import type { AbiItem } from 'web3-utils'
+import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
+
+async function getERC721ContractOwner(address: string, tokenId: string) {
+    const web3 = createWeb3(Services.Ethereum.request, () => ({
+        chainId: ChainId.Mainnet,
+    }))
+    const ERC721contract = createContract<ERC721>(web3, address, ERC721ABI as AbiItem[])
+    return ERC721contract?.methods.ownerOf(tokenId).call()
+}
 
 function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderType {
     return {
@@ -127,15 +141,18 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
             const addressNames = await WalletRPC.getAddressNames(identity)
             if (identity.identifier.network === 'twitter.com') {
                 const result = await UserNFTContainerAtTwitter.getUserNftContainer(identity.identifier.userId ?? '')
-                if (result)
-                    return [
-                        ...addressNames,
-                        {
-                            type: AddressNameType.TWITTER_BLUE,
-                            label: result.address,
-                            resolvedAddress: result.address,
-                        },
-                    ]
+                if (result) {
+                    const contractAddress = await getERC721ContractOwner(result.address, result.token_id)
+                    if (contractAddress)
+                        return [
+                            ...addressNames,
+                            {
+                                type: AddressNameType.TWITTER_BLUE,
+                                label: contractAddress,
+                                resolvedAddress: contractAddress,
+                            },
+                        ]
+                }
             }
             return addressNames
         },
