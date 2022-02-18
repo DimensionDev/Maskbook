@@ -31,3 +31,32 @@ export async function fetchIdeaToken(marketName: string, tokenName: string) {
     const res = (await response.json())?.data.ideaTokens
     return first(res) as IdeaToken
 }
+
+export async function fetchAllTokens() {
+    const body = {
+        query: `query IdeaToken {
+            ideaTokens{
+                id
+                name
+                tokenID
+                market {
+                    name
+                }
+                rank
+                latestPricePoint {
+                    price
+                }
+                supply
+                holders
+                daiInToken
+            }
+        }`,
+    }
+    const response = await fetch(SUBGRAPH_URL, {
+        body: JSON.stringify(body),
+        method: 'POST',
+    })
+
+    const res = (await response.json())?.data
+    return res
+}

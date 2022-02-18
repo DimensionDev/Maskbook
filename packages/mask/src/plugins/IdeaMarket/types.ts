@@ -1,6 +1,7 @@
 import type BigNumber from 'bignumber.js'
 
 export interface IdeaToken {
+    id: string
     name: string
     tokenId: string
     market: Market

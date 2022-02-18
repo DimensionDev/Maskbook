@@ -1,14 +1,8 @@
 import { useCallback, useState } from 'react'
-import { LoadingAnimation } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { Card, CardContent, CardHeader, Paper, Tab, Tabs, Typography } from '@mui/material'
+import { Card, CardContent, Paper, Tab, Tabs } from '@mui/material'
 import { useI18N } from '../../../utils'
-import { useFetchIdeaToken } from '../hooks/useFetchIdeaToken'
-import { StatsView } from './StatsView'
-import { ChartsView } from '../SNSAdaptor/ChartsView'
-import { BoughtTogetherView } from '../SNSAdaptor/BoughtTogetherView'
-import { IdeaTokenViewDeck } from '../SNSAdaptor/IdeaTokenViewDeck'
-import { ContentView } from './ContentView'
+import { ListingsView } from './ListingsView'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -99,47 +93,47 @@ interface IdeaMarketViewProps {
     ideaName: string
 }
 
-export function IdeaMarketView(props: IdeaMarketViewProps) {
+export function IdeaMarketView() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [tabIndex, setTabIndex] = useState(0)
-    const { value: ideaToken, error, loading } = useFetchIdeaToken(props.marketName, props.ideaName)
+    // const { value: ideaToken, error, loading } = useFetchIdeaToken(props.marketName, props.ideaName)
     const tabCallback = useCallback((): void => setTabIndex(0), [])
 
-    if (loading) {
-        return (
-            <div className={classes.empty}>
-                <LoadingAnimation />
-            </div>
-        )
-    }
+    // if (loading) {
+    //     return (
+    //         <div className={classes.empty}>
+    //             <LoadingAnimation />
+    //         </div>
+    //     )
+    // }
 
-    if (!ideaToken) {
-        return (
-            <Typography className={classes.message} color="textPrimary">
-                {t('plugin_ideamarket_token_not_found')}
-            </Typography>
-        )
-    }
+    // if (!ideaToken) {
+    //     return (
+    //         <Typography className={classes.message} color="textPrimary">
+    //             {t('plugin_ideamarket_token_not_found')}
+    //         </Typography>
+    //     )
+    // }
 
-    if (error) {
-        return (
-            <Typography className={classes.message} color="textPrimary">
-                {t('plugin_ideamarket_smthg_wrong')}
-            </Typography>
-        )
-    }
+    // if (error) {
+    //     return (
+    //         <Typography className={classes.message} color="textPrimary">
+    //             {t('plugin_ideamarket_smthg_wrong')}
+    //         </Typography>
+    //     )
+    // }
 
     const tabs = [
-        <Tab className={classes.tab} key="stats" label={t('plugin_dhedge_tab_stats')} />,
-        <Tab className={classes.tab} key="content" label={t('plugin_ideamarket_tab_content')} />,
-        <Tab className={classes.tab} key="chart" label={t('plugin_dhedge_tab_chart')} />,
-        <Tab className={classes.tab} key="boughttogether" label={t('plugin_ideamarket_tab_bought_together')} />,
+        <Tab className={classes.tab} key="listings" label={t('plugin_ideamarket_tab_listings')} />,
+        // <Tab className={classes.tab} key="stats" label={t('plugin_dhedge_tab_stats')} />,
+        // <Tab className={classes.tab} key="content" label={t('plugin_ideamarket_tab_content')} />,
+        // <Tab className={classes.tab} key="chart" label={t('plugin_dhedge_tab_chart')} />,
+        // <Tab className={classes.tab} key="boughttogether" label={t('plugin_ideamarket_tab_bought_together')} />,
     ].filter(Boolean)
 
     return (
         <Card className={classes.root} elevation={0}>
-            <CardHeader subheader={<IdeaTokenViewDeck ideaToken={ideaToken} />} />
             <CardContent className={classes.content}>
                 <Tabs
                     className={classes.tabs}
@@ -156,10 +150,10 @@ export function IdeaMarketView(props: IdeaMarketViewProps) {
                     {tabs}
                 </Tabs>
                 <Paper className={classes.body}>
-                    {tabIndex === 0 ? <StatsView ideaToken={ideaToken} /> : null}
-                    {tabIndex === 1 ? <ContentView ideaToken={ideaToken} /> : null}
+                    {tabIndex === 0 ? <ListingsView /> : null}
+                    {/* {tabIndex === 1 ? <ContentView ideaToken={ideaToken} /> : null}
                     {tabIndex === 2 ? <ChartsView ideaToken={ideaToken} /> : null}
-                    {tabIndex === 3 ? <BoughtTogetherView ideaToken={ideaToken} setTabIndex={setTabIndex} /> : null}
+                    {tabIndex === 3 ? <BoughtTogetherView ideaToken={ideaToken} setTabIndex={setTabIndex} /> : null} */}
                 </Paper>
             </CardContent>
         </Card>

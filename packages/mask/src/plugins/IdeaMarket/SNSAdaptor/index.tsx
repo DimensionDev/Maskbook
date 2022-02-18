@@ -22,26 +22,27 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const asset = getAssetInfoFromURL(link)
         if (!asset?.market_name || !asset?.idea_name) return null
 
-        return <Renderer marketName={asset?.market_name} ideaName={asset?.idea_name} />
+        return <Renderer />
     },
     PostInspector: function Component() {
         const links = usePostInfoDetails.mentionedLinks()
         const link = uniq(links).find(checkUrl)
         const asset = getAssetInfoFromURL(link)
+        console.log(link)
 
-        if (!asset?.market_name || !asset?.idea_name) return null
+        // if (!asset?.market_name || !asset?.idea_name) return null
 
-        return <Renderer marketName={asset?.market_name} ideaName={asset?.idea_name} />
+        return <Renderer />
     },
 }
 
 export default sns
 
-function Renderer(props: { marketName: string; ideaName: string }) {
+function Renderer() {
     usePluginWrapper(true)
     return (
         <EthereumChainBoundary chainId={ChainId.Arbitrum}>
-            <IdeaMarketView marketName={props.marketName} ideaName={props.ideaName} />
+            <IdeaMarketView />
         </EthereumChainBoundary>
     )
 }
