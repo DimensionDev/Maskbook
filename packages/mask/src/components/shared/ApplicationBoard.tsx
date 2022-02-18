@@ -359,7 +359,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             new URL('./assets/findtruman.png', import.meta.url).toString(),
             onFindTrumanDialogOpen,
             [ChainId.Mainnet],
-            false,
+            isNotEvm,
             true,
         ),
     ]
