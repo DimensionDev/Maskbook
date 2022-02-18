@@ -58,11 +58,12 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'auto',
     },
     card: {
+        width: 172,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         position: 'relative',
-        padding: theme.spacing(1),
+        padding: theme.spacing(1, 0),
     },
     description: {
         background: theme.palette.mode === 'light' ? '#F7F9FA' : '#2F3336',
