@@ -1,6 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { Box, CircularProgress, Typography } from '@mui/material'
 import type { FC } from 'react'
+import { useI18N } from '../../locales'
 
 interface Props {
     loading?: boolean
@@ -18,6 +19,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export const StatusBox: FC<Props> = ({ loading, empty }) => {
     const { classes } = useStyles()
+    const t = useI18N()
     if (loading) {
         return (
             <Box className={classes.statusBox}>
@@ -29,7 +31,7 @@ export const StatusBox: FC<Props> = ({ loading, empty }) => {
     if (empty) {
         return (
             <Box className={classes.statusBox}>
-                <Typography color="textPrimary">No data.</Typography>
+                <Typography color="textPrimary">{t.no_data()}</Typography>
             </Box>
         )
     }

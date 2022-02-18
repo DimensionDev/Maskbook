@@ -1,6 +1,7 @@
 import { AddressViewer } from '@masknet/shared'
 import { AddressName, AddressNameType, EMPTY_LIST } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
+import { useI18N } from '../locales'
 import { useDonations, useFootprints } from './hooks'
 import { DonationPage, FootprintPage } from './pages'
 
@@ -15,6 +16,7 @@ export interface TabCardProps {
 }
 
 export function TabCard({ type, addressNames }: TabCardProps) {
+    const t = useI18N()
     const addressName = addressNames.find((x) => x.type === AddressNameType.RSS3)
     const userAddress = addressName?.resolvedAddress || ''
     const { value: donations = EMPTY_LIST, loading: loadingDonations } = useDonations(userAddress)
@@ -27,7 +29,9 @@ export function TabCard({ type, addressNames }: TabCardProps) {
     const summary =
         isDonation && !loadingDonations ? (
             <Typography color="textPrimary" component="span">
-                Total {donations.length} Grants
+                {t.total_grants({
+                    count: donations.length,
+                })}
             </Typography>
         ) : null
 
