@@ -10,9 +10,12 @@ import {
     PoapInfo,
     PollResult,
     PuzzleResult,
+    QuestionGroup,
     StoryInfo,
+    SubmitCompletionParams,
     SubmitPollParams,
     SubmitPuzzleParams,
+    UserCompletionStatus,
     UserPartsInfo,
     UserPollOrPuzzleStatus,
     UserPollStatus,
@@ -59,6 +62,10 @@ export function fetchUserPollStatus(pollId: string, uaddr: string) {
     return request<UserPollStatus>(urlcat('/polls/:pollId/status', { pollId, uaddr }))
 }
 
+export function fetchUserCompletionStatus(quesId: string, uaddr: string) {
+    return request<UserCompletionStatus>(urlcat('/subjective_questions/:quesId', { quesId, uaddr }))
+}
+
 export function fetchPuzzleResult(puzzleId: string) {
     return request<PuzzleResult>(urlcat('/puzzles/:puzzleId/result', { puzzleId }))
 }
@@ -78,6 +85,23 @@ export async function submitPuzzle(address: string, data: SubmitPuzzleParams) {
 export async function submitPoll(address: string, data: SubmitPollParams) {
     const sig = await Services.Ethereum.personalSign(JSON.stringify(data), address)
     return request<string>('/polls/submit', {
+        method: 'POST',
+        body: JSON.stringify({ data, sig }),
+    })
+}
+
+export async function submitCompletion(address: string, params: SubmitCompletionParams) {
+    const { timestamp, quesId, answers } = params
+    const data = {
+        timestamp,
+        address,
+        rawdata: {
+            quesId,
+            answers,
+        },
+    }
+    const sig = await Services.Ethereum.personalSign(JSON.stringify(data), address)
+    return request<string>('/subjective_questions/_/answer', {
         method: 'POST',
         body: JSON.stringify({ data, sig }),
     })
@@ -117,6 +141,10 @@ export function fetchExchangeStatus(uaddr: string) {
 
 export function fetchAllPollsOrPuzzles(uaddr: string) {
     return request<UserPollOrPuzzleStatus[]>(urlcat('/polls_or_puzzles', { uaddr }))
+}
+
+export function fetchQuestions(uaddr: string) {
+    return request<QuestionGroup>(urlcat('/questions', { uaddr }))
 }
 
 export function exchangeFtgWhitelist() {

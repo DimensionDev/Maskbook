@@ -1,21 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
-import BigNumber from 'bignumber.js'
-import { useWeb3State } from '@masknet/web3-shared-evm'
-import { StartUp } from './StartUp'
-import { Assets } from './components/Assets'
-import { Route, Routes, useLocation, useMatch, useNavigate } from 'react-router-dom'
-import { Balance } from './components/Balance'
-import { Transfer } from './components/Transfer'
-import { History } from './components/History'
-import { PageFrame } from '../../components/PageFrame'
-import { ReceiveDialog } from './components/ReceiveDialog'
-import { DashboardRoutes } from '@masknet/shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared'
-import { PluginMessages } from '../../API'
-import { WalletStateBar } from './components/WalletStateBar'
-import { useDashboardI18N } from '../../locales'
 import {
     getRegisteredWeb3Networks,
+    NetworkPluginID,
     useAccount,
     useChainId,
     useNetworkDescriptor,
@@ -25,7 +10,24 @@ import {
     useWeb3State as useWeb3PluginState,
     Web3Plugin,
 } from '@masknet/plugin-infra'
+import { useRemoteControlledDialog } from '@masknet/shared'
+import { DashboardRoutes } from '@masknet/shared-base'
+import { useWeb3State } from '@masknet/web3-shared-evm'
+import BigNumber from 'bignumber.js'
+import { useEffect, useMemo, useState } from 'react'
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { useAsync } from 'react-use'
+import { PluginMessages } from '../../API'
+import { PageFrame } from '../../components/PageFrame'
+import { useDashboardI18N } from '../../locales'
+import { Assets } from './components/Assets'
+import { Balance } from './components/Balance'
+import { History } from './components/History'
+import { ReceiveDialog } from './components/ReceiveDialog'
+import { Transfer } from './components/Transfer'
+import { WalletStateBar } from './components/WalletStateBar'
+import { useIsMatched } from './hooks'
+import { StartUp } from './StartUp'
 import { getTokenUSDValue } from './utils/getTokenUSDValue'
 
 function Wallets() {
@@ -40,9 +42,9 @@ function Wallets() {
     const network = useNetworkDescriptor()
 
     const { pathname } = useLocation()
-    const isWalletPath = useMatch(DashboardRoutes.Wallets)
-    const isWalletTransferPath = useMatch(DashboardRoutes.WalletsTransfer)
-    const isWalletHistoryPath = useMatch(DashboardRoutes.WalletsHistory)
+    const isWalletPath = useIsMatched(DashboardRoutes.Wallets)
+    const isWalletTransferPath = useIsMatched(DashboardRoutes.WalletsTransfer)
+    const isWalletHistoryPath = useIsMatched(DashboardRoutes.WalletsHistory)
 
     const [receiveOpen, setReceiveOpen] = useState(false)
 
@@ -60,29 +62,36 @@ function Wallets() {
         async () => Asset?.getFungibleAssets?.(account, portfolioProvider, network!),
         [account, Asset, portfolioProvider, network],
     )
+    const renderNetworks = useMemo(() => {
+        return networks.filter((x) => pluginId === x.networkSupporterPluginID && x.isMainnet)
+    }, [networks, pluginId])
+
+    // If show one network only, set it as default network
+    const defaultNetwork = useMemo(() => {
+        if (renderNetworks.length !== 1) return null
+        return renderNetworks[0]
+    }, [renderNetworks])
 
     useEffect(() => {
         if (isWalletPath) return
-        setSelectedNetwork(networkDescriptor ?? null)
-    }, [networkDescriptor])
+        setSelectedNetwork(networkDescriptor || defaultNetwork)
+    }, [isWalletPath, networkDescriptor, defaultNetwork])
 
     useEffect(() => {
         if (isWalletTransferPath || isWalletHistoryPath) {
-            setSelectedNetwork(networkDescriptor ?? null)
+            setSelectedNetwork(networkDescriptor || defaultNetwork)
             return
         }
-        setSelectedNetwork(null)
-    }, [pathname])
+        setSelectedNetwork(defaultNetwork)
+    }, [pathname, defaultNetwork])
 
     const balance = useMemo(() => {
-        return BigNumber.sum
-            .apply(
-                null,
-                detailedTokens
-                    ?.filter((x) => (selectedNetwork ? x.chainId === selectedNetwork.chainId : true))
-                    ?.map((y) => getTokenUSDValue(y.value)) ?? [],
-            )
-            .toNumber()
+        if (!detailedTokens || !detailedTokens.length) return 0
+
+        const values = detailedTokens
+            .filter((x) => (selectedNetwork ? x.chainId === selectedNetwork.chainId : true))
+            .map((y) => getTokenUSDValue(y.value))
+        return BigNumber.sum(...values).toNumber()
     }, [selectedNetwork, detailedTokens])
 
     const pateTitle = useMemo(() => {
@@ -107,10 +116,10 @@ function Wallets() {
                         onBuy={openBuyDialog}
                         onSwap={openSwapDialog}
                         onReceive={() => setReceiveOpen(true)}
-                        networks={networks}
+                        networks={renderNetworks}
                         selectedNetwork={selectedNetwork}
                         onSelectNetwork={setSelectedNetwork}
-                        pluginId={pluginId}
+                        showOperations={pluginId === NetworkPluginID.PLUGIN_EVM}
                     />
                     <Routes>
                         <Route path="/" element={<Assets network={selectedNetwork} />} />

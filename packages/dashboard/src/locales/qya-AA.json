@@ -353,6 +353,8 @@
     "labs_settings_swap_network": "crwdns8195:0{{network}}crwdne8195:0",
     "labs_pets": "crwdns9397:0crwdne9397:0",
     "labs_pets_desc": "crwdns9399:0crwdne9399:0",
+    "labs_cyber_connect": "crwdns13316:0crwdne13316:0",
+    "labs_cyber_connect_desc": "crwdns13318:0crwdne13318:0",
     "labs_setup_tutorial": "crwdns10339:0crwdne10339:0",
     "labs_do_not_show_again": "crwdns10341:0crwdne10341:0",
     "labs_cryptoartai": "crwdns10519:0crwdne10519:0",
