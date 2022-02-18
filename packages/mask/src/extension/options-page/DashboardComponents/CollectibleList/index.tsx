@@ -196,7 +196,7 @@ function CollectibleListUI(props: CollectibleListUIProps) {
                                 provider={provider}
                                 wallet={wallet}
                                 readonly={readonly}
-                                key={i}
+                                key={x.tokenId + x.contractDetailed.address}
                             />
                         ))}
                     </Box>
