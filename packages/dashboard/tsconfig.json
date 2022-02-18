@@ -6,10 +6,12 @@
     "tsBuildInfoFile": "./dist/src.tsbuildinfo"
   },
   "include": ["./src", "./src/**/*.json"],
+  "exclude": ["./src/initialization/plugins.js"],
   "references": [
     { "path": "../public-api" },
     { "path": "../theme/" },
     { "path": "../mask/src" },
+    { "path": "../web3-shared/base/" },
     { "path": "../web3-shared/evm/" },
     { "path": "../web3-shared/flow/" },
     { "path": "../icons/" },

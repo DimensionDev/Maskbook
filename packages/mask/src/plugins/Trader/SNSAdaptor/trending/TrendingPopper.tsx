@@ -4,18 +4,12 @@ import { useLocation, useWindowScroll } from 'react-use'
 import { PluginTraderMessages } from '../../messages'
 import { WalletMessages } from '../../../Wallet/messages'
 import type { TagType } from '../../types'
-import type { DataProvider, TradeProvider } from '@masknet/public-api'
+import type { DataProvider } from '@masknet/public-api'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginTransakMessages } from '../../../Transak/messages'
 
 export interface TrendingPopperProps {
-    children?: (
-        name: string,
-        type: TagType,
-        dataProviders: DataProvider[],
-        tradeProviders: TradeProvider[],
-        reposition?: () => void,
-    ) => React.ReactNode
+    children?: (name: string, type: TagType, dataProviders: DataProvider[], reposition?: () => void) => React.ReactNode
     PopperProps?: Partial<PopperProps>
 }
 
@@ -27,7 +21,6 @@ export function TrendingPopper(props: TrendingPopperProps) {
     const [type, setType] = useState<TagType | undefined>()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const [availableDataProviders, setAvailableDataProviders] = useState<DataProvider[]>([])
-    const [availableTradeProviders, setAvailableTradeProviders] = useState<TradeProvider[]>([])
 
     // #region select token and provider dialog could be open by trending view
     const onFreezed = useCallback((ev) => setFreezed(ev.open), [])
@@ -52,7 +45,6 @@ export function TrendingPopper(props: TrendingPopperProps) {
                     setType(ev.type)
                     setAnchorEl(ev.element)
                     setAvailableDataProviders(ev.dataProviders)
-                    setAvailableTradeProviders(ev.tradeProviders)
                     setLocked(false)
                 }
                 // observe the same element
@@ -103,7 +95,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
                 {({ TransitionProps }) => (
                     <Fade in={Boolean(anchorEl)} {...TransitionProps}>
                         <div>
-                            {props.children?.(name, type, availableDataProviders, availableTradeProviders, () =>
+                            {props.children?.(name, type, availableDataProviders, () =>
                                 setTimeout(() => popperRef.current?.update(), 100),
                             )}
                         </div>

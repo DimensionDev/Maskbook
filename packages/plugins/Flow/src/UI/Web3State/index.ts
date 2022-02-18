@@ -50,7 +50,7 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
         Utils: {
             formatAddress,
             formatBalance: toFixed,
-            formatCurrency: (value) => toFixed(value),
+            formatCurrency: (value, sign = '') => `${sign}${toFixed(value)}`,
 
             isChainIdValid: () => true,
 

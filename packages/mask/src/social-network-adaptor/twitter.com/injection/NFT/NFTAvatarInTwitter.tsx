@@ -23,12 +23,17 @@ export function injectNFTAvatarInTwitter(signal: AbortSignal) {
 
 const useStyles = makeStyles()(() => ({
     root: {
+        transform: 'scale(1.025)',
         position: 'absolute',
         textAlign: 'center',
         color: 'white',
         zIndex: 2,
         width: '100%',
         height: '100%',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
     },
     text: {
         fontSize: '20px !important',
@@ -86,10 +91,25 @@ function NFTAvatarInTwitter() {
             return
         }
 
-        const avatar = await PluginNFTAvatarRPC.saveNFTAvatar(wallet.address, {
-            ...NFTEvent,
-            avatarId: getAvatarId(identity.avatar ?? ''),
-        } as AvatarMetaDB)
+        const avatar = await PluginNFTAvatarRPC.saveNFTAvatar(
+            wallet.address,
+            {
+                ...NFTEvent,
+                avatarId: getAvatarId(identity.avatar ?? ''),
+            } as AvatarMetaDB,
+            identity.identifier.network,
+        ).catch((error) => {
+            setNFTEvent(undefined)
+            setAvatar(undefined)
+            window.alert(error.message)
+            return
+        })
+        if (!avatar) {
+            setNFTEvent(undefined)
+            setAvatar(undefined)
+            window.alert('Sorry, failed to save NFT Avatar. Please set again.')
+            return
+        }
 
         setAvatar(avatar)
         MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll(
@@ -113,6 +133,7 @@ function NFTAvatarInTwitter() {
     }, [onUpdate])
 
     useEffect(() => {
+        if (!showAvatar) return
         const linkDom = searchTwitterAvatarLinkSelector().evaluate()
 
         if (linkDom?.firstElementChild && linkDom.childNodes.length === 4) {
@@ -142,25 +163,18 @@ function NFTAvatarInTwitter() {
                 linkDom.appendChild(style)
             }
         }
-    }, [location.pathname])
 
-    useEffect(() => {
-        const linkDom = searchTwitterAvatarLinkSelector().evaluate()
-        if (showAvatar) {
-            if (borderElement.current && linkDom?.firstElementChild === borderElement.current) {
-                linkDom?.removeChild(linkDom.firstElementChild)
+        return () => {
+            if (linkDom?.lastElementChild?.tagName === 'STYLE') {
+                linkDom.removeChild(linkDom.lastElementChild)
             }
 
-            rainBowElement.current?.classList.add('rainbowBorder')
-        } else {
-            // recovery Twitter profile avatar style
             if (borderElement.current && linkDom?.firstElementChild !== borderElement.current) {
                 linkDom?.insertBefore(borderElement.current, linkDom.firstChild)
+                rainBowElement.current?.classList.remove('rainbowBorder')
             }
-
-            rainBowElement.current?.classList.remove('rainbowBorder')
         }
-    }, [showAvatar])
+    }, [location.pathname, showAvatar])
 
     useUpdateEffect(() => {
         if (
@@ -174,8 +188,7 @@ function NFTAvatarInTwitter() {
 
     useUpdateEffect(() => {
         const linkParentDom = searchTwitterAvatarLinkSelector().evaluate()?.closest('div')
-
-        if (!avatar || !linkParentDom) return
+        if (!avatar || !linkParentDom || !showAvatar) return
 
         const handler = () => {
             window.open(resolveOpenSeaLink(avatar.address, avatar.tokenId), '_blank')

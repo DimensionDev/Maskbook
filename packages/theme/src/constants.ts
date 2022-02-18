@@ -46,6 +46,7 @@ export const LightColor = {
     divider: '#eff3f4',
 
     border: '#F3F3F4',
+    borderSecondary: '#536471',
 
     textPrimary: '#111432',
     textSecondary: '#7b8192',
@@ -54,6 +55,7 @@ export const LightColor = {
     normalText: '#7B8192',
 
     infoBackground: 'rgba(175, 195, 225, 0.15)',
+    success: '#60DFAB',
     warning: '#FFB915',
     blue: '#1C68F3',
     textLink: '#1C68F3',
@@ -70,6 +72,7 @@ export const LightColor = {
     errorBackground: 'rgba(255, 95, 95, 0.15)',
     tooltipBackground: '#ffffff',
     warningBackground: 'rgba(255, 185, 21, 0.1)',
+    cyberconnectPrimary: '#000000',
 }
 export const DarkColor: typeof LightColor = {
     primary: '#1c68f3',
@@ -116,6 +119,7 @@ export const DarkColor: typeof LightColor = {
     divider: '#3e455e',
 
     border: '#3E455E',
+    borderSecondary: '#6e767d',
 
     // TODO: ?
     textPrimary: '#ffffff',
@@ -126,6 +130,7 @@ export const DarkColor: typeof LightColor = {
     normalText: 'rgba(255, 255, 255, 0.8)',
 
     infoBackground: 'rgba(175, 195, 225, 0.15)',
+    success: '#60DFAB',
     warning: '#FFB915',
     blue: '#1C68F3',
     textLink: '#ffffff',
@@ -142,6 +147,7 @@ export const DarkColor: typeof LightColor = {
     errorBackground: 'rgba(255, 95, 95, 0.1)',
     tooltipBackground: '#1A1D20',
     warningBackground: 'rgba(255, 185, 21, 0.1)',
+    cyberconnectPrimary: '#ffffff',
 }
 
 export type Color = typeof LightColor
@@ -172,7 +178,7 @@ export function applyMaskColorVars(node: HTMLElement, scheme: PaletteMode) {
             rule += `    --mask-${kebabCase(key)}: ${ns[key]};\n`
             rule += `    --mask-${kebabCase(key)}-fragment: ${getRGBFragment(ns, key)};\n`
         }
-        node.innerHTML = rule + '}'
+        node.textContent = rule + '}'
     } else {
         for (const key in ns) {
             node.style.setProperty('--mask-' + kebabCase(key), ns[key])
@@ -187,7 +193,7 @@ function getRGBFragment(x: Record<string, string>, key: string) {
     return [r, g, b].join(', ')
 }
 
-type MaskCSSVariableColor = string & {
+export type MaskCSSVariableColor = string & {
     /** Append alpha channel to the original color */
     alpha(alpha: number): string
 } & ((defaultValue?: string) => string)

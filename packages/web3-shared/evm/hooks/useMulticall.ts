@@ -105,8 +105,8 @@ export type MulticallState =
 export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?: number) {
     const currentChainId = useChainId()
     const chainId = targetChainId ?? currentChainId
-    const currentBlockNumber = useBlockNumber()
-    const blockNumber = targetBlockNumber ?? currentBlockNumber
+    const { value: defaultBlockNumber = 0 } = useBlockNumber()
+    const blockNumber = targetBlockNumber ?? defaultBlockNumber
     const multicallContract = useMulticallContract(chainId)
     const [multicallState, setMulticallState] = useState<MulticallState>({
         type: MulticallStateType.UNKNOWN,
@@ -165,7 +165,7 @@ export function useMulticallStateDecoded<
     K extends keyof T['methods'],
     R extends UnboxTransactionObject<ReturnType<T['methods'][K]>>,
 >(contracts: T[], names: K[], state: MulticallState, chainId?: ChainId) {
-    const web3 = useWeb3(false, chainId)
+    const web3 = useWeb3({ chainId })
     type Result = { succeed: boolean; gasUsed: string } & ({ error: any; value: null } | { error: null; value: R })
     return useMemo(() => {
         if (state.type !== MulticallStateType.SUCCEED) return []

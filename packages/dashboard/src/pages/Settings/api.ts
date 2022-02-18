@@ -2,50 +2,12 @@ import { createGlobalState } from '@masknet/shared'
 import { Messages, Services } from '../../API'
 import type { DataProvider } from '@masknet/public-api'
 import type { AccountType, BackupFileInfo, Scenario, Locale } from './type'
+
 export const [useLanguage] = createGlobalState(Services.Settings.getLanguage, Messages.events.languageSettings.on)
 
 export const [useTrendingDataSource] = createGlobalState<DataProvider>(
     Services.Settings.getTrendingDataSource,
     Messages.events.currentDataProviderSettings.on,
-)
-
-export const [useEthereumNetworkTradeProvider] = createGlobalState(
-    Services.Settings.getEthereumNetworkTradeProvider,
-    Messages.events.ethereumNetworkTradeProviderSettings.on,
-)
-
-export const [usePolygonNetworkTradeProvider] = createGlobalState(
-    Services.Settings.getPolygonNetworkTradeProvider,
-    Messages.events.polygonNetworkTradeProviderSettings.on,
-)
-
-export const [useBinanceNetworkTradeProvider] = createGlobalState(
-    Services.Settings.getBinanceNetworkTradeProvider,
-    Messages.events.binanceNetworkTradeProviderSettings.on,
-)
-
-export const [useArbitrumNetworkTradeProvider] = createGlobalState(
-    Services.Settings.getArbitrumNetworkTradeProvider,
-    Messages.events.arbitrumNetworkTradeProviderSettings.on,
-)
-
-export const [useXDaiNetworkTradeProvider] = createGlobalState(
-    Services.Settings.getxDaiNetworkTradeProvider,
-    Messages.events.xdaiNetworkTradeProviderSettings.on,
-)
-export const [useFantomNetworkTradeProvider] = createGlobalState(
-    Services.Settings.getFantomNetworkTradeProvider,
-    Messages.events.fantomNetworkTradeProviderSettings.on,
-)
-
-export const [useCeloNetworkTradeProvider] = createGlobalState(
-    Services.Settings.getCeloNetworkTradeProvider,
-    Messages.events.celoNetworkTradeProviderSettings.on,
-)
-
-export const [useAuroraNetworkTradeProvider] = createGlobalState(
-    Services.Settings.getAuroraNetworkTradeProvider,
-    Messages.events.auroraNetworkTradeProviderSettings.on,
 )
 
 const BASE_RUL = 'https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com/api'
@@ -74,9 +36,10 @@ const withErrorMiddleware =
     async (res: Response) => {
         const result = await handler(res)
         if (!res.ok) {
-            return Promise.reject<T>({ status: res.status, ...result })
+            // eslint-disable-next-line no-throw-literal
+            throw { status: res.status, ...result }
         }
-        return Promise.resolve<T>(result)
+        return result
     }
 
 const fetchBase = <T = any>(

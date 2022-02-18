@@ -11,7 +11,7 @@ maintainer:
 
 - ✅ For recommendations
 - &#9888; For warnings
-- 🚫 For forbiddens
+- 🚫 For forbidden
 - ✅ Use [the Box component provided by the library](https://next.material-ui.com/components/box/#main-content)
   when the CSS is simple and only used once.
 - ✅ CSS custom variables is OK but do not abuse it.
@@ -53,7 +53,7 @@ const Title = style.div`
 // 🚫 Bad
 const Title = style(Typography)(
   ({ theme }) => `
-    marign-left: ${theme.spacing(4)};
+    margin-left: ${theme.spacing(4)};
 `,
 )
 

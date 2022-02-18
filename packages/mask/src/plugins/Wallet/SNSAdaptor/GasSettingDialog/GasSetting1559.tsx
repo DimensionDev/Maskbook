@@ -1,6 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { formatGweiToEther, useChainId, useNativeTokenDetailed, GasOption } from '@masknet/web3-shared-evm'
-import { toWei } from 'web3-utils'
+import {
+    formatGweiToEther,
+    useChainId,
+    useNativeTokenDetailed,
+    GasOption,
+    formatGweiToWei,
+} from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import BigNumber from 'bignumber.js'
@@ -136,8 +141,8 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
             (data: zod.infer<typeof schema>) => {
                 onConfirm?.({
                     gasLimit: data.gasLimit,
-                    maxFee: toWei(data.maxFeePerGas, 'gwei'),
-                    priorityFee: toWei(data.maxPriorityFeePerGas, 'gwei'),
+                    maxFee: formatGweiToWei(data.maxFeePerGas).toFixed(0),
+                    priorityFee: formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0),
                     gasOption: selectedGasOption,
                 })
             },

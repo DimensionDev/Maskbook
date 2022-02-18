@@ -91,6 +91,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
 }))
 interface WalletStatusBox {
     isDashboard?: boolean
+    disableChange?: boolean
 }
 export function WalletStatusBox(props: WalletStatusBox) {
     const { t } = useI18N()
@@ -201,30 +202,32 @@ export function WalletStatusBox(props: WalletStatusBox) {
                     </Link>
                 </div>
             </div>
-            <section>
-                {providerType === ProviderType.WalletConnect || providerType === ProviderType.Fortmatic ? (
-                    <ActionButtonPromise
-                        className={classes.actionButton}
-                        color="primary"
-                        size="small"
+            {!props.disableChange && (
+                <section>
+                    {providerType === ProviderType.WalletConnect || providerType === ProviderType.Fortmatic ? (
+                        <ActionButtonPromise
+                            className={classes.actionButton}
+                            color="primary"
+                            size="small"
+                            variant="contained"
+                            init={t('wallet_status_button_disconnect')}
+                            waiting={t('wallet_status_button_disconnecting')}
+                            failed={t('failed')}
+                            complete={t('done')}
+                            executor={onDisconnect}
+                            completeIcon={<></>}
+                            failIcon={<></>}
+                        />
+                    ) : null}
+                    <Button
+                        className={classNames(classes.actionButton)}
                         variant="contained"
-                        init={t('wallet_status_button_disconnect')}
-                        waiting={t('wallet_status_button_disconnecting')}
-                        failed={t('failed')}
-                        complete={t('done')}
-                        executor={onDisconnect}
-                        completeIcon={<></>}
-                        failIcon={<></>}
-                    />
-                ) : null}
-                <Button
-                    className={classNames(classes.actionButton)}
-                    variant="contained"
-                    size="small"
-                    onClick={onChange}>
-                    {t('wallet_status_button_change')}
-                </Button>
-            </section>
+                        size="small"
+                        onClick={onChange}>
+                        {t('wallet_status_button_change')}
+                    </Button>
+                </section>
+            )}
         </section>
     ) : (
         <section className={classes.connectButtonWrapper}>

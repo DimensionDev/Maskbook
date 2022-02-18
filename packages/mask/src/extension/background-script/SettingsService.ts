@@ -8,21 +8,9 @@ import {
     currentPluginMinimalModeNOTEnabled,
     pluginIDSettings,
 } from '../../settings/settings'
-import {
-    currentDataProviderSettings,
-    ethereumNetworkTradeProviderSettings,
-    binanceNetworkTradeProviderSettings,
-    polygonNetworkTradeProviderSettings,
-    arbitrumNetworkTradeProviderSettings,
-    xdaiNetworkTradeProviderSettings,
-    celoNetworkTradeProviderSettings,
-    fantomNetworkTradeProviderSettings,
-    auroraNetworkTradeProviderSettings,
-} from '../../plugins/Trader/settings'
+import { currentDataProviderSettings } from '../../plugins/Trader/settings'
 import { queryMyPersonas } from './IdentityService'
 import {
-    currentBalanceSettings,
-    currentBlockNumberSettings,
     currentAccountSettings,
     currentNetworkSettings,
     currentProviderSettings,
@@ -35,7 +23,6 @@ import {
     currentMaskWalletAccountSettings,
     currentMaskWalletChainIdSettings,
     currentMaskWalletNetworkSettings,
-    currentBalancesSettings,
 } from '../../plugins/Wallet/settings'
 import { Flags, MaskMessages } from '../../../shared'
 import { indexedDB_KVStorageBackend, inMemory_KVStorageBackend } from '../../../background/database/kv-storage'
@@ -55,33 +42,10 @@ export const [getPluginID, setPluginID] = create(pluginIDSettings)
 export const [getTheme, setTheme] = create(appearanceSettings)
 export const [getLanguage, setLanguage] = create(languageSettings)
 export const [getChainId, setChainId] = create(currentChainIdSettings)
-export const [getBalance, setBalance] = create(currentBalanceSettings)
-export const [getBalances, setBalances] = create(currentBalancesSettings)
-export const [getBlockNumber, setBlockNumber] = create(currentBlockNumberSettings)
 export const [getTokenPrices, setTokenPrices] = create(currentTokenPricesSettings)
 export const [getGasOptions, setGasOptions] = create(currentGasOptionsSettings)
 export const [getGasPrice, setGasPrice] = create(currentGasOptionsSettings)
 export const [getTrendingDataSource, setTrendingDataSource] = create(currentDataProviderSettings)
-export const [getEthereumNetworkTradeProvider, setEthNetworkTradeProvider] = create(
-    ethereumNetworkTradeProviderSettings,
-)
-export const [getPolygonNetworkTradeProvider, setPolygonNetworkTradeProvider] = create(
-    polygonNetworkTradeProviderSettings,
-)
-export const [getBinanceNetworkTradeProvider, setBinanceNetworkTradeProvider] = create(
-    binanceNetworkTradeProviderSettings,
-)
-export const [getArbitrumNetworkTradeProvider, setArbitrumNetworkTradeProvider] = create(
-    arbitrumNetworkTradeProviderSettings,
-)
-export const [getxDaiNetworkTradeProvider, setxDaiNetworkTradeProvider] = create(xdaiNetworkTradeProviderSettings)
-
-export const [getCeloNetworkTradeProvider, setCeloNetworkTradeProvider] = create(celoNetworkTradeProviderSettings)
-
-export const [getFantomNetworkTradeProvider, setFantomNetworkTradeProvider] = create(fantomNetworkTradeProviderSettings)
-
-export const [getAuroraNetworkTradeProvider, setAuroraNetworkTradeProvider] = create(auroraNetworkTradeProviderSettings)
-
 export const [getCurrentSelectedWalletProvider, setCurrentSelectedWalletProvider] = create(currentProviderSettings)
 
 export const [getCurrentSelectedWalletNetwork, setCurrentSelectedWalletNetwork] = create(currentNetworkSettings)

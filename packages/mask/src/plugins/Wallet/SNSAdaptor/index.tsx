@@ -9,7 +9,6 @@ import { WalletStatusDialog } from './WalletStatusDialog'
 import { WalletRenameWalletDialog } from './RenameWalletDialog'
 import { TransactionDialog } from './TransactionDialog'
 import { ConnectWalletDialog } from './ConnectWalletDialog'
-import { useStartWatchChainState } from '../hooks/useStartWatchChainState'
 import { WalletRiskWarningDialog } from './RiskWarningDialog'
 import { GasSettingDialog } from './GasSettingDialog'
 import { TransactionSnackbar } from './TransactionSnackbar'
@@ -19,7 +18,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     GlobalInjection: function Component() {
-        useStartWatchChainState()
         return (
             <>
                 <TransactionDialog />

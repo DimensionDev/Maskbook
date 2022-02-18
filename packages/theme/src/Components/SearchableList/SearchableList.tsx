@@ -118,8 +118,8 @@ export function SearchableList<T>({
                     <FixedSizeList
                         width="100%"
                         height={height ?? 300}
-                        overscanCount={5}
-                        itemSize={itemSize ?? 60}
+                        overscanCount={25}
+                        itemSize={itemSize ?? 100}
                         itemData={{
                             dataSet: readyToRenderData,
                             onSelect: onSelect,
