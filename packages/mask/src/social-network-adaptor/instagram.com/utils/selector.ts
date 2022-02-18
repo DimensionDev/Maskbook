@@ -26,7 +26,7 @@ export const searchAvatarSelector = () =>
     querySelector<HTMLImageElement>('[id="react-root"] section main header button  img')
 
 export const bioDescriptionSelector = () =>
-    querySelector<E>('[id="react-root"] section main header section > div:last-child > :nth-child(3)')
+    querySelector<E>('[id="react-root"] section main header section > div:last-child div')
 
 export const personalHomepageSelector = () =>
     querySelector<E>('[id="react-root"] section main header section > div:last-child  a')
@@ -35,7 +35,7 @@ export const searchNickNameSelector = () =>
     querySelector<E>('[id="react-root"] section main header section > div:last-child > span')
 
 export const searchUserIdSelector = () =>
-    querySelector<HTMLHeadingElement>('[id="react-root"] section main header section h2')
+    querySelector<HTMLHeadingElement>('[id="react-root"] section main header section > div:first-child > :first-child')
 
 export const searchProfileTabArticlePageSelector = () =>
     querySelector<E>('[id="react-root"] section main > div > div:last-child > article')
