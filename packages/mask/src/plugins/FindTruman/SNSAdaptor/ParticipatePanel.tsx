@@ -237,23 +237,17 @@ function ParticipateDialog(props: ParticipateDialogProps) {
                         <FindTrumanDialogTabs currentTab={currentTab} setTab={(tab) => onChange(null, tab)} />
                     </div>
                     <Box className={classes.tabPaneWrapper}>
-                        <TabPanel className={classes.tabPane} value={ParticipationType.Critical}>
-                            {!itemsCritical.length ? (
-                                <Typography textAlign="center" color="textSecondary">
-                                    {t('plugin_find_truman_coming_soon')}
-                                </Typography>
-                            ) : (
-                                itemsCritical.map((e) => renderItem(e))
-                            )}
+                        <TabPanel
+                            className={classes.tabPane}
+                            value={ParticipationType.Critical}
+                            sx={{ height: '522px' }}>
+                            {!itemsCritical.length ? <EmptyTip /> : itemsCritical.map((e) => renderItem(e))}
                         </TabPanel>
-                        <TabPanel className={classes.tabPane} value={ParticipationType.NonCritical}>
-                            {!itemsNonCritical.length ? (
-                                <Typography textAlign="center" color="textSecondary">
-                                    {t('plugin_find_truman_coming_soon')}
-                                </Typography>
-                            ) : (
-                                itemsNonCritical.map((e) => renderItem(e))
-                            )}
+                        <TabPanel
+                            className={classes.tabPane}
+                            value={ParticipationType.NonCritical}
+                            sx={{ height: '522px' }}>
+                            {!itemsNonCritical.length ? <EmptyTip /> : itemsNonCritical.map((e) => renderItem(e))}
                         </TabPanel>
                     </Box>
                 </TabContext>
@@ -292,4 +286,15 @@ function FindTrumanDialogTabs(props: ParticipationTabsProps) {
     }
 
     return <AbstractTab {...tabProps} />
+}
+
+function EmptyTip() {
+    const { t } = useContext(FindTrumanContext)
+    return (
+        <Box display="flex" height="100%" alignItems="center">
+            <Typography margin="auto" textAlign="center" variant="h6" color="textSecondary">
+                {t('plugin_find_truman_coming_soon')}
+            </Typography>
+        </Box>
+    )
 }
