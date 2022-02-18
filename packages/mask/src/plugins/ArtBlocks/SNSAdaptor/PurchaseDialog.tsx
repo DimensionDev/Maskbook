@@ -33,6 +33,7 @@ import type { Project } from '../types'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
+import { usePostLink } from '../../../components/DataSource/usePostInfo'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -82,20 +83,23 @@ export function PurchaseDialog(props: ActionBarProps) {
         return leftShift(project.pricePerTokenInWei, token.value?.decimals)
     }, [project.pricePerTokenInWei, token.value?.decimals])
 
+    const postLink = usePostLink()
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
-            token
-                ? t(
-                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                          ? 'plugin_artblocks_share'
-                          : 'plugin_artblocks_share_no_official_account',
-                      {
-                          name: project.name,
-                          price: price,
-                          symbol: token.value?.symbol,
-                      },
-                  )
-                : '',
+            [
+                t(
+                    isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                        ? 'plugin_artblocks_share'
+                        : 'plugin_artblocks_share_no_official_account',
+                    {
+                        name: project.name,
+                        price: price,
+                        symbol: token.value?.symbol,
+                    },
+                ),
+                '#mask_io #artblocks_io #nft',
+                postLink,
+            ].join('\n'),
         )
         .toString()
 

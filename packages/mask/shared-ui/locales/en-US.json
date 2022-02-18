@@ -1027,6 +1027,6 @@
     "plugin_artblocks_blockchain_row": "Blockchain:",
     "plugin_artblocks_contract_row": "Contract:",
     "plugin_artblocks_smt_wrong": "Something went wrong!",
-    "plugin_artblocks_share": "I minted a beautiful piece of art from '{{name}}' collection for {{price}} {{symbol}}.\nPlease install Mask plugin, and get yours too.",
-    "plugin_artblocks_share_no_official_account": "I minted a beautiful piece of art from '{{name}}' collection for {{price}} {{symbol}}. Welcome to join."
+    "plugin_artblocks_share": "I just purchased a beautiful piece of art from '{{name}}' collection for {{price}} {{symbol}}. Install @realMaskNetwork to get yours.",
+    "plugin_artblocks_share_no_official_account": "I just purchased a beautiful piece of art from '{{name}}' collection for {{price}} {{symbol}}. Welcome to join."
 }
