@@ -30,7 +30,7 @@ export function TabCard({ type, addressNames }: TabCardProps) {
         isDonation && !loadingDonations ? (
             <Typography color="textPrimary" component="span">
                 {t.total_grants({
-                    count: donations.length,
+                    count: donations.length.toString(),
                 })}
             </Typography>
         ) : null
