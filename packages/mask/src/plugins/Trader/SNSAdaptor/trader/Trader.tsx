@@ -47,16 +47,15 @@ const useStyles = makeStyles()(() => {
 })
 
 export interface TraderProps extends withClasses<'root'> {
-    defaultFromCoin?: Coin
-    defaultToCoin?: Coin
     coin?: Coin
     defaultInputCoin?: Coin
+    defaultOutputCoin?: Coin
     tokenDetailed?: FungibleTokenDetailed
     chainId?: ChainId
 }
 
 export function Trader(props: TraderProps) {
-    const { defaultFromCoin, defaultToCoin, coin, tokenDetailed, chainId: targetChainId, defaultInputCoin } = props
+    const { defaultOutputCoin, coin, tokenDetailed, chainId: targetChainId, defaultInputCoin } = props
     const { decimals } = tokenDetailed ?? coin ?? {}
     const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
     const wallet = useWallet()
@@ -102,17 +101,17 @@ export function Trader(props: TraderProps) {
             if (!coin?.contract_address) return
             dispatchTradeStore({
                 type,
-                token: createERC20Token(chainId, coin.contract_address, decimals, coin.name, coin.symbol),
+                token: createERC20Token(chainId, coin.contract_address, coin.decimals, coin.name, coin.symbol),
             })
         },
         [chainId, decimals],
     )
     useEffect(() => {
-        updateTradingCoin(AllProviderTradeActionType.UPDATE_INPUT_TOKEN, defaultFromCoin)
-    }, [updateTradingCoin, defaultFromCoin])
+        updateTradingCoin(AllProviderTradeActionType.UPDATE_INPUT_TOKEN, defaultInputCoin)
+    }, [updateTradingCoin, defaultInputCoin])
     useEffect(() => {
-        updateTradingCoin(AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN, defaultToCoin)
-    }, [updateTradingCoin, defaultToCoin])
+        updateTradingCoin(AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN, defaultOutputCoin)
+    }, [updateTradingCoin, defaultOutputCoin])
 
     // #region if coin be changed, update output token
     useEffect(() => {

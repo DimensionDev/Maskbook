@@ -95,7 +95,7 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
         openSwapDialog({
             open: true,
             traderProps: {
-                defaultFromCoin: {
+                defaultInputCoin: {
                     id: token.id,
                     name: token.name || '',
                     symbol: token.symbol || '',
