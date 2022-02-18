@@ -2,7 +2,7 @@ import { useAccount } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends, useTabs } from '@masknet/theme'
 import { useAsyncRetry } from 'react-use'
 import { fetchQuestions, fetchUserStoryStatus, submitCompletion, submitPoll, submitPuzzle } from '../Worker/apis'
-import { Box, Button, Card, DialogActions, DialogContent } from '@mui/material'
+import { Box, Button, Card, DialogActions, DialogContent, Typography } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import StageCard from './StageCard'
 import { useControlledDialog } from '../../../utils'
@@ -238,10 +238,22 @@ function ParticipateDialog(props: ParticipateDialogProps) {
                     </div>
                     <Box className={classes.tabPaneWrapper}>
                         <TabPanel className={classes.tabPane} value={ParticipationType.Critical}>
-                            {itemsCritical.map((e) => renderItem(e))}
+                            {!itemsCritical.length ? (
+                                <Typography textAlign="center" color="textSecondary">
+                                    {t('plugin_find_truman_coming_soon')}
+                                </Typography>
+                            ) : (
+                                itemsCritical.map((e) => renderItem(e))
+                            )}
                         </TabPanel>
                         <TabPanel className={classes.tabPane} value={ParticipationType.NonCritical}>
-                            {itemsNonCritical.map((e) => renderItem(e))}
+                            {!itemsNonCritical.length ? (
+                                <Typography textAlign="center" color="textSecondary">
+                                    {t('plugin_find_truman_coming_soon')}
+                                </Typography>
+                            ) : (
+                                itemsNonCritical.map((e) => renderItem(e))
+                            )}
                         </TabPanel>
                     </Box>
                 </TabContext>
