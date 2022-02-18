@@ -1,5 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { Avatar, Box, Button, Chip, Divider, Link, Typography } from '@mui/material'
+import { ArrowForwardRounded } from '@mui/icons-material'
 import { useContext } from 'react'
 import { FindTrumanContext } from '../context'
 
@@ -104,14 +105,29 @@ export default function IntroductionPanel(props: IntroductionPanelProps) {
                 </Box>
             </Box>
             <Divider className={classes.divider} />
-            <Button
-                fullWidth
-                component="a"
-                href={consts.introduction.plot.url}
-                target="_blank"
-                rel="noopener noreferrer">
-                {consts.introduction.plot.label}
-            </Button>
+            <Box className={classes.section}>
+                <Typography variant="h6" gutterBottom>
+                    {consts.introduction.plot.title}
+                </Typography>
+                <img
+                    src={consts.introduction.plot.img}
+                    style={{
+                        width: '100%',
+                        objectFit: 'contain',
+                        marginBottom: '-5px',
+                    }}
+                />
+                <Button
+                    endIcon={<ArrowForwardRounded />}
+                    fullWidth
+                    variant="outlined"
+                    component="a"
+                    href={consts.introduction.plot.url}
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    {consts.introduction.plot.label}
+                </Button>
+            </Box>
         </Box>
     ) : null
 }

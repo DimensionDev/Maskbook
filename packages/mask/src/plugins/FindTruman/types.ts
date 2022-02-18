@@ -83,6 +83,8 @@ export interface IntroductionCommunity {
 }
 
 export interface IntroductionPlot {
+    title: string
+    img: string
     label: string
     url: string
 }
@@ -282,6 +284,15 @@ export interface MysteryBox {
     mintTime: string
     nftId: number
     img: string
+    completedQuest?: {
+        needPoap: boolean
+        tokenId: number
+    }
+}
+
+export interface PoapAvailability {
+    tokenId: number
+    used: boolean
 }
 
 export interface Quest {
@@ -290,6 +301,8 @@ export interface Quest {
     desc: string
     startFrom: string
     endTo: string
+    needPoap: boolean
+    poaps: PoapAvailability[]
 }
 
 export enum PartType {
@@ -307,6 +320,7 @@ export interface Part {
     name: string
     img: string
     used: boolean
+    fromBox?: MysteryBox
 }
 
 export interface UserPartsInfo {

@@ -54,9 +54,9 @@ export function FindTrumanDialog(props: FindTrumanDialogProps) {
     const { consts, t } = useConst()
 
     const [currentTab, onChange, tabs] = useTabs(
+        FindTrumanDialogTab.Introduction,
         FindTrumanDialogTab.Assets,
         FindTrumanDialogTab.Participate,
-        FindTrumanDialogTab.Introduction,
     )
 
     return (
