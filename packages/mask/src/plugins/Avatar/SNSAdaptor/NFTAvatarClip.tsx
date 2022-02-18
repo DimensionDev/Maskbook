@@ -147,7 +147,6 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
     )
     const { amount, name, symbol, slug } = value
     if (!avatarMetadata?.data.user.result.has_nft_avatar) return null
-
     return (
         <svg
             className={classes.root}

@@ -45,26 +45,32 @@ function NFTAvatarClipInTwitter() {
         if (!path) return
         const [, userId] = path.match(/^\/(\w+)\/nft$/) ?? []
         return userId
-    }, [location])
+    }, [])
 
     useEffect(() => {
         const linkDom = searchTwitterAvatarNFTLinkSelector().evaluate()
-        if (linkDom?.firstElementChild && linkDom.childNodes.length === 4) {
+        if (
+            linkDom?.firstElementChild &&
+            borderElement.current &&
+            borderElement.current === linkDom?.firstElementChild
+        ) {
             borderElement.current = linkDom.firstElementChild
             // remove useless border
             linkDom.removeChild(linkDom.firstElementChild)
         }
 
         const first = linkDom?.firstChild as HTMLDivElement
-        first.style.width = ''
-        first.style.height = ''
+        if (first?.style) {
+            first.style.width = ''
+            first.style.height = ''
+        }
 
         return () => {
             if (borderElement.current && borderElement.current !== linkDom?.firstElementChild) {
                 linkDom?.insertBefore(borderElement.current, linkDom.firstChild)
             }
         }
-    }, [location])
+    }, [twitterId])
 
     if (isZero(size) || !twitterId) return null
     return (
