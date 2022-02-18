@@ -15,6 +15,7 @@ import { formatAssets } from './format'
 import type { Web3Plugin } from '@masknet/plugin-infra'
 
 const ZERION_API = 'wss://api-v4.zerion.io'
+// cspell:disable-next-line
 const ZERION_TOKEN = 'Mask.yEUEfDnoxgLBwNEcYPVussxxjdrGwapj'
 
 let socket: SocketIOClient.Socket | null = null

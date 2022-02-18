@@ -77,6 +77,7 @@ function modify(manifest: Manifest, flags: NormalizedFlags) {
     }
 }
 
+// cspell: disable-next-line
 // ID: jkoeaghipilijlahjplgbfiocjhldnap
 // Note: with tihs key you cannot upload it to the extension store
 function stableDevelopmentExtensionID(manifest: Manifest) {

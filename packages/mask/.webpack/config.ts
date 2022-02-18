@@ -66,6 +66,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     // we can speed up the compile because there is no need to wait tsc build them to the dist folder.
                     '@masknet/dashboard$': require.resolve('../../dashboard/src/entry.tsx'),
                     '@masknet/injected-script': join(__dirname, '../../injected-script/sdk'),
+                    '@masknet/gun-utils': join(__dirname, '../../gun-utils/src/'),
                     '@masknet/shared': join(__dirname, '../../shared/src/'),
                     '@masknet/shared-base': join(__dirname, '../../shared-base/src/'),
                     '@masknet/theme': join(__dirname, '../../theme/src/'),

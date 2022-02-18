@@ -1,10 +1,8 @@
-import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base'
 import { useMemo, Suspense } from 'react'
 import { Skeleton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import MaskPluginWrapper from '../../MaskPluginWrapper'
-import { usePostInfoDetails } from '@masknet/plugin-infra'
+import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra'
 import { extractTextFromTypedMessage, parseURL } from '@masknet/shared-base'
 import { PostInspector } from './PostInspector'
 
@@ -47,24 +45,23 @@ const isFindTrumanURL = (input: string): boolean => {
 
 function Renderer({ url }: { url: string }) {
     const { classes } = useStyles()
+    usePluginWrapper(true)
+    const fallbackUI = Array.from({ length: 2 })
+        .fill(0)
+        .map((_, i) => (
+            <Skeleton
+                key={i}
+                className={classes.skeleton}
+                animation="wave"
+                variant="rectangular"
+                width={i === 0 ? '80%' : '60%'}
+                height={15}
+            />
+        ))
     return (
-        <MaskPluginWrapper pluginName="FindTruman">
-            <Suspense
-                fallback={Array.from({ length: 2 })
-                    .fill(0)
-                    .map((_, i) => (
-                        <Skeleton
-                            key={i}
-                            className={classes.skeleton}
-                            animation="wave"
-                            variant="rectangular"
-                            width={i === 0 ? '80%' : '60%'}
-                            height={15}
-                        />
-                    ))}>
-                <PostInspector url={url} />
-            </Suspense>
-        </MaskPluginWrapper>
+        <Suspense fallback={fallbackUI}>
+            <PostInspector url={url} />
+        </Suspense>
     )
 }
 

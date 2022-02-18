@@ -18,7 +18,9 @@ export const searchProfileSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-label][role="navigation"]')
 
 export const searchProfileTabListLastChildSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="primaryColumn"] [role="navigation"] [data-testid="ScrollSnap-nextButtonWrapper"]')
+    querySelector<E>(
+        '[data-testid="primaryColumn"] div + [role="navigation"][aria-label] [data-testid="ScrollSnap-nextButtonWrapper"]',
+    )
 
 export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
@@ -50,9 +52,7 @@ export const searchNewTweetButtonSelector: () => LiveSelector<E, true> = () => {
 export const searchNickNameSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="UserProfileHeader_Items"]')
 export const searchAvatarSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>(
-        '[data-testid="primaryColumn"] a[role="link"][href$="/header_photo"] + [class] img[src*="profile_images"]',
-    )
+    querySelector<E>('[data-testid="primaryColumn"] a[href$="/photo"] img[src*="profile_images"]')
 export const searchAvatarMetaSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('head > meta[property="og:image"]:last-child')
 

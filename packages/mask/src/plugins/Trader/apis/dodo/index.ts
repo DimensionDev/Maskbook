@@ -11,6 +11,7 @@ import { leftShift } from '@masknet/web3-shared-base'
 
 export async function swapRoute(request: SwapRouteRequest) {
     const response = await fetch(
+        // cspell:disable-next-line
         urlcat(DODO_BASE_URL, '/dodoapi/getdodoroute', {
             chainId: request.chainId,
             slippage: request.slippage,

@@ -3,18 +3,16 @@
 // Default fallback language in a family of languages are chosen by the alphabet order
 // To overwrite this, please overwrite packages/scripts/src/locale-kit-next/index.ts
 import en_US from './en-US.json'
-import zh_TW from './zh-TW.json'
 export const languages = {
     en: en_US,
-    zh: zh_TW,
 }
 // @ts-ignore
 if (import.meta.webpackHot) {
     // @ts-ignore
-    import.meta.webpackHot.accept(['./en-US.json', './zh-TW.json'], () =>
+    import.meta.webpackHot.accept(['./en-US.json'], () =>
         globalThis.dispatchEvent?.(
             new CustomEvent('MASK_I18N_HMR', {
-                detail: ['io.mask.example', { en: en_US, zh: zh_TW }],
+                detail: ['io.mask.example', { en: en_US }],
             }),
         ),
     )

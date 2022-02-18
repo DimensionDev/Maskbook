@@ -50,7 +50,7 @@ export function VotingCard() {
     const onVoteConfirm = useSnackbarCallback(
         () => {
             setLoading(true)
-            return PluginSnapshotRPC.vote(identifier, choice, account)
+            return PluginSnapshotRPC.vote(identifier, choice, account, proposal.type)
         },
         [choice, identifier],
         () => {
@@ -99,7 +99,7 @@ export function VotingCard() {
                 onClose={() => setOpen(false)}
                 choiceText={choices[choice - 1]}
                 snapshot={proposal.snapshot}
-                space={identifier.space}
+                powerSymbol={proposal.space.symbol}
                 power={power}
                 onVoteConfirm={onVoteConfirm}
             />
