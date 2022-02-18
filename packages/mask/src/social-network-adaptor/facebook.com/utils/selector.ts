@@ -17,15 +17,13 @@ export const searchUserIdOnMobileSelector: () => LiveSelector<HTMLAnchorElement,
 export const searchAvatarSelector: () => LiveSelector<HTMLImageElement, true> = () =>
     querySelector<HTMLImageElement>('[role="link"] [role="img"] image, [role="button"] [role="img"] image')
 
-export const searchNickNameSelector: () => LiveSelector<HTMLSpanElement, true> = () =>
-    querySelector<HTMLSpanElement>('span[dir="auto"] div h1')
+export const searchNickNameSelector: () => LiveSelector<HTMLHeadingElement, true> = () =>
+    querySelector<HTMLHeadingElement>('span[dir="auto"] div h1')
 
 export const searchNickNameSelectorOnMobile: () => LiveSelector<E, true> = () => querySelector<E>('#cover-name-root h3')
 
 export const bioDescriptionSelector = () =>
-    querySelector<HTMLSpanElement>('span[dir="auto"] div h1')
-        .closest(7)
-        .querySelector<HTMLSpanElement>('span[dir="auto"] > span')
+    querySelector('span[dir="auto"] div h1').closest(7).querySelector<HTMLSpanElement>('span[dir="auto"] > span')
 
 export const bioDescriptionSelectorOnMobile: () => LiveSelector<HTMLDivElement, true> = () => querySelector('#bio div')
 

@@ -19,8 +19,11 @@ import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 
 export function injectNFTAvatarInFacebook(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchFacebookAvatarSelector())
-    startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarInFacebook />)
+    if (!isMobileFacebook) {
+        startWatch(watcher, signal)
+        createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarInFacebook />)
+        return
+    }
 
     // mobile
     const mobileWatcher = new MutationObserverWatcher(searchFacebookAvatarOnMobileSelector())

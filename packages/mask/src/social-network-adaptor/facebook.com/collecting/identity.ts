@@ -53,7 +53,7 @@ function resolveCurrentVisitingIdentityInner(
         const avatar = getAvatar()
 
         ref.value = {
-            identifier: new ProfileIdentifier('facebook.com', handle ?? ''),
+            identifier: handle ? new ProfileIdentifier('facebook.com', handle) : ProfileIdentifier.unknown,
             nickname,
             avatar,
             bio,

@@ -63,7 +63,7 @@ function _(selector: () => LiveSelector<HTMLElement | SVGElement, false>, signal
             return {
                 onNodeMutation: run,
                 onTargetChanged: run,
-                onRemove: remove,
+                onRemove: () => remove(),
             }
         }),
         signal,

@@ -18,7 +18,7 @@ export function getInjectNodeInfo(element: HTMLElement | SVGElement) {
         return { element: nftDom, width, height, avatarId }
     }
 
-    const imgEle = element.querySelector<SVGImageElement>('i')
+    const imgEle = element.querySelector('i')
 
     if (!imgEle) return
 
