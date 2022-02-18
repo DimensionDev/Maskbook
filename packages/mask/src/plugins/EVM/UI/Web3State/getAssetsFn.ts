@@ -11,7 +11,15 @@ import {
     FungibleAssetProvider,
     createExternalProvider,
 } from '@masknet/web3-shared-evm'
-import { Pageable, Pagination, TokenType, Web3Plugin, ERC721TokenDetailed } from '@masknet/plugin-infra'
+import {
+    Pageable,
+    Pagination,
+    TokenType,
+    Web3Plugin,
+    ERC721TokenDetailed,
+    PluginId,
+    getNonFungibleAssets,
+} from '@masknet/plugin-infra'
 import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import type { AbiItem } from 'web3-utils'
@@ -19,7 +27,7 @@ import { uniqBy } from 'lodash-unified'
 import { PLUGIN_NETWORKS } from '../../constants'
 import { makeSortAssertWithoutChainFn } from '../../utils/token'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
-import { getProxyWebsocketInstance, NotifyFn } from '@masknet/web3-shared-base'
+import { getProxyWebsocketInstance } from '@masknet/web3-shared-base'
 
 export const getFungibleAssetsFn =
     (context: Web3ProviderType) =>
@@ -139,7 +147,7 @@ export const getNonFungibleTokenFn =
         const socket = await getProxyWebsocketInstance()
         let tokenInDb: ERC721TokenDetailed[] = []
         // validate and show trusted erc721 token in first page
-        if (pagination?.page === 0) {
+        if (pagination?.page === 0 && network?.networkSupporterPluginID === PluginId.EVM) {
             const trustedTokens = context.erc721Tokens.getCurrentValue()
             const calls = trustedTokens.map(async (x) => {
                 const web3 = new Web3(
@@ -169,20 +177,12 @@ export const getNonFungibleTokenFn =
             const fromChain = await Promise.all(calls)
             tokenInDb = fromChain.filter(Boolean) as any[]
         }
+        const { data: tokenFromProvider } = await getNonFungibleAssets(address, pagination, undefined, network, other)
 
-        const socketId = `mask.fetchNonFungibleCollectibleAsset_${address}_${network?.ID}`
-        socket.send({
-            id: socketId,
-            method: 'mask.fetchNonFungibleCollectibleAsset',
-            params: { address, network, pageSize: 40 },
-            notify: other?.notify as NotifyFn,
-        })
-
-        const tokenFromProvider = socket.getResult<ERC721TokenDetailed>(socketId)
         const allData: ERC721TokenDetailed[] = [...tokenInDb, ...tokenFromProvider]
             .filter((x) => isSameAddress(x.info.owner, address))
             .filter((x) => !network || x.contractDetailed.chainId === network.chainId)
-        console.log({ allData, tokenFromProvider, address, network, socketId })
+
         return {
             hasNextPage: tokenFromProvider.length === pagination?.size ?? 20,
             currentPage: pagination?.page ?? 0,

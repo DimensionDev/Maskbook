@@ -1,4 +1,4 @@
-import type { Web3Plugin } from '@masknet/plugin-infra'
+import { Web3Plugin, getNonFungibleAssets } from '@masknet/plugin-infra'
 import {
     NetworkType,
     ProviderType,
@@ -10,7 +10,7 @@ import { createConstantSubscription, mapSubscription } from '@masknet/shared-bas
 import { toFixed } from '@masknet/web3-shared-base'
 import { getStorage, StorageDefaultValue } from '../../storage'
 import { formatAddress } from '../../helpers'
-import { getFungibleAssets, getNonFungibleAssets } from '../../apis'
+import { getFungibleAssets } from '../../apis'
 
 function createSubscriptionFromChainId<T>(getter: (value: typeof StorageDefaultValue.chainId) => T) {
     return mapSubscription(getStorage().chainId.subscription, getter)

@@ -25,3 +25,4 @@ export * from './useWeb3UI'
 export * from './useWeb3State'
 
 export * from './Context'
+export * from './utils'

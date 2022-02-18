@@ -1,7 +1,7 @@
 import { Dispatch, memo, SetStateAction, useCallback, useEffect, useRef, useState } from 'react'
 import { Box, Stack, TablePagination } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { EMPTY_LIST } from '@masknet/web3-shared-evm'
+import { EMPTY_LIST, useAccount } from '@masknet/web3-shared-evm'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { CollectibleCard } from '../CollectibleCard'
@@ -49,7 +49,7 @@ const ITEM_SIZE = {
 export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) => {
     const [page, setPage] = useState(0)
     const navigate = useNavigate()
-    const account = '0x9eef2e4511390ce4'
+    const account = useAccount()
     const { Asset } = useWeb3PluginState()
     const network = useNetworkDescriptor()
     const [loadingSize, setLoadingSize] = useState(0)

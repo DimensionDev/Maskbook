@@ -1,4 +1,6 @@
-import type { Pageable, Pagination, Web3Plugin, ERC721TokenDetailed } from '@masknet/plugin-infra'
+import type { Pageable, Pagination } from '../../types'
+import type { Web3Plugin } from '../../web3-types'
+import type { ERC721TokenDetailed } from '../../web3-token-types'
 import { getProxyWebsocketInstance, NotifyFn } from '@masknet/web3-shared-base'
 
 export const getNonFungibleAssets = async (
