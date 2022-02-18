@@ -72,11 +72,11 @@ export const searchFacebookEditProfileSelector = () =>
 export const searchFacebookSaveAvatarButtonSelector = () =>
     new LiveSelector()
         .querySelector('[role="dialog"] [role="slider"]')
-        .closest<HTMLDivElement>(7)
+        .closest(7)
         .querySelectorAll('div')
         .map((x) => x.parentElement?.parentElement)
         .at(-1)
 
 export const searchFacebookConfirmAvatarImageSelector = () =>
-    querySelector('[role="dialog"] [role="slider"]').closest<HTMLDivElement>(7).querySelector('img')
+    querySelector('[role="dialog"] [role="slider"]').closest(7).querySelector('img')
 // #region
