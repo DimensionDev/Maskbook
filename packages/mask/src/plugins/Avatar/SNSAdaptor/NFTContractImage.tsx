@@ -1,5 +1,4 @@
 import { makeStyles } from '@masknet/theme'
-import { CircularProgress } from '@mui/material'
 import { useNFTAvatar } from '../hooks'
 import { useNFTVerified } from '../hooks/useNFTVerified'
 
@@ -24,11 +23,7 @@ export function NFTContractImage(props: NFTContractImageProps) {
 
     return (
         <div className={classes.root}>
-            {loading || loadingNFT ? (
-                <CircularProgress size="small" />
-            ) : contract ? (
-                <img className={classes.image} src={contract?.icon} />
-            ) : null}
+            {!loading && !loadingNFT && contract ? <img className={classes.image} src={contract?.icon} /> : null}
         </div>
     )
 }
