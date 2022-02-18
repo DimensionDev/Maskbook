@@ -1,4 +1,5 @@
 import { createContext, useEffect, useMemo } from 'react'
+import { useAsyncRetry } from 'react-use'
 import { useValueRef } from '@masknet/shared'
 import {
     ChainId,
@@ -6,7 +7,6 @@ import {
     isSameAddress,
     NonFungibleAssetProvider,
     SocketState,
-    useCollectibles,
     useCollections,
     Wallet,
 } from '@masknet/web3-shared-evm'
@@ -17,6 +17,7 @@ import { useI18N } from '../../../../utils'
 import { CollectibleCard } from './CollectibleCard'
 import { Image } from '../../../../components/shared/Image'
 import { WalletMessages } from '@masknet/plugin-wallet'
+import { useWeb3State as useWeb3PluginState, useNetworkDescriptor } from '@masknet/plugin-infra'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -210,19 +211,29 @@ export function CollectionList({ address }: { address: string }) {
     const chainId = ChainId.Mainnet
     const { t } = useI18N()
     const { classes } = useStyles()
-
+    const { Asset } = useWeb3PluginState()
+    const network = useNetworkDescriptor()
     const {
         data: collections,
         retry: retryFetchCollection,
         state: loadingCollectionDone,
     } = useCollections(address, chainId)
-    const {
-        data: collectibles,
-        state: loadingCollectibleDone,
-        retry: retryFetchCollectible,
-    } = useCollectibles(address, chainId, !!collections.length)
 
-    const isLoading = loadingCollectibleDone !== SocketState.done || loadingCollectionDone !== SocketState.done
+    const {
+        value,
+        loading: loadingCollectible,
+        retry: retryFetchCollectible,
+    } = useAsyncRetry(
+        async () =>
+            loadingCollectionDone === SocketState.done
+                ? Asset?.getNonFungibleAssets?.(address, { size: 30 }, undefined, network)
+                : { data: [] },
+        [address, Asset?.getNonFungibleAssets, loadingCollectionDone],
+    )
+
+    const collectibles = value?.data ?? []
+
+    const isLoading = loadingCollectible || loadingCollectionDone !== SocketState.done
 
     const renderWithRarible = useMemo(() => {
         if (isLoading) return []
@@ -281,7 +292,7 @@ export function CollectionList({ address }: { address: string }) {
                                 variant="body2"
                                 sx={{ fontSize: '16px' }}>
                                 {x.name}
-                                {loadingCollectibleDone && renderCollectibles.length
+                                {!loadingCollectible && renderCollectibles.length
                                     ? `(${renderCollectibles.length})`
                                     : null}
                             </Typography>
@@ -294,7 +305,7 @@ export function CollectionList({ address }: { address: string }) {
                                 retryFetchCollection()
                             }}
                             collectibles={renderCollectibles}
-                            loading={loadingCollectibleDone !== SocketState.done && renderCollectibles.length === 0}
+                            loading={loadingCollectible && renderCollectibles.length === 0}
                         />
                     </Box>
                 )

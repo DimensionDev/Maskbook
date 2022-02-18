@@ -1,4 +1,4 @@
-import { getAlchemyNFTList } from '@masknet/web3-providers'
+import { getOpenSeaNFTList, getRaribleNFTList, getNFTScanNFTs } from '@masknet/web3-providers'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import type { ProducerArgBase, ProducerKeyFunction, ProducerPushFunction, RPCMethodRegistrationValue } from '../types'
 import { collectAllPageData } from '../helper/request'
@@ -18,48 +18,43 @@ const nonFungibleCollectibleAsset = async (
     const size = 50
     const openSeaApiKey = await getKeys('opensea')
     try {
-        // await collectAllPageData<ERC721TokenDetailed>(
-        //     (page) => getOpenSeaNFTList(openSeaApiKey, address, page, size),
-        //     size,
-        //     push,
-        // )
-
         await collectAllPageData<ERC721TokenDetailed>(
-            async (page) => {
-                const r = (await getAlchemyNFTList(address, network, page, size)) as {
-                    data: ERC721TokenDetailed[]
-                    hasNextPage: boolean
-                }
-                console.log({ r: JSON.stringify(r) })
-                return r
-            },
+            (page) => getOpenSeaNFTList(openSeaApiKey, address, page, size),
             size,
             push,
         )
-    } finally {
+
         // await collectAllPageData<ERC721TokenDetailed>(
-        //     (page, pageInfo) => getRaribleNFTList(openSeaApiKey, address, page, size, pageInfo),
+        //     async (page) => {
+        //         const r = (await getAlchemyNFTList(address, network, page, size)) as {
+        //             data: ERC721TokenDetailed[]
+        //             hasNextPage: boolean
+        //         }
+        //         console.log({ r: JSON.stringify(r) })
+        //         return r
+        //     },
         //     size,
         //     push,
         // )
-        // try {
-        //     await collectAllPageData<ERC721TokenDetailed>(
-        //         (page, pageInfo) => getRaribleNFTList(openSeaApiKey, address, page, size, pageInfo),
-        //         size,
-        //         push,
-        //     )
-        // } finally {
-        //     await collectAllPageData<ERC721TokenDetailed>(
-        //         (page) => getNFTScanNFTs(address, 'erc721', page, size),
-        //         size,
-        //         push,
-        //     )
-        //     await collectAllPageData<ERC721TokenDetailed>(
-        //         (page) => getNFTScanNFTs(address, 'erc1155', page, size),
-        //         size,
-        //         push,
-        //     )
-        // }
+    } finally {
+        try {
+            await collectAllPageData<ERC721TokenDetailed>(
+                (page, pageInfo) => getRaribleNFTList(openSeaApiKey, address, page, size, pageInfo),
+                size,
+                push,
+            )
+        } finally {
+            await collectAllPageData<ERC721TokenDetailed>(
+                (page) => getNFTScanNFTs(address, 'erc721', page, size),
+                size,
+                push,
+            )
+            await collectAllPageData<ERC721TokenDetailed>(
+                (page) => getNFTScanNFTs(address, 'erc1155', page, size),
+                size,
+                push,
+            )
+        }
     }
 }
 
