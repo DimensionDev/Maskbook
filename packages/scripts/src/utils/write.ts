@@ -13,6 +13,6 @@ changeFile.JSON = (path: string, f: (x: any) => void) => {
         return prettier(JSON.stringify(obj), 'json')
     })
 }
-changeFile.typescript = (path: string, f: (x: any) => any) => {
+changeFile.typescript = (path: string, f: (x: string) => string) => {
     return changeFile(path, (content) => prettier(f(content), 'typescript'))
 }

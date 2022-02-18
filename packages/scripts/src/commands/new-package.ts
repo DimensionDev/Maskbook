@@ -71,8 +71,8 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
     const packagePath = resolve(ROOT_PATH, path)
     await ensureDir(packagePath)
 
+    // Copy package template
     if (type === 'plugin') {
-        const NormativeName = path.split('/').at(-1)
         // cp -r packages/plugins/template packages/plugins/NEW_PLUGIN
         await copy(resolve(ROOT_PATH, 'packages/plugins/template'), packagePath, {
             filter: (src) => {
@@ -80,13 +80,34 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
                 return true
             },
         })
+    } else {
+        // cp -r packages/empty packages/NEW_PACKAGE
+        await copy(resolve(ROOT_PATH, 'packages/empty'), packagePath, {
+            filter: (src) => {
+                if (src.includes('node_modules') || src.includes('dist')) return false
+                return true
+            },
+        })
+    }
+
+    // Add to webpack alias
+    await changeFile.typescript(resolve(ROOT_PATH, 'packages/mask/.webpack/config.ts'), (content) =>
+        content.replace(
+            INSERT_HERE,
+            `'${npmName}': join(__dirname, '../../${path.replace('package/', '')}/src'),\n${INSERT_HERE}`,
+        ),
+    )
+
+    // Fix package name
+    await changeFile.JSON(resolve(packagePath, 'package.json'), (content) => {
+        content.name = npmName
+    })
+
+    if (type === 'plugin') {
+        const NormativeName = path.split('/').at(-1)
         await changeFile.typescript(resolve(packagePath, 'src/constants.ts'), (content) =>
             content.replace('PluginId.Example', `PluginId.${NormativeName}`),
         )
-        await changeFile.JSON(resolve(packagePath, 'package.json'), (content) => {
-            content.name = npmName
-        })
-
         /**
          * .i18n-codegen.json
          * packages/plugins/tsconfig.json
@@ -126,16 +147,6 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
             content.replace(INSERT_HERE + ' 3', `"${npmName}": ["./${path}/src"],\n      ${INSERT_HERE} 3`),
         )
     } else {
-        // cp -r packages/empty packages/NEW_PACKAGE
-        await copy(resolve(ROOT_PATH, 'packages/empty'), packagePath, {
-            filter: (src) => {
-                if (src.includes('node_modules') || src.includes('dist')) return false
-                return true
-            },
-        })
-        await changeFile.JSON(resolve(packagePath, 'package.json'), (content) => {
-            content.name = npmName
-        })
         await changeFile(resolve(ROOT_PATH, 'tsconfig.json'), (content) =>
             content
                 .replace(INSERT_HERE + ' 1', `${INSERT_HERE} 1\n    { "path": "./${path}/tsconfig.tests.json" },`)

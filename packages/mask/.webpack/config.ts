@@ -91,6 +91,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@masknet/sdk': join(__dirname, '../../mask-sdk/server/'),
                     '@masknet/backup-format': join(__dirname, '../../backup-format/src/'),
                     '@masknet/encryption': join(__dirname, '../../encryption/src'),
+                    // @masknet/scripts: insert-here
                     '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
                 }
                 if (profiling) {
