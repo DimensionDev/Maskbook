@@ -8,6 +8,7 @@
     { "path": "./Wallet/" },
     { "path": "./FileService/" },
     { "path": "./RSS3/" },
-    { "path": "./DAO/" }
+    { "path": "./DAO/" },
+    { "path": "./CyberConnect/" }
   ]
 }

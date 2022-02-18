@@ -115,12 +115,15 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
             content.replace(INSERT_HERE, `${NormativeName} = '${pluginID}'\n${INSERT_HERE}`),
         )
         await changeFile.typescript(
-            resolve(ROOT_PATH, `packages/mask/src/plugin-infra/register.ts`),
+            resolve(ROOT_PATH, `packages/mask/src/plugin-infra/register.js`),
             (content) => `${content}import '${npmName}'`,
         )
         await awaitChildProcess(shell.cwd(ROOT_PATH)`pnpm install --prefer-offline -C packages/mask ${npmName}`)
         await changeFile(resolve(ROOT_PATH, 'packages/mask/package.json'), (content) =>
             content.replaceAll(/workspace:\^undefined/g, 'workspace:*'),
+        )
+        await changeFile(resolve(ROOT_PATH, 'tsconfig.json'), (content) =>
+            content.replace(INSERT_HERE + ' 3', `"${npmName}": ["./${path}/src"],\n      ${INSERT_HERE} 3`),
         )
     } else {
         // cp -r packages/empty packages/NEW_PACKAGE
@@ -134,9 +137,11 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
             content.name = npmName
         })
         await changeFile(resolve(ROOT_PATH, 'tsconfig.json'), (content) =>
-            content.replace(INSERT_HERE, `${INSERT_HERE}\n    { "path": "./${path}/tsconfig.tests.json" },`),
+            content
+                .replace(INSERT_HERE + ' 1', `${INSERT_HERE} 1\n    { "path": "./${path}/tsconfig.tests.json" },`)
+                .replace(INSERT_HERE + ' 2', `"${npmName}": ["./${path}/src"],\n      ${INSERT_HERE} 2`),
         )
-        await changeFile(resolve(packagePath, 'README.md'), (content) => `# ${npmName}`)
+        await changeFile(resolve(packagePath, 'README.md'), () => `# ${npmName}`)
     }
 
     // regenerate lockfile and install dependencies for newly installed packages
