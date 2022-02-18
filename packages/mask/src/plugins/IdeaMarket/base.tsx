@@ -6,7 +6,7 @@ export const base: Plugin.Shared.Definition = {
     ID: 'io.ideamarket',
     icon: <IdeaMarketIcon />,
     name: { fallback: 'IdeaMarket' },
-    description: { fallback: 'The literal marketplace of ideas' },
+    description: { fallback: 'Ideamarket is a dapp for creating public narratives without trusted third parties.' },
     publisher: { name: { fallback: 'sebastianLF' }, link: 'https://github.com/sebastianLF' },
     enableRequirement: {
         architecture: { app: true, web: true },
