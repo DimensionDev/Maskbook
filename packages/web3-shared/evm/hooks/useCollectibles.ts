@@ -33,7 +33,11 @@ export function useCollectibles(address: string, chainId: ChainId | null, depend
     const all = uniqWith(
         [
             ...(data ?? []),
-            ...erc721Tokens.getCurrentValue().filter((x) => !chainId || x.contractDetailed.chainId === chainId),
+            ...erc721Tokens
+                .getCurrentValue()
+                .filter(
+                    (x) => (!chainId || x.contractDetailed.chainId === chainId) && isSameAddress(x.info.owner, address),
+                ),
         ],
         (a, b) => isSameAddress(a.contractDetailed.address, b.contractDetailed.address) && a.tokenId === b.tokenId,
     )
