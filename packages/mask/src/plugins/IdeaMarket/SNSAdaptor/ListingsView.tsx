@@ -1,20 +1,23 @@
-import { useFetchIdeaTokens } from '../hooks/useFetchIdeaTokens'
-import { Box, Button, IconButton, TextField } from '@mui/material'
-import { DataGrid } from '@mui/x-data-grid'
-import type { IdeaToken } from '../types'
-import { formatterToUSD } from '../utils'
-import { formatWeiToEther } from '@masknet/web3-shared-evm'
-import { renderInvestButton } from '../SNSAdaptor/InvestButton'
-import { escapeRegExp } from 'lodash-unified'
 import { useCallback, useEffect, useState } from 'react'
+import { useFetchIdeaTokens } from '../hooks/useFetchIdeaTokens'
+import { makeStyles } from '@masknet/theme'
+import { Box, Button, Grid, IconButton, TextField } from '@mui/material'
+import { DataGrid, GridRenderCellParams, GridValueFormatterParams } from '@mui/x-data-grid'
+import type { IdeaToken } from '../types'
+import { displaySocialName, formatterToUSD } from '../utils'
+import { formatWeiToEther } from '@masknet/web3-shared-evm'
+import { escapeRegExp } from 'lodash-unified'
 import { SearchIcon } from '@masknet/icons'
 import ClearIcon from '@mui/icons-material/Clear'
+import { InvestButton } from '../SNSAdaptor/InvestButton'
 
-// QuickSearchToolbar.propTypes = {
-//     clearSearch: PropTypes.func.isRequired,
-//     onChange: PropTypes.func.isRequired,
-//     value: PropTypes.string.isRequired,
-// }
+const useStyles = makeStyles()((theme) => {
+    return {
+        subname: {
+            color: 'rgba(8,87,224,1)',
+        },
+    }
+})
 
 interface QuickSearchToolbarProps {
     clearSearch: () => void
@@ -69,6 +72,7 @@ function QuickSearchToolbar(props: QuickSearchToolbarProps) {
 export function ListingsView() {
     const [searchText, setSearchText] = useState('')
     const [rows, setRows] = useState([])
+    const { classes } = useStyles()
     const { value, error, loading } = useFetchIdeaTokens()
     const formattedData = useCallback(
         () =>
@@ -76,19 +80,49 @@ export function ListingsView() {
                 return {
                     id: token.id,
                     name: token.name,
-                    price: formatterToUSD.format(token.latestPricePoint.price),
-                    deposits: formatterToUSD.format(formatWeiToEther(token.daiInToken).toNumber()),
+                    price: token.latestPricePoint.price,
+                    deposits: formatWeiToEther(token.daiInToken).toNumber(),
                     button: <Button />,
                 }
             }),
         [value, formatterToUSD],
     )
 
+    const renderNameCell = (params: GridRenderCellParams<String>) => (
+        <Grid direction="column">
+            <div>{params.row.name}</div>
+            <div className={classes.subname}>{displaySocialName(params.row.name)}</div>
+        </Grid>
+    )
+
+    // const renderSearchHeader = (params: GridColumnHeaderParams) => <QuickSearchToolbar />
+
     const columns = [
-        { field: 'name' },
-        { field: 'price' },
-        { field: 'deposits' },
-        { field: 'button', headerName: '', renderCell: renderInvestButton },
+        { field: 'name', headerName: 'Name', headerAlign: 'left' as const, flex: 1, renderCell: renderNameCell },
+        {
+            field: 'price',
+            headerName: 'Price',
+            type: 'number',
+            headerAlign: 'center' as const,
+            align: 'center' as const,
+            valueFormatter: (params: GridValueFormatterParams) => formatterToUSD.format(params.value as number),
+        },
+        {
+            field: 'deposits',
+            headerName: 'Deposits',
+            headerAlign: 'center' as const,
+            type: 'number',
+            align: 'center' as const,
+            valueFormatter: (params: GridValueFormatterParams) => formatterToUSD.format(params.value as number),
+        },
+        {
+            field: 'button',
+            headerName: '',
+            sortable: false,
+            width: 130,
+            align: 'right' as const,
+            renderCell: (params: GridRenderCellParams) => <InvestButton params={params} />,
+        },
     ]
 
     const requestSearch = (searchValue: any) => {
@@ -107,8 +141,11 @@ export function ListingsView() {
     }, [formattedData])
 
     return (
-        <Box sx={{ height: 400 }}>
+        <div style={{ height: 350, width: '100%' }}>
             <DataGrid
+                disableSelectionOnClick
+                disableColumnMenu
+                headerHeight={18}
                 components={{ Toolbar: QuickSearchToolbar }}
                 rows={rows}
                 columns={columns}
@@ -120,6 +157,6 @@ export function ListingsView() {
                     },
                 }}
             />
-        </Box>
+        </div>
     )
 }

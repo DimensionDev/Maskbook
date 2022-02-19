@@ -34,3 +34,10 @@ export const formatterToUSD = new Intl.NumberFormat('en-US', {
 export function formatSymbol(symbol: string) {
     return symbol.length > 60 ? symbol.slice(0, -3).concat('...') : symbol
 }
+
+export function displaySocialName(social: string) {
+    if (social.startsWith('https://')) return 'Website'
+    if (social.startsWith('@')) return 'Twitter'
+
+    return 'Unknown'
+}

@@ -3,6 +3,7 @@ import { useERC20TokenDetailed } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { formatSymbol } from '../utils'
+import type { Coin } from '../../Trader/types'
 
 interface InvestButtonProps {
     params: any
@@ -11,19 +12,22 @@ interface InvestButtonProps {
 export function InvestButton(props: InvestButtonProps) {
     const { params } = props
     const { value: token } = useERC20TokenDetailed(params.row.id)
-    const { setDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
+    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
     const formattedSymbol = !token?.symbol || !token?.name ? '' : formatSymbol(`${token?.symbol} (${token?.name})`)
 
     return (
         <>
             <Link href="https://ideamarket.io" target="_blank">
-                View details
+                View
             </Link>
             <Button
+                style={{ marginLeft: 16 }}
+                color="primary"
+                size="small"
                 variant="contained"
                 onClick={() =>
-                    setDialog({
+                    setBuyDialog({
                         open: true,
                         traderProps: {
                             coin: {
@@ -32,7 +36,8 @@ export function InvestButton(props: InvestButtonProps) {
                                 symbol: formattedSymbol,
                                 contract_address: params.row.id,
                                 decimals: token?.decimals,
-                            },
+                                image_url: '../icons/ideamarket-logo.png',
+                            } as Coin,
                         },
                     })
                 }>
@@ -40,8 +45,4 @@ export function InvestButton(props: InvestButtonProps) {
             </Button>
         </>
     )
-}
-
-export function renderInvestButton(params: any) {
-    return <InvestButton params={params} />
 }
