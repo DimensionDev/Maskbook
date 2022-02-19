@@ -122,6 +122,7 @@ export namespace NonFungibleTokenAPI {
     export interface AssetTrait {
         trait_type: string
         value: string
+        percentage?: number
     }
 
     export interface AssetToken {

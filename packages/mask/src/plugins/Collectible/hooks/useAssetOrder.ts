@@ -33,6 +33,7 @@ export function useAssetOrder(provider: NonFungibleAssetProvider, token?: Collec
             case NonFungibleAssetProvider.NFTSCAN:
                 return
             case NonFungibleAssetProvider.ZORA:
+            case NonFungibleAssetProvider.TREASURE:
                 return
             default:
                 unreachable(provider)

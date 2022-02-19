@@ -57,6 +57,7 @@ export const resolveCollectibleProviderName = createLookupTableResolver<NonFungi
         [NonFungibleAssetProvider.RARIBLE]: 'Rarible',
         [NonFungibleAssetProvider.NFTSCAN]: 'NFTScan',
         [NonFungibleAssetProvider.ZORA]: 'Zora',
+        [NonFungibleAssetProvider.TREASURE]: 'Treasure',
     },
     (providerType) => {
         throw new Error(`Unknown provider type: ${providerType}.`)
@@ -96,6 +97,13 @@ export const resolveLinkOnZora = createLookupTableResolver<ChainId, string>(
     'https://zora.co',
 )
 
+export const resolveLinkOnTreasure = createLookupTableResolver<ChainId, string>(
+    {
+        [ChainId.Mainnet]: 'https://marketplace.treasure.lol',
+    },
+    'https://marketplace.treasure.lol',
+)
+
 export function resolveTraitLinkOnOpenSea(chainId: ChainId, slug: string, search: string, value: string) {
     if (chainId === ChainId.Rinkeby) {
         return `https://testnets.opensea.io/assets/${slug}?search[stringTraits][0][name]=${search}&search[stringTraits][0][values][0]=${value}`
@@ -119,6 +127,8 @@ export function resolveAssetLinkOnCurrentProvider(
             return ''
         case NonFungibleAssetProvider.ZORA:
             return urlcat(resolveLinkOnZora(chainId), '/collections/:address/:id', { address, id })
+        case NonFungibleAssetProvider.TREASURE:
+            return urlcat(resolveLinkOnTreasure(chainId), '/collection/:address/:id', { address, id })
         default:
             return ''
     }
@@ -139,6 +149,8 @@ export function resolveUserUrlOnCurrentProvider(
             return ''
         case NonFungibleAssetProvider.ZORA:
             return urlcat(resolveLinkOnZora(chainId), `/${address}`)
+        case NonFungibleAssetProvider.TREASURE:
+            return ''
         default:
             return ''
     }
@@ -151,8 +163,8 @@ export function resolveAvatarLinkOnCurrentProvider(chainId: ChainId, asset: any,
         case NonFungibleAssetProvider.RARIBLE:
             return urlcat(resolveLinkOnRarible(chainId), `/collection/${asset.token_address ?? ''}`)
         case NonFungibleAssetProvider.NFTSCAN:
-            return ''
         case NonFungibleAssetProvider.ZORA:
+        case NonFungibleAssetProvider.TREASURE:
             return ''
         default:
             return ''

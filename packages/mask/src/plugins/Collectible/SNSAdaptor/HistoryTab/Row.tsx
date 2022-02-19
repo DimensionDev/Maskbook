@@ -11,6 +11,7 @@ import { Account } from '../Account'
 import { getOrderUnitPrice, NonFungibleTokenAPI } from '@masknet/web3-providers'
 import type { OpenSeaAssetEventType } from '../../types/opensea'
 import type { RaribleEventType } from '../../types'
+import { Linking } from '../../../../components/shared/Linking'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -128,27 +129,27 @@ export function Row({ event, isDifferenceToken }: Props) {
             </TableCell>
             <TableCell>
                 {event.accountPair.to && (
-                    <Link
+                    <Linking
                         href={event.accountPair.to.link}
-                        title={event.accountPair.to.username ?? event.accountPair.to.address ?? ''}
-                        target="_blank"
-                        className={classes.account}
-                        rel="noopener noreferrer">
+                        LinkProps={{
+                            className: classes.account,
+                            title: event.accountPair.to.username ?? event.accountPair.to.address ?? '',
+                        }}>
                         <Avatar src={event.accountPair.to.imageUrl} className={classes.avatar} />
                         <Typography className={classes.accountName} variant="body2">
                             <Account username={event.accountPair.to.username} address={event.accountPair.to.address} />
                         </Typography>
-                    </Link>
+                    </Linking>
                 )}
             </TableCell>
             <TableCell className={classes.relativeTime}>
                 {event.transactionBlockExplorerLink ? (
-                    <Link href={event.transactionBlockExplorerLink} target="_blank" rel="noopener noreferrer">
+                    <Linking href={event.transactionBlockExplorerLink}>
                         <Typography className={classes.content} variant="body2">
                             {formatElapsed(event.timestamp)}
                             <LinkIcon fontSize="inherit" />
                         </Typography>
-                    </Link>
+                    </Linking>
                 ) : (
                     <Typography className={classes.content} color="primary" variant="body2">
                         {formatElapsed(event.timestamp)}

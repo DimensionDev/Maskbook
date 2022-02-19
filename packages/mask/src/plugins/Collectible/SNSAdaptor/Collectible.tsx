@@ -1,5 +1,5 @@
 import { ReactElement, useCallback } from 'react'
-import { Box, Button, CardActions, CardContent, CardHeader, Link, Paper, Tab, Tabs, Typography } from '@mui/material'
+import { Box, Button, CardActions, CardContent, CardHeader, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import { findIndex } from 'lodash-unified'
@@ -26,6 +26,8 @@ import { getEnumAsArray } from '@dimensiondev/kit'
 import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/FootnoteMenu'
 import { LoadingAnimation } from '@masknet/shared'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
+import { TAB_CONTROL } from '../constants'
+import { Linking } from '../../../components/shared/Linking'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -128,6 +130,10 @@ export function Collectible(props: CollectibleProps) {
     const chainId = useChainId()
     const { token, asset, provider, setProvider, tabIndex, setTabIndex } = CollectibleState.useContainer()
 
+    // #region tab controls
+    const tabControl = TAB_CONTROL[provider]
+    // #endregion
+
     // #region sync with settings
     const collectibleProviderOptions = getEnumAsArray(NonFungibleAssetProvider)
     const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
@@ -162,11 +168,40 @@ export function Collectible(props: CollectibleProps) {
             </Box>
         )
     const tabs = [
-        <Tab className={classes.tab} key="article" label={t('plugin_collectible_article')} />,
-        <Tab className={classes.tab} key="details" label={t('plugin_collectible_details')} />,
-        <Tab className={classes.tab} key="offers" label={t('plugin_collectible_offers')} />,
-        <Tab className={classes.tab} key="listing" label={t('plugin_collectible_listing')} />,
-        <Tab className={classes.tab} key="history" label={t('plugin_collectible_history')} />,
+        <Tab
+            className={classes.tab}
+            key="article"
+            label={t('plugin_collectible_article')}
+            value={CollectibleTab.ARTICLE}
+        />,
+        <Tab
+            className={classes.tab}
+            key="details"
+            label={t('plugin_collectible_details')}
+            value={CollectibleTab.TOKEN}
+        />,
+        !tabControl.offers && (
+            <Tab
+                className={classes.tab}
+                key="offers"
+                label={t('plugin_collectible_offers')}
+                value={CollectibleTab.OFFER}
+            />
+        ),
+        !tabControl.listing && (
+            <Tab
+                className={classes.tab}
+                key="listing"
+                label={t('plugin_collectible_listing')}
+                value={CollectibleTab.LISTING}
+            />
+        ),
+        <Tab
+            className={classes.tab}
+            key="history"
+            label={t('plugin_collectible_history')}
+            value={CollectibleTab.HISTORY}
+        />,
     ]
 
     const renderTab = (tabIndex: CollectibleTab) => {
@@ -202,10 +237,7 @@ export function Collectible(props: CollectibleProps) {
                     title={
                         <Typography style={{ display: 'flex', alignItems: 'center' }}>
                             {token ? (
-                                <Link
-                                    color="primary"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                                <Linking
                                     href={resolveAssetLinkOnCurrentProvider(
                                         chainId,
                                         token.contractAddress,
@@ -213,7 +245,7 @@ export function Collectible(props: CollectibleProps) {
                                         provider,
                                     )}>
                                     {_asset.name ?? ''}
-                                </Link>
+                                </Linking>
                             ) : (
                                 _asset.name ?? ''
                             )}

@@ -6,7 +6,7 @@ import type { DataProvider } from '@masknet/public-api'
 import { useSnackbarCallback, FormattedAddress } from '@masknet/shared'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import type { Trending } from '../../types'
-import { Linking } from './Linking'
+import { Linking } from '../../../../components/shared/Linking'
 import { CoinMetadataTags } from './CoinMetadataTags'
 import { useI18N } from '../../../../utils'
 

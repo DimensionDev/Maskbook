@@ -21,10 +21,15 @@ const useStyles = makeStyles()({
         height: 16,
         verticalAlign: 'bottom',
     },
+    treasure: {
+        width: 16,
+        height: 16,
+        verticalAlign: 'bottom',
+    },
 })
 
 const NFTScanIcon = new URL('../../../resources/NFTScanIcon.png', import.meta.url).toString()
-
+const TreasureIcon = new URL('../../../resources/treasure.png', import.meta.url).toString()
 export interface CollectibleProviderIconProps {
     provider: NonFungibleAssetProvider
 }
@@ -40,6 +45,8 @@ export function CollectibleProviderIcon(props: CollectibleProviderIconProps) {
             return <RaribleIcon classes={{ root: classes.rarible }} viewBox="0 0 16 16" />
         case NonFungibleAssetProvider.ZORA:
             return <ZoraIcon classes={{ root: classes.rarible }} viewBox="0 0 16 16" />
+        case NonFungibleAssetProvider.TREASURE:
+            return <img src={TreasureIcon} className={classes.treasure} />
         default:
             unreachable(props.provider)
     }

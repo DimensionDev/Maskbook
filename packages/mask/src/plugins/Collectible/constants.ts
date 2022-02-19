@@ -1,10 +1,29 @@
 import { PluginId } from '@masknet/plugin-infra'
+import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 
 export const PLUGIN_NAME = 'Collectibles'
 export const PLUGIN_ICON = '\u{1F5BC}\uFE0F'
 export const PLUGIN_DESCRIPTION = 'An NFT collectible viewer.'
 export const PLUGIN_ID = PluginId.Collectible
 export const PLUGIN_META_KEY = `${PluginId.Collectible}:1`
+
+// Set true to hide the corresponding tabs
+export const TAB_CONTROL: Record<
+    NonFungibleAssetProvider,
+    {
+        offers?: boolean
+        listing?: boolean
+    }
+> = {
+    [NonFungibleAssetProvider.OPENSEA]: {},
+    [NonFungibleAssetProvider.RARIBLE]: {},
+    [NonFungibleAssetProvider.NFTSCAN]: {},
+    [NonFungibleAssetProvider.ZORA]: {},
+    [NonFungibleAssetProvider.TREASURE]: {
+        offers: true,
+        listing: true,
+    },
+}
 
 export const openseaHostnames = ['opensea.io', 'testnets.opensea.io']
 export const openseaPathnameRegexMatcher = /^\/assets\/(0x[\dA-Fa-f]{40})\/(\d+)/
@@ -14,6 +33,9 @@ export const rariblePathnameRegexMatcher = /^\/token\/(0x[\dA-Fa-f]{40}):(\d+)/
 
 export const zoraHostnames = ['zora.co']
 export const zoraPathnameRegexMatcher = /^\/collections\/(0x[\dA-Fa-f]{40})\/(\d+)$/
+
+export const treasureHostnames = ['marketplace.treasure.lol']
+export const treasurePathnameRegexMatcher = /^\/collection\/([\w\-]+)\/(\d+)/
 
 export const OpenSeaAPI_Key = 'c38fe2446ee34f919436c32db480a2e3'
 export const OpenSeaBaseURL = 'https://api.opensea.io/api/v1/'

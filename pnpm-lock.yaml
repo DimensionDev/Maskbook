@@ -1182,7 +1182,8 @@ importers:
       '@masknet/web3-shared-evm': link:../web3-shared/evm
       bignumber.js: 9.0.2
       date-fns: 2.28.0
-      graphql-request: 3.5.0
+      graphql: 15.5.3
+      graphql-request: 3.5.0_graphql@15.5.3
       json-stable-stringify: 1.0.1
       lodash-unified: 1.0.2_da03a4540fbd16bbaafbb96724306afd
       lru-cache: 7.7.1
@@ -17270,16 +17271,6 @@ packages:
   /graceful-fs/4.2.9:
     resolution: {integrity: sha512-NtNxqUcXgpW2iMrfqSfR73Glt39K+BLwWsPs94yR63v45T0Wbej7eRmL5cWfwEgqXnmjQp3zaJTshdRW/qC2ZQ==}
 
-  /graphql-request/3.5.0:
-    resolution: {integrity: sha512-Io89QpfU4rqiMbqM/KwMBzKaDLOppi8FU8sEccCE4JqCgz95W9Q8bvxQ4NfPALLSMvg9nafgg8AkYRmgKSlukA==}
-    peerDependencies:
-      graphql: 14.x || 15.x
-    dependencies:
-      cross-fetch: 3.1.4
-      extract-files: 9.0.0
-      form-data: 3.0.1
-    dev: false
-
   /graphql-request/3.5.0_graphql@15.5.3:
     resolution: {integrity: sha512-Io89QpfU4rqiMbqM/KwMBzKaDLOppi8FU8sEccCE4JqCgz95W9Q8bvxQ4NfPALLSMvg9nafgg8AkYRmgKSlukA==}
     peerDependencies:
@@ -27799,7 +27790,7 @@ packages:
     dev: true
 
   github.com/ProjectOpenSea/wyvern-js/6f85f1b42f0962d2cc8e97b7e7f680865e3f26c1:
-    resolution: {tarball: https://codeload.github.com/ProjectOpenSea/wyvern-js/tar.gz/6f85f1b42f0962d2cc8e97b7e7f680865e3f26c1}
+    resolution: {commit: 6f85f1b42f0962d2cc8e97b7e7f680865e3f26c1, repo: git+ssh://git@github.com/ProjectOpenSea/wyvern-js.git, type: git}
     name: wyvern-js
     version: 3.2.0
     dependencies:
@@ -27819,7 +27810,7 @@ packages:
     dev: false
 
   github.com/ProjectOpenSea/wyvern-js/fabb7660f23f2252c141077e32193d281036299e:
-    resolution: {tarball: https://codeload.github.com/ProjectOpenSea/wyvern-js/tar.gz/fabb7660f23f2252c141077e32193d281036299e}
+    resolution: {commit: fabb7660f23f2252c141077e32193d281036299e, repo: git+ssh://git@github.com/ProjectOpenSea/wyvern-js.git, type: git}
     name: wyvern-js
     version: 3.2.0
     dependencies:
@@ -27851,7 +27842,7 @@ packages:
     dev: false
 
   github.com/ProjectOpenSea/wyvern-schemas/e1a08fcf8ce2b11a0fe9cbdc7c9f77c59fadef26:
-    resolution: {tarball: https://codeload.github.com/ProjectOpenSea/wyvern-schemas/tar.gz/e1a08fcf8ce2b11a0fe9cbdc7c9f77c59fadef26}
+    resolution: {commit: e1a08fcf8ce2b11a0fe9cbdc7c9f77c59fadef26, repo: git+ssh://git@github.com/ProjectOpenSea/wyvern-schemas.git, type: git}
     name: wyvern-schemas
     version: 0.10.7
     dependencies:
@@ -27892,13 +27883,13 @@ packages:
     dev: false
 
   github.com/frozeman/bignumber.js-nolookahead/57692b3ecfc98bbdd6b3a516cb2353652ea49934:
-    resolution: {tarball: https://codeload.github.com/frozeman/bignumber.js-nolookahead/tar.gz/57692b3ecfc98bbdd6b3a516cb2353652ea49934}
+    resolution: {commit: 57692b3ecfc98bbdd6b3a516cb2353652ea49934, repo: git+ssh://git@github.com/frozeman/bignumber.js-nolookahead.git, type: git}
     name: bignumber.js
     version: 2.0.7
     dev: false
 
   github.com/locize/html-parse-stringify2/d463109433b2c49c74a081044f54b2a6a1ccad7c:
-    resolution: {tarball: https://codeload.github.com/locize/html-parse-stringify2/tar.gz/d463109433b2c49c74a081044f54b2a6a1ccad7c}
+    resolution: {commit: d463109433b2c49c74a081044f54b2a6a1ccad7c, repo: git+ssh://git@github.com/locize/html-parse-stringify2.git, type: git}
     name: html-parse-stringify2
     version: 2.0.1
     dependencies:
