@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, useCallback } from 'react'
 import { useAsyncRetry } from 'react-use'
+import Web3 from 'web3'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import addDays from 'date-fns/addDays'
 import subDays from 'date-fns/subDays'
@@ -28,6 +29,7 @@ import {
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { BoxInfo, BoxState } from '../type'
 import { useMaskBoxInfo } from './useMaskBoxInfo'
+import { useGetRootHash } from './useGetRootHash'
 import { useMaskBoxStatus } from './useMaskBoxStatus'
 import { useMaskBoxCreationSuccessEvent } from './useMaskBoxCreationSuccessEvent'
 import { useMaskBoxTokensForSale } from './useMaskBoxTokensForSale'
@@ -38,7 +40,7 @@ import { useMaskBoxMetadata } from './useMaskBoxMetadata'
 import { useIsWhitelisted } from './useIsWhitelisted'
 import { isGreaterThanOrEqualTo, isLessThanOrEqualTo, isZero, multipliedBy, useBeat } from '@masknet/web3-shared-base'
 
-function useContext(initialState?: { boxId: string }) {
+function useContext(initialState?: { boxId: string; qualification: string }) {
     const now = new Date()
     const beat = useBeat()
     const account = useAccount()
@@ -47,6 +49,7 @@ function useContext(initialState?: { boxId: string }) {
     const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants()
 
     const [boxId, setBoxId] = useState(initialState?.boxId ?? '')
+    const qualification = initialState?.qualification?.replace(/0x/, '')
     const [paymentTokenAddress, setPaymentTokenAddress] = useState('')
 
     // #region the box info
@@ -56,6 +59,14 @@ function useContext(initialState?: { boxId: string }) {
         loading: loadingMaskBoxInfo,
         retry: retryMaskBoxInfo,
     } = useMaskBoxInfo(boxId)
+
+    // #get hashroot
+    const { value, error: errorRootHash } = useGetRootHash(
+        qualification || '0x0000000000000000000000000000000000000000000000000000000000000000',
+    )
+    const web3 = new Web3()
+    const hashroot = value ? web3.eth.abi.encodeParameters(['bytes32[]'], [value?.proof?.map((p) => '0x' + p)]) : '0x00'
+
     const {
         value: maskBoxStatus = null,
         error: errorMaskBoxStatus,
@@ -135,6 +146,7 @@ function useContext(initialState?: { boxId: string }) {
     ])
 
     const boxState = useMemo(() => {
+        if (errorRootHash?.message === 'leaf not found') return BoxState.NOT_IN_WHITELIST
         if (errorMaskBoxInfo || errorMaskBoxStatus || errorBoxInfo) return BoxState.ERROR
         if (loadingMaskBoxInfo || loadingMaskBoxStatus || loadingBoxInfo) {
             if (!maskBoxInfo && !boxInfo) return BoxState.UNKNOWN
@@ -149,7 +161,7 @@ function useContext(initialState?: { boxId: string }) {
         return BoxState.READY
     }, [boxInfo, loadingBoxInfo, errorBoxInfo, maskBoxInfo, loadingMaskBoxInfo, errorMaskBoxInfo, beat])
 
-    const isWhitelisted = useIsWhitelisted(boxInfo?.qualificationAddress, account)
+    const isWhitelisted = useIsWhitelisted(boxInfo?.qualificationAddress, account, hashroot)
     const isQualifiedByContract =
         boxInfo?.qualificationAddress && !isZeroAddress(boxInfo?.qualificationAddress) ? isWhitelisted : true
 
@@ -179,6 +191,8 @@ function useContext(initialState?: { boxId: string }) {
                 return countdown ? `Start sale in ${countdown}` : 'Loading...'
             case BoxState.SOLD_OUT:
                 return 'Sold Out'
+            case BoxState.NOT_IN_WHITELIST:
+                return 'You are not in whitelist'
             case BoxState.DRAWED_OUT:
                 return 'Purchase limit exceeded'
             case BoxState.ERROR:
@@ -255,6 +269,7 @@ function useContext(initialState?: { boxId: string }) {
         paymentTokenIndex,
         paymentTokenPrice,
         paymentTokenDetailed,
+        hashroot,
         openBoxTransactionOverrides,
     )
     const { value: erc20Allowance, retry: retryAllowance } = useERC20TokenAllowance(

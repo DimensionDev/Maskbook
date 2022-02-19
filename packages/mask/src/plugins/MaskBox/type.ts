@@ -20,6 +20,8 @@ export enum BoxState {
     ERROR = 7,
     /** 404 */
     NOT_FOUND = 8,
+    /** leaf not found */
+    NOT_IN_WHITELIST = 9,
 }
 
 export interface PaymentOption {
