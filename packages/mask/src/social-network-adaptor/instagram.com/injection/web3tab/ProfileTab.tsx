@@ -1,6 +1,5 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { CollectibleIcon } from '@masknet/icons'
-import { combineAbortSignal } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { ProfileTab } from '../../../../components/InjectedComponents/ProfileTab'
 import { createReactRootShadowed, startWatch, untilElementAvailable } from '../../../../utils'
@@ -14,22 +13,15 @@ import {
 
 export function injectProfileTabAtInstagram(signal: AbortSignal) {
     let tabInjected = false
-
-    const contentWatcher = new MutationObserverWatcher(searchProfileTabPageSelector()).useForeach(
-        (node, key, proxy) => {
-            const subController = new AbortController()
-            const subSignal = combineAbortSignal(signal, subController.signal)
-            const elePage = proxy.realCurrent
-            if (elePage && !tabInjected) {
-                const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())
-                startWatch(watcher, subSignal)
-                createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabAtInstagram />)
-                tabInjected = true
-            }
-
-            return () => subController.abort()
-        },
-    )
+    const contentWatcher = new MutationObserverWatcher(searchProfileTabPageSelector()).useForeach(() => {
+        const elePage = searchProfileTabPageSelector().evaluate()
+        if (elePage && !tabInjected) {
+            const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())
+            startWatch(watcher, signal)
+            createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabAtInstagram />)
+            tabInjected = true
+        }
+    })
 
     startWatch(contentWatcher, signal)
 }
