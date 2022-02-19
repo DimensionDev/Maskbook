@@ -1804,11 +1804,6 @@ video {
     color: rgba(64, 210, 47, var(--tw-text-opacity));
 }
 
-.text-donation {
-    --tw-text-opacity: 1;
-    color: rgba(17, 188, 146, var(--tw-text-opacity));
-}
-
 .text-footprint {
     --tw-text-opacity: 1;
     color: rgba(255, 180, 38, var(--tw-text-opacity));

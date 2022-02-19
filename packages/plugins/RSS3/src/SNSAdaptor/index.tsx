@@ -2,7 +2,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { AddressName, AddressNameType } from '@masknet/web3-shared-evm'
 import { base } from '../base'
 import { PLUGIN_ID } from '../constants'
-import { TabCard, TabCardType } from './components/TabCard'
+import { TabCard, TabCardType } from './TabCard'
 
 function addressNameSorter(a: Plugin.SNSAdaptor.ProfileAddress, z: Plugin.SNSAdaptor.ProfileAddress) {
     if (a.type === AddressNameType.RSS3) return -1

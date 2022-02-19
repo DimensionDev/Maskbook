@@ -19,9 +19,10 @@ export function createContract<T extends BaseContract>(web3: Web3, address: stri
  * EthereumService in the background page and decode the result of calls automatically
  * @param address
  * @param ABI
+ * @param chainId
  */
 export function useContract<T extends BaseContract>(address = '', ABI: AbiItem[] = [], chainId?: ChainId) {
-    const web3 = useWeb3({ chainId })
+    const web3 = useWeb3(chainId ? { chainId } : {})
     return useMemo(() => createContract<T>(web3, address, ABI), [web3, address, ABI])
 }
 
@@ -29,9 +30,10 @@ export function useContract<T extends BaseContract>(address = '', ABI: AbiItem[]
  * Create many contracts with same ABI
  * @param listOfAddress
  * @param ABI
+ * @param chainId
  */
 export function useContracts<T extends BaseContract>(listOfAddress: string[], ABI: AbiItem[] = [], chainId?: ChainId) {
-    const web3 = useWeb3({ chainId })
+    const web3 = useWeb3(chainId ? { chainId } : {})
     const contracts = useMemo(
         () => listOfAddress.map((address) => createContract<T>(web3, address, ABI)),
         [web3, JSON.stringify(listOfAddress), ABI],
