@@ -1,0 +1,13 @@
+{
+    "name": "@masknet/ui-runtime",
+    "private": true,
+    "license": "AGPL-3.0-or-later",
+    "main": "./dist/src/index.js",
+    "types": "./dist/",
+    "dependencies": {
+        "@masknet/theme": "workspace:*",
+        "@masknet/shared": "workspace:*",
+        "@masknet/shared-base": "workspace:*",
+        "@masknet/web3-shared-evm": "workspace:*"
+    }
+}

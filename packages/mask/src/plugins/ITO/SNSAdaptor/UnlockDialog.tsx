@@ -13,12 +13,12 @@ import {
 import { Link, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { Trans } from 'react-i18next'
+import { usePickToken } from '@masknet/ui-runtime'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { usePickToken } from '../../EVM/contexts'
 
 function isMoreThanMillion(allowance: string, decimals: number) {
     return isGreaterThan(allowance, `100000000000e${decimals}`) // 100 billion
@@ -57,7 +57,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
             selectedTokens: token?.address ? [token.address] : [],
             whitelist: tokens.map((x) => x.address),
         })
-        setToken(picked as ERC20TokenDetailed)
+        if (picked) setToken(picked as ERC20TokenDetailed)
     }, [tokens, token?.address])
     // #endregion
     // #region amount

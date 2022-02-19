@@ -5,22 +5,19 @@ import { ChainId, FungibleTokenDetailed, useTokenConstants } from '@masknet/web3
 // eslint-disable-next-line import/no-deprecated
 import { DialogContent, Theme, useMediaQuery } from '@mui/material'
 import type { FC } from 'react'
-import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
-import { activatedSocialNetworkUI } from '../../../../social-network'
-import { MINDS_ID } from '../../../../social-network-adaptor/minds.com/base'
-import { useI18N } from '../../../../utils'
+import { InjectedDialog } from '../../components'
 import { useRowSize } from './useRowSize'
 
 interface StyleProps {
-    snsId: string
-    isDashboard: boolean
+    compact: boolean
+    disablePaddingTop: boolean
 }
 
-const useStyles = makeStyles<StyleProps>()((theme, { snsId, isDashboard }) => ({
+const useStyles = makeStyles<StyleProps>()((theme, { compact, disablePaddingTop }) => ({
     content: {
-        ...(snsId === MINDS_ID ? { minWidth: 552 } : {}),
+        ...(compact ? { minWidth: 552 } : {}),
         padding: theme.spacing(3),
-        paddingTop: isDashboard ? 0 : theme.spacing(2.8),
+        paddingTop: disablePaddingTop ? 0 : theme.spacing(2.8),
     },
     list: {
         scrollbarWidth: 'none',
@@ -67,9 +64,10 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
     onSelect,
     onClose,
 }) => {
-    const { t } = useI18N()
     const isDashboard = location.href.includes('dashboard.html')
-    const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier, isDashboard })
+    // const isCompact = activatedSocialNetworkUI.networkIdentifier === MINDS_ID
+    const isCompact = false
+    const { classes } = useStyles({ compact: isCompact, disablePaddingTop: isDashboard })
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
     // eslint-disable-next-line import/no-deprecated
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
@@ -81,7 +79,7 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
             titleBarIconStyle={isDashboard ? 'close' : 'back'}
             open={open}
             onClose={onClose}
-            title={t('plugin_wallet_select_a_token')}>
+            title="Select a token">
             <DialogContent classes={{ root: classes.content }}>
                 <ERC20TokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}

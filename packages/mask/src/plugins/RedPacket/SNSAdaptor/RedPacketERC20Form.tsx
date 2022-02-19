@@ -14,13 +14,13 @@ import { FormControl, InputLabel, MenuItem, MenuProps, Select, TextField } from 
 import BigNumber from 'bignumber.js'
 import { omit } from 'lodash-unified'
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
+import { usePickToken } from '@masknet/ui-runtime'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { usePickToken } from '../../EVM/contexts'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants'
 import type { RedPacketSettings } from './hooks/useCreateCallback'
 
@@ -100,7 +100,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             disableNativeToken: false,
             selectedTokens: token ? [token.address] : [],
         })
-        setToken(picked)
+        if (picked) setToken(picked)
     }, [pickToken, token?.address])
     // #endregion
 

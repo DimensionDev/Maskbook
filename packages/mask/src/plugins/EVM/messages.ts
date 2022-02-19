@@ -1,6 +1,5 @@
 import { createPluginMessage, createPluginRPC, PluginMessageEmitter } from '@masknet/plugin-infra'
 import { serializer } from '@masknet/shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { PLUGIN_ID } from './constants'
 

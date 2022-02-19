@@ -19,12 +19,12 @@ import {
 import { CircularProgress, Slider, Typography } from '@mui/material'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { usePickToken } from '@masknet/ui-runtime'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { usePickToken } from '../../EVM/contexts'
 import { WalletMessages, WalletRPC } from '../../Wallet/messages'
 import type { JSON_PayloadInMask } from '../types'
 import { useQualificationVerify } from './hooks/useQualificationVerify'
@@ -145,6 +145,7 @@ export function SwapDialog(props: SwapDialogProps) {
             disableSearchBar: true,
             whitelist: exchangeTokens.map((x) => x.address),
         })
+        if (!picked) return
         const at = exchangeTokens.findIndex(currySameAddress(picked.address))
         const ratio = new BigNumber(payload.exchange_amounts[at * 2]).dividedBy(payload.exchange_amounts[at * 2 + 1])
         setRatio(ratio)

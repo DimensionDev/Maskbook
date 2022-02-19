@@ -18,7 +18,7 @@ export const useSocket = <T>(message: SocketMessage) => {
     const [data, setData] = useState<T[]>([])
     const [state, setState] = useState(SocketState.init)
     const [error, setError] = useState<unknown>()
-    const [id, setId] = useState(uuid())
+    const [id, setId] = useState(uuid)
     const { value: socket, loading } = useAsyncRetry(() => providerSocket, [])
 
     const { retry } = useAsyncRetry(async () => {

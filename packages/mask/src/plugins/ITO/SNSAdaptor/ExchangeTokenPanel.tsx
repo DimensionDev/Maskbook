@@ -4,10 +4,10 @@ import AddIcon from '@mui/icons-material/AddOutlined'
 import RemoveIcon from '@mui/icons-material/RemoveOutlined'
 import { IconButton, Paper } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
+import { usePickToken } from '@masknet/ui-runtime'
 import { useI18N } from '../../../utils'
 import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { usePickToken } from '../../EVM/contexts'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -86,7 +86,7 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
             blacklist: excludeTokensAddress,
             selectedTokens: [exchangeToken?.address || '', ...selectedTokensAddress],
         })
-        onExchangeTokenChange(picked, dataIndex)
+        if (picked) onExchangeTokenChange(picked, dataIndex)
     }, [
         isSell,
         dataIndex,

@@ -4,11 +4,11 @@ import { createContext, FC, useCallback, useContext, useMemo, useState } from 'r
 import { PickTokenOptions, SelectTokenDialog } from './SelectTokenDialog'
 
 interface ContextOptions {
-    pickToken: (options: PickTokenOptions) => Promise<FungibleTokenDetailed>
+    pickToken: (options: PickTokenOptions) => Promise<FungibleTokenDetailed | null>
 }
 const TokenPickerContext = createContext<ContextOptions>(null!)
 
-type PickerDeferTuple = DeferTuple<FungibleTokenDetailed>
+type PickerDeferTuple = DeferTuple<FungibleTokenDetailed | null>
 
 interface Task {
     id: number
@@ -29,7 +29,7 @@ export const TokenPickerProvider: FC = ({ children }) => {
     const contextValue = useMemo(() => {
         return {
             pickToken: (options: PickTokenOptions) => {
-                const [promise, resolve, reject] = defer<FungibleTokenDetailed>()
+                const [promise, resolve, reject] = defer<FungibleTokenDetailed | null>()
                 id += 1
                 const newTask: Task = { id, promise, resolve, reject, pickerOptions: options }
                 setTasks((list) => [...list, newTask])
@@ -50,7 +50,10 @@ export const TokenPickerProvider: FC = ({ children }) => {
                         task.resolve(token)
                         removeTask(task)
                     }}
-                    onClose={() => removeTask(task)}
+                    onClose={() => {
+                        task.resolve(null)
+                        removeTask(task)
+                    }}
                 />
             ))}
         </TokenPickerContext.Provider>

@@ -1,6 +1,7 @@
 import { Appearance, applyMaskColorVars, makeStyles } from '@masknet/theme'
 import { TransactionStatusType, useChainId, useWallet, Web3Provider } from '@masknet/web3-shared-evm'
 import { ThemeProvider, Typography } from '@mui/material'
+import { EvmUIRuntimeProvider } from '@masknet/ui-runtime'
 import { useCallback } from 'react'
 import { useRecentTransactions } from '../../../../plugins/Wallet/hooks/useRecentTransactions'
 import Services from '../../../service'
@@ -12,7 +13,6 @@ import { useI18N, usePopupsMaskFullPageTheme } from '../../../../utils'
 import { NetworkPluginID, useReverseAddress } from '@masknet/plugin-infra'
 import { TargetChainIdContext } from '../../../../plugins/Trader/trader/useTargetChainIdContext'
 import { AllProviderTradeContext } from '../../../../plugins/Trader/trader/useAllProviderTradeContext'
-import { EvmContextProvider } from '../../../../plugins/EVM/contexts'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -87,7 +87,7 @@ export default function SwapPage() {
     return (
         <Web3Provider value={SwapWeb3Context}>
             <ThemeProvider theme={theme}>
-                <EvmContextProvider>
+                <EvmUIRuntimeProvider>
                     <div className={classes.page}>
                         <div className={classes.container}>
                             <header className={classes.header}>
@@ -112,7 +112,7 @@ export default function SwapPage() {
                             </main>
                         </div>
                     </div>
-                </EvmContextProvider>
+                </EvmUIRuntimeProvider>
             </ThemeProvider>
         </Web3Provider>
     )

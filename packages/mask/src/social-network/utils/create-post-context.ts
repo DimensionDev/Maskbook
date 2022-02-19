@@ -21,7 +21,7 @@ import {
 } from '@masknet/shared-base'
 import { Err, Result } from 'ts-results'
 import type { Subscription } from 'use-subscription'
-import { activatedSocialNetworkUI } from '../'
+import { activatedSocialNetworkUI } from '../ui'
 import { resolveFacebookLink } from '../../social-network-adaptor/facebook.com/utils/resolveFacebookLink'
 
 export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSActions) {

@@ -33,7 +33,7 @@ import BigNumber from 'bignumber.js'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
-import { usePickToken } from '../../../../../../mask/src/plugins/EVM/contexts'
+import { usePickToken } from '@masknet/ui-runtime'
 import { useDashboardI18N } from '../../../../locales'
 import { useGasConfig } from '../../hooks/useGasConfig'
 import { useNativeTokenPrice } from './useNativeTokenPrice'
@@ -287,7 +287,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                                     const pickedToken = await pickToken({
                                         disableNativeToken: false,
                                     })
-                                    setSelectedToken(pickedToken)
+                                    if (pickedToken) setSelectedToken(pickedToken)
                                 },
                             },
                         }}

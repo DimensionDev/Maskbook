@@ -8,8 +8,6 @@ import { fallbackLng } from '../../shared-base/src/i18n/fallbackRule'
 import { addDashboardI18N } from '../src/locales/languages'
 import { initReactI18next } from 'react-i18next'
 import i18n from 'i18next'
-import { EvmContextProvider } from '../../mask/src/plugins/EVM/contexts'
-
 i18n.init({
     keySeparator: false,
     interpolation: { escapeValue: false },
@@ -30,9 +28,7 @@ export const decorators = [
                 <ThemeProvider theme={MaskDarkTheme}>
                     <I18NextProviderHMR i18n={i18n}>
                         <CustomSnackbarProvider>
-                            <EvmContextProvider>
-                                <Story />
-                            </EvmContextProvider>
+                            <Story />
                         </CustomSnackbarProvider>
                     </I18NextProviderHMR>
                 </ThemeProvider>

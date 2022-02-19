@@ -12,6 +12,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { DialogContent, Grid, Typography } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { usePickToken } from '@masknet/ui-runtime'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
@@ -21,7 +22,6 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { usePickToken } from '../../EVM/contexts'
 import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
 import { WalletMessages } from '../../Wallet/messages'
@@ -109,7 +109,7 @@ export function DepositDialog() {
             selectedTokens: [token.address],
             whitelist: [token.address],
         })
-        setToken(picked)
+        if (picked) setToken(picked)
     }, [token, pickToken])
     // #endregion
 

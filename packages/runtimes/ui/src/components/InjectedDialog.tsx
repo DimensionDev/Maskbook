@@ -17,17 +17,13 @@ import {
 import { makeStyles, useDialogStackActor, useStylesExtends, mergeClasses, usePortalShadowRoot } from '@masknet/theme'
 import { ErrorBoundary } from '@masknet/shared'
 import { isDashboardPage } from '@masknet/shared-base'
-import { useI18N } from '../../utils'
-import { DialogDismissIconUI } from '../InjectedComponents/DialogDismissIcon'
-import { activatedSocialNetworkUI } from '../../social-network'
-import { MINDS_ID } from '../../social-network-adaptor/minds.com/base'
-import { FACEBOOK_ID } from '../../social-network-adaptor/facebook.com/base'
+import { DialogDismissIcon } from './DialogDismissIcon'
 
 interface StyleProps {
-    snsId: string
+    clean: boolean
 }
 
-const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
+const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     dialogTitle: {
         padding: theme.spacing(1, 2),
         borderBottom: `1px solid ${theme.palette.divider}`,
@@ -40,7 +36,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
         color: theme.palette.text.primary,
     },
     paper: {
-        ...(snsId === MINDS_ID || snsId === FACEBOOK_ID ? { width: 'auto', backgroundImage: 'none' } : {}),
+        ...(clean ? { width: 'auto', backgroundImage: 'none' } : {}),
     },
 }))
 
@@ -63,8 +59,6 @@ export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'titl
 }
 
 export function InjectedDialog(props: InjectedDialogProps) {
-    const overwrite = activatedSocialNetworkUI.customization.componentOverwrite || {}
-    props = overwrite.InjectedDialog?.props?.(props) ?? props
     const {
         dialogActions,
         dialogCloseButton,
@@ -74,18 +68,14 @@ export function InjectedDialog(props: InjectedDialogProps) {
         dialogBackdropRoot,
         container,
         ...dialogClasses
-    } = useStylesExtends(
-        useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier }),
-        props,
-        overwrite.InjectedDialog?.classes,
-    )
+    } = useStylesExtends(useStyles({ clean: false }), props)
+
     // see https://github.com/import-js/eslint-plugin-import/issues/2288
     // eslint-disable-next-line import/no-deprecated
     const fullScreen = useMediaQuery(useTheme().breakpoints.down('xs'))
     const isDashboard = isDashboardPage()
     const { children, open, disableBackdropClick, titleBarIconStyle, onClose, title, disableTitleBorder, ...rest } =
         props
-    const { t } = useI18N()
     const actions = CopyElementWithNewProps(children, DialogActions, { root: dialogActions })
     const content = CopyElementWithNewProps(children, DialogContent, { root: dialogContent })
     const { extraProps, shouldReplaceExitWithBack, IncreaseStack } = useDialogStackActor(open)
@@ -125,9 +115,9 @@ export function InjectedDialog(props: InjectedDialogProps) {
                             <IconButton
                                 size="large"
                                 classes={{ root: dialogCloseButton }}
-                                aria-label={t('post_dialog__dismiss_aria')}
+                                aria-label="Dismiss"
                                 onClick={onClose}>
-                                <DialogDismissIconUI
+                                <DialogDismissIcon
                                     style={shouldReplaceExitWithBack && !isDashboard ? 'back' : titleBarIconStyle}
                                 />
                             </IconButton>

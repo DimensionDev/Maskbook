@@ -17,6 +17,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { delay } from '@dimensiondev/kit'
+import { usePickToken } from '@masknet/ui-runtime'
 import { useGasConfig } from './hooks/useGasConfig'
 import type { Coin } from '../../types'
 import { TokenPanelType, TradeInfo } from '../../types'
@@ -37,7 +38,6 @@ import { PluginTraderMessages } from '../../messages'
 import { SettingsDialog } from './SettingsDialog'
 import { useSortedTrades } from './hooks/useSortedTrades'
 import { useUpdateBalance } from './hooks/useUpdateBalance'
-import { usePickToken } from '../../../EVM/contexts'
 
 const useStyles = makeStyles()(() => {
     return {
@@ -215,13 +215,16 @@ export function Trader(props: TraderProps) {
                 disableNativeToken: false,
                 selectedTokens: excludeTokens,
             })
-            dispatchTradeStore({
-                type:
+            if (picked) {
+                const type =
                     panelType === TokenPanelType.Input
                         ? AllProviderTradeActionType.UPDATE_INPUT_TOKEN
-                        : AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
-                token: picked,
-            })
+                        : AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN
+                dispatchTradeStore({
+                    type,
+                    token: picked,
+                })
+            }
         },
         [excludeTokens.join(), chainId],
     )

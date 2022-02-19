@@ -1,11 +1,9 @@
 import { useWeb3State } from '@masknet/plugin-infra'
-import { SelectTokenDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
-import { useRemoteControlledDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { EthereumTokenType, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
 import { Box, FormControl, FormControlLabel, MenuItem, Radio, RadioGroup, Select, Typography } from '@mui/material'
-import { FC, memo, useCallback, useRef, useState } from 'react'
-import { v4 as uuid } from 'uuid'
+import { FC, memo, useCallback, useRef } from 'react'
+import { usePickToken } from '@masknet/ui-runtime'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
@@ -63,27 +61,14 @@ export const TipForm: FC = memo(() => {
     } = useTip()
     const { Utils } = useWeb3State()
     const selectRef = useRef(null)
-    const [id] = useState(uuid)
-    const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectTokenDialogUpdated,
-        useCallback(
-            (ev: SelectTokenDialogEvent) => {
-                if (ev.open || !ev.token || ev.uuid !== id) return
-                setToken(ev.token)
-            },
-            [id],
-        ),
-    )
-    const onSelectTokenChipClick = useCallback(() => {
-        setSelectTokenDialog({
-            open: true,
-            uuid: id,
+    const pickToken = usePickToken()
+    const onSelectTokenChipClick = useCallback(async () => {
+        const picked = await pickToken({
             disableNativeToken: false,
-            FungibleTokenListProps: {
-                selectedTokens: token ? [token.address] : [],
-            },
+            selectedTokens: token ? [token.address] : [],
         })
-    }, [id, token?.address])
+        if (picked) setToken(picked)
+    }, [token])
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
         token?.type || EthereumTokenType.Native,

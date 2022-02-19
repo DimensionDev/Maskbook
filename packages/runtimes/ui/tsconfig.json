@@ -1,0 +1,15 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist/src/",
+    "tsBuildInfoFile": "./dist/src.tsbuildinfo"
+  },
+  "include": ["./src"],
+  "references": [
+    { "path": "../../theme" },
+    { "path": "../../shared" },
+    { "path": "../../shared-base" },
+    { "path": "../../web3-shared/evm" }
+  ]
+}

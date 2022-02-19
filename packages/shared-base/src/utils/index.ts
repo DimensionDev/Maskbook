@@ -1,3 +1,4 @@
+export * from './defer'
 export * from './detect'
 export * from './getLocalImplementation'
 export * from './parseURL'

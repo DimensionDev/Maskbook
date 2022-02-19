@@ -7,6 +7,7 @@ import {
     MaskDarkTheme,
     useSystemPreferencePalette,
 } from '@masknet/theme'
+import { EvmUIRuntimeProvider } from '@masknet/ui-runtime'
 import { ErrorBoundary, I18NextProviderHMR } from '@masknet/shared'
 import {
     createInjectHooksRenderer,
@@ -27,7 +28,6 @@ import { Web3Context } from '../web3/context'
 import { useAppearance, usePluginID } from '../pages/Personas/api'
 import { PersonaContext } from '../pages/Personas/hooks/usePersonaContext'
 import { fixWeb3State } from '../../../mask/src/plugins/EVM/UI/Web3State'
-import { EvmContextProvider } from '../../../mask/src/plugins/EVM/contexts'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
@@ -62,12 +62,12 @@ export default function DashboardRoot() {
                                 <ErrorBoundary>
                                     <CssBaseline />
                                     <CustomSnackbarProvider>
-                                        <EvmContextProvider>
+                                        <EvmUIRuntimeProvider>
                                             <HashRouter>
                                                 <Pages />
                                             </HashRouter>
                                             <PluginRender />
-                                        </EvmContextProvider>
+                                        </EvmUIRuntimeProvider>
                                     </CustomSnackbarProvider>
                                 </ErrorBoundary>
                             </PersonaContext.Provider>

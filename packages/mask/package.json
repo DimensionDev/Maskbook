@@ -30,6 +30,7 @@
     "@masknet/plugin-solana": "workspace:*",
     "@masknet/plugin-wallet": "workspace:*",
     "@masknet/public-api": "workspace:*",
+    "@masknet/ui-runtime": "workspace:*",
     "@masknet/sdk": "workspace:*",
     "@masknet/shared": "workspace:*",
     "@masknet/shared-base": "workspace:*",

@@ -12,6 +12,7 @@ import {
 import { DialogContent } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
+import { usePickToken } from '@masknet/ui-runtime'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
@@ -21,7 +22,6 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { usePickToken } from '../../EVM/contexts'
 import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
 import { WalletMessages } from '../../Wallet/messages'
@@ -55,7 +55,7 @@ const useStyles = makeStyles()((theme) => ({
 export function InvestDialog() {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [id] = useState(uuid())
+    const [id] = useState(uuid)
     const [pool, setPool] = useState<Pool>()
     const [token, setToken] = useState<FungibleTokenDetailed>()
     const [allowedTokens, setAllowedTokens] = useState<string[]>()
@@ -84,7 +84,7 @@ export function InvestDialog() {
             disableNativeToken: true,
             whitelist: allowedTokens,
         })
-        setToken(picked)
+        if (picked) setToken(picked)
     }, [pickToken, token?.address, allowedTokens])
     // #endregion
 

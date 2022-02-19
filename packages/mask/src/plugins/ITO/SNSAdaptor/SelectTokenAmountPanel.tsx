@@ -1,8 +1,8 @@
 import type { ERC20TokenListProps } from '@masknet/shared'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { useCallback } from 'react'
+import { usePickToken } from '@masknet/ui-runtime'
 import { TokenAmountPanel, TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
-import { usePickToken } from '../../EVM/contexts'
 
 export interface SelectTokenAmountPanelProps {
     amount: string
@@ -37,7 +37,7 @@ export function SelectTokenAmountPanel(props: SelectTokenAmountPanelProps) {
             disableSearchBar,
             ...FungibleTokenListProps,
         })
-        onTokenChange(picked)
+        if (picked) onTokenChange(picked)
     }, [disableNativeToken, disableSearchBar, FungibleTokenListProps])
     // #endregion
 
