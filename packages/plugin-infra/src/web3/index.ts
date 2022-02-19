@@ -23,6 +23,8 @@ export * from './useWalletPrimary'
 export * from './useWallets'
 export * from './useWeb3UI'
 export * from './useWeb3State'
+export * from './useNonFungibleAssetCollections'
+export * from './useNonFungibleAssets'
 
 export * from './Context'
 export * from './utils'

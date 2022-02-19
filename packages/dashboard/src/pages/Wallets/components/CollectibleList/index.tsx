@@ -1,7 +1,7 @@
 import { Dispatch, memo, SetStateAction, useCallback, useEffect, useRef, useState } from 'react'
 import { Box, Stack, TablePagination } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { EMPTY_LIST, useAccount } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId, SocketState, useCustomNonFungibleAssets } from '@masknet/web3-shared-evm'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { CollectibleCard } from '../CollectibleCard'
@@ -12,13 +12,13 @@ import { DashboardRoutes } from '@masknet/shared-base'
 import { TransferTab } from '../Transfer'
 import {
     useNetworkDescriptor,
-    useWeb3State as useWeb3PluginState,
     Web3Plugin,
     usePluginIDContext,
     NetworkPluginID,
     ERC721TokenDetailed,
+    mergeNFTList,
+    useNonFungibleAssets,
 } from '@masknet/plugin-infra'
-import { useAsyncRetry } from 'react-use'
 
 const useStyles = makeStyles()({
     root: {
@@ -50,29 +50,25 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
     const [page, setPage] = useState(0)
     const navigate = useNavigate()
     const account = useAccount()
-    const { Asset } = useWeb3PluginState()
+    const chainId = useChainId()
     const network = useNetworkDescriptor()
     const [loadingSize, setLoadingSize] = useState(0)
     const [renderData, setRenderData] = useState<ERC721TokenDetailed[]>([])
-
+    const customCollectibles = useCustomNonFungibleAssets(account, chainId)
     const {
-        value = { data: EMPTY_LIST, hasNextPage: false },
-        error: collectiblesError,
-        loading: isQuerying,
+        data: _collectibles,
+        state: loadingCollectibleDone,
         retry,
-    } = useAsyncRetry(
-        async () =>
-            Asset?.getNonFungibleAssets?.(account, { page: page, size: 20 }, undefined, selectedNetwork || network, {
-                notify: PluginMessages.Wallet.events.socketMessageUpdated.sendToAll,
-            }),
-        [account, Asset?.getNonFungibleAssets, network, selectedNetwork],
-    )
+        error: collectiblesError,
+    } = useNonFungibleAssets(account, chainId)
+    const collectibles = mergeNFTList([..._collectibles, ...customCollectibles])
+    const isQuerying = loadingCollectibleDone !== SocketState.done
 
     useEffect(() => {
         if (!loadingSize) return
-        const render = value.data.slice(page * loadingSize, (page + 1) * loadingSize)
+        const render = collectibles.slice(page * loadingSize, (page + 1) * loadingSize)
         setRenderData(render)
-    }, [value.data, loadingSize, page])
+    }, [collectibles, loadingSize, page])
 
     const currentPluginId = usePluginIDContext()
     const onSend = useCallback(
@@ -90,15 +86,10 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
     )
 
     useEffect(() => {
-        PluginMessages.Wallet.events.erc721TokensUpdated.on(() => retry())
-        PluginMessages.Wallet.events.socketMessageUpdated.on((info) => {
-            if (!info.done) {
-                retry()
-            }
-        })
+        PluginMessages.Wallet.events.erc721TokensUpdated.on(retry)
     }, [retry])
 
-    const hasNextPage = (page + 1) * loadingSize < value.data.length
+    const hasNextPage = (page + 1) * loadingSize < collectibles.length
     const isLoading = renderData.length === 0 && isQuerying
 
     return (

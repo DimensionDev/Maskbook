@@ -3,7 +3,7 @@ import { useAsync } from 'react-use'
 import { OpenSea } from '@masknet/web3-providers'
 import {
     useChainId,
-    useCollectibles,
+    useCustomNonFungibleAssets,
     ERC721TokenDetailed,
     isSameAddress,
     ERC721ContractDetailed,
@@ -11,6 +11,7 @@ import {
     resolveIPFSLink,
 } from '@masknet/web3-shared-evm'
 import { Constant, transform } from '@masknet/web3-shared-evm/constants/utils'
+import { mergeNFTList, useNonFungibleAssets } from '@masknet/plugin-infra'
 import { cloneDeep, findLastIndex } from 'lodash-unified'
 import { delay } from '@masknet/shared-base'
 import type { User, FilterContract } from '../types'
@@ -32,7 +33,10 @@ export function useNFTs(user: User | undefined, configNFTs: Record<string, Const
     const [nfts, setNfts] = useState<FilterContract[]>(initContracts)
     const chainId = useChainId()
     const [fetchTotal, setFetchTotal] = useState<ERC721TokenDetailed[]>([])
-    const { data: collectibles, state } = useCollectibles(user?.address ?? '', chainId)
+    const { data: _collectibles, state } = useNonFungibleAssets(user?.address ?? '', chainId)
+    const customCollectibles = useCustomNonFungibleAssets(user?.address ?? '', chainId)
+    const collectibles = mergeNFTList([..._collectibles, ...customCollectibles])
+
     useEffect(() => {
         if (!initContracts.length) return
         const tempNFTs: FilterContract[] = cloneDeep(initContracts)

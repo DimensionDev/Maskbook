@@ -8,15 +8,15 @@ import {
     SocketState,
     ERC721TokenDetailed,
     useChainId,
-    useCollectibles,
     useImageChecker,
+    useCustomNonFungibleAssets,
 } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, Typography } from '@mui/material'
 import { useI18N } from '../../../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { AddNFT } from './AddNFT'
 import { NFTImage } from './NFTImage'
-import { useAccount, useWeb3State } from '@masknet/plugin-infra'
+import { useAccount, useWeb3State, mergeNFTList, useNonFungibleAssets } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -99,7 +99,9 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const [collectibles_, setCollectibles_] = useState<ERC721TokenDetailed[]>([])
     const { t } = useI18N()
     const { Utils } = useWeb3State()
-    const { data: collectibles, error, retry, state } = useCollectibles(account, ChainId.Mainnet)
+    const { data: _collectibles, error, retry, state } = useNonFungibleAssets(account, ChainId.Mainnet)
+    const customCollectibles = useCustomNonFungibleAssets(account, ChainId.Mainnet)
+    const collectibles = mergeNFTList([..._collectibles, ...customCollectibles])
 
     const onClick = useCallback(async () => {
         if (!selectedToken) return
