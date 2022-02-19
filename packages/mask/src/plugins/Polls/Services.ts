@@ -1,8 +1,7 @@
 import { first } from 'lodash-unified'
-import '../../network/gun/gun-worker.patch'
-import { gun2 } from '../../network/gun/version.2'
+import { setGunData, getGunData } from '@masknet/gun-utils'
 import type { PollMetaData } from './types'
-import { PollGunServer } from './constants'
+import { PollGunRootNode } from './constants'
 import { WorkerChannel } from 'async-call-rpc/utils/web/worker'
 import { AsyncCall } from 'async-call-rpc'
 
@@ -10,8 +9,6 @@ import * as self from './Services'
 setTimeout(() => {
     AsyncCall(self, { channel: new WorkerChannel() })
 }, 0)
-
-const PollGun = gun2.get(PollGunServer)
 
 const defaultPoll: PollGunDB = {
     key: '',
@@ -47,16 +44,23 @@ export async function createNewPoll(poll: NewPollProps) {
         end_time: end_time.getTime(),
     }
 
-    // @ts-ignore
-    const key = `${id}_${Gun.time.is()}_${Gun.text.random(4)}`
+    const key = `${id}_${Date.now()}_${GunTextRandom(4)}`
 
-    await PollGun
-        // @ts-ignore
-        .get(key)
-        // @ts-ignore
-        .put(poll_item).then!()
-
+    setGunData([PollGunRootNode, key], poll_item)
     return poll
+}
+
+/** Implementation of deprecated Gun.text.random */
+function GunTextRandom(l: number) {
+    let s = ''
+    l = l || 24 // you are not going to make a 0 length random number, so no need to check type
+    /* cspell:disable-next-line */
+    const c = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXZabcdefghijklmnopqrstuvwxyz'
+    while (l > 0) {
+        s += c.charAt(Math.floor(Math.random() * c.length))
+        l -= 1
+    }
+    return s
 }
 
 export type PollGunDB = PollMetaData
@@ -68,30 +72,19 @@ interface voteProps {
 
 export async function vote(props: voteProps) {
     const { poll, index } = props
-    let results = [0, 0]
-    PollGun
-        // @ts-ignore
-        .get(poll.key)
-        // @ts-ignore
-        .get('results')
-        .on((item) => {
-            // @ts-ignore
-            delete item._
-            results = Object.values(item)
-        })
+    const data = await getGunData(PollGunRootNode, poll.key, 'results')
+    if (typeof data === 'object') delete data._
+    else throw new TypeError('Invalid vote node.')
+
+    const results = Object.values(data)
+    if (!results.every((x): x is number => typeof x === 'number')) throw new TypeError('Invalid vote node.')
     const count = results[index] + 1
     const newResults = {
         ...results,
         [index]: count,
     }
 
-    PollGun
-        // @ts-ignore
-        .get(poll.key)
-        // @ts-ignore
-        .get('results')
-        // @ts-ignore
-        .put(newResults)
+    setGunData([PollGunRootNode, poll.key, 'results'], newResults)
 
     return {
         ...poll,
@@ -101,59 +94,51 @@ export async function vote(props: voteProps) {
 
 export async function getPollByKey(props: { key: string }) {
     const keys = props.key.split('_')
-    let poll: PollGunDB = {
-        ...defaultPoll,
-        key: props.key,
-        id: first(keys),
-    }
 
-    PollGun
-        // @ts-ignore
-        .get(props.key)
-        // @ts-ignore
-        .on((data: PollGunDB) => {
-            poll = {
-                ...poll,
-                sender: data.sender,
-                question: data.question,
-                start_time: data.start_time,
-                end_time: data.end_time,
-            }
-            if (data.options) {
-                PollGun
-                    // @ts-ignore
-                    .get(props.key)
-                    // @ts-ignore
-                    .get('options')
-                    .on((options) => {
-                        // @ts-ignore
-                        delete options._
-                        poll.options = Object.values(options)
-                    })
-            }
-            if (data.results) {
-                PollGun
-                    // @ts-ignore
-                    .get(props.key)
-                    // @ts-ignore
-                    .get('results')
-                    .on((results) => {
-                        // @ts-ignore
-                        delete results._
-                        poll.results = Object.values(results)
-                    })
-            }
-        })
+    const node = await getGunData(PollGunRootNode, props.key)
+    if (typeof node !== 'object' || !isPollGunDB(node)) throw new TypeError('Invalid vote node.')
+    const data = node
+    const poll: PollGunDB = {
+        ...defaultPoll,
+        id: first(keys),
+        key: props.key,
+        sender: data.sender,
+        question: data.question,
+        start_time: data.start_time,
+        end_time: data.end_time,
+    }
+    if (data.options) {
+        const options = await getGunData(PollGunRootNode, props.key, 'options')
+        if (typeof options === 'object') {
+            delete options._
+            data.options = Object.values(options) as any
+        }
+    }
+    if (data.results) {
+        const results = await getGunData(PollGunRootNode, props.key, 'results')
+        if (typeof results === 'object') {
+            delete results._
+            data.results = Object.values(results) as any
+        }
+    }
     return poll
+}
+
+function isPollGunDB(x: object): x is PollGunDB {
+    const { end_time } = x as PollGunDB
+    if (typeof end_time !== 'number') return false
+    return true
 }
 
 export async function getAllExistingPolls() {
     const polls: PollGunDB[] = []
 
-    PollGun.map().on(async (data, key) => {
-        const poll = await getPollByKey({ key })
-        polls.push(poll)
-    })
-
+    const allNodes = await getGunData(PollGunRootNode)
+    if (typeof allNodes !== 'object') return []
+    await Promise.allSettled(
+        Object.keys(allNodes).map(async (key) => {
+            polls.push(await getPollByKey({ key }))
+        }),
+    )
     return polls
 }

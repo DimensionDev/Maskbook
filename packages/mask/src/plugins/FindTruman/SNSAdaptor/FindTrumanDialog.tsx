@@ -11,6 +11,7 @@ import type { FindTrumanI18nFunction } from '../types'
 import { FindTrumanContext } from '../context'
 import { useAccount } from '@masknet/plugin-infra'
 import { useConst } from './hooks/useConst'
+import IntroductionPanel from './IntroductionPanel'
 
 const useStyles = makeStyles()((theme, props) => ({
     wrapper: {
@@ -52,7 +53,11 @@ export function FindTrumanDialog(props: FindTrumanDialogProps) {
     const account = useAccount()
     const { consts, t } = useConst()
 
-    const [currentTab, onChange, tabs] = useTabs(FindTrumanDialogTab.Assets, FindTrumanDialogTab.Participate)
+    const [currentTab, onChange, tabs] = useTabs(
+        FindTrumanDialogTab.Introduction,
+        FindTrumanDialogTab.Assets,
+        FindTrumanDialogTab.Participate,
+    )
 
     return (
         <FindTrumanContext.Provider
@@ -72,6 +77,9 @@ export function FindTrumanDialog(props: FindTrumanDialogProps) {
                                 <FindTrumanDialogTabs currentTab={currentTab} setTab={(tab) => onChange(null, tab)} />
                             </div>
                             <Box className={classes.tabPaneWrapper}>
+                                <TabPanel className={classes.tabPane} value={FindTrumanDialogTab.Introduction}>
+                                    <IntroductionPanel />
+                                </TabPanel>
                                 <TabPanel className={classes.tabPane} value={FindTrumanDialogTab.Assets}>
                                     <AssetsPanel />
                                 </TabPanel>
@@ -87,7 +95,11 @@ export function FindTrumanDialog(props: FindTrumanDialogProps) {
     )
 }
 
-export const useTabsStyles = makeStyles()((theme) => ({
+interface TabProps {
+    columns: string
+}
+
+export const useTabsStyles = makeStyles<TabProps>()((theme, props) => ({
     tab: {
         height: 36,
         minHeight: 36,
@@ -111,7 +123,7 @@ export const useTabsStyles = makeStyles()((theme) => ({
         },
         '& .MuiTabs-flexContainer': {
             display: 'grid',
-            gridTemplateColumns: '50% 50%',
+            gridTemplateColumns: props.columns,
             backgroundColor: theme.palette.background.paper,
         },
     },
@@ -121,10 +133,15 @@ export const useTabsStyles = makeStyles()((theme) => ({
 }))
 
 enum FindTrumanDialogTab {
+    Introduction = 'introduction',
     Assets = 'assets',
     Participate = 'participate',
 }
-const FindTrumanDialogTabValues = [FindTrumanDialogTab.Assets, FindTrumanDialogTab.Participate]
+const FindTrumanDialogTabValues = [
+    FindTrumanDialogTab.Introduction,
+    FindTrumanDialogTab.Assets,
+    FindTrumanDialogTab.Participate,
+]
 
 interface FindTrumanDialogTabsProps
     extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {
@@ -134,6 +151,8 @@ interface FindTrumanDialogTabsProps
 
 function getFindTrumanDialogTabName(t: FindTrumanI18nFunction, type: FindTrumanDialogTab) {
     switch (type) {
+        case FindTrumanDialogTab.Introduction:
+            return t('plugin_find_truman_dialog_tab_introduction')
         case FindTrumanDialogTab.Assets:
             return t('plugin_find_truman_dialog_tab_assets')
         case FindTrumanDialogTab.Participate:
@@ -142,7 +161,7 @@ function getFindTrumanDialogTabName(t: FindTrumanI18nFunction, type: FindTrumanD
 }
 
 function FindTrumanDialogTabs(props: FindTrumanDialogTabsProps) {
-    const classes = useStylesExtends(useTabsStyles(), props)
+    const classes = useStylesExtends(useTabsStyles({ columns: 'repeat(3, 33.33%)' }), props)
     const { t } = useContext(FindTrumanContext)
     const { currentTab, setTab } = props
     const createTabItem = (type: FindTrumanDialogTab) => ({
@@ -152,7 +171,11 @@ function FindTrumanDialogTabs(props: FindTrumanDialogTabsProps) {
     })
 
     const tabProps: AbstractTabProps = {
-        tabs: [createTabItem(FindTrumanDialogTab.Assets), createTabItem(FindTrumanDialogTab.Participate)],
+        tabs: [
+            createTabItem(FindTrumanDialogTab.Introduction),
+            createTabItem(FindTrumanDialogTab.Assets),
+            createTabItem(FindTrumanDialogTab.Participate),
+        ],
         index: FindTrumanDialogTabValues.indexOf(currentTab),
         classes,
         hasOnlyOneChild: true,
