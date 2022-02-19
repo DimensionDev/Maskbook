@@ -1,6 +1,6 @@
 import type { BigNumber } from 'bignumber.js'
 import type { Subscription } from 'use-subscription'
-import type { Pagination, Plugin, Pageable } from './types'
+import type { Pagination, Plugin } from './types'
 import type { ERC721TokenDetailed } from './web3-token-types'
 
 /**
@@ -220,14 +220,6 @@ export declare namespace Web3Plugin {
                 pagination?: Pagination,
                 other?: { [key in string]: unknown },
             ) => Promise<Asset<FungibleToken>[]>
-            /** Get non-fungible assets of given account. */
-            getNonFungibleAssets?: (
-                address: string,
-                pagination: Pagination,
-                providerType?: string,
-                network?: NetworkDescriptor,
-                other?: { [key in string]: unknown },
-            ) => Promise<Pageable<ERC721TokenDetailed>>
         }
         export interface NameServiceState {
             lookup?: (domain: string) => Promise<string | undefined>

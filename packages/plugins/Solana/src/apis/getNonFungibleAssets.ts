@@ -30,7 +30,7 @@ interface ExternalMetadata {
         }>
     }
 }
-
+// Todo: move the definition to @masknet/web3-provider, calling it at @masknet/proxy-provider.
 async function getNftList(chainId: ChainId, account: string) {
     const data = await requestRPC<GetProgramAccountsResponse>(chainId, {
         method: 'getProgramAccounts',

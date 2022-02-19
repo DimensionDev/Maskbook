@@ -27,7 +27,7 @@ import {
     createExternalProvider,
 } from '@masknet/web3-shared-evm'
 import { getStorage } from '../../storage'
-import { getFungibleAssetsFn, getNonFungibleTokenFn } from './getAssetsFn'
+import { getFungibleAssetsFn } from './getAssetsFn'
 
 const ZERO_X_ERROR_ADDRESS = '0x'
 
@@ -45,7 +45,6 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
     }
     state.Asset = state.Asset ?? {
         getFungibleAssets: getFungibleAssetsFn(context),
-        getNonFungibleAssets: getNonFungibleTokenFn(context),
     }
     state.NameService = state.NameService ?? {
         lookup: async (domain: string) => {

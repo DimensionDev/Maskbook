@@ -1,4 +1,4 @@
-import { Web3Plugin, getNonFungibleAssets } from '@masknet/plugin-infra'
+import { Web3Plugin } from '@masknet/plugin-infra'
 import {
     NetworkType,
     ProviderType,
@@ -46,7 +46,6 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
         },
         Asset: {
             getFungibleAssets,
-            getNonFungibleAssets,
         },
         Utils: {
             formatAddress,
