@@ -2,36 +2,27 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { ProfileTabContent } from '../../../components/InjectedComponents/ProfileTabContent'
 import { createReactRootShadowed, startWatch } from '../../../utils'
-import {
-    searchNewTweetButtonSelector,
-    searchProfileEmptySelector,
-    searchProfileTabPageSelector,
-} from '../utils/selector'
-
-function injectProfileTabContentForEmptyState(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchProfileEmptySelector())
-    startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabContentAtTwitter />)
-}
+import { profileSectionSelector, searchProfileTabPageSelector } from '../utils/selector'
 
 function injectProfileTabContentState(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileTabPageSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabContentAtTwitter />)
+    createReactRootShadowed(watcher.firstDOMProxy.beforeShadow, { signal }).render(<ProfileTabContentAtFacebook />)
 }
 
-export function injectProfileTabContentAtTwitter(signal: AbortSignal) {
-    injectProfileTabContentForEmptyState(signal)
+export function injectProfileTabContentAtFacebook(signal: AbortSignal) {
     injectProfileTabContentState(signal)
 }
 
 function getStyleProps() {
-    const newTweetButton = searchNewTweetButtonSelector().evaluate()
+    const EMPTY_STYLE = {} as CSSStyleDeclaration
+    const profileSection = profileSectionSelector().evaluate()
+    const style = profileSection ? window.getComputedStyle(profileSection) : EMPTY_STYLE
     return {
-        backgroundColor: newTweetButton ? window.getComputedStyle(newTweetButton).backgroundColor : undefined,
-        fontFamily: newTweetButton?.firstChild
-            ? window.getComputedStyle(newTweetButton.firstChild as HTMLElement).fontFamily
-            : undefined,
+        borderRadius: style.borderRadius,
+        backgroundColor: style.backgroundColor,
+        fontFamily: style.fontFamily,
+        boxShadow: style.boxShadow,
     }
 }
 
@@ -40,11 +31,12 @@ const useStyles = makeStyles()((theme) => {
 
     return {
         root: {
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            zIndex: 1,
+            position: 'relative',
+            marginBottom: 16,
+            paddingBottom: 16,
+            background: props.backgroundColor,
+            borderRadius: props.borderRadius,
+            boxShadow: props.boxShadow,
         },
         text: {
             paddingTop: 29,
@@ -67,7 +59,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export function ProfileTabContentAtTwitter() {
+export function ProfileTabContentAtFacebook() {
     const { classes } = useStyles()
     return <ProfileTabContent classes={classes} />
 }
