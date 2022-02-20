@@ -1,0 +1,161 @@
+[
+    {
+        "inputs": [{ "internalType": "address", "name": "_genArt721Address", "type": "address" }],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "artblocksContract",
+        "outputs": [{ "internalType": "contract GenArt721CoreContract", "name": "", "type": "address" }],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            { "internalType": "uint256", "name": "_projectId", "type": "uint256" },
+            { "internalType": "address", "name": "_bonusContractAddress", "type": "address" }
+        ],
+        "name": "artistSetBonusContractAddress",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [{ "internalType": "uint256", "name": "_projectId", "type": "uint256" }],
+        "name": "artistToggleBonus",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [{ "internalType": "uint256", "name": "_projectId", "type": "uint256" }],
+        "name": "checkYourAllowanceOfProjectERC20",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "name": "contractFilterProject",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [{ "internalType": "uint256", "name": "_projectId", "type": "uint256" }],
+        "name": "getYourBalanceOfProjectERC20",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "name": "projectIdToBonus",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "name": "projectIdToBonusContractAddress",
+        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "name": "projectMaxHasBeenInvoked",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "name": "projectMaxInvocations",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            { "internalType": "address", "name": "", "type": "address" },
+            { "internalType": "uint256", "name": "", "type": "uint256" }
+        ],
+        "name": "projectMintCounter",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "name": "projectMintLimit",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [{ "internalType": "uint256", "name": "_projectId", "type": "uint256" }],
+        "name": "purchase",
+        "outputs": [{ "internalType": "uint256", "name": "_tokenId", "type": "uint256" }],
+        "payable": true,
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [{ "internalType": "uint256", "name": "_projectId", "type": "uint256" }],
+        "name": "setProjectMaxInvocations",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            { "internalType": "uint256", "name": "_projectId", "type": "uint256" },
+            { "internalType": "uint8", "name": "_limit", "type": "uint8" }
+        ],
+        "name": "setProjectMintLimit",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [{ "internalType": "uint256", "name": "_projectId", "type": "uint256" }],
+        "name": "toggleContractFilter",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
+]
