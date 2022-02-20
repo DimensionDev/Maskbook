@@ -89,7 +89,7 @@ export function ListingsView() {
     )
 
     const renderNameCell = (params: GridRenderCellParams<String>) => (
-        <Grid direction="column">
+        <Grid container direction="column">
             <div>{params.row.name}</div>
             <div className={classes.subname}>{displaySocialName(params.row.name)}</div>
         </Grid>

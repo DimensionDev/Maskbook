@@ -6,7 +6,7 @@ import { useMutualHoldersTokens } from '../hooks/useMutualHoldersTokens'
 import type { IdeaToken } from '../types'
 import { useState } from 'react'
 import { LoadingAnimation } from '@masknet/shared'
-import IdeaMarketIcon from '../icons/IdeaMarketIcon'
+import { IdeaMarketIcon } from '../icons/IdeaMarketIcon'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

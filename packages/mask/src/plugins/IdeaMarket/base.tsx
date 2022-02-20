@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import IdeaMarketIcon from './icons/IdeaMarketIcon'
+import { IdeaMarketIcon } from './icons/IdeaMarketIcon'
 
 export const base: Plugin.Shared.Definition = {
     ID: 'io.ideamarket',
