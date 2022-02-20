@@ -141,7 +141,7 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
             const addressNames = await WalletRPC.getAddressNames(identity)
             if (identity.identifier.network === 'twitter.com') {
                 const result = await UserNFTContainerAtTwitter.getUserNftContainer(identity.identifier.userId ?? '')
-                if (result && result.type_name.toLowerCase() === 'ERC721') {
+                if (result && result.type_name.toUpperCase() === 'ERC721') {
                     const contractAddress = await getERC721ContractOwner(result.address, result.token_id)
                     if (contractAddress)
                         return [
