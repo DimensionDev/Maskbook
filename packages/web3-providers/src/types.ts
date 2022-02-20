@@ -387,6 +387,7 @@ export namespace UserNFTContainerAPI {
             | {
                   address: string
                   token_id: string
+                  type_name: string
               }
             | undefined
         >

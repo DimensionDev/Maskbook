@@ -82,7 +82,9 @@ async function getTokens() {
 }
 
 export class UserNFTContainerAtTwitterAPI implements UserNFTContainerAPI.Provider {
-    async getUserNftContainer(screenName: string): Promise<{ address: string; token_id: string } | undefined> {
+    async getUserNftContainer(
+        screenName: string,
+    ): Promise<{ address: string; token_id: string; type_name: string } | undefined> {
         const { bearerToken, queryToken, csrfToken } = await getTokens()
         if (!bearerToken || !queryToken || !csrfToken) return
         const result = await getUserNftContainer(screenName, queryToken, bearerToken, csrfToken)
@@ -90,6 +92,7 @@ export class UserNFTContainerAtTwitterAPI implements UserNFTContainerAPI.Provide
         return {
             address: result.data.user.result.nft_avatar_metadata.smart_contract.address,
             token_id: result.data.user.result.nft_avatar_metadata.token_id,
+            type_name: result.data.user.result.nft_avatar_metadata.smart_contract.__typename,
         }
     }
 }
