@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, useCallback } from 'react'
+import * as ABICoder from 'web3-eth-abi'
 import { useAsyncRetry } from 'react-use'
-import Web3 from 'web3'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import addDays from 'date-fns/addDays'
 import subDays from 'date-fns/subDays'
@@ -29,7 +29,7 @@ import {
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { BoxInfo, BoxState } from '../type'
 import { useMaskBoxInfo } from './useMaskBoxInfo'
-import { useGetRootHash } from './useGetRootHash'
+import { useMerkelProof } from './useMerkleProof'
 import { useMaskBoxStatus } from './useMaskBoxStatus'
 import { useMaskBoxCreationSuccessEvent } from './useMaskBoxCreationSuccessEvent'
 import { useMaskBoxTokensForSale } from './useMaskBoxTokensForSale'
@@ -40,7 +40,7 @@ import { useMaskBoxMetadata } from './useMaskBoxMetadata'
 import { useIsWhitelisted } from './useIsWhitelisted'
 import { isGreaterThanOrEqualTo, isLessThanOrEqualTo, isZero, multipliedBy, useBeat } from '@masknet/web3-shared-base'
 
-function useContext(initialState?: { boxId: string; qualification: string }) {
+function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const now = new Date()
     const beat = useBeat()
     const account = useAccount()
@@ -49,7 +49,7 @@ function useContext(initialState?: { boxId: string; qualification: string }) {
     const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants()
 
     const [boxId, setBoxId] = useState(initialState?.boxId ?? '')
-    const qualification = initialState?.qualification?.replace(/0x/, '')
+    const [hashRoot, setHashRoot] = useState(initialState?.hashRoot ?? '')
     const [paymentTokenAddress, setPaymentTokenAddress] = useState('')
 
     // #region the box info
@@ -59,13 +59,6 @@ function useContext(initialState?: { boxId: string; qualification: string }) {
         loading: loadingMaskBoxInfo,
         retry: retryMaskBoxInfo,
     } = useMaskBoxInfo(boxId)
-
-    // #get hashroot
-    const { value, error: errorRootHash } = useGetRootHash(
-        qualification || '0x0000000000000000000000000000000000000000000000000000000000000000',
-    )
-    const web3 = new Web3()
-    const hashroot = value ? web3.eth.abi.encodeParameters(['bytes32[]'], [value?.proof?.map((p) => '0x' + p)]) : '0x00'
 
     const {
         value: maskBoxStatus = null,
@@ -145,10 +138,29 @@ function useContext(initialState?: { boxId: string; qualification: string }) {
         maskBoxCreationSuccessEvent,
     ])
 
+    const { value, error: errorProof, loading: loadingProof } = useMerkelProof(hashRoot)
+
+    const proof = value?.proof?.length
+        ? (ABICoder as unknown as ABICoder.AbiCoder).encodeParameters(
+              ['bytes32[]'],
+              [value?.proof?.map((p) => '0x' + p)],
+          )
+        : '0x00'
+    const isWhitelisted = useIsWhitelisted(boxInfo?.qualificationAddress, account, proof)
+    const isQualifiedByContract =
+        boxInfo?.qualificationAddress && !isZeroAddress(boxInfo?.qualificationAddress) ? isWhitelisted : true
+
+    console.log({
+        account,
+        proof,
+        isWhitelisted: isWhitelisted.qualified,
+        qualificationAddress: boxInfo?.qualificationAddress,
+    })
+
     const boxState = useMemo(() => {
-        if (errorRootHash?.message === 'leaf not found') return BoxState.NOT_IN_WHITELIST
+        if (errorProof?.message === 'leaf not found') return BoxState.NOT_IN_WHITELIST
         if (errorMaskBoxInfo || errorMaskBoxStatus || errorBoxInfo) return BoxState.ERROR
-        if (loadingMaskBoxInfo || loadingMaskBoxStatus || loadingBoxInfo) {
+        if (loadingMaskBoxInfo || loadingMaskBoxStatus || loadingBoxInfo || loadingProof) {
             if (!maskBoxInfo && !boxInfo) return BoxState.UNKNOWN
         }
         if (maskBoxInfo && !boxInfo) return BoxState.UNKNOWN
@@ -159,11 +171,17 @@ function useContext(initialState?: { boxId: string; qualification: string }) {
         if (boxInfo.startAt > now || !boxInfo.started) return BoxState.NOT_READY
         if (boxInfo.endAt < now || maskBoxStatus?.expired) return BoxState.EXPIRED
         return BoxState.READY
-    }, [boxInfo, loadingBoxInfo, errorBoxInfo, maskBoxInfo, loadingMaskBoxInfo, errorMaskBoxInfo, beat])
-
-    const isWhitelisted = useIsWhitelisted(boxInfo?.qualificationAddress, account, hashroot)
-    const isQualifiedByContract =
-        boxInfo?.qualificationAddress && !isZeroAddress(boxInfo?.qualificationAddress) ? isWhitelisted : true
+    }, [
+        boxInfo,
+        loadingBoxInfo,
+        errorBoxInfo,
+        maskBoxInfo,
+        loadingMaskBoxInfo,
+        loadingProof,
+        errorProof,
+        errorMaskBoxInfo,
+        beat,
+    ])
 
     // #region check holder min token
     const { value: holderToken } = useERC20TokenDetailed(boxInfo?.holderTokenAddress)
@@ -269,7 +287,7 @@ function useContext(initialState?: { boxId: string; qualification: string }) {
         paymentTokenIndex,
         paymentTokenPrice,
         paymentTokenDetailed,
-        hashroot,
+        proof,
         openBoxTransactionOverrides,
     )
     const { value: erc20Allowance, retry: retryAllowance } = useERC20TokenAllowance(

@@ -10,7 +10,7 @@ export function useOpenBoxTransaction(
     paymentTokenIndex: number,
     paymentTokenPrice: string,
     paymentTokenDetailed: FungibleTokenDetailed | null,
-    qualification: string,
+    proof?: string,
     overrides?: NonPayableTx | null,
 ) {
     const account = useAccount()
@@ -26,7 +26,7 @@ export function useOpenBoxTransaction(
                         ? multipliedBy(paymentTokenPrice, amount).toFixed()
                         : undefined,
             },
-            method: maskBoxContract.methods.openBox(boxId, amount, paymentTokenIndex, qualification || '0x00'),
+            method: maskBoxContract.methods.openBox(boxId, amount, paymentTokenIndex, proof ?? '0x00'),
         }
     }, [account, amount, boxId, maskBoxContract, paymentTokenIndex, paymentTokenPrice, paymentTokenDetailed, overrides])
 }
