@@ -28,8 +28,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const links = usePostInfoDetails.mentionedLinks()
         const link = uniq(links).find(checkUrl)
         // const asset = getAssetInfoFromURL(link)
-        if (!link) return null
         // if (!asset?.market_name || !asset?.idea_name) return null
+        if (!link) return null
 
         return <Renderer />
     },

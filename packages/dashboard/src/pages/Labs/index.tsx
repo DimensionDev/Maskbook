@@ -18,6 +18,7 @@ import {
     TransakIcon,
     ValuablesIcon,
     CyberConnectIcon,
+    IdeaMarketIcon,
 } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import MarketTrendSettingDialog from './components/MarketTrendSettingDialog'
@@ -71,6 +72,7 @@ export default function Plugins() {
         [PluginId.GoodGhosting]: true,
         [PluginId.PoolTogether]: true,
         [PluginId.CyberConnect]: true,
+        [PluginId.IdeaMarket]: true,
     })
 
     useEffect(
@@ -189,6 +191,13 @@ export default function Plugins() {
             desc: t.labs_cyber_connect_desc(),
             icon: <CyberConnectIcon />,
             enabled: pluginStatus[PluginId.CyberConnect],
+        },
+        {
+            id: PluginId.IdeaMarket,
+            title: t.labs_idea_market(),
+            desc: t.labs_idea_market_desc(),
+            icon: <IdeaMarketIcon />,
+            enabled: pluginStatus[PluginId.IdeaMarket],
         },
     ]
 
