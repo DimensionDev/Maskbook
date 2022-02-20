@@ -4,17 +4,18 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Button, Grid, IconButton, TextField } from '@mui/material'
 import { DataGrid, GridRenderCellParams, GridValueFormatterParams } from '@mui/x-data-grid'
 import type { IdeaToken } from '../types'
-import { displaySocialName, formatterToUSD } from '../utils'
+import { formatterToUSD } from '../utils'
 import { formatWeiToEther } from '@masknet/web3-shared-evm'
 import { escapeRegExp } from 'lodash-unified'
 import { SearchIcon } from '@masknet/icons'
 import ClearIcon from '@mui/icons-material/Clear'
-import { InvestButton } from '../SNSAdaptor/InvestButton'
+import { BuyButton } from '../SNSAdaptor/BuyButton'
 
 const useStyles = makeStyles()((theme) => {
     return {
         subname: {
             color: 'rgba(8,87,224,1)',
+            marginLeft: theme.spacing(0.25),
         },
     }
 })
@@ -80,6 +81,7 @@ export function ListingsView() {
                 return {
                     id: token.id,
                     name: token.name,
+                    market: token.market.name,
                     price: token.latestPricePoint.price,
                     deposits: formatWeiToEther(token.daiInToken).toNumber(),
                     button: <Button />,
@@ -91,7 +93,7 @@ export function ListingsView() {
     const renderNameCell = (params: GridRenderCellParams<String>) => (
         <Grid container direction="column">
             <div>{params.row.name}</div>
-            <div className={classes.subname}>{displaySocialName(params.row.name)}</div>
+            <div className={classes.subname}>{params.row.market}</div>
         </Grid>
     )
 
@@ -121,7 +123,7 @@ export function ListingsView() {
             sortable: false,
             width: 130,
             align: 'right' as const,
-            renderCell: (params: GridRenderCellParams) => <InvestButton params={params} />,
+            renderCell: (params: GridRenderCellParams) => <BuyButton params={params} />,
         },
     ]
 

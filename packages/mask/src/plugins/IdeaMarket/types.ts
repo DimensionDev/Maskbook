@@ -34,6 +34,7 @@ export enum MarketAvailable {
     Twitter = 'Twitter',
     Substack = 'Substack',
     Showtime = 'Showtime',
+    Url = 'URL',
 }
 
 export enum IdeaTokenTab {

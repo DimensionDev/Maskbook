@@ -3,6 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { Card, CardContent, Paper, Tab, Tabs } from '@mui/material'
 import { useI18N } from '../../../utils'
 import { ListingsView } from './ListingsView'
+import { AccountView } from './AccountView'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -126,6 +127,7 @@ export function IdeaMarketView() {
 
     const tabs = [
         <Tab className={classes.tab} key="listings" label={t('plugin_ideamarket_tab_listings')} />,
+        <Tab className={classes.tab} key="account" label={t('plugin_ideamarket_tab_account')} />,
         // <Tab className={classes.tab} key="stats" label={t('plugin_dhedge_tab_stats')} />,
         // <Tab className={classes.tab} key="content" label={t('plugin_ideamarket_tab_content')} />,
         // <Tab className={classes.tab} key="chart" label={t('plugin_dhedge_tab_chart')} />,
@@ -151,6 +153,7 @@ export function IdeaMarketView() {
                 </Tabs>
                 <Paper className={classes.body}>
                     {tabIndex === 0 ? <ListingsView /> : null}
+                    {tabIndex === 1 ? <AccountView /> : null}
                     {/* {tabIndex === 1 ? <ContentView ideaToken={ideaToken} /> : null}
                     {tabIndex === 2 ? <ChartsView ideaToken={ideaToken} /> : null}
                     {tabIndex === 3 ? <BoughtTogetherView ideaToken={ideaToken} setTabIndex={setTabIndex} /> : null} */}

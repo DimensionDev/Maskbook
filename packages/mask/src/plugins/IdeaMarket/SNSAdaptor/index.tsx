@@ -5,7 +5,7 @@ import { uniq } from 'lodash-unified'
 import { useMemo } from 'react'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { base } from '../base'
-import { checkUrl, getAssetInfoFromURL } from '../utils'
+import { checkUrl } from '../utils'
 import { IdeaMarketView } from './IdeaMarketView'
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -19,8 +19,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
         }, [props.message])
         if (!links) return null
         const link = uniq(links).find(checkUrl)
-        const asset = getAssetInfoFromURL(link)
-        if (!asset?.market_name || !asset?.idea_name) return null
+        // const asset = getAssetInfoFromURL(link)
+        // if (!asset?.market_name || !asset?.idea_name) return null
+        if (!link) return null
 
         return <Renderer />
     },

@@ -20,7 +20,6 @@ export async function fetchIdeaToken(marketName: string, tokenName: string) {
                 daiInToken
             }
         }`,
-
         variables: { marketName: marketName, tokenName: tokenName },
     }
     const response = await fetch(SUBGRAPH_URL, {
@@ -51,6 +50,29 @@ export async function fetchAllTokens() {
                 daiInToken
             }
         }`,
+    }
+    const response = await fetch(SUBGRAPH_URL, {
+        body: JSON.stringify(body),
+        method: 'POST',
+    })
+
+    const res = (await response.json())?.data
+    return res
+}
+
+export async function fetchUserTokens(holder: string) {
+    const body = {
+        query: `query IdeaTokenBalances ($holder: String!) {
+            ideaTokenBalances(where: {holder: $holder}){
+                id
+                token {
+                    id
+                }
+                holder
+                amount
+            }
+        }`,
+        variables: { holder },
     }
     const response = await fetch(SUBGRAPH_URL, {
         body: JSON.stringify(body),

@@ -2,23 +2,24 @@ import { Button, Link } from '@mui/material'
 import { useERC20TokenDetailed } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginTraderMessages } from '../../Trader/messages'
-import { formatSymbol } from '../utils'
+import { composeIdeaURL, formatSymbol } from '../utils'
 import type { Coin } from '../../Trader/types'
 
-interface InvestButtonProps {
+interface BuyButtonProps {
     params: any
 }
 
-export function InvestButton(props: InvestButtonProps) {
+export function BuyButton(props: BuyButtonProps) {
     const { params } = props
     const { value: token } = useERC20TokenDetailed(params.row.id)
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
     const formattedSymbol = !token?.symbol || !token?.name ? '' : formatSymbol(`${token?.symbol} (${token?.name})`)
+    // console.log(composeIdeaURL(params.row.market, params.row.name))
 
     return (
         <>
-            <Link href="https://ideamarket.io" target="_blank">
+            <Link href={composeIdeaURL(params.row.market, params.row.name)} target="_blank">
                 View
             </Link>
             <Button
