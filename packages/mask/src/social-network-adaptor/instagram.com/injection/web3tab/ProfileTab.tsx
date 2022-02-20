@@ -27,7 +27,7 @@ export function injectProfileTabAtInstagram(signal: AbortSignal) {
 }
 
 function getStyleProps() {
-    const EMPTY_STYLE = {} as CSSStyleDeclaration
+    const EMPTY_STYLE: CSSStyleDeclaration = {}
     const eleTab = searchProfileTabSelector().evaluate()
     const style = eleTab ? window.getComputedStyle(eleTab) : EMPTY_STYLE
     const activeTab = searchUserIdSelector().evaluate()
