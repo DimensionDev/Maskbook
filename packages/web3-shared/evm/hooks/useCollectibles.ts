@@ -4,10 +4,10 @@ import { uniqWith } from 'lodash-unified'
 import { isSameAddress } from '../utils'
 import { useSocket } from './useSocket'
 
-export function useCollections(address: string, chainId: ChainId | null) {
+export function useCollections(address: string, chainId: ChainId | null, dependReady?: boolean) {
     const id = `mask.fetchNonFungibleCollectionAsset_${address}_${chainId}`
     const message = {
-        id,
+        id: dependReady === undefined ? id : dependReady ? id : '',
         method: 'mask.fetchNonFungibleCollectionAsset',
         params: {
             address: address,

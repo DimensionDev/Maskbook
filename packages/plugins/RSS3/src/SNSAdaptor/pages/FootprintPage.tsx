@@ -1,11 +1,10 @@
-import urlcat from 'urlcat'
 import { makeStyles } from '@masknet/theme'
-import type { AddressName } from '@masknet/web3-shared-evm'
-import { Box, CircularProgress, Link, Typography } from '@mui/material'
+import { Link } from '@mui/material'
+import urlcat from 'urlcat'
 import { RSS3_DEFAULT_IMAGE } from '../../constants'
-import type { GeneralAssetWithTags } from '../../types'
-import { FootprintCard } from '../components'
-import { useFootprints, useRss3Profile } from '../hooks'
+import type { GeneralAsset, GeneralAssetWithTags } from '../../types'
+import { FootprintCard, StatusBox } from '../components'
+import { useRss3Profile } from '../hooks'
 
 const useStyles = makeStyles()((theme) => ({
     address: {
@@ -29,32 +28,19 @@ const getFootprintLink = (label: string, footprint: GeneralAssetWithTags) => {
 }
 
 export interface FootprintPageProps {
-    addressName?: AddressName
+    footprints: GeneralAsset[]
+    loading?: boolean
+    addressLabel: string
+    address?: string
 }
 
-export function FootprintPage(props: FootprintPageProps) {
-    const { addressName } = props
+export function FootprintPage({ footprints, address, loading, addressLabel }: FootprintPageProps) {
     const { classes } = useStyles()
-    const { value: profile } = useRss3Profile(addressName?.resolvedAddress ?? '')
+    const { value: profile } = useRss3Profile(address || '')
     const username = profile?.name
 
-    const { value: footprints = [], loading } = useFootprints(addressName?.resolvedAddress ?? '')
-
-    if (!addressName) return null
-
-    if (loading) {
-        return (
-            <Box display="flex" alignItems="center" justifyContent="center">
-                <CircularProgress />
-            </Box>
-        )
-    }
-    if (!footprints.length) {
-        return (
-            <Box display="flex" alignItems="center" justifyContent="center">
-                <Typography color="textPrimary">No data.</Typography>
-            </Box>
-        )
+    if (loading || !footprints.length) {
+        return <StatusBox loading={loading} empty={!footprints.length} />
     }
 
     return (
@@ -62,7 +48,7 @@ export function FootprintPage(props: FootprintPageProps) {
             {footprints.map((footprint) => (
                 <Link
                     className={classes.link}
-                    href={getFootprintLink(addressName.label, footprint)}
+                    href={getFootprintLink(addressLabel, footprint)}
                     key={footprint.id}
                     target="_blank"
                     rel="noopener noreferrer">
