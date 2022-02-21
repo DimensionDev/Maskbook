@@ -8,7 +8,8 @@ import { PluginNFTAvatarRPC } from '../../Avatar/messages'
 
 const ENS_RE = /\S{1,256}\.(eth|kred|xyz|luxe)\b/
 const ADDRESS_FULL = /0x\w+/
-const RSS3_URL_RE = /https?:\/\/(?<name>[\w.]+)\.rss3\.bio/
+// xxx.cheers.bio xxx.rss3.bio
+const RSS3_URL_RE = /https?:\/\/(?<name>[\w.]+)\.(rss3|cheers)\.bio/
 const RSS3_RNS_RE = /(?<name>[\w.]+)\.rss3/
 
 function isValidAddress(address: string) {

@@ -1,8 +1,19 @@
 import { makeStyles } from '@masknet/theme'
+import { RainbowBox } from './RainbowBox'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
         overflow: 'unset',
+    },
+    container: {
+        boxShadow: '0 5px 15px rgba(0, 248, 255, 0.4), 0 10px 30px rgba(37, 41, 46, 0.2)',
+        transition: 'none',
+        borderRadius: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        lineHeight: 0,
+        border: '2px solid #00f8ff',
     },
 }))
 interface NFTAvatarRingProps {
@@ -13,11 +24,12 @@ interface NFTAvatarRingProps {
     price: string
     width: number
     id: string
+    hasRainbow?: boolean
 }
 
 export function NFTAvatarRing(props: NFTAvatarRingProps) {
     const { classes } = useStyles()
-    const { stroke, strokeWidth, fontSize, text, width, id, price } = props
+    const { stroke, strokeWidth, fontSize, text, width, id, price, hasRainbow = true } = props
 
     const avatarSize = width + 1
     const R = avatarSize / 2
@@ -25,7 +37,8 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
     const x1 = R - path_r
     const y1 = R
     const x2 = R + path_r
-    return (
+
+    const svgNode = (
         <svg className={classes.root} width="100%" height="100%" viewBox={`0 0 ${avatarSize} ${avatarSize}`} id={id}>
             <defs>
                 <path
@@ -83,4 +96,6 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
             </text>
         </svg>
     )
+
+    return hasRainbow ? <RainbowBox>{svgNode}</RainbowBox> : <div className={classes.container}>{svgNode}</div>
 }
