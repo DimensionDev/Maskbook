@@ -51,8 +51,10 @@ export const searchNewTweetButtonSelector: () => LiveSelector<E, true> = () => {
 
 export const searchNickNameSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="UserProfileHeader_Items"]')
-export const searchAvatarSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="primaryColumn"] a[href$="/photo"] img[src*="profile_images"]')
+export const searchAvatarSelector = () =>
+    querySelector<HTMLImageElement>('[data-testid="primaryColumn"] a[href$="/photo"] img[src*="profile_images"]')
+export const searchNFTAvatarSelector = () =>
+    querySelector<HTMLImageElement>('[data-testid="primaryColumn"] a[href$="/nft"] img[src*="profile_images"]')
 export const searchAvatarMetaSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('head > meta[property="og:image"]:last-child')
 
