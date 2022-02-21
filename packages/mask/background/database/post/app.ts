@@ -17,6 +17,7 @@ export async function createPostDB(record: PostRecord, t?: PostReadWriteTransact
         return nativeAPI?.api.create_post({ post: postInNative(record) as NativePostRecord })
     } catch (error) {
         console.log({ error })
+        return
     }
 }
 
