@@ -6,5 +6,5 @@
     "tsBuildInfoFile": "../dist/solana.tsbuildinfo"
   },
   "include": ["./", "./**/*.json"],
-  "references": [{ "path": "../../web3-kit" }, { "path": "../../plugins/Solana" }]
+  "references": [{ "path": "../../web3-kit" }]
 }
