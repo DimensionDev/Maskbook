@@ -152,7 +152,7 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const { value, error: errorProof, loading: loadingProof } = useMerkelProof(hashRoot)
     const proofBytes = value?.proof
         ? coder.encodeParameters(['bytes32[]'], [value?.proof?.map((p) => `0x${p}`) ?? []])
-        : ''
+        : undefined
     const qualification = useQualification(
         boxInfo?.qualificationAddress,
         account,
