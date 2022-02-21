@@ -18,11 +18,10 @@ export const IdentityProviderOpensea: SocialNetworkUI.CollectingCapabilities.Ide
 
 async function query(): Promise<null | SocialNetworkUI.CollectingCapabilities.IdentityResolved> {
     // temp
-    const detail = {
-        username: 'Unnamed',
-        profilePictureUrl: '',
-        fullName: 'Unnamed',
+    async function getBioByCookie() {
+        return { username: 'Unnamed', profilePictureUrl: '', fullName: 'Unnamed' }
     }
+    const detail = await getBioByCookie()
     return {
         identifier: new ProfileIdentifier(openseaBase.networkIdentifier, detail.username),
         avatar: detail.profilePictureUrl,
