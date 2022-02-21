@@ -176,7 +176,7 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
         if (notInWhiteList) return BoxState.NOT_IN_WHITELIST
         if (insufficientHolderToken) return BoxState.INSUFFICIENT_HOLDER_TOKEN
         if (qualification?.error_msg) return BoxState.NOT_QUALIFIED
-        if (errorMaskBoxInfo || errorMaskBoxStatus || errorBoxInfo || errorProof) return BoxState.ERROR
+        if (errorMaskBoxInfo || errorMaskBoxStatus || errorBoxInfo) return BoxState.ERROR
         if (loadingMaskBoxInfo || loadingMaskBoxStatus || loadingBoxInfo || loadingProof) {
             if (!maskBoxInfo && !boxInfo) return BoxState.UNKNOWN
         }
@@ -195,7 +195,6 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
         maskBoxInfo,
         loadingMaskBoxInfo,
         loadingProof,
-        errorProof,
         errorMaskBoxInfo,
         qualification,
         notInWhiteList,
