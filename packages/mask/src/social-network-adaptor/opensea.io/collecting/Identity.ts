@@ -1,7 +1,6 @@
 import { SocialNetworkUI, creator } from '../../../social-network'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { openseaBase } from '../base'
-import { openDB } from 'idb/with-async-ittr'
 export const IdentityProviderOpensea: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
     async start(signal) {
         const ref = this.recognized
@@ -18,16 +17,12 @@ export const IdentityProviderOpensea: SocialNetworkUI.CollectingCapabilities.Ide
 }
 
 async function query(): Promise<null | SocialNetworkUI.CollectingCapabilities.IdentityResolved> {
-    const db = await openDB('redux', 1, {
-        upgrade: () => {
-            db.createObjectStore('paths')
-        },
-    })
-    const tx = db.transaction('paths', 'readonly')
-    const id = await tx.store.get('users.viewerId')
-    if (!id) return null
-    const detail = (await tx.store.get('users.users'))[id]
-    db.close()
+    // temp
+    const detail = {
+        username: 'Unnamed',
+        profilePictureUrl: '',
+        fullName: 'Unnamed',
+    }
     return {
         identifier: new ProfileIdentifier(openseaBase.networkIdentifier, detail.username),
         avatar: detail.profilePictureUrl,
