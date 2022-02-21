@@ -1,13 +1,7 @@
-import {
-    MessageRenderUIComponentsContext,
-    MetadataRenderProps,
-    RenderRegistryContext,
-    TransformerContext,
-} from '@masknet/typed-message/dom'
+import { MessageRenderUIComponentsContext, MetadataRenderProps, RegistryContext } from '@masknet/typed-message/dom'
 import { TypedMessageRenderRegistry } from './registry'
-import { TypedMessageTransformers } from './transformer'
 import { useSubscription } from 'use-subscription'
-import { emptyTransformationContext, TransformationContext } from '@masknet/typed-message'
+import type { TransformationContext } from '@masknet/typed-message'
 import { useMemo } from 'react'
 import { Text, Anchor as Link } from './Components/Text'
 
@@ -18,19 +12,16 @@ export interface TypedMessageRenderContextProps extends React.PropsWithChildren<
 
 export function TypedMessageRenderContext(props: TypedMessageRenderContextProps) {
     const registry = useSubscription(TypedMessageRenderRegistry.subscription)
-    const f = useSubscription(TypedMessageTransformers.subscription)
-    const val = useMemo(() => {
-        return [f, props.context || emptyTransformationContext] as const
-    }, [f, props.context])
+    // const transformerFunction = useSubscription(TypedMessageTransformers.subscription)
     const Provider = useMemo((): MessageRenderUIComponentsContext => {
         return { Text, Link, Metadata: props.metadataRender }
     }, [props.metadataRender])
 
     return (
+        // basic components provider: Text, Link, Image and Metadata
         <MessageRenderUIComponentsContext.Provider value={Provider}>
-            <RenderRegistryContext.Provider value={registry}>
-                <TransformerContext.Provider value={val}>{props.children}</TransformerContext.Provider>
-            </RenderRegistryContext.Provider>
+            {/* Typed message render provider: a registry */}
+            <RegistryContext.Provider value={registry}>{props.children}</RegistryContext.Provider>
         </MessageRenderUIComponentsContext.Provider>
     )
 }
