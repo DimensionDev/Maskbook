@@ -139,27 +139,27 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     ])
 
     const { value, error: errorProof, loading: loadingProof } = useMerkelProof(hashRoot)
-
-    const proof = value?.proof?.length
+    const proof = value?.proof
         ? (ABICoder as unknown as ABICoder.AbiCoder).encodeParameters(
               ['bytes32[]'],
-              [value?.proof?.map((p) => '0x' + p)],
+              [value?.proof?.map((p) => `0x${p}`) ?? []],
           )
         : '0x00'
-    const isWhitelisted = useIsWhitelisted(boxInfo?.qualificationAddress, account, proof)
+    const isWhitelisted = useIsWhitelisted(boxInfo?.qualificationAddress, account, '0x0')
     const isQualifiedByContract =
         boxInfo?.qualificationAddress && !isZeroAddress(boxInfo?.qualificationAddress) ? isWhitelisted : true
 
     console.log({
         account,
         proof,
+        value,
         isWhitelisted: isWhitelisted.qualified,
         qualificationAddress: boxInfo?.qualificationAddress,
     })
 
     const boxState = useMemo(() => {
-        if (errorProof?.message === 'leaf not found') return BoxState.NOT_IN_WHITELIST
-        if (errorMaskBoxInfo || errorMaskBoxStatus || errorBoxInfo) return BoxState.ERROR
+        if (!isWhitelisted.qualified) return BoxState.NOT_IN_WHITELIST
+        if (errorMaskBoxInfo || errorMaskBoxStatus || errorBoxInfo || errorProof) return BoxState.ERROR
         if (loadingMaskBoxInfo || loadingMaskBoxStatus || loadingBoxInfo || loadingProof) {
             if (!maskBoxInfo && !boxInfo) return BoxState.UNKNOWN
         }
@@ -178,6 +178,7 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
         maskBoxInfo,
         loadingMaskBoxInfo,
         loadingProof,
+        isWhitelisted.qualified,
         errorProof,
         errorMaskBoxInfo,
         beat,

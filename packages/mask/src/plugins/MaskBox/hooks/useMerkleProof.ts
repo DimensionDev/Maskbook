@@ -7,16 +7,10 @@ export function useMerkelProof(root?: string) {
     return useAsyncRetry(async () => {
         if (!root) return
 
-        const leaf = encodeURIComponent(
-            Buffer.from(
-                new Uint8Array(
-                    account
-                        .replace(/0x/, '')
-                        .match(/.{1,2}/g)
-                        ?.map((byte) => Number.parseInt(byte, 16)) ?? [],
-                ),
-            ).toString('base64'),
-        )
+        const leaf = Buffer.from(
+            (account.replace(/0x/, '').match(/.{2}/g) ?? []).map((x) => Number.parseInt(x, 16)),
+        ).toString('base64')
+
         return getMerkleProof(leaf, root)
     }, [account, root])
 }
