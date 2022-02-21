@@ -5,6 +5,8 @@ import { DownloadCloud, File } from 'react-feather'
 import { useI18N } from '../locales/i18n_generated'
 import { CopyableCode } from './components/Copyable'
 import type { FileInfo } from '../types'
+import { resolveGatewayAPI } from '../helpers'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -55,7 +57,10 @@ export function Preview({ info }: { info: FileInfo }) {
             {t.unencrypted()}
         </Typography>
     )
-    const link = `https://arweave.net/${info.landingTxID}`
+
+    const linkPrefix = resolveGatewayAPI(info.provider)
+    const link = urlcat(linkPrefix, '/:txId', { txId: info.landingTxID })
+
     const onClick = (event: React.MouseEvent) => {
         event.preventDefault()
         event.stopPropagation()

@@ -5,6 +5,7 @@ import { Flags } from '../../../../../shared'
 import { getInjectNodeInfo } from '../../utils/avatar'
 import { searchRetweetAvatarSelector, searchTweetAvatarSelector } from '../../utils/selector'
 import { NFTAvatarMiniClip } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip'
+import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 
 function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
     startWatch(
@@ -24,7 +25,12 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                         {info.isTwitterNFT ? (
                             <NFTAvatarMiniClip width={info.width} height={info.height} />
                         ) : (
-                            <NFTBadgeTweet width={info.width - 4} height={info.height - 4} avatarId={info.avatarId} />
+                            <NFTBadgeTweet
+                                width={info.width - 4}
+                                height={info.height - 4}
+                                avatarId={info.avatarId}
+                                snsKey={RSS3_KEY_SNS.TWITTER}
+                            />
                         )}
                     </div>,
                 )

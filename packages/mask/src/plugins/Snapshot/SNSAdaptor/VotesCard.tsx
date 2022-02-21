@@ -6,11 +6,11 @@ import {
     formatPercentage,
 } from '@masknet/web3-shared-evm'
 import { Avatar, Badge, Box, Link, List, ListItem, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import classNames from 'classnames'
 import millify from 'millify'
 import { useContext } from 'react'
-import { useI18N, ShadowRootTooltip } from '../../../utils'
+import { useI18N } from '../../../utils'
 import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie'
 import { SnapshotContext } from '../context'
 import { useRetry } from './hooks/useRetry'

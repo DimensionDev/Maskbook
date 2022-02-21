@@ -217,6 +217,8 @@ export interface ERC721TokenCollectionInfo {
     slug: string
     address: string
     addresses?: string[]
+    symbol: string
+    balance: number
 }
 
 // #endregion
