@@ -22,6 +22,10 @@ export enum BoxState {
     NOT_FOUND = 8,
     /** leaf not found */
     NOT_IN_WHITELIST = 9,
+    /** insufficent holder token */
+    INSUFFICIENT_HOLDER_TOKEN = 10,
+    /** not qualified */
+    NOT_QUALIFIED = 11,
 }
 
 export interface PaymentOption {
