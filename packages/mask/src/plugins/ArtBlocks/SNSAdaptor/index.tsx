@@ -5,7 +5,7 @@ import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils'
 import { base } from '../base'
 import { getTypedMessageContent } from '../../../protocols/typed-message'
 import { Collectible } from './Collectible'
-import { ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -28,9 +28,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
 function Renderer(props: React.PropsWithChildren<{ chainId: ChainId; projectId: string }>) {
     usePluginWrapper(true)
     return (
-        <EthereumChainBoundary
-            chainId={props.chainId}
-            isValidChainId={(chainId) => [ChainId.Mainnet, ChainId.Ropsten].includes(chainId)}>
+        <EthereumChainBoundary chainId={props.chainId}>
             <Collectible projectId={props.projectId} />
         </EthereumChainBoundary>
     )
