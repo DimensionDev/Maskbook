@@ -1,4 +1,4 @@
-import { createRenderWithMetadata, createTypedMessageMetadataReader } from '@masknet/shared-base'
+import { createRenderWithMetadata, createTypedMessageMetadataReader } from '@masknet/typed-message'
 import { pluginMetaKey } from './constants'
 import type { UnlockProtocolMetadata } from './types'
 import schema from './schema.json'

@@ -1,17 +1,21 @@
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
-import { useValueRef } from '@masknet/shared'
 import {
     isTypedMessagePromise,
     isTypedMessageTuple,
     isWellKnownTypedMessages,
     makeTypedMessageTuple,
-} from '@masknet/shared-base'
+    TransformationContext,
+    TypedMessage,
+} from '@masknet/typed-message'
+import { TypedMessageRender, useTransformedValue } from '@masknet/typed-message/dom'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo } from 'react'
 import { Result } from 'ts-results'
-import { allPostReplacementSettings } from '../../settings/settings'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
-import { DefaultTypedMessageRenderer } from './TypedMessageRenderer'
+import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context'
+import { useCurrentIdentity } from '../DataSource/useActivatedUI'
+import { PluginRendererWithSuggestion } from './DecryptedPostMetadataRender'
+
 const useStyles = makeStyles()({
     root: {
         overflowWrap: 'break-word',
@@ -27,7 +31,10 @@ export function PostReplacer(props: PostReplacerProps) {
     const { classes } = useStyles()
     const postMessage = usePostInfoDetails.rawMessage()
     const postPayload = usePostInfoDetails.containingMaskPayload()
-    const allPostReplacement = useValueRef(allPostReplacementSettings)
+
+    const author = usePostInfoDetails.author()
+    const currentProfile = useCurrentIdentity()?.identifier
+    const url = usePostInfoDetails.url()
 
     const plugins = useActivatedPluginsSNSAdaptor(false)
     const processedPostMessage = useMemo(
@@ -44,8 +51,6 @@ export function PostReplacer(props: PostReplacerProps) {
         [plugins.map((x) => x.ID).join(), postMessage],
     )
     const shouldReplacePost =
-        // replace all posts
-        allPostReplacement ||
         // replace posts which enhanced by plugins
         processedPostMessage.items.some((x) => !isWellKnownTypedMessages(x)) ||
         // replace posts which encrypted by Mask
@@ -57,11 +62,29 @@ export function PostReplacer(props: PostReplacerProps) {
         else props.unzip?.()
     }, [shouldReplacePost])
 
+    const initialTransformationContext = useMemo((): TransformationContext => {
+        return {
+            authorHint: author,
+            currentProfile,
+            postURL: url?.toString(),
+        }
+    }, [author, currentProfile, url])
+
     return shouldReplacePost ? (
         <span className={classes.root}>
-            <DefaultTypedMessageRenderer
+            <TypedMessageRenderContext
+                context={initialTransformationContext}
+                metadataRender={PluginRendererWithSuggestion}>
+                <Transformer message={postMessage} />
+            </TypedMessageRenderContext>
+            <TypedMessageRender
                 message={makeTypedMessageTuple(processedPostMessage.items.filter((x) => !isTypedMessagePromise(x)))}
             />
         </span>
     ) : null
+}
+
+function Transformer(props: { message: TypedMessage }) {
+    const after = useTransformedValue(props.message)
+    return <TypedMessageRender message={after} />
 }

@@ -1,11 +1,10 @@
 import { useState } from 'react'
-import { useChainId } from '@masknet/web3-shared-evm'
 import { Link, Typography } from '@mui/material'
-import { TypedMessageAnchor, TypedMessage, isTypedMessageAnchor } from '@masknet/shared-base'
-import type { TypedMessageRendererProps } from '../../../components/InjectedComponents/TypedMessageRenderer'
+import { TypedMessageAnchor, TypedMessage, isTypedMessageAnchor } from '@masknet/typed-message'
 import { PluginTraderMessages, PluginTraderRPC } from '../messages'
 import { TagType } from '../types'
-import { registerTypedMessageRenderer } from '../../../protocols/typed-message'
+// TODO: when migrate, should have an API in the plugin infra for plugin to define render
+import { TypedMessageRenderRegistry } from '../../../../shared-ui/TypedMessageRender/registry'
 
 export interface TypedMessageCashTrending extends Omit<TypedMessageAnchor, 'type'> {
     readonly type: 'x-cash-trending'
@@ -21,15 +20,13 @@ export function makeTypedMessageCashTrending(message: TypedMessageAnchor) {
         name: message.content.substr(1).toLowerCase(),
     } as TypedMessageCashTrending
 }
-
-registerTypedMessageRenderer('x-cash-trending', {
-    component: DefaultTypedMessageCashTrendingRenderer,
-    id: 'com.maskbook.trader.x-cash-trending',
+TypedMessageRenderRegistry.registerTypedMessageRender('x-cash-trending', {
+    component: CashTrendingRenderer,
+    id: Symbol('com.mask.trader.x-cash-trending'),
     priority: 0,
 })
 
-function DefaultTypedMessageCashTrendingRenderer(props: TypedMessageRendererProps<TypedMessageCashTrending>) {
-    const chainId = useChainId()
+function CashTrendingRenderer(props: TypedMessageCashTrending) {
     const [openTimer, setOpenTimer] = useState<ReturnType<typeof setTimeout> | null>(null)
     const onMouseOver = (ev: React.MouseEvent<HTMLAnchorElement>) => {
         // cache for async operations
@@ -37,11 +34,10 @@ function DefaultTypedMessageCashTrendingRenderer(props: TypedMessageRendererProp
         if (openTimer !== null) clearTimeout(openTimer)
         setOpenTimer(
             setTimeout(async () => {
-                if (props.message.category !== 'cash' && props.message.category !== 'hash') return
-                const { name, category } = props.message
+                if (props.category !== 'cash' && props.category !== 'hash') return
+                const { name, category } = props
                 const type = category === 'cash' ? TagType.CASH : TagType.HASH
                 const dataProviders = await PluginTraderRPC.getAvailableDataProviders(type, name)
-                const tradeProviders = await PluginTraderRPC.getAvailableTraderProviders(chainId)
                 if (!dataProviders.length) return
                 PluginTraderMessages.cashTagObserved.sendToLocal({
                     name,
@@ -60,8 +56,8 @@ function DefaultTypedMessageCashTrendingRenderer(props: TypedMessageRendererProp
     }
     return (
         <Typography component="span" color="textPrimary" variant="body1">
-            <Link href={props.message.href} onMouseOver={onMouseOver} onMouseLeave={onMouseLeave} onClick={onClick}>
-                {props.message.content}
+            <Link href={props.href} onMouseOver={onMouseOver} onMouseLeave={onMouseLeave} onClick={onClick}>
+                {props.content}
             </Link>
         </Typography>
     )

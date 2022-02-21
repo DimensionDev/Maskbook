@@ -8,13 +8,18 @@ import { forEachTypedMessageChild } from '../visitor/forEachChild'
  * Get inner text from a TypedMessage
  * @param message message
  */
-export function extractTextFromTypedMessage(message: TypedMessage | null): Option<string> {
+export function extractTextFromTypedMessage(
+    message: TypedMessage | null,
+    options?: { linkAsText: boolean },
+): Option<string> {
     if (!message) return None
     const text: string[] = []
     forEachTypedMessageChild(message, function visitor(message) {
         if (isTypedMessageText(message)) text.push(message.content)
-        else if (isTypedMessageAnchor(message)) text.push(message.content)
-        else forEachTypedMessageChild(message, visitor)
+        else if (isTypedMessageAnchor(message)) {
+            text.push(message.content)
+            if (options?.linkAsText) text.push(`(${message.href})`)
+        } else forEachTypedMessageChild(message, visitor)
     })
     if (text.length) return Some(text.join(' '))
     return None

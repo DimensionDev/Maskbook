@@ -1,18 +1,20 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import type { PostContext, PostContextAuthor, PostContextCreation, PostContextSNSActions } from '@masknet/plugin-infra'
 import {
-    ALL_EVENTS,
     extractTextFromTypedMessage,
     isTypedMessageEqual,
     makeTypedMessageTupleFromList,
+    type TypedMessage,
+    type TypedMessageTuple,
+} from '@masknet/typed-message'
+import {
+    ALL_EVENTS,
     ObservableMap,
     ObservableSet,
     parseURL,
     Payload,
     PostIdentifier,
     ProfileIdentifier,
-    TypedMessage,
-    TypedMessageTuple,
     SubscriptionFromValueRef,
     SubscriptionDebug as debug,
     mapSubscription,

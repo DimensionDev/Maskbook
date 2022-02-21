@@ -4,6 +4,8 @@ import { TypedMessageUnknownRenderer as TypedMessageUnknownRender } from './Core
 import { RegistryContext } from './utils/RegistryContext'
 export interface RenderProps {
     message: TypedMessage
+    /** @deprecated */
+    allowTextEnlarge?: boolean
 }
 export function TypedMessageRender(props: RenderProps) {
     const { message } = props

@@ -1,4 +1,5 @@
-import { makeTypedMessageText, TypedMessage, delay } from '@masknet/shared-base'
+import { makeTypedMessageText, TypedMessage } from '@masknet/typed-message'
+import { delay } from '@masknet/shared-base'
 import { untilDocumentReady } from '../../../utils/dom'
 import { i18n } from '../../../../shared-ui/locales_legacy'
 import { MaskMessages, CompositionRequest } from '../../../utils/messages'

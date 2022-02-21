@@ -7,7 +7,7 @@ import {
     makeTypedMessageText,
     TypedMessage,
     TypedMessageText,
-} from '@masknet/shared-base'
+} from '@masknet/typed-message'
 import { assertNonNull } from '../../../../utils-pure'
 
 const parseNameArea = (nameArea: HTMLAnchorElement) => {

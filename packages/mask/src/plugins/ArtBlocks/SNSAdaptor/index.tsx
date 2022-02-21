@@ -3,7 +3,7 @@ import { uniq } from 'lodash-unified'
 import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils'
 
 import { base } from '../base'
-import { getTypedMessageContent } from '../../../protocols/typed-message'
+import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Collectible } from './Collectible'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
@@ -19,7 +19,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return asset ? <Renderer chainId={asset?.chain_id} projectId={asset.project_id} /> : null
     },
     DecryptedInspector: function Component(props) {
-        const collectibleUrl = getRelevantUrl(getTypedMessageContent(props.message))
+        const collectibleUrl = getRelevantUrl(extractTextFromTypedMessage(props.message).unwrapOr(''))
         const asset = getAssetInfoFromURL(collectibleUrl)
         return asset ? <Renderer chainId={asset.chain_id} projectId={asset.project_id} /> : null
     },

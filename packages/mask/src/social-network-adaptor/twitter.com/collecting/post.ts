@@ -6,14 +6,14 @@ import { postIdParser, postParser, postImagesParser } from '../utils/fetch'
 import { memoize } from 'lodash-unified'
 import Services from '../../../extension/service'
 import { injectMaskIconToPostTwitter } from '../injection/MaskIcon'
+import { ProfileIdentifier } from '@masknet/shared-base'
 import {
-    ProfileIdentifier,
     makeTypedMessageImage,
     makeTypedMessageTupleFromList,
     makeTypedMessageEmpty,
     makeTypedMessagePromise,
     makeTypedMessageTuple,
-} from '@masknet/shared-base'
+} from '@masknet/typed-message'
 import { untilElementAvailable } from '../../../utils/dom'
 import { twitterBase } from '../base'
 import { twitterShared } from '../shared'

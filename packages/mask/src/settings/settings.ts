@@ -14,14 +14,6 @@ export const debugModeSetting = createGlobalSettings<boolean>('debugMode', false
     secondary: () => i18n.t('settings_enable_debug_desc'),
 })
 
-/**
- * Whether if create substitute post for all posts
- */
-export const allPostReplacementSettings = createGlobalSettings<boolean>('post replacement all', false, {
-    primary: () => i18n.t('settings_post_replacement'),
-    secondary: () => i18n.t('settings_post_replacement_desc'),
-})
-
 // #region appearance
 export const appearanceSettings = createGlobalSettings<Appearance>('appearance', Appearance.default, {
     primary: () => i18n.t('settings_appearance'),

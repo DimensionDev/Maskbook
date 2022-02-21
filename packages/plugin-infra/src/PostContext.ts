@@ -5,8 +5,8 @@ import {
     type Payload,
     type PostIdentifier,
     type ProfileIdentifier,
-    type TypedMessageTuple,
 } from '@masknet/shared-base'
+import type { TypedMessageTuple } from '@masknet/typed-message'
 import { ValueRef, LiveSelector, DOMProxy } from '@dimensiondev/holoflows-kit'
 import type { Result } from 'ts-results'
 import { Context, createContext, createElement, memo, useContext } from 'react'

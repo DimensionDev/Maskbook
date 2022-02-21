@@ -1,7 +1,7 @@
 import { forwardRef, useImperativeHandle, useMemo, useRef, useState, startTransition, useCallback } from 'react'
 import { Typography, Chip, Button } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
-import type { TypedMessage } from '@masknet/shared-base'
+import type { TypedMessage } from '@masknet/typed-message'
 import { useValueRef } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { ImagePayloadIcon } from '@masknet/icons'

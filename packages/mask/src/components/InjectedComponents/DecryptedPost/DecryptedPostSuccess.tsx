@@ -5,35 +5,11 @@ import { useShareMenu } from '../SelectPeopleDialog'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Link } from '@mui/material'
 import type { Profile } from '../../../database'
-import { extractTextFromTypedMessage } from '@masknet/shared-base'
-import type { TypedMessage, ProfileIdentifier } from '@masknet/shared-base'
+import type { TypedMessage } from '@masknet/typed-message'
+import type { ProfileIdentifier } from '@masknet/shared-base'
 import { wrapAuthorDifferentMessage } from './authorDifferentMessage'
-import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
-import type { MetadataRendererProps } from '../TypedMessageRenderer'
-import {
-    useDisabledPluginSuggestionFromMeta,
-    useDisabledPluginSuggestionFromPost,
-    PossiblePluginSuggestionUI,
-} from '../DisabledPluginSuggestion'
-import { MaskPostExtraPluginWrapper } from '../../../plugins/MaskPluginWrapper'
+import { PluginRendererWithSuggestion } from '../DecryptedPostMetadataRender'
 
-const PluginRenderer = createInjectHooksRenderer(
-    useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
-    (x) => x.DecryptedInspector,
-    MaskPostExtraPluginWrapper,
-)
-function PluginRendererWithSuggestion(props: MetadataRendererProps) {
-    const a = useDisabledPluginSuggestionFromMeta(props.metadata || new Map())
-    const b = useDisabledPluginSuggestionFromPost(extractTextFromTypedMessage(props.message), [])
-
-    const suggest = Array.from(new Set(a.concat(b)))
-    return (
-        <>
-            <PossiblePluginSuggestionUI plugins={suggest} />
-            <PluginRenderer {...props} />
-        </>
-    )
-}
 export interface DecryptPostSuccessProps extends withClasses<never> {
     data: { content: TypedMessage }
     requestAppendRecipients?(to: Profile[]): Promise<void>
@@ -77,8 +53,8 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
     return (
         <>
             {shareMenu.ShareMenu}
+            <PluginRendererWithSuggestion metadata={content.meta} message={content} />
             <AdditionalContent
-                metadataRenderer={{ after: PluginRendererWithSuggestion }}
                 headerActions={wrapAuthorDifferentMessage(author, postedBy, rightActions)}
                 title={t('decrypted_postbox_title')}
                 message={content}

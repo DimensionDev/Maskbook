@@ -1,11 +1,6 @@
 import { Fragment, useEffect, useMemo, useReducer } from 'react'
-import {
-    delay,
-    makeTypedMessageTuple,
-    TypedMessageTuple,
-    type ProfileIdentifier,
-    type Payload,
-} from '@masknet/shared-base'
+import { delay, type ProfileIdentifier, type Payload } from '@masknet/shared-base'
+import { makeTypedMessageTuple, TypedMessageTuple } from '@masknet/typed-message'
 import { or } from '@masknet/theme'
 
 import { ServicesWithProgress } from '../../../extension/service'
