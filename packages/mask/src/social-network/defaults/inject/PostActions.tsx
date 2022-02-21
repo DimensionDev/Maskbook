@@ -1,3 +1,4 @@
+import { noop } from 'lodash-unified'
 import { PostInfoProvider } from '../../../components/DataSource/usePostInfo'
 import { PostActions } from '../../../components/InjectedComponents/PostActions'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
@@ -18,6 +19,6 @@ export function createPostActionsInjector() {
             root.render(jsx)
             return root.destory
         }
-        return () => {}
+        return noop
     }
 }
