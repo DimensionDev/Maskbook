@@ -57,6 +57,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
         chainId,
         selectedNetwork?.ID === `${PluginId.EVM}_ethereum`,
     )
+
     const {
         data: _collectibles,
         state: loadingCollectibleDone,
@@ -67,7 +68,10 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
     const collectibles = mergeNFTList([..._collectibles, ...customCollectibles])
     const isQuerying = loadingCollectibleDone !== SocketState.done
     const renderData = loadingSize ? collectibles.slice(page * loadingSize, (page + 1) * loadingSize) : []
-
+    useEffect(() => {
+        setPage(0)
+    }, [selectedNetwork])
+    console.log({ selectedNetwork, collectibles })
     const currentPluginId = usePluginIDContext()
     const onSend = useCallback(
         (detail: ERC721TokenDetailed) => {
