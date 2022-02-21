@@ -157,6 +157,16 @@ export async function personalSign(dataToSign: string, address: string, password
     )
 }
 
+export async function typedDataSign(address: string, dataToSign: string, overrides?: SendOverrides) {
+    return request<string>(
+        {
+            method: EthereumMethodType.ETH_SIGN_TYPED_DATA,
+            params: [address, dataToSign],
+        },
+        overrides,
+    )
+}
+
 export async function addEthereumChain(
     chainDetailed: EthereumChainDetailed,
     address?: string,

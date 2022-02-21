@@ -8,6 +8,7 @@ import type {
     RelationRecord,
     RedPacketAvailability,
 } from './types'
+import type { ProfileIdentifier_string } from './web'
 
 /**
  * APIs that both Android and iOS implements and have the same API signature
@@ -117,6 +118,7 @@ export interface SharedNativeAPIs {
         availability: RedPacketAvailability
         postLink: string | URL
     }): Promise<void>
+    notify_visible_detected_profile_changed(newID: ProfileIdentifier_string): Promise<void>
 }
 /**
  * APIs that only implemented by iOS Mask Network
