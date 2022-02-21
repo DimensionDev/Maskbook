@@ -1,9 +1,8 @@
-import { getMaskColor, makeStyles } from '@masknet/theme'
+import { useState } from 'react'
+import { getMaskColor, makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { MenuItem } from '@mui/material'
-import { ShadowRootMenu } from '../../../utils'
 import type { AddressName } from '@masknet/web3-shared-evm'
 import { CollectionList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
-import { useState } from 'react'
 import { first, uniqBy } from 'lodash-unified'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 
