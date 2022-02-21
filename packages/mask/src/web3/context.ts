@@ -13,6 +13,7 @@ import {
     createWeb3,
     ChainId,
     createContract,
+    isSameAddress,
 } from '@masknet/web3-shared-evm'
 import { isPopupPage } from '@masknet/shared-base'
 import { bridgedCoin98Provider, bridgedEthereumProvider } from '@masknet/injected-script'
@@ -36,13 +37,19 @@ import { UserNFTContainerAtTwitter } from '@masknet/web3-providers'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 import type { AbiItem } from 'web3-utils'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
+import CryptoPunks from '@masknet/web3-contracts/abis/CryptoPunks.json'
 
-async function getERC721ContractOwner(address: string, tokenId: string) {
+const PUNK_CONTRACT_ADDRESS = '0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb'
+async function getERC721ContractOwner(address: string, tokenId: string): Promise<string> {
     const web3 = createWeb3(Services.Ethereum.request, () => ({
         chainId: ChainId.Mainnet,
     }))
-    const ERC721contract = createContract<ERC721>(web3, address, ERC721ABI as AbiItem[])
-    return ERC721contract?.methods.ownerOf(tokenId).call()
+    if (isSameAddress(address, PUNK_CONTRACT_ADDRESS)) {
+        const PUNKContract = createContract(web3, PUNK_CONTRACT_ADDRESS, CryptoPunks as AbiItem[])
+        return PUNKContract?.methods.punkIndexToAddress(tokenId).call() ?? ''
+    }
+    const ERC721Contract = createContract<ERC721>(web3, address, ERC721ABI as AbiItem[])
+    return ERC721Contract?.methods.ownerOf(tokenId).call() ?? ''
 }
 
 function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderType {
