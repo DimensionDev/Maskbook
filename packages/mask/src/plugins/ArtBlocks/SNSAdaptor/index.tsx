@@ -30,7 +30,7 @@ function Renderer(props: React.PropsWithChildren<{ chainId: ChainId; projectId: 
     return (
         <EthereumChainBoundary
             chainId={props.chainId}
-            isValidChainId={(chainId) => [ChainId.Mainnet, ChainId.Ropsten].includes(props.chainId)}>
+            isValidChainId={(chainId) => [ChainId.Mainnet, ChainId.Ropsten].includes(chainId)}>
             <Collectible projectId={props.projectId} />
         </EthereumChainBoundary>
     )
