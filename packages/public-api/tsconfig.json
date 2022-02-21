@@ -3,9 +3,7 @@
   "compilerOptions": {
     "rootDir": "./src/",
     "outDir": "./dist/",
-    "tsBuildInfoFile": "./dist/.tsbuildinfo",
-    // NOT including web or node.
-    "types": []
+    "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
   "include": ["./src"],
   // This package MUST NOT use any other package.

@@ -78,9 +78,7 @@ export interface MaskNetworkAPIs {
     wallet_updateEthereumAccount(params: { account: string }): Promise<void>
     wallet_updateEthereumChainId(params: { chainId: number }): Promise<void>
     wallet_getLegacyWalletInfo(): Promise<WalletInfo[]>
-    /** @deprecated */
     SNSAdaptor_getCurrentDetectedProfile(): Promise<ProfileIdentifier_string | undefined>
-    getCurrentDetectedProfile_delegate_to_SNSAdaptor(): Promise<ProfileIdentifier_string | undefined>
 }
 
 export interface RelationRecord {
