@@ -1,7 +1,6 @@
 import { useValueRef } from '@masknet/shared'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { Box, Typography, styled } from '@mui/material'
-import { Portal } from '@mui/base'
+import { Box, Typography, styled, Portal } from '@mui/material'
 import classNames from 'classnames'
 import { PropsWithChildren, useRef, cloneElement, useEffect, ReactElement, useState } from 'react'
 import { sayHelloShowed, userGuideStatus } from '../../settings/settings'

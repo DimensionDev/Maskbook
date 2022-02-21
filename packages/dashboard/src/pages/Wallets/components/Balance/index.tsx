@@ -1,13 +1,13 @@
-import { memo, useEffect, useState } from 'react'
-import { useMatch } from 'react-router-dom'
-import { Box, Button, buttonClasses, styled, Typography } from '@mui/material'
-import { MaskColorVar } from '@masknet/theme'
 import { CardIcon, DownloadIcon, MaskWalletIcon, SendIcon, SwapIcon } from '@masknet/icons'
-import { MiniNetworkSelector } from '@masknet/shared'
 import type { Web3Plugin } from '@masknet/plugin-infra'
-import { useDashboardI18N } from '../../../../locales'
+import { MiniNetworkSelector } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { NetworkPluginID } from '@masknet/plugin-infra'
+import { MaskColorVar } from '@masknet/theme'
+import { Box, Button, buttonClasses, styled, Typography } from '@mui/material'
+import { noop } from 'lodash-unified'
+import { memo } from 'react'
+import { useDashboardI18N } from '../../../../locales'
+import { useIsMatched } from '../../hooks'
 
 const BalanceContainer = styled('div')(
     ({ theme }) => `
@@ -77,25 +77,19 @@ export interface BalanceCardProps {
     onReceive(): void
     networks: Web3Plugin.NetworkDescriptor[]
     selectedNetwork: Web3Plugin.NetworkDescriptor | null
-    pluginId: NetworkPluginID | null
+    showOperations: boolean
     onSelectNetwork(network: Web3Plugin.NetworkDescriptor | null): void
 }
 
 export const Balance = memo<BalanceCardProps>(
-    ({ balance, onSend, onBuy, onSwap, onReceive, onSelectNetwork, networks, selectedNetwork, pluginId }) => {
+    ({ balance, onSend, onBuy, onSwap, onReceive, onSelectNetwork, networks, selectedNetwork, showOperations }) => {
         const t = useDashboardI18N()
 
-        const isWalletTransferPath = useMatch(DashboardRoutes.WalletsTransfer)
-        const isWalletHistoryPath = useMatch(DashboardRoutes.WalletsHistory)
-
-        const [renderNetworks, setRenderNetworks] = useState<Web3Plugin.NetworkDescriptor[]>([])
-
-        useEffect(() => {
-            setRenderNetworks(networks.filter((x) => pluginId === x.networkSupporterPluginID && x.isMainnet))
-        }, [pluginId])
+        const isWalletTransferPath = useIsMatched(DashboardRoutes.WalletsTransfer)
+        const isWalletHistoryPath = useIsMatched(DashboardRoutes.WalletsHistory)
 
         const isDisabledNonCurrentChainSelect = !!isWalletTransferPath
-        const isHiddenAllButton = !!isWalletHistoryPath || !!isWalletTransferPath || renderNetworks.length <= 1
+        const isHiddenAllButton = isWalletHistoryPath || isWalletTransferPath || networks.length <= 1
 
         return (
             <BalanceContainer>
@@ -119,14 +113,14 @@ export const Balance = memo<BalanceCardProps>(
                             hideAllNetworkButton={isHiddenAllButton}
                             disabledNonCurrentNetwork={isDisabledNonCurrentChainSelect}
                             selectedNetwork={selectedNetwork}
-                            networks={renderNetworks}
+                            networks={networks}
                             onSelect={(network: Web3Plugin.NetworkDescriptor | null) =>
-                                renderNetworks.length <= 1 ? () => {} : onSelectNetwork(network)
+                                networks.length <= 1 ? noop : onSelectNetwork(network)
                             }
                         />
                     </BalanceDisplayContainer>
                 </Box>
-                {pluginId === NetworkPluginID.PLUGIN_EVM && (
+                {showOperations && (
                     <ButtonGroup>
                         <Button size="small" onClick={onSend} endIcon={<SendIcon fontSize="inherit" />}>
                             {t.wallets_balance_Send()}

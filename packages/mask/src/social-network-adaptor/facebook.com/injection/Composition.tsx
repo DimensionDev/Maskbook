@@ -37,16 +37,13 @@ if (isMobileFacebook) {
             .querySelector('[id="toolbarLabel"]')
             .closest(1)
             .querySelector('div:nth-child(2) > div:nth-child(4)')
-    } else
+    } else {
         composeBox = new LiveSelector()
-            .querySelector(
-                '[role="dialog"] form > div:first-child > div:first-child > div:first-child > div:first-child > div:first-child > div:last-child > div:first-child',
+            .querySelectorAll(
+                '[role="dialog"] form > div:first-child > div:first-child > div:first-child > div:first-child > div:first-child > div:last-child > div:first-child  > div:last-child > div > div',
             )
-            .querySelectorAll('[role="button"][tabindex="0"], [role="button"][tabindex="-1"]')
-            .map((x) => x.parentElement)
             .at(-2)
-            .map((x) => x.parentElement)
-            .map((x) => x.parentElement)
+    }
 }
 
 export function injectCompositionFacebook(signal: AbortSignal) {
