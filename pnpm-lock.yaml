@@ -1083,6 +1083,20 @@ importers:
       '@storybook/react': 6.4.18_b824aaa144c344b0886eeabad621db2e
       babel-loader: 8.2.3_900eac683bef8a6b239b47efcf24e8a9
 
+  packages/typed-message:
+    specifiers:
+      '@msgpack/msgpack': ^2.7.2
+      '@mui/material': link:..\empty
+      anchorme: ^2.1.2
+      immer: ^9.0.12
+      z-schema: ^5.0.2
+    dependencies:
+      '@msgpack/msgpack': 2.7.2
+      '@mui/material': link:../empty
+      anchorme: 2.1.2
+      immer: 9.0.12
+      z-schema: 5.0.2
+
   packages/web3-constants:
     specifiers: {}
 
