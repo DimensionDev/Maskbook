@@ -26,7 +26,6 @@ const nonFungibleCollectibleAsset = async (
                     data: ERC721TokenDetailed[]
                     hasNextPage: boolean
                 }
-                console.log({ r: JSON.stringify(r) })
                 return r
             },
             size,

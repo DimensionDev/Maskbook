@@ -48,7 +48,7 @@ async function fetchFromAlchemyEVM(path: string, network: Web3Plugin.NetworkDesc
         })
         const response = await fetch(urlcat(alchemyUrl, requestPath))
         const tokenMetaData = (await response.json()) as AlchemyNFTItemMetadataResponse
-        console.log({ tokenMetaData: JSON.stringify(tokenMetaData) })
+
         return {
             contract: {
                 name: tokenMetaData.metadata.name,
@@ -72,7 +72,7 @@ async function fetchFromAlchemyEVM(path: string, network: Web3Plugin.NetworkDesc
     const nfts = (await Promise.allSettled(allRequest))
         .map((v) => (v.status === 'fulfilled' && v.value ? v.value : null))
         .filter((v) => Boolean(v)) as AlchemyNFTItemDetailedResponse[]
-    console.log({ nfts: JSON.stringify(nfts) })
+
     return {
         ownerAddress: owner,
         nfts,
@@ -129,7 +129,7 @@ export class AlchemyAPI implements NonFungibleTokenAPI.Provider {
                 data: [],
                 hasNextPage: false,
             }
-        console.log({ nfts: JSON.stringify(result.nfts) })
+
         const data = result.nfts.map((nft) => createNFT(nft, result.ownerAddress, network.chainId))
         return {
             data,
