@@ -32,7 +32,7 @@ export default sns
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     const [, chainId] = props.url.match(/chain=(\d+)/i) ?? []
     const [, boxId] = props.url.match(/box=(\d+)/i) ?? []
-    const [, hashRoot] = props.url.match(/qualification=([\dA-Za-z]+)/) ?? []
+    const [, hashRoot] = props.url.match(/rootHash=([\dA-Za-z]+)/) ?? []
 
     const shouldNotRender = !chainId || !boxId
     usePluginWrapper(!shouldNotRender)
