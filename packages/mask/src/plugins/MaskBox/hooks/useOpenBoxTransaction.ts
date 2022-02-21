@@ -28,5 +28,15 @@ export function useOpenBoxTransaction(
             },
             method: maskBoxContract.methods.openBox(boxId, amount, paymentTokenIndex, proof ?? '0x00'),
         }
-    }, [account, amount, boxId, maskBoxContract, paymentTokenIndex, paymentTokenPrice, paymentTokenDetailed, overrides])
+    }, [
+        account,
+        amount,
+        boxId,
+        maskBoxContract,
+        paymentTokenIndex,
+        paymentTokenPrice,
+        paymentTokenDetailed,
+        proof,
+        overrides,
+    ])
 }

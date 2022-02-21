@@ -58,7 +58,7 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const coder = ABICoder as unknown as ABICoder.AbiCoder
 
     const [boxId, setBoxId] = useState(initialState?.boxId ?? '')
-    const [hashRoot, setHashRoot] = useState(initialState?.hashRoot || '')
+    const [rootHash, setRootHash] = useState(initialState?.hashRoot || '')
     const [paymentTokenAddress, setPaymentTokenAddress] = useState('')
 
     // #region the box info
@@ -149,14 +149,14 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     // #endregion
 
     // #region qualification
-    const { value, error: errorProof, loading: loadingProof } = useMerkelProof(hashRoot)
+    const { value, error: errorProof, loading: loadingProof } = useMerkelProof(rootHash)
     const proofBytes = value?.proof
         ? coder.encodeParameters(['bytes32[]'], [value?.proof?.map((p) => `0x${p}`) ?? []])
         : undefined
     const qualification = useQualification(
         boxInfo?.qualificationAddress,
         account,
-        value?.proof ? coder.encodeParameters(['bytes', 'bytes32'], [proofBytes, hashRoot]) : undefined,
+        value?.proof ? coder.encodeParameters(['bytes', 'bytes32'], [proofBytes, rootHash]) : undefined,
     )
 
     // not in whitelist
@@ -176,8 +176,9 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
         if (notInWhiteList) return BoxState.NOT_IN_WHITELIST
         if (insufficientHolderToken) return BoxState.INSUFFICIENT_HOLDER_TOKEN
         if (qualification?.error_msg) return BoxState.NOT_QUALIFIED
-        if (errorMaskBoxInfo || errorMaskBoxStatus || errorBoxInfo) return BoxState.ERROR
-        if (loadingMaskBoxInfo || loadingMaskBoxStatus || loadingBoxInfo || loadingProof) {
+        if (errorMaskBoxInfo || errorMaskBoxStatus || errorBoxInfo || (rootHash ? errorProof : false))
+            return BoxState.ERROR
+        if (loadingMaskBoxInfo || loadingMaskBoxStatus || loadingBoxInfo || (rootHash ? loadingProof : false)) {
             if (!maskBoxInfo && !boxInfo) return BoxState.UNKNOWN
         }
         if (maskBoxInfo && !boxInfo) return BoxState.UNKNOWN
@@ -194,9 +195,11 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
         errorBoxInfo,
         maskBoxInfo,
         loadingMaskBoxInfo,
-        loadingProof,
         errorMaskBoxInfo,
         qualification,
+        loadingProof,
+        errorProof,
+        rootHash,
         notInWhiteList,
         insufficientHolderToken,
         beat,
