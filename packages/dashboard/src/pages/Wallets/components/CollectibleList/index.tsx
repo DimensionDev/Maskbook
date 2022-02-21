@@ -1,7 +1,7 @@
 import { Dispatch, memo, SetStateAction, useCallback, useEffect, useRef, useState } from 'react'
 import { Box, Stack, TablePagination } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useAccount, useChainId, SocketState, useCustomNonFungibleAssets, ChainId } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId, SocketState, useCustomNonFungibleAssets } from '@masknet/web3-shared-evm'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { CollectibleCard } from '../CollectibleCard'
@@ -46,17 +46,7 @@ const ITEM_SIZE = {
     height: 250,
 }
 
-// TODO: Replace this after migrate EVM module out of mask package.
-const EVM_MAINNET_NETWORK_DESCRIPTION: Partial<Web3Plugin.NetworkDescriptor> = {
-    ID: `${PluginId.EVM}_ethereum`,
-    networkSupporterPluginID: PluginId.EVM,
-    chainId: ChainId.Mainnet,
-    type: 'ethereum',
-    name: 'Ethereum',
-    isMainnet: true,
-}
-
-export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork = EVM_MAINNET_NETWORK_DESCRIPTION }) => {
+export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) => {
     const [page, setPage] = useState(0)
     const navigate = useNavigate()
     const account = useAccount()
@@ -72,7 +62,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork = E
         state: loadingCollectibleDone,
         retry,
         error: collectiblesError,
-    } = useNonFungibleAssets(account, selectedNetwork! as Web3Plugin.NetworkDescriptor)
+    } = useNonFungibleAssets(account, selectedNetwork)
 
     const collectibles = mergeNFTList([..._collectibles, ...customCollectibles])
     const isQuerying = loadingCollectibleDone !== SocketState.done
