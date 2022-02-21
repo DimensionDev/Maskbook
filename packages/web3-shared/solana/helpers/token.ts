@@ -1,6 +1,6 @@
 import { CurrencyType, TokenType, Web3Plugin } from '@masknet/plugin-infra'
 import { leftShift, multipliedBy } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-solana'
+import type { ChainId } from '../types'
 
 export function createFungibleToken(
     chainId: ChainId,
@@ -8,6 +8,7 @@ export function createFungibleToken(
     name: string,
     symbol: string,
     decimals: number,
+    logoURI?: string,
 ): Web3Plugin.FungibleToken {
     return {
         id: address,
@@ -17,6 +18,7 @@ export function createFungibleToken(
         name,
         symbol,
         decimals,
+        logoURI,
     }
 }
 

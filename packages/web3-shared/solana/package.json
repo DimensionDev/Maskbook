@@ -4,8 +4,12 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "dependencies": {
+    "@masknet/plugin-infra": "workspace:*",
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-kit": "workspace:*",
+    "@masknet/web3-shared-base": "workspace:*",
+    "@solana/spl-token": "^0.1.8",
+    "@solana/spl-token-registry": "^0.2.1301",
     "react-use": "^17.3.2",
     "urlcat": "^2.0.4"
   }

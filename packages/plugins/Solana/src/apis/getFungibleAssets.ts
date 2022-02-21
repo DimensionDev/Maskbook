@@ -1,9 +1,16 @@
 import { Pagination, Web3Plugin, CurrencyType } from '@masknet/plugin-infra'
-import { ChainId, getTokenConstants } from '@masknet/web3-shared-solana'
+import {
+    ChainId,
+    createFungibleAsset,
+    createFungibleToken,
+    getTokenConstants,
+    requestRPC,
+    GetProgramAccountsResponse,
+    SPL_TOKEN_PROGRAM_ID,
+    GetAccountInfoResponse,
+} from '@masknet/web3-shared-solana'
 import { CoinGecko } from '@masknet/web3-providers'
-import { createFungibleAsset, createFungibleToken } from '../helpers'
 import { TokenListProvider } from '@solana/spl-token-registry'
-import { GetAccountInfoResponse, GetProgramAccountsResponse, requestRPC, SPL_TOKEN_PROGRAM_ID } from './shared'
 
 async function getSolanaBalance(chainId: ChainId, account: string) {
     const { SOL_ADDRESS = '' } = getTokenConstants(chainId)

@@ -1,8 +1,13 @@
 import { Connection } from '@metaplex/js'
-import { ChainId } from '@masknet/web3-shared-solana'
+import {
+    ChainId,
+    fetchJSON,
+    GetProgramAccountsResponse,
+    requestRPC,
+    SPL_TOKEN_PROGRAM_ID,
+} from '@masknet/web3-shared-solana'
 import { Metadata } from '@metaplex-foundation/mpl-token-metadata'
 import { Pageable, Pagination, TokenType, Web3Plugin } from '@masknet/plugin-infra'
-import { fetchJSON, GetProgramAccountsResponse, requestRPC, SPL_TOKEN_PROGRAM_ID } from './shared'
 import { ENDPOINT_KEY } from '../constants'
 
 interface ExternalMetadata {
@@ -62,6 +67,7 @@ async function getNftList(chainId: ChainId, account: string) {
             name: metadata.data.data.name,
             description: externalMeta?.description,
             contract: {
+                id: pubkey,
                 name: metadata.data.data.name,
                 symbol: metadata.data.data.symbol,
                 chainId: ChainId.Mainnet,
