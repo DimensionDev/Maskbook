@@ -27,7 +27,8 @@ export const useSocket = <T>(message: SocketMessage) => {
             if (!info.done) {
                 setState(SocketState.receiving)
             } else {
-                setState(SocketState.done)
+                // workaround for get data from cache
+                setTimeout(() => setState(SocketState.done), 0)
             }
             setError(info.error)
             if (!socket) return

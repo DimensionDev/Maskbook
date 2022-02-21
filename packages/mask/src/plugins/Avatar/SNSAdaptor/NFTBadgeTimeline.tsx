@@ -4,17 +4,19 @@ import { MaskMessages } from '../../../utils'
 import { useNFTAvatar } from '../hooks'
 import type { AvatarMetaDB } from '../types'
 import { RainbowBox } from './RainbowBox'
+import type { RSS3_KEY_SNS } from '../constants'
 
 interface NFTBadgeTimelineProps extends withClasses<'root'> {
     userId: string
     avatarId: string
     width: number
     height: number
+    snsKey: RSS3_KEY_SNS
 }
 
 export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
-    const { userId, avatarId, width, height } = props
-    const { loading, value: _avatar } = useNFTAvatar(userId)
+    const { userId, avatarId, width, height, snsKey } = props
+    const { loading, value: _avatar } = useNFTAvatar(userId, snsKey)
     const [avatar, setAvatar] = useState<AvatarMetaDB>()
     const [avatarId_, setAvatarId_] = useState('')
 
