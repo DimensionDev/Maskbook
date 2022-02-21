@@ -58,7 +58,7 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const coder = ABICoder as unknown as ABICoder.AbiCoder
 
     const [boxId, setBoxId] = useState(initialState?.boxId ?? '')
-    const [hashRoot, setHashRoot] = useState(initialState?.hashRoot ?? '')
+    const [hashRoot, setHashRoot] = useState(initialState?.hashRoot || '')
     const [paymentTokenAddress, setPaymentTokenAddress] = useState('')
 
     // #region the box info
