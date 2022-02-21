@@ -2,7 +2,7 @@ import '../utils/debug/general'
 import '../utils/debug/ui'
 import Services from '../extension/service'
 import { untilDomLoaded } from '../utils/dom'
-import { Flags } from '../../shared'
+import { Flags, MaskMessages } from '../../shared'
 import i18nNextInstance from '../../shared-ui/locales_legacy'
 import type { SocialNetworkUI } from './types'
 import { managedStateCreator } from './utils'
@@ -123,6 +123,17 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     function $unknownIdentityResolution() {
         const provider = ui.collecting.identityProvider
         provider?.start(signal)
+        MaskMessages.events.Native_delegate_getCurrentDetectedProfile.on(
+            ([type]) => {
+                if (type === 'request') {
+                    MaskMessages.events.Native_delegate_getCurrentDetectedProfile.sendToBackgroundPage([
+                        'response',
+                        provider?.recognized.value.identifier.toText(),
+                    ])
+                }
+            },
+            { signal },
+        )
         if (provider?.hasDeprecatedPlaceholderName) {
             provider.recognized.addListener((id) => {
                 if (signal.aborted) return
