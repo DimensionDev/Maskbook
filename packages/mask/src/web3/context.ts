@@ -40,16 +40,16 @@ import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import CryptoPunks from '@masknet/web3-contracts/abis/CryptoPunks.json'
 
 const PUNK_CONTRACT_ADDRESS = '0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb'
-async function getERC721ContractOwner(address: string, tokenId: string): Promise<string> {
+async function getTokenOwner(address: string, tokenId: string) {
     const web3 = createWeb3(Services.Ethereum.request, () => ({
         chainId: ChainId.Mainnet,
     }))
     if (isSameAddress(address, PUNK_CONTRACT_ADDRESS)) {
         const PUNKContract = createContract(web3, PUNK_CONTRACT_ADDRESS, CryptoPunks as AbiItem[])
-        return PUNKContract?.methods.punkIndexToAddress(tokenId).call() ?? ''
+        return PUNKContract?.methods.punkIndexToAddress(tokenId).call()
     }
     const ERC721Contract = createContract<ERC721>(web3, address, ERC721ABI as AbiItem[])
-    return ERC721Contract?.methods.ownerOf(tokenId).call() ?? ''
+    return ERC721Contract?.methods.ownerOf(tokenId).call()
 }
 
 function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderType {
@@ -148,8 +148,8 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
             const addressNames = await WalletRPC.getAddressNames(identity)
             if (identity.identifier.network === 'twitter.com') {
                 const result = await UserNFTContainerAtTwitter.getUserNftContainer(identity.identifier.userId ?? '')
-                if (result && result.type_name.toUpperCase() === 'ERC721') {
-                    const contractAddress = await getERC721ContractOwner(result.address, result.token_id)
+                if (result?.type_name.toUpperCase() === 'ERC721') {
+                    const contractAddress = await getTokenOwner(result.address, result.token_id)
                     if (contractAddress)
                         return [
                             ...addressNames,
