@@ -15,7 +15,7 @@ const define: SocialNetworkUI.Definition = {
     },
     configuration: {
         setupWizard: {
-            disableSayHello: false,
+            disableSayHello: true,
         },
     },
     customization: {},
