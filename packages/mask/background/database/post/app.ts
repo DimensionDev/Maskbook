@@ -12,8 +12,12 @@ import {
 import { nativeAPI } from '../../../shared/native-rpc'
 
 export async function createPostDB(record: PostRecord, t?: PostReadWriteTransaction) {
-    console.log({ record, post: postInNative(record) })
-    return nativeAPI?.api.create_post({ post: postInNative(record) as NativePostRecord })
+    try {
+        console.log({ record, post: postInNative(record) })
+        return nativeAPI?.api.create_post({ post: postInNative(record) as NativePostRecord })
+    } catch (error) {
+        console.log({ error })
+    }
 }
 
 export async function updatePostDB(
