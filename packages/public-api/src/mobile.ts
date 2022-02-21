@@ -110,13 +110,13 @@ export interface SharedNativeAPIs {
     notifyRedpacket(params: {
         redpacketPayload: any
         availability: RedPacketAvailability
-        postLink: string | URL
+        postLink: string
     }): Promise<void>
 
     claimOrRefundRedpacket(params: {
         redpacketPayload: any
         availability: RedPacketAvailability
-        postLink: string | URL
+        postLink: string
     }): Promise<void>
     notify_visible_detected_profile_changed(newID: ProfileIdentifier_string): Promise<void>
 }
