@@ -3,10 +3,11 @@ import type { AsyncState } from 'react-use/lib/useAsyncFn'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { PluginNFTAvatarRPC } from '../messages'
 import type { AvatarMetaDB } from '../types'
+import type { RSS3_KEY_SNS } from '../constants'
 
-export function useNFTAvatar(userId: string): AsyncState<AvatarMetaDB | undefined> {
+export function useNFTAvatar(userId: string, snsKey: RSS3_KEY_SNS): AsyncState<AvatarMetaDB | undefined> {
     return useAsync(async () => {
         if (!userId || userId === '$unknown') return
-        return PluginNFTAvatarRPC.getNFTAvatar(userId, activatedSocialNetworkUI.networkIdentifier)
+        return PluginNFTAvatarRPC.getNFTAvatar(userId, activatedSocialNetworkUI.networkIdentifier, snsKey)
     }, [userId, activatedSocialNetworkUI.networkIdentifier])
 }

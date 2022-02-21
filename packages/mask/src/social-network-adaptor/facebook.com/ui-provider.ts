@@ -5,7 +5,7 @@ import { facebookShared } from './shared'
 import { getProfilePageUrlAtFacebook } from './utils/parse-username'
 import { taskOpenComposeBoxFacebook } from './automation/openComposeBox'
 import { pasteTextToCompositionFacebook } from './automation/pasteTextToComposition'
-import { IdentityProviderFacebook } from './collecting/identity'
+import { CurrentVisitingIdentityProviderFacebook, IdentityProviderFacebook } from './collecting/identity'
 import { InitAutonomousStateFriends } from '../../social-network/defaults/state/InitFriends'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles'
 import { injectCompositionFacebook } from './injection/Composition'
@@ -25,6 +25,10 @@ import { makeStyles } from '@masknet/theme'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { globalUIState } from '../../social-network'
 import { injectToolboxHintAtFacebook as injectToolboxAtFacebook } from './injection/Toolbar'
+import { injectProfileNFTAvatarInFaceBook } from './injection/NFT/ProfileNFTAvatar'
+import { injectNFTAvatarInFacebook } from './injection/NFT/NFTAvatarInFacebook'
+import { injectUserNFTAvatarAtFacebook } from './injection/NFT/NFTAvatarInTimeline'
+import { injectOpenNFTAvatarEditProfileButton } from './injection/NFT/NFTAvatarEditProfile'
 
 const useInjectedDialogClassesOverwriteFacebook = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -129,6 +133,7 @@ const facebookUI: SocialNetworkUI.Definition = {
     },
     collecting: {
         identityProvider: IdentityProviderFacebook,
+        currentVisitingIdentityProvider: CurrentVisitingIdentityProviderFacebook,
         postsProvider: PostProviderFacebook,
     },
     customization: {
@@ -178,6 +183,10 @@ const facebookUI: SocialNetworkUI.Definition = {
                 },
             ),
         },
+        userAvatar: injectUserNFTAvatarAtFacebook,
+        enhancedProfileNFTAvatar: injectProfileNFTAvatarInFaceBook,
+        profileAvatar: injectNFTAvatarInFacebook,
+        openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
         postInspector: injectPostInspectorFacebook,
         pageInspector: injectPageInspectorDefault(),
         setupWizard: createTaskStartSetupGuideDefault(),

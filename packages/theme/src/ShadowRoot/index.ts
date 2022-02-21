@@ -12,4 +12,5 @@ export {
     createShadowRootForwardedPopperComponent,
     NoEffectUsePortalShadowRootContext,
 } from './Portal'
+export { ShadowRootMenu, ShadowRootPopper, ShadowRootTooltip } from './Wrapped'
 export { CSSVariableInjector } from './CSSVariableInjector'
