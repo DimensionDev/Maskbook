@@ -43,7 +43,6 @@ import {
     isGreaterThan,
     isGreaterThanOrEqualTo,
     isLessThanOrEqualTo,
-    isZero,
     multipliedBy,
     useBeat,
 } from '@masknet/web3-shared-base'
