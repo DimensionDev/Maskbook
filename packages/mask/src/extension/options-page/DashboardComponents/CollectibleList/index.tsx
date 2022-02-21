@@ -10,6 +10,7 @@ import {
     Wallet,
 } from '@masknet/web3-shared-evm'
 import { useNonFungibleAssetCollections, mergeNFTList, useNonFungibleAssets } from '@masknet/plugin-infra'
+import { PLUGIN_NETWORKS } from '../../../../plugins/EVM/constants'
 import { Box, Button, Skeleton, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { currentNonFungibleAssetDataProviderSettings } from '../../../../plugins/Wallet/settings'
@@ -215,12 +216,13 @@ export function CollectionList({ address }: { address: string }) {
         retry: retryFetchCollection,
         state: loadingCollectionDone,
     } = useNonFungibleAssetCollections(address, chainId)
+    const EVM_MainnetDescription = PLUGIN_NETWORKS[0]
     const {
         data: _collectibles,
         state: loadingCollectibleDone,
         retry: retryFetchCollectible,
-    } = useNonFungibleAssets(address, chainId, !!collections.length)
-    const customCollectibles = useCustomNonFungibleAssets(address, chainId)
+    } = useNonFungibleAssets(address, EVM_MainnetDescription, !!collections.length)
+    const customCollectibles = useCustomNonFungibleAssets(address, chainId, true)
     const collectibles = mergeNFTList([..._collectibles, ...customCollectibles])
 
     const isLoading = loadingCollectibleDone !== SocketState.done || loadingCollectionDone !== SocketState.done

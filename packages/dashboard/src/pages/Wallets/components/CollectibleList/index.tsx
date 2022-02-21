@@ -1,7 +1,7 @@
 import { Dispatch, memo, SetStateAction, useCallback, useEffect, useRef, useState } from 'react'
 import { Box, Stack, TablePagination } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useAccount, useChainId, SocketState, useCustomNonFungibleAssets } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId, SocketState, useCustomNonFungibleAssets, ChainId } from '@masknet/web3-shared-evm'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { CollectibleCard } from '../CollectibleCard'
@@ -11,13 +11,13 @@ import { useNavigate } from 'react-router'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { TransferTab } from '../Transfer'
 import {
-    useNetworkDescriptor,
     Web3Plugin,
     usePluginIDContext,
     NetworkPluginID,
     ERC721TokenDetailed,
     mergeNFTList,
     useNonFungibleAssets,
+    PluginId,
 } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()({
@@ -46,29 +46,37 @@ const ITEM_SIZE = {
     height: 250,
 }
 
-export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) => {
+// TODO: Replace this after migrate EVM module out of mask package.
+const EVM_MAINNET_NETWORK_DESCRIPTION: Partial<Web3Plugin.NetworkDescriptor> = {
+    ID: `${PluginId.EVM}_ethereum`,
+    networkSupporterPluginID: PluginId.EVM,
+    chainId: ChainId.Mainnet,
+    type: 'ethereum',
+    name: 'Ethereum',
+    isMainnet: true,
+}
+
+export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork = EVM_MAINNET_NETWORK_DESCRIPTION }) => {
     const [page, setPage] = useState(0)
     const navigate = useNavigate()
     const account = useAccount()
     const chainId = useChainId()
-    const network = useNetworkDescriptor()
     const [loadingSize, setLoadingSize] = useState(0)
-    const [renderData, setRenderData] = useState<ERC721TokenDetailed[]>([])
-    const customCollectibles = useCustomNonFungibleAssets(account, chainId)
+    const customCollectibles = useCustomNonFungibleAssets(
+        account,
+        chainId,
+        selectedNetwork?.ID === `${PluginId.EVM}_ethereum`,
+    )
     const {
         data: _collectibles,
         state: loadingCollectibleDone,
         retry,
         error: collectiblesError,
-    } = useNonFungibleAssets(account, chainId)
+    } = useNonFungibleAssets(account, selectedNetwork! as Web3Plugin.NetworkDescriptor)
+
     const collectibles = mergeNFTList([..._collectibles, ...customCollectibles])
     const isQuerying = loadingCollectibleDone !== SocketState.done
-
-    useEffect(() => {
-        if (!loadingSize) return
-        const render = collectibles.slice(page * loadingSize, (page + 1) * loadingSize)
-        setRenderData(render)
-    }, [collectibles, loadingSize, page])
+    const renderData = loadingSize ? collectibles.slice(page * loadingSize, (page + 1) * loadingSize) : []
 
     const currentPluginId = usePluginIDContext()
     const onSend = useCallback(
@@ -101,7 +109,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
             hasNextPage={hasNextPage}
             showPagination={!isQuerying && !(page === 0 && !hasNextPage)}
             dataSource={renderData}
-            chainId={network?.chainId ?? 1}
+            chainId={selectedNetwork?.chainId ?? 1}
             onSend={onSend}
             setLoadingSize={(size) => setLoadingSize(size)}
         />

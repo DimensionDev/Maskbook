@@ -58,7 +58,6 @@ export function NFTCardStyledAssetPlayer(props: NFTStyledAssetPlayerProps) {
         theme.palette.mode === 'dark'
             ? new URL('./nft_token_fallback_dark.png', import.meta.url)
             : new URL('./nft_token_fallback.png', import.meta.url)
-    console.log({ chainId, contractAddress, tokenId, tokenURI })
     return (
         <AssetPlayer
             erc721Token={{

@@ -33,8 +33,8 @@ export function useNFTs(user: User | undefined, configNFTs: Record<string, Const
     const [nfts, setNfts] = useState<FilterContract[]>(initContracts)
     const chainId = useChainId()
     const [fetchTotal, setFetchTotal] = useState<ERC721TokenDetailed[]>([])
-    const { data: _collectibles, state } = useNonFungibleAssets(user?.address ?? '', chainId)
-    const customCollectibles = useCustomNonFungibleAssets(user?.address ?? '', chainId)
+    const { data: _collectibles, state } = useNonFungibleAssets(user?.address ?? '')
+    const customCollectibles = useCustomNonFungibleAssets(user?.address ?? '', chainId, true)
     const collectibles = mergeNFTList([..._collectibles, ...customCollectibles])
 
     useEffect(() => {
