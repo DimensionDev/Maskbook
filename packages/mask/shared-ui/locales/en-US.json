@@ -1005,5 +1005,6 @@
     "nft_button_add_collectible": "Add Collectible",
     "nft_avatar": "NFT Avatar",
     "plugin_profile_no_wallets": "Connect your wallet here.<br/>This section will be shown to your encrypted friends.<br/>The display content includes digital art, donations, badges<br/>and other public information on chain.",
-    "plugin_vcent_last_offer_at": "LATEST OFFER at"
+    "plugin_vcent_last_offer_at": "LATEST OFFER at",
+    "web3_tab_hint": "No address found."
 }

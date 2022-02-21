@@ -1,15 +1,15 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { CollectibleIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { ProfileTab } from '../../../../components/InjectedComponents/ProfileTab'
-import { createReactRootShadowed, startWatch, untilElementAvailable } from '../../../../utils'
+import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab'
+import { createReactRootShadowed, startWatch, untilElementAvailable } from '../../../utils'
 import {
     searchProfileActiveTabSelector,
+    searchProfileTabListLastChildSelector,
     searchProfileTabPageSelector,
     searchProfileTabSelector,
-    searchProfileTabListLastChildSelector,
     searchUserIdSelector,
-} from '../../utils/selector'
+} from '../utils/selector'
 
 export function injectProfileTabAtInstagram(signal: AbortSignal) {
     let tabInjected = false

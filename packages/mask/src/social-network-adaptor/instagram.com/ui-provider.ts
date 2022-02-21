@@ -6,10 +6,10 @@ import { PostProviderInstagram } from './collecting/posts'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults'
 import { pasteInstagram } from '@masknet/injected-script'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles'
-import { injectProfileTabAtInstagram } from './injection/web3tab/ProfileTab'
-import { injectProfileTabContentAtInstagram } from './injection/web3tab/ProfileTabContent'
 import { CurrentVisitingIdentityProviderInstagram } from './collecting/identity'
 import { injectPostInspectorInstagram } from './injection/post-inspector'
+import { injectProfileTabAtInstagram } from './injection/ProfileTab'
+import { injectProfileTabContentAtInstagram } from './injection/ProfileTabContent'
 
 const define: SocialNetworkUI.Definition = {
     ...instagramShared,
