@@ -10,11 +10,10 @@ export const base: Plugin.Shared.Definition = {
     enableRequirement: {
         architecture: { app: false, web: true },
         networks: {
-            type: 'opt-out',
+            type: 'opt-in',
             networks: {
-                [CurrentSNSNetwork.Instagram]: true,
+                [CurrentSNSNetwork.Twitter]: true,
                 [CurrentSNSNetwork.Facebook]: true,
-                [CurrentSNSNetwork.Minds]: true,
             },
         },
         target: 'stable',
