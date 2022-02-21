@@ -7,9 +7,9 @@ import {
     isSameAddress,
     SocketState,
     useAccount,
-    useCollections,
     useERC721ContractBalance,
 } from '@masknet/web3-shared-evm'
+import { useNonFungibleAssetCollections } from '@masknet/plugin-infra'
 import classNames from 'classnames'
 import { EthereumAddress } from 'wallet.ts'
 import { Box, CircularProgress, Typography } from '@mui/material'
@@ -80,7 +80,11 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
     const account = useAccount()
     const { classes } = useStyles({ hasIcon: Boolean(contract?.iconURL) })
     const { value: balanceFromChain, loading: loadingFromChain } = useERC721ContractBalance(contract?.address, account)
-    const { data: assets, state: loadingBalanceFromRemoteState } = useCollections(account, ChainId.Mainnet, !!contract)
+    const { data: assets, state: loadingBalanceFromRemoteState } = useNonFungibleAssetCollections(
+        account,
+        ChainId.Mainnet,
+        !!contract,
+    )
 
     const convertedAssets = assets.map((x) => ({
         contractDetailed: {

@@ -10,10 +10,10 @@ import {
     SocketState,
     useAccount,
     useChainId,
-    useCollections,
     useERC721ContractDetailed,
     useERC721Tokens,
 } from '@masknet/web3-shared-evm'
+import { useNonFungibleAssetCollections } from '@masknet/plugin-infra'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../messages'
 import { useI18N } from '../../../utils'
@@ -151,7 +151,11 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     }, [id, setDialog])
     // #endregion
 
-    const { data: assets, state: loadingCollectionState } = useCollections(account, ChainId.Mainnet, open)
+    const { data: assets, state: loadingCollectionState } = useNonFungibleAssetCollections(
+        account,
+        ChainId.Mainnet,
+        open,
+    )
 
     const erc721InDb = useERC721Tokens()
     const allContractsInDb = unionBy(
