@@ -21,10 +21,11 @@ async function query(): Promise<null | SocialNetworkUI.CollectingCapabilities.Id
         const res = decodeURIComponent(document.cookie)
             .split('; ')
             .find((x) => x.includes('wallet={'))
+
         if (!res) return ''
         const [, value] = res.split('wallet=')
-
         if (!value) return ''
+
         return JSON.parse(value)
     }
     function getBioByCookie() {
