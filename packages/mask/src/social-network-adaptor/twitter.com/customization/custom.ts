@@ -12,8 +12,8 @@ import twitterColorSchema from './twitter-color-schema.json'
 import { parseColor } from '@masknet/theme'
 import { noop } from 'lodash-unified'
 
-const primaryColorRef = new ValueRef('rgb(29, 161, 242)')
-const primaryColorContrastColorRef = new ValueRef('rgb(255, 255, 255)')
+const themeColorRef = new ValueRef('rgb(29, 161, 242)')
+const textColorRef = new ValueRef('rgb(255, 255, 255)')
 const backgroundColorRef = new ValueRef('rgb(255, 255, 255)')
 
 const currentTheme = new ValueRef<PaletteMode>('light')
@@ -27,14 +27,13 @@ export function startWatchThemeColor(signal: AbortSignal) {
         const composeAnchor = composeAnchorSelector().evaluate()
         const anchorText = composeAnchorTextSelector().evaluate()
         const headingText = headingTextSelector().evaluate()
-        const color = getBackgroundColor(composeAnchor)
-        const contrastColor = getForegroundColor(anchorText || headingText)
+        const themeColor = getBackgroundColor(composeAnchor)
+        const textColor = getForegroundColor(anchorText || headingText)
         const backgroundColor = getBackgroundColor(document.body)
         currentTheme.value = isDark(fromRGB(backgroundColor)!) ? 'dark' : 'light'
 
-        if (color) primaryColorRef.value = color
-        if (contrastColor) primaryColorContrastColorRef.value = contrastColor
-        console.log({ color, contrastColor })
+        if (themeColor) themeColorRef.value = themeColor
+        if (textColor) textColorRef.value = textColor
         if (backgroundColor) backgroundColorRef.value = backgroundColor
     }
     const watcher = new MutationObserverWatcher(composeAnchorSelector())
@@ -63,8 +62,8 @@ export function startWatchThemeColor(signal: AbortSignal) {
     })
 }
 export function useThemeTwitterVariant(baseTheme: Theme) {
-    const primaryColor = useValueRef(primaryColorRef)
-    const primaryContrastColor = useValueRef(primaryColorContrastColorRef)
+    const primaryColor = useValueRef(themeColorRef)
+    const primaryContrastColor = useValueRef(textColorRef)
     const backgroundColor = useValueRef(backgroundColorRef)
     return useMemo(() => {
         const primaryColorRGB = fromRGB(primaryColor)!
