@@ -4,7 +4,7 @@ import { PersonaContext } from '../hooks/usePersonaContext'
 import { useHistory } from 'react-router-dom'
 import { DeleteIcon, MasksIcon, EditIcon } from '@masknet/icons'
 import { Button, Typography } from '@mui/material'
-import { formatFingerprint, PersonaLimit } from '@masknet/shared'
+import { formatFingerprint, MAX_PERSONA_LIMIT } from '@masknet/shared'
 import { PopupRoutes } from '@masknet/shared-base'
 import { ChevronDown, ChevronUp } from 'react-feather'
 import { ProfileList } from '../components/ProfileList'
@@ -142,7 +142,7 @@ const PersonaHome = memo(() => {
                     <Button
                         variant="contained"
                         className={classNames(classes.button, classes.secondaryButton)}
-                        disabled={personas && personas.length >= PersonaLimit}
+                        disabled={personas && personas.length >= MAX_PERSONA_LIMIT}
                         onClick={() => {
                             browser.tabs.create({
                                 active: true,
@@ -154,7 +154,7 @@ const PersonaHome = memo(() => {
                     <Button
                         variant="contained"
                         className={classes.button}
-                        disabled={personas && personas.length >= PersonaLimit}
+                        disabled={personas && personas.length >= MAX_PERSONA_LIMIT}
                         onClick={() => {
                             browser.tabs.create({
                                 active: true,
