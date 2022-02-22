@@ -9,10 +9,10 @@ export function useNonFungibleAssets(
     network?: Web3Plugin.NetworkDescriptor | null,
     dependReady?: boolean,
 ) {
-    const id = `mask.fetchNonFungibleCollectibleAsset_${address}_${network?.ID ?? 'all'}`
+    const id = `mask.fetchNonFungibleCollectibleAssetV2_${address}_${network?.ID ?? 'all'}`
     const message = {
         id: dependReady === undefined ? id : dependReady ? id : '',
-        method: 'mask.fetchNonFungibleCollectibleAsset',
+        method: 'mask.fetchNonFungibleCollectibleAssetV2',
         params: {
             address: address,
             pageSize: 30,

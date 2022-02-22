@@ -1,10 +1,12 @@
-import { getOpenSeaNFTList, getRaribleNFTList, getNFTScanNFTs } from '@masknet/web3-providers'
+import { getOpenSeaNFTList, getRaribleNFTList, getNFTScanNFTs, getAlchemyNFTList } from '@masknet/web3-providers'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import type { ProducerArgBase, ProducerKeyFunction, ProducerPushFunction, RPCMethodRegistrationValue } from '../types'
-import { collectAllPageDate } from '../helper/request'
+import { collectAllPageData } from '../helper/request'
+import { Web3Plugin, PluginId } from '@masknet/plugin-infra'
 
 export interface NonFungibleTokenAssetArgs extends ProducerArgBase {
     address: string
+    network?: Web3Plugin.NetworkDescriptor | null
 }
 
 const nonFungibleCollectibleAsset = async (
@@ -12,30 +14,47 @@ const nonFungibleCollectibleAsset = async (
     getKeys: ProducerKeyFunction,
     args: NonFungibleTokenAssetArgs,
 ): Promise<void> => {
-    const { address } = args
+    const { address, network } = args
     const size = 50
     const openSeaApiKey = await getKeys('opensea')
 
+    // Alchemy api is used for polygon and flow network.
+    if (network) {
+        await collectAllPageData<ERC721TokenDetailed>(
+            async (page) => {
+                const r = (await getAlchemyNFTList(address, network, page, size)) as {
+                    data: ERC721TokenDetailed[]
+                    hasNextPage: boolean
+                }
+                return r
+            },
+            size,
+            push,
+        )
+    }
+
+    if (network && network.ID !== `${PluginId.EVM}_ethereum`) return
+
     try {
-        await collectAllPageDate<ERC721TokenDetailed>(
+        await collectAllPageData<ERC721TokenDetailed>(
             (page) => getOpenSeaNFTList(openSeaApiKey, address, page, size),
             size,
             push,
         )
     } finally {
-        const fromRarible = collectAllPageDate<ERC721TokenDetailed>(
+        const fromRarible = collectAllPageData<ERC721TokenDetailed>(
             (page, pageInfo) => getRaribleNFTList(openSeaApiKey, address, page, size, pageInfo),
             size,
             push,
         )
 
-        const formNFTScanERC721 = collectAllPageDate<ERC721TokenDetailed>(
+        const formNFTScanERC721 = collectAllPageData<ERC721TokenDetailed>(
             (page) => getNFTScanNFTs(address, 'erc721', page, size),
             size,
             push,
         )
 
-        const fromNFTScanERC1155 = collectAllPageDate<ERC721TokenDetailed>(
+        const fromNFTScanERC1155 = collectAllPageData<ERC721TokenDetailed>(
             (page) => getNFTScanNFTs(address, 'erc1155', page, size),
             size,
             push,
