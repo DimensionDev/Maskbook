@@ -138,6 +138,7 @@
         "masktext",
         "mastdon",
         "mayen",
+        "merkel",
         "merkle",
         "metas",
         "metaverse",
@@ -260,8 +261,7 @@
         "xlarge",
         "xlink",
         "zerion",
-        "zubin",
-        "merkel"
+        "zubin"
     ],
     "ignoreWords": [
         "aicanft",
