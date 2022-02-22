@@ -79,7 +79,7 @@ export function Row({ event, isDifferenceToken }: Props) {
                             {event.price?.paymentToken?.image_url && (
                                 <Link href={event.price.asset?.permalink} target="_blank" rel="noopener noreferrer">
                                     <img
-                                        src={event.price.paymentToken?.image_url}
+                                        src={event.price.paymentToken.image_url}
                                         className={classes.token}
                                         alt={event.price.asset?.asset_contract.symbol}
                                     />
