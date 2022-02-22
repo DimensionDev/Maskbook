@@ -1,6 +1,6 @@
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { PluginCyberConnectRPC } from '../messages'
-import { Skeleton } from '@mui/material'
+import { Skeleton, Typography } from '@mui/material'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import Avatar from 'boring-avatars'
 import ConnectButton from './ConnectButton'
@@ -81,12 +81,16 @@ const Profile = ({ url }: { url: string }) => {
                     <Avatar name={queryAddress} square size={300} />
                 )}
             </div>
-            <div className={classes.userName}>{identity?.ens || formatEthereumAddress(queryAddress, 4)}</div>
+            <Typography className={classes.userName} component="div">
+                {identity?.ens || formatEthereumAddress(queryAddress, 4)}
+            </Typography>
 
             {!identity ? (
                 <Skeleton width={400} height={40} />
             ) : (
-                <div className={classes.address}>{identity.address}</div>
+                <Typography className={classes.address} component="div">
+                    {identity.address}
+                </Typography>
             )}
 
             {!loading ? (
