@@ -1,6 +1,6 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
 
-type E = HTMLDivElement
+type E = HTMLElement
 
 const querySelector = <T extends E, SingleMode extends boolean = true>(selector: string, singleMode = true) => {
     const ls = new LiveSelector<T, SingleMode>().querySelector<T>(selector)
@@ -17,19 +17,19 @@ export const searchProfileTabPageSelector = () =>
     querySelector<E>('[id="react-root"] section main > div > div:last-child')
 
 export const searchProfileTabSelector = () =>
-    querySelector<E>('[id="react-root"] section main div[role="tablist"]  a[aria-selected="false"]')
+    querySelector<E>('[id="react-root"] section main div[role="tablist"] a[aria-selected="false"]')
 
 export const searchProfileActiveTabSelector = () =>
     querySelector<E>('[id="react-root"] section main  div[role="tablist"] a[aria-selected="true"]')
 
 export const searchAvatarSelector = () =>
-    querySelector<HTMLImageElement>('[id="react-root"] section main header button  img')
+    querySelector<HTMLImageElement>('[id="react-root"] section main header button img')
 
 export const bioDescriptionSelector = () =>
     querySelector<E>('[id="react-root"] section main header section > div:last-child div')
 
 export const personalHomepageSelector = () =>
-    querySelector<E>('[id="react-root"] section main header section > div:last-child  a')
+    querySelector<E>('[id="react-root"] section main header section > div:last-child a')
 
 export const searchNickNameSelector = () =>
     querySelector<E>('[id="react-root"] section main header section > div:last-child > span')
