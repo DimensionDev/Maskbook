@@ -1,5 +1,11 @@
 import type { PostRecord as NativePostRecord } from '@masknet/public-api'
-import type { PostRecord, PostReadWriteTransaction, PostReadOnlyTransaction, RecipientDetail } from './type'
+import type {
+    PostRecord,
+    PostReadWriteTransaction,
+    PostReadOnlyTransaction,
+    RecipientDetail,
+    RecipientReason,
+} from './type'
 import {
     PostIVIdentifier,
     Identifier,
@@ -10,6 +16,7 @@ import {
     ECKeyIdentifier,
 } from '@masknet/shared-base'
 import { nativeAPI } from '../../../shared/native-rpc'
+import { unreachable } from '@dimensiondev/kit'
 
 export async function createPostDB(record: PostRecord, t?: PostReadWriteTransaction) {
     await nativeAPI?.api.create_post({ post: postInNative(record) as NativePostRecord })
@@ -68,7 +75,14 @@ function postInNative(record: Partial<PostRecord> & Pick<PostRecord, 'identifier
             record.recipients === 'everyone'
                 ? Object.fromEntries(new Map())
                 : record.recipients
-                ? Object.fromEntries(record.recipients.__raw_map__)
+                ? Array.from(record.recipients).map(
+                      ([identifier, detail]): [string, { reason: RecipientReasonJSON[] }] => [
+                          identifier.toText(),
+                          {
+                              reason: Array.from(detail.reason).map<RecipientReasonJSON>(RecipientReasonToJSON),
+                          },
+                      ],
+                  )
                 : undefined,
         foundAt: record.foundAt?.getTime(),
         encryptBy: record.encryptBy?.toText(),
@@ -107,3 +121,18 @@ export async function queryPostsDB(
 
 export const PostDBAccess = () => undefined
 // #endregion
+
+type RecipientReasonJSON = (
+    | { type: 'auto-share' }
+    | { type: 'direct' }
+    | { type: 'group'; group: string /** GroupIdentifier */ }
+) & {
+    at: number
+}
+
+function RecipientReasonToJSON(y: RecipientReason): RecipientReasonJSON {
+    if (y.type === 'direct' || y.type === 'auto-share')
+        return { at: y.at.getTime(), type: y.type } as RecipientReasonJSON
+    else if (y.type === 'group') return { at: y.at.getTime(), group: y.group.toText(), type: y.type }
+    return unreachable(y)
+}
