@@ -2,7 +2,7 @@ import type { TypedMessage } from '../base'
 import { isTypedMessageText, isTypedMessageImage } from '../core'
 import { isTypedMessageAnchor } from '../extension'
 import { Option, Some, None } from 'ts-results'
-import { forEachTypedMessageChild } from '../visitor/forEachChild'
+import { forEachTypedMessageChild } from '../visitor'
 
 /**
  * Get inner text from a TypedMessage

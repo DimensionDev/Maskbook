@@ -1,6 +1,5 @@
-import type { Transformer, TypedMessage } from '../../../base'
+import { Transformer, TypedMessage, emptyTransformationContext, TransformationContext } from '../../../base'
 import { createContext, useContext, useMemo } from 'react'
-import { emptyTransformationContext, TransformationContext } from '../../../base/transformer/context'
 export const TransformerProvider = createContext<Transformer>((x) => x)
 export const TransformationContextProvider = createContext<TransformationContext>(emptyTransformationContext)
 

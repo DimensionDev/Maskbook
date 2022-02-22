@@ -1,7 +1,7 @@
 import { memo, Fragment, createElement, useContext } from 'react'
 import { RenderFragmentsContext, RenderFragmentsContextType, DefaultRenderFragments } from './RenderFragments'
+import type { TypedMessageAnchor } from '../../../base'
 import { parseLink } from '../../../base/utils/parseLink'
-import type { TypedMessageAnchor } from '../../../base/extension'
 import { TextEnlargeContext } from './TextEnlargeContext'
 
 /** @internal */

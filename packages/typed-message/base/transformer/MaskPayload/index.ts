@@ -1,4 +1,4 @@
-import { FlattenTypedMessage } from '..'
+import { FlattenTypedMessage } from '../Flatten'
 import type { TypedMessage } from '../../base'
 import { isTypedMessageImage, isTypedMessageText, isTypedMessageTuple, TypedMessageImage } from '../../core'
 import { isTypedMessageAnchor, isTypedMessageMaskPayload } from '../../extension'

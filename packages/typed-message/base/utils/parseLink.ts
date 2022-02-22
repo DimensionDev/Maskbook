@@ -1,5 +1,5 @@
 import _anchorme from 'anchorme'
-import type { TypedMessageAnchor } from '..'
+import type { TypedMessageAnchor } from '../extension'
 // ESM/CJS compat
 const anchorme = ((_anchorme as any).default || _anchorme) as typeof _anchorme
 
