@@ -64,6 +64,7 @@
     "message": "crwdns10123:0crwdne10123:0",
     "dashboard_tab_collectibles": "crwdns4063:0crwdne4063:0",
     "dashboard_no_collectible_found": "crwdns4105:0crwdne4105:0",
+    "dashboard_collectible_menu_all": "crwdns14532:0{{count}}crwdne14532:0",
     "days": "crwdns4107:0{{days}}crwdne4107:0",
     "decrypted_postbox_add_recipients": "crwdns4109:0crwdne4109:0",
     "decrypted_postbox_decrypting": "crwdns4111:0crwdne4111:0",
