@@ -161,7 +161,6 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     // not in whitelist
     const notInWhiteList = value?.message === 'leaf not found'
 
-    console.log('qualification', qualification?.qualified)
     // at least hold token amount
     const { value: holderToken } = useERC20TokenDetailed(boxInfo?.holderTokenAddress)
     const { value: holderTokenBalance = '0' } = useERC20TokenBalance(holderToken?.address)
