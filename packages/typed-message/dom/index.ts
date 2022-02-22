@@ -4,7 +4,11 @@ export { useMetadataRender, type MetadataRenderProps } from './Renderer/Metadata
 
 // Render Registry
 export { type RenderConfig, createTypedMessageRenderRegistry } from './Renderer/registry'
-export { MessageRenderUIComponentsContext } from './Renderer/utils/ComponentsContext'
+export {
+    RenderFragmentsContext,
+    type RenderFragmentsContextType,
+    DefaultRenderFragments,
+} from './Renderer/utils/RenderFragments'
 export { RegistryContext } from './Renderer/utils/RegistryContext'
 
 // Transformation

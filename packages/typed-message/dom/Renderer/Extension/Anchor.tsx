@@ -1,14 +1,7 @@
-import { memo, useContext } from 'react'
+import { memo } from 'react'
 import type { TypedMessageAnchor } from '../../../base'
-import { LinkDefault, MessageRenderUIComponentsContext } from '../utils/ComponentsContext'
+import { RenderLinkFragment } from '../utils/renderText'
 
 export const TypedMessageAnchorRenderer = memo(function TypedMessageAnchorRenderer(props: TypedMessageAnchor) {
-    const { content, href, category } = props
-    const { Link = LinkDefault! } = useContext(MessageRenderUIComponentsContext)
-    // Not render meta of inline component.
-    return (
-        <Link category={category} href={href}>
-            {content}
-        </Link>
-    )
+    return <RenderLinkFragment category={props.category} children={props.content} href={props.href} />
 })

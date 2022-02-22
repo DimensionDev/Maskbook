@@ -1,18 +1,22 @@
-import type { MessageRenderUIComponentsContext } from '@masknet/typed-message/dom'
+import { memo } from 'react'
 import { Typography, Link } from '@mui/material'
+import type { RenderFragmentsContextType } from '@masknet/typed-message/dom'
 
-export const Text: MessageRenderUIComponentsContext['Text'] = (props) => (
-    <Typography
-        sx={{ fontSize: props.fontSize ? `${Math.max(props.fontSize, 14)}px` : undefined, display: 'inline' }}
-        children={props.children}
-    />
-)
+export const Text = memo(function Text(props: RenderFragmentsContextType.TextProps) {
+    return (
+        <Typography
+            sx={{ fontSize: props.fontSize ? `${Math.max(props.fontSize, 14)}px` : undefined, display: 'inline' }}
+            children={props.children}
+        />
+    )
+})
 
-// TODO: provide SNS-aware #hast $link and @mention support
-export const Anchor: MessageRenderUIComponentsContext['Link'] = (props) => (
-    <Link
-        sx={{ fontSize: props.fontSize ? `${Math.max(props.fontSize, 14)}px` : undefined }}
-        href={props.href}
-        children={props.children}
-    />
-)
+export const Anchor = memo(function Anchor(props: RenderFragmentsContextType.LinkProps) {
+    return (
+        <Link
+            sx={{ fontSize: props.fontSize ? `${Math.max(props.fontSize, 14)}px` : undefined }}
+            href={props.href}
+            children={props.children}
+        />
+    )
+})

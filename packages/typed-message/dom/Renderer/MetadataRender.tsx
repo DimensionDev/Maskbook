@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { MessageRenderUIComponentsContext } from './utils/ComponentsContext'
+import { RenderFragmentsContext } from './utils/RenderFragments'
 import type { TypedMessage } from '../../base'
 
 export interface MetadataRenderProps {
@@ -7,7 +7,7 @@ export interface MetadataRenderProps {
     message: TypedMessage
 }
 export function useMetadataRender(message: TypedMessage) {
-    const { Metadata } = useContext(MessageRenderUIComponentsContext)
+    const { Metadata } = useContext(RenderFragmentsContext)
     if (!Metadata || !message.meta) return null
     return <Metadata metadata={message.meta} message={message} />
 }
