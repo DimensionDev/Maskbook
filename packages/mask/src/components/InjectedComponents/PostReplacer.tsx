@@ -1,11 +1,10 @@
 import type { TransformationContext, TypedMessage } from '@masknet/typed-message'
-import { TypedMessageRender, useTransformedValue } from '@masknet/typed-message/dom'
+import { TextEnlargeContext, TypedMessageRender, useTransformedValue } from '@masknet/typed-message/dom'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo } from 'react'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
 import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI'
-import { PluginRendererWithSuggestion } from './DecryptedPostMetadataRender'
 import { activatedSocialNetworkUI } from '../../social-network/ui'
 
 const useStyles = makeStyles()({
@@ -43,12 +42,13 @@ export function PostReplacer({ unzip, zip }: PostReplacerProps) {
 
     return (
         <span className={classes.root}>
-            <TypedMessageRenderContext
-                renderFragments={activatedSocialNetworkUI?.customization.componentOverwrite?.RenderFragments}
-                context={initialTransformationContext}
-                metadataRender={PluginRendererWithSuggestion}>
-                <Transformer message={postMessage} />
-            </TypedMessageRenderContext>
+            <TextEnlargeContext.Provider value>
+                <TypedMessageRenderContext
+                    renderFragments={activatedSocialNetworkUI?.customization.componentOverwrite?.RenderFragments}
+                    context={initialTransformationContext}>
+                    <Transformer message={postMessage} />
+                </TypedMessageRenderContext>
+            </TextEnlargeContext.Provider>
         </span>
     )
 }

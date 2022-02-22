@@ -8,7 +8,7 @@ import type { Profile } from '../../../database'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import { wrapAuthorDifferentMessage } from './authorDifferentMessage'
-import { PluginRendererWithSuggestion } from '../DecryptedPostMetadataRender'
+import { DecryptedUI_PluginRendererWithSuggestion } from '../DecryptedPostMetadataRender'
 
 export interface DecryptPostSuccessProps extends withClasses<never> {
     data: { content: TypedMessage }
@@ -58,7 +58,7 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
                 title={t('decrypted_postbox_title')}
                 message={content}
             />
-            <PluginRendererWithSuggestion metadata={content.meta} message={content} />
+            <DecryptedUI_PluginRendererWithSuggestion message={content} metadata={content.meta} />
         </>
     )
 })

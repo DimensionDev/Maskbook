@@ -6,9 +6,10 @@ import { useTagEnhancer } from '../../../../shared-ui/TypedMessageRender/Compone
 function Hash(props: RenderFragmentsContextType.HashLinkProps | RenderFragmentsContextType.CashLinkProps) {
     const text = props.children.slice(1)
     const target = `/hashtag/${encodeURIComponent(text)}`
+    const { hasMatch, ...events } = useTagEnhancer('hash', text)
     return (
         <Link
-            {...useTagEnhancer('hash', text)}
+            {...events}
             sx={{ fontSize: props.fontSize ? `${Math.max(props.fontSize, 14)}px` : undefined }}
             href={target}
             children={props.children}

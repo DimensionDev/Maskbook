@@ -16,9 +16,10 @@ export const TwitterRenderFragments: RenderFragmentsContextType = {
     HashLink: memo(function (props) {
         const text = props.children.slice(1)
         const target = `/hashtag/${encodeURIComponent(text)}?src=hashtag_click`
+        const { hasMatch, ...events } = useTagEnhancer('hash', text)
         return (
             <Link
-                {...useTagEnhancer('hash', text)}
+                {...events}
                 sx={{ fontSize: props.fontSize ? `${Math.max(props.fontSize, 14)}px` : undefined }}
                 href={target}
                 children={props.children}
@@ -27,9 +28,10 @@ export const TwitterRenderFragments: RenderFragmentsContextType = {
     }),
     CashLink: memo(function (props) {
         const target = `/search?q=${encodeURIComponent(props.children)}&src=cashtag_click`
+        const { hasMatch, ...events } = useTagEnhancer('cash', props.children.slice(1))
         return (
             <Link
-                {...useTagEnhancer('cash', props.children.slice(1))}
+                {...events}
                 sx={{ fontSize: props.fontSize ? `${Math.max(props.fontSize, 14)}px` : undefined }}
                 href={target}
                 children={props.children}

@@ -8,20 +8,21 @@ import {
 } from './DisabledPluginSuggestion'
 import { MaskPostExtraPluginWrapper } from '../../plugins/MaskPluginWrapper'
 
-const PluginRenderer = createInjectHooksRenderer(
+const Decrypted = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
     (x) => x.DecryptedInspector,
     MaskPostExtraPluginWrapper,
 )
-export function PluginRendererWithSuggestion(props: MetadataRenderProps) {
+export function DecryptedUI_PluginRendererWithSuggestion(props: MetadataRenderProps) {
     const a = useDisabledPluginSuggestionFromMeta(props.metadata)
     const b = useDisabledPluginSuggestionFromPost(extractTextFromTypedMessage(props.message), [])
 
     const suggest = Array.from(new Set(a.concat(b)))
+    console.log(props)
     return (
         <>
             <PossiblePluginSuggestionUI plugins={suggest} />
-            <PluginRenderer {...props} />
+            <Decrypted {...props} />
         </>
     )
 }
