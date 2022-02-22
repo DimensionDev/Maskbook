@@ -8,7 +8,7 @@ import { TypedMessageRenderRegistry } from './registry'
 import { useSubscription } from 'use-subscription'
 import type { TransformationContext } from '@masknet/typed-message'
 import { useMemo } from 'react'
-import { Text, Anchor as Link } from './Components/Text'
+import { Text, Link } from './Components/Text'
 
 export interface TypedMessageRenderContextProps extends React.PropsWithChildren<{}> {
     context?: TransformationContext
