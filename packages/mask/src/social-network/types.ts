@@ -80,7 +80,7 @@ export namespace SocialNetworkUI {
     }
     export interface Definition extends SocialNetwork.Base, SocialNetwork.Shared {
         /** @returns the states */
-        init?(signal: AbortSignal): Readonly<AutonomousState> | Promise<Readonly<AutonomousState>>
+        init(signal: AbortSignal): Readonly<AutonomousState> | Promise<Readonly<AutonomousState>>
         permission?: RuntimePermission
         injection: InjectingCapabilities.Define
         automation: AutomationCapabilities.Define
