@@ -63,7 +63,7 @@ function createERC721TokenFromAsset(
     chainId: ChainId,
     asset: OpenSeaResponse,
 ): ERC721TokenDetailed {
-    const imageURL = asset?.image_url ?? asset?.image_preview_url ?? ''
+    const imageURL = asset?.image_preview_url ?? asset?.image_url ?? ''
     return createERC721Token(
         createERC721ContractFromAssetContract(asset?.asset_contract?.address, chainId, asset?.asset_contract),
         {
@@ -284,7 +284,8 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
                         ['non-fungible', 'semi-fungible'].includes(x.asset_contract.asset_contract_type) ||
                         ['ERC721', 'ERC1155'].includes(x.asset_contract.schema_name),
                 )
-                .map((asset: OpenSeaResponse) => createERC721TokenFromAsset(from, asset.token_id, chainId, asset)) ?? []
+                .map((asset: OpenSeaResponse) => createERC721TokenFromAsset(from, asset.token_id, chainId, asset))
+                .map((x) => ({ ...x, provideBy: 'OpenSea' })) ?? []
         return {
             data: assets,
             hasNextPage: assets.length === size,
