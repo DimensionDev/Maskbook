@@ -6,6 +6,7 @@ import { usePostInfoDetails } from '../DataSource/usePostInfo'
 import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI'
 import { PluginRendererWithSuggestion } from './DecryptedPostMetadataRender'
+import { activatedSocialNetworkUI } from '../../social-network/ui'
 
 const useStyles = makeStyles()({
     root: {
@@ -43,6 +44,7 @@ export function PostReplacer({ unzip, zip }: PostReplacerProps) {
     return (
         <span className={classes.root}>
             <TypedMessageRenderContext
+                renderFragments={activatedSocialNetworkUI?.customization.componentOverwrite?.RenderFragments}
                 context={initialTransformationContext}
                 metadataRender={PluginRendererWithSuggestion}>
                 <Transformer message={postMessage} />

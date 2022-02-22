@@ -35,6 +35,7 @@ import { injectOpenNFTAvatarEditProfileButton } from './injection/NFT/NFTAvatarE
 import { injectUserNFTAvatarAtTweet } from './injection/NFT/TweetNFTAvatar'
 import { injectNFTContractAtTwitter } from './injection/NFT/NFTContract'
 import { injectNFTAvatarClipInTwitter } from './injection/NFT/NFTAvatarClip'
+import { TwitterRenderFragments } from './customization/render-fragments'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -136,6 +137,7 @@ const twitterUI: SocialNetworkUI.Definition = {
             InjectedDialog: {
                 classes: useInjectedDialogClassesOverwriteTwitter,
             },
+            RenderFragments: TwitterRenderFragments,
         },
         useTheme: useThemeTwitterVariant,
         i18nOverwrite: i18NOverwriteTwitter,

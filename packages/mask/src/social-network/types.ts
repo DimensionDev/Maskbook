@@ -15,6 +15,7 @@ import type { PostInfo } from './PostInfo'
 import type { GrayscaleAlgorithm } from '@masknet/encryption'
 import type { createSNSAdaptorSpecializedPostContext } from './utils/create-post-context'
 import type { Subscription } from 'use-subscription'
+import type { RenderFragmentsContextType } from '@masknet/typed-message/dom'
 
 type ClassNameMap<ClassKey extends string = string> = { [P in ClassKey]: string }
 // Don't define values in namespaces
@@ -271,6 +272,7 @@ export namespace SocialNetworkUI {
         }
         export interface ComponentOverwrite {
             InjectedDialog?: ComponentOverwriteConfig<InjectedDialogProps, InjectedDialogClassKey>
+            RenderFragments?: RenderFragmentsContextType
         }
         export interface ComponentOverwriteConfig<Props extends { classes?: any }, Classes extends string> {
             classes?: () => { classes: Partial<ClassNameMap<Classes>> }

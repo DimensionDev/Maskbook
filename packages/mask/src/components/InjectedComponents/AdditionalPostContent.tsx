@@ -9,6 +9,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import green from '@mui/material/colors/green'
 import { MaskIcon } from '../../resources/MaskIcon'
 import { memo, useCallback, useMemo } from 'react'
+import { activatedSocialNetworkUI } from '../../social-network/ui'
 
 export enum AdditionalIcon {
     check = 'check',
@@ -75,7 +76,8 @@ export const AdditionalContent = memo(function AdditionalContent(props: Addition
             <header className={classes.content}>{header}</header>
             {message ? (
                 <main className={classes.content}>
-                    <TypedMessageRenderContext>
+                    <TypedMessageRenderContext
+                        renderFragments={activatedSocialNetworkUI?.customization.componentOverwrite?.RenderFragments}>
                         <TypedMessageRender message={TypedMessage} allowTextEnlarge />
                     </TypedMessageRenderContext>
                 </main>
