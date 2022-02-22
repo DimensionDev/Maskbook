@@ -14,10 +14,11 @@ export const TwitterRenderFragments: RenderFragmentsContextType = {
         )
     }),
     HashLink: memo(function (props) {
-        const target = '/hashtag/' + encodeURIComponent(props.children.slice(1))
+        const text = props.children.slice(1)
+        const target = `/hashtag/${encodeURIComponent(text)}?src=hashtag_click`
         return (
             <Link
-                {...useTagEnhancer('hash', props.children.slice(1))}
+                {...useTagEnhancer('hash', text)}
                 sx={{ fontSize: props.fontSize ? `${Math.max(props.fontSize, 14)}px` : undefined }}
                 href={target}
                 children={props.children}
