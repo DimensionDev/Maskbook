@@ -3,11 +3,19 @@ import type { AvatarMetaDB } from '../types'
 import { getNFTAvatarFromJSON } from './db'
 import { getUserAddress, setUserAddress } from './bind'
 import { getNFTAvatarFromRSS, saveNFTAvatarToRSS } from './rss3'
+import type { RSS3_KEY_SNS } from '../constants'
 
-export async function getNFTAvatar(userId: string, networkPluginId?: NetworkPluginID, chainId?: number) {
-    const address = await getUserAddress(userId, networkPluginId, chainId)
+export async function getNFTAvatar(
+    userId: string,
+    network: string,
+    snsKey: RSS3_KEY_SNS,
+    networkPluginId?: NetworkPluginID,
+    chainId?: number,
+) {
+    const address = await getUserAddress(userId, network, networkPluginId, chainId)
+
     if (address) {
-        return getNFTAvatarFromRSS(userId, address)
+        return getNFTAvatarFromRSS(userId, address, snsKey)
     }
     return getNFTAvatarFromJSON(userId)
 }
@@ -15,20 +23,23 @@ export async function getNFTAvatar(userId: string, networkPluginId?: NetworkPlug
 export async function saveNFTAvatar(
     address: string,
     nft: AvatarMetaDB,
+    network: string,
+    snsKey: RSS3_KEY_SNS,
     networkPluginId?: NetworkPluginID,
     chainId?: number,
 ) {
     try {
-        const avatar = await saveNFTAvatarToRSS(address, nft, '')
-        await setUserAddress(nft.userId, address, networkPluginId, chainId)
+        const avatar = await saveNFTAvatarToRSS(address, nft, '', snsKey)
+        await setUserAddress(nft.userId, address, network, networkPluginId, chainId)
         return avatar
     } catch (error) {
         throw error
     }
 }
 
-export async function getAddress(userId: string, networkPluginId?: NetworkPluginID, chainId?: number) {
-    const address = await getUserAddress(userId, networkPluginId, chainId)
+export async function getAddress(userId: string, network: string, networkPluginId?: NetworkPluginID, chainId?: number) {
+    if (!userId) return ''
+    const address = await getUserAddress(userId, network, networkPluginId, chainId)
     return (address ?? '') as string
 }
 

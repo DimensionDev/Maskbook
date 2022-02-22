@@ -1,4 +1,4 @@
-import type { Plugin } from '@masknet/plugin-infra'
+import { Plugin, usePluginWrapper } from '@masknet/plugin-infra'
 import { ItoLabelIcon } from '../assets/ItoLabelIcon'
 import { makeStyles } from '@masknet/theme'
 import {
@@ -12,7 +12,6 @@ import { base } from '../base'
 import { ITO_MetaKey_1, ITO_MetaKey_2, MSG_DELIMITER } from '../constants'
 import type { JSON_PayloadComposeMask } from '../types'
 import { ITO_MetadataReader, payloadIntoMask } from './helpers'
-import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { CompositionDialog } from './CompositionDialog'
 import { set } from 'lodash-unified'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
@@ -33,13 +32,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal) {},
     DecryptedInspector(props) {
         const payload = ITO_MetadataReader(props.message.meta)
+        usePluginWrapper(payload.ok)
         if (!payload.ok) return null
         return (
-            <MaskPluginWrapper pluginName="ITO" publisher={base.publisher}>
-                <EthereumChainBoundary chainId={payload.val.chain_id}>
-                    <PostInspector payload={set(payloadIntoMask(payload.val), 'token', payload.val.token)} />
-                </EthereumChainBoundary>
-            </MaskPluginWrapper>
+            <EthereumChainBoundary chainId={payload.val.chain_id}>
+                <PostInspector payload={set(payloadIntoMask(payload.val), 'token', payload.val.token)} />
+            </EthereumChainBoundary>
         )
     },
     CompositionDialogMetadataBadgeRender: new Map([

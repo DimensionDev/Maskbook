@@ -10,7 +10,14 @@ import { PluginMessages } from '../../../../API'
 import { useNavigate } from 'react-router'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { TransferTab } from '../Transfer'
-import { useNetworkDescriptor, useWeb3State as useWeb3PluginState, Web3Plugin, useAccount } from '@masknet/plugin-infra'
+import {
+    useNetworkDescriptor,
+    useWeb3State as useWeb3PluginState,
+    Web3Plugin,
+    useAccount,
+    usePluginIDContext,
+    NetworkPluginID,
+} from '@masknet/plugin-infra'
 import { useAsyncRetry } from 'react-use'
 
 const useStyles = makeStyles()({
@@ -65,15 +72,19 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
         setRenderData(render)
     }, [value.data, loadingSize, page])
 
+    const currentPluginId = usePluginIDContext()
     const onSend = useCallback(
-        (detail: Web3Plugin.NonFungibleToken) =>
+        (detail: Web3Plugin.NonFungibleToken) => {
+            // Sending NFT is only available on EVM currently.
+            if (currentPluginId !== NetworkPluginID.PLUGIN_EVM) return
             navigate(DashboardRoutes.WalletsTransfer, {
                 state: {
                     type: TransferTab.Collectibles,
                     erc721Token: detail,
                 },
-            }),
-        [],
+            })
+        },
+        [currentPluginId],
     )
 
     useEffect(() => {

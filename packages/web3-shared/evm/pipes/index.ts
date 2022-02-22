@@ -92,6 +92,7 @@ export const resolveNetworkAddressPrefix = createLookupTableResolver<NetworkType
         [NetworkType.Polygon]: 'polygon',
         [NetworkType.Arbitrum]: 'arbitrum',
         [NetworkType.xDai]: 'xdai',
+        [NetworkType.Avalanche]: 'avalanche',
         [NetworkType.Celo]: 'celo',
         [NetworkType.Fantom]: 'fantom',
         [NetworkType.Aurora]: 'Aurora',
@@ -106,6 +107,7 @@ export const resolveNetworkName = createLookupTableResolver<NetworkType, string>
         [NetworkType.Polygon]: 'Polygon',
         [NetworkType.Arbitrum]: 'Arbitrum',
         [NetworkType.xDai]: 'xDai',
+        [NetworkType.Avalanche]: 'Avalanche',
         [NetworkType.Celo]: 'Celo',
         [NetworkType.Fantom]: 'Fantom',
         [NetworkType.Aurora]: 'Aurora',
@@ -137,6 +139,8 @@ export const resolveChainColor = createLookupTableResolver<ChainId, string>(
         [ChainId.Arbitrum]: 'rgb(36, 150, 238)',
         [ChainId.Arbitrum_Rinkeby]: 'rgb(36, 150, 238)',
         [ChainId.xDai]: 'rgb(73, 169, 166)',
+        [ChainId.Avalanche]: 'rgb(232, 65, 66)',
+        [ChainId.Avalanche_Fuji]: 'rgb(232, 65, 66)',
         [ChainId.Celo]: 'rgb(53, 208, 127)',
         [ChainId.Fantom]: 'rgb(19, 181, 236)',
         [ChainId.Aurora]: 'rgb(112, 212, 74)',
@@ -168,7 +172,15 @@ export function resolveBlockLinkOnExplorer(chainId: ChainId, block: string): str
 }
 
 export function resolveIPFSLink(ipfs: string): string {
-    return urlcat('https://ipfs.fleek.co/ipfs/:ipfs', { ipfs })
+    return urlcat('https://coldcdn.com/api/cdn/mipfsygtms/ipfs/:ipfs', { ipfs })
+}
+
+export function resolveResourceLink(originLink: string): string {
+    if (!originLink) return ''
+    if (originLink.startsWith('http') || originLink.startsWith('data')) return originLink
+    if (originLink.startsWith('ipfs://ipfs/')) return resolveIPFSLink(originLink.replace(/^ipfs:\/\/ipfs\//, ''))
+    if (originLink.startsWith('ipfs://')) return resolveIPFSLink(decodeURIComponent(originLink).replace('ipfs://', ''))
+    return resolveIPFSLink(originLink)
 }
 
 export function resolveDomainLink(domain?: string) {

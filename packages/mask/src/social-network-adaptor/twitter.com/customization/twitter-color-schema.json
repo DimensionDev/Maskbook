@@ -19,7 +19,7 @@
             "messageShadow": "rgba(101, 119, 134, 0.2)"
         },
         "error": {
-            "main": "#FF5555"
+            "main": "#F4212E"
         },
         "divider": "#EFF3F4",
         "secondaryDivider": "#CFD9DE",

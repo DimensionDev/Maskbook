@@ -4,10 +4,10 @@ import { uniqWith } from 'lodash-unified'
 import { isSameAddress } from '../utils'
 import { useSocket } from './useSocket'
 
-export function useCollections(address: string, chainId: ChainId | null) {
+export function useCollections(address: string, chainId: ChainId | null, dependReady?: boolean) {
     const id = `mask.fetchNonFungibleCollectionAsset_${address}_${chainId}`
     const message = {
-        id,
+        id: dependReady === undefined ? id : dependReady ? id : '',
         method: 'mask.fetchNonFungibleCollectionAsset',
         params: {
             address: address,
@@ -22,7 +22,7 @@ export function useCollectibles(address: string, chainId: ChainId | null, depend
     const id = `mask.fetchNonFungibleCollectibleAsset_${address}_${chainId}`
     const message = {
         id: dependReady === undefined ? id : dependReady ? id : '',
-        method: 'mask.fetchNonFungibleCollectibleAsset',
+        method: 'mask.fetchNonFungibleCollectibleAssetV2',
         params: {
             address: address,
             pageSize: 30,
@@ -33,7 +33,11 @@ export function useCollectibles(address: string, chainId: ChainId | null, depend
     const all = uniqWith(
         [
             ...(data ?? []),
-            ...erc721Tokens.getCurrentValue().filter((x) => !chainId || x.contractDetailed.chainId === chainId),
+            ...erc721Tokens
+                .getCurrentValue()
+                .filter(
+                    (x) => (!chainId || x.contractDetailed.chainId === chainId) && isSameAddress(x.info.owner, address),
+                ),
         ],
         (a, b) => isSameAddress(a.contractDetailed.address, b.contractDetailed.address) && a.tokenId === b.tokenId,
     )

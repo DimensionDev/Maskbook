@@ -113,9 +113,9 @@ const useStyles = makeStyles()((theme) => ({
 const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 
 export const GasSetting1559 = memo(() => {
+    const { t } = useI18N()
     const { classes } = useStyles()
     const web3 = useWeb3()
-    const { t } = useI18N()
     const chainId = useChainId()
     const history = useHistory()
     const [selected, setOption] = useState<number | null>(null)
@@ -278,8 +278,8 @@ export const GasSetting1559 = memo(() => {
             const config = value.payload.params.map((param) => ({
                 ...param,
                 gas: toHex(new BigNumber(data.gasLimit).toString()),
-                maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toString()),
-                maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toString()),
+                maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
+                maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
             }))
 
             await WalletRPC.updateUnconfirmedRequest({

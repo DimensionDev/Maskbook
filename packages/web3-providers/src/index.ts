@@ -5,6 +5,7 @@ import { NFTScanAPI } from './NFTScan'
 import { NativeExplorerAPI } from './explorer'
 import { RSS3API } from './rss3'
 import { KeyValueAPI } from './kv'
+import { UserNFTContainerAtTwitterAPI } from './UserNFTContainer'
 
 export * from './types'
 export * from './opensea/utils'
@@ -16,8 +17,10 @@ export const CoinGecko = new CoinGeckoAPI()
 export const Explorer = new NativeExplorerAPI()
 export const RSS3 = new RSS3API()
 export const KeyValue = new KeyValueAPI()
+export const UserNFTContainerAtTwitter = new UserNFTContainerAtTwitterAPI()
 
 // Method for provider proxy
 export { getOpenSeaNFTList, getOpenSeaCollectionList } from './opensea'
 export { getAssetListFromDebank } from './debank'
 export { getRaribleNFTList } from './rarible'
+export { getNFTScanNFTList, getNFTScanNFTs } from './NFTScan'

@@ -1,6 +1,6 @@
 import { FC, memo } from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
-import { ProviderType, TransactionStatusType } from '@masknet/web3-shared-evm'
+import { EMPTY_LIST, ProviderType, TransactionStatusType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { FormattedAddress, LoadingAnimation, useRemoteControlledDialog, WalletIcon } from '@masknet/shared'
 import {
@@ -64,7 +64,9 @@ export const WalletStateBar = memo(() => {
     const wallet = useWallet()
     const networkDescriptor = useNetworkDescriptor()
     const providerDescriptor = useProviderDescriptor()
-    const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)
+    const { value: pendingTransactions = EMPTY_LIST } = useRecentTransactions({
+        status: TransactionStatusType.NOT_DEPEND,
+    })
 
     const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
         PluginMessages.Wallet.events.walletStatusDialogUpdated,
@@ -141,7 +143,12 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
                     direction="row"
                     alignItems="center"
                     justifyContent="center"
-                    sx={{ px: 2, background: MaskColorVar.orangeMain.alpha(0.1), color: MaskColorVar.orangeMain }}
+                    sx={{
+                        borderRadius: 9999,
+                        px: 2,
+                        background: MaskColorVar.orangeMain.alpha(0.1),
+                        color: MaskColorVar.orangeMain,
+                    }}
                     className={classes.bar}>
                     <LoadingAnimation sx={{ fontSize: 12, mr: 0.8, color: MaskColorVar.orangeMain }} />
                     <Typography component="span" fontSize={12} display="inline-block">

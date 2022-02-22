@@ -103,6 +103,16 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                             },
                         },
                     },
+                    {
+                        props: { color: 'error' },
+                        style: {
+                            backgroundColor: theme.palette.error.main,
+                            color: theme.palette.common.white,
+                            '&:hover': {
+                                backgroundColor: '#f53b47',
+                            },
+                        },
+                    },
                 ],
                 styleOverrides: {
                     root: {
@@ -239,6 +249,9 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                     },
                     tooltipArrow: {
                         backgroundColor: theme.palette.background.tipMask,
+                    },
+                    arrow: {
+                        color: theme.palette.background.tipMask,
                     },
                 },
             }

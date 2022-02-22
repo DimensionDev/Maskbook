@@ -46,12 +46,16 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const [selectedTab, setSelectedTab] = useState<Plugin.SNSAdaptor.ProfileTab | undefined>()
 
     const identity = useCurrentVisitingIdentity()
-    const { value: addressNames, loading: loadingAddressNames } = useAddressNames(identity)
+    const { value: addressNames = [], loading: loadingAddressNames } = useAddressNames(identity)
 
     const tabs = useActivatedPluginsSNSAdaptor('any')
         .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? [])
         .filter((z) => z.Utils?.shouldDisplay?.(identity, addressNames) ?? true)
         .sort((a, z) => {
+            // order those tabs from next id first
+            if (a.pluginID === PluginId.NextID) return -1
+            if (z.pluginID === PluginId.NextID) return 1
+
             // order those tabs from collectible first
             if (a.pluginID === PluginId.Collectible) return -1
             if (z.pluginID === PluginId.Collectible) return 1

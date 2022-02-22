@@ -1,4 +1,7 @@
 {
+    "__display_name": "プラグイン: ファイルサービス",
+    "__description": "ファイルをArweaveネットワーク上にアップロードと共有します。データーを永久に保存します。",
+    "__composition_entry": "📃ファイルサービス",
     "on_insert": "ファイルを使用する",
     "uploading_preparing": "準備中",
     "uploading_estimating_time": "転送時間を計算中...",
@@ -13,6 +16,8 @@
     "on_encrypt_it": "暗号化しましょう",
     "use_cdn": "Mesonを使用して加速する",
     "legal_text": "このプラグインを使用することで<terms>利用規約</terms>並びに<policy>プライバシーポリシー</policy>に同意したこととなります。",
+    "legal_terms_link": "https://legal.mask.io/arweave/file-service/plugin-terms.html",
+    "legal_policy_link": "https://legal.mask.io/arweave/file-service/privacy-policy-uploader.html",
     "drop_indicator": "ファイルをドラッグ＆ドロップしてアップロード！",
     "drop_hint_1": "ファイル容量の超過：{{limit}}",
     "drop_hint_2": "このファイルはすぐにアップロードされ、取り消すことはできません。",

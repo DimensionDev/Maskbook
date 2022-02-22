@@ -17,6 +17,7 @@ import {
     SwapServiceIcon,
     TransakIcon,
     ValuablesIcon,
+    CyberConnectIcon,
 } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import MarketTrendSettingDialog from './components/MarketTrendSettingDialog'
@@ -30,6 +31,7 @@ import { PoolTogetherURL } from '../../assets'
 import { DHEDGEIcon } from '../../../../mask/src/resources/DHEDGEIcon'
 import TutorialDialog from './components/TutorialDialog'
 import { PluginId } from '@masknet/plugin-infra'
+import ArtBlocksIcon from '../../../../mask/src/plugins/ArtBlocks/SNSAdaptor/ArtBlocksIcon'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -69,12 +71,14 @@ export default function Plugins() {
         [PluginId.MaskBox]: true,
         [PluginId.GoodGhosting]: true,
         [PluginId.PoolTogether]: true,
+        [PluginId.ArtBlocks]: true,
+        [PluginId.CyberConnect]: true,
     })
 
     useEffect(
         () =>
             Messages.events.pluginMinimalModeChanged.on(([id, newValue]) =>
-                setPluginStatus({ ...pluginStatus, [id]: newValue }),
+                setPluginStatus({ ...pluginStatus, [id]: !newValue }),
             ),
         [pluginStatus],
     )
@@ -181,6 +185,20 @@ export default function Plugins() {
             icon: <PoolTogetherIcon />,
             enabled: pluginStatus[PluginId.PoolTogether],
         },
+        {
+            id: PluginId.ArtBlocks,
+            title: t.labs_art_blocks(),
+            desc: t.labs_art_blocks_desc(),
+            icon: <ArtBlocksIcon />,
+            enabled: pluginStatus[PluginId.ArtBlocks],
+        },
+        {
+            id: PluginId.CyberConnect,
+            title: t.labs_cyber_connect(),
+            desc: t.labs_cyber_connect_desc(),
+            icon: <CyberConnectIcon />,
+            enabled: pluginStatus[PluginId.CyberConnect],
+        },
     ]
 
     const account = useAccount()
@@ -197,6 +215,8 @@ export default function Plugins() {
     )
 
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
+
+    const { openDialog: openEssayDialog } = useRemoteControlledDialog(PluginMessages.Pets.events.essayDialogUpdated)
 
     async function onSwitch(id: string, checked: boolean) {
         await Services.Settings.setPluginMinimalModeEnabled(id, !checked)
@@ -226,7 +246,7 @@ export default function Plugins() {
     useEffect(() => {
         Object.values(PluginId).forEach(async (id) => {
             const enabled = await Services.Settings.getPluginMinimalModeEnabled(id)
-            setPluginStatus((status) => ({ ...status, [id]: enabled }))
+            setPluginStatus((status) => ({ ...status, [id]: !enabled }))
         })
     }, [])
 
@@ -234,13 +254,14 @@ export default function Plugins() {
         const search = new URLSearchParams(location.search)
         const open = search.get('open')
         const code = search.get('code')
-
         if (open === 'Transak') {
             openTransakDialog(code ?? '')
         } else if (open === 'Swap') {
             openSwapDialog()
+        } else if (open === 'Pets') {
+            openEssayDialog()
         }
-    }, [location.search, openTransakDialog, openSwapDialog])
+    }, [location.search, openTransakDialog, openSwapDialog, openEssayDialog])
 
     return (
         <PageFrame title={t.labs()} primaryAction={<WalletStateBar />}>

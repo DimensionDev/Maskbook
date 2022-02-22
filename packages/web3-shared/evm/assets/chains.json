@@ -14,6 +14,7 @@
             "logoURI": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
         },
         "faucets": [],
+
         "features": ["EIP1559"],
         "explorers": [
             {
@@ -184,7 +185,7 @@
             "logoURI": "https://static.debank.com/image/matic_token/logo_url/matic/e5a8a2860ba5cf740a474dcab796dc63.png"
         },
         "faucets": [],
-        "features": [],
+        "features": ["EIP1559"],
         "explorers": [
             {
                 "name": "matic",
@@ -208,7 +209,7 @@
             "decimals": 18
         },
         "faucets": ["https://faucet.matic.network/"],
-        "features": [],
+        "features": ["EIP1559"],
         "explorers": [
             {
                 "name": "matic",
@@ -2075,30 +2076,49 @@
         "networkId": 43110
     },
     {
-        "name": "Avalanche Fuji Testnet",
-        "chain": "AVAX",
-        "network": "testnet",
-        "rpc": ["https://api.avax-test.network/ext/bc/C/rpc"],
-        "faucets": ["https://faucet.avax-test.network/"],
-        "features": [],
-        "nativeCurrency": { "name": "Avalanche", "symbol": "AVAX", "decimals": 18 },
-        "infoURL": "https://cchain.explorer.avax-test.network",
-        "shortName": "Fuji",
-        "chainId": 43113,
-        "networkId": 1
-    },
-    {
         "name": "Avalanche Mainnet",
         "chain": "AVAX",
         "network": "mainnet",
         "rpc": ["https://api.avax.network/ext/bc/C/rpc"],
         "faucets": [],
         "features": [],
-        "nativeCurrency": { "name": "Avalanche", "symbol": "AVAX", "decimals": 18 },
-        "infoURL": "https://cchain.explorer.avax.network/",
-        "shortName": "Avalanche",
+        "nativeCurrency": {
+            "name": "Avalanche",
+            "symbol": "AVAX",
+            "decimals": 18,
+            "logoURI": "https://raw.githubusercontent.com/sushiswap/icons/master/network/avalanche.jpg"
+        },
+        "infoURL": "https://snowtrace.io/",
+        "shortName": "AVAX",
         "chainId": 43114,
-        "networkId": 1
+        "networkId": 43114,
+        "icon": "avalanche",
+        "explorers": [
+            {
+                "name": "snowtrace",
+                "url": "https://snowtrace.io/",
+                "icon": "avalanche",
+                "standard": "EIP3091",
+                "logoURI": "https://snowtrace.io/images/svg/brands/main.svg?v=21.12.4.1"
+            }
+        ]
+    },
+    {
+        "name": "Avalanche Fuji Testnet",
+        "chain": "AVAX",
+        "network": "testnet",
+        "rpc": ["https://api.avax-test.network/ext/bc/C/rpc"],
+        "faucets": ["https://faucet.avax-test.network/"],
+        "features": [],
+        "nativeCurrency": {
+            "name": "Avalanche",
+            "symbol": "AVAX",
+            "decimals": 18
+        },
+        "infoURL": "https://cchain.explorer.avax-test.network",
+        "shortName": "Fuji",
+        "chainId": 43113,
+        "networkId": 43113
     },
     {
         "name": "Celo Alfajores Testnet",
@@ -2621,6 +2641,13 @@
             "logoURI": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
         },
         "infoURL": "https://aurora.dev",
+        "explorers": [
+            {
+                "name": "Blockscout",
+                "url": "https://explorer.mainnet.aurora.dev/",
+                "standard": "EIP3091"
+            }
+        ],
         "shortName": "aurora",
         "chainId": 1313161554,
         "networkId": 1313161554

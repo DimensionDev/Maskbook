@@ -1,14 +1,13 @@
 import { EthereumAddress } from 'wallet.ts'
-import { Resolution } from '@unstoppabledomains/resolution'
 import { AddressName, AddressNameType, ChainId, isZeroAddress, ProviderType } from '@masknet/web3-shared-evm'
-import * as ENS from '../apis/ens'
 import { createWeb3 } from '../../../extension/background-script/EthereumServices/web3'
 import { PluginProfileRPC } from '../../Profile/messages'
 import { PluginNFTAvatarRPC } from '../../Avatar/messages'
 
 const ENS_RE = /\S{1,256}\.(eth|kred|xyz|luxe)\b/
 const ADDRESS_FULL = /0x\w+/
-const RSS3_URL_RE = /https?:\/\/(?<name>[\w.]+)\.rss3\.bio/
+// xxx.cheers.bio xxx.rss3.bio
+const RSS3_URL_RE = /https?:\/\/(?<name>[\w.]+)\.(rss3|cheers)\.bio/
 const RSS3_RNS_RE = /(?<name>[\w.]+)\.rss3/
 
 function isValidAddress(address: string) {
@@ -18,7 +17,7 @@ function isValidAddress(address: string) {
 function getEthereumName(twitterId: string, nickname: string, bio: string) {
     const [matched] = nickname.match(ENS_RE) ?? bio.match(ENS_RE) ?? []
     if (matched) return matched
-    return twitterId && !twitterId.endsWith('.eth') ? `${twitterId}.eth` : ''
+    return twitterId && !twitterId.endsWith('.eth') ? `${twitterId}.eth` : twitterId
 }
 
 function getRSS3Id(nickname: string, profileURL: string, bio: string) {
@@ -41,12 +40,6 @@ async function getResolvedENS(label: string) {
     return web3.eth.ens.getAddress(label)
 }
 
-async function getResolvedUNS(label: string) {
-    const resolution = new Resolution()
-    const result = await resolution.records(label, ['crypto.ETH.address'])
-    return result['crypto.ETH.address']
-}
-
 export async function getAddressNames(identity: {
     identifier: {
         userId: string
@@ -58,20 +51,15 @@ export async function getAddressNames(identity: {
     homepage?: string
 }) {
     const { identifier, bio = '', nickname = '', homepage = '' } = identity
-    const twitterId = identifier.network === 'twitter.com' ? identifier.userId : ''
 
     const address = getAddress(bio)
-    const ethereumName = getEthereumName(twitterId ?? '', nickname, bio)
+    const ethereumName = getEthereumName(identifier.userId ?? '', nickname, bio)
     const RSS3Id = getRSS3Id(nickname, homepage, bio)
 
     const allSettled = await Promise.allSettled([
         getResolvedENS(ethereumName),
-        getResolvedUNS(ethereumName),
         PluginProfileRPC.getRSS3AddressById(RSS3Id),
-        ENS.fetchAddressNamesByTwitterId(twitterId?.toLowerCase() ?? '').then(
-            (result) => result.find((x) => x.owner)?.owner ?? '',
-        ),
-        PluginNFTAvatarRPC.getAddress(twitterId ?? ''),
+        PluginNFTAvatarRPC.getAddress(identifier.userId ?? '', identifier.network),
     ])
 
     const getSettledAddress = (result: PromiseSettledResult<string>) => {
@@ -79,10 +67,8 @@ export async function getAddressNames(identity: {
     }
 
     const addressENS = getSettledAddress(allSettled[0])
-    const addressUNS = getSettledAddress(allSettled[1])
-    const addressRSS3 = getSettledAddress(allSettled[2])
-    const addressTheGraph = getSettledAddress(allSettled[3])
-    const addressGUN = getSettledAddress(allSettled[4])
+    const addressRSS3 = getSettledAddress(allSettled[1])
+    const addressGUN = getSettledAddress(allSettled[2])
 
     return [
         isValidAddress(address)
@@ -99,13 +85,6 @@ export async function getAddressNames(identity: {
                   resolvedAddress: addressENS,
               }
             : null,
-        isValidAddress(addressUNS)
-            ? {
-                  type: AddressNameType.UNS,
-                  label: ethereumName,
-                  resolvedAddress: addressUNS,
-              }
-            : null,
         isValidAddress(addressRSS3)
             ? {
                   type: AddressNameType.RSS3,
@@ -118,13 +97,6 @@ export async function getAddressNames(identity: {
                   type: AddressNameType.GUN,
                   label: addressGUN,
                   resolvedAddress: addressGUN,
-              }
-            : null,
-        isValidAddress(addressTheGraph)
-            ? {
-                  type: AddressNameType.THE_GRAPH,
-                  label: addressTheGraph,
-                  resolvedAddress: addressTheGraph,
               }
             : null,
     ].filter(Boolean) as AddressName[]

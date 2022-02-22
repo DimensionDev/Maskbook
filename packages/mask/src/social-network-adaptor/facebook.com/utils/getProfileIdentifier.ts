@@ -2,6 +2,7 @@ import { ProfileIdentifier } from '@masknet/shared-base'
 import Services from '../../../extension/service'
 import type { Profile } from '../../../database'
 import { getCurrentIdentifier } from '../../utils'
+import { searchUserIdOnMobileSelector } from './selector'
 
 type link = HTMLAnchorElement | null | undefined
 
@@ -83,6 +84,21 @@ export function getUserID(x: string) {
     const url = relative ? new URL(x, location.host) : new URL(x)
 
     if (url.hostname !== 'www.facebook.com' && url.hostname !== 'm.facebook.com') return null
+
+    // Get the userId from the meta element
+    if (url.hostname === 'm.facebook.com') {
+        const node = searchUserIdOnMobileSelector().evaluate()
+        if (!node) return null
+
+        const href = node.getAttribute('href')
+
+        if (!href) return null
+
+        const match = href.match(/lst=(\w+)/)
+        if (!match) return null
+
+        return match[1]
+    }
     if (url.pathname.endsWith('.php')) {
         if (!url.search) return null
         const search = new URLSearchParams(url.search)
