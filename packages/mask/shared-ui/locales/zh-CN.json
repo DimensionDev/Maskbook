@@ -324,7 +324,6 @@
     "plugin_wallet_name_placeholder": "输入1-12 个字符",
     "plugin_wallet_fail_to_sign": "无法签名密码。",
     "plugin_wallet_cancel_sign": "签名已取消。",
-    "plugin_wallet_nft_wall_current_display": "当前显示： ",
     "plugin_red_packet_display_name": "插件：红包",
     "plugin_red_packet_claimed": "已认领",
     "plugin_red_packet_erc20_tab_title": "代币",

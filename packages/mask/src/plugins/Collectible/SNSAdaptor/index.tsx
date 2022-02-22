@@ -1,4 +1,4 @@
-import { uniq, first } from 'lodash-unified'
+import { uniq } from 'lodash-unified'
 import { Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra'
 import { PostInspector } from './PostInspector'
 import { base } from '../base'
@@ -30,9 +30,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             label: 'NFTs',
             priority: 1,
             UI: {
-                TabContent: ({ addressNames = [] }) => (
-                    <NFTPage addressName={first(addressNames) as AddressName | undefined} />
-                ),
+                TabContent: ({ addressNames = [] }) => <NFTPage addressNames={addressNames as AddressName[]} />,
             },
             Utils: {
                 addressNameSorter: (a, z) => {

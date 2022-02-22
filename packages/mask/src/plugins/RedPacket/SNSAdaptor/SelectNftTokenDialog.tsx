@@ -7,10 +7,10 @@ import {
     useAccount,
     isSameAddress,
 } from '@masknet/web3-shared-evm'
-import { useI18N, ShadowRootTooltip } from '../../../utils'
+import { useI18N } from '../../../utils'
 import { DialogContent, Box, InputBase, Paper, Button, Typography, ListItem, CircularProgress } from '@mui/material'
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useCallback, useState, useEffect } from 'react'
 import { SearchIcon } from '@masknet/icons'
 import CheckIcon from '@mui/icons-material/Check'

@@ -217,8 +217,9 @@ export const Prior1559GasSetting = memo(() => {
     }, [value, setValue, chainId])
 
     useUpdateEffect(() => {
-        if (gas) setValue('gasLimit', new BigNumber(gas).toString())
-    }, [gas, setValue])
+        const gasLimit = minGasLimit || gas
+        if (gasLimit) setValue('gasLimit', new BigNumber(gasLimit).toString())
+    }, [minGasLimit, gas, setValue])
 
     useEffect(() => {
         if (selected !== null) setValue('gasPrice', formatWeiToGwei(options[selected].gasPrice).toString())
@@ -266,7 +267,10 @@ export const Prior1559GasSetting = memo(() => {
                         <Typography>{formatWeiToGwei(gasPrice ?? 0).toString()} Gwei</Typography>
                         <Typography className={classes.gasUSD}>
                             {t('popups_wallet_gas_fee_settings_usd', {
-                                usd: formatWeiToEther(gasPrice).times(nativeTokenPrice).times(21000).toPrecision(3),
+                                usd: formatWeiToEther(gasPrice)
+                                    .times(nativeTokenPrice)
+                                    .times(minGasLimit || 21000)
+                                    .toPrecision(3),
                             })}
                         </Typography>
                     </div>
