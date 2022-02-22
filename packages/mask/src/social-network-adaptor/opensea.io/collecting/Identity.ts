@@ -42,7 +42,7 @@ async function query(): Promise<null | SocialNetworkUI.CollectingCapabilities.Id
                 ...raw,
                 profilePictureUrl: raw.imageUrl,
                 username: raw.user.username,
-                fullname: raw.address,
+                nickname: raw.nickname,
             }
         }
 
@@ -52,6 +52,6 @@ async function query(): Promise<null | SocialNetworkUI.CollectingCapabilities.Id
     return {
         identifier: new ProfileIdentifier(openseaBase.networkIdentifier, detail.username),
         avatar: detail.profilePictureUrl,
-        nickname: detail.fullName,
+        nickname: detail.nickname,
     }
 }
