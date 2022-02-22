@@ -5,6 +5,9 @@ import {
     fromHex,
     toBase64,
     decompressSecp256k1Key,
+    NextIDBindings,
+    NextIDPlatform,
+    NextIDPayload,
 } from '@masknet/shared-base'
 import urlcat from 'urlcat'
 import { first } from 'lodash-unified'
@@ -14,29 +17,9 @@ const BASE_URL =
         ? 'https://proof-service.next.id/'
         : 'https://js43x8ol17.execute-api.ap-east-1.amazonaws.com/api/'
 
-export enum NextIDPlatform {
-    NextId = 'nextid',
-    Twitter = 'twitter',
-    KeyBase = 'keybase',
-    Ethereum = 'ethereum',
-    Github = 'github',
-}
-
-interface QueryBinding {
-    platform: string
+interface BindingQueryRequest {
+    platform: NextIDPlatform
     identity: string
-}
-
-interface QueryBindingIDResponse {
-    persona: string
-    proofs: {
-        platform: string
-        identity: string
-    }[]
-}
-
-interface QueryBindingResponse {
-    ids: QueryBindingIDResponse[]
 }
 
 interface CreatePayloadBody {
@@ -44,11 +27,6 @@ interface CreatePayloadBody {
     platform: string
     identity: string
     public_key: string
-}
-
-interface PayloadResponse {
-    post_content: string
-    sign_payload: string
 }
 
 export async function bindProof(
@@ -96,7 +74,8 @@ export async function queryExistedBindingByPersona(persona: PersonaIdentifier) {
         mode: 'cors',
     })
 
-    const result = (await response.json()) as QueryBindingResponse
+    const result = (await response.json()) as NextIDBindings
+    // Will have only one item when query by persona
     return first(result.ids)
 }
 
@@ -107,8 +86,18 @@ export async function queryExistedBindingByPlatform(platform: NextIDPlatform, id
         mode: 'cors',
     })
 
-    const result = (await response.json()) as QueryBindingResponse
+    const result = (await response.json()) as NextIDBindings
     return result.ids
+}
+
+export async function queryIsBound(persona: PersonaIdentifier, platform: NextIDPlatform, identity: string) {
+    if (!platform && !identity) return false
+
+    const personaPublicKey = await convertPersonaHexPublicKey(persona)
+    if (!personaPublicKey) return false
+
+    const ids = await queryExistedBindingByPlatform(platform, identity)
+    return ids.map((x) => x.persona.toLowerCase()).includes(personaPublicKey.toLowerCase())
 }
 
 export async function createPersonaPayload(
@@ -116,9 +105,9 @@ export async function createPersonaPayload(
     action: 'create' | 'delete',
     identity: string,
     platform: NextIDPlatform,
-) {
+): Promise<NextIDPayload | null> {
     const personaPublicKey = await convertPersonaHexPublicKey(persona)
-    if (!personaPublicKey) return
+    if (!personaPublicKey) return null
 
     const requestBody: CreatePayloadBody = {
         action,
@@ -133,6 +122,9 @@ export async function createPersonaPayload(
         mode: 'cors',
     })
 
-    const result: PayloadResponse = await response.json()
-    return JSON.stringify(JSON.parse(result.sign_payload))
+    const result = await response.json()
+    return {
+        postContent: result.post_content,
+        signPayload: JSON.stringify(JSON.parse(result.sign_payload)),
+    }
 }

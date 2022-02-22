@@ -1,380 +1,32 @@
-import { useMemo, useState, useEffect } from 'react'
-import { Paper, Typography, IconButton, Box, Button, FormControlLabel, Checkbox } from '@mui/material'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
-import CloseIcon from '@mui/icons-material/Close'
-import { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
+import { useMemo, useState, useEffect, useRef } from 'react'
+import { makeStyles } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared'
 import { useI18N, MaskMessages } from '../../utils'
 import { activatedSocialNetworkUI, SocialNetworkUI } from '../../social-network'
 import { currentSetupGuideStatus, dismissPinExtensionTip, userGuideStatus } from '../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
-import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '@masknet/shared-base'
+import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier, NextIDPlatform } from '@masknet/shared-base'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import Services from '../../extension/service'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
-import { MaskIcon } from '../../resources/MaskIcon'
 import { useAsync, useCopyToClipboard } from 'react-use'
-import classNames from 'classnames'
-import ExtensionIcon from '@mui/icons-material/Extension'
 import stringify from 'json-stable-stringify'
-import { VerifiedIcon, PinIcon } from '@masknet/icons'
-
-export enum SetupGuideStep {
-    FindUsername = 'find-username',
-    PinExtension = 'pin-extension',
-    Close = 'close',
-}
-
-// #region wizard dialog
-const useWizardDialogStyles = makeStyles()((theme) => ({
-    root: {
-        padding: theme.spacing(3),
-        position: 'relative',
-        boxShadow: theme.palette.mode === 'dark' ? 'none' : theme.shadows[4],
-        border: `${theme.palette.mode === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
-        borderRadius: 20,
-        [theme.breakpoints.down('sm')]: {
-            position: 'fixed',
-            bottom: 0,
-            left: 0,
-            margin: 0,
-            alignSelf: 'center',
-            borderRadius: 0,
-            boxShadow: 'none',
-            border: `solid 1px ${theme.palette.divider}`,
-            width: '100%',
-        },
-        userSelect: 'none',
-        boxSizing: 'border-box',
-        width: 480,
-        '&.small': {
-            width: 384,
-        },
-        overflow: 'hidden',
-    },
-    button: {
-        width: 150,
-        height: 40,
-        minHeight: 40,
-        marginLeft: 0,
-        marginTop: 0,
-        [theme.breakpoints.down('sm')]: {
-            width: '100%',
-        },
-        fontSize: 14,
-        wordBreak: 'keep-all',
-        '&,&:hover': {
-            color: `${MaskColorVar.twitterButtonText} !important`,
-            background: `${MaskColorVar.twitterButton} !important`,
-        },
-    },
-    close: {
-        color: theme.palette.text.primary,
-        position: 'absolute',
-        right: 10,
-        top: 10,
-    },
-    tip: {
-        fontSize: 16,
-        fontWeight: 500,
-        lineHeight: '22px',
-        paddingTop: 16,
-    },
-    label: {
-        fontSize: 16,
-        fontWeight: 400,
-        lineHeight: '22px',
-    },
-    header: {
-        height: 40,
-    },
-    content: {},
-    connection: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-    },
-    connectItem: {
-        flex: 1,
-        height: 75,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-    },
-    line: {
-        width: 100,
-        height: 1,
-        borderTop: `dashed 1px  ${MaskColorVar.borderSecondary}`,
-    },
-    name: {
-        fontSize: 16,
-        fontWeight: 500,
-    },
-    footer: {},
-}))
-
-const useStyles = makeStyles()((theme) => ({
-    content: {
-        marginBottom: theme.spacing(2),
-    },
-    footer: {
-        marginLeft: 0,
-        marginTop: theme.spacing(3),
-        flex: 1,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'column',
-    },
-    tip: {},
-}))
-
-interface ContentUIProps {
-    dialogType: SetupGuideStep
-    content?: React.ReactNode
-    footer?: React.ReactNode
-    tip?: React.ReactNode
-    dismiss?: React.ReactNode
-}
-
-function ContentUI(props: ContentUIProps) {
-    const { classes } = useStyles()
-    switch (props.dialogType) {
-        case SetupGuideStep.FindUsername:
-        case SetupGuideStep.PinExtension:
-            return (
-                <Box>
-                    <main className={classes.content}>{props.content}</main>
-                    <div>{props.tip}</div>
-                    {props.footer ? <footer className={classes.footer}>{props.footer}</footer> : null}
-                    {props.dismiss ? <div>{props.dismiss}</div> : null}
-                </Box>
-            )
-        default:
-            return null
-    }
-}
-
-interface WizardDialogProps {
-    small?: boolean
-    title?: string
-    dialogType: SetupGuideStep
-    optional?: boolean
-    content?: React.ReactNode
-    tip?: React.ReactNode
-    footer?: React.ReactNode
-    dismiss?: React.ReactNode
-    onClose?: () => void
-}
-
-function WizardDialog(props: WizardDialogProps) {
-    const { small, title, dialogType, content, tip, footer, dismiss, onClose } = props
-    const { classes } = useWizardDialogStyles()
-
-    return (
-        <Paper className={classNames(classes.root, small ? 'small' : '')}>
-            <header className={classes.header}>
-                <Typography color="textPrimary" variant="h3" fontSize={24}>
-                    {title}
-                </Typography>
-            </header>
-            <ContentUI dialogType={dialogType} content={content} tip={tip} footer={footer} dismiss={dismiss} />
-            {onClose ? (
-                <IconButton className={classes.close} size="medium" onClick={onClose}>
-                    <CloseIcon cursor="pointer" />
-                </IconButton>
-            ) : null}
-        </Paper>
-    )
-}
-// #endregion
-
-// #region find username
-const useFindUsernameStyles = makeStyles()((theme) => ({
-    avatar: {
-        display: 'block',
-        width: 48,
-        height: 48,
-        borderRadius: '50%',
-        border: `solid 1px ${MaskColorVar.border}`,
-        '&.connected': {
-            borderColor: MaskColorVar.success,
-        },
-    },
-    verified: {
-        position: 'absolute',
-        bottom: 0,
-        right: 0,
-        fontSize: 16,
-        color: MaskColorVar.success,
-    },
-}))
-
-interface FindUsernameProps extends Partial<WizardDialogProps> {
-    username: string
-    personaName?: string
-    avatar?: string
-    onUsernameChange?: (username: string) => void
-    onConnect: () => Promise<void>
-    onDone?: () => void
-}
-
-function FindUsername({ personaName, username, avatar, onConnect, onDone, onClose }: FindUsernameProps) {
-    const { t } = useI18N()
-    const [connected, setConnected] = useState(false)
-
-    const { classes } = useWizardDialogStyles()
-    const { classes: findUsernameClasses } = useFindUsernameStyles()
-
-    return (
-        <WizardDialog
-            dialogType={SetupGuideStep.FindUsername}
-            small={!username}
-            content={
-                <Box className={classes.connection}>
-                    <Box className={classes.connectItem}>
-                        <MaskIcon size={48} />
-                        <Typography variant="body2" className={classes.name}>
-                            {personaName}
-                        </Typography>
-                    </Box>
-                    {username ? (
-                        <>
-                            <Box className={classes.line} />
-                            <Box className={classes.connectItem}>
-                                <Box position="relative" width={48}>
-                                    <img
-                                        src={avatar}
-                                        className={classNames(findUsernameClasses.avatar, connected ? 'connected' : '')}
-                                    />
-                                    {connected ? <VerifiedIcon className={findUsernameClasses.verified} /> : null}
-                                </Box>
-                                <Typography variant="body2" className={classes.name}>
-                                    {username}
-                                </Typography>
-                            </Box>
-                        </>
-                    ) : null}
-                </Box>
-            }
-            tip={
-                <Typography
-                    className={classes.tip}
-                    variant="body2"
-                    dangerouslySetInnerHTML={{
-                        __html: !username
-                            ? t('setup_guide_login')
-                            : connected
-                            ? t('user_guide_tip_connected')
-                            : t('setup_guide_find_username_text'),
-                    }}
-                />
-            }
-            footer={
-                username ? (
-                    <ActionButtonPromise
-                        className={classes.button}
-                        variant="contained"
-                        init={t('setup_guide_connect_auto')}
-                        waiting={t('connecting')}
-                        complete={t('ok')}
-                        failed={t('setup_guide_connect_failed')}
-                        executor={onConnect}
-                        completeOnClick={onDone}
-                        onComplete={() => setConnected(true)}
-                        disabled={!username || !personaName}
-                        completeIcon={null}
-                        failIcon={null}
-                        failedOnClick="use executor"
-                        data-testid="confirm_button">
-                        {t('confirm')}
-                    </ActionButtonPromise>
-                ) : null
-            }
-            onClose={onClose}
-        />
-    )
-}
-// #endregion
-
-interface PinExtensionProps {
-    onDone?: () => void
-}
-function PinExtension({ onDone }: PinExtensionProps) {
-    const pinImg = new URL('../../resources/extensionPinned.png', import.meta.url).toString()
-    const { classes } = useWizardDialogStyles()
-    const { t } = useI18N()
-    const [checked, setChecked] = useState(true)
-
-    return (
-        <WizardDialog
-            dialogType={SetupGuideStep.PinExtension}
-            content={
-                <Box className={classes.connection}>
-                    <Box className={classes.connectItem}>
-                        <MaskIcon size={48} />
-                        <Typography variant="body2" className={classes.name}>
-                            Mask Network
-                        </Typography>
-                    </Box>
-                    <Box className={classes.line} />
-                    <Box className={classes.connectItem}>
-                        <img
-                            src={pinImg}
-                            width={100}
-                            style={{ filter: 'drop-shadow(0px 0px 16px rgba(101, 119, 134, 0.2))' }}
-                        />
-                    </Box>
-                </Box>
-            }
-            tip={
-                <Typography className={classes.tip} component="div">
-                    <div>{t('setup_guide_pin_tip_0')}</div>
-                    <ol style={{ paddingLeft: '24px' }}>
-                        <li>
-                            {t('setup_guide_pin_tip_1')}
-                            <ExtensionIcon sx={{ fontSize: 16, color: '#ababab' }} />
-                            {t('setup_guide_pin_tip_1_s')}
-                        </li>
-                        <li>
-                            {t('setup_guide_pin_tip_2')}
-                            <PinIcon sx={{ fontSize: 16 }} />
-                            {t('setup_guide_pin_tip_2_s')}
-                        </li>
-                        <li>{t('setup_guide_pin_tip_3')}</li>
-                    </ol>
-                </Typography>
-            }
-            footer={
-                <Button className={classes.button} variant="contained" onClick={onDone}>
-                    {t('start')}
-                </Button>
-            }
-            dismiss={
-                <FormControlLabel
-                    classes={{ label: classes.label }}
-                    control={
-                        <Checkbox
-                            checked={checked}
-                            onChange={(e) => {
-                                setChecked(e.target.checked)
-                                dismissPinExtensionTip.value = e.target.checked
-                            }}
-                        />
-                    }
-                    label={t('setup_guide_pin_dismiss')}
-                />
-            }
-            onClose={onDone}
-        />
-    )
-}
+import type { NextIDPayload } from '@masknet/shared-base'
+import { SetupGuideStep } from './SetupGuide/types'
+import { FindUsername } from './SetupGuide/FindUsername'
+import { VerifyNextID } from './SetupGuide/VerifyNextID'
+import { PinExtension } from './SetupGuide/PinExtension'
 
 // #region setup guide ui
 interface SetupGuideUIProps {
     persona: PersonaIdentifier
     onClose?: () => void
+}
+
+interface SignInfo {
+    payload: NextIDPayload
+    personaSign: string
+    twitterPost: string
 }
 
 function SetupGuideUI(props: SetupGuideUIProps) {
@@ -383,6 +35,14 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const ui = activatedSocialNetworkUI
     const [, copyToClipboard] = useCopyToClipboard()
     const [step, setStep] = useState(SetupGuideStep.FindUsername)
+    // @ts-ignore
+    const [signInfo, setSignInfo] = useState<SignInfo>({})
+    const [verifiedPostId, setVerifiedPostId] = useState<string>()
+    const [enableNextID] = useState(activatedSocialNetworkUI.configuration.nextIDConfig?.enable)
+    const verifyPostCollectTimer = useRef<any>()
+    const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
+
+    console.log(enableNextID)
 
     // #region parse setup status
     const lastStateRef = currentSetupGuideStatus[ui.networkIdentifier]
@@ -437,6 +97,13 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         return Services.Identity.queryPersona(Identifier.fromString(persona.toText(), ECKeyIdentifier).unwrap())
     }, [persona])
 
+    useEffect(() => {
+        if (!verifiedPostId || !signInfo?.personaSign || !enableNextID || !persona_?.identifier) return
+        Services.NextID.bindProof(persona_.identifier, 'create', platform, username).then(async () => {
+            await onConnect()
+        })
+    }, [verifiedPostId, signInfo.personaSign, enableNextID])
+
     const onConnect = async () => {
         // attach persona with SNS profile
         await Services.Identity.attachProfile(new ProfileIdentifier(ui.networkIdentifier, username), persona, {
@@ -447,6 +114,46 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         if (!persona_?.hasPrivateKey) throw new Error('invalid persona')
         await Services.Identity.setupPersona(persona_?.identifier)
         MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
+    }
+
+    const onVerify = async () => {
+        // TODO: error handle for ui
+        if (!persona_) return
+        const collect = activatedSocialNetworkUI.configuration.nextIDConfig?.collectVerifyPost
+        const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
+        const isBound = await Services.NextID.queryIsBound(persona_.identifier, platform, username)
+        if (!isBound) {
+            const payload = await Services.NextID.createPersonaPayload(
+                persona_.identifier,
+                'create',
+                username,
+                platform,
+            )
+            if (!payload) throw new Error('Get Payload Wrong')
+            setSignInfo({ ...signInfo, payload })
+            const signResult = await Services.Identity.signWithPersona({
+                method: 'eth',
+                message: payload.signPayload,
+                identifier: persona.toText(),
+            })
+            if (!signResult) throw new Error('Get Persona Sign Wrong')
+            setSignInfo({ ...signInfo, personaSign: signResult.signature.signature })
+            activatedSocialNetworkUI.automation?.nativeCompositionDialog?.appendText?.(payload.postContent)
+
+            verifyPostCollectTimer.current = setInterval(async () => {
+                // TODO: rename this method
+                const post = collect?.(payload.postContent)
+                if (post) {
+                    setVerifiedPostId(post)
+                    clearInterval(verifyPostCollectTimer.current)
+                    // await onConnect()
+                }
+            }, 1000)
+
+            setTimeout(() => {
+                clearInterval(verifyPostCollectTimer.current)
+            }, 1000 * 20)
+        }
     }
 
     const onClose = () => {
@@ -484,7 +191,17 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
     switch (step) {
         case SetupGuideStep.FindUsername:
-            return (
+            return enableNextID ? (
+                <VerifyNextID
+                    personaName={persona_?.nickname}
+                    username={username}
+                    avatar={lastRecognized.avatar}
+                    onUsernameChange={setUsername}
+                    onVerify={onVerify}
+                    onDone={onDone}
+                    onClose={onClose}
+                />
+            ) : (
                 <FindUsername
                     personaName={persona_?.nickname}
                     username={username}

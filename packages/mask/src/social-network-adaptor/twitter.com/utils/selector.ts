@@ -143,6 +143,15 @@ export const postsImageSelector = (node: HTMLElement) =>
             '[data-testid="tweet"] ~ div img[src*="media"]', // image in detail page for new twitter
         ].join(),
     )
+
+export const timeLinePostContentSelector = () =>
+    querySelectorAll(
+        [
+            '[data-testid="tweet"] div + div div[lang]', // text tweets
+            '[data-testid="tweet"] div + div div[data-testid="card.wrapper"]', // link box tweets
+        ].join(),
+    )
+
 export const postsContentSelector = () =>
     querySelectorAll(
         [
