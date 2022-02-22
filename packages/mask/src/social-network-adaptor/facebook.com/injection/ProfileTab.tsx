@@ -136,7 +136,7 @@ export function injectProfileTabAtFacebook(signal: AbortSignal) {
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabAtFacebook />)
 
     setTimeout(() => {
-        const web3Tab = web3TabSelector().evaluate() as HTMLSpanElement
+        const web3Tab = web3TabSelector().evaluate()
         if (web3Tab) {
             web3Tab.style.float = 'left'
         }

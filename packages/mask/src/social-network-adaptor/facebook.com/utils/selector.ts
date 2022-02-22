@@ -97,8 +97,8 @@ export const searchProfileTabSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-pagelet="ProfileTabs"] a:nth-child(7)')
 
 // fot getting the inserted web3 tab
-export const web3TabSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-pagelet="ProfileTabs"] a:nth-child(7)+span')
+export const web3TabSelector: () => LiveSelector<HTMLSpanElement, true> = () =>
+    querySelector<HTMLSpanElement>('[data-pagelet="ProfileTabs"] a:nth-child(7)+span')
 
 // fot inserting web3 tab content
 export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
