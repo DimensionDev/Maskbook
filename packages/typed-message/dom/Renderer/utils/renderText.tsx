@@ -2,6 +2,7 @@ import { memo, Fragment, createElement, useContext } from 'react'
 import { RenderFragmentsContext, RenderFragmentsContextType, DefaultRenderFragments } from './RenderFragments'
 import { parseLink } from '../../../base/utils/parseLink'
 import type { TypedMessageAnchor } from '../../../base/extension'
+import { TextEnlargeContext } from './TextEnlargeContext'
 
 /** @internal */
 export interface RenderTextProps {
@@ -11,7 +12,8 @@ export interface RenderTextProps {
 /** @internal */
 export const RenderTextFragment = memo(function RenderText(props: RenderTextProps) {
     const { Text = DefaultRenderFragments.Text } = useContext(RenderFragmentsContext)
-    return createElement(Fragment, {}, ...parseText(props.text, false, Text))
+    const allowTextEnlarge = useContext(TextEnlargeContext)
+    return createElement(Fragment, {}, ...parseText(props.text, allowTextEnlarge, Text))
 })
 
 /** @internal */
