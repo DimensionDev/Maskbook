@@ -75,14 +75,11 @@ function postInNative(record: Partial<PostRecord> & Pick<PostRecord, 'identifier
             record.recipients === 'everyone'
                 ? Object.fromEntries(new Map())
                 : record.recipients
-                ? Array.from(record.recipients).map(
-                      ([identifier, detail]): [string, { reason: RecipientReasonJSON[] }] => [
-                          identifier.toText(),
-                          {
-                              reason: Array.from(detail.reason).map<RecipientReasonJSON>(RecipientReasonToJSON),
-                          },
-                      ],
-                  )
+                ? Array.from(record.recipients).map(([identifier, detail]) => ({
+                      [identifier.toText()]: {
+                          reason: Array.from(detail.reason).map<RecipientReasonJSON>(RecipientReasonToJSON),
+                      },
+                  }))
                 : undefined,
         foundAt: record.foundAt?.getTime(),
         encryptBy: record.encryptBy?.toText(),
