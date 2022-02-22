@@ -24,5 +24,8 @@
     "drop_here": "crwdns10735:0crwdne10735:0",
     "error_101": "crwdns10737:0crwdne10737:0",
     "error_102": "crwdns10739:0{{limit}}crwdne10739:0",
-    "on_change_file": "crwdns10741:0crwdne10741:0"
+    "on_change_file": "crwdns10741:0crwdne10741:0",
+    "provider_arweave": "crwdns14526:0crwdne14526:0",
+    "provider_ipfs": "crwdns14528:0crwdne14528:0",
+    "provider_swarm": "crwdns14530:0crwdne14530:0"
 }

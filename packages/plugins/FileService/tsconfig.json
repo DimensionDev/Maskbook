@@ -12,7 +12,9 @@
     { "path": "../../plugin-infra" },
     { "path": "../../shared-base" },
     { "path": "../../shared" },
+    { "path": "../../web3-kit" },
     { "path": "../../icons" },
+    { "path": "../../web3-kit" },
     { "path": "../Wallet" }
   ]
 }
