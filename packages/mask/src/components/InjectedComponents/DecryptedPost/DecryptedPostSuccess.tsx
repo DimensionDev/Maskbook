@@ -53,12 +53,12 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
     return (
         <>
             {shareMenu.ShareMenu}
-            <PluginRendererWithSuggestion metadata={content.meta} message={content} />
             <AdditionalContent
                 headerActions={wrapAuthorDifferentMessage(author, postedBy, rightActions)}
                 title={t('decrypted_postbox_title')}
                 message={content}
             />
+            <PluginRendererWithSuggestion metadata={content.meta} message={content} />
         </>
     )
 })

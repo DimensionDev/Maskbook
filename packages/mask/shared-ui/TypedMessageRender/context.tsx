@@ -1,14 +1,17 @@
+import { emptyTransformationContext, TransformationContext } from '@masknet/typed-message'
 import {
     RenderFragmentsContext,
     type RenderFragmentsContextType,
     MetadataRenderProps,
     RegistryContext,
+    TransformerProvider,
+    TransformationContextProvider,
 } from '@masknet/typed-message/dom'
 import { TypedMessageRenderRegistry } from './registry'
 import { useSubscription } from 'use-subscription'
-import type { TransformationContext } from '@masknet/typed-message'
 import { useMemo } from 'react'
 import { Text, Link } from './Components/Text'
+import { TypedMessageTransformers } from './transformer'
 
 export interface TypedMessageRenderContextProps extends React.PropsWithChildren<{}> {
     context?: TransformationContext
@@ -18,7 +21,7 @@ export interface TypedMessageRenderContextProps extends React.PropsWithChildren<
 
 export function TypedMessageRenderContext(props: TypedMessageRenderContextProps) {
     const registry = useSubscription(TypedMessageRenderRegistry.subscription)
-    // const transformerFunction = useSubscription(TypedMessageTransformers.subscription)
+    const transformerFunction = useSubscription(TypedMessageTransformers.subscription)
     const Provider = useMemo((): RenderFragmentsContextType => {
         return { Text, Link, Metadata: props.metadataRender, ...props.renderFragments }
     }, [props.metadataRender, props.renderFragments])
@@ -26,8 +29,14 @@ export function TypedMessageRenderContext(props: TypedMessageRenderContextProps)
     return (
         // basic render fragments provider: Text, Link, Image and Metadata
         <RenderFragmentsContext.Provider value={Provider}>
-            {/* Typed message render provider: a registry */}
-            <RegistryContext.Provider value={registry}>{props.children}</RegistryContext.Provider>
+            {/* transformer pipeline */}
+            <TransformerProvider.Provider value={transformerFunction}>
+                {/* transformation context */}
+                <TransformationContextProvider.Provider value={props.context || emptyTransformationContext}>
+                    {/* components provider */}
+                    <RegistryContext.Provider value={registry}>{props.children}</RegistryContext.Provider>
+                </TransformationContextProvider.Provider>
+            </TransformerProvider.Provider>
         </RenderFragmentsContext.Provider>
     )
 }
