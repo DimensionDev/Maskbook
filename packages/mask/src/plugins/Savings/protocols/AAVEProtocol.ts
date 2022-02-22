@@ -26,25 +26,18 @@ export interface AaveContract {
     stEthContract: string
 }
 
-export const AaveContracts: { [key: number]: AaveContract } = {
-    [ChainId.Mainnet]: {
+export function getAaveContract(chainId: ChainId): AaveContract {
+    const constants = getSavingsConstants(chainId)
+
+    return {
         type: EthereumTokenType.ERC20,
-        chainName: 'Ethereum',
-        subgraphUrl: getSavingsConstants(ChainId.Mainnet).AAVE_SUBGRAPHS || '',
+        chainName: ChainId[chainId],
+        subgraphUrl: constants.AAVE_SUBGRAPHS ?? '',
         aaveLendingPoolAddressProviderContract:
-            getSavingsConstants(ChainId.Mainnet).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS,
-        aaveContract: getSavingsConstants(ChainId.Mainnet).AAVE || ZERO_ADDRESS,
-        stEthContract: getSavingsConstants(ChainId.Mainnet).LIDO_STETH || ZERO_ADDRESS,
-    },
-    [ChainId.Gorli]: {
-        type: EthereumTokenType.ERC20,
-        chainName: 'Kovan',
-        subgraphUrl: getSavingsConstants(ChainId.Kovan).AAVE_SUBGRAPHS || '',
-        aaveLendingPoolAddressProviderContract:
-            getSavingsConstants(ChainId.Kovan).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS,
-        aaveContract: getSavingsConstants(ChainId.Kovan).AAVE || ZERO_ADDRESS,
-        stEthContract: getSavingsConstants(ChainId.Kovan).LIDO_STETH || ZERO_ADDRESS,
-    },
+            constants.AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS ?? ZERO_ADDRESS,
+        aaveContract: constants.AAVE ?? ZERO_ADDRESS,
+        stEthContract: constants.LIDO_STETH ?? ZERO_ADDRESS,
+    }
 }
 
 export class AAVEProtocol implements SavingsProtocol {
@@ -225,26 +218,10 @@ export class AAVEProtocol implements SavingsProtocol {
 
     public async depositEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
         try {
-            const aaveLPoolAddress =
-                getSavingsConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS
-            const lPoolAdressProviderContract = createContract<AaveLendingPoolAddressProvider>(
-                web3,
-                aaveLPoolAddress,
-                AaveLendingPoolAddressProviderABI as AbiItem[],
-            )
-
-            const poolAddress = await lPoolAdressProviderContract?.methods.getLendingPool().call()
-
-            const contract = createContract<AaveLendingPool>(
-                web3,
-                poolAddress || ZERO_ADDRESS,
-                AaveLendingPoolABI as AbiItem[],
-            )
-            const gasEstimate = await contract?.methods
-                .deposit(getSavingsConstants(chainId).AAVE || ZERO_ADDRESS, value.toString(), account, '0')
-                .estimateGas({
-                    from: account,
-                })
+            const operation = await this.createDepositTokenOperation(account, chainId, web3, value)
+            const gasEstimate = await operation.estimateGas({
+                from: account,
+            })
 
             return new BigNumber(gasEstimate || 0)
         } catch (error) {
@@ -253,30 +230,38 @@ export class AAVEProtocol implements SavingsProtocol {
         }
     }
 
+    private async createDepositTokenOperation(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
+        const aaveLPoolAddress =
+            getSavingsConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS
+        const lPoolAdressProviderContract = createContract<AaveLendingPoolAddressProvider>(
+            web3,
+            aaveLPoolAddress,
+            AaveLendingPoolAddressProviderABI as AbiItem[],
+        )
+
+        const poolAddress = await lPoolAdressProviderContract?.methods.getLendingPool().call()
+
+        const contract = createContract<AaveLendingPool>(
+            web3,
+            poolAddress || ZERO_ADDRESS,
+            AaveLendingPoolABI as AbiItem[],
+        )
+        return contract?.methods.deposit(
+            getSavingsConstants(chainId).AAVE || ZERO_ADDRESS,
+            value.toString(),
+            account,
+            '0',
+        )
+    }
+
     public async deposit(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
         try {
-            const lPoolAdressProviderContract = createContract<AaveLendingPoolAddressProvider>(
-                web3,
-                getSavingsConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS,
-                AaveLendingPoolAddressProviderABI as AbiItem[],
-            )
-
-            const poolAddress = await lPoolAdressProviderContract?.methods.getLendingPool().call()
-
-            const contract = createContract<AaveLendingPool>(
-                web3,
-                poolAddress || ZERO_ADDRESS,
-                AaveLendingPoolABI as AbiItem[],
-            )
-
             const gasEstimate = await this.depositEstimate(account, chainId, web3, value)
-
-            await contract?.methods
-                .deposit(getSavingsConstants(chainId).AAVE || ZERO_ADDRESS, value.toString(), account, '0')
-                .send({
-                    from: account,
-                    gas: gasEstimate.toNumber(),
-                })
+            const operation = await this.createDepositTokenOperation(account, chainId, web3, value)
+            await operation.send({
+                from: account,
+                gas: gasEstimate.toNumber(),
+            })
             return true
         } catch (error) {
             console.error('AAVE `deposit()` Error', error)
