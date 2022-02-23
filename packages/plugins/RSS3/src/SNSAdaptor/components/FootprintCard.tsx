@@ -53,7 +53,7 @@ export const FootprintCard = ({ imageUrl, startDate, endDate, city, country, act
                     </Typography>
                 </div>
                 <div className="flex flex-row gap-2 font-medium">
-                    <Typography variant="body1" className="capitalize" style={{ color: 'rgba(255, 180, 38, 1)' }}>
+                    <Typography variant="body1" className="capitalize" style={{ color: 'rgb(255, 180, 38)' }}>
                         {t.attended()}
                     </Typography>
                     <Typography variant="body1" color="textPrimary">

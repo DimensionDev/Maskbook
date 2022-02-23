@@ -175,6 +175,14 @@ export function resolveIPFSLink(ipfs: string): string {
     return urlcat('https://coldcdn.com/api/cdn/mipfsygtms/ipfs/:ipfs', { ipfs })
 }
 
+export function resolveResourceLink(originLink: string): string {
+    if (!originLink) return ''
+    if (originLink.startsWith('http') || originLink.startsWith('data')) return originLink
+    if (originLink.startsWith('ipfs://ipfs/')) return resolveIPFSLink(originLink.replace(/^ipfs:\/\/ipfs\//, ''))
+    if (originLink.startsWith('ipfs://')) return resolveIPFSLink(decodeURIComponent(originLink).replace('ipfs://', ''))
+    return resolveIPFSLink(originLink)
+}
+
 export function resolveDomainLink(domain?: string) {
     if (!domain) return ''
     return urlcat('https://app.ens.domains/name/:domain/details', { domain })

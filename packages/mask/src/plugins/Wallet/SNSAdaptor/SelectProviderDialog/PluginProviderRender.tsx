@@ -1,10 +1,10 @@
 import { SelectedIcon } from '@masknet/icons'
 import type { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra'
 import { ImageIcon } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Box, ImageList, ImageListItem, List, ListItem, Typography } from '@mui/material'
 import { first } from 'lodash-unified'
-import { ShadowRootTooltip, useI18N } from '../../../../utils'
+import { useI18N } from '../../../../utils'
 import { ProviderIcon } from './ProviderIcon'
 
 const useStyles = makeStyles()((theme) => ({

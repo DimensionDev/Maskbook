@@ -692,6 +692,7 @@ export enum CurrentSNSNetwork {
  */
 export enum PluginId {
     Avatar = 'com.maskbook.avatar',
+    ArtBlocks = 'io.artblocks',
     Collectible = 'com.maskbook.collectibles',
     CryptoArtAI = 'com.maskbook.cryptoartai',
     dHEDGE = 'org.dhedge',
@@ -720,6 +721,8 @@ export enum PluginId {
     PoolTogether = 'com.pooltogether',
     UnlockProtocol = 'com.maskbook.unlockprotocol',
     FileService = 'com.maskbook.fileservice',
+    CyberConnect = 'me.cyberconnect.app',
+    // @masknet/scripts: insert-here
 }
 
 export interface Pagination {
