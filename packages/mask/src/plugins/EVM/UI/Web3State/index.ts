@@ -26,6 +26,7 @@ import {
     createWeb3,
     createExternalProvider,
 } from '@masknet/web3-shared-evm'
+import { mergeNFTList } from '@masknet/plugin-infra'
 import { getStorage } from '../../storage'
 import { getFungibleAssetsFn } from './getAssetsFn'
 
@@ -129,6 +130,7 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
         getChainDetailed,
         isChainIdValid,
 
+        isSameAddress,
         formatAddress: formatEthereumAddress,
         formatCurrency,
         formatBalance,
@@ -148,6 +150,7 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
                 contractDetailed: { address: address },
                 tokenId: tokenId,
             } as unknown as any),
+        mergeNFTList,
     }
     return state
 }

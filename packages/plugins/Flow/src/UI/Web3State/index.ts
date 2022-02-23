@@ -8,6 +8,7 @@ import {
 } from '@masknet/web3-shared-flow'
 import { createConstantSubscription, mapSubscription } from '@masknet/shared-base'
 import { toFixed } from '@masknet/web3-shared-base'
+import { isSameAddress, mergeNFTList } from '@masknet/plugin-infra'
 import { getStorage, StorageDefaultValue } from '../../storage'
 import { formatAddress } from '../../helpers'
 import { getFungibleAssets } from '../../apis'
@@ -48,6 +49,7 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
             getFungibleAssets,
         },
         Utils: {
+            isSameAddress,
             formatAddress,
             formatBalance: toFixed,
             formatCurrency: (value, sign = '') => `${sign}${toFixed(value)}`,
@@ -57,6 +59,7 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
             resolveTransactionLink: resolveTransactionLinkOnExplorer,
             resolveAddressLink: resolveAddressLinkOnExplorer,
             resolveBlockLink: resolveBlockLinkOnExplorer,
+            mergeNFTList,
         },
     }
 }

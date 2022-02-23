@@ -10,7 +10,7 @@ import {
     resolveIPFSLink,
 } from '@masknet/web3-shared-evm'
 import { Constant, transform } from '@masknet/web3-shared-evm/constants/utils'
-import { mergeNFTList, SocketState, useNonFungibleAssets } from '@masknet/plugin-infra'
+import { mergeNFTList, SocketState, useNonFungibleAssets, useWeb3State } from '@masknet/plugin-infra'
 import { cloneDeep, findLastIndex } from 'lodash-unified'
 import { delay } from '@masknet/shared-base'
 import type { User, FilterContract } from '../types'
@@ -31,10 +31,11 @@ export function useNFTs(user: User | undefined, configNFTs: Record<string, Const
     const initContracts = useInitNFTs(configNFTs)
     const [nfts, setNfts] = useState<FilterContract[]>(initContracts)
     const chainId = useChainId()
+    const { Utils } = useWeb3State()
     const [fetchTotal, setFetchTotal] = useState<ERC721TokenDetailed[]>([])
     const { data: _collectibles, state } = useNonFungibleAssets(user?.address ?? '')
     const customCollectibles = useCustomNonFungibleAssets(user?.address ?? '', chainId, true)
-    const collectibles = mergeNFTList([..._collectibles, ...customCollectibles])
+    const collectibles = (Utils?.mergeNFTList ?? mergeNFTList)([..._collectibles, ...customCollectibles])
 
     useEffect(() => {
         if (!initContracts.length) return

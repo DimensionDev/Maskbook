@@ -100,7 +100,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const { Utils } = useWeb3State()
     const { data: _collectibles, error, retry, state } = useNonFungibleAssets(account)
     const customCollectibles = useCustomNonFungibleAssets(account, ChainId.Mainnet, true)
-    const collectibles = mergeNFTList([..._collectibles, ...customCollectibles])
+    const collectibles = (Utils?.mergeNFTList ?? mergeNFTList)([..._collectibles, ...customCollectibles])
 
     const onClick = useCallback(async () => {
         if (!selectedToken) return

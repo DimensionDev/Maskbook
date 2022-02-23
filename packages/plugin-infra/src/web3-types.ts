@@ -263,6 +263,7 @@ export declare namespace Web3Plugin {
             isChainIdValid?: (chainId: number, allowTestnet: boolean) => boolean
             getChainDetailed?: (chainId: number) => ChainDetailed | undefined
 
+            isSameAddress?: (a?: string, b?: string) => boolean
             formatAddress?: (address: string, size?: number) => string
             formatCurrency?: (value: BigNumber.Value, sign?: string, symbol?: string) => string
             formatBalance?: (value: BigNumber.Value, decimals?: number, significant?: number) => string
@@ -281,6 +282,7 @@ export declare namespace Web3Plugin {
             formatDomainName?: (domain?: string, size?: number) => string | undefined
 
             getAverageBlockDelay?: (chainId: number, scale?: number) => number
+            mergeNFTList?: (NFTList: ERC721TokenDetailed[]) => ERC721TokenDetailed[]
         }
         export interface Capabilities {
             Shared?: SharedState

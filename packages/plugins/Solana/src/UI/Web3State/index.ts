@@ -9,6 +9,7 @@ import {
     resolveBlockLinkOnExplorer,
     resolveTransactionLinkOnExplorer,
 } from '@masknet/web3-shared-solana'
+import { isSameAddress, mergeNFTList } from '@masknet/plugin-infra'
 import { getFungibleAssets } from '../../apis'
 import { formatAddress, formatCurrency } from '../../helpers'
 import { getStorage, StorageDefaultValue } from '../../storage'
@@ -47,6 +48,7 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
             getFungibleAssets,
         },
         Utils: {
+            isSameAddress,
             formatAddress,
             formatBalance: toFixed,
             formatCurrency,
@@ -56,6 +58,7 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
             resolveTransactionLink: resolveTransactionLinkOnExplorer,
             resolveAddressLink: resolveAddressLinkOnExplorer,
             resolveBlockLink: resolveBlockLinkOnExplorer,
+            mergeNFTList,
         },
     }
 }

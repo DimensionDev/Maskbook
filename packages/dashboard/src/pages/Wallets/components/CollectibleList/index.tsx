@@ -16,6 +16,7 @@ import {
     NetworkPluginID,
     ERC721TokenDetailed,
     mergeNFTList,
+    useWeb3State,
     useNonFungibleAssets,
     PluginId,
     SocketState,
@@ -52,6 +53,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
     const navigate = useNavigate()
     const account = useAccount()
     const chainId = useChainId()
+    const { Utils } = useWeb3State()
     const [loadingSize, setLoadingSize] = useState(0)
     const customCollectibles = useCustomNonFungibleAssets(
         account,
@@ -66,7 +68,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
         error: collectiblesError,
     } = useNonFungibleAssets(account, selectedNetwork)
 
-    const collectibles = mergeNFTList([..._collectibles, ...customCollectibles])
+    const collectibles = (Utils?.mergeNFTList ?? mergeNFTList)([..._collectibles, ...customCollectibles])
     const isQuerying = loadingCollectibleDone !== SocketState.done
     const renderData = loadingSize ? collectibles.slice(page * loadingSize, (page + 1) * loadingSize) : []
     useEffect(() => {
