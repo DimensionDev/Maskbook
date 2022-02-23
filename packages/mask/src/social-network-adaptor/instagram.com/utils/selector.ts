@@ -34,25 +34,32 @@ export const searchNickNameSelector = () =>
 export const searchUserIdSelector = () =>
     querySelector<HTMLHeadingElement>('[id="react-root"] section main header section h2')
 
+export const searchUserIdInEditPageSelector = () =>
+    querySelector('[id="react-root"] button[title="Change Profile Photo"] > img').closest(4).querySelector('h1')
+
 export const searchProfileTabArticlePageSelector = () =>
     querySelector<E>('[id="react-root"] section main > div > div:last-child > article')
 
 export const searchProfileTabOtherArticlePageSelector = () =>
     querySelector<E>('[id="react-root"] section main > div > div:last-child > div')
 
-export const searchInstagramAvatarListSelector = () => querySelector<E>('[role="dialog"] .piCib > div')
+export const searchInstagramAvatarListSelector = () => querySelector<E>('[role="dialog"] .piCib > div > button')
 
 export const searchInstagramAvatarOpenFilesSelector = () =>
-    querySelector<HTMLButtonElement>('[role="dialog"] .piCib button')
+    querySelector('[id="react-root"] button[title="Change Profile Photo"] > img')
+        .closest(4)
+        .querySelector<HTMLFormElement>('form')
 
 export const searchInstagramSaveAvatarButtonSelector = () =>
     querySelector<HTMLButtonElement>('section > div > header > div > div:last-child > button')
 
 export const searchInstagramAvatarSelector = () =>
-    querySelector('[id="react-root"] header button[title="Change Profile Photo"] > img')
+    querySelector('[id="react-root"] button[title="Change Profile Photo"] > img')
+
+export const searchInstagramAvatarSettingDialog = () => querySelector<E>('[id="react-root"]')
 
 export const searchInstagramAvatarUploadLoadingSelector = () =>
-    querySelector('[id="react-root"] header button[title="Change Profile Photo"]')
+    querySelector('[id="react-root"] button[title="Change Profile Photo"]')
         .closest(1)
         .querySelector<HTMLDivElement>('div[data-visualcompletion="loading-state"]')
 

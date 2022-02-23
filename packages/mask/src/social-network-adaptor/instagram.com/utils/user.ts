@@ -4,6 +4,7 @@ import {
     personalHomepageSelector,
     searchInstagramAvatarSelector,
     searchNickNameSelector,
+    searchUserIdInEditPageSelector,
     searchUserIdSelector,
 } from './selector'
 import { InMemoryStorages } from '../../../../shared'
@@ -25,7 +26,8 @@ export const getNickname = () => {
 
 export const getUserId = () => {
     const node = searchUserIdSelector().evaluate()
-    return node ? collectNodeText(node) : ''
+    const secondNode = searchUserIdInEditPageSelector().evaluate()
+    return node ? collectNodeText(node) : secondNode ? collectNodeText(secondNode) : ''
 }
 
 export const getAvatar = () => {

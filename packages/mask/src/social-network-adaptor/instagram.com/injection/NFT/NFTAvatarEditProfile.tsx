@@ -1,85 +1,55 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { searchInstagramAvatarSelector, searchInstagramProfileSettingButtonSelector } from '../../utils/selector'
-import { createReactRootShadowed, startWatch } from '../../../../utils'
-import { useCallback, useLayoutEffect, useState } from 'react'
+import { searchInstagramAvatarSelector, searchInstagramAvatarSettingDialog } from '../../utils/selector'
+import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils'
+import { useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
-import { useLocationChange } from '../../../../utils/hooks/useLocationChange'
-import { Theme, useMediaQuery } from '@mui/material'
+import { NFTAvatarSettingDialog } from './NFTAvatarSettingDialog'
+import { useLocation } from 'react-use'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchInstagramProfileSettingButtonSelector())
+    const watcher = new MutationObserverWatcher(searchInstagramAvatarSelector().closest<HTMLDivElement>(3))
     startWatch(watcher, signal)
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
         <OpenNFTAvatarEditProfileButtonInInstagram />,
     )
+
+    const dialogWatcher = new MutationObserverWatcher(searchInstagramAvatarSettingDialog())
+    startWatch(dialogWatcher, signal)
+    createReactRootShadowed(dialogWatcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarSettingDialog />)
 }
 
-interface StyleProps {
-    fontSize: number
-    marginLeft: number
-    minHeight: number
-    borderRadius: number
-    border: string
-    background: string
-    color: string
-    marginTop?: number
-}
-
-const useStyles = makeStyles<StyleProps>()((theme, props) => ({
+const useStyles = makeStyles()(() => ({
     root: {
-        ...props,
+        marginTop: 8,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+
+        background: '#262626',
+        borderRadius: '2px !important',
+        height: 30,
+        width: 104,
+    },
+    text: {
+        fontSize: 12,
+        color: '#ffffff',
+        lineHeight: '12px',
     },
 }))
 
 function OpenNFTAvatarEditProfileButtonInInstagram() {
-    const [style, setStyle] = useState<StyleProps>({
-        fontSize: 15,
-        marginLeft: 0,
-        minHeight: 30,
-        borderRadius: 4,
-        border: '',
-        background: 'transparent',
-        color: '#000',
-    })
-
-    const mediaQuery = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
-
+    const location = useLocation()
     const onClick = useCallback(() => {
-        const editDom = searchInstagramAvatarSelector().evaluate()
-
-        editDom?.click()
+        MaskMessages.events.nftAvatarSettingDialogUpdated.sendToLocal({ open: true })
     }, [])
 
-    const setStyleWithSelector = useCallback(() => {
-        const editDom = searchInstagramProfileSettingButtonSelector().evaluate()
+    const { classes } = useStyles()
 
-        if (!editDom) return
+    if (location.pathname?.includes('/edit')) return null
 
-        const buttonDom = editDom.querySelector('a')
-
-        if (!buttonDom) return
-
-        const editCss = window.getComputedStyle(editDom)
-        const buttonCss = window.getComputedStyle(buttonDom)
-
-        setStyle({
-            minHeight: Number(buttonCss.height.replace('px', '')),
-            fontSize: Number(buttonCss.fontSize.replace('px', '')),
-            marginLeft: Number(editCss.marginLeft.replace('px', '')),
-            borderRadius: Number(buttonCss.borderRadius.replace('px', '')),
-            border: buttonCss.border,
-            background: buttonCss.background,
-            color: buttonCss.color,
-            marginTop: mediaQuery ? 20 : 0,
-        })
-    }, [mediaQuery])
-
-    useLayoutEffect(setStyleWithSelector, [])
-
-    useLocationChange(setStyleWithSelector)
-
-    const { classes } = useStyles(style)
-
-    return <NFTAvatarButton onClick={onClick} classes={classes} />
+    return (
+        <>
+            <NFTAvatarButton onClick={onClick} classes={classes} />
+        </>
+    )
 }

@@ -1,56 +1,70 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { searchInstagramAvatarListSelector, searchInstagramAvatarOpenFilesSelector } from '../../utils/selector'
-import { createReactRootShadowed, startWatch } from '../../../../utils'
-import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
-import { useCallback } from 'react'
-import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
+import { searchInstagramAvatarListSelector } from '../../utils/selector'
+import { createReactRootShadowed, MaskMessages, startWatch, useI18N } from '../../../../utils'
 import { makeStyles } from '@masknet/theme'
-import { blobToArrayBuffer } from '@dimensiondev/kit'
-import { hookInputUploadOnce } from '@masknet/injected-script'
-import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
-import { toPNG } from '../../../../plugins/Avatar/utils'
-import { InMemoryStorages } from '../../../../../shared'
-import { useMount } from 'react-use'
-import { clearStorages } from '../../utils/user'
+import { useCallback, useLayoutEffect, useState } from 'react'
+import { useLocationChange } from '../../../../utils/hooks/useLocationChange'
 
 export async function injectProfileNFTAvatarInInstagram(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchInstagramAvatarListSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarInInstagramFirstStep />)
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarButtonInDialog />)
 }
 
-const useStyles = makeStyles()(() => ({
+const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     root: {
-        padding: '8px 0',
-        margin: '0 16px',
+        width: '100%',
+        fontSize: props.fontSize,
+        lineHeight: 1.5,
+        minHeight: props.minHeight,
+        borderTop: props.borderTop,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: '#ED4956',
+        fontWeight: 600,
+        cursor: 'pointer',
     },
 }))
 
-async function changeImageToActiveElements(image: File | Blob): Promise<void> {
-    const imageBuffer = await blobToArrayBuffer(image)
-    hookInputUploadOnce('image/png', 'avatar.png', new Uint8Array(imageBuffer))
-    searchInstagramAvatarOpenFilesSelector().evaluate()?.click()
+interface StyleProps {
+    fontSize: number
+    minHeight: number
+    color?: string
+    borderTop?: string
 }
 
-function NFTAvatarInInstagramFirstStep() {
-    const { classes } = useStyles()
-    const identity = useCurrentVisitingIdentity()
+export function NFTAvatarButtonInDialog() {
+    const { t } = useI18N()
+    const [style, setStyle] = useState<StyleProps>({
+        fontSize: 12,
+        minHeight: 48,
+    })
+    const { classes } = useStyles(style)
 
-    const onChange = useCallback(
-        async (token: ERC721TokenDetailed) => {
-            if (!token.info.imageURL) return
-            const image = await toPNG(token.info.imageURL)
-            if (!image) return
-            await changeImageToActiveElements(image)
+    const setStyleWithSelector = useCallback(() => {
+        const dom = searchInstagramAvatarListSelector().evaluate()
+        if (!dom) return
+        const css = window.getComputedStyle(dom)
+        setStyle({
+            minHeight: Number(css.minHeight.replace('px', '')),
+            fontSize: Number(css.fontSize.replace('px', '')),
+            color: css.color,
+            borderTop: css.borderTop,
+        })
+    }, [])
 
-            InMemoryStorages.InstagramNFTEvent?.storage.userId.setValue(identity.identifier.userId)
-            InMemoryStorages.InstagramNFTEvent?.storage.address.setValue(token.contractDetailed.address)
-            InMemoryStorages.InstagramNFTEvent?.storage.tokenId.setValue(token.tokenId)
-        },
-        [identity],
+    const onClick = useCallback(() => {
+        MaskMessages.events.nftAvatarSettingDialogUpdated.sendToLocal({ open: true })
+    }, [])
+
+    useLayoutEffect(setStyleWithSelector, [])
+
+    useLocationChange(setStyleWithSelector)
+
+    return (
+        <div className={classes.root} onClick={onClick}>
+            &#x1F525; {t('use_nft')}
+        </div>
     )
-
-    useMount(clearStorages)
-
-    return <NFTAvatar onChange={onChange} classes={classes} />
 }

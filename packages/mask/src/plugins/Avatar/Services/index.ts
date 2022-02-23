@@ -2,7 +2,7 @@ import type { NetworkPluginID } from '@masknet/plugin-infra'
 import type { AvatarMetaDB } from '../types'
 import { getNFTAvatarFromJSON } from './db'
 import { getUserAddress, setUserAddress } from './bind'
-import { getNFTAvatarFromRSS, saveNFTAvatarToRSS } from './rss3'
+import { clearTargetCache, getNFTAvatarFromRSS, saveNFTAvatarToRSS } from './rss3'
 import type { RSS3_KEY_SNS } from '../constants'
 
 export async function getNFTAvatar(
@@ -18,6 +18,20 @@ export async function getNFTAvatar(
         return getNFTAvatarFromRSS(userId, address, snsKey)
     }
     return getNFTAvatarFromJSON(userId)
+}
+
+export async function clearCache(
+    userId: string,
+    network: string,
+    snsKey: RSS3_KEY_SNS,
+    networkPluginId?: NetworkPluginID,
+    chainId?: number,
+) {
+    const address = await getUserAddress(userId, network, networkPluginId, chainId)
+
+    if (address) {
+        clearTargetCache(userId, address, snsKey)
+    }
 }
 
 export async function saveNFTAvatar(

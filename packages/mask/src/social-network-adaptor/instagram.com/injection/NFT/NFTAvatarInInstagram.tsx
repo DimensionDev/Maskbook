@@ -13,6 +13,8 @@ import { clearStorages, getAvatarId } from '../../utils/user'
 import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
 import { useLocation, useWindowSize } from 'react-use'
 import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
+import { delay } from '@masknet/shared-base'
+import { activatedSocialNetworkUI } from '../../../../social-network'
 
 export function injectNFTAvatarInInstagram(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchInstagramAvatarSelector())
@@ -50,8 +52,9 @@ function NFTAvatarInInstagram() {
     const windowSize = useWindowSize()
 
     const showAvatar = useMemo(() => {
+        if (location.pathname?.includes('/edit')) return false
         return getAvatarId(identity.avatar ?? '') === avatar?.avatarId
-    }, [avatar?.avatarId, identity.avatar])
+    }, [avatar?.avatarId, identity.avatar, location.pathname])
 
     const size = useMemo(() => {
         const ele = searchInstagramAvatarSelector().evaluate()
@@ -63,15 +66,19 @@ function NFTAvatarInInstagram() {
     }, [windowSize])
 
     useEffect(() => {
-        if (!searchInstagramAvatarUploadLoadingSelector()) return
         const watcher = new MutationObserverWatcher(searchInstagramAvatarUploadLoadingSelector())
             .addListener('onRemove', async () => {
                 const storages = InMemoryStorages.InstagramNFTEvent.storage
 
-                if (!wallet || !location.href) return
+                if (!wallet) return
+
                 if (storages.address.value && storages.userId.value && storages.tokenId.value) {
                     try {
-                        const response = await fetch(location.href)
+                        await delay(1000)
+
+                        const url = `${location.protocol}//${location.host}/${identity.identifier.userId}`
+
+                        const response = await fetch(url)
                         const htmlString = await response.text()
 
                         const html = document.createElement('html')
@@ -102,6 +109,13 @@ function NFTAvatarInInstagram() {
 
                         setAvatar(avatarInfo)
                         clearStorages()
+                        await PluginNFTAvatarRPC.clearCache(
+                            identity.identifier.userId,
+                            activatedSocialNetworkUI.networkIdentifier,
+                            RSS3_KEY_SNS.INSTAGRAM,
+                        )
+                        // If the avatar is set successfully, reload the page
+                        window.location.reload()
                     } catch (error: any) {
                         clearStorages()
                         setAvatar(undefined)
@@ -119,7 +133,7 @@ function NFTAvatarInInstagram() {
         return () => {
             watcher.stopWatch()
         }
-    }, [identity])
+    }, [identity, wallet])
 
     useEffect(() => setAvatar(_avatar), [_avatar, location])
 
