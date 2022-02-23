@@ -5,7 +5,6 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import {
     ChainId,
-    SocketState,
     ERC721TokenDetailed,
     useChainId,
     useImageChecker,
@@ -16,7 +15,7 @@ import { useI18N } from '../../../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { AddNFT } from './AddNFT'
 import { NFTImage } from './NFTImage'
-import { useAccount, useWeb3State, mergeNFTList, useNonFungibleAssets } from '@masknet/plugin-infra'
+import { useAccount, useWeb3State, mergeNFTList, SocketState, useNonFungibleAssets } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},

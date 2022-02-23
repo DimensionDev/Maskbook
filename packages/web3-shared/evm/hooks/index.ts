@@ -56,7 +56,6 @@ export * from './useGetPastLogsParams'
 export * from './useChainColor'
 export * from './useResolveENS'
 export * from './useGasLimit'
-export * from './useSocket'
 
 // wallet plugin related
 export * from './useWalletPrimary'

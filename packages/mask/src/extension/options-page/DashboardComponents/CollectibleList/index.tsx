@@ -8,11 +8,10 @@ import {
     formatEthereumAddress,
     isSameAddress,
     NonFungibleAssetProvider,
-    SocketState,
     useCustomNonFungibleAssets,
     Wallet,
 } from '@masknet/web3-shared-evm'
-import { useNonFungibleAssetCollections, mergeNFTList, useNonFungibleAssets } from '@masknet/plugin-infra'
+import { useNonFungibleAssetCollections, mergeNFTList, SocketState, useNonFungibleAssets } from '@masknet/plugin-infra'
 import { Box, Button, Skeleton, Typography, styled, Stack } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { currentNonFungibleAssetDataProviderSettings } from '../../../../plugins/Wallet/settings'

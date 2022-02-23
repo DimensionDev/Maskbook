@@ -5,11 +5,10 @@ import {
     ERC721ContractDetailed,
     EthereumTokenType,
     isSameAddress,
-    SocketState,
     useAccount,
     useERC721ContractBalance,
 } from '@masknet/web3-shared-evm'
-import { useNonFungibleAssetCollections } from '@masknet/plugin-infra'
+import { SocketState, useNonFungibleAssetCollections } from '@masknet/plugin-infra'
 import classNames from 'classnames'
 import { EthereumAddress } from 'wallet.ts'
 import { Box, CircularProgress, Typography } from '@mui/material'

@@ -7,13 +7,12 @@ import {
     EthereumTokenType,
     formatEthereumAddress,
     resolveAddressLinkOnExplorer,
-    SocketState,
     useAccount,
     useChainId,
     useERC721ContractDetailed,
     useERC721Tokens,
 } from '@masknet/web3-shared-evm'
-import { useNonFungibleAssetCollections } from '@masknet/plugin-infra'
+import { SocketState, useNonFungibleAssetCollections } from '@masknet/plugin-infra'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../messages'
 import { useI18N } from '../../../utils'

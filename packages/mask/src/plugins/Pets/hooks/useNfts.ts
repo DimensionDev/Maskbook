@@ -7,11 +7,10 @@ import {
     ERC721TokenDetailed,
     isSameAddress,
     ERC721ContractDetailed,
-    SocketState,
     resolveIPFSLink,
 } from '@masknet/web3-shared-evm'
 import { Constant, transform } from '@masknet/web3-shared-evm/constants/utils'
-import { mergeNFTList, useNonFungibleAssets } from '@masknet/plugin-infra'
+import { mergeNFTList, SocketState, useNonFungibleAssets } from '@masknet/plugin-infra'
 import { cloneDeep, findLastIndex } from 'lodash-unified'
 import { delay } from '@masknet/shared-base'
 import type { User, FilterContract } from '../types'
