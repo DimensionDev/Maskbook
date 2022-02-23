@@ -6,7 +6,7 @@ import type { ERC721ContractDetailed, ERC721TokenDetailed } from '@masknet/web3-
 import { Constant, transform } from '@masknet/web3-shared-evm/constants/utils'
 import { mergeNFTList, SocketState, useNonFungibleAssets, useWeb3State } from '@masknet/plugin-infra'
 import { cloneDeep, findLastIndex } from 'lodash-unified'
-import { delay } from '@masknet/shared-base'
+import { delay } from '@dimensiondev/kit'
 import type { User, FilterContract } from '../types'
 import { Punk3D } from '../constants'
 

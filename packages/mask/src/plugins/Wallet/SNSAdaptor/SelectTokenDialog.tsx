@@ -8,7 +8,7 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../../Wallet/messages'
 import { useI18N } from '../../../utils'
 import { ERC20TokenList, ERC20TokenListProps, useRemoteControlledDialog } from '@masknet/shared'
-import { delay } from '@masknet/shared-base'
+import { delay } from '@dimensiondev/kit'
 import { MINDS_ID } from '../../../social-network-adaptor/minds.com/base'
 import { activatedSocialNetworkUI } from '../../../social-network'
 

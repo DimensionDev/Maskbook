@@ -392,3 +392,51 @@ export namespace UserNFTContainerAPI {
         >
     }
 }
+
+export namespace TokenListAPI {
+    export interface Token {
+        address: string
+        chainId: number
+        name: string
+        symbol: string
+        decimals: number
+        logoURI?: string
+    }
+
+    export interface TokenList {
+        keywords: string[]
+        logoURI: string
+        name: string
+        timestamp: string
+        tokens: Token[]
+        version: {
+            major: number
+            minor: number
+            patch: number
+        }
+    }
+
+    export interface TokenObject {
+        tokens: Record<string, Token>
+    }
+
+    export interface Provider {
+        fetchERC20TokensFromTokenLists: (urls: string[], chainId: ChainId) => Promise<ERC20TokenDetailed[]>
+    }
+}
+
+export namespace TokenPriceAPI {
+    export interface PriceRecord {
+        [currency: string]: number
+    }
+
+    /** Base on response of coingecko's token price API */
+    export interface CryptoPrice {
+        [token: string]: PriceRecord
+    }
+
+    export interface Provider {
+        getTokenPrices: (platform: string, contractAddresses: string[], currency: CurrencyType) => Promise<CryptoPrice>
+        getNativeTokenPrice: (tokenIds: string[], currency: CurrencyType) => Promise<CryptoPrice>
+    }
+}
