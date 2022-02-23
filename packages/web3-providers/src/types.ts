@@ -1,13 +1,14 @@
 import type { Transaction as Web3Transaction } from 'web3-core'
 import type RSS3 from 'rss3-next'
-import type { CurrencyType } from '@masknet/plugin-infra'
 import type {
     ChainId,
+    CryptoPrice,
     ERC20TokenDetailed,
     ERC721ContractDetailed,
     ERC721TokenDetailed,
     NativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
+import type { CurrencyType } from '@masknet/plugin-infra'
 
 export namespace ExplorerAPI {
     export type Transaction = Web3Transaction & {
@@ -391,5 +392,44 @@ export namespace UserNFTContainerAPI {
               }
             | undefined
         >
+    }
+}
+
+export namespace TokenListAPI {
+    export interface Token {
+        address: string
+        chainId: number
+        name: string
+        symbol: string
+        decimals: number
+        logoURI?: string
+    }
+
+    export interface TokenList {
+        keywords: string[]
+        logoURI: string
+        name: string
+        timestamp: string
+        tokens: Token[]
+        version: {
+            major: number
+            minor: number
+            patch: number
+        }
+    }
+
+    export interface TokenObject {
+        tokens: Record<string, Token>
+    }
+
+    export interface Provider {
+        fetchERC20TokensFromTokenLists: (urls: string[], chainId: ChainId) => Promise<ERC20TokenDetailed[]>
+    }
+}
+
+export namespace TokenPriceAPI {
+    export interface Provider {
+        getTokenPrices: (platform: string, contractAddresses: string[], currency: CurrencyType) => Promise<CryptoPrice>
+        getNativeTokenPrice: (tokenIds: string[], currency: CurrencyType) => Promise<CryptoPrice>
     }
 }

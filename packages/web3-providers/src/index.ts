@@ -6,6 +6,8 @@ import { NativeExplorerAPI } from './explorer'
 import { RSS3API } from './rss3'
 import { KeyValueAPI } from './kv'
 import { UserNFTContainerAtTwitterAPI } from './UserNFTContainer'
+import { TokenList } from './tokenList'
+import { TokenPrice } from './TokenPrice'
 
 export * from './types'
 export * from './opensea/utils'
@@ -18,6 +20,9 @@ export const Explorer = new NativeExplorerAPI()
 export const RSS3 = new RSS3API()
 export const KeyValue = new KeyValueAPI()
 export const UserNFTContainerAtTwitter = new UserNFTContainerAtTwitterAPI()
+
+export const TokenListApi = new TokenList()
+export const TokenPriceApi = new TokenPrice()
 
 // Method for provider proxy
 export { getOpenSeaNFTList, getOpenSeaCollectionList } from './opensea'
