@@ -4,7 +4,7 @@ import {
     multipliedBy,
     rightShift,
     toFixed,
-    EthereumTokenType,
+    Web3TokenType,
     ERC721TokenCollectionInfo,
     ERC721TokenDetailed,
 } from '@masknet/web3-shared-base'
@@ -194,7 +194,7 @@ function formatAssetsFromZerion(
                 decimals: asset.decimals,
                 address: isNativeToken(asset.symbol) ? getTokenConstants().NATIVE_TOKEN_ADDRESS : asset.asset_code,
                 chainId: resolveChainByScope(scope).chainId,
-                type: isNativeToken(asset.symbol) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
+                type: isNativeToken(asset.symbol) ? Web3TokenType.Native : Web3TokenType.ERC20,
                 logoURI: asset.icon_url,
             },
             chain: resolveChainByScope(scope).chain,

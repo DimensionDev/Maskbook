@@ -5,7 +5,6 @@ import {
     Asset,
     ChainId,
     currySameAddress,
-    FungibleTokenDetailed,
     isSameAddress,
     isValidAddress,
     makeSortAssertFn,
@@ -19,6 +18,7 @@ import {
     useNativeTokenDetailed,
     useTrustedERC20Tokens,
 } from '@masknet/web3-shared-evm'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-base'
 import { MaskFixedSizeListProps, MaskTextFieldProps, SearchableList } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales'

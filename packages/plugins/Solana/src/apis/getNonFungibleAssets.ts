@@ -2,7 +2,7 @@ import { Connection } from '@metaplex/js'
 import { ChainId } from '@masknet/web3-shared-solana'
 import { Metadata } from '@metaplex-foundation/mpl-token-metadata'
 import { Pageable, Pagination, TokenType, Web3Plugin } from '@masknet/plugin-infra'
-import { ERC721TokenDetailed, EthereumTokenType } from '@masknet/web3-shared-base'
+import { ERC721TokenDetailed, Web3TokenType } from '@masknet/web3-shared-base'
 import { fetchJSON, GetProgramAccountsResponse, requestRPC, SPL_TOKEN_PROGRAM_ID } from './shared'
 import { ENDPOINT_KEY } from '../constants'
 
@@ -64,7 +64,7 @@ async function getNftList(chainId: ChainId, account: string) {
             },
             type: TokenType.NonFungible,
             contractDetailed: {
-                type: EthereumTokenType.ERC721,
+                type: Web3TokenType.ERC721,
                 name: metadata.data.data.name,
                 symbol: metadata.data.data.symbol,
                 chainId: ChainId.Mainnet,

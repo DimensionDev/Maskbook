@@ -1,14 +1,14 @@
 import type Web3 from 'web3'
 import type { AbiItem } from 'web3-utils'
 import { ChainId, getSavingsConstants, createContract, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { FungibleTokenDetailed, EthereumTokenType } from '@masknet/web3-shared-base'
+import { FungibleTokenDetailed, Web3TokenType } from '@masknet/web3-shared-base'
 import type { Lido } from '@masknet/web3-contracts/types/Lido'
 import LidoABI from '@masknet/web3-contracts/abis/Lido.json'
 import BigNumber from 'bignumber.js'
 import { ProtocolCategory, SavingsNetwork, SavingsProtocol, ProtocolType } from '../types'
 
 export interface LidoContract {
-    type: EthereumTokenType
+    type: Web3TokenType
     chainName: string
     ldoContract: string
     stEthContract: string
@@ -16,13 +16,13 @@ export interface LidoContract {
 
 export const LidoContracts: { [key: number]: LidoContract } = {
     [ChainId.Mainnet]: {
-        type: EthereumTokenType.ERC20,
+        type: Web3TokenType.ERC20,
         chainName: 'Ethereum',
         ldoContract: getSavingsConstants(ChainId.Mainnet).LIDO || ZERO_ADDRESS,
         stEthContract: getSavingsConstants(ChainId.Mainnet).LIDO_STETH || ZERO_ADDRESS,
     },
     [ChainId.Gorli]: {
-        type: EthereumTokenType.ERC20,
+        type: Web3TokenType.ERC20,
         chainName: 'Gorli',
         ldoContract: getSavingsConstants(ChainId.Gorli).LIDO || ZERO_ADDRESS,
         stEthContract: getSavingsConstants(ChainId.Gorli).LIDO_STETH || ZERO_ADDRESS,

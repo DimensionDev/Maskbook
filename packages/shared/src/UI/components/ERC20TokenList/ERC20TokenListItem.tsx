@@ -3,13 +3,12 @@ import classNames from 'classnames'
 import {
     Asset,
     currySameAddress,
-    ERC20TokenDetailed,
     formatBalance,
-    FungibleTokenDetailed,
     isSameAddress,
     useAddERC20TokenCallback,
     useTrustERC20TokenCallback,
 } from '@masknet/web3-shared-evm'
+import type { ERC20TokenDetailed, FungibleTokenDetailed } from '@masknet/web3-shared-base'
 import { TokenIcon } from '../TokenIcon'
 import type { MaskSearchableListItemProps } from '@masknet/theme'
 import { makeStyles, MaskLoadingButton } from '@masknet/theme'

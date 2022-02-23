@@ -1,7 +1,7 @@
 import type BigNumber from 'bignumber.js'
 import type { ERC20TokenRecord } from '../Wallet/database/types'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import type { EthereumTokenType } from '@masknet/web3-shared-base'
+import type { Web3TokenType } from '@masknet/web3-shared-base'
 
 export enum GitcoinGrantFailedReason {
     InvalidURL = 0,
@@ -15,7 +15,7 @@ export interface GitcoinDonationPayload {
     donation_address: string
     donation_total: BigNumber
     chainId: ChainId
-    token_type: EthereumTokenType
+    token_type: Web3TokenType
     token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
 }
 
@@ -33,7 +33,7 @@ export interface GitcoinDonationRecord {
     /** The donation value which for project owner */
     donation_value: BigNumber
     /** token type tag for red packet */
-    token_type: EthereumTokenType
+    token_type: Web3TokenType
     /** The tip transaction hash */
     tip_transaction_hash?: string
     /** The tip value for Gitcoin maintainer */

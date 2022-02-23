@@ -1,13 +1,12 @@
 import { useRemoteControlledDialog } from '@masknet/shared'
 import {
     formatBalance,
-    FungibleTokenDetailed,
     TransactionStateType,
     useAccount,
     ZERO_ADDRESS,
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
-import { EthereumTokenType, isZero, rightShift } from '@masknet/web3-shared-base'
+import { FungibleTokenDetailed, Web3TokenType, isZero, rightShift } from '@masknet/web3-shared-base'
 import { DialogContent, Grid, Typography } from '@mui/material'
 import { keyframes, makeStyles } from '@masknet/theme'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -132,7 +131,7 @@ export function DepositDialog() {
         value: tokenBalance = '0',
         loading: loadingTokenBalance,
         retry: retryLoadTokenBalance,
-    } = useFungibleTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
+    } = useFungibleTokenBalance(token?.type ?? Web3TokenType.Native, token?.address ?? '')
     // #endregion
 
     useEffect(() => {
@@ -289,7 +288,7 @@ export function DepositDialog() {
                             <EthereumERC20TokenApprovedBoundary
                                 amount={amount.toFixed()}
                                 spender={pool.prizePool.address}
-                                token={token?.type === EthereumTokenType.ERC20 ? token : undefined}>
+                                token={token?.type === Web3TokenType.ERC20 ? token : undefined}>
                                 <ActionButton
                                     className={classes.button}
                                     fullWidth

@@ -10,7 +10,7 @@ import {
     useERC721ContractDetailed,
     useERC721Tokens,
 } from '@masknet/web3-shared-evm'
-import { EthereumTokenType, ERC721ContractDetailed } from '@masknet/web3-shared-base'
+import { Web3TokenType, ERC721ContractDetailed } from '@masknet/web3-shared-base'
 import { SocketState, useNonFungibleAssetCollections } from '@masknet/plugin-infra'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../messages'
@@ -163,7 +163,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
 
     const renderAssets = assets.map((x) => ({
         contractDetailed: {
-            type: EthereumTokenType.ERC721,
+            type: Web3TokenType.ERC721,
             address: x.address,
             chainId: ChainId.Mainnet,
             name: x.name,

@@ -1,7 +1,7 @@
 import Fuse from 'fuse.js'
 import { EthereumAddress } from 'wallet.ts'
 import { formatEthereumAddress, isSameAddress } from '@masknet/web3-shared-evm'
-import { ERC20TokenDetailed, EthereumTokenType } from '@masknet/web3-shared-base'
+import { ERC20TokenDetailed, Web3TokenType } from '@masknet/web3-shared-base'
 import { createTransaction } from '../../../../background/database/utils/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import { WalletMessages } from '../messages'
@@ -21,7 +21,7 @@ export async function getERC20Tokens() {
     const tokens = await t.objectStore('ERC20Token').getAll()
     return tokens.map(ERC20TokenRecordOutDB).map(
         (x): ERC20TokenDetailed => ({
-            type: EthereumTokenType.ERC20,
+            type: Web3TokenType.ERC20,
             ...x,
         }),
     )
@@ -52,7 +52,7 @@ export async function getERC20TokensPaged(index: number, count: number, query?: 
     })
     return tokens.map(ERC20TokenRecordOutDB).map(
         (x): ERC20TokenDetailed => ({
-            type: EthereumTokenType.ERC20,
+            type: Web3TokenType.ERC20,
             ...x,
         }),
     )

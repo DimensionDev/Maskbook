@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
 import { compact, first } from 'lodash-unified'
 import { ChainId, createLookupTableResolver, resolveResourceLink } from '@masknet/web3-shared-evm'
-import { FungibleTokenDetailed, EthereumTokenType, ERC721TokenDetailed } from '@masknet/web3-shared-base'
+import { FungibleTokenDetailed, Web3TokenType, ERC721TokenDetailed } from '@masknet/web3-shared-base'
 import {
     Ownership,
     RaribleEventType,
@@ -48,7 +48,7 @@ function createERC721TokenFromAsset(
     const imageURL = resolveResourceLink(asset?.meta.image?.url.ORIGINAL ?? asset?.meta.image?.url.PREVIEW ?? '')
     return {
         contractDetailed: {
-            type: EthereumTokenType.ERC721,
+            type: Web3TokenType.ERC721,
             chainId: ChainId.Mainnet,
             address: tokenAddress,
             name: asset?.meta.name ?? '',

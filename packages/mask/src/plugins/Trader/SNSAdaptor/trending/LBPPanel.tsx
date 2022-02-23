@@ -1,4 +1,4 @@
-import type { ERC20TokenDetailed } from '@masknet/web3-shared-evm'
+import type { ERC20TokenDetailed } from '@masknet/web3-shared-base'
 import { formatEthereumAddress, useTokenConstants } from '@masknet/web3-shared-evm'
 import { Button, CircularProgress, IconButton, Link, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'

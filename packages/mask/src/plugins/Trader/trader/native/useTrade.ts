@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import { isSameAddress, useTokenConstants } from '@masknet/web3-shared-evm'
-import { EthereumTokenType, FungibleTokenDetailed } from '@masknet/web3-shared-base'
+import { Web3TokenType, FungibleTokenDetailed } from '@masknet/web3-shared-base'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 
 export function useTrade(inputToken?: FungibleTokenDetailed, outputToken?: FungibleTokenDetailed) {
@@ -11,7 +11,7 @@ export function useTrade(inputToken?: FungibleTokenDetailed, outputToken?: Fungi
     return useAsyncRetry(async () => {
         if (!inputToken || !outputToken) return false
         // none of the tokens is native token
-        if (inputToken.type !== EthereumTokenType.Native && outputToken.type !== EthereumTokenType.Native) return false
+        if (inputToken.type !== Web3TokenType.Native && outputToken.type !== Web3TokenType.Native) return false
         // none of the tokens is wrapped native token
         if (!isSameAddress(inputToken.address, WNATIVE_ADDRESS) && !isSameAddress(outputToken.address, WNATIVE_ADDRESS))
             return false

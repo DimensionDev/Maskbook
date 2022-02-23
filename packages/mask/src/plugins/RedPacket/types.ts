@@ -1,6 +1,6 @@
 import type { ERC20TokenRecord } from '../Wallet/database/types'
 import type { ChainId, ERC721TokenOutMask } from '@masknet/web3-shared-evm'
-import type { EthereumTokenType, FungibleTokenDetailed, ERC721TokenDetailed } from '@masknet/web3-shared-base'
+import type { Web3TokenType, FungibleTokenDetailed, ERC721TokenDetailed } from '@masknet/web3-shared-base'
 
 // #region erc20 red packet
 export interface RedPacketRecord {
@@ -54,7 +54,7 @@ export interface RedPacketJSONPayload extends RedPacketBasic {
     }
     contract_version: number
     network?: string
-    token_type?: EthereumTokenType.Native | EthereumTokenType.ERC20
+    token_type?: Web3TokenType.Native | Web3TokenType.ERC20
     token?: FungibleTokenDetailed
     token_address?: string
     claimers?: { address: string; name: string }[]
@@ -98,7 +98,7 @@ export interface NftRedPacketJSONPayload extends RedPacketBasic {
     }
     contract_version: number
     network?: string
-    token_type: EthereumTokenType.ERC721
+    token_type: Web3TokenType.ERC721
     token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
 }
 

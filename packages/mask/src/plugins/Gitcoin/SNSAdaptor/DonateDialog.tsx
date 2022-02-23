@@ -25,7 +25,7 @@ import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { useDonateCallback } from '../hooks/useDonateCallback'
 import { PluginGitcoinMessages } from '../messages'
-import { FungibleTokenDetailed, EthereumTokenType, rightShift } from '@masknet/web3-shared-base'
+import { FungibleTokenDetailed, Web3TokenType, rightShift } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -81,7 +81,7 @@ export function DonateDialog(props: DonateDialogProps) {
     const [token = nativeTokenDetailed.value, setToken] = useState<FungibleTokenDetailed | undefined>(
         nativeTokenDetailed.value,
     )
-    const tokenBalance = useFungibleTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
+    const tokenBalance = useFungibleTokenBalance(token?.type ?? Web3TokenType.Native, token?.address ?? '')
     // #endregion
 
     // #region select token dialog
@@ -216,7 +216,7 @@ export function DonateDialog(props: DonateDialogProps) {
                         <EthereumERC20TokenApprovedBoundary
                             amount={amount.toFixed()}
                             spender={BULK_CHECKOUT_ADDRESS}
-                            token={token.type === EthereumTokenType.ERC20 ? token : undefined}>
+                            token={token.type === Web3TokenType.ERC20 ? token : undefined}>
                             <ActionButton
                                 className={classes.button}
                                 fullWidth

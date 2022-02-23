@@ -1,5 +1,4 @@
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { leftShift, ONE, rightShift } from '@masknet/web3-shared-base'
+import { leftShift, ONE, rightShift, FungibleTokenDetailed } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import { BIPS_BASE } from '../../constants'
 

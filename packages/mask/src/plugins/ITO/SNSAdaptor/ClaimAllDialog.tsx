@@ -17,7 +17,7 @@ import {
     useChainId,
     useAccount,
 } from '@masknet/web3-shared-evm'
-import { EthereumTokenType } from '@masknet/web3-shared-base'
+import { Web3TokenType } from '@masknet/web3-shared-base'
 import classNames from 'classnames'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
@@ -239,7 +239,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { value: swappedTokensWithDetailed = [], loading: loadingTokenDetailed } = useFungibleTokensDetailed(
         (_swappedTokens ?? []).map((t) => ({
             address: t.token.address,
-            type: EthereumTokenType.ERC20,
+            type: Web3TokenType.ERC20,
         })),
         chainId,
     )

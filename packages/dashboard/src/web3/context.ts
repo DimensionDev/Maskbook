@@ -8,7 +8,7 @@ import {
     Web3ProviderType,
     isInjectedProvider,
 } from '@masknet/web3-shared-evm'
-import { EthereumTokenType, ERC721TokenDetailed, getProxyWebsocketInstance } from '@masknet/web3-shared-base'
+import { Web3TokenType, ERC721TokenDetailed } from '@masknet/web3-shared-base'
 
 import { Services, Messages, PluginServices, PluginMessages } from '../API'
 import { TokenListApi } from '@masknet/web3-providers'
@@ -61,12 +61,12 @@ export const Web3Context: Web3ProviderType = {
         PluginMessages.Wallet.events.walletsUpdated.on,
     ),
     erc20Tokens: createSubscriptionFromAsync(
-        () => PluginServices.Wallet.getTokens<ERC20TokenDetailed>(EthereumTokenType.ERC20),
+        () => PluginServices.Wallet.getTokens<ERC20TokenDetailed>(Web3TokenType.ERC20),
         [],
         PluginMessages.Wallet.events.erc20TokensUpdated.on,
     ),
     erc721Tokens: createSubscriptionFromAsync(
-        () => PluginServices.Wallet.getTokens<ERC721TokenDetailed>(EthereumTokenType.ERC721),
+        () => PluginServices.Wallet.getTokens<ERC721TokenDetailed>(Web3TokenType.ERC721),
         [],
         PluginMessages.Wallet.events.erc721TokensUpdated.on,
     ),
@@ -90,9 +90,6 @@ export const Web3Context: Web3ProviderType = {
     getAddressNamesList: PluginServices.Wallet.getAddressNames,
     getTransactionList: PluginServices.Wallet.getTransactionList,
     fetchERC20TokensFromTokenLists: TokenListApi.fetchERC20TokensFromTokenLists,
-    providerSocket: getProxyWebsocketInstance((info) =>
-        PluginMessages.Wallet.events.socketMessageUpdated.sendToAll(info),
-    ),
 }
 
 // double check

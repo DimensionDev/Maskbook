@@ -26,7 +26,7 @@ import {
     useNetworkType,
     isNativeTokenSymbol,
 } from '@masknet/web3-shared-evm'
-import { EthereumTokenType } from '@masknet/web3-shared-base'
+import { Web3TokenType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
     return {
@@ -136,7 +136,7 @@ export function TraderView(props: TraderViewProps) {
 
     // #region swap
     const { value: tokenDetailed } = useFungibleTokenDetailed(
-        coinSymbol === 'eth' ? EthereumTokenType.Native : EthereumTokenType.ERC20,
+        coinSymbol === 'eth' ? Web3TokenType.Native : Web3TokenType.ERC20,
         coinSymbol === 'eth' ? '' : trending?.coin.contract_address ?? '',
     )
     // #endregion

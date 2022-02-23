@@ -13,7 +13,7 @@ import {
     useTokenConstants,
     useWallet,
 } from '@masknet/web3-shared-evm'
-import { EthereumTokenType, FungibleTokenDetailed } from '@masknet/web3-shared-base'
+import { Web3TokenType, FungibleTokenDetailed } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { delay } from '@dimensiondev/kit'
 import { useGasConfig } from './hooks/useGasConfig'
@@ -119,7 +119,7 @@ export function Trader(props: TraderProps) {
         // if coin be native token and input token also be native token, reset it
         if (
             isSameAddress(coin.contract_address, NATIVE_TOKEN_ADDRESS) &&
-            inputToken?.type === EthereumTokenType.Native &&
+            inputToken?.type === Web3TokenType.Native &&
             coin.symbol === inputToken.symbol
         ) {
             dispatchTradeStore({
@@ -158,16 +158,16 @@ export function Trader(props: TraderProps) {
     // #region update balance
     const { value: inputTokenBalance_, loading: loadingInputTokenBalance } = useFungibleTokenBalance(
         isSameAddress(inputToken?.address, NATIVE_TOKEN_ADDRESS)
-            ? EthereumTokenType.Native
-            : inputToken?.type ?? EthereumTokenType.Native,
+            ? Web3TokenType.Native
+            : inputToken?.type ?? Web3TokenType.Native,
         inputToken?.address ?? '',
         chainId,
     )
 
     const { value: outputTokenBalance_, loading: loadingOutputTokenBalance } = useFungibleTokenBalance(
         isSameAddress(outputToken?.address, NATIVE_TOKEN_ADDRESS)
-            ? EthereumTokenType.Native
-            : outputToken?.type ?? EthereumTokenType.Native,
+            ? Web3TokenType.Native
+            : outputToken?.type ?? Web3TokenType.Native,
         outputToken?.address ?? '',
         chainId,
     )
@@ -175,7 +175,7 @@ export function Trader(props: TraderProps) {
     useEffect(() => {
         if (
             !inputToken ||
-            inputToken.type === EthereumTokenType.Native ||
+            inputToken.type === Web3TokenType.Native ||
             !inputTokenBalance_ ||
             loadingInputTokenBalance
         ) {
@@ -190,7 +190,7 @@ export function Trader(props: TraderProps) {
     useEffect(() => {
         if (
             !outputToken ||
-            outputToken.type === EthereumTokenType.Native ||
+            outputToken.type === Web3TokenType.Native ||
             !outputTokenBalance_ ||
             loadingOutputTokenBalance
         ) {

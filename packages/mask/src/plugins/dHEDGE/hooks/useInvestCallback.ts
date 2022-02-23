@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { useAccount, useTransactionState, TransactionStateType, TransactionEventType } from '@masknet/web3-shared-evm'
 import { useDHedgePoolV1Contract, useDHedgePoolV2Contract } from '../contracts/useDHedgePool'
 import { Pool, PoolType } from '../types'
-import { FungibleTokenDetailed, EthereumTokenType, toFixed } from '@masknet/web3-shared-base'
+import { FungibleTokenDetailed, Web3TokenType, toFixed } from '@masknet/web3-shared-base'
 
 /**
  * A callback for invest dhedge pool
@@ -33,7 +33,7 @@ export function useInvestCallback(pool: Pool | undefined, amount: string, token?
         // step 1: estimate gas
         const config = {
             from: account,
-            value: toFixed(token.type === EthereumTokenType.Native ? amount : 0),
+            value: toFixed(token.type === Web3TokenType.Native ? amount : 0),
         }
 
         const deposit = () => {

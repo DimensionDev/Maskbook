@@ -6,7 +6,7 @@ import {
     useTokenConstants,
     useTokenListConstants,
 } from '@masknet/web3-shared-evm'
-import { EthereumTokenType } from '@masknet/web3-shared-base'
+import { Web3TokenType } from '@masknet/web3-shared-base'
 import { uniqBy } from 'lodash-unified'
 import { useMemo } from 'react'
 
@@ -26,8 +26,8 @@ export function useERC20TokensDetailed() {
                 nativeTokenDetailed ? [nativeTokenDetailed, ...erc20TokensDetailed] : [...erc20TokensDetailed],
                 (x) => x.address.toLowerCase(),
             ).sort((a, z) => {
-                if (a.type === EthereumTokenType.Native) return -1
-                if (z.type === EthereumTokenType.Native) return 1
+                if (a.type === Web3TokenType.Native) return -1
+                if (z.type === Web3TokenType.Native) return 1
                 if (isSameAddress(a.address, MASK_ADDRESS)) return -1
                 if (isSameAddress(z.address, MASK_ADDRESS)) return 1
                 return 0

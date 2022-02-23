@@ -17,7 +17,7 @@ import {
     isSameAddress,
 } from '@masknet/web3-shared-evm'
 import {
-    EthereumTokenType,
+    Web3TokenType,
     isZero,
     isGreaterThan,
     isGreaterThanOrEqualTo,
@@ -258,16 +258,14 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     // #endregion
 
     const { value: tokenBalance = '0' } = useFungibleTokenBalance(
-        selectedAsset?.token?.type ?? EthereumTokenType.Native,
+        selectedAsset?.token?.type ?? Web3TokenType.Native,
         selectedAsset?.token?.address ?? '',
     )
 
     const maxAmount = useMemo(() => {
         let amount_ = new BigNumber(tokenBalance || '0')
         amount_ =
-            selectedAsset?.token.type === EthereumTokenType.Native
-                ? amount_.minus(multipliedBy(30000, gasPrice))
-                : amount_
+            selectedAsset?.token.type === Web3TokenType.Native ? amount_.minus(multipliedBy(30000, gasPrice)) : amount_
 
         return BigNumber.max(0, amount_).toFixed()
     }, [selectedAsset?.balance, gasPrice, selectedAsset?.token.type, tokenBalance])
@@ -281,7 +279,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     // #endregion
 
     const [_, transferCallback] = useTokenTransferCallback(
-        selectedAsset?.token.type ?? EthereumTokenType.Native,
+        selectedAsset?.token.type ?? Web3TokenType.Native,
         selectedAsset?.token.address ?? '',
     )
 

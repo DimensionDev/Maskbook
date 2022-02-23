@@ -1,6 +1,6 @@
 import type { TradeInfo } from '../../../types'
 import { useMemo } from 'react'
-import { EthereumTokenType, isGreaterThan, isLessThan, multipliedBy } from '@masknet/web3-shared-base'
+import { Web3TokenType, isGreaterThan, isLessThan, multipliedBy } from '@masknet/web3-shared-base'
 import { MINIMUM_AMOUNT } from '../../../constants'
 import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice, useTokenPrice } from '../../../../Wallet/hooks/useTokenPrice'
@@ -36,7 +36,7 @@ export function useSortedTrades(traders: TradeInfo[], chainId: ChainId, gasPrice
                         const finalPrice = new BigNumber(
                             formatBalance(trade.value.outputAmount, outputToken.decimals, 2),
                         )
-                            .times(outputToken.type !== EthereumTokenType.Native ? outputTokenPrice : nativeTokenPrice)
+                            .times(outputToken.type !== Web3TokenType.Native ? outputTokenPrice : nativeTokenPrice)
                             .minus(gasFeeUSD)
 
                         return {

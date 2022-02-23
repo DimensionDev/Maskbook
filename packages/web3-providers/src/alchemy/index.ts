@@ -3,7 +3,7 @@ import urlcat from 'urlcat'
 import { ALCHEMY_URL_MAPPINGS } from './constants'
 import type { AlchemyNFTItemResponse, AlchemyNFTItemDetailedResponse, AlchemyNFTItemMetadataResponse } from './types'
 import { Web3Plugin, PluginId } from '@masknet/plugin-infra'
-import { ERC721TokenDetailed, EthereumTokenType } from '@masknet/web3-shared-base'
+import { ERC721TokenDetailed, Web3TokenType } from '@masknet/web3-shared-base'
 import { resolveIPFSLink } from '@masknet/web3-shared-evm'
 
 interface Payload {
@@ -99,7 +99,7 @@ function createNFT(token: AlchemyNFTItemDetailedResponse, owner: string, chainId
             hasTokenDetailed: true,
         },
         contractDetailed: {
-            type: EthereumTokenType.ERC721,
+            type: Web3TokenType.ERC721,
             address: token.contract.address,
             chainId,
             name: token.contract.name,

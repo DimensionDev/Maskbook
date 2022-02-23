@@ -20,7 +20,7 @@ import type { BoxInfo } from '../../type'
 import { GasSettingBar } from '../../../Wallet/SNSAdaptor/GasSettingDialog/GasSettingBar'
 import { TokenPrice } from '../../../../components/shared/TokenPrice'
 import { Context } from '../../hooks/useContext'
-import { EthereumTokenType, multipliedBy } from '@masknet/web3-shared-base'
+import { Web3TokenType, multipliedBy } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
@@ -266,9 +266,7 @@ export function DrawDialog(props: DrawDialogProps) {
                     <EthereumERC20TokenApprovedBoundary
                         amount={multipliedBy(paymentTokenPrice, paymentCount).toFixed()}
                         spender={MASK_BOX_CONTRACT_ADDRESS}
-                        token={
-                            paymentTokenDetailed?.type === EthereumTokenType.ERC20 ? paymentTokenDetailed : undefined
-                        }
+                        token={paymentTokenDetailed?.type === Web3TokenType.ERC20 ? paymentTokenDetailed : undefined}
                         ActionButtonProps={{ size: 'medium', sx: { marginTop: 2 } }}>
                         <ActionButton
                             size="medium"

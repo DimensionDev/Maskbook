@@ -17,7 +17,7 @@ import {
     useFungibleTokenDetailed,
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
-import { EthereumTokenType } from '@masknet/web3-shared-base'
+import { Web3TokenType } from '@masknet/web3-shared-base'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { StyledLinearProgress } from '../../ITO/SNSAdaptor/StyledLinearProgress'
@@ -205,7 +205,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
         (history as RedPacketJSONPayload).token?.address ?? (history as RedPacketJSONPayloadFromChain).token_address
 
     const { value: tokenDetailed } = useFungibleTokenDetailed(
-        isSameAddress(NATIVE_TOKEN_ADDRESS, tokenAddress) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
+        isSameAddress(NATIVE_TOKEN_ADDRESS, tokenAddress) ? Web3TokenType.Native : Web3TokenType.ERC20,
         tokenAddress ?? '',
     )
 

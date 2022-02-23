@@ -1,7 +1,6 @@
 import type BigNumber from 'bignumber.js'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type {
-    FungibleTokenDetailed,
     GasOptions,
     NetworkType,
     ProviderType,
@@ -10,7 +9,7 @@ import type {
     GasOption,
     ChainId,
 } from '@masknet/web3-shared-evm'
-import type { ERC721ContractDetailed } from '@masknet/web3-shared-base'
+import type { FungibleTokenDetailed, ERC721ContractDetailed } from '@masknet/web3-shared-base'
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
 import { PLUGIN_ID } from './constants'
 

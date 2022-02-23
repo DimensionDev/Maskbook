@@ -1,6 +1,6 @@
 import type { TransactionConfig as TransactionConfig_ } from 'web3-core'
 import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types'
-import { EthereumTokenType } from '@masknet/web3-shared-base'
+import { Web3TokenType } from '@masknet/web3-shared-base'
 export interface SendOverrides {
     chainId?: ChainId
     account?: string
@@ -143,7 +143,7 @@ export interface Wallet {
 
 // #region Ether
 export interface NativeToken {
-    type: EthereumTokenType.Native
+    type: Web3TokenType.Native
     address: string
     chainId: ChainId
 }
@@ -158,7 +158,7 @@ export interface NativeTokenDetailed extends NativeToken {
 
 // #region ERC20
 export interface ERC20Token {
-    type: EthereumTokenType.ERC20
+    type: Web3TokenType.ERC20
     address: string
     chainId: ChainId
 }
@@ -173,7 +173,7 @@ export interface ERC20TokenDetailed extends ERC20Token {
 
 // #region ERC721
 export interface ERC721Token {
-    type: EthereumTokenType.ERC721
+    type: Web3TokenType.ERC721
     address: string
     chainId: ChainId
 }
@@ -244,18 +244,18 @@ export type ERC721TokenOutMask = Omit<ERC721TokenDetailed, 'chainId'> & {
 // #endregion
 
 interface TokenDetailedMap {
-    [EthereumTokenType.Native]: NativeTokenDetailed
-    [EthereumTokenType.ERC20]: ERC20TokenDetailed
-    [EthereumTokenType.ERC721]: ERC721TokenDetailed
+    [Web3TokenType.Native]: NativeTokenDetailed
+    [Web3TokenType.ERC20]: ERC20TokenDetailed
+    [Web3TokenType.ERC721]: ERC721TokenDetailed
 }
 
 interface TokenAssetDetailedMap {
-    [EthereumTokenType.ERC721]: ERC721TokenDetailed
+    [Web3TokenType.ERC721]: ERC721TokenDetailed
 }
 
-export type EthereumTokenDetailedType<T extends EthereumTokenType> = TokenDetailedMap[T]
+export type EthereumTokenDetailedType<T extends Web3TokenType> = TokenDetailedMap[T]
 
-export type TokenAssetDetailedType<T extends EthereumTokenType.ERC721> = TokenAssetDetailedMap[T]
+export type TokenAssetDetailedType<T extends Web3TokenType.ERC721> = TokenAssetDetailedMap[T]
 
 // Learn more: https://eips.ethereum.org/EIPS/eip-747
 export interface EthereumAssetDetailed {

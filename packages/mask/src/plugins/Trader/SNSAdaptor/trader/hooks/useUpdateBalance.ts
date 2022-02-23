@@ -1,5 +1,5 @@
 import { ChainId, isSameAddress, useAccount, useBalance, useTokenConstants } from '@masknet/web3-shared-evm'
-import { EthereumTokenType } from '@masknet/web3-shared-base'
+import { Web3TokenType } from '@masknet/web3-shared-base'
 import { useEffect } from 'react'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext'
 
@@ -28,7 +28,7 @@ export function useUpdateBalance(chainId: ChainId) {
 
     useEffect(() => {
         if (!currentAccount) return
-        const value = inputToken?.type === EthereumTokenType.Native ? balance.value : '0'
+        const value = inputToken?.type === Web3TokenType.Native ? balance.value : '0'
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
             balance: value || '0',
@@ -38,7 +38,7 @@ export function useUpdateBalance(chainId: ChainId) {
     useEffect(() => {
         if (!currentAccount) return
         const value =
-            outputToken?.type === EthereumTokenType.Native || isSameAddress(outputToken?.address, NATIVE_TOKEN_ADDRESS)
+            outputToken?.type === Web3TokenType.Native || isSameAddress(outputToken?.address, NATIVE_TOKEN_ADDRESS)
                 ? balance.value
                 : '0'
         dispatchTradeStore({

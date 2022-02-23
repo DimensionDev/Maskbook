@@ -1,4 +1,5 @@
-import type { ChainId, FungibleTokenDetailed } from '../types'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-base'
+import type { ChainId } from '../types'
 import { useWallet } from './useWallet'
 import { useNativeTokenDetailed } from './useNativeTokenDetailed'
 import { useAssetsFromChain } from './useAssetsFromChain'

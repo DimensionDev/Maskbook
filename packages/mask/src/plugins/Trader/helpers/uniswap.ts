@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js'
 import { Currency, Token, CurrencyAmount, TradeType, Percent, Price, Ether } from '@uniswap/sdk-core'
 import type { Trade } from '@uniswap/v2-sdk'
 import { formatEthereumAddress, ChainId, isSameAddress } from '@masknet/web3-shared-evm'
-import { EthereumTokenType, FungibleTokenDetailed, pow10, isGreaterThan } from '@masknet/web3-shared-base'
+import { Web3TokenType, FungibleTokenDetailed, pow10, isGreaterThan } from '@masknet/web3-shared-base'
 import { ONE_HUNDRED_PERCENT, WNATIVE, ZERO_PERCENT } from '../constants'
 
 export function swapErrorToUserReadableMessage(error: any): string {
@@ -57,7 +57,7 @@ export function toUniswapCurrency(chainId: ChainId, token?: FungibleTokenDetaile
         const extendedEther = ExtendedEther.onChain(chainId)
         const weth = toUniswapToken(chainId, WNATIVE[chainId])
         if (weth && isSameAddress(token.address, weth.address)) return weth
-        return token.type === EthereumTokenType.Native ? extendedEther : toUniswapToken(chainId, token)
+        return token.type === Web3TokenType.Native ? extendedEther : toUniswapToken(chainId, token)
     } catch {
         return
     }
@@ -100,8 +100,8 @@ export function uniswapPriceTo(price: Price<Currency, Currency>) {
 export function uniswapTokenTo(token: Token) {
     return {
         type: ['eth', 'matic', 'bnb'].includes(token.name?.toLowerCase() ?? '')
-            ? EthereumTokenType.Native
-            : EthereumTokenType.ERC20,
+            ? Web3TokenType.Native
+            : Web3TokenType.ERC20,
         name: token.name,
         symbol: token.symbol,
         decimals: token.decimals,

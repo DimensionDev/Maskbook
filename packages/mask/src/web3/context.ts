@@ -11,12 +11,7 @@ import {
     createContract,
     isSameAddress,
 } from '@masknet/web3-shared-evm'
-import {
-    ERC20TokenDetailed,
-    EthereumTokenType,
-    ERC721TokenDetailed,
-    getProxyWebsocketInstance,
-} from '@masknet/web3-shared-base'
+import { ERC20TokenDetailed, Web3TokenType, ERC721TokenDetailed } from '@masknet/web3-shared-base'
 import { isPopupPage } from '@masknet/shared-base'
 import { bridgedCoin98Provider, bridgedEthereumProvider } from '@masknet/injected-script'
 import {
@@ -106,12 +101,12 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
             : createSubscriptionFromSettings(currentProviderSettings),
         networkType: createSubscriptionFromSettings(isMask ? currentMaskWalletNetworkSettings : currentNetworkSettings),
         erc20Tokens: createSubscriptionFromAsync(
-            () => WalletRPC.getTokens<ERC20TokenDetailed>(EthereumTokenType.ERC20),
+            () => WalletRPC.getTokens<ERC20TokenDetailed>(Web3TokenType.ERC20),
             [],
             WalletMessages.events.erc20TokensUpdated.on,
         ),
         erc721Tokens: createSubscriptionFromAsync(
-            () => WalletRPC.getTokens<ERC721TokenDetailed>(EthereumTokenType.ERC721),
+            () => WalletRPC.getTokens<ERC721TokenDetailed>(Web3TokenType.ERC721),
             [],
             WalletMessages.events.erc721TokensUpdated.on,
         ),
@@ -161,7 +156,6 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
         },
         getTransactionList: WalletRPC.getTransactionList,
         fetchERC20TokensFromTokenLists: TokenListApi.fetchERC20TokensFromTokenLists,
-        providerSocket: getProxyWebsocketInstance((info) => WalletMessages.events.socketMessageUpdated.sendToAll(info)),
     }
 }
 

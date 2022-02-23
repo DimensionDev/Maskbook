@@ -1,4 +1,4 @@
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-base'
 
 export enum CardTab {
     Articles = 0,

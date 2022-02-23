@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
-import { EthereumTokenType, FungibleTokenDetailed, FungibleToken, ERC20TokenDetailed } from '@masknet/web3-shared-base'
+import { Web3TokenType, FungibleTokenDetailed, FungibleToken, ERC20TokenDetailed } from '@masknet/web3-shared-base'
 import type { ChainId } from '../types'
 import { useChainId } from './useChainId'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
@@ -35,7 +35,7 @@ export function useFungibleTokensDetailed(listOfToken: Pick<FungibleToken, 'addr
         async () =>
             Promise.all(
                 listOfToken.map(async (token, i) => {
-                    if (token.type === EthereumTokenType.Native) return createNativeToken(chainId)
+                    if (token.type === Web3TokenType.Native) return createNativeToken(chainId)
 
                     const erc20TokenContract = erc20TokenContracts[i]
                     const erc20TokenBytes32Contract = erc20TokenBytes32Contracts[i]

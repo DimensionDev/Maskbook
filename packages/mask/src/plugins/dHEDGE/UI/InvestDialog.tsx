@@ -1,5 +1,5 @@
 import { formatBalance, TransactionStateType, useAccount, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
-import { FungibleTokenDetailed, EthereumTokenType, isZero, rightShift } from '@masknet/web3-shared-base'
+import { FungibleTokenDetailed, Web3TokenType, isZero, rightShift } from '@masknet/web3-shared-base'
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -99,7 +99,7 @@ export function InvestDialog() {
         value: tokenBalance = '0',
         loading: loadingTokenBalance,
         retry: retryLoadTokenBalance,
-    } = useFungibleTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
+    } = useFungibleTokenBalance(token?.type ?? Web3TokenType.Native, token?.address ?? '')
     // #endregion
 
     // #region blocking
@@ -231,7 +231,7 @@ export function InvestDialog() {
                             <EthereumERC20TokenApprovedBoundary
                                 amount={amount.toFixed()}
                                 spender={pool.address}
-                                token={token?.type === EthereumTokenType.ERC20 ? token : undefined}>
+                                token={token?.type === Web3TokenType.ERC20 ? token : undefined}>
                                 <ActionButton
                                     className={classes.button}
                                     fullWidth

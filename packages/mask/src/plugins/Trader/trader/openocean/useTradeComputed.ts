@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-base'
 import { ZERO, pow10 } from '@masknet/web3-shared-base'
 import { SwapOOData, TradeComputed, TradeStrategy } from '../../types'
 

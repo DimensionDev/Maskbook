@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { useDashboardI18N } from '../../../../locales'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import type { ERC20TokenDetailed } from '@masknet/web3-shared-evm'
+import type { ERC20TokenDetailed } from '@masknet/web3-shared-base'
 import { TokenIcon } from '@masknet/shared'
 import { useFormContext } from 'react-hook-form'
 

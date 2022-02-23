@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
 import { unreachable } from '@dimensiondev/kit'
-import type { ERC721TokenDetailed, NonFungibleToken } from '@masknet/web3-shared-base'
-import { ChainId, FungibleToken, NetworkType, ProviderType, NonFungibleAssetProvider } from '../types'
+import type { ERC721TokenDetailed, NonFungibleToken, FungibleToken } from '@masknet/web3-shared-base'
+import { ChainId, NetworkType, ProviderType, NonFungibleAssetProvider } from '../types'
 import { getChainDetailed, createLookupTableResolver } from '../utils'
 
 export const resolveProviderName = createLookupTableResolver<ProviderType, string>(

@@ -42,7 +42,7 @@ import {
     isGreaterThan,
     isGreaterThanOrEqualTo,
     isLessThanOrEqualTo,
-    EthereumTokenType,
+    Web3TokenType,
     multipliedBy,
     useBeat,
 } from '@masknet/web3-shared-base'
@@ -79,7 +79,7 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const { value: paymentTokens = [] } = useFungibleTokensDetailed(
         maskBoxStatus?.payment?.map(([address]) => {
             return {
-                type: isNativeTokenAddress(address) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
+                type: isNativeTokenAddress(address) ? Web3TokenType.Native : Web3TokenType.ERC20,
                 address,
             }
         }) ?? [],

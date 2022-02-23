@@ -6,7 +6,7 @@ import {
     isSameAddress,
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
-import { FungibleToken, EthereumTokenType, FungibleTokenDetailed } from '@masknet/web3-shared-base'
+import { FungibleToken, Web3TokenType, FungibleTokenDetailed } from '@masknet/web3-shared-base'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { isCompactPayload } from './helpers'
 import { usePoolPayload } from './hooks/usePoolPayload'
@@ -39,7 +39,7 @@ export function PostInspector(props: PostInspectorProps) {
         loading: _loadingToken,
         retry: retryToken,
     } = useFungibleTokenDetailed(
-        EthereumTokenType.ERC20,
+        Web3TokenType.ERC20,
         typeof token === 'string' ? (token as string) : (token as FungibleTokenDetailed).address,
     )
 
@@ -50,8 +50,8 @@ export function PostInspector(props: PostInspectorProps) {
                     ({
                         address: t.address,
                         type: isSameAddress(t.address, NATIVE_TOKEN_ADDRESS)
-                            ? EthereumTokenType.Native
-                            : EthereumTokenType.ERC20,
+                            ? Web3TokenType.Native
+                            : Web3TokenType.ERC20,
                     } as Pick<FungibleToken, 'address' | 'type'>),
             ),
         [JSON.stringify(_payload.exchange_tokens)],

@@ -1,4 +1,4 @@
-import { EthereumTokenType } from '@masknet/web3-shared-base'
+import { Web3TokenType } from '@masknet/web3-shared-base'
 import { useERC20TokenContract, useERC721TokenContract } from '../contracts'
 import { useAccount } from './useAccount'
 import { useWeb3 } from './useWeb3'
@@ -6,7 +6,7 @@ import { useAsync } from 'react-use'
 import { unreachable } from '@dimensiondev/kit'
 
 export function useGasLimit(
-    type?: EthereumTokenType,
+    type?: Web3TokenType,
     contractAddress?: string,
     amount?: string,
     recipient?: string,
@@ -19,21 +19,21 @@ export function useGasLimit(
 
     return useAsync(async () => {
         if (!recipient || type === undefined) return 0
-        if ((type === EthereumTokenType.ERC20 && !amount) || !contractAddress) return 0
-        if ((type === EthereumTokenType.ERC721 && !tokenId) || !contractAddress) return 0
+        if ((type === Web3TokenType.ERC20 && !amount) || !contractAddress) return 0
+        if ((type === Web3TokenType.ERC721 && !tokenId) || !contractAddress) return 0
 
         switch (type) {
-            case EthereumTokenType.Native:
+            case Web3TokenType.Native:
                 return web3.eth.estimateGas({
                     from: account,
                     to: recipient,
                     value: amount,
                 })
-            case EthereumTokenType.ERC20:
+            case Web3TokenType.ERC20:
                 return erc20Contract?.methods.transfer(recipient, amount ?? 0).estimateGas({
                     from: account,
                 })
-            case EthereumTokenType.ERC721:
+            case Web3TokenType.ERC721:
                 return erc721Contract?.methods.transferFrom(account, recipient, tokenId ?? '').estimateGas({
                     from: account,
                 })

@@ -4,7 +4,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { currySameAddress, formatEthereumAddress, isSameAddress, ProviderType } from '@masknet/web3-shared-evm'
 import {
     ERC20TokenDetailed,
-    EthereumTokenType,
+    Web3TokenType,
     ERC721TokenDetailed,
     NonFungibleTokenDetailed,
 } from '@masknet/web3-shared-base'
@@ -154,15 +154,12 @@ export async function updateWalletToken(
     const tokenAddressChecksummed = formatEthereumAddress(tokenAddress)
     const tokenType = (token as ERC20TokenDetailed).type || (token as ERC721TokenDetailed).contractDetailed.type
 
-    const operationMap: Record<
-        EthereumTokenType.ERC20 | EthereumTokenType.ERC721,
-        Record<'block' | 'trust', Set<string>>
-    > = {
-        [EthereumTokenType.ERC20]: {
+    const operationMap: Record<Web3TokenType.ERC20 | Web3TokenType.ERC721, Record<'block' | 'trust', Set<string>>> = {
+        [Web3TokenType.ERC20]: {
             block: wallet.erc20_token_blacklist,
             trust: wallet.erc20_token_whitelist,
         },
-        [EthereumTokenType.ERC721]: {
+        [Web3TokenType.ERC721]: {
             block: wallet.erc721_token_blacklist,
             trust: wallet.erc721_token_whitelist,
         },

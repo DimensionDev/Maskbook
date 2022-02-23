@@ -6,7 +6,7 @@ import { getTokenConstants } from '../constants'
 import { Asset, ChainId, CurrencyType, ChainIdRecord } from '../types'
 import {
     ERC20TokenDetailed,
-    EthereumTokenType,
+    Web3TokenType,
     FungibleTokenDetailed,
     NativeTokenDetailed,
     ERC721TokenDetailed,
@@ -24,7 +24,7 @@ export function createNativeToken(chainId: ChainId): NativeTokenDetailed {
     const { NATIVE_TOKEN_ADDRESS } = getTokenConstants(chainId)
     if (!NATIVE_TOKEN_ADDRESS) throw new Error('Failed to create token.')
     return {
-        type: EthereumTokenType.Native,
+        type: Web3TokenType.Native,
         chainId,
         address: NATIVE_TOKEN_ADDRESS,
         ...chainDetailed.nativeCurrency,
@@ -47,7 +47,7 @@ export function createERC20Token(
     logoURI?: string[],
 ): ERC20TokenDetailed {
     return {
-        type: EthereumTokenType.ERC20,
+        type: Web3TokenType.ERC20,
         chainId,
         address,
         decimals,
@@ -66,7 +66,7 @@ export function createERC721ContractDetailed(
     iconURL?: string,
 ): ERC721ContractDetailed {
     return {
-        type: EthereumTokenType.ERC721,
+        type: Web3TokenType.ERC721,
         chainId,
         address,
         name,
@@ -107,7 +107,7 @@ export function createERC20Tokens(
             typeof f === 'function' ? (f as any)(chainId) : f
 
         accumulator[chainId] = {
-            type: EthereumTokenType.ERC20,
+            type: Web3TokenType.ERC20,
             chainId,
             address: getTokenConstants(chainId)[key] ?? '',
             name: evaluator(name),
@@ -148,7 +148,7 @@ export function parseStringOrBytes32(
 export const getTokenUSDValue = (token: Asset) => (token.value ? Number.parseFloat(token.value[CurrencyType.USD]) : 0)
 export const getBalanceValue = (asset: Asset) => Number.parseFloat(formatBalance(asset.balance, asset.token.decimals))
 export const getTokenChainIdValue = (asset: Asset) =>
-    asset.token.type === EthereumTokenType.Native ? 1 / asset.token.chainId : 0
+    asset.token.type === Web3TokenType.Native ? 1 / asset.token.chainId : 0
 
 export const makeSortTokenFn = (chainId: ChainId, options: { isMaskBoost?: boolean } = {}) => {
     const { isMaskBoost = false } = options
@@ -156,8 +156,8 @@ export const makeSortTokenFn = (chainId: ChainId, options: { isMaskBoost?: boole
 
     return (a: FungibleTokenDetailed, b: FungibleTokenDetailed) => {
         // The native token goes first
-        if (a.type === EthereumTokenType.Native) return -1
-        if (b.type === EthereumTokenType.Native) return 1
+        if (a.type === Web3TokenType.Native) return -1
+        if (b.type === Web3TokenType.Native) return 1
 
         // The mask token second
         if (isMaskBoost) {

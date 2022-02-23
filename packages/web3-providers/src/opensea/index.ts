@@ -5,7 +5,7 @@ import {
     createNativeToken,
     createERC20Token,
 } from '@masknet/web3-shared-evm'
-import { EthereumTokenType, ERC721ContractDetailed, ERC721TokenDetailed } from '@masknet/web3-shared-base'
+import { Web3TokenType, ERC721ContractDetailed, ERC721TokenDetailed } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import isAfter from 'date-fns/isAfter'
@@ -156,7 +156,7 @@ function createNFTAsset(asset: OpenSeaResponse, chainId: ChainId): NonFungibleTo
         offer_payment_tokens: uniqBy(
             asset.collection.payment_tokens.map((x) => createTokenDetailed(chainId, x)),
             (x) => x.address.toLowerCase(),
-        ).filter((x) => x.type === EthereumTokenType.ERC20),
+        ).filter((x) => x.type === Web3TokenType.ERC20),
         slug: asset.collection.slug,
         desktopOrder,
         top_ownerships: asset.top_ownerships.map((x): { owner: NonFungibleTokenAPI.AssetOwner } => ({

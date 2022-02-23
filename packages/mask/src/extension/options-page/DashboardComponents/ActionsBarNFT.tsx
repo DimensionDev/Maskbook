@@ -3,7 +3,7 @@ import { IconButton, MenuItem } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import { Wallet, useChainIdValid } from '@masknet/web3-shared-evm'
-import { ERC721TokenDetailed, EthereumTokenType } from '@masknet/web3-shared-base'
+import { ERC721TokenDetailed, Web3TokenType } from '@masknet/web3-shared-base'
 import { useMenu, useI18N } from '../../../utils'
 // eslint-disable-next-line import/no-deprecated
 import { useModal } from '../DashboardDialogs/Base'
@@ -33,7 +33,7 @@ export function ActionsBarNFT(props: ActionsBarNFT_Props) {
     // eslint-disable-next-line import/no-deprecated
     const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
     const [menu, openMenu] = useMenu([
-        token.contractDetailed.type === EthereumTokenType.ERC721 ? (
+        token.contractDetailed.type === Web3TokenType.ERC721 ? (
             <MenuItem key="transfer" disabled={!chainIdValid} onClick={() => openTransferDialogOpen({ token })}>
                 {t('transfer')}
             </MenuItem>

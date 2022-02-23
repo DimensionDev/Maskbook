@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { first } from 'lodash-unified'
-import { EthereumTokenType, FungibleTokenDetailed } from '@masknet/web3-shared-base'
+import { Web3TokenType, FungibleTokenDetailed } from '@masknet/web3-shared-base'
 import type { Asset, ChainId } from '../types'
 import { useTokensBalance } from './useTokensBalance'
 import { useChainDetailed } from './useChainDetailed'
@@ -13,8 +13,8 @@ export function useAssetsFromChain(tokens: FungibleTokenDetailed[], chainId?: Ch
     const passedChainDetailed = getChainDetailed(chainId)
 
     const chain = passedChainDetailed?.shortName.toLowerCase() ?? chainDetailed?.shortName.toLowerCase() ?? 'unknown'
-    const nativeToken = first(tokens.filter((x) => x.type === EthereumTokenType.Native))
-    const erc20Tokens = useMemo(() => tokens.filter((x) => x.type === EthereumTokenType.ERC20), [tokens])
+    const nativeToken = first(tokens.filter((x) => x.type === Web3TokenType.Native))
+    const erc20Tokens = useMemo(() => tokens.filter((x) => x.type === Web3TokenType.ERC20), [tokens])
     const erc20TokenAddresses = useMemo(() => erc20Tokens.map((x) => x.address), [erc20Tokens])
 
     const { value: listOfBalance = EMPTY_LIST, loading, error, retry } = useTokensBalance(erc20TokenAddresses, chainId)

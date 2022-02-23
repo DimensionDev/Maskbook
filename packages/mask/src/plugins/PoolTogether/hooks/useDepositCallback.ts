@@ -7,7 +7,7 @@ import {
     TransactionStateType,
     TransactionEventType,
 } from '@masknet/web3-shared-evm'
-import { EthereumTokenType } from '@masknet/web3-shared-base'
+import { Web3TokenType } from '@masknet/web3-shared-base'
 import { usePoolTogetherPoolContract } from '../contracts/usePoolTogetherPool'
 
 /**
@@ -46,7 +46,7 @@ export function useDepositCallback(
         // step 1: estimate gas
         const config = {
             from: account,
-            value: new BigNumber(token.type === EthereumTokenType.Native ? amount : 0).toFixed(),
+            value: new BigNumber(token.type === Web3TokenType.Native ? amount : 0).toFixed(),
         }
         const estimatedGas = await poolContract.methods
             .depositTo(account, amount, controlledToken, referrer)

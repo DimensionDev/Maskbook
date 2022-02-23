@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { useCallback, useMemo } from 'react'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
-import { EthereumTokenType, FungibleTokenDetailed, toFixed } from '@masknet/web3-shared-base'
+import { Web3TokenType, FungibleTokenDetailed, toFixed } from '@masknet/web3-shared-base'
 import {
     TransactionEventType,
     TransactionStateType,
@@ -31,12 +31,12 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
         const grantAmount = new BigNumber(amount).minus(tipAmount)
         return [
             [
-                token.type === EthereumTokenType.Native ? GITCOIN_ETH_ADDRESS : token.address, // token
+                token.type === Web3TokenType.Native ? GITCOIN_ETH_ADDRESS : token.address, // token
                 tipAmount.toFixed(), // amount
                 address, // dest
             ],
             [
-                token.type === EthereumTokenType.Native ? GITCOIN_ETH_ADDRESS : token.address, // token
+                token.type === Web3TokenType.Native ? GITCOIN_ETH_ADDRESS : token.address, // token
                 grantAmount.toFixed(), // amount
                 address, // dest
             ],
@@ -57,7 +57,7 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
         })
 
         // estimate gas and compose transaction
-        const value = toFixed(token.type === EthereumTokenType.Native ? amount : 0)
+        const value = toFixed(token.type === Web3TokenType.Native ? amount : 0)
         const config = {
             from: account,
             gas: await bulkCheckoutContract.methods

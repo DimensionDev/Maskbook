@@ -1,7 +1,7 @@
 import { omit } from 'lodash-unified'
 import {
     ERC20TokenDetailed,
-    EthereumTokenType,
+    Web3TokenType,
     NonFungibleTokenDetailed,
     ERC721TokenDetailed,
 } from '@masknet/web3-shared-base'
@@ -13,7 +13,7 @@ import { currentChainIdSettings } from '../../../settings'
 import type { ERC20TokenRecord, ERC721TokenRecord } from '../type'
 import * as walletDB from './wallet'
 
-type DatabaseTokenType = EthereumTokenType.ERC20 | EthereumTokenType.ERC721
+type DatabaseTokenType = Web3TokenType.ERC20 | Web3TokenType.ERC721
 type DatabaseTokenDetailed = ERC20TokenDetailed | NonFungibleTokenDetailed
 type DatabaseTokenRecord = ERC20TokenRecord | ERC721TokenRecord
 
@@ -40,9 +40,9 @@ function getTokenType(tokenDetailed: DatabaseTokenDetailed) {
 
 function getDatabaseType(type: DatabaseTokenType) {
     switch (type) {
-        case EthereumTokenType.ERC20:
+        case Web3TokenType.ERC20:
             return 'erc20'
-        case EthereumTokenType.ERC721:
+        case Web3TokenType.ERC721:
             return 'erc721'
         default:
             unreachable(type)
@@ -51,9 +51,9 @@ function getDatabaseType(type: DatabaseTokenType) {
 
 function getEventMessage(type: DatabaseTokenType) {
     switch (type) {
-        case EthereumTokenType.ERC20:
+        case Web3TokenType.ERC20:
             return WalletMessages.events.erc20TokensUpdated
-        case EthereumTokenType.ERC721:
+        case Web3TokenType.ERC721:
             return WalletMessages.events.erc721TokensUpdated
         default:
             unreachable(type)
@@ -66,9 +66,9 @@ function TokenRecordOutDatabase(type: DatabaseTokenType, token: DatabaseTokenRec
         type,
     }
     switch (type) {
-        case EthereumTokenType.ERC20:
+        case Web3TokenType.ERC20:
             return token_ as ERC20TokenDetailed
-        case EthereumTokenType.ERC721:
+        case Web3TokenType.ERC721:
             return token_ as ERC721TokenDetailed
         default:
             throw new Error('Unknown token type.')

@@ -28,7 +28,7 @@ import { PluginTraderMessages } from '../../Trader/messages'
 import { Trans } from 'react-i18next'
 import getUnixTime from 'date-fns/getUnixTime'
 import type { useAsset } from '../../EVM/hooks'
-import { FungibleTokenDetailed, EthereumTokenType, rightShift, ZERO } from '@masknet/web3-shared-base'
+import { FungibleTokenDetailed, Web3TokenType, rightShift, ZERO } from '@masknet/web3-shared-base'
 import type { Coin } from '../../Trader/types'
 import { SelectTokenListPanel } from './SelectTokenListPanel'
 import { isWyvernSchemaName } from '../utils'
@@ -98,7 +98,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         if (!asset?.value) return
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!token?.value) return
-        if (token.value.type !== EthereumTokenType.Native && token.value.type !== EthereumTokenType.ERC20) return
+        if (token.value.type !== Web3TokenType.Native && token.value.type !== Web3TokenType.ERC20) return
         const schemaName = asset.value.asset_contract?.schemaName
         await PluginCollectibleRPC.createBuyOrder({
             asset: toAsset({
@@ -109,7 +109,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
             accountAddress: account,
             startAmount: Number.parseFloat(amount),
             expirationTime: !isAuction ? getUnixTime(expirationDateTime) : undefined,
-            paymentTokenAddress: token.value.type === EthereumTokenType.Native ? undefined : token.value.address,
+            paymentTokenAddress: token.value.type === Web3TokenType.Native ? undefined : token.value.address,
         })
     }, [asset?.value, token, account, amount, expirationDateTime, isAuction])
 

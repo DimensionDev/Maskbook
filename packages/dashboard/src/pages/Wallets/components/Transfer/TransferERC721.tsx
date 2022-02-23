@@ -3,7 +3,7 @@ import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import { NetworkPluginID, useLookupAddress, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
-import { ERC721ContractDetailed, ERC721TokenDetailed, EthereumTokenType, multipliedBy } from '@masknet/web3-shared-base'
+import { ERC721ContractDetailed, ERC721TokenDetailed, Web3TokenType, multipliedBy } from '@masknet/web3-shared-base'
 import {
     formatWeiToEther,
     isSameAddress,
@@ -149,7 +149,7 @@ export const TransferERC721 = memo(() => {
     // #endregion
 
     const erc721GasLimit = useGasLimit(
-        EthereumTokenType.ERC721,
+        Web3TokenType.ERC721,
         contract?.address,
         undefined,
         EthereumAddress.isValid(allFormFields.recipient) ? allFormFields.recipient : registeredAddress,
@@ -165,7 +165,7 @@ export const TransferERC721 = memo(() => {
     const nativeToken = useNativeTokenDetailed()
     const nativeTokenPrice = useNativeTokenPrice()
     const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
-        EthereumTokenType.ERC721,
+        Web3TokenType.ERC721,
         contract?.address ?? '',
     )
 

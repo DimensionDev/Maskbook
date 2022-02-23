@@ -9,7 +9,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import {
     FungibleTokenDetailed,
-    EthereumTokenType,
+    Web3TokenType,
     isGreaterThan,
     isZero,
     multipliedBy,
@@ -165,7 +165,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
 
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
-        token?.type ?? EthereumTokenType.Native,
+        token?.type ?? Web3TokenType.Native,
         token?.address ?? '',
     )
     // #endregion
@@ -287,7 +287,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             <EthereumWalletConnectedBoundary>
                 <EthereumERC20TokenApprovedBoundary
                     amount={totalAmount.toFixed()}
-                    token={token?.type === EthereumTokenType.ERC20 ? token : undefined}
+                    token={token?.type === Web3TokenType.ERC20 ? token : undefined}
                     spender={HAPPY_RED_PACKET_ADDRESS_V4}>
                     <ActionButton
                         variant="contained"

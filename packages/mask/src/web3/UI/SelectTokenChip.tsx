@@ -5,7 +5,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ErrorIcon from '@mui/icons-material/Error'
 import { noop } from 'lodash-unified'
 import { TokenIcon } from '@masknet/shared'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-base'
 import { useI18N } from '../../utils'
 
 const useStyles = makeStyles()((theme) => {

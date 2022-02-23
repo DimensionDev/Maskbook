@@ -3,7 +3,7 @@ import { EthereumAddress } from 'wallet.ts'
 import { Box, Card, CardActions, CardContent, Checkbox, FormControlLabel, TextField, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { FungibleTokenWatched, isNativeTokenAddress, useAccount } from '@masknet/web3-shared-evm'
-import { FungibleTokenDetailed, EthereumTokenType, isZero, isGreaterThan } from '@masknet/web3-shared-base'
+import { FungibleTokenDetailed, Web3TokenType, isZero, isGreaterThan } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../utils'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -93,7 +93,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
         if (!asset?.value) return
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!token?.value) return
-        if (token.value.type !== EthereumTokenType.Native && token.value.type !== EthereumTokenType.ERC20) return
+        if (token.value.type !== Web3TokenType.Native && token.value.type !== Web3TokenType.ERC20) return
         const schemaName = asset.value.asset_contract?.schemaName
         await PluginCollectibleRPC.createSellOrder({
             asset: toAsset({

@@ -15,7 +15,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { useArtBlocksConstants, useFungibleTokenWatched, TransactionStateType } from '@masknet/web3-shared-evm'
-import { EthereumTokenType, ERC20TokenDetailed, FungibleTokenDetailed, leftShift } from '@masknet/web3-shared-base'
+import { Web3TokenType, ERC20TokenDetailed, FungibleTokenDetailed, leftShift } from '@masknet/web3-shared-base'
 import { Trans } from 'react-i18next'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback'
 import { TokenAmountPanel, useRemoteControlledDialog } from '@masknet/shared'
@@ -180,7 +180,7 @@ export function PurchaseDialog(props: ActionBarProps) {
                     </CardContent>
                     <CardActions>
                         <EthereumWalletConnectedBoundary>
-                            {token.value?.type === EthereumTokenType.Native ? (
+                            {token.value?.type === Web3TokenType.Native ? (
                                 <ActionButton
                                     className={classes.button}
                                     disabled={!!validationMessage}
@@ -193,7 +193,7 @@ export function PurchaseDialog(props: ActionBarProps) {
                                         : t('plugin_artblocks_purchasing')}
                                 </ActionButton>
                             ) : null}
-                            {token.value?.type === EthereumTokenType.ERC20 ? (
+                            {token.value?.type === Web3TokenType.ERC20 ? (
                                 <EthereumERC20TokenApprovedBoundary
                                     amount={project.pricePerTokenInWei}
                                     spender={spender}

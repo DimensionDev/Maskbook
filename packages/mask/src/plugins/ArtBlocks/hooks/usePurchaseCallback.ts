@@ -6,7 +6,7 @@ import {
     useChainId,
     useTransactionState,
 } from '@masknet/web3-shared-evm'
-import { EthereumTokenType } from '@masknet/web3-shared-base'
+import { Web3TokenType } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import { useArtBlocksContract } from './useArtBlocksContract'
@@ -31,7 +31,7 @@ export function usePurchaseCallback(projectId: string, amount: string, tokenType
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
-        const value = new BigNumber(tokenType === EthereumTokenType.Native ? amount : 0).toFixed()
+        const value = new BigNumber(tokenType === Web3TokenType.Native ? amount : 0).toFixed()
         const config = {
             from: account,
             value,

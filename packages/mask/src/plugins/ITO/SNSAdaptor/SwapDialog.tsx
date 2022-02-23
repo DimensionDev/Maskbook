@@ -19,7 +19,7 @@ import {
     useTokenConstants,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
-import { FungibleTokenDetailed, EthereumTokenType, leftShift, rightShift, ZERO } from '@masknet/web3-shared-base'
+import { FungibleTokenDetailed, Web3TokenType, leftShift, rightShift, ZERO } from '@masknet/web3-shared-base'
 import { SelectTokenDialogEvent, WalletMessages, WalletRPC } from '../../Wallet/messages'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useSwapCallback } from './hooks/useSwapCallback'
@@ -120,8 +120,8 @@ export function SwapDialog(props: SwapDialogProps) {
     )
     const { value: initToken } = useFungibleTokenDetailed(
         isSameAddress(NATIVE_TOKEN_ADDRESS, payload.exchange_tokens[0].address)
-            ? EthereumTokenType.Native
-            : EthereumTokenType.ERC20,
+            ? Web3TokenType.Native
+            : Web3TokenType.ERC20,
         payload.exchange_tokens[0].address,
     )
 
@@ -185,7 +185,7 @@ export function SwapDialog(props: SwapDialogProps) {
 
     // #region balance
     const { value: tokenBalance = '0' } = useFungibleTokenBalance(
-        swapToken ? swapToken.type : EthereumTokenType.Native,
+        swapToken ? swapToken.type : Web3TokenType.Native,
         swapToken ? swapToken.address : NATIVE_TOKEN_ADDRESS,
     )
     // #endregion
@@ -211,7 +211,7 @@ export function SwapDialog(props: SwapDialogProps) {
     )
     const onSwap = useCallback(async () => {
         await swapCallback()
-        if (payload.token.type !== EthereumTokenType.ERC20) return
+        if (payload.token.type !== Web3TokenType.ERC20) return
         await WalletRPC.addToken(payload.token)
         await WalletRPC.updateWalletToken(account, payload.token, { strategy: 'trust' })
     }, [swapCallback, payload.token.address])
@@ -318,7 +318,7 @@ export function SwapDialog(props: SwapDialogProps) {
                     <EthereumERC20TokenApprovedBoundary
                         amount={swapAmount.toFixed()}
                         spender={payload.contract_address}
-                        token={swapToken.type === EthereumTokenType.ERC20 ? swapToken : undefined}>
+                        token={swapToken.type === Web3TokenType.ERC20 ? swapToken : undefined}>
                         <ActionButton
                             className={classes.button}
                             fullWidth

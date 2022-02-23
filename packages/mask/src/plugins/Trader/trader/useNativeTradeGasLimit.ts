@@ -1,5 +1,5 @@
 import { ChainId, useAccount } from '@masknet/web3-shared-evm'
-import { EthereumTokenType } from '@masknet/web3-shared-base'
+import { Web3TokenType } from '@masknet/web3-shared-base'
 import { useNativeTokenWrapperContract } from '@masknet/web3-shared-evm/contracts/useWrappedEtherContract'
 import { useAsync } from 'react-use'
 import type { TradeComputed } from '../types'
@@ -22,8 +22,8 @@ export function useNativeTradeGasLimit(
         if (!tradeAmount || !wrapperContract) return 0
 
         if (
-            (trade.strategy === TradeStrategy.ExactIn && trade.inputToken.type === EthereumTokenType.Native) ||
-            (trade.strategy === TradeStrategy.ExactOut && trade.outputToken.type === EthereumTokenType.Native)
+            (trade.strategy === TradeStrategy.ExactIn && trade.inputToken.type === Web3TokenType.Native) ||
+            (trade.strategy === TradeStrategy.ExactOut && trade.outputToken.type === Web3TokenType.Native)
         ) {
             return wrapperContract.methods.deposit().estimateGas({ from: account, value: tradeAmount })
         }

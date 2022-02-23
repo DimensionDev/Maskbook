@@ -1,6 +1,6 @@
 import { useWeb3Context } from '../context'
 import { useAsyncFn } from 'react-use'
-import type { ERC20TokenDetailed } from '../types'
+import type { ERC20TokenDetailed } from '@masknet/web3-shared-base'
 
 export function useTrustERC20TokenCallback() {
     const { trustToken } = useWeb3Context()

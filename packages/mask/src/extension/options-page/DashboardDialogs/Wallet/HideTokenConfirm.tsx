@@ -2,7 +2,7 @@ import { Trash2 as TrashIcon } from 'react-feather'
 import { Button, Box, BoxProps } from '@mui/material'
 import { unreachable } from '@dimensiondev/kit'
 import { FungibleTokenDetailed, isNativeTokenAddress } from '@masknet/web3-shared-evm'
-import { ERC20TokenDetailed, EthereumTokenType, ERC721TokenDetailed } from '@masknet/web3-shared-base'
+import { ERC20TokenDetailed, Web3TokenType, ERC721TokenDetailed } from '@masknet/web3-shared-base'
 import { useSnackbarCallback } from '@masknet/shared'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../utils'
@@ -26,17 +26,17 @@ export function DashboardWalletHideTokenConfirmDialog(
         () => {
             const type = ((token as FungibleTokenDetailed).type ??
                 (token as ERC721TokenDetailed).contractDetailed.type) as
-                | EthereumTokenType.Native
-                | EthereumTokenType.ERC20
-                | EthereumTokenType.ERC721
+                | Web3TokenType.Native
+                | Web3TokenType.ERC20
+                | Web3TokenType.ERC721
             switch (type) {
-                case EthereumTokenType.Native:
+                case Web3TokenType.Native:
                     throw new Error('Unable to hide the native token.')
-                case EthereumTokenType.ERC20:
+                case Web3TokenType.ERC20:
                     return WalletRPC.updateWalletToken(wallet.address, token as ERC20TokenDetailed, {
                         strategy: 'block',
                     })
-                case EthereumTokenType.ERC721:
+                case Web3TokenType.ERC721:
                     return WalletRPC.removeToken(token as ERC721TokenDetailed)
                 default:
                     unreachable(type)

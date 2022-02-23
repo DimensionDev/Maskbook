@@ -1,6 +1,6 @@
 import { memoizePromise } from '@dimensiondev/kit'
 import { ChainId, ERC20TokenDetailed, formatEthereumAddress, getChainDetailed } from '@masknet/web3-shared-evm'
-import { EthereumTokenType } from '@masknet/web3-shared-base'
+import { Web3TokenType } from '@masknet/web3-shared-base'
 import { groupBy } from 'lodash-unified'
 import type { TokenListAPI } from '../types'
 
@@ -28,7 +28,7 @@ async function fetch1inchERC20TokensFromTokenList(
     return _tokens
         .filter((x) => x.address.toLowerCase() !== NATIVE_TOKEN_ADDRESS_IN_1INCH)
         .map((x) => ({
-            type: EthereumTokenType.ERC20,
+            type: Web3TokenType.ERC20,
             ...x,
             chainId: chainId,
             logoURI: x.logoURI ? [x.logoURI] : [],
@@ -53,7 +53,7 @@ async function fetchCommonERC20TokensFromTokenList(
                     : true),
         )
         .map((x) => ({
-            type: EthereumTokenType.ERC20,
+            type: Web3TokenType.ERC20,
             ...x,
             logoURI: x.logoURI ? [x.logoURI] : [],
         }))

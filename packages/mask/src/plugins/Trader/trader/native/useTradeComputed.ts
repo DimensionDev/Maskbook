@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import { EthereumTokenType, FungibleTokenDetailed, ZERO } from '@masknet/web3-shared-base'
+import { Web3TokenType, FungibleTokenDetailed, ZERO } from '@masknet/web3-shared-base'
 import { TradeComputed, TradeStrategy } from '../../types'
 
 export interface NativeTokenWrapper {
@@ -45,8 +45,8 @@ export function useTradeComputed(
             fee: ZERO,
             trade_: {
                 isWrap:
-                    (strategy === TradeStrategy.ExactIn && inputToken?.type === EthereumTokenType.Native) ||
-                    (strategy === TradeStrategy.ExactOut && outputToken?.type === EthereumTokenType.Native),
+                    (strategy === TradeStrategy.ExactIn && inputToken?.type === Web3TokenType.Native) ||
+                    (strategy === TradeStrategy.ExactOut && outputToken?.type === Web3TokenType.Native),
                 isNativeTokenWrapper,
             },
         }

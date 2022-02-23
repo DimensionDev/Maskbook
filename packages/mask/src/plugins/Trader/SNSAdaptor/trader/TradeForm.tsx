@@ -5,7 +5,7 @@ import { InputTokenPanel } from './InputTokenPanel'
 import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
 import type { FungibleTokenDetailed, Wallet } from '@masknet/web3-shared-evm'
 import { formatBalance, formatPercentage } from '@masknet/web3-shared-evm'
-import { EthereumTokenType, isLessThan, rightShift } from '@masknet/web3-shared-base'
+import { Web3TokenType, isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
@@ -460,7 +460,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     amount={approveAmount.toFixed()}
                                     token={
                                         !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
-                                        approveToken?.type === EthereumTokenType.ERC20 &&
+                                        approveToken?.type === Web3TokenType.ERC20 &&
                                         !!approveAmount.toNumber()
                                             ? approveToken
                                             : undefined

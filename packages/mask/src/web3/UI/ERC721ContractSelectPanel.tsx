@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import { ChainId, isSameAddress, useAccount, useERC721ContractBalance } from '@masknet/web3-shared-evm'
-import { EthereumTokenType, ERC721ContractDetailed } from '@masknet/web3-shared-base'
+import { Web3TokenType, ERC721ContractDetailed } from '@masknet/web3-shared-base'
 import { SocketState, useNonFungibleAssetCollections } from '@masknet/plugin-infra'
 import classNames from 'classnames'
 import { EthereumAddress } from 'wallet.ts'
@@ -81,7 +81,7 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
 
     const convertedAssets = assets.map((x) => ({
         contractDetailed: {
-            type: EthereumTokenType.ERC721,
+            type: Web3TokenType.ERC721,
             address: x.address,
             chainId: ChainId.Mainnet,
             name: x.name,

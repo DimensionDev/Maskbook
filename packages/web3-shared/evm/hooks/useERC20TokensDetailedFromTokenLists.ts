@@ -1,12 +1,13 @@
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
+import type { ERC20TokenDetailed, NativeTokenDetailed } from '@masknet/web3-shared-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import Fuse from 'fuse.js'
 import { EthereumAddress } from 'wallet.ts'
 import { useWeb3Context } from '../context'
 import { useChainId } from './useChainId'
 import { currySameAddress } from '../utils'
-import type { ERC20TokenDetailed, NativeTokenDetailed, ChainId } from '../types'
+import type { ChainId } from '../types'
 
 export function useERC20TokensDetailedFromTokenLists(
     lists?: string[],

@@ -9,7 +9,7 @@ import {
     useFungibleTokensDetailed,
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
-import { FungibleToken, EthereumTokenType, isZero } from '@masknet/web3-shared-base'
+import { FungibleToken, Web3TokenType, isZero } from '@masknet/web3-shared-base'
 import {
     Box,
     Card,
@@ -140,7 +140,7 @@ export function PoolInList(props: PoolInListProps) {
 
     // #region Fetch tokens detailed
     const { value: _tokenDetailed } = useFungibleTokenDetailed(
-        EthereumTokenType.ERC20,
+        Web3TokenType.ERC20,
         (pool as JSON_PayloadFromChain).token_address ?? (pool as JSON_PayloadInMask).token.address,
     )
     const poolToken = (pool as JSON_PayloadInMask).token ?? _tokenDetailed
@@ -150,7 +150,7 @@ export function PoolInList(props: PoolInListProps) {
               (v) =>
                   ({
                       address: v,
-                      type: isSameAddress(v, NATIVE_TOKEN_ADDRESS) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
+                      type: isSameAddress(v, NATIVE_TOKEN_ADDRESS) ? Web3TokenType.Native : Web3TokenType.ERC20,
                   } as Pick<FungibleToken, 'address' | 'type'>),
           )
         : []

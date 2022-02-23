@@ -1,5 +1,5 @@
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { EthereumTokenType, ERC721ContractDetailed } from '@masknet/web3-shared-base'
+import { Web3TokenType, ERC721ContractDetailed } from '@masknet/web3-shared-base'
 const NFTSCAN_ID = 't9k2o5GC'
 const NFTSCAN_SECRET = '21da1d638ef5d0bf76e37aa5c2da7fd789ade9e3'
 const NFTSCAN_URL = 'https://restapi.nftscan.com'
@@ -59,7 +59,7 @@ export async function findAssets(address: string) {
                       name: value.nft_platform_name,
                       symbol: '',
                       address: formatEthereumAddress(value.nft_contract_address),
-                      type: EthereumTokenType.ERC721,
+                      type: Web3TokenType.ERC721,
                       chainId: ChainId.Mainnet,
                   }
 

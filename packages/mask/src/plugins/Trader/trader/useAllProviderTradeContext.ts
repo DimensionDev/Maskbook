@@ -1,4 +1,4 @@
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-base'
 import { useReducer, useState } from 'react'
 import { useAllTradeComputed } from './useAllTradeComputed'
 import { createContainer } from 'unstated-next'

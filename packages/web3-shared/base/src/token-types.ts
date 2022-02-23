@@ -1,4 +1,4 @@
-export enum EthereumTokenType {
+export enum Web3TokenType {
     Native = 0,
     ERC20 = 1,
     ERC721 = 2,
@@ -6,7 +6,7 @@ export enum EthereumTokenType {
 
 // #region Ether
 export interface NativeToken {
-    type: EthereumTokenType.Native
+    type: Web3TokenType.Native
     address: string
     chainId: number
 }
@@ -21,7 +21,7 @@ export interface NativeTokenDetailed extends NativeToken {
 
 // #region ERC20
 export interface ERC20Token {
-    type: EthereumTokenType.ERC20
+    type: Web3TokenType.ERC20
     address: string
     chainId: number
 }
@@ -36,7 +36,7 @@ export interface ERC20TokenDetailed extends ERC20Token {
 
 // #region ERC721
 export interface ERC721Token {
-    type: EthereumTokenType.ERC721
+    type: Web3TokenType.ERC721
     address: string
     chainId: number
 }

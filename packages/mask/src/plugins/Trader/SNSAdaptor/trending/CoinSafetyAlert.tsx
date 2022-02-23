@@ -4,7 +4,7 @@ import { useI18N } from '../../../../utils'
 import type { Coin } from '../../types'
 import { useApprovedTokens } from '../../trending/useApprovedTokens'
 import { resolveTokenLinkOnExplorer, ChainId } from '@masknet/web3-shared-evm'
-import { EthereumTokenType } from '@masknet/web3-shared-base'
+import { Web3TokenType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -48,7 +48,7 @@ export function CoinSafetyAlert(props: CoinSafetyAlertProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                         href={resolveTokenLinkOnExplorer({
-                            type: EthereumTokenType.Native,
+                            type: Web3TokenType.Native,
                             address: coin.contract_address,
                             chainId: ChainId.Mainnet,
                         })}>

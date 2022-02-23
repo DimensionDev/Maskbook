@@ -18,7 +18,7 @@ import { useStyles } from './SavingsFormStyles'
 import { IconURLs } from './IconURL'
 import { TabType, ProtocolType } from '../types'
 import { SavingsProtocols } from '../protocols'
-import { EthereumTokenType, isLessThan, rightShift } from '@masknet/web3-shared-base'
+import { Web3TokenType, isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -46,7 +46,7 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose }: Savings
     const [estimatedGas, setEstimatedGas] = useState<BigNumber.Value>(new BigNumber('0'))
     const [loading, setLoading] = useState(false)
 
-    const { value: nativeTokenBalance } = useFungibleTokenBalance(EthereumTokenType.Native, '', targetChainId)
+    const { value: nativeTokenBalance } = useFungibleTokenBalance(Web3TokenType.Native, '', targetChainId)
 
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 

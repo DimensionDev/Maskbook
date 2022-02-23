@@ -5,7 +5,7 @@ import {
     useITOConstants,
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
-import { ERC20TokenDetailed, EthereumTokenType, isGreaterThan, isZero } from '@masknet/web3-shared-base'
+import { ERC20TokenDetailed, Web3TokenType, isGreaterThan, isZero } from '@masknet/web3-shared-base'
 import { Box, CircularProgress, Stack, TextField, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import CheckIcon from '@mui/icons-material/Check'
@@ -175,7 +175,7 @@ export function CreateForm(props: CreateFormProps) {
 
     // balance
     const { value: tokenBalance = '0' } = useFungibleTokenBalance(
-        tokenAndAmount?.token?.type ?? EthereumTokenType.Native,
+        tokenAndAmount?.token?.type ?? Web3TokenType.Native,
         tokenAndAmount?.token?.address ?? '',
     )
 
@@ -467,9 +467,7 @@ export function CreateForm(props: CreateFormProps) {
                     <EthereumERC20TokenApprovedBoundary
                         amount={inputTokenAmount}
                         spender={ITO2_CONTRACT_ADDRESS}
-                        token={
-                            tokenAndAmount?.token?.type === EthereumTokenType.ERC20 ? tokenAndAmount.token : undefined
-                        }>
+                        token={tokenAndAmount?.token?.type === Web3TokenType.ERC20 ? tokenAndAmount.token : undefined}>
                         <ActionButton
                             className={classes.button}
                             fullWidth

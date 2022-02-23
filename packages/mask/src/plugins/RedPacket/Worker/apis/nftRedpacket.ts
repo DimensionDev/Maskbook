@@ -1,5 +1,5 @@
 import { getChainName, getNftRedPacketConstants } from '@masknet/web3-shared-evm'
-import { EthereumTokenType } from '@masknet/web3-shared-base'
+import { Web3TokenType } from '@masknet/web3-shared-base'
 import stringify from 'json-stable-stringify'
 import { first, pick } from 'lodash-unified'
 import { tokenIntoMask } from '../../../ITO/SNSAdaptor/helpers'
@@ -121,7 +121,7 @@ export async function getNftRedPacketHistory(address: string, page: number) {
         const payload = {
             sender,
             network,
-            token_type: EthereumTokenType.ERC721,
+            token_type: Web3TokenType.ERC721,
             token: pick(nftRedPacketSubgraphInMask.token, ['symbol', 'address', 'name', 'decimals']),
             ...redPacketBasic,
         } as NftRedPacketJSONPayload

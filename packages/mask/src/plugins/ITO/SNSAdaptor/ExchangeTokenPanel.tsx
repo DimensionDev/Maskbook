@@ -1,5 +1,5 @@
 import { useFungibleTokenBalance } from '@masknet/web3-shared-evm'
-import { FungibleTokenDetailed, EthereumTokenType } from '@masknet/web3-shared-base'
+import { FungibleTokenDetailed, Web3TokenType } from '@masknet/web3-shared-base'
 import { IconButton, Paper } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import AddIcon from '@mui/icons-material/AddOutlined'
@@ -107,7 +107,7 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
 
     // #region balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
-        exchangeToken?.type ?? EthereumTokenType.Native,
+        exchangeToken?.type ?? Web3TokenType.Native,
         exchangeToken?.address ?? '',
     )
     // #endregion

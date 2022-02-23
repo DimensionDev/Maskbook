@@ -8,7 +8,7 @@ import {
     useAccount,
     useTraderConstants,
 } from '@masknet/web3-shared-evm'
-import { EthereumTokenType } from '@masknet/web3-shared-base'
+import { Web3TokenType } from '@masknet/web3-shared-base'
 import { useCallback, useState } from 'react'
 import { SLIPPAGE_DEFAULT } from '../../constants'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
@@ -64,9 +64,9 @@ export function useTradeCallback(
 
         // balancer use a different address for the native token
         const inputTokenAddress =
-            trade.inputToken.type === EthereumTokenType.Native ? BALANCER_ETH_ADDRESS : trade.inputToken.address
+            trade.inputToken.type === Web3TokenType.Native ? BALANCER_ETH_ADDRESS : trade.inputToken.address
         const outputTokenAddress =
-            trade.outputToken.type === EthereumTokenType.Native ? BALANCER_ETH_ADDRESS : trade.outputToken.address
+            trade.outputToken.type === Web3TokenType.Native ? BALANCER_ETH_ADDRESS : trade.outputToken.address
 
         const tx =
             trade.strategy === TradeStrategy.ExactIn
@@ -86,9 +86,9 @@ export function useTradeCallback(
 
         // trade with the native token
         let transactionValue = '0'
-        if (trade.strategy === TradeStrategy.ExactIn && trade.inputToken.type === EthereumTokenType.Native)
+        if (trade.strategy === TradeStrategy.ExactIn && trade.inputToken.type === Web3TokenType.Native)
             transactionValue = trade.inputAmount.toFixed()
-        else if (trade.strategy === TradeStrategy.ExactOut && trade.outputToken.type === EthereumTokenType.Native)
+        else if (trade.strategy === TradeStrategy.ExactOut && trade.outputToken.type === Web3TokenType.Native)
             transactionValue = trade.outputAmount.toFixed()
 
         // send transaction and wait for hash

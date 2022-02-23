@@ -1,4 +1,5 @@
-import type { FungibleTokenDetailed, ChainId } from '../types'
+import type { ChainId } from '../types'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-base'
 import { useAssetsFromChain } from './useAssetsFromChain'
 import { useAssetsFromProvider } from './useAssetsFromProvider'
 import { useCallback, useEffect, useState } from 'react'

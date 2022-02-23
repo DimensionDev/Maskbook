@@ -1,6 +1,6 @@
 import { story } from '@masknet/storybook-shared'
 import { CollectibleCard as C } from '../../../src/pages/Wallets/components/CollectibleCard'
-import { EthereumTokenType } from '@masknet/web3-shared-base'
+import { Web3TokenType } from '@masknet/web3-shared-base'
 
 const { meta, of } = story(C)
 
@@ -16,7 +16,7 @@ export const CollectibleCard = of({
             },
             contractDetailed: {
                 address: 'address',
-                type: EthereumTokenType.ERC721,
+                type: Web3TokenType.ERC721,
                 chainId: 1,
                 name: '',
                 symbol: '',

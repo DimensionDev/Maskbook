@@ -4,10 +4,10 @@ import type {
     NonFungibleTokenDetailed,
     ERC721TokenCollectionInfo,
     ERC721TokenDetailed,
+    ERC20TokenDetailed,
 } from '@masknet/web3-shared-base'
 import type {
     ChainId,
-    ERC20TokenDetailed,
     NetworkType,
     ProviderType,
     Asset,

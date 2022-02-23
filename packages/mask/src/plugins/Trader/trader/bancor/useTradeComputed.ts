@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-base'
 import { rightShift, ZERO } from '@masknet/web3-shared-base'
 import type { SwapBancorRequest, TradeComputed, TradeStrategy } from '../../types'
 

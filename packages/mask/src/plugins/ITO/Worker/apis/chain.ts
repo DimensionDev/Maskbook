@@ -5,7 +5,7 @@ import {
     isSameAddress,
     FungibleTokenDetailed,
 } from '@masknet/web3-shared-evm'
-import { EthereumTokenType } from '@masknet/web3-shared-base'
+import { Web3TokenType } from '@masknet/web3-shared-base'
 import { Interface } from '@ethersproject/abi'
 import ITO_ABI from '@masknet/web3-contracts/abis/ITO2.json'
 import urlcat from 'urlcat'
@@ -264,7 +264,7 @@ export async function getClaimAllPools(chainId: ChainId, endBlock: number, swapp
                     amount: new BigNumber(Number(eventParams.to_value)),
                     isClaimable: value.isClaimable,
                     unlockTime: value.unlockTime,
-                    token: { address: eventParams.to_address, type: EthereumTokenType.ERC20 } as FungibleTokenDetailed,
+                    token: { address: eventParams.to_address, type: Web3TokenType.ERC20 } as FungibleTokenDetailed,
                 }
             }),
         )

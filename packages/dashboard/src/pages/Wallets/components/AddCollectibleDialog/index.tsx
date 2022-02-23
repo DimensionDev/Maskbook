@@ -7,7 +7,7 @@ import {
     useERC721TokenDetailedCallback,
     useWallet,
 } from '@masknet/web3-shared-evm'
-import { EthereumTokenType } from '@masknet/web3-shared-base'
+import { Web3TokenType } from '@masknet/web3-shared-base'
 import { EthereumAddress } from 'wallet.ts'
 import { useDashboardI18N } from '../../../../locales'
 import { z } from 'zod'
@@ -39,7 +39,7 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
     const onSubmit = useCallback(async () => {
         if (contractDetailLoading || !wallet) return
 
-        const tokenInDB = await PluginServices.Wallet.getToken(EthereumTokenType.ERC721, address, tokenId)
+        const tokenInDB = await PluginServices.Wallet.getToken(Web3TokenType.ERC721, address, tokenId)
         if (tokenInDB) throw new Error(FormErrorType.Added)
 
         const tokenDetailed = await erc721TokenDetailedCallback()

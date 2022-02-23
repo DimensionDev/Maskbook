@@ -6,7 +6,7 @@ import {
     getChainIdFromName,
     useERC20TokenDetailed,
 } from '@masknet/web3-shared-evm'
-import { EthereumTokenType } from '@masknet/web3-shared-base'
+import { Web3TokenType } from '@masknet/web3-shared-base'
 import { base } from '../base'
 import { RedPacketMetaKey, RedPacketNftMetaKey } from '../constants'
 import {
@@ -85,7 +85,7 @@ function ERC20RedpacketBadge(props: ERC20RedpacketBadgeProps) {
     const chainId = getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet
     const chainDetailed = getChainDetailed(chainId)
     const tokenDetailed =
-        payload.token?.type === EthereumTokenType.Native ? chainDetailed?.nativeCurrency : payload.token ?? fetchedToken
+        payload.token?.type === Web3TokenType.Native ? chainDetailed?.nativeCurrency : payload.token ?? fetchedToken
     return (
         <>
             &#x1F9E7; A Lucky Drop with {formatBalance(payload.total, tokenDetailed?.decimals ?? 0)} $

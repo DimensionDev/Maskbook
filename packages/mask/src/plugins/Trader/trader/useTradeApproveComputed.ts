@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { createERC20Token, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { EthereumTokenType, ZERO } from '@masknet/web3-shared-base'
+import { Web3TokenType, ZERO } from '@masknet/web3-shared-base'
 import { TradeProvider } from '@masknet/public-api'
 import type { SwapQuoteResponse, TradeComputed } from '../types'
 import { useGetTradeContext } from './useGetTradeContext'
@@ -17,7 +17,7 @@ export function useTradeApproveComputed(
     return useMemo(() => {
         return {
             approveToken:
-                token?.type === EthereumTokenType.ERC20
+                token?.type === Web3TokenType.ERC20
                     ? createERC20Token(chainId, token.address, token.decimals, token.name, token.symbol)
                     : null,
             approveAmount: trade ? trade.inputAmount : ZERO,
