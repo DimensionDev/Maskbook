@@ -3,6 +3,7 @@ import {
     searchAvatarSelector,
     searchBioSelector,
     searchFacebookAvatarOnMobileSelector,
+    searchHomepageSelector,
     searchNickNameSelector,
     searchNickNameSelectorOnMobile,
     searchUserIdSelector,
@@ -10,7 +11,7 @@ import {
 } from './selector'
 import { collectNodeText } from '../../../utils'
 import { isMobileFacebook } from './isMobile'
-import { bioDescription } from '../../../settings/settings'
+import { bioDescription, personalHomepage } from '../../../settings/settings'
 import { FACEBOOK_ID } from '../base'
 
 export const getNickName = () => {
@@ -67,4 +68,20 @@ export const getAvatarId = (avatarURL: string) => {
     const match = _url.pathname.match(FACEBOOK_AVATAR_ID_MATCH)
     if (!match) return ''
     return match[1]
+}
+
+export const getPersonalHomepage = () => {
+    const node = searchHomepageSelector().evaluate()
+    if (node) {
+        let text = collectNodeText(node)
+
+        if (text) {
+            if (!text.startsWith('http')) {
+                text = 'http://' + text
+            }
+            personalHomepage[FACEBOOK_ID].value = text
+        }
+    }
+
+    return personalHomepage[FACEBOOK_ID].value
 }

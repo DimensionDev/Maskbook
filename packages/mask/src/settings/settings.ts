@@ -70,6 +70,7 @@ export const dismissPinExtensionTip = createGlobalSettings<boolean>('dismissPinE
     primary: () => '',
 })
 export const bioDescription: NetworkSettings<string> = createNetworkSettings('bioDescription', '')
+export const personalHomepage: NetworkSettings<string> = createNetworkSettings('personalHomepage', '')
 // This is a misuse of concept "NetworkSettings" as "namespaced settings"
 // The refactor is tracked in https://github.com/DimensionDev/Maskbook/issues/1884
 /**

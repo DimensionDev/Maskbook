@@ -114,3 +114,6 @@ export const searchBioSelector: () => LiveSelector<HTMLSpanElement, true> = () =
     querySelector<HTMLSpanElement>(
         '[data-pagelet="ProfileTilesFeed_0"] > div > div > div > div > div:last-child span[dir="auto"]',
     )
+
+export const searchHomepageSelector: () => LiveSelector<HTMLSpanElement, true> = () =>
+    querySelector<HTMLSpanElement>('[data-pagelet="ProfileTilesFeed_0"] ul a span[dir="auto"]')
