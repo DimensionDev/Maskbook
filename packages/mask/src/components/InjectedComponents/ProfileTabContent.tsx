@@ -7,7 +7,6 @@ import { useAddressNames } from '@masknet/web3-shared-evm'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor, Plugin, PluginId } from '@masknet/plugin-infra'
 import { PageTab } from '../InjectedComponents/PageTab'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
-import { useDaoTabTwitterIdList, DEFAULT_SUPPORTED_TWITTER_IDS } from '../../utils/hooks/useDaoTabTwitterIdList'
 import { MaskMessages, useI18N } from '../../utils'
 import { useCurrentVisitingIdentity } from '../DataSource/useActivatedUI'
 
@@ -49,16 +48,9 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const identity = useCurrentVisitingIdentity()
     const { value: addressNames = [], loading: loadingAddressNames } = useAddressNames(identity)
 
-    const { value: daoTabTwitterIdList = DEFAULT_SUPPORTED_TWITTER_IDS } = useDaoTabTwitterIdList()
     const tabs = useActivatedPluginsSNSAdaptor('any')
         .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? [])
-        .filter(
-            (z) =>
-                z.Utils?.shouldDisplay?.(identity, addressNames, {
-                    type: 'daoTabTwitterIdList',
-                    items: daoTabTwitterIdList,
-                }) ?? true,
-        )
+        .filter((z) => z.Utils?.shouldDisplay?.(identity, addressNames) ?? true)
         .sort((a, z) => {
             // order those tabs from next id first
             if (a.pluginID === PluginId.NextID) return -1

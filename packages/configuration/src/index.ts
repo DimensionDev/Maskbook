@@ -26,10 +26,10 @@ class Configuration<T extends unknown> {
 
 const cache = new Map<string, Configuration<unknown>>()
 
-export function create<T extends unknown>(name: string, initialData?: T) {
-    const url = urlcat(`${DEFAULT_HOST}', ':prefix.:name.json`, {
+export function create<T extends unknown>(name: string, prefix?: string, initialData?: T) {
+    const url = urlcat(DEFAULT_HOST, prefix ? ':prefix.:name.json' : ':name.json', {
         name,
-        prefix: DEFAULT_PREFIX,
+        prefix: prefix ?? DEFAULT_PREFIX,
     })
     if (!cache.has(url)) cache.set(url, new Configuration(url, initialData))
     return cache.get(url) as Configuration<T>

@@ -2,6 +2,24 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base'
 import { PLUGIN_ID } from '../constants'
 import { DAOPage } from '../components/DAOPage'
+import { create } from '@masknet/configuration'
+
+// cspell:disable
+const DEFAULT_SUPPORTED_TWITTER_IDS = [
+    'ConstitutionDAO',
+    'juiceboxETH',
+    'AssangeDAO',
+    'OfficialMoonDAO',
+    'TheSpiceDAO',
+    'sharkdao',
+    'CrayonFinance',
+    'merge_dao',
+    'DAOTaiFung',
+    'Tile_DAO',
+    'mountaindao',
+    'OfficialMoonDAO',
+]
+// cspell:enable
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -17,9 +35,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 },
             },
             Utils: {
-                shouldDisplay: (identity, _addressNames, extraData) => {
-                    if (extraData?.type !== 'daoTabTwitterIdList') return false
-                    const { items: daoTabTwitterIdList } = extraData
+                shouldDisplay: (identity, _addressNames) => {
+                    const daoTabTwitterIdList = create(
+                        'twitter-supported-id-list',
+                        '',
+                        DEFAULT_SUPPORTED_TWITTER_IDS,
+                    ).get()
+
                     return (
                         !identity?.identifier.isUnknown &&
                         (daoTabTwitterIdList ?? []).some(
