@@ -1,7 +1,7 @@
 import {
-    bioDescriptionSelector,
     bioDescriptionSelectorOnMobile,
     searchAvatarSelector,
+    searchBioSelector,
     searchFacebookAvatarOnMobileSelector,
     searchNickNameSelector,
     searchNickNameSelectorOnMobile,
@@ -10,6 +10,8 @@ import {
 } from './selector'
 import { collectNodeText } from '../../../utils'
 import { isMobileFacebook } from './isMobile'
+import { bioDescription } from '../../../settings/settings'
+import { FACEBOOK_ID } from '../base'
 
 export const getNickName = () => {
     const node = isMobileFacebook ? searchNickNameSelectorOnMobile().evaluate() : searchNickNameSelector().evaluate()
@@ -33,17 +35,17 @@ export const getAvatar = () => {
 }
 
 export const getBioDescription = () => {
-    const node = isMobileFacebook ? bioDescriptionSelectorOnMobile().evaluate() : bioDescriptionSelector().evaluate()
+    const node = isMobileFacebook ? bioDescriptionSelectorOnMobile().evaluate() : searchBioSelector().evaluate()
 
-    if (!node) return ''
+    if (node) {
+        const text = collectNodeText(node)
 
-    // Only collect text
-    return [...node.childNodes]
-        .map((each) => {
-            if (each.nodeType === document.TEXT_NODE) return (each as Text).nodeValue || ''
-            return ''
-        })
-        .join('')
+        if (text) {
+            bioDescription[FACEBOOK_ID].value = text
+        }
+    }
+
+    return bioDescription[FACEBOOK_ID].value
 }
 
 export const getFacebookId = () => {

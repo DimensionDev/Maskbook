@@ -109,3 +109,8 @@ export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
 // fot getting profile section style
 export const profileSectionSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-pagelet="ProfileAppSection_0"], [data-pagelet="ProfileTimeline"]').querySelector('[style]')
+
+export const searchBioSelector: () => LiveSelector<HTMLSpanElement, true> = () =>
+    querySelector<HTMLSpanElement>(
+        '[data-pagelet="ProfileTilesFeed_0"] > div > div > div > div > div:last-child span[dir="auto"]',
+    )

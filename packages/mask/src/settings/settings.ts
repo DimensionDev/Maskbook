@@ -69,6 +69,7 @@ export const sayHelloShowed: NetworkSettings<boolean> = createNetworkSettings('s
 export const dismissPinExtensionTip = createGlobalSettings<boolean>('dismissPinExtensionTip', false, {
     primary: () => '',
 })
+export const bioDescription: NetworkSettings<string> = createNetworkSettings('bioDescription', '')
 // This is a misuse of concept "NetworkSettings" as "namespaced settings"
 // The refactor is tracked in https://github.com/DimensionDev/Maskbook/issues/1884
 /**
