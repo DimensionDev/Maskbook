@@ -40,7 +40,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const [selectedTab, setSelectedTab] = useState<Plugin.SNSAdaptor.ProfileTab | undefined>()
 
     const identity = useCurrentVisitingIdentity()
-    const { value: addressNames, loading: loadingAddressNames } = useAddressNames(identity)
+    const { value: addressNames = [], loading: loadingAddressNames } = useAddressNames(identity)
 
     const tabs = useActivatedPluginsSNSAdaptor('any')
         .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? [])
