@@ -24,7 +24,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     tip: {
         padding: theme.spacing(1),
-        color: '#ffffff',
     },
     selected: {
         border: '2px solid #1D9BF0',
@@ -45,6 +44,7 @@ export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, 
     }
     return (
         <Tooltip
+            placement="right-end"
             classes={{ tooltip: classes.tip }}
             PopperProps={{
                 disablePortal: true,
