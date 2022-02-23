@@ -2,7 +2,7 @@ import { createContext, memo } from 'react'
 import type { MetadataRenderProps } from '../MetadataRender'
 
 export const DefaultRenderFragments = {
-    Text: memo((props: RenderFragmentsContextType.TextProps) => <span>{props.children}</span>),
+    Text: memo((props: RenderFragmentsContextType.TextProps) => <>{props.children}</>),
     Link: memo((props: RenderFragmentsContextType.LinkProps) => (
         <a href={props.href} target="_blank" rel="noopener noreferrer">
             {props.children}
@@ -13,8 +13,8 @@ export const DefaultRenderFragments = {
     ),
     Metadata: memo(() => null),
 }
-
 export interface RenderFragmentsContextType {
+    Container?: React.ComponentType<{}>
     Text?: React.ComponentType<RenderFragmentsContextType.TextProps>
     Image?: React.ComponentType<RenderFragmentsContextType.ImageProps>
     Metadata?: React.ComponentType<MetadataRenderProps>
@@ -29,24 +29,19 @@ export interface RenderFragmentsContextType {
 export namespace RenderFragmentsContextType {
     export interface TextProps {
         children: string
-        fontSize?: number
     }
     export interface LinkProps {
         children: string
         href: string
-        fontSize?: number
     }
     export interface AtLinkProps {
         children: string
-        fontSize?: number
     }
     export interface CashLinkProps {
         children: string
-        fontSize?: number
     }
     export interface HashLinkProps {
         children: string
-        fontSize?: number
     }
     export interface ImageProps {
         src: string

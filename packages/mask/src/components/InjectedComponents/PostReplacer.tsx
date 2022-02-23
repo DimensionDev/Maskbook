@@ -1,5 +1,5 @@
 import type { TransformationContext, TypedMessage } from '@masknet/typed-message'
-import { TextEnlargeContext, TypedMessageRender, useTransformedValue } from '@masknet/typed-message/dom'
+import { TextResizeContext, TypedMessageRender, useTransformedValue } from '@masknet/typed-message/dom'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo } from 'react'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
@@ -42,13 +42,13 @@ export function PostReplacer({ unzip, zip }: PostReplacerProps) {
 
     return (
         <span className={classes.root}>
-            <TextEnlargeContext.Provider value>
+            <TextResizeContext.Provider value>
                 <TypedMessageRenderContext
                     renderFragments={activatedSocialNetworkUI?.customization.componentOverwrite?.RenderFragments}
                     context={initialTransformationContext}>
                     <Transformer message={postMessage} />
                 </TypedMessageRenderContext>
-            </TextEnlargeContext.Provider>
+            </TextResizeContext.Provider>
         </span>
     )
 }

@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react'
 import type { TypedMessageTuple } from '../../../base'
 import { hasCircular } from '../utils/circularDetect'
-import { TypedMessageRender } from '../Entry'
+import { TypedMessageRenderInline } from '../Entry'
 import { useMetadataRender } from '../MetadataRender'
 
 export const TypedMessageTupleRenderer = memo(function TypedMessageTupleRenderer(props: TypedMessageTuple) {
@@ -10,7 +10,7 @@ export const TypedMessageTupleRenderer = memo(function TypedMessageTupleRenderer
     return (
         <>
             {props.items.map((message, index) => (
-                <TypedMessageRender key={index} {...props} message={message} />
+                <TypedMessageRenderInline key={index} {...props} message={message} />
             ))}
             {meta}
         </>

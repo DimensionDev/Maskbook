@@ -1,9 +1,9 @@
 // Render
-export { TypedMessageRender, type RenderProps } from './Renderer/Entry'
+export { TypedMessageRender, TypedMessageRenderInline, type RenderProps } from './Renderer/Entry'
 export { useMetadataRender, type MetadataRenderProps } from './Renderer/MetadataRender'
 
 // Render behavior
-export { TextEnlargeContext } from './Renderer/utils/TextEnlargeContext'
+export { TextResizeContext } from './Renderer/utils/TextResizerContext'
 
 // Render Registry
 export { type RenderConfig, createTypedMessageRenderRegistry } from './Renderer/registry'

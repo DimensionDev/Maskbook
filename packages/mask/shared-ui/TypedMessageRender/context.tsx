@@ -10,7 +10,7 @@ import {
 import { TypedMessageRenderRegistry } from './registry'
 import { useSubscription } from 'use-subscription'
 import { useMemo } from 'react'
-import { Text, Link } from './Components/Text'
+import { Container, Link } from './Components/Text'
 import { TypedMessageTransformers } from './transformer'
 
 export interface TypedMessageRenderContextProps extends React.PropsWithChildren<{}> {
@@ -23,7 +23,7 @@ export function TypedMessageRenderContext(props: TypedMessageRenderContextProps)
     const registry = useSubscription(TypedMessageRenderRegistry.subscription)
     const transformerFunction = useSubscription(TypedMessageTransformers.subscription)
     const Provider = useMemo((): RenderFragmentsContextType => {
-        return { Text, Link, Metadata: props.metadataRender, ...props.renderFragments }
+        return { Container, Link, Metadata: props.metadataRender, ...props.renderFragments }
     }, [props.metadataRender, props.renderFragments])
 
     return (

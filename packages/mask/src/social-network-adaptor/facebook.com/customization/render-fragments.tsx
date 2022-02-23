@@ -7,14 +7,7 @@ function Hash(props: RenderFragmentsContextType.HashLinkProps | RenderFragmentsC
     const text = props.children.slice(1)
     const target = `/hashtag/${encodeURIComponent(text)}`
     const { hasMatch, ...events } = useTagEnhancer('hash', text)
-    return (
-        <Link
-            {...events}
-            sx={{ fontSize: props.fontSize ? `${Math.max(props.fontSize, 14)}px` : undefined }}
-            href={target}
-            children={props.children}
-        />
-    )
+    return <Link {...events} href={target} children={props.children} />
 }
 export const FacebookRenderFragments: RenderFragmentsContextType = {
     // AtLink: not supported

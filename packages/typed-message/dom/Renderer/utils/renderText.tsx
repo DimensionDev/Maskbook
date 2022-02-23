@@ -2,7 +2,6 @@ import { memo, Fragment, createElement, useContext } from 'react'
 import { RenderFragmentsContext, RenderFragmentsContextType, DefaultRenderFragments } from './RenderFragments'
 import type { TypedMessageAnchor } from '../../../base'
 import { parseLink } from '../../../base/utils/parseLink'
-import { TextEnlargeContext } from './TextEnlargeContext'
 
 /** @internal */
 export interface RenderTextProps {
@@ -12,15 +11,14 @@ export interface RenderTextProps {
 /** @internal */
 export const RenderTextFragment = memo(function RenderText(props: RenderTextProps) {
     const { Text = DefaultRenderFragments.Text } = useContext(RenderFragmentsContext)
-    const allowTextEnlarge = useContext(TextEnlargeContext)
-    return createElement(Fragment, {}, ...parseText(props.text, allowTextEnlarge, Text))
+    return createElement(Fragment, {}, ...parseText(props.text, Text))
 })
 
 /** @internal */
 export const RenderLinkFragment = memo(function RenderLink(
     props: Pick<TypedMessageAnchor, 'category'> & RenderFragmentsContextType.LinkProps,
 ) {
-    const { children, href, category, fontSize } = props
+    const { children, href, category } = props
     const context = useContext(RenderFragmentsContext)
     const {
         Text = DefaultRenderFragments.Text,
@@ -29,28 +27,19 @@ export const RenderLinkFragment = memo(function RenderLink(
         CashLink = Text,
         HashLink = Text,
     } = context
-    if (category === 'cash') return <CashLink children={children} fontSize={fontSize} />
-    if (category === 'hash') return <HashLink children={children} fontSize={fontSize} />
-    if (category === 'user') return <AtLink children={children} fontSize={fontSize} />
-    return <Link children={children} href={href} fontSize={fontSize} />
+    if (category === 'cash') return <CashLink children={children} />
+    if (category === 'hash') return <HashLink children={children} />
+    if (category === 'user') return <AtLink children={children} />
+    return <Link children={children} href={href} />
 })
 
-function parseText(string: string, allowTextEnlarge: boolean, Text: NonNullable<RenderFragmentsContextType['Text']>) {
-    const fontSize =
-        14 *
-        (allowTextEnlarge && Array.from(string).length < 45
-            ? 1.5
-            : allowTextEnlarge && Array.from(string).length < 85
-            ? 1.2
-            : 1)
+function parseText(string: string, Text: NonNullable<RenderFragmentsContextType['Text']>) {
     const links = parseLink(string).flatMap((x) => {
         if (x.type === 'text') {
-            return x.content
-                .split(/(\n)/g)
-                .map((x) => (x === '\n' ? <br /> : <Text children={x} fontSize={fontSize} />))
+            return x.content.split(/(\n)/g).map((x) => (x === '\n' ? <br /> : <Text children={x} />))
         }
         if (x.category === 'normal' && !x.content.match(/^https?:\/\//gi)) x.content = 'http://' + x.content
-        return <RenderLinkFragment category={x.category} href={x.content} children={x.content} fontSize={fontSize} />
+        return <RenderLinkFragment category={x.category} href={x.content} children={x.content} />
     })
     return links
 }
