@@ -1,5 +1,5 @@
 import { merge } from 'lodash-unified'
-import { timeout } from '@masknet/shared-base'
+import { timeout } from '@dimensiondev/kit'
 
 /**
  * Make sure that the storage is used serially.
