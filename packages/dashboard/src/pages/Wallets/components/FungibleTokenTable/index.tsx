@@ -95,10 +95,10 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
         openSwapDialog({
             open: true,
             traderProps: {
-                coin: {
+                defaultInputCoin: {
                     id: token.id,
-                    name: token.name ?? '',
-                    symbol: token.symbol ?? '',
+                    name: token.name || '',
+                    symbol: token.symbol || '',
                     contract_address: token.address,
                     decimals: token.decimals,
                 },

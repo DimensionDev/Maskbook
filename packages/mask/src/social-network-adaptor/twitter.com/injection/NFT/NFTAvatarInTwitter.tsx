@@ -2,7 +2,7 @@ import { createReactRootShadowed, MaskMessages, NFTAvatarEvent, startWatch } fro
 import { searchTwitterAvatarLinkSelector, searchTwitterAvatarSelector } from '../../utils/selector'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { useState, useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { resolveOpenSeaLink, useWallet } from '@masknet/web3-shared-evm'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
@@ -14,6 +14,7 @@ import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 import { useAsync, useLocation, useUpdateEffect, useWindowSize } from 'react-use'
 import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/RainbowBox'
 import { trim } from 'lodash-unified'
+import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -23,7 +24,7 @@ export function injectNFTAvatarInTwitter(signal: AbortSignal) {
 
 const useStyles = makeStyles()(() => ({
     root: {
-        transform: 'scale(1.025)',
+        transform: 'scale(1.022)',
         position: 'absolute',
         textAlign: 'center',
         color: 'white',
@@ -50,7 +51,7 @@ function NFTAvatarInTwitter() {
     const borderElement = useRef<Element | null>()
     const identity = useCurrentVisitingIdentity()
     const wallet = useWallet()
-    const { value: _avatar } = useNFTAvatar(identity.identifier.userId)
+    const { value: _avatar } = useNFTAvatar(identity.identifier.userId, RSS3_KEY_SNS.TWITTER)
     const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
     const windowSize = useWindowSize()
     const location = useLocation()
@@ -98,6 +99,7 @@ function NFTAvatarInTwitter() {
                 avatarId: getAvatarId(identity.avatar ?? ''),
             } as AvatarMetaDB,
             identity.identifier.network,
+            RSS3_KEY_SNS.TWITTER,
         ).catch((error) => {
             setNFTEvent(undefined)
             setAvatar(undefined)
@@ -158,8 +160,8 @@ function NFTAvatarInTwitter() {
                     border: 2px solid #00f8ff;
                 }
             `
-                rainBowElement.current = linkDom.firstElementChild
-                if (showAvatar) linkDom.firstElementChild.classList.add('rainbowBorder')
+                rainBowElement.current = linkDom.firstElementChild.nextElementSibling
+                linkDom.firstElementChild.nextElementSibling?.classList.add('rainbowBorder')
                 linkDom.appendChild(style)
             }
         }
@@ -171,6 +173,8 @@ function NFTAvatarInTwitter() {
 
             if (borderElement.current && linkDom?.firstElementChild !== borderElement.current) {
                 linkDom?.insertBefore(borderElement.current, linkDom.firstChild)
+            }
+            if (rainBowElement.current) {
                 rainBowElement.current?.classList.remove('rainbowBorder')
             }
         }
@@ -207,6 +211,7 @@ function NFTAvatarInTwitter() {
         <>
             {showAvatar ? (
                 <NFTBadge
+                    hasRainbow={false}
                     avatar={avatar}
                     size={size}
                     width={15}

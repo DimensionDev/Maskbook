@@ -31,7 +31,6 @@ interface StyleProps {
 }
 const useStyles = makeStyles<StyleProps>()((theme, { width, height, radius = '100%' }) => ({
     root: {
-        transform: 'scale(0.97)',
         animation: `${rainbowBorderKeyFrames} 6s linear infinite`,
         width,
         height,

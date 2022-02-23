@@ -361,6 +361,8 @@
     "labs_do_not_show_again": "Don't show again.",
     "labs_cryptoartai": "CRYPTOART.AI",
     "labs_cryptoartai_desc": "Connect CryptoArt Digital Artworks. The Internationale is a classic anthem that has been a shared memory for generations.",
+    "labs_art_blocks": "Artblocks",
+    "labs_art_blocks_desc": "Artblocks allow you to pick a style that you like, pay for the work, and a randomly generated version of the content is created by an algorithm and sent to your Ethereum account.",
     "dashboard_mobile_test": "Join Tests for Mobile",
     "dashboard_source_code": "Source Code",
     "privacy_policy": "Privacy Policy",

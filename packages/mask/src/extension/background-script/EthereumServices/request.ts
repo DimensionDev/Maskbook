@@ -66,9 +66,10 @@ async function requestSend(
     const { providerType = currentProviderSettings.value } = overrides ?? {}
 
     const chainId =
-        overrides?.chainId ?? providerType === ProviderType.MaskWallet
+        overrides?.chainId ??
+        (providerType === ProviderType.MaskWallet
             ? currentMaskWalletChainIdSettings.value
-            : currentChainIdSettings.value
+            : currentChainIdSettings.value)
 
     const { popupsWindow = true } = options ?? {}
 

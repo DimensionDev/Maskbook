@@ -412,7 +412,7 @@ export namespace Plugin.SNSAdaptor {
             /**
              * If it returns false, this tab will not be displayed.
              */
-            shouldDisplay?: (identity?: ProfileIdentity, addressNames?: ProfileAddress[]) => boolean
+            shouldDisplay?(identity?: ProfileIdentity, addressNames?: ProfileAddress[]): boolean
 
             /**
              * Sort address name in expected order.
@@ -692,6 +692,7 @@ export enum CurrentSNSNetwork {
  */
 export enum PluginId {
     Avatar = 'com.maskbook.avatar',
+    ArtBlocks = 'io.artblocks',
     Collectible = 'com.maskbook.collectibles',
     CryptoArtAI = 'com.maskbook.cryptoartai',
     dHEDGE = 'org.dhedge',

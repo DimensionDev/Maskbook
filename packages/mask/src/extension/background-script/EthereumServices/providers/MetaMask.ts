@@ -92,7 +92,7 @@ export async function ensureConnectedAndUnlocked() {
     try {
         const accounts = await web3.eth.requestAccounts()
         throw accounts
-    } catch (error: string[] | any) {
+    } catch (error) {
         const accounts = error
         if (Array.isArray(accounts)) {
             if (accounts.length === 0) throw new Error('MetaMask is locked or it has not connected any accounts.')
