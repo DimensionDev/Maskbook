@@ -10,7 +10,7 @@ export async function getMerkleProof(leaf: string, root: string) {
             }),
         )
         return (await response.json()) as { proof?: string[]; message?: string; module?: string }
-    } catch (err: any) {
-        throw new Error(err?.message)
+    } catch (err) {
+        throw new Error(Reflect.get(Object(err), 'message'))
     }
 }

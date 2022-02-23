@@ -19,7 +19,7 @@ class MutexStorage<T extends browser.storage.StorageValue> {
     }
     public async getStorage(key: string) {
         return new Promise<T | undefined>(async (resolve, reject) => {
-            const callback = (e: Error | null, storage?: T) => {
+            const callback = (e: unknown, storage?: T) => {
                 if (e) reject(e)
                 else resolve(storage)
                 this.unlock()
@@ -30,7 +30,7 @@ class MutexStorage<T extends browser.storage.StorageValue> {
                     this.lock()
                     const stored = await timeout(browser.storage.local.get(key), 3000, `Get ${key} timeout.`)
                     callback(null, (stored ?? {})[key] as T)
-                } catch (error: any) {
+                } catch (error) {
                     callback(error)
                 }
             }
@@ -40,7 +40,7 @@ class MutexStorage<T extends browser.storage.StorageValue> {
     }
     public async setStorage(key: string, value: T) {
         return new Promise<void>(async (resolve, reject) => {
-            const callback = (e: Error | null) => {
+            const callback = (e: unknown) => {
                 if (e) reject(e)
                 else resolve()
                 this.unlock()
@@ -51,7 +51,7 @@ class MutexStorage<T extends browser.storage.StorageValue> {
                     this.lock()
                     await timeout(browser.storage.local.set({ [key]: value }), 3000, `Set ${key} to ${value} timeout.`)
                     callback(null)
-                } catch (error: any) {
+                } catch (error) {
                     callback(error)
                 }
             }
