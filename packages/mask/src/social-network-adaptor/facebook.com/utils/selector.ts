@@ -110,6 +110,9 @@ export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
 export const profileSectionSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-pagelet="ProfileAppSection_0"], [data-pagelet="ProfileTimeline"]').querySelector('[style]')
 
+export const searchIntroSectionSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-pagelet="ProfileTilesFeed_0"]')
+
 export const searchBioSelector: () => LiveSelector<HTMLSpanElement, true> = () =>
     querySelector<HTMLSpanElement>(
         '[data-pagelet="ProfileTilesFeed_0"] > div > div > div > div > div:last-child span[dir="auto"]',

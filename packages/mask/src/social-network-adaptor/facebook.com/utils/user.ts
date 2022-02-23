@@ -4,6 +4,7 @@ import {
     searchBioSelector,
     searchFacebookAvatarOnMobileSelector,
     searchHomepageSelector,
+    searchIntroSectionSelector,
     searchNickNameSelector,
     searchNickNameSelectorOnMobile,
     searchUserIdSelector,
@@ -36,14 +37,14 @@ export const getAvatar = () => {
 }
 
 export const getBioDescription = () => {
+    const intro = searchIntroSectionSelector().evaluate()
     const node = isMobileFacebook ? bioDescriptionSelectorOnMobile().evaluate() : searchBioSelector().evaluate()
 
-    if (node) {
+    if (intro && node) {
         const text = collectNodeText(node)
-
-        if (text) {
-            bioDescription[FACEBOOK_ID].value = text
-        }
+        bioDescription[FACEBOOK_ID].value = text
+    } else if (intro) {
+        bioDescription[FACEBOOK_ID].value = ''
     }
 
     return bioDescription[FACEBOOK_ID].value
@@ -71,16 +72,16 @@ export const getAvatarId = (avatarURL: string) => {
 }
 
 export const getPersonalHomepage = () => {
+    const intro = searchIntroSectionSelector().evaluate()
     const node = searchHomepageSelector().evaluate()
-    if (node) {
+    if (intro && node) {
         let text = collectNodeText(node)
-
-        if (text) {
-            if (!text.startsWith('http')) {
-                text = 'http://' + text
-            }
-            personalHomepage[FACEBOOK_ID].value = text
+        if (text && !text.startsWith('http')) {
+            text = 'http://' + text
         }
+        personalHomepage[FACEBOOK_ID].value = text
+    } else if (intro) {
+        personalHomepage[FACEBOOK_ID].value = ''
     }
 
     return personalHomepage[FACEBOOK_ID].value
