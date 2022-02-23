@@ -1,6 +1,7 @@
 import { story } from '../utils'
 import { MaskLoadingButton } from '../../src'
 import { Save } from '@mui/icons-material'
+import { delay } from '@dimensiondev/kit'
 
 const { meta, of } = story(MaskLoadingButton)
 
