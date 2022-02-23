@@ -18,7 +18,6 @@ export function DecryptedUI_PluginRendererWithSuggestion(props: MetadataRenderPr
     const b = useDisabledPluginSuggestionFromPost(extractTextFromTypedMessage(props.message), [])
 
     const suggest = Array.from(new Set(a.concat(b)))
-    console.log(props)
     return (
         <>
             <PossiblePluginSuggestionUI plugins={suggest} />
