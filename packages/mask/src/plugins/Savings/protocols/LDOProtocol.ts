@@ -1,13 +1,7 @@
 import type Web3 from 'web3'
 import type { AbiItem } from 'web3-utils'
-import {
-    EthereumTokenType,
-    ChainId,
-    getSavingsConstants,
-    createContract,
-    FungibleTokenDetailed,
-    ZERO_ADDRESS,
-} from '@masknet/web3-shared-evm'
+import { ChainId, getSavingsConstants, createContract, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { FungibleTokenDetailed, EthereumTokenType } from '@masknet/web3-shared-base'
 import type { Lido } from '@masknet/web3-contracts/types/Lido'
 import LidoABI from '@masknet/web3-contracts/abis/Lido.json'
 import BigNumber from 'bignumber.js'

@@ -1,5 +1,5 @@
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import type { ERC721ContractDetailed } from '@masknet/web3-shared-evm'
+import type { ERC721ContractDetailed } from '@masknet/web3-shared-base'
 import { List, ListItem, ListProps, Skeleton, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { FC, HTMLProps, useState } from 'react'

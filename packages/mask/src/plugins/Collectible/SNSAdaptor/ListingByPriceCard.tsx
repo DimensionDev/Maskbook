@@ -2,14 +2,8 @@ import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import { Box, Card, CardActions, CardContent, Checkbox, FormControlLabel, TextField, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import {
-    EthereumTokenType,
-    FungibleTokenDetailed,
-    FungibleTokenWatched,
-    isNativeTokenAddress,
-    useAccount,
-} from '@masknet/web3-shared-evm'
-import { isZero, isGreaterThan } from '@masknet/web3-shared-base'
+import { FungibleTokenWatched, isNativeTokenAddress, useAccount } from '@masknet/web3-shared-evm'
+import { FungibleTokenDetailed, EthereumTokenType, isZero, isGreaterThan } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../utils'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'

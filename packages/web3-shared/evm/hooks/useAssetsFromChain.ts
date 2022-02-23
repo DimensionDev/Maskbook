@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { first } from 'lodash-unified'
-import { Asset, ChainId, EthereumTokenType, FungibleTokenDetailed } from '../types'
+import { EthereumTokenType, FungibleTokenDetailed } from '@masknet/web3-shared-base'
+import type { Asset, ChainId } from '../types'
 import { useTokensBalance } from './useTokensBalance'
 import { useChainDetailed } from './useChainDetailed'
 import { getChainDetailed, EMPTY_LIST } from '../utils'

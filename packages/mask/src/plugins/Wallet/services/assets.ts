@@ -1,5 +1,13 @@
 import { unreachable } from '@dimensiondev/kit'
-import { leftShift, multipliedBy, rightShift, toFixed } from '@masknet/web3-shared-base'
+import {
+    leftShift,
+    multipliedBy,
+    rightShift,
+    toFixed,
+    EthereumTokenType,
+    ERC721TokenCollectionInfo,
+    ERC721TokenDetailed,
+} from '@masknet/web3-shared-base'
 import {
     Asset,
     ChainId,
@@ -7,8 +15,6 @@ import {
     createERC20Token,
     createNativeToken,
     CurrencyType,
-    EthereumTokenType,
-    ERC721TokenDetailed,
     formatEthereumAddress,
     getChainIdFromName,
     getTokenConstants,
@@ -17,7 +23,6 @@ import {
     FungibleAssetProvider,
     getChainShortName,
     getChainIdFromNetworkType,
-    ERC721TokenCollectionInfo,
     isNativeTokenSymbol as isNativeToken,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'

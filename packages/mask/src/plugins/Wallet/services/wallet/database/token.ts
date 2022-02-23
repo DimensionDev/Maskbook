@@ -1,22 +1,21 @@
 import { omit } from 'lodash-unified'
 import {
-    ERC1155TokenDetailed,
     ERC20TokenDetailed,
-    ERC721TokenDetailed,
     EthereumTokenType,
     NonFungibleTokenDetailed,
-} from '@masknet/web3-shared-evm'
+    ERC721TokenDetailed,
+} from '@masknet/web3-shared-base'
 import { unreachable } from '@dimensiondev/kit'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { PluginDB } from '../../../database/Plugin.db'
 import { asyncIteratorToArray } from '../../../../../utils'
 import { currentChainIdSettings } from '../../../settings'
-import type { ERC20TokenRecord, ERC721TokenRecord, ERC1155TokenRecord } from '../type'
+import type { ERC20TokenRecord, ERC721TokenRecord } from '../type'
 import * as walletDB from './wallet'
 
-type DatabaseTokenType = EthereumTokenType.ERC20 | EthereumTokenType.ERC721 | EthereumTokenType.ERC1155
+type DatabaseTokenType = EthereumTokenType.ERC20 | EthereumTokenType.ERC721
 type DatabaseTokenDetailed = ERC20TokenDetailed | NonFungibleTokenDetailed
-type DatabaseTokenRecord = ERC20TokenRecord | ERC721TokenRecord | ERC1155TokenRecord
+type DatabaseTokenRecord = ERC20TokenRecord | ERC721TokenRecord
 
 const MAX_TOKEN_COUNT = 49
 
@@ -31,16 +30,12 @@ function getTokenId(tokenDetailed: DatabaseTokenDetailed) {
 
 function getTokenAddress(tokenDetailed: DatabaseTokenDetailed) {
     return (
-        (tokenDetailed as ERC20TokenDetailed | ERC1155TokenDetailed).address ||
-        (tokenDetailed as ERC721TokenDetailed).contractDetailed.address
+        (tokenDetailed as ERC20TokenDetailed).address || (tokenDetailed as ERC721TokenDetailed).contractDetailed.address
     )
 }
 
 function getTokenType(tokenDetailed: DatabaseTokenDetailed) {
-    return (
-        (tokenDetailed as ERC20TokenDetailed | ERC1155TokenDetailed).type ||
-        (tokenDetailed as ERC721TokenDetailed).contractDetailed.type
-    )
+    return (tokenDetailed as ERC20TokenDetailed).type || (tokenDetailed as ERC721TokenDetailed).contractDetailed.type
 }
 
 function getDatabaseType(type: DatabaseTokenType) {
@@ -49,8 +44,6 @@ function getDatabaseType(type: DatabaseTokenType) {
             return 'erc20'
         case EthereumTokenType.ERC721:
             return 'erc721'
-        case EthereumTokenType.ERC1155:
-            return 'erc1155'
         default:
             unreachable(type)
     }
@@ -62,8 +55,6 @@ function getEventMessage(type: DatabaseTokenType) {
             return WalletMessages.events.erc20TokensUpdated
         case EthereumTokenType.ERC721:
             return WalletMessages.events.erc721TokensUpdated
-        case EthereumTokenType.ERC1155:
-            return WalletMessages.events.erc1155TokensUpdated
         default:
             unreachable(type)
     }
@@ -79,8 +70,6 @@ function TokenRecordOutDatabase(type: DatabaseTokenType, token: DatabaseTokenRec
             return token_ as ERC20TokenDetailed
         case EthereumTokenType.ERC721:
             return token_ as ERC721TokenDetailed
-        case EthereumTokenType.ERC1155:
-            return token_ as ERC1155TokenDetailed
         default:
             throw new Error('Unknown token type.')
     }

@@ -1,4 +1,5 @@
-import { EthereumTokenType, getChainName, getNftRedPacketConstants } from '@masknet/web3-shared-evm'
+import { getChainName, getNftRedPacketConstants } from '@masknet/web3-shared-evm'
+import { EthereumTokenType } from '@masknet/web3-shared-base'
 import stringify from 'json-stable-stringify'
 import { first, pick } from 'lodash-unified'
 import { tokenIntoMask } from '../../../ITO/SNSAdaptor/helpers'

@@ -14,7 +14,7 @@ import {
 } from '../../utils/selector'
 import { useCallback, useEffect } from 'react'
 import { toPNG } from '../../../../plugins/Avatar/utils'
-import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import type { ERC721TokenDetailed } from '@masknet/web3-shared-base'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { getAvatarId } from '../../utils/user'
 import { isMobileFacebook } from '../../utils/isMobile'

@@ -1,12 +1,7 @@
 import classNames from 'classnames'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import {
-    ERC721TokenDetailed,
-    ERC721ContractDetailed,
-    useERC721TokenDetailedCallback,
-    useAccount,
-    isSameAddress,
-} from '@masknet/web3-shared-evm'
+import { useERC721TokenDetailedCallback, useAccount, isSameAddress } from '@masknet/web3-shared-evm'
+import type { ERC721ContractDetailed, ERC721TokenDetailed } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../utils'
 import { DialogContent, Box, InputBase, Paper, Button, Typography, ListItem, CircularProgress } from '@mui/material'
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark'

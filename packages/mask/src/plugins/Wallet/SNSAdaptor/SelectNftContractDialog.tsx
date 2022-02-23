@@ -3,8 +3,6 @@ import { makeStyles } from '@masknet/theme'
 import { Avatar, Box, CircularProgress, DialogContent, Link, List, ListItem, Typography } from '@mui/material'
 import {
     ChainId,
-    ERC721ContractDetailed,
-    EthereumTokenType,
     formatEthereumAddress,
     resolveAddressLinkOnExplorer,
     useAccount,
@@ -12,6 +10,7 @@ import {
     useERC721ContractDetailed,
     useERC721Tokens,
 } from '@masknet/web3-shared-evm'
+import { EthereumTokenType, ERC721ContractDetailed } from '@masknet/web3-shared-base'
 import { SocketState, useNonFungibleAssetCollections } from '@masknet/plugin-infra'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../messages'

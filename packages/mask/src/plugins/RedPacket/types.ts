@@ -1,11 +1,6 @@
 import type { ERC20TokenRecord } from '../Wallet/database/types'
-import type {
-    EthereumTokenType,
-    FungibleTokenDetailed,
-    ChainId,
-    ERC721TokenDetailed,
-    ERC721TokenOutMask,
-} from '@masknet/web3-shared-evm'
+import type { ChainId, ERC721TokenOutMask } from '@masknet/web3-shared-evm'
+import type { EthereumTokenType, FungibleTokenDetailed, ERC721TokenDetailed } from '@masknet/web3-shared-base'
 
 // #region erc20 red packet
 export interface RedPacketRecord {

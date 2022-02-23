@@ -1,15 +1,8 @@
 import { useCallback } from 'react'
-import {
-    FungibleTokenDetailed,
-    EthereumTokenType,
-    useAccount,
-    useTransactionState,
-    TransactionStateType,
-    TransactionEventType,
-} from '@masknet/web3-shared-evm'
+import { useAccount, useTransactionState, TransactionStateType, TransactionEventType } from '@masknet/web3-shared-evm'
 import { useDHedgePoolV1Contract, useDHedgePoolV2Contract } from '../contracts/useDHedgePool'
 import { Pool, PoolType } from '../types'
-import { toFixed } from '@masknet/web3-shared-base'
+import { FungibleTokenDetailed, EthereumTokenType, toFixed } from '@masknet/web3-shared-base'
 
 /**
  * A callback for invest dhedge pool

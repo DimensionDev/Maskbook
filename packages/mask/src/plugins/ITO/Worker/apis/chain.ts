@@ -4,8 +4,8 @@ import {
     getITOConstants,
     isSameAddress,
     FungibleTokenDetailed,
-    EthereumTokenType,
 } from '@masknet/web3-shared-evm'
+import { EthereumTokenType } from '@masknet/web3-shared-base'
 import { Interface } from '@ethersproject/abi'
 import ITO_ABI from '@masknet/web3-contracts/abis/ITO2.json'
 import urlcat from 'urlcat'

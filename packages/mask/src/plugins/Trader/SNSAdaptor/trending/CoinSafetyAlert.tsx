@@ -3,7 +3,8 @@ import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils'
 import type { Coin } from '../../types'
 import { useApprovedTokens } from '../../trending/useApprovedTokens'
-import { resolveTokenLinkOnExplorer, ChainId, EthereumTokenType } from '@masknet/web3-shared-evm'
+import { resolveTokenLinkOnExplorer, ChainId } from '@masknet/web3-shared-evm'
+import { EthereumTokenType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {

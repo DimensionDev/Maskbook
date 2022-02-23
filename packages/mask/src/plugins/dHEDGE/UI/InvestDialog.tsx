@@ -1,12 +1,5 @@
-import {
-    EthereumTokenType,
-    formatBalance,
-    FungibleTokenDetailed,
-    TransactionStateType,
-    useAccount,
-    useFungibleTokenBalance,
-} from '@masknet/web3-shared-evm'
-import { isZero, rightShift } from '@masknet/web3-shared-base'
+import { formatBalance, TransactionStateType, useAccount, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
+import { FungibleTokenDetailed, EthereumTokenType, isZero, rightShift } from '@masknet/web3-shared-base'
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useEffect, useMemo, useState } from 'react'

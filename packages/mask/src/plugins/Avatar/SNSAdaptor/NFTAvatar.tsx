@@ -3,13 +3,8 @@ import { uniqBy } from 'lodash-unified'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import {
-    ChainId,
-    ERC721TokenDetailed,
-    useChainId,
-    useImageChecker,
-    useCustomNonFungibleAssets,
-} from '@masknet/web3-shared-evm'
+import { ChainId, useChainId, useImageChecker, useCustomNonFungibleAssets } from '@masknet/web3-shared-evm'
+import type { ERC721TokenDetailed } from '@masknet/web3-shared-base'
 import { Box, Button, Skeleton, Typography } from '@mui/material'
 import { useI18N } from '../../../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'

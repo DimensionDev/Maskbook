@@ -14,19 +14,12 @@ import {
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import {
-    ERC20TokenDetailed,
-    EthereumTokenType,
-    FungibleTokenDetailed,
-    useArtBlocksConstants,
-    useFungibleTokenWatched,
-    TransactionStateType,
-} from '@masknet/web3-shared-evm'
+import { useArtBlocksConstants, useFungibleTokenWatched, TransactionStateType } from '@masknet/web3-shared-evm'
+import { EthereumTokenType, ERC20TokenDetailed, FungibleTokenDetailed, leftShift } from '@masknet/web3-shared-base'
 import { Trans } from 'react-i18next'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback'
 import { TokenAmountPanel, useRemoteControlledDialog } from '@masknet/shared'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { leftShift } from '@masknet/web3-shared-base'
 import { WalletMessages } from '../../Wallet/messages'
 
 import type { Project } from '../types'

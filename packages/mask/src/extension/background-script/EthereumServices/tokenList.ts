@@ -1,11 +1,6 @@
 import { memoizePromise } from '@dimensiondev/kit'
-import {
-    ChainId,
-    ERC20TokenDetailed,
-    EthereumTokenType,
-    formatEthereumAddress,
-    getChainDetailed,
-} from '@masknet/web3-shared-evm'
+import { ChainId, ERC20TokenDetailed, formatEthereumAddress, getChainDetailed } from '@masknet/web3-shared-evm'
+import { EthereumTokenType } from '@masknet/web3-shared-base'
 import { groupBy } from 'lodash-unified'
 
 const NATIVE_TOKEN_ADDRESS_IN_1INCH = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'

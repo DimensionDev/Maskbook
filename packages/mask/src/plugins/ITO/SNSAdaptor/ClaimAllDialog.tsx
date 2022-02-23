@@ -11,13 +11,13 @@ import {
     TransactionStateType,
     resolveTransactionLinkOnExplorer,
     useFungibleTokensDetailed,
-    EthereumTokenType,
     isSameAddress,
     useITOConstants,
     ChainId,
     useChainId,
     useAccount,
 } from '@masknet/web3-shared-evm'
+import { EthereumTokenType } from '@masknet/web3-shared-base'
 import classNames from 'classnames'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'

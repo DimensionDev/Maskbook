@@ -4,9 +4,7 @@ import {
     ChainId,
     createERC20Token,
     createNativeToken,
-    EthereumTokenType,
     formatBalance,
-    FungibleTokenDetailed,
     isSameAddress,
     TransactionStateType,
     useChainId,
@@ -15,6 +13,7 @@ import {
     useTokenConstants,
     useWallet,
 } from '@masknet/web3-shared-evm'
+import { EthereumTokenType, FungibleTokenDetailed } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { delay } from '@masknet/shared-base'
 import { useGasConfig } from './hooks/useGasConfig'

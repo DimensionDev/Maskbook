@@ -1,13 +1,8 @@
 import { Trash2 as TrashIcon } from 'react-feather'
 import { Button, Box, BoxProps } from '@mui/material'
 import { unreachable } from '@dimensiondev/kit'
-import {
-    ERC20TokenDetailed,
-    ERC721TokenDetailed,
-    EthereumTokenType,
-    FungibleTokenDetailed,
-    isNativeTokenAddress,
-} from '@masknet/web3-shared-evm'
+import { FungibleTokenDetailed, isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { ERC20TokenDetailed, EthereumTokenType, ERC721TokenDetailed } from '@masknet/web3-shared-base'
 import { useSnackbarCallback } from '@masknet/shared'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../utils'

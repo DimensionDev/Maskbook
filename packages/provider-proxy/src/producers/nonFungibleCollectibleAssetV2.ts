@@ -1,5 +1,5 @@
 import { getOpenSeaNFTList, getRaribleNFTList, getNFTScanNFTs, getAlchemyNFTList } from '@masknet/web3-providers'
-import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import type { ERC721TokenDetailed } from '@masknet/web3-shared-base'
 import type { ProducerArgBase, ProducerKeyFunction, ProducerPushFunction, RPCMethodRegistrationValue } from '../types'
 import { collectAllPageData } from '../helper/request'
 import { Web3Plugin, PluginId } from '@masknet/plugin-infra'

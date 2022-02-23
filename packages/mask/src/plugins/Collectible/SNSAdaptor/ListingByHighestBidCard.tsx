@@ -1,14 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Card, CardActions, CardContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import {
-    EthereumTokenType,
-    FungibleTokenDetailed,
-    FungibleTokenWatched,
-    isNativeTokenAddress,
-    useAccount,
-} from '@masknet/web3-shared-evm'
-import { isZero, isLessThan } from '@masknet/web3-shared-base'
+import { FungibleTokenWatched, isNativeTokenAddress, useAccount } from '@masknet/web3-shared-evm'
+import { isZero, isLessThan, EthereumTokenType, FungibleTokenDetailed } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../utils'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'

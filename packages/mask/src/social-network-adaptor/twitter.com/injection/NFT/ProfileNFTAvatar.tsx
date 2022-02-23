@@ -12,7 +12,7 @@ import {
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { getAvatarId } from '../../utils/user'
 import { toPNG } from '../../../../plugins/Avatar/utils'
-import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import type { ERC721TokenDetailed } from '@masknet/web3-shared-base'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 import { hookInputUploadOnce } from '@masknet/injected-script'
 

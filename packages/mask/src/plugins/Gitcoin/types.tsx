@@ -1,6 +1,7 @@
 import type BigNumber from 'bignumber.js'
 import type { ERC20TokenRecord } from '../Wallet/database/types'
-import type { ChainId, EthereumTokenType } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
+import type { EthereumTokenType } from '@masknet/web3-shared-base'
 
 export enum GitcoinGrantFailedReason {
     InvalidURL = 0,

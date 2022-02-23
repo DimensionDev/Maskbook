@@ -1,4 +1,4 @@
-import type { ERC721TokenInfo } from '@masknet/web3-shared-evm'
+import type { ERC721TokenInfo } from '@masknet/web3-shared-base'
 import type { Constant } from '@masknet/web3-shared-evm/constants/utils'
 
 export interface PetsDialogEvent {

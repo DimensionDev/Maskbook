@@ -1,16 +1,14 @@
 import type { Subscription } from 'use-subscription'
 import {
     ChainId,
-    ERC1155TokenDetailed,
-    ERC721TokenDetailed,
     FungibleAssetProvider,
     ProviderType,
     ERC20TokenDetailed,
-    EthereumTokenType,
     NetworkType,
     Web3ProviderType,
     isInjectedProvider,
 } from '@masknet/web3-shared-evm'
+import { EthereumTokenType, ERC721TokenDetailed } from '@masknet/web3-shared-base'
 
 import { Services, Messages, PluginServices, PluginMessages } from '../API'
 
@@ -71,11 +69,7 @@ export const Web3Context: Web3ProviderType = {
         [],
         PluginMessages.Wallet.events.erc721TokensUpdated.on,
     ),
-    erc1155Tokens: createSubscriptionFromAsync(
-        () => PluginServices.Wallet.getTokens<ERC1155TokenDetailed>(EthereumTokenType.ERC1155),
-        [],
-        PluginMessages.Wallet.events.erc1155TokensUpdated.on,
-    ),
+
     portfolioProvider: createSubscriptionFromAsync(
         Services.Settings.getCurrentPortfolioDataProvider,
         FungibleAssetProvider.DEBANK,

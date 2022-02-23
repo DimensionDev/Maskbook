@@ -8,14 +8,13 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import {
     useITOConstants,
     ERC20TokenDetailed,
-    EthereumTokenType,
     formatBalance,
     formatEthereumAddress,
     resolveAddressLinkOnExplorer,
     useChainId,
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
-import { isGreaterThan, rightShift } from '@masknet/web3-shared-base'
+import { EthereumTokenType, isGreaterThan, rightShift } from '@masknet/web3-shared-base'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'

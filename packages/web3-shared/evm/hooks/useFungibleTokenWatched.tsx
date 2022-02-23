@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { EthereumTokenType } from '../types'
+import { EthereumTokenType } from '@masknet/web3-shared-base'
 import { useFungibleTokenBalance } from './useFungibleTokenBalance'
 import { useFungibleTokenDetailed } from './useFungibleTokenDetailed'
 import { useNativeTokenDetailed } from './useNativeTokenDetailed'

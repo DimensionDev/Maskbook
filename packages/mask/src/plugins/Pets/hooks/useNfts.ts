@@ -1,14 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { OpenSea } from '@masknet/web3-providers'
-import {
-    useChainId,
-    useCustomNonFungibleAssets,
-    ERC721TokenDetailed,
-    isSameAddress,
-    ERC721ContractDetailed,
-    resolveIPFSLink,
-} from '@masknet/web3-shared-evm'
+import { useChainId, useCustomNonFungibleAssets, isSameAddress, resolveIPFSLink } from '@masknet/web3-shared-evm'
+import type { ERC721ContractDetailed, ERC721TokenDetailed } from '@masknet/web3-shared-base'
 import { Constant, transform } from '@masknet/web3-shared-evm/constants/utils'
 import { mergeNFTList, SocketState, useNonFungibleAssets, useWeb3State } from '@masknet/plugin-infra'
 import { cloneDeep, findLastIndex } from 'lodash-unified'

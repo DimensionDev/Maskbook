@@ -2,15 +2,8 @@ import { makeStyles, MaskColorVar, MaskTextField } from '@masknet/theme'
 import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/material'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { v4 as uuid } from 'uuid'
-import {
-    ERC721ContractDetailed,
-    ERC721TokenDetailed,
-    EthereumTokenType,
-    NetworkPluginID,
-    useLookupAddress,
-    useNetworkDescriptor,
-    useWeb3State,
-} from '@masknet/plugin-infra'
+import { NetworkPluginID, useLookupAddress, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
+import { ERC721ContractDetailed, ERC721TokenDetailed, EthereumTokenType, multipliedBy } from '@masknet/web3-shared-base'
 import {
     formatWeiToEther,
     isSameAddress,
@@ -44,7 +37,6 @@ import { unionBy } from 'lodash-unified'
 import { TransferTab } from './types'
 import { NetworkType } from '@masknet/public-api'
 import { useAsync, useUpdateEffect } from 'react-use'
-import { multipliedBy } from '@masknet/web3-shared-base'
 import { Services } from '../../../../API'
 import { RightIcon } from '@masknet/icons'
 

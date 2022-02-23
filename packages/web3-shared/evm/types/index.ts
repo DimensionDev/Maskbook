@@ -1,6 +1,6 @@
 import type { TransactionConfig as TransactionConfig_ } from 'web3-core'
 import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types'
-
+import { EthereumTokenType } from '@masknet/web3-shared-base'
 export interface SendOverrides {
     chainId?: ChainId
     account?: string
@@ -223,38 +223,14 @@ export interface ERC721TokenCollectionInfo {
 
 // #endregion
 
-// #region ERC1155
-export interface ERC1155Token {
-    type: EthereumTokenType.ERC1155
-    address: string
-    chainId: ChainId
-}
-
-export interface ERC1155TokenDetailed extends ERC1155Token {
-    name: string
-    tokenId: string
-    uri?: string
-}
-
-export interface ERC1155TokenAssetDetailed extends ERC1155TokenDetailed {
-    asset?: {
-        name?: string
-        decimals?: string
-        description?: string
-        image?: string
-        properties?: Record<string, string | any[] | Record<string, any>>
-    }
-}
-// #endregion
-
 // #region fungible token
 export type FungibleToken = NativeToken | ERC20Token
 export type FungibleTokenDetailed = NativeTokenDetailed | ERC20TokenDetailed
 // #endregion
 
 // #region non-fungible token
-export type NonFungibleToken = ERC721Token | ERC1155Token
-export type NonFungibleTokenDetailed = ERC721TokenDetailed | ERC1155TokenDetailed
+export type NonFungibleToken = ERC721Token
+export type NonFungibleTokenDetailed = ERC721TokenDetailed
 // #endregion
 
 // #region token out of mask
@@ -271,18 +247,15 @@ interface TokenDetailedMap {
     [EthereumTokenType.Native]: NativeTokenDetailed
     [EthereumTokenType.ERC20]: ERC20TokenDetailed
     [EthereumTokenType.ERC721]: ERC721TokenDetailed
-    [EthereumTokenType.ERC1155]: ERC1155TokenDetailed
 }
 
 interface TokenAssetDetailedMap {
     [EthereumTokenType.ERC721]: ERC721TokenDetailed
-    [EthereumTokenType.ERC1155]: ERC1155TokenAssetDetailed
 }
 
 export type EthereumTokenDetailedType<T extends EthereumTokenType> = TokenDetailedMap[T]
 
-export type TokenAssetDetailedType<T extends EthereumTokenType.ERC721 | EthereumTokenType.ERC1155> =
-    TokenAssetDetailedMap[T]
+export type TokenAssetDetailedType<T extends EthereumTokenType.ERC721> = TokenAssetDetailedMap[T]
 
 // Learn more: https://eips.ethereum.org/EIPS/eip-747
 export interface EthereumAssetDetailed {
@@ -304,13 +277,6 @@ export interface EthereumChainDetailed {
     }
     rpcUrls: string[]
     blockExplorerUrls: string[]
-}
-
-export enum EthereumTokenType {
-    Native = 0,
-    ERC20 = 1,
-    ERC721 = 2,
-    ERC1155 = 3,
 }
 
 export type EIP1559GasConfig = {

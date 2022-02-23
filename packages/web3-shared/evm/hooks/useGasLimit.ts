@@ -1,4 +1,4 @@
-import { EthereumTokenType } from '../types'
+import { EthereumTokenType } from '@masknet/web3-shared-base'
 import { useERC20TokenContract, useERC721TokenContract } from '../contracts'
 import { useAccount } from './useAccount'
 import { useWeb3 } from './useWeb3'
@@ -37,8 +37,6 @@ export function useGasLimit(
                 return erc721Contract?.methods.transferFrom(account, recipient, tokenId ?? '').estimateGas({
                     from: account,
                 })
-            case EthereumTokenType.ERC1155:
-                throw new Error('To be implemented')
             default:
                 unreachable(type)
         }

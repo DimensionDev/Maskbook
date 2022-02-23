@@ -1,5 +1,5 @@
 import { unreachable } from '@dimensiondev/kit'
-import { EthereumTokenType } from '../types'
+import { EthereumTokenType } from '@masknet/web3-shared-base'
 import { useERC20TokenTransferCallback } from './useERC20TokenTransferCallback'
 import { useERC721TokenTransferCallback } from './useERC721TokenTransferCallback'
 import { useNativeTransferCallback } from './useNativeTokenTransferCallback'
@@ -16,8 +16,6 @@ export function useTokenTransferCallback(type: EthereumTokenType, address: strin
             return r2
         case EthereumTokenType.ERC721:
             return r3
-        case EthereumTokenType.ERC1155:
-            throw new Error('To be implemented.')
         default:
             unreachable(type_)
     }

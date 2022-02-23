@@ -1,5 +1,4 @@
 import {
-    EthereumTokenType,
     isSameAddress,
     useAssetsFromChain,
     useERC20TokensDetailedFromTokenLists,
@@ -7,6 +6,7 @@ import {
     useTokenConstants,
     useTokenListConstants,
 } from '@masknet/web3-shared-evm'
+import { EthereumTokenType } from '@masknet/web3-shared-base'
 import { uniqBy } from 'lodash-unified'
 import { useMemo } from 'react'
 

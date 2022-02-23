@@ -2,13 +2,11 @@ import { useCallback, useMemo } from 'react'
 import {
     useChainId,
     useFungibleTokenDetailed,
-    EthereumTokenType,
-    FungibleTokenDetailed,
-    FungibleToken,
     useFungibleTokensDetailed,
     isSameAddress,
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
+import { FungibleToken, EthereumTokenType, FungibleTokenDetailed } from '@masknet/web3-shared-base'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { isCompactPayload } from './helpers'
 import { usePoolPayload } from './hooks/usePoolPayload'

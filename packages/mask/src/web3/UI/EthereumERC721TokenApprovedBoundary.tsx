@@ -2,9 +2,9 @@ import {
     useERC721ContractIsApproveForAll,
     useERC721ContractSetApproveForAllCallback,
     TransactionStateType,
-    ERC721ContractDetailed,
     resolveTransactionLinkOnExplorer,
 } from '@masknet/web3-shared-evm'
+import type { ERC721ContractDetailed } from '@masknet/web3-shared-base'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { useI18N } from '../../utils'
 import { makeStyles, useCustomSnackbar, useStylesExtends } from '@masknet/theme'

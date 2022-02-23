@@ -14,25 +14,6 @@ export interface ERC20TokenRecord {
     symbol: string
 }
 
-export interface ERC1155TokenRecord {
-    /** contract address */
-    address: string
-    /** eth chain id */
-    chainId: ChainId
-    /** token name */
-    name: string
-    /** token id */
-    tokenId: string
-    /** asset uri */
-    uri?: string
-    /** asset name */
-    assetName?: string
-    /** asset description */
-    assetDescription?: string
-    /** asset img uri */
-    assetImage?: string
-}
-
 export interface LegacyWalletRecord {
     /** ethereum hex address */
     address: string
@@ -87,10 +68,6 @@ export interface UnconfirmedRequestChunkRecord {
 }
 
 export interface ERC20TokenRecordInDatabase extends ERC20TokenRecord {}
-
-export interface ERC1155TokenRecordInDatabase extends ERC1155TokenRecord {
-    record_id: string
-}
 
 export interface LegacyWalletRecordInDatabase extends LegacyWalletRecord {}
 

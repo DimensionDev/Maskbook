@@ -1,5 +1,5 @@
-import { ERC721ContractDetailed, EthereumTokenType, ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
-
+import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { EthereumTokenType, ERC721ContractDetailed } from '@masknet/web3-shared-base'
 const NFTSCAN_ID = 't9k2o5GC'
 const NFTSCAN_SECRET = '21da1d638ef5d0bf76e37aa5c2da7fd789ade9e3'
 const NFTSCAN_URL = 'https://restapi.nftscan.com'

@@ -1,11 +1,5 @@
-import {
-    ChainId,
-    EthereumTokenType,
-    isSameAddress,
-    useAccount,
-    useBalance,
-    useTokenConstants,
-} from '@masknet/web3-shared-evm'
+import { ChainId, isSameAddress, useAccount, useBalance, useTokenConstants } from '@masknet/web3-shared-evm'
+import { EthereumTokenType } from '@masknet/web3-shared-base'
 import { useEffect } from 'react'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext'
 

@@ -1,5 +1,6 @@
 import { makeStyles } from '@masknet/theme'
-import { ERC721ContractDetailed, NonFungibleAssetProvider, useERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import { NonFungibleAssetProvider, useERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import type { ERC721ContractDetailed } from '@masknet/web3-shared-base'
 import { Typography, CircularProgress } from '@mui/material'
 import { memo } from 'react'
 import { CollectibleCard } from '../../../../extension/options-page/DashboardComponents/CollectibleList/CollectibleCard'

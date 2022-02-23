@@ -1,4 +1,5 @@
-import { EthereumTokenType, FungibleTokenDetailed, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
+import { useFungibleTokenBalance } from '@masknet/web3-shared-evm'
+import { FungibleTokenDetailed, EthereumTokenType } from '@masknet/web3-shared-base'
 import { IconButton, Paper } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import AddIcon from '@mui/icons-material/AddOutlined'

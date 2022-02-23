@@ -1,7 +1,6 @@
 export * from './web3'
 export * from './types'
 export * from './web3-types'
-export * from './web3-token-types'
 export * from './hooks'
 export * from './manager/dashboard'
 export * from './manager/sns-adaptor'

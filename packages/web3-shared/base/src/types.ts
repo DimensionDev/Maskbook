@@ -2,8 +2,37 @@ export enum EthereumTokenType {
     Native = 0,
     ERC20 = 1,
     ERC721 = 2,
-    ERC1155 = 3,
 }
+
+// #region Ether
+export interface NativeToken {
+    type: EthereumTokenType.Native
+    address: string
+    chainId: number
+}
+
+export interface NativeTokenDetailed extends NativeToken {
+    name: string
+    symbol: string
+    decimals: number
+    logoURI?: string
+}
+// #endregion
+
+// #region ERC20
+export interface ERC20Token {
+    type: EthereumTokenType.ERC20
+    address: string
+    chainId: number
+}
+
+export interface ERC20TokenDetailed extends ERC20Token {
+    name?: string
+    symbol?: string
+    decimals: number
+    logoURI?: string[]
+}
+// #endregion
 
 // #region ERC721
 export interface ERC721Token {
@@ -57,31 +86,12 @@ export interface ERC721TokenCollectionInfo {
 }
 // #endregion
 
-// #region ERC1155
-export interface ERC1155Token {
-    type: EthereumTokenType.ERC1155
-    address: string
-    chainId: number
-}
-
-export interface ERC1155TokenDetailed extends ERC1155Token {
-    name: string
-    tokenId: string
-    uri?: string
-}
-
-export interface ERC1155TokenAssetDetailed extends ERC1155TokenDetailed {
-    asset?: {
-        name?: string
-        decimals?: string
-        description?: string
-        image?: string
-        properties?: Record<string, string | any[] | Record<string, any>>
-    }
-}
+// #region fungible token
+export type FungibleToken = NativeToken | ERC20Token
+export type FungibleTokenDetailed = NativeTokenDetailed | ERC20TokenDetailed
 // #endregion
 
 // #region non-fungible token
-export type NonFungibleToken = ERC721Token | ERC1155Token
-export type NonFungibleTokenDetailed = ERC721TokenDetailed | ERC1155TokenDetailed
+export type NonFungibleToken = ERC721Token
+export type NonFungibleTokenDetailed = ERC721TokenDetailed
 // #endregion

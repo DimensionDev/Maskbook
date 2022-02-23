@@ -3,20 +3,16 @@ import { AbiOutput, hexToBytes, toAscii } from 'web3-utils'
 import BigNumber from 'bignumber.js'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { getTokenConstants } from '../constants'
+import { Asset, ChainId, CurrencyType, ChainIdRecord } from '../types'
 import {
-    Asset,
-    ChainId,
-    CurrencyType,
-    ERC1155TokenAssetDetailed,
-    ERC721ContractDetailed,
-    ERC721TokenInfo,
-    ERC721TokenDetailed,
     ERC20TokenDetailed,
     EthereumTokenType,
     FungibleTokenDetailed,
     NativeTokenDetailed,
-    ChainIdRecord,
-} from '../types'
+    ERC721TokenDetailed,
+    ERC721ContractDetailed,
+    ERC721TokenInfo,
+} from '@masknet/web3-shared-base'
 import { getChainDetailed, getChainIdFromName } from './chainDetailed'
 import { formatBalance } from './formatter'
 import { isSameAddress } from './address'
@@ -95,25 +91,6 @@ export function createERC721Token(
         info,
         tokenId,
         collection,
-    }
-}
-
-export function createERC1155Token(
-    chainId: ChainId,
-    tokenId: string,
-    address: string,
-    name: string,
-    uri?: string,
-    asset?: ERC1155TokenAssetDetailed['asset'],
-): ERC1155TokenAssetDetailed {
-    return {
-        type: EthereumTokenType.ERC1155,
-        chainId,
-        tokenId,
-        address,
-        name,
-        uri,
-        asset,
     }
 }
 

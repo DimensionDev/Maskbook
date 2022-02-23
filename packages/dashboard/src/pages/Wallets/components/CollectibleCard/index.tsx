@@ -6,13 +6,8 @@ import { useHoverDirty } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
 import { WalletIcon, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { ChangeNetworkTip } from '../FungibleTokenTableRow/ChangeNetworkTip'
-import {
-    NetworkPluginID,
-    useNetworkDescriptor,
-    usePluginIDContext,
-    useWeb3State,
-    ERC721TokenDetailed,
-} from '@masknet/plugin-infra'
+import { NetworkPluginID, useNetworkDescriptor, usePluginIDContext, useWeb3State } from '@masknet/plugin-infra'
+import type { ERC721TokenDetailed } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

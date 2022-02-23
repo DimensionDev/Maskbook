@@ -1,4 +1,5 @@
-import { EthereumTokenType, GasOptionConfig, useNativeTokenWrapperCallback } from '@masknet/web3-shared-evm'
+import { GasOptionConfig, useNativeTokenWrapperCallback } from '@masknet/web3-shared-evm'
+import { EthereumTokenType } from '@masknet/web3-shared-base'
 import { TradeComputed, TradeStrategy } from '../../types'
 import type { NativeTokenWrapper } from './useTradeComputed'
 

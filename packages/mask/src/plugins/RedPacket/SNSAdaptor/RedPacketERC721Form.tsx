@@ -8,13 +8,12 @@ import { ERC721ContractSelectPanel } from '../../../web3/UI/ERC721ContractSelect
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC721TokenApprovedBoundary } from '../../../web3/UI/EthereumERC721TokenApprovedBoundary'
 import {
-    ERC721ContractDetailed,
-    ERC721TokenDetailed,
     useERC721TokenDetailedOwnerList,
     useAccount,
     useChainId,
     useNftRedPacketConstants,
 } from '@masknet/web3-shared-evm'
+import type { ERC721ContractDetailed, ERC721TokenDetailed } from '@masknet/web3-shared-base'
 import CheckIcon from '@mui/icons-material/Check'
 import CloseIcon from '@mui/icons-material/Close'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'

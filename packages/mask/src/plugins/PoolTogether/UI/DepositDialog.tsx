@@ -1,6 +1,5 @@
 import { useRemoteControlledDialog } from '@masknet/shared'
 import {
-    EthereumTokenType,
     formatBalance,
     FungibleTokenDetailed,
     TransactionStateType,
@@ -8,7 +7,7 @@ import {
     ZERO_ADDRESS,
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
-import { isZero, rightShift } from '@masknet/web3-shared-base'
+import { EthereumTokenType, isZero, rightShift } from '@masknet/web3-shared-base'
 import { DialogContent, Grid, Typography } from '@mui/material'
 import { keyframes, makeStyles } from '@masknet/theme'
 import { useCallback, useEffect, useMemo, useState } from 'react'

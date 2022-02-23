@@ -3,14 +3,13 @@ import { useValueRef } from '@masknet/shared'
 import {
     AddressName,
     ChainId,
-    ERC721ContractDetailed,
-    ERC721TokenDetailed,
     formatEthereumAddress,
     isSameAddress,
     NonFungibleAssetProvider,
     useCustomNonFungibleAssets,
     Wallet,
 } from '@masknet/web3-shared-evm'
+import type { ERC721ContractDetailed, ERC721TokenDetailed } from '@masknet/web3-shared-base'
 import {
     useNonFungibleAssetCollections,
     mergeNFTList,

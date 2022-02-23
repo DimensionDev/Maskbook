@@ -1,13 +1,7 @@
 import { useCallback, useState } from 'react'
 import { v4 as uuid } from 'uuid'
-import {
-    ChainId,
-    ERC721ContractDetailed,
-    EthereumTokenType,
-    isSameAddress,
-    useAccount,
-    useERC721ContractBalance,
-} from '@masknet/web3-shared-evm'
+import { ChainId, isSameAddress, useAccount, useERC721ContractBalance } from '@masknet/web3-shared-evm'
+import { EthereumTokenType, ERC721ContractDetailed } from '@masknet/web3-shared-base'
 import { SocketState, useNonFungibleAssetCollections } from '@masknet/plugin-infra'
 import classNames from 'classnames'
 import { EthereumAddress } from 'wallet.ts'

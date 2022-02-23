@@ -5,8 +5,6 @@ import type { Qualification2 } from '@masknet/web3-contracts/types/Qualification
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import {
     currySameAddress,
-    EthereumTokenType,
-    FungibleTokenDetailed,
     TransactionEventType,
     TransactionStateType,
     useAccount,
@@ -15,7 +13,7 @@ import {
     isSameAddress,
     useITOConstants,
 } from '@masknet/web3-shared-evm'
-import { isPositive, isZero, toFixed } from '@masknet/web3-shared-base'
+import { EthereumTokenType, FungibleTokenDetailed, isPositive, isZero, toFixed } from '@masknet/web3-shared-base'
 import { useCallback } from 'react'
 import type { TransactionReceipt } from 'web3-core'
 import Web3Utils from 'web3-utils'

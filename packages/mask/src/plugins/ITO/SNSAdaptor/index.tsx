@@ -1,12 +1,8 @@
 import { Plugin, usePluginWrapper } from '@masknet/plugin-infra'
 import { ItoLabelIcon } from '../assets/ItoLabelIcon'
 import { makeStyles } from '@masknet/theme'
-import {
-    formatEthereumAddress,
-    formatBalance,
-    useFungibleTokenDetailed,
-    EthereumTokenType,
-} from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, formatBalance, useFungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import { EthereumTokenType } from '@masknet/web3-shared-base'
 import { PostInspector } from './PostInspector'
 import { base } from '../base'
 import { ITO_MetaKey_1, ITO_MetaKey_2, MSG_DELIMITER } from '../constants'

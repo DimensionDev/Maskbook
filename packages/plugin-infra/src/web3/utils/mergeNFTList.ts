@@ -1,4 +1,4 @@
-import type { ERC721TokenDetailed } from '../../web3-token-types'
+import type { ERC721TokenDetailed } from '@masknet/web3-shared-base'
 import { uniqWith } from 'lodash-unified'
 import { isSameAddress } from './isSameAddress'
 

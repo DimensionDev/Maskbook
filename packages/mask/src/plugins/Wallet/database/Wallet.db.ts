@@ -1,13 +1,12 @@
 import { DBSchema, openDB } from 'idb/with-async-ittr'
 import { createDBAccess } from '../../../../background/database/utils/openDB'
 import type {
-    ERC1155TokenRecordInDatabase,
     ERC20TokenRecordInDatabase,
     TransactionChunkRecordInDatabase,
     UnconfirmedRequestChunkRecordInDatabase,
     LegacyWalletRecordInDatabase,
 } from './types'
-import type { ERC721TokenRecordInDatabase } from '@masknet/web3-shared-evm'
+import type { ERC721TokenRecordInDatabase } from '@masknet/web3-shared-base'
 
 function path<T>(x: T) {
     return x
@@ -22,7 +21,6 @@ export const createWalletDBAccess = createDBAccess(() => {
             }
             function v5_v6() {
                 db.createObjectStore('ERC721Token', { keyPath: path<keyof ERC721TokenRecordInDatabase>('record_id') })
-                db.createObjectStore('ERC1155Token', { keyPath: path<keyof ERC1155TokenRecordInDatabase>('record_id') })
             }
             function v7_v8() {
                 db.createObjectStore('TransactionChunk', {
@@ -64,10 +62,6 @@ export interface WalletDB extends DBSchema {
     }
     ERC721Token: {
         value: ERC721TokenRecordInDatabase
-        key: string
-    }
-    ERC1155Token: {
-        value: ERC1155TokenRecordInDatabase
         key: string
     }
 }

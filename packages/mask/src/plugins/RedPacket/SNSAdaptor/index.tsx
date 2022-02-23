@@ -1,12 +1,12 @@
 import { Plugin, usePluginWrapper } from '@masknet/plugin-infra'
 import {
     ChainId,
-    EthereumTokenType,
     formatBalance,
     getChainDetailed,
     getChainIdFromName,
     useERC20TokenDetailed,
 } from '@masknet/web3-shared-evm'
+import { EthereumTokenType } from '@masknet/web3-shared-base'
 import { base } from '../base'
 import { RedPacketMetaKey, RedPacketNftMetaKey } from '../constants'
 import {

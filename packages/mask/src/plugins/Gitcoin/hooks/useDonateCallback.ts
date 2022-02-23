@@ -1,10 +1,8 @@
 import BigNumber from 'bignumber.js'
 import { useCallback, useMemo } from 'react'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
-import { toFixed } from '@masknet/web3-shared-base'
+import { EthereumTokenType, FungibleTokenDetailed, toFixed } from '@masknet/web3-shared-base'
 import {
-    EthereumTokenType,
-    FungibleTokenDetailed,
     TransactionEventType,
     TransactionStateType,
     useAccount,

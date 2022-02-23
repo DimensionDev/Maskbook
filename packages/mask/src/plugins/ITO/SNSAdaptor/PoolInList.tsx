@@ -1,8 +1,6 @@
 import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import {
-    EthereumTokenType,
     formatBalance,
-    FungibleToken,
     getChainDetailed,
     isSameAddress,
     TransactionStateType,
@@ -11,7 +9,7 @@ import {
     useFungibleTokensDetailed,
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
-import { isZero } from '@masknet/web3-shared-base'
+import { FungibleToken, EthereumTokenType, isZero } from '@masknet/web3-shared-base'
 import {
     Box,
     Card,

@@ -1,7 +1,6 @@
 import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import {
-    EthereumTokenType,
     GasOptionConfig,
     TransactionEventType,
     TransactionState,
@@ -9,6 +8,7 @@ import {
     useAccount,
     useTraderConstants,
 } from '@masknet/web3-shared-evm'
+import { EthereumTokenType } from '@masknet/web3-shared-base'
 import { useCallback, useState } from 'react'
 import { SLIPPAGE_DEFAULT } from '../../constants'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'

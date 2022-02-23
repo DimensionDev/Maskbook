@@ -2,12 +2,12 @@ import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import {
     FungibleTokenDetailed,
-    EthereumTokenType,
     useAccount,
     useTransactionState,
     TransactionStateType,
     TransactionEventType,
 } from '@masknet/web3-shared-evm'
+import { EthereumTokenType } from '@masknet/web3-shared-base'
 import { usePoolTogetherPoolContract } from '../contracts/usePoolTogetherPool'
 
 /**

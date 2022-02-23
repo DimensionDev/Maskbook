@@ -1,13 +1,11 @@
 import {
-    ERC20TokenDetailed,
-    EthereumTokenType,
     formatAmount,
     formatBalance,
     useAccount,
     useITOConstants,
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
-import { isGreaterThan, isZero } from '@masknet/web3-shared-base'
+import { ERC20TokenDetailed, EthereumTokenType, isGreaterThan, isZero } from '@masknet/web3-shared-base'
 import { Box, CircularProgress, Stack, TextField, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import CheckIcon from '@mui/icons-material/Check'

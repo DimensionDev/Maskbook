@@ -1,4 +1,4 @@
-import type { ERC721TokenDetailed } from '../web3-token-types'
+import type { ERC721TokenDetailed } from '@masknet/web3-shared-base'
 import type { Web3Plugin } from '../web3-types'
 import { useSocket } from '../hooks/useSocket'
 import { isSameAddress } from './utils/isSameAddress'

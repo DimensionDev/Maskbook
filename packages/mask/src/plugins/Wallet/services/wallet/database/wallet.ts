@@ -1,17 +1,13 @@
 import { omit, pick } from 'lodash-unified'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { WalletMessages } from '@masknet/plugin-wallet'
+import { currySameAddress, formatEthereumAddress, isSameAddress, ProviderType } from '@masknet/web3-shared-evm'
 import {
-    currySameAddress,
-    NonFungibleTokenDetailed,
-    ERC1155TokenDetailed,
     ERC20TokenDetailed,
-    ERC721TokenDetailed,
     EthereumTokenType,
-    formatEthereumAddress,
-    isSameAddress,
-    ProviderType,
-} from '@masknet/web3-shared-evm'
+    ERC721TokenDetailed,
+    NonFungibleTokenDetailed,
+} from '@masknet/web3-shared-base'
 import { EthereumAddress } from 'wallet.ts'
 import { asyncIteratorToArray } from '../../../../../utils'
 import { PluginDB } from '../../../database/Plugin.db'
@@ -154,15 +150,12 @@ export async function updateWalletToken(
 ) {
     const wallet = await getWalletRequired(address)
     const tokenAddress =
-        (token as ERC20TokenDetailed | ERC1155TokenDetailed).address ||
-        (token as ERC721TokenDetailed).contractDetailed.address
+        (token as ERC20TokenDetailed).address || (token as ERC721TokenDetailed).contractDetailed.address
     const tokenAddressChecksummed = formatEthereumAddress(tokenAddress)
-    const tokenType =
-        (token as ERC20TokenDetailed | ERC1155TokenDetailed).type ||
-        (token as ERC721TokenDetailed).contractDetailed.type
+    const tokenType = (token as ERC20TokenDetailed).type || (token as ERC721TokenDetailed).contractDetailed.type
 
     const operationMap: Record<
-        EthereumTokenType.ERC20 | EthereumTokenType.ERC721 | EthereumTokenType.ERC1155,
+        EthereumTokenType.ERC20 | EthereumTokenType.ERC721,
         Record<'block' | 'trust', Set<string>>
     > = {
         [EthereumTokenType.ERC20]: {
@@ -172,10 +165,6 @@ export async function updateWalletToken(
         [EthereumTokenType.ERC721]: {
             block: wallet.erc721_token_blacklist,
             trust: wallet.erc721_token_whitelist,
-        },
-        [EthereumTokenType.ERC1155]: {
-            block: wallet.erc1155_token_blacklist,
-            trust: wallet.erc1155_token_whitelist,
         },
     }
 

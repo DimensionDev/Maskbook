@@ -4,7 +4,7 @@ import {
     getERC721TokenDetailedFromChain,
     getERC721TokenAssetFromChain,
 } from './useERC721TokenDetailed'
-import type { ERC721ContractDetailed } from '../types'
+import type { ERC721ContractDetailed } from '@masknet/web3-shared-base'
 import { useOpenseaAPIConstants } from '../constants'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 

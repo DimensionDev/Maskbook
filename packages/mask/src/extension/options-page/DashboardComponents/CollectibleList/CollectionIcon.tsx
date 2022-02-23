@@ -4,7 +4,7 @@ import { Image } from '../../../../components/shared/Image'
 import { makeStyles } from '@masknet/theme'
 import { TokenIcon } from '@masknet/shared'
 import classNames from 'classnames'
-import type { ERC721ContractDetailed } from '@masknet/web3-shared-evm'
+import type { ERC721ContractDetailed } from '@masknet/web3-shared-base'
 import { isSameAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({

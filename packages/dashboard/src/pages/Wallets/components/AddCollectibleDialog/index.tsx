@@ -2,12 +2,12 @@ import { FormEvent, memo, useCallback, useEffect, useState } from 'react'
 import { MaskDialog, MaskTextField } from '@masknet/theme'
 import { Box, Button, DialogActions, DialogContent } from '@mui/material'
 import {
-    EthereumTokenType,
     isSameAddress,
     useERC721ContractDetailed,
     useERC721TokenDetailedCallback,
     useWallet,
 } from '@masknet/web3-shared-evm'
+import { EthereumTokenType } from '@masknet/web3-shared-base'
 import { EthereumAddress } from 'wallet.ts'
 import { useDashboardI18N } from '../../../../locales'
 import { z } from 'zod'

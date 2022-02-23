@@ -11,7 +11,6 @@ import {
     useAccount,
     useChainId,
     useMaskBoxConstants,
-    EthereumTokenType,
 } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
@@ -21,7 +20,7 @@ import type { BoxInfo } from '../../type'
 import { GasSettingBar } from '../../../Wallet/SNSAdaptor/GasSettingDialog/GasSettingBar'
 import { TokenPrice } from '../../../../components/shared/TokenPrice'
 import { Context } from '../../hooks/useContext'
-import { multipliedBy } from '@masknet/web3-shared-base'
+import { EthereumTokenType, multipliedBy } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     main: {

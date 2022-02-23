@@ -1,13 +1,11 @@
 import {
     ChainId,
-    ERC721TokenDetailed,
-    EthereumTokenType,
     createERC721Token,
-    ERC721ContractDetailed,
     createERC721ContractDetailed,
     createNativeToken,
     createERC20Token,
 } from '@masknet/web3-shared-evm'
+import { EthereumTokenType, ERC721ContractDetailed, ERC721TokenDetailed } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import isAfter from 'date-fns/isAfter'

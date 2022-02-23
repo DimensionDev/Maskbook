@@ -13,9 +13,9 @@ import {
     useNetworkType,
     useWeb3,
     useTokenConstants,
-    EthereumTokenType,
     isSameAddress,
 } from '@masknet/web3-shared-evm'
+import { EthereumTokenType } from '@masknet/web3-shared-base'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'

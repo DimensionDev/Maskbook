@@ -1,4 +1,4 @@
-import type { ERC721TokenDetailed } from '@masknet/plugin-infra'
+import type { ERC721TokenDetailed } from '@masknet/web3-shared-base'
 import { memo, useMemo, useState } from 'react'
 import { Checkbox, ImageListItem, ImageListItemBar, Box } from '@mui/material'
 import { getMaskColor, makeStyles, MaskColorVar } from '@masknet/theme'

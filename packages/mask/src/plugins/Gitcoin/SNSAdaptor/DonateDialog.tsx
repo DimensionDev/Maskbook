@@ -1,7 +1,5 @@
 import {
-    EthereumTokenType,
     formatBalance,
-    FungibleTokenDetailed,
     TransactionStateType,
     useAccount,
     useChainId,
@@ -27,7 +25,7 @@ import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { useDonateCallback } from '../hooks/useDonateCallback'
 import { PluginGitcoinMessages } from '../messages'
-import { rightShift } from '@masknet/web3-shared-base'
+import { FungibleTokenDetailed, EthereumTokenType, rightShift } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {

@@ -9,9 +9,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import {
     ChainId,
     currySameAddress,
-    EthereumTokenType,
     formatBalance,
-    FungibleTokenDetailed,
     resolveTransactionLinkOnExplorer,
     TransactionStateType,
     useChainId,
@@ -21,7 +19,7 @@ import {
     useTokenConstants,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
-import { leftShift, rightShift, ZERO } from '@masknet/web3-shared-base'
+import { FungibleTokenDetailed, EthereumTokenType, leftShift, rightShift, ZERO } from '@masknet/web3-shared-base'
 import { SelectTokenDialogEvent, WalletMessages, WalletRPC } from '../../Wallet/messages'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useSwapCallback } from './hooks/useSwapCallback'

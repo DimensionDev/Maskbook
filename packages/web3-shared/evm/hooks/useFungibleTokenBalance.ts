@@ -1,5 +1,6 @@
 import { unreachable } from '@dimensiondev/kit'
-import { ChainId, EthereumTokenType } from '../types'
+import type { ChainId } from '../types'
+import { EthereumTokenType } from '@masknet/web3-shared-base'
 import { useERC20TokenBalance } from './useERC20TokenBalance'
 import { useNativeTokenBalance } from './useNativeTokenBalance'
 

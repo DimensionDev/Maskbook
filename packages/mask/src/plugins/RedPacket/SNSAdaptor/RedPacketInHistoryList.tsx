@@ -14,10 +14,10 @@ import {
     TransactionStateType,
     useAccount,
     isSameAddress,
-    EthereumTokenType,
     useFungibleTokenDetailed,
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
+import { EthereumTokenType } from '@masknet/web3-shared-base'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { StyledLinearProgress } from '../../ITO/SNSAdaptor/StyledLinearProgress'

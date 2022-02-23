@@ -132,7 +132,6 @@ export interface ExternalErc20Award {
 export interface LootBox {
     address?: string
     id: null | string
-    erc1155Tokens?: any[]
     erc721Tokens?: any[]
     erc20Tokens?: any[]
     totalValueUsdScaled: AmountUnformatted

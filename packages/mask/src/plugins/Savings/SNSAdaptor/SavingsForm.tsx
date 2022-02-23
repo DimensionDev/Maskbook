@@ -4,7 +4,6 @@ import { useState, useMemo, useCallback } from 'react'
 import { useAsync } from 'react-use'
 import { unreachable } from '@dimensiondev/kit'
 import {
-    EthereumTokenType,
     useNativeTokenDetailed,
     useFungibleTokenBalance,
     useWeb3,
@@ -19,7 +18,7 @@ import { useStyles } from './SavingsFormStyles'
 import { IconURLs } from './IconURL'
 import { TabType, ProtocolType } from '../types'
 import { SavingsProtocols } from '../protocols'
-import { isLessThan, rightShift } from '@masknet/web3-shared-base'
+import { EthereumTokenType, isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'

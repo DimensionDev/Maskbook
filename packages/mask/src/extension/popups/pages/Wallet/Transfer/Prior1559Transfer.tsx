@@ -5,7 +5,6 @@ import BigNumber from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
 import {
     Asset,
-    EthereumTokenType,
     formatBalance,
     formatGweiToWei,
     formatWeiToGwei,
@@ -17,7 +16,14 @@ import {
     useFungibleTokenBalance,
     isSameAddress,
 } from '@masknet/web3-shared-evm'
-import { isZero, isGreaterThan, isGreaterThanOrEqualTo, multipliedBy, rightShift } from '@masknet/web3-shared-base'
+import {
+    EthereumTokenType,
+    isZero,
+    isGreaterThan,
+    isGreaterThanOrEqualTo,
+    multipliedBy,
+    rightShift,
+} from '@masknet/web3-shared-base'
 import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'

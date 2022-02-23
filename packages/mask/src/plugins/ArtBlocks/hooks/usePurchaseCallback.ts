@@ -1,12 +1,12 @@
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import {
-    EthereumTokenType,
     TransactionEventType,
     TransactionStateType,
     useAccount,
     useChainId,
     useTransactionState,
 } from '@masknet/web3-shared-evm'
+import { EthereumTokenType } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import { useArtBlocksContract } from './useArtBlocksContract'

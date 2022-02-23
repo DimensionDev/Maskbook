@@ -1,12 +1,7 @@
 import { Card, Link, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import {
-    Wallet,
-    ERC721TokenDetailed,
-    resolveCollectibleLink,
-    NonFungibleAssetProvider,
-    useImageChecker,
-} from '@masknet/web3-shared-evm'
+import { Wallet, resolveCollectibleLink, NonFungibleAssetProvider, useImageChecker } from '@masknet/web3-shared-evm'
+import type { ERC721TokenDetailed } from '@masknet/web3-shared-base'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { ActionsBarNFT } from '../ActionsBarNFT'
 import { Image } from '../../../../components/shared/Image'

@@ -1,13 +1,7 @@
 import urlcat from 'urlcat'
 import { compact, first } from 'lodash-unified'
-import {
-    ChainId,
-    createLookupTableResolver,
-    ERC721TokenDetailed,
-    EthereumTokenType,
-    FungibleTokenDetailed,
-    resolveResourceLink,
-} from '@masknet/web3-shared-evm'
+import { ChainId, createLookupTableResolver, resolveResourceLink } from '@masknet/web3-shared-evm'
+import { FungibleTokenDetailed, EthereumTokenType, ERC721TokenDetailed } from '@masknet/web3-shared-base'
 import {
     Ownership,
     RaribleEventType,

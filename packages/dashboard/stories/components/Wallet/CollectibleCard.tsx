@@ -1,6 +1,6 @@
 import { story } from '@masknet/storybook-shared'
 import { CollectibleCard as C } from '../../../src/pages/Wallets/components/CollectibleCard'
-import { EthereumTokenType } from '@masknet/plugin-infra'
+import { EthereumTokenType } from '@masknet/web3-shared-base'
 
 const { meta, of } = story(C)
 

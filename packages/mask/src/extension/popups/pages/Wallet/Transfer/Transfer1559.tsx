@@ -3,7 +3,6 @@ import { useI18N } from '../../../../../utils'
 import {
     addGasMargin,
     Asset,
-    EthereumTokenType,
     formatBalance,
     formatEthereumAddress,
     formatGweiToEther,
@@ -27,6 +26,7 @@ import {
     isZero,
     multipliedBy,
     rightShift,
+    EthereumTokenType,
 } from '@masknet/web3-shared-base'
 import { z as zod } from 'zod'
 import { EthereumAddress } from 'wallet.ts'

@@ -1,11 +1,13 @@
 import type { RequestArguments } from 'web3-core'
 import type { Subscription } from 'use-subscription'
 import type {
+    NonFungibleTokenDetailed,
+    ERC721TokenCollectionInfo,
+    ERC721TokenDetailed,
+} from '@masknet/web3-shared-base'
+import type {
     ChainId,
     ERC20TokenDetailed,
-    ERC721TokenDetailed,
-    ERC1155TokenDetailed,
-    NonFungibleTokenDetailed,
     NetworkType,
     ProviderType,
     Asset,
@@ -15,7 +17,6 @@ import type {
     Transaction,
     AddressName,
     CryptoPrice,
-    ERC721TokenCollectionInfo,
     SendOverrides,
     RequestOptions,
 } from '../types'
@@ -31,7 +32,6 @@ export interface Web3ProviderType {
     walletPrimary: Subscription<Wallet | null>
     erc20Tokens: Subscription<ERC20TokenDetailed[]>
     erc721Tokens: Subscription<ERC721TokenDetailed[]>
-    erc1155Tokens: Subscription<ERC1155TokenDetailed[]>
     portfolioProvider: Subscription<FungibleAssetProvider>
 
     addToken: (token: ERC20TokenDetailed | NonFungibleTokenDetailed) => Promise<void>

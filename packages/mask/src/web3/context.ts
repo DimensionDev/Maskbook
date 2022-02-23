@@ -1,10 +1,6 @@
 import { noop } from 'lodash-unified'
 import type { Subscription } from 'use-subscription'
 import {
-    ERC20TokenDetailed,
-    ERC721TokenDetailed,
-    ERC1155TokenDetailed,
-    EthereumTokenType,
     ProviderType,
     Web3ProviderType,
     resolveProviderInjectedKey,
@@ -15,6 +11,7 @@ import {
     createContract,
     isSameAddress,
 } from '@masknet/web3-shared-evm'
+import { ERC20TokenDetailed, EthereumTokenType, ERC721TokenDetailed } from '@masknet/web3-shared-base'
 import { isPopupPage } from '@masknet/shared-base'
 import { bridgedCoin98Provider, bridgedEthereumProvider } from '@masknet/injected-script'
 import {
@@ -112,11 +109,6 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
             () => WalletRPC.getTokens<ERC721TokenDetailed>(EthereumTokenType.ERC721),
             [],
             WalletMessages.events.erc721TokensUpdated.on,
-        ),
-        erc1155Tokens: createSubscriptionFromAsync(
-            () => WalletRPC.getTokens<ERC1155TokenDetailed>(EthereumTokenType.ERC1155),
-            [],
-            WalletMessages.events.erc1155TokensUpdated.on,
         ),
         portfolioProvider: createSubscriptionFromSettings(currentFungibleAssetDataProviderSettings),
 

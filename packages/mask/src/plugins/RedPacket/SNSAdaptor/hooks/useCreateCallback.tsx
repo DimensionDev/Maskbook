@@ -6,8 +6,6 @@ import Web3Utils from 'web3-utils'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import {
-    EthereumTokenType,
-    FungibleTokenDetailed,
     TransactionEventType,
     TransactionState,
     TransactionStateType,
@@ -16,7 +14,7 @@ import {
     useTokenConstants,
     useTransactionState,
 } from '@masknet/web3-shared-evm'
-import { isLessThan, toFixed } from '@masknet/web3-shared-base'
+import { EthereumTokenType, FungibleTokenDetailed, isLessThan, toFixed } from '@masknet/web3-shared-base'
 import { useRedPacketContract } from './useRedPacketContract'
 
 export interface RedPacketSettings {

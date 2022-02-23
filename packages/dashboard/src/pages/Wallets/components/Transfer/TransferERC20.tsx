@@ -3,7 +3,6 @@ import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
     addGasMargin,
-    EthereumTokenType,
     formatWeiToEther,
     FungibleTokenDetailed,
     isEIP1559Supported,
@@ -17,7 +16,7 @@ import {
     useTokenConstants,
     useTokenTransferCallback,
 } from '@masknet/web3-shared-evm'
-import { isGreaterThan, isZero, multipliedBy, rightShift } from '@masknet/web3-shared-base'
+import { EthereumTokenType, isGreaterThan, isZero, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import {
     NetworkPluginID,

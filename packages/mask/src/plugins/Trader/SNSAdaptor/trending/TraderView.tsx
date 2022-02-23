@@ -21,12 +21,12 @@ import { currentDataProviderSettings } from '../../settings'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
 import {
-    EthereumTokenType,
     useFungibleTokenDetailed,
     useChainIdValid,
     useNetworkType,
     isNativeTokenSymbol,
 } from '@masknet/web3-shared-evm'
+import { EthereumTokenType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
     return {

@@ -1,5 +1,6 @@
 import { useAsyncRetry } from 'react-use'
-import { EthereumTokenType, FungibleTokenDetailed, isSameAddress, useTokenConstants } from '@masknet/web3-shared-evm'
+import { isSameAddress, useTokenConstants } from '@masknet/web3-shared-evm'
+import { EthereumTokenType, FungibleTokenDetailed } from '@masknet/web3-shared-base'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 
 export function useTrade(inputToken?: FungibleTokenDetailed, outputToken?: FungibleTokenDetailed) {

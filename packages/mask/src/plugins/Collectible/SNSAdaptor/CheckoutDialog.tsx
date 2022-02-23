@@ -12,7 +12,8 @@ import {
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
-import { EthereumTokenType, useAccount, useFungibleTokenWatched } from '@masknet/web3-shared-evm'
+import { useAccount, useFungibleTokenWatched } from '@masknet/web3-shared-evm'
+import { EthereumTokenType, isGreaterThan } from '@masknet/web3-shared-base'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { UnreviewedWarning } from './UnreviewedWarning'
 import { useI18N } from '../../../utils'
@@ -25,7 +26,6 @@ import { CheckoutOrder } from './CheckoutOrder'
 import type { useAsset } from '../../EVM/hooks/useAsset'
 import type { useAssetOrder } from '../hooks/useAssetOrder'
 import type { Coin } from '../../Trader/types'
-import { isGreaterThan } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {

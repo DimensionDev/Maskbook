@@ -6,12 +6,11 @@ import {
     useChainId,
     useWallet,
     useAccount,
-    ERC721ContractDetailed,
-    ERC721TokenDetailed,
     useWeb3,
     TransactionStateType,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
+import type { ERC721ContractDetailed, ERC721TokenDetailed } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import classNames from 'classnames'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'

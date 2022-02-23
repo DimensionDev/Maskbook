@@ -1,13 +1,8 @@
 import type { Transaction as Web3Transaction } from 'web3-core'
 import type RSS3 from 'rss3-next'
 import type { CurrencyType, Web3Plugin } from '@masknet/plugin-infra'
-import type {
-    ChainId,
-    ERC20TokenDetailed,
-    ERC721ContractDetailed,
-    ERC721TokenDetailed,
-    NativeTokenDetailed,
-} from '@masknet/web3-shared-evm'
+import type { ChainId, ERC20TokenDetailed, NativeTokenDetailed } from '@masknet/web3-shared-evm'
+import type { ERC721ContractDetailed, ERC721TokenDetailed } from '@masknet/web3-shared-base'
 
 export namespace ExplorerAPI {
     export type Transaction = Web3Transaction & {
@@ -280,7 +275,6 @@ export namespace NonFungibleTokenAPI {
         getContractBalance?: (address: string) => Promise<ContractBalance[]>
         getAsset?: (address: string, tokenId: string, opts?: { chainId?: ChainId }) => Promise<Asset | undefined>
         getToken?: (address: string, tokenId: string, chainId: ChainId) => Promise<ERC721TokenDetailed | undefined>
-        // TODO: should return Web3Plugin.NonFungibleToken
         getTokens?: (
             from: string,
             opts: Options,

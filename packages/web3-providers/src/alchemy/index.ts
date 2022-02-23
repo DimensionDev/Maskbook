@@ -2,7 +2,8 @@ import type { NonFungibleTokenAPI } from '../types'
 import urlcat from 'urlcat'
 import { ALCHEMY_URL_MAPPINGS } from './constants'
 import type { AlchemyNFTItemResponse, AlchemyNFTItemDetailedResponse, AlchemyNFTItemMetadataResponse } from './types'
-import { Web3Plugin, PluginId, ERC721TokenDetailed, EthereumTokenType } from '@masknet/plugin-infra'
+import { Web3Plugin, PluginId } from '@masknet/plugin-infra'
+import { ERC721TokenDetailed, EthereumTokenType } from '@masknet/web3-shared-base'
 import { resolveIPFSLink } from '@masknet/web3-shared-evm'
 
 interface Payload {

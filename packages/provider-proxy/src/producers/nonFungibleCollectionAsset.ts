@@ -1,4 +1,4 @@
-import type { ERC721TokenCollectionInfo } from '@masknet/plugin-infra'
+import type { ERC721TokenCollectionInfo } from '@masknet/web3-shared-base'
 import { getNFTScanNFTList, getOpenSeaCollectionList } from '@masknet/web3-providers'
 import { collectAllPageData } from '../helper/request'
 import type { ProducerArgBase, ProducerKeyFunction, ProducerPushFunction, RPCMethodRegistrationValue } from '../types'

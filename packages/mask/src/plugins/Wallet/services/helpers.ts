@@ -2,8 +2,6 @@ import { omit } from 'lodash-unified'
 import type { IDBPSafeTransaction } from '../../../../background/database/utils/openDB'
 import type { WalletDB } from '../database/Wallet.db'
 import type {
-    ERC1155TokenRecord,
-    ERC1155TokenRecordInDatabase,
     ERC20TokenRecord,
     ERC20TokenRecordInDatabase,
     LegacyWalletRecord,
@@ -11,13 +9,8 @@ import type {
     TransactionChunkRecordInDatabase,
     LegacyWalletRecordInDatabase,
 } from '../database/types'
-import {
-    ChainId,
-    formatEthereumAddress,
-    getChainIdFromName,
-    ERC721TokenDetailed,
-    ERC721TokenRecordInDatabase,
-} from '@masknet/web3-shared-evm'
+import { ChainId, formatEthereumAddress, getChainIdFromName } from '@masknet/web3-shared-evm'
+import type { ERC721TokenRecordInDatabase, ERC721TokenDetailed } from '@masknet/web3-shared-base'
 
 export async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {
     const record = await t.objectStore('Wallet').get(formatEthereumAddress(address))
@@ -73,20 +66,6 @@ export function ERC721TokenRecordIntoDB(x: ERC721TokenDetailed) {
 
 export function ERC721TokenRecordOutDB(x: ERC721TokenRecordInDatabase) {
     const record: ERC721TokenDetailed = omit(x, 'record_id')
-    return record
-}
-
-export function ERC1155TokenRecordIntoDB(x: ERC1155TokenRecord) {
-    const record: ERC1155TokenRecordInDatabase = {
-        ...x,
-        // NFT cannot be divided and store each token separately
-        record_id: `${formatEthereumAddress(x.address)}_${x.tokenId}`,
-    }
-    return record
-}
-
-export function ERC1155TokenRecordOutDB(x: ERC1155TokenRecordInDatabase) {
-    const record: ERC1155TokenRecord = omit(x, 'record_id')
     return record
 }
 

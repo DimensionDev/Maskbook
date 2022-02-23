@@ -1,7 +1,7 @@
 import type { BigNumber } from 'bignumber.js'
+import type { ERC721TokenDetailed } from '@masknet/web3-shared-base'
 import type { Subscription } from 'use-subscription'
 import type { Pagination, Plugin } from './types'
-import type { ERC721TokenDetailed } from './web3-token-types'
 
 /**
  * A network plugin defines the way to connect to a single chain.

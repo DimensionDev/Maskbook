@@ -15,7 +15,6 @@ import {
     useNativeTokenBalance,
     useTokenConstants,
     useFungibleTokensDetailed,
-    EthereumTokenType,
     useChainId,
     useAccount,
     useERC20TokenAllowance,
@@ -43,6 +42,7 @@ import {
     isGreaterThan,
     isGreaterThanOrEqualTo,
     isLessThanOrEqualTo,
+    EthereumTokenType,
     multipliedBy,
     useBeat,
 } from '@masknet/web3-shared-base'

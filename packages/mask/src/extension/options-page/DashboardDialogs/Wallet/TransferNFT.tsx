@@ -2,12 +2,8 @@ import { Button, TextField } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
-import {
-    ERC721TokenDetailed,
-    formatEthereumAddress,
-    TransactionStateType,
-    useTokenTransferCallback,
-} from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, TransactionStateType, useTokenTransferCallback } from '@masknet/web3-shared-evm'
+import type { ERC721TokenDetailed } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { Image } from '../../../../components/shared/Image'
