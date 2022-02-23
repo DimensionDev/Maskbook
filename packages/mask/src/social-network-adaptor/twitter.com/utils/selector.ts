@@ -80,6 +80,8 @@ export const composeAnchorTextSelector: () => LiveSelector<HTMLAnchorElement, tr
     querySelector<HTMLAnchorElement>(
         'header[role=banner] a[href="/compose/tweet"] div[dir],aside a[href="/compose/tweet"] div[dir]',
     )
+export const headingTextSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
+    querySelector<HTMLAnchorElement>('[role="banner"] [role="heading"]')
 
 export const postEditorContentInPopupSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
