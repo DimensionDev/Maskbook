@@ -266,7 +266,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             new URL('./assets/savings.png', import.meta.url).toString(),
             onSavingsDialogOpen,
             undefined,
-            false,
+            isNotEvm,
         ),
         createEntry(
             'Swap',
@@ -359,7 +359,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             new URL('./assets/findtruman.png', import.meta.url).toString(),
             onFindTrumanDialogOpen,
             [ChainId.Mainnet],
-            false,
+            isNotEvm,
             true,
         ),
     ]
@@ -408,9 +408,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             {isFindTrumanDialogOpen ? <FindTrumanDialog open onClose={onFindTrumanDialogClose} /> : null}
             {isSwapDialogOpen ? <TraderDialog open onClose={onSwapDialogClose} /> : null}
 
-            {isSavingsDialogOpen ? (
-                <SavingsDialog open onClose={onSavingsDialogClose} onSwapDialogOpen={onSwapDialogOpen} />
-            ) : null}
+            {isSavingsDialogOpen ? <SavingsDialog open onClose={onSavingsDialogClose} /> : null}
         </>
     )
 }

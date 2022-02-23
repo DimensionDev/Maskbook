@@ -51,8 +51,10 @@ export const searchNewTweetButtonSelector: () => LiveSelector<E, true> = () => {
 
 export const searchNickNameSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="UserProfileHeader_Items"]')
-export const searchAvatarSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="primaryColumn"] a[href$="/photo"] img[src*="profile_images"]')
+export const searchAvatarSelector = () =>
+    querySelector<HTMLImageElement>('[data-testid="primaryColumn"] a[href$="/photo"] img[src*="profile_images"]')
+export const searchNFTAvatarSelector = () =>
+    querySelector<HTMLImageElement>('[data-testid="primaryColumn"] a[href$="/nft"] img[src*="profile_images"]')
 export const searchAvatarMetaSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('head > meta[property="og:image"]:last-child')
 
@@ -197,7 +199,7 @@ export const selfInfoSelectors = () => ({
     userAvatar: p(avatar, 1),
 })
 
-// #region nft avatar
+// #region twitter nft avatar
 export const searchProfileAvatarSelector = () => {
     return querySelectorAll<E>('[data-testid="fileInput"]').at(1).closest<E>(4)
 }
@@ -217,7 +219,7 @@ export const searchAvatarSelectorImage = () =>
         .closest<HTMLDivElement>(2)
         .querySelector<HTMLDivElement>('div > div > :nth-child(2) > div > img')
 
-export const searchAvatarOpenFileSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1)
+export const searchTwitterAvatarOpenFilesSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1)
 export const searchProfileSaveSelector = () => querySelector<E>('[data-testid="Profile_Save_Button"]')
 
 export const searchProfessionalButtonSelector = () => querySelector<E>('[data-testid*="ProfessionalButton"]')

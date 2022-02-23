@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, useCallback } from 'react'
+import * as ABICoder from 'web3-eth-abi'
 import { useAsyncRetry } from 'react-use'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import addDays from 'date-fns/addDays'
@@ -24,10 +25,12 @@ import {
     ZERO_ADDRESS,
     isZeroAddress,
     isNativeTokenAddress,
+    formatBalance,
 } from '@masknet/web3-shared-evm'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { BoxInfo, BoxState } from '../type'
 import { useMaskBoxInfo } from './useMaskBoxInfo'
+import { useMerkelProof } from './useMerkleProof'
 import { useMaskBoxStatus } from './useMaskBoxStatus'
 import { useMaskBoxCreationSuccessEvent } from './useMaskBoxCreationSuccessEvent'
 import { useMaskBoxTokensForSale } from './useMaskBoxTokensForSale'
@@ -35,18 +38,26 @@ import { useMaskBoxPurchasedTokens } from './useMaskBoxPurchasedTokens'
 import { formatCountdown } from '../helpers/formatCountdown'
 import { useOpenBoxTransaction } from './useOpenBoxTransaction'
 import { useMaskBoxMetadata } from './useMaskBoxMetadata'
-import { useIsWhitelisted } from './useIsWhitelisted'
-import { isGreaterThanOrEqualTo, isLessThanOrEqualTo, isZero, multipliedBy, useBeat } from '@masknet/web3-shared-base'
+import { useQualification } from './useQualification'
+import {
+    isGreaterThan,
+    isGreaterThanOrEqualTo,
+    isLessThanOrEqualTo,
+    multipliedBy,
+    useBeat,
+} from '@masknet/web3-shared-base'
 
-function useContext(initialState?: { boxId: string }) {
+function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const now = new Date()
     const beat = useBeat()
     const account = useAccount()
     const chainId = useChainId()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(ChainId.Mainnet)
     const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants()
+    const coder = ABICoder as unknown as ABICoder.AbiCoder
 
     const [boxId, setBoxId] = useState(initialState?.boxId ?? '')
+    const [rootHash, setRootHash] = useState(initialState?.hashRoot || '')
     const [paymentTokenAddress, setPaymentTokenAddress] = useState('')
 
     // #region the box info
@@ -56,6 +67,7 @@ function useContext(initialState?: { boxId: string }) {
         loading: loadingMaskBoxInfo,
         retry: retryMaskBoxInfo,
     } = useMaskBoxInfo(boxId)
+
     const {
         value: maskBoxStatus = null,
         error: errorMaskBoxStatus,
@@ -133,10 +145,37 @@ function useContext(initialState?: { boxId: string }) {
         maskBoxStatus,
         maskBoxCreationSuccessEvent,
     ])
+    // #endregion
+
+    // #region qualification
+    const { value, error: errorProof, loading: loadingProof } = useMerkelProof(rootHash)
+    const proofBytes = value?.proof
+        ? coder.encodeParameters(['bytes32[]'], [value?.proof?.map((p) => `0x${p}`) ?? []])
+        : undefined
+    const qualification = useQualification(
+        boxInfo?.qualificationAddress,
+        account,
+        value?.proof ? coder.encodeParameters(['bytes', 'bytes32'], [proofBytes, rootHash]) : undefined,
+    )
+
+    // not in whitelist
+    const notInWhiteList = value?.message === 'leaf not found'
+
+    // at least hold token amount
+    const { value: holderToken } = useERC20TokenDetailed(boxInfo?.holderTokenAddress)
+    const { value: holderTokenBalance = '0' } = useERC20TokenBalance(holderToken?.address)
+    const holderMinTokenAmountBN = new BigNumber(boxInfo?.holderMinTokenAmount ?? 0)
+    const insufficientHolderToken =
+        isGreaterThan(holderMinTokenAmountBN, 0) && !holderMinTokenAmountBN.lte(holderTokenBalance)
+    // #endregion
 
     const boxState = useMemo(() => {
-        if (errorMaskBoxInfo || errorMaskBoxStatus || errorBoxInfo) return BoxState.ERROR
-        if (loadingMaskBoxInfo || loadingMaskBoxStatus || loadingBoxInfo) {
+        if (notInWhiteList) return BoxState.NOT_IN_WHITELIST
+        if (insufficientHolderToken) return BoxState.INSUFFICIENT_HOLDER_TOKEN
+        if (qualification?.error_msg) return BoxState.NOT_QUALIFIED
+        if (errorMaskBoxInfo || errorMaskBoxStatus || errorBoxInfo || (rootHash ? errorProof : false))
+            return BoxState.ERROR
+        if (loadingMaskBoxInfo || loadingMaskBoxStatus || loadingBoxInfo || (rootHash ? loadingProof : false)) {
             if (!maskBoxInfo && !boxInfo) return BoxState.UNKNOWN
         }
         if (maskBoxInfo && !boxInfo) return BoxState.UNKNOWN
@@ -147,19 +186,21 @@ function useContext(initialState?: { boxId: string }) {
         if (boxInfo.startAt > now || !boxInfo.started) return BoxState.NOT_READY
         if (boxInfo.endAt < now || maskBoxStatus?.expired) return BoxState.EXPIRED
         return BoxState.READY
-    }, [boxInfo, loadingBoxInfo, errorBoxInfo, maskBoxInfo, loadingMaskBoxInfo, errorMaskBoxInfo, beat])
-
-    const isWhitelisted = useIsWhitelisted(boxInfo?.qualificationAddress, account)
-    const isQualifiedByContract =
-        boxInfo?.qualificationAddress && !isZeroAddress(boxInfo?.qualificationAddress) ? isWhitelisted : true
-
-    // #region check holder min token
-    const { value: holderToken } = useERC20TokenDetailed(boxInfo?.holderTokenAddress)
-    const { value: holderTokenBalance = '0' } = useERC20TokenBalance(holderToken?.address)
-    const holderMinTokenAmountBN = new BigNumber(boxInfo?.holderMinTokenAmount ?? 0)
-    const isQualified =
-        (isZero(holderMinTokenAmountBN) || holderMinTokenAmountBN.lte(holderTokenBalance)) && isQualifiedByContract
-    // #endregion
+    }, [
+        boxInfo,
+        loadingBoxInfo,
+        errorBoxInfo,
+        maskBoxInfo,
+        loadingMaskBoxInfo,
+        errorMaskBoxInfo,
+        qualification,
+        loadingProof,
+        errorProof,
+        rootHash,
+        notInWhiteList,
+        insufficientHolderToken,
+        beat,
+    ])
 
     const boxStateMessage = useMemo(() => {
         switch (boxState) {
@@ -179,8 +220,16 @@ function useContext(initialState?: { boxId: string }) {
                 return countdown ? `Start sale in ${countdown}` : 'Loading...'
             case BoxState.SOLD_OUT:
                 return 'Sold Out'
+            case BoxState.NOT_IN_WHITELIST:
+                return 'You are not in the whitelist.'
+            case BoxState.INSUFFICIENT_HOLDER_TOKEN:
+                const { symbol, decimals } = holderToken ?? {}
+                const tokenPrice = `${formatBalance(boxInfo?.holderMinTokenAmount, decimals)} $${symbol}`
+                return `You must hold at least ${tokenPrice}.`
+            case BoxState.NOT_QUALIFIED:
+                return qualification?.error_msg ?? 'Not qualified.'
             case BoxState.DRAWED_OUT:
-                return 'Purchase limit exceeded'
+                return 'Purchase limit exceeded.'
             case BoxState.ERROR:
                 return 'Something went wrong.'
             case BoxState.NOT_FOUND:
@@ -188,7 +237,7 @@ function useContext(initialState?: { boxId: string }) {
             default:
                 unreachable(boxState)
         }
-    }, [boxState, boxInfo?.startAt, beat])
+    }, [holderToken, boxState, boxInfo?.startAt, qualification, beat])
 
     useEffect(() => {
         if (!boxInfo || boxInfo.started) return
@@ -197,8 +246,6 @@ function useContext(initialState?: { boxId: string }) {
             retryMaskBoxStatus()
         }
     }, [boxInfo, beat])
-
-    // #endregion
 
     // #region the box metadata
     const { value: boxMetadata, retry: retryBoxMetadata } = useMaskBoxMetadata(boxId, boxInfo?.creator ?? '')
@@ -255,13 +302,14 @@ function useContext(initialState?: { boxId: string }) {
         paymentTokenIndex,
         paymentTokenPrice,
         paymentTokenDetailed,
+        proofBytes,
         openBoxTransactionOverrides,
     )
     const { value: erc20Allowance, retry: retryAllowance } = useERC20TokenAllowance(
         isNativeToken ? undefined : paymentTokenAddress,
         MASK_BOX_CONTRACT_ADDRESS,
     )
-    const canPurchase = !isBalanceInsufficient && isQualified && !!boxInfo?.personalRemaining
+    const canPurchase = !isBalanceInsufficient && !!boxInfo?.personalRemaining
     const allowToPurchase = boxState === BoxState.READY
     const isAllowanceEnough = isNativeToken ? true : costAmount.lte(erc20Allowance ?? '0')
     const { value: openBoxTransactionGasLimit } = useAsyncRetry(async () => {
@@ -275,9 +323,6 @@ function useContext(initialState?: { boxId: string }) {
         // box id
         boxId,
         setBoxId,
-
-        isQualified,
-        holderToken,
 
         // box info & metadata
         boxInfo,

@@ -63,7 +63,14 @@ async function requestSend(
 ) {
     id += 1
     const notifyProgress = isSendMethod(payload.method as EthereumMethodType)
-    const { providerType = currentProviderSettings.value, chainId = currentChainIdSettings.value } = overrides ?? {}
+    const { providerType = currentProviderSettings.value } = overrides ?? {}
+
+    const chainId =
+        overrides?.chainId ??
+        (providerType === ProviderType.MaskWallet
+            ? currentMaskWalletChainIdSettings.value
+            : currentChainIdSettings.value)
+
     const { popupsWindow = true } = options ?? {}
 
     const payload_ = {

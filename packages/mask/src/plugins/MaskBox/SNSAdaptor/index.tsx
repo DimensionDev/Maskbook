@@ -32,6 +32,7 @@ export default sns
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     const [, chainId] = props.url.match(/chain=(\d+)/i) ?? []
     const [, boxId] = props.url.match(/box=(\d+)/i) ?? []
+    const [, hashRoot] = props.url.match(/rootHash=([\dA-Za-z]+)/) ?? []
 
     const shouldNotRender = !chainId || !boxId
     usePluginWrapper(!shouldNotRender)
@@ -39,7 +40,7 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
 
     return (
         <EthereumChainBoundary chainId={Number.parseInt(chainId, 10)}>
-            <Context.Provider initialState={{ boxId }}>
+            <Context.Provider initialState={{ boxId, hashRoot }}>
                 <PreviewCard />
             </Context.Provider>
         </EthereumChainBoundary>

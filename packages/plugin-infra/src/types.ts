@@ -696,6 +696,7 @@ export enum CurrentSNSNetwork {
  */
 export enum PluginId {
     Avatar = 'com.maskbook.avatar',
+    ArtBlocks = 'io.artblocks',
     Collectible = 'com.maskbook.collectibles',
     CryptoArtAI = 'com.maskbook.cryptoartai',
     dHEDGE = 'org.dhedge',
@@ -724,6 +725,8 @@ export enum PluginId {
     PoolTogether = 'com.pooltogether',
     UnlockProtocol = 'com.maskbook.unlockprotocol',
     FileService = 'com.maskbook.fileservice',
+    CyberConnect = 'me.cyberconnect.app',
+    // @masknet/scripts: insert-here
 }
 
 export interface Pagination {
@@ -745,19 +748,9 @@ export interface Pageable<T> {
 export namespace Plugin.__Host {
     export interface Host<Context = undefined> {
         /**
-         * Control if the plugin is enabled or not.
-         *
-         * Note: This API currently is not in use.
-         *
-         * The "enabled/disabled" UI in the dashboard actually reflects to the "minimalMode" below.
-         */
-        enabled: EnabledStatusReporter
-        /**
          * Control if the plugin is in the minimal mode.
          *
          * If it is in the minimal mode, it will be omitted in some cases.
-         *
-         * Plugin can use
          */
         minimalMode: EnabledStatusReporter
         addI18NResource(pluginID: string, resources: Plugin.Shared.I18NResource): void

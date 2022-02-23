@@ -28,20 +28,14 @@ export function TabContent({ identity, addressNames }: TabContentProps) {
                         secondary={identity?.homepage}
                     />
                 </ListItem>
-                <ListItem>
+                <ListItem sx={{ display: 'block' }}>
                     <ListItemText
                         primary={<Typography color="textPrimary">Avatar</Typography>}
-                        secondary={
-                            <Box>
-                                <Typography color="textSecondary" variant="body2">
-                                    {identity?.avatar}
-                                </Typography>
-                                <Box sx={{ mt: 1 }}>
-                                    <img src={identity?.avatar} />
-                                </Box>
-                            </Box>
-                        }
+                        secondary={identity?.avatar}
                     />
+                    <Box sx={{ mt: 1 }}>
+                        <img src={identity?.avatar} />
+                    </Box>
                 </ListItem>
             </List>
         )
