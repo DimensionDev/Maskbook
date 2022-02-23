@@ -1,5 +1,5 @@
-import { encodeText } from '@dimensiondev/kit'
-import { delay, type DashboardRoutes, PopupRoutes } from '@masknet/shared-base'
+import { encodeText, delay } from '@dimensiondev/kit'
+import { type DashboardRoutes, PopupRoutes } from '@masknet/shared-base'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { createPersonaByJsonWebKey } from '../../database'
 import { attachProfileDB, LinkedProfileDetails } from '../../../background/database/persona/db'

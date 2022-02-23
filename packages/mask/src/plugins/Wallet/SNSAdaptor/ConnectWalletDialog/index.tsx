@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { DialogContent } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { safeUnreachable } from '@dimensiondev/kit'
+import { safeUnreachable, delay } from '@dimensiondev/kit'
 import {
     ChainId,
     getChainDetailedCAIP,
@@ -13,7 +13,6 @@ import {
     resolveProviderName,
 } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { delay } from '@masknet/shared-base'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { WalletMessages, WalletRPC } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'

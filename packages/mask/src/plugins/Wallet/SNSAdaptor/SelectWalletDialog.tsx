@@ -5,12 +5,13 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { ProviderType, useWallets, useWallet, NetworkType } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { DashboardRoutes, delay } from '@masknet/shared-base'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../utils'
 import { WalletMessages, WalletRPC } from '../messages'
 import { WalletInList } from '../../../components/shared/SelectWallet/WalletInList'
 import Services from '../../../extension/service'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { delay } from '@dimensiondev/kit'
 
 const useStyles = makeStyles()({
     content: {

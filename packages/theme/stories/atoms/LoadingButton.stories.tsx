@@ -4,11 +4,6 @@ import { Save } from '@mui/icons-material'
 
 const { meta, of } = story(MaskLoadingButton)
 
-function delay(time: number) {
-    return new Promise(function (resolve) {
-        setTimeout(resolve.bind(null), time)
-    })
-}
 const f = () => delay(3000)
 export default meta({
     title: 'Atoms/LoadingButton',
