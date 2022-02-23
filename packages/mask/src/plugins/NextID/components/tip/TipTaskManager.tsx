@@ -18,7 +18,7 @@ export const TipTaskManager: FC = ({ children }) => {
     }, [])
 
     useEffect(() => {
-        PluginNextIdMessages.tipTask.on((task) => {
+        return PluginNextIdMessages.tipTask.on((task) => {
             id += 1
             setTasks((list) => [...list, { id, ...task }])
         })
