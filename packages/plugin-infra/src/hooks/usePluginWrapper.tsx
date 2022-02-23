@@ -29,5 +29,5 @@ export function usePluginWrapper(open: boolean, options?: { width?: number; name
     // unwrap when the component is unmounted
     const setWrapRef = useRef(setWrap)
     setWrapRef.current = setWrap
-    useEffect(() => () => setWrapRef.current(false), [])
+    useEffect(() => () => setWrapRef.current(open), [])
 }

@@ -1,4 +1,4 @@
-import { ChainId, createERC721ContractDetailed, createERC721Token } from '@masknet/web3-shared-evm'
+import { ChainId, createERC721ContractDetailed, createERC721Token, resolveResourceLink } from '@masknet/web3-shared-evm'
 import addSeconds from 'date-fns/addSeconds'
 import isBefore from 'date-fns/isBefore'
 import urlcat from 'urlcat'
@@ -59,7 +59,7 @@ function createERC721TokenAsset(asset: NFTScanAsset) {
         {
             name: payload?.name ?? asset.nft_name ?? asset.nft_platform_name ?? '',
             description: payload?.description ?? '',
-            mediaUrl: payload?.image ?? '',
+            mediaUrl: resolveResourceLink(asset.nft_cover ?? asset.nft_content_uri ?? payload.image ?? ''),
             owner: asset.nft_holder ?? '',
         },
         asset.token_id,
@@ -118,7 +118,8 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
                 data: [],
                 hasNextPage: false,
             }
-        const data = response.data.content.map(createERC721TokenAsset)
+        const data =
+            response.data.content.map(createERC721TokenAsset).map((x) => ({ ...x, provideBy: 'NFTScan' })) ?? []
         const total = response.data.total
         return {
             data,

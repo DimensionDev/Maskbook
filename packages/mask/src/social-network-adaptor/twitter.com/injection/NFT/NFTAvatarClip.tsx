@@ -55,9 +55,11 @@ function NFTAvatarClipInTwitter() {
             linkDom.removeChild(linkDom.firstElementChild)
         }
 
-        const first = linkDom?.firstChild as HTMLDivElement
-        first.style.width = ''
-        first.style.height = ''
+        const first = linkDom?.firstElementChild as HTMLDivElement
+        if (first?.style) {
+            first.style.width = ''
+            first.style.height = ''
+        }
 
         return () => {
             if (borderElement.current && borderElement.current !== linkDom?.firstElementChild) {

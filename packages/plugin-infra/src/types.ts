@@ -694,6 +694,7 @@ export enum CurrentSNSNetwork {
  */
 export enum PluginId {
     Avatar = 'com.maskbook.avatar',
+    ArtBlocks = 'io.artblocks',
     Collectible = 'com.maskbook.collectibles',
     CryptoArtAI = 'com.maskbook.cryptoartai',
     dHEDGE = 'org.dhedge',

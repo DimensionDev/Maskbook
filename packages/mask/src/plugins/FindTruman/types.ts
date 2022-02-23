@@ -2,6 +2,7 @@ export enum PostType {
     Status = 'result',
     Puzzle = 'puzzle',
     Poll = 'poll',
+    Completion = 'completion',
     PuzzleResult = 'puzzle_result',
     PollResult = 'poll_result',
     Encryption = 'encryption',
@@ -49,6 +50,52 @@ export interface IconResource {
     url: string
 }
 
+export interface IntroductionBanner {
+    title: string
+    img: string
+    desc: string[]
+}
+
+export interface IntroductionStep {
+    title: string
+    img: string
+    desc: string
+    link?: {
+        label: string
+        url: string
+    }
+}
+
+export interface IntroductionParticipation {
+    title: string
+    steps: IntroductionStep[]
+}
+
+export interface IntroductionChannel {
+    label: string
+    img: string
+    url: string
+}
+
+export interface IntroductionCommunity {
+    title: string
+    channels: IntroductionChannel[]
+}
+
+export interface IntroductionPlot {
+    title: string
+    img: string
+    label: string
+    url: string
+}
+
+export interface Introduction {
+    banner: IntroductionBanner
+    step: IntroductionParticipation
+    community: IntroductionCommunity
+    plot: IntroductionPlot
+}
+
 export interface FindTrumanConst {
     faqLabel: string
     faqDesc: string
@@ -64,6 +111,7 @@ export interface FindTrumanConst {
     ftgImg: string
     poapImg: string
     ftgPartLogoImg: string
+    introduction: Introduction
     t: FindTrumanI18nFunction
 }
 
@@ -102,22 +150,54 @@ export interface UserCount {
     value: number
 }
 
-export interface UserPollStatus {
+export interface QuestionGroup {
+    fills: UserCompletionStatus[]
+    polls: UserPollOrPuzzleStatus[]
+    puzzles: UserPollOrPuzzleStatus[]
+}
+
+export interface BasicQuestion {
+    type: PostType
     id: string
+    order: number
+    critical: boolean
+    conditions: PuzzleCondition[]
+    notMeetConditions: PuzzleCondition[]
     story: StoryInfo
+}
+
+export interface UserPollStatus extends BasicQuestion {
     status: number // 1: opening, 0: finished
     question: string
     options: string[]
     count?: UserCount[]
     choice: number
-    conditions: PuzzleCondition[]
-    notMeetConditions: PuzzleCondition[]
-    critical: boolean
 }
 
 export interface UserPollOrPuzzleStatus extends UserPollStatus {
-    type: PostType.Poll | PostType.Puzzle
     result: number
+}
+
+export interface CompletionQuestionAnswer {
+    id: string
+    answer: string
+}
+
+export interface CompletionQuestionItem {
+    id: string
+    title: string
+    answer?: string
+    correct?: boolean
+    correctAnswer?: string
+}
+
+export interface UserCompletionStatus extends BasicQuestion {
+    questions: CompletionQuestionItem[]
+    answered: boolean
+    correct?: boolean
+    answersPublished: boolean
+    title: string
+    answers: number
 }
 
 export interface PuzzleResult {
@@ -150,6 +230,12 @@ export interface SubmitPollParams {
     from: string
     timestamp: number // in seconds
     choice: number
+}
+
+export interface SubmitCompletionParams {
+    timestamp: number
+    quesId: string
+    answers: { id: string; answer: string }[]
 }
 
 export enum ClueConditionType {
@@ -198,6 +284,15 @@ export interface MysteryBox {
     mintTime: string
     nftId: number
     img: string
+    completedQuest?: {
+        needPoap: boolean
+        tokenId: number
+    }
+}
+
+export interface PoapAvailability {
+    tokenId: number
+    used: boolean
 }
 
 export interface Quest {
@@ -206,6 +301,8 @@ export interface Quest {
     desc: string
     startFrom: string
     endTo: string
+    needPoap: boolean
+    poaps: PoapAvailability[]
 }
 
 export enum PartType {
@@ -223,6 +320,7 @@ export interface Part {
     name: string
     img: string
     used: boolean
+    fromBox?: MysteryBox
 }
 
 export interface UserPartsInfo {

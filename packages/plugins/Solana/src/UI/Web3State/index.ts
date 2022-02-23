@@ -10,7 +10,7 @@ import {
     resolveTransactionLinkOnExplorer,
 } from '@masknet/web3-shared-solana'
 import { getFungibleAssets, getNonFungibleAssets } from '../../apis'
-import { formatAddress } from '../../helpers'
+import { formatAddress, formatCurrency } from '../../helpers'
 import { getStorage, StorageDefaultValue } from '../../storage'
 
 function createSubscriptionFromPublicKey<T>(getter: (value: typeof StorageDefaultValue.publicKey) => T) {
@@ -50,7 +50,7 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
         Utils: {
             formatAddress,
             formatBalance: toFixed,
-            formatCurrency: (value) => toFixed(value),
+            formatCurrency,
 
             isChainIdValid: () => true,
 

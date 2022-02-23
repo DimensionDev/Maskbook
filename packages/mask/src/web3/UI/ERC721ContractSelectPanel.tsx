@@ -1,15 +1,23 @@
 import { useState, useCallback, useEffect } from 'react'
 import { v4 as uuid } from 'uuid'
-import { ERC721ContractDetailed, useERC721ContractBalance, useAccount, isSameAddress } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    ERC721ContractDetailed,
+    EthereumTokenType,
+    isSameAddress,
+    SocketState,
+    useAccount,
+    useCollections,
+    useERC721ContractBalance,
+} from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
 import { EthereumAddress } from 'wallet.ts'
-import { Box, Typography, CircularProgress } from '@mui/material'
+import { Box, CircularProgress, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { SelectNftContractDialogEvent, WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
-import { useNFTBalance } from '../../plugins/EVM/hooks/useNFTBalance'
 
 interface StyleProps {
     hasIcon: boolean
@@ -72,21 +80,34 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
     const account = useAccount()
     const { classes } = useStyles({ hasIcon: Boolean(contract?.iconURL) })
     const { value: balanceFromChain, loading: loadingFromChain } = useERC721ContractBalance(contract?.address, account)
-    const { value: assets, loading: loadingBalanceFromNFTscan } = useNFTBalance(account, !contract)
+    const { data: assets, state: loadingBalanceFromRemoteState } = useCollections(account, ChainId.Mainnet, !!contract)
+
+    const convertedAssets = assets.map((x) => ({
+        contractDetailed: {
+            type: EthereumTokenType.ERC721,
+            address: x.address,
+            chainId: ChainId.Mainnet,
+            name: x.name,
+            symbol: x.symbol,
+            baseURI: x.iconURL,
+            iconURL: x.iconURL,
+        } as ERC721ContractDetailed,
+        balance: x.balance,
+    }))
 
     const { t } = useI18N()
 
-    const balanceFromNFTscan = assets
-        ? assets.find((asset) => isSameAddress(asset.contractDetailed.address, contract?.address))?.balance
+    const balanceFromRemote = convertedAssets
+        ? convertedAssets.find((asset) => isSameAddress(asset.contractDetailed.address, contract?.address))?.balance
         : undefined
 
-    const balance = balanceFromChain ? Number(balanceFromChain) : balanceFromNFTscan ?? 0
+    const balance = balanceFromChain ? Number(balanceFromChain) : balanceFromRemote ?? 0
 
     useEffect(() => {
         onBalanceChange?.(balance)
     }, [onBalanceChange, balance])
 
-    const loading = (loadingFromChain || loadingBalanceFromNFTscan) && !balance
+    const loading = (loadingFromChain || loadingBalanceFromRemoteState !== SocketState.done) && !balance
 
     // #region select contract
     const [id] = useState(uuid)

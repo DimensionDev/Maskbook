@@ -217,6 +217,8 @@ export interface ERC721TokenCollectionInfo {
     slug: string
     address: string
     addresses?: string[]
+    symbol: string
+    balance: number
 }
 
 // #endregion
@@ -655,6 +657,7 @@ export enum AddressNameType {
     RSS3 = 'RSS3',
     GUN = 'GUN',
     THE_GRAPH = 'THE_GRAPH',
+    TWITTER_BLUE = 'TWITTER_BLUE',
 }
 
 export interface AddressName {
