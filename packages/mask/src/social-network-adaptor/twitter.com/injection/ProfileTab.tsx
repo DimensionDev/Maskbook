@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => {
     const props = getStyleProps()
 
     return {
-        tab: {
+        root: {
             '&:hover': {
                 backgroundColor: new Color(props.hover).alpha(0.1).toString(),
                 cursor: 'pointer',

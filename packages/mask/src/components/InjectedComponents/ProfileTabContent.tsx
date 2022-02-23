@@ -36,7 +36,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ProfileTabContentProps extends withClasses<'text' | 'button'> {}
+export interface ProfileTabContentProps extends withClasses<'text' | 'button' | 'root'> {}
 
 export function ProfileTabContent(props: ProfileTabContentProps) {
     const { t } = useI18N()
