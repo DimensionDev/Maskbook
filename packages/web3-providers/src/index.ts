@@ -6,7 +6,7 @@ import { NativeExplorerAPI } from './explorer'
 import { RSS3API } from './rss3'
 import { KeyValueAPI } from './kv'
 import { UserNFTContainerAtTwitterAPI } from './UserNFTContainer'
-import { TokenList } from './tokenList'
+import { TokenList } from './TokenList'
 import { TokenPrice } from './TokenPrice'
 
 export * from './types'

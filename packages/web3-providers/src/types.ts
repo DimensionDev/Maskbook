@@ -2,7 +2,6 @@ import type { Transaction as Web3Transaction } from 'web3-core'
 import type RSS3 from 'rss3-next'
 import type {
     ChainId,
-    CryptoPrice,
     ERC20TokenDetailed,
     ERC721ContractDetailed,
     ERC721TokenDetailed,
@@ -428,6 +427,15 @@ export namespace TokenListAPI {
 }
 
 export namespace TokenPriceAPI {
+    export interface PriceRecord {
+        [currency: string]: number
+    }
+
+    /** Base on response of coingecko's token price API */
+    export interface CryptoPrice {
+        [token: string]: PriceRecord
+    }
+
     export interface Provider {
         getTokenPrices: (platform: string, contractAddresses: string[], currency: CurrencyType) => Promise<CryptoPrice>
         getNativeTokenPrice: (tokenIds: string[], currency: CurrencyType) => Promise<CryptoPrice>
