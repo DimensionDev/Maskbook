@@ -1,4 +1,3 @@
-import Color from 'color'
 import { makeStyles } from '@masknet/theme'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createReactRootShadowed, startWatch } from '../../../utils'
@@ -27,7 +26,7 @@ function getStyleProps() {
         fontSize: spanStyle.fontSize,
         padding: divStyle.paddingLeft,
         height: divStyle.height,
-        hover: selectedSpanStyle.color,
+        hover: 'var(--hover-overlay)',
         line: selectedSpanStyle.color,
     }
 }
@@ -38,12 +37,18 @@ const useStyles = makeStyles()((theme) => {
     return {
         tab: {
             '&:hover': {
-                backgroundColor: new Color(props.hover).alpha(0.1).toString(),
                 cursor: 'pointer',
             },
             height: props.height,
+            display: 'flex',
+            flexDirection: 'column',
+            alignContent: 'center',
+            justifyContent: 'center',
+            padding: '4px 0',
+            boxSizing: 'border-box',
         },
         button: {
+            flex: 1,
             zIndex: 1,
             position: 'relative',
             display: 'flex',
@@ -57,17 +62,18 @@ const useStyles = makeStyles()((theme) => {
             fontSize: props.fontSize,
             fontWeight: 600,
             '&:hover': {
+                backgroundColor: props.hover,
                 color: props.color,
             },
-            height: props.height,
+            borderRadius: 6,
         },
         selected: {
-            color: `${props.hover} !important`,
+            color: `${props.line} !important`,
         },
         line: {
             borderRadius: 9999,
             position: 'absolute',
-            bottom: 0,
+            bottom: -4,
             width: '100%',
             alignSelf: 'center',
             height: 3,
