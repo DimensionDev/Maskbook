@@ -250,6 +250,9 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                     tooltipArrow: {
                         backgroundColor: theme.palette.background.tipMask,
                     },
+                    arrow: {
+                        color: theme.palette.background.tipMask,
+                    },
                 },
             }
             theme.components.MuiSnackbar = {

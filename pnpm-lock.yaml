@@ -126,6 +126,12 @@ importers:
     dependencies:
       '@msgpack/msgpack': 2.7.2
 
+  packages/configuration:
+    specifiers:
+      urlcat: ^2.0.4
+    dependencies:
+      urlcat: 2.0.4
+
   packages/dashboard:
     specifiers:
       '@babel/core': ^7.17.2

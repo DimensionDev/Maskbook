@@ -306,7 +306,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
         const response = await fetchFromOpenSea<{
             asset_events: OpenSeaAssetEvent[]
         }>(requestPath, chainId)
-        return response?.asset_events.map(createNFTHistory) ?? []
+        return response?.asset_events?.map(createNFTHistory) ?? []
     }
 
     async getOrders(

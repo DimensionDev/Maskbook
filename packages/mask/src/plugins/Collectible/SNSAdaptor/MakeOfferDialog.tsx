@@ -11,22 +11,15 @@ import {
     Link,
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { first } from 'lodash-unified'
+import { first, uniqBy } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
-import {
-    FungibleTokenDetailed,
-    EthereumTokenType,
-    useAccount,
-    useFungibleTokenWatched,
-    isNativeTokenAddress,
-} from '@masknet/web3-shared-evm'
+import { FungibleTokenDetailed, EthereumTokenType, useAccount, useFungibleTokenWatched } from '@masknet/web3-shared-evm'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { UnreviewedWarning } from './UnreviewedWarning'
 import ActionButton, { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { SelectTokenAmountPanel } from '../../ITO/SNSAdaptor/SelectTokenAmountPanel'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { PluginCollectibleRPC } from '../messages'
@@ -37,6 +30,7 @@ import getUnixTime from 'date-fns/getUnixTime'
 import type { useAsset } from '../../EVM/hooks'
 import { rightShift, ZERO } from '@masknet/web3-shared-base'
 import type { Coin } from '../../Trader/types'
+import { SelectTokenListPanel } from './SelectTokenListPanel'
 import { isWyvernSchemaName } from '../utils'
 
 const useStyles = makeStyles()((theme) => {
@@ -81,8 +75,13 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const leastPrice =
         asset?.value && asset.value.desktopOrder ? new BigNumber(asset.value.desktopOrder.current_price ?? '0') : ZERO
 
-    const paymentTokens = (isAuction ? asset?.value?.offer_payment_tokens : asset?.value?.order_payment_tokens) ?? []
+    const paymentTokens = uniqBy(
+        [...(asset?.value?.offer_payment_tokens ?? []), ...(asset?.value?.order_payment_tokens ?? [])],
+        (x) => x.address,
+    )
+
     const selectedPaymentToken = first(paymentTokens)
+
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -139,7 +138,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
 
     const validationMessage = useMemo(() => {
         setInsufficientBalance(false)
-        const amount_ = rightShift(amount, token.value?.decimals)
+        const amount_ = rightShift(amount ?? '0', token.value?.decimals || 0)
         const balance_ = new BigNumber(balance.value ?? '0')
         if (amount_.isNaN() || amount_.isZero()) return t('plugin_collectible_enter_a_price')
         if (balance_.isZero() || amount_.isGreaterThan(balance_)) {
@@ -170,21 +169,13 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                 <UnreviewedWarning />
                             </Box>
                         )}
-                        <SelectTokenAmountPanel
+                        <SelectTokenListPanel
                             amount={amount}
                             balance={balance.value ?? '0'}
                             token={token.value as FungibleTokenDetailed}
-                            disableNativeToken={!paymentTokens.some(isNativeTokenAddress)}
                             onAmountChange={setAmount}
                             onTokenChange={setToken}
-                            TokenAmountPanelProps={{
-                                label: t('plugin_collectible_price'),
-                            }}
-                            FungibleTokenListProps={{
-                                selectedTokens: selectedPaymentToken ? [selectedPaymentToken.address] : [],
-                                tokens: paymentTokens,
-                                whitelist: paymentTokens.map((x) => x.address),
-                            }}
+                            tokens={paymentTokens}
                         />
 
                         {!isAuction ? (
