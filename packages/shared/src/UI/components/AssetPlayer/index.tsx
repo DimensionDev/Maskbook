@@ -78,18 +78,20 @@ export const AssetPlayer = memo<AssetPlayerProps>((props) => {
     // #region setup iframe when url and options be changed
     const setIframe = useCallback(() => {
         // if iframe isn't be init or the load error has been existed
-        if (!ref.current) return
+        if (!ref.current || playerState === AssetPlayerState.ERROR || playerState === AssetPlayerState.NORMAL) return
         if (!url && !erc721Token) {
             setPlayerState(AssetPlayerState.ERROR)
             return
         }
-
-        ref.current.iFrameResizer.sendMessage({
-            url,
-            erc721Token,
-            type,
-            ...options,
-        })
+        if (playerState === AssetPlayerState.INIT) {
+            ref.current.iFrameResizer.sendMessage({
+                url,
+                erc721Token,
+                type,
+                ...options,
+            })
+            return
+        }
     }, [url, JSON.stringify(erc721Token), type, JSON.stringify(options), playerState])
     // endregion
     type ERC721TokenNameMsg = { message: { type: 'name'; name: string } | { type: 'sourceType'; name: string } }
