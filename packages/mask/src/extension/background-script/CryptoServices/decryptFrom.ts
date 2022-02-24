@@ -1,10 +1,10 @@
 import * as Alpha40 from '../../../crypto/crypto-alpha-40'
 import * as Alpha39 from '../../../crypto/crypto-alpha-39'
-import { decodeArrayBuffer, decodeText, encodeArrayBuffer } from '@dimensiondev/kit'
+import { decodeArrayBuffer, decodeText, encodeArrayBuffer, delay, abortSignalTimeout } from '@dimensiondev/kit'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { i18n } from '../../../../shared-ui/locales_legacy'
 import { queryPersonaRecord, queryLocalKey } from '../../../database'
-import { ProfileIdentifier, PostIVIdentifier, delay, EC_Public_CryptoKey } from '@masknet/shared-base'
+import { ProfileIdentifier, PostIVIdentifier, EC_Public_CryptoKey } from '@masknet/shared-base'
 import { PostRecord, queryPostDB, updatePostDB } from '../../../../background/database/post'
 import { getNetworkWorker, getNetworkWorkerUninitialized } from '../../../social-network/worker'
 import { cryptoProviderTable } from './cryptoProviderTable'
@@ -217,15 +217,12 @@ async function* decryptFromPayloadWithProgress_raw(
             if (result === null) return makeError(i18n.t('service_not_share_target'))
             aesKeyEncrypted.push(result)
         } else if (version === -39 || version === -38) {
-            const controller = new AbortController()
-            setTimeout(() => controller.abort(), 2000)
-
             const collector = GUN_queryPostKey_version39Or38(
                 version,
                 new Uint8Array(decodeArrayBuffer(iv)),
                 await minePublic,
                 authorNetworkWorker.val.gunNetworkHint,
-                controller.signal,
+                abortSignalTimeout(2000),
             )
             try {
                 for await (const key of collector) aesKeyEncrypted.push(key)

@@ -1,7 +1,7 @@
 import * as bip39 from 'bip39'
 import { validateMnemonic } from 'bip39'
 import { decode, encode } from '@msgpack/msgpack'
-import { blobToArrayBuffer, decodeArrayBuffer, decodeText, encodeArrayBuffer } from '@dimensiondev/kit'
+import { decodeArrayBuffer, decodeText, encodeArrayBuffer } from '@dimensiondev/kit'
 import {
     createPersonaByJsonWebKey,
     loginPersona,
@@ -373,7 +373,7 @@ export const updateCurrentPersonaAvatar = async (avatar: Blob) => {
     const identifier = await getCurrentPersonaIdentifier()
 
     if (identifier) {
-        await storeAvatar(identifier, await blobToArrayBuffer(avatar))
+        await storeAvatar(identifier, await avatar.arrayBuffer())
         MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
     }
 }

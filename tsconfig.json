@@ -58,6 +58,7 @@
       // which is unwanted. We need to take care of this.
 
       "@masknet/backup-format": ["./packages/backup-format/src"],
+      "@masknet/configuration": ["./packages/configuration/src"],
       // ! dashboard is explicitly opt-out of this feature, it and the /packages/mask has circulare reference that TypeScript does not allows.
       // "@masknet/dashboard": ["./packages/dashboard/src"],
       "@masknet/encryption": ["./packages/encryption/src"],
@@ -106,15 +107,16 @@
     // Type Checking
     "strict": true,
     // exactOptionalPropertyTypes: false,
-    "noImplicitOverride": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
+    "noImplicitOverride": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     // noPropertyAccessFromIndexSignature: false,
     // noUncheckedIndexedAccess: false,
     // noUnusedLocals: false,
     // noUnusedParameters: false,
+    "useUnknownInCatchVariables": true,
 
     // Modules
     "module": "ESNext",
@@ -127,6 +129,8 @@
     "declaration": true,
     "declarationMap": true,
     "importsNotUsedAsValues": "error",
+    "noEmitOnError": true,
+    // "preserveValueImports": true,
     "sourceMap": true,
     "stripInternal": true, // skip type emit for @internal types
 

@@ -5,8 +5,7 @@
     "outDir": "../dist/shared-ui/",
     "tsBuildInfoFile": "../dist/shared-ui.tsbuildinfo",
     "emitDeclarationOnly": true,
-    "lib": ["ES2021"],
-    "resolveJsonModule": true
+    "lib": ["ES2021"]
   },
   "include": ["./", "./**/*.json"],
   "references": [

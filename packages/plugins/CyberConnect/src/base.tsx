@@ -13,7 +13,7 @@ export const base: Plugin.Shared.Definition = {
     enableRequirement: {
         architecture: { app: false, web: true },
         networks: { type: 'opt-out', networks: {} },
-        target: 'beta',
+        target: 'stable',
         web3: {
             [NetworkPluginID.PLUGIN_EVM]: {
                 supportedChainIds: [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai],

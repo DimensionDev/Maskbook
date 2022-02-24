@@ -1,1 +1,1 @@
-export * from './DOM'
+export {}

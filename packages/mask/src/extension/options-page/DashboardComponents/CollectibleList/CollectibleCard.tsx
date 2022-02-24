@@ -55,6 +55,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     linkWrapper: {
         position: 'relative',
+        display: 'block',
         width: 172,
         height: 172,
     },

@@ -19,7 +19,14 @@ import {
 } from '@masknet/web3-shared-evm'
 import { isGreaterThan, isZero, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
-import { NetworkPluginID, useLookupAddress, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
+import {
+    NetworkPluginID,
+    TokenType,
+    useLookupAddress,
+    useNetworkDescriptor,
+    useWeb3State,
+    Web3Plugin,
+} from '@masknet/plugin-infra'
 import { FormattedAddress, TokenAmountPanel, useRemoteControlledDialog } from '@masknet/shared'
 import TuneIcon from '@mui/icons-material/Tune'
 import { EthereumAddress } from 'wallet.ts'
@@ -34,7 +41,7 @@ import type { SelectTokenDialogEvent } from '@masknet/plugin-wallet'
 import { RightIcon } from '@masknet/icons'
 
 interface TransferERC20Props {
-    token: FungibleTokenDetailed
+    token: FungibleTokenDetailed | Web3Plugin.FungibleToken
 }
 
 const GAS_LIMIT = 21000
@@ -64,7 +71,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
 
     const { value: defaultGasPrice = '0' } = useGasPrice()
 
-    const [selectedToken, setSelectedToken] = useState<FungibleTokenDetailed>(token)
+    const [selectedToken, setSelectedToken] = useState<FungibleTokenDetailed | Web3Plugin.FungibleToken>(token)
     const chainId = useChainId()
     const is1559Supported = useMemo(() => isEIP1559Supported(chainId), [chainId])
 
@@ -97,7 +104,11 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     // transfer amount
     const transferAmount = rightShift(amount || '0', selectedToken.decimals).toFixed()
     const erc20GasLimit = useGasLimit(
-        selectedToken.type,
+        selectedToken.type === TokenType.Fungible
+            ? selectedToken.symbol === nativeToken.value?.symbol
+                ? EthereumTokenType.Native
+                : EthereumTokenType.ERC20
+            : selectedToken.type,
         selectedToken.address,
         transferAmount,
         EthereumAddress.isValid(address) ? address : registeredAddress,
@@ -274,12 +285,13 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                     </Popover>
                 </Box>
                 <Box mt={2}>
+                    {/* TODO: Remove forced type conversion */}
                     <TokenAmountPanel
                         amount={amount}
                         maxAmount={maxAmount}
                         balance={tokenBalance}
                         label={t.wallets_transfer_amount()}
-                        token={selectedToken}
+                        token={selectedToken as FungibleTokenDetailed}
                         onAmountChange={setAmount}
                         SelectTokenChip={{
                             loading: false,
