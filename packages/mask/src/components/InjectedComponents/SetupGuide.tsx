@@ -5,8 +5,17 @@ import { useI18N, MaskMessages } from '../../utils'
 import { activatedSocialNetworkUI, SocialNetworkUI } from '../../social-network'
 import { currentSetupGuideStatus, dismissPinExtensionTip, userGuideStatus } from '../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
-import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier, NextIDPlatform } from '@masknet/shared-base'
 import { makeTypedMessageText } from '@masknet/typed-message'
+import {
+    PersonaIdentifier,
+    ProfileIdentifier,
+    Identifier,
+    ECKeyIdentifier,
+    NextIDPlatform,
+    PostIdentifier,
+    toBase64,
+    fromHex,
+} from '@masknet/shared-base'
 import Services from '../../extension/service'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { useAsync, useCopyToClipboard } from 'react-use'
@@ -37,12 +46,10 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const [step, setStep] = useState(SetupGuideStep.FindUsername)
     // @ts-ignore
     const [signInfo, setSignInfo] = useState<SignInfo>({})
-    const [verifiedPostId, setVerifiedPostId] = useState<string>()
+    const [verifiedPost, setVerifiedPost] = useState<null | PostIdentifier>(null)
     const [enableNextID] = useState(activatedSocialNetworkUI.configuration.nextIDConfig?.enable)
     const verifyPostCollectTimer = useRef<any>()
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
-
-    console.log(enableNextID)
 
     // #region parse setup status
     const lastStateRef = currentSetupGuideStatus[ui.networkIdentifier]
@@ -98,11 +105,20 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     }, [persona])
 
     useEffect(() => {
-        if (!verifiedPostId || !signInfo?.personaSign || !enableNextID || !persona_?.identifier) return
-        Services.NextID.bindProof(persona_.identifier, 'create', platform, username).then(async () => {
+        if (!verifiedPost || !signInfo?.personaSign || !enableNextID || !persona_?.identifier) return
+        Services.NextID.bindProof(
+            persona_.identifier,
+            'create',
+            platform,
+            username,
+            undefined,
+            signInfo.personaSign,
+            verifiedPost.postId,
+        ).then(async () => {
+            // TODO: handle error
             await onConnect()
         })
-    }, [verifiedPostId, signInfo.personaSign, enableNextID])
+    }, [verifiedPost, signInfo.personaSign, enableNextID])
 
     const onConnect = async () => {
         // attach persona with SNS profile
@@ -137,14 +153,16 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                 identifier: persona.toText(),
             })
             if (!signResult) throw new Error('Get Persona Sign Wrong')
-            setSignInfo({ ...signInfo, personaSign: signResult.signature.signature })
-            activatedSocialNetworkUI.automation?.nativeCompositionDialog?.appendText?.(payload.postContent)
+            const signature = signResult.signature.signature
+            setSignInfo({ ...signInfo, personaSign: signature })
+            const postContent = payload.postContent.replace('%SIG_BASE64%', toBase64(fromHex(signature)))
+            activatedSocialNetworkUI.automation?.nativeCompositionDialog?.appendText?.(postContent)
 
             verifyPostCollectTimer.current = setInterval(async () => {
                 // TODO: rename this method
-                const post = collect?.(payload.postContent)
+                const post = collect?.(postContent)
                 if (post) {
-                    setVerifiedPostId(post)
+                    setVerifiedPost(post)
                     clearInterval(verifyPostCollectTimer.current)
                     // await onConnect()
                 }

@@ -36,6 +36,7 @@ export async function bindProof(
     identity: string,
     walletSignature?: string,
     signature?: string,
+    proofLocation?: string,
 ) {
     const publicKey = await convertPersonaHexPublicKey(persona)
     if (!publicKey) return
@@ -45,6 +46,7 @@ export async function bindProof(
         platform,
         identity,
         public_key: publicKey,
+        ...(proofLocation ? { proof_location: proofLocation } : {}),
         extra: {
             ...(walletSignature ? { wallet_signature: toBase64(fromHex(walletSignature)) } : {}),
             ...(signature ? { signature: toBase64(fromHex(signature)) } : {}),

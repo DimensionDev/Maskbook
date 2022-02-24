@@ -26,7 +26,7 @@ import { injectMaskUserBadgeAtTwitter } from './injection/MaskIcon'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector'
 import { injectPostActionsAtTwitter } from './injection/PostActions'
-import { isTypedMessageText, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
+import { isTypedMessageText, NextIDPlatform, PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { unreachable } from '@dimensiondev/kit'
 import { makeStyles } from '@masknet/theme'
 import { injectNFTAvatarInTwitter } from './injection/NFT/NFTAvatarInTwitter'
@@ -192,7 +192,8 @@ const twitterUI: SocialNetworkUI.Definition = {
             platform: NextIDPlatform.Twitter,
             collectVerifyPost: (keyword: string) => {
                 let verifiedPostId: string | null = null
-                const regex = new RegExp(/myself121/)
+                const userId =
+                    IdentityProviderTwitter.recognized.value.identifier || globalUIState.profiles.value[0].identifier
                 const postNodes = timeLinePostContentSelector().evaluate()
 
                 forEach(postNodes, (x) => {
@@ -208,7 +209,7 @@ const twitterUI: SocialNetworkUI.Definition = {
                         verifiedPostId = postId
                     }
                 })
-                return verifiedPostId
+                return verifiedPostId && userId ? new PostIdentifier(userId, verifiedPostId) : null
             },
         },
         steganography: {
