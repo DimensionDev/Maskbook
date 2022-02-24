@@ -29,7 +29,7 @@ import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import type { InternalSettings } from '../settings/createSettings'
 import { Flags } from '../../shared'
 import Services from '../extension/service'
-import { TokenListApi, UserNFTContainerAtTwitter } from '@masknet/web3-providers'
+import { TokenList, Twitter } from '@masknet/web3-providers'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 import type { AbiItem } from 'web3-utils'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
@@ -138,7 +138,7 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
         getAddressNamesList: async (identity: Parameters<typeof WalletRPC.getAddressNames>[0]) => {
             const addressNames = await WalletRPC.getAddressNames(identity)
             if (identity.identifier.network === 'twitter.com') {
-                const result = await UserNFTContainerAtTwitter.getUserNftContainer(identity.identifier.userId ?? '')
+                const result = await Twitter.getUserNftContainer(identity.identifier.userId ?? '')
                 if (result?.type_name.toUpperCase() === 'ERC721') {
                     const contractAddress = await getTokenOwner(result.address, result.token_id)
                     if (contractAddress)
@@ -155,7 +155,7 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
             return addressNames
         },
         getTransactionList: WalletRPC.getTransactionList,
-        fetchERC20TokensFromTokenLists: TokenListApi.fetchERC20TokensFromTokenLists,
+        fetchERC20TokensFromTokenLists: TokenList.fetchERC20TokensFromTokenLists,
     }
 }
 

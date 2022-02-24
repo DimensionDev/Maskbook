@@ -347,7 +347,7 @@ export namespace SecurityAPI {
     }
 }
 
-export namespace UserNFTContainerAPI {
+export namespace TwitterBaseAPI {
     export interface NFTContainer {
         has_nft_avatar: boolean
         nft_avatar_metadata: AvatarMetadata
@@ -393,7 +393,7 @@ export namespace UserNFTContainerAPI {
     }
 }
 
-export namespace TokenListAPI {
+export namespace TokenListBaseAPI {
     export interface Token {
         address: string
         chainId: number
@@ -425,7 +425,7 @@ export namespace TokenListAPI {
     }
 }
 
-export namespace TokenPriceAPI {
+export namespace TokenPriceBaseAPI {
     export interface PriceRecord {
         [currency: string]: number
     }

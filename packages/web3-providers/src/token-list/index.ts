@@ -2,14 +2,14 @@ import { memoizePromise } from '@dimensiondev/kit'
 import { ChainId, ERC20TokenDetailed, formatEthereumAddress, getChainDetailed } from '@masknet/web3-shared-evm'
 import { Web3TokenType } from '@masknet/web3-shared-base'
 import { groupBy } from 'lodash-unified'
-import type { TokenListAPI } from '../types'
+import type { TokenListBaseAPI } from '../types'
 
 const NATIVE_TOKEN_ADDRESS_IN_1INCH = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 
 const fetchTokenList = memoizePromise(
     async (url: string) => {
         const response = await fetch(url, { cache: 'force-cache' })
-        return response.json() as Promise<TokenListAPI.TokenList | TokenListAPI.TokenObject>
+        return response.json() as Promise<TokenListBaseAPI.TokenList | TokenListBaseAPI.TokenObject>
     },
     (url) => url,
 )
@@ -23,7 +23,7 @@ async function fetch1inchERC20TokensFromTokenList(
     url: string,
     chainId = ChainId.Mainnet,
 ): Promise<ERC20TokenDetailed[]> {
-    const tokens = ((await fetchTokenList(url)) as TokenListAPI.TokenObject).tokens
+    const tokens = ((await fetchTokenList(url)) as TokenListBaseAPI.TokenObject).tokens
     const _tokens = Object.values(tokens)
     return _tokens
         .filter((x) => x.address.toLowerCase() !== NATIVE_TOKEN_ADDRESS_IN_1INCH)
@@ -44,7 +44,7 @@ async function fetchCommonERC20TokensFromTokenList(
     url: string,
     chainId = ChainId.Mainnet,
 ): Promise<ERC20TokenDetailed[]> {
-    return ((await fetchTokenList(url)) as TokenListAPI.TokenList).tokens
+    return ((await fetchTokenList(url)) as TokenListBaseAPI.TokenList).tokens
         .filter(
             (x) =>
                 x.chainId === chainId &&
@@ -85,7 +85,7 @@ async function fetchERC20TokensFromTokenList(urls: string[], chainId = ChainId.M
  * @param chainId
  */
 
-export class TokenList implements TokenListAPI.Provider {
+export class TokenListAPI implements TokenListBaseAPI.Provider {
     async fetchERC20TokensFromTokenLists(url: string[], chainId: ChainId) {
         const result = memoizePromise(
             async (urls: string[], chainId = ChainId.Mainnet): Promise<ERC20TokenDetailed[]> => {
