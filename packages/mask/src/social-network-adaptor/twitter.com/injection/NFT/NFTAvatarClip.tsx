@@ -32,7 +32,7 @@ function NFTAvatarClipInTwitter() {
     const borderElement = useRef<Element | null>()
 
     const size = useMemo(() => {
-        const ele = searchTwitterAvatarNFTSelector().evaluate()
+        const ele = searchTwitterAvatarNFTSelector().evaluate()?.querySelector('img')
         if (!ele) return 0
         const style = window.getComputedStyle(ele)
         return Number.parseInt(style.width.replace('px', '') ?? 0, 10)
