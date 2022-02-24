@@ -5,6 +5,38 @@ import { Flags } from '../../../../../shared'
 import { NFTBadgeTimeline } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeline'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 import { searchInstagramPostAvatarSelector } from '../../utils/selector'
+import { memo } from 'react'
+import { makeStyles } from '@masknet/theme'
+
+const useStyles = makeStyles()(() => ({
+    root: {
+        transform: 'scale(1)!important',
+    },
+}))
+
+const TimeLineRainbow = memo(
+    ({ userId, avatarId, width, height }: { userId: string; avatarId: string; width: number; height: number }) => {
+        const { classes } = useStyles()
+        return (
+            <div
+                style={{
+                    position: 'absolute',
+                    left: 0,
+                    top: 0,
+                    zIndex: 2,
+                }}>
+                <NFTBadgeTimeline
+                    userId={userId}
+                    avatarId={avatarId}
+                    width={width}
+                    height={height}
+                    classes={classes}
+                    snsKey={RSS3_KEY_SNS.INSTAGRAM}
+                />
+            </div>
+        )
+    },
+)
 
 function _(selector: () => LiveSelector<HTMLImageElement, false>, signal: AbortSignal) {
     startWatch(
@@ -30,21 +62,12 @@ function _(selector: () => LiveSelector<HTMLImageElement, false>, signal: AbortS
                 const root = createReactRootShadowed(proxy.afterShadow, { signal })
 
                 root.render(
-                    <div
-                        style={{
-                            position: 'absolute',
-                            left: 0,
-                            top: 0,
-                            zIndex: 2,
-                        }}>
-                        <NFTBadgeTimeline
-                            userId={id}
-                            avatarId={info.avatarId}
-                            width={info.width - 4}
-                            height={info.height - 4}
-                            snsKey={RSS3_KEY_SNS.INSTAGRAM}
-                        />
-                    </div>,
+                    <TimeLineRainbow
+                        userId={id}
+                        avatarId={info.avatarId}
+                        width={info.width - 4}
+                        height={info.height - 4}
+                    />,
                 )
 
                 remove = root.destory

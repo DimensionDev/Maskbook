@@ -140,16 +140,18 @@ export function NFTAvatar(props: NFTAvatarProps) {
                     <Typography variant="body1" color="textPrimary">
                         {t('nft_list_title')}
                     </Typography>
-                    {account && !hideWallet ? (
+                    {account ? (
                         <Typography variant="body1" color="textPrimary" className={classes.account}>
                             {t('nft_wallet_label')}: {Utils?.formatAddress?.(account, 4) || account}
-                            <Button
-                                variant="text"
-                                onClick={openSelectProviderDialog}
-                                size="small"
-                                className={classes.changeButton}>
-                                {t('nft_wallet_change')}
-                            </Button>
+                            {!hideWallet ? (
+                                <Button
+                                    variant="text"
+                                    onClick={openSelectProviderDialog}
+                                    size="small"
+                                    className={classes.changeButton}>
+                                    {t('nft_wallet_change')}
+                                </Button>
+                            ) : null}
                         </Typography>
                     ) : null}
                 </Box>
@@ -173,11 +175,10 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                   ))}
                         </Box>
                         <Box className={classes.buttons}>
-                            {!hideWallet ? (
-                                <Button variant="outlined" size="small" onClick={() => setOpen_(true)}>
-                                    {t('nft_button_add_collectible')}
-                                </Button>
-                            ) : null}
+                            <Button variant="outlined" size="small" onClick={() => setOpen_(true)}>
+                                {t('nft_button_add_collectible')}
+                            </Button>
+
                             <Button variant="contained" size="small" onClick={onClick} disabled={!selectedToken}>
                                 {t('nft_button_set_avatar')}
                             </Button>

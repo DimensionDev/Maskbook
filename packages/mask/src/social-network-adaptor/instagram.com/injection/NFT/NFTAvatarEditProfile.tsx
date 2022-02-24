@@ -1,5 +1,5 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { searchInstagramAvatarSelector, searchInstagramAvatarSettingDialog } from '../../utils/selector'
+import { searchInstagramAvatarSettingDialog, searchInstagramProfileAvatarButtonSelector } from '../../utils/selector'
 import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils'
 import { useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
@@ -8,7 +8,7 @@ import { NFTAvatarSettingDialog } from './NFTAvatarSettingDialog'
 import { useLocation } from 'react-use'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchInstagramAvatarSelector().closest<HTMLDivElement>(3))
+    const watcher = new MutationObserverWatcher(searchInstagramProfileAvatarButtonSelector())
     startWatch(watcher, signal)
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
         <OpenNFTAvatarEditProfileButtonInInstagram />,
@@ -21,7 +21,7 @@ export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
 
 const useStyles = makeStyles()(() => ({
     root: {
-        marginTop: 8,
+        marginTop: 5,
         marginLeft: 'auto',
         marginRight: 'auto',
 

@@ -15,6 +15,8 @@ import { useLocation, useWindowSize } from 'react-use'
 import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
 import { delay } from '@masknet/shared-base'
 import { activatedSocialNetworkUI } from '../../../../social-network'
+import { max } from 'lodash-unified'
+import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/RainbowBox'
 
 export function injectNFTAvatarInInstagram(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchInstagramAvatarSelector())
@@ -62,7 +64,7 @@ function NFTAvatarInInstagram() {
         if (!ele) return 0
 
         const style = window.getComputedStyle(ele)
-        return Number.parseInt(style.width.replace('px', '') ?? 0, 10)
+        return max([146, Number.parseInt(style.width.replace('px', '') ?? 0, 10)])
     }, [windowSize])
 
     useEffect(() => {
@@ -134,6 +136,34 @@ function NFTAvatarInInstagram() {
             watcher.stopWatch()
         }
     }, [identity, wallet])
+
+    useEffect(() => {
+        if (!showAvatar) return
+        const containerDom = searchInstagramAvatarSelector().closest<HTMLDivElement>(2)
+
+        const style = document.createElement('style')
+        style.innerText = `
+                ${rainbowBorderKeyFrames.styles}
+
+                .rainbowBorder {
+                    animation: ${rainbowBorderKeyFrames.name} 6s linear infinite;
+                    box-shadow: 0 5px 15px rgba(0, 248, 255, 0.4), 0 10px 30px rgba(37, 41, 46, 0.2);
+                    transition: .125s ease;
+                    border: 2px solid #00f8ff;
+                }
+            `
+
+        const parentDom = containerDom.closest('div').evaluate()
+
+        parentDom?.appendChild(style)
+        containerDom.evaluate()?.classList.add('rainbowBorder')
+        return () => {
+            if (parentDom?.lastElementChild?.tagName === 'STYLE') {
+                parentDom.removeChild(parentDom.lastElementChild)
+            }
+            containerDom.evaluate()?.classList.remove('rainbowBorder')
+        }
+    }, [location.pathname, showAvatar])
 
     useEffect(() => setAvatar(_avatar), [_avatar, location])
 

@@ -43,7 +43,8 @@ export const searchProfileTabArticlePageSelector = () =>
 export const searchProfileTabOtherArticlePageSelector = () =>
     querySelector<E>('[id="react-root"] section main > div > div:last-child > div')
 
-export const searchInstagramAvatarListSelector = () => querySelector<E>('[role="dialog"] .piCib > div > button')
+export const searchInstagramAvatarListSelector = () =>
+    querySelector('[role="dialog"] .piCib > div > form').closest(1).querySelector('button')
 
 export const searchInstagramAvatarOpenFilesSelector = () =>
     querySelector('[id="react-root"] button[title="Change Profile Photo"] > img')
@@ -53,8 +54,10 @@ export const searchInstagramAvatarOpenFilesSelector = () =>
 export const searchInstagramSaveAvatarButtonSelector = () =>
     querySelector<HTMLButtonElement>('section > div > header > div > div:last-child > button')
 
-export const searchInstagramAvatarSelector = () =>
-    querySelector('[id="react-root"] button[title="Change Profile Photo"] > img')
+export const searchInstagramAvatarSelector = () => querySelector('[id="react-root"] header button > img')
+
+export const searchInstagramProfileAvatarButtonSelector = () =>
+    querySelector('[id="react-root"] button[title="Change Profile Photo"] > img').closest<HTMLDivElement>(3)
 
 export const searchInstagramAvatarSettingDialog = () => querySelector<E>('[id="react-root"]')
 

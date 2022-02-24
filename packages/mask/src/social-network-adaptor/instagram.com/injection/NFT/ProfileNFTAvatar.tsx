@@ -4,6 +4,7 @@ import { createReactRootShadowed, MaskMessages, startWatch, useI18N } from '../.
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useLayoutEffect, useState } from 'react'
 import { useLocationChange } from '../../../../utils/hooks/useLocationChange'
+import { useLocation } from 'react-use'
 
 export async function injectProfileNFTAvatarInInstagram(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchInstagramAvatarListSelector())
@@ -39,7 +40,10 @@ export function NFTAvatarButtonInDialog() {
     const [style, setStyle] = useState<StyleProps>({
         fontSize: 12,
         minHeight: 48,
+        // Instagram css var
+        borderTop: '1px solid rgba(var(--b6a,219,219,219),1)',
     })
+    const location = useLocation()
     const { classes } = useStyles(style)
 
     const setStyleWithSelector = useCallback(() => {
