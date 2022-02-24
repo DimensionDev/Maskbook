@@ -2,7 +2,6 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
-import { blobToArrayBuffer } from '@dimensiondev/kit'
 import { hookInputUploadOnce } from '@masknet/injected-script'
 import {
     searchFacebookAvatarListSelector,
@@ -43,15 +42,15 @@ export async function injectProfileNFTAvatarInFaceBook(signal: AbortSignal) {
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarListInFaceBookMobile />)
 }
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()({
     root: {
         padding: '8px 0',
         margin: '0 16px',
     },
-}))
+})
 
 async function changeImageToActiveElements(image: File | Blob): Promise<void> {
-    const imageBuffer = await blobToArrayBuffer(image)
+    const imageBuffer = await image.arrayBuffer()
     hookInputUploadOnce('image/png', 'avatar.png', new Uint8Array(imageBuffer))
     searchFacebookAvatarOpenFilesSelector().evaluate()?.click()
 }
@@ -112,7 +111,7 @@ function NFTAvatarInFacebookSecondStep() {
 }
 
 async function changeImageToActiveElementsOnMobile(image: File | Blob): Promise<void> {
-    const imageBuffer = await blobToArrayBuffer(image)
+    const imageBuffer = await image.arrayBuffer()
 
     const input = searchFacebookAvatarOpenFilesOnMobileSelector().evaluate()
 

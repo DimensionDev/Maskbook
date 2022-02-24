@@ -122,10 +122,10 @@ function NFTAvatarInFacebook() {
                 setAvatar(avatarInfo)
 
                 setNFTEvent(undefined)
-            } catch (error: any) {
+            } catch (error) {
                 setNFTEvent(undefined)
                 setAvatar(undefined)
-                window.alert(error.message)
+                window.alert((error as any).message)
                 return
             }
         } else if (storages.address.value && storages.userId.value && storages.tokenId.value) {
@@ -149,10 +149,10 @@ function NFTAvatarInFacebook() {
                 }
                 setAvatar(avatarInfo)
                 clearStorages()
-            } catch (error: any) {
+            } catch (error) {
                 clearStorages()
                 setAvatar(undefined)
-                window.alert(error.message)
+                window.alert((error as any).message)
                 return
             }
         }

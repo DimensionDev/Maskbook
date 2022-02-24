@@ -1,5 +1,5 @@
 import { first } from 'lodash-unified'
-import { defer } from '@masknet/shared-base'
+import { defer } from '@dimensiondev/kit'
 import Web3 from 'web3'
 import type { RequestArguments } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
@@ -92,7 +92,7 @@ export async function ensureConnectedAndUnlocked() {
     try {
         const accounts = await web3.eth.requestAccounts()
         throw accounts
-    } catch (error: string[] | any) {
+    } catch (error) {
         const accounts = error
         if (Array.isArray(accounts)) {
             if (accounts.length === 0) throw new Error('Injected Web3 is locked or it has not connected any accounts.')

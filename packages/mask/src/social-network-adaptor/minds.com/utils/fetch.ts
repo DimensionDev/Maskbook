@@ -8,7 +8,7 @@ import {
     TypedMessage,
     TypedMessageText,
 } from '@masknet/shared-base'
-import { assertNonNull } from '../../../../utils-pure'
+import { assertNonNull } from '@dimensiondev/kit'
 
 const parseNameArea = (nameArea: HTMLAnchorElement) => {
     const displayNameNode = nameArea.querySelector('strong')

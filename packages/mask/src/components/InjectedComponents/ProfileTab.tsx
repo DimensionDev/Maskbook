@@ -9,8 +9,9 @@ export interface ProfileTabProps extends withClasses<'tab' | 'button' | 'selecte
     reset(): void
     children?: ReactElement
     // Required! This component don't have it own style.
-    classes: Record<'tab' | 'button' | 'selected', string>
+    classes: Record<'root' | 'button' | 'selected', string>
     title: string
+    icon?: React.ReactNode
 }
 
 export function ProfileTab(props: ProfileTabProps) {
@@ -30,11 +31,12 @@ export function ProfileTab(props: ProfileTabProps) {
     })
 
     return (
-        <div key="nfts" className={classes.tab}>
+        <div key="nfts" className={classes.root}>
             <Typography
                 className={classnames(classes.button, active ? classes.selected : '')}
                 onClick={onClick}
                 component="div">
+                {props.icon}
                 {title}
                 {active && children ? children : null}
             </Typography>

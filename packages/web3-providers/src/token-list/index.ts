@@ -7,39 +7,14 @@ import {
     getChainDetailed,
 } from '@masknet/web3-shared-evm'
 import { groupBy } from 'lodash-unified'
+import type { TokenListBaseAPI } from '../types'
 
 const NATIVE_TOKEN_ADDRESS_IN_1INCH = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-
-interface Token {
-    address: string
-    chainId: number
-    name: string
-    symbol: string
-    decimals: number
-    logoURI?: string
-}
-
-interface TokenList {
-    keywords: string[]
-    logoURI: string
-    name: string
-    timestamp: string
-    tokens: Token[]
-    version: {
-        major: number
-        minor: number
-        patch: number
-    }
-}
-
-interface TokenObject {
-    tokens: Record<string, Token>
-}
 
 const fetchTokenList = memoizePromise(
     async (url: string) => {
         const response = await fetch(url, { cache: 'force-cache' })
-        return response.json() as Promise<TokenList | TokenObject>
+        return response.json() as Promise<TokenListBaseAPI.TokenList | TokenListBaseAPI.TokenObject>
     },
     (url) => url,
 )
@@ -53,7 +28,7 @@ async function fetch1inchERC20TokensFromTokenList(
     url: string,
     chainId = ChainId.Mainnet,
 ): Promise<ERC20TokenDetailed[]> {
-    const tokens = ((await fetchTokenList(url)) as TokenObject).tokens
+    const tokens = ((await fetchTokenList(url)) as TokenListBaseAPI.TokenObject).tokens
     const _tokens = Object.values(tokens)
     return _tokens
         .filter((x) => x.address.toLowerCase() !== NATIVE_TOKEN_ADDRESS_IN_1INCH)
@@ -74,7 +49,7 @@ async function fetchCommonERC20TokensFromTokenList(
     url: string,
     chainId = ChainId.Mainnet,
 ): Promise<ERC20TokenDetailed[]> {
-    return ((await fetchTokenList(url)) as TokenList).tokens
+    return ((await fetchTokenList(url)) as TokenListBaseAPI.TokenList).tokens
         .filter(
             (x) =>
                 x.chainId === chainId &&
@@ -114,24 +89,31 @@ async function fetchERC20TokensFromTokenList(urls: string[], chainId = ChainId.M
  * @param urls
  * @param chainId
  */
-export const fetchERC20TokensFromTokenLists = memoizePromise(
-    async (urls: string[], chainId = ChainId.Mainnet): Promise<ERC20TokenDetailed[]> => {
-        const tokens = (await fetchERC20TokensFromTokenList(urls, chainId))
-            .sort((a, b) => b.weight - a.weight)
-            .flatMap((x) => x.tokens)
-        const groupedToken = groupBy(tokens, (x) => x.address.toLowerCase())
 
-        return Object.values(groupedToken).map((tokenList) => {
-            const logoURIs = tokenList
-                .map((token) => token.logoURI)
-                .flat()
-                .filter((token) => !!token) as string[]
-            return {
-                ...tokenList[0],
-                ...{ address: formatEthereumAddress(tokenList[0].address) },
-                ...{ logoURI: logoURIs },
-            }
-        })
-    },
-    (urls, chainId) => `${chainId}-${urls.join()}`,
-)
+export class TokenListAPI implements TokenListBaseAPI.Provider {
+    async fetchERC20TokensFromTokenLists(url: string[], chainId: ChainId) {
+        const result = memoizePromise(
+            async (urls: string[], chainId = ChainId.Mainnet): Promise<ERC20TokenDetailed[]> => {
+                const tokens = (await fetchERC20TokensFromTokenList(urls, chainId))
+                    .sort((a, b) => b.weight - a.weight)
+                    .flatMap((x) => x.tokens)
+                const groupedToken = groupBy(tokens, (x) => x.address.toLowerCase())
+
+                return Object.values(groupedToken).map((tokenList) => {
+                    const logoURIs = tokenList
+                        .map((token) => token.logoURI)
+                        .flat()
+                        .filter((token) => !!token) as string[]
+                    return {
+                        ...tokenList[0],
+                        ...{ address: formatEthereumAddress(tokenList[0].address) },
+                        ...{ logoURI: logoURIs },
+                    }
+                })
+            },
+            (urls, chainId) => `${chainId}-${urls.join()}`,
+        )
+
+        return result(url, chainId)
+    }
+}
