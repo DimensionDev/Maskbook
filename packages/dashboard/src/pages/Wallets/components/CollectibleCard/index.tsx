@@ -1,5 +1,5 @@
 import { memo, useEffect, useMemo, useRef, useState } from 'react'
-import { Box, Button, Link, Tooltip, Typography } from '@mui/material'
+import { Box, Button, Link, Tooltip, Typography, useTheme } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { CollectiblePlaceholder } from '../CollectiblePlaceHolder'
 import { useHoverDirty } from 'react-use'
@@ -8,6 +8,7 @@ import { WalletIcon, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { ChangeNetworkTip } from '../FungibleTokenTableRow/ChangeNetworkTip'
 import { NetworkPluginID, useNetworkDescriptor, usePluginIDContext, useWeb3State } from '@masknet/plugin-infra'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared-base'
+import { useImageChecker } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -109,6 +110,13 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
     const isOnCurrentChain = useMemo(() => chainId === token.contractDetailed?.chainId, [chainId, token])
     const currentPluginId = usePluginIDContext()
 
+    const theme = useTheme()
+    const fallbackImageURL =
+        theme.palette.mode === 'dark'
+            ? new URL('./nft_token_fallback_dark.png', import.meta.url)
+            : new URL('./nft_token_fallback.png', import.meta.url)
+    const { value: isImageToken } = useImageChecker(token.info.mediaUrl || token.contractDetailed?.iconURL)
+
     useEffect(() => {
         setHoveringTooltip(false)
     }, [chainId])
@@ -137,28 +145,42 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
                     token.info.imageURL ||
                     token.info.tokenURI) &&
                 token.contractDetailed ? (
-                    <Link
-                        target={nftLink ? '_blank' : '_self'}
-                        rel="noopener noreferrer"
-                        className={classes.linkWrapper}
-                        href={nftLink}>
-                        <div className={classes.blocker} />
-                        <div className={classes.mediaContainer}>
-                            <NFTCardStyledAssetPlayer
-                                contractAddress={token.contractDetailed.address}
-                                chainId={token.contractDetailed.chainId}
-                                renderOrder={renderOrder}
-                                url={token.info.mediaUrl || token.contractDetailed?.iconURL}
-                                tokenURI={token.info.tokenURI}
-                                tokenId={token.tokenId}
-                                classes={{
-                                    loadingFailImage: classes.loadingFailImage,
-                                    wrapper: classes.wrapper,
-                                    iframe: classes.iframe,
-                                }}
-                            />
-                        </div>
-                    </Link>
+                    isImageToken ? (
+                        <img
+                            width={172}
+                            height={172}
+                            style={{ objectFit: 'cover' }}
+                            src={token.info.mediaUrl || token.contractDetailed?.iconURL}
+                            onError={(event) => {
+                                const target = event.currentTarget as HTMLImageElement
+                                target.src = fallbackImageURL.toString()
+                                target.classList.add(classes.loadingFailImage ?? '')
+                            }}
+                        />
+                    ) : (
+                        <Link
+                            target={nftLink ? '_blank' : '_self'}
+                            rel="noopener noreferrer"
+                            className={classes.linkWrapper}
+                            href={nftLink}>
+                            <div className={classes.blocker} />
+                            <div className={classes.mediaContainer}>
+                                <NFTCardStyledAssetPlayer
+                                    contractAddress={token.contractDetailed.address}
+                                    chainId={token.contractDetailed.chainId}
+                                    renderOrder={renderOrder}
+                                    url={token.info.mediaUrl || token.contractDetailed?.iconURL}
+                                    tokenURI={token.info.tokenURI}
+                                    tokenId={token.tokenId}
+                                    classes={{
+                                        loadingFailImage: classes.loadingFailImage,
+                                        wrapper: classes.wrapper,
+                                        iframe: classes.iframe,
+                                    }}
+                                />
+                            </div>
+                        </Link>
+                    )
                 ) : (
                     <Box>
                         <CollectiblePlaceholder chainId={token.contractDetailed?.chainId} />
