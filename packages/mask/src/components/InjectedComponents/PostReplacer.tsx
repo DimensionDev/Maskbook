@@ -1,4 +1,12 @@
-import type { TransformationContext, TypedMessage } from '@masknet/typed-message'
+import {
+    type TransformationContext,
+    type TypedMessage,
+    isTypedMessageEqual,
+    emptyTransformationContext,
+    FlattenTypedMessage,
+    forEachTypedMessageChild,
+    isTypedMessageAnchor,
+} from '@masknet/typed-message'
 import { TextResizeContext, TypedMessageRender, useTransformedValue } from '@masknet/typed-message/dom'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo } from 'react'
@@ -18,19 +26,13 @@ export interface PostReplacerProps {
     unzip?: () => void
 }
 
-export function PostReplacer({ unzip, zip }: PostReplacerProps) {
+export function PostReplacer(props: PostReplacerProps) {
     const { classes } = useStyles()
     const postMessage = usePostInfoDetails.rawMessage()
 
     const author = usePostInfoDetails.author()
     const currentProfile = useCurrentIdentity()?.identifier
     const url = usePostInfoDetails.url()
-
-    // zip/unzip original post
-    useEffect(() => {
-        zip?.()
-        return () => unzip?.()
-    }, [])
 
     const initialTransformationContext = useMemo((): TransformationContext => {
         return {
@@ -46,14 +48,43 @@ export function PostReplacer({ unzip, zip }: PostReplacerProps) {
                 <TypedMessageRenderContext
                     renderFragments={activatedSocialNetworkUI?.customization.componentOverwrite?.RenderFragments}
                     context={initialTransformationContext}>
-                    <Transformer message={postMessage} />
+                    <Transformer {...props} message={postMessage} />
                 </TypedMessageRenderContext>
             </TextResizeContext.Provider>
         </span>
     )
 }
 
-function Transformer(props: { message: TypedMessage }) {
-    const after = useTransformedValue(props.message)
-    return <TypedMessageRender message={after} />
+function Transformer({ message, unzip, zip }: { message: TypedMessage } & PostReplacerProps) {
+    const after = useTransformedValue(message)
+
+    const shouldReplace = useMemo(() => {
+        const flatten = FlattenTypedMessage(message, emptyTransformationContext)
+        if (!isTypedMessageEqual(flatten, after)) return true
+        if (hasCashOrHashTag(after)) return true
+        return false
+    }, [message, after])
+
+    useEffect(() => {
+        if (shouldReplace) zip?.()
+        else unzip?.()
+
+        return () => unzip?.()
+    }, [])
+
+    if (shouldReplace) return <TypedMessageRender message={after} />
+    return null
+}
+function hasCashOrHashTag(message: TypedMessage): boolean {
+    let result = false
+    forEachTypedMessageChild(message, function visitor(node) {
+        if (isTypedMessageAnchor(node)) {
+            if (node.category === 'cash' || node.category === 'hash') {
+                result = true
+                return 'stop'
+            }
+        } else forEachTypedMessageChild(node, visitor)
+        return
+    })
+    return result
 }

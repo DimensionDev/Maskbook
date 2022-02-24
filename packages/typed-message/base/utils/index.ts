@@ -7,8 +7,7 @@ import type {
     SerializableTypedMessage,
     NonSerializableWithAltTypedMessage,
 } from '../base'
-import { isTypedMessageTuple, TypedMessageTuple } from '../core'
-import { eq } from 'lodash-unified'
+import { isEqual } from 'lodash-unified'
 
 export function isNonSerializableTypedMessageWithAlt(x: TypedMessage): x is NonSerializableWithAltTypedMessage {
     const y = x as NonSerializableWithAltTypedMessage
@@ -27,11 +26,6 @@ export function isSerializableTypedMessage(x: TypedMessage): x is SerializableTy
 export function isTypedMessageEqual(message1: TypedMessage, message2: TypedMessage): boolean {
     if (message1.type !== message2.type) return false
     if (message1.meta !== message2.meta) return false
-    if (isTypedMessageTuple(message1)) {
-        const msg1 = message1 as TypedMessageTuple
-        const msg2 = message2 as TypedMessageTuple
-        if (msg1.items.length !== msg2.items.length) return false
-        return msg1.items.every((item, index) => isTypedMessageEqual(item, msg2.items[index]))
-    }
-    return eq(message1, message2)
+    // perform a deep equal
+    return isEqual(message1, message2)
 }

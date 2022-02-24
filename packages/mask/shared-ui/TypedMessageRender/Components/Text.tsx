@@ -4,7 +4,11 @@ import type { RenderFragmentsContextType } from '@masknet/typed-message/dom'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 
 export const Container = memo(function Container(props) {
-    return <Typography fontSize="inherit">{props.children}</Typography>
+    return (
+        <Typography color="textPrimary" fontSize="inherit">
+            {props.children}
+        </Typography>
+    )
 })
 
 export const Link = memo(function Anchor(props: RenderFragmentsContextType.LinkProps) {

@@ -12,11 +12,11 @@ export function useTextResize(shouldEnable: boolean) {
 
         const updateFontSize = () => {
             const length = Array.from(element.innerText).length
-            let fontSize = 14
-            if (length < 45) fontSize *= 1.5
-            else if (length < 80) fontSize *= 1.2
+            let fontSize = 1
+            if (length < 45) fontSize = 1.5
+            else if (length < 80) fontSize = 1.2
 
-            element.style.fontSize = `${fontSize}px`
+            element.style.fontSize = `${fontSize}rem`
         }
         updateFontSize()
 
