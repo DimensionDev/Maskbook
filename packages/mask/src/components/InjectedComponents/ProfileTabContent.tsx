@@ -19,9 +19,7 @@ function getTabContent(tabId: string) {
 }
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
-        zIndex: 1,
-    },
+    root: {},
     tags: {
         padding: theme.spacing(2),
     },
