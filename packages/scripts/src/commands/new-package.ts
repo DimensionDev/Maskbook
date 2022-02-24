@@ -152,7 +152,7 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
                 .replace(INSERT_HERE + ' 1', `${INSERT_HERE} 1\n    { "path": "./${path}/tsconfig.tests.json" },`)
                 .replace(INSERT_HERE + ' 2', `"${npmName}": ["./${path}/src"],\n      ${INSERT_HERE} 2`),
         )
-        await changeFile(resolve(packagePath, 'README.md'), () => `# ${npmName}`)
+        await changeFile(resolve(packagePath, 'README.md'), () => `# ${npmName}\n`)
     }
 
     // regenerate lockfile and install dependencies for newly installed packages

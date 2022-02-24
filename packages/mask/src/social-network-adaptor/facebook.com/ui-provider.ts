@@ -31,6 +31,7 @@ import { injectUserNFTAvatarAtFacebook } from './injection/NFT/NFTAvatarInTimeli
 import { injectOpenNFTAvatarEditProfileButton } from './injection/NFT/NFTAvatarEditProfile'
 import { injectProfileTabAtFacebook } from './injection/ProfileTab'
 import { injectProfileTabContentAtFacebook } from './injection/ProfileContent'
+import { FacebookRenderFragments } from './customization/render-fragments'
 
 const useInjectedDialogClassesOverwriteFacebook = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -144,6 +145,7 @@ const facebookUI: SocialNetworkUI.Definition = {
             InjectedDialog: {
                 classes: useInjectedDialogClassesOverwriteFacebook,
             },
+            RenderFragments: FacebookRenderFragments,
         },
         useTheme: useThemeFacebookVariant,
     },

@@ -4,7 +4,7 @@ import {
     makeTypedMessageText,
     TypedMessage,
     editTypedMessageMeta,
-} from '@masknet/shared-base'
+} from '@masknet/typed-message'
 import { makeStyles } from '@masknet/theme'
 import { InputBase, Alert, Button } from '@mui/material'
 import { useCallback, useImperativeHandle, useState, useRef, forwardRef, memo } from 'react'

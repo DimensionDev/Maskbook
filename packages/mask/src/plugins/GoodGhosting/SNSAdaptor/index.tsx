@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { Plugin, usePluginWrapper } from '@masknet/plugin-infra'
-import { extractTextFromTypedMessage, parseURL } from '@masknet/shared-base'
+import { extractTextFromTypedMessage } from '@masknet/typed-message'
+import { parseURL } from '@masknet/shared-base'
 import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
 import { PreviewCard } from '../UI/PreviewCard'
 import { ChainId } from '@masknet/web3-shared-evm'

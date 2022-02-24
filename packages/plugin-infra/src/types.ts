@@ -1,13 +1,8 @@
 /* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
-import type {
-    TypedMessage,
-    TypedMessageTuple,
-    ScopedStorage,
-    ProfileIdentifier,
-    PersonaIdentifier,
-} from '@masknet/shared-base'
+import type { TypedMessage, TypedMessageTuple } from '@masknet/typed-message'
+import type { ScopedStorage, ProfileIdentifier, PersonaIdentifier } from '@masknet/shared-base'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
 import type { Subscription } from 'use-subscription'
@@ -145,12 +140,7 @@ export namespace Plugin.Shared {
          */
         init(signal: AbortSignal, context: Context): void | Promise<void>
     }
-    export interface Utilities {
-        /**
-         * A pure function that convert a TypedMessage into another one
-         */
-        typedMessageTransformer?: TypedMessageTransformer
-    }
+    export interface Utilities {}
     export type TypedMessageTransformer = (message: TypedMessageTuple) => TypedMessageTuple
     /** The publisher of the plugin */
     export interface Publisher {
@@ -261,6 +251,13 @@ export namespace Plugin.SNSAdaptor {
         ProfileSliders?: ProfileSlider[]
         /** This UI will be rendered as tabs on the profile page */
         ProfileTabs?: ProfileTab[]
+        /**
+         * A hook for if this plugin can enhance the #hash or $cash tag.
+         */
+        enhanceTag?: {
+            onClick?: (kind: 'cash' | 'hash', content: string, event: React.MouseEvent<HTMLAnchorElement>) => void
+            onHover?: (kind: 'cash' | 'hash', content: string, event: React.MouseEvent<HTMLAnchorElement>) => () => void
+        }
     }
     // #region Composition entry
     /**

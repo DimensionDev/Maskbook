@@ -1,6 +1,6 @@
 import { useActivatedPluginsSNSAdaptor, Plugin, usePluginI18NField } from '@masknet/plugin-infra'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import type { TypedMessage } from '@masknet/shared-base'
+import type { TypedMessage } from '@masknet/typed-message'
 import { Box, Chip } from '@mui/material'
 import { useI18N } from '../../utils'
 

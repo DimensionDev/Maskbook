@@ -1,5 +1,5 @@
+import { makeTypedMessageText, TypedMessage } from '@masknet/typed-message'
 import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
-import { makeTypedMessageText, TypedMessage } from '@masknet/shared-base'
 import { i18n } from '../../../../shared-ui/locales_legacy'
 import { MaskMessages, CompositionRequest } from '../../../utils/messages'
 import { composeButtonSelector, composeDialogIndicatorSelector, composeTextareaSelector } from '../utils/selector'
