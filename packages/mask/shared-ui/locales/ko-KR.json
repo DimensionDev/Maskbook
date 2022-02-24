@@ -24,7 +24,6 @@
     "contract": "컨트랙트",
     "initializing": "초기화 중...",
     "redirect_alert": "브라우저가 리다이렉트하지 않으면 <terms>여기 클릭</terms>",
-    "typed_message_can_not_be_rendered": "The TypedMessage has a circular structure so it can't be rendered on the screen.",
     "typed_message_text_alert": "현재 TypedMessageText만 지원합니다.",
     "badge_renderer_provided_by_plugin": "플러그인으로 제공",
     "add_to_key_store_success": "해당 공개 키가 이미 키스토어에서 추가되었습니다",
@@ -58,8 +57,6 @@
     "create": "만들기",
     "copied": "복사됨",
     "daily": "일일",
-    "unknown": "알 수 없음",
-    "message": "메시지",
     "dashboard_tab_collectibles": "수집품",
     "dashboard_no_collectible_found": "수집품이 없습니다.",
     "days": "{{days}} 일마다",
@@ -114,7 +111,6 @@
     "post_dialog__title": "Mask: 편집",
     "post_dialog_enable_paste_auto": "자동 붙이기 지원",
     "post_modal_hint__button": "암호화된 메시지를 편집하기",
-    "post_substitute_label": "Mask",
     "hide": "숨기기",
     "reset": "초기화",
     "editor": "에디터",
@@ -144,8 +140,6 @@
     "settings_language": "언어",
     "settings_language_secondary": "이용하고 싶은 언어를 선택하세요.",
     "settings_choose_eth_network": "이더리움 네트워크를 선택하기",
-    "settings_post_replacement": "대체 게시물",
-    "settings_post_replacement_desc": "Mask가 이 웹페이지에 모든 게시물을 렌더링합니다.  Mask로 만들지 않는 것도 포함됩니다.",
     "settings_launch_page": "시작 페이지",
     "settings_launch_page_secondary": "앱을 열을 때 디폴트 페이지를 선택하세요.",
     "speed_up": "가속하기",
@@ -798,5 +792,6 @@
     "popups_persona_persona_name_exists": "이미 존재된 페르소나입니다",
     "popups_password_do_not_match": "잘못된 백업 비밀번호",
     "popups_backup_password": "백업 비밀번호",
-    "popups_rename_error_tip": "최대 길이는 {{length}} 자입니다."
+    "popups_rename_error_tip": "최대 길이는 {{length}} 자입니다.",
+    "nft_button_set_avatar": "NFT 아바타 설정"
 }

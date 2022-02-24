@@ -10,7 +10,7 @@ importers:
       '@commitlint/cli': ^16.1.0
       '@commitlint/config-conventional': ^16.0.0
       '@dimensiondev/eslint-plugin': ^0.0.1-20220117062517-fd3cb01
-      '@dimensiondev/kit': 0.0.0-20211215044858-27d964f
+      '@dimensiondev/kit': 0.0.0-20220223101101-4e6f3b9
       '@dimensiondev/patch-package': ^6.5.0
       '@emotion/cache': ^11.7.1
       '@emotion/react': ^11.7.1
@@ -63,7 +63,7 @@ importers:
       web3-core-method: 1.5.2
       webpack: 5.68.0
     dependencies:
-      '@dimensiondev/kit': 0.0.0-20211215044858-27d964f_8495c1478c7f1d196df61d0bdcd91148
+      '@dimensiondev/kit': 0.0.0-20220223101101-4e6f3b9
       '@emotion/cache': 11.7.1
       '@emotion/react': 11.7.1_6b5db35eea36630b01cb5c8dd65e2365
       '@emotion/serialize': 1.0.2
@@ -252,10 +252,12 @@ importers:
     specifiers:
       '@dimensiondev/stego-js': 0.11.1-20201027083223-8ab41be
       '@masknet/shared-base': workspace:*
+      '@masknet/typed-message': workspace:*
       '@msgpack/msgpack': ^2.7.2
     dependencies:
       '@dimensiondev/stego-js': 0.11.1-20201027083223-8ab41be
       '@masknet/shared-base': link:../shared-base
+      '@masknet/typed-message': link:../typed-message
       '@msgpack/msgpack': 2.7.2
 
   packages/external-plugin-previewer:
@@ -326,6 +328,7 @@ importers:
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
+      '@masknet/typed-message': workspace:*
       '@masknet/web3-contracts': workspace:*
       '@masknet/web3-providers': workspace:*
       '@masknet/web3-shared-base': workspace:*
@@ -388,7 +391,6 @@ importers:
       jsbi: 3.1.4
       json-stable-stringify: ^1.0.1
       json2csv: ^5.0.6
-      jsx-jsonml-devtools-renderer: ^1.4.3
       millify: ^4.0.0
       next-tick: ^1.0.0
       opensea-js: ^1.2.7
@@ -462,6 +464,7 @@ importers:
       '@masknet/shared': link:../shared
       '@masknet/shared-base': link:../shared-base
       '@masknet/theme': link:../theme
+      '@masknet/typed-message': link:../typed-message
       '@masknet/web3-contracts': link:../web3-contracts
       '@masknet/web3-providers': link:../web3-providers
       '@masknet/web3-shared-base': link:../web3-shared/base
@@ -518,7 +521,6 @@ importers:
       jsbi: 3.1.4
       json-stable-stringify: 1.0.1
       json2csv: 5.0.6
-      jsx-jsonml-devtools-renderer: 1.4.3
       millify: 4.0.0
       next-tick: 1.1.0
       opensea-js: 1.2.7
@@ -591,6 +593,7 @@ importers:
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
+      '@masknet/typed-message': workspace:*
       '@masknet/web3-shared-base': workspace:*
       '@servie/events': ^3.0.0
       '@types/use-subscription': ^1.0.0
@@ -605,6 +608,7 @@ importers:
       '@masknet/shared': link:../shared
       '@masknet/shared-base': link:../shared-base
       '@masknet/theme': link:../theme
+      '@masknet/typed-message': link:../typed-message
       '@masknet/web3-shared-base': link:../web3-shared/base
       '@servie/events': 3.0.0
       '@types/use-subscription': 1.0.0
@@ -636,6 +640,7 @@ importers:
 
   packages/plugins/DAO:
     specifiers:
+      '@masknet/configuration': workspace:*
       '@masknet/icons': workspace:*
       '@masknet/plugin-infra': workspace:*
       '@masknet/shared': workspace:*
@@ -646,6 +651,7 @@ importers:
       react-use: ^17.3.2
       urlcat: ^2.0.4
     dependencies:
+      '@masknet/configuration': link:../../configuration
       '@masknet/icons': link:../../icons
       '@masknet/plugin-infra': link:../../plugin-infra
       '@masknet/shared': link:../../shared
@@ -694,6 +700,7 @@ importers:
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
+      '@masknet/typed-message': workspace:*
       '@masknet/web3-kit': workspace:*
       '@msgpack/msgpack': ^2.7.2
       arweave: ^1.10.3
@@ -712,6 +719,7 @@ importers:
       '@masknet/shared': link:../../shared
       '@masknet/shared-base': link:../../shared-base
       '@masknet/theme': link:../../theme
+      '@masknet/typed-message': link:../../typed-message
       '@masknet/web3-kit': link:../../web3-kit
       '@msgpack/msgpack': 2.7.2
       arweave: 1.10.13
@@ -1000,6 +1008,7 @@ importers:
   packages/shared-base:
     specifiers:
       '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
+      '@masknet/typed-message': workspace:*
       '@msgpack/msgpack': ^2.7.2
       '@mui/icons-material': link:..\empty
       '@mui/lab': link:..\empty
@@ -1021,6 +1030,7 @@ importers:
       z-schema: ^5.0.2
     dependencies:
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
+      '@masknet/typed-message': link:../typed-message
       '@msgpack/msgpack': 2.7.2
       '@mui/icons-material': link:../empty
       '@mui/lab': link:../empty
@@ -1096,6 +1106,20 @@ importers:
       '@storybook/manager-webpack5': 6.4.18_7a3f4a361b4b2ecb4dc340ca5387ad5f
       '@storybook/react': 6.4.18_b824aaa144c344b0886eeabad621db2e
       babel-loader: 8.2.3_900eac683bef8a6b239b47efcf24e8a9
+
+  packages/typed-message:
+    specifiers:
+      '@msgpack/msgpack': ^2.7.2
+      '@mui/material': link:..\empty
+      anchorme: ^2.1.2
+      immer: ^9.0.12
+      z-schema: ^5.0.2
+    dependencies:
+      '@msgpack/msgpack': 2.7.2
+      '@mui/material': link:../empty
+      anchorme: 2.1.2
+      immer: 9.0.12
+      z-schema: 5.0.2
 
   packages/web3-constants:
     specifiers: {}
@@ -3806,18 +3830,10 @@ packages:
       webextension-polyfill: 0.8.0
     dev: false
 
-  /@dimensiondev/kit/0.0.0-20211215044858-27d964f_8495c1478c7f1d196df61d0bdcd91148:
-    resolution: {integrity: sha512-gUyTWUPIAIQ5oeoKVcKE9nvdpTwof3Mu3kqax2Z60IWUFIUsN+8GdcanuU91SYY+8W4f1slkO4GycmhN37pWpQ==, tarball: download/@dimensiondev/kit/0.0.0-20211215044858-27d964f/ffae2c70fb4f65a1a0cadbb52d96977097c3cc3a4e1efb3f588d26969e7d5858}
-    peerDependencies:
-      react: ^17 || ^18
-      react-router: ^5 || ^6
+  /@dimensiondev/kit/0.0.0-20220223101101-4e6f3b9:
+    resolution: {integrity: sha512-xk9rACwU2Iu+81BfnL1ykGofG+HuR/aMmYo4GZ1zyv32vZwe73B21z1GNGLq6XbYVjqNGa3puWoHZwDizAP4SA==, tarball: download/@dimensiondev/kit/0.0.0-20220223101101-4e6f3b9/a1b996a27d8d62c75d54a4a9d6b6544b45fe464288c83df31fccbbd2685b3a54}
     dependencies:
-      lodash: 4.17.21
       lodash-es: 4.17.21
-      lodash-unified: 1.0.1_da03a4540fbd16bbaafbb96724306afd
-      react: 18.0.0-rc.0
-    transitivePeerDependencies:
-      - '@types/lodash-es'
     dev: false
 
   /@dimensiondev/mask-wallet-core/0.1.0-20211013082857-eb62e5f_protobufjs@6.11.2:
@@ -10070,7 +10086,7 @@ packages:
     resolution: {integrity: sha512-oagLNqpfNv7CvmyMoexMDNyVDSiq1rya0AEUgcLlNHdHgNl6U/hi8xY370n5y+ZIFEXOx0J4B1qF2NDjMRxklA==}
     engines: {node: '>=6.0.0'}
     dependencies:
-      pvutils: 1.0.17
+      pvutils: 1.1.2
     dev: false
 
   /assert-plus/1.0.0:
@@ -21155,8 +21171,8 @@ packages:
       tslib: 2.3.1
     dev: false
 
-  /pvutils/1.0.17:
-    resolution: {integrity: sha512-wLHYUQxWaXVQvKnwIDWFVKDJku9XDCvyhhxoq8dc5MFdIlRenyPI9eSfEtcvgHgD7FlvCyGAlWgOzRnZD99GZQ==}
+  /pvutils/1.1.2:
+    resolution: {integrity: sha512-wlo0BUInyP+ZgBJHV8PnJW8S2HubdQfMMip8B9yXr9aFlauJFuF1jZ/RWFmzGYitC7GxkxqXdwbY9/R97v+Cqg==}
     engines: {node: '>=6.0.0'}
     dev: false
 

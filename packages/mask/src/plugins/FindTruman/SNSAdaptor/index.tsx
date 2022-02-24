@@ -3,7 +3,8 @@ import { useMemo, Suspense } from 'react'
 import { Skeleton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra'
-import { extractTextFromTypedMessage, parseURL } from '@masknet/shared-base'
+import { extractTextFromTypedMessage } from '@masknet/typed-message'
+import { parseURL } from '@masknet/shared-base'
 import { PostInspector } from './PostInspector'
 
 const useStyles = makeStyles()((theme) => {

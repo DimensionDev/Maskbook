@@ -1,5 +1,6 @@
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { ProfileIdentifier, delay } from '@masknet/shared-base'
+import { delay } from '@dimensiondev/kit'
+import { ProfileIdentifier } from '@masknet/shared-base'
 import { creator, SocialNetworkUI as Next } from '../../../social-network'
 import { instagramBase } from '../base'
 import { searchInstagramAvatarSelector } from '../utils/selector'

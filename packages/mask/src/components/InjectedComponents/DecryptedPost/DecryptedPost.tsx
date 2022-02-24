@@ -1,11 +1,6 @@
 import { Fragment, useEffect, useMemo, useReducer } from 'react'
-import {
-    delay,
-    makeTypedMessageTuple,
-    TypedMessageTuple,
-    type ProfileIdentifier,
-    type Payload,
-} from '@masknet/shared-base'
+import { makeTypedMessageTuple, TypedMessageTuple } from '@masknet/typed-message'
+import type { ProfileIdentifier, Payload } from '@masknet/shared-base'
 import { or } from '@masknet/theme'
 
 import { ServicesWithProgress } from '../../../extension/service'
@@ -25,6 +20,7 @@ import {
     usePostInfo,
 } from '../../DataSource/usePostInfo'
 import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorHelpers'
+import { delay } from '@dimensiondev/kit'
 
 function progressReducer(
     state: { key: string; progress: SuccessDecryption | FailureDecryption | DecryptionProgress }[],

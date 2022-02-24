@@ -93,6 +93,8 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@masknet/sdk': join(__dirname, '../../mask-sdk/server/'),
                     '@masknet/backup-format': join(__dirname, '../../backup-format/src/'),
                     '@masknet/encryption': join(__dirname, '../../encryption/src'),
+                    '@masknet/typed-message/dom$': require.resolve('../../typed-message/dom/index.ts'),
+                    '@masknet/typed-message$': require.resolve('../../typed-message/base/index.ts'),
                     // @masknet/scripts: insert-here
                     '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
                 }
@@ -286,7 +288,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
     // background
     if (runtime.manifest === 3) {
         entries.background = {
-            import: join(__dirname, '../src/background-worker.ts'),
+            import: join(__dirname, '../background/mv3-entry.ts'),
             filename: 'js/background.js',
         }
         plugins.push(new WebExtensionPlugin({ background: { entry: 'background', manifest: 3 } }))
