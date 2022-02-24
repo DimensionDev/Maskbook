@@ -97,6 +97,7 @@ const PersonaHome = memo(() => {
     const { currentPersona, setDeletingPersona, personas } = PersonaContext.useContainer()
     const history = useHistory()
 
+    console.log(personas)
     return (
         <>
             <div className={classes.content}>
@@ -142,7 +143,7 @@ const PersonaHome = memo(() => {
                     <Button
                         variant="contained"
                         className={classNames(classes.button, classes.secondaryButton)}
-                        disabled={personas && personas.length >= MAX_PERSONA_LIMIT}
+                        disabled={personas && personas.length >= MAX_PERSONA_LIMIT - 1}
                         onClick={() => {
                             browser.tabs.create({
                                 active: true,
@@ -154,7 +155,6 @@ const PersonaHome = memo(() => {
                     <Button
                         variant="contained"
                         className={classes.button}
-                        disabled={personas && personas.length >= MAX_PERSONA_LIMIT}
                         onClick={() => {
                             browser.tabs.create({
                                 active: true,
