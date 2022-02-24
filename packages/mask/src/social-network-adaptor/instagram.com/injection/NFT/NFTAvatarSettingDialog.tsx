@@ -1,4 +1,3 @@
-import { blobToArrayBuffer } from '@dimensiondev/kit'
 import { searchInstagramAvatarOpenFilesSelector } from '../../utils/selector'
 import { MaskMessages, useI18N } from '../../../../utils'
 import { useCallback, useState } from 'react'
@@ -22,7 +21,7 @@ const useStyles = makeStyles()(() => ({
 }))
 
 async function changeImageToActiveElements(image: File | Blob): Promise<void> {
-    const imageBuffer = await blobToArrayBuffer(image)
+    const imageBuffer = await image.arrayBuffer()
     hookInputUploadOnce('image/png', 'avatar.png', new Uint8Array(imageBuffer))
     searchInstagramAvatarOpenFilesSelector().evaluate()?.click()
 }

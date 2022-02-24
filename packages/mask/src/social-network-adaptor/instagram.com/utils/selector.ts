@@ -72,4 +72,6 @@ export const searchInstagramProfileSettingButtonSelector = () =>
         .querySelector('section > div > div')
 
 export const searchInstagramPostAvatarSelector = () =>
-    new LiveSelector<HTMLImageElement, false>().querySelectorAll<HTMLImageElement>('img[data-testid="user-avatar"]')
+    new LiveSelector<HTMLImageElement, false>().querySelectorAll<HTMLImageElement>(
+        '[id="react-root"] [role="button"] > a > img[data-testid="user-avatar"]',
+    )

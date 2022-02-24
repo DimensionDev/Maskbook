@@ -13,10 +13,10 @@ import { clearStorages, getAvatarId } from '../../utils/user'
 import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
 import { useLocation, useWindowSize } from 'react-use'
 import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
-import { delay } from '@masknet/shared-base'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { max } from 'lodash-unified'
 import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/RainbowBox'
+import { delay } from '@dimensiondev/kit'
 
 export function injectNFTAvatarInInstagram(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchInstagramAvatarSelector())
