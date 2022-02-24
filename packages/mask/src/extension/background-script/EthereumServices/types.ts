@@ -63,17 +63,17 @@ export interface Context {
     error: Error | null
 
     /**
-     * Alias of end(error)
+     * Resolve a request and write down the result into the context. Alias of end(error)
      */
     abort: (error: unknown, fallback?: string) => void
 
     /**
-     * Alias of end(null, result)
+     * Reject a request and throw an error. Alias of end(null, result)
      */
     write: (result: unknown) => void
 
     /**
-     * Write RPC response into the context but only allow to call once.
+     * Seal a request by resolving or rejecting it.
      */
     end: (error?: Error | null, result?: unknown) => void
 
