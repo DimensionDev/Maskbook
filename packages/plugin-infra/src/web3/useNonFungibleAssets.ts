@@ -14,7 +14,7 @@ export function useNonFungibleAssets(
         id: dependReady === undefined ? id : dependReady ? id : '',
         method: 'mask.fetchNonFungibleCollectibleAssetV2',
         params: {
-            address: address,
+            address,
             pageSize: 30,
             network,
         },

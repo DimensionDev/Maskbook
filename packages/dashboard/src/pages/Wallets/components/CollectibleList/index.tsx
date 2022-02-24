@@ -1,7 +1,7 @@
 import { Dispatch, memo, SetStateAction, useCallback, useEffect, useRef, useState } from 'react'
 import { Box, Stack, TablePagination } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useAccount, useChainId, useCustomNonFungibleAssets } from '@masknet/web3-shared-evm'
+import { useChainId, useCustomNonFungibleAssets } from '@masknet/web3-shared-evm'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { CollectibleCard } from '../CollectibleCard'
@@ -16,6 +16,7 @@ import {
     NetworkPluginID,
     mergeNFTList,
     useWeb3State,
+    useAccount,
     useNonFungibleAssets,
     PluginId,
     SocketState,
