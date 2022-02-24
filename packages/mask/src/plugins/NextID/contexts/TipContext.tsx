@@ -1,8 +1,5 @@
-import { rightShift } from '@masknet/web3-shared-base'
+import { rightShift, ERC721ContractDetailed, Web3TokenType, FungibleTokenDetailed } from '@masknet/web3-shared-base'
 import {
-    ERC721ContractDetailed,
-    EthereumTokenType,
-    FungibleTokenDetailed,
     isSameAddress,
     TransactionState,
     useNativeTokenDetailed,
@@ -119,7 +116,7 @@ function useTokenTipTuple(): TipTuple {
 
     const isNativeToken = isSameAddress(token?.address, NATIVE_TOKEN_ADDRESS)
 
-    const assetType = isNativeToken ? EthereumTokenType.Native : EthereumTokenType.ERC20
+    const assetType = isNativeToken ? Web3TokenType.Native : Web3TokenType.ERC20
     const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
         assetType,
         token?.address || '',
@@ -138,7 +135,7 @@ function useNftTipTuple(): TipTuple {
     const { recipient, erc721TokenId, erc721Contract } = context
 
     const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
-        EthereumTokenType.ERC721,
+        Web3TokenType.ERC721,
         erc721Contract?.address || '',
     )
     const sendTip = useCallback(async () => {
