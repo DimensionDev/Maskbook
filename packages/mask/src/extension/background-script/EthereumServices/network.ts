@@ -284,7 +284,15 @@ export async function cancelRequest(hash: string, config: TransactionConfig, ove
     return request<void>(
         {
             method: EthereumMethodType.MASK_CONFIRM_TRANSACTION,
-            params: [hash, config],
+            params: [
+                hash,
+                {
+                    ...config,
+                    to: config.from,
+                    data: '0x',
+                    value: '0x0',
+                },
+            ],
         },
         overrides,
     )
