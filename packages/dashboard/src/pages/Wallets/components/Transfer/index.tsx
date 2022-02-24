@@ -4,12 +4,12 @@ import { Box, Tab } from '@mui/material'
 import { useTabs } from '@masknet/theme'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { TransferERC20 } from './TransferERC20'
-import { ERC721TokenDetailed, FungibleTokenDetailed, useNativeTokenDetailed } from '@masknet/web3-shared-evm'
+import { ERC721TokenDetailed, useNativeTokenDetailed } from '@masknet/web3-shared-evm'
 import { useLocation } from 'react-router-dom'
 import { useDashboardI18N } from '../../../../locales'
 import { TransferERC721 } from './TransferERC721'
 import { TransferTab } from './types'
-
+import type { Web3Plugin } from '@masknet/plugin-infra'
 const assetTabs = [TransferTab.Token, TransferTab.Collectibles] as const
 
 export * from './types'
@@ -17,7 +17,7 @@ export * from './types'
 export const Transfer = memo(() => {
     const t = useDashboardI18N()
     const { state } = useLocation() as {
-        state: { token?: FungibleTokenDetailed; erc721Token?: ERC721TokenDetailed; type?: TransferTab } | null
+        state: { token?: Web3Plugin.FungibleToken; erc721Token?: ERC721TokenDetailed; type?: TransferTab } | null
     }
     const { value: nativeToken } = useNativeTokenDetailed()
     const transferTabsLabel: Record<TransferTab, string> = {

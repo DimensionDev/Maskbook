@@ -24,7 +24,7 @@ export function injectNFTAvatarInTwitter(signal: AbortSignal) {
 
 const useStyles = makeStyles()(() => ({
     root: {
-        transform: 'scale(1.025)',
+        transform: 'scale(1.022)',
         position: 'absolute',
         textAlign: 'center',
         color: 'white',
@@ -160,8 +160,8 @@ function NFTAvatarInTwitter() {
                     border: 2px solid #00f8ff;
                 }
             `
-                rainBowElement.current = linkDom.firstElementChild
-                if (showAvatar) linkDom.firstElementChild.classList.add('rainbowBorder')
+                rainBowElement.current = linkDom.firstElementChild.nextElementSibling
+                linkDom.firstElementChild.nextElementSibling?.classList.add('rainbowBorder')
                 linkDom.appendChild(style)
             }
         }
@@ -173,6 +173,8 @@ function NFTAvatarInTwitter() {
 
             if (borderElement.current && linkDom?.firstElementChild !== borderElement.current) {
                 linkDom?.insertBefore(borderElement.current, linkDom.firstChild)
+            }
+            if (rainBowElement.current) {
                 rainBowElement.current?.classList.remove('rainbowBorder')
             }
         }
