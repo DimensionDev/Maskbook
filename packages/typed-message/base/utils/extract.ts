@@ -31,8 +31,8 @@ export function extractImageFromTypedMessage(message: TypedMessage | null): (str
     if (!message) return []
 
     const image: (string | Blob)[] = []
-    function visitor(message: TypedMessage): number | void {
-        if (isTypedMessageImage(message)) return image.push(message.image)
+    function visitor(message: TypedMessage): void {
+        if (isTypedMessageImage(message)) return void image.push(message.image)
         return forEachTypedMessageChild(message, visitor)
     }
     visitor(message)

@@ -77,14 +77,15 @@ function Transformer({ message, unzip, zip }: { message: TypedMessage } & PostRe
 }
 function hasCashOrHashTag(message: TypedMessage): boolean {
     let result = false
-    forEachTypedMessageChild(message, function visitor(node) {
+    function visitor(node: TypedMessage): 'stop' | void {
         if (isTypedMessageAnchor(node)) {
             if (node.category === 'cash' || node.category === 'hash') {
                 result = true
                 return 'stop'
             }
         } else forEachTypedMessageChild(node, visitor)
-        return
-    })
+    }
+    visitor(message)
+    forEachTypedMessageChild(message, visitor)
     return result
 }
