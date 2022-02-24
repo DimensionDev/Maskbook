@@ -14,6 +14,7 @@ export function useFungibleTokenWatched(initialToken?: {
     const [amount, setAmount] = useState('')
     const balance = useFungibleTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
     const detailed = useFungibleTokenDetailed(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
+
     return {
         amount,
         token: detailed,

@@ -20,7 +20,7 @@ class NonceManager {
     }
     private async getRemoteNonce() {
         return new Promise<number>(async (resolve, reject) => {
-            const callback = (e: Error | null, nonce?: number) => {
+            const callback = (e: unknown, nonce?: number) => {
                 if (e) reject(e)
                 // TODO: is 0 a correct value if nonce is undefined?
                 else resolve(nonce ?? 0)
@@ -38,7 +38,7 @@ class NonceManager {
                             chainId: currentMaskWalletChainIdSettings.value,
                         }),
                     )
-                } catch (error: any) {
+                } catch (error) {
                     callback(error)
                 }
             }

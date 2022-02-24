@@ -17,7 +17,7 @@ import {
     useChainId,
 } from '@masknet/web3-shared-evm'
 import { useValueRef, useRemoteControlledDialog } from '@masknet/shared'
-import { delay } from '@masknet/shared-base'
+import { delay } from '@dimensiondev/kit'
 import ActionButton, {
     ActionButtonPromise,
     ActionButtonPromiseProps,
@@ -31,6 +31,7 @@ import { pluginIDSettings } from '../../settings/settings'
 const useStyles = makeStyles()(() => ({}))
 
 export interface EthereumChainBoundaryProps extends withClasses<'switchButton'> {
+    className?: string
     chainId: ChainId
     noSwitchNetworkTip?: boolean
     disablePadding?: boolean
@@ -131,6 +132,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const renderBox = (children?: React.ReactNode) => {
         return (
             <Box
+                className={props.className}
                 display="flex"
                 flexDirection="column"
                 alignItems="center"

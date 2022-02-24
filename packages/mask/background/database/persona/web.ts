@@ -428,7 +428,14 @@ export async function queryProfilesDB(
             if (query.hasLinkedPersona && !out.linkedPersona) continue
             if (query.identifiers.some((x) => out.identifier.equals(x))) result.push(out)
         }
+    } else {
+        for await (const each of t.objectStore('profiles').iterate()) {
+            const out = profileOutDB(each.value)
+            if (query.hasLinkedPersona && !out.linkedPersona) continue
+            result.push(out)
+        }
     }
+
     return result
 }
 

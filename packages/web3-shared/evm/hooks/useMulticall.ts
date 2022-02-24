@@ -181,7 +181,7 @@ export function useMulticallStateDecoded<
             try {
                 const value = decodeOutputString(web3, outputs, result) as R
                 return { succeed, gasUsed, value, error: null }
-            } catch (error: any) {
+            } catch (error) {
                 return { succeed: false, gasUsed, value: null, error }
             }
         })

@@ -9,7 +9,7 @@ import { useCustomSnackbar } from '@masknet/theme'
 import { usePersonaSign } from '../hooks/usePersonaSign'
 import { useWalletSign } from '../hooks/useWalletSign'
 import { useBindPayload } from '../hooks/useBindPayload'
-import { delay } from '@masknet/shared-base'
+import { delay } from '@dimensiondev/kit'
 import { UnbindPanelUI } from './UnbindPanelUI'
 
 interface VerifyWalletDialogProps {

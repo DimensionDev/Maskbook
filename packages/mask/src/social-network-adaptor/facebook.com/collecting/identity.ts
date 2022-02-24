@@ -3,9 +3,10 @@ import { LiveSelector, MutationObserverWatcher, ValueRef } from '@dimensiondev/h
 import { creator, SocialNetworkUI } from '../../../social-network'
 import { getProfileIdentifierAtFacebook, getUserID } from '../utils/getProfileIdentifier'
 import { isMobileFacebook } from '../utils/isMobile'
-import { delay, ProfileIdentifier } from '@masknet/shared-base'
+import { ProfileIdentifier } from '@masknet/shared-base'
 import { searchAvatarSelector, searchUserIdOnMobileSelector } from '../utils/selector'
 import { getAvatar, getBioDescription, getFacebookId, getNickName } from '../utils/user'
+import { delay } from '@dimensiondev/kit'
 
 export const IdentityProviderFacebook: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: true,

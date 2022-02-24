@@ -5,7 +5,6 @@
 import { pasteImage } from '@masknet/injected-script'
 import { isNull } from 'lodash-unified'
 import Services from '../extension/service'
-import { blobToArrayBuffer } from '@dimensiondev/kit'
 /**
  * Download given url return as Blob
  */
@@ -25,7 +24,7 @@ export async function downloadUrl(url: string) {
  * @param image
  */
 export async function pasteImageToActiveElements(image: File | Blob): Promise<void> {
-    pasteImage(new Uint8Array(await blobToArrayBuffer(image)))
+    pasteImage(new Uint8Array(await image.arrayBuffer()))
 }
 
 /**

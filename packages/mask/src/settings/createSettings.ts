@@ -1,7 +1,7 @@
 import { ValueRef, isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import Services from '../extension/service'
 import { MaskMessages } from '../utils/messages'
-import { defer } from '@masknet/shared-base'
+import { defer } from '@dimensiondev/kit'
 
 export interface SettingsTexts {
     primary: () => string
