@@ -92,6 +92,9 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
         section: {
             width: '100%',
         },
+        chainBoundary: {
+            width: '100%',
+        },
         button: {
             fontSize: 18,
             lineHeight: '22px',
@@ -450,6 +453,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 chainId={chainId}
                                 noSwitchNetworkTip
                                 disablePadding
+                                className={classes.chainBoundary}
                                 ActionButtonPromiseProps={{
                                     fullWidth: true,
                                     classes: { root: classes.button, disabled: classes.disabledButton },

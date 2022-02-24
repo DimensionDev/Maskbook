@@ -26,8 +26,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface NFTStyledAssetPlayerProps
-    extends withClasses<'loadingFailImage' | 'iframe' | 'wrapper' | 'loadingPlaceholder'> {
+interface Props extends withClasses<'loadingFailImage' | 'iframe' | 'wrapper' | 'loadingPlaceholder'> {
     chainId: ChainId
     contractAddress: string
     tokenId: string
@@ -39,7 +38,7 @@ interface NFTStyledAssetPlayerProps
     setERC721TokenName?: (name: string) => void
     setSourceType?: (type: string) => void
 }
-export function NFTCardStyledAssetPlayer(props: NFTStyledAssetPlayerProps) {
+export function NFTCardStyledAssetPlayer(props: Props) {
     const {
         chainId,
         contractAddress,

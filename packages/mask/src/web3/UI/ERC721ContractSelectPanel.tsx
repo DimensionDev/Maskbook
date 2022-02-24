@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { v4 as uuid } from 'uuid'
 import { ChainId, isSameAddress, useAccount, useERC721ContractBalance } from '@masknet/web3-shared-evm'
 import { Web3TokenType, ERC721ContractDetailed } from '@masknet/web3-shared-base'
@@ -65,8 +65,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
 
 export interface ERC721TokenSelectPanelProps {
     onContractChange: (contract: ERC721ContractDetailed) => void
-    onBalanceChange: (balance: number) => void
-    contract: ERC721ContractDetailed | undefined
+    onBalanceChange?: (balance: number) => void
+    contract: ERC721ContractDetailed | null | undefined
 }
 export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
     const { onContractChange, onBalanceChange, contract } = props
@@ -100,12 +100,14 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
 
     const balance = balanceFromChain ? Number(balanceFromChain) : balanceFromRemote ?? 0
 
-    onBalanceChange(balance)
+    useEffect(() => {
+        onBalanceChange?.(balance)
+    }, [onBalanceChange, balance])
 
     const loading = (loadingFromChain || loadingBalanceFromRemoteState !== SocketState.done) && !balance
 
     // #region select contract
-    const [id] = useState(uuid())
+    const [id] = useState(uuid)
 
     const { setDialog: setNftContractDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectNftContractDialogUpdated,
