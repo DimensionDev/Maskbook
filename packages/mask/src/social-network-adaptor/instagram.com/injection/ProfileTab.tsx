@@ -43,7 +43,7 @@ function getStyleProps() {
     }
 }
 
-const useStyles = makeStyles()(() => {
+const useStyles = makeStyles()((theme) => {
     const props = getStyleProps()
     return {
         root: {
@@ -68,11 +68,16 @@ const useStyles = makeStyles()(() => {
         selected: {
             borderTop: `1px solid ${props.hover}`,
             color: props.hover,
+            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+                borderTop: 'unset',
+            },
         },
         line: {},
         icon: {
-            fontSize: props.fontSize,
             paddingRight: 4,
+            [`@media (min-width: ${theme.breakpoints.values.sm}px)`]: {
+                fontSize: props.fontSize,
+            },
         },
     }
 })
