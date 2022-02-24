@@ -134,7 +134,7 @@ export class AlchemyAPI implements NonFungibleTokenAPI.Provider {
         const data = result.nfts.map((nft) => createNFT(nft, result.ownerAddress, network.chainId))
         return {
             data,
-            hasNextPage: page === 0,
+            hasNextPage: data.length === size,
         }
     }
 }
