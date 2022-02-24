@@ -4,7 +4,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import {
     EthereumMethodType,
     getPayloadSignature,
-    getTransactionSignaure,
+    getTransactionSignature,
     getTransactionState,
     isFinalState,
     isNextStateAvailable,
@@ -60,7 +60,7 @@ class ProgressManager {
     }
 
     public notifyTransactionProgress(transaction: Transaction, state: TransactionState) {
-        const progressId = getTransactionSignaure(transaction)
+        const progressId = getTransactionSignature(transaction)
         if (!progressId) return
 
         this.notifyProgress(progressId, state)

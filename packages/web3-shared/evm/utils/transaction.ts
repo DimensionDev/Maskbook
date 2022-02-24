@@ -52,7 +52,7 @@ export function isNextStateAvailable(type: TransactionStateType, nextType: Trans
     }
 }
 
-export function getTransactionSignaure(transaction: Transaction | null) {
+export function getTransactionSignature(transaction: Transaction | null) {
     if (!transaction) return
     const { from, to, input, value } = transaction
     return sha3([from, to, input || '0x0', toHex(value || '0x0') || '0x0'].join('_')) ?? undefined

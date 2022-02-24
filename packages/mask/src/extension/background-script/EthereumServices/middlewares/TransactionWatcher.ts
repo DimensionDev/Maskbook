@@ -6,7 +6,7 @@ import {
     getPayloadConfig,
     getPayloadFrom,
     getPayloadSignature,
-    getTransactionSignaure,
+    getTransactionSignature,
 } from '@masknet/web3-shared-evm'
 import type { TransactionReceipt } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
@@ -129,7 +129,7 @@ export class TransactionWatcher implements Middleware<Context> {
                     if (config?.nonce) return config.nonce === latestTransaction.nonce
 
                     // the transaction signature id exact matched
-                    if (getTransactionSignaure(latestTransaction) === getPayloadSignature(transaction.payload))
+                    if (getTransactionSignature(latestTransaction) === getPayloadSignature(transaction.payload))
                         return true
 
                     return false
