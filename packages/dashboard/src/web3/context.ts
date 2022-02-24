@@ -13,7 +13,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { getProxyWebsocketInstance } from '@masknet/web3-shared-base'
 import { Services, Messages, PluginServices, PluginMessages } from '../API'
-import { TokenListApi } from '@masknet/web3-providers'
+import { TokenListAPI } from '@masknet/web3-providers'
 
 export const Web3Context: Web3ProviderType = {
     allowTestnet: createSubscriptionFromAsync(Services.Settings.getWalletAllowTestChain, false, () => {
@@ -95,7 +95,7 @@ export const Web3Context: Web3ProviderType = {
     getCollectionsNFT: PluginServices.Wallet.getCollectionsNFT,
     getAddressNamesList: PluginServices.Wallet.getAddressNames,
     getTransactionList: PluginServices.Wallet.getTransactionList,
-    fetchERC20TokensFromTokenLists: TokenListApi.fetchERC20TokensFromTokenLists,
+    fetchERC20TokensFromTokenLists: TokenListAPI.fetchERC20TokensFromTokenLists,
     providerSocket: getProxyWebsocketInstance((info) =>
         PluginMessages.Wallet.events.socketMessageUpdated.sendToAll(info),
     ),

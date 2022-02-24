@@ -1,6 +1,6 @@
 import { escapeRegExp } from 'lodash-unified'
 import urlcat from 'urlcat'
-import type { UserNFTContainerAPI } from '../types'
+import type { TwitterBaseAPI } from '../types'
 
 function getScriptURL(content: string, name: string) {
     const matchURL = new RegExp(
@@ -38,7 +38,7 @@ async function getUserNftContainer(
 ): Promise<{
     data: {
         user: {
-            result: UserNFTContainerAPI.NFTContainer
+            result: TwitterBaseAPI.NFTContainer
         }
     }
 }> {
@@ -83,7 +83,7 @@ async function getTokens() {
     }
 }
 
-export class UserNFTContainerAtTwitterAPI implements UserNFTContainerAPI.Provider {
+export class TwitterAPI implements TwitterBaseAPI.Provider {
     async getUserNftContainer(
         screenName: string,
     ): Promise<{ address: string; token_id: string; type_name: string } | undefined> {

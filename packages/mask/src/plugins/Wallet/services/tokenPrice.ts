@@ -4,7 +4,7 @@ import { startEffects } from '../../../../utils-pure'
 import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
 import { currentTokenPricesSettings } from '../settings'
 import { uniq } from 'lodash-unified'
-import { TokenPriceApi } from '@masknet/web3-providers'
+import { TokenPrice } from '@masknet/web3-providers'
 
 const { run } = startEffects(import.meta.webpackHot)
 
@@ -46,11 +46,7 @@ export async function updateTokenPrices() {
         const platforms = Object.keys(trackingContracts)
         await Promise.allSettled(
             platforms.map(async (platform) => {
-                const prices = await TokenPriceApi.getTokenPrices(
-                    platform,
-                    trackingContracts[platform],
-                    CurrencyType.USD,
-                )
+                const prices = await TokenPrice.getTokenPrices(platform, trackingContracts[platform], CurrencyType.USD)
                 updateCurrentPrices(prices)
             }),
         )
@@ -76,7 +72,7 @@ export async function updateNativeTokenPrices() {
 
     // update chain state
     try {
-        const prices = await TokenPriceApi.getNativeTokenPrice(trackingNativeTokenIds, CurrencyType.USD)
+        const prices = await TokenPrice.getNativeTokenPrice(trackingNativeTokenIds, CurrencyType.USD)
         updateCurrentPrices(prices)
     } catch {
         // do nothing
