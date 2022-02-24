@@ -399,6 +399,10 @@
         {
             "filename": "**/qya-AA.json",
             "enabled": false
+        },
+        {
+            "filename": ".circleci/config.yml",
+            "ignoreWords": ["cimg"]
         }
     ]
 }
