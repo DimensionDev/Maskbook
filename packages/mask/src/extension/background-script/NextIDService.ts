@@ -90,6 +90,10 @@ export async function queryExistedBindingByPlatform(platform: NextIDPlatform, id
     return result.ids
 }
 
+export async function queryExistedBinding(platform: NextIDPlatform, identity: string): Promise<NextIDBindings> {
+    throw new Error('To be implemented.')
+}
+
 export async function queryIsBound(persona: PersonaIdentifier, platform: NextIDPlatform, identity: string) {
     if (!platform && !identity) return false
 

@@ -40,6 +40,9 @@ startPluginDashboard(
             },
             personaSign: Services.Identity.signWithPersona,
             walletSign: Services.Ethereum.personalSign,
+            nextID: {
+                query: Services.NextID.queryExistedBinding,
+            },
         }
     }),
 )
