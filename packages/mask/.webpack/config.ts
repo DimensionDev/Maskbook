@@ -286,7 +286,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
     // background
     if (runtime.manifest === 3) {
         entries.background = {
-            import: join(__dirname, '../src/background-worker.ts'),
+            import: join(__dirname, '../background/mv3-entry.ts'),
             filename: 'js/background.js',
         }
         plugins.push(new WebExtensionPlugin({ background: { entry: 'background', manifest: 3 } }))
