@@ -9,3 +9,6 @@ export const SOCIAL_MEDIA_ICON_MAPPING: Record<string, ReactNode> = {
 }
 
 export const mediaViewerUrl = 'https://media-viewer.r2d2.to/index.html'
+
+export const MAX_WALLET_LIMIT = 100
+export const MAX_PERSONA_LIMIT = 10
