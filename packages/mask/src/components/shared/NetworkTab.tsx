@@ -63,6 +63,7 @@ export function NetworkTab(props: NetworkTabProps) {
         index: chains.indexOf(chainId),
         classes,
         hasOnlyOneChild: true,
+        scrollable: true,
     }
 
     return <AbstractTab {...tabProps} />
