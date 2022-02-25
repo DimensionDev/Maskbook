@@ -3,7 +3,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { createTransaction } from '../../../../background/database/utils/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
-import { openPopupWindow } from '../../../extension/background-script/HelperService'
+import { openPopupWindow } from '../../../../background/services/helper'
 
 const MAX_UNCONFIRMED_REQUESTS_SIZE = 1
 const MAIN_RECORD_ID = '0'
