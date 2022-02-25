@@ -84,6 +84,7 @@
   "pnpm": {
     "overrides": {
       "@types/node": "^17.0.17"
-    }
+    },
+    "onlyBuiltDependencies": ["fsevents"]
   }
 }
