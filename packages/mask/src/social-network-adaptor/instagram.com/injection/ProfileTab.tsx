@@ -1,7 +1,7 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { CollectibleIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { useMemo } from 'react'
+import { useLayoutEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-use'
 import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab'
 import { createReactRootShadowed, startWatch, untilElementAvailable, useMatchXS } from '../../../utils'
@@ -42,8 +42,7 @@ function getStyleProps(activeColor: { activeColor: string; color: string }) {
     }
 }
 
-const useStyles = makeStyles<{ activeColor: string; color: string }>()((theme, { activeColor, color }) => {
-    const props = getStyleProps({ activeColor, color })
+const useStyles = makeStyles<StyleProps>()((theme, props) => {
     return {
         root: {
             '&:hover': {
@@ -81,22 +80,54 @@ const useStyles = makeStyles<{ activeColor: string; color: string }>()((theme, {
     }
 })
 
+interface StyleProps {
+    color: string
+    font: string
+    hover: string
+    fontSize: string
+    height: string
+    padding: string
+}
+
+function getActiveColor() {
+    const activeTab = searchProfileActiveTabSelector().evaluate()?.firstElementChild
+    if (!activeTab) return ''
+    const activeStyle = window.getComputedStyle(activeTab)
+    return activeStyle.color
+}
+
+function getColor() {
+    const tab = searchProfileTabSelector().evaluate()
+    if (!tab) return ''
+    const style = window.getComputedStyle(tab)
+    return style.color
+}
+
 export function ProfileTabAtInstagram() {
     const isMobile = useMatchXS()
     const location = useLocation()
-    const activeColor = useMemo(() => {
-        const activeTab = searchProfileActiveTabSelector().evaluate()?.firstElementChild
-        if (!activeTab) return ''
-        const activeStyle = window.getComputedStyle(activeTab)
-        return activeStyle.color
-    }, [location])
-    const color = useMemo(() => {
-        const tab = searchProfileTabSelector().evaluate()
-        if (!tab) return ''
-        const style = window.getComputedStyle(tab)
-        return style.color
-    }, [location])
-    const { classes } = useStyles({ activeColor, color })
+    const [styles, setStyles] = useState<StyleProps>({
+        color: '',
+        font: '',
+        hover: '',
+        fontSize: '',
+        height: '',
+        padding: '',
+    })
+
+    const { activeColor, color } = useMemo(() => {
+        const activeColor = getActiveColor()
+        const color = getColor()
+
+        return { activeColor, color }
+    }, [location.pathname])
+
+    useLayoutEffect(() => {
+        const tabStyles = getStyleProps({ activeColor, color })
+        setStyles(tabStyles)
+    }, [])
+
+    const { classes } = useStyles(styles)
     const reset = () => {
         const activeTab = searchProfileActiveTabSelector().evaluate()
         if (activeTab?.style) {
