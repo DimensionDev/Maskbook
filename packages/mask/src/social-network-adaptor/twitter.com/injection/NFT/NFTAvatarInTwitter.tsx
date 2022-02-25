@@ -62,13 +62,13 @@ function NFTAvatarInTwitter() {
     )
 
     const size = useMemo(() => {
-        const ele = searchTwitterAvatarSelector().evaluate()
+        const ele = searchTwitterAvatarSelector().evaluate()?.querySelector('img')
         if (ele) {
             const style = window.getComputedStyle(ele)
             return Number.parseInt(style.width.replace('px', '') ?? 0, 10)
         }
         return 0
-    }, [windowSize])
+    }, [windowSize, location])
 
     const { classes } = useStyles()
 
@@ -138,17 +138,19 @@ function NFTAvatarInTwitter() {
         if (!showAvatar) return
         const linkDom = searchTwitterAvatarLinkSelector().evaluate()
 
-        if (linkDom?.firstElementChild && linkDom.childNodes.length === 4) {
+        if (linkDom?.firstElementChild) {
             const linkParentDom = linkDom.closest('div')
 
             if (linkParentDom) linkParentDom.style.overflow = 'visible'
 
-            // create rainbow shadow border
-            if (linkDom.lastElementChild?.tagName !== 'STYLE') {
+            if (linkDom.childNodes.length === 4 && linkDom.lastElementChild?.tagName !== 'STYLE') {
                 borderElement.current = linkDom.firstElementChild
-
                 // remove useless border
                 linkDom.removeChild(linkDom.firstElementChild)
+            }
+
+            // create rainbow shadow border
+            if (linkDom.lastElementChild?.tagName !== 'STYLE') {
                 const style = document.createElement('style')
                 style.innerText = `
                 ${rainbowBorderKeyFrames.styles}
