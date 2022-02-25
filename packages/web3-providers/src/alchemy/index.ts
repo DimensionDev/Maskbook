@@ -113,13 +113,13 @@ function createNFT(token: AlchemyNFTItemDetailedResponse, owner: string, chainId
 export class AlchemyAPI implements NonFungibleTokenAPI.Provider {
     async getTokens(
         from: string,
-        { page = 0, size = 100 }: NonFungibleTokenAPI.Options,
+        { page = 0, pageSize = 100 }: NonFungibleTokenAPI.Options,
         network: Web3Plugin.NetworkDescriptor,
     ) {
         const requestPath = urlcat(`${PluginId.Flow}_flow` === network.ID ? '/getNFTs/' : '/v1/getNFTs/', {
             owner: from,
-            offset: page * size,
-            limit: size,
+            offset: page * pageSize,
+            limit: pageSize,
         })
 
         const result =
@@ -135,7 +135,7 @@ export class AlchemyAPI implements NonFungibleTokenAPI.Provider {
         const data = result.nfts.map((nft) => createNFT(nft, result.ownerAddress, network.chainId))
         return {
             data,
-            hasNextPage: data.length === size,
+            hasNextPage: data.length === pageSize,
         }
     }
 }
@@ -144,8 +144,8 @@ export function getAlchemyNFTList(
     address: string,
     network: Web3Plugin.NetworkDescriptor,
     page?: number,
-    size?: number,
+    pageSize?: number,
 ) {
     const alchemy = new AlchemyAPI()
-    return alchemy.getTokens(address, { page, size }, network)
+    return alchemy.getTokens(address, { page, pageSize }, network)
 }

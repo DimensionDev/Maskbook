@@ -100,7 +100,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
 
     async getTokens(
         from: string,
-        { chainId = ChainId.Mainnet, page = 0, size = 50, pageInfo }: NonFungibleTokenAPI.Options,
+        { chainId = ChainId.Mainnet, page = 0, pageSize = 50, pageInfo }: NonFungibleTokenAPI.Options,
     ) {
         const response = await fetchAsset<{
             content: NFTScanAsset[]
@@ -108,7 +108,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
             page_size: number
             total: number
         }>('getAllNftByUserAddress', {
-            page_size: size,
+            page_size: pageSize,
             page_index: page + 1,
             user_address: from,
             erc: pageInfo?.type ?? 'erc721',
@@ -123,7 +123,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
         const total = response.data.total
         return {
             data,
-            hasNextPage: total - (page + 1) * size > 0,
+            hasNextPage: total - (page + 1) * pageSize > 0,
         }
     }
 }
@@ -133,7 +133,7 @@ export function getNFTScanNFTList(address: string) {
     return nftScanAPI.getContractBalance(address)
 }
 
-export function getNFTScanNFTs(address: string, type: 'erc721' | 'erc1155', page?: number, size?: number) {
+export function getNFTScanNFTs(address: string, type: 'erc721' | 'erc1155', page?: number, pageSize?: number) {
     const nftScanAPI = new NFTScanAPI()
-    return nftScanAPI.getTokens(address, { page, size, pageInfo: { type } })
+    return nftScanAPI.getTokens(address, { page, pageSize, pageInfo: { type } })
 }

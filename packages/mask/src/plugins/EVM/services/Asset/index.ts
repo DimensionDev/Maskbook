@@ -68,7 +68,7 @@ export async function getOrders(options: OrderOption) {
             return OpenSea.getOrders(address, tokenId, side, {
                 chainId,
                 page,
-                size,
+                pageSize: size,
             })
         case NonFungibleAssetProvider.NFTSCAN:
             return []
@@ -97,7 +97,7 @@ export async function getHistory(options: HistoryOption) {
     const { address, tokenId, chainId, provider, page, size } = options
     switch (provider) {
         case NonFungibleAssetProvider.OPENSEA:
-            return OpenSea.getHistory(address, tokenId, { chainId, page, size })
+            return OpenSea.getHistory(address, tokenId, { chainId, page, pageSize: size })
         case NonFungibleAssetProvider.NFTSCAN:
             return []
         case NonFungibleAssetProvider.RARIBLE:
@@ -111,7 +111,7 @@ export async function getCollections(options: CollectionOption) {
     const { address, chainId, provider, page, size } = options
     switch (provider) {
         case NonFungibleAssetProvider.OPENSEA:
-            return OpenSea.getCollections(address, { chainId, page, size })
+            return OpenSea.getCollections(address, { chainId, page, pageSize: size })
         case NonFungibleAssetProvider.RARIBLE:
             return defaultPageableData
         case NonFungibleAssetProvider.NFTSCAN:

@@ -266,12 +266,12 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
     }
 
     async getTokens(from: string, opts: NonFungibleTokenAPI.Options) {
-        const { chainId = ChainId.Mainnet, page = 0, size = 50 } = opts
+        const { chainId = ChainId.Mainnet, page = 0, pageSize = 50 } = opts
 
         const requestPath = urlcat('/api/v1/assets', {
             owner: from,
-            offset: page * size,
-            limit: size,
+            offset: page * pageSize,
+            limit: pageSize,
             collection: opts.pageInfo?.collection,
         })
         const response = await fetchFromOpenSea<{ assets: OpenSeaResponse[] }>(requestPath, chainId, this._apiKey)
@@ -286,20 +286,20 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
                 .map((x) => ({ ...x, provideBy: 'OpenSea' })) ?? []
         return {
             data: assets,
-            hasNextPage: assets.length === size,
+            hasNextPage: assets.length === pageSize,
         }
     }
 
     async getHistory(
         address: string,
         tokenId: string,
-        { chainId = ChainId.Mainnet, page, size }: NonFungibleTokenAPI.Options = {},
+        { chainId = ChainId.Mainnet, page, pageSize }: NonFungibleTokenAPI.Options = {},
     ) {
         const requestPath = urlcat('/api/v1/events', {
             asset_contract_address: address,
             token_id: tokenId,
             offset: page,
-            limit: size,
+            limit: pageSize,
         })
         const response = await fetchFromOpenSea<{
             asset_events: OpenSeaAssetEvent[]
@@ -311,14 +311,14 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
         address: string,
         tokenId: string,
         side: NonFungibleTokenAPI.OrderSide,
-        { chainId = ChainId.Mainnet, page, size }: NonFungibleTokenAPI.Options = {},
+        { chainId = ChainId.Mainnet, page, pageSize }: NonFungibleTokenAPI.Options = {},
     ) {
         const requestPath = urlcat('/wyvern/v1/orders', {
             asset_contract_address: address,
             token_id: tokenId,
             side,
             offset: page,
-            limit: size,
+            limit: pageSize,
         })
         const response = await fetchFromOpenSea<{
             orders: OpenSeaAssetOrder[]
@@ -327,11 +327,11 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
     }
 
     async getCollections(address: string, opts: NonFungibleTokenAPI.Options = {}) {
-        const { chainId = ChainId.Mainnet, page = 0, size = 50 } = opts
+        const { chainId = ChainId.Mainnet, page = 0, pageSize = 50 } = opts
         const requestPath = urlcat('/api/v1/collections', {
             asset_owner: address,
-            offset: page * size,
-            limit: size,
+            offset: page * pageSize,
+            limit: pageSize,
         })
         const response = await fetchFromOpenSea<OpenSeaCollection[]>(requestPath, chainId, this._apiKey)
         if (!response) {
@@ -356,17 +356,17 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
 
         return {
             data: collections,
-            hasNextPage: collections.length === size,
+            hasNextPage: collections.length === pageSize,
         }
     }
 }
 
-export function getOpenSeaNFTList(apiKey: string, address: string, page?: number, size?: number) {
+export function getOpenSeaNFTList(apiKey: string, address: string, page?: number, pageSize?: number) {
     const opensea = new OpenSeaAPI(apiKey)
-    return opensea.getTokens(address, { page, size })
+    return opensea.getTokens(address, { page, pageSize })
 }
 
-export function getOpenSeaCollectionList(apiKey: string, address: string, page?: number, size?: number) {
+export function getOpenSeaCollectionList(apiKey: string, address: string, page?: number, pageSize?: number) {
     const opensea = new OpenSeaAPI(apiKey)
-    return opensea.getCollections(address, { page, size })
+    return opensea.getCollections(address, { page, pageSize })
 }

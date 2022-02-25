@@ -2,7 +2,7 @@ export type ProducerPushFunction<T> = (item: T[]) => Promise<void>
 export type ProducerKeyFunction = (provider: string) => Promise<string>
 
 export interface ProducerArgBase {
-    size: number
+    pageSize: number
 }
 
 export interface RPCMethodRegistrationValue<T extends unknown = unknown, TArgs extends unknown = any> {

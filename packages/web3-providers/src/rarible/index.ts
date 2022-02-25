@@ -150,7 +150,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider {
     async getTokens(from: string, opts: NonFungibleTokenAPI.Options) {
         const requestPath = urlcat('/protocol/v0.1/ethereum/nft/items/byOwner', {
             owner: from,
-            size: opts.size,
+            size: opts.pageSize,
             ...opts.pageInfo,
         })
         interface Payload {
@@ -332,9 +332,9 @@ export function getRaribleNFTList(
     apiKey: string,
     address: string,
     page?: number,
-    size?: number,
+    pageSize?: number,
     pageInfo?: { [key in string]: unknown },
 ) {
     const rarible = new RaribleAPI()
-    return rarible.getTokens(address, { page, size, pageInfo })
+    return rarible.getTokens(address, { page, pageSize, pageInfo })
 }

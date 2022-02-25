@@ -15,7 +15,7 @@ export function useNonFungibleAssets(
         method: 'mask.fetchNonFungibleCollectibleAssetV2',
         params: {
             address,
-            size: 200,
+            pageSize: 200,
             network,
         },
     }

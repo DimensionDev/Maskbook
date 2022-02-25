@@ -260,7 +260,7 @@ export namespace NonFungibleTokenAPI {
     export interface Options {
         chainId?: ChainId
         page?: number
-        size?: number
+        pageSize?: number
         pageInfo?: { [key in string]: unknown }
     }
 
