@@ -42,7 +42,7 @@ export default function AbstractTab(props: AbstractTabProps) {
     const { tabs, state, index, height = 200, hasOnlyOneChild = false, scrollable = false } = props
     const classes = useStylesExtends(useStyles(), props)
     const [value, setValue] = state ?? [undefined, undefined]
-    const tabIndicatorStyle = tabs.length && scrollable ? { width: 100 / tabs.length + '%' } : undefined
+    const tabIndicatorStyle = tabs.length && !scrollable ? { width: 100 / tabs.length + '%' } : undefined
 
     return (
         <>
