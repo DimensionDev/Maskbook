@@ -1,8 +1,8 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { CollectibleIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { useEffect, useMemo, useState } from 'react'
-import { useLocation, useMount } from 'react-use'
+import { useLayoutEffect, useMemo, useState } from 'react'
+import { useLocation } from 'react-use'
 import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab'
 import { createReactRootShadowed, startWatch, untilElementAvailable, useMatchXS } from '../../../utils'
 import {
@@ -11,7 +11,6 @@ import {
     searchProfileTabPageSelector,
     searchProfileTabSelector,
 } from '../utils/selector'
-import { useLocationChange } from '../../../utils/hooks/useLocationChange'
 
 export function injectProfileTabAtInstagram(signal: AbortSignal) {
     let tabInjected = false
@@ -123,18 +122,10 @@ export function ProfileTabAtInstagram() {
         return { activeColor, color }
     }, [location.pathname])
 
-    useMount(() => {
-        const activeColor = getActiveColor()
-        const color = getColor()
+    useLayoutEffect(() => {
         const tabStyles = getStyleProps({ activeColor, color })
         setStyles(tabStyles)
-    })
-
-    useLocationChange(() => {
-        const tabStyles = getStyleProps({ activeColor, color })
-
-        setStyles(tabStyles)
-    })
+    }, [])
 
     const { classes } = useStyles(styles)
     const reset = () => {
