@@ -41,7 +41,6 @@ export default function AbstractTab(props: AbstractTabProps) {
     const { tabs, state, index, height = 200, hasOnlyOneChild = false } = props
     const classes = useStylesExtends(useStyles(), props)
     const [value, setValue] = state ?? [undefined, undefined]
-    const tabIndicatorStyle = tabs.length ? { width: 100 / tabs.length + '%' } : undefined
 
     return (
         <>
@@ -53,10 +52,11 @@ export default function AbstractTab(props: AbstractTabProps) {
                         flexContainer: classes.flexContainer,
                     }}
                     value={index ? index : value ? value : 0}
-                    TabIndicatorProps={{ style: tabIndicatorStyle }}
-                    variant="fullWidth"
+                    variant="scrollable"
                     indicatorColor="primary"
                     textColor="primary"
+                    scrollButtons
+                    allowScrollButtonsMobile
                     onChange={(_: React.SyntheticEvent, newValue: number) => setValue?.(newValue)}>
                     {tabs.map((tab, i) => (
                         <Tab
