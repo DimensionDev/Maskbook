@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { useLayoutEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-use'
 import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab'
-import { createReactRootShadowed, startWatch, untilElementAvailable, useMatchXS } from '../../../utils'
+import { createReactRootShadowed, startWatch, useMatchXS } from '../../../utils'
 import {
     searchProfileActiveTabSelector,
     searchProfileTabListLastChildSelector,
@@ -146,11 +146,10 @@ export function ProfileTabAtInstagram() {
                 }
             }
         }
-
-        Array.from(searchProfileTabPageSelector().evaluate()?.childNodes ?? []).forEach((v) => {
-            const ele = v as HTMLDivElement
-            if (ele.tagName !== 'SPAN') ele.style.display = ''
-        })
+        const ele = searchProfileTabPageSelector().evaluate()
+        if (ele?.style) {
+            ele.style.display = ''
+        }
     }
     const clear = async () => {
         const style = getStyleProps({ activeColor, color })
@@ -170,13 +169,10 @@ export function ProfileTabAtInstagram() {
                 }
             }
         }
-        // hide the content page
-        await untilElementAvailable(searchProfileTabPageSelector())
-
-        Array.from(searchProfileTabPageSelector().evaluate()?.childNodes ?? []).forEach((v) => {
-            const ele = v as HTMLDivElement
-            if (ele.tagName !== 'SPAN') ele.style.display = 'none'
-        })
+        const ele = searchProfileTabPageSelector().evaluate()
+        if (ele?.style) {
+            ele.style.display = 'none'
+        }
     }
     return (
         <ProfileTab
