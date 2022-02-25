@@ -1,5 +1,5 @@
 import { Environment, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import { newDashboardConnection } from '../../../settings/settings'
+import { Flags } from '../../../shared/flags'
 
 let disconnected = false
 export default function (signal: AbortSignal) {
@@ -12,7 +12,7 @@ export default function (signal: AbortSignal) {
         WebExtensionMessage.acceptExternalConnect((conn) => {
             if (disconnected) return false
             console.log('New connection from', conn)
-            if (!newDashboardConnection.value) return false
+            if (!Flags.isolated_dashboard_bridge_enabled) return false
             if (!conn.url) return false
             /* cspell:disable-next-line */
             if (!new URL(conn.url).host.endsWith('compassionate-northcutt-326a3a.netlify.app')) return false
