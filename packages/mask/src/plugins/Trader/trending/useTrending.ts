@@ -40,17 +40,34 @@ export function useTrendingByKeyword(tagType: TagType, keyword: string, dataProv
 export function useTrendingById(id: string, dataProvider: DataProvider) {
     const chainId = useChainId()
     const currency = useCurrentCurrency(dataProvider)
-    const trendingAsyncResult = useAsync(async () => {
+    const {
+        value: trending,
+        loading,
+        error,
+    } = useAsync(async () => {
         if (!id) return null
         if (!currency) return null
         return PluginTraderRPC.getCoinTrendingById(id, currency, dataProvider)
     }, [chainId, dataProvider, currency?.id, id])
+
+    const { value: detailedToken } = useERC20TokenDetailed(trending?.coin.contract_address)
+
+    const coin = {
+        ...trending?.coin,
+        decimals: trending?.coin.decimals || detailedToken?.decimals || 0,
+    } as Coin
+
     return {
         value: {
             currency: currency,
-            trending: trendingAsyncResult.value,
+            trending: trending
+                ? {
+                      ...trending,
+                      coin,
+                  }
+                : null,
         },
-        loading: trendingAsyncResult.loading,
-        error: trendingAsyncResult.error,
+        loading: loading,
+        error: error,
     }
 }
