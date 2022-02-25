@@ -8,6 +8,7 @@ const useStyles = makeStyles()((theme) => ({
     body: {
         display: 'flex',
         justifyContent: 'center',
+        minHeight: 300,
     },
     player: {
         maxWidth: '100%',
