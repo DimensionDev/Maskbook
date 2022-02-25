@@ -138,19 +138,16 @@ function NFTAvatarInTwitter() {
         if (!showAvatar) return
         const linkDom = searchTwitterAvatarLinkSelector().evaluate()
 
-        if (linkDom?.firstElementChild) {
+        if (linkDom?.firstElementChild && linkDom.childNodes.length === 4) {
             const linkParentDom = linkDom.closest('div')
 
             if (linkParentDom) linkParentDom.style.overflow = 'visible'
 
-            if (linkDom.childNodes.length === 4 && linkDom.lastElementChild?.tagName !== 'STYLE') {
+            // create rainbow shadow border
+            if (linkDom.lastElementChild?.tagName !== 'STYLE') {
                 borderElement.current = linkDom.firstElementChild
                 // remove useless border
                 linkDom.removeChild(linkDom.firstElementChild)
-            }
-
-            // create rainbow shadow border
-            if (linkDom.lastElementChild?.tagName !== 'STYLE') {
                 const style = document.createElement('style')
                 style.innerText = `
                 ${rainbowBorderKeyFrames.styles}
@@ -158,8 +155,8 @@ function NFTAvatarInTwitter() {
                 .rainbowBorder {
                     animation: ${rainbowBorderKeyFrames.name} 6s linear infinite;
                     box-shadow: 0 5px 15px rgba(0, 248, 255, 0.4), 0 10px 30px rgba(37, 41, 46, 0.2);
-                    transition: .125s ease;
-                    border: 2px solid #00f8ff;
+                    transition: none;
+                    border: 0px solid #00f8ff;
                 }
             `
                 rainBowElement.current = linkDom.firstElementChild.nextElementSibling
