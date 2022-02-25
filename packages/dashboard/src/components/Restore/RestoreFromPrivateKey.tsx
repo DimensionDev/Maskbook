@@ -10,8 +10,9 @@ import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useNavigate } from 'react-router-dom'
-import { DashboardRoutes, delay } from '@masknet/shared-base'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { SignUpRoutePath } from '../../pages/SignUp/routePath'
+import { delay } from '@dimensiondev/kit'
 type FormInputs = {
     privateKey: string
 }

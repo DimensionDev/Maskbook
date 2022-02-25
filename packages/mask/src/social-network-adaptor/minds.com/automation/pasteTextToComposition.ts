@@ -2,7 +2,7 @@ import type { SocialNetworkUI } from '../../../social-network'
 import { untilElementAvailable } from '../../../utils/dom'
 import { MaskMessages } from '../../../utils/messages'
 import { selectElementContents } from '../../../utils/utils'
-import { delay } from '@masknet/shared-base'
+import { abortSignalTimeout, delay } from '@dimensiondev/kit'
 import { inputText } from '@masknet/injected-script'
 import { getEditorContent, hasEditor, hasFocus, isCompose } from '../utils/postBox'
 import { composeButtonSelector, postEditorDraftContentSelector } from '../utils/selector'
@@ -15,9 +15,9 @@ export const pasteTextToCompositionMinds: SocialNetworkUI.AutomationCapabilities
     (text, opt) => {
         const interval = 500
         const timeout = 5000
-        const worker = async function (abort: AbortController) {
+        const worker = async function (abort: AbortSignal) {
             const checkSignal = () => {
-                if (abort.signal.aborted) throw new Error('Aborted')
+                if (abort.aborted) throw new Error('Aborted')
             }
 
             if (!isCompose() && !hasEditor()) {
@@ -54,9 +54,5 @@ export const pasteTextToCompositionMinds: SocialNetworkUI.AutomationCapabilities
             throw e
         }
 
-        const abortCtr = new AbortController()
-        setTimeout(() => {
-            abortCtr.abort()
-        }, timeout)
-        worker(abortCtr).then(undefined, (error) => fail(error))
+        worker(abortSignalTimeout(timeout)).then(undefined, (error) => fail(error))
     }

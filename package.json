@@ -1,7 +1,7 @@
 {
   "name": "mask-network",
   "packageManager": "pnpm@6.30.1",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
@@ -19,7 +19,7 @@
     "spellcheck": "cspell lint --no-must-find-files"
   },
   "dependencies": {
-    "@dimensiondev/kit": "0.0.0-20211215044858-27d964f",
+    "@dimensiondev/kit": "0.0.0-20220223101101-4e6f3b9",
     "@emotion/cache": "^11.7.1",
     "@emotion/react": "^11.7.1",
     "@emotion/serialize": "^1.0.2",

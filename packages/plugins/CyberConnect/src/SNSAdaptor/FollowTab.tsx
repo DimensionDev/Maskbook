@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import Box from '@mui/material/Box'
 import Tab from '@mui/material/Tab'
@@ -8,6 +9,7 @@ import TabPanel from '@mui/lab/TabPanel'
 import Avatar from 'boring-avatars'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import type { IFollowIdentity } from '../Worker/apis'
+
 const useStyles = makeStyles()((theme) => ({
     tabContext: {
         marginTop: '20px',
@@ -44,10 +46,12 @@ export default function FollowTab({
                     <Avatar square={false} name={identity.ens || identity.address} size={40} />
                 </div>
                 <div className={classes.user}>
-                    <div className={classes.userName}>
+                    <Typography className={classes.userName} component="div">
                         {identity.ens || formatEthereumAddress(identity.address, 16)}
-                    </div>
-                    <div className={classes.namespace}>From {identity.namespace}</div>
+                    </Typography>
+                    <Typography className={classes.namespace} component="div">
+                        From {identity.namespace}
+                    </Typography>
                 </div>
             </div>
         )

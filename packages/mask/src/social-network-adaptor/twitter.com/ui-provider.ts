@@ -25,6 +25,7 @@ import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/
 import { injectMaskUserBadgeAtTwitter } from './injection/MaskIcon'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector'
+import { injectPostActionsAtTwitter } from './injection/PostActions'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { unreachable } from '@dimensiondev/kit'
 import { makeStyles } from '@masknet/theme'
@@ -35,6 +36,7 @@ import { injectOpenNFTAvatarEditProfileButton } from './injection/NFT/NFTAvatarE
 import { injectUserNFTAvatarAtTweet } from './injection/NFT/TweetNFTAvatar'
 import { injectNFTContractAtTwitter } from './injection/NFT/NFTContract'
 import { injectNFTAvatarClipInTwitter } from './injection/NFT/NFTAvatarClip'
+import { TwitterRenderFragments } from './customization/render-fragments'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -136,6 +138,7 @@ const twitterUI: SocialNetworkUI.Definition = {
             InjectedDialog: {
                 classes: useInjectedDialogClassesOverwriteTwitter,
             },
+            RenderFragments: TwitterRenderFragments,
         },
         useTheme: useThemeTwitterVariant,
         i18nOverwrite: i18NOverwriteTwitter,
@@ -156,6 +159,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         enhancedPostRenderer: injectPostReplacerAtTwitter,
         pageInspector: injectPageInspectorDefault(),
         postInspector: injectPostInspectorAtTwitter,
+        postActions: injectPostActionsAtTwitter,
         setupPrompt: injectSetupPromptAtTwitter,
         newPostComposition: {
             start: injectPostBoxComposed,
