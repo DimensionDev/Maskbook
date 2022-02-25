@@ -46,9 +46,5 @@ function OpenNFTAvatarEditProfileButtonInInstagram() {
 
     if (location.pathname?.includes('/edit')) return null
 
-    return (
-        <>
-            <NFTAvatarButton onClick={onClick} classes={classes} />
-        </>
-    )
+    return <NFTAvatarButton onClick={onClick} classes={classes} />
 }

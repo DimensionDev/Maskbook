@@ -23,7 +23,7 @@ export async function getNFTAvatarFromRSS(userId: string, address: string, snsKe
     return result?.nft
 }
 
-export function clearTargetCache(userId: string, address: string, snsKey: RSS3_KEY_SNS) {
+export function deleteTargetCache(userId: string, address: string, snsKey: RSS3_KEY_SNS) {
     const key = `${address}, ${userId}, ${snsKey}`
     cache.delete(key)
 }

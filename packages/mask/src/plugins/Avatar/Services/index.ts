@@ -2,7 +2,7 @@ import type { NetworkPluginID } from '@masknet/plugin-infra'
 import type { AvatarMetaDB } from '../types'
 import { getNFTAvatarFromJSON } from './db'
 import { getUserAddress, setUserAddress } from './bind'
-import { clearTargetCache, getNFTAvatarFromRSS, saveNFTAvatarToRSS } from './rss3'
+import { deleteTargetCache, getNFTAvatarFromRSS, saveNFTAvatarToRSS } from './rss3'
 import type { RSS3_KEY_SNS } from '../constants'
 
 export async function getNFTAvatar(
@@ -30,7 +30,7 @@ export async function clearCache(
     const address = await getUserAddress(userId, network, networkPluginId, chainId)
 
     if (address) {
-        clearTargetCache(userId, address, snsKey)
+        deleteTargetCache(userId, address, snsKey)
     }
 }
 
