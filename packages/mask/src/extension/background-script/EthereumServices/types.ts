@@ -44,7 +44,6 @@ export interface Context {
     readonly requestId: number
     readonly providerType: ProviderType
     readonly method: EthereumMethodType
-    readonly config: EthereumTransactionConfig | undefined
     readonly sendOverrides: SendOverrides | undefined
     readonly requestOptions: RequestOptions | undefined
 
@@ -58,6 +57,7 @@ export interface Context {
      */
     readonly response: JsonRpcResponse | undefined
 
+    config: EthereumTransactionConfig | undefined
     requestArguments: RequestArguments
     result: unknown
     error: Error | null
@@ -65,22 +65,17 @@ export interface Context {
     /**
      * Resolve a request and write down the result into the context. Alias of end(error)
      */
-    abort: (error: unknown, fallback?: string) => void
+    write: (result: unknown) => void
 
     /**
      * Reject a request and throw an error. Alias of end(null, result)
      */
-    write: (result: unknown) => void
+    abort: (error: unknown, fallback?: string) => void
 
     /**
      * Seal a request by resolving or rejecting it.
      */
     end: (error?: Error | null, result?: unknown) => void
-
-    /**
-     * Register a callback which will be called once the context is written with a response.
-     */
-    onResponse: (callback: (error: Error | null, response?: JsonRpcResponse) => void) => void
 }
 
 export interface Middleware<T> {
@@ -88,6 +83,6 @@ export interface Middleware<T> {
 }
 
 export interface Translator {
-    encode?(payload: JsonRpcPayload): JsonRpcPayload
-    decode?(error: Error | null, response?: JsonRpcResponse): [Error | null, JsonRpcResponse]
+    encode?(context: Context): void
+    decode?(context: Context): void
 }

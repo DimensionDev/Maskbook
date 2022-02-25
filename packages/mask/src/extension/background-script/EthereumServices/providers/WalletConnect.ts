@@ -13,17 +13,17 @@ export class WalletConnectProvider extends BaseProvider implements Provider {
     private id = 0
     private connector: WalletConnect | null = null
 
-    private async signPersonalMessage(data: string, address: string, password: string) {
+    public async signPersonalMessage(data: string, address: string, password: string) {
         if (!this.connector) throw new Error('Connection Lost.')
         return (await this.connector.signPersonalMessage([data, address, password])) as string
     }
 
-    private async sendCustomRequest(payload: IJsonRpcRequest) {
+    public async sendCustomRequest(payload: IJsonRpcRequest) {
         if (!this.connector) throw new Error('Connection Lost.')
         return (await this.connector.sendCustomRequest(payload as IJsonRpcRequest)) as JsonRpcResponse
     }
 
-    private async signTypedDataMessage(data: string, address: string) {
+    public async signTypedDataMessage(data: string, address: string) {
         if (!this.connector) throw new Error('Connection Lost.')
         return (await this.connector.signTypedData([data, address])) as string
     }

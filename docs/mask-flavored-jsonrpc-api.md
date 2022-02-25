@@ -69,7 +69,7 @@ Confirm to send a risk transaction.
 
 ### Returns
 
-- `void`
+- `string` the hash of the confirmed transaction
 
 ## mask_rejectTransaction
 

@@ -78,7 +78,8 @@ export class MaskWallet implements Middleware<Context> {
                 }
                 break
             default:
-                await next()
+                break
         }
+        await next()
     }
 }

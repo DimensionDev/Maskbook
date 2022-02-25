@@ -9,7 +9,7 @@ import type { Context, Middleware } from '../types'
  * Squash multiple RPC requests into a single one.
  */
 export class Squash implements Middleware<Context> {
-    private cache = new Map<string, Promise<JsonRpcResponse | undefined>>()
+    private cache = new Map<string, Promise<unknown>>()
 
     /**
      * If it returns a cache id, existence means the request can be cached.
@@ -21,10 +21,10 @@ export class Squash implements Middleware<Context> {
         const chainId = overrides?.chainId ?? -1
         const { method, params } = requestArguments
         switch (method) {
-            case EthereumMethodType.ETH_GET_BALANCE: {
-                const [account, tag = 'latest'] = params as string[]
+            case EthereumMethodType.ETH_GET_BALANCE:
+            case EthereumMethodType.ETH_GET_TRANSACTION_COUNT:
+                const [account, tag = 'latest'] = params as [string, string]
                 return sha3([chainId, method, account, tag].join('_'))
-            }
             case EthereumMethodType.ETH_BLOCK_NUMBER:
                 return sha3([chainId, method].join('_'))
             case EthereumMethodType.ETH_CALL: {
@@ -45,17 +45,28 @@ export class Squash implements Middleware<Context> {
 
         // write context with the cached response
         if (id && this.cache.has(id)) {
-            try {
-                context.write(await this.cache.get(id))
-            } catch (error) {
-                context.abort(error, 'Failed to send request.')
-            }
+            const timer = setTimeout(() => {
+                context.abort(new Error('Request timeout!'))
+            }, 30 * 1000)
+
+            this.cache
+                .get(id)
+                ?.then((result) => {
+                    if (context.method === EthereumMethodType.ETH_GET_BALANCE) {
+                        console.log(`balance is: ${result}`)
+                    }
+                    context.write(result)
+                })
+                .catch((error) => context.abort(error, 'Failed to send request.'))
+                .finally(() => {
+                    clearTimeout(timer)
+                })
             return
         }
 
         // cache a deferred request
         if (id) {
-            const [promise, resolve, reject] = defer<JsonRpcResponse | undefined>()
+            const [promise, resolve, reject] = defer<unknown>()
             this.cache.set(id, promise)
 
             // throw error if timeout
@@ -68,11 +79,12 @@ export class Squash implements Middleware<Context> {
                 clearTimeout(timer)
             })
 
-            // register response callback
-            context.onResponse((error, response) => {
-                if (error) reject(error)
-                else resolve(response)
-            })
+            await next()
+
+            if (context.error) reject(context.error)
+            else resolve(context.result)
+
+            return
         }
         await next()
     }

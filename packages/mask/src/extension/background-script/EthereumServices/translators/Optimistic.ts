@@ -1,7 +1,6 @@
-import type { Context } from '../types'
 import { Base } from './Base'
 
-export class Celo extends Base {
+export class Optimistic extends Base {
     override encode(context: Context) {
         throw new Error('Method not implemented.')
     }

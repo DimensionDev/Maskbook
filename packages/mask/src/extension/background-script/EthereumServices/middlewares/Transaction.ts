@@ -21,7 +21,7 @@ export class RecentTransaction implements Middleware<Context> {
 
         switch (context.method) {
             case EthereumMethodType.ETH_SEND_TRANSACTION:
-                if (typeof context.result !== 'string' || !context.config) return
+                if (!context.account || !context.config || typeof context.result !== 'string') return
                 if (this.replaceHash)
                     await WalletRPC.replaceRecentTransaction(
                         context.chainId,

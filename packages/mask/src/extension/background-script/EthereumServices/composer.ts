@@ -1,17 +1,14 @@
+import type { RequestArguments } from 'web3-core'
 import {
-    addGasMargin,
     getPayloadChainId,
     getPayloadConfig,
     getPayloadFrom,
-    isEIP1559Supported,
     RequestOptions,
     SendOverrides,
     ProviderType,
     EthereumMethodType,
+    EthereumTransactionConfig,
 } from '@masknet/web3-shared-evm'
-import type { RequestArguments } from 'web3-core'
-import type { JsonRpcResponse } from 'web3-core-helpers'
-import { toHex } from 'web3-utils'
 import { Flags } from '../../../../shared'
 import {
     currentAccountSettings,
@@ -60,35 +57,38 @@ let pid = 0
 
 class RequestContext implements Context {
     private id = pid++
-    private writeable = true
-    private rawError: Error | null = null
-    private rawResult: unknown
-    private rawAccount = currentAccountSettings.value
-    private rawChainId = currentChainIdSettings.value
-    private rawProviderType = currentProviderSettings.value
-    private responseCallbacks: ((error: Error | null, response?: JsonRpcResponse) => void)[] = []
+    private _writeable = true
+    private _error: Error | null = null
+    private _result: unknown
+    private _account = currentAccountSettings.value
+    private _chainId = currentChainIdSettings.value
+    private _providerType = currentProviderSettings.value
 
     constructor(
-        private rawRequestArguments: RequestArguments,
-        private rawOverrides?: SendOverrides,
-        private rawOptions?: RequestOptions,
+        private _requestArguments: RequestArguments,
+        private _overrides?: SendOverrides,
+        private _options?: RequestOptions,
     ) {
         if (this.providerType === ProviderType.MaskWallet) {
-            this.rawAccount = currentMaskWalletAccountSettings.value
-            this.rawChainId = currentMaskWalletChainIdSettings.value
+            this._account = currentMaskWalletAccountSettings.value
+            this._chainId = currentMaskWalletChainIdSettings.value
         }
     }
 
+    get writeable() {
+        return this._writeable
+    }
+
     get account() {
-        return getPayloadFrom(this.request) ?? this.sendOverrides?.account ?? this.rawAccount
+        return getPayloadFrom(this.request) ?? this.sendOverrides?.account ?? this._account
     }
 
     get chainId() {
-        return getPayloadChainId(this.request) ?? this.sendOverrides?.chainId ?? this.rawChainId
+        return getPayloadChainId(this.request) ?? this.sendOverrides?.chainId ?? this._chainId
     }
 
     get providerType() {
-        return this.sendOverrides?.providerType ?? this.rawProviderType
+        return this.sendOverrides?.providerType ?? this._providerType
     }
 
     get method() {
@@ -96,29 +96,16 @@ class RequestContext implements Context {
     }
 
     get config() {
-        const config = {
-            ...getPayloadConfig(this.request),
-        }
+        return getPayloadConfig(this.request)
+    }
 
-        // add gas margin
-        if (config.gas) config.gas = toHex(addGasMargin(config.gas as string).toFixed())
-
-        // add chain id
-        if (!config.chainId) config.chainId = this.chainId
-
-        // fix gas price
-        if (Flags.EIP1559_enabled && isEIP1559Supported(this.chainId)) {
-            delete config.gasPrice
-        } else {
-            delete config.maxFeePerGas
-            delete config.maxPriorityFeePerGas
-        }
-
-        return config
+    set config(config: EthereumTransactionConfig | undefined) {
+        if (!this.config || !config) return
+        this.requestArguments.params = [config]
     }
 
     get sendOverrides() {
-        return this.rawOverrides
+        return this._overrides
     }
 
     get requestId() {
@@ -126,15 +113,15 @@ class RequestContext implements Context {
     }
 
     get requestOptions() {
-        return this.rawOptions
+        return this._options
     }
 
     get requestArguments() {
-        return this.rawRequestArguments
+        return this._requestArguments
     }
 
     set requestArguments(requestArguments: RequestArguments) {
-        this.rawRequestArguments = requestArguments
+        this._requestArguments = requestArguments
     }
 
     get request() {
@@ -147,32 +134,30 @@ class RequestContext implements Context {
     }
 
     get response() {
-        if (this.writeable) return
-        if (this.error) return
+        if (this._writeable) return
         return {
             id: this.id,
             jsonrpc: '2.0',
-            result: this.rawResult,
+            result: this._result,
         }
     }
 
     get error() {
-        if (this.writeable) return null
-        if (hasError(this.rawError, this.response))
-            return getError(this.rawError, this.response, 'Failed to send request.')
+        if (this._writeable) return null
+        if (hasError(this._error, this.response)) return getError(this._error, this.response, 'Failed to send request.')
         return null
     }
 
     set error(error: Error | null) {
-        this.rawError = error
+        this._error = error
     }
 
     get result() {
-        return this.rawResult
+        return this._result
     }
 
     set result(result: unknown) {
-        this.rawResult = result
+        this._result = result
     }
 
     write(result?: unknown) {
@@ -184,15 +169,10 @@ class RequestContext implements Context {
     }
 
     end(error: Error | null = null, result?: unknown) {
-        if (!this.writeable) return
-        this.writeable = false
+        if (!this._writeable) return
+        this._writeable = false
         this.error = error
         this.result = result
-        this.responseCallbacks.forEach((x) => x(this.error, this.response))
-    }
-
-    onResponse(callback: (error: Error | null, response?: JsonRpcResponse) => void) {
-        if (!this.responseCallbacks.includes(callback)) this.responseCallbacks.push(callback)
     }
 }
 

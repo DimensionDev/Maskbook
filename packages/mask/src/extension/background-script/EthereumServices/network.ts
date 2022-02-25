@@ -250,7 +250,7 @@ export async function unwatchTransaction(hash: string, overrides?: SendOverrides
 }
 
 export async function confirmRequest(overrides?: SendOverrides) {
-    return request<void>(
+    return request<string>(
         {
             method: EthereumMethodType.MASK_CONFIRM_TRANSACTION,
             params: [],
