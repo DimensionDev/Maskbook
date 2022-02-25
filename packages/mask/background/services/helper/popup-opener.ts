@@ -1,10 +1,8 @@
 import { PopupRoutes } from '@masknet/shared-base'
-import { ValueRef } from '@dimensiondev/holoflows-kit'
 import urlcat from 'urlcat'
 import { MaskMessages } from '../../../shared'
 
-const currentPopupWindowId = new ValueRef(0)
-
+let currentPopupWindowId = 0
 function isLocked() {
     return new Promise<boolean>((resolve) => {
         const off = MaskMessages.events.wallet_is_locked.on(([type, value]) => {
@@ -19,11 +17,11 @@ function isLocked() {
 }
 export async function openPopupWindow(route?: PopupRoutes, params?: Record<string, any>) {
     const windows = await browser.windows.getAll()
-    const popup = windows.find((win) => win && win.type === 'popup' && win.id === currentPopupWindowId.value)
+    const popup = windows.find((win) => win && win.type === 'popup' && win.id === currentPopupWindowId)
 
     // Focus on the pop-up window if it already exists
     if (popup) {
-        await browser.windows.update(currentPopupWindowId.value, { focused: true })
+        await browser.windows.update(currentPopupWindowId, { focused: true })
     } else {
         const locked = await isLocked()
 
@@ -63,10 +61,10 @@ export async function openPopupWindow(route?: PopupRoutes, params?: Record<strin
 
         // update currentPopupWindowId and clean event
         if (id) {
-            currentPopupWindowId.value = id
+            currentPopupWindowId = id
             browser.windows.onRemoved.addListener(function listener(windowID: number) {
                 if (windowID === id) {
-                    currentPopupWindowId.value = 0
+                    currentPopupWindowId = 0
                 }
             })
 
@@ -82,7 +80,7 @@ export async function openPopupWindow(route?: PopupRoutes, params?: Record<strin
 }
 
 export async function removePopupWindow() {
-    if (currentPopupWindowId.value) {
-        browser.windows.remove(currentPopupWindowId.value)
-    }
+    if (!currentPopupWindowId) return
+    browser.windows.remove(currentPopupWindowId)
+    currentPopupWindowId = 0
 }
