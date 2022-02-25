@@ -1,5 +1,5 @@
 import { PopupRoutes } from '@masknet/shared-base'
-import { getRouteURLWithNoParam } from '../utils'
+import { getPopupRouteURLWithNoParam } from '..'
 import type { ThirdPartyPluginPermission } from '../../background-script/ThirdPartyPlugin/types'
 
 export function constructThirdPartyRequestPermissionURL(
@@ -9,5 +9,5 @@ export function constructThirdPartyRequestPermissionURL(
     const params = new URLSearchParams()
     params.set('plugin', pluginManifestURL)
     for (const x of permissions) params.append('permission', String(x))
-    return getRouteURLWithNoParam(PopupRoutes.ThirdPartyRequestPermission) + '?' + params.toString()
+    return getPopupRouteURLWithNoParam(PopupRoutes.ThirdPartyRequestPermission) + '?' + params.toString()
 }

@@ -1,7 +1,4 @@
-import {
-    __deprecated__getStorage,
-    __deprecated__setStorage,
-} from '../../../extension/background-script/HelperService/storage'
+import { __deprecated__getStorage, __deprecated__setStorage } from '../../../../background/services/helper'
 
 const HOST_MAP = {
     production: 'https://backup.mask.io/api',
