@@ -11,6 +11,8 @@ function isLocked() {
             if (type === 'request') return
             off()
             resolve(value)
+            // in case something went wrong
+            setTimeout(() => resolve(false), 200)
         })
         MaskMessages.events.wallet_is_locked.sendToLocal(['request'])
     })
