@@ -113,7 +113,7 @@ function createNFT(token: AlchemyNFTItemDetailedResponse, owner: string, chainId
 export class AlchemyAPI implements NonFungibleTokenAPI.Provider {
     async getTokens(
         from: string,
-        { page = 0, size = 50 }: NonFungibleTokenAPI.Options,
+        { page = 0, size = 100 }: NonFungibleTokenAPI.Options,
         network: Web3Plugin.NetworkDescriptor,
     ) {
         const requestPath = urlcat(`${PluginId.Flow}_flow` === network.ID ? '/getNFTs/' : '/v1/getNFTs/', {

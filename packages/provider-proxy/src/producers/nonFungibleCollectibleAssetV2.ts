@@ -14,8 +14,7 @@ const nonFungibleCollectibleAsset = async (
     getKeys: ProducerKeyFunction,
     args: NonFungibleTokenAssetArgs,
 ): Promise<void> => {
-    const { address, network } = args
-    const size = 50
+    const { address, network, size = 100 } = args
     const openSeaApiKey = await getKeys('opensea')
 
     // Alchemy api is used for polygon and flow network.
