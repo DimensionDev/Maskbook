@@ -1,5 +1,4 @@
 import { useI18N } from '../../../utils'
-import { useState } from 'react'
 import { Box, Typography } from '@mui/material'
 import { MaskIcon } from '../../../resources/MaskIcon'
 import classNames from 'classnames'
@@ -20,7 +19,6 @@ interface VerifyNextIDProps extends Partial<WizardDialogProps> {
 
 export const VerifyNextID = ({ personaName, username, avatar, onVerify, onDone, onClose }: VerifyNextIDProps) => {
     const { t } = useI18N()
-    const [connected, setConnected] = useState(false)
 
     const { classes } = useWizardDialogStyles()
     const { classes: findUsernameClasses } = useFindUsernameStyles()
@@ -42,11 +40,8 @@ export const VerifyNextID = ({ personaName, username, avatar, onVerify, onDone, 
                             <Box className={classes.line} />
                             <Box className={classes.connectItem}>
                                 <Box position="relative" width={48}>
-                                    <img
-                                        src={avatar}
-                                        className={classNames(findUsernameClasses.avatar, connected ? 'connected' : '')}
-                                    />
-                                    {connected ? <VerifiedIcon className={findUsernameClasses.verified} /> : null}
+                                    <img src={avatar} className={classNames(findUsernameClasses.avatar, 'connected')} />
+                                    <VerifiedIcon className={findUsernameClasses.verified} />
                                 </Box>
                                 <Typography variant="body2" className={classes.name}>
                                     {username}
@@ -63,9 +58,9 @@ export const VerifyNextID = ({ personaName, username, avatar, onVerify, onDone, 
                     dangerouslySetInnerHTML={{
                         __html: !username
                             ? t('setup_guide_login')
-                            : connected
-                            ? t('user_guide_tip_connected')
-                            : t('setup_guide_find_username_text'),
+                            : `<p>${t('user_guide_tip_connected')}</p><p>${t(
+                                  'user_guide_tip_need_verify_on_next_id',
+                              )}</p>`,
                     }}
                 />
             }
@@ -74,13 +69,13 @@ export const VerifyNextID = ({ personaName, username, avatar, onVerify, onDone, 
                     <ActionButtonPromise
                         className={classes.button}
                         variant="contained"
-                        init={t('setup_guide_connect_auto')}
-                        waiting={t('connecting')}
-                        complete={t('ok')}
-                        failed={t('setup_guide_connect_failed')}
+                        init={t('setup_guide_verify')}
+                        waiting={t('setup_guide_verifying')}
+                        complete={t('setup_guide_verify')}
+                        failed={t('setup_guide_verifying_failed')}
                         executor={onVerify}
                         completeOnClick={onDone}
-                        onComplete={() => setConnected(true)}
+                        onComplete={() => {}}
                         disabled={!username || !personaName}
                         completeIcon={null}
                         failIcon={null}

@@ -47,9 +47,9 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     // @ts-ignore
     const [signInfo, setSignInfo] = useState<SignInfo>({})
     const [verifiedPost, setVerifiedPost] = useState<null | PostIdentifier>(null)
-    const [enableNextID] = useState(activatedSocialNetworkUI.configuration.nextIDConfig?.enable)
+    const [enableNextID] = useState(ui.configuration.nextIDConfig?.enable)
     const verifyPostCollectTimer = useRef<any>()
-    const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
+    const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform
 
     // #region parse setup status
     const lastStateRef = currentSetupGuideStatus[ui.networkIdentifier]
@@ -76,10 +76,10 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         const handler = (val: SocialNetworkUI.CollectingCapabilities.IdentityResolved) => {
             if (username === '' && !val.identifier.isUnknown) setUsername(val.identifier.userId)
         }
-        activatedSocialNetworkUI.collecting.identityProvider?.recognized.addListener(handler)
+        ui.collecting.identityProvider?.recognized.addListener(handler)
 
         return () => {
-            activatedSocialNetworkUI.collecting.identityProvider?.recognized.removeListener(handler)
+            ui.collecting.identityProvider?.recognized.removeListener(handler)
         }
     }, [username])
 
@@ -104,22 +104,6 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         return Services.Identity.queryPersona(Identifier.fromString(persona.toText(), ECKeyIdentifier).unwrap())
     }, [persona])
 
-    useEffect(() => {
-        if (!verifiedPost || !signInfo?.personaSign || !enableNextID || !persona_?.identifier) return
-        Services.NextID.bindProof(
-            persona_.identifier,
-            'create',
-            platform,
-            username,
-            undefined,
-            signInfo.personaSign,
-            verifiedPost.postId,
-        ).then(async () => {
-            // TODO: handle error
-            await onConnect()
-        })
-    }, [verifiedPost, signInfo.personaSign, enableNextID])
-
     const onConnect = async () => {
         // attach persona with SNS profile
         await Services.Identity.attachProfile(new ProfileIdentifier(ui.networkIdentifier, username), persona, {
@@ -133,11 +117,11 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     }
 
     const onVerify = async () => {
-        // TODO: error handle for ui
         if (!persona_) return
-        const collect = activatedSocialNetworkUI.configuration.nextIDConfig?.collectVerifyPost
-        const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
+        const collect = ui.configuration.nextIDConfig?.collectVerifyPost
+        const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform
         const isBound = await Services.NextID.queryIsBound(persona_.identifier, platform, username)
+
         if (!isBound) {
             const payload = await Services.NextID.createPersonaPayload(
                 persona_.identifier,
@@ -146,7 +130,6 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                 platform,
             )
             if (!payload) throw new Error('Get Payload Wrong')
-            setSignInfo({ ...signInfo, payload })
             const signResult = await Services.Identity.signWithPersona({
                 method: 'eth',
                 message: payload.signPayload,
@@ -154,24 +137,38 @@ function SetupGuideUI(props: SetupGuideUIProps) {
             })
             if (!signResult) throw new Error('Get Persona Sign Wrong')
             const signature = signResult.signature.signature
-            setSignInfo({ ...signInfo, personaSign: signature })
             const postContent = payload.postContent.replace('%SIG_BASE64%', toBase64(fromHex(signature)))
-            activatedSocialNetworkUI.automation?.nativeCompositionDialog?.appendText?.(postContent)
+            ui.automation?.nativeCompositionDialog?.appendText?.(postContent, { recover: false })
 
-            verifyPostCollectTimer.current = setInterval(async () => {
-                // TODO: rename this method
-                const post = collect?.(postContent)
-                if (post) {
-                    setVerifiedPost(post)
+            const waitingPost = new Promise<void>((resolve, reject) => {
+                verifyPostCollectTimer.current = setInterval(async () => {
+                    // TODO: rename this method
+                    const post = collect?.(postContent)
+                    if (post) {
+                        // setSignInfo({ ...signInfo, personaSign: signature, payload })
+                        clearInterval(verifyPostCollectTimer.current)
+                        await Services.NextID.bindProof(
+                            persona_.identifier,
+                            'create',
+                            platform,
+                            username,
+                            undefined,
+                            signInfo.personaSign,
+                            post.postId,
+                        )
+                        resolve()
+                    }
+                }, 1000)
+
+                setTimeout(() => {
                     clearInterval(verifyPostCollectTimer.current)
-                    // await onConnect()
-                }
-            }, 1000)
+                    reject({ message: 'Unfind Verify Post' })
+                }, 1000 * 20)
+            })
 
-            setTimeout(() => {
-                clearInterval(verifyPostCollectTimer.current)
-            }, 1000 * 20)
+            await waitingPost
         }
+        onDone()
     }
 
     const onClose = () => {
@@ -179,12 +176,30 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         setStep(SetupGuideStep.Close)
     }
 
-    const onDone = () => {
+    const onDone = async () => {
+        // check verify nextID id state
+        if (step === SetupGuideStep.FindUsername && enableNextID && persona_) {
+            const isBound = await Services.NextID.queryIsBound(persona_.identifier, platform, username)
+            if (!isBound) {
+                currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
+                    status: SetupGuideStep.VerifyOnNextID,
+                })
+                return setStep(SetupGuideStep.VerifyOnNextID)
+            }
+        }
+
         // check pin tip status
         if (step === SetupGuideStep.FindUsername && !dismissPinExtensionTip.value) {
             currentSetupGuideStatus[ui.networkIdentifier].value = stringify({ status: SetupGuideStep.PinExtension })
             return setStep(SetupGuideStep.PinExtension)
         }
+
+        // check pin tip status
+        if (step === SetupGuideStep.VerifyOnNextID && enableNextID && persona_) {
+            const isBound = await Services.NextID.queryIsBound(persona_.identifier, platform, username)
+            if (!isBound) return
+        }
+
         // check user guide status
         const network = ui.networkIdentifier
         if (network === 'twitter.com' && userGuideStatus[network].value !== 'completed') {
@@ -209,17 +224,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
     switch (step) {
         case SetupGuideStep.FindUsername:
-            return enableNextID ? (
-                <VerifyNextID
-                    personaName={persona_?.nickname}
-                    username={username}
-                    avatar={lastRecognized.avatar}
-                    onUsernameChange={setUsername}
-                    onVerify={onVerify}
-                    onDone={onDone}
-                    onClose={onClose}
-                />
-            ) : (
+            return (
                 <FindUsername
                     personaName={persona_?.nickname}
                     username={username}
@@ -227,6 +232,18 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                     onUsernameChange={setUsername}
                     onConnect={onConnect}
                     onDone={onDone}
+                    onClose={onClose}
+                />
+            )
+        case SetupGuideStep.VerifyOnNextID:
+            return (
+                <VerifyNextID
+                    personaName={persona_?.nickname}
+                    username={username}
+                    avatar={lastRecognized.avatar}
+                    onUsernameChange={setUsername}
+                    onVerify={onVerify}
+                    onDone={() => {}}
                     onClose={onClose}
                 />
             )

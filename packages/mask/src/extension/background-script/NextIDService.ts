@@ -53,11 +53,16 @@ export async function bindProof(
         },
     }
 
-    return fetch(urlcat(BASE_URL, '/v1/proof'), {
+    const response = await fetch(urlcat(BASE_URL, '/v1/proof'), {
         body: JSON.stringify(requestBody),
         method: 'POST',
         mode: 'cors',
     })
+
+    const result = (await response.json()) as { message: string }
+
+    if (!response.ok) new Error(result.message)
+    return response
 }
 
 async function convertPersonaHexPublicKey(persona: PersonaIdentifier) {

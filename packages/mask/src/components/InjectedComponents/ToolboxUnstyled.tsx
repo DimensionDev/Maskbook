@@ -33,6 +33,7 @@ import { MaskFilledIcon } from '../../resources/MaskIcon'
 import { makeStyles } from '@masknet/theme'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
+import { useNextIDConnectStatus } from '../DataSource/useNextID'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -83,6 +84,7 @@ export interface ToolboxHintProps {
 }
 export function ToolboxHintUnstyled(props: ToolboxHintProps) {
     const { t } = useI18N()
+    const isNextIDVerified = useNextIDConnectStatus()
     const {
         ListItemButton = MuiListItemButton,
         ListItemText = MuiListItemText,
@@ -109,7 +111,7 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
     }, [personaConnectStatus, walletTitle, t])
 
     const onClick = () => {
-        personaConnectStatus.action ? personaConnectStatus.action() : openWallet()
+        personaConnectStatus.action ? personaConnectStatus.action() : !isNextIDVerified ? null : openWallet()
     }
 
     return (
