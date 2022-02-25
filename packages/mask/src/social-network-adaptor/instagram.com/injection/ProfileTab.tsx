@@ -2,7 +2,7 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { CollectibleIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab'
-import { createReactRootShadowed, startWatch, untilElementAvailable } from '../../../utils'
+import { createReactRootShadowed, startWatch } from '../../../utils'
 import {
     searchProfileActiveTabSelector,
     searchProfileTabListLastChildSelector,
@@ -87,10 +87,10 @@ export function ProfileTabAtInstagram() {
             activeTab.style.color = ''
         }
 
-        Array.from(searchProfileTabPageSelector().evaluate()?.childNodes ?? []).forEach((v) => {
-            const ele = v as HTMLDivElement
-            if (ele.tagName !== 'SPAN') ele.style.display = ''
-        })
+        const ele = searchProfileTabPageSelector().evaluate()
+        if (ele?.style) {
+            ele.style.display = ''
+        }
     }
     const clear = async () => {
         const style = getStyleProps()
@@ -99,13 +99,10 @@ export function ProfileTabAtInstagram() {
             activeTab.style.borderTop = 'none'
             activeTab.style.color = style.color
         }
-        // hide the content page
-        await untilElementAvailable(searchProfileTabPageSelector())
-
-        Array.from(searchProfileTabPageSelector().evaluate()?.childNodes ?? []).forEach((v) => {
-            const ele = v as HTMLDivElement
-            if (ele.tagName !== 'SPAN') ele.style.display = 'none'
-        })
+        const ele = searchProfileTabPageSelector().evaluate()
+        if (ele?.style) {
+            ele.style.display = 'none'
+        }
     }
     return (
         <ProfileTab

@@ -38,7 +38,7 @@ export const searchUserIdSelector = () =>
     querySelector<HTMLHeadingElement>('[id="react-root"] section main header section > div:first-child > :first-child')
 
 export const searchProfileTabArticlePageSelector = () =>
-    querySelector<E>('[id="react-root"] section main > div > div:last-child > article')
+    querySelector<E>('[id="react-root"] section main div[role="tablist"]')
 
 export const searchProfileTabOtherArticlePageSelector = () =>
     querySelector<E>('[id="react-root"] section main > div > div:last-child > div')
