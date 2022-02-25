@@ -80,10 +80,10 @@ async function fetchFromAlchemyEVM(path: string, network: Web3Plugin.NetworkDesc
     } as Payload
 }
 
-export function toHttpImage(url?: string) {
-    if (!url) return ''
-    if (url.replace('ipfs://https://', 'https://').replace('ipfs://http://', 'http://').startsWith?.('ipfs://'))
-        return resolveIPFSLink(url.replace(/^ipfs:\/\//g, ''))
+export function toHttpImage(_url?: string) {
+    if (!_url) return ''
+    const url = _url.replace('ipfs://https://', 'https://').replace('ipfs://http://', 'http://')
+    if (url.startsWith?.('ipfs://')) return resolveIPFSLink(url.replace(/^ipfs:\/\//g, ''))
     return url
 }
 
