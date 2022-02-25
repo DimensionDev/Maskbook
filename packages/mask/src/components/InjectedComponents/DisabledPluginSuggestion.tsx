@@ -6,7 +6,7 @@ import {
     Plugin,
     usePluginI18NField,
 } from '@masknet/plugin-infra'
-import { extractTextFromTypedMessage } from '@masknet/shared-base'
+import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Switch } from '@mui/material'
 import Services from '../../extension/service'
 import MaskPostExtraInfoWrapper from '../../plugins/MaskPluginWrapper'
@@ -33,8 +33,9 @@ export function useDisabledPluginSuggestionFromPost(postContent: Option<string>,
     return matches
 }
 
-export function useDisabledPluginSuggestionFromMeta(meta: ReadonlyMap<string, unknown>) {
+export function useDisabledPluginSuggestionFromMeta(meta: undefined | ReadonlyMap<string, unknown>) {
     const disabled = useDisabledPlugins().filter((x) => x.contribution?.metadataKeys)
+    if (!meta) return []
     const keys = [...meta.keys()]
 
     const matches = disabled.filter((x) => {

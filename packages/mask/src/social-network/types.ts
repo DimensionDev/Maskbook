@@ -8,8 +8,9 @@ import type {
     PostIdentifier,
     ProfileIdentifier,
     ReadonlyIdentifierMap,
-    TypedMessage,
 } from '@masknet/shared-base'
+import type { TypedMessage } from '@masknet/typed-message'
+import type { RenderFragmentsContextType } from '@masknet/typed-message/dom'
 import type { PaletteMode, Theme } from '@mui/material'
 import type { Subscription } from 'use-subscription'
 import type { InjectedDialogClassKey, InjectedDialogProps } from '../components/shared/InjectedDialog'
@@ -273,6 +274,7 @@ export namespace SocialNetworkUI {
         }
         export interface ComponentOverwrite {
             InjectedDialog?: ComponentOverwriteConfig<InjectedDialogProps, InjectedDialogClassKey>
+            RenderFragments?: RenderFragmentsContextType
         }
         export interface ComponentOverwriteConfig<Props extends { classes?: any }, Classes extends string> {
             classes?: () => { classes: Partial<ClassNameMap<Classes>> }

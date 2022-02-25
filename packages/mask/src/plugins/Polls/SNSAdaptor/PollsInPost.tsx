@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import type { TypedMessage } from '@masknet/shared-base'
+import type { TypedMessage } from '@masknet/typed-message'
 import { PluginPollRPC } from '../messages'
 import { renderWithPollMetadata, PollMetadataReader } from '../helpers'
 import type { PollGunDB } from '../Services'
