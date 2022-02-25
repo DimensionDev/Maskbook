@@ -55,8 +55,7 @@ export interface TraderProps extends withClasses<'root'> {
 }
 
 export function Trader(props: TraderProps) {
-    const { defaultOutputCoin, coin, tokenDetailed, chainId: targetChainId, defaultInputCoin } = props
-    const { decimals } = tokenDetailed ?? coin ?? {}
+    const { defaultOutputCoin, coin, chainId: targetChainId, defaultInputCoin } = props
     const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
     const wallet = useWallet()
     const currentChainId = useChainId()
@@ -104,7 +103,7 @@ export function Trader(props: TraderProps) {
                 token: createERC20Token(chainId, coin.contract_address, coin.decimals, coin.name, coin.symbol),
             })
         },
-        [chainId, decimals],
+        [chainId],
     )
     useEffect(() => {
         updateTradingCoin(AllProviderTradeActionType.UPDATE_INPUT_TOKEN, defaultInputCoin)

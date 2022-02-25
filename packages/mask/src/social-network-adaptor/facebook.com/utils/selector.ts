@@ -80,3 +80,43 @@ export const searchFacebookSaveAvatarButtonSelector = () =>
 export const searchFacebookConfirmAvatarImageSelector = () =>
     querySelector('[role="dialog"] [role="slider"]').closest(7).querySelector('img')
 // #region
+
+export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-pagelet="LeftRail"] li:nth-child(2)')
+
+// for getting normal tab style
+export const profileTabUnselectedSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-pagelet="ProfileTabs"] a[aria-selected="false"]')
+
+// for getting activated tab style
+export const profileTabSelectedSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-pagelet="ProfileTabs"] [aria-selected="true"]')
+
+// fot inserting web3 tab
+export const searchProfileTabSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-pagelet="ProfileTabs"] a:nth-child(7)')
+
+// fot getting the inserted web3 tab
+export const web3TabSelector: () => LiveSelector<HTMLSpanElement, true> = () =>
+    querySelector<HTMLSpanElement>('[data-pagelet="ProfileTabs"] a:nth-child(7)+span')
+
+// fot inserting web3 tab content
+export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-pagelet="ProfileAppSection_0"], [data-pagelet="ProfileTimeline"]')
+        .closest(1)
+        .querySelector('div:first-of-type')
+
+// fot getting profile section style
+export const profileSectionSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-pagelet="ProfileAppSection_0"], [data-pagelet="ProfileTimeline"]').querySelector('[style]')
+
+export const searchIntroSectionSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-pagelet="ProfileTilesFeed_0"]')
+
+export const searchBioSelector: () => LiveSelector<HTMLSpanElement, true> = () =>
+    querySelector<HTMLSpanElement>(
+        '[data-pagelet="ProfileTilesFeed_0"] > div > div > div > div > div:last-child span[dir="auto"]',
+    )
+
+export const searchHomepageSelector: () => LiveSelector<HTMLSpanElement, true> = () =>
+    querySelector<HTMLSpanElement>('[data-pagelet="ProfileTilesFeed_0"] ul a span[dir="auto"]')

@@ -1,8 +1,10 @@
 import {
-    bioDescriptionSelector,
     bioDescriptionSelectorOnMobile,
     searchAvatarSelector,
+    searchBioSelector,
     searchFacebookAvatarOnMobileSelector,
+    searchHomepageSelector,
+    searchIntroSectionSelector,
     searchNickNameSelector,
     searchNickNameSelectorOnMobile,
     searchUserIdSelector,
@@ -10,6 +12,8 @@ import {
 } from './selector'
 import { collectNodeText } from '../../../utils'
 import { isMobileFacebook } from './isMobile'
+import { bioDescription, personalHomepage } from '../../../settings/settings'
+import { FACEBOOK_ID } from '../base'
 
 export const getNickName = () => {
     const node = isMobileFacebook ? searchNickNameSelectorOnMobile().evaluate() : searchNickNameSelector().evaluate()
@@ -33,17 +37,17 @@ export const getAvatar = () => {
 }
 
 export const getBioDescription = () => {
-    const node = isMobileFacebook ? bioDescriptionSelectorOnMobile().evaluate() : bioDescriptionSelector().evaluate()
+    const intro = searchIntroSectionSelector().evaluate()
+    const node = isMobileFacebook ? bioDescriptionSelectorOnMobile().evaluate() : searchBioSelector().evaluate()
 
-    if (!node) return ''
+    if (intro && node) {
+        const text = collectNodeText(node)
+        bioDescription[FACEBOOK_ID].value = text
+    } else if (intro) {
+        bioDescription[FACEBOOK_ID].value = ''
+    }
 
-    // Only collect text
-    return [...node.childNodes]
-        .map((each) => {
-            if (each.nodeType === document.TEXT_NODE) return (each as Text).nodeValue || ''
-            return ''
-        })
-        .join('')
+    return bioDescription[FACEBOOK_ID].value
 }
 
 export const getFacebookId = () => {
@@ -65,4 +69,20 @@ export const getAvatarId = (avatarURL: string) => {
     const match = _url.pathname.match(FACEBOOK_AVATAR_ID_MATCH)
     if (!match) return ''
     return match[1]
+}
+
+export const getPersonalHomepage = () => {
+    const intro = searchIntroSectionSelector().evaluate()
+    const node = searchHomepageSelector().evaluate()
+    if (intro && node) {
+        let text = collectNodeText(node)
+        if (text && !text.startsWith('http')) {
+            text = 'http://' + text
+        }
+        personalHomepage[FACEBOOK_ID].value = text
+    } else if (intro) {
+        personalHomepage[FACEBOOK_ID].value = ''
+    }
+
+    return personalHomepage[FACEBOOK_ID].value
 }

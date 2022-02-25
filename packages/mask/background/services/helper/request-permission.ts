@@ -1,5 +1,4 @@
-import { constructRequestPermissionURL } from '../../popups'
-
+import { getPermissionRequestURL } from '../../../shared/definitions/routes'
 export async function requestExtensionPermission(permission: browser.permissions.Permissions) {
     if (await browser.permissions.contains(permission)) return true
     try {
@@ -12,7 +11,7 @@ export async function requestExtensionPermission(permission: browser.permissions
         height: 600,
         width: 350,
         type: 'popup',
-        url: constructRequestPermissionURL(permission),
+        url: getPermissionRequestURL(permission),
     })
     return new Promise((resolve) => {
         browser.windows.onRemoved.addListener(function listener(windowID: number) {

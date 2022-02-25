@@ -13,6 +13,7 @@ export const Flags = {
         target: process.env.engine,
         architecture: process.env.architecture,
     },
+    isolated_dashboard_bridge_enabled: false,
     mask_SDK_ready: betaOrInsiderOnly,
     /** There is no "tabs" to navigate to. We must be careful with this. */
     has_no_browser_tab_ui: appOnly,

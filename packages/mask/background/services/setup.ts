@@ -13,6 +13,7 @@ const message = new WebExtensionMessage<Record<string, any>>({ domain: 'services
 // #region Setup services
 const _service: Record<keyof Services, void> = {
     Crypto: setup('Crypto', () => import('./crypto')),
+    Helper: setup('Helper', () => import('./helper')),
 }
 const _service_generator: Record<keyof GeneratorServices, void> = {}
 
