@@ -2,14 +2,14 @@ import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-k
 import { ProfileIdentifier, delay } from '@masknet/shared-base'
 import { creator, SocialNetworkUI as Next } from '../../../social-network'
 import { instagramBase } from '../base'
-import { searchAvatarSelector } from '../utils/selector'
+import { searchInstagramAvatarSelector } from '../utils/selector'
 import { getAvatar, getBioDescription, getNickname, getPersonalHomepage, getUserId } from '../utils/user'
 
 function resolveCurrentVisitingIdentityInner(
     ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
-    const avatarSelector = searchAvatarSelector()
+    const avatarSelector = searchInstagramAvatarSelector()
     const assign = async () => {
         await delay(500)
         const bio = getBioDescription()

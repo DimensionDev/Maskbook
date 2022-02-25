@@ -42,6 +42,7 @@ export interface MaskSNSEvents {
     profileNFTsTabUpdated: 'reset'
     NFTAvatarUpdated: NFTAvatarEvent
     NFTAvatarTimelineUpdated: NFTAvatarEvent
+    nftAvatarSettingDialogUpdated: NFTAvatarSettingDialogEvent
 }
 
 export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, MaskSNSEvents {
@@ -81,6 +82,10 @@ export interface CompositionRequest {
         target?: 'E2E' | 'Everyone'
         startupPlugin?: string
     }
+}
+
+export interface NFTAvatarSettingDialogEvent {
+    open: boolean
 }
 
 export interface SettingsUpdateEvent {

@@ -5,7 +5,7 @@ import { useNFTAvatar } from '../hooks'
 import type { AvatarMetaDB } from '../types'
 import { RainbowBox } from './RainbowBox'
 import type { RSS3_KEY_SNS } from '../constants'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 
 interface NFTBadgeTimelineProps extends withClasses<'root'> {
     userId: string
@@ -26,7 +26,7 @@ export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
     const { loading, value: _avatar } = useNFTAvatar(userId, snsKey)
     const [avatar, setAvatar] = useState<AvatarMetaDB>()
     const [avatarId_, setAvatarId_] = useState('')
-    const { classes } = useStyles()
+    const classes = useStylesExtends(useStyles(), props)
 
     const onUpdate = (data: AvatarMetaDB) => {
         if (!data.address || !data.tokenId) {
