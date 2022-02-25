@@ -5,7 +5,7 @@ import { ChainId, getChainIdFromNetworkType, useChainId } from '@masknet/web3-sh
 import { isDashboardPage } from '@masknet/shared-base'
 import { useI18N } from '../../../utils'
 import { EMPTY_LIST } from '../../../../utils-pure'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { InjectedDialog } from '@masknet/ui-runtime'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
 import { AllProviderTradeContext } from '../../Trader/trader/useAllProviderTradeContext'
 import { TargetChainIdContext } from '../../Trader/trader/useTargetChainIdContext'

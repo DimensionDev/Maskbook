@@ -9,7 +9,7 @@ import { RedPacketRPC } from '../messages'
 import { RedPacketMetaKey } from '../constants'
 import { RedPacketCreateNew } from './RedPacketCreateNew'
 import { RedPacketPast } from './RedPacketPast'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { InjectedDialog } from '@masknet/ui-runtime'
 import Services from '../../../extension/service'
 import Web3Utils from 'web3-utils'
 import {

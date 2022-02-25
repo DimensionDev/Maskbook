@@ -114,7 +114,6 @@
     "beta_sup": "<sup>(测试版)<sup>",
     "post_dialog_plugins_experimental": "插件 <sup>(体验版)</sup>",
     "post_dialog__button": "加密",
-    "post_dialog__dismiss_aria": "关闭贴文发送对话框",
     "post_dialog__image_payload": "图片Payload",
     "post_dialog__more_options_title": "更多选项",
     "post_dialog__placeholder": "文本在此处…",

@@ -48,7 +48,6 @@
     "personas": "ペルソナ",
     "browser_action_enter_dashboard": "ダッシュボードに入る",
     "post_dialog__button": "完了",
-    "post_dialog__dismiss_aria": "作成ダイアログを閉じる",
     "post_dialog__image_payload": "画像で暗号化",
     "post_dialog__more_options_title": "他のオプション",
     "post_dialog__placeholder": "ここにテキストを持ってきます",

@@ -13,7 +13,7 @@ import {
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import { EthereumTokenType, useAccount, useFungibleTokenWatched } from '@masknet/web3-shared-evm'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { InjectedDialog } from '@masknet/ui-runtime'
 import { UnreviewedWarning } from './UnreviewedWarning'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'

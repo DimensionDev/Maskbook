@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useCustomSnackbar } from '@masknet/theme'
 import { Button, Box, Typography } from '@mui/material'
-import { EvmUIRuntimeProvider } from '@masknet/ui-runtime'
+import { UIRuntimeProvider } from '@masknet/ui-runtime'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 import { useMatchXS, MaskMessages, useI18N } from '../../utils'
 import { useAutoPasteFailedDialog } from './AutoPasteFailedDialog'
@@ -61,9 +61,9 @@ export function PageInspector(props: PageInspectorProps) {
     return (
         <>
             {JSX}
-            <EvmUIRuntimeProvider>
+            <UIRuntimeProvider>
                 <PluginRender />
-            </EvmUIRuntimeProvider>
+            </UIRuntimeProvider>
         </>
     )
 }

@@ -11,8 +11,8 @@ import {
     formatBalance,
     TransactionStateType,
 } from '@masknet/web3-shared-evm'
+import { InjectedDialog } from '@masknet/ui-runtime'
 import { useI18N } from '../../../utils'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/SNSAdaptor/SelectTokenAmountPanel'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'

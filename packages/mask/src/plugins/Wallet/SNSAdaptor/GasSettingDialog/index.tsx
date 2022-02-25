@@ -4,7 +4,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { GasOption } from '@masknet/web3-shared-evm'
-import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
+import { InjectedDialog } from '@masknet/ui-runtime'
 import { useI18N } from '../../../../utils'
 import { GasSetting } from './GasSetting'
 

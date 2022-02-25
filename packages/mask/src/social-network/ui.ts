@@ -15,6 +15,7 @@ import { createPluginHost } from '../plugin-infra/host'
 import { definedSocialNetworkUIs } from './define'
 import { setupShadowRootPortal, MaskMessages } from '../utils'
 import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
+import { staticBaseUIRuntime as baseUIRuntime } from '@masknet/ui-runtime'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
@@ -44,6 +45,12 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     console.log('Activating provider', ui_deferred.networkIdentifier)
     const ui = (activatedSocialNetworkUI = await loadSocialNetworkUI(ui_deferred.networkIdentifier))
+
+    baseUIRuntime.updateNetworkIdentifier(ui_deferred.networkIdentifier)
+    if (ui.customization.runtimeComponentOverwrite) {
+        baseUIRuntime.updateOverwrite(ui.customization.runtimeComponentOverwrite)
+    }
+
     console.log('Provider activated. You can access it by globalThis.ui', ui)
     Object.assign(globalThis, { ui })
 

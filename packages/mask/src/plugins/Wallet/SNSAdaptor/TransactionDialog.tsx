@@ -11,7 +11,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { InjectedDialog } from '@masknet/ui-runtime'
 import { WalletMessages } from '../messages'
 
 const useStyles = makeStyles()((theme) => ({

@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { EvmUIRuntimeProvider } from '@masknet/ui-runtime'
+import { UIRuntimeProvider } from '@masknet/ui-runtime'
 import { base } from '../base'
 import { TraderDialog } from './trader/TraderDialog'
 import { SearchResultInspector } from './trending/SearchResultInspector'
@@ -11,9 +11,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal) {},
     SearchResultBox() {
         return (
-            <EvmUIRuntimeProvider>
+            <UIRuntimeProvider>
                 <SearchResultInspector />
-            </EvmUIRuntimeProvider>
+            </UIRuntimeProvider>
         )
     },
     GlobalInjection: function Component() {

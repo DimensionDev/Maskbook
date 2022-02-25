@@ -123,7 +123,7 @@ const mindsUI: SocialNetworkUI.Definition = {
     },
     customization: {
         paletteMode: PaletteModeProviderMinds,
-        componentOverwrite: {
+        runtimeComponentOverwrite: {
             InjectedDialog: {
                 classes: useInjectedDialogClassesOverwriteMinds,
             },

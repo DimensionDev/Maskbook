@@ -7,7 +7,7 @@ import {
     MaskDarkTheme,
     useSystemPreferencePalette,
 } from '@masknet/theme'
-import { EvmUIRuntimeProvider } from '@masknet/ui-runtime'
+import { UIRuntimeProvider } from '@masknet/ui-runtime'
 import { ErrorBoundary, I18NextProviderHMR } from '@masknet/shared'
 import {
     createInjectHooksRenderer,
@@ -62,12 +62,12 @@ export default function DashboardRoot() {
                                 <ErrorBoundary>
                                     <CssBaseline />
                                     <CustomSnackbarProvider>
-                                        <EvmUIRuntimeProvider>
+                                        <UIRuntimeProvider>
                                             <HashRouter>
                                                 <Pages />
                                             </HashRouter>
                                             <PluginRender />
-                                        </EvmUIRuntimeProvider>
+                                        </UIRuntimeProvider>
                                     </CustomSnackbarProvider>
                                 </ErrorBoundary>
                             </PersonaContext.Provider>

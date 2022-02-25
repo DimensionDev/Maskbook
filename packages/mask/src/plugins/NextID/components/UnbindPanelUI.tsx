@@ -8,7 +8,7 @@ import { useI18N } from '../locales'
 import { getMaskColor, makeStyles, MaskColorVar } from '@masknet/theme'
 import type { Persona } from '../../../database'
 import { formatFingerprint, LoadingAnimation } from '@masknet/shared'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { InjectedDialog } from '@masknet/ui-runtime'
 import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 

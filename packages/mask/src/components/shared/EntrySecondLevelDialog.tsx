@@ -1,6 +1,6 @@
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { InjectedDialog } from './InjectedDialog'
+import { InjectedDialog } from '@masknet/ui-runtime'
 import { WalletStatusBox } from './WalletStatusBox'
 import { ApplicationBoard, MaskAppEntry } from './ApplicationBoard'
 import type { ChainId } from '@masknet/web3-shared-evm'

@@ -7,7 +7,7 @@ import { makeStyles } from '@masknet/theme'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, Typography } from '@mui/material'
 import { PopupRoutes } from '@masknet/shared-base'
-import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
+import { InjectedDialog } from '@masknet/ui-runtime'
 import { WalletMessages, WalletRPC } from '../../messages'
 import { useI18N } from '../../../../utils'
 

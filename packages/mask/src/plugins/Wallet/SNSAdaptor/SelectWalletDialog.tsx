@@ -10,7 +10,7 @@ import { useI18N } from '../../../utils'
 import { WalletMessages, WalletRPC } from '../messages'
 import { WalletInList } from '../../../components/shared/SelectWallet/WalletInList'
 import Services from '../../../extension/service'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { InjectedDialog } from '@masknet/ui-runtime'
 import { delay } from '@dimensiondev/kit'
 
 const useStyles = makeStyles()({

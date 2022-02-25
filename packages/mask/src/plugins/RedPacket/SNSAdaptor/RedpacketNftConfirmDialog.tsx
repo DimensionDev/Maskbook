@@ -14,7 +14,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import classNames from 'classnames'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { InjectedDialog } from '@masknet/ui-runtime'
 import { Button, Grid, Link, Typography, DialogContent, List, ListItem } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'

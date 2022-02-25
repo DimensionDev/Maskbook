@@ -14,6 +14,7 @@ import { fixWeb3State } from './plugins/EVM/UI/Web3State'
 import { getBackgroundColor } from './utils'
 import { MaskIconPaletteContext } from '@masknet/icons'
 import { isTwitter } from './social-network-adaptor/twitter.com/base'
+import { UIRuntimeProvider } from '@masknet/ui-runtime'
 const identity = (jsx: React.ReactNode) => jsx as JSX.Element
 function compose(init: React.ReactNode, ...f: ((children: React.ReactNode) => JSX.Element)[]) {
     return f.reduceRight((prev, curr) => curr(prev), <>{init}</>)
@@ -39,6 +40,7 @@ function MaskThemeProvider({ children, baseline, useTheme }: MaskThemeProvider) 
             </MaskIconPaletteContext.Provider>
         ),
         (jsx) => <ThemeProvider theme={theme} children={jsx} />,
+        (jsx) => <UIRuntimeProvider children={jsx} />,
         (jsx) => (
             <CustomSnackbarProvider
                 disableWindowBlurListener={false}

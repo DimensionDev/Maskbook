@@ -11,13 +11,12 @@ import type {
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { RenderFragmentsContextType } from '@masknet/typed-message/dom'
+import type { RuntimeComponentOverwrite } from '@masknet/ui-runtime'
 import type { PaletteMode, Theme } from '@mui/material'
 import type { Subscription } from 'use-subscription'
-import type { InjectedDialogClassKey, InjectedDialogProps } from '../components/shared/InjectedDialog'
 import type { Profile } from '../database'
 import type { createSNSAdaptorSpecializedPostContext } from './utils/create-post-context'
 
-type ClassNameMap<ClassKey extends string = string> = { [P in ClassKey]: string }
 // Don't define values in namespaces
 export namespace SocialNetwork {
     export interface PayloadEncoding {
@@ -266,6 +265,7 @@ export namespace SocialNetworkUI {
             /** Provide the ability to detect the current color scheme (light or dark) in the current SNS */
             paletteMode?: PaletteModeProvider
             i18nOverwrite?: I18NOverwrite
+            runtimeComponentOverwrite?: RuntimeComponentOverwrite
             componentOverwrite?: ComponentOverwrite
         }
         export interface PaletteModeProvider {
@@ -273,12 +273,7 @@ export namespace SocialNetworkUI {
             start(signal: AbortSignal): void
         }
         export interface ComponentOverwrite {
-            InjectedDialog?: ComponentOverwriteConfig<InjectedDialogProps, InjectedDialogClassKey>
             RenderFragments?: RenderFragmentsContextType
-        }
-        export interface ComponentOverwriteConfig<Props extends { classes?: any }, Classes extends string> {
-            classes?: () => { classes: Partial<ClassNameMap<Classes>> }
-            props?: (props: Props) => Props
         }
         export interface I18NOverwrite {
             [namespace: string]: I18NOverwriteNamespace

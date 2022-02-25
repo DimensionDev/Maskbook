@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { InjectedDialog } from '@masknet/ui-runtime'
 import {
     ERC721TokenDetailed,
     ERC721ContractDetailed,

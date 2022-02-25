@@ -139,10 +139,12 @@ const facebookUI: SocialNetworkUI.Definition = {
     },
     customization: {
         paletteMode: PaletteModeProviderFacebook,
-        componentOverwrite: {
+        runtimeComponentOverwrite: {
             InjectedDialog: {
                 classes: useInjectedDialogClassesOverwriteFacebook,
             },
+        },
+        componentOverwrite: {
             RenderFragments: FacebookRenderFragments,
         },
         useTheme: useThemeFacebookVariant,

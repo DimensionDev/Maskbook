@@ -134,10 +134,12 @@ const twitterUI: SocialNetworkUI.Definition = {
     },
     customization: {
         paletteMode: PaletteModeProviderTwitter,
-        componentOverwrite: {
+        runtimeComponentOverwrite: {
             InjectedDialog: {
                 classes: useInjectedDialogClassesOverwriteTwitter,
             },
+        },
+        componentOverwrite: {
             RenderFragments: TwitterRenderFragments,
         },
         useTheme: useThemeTwitterVariant,
