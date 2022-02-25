@@ -1,11 +1,10 @@
 import { LiveSelector, MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
-
 import { creator, SocialNetworkUI } from '../../../social-network'
 import { getProfileIdentifierAtFacebook, getUserID } from '../utils/getProfileIdentifier'
 import { isMobileFacebook } from '../utils/isMobile'
 import { delay, ProfileIdentifier } from '@masknet/shared-base'
 import { searchAvatarSelector, searchUserIdOnMobileSelector } from '../utils/selector'
-import { getAvatar, getBioDescription, getFacebookId, getNickName } from '../utils/user'
+import { getAvatar, getBioDescription, getFacebookId, getNickName, getPersonalHomepage } from '../utils/user'
 
 export const IdentityProviderFacebook: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: true,
@@ -49,6 +48,7 @@ function resolveCurrentVisitingIdentityInner(
         const nickname = getNickName()
         const bio = getBioDescription()
         const handle = getFacebookId()
+        const homepage = getPersonalHomepage()
 
         const avatar = getAvatar()
 
@@ -57,6 +57,7 @@ function resolveCurrentVisitingIdentityInner(
             nickname,
             avatar,
             bio,
+            homepage,
         }
     }
 

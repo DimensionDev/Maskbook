@@ -13,7 +13,6 @@ export const base: Plugin.Shared.Definition = {
             type: 'opt-in',
             networks: {
                 [CurrentSNSNetwork.Twitter]: true,
-                [CurrentSNSNetwork.Facebook]: true,
             },
         },
         target: 'stable',
