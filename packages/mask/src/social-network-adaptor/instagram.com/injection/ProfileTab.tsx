@@ -43,7 +43,7 @@ function getStyleProps(activeColor: { activeColor: string; color: string }) {
 }
 
 const useStyles = makeStyles<{ activeColor: string; color: string }>()((theme, { activeColor, color }) => {
-    const _props = getStyleProps({ activeColor, color })
+    const props = getStyleProps({ activeColor, color })
     return {
         root: {
             '&:hover': {
@@ -55,18 +55,18 @@ const useStyles = makeStyles<{ activeColor: string; color: string }>()((theme, {
             marginRight: 60,
         },
         button: {
-            color: _props.color,
-            font: _props.font,
-            fontSize: _props.fontSize,
-            height: _props.height,
+            color: props.color,
+            font: props.font,
+            fontSize: props.fontSize,
+            height: props.height,
             justifyContent: 'center',
             alignItems: 'center',
             display: 'flex',
             borderTop: '1px solid transparent',
         },
         selected: {
-            borderTop: `1px solid ${_props.hover}`,
-            color: _props.hover,
+            borderTop: `1px solid ${props.hover}`,
+            color: props.hover,
             [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
                 borderTop: 'unset',
             },
@@ -74,7 +74,7 @@ const useStyles = makeStyles<{ activeColor: string; color: string }>()((theme, {
         line: {},
         icon: {
             [`@media (min-width: ${theme.breakpoints.values.sm}px)`]: {
-                fontSize: _props.fontSize,
+                fontSize: props.fontSize,
                 paddingRight: 4,
             },
         },
