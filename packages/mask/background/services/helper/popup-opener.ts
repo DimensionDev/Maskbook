@@ -1,22 +1,27 @@
 import { PopupRoutes } from '@masknet/shared-base'
 import urlcat from 'urlcat'
-import { currentPopupWindowId } from '../../../settings/settings'
-import { isLocked } from '../../../plugins/Wallet/services'
+import { MaskMessages } from '../../../shared'
 
-export { __deprecated__getStorage, __deprecated__setStorage } from './storage'
-export { resolveTCOLink } from '../../../../shared'
-export { fetch, fetchJSON } from '../../../../background/services/helper/fetch'
-export { requestExtensionPermission, queryExtensionPermission } from './extensionPermission'
-export { createPersonaPayload, queryExistedBinding, bindProof } from './nextId'
-export { fromHex, toBase64URL } from '@masknet/shared-base'
-
+let currentPopupWindowId = 0
+function isLocked() {
+    return new Promise<boolean>((resolve) => {
+        const off = MaskMessages.events.wallet_is_locked.on(([type, value]) => {
+            if (type === 'request') return
+            off()
+            resolve(value)
+            // in case something went wrong
+            setTimeout(() => resolve(false), 200)
+        })
+        MaskMessages.events.wallet_is_locked.sendToLocal(['request'])
+    })
+}
 export async function openPopupWindow(route?: PopupRoutes, params?: Record<string, any>) {
     const windows = await browser.windows.getAll()
-    const popup = windows.find((win) => win && win.type === 'popup' && win.id === currentPopupWindowId.value)
+    const popup = windows.find((win) => win && win.type === 'popup' && win.id === currentPopupWindowId)
 
     // Focus on the pop-up window if it already exists
     if (popup) {
-        await browser.windows.update(currentPopupWindowId.value, { focused: true })
+        await browser.windows.update(currentPopupWindowId, { focused: true })
     } else {
         const locked = await isLocked()
 
@@ -56,10 +61,10 @@ export async function openPopupWindow(route?: PopupRoutes, params?: Record<strin
 
         // update currentPopupWindowId and clean event
         if (id) {
-            currentPopupWindowId.value = id
+            currentPopupWindowId = id
             browser.windows.onRemoved.addListener(function listener(windowID: number) {
                 if (windowID === id) {
-                    currentPopupWindowId.value = 0
+                    currentPopupWindowId = 0
                 }
             })
 
@@ -75,7 +80,7 @@ export async function openPopupWindow(route?: PopupRoutes, params?: Record<strin
 }
 
 export async function removePopupWindow() {
-    if (currentPopupWindowId.value) {
-        browser.windows.remove(currentPopupWindowId.value)
-    }
+    if (!currentPopupWindowId) return
+    browser.windows.remove(currentPopupWindowId)
+    currentPopupWindowId = 0
 }
