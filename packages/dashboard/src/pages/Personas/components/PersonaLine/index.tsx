@@ -57,10 +57,11 @@ export interface ConnectedPersonaLineProps {
     onDisconnect: (identifier: ProfileIdentifier) => void
     profileIdentifiers: ProfileIdentifier[]
     networkIdentifier: string
+    disableAdd?: boolean
 }
 
 export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
-    ({ profileIdentifiers, onConnect, onDisconnect, networkIdentifier, isHideOperations }) => {
+    ({ profileIdentifiers, onConnect, onDisconnect, networkIdentifier, isHideOperations, disableAdd }) => {
         const t = useDashboardI18N()
         const { openProfilePage } = PersonaContext.useContainer()
         const { classes } = useStyles()
@@ -98,6 +99,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                     {!isHideOperations && (
                         <Box>
                             <Link
+                                disabled={disableAdd}
                                 component="button"
                                 classes={{ button: classes.link }}
                                 variant="caption"
