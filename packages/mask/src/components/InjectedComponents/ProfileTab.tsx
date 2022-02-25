@@ -1,7 +1,7 @@
 import { ReactElement, useCallback, useState } from 'react'
 import classnames from 'classnames'
 import { Typography } from '@mui/material'
-import { MaskMessages } from '../../utils'
+import { MaskMessages, useMatchXS } from '../../utils'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 
 export interface ProfileTabProps extends withClasses<'tab' | 'button' | 'selected'> {
@@ -17,6 +17,7 @@ export interface ProfileTabProps extends withClasses<'tab' | 'button' | 'selecte
 export function ProfileTab(props: ProfileTabProps) {
     const { reset, clear, children, classes, title } = props
     const [active, setActive] = useState(false)
+    const isMobile = useMatchXS()
 
     const onClick = useCallback(() => {
         MaskMessages.events.profileTabUpdated.sendToLocal({ show: true })
@@ -37,7 +38,7 @@ export function ProfileTab(props: ProfileTabProps) {
                 onClick={onClick}
                 component="div">
                 {props.icon}
-                {title}
+                {isMobile && props.icon ? null : title}
                 {active && children ? children : null}
             </Typography>
         </div>

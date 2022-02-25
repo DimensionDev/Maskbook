@@ -16,7 +16,8 @@ export function getBioDescription() {
 
 export const getPersonalHomepage = () => {
     const node = personalHomepageSelector().evaluate()
-    return node?.textContent || ''
+    if (!node?.textContent) return ''
+    return !node.textContent?.match(/^http/) ? `https://${node.textContent}` : node.textContent
 }
 
 export const getNickname = () => {
