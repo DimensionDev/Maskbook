@@ -6,7 +6,6 @@ import { useValueRef } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { ImagePayloadIcon } from '@masknet/icons'
 import { Send } from '@mui/icons-material'
-import { UIRuntimeProvider } from '@masknet/ui-runtime'
 import { PluginEntryRender, PluginEntryRenderRef } from './PluginEntryRender'
 import { TypedMessageEditor, TypedMessageEditorRef } from './TypedMessageEditor'
 import { CharLimitIndicator } from './CharLimitIndicator'
@@ -183,9 +182,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     />
                 </Typography>
                 <div className={classes.flex}>
-                    <UIRuntimeProvider>
-                        <PluginEntryRender readonly={sending} ref={PluginEntry} />
-                    </UIRuntimeProvider>
+                    <PluginEntryRender readonly={sending} ref={PluginEntry} />
                 </div>
                 <Typography>{t('post_dialog__select_recipients_title')}</Typography>
                 <div className={classes.flex}>
