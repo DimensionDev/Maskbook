@@ -1,4 +1,5 @@
-import type { TypedMessage, ProfileIdentifier, AESCryptoKey, EC_Public_CryptoKey } from '@masknet/shared-base'
+import type { TypedMessage } from '@masknet/typed-message'
+import type { ProfileIdentifier, AESCryptoKey, EC_Public_CryptoKey } from '@masknet/shared-base'
 import type { PayloadParseResult } from '../payload'
 
 export interface DecryptOptions {

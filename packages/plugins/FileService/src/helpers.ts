@@ -1,4 +1,4 @@
-import { type TypedMessage, createTypedMessageMetadataReader } from '@masknet/shared-base'
+import { type TypedMessage, createTypedMessageMetadataReader } from '@masknet/typed-message'
 import { META_KEY_1, META_KEY_2 } from './constants'
 import { FileInfo, FileInfoV1, Provider } from './types'
 import schemaV1 from './schema-v1.json'

@@ -3,15 +3,8 @@ import { publishPostAESKey_version39Or38 } from '../../../../background/network/
 import { decodeArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
 import { constructAlpha38 } from '../../../utils/type-transform/Payload'
 import { queryPrivateKey, queryLocalKey, queryProfile } from '../../../database'
-import {
-    ProfileIdentifier,
-    PostIVIdentifier,
-    isTypedMessageText,
-    TypedMessage,
-    TypedMessageText,
-    PayloadLatest,
-    compressSecp256k1Key,
-} from '@masknet/shared-base'
+import { ProfileIdentifier, PostIVIdentifier, PayloadLatest, compressSecp256k1Key } from '@masknet/shared-base'
+import { isTypedMessageText, TypedMessage, TypedMessageText } from '@masknet/typed-message'
 import { prepareRecipientDetail } from './prepareRecipientDetail'
 import { getNetworkWorker } from '../../../social-network/worker'
 import { createPostDB, PostRecord } from '../../../../background/database/post'

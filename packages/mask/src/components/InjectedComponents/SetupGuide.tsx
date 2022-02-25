@@ -8,13 +8,8 @@ import { useI18N, MaskMessages } from '../../utils'
 import { activatedSocialNetworkUI, SocialNetworkUI } from '../../social-network'
 import { currentSetupGuideStatus, dismissPinExtensionTip, userGuideStatus } from '../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
-import {
-    PersonaIdentifier,
-    ProfileIdentifier,
-    Identifier,
-    ECKeyIdentifier,
-    makeTypedMessageText,
-} from '@masknet/shared-base'
+import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '@masknet/shared-base'
+import { makeTypedMessageText } from '@masknet/typed-message'
 import Services from '../../extension/service'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { MaskIcon } from '../../resources/MaskIcon'
