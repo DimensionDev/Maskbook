@@ -10,6 +10,8 @@ import { useCopyToClipboard } from 'react-use'
 import { NetworkSelector } from '../../../components/NetworkSelector'
 import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
 import { WalletItem } from './WalletItem'
+import { MAX_WALLET_LIMIT } from '@masknet/shared'
+import classNames from 'classnames'
 
 const useStyles = makeStyles()({
     header: {
@@ -71,6 +73,10 @@ const useStyles = makeStyles()({
         borderRadius: 20,
         fontSize: 14,
         lineHeight: '20px',
+    },
+    secondaryButton: {
+        backgroundColor: '#F7F9FA',
+        color: '#1C68F3',
     },
 })
 
@@ -137,13 +143,14 @@ const SwitchWallet = memo(() => {
             <div className={classes.controller}>
                 <Button
                     variant="contained"
-                    className={classes.button}
-                    onClick={handleClickCreate}
-                    style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}>
+                    className={classNames(classes.button, classes.secondaryButton)}
+                    disabled={wallets.length >= MAX_WALLET_LIMIT}
+                    onClick={handleClickCreate}>
                     {t('create')}
                 </Button>
                 <Button
                     variant="contained"
+                    disabled={wallets.length >= MAX_WALLET_LIMIT}
                     className={classes.button}
                     onClick={() => history.push(PopupRoutes.ImportWallet)}>
                     {t('import')}
