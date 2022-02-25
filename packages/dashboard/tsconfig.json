@@ -21,6 +21,6 @@
     { "path": "../plugins/Wallet/" },
     { "path": "../backup-format/" },
     { "path": "../shared-base" },
-    { "path": "../runtimes/ui" }
+    { "path": "../runtime/ui" }
   ]
 }

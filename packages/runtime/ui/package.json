@@ -2,7 +2,7 @@
     "name": "@masknet/ui-runtime",
     "private": true,
     "license": "AGPL-3.0-or-later",
-    "main": "./dist/src/index.js",
+    "main": "./dist/index.js",
     "types": "./dist/",
     "dependencies": {
         "@masknet/theme": "workspace:*",

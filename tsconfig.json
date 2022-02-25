@@ -18,7 +18,7 @@
     { "path": "./packages/shared-base/tsconfig.tests.json" },
     // All plugins should be type checked too
     { "path": "./packages/plugins" },
-    { "path": "./packages/runtimes" }
+    { "path": "./packages/runtime" }
   ],
   "compilerOptions": {
     "paths": {
@@ -104,7 +104,7 @@
       "@masknet/plugin-wallet": ["./packages/plugins/Wallet/src"],
 
       // Runtimes
-      "@masknet/ui-runtime": ["./packages/runtimes/ui/src"]
+      "@masknet/ui-runtime": ["./packages/runtime/ui/src"]
     },
     // Classification follows https://www.typescriptlang.org/tsconfig
 

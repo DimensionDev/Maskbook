@@ -205,7 +205,7 @@ importers:
       '@masknet/shared-base': link:../shared-base
       '@masknet/storybook-shared': link:../storybook-shared
       '@masknet/theme': link:../theme
-      '@masknet/ui-runtime': link:../runtimes/ui
+      '@masknet/ui-runtime': link:../runtime/ui
       '@masknet/web3-shared-base': link:../web3-shared/base
       '@masknet/web3-shared-evm': link:../web3-shared/evm
       '@msgpack/msgpack': 2.7.2
@@ -470,7 +470,7 @@ importers:
       '@masknet/shared-base': link:../shared-base
       '@masknet/theme': link:../theme
       '@masknet/typed-message': link:../typed-message
-      '@masknet/ui-runtime': link:../runtimes/ui
+      '@masknet/ui-runtime': link:../runtime/ui
       '@masknet/web3-contracts': link:../web3-contracts
       '@masknet/web3-providers': link:../web3-providers
       '@masknet/web3-shared-base': link:../web3-shared/base
@@ -942,7 +942,7 @@ importers:
   packages/public-api:
     specifiers: {}
 
-  packages/runtimes/ui:
+  packages/runtime/ui:
     specifiers:
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*

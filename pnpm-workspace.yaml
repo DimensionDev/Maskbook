@@ -8,4 +8,4 @@ packages:
   - 'packages/web3-shared/flow'
   - 'packages/web3-shared/solana'
   - 'packages/plugins/*'
-  - 'packages/runtimes/*'
+  - 'packages/runtime/*'

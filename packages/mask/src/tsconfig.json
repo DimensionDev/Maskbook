@@ -32,7 +32,7 @@
     { "path": "../../external-plugin-previewer" },
     { "path": "../../injected-script/sdk" },
     { "path": "../../mask-sdk/server" },
-    { "path": "../../runtimes/ui" },
+    { "path": "../../runtime/ui" },
     { "path": "../web-workers" },
     { "path": "../utils-pure" },
     { "path": "../utils-ui" },
