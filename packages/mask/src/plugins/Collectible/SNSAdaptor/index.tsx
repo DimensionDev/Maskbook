@@ -4,7 +4,7 @@ import { PostInspector } from './PostInspector'
 import { base } from '../base'
 import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils'
 import { PLUGIN_ID } from '../constants'
-import { getTypedMessageContent } from '../../../protocols/typed-message'
+import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { NFTPage } from './NFTPage'
 import { AddressName, AddressNameType } from '@masknet/web3-shared-evm'
 
@@ -19,7 +19,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return asset ? <PostInspector payload={asset} /> : null
     },
     DecryptedInspector: function Component(props) {
-        const collectibleUrl = getRelevantUrl(getTypedMessageContent(props.message))
+        const collectibleUrl = getRelevantUrl(
+            extractTextFromTypedMessage(props.message, { linkAsText: true }).unwrapOr(''),
+        )
         const asset = getAssetInfoFromURL(collectibleUrl)
         usePluginWrapper(!!asset)
         return asset ? <PostInspector payload={asset} /> : null

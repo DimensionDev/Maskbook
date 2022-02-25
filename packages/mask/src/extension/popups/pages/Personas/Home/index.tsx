@@ -4,7 +4,7 @@ import { PersonaContext } from '../hooks/usePersonaContext'
 import { useHistory } from 'react-router-dom'
 import { DeleteIcon, MasksIcon, EditIcon } from '@masknet/icons'
 import { Button, Typography } from '@mui/material'
-import { formatFingerprint } from '@masknet/shared'
+import { formatFingerprint, MAX_PERSONA_LIMIT } from '@masknet/shared'
 import { PopupRoutes } from '@masknet/shared-base'
 import { ChevronDown, ChevronUp } from 'react-feather'
 import { ProfileList } from '../components/ProfileList'
@@ -12,6 +12,7 @@ import { EnterDashboard } from '../../../components/EnterDashboard'
 import { PersonaList } from '../components/PersonaList'
 import { useI18N } from '../../../../../utils'
 import urlcat from 'urlcat'
+import classNames from 'classnames'
 
 const useStyles = makeStyles()({
     content: {
@@ -83,15 +84,20 @@ const useStyles = makeStyles()({
         marginLeft: 10,
         cursor: 'pointer',
     },
+    secondaryButton: {
+        backgroundColor: '#F7F9FA',
+        color: '#1C68F3',
+    },
 })
 
 const PersonaHome = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [isExpand, setExpand] = useState(true)
-    const { currentPersona, setDeletingPersona } = PersonaContext.useContainer()
+    const { currentPersona, setDeletingPersona, personas } = PersonaContext.useContainer()
     const history = useHistory()
 
+    console.log(personas)
     return (
         <>
             <div className={classes.content}>
@@ -136,14 +142,14 @@ const PersonaHome = memo(() => {
                 <div className={classes.controller}>
                     <Button
                         variant="contained"
-                        className={classes.button}
+                        className={classNames(classes.button, classes.secondaryButton)}
+                        disabled={personas && personas.length >= MAX_PERSONA_LIMIT - 1}
                         onClick={() => {
                             browser.tabs.create({
                                 active: true,
                                 url: browser.runtime.getURL('/dashboard.html#/sign-up'),
                             })
-                        }}
-                        style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}>
+                        }}>
                         {t('create')}
                     </Button>
                     <Button

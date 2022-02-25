@@ -1,19 +1,9 @@
-import * as IsolatedDashboardBridge from './IsolatedDashboardBridge'
-import * as InjectContentScripts from './InjectContentScripts'
-import * as NewInstalled from '../../../../background/tasks/NewInstalled'
+// Define new task at packages/mask/background/tasks/setup.hmr.ts if possible.
 import * as PluginWorker from './StartPluginWorker'
 import * as SettingListeners from './SettingListeners'
-import * as CleanupProfileDatabase from '../../../../background/tasks/CleanProfileAndAvatar'
 
 type CancelableJob = { default: (signal: AbortSignal) => void }
-const CancelableJobs: CancelableJob[] = [
-    InjectContentScripts,
-    NewInstalled,
-    IsolatedDashboardBridge,
-    PluginWorker,
-    SettingListeners,
-    CleanupProfileDatabase,
-]
+const CancelableJobs: CancelableJob[] = [PluginWorker, SettingListeners]
 
 const abort = new AbortController()
 CancelableJobs.map((x) => x.default(abort.signal))
