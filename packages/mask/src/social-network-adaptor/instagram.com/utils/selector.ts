@@ -38,7 +38,7 @@ export const searchUserIdInEditPageSelector = () =>
     querySelector('[id="react-root"] button[title="Change Profile Photo"] > img').closest(4).querySelector('h1')
 
 export const searchProfileTabArticlePageSelector = () =>
-    querySelector<E>('[id="react-root"] section main > div > div:last-child > article')
+    querySelector<E>('[id="react-root"] section main div[role="tablist"]')
 
 export const searchProfileTabOtherArticlePageSelector = () =>
     querySelector<E>('[id="react-root"] section main > div > div:last-child > div')
