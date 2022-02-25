@@ -3,7 +3,7 @@ import { ValueRef } from '@dimensiondev/holoflows-kit'
 import urlcat from 'urlcat'
 import { MaskMessages } from '../../../shared'
 
-const currentPopupWindowId = new ValueRef(-1)
+const currentPopupWindowId = new ValueRef(0)
 
 function isLocked() {
     return new Promise<boolean>((resolve) => {
