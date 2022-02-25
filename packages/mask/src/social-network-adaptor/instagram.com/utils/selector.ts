@@ -54,7 +54,8 @@ export const searchInstagramAvatarOpenFilesSelector = () =>
 export const searchInstagramSaveAvatarButtonSelector = () =>
     querySelector<HTMLButtonElement>('section > div > header > div > div:last-child > button')
 
-export const searchInstagramAvatarSelector = () => querySelector('[id="react-root"] header button > img')
+export const searchInstagramAvatarSelector = () =>
+    querySelector('[id="react-root"] header img[alt="Change Profile Photo"], img[data-testid="user-avatar"]')
 
 export const searchInstagramProfileAvatarButtonSelector = () =>
     querySelector('[id="react-root"] button[title="Change Profile Photo"] > img').closest<HTMLDivElement>(3)

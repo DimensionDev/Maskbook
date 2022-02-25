@@ -7,7 +7,6 @@ import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 import { searchInstagramPostAvatarSelector } from '../../utils/selector'
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { max } from 'lodash-unified'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -66,8 +65,8 @@ function _(selector: () => LiveSelector<HTMLImageElement, false>, signal: AbortS
                     <TimeLineRainbow
                         userId={id}
                         avatarId={info.avatarId}
-                        width={max([28, info.width - 4]) ?? info.width - 4}
-                        height={max([28, info.height - 4]) ?? info.height - 4}
+                        width={info.width - 4}
+                        height={info.height - 4}
                     />,
                 )
 

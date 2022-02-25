@@ -1,4 +1,4 @@
-import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { searchInstagramAvatarSelector, searchInstagramAvatarUploadLoadingSelector } from '../../utils/selector'
 import { createReactRootShadowed, startWatch } from '../../../../utils'
 import { makeStyles } from '@masknet/theme'
@@ -48,6 +48,7 @@ function NFTAvatarInInstagram() {
     const { classes } = useStyles()
     const wallet = useWallet()
     const [avatar, setAvatar] = useState<AvatarMetaDB>()
+
     const identity = useCurrentVisitingIdentity()
     const location = useLocation()
     const { value: _avatar } = useNFTAvatar(identity.identifier.userId, RSS3_KEY_SNS.INSTAGRAM)
@@ -139,7 +140,14 @@ function NFTAvatarInInstagram() {
 
     useEffect(() => {
         if (!showAvatar) return
-        const containerDom = searchInstagramAvatarSelector().closest<HTMLDivElement>(2)
+
+        let containerDom: LiveSelector<HTMLSpanElement | HTMLDivElement, true>
+
+        if (searchInstagramAvatarSelector().evaluate()?.parentElement?.tagName === 'SPAN') {
+            containerDom = searchInstagramAvatarSelector().closest<HTMLSpanElement>(1)
+        } else {
+            containerDom = searchInstagramAvatarSelector().closest<HTMLDivElement>(2)
+        }
 
         const style = document.createElement('style')
         style.innerText = `
@@ -153,9 +161,10 @@ function NFTAvatarInInstagram() {
                 }
             `
 
-        const parentDom = containerDom.closest('div').evaluate()
+        const parentDom = searchInstagramAvatarSelector().closest<HTMLDivElement>(2).evaluate()
 
         parentDom?.appendChild(style)
+
         containerDom.evaluate()?.classList.add('rainbowBorder')
         return () => {
             if (parentDom?.lastElementChild?.tagName === 'STYLE') {
@@ -171,6 +180,7 @@ function NFTAvatarInInstagram() {
 
     return (
         <NFTBadge
+            hasRainbow={false}
             avatar={avatar}
             size={size}
             classes={{ root: classes.root, text: classes.text, icon: classes.icon }}
