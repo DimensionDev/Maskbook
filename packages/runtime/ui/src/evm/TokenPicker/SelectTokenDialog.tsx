@@ -1,10 +1,11 @@
 import { ERC20TokenList } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { ChainId, FungibleTokenDetailed, useTokenConstants } from '@masknet/web3-shared-evm'
+import { ChainId, EMPTY_LIST, FungibleTokenDetailed, useTokenConstants } from '@masknet/web3-shared-evm'
 // see https://github.com/import-js/eslint-plugin-import/issues/2288
 // eslint-disable-next-line import/no-deprecated
 import { DialogContent, Theme, useMediaQuery } from '@mui/material'
 import type { FC } from 'react'
+import { useBaseUIRuntime, MINDS_ID } from '../../base'
 import { InjectedDialog } from '../../components'
 import { useRowSize } from './useRowSize'
 
@@ -60,14 +61,15 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
     disableSearchBar,
     disableNativeToken,
     tokens,
-    blacklist,
+    blacklist = EMPTY_LIST,
+    selectedTokens = EMPTY_LIST,
     onSelect,
     onClose,
 }) => {
     const isDashboard = location.href.includes('dashboard.html')
-    // const isCompact = activatedSocialNetworkUI.networkIdentifier === MINDS_ID
-    const isCompact = false
-    const { classes } = useStyles({ compact: isCompact, disablePaddingTop: isDashboard })
+    const { networkIdentifier } = useBaseUIRuntime()
+    const compact = networkIdentifier === MINDS_ID
+    const { classes } = useStyles({ compact, disablePaddingTop: isDashboard })
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
     // eslint-disable-next-line import/no-deprecated
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
@@ -86,12 +88,11 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
                     onSelect={onSelect}
                     tokens={tokens ?? []}
                     blacklist={
-                        disableNativeToken && NATIVE_TOKEN_ADDRESS
-                            ? [NATIVE_TOKEN_ADDRESS, ...(blacklist ?? [])]
-                            : blacklist ?? []
+                        disableNativeToken && NATIVE_TOKEN_ADDRESS ? [NATIVE_TOKEN_ADDRESS, ...blacklist] : blacklist
                     }
                     targetChainId={chainId}
                     disableSearch={disableSearchBar}
+                    selectedTokens={selectedTokens}
                     FixedSizeListProps={{
                         itemSize: rowSize,
                         height: isMdScreen ? 300 : 503,
