@@ -112,18 +112,15 @@ const SignRequest = memo(() => {
     }, [value])
 
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
-        if (value) {
-            try {
-                await Services.Ethereum.confirmRequest(value.payload)
-            } catch (error_) {
-                setTransferError(true)
-            }
+        try {
+            await Services.Ethereum.confirmRequest()
+        } catch (error_) {
+            setTransferError(true)
         }
     }, [value, location.search, history])
 
     const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
-        if (!value) return
-        await Services.Ethereum.rejectRequest(value.payload)
+        await Services.Ethereum.rejectRequest()
         history.replace(PopupRoutes.Wallet)
     }, [value])
 

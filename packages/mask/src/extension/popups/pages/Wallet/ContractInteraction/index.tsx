@@ -256,22 +256,18 @@ const ContractInteraction = memo(() => {
 
     // handlers
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
-        if (request) {
-            try {
-                await Services.Ethereum.confirmRequest(request.payload)
-                history.goBack()
-            } catch (error_) {
-                setTransferError(true)
-            }
+        try {
+            await Services.Ethereum.confirmRequest()
+            history.goBack()
+        } catch (error_) {
+            setTransferError(true)
         }
-        return
     }, [request, location.search, history])
 
     const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
-        if (!request) return
-        await Services.Ethereum.rejectRequest(request.payload)
+        await Services.Ethereum.rejectRequest()
         history.replace(PopupRoutes.Wallet)
-    }, [request])
+    }, [])
 
     // Wei
     const gasPriceEIP1559 = new BigNumber(maxFeePerGas ?? defaultPrices?.maxFeePerGas ?? 0, 16)

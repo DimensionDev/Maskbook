@@ -139,9 +139,9 @@ const ReplaceTransaction = memo(() => {
     const [{ loading }, handleConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             try {
-                if (transaction?.payload) {
-                    const config = transaction.payload.params.map((param) => ({
-                        ...param,
+                if (transaction?.config) {
+                    const config = {
+                        ...transaction.config,
                         gas: toHex(new BigNumber(data.gas).toString()),
                         ...(is1559
                             ? {
@@ -151,18 +151,12 @@ const ReplaceTransaction = memo(() => {
                                   maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas ?? 0).toString()),
                               }
                             : { gasPrice: toHex(formatGweiToWei(data.gasPrice ?? 0).toString()) }),
-                    }))
+                    }
 
                     if (type === ReplaceType.CANCEL) {
-                        await Services.Ethereum.cancelRequest(transaction.hash, {
-                            ...transaction.payload,
-                            params: config,
-                        })
+                        await Services.Ethereum.cancelRequest(transaction.hash, config)
                     } else {
-                        await Services.Ethereum.replaceRequest(transaction.hash, {
-                            ...transaction.payload,
-                            params: config,
-                        })
+                        await Services.Ethereum.replaceRequest(transaction.hash, config)
                     }
 
                     history.goBack()

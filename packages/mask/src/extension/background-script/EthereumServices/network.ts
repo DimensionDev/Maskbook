@@ -7,6 +7,7 @@ import type {
     Log,
 } from 'web3-core'
 import { toHex } from 'web3-utils'
+import type { JsonRpcPayload } from 'web3-core-helpers'
 import { ChainId, EthereumChainDetailed, EthereumMethodType, SendOverrides } from '@masknet/web3-shared-evm'
 import { request } from './request'
 
@@ -71,6 +72,16 @@ export async function getTransactionByHash(hash: string, overrides?: SendOverrid
     return request<Transaction>(
         {
             method: EthereumMethodType.ETH_GET_TRANSACTION_BY_HASH,
+            params: [hash],
+        },
+        overrides,
+    )
+}
+
+export async function getTransactionReceiptHijacked(hash: string, overrides?: SendOverrides) {
+    return request<TransactionReceipt | null>(
+        {
+            method: EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
             params: [hash],
         },
         overrides,
@@ -205,16 +216,6 @@ export async function signTransaction(config: TransactionConfig, overrides?: Sen
     )
 }
 
-export async function sendTransaction(config: TransactionConfig, overrides?: SendOverrides) {
-    return request<string>(
-        {
-            method: EthereumMethodType.ETH_SEND_TRANSACTION,
-            params: [config],
-        },
-        overrides,
-    )
-}
-
 export async function getPastLogs(config: PastLogsOptions, overrides?: SendOverrides) {
     return new Promise<Log[]>((resolve, reject) =>
         request<Log[]>(
@@ -226,5 +227,65 @@ export async function getPastLogs(config: PastLogsOptions, overrides?: SendOverr
         )
             .then((result) => resolve(result))
             .catch(() => resolve([])),
+    )
+}
+
+export async function watchTransaction(hash: string, config: TransactionConfig, overrides?: SendOverrides) {
+    return request<void>(
+        {
+            method: EthereumMethodType.MASK_WATCH_TRANSACTION,
+            params: [hash, config],
+        },
+        overrides,
+    )
+}
+
+export async function unwatchTransaction(hash: string, overrides?: SendOverrides) {
+    return request<void>(
+        {
+            method: EthereumMethodType.MASK_UNWATCH_TRANSACTION,
+            params: [hash],
+        },
+        overrides,
+    )
+}
+
+export async function confirmRequest(overrides?: SendOverrides) {
+    return request<void>(
+        {
+            method: EthereumMethodType.MASK_CONFIRM_TRANSACTION,
+            params: [],
+        },
+        overrides,
+    )
+}
+
+export async function rejectRequest(overrides?: SendOverrides) {
+    return request<void>(
+        {
+            method: EthereumMethodType.MASK_CONFIRM_TRANSACTION,
+            params: [],
+        },
+        overrides,
+    )
+}
+
+export async function replaceRequest(hash: string, config: TransactionConfig, overrides?: SendOverrides) {
+    return request<void>(
+        {
+            method: EthereumMethodType.MASK_CONFIRM_TRANSACTION,
+            params: [hash, config],
+        },
+        overrides,
+    )
+}
+
+export async function cancelRequest(hash: string, config: TransactionConfig, overrides?: SendOverrides) {
+    return request<void>(
+        {
+            method: EthereumMethodType.MASK_CONFIRM_TRANSACTION,
+            params: [hash, config],
+        },
+        overrides,
     )
 }

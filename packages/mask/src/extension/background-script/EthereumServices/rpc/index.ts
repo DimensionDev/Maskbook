@@ -7,6 +7,8 @@ import {
     getChainDetailedCAIP,
     ZERO_ADDRESS,
     isZeroAddress,
+    EthereumTransactionConfig,
+    getPayloadConfig,
 } from '@masknet/web3-shared-evm'
 import type { TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
@@ -21,16 +23,16 @@ function isEmptyHex(hex: string) {
     return !hex || ['0x', '0x0'].includes(hex)
 }
 
-function getData(tx: TransactionConfig) {
-    const { data } = tx
+function getData(config: TransactionConfig) {
+    const { data } = config
     if (!data) return
     if (isEmptyHex(data)) return
     if (!data.startsWith('0x')) return `0x${data}`
     return data
 }
 
-function getTo(tx: TransactionConfig) {
-    const { to } = tx
+function getTo(config: TransactionConfig) {
+    const { to } = config
     if (!to) return ZERO_ADDRESS
     if (isEmptyHex(to)) return ZERO_ADDRESS
     return to
@@ -98,16 +100,18 @@ export async function getComputedPayload(payload: JsonRpcPayload): Promise<Ether
 
         // contract interaction
         case EthereumMethodType.ETH_SEND_TRANSACTION:
-            return getSendTransactionComputedPayload(payload) as Promise<EthereumRpcComputed | undefined>
+            return getSendTransactionComputedPayload(getPayloadConfig(payload)) as Promise<
+                EthereumRpcComputed | undefined
+            >
 
         default:
             return
     }
 }
 
-export async function getSendTransactionComputedPayload(payload: JsonRpcPayload) {
-    const config =
-        payload.method === EthereumMethodType.MASK_REPLACE_TRANSACTION ? payload.params[1] : payload.params[0]
+export async function getSendTransactionComputedPayload(config?: EthereumTransactionConfig) {
+    if (!config) return
+
     const from = (config.from as string | undefined) ?? ''
     const value = (config.value as string | undefined) ?? '0x0'
     const data = getData(config)

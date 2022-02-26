@@ -4,6 +4,7 @@ import LaunchIcon from '@mui/icons-material/Launch'
 import type { TransactionReceipt } from 'web3-core'
 import {
     createLookupTableResolver,
+    getPayloadConfig,
     resolveTransactionLinkOnExplorer,
     TransactionState,
     TransactionStateType,
@@ -105,7 +106,9 @@ export function TransactionSnackbar() {
             if (location.href.includes('popups.html')) return
             if (progress.state.type === TransactionStateType.UNKNOWN) return
 
-            const payload = await Services.Ethereum.getSendTransactionComputedPayload(progress.payload)
+            const payload = await Services.Ethereum.getSendTransactionComputedPayload(
+                getPayloadConfig(progress.payload),
+            )
             const config = resolveSnackbarConfig(progress.state.type)
             const hash =
                 (progress.state as { hash?: string }).hash ??

@@ -65,10 +65,15 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
 
         switch (providerType) {
             case ProviderType.MaskWallet:
-                ;({ account, chainId } = await Services.Ethereum.connectMaskWallet(networkType))
-                break
             case ProviderType.MetaMask:
-                ;({ account, chainId } = await Services.Ethereum.connectMetaMask())
+            case ProviderType.Coin98:
+            case ProviderType.WalletLink:
+            case ProviderType.MathWallet:
+            case ProviderType.Fortmatic:
+                ;({ account, chainId } = await Services.Ethereum.connect({
+                    chainId: expectedChainId,
+                    providerType,
+                }))
                 break
             case ProviderType.WalletConnect:
                 // create wallet connect QR code URI
@@ -83,14 +88,6 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
 
                 // wait for walletconnect to be connected
                 ;({ account, chainId } = await Services.Ethereum.connectWalletConnect())
-                break
-            case ProviderType.Coin98:
-            case ProviderType.WalletLink:
-            case ProviderType.MathWallet:
-                ;({ account, chainId } = await Services.Ethereum.connectInjected())
-                break
-            case ProviderType.Fortmatic:
-                ;({ account, chainId } = await Services.Ethereum.connectFortmatic(expectedChainId))
                 break
             case ProviderType.CustomNetwork:
                 throw new Error('To be implemented.')

@@ -262,7 +262,8 @@
         "xlarge",
         "xlink",
         "zerion",
-        "zubin"
+        "zubin",
+        "middlewares"
     ],
     "ignoreWords": [
         "aicanft",

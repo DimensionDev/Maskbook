@@ -1,19 +1,44 @@
-import MaskWallet from 'web3'
-import type { HttpProvider } from 'web3-core'
+import Web3 from 'web3'
+import type { HttpProvider, RequestArguments } from 'web3-core'
+import type { JsonRpcResponse } from 'web3-core-helpers'
 import { PopupRoutes } from '@masknet/shared-base'
-import { ChainId, getChainIdFromNetworkType, getChainRPC, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
-import { currentChainIdSettings } from '../../../../plugins/Wallet/settings'
+import {
+    ChainId,
+    createExternalProvider,
+    createPayload,
+    getChainRPC,
+    getRPCConstants,
+    ProviderType,
+} from '@masknet/web3-shared-evm'
 import { getWallets, selectAccountPrepare } from '../../../../plugins/Wallet/services'
+import { BaseProvider } from './Base'
+import type { Provider, ProviderOptions, Web3Options } from '../types'
+import { currentChainIdSettings } from '../../../../plugins/Wallet/settings'
 import { openPopupWindow } from '../../../../../background/services/helper'
 
-// #region providers
-const providerPool = new Map<string, HttpProvider>()
+const WEIGHTS_LENGTH = getRPCConstants(ChainId.Mainnet).RPC_WEIGHTS?.length ?? 4
 
-export function createProvider(url: string) {
-    const provider =
-        providerPool.get(url) ??
-        new MaskWallet.providers.HttpProvider(url, {
-            timeout: 20000, // ms
+export class MaskWalletProvider extends BaseProvider implements Provider {
+    private id = 0
+    private seed = Math.floor(Math.random() * WEIGHTS_LENGTH)
+    private providerPool = new Map<string, HttpProvider>()
+    private instancePool = new Map<string, Web3>()
+
+    private createWeb3Instance(provider: HttpProvider) {
+        const instance = this.instancePool.get(provider.host)
+        if (instance) return instance
+
+        const newInstance = new Web3(provider)
+        this.instancePool.set(provider.host, newInstance)
+        return newInstance
+    }
+
+    private createProviderInstance(url: string) {
+        const instance = this.providerPool.get(url)
+        if (instance) return instance
+
+        const newInstance = new Web3.providers.HttpProvider(url, {
+            timeout: 30 * 1000, // ms
             // @ts-ignore
             clientConfig: {
                 keepalive: true,
@@ -26,64 +51,63 @@ export function createProvider(url: string) {
                 onTimeout: true,
             },
         })
-    providerPool.set(url, provider)
-    return provider
-}
-// #endregion
-
-// #region web3 instances
-const instancePool = new Map<string, MaskWallet>()
-const SEED = Math.floor(Math.random() * 4)
-
-function createWeb3Instance(provider: HttpProvider) {
-    return (
-        instancePool.get(provider.host) ??
-        (() => {
-            const newInstance = new MaskWallet(provider)
-            instancePool.set(provider.host, newInstance)
-            return newInstance
-        })()
-    )
-}
-
-export function createWeb3({
-    url = '',
-    chainId = currentChainIdSettings.value,
-    privKeys = [],
-}: {
-    url?: string
-    chainId?: ChainId
-    privKeys?: string[]
-} = {}) {
-    url = url || getChainRPC(chainId, SEED)
-    const provider = createProvider(url)
-    const web3 = createWeb3Instance(provider)
-    if (privKeys.length) {
-        web3.eth.accounts.wallet.clear()
-        privKeys.forEach((k) => k && k !== '0x' && web3.eth.accounts.wallet.add(k))
+        this.providerPool.set(url, newInstance)
+        return newInstance
     }
-    return web3
-}
-// #endregion
 
-export async function requestAccounts(networkType: NetworkType) {
-    const wallets = await getWallets(ProviderType.MaskWallet)
-    return new Promise<{
-        chainId: ChainId
-        accounts: string[]
-    }>(async (resolve, reject) => {
-        try {
-            await selectAccountPrepare((accounts, chainId) => {
-                resolve({
-                    chainId,
-                    accounts,
-                })
-            })
-            await openPopupWindow(wallets.length > 0 ? PopupRoutes.SelectWallet : undefined, {
-                chainId: getChainIdFromNetworkType(networkType),
-            })
-        } catch {
-            reject(new Error('Failed to connect to Mask Network.'))
+    override async createWeb3({ keys = [], options = {} }: Web3Options = {}) {
+        const provider = await this.createProvider(options)
+        const web3 = this.createWeb3Instance(provider)
+        if (keys.length) {
+            web3.eth.accounts.wallet.clear()
+            keys.forEach((k) => k && k !== '0x' && web3.eth.accounts.wallet.add(k))
         }
-    })
+        return web3
+    }
+
+    async createProvider({ chainId, url }: ProviderOptions = {}) {
+        url = url ?? getChainRPC(chainId ?? currentChainIdSettings.value, this.seed)
+        if (!url) throw new Error('Failed to create provider.')
+        return this.createProviderInstance(url)
+    }
+
+    override async createExternalProvider(options?: ProviderOptions) {
+        const provider = await this.createProvider(options)
+        const request = <T extends unknown>(requestArguments: RequestArguments) => {
+            return new Promise<T>((resolve, reject) => {
+                const requestId = this.id++
+                provider?.send(
+                    createPayload(requestId, requestArguments.method, requestArguments.params),
+                    (error: Error | null, response?: JsonRpcResponse) => {
+                        if (error) reject(error)
+                        else resolve(response?.result as T)
+                    },
+                )
+            })
+        }
+        return createExternalProvider(request)
+    }
+
+    async requestAccounts(chainId?: ChainId) {
+        return new Promise<{
+            chainId: ChainId
+            accounts: string[]
+        }>(async (resolve, reject) => {
+            try {
+                const wallets = await getWallets(ProviderType.MaskWallet)
+
+                await selectAccountPrepare((accounts, chainId) => {
+                    resolve({
+                        chainId,
+                        accounts,
+                    })
+                })
+                await openPopupWindow(wallets.length > 0 ? PopupRoutes.SelectWallet : undefined, {
+                    chainId,
+                })
+            } catch {
+                reject(new Error('Failed to connect to Mask Network.'))
+            }
+        })
+    }
 }

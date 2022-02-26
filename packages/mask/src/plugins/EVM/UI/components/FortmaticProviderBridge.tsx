@@ -18,9 +18,10 @@ export function FortmaticProviderBridge(props: FortmaticProviderBridgeProps) {
     const onMounted = useCallback(async () => {
         if (isDashboardPage() || isPopupPage()) return
         if (providerType !== ProviderType.Fortmatic) return
-        const connected = await Services.Ethereum.connectFortmatic(
-            isFortmaticSupported(chainId) ? chainId : ChainId.Mainnet,
-        )
+        const connected = await Services.Ethereum.connect({
+            chainId: isFortmaticSupported(chainId) ? chainId : ChainId.Mainnet,
+            providerType: ProviderType.Fortmatic,
+        })
         await WalletRPC.updateAccount({
             account: connected.account,
             chainId: connected.chainId,

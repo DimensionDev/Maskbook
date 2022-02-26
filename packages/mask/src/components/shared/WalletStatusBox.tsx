@@ -144,7 +144,10 @@ export function WalletStatusBox(props: WalletStatusBox) {
                 })
                 break
             case ProviderType.Fortmatic:
-                await Services.Ethereum.disconnectFortmatic(chainId)
+                await Services.Ethereum.disconnect({
+                    chainId,
+                    providerType: ProviderType.Fortmatic,
+                })
                 break
         }
     }, [chainId, providerType, setWalletConnectDialog])

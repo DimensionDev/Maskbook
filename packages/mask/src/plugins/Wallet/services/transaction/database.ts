@@ -1,7 +1,6 @@
 import { uniqBy } from 'lodash-unified'
-import type { JsonRpcPayload } from 'web3-core-helpers'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { ChainId, EthereumTransactionConfig, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { currentChainIdSettings } from '../../settings'
 import { PluginDB } from '../../database/Plugin.db'
 
@@ -10,9 +9,8 @@ export const MAX_RECENT_TRANSACTIONS_SIZE = 20
 export interface RecentTransaction {
     at: Date
     hash: string
-    hashReplacement?: string
-    payload: JsonRpcPayload
-    payloadReplacement?: JsonRpcPayload
+    config: EthereumTransactionConfig
+    candidates: Record<string, EthereumTransactionConfig>
 }
 
 export interface RecentTransactionChunk {
@@ -29,7 +27,12 @@ function getRecordId(chainId: ChainId, address: string) {
     return `${chainId}_${formatEthereumAddress(address)}`
 }
 
-export async function addRecentTransaction(chainId: ChainId, address: string, hash: string, payload: JsonRpcPayload) {
+export async function addRecentTransaction(
+    chainId: ChainId,
+    address: string,
+    hash: string,
+    config: EthereumTransactionConfig,
+) {
     const now = new Date()
     const recordId = getRecordId(chainId, address)
     const chunk = await PluginDB.get('recent-transactions', recordId)
@@ -43,7 +46,10 @@ export async function addRecentTransaction(chainId: ChainId, address: string, ha
                 {
                     at: now,
                     hash,
-                    payload,
+                    config,
+                    candidates: {
+                        [hash]: config,
+                    },
                 },
                 // place old transactions last
                 ...(chunk?.transactions ?? []),
@@ -59,19 +65,19 @@ export async function addRecentTransaction(chainId: ChainId, address: string, ha
 export async function replaceRecentTransaction(
     chainId: ChainId,
     address: string,
-    oldHash: string,
+    hash: string,
     newHash: string,
-    newPayload?: JsonRpcPayload,
+    newConfig?: EthereumTransactionConfig,
 ) {
     const now = new Date()
     const recordId = getRecordId(chainId, address)
     const chunk = await PluginDB.get('recent-transactions', recordId)
-    const transaction = chunk?.transactions.find((x) => x.hash === oldHash)
+    const transaction = chunk?.transactions.find((x) => x.hash === hash)
     if (!transaction) throw new Error('Failed to find the old transaction.')
-    if (transaction.hash === newHash) return
-    transaction.hashReplacement = newHash
-    if (newPayload) {
-        transaction.payloadReplacement = newPayload
+    if (transaction.candidates?.[newHash]) return
+    transaction.candidates = {
+        ...transaction.candidates,
+        [newHash]: newConfig ?? transaction.candidates[hash],
     }
     await PluginDB.add({
         type: 'recent-transactions',

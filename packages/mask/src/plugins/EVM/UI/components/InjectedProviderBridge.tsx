@@ -20,7 +20,9 @@ export function InjectedProviderBridge(props: InjectedProviderBridgeProps) {
     const onMounted = useCallback(async () => {
         if (isDashboardPage() || isPopupPage()) return
         if (providerType !== ProviderType.Coin98) return
-        const connected = await Services.Ethereum.connectInjected()
+        const connected = await Services.Ethereum.connect({
+            providerType: ProviderType.Coin98,
+        })
         await WalletRPC.updateAccount({
             account: connected.account,
             chainId: connected.chainId,
@@ -52,14 +54,14 @@ export function InjectedProviderBridge(props: InjectedProviderBridgeProps) {
     useEffect(() => {
         return bridgedProvider.on('accountsChanged', async (event) => {
             if (!isInjectedProvider(providerType)) return
-            Services.Ethereum.notifyInjectedEvent('accountsChanged', event, providerType)
+            await Services.Ethereum.notifyEvent(providerType, 'accountsChanged', event)
         })
     }, [providerType, bridgedProvider])
 
     useEffect(() => {
-        return bridgedProvider.on('chainChanged', (event) => {
+        return bridgedProvider.on('chainChanged', async (event) => {
             if (!isInjectedProvider(providerType)) return
-            Services.Ethereum.notifyInjectedEvent('chainChanged', event, providerType)
+            await Services.Ethereum.notifyEvent(providerType, 'chainChanged', event)
         })
     }, [providerType, bridgedProvider])
 

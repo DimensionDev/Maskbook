@@ -242,6 +242,11 @@ export declare namespace Web3Plugin {
             /** The user added non-fungible tokens. */
             nonFungibleTokens?: Subscription<NonFungibleToken[]>
         }
+        export interface AddressBook {
+            getAllAddress: (chainId: number) => Promise<string[]>
+            addAddress: (chainId: number, address: string) => Promise<void>
+            removeAddress: (chainId: number, address: string) => Promise<void>
+        }
         export interface AssetState {
             /** Get fungible assets of given account. */
             getFungibleAssets?: (
@@ -293,6 +298,16 @@ export declare namespace Web3Plugin {
                 pagination?: Pagination,
             ) => Promise<TokenList[]>
         }
+        export interface TransactionState {
+            addTransaction?: (chainId: number, id: string, tx: unknown) => Promise<void>
+            removeTransaction?: (chainId: number, id: string) => Promise<void>
+            clearTransactions?: (chainId: number, address: string) => Promise<void>
+            getTransaction?: (chainId: number, id: string) => Promise<unknown>
+            getAllTransactions?: (chainId: number, address: string) => Promise<unknown>
+            replaceTransaction?: (chainId: number, id: string, newId: string) => Promise<void>
+            cancelTransaction?: (chainId: number, id: string) => Promise<void>
+            watchTransaction?: (chainId: number, id: string) => Promise<void>
+        }
         export interface Others {
             getLatestBlockNumber?: (chainId: number) => Promise<number>
             getLatestBalance?: (chainId: number, account: string) => Promise<string>
@@ -323,11 +338,13 @@ export declare namespace Web3Plugin {
         }
         export interface Capabilities {
             Shared?: SharedState
+            AddressBook?: AddressBook
             Asset?: AssetState
             NameService?: NameServiceState
-            Token?: TokenState
             Provider?: ProviderState
+            Token?: TokenState
             TokenList?: TokenListState
+            Transaction?: TransactionState
             Utils?: Others
         }
     }

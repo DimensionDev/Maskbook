@@ -1,13 +1,12 @@
 import type { TransactionReceipt } from 'web3-core'
-import type { JsonRpcPayload } from 'web3-core-helpers'
-import type { ChainId, TransactionStatusType } from '@masknet/web3-shared-evm'
-import { getSendTransactionComputedPayload } from '../../../../extension/background-script/EthereumService'
+import { ChainId, EthereumTransactionConfig, getReceiptStatus, TransactionStatusType } from '@masknet/web3-shared-evm'
+import {
+    getSendTransactionComputedPayload,
+    watchTransaction,
+    unwatchTransaction,
+    getTransactionReceiptHijacked,
+} from '../../../../extension/background-script/EthereumService'
 import * as database from './database'
-import * as watcher from './watcher'
-import * as helpers from './helpers'
-
-export * from './progress'
-export * from './watcher'
 
 export interface RecentTransactionOptions {
     status?: TransactionStatusType
@@ -18,16 +17,20 @@ export interface RecentTransactionOptions {
 export interface RecentTransaction {
     at: Date
     hash: string
-    hashReplacement?: string
+    config: EthereumTransactionConfig
     status: TransactionStatusType
+    candidates: Record<string, EthereumTransactionConfig>
     receipt?: TransactionReceipt | null
-    payload?: JsonRpcPayload
-    payloadReplacement?: JsonRpcPayload
     computedPayload?: UnboxPromise<ReturnType<typeof getSendTransactionComputedPayload>>
 }
 
-export async function addRecentTransaction(chainId: ChainId, address: string, hash: string, payload: JsonRpcPayload) {
-    await database.addRecentTransaction(chainId, address, hash, payload)
+export async function addRecentTransaction(
+    chainId: ChainId,
+    address: string,
+    hash: string,
+    config: EthereumTransactionConfig,
+) {
+    await database.addRecentTransaction(chainId, address, hash, config)
 }
 
 export async function removeRecentTransaction(chainId: ChainId, address: string, hash: string) {
@@ -39,9 +42,9 @@ export async function replaceRecentTransaction(
     address: string,
     hash: string,
     newHash: string,
-    payload: JsonRpcPayload,
+    newConfig: EthereumTransactionConfig,
 ) {
-    await database.replaceRecentTransaction(chainId, address, hash, newHash, payload)
+    await database.replaceRecentTransaction(chainId, address, hash, newHash, newConfig)
 }
 
 export async function clearRecentTransactions(chainId: ChainId, address: string) {
@@ -65,41 +68,46 @@ export async function getRecentTransactions(
 ): Promise<RecentTransaction[]> {
     const transactions = await database.getRecentTransactions(chainId, address)
     const allSettled = await Promise.allSettled(
-        transactions.map<Promise<RecentTransaction>>(
-            async ({ at, hash, hashReplacement, payload, payloadReplacement }) => {
-                const receipt =
-                    (await watcher.getReceipt(chainId, hash)) ||
-                    (await (hashReplacement ? watcher.getReceipt(chainId, hashReplacement) : null))
+        transactions.map<Promise<RecentTransaction>>(async ({ at, hash, config, candidates }) => {
+            const tx: RecentTransaction = {
+                at,
+                hash,
+                config,
+                status: getReceiptStatus(null),
+                receipt: null,
+                candidates,
+            }
+            const pairs = Object.entries(candidates).map(([hash, config]) => ({ hash, config }))
 
-                // if it cannot found receipt, then start the watching progress
-                // in case the user just refreshed the background page
-                if (!receipt) {
-                    watcher.watchTransaction(chainId, hash, payload)
-                    if (hashReplacement && payloadReplacement)
-                        watcher.watchTransaction(chainId, hashReplacement, payloadReplacement)
+            try {
+                for await (const pair of pairs) {
+                    const receipt = await getTransactionReceiptHijacked(pair.hash)
+                    if (!receipt) continue
+
+                    tx.hash = pair.hash
+                    tx.config = pair.config
+                    tx.receipt = receipt
+                    break
                 }
-
-                const tx: RecentTransaction = {
-                    at,
-                    hash,
-                    hashReplacement,
-                    payload,
-                    payloadReplacement,
-                    status: helpers.getReceiptStatus(receipt),
-                    receipt: receipt,
+            } catch {
+                // do nothing
+            } finally {
+                if (tx.receipt) {
+                    pairs.forEach((x) => {
+                        if (x.hash !== tx.receipt?.transactionHash) unwatchTransaction(x.hash)
+                    })
+                } else {
+                    pairs.forEach((x) => watchTransaction(x.hash, x.config))
                 }
+            }
 
-                if (!options?.receipt) {
-                    delete tx.receipt
-                }
+            if (options?.receipt) delete tx.receipt
+            if (options?.computedPayload) {
+                tx.computedPayload = await getSendTransactionComputedPayload(tx.config)
+            }
 
-                if (options?.computedPayload) {
-                    tx.computedPayload = await getSendTransactionComputedPayload(payloadReplacement ?? payload)
-                }
-
-                return tx
-            },
-        ),
+            return tx
+        }),
     )
 
     // compose result

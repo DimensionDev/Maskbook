@@ -50,6 +50,7 @@ export const bridgedCoin98Provider: EthereumProvider = {
 }
 
 const bridgedCoin98 = new Map<string, Set<Function>>()
+
 /** @internal */
 export function onCoin98Event(event: string, data: unknown[]) {
     for (const f of bridgedCoin98.get(event) || []) {

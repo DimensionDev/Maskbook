@@ -54,7 +54,11 @@ function getTransactionDescription(
                         true,
                     )}`
                 case 'swapExactETHForTokens':
-                    const inputAmount = formatBalance(computedPayload._tx.value, nativeTokenDetailed?.decimals, 2)
+                    const inputAmount = formatBalance(
+                        computedPayload._tx.value as string | undefined,
+                        nativeTokenDetailed?.decimals,
+                        2,
+                    )
                     const outputAmount = formatBalance(
                         computedPayload.parameters.amountOutMin,
                         tokenDetailed?.decimals,
