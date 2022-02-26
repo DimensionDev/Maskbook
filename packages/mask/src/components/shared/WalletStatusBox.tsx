@@ -18,10 +18,10 @@ import {
     useWallet,
 } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
-import { WalletMessages } from '../../plugins/Wallet/messages'
+import { WalletMessages, WalletRPC } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
-import Services from '../../extension/service'
 import { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     content: {
@@ -130,25 +130,22 @@ export function WalletStatusBox(props: WalletStatusBox) {
     )
     // #endregion
 
-    // #region walletconnect
-    const { setDialog: setWalletConnectDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletConnectQRCodeDialogUpdated,
-    )
-    // #endregion
-
     const onDisconnect = useCallback(async () => {
         switch (providerType) {
+            case ProviderType.MaskWallet:
+            case ProviderType.MetaMask:
+            case ProviderType.Coin98:
             case ProviderType.WalletConnect:
-                setWalletConnectDialog({
-                    open: true,
-                    uri: await Services.Ethereum.createConnectionURI(),
-                })
-                break
             case ProviderType.Fortmatic:
-                await Services.Ethereum.disconnectFortmatic(chainId)
+                await EVM_RPC.disconnect({
+                    providerType,
+                })
+                await WalletRPC.resetAccount()
+                break
+            default:
                 break
         }
-    }, [chainId, providerType, setWalletConnectDialog])
+    }, [chainId, providerType])
 
     return account ? (
         <section className={classNames(classes.currentAccount, props.isDashboard ? classes.dashboardBackground : '')}>
@@ -201,21 +198,17 @@ export function WalletStatusBox(props: WalletStatusBox) {
             </div>
             {!props.disableChange && (
                 <section>
-                    {providerType === ProviderType.WalletConnect || providerType === ProviderType.Fortmatic ? (
-                        <ActionButtonPromise
-                            className={classes.actionButton}
-                            color="primary"
-                            size="small"
-                            variant="contained"
-                            init={t('wallet_status_button_disconnect')}
-                            waiting={t('wallet_status_button_disconnecting')}
-                            failed={t('failed')}
-                            complete={t('done')}
-                            executor={onDisconnect}
-                            completeIcon={<></>}
-                            failIcon={<></>}
-                        />
-                    ) : null}
+                    <ActionButtonPromise
+                        className={classes.actionButton}
+                        color="primary"
+                        size="small"
+                        variant="contained"
+                        init={t('wallet_status_button_disconnect')}
+                        waiting={t('wallet_status_button_disconnecting')}
+                        failed={t('failed')}
+                        complete={t('done')}
+                        executor={onDisconnect}
+                    />
                     <Button
                         className={classNames(classes.actionButton)}
                         variant="contained"

@@ -66,7 +66,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface TokenTableRowProps {
-    asset: Web3Plugin.Asset<Web3Plugin.FungibleToken>
+    asset: Web3Plugin.FungibleAsset
     onSwap(): void
     onSend(): void
 }
@@ -78,7 +78,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
     const { Utils } = useWeb3State()
     const networkDescriptors = useNetworkDescriptors()
     const currentPluginId = useCurrentWeb3NetworkPluginID()
-    const isOnCurrentChain = useMemo(() => currentChainId === asset.token.chainId, [asset, currentChainId])
+    const isOnCurrentChain = useMemo(() => currentChainId === asset.chainId, [asset, currentChainId])
 
     return (
         <TableRow className={classes.row}>
@@ -87,24 +87,24 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                     <Box position="relative">
                         <TokenIcon
                             classes={{ icon: classes.icon }}
-                            address={asset.token.address}
-                            name={asset.token.name}
-                            chainId={asset.token.chainId}
-                            logoURI={asset.logoURI || asset.token.logoURI}
+                            address={asset.address}
+                            name={asset.name}
+                            chainId={asset.chainId}
+                            logoURI={asset.logoURI || asset.logoURI}
                             AvatarProps={{ sx: { width: 36, height: 36 } }}
                         />
                         <Box className={classes.chainIcon}>
                             <WalletIcon
                                 size={16}
-                                networkIcon={networkDescriptors.find((x) => x.chainId === asset.token.chainId)?.icon}
+                                networkIcon={networkDescriptors.find((x) => x.chainId === asset.chainId)?.icon}
                             />
                         </Box>
                     </Box>
-                    <Typography className={classes.symbol}>{asset.token.symbol}</Typography>
+                    <Typography className={classes.symbol}>{asset.symbol}</Typography>
                 </Box>
             </TableCell>
             <TableCell className={classes.cell} align="center" variant="body">
-                <Typography>{toFixed(Utils?.formatBalance?.(asset.balance, asset.token.decimals) ?? '', 6)}</Typography>
+                <Typography>{toFixed(Utils?.formatBalance?.(asset.balance, asset.decimals) ?? '', 6)}</Typography>
             </TableCell>
             <TableCell className={classes.cell} align="center" variant="body">
                 <Typography>
@@ -133,7 +133,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                     <Tooltip
                         disableHoverListener={isOnCurrentChain}
                         disableTouchListener
-                        title={<ChangeNetworkTip chainId={asset.token.chainId} />}
+                        title={<ChangeNetworkTip chainId={asset.chainId} />}
                         placement="top"
                         classes={{ tooltip: classes.tip, arrow: classes.tipArrow }}
                         arrow>
@@ -152,9 +152,9 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                         </span>
                     </Tooltip>
                     <Tooltip
-                        disableHoverListener={isOnCurrentChain || asset.token.chainId !== ChainId.Conflux}
+                        disableHoverListener={isOnCurrentChain || asset.chainId !== ChainId.Conflux}
                         disableTouchListener
-                        title={<ChangeNetworkTip chainId={asset.token.chainId} />}
+                        title={<ChangeNetworkTip chainId={asset.chainId} />}
                         placement="top"
                         classes={{ tooltip: classes.tip, arrow: classes.tipArrow }}
                         arrow>
@@ -162,11 +162,11 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                             <Button
                                 size="small"
                                 style={
-                                    !isOnCurrentChain || asset.token.chainId === ChainId.Conflux
+                                    !isOnCurrentChain || asset.chainId === ChainId.Conflux
                                         ? { pointerEvents: 'none' }
                                         : {}
                                 }
-                                disabled={!isOnCurrentChain || asset.token.chainId === ChainId.Conflux}
+                                disabled={!isOnCurrentChain || asset.chainId === ChainId.Conflux}
                                 variant="outlined"
                                 color="secondary"
                                 onClick={onSwap}

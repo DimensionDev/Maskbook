@@ -1,11 +1,13 @@
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
+import type { Subscription } from 'use-subscription'
+import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { TypedMessage } from '@masknet/typed-message'
-import type { ScopedStorage, ProfileIdentifier, PersonaIdentifier } from '@masknet/shared-base'
+import type { ScopedStorage, ProfileIdentifier, PersonaIdentifier, PopupRoutes } from '@masknet/shared-base'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
-import type { Subscription } from 'use-subscription'
+import type { EthereumTransactionConfig } from '../../web3-providers/node_modules/@masknet/web3-shared-evm'
 
 export declare namespace Plugin {
     /**
@@ -61,15 +63,67 @@ export declare namespace Plugin {
  */
 export namespace Plugin.Shared {
     export interface SharedContext {
-        /**
-         * A lightweight K/V storage used to store some simple data.
-         */
-        createKVStorage<T extends object>(type: 'memory' | 'persistent', defaultValues: T): ScopedStorage<T>
-        /** Sign a message with persona */
-        personaSign(payload: PersonaSignRequest): Promise<PersonaSignResult>
-        /** Sign a message with wallet */
-        walletSign(message: string, address: string): Promise<string>
+        /** The selected account of Mask Wallet */
+        account: Subscription<string>
+        /** The selected chainId of Mask Wallet */
+        chainId: Subscription<number>
+        /** The selected persona */
         currentPersona: Subscription<PersonaIdentifier | undefined>
+        /** Get all wallets */
+        wallets: Subscription<Web3Plugin.Wallet[]>
+        /** Get the primary wallet */
+        walletPrimary: Subscription<Web3Plugin.Wallet | null>
+
+        /** A lightweight K/V storage used to store some simple data. */
+        createKVStorage<T extends object>(type: 'memory' | 'persistent', defaultValues: T): ScopedStorage<T>
+
+        /** Native platform type */
+        nativeType?: 'Android' | 'iOS'
+        /** Native API supported */
+        hasNativeAPI: boolean
+        /** iOS Ethereum send request */
+        nativeSend?: (payload: JsonRpcPayload) => Promise<JsonRpcResponse>
+        /** Android Ethereum send request */
+        nativeSendJsonString?: (message: string) => Promise<string>
+
+        /** Open popup window */
+        openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void>
+        /** Close popup window */
+        closePopupWindow(): Promise<void>
+
+        /** Update Mask Wallet account */
+        updateAccount(account: {
+            account?: string
+            chainId?: number
+            networkType?: string
+            providerType?: string
+        }): Promise<void>
+        /** Reset Mask Wallet account */
+        resetAccount(): Promise<void>
+        /** Prepare to select a Mask Wallet account */
+        selectAccountPrepare(callback: (accounts: string[]) => void): Promise<void>
+
+        /** Sign a message with persona */
+        personaSignMessage(payload: PersonaSignRequest): Promise<PersonaSignResult>
+
+        /** Sign transaction */
+        signTransaction(address: string, transaction: EthereumTransactionConfig): Promise<string>
+        /** Sign personal message, aka. eth.personal.sign() */
+        signPersonalMessage(address: string, message: string): Promise<string>
+        /** Sign typed data */
+        signTypedData(address: string, message: string): Promise<string>
+
+        /** Add a new wallet */
+        addWallet(id: string, wallet: Web3Plugin.Wallet): Promise<void>
+        /** Update a wallet */
+        updateWallet(id: string, wallet: Partial<Web3Plugin.Wallet>): Promise<void>
+        /** Remove a old wallet */
+        removeWallet(id: string, password?: string): Promise<void>
+
+        /** get the latest unconfirmed request */
+        shiftUnconfirmedRequest(): Promise<JsonRpcPayload | undefined>
+        /** add an unconfirmed request */
+        pushUnconfirmedRequest(payload: JsonRpcPayload): Promise<JsonRpcPayload>
     }
     export interface Definition {
         /**
@@ -233,7 +287,7 @@ export namespace Plugin.SNSAdaptor {
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
         Web3UI?: Web3Plugin.UI.UI
         /** This is the context of the currently chosen network. */
-        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities
+        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities<number, string, string, string, object>
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
         CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be use when there is known badges. */
@@ -394,7 +448,7 @@ export namespace Plugin.Dashboard {
          */
         Web3UI?: Web3Plugin.UI.UI
         /** This is the context of the currently chosen network. */
-        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities
+        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities<number, string, string, object, object>
         /** Plugin DO NOT need to define this. This will be auto set by the plugin host. */
         __general_ui__?: GeneralUI.DefinitionDeferred
     }
@@ -695,6 +749,18 @@ export enum PluginId {
     GoPlusSecurity = 'io.gopluslabs.security',
     CrossChainBridge = 'io.mask.cross-chain-bridge',
     // @masknet/scripts: insert-here
+}
+
+export interface Pagination {
+    /** The item size of each page. */
+    size?: number
+    /** The page index. */
+    page?: number
+}
+
+export interface Pageable<T> {
+    hasNextPage: boolean
+    data: T[]
 }
 /**
  * This namespace is not related to the plugin authors

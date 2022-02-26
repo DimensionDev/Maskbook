@@ -1,17 +1,18 @@
 import * as bip39 from 'bip39'
 import { first, last } from 'lodash-unified'
 import { toHex } from 'web3-utils'
-import type { TransactionConfig } from 'web3-core'
+import { toBuffer } from 'ethereumjs-util'
+import { personalSign, signTypedData as signTypedData_, SignTypedDataVersion } from '@metamask/eth-sig-util'
 import { encodeText } from '@dimensiondev/kit'
-import { formatEthereumAddress, isSameAddress, ProviderType } from '@masknet/web3-shared-evm'
+import { EthereumTransactionConfig, formatEthereumAddress, isSameAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { MAX_DERIVE_COUNT, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
 import * as sdk from './maskwallet'
 import * as database from './database'
 import * as password from './password'
-import * as EthereumServices from '../../../../extension/background-script/EthereumService'
 import { hasNativeAPI } from '../../../../../shared/native-rpc'
 import type { WalletRecord } from './type'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 function bumpDerivationPath(path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`) {
     const splitted = path.split('/')
@@ -20,21 +21,8 @@ function bumpDerivationPath(path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`) {
     return [...splitted.slice(0, -1), index + 1].join('/')
 }
 
-// token db
-export {
-    getToken,
-    getTokens,
-    getTokensCount,
-    getTokensPaged,
-    hasToken,
-    addToken,
-    removeToken,
-    trustToken,
-    blockToken,
-} from './database/token'
-
 // wallet db
-export { hasWallet, updateWallet, updateWalletToken } from './database/wallet'
+export { hasWallet, updateWallet } from './database/wallet'
 
 // password
 export { setPassword, hasPassword, verifyPassword, changePassword, validatePassword, clearPassword } from './password'
@@ -61,7 +49,7 @@ export async function getWallets(providerType?: ProviderType): Promise<
         if (providerType && providerType !== ProviderType.MaskWallet) return []
 
         // read wallet from rpc
-        const accounts = await EthereumServices.getAccounts()
+        const accounts = await EVM_RPC.getAccounts()
         const address = first(accounts) ?? ''
         if (!address) return []
 
@@ -74,12 +62,6 @@ export async function getWallets(providerType?: ProviderType): Promise<
                 address: address_,
                 createdAt: now,
                 updatedAt: now,
-                erc20_token_blacklist: new Set(),
-                erc20_token_whitelist: new Set(),
-                erc721_token_whitelist: new Set(),
-                erc721_token_blacklist: new Set(),
-                erc1155_token_whitelist: new Set(),
-                erc1155_token_blacklist: new Set(),
                 configurable: false,
                 hasStoredKeyInfo: false,
                 hasDerivationPath: false,
@@ -136,16 +118,10 @@ export async function getDerivableAccounts(mnemonic: string, page: number, pageS
     return accounts
 }
 
-export async function signTransaction(
-    address: string,
-    config: TransactionConfig & {
-        maxFeePerGas?: string
-        maxPriorityFeePerGas?: string
-    },
-) {
+export async function signTransaction(address: string, config: EthereumTransactionConfig) {
     const password_ = await password.INTERNAL_getPasswordRequired()
     const wallet = await database.getWalletRequired(address)
-    return sdk.signTransaction({
+    const signed = await sdk.signTransaction({
         password: password_,
         coin: api.Coin.Ethereum,
         storedKeyData: wallet.storedKeyInfo?.data,
@@ -160,6 +136,24 @@ export async function signTransaction(
             to_address: config.to,
             payload: config.data ? encodeText(config.data) : new Uint8Array(),
         },
+    })
+
+    if (!signed?.sign_output?.encoded) throw new Error('Failed to sign transaction.')
+    return `0x${Buffer.from(signed.sign_output.encoded).toString('hex')}`
+}
+
+export async function signPersonalMessage(address: string, message: string, password?: string) {
+    return personalSign({
+        privateKey: toBuffer(`0x${await exportPrivateKey(address, password)}`),
+        data: message,
+    })
+}
+
+export async function signTypedData(address: string, data: string, password?: string) {
+    return signTypedData_({
+        privateKey: toBuffer(`0x${await exportPrivateKey(address, password)}`),
+        data: JSON.parse(data),
+        version: SignTypedDataVersion.V4,
     })
 }
 

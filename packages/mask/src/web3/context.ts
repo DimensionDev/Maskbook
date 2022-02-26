@@ -16,7 +16,7 @@ import {
     isSameAddress,
 } from '@masknet/web3-shared-evm'
 import { isPopupPage } from '@masknet/shared-base'
-import { bridgedCoin98Provider, bridgedEthereumProvider } from '@masknet/injected-script'
+import { injectedCoin98Provider, injectedEthereumProvider } from '@masknet/injected-script'
 import {
     currentAccountSettings,
     currentNetworkSettings,
@@ -41,7 +41,7 @@ import CryptoPunks from '@masknet/web3-contracts/abis/CryptoPunks.json'
 
 const PUNK_CONTRACT_ADDRESS = '0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb'
 async function getTokenOwner(address: string, tokenId: string) {
-    const web3 = createWeb3(Services.Ethereum.request, () => ({
+    const web3 = createWeb3(EVM_RPC.request, () => ({
         chainId: ChainId.Mainnet,
     }))
     if (isSameAddress(address, PUNK_CONTRACT_ADDRESS)) {
@@ -74,11 +74,11 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
                 if (!isInjectedProvider(providerType)) return account
 
                 try {
-                    const bridgedProvider =
-                        providerType === ProviderType.Coin98 ? bridgedCoin98Provider : bridgedEthereumProvider
+                    const injectedProvider =
+                        providerType === ProviderType.Coin98 ? injectedCoin98Provider : injectedEthereumProvider
                     const injectedKey = resolveProviderInjectedKey(providerType)
                     if (!injectedKey) return ''
-                    const propertyValue = await bridgedProvider.getProperty(injectedKey)
+                    const propertyValue = await injectedProvider.getProperty(injectedKey)
                     if (propertyValue === true) return account
                     return ''
                 } catch (error) {
@@ -126,7 +126,7 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
         trustToken: WalletRPC.trustToken,
         blockToken: WalletRPC.blockToken,
 
-        request: Services.Ethereum.request,
+        request: EVM_RPC.request,
         getSendOverrides: () =>
             isMask
                 ? {
@@ -164,7 +164,7 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
             return addressNames
         },
         getTransactionList: WalletRPC.getTransactionList,
-        fetchERC20TokensFromTokenLists: TokenList.fetchERC20TokensFromTokenLists,
+        fetchERC20TokensFromTokenLists: TokenList.fetchFungibleTokensFromTokenLists,
         providerSocket: getProxyWebsocketInstance((info) => WalletMessages.events.socketMessageUpdated.sendToAll(info)),
     }
 }

@@ -113,7 +113,7 @@ export const ActivityListItem = memo<ActivityListItemProps>(
 
                     {transaction.status === TransactionStatusType.NOT_DEPEND ? (
                         <Box display="flex" mt={1}>
-                            {!transaction.payloadReplacement ? (
+                            {Object.keys(transaction.candidates).length === 1 ? (
                                 <Button className={classes.button} variant="contained" onClick={onSpeedUpClick}>
                                     {t('speed_up')}
                                 </Button>

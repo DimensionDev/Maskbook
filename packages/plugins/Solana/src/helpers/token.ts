@@ -25,7 +25,7 @@ export function createFungibleAsset(
     balance: string,
     logoURI?: string,
     price?: { [key in CurrencyType]?: string },
-): Web3Plugin.Asset {
+): Web3Plugin.FungibleAsset {
     return {
         id: token.address,
         chainId: token.chainId,

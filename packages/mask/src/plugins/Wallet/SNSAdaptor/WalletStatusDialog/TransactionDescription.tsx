@@ -1,23 +1,21 @@
-import type { TransactionReceipt } from 'web3-core'
 import { first, last } from 'lodash-unified'
 import {
     ChainId,
     useNativeTokenDetailed,
     EthereumRpcType,
-    useChainId,
     formatBalance,
     NativeTokenDetailed,
     ERC20TokenDetailed,
     FungibleTokenDetailed,
     useERC20TokenDetailed,
 } from '@masknet/web3-shared-evm'
-import { pow10 } from '@masknet/web3-shared-base'
+import { scale10 } from '@masknet/web3-shared-base'
 import { getContractMethodDescription } from './contractMethodDescription'
-import type { ComputedPayload } from '../../../../extension/background-script/EthereumServices/rpc'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra/web3'
 
 function getTokenAmountDescription(amount = '0', tokenDetailed?: FungibleTokenDetailed, negative?: boolean) {
     const symbol = negative ? '- ' : ''
-    const value = pow10(9 + (tokenDetailed?.decimals ?? 18)).isGreaterThanOrEqualTo(amount)
+    const value = scale10(1, 9 + (tokenDetailed?.decimals ?? 18)).isGreaterThanOrEqualTo(amount)
         ? formatBalance(amount, tokenDetailed?.decimals ?? 0, 4)
         : 'infinite'
     const token = tokenDetailed?.symbol?.trim()
@@ -54,7 +52,11 @@ function getTransactionDescription(
                         true,
                     )}`
                 case 'swapExactETHForTokens':
-                    const inputAmount = formatBalance(computedPayload._tx.value, nativeTokenDetailed?.decimals, 2)
+                    const inputAmount = formatBalance(
+                        computedPayload._tx.value as string | undefined,
+                        nativeTokenDetailed?.decimals,
+                        2,
+                    )
                     const outputAmount = formatBalance(
                         computedPayload.parameters!.amountOutMin,
                         tokenDetailed?.decimals,
@@ -95,7 +97,7 @@ function getTransactionDescription(
                                       nativeTokenDetailed,
                                       true,
                                   )
-                                : ''
+                                : '-'
                         }`
                     )
             }
@@ -108,18 +110,17 @@ function getTransactionDescription(
         case EthereumRpcType.CANCEL:
             return 'Cancel Transaction'
         default:
-            return
+            return '-'
     }
 }
 
 export interface RecentTransactionDescriptionProps {
     hash: string
-    receipt?: TransactionReceipt | null
     computedPayload?: ComputedPayload | null
 }
 
 export function RecentTransactionDescription(props: RecentTransactionDescriptionProps) {
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { hash, computedPayload } = props
     const { loading: getNativeTokenLoading, value: nativeTokenDetailed } = useNativeTokenDetailed()
     let inputTokenAddress: string | undefined = ''
@@ -154,14 +155,16 @@ export function RecentTransactionDescription(props: RecentTransactionDescription
 
     const { loading: getERC20TokenLoading, value: tokenDetailed } = useERC20TokenDetailed(tokenAddress)
 
-    return !getNativeTokenLoading && !getERC20TokenLoading && !getInputERC20TokenLoading ? (
+    return (
         <span>
-            {getTransactionDescription(
-                chainId,
-                inputTokenAddress ? inputTokenDetailed : nativeTokenDetailed,
-                tokenDetailed,
-                computedPayload,
-            ) ?? hash}
+            {!getNativeTokenLoading && !getERC20TokenLoading && !getInputERC20TokenLoading
+                ? getTransactionDescription(
+                      chainId,
+                      inputTokenAddress ? inputTokenDetailed : nativeTokenDetailed,
+                      tokenDetailed,
+                      computedPayload,
+                  ) ?? hash
+                : '-'}
         </span>
-    ) : null
+    )
 }

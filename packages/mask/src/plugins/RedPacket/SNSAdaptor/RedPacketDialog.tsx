@@ -105,10 +105,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     payload.password = prompt('Please enter the password of the lucky drop:', '') ?? ''
                 } else if (payload.contract_version > 1 && payload.contract_version < 4) {
                     // just sign out the password if it is lost.
-                    payload.password = await Services.Ethereum.personalSign(
-                        Web3Utils.sha3(payload.sender.message) ?? '',
-                        account,
-                    )
+                    payload.password = await EVM_RPC.personalSign(Web3Utils.sha3(payload.sender.message) ?? '', account)
                     payload.password = payload.password!.slice(2)
                 }
             }

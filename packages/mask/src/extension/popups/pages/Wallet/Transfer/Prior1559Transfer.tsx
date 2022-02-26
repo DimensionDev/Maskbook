@@ -33,8 +33,8 @@ import { useNavigate } from 'react-router-dom'
 import { LoadingButton } from '@mui/lab'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { toHex } from 'web3-utils'
-import Services from '../../../../service'
 import { TransferAddressError } from '../type'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 const useStyles = makeStyles()({
     container: {
@@ -221,7 +221,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
             })
             return
         }
-        const result = await Services.Ethereum.getCode(address)
+        const result = await EVM_RPC.getCode(address)
 
         if (result !== '0x') {
             setAddressTip({

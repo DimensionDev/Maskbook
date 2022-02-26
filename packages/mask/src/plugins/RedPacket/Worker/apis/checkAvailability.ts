@@ -9,7 +9,7 @@ const interFace = new Interface(REDPACKET_ABI)
 // red-packet contract readonly method, read it no matter on whatever chains you are.
 export async function checkAvailability(pid: string, from: string, to: string, chainId: ChainId) {
     const callData = interFace.encodeFunctionData('check_availability', [pid])
-    const data = await Services.Ethereum.call(
+    const data = await EVM_RPC.call(
         {
             to,
             from,

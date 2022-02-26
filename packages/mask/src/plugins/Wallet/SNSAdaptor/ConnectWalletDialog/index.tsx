@@ -16,7 +16,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import { WalletMessages, WalletRPC } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
-import Services from '../../../../extension/service'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -43,13 +43,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     )
     // #endregion
 
-    // #region walletconnect
-    const { setDialog: setWalletConnectDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletConnectQRCodeDialogUpdated,
-    )
-    // #endregion
-
-    const connectTo = useCallback(async () => {
+    const connectTo = useCallback<() => Promise<true>>(async () => {
         if (!networkType) throw new Error('Unknown network type.')
         if (!providerType) throw new Error('Unknown provider type.')
 
@@ -60,37 +54,28 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
 
         // a short time loading makes the user fells better
         await delay(1000)
+
+        const overrides = {
+            chainId: expectedChainId,
+            providerType,
+        }
+
+        // try to read the currently select chain id and account from the provider
         let account: string | undefined
         let chainId: ChainId | undefined
 
         switch (providerType) {
             case ProviderType.MaskWallet:
-                ;({ account, chainId } = await Services.Ethereum.connectMaskWallet(networkType))
-                break
             case ProviderType.MetaMask:
-                ;({ account, chainId } = await Services.Ethereum.connectMetaMask())
-                break
             case ProviderType.WalletConnect:
-                // create wallet connect QR code URI
-                const uri = await Services.Ethereum.createConnectionURI()
-                if (!uri) throw new Error('Failed to create connection URI.')
-
-                // open the QR code dialog
-                setWalletConnectDialog({
-                    open: true,
-                    uri,
-                })
-
-                // wait for walletconnect to be connected
-                ;({ account, chainId } = await Services.Ethereum.connectWalletConnect())
-                break
             case ProviderType.Coin98:
             case ProviderType.WalletLink:
             case ProviderType.MathWallet:
-                ;({ account, chainId } = await Services.Ethereum.connectInjected())
-                break
             case ProviderType.Fortmatic:
-                ;({ account, chainId } = await Services.Ethereum.connectFortmatic(expectedChainId))
+                ;({ account, chainId } = await EVM_RPC.connect({
+                    chainId: expectedChainId,
+                    providerType,
+                }))
                 break
             case ProviderType.CustomNetwork:
                 throw new Error('To be implemented.')
@@ -102,31 +87,32 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
         // connection failed
         if (!account || !networkType) throw new Error(`Failed to connect to ${resolveProviderName(providerType)}.`)
 
-        // switch to the expected chain
+        // switch to the expected chain automatically
         if (chainId !== expectedChainId) {
             try {
-                const overrides = {
-                    chainId: expectedChainId,
-                    providerType,
-                }
+                const switchable =
+                    // the coin98 wallet cannot handle add/switch RPC provider correctly
+                    // it will always add a new RPC provider even if the network exists
+                    providerType !== ProviderType.Coin98 &&
+                    // to switch chain with walletconnect is not implemented widely
+                    providerType !== ProviderType.WalletConnect
 
-                // the coin98 wallet cannot handle add/switch RPC provider correctly
-                // it will always add a new RPC provider even if the network exists
-                if (providerType !== ProviderType.Coin98) {
+                if (switchable) {
                     await Promise.race([
                         (async () => {
                             await delay(30 /* seconds */ * 1000 /* milliseconds */)
                             throw new Error('Timeout!')
                         })(),
                         networkType === NetworkType.Ethereum
-                            ? Services.Ethereum.switchEthereumChain(ChainId.Mainnet, overrides)
-                            : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account, overrides),
+                            ? EVM_RPC.switchEthereumChain(ChainId.Mainnet, overrides)
+                            : EVM_RPC.addEthereumChain(chainDetailedCAIP, account, overrides),
                     ])
                 }
 
                 // recheck
-                const chainIdHex = await Services.Ethereum.getChainId(overrides)
-                if (Number.parseInt(chainIdHex, 16) !== expectedChainId) throw new Error('Failed to switch chain.')
+                const actualChainId = Number.parseInt(await EVM_RPC.getChainId(overrides), 16)
+                if (actualChainId !== expectedChainId)
+                    throw new Error('Failed to switch chain, please try again later.')
             } catch {
                 throw new Error(`Make sure your wallet is on the ${resolveNetworkName(networkType)} network.`)
             }
@@ -146,8 +132,10 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
         if (!open) return true
 
         await connectTo()
-        // sync settings
+
+        // delay for syncing settings
         await delay(1000)
+
         setConnectWalletDialog({
             open: false,
             result: true,

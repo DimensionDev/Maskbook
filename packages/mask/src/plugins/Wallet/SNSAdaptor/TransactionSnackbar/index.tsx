@@ -4,16 +4,16 @@ import LaunchIcon from '@mui/icons-material/Launch'
 import type { TransactionReceipt } from 'web3-core'
 import {
     createLookupTableResolver,
+    getPayloadConfig,
     resolveTransactionLinkOnExplorer,
-    TransactionState,
     TransactionStateType,
-    useChainId,
 } from '@masknet/web3-shared-evm'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 import { makeStyles, ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
 import { WalletMessages } from '../../messages'
 import { RecentTransactionDescription } from '../WalletStatusDialog/TransactionDescription'
-import Services from '../../../../extension/service'
 import { useI18N } from '../../../../utils'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 const useStyles = makeStyles()({
     link: {
@@ -23,7 +23,7 @@ const useStyles = makeStyles()({
 })
 
 export function TransactionSnackbar() {
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { classes } = useStyles()
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()
     const { t } = useI18N()
@@ -77,14 +77,8 @@ export function TransactionSnackbar() {
         [showSnackbar, closeSnackbar],
     )
 
-    const getTitle = useCallback((state: TransactionState, payload: any, hash?: string) => {
-        return (
-            <RecentTransactionDescription
-                hash={hash ?? ''}
-                computedPayload={payload}
-                receipt={(state as { receipt: TransactionReceipt }).receipt}
-            />
-        )
+    const getTitle = useCallback((payload: any, hash?: string) => {
+        return <RecentTransactionDescription hash={hash ?? ''} computedPayload={payload} />
     }, [])
 
     const getFullMessage = useCallback(
@@ -105,7 +99,7 @@ export function TransactionSnackbar() {
             if (location.href.includes('popups.html')) return
             if (progress.state.type === TransactionStateType.UNKNOWN) return
 
-            const payload = await Services.Ethereum.getSendTransactionComputedPayload(progress.payload)
+            const payload = await EVM_RPC.getSendTransactionComputedPayload(getPayloadConfig(progress.payload))
             const config = resolveSnackbarConfig(progress.state.type)
             const hash =
                 (progress.state as { hash?: string }).hash ??
@@ -120,7 +114,7 @@ export function TransactionSnackbar() {
                 if (progress.state.type === TransactionStateType.CONFIRMED) {
                     showSingletonSnackbar(t('plugin_wallet_snackbar_swap_successful'), {
                         ...config,
-                        ...{ message: getFullMessage(getTitle(progress.state, payload, hash), hash) },
+                        ...{ message: getFullMessage(getTitle(payload, hash), hash) },
                     })
                     return
                 }
@@ -134,7 +128,7 @@ export function TransactionSnackbar() {
                 }
             }
 
-            showSingletonSnackbar(getTitle(progress.state, payload, hash), {
+            showSingletonSnackbar(getTitle(payload, hash), {
                 ...config,
                 ...{ message: getFullMessage(config.message, hash) },
             } as ShowSnackbarOptions)

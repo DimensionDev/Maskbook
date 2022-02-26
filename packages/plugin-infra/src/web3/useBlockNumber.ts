@@ -3,12 +3,12 @@ import { useChainId, useWeb3State } from '.'
 import type { NetworkPluginID } from '../web3-types'
 
 export function useBlockNumber(expectedChainId?: number, pluginID?: NetworkPluginID) {
-    const { Utils } = useWeb3State()
+    const { Protocol } = useWeb3State(pluginID)
     const defaultChainId = useChainId(pluginID)
 
     const chainId = expectedChainId ?? defaultChainId
 
     return useAsyncRetry(async () => {
-        return Utils?.getLatestBlockNumber?.(chainId)
-    }, [Utils, chainId])
+        return Protocol?.getLatestBlockNumber?.(chainId)
+    }, [Protocol?.getLatestBlockNumber, chainId])
 }

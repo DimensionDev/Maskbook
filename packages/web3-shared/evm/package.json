@@ -10,13 +10,17 @@
   },
   "sideEffects": false,
   "dependencies": {
+    "@dimensiondev/holoflows-kit": "^0.9.0-20210902104757-7c3d0d0",
     "@ensdomains/address-encoder": "^0.2.6",
     "@masknet/shared-base": "workspace:*",
+    "@masknet/plugin-infra": "workspace:*",
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-contracts": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
     "@types/ethereum-blockies": "^0.1.0",
     "@types/punycode": "^2.1.0",
+    "@walletconnect/client": "^1.7.5",
+    "@walletconnect/qrcode-modal": "^1.7.5",
     "bignumber.js": "9.0.2",
     "ethereum-blockies": "^0.1.1",
     "fortmatic": "^2.2.1",
@@ -33,6 +37,7 @@
     "web3-utils": "1.7.3"
   },
   "devDependencies": {
+    "@masknet/injected-script": "*",
     "@types/use-subscription": "^1.0.0"
   }
 }

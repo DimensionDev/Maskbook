@@ -1,5 +1,4 @@
-import { bridgedSolanaProvider } from '@masknet/injected-script'
-import { getStorage } from '../storage'
+import { injectedSolanaProvider } from '@masknet/injected-script'
 import { hexToBase58 } from '../utils'
 
 type BNLike = {
@@ -21,11 +20,11 @@ export async function storeConnection(pubKey: string | BNLike, chainId?: number)
     }
 }
 export async function connectWallet(init = false) {
-    const rsp = await bridgedSolanaProvider.connect({ onlyIfTrusted: init })
+    const rsp = await injectedSolanaProvider.connect({ onlyIfTrusted: init })
     if (rsp?.publicKey) {
         await storeConnection(rsp.publicKey)
     }
-    const off = bridgedSolanaProvider.on('disconnect', async () => {
+    const off = injectedSolanaProvider.on('disconnect', async () => {
         await clearConnection()
         off()
     })
@@ -33,7 +32,7 @@ export async function connectWallet(init = false) {
 }
 
 export async function watchAccount() {
-    bridgedSolanaProvider.on('accountChanged', async (publicKey) => {
+    injectedSolanaProvider.on('accountChanged', async (publicKey) => {
         if (publicKey) {
             await storeConnection(publicKey as string)
         } else {

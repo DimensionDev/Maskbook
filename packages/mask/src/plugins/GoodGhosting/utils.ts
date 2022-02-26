@@ -8,13 +8,14 @@ import type {
     PlayerStandings,
     TimelineEvent,
 } from './types'
+import BigNumber from 'bignumber.js'
 import addSeconds from 'date-fns/addSeconds'
 import differenceInDays from 'date-fns/differenceInDays'
 import formatDuration from 'date-fns/formatDuration'
 import isBefore from 'date-fns/isBefore'
-import { CurrencyType, TransactionStateType } from '@masknet/web3-shared-evm'
-import BigNumber from 'bignumber.js'
+import { TransactionStateType } from '@masknet/web3-shared-evm'
 import { isZero, multipliedBy, ZERO } from '@masknet/web3-shared-base'
+import { CurrencyType } from '@masknet/plugin-infra'
 
 export enum PlayerStatus {
     Winning = 'winning',

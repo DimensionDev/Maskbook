@@ -22,7 +22,7 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { PluginCollectibleRPC } from '../messages'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { CheckoutOrder } from './CheckoutOrder'
-import type { useAsset } from '../../EVM/hooks/useAsset'
+import type { useAsset } from '@masknet/plugin-evm/src/hooks'
 import type { useAssetOrder } from '../hooks/useAssetOrder'
 import type { Coin } from '../../Trader/types'
 import { isGreaterThan } from '@masknet/web3-shared-base'

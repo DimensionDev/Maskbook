@@ -1,13 +1,8 @@
-import type { Transaction as Web3Transaction } from 'web3-core'
 import type RSS3 from 'rss3-next'
-import type {
-    ChainId,
-    ERC20TokenDetailed,
-    ERC721ContractDetailed,
-    ERC721TokenDetailed,
-    NativeTokenDetailed,
-} from '@masknet/web3-shared-evm'
-import type { CurrencyType } from '@masknet/plugin-infra/web3'
+import type { Transaction as Web3Transaction } from 'web3-core'
+import type { CurrencyType, Pageable, Web3Plugin } from '@masknet/plugin-infra/web3'
+import type { api } from '@dimensiondev/mask-wallet-core/proto'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import type { Result } from 'ts-results'
 import type { NextIDAction, NextIDStoragePayload, NextIDPayload, NextIDPlatform } from '@masknet/shared-base'
 
@@ -90,210 +85,72 @@ export namespace RSS3BaseAPI {
 }
 
 export namespace PriceAPI {
-    export interface CryptoPrice {
-        [token: string]: {
-            [key in CurrencyType]?: string
-        }
-    }
-
     export interface Provider {
-        getTokenPrice(
-            tokenId: string,
-            currency: CurrencyType,
-        ): Promise<{
-            [key in CurrencyType]?: string
-        }>
-        getTokensPrice(tokenIds: string[], currency: CurrencyType): Promise<CryptoPrice>
+        getTokenPrice(tokenId: string, currency: CurrencyType): Promise<Web3Plugin.CryptoPrices['']>
+        getTokensPrice(tokenIds: string[], currency: CurrencyType): Promise<Web3Plugin.CryptoPrices>
+    }
+}
+
+export namespace HistoryAPI {
+    export interface Provider {
+        getTransactions(chainId: number, address: string): Promise<Pageable<Web3Plugin.Transaction>>
+    }
+}
+
+export namespace GasPriceAPI {
+    export interface Provider {
+        getGasPrice(chainId: number): Promise<Web3Plugin.GasPrice>
+    }
+}
+
+export namespace FungibleTokenAPI {
+    export interface Provider {
+        getAssets(chainId: number, address: string): Promise<Pageable<Web3Plugin.FungibleAsset>>
     }
 }
 
 export namespace NonFungibleTokenAPI {
-    export enum OrderSide {
-        Buy = 0,
-        Sell = 1,
-    }
-    export interface AssetOwner {
-        address: string
-        profile_img_url?: string
-        user?: {
-            username: string
-        }
-        link: string
-    }
-
-    export interface AssetTrait {
-        trait_type: string
-        value: string
-    }
-
-    export interface AssetToken {
-        image_url?: string
-        eth_price?: string
-        usd_price?: string
-        name: string
-        symbol: string
-        decimals: number
-        address: string
-    }
-
-    export interface AssetOrder {
-        created_time?: string
-        current_price?: string
-        current_bounty?: string
-        maker_account?: AssetOwner
-        taker_account?: AssetOwner
-        payment_token?: string
-        payment_token_contract?: AssetToken
-        fee_recipient_account?: AssetToken
-        cancelled_or_finalized?: boolean
-        marked_invalid?: boolean
-        approved_on_chain: boolean
-        listing_time: number
-        side: number
-        quantity: string
-        expiration_time: number
-        order_hash: string
-    }
-
-    export interface AssetCollection {
-        name: string
-        slug: string
-        editors: string[]
-        hidden: boolean
-        featured: boolean
-        created_date: string
-        description: string
-        image_url: string
-        largeImage_url: string
-        featured_image_url: string
-        stats: object
-        display_data: object
-        payment_tokens: AssetToken[]
-        payout_address?: string
-        trait_stats: AssetTrait
-        external_link?: string
-        wiki_link?: string
-        safelist_request_status: string
-    }
-    export interface AssetEvent {
-        event_type: string
-        event_timestamp: number
-        auction_type: string
-        total_price: string
-        payment_token: {
-            decimals: number
-        }
-    }
-
-    export interface Asset {
-        is_verified: boolean
-        collection?: AssetCollection
-        is_auction: boolean
-        image_url: string
-        asset_contract: { name: string; description: string; schemaName: string } | null
-        current_price: number | null
-        current_symbol: string
-        owner: AssetOwner | null
-        creator: AssetOwner | null
-        token_id: string
-        token_address: string
-        traits: AssetTrait[]
-        safelist_request_status: string
-        description: string
-        name: string
-        collection_name: string
-        animation_url?: string
-        end_time: Date | null
-        order_payment_tokens: (ERC20TokenDetailed | NativeTokenDetailed)[]
-        offer_payment_tokens: (ERC20TokenDetailed | NativeTokenDetailed)[]
-        slug: string | null
-        desktopOrder?: AssetOrder
-        top_ownerships: {
-            owner: AssetOwner
-        }[]
-        last_sale: AssetEvent | null
-        response_: any
-    }
-
-    export interface History {
-        id: string
-        accountPair: {
-            from?: {
-                username?: string
-                address?: string
-                imageUrl?: string
-                link: string
-            }
-            to?: {
-                username?: string
-                address?: string
-                imageUrl?: string
-                link: string
-            }
-        }
-        price?: {
-            quantity: string
-            price: string
-            asset?: {
-                id: string
-                decimals: number
-                image_url: string
-                image_original_url: string
-                image_preview_url: string
-                asset_contract: {
-                    symbol: string
-                }
-                permalink: string
-            }
-            paymentToken?: AssetToken
-        }
-
-        eventType: string
-        transactionBlockExplorerLink?: string
-        timestamp: number
-    }
-
-    export interface Collection {
-        name: string
-        image?: string
-        slug: string
-    }
-
-    export interface ContractBalance {
-        contractDetailed: ERC721ContractDetailed
-        balance?: number
-    }
-
     export interface Options {
-        chainId?: ChainId
+        chainId?: number
         page?: number
         size?: number
-        pageInfo?: { [key in string]: unknown }
-    }
-
-    export interface ProviderPageable<T> {
-        data: T[]
-        hasNextPage: boolean
-        nextPageInfo?: { [key in string]: unknown }
     }
 
     export interface Provider {
-        getContract?: (address: string, chainId: ChainId) => Promise<ERC721ContractDetailed | undefined>
-        getContractBalance?: (address: string) => Promise<ContractBalance[]>
-        getAsset?: (address: string, tokenId: string, opts?: { chainId?: ChainId }) => Promise<Asset | undefined>
-        getToken?: (address: string, tokenId: string, chainId: ChainId) => Promise<ERC721TokenDetailed | undefined>
-        getTokens?: (from: string, opts: Options) => Promise<ProviderPageable<ERC721TokenDetailed>>
-        getHistory?: (address: string, tokenId: string, opts?: Options) => Promise<History[]>
-        getListings?: (address: string, tokenId: string, opts?: Options) => Promise<AssetOrder[]>
-        getOffers?: (address: string, tokenId: string, opts?: Options) => Promise<AssetOrder[]>
+        getAsset?: (
+            address: string,
+            tokenId: string,
+            opts?: Options,
+        ) => Promise<Web3Plugin.NonFungibleAsset | undefined>
+        getAssets?: (address: string) => Promise<Web3Plugin.NonFungibleAsset[]>
+        getHistory?: (
+            address: string,
+            tokenId: string,
+            opts?: Options,
+        ) => Promise<Web3Plugin.NonFungibleAsset['events']>
+        getListings?: (
+            address: string,
+            tokenId: string,
+            opts?: Options,
+        ) => Promise<Web3Plugin.NonFungibleAsset['orders']>
+        getOffers?: (address: string, tokenId: string, opts?: Options) => Promise<Web3Plugin.NonFungibleAsset['orders']>
         getOrders?: (
             address: string,
             tokenId: string,
-            side: NonFungibleTokenAPI.OrderSide,
+            side: string,
             opts?: Options,
-        ) => Promise<AssetOrder[]>
-        getCollections?: (address: string, opts?: Options) => Promise<ProviderPageable<Collection>>
-        getAssets?: (address: string) => Promise<Asset[] | undefined>
+        ) => Promise<Web3Plugin.NonFungibleAsset['orders']>
+        getToken?: (
+            address: string,
+            tokenId: string,
+            opts?: Options,
+        ) => Promise<Web3Plugin.NonFungibleToken | undefined>
+        getTokens?: (from: string, opts?: Options) => Promise<Pageable<Web3Plugin.NonFungibleToken>>
+        getContract?: (address: string, opts?: Options) => Promise<Web3Plugin.NonFungibleToken['contract'] | undefined>
+        getCollections?: (
+            address: string,
+            opts?: Options,
+        ) => Promise<Pageable<Web3Plugin.NonFungibleToken['collection'] | undefined>>
     }
 }
 
@@ -517,22 +374,31 @@ export namespace TokenListBaseAPI {
     }
 
     export interface Provider {
-        fetchERC20TokensFromTokenLists: (urls: string[], chainId: ChainId) => Promise<ERC20TokenDetailed[]>
+        fetchFungibleTokensFromTokenLists: (chainId: number, urls: string[]) => Promise<Web3Plugin.FungibleToken[]>
     }
 }
 
 export namespace TokenPriceBaseAPI {
-    export interface PriceRecord {
-        [currency: string]: number
-    }
-
-    /** Base on response of coingecko's token price API */
     export interface CryptoPrice {
-        [token: string]: PriceRecord
+        [token: string]: {
+            [currency: string]: number
+        }
     }
 
     export interface Provider {
         getTokenPrices: (platform: string, contractAddresses: string[], currency: CurrencyType) => Promise<CryptoPrice>
         getNativeTokenPrice: (tokenIds: string[], currency: CurrencyType) => Promise<CryptoPrice>
     }
+}
+
+export namespace MaskBaseAPI {
+    export type Input = { id: number; data: api.IMWRequest }
+    export type Output = { id: number; response: api.MWResponse }
+
+    export type Request = InstanceType<typeof api.MWRequest>
+    export type Response = InstanceType<typeof api.MWResponse>
+
+    export type StoredKeyInfo = api.IStoredKeyInfo
+
+    export interface Provider {}
 }

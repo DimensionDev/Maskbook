@@ -26,8 +26,8 @@ import { isEmpty } from 'lodash-unified'
 import { useAsyncFn } from 'react-use'
 import { useContainer } from 'unstated-next'
 import { WalletContext } from '../hooks/useWalletContext'
-import Services from '../../../../service'
 import { isPositive, multipliedBy } from '@masknet/web3-shared-base'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 const useStyles = makeStyles()({
     container: {
@@ -139,9 +139,10 @@ const ReplaceTransaction = memo(() => {
     const [{ loading }, handleConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             try {
-                if (transaction?.payload) {
-                    const config = transaction.payload.params!.map((param) => ({
-                        ...param,
+                const config_ = transaction?.candidates[transaction.hash]
+                if (config_) {
+                    const config = {
+                        ...config_,
                         gas: toHex(new BigNumber(data.gas).toString()),
                         ...(is1559
                             ? {
@@ -151,18 +152,12 @@ const ReplaceTransaction = memo(() => {
                                   maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas ?? 0).toString()),
                               }
                             : { gasPrice: toHex(formatGweiToWei(data.gasPrice ?? 0).toString()) }),
-                    }))
+                    }
 
                     if (type === ReplaceType.CANCEL) {
-                        await Services.Ethereum.cancelRequest(transaction.hash, {
-                            ...transaction.payload,
-                            params: config,
-                        })
+                        await EVM_RPC.cancelRequest(transaction.hash, config)
                     } else {
-                        await Services.Ethereum.replaceRequest(transaction.hash, {
-                            ...transaction.payload,
-                            params: config,
-                        })
+                        await EVM_RPC.replaceRequest(transaction.hash, config)
                     }
 
                     navigate(-1)

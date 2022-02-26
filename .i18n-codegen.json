@@ -99,18 +99,6 @@
             }
         },
         {
-            "input": "./packages/plugins/Flow/src/locales/en-US.json",
-            "output": "./packages/plugins/Flow/src/locales/i18n_generated",
-            "parser": "i18next",
-            "generator": {
-                "type": "i18next/react-hooks",
-                "hooks": "useI18N",
-                "namespace": "com.mask.flow",
-                "trans": "Translate",
-                "sourceMap": "inline"
-            }
-        },
-        {
             "input": "./packages/plugins/FileService/src/locales/en-US.json",
             "output": "./packages/plugins/FileService/src/locales/i18n_generated",
             "parser": "i18next",
@@ -135,6 +123,18 @@
             }
         },
         {
+            "input": "./packages/plugins/EVM/src/locales/en-US.json",
+            "output": "./packages/plugins/EVM/src/locales/i18n_generated",
+            "parser": "i18next",
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useI18N",
+                "namespace": "com.mask.evm",
+                "trans": "Translate",
+                "sourceMap": "inline"
+            }
+        },
+        {
             "input": "./packages/plugins/DAO/src/locales/en-US.json",
             "output": "./packages/plugins/DAO/src/locales/i18n_generated",
             "parser": "i18next",
@@ -142,6 +142,18 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
                 "namespace": "money.juicebox",
+                "trans": "Translate",
+                "sourceMap": "inline"
+            }
+        },
+        {
+            "input": "./packages/plugins/Flow/src/locales/en-US.json",
+            "output": "./packages/plugins/Flow/src/locales/i18n_generated",
+            "parser": "i18next",
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useI18N",
+                "namespace": "com.mask.flow",
                 "trans": "Translate",
                 "sourceMap": "inline"
             }

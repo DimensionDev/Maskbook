@@ -1,17 +1,19 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../../base'
-import { setupStorage, StorageDefaultValue } from '../../storage'
-import { connectWallet, watchAccount } from '../../wallet'
-import { createWeb3State } from '../Web3State'
+import { setupWeb3State } from '../../state'
+import { setupSharedContext } from '../../context'
 import { Web3UI } from '../Web3UI'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     async init(signal, context) {
-        setupStorage(context.createKVStorage('memory', StorageDefaultValue))
-        sns.Web3State = createWeb3State(signal)
-        await connectWallet(true)
-        await watchAccount()
+        setupSharedContext(context)
+
+        // @ts-ignore
+        sns.Web3State = await setupWeb3State(context)
+
+        // await connectWallet(true)
+        // await watchAccount()
     },
     Web3UI,
 }

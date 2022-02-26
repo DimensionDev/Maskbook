@@ -7,7 +7,7 @@ export interface FungibleTokenAssetArgs extends ProducerArgBase {
 }
 
 const fungibleTokenAsset = async (
-    push: ProducerPushFunction<Web3Plugin.Asset<Web3Plugin.FungibleToken>>,
+    push: ProducerPushFunction<Web3Plugin.FungibleAsset>,
     getKeys: ProducerKeyFunction,
     args: FungibleTokenAssetArgs,
 ): Promise<void> => {
@@ -16,7 +16,7 @@ const fungibleTokenAsset = async (
     await push(data)
 }
 
-const producer: RPCMethodRegistrationValue<Web3Plugin.Asset<Web3Plugin.FungibleToken>, FungibleTokenAssetArgs> = {
+const producer: RPCMethodRegistrationValue<Web3Plugin.FungibleAsset, FungibleTokenAssetArgs> = {
     method: 'mask.fetchFungibleTokenAsset',
     producer: fungibleTokenAsset,
     distinctBy: (item) => `${item.id}_${item.chainId}`,

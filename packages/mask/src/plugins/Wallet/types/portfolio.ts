@@ -18,7 +18,7 @@ export interface TransactionPair {
     logoURI?: string
 }
 
-export type TransactionGasFee = {
+export interface TransactionGasFee {
     eth: number
     usd: number
 }

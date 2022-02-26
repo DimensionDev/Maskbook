@@ -3,7 +3,6 @@ import { base } from '@masknet/plugin-wallet'
 import { SelectNftContractDialog } from '../SNSAdaptor/SelectNftContractDialog'
 import { SelectProviderDialog } from '../SNSAdaptor/SelectProviderDialog'
 import { SelectWalletDialog } from '../SNSAdaptor/SelectWalletDialog'
-import { WalletConnectQRCodeDialog } from '../SNSAdaptor/WalletConnectQRCodeDialog'
 import { WalletStatusDialog } from '../SNSAdaptor/WalletStatusDialog'
 import { WalletRenameWalletDialog } from '../SNSAdaptor/RenameWalletDialog'
 import { TransactionDialog } from '../SNSAdaptor/TransactionDialog'
@@ -25,7 +24,6 @@ const dashboard: Plugin.Dashboard.Definition = {
                 <SelectNftContractDialog />
                 <WalletStatusDialog isDashboard />
                 <ConnectWalletDialog />
-                <WalletConnectQRCodeDialog />
                 <WalletRenameWalletDialog />
                 <WalletRiskWarningDialog />
                 <RestoreLegacyWalletDialog />

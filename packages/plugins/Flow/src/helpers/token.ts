@@ -8,33 +8,32 @@ export function createFungibleToken(
     name: string,
     symbol: string,
     decimals: number,
+    logoURI?: string,
 ): Web3Plugin.FungibleToken {
     return {
         id: address,
         chainId,
         type: TokenType.Fungible,
+        subType: TokenType.Fungible,
         address,
         name,
         symbol,
         decimals,
+        logoURI,
     }
 }
 
 export function createFungibleAsset(
     token: Web3Plugin.FungibleToken,
     balance: string,
-    logoURI?: string,
     price?: { [key in CurrencyType]?: string },
-): Web3Plugin.Asset {
+): Web3Plugin.FungibleAsset {
     return {
-        id: token.address,
-        chainId: token.chainId,
+        ...token,
         balance: leftShift(balance, 8).toFixed(),
-        token,
-        logoURI,
+        price,
         value: {
             [CurrencyType.USD]: multipliedBy(price?.usd ?? 0, leftShift(balance, 8)).toFixed(),
         },
-        price,
     }
 }

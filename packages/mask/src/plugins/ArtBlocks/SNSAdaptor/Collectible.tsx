@@ -66,7 +66,7 @@ export function Collectible(props: CollectibleProps) {
 
     if (loading) return <Typography align="center">{t('loading')}</Typography>
 
-    if (error || !value)
+    if (error || !project)
         return (
             <Typography align="center" color="textPrimary">
                 {t('plugin_artblocks_smt_wrong')}

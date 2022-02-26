@@ -4,14 +4,13 @@ import { useCurrentWeb3NetworkPluginID } from './Context'
 import { getPluginDefine } from '../manager/store'
 
 export function useNetworkDescriptor(
-    expectedChainIdOrNetworkTypeOrID?: number | string,
     expectedPluginID?: NetworkPluginID,
+    expectedChainIdOrNetworkTypeOrID?: number | string,
 ) {
-    const pluginID = useCurrentWeb3NetworkPluginID()
-    const pid = expectedPluginID ?? pluginID
-    const networkType = useNetworkType(pid)
+    const pluginID = useCurrentWeb3NetworkPluginID(expectedPluginID)
+    const networkType = useNetworkType(pluginID)
 
-    return getPluginDefine(pid)?.declareWeb3Networks?.find((x) =>
+    return getPluginDefine(pluginID)?.declareWeb3Networks?.find((x) =>
         [x.chainId, x.type, x.ID].includes(expectedChainIdOrNetworkTypeOrID ?? networkType ?? ''),
     )
 }

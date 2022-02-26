@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useInterval } from 'react-use'
-import { CryptoPrice, CurrencyType, getCoinGeckoCoinId, useChainId } from '@masknet/web3-shared-evm'
+import { CryptoPrice, getCoinGeckoCoinId, useChainId } from '@masknet/web3-shared-evm'
+import type { CurrencyType } from '@masknet/plugin-infra'
 import { UPDATE_CHAIN_STATE_DELAY } from '@masknet/plugin-wallet'
 
 const URL_BASE = 'https://api.coingecko.com/api/v3'

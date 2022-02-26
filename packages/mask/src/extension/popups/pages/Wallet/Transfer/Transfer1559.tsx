@@ -51,6 +51,7 @@ import { NetworkPluginID, useLookupAddress, useWeb3State } from '@masknet/plugin
 import { AccountItem } from './AccountItem'
 import Services from '../../../../service'
 import { TransferAddressError } from '../type'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 const useStyles = makeStyles()({
     container: {
@@ -331,7 +332,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
             return
         }
 
-        const result = await Services.Ethereum.getCode(address)
+        const result = await EVM_RPC.getCode(address)
 
         if (result !== '0x') {
             setAddressTip({

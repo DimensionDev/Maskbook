@@ -1,4 +1,5 @@
 import { unreachable } from '@dimensiondev/kit'
+import { CurrencyType } from '@masknet/plugin-infra'
 import { leftShift, multipliedBy, rightShift, toFixed } from '@masknet/web3-shared-base'
 import {
     Asset,
@@ -6,7 +7,6 @@ import {
     NonFungibleAssetProvider,
     createERC20Token,
     createNativeToken,
-    CurrencyType,
     EthereumTokenType,
     ERC721TokenDetailed,
     formatEthereumAddress,
@@ -23,7 +23,7 @@ import {
 import BigNumber from 'bignumber.js'
 import { values } from 'lodash-unified'
 import { EthereumAddress } from 'wallet.ts'
-import { EVM_RPC } from '../../EVM/messages'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 import * as DebankAPI from '../apis/debank'
 import * as ZerionAPI from '../apis/zerion'
 import { resolveChainByScope, resolveZerionAssetsScopeName } from '../pipes'

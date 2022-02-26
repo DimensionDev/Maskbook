@@ -1,12 +1,11 @@
 import React, { createContext, useContext, useMemo } from 'react'
 import { createContainer } from 'unstated-next'
 import { useSubscription } from 'use-subscription'
-import { CurrencyType, NetworkPluginID, Web3Plugin } from '../web3-types'
 import { createConstantSubscription } from '@masknet/shared-base'
+import { CurrencyType, NetworkPluginID, Web3Plugin } from '../web3-types'
 
 // constant subscriptions
 const ZERO = createConstantSubscription(0)
-const ZERO_STRING = createConstantSubscription('0')
 const USD_CURRENCY = createConstantSubscription(CurrencyType.USD)
 const EMPTY_STRING = createConstantSubscription('')
 const EMPTY_ARRAY = createConstantSubscription([])
@@ -27,39 +26,53 @@ function usePluginsWeb3Context() {
 function usePluginWeb3State(pluginID: string, context: Record<string, Web3Plugin.ObjectCapabilities.Capabilities>) {
     const pluginContext = context[pluginID]
 
-    const { Shared, Utils } = pluginContext ?? {}
-    const allowTestnet = useSubscription(Shared?.allowTestnet ?? FALSE)
-    const chainId = useSubscription(Shared?.chainId ?? ZERO)
-    const account = useSubscription(Shared?.account ?? EMPTY_STRING)
-    const networkType = useSubscription(Shared?.networkType ?? EMPTY_STRING)
-    const providerType = useSubscription(Shared?.providerType ?? EMPTY_STRING)
-    const assetType = useSubscription(Shared?.assetType ?? EMPTY_STRING)
-    const nameType = useSubscription(Shared?.nameType ?? EMPTY_STRING)
-    const collectibleType = useSubscription(Shared?.collectibleType ?? EMPTY_STRING)
-    const transactionType = useSubscription(Shared?.transactionType ?? EMPTY_STRING)
-    const currencyType = useSubscription(Shared?.currencyType ?? USD_CURRENCY)
-    const prices = useSubscription(Shared?.prices ?? NULL)
-    const walletPrimary = useSubscription(Shared?.walletPrimary ?? NULL)
-    const wallets = useSubscription(Shared?.wallets ?? EMPTY_ARRAY)
-    const fungibleTokens = useSubscription(Shared?.fungibleTokens ?? EMPTY_ARRAY)
-    const nonFungibleTokens = useSubscription(Shared?.nonFungibleTokens ?? EMPTY_ARRAY)
+    const {
+        AddressBook,
+        Token,
+        TokenList,
+        TokenPrice,
+        Transaction,
+        NameService,
+        Protocol,
+        Provider,
+        Wallet,
+        Settings,
+        Utils,
+    } = pluginContext ?? {}
+    const allowTestnet = useSubscription(Settings?.allowTestnet ?? FALSE)
+    const currencyType = useSubscription(Settings?.currencyType ?? USD_CURRENCY)
+    const chainId = useSubscription(Provider?.chainId ?? ZERO)
+    const account = useSubscription(Provider?.account ?? EMPTY_STRING)
+    const networkType = useSubscription(Provider?.networkType ?? EMPTY_STRING)
+    const providerType = useSubscription(Provider?.providerType ?? EMPTY_STRING)
+    const tokenPrices = useSubscription(TokenPrice?.tokenPrices ?? NULL)
+    const addressBook = useSubscription(AddressBook?.addressBook ?? EMPTY_ARRAY)
+    const domainBook = useSubscription(NameService?.domainBook ?? EMPTY_OBJECT)
+    const transactions = useSubscription(Transaction?.transactions ?? EMPTY_ARRAY)
+    const walletPrimary = useSubscription(Wallet?.walletPrimary ?? NULL)
+    const wallets = useSubscription(Wallet?.wallets ?? EMPTY_ARRAY)
+    const fungibleTokens = useSubscription(Token?.fungibleTokens ?? EMPTY_ARRAY)
+    const nonFungibleTokens = useSubscription(Token?.nonFungibleTokens ?? EMPTY_ARRAY)
+    const fungibleTokenList = useSubscription(TokenList?.fungibleTokens ?? EMPTY_ARRAY)
+    const nonFungibleTokenList = useSubscription(TokenList?.nonFungibleTokens ?? EMPTY_ARRAY)
 
     return {
         allowTestnet,
+        addressBook,
+        domainBook,
         chainId,
         account,
         networkType,
         providerType,
-        assetType,
-        nameType,
-        collectibleType,
-        transactionType,
         currencyType,
-        prices,
+        tokenPrices,
+        transactions,
         walletPrimary,
         wallets,
         fungibleTokens,
         nonFungibleTokens,
+        fungibleTokenList,
+        nonFungibleTokenList,
     }
 }
 
@@ -78,8 +91,9 @@ function usePluginsWeb3State() {
     )
 }
 
-export function useCurrentWeb3NetworkPluginID() {
-    return useContext(PluginIDContext)
+export function useCurrentWeb3NetworkPluginID(expectedPluginID?: NetworkPluginID) {
+    const pluginID = useContext(PluginIDContext)
+    return expectedPluginID ?? pluginID
 }
 
 const PluginsWeb3StateContext = createContainer(usePluginsWeb3State)
@@ -87,9 +101,9 @@ const PluginsWeb3StateContext = createContainer(usePluginsWeb3State)
 export const usePluginsWeb3StateContext = PluginsWeb3StateContext.useContainer
 
 export function usePluginWeb3StateContext(expectedPluginID?: NetworkPluginID) {
-    const pluginID = useCurrentWeb3NetworkPluginID()
+    const pluginID = useCurrentWeb3NetworkPluginID(expectedPluginID)
     const pluginsWeb3State = usePluginsWeb3StateContext()
-    return pluginsWeb3State[expectedPluginID ?? pluginID] ?? {}
+    return pluginsWeb3State[pluginID] ?? {}
 }
 
 export function PluginsWeb3ContextProvider({

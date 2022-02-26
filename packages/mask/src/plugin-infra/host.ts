@@ -5,7 +5,73 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { Emitter } from '@servie/events'
 import { MaskMessages } from '../../shared/messages'
 import Services from '../extension/service'
-import { createI18NBundle, i18NextInstance } from '@masknet/shared-base'
+import {
+    createI18NBundle,
+    createSubscriptionFromAsync,
+    EMPTY_LIST,
+    i18NextInstance,
+    SubscriptionFromValueRef,
+} from '@masknet/shared-base'
+import { InMemoryStorages, PersistentStorages } from '../../shared'
+import { nativeAPI, hasNativeAPI } from '../../shared/native-rpc'
+import { currentChainIdSettings, currentMaskWalletAccountSettings } from '../plugins/Wallet/settings'
+import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
+import { ProviderType } from '@masknet/web3-shared-evm'
+
+export function createSharedContext(pluginID: string, signal: AbortSignal): Plugin.Shared.SharedContext {
+    return {
+        createKVStorage<T extends object>(type: 'memory' | 'persistent', defaultValues: T) {
+            if (type === 'memory') return InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
+            else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
+        },
+
+        nativeType: nativeAPI?.type,
+        hasNativeAPI,
+        nativeSend: nativeAPI?.type === 'iOS' ? nativeAPI.api.send : undefined,
+        nativeSendJsonString: nativeAPI?.type === 'Android' ? nativeAPI.api.sendJsonString : undefined,
+
+        openPopupWindow: Services.Helper.openPopupWindow,
+        closePopupWindow: Services.Helper.removePopupWindow,
+
+        account: SubscriptionFromValueRef(currentMaskWalletAccountSettings),
+        chainId: SubscriptionFromValueRef(currentChainIdSettings),
+
+        currentPersona: createSubscriptionFromAsync(
+            Services.Settings.getCurrentPersonaIdentifier,
+            undefined,
+            MaskMessages.events.currentPersonaIdentifier.on,
+            signal,
+        ),
+
+        wallets: createSubscriptionFromAsync(
+            () => WalletRPC.getWallets(ProviderType.MaskWallet),
+            EMPTY_LIST,
+            WalletMessages.events.walletsUpdated.on,
+        ),
+        walletPrimary: createSubscriptionFromAsync(
+            () => WalletRPC.getWalletPrimary(),
+            null,
+            WalletMessages.events.walletsUpdated.on,
+        ),
+
+        personaSignMessage: Services.Identity.signWithPersona,
+
+        updateAccount: WalletRPC.updateMaskAccount,
+        resetAccount: WalletRPC.resetMaskAccount,
+        selectAccountPrepare: WalletRPC.selectAccountPrepare,
+
+        signTransaction: WalletRPC.signTransaction,
+        signTypedData: WalletRPC.signTypedData,
+        signPersonalMessage: WalletRPC.signPersonalMessage,
+
+        addWallet: WalletRPC.updateWallet,
+        updateWallet: WalletRPC.updateWallet,
+        removeWallet: WalletRPC.removeWallet,
+
+        shiftUnconfirmedRequest: WalletRPC.shiftUnconfirmedRequest,
+        pushUnconfirmedRequest: WalletRPC.pushUnconfirmedRequest,
+    }
+}
 
 export function createPluginHost<Context>(
     signal: AbortSignal | undefined,

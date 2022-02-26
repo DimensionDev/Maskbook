@@ -1,8 +1,9 @@
 import type { FC, HTMLProps } from 'react'
 import type BigNumber from 'bignumber.js'
-import { ChainId, CurrencyType, isZeroAddress } from '@masknet/web3-shared-evm'
-import { useNativeTokenPrice, useTokenPrice } from '../../plugins/Wallet/hooks/useTokenPrice'
+import { ChainId, isZeroAddress } from '@masknet/web3-shared-evm'
 import { multipliedBy } from '@masknet/web3-shared-base'
+import type { CurrencyType } from '@masknet/plugin-infra'
+import { useNativeTokenPrice, useTokenPrice } from '../../plugins/Wallet/hooks/useTokenPrice'
 
 interface TokenPriceProps extends Omit<HTMLProps<HTMLSpanElement>, 'children'> {
     chainId: ChainId

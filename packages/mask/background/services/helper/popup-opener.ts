@@ -1,5 +1,5 @@
-import { PopupRoutes } from '@masknet/shared-base'
 import urlcat from 'urlcat'
+import { PopupRoutes } from '@masknet/shared-base'
 import { MaskMessages } from '../../../shared'
 
 let currentPopupWindowId = 0

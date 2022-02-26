@@ -166,11 +166,11 @@ export function resolveTokenLinkOnExplorer({ chainId, address }: NativeToken | E
     return urlcat(resolveLinkOnExplorer(chainId), '/token/:address', { address })
 }
 
-export function resolveAddressLinkOnExplorer(chainId: ChainId, address: string): string {
+export function resolveAddressLinkOnExplorer(chainId: ChainId, address: string) {
     return urlcat(resolveLinkOnExplorer(chainId), '/address/:address', { address })
 }
 
-export function resolveBlockLinkOnExplorer(chainId: ChainId, block: string): string {
+export function resolveBlockLinkOnExplorer(chainId: ChainId, block: string) {
     return urlcat(resolveLinkOnExplorer(chainId), '/block/:block', { block })
 }
 

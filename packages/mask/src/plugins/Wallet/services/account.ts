@@ -20,6 +20,10 @@ import { getWallets, hasWallet, updateWallet } from './wallet'
 import { hasNativeAPI, nativeAPI } from '../../../../shared/native-rpc'
 import { Flags } from '../../../../shared'
 
+/**
+ * @deprecated
+ * @param options
+ */
 export async function updateAccount(
     options: {
         name?: string
@@ -34,7 +38,7 @@ export async function updateAccount(
 
     // make sure account and provider type to be updating both
     if ((options.account && !options.providerType) || (options.account === undefined && options.providerType))
-        throw new Error('Account and provider type must be updating both')
+        throw new Error('Account and provider type must be updating both.')
 
     const { name, account, chainId, providerType, networkType } = options
 
@@ -78,6 +82,16 @@ export async function updateMaskAccount(options: { account?: string; chainId?: C
     if (account && EthereumAddress.isValid(account)) currentMaskWalletAccountSettings.value = account
 }
 
+export async function resetMaskAccount() {
+    currentMaskWalletChainIdSettings.value = ChainId.Mainnet
+    currentMaskWalletNetworkSettings.value = NetworkType.Ethereum
+    currentMaskWalletAccountSettings.value = ''
+}
+
+/**
+ * @deprecated
+ * @param options
+ */
 export async function resetAccount(
     options: {
         account?: string
@@ -95,14 +109,14 @@ export async function resetAccount(
 }
 
 // #region select wallet with popups
-let callbackMemorized: (accounts: string[], chainId: ChainId) => void | undefined
+let callbackMemorized: (accounts: string[]) => void | undefined
 
-export async function selectAccountPrepare(callback: (accounts: string[], chainId: ChainId) => void) {
+export async function selectAccountPrepare(callback: (accounts: string[]) => void) {
     callbackMemorized = callback
 }
 
-export async function selectAccount(accounts: string[], chainId: ChainId) {
-    callbackMemorized?.(accounts, chainId)
+export async function selectAccount(accounts: string[]) {
+    callbackMemorized?.(accounts)
 }
 // #endregion
 

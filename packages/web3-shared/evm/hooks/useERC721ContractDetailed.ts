@@ -4,8 +4,7 @@ import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 import type { ChainId } from '../types'
 import { useChainId } from './useChainId'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
-import { createERC721ContractDetailed, safeNonPayableTransactionCall } from '../utils'
-import { getOpenseaAPIConstants } from '../constants'
+import { createERC721Contract, safeNonPayableTransactionCall } from '../utils'
 
 export function useERC721ContractDetailed(address?: string) {
     const chainId = useChainId()
@@ -28,7 +27,7 @@ async function getERC721ContractDetailedFromChain(address: string, chainId: Chai
         result.status === 'fulfilled' ? result.value : '',
     ) as string[]
 
-    return createERC721ContractDetailed(chainId, address, name, symbol, baseURI)
+    return createERC721Contract(chainId, address, name, symbol, baseURI)
 }
 
 async function getERC721ContractDetailedFromOpensea(address: string, chainId: ChainId, apiUrl: string) {
@@ -40,7 +39,7 @@ async function getERC721ContractDetailedFromOpensea(address: string, chainId: Ch
     }
     if (response.ok) {
         const data: DataType = await response.json()
-        return createERC721ContractDetailed(chainId, address, data.name, data.symbol, undefined, data.image_url)
+        return createERC721Contract(chainId, address, data.name, data.symbol, undefined, data.image_url)
     }
     return null
 }

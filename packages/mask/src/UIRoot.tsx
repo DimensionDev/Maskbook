@@ -10,7 +10,7 @@ import { buildInfoMarkdown } from './utils/BuildInfoMarkdown'
 import { activatedSocialNetworkUI } from './social-network'
 import { isFacebook } from './social-network-adaptor/facebook.com/base'
 import { pluginIDSettings } from './settings/settings'
-import { fixWeb3State } from './plugins/EVM/UI/Web3State'
+// import { fixWeb3State } from '@masknet/plugin-evm/src/UI/Web3State'
 import { getBackgroundColor } from './utils'
 import { isTwitter } from './social-network-adaptor/twitter.com/base'
 import { MaskThemeProvider } from '@masknet/theme'
@@ -38,7 +38,7 @@ export function MaskUIRoot({ children, kind, useTheme }: MaskUIRootProps) {
 
     // TODO:
     // migrate EVM plugin
-    fixWeb3State(PluginsWeb3State[NetworkPluginID.PLUGIN_EVM], Web3Context)
+    // fixWeb3State(PluginsWeb3State[NetworkPluginID.PLUGIN_EVM], Web3Context)
 
     return compose(
         children,

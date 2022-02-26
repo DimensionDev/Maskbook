@@ -1,5 +1,7 @@
 import { memo, useMemo, useState } from 'react'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
+import { toHex } from 'web3-utils'
+import BigNumber from 'bignumber.js'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
@@ -17,19 +19,17 @@ import {
     useNetworkType,
 } from '@masknet/web3-shared-evm'
 import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
-import { Link, Typography } from '@mui/material'
-import { useI18N } from '../../../../../utils'
-import { PopupRoutes } from '@masknet/shared-base'
 import { LoadingButton } from '@mui/lab'
+import { Link, Typography } from '@mui/material'
+import { PopupRoutes } from '@masknet/shared-base'
+import { isGreaterThan, leftShift, pow10 } from '@masknet/web3-shared-base'
 import { unreachable } from '@dimensiondev/kit'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
+import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useI18N } from '../../../../../utils'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import Services from '../../../../service'
-import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice, useTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
-import { toHex } from 'web3-utils'
-import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
-import { isGreaterThan, leftShift, pow10 } from '@masknet/web3-shared-base'
 import { CopyIconButton } from '../../../components/CopyIconButton'
 
 const useStyles = makeStyles()(() => ({
@@ -256,22 +256,18 @@ const ContractInteraction = memo(() => {
 
     // handlers
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
-        if (request) {
-            try {
-                await Services.Ethereum.confirmRequest(request.payload)
-                navigate(-1)
-            } catch (error_) {
-                setTransferError(true)
-            }
+        try {
+            await EVM_RPC.confirmRequest()
+            navigate(-1)
+        } catch (error_) {
+            setTransferError(true)
         }
-        return
     }, [request, location.search, history])
 
     const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
-        if (!request) return
-        await Services.Ethereum.rejectRequest(request.payload)
+        await EVM_RPC.rejectRequest()
         navigate(PopupRoutes.Wallet, { replace: true })
-    }, [request])
+    }, [])
 
     // Wei
     const gasPriceEIP1559 = new BigNumber(maxFeePerGas ?? defaultPrices?.maxFeePerGas ?? 0, 16)
@@ -293,21 +289,6 @@ const ContractInteraction = memo(() => {
         .toString()
 
     const totalUSD = new BigNumber(formatWeiToEther(gasFee)).times(nativeTokenPrice).plus(tokenValueUSD).toString()
-    //
-    console.log('DEBUG: ContractInteraction')
-    console.log({
-        amount,
-        gasFee,
-        gas,
-        maxPriorityFeePerGas: maxPriorityFeePerGas ?? defaultPrices?.maxPriorityFeePerGas,
-        maxFeePerGas: maxFeePerGas ?? defaultPrices?.maxFeePerGas,
-        defaultPrice: (gasPrice as string) ?? defaultPrices?.gasPrice,
-        request,
-        tokenPrice,
-        tokenAmount,
-        tokenDecimals,
-        nativeTokenPrice,
-    })
 
     useUpdateEffect(() => {
         if (!request && !requestLoading) {

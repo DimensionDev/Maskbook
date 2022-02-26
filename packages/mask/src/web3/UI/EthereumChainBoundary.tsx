@@ -26,8 +26,8 @@ import ActionButton, {
 import { currentProviderSettings } from '../../plugins/Wallet/settings'
 import { useI18N } from '../../utils'
 import { WalletMessages, WalletRPC } from '../../plugins/Wallet/messages'
-import Services from '../../extension/service'
 import { pluginIDSettings } from '../../settings/settings'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 const useStyles = makeStyles()(() => ({}))
 
@@ -119,12 +119,12 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         throw new Error('Timeout!')
                     })(),
                     networkType === NetworkType.Ethereum
-                        ? Services.Ethereum.switchEthereumChain(expectedChainId, overrides)
-                        : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account, overrides),
+                        ? EVM_RPC.switchEthereumChain(expectedChainId, overrides)
+                        : EVM_RPC.addEthereumChain(chainDetailedCAIP, account, overrides),
                 ])
 
                 // recheck
-                const chainIdHex = await Services.Ethereum.getChainId(overrides)
+                const chainIdHex = await EVM_RPC.getChainId(overrides)
                 if (Number.parseInt(chainIdHex, 16) !== expectedChainId) throw new Error('Failed to switch chain.')
             } catch {
                 throw new Error(

@@ -28,12 +28,18 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
             }),
             wallets: createSubscriptionFromPublicKey((publicKey): Web3Plugin.Wallet[] => {
                 if (!publicKey) return []
+
+                const now = new Date()
+
                 return [
                     {
+                        id: publicKey,
                         name: 'Solana',
                         address: publicKey,
                         hasDerivationPath: false,
                         hasStoredKeyInfo: false,
+                        createdAt: now,
+                        updatedAt: now,
                     },
                 ]
             }),

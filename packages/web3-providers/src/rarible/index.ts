@@ -268,7 +268,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider {
         }
     }
 
-    async getHistory(tokenAddress: string, tokenId: string): Promise<NonFungibleTokenAPI.History[]> {
+    async getHistory(tokenAddress: string, tokenId: string): Promise<NonFungibleTokenAPI.AssetHistory[]> {
         const response = await fetchFromRarible<RaribleHistory[]>(RaribleMainnetURL, '/activity', {
             method: 'POST',
             body: JSON.stringify({
@@ -330,7 +330,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider {
                         link: '',
                     },
                 },
-            } as NonFungibleTokenAPI.History
+            } as NonFungibleTokenAPI.AssetHistory
         })
     }
 }

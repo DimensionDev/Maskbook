@@ -4,7 +4,7 @@ import { getEnumAsArray } from '@dimensiondev/kit'
 import { getRedPacketConstants, getTokenConstants, ZERO_ADDRESS } from '../constants'
 import { ChainId } from '../types'
 
-export function isSameAddress(a = '', b = '') {
+export function isSameAddress(a?: string, b?: string) {
     if (!a || !b) return false
     return a.toLowerCase() === b.toLowerCase()
 }

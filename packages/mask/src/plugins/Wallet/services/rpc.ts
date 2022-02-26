@@ -19,11 +19,11 @@ export async function getUnconfirmedRequests() {
     return chunk.requests.slice(0, MAX_UNCONFIRMED_REQUESTS_SIZE).sort(requestSorter)
 }
 
-export async function topUnconfirmedRequest() {
+export async function firstUnconfirmedRequest() {
     return first(await getUnconfirmedRequests())
 }
 
-export async function popUnconfirmedRequest() {
+export async function shiftUnconfirmedRequest() {
     const now = new Date()
     const t = createTransaction(await createWalletDBAccess(), 'readwrite')('UnconfirmedRequestChunk')
 

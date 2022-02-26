@@ -1,3 +1,4 @@
+import { useCallback, useState, useRef, forwardRef, memo, useImperativeHandle, useMemo } from 'react'
 import {
     useActivatedPluginSNSAdaptor_Web3Supported,
     useActivatedPluginsSNSAdaptor,
@@ -12,9 +13,8 @@ import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
 import { ITO_PluginID } from '../../plugins/ITO/constants'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import { makeStyles } from '@masknet/theme'
-import { useCallback, useState, useRef, forwardRef, memo, useImperativeHandle, useMemo } from 'react'
-import { useChainId } from '@masknet/web3-shared-evm'
 import { Trans } from 'react-i18next'
+
 const useStyles = makeStyles()({
     sup: {
         paddingLeft: 2,

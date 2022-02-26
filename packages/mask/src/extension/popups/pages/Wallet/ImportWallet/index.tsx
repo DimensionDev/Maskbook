@@ -1,4 +1,6 @@
 import { memo, useMemo, useState } from 'react'
+import { useAsyncFn } from 'react-use'
+import { query } from 'urlcat'
 import { Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles, useTabs } from '@masknet/theme'
 import { Controller, useForm } from 'react-hook-form'
@@ -7,18 +9,16 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { LoadingButton, TabContext, TabPanel } from '@mui/lab'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
+import { useChainId } from '@masknet/web3-shared-evm'
 import { JsonFileBox } from '../components/JsonFileBox'
 import { StyledInput } from '../../../components/StyledInput'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { useAsyncFn } from 'react-use'
-import { query } from 'urlcat'
 import { useI18N } from '../../../../../utils'
 import Services from '../../../../service'
 import { getDerivableAccounts } from '../../../../../plugins/Wallet/services'
 import { PageHeader } from '../components/PageHeader'
 import { PasswordField } from '../../../components/PasswordField'
-import { currentAccountSettings, currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
-import { ProviderType, useChainId } from '@masknet/web3-shared-evm'
+import { currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
 
 const useStyles = makeStyles()({
     container: {
@@ -174,13 +174,7 @@ const ImportWallet = memo(() => {
                                     account: wallet,
                                 })
                             }
-                            if (!currentAccountSettings.value) {
-                                await WalletRPC.updateAccount({
-                                    account: wallet,
-                                    providerType: ProviderType.MaskWallet,
-                                })
-                            }
-                            await WalletRPC.selectAccount([wallet], chainId)
+                            await WalletRPC.selectAccount([wallet])
                             navigate(PopupRoutes.Wallet, { replace: true })
                             await Services.Helper.removePopupWindow()
                             break
@@ -192,14 +186,7 @@ const ImportWallet = memo(() => {
                                 })
                             }
 
-                            if (!currentAccountSettings.value) {
-                                await WalletRPC.updateAccount({
-                                    account: privateKeyWallet,
-                                    providerType: ProviderType.MaskWallet,
-                                })
-                            }
-
-                            await WalletRPC.selectAccount([privateKeyWallet], chainId)
+                            await WalletRPC.selectAccount([privateKeyWallet])
                             await Services.Helper.removePopupWindow()
                             navigate(PopupRoutes.Wallet, { replace: true })
                             break
@@ -213,7 +200,7 @@ const ImportWallet = memo(() => {
                 }
             }
         },
-        [mnemonic, currentTab, keyStoreContent, keyStorePassword, privateKey, disabled, chainId, history, tabs],
+        [mnemonic, currentTab, keyStoreContent, keyStorePassword, privateKey, disabled, history, tabs],
     )
 
     const onSubmit = handleSubmit(onDerivedWallet)

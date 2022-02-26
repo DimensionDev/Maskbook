@@ -1,4 +1,4 @@
-import { Pagination, Web3Plugin, CurrencyType } from '@masknet/plugin-infra/web3'
+import { Pagination, Web3Plugin, CurrencyType, Pageable } from '@masknet/plugin-infra/web3'
 import { ChainId, getTokenConstants } from '@masknet/web3-shared-solana'
 import { CoinGecko } from '@masknet/web3-providers'
 import { createFungibleAsset, createFungibleToken } from '../helpers'
@@ -20,6 +20,7 @@ async function getSolanaBalance(chainId: ChainId, account: string) {
         price,
     )
 }
+
 async function getSplTokenList(chainId: ChainId, account: string) {
     const data = await requestRPC<GetProgramAccountsResponse>(chainId, {
         method: 'getProgramAccounts',
@@ -45,7 +46,7 @@ async function getSplTokenList(chainId: ChainId, account: string) {
     const tokenListProvider = new TokenListProvider()
     const provider = await tokenListProvider.resolve()
     const tokenList = provider.filterByChainId(chainId).getList()
-    const splTokens: Web3Plugin.Asset[] = []
+    const splTokens: Web3Plugin.FungibleAsset[] = []
     data.result.forEach((x) => {
         const info = x.account.data.parsed.info
         const token = tokenList.find((y) => y.address === info.mint)
@@ -64,18 +65,22 @@ async function getSplTokenList(chainId: ChainId, account: string) {
 }
 
 export async function getFungibleAssets(
+    chainId: ChainId,
     address: string,
-    provider: string,
-    network: Web3Plugin.NetworkDescriptor,
     pagination?: Pagination,
-): Promise<Web3Plugin.Asset<Web3Plugin.FungibleToken>[]> {
+): Promise<Pageable<Web3Plugin.FungibleAsset>> {
     const allSettled = await Promise.allSettled([
-        getSolanaBalance(network.chainId, address).then((x) => [x]),
-        getSplTokenList(network.chainId, address),
+        getSolanaBalance(chainId, address).then((x) => [x]),
+        getSplTokenList(chainId, address),
     ])
-
-    return allSettled
+    const assets = await allSettled
         .map((x) => (x.status === 'fulfilled' ? x.value : null))
         .flat()
-        .filter(Boolean) as Web3Plugin.Asset<Web3Plugin.FungibleToken>[]
+        .filter(Boolean)
+
+    return {
+        currentPage: 0,
+        hasNextPage: false,
+        data: assets as Web3Plugin.FungibleAsset[],
+    }
 }

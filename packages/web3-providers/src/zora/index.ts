@@ -119,7 +119,7 @@ export class ZoraAPI {
         return createERC721TokenFromAsset(address, tokenId, asset.Token[0])
     }
 
-    async getHistory(address: string, tokenId: string): Promise<NonFungibleTokenAPI.History[]> {
+    async getHistory(address: string, tokenId: string): Promise<NonFungibleTokenAPI.AssetHistory[]> {
         const variables = {
             address,
             tokenId,
@@ -127,8 +127,8 @@ export class ZoraAPI {
 
         const nftEventHistory = await this.client.request(getTokenHistoryQuery, variables)
 
-        const history: NonFungibleTokenAPI.History[] = nftEventHistory.Token[0].transferEvents.map(
-            (event: ZoraHistory): NonFungibleTokenAPI.History | undefined => {
+        const history: NonFungibleTokenAPI.AssetHistory[] = nftEventHistory.Token[0].transferEvents.map(
+            (event: ZoraHistory): NonFungibleTokenAPI.AssetHistory | undefined => {
                 if (event.transaction.mediaMints?.length !== 0) {
                     const mint = first(event.transaction.mediaMints)
                     return {

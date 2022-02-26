@@ -6,6 +6,7 @@ Any wallet available in a browser environment can integrate into Mask Network. W
 
 ```txt
    Front End Page                                 Background Page
+
 +------------------+                            +-----------------+
 |       User       | - Messaging API ---------- |  RPC Composer   |
 +------------------+                            +-----------------+
@@ -32,13 +33,15 @@ function Example() {
   const web3 = useWeb3()
   const onClick = useCallback(async () => {
     const blockNumber = await web3.eth.getBlockNumber()
+
     console.log(`The current block number is ${blockNumber}.`)
   }, [web3])
+
   return <button onClick={onClick}>Get Block Number</button>
 }
 ```
 
-First of all, it creates a [Web3](https://web3js.readthedocs.io/) instance which redirects all JSON-RPC requests to the [request](https://github.com/DimensionDev/Maskbook/blob/develop/packages/mask/src/extension/background-script/EthereumServices/request.ts) service on the background page. If you'd like to read the source code, you will realise that there is a [Koa.js](https://koajs.com/) styled [composer](https://github.com/koajs/compose) built-in. A list of middleware is used and serve different purposes: a middleware stores transactions into DB, a middleware watches transaction status, a middleware notifies transaction progress, and so on.
+First of all, it creates a [Web3](https://web3js.readthedocs.io/) instance which redirects all JSON-RPC requests to the [request](https://github.com/DimensionDev/Maskbook/blob/develop/packages/mask/src/extension/background-script/EthereumServices/request.ts) service on the background page. If you'd like to read the source code, you will realize that there is a [Koa.js](https://koajs.com/) styled [composer](https://github.com/koajs/compose) built-in. A list of middleware is used and serve different purposes: a middleware stores transactions into DB, a middleware watches transaction status, a middleware notifies transaction progress, and so on.
 
 At the current stage, there are two kinds of wallets: Mask Wallet and other wallets.
 
@@ -76,7 +79,7 @@ The implementation of Ethereum JSON-RPC may very different between wallets. Thos
 
 <!-- spell-checker: disable-next-line -->
 
-For this sake, the [`composer`](https://github.com/DimensionDev/Maskbook/blob/develop/packages/mask/src/extension/background-script/EthereumServices/composer.ts) creates a middleware for intercepting JSON-RPC requests. Here is a quick example that converts the Mask Network flavored [`mask_requestAccounts`](./mask-flavored-**jsonrpc**-api.md#mask_requestaccounts) into an Ethereum styled [`eth_accounts`](https://eth.wiki/json-rpc/API#eth_accounts).
+For this sake, the [`composer`](https://github.com/DimensionDev/Maskbook/blob/develop/packages/mask/src/extension/background-script/EthereumServices/composer.ts) creates a middleware for intercepting JSON-RPC requests. Here is a quick example that converts the Mask Network flavored [`mask_requestAccounts`](./mask-flavored-jsonrpc-api.md#mask_requestaccounts) into an Ethereum styled [`eth_accounts`](https://eth.wiki/json-rpc/API#eth_accounts).
 
 ```ts
 export class Example implements Middleware<Context> {

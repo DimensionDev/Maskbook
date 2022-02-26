@@ -13,6 +13,7 @@ import type { Result, Some } from 'ts-results'
 import { createContext, createElement, memo, useContext } from 'react'
 import { Subscription, useSubscription } from 'use-subscription'
 import type { SupportedPayloadVersions } from '@masknet/encryption'
+
 export interface PostContextSNSActions {
     /** Parse payload into Payload */
     payloadParser(raw: string): Result<Payload, Error>

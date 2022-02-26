@@ -9,28 +9,20 @@ import {
     EthereumTokenType,
     NetworkType,
     Web3ProviderType,
-    isInjectedProvider,
 } from '@masknet/web3-shared-evm'
 import { getProxyWebsocketInstance } from '@masknet/web3-shared-base'
 import { Services, Messages, PluginServices, PluginMessages } from '../API'
 import { TokenList } from '@masknet/web3-providers'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 export const Web3Context: Web3ProviderType = {
     allowTestnet: createSubscriptionFromAsync(Services.Settings.getWalletAllowTestChain, false, () => {
         return () => {}
     }),
     account: createSubscriptionFromAsync(
-        async () => {
-            const providerType = await Services.Settings.getCurrentSelectedWalletProvider()
-            if (isInjectedProvider(providerType) || providerType === ProviderType.Fortmatic) return ''
-            return Services.Settings.getSelectedWalletAddress()
-        },
+        Services.Settings.getSelectedWalletAddress,
         '',
-        (callback) => {
-            const a = Messages.events.currentAccountSettings.on(callback)
-            const b = Messages.events.currentProviderSettings.on(callback)
-            return () => void [a(), b()]
-        },
+        Messages.events.currentAccountSettings.on,
     ),
     tokenPrices: createSubscriptionFromAsync(
         Services.Settings.getTokenPrices,
@@ -88,14 +80,14 @@ export const Web3Context: Web3ProviderType = {
     trustToken: PluginServices.Wallet.trustToken,
     blockToken: PluginServices.Wallet.blockToken,
 
-    request: Services.Ethereum.request,
+    request: EVM_RPC.request,
 
     getAssetsList: PluginServices.Wallet.getAssetsList,
     getAssetsListNFT: PluginServices.Wallet.getAssetsListNFT,
     getCollectionsNFT: PluginServices.Wallet.getCollectionsNFT,
     getAddressNamesList: PluginServices.Wallet.getAddressNames,
     getTransactionList: PluginServices.Wallet.getTransactionList,
-    fetchERC20TokensFromTokenLists: TokenList.fetchERC20TokensFromTokenLists,
+    fetchERC20TokensFromTokenLists: TokenList.fetchFungibleTokensFromTokenLists,
     providerSocket: getProxyWebsocketInstance((info) =>
         PluginMessages.Wallet.events.socketMessageUpdated.sendToAll(info),
     ),

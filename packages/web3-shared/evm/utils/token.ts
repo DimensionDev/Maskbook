@@ -2,44 +2,35 @@ import type Web3 from 'web3'
 import { AbiOutput, hexToBytes, toAscii } from 'web3-utils'
 import BigNumber from 'bignumber.js'
 import { getEnumAsArray } from '@dimensiondev/kit'
+import { CurrencyType, TokenType, Web3Plugin } from '@masknet/plugin-infra'
 import { getTokenConstants } from '../constants'
-import {
-    Asset,
-    ChainId,
-    CurrencyType,
-    ERC1155TokenAssetDetailed,
-    ERC721ContractDetailed,
-    ERC721TokenInfo,
-    ERC721TokenDetailed,
-    ERC20TokenDetailed,
-    EthereumTokenType,
-    FungibleTokenDetailed,
-    NativeTokenDetailed,
-    ChainIdRecord,
-} from '../types'
-import { getChainDetailed, getChainIdFromName } from './chainDetailed'
+import { ChainId, EthereumTokenType, ChainIdRecord } from '../types'
+import { getChainDetailed } from './chainDetailed'
 import { formatBalance } from './formatter'
 import { isSameAddress } from './address'
 import CHAINS from '../assets/chains.json'
 
-export function createNativeToken(chainId: ChainId): NativeTokenDetailed {
+export function createNativeToken(chainId: ChainId): Web3Plugin.FungibleToken {
     const chainDetailed = getChainDetailed(chainId)
     if (!chainDetailed) throw new Error('Unknown chain id.')
+
     const { NATIVE_TOKEN_ADDRESS } = getTokenConstants(chainId)
     if (!NATIVE_TOKEN_ADDRESS) throw new Error('Failed to create token.')
+
     return {
-        type: EthereumTokenType.Native,
+        id: NATIVE_TOKEN_ADDRESS,
+        type: TokenType.Fungible,
+        subType: EthereumTokenType.Native,
         chainId,
         address: NATIVE_TOKEN_ADDRESS,
         ...chainDetailed.nativeCurrency,
     }
 }
 
-const NATIVE_TOKEN_SYMBOLS = CHAINS.filter((x) => x.network === 'mainnet' && x.nativeCurrency).map((x) =>
-    x.nativeCurrency.symbol.toLowerCase(),
-)
 export function isNativeTokenSymbol(symbol: string) {
-    return NATIVE_TOKEN_SYMBOLS.includes(symbol.toLowerCase())
+    return CHAINS.filter((x) => x.network === 'mainnet' && x.nativeCurrency)
+        .map((x) => x.nativeCurrency.symbol.toLowerCase())
+        .includes(symbol.toLowerCase())
 }
 
 export function createERC20Token(
@@ -49,9 +40,11 @@ export function createERC20Token(
     name = 'Unknown Token',
     symbol = 'UNKNOWN',
     logoURI?: string[],
-): ERC20TokenDetailed {
+): Web3Plugin.FungibleToken {
     return {
-        type: EthereumTokenType.ERC20,
+        id: address,
+        type: TokenType.Fungible,
+        subType: EthereumTokenType.ERC20,
         chainId,
         address,
         decimals,
@@ -61,18 +54,18 @@ export function createERC20Token(
     }
 }
 
-export function createERC721ContractDetailed(
+export function createERC721Contract(
     chainId: ChainId,
     address: string,
     name = 'Unknown Token',
     symbol = 'UNKNOWN',
     baseURI?: string,
     iconURL?: string,
-): ERC721ContractDetailed {
+): Web3Plugin.NonFungibleToken['contract'] {
     return {
         type: EthereumTokenType.ERC721,
-        chainId,
         address,
+        chainId,
         name,
         symbol,
         baseURI,
@@ -81,39 +74,44 @@ export function createERC721ContractDetailed(
 }
 
 export function createERC721Token(
-    contractDetailed: ERC721ContractDetailed,
-    info: ERC721TokenInfo,
+    chainId: ChainId,
+    address: string,
     tokenId: string,
-    collection?: {
-        name: string
-        image?: string
-        slug: string
-    },
-): ERC721TokenDetailed {
+    contract: Web3Plugin.NonFungibleToken['contract'],
+    metadata: Web3Plugin.NonFungibleToken['metadata'],
+    collection?: Web3Plugin.NonFungibleToken['collection'],
+): Web3Plugin.NonFungibleToken {
     return {
-        contractDetailed,
-        info,
+        id: address,
+        type: TokenType.NonFungible,
+        subType: EthereumTokenType.ERC721,
+        chainId,
         tokenId,
+        address,
+        contract,
+        metadata,
         collection,
     }
 }
 
 export function createERC1155Token(
     chainId: ChainId,
-    tokenId: string,
     address: string,
-    name: string,
-    uri?: string,
-    asset?: ERC1155TokenAssetDetailed['asset'],
-): ERC1155TokenAssetDetailed {
+    tokenId: string,
+    contract: Web3Plugin.NonFungibleToken['contract'],
+    metadata: Web3Plugin.NonFungibleToken['metadata'],
+    collection?: Web3Plugin.NonFungibleToken['collection'],
+): Web3Plugin.NonFungibleToken {
     return {
-        type: EthereumTokenType.ERC1155,
+        id: address,
+        type: TokenType.NonFungible,
+        subType: EthereumTokenType.ERC1155,
         chainId,
         tokenId,
         address,
-        name,
-        uri,
-        asset,
+        contract,
+        metadata,
+        collection,
     }
 }
 
@@ -123,14 +121,16 @@ export function createERC20Tokens(
     symbol: string | ((chainId: ChainId) => string),
     decimals: number | ((chainId: ChainId) => number),
 ) {
-    type Table = ChainIdRecord<ERC20TokenDetailed>
+    type Table = ChainIdRecord<Web3Plugin.FungibleToken>
     const base = {} as Table
     return getEnumAsArray(ChainId).reduce<Table>((accumulator, { value: chainId }) => {
         const evaluator: <T>(f: T | ((chainId: ChainId) => T)) => T = (f) =>
             typeof f === 'function' ? (f as any)(chainId) : f
 
         accumulator[chainId] = {
-            type: EthereumTokenType.ERC20,
+            id: getTokenConstants(chainId)[key] ?? '',
+            type: TokenType.Fungible,
+            subType: EthereumTokenType.ERC20,
             chainId,
             address: getTokenConstants(chainId)[key] ?? '',
             name: evaluator(name),
@@ -168,19 +168,21 @@ export function parseStringOrBytes32(
 }
 
 // #region asset sort
-export const getTokenUSDValue = (token: Asset) => (token.value ? Number.parseFloat(token.value[CurrencyType.USD]) : 0)
-export const getBalanceValue = (asset: Asset) => Number.parseFloat(formatBalance(asset.balance, asset.token.decimals))
-export const getTokenChainIdValue = (asset: Asset) =>
-    asset.token.type === EthereumTokenType.Native ? 1 / asset.token.chainId : 0
+export const getTokenUSDValue = (asset: Web3Plugin.FungibleAsset) =>
+    asset.value ? Number.parseFloat(asset.value[CurrencyType.USD] ?? '0') : 0
+export const getBalanceValue = (asset: Web3Plugin.FungibleAsset) =>
+    Number.parseFloat(formatBalance(asset.balance, asset.decimals))
+export const getTokenChainIdValue = (asset: Web3Plugin.FungibleAsset) =>
+    asset.subType === EthereumTokenType.Native ? 1 / asset.chainId : 0
 
 export const makeSortTokenFn = (chainId: ChainId, options: { isMaskBoost?: boolean } = {}) => {
     const { isMaskBoost = false } = options
     const { MASK_ADDRESS } = getTokenConstants(chainId)
 
-    return (a: FungibleTokenDetailed, b: FungibleTokenDetailed) => {
+    return (a: Web3Plugin.FungibleToken, b: Web3Plugin.FungibleToken) => {
         // The native token goes first
-        if (a.type === EthereumTokenType.Native) return -1
-        if (b.type === EthereumTokenType.Native) return 1
+        if (a.subType === EthereumTokenType.Native) return -1
+        if (b.subType === EthereumTokenType.Native) return 1
 
         // The mask token second
         if (isMaskBoost) {
@@ -196,21 +198,21 @@ export const makeSortAssertFn = (chainId: ChainId, options: { isMaskBoost?: bool
     const { isMaskBoost = false } = options
     const { MASK_ADDRESS } = getTokenConstants(chainId)
 
-    return (a: Asset, b: Asset) => {
+    return (a: Web3Plugin.FungibleAsset, b: Web3Plugin.FungibleAsset) => {
         // The tokens with the current chain id goes first
-        if (a.chain !== b.chain) {
-            if (getChainIdFromName(a.chain) === chainId) return -1
-            if (getChainIdFromName(b.chain) === chainId) return 1
+        if (a.chainId !== b.chainId) {
+            if (a.chainId === chainId) return -1
+            if (b.chainId === chainId) return 1
         }
 
         // native token sort
-        const nativeTokenDifference = makeSortTokenFn(chainId, { isMaskBoost: false })(a.token, b.token)
+        const nativeTokenDifference = makeSortTokenFn(chainId, { isMaskBoost: false })(a, b)
         if (nativeTokenDifference !== 0) return nativeTokenDifference
 
         // Mask token at second if value > 0
         if (isMaskBoost) {
-            if (isSameAddress(a.token.address, MASK_ADDRESS) && getBalanceValue(a) > 0) return -1
-            if (isSameAddress(b.token.address, MASK_ADDRESS) && getBalanceValue(b) > 0) return 1
+            if (isSameAddress(a.address, MASK_ADDRESS) && getBalanceValue(a) > 0) return -1
+            if (isSameAddress(b.address, MASK_ADDRESS) && getBalanceValue(b) > 0) return 1
         }
 
         // Token with high usd value estimation has priority
@@ -223,20 +225,20 @@ export const makeSortAssertFn = (chainId: ChainId, options: { isMaskBoost?: bool
 
         // mask token behind all valuable tokens if value = 0 and balance = 0
         if (isMaskBoost) {
-            if (isSameAddress(a.token.address, MASK_ADDRESS)) return -1
-            if (isSameAddress(b.token.address, MASK_ADDRESS)) return 1
+            if (isSameAddress(a.address, MASK_ADDRESS)) return -1
+            if (isSameAddress(b.address, MASK_ADDRESS)) return 1
         }
 
         // Sorted by alphabet
-        if ((a.token.name ?? '') > (b.token.name ?? '')) return 1
-        if ((a.token.name ?? '') < (b.token.name ?? '')) return -1
+        if ((a.name ?? '') > (b.name ?? '')) return 1
+        if ((a.name ?? '') < (b.name ?? '')) return -1
 
         return 0
     }
 }
 
 export const makeSortAssertWithoutChainFn = () => {
-    return (a: Asset, b: Asset) => {
+    return (a: Web3Plugin.FungibleAsset, b: Web3Plugin.FungibleAsset) => {
         // Token with high usd value estimation has priority
         const valueDifference = getTokenUSDValue(b) - getTokenUSDValue(a)
         if (valueDifference !== 0) return valueDifference
@@ -250,8 +252,8 @@ export const makeSortAssertWithoutChainFn = () => {
         if (getBalanceValue(a) < getBalanceValue(b)) return 1
 
         // Sorted by alphabet
-        if ((a.token.name ?? '') > (b.token.name ?? '')) return 1
-        if ((a.token.name ?? '') < (b.token.name ?? '')) return -1
+        if ((a.name ?? '') > (b.name ?? '')) return 1
+        if ((a.name ?? '') < (b.name ?? '')) return -1
 
         return 0
     }

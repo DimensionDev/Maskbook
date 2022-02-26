@@ -42,7 +42,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 interface Props {
-    event: NonFungibleTokenAPI.History
+    event: NonFungibleTokenAPI.AssetHistory
     isDifferenceToken?: boolean
 }
 

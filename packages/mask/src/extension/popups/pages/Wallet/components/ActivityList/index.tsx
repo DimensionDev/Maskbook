@@ -1,5 +1,4 @@
 import urlcat from 'urlcat'
-import type { TransactionReceipt } from 'web3-core'
 import { memo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
@@ -19,7 +18,7 @@ import type { RecentTransaction } from '../../../../../../plugins/Wallet/service
 import { useI18N } from '../../../../../../utils'
 import { ReplaceType } from '../../type'
 import { ActivityListItem } from './ActivityListItem'
-import type { ComputedPayload } from '../../../../../background-script/EthereumService'
+import type { ComputedPayload } from '../../../../../../plugins/Wallet/SNSAdaptor/WalletStatusDialog/type'
 
 const useStyles = makeStyles()({
     list: {
@@ -138,13 +137,10 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }
         <>
             <List dense className={classes.list}>
                 {dataSource.slice(0, !isExpand ? 3 : undefined).map((transaction, index) => {
-                    const toAddress = getToAddress(transaction.receipt, transaction.computedPayload)
+                    const toAddress = getToAddress(transaction.computedPayload)
                     return (
                         <Link
-                            href={resolveTransactionLinkOnExplorer(
-                                chainId,
-                                transaction.receipt?.transactionHash ?? transaction.hash,
-                            )}
+                            href={resolveTransactionLinkOnExplorer(chainId, transaction.hash)}
                             target="_blank"
                             rel="noopener noreferrer"
                             key={index}
@@ -186,12 +182,11 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }
     )
 })
 
-function getToAddress(receipt?: TransactionReceipt | null, computedPayload?: ComputedPayload | null) {
+function getToAddress(computedPayload?: ComputedPayload | null) {
     if (!computedPayload) return undefined
-    const type = computedPayload.type
-    switch (type) {
+    switch (computedPayload.type) {
         case EthereumRpcType.SEND_ETHER:
-            return receipt?.to
+            return computedPayload._tx.to
         case EthereumRpcType.CONTRACT_INTERACTION:
             switch (computedPayload.name) {
                 case 'transfer':
@@ -199,10 +194,10 @@ function getToAddress(receipt?: TransactionReceipt | null, computedPayload?: Com
                     return computedPayload.parameters?.to
                 case 'approve':
                 default:
-                    return receipt?.to
+                    return computedPayload._tx.to
             }
         case EthereumRpcType.CONTRACT_DEPLOYMENT:
-            return receipt?.to
+            return computedPayload._tx.to
         case EthereumRpcType.CANCEL:
         default:
             return undefined

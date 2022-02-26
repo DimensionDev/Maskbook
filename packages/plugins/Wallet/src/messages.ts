@@ -166,11 +166,6 @@ export interface WalletMessage {
     selectNftContractDialogUpdated: SelectNftContractDialogEvent
 
     /**
-     * WalletConnect QR Code dialog
-     */
-    walletConnectQRCodeDialogUpdated: WalletConnectQRCodeDialogEvent
-
-    /**
      * Wallet Risk Warning dialog
      */
     walletRiskWarningDialogUpdated: WalletRiskWarningDialogEvent
@@ -184,7 +179,6 @@ export interface WalletMessage {
     phrasesUpdated: void
     addressBookUpdated: void
     transactionsUpdated: void
-    transactionStateUpdated: TransactionState
     transactionProgressUpdated: {
         state: TransactionState
         payload: JsonRpcPayload

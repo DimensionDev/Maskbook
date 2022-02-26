@@ -16,6 +16,54 @@ export interface Asset {
     decimals?: number
 }
 
+export interface AssetOwner {
+    address: string
+    profile_img_url?: string
+    user?: {
+        username: string
+    }
+    link: string
+}
+
+export interface AssetToken {
+    image_url?: string
+    eth_price?: string
+    usd_price?: string
+    name: string
+    symbol: string
+    decimals: number
+    address: string
+}
+
+export interface AssetOrder {
+    created_time?: string
+    current_price?: string
+    current_bounty?: string
+    maker_account?: AssetOwner
+    taker_account?: AssetOwner
+    payment_token?: string
+    payment_token_contract?: AssetToken
+    fee_recipient_account?: AssetToken
+    cancelled_or_finalized?: boolean
+    marked_invalid?: boolean
+    approved_on_chain: boolean
+    listing_time: number
+    side: number
+    quantity: string
+    expiration_time: number
+    order_hash: string
+}
+
+export interface AssetEvent {
+    event_type: string
+    event_timestamp: number
+    auction_type: string
+    total_price: string
+    payment_token: {
+        decimals: number
+    }
+}
+
 export interface OpenSeaAssetContract extends OpenSeaFees {
     name: string
     address: string
@@ -94,9 +142,9 @@ export interface OpenSeaResponse extends Asset {
     name: string
     description: string
     owner: OpenSeaCustomAccount
-    orders: NonFungibleTokenAPI.AssetOrder[] | null
-    buy_orders: NonFungibleTokenAPI.AssetOrder[] | null
-    sell_orders: NonFungibleTokenAPI.AssetOrder[] | null
+    orders: AssetOrder[] | null
+    buy_orders: AssetOrder[] | null
+    sell_orders: AssetOrder[] | null
     is_presale: boolean
     image_url: string
     image_preview_url: string
@@ -109,7 +157,7 @@ export interface OpenSeaResponse extends Asset {
         value: string
     }[]
     num_sales: number
-    last_sale: NonFungibleTokenAPI.AssetEvent | null
+    last_sale: AssetEvent | null
     background_color: string | null
     transfer_fee: string | null
     transfer_fee_payment_token: OpenSeaFungibleToken | null
@@ -183,8 +231,8 @@ export interface OpenSeaAssetOrder {
     taker: OpenSeaCustomAccount
 
     payment_token?: string
-    payment_token_contract?: NonFungibleTokenAPI.AssetToken
-    fee_recipient?: NonFungibleTokenAPI.AssetToken
+    payment_token_contract?: AssetToken
+    fee_recipient?: AssetToken
 
     cancelled?: boolean
     finalized?: boolean

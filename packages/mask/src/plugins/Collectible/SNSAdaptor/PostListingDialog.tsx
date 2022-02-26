@@ -7,7 +7,7 @@ import { ListingByPriceCard } from './ListingByPriceCard'
 import { ListingByHighestBidCard } from './ListingByHighestBidCard'
 import { useFungibleTokenWatched } from '@masknet/web3-shared-evm'
 import { first } from 'lodash-unified'
-import type { useAsset } from '../../EVM/hooks/useAsset'
+import type { useAsset } from '@masknet/plugin-evm/src/hooks'
 
 const useStyles = makeStyles()((theme) => {
     return {

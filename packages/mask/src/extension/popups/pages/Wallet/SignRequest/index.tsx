@@ -5,11 +5,11 @@ import { Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
 import { EthereumRpcType, useWallet } from '@masknet/web3-shared-evm'
 import { useAsyncFn, useUpdateEffect } from 'react-use'
-import Services from '../../../../service'
 import { LoadingButton } from '@mui/lab'
 import { toUtf8 } from 'web3-utils'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -112,18 +112,16 @@ const SignRequest = memo(() => {
     }, [value])
 
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
-        if (value) {
-            try {
-                await Services.Ethereum.confirmRequest(value.payload)
-            } catch (error_) {
-                setTransferError(true)
-            }
+        try {
+            await EVM_RPC.confirmRequest()
+        } catch (error_) {
+            setTransferError(true)
         }
     }, [value, location.search, history])
 
     const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
         if (!value) return
-        await Services.Ethereum.rejectRequest(value.payload)
+        await EVM_RPC.rejectRequest()
         navigate(PopupRoutes.Wallet, { replace: true })
     }, [value])
 

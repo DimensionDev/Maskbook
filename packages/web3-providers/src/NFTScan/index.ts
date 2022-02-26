@@ -1,6 +1,6 @@
 import {
     ChainId,
-    createERC721ContractDetailed,
+    createERC721Contract,
     createERC721Token,
     ERC721TokenDetailed,
     resolveIPFSLinkFromURL,
@@ -46,7 +46,7 @@ async function fetchAsset<T>(path: string, body?: unknown) {
 }
 
 function createERC721ContractDetailedFromAssetContract(asset: NFTScanAsset) {
-    return createERC721ContractDetailed(
+    return createERC721Contract(
         ChainId.Mainnet,
         asset.trade_contract ?? asset.nft_contract_address,
         undefined,
@@ -84,7 +84,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
         if (!response?.data) return []
         return response.data
             .map((x) => {
-                const contractDetailed = createERC721ContractDetailed(
+                const contractDetailed = createERC721Contract(
                     ChainId.Mainnet,
                     x.nft_contract_address,
                     x.nft_platform_name,

@@ -10,9 +10,9 @@ import {
 } from '@masknet/web3-shared-evm'
 import { Interface } from '@ethersproject/abi'
 import type { RedPacketJSONPayloadFromChain } from '../../types'
-import { getTransactionReceipt } from '../../../../extension/background-script/EthereumService'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import { checkAvailability } from './checkAvailability'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 const interFace = new Interface(REDPACKET_ABI)
 
@@ -122,7 +122,7 @@ export async function getRedPacketHistory(
 
     const eventLogResponse = await Promise.allSettled(
         payloadList.map(async (payload) => {
-            const result = await getTransactionReceipt(payload.txid)
+            const result = await EVM_RPC.getTransactionReceipt(payload.txid)
 
             if (!result) return null
 

@@ -1,5 +1,9 @@
+import { sha3, toHex } from 'web3-utils'
+import type { Transaction, TransactionReceipt } from 'web3-core'
 import { unreachable } from '@dimensiondev/kit'
-import { EthereumTransactionConfig, TransactionStateType } from '../types'
+import type { TransactionState } from '../hooks'
+import { EthereumTransactionConfig, TransactionStateType, TransactionStatusType } from '../types'
+import { getReceiptStatus } from './payload'
 
 export function isEIP1559Transaction(receipt: EthereumTransactionConfig) {
     return typeof receipt.maxFeePerGas !== 'undefined' && typeof receipt.maxPriorityFeePerGas !== 'undefined'
@@ -45,5 +49,49 @@ export function isNextStateAvailable(type: TransactionStateType, nextType: Trans
             ].includes(type)
         default:
             unreachable(nextType)
+    }
+}
+
+export function getTransactionSignature(transaction: Transaction | null) {
+    if (!transaction) return
+    const { from, to, input, value } = transaction
+    return sha3([from, to, input || '0x0', toHex(value || '0x0') || '0x0'].join('_')) ?? undefined
+}
+
+export function getTransactionState(receipt: TransactionReceipt): TransactionState {
+    if (receipt.blockNumber) {
+        const status = getReceiptStatus(receipt)
+        switch (status) {
+            case TransactionStatusType.SUCCEED:
+                return {
+                    type: TransactionStateType.CONFIRMED,
+                    no: 0,
+                    receipt,
+                }
+            case TransactionStatusType.FAILED:
+                return {
+                    type: TransactionStateType.FAILED,
+                    receipt,
+                    error: new Error('FAILED'),
+                }
+            case TransactionStatusType.NOT_DEPEND:
+                return {
+                    type: TransactionStateType.FAILED,
+                    receipt,
+                    error: new Error('Invalid transaction status.'),
+                }
+            case TransactionStatusType.CANCELLED:
+                return {
+                    type: TransactionStateType.FAILED,
+                    receipt,
+                    error: new Error('CANCELLED'),
+                }
+            default:
+                unreachable(status)
+        }
+    }
+    return {
+        type: TransactionStateType.RECEIPT,
+        receipt,
     }
 }

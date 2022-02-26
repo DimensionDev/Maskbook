@@ -27,8 +27,6 @@ export const Flags = {
     LBP_whitelist_enabled: process.env.NODE_ENV === 'production',
     // #endregion
 
-    EIP1559_enabled: true,
-
     bsc_enabled: true,
     polygon_enabled: true,
     arbitrum_enabled: true,

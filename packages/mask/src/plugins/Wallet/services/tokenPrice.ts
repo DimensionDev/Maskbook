@@ -1,15 +1,16 @@
-import { CryptoPrice, CurrencyType } from '@masknet/web3-shared-evm'
+import type { CryptoPrice } from '@masknet/public-api'
 import { pollingTask } from '@masknet/shared-base'
 import { startEffects } from '../../../../utils-pure'
 import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
 import { currentTokenPricesSettings } from '../settings'
 import { uniq } from 'lodash-unified'
 import { TokenPrice } from '@masknet/web3-providers'
+import { CurrencyType } from '@masknet/plugin-infra'
 
 const { run } = startEffects(import.meta.webpackHot)
 
 function updateCurrentPrices(data: CryptoPrice) {
-    const currentPrices: CryptoPrice = { ...currentTokenPricesSettings.value }
+    const currentPrices = { ...currentTokenPricesSettings.value }
     Object.keys(data).forEach((category) => {
         Object.keys(data[category]).forEach((currency) => {
             currentPrices[category] = {

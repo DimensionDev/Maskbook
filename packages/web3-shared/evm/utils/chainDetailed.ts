@@ -21,7 +21,9 @@ export function isEIP1559Supported(chainId: ChainId) {
 }
 
 export function isInjectedProvider(providerType: ProviderType) {
-    return [ProviderType.Coin98, ProviderType.WalletLink, ProviderType.MathWallet].includes(providerType)
+    return [ProviderType.MetaMask, ProviderType.Coin98, ProviderType.WalletLink, ProviderType.MathWallet].includes(
+        providerType,
+    )
 }
 
 export function isFortmaticSupported(chainId: ChainId) {
