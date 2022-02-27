@@ -63,7 +63,7 @@ export class AAVEProtocol implements SavingsProtocol {
         public name = 'AAVE',
         public symbol = 'AAVE',
         public image = 'aave',
-        public base = 'AAVE', // Used as key in savings.json
+        public base: keyof Savings = 'AAVE',
         public pair = 'aAAVE',
         public decimals = 18,
         public underLyingAssetName = 'AAVE Interest Bearing AAVE',
