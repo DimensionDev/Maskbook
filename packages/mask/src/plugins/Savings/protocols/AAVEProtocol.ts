@@ -87,7 +87,7 @@ export class AAVEProtocol implements SavingsProtocol {
 
     public getFungibleTokenDetails(chainId: ChainId): FungibleTokenDetailed {
         return {
-            type: 1,
+            type: EthereumTokenType.ERC20,
             chainId: chainId,
             address: (getSavingsConstants(chainId) as any)[this.base],
             symbol: this.symbol,
@@ -100,6 +100,11 @@ export class AAVEProtocol implements SavingsProtocol {
     public async getApr(chainId: ChainId) {
         try {
             const subgraphUrl = getSavingsConstants(chainId).AAVE_SUBGRAPHS || ''
+            if (!subgraphUrl) {
+                this.apr = this.DEFAULT_APR
+                return this.apr
+            }
+
             const body = JSON.stringify({
                 query: `{
                 reserves (where: {
@@ -239,7 +244,7 @@ export class AAVEProtocol implements SavingsProtocol {
             return new BigNumber(gasEstimate || 0)
         } catch (error) {
             console.error('AAVE `depositEstimate()` Error', error)
-            return new BigNumber(0)
+            return ZERO
         }
     }
 
@@ -261,7 +266,7 @@ export class AAVEProtocol implements SavingsProtocol {
         )
         return contract?.methods.deposit(
             (getSavingsConstants(chainId) as any)[this.base] || ZERO_ADDRESS,
-            value.toString(),
+            new BigNumber(value).toFixed(),
             account,
             '0',
         )
@@ -301,14 +306,18 @@ export class AAVEProtocol implements SavingsProtocol {
                 AaveLendingPoolABI as AbiItem[],
             )
             const gasEstimate = await contract?.methods
-                .withdraw((getSavingsConstants(chainId) as any)[this.base] || ZERO_ADDRESS, value.toString(), account)
+                .withdraw(
+                    (getSavingsConstants(chainId) as any)[this.base] || ZERO_ADDRESS,
+                    new BigNumber(value).toFixed(),
+                    account,
+                )
                 .estimateGas({
                     from: account,
                 })
             return new BigNumber(gasEstimate || 0)
         } catch (error) {
             console.error('AAVE `withdrawEstimate()` Error', error)
-            return new BigNumber(0)
+            return ZERO
         }
     }
 
@@ -329,7 +338,11 @@ export class AAVEProtocol implements SavingsProtocol {
                 AaveLendingPoolABI as AbiItem[],
             )
             await contract?.methods
-                .withdraw((getSavingsConstants(chainId) as any)[this.base] || ZERO_ADDRESS, value.toString(), account)
+                .withdraw(
+                    (getSavingsConstants(chainId) as any)[this.base] || ZERO_ADDRESS,
+                    new BigNumber(value).toFixed(),
+                    account,
+                )
                 .send({
                     from: account,
                     gas: gasEstimate.toNumber(),
