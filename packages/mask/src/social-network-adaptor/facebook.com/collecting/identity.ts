@@ -5,7 +5,7 @@ import { getProfileIdentifierAtFacebook, getUserID } from '../utils/getProfileId
 import { isMobileFacebook } from '../utils/isMobile'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { searchAvatarSelector, searchUserIdOnMobileSelector } from '../utils/selector'
-import { getAvatar, getBioDescription, getFacebookId, getNickName } from '../utils/user'
+import { getAvatar, getBioDescription, getFacebookId, getNickName, getPersonalHomepage } from '../utils/user'
 import { delay } from '@dimensiondev/kit'
 
 export const IdentityProviderFacebook: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
@@ -50,6 +50,7 @@ function resolveCurrentVisitingIdentityInner(
         const nickname = getNickName()
         const bio = getBioDescription()
         const handle = getFacebookId()
+        const homepage = getPersonalHomepage()
 
         const avatar = getAvatar()
 
@@ -58,6 +59,7 @@ function resolveCurrentVisitingIdentityInner(
             nickname,
             avatar,
             bio,
+            homepage,
         }
     }
 

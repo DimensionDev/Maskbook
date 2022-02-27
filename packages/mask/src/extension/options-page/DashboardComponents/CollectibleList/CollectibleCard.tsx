@@ -15,7 +15,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 4,
         position: 'absolute',
         zIndex: 1,
-        backgroundColor: theme.palette.background.default,
+        backgroundColor: theme.palette.mode === 'light' ? '#F7F9FA' : '#2F3336',
         width: 172,
         height: 172,
     },

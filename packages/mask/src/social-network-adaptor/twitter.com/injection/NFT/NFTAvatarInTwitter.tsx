@@ -62,13 +62,13 @@ function NFTAvatarInTwitter() {
     )
 
     const size = useMemo(() => {
-        const ele = searchTwitterAvatarSelector().evaluate()
+        const ele = searchTwitterAvatarSelector().evaluate()?.querySelector('img')
         if (ele) {
             const style = window.getComputedStyle(ele)
             return Number.parseInt(style.width.replace('px', '') ?? 0, 10)
         }
         return 0
-    }, [windowSize])
+    }, [windowSize, location])
 
     const { classes } = useStyles()
 
@@ -146,7 +146,6 @@ function NFTAvatarInTwitter() {
             // create rainbow shadow border
             if (linkDom.lastElementChild?.tagName !== 'STYLE') {
                 borderElement.current = linkDom.firstElementChild
-
                 // remove useless border
                 linkDom.removeChild(linkDom.firstElementChild)
                 const style = document.createElement('style')
@@ -156,8 +155,8 @@ function NFTAvatarInTwitter() {
                 .rainbowBorder {
                     animation: ${rainbowBorderKeyFrames.name} 6s linear infinite;
                     box-shadow: 0 5px 15px rgba(0, 248, 255, 0.4), 0 10px 30px rgba(37, 41, 46, 0.2);
-                    transition: .125s ease;
-                    border: 2px solid #00f8ff;
+                    transition: none;
+                    border: 0px solid #00f8ff;
                 }
             `
                 rainBowElement.current = linkDom.firstElementChild.nextElementSibling
@@ -211,7 +210,8 @@ function NFTAvatarInTwitter() {
         <>
             {showAvatar ? (
                 <NFTBadge
-                    hasRainbow={false}
+                    borderSize={5}
+                    hasRainbow
                     avatar={avatar}
                     size={size}
                     width={15}
