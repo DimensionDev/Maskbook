@@ -1,6 +1,6 @@
 # UI runtime
 
-An ui runtime implementation for browser
+A UI runtime implementation for browser.
 
 ## Features
 
