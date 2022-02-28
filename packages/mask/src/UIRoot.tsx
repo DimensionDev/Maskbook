@@ -40,7 +40,6 @@ function MaskThemeProvider({ children, baseline, useTheme }: MaskThemeProvider) 
             </MaskIconPaletteContext.Provider>
         ),
         (jsx) => <ThemeProvider theme={theme} children={jsx} />,
-        (jsx) => <UIRuntimeProvider children={jsx} />,
         (jsx) => (
             <CustomSnackbarProvider
                 disableWindowBlurListener={false}
@@ -57,6 +56,7 @@ function MaskThemeProvider({ children, baseline, useTheme }: MaskThemeProvider) 
                   </>
               )
             : identity,
+        (jsx) => <UIRuntimeProvider children={jsx} />,
     )
 }
 export interface MaskUIRootProps extends React.PropsWithChildren<{}> {

@@ -108,9 +108,7 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
                     </TabPanel>
                 </TabContext>
             </ContentContainer>
-            {addCollectibleOpen && (
-                <AddCollectibleDialog open={addCollectibleOpen} onClose={() => setAddCollectibleOpen(false)} />
-            )}
+            {addCollectibleOpen && <AddCollectibleDialog open onClose={() => setAddCollectibleOpen(false)} />}
         </>
     )
 })
