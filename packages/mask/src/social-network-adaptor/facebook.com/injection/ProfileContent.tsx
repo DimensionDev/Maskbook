@@ -2,23 +2,27 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { ProfileTabContent } from '../../../components/InjectedComponents/ProfileTabContent'
 import { createReactRootShadowed, startWatch } from '../../../utils'
-import { searchProfileActiveTabSelector, searchProfileTabArticlePageSelector } from '../utils/selector'
+import { profileSectionSelector, searchProfileTabPageSelector } from '../utils/selector'
 
-export function injectProfileTabContentAtInstagram(signal: AbortSignal) {
-    injectProfileTabContentHaveArticle(signal)
+function injectProfileTabContentState(signal: AbortSignal) {
+    const watcher = new MutationObserverWatcher(searchProfileTabPageSelector())
+    startWatch(watcher, signal)
+    createReactRootShadowed(watcher.firstDOMProxy.beforeShadow, { signal }).render(<ProfileTabContentAtFacebook />)
 }
 
-function injectProfileTabContentHaveArticle(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchProfileTabArticlePageSelector())
-    startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabContentAtInstagram />)
+export function injectProfileTabContentAtFacebook(signal: AbortSignal) {
+    injectProfileTabContentState(signal)
 }
 
 function getStyleProps() {
-    const activeTab = searchProfileActiveTabSelector().evaluate() as HTMLDivElement
+    const EMPTY_STYLE = {} as CSSStyleDeclaration
+    const profileSection = profileSectionSelector().evaluate()
+    const style = profileSection ? window.getComputedStyle(profileSection) : EMPTY_STYLE
     return {
-        backgroundColor: activeTab ? window.getComputedStyle(activeTab).backgroundColor : undefined,
-        fontFamily: activeTab ? window.getComputedStyle(activeTab as HTMLElement).fontFamily : undefined,
+        borderRadius: style.borderRadius,
+        backgroundColor: style.backgroundColor,
+        fontFamily: style.fontFamily,
+        boxShadow: style.boxShadow,
     }
 }
 
@@ -28,6 +32,11 @@ const useStyles = makeStyles()((theme) => {
     return {
         root: {
             position: 'relative',
+            marginBottom: 16,
+            paddingBottom: 16,
+            background: props.backgroundColor,
+            borderRadius: props.borderRadius,
+            boxShadow: props.boxShadow,
         },
         text: {
             paddingTop: 29,
@@ -50,7 +59,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export function ProfileTabContentAtInstagram() {
+export function ProfileTabContentAtFacebook() {
     const { classes } = useStyles()
     return <ProfileTabContent classes={classes} />
 }

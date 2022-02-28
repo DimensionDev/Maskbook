@@ -103,6 +103,8 @@
     "mask_network": "Mask Network",
     "import": "Import",
     "no_search_result": "No result",
+    "set_nft_profile_photo": "Set NFT Photo",
+    "use_nft": "Use NFT",
     "loading": "Loading...",
     "unlock": "Unlock",
     "payload_bad": "This post seems to be corrupted. Mask cannot decrypt it.",
