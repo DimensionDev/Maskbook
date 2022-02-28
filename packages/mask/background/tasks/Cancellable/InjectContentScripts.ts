@@ -3,14 +3,15 @@ import { MaskMessages } from '../../../shared/messages'
 import { Flags } from '../../../shared/flags'
 
 type Args = browser.webNavigation.TransitionNavListener extends browser.webNavigation.NavListener<infer U> ? U : never
+
+export const injectedScriptURL = '/injected-script.js'
+export const maskSDK_URL = '/mask-sdk.js'
+export const contentScriptURL = '/generated__content__script.html'
+
 export default function (signal: AbortSignal) {
-    const injectedScriptURL = '/injected-script.js'
     const injectedScript = fetchUserScript(injectedScriptURL)
-
-    const maskSDK_URL = '/mask-sdk.js'
     const maskSDK = fetchUserScript(maskSDK_URL)
-
-    const injectContentScript = fetchInjectContentScript('/generated__content__script.html')
+    const injectContentScript = fetchInjectContentScript(contentScriptURL)
 
     async function onCommittedListener(arg: Args): Promise<void> {
         if (arg.url === 'about:blank') return
@@ -61,29 +62,28 @@ export default function (signal: AbortSignal) {
         )
     }
 }
-
-function fetchInjectContentScript(entryHTML: string) {
+export async function fetchInjectContentScriptList(entryHTML: string) {
     const contentScripts: string[] = []
-    const task = fetch(entryHTML)
-        .then((x) => x.text())
-        .then((html) => {
-            // We're not going to use DOMParser because it is not available in MV3.
-            Array.from(html.matchAll(/<script src="([\w./-]+)"><\/script>/g)).forEach((script) =>
-                contentScripts.push(new URL(script[1], browser.runtime.getURL('')).pathname),
-            )
+    const html = await fetch(entryHTML).then((x) => x.text())
+    // We're not going to use DOMParser because it is not available in MV3.
+    Array.from(html.matchAll(/<script src="([\w./-]+)"><\/script>/g)).forEach((script) =>
+        contentScripts.push(new URL(script[1], browser.runtime.getURL('')).pathname),
+    )
 
-            const body = html.match(/<body>(.+)<\/body>/)![1]
-            body.replace(/<script defer src="/g, '')
-                .replace(/><\/script>/g, '')
-                .split('"')
-                .forEach((script) => {
-                    if (!script) return
-                    contentScripts.push(new URL(script, browser.runtime.getURL('')).pathname)
-                })
+    const body = html.match(/<body>(.+)<\/body>/)![1]
+    body.replace(/<script defer src="/g, '')
+        .replace(/><\/script>/g, '')
+        .split('"')
+        .forEach((script) => {
+            if (!script) return
+            contentScripts.push(new URL(script, browser.runtime.getURL('')).pathname)
         })
+    return contentScripts
+}
+function fetchInjectContentScript(entryHTML: string) {
+    const contentScripts = fetchInjectContentScriptList(entryHTML)
     return async (tabID: number, frameId: number | undefined) => {
-        await task
-        for (const script of contentScripts) {
+        for (const script of await contentScripts) {
             const option: browser.extensionTypes.InjectDetails = {
                 runAt: 'document_idle',
                 frameId,
