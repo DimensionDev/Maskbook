@@ -156,7 +156,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
                 setTimeout(() => {
                     clearInterval(verifyPostCollectTimer.current)
-                    reject({ message: 'Unfind Verify Post' })
+                    reject({ message: t('setup_guide_verify_post_not_found') })
                 }, 1000 * 20)
             })
 
@@ -189,10 +189,12 @@ function SetupGuideUI(props: SetupGuideUIProps) {
             return
         }
 
-        // check pin tip status
+        // check verify on next id status
         if (step === SetupGuideStep.VerifyOnNextID && enableNextID && persona_) {
             const isBound = await Services.NextID.queryIsBound(persona_.identifier, platform, username)
             if (!isBound) return
+            setStep(SetupGuideStep.PinExtension)
+            return
         }
 
         // check user guide status
