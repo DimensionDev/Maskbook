@@ -32,7 +32,6 @@ export const Services = {
     Ethereum: add(() => import('./background-script/EthereumService'), 'Ethereum'),
     SocialNetwork: add(() => import('./background-script/SocialNetworkService'), 'SocialNetwork'),
     Settings: add(() => import('./background-script/SettingsService'), 'Settings'),
-    NextID: add(() => import('./background-script/NextIDService'), 'NextID'),
     ThirdPartyPlugin: add(() => import('./background-script/ThirdPartyPlugin'), 'ThirdPartyPlugin'),
 }
 export default Services
@@ -53,7 +52,6 @@ if (process.env.manifest === '2' && import.meta.webpackHot && isEnvironment(Envi
             './background-script/SettingsService',
             './background-script/ThirdPartyPlugin',
             './background-script/SocialNetworkService',
-            './background-script/NextIDService',
             './service-generator',
         ],
         () => document.dispatchEvent(new Event(SERVICE_HMR_EVENT)),

@@ -1,14 +1,4 @@
-import {
-    toHex,
-    PersonaIdentifier,
-    compressSecp256k1Point,
-    fromHex,
-    toBase64,
-    decompressSecp256k1Key,
-    NextIDBindings,
-    NextIDPlatform,
-    NextIDPayload,
-} from '@masknet/shared-base'
+import { fromHex, toBase64, NextIDBindings, NextIDPlatform, NextIDPayload } from '@masknet/shared-base'
 import urlcat from 'urlcat'
 import { first } from 'lodash-unified'
 
@@ -30,7 +20,7 @@ interface CreatePayloadBody {
 }
 
 export async function bindProof(
-    persona: PersonaIdentifier,
+    personaPublicKey: string,
     action: 'create' | 'delete',
     platform: string,
     identity: string,
@@ -38,14 +28,11 @@ export async function bindProof(
     signature?: string,
     proofLocation?: string,
 ) {
-    const publicKey = await convertPersonaHexPublicKey(persona)
-    if (!publicKey) return
-
     const requestBody = {
         action,
         platform,
         identity,
-        public_key: publicKey,
+        public_key: personaPublicKey,
         ...(proofLocation ? { proof_location: proofLocation } : {}),
         extra: {
             ...(walletSignature ? { wallet_signature: toBase64(fromHex(walletSignature)) } : {}),
@@ -65,24 +52,13 @@ export async function bindProof(
     return response
 }
 
-async function convertPersonaHexPublicKey(persona: PersonaIdentifier) {
-    const key256 = decompressSecp256k1Key(persona.compressedPoint.replace(/\|/g, '/'))
-    if (!key256.x || !key256.y) return null
-    const arr = compressSecp256k1Point(key256.x, key256.y)
-
-    return `0x${toHex(arr)}`
-}
-
-export async function queryExistedBindingByPersona(persona: PersonaIdentifier) {
-    const personaPublicKey = await convertPersonaHexPublicKey(persona)
-    if (!personaPublicKey) return
-
+export async function queryExistedBindingByPersona(personaPublicKey: string) {
     const response = await fetch(urlcat(BASE_URL, '/v1/proof', { platform: 'nextid', identity: personaPublicKey }), {
         mode: 'cors',
     })
 
     const result = (await response.json()) as NextIDBindings
-    // Will have only one item when query by persona
+    // Will have only one item when query by personaPublicKey
     return first(result.ids)
 }
 
@@ -101,25 +77,19 @@ export async function queryExistedBinding(platform: NextIDPlatform, identity: st
     throw new Error('To be implemented.')
 }
 
-export async function queryIsBound(persona: PersonaIdentifier, platform: NextIDPlatform, identity: string) {
+export async function queryIsBound(personaPublicKey: string, platform: NextIDPlatform, identity: string) {
     if (!platform && !identity) return false
-
-    const personaPublicKey = await convertPersonaHexPublicKey(persona)
-    if (!personaPublicKey) return false
 
     const ids = await queryExistedBindingByPlatform(platform, identity)
     return ids.map((x) => x.persona.toLowerCase()).includes(personaPublicKey.toLowerCase())
 }
 
 export async function createPersonaPayload(
-    persona: PersonaIdentifier,
+    personaPublicKey: string,
     action: 'create' | 'delete',
     identity: string,
     platform: NextIDPlatform,
 ): Promise<NextIDPayload | null> {
-    const personaPublicKey = await convertPersonaHexPublicKey(persona)
-    if (!personaPublicKey) return null
-
     const requestBody: CreatePayloadBody = {
         action,
         platform,

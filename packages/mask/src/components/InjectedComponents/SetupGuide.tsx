@@ -24,6 +24,7 @@ import { SetupGuideStep } from './SetupGuide/types'
 import { FindUsername } from './SetupGuide/FindUsername'
 import { VerifyNextID } from './SetupGuide/VerifyNextID'
 import { PinExtension } from './SetupGuide/PinExtension'
+import { bindProof, createPersonaPayload, queryIsBound } from '@masknet/web3-providers'
 
 // #region setup guide ui
 interface SetupGuideUIProps {
@@ -113,23 +114,18 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     }
 
     const onVerify = async () => {
-        if (!persona_) return
+        if (!persona_?.publicHexKey) return
         const collectVerificationPost = ui.configuration.nextIDConfig?.collectVerificationPost
         const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform
-        const isBound = await Services.NextID.queryIsBound(persona_.identifier, platform, username)
+        const isBound = await queryIsBound(persona_.publicHexKey, platform, username)
 
         if (!isBound) {
-            const payload = await Services.NextID.createPersonaPayload(
-                persona_.identifier,
-                'create',
-                username,
-                platform,
-            )
+            const payload = await createPersonaPayload(persona_.publicHexKey, 'create', username, platform)
             if (!payload) throw new Error('Get Payload Wrong')
             const signResult = await Services.Identity.signWithPersona({
                 method: 'eth',
                 message: payload.signPayload,
-                identifier: persona.toText(),
+                identifier: persona_.publicHexKey,
             })
             if (!signResult) throw new Error('Get Persona Sign Wrong')
             const signature = signResult.signature.signature
@@ -139,10 +135,10 @@ function SetupGuideUI(props: SetupGuideUIProps) {
             const waitingPost = new Promise<void>((resolve, reject) => {
                 verifyPostCollectTimer.current = setInterval(async () => {
                     const post = collectVerificationPost?.(postContent)
-                    if (post) {
+                    if (post && persona_.publicHexKey) {
                         clearInterval(verifyPostCollectTimer.current)
-                        await Services.NextID.bindProof(
-                            persona_.identifier,
+                        await bindProof(
+                            persona_.publicHexKey,
                             'create',
                             platform,
                             username,
@@ -171,8 +167,8 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
     const onDone = async () => {
         // check verify nextID id state
-        if (step === SetupGuideStep.FindUsername && enableNextID && persona_) {
-            const isBound = await Services.NextID.queryIsBound(persona_.identifier, platform, username)
+        if (step === SetupGuideStep.FindUsername && enableNextID && persona_?.publicHexKey) {
+            const isBound = await queryIsBound(persona_.publicHexKey, platform, username)
             if (!isBound) {
                 currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
                     status: SetupGuideStep.VerifyOnNextID,
@@ -190,8 +186,8 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         }
 
         // check verify on next id status
-        if (step === SetupGuideStep.VerifyOnNextID && enableNextID && persona_) {
-            const isBound = await Services.NextID.queryIsBound(persona_.identifier, platform, username)
+        if (step === SetupGuideStep.VerifyOnNextID && enableNextID && persona_ && persona_.publicHexKey) {
+            const isBound = await queryIsBound(persona_.publicHexKey, platform, username)
             if (!isBound) return
             setStep(SetupGuideStep.PinExtension)
             return

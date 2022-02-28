@@ -19,8 +19,5 @@ function createWorkerContext(pluginID: string, signal: AbortSignal): Plugin.Work
         },
         personaSign: Services.Identity.signWithPersona,
         walletSign: Services.Ethereum.personalSign,
-        nextID: {
-            query: Services.NextID.queryExistedBinding,
-        },
     }
 }
