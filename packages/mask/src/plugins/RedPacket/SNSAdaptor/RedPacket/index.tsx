@@ -70,18 +70,21 @@ export function RedPacket(props: RedPacketProps) {
 
     // #region remote controlled transaction dialog
     const postLink = usePostLink()
+    const shareTextOption = {
+        sender: payload.sender.name,
+        payload: postLink,
+        network: resolveNetworkName(networkType),
+        account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
+    }
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
-            t(
-                isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                    ? 'plugin_red_packet_share_message_official_account'
-                    : 'plugin_red_packet_share_message_not_twitter',
-                {
-                    sender: payload.sender.name,
-                    payload: postLink,
-                    network: resolveNetworkName(networkType),
-                    account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
-                },
+            (availability?.claimed
+                ? isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                    ? t('plugin_red_packet_share_message_official_account', shareTextOption)
+                    : t('plugin_red_packet_share_message_not_twitter', shareTextOption)
+                : isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                ? t('plugin_red_packet_share_unclaimed_message_official_account', shareTextOption)
+                : t('plugin_red_packet_share_unclaimed_message_not_twitter', shareTextOption)
             ).trim(),
         )
         .toString()
