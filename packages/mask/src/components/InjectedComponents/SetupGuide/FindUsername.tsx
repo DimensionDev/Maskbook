@@ -36,9 +36,18 @@ export interface FindUsernameProps extends Partial<WizardDialogProps> {
     onUsernameChange?: (username: string) => void
     onConnect: () => Promise<void>
     onDone?: () => void
+    enableNextID?: boolean
 }
 
-export function FindUsername({ personaName, username, avatar, onConnect, onDone, onClose }: FindUsernameProps) {
+export function FindUsername({
+    personaName,
+    username,
+    avatar,
+    onConnect,
+    onDone,
+    onClose,
+    enableNextID,
+}: FindUsernameProps) {
     const { t } = useI18N()
     const [connected, setConnected] = useState(false)
 
@@ -96,11 +105,11 @@ export function FindUsername({ personaName, username, avatar, onConnect, onDone,
                         variant="contained"
                         init={t('setup_guide_connect_auto')}
                         waiting={t('connecting')}
-                        complete={t('ok')}
+                        complete={enableNextID ? 'fetching' : t('ok')}
                         failed={t('setup_guide_connect_failed')}
                         executor={onConnect}
-                        completeOnClick={onDone}
-                        onComplete={() => setConnected(true)}
+                        completeOnClick={enableNextID ? () => {} : onDone}
+                        onComplete={enableNextID ? onDone : () => setConnected(true)}
                         disabled={!username || !personaName}
                         completeIcon={null}
                         failIcon={null}

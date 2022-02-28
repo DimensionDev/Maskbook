@@ -233,6 +233,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                     onConnect={onConnect}
                     onDone={onDone}
                     onClose={onClose}
+                    enableNextID={enableNextID}
                 />
             )
         case SetupGuideStep.VerifyOnNextID:
