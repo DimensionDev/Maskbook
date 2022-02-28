@@ -52,7 +52,9 @@ export function useNextIDConnectStatus() {
         const currentPersona = await Services.Settings.getCurrentPersona()
         if (!currentPersona?.publicHexKey) return true
 
-        const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform
+        const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
+        if (!platform) return true
+
         const isBound = await queryIsBound(currentPersona.publicHexKey, platform, username)
         if (isBound) return true
 
