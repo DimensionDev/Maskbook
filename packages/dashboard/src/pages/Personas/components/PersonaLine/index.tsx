@@ -81,11 +81,13 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         const handleUserIdClick = async (network: string, userId: string) => {
             await openProfilePage(network, userId)
         }
-        const userIdBox = (id: string, verify: boolean) => {
+        const userIdBox = (id: string) => {
+            const verifed = false
+            // temp here, further change to get proof verified
             return (
                 <div className={classes.userIdBox}>
                     <div>@{id}</div>
-                    {verify ? <NextIdPersonaVerifiedIcon /> : <NextIdPersonaWarningIcon />}
+                    {verifed ? <NextIdPersonaVerifiedIcon /> : <NextIdPersonaWarningIcon />}
                 </div>
             )
         }
@@ -108,7 +110,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                                     key={x.userId}
                                     onClick={() => handleUserIdClick(networkIdentifier, x.userId)}
                                     sx={{ color: MaskColorVar.textPrimary, fontSize: 13, mr: 1, cursor: 'pointer' }}>
-                                    {userIdBox(x.userId, true)}
+                                    {userIdBox(x.userId)}
                                 </Typography>
                             ))}
                         </Stack>
