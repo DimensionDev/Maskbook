@@ -34,7 +34,6 @@ import { injectProfileNFTAvatarInTwitter } from './injection/NFT/ProfileNFTAvata
 import { injectUserNFTAvatarAtTwitter } from './injection/NFT/Avatar'
 import { injectOpenNFTAvatarEditProfileButton } from './injection/NFT/NFTAvatarEditProfile'
 import { injectUserNFTAvatarAtTweet } from './injection/NFT/TweetNFTAvatar'
-import { injectNFTContractAtTwitter } from './injection/NFT/NFTContract'
 import { injectNFTAvatarClipInTwitter } from './injection/NFT/NFTAvatarClip'
 import { TwitterRenderFragments } from './customization/render-fragments'
 
@@ -180,7 +179,6 @@ const twitterUI: SocialNetworkUI.Definition = {
         profileAvatar: injectNFTAvatarInTwitter,
         openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
         postAndReplyNFTAvatar: injectUserNFTAvatarAtTweet,
-        collectionAvatar: injectNFTContractAtTwitter,
         avatarClipNFT: injectNFTAvatarClipInTwitter,
     },
     configuration: {
