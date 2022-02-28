@@ -10,7 +10,7 @@ importers:
       '@commitlint/cli': ^16.1.0
       '@commitlint/config-conventional': ^16.0.0
       '@dimensiondev/eslint-plugin': ^0.0.1-20220117062517-fd3cb01
-      '@dimensiondev/kit': 0.0.0-20220223101101-4e6f3b9
+      '@dimensiondev/kit': 0.0.0-20220228054820-f2378be
       '@dimensiondev/patch-package': ^6.5.0
       '@emotion/cache': ^11.7.1
       '@emotion/react': ^11.7.1
@@ -63,7 +63,7 @@ importers:
       web3-core-method: 1.5.2
       webpack: 5.68.0
     dependencies:
-      '@dimensiondev/kit': 0.0.0-20220223101101-4e6f3b9
+      '@dimensiondev/kit': 0.0.0-20220228054820-f2378be
       '@emotion/cache': 11.7.1
       '@emotion/react': 11.7.1_6b5db35eea36630b01cb5c8dd65e2365
       '@emotion/serialize': 1.0.2
@@ -3841,8 +3841,8 @@ packages:
       webextension-polyfill: 0.8.0
     dev: false
 
-  /@dimensiondev/kit/0.0.0-20220223101101-4e6f3b9:
-    resolution: {integrity: sha512-xk9rACwU2Iu+81BfnL1ykGofG+HuR/aMmYo4GZ1zyv32vZwe73B21z1GNGLq6XbYVjqNGa3puWoHZwDizAP4SA==, tarball: download/@dimensiondev/kit/0.0.0-20220223101101-4e6f3b9/a1b996a27d8d62c75d54a4a9d6b6544b45fe464288c83df31fccbbd2685b3a54}
+  /@dimensiondev/kit/0.0.0-20220228054820-f2378be:
+    resolution: {integrity: sha512-B+5bj3+nTqwp4nigrwXxKK3iQeCn1tlFOuYeqzPCJY/wqMrM+GsAyYdw5BPjFwn5+9uiZ5xSZcnLhSF/6EgjhQ==, tarball: download/@dimensiondev/kit/0.0.0-20220228054820-f2378be/8352c3f70e1a38376b321dd05989ad48c80a260785561da3910520e28560b26b}
     dependencies:
       lodash-es: 4.17.21
     dev: false
