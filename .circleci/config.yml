@@ -6,7 +6,7 @@ version: 2.1
 executors:
   mask_node:
     docker:
-      - image: circleci/node:15.3.0
+      - image: cimg/node:17.5
     working_directory: ~/repo
 commands:
   restore_workspace:
@@ -24,8 +24,8 @@ jobs:
           keys:
             - v3-mask-cache-pnpm
       - run:
-          name: Install PNPM
-          command: sudo npm install -g pnpm@6.4.0
+          name: Enable corepack
+          command: sudo corepack enable
       - run:
           name: Install Dependencies
           command: pnpm install --frozen-lockfile --store-dir ~/.pnpm/
@@ -43,8 +43,8 @@ jobs:
     steps:
       - restore_workspace
       - run:
-          name: Install PNPM
-          command: sudo npm install -g pnpm@6.4.0
+          name: Enable corepack
+          command: sudo corepack enable
       - run:
           name: Build Mask Network
           command: npx gulp build-ci

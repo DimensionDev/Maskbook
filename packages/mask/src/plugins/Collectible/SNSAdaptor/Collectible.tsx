@@ -8,7 +8,7 @@ import isValidDate from 'date-fns/isValid'
 import isAfter from 'date-fns/isAfter'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
-import { useI18N, useSettingsSwitcher } from '../../../utils'
+import { useI18N, useSwitcher } from '../../../utils'
 import { ArticleTab } from './ArticleTab'
 import { TokenTab } from './TokenTab'
 import { OfferTab } from './OfferTab'
@@ -26,7 +26,6 @@ import { getEnumAsArray } from '@dimensiondev/kit'
 import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/FootnoteMenu'
 import { LoadingAnimation } from '@masknet/shared'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
-import { currentNonFungibleAssetProviderSettings } from '../settings'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -127,18 +126,19 @@ export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const chainId = useChainId()
-    const { token, asset, provider, tabIndex, setTabIndex } = CollectibleState.useContainer()
+    const { token, asset, provider, setProvider, tabIndex, setTabIndex } = CollectibleState.useContainer()
 
     // #region sync with settings
     const collectibleProviderOptions = getEnumAsArray(NonFungibleAssetProvider)
     const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
-        currentNonFungibleAssetProviderSettings.value = option.value as NonFungibleAssetProvider
+        setProvider(option.value as NonFungibleAssetProvider)
     }, [])
     // #endregion
 
     // #region provider switcher
-    const CollectibleProviderSwitcher = useSettingsSwitcher(
-        currentNonFungibleAssetProviderSettings,
+    const CollectibleProviderSwitcher = useSwitcher(
+        provider,
+        setProvider,
         getEnumAsArray(NonFungibleAssetProvider).map((x) => x.value),
         resolveCollectibleProviderName,
     )

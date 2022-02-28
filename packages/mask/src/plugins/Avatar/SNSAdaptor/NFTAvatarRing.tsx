@@ -25,13 +25,14 @@ interface NFTAvatarRingProps {
     width: number
     id: string
     hasRainbow?: boolean
+    borderSize?: number
 }
 
 export function NFTAvatarRing(props: NFTAvatarRingProps) {
     const { classes } = useStyles()
-    const { stroke, strokeWidth, fontSize, text, width, id, price, hasRainbow = true } = props
+    const { stroke, strokeWidth, fontSize, text, width, id, price, hasRainbow = true, borderSize = 2 } = props
 
-    const avatarSize = width + 1
+    const avatarSize = hasRainbow ? width - borderSize : width + 1
     const R = avatarSize / 2
     const path_r = R - strokeWidth + fontSize / 2
     const x1 = R - path_r
@@ -97,5 +98,9 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
         </svg>
     )
 
-    return hasRainbow ? <RainbowBox>{svgNode}</RainbowBox> : <div className={classes.container}>{svgNode}</div>
+    return hasRainbow ? (
+        <RainbowBox borderSize={borderSize}>{svgNode}</RainbowBox>
+    ) : (
+        <div className={classes.container}>{svgNode}</div>
+    )
 }

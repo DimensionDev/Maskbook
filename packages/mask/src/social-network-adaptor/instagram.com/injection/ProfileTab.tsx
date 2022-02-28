@@ -1,14 +1,15 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { CollectibleIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
+import { useLayoutEffect, useMemo, useState } from 'react'
+import { useLocation } from 'react-use'
 import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab'
-import { createReactRootShadowed, startWatch, untilElementAvailable } from '../../../utils'
+import { createReactRootShadowed, startWatch, useMatchXS } from '../../../utils'
 import {
     searchProfileActiveTabSelector,
     searchProfileTabListLastChildSelector,
     searchProfileTabPageSelector,
     searchProfileTabSelector,
-    searchUserIdSelector,
 } from '../utils/selector'
 
 export function injectProfileTabAtInstagram(signal: AbortSignal) {
@@ -26,25 +27,22 @@ export function injectProfileTabAtInstagram(signal: AbortSignal) {
     startWatch(contentWatcher, signal)
 }
 
-function getStyleProps() {
+function getStyleProps(activeColor: { activeColor: string; color: string }) {
     const EMPTY_STYLE = {} as CSSStyleDeclaration
     const eleTab = searchProfileTabSelector().evaluate()
     const style = eleTab ? window.getComputedStyle(eleTab) : EMPTY_STYLE
-    const activeTab = searchUserIdSelector().evaluate()
-    const activeStyle = activeTab ? window.getComputedStyle(activeTab) : EMPTY_STYLE
     return {
-        color: style.color,
+        color: activeColor.color,
         font: style.font,
         fontSize: style.fontSize,
         padding: style.paddingBottom,
         height: style.height,
-        hover: activeStyle.color,
-        line: activeStyle.color,
+        hover: activeColor.activeColor,
+        line: activeColor.activeColor,
     }
 }
 
-const useStyles = makeStyles()(() => {
-    const props = getStyleProps()
+const useStyles = makeStyles<StyleProps>()((theme, props) => {
     return {
         root: {
             '&:hover': {
@@ -68,18 +66,68 @@ const useStyles = makeStyles()(() => {
         selected: {
             borderTop: `1px solid ${props.hover}`,
             color: props.hover,
+            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+                borderTop: 'unset',
+            },
         },
         line: {},
         icon: {
-            fontSize: props.fontSize,
-            paddingRight: 4,
+            [`@media (min-width: ${theme.breakpoints.values.sm}px)`]: {
+                fontSize: props.fontSize,
+                paddingRight: 4,
+            },
         },
     }
 })
 
-export function ProfileTabAtInstagram() {
-    const { classes } = useStyles()
+interface StyleProps {
+    color: string
+    font: string
+    hover: string
+    fontSize: string
+    height: string
+    padding: string
+}
 
+function getActiveColor() {
+    const activeTab = searchProfileActiveTabSelector().evaluate()?.firstElementChild
+    if (!activeTab) return ''
+    const activeStyle = window.getComputedStyle(activeTab)
+    return activeStyle.color
+}
+
+function getColor() {
+    const tab = searchProfileTabSelector().evaluate()
+    if (!tab) return ''
+    const style = window.getComputedStyle(tab)
+    return style.color
+}
+
+export function ProfileTabAtInstagram() {
+    const isMobile = useMatchXS()
+    const location = useLocation()
+    const [styles, setStyles] = useState<StyleProps>({
+        color: '',
+        font: '',
+        hover: '',
+        fontSize: '',
+        height: '',
+        padding: '',
+    })
+
+    const { activeColor, color } = useMemo(() => {
+        const activeColor = getActiveColor()
+        const color = getColor()
+
+        return { activeColor, color }
+    }, [location.pathname])
+
+    useLayoutEffect(() => {
+        const tabStyles = getStyleProps({ activeColor, color })
+        setStyles(tabStyles)
+    }, [])
+
+    const { classes } = useStyles(styles)
     const reset = () => {
         const activeTab = searchProfileActiveTabSelector().evaluate()
         if (activeTab?.style) {
@@ -87,25 +135,44 @@ export function ProfileTabAtInstagram() {
             activeTab.style.color = ''
         }
 
-        Array.from(searchProfileTabPageSelector().evaluate()?.childNodes ?? []).forEach((v) => {
-            const ele = v as HTMLDivElement
-            if (ele.tagName !== 'SPAN') ele.style.display = ''
-        })
+        if (isMobile) {
+            const activeTab = searchProfileActiveTabSelector().evaluate()?.firstElementChild
+
+            if (activeTab?.tagName.toUpperCase() === 'SVG') {
+                const ele = activeTab as HTMLOrSVGImageElement
+                if (ele.style) {
+                    ele.style.color = ''
+                    ele.style.fill = ''
+                }
+            }
+        }
+        const ele = searchProfileTabPageSelector().evaluate()
+        if (ele?.style) {
+            ele.style.display = ''
+        }
     }
     const clear = async () => {
-        const style = getStyleProps()
+        const style = getStyleProps({ activeColor, color })
         const activeTab = searchProfileActiveTabSelector().evaluate()
         if (activeTab?.style) {
             activeTab.style.borderTop = 'none'
             activeTab.style.color = style.color
         }
-        // hide the content page
-        await untilElementAvailable(searchProfileTabPageSelector())
 
-        Array.from(searchProfileTabPageSelector().evaluate()?.childNodes ?? []).forEach((v) => {
-            const ele = v as HTMLDivElement
-            if (ele.tagName !== 'SPAN') ele.style.display = 'none'
-        })
+        if (isMobile) {
+            const activeTab = searchProfileActiveTabSelector().evaluate()?.firstElementChild
+            if (activeTab?.tagName.toUpperCase() === 'SVG') {
+                const ele = activeTab as HTMLOrSVGImageElement
+                if (ele.style) {
+                    ele.style.color = style.color
+                    ele.style.fill = style.color
+                }
+            }
+        }
+        const ele = searchProfileTabPageSelector().evaluate()
+        if (ele?.style) {
+            ele.style.display = 'none'
+        }
     }
     return (
         <ProfileTab

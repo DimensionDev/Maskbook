@@ -1,5 +1,7 @@
 lockfileVersion: 5.3
 
+onlyBuiltDependencies: []
+
 overrides:
   '@types/node': ^17.0.17
 
@@ -50,7 +52,6 @@ importers:
       lodash: ^4.17.21
       lodash-es: ^4.17.21
       lodash-unified: 1.0.1
-      only-allow: ^1.0.0
       prettier: ^2.5.1
       react: 18.0.0-rc.0
       react-dom: 18.0.0-rc.0
@@ -113,7 +114,6 @@ importers:
       husky: 7.0.4
       jest: 28.0.0-alpha.3_ts-node@10.5.0
       lint-staged: 12.3.3
-      only-allow: 1.0.0
       prettier: 2.5.1
       ts-jest: 27.1.3_c8eb52e5486fcfea70490c468354ab3a
       ts-node: 10.5.0_e833ca82abcdabd5fb6957683ba71378
@@ -252,10 +252,12 @@ importers:
     specifiers:
       '@dimensiondev/stego-js': 0.11.1-20201027083223-8ab41be
       '@masknet/shared-base': workspace:*
+      '@masknet/typed-message': workspace:*
       '@msgpack/msgpack': ^2.7.2
     dependencies:
       '@dimensiondev/stego-js': 0.11.1-20201027083223-8ab41be
       '@masknet/shared-base': link:../shared-base
+      '@masknet/typed-message': link:../typed-message
       '@msgpack/msgpack': 2.7.2
 
   packages/external-plugin-previewer:
@@ -326,6 +328,7 @@ importers:
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
+      '@masknet/typed-message': workspace:*
       '@masknet/web3-contracts': workspace:*
       '@masknet/web3-providers': workspace:*
       '@masknet/web3-shared-base': workspace:*
@@ -388,7 +391,6 @@ importers:
       jsbi: 3.1.4
       json-stable-stringify: ^1.0.1
       json2csv: ^5.0.6
-      jsx-jsonml-devtools-renderer: ^1.4.3
       millify: ^4.0.0
       next-tick: ^1.0.0
       opensea-js: ^1.2.7
@@ -462,6 +464,7 @@ importers:
       '@masknet/shared': link:../shared
       '@masknet/shared-base': link:../shared-base
       '@masknet/theme': link:../theme
+      '@masknet/typed-message': link:../typed-message
       '@masknet/web3-contracts': link:../web3-contracts
       '@masknet/web3-providers': link:../web3-providers
       '@masknet/web3-shared-base': link:../web3-shared/base
@@ -518,7 +521,6 @@ importers:
       jsbi: 3.1.4
       json-stable-stringify: 1.0.1
       json2csv: 5.0.6
-      jsx-jsonml-devtools-renderer: 1.4.3
       millify: 4.0.0
       next-tick: 1.1.0
       opensea-js: 1.2.7
@@ -591,6 +593,7 @@ importers:
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
+      '@masknet/typed-message': workspace:*
       '@masknet/web3-shared-base': workspace:*
       '@servie/events': ^3.0.0
       '@types/use-subscription': ^1.0.0
@@ -605,6 +608,7 @@ importers:
       '@masknet/shared': link:../shared
       '@masknet/shared-base': link:../shared-base
       '@masknet/theme': link:../theme
+      '@masknet/typed-message': link:../typed-message
       '@masknet/web3-shared-base': link:../web3-shared/base
       '@servie/events': 3.0.0
       '@types/use-subscription': 1.0.0
@@ -696,6 +700,7 @@ importers:
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
+      '@masknet/typed-message': workspace:*
       '@masknet/web3-kit': workspace:*
       '@msgpack/msgpack': ^2.7.2
       arweave: ^1.10.3
@@ -714,6 +719,7 @@ importers:
       '@masknet/shared': link:../../shared
       '@masknet/shared-base': link:../../shared-base
       '@masknet/theme': link:../../theme
+      '@masknet/typed-message': link:../../typed-message
       '@masknet/web3-kit': link:../../web3-kit
       '@msgpack/msgpack': 2.7.2
       arweave: 1.10.13
@@ -1002,6 +1008,7 @@ importers:
   packages/shared-base:
     specifiers:
       '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
+      '@masknet/typed-message': workspace:*
       '@msgpack/msgpack': ^2.7.2
       '@mui/icons-material': link:..\empty
       '@mui/lab': link:..\empty
@@ -1023,6 +1030,7 @@ importers:
       z-schema: ^5.0.2
     dependencies:
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
+      '@masknet/typed-message': link:../typed-message
       '@msgpack/msgpack': 2.7.2
       '@mui/icons-material': link:../empty
       '@mui/lab': link:../empty
@@ -1098,6 +1106,20 @@ importers:
       '@storybook/manager-webpack5': 6.4.18_7a3f4a361b4b2ecb4dc340ca5387ad5f
       '@storybook/react': 6.4.18_b824aaa144c344b0886eeabad621db2e
       babel-loader: 8.2.3_900eac683bef8a6b239b47efcf24e8a9
+
+  packages/typed-message:
+    specifiers:
+      '@msgpack/msgpack': ^2.7.2
+      '@mui/material': link:..\empty
+      anchorme: ^2.1.2
+      immer: ^9.0.12
+      z-schema: ^5.0.2
+    dependencies:
+      '@msgpack/msgpack': 2.7.2
+      '@mui/material': link:../empty
+      anchorme: 2.1.2
+      immer: 9.0.12
+      z-schema: 5.0.2
 
   packages/web3-constants:
     specifiers: {}
@@ -5530,7 +5552,6 @@ packages:
   /@peculiar/webcrypto/1.2.3:
     resolution: {integrity: sha512-q7wDfZy3k/tpnsYB23/MyyDkjn6IdHh8w+xwoVMS5cu6CjVoFzngXDZEOOuSE4zus2yO6ciQhhHxd4XkLpwVnQ==}
     engines: {node: '>=10.12.0'}
-    requiresBuild: true
     dependencies:
       '@peculiar/asn1-schema': 2.0.44
       '@peculiar/json-schema': 1.1.12
@@ -7868,7 +7889,6 @@ packages:
     engines: {node: '>=10'}
     cpu: [arm]
     os: [android]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -7877,7 +7897,6 @@ packages:
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [android]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -7886,7 +7905,6 @@ packages:
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [darwin]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -7895,7 +7913,6 @@ packages:
     engines: {node: '>=10'}
     cpu: [x64]
     os: [darwin]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -7904,7 +7921,6 @@ packages:
     engines: {node: '>=10'}
     cpu: [x64]
     os: [freebsd]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -7913,7 +7929,6 @@ packages:
     engines: {node: '>=10'}
     cpu: [arm]
     os: [linux]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -7922,7 +7937,6 @@ packages:
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [linux]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -7931,7 +7945,6 @@ packages:
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [linux]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -7940,7 +7953,6 @@ packages:
     engines: {node: '>=10'}
     cpu: [x64]
     os: [linux]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -7949,7 +7961,6 @@ packages:
     engines: {node: '>=10'}
     cpu: [x64]
     os: [linux]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -7958,7 +7969,6 @@ packages:
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [win32]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -7967,7 +7977,6 @@ packages:
     engines: {node: '>=10'}
     cpu: [ia32]
     os: [win32]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -7976,7 +7985,6 @@ packages:
     engines: {node: '>=10'}
     cpu: [x64]
     os: [win32]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -11094,7 +11102,6 @@ packages:
 
   /bindings/1.5.0:
     resolution: {integrity: sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==}
-    requiresBuild: true
     dependencies:
       file-uri-to-path: 1.0.0
     optional: true
@@ -11220,20 +11227,6 @@ packages:
       bs58: 4.0.1
       text-encoding-utf-8: 1.0.2
     dev: false
-
-  /boxen/4.2.0:
-    resolution: {integrity: sha512-eB4uT9RGzg2odpER62bBwSLvUeGC+WbRjjyyFhGsKnc8wp/m0+hQsMUvUe3H2V0D5vw0nBdO1hCJoZo5mKeuIQ==}
-    engines: {node: '>=8'}
-    dependencies:
-      ansi-align: 3.0.1
-      camelcase: 5.3.1
-      chalk: 3.0.0
-      cli-boxes: 2.2.1
-      string-width: 4.2.3
-      term-size: 2.2.1
-      type-fest: 0.8.1
-      widest-line: 3.1.0
-    dev: true
 
   /boxen/5.1.2:
     resolution: {integrity: sha512-9gYgQKXx+1nP8mP7CzFyaUARhg7D3n1dF/FnErWmu9l6JvGpNUN278h0aSb+QjoiKSWG+iZ3uHrcqk0qrY9RQQ==}
@@ -11444,14 +11437,12 @@ packages:
 
   /bufferutil/4.0.3:
     resolution: {integrity: sha512-yEYTwGndELGvfXsImMBLop58eaGW+YdONi1fNjTINSY98tmMmFijBG6WXgdkfuLNt4imzQNtIE+eBp1PVpMCSw==}
-    requiresBuild: true
     dependencies:
       node-gyp-build: 4.3.0
 
   /bufferutil/4.0.6:
     resolution: {integrity: sha512-jduaYOYtnio4aIAyc6UbvPCVcgq7nYpVnucyxr6eCYg/Woad9Hf/oxxBRDnGGjPfjUm6j5O/uBWhIu4iLebFaw==}
     engines: {node: '>=6.14.2'}
-    requiresBuild: true
     dependencies:
       node-gyp-build: 4.3.0
     dev: false
@@ -11703,14 +11694,6 @@ packages:
       ansi-styles: 3.2.1
       escape-string-regexp: 1.0.5
       supports-color: 5.5.0
-
-  /chalk/3.0.0:
-    resolution: {integrity: sha512-4D3B6Wf41KOYRFdszmDqMCGq5VV/uMAB273JILmO+3jAlh8X4qDtdtgCR3fxtbLEMzSx22QdhnDcJvu2u1fVwg==}
-    engines: {node: '>=8'}
-    dependencies:
-      ansi-styles: 4.3.0
-      supports-color: 7.2.0
-    dev: true
 
   /chalk/4.1.2:
     resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
@@ -12106,7 +12089,6 @@ packages:
   /colors/1.4.0:
     resolution: {integrity: sha512-a+UqTh4kgZg/SlGvfbzDHpgRu7AAQOmmqRHJnxhRZICKFUT91brVhNNt58CMWU9PsBbv3PDCZUHbVxuDiH2mtA==}
     engines: {node: '>=0.1.90'}
-    requiresBuild: true
 
   /combined-stream/1.0.8:
     resolution: {integrity: sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==}
@@ -12393,12 +12375,10 @@ packages:
 
   /core-js-pure/3.20.1:
     resolution: {integrity: sha512-yeNNr3L9cEBwNy6vhhIJ0nko7fE7uFO6PgawcacGt2VWep4WqQx0RiqlkgSP7kqUMC1IKdfO9qPeWXcUheHLVQ==}
-    requiresBuild: true
     dev: true
 
   /core-js-pure/3.21.0:
     resolution: {integrity: sha512-VaJUunCZLnxuDbo1rNOzwbet9E1K9joiXS5+DQMPtgxd24wfsZbJZMMfQLGYMlCUvSxLfsRUUhoOR2x28mFfeg==}
-    requiresBuild: true
     dev: true
 
   /core-js/1.2.7:
@@ -12409,12 +12389,10 @@ packages:
   /core-js/2.6.12:
     resolution: {integrity: sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==}
     deprecated: core-js@<3.4 is no longer maintained and not recommended for usage due to the number of issues. Because of the V8 engine whims, feature detection in old core-js versions could cause a slowdown up to 100x even if nothing is polyfilled. Please, upgrade your dependencies to the actual version of core-js.
-    requiresBuild: true
     dev: false
 
   /core-js/3.21.0:
     resolution: {integrity: sha512-YUdI3fFu4TF/2WykQ2xzSiTQdldLB4KVuL9WeAy5XONZYt5Cun/fpQvctoKbCgvPhmzADeesTk/j2Rdx77AcKQ==}
-    requiresBuild: true
 
   /core-util-is/1.0.2:
     resolution: {integrity: sha1-tf1UIgqivFq1eqtxQMlAdUUDwac=}
@@ -13690,7 +13668,6 @@ packages:
 
   /emailjs/2.2.0:
     resolution: {integrity: sha1-ulsj5KSwpFEPZS6HOxVOlAe2ygM=}
-    requiresBuild: true
     dependencies:
       addressparser: 0.3.2
       emailjs-mime-codec: 2.0.9
@@ -15109,7 +15086,6 @@ packages:
 
   /file-uri-to-path/1.0.0:
     resolution: {integrity: sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw==}
-    requiresBuild: true
     optional: true
 
   /fill-range/4.0.0:
@@ -15561,7 +15537,6 @@ packages:
     engines: {node: '>= 4.0'}
     os: [darwin]
     deprecated: fsevents 1 will break on node v14+ and could be using insecure binaries. Upgrade to fsevents 2.
-    requiresBuild: true
     dependencies:
       bindings: 1.5.0
       nan: 2.15.0
@@ -15571,7 +15546,6 @@ packages:
     resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
-    requiresBuild: true
     optional: true
 
   /function-bind/1.1.1:
@@ -15958,7 +15932,6 @@ packages:
 
   /graceful-fs/4.2.9:
     resolution: {integrity: sha512-NtNxqUcXgpW2iMrfqSfR73Glt39K+BLwWsPs94yR63v45T0Wbej7eRmL5cWfwEgqXnmjQp3zaJTshdRW/qC2ZQ==}
-    requiresBuild: true
 
   /graphql-request/3.5.0_graphql@15.5.3:
     resolution: {integrity: sha512-Io89QpfU4rqiMbqM/KwMBzKaDLOppi8FU8sEccCE4JqCgz95W9Q8bvxQ4NfPALLSMvg9nafgg8AkYRmgKSlukA==}
@@ -16283,7 +16256,6 @@ packages:
   /highlight.js/9.18.5:
     resolution: {integrity: sha512-a5bFyofd/BHCX52/8i8uJkjr9DYwXIPnM/plwI6W7ezItLGqzt7X2G2nXuYSfsIJdkwwj/g9DG1LkcGJI/dDoA==}
     deprecated: Support has ended for 9.x series. Upgrade to @latest
-    requiresBuild: true
     dev: false
 
   /history/4.10.1:
@@ -18460,7 +18432,6 @@ packages:
   /keccak/3.0.1:
     resolution: {integrity: sha512-epq90L9jlFWCW7+pQa6JOnKn2Xgl2mtI664seYR6MHskvI9agt7AnDqmAlp9TqU4/caMYbA08Hi5DMZAl5zdkA==}
     engines: {node: '>=10.0.0'}
-    requiresBuild: true
     dependencies:
       node-addon-api: 2.0.2
       node-gyp-build: 4.2.3
@@ -18469,7 +18440,6 @@ packages:
   /keccak/3.0.2:
     resolution: {integrity: sha512-PyKKjkH53wDMLGrvmRGSNWgmSxZOUqbnXwKL9tmgbFYA1iAYqW21kfR7mZXV0MlESiefxQQE9X9fTa3X+2MPDQ==}
     engines: {node: '>=10.0.0'}
-    requiresBuild: true
     dependencies:
       node-addon-api: 2.0.2
       node-gyp-build: 4.3.0
@@ -19647,7 +19617,6 @@ packages:
 
   /nan/2.15.0:
     resolution: {integrity: sha512-8ZtvEnA2c5aYCZYd1cvgdnU6cqwixRoYg70xPLWUws5ORTa/lnw+u4amixRS/Ac5U5mQVgp9pnlSUnbNWFaWZQ==}
-    requiresBuild: true
     optional: true
 
   /nano-base32/1.0.1:
@@ -20150,14 +20119,6 @@ packages:
     engines: {node: '>=6'}
     dependencies:
       mimic-fn: 2.1.0
-    dev: true
-
-  /only-allow/1.0.0:
-    resolution: {integrity: sha512-DQazysAz1cw8JxxYVqg+wXWSm6K7smVqORwS+dtXQWPeRwjsWvRpxMRa5FPiOPxH4e05xCDv12ncAUF8JlVukw==}
-    hasBin: true
-    dependencies:
-      boxen: 4.2.0
-      which-pm-runs: 1.0.0
     dev: true
 
   /open/7.4.2:
@@ -21062,7 +21023,6 @@ packages:
   /protobufjs/6.11.2:
     resolution: {integrity: sha512-4BQJoPooKJl2G9j3XftkIXjoC9C0Av2NOrWmbLWT1vH32GcSUHjM0Arra6UfTsVyfMAuFzaLucXn1sadxJydAw==}
     hasBin: true
-    requiresBuild: true
     dependencies:
       '@protobufjs/aspromise': 1.1.2
       '@protobufjs/base64': 1.1.2
@@ -21864,7 +21824,6 @@ packages:
 
   /reflect-metadata/0.1.13:
     resolution: {integrity: sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==}
-    requiresBuild: true
     dev: false
     optional: true
 
@@ -22597,7 +22556,6 @@ packages:
   /secp256k1/4.0.2:
     resolution: {integrity: sha512-UDar4sKvWAksIlfX3xIaQReADn+WFnHvbVujpcbr+9Sf/69odMwy2MUsz5CKLQgX9nsIyrjuxL2imVyoNHa3fg==}
     engines: {node: '>=10.0.0'}
-    requiresBuild: true
     dependencies:
       elliptic: 6.5.4
       node-addon-api: 2.0.2
@@ -23710,11 +23668,6 @@ packages:
       memoizerific: 1.11.3
     dev: true
 
-  /term-size/2.2.1:
-    resolution: {integrity: sha512-wK0Ri4fOGjv/XPy8SBHZChl8CM7uMc5VML7SqiQ0zG7+J5Vr+RMQDoHa2CNT6KHUnTGIXH34UDMkPzAUyapBZg==}
-    engines: {node: '>=8'}
-    dev: true
-
   /terminal-link/2.1.1:
     resolution: {integrity: sha512-un0FmiRUQNr5PJqy9kP7c40F5BOfpGlYTrxonDChEZB7pzZxRNp/bt+ymiy9/npwXya9KH99nJ/GXFIiUkYGFQ==}
     engines: {node: '>=8'}
@@ -24640,19 +24593,16 @@ packages:
     resolution: {integrity: sha512-FAGKF12fWdkpvNJZENacOH0e/83eG6JyVQyanIJaBXCN1J11TUQv1T1/z8S+Z0CG0ZPk1nPcreF/c7lrTd0TEQ==}
     engines: {node: '>=0.8.0'}
     hasBin: true
-    requiresBuild: true
     optional: true
 
   /uglify-to-browserify/1.0.2:
     resolution: {integrity: sha1-bgkk1r2mta/jSeOabWMoUKD4grc=}
-    requiresBuild: true
     dev: false
     optional: true
 
   /uglifyjs-webpack-plugin/0.4.6_webpack@3.12.0:
     resolution: {integrity: sha1-uVH0q7a9YX5m9j64kUmOORdj4wk=}
     engines: {node: '>=4.3.0 <5.0.0 || >=5.10'}
-    requiresBuild: true
     peerDependencies:
       webpack: ^1.9 || ^2 || ^2.1.0-beta || ^2.2.0-rc || ^3.0.0
     dependencies:
@@ -24985,14 +24935,12 @@ packages:
 
   /utf-8-validate/5.0.5:
     resolution: {integrity: sha512-+pnxRYsS/axEpkrrEpzYfNZGXp0IjC/9RIxwM5gntY4Koi8SHmUGSfxfWqxZdRxrtaoVstuOzUp/rbs3JSPELQ==}
-    requiresBuild: true
     dependencies:
       node-gyp-build: 4.3.0
 
   /utf-8-validate/5.0.8:
     resolution: {integrity: sha512-k4dW/Qja1BYDl2qD4tOMB9PFVha/UJtxTc1cXYOe3WwA/2m0Yn4qB7wLMpJyLJ/7DR0XnTut3HsCSzDT4ZvKgA==}
     engines: {node: '>=6.14.2'}
-    requiresBuild: true
     dependencies:
       node-gyp-build: 4.3.0
     dev: false
@@ -25255,7 +25203,6 @@ packages:
 
   /watchpack-chokidar2/2.0.1:
     resolution: {integrity: sha512-nCFfBIPKr5Sh61s4LPpy1Wtfi0HE8isJ3d2Yb5/Ppw2P2B/3eVSEBjKfN0fmHJSK14+31KwMKmcrzs2GM4P0Ww==}
-    requiresBuild: true
     dependencies:
       chokidar: 2.1.8
     optional: true
@@ -25298,7 +25245,6 @@ packages:
   /web3-bzz/1.5.2:
     resolution: {integrity: sha512-W/sPCdA+XQ9duUYKHAwf/g69cbbV8gTCRsa1MpZwU7spXECiyJ2EvD/QzAZ+UpJk3GELXFF/fUByeZ3VRQKF2g==}
     engines: {node: '>=8.0.0'}
-    requiresBuild: true
     dependencies:
       '@types/node': 17.0.18
       got: 9.6.0
@@ -25504,7 +25450,6 @@ packages:
   /web3-shh/1.5.2:
     resolution: {integrity: sha512-wOxOcYt4Sa0AHAI8gG7RulCwVuVjSRS/M/AbFsea3XfJdN6sU13/syY7OdZNjNYuKjYTzxKYrd3dU/K2iqffVw==}
     engines: {node: '>=8.0.0'}
-    requiresBuild: true
     dependencies:
       web3-core: 1.5.2
       web3-core-method: 1.5.2
@@ -25550,7 +25495,6 @@ packages:
   /web3/1.5.2:
     resolution: {integrity: sha512-aapKLdO8t7Cos6tZLeeQUtCJvTiPMlLcHsHHDLSBZ/VaJEucSTxzun32M8sp3BmF4waDEmhY+iyUM1BKvtAcVQ==}
     engines: {node: '>=8.0.0'}
-    requiresBuild: true
     dependencies:
       web3-bzz: 1.5.2
       web3-core: 1.5.2
@@ -25998,10 +25942,6 @@ packages:
   /which-module/2.0.0:
     resolution: {integrity: sha1-2e8H3Od7mQK4o6j6SzHD4/fm6Ho=}
     dev: false
-
-  /which-pm-runs/1.0.0:
-    resolution: {integrity: sha1-Zws6+8VS4LVd9rd4DKdGFfI60cs=}
-    dev: true
 
   /which-typed-array/1.1.7:
     resolution: {integrity: sha512-vjxaB4nfDqwKI0ws7wZpxIlde1XrLX5uB0ZjpfshgmapJMD7jJWhZI+yToJTqaFByF0eNBcYxbjmCzoRP7CfEw==}

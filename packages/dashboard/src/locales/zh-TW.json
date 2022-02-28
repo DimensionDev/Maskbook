@@ -38,7 +38,6 @@
     "setup_page_create_restore_button": "備份 或 登錄",
     "create_account_identity_title": "在Mask Network創建一個身份",
     "create_account_sign_in_button": "恢復",
-    "create_account_identity_warning": "請妥善保管您的身分助記詞，您的身分助記詞是您用戶身分的唯一證明，也是您加密或解密社交信息的唯一基礎。",
     "create_account_preview_tip": "此二維碼將保存你的身份密碼，請妥善保存。可使用Mask手機端掃描二維碼來登錄。",
     "create_account_mnemonic_confirm_failed": "錯誤身份代碼",
     "create_account_connect_social_media_button": "創建",

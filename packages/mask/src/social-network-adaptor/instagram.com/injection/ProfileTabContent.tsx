@@ -2,26 +2,14 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { ProfileTabContent } from '../../../components/InjectedComponents/ProfileTabContent'
 import { createReactRootShadowed, startWatch } from '../../../utils'
-import {
-    searchProfileActiveTabSelector,
-    searchProfileTabArticlePageSelector,
-    searchProfileTabOtherArticlePageSelector,
-} from '../utils/selector'
+import { searchProfileActiveTabSelector, searchProfileTabArticlePageSelector } from '../utils/selector'
 
 export function injectProfileTabContentAtInstagram(signal: AbortSignal) {
     injectProfileTabContentHaveArticle(signal)
-
-    injectProfileTabContentEmptyArticle(signal)
 }
 
 function injectProfileTabContentHaveArticle(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileTabArticlePageSelector())
-    startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabContentAtInstagram />)
-}
-
-function injectProfileTabContentEmptyArticle(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchProfileTabOtherArticlePageSelector())
     startWatch(watcher, signal)
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabContentAtInstagram />)
 }

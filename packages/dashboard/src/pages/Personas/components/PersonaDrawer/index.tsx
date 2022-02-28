@@ -6,6 +6,7 @@ import { PersonaCard } from '../PersonaCard'
 import { useDashboardI18N } from '../../../../locales'
 import { PersonaIdentifier, PersonaInformation, DashboardRoutes } from '@masknet/shared-base'
 import { useNavigate } from 'react-router-dom'
+import { MAX_PERSONA_LIMIT } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -97,7 +98,11 @@ export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
                             )
                         })}
                         <Box className={classes.buttons}>
-                            <Button onClick={() => navigate(DashboardRoutes.SignUp)}>{t.personas_add_persona()}</Button>
+                            <Button
+                                onClick={() => navigate(DashboardRoutes.SignUp)}
+                                disabled={personas.length >= MAX_PERSONA_LIMIT}>
+                                {t.personas_add_persona()}
+                            </Button>
                             <Button
                                 color="warning"
                                 onClick={() =>

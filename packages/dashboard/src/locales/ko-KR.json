@@ -38,7 +38,6 @@
     "setup_page_create_restore_button": "복구 또는 로그인",
     "create_account_identity_title": "Mask Network 아이디 만들기",
     "create_account_sign_in_button": "복구 또는 로그인",
-    "create_account_identity_warning": "아디디 코드를 잊지 마세요. 아이디 코드는 유저 아이디의 유일한 증명이며 암호화하거나 해독하기에 유일한 근거이다.",
     "create_account_mnemonic_confirm_failed": "잘못된 아이디 코드",
     "create_account_connect_social_media_button": "만들기",
     "create_account_connect_social_media": "{{type}} 에 연결하기",

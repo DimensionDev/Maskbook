@@ -1,20 +1,9 @@
 import { Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra'
 import { base } from '../base'
 import { useMemo } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { parseURL, extractTextFromTypedMessage } from '@masknet/shared-base'
+import { parseURL } from '@masknet/shared-base'
+import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import Profile from './Profile'
-
-const useStyles = makeStyles()((theme) => {
-    return {
-        skeleton: {
-            margin: theme.spacing(2),
-            '&:first-child': {
-                marginTop: theme.spacing(3),
-            },
-        },
-    }
-})
 
 const isCyberConnectUrl = (x: string): boolean => x.includes('app.cyberconnect.me')
 

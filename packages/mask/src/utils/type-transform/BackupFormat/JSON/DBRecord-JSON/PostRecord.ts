@@ -3,8 +3,8 @@ import type { BackupJSONFileLatest } from '../latest'
 import type { RecipientReasonJSON } from '../version-2'
 import { encodeArrayBuffer, decodeArrayBuffer, unreachable } from '@dimensiondev/kit'
 import { encode, decode } from '@msgpack/msgpack'
+import type { TypedMessage } from '@masknet/typed-message'
 import {
-    type TypedMessage,
     IdentifierMap,
     ECKeyIdentifier,
     GroupIdentifier,
