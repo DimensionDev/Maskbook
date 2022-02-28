@@ -20,7 +20,7 @@ import './clean-hmr'
 
 export function createConfiguration(rawFlags: BuildFlags): Configuration {
     const normalizedFlags = normalizeBuildFlags(rawFlags)
-    const { sourceMapKind } = computedBuildFlags(normalizedFlags)
+    const { sourceMapKind, supportWebAssembly } = computedBuildFlags(normalizedFlags)
     const { hmr, mode, profiling, reactRefresh, readonlyCache, reproducibleBuild, runtime, outputPath } =
         normalizedFlags
 
@@ -39,7 +39,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         devtool: sourceMapKind,
         target: ['web', 'es2019'],
         entry: {},
-        experiments: { backCompat: false, asyncWebAssembly: true },
+        experiments: { backCompat: false, asyncWebAssembly: supportWebAssembly },
         cache: {
             type: 'filesystem',
             buildDependencies: { config: [__filename] },
@@ -124,6 +124,14 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
             rules: [
                 // Opt in source map
                 { test: /(async-call|webextension).+\.js$/, enforce: 'pre', use: ['source-map-loader'] },
+                // Manifest v3 does not support
+                supportWebAssembly
+                    ? {
+                          test: /\.wasm?$/,
+                          loader: require.resolve('./wasm-to-asm.ts'),
+                          type: 'javascript/auto',
+                      }
+                    : undefined!,
                 // TypeScript
                 {
                     test: /\.tsx?$/,
@@ -265,6 +273,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         } as DevServerConfiguration,
         stats: process.env.CI ? 'errors-warnings' : undefined,
     }
+    baseConfig.module!.rules = baseConfig.module!.rules!.filter(Boolean)
 
     const plugins = baseConfig.plugins!
     const entries: Record<string, EntryDescription> = (baseConfig.entry = {
