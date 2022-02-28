@@ -18,7 +18,6 @@ export default function loader(this: LoaderContext<any>, source: Buffer) {
         child.on('close', (code) => {
             if (code !== 0) reject(new Error(err.join('\n')))
             else resolve(out.join(''))
-            writeFileSync('./out.js', out.join(''))
         })
     })
 }
