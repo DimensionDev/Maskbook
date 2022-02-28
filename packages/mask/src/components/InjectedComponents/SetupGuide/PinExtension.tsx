@@ -41,19 +41,19 @@ export function PinExtension({ onDone }: PinExtensionProps) {
             }
             tip={
                 <Typography className={classes.tip} component="div">
-                    <div>{t('setup_guide_pin_tip_0')}</div>
+                    <div>{t('setup_guide_pin_tip')}</div>
                     <ol style={{ paddingLeft: '24px' }}>
                         <li>
-                            {t('setup_guide_pin_tip_1')}
+                            {t('setup_guide_pin_tip_step_click_left')}
                             <ExtensionIcon sx={{ fontSize: 16, color: '#ababab' }} />
-                            {t('setup_guide_pin_tip_1_s')}
+                            {t('setup_guide_pin_tip_step_click_right')}
                         </li>
                         <li>
-                            {t('setup_guide_pin_tip_2')}
+                            {t('setup_guide_pin_tip_step_find_left')}
                             <PinIcon sx={{ fontSize: 16 }} />
-                            {t('setup_guide_pin_tip_2_s')}
+                            {t('setup_guide_pin_tip_step_find_right')}
                         </li>
-                        <li>{t('setup_guide_pin_tip_3')}</li>
+                        <li>{t('setup_guide_pin_tip_successfully')}</li>
                     </ol>
                 </Typography>
             }
