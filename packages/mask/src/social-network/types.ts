@@ -310,7 +310,7 @@ export namespace SocialNetworkUI {
         export interface NextIDConfig {
             enable?: boolean
             platform: string
-            collectVerifyPost: (keyword: string) => PostIdentifier | null
+            collectVerificationPost: (keyword: string) => PostIdentifier | null
         }
     }
 }

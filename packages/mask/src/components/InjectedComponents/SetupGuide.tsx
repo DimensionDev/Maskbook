@@ -12,7 +12,6 @@ import {
     Identifier,
     ECKeyIdentifier,
     NextIDPlatform,
-    PostIdentifier,
     toBase64,
     fromHex,
 } from '@masknet/shared-base'
@@ -44,9 +43,6 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const ui = activatedSocialNetworkUI
     const [, copyToClipboard] = useCopyToClipboard()
     const [step, setStep] = useState(SetupGuideStep.FindUsername)
-    // @ts-ignore
-    const [signInfo, setSignInfo] = useState<SignInfo>({})
-    const [verifiedPost, setVerifiedPost] = useState<null | PostIdentifier>(null)
     const [enableNextID] = useState(ui.configuration.nextIDConfig?.enable)
     const verifyPostCollectTimer = useRef<any>()
     const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform
@@ -118,7 +114,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
     const onVerify = async () => {
         if (!persona_) return
-        const collect = ui.configuration.nextIDConfig?.collectVerifyPost
+        const collectVerificationPost = ui.configuration.nextIDConfig?.collectVerificationPost
         const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform
         const isBound = await Services.NextID.queryIsBound(persona_.identifier, platform, username)
 
@@ -142,10 +138,8 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
             const waitingPost = new Promise<void>((resolve, reject) => {
                 verifyPostCollectTimer.current = setInterval(async () => {
-                    // TODO: rename this method
-                    const post = collect?.(postContent)
+                    const post = collectVerificationPost?.(postContent)
                     if (post) {
-                        // setSignInfo({ ...signInfo, personaSign: signature, payload })
                         clearInterval(verifyPostCollectTimer.current)
                         await Services.NextID.bindProof(
                             persona_.identifier,
@@ -153,7 +147,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                             platform,
                             username,
                             undefined,
-                            signInfo.personaSign,
+                            signature,
                             post.postId,
                         )
                         resolve()

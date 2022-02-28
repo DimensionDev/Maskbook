@@ -191,7 +191,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         nextIDConfig: {
             enable: true,
             platform: NextIDPlatform.Twitter,
-            collectVerifyPost: (keyword: string) => {
+            collectVerificationPost: (keyword: string) => {
                 let verifiedPostId: string | null = null
                 const userId =
                     IdentityProviderTwitter.recognized.value.identifier || globalUIState.profiles.value[0].identifier
