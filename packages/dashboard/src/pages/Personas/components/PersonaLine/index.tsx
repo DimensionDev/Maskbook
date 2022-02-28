@@ -6,6 +6,7 @@ import { DisconnectProfileDialog } from '../DisconnectProfileDialog'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { PersonaContext } from '../../hooks/usePersonaContext'
+import { NextIdPersonaWarningIcon, NextIdPersonaVerifiedIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     connect: {
@@ -20,6 +21,11 @@ const useStyles = makeStyles()((theme) => ({
     disabled: {
         opacity: 0.6,
         pointerEvents: 'none',
+    },
+    userIdBox: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: theme.spacing(0.5),
     },
 }))
 export interface UnconnectedPersonaLineProps {
@@ -75,7 +81,14 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         const handleUserIdClick = async (network: string, userId: string) => {
             await openProfilePage(network, userId)
         }
-        console.log(disableAdd, 'ffff')
+        const userIdBox = (id: string, verify: boolean) => {
+            return (
+                <div className={classes.userIdBox}>
+                    <div>@{id}</div>
+                    {verify ? <NextIdPersonaVerifiedIcon /> : <NextIdPersonaWarningIcon />}
+                </div>
+            )
+        }
         return (
             <Box className={classes.connect} sx={{ display: 'flex', alignItems: 'center' }}>
                 <Link
@@ -95,7 +108,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                                     key={x.userId}
                                     onClick={() => handleUserIdClick(networkIdentifier, x.userId)}
                                     sx={{ color: MaskColorVar.textPrimary, fontSize: 13, mr: 1, cursor: 'pointer' }}>
-                                    @{x.userId}
+                                    {userIdBox(x.userId, true)}
                                 </Typography>
                             ))}
                         </Stack>
