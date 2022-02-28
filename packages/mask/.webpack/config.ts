@@ -125,7 +125,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 // Opt in source map
                 { test: /(async-call|webextension).+\.js$/, enforce: 'pre', use: ['source-map-loader'] },
                 // Manifest v3 does not support
-                supportWebAssembly
+                !supportWebAssembly
                     ? {
                           test: /\.wasm?$/,
                           loader: require.resolve('./wasm-to-asm.ts'),
