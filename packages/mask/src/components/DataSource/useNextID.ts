@@ -17,6 +17,8 @@ export const usePersonaBoundPlatform = (personaIdentifier: PersonaIdentifier) =>
     }, [personaIdentifier.toText()])
 }
 
+let isOpenedVerifyDialog = false
+
 export const useNextIDBoundByPlatform = (platform: NextIDPlatform, identity: string) => {
     useAsyncRetry(() => {
         return Services.NextID.queryExistedBindingByPlatform(platform, identity)
@@ -43,6 +45,7 @@ export function useNextIDConnectStatus() {
     const [username] = useState(getUsername)
 
     const { value: isVerified } = useAsync(async () => {
+        if (isOpenedVerifyDialog) return true
         if (!enableNextID || !username || !personaConnectStatus.connected) return true
 
         const currentPersonaIdentifier = await Services.Settings.getCurrentPersonaIdentifier()
@@ -56,7 +59,7 @@ export function useNextIDConnectStatus() {
             status: SetupGuideStep.VerifyOnNextID,
             persona: currentPersonaIdentifier?.toText(),
         })
-
+        isOpenedVerifyDialog = true
         return false
     }, [username, enableNextID, lastStateRef.value])
 

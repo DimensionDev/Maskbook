@@ -74,14 +74,13 @@ export const VerifyNextID = ({ personaName, username, avatar, onVerify, onDone, 
                         complete={t('setup_guide_verify')}
                         failed={t('setup_guide_verifying_failed')}
                         executor={onVerify}
-                        completeOnClick={onDone}
-                        onComplete={() => {}}
+                        onComplete={onDone}
                         disabled={!username || !personaName}
                         completeIcon={null}
                         failIcon={null}
                         failedOnClick="use executor"
                         data-testid="confirm_button">
-                        Verify
+                        {t('setup_guide_verify')}
                     </ActionButtonPromise>
                 ) : null
             }

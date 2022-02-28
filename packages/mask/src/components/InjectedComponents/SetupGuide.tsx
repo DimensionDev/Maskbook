@@ -168,7 +168,6 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
             await waitingPost
         }
-        onDone()
     }
 
     const onClose = () => {
@@ -244,7 +243,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                     avatar={lastRecognized.avatar}
                     onUsernameChange={setUsername}
                     onVerify={onVerify}
-                    onDone={() => {}}
+                    onDone={onDone}
                     onClose={onClose}
                 />
             )
