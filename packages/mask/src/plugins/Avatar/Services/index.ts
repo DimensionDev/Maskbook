@@ -57,8 +57,6 @@ export async function getAddress(userId: string, network: string, networkPluginI
     return (address ?? '') as string
 }
 
-export { getNFTContractVerifiedFromJSON } from './verified'
-
 export async function getImage(image: string): Promise<string> {
     const response = await globalThis.fetch(image)
     return (await blobToBase64(await response.blob())) as string
