@@ -26,7 +26,7 @@ import { injectMaskUserBadgeAtTwitter } from './injection/MaskIcon'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector'
 import { injectPostActionsAtTwitter } from './injection/PostActions'
-import { isTypedMessageText, NextIDPlatform, PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import { NextIDPlatform, PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { unreachable } from '@dimensiondev/kit'
 import { makeStyles } from '@masknet/theme'
 import { injectNFTAvatarInTwitter } from './injection/NFT/NFTAvatarInTwitter'
@@ -40,6 +40,7 @@ import { TwitterRenderFragments } from './customization/render-fragments'
 import { timelinePostContentSelector } from './utils/selector'
 import { postContentMessageParser, postIdParser } from './utils/fetch'
 import { forEach } from 'lodash-unified'
+import { isTypedMessageText } from '@masknet/typed-message'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
