@@ -1,8 +1,8 @@
 import { Grid } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import classNames from 'classnames'
-import { useRemoteControlledDialog } from '@masknet/shared'
-import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
+import ActionButton, { useRemoteControlledDialog, ActionButtonProps } from '@masknet/shared'
+
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
 import { useAccount, useChainIdValid, useNativeTokenBalance } from '@masknet/web3-shared-evm'

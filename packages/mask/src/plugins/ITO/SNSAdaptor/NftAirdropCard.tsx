@@ -17,7 +17,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import CloseIcon from '@mui/icons-material/Close'
 import classNames from 'classnames'
 import type { CampaignInfo } from '../types'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import ActionButton from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

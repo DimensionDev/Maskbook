@@ -1,4 +1,4 @@
-import { FormattedBalance, TokenIcon } from '@masknet/shared'
+import ActionButton, { FormattedBalance, TokenIcon } from '@masknet/shared'
 import {
     EthereumTokenType,
     formatBalance,
@@ -28,7 +28,6 @@ import {
 import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import formatDateTime from 'date-fns/format'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { debugModeSetting } from '../../../settings/settings'
 import { useI18N } from '../../../utils'
 import { MSG_DELIMITER } from '../constants'

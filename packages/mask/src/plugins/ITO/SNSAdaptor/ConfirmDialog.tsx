@@ -1,4 +1,4 @@
-import { FormattedAddress, FormattedBalance } from '@masknet/shared'
+import ActionButton, { FormattedAddress, FormattedBalance } from '@masknet/shared'
 import {
     formatBalance,
     formatEthereumAddress,
@@ -16,7 +16,7 @@ import LaunchIcon from '@mui/icons-material/Launch'
 import RepeatIcon from '@mui/icons-material/Repeat'
 import formatDateTime from 'date-fns/format'
 import { Fragment, useCallback, useState, useEffect } from 'react'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+
 import { useI18N } from '../../../utils'
 import type { PoolSettings } from './hooks/useFill'
 import { decodeRegionCode, regionCodes } from './hooks/useRegion'

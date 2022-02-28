@@ -9,7 +9,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { useI18N } from '../../utils'
 import { makeStyles, useCustomSnackbar, useStylesExtends } from '@masknet/theme'
 import { Typography, Link } from '@mui/material'
-import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
+import ActionButton, { ActionButtonProps } from '@masknet/shared'
 import { useMemo, useEffect } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 

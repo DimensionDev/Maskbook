@@ -8,10 +8,9 @@ import {
     FungibleTokenDetailed,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
-import { useSnackbarCallback } from '@masknet/shared'
+import { useSnackbarCallback, DebounceButton } from '@masknet/shared'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../utils'
-import { DebounceButton } from '../../DashboardComponents/ActionButton'
 // eslint-disable-next-line import/no-deprecated
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 import type { Wallet } from '@masknet/web3-shared-evm'

@@ -3,7 +3,7 @@ import { Alert, Box, Button, CardContent, Snackbar, TextField, Typography } from
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { FindTrumanContext } from '../context'
 import { makeStyles } from '@masknet/theme'
-import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { ActionButtonPromise } from '@masknet/shared'
 import { DoneOutlined, RefreshOutlined, Send, CheckRounded, ClearRounded, KeyRounded } from '@mui/icons-material'
 import NoNftCard from './NoNftCard'
 

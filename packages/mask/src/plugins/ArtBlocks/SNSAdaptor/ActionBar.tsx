@@ -1,7 +1,7 @@
 import { useControlledDialog, useI18N } from '../../../utils'
 import { makeStyles } from '@masknet/theme'
 import { Box } from '@mui/material'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import ActionButton from '@masknet/shared'
 import { PurchaseDialog } from './PurchaseDialog'
 import type { Project } from '../types'
 

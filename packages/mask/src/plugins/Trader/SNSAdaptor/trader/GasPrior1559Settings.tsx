@@ -17,7 +17,7 @@ import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 import { ExpandMore } from '@mui/icons-material'
 import { toHex } from 'web3-utils'
 import BigNumber from 'bignumber.js'
-import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
+import ActionButton from '@masknet/shared'
 import { isDashboardPage } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({

@@ -1,14 +1,13 @@
 import { useCallback } from 'react'
 import classnames from 'classnames'
 import { Trans } from 'react-i18next'
-import { useRemoteControlledDialog, InjectedDialog } from '@masknet/shared'
+import { useRemoteControlledDialog, InjectedDialog, ActionButtonPromise } from '@masknet/shared'
 import { formatEthereumAddress, useAccount } from '@masknet/web3-shared-evm'
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh'
 import { Avatar, Button, DialogActions, DialogContent, Paper, Typography } from '@mui/material'
 import { getMaskColor, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useI18N, useMatchXS } from '../../../../utils'
 import { WalletMessages, WalletRPC } from '../../messages'
-import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {

@@ -9,7 +9,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
 import { useI18N } from '../../utils'
-import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
+import ActionButton, { ActionButtonProps } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     button: {

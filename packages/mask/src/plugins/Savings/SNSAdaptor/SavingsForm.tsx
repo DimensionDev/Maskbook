@@ -12,7 +12,13 @@ import {
     formatCurrency,
     formatBalance,
 } from '@masknet/web3-shared-evm'
-import { TokenAmountPanel, FormattedCurrency, LoadingAnimation, useRemoteControlledDialog } from '@masknet/shared'
+import {
+    TokenAmountPanel,
+    FormattedCurrency,
+    LoadingAnimation,
+    useRemoteControlledDialog,
+    ActionButtonPromise,
+} from '@masknet/shared'
 import { useTokenPrice } from '../../Wallet/hooks/useTokenPrice'
 import { useI18N } from '../../../utils'
 import { useStyles } from './SavingsFormStyles'
@@ -22,7 +28,6 @@ import { SavingsProtocols } from '../protocols'
 import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
 

@@ -6,7 +6,7 @@ import { RadioButtonChecked, RadioButtonUnchecked, DoneOutlined, Send, RefreshOu
 import NoNftCard from './NoNftCard'
 import { FindTrumanContext } from '../context'
 import { BorderLinearProgress } from './ResultCard'
-import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { ActionButtonPromise } from '@masknet/shared'
 
 const useOptionsStyles = makeStyles()((theme) => {
     return {

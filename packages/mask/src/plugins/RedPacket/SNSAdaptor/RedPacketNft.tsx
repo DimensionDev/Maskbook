@@ -10,7 +10,7 @@ import {
 import LaunchIcon from '@mui/icons-material/Launch'
 import { Grid, Card, CardHeader, Typography, Link, CardMedia, CardContent, Button, Box, Skeleton } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import ActionButton, { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import type { RedPacketNftJSONPayload } from '../types'
@@ -21,7 +21,6 @@ import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

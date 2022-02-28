@@ -1,4 +1,4 @@
-import { useRemoteControlledDialog, usePickToken } from '@masknet/shared'
+import ActionButton, { useRemoteControlledDialog, usePickToken } from '@masknet/shared'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { leftShift, rightShift, ZERO } from '@masknet/web3-shared-base'
 import {
@@ -19,7 +19,6 @@ import {
 import { CircularProgress, Slider, Typography } from '@mui/material'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'

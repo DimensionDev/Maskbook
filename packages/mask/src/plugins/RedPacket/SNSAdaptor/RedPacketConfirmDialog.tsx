@@ -5,8 +5,7 @@ import { formatBalance, isNativeTokenAddress, resolveTokenLinkOnExplorer, useCha
 import { Grid, Link, Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import LaunchIcon from '@mui/icons-material/Launch'
-import { FormattedBalance } from '@masknet/shared'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import ActionButton, { FormattedBalance } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import type { RedPacketSettings } from './hooks/useCreateCallback'
 

@@ -1,13 +1,12 @@
 import { useState, useCallback } from 'react'
 import { Button, CircularProgress } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useErrorStyles } from '@masknet/theme'
 import type { ButtonProps } from '@mui/material/Button'
 import CheckIcon from '@mui/icons-material/Check'
 import ErrorIcon from '@mui/icons-material/Error'
 import { red, green } from '@mui/material/colors'
 import classNames from 'classnames'
 import { useDebounce, useAsyncFn, useUpdateEffect } from 'react-use'
-import { useErrorStyles } from '../../../utils/theme'
 
 const circle = <CircularProgress color="inherit" size={18} />
 

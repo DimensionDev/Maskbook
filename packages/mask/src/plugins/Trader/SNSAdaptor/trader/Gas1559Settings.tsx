@@ -13,7 +13,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { ExpandMore } from '@mui/icons-material'
 import { fromWei, toHex } from 'web3-utils'
 import { isEmpty } from 'lodash-unified'
-import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
+import ActionButton from '@masknet/shared'
 import {
     isGreaterThan,
     isLessThan,

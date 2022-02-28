@@ -16,12 +16,14 @@ import {
     useAllowTestnet,
     useChainId,
 } from '@masknet/web3-shared-evm'
-import { useValueRef, useRemoteControlledDialog } from '@masknet/shared'
-import { delay } from '@dimensiondev/kit'
 import ActionButton, {
+    useValueRef,
+    useRemoteControlledDialog,
     ActionButtonPromise,
     ActionButtonPromiseProps,
-} from '../../extension/options-page/DashboardComponents/ActionButton'
+} from '@masknet/shared'
+import { delay } from '@dimensiondev/kit'
+
 import { currentProviderSettings } from '../../plugins/Wallet/settings'
 import { useI18N } from '../../utils'
 import { WalletMessages, WalletRPC } from '../../plugins/Wallet/messages'

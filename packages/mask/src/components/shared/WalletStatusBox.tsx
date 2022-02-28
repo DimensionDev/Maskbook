@@ -16,11 +16,16 @@ import {
     useReverseAddress,
     useWallet,
 } from '@masknet/plugin-infra'
-import { FormattedAddress, useRemoteControlledDialog, useSnackbarCallback, WalletIcon } from '@masknet/shared'
+import {
+    FormattedAddress,
+    useRemoteControlledDialog,
+    useSnackbarCallback,
+    WalletIcon,
+    ActionButtonPromise,
+} from '@masknet/shared'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
 import Services from '../../extension/service'
-import { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     content: {

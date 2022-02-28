@@ -1,7 +1,7 @@
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { Box, Card, CircularProgress, Typography, Paper, Link } from '@mui/material'
 import { useStylesExtends, makeStyles, MaskColorVar } from '@masknet/theme'
-import { ImageIcon } from '@masknet/shared'
+import ActionButton, { ImageIcon } from '@masknet/shared'
 import { NetworkPluginID, useProviderDescriptor } from '@masknet/plugin-infra'
 import {
     ProviderType,
@@ -9,7 +9,6 @@ import {
     resolveProviderShortenLink,
     resolveProviderHomeLink,
 } from '@masknet/web3-shared-evm'
-import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
 import { FlashIcon } from '../../../../resources/FlashIcon'
 import { Trans } from 'react-i18next'

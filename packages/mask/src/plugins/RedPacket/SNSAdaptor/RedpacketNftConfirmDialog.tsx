@@ -13,10 +13,9 @@ import {
     isNativeTokenAddress,
     formatNFT_TokenId,
 } from '@masknet/web3-shared-evm'
-import { InjectedDialog, useRemoteControlledDialog, NFTCardStyledAssetPlayer } from '@masknet/shared'
+import ActionButton, { InjectedDialog, useRemoteControlledDialog, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import classNames from 'classnames'
 import { Button, Grid, Link, Typography, DialogContent, List, ListItem } from '@mui/material'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import LaunchIcon from '@mui/icons-material/Launch'
 import { useI18N } from '../../../utils'

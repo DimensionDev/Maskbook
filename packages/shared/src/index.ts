@@ -18,3 +18,5 @@ export interface DashboardPluginServices {
     Wallet: unknown
     Swap: unknown
 }
+
+export default ActionButton

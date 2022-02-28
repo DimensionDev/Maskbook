@@ -1,6 +1,6 @@
 import { useMemo, useCallback } from 'react'
-import { useValueRef } from '@masknet/shared'
-import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
+import ActionButton, { useValueRef } from '@masknet/shared'
+
 import type { InternalSettings } from '../../settings/createSettings'
 
 export function useSettingsSwitcher<T extends string | number, S extends InternalSettings<T>>(
