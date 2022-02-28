@@ -15,7 +15,7 @@ import {
     useMediaQuery,
 } from '@mui/material'
 import { makeStyles, useDialogStackActor, useStylesExtends, mergeClasses, usePortalShadowRoot } from '@masknet/theme'
-import { ErrorBoundary } from '@masknet/shared'
+import { ErrorBoundary, useSharedI18N } from '@masknet/shared'
 import { isDashboardPage } from '@masknet/shared-base'
 import { DialogDismissIcon } from './DialogDismissIcon'
 import { FACEBOOK_ID, MINDS_ID, staticBaseUIRuntime } from '../base'
@@ -74,6 +74,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
         ...dialogClasses
     } = useStylesExtends(useStyles({ clean }), props, overwrite.InjectedDialog?.classes)
 
+    const t = useSharedI18N()
     // see https://github.com/import-js/eslint-plugin-import/issues/2288
     // eslint-disable-next-line import/no-deprecated
     const fullScreen = useMediaQuery(useTheme().breakpoints.down('xs'))
@@ -119,7 +120,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                             <IconButton
                                 size="large"
                                 classes={{ root: dialogCloseButton }}
-                                aria-label="Dismiss"
+                                aria-label={t.dialog_dismiss()}
                                 onClick={onClose}>
                                 <DialogDismissIcon
                                     style={shouldReplaceExitWithBack && !isDashboard ? 'back' : titleBarIconStyle}

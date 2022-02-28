@@ -1,4 +1,4 @@
-import { ERC20TokenList } from '@masknet/shared'
+import { ERC20TokenList, useSharedI18N } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { ChainId, EMPTY_LIST, FungibleTokenDetailed, useTokenConstants } from '@masknet/web3-shared-evm'
 // see https://github.com/import-js/eslint-plugin-import/issues/2288
@@ -66,6 +66,7 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
     onSelect,
     onClose,
 }) => {
+    const t = useSharedI18N()
     const isDashboard = location.href.includes('dashboard.html')
     const { networkIdentifier } = useBaseUIRuntime()
     const compact = networkIdentifier === MINDS_ID
@@ -81,7 +82,7 @@ export const SelectTokenDialog: FC<SelectTokenDialogProps> = ({
             titleBarIconStyle={isDashboard ? 'close' : 'back'}
             open={open}
             onClose={onClose}
-            title="Select a token">
+            title={t.select_token()}>
             <DialogContent classes={{ root: classes.content }}>
                 <ERC20TokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
