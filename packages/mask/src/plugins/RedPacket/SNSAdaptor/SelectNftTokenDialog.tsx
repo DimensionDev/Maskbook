@@ -742,7 +742,6 @@ interface NFTCardProps {
 function NFTCard(props: NFTCardProps) {
     const { findToken, token, tokenIdFilterList, isSelectSharesExceed, renderOrder, selectToken } = props
     const { classes } = useStyles({ isSelectSharesExceed })
-    const [name, setName] = useState('#' + token.tokenId)
     return (
         <ListItem
             className={classNames(
@@ -758,11 +757,10 @@ function NFTCard(props: NFTCardProps) {
                     loadingFailImage: classes.loadingFailImage,
                     iframe: classes.iframe,
                 }}
-                setERC721TokenName={setName}
             />
             <div className={classes.selectWrapperNftNameWrapper}>
                 <Typography className={classes.selectWrapperNftName} color="textSecondary">
-                    {name}
+                    {'#' + token.tokenId}
                 </Typography>
             </div>
 
