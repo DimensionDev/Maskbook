@@ -93,13 +93,13 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
             console.log('prof')
         }
         const userIdBox = (id: string) => {
-            const verifed = false
+            const verified = false
             // temp here, further change to get proof verified
             return (
                 <div className={classes.userIdBox}>
                     <div>@{id}</div>
                     <div className={classes.proofIconBox} onClick={(e) => handleProofIconClick(e)}>
-                        {verifed ? <NextIdPersonaVerifiedIcon /> : <NextIdPersonaWarningIcon />}
+                        {verified ? <NextIdPersonaVerifiedIcon /> : <NextIdPersonaWarningIcon />}
                     </div>
                 </div>
             )
