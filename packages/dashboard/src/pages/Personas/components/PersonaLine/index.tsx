@@ -17,6 +17,10 @@ const useStyles = makeStyles()((theme) => ({
     link: {
         height: 28,
     },
+    disabled: {
+        opacity: 0.6,
+        pointerEvents: 'none',
+    },
 }))
 export interface UnconnectedPersonaLineProps {
     onConnect: () => void
@@ -71,7 +75,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         const handleUserIdClick = async (network: string, userId: string) => {
             await openProfilePage(network, userId)
         }
-
+        console.log(disableAdd, 'ffff')
         return (
             <Box className={classes.connect} sx={{ display: 'flex', alignItems: 'center' }}>
                 <Link
@@ -99,9 +103,8 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                     {!isHideOperations && (
                         <Box>
                             <Link
-                                disabled={disableAdd}
                                 component="button"
-                                classes={{ button: classes.link }}
+                                classes={{ button: classes.link, root: disableAdd ? classes.disabled : undefined }}
                                 variant="caption"
                                 sx={{ mr: 1 }}
                                 onClick={(e: MouseEvent) => {

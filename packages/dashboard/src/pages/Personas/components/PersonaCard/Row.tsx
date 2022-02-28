@@ -177,6 +177,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                         } else {
                             return (
                                 <ConnectedPersonaLine
+                                    disableAdd={currentNetworkProfiles.length >= 5}
                                     isHideOperations={false}
                                     key={networkIdentifier}
                                     onConnect={() => onConnect(identifier, networkIdentifier)}

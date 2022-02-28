@@ -112,7 +112,6 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
                             return (
                                 <ConnectedPersonaLine
                                     isHideOperations
-                                    disableAdd={currentNetworkProfiles.length >= 5}
                                     key={networkIdentifier}
                                     onConnect={() => onConnect(identifier, networkIdentifier)}
                                     onDisconnect={onDisconnect}
