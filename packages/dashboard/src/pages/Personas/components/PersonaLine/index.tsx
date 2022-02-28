@@ -147,7 +147,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                                 classes={{ button: classes.link }}
                                 variant="caption"
                                 onClick={() => setOpenDisconnectDialog(true)}>
-                                {t.personas_disconnect()}
+                                {t.personas_disconnect_raw()}
                             </Link>
                         </Box>
                     )}

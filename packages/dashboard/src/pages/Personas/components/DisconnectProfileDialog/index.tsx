@@ -12,6 +12,10 @@ const useStyles = makeStyles()((theme) => ({
             fill: getMaskColor(theme).orangeMain,
         },
     },
+    personaTextZone: {
+        marginTop: theme.spacing(4),
+        fontSize: '13px',
+    },
 }))
 
 interface DisconnectProfileDialogProps {
@@ -70,7 +74,7 @@ export const DisconnectProfileDialog = ({
                                             setProfileIdentifier(x)
                                             setCurrentStep(steps.action)
                                         }}>
-                                        {t.personas_disconnect()}
+                                        {t.personas_disconnect_raw()}
                                     </Link>
                                 </Box>
                             </Stack>
@@ -83,11 +87,9 @@ export const DisconnectProfileDialog = ({
                             <WarningIcon className={classes.svg} sx={{ fontSize: 64 }} color="warning" />
                         </Box>
                         <Typography variant="caption" sx={{ color: MaskColorVar.textPrimary, fontSize: 13, mr: 1 }}>
-                            {t.personas_disconnect_warning({
-                                userId: profileIdentifier?.userId ?? '',
-                                network: networkIdentifier,
-                            })}
+                            {t.personas_disconnect_warning()}
                         </Typography>
+                        <div className={classes.personaTextZone}>persona: xxxxxxxxxxxxx</div>
                         <Stack mt={3} mb={1} direction="row" justifyContent="space-around" gap={4}>
                             <Button sx={{ flex: 1 }} onClick={onClose} color="secondary">
                                 {t.cancel()}
