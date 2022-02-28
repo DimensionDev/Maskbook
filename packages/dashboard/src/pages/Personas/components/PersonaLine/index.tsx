@@ -27,6 +27,13 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         gap: theme.spacing(0.5),
     },
+    proofIconBox: {
+        display: 'flex',
+        alignItems: 'center',
+        ':hover': {
+            opacity: 0.8,
+        },
+    },
 }))
 export interface UnconnectedPersonaLineProps {
     onConnect: () => void
@@ -81,13 +88,19 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         const handleUserIdClick = async (network: string, userId: string) => {
             await openProfilePage(network, userId)
         }
+        const handleProofIconClick = async (e: MouseEvent) => {
+            e.stopPropagation()
+            console.log('prof')
+        }
         const userIdBox = (id: string) => {
             const verifed = false
             // temp here, further change to get proof verified
             return (
                 <div className={classes.userIdBox}>
                     <div>@{id}</div>
-                    {verifed ? <NextIdPersonaVerifiedIcon /> : <NextIdPersonaWarningIcon />}
+                    <div className={classes.proofIconBox} onClick={(e) => handleProofIconClick(e)}>
+                        {verifed ? <NextIdPersonaVerifiedIcon /> : <NextIdPersonaWarningIcon />}
+                    </div>
                 </div>
             )
         }
