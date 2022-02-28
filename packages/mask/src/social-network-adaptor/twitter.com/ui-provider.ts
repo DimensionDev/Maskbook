@@ -37,7 +37,7 @@ import { injectUserNFTAvatarAtTweet } from './injection/NFT/TweetNFTAvatar'
 import { injectNFTContractAtTwitter } from './injection/NFT/NFTContract'
 import { injectNFTAvatarClipInTwitter } from './injection/NFT/NFTAvatarClip'
 import { TwitterRenderFragments } from './customization/render-fragments'
-import { timeLinePostContentSelector } from './utils/selector'
+import { timelinePostContentSelector } from './utils/selector'
 import { postContentMessageParser, postIdParser } from './utils/fetch'
 import { forEach } from 'lodash-unified'
 
@@ -194,7 +194,7 @@ const twitterUI: SocialNetworkUI.Definition = {
                 let verifiedPostId: string | null = null
                 const userId =
                     IdentityProviderTwitter.recognized.value.identifier || globalUIState.profiles.value[0].identifier
-                const postNodes = timeLinePostContentSelector().evaluate()
+                const postNodes = timelinePostContentSelector().evaluate()
 
                 forEach(postNodes, (x) => {
                     const postId = postIdParser(x)

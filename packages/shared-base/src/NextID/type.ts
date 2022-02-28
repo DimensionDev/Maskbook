@@ -1,7 +1,7 @@
 export enum NextIDPlatform {
     NextId = 'nextid',
     Twitter = 'twitter',
-    KeyBase = 'keybase',
+    Keybase = 'keybase',
     Ethereum = 'ethereum',
     Github = 'github',
 }

@@ -144,7 +144,7 @@ export const postsImageSelector = (node: HTMLElement) =>
         ].join(),
     )
 
-export const timeLinePostContentSelector = () =>
+export const timelinePostContentSelector = () =>
     querySelectorAll(
         [
             '[data-testid="tweet"] div + div div[lang]', // text tweets

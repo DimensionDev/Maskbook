@@ -183,14 +183,16 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                 currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
                     status: SetupGuideStep.VerifyOnNextID,
                 })
-                return setStep(SetupGuideStep.VerifyOnNextID)
+                setStep(SetupGuideStep.VerifyOnNextID)
+                return
             }
         }
 
         // check pin tip status
         if (step === SetupGuideStep.FindUsername && !dismissPinExtensionTip.value) {
             currentSetupGuideStatus[ui.networkIdentifier].value = stringify({ status: SetupGuideStep.PinExtension })
-            return setStep(SetupGuideStep.PinExtension)
+            setStep(SetupGuideStep.PinExtension)
+            return
         }
 
         // check pin tip status
