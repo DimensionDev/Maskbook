@@ -35,6 +35,7 @@ export interface EthereumChainBoundaryProps extends withClasses<'switchButton'> 
     chainId: ChainId
     noSwitchNetworkTip?: boolean
     disablePadding?: boolean
+    hiddenConnectButton?: boolean
     switchButtonStyle?: SxProps<Theme>
     children?: React.ReactNode
     isValidChainId?: (actualChainId: ChainId, expectedChainId: ChainId) => boolean
@@ -148,13 +149,15 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                 <Typography color="textPrimary">
                     <span>{t('plugin_wallet_connect_wallet_tip')}</span>
                 </Typography>
-                <ActionButton
-                    variant="contained"
-                    size="small"
-                    sx={{ marginTop: 1.5 }}
-                    onClick={openSelectProviderDialog}>
-                    {t('plugin_wallet_connect_wallet')}
-                </ActionButton>
+                {!props.hiddenConnectButton ? (
+                    <ActionButton
+                        variant="contained"
+                        size="small"
+                        sx={{ marginTop: 1.5 }}
+                        onClick={openSelectProviderDialog}>
+                        {t('plugin_wallet_connect_wallet')}
+                    </ActionButton>
+                ) : null}
             </>,
         )
 

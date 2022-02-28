@@ -35,7 +35,7 @@ export const searchUserIdSelector = () =>
     querySelector<HTMLHeadingElement>('[id="react-root"] section main header section h2')
 
 export const searchUserIdInEditPageSelector = () =>
-    querySelector('[id="react-root"] button[title="Change Profile Photo"] > img').closest(4).querySelector('h1')
+    querySelector('[id="react-root"] button > img').closest(4).querySelector('h1')
 
 export const searchProfileTabArticlePageSelector = () =>
     querySelector<E>('[id="react-root"] section main div[role="tablist"]')
@@ -47,30 +47,28 @@ export const searchInstagramAvatarListSelector = () =>
     querySelector('[role="dialog"] .piCib > div > form').closest(1).querySelector('button')
 
 export const searchInstagramAvatarOpenFilesSelector = () =>
-    querySelector('[id="react-root"] button[title="Change Profile Photo"] > img')
-        .closest(4)
-        .querySelector<HTMLFormElement>('form')
+    querySelector('[id="react-root"] button > img').closest(4).querySelector<HTMLFormElement>('form')
 
 export const searchInstagramSaveAvatarButtonSelector = () =>
     querySelector<HTMLButtonElement>('section > div > header > div > div:last-child > button')
 
 export const searchInstagramAvatarSelector = () =>
-    querySelector('[id="react-root"] header img[alt="Change Profile Photo"], img[data-testid="user-avatar"]')
+    querySelector('[id="react-root"] header img, img[data-testid="user-avatar"]')
 
 export const searchInstagramProfileAvatarButtonSelector = () =>
-    querySelector('[id="react-root"] button[title="Change Profile Photo"] > img').closest<HTMLDivElement>(3)
+    querySelector('[id="react-root"] button > img').closest<HTMLDivElement>(3)
 
 export const searchInstagramAvatarSettingDialog = () => querySelector<E>('[id="react-root"]')
 
 export const searchInstagramAvatarUploadLoadingSelector = () =>
-    querySelector('[id="react-root"] button[title="Change Profile Photo"]')
+    querySelector('[id="react-root"] button')
         .closest(1)
         .querySelector<HTMLDivElement>('div[data-visualcompletion="loading-state"]')
 
 export const searchInstagramProfileSettingButtonSelector = () =>
-    querySelector('[id="react-root"] header button[title="Change Profile Photo"]')
-        .closest(4)
-        .querySelector('section > div > div')
+    querySelector('[id="react-root"] header button').closest(4).querySelector('section > div > div')
+
+export const searchInstagramProfileEditButton = () => querySelector('[id="react-root"] a[href="/accounts/edit/"]')
 
 export const searchInstagramPostAvatarSelector = () =>
     new LiveSelector<HTMLImageElement, false>().querySelectorAll<HTMLImageElement>(
