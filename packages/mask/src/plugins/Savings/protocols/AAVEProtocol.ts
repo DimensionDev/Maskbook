@@ -16,6 +16,8 @@ import AaveLendingPoolABI from '@masknet/web3-contracts/abis/AaveLendingPool.jso
 import BigNumber from 'bignumber.js'
 import { ProtocolCategory, SavingsNetwork, SavingsProtocol, ProtocolType } from '../types'
 import { pow10, ZERO } from '@masknet/web3-shared-base'
+import Savings from '@masknet/web3-constants/evm/savings.json'
+import { AAVE_PAIRS } from '../constants'
 
 export interface ContractListArray {
     [index: string]: {
@@ -355,4 +357,18 @@ export class AAVEProtocol implements SavingsProtocol {
     }
 }
 
-export default new AAVEProtocol()
+export default AAVE_PAIRS.map(
+    (p) =>
+        new AAVEProtocol(
+            ProtocolCategory.ETH,
+            ProtocolType.AAVE,
+            p.name,
+            p.name,
+            p.name.toLowerCase(),
+            p.name,
+            p.pair,
+            p.decimals,
+            p.underLyingAssetName,
+            p.logoURI,
+        ),
+)
