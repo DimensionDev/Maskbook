@@ -56,10 +56,10 @@ const SUPPORT_PLUGIN: Record<
         icon: <RedPacketIcon />,
         messageParse: (body: any) => body.sender.message,
     },
-    'com.maskbook.red_packet:2': {
+    'com.maskbook.red_packet_nft:1': {
         pluginId: PluginId.RedPacket,
         icon: <NFTRedPacketIcon />,
-        messageParse: (body: any) => body.sender.message,
+        messageParse: (body: { message: string }) => body.message,
     },
     'com.maskbook.ito:1': {
         pluginId: PluginId.ITO,
@@ -101,6 +101,7 @@ export const PostHistoryRow = memo(({ post, network }: PostHistoryRowProps) => {
     const postIcon = useMemo(() => {
         const { interestedMeta } = post
         const plugin = interestedMeta?.keys().next().value ?? 'text'
+
         return SUPPORT_PLUGIN[plugin]?.icon ?? <MessageIcon />
     }, [post.interestedMeta])
 
@@ -110,6 +111,7 @@ export const PostHistoryRow = memo(({ post, network }: PostHistoryRowProps) => {
 
         if (!meta.length) return null
         const [pluginName, pluginInfo] = meta[0]
+        console.log(pluginInfo, 'gggg')
         return SUPPORT_PLUGIN[pluginName]?.messageParse(pluginInfo) ?? ''
     }, [post.interestedMeta])
 
