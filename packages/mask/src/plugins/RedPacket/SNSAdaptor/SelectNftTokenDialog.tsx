@@ -6,6 +6,7 @@ import {
     useERC721TokenDetailedCallback,
     useAccount,
     isSameAddress,
+    formatNFT_TokenId,
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { DialogContent, Box, InputBase, Paper, Button, Typography, ListItem, CircularProgress } from '@mui/material'
@@ -757,7 +758,7 @@ function NFTCard(props: NFTCardProps) {
             />
             <div className={classes.selectWrapperNftNameWrapper}>
                 <Typography className={classes.selectWrapperNftName} color="textSecondary">
-                    {'#' + token.tokenId}
+                    {'#' + formatNFT_TokenId(token.tokenId, 2)}
                 </Typography>
             </div>
 
