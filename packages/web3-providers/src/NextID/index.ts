@@ -1,4 +1,4 @@
-import { fromHex, toBase64, NextIDBindings, NextIDPlatform, NextIDPayload } from '@masknet/shared-base'
+import { fromHex, toBase64, NextIDBindings, NextIDPlatform, NextIDPayload, NextIDAction } from '@masknet/shared-base'
 import urlcat from 'urlcat'
 import { first } from 'lodash-unified'
 
@@ -6,11 +6,6 @@ const BASE_URL =
     process.env.channel === 'stable' && process.env.NODE_ENV === 'production'
         ? 'https://proof-service.next.id/'
         : 'https://js43x8ol17.execute-api.ap-east-1.amazonaws.com/api/'
-
-interface BindingQueryRequest {
-    platform: NextIDPlatform
-    identity: string
-}
 
 interface CreatePayloadBody {
     action: string
@@ -21,7 +16,7 @@ interface CreatePayloadBody {
 
 export async function bindProof(
     personaPublicKey: string,
-    action: 'create' | 'delete',
+    action: NextIDAction,
     platform: string,
     identity: string,
     walletSignature?: string,
@@ -48,7 +43,7 @@ export async function bindProof(
 
     const result = (await response.json()) as { message: string }
 
-    if (!response.ok) new Error(result.message)
+    if (!response.ok) throw new Error(result.message)
     return response
 }
 
@@ -81,12 +76,12 @@ export async function queryIsBound(personaPublicKey: string, platform: NextIDPla
     if (!platform && !identity) return false
 
     const ids = await queryExistedBindingByPlatform(platform, identity)
-    return ids.map((x) => x.persona.toLowerCase()).includes(personaPublicKey.toLowerCase())
+    return ids.some((x) => x.persona.toLowerCase() === personaPublicKey.toLowerCase())
 }
 
 export async function createPersonaPayload(
     personaPublicKey: string,
-    action: 'create' | 'delete',
+    action: NextIDAction,
     identity: string,
     platform: NextIDPlatform,
 ): Promise<NextIDPayload | null> {

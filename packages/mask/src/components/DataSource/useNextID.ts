@@ -27,9 +27,9 @@ export const useNextIDBoundByPlatform = (platform: NextIDPlatform, identity: str
 }
 
 export function useNextIDConnectStatus() {
-    const [enableNextID] = useState(activatedSocialNetworkUI.configuration.nextIDConfig?.enable)
-    const personaConnectStatus = usePersonaConnectStatus()
     const ui = activatedSocialNetworkUI
+    const [enableNextID] = useState(ui.configuration.nextIDConfig?.enable)
+    const personaConnectStatus = usePersonaConnectStatus()
     const lastStateRef = currentSetupGuideStatus[ui.networkIdentifier]
     const lastState_ = useValueRef(lastStateRef)
     const lastState = useMemo<SetupGuideCrossContextStatus>(() => {
@@ -41,11 +41,11 @@ export function useNextIDConnectStatus() {
     }, [lastState_])
 
     const lastRecognized = useLastRecognizedIdentity()
-    const getUsername = () =>
-        lastState.username || (lastRecognized.identifier.isUnknown ? '' : lastRecognized.identifier.userId)
-    const [username] = useState(getUsername)
+    const [username] = useState(
+        lastState.username || (lastRecognized.identifier.isUnknown ? '' : lastRecognized.identifier.userId),
+    )
 
-    const { value: isVerified } = useAsync(async () => {
+    const { value: isVerified = false } = useAsync(async () => {
         if (isOpenedVerifyDialog) return true
         if (!enableNextID || !username || !personaConnectStatus.connected) return true
 
@@ -61,7 +61,7 @@ export function useNextIDConnectStatus() {
         const isBound = await queryIsBound(currentPersona.publicHexKey, platform, username)
         if (isBound) return true
 
-        currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier].value = stringify({
+        currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
             status: SetupGuideStep.VerifyOnNextID,
             persona: currentPersona?.identifier.toText(),
         })

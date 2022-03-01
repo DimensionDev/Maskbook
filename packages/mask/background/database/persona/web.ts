@@ -706,7 +706,7 @@ function personaRecordOutDB(x: PersonaRecordDB): PersonaRecord {
 
     const obj: PersonaRecord = {
         ...x,
-        identifier: identifier,
+        identifier,
         publicHexKey: convertPersonaHexPublicKey(identifier),
         linkedProfiles: new IdentifierMap(x.linkedProfiles, ProfileIdentifier),
     }

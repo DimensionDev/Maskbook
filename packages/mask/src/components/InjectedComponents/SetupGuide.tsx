@@ -14,6 +14,7 @@ import {
     NextIDPlatform,
     toBase64,
     fromHex,
+    NextIDAction,
 } from '@masknet/shared-base'
 import Services from '../../extension/service'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
@@ -45,7 +46,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const [, copyToClipboard] = useCopyToClipboard()
     const [step, setStep] = useState(SetupGuideStep.FindUsername)
     const [enableNextID] = useState(ui.configuration.nextIDConfig?.enable)
-    const verifyPostCollectTimer = useRef<any>()
+    const verifyPostCollectTimer = useRef<NodeJS.Timer | null>(null)
     const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform
 
     // #region parse setup status
@@ -116,18 +117,20 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const onVerify = async () => {
         if (!persona_?.publicHexKey) return
         const collectVerificationPost = ui.configuration.nextIDConfig?.collectVerificationPost
-        const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform
-        const isBound = await queryIsBound(persona_.publicHexKey, platform, username)
 
+        const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
+        if (!platform) return
+
+        const isBound = await queryIsBound(persona_.publicHexKey, platform, username)
         if (!isBound) {
-            const payload = await createPersonaPayload(persona_.publicHexKey, 'create', username, platform)
-            if (!payload) throw new Error('Get Payload Wrong')
+            const payload = await createPersonaPayload(persona_.publicHexKey, NextIDAction.Create, username, platform)
+            if (!payload) throw new Error('Failed to create persona payload.')
             const signResult = await Services.Identity.signWithPersona({
                 method: 'eth',
                 message: payload.signPayload,
                 identifier: persona_.publicHexKey,
             })
-            if (!signResult) throw new Error('Get Persona Sign Wrong')
+            if (!signResult) throw new Error('Failed to sign by persona.')
             const signature = signResult.signature.signature
             const postContent = payload.postContent.replace('%SIG_BASE64%', toBase64(fromHex(signature)))
             ui.automation?.nativeCompositionDialog?.appendText?.(postContent, { recover: false })
@@ -136,10 +139,10 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                 verifyPostCollectTimer.current = setInterval(async () => {
                     const post = collectVerificationPost?.(postContent)
                     if (post && persona_.publicHexKey) {
-                        clearInterval(verifyPostCollectTimer.current)
+                        clearInterval(verifyPostCollectTimer.current!)
                         await bindProof(
                             persona_.publicHexKey,
-                            'create',
+                            NextIDAction.Create,
                             platform,
                             username,
                             undefined,
@@ -151,7 +154,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                 }, 1000)
 
                 setTimeout(() => {
-                    clearInterval(verifyPostCollectTimer.current)
+                    clearInterval(verifyPostCollectTimer.current!)
                     reject({ message: t('setup_guide_verify_post_not_found') })
                 }, 1000 * 20)
             })

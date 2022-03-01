@@ -39,7 +39,6 @@ import { injectNFTAvatarClipInTwitter } from './injection/NFT/NFTAvatarClip'
 import { TwitterRenderFragments } from './customization/render-fragments'
 import { timelinePostContentSelector } from './utils/selector'
 import { postContentMessageParser, postIdParser } from './utils/fetch'
-import { forEach } from 'lodash-unified'
 import { isTypedMessageText } from '@masknet/typed-message'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
@@ -192,25 +191,25 @@ const twitterUI: SocialNetworkUI.Definition = {
             enable: true,
             platform: NextIDPlatform.Twitter,
             collectVerificationPost: (keyword: string) => {
-                let verifiedPostId: string | null = null
                 const userId =
                     IdentityProviderTwitter.recognized.value.identifier || globalUIState.profiles.value[0].identifier
                 const postNodes = timelinePostContentSelector().evaluate()
 
-                forEach(postNodes, (x) => {
-                    const postId = postIdParser(x)
-                    const postContent = postContentMessageParser(x)
+                for (const postNode of postNodes) {
+                    const postId = postIdParser(postNode)
+                    const postContent = postContentMessageParser(postNode)
                     const isVerified =
                         postId &&
                         postContent[0] &&
                         isTypedMessageText(postContent[0]) &&
                         (postContent[0]?.content ?? '').toLowerCase() === keyword.toLowerCase()
 
-                    if (isVerified) {
-                        verifiedPostId = postId
+                    if (isVerified && userId) {
+                        return new PostIdentifier(userId, postId)
                     }
-                })
-                return verifiedPostId && userId ? new PostIdentifier(userId, verifiedPostId) : null
+                }
+
+                return null
             },
         },
         steganography: {

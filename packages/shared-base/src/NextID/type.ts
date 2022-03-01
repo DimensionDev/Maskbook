@@ -1,9 +1,14 @@
+export enum NextIDAction {
+    Create = 'create',
+    Delete = 'delete',
+}
+
 export enum NextIDPlatform {
     NextId = 'nextid',
     Twitter = 'twitter',
     Keybase = 'keybase',
     Ethereum = 'ethereum',
-    Github = 'github',
+    GitHub = 'github',
 }
 
 export interface NextIDPayload {

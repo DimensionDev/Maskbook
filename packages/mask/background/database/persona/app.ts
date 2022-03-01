@@ -400,7 +400,7 @@ function personaRecordOutDB(x: NativePersonaRecord): PersonaRecord {
         publicHexKey: convertPersonaHexPublicKey(identifier),
         privateKey: x.privateKey as JsonWebKey as unknown as EC_Private_JsonWebKey,
         localKey: x.localKey as JsonWebKey as unknown as AESJsonWebKey,
-        identifier: identifier,
+        identifier,
         linkedProfiles: new IdentifierMap(new Map(Object.entries(x.linkedProfiles)), ProfileIdentifier),
         createdAt: new Date(x.createdAt),
         updatedAt: new Date(x.updatedAt),
