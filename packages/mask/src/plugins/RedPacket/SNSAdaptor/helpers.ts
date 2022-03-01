@@ -1,4 +1,4 @@
-import { createRenderWithMetadata, createTypedMessageMetadataReader } from '@masknet/shared-base'
+import { createRenderWithMetadata, createTypedMessageMetadataReader } from '@masknet/typed-message'
 import { RedPacketMetaKey, RedPacketNftMetaKey } from '../constants'
 import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '../types'
 import schema from '../schema.json'

@@ -58,6 +58,7 @@
       // which is unwanted. We need to take care of this.
 
       "@masknet/backup-format": ["./packages/backup-format/src"],
+      "@masknet/configuration": ["./packages/configuration/src"],
       // ! dashboard is explicitly opt-out of this feature, it and the /packages/mask has circulare reference that TypeScript does not allows.
       // "@masknet/dashboard": ["./packages/dashboard/src"],
       "@masknet/encryption": ["./packages/encryption/src"],
@@ -84,6 +85,8 @@
       "@masknet/web3-shared-evm": ["./packages/web3-shared/evm/src"],
       "@masknet/web3-shared-flow": ["./packages/web3-shared/flow/src"],
       "@masknet/web3-shared-solana": ["./packages/web3-shared/solana/src"],
+      "@masknet/typed-message": ["./packages/typed-message/base"],
+      "@masknet/typed-message/dom": ["./packages/typed-message/dom"],
       // @masknet/scripts: insert-here 2
 
       // Plugins
@@ -95,7 +98,7 @@
       "@masknet/plugin-rss3": ["./packages/plugins/RSS3/src"],
       "@masknet/plugin-solana": ["./packages/plugins/Solana/src"],
       "@masknet/plugin-template": ["./packages/plugins/template/src"],
-      "@masknet/plugin-cyber-connect": ["./packages/plugins/CyberConnect/src"],
+      "@masknet/plugin-cyberconnect": ["./packages/plugins/CyberConnect/src"],
       // @masknet/scripts: insert-here 3
       "@masknet/plugin-wallet": ["./packages/plugins/Wallet/src"]
     },
@@ -104,15 +107,16 @@
     // Type Checking
     "strict": true,
     // exactOptionalPropertyTypes: false,
-    "noImplicitOverride": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
+    "noImplicitOverride": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     // noPropertyAccessFromIndexSignature: false,
     // noUncheckedIndexedAccess: false,
     // noUnusedLocals: false,
     // noUnusedParameters: false,
+    "useUnknownInCatchVariables": true,
 
     // Modules
     "module": "ESNext",
@@ -125,6 +129,8 @@
     "declaration": true,
     "declarationMap": true,
     "importsNotUsedAsValues": "error",
+    "noEmitOnError": true,
+    // "preserveValueImports": true,
     "sourceMap": true,
     "stripInternal": true, // skip type emit for @internal types
 

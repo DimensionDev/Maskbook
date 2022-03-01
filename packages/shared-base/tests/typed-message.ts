@@ -1,10 +1,11 @@
+// TODO: move this test to @masknet/typed-message package
 import { test, expect } from '@jest/globals'
 import {
     makeTypedMessageText,
     encodeTypedMessageToDocument,
     makeTypedMessageSerializableTupleFromList,
     decodeTypedMessageFromDocument,
-} from '../src/TypedMessage'
+} from '@masknet/typed-message'
 
 const meta = new Map<string, any>([
     ['com.example.test', 'hi'],

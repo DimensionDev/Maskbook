@@ -1,7 +1,6 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useState } from 'react'
-import { blobToArrayBuffer } from '@dimensiondev/kit'
 import { createReactRootShadowed, MaskMessages, NFTAvatarEvent, startWatch } from '../../../../utils'
 import {
     searchTwitterAvatarOpenFilesSelector,
@@ -56,7 +55,7 @@ function getStyles() {
 }
 
 async function changeImageToActiveElements(image: File | Blob): Promise<void> {
-    const imageBuffer = await blobToArrayBuffer(image)
+    const imageBuffer = await image.arrayBuffer()
     hookInputUploadOnce('image/png', 'avatar.png', new Uint8Array(imageBuffer))
     ;(searchTwitterAvatarOpenFilesSelector().evaluate()[0]?.parentElement?.children[0] as HTMLElement)?.click()
 }

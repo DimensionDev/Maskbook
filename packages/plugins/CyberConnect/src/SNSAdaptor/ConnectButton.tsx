@@ -154,7 +154,7 @@ export default function ConnectButton({
             }}>
             {!isLoading ? (
                 <>
-                    <Logo /> {!isFollowing ? 'Follow Now' : 'Following'}
+                    <Logo /> <Typography variant="button">{!isFollowing ? 'Follow Now' : 'Following'}</Typography>
                 </>
             ) : (
                 <CircularProgress size={30} sx={{ marginLeft: '154px' }} />

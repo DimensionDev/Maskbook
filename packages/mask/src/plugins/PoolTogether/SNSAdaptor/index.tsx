@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra'
-import { extractTextFromTypedMessage, parseURL } from '@masknet/shared-base'
+import { extractTextFromTypedMessage } from '@masknet/typed-message'
+import { parseURL } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { base } from '../base'
 import { DepositDialog } from '../UI/DepositDialog'

@@ -3,12 +3,8 @@ import { useAsync } from 'react-use'
 import { DecryptPost } from './DecryptedPost/DecryptedPost'
 import { AddToKeyStore } from './AddToKeyStore'
 import Services from '../../extension/service'
-import {
-    ProfileIdentifier,
-    type TypedMessageTuple,
-    type PayloadAlpha40_Or_Alpha39,
-    type PayloadAlpha38,
-} from '@masknet/shared-base'
+import { ProfileIdentifier, type PayloadAlpha40_Or_Alpha39, type PayloadAlpha38 } from '@masknet/shared-base'
+import type { TypedMessageTuple } from '@masknet/typed-message'
 import type { Profile } from '../../database'
 import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'
 import { useValueRef } from '@masknet/shared'

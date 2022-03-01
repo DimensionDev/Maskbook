@@ -20,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 4,
         position: 'absolute',
         zIndex: 1,
-        backgroundColor: theme.palette.background.default,
+        backgroundColor: theme.palette.mode === 'light' ? '#F7F9FA' : '#2F3336',
         width: 172,
         height: 172,
     },
@@ -55,6 +55,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     linkWrapper: {
         position: 'relative',
+        display: 'block',
         width: 172,
         height: 172,
     },
@@ -79,7 +80,7 @@ export function CollectibleCard(props: CollectibleCardProps) {
             (entries) => {
                 entries.forEach((item) => {
                     if (!item.isIntersecting) return
-                    setImageLinkWithLazy(token.info.mediaUrl!)
+                    setImageLinkWithLazy(token.info.imageURL || token.info.mediaUrl!)
                     observer.unobserve(item.target)
                 })
             },
@@ -101,7 +102,7 @@ export function CollectibleCard(props: CollectibleCardProps) {
         theme.palette.mode === 'dark'
             ? new URL('./nft_token_fallback_dark.png', import.meta.url)
             : new URL('./nft_token_fallback.png', import.meta.url)
-    const { value: isImageToken, loading } = useImageChecker(token.info.mediaUrl)
+    const { value: isImageToken, loading } = useImageChecker(token.info.imageURL || token.info.mediaUrl)
     return (
         <Link
             ref={imgRef}
@@ -114,7 +115,7 @@ export function CollectibleCard(props: CollectibleCardProps) {
                 {readonly || !wallet ? null : (
                     <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} token={token} />
                 )}
-                {token.info.mediaUrl ? (
+                {token.info.imageURL || token.info.mediaUrl ? (
                     loading ? (
                         <Image component="img" width={172} height={172} loading src="" />
                     ) : isImageToken && imageLinkWithLazy ? (

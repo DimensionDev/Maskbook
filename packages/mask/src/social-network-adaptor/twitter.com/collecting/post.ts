@@ -1,24 +1,38 @@
 import { postsContentSelector, postsImageSelector } from '../utils/selector'
-import { IntervalWatcher } from '@dimensiondev/holoflows-kit'
+import { IntervalWatcher, DOMProxy, DOMProxyEvents } from '@dimensiondev/holoflows-kit'
+import type { EventListener } from '@servie/events'
 import { creator, SocialNetworkUI as Next } from '../../../social-network'
 import type { PostInfo } from '../../../social-network/PostInfo'
 import { postIdParser, postParser, postImagesParser } from '../utils/fetch'
-import { memoize } from 'lodash-unified'
+import { memoize, noop } from 'lodash-unified'
 import Services from '../../../extension/service'
 import { injectMaskIconToPostTwitter } from '../injection/MaskIcon'
+import { ProfileIdentifier } from '@masknet/shared-base'
 import {
-    ProfileIdentifier,
     makeTypedMessageImage,
     makeTypedMessageTupleFromList,
     makeTypedMessageEmpty,
     makeTypedMessagePromise,
     makeTypedMessageTuple,
-} from '@masknet/shared-base'
+} from '@masknet/typed-message'
 import { untilElementAvailable } from '../../../utils/dom'
 import { twitterBase } from '../base'
 import { twitterShared } from '../shared'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context'
 import { getCurrentIdentifier } from '../../utils'
+
+function getPostActionsNode(postNode: HTMLElement | null) {
+    if (!postNode) return null
+    return postNode.closest('[data-testid="tweet"]')?.querySelector<HTMLElement>('[role="group"] > div:last-child')
+}
+
+const getParentTweetNode = (node: HTMLElement) => {
+    return node.closest<HTMLElement>('[data-testid="tweet"]')
+}
+
+function isQuotedTweet(tweetNode: HTMLElement | null) {
+    return tweetNode?.getAttribute('role') === 'link'
+}
 
 function registerPostCollectorInner(
     postStore: Next.CollectingCapabilities.PostsProvider['posts'],
@@ -28,7 +42,7 @@ function registerPostCollectorInner(
         const root = node.closest<HTMLDivElement>(
             [
                 'article > div',
-                'div[role="link"]', // retweet in new twitter
+                'div[role="link"]', // retweet(quoted tweet) in new twitter
             ].join(),
         )
         if (!root) return null
@@ -45,10 +59,6 @@ function registerPostCollectorInner(
         if (isCardNode && hasTextNode) return null
 
         return root
-    }
-
-    const getParentTweetNode = (node: HTMLElement) => {
-        return node.closest<HTMLElement>('[data-testid="tweet"]')
     }
 
     const updateProfileInfo = memoize(
@@ -70,9 +80,24 @@ function registerPostCollectorInner(
             const tweetNode = getTweetNode(node)
             if (!tweetNode) return
             const refs = createRefsForCreatePostContext()
+            let actionsElementProxy: DOMProxy | undefined = undefined
+            const actionsInjectPoint = getPostActionsNode(proxy.current)
+            let unwatchPostNodeChange = noop
+            if (actionsInjectPoint && !isQuotedTweet(tweetNode)) {
+                actionsElementProxy = DOMProxy({})
+                actionsElementProxy.realCurrent = actionsInjectPoint
+                const handleChanged: EventListener<DOMProxyEvents<HTMLElement>, 'currentChanged'> = (e) => {
+                    actionsElementProxy!.realCurrent = getPostActionsNode(e.new) || null
+                }
+                proxy.on('currentChanged', handleChanged)
+                unwatchPostNodeChange = () => {
+                    proxy.off('currentChanged', handleChanged)
+                }
+            }
             const info = twitterShared.utils.createPostContext({
                 comments: undefined,
                 rootElement: proxy,
+                actionsElement: actionsElementProxy,
                 suggestedInjectionPoint: tweetNode,
                 ...refs.subscriptions,
             })
@@ -93,13 +118,16 @@ function registerPostCollectorInner(
             postStore.set(proxy, info)
             return {
                 onTargetChanged: run,
-                onRemove: () => postStore.delete(proxy),
+                onRemove: () => {
+                    postStore.delete(proxy)
+                    unwatchPostNodeChange()
+                },
                 onNodeMutation: run,
             }
         })
         .assignKeys((node) => {
             const tweetNode = getTweetNode(node)
-            const parentTweetNode = tweetNode?.getAttribute('role') === 'link' ? getParentTweetNode(tweetNode) : null
+            const parentTweetNode = isQuotedTweet(tweetNode) ? getParentTweetNode(tweetNode!) : null
             if (!tweetNode) return node.innerText
             const parentTweetId = parentTweetNode ? postIdParser(parentTweetNode) : ''
             const tweetId = postIdParser(tweetNode)

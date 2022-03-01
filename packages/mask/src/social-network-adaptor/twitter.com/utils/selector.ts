@@ -5,7 +5,7 @@ import { isCompose } from './postBox'
 
 type E = HTMLElement
 
-const querySelector = <T extends E, SingleMode extends boolean = true>(selector: string, singleMode = true) => {
+export const querySelector = <T extends E, SingleMode extends boolean = true>(selector: string, singleMode = true) => {
     const ls = new LiveSelector<T, SingleMode>().querySelector<T>(selector)
     return (singleMode ? ls.enableSingleMode() : ls) as LiveSelector<T, SingleMode>
 }
@@ -51,8 +51,10 @@ export const searchNewTweetButtonSelector: () => LiveSelector<E, true> = () => {
 
 export const searchNickNameSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="UserProfileHeader_Items"]')
-export const searchAvatarSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="primaryColumn"] a[href$="/photo"] img[src*="profile_images"]')
+export const searchAvatarSelector = () =>
+    querySelector<HTMLImageElement>('[data-testid="primaryColumn"] a[href$="/photo"] img[src*="profile_images"]')
+export const searchNFTAvatarSelector = () =>
+    querySelector<HTMLImageElement>('[data-testid="primaryColumn"] a[href$="/nft"] img[src*="profile_images"]')
 export const searchAvatarMetaSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('head > meta[property="og:image"]:last-child')
 
@@ -78,6 +80,8 @@ export const composeAnchorTextSelector: () => LiveSelector<HTMLAnchorElement, tr
     querySelector<HTMLAnchorElement>(
         'header[role=banner] a[href="/compose/tweet"] div[dir],aside a[href="/compose/tweet"] div[dir]',
     )
+export const headingTextSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
+    querySelector<HTMLAnchorElement>('[role="banner"] [role="heading"]')
 
 export const postEditorContentInPopupSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
@@ -235,7 +239,7 @@ export const searchTwitterAvatarLinkSelector: () => LiveSelector<E, true> = () =
     querySelector<E, true>('[data-testid="UserProfileHeader_Items"]').closest<E>(2).querySelector('div  a')
 
 export const searchTwitterAvatarSelector = () =>
-    querySelector<E, true>('[data-testid="UserProfileHeader_Items"]').closest<E>(2).querySelector('img').closest<E>(1)
+    querySelector<E, true>('a[href$="/photo"]').querySelector('img').closest<E>(1)
 // #endregion
 
 // #region twitter avatar
@@ -248,6 +252,6 @@ export const searchTweetAvatarSelector = () =>
 export const searchRetweetAvatarSelector = () => querySelector<E, false>('[data-testid="tweetButton"]').closest<E>(6)
 
 export const searchTwitterAvatarNFTSelector = () =>
-    querySelector<E>('a[href*=nft]').closest<E>(1).querySelector('a  div:nth-child(3) > div')
+    querySelector<E>('a[href$="/nft"]').closest<E>(1).querySelector('a div:nth-child(3) > div')
 
-export const searchTwitterAvatarNFTLinkSelector = () => querySelector<E>('a[href*=nft]')
+export const searchTwitterAvatarNFTLinkSelector = () => querySelector<E>('a[href$="/nft"]')

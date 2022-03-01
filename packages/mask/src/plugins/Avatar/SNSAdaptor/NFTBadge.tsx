@@ -23,10 +23,11 @@ interface NFTBadgeProps extends withClasses<'root' | 'text' | 'icon'> {
     size?: number
     width?: number
     hasRainbow?: boolean
+    borderSize?: number
 }
 
 export function NFTBadge(props: NFTBadgeProps) {
-    const { avatar, size = 140, hasRainbow } = props
+    const { avatar, size = 140, hasRainbow, borderSize } = props
     const classes = useStylesExtends(useStyles(), props)
 
     const { value = { amount: '0', symbol: 'ETH', name: '', slug: '' }, loading } = useNFT(
@@ -50,6 +51,7 @@ export function NFTBadge(props: NFTBadgeProps) {
                     strokeWidth={14}
                     stroke="black"
                     hasRainbow={hasRainbow}
+                    borderSize={borderSize}
                     fontSize={9}
                     text={
                         loading

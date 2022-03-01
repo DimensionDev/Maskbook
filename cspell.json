@@ -59,6 +59,7 @@
         "contrib",
         "contribs",
         "cooldown",
+        "corepack",
         "counterparty",
         "cyberconnect",
         "cyberlab",
@@ -76,6 +77,7 @@
         "elec",
         "encryptedmsg",
         "endregion",
+        "ethersphere",
         "ethersproject",
         "eustatius",
         "everytime",
@@ -106,6 +108,7 @@
         "imtokenv2",
         "investables",
         "ipfs",
+        "ipfshttp",
         "ipfsurl",
         "ittr",
         "jailbroken",
@@ -136,6 +139,7 @@
         "masktext",
         "mastdon",
         "mayen",
+        "merkel",
         "merkle",
         "metas",
         "metaverse",
@@ -396,6 +400,10 @@
         {
             "filename": "**/qya-AA.json",
             "enabled": false
+        },
+        {
+            "filename": ".circleci/config.yml",
+            "ignoreWords": ["cimg"]
         }
     ]
 }

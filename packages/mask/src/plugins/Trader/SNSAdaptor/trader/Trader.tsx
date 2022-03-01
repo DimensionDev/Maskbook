@@ -16,7 +16,7 @@ import {
     useWallet,
 } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { delay } from '@masknet/shared-base'
+import { delay } from '@dimensiondev/kit'
 import { useGasConfig } from './hooks/useGasConfig'
 import type { Coin } from '../../types'
 import { TokenPanelType, TradeInfo } from '../../types'
@@ -49,13 +49,13 @@ const useStyles = makeStyles()(() => {
 export interface TraderProps extends withClasses<'root'> {
     coin?: Coin
     defaultInputCoin?: Coin
+    defaultOutputCoin?: Coin
     tokenDetailed?: FungibleTokenDetailed
     chainId?: ChainId
 }
 
 export function Trader(props: TraderProps) {
-    const { coin, tokenDetailed, chainId: targetChainId, defaultInputCoin } = props
-    const { decimals } = tokenDetailed ?? coin ?? {}
+    const { defaultOutputCoin, coin, chainId: targetChainId, defaultInputCoin } = props
     const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
     const wallet = useWallet()
     const currentChainId = useChainId()
@@ -92,6 +92,26 @@ export function Trader(props: TraderProps) {
     }, [chainId, chainIdValid])
     // #endregion
 
+    const updateTradingCoin = useCallback(
+        (
+            type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN | AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
+            coin?: Coin,
+        ) => {
+            if (!coin?.contract_address) return
+            dispatchTradeStore({
+                type,
+                token: createERC20Token(chainId, coin.contract_address, coin.decimals, coin.name, coin.symbol),
+            })
+        },
+        [chainId],
+    )
+    useEffect(() => {
+        updateTradingCoin(AllProviderTradeActionType.UPDATE_INPUT_TOKEN, defaultInputCoin)
+    }, [updateTradingCoin, defaultInputCoin])
+    useEffect(() => {
+        updateTradingCoin(AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN, defaultOutputCoin)
+    }, [updateTradingCoin, defaultOutputCoin])
+
     // #region if coin be changed, update output token
     useEffect(() => {
         if (!coin || currentChainId !== targetChainId) return
@@ -108,14 +128,9 @@ export function Trader(props: TraderProps) {
             })
         }
         if (!outputToken) {
-            dispatchTradeStore({
-                type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
-                token: coin.contract_address
-                    ? createERC20Token(chainId, coin.contract_address, coin.decimals, coin.name, coin.symbol)
-                    : undefined,
-            })
+            updateTradingCoin(AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN, coin)
         }
-    }, [coin, NATIVE_TOKEN_ADDRESS, inputToken, outputToken, currentChainId, targetChainId, decimals])
+    }, [coin, NATIVE_TOKEN_ADDRESS, inputToken, outputToken, currentChainId, targetChainId, updateTradingCoin])
 
     useEffect(() => {
         if (!defaultInputCoin) return

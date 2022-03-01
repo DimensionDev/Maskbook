@@ -19,9 +19,9 @@ import {
 } from '../../../plugins/Wallet/settings'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { INTERNAL_nativeSend, INTERNAL_send } from './send'
-import { defer } from '@masknet/shared-base'
+import { defer } from '@dimensiondev/kit'
 import { hasNativeAPI, nativeAPI } from '../../../../shared/native-rpc'
-import { openPopupWindow } from '../HelperService'
+import { openPopupWindow } from '../../../../background/services/helper'
 import Services from '../../service'
 import { toHex } from 'web3-utils'
 import { isLessThan } from '@masknet/web3-shared-base'
@@ -66,9 +66,10 @@ async function requestSend(
     const { providerType = currentProviderSettings.value } = overrides ?? {}
 
     const chainId =
-        overrides?.chainId ?? providerType === ProviderType.MaskWallet
+        overrides?.chainId ??
+        (providerType === ProviderType.MaskWallet
             ? currentMaskWalletChainIdSettings.value
-            : currentChainIdSettings.value
+            : currentChainIdSettings.value)
 
     const { popupsWindow = true } = options ?? {}
 

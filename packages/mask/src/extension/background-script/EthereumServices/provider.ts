@@ -1,5 +1,5 @@
 import { first } from 'lodash-unified'
-import { defer } from '@masknet/shared-base'
+import { defer } from '@dimensiondev/kit'
 import type { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 import * as MaskWallet from './providers/MaskWallet'
 import * as MetaMask from './providers/MetaMask'

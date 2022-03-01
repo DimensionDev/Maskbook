@@ -8,6 +8,7 @@ const useStyles = makeStyles()((theme) => ({
     body: {
         display: 'flex',
         justifyContent: 'center',
+        minHeight: 300,
     },
     player: {
         maxWidth: '100%',
@@ -37,6 +38,10 @@ const useStyles = makeStyles()((theme) => ({
     errorIcon: {
         width: 36,
         height: 36,
+    },
+    iframe: {
+        minWidth: 300,
+        minHeight: 300,
     },
 }))
 
