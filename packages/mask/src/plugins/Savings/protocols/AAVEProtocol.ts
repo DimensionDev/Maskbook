@@ -77,12 +77,12 @@ export class AAVEProtocol implements SavingsProtocol {
             {
                 chainId: ChainId.Mainnet,
                 chainName: 'Ethereum',
-                contractAddress: (getSavingsConstants(ChainId.Mainnet) as any)[this.base] || ZERO_ADDRESS,
+                contractAddress: getSavingsConstants(ChainId.Mainnet)[this.base] || ZERO_ADDRESS,
             },
             {
                 chainId: ChainId.Kovan,
                 chainName: 'Kovan',
-                contractAddress: (getSavingsConstants(ChainId.Kovan) as any)[this.base] || ZERO_ADDRESS,
+                contractAddress: getSavingsConstants(ChainId.Kovan)[this.base] || ZERO_ADDRESS,
             },
         ]
     }
@@ -91,7 +91,7 @@ export class AAVEProtocol implements SavingsProtocol {
         return {
             type: EthereumTokenType.ERC20,
             chainId: chainId,
-            address: (getSavingsConstants(chainId) as any)[this.base],
+            address: getSavingsConstants(chainId)[this.base],
             symbol: this.symbol,
             decimals: this.decimals,
             name: this.underLyingAssetName,
@@ -110,7 +110,7 @@ export class AAVEProtocol implements SavingsProtocol {
             const body = JSON.stringify({
                 query: `{
                 reserves (where: {
-                    underlyingAsset: "${(getSavingsConstants(chainId) as any)[this.base] || ZERO_ADDRESS}"
+                    underlyingAsset: "${getSavingsConstants(chainId)[this.base] || ZERO_ADDRESS}"
                 }) {
                     id
                     name
@@ -161,7 +161,7 @@ export class AAVEProtocol implements SavingsProtocol {
             const reserveBody = JSON.stringify({
                 query: `{
                 reserves (where: {
-                    underlyingAsset: "${(getSavingsConstants(chainId) as any)[this.base] || ZERO_ADDRESS}"
+                    underlyingAsset: "${getSavingsConstants(chainId)[this.base] || ZERO_ADDRESS}"
                 }) {
                     id
                     name
@@ -267,7 +267,7 @@ export class AAVEProtocol implements SavingsProtocol {
             AaveLendingPoolABI as AbiItem[],
         )
         return contract?.methods.deposit(
-            (getSavingsConstants(chainId) as any)[this.base] || ZERO_ADDRESS,
+            getSavingsConstants(chainId)[this.base] || ZERO_ADDRESS,
             new BigNumber(value).toFixed(),
             account,
             '0',
@@ -309,7 +309,7 @@ export class AAVEProtocol implements SavingsProtocol {
             )
             const gasEstimate = await contract?.methods
                 .withdraw(
-                    (getSavingsConstants(chainId) as any)[this.base] || ZERO_ADDRESS,
+                    getSavingsConstants(chainId)[this.base] || ZERO_ADDRESS,
                     new BigNumber(value).toFixed(),
                     account,
                 )
@@ -341,7 +341,7 @@ export class AAVEProtocol implements SavingsProtocol {
             )
             await contract?.methods
                 .withdraw(
-                    (getSavingsConstants(chainId) as any)[this.base] || ZERO_ADDRESS,
+                    getSavingsConstants(chainId)[this.base] || ZERO_ADDRESS,
                     new BigNumber(value).toFixed(),
                     account,
                 )
