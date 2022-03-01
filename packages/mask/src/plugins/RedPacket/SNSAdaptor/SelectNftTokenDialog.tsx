@@ -641,7 +641,8 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                                 (t) => t.tokenId === token.tokenId,
                                             )
 
-                                            return (
+                                            return tokenIdFilterList.length > 0 &&
+                                                !tokenIdFilterList.includes(token.tokenId) ? null : (
                                                 <div key={i}>
                                                     <NFTCard
                                                         findToken={findToken}
@@ -743,11 +744,7 @@ function NFTCard(props: NFTCardProps) {
     const { findToken, token, tokenIdFilterList, isSelectSharesExceed, renderOrder, selectToken } = props
     const { classes } = useStyles({ isSelectSharesExceed })
     return (
-        <ListItem
-            className={classNames(
-                classes.selectWrapper,
-                tokenIdFilterList.length > 0 && !tokenIdFilterList.includes(token.tokenId) ? classes.hide : '',
-            )}>
+        <ListItem className={classes.selectWrapper}>
             <NFTCardStyledAssetPlayer
                 contractAddress={token.contractDetailed.address}
                 tokenId={token.tokenId}

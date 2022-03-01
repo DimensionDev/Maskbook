@@ -24,6 +24,13 @@ const useStyles = makeStyles()((theme) => ({
         width: 36,
         height: 52,
     },
+    imgWrapper: {
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 }))
 
 interface Props extends withClasses<'loadingFailImage' | 'iframe' | 'wrapper' | 'loadingPlaceholder'> {
@@ -63,17 +70,18 @@ export function NFTCardStyledAssetPlayer(props: Props) {
             : new URL('./nft_token_fallback.png', import.meta.url)
 
     return isImageToken ? (
-        <img
-            width="100%"
-            height="100%"
-            style={{ objectFit: 'cover' }}
-            src={url || tokenDetailed?.info.imageURL || tokenDetailed?.info.mediaUrl}
-            onError={(event) => {
-                const target = event.currentTarget as HTMLImageElement
-                target.src = fallbackImageURL.toString()
-                target.classList.add(classes.loadingFailImage ?? '')
-            }}
-        />
+        <div className={classes.imgWrapper}>
+            <img
+                width="100%"
+                style={{ objectFit: 'cover' }}
+                src={url || tokenDetailed?.info.imageURL || tokenDetailed?.info.mediaUrl}
+                onError={(event) => {
+                    const target = event.currentTarget as HTMLImageElement
+                    target.src = fallbackImageURL.toString()
+                    target.classList.add(classes.loadingFailImage ?? '')
+                }}
+            />
+        </div>
     ) : (
         <AssetPlayer
             erc721Token={{

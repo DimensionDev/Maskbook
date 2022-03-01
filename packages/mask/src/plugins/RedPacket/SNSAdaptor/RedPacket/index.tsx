@@ -78,7 +78,7 @@ export function RedPacket(props: RedPacketProps) {
     }
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
-            (availability?.claimed
+            (listOfStatus.includes(RedPacketStatus.claimed)
                 ? isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
                     ? t('plugin_red_packet_share_message_official_account', shareTextOption)
                     : t('plugin_red_packet_share_message_not_twitter', shareTextOption)
