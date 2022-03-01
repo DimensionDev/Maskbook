@@ -35,7 +35,7 @@ export async function consistentPersonaDBWriteAccess(action: () => Promise<void>
 }
 
 export async function createRelationsTransaction() {
-    return Promise.resolve()
+    return
 }
 
 export async function createPersonaDB(record: PersonaRecord): Promise<void> {
