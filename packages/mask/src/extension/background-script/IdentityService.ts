@@ -287,7 +287,7 @@ export async function patchCreateOrUpdateRelation(
 export async function patchCreateNewRelation(relations: Omit<RelationRecord, 'network'>[]) {
     await consistentPersonaDBWriteAccess(async (t) => {
         for (const relation of relations) {
-            const relationsInDB = await queryRelations(relation.linked, relation.profile)
+            const relationsInDB = await queryRelations(relation.linked, relation.profile, t)
 
             if (relationsInDB.length > 0) {
                 for (const relation of relationsInDB) {
