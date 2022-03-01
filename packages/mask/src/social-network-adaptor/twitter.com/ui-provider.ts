@@ -202,7 +202,7 @@ const twitterUI: SocialNetworkUI.Definition = {
                         postId &&
                         postContent[0] &&
                         isTypedMessageText(postContent[0]) &&
-                        (postContent[0]?.content ?? '').toLowerCase() === keyword.toLowerCase()
+                        (postContent[0].content ?? '').toLowerCase() === keyword.toLowerCase()
 
                     if (isVerified && userId) {
                         return new PostIdentifier(userId, postId)
