@@ -134,7 +134,7 @@ const twitterUI: SocialNetworkUI.Definition = {
     },
     customization: {
         paletteMode: PaletteModeProviderTwitter,
-        runtimeComponentOverwrite: {
+        sharedComponentOverwrite: {
             InjectedDialog: {
                 classes: useInjectedDialogClassesOverwriteTwitter,
             },

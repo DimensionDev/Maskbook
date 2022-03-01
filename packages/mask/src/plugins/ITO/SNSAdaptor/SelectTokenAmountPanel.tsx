@@ -1,7 +1,7 @@
 import type { ERC20TokenListProps } from '@masknet/shared'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { useCallback } from 'react'
-import { usePickToken } from '@masknet/ui-runtime'
+import { usePickToken } from '@masknet/shared'
 import { TokenAmountPanel, TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
 
 export interface SelectTokenAmountPanelProps {

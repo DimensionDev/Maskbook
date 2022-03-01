@@ -17,8 +17,7 @@
     { "path": "./packages/encryption/tsconfig.tests.json" },
     { "path": "./packages/shared-base/tsconfig.tests.json" },
     // All plugins should be type checked too
-    { "path": "./packages/plugins" },
-    { "path": "./packages/runtime" }
+    { "path": "./packages/plugins" }
   ],
   "compilerOptions": {
     "paths": {
@@ -101,10 +100,7 @@
       "@masknet/plugin-template": ["./packages/plugins/template/src"],
       "@masknet/plugin-cyberconnect": ["./packages/plugins/CyberConnect/src"],
       // @masknet/scripts: insert-here 3
-      "@masknet/plugin-wallet": ["./packages/plugins/Wallet/src"],
-
-      // Runtimes
-      "@masknet/ui-runtime": ["./packages/runtime/ui/src"]
+      "@masknet/plugin-wallet": ["./packages/plugins/Wallet/src"]
     },
     // Classification follows https://www.typescriptlang.org/tsconfig
 

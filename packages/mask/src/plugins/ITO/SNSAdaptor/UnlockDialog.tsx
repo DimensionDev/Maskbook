@@ -13,7 +13,7 @@ import {
 import { Link, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { Trans } from 'react-i18next'
-import { usePickToken } from '@masknet/ui-runtime'
+import { usePickToken } from '@masknet/shared'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'

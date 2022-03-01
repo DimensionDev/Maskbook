@@ -15,7 +15,7 @@ import {
 import { makeStyles, useStylesExtends, usePortalShadowRoot } from '@masknet/theme'
 import AddIcon from '@mui/icons-material/Add'
 import addDate from 'date-fns/add'
-import { InjectedDialog } from '@masknet/ui-runtime'
+import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'

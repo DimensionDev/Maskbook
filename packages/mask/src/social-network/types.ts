@@ -11,7 +11,7 @@ import type {
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { RenderFragmentsContextType } from '@masknet/typed-message/dom'
-import type { RuntimeComponentOverwrite } from '@masknet/ui-runtime'
+import type { SharedComponentOverwrite } from '@masknet/shared'
 import type { PaletteMode, Theme } from '@mui/material'
 import type { Subscription } from 'use-subscription'
 import type { Profile } from '../database'
@@ -265,7 +265,7 @@ export namespace SocialNetworkUI {
             /** Provide the ability to detect the current color scheme (light or dark) in the current SNS */
             paletteMode?: PaletteModeProvider
             i18nOverwrite?: I18NOverwrite
-            runtimeComponentOverwrite?: RuntimeComponentOverwrite
+            sharedComponentOverwrite?: SharedComponentOverwrite
             componentOverwrite?: ComponentOverwrite
         }
         export interface PaletteModeProvider {

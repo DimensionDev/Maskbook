@@ -1,4 +1,4 @@
-import { InjectedDialog } from '@masknet/ui-runtime'
+import { InjectedDialog } from '@masknet/shared'
 import Fuse from 'fuse.js'
 import {
     InputBase,

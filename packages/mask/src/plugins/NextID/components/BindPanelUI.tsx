@@ -7,8 +7,7 @@ import DoneIcon from '@mui/icons-material/Done'
 import { useI18N } from '../locales'
 import { getMaskColor, makeStyles, MaskColorVar } from '@masknet/theme'
 import type { Persona } from '../../../database'
-import { formatFingerprint, LoadingAnimation } from '@masknet/shared'
-import { InjectedDialog } from '@masknet/ui-runtime'
+import { InjectedDialog, formatFingerprint, LoadingAnimation } from '@masknet/shared'
 import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({

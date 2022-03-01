@@ -1,5 +1,5 @@
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { InjectedDialog } from '@masknet/ui-runtime'
+import { InjectedDialog } from '@masknet/shared'
 import { Button, DialogActions, DialogContent, InputBase, List, ListItem, ListItemText } from '@mui/material'
 import Fuse from 'fuse.js'
 import { useMemo, useState } from 'react'

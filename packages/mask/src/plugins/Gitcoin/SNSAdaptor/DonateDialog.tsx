@@ -1,4 +1,4 @@
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog, usePickToken, InjectedDialog } from '@masknet/shared'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { rightShift } from '@masknet/web3-shared-base'
 import {
@@ -15,7 +15,6 @@ import {
 import { DialogContent, Link, Typography } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
-import { usePickToken, InjectedDialog } from '@masknet/ui-runtime'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'

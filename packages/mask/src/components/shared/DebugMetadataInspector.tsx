@@ -13,7 +13,7 @@ import {
     Autocomplete,
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { InjectedDialog } from '@masknet/ui-runtime'
+import { InjectedDialog } from '@masknet/shared'
 import { isDataMatchJSONSchema, getKnownMetadataKeys, getMetadataSchema } from '@masknet/typed-message'
 import { ShadowRootPopper } from '@masknet/theme'
 import { useState } from 'react'

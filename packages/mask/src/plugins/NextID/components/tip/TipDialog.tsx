@@ -2,7 +2,7 @@ import { PluginId, useActivatedPlugin, usePluginIDContext } from '@masknet/plugi
 import { makeStyles } from '@masknet/theme'
 import { EMPTY_LIST } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
-import { InjectedDialog } from '@masknet/ui-runtime'
+import { InjectedDialog } from '@masknet/shared'
 import { NetworkTab } from '../../../../components/shared/NetworkTab'
 import { useI18N } from '../../../../utils'
 import { TargetChainIdContext } from '../../contexts'

@@ -17,8 +17,9 @@ import {
 import { makeStyles, useDialogStackActor, useStylesExtends, mergeClasses, usePortalShadowRoot } from '@masknet/theme'
 import { ErrorBoundary, useSharedI18N } from '@masknet/shared'
 import { isDashboardPage } from '@masknet/shared-base'
+import { FACEBOOK_ID, MINDS_ID } from '../../constants'
+import { staticSharedUI } from '../base'
 import { DialogDismissIcon } from './DialogDismissIcon'
-import { FACEBOOK_ID, MINDS_ID, staticBaseUIRuntime } from '../base'
 
 interface StyleProps {
     clean: boolean
@@ -60,7 +61,7 @@ export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'titl
 }
 
 export function InjectedDialog(props: InjectedDialogProps) {
-    const { componentOverwrite: overwrite, networkIdentifier: snsId } = staticBaseUIRuntime
+    const { componentOverwrite: overwrite, networkIdentifier: snsId } = staticSharedUI
     props = overwrite.InjectedDialog?.props?.(props) ?? props
     const clean = snsId === MINDS_ID || snsId === FACEBOOK_ID
     const {

@@ -3,6 +3,6 @@ import { TokenPickerProvider } from './TokenPicker'
 
 export * from './TokenPicker'
 
-export const EvmUIRuntimeProvider: FC = ({ children }) => {
+export const EvmSharedUIProvider: FC = ({ children }) => {
     return <TokenPickerProvider>{children}</TokenPickerProvider>
 }

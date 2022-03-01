@@ -15,9 +15,8 @@ import {
     useTokenConstants,
     useWallet,
 } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { usePickToken, useRemoteControlledDialog } from '@masknet/shared'
 import { delay } from '@dimensiondev/kit'
-import { usePickToken } from '@masknet/ui-runtime'
 import { useGasConfig } from './hooks/useGasConfig'
 import type { Coin } from '../../types'
 import { TokenPanelType, TradeInfo } from '../../types'

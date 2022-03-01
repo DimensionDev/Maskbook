@@ -1,31 +1,31 @@
 import { pick } from 'lodash-unified'
 import { createContext, FC, useContext, useMemo, useState } from 'react'
-import type { RuntimeComponentOverwrite } from './types'
+import type { SharedComponentOverwrite } from './types'
 
 interface ContextOptions {
     networkIdentifier: string
-    componentOverwrite: RuntimeComponentOverwrite
-    updateOverwrite(overwrite: RuntimeComponentOverwrite): void
+    componentOverwrite: SharedComponentOverwrite
+    updateOverwrite(overwrite: SharedComponentOverwrite): void
     updateNetworkIdentifier(snsId: string): void
 }
 
 // We can use this from outside of components or hooks
-export const staticBaseUIRuntime: ContextOptions = {
+export const staticSharedUI: ContextOptions = {
     networkIdentifier: 'unknown',
     componentOverwrite: {},
-    updateOverwrite: (overwrite: RuntimeComponentOverwrite) => {
-        staticBaseUIRuntime.componentOverwrite = overwrite
+    updateOverwrite: (overwrite: SharedComponentOverwrite) => {
+        staticSharedUI.componentOverwrite = overwrite
     },
     updateNetworkIdentifier: (snsId: string) => {
-        staticBaseUIRuntime.networkIdentifier = snsId
+        staticSharedUI.networkIdentifier = snsId
     },
 }
 
-const BaseUIContext = createContext<ContextOptions>(staticBaseUIRuntime)
+const BaseUIContext = createContext<ContextOptions>(staticSharedUI)
 
-export const BaseUIRuntimeProvider: FC = ({ children }) => {
-    const [overwrite, setOverwrite] = useState<RuntimeComponentOverwrite>(staticBaseUIRuntime.componentOverwrite)
-    const [snsId, setSnsId] = useState(staticBaseUIRuntime.networkIdentifier)
+export const BaseSharedUIProvider: FC = ({ children }) => {
+    const [overwrite, setOverwrite] = useState<SharedComponentOverwrite>(staticSharedUI.componentOverwrite)
+    const [snsId, setSnsId] = useState(staticSharedUI.networkIdentifier)
 
     const contextValue = useMemo(() => {
         const value: ContextOptions = {
@@ -34,7 +34,7 @@ export const BaseUIRuntimeProvider: FC = ({ children }) => {
             updateOverwrite: setOverwrite,
             updateNetworkIdentifier: setSnsId,
         }
-        Object.assign(staticBaseUIRuntime, pick(value, ['networkIdentifier', 'componentOverwrite']))
+        Object.assign(staticSharedUI, pick(value, ['networkIdentifier', 'componentOverwrite']))
         return value
     }, [snsId, overwrite])
 

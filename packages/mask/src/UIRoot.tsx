@@ -3,7 +3,13 @@ import { CustomSnackbarProvider } from '@masknet/theme'
 import { Web3Provider } from '@masknet/web3-shared-evm'
 import { CssBaseline, StyledEngineProvider, Theme, ThemeProvider } from '@mui/material'
 import { NetworkPluginID, PluginsWeb3ContextProvider, useAllPluginsWeb3State } from '@masknet/plugin-infra'
-import { ErrorBoundary, ErrorBoundaryBuildInfoContext, useValueRef, I18NextProviderHMR } from '@masknet/shared'
+import {
+    ErrorBoundary,
+    ErrorBoundaryBuildInfoContext,
+    useValueRef,
+    I18NextProviderHMR,
+    SharedContextProvider,
+} from '@masknet/shared'
 import i18nNextInstance from '../shared-ui/locales_legacy'
 import { Web3Context } from './web3/context'
 import { buildInfoMarkdown } from './utils/BuildInfoMarkdown'
@@ -14,7 +20,6 @@ import { fixWeb3State } from './plugins/EVM/UI/Web3State'
 import { getBackgroundColor } from './utils'
 import { MaskIconPaletteContext } from '@masknet/icons'
 import { isTwitter } from './social-network-adaptor/twitter.com/base'
-import { UIRuntimeProvider } from '@masknet/ui-runtime'
 const identity = (jsx: React.ReactNode) => jsx as JSX.Element
 function compose(init: React.ReactNode, ...f: ((children: React.ReactNode) => JSX.Element)[]) {
     return f.reduceRight((prev, curr) => curr(prev), <>{init}</>)
@@ -56,7 +61,7 @@ function MaskThemeProvider({ children, baseline, useTheme }: MaskThemeProvider) 
                   </>
               )
             : identity,
-        (jsx) => <UIRuntimeProvider children={jsx} />,
+        (jsx) => <SharedContextProvider children={jsx} />,
     )
 }
 export interface MaskUIRootProps extends React.PropsWithChildren<{}> {

@@ -14,7 +14,7 @@ import { FormControl, InputLabel, MenuItem, MenuProps, Select, TextField } from 
 import BigNumber from 'bignumber.js'
 import { omit } from 'lodash-unified'
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
-import { usePickToken } from '@masknet/ui-runtime'
+import { usePickToken } from '@masknet/shared'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'

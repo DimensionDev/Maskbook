@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Button, CircularProgress, DialogActions, DialogContent } from '@mui/material'
-import { InjectedDialog } from '@masknet/ui-runtime'
+import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../utils'
 import { SelectProfileUI } from '../shared/SelectProfileUI'
 import type { Profile } from '../../database'

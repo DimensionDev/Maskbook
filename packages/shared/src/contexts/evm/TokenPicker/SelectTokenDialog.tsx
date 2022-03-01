@@ -5,7 +5,8 @@ import { ChainId, EMPTY_LIST, FungibleTokenDetailed, useTokenConstants } from '@
 // eslint-disable-next-line import/no-deprecated
 import { DialogContent, Theme, useMediaQuery } from '@mui/material'
 import type { FC } from 'react'
-import { useBaseUIRuntime, MINDS_ID } from '../../base'
+import { useBaseUIRuntime } from '../../base'
+import { MINDS_ID } from '../../../constants'
 import { InjectedDialog } from '../../components'
 import { useRowSize } from './useRowSize'
 

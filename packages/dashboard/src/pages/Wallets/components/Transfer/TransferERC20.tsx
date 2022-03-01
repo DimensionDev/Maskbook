@@ -8,7 +8,7 @@ import {
     Web3Plugin,
 } from '@masknet/plugin-infra'
 import { NetworkType } from '@masknet/public-api'
-import { FormattedAddress, TokenAmountPanel } from '@masknet/shared'
+import { FormattedAddress, TokenAmountPanel, usePickToken } from '@masknet/shared'
 import { MaskColorVar, MaskTextField } from '@masknet/theme'
 import { isGreaterThan, isZero, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import {
@@ -33,7 +33,6 @@ import BigNumber from 'bignumber.js'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
-import { usePickToken } from '@masknet/ui-runtime'
 import { useDashboardI18N } from '../../../../locales'
 import { useGasConfig } from '../../hooks/useGasConfig'
 import { useNativeTokenPrice } from './useNativeTokenPrice'

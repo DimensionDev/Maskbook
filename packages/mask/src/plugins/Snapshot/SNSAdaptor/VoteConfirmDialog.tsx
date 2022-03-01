@@ -14,7 +14,7 @@ import millify from 'millify'
 import OpenInNew from '@mui/icons-material/OpenInNew'
 import { resolveBlockLinkOnExplorer, ChainId } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
-import { InjectedDialog } from '@masknet/ui-runtime'
+import { InjectedDialog } from '@masknet/shared'
 import { InfoField } from './InformationCard'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 

@@ -3,9 +3,8 @@ import { ExternalLink } from 'react-feather'
 import BigNumber from 'bignumber.js'
 import { Alert, Box, Button, DialogActions, DialogContent, Link, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
-import { FormattedAddress, FormattedBalance, useValueRef, TokenIcon } from '@masknet/shared'
+import { InjectedDialog, FormattedAddress, FormattedBalance, useValueRef, TokenIcon } from '@masknet/shared'
 import type { TradeComputed } from '../../types'
-import { InjectedDialog } from '@masknet/ui-runtime'
 import type { FungibleTokenDetailed, Wallet } from '@masknet/web3-shared-evm'
 import {
     createNativeToken,

@@ -1,7 +1,7 @@
 import { Appearance, applyMaskColorVars, makeStyles } from '@masknet/theme'
 import { TransactionStatusType, useChainId, useWallet, Web3Provider } from '@masknet/web3-shared-evm'
 import { ThemeProvider, Typography } from '@mui/material'
-import { UIRuntimeProvider } from '@masknet/ui-runtime'
+import { SharedContextProvider } from '@masknet/shared'
 import { useCallback } from 'react'
 import { useRecentTransactions } from '../../../../plugins/Wallet/hooks/useRecentTransactions'
 import Services from '../../../service'
@@ -87,7 +87,7 @@ export default function SwapPage() {
     return (
         <Web3Provider value={SwapWeb3Context}>
             <ThemeProvider theme={theme}>
-                <UIRuntimeProvider>
+                <SharedContextProvider>
                     <div className={classes.page}>
                         <div className={classes.container}>
                             <header className={classes.header}>
@@ -112,7 +112,7 @@ export default function SwapPage() {
                             </main>
                         </div>
                     </div>
-                </UIRuntimeProvider>
+                </SharedContextProvider>
             </ThemeProvider>
         </Web3Provider>
     )
