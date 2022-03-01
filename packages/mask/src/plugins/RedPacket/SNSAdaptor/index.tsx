@@ -62,7 +62,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 return {
                     text: (
                         <>
-                            <NFTRedPacketIcon style={{ width: 12, height: 12 }} />
+                            <NFTRedPacketIcon style={{ width: 16, height: 16 }} />
                             {payload.message ? payload.message : 'An NFT Lucky Drop'}
                         </>
                     ),
@@ -95,7 +95,7 @@ function ERC20RedpacketBadge(props: ERC20RedpacketBadgeProps) {
         payload.token?.type === EthereumTokenType.Native ? chainDetailed?.nativeCurrency : payload.token ?? fetchedToken
     return (
         <>
-            <RedPacketIcon style={{ width: 12, height: 12 }} /> A Lucky Drop with
+            <RedPacketIcon style={{ width: 16, height: 16 }} /> A Lucky Drop with
             {formatBalance(payload.total, tokenDetailed?.decimals ?? 0)} $
             {tokenDetailed?.symbol ?? tokenDetailed?.name ?? 'Token'} from {payload.sender.name}
         </>
