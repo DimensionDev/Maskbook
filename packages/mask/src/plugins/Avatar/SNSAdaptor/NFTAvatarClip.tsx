@@ -3,7 +3,7 @@ import { keyframes, makeStyles, useStylesExtends } from '@masknet/theme'
 import classNames from 'classnames'
 import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 import { useNFT } from '../hooks'
-import { useNFTContainerAtTwitter } from '../hooks/userNFTContainerAtTwitter'
+import { useNFTContainerAtTwitter } from '../hooks/useNFTContainerAtTwitter'
 import { formatPrice, formatText } from '../utils'
 import { v4 as uuid } from 'uuid'
 
@@ -142,11 +142,11 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName ?? '')
     const { value = { amount: '0', symbol: 'ETH', name: '', slug: '' }, loading: loadingNFT } = useNFT(
-        avatarMetadata?.data.user.result.nft_avatar_metadata.smart_contract.address ?? '',
-        avatarMetadata?.data.user.result.nft_avatar_metadata.token_id ?? '',
+        avatarMetadata?.address ?? '',
+        avatarMetadata?.token_id ?? '',
     )
     const { amount, name, symbol, slug } = value
-    if (!avatarMetadata?.data.user.result.has_nft_avatar) return null
+    if (!avatarMetadata?.address || !avatarMetadata?.token_id) return null
 
     return (
         <svg
@@ -201,10 +201,9 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
                     text={
                         loading || loadingNFT
                             ? 'loading...'
-                            : `${formatText(
-                                  name,
-                                  avatarMetadata?.data.user.result.nft_avatar_metadata.token_id ?? '',
-                              )} ${slug.toLowerCase() === 'ens' ? 'ENS' : ''}`
+                            : `${formatText(name, avatarMetadata?.token_id ?? '')} ${
+                                  slug.toLowerCase() === 'ens' ? 'ENS' : ''
+                              }`
                     }
                     classes={{ root: classes.text }}
                 />
@@ -225,7 +224,7 @@ export function NFTAvatarMiniClip(props: NFTAvatarClipProps) {
     const identity = useLastRecognizedIdentity()
     const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName ?? identity.identifier.userId)
 
-    if (loading || !avatarMetadata?.data.user.result.has_nft_avatar) return null
+    if (loading || !avatarMetadata?.address || !avatarMetadata?.token_id) return null
 
     return (
         <svg

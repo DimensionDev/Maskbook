@@ -81,8 +81,6 @@
     "settings_language": "言語を設定",
     "settings_language_secondary": "ご利用になりたい言語をお選びください。",
     "settings_choose_eth_network": "Ethereum ネットワークを選択してください",
-    "settings_post_replacement": "代替ポスト",
-    "settings_post_replacement_desc": "Web ページ上のすべての投稿は、Mask で作成されていない投稿を含め、Mask によってレンダリングされます。",
     "settings_launch_page": "初期画面",
     "settings_launch_page_secondary": "アプリを開いたときに最初に開かれる画面を選んでください。",
     "skip": "スキップ",

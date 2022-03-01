@@ -1,9 +1,8 @@
-import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra'
-import { makeStyles } from '@masknet/theme'
-import type { TypedMessage } from '@masknet/shared-base'
+import { useActivatedPluginsSNSAdaptor, Plugin, usePluginI18NField } from '@masknet/plugin-infra'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import type { TypedMessage } from '@masknet/typed-message'
 import { Box, Chip } from '@mui/material'
-import { usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
-import { ShadowRootTooltip, useI18N } from '../../utils'
+import { useI18N } from '../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     chip: {

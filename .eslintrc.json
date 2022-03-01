@@ -28,7 +28,12 @@
                     { "name": "lodash", "message": "Please use lodash-unified instead." },
                     { "name": "lodash-es", "message": "Please use lodash-unified instead." },
                     { "name": "date-fns", "message": "Please use date-fns/{submodule} instead." },
-                    { "name": "date-fns/esm", "message": "Please use date-fns/{submodule} instead." }
+                    { "name": "date-fns/esm", "message": "Please use date-fns/{submodule} instead." },
+                    { "name": "@masknet/typed-message/base", "message": "Please use @masknet/typed-message instead." },
+                    {
+                        "name": "@dimensiondev/holoflows-kit/es",
+                        "message": "Please use @dimensiondev/holoflows-kit instead."
+                    }
                 ]
             }
         ],

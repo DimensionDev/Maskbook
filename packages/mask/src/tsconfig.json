@@ -8,6 +8,7 @@
     "lib": ["ES2021"]
   },
   "include": ["./", "./**/*.json"],
+  "exclude": ["./plugin-infra/register.js"],
 
   // ! Note: mask/ depends dashboard/ on source-code level
   // !       but dashboard/ depends mask/ on type level
@@ -16,6 +17,8 @@
     { "path": "../../public-api" },
     { "path": "../../shared" },
     { "path": "../../shared-base" },
+    { "path": "../../typed-message/base" },
+    { "path": "../../typed-message/dom" },
     { "path": "../../web3-shared/base" },
     { "path": "../../web3-shared/evm" },
     { "path": "../../web3-shared/flow" },

@@ -25,7 +25,8 @@ import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/
 import { injectMaskUserBadgeAtTwitter } from './injection/MaskIcon'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector'
-import { ProfileIdentifier } from '@masknet/shared-base'
+import { injectPostActionsAtTwitter } from './injection/PostActions'
+import { NextIDPlatform, PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { unreachable } from '@dimensiondev/kit'
 import { makeStyles } from '@masknet/theme'
 import { injectNFTAvatarInTwitter } from './injection/NFT/NFTAvatarInTwitter'
@@ -35,6 +36,10 @@ import { injectOpenNFTAvatarEditProfileButton } from './injection/NFT/NFTAvatarE
 import { injectUserNFTAvatarAtTweet } from './injection/NFT/TweetNFTAvatar'
 import { injectNFTContractAtTwitter } from './injection/NFT/NFTContract'
 import { injectNFTAvatarClipInTwitter } from './injection/NFT/NFTAvatarClip'
+import { TwitterRenderFragments } from './customization/render-fragments'
+import { timelinePostContentSelector } from './utils/selector'
+import { postContentMessageParser, postIdParser } from './utils/fetch'
+import { isTypedMessageText } from '@masknet/typed-message'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -136,6 +141,7 @@ const twitterUI: SocialNetworkUI.Definition = {
             InjectedDialog: {
                 classes: useInjectedDialogClassesOverwriteTwitter,
             },
+            RenderFragments: TwitterRenderFragments,
         },
         useTheme: useThemeTwitterVariant,
         i18nOverwrite: i18NOverwriteTwitter,
@@ -156,6 +162,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         enhancedPostRenderer: injectPostReplacerAtTwitter,
         pageInspector: injectPageInspectorDefault(),
         postInspector: injectPostInspectorAtTwitter,
+        postActions: injectPostActionsAtTwitter,
         setupPrompt: injectSetupPromptAtTwitter,
         newPostComposition: {
             start: injectPostBoxComposed,
@@ -180,6 +187,31 @@ const twitterUI: SocialNetworkUI.Definition = {
         avatarClipNFT: injectNFTAvatarClipInTwitter,
     },
     configuration: {
+        nextIDConfig: {
+            enable: true,
+            platform: NextIDPlatform.Twitter,
+            collectVerificationPost: (keyword: string) => {
+                const userId =
+                    IdentityProviderTwitter.recognized.value.identifier || globalUIState.profiles.value[0].identifier
+                const postNodes = timelinePostContentSelector().evaluate()
+
+                for (const postNode of postNodes) {
+                    const postId = postIdParser(postNode)
+                    const postContent = postContentMessageParser(postNode)
+                    const isVerified =
+                        postId &&
+                        postContent[0] &&
+                        isTypedMessageText(postContent[0]) &&
+                        (postContent[0]?.content ?? '').toLowerCase() === keyword.toLowerCase()
+
+                    if (isVerified && userId) {
+                        return new PostIdentifier(userId, postId)
+                    }
+                }
+
+                return null
+            },
+        },
         steganography: {
             password() {
                 // ! Change this might be a breaking change !
@@ -193,4 +225,5 @@ const twitterUI: SocialNetworkUI.Definition = {
         },
     },
 }
+
 export default twitterUI

@@ -8,11 +8,12 @@ import { MaskAlert } from '../MaskAlert'
 import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
 import { Services } from '../../API'
 import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
-import { DashboardRoutes, delay } from '@masknet/shared-base'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { SignUpRoutePath } from '../../pages/SignUp/routePath'
 import { LoadingButton } from '../LoadingButton'
+import { delay } from '@dimensiondev/kit'
 
 const useStyles = makeStyles()((theme) => ({
     error: {

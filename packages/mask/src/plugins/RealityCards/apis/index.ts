@@ -19,6 +19,7 @@ export async function fetchMarketBySlug(graph_url: string | undefined, slug: str
             artistAddress
             artistCut
             artistLink
+            artistName
             cardAffiliateAddresses
             cardAffiliateCut
             cards {
@@ -26,15 +27,19 @@ export async function fetchMarketBySlug(graph_url: string | undefined, slug: str
               image
               outcomeName
               price
-              marketCardIndex
-              longestOwner {
+              owner {
                 id
                 __typename
               }
+              marketCardIndex
+              longestOwner {
+                  id
+                  __typename
+              }
               originalNft {
-                owner {
-                    id
-                }
+                  owner {
+                      id
+                  }
               }
               __typename
             }
@@ -45,6 +50,8 @@ export async function fetchMarketBySlug(graph_url: string | undefined, slug: str
               id
               __typename
             }
+            giveawayType
+            giveawayText
             id
             invalid
             ipfsHash
@@ -53,9 +60,10 @@ export async function fetchMarketBySlug(graph_url: string | undefined, slug: str
             minRentalDayDivisor
             mode
             name
+            nftsToAward
+            nftsToWinningOutcomeOnly
             nftMintCount
             numberOfTokens
-            giveawayText
             lockingTime
             oracleResolutionTime
             openingTime
@@ -93,6 +101,7 @@ export async function fetchMarketBySlug(graph_url: string | undefined, slug: str
         mode: 'cors',
         credentials: 'omit',
     })
+
     const market = (await response.json())?.data?.markets?.[0]
     return market
 }

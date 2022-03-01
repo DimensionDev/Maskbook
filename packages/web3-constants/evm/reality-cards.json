@@ -7,11 +7,17 @@
         "Gorli": "",
         "BSC": "",
         "BSCT": "",
-        "Matic": "https://api.thegraph.com/subgraphs/name/realitycards/rc-beta-v12",
+        "Matic": "https://api.thegraph.com/subgraphs/name/realitycards/rc-beta-v14",
         "Mumbai": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     },
     "REALITY_CARD_ADDRESS": {
         "Mainnet": "",
@@ -25,6 +31,12 @@
         "Mumbai": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     }
 }

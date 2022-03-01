@@ -7,7 +7,7 @@ import Lock from '@mui/icons-material/Lock'
 import { useEffect } from 'react'
 import { useAsync } from 'react-use'
 import Services from '../../extension/service'
-import { extractTextFromTypedMessage } from '@masknet/shared-base'
+import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
 
 const useStyle = makeStyles()({

@@ -125,8 +125,8 @@ export function CardDialog(props: CardDialogProps) {
     const [days, setDays] = useState('')
 
     const isOwner = useMemo(() => {
-        return isSameAddress(card.originalNft.owner.id, account)
-    }, [card.originalNft.owner.id, account])
+        return isSameAddress(card.owner?.id, account)
+    }, [card.owner?.id, account])
     // #endregion
 
     useEffect(() => {
@@ -164,10 +164,15 @@ export function CardDialog(props: CardDialogProps) {
     }, [priceHourly])
 
     const minHourlyPrice = useMemo(() => {
-        return new BigNumber(card.price)
+        const currentPrice = new BigNumber(card.price)
             .multipliedBy(100 + Number.parseFloat(market.minimumPriceIncreasePercent))
             .dividedBy(100)
             .dividedBy(24)
+
+        if (currentPrice.isNaN() || currentPrice.isZero()) {
+            return new BigNumber(MINIMUM_ACCEPTED_PRICE)
+        }
+        return currentPrice
     }, [card.price, market.minimumPriceIncreasePercent])
 
     const maxOwnershipSeconds = useMemo(() => {
@@ -380,7 +385,7 @@ export function CardDialog(props: CardDialogProps) {
 
                         <EthereumWalletConnectedBoundary>
                             <EthereumERC20TokenApprovedBoundary
-                                amount={priceHourly.toString()}
+                                amount={maxRentalAmount}
                                 spender={market.id}
                                 token={token?.type === EthereumTokenType.ERC20 ? token : undefined}>
                                 <ActionButton

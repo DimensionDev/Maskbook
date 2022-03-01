@@ -18,6 +18,7 @@ import {
     TransakIcon,
     ValuablesIcon,
     RealityCardsIcon,
+    CyberConnectIcon,
 } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import MarketTrendSettingDialog from './components/MarketTrendSettingDialog'
@@ -31,6 +32,7 @@ import { PoolTogetherURL } from '../../assets'
 import { DHEDGEIcon } from '../../../../mask/src/resources/DHEDGEIcon'
 import TutorialDialog from './components/TutorialDialog'
 import { PluginId } from '@masknet/plugin-infra'
+import ArtBlocksIcon from '../../../../mask/src/plugins/ArtBlocks/SNSAdaptor/ArtBlocksIcon'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -71,6 +73,8 @@ export default function Plugins() {
         [PluginId.GoodGhosting]: true,
         [PluginId.PoolTogether]: true,
         [PluginId.RealityCards]: true,
+        [PluginId.ArtBlocks]: true,
+        [PluginId.CyberConnect]: true,
     })
 
     useEffect(
@@ -189,6 +193,20 @@ export default function Plugins() {
             desc: t.labs_realitycards_desc(),
             icon: <RealityCardsIcon />,
             enabled: pluginStatus[PluginId.RealityCards],
+        },
+        {
+            id: PluginId.ArtBlocks,
+            title: t.labs_art_blocks(),
+            desc: t.labs_art_blocks_desc(),
+            icon: <ArtBlocksIcon />,
+            enabled: pluginStatus[PluginId.ArtBlocks],
+        },
+        {
+            id: PluginId.CyberConnect,
+            title: t.labs_cyber_connect(),
+            desc: t.labs_cyber_connect_desc(),
+            icon: <CyberConnectIcon />,
+            enabled: pluginStatus[PluginId.CyberConnect],
         },
     ]
 

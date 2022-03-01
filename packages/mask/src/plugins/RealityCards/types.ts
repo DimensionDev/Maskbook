@@ -6,6 +6,7 @@ export interface Market {
     artistAddress: string
     artistCut: string
     artistLink: string
+    artistName: string | null
     cardAffiliateAddresses: any[]
     cardAffiliateCut: string
     cards: Card[]
@@ -24,7 +25,8 @@ export interface Market {
     name: string
     nftMintCount: string
     numberOfTokens: string
-    giveawayText?: string
+    giveawayText?: string | null
+    giveawayType?: string | null
     openingTime: string
     oracleResolutionTime: string
     questionId: string
@@ -61,6 +63,7 @@ export interface Card extends Factory {
     marketCardIndex: string
     originalNft: OriginalNft
     longestOwner: Factory
+    owner: Factory | null
 }
 
 export interface OriginalNft extends Factory {

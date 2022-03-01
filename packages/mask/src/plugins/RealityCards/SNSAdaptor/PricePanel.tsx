@@ -1,9 +1,9 @@
 import { ChangeEvent, useCallback, useMemo } from 'react'
-import { Box, Chip, ChipProps, InputProps, TextField, TextFieldProps, Typography } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { Box, Chip, ChipProps, InputProps, Typography } from '@mui/material'
+import { makeStyles, MaskTextField, useStylesExtends } from '@masknet/theme'
 import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
-import { FormattedBalance, SelectTokenChip, SelectTokenChipProps } from '@masknet/shared'
+import { FormattedBalance, SelectTokenChip, SelectTokenChipProps, useSharedI18N } from '@masknet/shared'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { formatBalance } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
@@ -16,19 +16,22 @@ const useStyles = makeStyles()((theme) => {
         root: {},
         input: {
             '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
-                appearance: 'none',
+                '-webkit-appearance': 'none',
                 margin: 0,
             },
-            appearance: 'textfield',
+            '-moz-appearance': 'textfield',
         },
         max: {
-            marginRight: theme.spacing(0.5),
+            marginRight: theme.spacing(0.2),
             borderRadius: 8,
+            fontSize: 12,
+            height: 18,
         },
         token: {
             whiteSpace: 'pre',
             maxWidth: 300,
             paddingLeft: theme.spacing(1),
+            fontSize: 12,
         },
         balance: {
             whiteSpace: 'nowrap',
@@ -61,25 +64,24 @@ export interface PricePanelProps extends withClasses<'root'> {
     MaxChipProps?: Partial<ChipProps>
     MaxChipStyle?: ChipProps['classes']
     SelectTokenChip?: Partial<SelectTokenChipProps>
-    TextFieldProps?: Partial<TextFieldProps>
 }
 
 export function PricePanel(props: PricePanelProps) {
     const {
         amount,
-        maxAmount,
         minAmount,
         balance,
         decimals = 2,
         token,
         onAmountChange,
-        maxAmountShares = 1,
         label,
         disableToken = false,
         disableBalance = false,
         MaxChipProps,
     } = props
+
     const { t } = useI18N()
+    const sharedT = useSharedI18N()
     const classes = useStylesExtends(useStyles(), props)
 
     // #region update amount by self
@@ -101,14 +103,13 @@ export function PricePanel(props: PricePanelProps) {
     // #endregion
 
     return (
-        <TextField
+        <MaskTextField
             className={classes.root}
             label={label}
             fullWidth
             required
             type="text"
             value={amount}
-            variant="outlined"
             onChange={onChange}
             placeholder="0.0"
             InputProps={{
@@ -139,8 +140,13 @@ export function PricePanel(props: PricePanelProps) {
                                 color="textSecondary"
                                 variant="body2"
                                 component="span">
-                                {t('plugin_ito_list_table_got')}:
-                                <FormattedBalance value={balance} decimals={token.decimals} significant={6} />
+                                {sharedT.balance()}:
+                                <FormattedBalance
+                                    value={balance}
+                                    decimals={token.decimals}
+                                    significant={6}
+                                    formatter={formatBalance}
+                                />
                             </Typography>
                         ) : null}
                         <Box
@@ -149,26 +155,28 @@ export function PricePanel(props: PricePanelProps) {
                                 alignItems: 'center',
                                 marginTop: 2,
                             }}>
-                            <Chip
-                                classes={{
-                                    root: classNames(classes.max, MaxChipProps?.classes?.root),
-                                    ...MaxChipProps?.classes,
-                                }}
-                                size="small"
-                                label={t('plugin_realitycards_set_min_rental_price')}
-                                clickable
-                                color="primary"
-                                variant="outlined"
-                                sx={{ textTransform: 'uppercase' }}
-                                onClick={() => {
-                                    onAmountChange(
-                                        new BigNumber(formatBalance(minAmount ?? 0, token.decimals))
-                                            .decimalPlaces(decimals, BigNumber.ROUND_UP)
-                                            .toString(),
-                                    )
-                                }}
-                                {...MaxChipProps}
-                            />
+                            {balance !== '0' && !disableBalance ? (
+                                <Chip
+                                    classes={{
+                                        root: classNames(classes.max, MaxChipProps?.classes?.root),
+                                        ...MaxChipProps?.classes,
+                                    }}
+                                    size="small"
+                                    label={t('plugin_realitycards_set_min_rental_price')}
+                                    clickable
+                                    color="primary"
+                                    variant="outlined"
+                                    sx={{ textTransform: 'uppercase' }}
+                                    onClick={() => {
+                                        onAmountChange(
+                                            new BigNumber(formatBalance(minAmount ?? 0, token.decimals))
+                                                .decimalPlaces(decimals, BigNumber.ROUND_UP)
+                                                .toString(),
+                                        )
+                                    }}
+                                    {...MaxChipProps}
+                                />
+                            ) : null}
                             <SelectTokenChip token={token} {...props.SelectTokenChip} />
                         </Box>
                     </Box>
@@ -202,7 +210,6 @@ export function PricePanel(props: PricePanelProps) {
                     shrink: classes.inputShrinkLabel,
                 },
             }}
-            {...props.TextFieldProps}
         />
     )
 }

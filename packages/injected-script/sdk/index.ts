@@ -20,8 +20,13 @@ export function pasteInstagram(url: string) {
 export function inputText(text: string) {
     sendEvent('input', text)
 }
-export function hookInputUploadOnce(format: string, fileName: string, image: Uint8Array) {
-    sendEvent('hookInputUploadOnce', format, fileName, Array.from(image))
+export function hookInputUploadOnce(
+    format: string,
+    fileName: string,
+    image: Uint8Array,
+    triggerOnActiveElementNow = false,
+) {
+    sendEvent('hookInputUploadOnce', format, fileName, Array.from(image), triggerOnActiveElementNow)
 }
 
 document.addEventListener(CustomEventId, (e) => {

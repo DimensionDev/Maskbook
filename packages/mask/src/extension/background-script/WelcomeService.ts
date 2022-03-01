@@ -1,12 +1,12 @@
-import { encodeText } from '@dimensiondev/kit'
-import { delay, type DashboardRoutes, PopupRoutes } from '@masknet/shared-base'
+import { encodeText, delay } from '@dimensiondev/kit'
+import { type DashboardRoutes, PopupRoutes } from '@masknet/shared-base'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { createPersonaByJsonWebKey } from '../../database'
 import { attachProfileDB, LinkedProfileDetails } from '../../../background/database/persona/db'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
 import type { PersonaIdentifier, ProfileIdentifier, AESJsonWebKey } from '@masknet/shared-base'
 import { BackupOptions, generateBackupJSON } from './WelcomeServices/generateBackupJSON'
-import { requestExtensionPermission } from './HelperService/extensionPermission'
+import { requestExtensionPermission, openPopupWindow } from './../../../background/services/helper'
 import { saveFileFromBuffer } from '../../../shared'
 import {
     BackupJSONFileLatest,
@@ -18,7 +18,6 @@ import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { convertBackupFileToObject, extraPermissions, fixBackupFilePermission } from '../../utils'
 import { v4 as uuid } from 'uuid'
 import { getUnconfirmedBackup, restoreBackup, setUnconfirmedBackup } from './WelcomeServices/restoreBackup'
-import { openPopupWindow } from './HelperService'
 import formatDateTime from 'date-fns/format'
 
 export { generateBackupJSON, generateBackupPreviewInfo } from './WelcomeServices/generateBackupJSON'

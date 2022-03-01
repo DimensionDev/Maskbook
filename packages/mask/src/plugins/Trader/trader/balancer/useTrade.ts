@@ -4,6 +4,7 @@ import { BALANCER_SWAP_TYPE } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
 import { SwapResponse, TradeStrategy } from '../../types'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 
 export function useTrade(
     strategy: TradeStrategy,
@@ -11,7 +12,7 @@ export function useTrade(
     outputAmount: string,
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
-) {
+): AsyncStateRetry<SwapResponse | null> {
     const { targetChainId } = TargetChainIdContext.useContainer()
     const { WNATIVE_ADDRESS } = useTokenConstants(targetChainId)
 

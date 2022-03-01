@@ -31,6 +31,7 @@ export const TUTORIAL_URLS_EN: TUTORIAL_URLS_OPT = {
     [PluginId.MaskBox]:
         'https://realmasknetwork.notion.site/How-to-participate-in-a-MaskBox-sale-d0941687649a4ef7a38d71f23ecbe4da',
     [PluginId.RealityCards]: '',
+    [PluginId.CyberConnect]: 'https://cyberconnect.me',
 }
 
 export const TUTORIAL_URLS_CN: TUTORIAL_URLS_OPT = {
@@ -49,4 +50,5 @@ export const TUTORIAL_URLS_CN: TUTORIAL_URLS_OPT = {
     [PluginId.Poll]: '',
     [PluginId.Pets]: '',
     [PluginId.RealityCards]: '',
+    [PluginId.CyberConnect]: 'https://cyberconnect.me',
 }

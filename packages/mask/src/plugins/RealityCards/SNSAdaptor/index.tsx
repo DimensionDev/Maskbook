@@ -1,14 +1,13 @@
-import { Suspense, useMemo } from 'react'
-import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
-import { SnackbarContent } from '@mui/material'
+import { useMemo } from 'react'
+import { Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra'
 import { base } from '../base'
-import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { escapeRegExp } from 'lodash-unified'
-import { BASE_URL, VALID_CHAINS_ID } from '../constants'
+import { BASE_URL } from '../constants'
 import { MarketView } from './MarketView'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { extractTextFromTypedMessage, parseURL } from '@masknet/shared-base'
+import { parseURL } from '@masknet/shared-base'
+import { extractTextFromTypedMessage } from '@masknet/typed-message'
 
 function createMatchLink() {
     return new RegExp(`https:\/\/${escapeRegExp(BASE_URL)}\/cards\/(.+)`)
@@ -37,12 +36,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
             return parseURL(text?.val ?? '')
         }, [props.message])
         const market = getMarketFromLinks(links)
+        usePluginWrapper(!!market?.slug)
         if (!market?.slug) return null
         return <Renderer link={market.link} slug={market.slug} />
     },
     PostInspector: function Component() {
         const links = usePostInfoDetails.mentionedLinks()
         const market = getMarketFromLinks(links)
+        usePluginWrapper(!!market?.slug)
         if (!market?.slug) return null
         return <Renderer link={market.link} slug={market.slug} />
     },
@@ -52,14 +53,8 @@ export default sns
 
 function Renderer(props: React.PropsWithChildren<{ link: string; slug: string }>) {
     return (
-        <MaskPluginWrapper pluginName="RealityCards">
-            <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
-                <EthereumChainBoundary
-                    chainId={ChainId.Matic}
-                    isValidChainId={(chainId) => VALID_CHAINS_ID.includes(chainId)}>
-                    <MarketView slug={props.slug} link={props.link} />
-                </EthereumChainBoundary>
-            </Suspense>
-        </MaskPluginWrapper>
+        <EthereumChainBoundary chainId={ChainId.Matic}>
+            <MarketView slug={props.slug} link={props.link} />
+        </EthereumChainBoundary>
     )
 }

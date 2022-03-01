@@ -12,9 +12,3 @@ export { verifyOthersProve } from './CryptoServices/verifyOthersProve'
 export function steganographyEncodeImage(buf: ArrayBuffer, options: Omit<EncodeImageOptions, 'downloadImage'>) {
     return __steganographyEncodeImage(buf, { ...options, downloadImage: steganographyDownloadImage })
 }
-
-import type { debugShowAllPossibleHashForPost as orig } from './CryptoServices/debugShowAllPossibleHashForPost'
-// This module requires lazy loading otherwise it will load gun
-export async function debugShowAllPossibleHashForPost(...args: Parameters<typeof orig>) {
-    return (await import('./CryptoServices/debugShowAllPossibleHashForPost')).debugShowAllPossibleHashForPost(...args)
-}

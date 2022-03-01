@@ -10,7 +10,7 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { alpha } from '@mui/material'
 import { twitterBase } from '../base'
 import { sayHelloShowed } from '../../../settings/settings'
-import { makeTypedMessageText } from '@masknet/shared-base'
+import { makeTypedMessageText } from '@masknet/typed-message'
 import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({

@@ -5,9 +5,9 @@ import { File } from 'react-feather'
 import { useHistory, useLocation } from 'react-router-dom'
 import { useAsync } from 'react-use'
 import { useI18N } from '../../locales/i18n_generated'
-import { timeout } from '@masknet/shared-base'
+import { timeout } from '@dimensiondev/kit'
 import { FileRouter } from '../../constants'
-import type { FileInfo } from '../../types'
+import type { FileInfo, Provider } from '../../types'
 import { PluginFileServiceRPC, PluginFileServiceRPCGenerator } from '../../Worker/rpc'
 import { useExchange } from '../hooks/Exchange'
 import { FileName } from './FileName'
@@ -31,7 +31,6 @@ const useStyles = makeStyles()({
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
-        width: 400,
     },
 })
 
@@ -43,6 +42,7 @@ interface RouteState {
     block: Uint8Array
     checksum: string
     useCDN: boolean
+    provider: Provider
 }
 
 export const Uploading: React.FC = () => {
@@ -59,8 +59,10 @@ export const Uploading: React.FC = () => {
         return () => onUploading(false)
     }, [onUploading])
     const { error } = useAsync(async () => {
+        const currentProvider = state.provider as Provider
         const payloadTxID = await timeout(
-            PluginFileServiceRPC.makeAttachment({
+            PluginFileServiceRPC.makeAttachment(currentProvider, {
+                name: state.name,
                 key: state.key,
                 block: state.block,
                 type: state.type,
@@ -68,11 +70,11 @@ export const Uploading: React.FC = () => {
             60000, // = 1 minute
         )
         setPreparing(false)
-        for await (const pctComplete of PluginFileServiceRPCGenerator.upload(payloadTxID)) {
+        for await (const pctComplete of PluginFileServiceRPCGenerator.upload(currentProvider, payloadTxID)) {
             setSendSize(state.size * (pctComplete / 100))
         }
         const landingTxID = await timeout(
-            PluginFileServiceRPC.uploadLandingPage({
+            PluginFileServiceRPC.uploadLandingPage(currentProvider, {
                 name: state.name,
                 size: state.size,
                 txId: payloadTxID,
@@ -84,9 +86,8 @@ export const Uploading: React.FC = () => {
         )
         const item: FileInfo = {
             type: 'file',
-            provider: 'arweave',
+            provider: currentProvider,
             id: state.checksum,
-
             name: state.name,
             size: state.size,
             createdAt: new Date(startedAt),
@@ -119,7 +120,7 @@ export const Uploading: React.FC = () => {
             <Grid item>
                 <File width={96} height={120} />
             </Grid>
-            <Grid item>
+            <Grid item sx={{ width: '100%' }}>
                 <FileName name={state.name} />
                 <ProgressBar preparing={preparing} fileSize={state.size} sendSize={sendSize} startedAt={startedAt} />
             </Grid>
