@@ -714,6 +714,7 @@ export enum PluginId {
     Flow = 'com.mask.flow',
     RSS3 = 'bio.rss3',
     RedPacket = 'com.maskbook.red_packet',
+    RedPacketNFT = 'com.maskbook.red_packet_nft',
     Pets = 'com.maskbook.pets',
     Snapshot = 'org.snapshot',
     ITO = 'com.maskbook.ito',
