@@ -1,7 +1,11 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { searchInstagramAvatarSettingDialog, searchInstagramProfileAvatarButtonSelector } from '../../utils/selector'
+import {
+    searchInstagramAvatarSettingDialog,
+    searchInstagramProfileAvatarButtonSelector,
+    searchInstagramProfileEditButton,
+} from '../../utils/selector'
 import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
 import { NFTAvatarSettingDialog } from './NFTAvatarSettingDialog'
@@ -44,7 +48,9 @@ function OpenNFTAvatarEditProfileButtonInInstagram() {
 
     const { classes } = useStyles()
 
-    if (location.pathname?.includes('/edit')) return null
+    const editButton = useMemo(() => searchInstagramProfileEditButton().evaluate(), [location.pathname])
+
+    if (location.pathname?.includes('/edit') || !editButton) return null
 
     return <NFTAvatarButton onClick={onClick} classes={classes} />
 }
