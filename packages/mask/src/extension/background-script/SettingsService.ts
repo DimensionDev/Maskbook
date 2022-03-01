@@ -9,7 +9,7 @@ import {
     pluginIDSettings,
 } from '../../settings/settings'
 import { currentDataProviderSettings } from '../../plugins/Trader/settings'
-import { queryMyPersonas } from './IdentityService'
+import { queryMyPersonas, queryPersona } from './IdentityService'
 import {
     currentAccountSettings,
     currentNetworkSettings,
@@ -26,6 +26,7 @@ import {
 } from '../../plugins/Wallet/settings'
 import { Flags, MaskMessages } from '../../../shared'
 import { indexedDB_KVStorageBackend, inMemory_KVStorageBackend } from '../../../background/database/kv-storage'
+import type { Persona } from '../../database'
 
 function create<T>(settings: InternalSettings<T>) {
     async function get() {
@@ -74,6 +75,12 @@ export const [getCurrentMaskWalletLockedSettings, setCurrentMaskWalletLockedSett
 
 export async function getWalletAllowTestChain() {
     return Flags.wallet_allow_testnet
+}
+
+export async function getCurrentPersona(): Promise<Persona | undefined> {
+    const currentPersonaIdentifier = await getCurrentPersonaIdentifier()
+    if (!currentPersonaIdentifier) return undefined
+    return queryPersona(currentPersonaIdentifier)
 }
 
 export async function getCurrentPersonaIdentifier(): Promise<PersonaIdentifier | undefined> {
