@@ -111,7 +111,8 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
     }, [personaConnectStatus, walletTitle, t])
 
     const onClick = () => {
-        personaConnectStatus.action ? personaConnectStatus.action() : !isNextIDVerified ? null : openWallet()
+        if (!isNextIDVerified) return
+        personaConnectStatus.action ? personaConnectStatus.action() : openWallet()
     }
 
     return (

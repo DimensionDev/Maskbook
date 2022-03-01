@@ -4,7 +4,7 @@ import Services from '../../extension/service'
 import { useMemo, useState } from 'react'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { usePersonaConnectStatus } from './usePersonaConnectStatus'
-import { currentSetupGuideStatus } from '../../settings/settings'
+import { currentSetupGuideStatus, dismissVerifyNextID } from '../../settings/settings'
 import stringify from 'json-stable-stringify'
 import { SetupGuideStep } from '../InjectedComponents/SetupGuide/types'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
@@ -51,6 +51,9 @@ export function useNextIDConnectStatus() {
 
         const currentPersona = await Services.Settings.getCurrentPersona()
         if (!currentPersona?.publicHexKey) return true
+
+        if (dismissVerifyNextID[ui.networkIdentifier].value[`${username}_${currentPersona.identifier.toText()}`])
+            return true
 
         const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
         if (!platform) return true

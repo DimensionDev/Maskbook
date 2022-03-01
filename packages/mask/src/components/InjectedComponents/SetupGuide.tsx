@@ -232,8 +232,10 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         case SetupGuideStep.VerifyOnNextID:
             return (
                 <VerifyNextID
+                    personaIdentifier={persona_?.identifier}
                     personaName={persona_?.nickname}
                     username={username}
+                    network={ui.networkIdentifier}
                     avatar={lastRecognized.avatar}
                     onUsernameChange={setUsername}
                     onVerify={onVerify}

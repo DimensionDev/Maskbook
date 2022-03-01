@@ -84,6 +84,7 @@
     "setup_guide_connect_auto": "Connect",
     "setup_guide_connect_failed": "Re-Connect",
     "setup_guide_verify": "Verfiy",
+    "setup_guide_verify_dismiss": "Don't show again.",
     "setup_guide_verify_checking": "Checking",
     "setup_guide_verify_post_not_found": "No verification post found",
     "setup_guide_verifying": "Verfiying",

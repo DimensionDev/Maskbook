@@ -1,5 +1,5 @@
 import { useI18N } from '../../../utils'
-import { Box, Typography } from '@mui/material'
+import { Box, Checkbox, FormControlLabel, Typography } from '@mui/material'
 import { MaskIcon } from '../../../resources/MaskIcon'
 import classNames from 'classnames'
 import { VerifiedIcon } from '@masknet/icons'
@@ -7,21 +7,38 @@ import { ActionButtonPromise } from '../../../extension/options-page/DashboardCo
 import { useWizardDialogStyles, WizardDialogProps, WizardDialog } from './WizardDialog'
 import { useFindUsernameStyles } from './FindUsername'
 import { SetupGuideStep } from './types'
+import { dismissVerifyNextID } from '../../../settings/settings'
+import { useState } from 'react'
+import type { PersonaIdentifier } from '@masknet/shared-base'
 
 interface VerifyNextIDProps extends Partial<WizardDialogProps> {
     username: string
     personaName?: string
+    personaIdentifier?: PersonaIdentifier
+    network: string
     avatar?: string
     onUsernameChange?: (username: string) => void
     onVerify: () => Promise<void>
     onDone?: () => void
 }
 
-export const VerifyNextID = ({ personaName, username, avatar, onVerify, onDone, onClose }: VerifyNextIDProps) => {
+export const VerifyNextID = ({
+    personaName,
+    personaIdentifier,
+    username,
+    avatar,
+    onVerify,
+    onDone,
+    onClose,
+    network,
+}: VerifyNextIDProps) => {
     const { t } = useI18N()
 
     const { classes } = useWizardDialogStyles()
     const { classes: findUsernameClasses } = useFindUsernameStyles()
+    const [checked, setChecked] = useState(false)
+
+    if (!personaIdentifier) return null
 
     return (
         <WizardDialog
@@ -83,6 +100,24 @@ export const VerifyNextID = ({ personaName, username, avatar, onVerify, onDone, 
                         {t('setup_guide_verify')}
                     </ActionButtonPromise>
                 ) : null
+            }
+            dismiss={
+                <FormControlLabel
+                    classes={{ label: classes.label }}
+                    control={
+                        <Checkbox
+                            checked={checked}
+                            onChange={(e) => {
+                                setChecked(e.target.checked)
+                                dismissVerifyNextID[network].value = {
+                                    ...dismissVerifyNextID[network].value,
+                                    [`${username}_${personaIdentifier.toText()}`]: e.target.checked,
+                                }
+                            }}
+                        />
+                    }
+                    label={t('setup_guide_verify_dismiss')}
+                />
             }
             onClose={onClose}
         />
