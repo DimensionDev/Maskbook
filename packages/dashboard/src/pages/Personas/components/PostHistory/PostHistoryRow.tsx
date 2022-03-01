@@ -108,10 +108,8 @@ export const PostHistoryRow = memo(({ post, network }: PostHistoryRowProps) => {
     const postMessage = useMemo(() => {
         const { interestedMeta } = post
         const meta = Array.from(interestedMeta ?? [])
-
         if (!meta.length) return null
         const [pluginName, pluginInfo] = meta[0]
-        console.log(pluginInfo, 'gggg')
         return SUPPORT_PLUGIN[pluginName]?.messageParse(pluginInfo) ?? ''
     }, [post.interestedMeta])
 
