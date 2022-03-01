@@ -76,9 +76,17 @@ export function RedPacket(props: RedPacketProps) {
         network: resolveNetworkName(networkType),
         account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
     }
+
+    const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(
+        payload.contract_version,
+        account,
+        payload.rpid,
+        payload.contract_version > 3 ? web3.eth.accounts.sign(account, payload.password).signature : payload.password,
+    )
+
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
-            (listOfStatus.includes(RedPacketStatus.claimed)
+            (listOfStatus.includes(RedPacketStatus.claimed) || claimState.type === TransactionStateType.CONFIRMED
                 ? isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
                     ? t('plugin_red_packet_share_message_official_account', shareTextOption)
                     : t('plugin_red_packet_share_message_not_twitter', shareTextOption)
@@ -89,12 +97,6 @@ export function RedPacket(props: RedPacketProps) {
         )
         .toString()
 
-    const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(
-        payload.contract_version,
-        account,
-        payload.rpid,
-        payload.contract_version > 3 ? web3.eth.accounts.sign(account, payload.password).signature : payload.password,
-    )
     const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(
         payload.contract_version,
         account,
