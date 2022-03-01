@@ -25,6 +25,11 @@ function Render(props: React.PropsWithChildren<{ name: string }>) {
     usePluginWrapper(true, { name: props.name })
     return <>{props.children}</>
 }
+const containerStyle = {
+    display: 'flex',
+    alignItems: 'center',
+}
+
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
@@ -61,10 +66,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 const payload = _payload as RedPacketNftJSONPayload
                 return {
                     text: (
-                        <>
+                        <div style={containerStyle}>
                             <NFTRedPacketIcon style={{ width: 16, height: 16 }} />
                             {payload.message ? payload.message : 'An NFT Lucky Drop'}
-                        </>
+                        </div>
                     ),
                 }
             },
@@ -94,11 +99,11 @@ function ERC20RedpacketBadge(props: ERC20RedpacketBadgeProps) {
     const tokenDetailed =
         payload.token?.type === EthereumTokenType.Native ? chainDetailed?.nativeCurrency : payload.token ?? fetchedToken
     return (
-        <>
+        <div style={containerStyle}>
             <RedPacketIcon style={{ width: 16, height: 16 }} /> A Lucky Drop with
             {formatBalance(payload.total, tokenDetailed?.decimals ?? 0)} $
             {tokenDetailed?.symbol ?? tokenDetailed?.name ?? 'Token'} from {payload.sender.name}
-        </>
+        </div>
     )
 }
 
