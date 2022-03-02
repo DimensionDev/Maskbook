@@ -46,6 +46,7 @@ export function useNextIDConnectStatus() {
     )
 
     const { value: isVerified = false } = useAsync(async () => {
+        if (lastState.status === SetupGuideStep.FindUsername) return true
         if (isOpenedVerifyDialog) return true
         if (!enableNextID || !username || !personaConnectStatus.connected) return true
 
@@ -65,6 +66,7 @@ export function useNextIDConnectStatus() {
             status: SetupGuideStep.VerifyOnNextID,
             persona: currentPersona?.identifier.toText(),
         })
+
         isOpenedVerifyDialog = true
         return false
     }, [username, enableNextID, lastStateRef.value])
