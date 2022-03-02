@@ -1,7 +1,7 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { searchFacebookAvatarOnMobileSelector, searchFacebookAvatarSelector } from '../../utils/selector'
 import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import type { NFTAvatarEvent } from '@masknet/shared-base'
 import { max, pickBy } from 'lodash-unified'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
@@ -161,7 +161,7 @@ function NFTAvatarInFacebook() {
     useEffect(() => setAvatar(_avatar), [_avatar, location])
 
     // #region clear white border
-    useEffect(() => {
+    useLayoutEffect(() => {
         const node = searchFacebookAvatarSelector().closest<HTMLDivElement>(3).evaluate()
         if (!node) return
         if (showAvatar) {
@@ -169,7 +169,7 @@ function NFTAvatarInFacebook() {
         } else {
             node.removeAttribute('style')
         }
-    }, [showAvatar])
+    })
     // #endregion
 
     if (!avatar || !size || !showAvatar) return null
