@@ -8,15 +8,15 @@ import { MaskMessages } from '../../utils/messages'
 import { useControlledDialog } from '../../utils/hooks/useControlledDialog'
 import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
 import { ITO_PluginID } from '../../plugins/ITO/constants'
-import { PluginTransakMessages } from '../../plugins/Transak/messages'
+import { PluginTransakMessages } from '@masknet/plugin-transak'
 import { PluginPetMessages } from '../../plugins/Pets/messages'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { EntrySecondLevelDialog } from './EntrySecondLevelDialog'
 import { NetworkTab } from './NetworkTab'
 import { SavingsDialog } from '../../plugins/Savings/SNSAdaptor/SavingsDialog'
-import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialog'
 import { NetworkPluginID, PluginId, usePluginIDContext } from '@masknet/plugin-infra'
 import { FindTrumanDialog } from '../../plugins/FindTruman/SNSAdaptor/FindTrumanDialog'
+import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialog'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {

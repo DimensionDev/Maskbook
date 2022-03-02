@@ -6,7 +6,7 @@ import { WalletMessages } from '../../../Wallet/messages'
 import type { TagType } from '../../types'
 import type { DataProvider } from '@masknet/public-api'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { PluginTransakMessages } from '../../../Transak/messages'
+import { PluginTransakMessages } from '@masknet/plugin-transak'
 
 export interface TrendingPopperProps {
     children?: (name: string, type: TagType, dataProviders: DataProvider[], reposition?: () => void) => React.ReactNode

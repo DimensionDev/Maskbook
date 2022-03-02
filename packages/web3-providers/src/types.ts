@@ -9,6 +9,31 @@ import type {
 } from '@masknet/web3-shared-evm'
 import type { CurrencyType } from '@masknet/plugin-infra'
 
+export interface Coin {
+    id: string
+    name: string
+    symbol: string
+    decimals?: number
+    is_mirrored?: boolean
+    platform_url?: string
+    tags?: string[]
+    tech_docs_urls?: string[]
+    message_board_urls?: string[]
+    source_code_urls?: string[]
+    community_urls?: string[]
+    home_urls?: string[]
+    announcement_urls?: string[]
+    blockchain_urls?: string[]
+    image_url?: string
+    description?: string
+    market_cap_rank?: number
+    address?: string
+    contract_address?: string
+    facebook_url?: string
+    twitter_url?: string
+    telegram_url?: string
+}
+
 export namespace ExplorerAPI {
     export type Transaction = Web3Transaction & {
         status: '0' | '1'

@@ -1,5 +1,5 @@
+import type { Coin } from '@masknet/web3-providers'
 import { useAsync } from 'react-use'
-import type { Coin } from '../../Trader/types/trending'
 
 const ENV = {
     production: 'https://api.transak.com/api/v2/currencies/crypto-currencies',

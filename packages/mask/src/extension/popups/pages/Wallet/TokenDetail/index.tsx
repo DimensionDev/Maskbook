@@ -11,7 +11,7 @@ import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { getTokenUSDValue } from '../../../../../plugins/Wallet/helpers'
 import { InteractionCircleIcon } from '@masknet/icons'
 import { useI18N } from '../../../../../utils'
-import { PluginTransakMessages } from '../../../../../plugins/Transak/messages'
+import { PluginTransakMessages } from '@masknet/plugin-transak'
 import {
     formatBalance,
     formatCurrency,

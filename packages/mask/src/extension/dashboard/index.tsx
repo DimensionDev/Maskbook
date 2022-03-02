@@ -2,7 +2,7 @@
 import { setService, setPluginMessages, setMessages, setPluginServices, IntegratedDashboard } from '@masknet/dashboard'
 import Services from '../service'
 import { WalletRPC, WalletMessages } from '../../plugins/Wallet/messages'
-import { PluginTransakMessages } from '../../plugins/Transak/messages'
+import { PluginTransakMessages } from '@masknet/plugin-transak'
 import { PluginTraderMessages, PluginTraderRPC } from '../../plugins/Trader/messages'
 import { PluginPetMessages } from '../../plugins/Pets/messages'
 import { MaskMessages } from '../../utils/messages'
