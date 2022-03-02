@@ -758,7 +758,7 @@ function NFTCard(props: NFTCardProps) {
             />
             <div className={classes.selectWrapperNftNameWrapper}>
                 <Typography className={classes.selectWrapperNftName} color="textSecondary">
-                    {'#' + formatNFT_TokenId(token.tokenId, 2)}
+                    {formatNFT_TokenId(token.tokenId, 2)}
                 </Typography>
             </div>
 

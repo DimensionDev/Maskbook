@@ -1,5 +1,5 @@
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import type { ERC721ContractDetailed } from '@masknet/web3-shared-evm'
+import { ERC721ContractDetailed, formatNFT_TokenId } from '@masknet/web3-shared-evm'
 import { List, ListItem, ListProps, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { FC, HTMLProps, useState } from 'react'
@@ -101,7 +101,7 @@ interface NftItemProps extends HTMLProps<HTMLDivElement> {
 export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claimed, renderOrder, ...rest }) => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [name, setName] = useState('#' + tokenId)
+    const [name, setName] = useState(formatNFT_TokenId(tokenId, 2))
 
     return (
         <div className={classnames(className, classes.nft)} {...rest}>
