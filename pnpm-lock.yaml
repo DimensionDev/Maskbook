@@ -53,6 +53,7 @@ importers:
       react: 18.0.0
       react-dom: 18.0.0
       react-i18next: ^11.16.2
+      ses: ^0.15.11
       ts-jest: ^27.1.4
       ts-node: ^10.7.0
       ts-results: 3.3.0
@@ -80,6 +81,7 @@ importers:
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
       react-i18next: 11.16.2_react-dom@18.0.0+react@18.0.0
+      ses: 0.15.11
       ts-results: 3.3.0
       web3-core: 1.5.2
       web3-core-method: 1.5.2
@@ -24121,6 +24123,10 @@ packages:
       xhr: 2.6.0
     dev: false
 
+  /ses/0.15.11:
+    resolution: {integrity: sha512-lQg6q8/PVf+n18EjP+5Uv1tN9oVQ3br5QxJzPXoAVQleSYnlf20JY9coe7n1B9A6CtIKIHyr6m/TfskcRCufgA==}
+    dev: false
+
   /set-blocking/2.0.0:
     resolution: {integrity: sha1-BF+XgtARrppoA93TgrJDkrPYkPc=}
 
@@ -28045,7 +28051,7 @@ packages:
     dev: false
 
   github.com/ProjectWyvern/ethereumjs-abi/3d2d89641a6ad5984929b6ca4b646452ec74f73d:
-    resolution: {tarball: https://codeload.github.com/ProjectWyvern/ethereumjs-abi/tar.gz/3d2d89641a6ad5984929b6ca4b646452ec74f73d}
+    resolution: {commit: 3d2d89641a6ad5984929b6ca4b646452ec74f73d, repo: git+ssh://git@github.com/ProjectWyvern/ethereumjs-abi.git, type: git}
     name: ethereumjs-abi
     version: 0.6.6
     dependencies:
@@ -28054,7 +28060,7 @@ packages:
     dev: false
 
   github.com/ahultgren/async-eventemitter/fa06e39e56786ba541c180061dbf2c0a5bbf951c:
-    resolution: {tarball: https://codeload.github.com/ahultgren/async-eventemitter/tar.gz/fa06e39e56786ba541c180061dbf2c0a5bbf951c}
+    resolution: {commit: fa06e39e56786ba541c180061dbf2c0a5bbf951c, repo: git+ssh://git@github.com/ahultgren/async-eventemitter.git, type: git}
     name: async-eventemitter
     version: 0.2.3
     dependencies:
@@ -28062,7 +28068,7 @@ packages:
     dev: false
 
   github.com/ethereumjs/ethereumjs-abi/ee3994657fa7a427238e6ba92a84d0b529bbcde0:
-    resolution: {tarball: https://codeload.github.com/ethereumjs/ethereumjs-abi/tar.gz/ee3994657fa7a427238e6ba92a84d0b529bbcde0}
+    resolution: {commit: ee3994657fa7a427238e6ba92a84d0b529bbcde0, repo: git+ssh://git@github.com/ethereumjs/ethereumjs-abi.git, type: git}
     name: ethereumjs-abi
     version: 0.6.8
     dependencies:

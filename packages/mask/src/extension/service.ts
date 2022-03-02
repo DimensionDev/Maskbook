@@ -16,10 +16,6 @@ import { serializer, getLocalImplementation } from '@masknet/shared-base'
 const SERVICE_HMR_EVENT = 'service-hmr'
 const message = new WebExtensionMessage<Record<string, any>>({ domain: 'services' })
 const log: AsyncCallOptions['log'] = {
-    beCalled: true,
-    localError: true,
-    remoteError: true,
-    sendLocalStack: true,
     type: 'pretty',
     requestReplay: process.env.NODE_ENV === 'development',
 }

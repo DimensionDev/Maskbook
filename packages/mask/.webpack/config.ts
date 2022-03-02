@@ -20,7 +20,7 @@ import './clean-hmr'
 
 export function createConfiguration(rawFlags: BuildFlags): Configuration {
     const normalizedFlags = normalizeBuildFlags(rawFlags)
-    const { sourceMapKind, supportWebAssembly } = computedBuildFlags(normalizedFlags)
+    const { sourceMapKind, supportWebAssembly, lockdown } = computedBuildFlags(normalizedFlags)
     const { hmr, mode, profiling, reactRefresh, readonlyCache, reproducibleBuild, runtime, outputPath } =
         normalizedFlags
 
@@ -212,6 +212,13 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                         to: polyfillFolder,
                     },
                     { from: require.resolve('webextension-polyfill/dist/browser-polyfill.js'), to: polyfillFolder },
+                    {
+                        from:
+                            mode === 'development'
+                                ? require.resolve('../../../node_modules/ses/dist/lockdown.umd.js')
+                                : require.resolve('../../../node_modules/ses/dist/lockdown.umd.min.js'),
+                        to: join(polyfillFolder, 'lockdown.js'),
+                    },
                 ],
             }),
             emitManifestFile(normalizedFlags),
@@ -280,14 +287,15 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         debug: normalizeEntryDescription(join(__dirname, '../src/extension/debug-page/index.tsx')),
     })
     baseConfig.plugins!.push(
-        addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html', sourceMap: !!sourceMapKind }),
-        addHTMLEntry({ chunks: ['popups'], filename: 'popups.html', sourceMap: !!sourceMapKind }),
+        addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html', sourceMap: !!sourceMapKind, lockdown }),
+        addHTMLEntry({ chunks: ['popups'], filename: 'popups.html', sourceMap: !!sourceMapKind, lockdown }),
         addHTMLEntry({
             chunks: ['contentScript'],
             filename: 'generated__content__script.html',
             sourceMap: !!sourceMapKind,
+            lockdown,
         }),
-        addHTMLEntry({ chunks: ['debug'], filename: 'debug.html', sourceMap: !!sourceMapKind }),
+        addHTMLEntry({ chunks: ['debug'], filename: 'debug.html', sourceMap: !!sourceMapKind, lockdown }),
     )
     // background
     if (runtime.manifest === 3) {
@@ -306,6 +314,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 secp256k1: true,
                 gun: true,
                 sourceMap: !!sourceMapKind,
+                lockdown,
             }),
         )
     }
@@ -329,13 +338,13 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         }
     }
 }
-function addHTMLEntry(
-    options: HTMLPlugin.Options & {
-        secp256k1?: boolean
-        sourceMap: boolean
-        gun?: boolean
-    },
-) {
+interface HTMLOptions extends HTMLPlugin.Options {
+    secp256k1?: boolean
+    sourceMap: boolean
+    gun?: boolean
+    lockdown: boolean
+}
+function addHTMLEntry(options: HTMLOptions) {
     let templateContent = readFileSync(join(__dirname, './template.html'), 'utf8')
     if (options.secp256k1) {
         templateContent = templateContent.replace(
@@ -350,6 +359,13 @@ function addHTMLEntry(
         templateContent = templateContent.replace(
             `<!-- CSP -->`,
             `<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval'; require-trusted-types-for 'script'; trusted-types default webpack">`,
+        )
+    }
+    if (options.lockdown) {
+        templateContent = templateContent.replace(
+            `<!-- lockdown -->`,
+            `<script src="/polyfill/lockdown.js"></script>
+            <script src="/lockdown.js"></script>`,
         )
     }
     return new HTMLPlugin({
