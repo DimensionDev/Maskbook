@@ -9,7 +9,7 @@ import { pasteTextToCompositionTwitter } from './automation/pasteTextToCompositi
 import { gotoNewsFeedPageTwitter } from './automation/gotoNewsFeedPage'
 import { gotoProfilePageTwitter } from './automation/gotoProfilePage'
 import { IdentityProviderTwitter, CurrentVisitingIdentityProviderTwitter } from './collecting/identity'
-import { PostProviderTwitter } from './collecting/post'
+import { collectVerificationPost, PostProviderTwitter } from './collecting/post'
 import { PaletteModeProviderTwitter, useThemeTwitterVariant } from './customization/custom'
 import { injectToolboxHintAtTwitter } from './injection/ToolboxHint'
 import { i18NOverwriteTwitter } from './customization/i18n'
@@ -26,7 +26,7 @@ import { injectMaskUserBadgeAtTwitter } from './injection/MaskIcon'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector'
 import { injectPostActionsAtTwitter } from './injection/PostActions'
-import { NextIDPlatform, PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import { NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { unreachable } from '@dimensiondev/kit'
 import { makeStyles } from '@masknet/theme'
 import { injectNFTAvatarInTwitter } from './injection/NFT/NFTAvatarInTwitter'
@@ -37,9 +37,6 @@ import { injectUserNFTAvatarAtTweet } from './injection/NFT/TweetNFTAvatar'
 import { injectNFTContractAtTwitter } from './injection/NFT/NFTContract'
 import { injectNFTAvatarClipInTwitter } from './injection/NFT/NFTAvatarClip'
 import { TwitterRenderFragments } from './customization/render-fragments'
-import { timelinePostContentSelector } from './utils/selector'
-import { postContentMessageParser, postIdParser } from './utils/fetch'
-import { isTypedMessageText } from '@masknet/typed-message'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -190,27 +187,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         nextIDConfig: {
             enable: true,
             platform: NextIDPlatform.Twitter,
-            collectVerificationPost: (keyword: string) => {
-                const userId =
-                    IdentityProviderTwitter.recognized.value.identifier || globalUIState.profiles.value[0].identifier
-                const postNodes = timelinePostContentSelector().evaluate()
-
-                for (const postNode of postNodes) {
-                    const postId = postIdParser(postNode)
-                    const postContent = postContentMessageParser(postNode)
-                    const isVerified =
-                        postId &&
-                        postContent[0] &&
-                        isTypedMessageText(postContent[0]) &&
-                        (postContent[0]?.content ?? '').toLowerCase() === keyword.toLowerCase()
-
-                    if (isVerified && userId) {
-                        return new PostIdentifier(userId, postId)
-                    }
-                }
-
-                return null
-            },
+            collectVerificationPost,
         },
         steganography: {
             password() {

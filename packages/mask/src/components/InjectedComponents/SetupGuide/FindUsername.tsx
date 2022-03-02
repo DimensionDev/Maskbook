@@ -8,7 +8,6 @@ import classNames from 'classnames'
 import { VerifiedIcon } from '@masknet/icons'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { noop } from 'lodash-unified'
 
 export const useFindUsernameStyles = makeStyles()((theme) => ({
     avatar: {
@@ -109,7 +108,7 @@ export function FindUsername({
                         complete={enableNextID ? t('setup_guide_verify_checking') : t('ok')}
                         failed={t('setup_guide_connect_failed')}
                         executor={onConnect}
-                        completeOnClick={enableNextID ? noop : onDone}
+                        completeOnClick={enableNextID ? undefined : onDone}
                         onComplete={enableNextID ? onDone : () => setConnected(true)}
                         disabled={!username || !personaName}
                         completeIcon={null}
