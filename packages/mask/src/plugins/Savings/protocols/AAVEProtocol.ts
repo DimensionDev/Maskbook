@@ -71,8 +71,6 @@ export class AAVEProtocol implements SavingsProtocol {
         public underLyingAssetName = 'AAVE Interest Bearing AAVE',
         public logoURI: string[] = ['https://tokens.1inch.io/0xffc97d72e13e01096502cb8eb52dee56f74dad7b.png'],
     ) {
-        // this.constants = getSavingsConstants(chainId)
-
         this.availableNetworks = [
             {
                 chainId: ChainId.Mainnet,
