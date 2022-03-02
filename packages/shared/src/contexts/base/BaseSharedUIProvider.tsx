@@ -1,40 +1,30 @@
-import { pick } from 'lodash-unified'
-import { createContext, FC, useContext, useMemo, useState } from 'react'
+import { ValueRef } from '@dimensiondev/holoflows-kit'
+import { createContext, FC, useContext, useMemo } from 'react'
+import { useValueRef } from '../../hooks'
 import type { SharedComponentOverwrite } from './types'
+
+export const sharedUINetworkIdentifier = new ValueRef('unknown')
+export const sharedUIComponentOverwrite = new ValueRef<SharedComponentOverwrite>({})
 
 interface ContextOptions {
     networkIdentifier: string
     componentOverwrite: SharedComponentOverwrite
-    updateOverwrite(overwrite: SharedComponentOverwrite): void
-    updateNetworkIdentifier(snsId: string): void
 }
 
-// We can use this from outside of components or hooks
-export const staticSharedUI: ContextOptions = {
-    networkIdentifier: 'unknown',
-    componentOverwrite: {},
-    updateOverwrite: (overwrite: SharedComponentOverwrite) => {
-        staticSharedUI.componentOverwrite = overwrite
-    },
-    updateNetworkIdentifier: (snsId: string) => {
-        staticSharedUI.networkIdentifier = snsId
-    },
-}
-
-const BaseUIContext = createContext<ContextOptions>(staticSharedUI)
+const BaseUIContext = createContext<ContextOptions>({
+    networkIdentifier: sharedUINetworkIdentifier.value,
+    componentOverwrite: sharedUIComponentOverwrite.value,
+})
 
 export const BaseSharedUIProvider: FC = ({ children }) => {
-    const [overwrite, setOverwrite] = useState<SharedComponentOverwrite>(staticSharedUI.componentOverwrite)
-    const [snsId, setSnsId] = useState(staticSharedUI.networkIdentifier)
+    const snsId = useValueRef(sharedUINetworkIdentifier)
+    const overwrite = useValueRef(sharedUIComponentOverwrite)
 
     const contextValue = useMemo(() => {
         const value: ContextOptions = {
             networkIdentifier: snsId,
             componentOverwrite: overwrite,
-            updateOverwrite: setOverwrite,
-            updateNetworkIdentifier: setSnsId,
         }
-        Object.assign(staticSharedUI, pick(value, ['networkIdentifier', 'componentOverwrite']))
         return value
     }, [snsId, overwrite])
 

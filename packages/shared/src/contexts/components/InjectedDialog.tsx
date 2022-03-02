@@ -1,5 +1,7 @@
-import { Children, cloneElement } from 'react'
+import { isDashboardPage } from '@masknet/shared-base'
+import { makeStyles, mergeClasses, useDialogStackActor, usePortalShadowRoot, useStylesExtends } from '@masknet/theme'
 import {
+    Dialog,
     DialogActions,
     DialogClassKey,
     DialogContent,
@@ -8,17 +10,17 @@ import {
     DialogTitle,
     IconButton,
     Typography,
-    useTheme,
-    Dialog,
     // see https://github.com/import-js/eslint-plugin-import/issues/2288
     // eslint-disable-next-line import/no-deprecated
     useMediaQuery,
+    useTheme,
 } from '@mui/material'
-import { makeStyles, useDialogStackActor, useStylesExtends, mergeClasses, usePortalShadowRoot } from '@masknet/theme'
-import { ErrorBoundary, useSharedI18N } from '@masknet/shared'
-import { isDashboardPage } from '@masknet/shared-base'
+import { Children, cloneElement } from 'react'
 import { FACEBOOK_ID, MINDS_ID } from '../../constants'
-import { staticSharedUI } from '../base'
+import { useValueRef } from '../../hooks'
+import { useSharedI18N } from '../../locales'
+import { ErrorBoundary } from '../../UI'
+import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '../base'
 import { DialogDismissIcon } from './DialogDismissIcon'
 
 interface StyleProps {
@@ -61,7 +63,8 @@ export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'titl
 }
 
 export function InjectedDialog(props: InjectedDialogProps) {
-    const { componentOverwrite: overwrite, networkIdentifier: snsId } = staticSharedUI
+    const snsId = useValueRef(sharedUINetworkIdentifier)
+    const overwrite = useValueRef(sharedUIComponentOverwrite)
     props = overwrite.InjectedDialog?.props?.(props) ?? props
     const clean = snsId === MINDS_ID || snsId === FACEBOOK_ID
     const {
