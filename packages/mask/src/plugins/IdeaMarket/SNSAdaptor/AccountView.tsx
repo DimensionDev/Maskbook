@@ -1,30 +1,17 @@
 import Table from '@mui/material/Table'
-import TableBody from '@mui/material/TableBody'
-import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
-import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import { makeStyles } from '@masknet/theme'
-import { Button, Grid, Typography } from '@mui/material'
+import { Grid, Link, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
 import { useFetchUserTokens } from '../hooks/useFetchUserTokens'
 import { useAccount } from '@masknet/web3-shared-evm'
 import { LoadingAnimation } from '@masknet/shared'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { SellButton } from '../SNSAdaptor/SellButton'
-import { LockDialog } from '../SNSAdaptor/LockDialog'
-import type { IdeaToken } from '../types'
 import { useState } from 'react'
-
-function createData(name: string, calories: number, fat: number, carbs: number, protein: number) {
-    return { name, calories, fat, carbs, protein }
-}
-
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-]
+import { SellButton } from './SellButton'
+import { leftShift } from '@masknet/web3-shared-base'
+import type { UserIdeaTokenBalance } from '../types'
+import { composeIdeaURL } from '../utils'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -39,6 +26,28 @@ const useStyles = makeStyles()((theme) => {
         message: {
             textAlign: 'center',
         },
+        actionButtons: {
+            width: 96,
+        },
+        name: {
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+        },
+        nameHeader: {
+            width: 200,
+        },
+        market: {
+            color: 'rgba(8,87,224,1)',
+            marginLeft: theme.spacing(0.25),
+        },
+        row: {
+            '&:nth-of-type(odd)': {
+                backgroundColor: theme.palette.background.default,
+            },
+        },
+        buttonContainer: {
+            marginTop: -5,
+        },
     }
 })
 
@@ -48,6 +57,7 @@ export function AccountView() {
     const account = useAccount()
     const { value, error, loading } = useFetchUserTokens(account)
     const [open, setOpenDialog] = useState(false)
+    const userTokenBalances = value?.ideaTokenBalances
     console.log(value, error)
 
     if (loading) {
@@ -58,15 +68,7 @@ export function AccountView() {
         )
     }
 
-    // if (value?.ideaTokenBalances.length === 0) {
-    //     return (
-    //         <Typography className={classes.empty} color="textPrimary">
-    //             {t('no_data')}
-    //         </Typography>
-    //     )
-    // }
-
-    if (error) {
+    if (error || !value) {
         return (
             <Typography className={classes.message} color="textPrimary">
                 {t('plugin_ideamarket_smthg_wrong')}
@@ -78,75 +80,67 @@ export function AccountView() {
 
     return (
         <>
-            <TableContainer component={Paper}>
-                <Table sx={{ width: '100%' }} aria-label="simple table">
-                    {/* <TableHead>
+            <TableContainer component={Paper} sx={{ width: '100%' }}>
+                <Table sx={{ tableLayout: 'fixed', width: '100%' }} size="small" aria-label="simple table">
+                    <TableHead>
                         <TableRow>
-                            <TableCell>Idea</TableCell>
-                            <TableCell align="right">Price</TableCell>
-                            <TableCell align="right">Test&nbsp;(g)</TableCell>
-                            <TableCell align="right">Test&nbsp;(g)</TableCell>
+                            <TableCell className={classes.nameHeader} key="name">
+                                Idea
+                            </TableCell>
+                            <TableCell key="price">Price</TableCell>
+                            <TableCell key="balance">Balance</TableCell>
+                            <TableCell key="value">Value</TableCell>
+                            {/* <TableCell key="dayChange">24H change</TableCell> */}
                         </TableRow>
-                    </TableHead> */}
+                    </TableHead>
                     <TableBody>
-                        {value?.ideaTokenBalances.map((token: IdeaToken) => (
-                            <TableRow key={token.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                <TableCell component="th" scope="row">
-                                    {token.name}
-                                </TableCell>
-                                <TableCell align="right">{token.supply}</TableCell>
-                                <TableCell align="right">{token.holders}</TableCell>
-                                <TableCell align="right">
-                                    <Button color="primary" size="small" variant="contained" aria-label="lock">
-                                        Lock
-                                    </Button>
-                                    <SellButton tokenContractAddress={token.id} />
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                        <TableRow key="ok">
-                            <TableCell align="left">
-                                <Grid container direction="column">
-                                    <Grid item>Name</Grid>
-                                    <Grid item>Market</Grid>
-                                </Grid>
-                            </TableCell>
-                            <TableCell align="right">
-                                <Grid container direction="row" wrap="nowrap">
-                                    <Grid container item direction="column">
-                                        <Grid item>$1,046</Grid>
-                                        <Grid item>1dchange</Grid>
-                                    </Grid>
-                                    <Grid container item direction="column">
-                                        <Grid item>$1,046</Grid>
-                                        <Grid item>Price</Grid>
-                                    </Grid>
-                                    <Grid container item direction="column">
-                                        <Grid item>$1,046</Grid>
-                                        <Grid item>Supply</Grid>
-                                    </Grid>
-                                    <Grid container item direction="column">
-                                        <Grid item>$1,046</Grid>
-                                        <Grid item>Deposits</Grid>
-                                    </Grid>
-                                </Grid>
-                            </TableCell>
-                            <TableCell align="right">
-                                <Button
-                                    onClick={() => setOpenDialog(true)}
-                                    color="primary"
-                                    size="small"
-                                    variant="contained"
-                                    aria-label="lock">
-                                    Lock
-                                </Button>
-                                <SellButton tokenContractAddress="0x004883775235a0d1e0b6e101cce43a7b4481340b" />
-                            </TableCell>
-                        </TableRow>
+                        {userTokenBalances.map((balance: UserIdeaTokenBalance) => {
+                            const name =
+                                balance.token.name.length > 30
+                                    ? balance.token.name.slice(0, 30).concat('...')
+                                    : balance.token.name
+                            const tokenPrice = Number(balance.token.latestPricePoint.price).toFixed(2)
+                            const userTokenBalance = leftShift(balance.amount, 18).toFixed(2, 1)
+                            const balanceValue = (
+                                balance.token.latestPricePoint.price * leftShift(balance.amount, 18).toNumber()
+                            ).toFixed(2)
+
+                            return (
+                                <TableRow className={classes.row} key={balance.id}>
+                                    <TableCell className={classes.name}>
+                                        <Grid container direction="column">
+                                            <div title={balance.token.name}>{name}</div>
+                                            <div className={classes.market}>{balance.token.market.name}</div>
+                                        </Grid>
+                                    </TableCell>
+                                    <TableCell>&#36;{tokenPrice}</TableCell>
+                                    <TableCell>{userTokenBalance}</TableCell>
+                                    <TableCell>&#36;{balanceValue}</TableCell>
+                                    {/* <TableCell>{formatWithOperator(balance.token.dayChange)}</TableCell> */}
+                                    <TableCell className={classes.actionButtons}>
+                                        <Grid
+                                            className={classes.buttonContainer}
+                                            container
+                                            alignContent="center"
+                                            justifyContent="center">
+                                            <Grid container item justifyContent="center">
+                                                <Link
+                                                    href={composeIdeaURL(balance.token.market.name, balance.token.name)}
+                                                    target="_blank">
+                                                    View
+                                                </Link>
+                                            </Grid>
+                                            <Grid item>
+                                                <SellButton tokenContractAddress={balance.token.id} />
+                                            </Grid>
+                                        </Grid>
+                                    </TableCell>
+                                </TableRow>
+                            )
+                        })}
                     </TableBody>
                 </Table>
             </TableContainer>
-            <LockDialog open={open} onClose={onClose} />
         </>
     )
 }

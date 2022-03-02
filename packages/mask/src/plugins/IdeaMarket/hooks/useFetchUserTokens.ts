@@ -1,9 +1,9 @@
 import { useAsync } from 'react-use'
-import { fetchUserTokens } from '../apis'
+import { fetchUserTokensBalances } from '../apis'
 
 export function useFetchUserTokens(holder: string) {
     return useAsync(async () => {
         if (!holder) return
-        return fetchUserTokens(holder)
+        return fetchUserTokensBalances(holder)
     }, [holder])
 }

@@ -10,6 +10,14 @@ export interface IdeaToken {
     supply: BigNumber
     holders: number
     daiInToken: BigNumber
+    dayChange: number
+}
+
+export interface UserIdeaTokenBalance {
+    id: string
+    token: IdeaToken
+    holder: string
+    amount: BigNumber
 }
 
 export enum Period {

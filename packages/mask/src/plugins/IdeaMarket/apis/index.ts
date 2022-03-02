@@ -31,10 +31,10 @@ export async function fetchIdeaToken(marketName: string, tokenName: string) {
     return first(res) as IdeaToken
 }
 
-export async function fetchAllTokens() {
+export async function fetchAllTokens(searchTerm: string) {
     const body = {
-        query: `query IdeaToken {
-            ideaTokens{
+        query: `query IdeaToken($searchTerm: String!) {
+            ideaTokens(first: 1000, orderBy: daiInToken, orderDirection: desc, where: { name_contains: $searchTerm }){
                 id
                 name
                 tokenID
@@ -48,8 +48,10 @@ export async function fetchAllTokens() {
                 supply
                 holders
                 daiInToken
+                dayChange
             }
         }`,
+        variables: { searchTerm: searchTerm },
     }
     const response = await fetch(SUBGRAPH_URL, {
         body: JSON.stringify(body),
@@ -60,14 +62,23 @@ export async function fetchAllTokens() {
     return res
 }
 
-export async function fetchUserTokens(holder: string) {
+export async function fetchUserTokensBalances(holder: string) {
     const body = {
         query: `query IdeaTokenBalances ($holder: String!) {
             ideaTokenBalances(where: {holder: $holder}){
-                id
                 token {
                     id
+                    name
+                    market {
+                        name
+                    }
+                    latestPricePoint {
+                      price
+                    }
+                    daiInToken
+                    dayChange
                 }
+                id
                 holder
                 amount
             }

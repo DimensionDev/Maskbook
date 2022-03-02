@@ -4,7 +4,6 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { formatSymbol } from '../utils'
 import type { Coin } from '../../Trader/types'
-import SellIcon from '@mui/icons-material/Sell'
 
 interface SellButtonProps {
     tokenContractAddress: string
@@ -16,6 +15,7 @@ export function SellButton(props: SellButtonProps) {
     const { setDialog: setSellDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
     const formattedSymbol = !token?.symbol || !token?.name ? '' : formatSymbol(`${token?.symbol} (${token?.name})`)
+    console.log(token)
 
     return (
         <>
@@ -38,7 +38,7 @@ export function SellButton(props: SellButtonProps) {
                         },
                     })
                 }>
-                <SellIcon />
+                Sell
             </Button>
         </>
     )

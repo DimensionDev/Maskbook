@@ -77,3 +77,13 @@ export function selectIconFromMarket(market: string) {
             return <LanguageIcon />
     }
 }
+
+export function formatWithOperator(value: string | number): string {
+    const valueToPercent = Number(value) * 100
+    const operator = valueToPercent > 0 ? '+' : ''
+    return `${operator}${valueToPercent.toFixed()}%`
+}
+
+export function truncate(text: string, max: number) {
+    return text.length > max ? text.slice(0, max).concat('...') : text
+}
