@@ -16,6 +16,7 @@ import { definedSocialNetworkUIs } from './define'
 import { setupShadowRootPortal, MaskMessages } from '../utils'
 import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
 import { sharedUINetworkIdentifier, sharedUIComponentOverwrite } from '@masknet/shared'
+import { currentProviderSettings } from '../plugins/Wallet/settings'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
@@ -50,6 +51,8 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     if (ui.customization.sharedComponentOverwrite) {
         sharedUIComponentOverwrite.value = ui.customization.sharedComponentOverwrite
     }
+
+    sharedProviderType.value = currentProviderSettings.value
 
     console.log('Provider activated. You can access it by globalThis.ui', ui)
     Object.assign(globalThis, { ui })

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Box, Typography, Theme } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import type { SxProps } from '@mui/system'
@@ -24,10 +24,12 @@ import ActionButton, {
 } from '@masknet/shared'
 import { delay } from '@dimensiondev/kit'
 
-import { currentProviderSettings } from '../../plugins/Wallet/settings'
-import { WalletMessages, WalletRPC } from '../../plugins/Wallet/messages'
-import Services from '../../extension/service'
-import { useI18N } from '../../locales/i18n_generated'
+import { useSwitchEthereumChain } from '../hook/useSwitchEthereumChain'
+import { useAddEthereumChain } from '../hook/useAddEthereumChain'
+import { useGetChainId } from '../hook/useGetChainId'
+import { sharedProviderType } from '../../contexts'
+import { useSharedI18N } from '../../locales/i18n_generated'
+import { PluginServices, PluginMessages } from '../API'
 
 const useStyles = makeStyles()(() => ({}))
 
@@ -41,11 +43,10 @@ export interface EthereumChainBoundaryProps extends withClasses<'switchButton'> 
     isValidChainId?: (actualChainId: ChainId, expectedChainId: ChainId) => boolean
     ActionButtonPromiseProps?: Partial<ActionButtonPromiseProps>
     switchToPlugin?: () => Promise<void>
-    currentProviderType: unknown
 }
 
 export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
-    const t = useI18N()
+    const t = useSharedI18N()
 
     const pluginID = usePluginIDContext()
     const plugin = useActivatedPlugin(pluginID, 'any')
@@ -53,12 +54,21 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const account = useAccount()
     const chainId = useChainId()
     const allowTestnet = useAllowTestnet()
-    const providerType = useValueRef(currentProviderSettings)
+    const providerType = useValueRef(sharedProviderType)
 
     const { noSwitchNetworkTip = false } = props
     const classes = useStylesExtends(useStyles(), props)
     const expectedChainId = props.chainId
     const expectedNetwork = getChainName(expectedChainId)
+    const overrides = useMemo(() => {
+        return {
+            chainId: expectedChainId,
+            providerType: providerType as ProviderType,
+        }
+    }, [chainId, providerType])
+    const [, switchEthereumChain] = useSwitchEthereumChain(overrides)
+    const [, addEthereumChain] = useAddEthereumChain(overrides)
+    const [, getChainId] = useGetChainId(overrides)
 
     const actualChainId = chainId
     const actualNetwork = getChainName(actualChainId)
@@ -88,7 +98,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
 
             // if mask wallet was used it can switch network automatically
             if (providerType === ProviderType.MaskWallet) {
-                await WalletRPC.updateAccount({
+                await PluginServices.updateAccount({
                     chainId: expectedChainId,
                 })
                 return
@@ -98,22 +108,18 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
             const networkType = getNetworkTypeFromChainId(expectedChainId)
             if (!networkType) return
             try {
-                const overrides = {
-                    chainId: expectedChainId,
-                    providerType,
-                }
                 await Promise.race([
                     (async () => {
                         await delay(30 /* seconds */ * 1000 /* milliseconds */)
                         throw new Error('Timeout!')
                     })(),
                     networkType === NetworkType.Ethereum
-                        ? Services.Ethereum.switchEthereumChain(expectedChainId, overrides)
-                        : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account, overrides),
+                        ? await switchEthereumChain(expectedChainId)
+                        : await addEthereumChain(chainDetailedCAIP, account),
                 ])
 
                 // recheck
-                const chainIdHex = await Services.Ethereum.getChainId(overrides)
+                const chainIdHex = await getChainId()
                 if (Number.parseInt(chainIdHex, 16) !== expectedChainId) throw new Error('Failed to switch chain.')
             } catch {
                 throw new Error(
@@ -128,10 +134,10 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
 */
         if (!isChainMatched) await switchToChain()
         if (!isPluginMatched) await switchToPlugin?.()
-    }, [account, isAllowed, isChainMatched, isPluginMatched, providerType, expectedChainId])
+    }, [account, isAllowed, isChainMatched, isPluginMatched, providerType, expectedChainId, overrides])
 
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
+        PluginMessages.Wallet.selectProviderDialogUpdated,
     )
 
     const renderBox = (children?: React.ReactNode) => {

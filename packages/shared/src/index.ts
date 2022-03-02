@@ -1,3 +1,5 @@
+import type ActionButton from './UI/components/ActionButton'
+
 export * from './contexts'
 export * from './hooks'
 export * from './wallet'
@@ -6,6 +8,7 @@ export * from './locales'
 export * from './locales/languages'
 export * from './utils'
 export * from './constants'
+export * from './web3'
 // This interface is used as a proxy type to avoid circular project dependencies
 export interface DashboardPluginMessages {
     Wallet: unknown

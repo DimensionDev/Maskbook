@@ -24,5 +24,11 @@
     "address_viewer_address_name_rns": "RNS",
     "address_viewer_address_name_address": "address",
     "address_viewer_address_name_twitter": "twitter blue",
-    "dialog_dismiss": "Dismiss"
+    "dialog_dismiss": "Dismiss",
+    "plugin_wallet_connect_wallet_tip": "Please connect to a wallet.",
+    "plugin_wallet_connect_wallet": "Connect Wallet",
+    "plugin_wallet_not_available_on": "Not available on {{network}} Network.",
+    "plugin_wallet_switch_network": "Switch to {{network}} Network",
+    "plugin_wallet_switch_network_under_going": "Switching to {{network}} Network…",
+    "retry": "retry"
 }
