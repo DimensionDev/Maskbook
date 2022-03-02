@@ -1,4 +1,5 @@
 export function gotoNewsFeedPageMinds() {
-    if (location.pathname.includes('/newsfeed/subscriptions')) return
-    else location.pathname = '/newsfeed/subscriptions'
+    const path = '/newsfeed/subscriptions'
+    if (location.pathname.includes(path)) return
+    location.assign(path)
 }

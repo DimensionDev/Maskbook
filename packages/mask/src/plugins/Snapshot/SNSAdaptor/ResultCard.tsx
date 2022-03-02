@@ -1,8 +1,8 @@
 import { useContext, useRef, useEffect, useState, useMemo } from 'react'
 import classNames from 'classnames'
 import { Box, List, ListItem, Typography, LinearProgress, styled, Button, linearProgressClasses } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { ShadowRootTooltip, useI18N } from '../../../utils'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { useI18N } from '../../../utils'
 import millify from 'millify'
 import { SnapshotContext } from '../context'
 import { useProposal } from './hooks/useProposal'
@@ -80,7 +80,7 @@ function Content() {
     )
 
     useEffect(() => {
-        setTooltipsVisible(listRef.current.map((element) => (element.offsetWidth === choiceMaxWidth ? true : false)))
+        setTooltipsVisible(listRef.current.map((element) => element.offsetWidth === choiceMaxWidth))
     }, [])
 
     const dataForCsv = useMemo(
@@ -101,7 +101,7 @@ function Content() {
             title={proposal.isEnd ? t('plugin_snapshot_result_title') : t('plugin_snapshot_current_result_title')}>
             <List className={classes.list}>
                 {results.map((result, i) => (
-                    <ListItem className={classes.listItem} key={i.toString()}>
+                    <ListItem className={classes.listItem} key={i}>
                         <Box className={classes.listItemHeader}>
                             <ShadowRootTooltip
                                 PopperProps={{
@@ -124,7 +124,7 @@ function Content() {
                                     disablePortal: true,
                                 }}
                                 title={
-                                    <Typography color="textPrimary" className={classes.ellipsisText}>
+                                    <Typography className={classes.ellipsisText}>
                                         {result.powerDetail.reduce((sum, cur, i) => {
                                             const name =
                                                 millify(cur.power, { precision: 2, lowercase: true }) + ' ' + cur.name

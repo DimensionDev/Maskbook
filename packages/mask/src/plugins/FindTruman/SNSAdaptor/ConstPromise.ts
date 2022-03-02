@@ -9,13 +9,12 @@ export default class FindTrumanConstPromise {
     constructor() {}
 
     init = (executor: (resolve: (value: FindTrumanConst) => void, reject: (reason: any) => void) => void) => {
-        if (!this.initialized) {
-            this.initialized = true
-            executor(this.resolve, this.reject)
-        }
+        if (this.initialized) return
+        this.initialized = true
+        executor(this.resolve, this.reject)
     }
 
-    initialized: boolean = false
+    initialized = false
     status: Status = Status.PENDING
 
     value?: FindTrumanConst
@@ -43,6 +42,7 @@ export default class FindTrumanConstPromise {
         }
     }
 
+    // eslint-disable-next-line unicorn/no-thenable
     then(successCallback: (value?: FindTrumanConst) => void, failCallback?: (err: any) => void) {
         if (this.status === Status.FULFILLED) {
             successCallback(this.value)

@@ -1,10 +1,12 @@
 import { makeStyles } from '@masknet/theme'
+import { isLessThan } from '@masknet/web3-shared-base'
 import { memo, useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../../../utils'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import {
+    ChainId,
     EthereumRpcType,
     formatGweiToWei,
     formatWeiToEther,
@@ -12,6 +14,7 @@ import {
     useChainId,
     useNativeTokenDetailed,
     useWeb3,
+    ChainIdOptionalRecord,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { z as zod } from 'zod'
@@ -87,10 +90,15 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+const minGasPriceOfChain: ChainIdOptionalRecord<string> = {
+    [ChainId.BSC]: '0x12a05f200', // 5
+    [ChainId.Matic]: '0x6fc23ac00', // 30
+}
+
 export const Prior1559GasSetting = memo(() => {
+    const { t } = useI18N()
     const { classes } = useStyles()
     const web3 = useWeb3()
-    const { t } = useI18N()
     const chainId = useChainId()
     const { value, loading: getValueLoading } = useUnconfirmedRequest()
     const [getGasLimitError, setGetGasLimitError] = useState(false)
@@ -100,7 +108,7 @@ export const Prior1559GasSetting = memo(() => {
 
     const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
 
-    //#region Get gas options from debank
+    // #region Get gas options from debank
     const { value: gasOptions } = useAsync(async () => {
         const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
         if (!response) return { slow: 0, standard: 0, fast: 0 }
@@ -111,7 +119,7 @@ export const Prior1559GasSetting = memo(() => {
             fast: response.data.fast.price,
         }
     }, [chainId])
-    //#endregion
+    // #endregion
 
     const options = useMemo(
         () => [
@@ -196,16 +204,22 @@ export const Prior1559GasSetting = memo(() => {
         ) {
             // if rpc payload contain gas price, set it to default values
             if (value?.computedPayload._tx.gasPrice) {
+                const minGasPrice = minGasPriceOfChain[chainId]
+                // if the gas price in payload is lower than minimum value
+                if (minGasPrice && isLessThan(value.computedPayload._tx.gasPrice as number, minGasPrice)) {
+                    setValue('gasPrice', formatWeiToGwei(minGasPrice).toString())
+                }
                 setValue('gasPrice', formatWeiToGwei(value.computedPayload._tx.gasPrice as number).toString())
             } else {
                 setOption(1)
             }
         }
-    }, [value, setValue])
+    }, [value, setValue, chainId])
 
     useUpdateEffect(() => {
-        if (gas) setValue('gasLimit', new BigNumber(gas).toString())
-    }, [gas, setValue])
+        const gasLimit = minGasLimit || gas
+        if (gasLimit) setValue('gasLimit', new BigNumber(gasLimit).toString())
+    }, [minGasLimit, gas, setValue])
 
     useEffect(() => {
         if (selected !== null) setValue('gasPrice', formatWeiToGwei(options[selected].gasPrice).toString())
@@ -213,19 +227,17 @@ export const Prior1559GasSetting = memo(() => {
 
     const [{ loading }, handleConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
-            if (value) {
-                const config = value.payload.params.map((param) => ({
-                    ...param,
-                    gas: toHex(new BigNumber(data.gasLimit).toString()),
-                    gasPrice: toHex(formatGweiToWei(data.gasPrice).toString()),
-                }))
-
-                await WalletRPC.updateUnconfirmedRequest({
-                    ...value.payload,
-                    params: config,
-                })
-                history.goBack()
-            }
+            if (!value) return
+            const config = value.payload.params.map((param) => ({
+                ...param,
+                gas: toHex(new BigNumber(data.gasLimit).toString()),
+                gasPrice: toHex(formatGweiToWei(data.gasPrice).toString()),
+            }))
+            await WalletRPC.updateUnconfirmedRequest({
+                ...value.payload,
+                params: config,
+            })
+            history.goBack()
         },
         [value],
     )
@@ -238,7 +250,7 @@ export const Prior1559GasSetting = memo(() => {
         }
     }, [value, getValueLoading])
 
-    //#region If the estimate gas be 0, Set error
+    // #region If the estimate gas be 0, Set error
     useUpdateEffect(() => {
         if (!getGasLimitError) setError('gasLimit', { message: 'Cant not get estimate gas from contract' })
     }, [getGasLimitError])
@@ -255,7 +267,10 @@ export const Prior1559GasSetting = memo(() => {
                         <Typography>{formatWeiToGwei(gasPrice ?? 0).toString()} Gwei</Typography>
                         <Typography className={classes.gasUSD}>
                             {t('popups_wallet_gas_fee_settings_usd', {
-                                usd: formatWeiToEther(gasPrice).times(nativeTokenPrice).times(21000).toPrecision(3),
+                                usd: formatWeiToEther(gasPrice)
+                                    .times(nativeTokenPrice)
+                                    .times(minGasLimit || 21000)
+                                    .toPrecision(3),
                             })}
                         </Typography>
                     </div>

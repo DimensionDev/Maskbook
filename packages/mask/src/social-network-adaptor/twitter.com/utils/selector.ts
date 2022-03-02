@@ -1,13 +1,11 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
 import { regexMatch } from '../../../utils/utils'
+import { isMobileTwitter } from './isMobile'
 import { isCompose } from './postBox'
 
 type E = HTMLElement
 
-const querySelector = <T extends E, SingleMode extends boolean = true>(
-    selector: string,
-    singleMode: boolean = true,
-) => {
+export const querySelector = <T extends E, SingleMode extends boolean = true>(selector: string, singleMode = true) => {
     const ls = new LiveSelector<T, SingleMode>().querySelector<T>(selector)
     return (singleMode ? ls.enableSingleMode() : ls) as LiveSelector<T, SingleMode>
 }
@@ -15,24 +13,20 @@ const querySelectorAll = <T extends E>(selector: string) => {
     return new LiveSelector().querySelectorAll<T>(selector)
 }
 
-//#region "Enhanced Profile"
+// #region "Enhanced Profile"
 export const searchProfileSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-label][role="navigation"]')
-export const searchProfileTabListLastChildSelector: () => LiveSelector<E, true> = () => {
-    const q = querySelector<E>(
-        '[data-testid="primaryColumn"] > div > div >div >div >:nth-child(2)>div>div>:nth-child(2)>div>:nth-child(2)>div>:last-child',
+
+export const searchProfileTabListLastChildSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>(
+        '[data-testid="primaryColumn"] div + [role="navigation"][aria-label] [data-testid="ScrollSnap-nextButtonWrapper"]',
     )
 
-    if (!q.evaluate()) {
-        return querySelector<E>(
-            '[data-testid="primaryColumn"] > div > :nth-child(2) > div > div > :nth-child(2) >div>:last-child',
-        )
-    }
-    return q
-}
-
 export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="primaryColumn"] [role="navigation"] ~ div [role="heading"] ~ div[aria-label]')
+    querySelector<E>(
+        '[data-testid="primaryColumn"] [role="navigation"] ~ [aria-labelledby^="accessible-list"] [role="heading"] ~ div[aria-label]',
+    )
+
 export const searchProfileEmptySelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] [data-testid="emptyState"]')
 export const searchProfileActiveTabSelector: () => LiveSelector<E, true> = () =>
@@ -50,15 +44,17 @@ export const searchProfileTabListSelector = () =>
 export const searchForegroundColorSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] > div > div > div > div > div > div > div > div > div > div')
 export const searchNewTweetButtonSelector: () => LiveSelector<E, true> = () => {
-    const q = querySelector<E>('[data-testid="FloatingActionButtons_Tweet_Button"')
+    const q = querySelector<E>('[data-testid="FloatingActionButtons_Tweet_Button"]')
     if (q.evaluate()) return q
     return querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
 }
 
 export const searchNickNameSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="UserProfileHeader_Items"]')
-export const searchAvatarSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="primaryColumn"] a[role="link"][href$="/photo"] img')
+export const searchAvatarSelector = () =>
+    querySelector<HTMLImageElement>('[data-testid="primaryColumn"] a[href$="/photo"] img[src*="profile_images"]')
+export const searchNFTAvatarSelector = () =>
+    querySelector<HTMLImageElement>('[data-testid="primaryColumn"] a[href$="/nft"] img[src*="profile_images"]')
 export const searchAvatarMetaSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('head > meta[property="og:image"]:last-child')
 
@@ -73,7 +69,7 @@ export const bioCardSelector = <SingleMode extends boolean = true>(singleMode = 
         ].join(),
         singleMode,
     )
-//#endregion
+// #endregion
 
 export const rootSelector: () => LiveSelector<E, true> = () => querySelector<E>('#react-root')
 
@@ -84,6 +80,8 @@ export const composeAnchorTextSelector: () => LiveSelector<HTMLAnchorElement, tr
     querySelector<HTMLAnchorElement>(
         'header[role=banner] a[href="/compose/tweet"] div[dir],aside a[href="/compose/tweet"] div[dir]',
     )
+export const headingTextSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
+    querySelector<HTMLAnchorElement>('[role="banner"] [role="heading"]')
 
 export const postEditorContentInPopupSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
@@ -91,16 +89,18 @@ export const postEditorContentInPopupSelector: () => LiveSelector<E, true> = () 
     )
 export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
-        '[aria-labelledby="modal-header"] > div:first-child > div:first-child > div:first-child > div:nth-child(3) > div:first-child > div:first-child [role="button"][aria-label]:nth-child(6)',
+        '[aria-labelledby="modal-header"] > div:first-child > div:first-child > div:first-child > div:nth-child(3) > div:first-child [role="button"][aria-label]:nth-child(6)',
     )
 export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="banner"] [role="navigation"] > div')
+export const sideBarProfileSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[role="banner"] [role="navigation"] [aria-label="Lists"] > div')
 export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div [role="button"][aria-label]:nth-child(6)')
 export const postEditorDraftContentSelector = () => {
     if (location.pathname === '/compose/tweet') {
         return querySelector<HTMLDivElement>(
-            `[contenteditable][aria-label][spellcheck],textarea[aria-label][spellcheck]`,
+            '[contenteditable][aria-label][spellcheck],textarea[aria-label][spellcheck]',
         )
     }
     return (isCompose() ? postEditorInPopupSelector() : postEditorInTimelineSelector()).querySelector<HTMLElement>(
@@ -123,6 +123,8 @@ export const newPostButtonSelector = () => querySelector<E>('[data-testid="SideN
 
 export const bioDescriptionSelector = () => querySelector<HTMLDivElement>('[data-testid="UserDescription"]')
 
+export const personalHomepageSelector = () => querySelector<HTMLDivElement>('[data-testid="UserUrl"]')
+
 export const bioPageUserNickNameSelector = () =>
     querySelector<HTMLDivElement>('[data-testid="UserDescription"]')
         .map((x) => x.parentElement?.parentElement?.previousElementSibling)
@@ -131,7 +133,7 @@ export const bioPageUserIDSelector = (selector: () => LiveSelector<HTMLSpanEleme
     selector().map((x) => (x.parentElement?.nextElementSibling as HTMLElement).innerText.replace('@', ''))
 export const floatingBioCardSelector = () =>
     querySelector<HTMLSpanElement>(
-        `[style~="left:"] a[role=link] > div:first-child > div:first-child > div:first-child[dir="auto"]`,
+        '[style~="left:"] a[role=link] > div:first-child > div:first-child > div:first-child[dir="auto"]',
     )
 
 export const postsImageSelector = (node: HTMLElement) =>
@@ -141,6 +143,15 @@ export const postsImageSelector = (node: HTMLElement) =>
             '[data-testid="tweet"] ~ div img[src*="media"]', // image in detail page for new twitter
         ].join(),
     )
+
+export const timelinePostContentSelector = () =>
+    querySelectorAll(
+        [
+            '[data-testid="tweet"] div + div div[lang]', // text tweets
+            '[data-testid="tweet"] div + div div[data-testid="card.wrapper"]', // link box tweets
+        ].join(),
+    )
+
 export const postsContentSelector = () =>
     querySelectorAll(
         [
@@ -199,8 +210,10 @@ export const selfInfoSelectors = () => ({
     userAvatar: p(avatar, 1),
 })
 
-//#region nft avatar
-export const searchProfileAvatarSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1).closest<E>(4)
+// #region twitter nft avatar
+export const searchProfileAvatarSelector = () => {
+    return querySelectorAll<E>('[data-testid="fileInput"]').at(1).closest<E>(4)
+}
 
 export const searchProfileAvatarParentSelector = () =>
     querySelectorAll<HTMLDivElement>('[data-testid="fileInput"]').at(1).closest<HTMLDivElement>(2).evaluate()[0]
@@ -217,29 +230,37 @@ export const searchAvatarSelectorImage = () =>
         .closest<HTMLDivElement>(2)
         .querySelector<HTMLDivElement>('div > div > :nth-child(2) > div > img')
 
-export const searchAvatarOpenFileSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1)
+export const searchTwitterAvatarOpenFilesSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1)
 export const searchProfileSaveSelector = () => querySelector<E>('[data-testid="Profile_Save_Button"]')
 
-export const searchProfessionalButtonSelector = () =>
-    querySelector<E>('[data-testid="ProfessionalButton_Switch_To_Professional"]')
-//#endregion
+export const searchProfessionalButtonSelector = () => querySelector<E>('[data-testid*="ProfessionalButton"]')
 
-//#region avatar selector
+export const searchProfileSetAvatarSelector = () =>
+    isMobileTwitter
+        ? searchProfessionalButtonSelector()
+              .closest<E>(4)
+              .querySelector('div > div:nth-child(2) >div > div:nth-child(2)')
+        : searchProfessionalButtonSelector().closest<E>(3).querySelector('div > div:nth-child(2) > div:nth-child(2)')
+// #endregion
 
+// #region avatar selector
 export const searchTwitterAvatarLinkSelector: () => LiveSelector<E, true> = () =>
     querySelector<E, true>('[data-testid="UserProfileHeader_Items"]').closest<E>(2).querySelector('div  a')
 
-export const searchTwitterAvatarSelector = () => searchTwitterAvatarLinkSelector().querySelector<E>('div')
-//#endregion
+export const searchTwitterAvatarSelector = () =>
+    querySelector<E, true>('a[href$="/photo"]').querySelector('img').closest<E>(1)
+// #endregion
 
-//#region twitter avatar
-export const searchAccountSwitherButtonSelector = () =>
-    querySelector<E>('[data-testid="SideNav_AccountSwitcher_Button"]')
-
+// #region twitter avatar
 export const searchUseCellSelector = () => querySelector<E>('[data-testid="UserCell"]')
-//#endregion
+// #endregion
 
 export const searchTweetAvatarSelector = () =>
     querySelector<E, false>('[data-testid="tweetButtonInline"]').closest<E>(7)
 
 export const searchRetweetAvatarSelector = () => querySelector<E, false>('[data-testid="tweetButton"]').closest<E>(6)
+
+export const searchTwitterAvatarNFTSelector = () =>
+    querySelector<E>('a[href$="/nft"]').closest<E>(1).querySelector('a div:nth-child(3) > div')
+
+export const searchTwitterAvatarNFTLinkSelector = () => querySelector<E>('a[href$="/nft"]')

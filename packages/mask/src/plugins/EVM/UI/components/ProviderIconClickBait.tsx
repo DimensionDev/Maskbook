@@ -21,7 +21,7 @@ export function ProviderIconClickBait({
     onClick,
     onSubmit,
 }: Web3Plugin.UI.ProviderIconClickBaitProps) {
-    //#region connect wallet dialog
+    // #region connect wallet dialog
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.connectWalletDialogUpdated,
         (ev) => {
@@ -29,7 +29,7 @@ export function ProviderIconClickBait({
             if (ev.result) onSubmit?.(network, provider)
         },
     )
-    //#endregion
+    // #endregion
 
     const providerType = provider.type as ProviderType
     const networkType = network.type as NetworkType
@@ -81,8 +81,8 @@ export function ProviderIconClickBait({
     if (providerType === ProviderType.Fortmatic && !isFortmaticSupported(getChainIdFromNetworkType(networkType)))
         return null
 
-    // hide fortmatic and coin98 wallets
-    if (providerType === ProviderType.Fortmatic || providerType === ProviderType.Coin98) return null
+    // hide coin98 and fortmatic
+    if (providerType === ProviderType.Coin98 || providerType === ProviderType.Fortmatic) return null
 
     // coinbase and mathwallet are blocked by CSP
     if ([ProviderType.WalletLink, ProviderType.MathWallet].includes(providerType)) return null

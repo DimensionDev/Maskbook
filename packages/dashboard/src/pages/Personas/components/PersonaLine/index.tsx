@@ -1,8 +1,7 @@
 import { memo, MouseEvent, useState } from 'react'
 import { Box, Button, Link, Stack, Typography } from '@mui/material'
-import { getMaskColor, MaskColorVar } from '@masknet/theme'
+import { getMaskColor, MaskColorVar, makeStyles } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
-import { makeStyles } from '@masknet/theme'
 import { DisconnectProfileDialog } from '../DisconnectProfileDialog'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
@@ -91,7 +90,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                                     key={x.userId}
                                     onClick={() => handleUserIdClick(networkIdentifier, x.userId)}
                                     sx={{ color: MaskColorVar.textPrimary, fontSize: 13, mr: 1, cursor: 'pointer' }}>
-                                    {`@${x.userId}`}
+                                    @{x.userId}
                                 </Typography>
                             ))}
                         </Stack>

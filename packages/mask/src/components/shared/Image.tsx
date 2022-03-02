@@ -35,6 +35,7 @@ export interface ImageProps {
     className?: string
     style?: React.CSSProperties
     onClick?: React.MouseEventHandler<HTMLElement>
+    onError?(event: Event): void
     onURL?(url: string): void
 }
 
@@ -48,7 +49,18 @@ export type ImageRef = {
  * This React Component is used to render images in the content script to bypass the CSP restriction.
  */
 export const Image = forwardRef<ImageRef, ImageProps>(function Image(props, outgoingRef) {
-    const { src, loading: propsLoading, canvasProps, imgProps, style, className, SkeletonProps, onClick, onURL } = props
+    const {
+        src,
+        loading: propsLoading,
+        canvasProps,
+        imgProps,
+        style,
+        className,
+        SkeletonProps,
+        onClick,
+        onURL,
+        onError,
+    } = props
     // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas#Maximum_canvas_size
     const [height, width] = [Math.min(32767, props.height || 500), Math.min(32767, props.width || 500)]
     const [hasCSPBan, setHasCSPBan] = useState(false)
@@ -112,7 +124,7 @@ export const Image = forwardRef<ImageRef, ImageProps>(function Image(props, outg
         return (
             <img
                 src={url}
-                onError={blobURL ? () => setHasCSPBan(true) : undefined}
+                onError={blobURL ? () => setHasCSPBan(true) : (event) => onError?.(event as unknown as Event)}
                 width={width}
                 height={height}
                 className={className}

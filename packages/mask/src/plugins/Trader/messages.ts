@@ -1,16 +1,15 @@
-import type { TagType } from './types'
-import type { DataProvider, TradeProvider } from '@masknet/public-api'
-import { createPluginMessage, PluginMessageEmitter, createPluginRPC } from '@masknet/plugin-infra'
-import { PLUGIN_IDENTIFIER } from './constants'
+import { createPluginMessage, createPluginRPC, PluginMessageEmitter } from '@masknet/plugin-infra'
+import type { DataProvider } from '@masknet/public-api'
+import type { GasOptionConfig } from '@masknet/web3-shared-evm'
+import { PLUGIN_ID } from './constants'
 import type { TraderProps } from './SNSAdaptor/trader/Trader'
-import type { GasOptionConfig } from '../../../../web3-shared/evm'
+import type { TagType } from './types'
 
 interface CashTagEvent {
     name: string
     type: TagType
     element: HTMLAnchorElement | null
     dataProviders: DataProvider[]
-    tradeProviders: TradeProvider[]
 }
 
 interface SwapSettingsEvent {
@@ -52,5 +51,5 @@ export interface TraderMessage {
 }
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
-export const PluginTraderMessages: PluginMessageEmitter<TraderMessage> = createPluginMessage(PLUGIN_IDENTIFIER)
-export const PluginTraderRPC = createPluginRPC(PLUGIN_IDENTIFIER, () => import('./services'), PluginTraderMessages.rpc)
+export const PluginTraderMessages: PluginMessageEmitter<TraderMessage> = createPluginMessage(PLUGIN_ID)
+export const PluginTraderRPC = createPluginRPC(PLUGIN_ID, () => import('./services'), PluginTraderMessages.rpc)

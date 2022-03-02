@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js'
 import { parseURL } from '@masknet/shared-base'
 import {
     openseaHostnames,
@@ -6,9 +5,8 @@ import {
     raribleHostnames,
     rariblePathnameRegexMatcher,
 } from './constants'
-import { ChainId, formatBalance } from '@masknet/web3-shared-evm'
-import type { AssetEvent } from './types'
-import { multipliedBy } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { WyvernSchemaName } from 'opensea-js/lib/types'
 
 export function checkUrl(url: string): boolean {
     const protocol = 'https://'
@@ -29,7 +27,7 @@ export function getAssetInfoFromURL(url?: string) {
     if (!url) return null
     const _url = new URL(url)
 
-    //#region opensea
+    // #region opensea
     const openSeaMatched = _url.pathname.match(openseaPathnameRegexMatcher)
     if (openSeaMatched) {
         return {
@@ -38,9 +36,9 @@ export function getAssetInfoFromURL(url?: string) {
             token_id: openSeaMatched[2],
         }
     }
-    //#endregion
+    // #endregion
 
-    //#region rarible
+    // #region rarible
     const raribleMatched = _url.pathname.match(rariblePathnameRegexMatcher)
     if (raribleMatched) {
         return {
@@ -53,29 +51,19 @@ export function getAssetInfoFromURL(url?: string) {
             token_id: raribleMatched[2],
         }
     }
-    //#endregion
+    // #endregion
 
     // nothing matched
     return
 }
 
-export function getOrderUnitPrice(currentPrice?: string, decimals?: number, quantity?: string) {
-    if (!currentPrice || !decimals || !quantity) return
-    const price = formatBalance(currentPrice, decimals)
-    const _quantity = formatBalance(quantity, new BigNumber(quantity).toString() !== '1' ? 8 : 0)
-    return new BigNumber(price).dividedBy(_quantity).toFixed(4, 1).toString()
-}
-
-export function getOrderUSDPrice(currentPrice?: string, usdPrice?: string, decimals?: number) {
-    if (!currentPrice || !decimals) return
-    const price = formatBalance(usdPrice, 0)
-    const quantity = formatBalance(currentPrice, decimals)
-
-    return multipliedBy(price, quantity).toFixed(2, 1).toString()
-}
-
-export function getLastSalePrice(lastSale: AssetEvent | null) {
-    if (!lastSale?.total_price || !lastSale?.payment_token?.decimals) return
-    const price = formatBalance(lastSale.total_price, lastSale.payment_token.decimals)
-    return price
+export function isWyvernSchemaName(name: unknown): name is WyvernSchemaName {
+    const schemas: unknown[] = [
+        WyvernSchemaName.ERC20,
+        WyvernSchemaName.ERC721,
+        WyvernSchemaName.ERC1155,
+        WyvernSchemaName.LegacyEnjin,
+        WyvernSchemaName.ENSShortNameAuction,
+    ]
+    return schemas.includes(name)
 }

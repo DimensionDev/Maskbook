@@ -61,7 +61,7 @@ const PageTitle = styled(Grid)(({ theme }) => ({
 const Containment = styled(Grid)(({ theme }) => ({
     maxWidth: '100%',
     display: 'flex',
-    height: `calc(100vh - 64px)`,
+    height: 'calc(100vh - 64px)',
     overflow: 'hidden',
 }))
 

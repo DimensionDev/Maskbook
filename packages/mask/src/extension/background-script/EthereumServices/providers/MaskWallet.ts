@@ -4,16 +4,16 @@ import { PopupRoutes } from '@masknet/shared-base'
 import { ChainId, getChainIdFromNetworkType, getChainRPC, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 import { currentChainIdSettings } from '../../../../plugins/Wallet/settings'
 import { getWallets, selectAccountPrepare } from '../../../../plugins/Wallet/services'
-import { openPopupWindow } from '../../HelperService'
+import { openPopupWindow } from '../../../../../background/services/helper'
 
-//#region providers
+// #region providers
 const providerPool = new Map<string, HttpProvider>()
 
 export function createProvider(url: string) {
     const provider =
         providerPool.get(url) ??
         new MaskWallet.providers.HttpProvider(url, {
-            timeout: 5000, // ms
+            timeout: 20000, // ms
             // @ts-ignore
             clientConfig: {
                 keepalive: true,
@@ -29,9 +29,9 @@ export function createProvider(url: string) {
     providerPool.set(url, provider)
     return provider
 }
-//#endregion
+// #endregion
 
-//#region web3 instances
+// #region web3 instances
 const instancePool = new Map<string, MaskWallet>()
 const SEED = Math.floor(Math.random() * 4)
 
@@ -64,7 +64,7 @@ export function createWeb3({
     }
     return web3
 }
-//#endregion
+// #endregion
 
 export async function requestAccounts(networkType: NetworkType) {
     const wallets = await getWallets(ProviderType.MaskWallet)

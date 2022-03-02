@@ -1,18 +1,18 @@
 import {
     FungibleTokenDetailed,
-    isNative,
     useAccount,
-    useBlockNumber,
     useTokenConstants,
     useTraderConstants,
     ChainId,
+    isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
-import { useAsyncRetry } from 'react-use'
 import { PluginTraderRPC } from '../../messages'
-import { TradeStrategy } from '../../types'
+import { SwapBancorRequest, TradeStrategy } from '../../types'
 import { useSlippageTolerance } from './useSlippageTolerance'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { leftShift } from '@masknet/web3-shared-base'
+import { useDoubleBlockBeatRetry } from '@masknet/plugin-infra'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 
 export function useTrade(
     strategy: TradeStrategy,
@@ -20,9 +20,10 @@ export function useTrade(
     outputAmountWei: string,
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
-) {
-    const blockNumber = useBlockNumber()
-    const slippage = useSlippageTolerance()
+    temporarySlippage?: number,
+): AsyncStateRetry<SwapBancorRequest | null> {
+    const slippageSetting = useSlippageTolerance()
+    const slippage = temporarySlippage || slippageSetting
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
     const { BANCOR_ETH_ADDRESS } = useTraderConstants(chainId)
@@ -32,17 +33,17 @@ export function useTrade(
     const outputAmount = leftShift(outputAmountWei, outputToken?.decimals).toFixed()
     const isExactIn = strategy === TradeStrategy.ExactIn
 
-    return useAsyncRetry(async () => {
+    return useDoubleBlockBeatRetry(async () => {
         if (!inputToken || !outputToken) return null
         if (inputAmountWei === '0' && isExactIn) return null
         if (outputAmountWei === '0' && !isExactIn) return null
         if (![ChainId.Mainnet, ChainId.Ropsten].includes(chainId)) return null
 
-        const fromToken = isNative(inputToken.address)
+        const fromToken = isNativeTokenAddress(inputToken)
             ? { ...inputToken, address: BANCOR_ETH_ADDRESS ?? '' }
             : inputToken
 
-        const toToken = isNative(outputToken.address)
+        const toToken = isNativeTokenAddress(outputToken)
             ? { ...outputToken, address: BANCOR_ETH_ADDRESS ?? '' }
             : outputToken
 
@@ -65,7 +66,6 @@ export function useTrade(
         inputToken?.address,
         outputToken?.address,
         slippage,
-        blockNumber, // refresh api each block
         user,
         chainId,
     ])

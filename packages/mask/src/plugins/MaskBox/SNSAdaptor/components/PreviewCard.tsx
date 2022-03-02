@@ -51,8 +51,6 @@ export function PreviewCard(props: PreviewCardProps) {
     const {
         boxId,
         boxState,
-        isQualified,
-        holderToken,
         boxStateMessage,
         boxInfo,
         boxMetadata,
@@ -76,6 +74,7 @@ export function PreviewCard(props: PreviewCardProps) {
         setOpenBoxTransactionOverrides,
 
         // retry
+        retryMaskBoxStatus,
         retryMaskBoxInfo,
         retryBoxInfo,
         retryMaskBoxCreationSuccessEvent,
@@ -90,7 +89,7 @@ export function PreviewCard(props: PreviewCardProps) {
         }
     }, [openBoxTransaction?.config, openBoxTransactionOverrides, openBoxTransactionGasLimit])
 
-    //#region open box
+    // #region open box
     const [openBoxState, openBoxCallback, resetOpenBoxCallback] = useTransactionCallback(
         TransactionStateType.CONFIRMED,
         txConfig,
@@ -118,10 +117,11 @@ export function PreviewCard(props: PreviewCardProps) {
         refreshLastPurchasedTokenIds()
         try {
             await openBoxCallback()
+            retryMaskBoxStatus()
             setOpenDrawDialog(false)
         } catch {}
         setDrawing(false)
-    }, [openBoxCallback, refreshLastPurchasedTokenIds])
+    }, [openBoxCallback, refreshLastPurchasedTokenIds, retryMaskBoxStatus])
 
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
@@ -143,7 +143,7 @@ export function PreviewCard(props: PreviewCardProps) {
             summary: `Open ${boxInfo?.name ?? 'box'}...`,
         })
     }, [openBoxState.type])
-    //#endregion
+    // #endregion
 
     if (boxState === BoxState.UNKNOWN)
         return (
@@ -196,14 +196,9 @@ export function PreviewCard(props: PreviewCardProps) {
                     size="medium"
                     fullWidth
                     variant="contained"
-                    disabled={boxState !== BoxState.READY || !isQualified}
+                    disabled={boxState !== BoxState.READY}
                     onClick={() => setOpenDrawDialog(true)}>
                     {(() => {
-                        if (!isQualified) {
-                            const { symbol, decimals } = holderToken ?? {}
-                            const tokenPrice = `${formatBalance(boxInfo?.holderMinTokenAmount, decimals)}$${symbol}`
-                            return `You must hold at least ${tokenPrice}`
-                        }
                         return boxState === BoxState.READY && paymentTokenAddress ? (
                             <>
                                 {boxStateMessage} (

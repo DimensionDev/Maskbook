@@ -1,26 +1,30 @@
 import { memo, ReactElement, SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react'
 import { useI18N } from '../../../../../utils'
 import {
+    addGasMargin,
     Asset,
     EthereumTokenType,
     formatBalance,
     formatEthereumAddress,
     formatGweiToEther,
     formatGweiToWei,
+    isSameAddress,
+    NetworkType,
     useChainId,
     useFungibleTokenBalance,
     useGasLimit,
     useNativeTokenDetailed,
+    useNetworkType,
     useTokenTransferCallback,
     useWallet,
 } from '@masknet/web3-shared-evm'
 import {
-    isZero,
     isGreaterThan,
     isGreaterThanOrEqualTo,
-    isPositive,
     isLessThan,
     isLessThanOrEqualTo,
+    isPositive,
+    isZero,
     multipliedBy,
     rightShift,
 } from '@masknet/web3-shared-base'
@@ -45,6 +49,8 @@ import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useToke
 import { toHex } from 'web3-utils'
 import { NetworkPluginID, useLookupAddress, useWeb3State } from '@masknet/plugin-infra'
 import { AccountItem } from './AccountItem'
+import Services from '../../../../service'
+import { TransferAddressError } from '../type'
 
 const useStyles = makeStyles()({
     container: {
@@ -144,6 +150,12 @@ const useStyles = makeStyles()({
         lineHeight: '22px',
         fontWeight: 500,
     },
+    normalMessage: {
+        color: '#111432',
+        fontSize: 16,
+        lineHeight: '22px',
+        fontWeight: 500,
+    },
     domainName: {
         fontSize: 14,
         fontWeight: 600,
@@ -171,9 +183,11 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     const wallet = useWallet()
 
     const chainId = useChainId()
+    const network = useNetworkType()
     const history = useHistory()
 
     const [minGasLimitContext, setMinGasLimitContext] = useState(0)
+    const [addressTip, setAddressTip] = useState<{ type: TransferAddressError; message: string } | null>()
 
     const { value: nativeToken } = useNativeTokenDetailed()
 
@@ -192,8 +206,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                     .refine(
                         (address) => EthereumAddress.isValid(address) || Utils?.isValidDomain?.(address),
                         t('wallet_transfer_error_invalid_address'),
-                    )
-                    .refine((address) => address !== wallet?.address, t('wallet_transfer_error_address_absence')),
+                    ),
                 amount: zod
                     .string()
                     .refine((amount) => {
@@ -252,7 +265,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 message: t('wallet_transfer_error_max_priority_gas_fee_imbalance'),
                 path: ['maxFeePerGas'],
             })
-    }, [selectedAsset, minGasLimitContext, estimateGasFees, Utils])
+    }, [wallet, selectedAsset, minGasLimitContext, estimateGasFees, Utils])
 
     const methods = useForm<zod.infer<typeof schema>>({
         shouldUnregister: false,
@@ -266,6 +279,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
             maxFeePerGas: '',
         },
         context: {
+            wallet,
             minGasLimitContext,
             estimateGasFees,
             selectedAsset,
@@ -274,31 +288,76 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
 
     const [address, amount, maxFeePerGas] = methods.watch(['address', 'amount', 'maxFeePerGas'])
 
-    //#region resolve ENS domain
+    // #region resolve ENS domain
     const {
         value: registeredAddress = '',
         error: resolveDomainError,
         loading: resolveDomainLoading,
     } = useLookupAddress(address, NetworkPluginID.PLUGIN_EVM)
+    // #endregion
 
-    useUpdateEffect(() => {
+    // #region check address or registered address type
+    useAsync(async () => {
+        // Only ethereum currently supports ens
+        if (address.includes('.eth') && network !== NetworkType.Ethereum) {
+            setAddressTip({
+                type: TransferAddressError.NETWORK_NOT_SUPPORT,
+                message: t('wallet_transfer_error_no_support_ens'),
+            })
+            return
+        }
+
         // The input is ens domain but the binding address cannot be found
-        if (Utils?.isValidDomain?.(address) && (resolveDomainError || !registeredAddress))
-            methods.setError('address', {
-                type: 'resolveFailed',
+        if (Utils?.isValidDomain?.(address) && (resolveDomainError || !registeredAddress)) {
+            setAddressTip({
+                type: TransferAddressError.RESOLVE_FAILED,
                 message: t('wallet_transfer_error_no_address_has_been_set_name'),
             })
-    }, [resolveDomainError, registeredAddress, methods.setError, address, Utils])
-    //#endregion
+            return
+        }
 
-    //#region Get min gas limit with amount and recipient address
+        // clear error tip
+        setAddressTip(null)
+
+        if (!address && !registeredAddress) return
+        if (!EthereumAddress.isValid(address) && !EthereumAddress.isValid(registeredAddress)) return
+        methods.clearErrors('address')
+
+        if (isSameAddress(address, wallet?.address) || isSameAddress(registeredAddress, wallet?.address)) {
+            setAddressTip({
+                type: TransferAddressError.SAME_ACCOUNT,
+                message: t('wallet_transfer_error_same_address_with_current_account'),
+            })
+            return
+        }
+
+        const result = await Services.Ethereum.getCode(address)
+
+        if (result !== '0x') {
+            setAddressTip({
+                type: TransferAddressError.CONTRACT_ADDRESS,
+                message: t('wallet_transfer_error_is_contract_address'),
+            })
+        }
+    }, [
+        address,
+        EthereumAddress.isValid,
+        registeredAddress,
+        methods.clearErrors,
+        wallet?.address,
+        resolveDomainError,
+        Utils,
+    ])
+    // #endregion
+
+    // #region Get min gas limit with amount and recipient address
     const { value: minGasLimit } = useGasLimit(
         selectedAsset?.token.type,
         selectedAsset?.token.address,
         rightShift(amount ?? 0, selectedAsset?.token.decimals).toFixed(),
         EthereumAddress.isValid(address) ? address : registeredAddress,
     )
-    //#endregion
+    // #endregion
 
     const { value: tokenBalance = '0' } = useFungibleTokenBalance(
         selectedAsset?.token?.type ?? EthereumTokenType.Native,
@@ -306,35 +365,28 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     )
 
     const maxAmount = useMemo(() => {
-        const gasFee = formatGweiToWei(maxFeePerGas ?? 0).multipliedBy(MIN_GAS_LIMIT)
+        const gasFee = formatGweiToWei(maxFeePerGas ?? 0).multipliedBy(addGasMargin(minGasLimit ?? MIN_GAS_LIMIT))
         let amount_ = new BigNumber(tokenBalance ?? 0)
         amount_ = selectedAsset?.token.type === EthereumTokenType.Native ? amount_.minus(gasFee) : amount_
-        return formatBalance(amount_.toFixed(), selectedAsset?.token.decimals).toString()
+        return formatBalance(BigNumber.max(0, amount_).toFixed(), selectedAsset?.token.decimals)
     }, [selectedAsset, maxFeePerGas, minGasLimit, tokenBalance])
 
-    //#region set default gasLimit
+    // #region set default gasLimit
     useUpdateEffect(() => {
-        if (minGasLimit) {
-            methods.setValue('gasLimit', `${minGasLimit}`)
-            setMinGasLimitContext(minGasLimit)
-        }
+        if (!minGasLimit) return
+        methods.setValue('gasLimit', minGasLimit.toString())
+        setMinGasLimitContext(minGasLimit)
     }, [minGasLimit, methods.setValue])
-    //#endregion
+    // #endregion
 
-    //#region set default Max priority gas fee and max fee
+    // #region set default Max priority gas fee and max fee
     useUpdateEffect(() => {
-        if (estimateGasFees) {
-            methods.setValue(
-                'maxFeePerGas',
-                new BigNumber(estimateGasFees.medium?.suggestedMaxFeePerGas ?? 0).toString(),
-            )
-            methods.setValue(
-                'maxPriorityFeePerGas',
-                new BigNumber(estimateGasFees.medium?.suggestedMaxPriorityFeePerGas ?? 0).toString(),
-            )
-        }
+        if (!estimateGasFees) return
+        const { medium } = estimateGasFees
+        methods.setValue('maxFeePerGas', new BigNumber(medium?.suggestedMaxFeePerGas ?? 0).toString())
+        methods.setValue('maxPriorityFeePerGas', new BigNumber(medium?.suggestedMaxPriorityFeePerGas ?? 0).toString())
     }, [estimateGasFees, methods.setValue])
-    //#endregion
+    // #endregion
 
     const [_, transferCallback] = useTokenTransferCallback(
         selectedAsset?.token.type ?? EthereumTokenType.Native,
@@ -345,23 +397,23 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         methods.setValue('amount', maxAmount)
     }, [methods.setValue, maxAmount])
 
-    const [{ loading }, onSubmit] = useAsyncFn(
+    const [{ loading, error }, onSubmit] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             const transferAmount = rightShift(data.amount || '0', selectedAsset?.token.decimals).toFixed()
 
-            //If input address is ens domain, use registeredAddress to transfer
+            // If input address is ens domain, use registeredAddress to transfer
             if (Utils?.isValidDomain?.(data.address)) {
                 await transferCallback(transferAmount, registeredAddress, {
-                    maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toString()),
-                    maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toString()),
+                    maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
+                    maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
                     gas: new BigNumber(data.gasLimit).toNumber(),
                 })
                 return
             }
 
             await transferCallback(transferAmount, data.address, {
-                maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toString()),
-                maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toString()),
+                maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
+                maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
                 gas: new BigNumber(data.gasLimit).toNumber(),
             })
         },
@@ -384,16 +436,32 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         </Collapse>,
     )
 
-    const ensContent = useMemo(() => {
+    const popoverContent = useMemo(() => {
         if (resolveDomainLoading) return
+
+        if (addressTip) {
+            return (
+                <Box py={2.5} px={1.5}>
+                    <Typography
+                        className={
+                            addressTip.type === TransferAddressError.SAME_ACCOUNT
+                                ? classes.normalMessage
+                                : classes.errorMessage
+                        }>
+                        {addressTip.message}
+                    </Typography>
+                </Box>
+            )
+        }
+
         if (registeredAddress && !resolveDomainError && Utils?.resolveDomainLink)
             return (
-                <Link
-                    href={Utils.resolveDomainLink(address)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    underline="none">
-                    <Box display="flex" justifyContent="space-between" alignItems="center" py={2.5} px={1.5}>
+                <Box display="flex" justifyContent="space-between" alignItems="center" py={2.5} px={1.5}>
+                    <Link
+                        href={Utils.resolveDomainLink(address)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="none">
                         <Box>
                             <Typography className={classes.domainName}>{address}</Typography>
                             <Typography className={classes.registeredAddress}>
@@ -404,22 +472,15 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                                 />
                             </Typography>
                         </Box>
-                        <RightIcon />
-                    </Box>
-                </Link>
-            )
-        if (methods.formState.errors.address?.type === 'resolveFailed') {
-            return (
-                <Box py={2.5} px={1.5}>
-                    <Typography className={classes.errorMessage}>
-                        {methods.formState.errors.address?.message}
-                    </Typography>
+                    </Link>
+                    <RightIcon />
                 </Box>
             )
-        }
+
         return
     }, [
         address,
+        addressTip,
         registeredAddress,
         Utils?.resolveDomainLink,
         methods.formState.errors.address?.type,
@@ -439,7 +500,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 handleCancel={() => history.goBack()}
                 handleConfirm={methods.handleSubmit(onSubmit)}
                 confirmLoading={loading}
-                ensContent={ensContent}
+                popoverContent={popoverContent}
             />
             {otherWallets.length ? menu : null}
         </FormProvider>
@@ -456,7 +517,7 @@ export interface Transfer1559UIProps {
     handleCancel: () => void
     handleConfirm: () => void
     confirmLoading: boolean
-    ensContent?: ReactElement
+    popoverContent?: ReactElement
 }
 
 type TransferFormData = {
@@ -478,7 +539,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
         handleCancel,
         handleConfirm,
         confirmLoading,
-        ensContent,
+        popoverContent,
     }) => {
         const anchorEl = useRef<HTMLDivElement | null>(null)
         const { t } = useI18N()
@@ -505,8 +566,8 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
         ])
 
         useUpdateEffect(() => {
-            setPopoverOpen(!!ensContent && !!anchorEl.current)
-        }, [ensContent])
+            setPopoverOpen(!!popoverContent && !!anchorEl.current)
+        }, [popoverContent])
 
         return (
             <>
@@ -529,7 +590,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                     ),
                                     onClick: (event) => {
                                         if (!anchorEl.current) anchorEl.current = event.currentTarget
-                                        if (!!ensContent) setPopoverOpen(true)
+                                        if (popoverContent) setPopoverOpen(true)
                                     },
                                 }}
                             />
@@ -545,7 +606,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                             vertical: 'bottom',
                             horizontal: 'left',
                         }}>
-                        {ensContent}
+                        {popoverContent}
                     </Popover>
                     <Typography className={classes.label}>
                         <span>{t('popups_wallet_choose_token')}</span>

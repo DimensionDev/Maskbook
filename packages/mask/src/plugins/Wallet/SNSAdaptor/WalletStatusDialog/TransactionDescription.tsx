@@ -1,7 +1,10 @@
 import type { TransactionReceipt } from 'web3-core'
+import { first, last } from 'lodash-unified'
 import {
+    ChainId,
     useNativeTokenDetailed,
     EthereumRpcType,
+    useChainId,
     formatBalance,
     NativeTokenDetailed,
     ERC20TokenDetailed,
@@ -10,7 +13,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { pow10 } from '@masknet/web3-shared-base'
 import type Services from '../../../../extension/service'
-import { first, last } from 'lodash-unified'
+import { getContractMethodDescription } from './contractMethodDescription'
 
 function getTokenAmountDescription(amount = '0', tokenDetailed?: FungibleTokenDetailed, negative?: boolean) {
     const symbol = negative ? '- ' : ''
@@ -22,12 +25,14 @@ function getTokenAmountDescription(amount = '0', tokenDetailed?: FungibleTokenDe
 }
 
 function getTransactionDescription(
+    chainId: ChainId,
     nativeTokenDetailed?: NativeTokenDetailed | ERC20TokenDetailed,
     tokenDetailed?: ERC20TokenDetailed,
     computedPayload?: UnboxPromise<ReturnType<typeof Services.Ethereum.getSendTransactionComputedPayload>> | null,
 ) {
     if (!computedPayload) return
     const type = computedPayload.type
+
     switch (type) {
         case EthereumRpcType.SEND_ETHER:
             return `Send token -${getTokenAmountDescription(
@@ -37,7 +42,7 @@ function getTransactionDescription(
         case EthereumRpcType.CONTRACT_INTERACTION:
             switch (computedPayload.name) {
                 case 'approve':
-                    return `Approve spend limit ${getTokenAmountDescription(
+                    return `Approve spend ${getTokenAmountDescription(
                         computedPayload.parameters?.value,
                         tokenDetailed,
                     )}`
@@ -73,15 +78,22 @@ function getTransactionDescription(
                     const amountOut = formatBalance(computedPayload.parameters.amountOutMin, tokenDetailed?.decimals, 2)
                     return `Swap ${amountIn} ${nativeTokenDetailed?.symbol} for ${amountOut} ${tokenDetailed?.symbol}`
                 default:
-                    return `${computedPayload.name ?? 'Contract Interaction'} ${
-                        computedPayload._tx.value
-                            ? getTokenAmountDescription(
-                                  computedPayload._tx.value as string | undefined,
-                                  nativeTokenDetailed,
-                                  true,
-                              )
-                            : ''
-                    }`
+                    const description = getContractMethodDescription(
+                        { name: computedPayload.name ?? '', chainId, address: computedPayload._tx.to ?? '' },
+                        computedPayload,
+                    )
+                    return (
+                        description ??
+                        `${computedPayload.name ?? 'Contract Interaction'} ${
+                            computedPayload._tx.value
+                                ? getTokenAmountDescription(
+                                      computedPayload._tx.value as string | undefined,
+                                      nativeTokenDetailed,
+                                      true,
+                                  )
+                                : ''
+                        }`
+                    )
             }
         case EthereumRpcType.CONTRACT_DEPLOYMENT:
             return `Contract Deployment ${getTokenAmountDescription(
@@ -105,6 +117,7 @@ export interface RecentTransactionDescriptionProps {
 }
 
 export function RecentTransactionDescription(props: RecentTransactionDescriptionProps) {
+    const chainId = useChainId()
     const { hash, computedPayload } = props
     const { loading: getNativeTokenLoading, value: nativeTokenDetailed } = useNativeTokenDetailed()
     let inputTokenAddress: string | undefined = ''
@@ -127,6 +140,9 @@ export function RecentTransactionDescription(props: RecentTransactionDescription
                 inputTokenAddress = first(computedPayload.parameters.path)
                 tokenAddress = last(computedPayload.parameters.path)
                 break
+            case 'create_red_packet':
+                tokenAddress = computedPayload.parameters._token_addr
+                break
             default:
                 tokenAddress = ''
         }
@@ -139,6 +155,7 @@ export function RecentTransactionDescription(props: RecentTransactionDescription
     return !getNativeTokenLoading && !getERC20TokenLoading && !getInputERC20TokenLoading ? (
         <span>
             {getTransactionDescription(
+                chainId,
                 inputTokenAddress ? inputTokenDetailed : nativeTokenDetailed,
                 tokenDetailed,
                 computedPayload,

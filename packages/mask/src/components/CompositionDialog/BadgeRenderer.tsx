@@ -1,8 +1,14 @@
-import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra'
-import type { TypedMessage } from '@masknet/shared-base'
+import { useActivatedPluginsSNSAdaptor, Plugin, usePluginI18NField } from '@masknet/plugin-infra'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import type { TypedMessage } from '@masknet/typed-message'
 import { Box, Chip } from '@mui/material'
-import { usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
-import { ShadowRootTooltip, useI18N } from '../../utils'
+import { useI18N } from '../../utils'
+
+const useStyles = makeStyles()((theme) => ({
+    chip: {
+        maxWidth: 500,
+    },
+}))
 
 export interface BadgeRendererProps {
     meta: TypedMessage['meta']
@@ -11,7 +17,7 @@ export interface BadgeRendererProps {
 }
 
 export function BadgeRenderer({ meta, onDeleteMeta, readonly }: BadgeRendererProps) {
-    const plugins = useActivatedPluginsSNSAdaptor()
+    const plugins = useActivatedPluginsSNSAdaptor('any')
     const i18n = usePluginI18NField()
     const { t } = useI18N()
     if (!meta) return null
@@ -62,11 +68,12 @@ interface MetaBadgeProps {
 }
 
 function MetaBadge({ title, children, onDelete, readonly }: React.PropsWithChildren<MetaBadgeProps>) {
+    const { classes } = useStyles()
     return (
         <Box sx={{ marginRight: 1, marginTop: 1, display: 'inline-block' }}>
             <ShadowRootTooltip title={title}>
                 <span>
-                    <Chip disabled={readonly} onDelete={onDelete} label={children} />
+                    <Chip disabled={readonly} onDelete={onDelete} label={children} className={classes.chip} />
                 </span>
             </ShadowRootTooltip>
         </Box>

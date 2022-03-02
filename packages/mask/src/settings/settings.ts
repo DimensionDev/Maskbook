@@ -14,38 +14,30 @@ export const debugModeSetting = createGlobalSettings<boolean>('debugMode', false
     secondary: () => i18n.t('settings_enable_debug_desc'),
 })
 
-/**
- * Whether if create substitute post for all posts
- */
-export const allPostReplacementSettings = createGlobalSettings<boolean>('post replacement all', false, {
-    primary: () => i18n.t('settings_post_replacement'),
-    secondary: () => i18n.t('settings_post_replacement_desc'),
-})
-
-//#region appearance
+// #region appearance
 export const appearanceSettings = createGlobalSettings<Appearance>('appearance', Appearance.default, {
     primary: () => i18n.t('settings_appearance'),
     secondary: () => i18n.t('settings_appearance_secondary'),
 })
-//#endregion
+// #endregion
 
-//#region language
+// #region language
 export const languageSettings = createGlobalSettings<LanguageOptions>('language', LanguageOptions.__auto__, {
     primary: () => i18n.t('settings_language'),
     secondary: () => i18n.t('settings_language_secondary'),
 })
-//#endregion
+// #endregion
 
-//#region web3 plugin ID
+// #region web3 plugin ID
 export const pluginIDSettings = createGlobalSettings<string>('pluginID', PLUGIN_ID, {
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
-//#endregion
+// #endregion
 
-//#region network setting
+// #region network setting
 
 /**
- * Expected Usage：export const currentImagePayloadStatus = createNetworkSettings('currentImagePayloadStatus')
+ * Expected Usage: export const currentImagePayloadStatus = createNetworkSettings('currentImagePayloadStatus')
  *
  * Work around the issue:
  *      https://github.com/microsoft/TypeScript/issues/42873
@@ -65,6 +57,16 @@ export function getCurrentSelectedIdentity(network: string) {
 }
 export const currentSetupGuideStatus: NetworkSettings<string> = createNetworkSettings('currentSetupGuideStatus', '')
 export const userGuideStatus: NetworkSettings<string> = createNetworkSettings('userGuideStatus', '')
+export const sayHelloShowed: NetworkSettings<boolean> = createNetworkSettings('sayHelloShowed', false)
+export const dismissPinExtensionTip = createGlobalSettings<boolean>('dismissPinExtensionTip', false, {
+    primary: () => '',
+})
+export const dismissVerifyNextID: NetworkSettings<{ [key in string]: boolean }> = createNetworkSettings(
+    'dismissVerifyNextID',
+    {},
+)
+export const bioDescription: NetworkSettings<string> = createNetworkSettings('bioDescription', '')
+export const personalHomepage: NetworkSettings<string> = createNetworkSettings('personalHomepage', '')
 // This is a misuse of concept "NetworkSettings" as "namespaced settings"
 // The refactor is tracked in https://github.com/DimensionDev/Maskbook/issues/1884
 /**
@@ -73,8 +75,12 @@ export const userGuideStatus: NetworkSettings<string> = createNetworkSettings('u
  * use `useActivatedPluginsSNSAdaptor().find((x) => x.ID === PLUGIN_ID)` or
  * `useActivatedPluginsDashboard().find((x) => x.ID === PLUGIN_ID)` instead
  */
-export const currentPluginEnabledStatus: NetworkSettings<boolean> = createNetworkSettings('pluginsEnabled', true)
-//#endregion
+// This was "currentPluginEnabled" before, but we used it to represent minimal mode now to make the settings be able to migrate.
+export const currentPluginMinimalModeNOTEnabled: NetworkSettings<boolean> = createNetworkSettings(
+    'pluginsEnabled',
+    true,
+)
+// #endregion
 
 export const launchPageSettings = createGlobalSettings<LaunchPage>('launchPage', LaunchPage.dashboard, {
     primary: () => i18n.t('settings_launch_page'),
@@ -87,10 +93,6 @@ export const newDashboardConnection = createGlobalSettings('beta-dashboard', fal
 })
 
 export const currentPersonaIdentifier = createGlobalSettings<string>('currentPersonaIdentifier', '', {
-    primary: () => 'DO NOT DISPLAY IT IN UI',
-})
-
-export const currentPopupWindowId = createGlobalSettings<number>('currentPopupWindowId', 0, {
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
 

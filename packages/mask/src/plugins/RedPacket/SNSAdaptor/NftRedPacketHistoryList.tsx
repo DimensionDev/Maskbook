@@ -1,7 +1,7 @@
 import { useScrollBottomEvent } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
-import { ERC721ContractDetailed, useAccount, useChainId } from '@masknet/web3-shared-evm'
+import { ERC721ContractDetailed, useAccount, useChainId, ChainId } from '@masknet/web3-shared-evm'
 import { List, Popper, Typography } from '@mui/material'
 import { useRef, useState } from 'react'
 import type { NftRedPacketHistory } from '../types'
@@ -9,11 +9,8 @@ import { useNftRedPacketHistory } from './hooks/useNftRedPacketHistory'
 import { NftRedPacketHistoryItem } from './NftRedPacketHistoryItem'
 import { useI18N } from '../../../utils'
 
-const useStyles = makeStyles()((theme, _, createRef) => {
+const useStyles = makeStyles<void, 'atBottom'>()((theme, _, refs) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
-    const atBottom = {
-        ref: createRef(),
-    } as const
     return {
         root: {
             display: 'flex',
@@ -28,8 +25,17 @@ const useStyles = makeStyles()((theme, _, createRef) => {
                 width: '100%',
                 padding: 0,
             },
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         placeholder: {
+            height: '100%',
+            display: 'flex',
+            width: 360,
+            margin: '0 auto',
+            justifyContent: 'center',
+            alignItems: 'center',
             textAlign: 'center',
         },
         popper: {
@@ -53,13 +59,13 @@ const useStyles = makeStyles()((theme, _, createRef) => {
             borderRight: '6px solid transparent',
             borderTop: `6px solid ${theme.palette.mode === 'light' ? 'rgba(15, 20, 25, 1)' : '#fff'}`,
             transform: 'translate(-50%, 6px)',
-            [`&.${atBottom.ref}`]: {
+            [`&.${refs.atBottom}`]: {
                 bottom: 'auto',
                 top: 0,
                 transform: 'translate(-50%, -6px) rotate(180deg)',
             },
         },
-        atBottom,
+        atBottom: {},
         popperText: {
             cursor: 'default',
             color: theme.palette.mode === 'light' ? '#fff' : 'rgba(15, 20, 25, 1)',
@@ -92,6 +98,14 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
         setAnchorEl(null)
     }
 
+    if (chainId === ChainId.BSC) {
+        return (
+            <Typography className={classes.placeholder} color="textSecondary">
+                {t('plugin_chain_not_supported', { chain: 'Binance Smart Chain' })}
+            </Typography>
+        )
+    }
+
     if (loading) {
         return (
             <Typography className={classes.placeholder} color="textSecondary">
@@ -99,8 +113,13 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
             </Typography>
         )
     }
+
     if (!histories?.length) {
-        return null
+        return (
+            <Typography className={classes.placeholder} color="textSecondary">
+                {t('plugin_red_packet_nft_no_history')}
+            </Typography>
+        )
     }
 
     return (

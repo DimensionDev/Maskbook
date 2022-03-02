@@ -1,14 +1,15 @@
-import { CardContent, Grid, Typography, Box } from '@mui/material'
+import { Box, CardContent, Grid, Typography } from '@mui/material'
 import type { UserStoryStatus } from '../types'
 import { BorderLinearProgress } from './ResultCard'
-import { useI18N } from '../../../utils'
+import { useContext } from 'react'
+import { FindTrumanContext } from '../context'
 
 interface StageCardProps {
     userStoryStatus?: UserStoryStatus
 }
 export default function StageCard(props: StageCardProps) {
     const { userStoryStatus } = props
-    const { t } = useI18N()
+    const { t } = useContext(FindTrumanContext)
 
     const renderProgress = (total: number, success: number, color: 'primary' | 'secondary' | 'success') => {
         return (
@@ -21,7 +22,9 @@ export default function StageCard(props: StageCardProps) {
                     />
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Typography variant="body2" color="text.secondary">{`${success}/${total}`}</Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        {success}/{total}
+                    </Typography>
                 </Box>
             </Box>
         )
@@ -30,61 +33,78 @@ export default function StageCard(props: StageCardProps) {
     return (
         <CardContent>
             {userStoryStatus && (
-                <Grid container spacing={1}>
-                    <Grid item sm={6} xs={12}>
-                        <Box sx={{ padding: '0 24px' }}>
-                            <Typography variant="h6" color="text.primary" gutterBottom={true}>
-                                {t('plugin_find_truman_status_puzzle')}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary" gutterBottom={true}>
-                                {`${t('plugin_find_truman_puzzle_rate')}${
-                                    userStoryStatus.puzzles.total > 0
+                <Box>
+                    <Grid container spacing={1}>
+                        <Grid item sm={6} xs={12}>
+                            <Box sx={{ padding: '0 24px' }}>
+                                <Typography variant="h6" color="text.primary" gutterBottom>
+                                    {t('plugin_find_truman_dialog_critical')}
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary" gutterBottom>
+                                    {t('plugin_find_truman_puzzle_rate')}
+                                    {userStoryStatus.critical.total > 0
                                         ? (
-                                              (userStoryStatus.puzzles.solved * 100) /
-                                              userStoryStatus.puzzles.total
+                                              (userStoryStatus.critical.correct * 100) /
+                                              userStoryStatus.critical.total
                                           ).toFixed(2)
-                                        : '0.00'
-                                }%`}
-                            </Typography>
-                            {renderProgress(userStoryStatus.puzzles.total, userStoryStatus.puzzles.solved, 'success')}
-                            {userStoryStatus.puzzles.waiting === 1 && (
-                                <Typography variant="body2" color="text.secondary" gutterBottom={true}>{`${
-                                    userStoryStatus.puzzles.waiting
-                                } ${t('plugin_find_truman_puzzle_to_be_revealed')}`}</Typography>
-                            )}
-                            {userStoryStatus.puzzles.waiting > 1 && (
-                                <Typography variant="body2" color="text.secondary" gutterBottom={true}>{`${
-                                    userStoryStatus.puzzles.waiting
-                                } ${t('plugin_find_truman_puzzles_to_be_revealed')}`}</Typography>
-                            )}
-                        </Box>
+                                        : '0.00'}
+                                    %
+                                </Typography>
+                                {renderProgress(
+                                    userStoryStatus.critical.total,
+                                    userStoryStatus.critical.correct,
+                                    'success',
+                                )}
+                                {userStoryStatus.critical.waiting === 1 && (
+                                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                                        {userStoryStatus.critical.waiting}
+                                        {t('plugin_find_truman_puzzle_to_be_revealed')}
+                                    </Typography>
+                                )}
+                                {userStoryStatus.critical.waiting > 1 && (
+                                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                                        {userStoryStatus.critical.waiting}
+                                        {t('plugin_find_truman_polls_to_be_revealed')}
+                                    </Typography>
+                                )}
+                            </Box>
+                        </Grid>
+                        <Grid item sm={6} xs={12}>
+                            <Box sx={{ padding: '0 24px' }}>
+                                <Typography variant="h6" color="text.primary" gutterBottom>
+                                    {t('plugin_find_truman_dialog_noncritical')}
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary" gutterBottom>
+                                    {t('plugin_find_truman_voting_rate')}
+                                    {userStoryStatus.nonCritical.total > 0
+                                        ? (
+                                              (userStoryStatus.nonCritical.correct * 100) /
+                                              userStoryStatus.nonCritical.total
+                                          ).toFixed(2)
+                                        : '0.00'}
+                                    %
+                                </Typography>
+                                {renderProgress(
+                                    userStoryStatus.nonCritical.total,
+                                    userStoryStatus.nonCritical.correct,
+                                    'secondary',
+                                )}
+                                {userStoryStatus.nonCritical.waiting === 1 && (
+                                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                                        {userStoryStatus.nonCritical.waiting}
+                                        {t('plugin_find_truman_poll_to_be_revealed')}
+                                    </Typography>
+                                )}
+                                {userStoryStatus.nonCritical.waiting > 1 && (
+                                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                                        {userStoryStatus.nonCritical.waiting}
+                                        {t('plugin_find_truman_polls_to_be_revealed')}
+                                    </Typography>
+                                )}
+                            </Box>
+                        </Grid>
                     </Grid>
-                    <Grid item sm={6} xs={12}>
-                        <Box sx={{ padding: '0 24px' }}>
-                            <Typography variant="h6" color="text.primary" gutterBottom={true}>
-                                {t('plugin_find_truman_status_poll')}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary" gutterBottom={true}>
-                                {`${t('plugin_find_truman_voting_rate')}${
-                                    userStoryStatus.polls.total > 0
-                                        ? ((userStoryStatus.polls.hit * 100) / userStoryStatus.polls.total).toFixed(2)
-                                        : '0.00'
-                                }%`}
-                            </Typography>
-                            {renderProgress(userStoryStatus.polls.total, userStoryStatus.polls.hit, 'secondary')}
-                            {userStoryStatus.polls.waiting === 1 && (
-                                <Typography variant="body2" color="text.secondary" gutterBottom={true}>{`${
-                                    userStoryStatus.polls.waiting
-                                } ${t('plugin_find_truman_poll_to_be_revealed')}`}</Typography>
-                            )}
-                            {userStoryStatus.polls.waiting > 1 && (
-                                <Typography variant="body2" color="text.secondary" gutterBottom={true}>{`${
-                                    userStoryStatus.polls.waiting
-                                } ${t('plugin_find_truman_polls_to_be_revealed')}`}</Typography>
-                            )}
-                        </Box>
-                    </Grid>
-                </Grid>
+                </Box>
             )}
         </CardContent>
     )

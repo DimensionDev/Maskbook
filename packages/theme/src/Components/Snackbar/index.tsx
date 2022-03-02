@@ -11,8 +11,7 @@ import {
     SnackbarAction,
     OptionsObject,
 } from 'notistack'
-import { Typography } from '@mui/material'
-import { IconButton } from '@mui/material'
+import { Typography, IconButton } from '@mui/material'
 import classnames from 'classnames'
 import { Close as CloseIcon } from '@mui/icons-material'
 import WarningIcon from '@mui/icons-material/Warning'
@@ -30,7 +29,7 @@ interface StyleProps {
     isFacebook?: boolean
 }
 
-const useStyles = makeStyles<StyleProps>()((theme, { isFacebook }, createRef) => {
+const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, { isFacebook }, refs) => {
     const { palette } = theme
     const isDark = palette.mode === 'dark'
     const spinningAnimationKeyFrames = keyframes`
@@ -39,14 +38,12 @@ to {
 }`
 
     const title = {
-        ref: createRef(),
         color: MaskColorVar.textPrimary,
         fontWeight: 400,
         fontSize: 14,
         lineHeight: '20px',
     } as const
     const message = {
-        ref: createRef(),
         color: MaskColorVar.textSecondary,
         fontWeight: 400,
         display: 'flex',
@@ -56,17 +53,17 @@ to {
     const defaultVariant = {
         background: isDark ? '#17191D' : '#F7F9FA',
         color: isDark ? '#D9D9D9' : '#0F1419',
-        [`& .${title.ref}`]: {
+        [`& .${refs.title}`]: {
             color: isDark ? '#D9D9D9' : palette.grey['800'],
         },
     }
     const success = {
         backgroundColor: '#60DFAB',
         color: '#ffffff',
-        [`& .${title.ref}`]: {
+        [`& .${refs.title}`]: {
             color: 'inherit',
         },
-        [`& .${message.ref}`]: {
+        [`& .${refs.message}`]: {
             color: 'inherit',
         },
     } as const
@@ -74,10 +71,10 @@ to {
     const error = {
         background: '#FF5F5F',
         color: '#ffffff',
-        [`& .${title.ref}`]: {
+        [`& .${refs.title}`]: {
             color: 'inherit',
         },
-        [`& .${message.ref}`]: {
+        [`& .${refs.message}`]: {
             color: 'inherit',
         },
     } as const
@@ -85,22 +82,21 @@ to {
     const info = {
         background: '#8CA3C7',
         color: '#ffffff',
-        [`& .${title.ref}`]: {
+        [`& .${refs.title}`]: {
             color: 'inherit',
         },
-        [`& .${message.ref}`]: {
+        [`& .${refs.message}`]: {
             color: 'inherit',
         },
     }
 
     const warning = {
-        ref: createRef(),
         backgroundColor: '#FFB915',
         color: '#ffffff',
-        [`& .${title.ref}`]: {
+        [`& .${refs.title}`]: {
             color: 'inherit',
         },
-        [`& .${message.ref}`]: {
+        [`& .${refs.message}`]: {
             color: 'inherit',
         },
     } as const

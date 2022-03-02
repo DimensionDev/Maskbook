@@ -2,30 +2,31 @@ import { FindTrumanContext } from '../context'
 import { LoadingFailCard } from './LoadingFailCard'
 import { FindTruman } from './FindTruman'
 import {
-    FindTrumanConst,
-    FindTrumanPostType,
+    CompletionQuestionAnswer,
     PollResult,
+    PostType,
     PuzzleResult,
     StoryInfo,
+    UserCompletionStatus,
     UserPollStatus,
-    UserPuzzleStatus,
     UserStoryStatus,
 } from '../types'
 import { useAccount } from '@masknet/web3-shared-evm'
 import { useEffect, useState } from 'react'
 import {
-    fetchConst,
     fetchPollResult,
     fetchPuzzleResult,
     fetchStoryInfo,
+    fetchUserCompletionStatus,
     fetchUserPollStatus,
     fetchUserPuzzleStatus,
     fetchUserStoryStatus,
+    submitCompletion,
     submitPoll,
     submitPuzzle,
 } from '../Worker/apis'
-import { FindTruman_Const } from '../constants'
-import { useI18N } from '../../../utils'
+import getUnixTime from 'date-fns/getUnixTime'
+import { useConst } from './hooks/useConst'
 
 export interface PostInspectorProps {
     url: string
@@ -34,159 +35,113 @@ export interface PostInspectorProps {
 export function PostInspector(props: PostInspectorProps) {
     const { url } = props
     const account = useAccount().toLowerCase()
-    const { i18n } = useI18N()
+    const { consts, t } = useConst()
 
     const [, , , _storyId, , _targetId] = new URL(url).hash.split('/')
     const storyId = _storyId ? _storyId : ''
     const targetId = _targetId ? _targetId : ''
 
-    const postType: FindTrumanPostType = url.includes('/encryption?')
-        ? FindTrumanPostType.Encryption
+    const postType: PostType = url.includes('/encryption?')
+        ? PostType.Encryption
         : url.includes('/puzzles/')
-        ? FindTrumanPostType.Puzzle
+        ? PostType.Puzzle
         : url.includes('/polls/')
-        ? FindTrumanPostType.Poll
+        ? PostType.Poll
+        : url.includes('/completions/')
+        ? PostType.Completion
         : url.includes('/puzzle_result')
-        ? FindTrumanPostType.PuzzleResult
+        ? PostType.PuzzleResult
         : url.includes('/poll_result/')
-        ? FindTrumanPostType.PollResult
-        : FindTrumanPostType.Status
+        ? PostType.PollResult
+        : PostType.Status
 
     const [storyInfo, setStoryInfo] = useState<StoryInfo>()
     const [userStoryStatus, setUserStoryStatus] = useState<UserStoryStatus>()
-    const [userPuzzleStatus, setUserPuzzleStatus] = useState<UserPuzzleStatus>()
+    const [userPuzzleStatus, setUserPuzzleStatus] = useState<UserPollStatus>()
     const [userPollStatus, setUserPollStatus] = useState<UserPollStatus>()
+    const [userCompletionStatus, setUserCompletionStatus] = useState<UserCompletionStatus>()
     const [puzzleResult, setPuzzleResult] = useState<PuzzleResult>()
     const [pollResult, setPollResult] = useState<PollResult>()
-    const [consts, setConsts] = useState<FindTrumanConst>()
-    const [encryptionPayload, setEncryptionPayload] = useState<string>('')
-
-    useEffect(() => {
-        if (!FindTruman_Const.initialized) {
-            FindTruman_Const.init((resolve, reject) => {
-                fetchConst(i18n.language)
-                    .then((res) => {
-                        resolve(res)
-                    })
-                    .catch((error) => {
-                        reject(error)
-                    })
-            })
-        }
-        FindTruman_Const.then((res) => {
-            setConsts(res)
-        })
-    }, [])
+    const [clueId, setClueId] = useState('')
 
     useEffect(() => {
         fetchData()
     }, [account])
 
     const fetchData = async () => {
-        postType !== FindTrumanPostType.Encryption &&
-            (await fetchStoryInfo(storyId).then((res) => {
-                setStoryInfo(res)
-            }))
-        switch (postType) {
-            case FindTrumanPostType.Encryption:
-                const searchParams = new URLSearchParams(url.split('?')[1])
-                const payload = searchParams.get('payload') || ''
-                setEncryptionPayload(payload)
-                break
-            case FindTrumanPostType.Status:
-                !!account &&
-                    (await fetchUserStoryStatus(storyId, account).then((res) => {
-                        setUserStoryStatus(res)
-                    }))
-                break
-            case FindTrumanPostType.Puzzle:
-                !!account &&
-                    (await fetchUserPuzzleStatus(targetId, account).then((res) => {
-                        setUserPuzzleStatus(res)
-                    }))
-                break
-            case FindTrumanPostType.Poll:
-                !!account &&
-                    (await fetchUserPollStatus(targetId, account).then((res) => {
-                        setUserPollStatus(res)
-                    }))
-                break
-            case FindTrumanPostType.PuzzleResult:
-                !!account &&
-                    (await fetchUserPuzzleStatus(targetId, account).then((res) => {
-                        setUserPuzzleStatus(res)
-                    }))
-                await fetchPuzzleResult(targetId).then((res) => {
-                    setPuzzleResult(res)
-                })
-                break
-            case FindTrumanPostType.PollResult:
-                !!account &&
-                    (await fetchUserPollStatus(targetId, account).then((res) => {
-                        setUserPollStatus(res)
-                    }))
-                await fetchPollResult(targetId).then((res) => {
-                    setPollResult(res)
-                })
-                break
+        if (postType === PostType.Encryption) {
+            const searchParams = new URLSearchParams(url.split('?')[1])
+            const payload = searchParams.get('clueId') || ''
+            setClueId(payload)
+            return
+        }
+        setStoryInfo(await fetchStoryInfo(storyId))
+        if (!account) return
+        if (postType === PostType.Status) {
+            setUserStoryStatus(await fetchUserStoryStatus(storyId, account))
+        } else if (postType === PostType.Puzzle || postType === PostType.PuzzleResult) {
+            setUserPuzzleStatus(await fetchUserPuzzleStatus(targetId, account))
+        } else if (postType === PostType.Poll || postType === PostType.PollResult) {
+            setUserPollStatus(await fetchUserPollStatus(targetId, account))
+        } else if (postType === PostType.Completion) {
+            setUserCompletionStatus(await fetchUserCompletionStatus(targetId, account))
+        }
+        if (postType === PostType.PuzzleResult) {
+            setPuzzleResult(await fetchPuzzleResult(targetId))
+        } else if (postType === PostType.PollResult) {
+            setPollResult(await fetchPollResult(targetId))
         }
     }
 
-    const handleSubmit = (choice: number) => {
-        return new Promise<boolean>((resolve, reject) => {
-            switch (postType) {
-                case FindTrumanPostType.Puzzle:
-                    submitPuzzle(account, {
-                        target: userPuzzleStatus?.id || '',
-                        from: account,
-                        timestamp: Math.floor(Date.now() / 1000),
-                        choice,
-                    })
-                        .then(async (res) => {
-                            await fetchData()
-                            resolve(true)
-                        })
-                        .catch((error) => {
-                            reject(false)
-                        })
-                    break
-                case FindTrumanPostType.Poll:
-                    submitPoll(account, {
-                        target: userPollStatus?.id || '',
-                        from: account,
-                        timestamp: Math.floor(Date.now() / 1000),
-                        choice,
-                    })
-                        .then(async (res) => {
-                            await fetchData()
-                            resolve(true)
-                        })
-                        .catch((error) => {
-                            reject(false)
-                        })
-                    break
-            }
+    const handleSubmitPoll = async (choice: number) => {
+        const from = account
+        const timestamp = getUnixTime(Date.now())
+        if (postType === PostType.Puzzle) {
+            const target = userPuzzleStatus?.id ?? ''
+            await submitPuzzle(account, { target, from, timestamp, choice })
+        } else if (postType === PostType.Poll) {
+            const target = userPollStatus?.id ?? ''
+            await submitPoll(account, { target, from, timestamp, choice })
+        }
+        await fetchData()
+    }
+
+    const handleSubmitCompletion = async (answers: CompletionQuestionAnswer[]) => {
+        const timestamp = getUnixTime(Date.now())
+        const quesId = userCompletionStatus?.id ?? ''
+        await submitCompletion(account, {
+            quesId,
+            answers,
+            timestamp,
         })
+        await fetchData()
     }
 
     return (
-        <FindTrumanContext.Provider value={{ address: account, const: consts }}>
+        <FindTrumanContext.Provider
+            value={{
+                address: account,
+                const: consts,
+                t,
+            }}>
             <LoadingFailCard
                 title=""
-                isFullPluginDown={true}
+                isFullPluginDown
                 retry={() => {
                     fetchData()
                 }}>
                 <FindTruman
                     storyInfo={storyInfo}
-                    encryptionPayload={encryptionPayload}
+                    clueId={clueId}
                     userStoryStatus={userStoryStatus}
                     userPuzzleStatus={userPuzzleStatus}
                     userPollStatus={userPollStatus}
+                    userCompletionStatus={userCompletionStatus}
                     puzzleResult={puzzleResult}
                     pollResult={pollResult}
                     postType={postType}
-                    onSubmit={handleSubmit}
+                    onSubmitPoll={handleSubmitPoll}
+                    onSubmitCompletion={handleSubmitCompletion}
                 />
             </LoadingFailCard>
         </FindTrumanContext.Provider>

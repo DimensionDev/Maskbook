@@ -13,6 +13,7 @@ export const Flags = {
         target: process.env.engine,
         architecture: process.env.architecture,
     },
+    isolated_dashboard_bridge_enabled: false,
     mask_SDK_ready: betaOrInsiderOnly,
     /** There is no "tabs" to navigate to. We must be careful with this. */
     has_no_browser_tab_ui: appOnly,
@@ -26,7 +27,7 @@ export const Flags = {
     /** Firefox has a special API that can inject to the document with a higher permission. */
     has_firefox_xray_vision: process.env.engine === 'firefox',
     support_testnet_switch: betaOrInsiderOnly,
-    //#region Experimental features
+    // #region Experimental features
     image_payload_marked_as_beta: appOnly,
     transak_enabled: webOnly,
     trader_zrx_enabled: webOnly,
@@ -43,7 +44,7 @@ export const Flags = {
     LBP_enabled: false,
     LBP_whitelist_enabled: process.env.NODE_ENV === 'production',
     plugin_switch_enabled: betaOrInsiderOnly,
-    //#endregion
+    // #endregion
 
     EIP1559_enabled: true,
 
@@ -51,16 +52,22 @@ export const Flags = {
     polygon_enabled: true,
     arbitrum_enabled: true,
     xdai_enabled: true,
+    avalanche_enabled: true,
+    fantom_enabled: true,
     flow_enabled: true,
+    celo_enabled: true,
+    aurora_enabled: true,
     nft_airdrop_enabled: false,
+    post_actions_enabled: false,
+    next_id_tip_enabled: false,
 
-    //#region Functionality missing / broken
+    // #region Functionality missing / broken
     /**
      * - iOS: WebExtension polyfill didn't implemented the dynamic permission API
      */
     no_web_extension_dynamic_permission_request: is_iOSApp,
     has_no_WebRTC: process.env.engine === 'safari' || !globalThis?.navigator?.permissions?.query,
-    //#endregion
+    // #endregion
     using_emoji_flag: true,
 } as const
 

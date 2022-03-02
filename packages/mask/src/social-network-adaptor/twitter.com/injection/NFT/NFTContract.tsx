@@ -3,6 +3,7 @@ import { NFTContractImage } from '../../../../plugins/Avatar/SNSAdaptor/NFTContr
 import { createReactRootShadowed, startWatch } from '../../../../utils'
 import { Flags } from '../../../../../shared'
 import { postAvatarsContentSelector } from '../../utils/selector'
+import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 
 function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
     startWatch(
@@ -18,15 +19,16 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                 const twitterId = twitterIdNode.innerText.trim().replace('@', '')
 
                 const nftDom = ele.querySelector(
-                    'div > :nth-child(2) > :nth-child(2) > div > div > div > div > div > a > div > div',
+                    'div > :nth-child(2) > :nth-child(2) > div > div > div > div > div > a > div > div > :last-child',
                 ) as HTMLSpanElement as HTMLElement
+
                 if (!nftDom) return
                 const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
                 proxy.realCurrent = nftDom
                 const root = createReactRootShadowed(proxy.afterShadow, { signal })
                 root.render(
                     <div>
-                        <NFTContractImage userId={twitterId} />
+                        <NFTContractImage userId={twitterId} snsKey={RSS3_KEY_SNS.TWITTER} />
                     </div>,
                 )
                 remover = root.destory

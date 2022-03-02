@@ -3,7 +3,12 @@ import type { SocialNetworkUI as Next } from '../../../social-network/types'
 import { creator } from '../../../social-network/utils'
 import { isMobileFacebook } from '../utils/isMobile'
 import { getProfileIdentifierAtFacebook } from '../utils/getProfileIdentifier'
-import { TypedMessage, makeTypedMessageText, makeTypedMessageImage, makeTypedMessageTuple } from '@masknet/shared-base'
+import {
+    TypedMessage,
+    makeTypedMessageText,
+    makeTypedMessageImage,
+    makeTypedMessageTuple,
+} from '@masknet/typed-message'
 import { clickSeeMore } from '../injection/PostInspector'
 import { startWatch } from '../../../utils/watcher'
 import { facebookShared } from '../shared'
@@ -82,7 +87,10 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
             function collectPostInfo() {
                 rootProxy.realCurrent = root.evaluate()[0]
                 const nextTypedMessage: TypedMessage[] = []
-                info.postBy.value = getPostBy(metadata, postInfo.postPayload.getCurrentValue() !== null).identifier
+                info.postBy.value = getPostBy(
+                    metadata,
+                    postInfo.containingMaskPayload.getCurrentValue() !== null,
+                ).identifier
                 info.postID.value = getPostID(metadata, rootProxy.realCurrent)
                 // parse text
                 const text = collectNodeText(node, {

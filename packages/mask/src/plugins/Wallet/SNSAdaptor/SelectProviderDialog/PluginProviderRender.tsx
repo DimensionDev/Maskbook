@@ -1,10 +1,11 @@
-import { SuccessIcon } from '@masknet/icons'
-import { ImageIcon } from '@masknet/shared'
+import { SelectedIcon } from '@masknet/icons'
 import type { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra'
-import { getMaskColor, makeStyles } from '@masknet/theme'
+import { ImageIcon } from '@masknet/shared'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Box, ImageList, ImageListItem, List, ListItem, Typography } from '@mui/material'
-import { ProviderIcon } from './ProviderIcon'
+import { first } from 'lodash-unified'
 import { useI18N } from '../../../../utils'
+import { ProviderIcon } from './ProviderIcon'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -39,10 +40,10 @@ const useStyles = makeStyles()((theme) => ({
         width: 48,
         height: 48,
         borderRadius: '50%',
-        backgroundColor: getMaskColor(theme).twitterBackground,
+        backgroundColor: 'transparent',
     },
     networkIcon: {
-        backgroundColor: getMaskColor(theme).twitterBackground,
+        backgroundColor: theme.palette.background.default,
     },
     checkedBadge: {
         position: 'absolute',
@@ -112,18 +113,20 @@ export function PluginProviderRender({
                                         setUndeterminedPluginID(network.networkSupporterPluginID as NetworkPluginID)
                                         setUndeterminedNetworkID(network.ID)
                                     }}>
-                                    <div className={classes.iconWrapper}>
-                                        {NetworkIconClickBait ? (
-                                            <NetworkIconClickBait network={network}>
+                                    <ShadowRootTooltip title={network.name} placement="top">
+                                        <div className={classes.iconWrapper}>
+                                            {NetworkIconClickBait ? (
+                                                <NetworkIconClickBait network={network}>
+                                                    <ImageIcon icon={network.icon} />
+                                                </NetworkIconClickBait>
+                                            ) : (
                                                 <ImageIcon icon={network.icon} />
-                                            </NetworkIconClickBait>
-                                        ) : (
-                                            <ImageIcon icon={network.icon} />
-                                        )}
-                                        {undeterminedNetworkID === network.ID && (
-                                            <SuccessIcon className={classes.checkedBadge} />
-                                        )}
-                                    </div>
+                                            )}
+                                            {undeterminedNetworkID === network.ID && (
+                                                <SelectedIcon className={classes.checkedBadge} />
+                                            )}
+                                        </div>
+                                    </ShadowRootTooltip>
                                 </ListItem>
                             ))}
                     </List>
@@ -139,7 +142,9 @@ export function PluginProviderRender({
                                 ProviderIconClickBait ? (
                                     <ProviderIconClickBait
                                         key={provider.ID}
-                                        network={networks.find((x) => x.ID === undeterminedNetworkID)!}
+                                        network={
+                                            networks.find((x) => x.ID === undeterminedNetworkID) ?? first(networks)!
+                                        }
                                         provider={provider}
                                         onSubmit={onSubmit}>
                                         <ImageListItem key={provider.ID}>

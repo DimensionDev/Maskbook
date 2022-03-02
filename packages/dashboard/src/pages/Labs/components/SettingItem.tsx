@@ -1,6 +1,6 @@
 import { MaskColorVar } from '@masknet/theme'
-import { formControlLabelClasses } from '@mui/material'
 import {
+    formControlLabelClasses,
     FormControl,
     FormControlLabel,
     FormControlLabelProps,
@@ -20,7 +20,7 @@ export interface SettingItemProps {
     legend: string
     value: any
     options: option[]
-    onChange?: (value: any) => void
+    onChange?: (value: string) => void
 }
 
 interface StyledFormControlLabelProps extends FormControlLabelProps {

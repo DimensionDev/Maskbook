@@ -1,11 +1,12 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { languages } from './locales'
+import { PLUGIN_DESCRIPTION, PLUGIN_ID, PLUGIN_NAME } from './constants'
+import { languages } from './locales/languages'
 
 export const base: Plugin.Shared.Definition = {
-    ID: 'io.mask.example',
-    icon: '🤔',
-    name: { fallback: 'Mask Example Plugin' },
-    description: { fallback: 'An example plugin of Mask Network.' },
+    ID: PLUGIN_ID,
+    icon: '\u{1F9EA}',
+    name: { fallback: PLUGIN_NAME },
+    description: { fallback: PLUGIN_DESCRIPTION },
     publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
     enableRequirement: {
         architecture: { app: false, web: true },

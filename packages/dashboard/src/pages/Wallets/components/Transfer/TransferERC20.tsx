@@ -2,6 +2,7 @@ import { MaskColorVar, MaskTextField } from '@masknet/theme'
 import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/material'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
+    addGasMargin,
     EthereumTokenType,
     formatWeiToEther,
     FungibleTokenDetailed,
@@ -18,7 +19,14 @@ import {
 } from '@masknet/web3-shared-evm'
 import { isGreaterThan, isZero, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
-import { NetworkPluginID, useLookupAddress, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
+import {
+    NetworkPluginID,
+    TokenType,
+    useLookupAddress,
+    useNetworkDescriptor,
+    useWeb3State,
+    Web3Plugin,
+} from '@masknet/plugin-infra'
 import { FormattedAddress, TokenAmountPanel, useRemoteControlledDialog } from '@masknet/shared'
 import TuneIcon from '@mui/icons-material/Tune'
 import { EthereumAddress } from 'wallet.ts'
@@ -30,12 +38,13 @@ import { useUpdateEffect } from 'react-use'
 import { v4 as uuid } from 'uuid'
 import { PluginMessages } from '../../../../API'
 import type { SelectTokenDialogEvent } from '@masknet/plugin-wallet'
+import { RightIcon } from '@masknet/icons'
 
 interface TransferERC20Props {
-    token: FungibleTokenDetailed
+    token: FungibleTokenDetailed | Web3Plugin.FungibleToken
 }
 
-const GAS_LIMIT = 30000
+const GAS_LIMIT = 21000
 export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const t = useDashboardI18N()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
@@ -62,7 +71,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
 
     const { value: defaultGasPrice = '0' } = useGasPrice()
 
-    const [selectedToken, setSelectedToken] = useState<FungibleTokenDetailed>(token)
+    const [selectedToken, setSelectedToken] = useState<FungibleTokenDetailed | Web3Plugin.FungibleToken>(token)
     const chainId = useChainId()
     const is1559Supported = useMemo(() => isEIP1559Supported(chainId), [chainId])
 
@@ -84,23 +93,28 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const nativeToken = useNativeTokenDetailed()
     const nativeTokenPrice = useNativeTokenPrice()
 
-    //#region resolve ENS domain
+    // #region resolve ENS domain
     const {
         value: registeredAddress = '',
         error: resolveDomainError,
         loading: resolveDomainLoading,
     } = useLookupAddress(address, NetworkPluginID.PLUGIN_EVM)
-    //#endregion
+    // #endregion
 
     // transfer amount
     const transferAmount = rightShift(amount || '0', selectedToken.decimals).toFixed()
     const erc20GasLimit = useGasLimit(
-        selectedToken.type,
+        selectedToken.type === TokenType.Fungible
+            ? selectedToken.symbol === nativeToken.value?.symbol
+                ? EthereumTokenType.Native
+                : EthereumTokenType.ERC20
+            : selectedToken.type,
         selectedToken.address,
         transferAmount,
         EthereumAddress.isValid(address) ? address : registeredAddress,
     )
-    const { gasConfig, onCustomGasSetting, gasLimit, maxFee } = useGasConfig(gasLimit_, 30000)
+    const { gasConfig, onCustomGasSetting, gasLimit, maxFee } = useGasConfig(gasLimit_, GAS_LIMIT)
+
     const gasPrice = gasConfig.gasPrice || defaultGasPrice
 
     useEffect(() => {
@@ -114,10 +128,13 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const gasFeeInUsd = formatWeiToEther(gasFee).multipliedBy(nativeTokenPrice)
 
     const maxAmount = useMemo(() => {
+        const price = is1559Supported && maxFee ? new BigNumber(maxFee) : gasPrice
+        const gasFee = multipliedBy(addGasMargin(gasLimit), price)
+
         let amount_ = new BigNumber(tokenBalance || '0')
         amount_ = selectedToken.type === EthereumTokenType.Native ? amount_.minus(gasFee) : amount_
-        return amount_.toFixed()
-    }, [tokenBalance, gasPrice, selectedToken?.type, amount])
+        return BigNumber.max(0, amount_).toFixed()
+    }, [tokenBalance, gasPrice, selectedToken?.type, amount, gasLimit, maxFee, is1559Supported])
 
     const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
         tokenType,
@@ -135,7 +152,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         return
     }, [transferAmount, address, memo, selectedToken.decimals, transferCallback, gasConfig, registeredAddress, Utils])
 
-    //#region validation
+    // #region validation
     const validationMessage = useMemo(() => {
         if (!transferAmount || isZero(transferAmount)) return t.wallets_transfer_error_amount_absence()
         if (isGreaterThan(rightShift(amount, selectedToken.decimals), maxAmount))
@@ -160,27 +177,27 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         resolveDomainError,
         network,
     ])
-    //#endregion
+    // #endregion
 
     useEffect(() => {
-        if (transferState.type === TransactionStateType.FAILED || transferState.type === TransactionStateType.HASH) {
-            setMemo('')
-            setAddress('')
-            setAmount('')
-            resetTransferCallback()
-        }
+        const ALLOWED_TYPES = [TransactionStateType.FAILED, TransactionStateType.HASH]
+        if (!ALLOWED_TYPES.includes(transferState.type)) return
+        setMemo('')
+        setAddress('')
+        setAmount('')
+        resetTransferCallback()
     }, [transferState])
 
     const ensContent = useMemo(() => {
         if (resolveDomainLoading) return
         if (registeredAddress) {
             return (
-                <Link
-                    href={Utils?.resolveDomainLink?.(address)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    underline="none">
-                    <Box style={{ padding: 10 }}>
+                <Box style={{ padding: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Link
+                        href={Utils?.resolveDomainLink?.(address)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="none">
                         <Typography
                             fontSize={16}
                             lineHeight="22px"
@@ -192,8 +209,9 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                         <Typography fontSize={14} lineHeight="20px" style={{ color: MaskColorVar.textSecondary }}>
                             <FormattedAddress address={registeredAddress} size={4} formatter={Utils?.formatAddress} />
                         </Typography>
-                    </Box>
-                </Link>
+                    </Link>
+                    <RightIcon />
+                </Box>
             )
         }
 
@@ -243,9 +261,10 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                         InputProps={{
                             onClick: (event) => {
                                 if (!anchorEl.current) anchorEl.current = event.currentTarget
-                                if (!!ensContent) setPopoverOpen(true)
+                                if (ensContent) setPopoverOpen(true)
                                 setMinPopoverWidth(event.currentTarget.clientWidth)
                             },
+                            spellCheck: false,
                         }}
                         onChange={(e) => setAddress(e.currentTarget.value)}
                         label={t.wallets_transfer_to_address()}
@@ -266,12 +285,13 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                     </Popover>
                 </Box>
                 <Box mt={2}>
+                    {/* TODO: Remove forced type conversion */}
                     <TokenAmountPanel
                         amount={amount}
                         maxAmount={maxAmount}
                         balance={tokenBalance}
                         label={t.wallets_transfer_amount()}
-                        token={selectedToken}
+                        token={selectedToken as FungibleTokenDetailed}
                         onAmountChange={setAmount}
                         SelectTokenChip={{
                             loading: false,

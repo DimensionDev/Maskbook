@@ -50,7 +50,7 @@ export function VotingCard() {
     const onVoteConfirm = useSnackbarCallback(
         () => {
             setLoading(true)
-            return PluginSnapshotRPC.vote(identifier, choice, account)
+            return PluginSnapshotRPC.vote(identifier, choice, account, proposal.type)
         },
         [choice, identifier],
         () => {
@@ -84,11 +84,11 @@ export function VotingCard() {
             ))}
             <EthereumWalletConnectedBoundary
                 classes={{ connectWallet: classes.button, unlockMetaMask: classes.button }}
-                offChain={true}>
+                offChain>
                 <Button
                     className={classes.button}
                     variant="contained"
-                    disabled={choice === 0 || !Boolean(account) || !Boolean(power)}
+                    disabled={choice === 0 || !account || !power}
                     onClick={() => setOpen(true)}>
                     {Boolean(power) && Boolean(account) ? t('plugin_snapshot_vote') : t('plugin_snapshot_no_power')}
                 </Button>
@@ -99,7 +99,7 @@ export function VotingCard() {
                 onClose={() => setOpen(false)}
                 choiceText={choices[choice - 1]}
                 snapshot={proposal.snapshot}
-                space={identifier.space}
+                powerSymbol={proposal.space.symbol}
                 power={power}
                 onVoteConfirm={onVoteConfirm}
             />

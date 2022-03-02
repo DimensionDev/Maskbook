@@ -41,6 +41,7 @@ import { NetworkType } from '@masknet/public-api'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { multipliedBy } from '@masknet/web3-shared-base'
 import { Services } from '../../../../API'
+import { RightIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     disabled: {
@@ -55,6 +56,7 @@ type FormInputs = {
 }
 
 const GAS_LIMIT = 30000
+
 export const TransferERC721 = memo(() => {
     const t = useDashboardI18N()
     const chainId = useChainId()
@@ -73,7 +75,6 @@ export const TransferERC721 = memo(() => {
     } | null>(null)
     const [minPopoverWidth, setMinPopoverWidth] = useState(0)
     const [contract, setContract] = useState<ERC721ContractDetailed>()
-    const [offset, setOffset] = useState(0)
     const [id] = useState(uuid())
     const [gasLimit_, setGasLimit_] = useState(0)
     const network = useNetworkDescriptor()
@@ -118,15 +119,15 @@ export const TransferERC721 = memo(() => {
 
     const allFormFields = watch()
 
-    //#region resolve ENS domain
+    // #region resolve ENS domain
     const {
         value: registeredAddress = '',
         error: resolveDomainError,
         loading: resolveDomainLoading,
     } = useLookupAddress(allFormFields.recipient, NetworkPluginID.PLUGIN_EVM)
-    //#endregion
+    // #endregion
 
-    //#region check contract address and account address
+    // #region check contract address and account address
     useAsync(async () => {
         const recipient = allFormFields.recipient
         setRecipientError(null)
@@ -148,7 +149,7 @@ export const TransferERC721 = memo(() => {
             })
         }
     }, [allFormFields.recipient, clearErrors, registeredAddress])
-    //#endregion
+    // #endregion
 
     const erc721GasLimit = useGasLimit(
         EthereumTokenType.ERC721,
@@ -193,18 +194,15 @@ export const TransferERC721 = memo(() => {
                 setValue('contract', ev.contract.name || ev.contract.address, { shouldValidate: true })
                 setContract(ev.contract)
                 setValue('tokenId', '')
-                setOffset(0)
             }
         },
     )
 
     const {
-        asyncRetry: { value = { tokenDetailedOwnerList: [], loadMore: true }, loading: loadingOwnerList },
+        asyncRetry: { loading: loadingOwnerList },
+        tokenDetailedOwnerList = [],
         refreshing,
-    } = useERC721TokenDetailedOwnerList(contract, account, offset)
-    const { tokenDetailedOwnerList, loadMore } = value
-
-    const addOffset = useCallback(() => (loadMore ? setOffset(offset + 8) : void 0), [offset, loadMore])
+    } = useERC721TokenDetailedOwnerList(contract, account)
 
     useEffect(() => {
         if (transferState.type === TransactionStateType.HASH) {
@@ -229,12 +227,12 @@ export const TransferERC721 = memo(() => {
         if (resolveDomainLoading) return
         if (registeredAddress) {
             return (
-                <Link
-                    href={Utils?.resolveDomainLink?.(allFormFields.recipient)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    underline="none">
-                    <Box style={{ padding: 10 }}>
+                <Box style={{ padding: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Link
+                        href={Utils?.resolveDomainLink?.(allFormFields.recipient)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="none">
                         <Typography
                             fontSize={16}
                             lineHeight="22px"
@@ -245,8 +243,9 @@ export const TransferERC721 = memo(() => {
                         <Typography fontSize={14} lineHeight="20px" style={{ color: MaskColorVar.textSecondary }}>
                             <FormattedAddress address={registeredAddress} size={4} formatter={Utils?.formatAddress} />
                         </Typography>
-                    </Box>
-                </Link>
+                    </Link>
+                    <RightIcon />
+                </Box>
             )
         }
 
@@ -314,9 +313,10 @@ export const TransferERC721 = memo(() => {
                                     InputProps={{
                                         onClick: (event) => {
                                             if (!anchorEl.current) anchorEl.current = event.currentTarget
-                                            if (!!ensContent) setPopoverOpen(true)
+                                            if (ensContent) setPopoverOpen(true)
                                             setMinPopoverWidth(event.currentTarget.clientWidth)
                                         },
+                                        spellCheck: false,
                                     }}
                                     label={t.wallets_transfer_to_address()}
                                 />
@@ -377,7 +377,7 @@ export const TransferERC721 = memo(() => {
                                 control={control}
                                 render={(field) => (
                                     <SelectNFTList
-                                        onScroll={addOffset}
+                                        error={!!errors.tokenId}
                                         onSelect={(value) => setValue('tokenId', value)}
                                         list={
                                             defaultToken
@@ -386,7 +386,6 @@ export const TransferERC721 = memo(() => {
                                         }
                                         selectedTokenId={field.field.value}
                                         loading={loadingOwnerList}
-                                        loadMore={loadMore}
                                     />
                                 )}
                                 name="tokenId"

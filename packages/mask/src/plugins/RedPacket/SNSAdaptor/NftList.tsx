@@ -1,9 +1,10 @@
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { ERC721ContractDetailed, useERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import type { ERC721ContractDetailed } from '@masknet/web3-shared-evm'
 import { List, ListItem, ListProps, Skeleton, Typography } from '@mui/material'
 import classnames from 'classnames'
-import type { FC, HTMLProps } from 'react'
+import { FC, HTMLProps, useState } from 'react'
 import { useI18N } from '../../../utils'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -77,6 +78,13 @@ const useStyles = makeStyles()((theme) => {
             padding: '2px 2px 6px',
             color: MaskColorVar.textSecondary,
         },
+        loadingFailImage: {
+            minHeight: '0px !important',
+            maxWidth: 'none',
+            transform: 'translateY(-10px)',
+            width: 64,
+            height: 64,
+        },
     }
 })
 
@@ -84,24 +92,34 @@ interface NftItemProps extends HTMLProps<HTMLDivElement> {
     contract: ERC721ContractDetailed | undefined
     tokenId: string
     claimed?: boolean
+    renderOrder: number
 }
 
-export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claimed, ...rest }) => {
+export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claimed, renderOrder, ...rest }) => {
     const { t } = useI18N()
-    const result = useERC721TokenDetailed(contract, tokenId)
     const { classes } = useStyles()
-    if (!result.value || !contract) {
+    const [name, setName] = useState('#' + tokenId)
+    if (!contract) {
         return (
             <div className={classnames(className, classes.nft, classes.loading)} {...rest}>
                 <Skeleton height={185} width={120} />
             </div>
         )
     }
-    const info = result.value.info
+
     return (
         <div className={classnames(className, classes.nft)} {...rest}>
-            <img className={classes.media} src={info.mediaUrl} alt={info.name} />
-            <Typography className={classes.name}>{info.name}</Typography>
+            <NFTCardStyledAssetPlayer
+                classes={{
+                    loadingFailImage: classes.loadingFailImage,
+                }}
+                tokenId={tokenId}
+                renderOrder={renderOrder}
+                contractAddress={contract.address}
+                chainId={contract.chainId}
+                setERC721TokenName={setName}
+            />
+            <Typography className={classes.name}>{name}</Typography>
             {claimed && <Typography className={classes.claimedBadge}>{t('plugin_red_packet_claimed')}</Typography>}
         </div>
     )
@@ -119,7 +137,7 @@ export const NftList: FC<NftListProps> = ({ contract, statusList, tokenIds, clas
         <List className={classnames(className, classes.list)} {...rest}>
             {tokenIds.map((tokenId, index) => (
                 <ListItem className={classes.listItem} key={tokenId}>
-                    <NftItem contract={contract} claimed={statusList[index]} tokenId={tokenId} />
+                    <NftItem contract={contract} claimed={statusList[index]} tokenId={tokenId} renderOrder={index} />
                 </ListItem>
             ))}
         </List>

@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import BigNumber from 'bignumber.js'
 import { computePoolAddress, Pool, FeeAmount } from '@uniswap/v3-sdk'
 import type { Token, Currency } from '@uniswap/sdk-core'
 import { MulticallStateType, useMultipleContractSingleData } from '@masknet/web3-shared-evm'
@@ -9,6 +8,7 @@ import type { TradeProvider } from '@masknet/public-api'
 import { useGetTradeContext } from '../useGetTradeContext'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { useTargetBlockNumber } from '../useTargetBlockNumber'
+import { isZero } from '@masknet/web3-shared-base'
 
 export enum PoolState {
     LOADING = 0,
@@ -37,16 +37,20 @@ export function usePools(
     }, [chainId, poolKeys])
 
     const poolAddresses = useMemo(() => {
-        return transformed.map((value) => {
-            if (!context?.IS_UNISWAP_V3_LIKE) return ''
-            if (!context?.FACTORY_CONTRACT_ADDRESS || !value) return ''
-            return computePoolAddress({
-                factoryAddress: context.FACTORY_CONTRACT_ADDRESS,
-                tokenA: value[0],
-                tokenB: value[1],
-                fee: value[2],
+        try {
+            return transformed.map((value) => {
+                if (!context?.IS_UNISWAP_V3_LIKE) return ''
+                if (!context?.FACTORY_CONTRACT_ADDRESS || !value) return ''
+                return computePoolAddress({
+                    factoryAddress: context.FACTORY_CONTRACT_ADDRESS,
+                    tokenA: value[0],
+                    tokenB: value[1],
+                    fee: value[2],
+                })
             })
-        })
+        } catch {
+            return []
+        }
     }, [chainId, transformed, context?.FACTORY_CONTRACT_ADDRESS])
 
     const poolContracts = usePoolContracts(poolAddresses, chainId)
@@ -86,7 +90,7 @@ export function usePools(
 
             if (!slot0 || !liquidity) return [PoolState.NOT_EXISTS, null]
 
-            if (new BigNumber(slot0.sqrtPriceX96 ?? '0').isZero()) return [PoolState.NOT_EXISTS, null]
+            if (isZero(slot0.sqrtPriceX96 ?? 0)) return [PoolState.NOT_EXISTS, null]
 
             try {
                 return [

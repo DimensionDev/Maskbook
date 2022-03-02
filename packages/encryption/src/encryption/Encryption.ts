@@ -1,7 +1,7 @@
+import type { TypedMessage } from '@masknet/typed-message'
 import type {
     PersonaIdentifier,
     ProfileIdentifier,
-    TypedMessage,
     AESCryptoKey,
     PostIVIdentifier,
     EC_Public_CryptoKey,

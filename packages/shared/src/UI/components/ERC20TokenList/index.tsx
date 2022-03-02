@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useState } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { getERC20TokenListItem } from './ERC20TokenListItem'
 import { uniqBy } from 'lodash-unified'
 import {
@@ -15,7 +15,7 @@ import {
     useChainId,
     useERC20TokenDetailed,
     useERC20TokensDetailedFromTokenLists,
-    useEthereumConstants,
+    useTokenListConstants,
     useNativeTokenDetailed,
     useTrustedERC20Tokens,
 } from '@masknet/web3-shared-evm'
@@ -63,24 +63,23 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
         selectedTokens = [],
     } = props
 
-    const { ERC20_TOKEN_LISTS } = useEthereumConstants(chainId)
-
+    const { ERC20 } = useTokenListConstants(chainId)
     const { value: erc20TokensDetailed = [], loading: erc20TokensDetailedLoading } =
         useERC20TokensDetailedFromTokenLists(
-            ERC20_TOKEN_LISTS,
+            ERC20,
             keyword,
             nativeToken ? [...trustedERC20Tokens, nativeToken] : trustedERC20Tokens,
             chainId,
         )
 
-    //#region add token by address
+    // #region add token by address
     const matchedTokenAddress = useMemo(() => {
         if (!keyword || !isValidAddress(keyword) || erc20TokensDetailedLoading) return
         return keyword
     }, [keyword, erc20TokensDetailedLoading])
 
     const { value: searchedToken, loading: searchedTokenLoading } = useERC20TokenDetailed(matchedTokenAddress ?? '')
-    //#endregion
+    // #endregion
 
     const filteredTokens = erc20TokensDetailed.filter(
         (token) =>
@@ -102,16 +101,12 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
         chainId,
     )
 
-    useEffect(() => {
-        if (assetsError) retryLoadAsset()
-    }, [assetsError])
-
     const renderAssets =
-        !account || assetsError || assetsLoading || searchedTokenLoading
+        !account || !!assetsError || assetsLoading || searchedTokenLoading
             ? [...renderTokens]
                   .sort(makeSortTokenFn(chainId, { isMaskBoost: true }))
                   .map((token) => ({ token: token, balance: null }))
-            : !!keyword
+            : keyword
             ? assets
             : [...assets].sort(makeSortAssertFn(chainId, { isMaskBoost: true }))
 

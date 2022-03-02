@@ -1,12 +1,20 @@
+/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
 /**
  * @deprecated This version of payload is not in use.
  * Please goto Crypto alpha v38
  */
-import { encodeText, encodeArrayBuffer, decodeArrayBuffer, decodeText, concatArrayBufferSync } from '@dimensiondev/kit'
-import { memoizePromise } from '../../utils-pure'
+import {
+    encodeText,
+    encodeArrayBuffer,
+    decodeArrayBuffer,
+    decodeText,
+    concatArrayBuffer,
+    memoizePromise,
+} from '@dimensiondev/kit'
 import { i18n } from '../../shared-ui/locales_legacy'
 import { CryptoWorker } from '../modules/workers'
-import { EC_Private_JsonWebKey, EC_Public_JsonWebKey, AESJsonWebKey, makeTypedMessageText } from '@masknet/shared-base'
+import type { EC_Private_JsonWebKey, EC_Public_JsonWebKey, AESJsonWebKey } from '@masknet/shared-base'
+import { makeTypedMessageText } from '@masknet/typed-message'
 import {
     derive_AES_GCM_256_Key_From_PBKDF2,
     derive_AES_GCM_256_Key_From_ECDH_256k1_Keys,
@@ -16,7 +24,7 @@ export type PublishedAESKeyRecordV40 = {
     key: PublishedAESKey
     name: string
 }
-//#region Derive AES Key from ECDH key
+// #region Derive AES Key from ECDH key
 /**
  * Derive the key from your private ECDH key and someone else's ECDH key.
  * If the key is ECDSA, it will be transform to ECDH.
@@ -37,15 +45,15 @@ async function deriveAESKey(
     const derivedKey = await CryptoWorker.aes_to_raw(await derive_AES_GCM_256_Key_From_ECDH_256k1_Keys(pr, op))
 
     const _salt = typeof salt === 'string' ? decodeArrayBuffer(salt) : salt
-    const UntitledUint8Array = concatArrayBufferSync(new Uint8Array(derivedKey), _salt)
+    const UntitledUint8Array = concatArrayBuffer(new Uint8Array(derivedKey), _salt)
     const password = await crypto.subtle.digest(
         'SHA-256',
-        concatArrayBufferSync(concatArrayBufferSync(UntitledUint8Array, _salt), decodeArrayBuffer('KEY')),
+        concatArrayBuffer(concatArrayBuffer(UntitledUint8Array, _salt), decodeArrayBuffer('KEY')),
     )
     const iv_pre = new Uint8Array(
         await crypto.subtle.digest(
             'SHA-256',
-            concatArrayBufferSync(concatArrayBufferSync(UntitledUint8Array, _salt), decodeArrayBuffer('IV')),
+            concatArrayBuffer(concatArrayBuffer(UntitledUint8Array, _salt), decodeArrayBuffer('IV')),
         ),
     )
     const iv = new Uint8Array(16)
@@ -56,8 +64,8 @@ async function deriveAESKey(
     const key = await CryptoWorker.raw_to_aes(password)
     return { key, salt: _salt, iv }
 }
-//#endregion
-//#region encrypt text
+// #endregion
+// #region encrypt text
 /**
  * Encrypt 1 to 1
  */
@@ -155,8 +163,8 @@ export async function encrypt1ToN(info: {
     const othersAESKeyEncrypted = await generateOthersAESKeyEncrypted(-40, AESKey, privateKeyECDH, othersPublicKeyECDH)
     return { encryptedContent, iv, version: -40, ownersAESKeyEncrypted, othersAESKeyEncrypted, postAESKey: AESKey }
 }
-//#endregion
-//#region decrypt text
+// #endregion
+// #region decrypt text
 /**
  * Decrypt 1 to 1
  */
@@ -263,11 +271,11 @@ export async function encryptWithAES(info: {
     const encrypted = await CryptoWorker.encrypt_aes_gcm(info.aesKey, iv, content)
     return { content: encrypted, iv }
 }
-//#endregion
+// #endregion
 
-//#region Comment
+// #region Comment
 function extractCommentPayload(text: string) {
-    const [_, toEnd] = text.split('🎶2/4|')
+    const [_, toEnd] = text.split('\u{1F3B6}2/4|')
     const [content, _2] = (toEnd || '').split(':||')
     if (content.length) return content
     return
@@ -294,7 +302,7 @@ export async function encryptComment(
         aesKey: key,
         iv: decodeArrayBuffer(postIV as string),
     })
-    return `🎶2/4|${encodeArrayBuffer(x.content)}:||`
+    return `\u{1F3B6}2/4|${encodeArrayBuffer(x.content)}:||`
 }
 export async function decryptComment(
     postIV: string | ArrayBuffer,
@@ -318,7 +326,7 @@ export async function decryptComment(
         return null
     }
 }
-//#endregion
+// #endregion
 
 export function typedMessageStringify(x: any) {
     throw new Error('Not supported typed message in version older than v39.')

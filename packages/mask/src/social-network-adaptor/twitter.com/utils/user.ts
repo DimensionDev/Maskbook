@@ -1,6 +1,12 @@
 import { isNull } from 'lodash-unified'
 import type { SocialNetwork } from '../../../social-network'
-import { bioDescriptionSelector, searchAvatarSelector, searchNickNameSelector } from './selector'
+import {
+    bioDescriptionSelector,
+    searchAvatarSelector,
+    searchNickNameSelector,
+    personalHomepageSelector,
+    searchNFTAvatarSelector,
+} from './selector'
 import { collectNodeText } from '../../../utils'
 
 /**
@@ -30,11 +36,21 @@ export const getNickname = () => {
 export const getTwitterId = () => {
     const node = searchNickNameSelector().evaluate()?.parentElement?.parentElement?.firstChild?.nextSibling?.firstChild
         ?.firstChild?.lastChild as HTMLDivElement
-    if (!node) return ''
+    if (node) {
+        const twitterIdNode = node.querySelector('div span')
+        if (twitterIdNode) return twitterIdNode.innerHTML.trim().replace('@', '')
+    }
 
-    const twitterIdNode = node.querySelector('div span')
-    if (!twitterIdNode) return ''
-    return twitterIdNode.innerHTML.trim().replace('@', '')
+    const ele = searchAvatarSelector().evaluate()?.closest('a') || searchNFTAvatarSelector().evaluate()?.closest('a')
+    if (ele) {
+        const link = ele.getAttribute('href')
+        if (link) {
+            const [, userId] = link.match(/^\/(\w+)\/(photo|nft)$/) ?? []
+            return userId
+        }
+    }
+
+    return ''
 }
 
 export const getBioDescription = () => {
@@ -42,16 +58,22 @@ export const getBioDescription = () => {
     return node ? collectNodeText(node) : ''
 }
 
-export const getAvatar = () => {
-    const node = searchAvatarSelector().evaluate() as HTMLImageElement
-    if (!node) return ''
+export const getPersonalHomepage = () => {
+    const node = personalHomepageSelector().evaluate()
+    return node?.getAttribute('href') || ''
+}
 
-    const imageURL = node.getAttribute('src') ?? ''
-    return imageURL.trim()
+export const getAvatar = () => {
+    const node = searchAvatarSelector().evaluate() || searchNFTAvatarSelector().evaluate()
+    if (node) {
+        const imageURL = node.getAttribute('src') ?? ''
+        return imageURL.trim()
+    }
+
+    return ''
 }
 
 const TWITTER_AVATAR_ID_MATCH = /^\/profile_images\/(\d+)/
-
 export const getAvatarId = (avatarURL: string) => {
     if (!avatarURL) return ''
     const _url = new URL(avatarURL)

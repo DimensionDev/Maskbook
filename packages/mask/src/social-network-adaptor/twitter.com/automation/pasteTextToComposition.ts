@@ -1,4 +1,4 @@
-import { delay } from '@masknet/shared-base'
+import { abortSignalTimeout, delay } from '@dimensiondev/kit'
 import { inputText, pasteText } from '@masknet/injected-script'
 import { postEditorDraftContentSelector, newPostButtonSelector } from '../utils/selector'
 import type { SocialNetworkUI } from '../../../social-network'
@@ -15,9 +15,9 @@ export const pasteTextToCompositionTwitter: SocialNetworkUI.AutomationCapabiliti
     (text, opt) => {
         const interval = 500
         const timeout = 5000
-        const worker = async function (abort: AbortController) {
+        const worker = async function (abort: AbortSignal) {
             const checkSignal = () => {
-                if (abort.signal.aborted) throw new Error('Aborted')
+                if (abort.aborted) throw new Error('Aborted')
             }
             if (!isCompose() && !hasEditor()) {
                 // open tweet window
@@ -48,9 +48,5 @@ export const pasteTextToCompositionTwitter: SocialNetworkUI.AutomationCapabiliti
             throw e
         }
 
-        const abortCtr = new AbortController()
-        setTimeout(() => {
-            abortCtr.abort()
-        }, timeout)
-        worker(abortCtr).then(undefined, (error) => fail(error))
+        worker(abortSignalTimeout(timeout)).then(undefined, (error) => fail(error))
     }

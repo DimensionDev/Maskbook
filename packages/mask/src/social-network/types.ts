@@ -1,20 +1,21 @@
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
+import type { GrayscaleAlgorithm } from '@masknet/encryption'
+import type { PostInfo } from '@masknet/plugin-infra'
 import type {
     Identifier,
+    ObservableWeakMap,
     PersonaIdentifier,
     PostIdentifier,
     ProfileIdentifier,
     ReadonlyIdentifierMap,
-    ObservableWeakMap,
-    TypedMessage,
 } from '@masknet/shared-base'
+import type { TypedMessage } from '@masknet/typed-message'
+import type { RenderFragmentsContextType } from '@masknet/typed-message/dom'
 import type { PaletteMode, Theme } from '@mui/material'
+import type { Subscription } from 'use-subscription'
 import type { InjectedDialogClassKey, InjectedDialogProps } from '../components/shared/InjectedDialog'
 import type { Profile } from '../database'
-import type { PostInfo } from './PostInfo'
-import type { GrayscaleAlgorithm } from '@dimensiondev/stego-js/umd/grayscale'
 import type { createSNSAdaptorSpecializedPostContext } from './utils/create-post-context'
-import type { Subscription } from 'use-subscription'
 
 type ClassNameMap<ClassKey extends string = string> = { [P in ClassKey]: string }
 // Don't define values in namespaces
@@ -114,6 +115,8 @@ export namespace SocialNetworkUI {
             enhancedPostRenderer?(signal: AbortSignal, current: PostInfo): void
             /** Display the additional content (decrypted, plugin, ...) below the post */
             postInspector?(signal: AbortSignal, current: PostInfo): void
+            /** Add custom actions buttons to the post */
+            postActions?(signal: AbortSignal, author: PostInfo): void
             /** Inject a tool box that displayed in the navigation bar of the SNS */
             toolbox?(signal: AbortSignal): void
             /** Inject the UI that used to notify if the user has not completely setup the current network. */
@@ -126,10 +129,13 @@ export namespace SocialNetworkUI {
             userBadge?(signal: AbortSignal): void
             /** Inject UI to the search result */
             searchResult?(signal: AbortSignal): void
+            /** Inject UI to the profile slider */
+            profileSlider?(signal: AbortSignal): void
+            /** Inject UI to the profile tab */
+            profileTab?(signal: AbortSignal): void
+            /** Inject UI to the profile page */
+            profileTabContent?(signal: AbortSignal): void
             setupWizard?(signal: AbortSignal, for_: PersonaIdentifier): void
-            /** Inject UI to the Profile page */
-            enhancedProfileTab?(signal: AbortSignal): void
-            enhancedProfile?(signal: AbortSignal): void
 
             /**
              * @deprecated
@@ -151,6 +157,8 @@ export namespace SocialNetworkUI {
             postAndReplyNFTAvatar?(signal: AbortSignal): void
             /** @deprecated same reason as userAvatar */
             collectionAvatar?(signal: AbortSignal): void
+            /** @deprecated same reason as useAvatar */
+            avatarClipNFT?(signal: AbortSignal): void
         }
         export interface NewPostComposition {
             start(signal: AbortSignal): void
@@ -216,7 +224,7 @@ export namespace SocialNetworkUI {
             getSearchedKeyword?(): string
         }
         export type ProfileUI = { bioContent: string }
-        export type IdentityResolved = Pick<Profile, 'identifier' | 'nickname' | 'avatar' | 'bio'>
+        export type IdentityResolved = Pick<Profile, 'identifier' | 'nickname' | 'avatar' | 'bio' | 'homepage'>
 
         /** Resolve the information of who am I on the current network. */
         export interface IdentityResolveProvider {
@@ -266,6 +274,7 @@ export namespace SocialNetworkUI {
         }
         export interface ComponentOverwrite {
             InjectedDialog?: ComponentOverwriteConfig<InjectedDialogProps, InjectedDialogClassKey>
+            RenderFragments?: RenderFragmentsContextType
         }
         export interface ComponentOverwriteConfig<Props extends { classes?: any }, Classes extends string> {
             classes?: () => { classes: Partial<ClassNameMap<Classes>> }
@@ -283,6 +292,7 @@ export namespace SocialNetworkUI {
     }
     export namespace Configuration {
         export interface Define {
+            nextIDConfig?: NextIDConfig
             steganography?: SteganographyConfig
             setupWizard?: SetupWizardConfig
         }
@@ -296,6 +306,11 @@ export namespace SocialNetworkUI {
         }
         export interface SetupWizardConfig {
             disableSayHello?: boolean
+        }
+        export interface NextIDConfig {
+            enable?: boolean
+            platform: string
+            collectVerificationPost: (keyword: string) => PostIdentifier | null
         }
     }
 }

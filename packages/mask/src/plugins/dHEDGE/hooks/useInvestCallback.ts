@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import BigNumber from 'bignumber.js'
 import {
     FungibleTokenDetailed,
     EthereumTokenType,
@@ -10,6 +9,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { useDHedgePoolV1Contract, useDHedgePoolV2Contract } from '../contracts/useDHedgePool'
 import { Pool, PoolType } from '../types'
+import { toFixed } from '@masknet/web3-shared-base'
 
 /**
  * A callback for invest dhedge pool
@@ -40,7 +40,7 @@ export function useInvestCallback(pool: Pool | undefined, amount: string, token?
         // step 1: estimate gas
         const config = {
             from: account,
-            value: new BigNumber(token.type === EthereumTokenType.Native ? amount : 0).toFixed(),
+            value: toFixed(token.type === EthereumTokenType.Native ? amount : 0),
         }
 
         const deposit = () => {
