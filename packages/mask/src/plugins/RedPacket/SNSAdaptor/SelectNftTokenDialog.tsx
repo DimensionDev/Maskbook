@@ -6,6 +6,7 @@ import {
     useERC721TokenDetailedCallback,
     useAccount,
     isSameAddress,
+    formatNFT_TokenId,
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { DialogContent, Box, InputBase, Paper, Button, Typography, ListItem, CircularProgress } from '@mui/material'
@@ -641,7 +642,8 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                                 (t) => t.tokenId === token.tokenId,
                                             )
 
-                                            return (
+                                            return tokenIdFilterList.length > 0 &&
+                                                !tokenIdFilterList.includes(token.tokenId) ? null : (
                                                 <div key={i}>
                                                     <NFTCard
                                                         findToken={findToken}
@@ -742,13 +744,8 @@ interface NFTCardProps {
 function NFTCard(props: NFTCardProps) {
     const { findToken, token, tokenIdFilterList, isSelectSharesExceed, renderOrder, selectToken } = props
     const { classes } = useStyles({ isSelectSharesExceed })
-    const [name, setName] = useState('#' + token.tokenId)
     return (
-        <ListItem
-            className={classNames(
-                classes.selectWrapper,
-                tokenIdFilterList.length > 0 && !tokenIdFilterList.includes(token.tokenId) ? classes.hide : '',
-            )}>
+        <ListItem className={classes.selectWrapper}>
             <NFTCardStyledAssetPlayer
                 contractAddress={token.contractDetailed.address}
                 tokenId={token.tokenId}
@@ -758,11 +755,10 @@ function NFTCard(props: NFTCardProps) {
                     loadingFailImage: classes.loadingFailImage,
                     iframe: classes.iframe,
                 }}
-                setERC721TokenName={setName}
             />
             <div className={classes.selectWrapperNftNameWrapper}>
                 <Typography className={classes.selectWrapperNftName} color="textSecondary">
-                    {name}
+                    {formatNFT_TokenId(token.tokenId, 2)}
                 </Typography>
             </div>
 
