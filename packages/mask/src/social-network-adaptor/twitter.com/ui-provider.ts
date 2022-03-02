@@ -187,7 +187,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         nextIDConfig: {
             enable: true,
             platform: NextIDPlatform.Twitter,
-            collectVerificationPost: collectVerificationPost,
+            collectVerificationPost,
         },
         steganography: {
             password() {
