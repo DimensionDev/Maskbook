@@ -20,7 +20,7 @@ importers:
       '@emotion/styled': ^11.6.0
       '@emotion/utils': ^1.0.0
       '@jest/globals': ^28.0.0-alpha.3
-      '@magic-works/i18n-codegen': ^0.0.6
+      '@magic-works/i18n-codegen': ^0.1.0
       '@masknet/cli': workspace:*
       '@masknet/serializer': workspace:^0.0.0
       '@mui/icons-material': 5.4.2
@@ -94,7 +94,7 @@ importers:
       '@dimensiondev/eslint-plugin': 0.0.1-20220120054224-6673363_eslint@8.9.0
       '@dimensiondev/patch-package': 6.5.0
       '@jest/globals': 28.0.0-alpha.3
-      '@magic-works/i18n-codegen': 0.0.6_typescript@4.6.1-rc
+      '@magic-works/i18n-codegen': 0.1.0_typescript@4.6.1-rc
       '@masknet/cli': link:packages/scripts
       '@masknet/serializer': link:packages/test-serializer
       '@nice-labs/git-rev': 3.5.0
@@ -4994,17 +4994,17 @@ packages:
       '@json-rpc-tools/types': 1.7.6
     dev: false
 
-  /@magic-works/i18n-codegen/0.0.6_typescript@4.6.1-rc:
-    resolution: {integrity: sha512-vM8DzT7zcmCDk2KBoeyUgGzkW/4MaKIdDTTh67cJT0/VVXu7fQd2tjRglJwOunowTCwPxwIHWjoCD/DIN4iPXQ==}
+  /@magic-works/i18n-codegen/0.1.0_typescript@4.6.1-rc:
+    resolution: {integrity: sha512-zmn7RjagUULc4dnCGPNSlFj8YDkzJkm0zU9PWHrDSr8u0WttggiTzFB3wej6KlxoNem/GQMPGVzYx8QacSFtdA==}
     hasBin: true
     peerDependencies:
       typescript: ^4
     dependencies:
-      chokidar: 3.5.2
+      chokidar: 3.5.3
       i18next-translation-parser: 1.0.1
       source-map: 0.7.3
       typescript: 4.6.1-rc
-      yargs: 16.2.0
+      yargs: 17.3.1
     dev: true
 
   /@mdx-js/loader/1.6.22_react@18.0.0-rc.0:
@@ -9821,7 +9821,7 @@ packages:
     engines: {node: '>= 8'}
     dependencies:
       normalize-path: 3.0.0
-      picomatch: 2.3.0
+      picomatch: 2.3.1
 
   /app-root-dir/1.0.2:
     resolution: {integrity: sha1-OBh+wt6nV3//Az/8sSFyaS/24Rg=}
@@ -18375,7 +18375,7 @@ packages:
   /jsonfile/4.0.0:
     resolution: {integrity: sha1-h3Gq4HmbZAdrdmQPygWPnBDjPss=}
     optionalDependencies:
-      graceful-fs: 4.2.9
+      graceful-fs: 4.2.8
 
   /jsonfile/6.1.0:
     resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
@@ -20592,11 +20592,11 @@ packages:
   /picomatch/2.3.0:
     resolution: {integrity: sha512-lY1Q/PiJGC2zOv/z391WOTD+Z02bCgsFfvxoXXf6h7kv9o+WmsmzYqrAwY63sNgOxE4xEdq0WyUnXfKeBrSvYw==}
     engines: {node: '>=8.6'}
+    dev: true
 
   /picomatch/2.3.1:
     resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==}
     engines: {node: '>=8.6'}
-    dev: true
 
   /pify/2.3.0:
     resolution: {integrity: sha1-7RQaasBDqEnqWISY59yosVMw6Qw=}
@@ -21789,7 +21789,7 @@ packages:
     resolution: {integrity: sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==}
     engines: {node: '>=8.10.0'}
     dependencies:
-      picomatch: 2.3.0
+      picomatch: 2.3.1
 
   /receptacle/1.3.2:
     resolution: {integrity: sha512-HrsFvqZZheusncQRiEE7GatOAETrARKV/lnfYicIm8lbvp/JQOdADOfhjBd2DajvoszEyxSM6RlAAIZgEoeu/A==}
