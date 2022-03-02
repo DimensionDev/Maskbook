@@ -215,12 +215,11 @@ export function Trader(props: TraderProps) {
                 selectedTokens: excludeTokens,
             })
             if (picked) {
-                const type =
-                    panelType === TokenPanelType.Input
-                        ? AllProviderTradeActionType.UPDATE_INPUT_TOKEN
-                        : AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN
                 dispatchTradeStore({
-                    type,
+                    type:
+                        panelType === TokenPanelType.Input
+                            ? AllProviderTradeActionType.UPDATE_INPUT_TOKEN
+                            : AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
                     token: picked,
                 })
             }

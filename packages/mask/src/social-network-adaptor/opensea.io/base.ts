@@ -1,6 +1,6 @@
+import { OPENSEA_ID } from '@masknet/shared'
 import type { SocialNetwork, SocialNetworkWorker } from '../../social-network/types'
 
-const OPENSEA_ID = 'opensea.io'
 const origins = ['https://opensea.io/*']
 export const openseaBase: SocialNetwork.Base = {
     networkIdentifier: OPENSEA_ID,
