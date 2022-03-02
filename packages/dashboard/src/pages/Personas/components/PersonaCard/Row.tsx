@@ -3,7 +3,13 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { PublicKeyIcon, SettingsIcon } from '@masknet/icons'
 import { Box, IconButton, MenuItem, Stack, Typography } from '@mui/material'
 import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine'
-import { PersonaIdentifier, ProfileIdentifier, ProfileInformation, DashboardRoutes } from '@masknet/shared-base'
+import {
+    PersonaIdentifier,
+    ProfileIdentifier,
+    ProfileInformation,
+    DashboardRoutes,
+    NextIDPersonaBindings,
+} from '@masknet/shared-base'
 import { useMenu } from '@masknet/shared'
 import { useDashboardI18N } from '../../../../locales'
 import { PersonaContext } from '../../hooks/usePersonaContext'
@@ -54,13 +60,14 @@ const MenuText = styled('span')(`
 `)
 
 export const PersonaRowCard = memo(() => {
-    const { currentPersona, connectPersona, disconnectPersona, renamePersona, definedSocialNetworks } =
+    const { currentPersona, connectPersona, disconnectPersona, renamePersona, definedSocialNetworks, verification } =
         PersonaContext.useContainer()
 
     if (!currentPersona) return null
 
     return (
         <PersonaRowCardUI
+            verification={verification}
             nickname={currentPersona.nickname}
             identifier={currentPersona.identifier}
             profiles={currentPersona.linkedProfiles}
@@ -80,6 +87,7 @@ export interface PersonaRowCardUIProps {
     onConnect: (identifier: PersonaIdentifier, networkIdentifier: string) => void
     onDisconnect: (identifier: ProfileIdentifier) => void
     onRename: (identifier: PersonaIdentifier, target: string, callback?: () => void) => Promise<void>
+    verification?: NextIDPersonaBindings
 }
 
 export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
@@ -88,7 +96,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
     const { classes } = useStyles()
     const { confirmPassword } = useContext(UserContext)
 
-    const { nickname, definedSocialNetworks, identifier, profiles } = props
+    const { nickname, definedSocialNetworks, identifier, profiles, verification } = props
     const { onConnect, onDisconnect, onRename } = props
 
     const [avatarOn, toggleAvatar] = useToggle(false)
@@ -177,6 +185,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                         } else {
                             return (
                                 <ConnectedPersonaLine
+                                    verification={verification}
                                     disableAdd={currentNetworkProfiles.length >= 5}
                                     isHideOperations={false}
                                     key={networkIdentifier}

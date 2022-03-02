@@ -3,7 +3,7 @@ import { Box, Button, Link, Stack, Typography } from '@mui/material'
 import { getMaskColor, MaskColorVar, makeStyles } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { DisconnectProfileDialog } from '../DisconnectProfileDialog'
-import type { ProfileIdentifier } from '@masknet/shared-base'
+import type { NextIDPersonaBindings, ProfileIdentifier } from '@masknet/shared-base'
 import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { NextIdPersonaWarningIcon, NextIdPersonaVerifiedIcon } from '@masknet/icons'
@@ -75,10 +75,19 @@ export interface ConnectedPersonaLineProps {
     profileIdentifiers: ProfileIdentifier[]
     networkIdentifier: string
     disableAdd?: boolean
+    verification?: NextIDPersonaBindings
 }
 
 export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
-    ({ profileIdentifiers, onConnect, onDisconnect, networkIdentifier, isHideOperations, disableAdd }) => {
+    ({
+        profileIdentifiers,
+        onConnect,
+        onDisconnect,
+        networkIdentifier,
+        isHideOperations,
+        disableAdd,
+        verification,
+    }) => {
         const t = useDashboardI18N()
         const { openProfilePage } = PersonaContext.useContainer()
         const { classes } = useStyles()
@@ -90,16 +99,20 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         }
         const handleProofIconClick = async (e: MouseEvent) => {
             e.stopPropagation()
-            console.log('prof')
         }
-        const userIdBox = (id: string) => {
-            const verified = false
-            // temp here, further change to get proof verified
+        const userIdBox = (profile: any) => {
+            const verified = verification?.proofs.find((x) => {
+                return x.platform === profile.network.split('.')[0] && x.identity === profile.userId.toLowerCase()
+            })
             return (
                 <div className={classes.userIdBox}>
-                    <div>@{id}</div>
+                    <div>@{profile.userId}</div>
                     <div className={classes.proofIconBox} onClick={(e) => handleProofIconClick(e)}>
-                        {verified ? <NextIdPersonaVerifiedIcon /> : <NextIdPersonaWarningIcon />}
+                        {verified === undefined ? null : verified ? (
+                            <NextIdPersonaVerifiedIcon />
+                        ) : (
+                            <NextIdPersonaWarningIcon />
+                        )}
                     </div>
                 </div>
             )
@@ -123,7 +136,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                                     key={x.userId}
                                     onClick={() => handleUserIdClick(networkIdentifier, x.userId)}
                                     sx={{ color: MaskColorVar.textPrimary, fontSize: 13, mr: 1, cursor: 'pointer' }}>
-                                    {userIdBox(x.userId)}
+                                    {userIdBox(x)}
                                 </Typography>
                             ))}
                         </Stack>
