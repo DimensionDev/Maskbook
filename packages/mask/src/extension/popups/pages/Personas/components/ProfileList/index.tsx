@@ -7,9 +7,10 @@ import { compact } from 'lodash-unified'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../../../utils'
 import { PersonaContext } from '../../hooks/usePersonaContext'
-import { useAsyncFn } from 'react-use'
+import { useAsync, useAsyncFn } from 'react-use'
 import Services from '../../../../../service'
 import { GrayMasks } from '@masknet/icons'
+import { queryExistedBindingByPersona } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
@@ -91,6 +92,25 @@ export const ProfileList = memo(() => {
     const [, onDisconnect] = useAsyncFn(async (identifier: ProfileIdentifier) =>
         Services.Identity.detachProfile(identifier),
     )
+
+    const { value: verifiedProfile } = useAsync(async () => {
+        if (!currentPersona) return
+        const persona = await Services.Identity.queryPersona(currentPersona.identifier)
+        if (!persona.publicHexKey) return
+        const response = await queryExistedBindingByPersona(persona.publicHexKey)
+        if (!response) return
+
+        return currentPersona?.linkedProfiles.map((profile) => {
+            const target = response.proofs.find(
+                (x) => profile.identifier.userId.toLowerCase() === x.identity.toLowerCase(),
+            )
+
+            return {
+                ...profile,
+                is_valid: target?.is_valid,
+            }
+        })
+    }, [currentPersona])
 
     return (
         <ProfileListUI

@@ -97,7 +97,6 @@ const PersonaHome = memo(() => {
     const { currentPersona, setDeletingPersona, personas } = PersonaContext.useContainer()
     const history = useHistory()
 
-    console.log(personas)
     return (
         <>
             <div className={classes.content}>
