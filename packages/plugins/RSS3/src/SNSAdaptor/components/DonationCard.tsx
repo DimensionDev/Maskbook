@@ -2,6 +2,7 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import classnames from 'classnames'
 import { HTMLProps, Fragment } from 'react'
+import { useI18N } from '../../locales'
 
 export interface DonationCardProps extends HTMLProps<HTMLDivElement> {
     imageUrl: string
@@ -69,6 +70,7 @@ export const DonationCard = ({
     ...rest
 }: DonationCardProps) => {
     const { classes } = useStyles()
+    const t = useI18N()
     return (
         <div className={classnames(classes.card, className)} {...rest}>
             <img className={classes.cover} src={imageUrl} alt={name} />
@@ -85,7 +87,8 @@ export const DonationCard = ({
                 </dt>
                 <dd className={classes.infoRow}>
                     <span className={classes.infoLabel}>{contribCount}</span>
-                    <span className={classes.infoValue}> Contrib</span>
+
+                    <span className={classes.infoValue}> {t.contribution({ count: contribCount })}</span>
                 </dd>
                 <dd className={classes.infoRow}>
                     {contribDetails.map((contrib, i) => (
