@@ -197,7 +197,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     // #endregion
 
     return (
-        <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_select_a_nft_contract')} maxWidth="xs">
+        <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_select_a_nft_contract')}>
             <DialogContent className={classes.dialogContent}>
                 <div className={classes.search}>
                     <SearchInput

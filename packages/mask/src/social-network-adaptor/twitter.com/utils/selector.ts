@@ -5,7 +5,7 @@ import { isCompose } from './postBox'
 
 type E = HTMLElement
 
-const querySelector = <T extends E, SingleMode extends boolean = true>(selector: string, singleMode = true) => {
+export const querySelector = <T extends E, SingleMode extends boolean = true>(selector: string, singleMode = true) => {
     const ls = new LiveSelector<T, SingleMode>().querySelector<T>(selector)
     return (singleMode ? ls.enableSingleMode() : ls) as LiveSelector<T, SingleMode>
 }
@@ -143,6 +143,15 @@ export const postsImageSelector = (node: HTMLElement) =>
             '[data-testid="tweet"] ~ div img[src*="media"]', // image in detail page for new twitter
         ].join(),
     )
+
+export const timelinePostContentSelector = () =>
+    querySelectorAll(
+        [
+            '[data-testid="tweet"] div + div div[lang]', // text tweets
+            '[data-testid="tweet"] div + div div[data-testid="card.wrapper"]', // link box tweets
+        ].join(),
+    )
+
 export const postsContentSelector = () =>
     querySelectorAll(
         [
@@ -239,7 +248,7 @@ export const searchTwitterAvatarLinkSelector: () => LiveSelector<E, true> = () =
     querySelector<E, true>('[data-testid="UserProfileHeader_Items"]').closest<E>(2).querySelector('div  a')
 
 export const searchTwitterAvatarSelector = () =>
-    querySelector<E, true>('[data-testid="UserProfileHeader_Items"]').closest<E>(2).querySelector('img').closest<E>(1)
+    querySelector<E, true>('a[href$="/photo"]').querySelector('img').closest<E>(1)
 // #endregion
 
 // #region twitter avatar
@@ -252,6 +261,6 @@ export const searchTweetAvatarSelector = () =>
 export const searchRetweetAvatarSelector = () => querySelector<E, false>('[data-testid="tweetButton"]').closest<E>(6)
 
 export const searchTwitterAvatarNFTSelector = () =>
-    querySelector<E>('a[href*=nft]').closest<E>(1).querySelector('a  div:nth-child(3) > div')
+    querySelector<E>('a[href$="/nft"]').closest<E>(1).querySelector('a div:nth-child(3) > div')
 
-export const searchTwitterAvatarNFTLinkSelector = () => querySelector<E>('a[href*=nft]')
+export const searchTwitterAvatarNFTLinkSelector = () => querySelector<E>('a[href$="/nft"]')

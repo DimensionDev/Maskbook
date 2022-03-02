@@ -1,9 +1,7 @@
 import { LiveSelector, Watcher, DOMProxy } from '@dimensiondev/holoflows-kit'
-import { enhanceTypedMessageDebugger } from '../../protocols/typed-message/debugger'
 
-if (typeof window === 'object') {
+if (typeof window === 'object' && process.env.NODE_ENV === 'development') {
     LiveSelector.enhanceDebugger()
     Watcher.enhanceDebugger()
     DOMProxy.enhanceDebugger()
-    enhanceTypedMessageDebugger()
 }

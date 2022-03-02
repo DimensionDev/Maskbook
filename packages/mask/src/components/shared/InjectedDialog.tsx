@@ -32,6 +32,9 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
         padding: theme.spacing(1, 2),
         borderBottom: `1px solid ${theme.palette.divider}`,
     },
+    dialogContent: {
+        overscrollBehavior: 'contain',
+    },
     dialogTitleTypography: {
         marginLeft: 6,
         verticalAlign: 'middle',

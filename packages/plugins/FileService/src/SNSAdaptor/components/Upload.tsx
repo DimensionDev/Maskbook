@@ -1,5 +1,5 @@
 import { Attachment } from '@dimensiondev/common-protocols'
-import { blobToArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
+import { encodeArrayBuffer } from '@dimensiondev/kit'
 import { Checkbox, Radio, FormControlLabel, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { isNil } from 'lodash-unified'
@@ -81,7 +81,7 @@ export const Upload: React.FC = () => {
         if (encrypted) {
             key = makeFileKey()
         }
-        const block = new Uint8Array(await blobToArrayBuffer(file))
+        const block = new Uint8Array(await file.arrayBuffer())
         const checksum = encodeArrayBuffer(await Attachment.checksum(block))
         const item = await PluginFileServiceRPC.getFileInfo(checksum)
         if (isNil(item)) {

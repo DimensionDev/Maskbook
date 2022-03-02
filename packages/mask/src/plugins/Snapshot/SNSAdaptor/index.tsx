@@ -5,7 +5,8 @@ import { Skeleton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { PostInspector } from './PostInspector'
 import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
-import { extractTextFromTypedMessage, parseURL } from '@masknet/shared-base'
+import { extractTextFromTypedMessage } from '@masknet/typed-message'
+import { parseURL } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {

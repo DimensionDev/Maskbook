@@ -8,7 +8,7 @@ export interface NFTScanAsset {
     nft_creator: string
     nft_detail: string
     nft_holder: string
-    nft_json: string
+    nft_json?: string
     nft_value: string
     nft_name: string
     nft_platform_name: string

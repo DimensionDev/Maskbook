@@ -2,10 +2,12 @@ import { collectNodeText } from '../../../utils'
 import {
     bioDescriptionSelector,
     personalHomepageSelector,
-    searchAvatarSelector,
+    searchInstagramAvatarSelector,
     searchNickNameSelector,
+    searchUserIdInEditPageSelector,
     searchUserIdSelector,
 } from './selector'
+import { InMemoryStorages } from '../../../../shared'
 
 export function getBioDescription() {
     const bio = bioDescriptionSelector().evaluate()
@@ -14,7 +16,9 @@ export function getBioDescription() {
 
 export const getPersonalHomepage = () => {
     const node = personalHomepageSelector().evaluate()
-    return node?.textContent || ''
+    if (!node?.textContent) return ''
+    if (node.textContent.startsWith('http')) return node.textContent
+    return `https://${node.textContent}`
 }
 
 export const getNickname = () => {
@@ -24,13 +28,30 @@ export const getNickname = () => {
 
 export const getUserId = () => {
     const node = searchUserIdSelector().evaluate()
-    return node ? collectNodeText(node) : ''
+    const secondNode = searchUserIdInEditPageSelector().evaluate()
+    return node ? collectNodeText(node) : secondNode ? collectNodeText(secondNode) : ''
 }
 
 export const getAvatar = () => {
-    const node = searchAvatarSelector().evaluate()
+    const node = searchInstagramAvatarSelector().evaluate()
     if (!node) return ''
 
     const imageURL = node.getAttribute('src') ?? ''
     return imageURL.trim()
+}
+
+export const clearStorages = () => {
+    InMemoryStorages.InstagramNFTEvent.storage.userId.setValue('')
+    InMemoryStorages.InstagramNFTEvent.storage.address.setValue('')
+    InMemoryStorages.InstagramNFTEvent.storage.tokenId.setValue('')
+}
+
+const INSTAGRAM_AVATAR_ID_MATCH = /(\w+).(?:png|jpg|gif|bmp)/
+
+export const getAvatarId = (avatarURL: string) => {
+    if (!avatarURL) return ''
+    const _url = new URL(avatarURL)
+    const match = _url.pathname.match(INSTAGRAM_AVATAR_ID_MATCH)
+    if (!match) return ''
+    return match[1]
 }

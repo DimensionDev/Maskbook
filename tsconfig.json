@@ -85,6 +85,8 @@
       "@masknet/web3-shared-evm": ["./packages/web3-shared/evm/src"],
       "@masknet/web3-shared-flow": ["./packages/web3-shared/flow/src"],
       "@masknet/web3-shared-solana": ["./packages/web3-shared/solana/src"],
+      "@masknet/typed-message": ["./packages/typed-message/base"],
+      "@masknet/typed-message/dom": ["./packages/typed-message/dom"],
       // @masknet/scripts: insert-here 2
 
       // Plugins
