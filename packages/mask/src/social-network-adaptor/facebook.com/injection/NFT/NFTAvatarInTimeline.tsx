@@ -15,7 +15,7 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
-const TimeLineRainbow = memo(
+const TimelineRainbow = memo(
     ({ userId, avatarId, width, height }: { userId: string; avatarId: string; width: number; height: number }) => {
         const { classes } = useStyles()
         return (
@@ -84,7 +84,7 @@ function _(selector: () => LiveSelector<HTMLElement | SVGElement, false>, signal
                             top: 0,
                             zIndex: 2,
                         }}>
-                        <TimeLineRainbow
+                        <TimelineRainbow
                             userId={facebookId}
                             avatarId={info.avatarId}
                             width={info.width - 4}
