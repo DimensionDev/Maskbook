@@ -240,7 +240,9 @@ export const searchProfileSetAvatarSelector = () =>
         ? searchProfessionalButtonSelector()
               .closest<E>(4)
               .querySelector('div > div:nth-child(2) >div > div:nth-child(2)')
-        : searchProfessionalButtonSelector().closest<E>(3).querySelector('div > div:nth-child(2) > div:nth-child(2)')
+        : querySelector<E>('[data-testid="ProfileBirthdate"]')
+              .closest<E>(5)
+              .querySelector('div > div:nth-child(2) > div:nth-child(2)')
 // #endregion
 
 // #region avatar selector
