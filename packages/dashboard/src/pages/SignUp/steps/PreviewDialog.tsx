@@ -45,7 +45,7 @@ interface PreviewDialogProps {
     personaName: string
     id?: string
     privateKey: string
-    words: string[]
+    words?: string[]
     onClose(): void
 }
 
@@ -146,10 +146,15 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
                         qrStyle="dots"
                     />
                 </Box>
-                <Typography margin="24px 0" fontWeight={600}>
-                    {t.create_account_identity_id()}
-                </Typography>
-                <MnemonicReveal words={words} indexed wordClass={classes.wordClass} />
+                {words?.length ? (
+                    <>
+                        <Typography margin="24px 0" fontWeight={600}>
+                            {t.create_account_identity_id()}
+                        </Typography>
+                        <MnemonicReveal words={words} indexed wordClass={classes.wordClass} />
+                    </>
+                ) : null}
+
                 <Box display="flex" alignItems="center" margin="24px 0">
                     <InfoIcon className={classes.infoIcon} />
                     <Typography fontSize={12} fontWeight={700}>
