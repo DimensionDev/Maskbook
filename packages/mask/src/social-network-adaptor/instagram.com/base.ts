@@ -9,7 +9,6 @@ export const instagramBase: SocialNetwork.Base = {
     shouldActivate(location) {
         return location.host.endsWith(INSTAGRAM_ID)
     },
-    notReadyForProduction: true,
 }
 export const instagramWorkerBase: SocialNetworkWorker.WorkerBase & SocialNetwork.Base = {
     ...instagramBase,

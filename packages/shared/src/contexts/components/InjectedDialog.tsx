@@ -32,6 +32,9 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
         padding: theme.spacing(1, 2),
         borderBottom: `1px solid ${theme.palette.divider}`,
     },
+    dialogContent: {
+        overscrollBehavior: 'contain',
+    },
     dialogTitleTypography: {
         marginLeft: 6,
         verticalAlign: 'middle',
@@ -39,9 +42,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     dialogCloseButton: {
         color: theme.palette.text.primary,
     },
-    paper: {
-        ...(clean ? { width: 'auto', backgroundImage: 'none' } : {}),
-    },
+    paper: clean ? { width: 'auto', backgroundImage: 'none' } : {},
 }))
 
 export type InjectedDialogClassKey =

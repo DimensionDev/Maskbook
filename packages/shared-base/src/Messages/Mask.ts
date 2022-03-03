@@ -42,6 +42,7 @@ export interface MaskSNSEvents {
     profileNFTsTabUpdated: 'reset'
     NFTAvatarUpdated: NFTAvatarEvent
     NFTAvatarTimelineUpdated: NFTAvatarEvent
+    nftAvatarSettingDialogUpdated: NFTAvatarSettingDialogEvent
 }
 
 export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, MaskSNSEvents {
@@ -66,6 +67,8 @@ export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, Ma
     maskSDKHotModuleReload: void
     __kv_backend_persistent__: [string, unknown]
     __kv_backend_in_memory__: [string, unknown]
+    /** @deprecated do not use it in new code. */
+    wallet_is_locked: ['request'] | ['response', boolean]
 }
 
 export interface UpdateEvent<Data> {
@@ -81,6 +84,10 @@ export interface CompositionRequest {
         target?: 'E2E' | 'Everyone'
         startupPlugin?: string
     }
+}
+
+export interface NFTAvatarSettingDialogEvent {
+    open: boolean
 }
 
 export interface SettingsUpdateEvent {

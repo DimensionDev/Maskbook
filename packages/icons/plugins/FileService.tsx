@@ -5,22 +5,14 @@ export const FileServiceIcon: typeof SvgIcon = createIcon(
     'FileService',
     <g>
         <path
-            d="M3.5 8a1 1 0 0 1 1-1h7.25a1 1 0 0 1 .8.4l3.75 5a1 1 0 0 1-.8 1.6h-11a1 1 0 0 1-1-1V8Z"
-            fill="#F7931E"
+            d="M3 4.3125C3 3.20793 3.89543 2.3125 5 2.3125H11C12.1046 2.3125 13 3.20793 13 4.3125V12.3125C13 13.4171 12.1046 14.3125 11 14.3125H5C3.89543 14.3125 3 13.4171 3 12.3125V4.3125Z"
+            fill="#B9CDF0"
         />
-        <rect opacity=".8" x="5.25" y="8.559" width="17.5" height="12.25" rx="1" fill="url(#a)" />
-        <rect opacity=".8" x="5.25" y="9.434" width="17.5" height="12.25" rx="1" fill="url(#b)" />
-        <rect x="3.5" y="10.5" width="21" height="12.25" rx="1" fill="#FFB110" />
-        <defs>
-            <linearGradient id="a" x1="5.25" y1="20.809" x2="22.75" y2="20.809" gradientUnits="userSpaceOnUse">
-                <stop stopColor="#B0CFEB" />
-                <stop offset="1" stopColor="#C4E1FB" />
-            </linearGradient>
-            <linearGradient id="b" x1="5.25" y1="21.684" x2="22.75" y2="21.684" gradientUnits="userSpaceOnUse">
-                <stop stopColor="#B0CFEB" />
-                <stop offset="1" stopColor="#C4E1FB" />
-            </linearGradient>
-        </defs>
+        <path d="M13 6.79688V4.3125C13 3.20793 12.1046 2.3125 11 2.3125H8.51562L13 6.79688Z" fill="#B9CDF0" />
+        <path
+            d="M8.51563 2.3125L8.51563 4.79687C8.51563 5.90144 9.41106 6.79687 10.5156 6.79687L13 6.79688L8.51563 2.3125Z"
+            fill="#A4BDEB"
+        />
     </g>,
-    '0 0 28 28',
+    '0 0 16 16',
 )

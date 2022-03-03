@@ -43,6 +43,42 @@ export interface PersonaRecord {
     uninitialized?: boolean
 }
 
+type RecipientReason = ({ type: 'auto-share' } | { type: 'direct' } | { type: 'group'; group: any }) & {
+    at: number
+}
+
+interface RecipientDetail {
+    reason: RecipientReason[]
+}
+
+export interface PostRecord {
+    /**
+     * For old data stored before version 3, this identifier may be ProfileIdentifier.unknown
+     */
+    postBy: string
+    identifier: string
+    postCryptoKey?: object
+    /**
+     * Receivers
+     */
+    recipients: Record<string, RecipientDetail>
+    /** @deprecated */
+    recipientGroups?: unknown
+    /**
+     * When does Mask find this post.
+     * For your own post, it is when Mask created this post.
+     * For others post, it is when you see it first time.
+     */
+    foundAt: number
+    encryptBy?: string
+    /** The URL of this post */
+    url?: string
+    /** Summary of this post (maybe front 20 chars). */
+    summary?: string
+    /** Interested metadata contained in this post. */
+    interestedMeta?: ReadonlyMap<string, unknown>
+}
+
 export interface ProfileRecord {
     identifier: string
     nickname?: string

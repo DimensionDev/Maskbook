@@ -11,6 +11,7 @@ import { TokenPriceAPI } from './token-price'
 
 export * from './types'
 export * from './opensea/utils'
+export * from './NextID'
 
 export const OpenSea = new OpenSeaAPI()
 export const Rarible = new RaribleAPI()
