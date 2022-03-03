@@ -18,74 +18,88 @@ import { NetworkPluginID, PluginId, usePluginIDContext } from '@masknet/plugin-i
 import { FindTrumanDialog } from '../../plugins/FindTruman/SNSAdaptor/FindTrumanDialog'
 import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialog'
 
-const useStyles = makeStyles()((theme) => ({
-    abstractTabWrapper: {
-        position: 'sticky',
-        top: 0,
-        width: '100%',
-        zIndex: 2,
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(2),
-        backgroundColor: theme.palette.background.paper,
-    },
-    tab: {
-        height: 36,
-        minHeight: 36,
-        fontWeight: 300,
-    },
-    tabs: {
-        width: 552,
-        height: 36,
-        minHeight: 36,
-        margin: '0 auto',
-        borderRadius: 4,
-        '& .Mui-selected': {
-            color: theme.palette.primary.contrastText,
-            backgroundColor: theme.palette.primary.main,
+const useStyles = makeStyles()((theme) => {
+    const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
+    return {
+        abstractTabWrapper: {
+            position: 'sticky',
+            top: 0,
+            width: '100%',
+            zIndex: 2,
+            paddingTop: theme.spacing(1),
+            paddingBottom: theme.spacing(2),
+            backgroundColor: theme.palette.background.paper,
         },
-    },
-    tabPanel: {
-        marginTop: theme.spacing(3),
-    },
-    indicator: {
-        display: 'none',
-    },
-    applicationBox: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: theme.palette.background.default,
-        borderRadius: '8px',
-        cursor: 'pointer',
-        height: 100,
-        '&:hover': {
-            transform: 'scale(1.05) translateY(-4px)',
-            boxShadow: theme.palette.mode === 'light' ? '0px 10px 16px rgba(0, 0, 0, 0.1)' : 'none',
+        tab: {
+            height: 36,
+            minHeight: 36,
+            fontWeight: 300,
         },
-    },
-    applicationWrapper: {
-        marginTop: 4,
-        display: 'grid',
-        gridTemplateColumns: '123px 123px 123px 123px',
-        gridTemplateRows: '100px',
-        rowGap: 12,
-        justifyContent: 'space-between',
-        height: 324,
-    },
-    applicationImg: {
-        width: 36,
-        height: 36,
-        marginBottom: 10,
-    },
-    disabled: {
-        pointerEvents: 'none',
-        opacity: 0.5,
-    },
-    title: {
-        fontSize: 15,
-    },
-}))
+        tabs: {
+            width: 552,
+            height: 36,
+            minHeight: 36,
+            margin: '0 auto',
+            borderRadius: 4,
+            '& .Mui-selected': {
+                color: theme.palette.primary.contrastText,
+                backgroundColor: theme.palette.primary.main,
+            },
+        },
+        tabPanel: {
+            marginTop: theme.spacing(3),
+        },
+        indicator: {
+            display: 'none',
+        },
+        applicationBox: {
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: theme.palette.background.default,
+            borderRadius: '8px',
+            cursor: 'pointer',
+            height: 100,
+            '@media (hover: hover)': {
+                '&:hover': {
+                    transform: 'scale(1.05) translateY(-4px)',
+                    boxShadow: theme.palette.mode === 'light' ? '0px 10px 16px rgba(0, 0, 0, 0.1)' : 'none',
+                },
+            },
+        },
+        applicationWrapper: {
+            marginTop: theme.spacing(0.5),
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            gridTemplateRows: '100px',
+            gridGap: theme.spacing(1.5),
+            justifyContent: 'space-between',
+            height: 324,
+            [smallQuery]: {
+                overflow: 'auto',
+                overscrollBehavior: 'contain',
+                gridTemplateColumns: 'repeat(3, 1fr)',
+                gridGap: theme.spacing(1),
+            },
+        },
+        applicationImg: {
+            width: 36,
+            height: 36,
+            marginBottom: theme.spacing(1),
+        },
+        disabled: {
+            pointerEvents: 'none',
+            opacity: 0.5,
+        },
+        title: {
+            fontSize: 15,
+            [smallQuery]: {
+                fontSize: 13,
+            },
+        },
+    }
+})
 
 const SUPPORTED_CHAIN_ID_LIST = [
     ChainId.Mainnet,

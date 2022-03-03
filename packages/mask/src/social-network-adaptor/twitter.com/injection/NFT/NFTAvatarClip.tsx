@@ -30,13 +30,14 @@ function NFTAvatarClipInTwitter() {
     const windowSize = useWindowSize()
     const location = useLocation()
     const borderElement = useRef<Element | null>()
+    const linkDom = useRef<Element | null>()
 
     const size = useMemo(() => {
-        const ele = searchTwitterAvatarNFTSelector().evaluate()
+        const ele = searchTwitterAvatarNFTSelector().evaluate()?.closest('a')?.querySelector('img')
         if (!ele) return 0
         const style = window.getComputedStyle(ele)
         return Number.parseInt(style.width.replace('px', '') ?? 0, 10)
-    }, [windowSize])
+    }, [windowSize, location])
 
     const twitterId = useMemo(() => {
         const ele = searchTwitterAvatarNFTSelector().evaluate()?.closest('a') as HTMLElement
@@ -48,25 +49,24 @@ function NFTAvatarClipInTwitter() {
     }, [location])
 
     useEffect(() => {
-        const linkDom = searchTwitterAvatarNFTLinkSelector().evaluate()
-        if (linkDom?.firstElementChild && linkDom.childNodes.length === 4) {
-            borderElement.current = linkDom.firstElementChild
-            // remove useless border
-            linkDom.removeChild(linkDom.firstElementChild)
-        }
-
-        const first = linkDom?.firstElementChild as HTMLDivElement
-        if (first?.style) {
-            first.style.width = ''
-            first.style.height = ''
-        }
+        setTimeout(() => {
+            linkDom.current = searchTwitterAvatarNFTLinkSelector().evaluate()
+            if (linkDom.current?.firstElementChild && linkDom.current?.childNodes.length === 4) {
+                borderElement.current = linkDom.current.firstElementChild
+                // remove useless border
+                linkDom.current.removeChild(linkDom.current?.firstElementChild)
+            }
+        }, 5000)
 
         return () => {
-            if (borderElement.current && borderElement.current !== linkDom?.firstElementChild) {
-                linkDom?.insertBefore(borderElement.current, linkDom.firstChild)
-            }
+            if (
+                borderElement.current &&
+                borderElement.current !== linkDom.current?.firstElementChild &&
+                linkDom.current
+            )
+                linkDom.current.insertBefore(borderElement.current, linkDom.current.firstChild)
         }
-    }, [location])
+    }, [location.pathname])
 
     if (isZero(size) || !twitterId) return null
     return (

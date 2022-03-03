@@ -61,6 +61,12 @@ export const sayHelloShowed: NetworkSettings<boolean> = createNetworkSettings('s
 export const dismissPinExtensionTip = createGlobalSettings<boolean>('dismissPinExtensionTip', false, {
     primary: () => '',
 })
+export const dismissVerifyNextID: NetworkSettings<{ [key in string]: boolean }> = createNetworkSettings(
+    'dismissVerifyNextID',
+    {},
+)
+export const bioDescription: NetworkSettings<string> = createNetworkSettings('bioDescription', '')
+export const personalHomepage: NetworkSettings<string> = createNetworkSettings('personalHomepage', '')
 // This is a misuse of concept "NetworkSettings" as "namespaced settings"
 // The refactor is tracked in https://github.com/DimensionDev/Maskbook/issues/1884
 /**
@@ -87,10 +93,6 @@ export const newDashboardConnection = createGlobalSettings('beta-dashboard', fal
 })
 
 export const currentPersonaIdentifier = createGlobalSettings<string>('currentPersonaIdentifier', '', {
-    primary: () => 'DO NOT DISPLAY IT IN UI',
-})
-
-export const currentPopupWindowId = createGlobalSettings<number>('currentPopupWindowId', 0, {
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
 

@@ -49,5 +49,5 @@ export function computedBuildFlags(flags: ReturnType<typeof normalizeBuildFlags>
     } else {
         sourceMapKind = false
     }
-    return { sourceMapKind } as const
+    return { sourceMapKind, lockdown: mode === 'development' } as const
 }

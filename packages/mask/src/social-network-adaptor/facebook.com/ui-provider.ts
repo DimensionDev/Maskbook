@@ -29,6 +29,8 @@ import { injectProfileNFTAvatarInFaceBook } from './injection/NFT/ProfileNFTAvat
 import { injectNFTAvatarInFacebook } from './injection/NFT/NFTAvatarInFacebook'
 import { injectUserNFTAvatarAtFacebook } from './injection/NFT/NFTAvatarInTimeline'
 import { injectOpenNFTAvatarEditProfileButton } from './injection/NFT/NFTAvatarEditProfile'
+import { injectProfileTabAtFacebook } from './injection/ProfileTab'
+import { injectProfileTabContentAtFacebook } from './injection/ProfileContent'
 import { FacebookRenderFragments } from './customization/render-fragments'
 
 const useInjectedDialogClassesOverwriteFacebook = makeStyles()((theme) => {
@@ -195,6 +197,8 @@ const facebookUI: SocialNetworkUI.Definition = {
         pageInspector: injectPageInspectorDefault(),
         setupWizard: createTaskStartSetupGuideDefault(),
         toolbox: injectToolboxAtFacebook,
+        profileTab: injectProfileTabAtFacebook,
+        profileTabContent: injectProfileTabContentAtFacebook,
     },
     configuration: {
         steganography: {

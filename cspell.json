@@ -59,6 +59,7 @@
         "contrib",
         "contribs",
         "cooldown",
+        "corepack",
         "counterparty",
         "cyberconnect",
         "cyberlab",
@@ -116,6 +117,7 @@
         "juicebox",
         "kdfparams",
         "keccak",
+        "keybase",
         "kitts",
         "kred",
         "labelledby",
@@ -399,6 +401,10 @@
         {
             "filename": "**/qya-AA.json",
             "enabled": false
+        },
+        {
+            "filename": ".circleci/config.yml",
+            "ignoreWords": ["cimg"]
         }
     ]
 }

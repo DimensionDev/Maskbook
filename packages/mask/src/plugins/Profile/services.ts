@@ -1,5 +1,4 @@
 import urlcat from 'urlcat'
-import { fetchJSON } from '../../extension/background-script/HelperService'
 
 interface NameInfo {
     rnsName: string
@@ -10,6 +9,6 @@ interface NameInfo {
 export async function getRSS3AddressById(id: string) {
     if (!id) return ''
     const url = urlcat('https://rss3.domains/name/:id', { id })
-    const rsp = await fetchJSON<NameInfo>(url)
+    const rsp = (await (await fetch(url)).json()) as NameInfo
     return rsp.address
 }
