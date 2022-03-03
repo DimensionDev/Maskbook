@@ -1097,7 +1097,7 @@
         "Rinkeby": "",
         "Kovan": "",
         "Gorli": "",
-        "BSC": "https://thegraph.com/explorer/subgraph/pancakeswap/exchange",
+        "BSC": "",
         "BSCT": "",
         "Matic": "",
         "Mumbai": "",
@@ -1141,7 +1141,7 @@
         "Gorli": "",
         "BSC": "",
         "BSCT": "",
-        "Matic": "0x60913758635b54e6C9685f92201A5704eEe74748",
+        "Matic": "",
         "Mumbai": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
@@ -1150,8 +1150,8 @@
         "Avalanche_Fuji": "",
         "Celo": "",
         "Fantom": "",
-        "Aurora": "0x2CB45Edb4517d5947aFdE3BEAbF95A582506858B",
+        "Aurora": "",
         "Aurora_Testnet": "",
-        "Nervos": ""
+        "Nervos": "0xb02c930c2825a960a50ba4ab005e8264498b64a0"
     }
 }

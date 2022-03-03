@@ -1,5 +1,5 @@
 import { ChainId } from '@masknet/web3-shared-evm'
-import { DAI, ETHER, USDC, USDT, WBTC, WNATIVE, WNATIVE_ONLY } from './trader'
+import { DAI, ETHER, YOK, USDC, USDT, BUSD, WBTC, WNATIVE, WNATIVE_ONLY } from './trader'
 import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'
 
 /**
@@ -10,5 +10,5 @@ export const YOKAISWAP_CUSTOM_BASES: ERC20TokenCustomizedBase = {}
 
 export const YOKAISWAP_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
     ...WNATIVE_ONLY,
-    [ChainId.Nervos]: [WNATIVE, DAI, USDT, USDC, ETHER, WBTC].map((x) => x[ChainId.Nervos]),
+    [ChainId.Nervos]: [WNATIVE, YOK, DAI, USDT, USDC, ETHER, WBTC, BUSD].map((x) => x[ChainId.Nervos]),
 }
