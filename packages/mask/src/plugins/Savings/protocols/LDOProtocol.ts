@@ -1,5 +1,6 @@
 import type Web3 from 'web3'
 import type { AbiItem } from 'web3-utils'
+import BigNumber from 'bignumber.js'
 import {
     ChainId,
     getSavingsConstants,
@@ -7,11 +8,10 @@ import {
     FungibleTokenDetailed,
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
+import { ZERO } from '@masknet/web3-shared-base'
 import type { Lido } from '@masknet/web3-contracts/types/Lido'
 import LidoABI from '@masknet/web3-contracts/abis/Lido.json'
-import BigNumber from 'bignumber.js'
 import { SavingsProtocol, ProtocolType } from '../types'
-import { ZERO } from '@masknet/web3-shared-base'
 
 export class LidoProtocol implements SavingsProtocol {
     private _apr = '0.00'
@@ -19,7 +19,7 @@ export class LidoProtocol implements SavingsProtocol {
 
     readonly type = ProtocolType.Lido
 
-    constructor(public readonly pair: [FungibleTokenDetailed, FungibleTokenDetailed]) {}
+    constructor(readonly pair: [FungibleTokenDetailed, FungibleTokenDetailed]) {}
 
     get apr() {
         return this._apr

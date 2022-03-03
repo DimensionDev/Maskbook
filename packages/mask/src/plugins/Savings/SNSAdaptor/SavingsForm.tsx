@@ -13,13 +13,11 @@ import {
     formatCurrency,
     formatBalance,
 } from '@masknet/web3-shared-evm'
-import { TokenAmountPanel, FormattedCurrency, LoadingAnimation } from '@masknet/shared'
+import { TokenAmountPanel, FormattedCurrency, LoadingAnimation, TokenIcon } from '@masknet/shared'
 import { useTokenPrice } from '../../Wallet/hooks/useTokenPrice'
 import { useI18N } from '../../../utils'
 import { useStyles } from './SavingsFormStyles'
-import { ProviderIconURLs } from './IconURL'
-import { TabType, ProtocolType } from '../types'
-import { SavingsProtocols } from '../protocols'
+import { TabType, ProtocolType, SavingsProtocol } from '../types'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -27,16 +25,15 @@ import { AllProviderTradeActionType, AllProviderTradeContext } from '../../Trade
 
 export interface SavingsFormProps {
     chainId: number
-    selectedProtocol: ProtocolType
+    protocol: SavingsProtocol
     tab: TabType
     onClose?: () => void
     onSwapDialogOpen?: () => void
 }
 
-export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDialogOpen }: SavingsFormProps) {
+export function SavingsForm({ chainId, protocol, tab, onClose, onSwapDialogOpen }: SavingsFormProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const protocol = SavingsProtocols[selectedProtocol]
 
     const { value: nativeTokenDetailed } = useNativeTokenDetailed()
     const web3 = useWeb3({ chainId })
@@ -139,11 +136,11 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
             )}
 
             <div className={classes.infoRow}>
-                <Typography variant="body1" className={classes.infoRowLeft}>
-                    <img src={ProviderIconURLs[protocol.type]} className={classes.rowImage} />
-                    {protocol.pair} {t('plugin_savings_apr')}%
+                <Typography variant="body2" className={classes.infoRowLeft}>
+                    <TokenIcon address={protocol.bareToken.address} classes={{ icon: classes.rowImage }} />
+                    {protocol.bareToken.name} {t('plugin_savings_apr')}%
                 </Typography>
-                <Typography variant="body1" className={classes.infoRowRight}>
+                <Typography variant="body2" className={classes.infoRowRight}>
                     {protocol.apr}%
                 </Typography>
             </div>
@@ -168,7 +165,7 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
                         variant="contained"
                         init={
                             needsSwap
-                                ? 'Swap ' + protocol.pair
+                                ? 'Swap ' + protocol.bareToken.symbol
                                 : validationMessage ||
                                   (tab === TabType.Deposit
                                       ? t('plugin_savings_deposit') + ' ' + protocol.bareToken.symbol

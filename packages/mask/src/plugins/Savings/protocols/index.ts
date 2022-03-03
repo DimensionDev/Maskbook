@@ -1,6 +1,8 @@
-import { LDO_PAIRS } from '../constants'
-import type { SavingsProtocol } from '../types'
+import { AAVE_PAIRS, LDO_PAIRS } from '../constants'
 import { LidoProtocol } from './LDOProtocol'
-// import AAVEProtocol from './AAVEProtocol'
+import { AAVEProtocol } from './AAVEProtocol'
 
-export const SavingsProtocols: SavingsProtocol[] = [...LDO_PAIRS.map((pair) => new LidoProtocol(pair))]
+export const SavingsProtocols = [
+    ...LDO_PAIRS.map((pair) => new LidoProtocol(pair)),
+    ...AAVE_PAIRS.map((pair) => new AAVEProtocol(pair)),
+]

@@ -1,12 +1,11 @@
 import { useAsync } from 'react-use'
-import { Box, Grid, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { FormattedBalance } from '@masknet/shared'
+import { Box, Grid, Button, Typography } from '@mui/material'
+import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import { isZero, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, useWeb3, useAccount, formatBalance } from '@masknet/web3-shared-evm'
 import { ProviderIconURLs } from './IconURL'
 import { useI18N } from '../../../utils'
-import { SavingsProtocols } from '../protocols'
 import { TabType, ProtocolType, SavingsProtocol } from '../types'
 
 const useStyles = makeStyles()((theme, props) => ({
@@ -16,18 +15,23 @@ const useStyles = makeStyles()((theme, props) => ({
     tableHeader: {
         display: 'flex',
         background: theme.palette.mode === 'light' ? '#F6F8F8' : '#17191D',
-        borderRadius: '8px',
+        borderRadius: theme.spacing(1),
         margin: '0 0 15px 0',
     },
     tableRow: {
         display: 'flex',
         background: theme.palette.mode === 'light' ? '#F6F8F8' : '#17191D',
-        borderRadius: '8px',
+        borderRadius: theme.spacing(1),
+        marginBottom: theme.spacing(1),
+
+        '&:last-child': {
+            marginBottom: '0',
+        },
     },
     tableItem: {
         display: 'flex',
         background: theme.palette.mode === 'light' ? '#F6F8F8' : '#17191D',
-        borderRadius: '8px',
+        borderRadius: theme.spacing(1),
     },
     tableCell: {
         display: 'flex',
@@ -40,18 +44,16 @@ const useStyles = makeStyles()((theme, props) => ({
         margin: '0 20px 0 0',
     },
     logo: {
+        width: '32px',
         height: '32px',
     },
     logoMini: {
         height: '16px',
         position: 'absolute',
-        bottom: '3px',
+        bottom: 0,
         right: '-5px',
     },
-    protocolLabel: {
-        fontSize: 12,
-        opacity: 0.5,
-    },
+    protocolLabel: {},
 }))
 
 export interface SavingsTableProps {
@@ -59,10 +61,10 @@ export interface SavingsTableProps {
     tab: TabType
     protocols: SavingsProtocol[]
     setTab(tab: TabType): void
-    setSelectedProtocol(protocol: ProtocolType): void
+    setSelectedProtocol(protocol: SavingsProtocol): void
 }
 
-export function SavingsTable({ chainId, tab, protocols, setSelectedProtocol, setTab }: SavingsTableProps) {
+export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProtocol }: SavingsTableProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -71,11 +73,11 @@ export function SavingsTable({ chainId, tab, protocols, setSelectedProtocol, set
 
     // Only fetch protocol APR and Balance on chainId change
     useAsync(async () => {
-        for (const protocol of SavingsProtocols) {
+        for (const protocol of protocols) {
             await protocol.updateApr(chainId, web3)
             await protocol.updateBalance(chainId, web3, account)
         }
-    }, [chainId, web3, account])
+    }, [chainId, web3, account, protocols])
 
     return (
         <Box className={classes.containerWrap}>
@@ -98,6 +100,11 @@ export function SavingsTable({ chainId, tab, protocols, setSelectedProtocol, set
                 <Grid container spacing={0} className={classes.tableRow} key={protocol.type}>
                     <Grid item xs={4} className={classes.tableCell}>
                         <div className={classes.logoWrap}>
+                            <TokenIcon
+                                name={protocol.bareToken.name}
+                                address={protocol.bareToken.address}
+                                classes={{ icon: classes.logo }}
+                            />
                             <img src={ProviderIconURLs[protocol.type]} className={classes.logoMini} />
                         </div>
                         <div>
@@ -126,8 +133,8 @@ export function SavingsTable({ chainId, tab, protocols, setSelectedProtocol, set
                             color="primary"
                             disabled={tab === TabType.Withdraw ? isZero(protocol.balance) : false}
                             onClick={() => {
-                                setSelectedProtocol(protocol.type)
                                 setTab(tab)
+                                setSelectedProtocol(protocol)
                             }}>
                             {tab === TabType.Deposit ? t('plugin_savings_deposit') : t('plugin_savings_withdraw')}
                         </Button>
