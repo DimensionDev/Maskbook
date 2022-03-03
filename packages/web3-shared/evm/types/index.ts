@@ -79,6 +79,11 @@ export enum ChainId {
 
     // Optimistic
     Optimistic = 10,
+
+    // Nervos
+    Nervos = 71394,
+    Nervos_Devnet = 1024777,
+    Nervos_Testnet = 71393,
 }
 
 export enum ProviderType {
@@ -114,6 +119,7 @@ export enum NetworkType {
     Fuse = 'Fuse',
     Metis = 'Metis',
     Optimistic = 'Optimistic',
+    Nervos = 'Nervos',
 }
 
 export interface Wallet {

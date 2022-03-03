@@ -61,6 +61,7 @@ export const resolveTradeProviderName = createLookupTableResolver<TradeProvider,
         [TradeProvider.PANGOLIN]: 'PangolinDex',
         [TradeProvider.TRISOLARIS]: 'Trisolaris',
         [TradeProvider.WANNASWAP]: 'WannaSwap',
+        [TradeProvider.YOKAISWAP]: 'YokaiSwap',
     },
     (tradeProvider) => {
         throw new Error(`Unknown provider type: ${tradeProvider}`)
@@ -96,8 +97,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
                 case NetworkType.Boba:
                 case NetworkType.Fuse:
                 case NetworkType.Metis:
-                case NetworkType.Avalanche:
                 case NetworkType.Optimistic:
+                case NetworkType.Nervos:
                     console.error('To be implement network: ', networkType)
                     return ''
                 default:
@@ -127,6 +128,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
         case TradeProvider.TRISOLARIS:
             return 'https://www.trisolaris.io/#/swap'
         case TradeProvider.WANNASWAP:
+            return 'https://wannaswap.finance/exchange/swap'
+        case TradeProvider.YOKAISWAP:
             return 'https://wannaswap.finance/exchange/swap'
         default:
             unreachable(tradeProvider)
@@ -176,6 +179,7 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
                 case NetworkType.Fuse:
                 case NetworkType.Metis:
                 case NetworkType.Optimistic:
+                case NetworkType.Nervos:
                     console.error('To be implement network: ', networkType)
                     return ''
                 default:
@@ -205,6 +209,9 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             return ''
         case TradeProvider.WANNASWAP:
             // TODO - add WannaSwap analytics
+            return ''
+        case TradeProvider.YOKAISWAP:
+            // TODO - add yokaiswap analytics
             return ''
         default:
             unreachable(tradeProvider)
@@ -299,6 +306,7 @@ export const resolveZrxTradePoolName = createLookupTableResolver<ZrxTradePool, s
         [ZrxTradePool.PangolinDex]: 'PangolinDex',
         [ZrxTradePool.Trisolaris]: 'Trisolaris',
         [ZrxTradePool.WannaSwap]: 'WannaSwap',
+        [ZrxTradePool.YokaiSwap]: 'YokaiSwap',
     },
     'Unknown',
 )

@@ -112,6 +112,8 @@ export function useTradeCallback(
             return uniswapV2Like
         case TradeProvider.PANGOLIN:
             return uniswapV2Like
+        case TradeProvider.YOKAISWAP:
+            return uniswapV2Like
         case TradeProvider.OPENOCEAN:
             return openocean
         default:

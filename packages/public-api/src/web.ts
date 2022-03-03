@@ -193,6 +193,7 @@ export enum NetworkType {
     Fuse = 'Fuse',
     Metis = 'Metis',
     Optimistic = 'Optimistic',
+    Nervos = 'Nervos',
 }
 
 export enum DataProvider {
@@ -217,6 +218,7 @@ export enum TradeProvider {
     TRISOLARIS = 12,
     TRADERJOE = 13,
     PANGOLIN = 14,
+    YOKAISWAP = 15,
 }
 /** Supported language settings */
 export enum LanguageOptions {

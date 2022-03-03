@@ -157,6 +157,7 @@
         "multicall",
         "multihop",
         "mutex",
+        "nervos",
         "newsfeed",
         "nftrss",
         "nftscan",
@@ -262,6 +263,8 @@
         "xdai",
         "xlarge",
         "xlink",
+        "yokaiswap",
+        "yokayswap",
         "zerion",
         "zubin"
     ],

@@ -2826,5 +2826,53 @@
         "shortName": "palm",
         "chainId": 11297108109,
         "networkId": 11297108109
+    },
+    {
+        "name": "GodWoken Testnet",
+        "chain": "Nervos",
+        "network": "testnet",
+        "rpc": ["https://godwoken-testnet-web3-rpc.ckbapp.dev/"],
+        "faucets": [],
+        "features": [],
+        "nativeCurrency": {
+            "decimals": 8,
+            "name": "CKB",
+            "symbol": "CKB"
+        },
+        "infoURL": "https://godwoken.io",
+        "shortName": "nervos",
+        "chainId": 71393,
+        "networkId": 71393,
+        "explorers": [
+            {
+                "name": "layerview",
+                "url": "https://aggron.layerview.io",
+                "standard": "EIP3091"
+            }
+        ]
+    },
+    {
+        "name": "Godwoken Mainnet",
+        "chain": "Nervos",
+        "network": "mainnet",
+        "rpc": ["https://mainnet.godwoken.io/rpc"],
+        "faucets": [],
+        "features": [],
+        "nativeCurrency": {
+            "decimals": 8,
+            "name": "CKB",
+            "symbol": "CKB"
+        },
+        "infoURL": "https://godwoken.io",
+        "shortName": "nervos",
+        "chainId": 71394,
+        "networkId": 71394,
+        "explorers": [
+            {
+                "name": "layerviewn",
+                "url": "https://www.layerview.io/",
+                "standard": "EIP3091"
+            }
+        ]
     }
 ]
