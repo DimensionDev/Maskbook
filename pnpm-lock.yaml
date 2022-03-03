@@ -143,6 +143,7 @@ importers:
       '@masknet/plugin-flow': workspace:*
       '@masknet/plugin-infra': workspace:*
       '@masknet/plugin-solana': workspace:*
+      '@masknet/plugin-transak': workspace:*
       '@masknet/plugin-wallet': workspace:*
       '@masknet/public-api': workspace:*
       '@masknet/shared': workspace:*
@@ -198,6 +199,7 @@ importers:
       '@masknet/plugin-flow': link:../plugins/Flow
       '@masknet/plugin-infra': link:../plugin-infra
       '@masknet/plugin-solana': link:../plugins/Solana
+      '@masknet/plugin-transak': link:../plugins/Transak
       '@masknet/plugin-wallet': link:../plugins/Wallet
       '@masknet/public-api': link:../public-api
       '@masknet/shared': link:../shared
