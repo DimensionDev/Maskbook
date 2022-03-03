@@ -18,7 +18,7 @@ export interface PluginServices extends DashboardPluginServices {
 }
 export interface PluginMessages extends DashboardPluginMessages {
     Wallet: typeof WalletMessages
-    Transak: typeof import('../../mask/dist/src/plugins/Transak/messages').PluginTransakMessages
+    Transak: typeof import('@masknet/plugin-transak').PluginTransakMessages
     Swap: typeof import('../../mask/dist/src/plugins/Trader/messages').PluginTraderMessages
     Pets: typeof import('../../mask/dist/src/plugins/Pets/messages').PluginPetMessages
 }

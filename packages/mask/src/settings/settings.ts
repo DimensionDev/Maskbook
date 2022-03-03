@@ -46,7 +46,7 @@ export const pluginIDSettings = createGlobalSettings<string>('pluginID', PLUGIN_
  * References:
  *      PluginGitcoinMessages: packages/mask/src/plugins/Gitcoin/messages.ts
  *      PluginTraderMessages: packages/mask/src/plugins/Trader/messages.ts
- *      PluginTransakMessages: packages/mask/src/plugins/Transak/messages.ts
+ *      PluginTransakMessages: packages/plugins/Transak/src/messages.ts
  */
 export const currentImagePayloadStatus: NetworkSettings<string> = createNetworkSettings('currentImagePayloadStatus', '')
 export const currentSelectedIdentity: NetworkSettings<string> = createNetworkSettings('currentSelectedIdentity', '')

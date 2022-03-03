@@ -22,6 +22,7 @@
     "@masknet/shared": "workspace:*",
     "@masknet/shared-base": "workspace:*",
     "@masknet/storybook-shared": "workspace:*",
+    "@masknet/plugin-transak": "workspace:*",
     "@masknet/theme": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
