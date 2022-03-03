@@ -14,9 +14,9 @@ import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/typ
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
 import AaveLendingPoolABI from '@masknet/web3-contracts/abis/AaveLendingPool.json'
 import BigNumber from 'bignumber.js'
-import { ProtocolCategory, SavingsNetwork, SavingsProtocol, ProtocolType } from '../types'
+import { ProtocolCategory, SavingsNetwork, SavingsProtocol, ProtocolType, ProtocolToken } from '../types'
 import { pow10, ZERO } from '@masknet/web3-shared-base'
-import Savings from '@masknet/web3-constants/evm/savings.json'
+import type Savings from '@masknet/web3-constants/evm/savings.json'
 import { AAVE_PAIRS } from '../constants'
 
 export interface ContractListArray {
@@ -65,7 +65,7 @@ export class AAVEProtocol implements SavingsProtocol {
         public name = 'AAVE',
         public symbol = 'AAVE',
         public image = 'aave',
-        public base: keyof Savings = 'AAVE',
+        public base: keyof typeof AAVE_PAIRS = 'AAVE',
         public pair = 'aAAVE',
         public decimals = 18,
         public underLyingAssetName = 'AAVE Interest Bearing AAVE',
@@ -84,8 +84,21 @@ export class AAVEProtocol implements SavingsProtocol {
             },
         ]
     }
+    token: ProtocolToken
 
-    public getFungibleTokenDetails(chainId: ChainId): FungibleTokenDetailed {
+    public bareTokenDetailed(chainId: ChainId): FungibleTokenDetailed {
+        return {
+            type: EthereumTokenType.ERC20,
+            chainId: chainId,
+            address: getSavingsConstants(chainId)[this.base],
+            symbol: this.symbol,
+            decimals: this.decimals,
+            name: this.underLyingAssetName,
+            logoURI: this.logoURI,
+        }
+    }
+
+    public stakeTokenDetailed(chainId: ChainId): FungibleTokenDetailed {
         return {
             type: EthereumTokenType.ERC20,
             chainId: chainId,
@@ -163,7 +176,7 @@ export class AAVEProtocol implements SavingsProtocol {
                 }) {
                     id
                     name
-                    underlyingAsset            
+                    underlyingAsset
                 }
             }`,
             })
@@ -188,10 +201,10 @@ export class AAVEProtocol implements SavingsProtocol {
             // Get User Reserve
             const userReserveBody = JSON.stringify({
                 query: `{
-                    userReserves(where: { 
+                    userReserves(where: {
                         user: "${account}",
                         reserve: "${reserveId}"
-                        
+
                         }) {
                       id
                       scaledATokenBalance
