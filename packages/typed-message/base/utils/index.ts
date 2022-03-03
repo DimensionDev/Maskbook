@@ -1,13 +1,15 @@
-export * from './metadata'
 export * from './extract'
+export * from './metadata'
 
 import type {
-    TypedMessage,
-    SerializableTypedMessages,
-    SerializableTypedMessage,
     NonSerializableWithAltTypedMessage,
+    SerializableTypedMessage,
+    SerializableTypedMessages,
+    TypedMessage,
 } from '../base'
-import { isEqual } from 'lodash-unified'
+import { isTypedMessageText, isTypedMessageTuple } from '../core'
+import { isTypedMessageAnchor, isTypedMessageMaskPayload } from '../extension'
+import { forEachTypedMessageChild } from '../visitor'
 
 export function isNonSerializableTypedMessageWithAlt(x: TypedMessage): x is NonSerializableWithAltTypedMessage {
     const y = x as NonSerializableWithAltTypedMessage
@@ -26,6 +28,22 @@ export function isSerializableTypedMessage(x: TypedMessage): x is SerializableTy
 export function isTypedMessageEqual(message1: TypedMessage, message2: TypedMessage): boolean {
     if (message1.type !== message2.type) return false
     if (message1.meta !== message2.meta) return false
-    // perform a deep equal
-    return isEqual(message1, message2)
+    return renderMessage(message1) === renderMessage(message2)
+}
+
+// TODO unit tests
+function renderMessage(message: TypedMessage) {
+    const fragments: string[] = []
+    forEachTypedMessageChild(message, function visitor(node) {
+        if (isTypedMessageTuple(node)) {
+            visitor(node)
+        } else if (isTypedMessageMaskPayload(node)) {
+            fragments.push(renderMessage(node))
+        } else if (isTypedMessageText(node)) {
+            fragments.push(node.content)
+        } else if (isTypedMessageAnchor(node)) {
+            fragments.push(node.content)
+        }
+    })
+    return fragments.join('')
 }

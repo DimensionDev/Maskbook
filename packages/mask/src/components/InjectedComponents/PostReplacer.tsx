@@ -70,7 +70,7 @@ function Transformer({ message, unzip, zip }: { message: TypedMessage } & PostRe
         else unzip?.()
 
         return () => unzip?.()
-    }, [])
+    }, [shouldReplace])
 
     if (shouldReplace) return <TypedMessageRender message={after} />
     return null
