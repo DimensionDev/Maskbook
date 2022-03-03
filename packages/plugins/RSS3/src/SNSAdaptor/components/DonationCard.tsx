@@ -87,7 +87,6 @@ export const DonationCard = ({
                 </dt>
                 <dd className={classes.infoRow}>
                     <span className={classes.infoLabel}>{contribCount}</span>
-
                     <span className={classes.infoValue}> {t.contribution({ count: contribCount })}</span>
                 </dd>
                 <dd className={classes.infoRow}>
