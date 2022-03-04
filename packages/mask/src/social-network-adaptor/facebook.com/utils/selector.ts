@@ -15,7 +15,9 @@ export const searchUserIdOnMobileSelector: () => LiveSelector<HTMLAnchorElement,
     querySelector<HTMLAnchorElement>('div[data-sigil$="profile"] a')
 
 export const searchAvatarSelector: () => LiveSelector<HTMLImageElement, true> = () =>
-    querySelector<HTMLImageElement>('[role="link"] [role="img"] image, [role="button"] [role="img"] image')
+    querySelector<HTMLImageElement>(
+        '[role="main"] [role="link"] [role="img"] image, [role="main"] [role="button"] [role="img"] image',
+    )
 
 export const searchNickNameSelector: () => LiveSelector<HTMLHeadingElement, true> = () =>
     querySelector<HTMLHeadingElement>('span[dir="auto"] div h1')
@@ -43,13 +45,15 @@ export const searchFacebookAvatarListSelector = () =>
 export const searchFacebookAvatarMobileListSelector = () => querySelector('#nuxChoosePhotoButton').closest<E>(6)
 
 export const searchFacebookAvatarSelector = () =>
-    querySelector('[role="button"] svg[role="img"], [role="link"] svg[role="img"]')
+    querySelector('[role="main"] [role="button"] svg[role="img"],[role="main"] [role="link"] svg[role="img"]')
 
 export const searchFacebookAvatarOnMobileSelector = () =>
     querySelector('[data-sigil="timeline-cover"] i[aria-label$="picture"]')
 
 export const searchFaceBookPostAvatarSelector = () =>
-    new LiveSelector<SVGElement, false>().querySelectorAll<SVGElement>('[type="nested/pressable"] svg')
+    new LiveSelector<SVGElement, false>().querySelectorAll<SVGElement>(
+        '[type="nested/pressable"] > a > div > svg, ul div[role="article"] a > div > svg[role="none"]',
+    )
 
 export const searchFaceBookPostAvatarOnMobileSelector = () => querySelectorAll('[data-gt=\'{"tn":"~"}\']')
 

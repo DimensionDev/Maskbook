@@ -8,7 +8,6 @@ import type {
 } from './type'
 import {
     PostIVIdentifier,
-    Identifier,
     AESJsonWebKey,
     IdentifierMap,
     PersonaIdentifier,
@@ -94,16 +93,15 @@ function postInNative(record: Partial<PostRecord> & Pick<PostRecord, 'identifier
 
 function postOutNative(record: NativePostRecord): PostRecord {
     return {
-        postBy: Identifier.fromString(record.postBy).unwrap() as unknown as ProfileIdentifier,
-        identifier: Identifier.fromString(record.identifier).unwrap() as unknown as PostIVIdentifier,
+        postBy: ProfileIdentifier.fromString(record.postBy, ProfileIdentifier).unwrap(),
+        identifier: PostIVIdentifier.fromString(record.identifier, PostIVIdentifier).unwrap(),
         postCryptoKey: record.postCryptoKey as unknown as AESJsonWebKey,
-        recipients: new IdentifierMap(new Map(Object.entries(record.recipients))) as unknown as IdentifierMap<
-            ProfileIdentifier,
-            RecipientDetail
-        >,
+        recipients: new IdentifierMap<ProfileIdentifier, RecipientDetail>(
+            new Map(Object.entries(record.recipients)) as any,
+        ),
         foundAt: new Date(record.foundAt),
         encryptBy: record.encryptBy
-            ? (Identifier.fromString(record.encryptBy).unwrap() as unknown as ECKeyIdentifier)
+            ? ECKeyIdentifier.fromString(record.encryptBy, ECKeyIdentifier).unwrap()
             : undefined,
         url: record.url,
         summary: record.summary,
