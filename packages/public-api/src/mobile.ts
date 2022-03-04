@@ -8,6 +8,7 @@ import type {
     RelationRecord,
     PostRecord,
 } from './types'
+import type { ProfileIdentifier_string } from './web'
 
 /**
  * APIs that both Android and iOS implements and have the same API signature
@@ -112,6 +113,7 @@ export interface SharedNativeAPIs {
         pageOption?: PageOption
     }): Promise<PostRecord[]>
     update_post(params: { post: Partial<PostRecord>; options: { mode: 0 | 1 } }): Promise<PostRecord[]>
+    notify_visible_detected_profile_changed(newID: ProfileIdentifier_string): Promise<void>
 }
 /**
  * APIs that only implemented by iOS Mask Network
