@@ -29,7 +29,7 @@ if ((await readFile(versionFilePath, 'utf-8').catch(() => '')) === polyfillVersi
 await builder({
     modules: ['es', 'web'],
     targets: [
-        'iOS >= 13.4',
+        'iOS >= 14.0',
         // Android
         'Firefox >= 91',
         'last 2 Chrome versions',

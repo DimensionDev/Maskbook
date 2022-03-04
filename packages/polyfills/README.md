@@ -13,26 +13,28 @@ Extra:
 
 ## Supporting browsers
 
-- Safari 13.4+ (Released on Sept 2019)
-- Chrome Last 2 versions (about 3 months) (91+ at 7/23/2021)
-- Firefox Last 2 versions (about 3 months) (97+ at 7/23/2021)
+- Safari 14+ (Released on Sept 2020)
+- Chrome Last 2 versions (about 3 months) (98+ at 3/4/2022)
+- Firefox Last 2 versions (about 3 months) (97+ at 3/4/2022)
 - GeckoView 91 (last updated at 7/23/2021).
 
 ## ES Syntax and APIs
 
 We're targeting syntax and libraries to ES2020.
 
-Fell free to add polyfill (or install it from npm).
-For proposals, stage 2 or higher can be considered.
-
 ### Caution
+
+Those features are not easy to polyfill.
 
 - ES2017: SharedArrayBuffer and Atomics
 - ES2018: - (Syntax) RegExp Lookbehind Assertions (Safari not supported)
-- ES2020: BigInt (requires Safari 15)
+- ES2020:
+  - BigInt64Array (requires Safari 15)
+  - BigUint64Array (requires Safari 15)
+  - DataView.prototype.getBigInt64 (requires Safari 15)
+  - DataView.prototype.getBigUint64 (requires Safari 15)
 - ES2021:
   - WeakReference (requires Safari 15)
-  - (Syntax) Logical Assignment (requires Safari 14)
 - ES2022:
   - ⭐ C l a s s ⭐ F i e l d s ⭐ (requires Safari 15)
   - Class initialization block (Safari not supported, Firefox 93+)
@@ -44,7 +46,6 @@ Check and polyfill before using.
 ### Simply polyfilled
 
 - Intl.ListFormat
-- EventTarget.constructor (requires Safari 14)
 
 ### Using polyfill
 
