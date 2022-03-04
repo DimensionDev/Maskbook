@@ -32,6 +32,7 @@ jobs:
           registry: true
       - run: pnpm install
       - run: pnpm build
+      - run: pnpm build
         working-directory: packages/provider-proxy
       - run: npm publish
         working-directory: packages/provider-proxy/dist
