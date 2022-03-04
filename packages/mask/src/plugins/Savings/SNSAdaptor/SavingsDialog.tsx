@@ -12,7 +12,7 @@ import { TargetChainIdContext } from '../../Trader/trader/useTargetChainIdContex
 import { FolderTabPanel, FolderTabs } from '@masknet/theme'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { WalletRPC } from '../../Wallet/messages'
-import { ProtocolCategory, ProtocolType, TabType } from '../types'
+import { TabType } from '../types'
 import { SavingsProtocols } from '../protocols'
 
 import { useStyles } from './SavingsDialogStyles'
@@ -32,41 +32,43 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const currentChainId = useChainId()
     const [chainId, setChainId] = useState<ChainId>(currentChainId)
     const [tab, setTab] = useState<TabType>(TabType.Deposit)
-    const [selectedProtocol, setSelectedProtocol] = useState<ProtocolType | null>(null)
+    const [selectedProtocol, setSelectedProtocol] = useState<SavingsProtocol | null>(null)
 
     const { value: chains = EMPTY_LIST } = useAsync(async () => {
         const networks = await WalletRPC.getSupportedNetworks()
         return networks.map((network) => getChainIdFromNetworkType(network))
     }, [])
 
-    const mappableProtocols = useMemo(() => {
-        return Object.keys(ProtocolCategory)
-            .map((category) => ({
-                category,
-                protocols: SavingsProtocols.filter(
-                    (protocol) => protocol.category.toLowerCase() === category.toLowerCase(),
-                ),
-            }))
-            .filter((categorizedProtocol) =>
-                categorizedProtocol.protocols.some(({ availableNetworks }) =>
-                    availableNetworks.some((network) => network.chainId === chainId),
-                ),
-            )
-    }, [chainId])
+    // const mappableProtocols = useMemo(() => {
+    //     return Object.keys(ProtocolCategory)
+    //         .map((category) => ({
+    //             category,
+    //             protocols: SavingsProtocols.filter(
+    //                 (protocol) => protocol.category.toLowerCase() === category.toLowerCase(),
+    //             ),
+    //         }))
+    //         .filter((categorizedProtocol) =>
+    //             categorizedProtocol.protocols.some(({ availableNetworks }) =>
+    //                 availableNetworks.some((network) => network.chainId === chainId),
+    //             ),
+    //         )
+    // }, [chainId])
+
+    const protocols = useMemo(() => SavingsProtocols.filter((x) => x.bareToken.chainId === chainId), [chainId])
 
     return (
         <TargetChainIdContext.Provider>
             <AllProviderTradeContext.Provider>
                 <InjectedDialog
                     open
+                    title={t('plugin_savings')}
                     onClose={() => {
                         if (selectedProtocol === null) {
                             onClose?.()
                         } else {
                             setSelectedProtocol(null)
                         }
-                    }}
-                    title={t('plugin_savings')}>
+                    }}>
                     <DialogContent>
                         {!isDashboard ? (
                             <div className={classes.walletStatusBox}>
@@ -74,7 +76,15 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                             </div>
                         ) : null}
 
-                        {selectedProtocol === null ? (
+                        {selectedProtocol ? (
+                            <SavingsForm
+                                tab={tab}
+                                chainId={chainId}
+                                protocols={selectedProtocol}
+                                onClose={onClose}
+                                onSwapDialogOpen={onSwapDialogOpen}
+                            />
+                        ) : (
                             <>
                                 <div className={classes.abstractTabWrapper}>
                                     <NetworkTab
@@ -85,26 +95,26 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                     />
                                 </div>
                                 <div className={classes.tableTabWrapper}>
-                                    {mappableProtocols.length === 0 ? (
-                                        <Typography variant="h5" textAlign="center">
+                                    {protocols.length === 0 ? (
+                                        <Typography variant="body2" textAlign="center">
                                             {t('plugin_no_protocol_available')}
                                         </Typography>
                                     ) : (
                                         <FolderTabs>
-                                            <FolderTabPanel label="DEPOSIT">
+                                            <FolderTabPanel label="Deposit">
                                                 <SavingsTable
                                                     chainId={chainId}
                                                     tab={TabType.Deposit}
-                                                    mappableProtocols={mappableProtocols}
+                                                    protocols={protocols}
                                                     setSelectedProtocol={setSelectedProtocol}
                                                     setTab={setTab}
                                                 />
                                             </FolderTabPanel>
-                                            <FolderTabPanel label="WITHDRAW">
+                                            <FolderTabPanel label="Withdraw">
                                                 <SavingsTable
                                                     chainId={chainId}
                                                     tab={TabType.Withdraw}
-                                                    mappableProtocols={mappableProtocols}
+                                                    protocols={protocols}
                                                     setSelectedProtocol={setSelectedProtocol}
                                                     setTab={setTab}
                                                 />
@@ -113,13 +123,6 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                     )}
                                 </div>
                             </>
-                        ) : (
-                            <SavingsForm
-                                tab={tab}
-                                chainId={chainId}
-                                selectedProtocol={selectedProtocol}
-                                onClose={onClose}
-                            />
                         )}
                     </DialogContent>
                 </InjectedDialog>

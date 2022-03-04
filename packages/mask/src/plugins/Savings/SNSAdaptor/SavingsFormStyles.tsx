@@ -40,6 +40,7 @@ export const useStyles = makeStyles()((theme, props) => ({
     },
     rowImage: {
         height: '24px',
+        width: '24px',
         margin: '0 5px 0 0',
     },
     button: {

@@ -1,115 +1,76 @@
 import type Web3 from 'web3'
 import type { AbiItem } from 'web3-utils'
+import BigNumber from 'bignumber.js'
 import {
-    EthereumTokenType,
     ChainId,
     getSavingsConstants,
     createContract,
     FungibleTokenDetailed,
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
+import { ZERO } from '@masknet/web3-shared-base'
 import type { Lido } from '@masknet/web3-contracts/types/Lido'
 import LidoABI from '@masknet/web3-contracts/abis/Lido.json'
-import BigNumber from 'bignumber.js'
-import { ProtocolCategory, SavingsNetwork, SavingsProtocol, ProtocolType } from '../types'
-
-export interface LidoContract {
-    type: EthereumTokenType
-    chainName: string
-    ldoContract: string
-    stEthContract: string
-}
-
-export const LidoContracts: { [key: number]: LidoContract } = {
-    [ChainId.Mainnet]: {
-        type: EthereumTokenType.ERC20,
-        chainName: 'Ethereum',
-        ldoContract: getSavingsConstants(ChainId.Mainnet).LIDO || ZERO_ADDRESS,
-        stEthContract: getSavingsConstants(ChainId.Mainnet).LIDO_STETH || ZERO_ADDRESS,
-    },
-    [ChainId.Gorli]: {
-        type: EthereumTokenType.ERC20,
-        chainName: 'Gorli',
-        ldoContract: getSavingsConstants(ChainId.Gorli).LIDO || ZERO_ADDRESS,
-        stEthContract: getSavingsConstants(ChainId.Gorli).LIDO_STETH || ZERO_ADDRESS,
-    },
-}
+import { SavingsProtocol, ProtocolType, ProtocolCategory, SavingsNetwork } from '../types'
 
 export class LidoProtocol implements SavingsProtocol {
-    public category = ProtocolCategory.ETH
-    public type = ProtocolType.Lido
-    public name = 'Lido'
-    public image = 'lido'
-    public base = 'ETH'
-    public pair = 'stETH'
-    public decimals = 18
-    public apr = '0.00'
-    public balance = new BigNumber('0')
-    public availableNetworks: SavingsNetwork[] = [
-        {
-            chainId: ChainId.Mainnet,
-            chainName: 'Ethereum',
-            contractAddress: getSavingsConstants(ChainId.Mainnet).LIDO_STETH || ZERO_ADDRESS,
-        },
-        {
-            chainId: ChainId.Gorli,
-            chainName: 'Gorli',
-            contractAddress: getSavingsConstants(ChainId.Gorli).LIDO_STETH || ZERO_ADDRESS,
-        },
-    ]
+    private _apr = '0.00'
+    private _balance = ZERO
 
-    public getFungibleTokenDetails(chainId: ChainId): FungibleTokenDetailed {
-        let contractAddress = ''
+    readonly type = ProtocolType.Lido
 
-        for (const network of this.availableNetworks) {
-            if (network.chainId === chainId) {
-                contractAddress = network.contractAddress
-            }
-        }
-
-        return {
-            type: 1,
-            chainId: chainId,
-            address: contractAddress,
-            symbol: 'stETH',
-            decimals: 18,
-            name: 'Liquid staked Ether 2.0',
-            logoURI: [
-                'https://static.debank.com/image/eth_token/logo_url/0xae7ab96520de3a18e5e111b5eaab095312d7fe84/f768023f77be7a2ea23c37f25b272048.png',
-                'https://tokens.1inch.io/0xae7ab96520de3a18e5e111b5eaab095312d7fe84.png',
-            ],
-        }
+    constructor(readonly pair: [FungibleTokenDetailed, FungibleTokenDetailed]) {}
+    category: ProtocolCategory
+    name: string
+    image: string
+    stakingToken: string
+    decimals: number
+    availableNetworks: SavingsNetwork[]
+    getFungibleTokenDetails(chainId: ChainId): FungibleTokenDetailed {
+        throw new Error('Method not implemented.')
+    }
+    getApr(): Promise<string> {
+        throw new Error('Method not implemented.')
+    }
+    getBalance(chainId: ChainId, web3: Web3, account: string): Promise<BigNumber.Value> {
+        throw new Error('Method not implemented.')
     }
 
-    public async getApr() {
+    get apr() {
+        return this._apr
+    }
+
+    get balance() {
+        return this._balance
+    }
+
+    get bareToken() {
+        return this.pair[0]
+    }
+
+    get stakeToken() {
+        return this.pair[1]
+    }
+
+    async updateApr(chainId: ChainId, web3: Web3): Promise<void> {
         try {
-            const LidoAprUrl = 'https://cors.r2d2.to/?https://stake.lido.fi/api/steth-apr'
-            const response = await fetch(LidoAprUrl)
-            const apr = await response.text()
-            this.apr = apr
-            return apr
-        } catch (error) {
-            console.log('LDO `getApr()` error', error)
-            // Default APR is 5.30%
-            this.apr = '5.30'
-            return '5.30'
+            const response = await fetch('https://cors.r2d2.to/?https://stake.lido.fi/api/steth-apr')
+            this._apr = await response.text()
+        } catch {
+            // the default APR is 5.30%
+            this._apr = '5.30'
         }
     }
-
-    public async getBalance(chainId: ChainId, web3: Web3, account: string) {
+    async updateBalance(chainId: ChainId, web3: Web3, account: string): Promise<void> {
         try {
             const contract = createContract<Lido>(
                 web3,
                 getSavingsConstants(chainId).LIDO_STETH || ZERO_ADDRESS,
                 LidoABI as AbiItem[],
             )
-            const balance = await contract?.methods.balanceOf(account).call()
-            this.balance = new BigNumber(balance || '0')
-            return this.balance
+            this._balance = new BigNumber((await contract?.methods.balanceOf(account).call()) ?? '0')
         } catch (error) {
-            console.log('LDO `getBalance()` error', error)
-            this.balance = new BigNumber('0')
-            return this.balance
+            this._balance = ZERO
         }
     }
 
@@ -155,7 +116,7 @@ export class LidoProtocol implements SavingsProtocol {
     }
 
     public async withdrawEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
-        return new BigNumber('0')
+        return ZERO
     }
 
     public async withdraw(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
@@ -176,5 +137,3 @@ export class LidoProtocol implements SavingsProtocol {
         return false
     }
 }
-
-export default new LidoProtocol()

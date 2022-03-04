@@ -14,6 +14,7 @@ export enum ProtocolCategory {
 
 export enum ProtocolType {
     Lido = 0,
+    Convex = 1,
 }
 
 export interface SavingsProtocol {
@@ -21,8 +22,8 @@ export interface SavingsProtocol {
     type: ProtocolType
     name: string
     image: string
-    base: string
-    pair: string
+    bareToken: string
+    stakingToken: string
     decimals: number
     availableNetworks: SavingsNetwork[]
     apr: string
@@ -31,6 +32,28 @@ export interface SavingsProtocol {
     getFungibleTokenDetails(chainId: ChainId): FungibleTokenDetailed
     getApr(): Promise<string>
     getBalance(chainId: ChainId, web3: Web3, account: string): Promise<BigNumber.Value>
+    readonly type: ProtocolType
+
+    /**
+     * annual percentage rate
+     */
+    readonly apr: string
+
+    /**
+     * the amount of staked tokens of the latest found account
+     */
+    readonly balance: BigNumber
+
+    /**
+     * combine a bare token and a staked token with being a pair
+     */
+    readonly pair: [FungibleTokenDetailed, FungibleTokenDetailed]
+
+    readonly bareToken: FungibleTokenDetailed
+    readonly stakeToken: FungibleTokenDetailed
+
+    updateApr(chainId: ChainId, web3: Web3): Promise<void>
+    updateBalance(chainId: ChainId, web3: Web3, account: string): Promise<void>
     depositEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value): Promise<BigNumber.Value>
     deposit(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value): Promise<boolean>
     withdrawEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value): Promise<BigNumber.Value>

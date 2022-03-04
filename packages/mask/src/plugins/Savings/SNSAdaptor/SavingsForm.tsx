@@ -12,13 +12,17 @@ import {
     formatCurrency,
     formatBalance,
 } from '@masknet/web3-shared-evm'
-import { TokenAmountPanel, FormattedCurrency, LoadingAnimation, useRemoteControlledDialog } from '@masknet/shared'
+import {
+    TokenAmountPanel,
+    FormattedCurrency,
+    LoadingAnimation,
+    useRemoteControlledDialog,
+    TokenIcon,
+} from '@masknet/shared'
 import { useTokenPrice } from '../../Wallet/hooks/useTokenPrice'
 import { useI18N } from '../../../utils'
 import { useStyles } from './SavingsFormStyles'
-import { IconURLs } from './IconURL'
-import { TabType, ProtocolType } from '../types'
-import { SavingsProtocols } from '../protocols'
+import { TabType, ProtocolType, SavingsProtocol } from '../types'
 import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
@@ -28,16 +32,14 @@ import type { Coin } from '../../Trader/types'
 
 export interface SavingsFormProps {
     chainId: number
-    selectedProtocol: ProtocolType
+    protocol: SavingsProtocol
     tab: TabType
     onClose?: () => void
 }
 
-export function SavingsForm({ chainId, selectedProtocol, tab, onClose }: SavingsFormProps) {
+export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const protocol = SavingsProtocols[selectedProtocol]
-    const targetChainId = chainId
 
     const { value: nativeTokenDetailed } = useNativeTokenDetailed()
     const web3 = useWeb3({ chainId })
@@ -47,12 +49,12 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose }: Savings
     const [estimatedGas, setEstimatedGas] = useState<BigNumber.Value>(new BigNumber('0'))
     const [loading, setLoading] = useState(false)
 
-    const { value: nativeTokenBalance } = useFungibleTokenBalance(EthereumTokenType.Native, '', targetChainId)
+    const { value: nativeTokenBalance } = useFungibleTokenBalance(EthereumTokenType.Native, '', chainId)
 
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
     const onConvertClick = useCallback(() => {
-        const token = protocol.getFungibleTokenDetails(targetChainId)
+        const token = protocol.getFungibleTokenDetails(chainId)
         openSwapDialog({
             open: true,
             traderProps: {
@@ -65,7 +67,7 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose }: Savings
                 } as Coin,
             },
         })
-    }, [protocol, targetChainId, openSwapDialog])
+    }, [protocol, chainId, openSwapDialog])
 
     // #region form variables
     const tokenAmount = useMemo(() => new BigNumber(rightShift(inputAmount || '0', 18)), [inputAmount])
@@ -77,14 +79,19 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose }: Savings
 
     useAsync(async () => {
         if (!(inputAsBN.toNumber() > 0)) return
-        setLoading(true)
-        const gasEstimate =
-            tab === TabType.Deposit
-                ? await protocol.depositEstimate(account, targetChainId, web3, inputAsBN)
-                : await protocol.withdrawEstimate(account, targetChainId, web3, inputAsBN)
-        setEstimatedGas(gasEstimate)
-        setLoading(false)
-    }, [protocol, chainId, inputAmount])
+        try {
+            setLoading(true)
+            setEstimatedGas(
+                tab === TabType.Deposit
+                    ? await protocol.depositEstimate(account, chainId, web3, inputAsBN)
+                    : await protocol.withdrawEstimate(account, chainId, web3, inputAsBN),
+            )
+        } catch {
+            // todo check async catch
+        } finally {
+            setLoading(false)
+        }
+    }, [tab, protocol, chainId, inputAsBN])
     // #endregion
 
     // #region form validation
@@ -94,7 +101,7 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose }: Savings
 
         if (isLessThan(balanceAsBN.minus(estimatedGas), tokenAmount)) {
             return t('plugin_trader_error_insufficient_balance', {
-                symbol: tab === TabType.Deposit ? protocol.base : protocol.pair,
+                symbol: tab === TabType.Deposit ? protocol.bareToken.symbol : protocol.stakeToken.symbol,
             })
         }
 
@@ -148,16 +155,16 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose }: Savings
 
             <div className={classes.infoRow}>
                 <Typography variant="body1" className={classes.infoRowLeft}>
-                    <img src={IconURLs[protocol.image]} className={classes.rowImage} />
-                    {protocol.pair} {t('plugin_savings_apr')}%
+                    <TokenIcon address={protocol.bareToken.address} classes={{ icon: classes.rowImage }} />
+                    {protocol.bareToken.name} {t('plugin_savings_apr')}%
                 </Typography>
-                <Typography variant="body1" className={classes.infoRowRight}>
+                <Typography variant="body2" className={classes.infoRowRight}>
                     {protocol.apr}%
                 </Typography>
             </div>
 
             <EthereumChainBoundary
-                chainId={targetChainId}
+                chainId={chainId}
                 noSwitchNetworkTip
                 disablePadding
                 ActionButtonPromiseProps={{
@@ -193,8 +200,8 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose }: Savings
                         executor={async () => {
                             switch (tab) {
                                 case TabType.Deposit:
-                                    if (!(await protocol.deposit(account, targetChainId, web3, tokenAmount))) {
-                                        throw new Error('Could not deposit')
+                                    if (!(await protocol.deposit(account, chainId, web3, tokenAmount))) {
+                                        throw new Error('Failed to deposit token')
                                     }
                                     return
                                 case TabType.Withdraw:
@@ -204,8 +211,8 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose }: Savings
                                             onConvertClick()
                                             return
                                         default:
-                                            if (!(await protocol.withdraw(account, targetChainId, web3, tokenAmount))) {
-                                                throw new Error('Could not withdraw')
+                                            if (!(await protocol.withdraw(account, chainId, web3, tokenAmount))) {
+                                                throw new Error('Failed to withdraw')
                                             }
                                             return
                                     }
