@@ -8,7 +8,7 @@
     "verify_wallet_button": "Verify Your Wallet",
     "add_wallet_button": "Add A Wallet",
     "verify_wallet_dialog_title": "Verify your wallet",
-    "bind_wallet_bound_error": "This wallet address has already connected.",
+    "bind_wallet_bound_error": "This wallet address has already been connected.",
     "unbind_wallet_same_account_error": "Please switch to the address that you want to disconnect.",
     "unbind_dialog_title": "Disconnect wallet",
     "persona_sign": "Persona Sign",
