@@ -58,7 +58,6 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const providerDescriptor = useProviderDescriptor(providerType, NetworkPluginID.PLUGIN_EVM)
-
     return (
         <>
             <Paper elevation={0}>
@@ -67,7 +66,9 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                         <ImageIcon icon={providerDescriptor?.icon} />
                         <Box display="flex" flex={1} flexDirection="column" sx={{ marginLeft: 2 }}>
                             <Typography>
-                                {t(connected ? 'plugin_wallet_connected_with' : 'plugin_wallet_connect_with')}{' '}
+                                {loading
+                                    ? t('plugin_wallet_connecting_with')
+                                    : t(connected ? 'plugin_wallet_connected_with' : 'plugin_wallet_connect_with')}{' '}
                                 {resolveProviderName(providerType)}
                             </Typography>
                             {loading ? (
