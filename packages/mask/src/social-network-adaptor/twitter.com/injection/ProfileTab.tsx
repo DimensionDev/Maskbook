@@ -100,7 +100,10 @@ async function clear() {
     await untilElementAvailable(searchProfileTabPageSelector())
 
     const elePage = searchProfileTabPageSelector().evaluate()
-    if (elePage) elePage.style.visibility = 'hidden'
+    if (elePage) {
+        elePage.style.visibility = 'hidden'
+        elePage.style.height = '0px'
+    }
 }
 
 function reset() {
@@ -111,8 +114,10 @@ function reset() {
     if (eleEmpty) eleEmpty.style.display = ''
 
     const elePage = searchProfileTabPageSelector().evaluate()
-    if (elePage) elePage.style.visibility = 'visible'
-
+    if (elePage) {
+        elePage.style.visibility = 'visible'
+        elePage.style.height = 'auto'
+    }
     const tabList = searchProfileTabListSelector().evaluate()
     tabList.map((v) => {
         const _v = v.querySelector('div') as HTMLDivElement
