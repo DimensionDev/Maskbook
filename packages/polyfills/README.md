@@ -18,9 +18,10 @@ Extra:
 - Firefox Last 2 versions (about 3 months) (97+ at 3/4/2022)
 - GeckoView 91 (last updated at 7/23/2021).
 
-## ES Syntax and APIs
+## Targeting ES Syntax and APIs
 
-We're targeting syntax and libraries to ES2020.
+- Syntax: ES2020
+- Library: ES2022 (with [core-js](https://github.com/zloirock/core-js)).
 
 ### Caution
 
