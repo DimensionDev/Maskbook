@@ -30,6 +30,7 @@ export const DatabaseOps: React.FC = () => {
         if (file === undefined) {
             return
         }
+        // cspell:disable-next-line
         const parsed = (await serializer.deserialization(await file.text())) as BackupFormat
         await restoreAll(parsed)
     }
