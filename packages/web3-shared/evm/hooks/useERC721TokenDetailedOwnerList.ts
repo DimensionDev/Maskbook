@@ -9,6 +9,7 @@ import { getERC721TokenDetailedFromChain } from './useERC721TokenDetailed'
 import { useEffect, useRef, useState } from 'react'
 import { uniqBy } from 'lodash-unified'
 import { useChainId } from './useChainId'
+import { NFTScan } from '@masknet/web3-providers'
 
 export const ERC721_ENUMERABLE_INTERFACE_ID = '0x780e9d63'
 
@@ -74,8 +75,10 @@ async function getERC721TokenDetailedOwnerListFromChain(
 
         return getERC721TokenDetailedFromChain(contractDetailed, erc721TokenContract, tokenId, owner, false)
     })
-
+    NFTScan
     return (await Promise.allSettled(allRequest))
         .map((x) => (x.status === 'fulfilled' ? x.value : undefined))
         .filter((value) => value) as ERC721TokenDetailed[]
 }
+
+async function getERC721TokenDetailedOwnerListFromNFTScan(contractDetailed: ERC721ContractDetailed, owner: string) {}

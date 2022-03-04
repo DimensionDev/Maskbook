@@ -102,6 +102,7 @@ const useStyles = makeStyles()((theme) => {
             alignItems: 'center',
             background: `${theme.palette.background.default} !important`,
             justifyContent: 'center',
+            border: `1px solid ${theme.palette.divider}`,
         },
         addIcon: {
             color: '#AFC3E1',
@@ -176,7 +177,10 @@ const useStyles = makeStyles()((theme) => {
         },
         approveAllTip: {
             color: '#FF5F5F',
-            margin: '0px 4px 24px 4px',
+            margin: '16px 4px 24px 4px',
+        },
+        unapprovedTip: {
+            color: theme.palette.grey[500],
         },
         disabledSelector: {
             opacity: 0.5,
@@ -187,6 +191,9 @@ const useStyles = makeStyles()((theme) => {
         },
         iframe: {
             minHeight: 147,
+        },
+        assetImgWrapper: {
+            maxHeight: 155,
         },
     }
 })
@@ -292,12 +299,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                           })}
                                 </Typography>
                             </div>
-                            <div
-                                className={classes.option}
-                                onClick={() => {
-                                    setSelectOption(NFTSelectOption.Partial)
-                                    setExistTokenDetailedList([])
-                                }}>
+                            <div className={classes.option} onClick={() => setSelectOption(NFTSelectOption.Partial)}>
                                 <div
                                     className={classNames(
                                         classes.checkIconWrapper,
@@ -312,7 +314,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         </Box>
                     )
                 ) : null}
-                {contract && balance && selectOption === NFTSelectOption.Partial && !loadingOwnerList ? (
+                {contract && balance && !loadingOwnerList ? (
                     <div className={classes.tokenSelectorParent}>
                         <List className={classes.tokenSelector}>
                             {existTokenDetailedList.map((value, i) => (
@@ -332,9 +334,14 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     <RedpacketMessagePanel onChange={(val: string) => setMessage(val)} message={message} />
                 </div>
                 {contract && balance && !loadingOwnerList ? (
-                    <Typography className={classes.approveAllTip}>
-                        {t('plugin_red_packet_nft_approve_all_tip')}
-                    </Typography>
+                    <>
+                        <Typography className={classes.unapprovedTip}>
+                            {t('plugin_red_packet_nft_unapproved_tip')}
+                        </Typography>
+                        <Typography className={classes.approveAllTip}>
+                            {t('plugin_red_packet_nft_approve_all_tip')}
+                        </Typography>
+                    </>
                 ) : null}
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC721TokenApprovedBoundary
@@ -399,6 +406,7 @@ function NFTCard(props: NFTCardProps) {
                 classes={{
                     loadingFailImage: classes.loadingFailImage,
                     iframe: classes.iframe,
+                    imgWrapper: classes.assetImgWrapper,
                 }}
             />
             <div className={classes.nftNameWrapper}>

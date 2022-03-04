@@ -30,7 +30,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         minHeight: 380,
     },
     dialogContentFixedHeight: {
-        height: 600,
+        height: 610,
     },
     tokenBox: {
         background: theme.palette.background.default,
@@ -294,6 +294,9 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    assetImgWrapper: {
+        maxHeight: 155,
+    },
 }))
 
 export type OrderedERC721Token = ERC721TokenDetailed & { index: number }
@@ -334,8 +337,9 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         (tokenDetailedOwnerList.length === 0 ? NFT_RED_PACKET_MAX_SHARES - 1 : NFT_RED_PACKET_MAX_SHARES) <
         tokenDetailedSelectedList.length
     const { classes } = useStyles({ isSelectSharesExceed })
-    const selectAll = maxSelectShares === tokenDetailedSelectedList.length
+    const [selectAll, setSelectAll] = useState(false)
     const selectAllHandler = useCallback(() => {
+        setSelectAll(!selectAll)
         setTokenDetailedSelectedList(
             tokenIdFilterList.length === 0
                 ? []
@@ -510,6 +514,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                     classes={{
                                         loadingFailImage: classes.loadingFailImage,
                                         iframe: classes.iframe,
+                                        imgWrapper: classes.assetImgWrapper,
                                     }}
                                 />
                                 <div className={classes.selectWrapperNftNameWrapper}>
@@ -754,6 +759,7 @@ function NFTCard(props: NFTCardProps) {
                 classes={{
                     loadingFailImage: classes.loadingFailImage,
                     iframe: classes.iframe,
+                    imgWrapper: classes.assetImgWrapper,
                 }}
             />
             <div className={classes.selectWrapperNftNameWrapper}>
