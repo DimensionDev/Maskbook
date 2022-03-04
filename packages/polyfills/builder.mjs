@@ -20,7 +20,7 @@ let polyfillVersion = '__'
     const lockfile = await readFile(lockfilePath)
     const hash = createHash('sha256')
     hash.update(lockfile)
-    polyfillVersion = 'v3' + hash.digest('hex')
+    polyfillVersion = 'v4' + hash.digest('hex')
 }
 
 const versionFilePath = fileURLToPath(new URL('./dist/version.txt', import.meta.url))
