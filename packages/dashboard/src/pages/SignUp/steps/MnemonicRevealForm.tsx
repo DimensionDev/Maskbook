@@ -121,7 +121,7 @@ export const MnemonicRevealForm = memo(() => {
                         <FormControlLabel
                             control={<Checkbox checked={checked} onChange={(e) => setChecked(e.target.checked)} />}
                             label={t.create_account_mnemonic_download_or_print()}
-                            sx={{ marginTop: '8px' }}
+                            sx={{ marginTop: '8px', color: MaskColorVar.textSecondary }}
                         />
                         <ButtonContainer>
                             <Button
