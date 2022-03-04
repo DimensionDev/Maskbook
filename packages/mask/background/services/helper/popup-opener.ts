@@ -15,6 +15,9 @@ function isLocked() {
         MaskMessages.events.wallet_is_locked.sendToLocal(['request'])
     })
 }
+
+const exclusionDetectLocked = [PopupRoutes.PersonaSignRequest]
+
 export async function openPopupWindow(route?: PopupRoutes, params?: Record<string, any>) {
     const windows = await browser.windows.getAll()
     const popup = windows.find((win) => win && win.type === 'popup' && win.id === currentPopupWindowId)
@@ -23,20 +26,14 @@ export async function openPopupWindow(route?: PopupRoutes, params?: Record<strin
     if (popup) {
         await browser.windows.update(currentPopupWindowId, { focused: true })
     } else {
-        const exclusionDetectLocked = [PopupRoutes.PersonaSignRequest]
         const locked = await isLocked()
+        const shouldUnlockWallet = locked && !exclusionDetectLocked.includes(route ?? PopupRoutes.Wallet)
 
-        const url = urlcat(
-            'popups.html#',
-            locked && !exclusionDetectLocked.includes(route ?? PopupRoutes.Wallet)
-                ? PopupRoutes.Unlock
-                : route ?? PopupRoutes.Wallet,
-            {
-                toBeClose: 1,
-                from: locked && route ? route : null,
-                ...params,
-            },
-        )
+        const url = urlcat('popups.html#', shouldUnlockWallet ? PopupRoutes.Unlock : route ?? PopupRoutes.Wallet, {
+            toBeClose: 1,
+            from: locked && route ? route : null,
+            ...params,
+        })
 
         let left: number
         let top: number
