@@ -13,10 +13,10 @@ export const LDO_PAIRS: [FungibleTokenDetailed, FungibleTokenDetailed][] = [
 export const CONVEX_PAIRS: [FungibleTokenDetailed, FungibleTokenDetailed][] = [
     [
         createERC20Tokens('USDT_ADDRESS', 'Tether USD', 'USDT', 6)[ChainId.Mainnet],
-        createERC20Tokens('CONVEX_LP_USDT_ADDRESS', 'Convex  USDT ', 'USDT', 6)[ChainId.Mainnet],
+        createERC20Tokens('CONVEX_USDT_LP_ADDRESS', 'Convex  USDT ', 'USDT', 6)[ChainId.Mainnet],
     ],
     [
         createERC20Tokens('USDC_ADDRESS', 'WETH', 'WETH', 18)[ChainId.Mainnet],
-        createERC20Tokens('CONVEX_LP_USD_ADDRESS', 'Convex  USD', 'USD', 18)[ChainId.Mainnet],
+        createERC20Tokens('CONVEX_USD_LP_ADDRESS', 'Convex  USD', 'USD', 18)[ChainId.Mainnet],
     ],
 ]
