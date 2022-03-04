@@ -15,7 +15,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             label: 'Wallet',
             priority: 10,
             UI: {
-                TabContent: NextIdPage,
+                TabContent: ({ personaList = [] }) => <NextIdPage personaList={personaList} />,
             },
         },
     ],

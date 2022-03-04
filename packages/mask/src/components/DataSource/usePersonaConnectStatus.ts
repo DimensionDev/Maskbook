@@ -27,13 +27,13 @@ export function usePersonaConnectStatus() {
     return useMemo(() => {
         const id = new ProfileIdentifier(activatedSocialNetworkUI.networkIdentifier, lastRecognized.identifier.userId)
         let connected = false
+        let currentConnectedPersona
         personas.forEach((p) => {
-            p.identifier
-            if (p.linkedProfiles.get(id)) {
-                connected = true
-            }
+            if (!p.linkedProfiles.get(id)) return
+            connected = true
+            currentConnectedPersona = p.publicHexKey
         })
         const action = !personas.length ? createPersona : !connected ? connectPersona : null
-        return { connected, action, hasPersona: !!personas.length }
+        return { connected, action, hasPersona: !!personas.length, currentConnectedPersona }
     }, [personas, lastRecognized, activatedSocialNetworkUI])
 }

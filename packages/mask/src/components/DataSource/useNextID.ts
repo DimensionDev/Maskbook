@@ -1,4 +1,4 @@
-import { useAsync, useAsyncRetry } from 'react-use'
+import { useAsyncRetry } from 'react-use'
 import type { NextIDPlatform } from '@masknet/shared-base'
 import Services from '../../extension/service'
 import { useMemo, useState } from 'react'
@@ -13,15 +13,16 @@ import { useValueRef } from '@masknet/shared'
 import { queryExistedBindingByPersona, queryExistedBindingByPlatform, queryIsBound } from '@masknet/web3-providers'
 
 export const usePersonaBoundPlatform = (personaPublicKey: string) => {
-    useAsyncRetry(() => {
+    return useAsyncRetry(() => {
         return queryExistedBindingByPersona(personaPublicKey)
     }, [personaPublicKey])
 }
 
 let isOpenedVerifyDialog = false
+let isOpenedFromButton = false
 
 export const useNextIDBoundByPlatform = (platform: NextIDPlatform, identity: string) => {
-    useAsyncRetry(() => {
+    return useAsyncRetry(() => {
         return queryExistedBindingByPlatform(platform, identity)
     }, [platform, identity])
 }
@@ -45,14 +46,18 @@ export function useNextIDConnectStatus() {
         lastState.username || (lastRecognized.identifier.isUnknown ? '' : lastRecognized.identifier.userId),
     )
 
-    const { value: isVerified = false } = useAsync(async () => {
+    const { value: isVerified = false, retry } = useAsyncRetry(async () => {
+        if (lastState.status === SetupGuideStep.FindUsername) return true
         if (isOpenedVerifyDialog) return true
         if (!enableNextID || !username || !personaConnectStatus.connected) return true
 
         const currentPersona = await Services.Settings.getCurrentPersona()
         if (!currentPersona?.publicHexKey) return true
 
-        if (dismissVerifyNextID[ui.networkIdentifier].value[`${username}_${currentPersona.identifier.toText()}`])
+        if (
+            dismissVerifyNextID[ui.networkIdentifier].value[`${username}_${currentPersona.identifier.toText()}`] &&
+            !isOpenedFromButton
+        )
             return true
 
         const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
@@ -66,8 +71,15 @@ export function useNextIDConnectStatus() {
             persona: currentPersona?.identifier.toText(),
         })
         isOpenedVerifyDialog = true
+        isOpenedFromButton = false
         return false
     }, [username, enableNextID, lastStateRef.value])
 
-    return isVerified
+    return {
+        isVerified,
+        reset: () => {
+            isOpenedVerifyDialog = false
+            isOpenedFromButton = true
+        },
+    }
 }

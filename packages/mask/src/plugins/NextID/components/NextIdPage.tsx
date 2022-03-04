@@ -1,15 +1,20 @@
 import { useI18N } from '../locales'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Skeleton, Stack, Typography } from '@mui/material'
+import { NextIDPlatform } from '@masknet/shared-base'
+import type { NextIDPersonaBindings } from '@masknet/shared-base'
 import { useMemo, useState } from 'react'
 import { BindDialog } from './BindDialog'
 import { useAsync, useAsyncRetry, useCounter } from 'react-use'
 import Services from '../../../extension/service'
 import { BindingItem } from './BindingItem'
-import type { Platform } from '../types'
 import { UnbindDialog } from './UnbindDialog'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
+import { searchAllProfileTabSelector } from '../../../social-network-adaptor/twitter.com/utils/selector'
+import { queryIsBound, queryExistedBindingByPersona } from '@masknet/web3-providers'
+import { activatedSocialNetworkUI } from '../../../social-network'
+import { useNextIDConnectStatus } from '../../../components/DataSource/useNextID'
 
 const useStyles = makeStyles()((theme) => ({
     tip: {
@@ -29,14 +34,17 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface NextIDPageProps {}
+interface NextIDPageProps {
+    personaList: NextIDPersonaBindings[]
+}
 
-export function NextIdPage({}: NextIDPageProps) {
+export function NextIdPage({ personaList }: NextIDPageProps) {
     const t = useI18N()
     const { classes } = useStyles()
     const currentProfileIdentifier = useLastRecognizedIdentity()
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
     const personaConnectStatus = usePersonaConnectStatus()
+    const { reset, isVerified } = useNextIDConnectStatus()
 
     const [openBindDialog, toggleBindDialog] = useState(false)
     const [unbindAddress, setUnBindAddress] = useState<string>()
@@ -56,22 +64,31 @@ export function NextIdPage({}: NextIDPageProps) {
     }, [personaConnectStatus, t])
 
     const { value: currentPersona, loading: loadingPersona } = useAsyncRetry(() => {
-        if (!currentProfileIdentifier) return Promise.resolve(undefined)
-        return Services.Identity.queryPersonaByProfile(currentProfileIdentifier.identifier)
-    }, [currentProfileIdentifier, personaConnectStatus.hasPersona])
+        if (!visitingPersonaIdentifier) return Promise.resolve(undefined)
+        return Services.Identity.queryPersonaByProfile(visitingPersonaIdentifier.identifier)
+    }, [visitingPersonaIdentifier, personaConnectStatus.hasPersona])
+
+    const { value: isAccountVerified, loading: loadingVerifyInfo } = useAsync(() => {
+        if (!currentPersona) return Promise.resolve(undefined)
+        const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
+        return queryIsBound(
+            currentPersona.publicHexKey as string,
+            platform,
+            visitingPersonaIdentifier.identifier.userId,
+        )
+    }, [isOwn, currentPersona, visitingPersonaIdentifier, isVerified])
 
     const { value: bindings, loading } = useAsync(async () => {
         if (!currentPersona) return
-        if (isOwn) {
-            return Services.Helper.queryExistedBinding(currentPersona.identifier)
-        }
+        return queryExistedBindingByPersona(currentPersona.publicHexKey!)
+    }, [currentPersona, isOwn, count])
 
-        if (!visitingPersonaIdentifier) return null
-        const visitingPersona = await Services.Identity.queryPersonaByProfile(visitingPersonaIdentifier.identifier)
-
-        if (!visitingPersona) return null
-        return Services.Helper.queryExistedBinding(visitingPersona.identifier)
-    }, [currentPersona, count, visitingPersonaIdentifier, isOwn])
+    const onVerify = async () => {
+        const firstTab = searchAllProfileTabSelector().evaluate()?.querySelector('div')?.parentNode
+            ?.firstChild as HTMLElement
+        firstTab.click()
+        reset()
+    }
 
     if (personaActionButton) {
         return (
@@ -81,7 +98,7 @@ export function NextIdPage({}: NextIDPageProps) {
         )
     }
 
-    if (loading || loadingPersona) {
+    if (loading || loadingPersona || loadingVerifyInfo) {
         return (
             <>
                 {Array.from({ length: 2 })
@@ -95,7 +112,31 @@ export function NextIdPage({}: NextIDPageProps) {
         )
     }
 
-    if (bindings?.proofs.length) {
+    if (!isAccountVerified) {
+        return (
+            <Box>
+                {isOwn ? (
+                    <Box className={classes.tip}>
+                        <Typography>{t.verify_Twitter_ID_intro()}</Typography>
+                        <Typography>{t.verify_Twitter_ID()}</Typography>
+                    </Box>
+                ) : (
+                    <Box className={classes.tip}>
+                        <Typography>{t.verify_other_Twitter_ID_intro()}</Typography>
+                    </Box>
+                )}
+                {isOwn && (
+                    <Stack justifyContent="center" direction="row" mt="24px">
+                        <Button variant="contained" onClick={onVerify}>
+                            {t.verify_Twitter_ID_button()}
+                        </Button>
+                    </Stack>
+                )}
+            </Box>
+        )
+    }
+
+    if (bindings?.proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum).length) {
         return (
             <>
                 <Box>
@@ -104,7 +145,7 @@ export function NextIdPage({}: NextIDPageProps) {
                             <BindingItem
                                 enableAction={isOwn}
                                 key={x.identity}
-                                platform={x.platform as Platform}
+                                platform={x.platform as NextIDPlatform}
                                 identity={x.identity}
                                 onUnBind={setUnBindAddress}
                             />
