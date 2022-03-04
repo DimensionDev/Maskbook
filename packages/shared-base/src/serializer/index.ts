@@ -5,12 +5,7 @@ import { Ok, Err, Some, None } from 'ts-results'
 import * as BN from 'bignumber.js'
 
 // @ts-ignore
-import builtins from 'typeson-registry/dist/presets/builtin' // @ts-ignore
-import blob from 'typeson-registry/dist/types/blob' // @ts-ignore
-import file from 'typeson-registry/dist/types/file' // @ts-ignore
-import fileList from 'typeson-registry/dist/types/filelist' // @ts-ignore
-import imageBitMap from 'typeson-registry/dist/types/imagebitmap' // @ts-ignore
-import num from 'typeson-registry/dist/presets/special-numbers'
+import { builtin, blob, file, filelist, imagebitmap, specialNumbers, cryptokey } from 'typeson-registry'
 import { IdentifierMap } from '../Identifier/IdentifierMap'
 import {
     ECKeyIdentifier,
@@ -30,9 +25,9 @@ function setup() {
         all.push([name, undefined, undefined, constructor])
     }
     typeson = new Typeson({})
-    typeson.register(builtins)
-    typeson.register(num)
-    typeson.register([blob, file, fileList, imageBitMap, num])
+    typeson.register(builtin)
+    typeson.register(specialNumbers)
+    typeson.register([blob, file, filelist, imagebitmap])
     typeson.register({ None: [(x) => x === None, () => 'None', () => None] })
 
     addClass('Ok', Ok)
@@ -85,11 +80,12 @@ export const serializer: Serialization = {
     // cspell:disable-next-line
     deserialization(to: string) {
         if (!typeson) setup()
-        try {
-            return typeson!.revive(to)
-        } catch (error) {
-            console.error(error)
-        }
-        return {}
+        return typeson!.revive(to)
     },
+}
+
+/** THIS MUST NOT BE USED OUTSIDE OF A DEBUGGER CONTEXT */
+export function __DEBUG__ONLY__enableCryptoKeySerialization() {
+    if (!typeson) setup()
+    typeson!.register(cryptokey)
 }

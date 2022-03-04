@@ -44,6 +44,7 @@ export interface MaskSNSEvents {
     NFTAvatarTimelineUpdated: NFTAvatarEvent
     Native_visibleSNS_currentDetectedProfileUpdated: string
     nftAvatarSettingDialogUpdated: NFTAvatarSettingDialogEvent
+    Native_visibleSNS_currentDetectedProfileUpdated: string
 }
 
 export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, MaskSNSEvents {

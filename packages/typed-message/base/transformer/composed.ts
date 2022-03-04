@@ -18,7 +18,7 @@ export function composeTransformers(): ComposedTransformers {
     const transformers = new Set<readonly [Transformer, number]>()
 
     function composed(message: TypedMessage, context: TransformationContext) {
-        return [...transformers].sort((a, b) => a[1] - b[1]).reduce((p, [c]) => c(p, context), message)
+        return [...transformers].sort((a, b) => b[1] - a[1]).reduce((p, [c]) => c(p, context), message)
     }
 
     const subscription = {

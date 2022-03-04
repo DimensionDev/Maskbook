@@ -21,7 +21,7 @@
     "use-subscription": "^1.5.1"
   },
   "devDependencies": {
-    "react-i18next": "^11.15.4"
+    "react-i18next": "^11.15.5"
   },
   "peerDependencies": {
     "react-i18next": "^11.15.3"

@@ -32,6 +32,7 @@ function getStyleProps() {
         fontFamily: newTweetButton?.firstChild
             ? window.getComputedStyle(newTweetButton.firstChild as HTMLElement).fontFamily
             : undefined,
+        isPositionStatic: location.pathname.endsWith('/likes') || location.pathname.endsWith('/media'),
     }
 }
 
@@ -40,7 +41,7 @@ const useStyles = makeStyles()((theme) => {
 
     return {
         root: {
-            position: 'absolute',
+            position: props.isPositionStatic ? 'static' : 'absolute',
             top: 0,
             left: 0,
             right: 0,
