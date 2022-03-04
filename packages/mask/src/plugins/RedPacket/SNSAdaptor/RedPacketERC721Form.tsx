@@ -10,12 +10,12 @@ import { EthereumERC721TokenApprovedBoundary } from '../../../web3/UI/EthereumER
 import {
     ERC721ContractDetailed,
     ERC721TokenDetailed,
-    useERC721TokenDetailedOwnerList,
     useAccount,
     useChainId,
     useNftRedPacketConstants,
     formatNFT_TokenId,
 } from '@masknet/web3-shared-evm'
+import { useERC721TokenDetailedOwnerList } from '@masknet/web3-providers'
 import CheckIcon from '@mui/icons-material/Check'
 import CloseIcon from '@mui/icons-material/Close'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
@@ -400,6 +400,7 @@ function NFTCard(props: NFTCardProps) {
             <NFTCardStyledAssetPlayer
                 contractAddress={token.contractDetailed.address}
                 chainId={token.contractDetailed.chainId}
+                url={token.info.mediaUrl || token.info.imageURL}
                 tokenId={token.tokenId}
                 renderOrder={renderOrder}
                 setERC721TokenName={setName}
