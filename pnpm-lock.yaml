@@ -1024,7 +1024,7 @@ importers:
       pvtsutils: ^1.2.2
       react: ../empty
       tiny-secp256k1: ^2.2.1
-      typeson: ^6.1.0
+      typeson: ^7.0.1
       typeson-registry: ^2.0.0
       use-subscription: ^1.5.1
       z-schema: ^5.0.2
@@ -1046,7 +1046,7 @@ importers:
       pvtsutils: 1.2.2
       react: link:../empty
       tiny-secp256k1: 2.2.1
-      typeson: 6.1.0
+      typeson: 7.0.1
       typeson-registry: 2.0.0
       use-subscription: 1.5.1_react@18.0.0-rc.0
       z-schema: 5.0.2
@@ -24607,17 +24607,12 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dependencies:
       base64-arraybuffer-es6: 1.0.0
-      typeson: 7.0.0
+      typeson: 7.0.1
       whatwg-url: 11.0.0
     dev: false
 
-  /typeson/6.1.0:
-    resolution: {integrity: sha512-6FTtyGr8ldU0pfbvW/eOZrEtEkczHRUtduBnA90Jh9kMPCiFNnXIon3vF41N0S4tV1HHQt4Hk1j4srpESziCaA==}
-    engines: {node: '>=0.1.14'}
-    dev: false
-
-  /typeson/7.0.0:
-    resolution: {integrity: sha512-iPWv42lvAs54REu7Sn8Gcwg+8QPTV82NO/PHJa3Zxgn+UOd40o+REZqc3RnMX7LWSEPve2T6ziNaUR1jCj7nSQ==}
+  /typeson/7.0.1:
+    resolution: {integrity: sha512-nXOHqh3KHpBOKeWUE+EsKPpFnyE1RnVYo7dnDXAxtUNZJ5qyo1Gk4O0ce+PRNu4YxZXE+J6U/poGpBZ3aBzXgQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: false
 
