@@ -14,11 +14,11 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
     PluginWrapperComponent?: PluginWrapperComponent<PluginDefinition>,
 ) {
     function usePluginWrapperProvider(element: JSX.Element | null, plugin: PluginDefinition) {
-        const ref = useRef<PluginWrapperMethods>(emptyPluginWrapperMethods)
+        const [ref, setRef] = useState<PluginWrapperMethods | null>(null)
         if (PluginWrapperComponent) {
             return (
-                <PluginWrapperComponent definition={plugin} ref={ref}>
-                    <PluginWrapperMethodsContext.Provider value={ref.current || emptyPluginWrapperMethods}>
+                <PluginWrapperComponent definition={plugin} ref={setRef}>
+                    <PluginWrapperMethodsContext.Provider value={ref || emptyPluginWrapperMethods}>
                         {element}
                     </PluginWrapperMethodsContext.Provider>
                 </PluginWrapperComponent>
