@@ -32,7 +32,7 @@ importers:
       '@types/lodash-es': ^4.17.6
       '@types/masknet__global-types': workspace:*
       '@types/react': ^17.0.39
-      '@types/react-dom': ^17.0.13
+      '@types/react-dom': 17.0.11
       '@types/web': ^0.0.54
       '@typescript-eslint/experimental-utils': ^5.13.0
       cspell: ^5.18.5
@@ -75,7 +75,7 @@ importers:
       '@mui/system': 5.4.4_d1c81cb414c255fa45866714477ddb5d
       '@types/masknet__global-types': link:packages/polyfills/types
       '@types/react': 17.0.39
-      '@types/react-dom': 17.0.13
+      '@types/react-dom': 17.0.11
       '@types/web': 0.0.54
       i18next: 21.6.13
       lodash: 4.17.21
@@ -8620,8 +8620,8 @@ packages:
       '@types/react': 17.0.19
     dev: false
 
-  /@types/react-dom/17.0.13:
-    resolution: {integrity: sha512-wEP+B8hzvy6ORDv1QBhcQia4j6ea4SFIBttHYpXKPFZRviBvknq0FRh3VrIxeXUmsPkwuXVZrVGG7KUVONmXCQ==}
+  /@types/react-dom/17.0.11:
+    resolution: {integrity: sha512-f96K3k+24RaLGVu/Y2Ng3e1EbZ8/cVJvypZWd7cy0ofCBaf2lcM46xNhycMZ2xGwbBjRql7hOlZ+e2WlJ5MH3Q==}
     dependencies:
       '@types/react': 17.0.39
     dev: false
