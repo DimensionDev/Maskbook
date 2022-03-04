@@ -6,7 +6,7 @@ import { ShadowRootStyleProvider } from './ShadowRootStyleProvider'
 export interface RenderInShadowRootConfig {
     /** Root tag. @default "main" */
     tag?: keyof HTMLElementTagNameMap
-    /** Allow to render multiple React root into a same ShadowRoot */
+    /** Used to distinguish multiple React root within a same ShadowRoot */
     key?: string
     /** The AbortSignal to stop the render */
     signal?: AbortSignal

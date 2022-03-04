@@ -1,5 +1,5 @@
 import { useRef, useEffect, forwardRef, useState, createContext, useContext } from 'react'
-import { useCurrentShadowRootStyles } from './ShadowRootStyleProvider'
+import { useAddSyncToStyleSheet } from './ShadowRootStyleProvider'
 import type { PopperProps } from '@mui/material'
 
 /**
@@ -79,7 +79,7 @@ type IsolatedRenderProps = React.PropsWithChildren<{
 }>
 const IsolatedRender = ({ container, root, style, children, findMountingShadowRef }: IsolatedRenderProps) => {
     const update = useUpdate()
-    const css = useCurrentShadowRootStyles(findMountingShadowRef)
+    useAddSyncToStyleSheet(findMountingShadowRef)
     const containerInUse = container.children.length !== 0
 
     useEffect(() => {
@@ -93,10 +93,6 @@ const IsolatedRender = ({ container, root, style, children, findMountingShadowRe
         if (root.parentElement === shadow) return
         shadow.appendChild(root)
     }, [containerInUse, root])
-
-    useEffect(() => {
-        if (findMountingShadowRef && style.textContent !== css) style.textContent = css
-    }, [style, css, findMountingShadowRef])
 
     return children as any
 }
