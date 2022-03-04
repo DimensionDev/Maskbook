@@ -10,7 +10,7 @@ export function formatAssets(data: WalletTokenRecord[]): Asset[] {
     const supportedChains = Object.values(DeBank.CHAIN_ID).filter(Boolean)
 
     const result: Asset[] = data.reduce((list: Asset[], y) => {
-        if (y.is_verified) return list
+        if (!y.is_verified) return list
         const chainIdFromChain = getChainIdFromName(y.chain)
         if (!chainIdFromChain) return list
         const address = supportedChains.includes(y.id) ? createNativeToken(chainIdFromChain).address : y.id
