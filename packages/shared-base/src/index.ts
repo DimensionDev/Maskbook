@@ -1,4 +1,4 @@
-export { serializer } from './serializer'
+export { serializer, __DEBUG__ONLY__enableCryptoKeySerialization } from './serializer'
 export { IdentifierMap, ReadonlyIdentifierMap } from './Identifier/IdentifierMap'
 export * from './collections'
 export * from './MaskPayload'

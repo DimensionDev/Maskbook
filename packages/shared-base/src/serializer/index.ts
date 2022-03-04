@@ -1,11 +1,11 @@
 /// <reference path="./typeson.d.ts" />
-import { Typeson } from 'typeson'
+import Typeson from 'typeson'
 import type { Serialization } from 'async-call-rpc'
 import { Ok, Err, Some, None } from 'ts-results'
 import * as BN from 'bignumber.js'
 
 // @ts-ignore
-import { builtin, blob, file, filelist, imagebitmap, specialNumbers } from 'typeson-registry'
+import { builtin, blob, file, filelist, imagebitmap, specialNumbers, cryptokey } from 'typeson-registry'
 import { IdentifierMap } from '../Identifier/IdentifierMap'
 import {
     ECKeyIdentifier,
@@ -80,11 +80,12 @@ export const serializer: Serialization = {
     // cspell:disable-next-line
     deserialization(to: string) {
         if (!typeson) setup()
-        try {
-            return typeson!.revive(to)
-        } catch (error) {
-            console.error(error)
-        }
-        return {}
+        return typeson!.revive(to)
     },
+}
+
+/** THIS MUST NOT BE USED OUTSIDE OF A DEBUGGER CONTEXT */
+export function __DEBUG__ONLY__enableCryptoKeySerialization() {
+    if (!typeson) setup()
+    typeson!.register(cryptokey)
 }
