@@ -8,7 +8,6 @@
 
 Extra:
 
-- Proposals: `dist/esnext.js` provides useful ES proposals (don't forget to include type definition as well).
 - Intl: `dist/intl.js` provides polyfill for ES Intl API.
 - Secp256k1 support in WebCrypto: `dist/secp256k1.js`
 

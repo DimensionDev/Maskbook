@@ -1,6 +1,6 @@
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import type { ERC721ContractDetailed } from '@masknet/web3-shared-evm'
-import { List, ListItem, ListProps, Skeleton, Typography } from '@mui/material'
+import { ERC721ContractDetailed, formatNFT_TokenId } from '@masknet/web3-shared-evm'
+import { List, ListItem, ListProps, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { FC, HTMLProps, useState } from 'react'
 import { useI18N } from '../../../utils'
@@ -28,6 +28,7 @@ const useStyles = makeStyles()((theme) => {
             width: 120,
             height: 185,
             flexDirection: 'column',
+            backgroundColor: theme.palette.background.paper,
             margin: '0 auto',
             borderRadius: 8,
             overflow: 'hidden',
@@ -72,7 +73,9 @@ const useStyles = makeStyles()((theme) => {
         },
         name: {
             fontSize: 12,
+            height: 18,
             textOverflow: 'ellipsis',
+            textAlign: 'center',
             overflow: 'hidden',
             whiteSpace: 'nowrap',
             padding: '2px 2px 6px',
@@ -89,7 +92,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 interface NftItemProps extends HTMLProps<HTMLDivElement> {
-    contract: ERC721ContractDetailed | undefined
+    contract: ERC721ContractDetailed
     tokenId: string
     claimed?: boolean
     renderOrder: number
@@ -98,14 +101,7 @@ interface NftItemProps extends HTMLProps<HTMLDivElement> {
 export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claimed, renderOrder, ...rest }) => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [name, setName] = useState('#' + tokenId)
-    if (!contract) {
-        return (
-            <div className={classnames(className, classes.nft, classes.loading)} {...rest}>
-                <Skeleton height={185} width={120} />
-            </div>
-        )
-    }
+    const [name, setName] = useState(formatNFT_TokenId(tokenId, 2))
 
     return (
         <div className={classnames(className, classes.nft)} {...rest}>
@@ -126,7 +122,7 @@ export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claime
 }
 
 interface NftListProps extends ListProps {
-    contract: ERC721ContractDetailed | undefined
+    contract: ERC721ContractDetailed
     statusList: boolean[]
     tokenIds: string[]
 }

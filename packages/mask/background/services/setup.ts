@@ -47,9 +47,7 @@ function setup(key: keyof Services, implementation: () => Promise<any>, isGenera
         serializer,
         log: {
             beCalled: false,
-            localError: true,
             remoteError: false,
-            sendLocalStack: false,
             type: 'pretty',
             requestReplay: process.env.NODE_ENV === 'development',
         },

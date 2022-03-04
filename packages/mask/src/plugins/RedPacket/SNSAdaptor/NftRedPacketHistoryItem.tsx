@@ -224,7 +224,12 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                         </section>
                         <section className={classes.nftList}>
                             <NftList
-                                contract={contractDetailed}
+                                contract={
+                                    {
+                                        address: history.token_contract.address,
+                                        chainId: history.token_contract.chain_id,
+                                    } as ERC721ContractDetailed
+                                }
                                 statusList={bitStatusList}
                                 tokenIds={history.token_ids}
                             />
