@@ -8,7 +8,7 @@ const HeaderContainer = styled('header')(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    flexBasis: '600px',
+    flexBasis: '240px',
 
     [theme.breakpoints.down('lg')]: {
         flexBasis: '350px',
