@@ -97,18 +97,24 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         const handleUserIdClick = async (network: string, userId: string) => {
             await openProfilePage(network, userId)
         }
-        const handleProofIconClick = async (e: MouseEvent) => {
+        const handleProofIconClick = async (e: MouseEvent, proof: any, profile: any) => {
             e.stopPropagation()
+            if (!proof || !proof.is_valid) {
+                onConnect()
+            }
         }
         const userIdBox = (profile: any) => {
-            const verified = verification?.proofs.find((x) => {
-                return x.platform === profile.network.split('.')[0] && x.identity === profile.userId.toLowerCase()
+            const proofSupport = ['twitter.com'].includes(profile.network)
+            const proof = verification?.proofs.find((x) => {
+                return x.platform === 'twitter' && x.identity === profile.userId.toLowerCase()
             })
             return (
                 <div className={classes.userIdBox}>
                     <div>@{profile.userId}</div>
-                    <div className={classes.proofIconBox} onClick={(e) => handleProofIconClick(e)}>
-                        {verified === undefined ? null : verified ? (
+                    <div
+                        className={classes.proofIconBox}
+                        onClick={(e: MouseEvent) => handleProofIconClick(e, proof, profile)}>
+                        {!proofSupport ? null : proof?.is_valid ? (
                             <NextIdPersonaVerifiedIcon />
                         ) : (
                             <NextIdPersonaWarningIcon />
@@ -165,15 +171,13 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                         </Box>
                     )}
                 </Link>
-                {openDisconnectDialog && (
-                    <DisconnectProfileDialog
-                        networkIdentifier={networkIdentifier}
-                        onDisconnect={onDisconnect}
-                        profileIdentifiers={profileIdentifiers}
-                        open={openDisconnectDialog}
-                        onClose={() => setOpenDisconnectDialog(false)}
-                    />
-                )}
+                <DisconnectProfileDialog
+                    networkIdentifier={networkIdentifier}
+                    onDisconnect={onDisconnect}
+                    profileIdentifiers={profileIdentifiers}
+                    open={openDisconnectDialog}
+                    onClose={() => setOpenDisconnectDialog(false)}
+                />
             </Box>
         )
     },

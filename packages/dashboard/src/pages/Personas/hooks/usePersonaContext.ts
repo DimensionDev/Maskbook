@@ -23,8 +23,6 @@ function usePersonaContext() {
         return queryExistedBindingByPersona(personaPublicKey as string)
     }, [personaPublicKey]).value
 
-    console.log(verification, 'verification')
-
     const [, connectPersona] = useConnectSocialNetwork()
     const [, openProfilePage] = useOpenProfilePage()
     const [, disconnectPersona] = useDisconnectSocialNetwork()
