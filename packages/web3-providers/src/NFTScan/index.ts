@@ -52,7 +52,7 @@ function createERC721TokenAsset(asset: NFTScanAsset) {
         name?: string
         description?: string
         image?: string
-    } = JSON.parse(asset.nft_json)
+    } = JSON.parse(asset.nft_json ?? '{}')
     const detailed = createERC721ContractDetailedFromAssetContract(asset)
     return createERC721Token(
         detailed,

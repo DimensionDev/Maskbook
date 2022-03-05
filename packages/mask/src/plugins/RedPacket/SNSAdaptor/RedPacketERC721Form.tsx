@@ -14,6 +14,7 @@ import {
     useAccount,
     useChainId,
     useNftRedPacketConstants,
+    formatNFT_TokenId,
 } from '@masknet/web3-shared-evm'
 import CheckIcon from '@mui/icons-material/Check'
 import CloseIcon from '@mui/icons-material/Close'
@@ -386,7 +387,7 @@ interface NFTCardProps {
 function NFTCard(props: NFTCardProps) {
     const { token, removeToken, renderOrder } = props
     const { classes } = useStyles()
-    const [name, setName] = useState('#' + token.tokenId)
+    const [name, setName] = useState(formatNFT_TokenId(token.tokenId, 2))
     return (
         <ListItem className={classNames(classes.tokenSelectorWrapper)}>
             <NFTCardStyledAssetPlayer
