@@ -2,6 +2,7 @@ import { ValueRef, isEnvironment, Environment } from '@dimensiondev/holoflows-ki
 import Services from '../extension/service'
 import { MaskMessages } from '../utils/messages'
 import { defer } from '@dimensiondev/kit'
+import { isEqual } from 'lodash-unified'
 
 export interface SettingsTexts {
     primary: () => string
@@ -49,7 +50,7 @@ MaskMessages.events.createInternalSettingsUpdated.on(async (payload) => {
 export function createInternalSettings<T extends browser.storage.StorageValue>(
     key: string,
     value: T,
-    comparer: (a: T, b: T) => boolean = (a, b) => a === b,
+    comparer: (a: T, b: T) => boolean = isEqual,
 ) {
     const settings = new ValueRef(value, comparer) as InternalSettings<T>
     const [readyPromise, resolve, reject] = defer<T>()
@@ -93,7 +94,7 @@ export function createGlobalSettings<T extends browser.storage.StorageValue>(
     key: string,
     value: T,
     UITexts: SettingsTexts,
-    comparer: (a: T, b: T) => boolean = (a, b) => a === b,
+    comparer: (a: T, b: T) => boolean = isEqual,
 ) {
     const settings = createInternalSettings(`settings+${key}`, value, comparer)
     return settings
