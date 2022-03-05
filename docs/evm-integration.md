@@ -100,3 +100,4 @@ Goto `chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/dashboard.html#/wallet
 | xDai      | <https://github.com/DimensionDev/Maskbook/pull/4140> |
 | Arbitrum  | <https://github.com/DimensionDev/Maskbook/pull/3558> |
 | Avalanche | <https://github.com/DimensionDev/Maskbook/pull/5289> |
+| Heco      | <https://github.com/DimensionDev/Maskbook/pull/>     |
