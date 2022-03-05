@@ -61,6 +61,7 @@ export const resolveTradeProviderName = createLookupTableResolver<TradeProvider,
         [TradeProvider.PANGOLIN]: 'PangolinDex',
         [TradeProvider.TRISOLARIS]: 'Trisolaris',
         [TradeProvider.WANNASWAP]: 'WannaSwap',
+        [TradeProvider.MDEX]: 'Mdex',
     },
     (tradeProvider) => {
         throw new Error(`Unknown provider type: ${tradeProvider}`)
@@ -129,6 +130,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
             return 'https://www.trisolaris.io/#/swap'
         case TradeProvider.WANNASWAP:
             return 'https://wannaswap.finance/exchange/swap'
+        case TradeProvider.MDEX:
+            return 'https://eth.mdex.com/#/swap?lang=en'
         default:
             unreachable(tradeProvider)
     }
@@ -208,6 +211,8 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
         case TradeProvider.WANNASWAP:
             // TODO - add WannaSwap analytics
             return ''
+        case TradeProvider.MDEX:
+            return `https://info.mdex.com/#/pools/${address}`
         default:
             unreachable(tradeProvider)
     }
@@ -301,6 +306,7 @@ export const resolveZrxTradePoolName = createLookupTableResolver<ZrxTradePool, s
         [ZrxTradePool.PangolinDex]: 'PangolinDex',
         [ZrxTradePool.Trisolaris]: 'Trisolaris',
         [ZrxTradePool.WannaSwap]: 'WannaSwap',
+        [ZrxTradePool.Mdex]: 'Mdex',
     },
     'Unknown',
 )
