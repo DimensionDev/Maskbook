@@ -1,12 +1,12 @@
 import { useAsync } from 'react-use'
-import { Box, Grid, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { FormattedBalance } from '@masknet/shared'
-import { useWeb3, useAccount, formatBalance } from '@masknet/web3-shared-evm'
+import { Box, Grid, Button, Typography } from '@mui/material'
+import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import { isZero, rightShift } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, useWeb3, useAccount, formatBalance } from '@masknet/web3-shared-evm'
+import { ProviderIconURLs } from './IconURL'
 import { useI18N } from '../../../utils'
-import { SavingsProtocol, TabType } from '../types'
+import { TabType, SavingsProtocol } from '../types'
 
 const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {
@@ -15,7 +15,7 @@ const useStyles = makeStyles()((theme, props) => ({
     tableHeader: {
         display: 'flex',
         background: theme.palette.mode === 'light' ? '#F6F8F8' : '#17191D',
-        borderRadius: '8px',
+        borderRadius: theme.spacing(1),
         margin: '0 0 15px 0',
     },
     tableRow: {
@@ -44,6 +44,7 @@ const useStyles = makeStyles()((theme, props) => ({
         margin: '0 20px 0 0',
     },
     logo: {
+        width: '32px',
         height: '32px',
     },
     logoMini: {
@@ -58,7 +59,7 @@ const useStyles = makeStyles()((theme, props) => ({
 export interface SavingsTableProps {
     chainId: ChainId
     tab: TabType
-    protocols: SavingsProtocol[]
+    protocols: SavingsProtocol
     setTab(tab: TabType): void
     setSelectedProtocol(protocol: SavingsProtocol): void
 }

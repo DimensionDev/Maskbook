@@ -35,6 +35,7 @@ export interface SavingsFormProps {
     protocol: SavingsProtocol
     tab: TabType
     onClose?: () => void
+    onSwapDialogOpen?: () => void
 }
 
 export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProps) {
@@ -183,11 +184,11 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                         variant="contained"
                         init={
                             needsSwap
-                                ? 'Swap ' + protocol.pair
+                                ? 'Swap ' + protocol.bareToken.symbol
                                 : validationMessage ||
                                   (tab === TabType.Deposit
-                                      ? t('plugin_savings_deposit') + ' ' + protocol.base
-                                      : t('plugin_savings_withdraw') + ' ' + protocol.pair)
+                                      ? t('plugin_savings_deposit') + ' ' + protocol.bareToken.symbol
+                                      : t('plugin_savings_withdraw') + ' ' + protocol.stakeToken.symbol)
                         }
                         waiting={
                             TabType.Deposit ? t('plugin_savings_process_deposit') : t('plugin_savings_process_withdraw')

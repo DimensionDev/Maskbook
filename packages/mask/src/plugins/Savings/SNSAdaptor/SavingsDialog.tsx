@@ -1,30 +1,30 @@
-import { useState, useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { Typography, DialogContent } from '@mui/material'
-import { ChainId, getChainIdFromNetworkType, useChainId } from '@masknet/web3-shared-evm'
 import { isDashboardPage } from '@masknet/shared-base'
+import { FolderTabPanel, FolderTabs } from '@masknet/theme'
+import { ChainId, getChainIdFromNetworkType, useChainId } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { EMPTY_LIST } from '../../../../utils-pure'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
 import { AllProviderTradeContext } from '../../Trader/trader/useAllProviderTradeContext'
 import { TargetChainIdContext } from '../../Trader/trader/useTargetChainIdContext'
-import { FolderTabPanel, FolderTabs } from '@masknet/theme'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { WalletRPC } from '../../Wallet/messages'
-import { TabType } from '../types'
-import { SavingsProtocols } from '../protocols'
-
+import { SavingsProtocol, TabType } from '../types'
 import { useStyles } from './SavingsDialogStyles'
 import { SavingsTable } from './SavingsTable'
 import { SavingsForm } from './SavingsForm'
+import { SavingsProtocols } from '../protocols'
 
-interface SavingsDialogProps {
+export interface SavingsDialogProps {
     open: boolean
     onClose?: () => void
+    onSwapDialogOpen?: () => void
 }
 
-export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
+export function SavingsDialog({ open, onClose, onSwapDialogOpen }: SavingsDialogProps) {
     const { t } = useI18N()
     const isDashboard = isDashboardPage()
     const { classes } = useStyles({ isDashboard })
@@ -38,21 +38,6 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
         const networks = await WalletRPC.getSupportedNetworks()
         return networks.map((network) => getChainIdFromNetworkType(network))
     }, [])
-
-    // const mappableProtocols = useMemo(() => {
-    //     return Object.keys(ProtocolCategory)
-    //         .map((category) => ({
-    //             category,
-    //             protocols: SavingsProtocols.filter(
-    //                 (protocol) => protocol.category.toLowerCase() === category.toLowerCase(),
-    //             ),
-    //         }))
-    //         .filter((categorizedProtocol) =>
-    //             categorizedProtocol.protocols.some(({ availableNetworks }) =>
-    //                 availableNetworks.some((network) => network.chainId === chainId),
-    //             ),
-    //         )
-    // }, [chainId])
 
     const protocols = useMemo(() => SavingsProtocols.filter((x) => x.bareToken.chainId === chainId), [chainId])
 
@@ -80,7 +65,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                             <SavingsForm
                                 tab={tab}
                                 chainId={chainId}
-                                protocols={selectedProtocol}
+                                protocol={selectedProtocol}
                                 onClose={onClose}
                                 onSwapDialogOpen={onSwapDialogOpen}
                             />
@@ -106,8 +91,8 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                                     chainId={chainId}
                                                     tab={TabType.Deposit}
                                                     protocols={protocols}
-                                                    setSelectedProtocol={setSelectedProtocol}
                                                     setTab={setTab}
+                                                    setSelectedProtocol={setSelectedProtocol}
                                                 />
                                             </FolderTabPanel>
                                             <FolderTabPanel label="Withdraw">
@@ -115,8 +100,8 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                                     chainId={chainId}
                                                     tab={TabType.Withdraw}
                                                     protocols={protocols}
-                                                    setSelectedProtocol={setSelectedProtocol}
                                                     setTab={setTab}
+                                                    setSelectedProtocol={setSelectedProtocol}
                                                 />
                                             </FolderTabPanel>
                                         </FolderTabs>

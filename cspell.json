@@ -1,6 +1,12 @@
 {
     "$schema": "https://github.com/streetsidesoftware/cspell/raw/main/cspell.schema.json",
-    "dictionaries": ["typescript", "node", "html", "css", "fonts"],
+    "dictionaries": [
+        "typescript",
+        "node",
+        "html",
+        "css",
+        "fonts"
+    ],
     "ignorePaths": [
         ".github",
         ".prettierignore",
@@ -17,10 +23,15 @@
         "adai",
         "addrs",
         "aeth",
+        "ALCX",
+        "aleth",
+        "alusd",
         "amountstate",
         "ampl",
         "ampleforth",
         "anchorme",
+        "ankr",
+        "ankreth",
         "apikey",
         "arbitrum",
         "areth",
@@ -28,6 +39,7 @@
         "arweave",
         "avalanche",
         "avax",
+        "bbtc",
         "betanet",
         "bgcolor",
         "bignumber",
@@ -62,6 +74,9 @@
         "cooldown",
         "corepack",
         "counterparty",
+        "cvxcrv",
+        "cvxeth",
+        "cvxfxs",
         "cyberconnect",
         "cyberlab",
         "datas",
@@ -72,7 +87,9 @@
         "dhedge",
         "dimensiondev",
         "dklen",
+        "dola",
         "dompurify",
+        "dusd",
         "ecid",
         "ecsign",
         "elec",
@@ -80,6 +97,11 @@
         "endregion",
         "ethersphere",
         "ethersproject",
+        "eurn",
+        "eurs",
+        "eursusd",
+        "eurt",
+        "eurtusd",
         "eustatius",
         "everytime",
         "exchangetoken",
@@ -88,6 +110,7 @@
         "filelist",
         "fileservice",
         "formating",
+        "frax",
         "fullfilled",
         "furucombo",
         "futuna",
@@ -96,9 +119,12 @@
         "gltf",
         "goodghosting",
         "gundb",
+        "gusd",
         "hashmasks",
+        "hbtc",
         "hexlify",
         "holoflows",
+        "ibbtc",
         "iconbar",
         "idbp",
         "ifclaimed",
@@ -111,6 +137,7 @@
         "ipfs",
         "ipfshttp",
         "ipfsurl",
+        "ironbank",
         "ittr",
         "jailbroken",
         "jsbi",
@@ -157,6 +184,7 @@
         "mskc",
         "multicall",
         "multihop",
+        "musd",
         "mutex",
         "newsfeed",
         "nftrss",
@@ -164,6 +192,7 @@
         "nowallet",
         "nums",
         "opensea",
+        "ousd",
         "overridable",
         "overscan",
         "pageable",
@@ -172,12 +201,14 @@
         "pangolin",
         "pangolindex",
         "pathnames",
+        "paxos",
         "perma",
         "pid",
         "pids",
         "plurinational",
         "plusplus",
         "polkadot",
+        "pooladdress",
         "pooltogether",
         "popper",
         "popperjs",
@@ -203,8 +234,10 @@
         "rindexed",
         "rpid",
         "rpids",
+        "saave",
         "sablier",
         "sashimiswap",
+        "sbtc",
         "scroller",
         "secp",
         "serializers",
@@ -224,6 +257,7 @@
         "swither",
         "tabindex",
         "tablist",
+        "tbtc",
         "testid",
         "textbox",
         "thegraph",
@@ -233,6 +267,7 @@
         "tokenid",
         "traderjoe",
         "transak",
+        "tricrypto",
         "trisolaris",
         "twimg",
         "txid",
@@ -245,6 +280,9 @@
         "unstyled",
         "untrusted",
         "urlcat",
+        "usdm",
+        "usdn",
+        "usdp",
         "usermenu",
         "vcent",
         "viet",
@@ -260,9 +298,12 @@
         "withdrawed",
         "wmatic",
         "wnative",
+        "wsbtc",
         "xdai",
         "xlarge",
         "xlink",
+        "ypax",
+        "ypool",
         "zerion",
         "zubin"
     ],
@@ -381,19 +422,32 @@
         "xdescribe",
         "xtest"
     ],
-    "ignoreRegExpList": ["/@servie/"],
+    "ignoreRegExpList": [
+        "/@servie/"
+    ],
     "overrides": [
         {
             "filename": "**/*.md",
-            "ignoreWords": ["guanbinrui", "jkoeaghipilijlahjplgbfiocjhldnap", "pnpx", "yisiliu", "zhouhancheng"]
+            "ignoreWords": [
+                "guanbinrui",
+                "jkoeaghipilijlahjplgbfiocjhldnap",
+                "pnpx",
+                "yisiliu",
+                "zhouhancheng"
+            ]
         },
         {
             "filename": "packages/web3-contracts/types/GoodGhostingIncentives.d.ts",
-            "ignoreWords": ["adming", "ditribution"]
+            "ignoreWords": [
+                "adming",
+                "ditribution"
+            ]
         },
         {
             "filename": "packages/web3-shared/evm/assets/**/*.json",
-            "ignoreWords": ["görli"]
+            "ignoreWords": [
+                "görli"
+            ]
         },
         {
             "filename": "packages/mask/src/plugins/ITO/assets/regions.json",
@@ -405,7 +459,9 @@
         },
         {
             "filename": ".circleci/config.yml",
-            "ignoreWords": ["cimg"]
+            "ignoreWords": [
+                "cimg"
+            ]
         }
     ]
 }

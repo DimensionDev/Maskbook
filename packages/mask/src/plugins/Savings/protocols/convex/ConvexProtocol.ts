@@ -13,14 +13,16 @@ import {
 // import type { CrvDepositor } from '@masknet/web3-contracts/types/CrvDepositor'
 import type { ConvexBooster } from '@masknet/web3-contracts/types/ConvexBooster'
 import type { ICurveFi } from '@masknet/web3-contracts/types/ICurveFi'
+import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
 
 // import CrvDepositorABI from '@masknet/web3-contracts/abis/CrvDepositor.json'
 import ConvexBoosterABI from '@masknet/web3-contracts/abis/ConvexBooster.json'
 import CurveFiABI from '@masknet/web3-contracts/abis/ICurveFi.json'
+import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 
-import { ProtocolType, SavingsProtocol } from '../types'
+import { ProtocolType, SavingsProtocol } from '../../types'
 
-import { CONVEX_POOLS } from './index'
+import { CONVEX_POOLS } from './constants/index'
 
 // https://github.com/convex-community/convex-subgraph
 
@@ -37,7 +39,7 @@ export class ConvexProtocol implements SavingsProtocol {
     constructor(readonly pair: [FungibleTokenDetailed, FungibleTokenDetailed]) {}
 
     get type() {
-        return ProtocolType.AAVE
+        return ProtocolType.Convex
     }
 
     get apr() {
@@ -56,7 +58,7 @@ export class ConvexProtocol implements SavingsProtocol {
         return this.pair[1]
     }
 
-    public async updateApr(web3: Web3) {
+    public async updateApr(web3: Web3, chainId: ChainId) {
         try {
             const subgraphUrl = CONVEX_STAKING_SUBGRAPH || ''
 
@@ -98,23 +100,24 @@ export class ConvexProtocol implements SavingsProtocol {
         }
     }
 
-    public async updateBalance(web3: Web3, account: string) {
+    public async updateBalance(web3: Web3, account: string, chainId: ChainId) {
         try {
-            const poolId = CONVEX_POOLS.find((pool) => pool.token === this.bareToken.address)
+            const poolData = CONVEX_POOLS.find((pool: { token: string }) => pool.token === this.bareToken.address)
 
             const boostAddress = getSavingsConstants(chainId).CONVEX_BOOSTER_ADDRESS || ZERO_ADDRESS
 
             const BoostContract = createContract<ConvexBooster>(web3, boostAddress, ConvexBoosterABI as AbiItem[])
 
-            const poolInfo = await BoostContract?.methods.poolInfo(poolId).call()
-            const tokenPooladdress = poolInfo.token
+            const poolID: number = poolData?.id!
+            const poolInfo = await BoostContract?.methods.poolInfo(poolID).call()
+            const tokenPooladdress = poolInfo?.token
             const stakingToken = createContract<ICurveFi>(
                 web3,
                 tokenPooladdress || ZERO_ADDRESS,
                 CurveFiABI as AbiItem[],
             )
 
-            const userBalance = await stakingToken?.methods.balanceOf(account, 0).call()
+            const userBalance = await stakingToken?.methods.balances(account).call()
 
             this._balance = new BigNumber(userBalance || '0')
         } catch (error) {
@@ -127,7 +130,7 @@ export class ConvexProtocol implements SavingsProtocol {
             const operation = await this.createDepositTokenOperation(account, chainId, web3, value)
             const gasEstimate = await operation?.estimateGas({
                 from: account,
-            })
+            })!
 
             return new BigNumber(gasEstimate || 0)
         } catch (error) {
@@ -136,24 +139,27 @@ export class ConvexProtocol implements SavingsProtocol {
     }
 
     private async createDepositTokenOperation(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
-        const poolId = CONVEX_POOLS.find((pool) => pool.token === this.bareToken.address)
+        const poolData = CONVEX_POOLS.find((pool: { token: string }) => pool.token === this.bareToken.address)
 
         const boostAddress = getSavingsConstants(chainId).CONVEX_BOOSTER_ADDRESS || ZERO_ADDRESS
 
         const BoostContract = createContract<ConvexBooster>(web3, boostAddress, ConvexBoosterABI as AbiItem[])
 
-        const poolInfo = await BoostContract?.methods.poolInfo(poolId).call()
+        const poolID = poolData?.id!
+        const poolInfo = await BoostContract?.methods.poolInfo(poolID).call()
         const tokenPooladdress = poolInfo?.token
 
         const stakingToken = createContract<ICurveFi>(web3, tokenPooladdress || ZERO_ADDRESS, CurveFiABI as AbiItem[])
+        const stakingTokenERC20 = createContract<ERC20>(web3, tokenPooladdress || ZERO_ADDRESS, ERC20ABI as AbiItem[])
 
-        const allowance = await stakingToken?.methods.allowance(web3.defaultAccount[0], boostAddress).call()
+        const allowance = await stakingTokenERC20?.methods.allowance(account, boostAddress).call()
 
         // check allowance
         if (allowance) {
-            return stakingToken?.methods.add_liquidity([new BigNumber(value).toFixed(), , 0, 0], 0, { from: account })
+            // eslint-disable-next-line no-sparse-arrays
+            return stakingToken?.methods.add_liquidity([new BigNumber(value).toFixed(), 0, 0, 0], account)
         }
-        return stakingToken?.methods.approve(boostAddress, account).call()
+        return stakingTokenERC20?.methods.approve(boostAddress, account).call()
     }
 
     public async deposit(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
@@ -175,14 +181,14 @@ export class ConvexProtocol implements SavingsProtocol {
 
     public async withdrawEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
         try {
-            const poolId = CONVEX_POOLS.find((pool) => pool.token === this.bareToken.address)
+            const poolData = CONVEX_POOLS.find((pool) => pool.token === this.bareToken.address)
 
             const boostAddress = getSavingsConstants(chainId).CONVEX_BOOSTER_ADDRESS || ZERO_ADDRESS
 
             const BoostContract = createContract<ConvexBooster>(web3, boostAddress, ConvexBoosterABI as AbiItem[])
-
+            const poolID = poolData?.id!
             const gasEstimate = await BoostContract?.methods
-                .withdraw(poolId, new BigNumber(value).toFixed())
+                .withdraw(poolID, new BigNumber(value).toFixed())
                 .estimateGas({
                     from: account,
                 })
@@ -194,13 +200,14 @@ export class ConvexProtocol implements SavingsProtocol {
 
     public async withdraw(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
         try {
-            const poolId = CONVEX_POOLS.find((pool) => pool.token === this.bareToken.address)
+            const poolData = CONVEX_POOLS.find((pool) => pool.token === this.bareToken.address)
+            const poolID = poolData?.id!
 
             const boostAddress = getSavingsConstants(chainId).CONVEX_BOOSTER_ADDRESS || ZERO_ADDRESS
 
             const BoostContract = createContract<ConvexBooster>(web3, boostAddress, ConvexBoosterABI as AbiItem[])
 
-            await BoostContract?.methods.withdraw(poolId, new BigNumber(value).toFixed()).send({
+            await BoostContract?.methods.withdraw(poolID, new BigNumber(value).toFixed()).send({
                 from: account,
             })
             return true

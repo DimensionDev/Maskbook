@@ -11,7 +11,7 @@ import {
 import { ZERO } from '@masknet/web3-shared-base'
 import type { Lido } from '@masknet/web3-contracts/types/Lido'
 import LidoABI from '@masknet/web3-contracts/abis/Lido.json'
-import { SavingsProtocol, ProtocolType, ProtocolCategory, SavingsNetwork } from '../types'
+import { SavingsProtocol, ProtocolType } from '../types'
 
 export class LidoProtocol implements SavingsProtocol {
     private _apr = '0.00'
@@ -20,12 +20,7 @@ export class LidoProtocol implements SavingsProtocol {
     readonly type = ProtocolType.Lido
 
     constructor(readonly pair: [FungibleTokenDetailed, FungibleTokenDetailed]) {}
-    category: ProtocolCategory
-    name: string
-    image: string
-    stakingToken: string
-    decimals: number
-    availableNetworks: SavingsNetwork[]
+
     getFungibleTokenDetails(chainId: ChainId): FungibleTokenDetailed {
         throw new Error('Method not implemented.')
     }
