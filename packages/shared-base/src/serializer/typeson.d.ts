@@ -5,7 +5,7 @@ declare module 'typeson' {
         (x: InternalRepresentation) => Type,
     ]
     export class Undefined {}
-    export default class Typeson {
+    export class Typeson {
         constructor(options?: {
             cyclic?: boolean
             encapsulateObserver?: (...args: unknown[]) => void

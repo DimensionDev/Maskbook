@@ -3,6 +3,7 @@ import * as InjectContentScript from './Cancellable/InjectContentScripts'
 import * as InjectContentScriptMV3 from './Cancellable/InjectContentScripts-mv3'
 import * as IsolatedDashboardBridge from './Cancellable/IsolatedDashboardBridge'
 import * as CleanupProfileDatabase from './Cancellable/CleanProfileAndAvatar'
+import * as NotificationsToMobile from './Cancellable/NotificationsToMobile'
 
 type CancelableJob = { default: (signal: AbortSignal) => void }
 const CancelableJobs: CancelableJob[] = [
@@ -10,6 +11,7 @@ const CancelableJobs: CancelableJob[] = [
     process.env.manifest === '2' ? InjectContentScript : InjectContentScriptMV3,
     IsolatedDashboardBridge,
     CleanupProfileDatabase,
+    NotificationsToMobile,
 ]
 
 const abort = new AbortController()
