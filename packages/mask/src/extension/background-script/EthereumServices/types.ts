@@ -63,12 +63,12 @@ export interface Context {
     error: Error | null
 
     /**
-     * Resolve a request and write down the result into the context. Alias of end(error)
+     * Resolve a request and write down the result into the context. Alias of end(null, result)
      */
     write: (result: unknown) => void
 
     /**
-     * Reject a request and throw an error. Alias of end(null, result)
+     * Reject a request and throw an error. Alias of end(error)
      */
     abort: (error: unknown, fallback?: string) => void
 

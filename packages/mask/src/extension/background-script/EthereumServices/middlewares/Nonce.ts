@@ -1,4 +1,5 @@
 import { EthereumAddress } from 'wallet.ts'
+import { toHex } from 'web3-utils'
 import { EthereumMethodType, ProviderType } from '@masknet/web3-shared-evm'
 import type { Context, Middleware } from '../types'
 import { getTransactionCount } from '../network'
@@ -21,10 +22,9 @@ class NonceManager {
     }
     private async getRemoteNonce() {
         return new Promise<number>(async (resolve, reject) => {
-            const callback = (e: Error | null, nonce?: number) => {
-                if (e) reject(e)
-                // TODO: is 0 a correct value if nonce is undefined?
-                else resolve(nonce ?? 0)
+            const callback = (error: Error | null, nonce = 0) => {
+                if (error) reject(error)
+                else resolve(nonce)
                 this.unlock()
                 this.continue()
             }
@@ -33,21 +33,28 @@ class NonceManager {
                     this.lock()
                     callback(
                         null,
-                        // Only mask wallets need to use Nonce
                         await getTransactionCount(this.address, {
+                            // Only mask wallets need to use Nonce
                             providerType: ProviderType.MaskWallet,
                             chainId: currentMaskWalletChainIdSettings.value,
                         }),
                     )
-                } catch (error: any) {
-                    callback(error)
+                } catch (error: unknown) {
+                    callback(error instanceof Error ? error : new Error('Failed to get remote nonce.'))
                 }
             }
             if (this.locked) this.tasks.push(run)
             else run()
         })
     }
-    private async setLocalNonce(nonce: number) {
+
+    public async getNonce() {
+        const nonce = Math.max(await this.getRemoteNonce(), this.nonce)
+        await this.setNonce(nonce)
+        return nonce
+    }
+
+    public async setNonce(nonce: number) {
         return new Promise<void>(async (resolve, reject) => {
             const callback = (e: Error | null) => {
                 if (e) reject(e)
@@ -65,17 +72,9 @@ class NonceManager {
         })
     }
 
-    public async getNonce() {
-        const nonce = this.nonce === NonceManager.INITIAL_NONCE ? await this.getRemoteNonce() : this.nonce
-        await this.setLocalNonce(nonce)
-        return nonce
-    }
-    public async setNonce(nonce: number) {
-        await this.setLocalNonce(nonce)
-    }
     public async resetNonce() {
         const nonce = await this.getRemoteNonce()
-        await this.setLocalNonce(nonce)
+        await this.setNonce(nonce)
     }
 
     static INITIAL_NONCE = -1
@@ -115,27 +114,7 @@ export class Nonce implements Middleware<Context> {
         await Promise.all(Array.from(this.cache.values()).map((m) => m.resetNonce()))
     }
 
-    async fn(context: Context, next: () => Promise<void>) {
-        // set a nonce for Mask wallets
-        if (
-            context.account &&
-            context.config &&
-            !context.config.nonce &&
-            context.providerType === ProviderType.MaskWallet
-        ) {
-            context.requestArguments = {
-                method: context.method,
-                params: [
-                    {
-                        ...context.config,
-                        nonce: this.getNonce(context.account),
-                    },
-                ],
-            }
-        }
-
-        await next()
-
+    private async observe(context: Context) {
         if (context.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return
 
         const message = context.error?.message ?? ''
@@ -146,5 +125,29 @@ export class Nonce implements Middleware<Context> {
         if (isGeneralErrorNonce || isAuroraErrorNonce) await this.resetNonce(context.account)
         // else if a nonce error was occurred then reset the nonce
         else if (!context.error && typeof context.result === 'string') await this.commitNonce(context.account)
+    }
+
+    async fn(context: Context, next: () => Promise<void>) {
+        // set a nonce for Mask wallets
+        if (
+            context.account &&
+            context.providerType === ProviderType.MaskWallet &&
+            context.method === EthereumMethodType.ETH_SEND_TRANSACTION
+        ) {
+            context.requestArguments = {
+                method: context.method,
+                params: [
+                    {
+                        ...context.config,
+                        nonce: toHex(await this.getNonce(context.account)),
+                    },
+                ],
+            }
+        }
+
+        await next()
+
+        // to scan the context to determine how to update the local nonce, allow to fail silently
+        this.observe(context)
     }
 }

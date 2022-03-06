@@ -1,3 +1,4 @@
+import type { Context } from '../types'
 import { Base } from './Base'
 
 export class Optimistic extends Base {

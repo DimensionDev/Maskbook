@@ -1,17 +1,33 @@
-import { EthereumMethodType, isRiskPayload, ProviderType } from '@masknet/web3-shared-evm'
+import type { JsonRpcPayload } from 'web3-core-helpers'
+import { EthereumMethodType, getPayloadConfig, ProviderType } from '@masknet/web3-shared-evm'
 import Services from '../../../service'
 import type { Context, Middleware } from '../types'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import { hasNativeAPI } from '../../../../../shared/native-rpc'
+import { openPopupWindow } from '../../../../../background/services/helper'
+import { defer } from '@dimensiondev/kit'
+import { confirmRequest, sendTransaction } from '../network'
 
 export class Popup implements Middleware<Context> {
     private previousRequests: {
         context: Context
-        next: () => Promise<void>
+        resume: () => void
     }[] = []
 
+    private isRiskPayload(payload: JsonRpcPayload) {
+        return [
+            EthereumMethodType.ETH_SIGN,
+            EthereumMethodType.PERSONAL_SIGN,
+            EthereumMethodType.ETH_SIGN_TYPED_DATA,
+            EthereumMethodType.ETH_DECRYPT,
+            EthereumMethodType.ETH_GET_ENCRYPTION_PUBLIC_KEY,
+            EthereumMethodType.ETH_SEND_TRANSACTION,
+            EthereumMethodType.ETH_SIGN_TRANSACTION,
+        ].includes(payload.method as EthereumMethodType)
+    }
+
     async fn(context: Context, next: () => Promise<void>) {
-        if (context.providerType !== ProviderType.MaskWallet || hasNativeAPI) {
+        if (context.providerType !== ProviderType.MaskWallet || hasNativeAPI || !context.requestOptions?.popupsWindow) {
             await next()
             return
         }
@@ -19,11 +35,9 @@ export class Popup implements Middleware<Context> {
         switch (context.method) {
             case EthereumMethodType.MASK_CONFIRM_TRANSACTION:
             case EthereumMethodType.MASK_REJECT_TRANSACTION:
-                // recover request from cache
+                const payload = await WalletRPC.shiftUnconfirmedRequest()
                 const previousRequest = this.previousRequests.shift()
 
-                // recover payload from DB
-                const payload = await WalletRPC.popUnconfirmedRequest()
                 if (!payload) {
                     context.abort(new Error('No unconfirmed request.'))
                     break
@@ -33,42 +47,49 @@ export class Popup implements Middleware<Context> {
 
                 if (context.method === EthereumMethodType.MASK_CONFIRM_TRANSACTION) {
                     if (previousRequest) {
-                        await previousRequest.next()
-                        context.end(previousRequest.context.error, previousRequest.context.result)
+                        previousRequest.resume()
                     } else {
-                        context.requestArguments = {
-                            method: payload.method,
-                            params: payload.params,
+                        const config = getPayloadConfig(payload)
+
+                        if (!config) {
+                            context.abort(new Error('Failed to read transaction config.'))
+                            break
                         }
+
+                        // re-send the previous request
+                        await sendTransaction(config, context.sendOverrides, context.requestOptions)
                     }
                 } else {
                     if (previousRequest) {
                         previousRequest.context.abort(new Error('The user rejected the request.'))
-                        await previousRequest.next()
+                        previousRequest.resume()
                     }
-                    context.write(undefined)
                 }
+                context.end()
                 break
             default:
-                if (!isRiskPayload(context.request)) break
+                if (!this.isRiskPayload(context.request)) break
 
-                if (await WalletRPC.topUnconfirmedRequest()) {
-                    context.abort(new Error('There is already a pending request, and please handle it first.'))
+                try {
+                    await WalletRPC.pushUnconfirmedRequest(context.request)
+                    await openPopupWindow()
+
+                    const [promise, resume] = defer<void>()
+
+                    // for now, we only support one request per time.
+                    this.previousRequests = [
+                        {
+                            context,
+                            resume,
+                        },
+                    ]
+
+                    // the context is holding until the user confirms or rejects it.
+                    await promise
+                } catch (error) {
+                    context.abort(error, 'Failed to add request.')
                     break
                 }
-
-                await WalletRPC.pushUnconfirmedRequest(context.request)
-
-                // for now, we only support on request per time.
-                this.previousRequests = [
-                    {
-                        context,
-                        next,
-                    },
-                ]
-
-                // the context is holding until the user confirms or rejects it.
-                return
         }
 
         await next()

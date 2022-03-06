@@ -9,7 +9,6 @@ import {
     EthereumMethodType,
     EthereumTransactionConfig,
 } from '@masknet/web3-shared-evm'
-import { Flags } from '../../../../shared'
 import {
     currentAccountSettings,
     currentChainIdSettings,
@@ -101,7 +100,10 @@ class RequestContext implements Context {
 
     set config(config: EthereumTransactionConfig | undefined) {
         if (!this.config || !config) return
-        this.requestArguments.params = [config]
+        this._requestArguments = {
+            method: this.method,
+            params: [config],
+        }
     }
 
     get sendOverrides() {

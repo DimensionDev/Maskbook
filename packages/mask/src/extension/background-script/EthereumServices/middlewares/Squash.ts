@@ -1,6 +1,5 @@
 import { sha3 } from 'web3-utils'
 import type { RequestArguments, TransactionConfig } from 'web3-core'
-import type { JsonRpcResponse } from 'web3-core-helpers'
 import { defer } from '@dimensiondev/kit'
 import { EthereumMethodType, SendOverrides } from '@masknet/web3-shared-evm'
 import type { Context, Middleware } from '../types'
@@ -43,49 +42,34 @@ export class Squash implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {
         const id = this.createRequestID(context.request, context.sendOverrides)
 
-        // write context with the cached response
-        if (id && this.cache.has(id)) {
-            const timer = setTimeout(() => {
-                context.abort(new Error('Request timeout!'))
-            }, 30 * 1000)
-
-            this.cache
-                .get(id)
-                ?.then((result) => {
-                    if (context.method === EthereumMethodType.ETH_GET_BALANCE) {
-                        console.log(`balance is: ${result}`)
-                    }
-                    context.write(result)
-                })
-                .catch((error) => context.abort(error, 'Failed to send request.'))
-                .finally(() => {
-                    clearTimeout(timer)
-                })
-            return
-        }
-
-        // cache a deferred request
-        if (id) {
-            const [promise, resolve, reject] = defer<unknown>()
-            this.cache.set(id, promise)
-
-            // throw error if timeout
-            const timer = setTimeout(() => {
-                reject(new Error('Request timeout!'))
-            }, 30 * 1000)
-
-            promise.finally(() => {
-                this.cache.delete(id)
-                clearTimeout(timer)
-            })
-
+        // unable to cache the request
+        if (!id) {
             await next()
-
-            if (context.error) reject(context.error)
-            else resolve(context.result)
-
             return
         }
+
+        // squash into the cached request
+        if (this.cache.has(id)) {
+            try {
+                context.write(await this.cache.get(id))
+            } catch (error) {
+                context.abort(error, 'Failed to send request.')
+            } finally {
+                await next()
+            }
+            return
+        }
+
+        // cache a request
+        const [promise, resolve, reject] = defer<unknown>()
+
+        this.cache.set(id, promise)
+
         await next()
+
+        this.cache.delete(id)
+
+        if (context.error) reject(context.error)
+        else resolve(context.result)
     }
 }

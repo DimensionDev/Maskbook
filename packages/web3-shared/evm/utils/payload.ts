@@ -13,43 +13,6 @@ export function createPayload(id: number, method: string, params: any[]) {
     }
 }
 
-export function isReadOnlyPayload(payload: JsonRpcPayload) {
-    return [
-        EthereumMethodType.ETH_GET_CODE,
-        EthereumMethodType.ETH_GAS_PRICE,
-        EthereumMethodType.ETH_BLOCK_NUMBER,
-        EthereumMethodType.ETH_GET_BALANCE,
-        EthereumMethodType.ETH_GET_TRANSACTION_BY_HASH,
-        EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
-        EthereumMethodType.MASK_GET_TRANSACTION_RECEIPT,
-        EthereumMethodType.ETH_GET_TRANSACTION_COUNT,
-        EthereumMethodType.ETH_ESTIMATE_GAS,
-        EthereumMethodType.ETH_CALL,
-        EthereumMethodType.ETH_GET_LOGS,
-    ].includes(payload.method as EthereumMethodType)
-}
-
-export function isSignablePayload(payload: JsonRpcPayload) {
-    return [
-        EthereumMethodType.ETH_SIGN,
-        EthereumMethodType.PERSONAL_SIGN,
-        EthereumMethodType.ETH_SIGN_TRANSACTION,
-        EthereumMethodType.ETH_SIGN_TYPED_DATA,
-        EthereumMethodType.ETH_SEND_TRANSACTION,
-    ].includes(payload.method as EthereumMethodType)
-}
-
-export function isRiskPayload(payload: JsonRpcPayload) {
-    return [
-        EthereumMethodType.ETH_SIGN,
-        EthereumMethodType.PERSONAL_SIGN,
-        EthereumMethodType.ETH_SIGN_TYPED_DATA,
-        EthereumMethodType.ETH_DECRYPT,
-        EthereumMethodType.ETH_GET_ENCRYPTION_PUBLIC_KEY,
-        EthereumMethodType.ETH_SEND_TRANSACTION,
-    ].includes(payload.method as EthereumMethodType)
-}
-
 export function getPayloadId(payload: JsonRpcPayload) {
     return typeof payload.id === 'string' ? Number.parseInt(payload.id, 10) : payload.id
 }

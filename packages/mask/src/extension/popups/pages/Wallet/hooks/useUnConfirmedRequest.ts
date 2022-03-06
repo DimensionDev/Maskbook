@@ -6,7 +6,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 
 export const useUnconfirmedRequest = () => {
     const result = useAsyncRetry(async () => {
-        const payload = await WalletRPC.topUnconfirmedRequest()
+        const payload = await WalletRPC.firstUnconfirmedRequest()
         if (!payload) return
         const computedPayload = await Services.Ethereum.getComputedPayload(payload)
         return {

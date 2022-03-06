@@ -57,6 +57,25 @@ If there is no one deployed [these contracts](https://github.com/DimensionDev/mi
 - [ ] BalanceChecker
 - [ ] Other contracts from the Mask team
 
+### Translate JSON RPC
+
+If the JSON RPC used by the chain is not fully compatible with [Ethereum JSON RPC API](https://eth.wiki/json-rpc/API), use translator to format each request. A translator implements `encode` and `decode` method, in which to override the request context before sending a RPC request and after receiving a RPC response.
+
+E.g., the CELO chain can pay the transaction fee with non-native tokens. It supports to use [`feeCurrency`](https://docs.celo.org/celo-codebase/protocol/transactions/erc20-transaction-fees) field to set the token address, which doesn't exist in the original [eth_sendTransaction](https://eth.wiki/json-rpc/API#eth_sendtransaction) payload. You can fulfill this requirement without altering any RPC facilities.
+
+```ts
+class CeloTranslator extends Base {
+  override encode(context: Context) {
+    context.config = {
+      ...context.config,
+      feeCurrency: '0x0000000000000000000000000000000000000001',
+    }
+  }
+}
+```
+
+### 🎉
+
 Congratulation! You have done the coding part.
 
 ## Testing Checklist

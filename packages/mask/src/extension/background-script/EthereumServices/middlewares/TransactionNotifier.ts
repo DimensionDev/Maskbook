@@ -101,24 +101,20 @@ export class TransactionNotifier implements Middleware<Context> {
                 }
                 break
             case EthereumMethodType.ETH_GET_TRANSACTION_BY_HASH:
-                {
-                    const transaction = context.result as Transaction | undefined
-                    if (transaction) {
-                        this.progressManager.notifyTransactionProgress(transaction, {
-                            type: TransactionStateType.HASH,
-                            hash: transaction.hash,
-                        })
-                    }
+                const transaction = context.result as Transaction | undefined
+                if (transaction) {
+                    this.progressManager.notifyTransactionProgress(transaction, {
+                        type: TransactionStateType.HASH,
+                        hash: transaction.hash,
+                    })
                 }
                 break
             case EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT:
-                {
-                    const receipt = context.result as TransactionReceipt | undefined
-                    if (receipt) {
-                        const state = getTransactionState(receipt)
-                        const transaction = await getTransactionByHash(receipt.transactionHash)
-                        this.progressManager.notifyTransactionProgress(transaction, state)
-                    }
+                const receipt = context.result as TransactionReceipt | undefined
+                if (receipt) {
+                    const state = getTransactionState(receipt)
+                    const transaction = await getTransactionByHash(receipt.transactionHash)
+                    this.progressManager.notifyTransactionProgress(transaction, state)
                 }
                 break
         }
