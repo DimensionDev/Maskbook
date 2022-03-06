@@ -18,7 +18,7 @@ importers:
       '@emotion/styled': ^11.6.0
       '@emotion/utils': ^1.0.0
       '@jest/globals': ^28.0.0-alpha.3
-      '@magic-works/i18n-codegen': ^0.0.6
+      '@magic-works/i18n-codegen': ^0.1.0
       '@masknet/cli': workspace:*
       '@masknet/serializer': workspace:^0.0.0
       '@mui/icons-material': 5.4.2
@@ -93,7 +93,7 @@ importers:
       '@dimensiondev/eslint-plugin': 0.0.1-20220120054224-6673363_eslint@8.9.0
       '@dimensiondev/patch-package': 6.5.0
       '@jest/globals': 28.0.0-alpha.3
-      '@magic-works/i18n-codegen': 0.0.6_typescript@4.6.1-rc
+      '@magic-works/i18n-codegen': 0.1.0_typescript@4.6.1-rc
       '@masknet/cli': link:packages/scripts
       '@masknet/serializer': link:packages/test-serializer
       '@nice-labs/git-rev': 3.5.0
@@ -4978,17 +4978,17 @@ packages:
       '@json-rpc-tools/types': 1.7.6
     dev: false
 
-  /@magic-works/i18n-codegen/0.0.6_typescript@4.6.1-rc:
-    resolution: {integrity: sha512-vM8DzT7zcmCDk2KBoeyUgGzkW/4MaKIdDTTh67cJT0/VVXu7fQd2tjRglJwOunowTCwPxwIHWjoCD/DIN4iPXQ==}
+  /@magic-works/i18n-codegen/0.1.0_typescript@4.6.1-rc:
+    resolution: {integrity: sha512-zmn7RjagUULc4dnCGPNSlFj8YDkzJkm0zU9PWHrDSr8u0WttggiTzFB3wej6KlxoNem/GQMPGVzYx8QacSFtdA==}
     hasBin: true
     peerDependencies:
       typescript: ^4
     dependencies:
-      chokidar: 3.5.2
+      chokidar: 3.5.3
       i18next-translation-parser: 1.0.1
       source-map: 0.7.3
       typescript: 4.6.1-rc
-      yargs: 16.2.0
+      yargs: 17.3.1
     dev: true
 
   /@mdx-js/loader/1.6.22_react@18.0.0-rc.0:
@@ -10070,7 +10070,7 @@ packages:
     resolution: {integrity: sha512-oagLNqpfNv7CvmyMoexMDNyVDSiq1rya0AEUgcLlNHdHgNl6U/hi8xY370n5y+ZIFEXOx0J4B1qF2NDjMRxklA==}
     engines: {node: '>=6.0.0'}
     dependencies:
-      pvutils: 1.0.17
+      pvutils: 1.1.3
     dev: false
 
   /assert-plus/1.0.0:
@@ -11755,7 +11755,7 @@ packages:
 
   /chokidar/2.1.8:
     resolution: {integrity: sha512-ZmZUazfOzf0Nve7duiCKD23PFSCs4JPoYyccjUFF3aQkQadqBhfzhjkwBH2mNOG9cTBwhamM37EIsIkZw3nRgg==}
-    deprecated: Chokidar 2 will break on node v14+. Upgrade to chokidar 3 with 15x less dependencies.
+    deprecated: Chokidar 2 does not receive security updates since 2019. Upgrade to chokidar 3 with 15x fewer dependencies
     dependencies:
       anymatch: 2.0.0
       async-each: 1.0.3
@@ -18409,7 +18409,7 @@ packages:
   /jsonfile/4.0.0:
     resolution: {integrity: sha1-h3Gq4HmbZAdrdmQPygWPnBDjPss=}
     optionalDependencies:
-      graceful-fs: 4.2.8
+      graceful-fs: 4.2.9
 
   /jsonfile/6.1.0:
     resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
@@ -19277,7 +19277,7 @@ packages:
     engines: {node: '>=8.6'}
     dependencies:
       braces: 3.0.2
-      picomatch: 2.3.0
+      picomatch: 2.3.1
     dev: true
 
   /miller-rabin/4.0.1:
@@ -21155,8 +21155,8 @@ packages:
       tslib: 2.3.1
     dev: false
 
-  /pvutils/1.0.17:
-    resolution: {integrity: sha512-wLHYUQxWaXVQvKnwIDWFVKDJku9XDCvyhhxoq8dc5MFdIlRenyPI9eSfEtcvgHgD7FlvCyGAlWgOzRnZD99GZQ==}
+  /pvutils/1.1.3:
+    resolution: {integrity: sha512-pMpnA0qRdFp32b1sJl1wOJNxZLQ2cbQx+k6tjNtZ8CpvVhNqEPRgivZ2WOUev2YMajecdH7ctUPDvEe87nariQ==}
     engines: {node: '>=6.0.0'}
     dev: false
 
