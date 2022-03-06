@@ -64,7 +64,7 @@ export class LidoProtocol implements SavingsProtocol {
         try {
             const contract = createContract<Lido>(
                 web3,
-                getSavingsConstants(chainId).LIDO_STETH || ZERO_ADDRESS,
+                getTokenConstants(chainId).LDO_stETH || ZERO_ADDRESS,
                 LidoABI as AbiItem[],
             )
             const gasEstimate = await contract?.methods
@@ -85,7 +85,7 @@ export class LidoProtocol implements SavingsProtocol {
         try {
             const contract = createContract<Lido>(
                 web3,
-                getSavingsConstants(chainId).LIDO_STETH || ZERO_ADDRESS,
+                getTokenConstants(chainId).LDO_stETH || ZERO_ADDRESS,
                 LidoABI as AbiItem[],
             )
             await contract?.methods.submit(getSavingsConstants(chainId).LIDO_REFERRAL_ADDRESS || ZERO_ADDRESS).send({

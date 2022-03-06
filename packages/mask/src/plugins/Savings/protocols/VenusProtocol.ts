@@ -18,8 +18,6 @@ import VbnbABI from '@masknet/web3-contracts/abis/vbnb.json'
 import venusTokenABI from '@masknet/web3-contracts/abis/venusToken.json'
 
 import { CONTRACT_VBEP_ADDRESS, CONTRACT_TOKEN_ADDRESS, VENUS_SUBGRAPH } from '../constants/venus'
-import XvsVaultABI from '@masknet/web3-contracts/abis/xvsVault.json'
-import type { XvsVault } from '@masknet/web3-contracts/types/xvsVault'
 import BigNumber from 'bignumber.js'
 
 export class VenusProtocol implements SavingsProtocol {
@@ -193,7 +191,7 @@ export class VenusProtocol implements SavingsProtocol {
                 const bnbContract = createContract<Vbnb>(web3, vBEPaddress!, VbnbABI as AbiItem[])
                 const contractData = bnbContract?.methods.repayBorrow().encodeABI()
 
-                const tx = {
+                const tx: any = {
                     from: account,
                     to: bnbContract!,
                     value: value,
@@ -202,29 +200,11 @@ export class VenusProtocol implements SavingsProtocol {
 
                 // send transaction
 
-                await web3.eth.sendTransaction(tx!, (err) => {
-                    if (!err) {
-                        callback(true)
-                    }
-                    callback(false)
-                })
+                return tx
             } catch (err) {
                 callback(false)
             }
         }
-
-        const vaultAddress = getSavingsConstants(chainId).VENUS_VAULT_PROXY || ZERO_ADDRESS
-        const vaultAddressContract = createContract<XvsVault>(web3, vaultAddress, XvsVaultABI as AbiItem[])
-
-        const xvsTokenPoolLength = await vaultAddressContract?.methods.poolLength(vTokenAddress?.address).call()
-
-        const fetchPoolParameters = Array.from({ length: xvsTokenPoolLength }).map((_, index) => ({
-            rewardToken: vTokenAddress,
-            pid: index,
-        }))
-
-        // deposit instructions
-        return
     }
 
     public async deposit(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
@@ -259,6 +239,7 @@ export class VenusProtocol implements SavingsProtocol {
             return new BigNumber(gasEstimate || 0)
         } catch (err) {
             console.log(err)
+            return ZERO
         }
     }
 
@@ -290,5 +271,8 @@ export class VenusProtocol implements SavingsProtocol {
     }
 }
 function callback(arg0: boolean) {
+    throw new Error('Function not implemented.')
+}
+function setTransferState(arg0: { type: any; error: Error }) {
     throw new Error('Function not implemented.')
 }

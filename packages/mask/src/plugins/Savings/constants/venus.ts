@@ -17,7 +17,7 @@ export const VENUS_BASE_URL: Record<NetworkType, string> = {
     [NetworkType.Optimistic]: '',
 }
 
-export const VENUS_SUBGRAPH = 'ttps://api.thegraph.com/subgraphs/name/venusprotocol/venus-subgraph'
+export const VENUS_SUBGRAPH = 'https://api.thegraph.com/subgraphs/name/venusprotocol/venus-subgraph'
 
 export const connectorLocalStorageKey = 'venus-local-key'
 
