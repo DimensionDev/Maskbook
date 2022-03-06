@@ -7,6 +7,7 @@ import {
     createContract,
     FungibleTokenDetailed,
     ZERO_ADDRESS,
+    getTokenConstants,
 } from '@masknet/web3-shared-evm'
 import { ZERO } from '@masknet/web3-shared-base'
 import type { Lido } from '@masknet/web3-contracts/types/Lido'
@@ -50,7 +51,7 @@ export class LidoProtocol implements SavingsProtocol {
         try {
             const contract = createContract<Lido>(
                 web3,
-                getSavingsConstants(chainId).LIDO_STETH || ZERO_ADDRESS,
+                getTokenConstants(chainId).LDO_stETH || ZERO_ADDRESS,
                 LidoABI as AbiItem[],
             )
             this._balance = new BigNumber((await contract?.methods.balanceOf(account).call()) ?? '0')

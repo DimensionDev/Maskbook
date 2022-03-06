@@ -17,6 +17,8 @@ export const VENUS_BASE_URL: Record<NetworkType, string> = {
     [NetworkType.Optimistic]: '',
 }
 
+export const VENUS_SUBGRAPH = 'ttps://api.thegraph.com/subgraphs/name/venusprotocol/venus-subgraph'
+
 export const connectorLocalStorageKey = 'venus-local-key'
 
 export const vtokenDecimals = 8
@@ -263,8 +265,6 @@ export const CONTRACT_TOKEN_ADDRESS = [
         id: 'bnb',
         symbol: 'BNB',
         decimals: 18,
-        asset: bnb,
-        vasset: vbnb,
     },
     {
         id: 'xvs',

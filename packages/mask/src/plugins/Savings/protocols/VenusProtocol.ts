@@ -1,23 +1,26 @@
-import BigNumber from 'bignumber.js'
-import { ZERO } from '@masknet/web3-shared-base'
+import { pow10, ZERO } from '@masknet/web3-shared-base'
 import type Web3 from 'web3'
-import { ChainId, createContract, FungibleTokenDetailed, getSavingsConstants, getTokenConstants, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    createContract,
+    FungibleTokenDetailed,
+    getSavingsConstants,
+    ZERO_ADDRESS,
+} from '@masknet/web3-shared-evm'
 import { ProtocolType, SavingsProtocol } from '../types'
 import type { AbiItem } from 'web3-utils'
 
-import type { VenusToken } from "@masknet/web3-contracts/types/venusToken"
-import type { Vbep } from "@masknet/web3-contracts/types/vbep"
-import  vbepABI  from "@masknet/web3-contracts/abis/vbep.json"
-import  venusTokenABI  from "@masknet/web3-contracts/abis/venusToken.json"
+import type { VenusToken } from '@masknet/web3-contracts/types/venusToken'
+import type { Vbep } from '@masknet/web3-contracts/types/vbep'
+import type { Vbnb } from '@masknet/web3-contracts/types/vbnb'
+import vbepABI from '@masknet/web3-contracts/abis/vbep.json'
+import VbnbABI from '@masknet/web3-contracts/abis/vbnb.json'
+import venusTokenABI from '@masknet/web3-contracts/abis/venusToken.json'
 
-import { CONTRACT_VBEP_ADDRESS, CONTRACT_TOKEN_ADDRESS } from '../constants/venus'
-import  XvsVaultABI  from "@masknet/web3-contracts/abis/xvsVault.json";
-import  XvsABI  from "@masknet/web3-contracts/abis/xvs.json";
-import type { XvsVault } from "@masknet/web3-contracts/types/xvsVault";
-import type { Xvs }  from "@masknet/web3-contracts/types/xvs";
-import type BigNumber from 'bignumber.js';
-
-
+import { CONTRACT_VBEP_ADDRESS, CONTRACT_TOKEN_ADDRESS, VENUS_SUBGRAPH } from '../constants/venus'
+import XvsVaultABI from '@masknet/web3-contracts/abis/xvsVault.json'
+import type { XvsVault } from '@masknet/web3-contracts/types/xvsVault'
+import BigNumber from 'bignumber.js'
 
 export class VenusProtocol implements SavingsProtocol {
     static DEFAULT_APR = '0.17'
@@ -46,102 +49,112 @@ export class VenusProtocol implements SavingsProtocol {
     }
 
     public async updateApr(chainId: ChainId, web3: Web3) {
-        const vTokenAddress = CONTRACT_TOKEN_ADDRESS.find(vault => vault.address === this.bareToken.address)
-        const vaultAddress = getSavingsConstants(chainId).VENUS_VAULT_PROXY
-        const TokenAddress = CONTRACT_VBEP_ADDRESS.find(vault => vault.address === this.stakeToken.address)
-
         try {
+            const subgraphUrl = VENUS_SUBGRAPH
 
-            const contract = createContract<Xvs>(
-                    web3,
-                    vTokenAddress?.address || ZERO_ADDRESS,
-                    XvsABI as AbiItem[],
-                )
+            if (!subgraphUrl) {
+                this._apr = VenusProtocol.DEFAULT_APR
+            }
 
-            const vaultAddress = getSavingsConstants(chainId).VENUS_VAULT_PROXY || ZERO_ADDRESS
-            const vaultAddressContract = createContract<XvsVault>(
-                web3,
-                vaultAddress,
-                XvsVaultABI as AbiItem[]
-                )
+            const body = JSON.stringify({
+                query: `{
 
+                    markets(where: {
+                        underlyingAddress: "${this.bareToken.address}"
+                    })) {
+                        id
+                        underlyingAddress
+                        exchangeRate
+                    }
 
-            const xvsTokenPoolLength = await vaultAddressContract?.methods.poolLength(vTokenAddress?.address!).call();
+                }`,
+            })
 
-            const fetchPoolParameters = Array.from({ length: xvsTokenPoolLength }).map(
-            (_, index) => ({ rewardToken: vTokenAddress, pid: index }),
-            );
+            const response = await fetch(subgraphUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: body,
+            })
 
+            const fullResponse: {
+                data: {
+                    markets: {
+                        id: string
+                        underlyingAddress: string
+                        exchangeRate: number
+                    }[]
+                }
+            } = await response.json()
+            const exchangeRate = +fullResponse.data.markets[0].exchangeRate
 
-            async function fetchOnePool(param: { rewardToken: any; pid: any }) {
-                const [poolInfo, rewardPerBlock, totalAllocPoints] = await Promise.all([
-                  vaultAddressContract?.methods.poolInfos(param.rewardToken, param.pid).call(),
-                  vaultAddressContract?.methods
-                    .rewardTokenAmountsPerBlock(param.rewardToken)
-                    .call(),
+            const RAY = pow10(27) // 10 to the power 27
+            const SECONDS_PER_YEAR = 31536000
 
-                  vaultAddressContract?.methods.totalAllocPoints(param.rewardToken).call(),
-                ]);
-
-                const totalStaked = await contract?.methods.balanceOf(vaultAddress).call();
-
-                let [userPendingRewards, userInfo] = [
-                  '0',
-                  {
-                    amount: '0',
-                    pendingWithdrawals: [],
-                    rewardDebt: '0',
-                  },
-                ];
-
-
-                const rewardPerBlockOfPool = new BigNumber(rewardPerBlock!)
-                  .multipliedBy(poolInfo?.allocPoint!)
-                  .div(totalAllocPoints!);
-                const blockPerDay = 86400 / 3; // per 3 seconds for a block
-                const dailyEmission = new BigNumber(rewardPerBlockOfPool).multipliedBy(
-                  blockPerDay,
-                );
-
-                return {
-                  poolId: new BigNumber(param.pid),
-                  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
-                  stakedToken: tokenAddressNameMap[poolInfo.token],
-                  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
-                  rewardToken: tokenAddressNameMap[param.rewardToken],
-                  pendingReward: new BigNumber(userPendingRewards),
-                  userStakedAmount: new BigNumber(userInfo.amount),
-                  lockPeriodSecond: new BigNumber(poolInfo?.lockPeriod!),
-                  apr: new BigNumber(dailyEmission).multipliedBy(365).div(totalStaked!),
-                  totalStaked: new BigNumber(totalStaked!),
-                  dailyEmission,
-                };
-              }
-
-            const patchedPoolInfos = await Promise.all(
-                fetchPoolParameters.map(param => fetchOnePool(param))
-            );
-
-
-            this._apr =  await patchedPoolInfos.apr ||  0.0
+            this._apr = new BigNumber(exchangeRate).div(RAY).toFixed(2)
         } catch (error) {
             this._apr = VenusProtocol.DEFAULT_APR
         }
     }
 
     public async updateBalance(chainId: ChainId, web3: Web3, account: string) {
-        const vTokenAddress = CONTRACT_TOKEN_ADDRESS.find(vault => vault.address === this.bareToken.address)
         try {
-            const contract = createContract<Xvs>(
-                web3,
-                vTokenAddress?.address || ZERO_ADDRESS,
-                XvsABI as AbiItem[],
-            )
+            const subgraphUrl = VENUS_SUBGRAPH || ''
+            if (!subgraphUrl) {
+                this._apr = VenusProtocol.DEFAULT_APR
+            }
+            const balanceBody = JSON.stringify({
+                query: `{
+                    accountVTokens(where:{symbol: "${this.bareToken.symbol}"}){
+                        id
+                        symbol
+                        vTokenBalance
+                      }
+                }`,
+            })
 
-            const userBalance = await contract?.methods.balanceOf(account).call()
+            const balanceResponse = await fetch(subgraphUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: balanceBody,
+            })
+            const fullResponse: {
+                data: {
+                    accountVTokens: {
+                        id: string
+                        symbol: string
+                        vTokenBalance: number
+                    }[]
+                }
+            } = await balanceResponse.json()
 
-            this._balance = new BigNumber(userBalance!)
+            // get user balance
 
+            const userReserveBody = JSON.stringify({
+                query: `{
+                    accountVTokens(where:{account: "${account}", symbol: "${this.bareToken.symbol}"}){
+                        id
+                        symbol
+                        vTokenBalance
+                        totalUnderlyingSupplied
+                    }
+                }`,
+            })
+
+            const userReserveBalance = await fetch(subgraphUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: userReserveBody,
+            })
+
+            const userResponse: {
+                data: {
+                    accountVTokens: {
+                        totalUnderlyingSupplied: number
+                    }
+                }
+            } = await userReserveBalance.json()
+
+            this._balance = new BigNumber(userResponse.data.accountVTokens.totalUnderlyingSupplied || '0')
         } catch (error) {
             this._balance = ZERO
         }
@@ -150,7 +163,7 @@ export class VenusProtocol implements SavingsProtocol {
     public async depositEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
         try {
             const operation = await this.createDepositTokenOperation(account, chainId, web3, value)
-            const gasEstimate = await operation?.estimateGas({
+            const gasEstimate = await operation.estimateGas({
                 from: account,
             })
 
@@ -161,23 +174,54 @@ export class VenusProtocol implements SavingsProtocol {
     }
 
     private async createDepositTokenOperation(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
-        const vTokenAddress = CONTRACT_TOKEN_ADDRESS.find(vault => vault.address === this.bareToken.address)
-        const TokenAddress = CONTRACT_VBEP_ADDRESS.find(vault => vault.address === this.stakeToken.address)
+        const vTokenAddress = CONTRACT_TOKEN_ADDRESS.find((vault) => vault.address === this.bareToken.address)
+        const TokenAddress = CONTRACT_VBEP_ADDRESS.find((vault) => vault.address === this.stakeToken.address)
 
+        if (this.bareToken.symbol !== 'bnb') {
+            try {
+                const vbepContract = createContract<Vbep>(web3, this.bareToken.address, vbepABI as AbiItem[])
+
+                await vbepContract?.methods
+                    .mint(new BigNumber(value).times(new BigNumber(10).pow(this.bareToken.decimals)).toString(10))
+                    .send({ from: account })
+            } catch (err) {
+                console.log(err)
+            }
+        } else {
+            try {
+                const vBEPaddress = getSavingsConstants(chainId).VENUS_GOVERNOR_DELEGATOR
+                const bnbContract = createContract<Vbnb>(web3, vBEPaddress!, VbnbABI as AbiItem[])
+                const contractData = bnbContract?.methods.repayBorrow().encodeABI()
+
+                const tx = {
+                    from: account,
+                    to: bnbContract!,
+                    value: value,
+                    data: contractData!,
+                }
+
+                // send transaction
+
+                await web3.eth.sendTransaction(tx!, (err) => {
+                    if (!err) {
+                        callback(true)
+                    }
+                    callback(false)
+                })
+            } catch (err) {
+                callback(false)
+            }
+        }
 
         const vaultAddress = getSavingsConstants(chainId).VENUS_VAULT_PROXY || ZERO_ADDRESS
-        const vaultAddressContract = createContract<XvsVault>(
-            web3,
-            vaultAddress,
-            XvsVaultABI as AbiItem[]
-        )
+        const vaultAddressContract = createContract<XvsVault>(web3, vaultAddress, XvsVaultABI as AbiItem[])
 
+        const xvsTokenPoolLength = await vaultAddressContract?.methods.poolLength(vTokenAddress?.address).call()
 
-        const xvsTokenPoolLength = await vaultAddressContract?.methods.poolLength(vTokenAddress?.address).call();
-
-        const fetchPoolParameters = Array.from({ length: xvsTokenPoolLength }).map(
-        (_, index) => ({ rewardToken: vTokenAddress, pid: index }),
-        );
+        const fetchPoolParameters = Array.from({ length: xvsTokenPoolLength }).map((_, index) => ({
+            rewardToken: vTokenAddress,
+            pid: index,
+        }))
 
         // deposit instructions
         return
@@ -201,15 +245,25 @@ export class VenusProtocol implements SavingsProtocol {
     }
 
     public async withdrawEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
-        //todo withdrawEstimate
+        const vTokenAddress = CONTRACT_TOKEN_ADDRESS.find((vault) => vault.address === this.bareToken.address)
+        const TokenAddress = CONTRACT_VBEP_ADDRESS.find((vault) => vault.address === this.stakeToken.address)
+
         try {
-            return true
-        } catch (error) {
-            return ZERO
+            const vbepContract = createContract<Vbep>(web3, this.bareToken.address, vbepABI as AbiItem[])
+
+            const gasEstimate = await vbepContract?.methods
+                .mint(new BigNumber(value).times(new BigNumber(10).pow(this.bareToken.decimals)).toString(10))
+                .estimateGas({
+                    from: account,
+                })
+            return new BigNumber(gasEstimate || 0)
+        } catch (err) {
+            console.log(err)
         }
     }
 
     public async withdraw(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
+        const TokenAddress = CONTRACT_VBEP_ADDRESS.find((vault) => vault.address === this.stakeToken.address)
         try {
             const vbepContract = createContract<Vbep>(
                 web3,
@@ -218,35 +272,23 @@ export class VenusProtocol implements SavingsProtocol {
             )
             const vToken = createContract<VenusToken>(
                 web3,
-                getTokenConstants(chainId).vXVS_ADDRESS || ZERO_ADDRESS,
+                TokenAddress?.address || ZERO_ADDRESS,
                 venusTokenABI as AbiItem[],
             )
 
-            // await vToken?.methods.approve({
-            //     asset.vtokenAddress,
-            //     new BigNumber(2)
-            //         .pow(256)
-            //         .minus(1)
-            //         .toString(10),
-            //     )
-            // })
-
-            await vbepContract?.methods.mint(new BigNumber(value).pow(8)).toString(10).send({
-                from: account,
-                gas: 300000,
-            })
-
+            vbepContract?.methods
+                .redeemUnderlying(new BigNumber(value).times(new BigNumber(10).pow(18)).integerValue().toString(10))
+                .send({
+                    from: account,
+                    gas: 300000,
+                })
             return true
         } catch (error) {
             console.error('VenusProtocol `deposit()` Error', error)
             return false
         }
-            }
-        }
     }
-
 }
-function vault(vault: any, arg1: { address: any }) {
+function callback(arg0: boolean) {
     throw new Error('Function not implemented.')
 }
-
