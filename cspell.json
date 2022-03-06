@@ -1,12 +1,6 @@
 {
     "$schema": "https://github.com/streetsidesoftware/cspell/raw/main/cspell.schema.json",
-    "dictionaries": [
-        "typescript",
-        "node",
-        "html",
-        "css",
-        "fonts"
-    ],
+    "dictionaries": ["typescript", "node", "html", "css", "fonts"],
     "ignorePaths": [
         ".github",
         ".prettierignore",
@@ -20,7 +14,7 @@
     ],
     "words": [
         "Reqested",
-        "Utilisation"
+        "Utilisation",
         "reedeemer",
         "Unitroller",
         "Transfered",
@@ -395,32 +389,19 @@
         "xdescribe",
         "xtest"
     ],
-    "ignoreRegExpList": [
-        "/@servie/"
-    ],
+    "ignoreRegExpList": ["/@servie/"],
     "overrides": [
         {
             "filename": "**/*.md",
-            "ignoreWords": [
-                "guanbinrui",
-                "jkoeaghipilijlahjplgbfiocjhldnap",
-                "pnpx",
-                "yisiliu",
-                "zhouhancheng"
-            ]
+            "ignoreWords": ["guanbinrui", "jkoeaghipilijlahjplgbfiocjhldnap", "pnpx", "yisiliu", "zhouhancheng"]
         },
         {
             "filename": "packages/web3-contracts/types/GoodGhostingIncentives.d.ts",
-            "ignoreWords": [
-                "adming",
-                "ditribution"
-            ]
+            "ignoreWords": ["adming", "ditribution"]
         },
         {
             "filename": "packages/web3-shared/evm/assets/**/*.json",
-            "ignoreWords": [
-                "görli"
-            ]
+            "ignoreWords": ["görli"]
         },
         {
             "filename": "packages/mask/src/plugins/ITO/assets/regions.json",
@@ -432,9 +413,7 @@
         },
         {
             "filename": ".circleci/config.yml",
-            "ignoreWords": [
-                "cimg"
-            ]
+            "ignoreWords": ["cimg"]
         }
     ]
 }
