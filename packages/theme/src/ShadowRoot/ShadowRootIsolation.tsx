@@ -5,7 +5,7 @@ import { ShadowRootStyleProvider } from './ShadowRootStyleProvider'
 /**
  * Render it's children inside a ShadowRoot to provide style isolation.
  */
-export function NestedShadowRootIsolation({
+export function ShadowRootIsolation({
     children,
     ...props
 }: React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>) {

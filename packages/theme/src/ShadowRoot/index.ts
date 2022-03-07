@@ -12,4 +12,4 @@ export {
     NoEffectUsePortalShadowRootContext,
 } from './Portal'
 export { ShadowRootMenu, ShadowRootPopper, ShadowRootTooltip } from './Wrapped'
-export { NestedShadowRootIsolation } from './NestedShadowRootIsolation'
+export { ShadowRootIsolation } from './ShadowRootIsolation'

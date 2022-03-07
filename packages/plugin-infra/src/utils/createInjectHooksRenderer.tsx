@@ -3,7 +3,7 @@ import { useEffect, useState, useRef, memo, createContext, useContext } from 're
 import { ErrorBoundary } from '@masknet/shared'
 import { usePluginI18NField, PluginWrapperComponent, PluginWrapperMethods } from '../hooks'
 import { emptyPluginWrapperMethods, PluginWrapperMethodsContext } from '../hooks/usePluginWrapper'
-import { NestedShadowRootIsolation } from '@masknet/theme'
+import { ShadowRootIsolation } from '@masknet/theme'
 
 type Inject<T> = Plugin.InjectUI<T>
 type Raw<T> = Plugin.InjectUIRaw<T>
@@ -45,9 +45,9 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
             .filter(pickInjectorHook)
             .map((plugin) => (
                 <PropsContext.Provider key={plugin.ID} value={props}>
-                    <NestedShadowRootIsolation data-plugin={plugin.ID}>
+                    <ShadowRootIsolation data-plugin={plugin.ID}>
                         <SinglePluginWithinErrorBoundary key={plugin.ID} plugin={plugin} />
-                    </NestedShadowRootIsolation>
+                    </ShadowRootIsolation>
                 </PropsContext.Provider>
             ))
         return <>{all}</>
