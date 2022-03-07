@@ -4,10 +4,10 @@ import { useConnectSocialNetwork, useDisconnectSocialNetwork, useOpenProfilePage
 import { Services } from '../../../API'
 import { useOwnedPersonas, useDefinedSocialNetworkUIs, SocialNetwork, useCurrentPersonaIdentifier } from '../api'
 import { useCreatePersona } from './useCreatePersona'
-import { useDeleteBound } from './useDeleteBindingProof'
 import { queryExistedBindingByPersona } from '@masknet/web3-providers'
 import { useAsync, useAsyncRetry } from 'react-use'
 import type { ECKeyIdentifier } from '@masknet/shared-base'
+import { useOperateBound } from './useOperateBindingProof'
 
 function usePersonaContext() {
     const currentPersonaIdentifier = useCurrentPersonaIdentifier()
@@ -28,7 +28,7 @@ function usePersonaContext() {
     const [, openProfilePage] = useOpenProfilePage()
     const [, disconnectPersona] = useDisconnectSocialNetwork()
     const [, createPersona] = useCreatePersona()
-    const [, deleteBound] = useDeleteBound()
+    const [, operateBound] = useOperateBound()
     const renamePersona = Services.Identity.renamePersona
     const changeCurrentPersona = useCallback(Services.Settings.setCurrentPersonaIdentifier, [])
 
@@ -38,7 +38,7 @@ function usePersonaContext() {
         createPersona,
         renamePersona,
         changeCurrentPersona,
-        deleteBound,
+        operateBound,
         currentPersona,
         definedSocialNetworks,
         personas,

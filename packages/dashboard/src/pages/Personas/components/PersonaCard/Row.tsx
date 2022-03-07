@@ -9,6 +9,7 @@ import {
     ProfileInformation,
     DashboardRoutes,
     NextIDPersonaBindings,
+    NextIDAction,
 } from '@masknet/shared-base'
 import { useMenu } from '@masknet/shared'
 import { useDashboardI18N } from '../../../../locales'
@@ -67,7 +68,7 @@ export const PersonaRowCard = memo(() => {
         connectPersona,
         disconnectPersona,
         renamePersona,
-        deleteBound,
+        operateBound,
         definedSocialNetworks,
         verification,
     } = PersonaContext.useContainer()
@@ -82,7 +83,7 @@ export const PersonaRowCard = memo(() => {
             profiles={currentPersona.linkedProfiles}
             onConnect={connectPersona}
             onDisconnect={disconnectPersona}
-            onDeleteBound={deleteBound}
+            onDeleteBound={operateBound}
             onRename={renamePersona}
             definedSocialNetworks={definedSocialNetworks}
         />
@@ -98,7 +99,12 @@ export interface PersonaRowCardUIProps {
     onDisconnect: (identifier: ProfileIdentifier) => void
     onRename: (identifier: PersonaIdentifier, target: string, callback?: () => void) => Promise<void>
     verification?: NextIDPersonaBindings
-    onDeleteBound: (identifier: PersonaIdentifier, profile: ProfileIdentifier, network: string) => void
+    onDeleteBound: (
+        identifier: PersonaIdentifier,
+        profile: ProfileIdentifier,
+        network: string,
+        action: NextIDAction,
+    ) => void
 }
 
 export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
@@ -206,7 +212,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                                     onConnect={() => onConnect(identifier, networkIdentifier)}
                                     onDisconnect={onDisconnect}
                                     onDeleteBound={(profile: ProfileIdentifier) => {
-                                        onDeleteBound(identifier, profile, networkIdentifier)
+                                        onDeleteBound(identifier, profile, networkIdentifier, NextIDAction.Delete)
                                     }}
                                     profileIdentifiers={currentNetworkProfiles.map((x) => x.identifier)}
                                     networkIdentifier={networkIdentifier}

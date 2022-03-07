@@ -125,6 +125,7 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
                                     onDisconnect={onDisconnect}
                                     profileIdentifiers={currentNetworkProfiles.map((x) => x.identifier)}
                                     networkIdentifier={networkIdentifier}
+                                    personaIdentifier={identifier}
                                 />
                             )
                         }
