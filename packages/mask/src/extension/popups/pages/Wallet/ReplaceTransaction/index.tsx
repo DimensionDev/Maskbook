@@ -139,9 +139,10 @@ const ReplaceTransaction = memo(() => {
     const [{ loading }, handleConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             try {
-                if (transaction?.config) {
+                const config_ = transaction?.candidates[transaction.hash]
+                if (config_) {
                     const config = {
-                        ...transaction.config,
+                        ...config_,
                         gas: toHex(new BigNumber(data.gas).toString()),
                         ...(is1559
                             ? {

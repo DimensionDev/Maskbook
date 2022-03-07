@@ -57,10 +57,10 @@ export async function connect({
     providerType?: ProviderType
 } = {}) {
     const provider = getProvider(providerType)
-    const { accounts = [] } = (await provider?.requestAccounts?.(chainId)) ?? {}
+    const response = await provider?.requestAccounts?.(chainId)
     return {
-        account: first(accounts),
-        chainId,
+        account: first(response?.accounts),
+        chainId: response?.chainId,
     }
 }
 

@@ -81,42 +81,46 @@ export class TransactionNotifier implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {
         await next()
 
-        switch (context.method) {
-            case EthereumMethodType.ETH_SEND_TRANSACTION:
-                if (typeof context.result === 'string') {
-                    this.progressManager.addProgress({
-                        state: {
-                            type:
-                                context.providerType === ProviderType.MaskWallet
-                                    ? TransactionStateType.UNKNOWN
-                                    : TransactionStateType.WAIT_FOR_CONFIRMING,
-                        },
-                        payload: context.request,
-                    })
-                } else if (context.error) {
-                    this.progressManager.notifyPayloadProgress(context.request, {
-                        type: TransactionStateType.FAILED,
-                        error: context.error,
-                    })
-                }
-                break
-            case EthereumMethodType.ETH_GET_TRANSACTION_BY_HASH:
-                const transaction = context.result as Transaction | undefined
-                if (transaction) {
-                    this.progressManager.notifyTransactionProgress(transaction, {
-                        type: TransactionStateType.HASH,
-                        hash: transaction.hash,
-                    })
-                }
-                break
-            case EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT:
-                const receipt = context.result as TransactionReceipt | undefined
-                if (receipt) {
-                    const state = getTransactionState(receipt)
-                    const transaction = await getTransactionByHash(receipt.transactionHash)
-                    this.progressManager.notifyTransactionProgress(transaction, state)
-                }
-                break
+        try {
+            switch (context.method) {
+                case EthereumMethodType.ETH_SEND_TRANSACTION:
+                    if (typeof context.result === 'string') {
+                        this.progressManager.addProgress({
+                            state: {
+                                type:
+                                    context.providerType === ProviderType.MaskWallet
+                                        ? TransactionStateType.UNKNOWN
+                                        : TransactionStateType.WAIT_FOR_CONFIRMING,
+                            },
+                            payload: context.request,
+                        })
+                    } else if (context.error) {
+                        this.progressManager.notifyPayloadProgress(context.request, {
+                            type: TransactionStateType.FAILED,
+                            error: context.error,
+                        })
+                    }
+                    break
+                case EthereumMethodType.ETH_GET_TRANSACTION_BY_HASH:
+                    const transaction = context.result as Transaction | undefined
+                    if (transaction) {
+                        this.progressManager.notifyTransactionProgress(transaction, {
+                            type: TransactionStateType.HASH,
+                            hash: transaction.hash,
+                        })
+                    }
+                    break
+                case EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT:
+                    const receipt = context.result as TransactionReceipt | undefined
+                    if (receipt) {
+                        const state = getTransactionState(receipt)
+                        const transaction = await getTransactionByHash(receipt.transactionHash)
+                        this.progressManager.notifyTransactionProgress(transaction, state)
+                    }
+                    break
+            }
+        } catch {
+            // allow to fail
         }
     }
 }

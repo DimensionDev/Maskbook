@@ -12,7 +12,7 @@ export class Base implements Translator {
         {
             // add gas margin
             if (config.gas)
-                config.gas = BigNumber.min(toHex(addGasMargin(config.gas as string).toFixed()), 21000).toFixed()
+                config.gas = BigNumber.max(toHex(addGasMargin(config.gas as string).toFixed()), 21000).toFixed()
 
             // fix gas price
             if (isEIP1559Supported(context.chainId)) {

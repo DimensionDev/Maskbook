@@ -79,18 +79,18 @@ class Storage {
     }
 }
 
-export class TransactionWatcher implements Middleware<Context> {
+class Watcher {
     static CHECK_DELAY = 30 * 1000 // seconds
     static LATEST_TRANSACTION_SIZE = 5
 
     private timer: NodeJS.Timeout | null = null
     private storage = new Storage()
 
-    private async getReceiptFromCache(chainId: ChainId, hash: string) {
+    public async getReceiptFromCache(chainId: ChainId, hash: string) {
         return this.storage.getItem(chainId, hash)?.receipt ?? null
     }
 
-    private async getReceiptFromChain(chainId: ChainId, hash: string) {
+    public async getReceiptFromChain(chainId: ChainId, hash: string) {
         return getTransactionReceipt(hash, {
             chainId,
         })
@@ -114,7 +114,7 @@ export class TransactionWatcher implements Middleware<Context> {
 
         const watchedTransactions = this.storage.getWatched(chainId)
         const latestTransactions = await Explorer.getLatestTransactions(account, EXPLORER_API, {
-            offset: TransactionWatcher.LATEST_TRANSACTION_SIZE,
+            offset: Watcher.LATEST_TRANSACTION_SIZE,
             apikey: first(API_KEYS),
         })
 
@@ -166,7 +166,7 @@ export class TransactionWatcher implements Middleware<Context> {
     private startCheck(force = false) {
         if (force) this.stopCheck()
         if (this.timer === null) {
-            this.timer = setTimeout(this.check.bind(this, currentChainIdSettings.value), TransactionWatcher.CHECK_DELAY)
+            this.timer = setTimeout(this.check.bind(this, currentChainIdSettings.value), Watcher.CHECK_DELAY)
         }
     }
 
@@ -175,7 +175,7 @@ export class TransactionWatcher implements Middleware<Context> {
         this.timer = null
     }
 
-    private watchTransaction(chainId: ChainId, hash: string, payload: JsonRpcPayload) {
+    public watchTransaction(chainId: ChainId, hash: string, payload: JsonRpcPayload) {
         if (!this.storage.hasItem(chainId, hash)) {
             this.storage.setItem(chainId, hash, {
                 at: Date.now(),
@@ -186,36 +186,40 @@ export class TransactionWatcher implements Middleware<Context> {
         this.startCheck()
     }
 
-    private unwatchTransaction(chainId: ChainId, hash: string) {
+    public unwatchTransaction(chainId: ChainId, hash: string) {
         this.storage.removeItem(chainId, hash)
     }
+}
+
+export class TransactionWatcher implements Middleware<Context> {
+    private watcher = new Watcher()
 
     async fn(context: Context, next: () => Promise<void>) {
         switch (context.method) {
             case EthereumMethodType.MASK_WATCH_TRANSACTION: {
                 const [hash, payload] = context.request.params as [string, JsonRpcPayload]
-                this.watchTransaction(context.chainId, hash, payload)
+                this.watcher.watchTransaction(context.chainId, hash, payload)
                 context.end()
                 break
             }
             case EthereumMethodType.MASK_UNWATCH_TRANSACTION: {
                 const [hash] = context.request.params as [string]
-                this.unwatchTransaction(context.chainId, hash)
+                this.watcher.unwatchTransaction(context.chainId, hash)
                 context.end()
                 break
             }
 
-            // the original method will read receipt from storage
+            // the original eth_getTransactionReceipt will read receipt from storage
             case EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT:
                 try {
                     const [hash] = context.request.params as [string]
-                    context.write(await this.getReceiptFromCache(context.chainId, hash))
+                    context.write(await this.watcher.getReceiptFromCache(context.chainId, hash))
                 } catch {
                     context.end()
                 }
                 break
 
-            // the mask modified method will read receipt from chain
+            // the mask_getTransactionReceipt method will read receipt from chain
             case EthereumMethodType.MASK_GET_TRANSACTION_RECEIPT:
                 context.requestArguments = {
                     ...context.requestArguments,

@@ -114,19 +114,6 @@ export class Nonce implements Middleware<Context> {
         await Promise.all(Array.from(this.cache.values()).map((m) => m.resetNonce()))
     }
 
-    private async observe(context: Context) {
-        if (context.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return
-
-        const message = context.error?.message ?? ''
-        const isGeneralErrorNonce = /\bnonce|transaction\b/im.test(message) && /\b(low|high|old)\b/im.test(message)
-        const isAuroraErrorNonce = message.includes('ERR_INCORRECT_NONCE')
-
-        // if a transaction hash was received then commit the nonce
-        if (isGeneralErrorNonce || isAuroraErrorNonce) await this.resetNonce(context.account)
-        // else if a nonce error was occurred then reset the nonce
-        else if (!context.error && typeof context.result === 'string') await this.commitNonce(context.account)
-    }
-
     async fn(context: Context, next: () => Promise<void>) {
         // set a nonce for Mask wallets
         if (
@@ -147,7 +134,19 @@ export class Nonce implements Middleware<Context> {
 
         await next()
 
-        // to scan the context to determine how to update the local nonce, allow to fail silently
-        this.observe(context)
+        if (context.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return
+
+        try {
+            const message = context.error?.message ?? ''
+            const isGeneralErrorNonce = /\bnonce|transaction\b/im.test(message) && /\b(low|high|old)\b/im.test(message)
+            const isAuroraErrorNonce = message.includes('ERR_INCORRECT_NONCE')
+
+            // if a transaction hash was received then commit the nonce
+            if (isGeneralErrorNonce || isAuroraErrorNonce) await this.resetNonce(context.account)
+            // else if a nonce error was occurred then reset the nonce
+            else if (!context.error && typeof context.result === 'string') await this.commitNonce(context.account)
+        } catch {
+            // to scan the context to determine how to update the local nonce, allow to fail silently
+        }
     }
 }

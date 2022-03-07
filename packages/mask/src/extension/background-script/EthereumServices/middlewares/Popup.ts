@@ -1,3 +1,4 @@
+import { defer } from '@dimensiondev/kit'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { EthereumMethodType, getPayloadConfig, ProviderType } from '@masknet/web3-shared-evm'
 import Services from '../../../service'
@@ -5,8 +6,7 @@ import type { Context, Middleware } from '../types'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import { hasNativeAPI } from '../../../../../shared/native-rpc'
 import { openPopupWindow } from '../../../../../background/services/helper'
-import { defer } from '@dimensiondev/kit'
-import { confirmRequest, sendTransaction } from '../network'
+import { sendTransaction } from '../network'
 
 export class Popup implements Middleware<Context> {
     private previousRequests: {

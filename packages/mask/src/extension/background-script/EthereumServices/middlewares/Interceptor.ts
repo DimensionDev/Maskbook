@@ -12,6 +12,7 @@ export class Interceptor implements Middleware<Context> {
     }
 
     async fn(context: Context, next: () => Promise<void>) {
-        await this.interceptors[context.providerType]?.fn(context, next)
+        if (context.writeable) await this.interceptors[context.providerType]?.fn(context, next)
+        else await next()
     }
 }

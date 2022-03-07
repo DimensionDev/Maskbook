@@ -24,20 +24,19 @@ export class AddressBook implements Middleware<Context> {
         return
     }
 
-    private async observe(context: Context) {
-        if (context.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return
-
-        const computedPayload = await getSendTransactionComputedPayload(context.config)
-        const from = this.getFrom(computedPayload)
-        const to = this.getTo(computedPayload)
-
-        if (!isSameAddress(from, to) && !isZeroAddress(to) && to) await WalletRPC.addAddress(context.chainId, to)
-    }
-
     async fn(context: Context, next: () => Promise<void>) {
         await next()
 
-        // to scan the context for available recipient address, allow to fail silently.
-        this.observe(context)
+        if (context.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return
+
+        try {
+            const computedPayload = await getSendTransactionComputedPayload(context.config)
+            const from = this.getFrom(computedPayload)
+            const to = this.getTo(computedPayload)
+
+            if (!isSameAddress(from, to) && !isZeroAddress(to) && to) await WalletRPC.addAddress(context.chainId, to)
+        } catch {
+            // to scan the context for available recipient address, allow to fail silently.
+        }
     }
 }

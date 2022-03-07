@@ -42,6 +42,7 @@ export interface Context {
     readonly account: string
     readonly chainId: ChainId
     readonly requestId: number
+    readonly writeable: boolean
     readonly providerType: ProviderType
     readonly method: EthereumMethodType
     readonly sendOverrides: SendOverrides | undefined

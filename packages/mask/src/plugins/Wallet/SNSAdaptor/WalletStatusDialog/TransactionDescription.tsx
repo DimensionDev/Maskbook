@@ -1,4 +1,3 @@
-import type { TransactionReceipt } from 'web3-core'
 import { first, last } from 'lodash-unified'
 import {
     ChainId,
@@ -95,7 +94,7 @@ function getTransactionDescription(
                                       nativeTokenDetailed,
                                       true,
                                   )
-                                : ''
+                                : '-'
                         }`
                     )
             }
@@ -110,13 +109,12 @@ function getTransactionDescription(
         case EthereumRpcType.RETRY:
             return 'Retry Transaction'
         default:
-            return
+            return '-'
     }
 }
 
 export interface RecentTransactionDescriptionProps {
     hash: string
-    receipt?: TransactionReceipt | null
     computedPayload?: UnboxPromise<ReturnType<typeof Services.Ethereum.getSendTransactionComputedPayload>> | null
 }
 
@@ -156,14 +154,16 @@ export function RecentTransactionDescription(props: RecentTransactionDescription
 
     const { loading: getERC20TokenLoading, value: tokenDetailed } = useERC20TokenDetailed(tokenAddress)
 
-    return !getNativeTokenLoading && !getERC20TokenLoading && !getInputERC20TokenLoading ? (
+    return (
         <span>
-            {getTransactionDescription(
-                chainId,
-                inputTokenAddress ? inputTokenDetailed : nativeTokenDetailed,
-                tokenDetailed,
-                computedPayload,
-            ) ?? hash}
+            {!getNativeTokenLoading && !getERC20TokenLoading && !getInputERC20TokenLoading
+                ? getTransactionDescription(
+                      chainId,
+                      inputTokenAddress ? inputTokenDetailed : nativeTokenDetailed,
+                      tokenDetailed,
+                      computedPayload,
+                  ) ?? hash
+                : '-'}
         </span>
-    ) : null
+    )
 }

@@ -18,13 +18,13 @@ use(new Squash())
 use(new Nonce())
 use(new Translator())
 use(new Popup())
-use(new Interceptor())
-use(new RecentTransaction())
 use(new TransactionNotifier())
 use(new TransactionWatcher())
+use(new RecentTransaction())
+use(new Interceptor())
 // #endregion
 
-function isUniversalPaylaod(payload: JsonRpcPayload) {
+function isUniversalPayload(payload: JsonRpcPayload) {
     return [
         EthereumMethodType.ETH_GET_CODE,
         EthereumMethodType.ETH_GAS_PRICE,
@@ -60,7 +60,7 @@ export async function request<T extends unknown>(
                     // create request provider
                     const externalProvider = await createExternalProvider(
                         context.chainId,
-                        isUniversalPaylaod(context.request) ? ProviderType.MaskWallet : context.providerType,
+                        isUniversalPayload(context.request) ? ProviderType.MaskWallet : context.providerType,
                     )
                     if (!externalProvider?.request) throw new Error('Failed to create provider.')
 

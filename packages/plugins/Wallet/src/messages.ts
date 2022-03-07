@@ -214,7 +214,6 @@ export interface WalletMessage {
     phrasesUpdated: void
     addressBookUpdated: void
     transactionsUpdated: void
-    transactionStateUpdated: TransactionState
     transactionProgressUpdated: {
         state: TransactionState
         payload: JsonRpcPayload

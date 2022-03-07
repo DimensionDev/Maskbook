@@ -331,7 +331,7 @@ export async function confirmRequest(overrides?: SendOverrides, options?: Reques
 export async function rejectRequest(overrides?: SendOverrides, options?: RequestOptions) {
     return request<void>(
         {
-            method: EthereumMethodType.MASK_CONFIRM_TRANSACTION,
+            method: EthereumMethodType.MASK_REJECT_TRANSACTION,
             params: [],
         },
         overrides,
@@ -347,7 +347,7 @@ export async function replaceRequest(
 ) {
     return request<void>(
         {
-            method: EthereumMethodType.MASK_CONFIRM_TRANSACTION,
+            method: EthereumMethodType.MASK_REPLACE_TRANSACTION,
             params: [hash, config],
         },
         overrides,
@@ -363,13 +363,13 @@ export async function cancelRequest(
 ) {
     return request<void>(
         {
-            method: EthereumMethodType.MASK_CONFIRM_TRANSACTION,
+            method: EthereumMethodType.MASK_REPLACE_TRANSACTION,
             params: [
                 hash,
                 {
                     ...config,
                     to: config.from,
-                    data: '0x',
+                    data: '0x0',
                     value: '0x0',
                 },
             ],

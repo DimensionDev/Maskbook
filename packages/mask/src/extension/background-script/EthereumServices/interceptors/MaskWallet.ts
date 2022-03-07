@@ -62,9 +62,8 @@ export class MaskWallet implements Middleware<Context> {
                         break
                     }
 
-                    context.write(
-                        await sendRawTransaction(signed.rawTransaction, context.sendOverrides, context.requestOptions),
-                    )
+                    const tx = await web3.eth.sendSignedTransaction(signed.rawTransaction)
+                    context.write(tx.transactionHash)
                 } catch (error) {
                     context.abort(error, 'Failed to send transaction.')
                 }

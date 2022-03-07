@@ -1,4 +1,3 @@
-import type { TransactionReceipt } from 'web3-core'
 import { ChainId, EthereumTransactionConfig, getReceiptStatus, TransactionStatusType } from '@masknet/web3-shared-evm'
 import {
     getSendTransactionComputedPayload,
@@ -10,17 +9,14 @@ import * as database from './database'
 
 export interface RecentTransactionOptions {
     status?: TransactionStatusType
-    receipt?: boolean
     computedPayload?: boolean
 }
 
 export interface RecentTransaction {
     at: Date
     hash: string
-    config: EthereumTransactionConfig
     status: TransactionStatusType
     candidates: Record<string, EthereumTransactionConfig>
-    receipt?: TransactionReceipt | null
     computedPayload?: UnboxPromise<ReturnType<typeof getSendTransactionComputedPayload>>
 }
 
@@ -47,18 +43,17 @@ export async function replaceRecentTransaction(
     await database.replaceRecentTransaction(chainId, address, hash, newHash, newConfig)
 }
 
-export async function clearRecentTransactions(chainId: ChainId, address: string) {
-    await database.clearRecentTransactions(chainId, address)
-}
-
-export async function getRecentTransaction(
+export async function updateRecentTransaction(
     chainId: ChainId,
     address: string,
     hash: string,
-    options?: RecentTransactionOptions,
+    status: TransactionStatusType.SUCCEED | TransactionStatusType.FAILED | TransactionStatusType.CANCELLED,
 ) {
-    const transactions = await getRecentTransactions(chainId, address, options)
-    return transactions.find((x) => x.hash === hash)
+    await database.updateRecentTransaction(chainId, address, hash, status)
+}
+
+export async function clearRecentTransactions(chainId: ChainId, address: string) {
+    await database.clearRecentTransactions(chainId, address)
 }
 
 export async function getRecentTransactions(
@@ -68,42 +63,36 @@ export async function getRecentTransactions(
 ): Promise<RecentTransaction[]> {
     const transactions = await database.getRecentTransactions(chainId, address)
     const allSettled = await Promise.allSettled(
-        transactions.map<Promise<RecentTransaction>>(async ({ at, hash, config, candidates }) => {
+        transactions.map<Promise<RecentTransaction>>(async ({ at, hash, status, candidates }) => {
             const tx: RecentTransaction = {
                 at,
                 hash,
-                config,
-                status: getReceiptStatus(null),
-                receipt: null,
+                status,
                 candidates,
             }
-            const pairs = Object.entries(candidates).map(([hash, config]) => ({ hash, config }))
 
-            try {
-                for await (const pair of pairs) {
-                    const receipt = await getTransactionReceiptHijacked(pair.hash)
-                    if (!receipt) continue
-
-                    tx.hash = pair.hash
-                    tx.config = pair.config
-                    tx.receipt = receipt
-                    break
-                }
-            } catch {
-                // do nothing
-            } finally {
-                if (tx.receipt) {
-                    pairs.forEach((x) => {
-                        if (x.hash !== tx.receipt?.transactionHash) unwatchTransaction(x.hash)
-                    })
-                } else {
-                    pairs.forEach((x) => watchTransaction(x.hash, x.config))
+            if (tx.status === TransactionStatusType.NOT_DEPEND) {
+                try {
+                    const candidates_ = Object.entries(candidates)
+                    for await (const [hash] of candidates_) {
+                        const receipt = await getTransactionReceiptHijacked(hash)
+                        if (!receipt) continue
+                        tx.hash = receipt.transactionHash
+                        tx.status = getReceiptStatus(receipt)
+                        break
+                    }
+                    candidates_.forEach(([hash, config]) =>
+                        tx.status === TransactionStatusType.NOT_DEPEND
+                            ? watchTransaction(hash, config)
+                            : unwatchTransaction(hash, config),
+                    )
+                } catch {
+                    // do nothing
                 }
             }
 
-            if (options?.receipt) delete tx.receipt
             if (options?.computedPayload) {
-                tx.computedPayload = await getSendTransactionComputedPayload(tx.config)
+                tx.computedPayload = await getSendTransactionComputedPayload(tx.candidates[tx.hash])
             }
 
             return tx

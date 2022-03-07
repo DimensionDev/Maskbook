@@ -78,14 +78,8 @@ export function TransactionSnackbar() {
         [showSnackbar, closeSnackbar],
     )
 
-    const getTitle = useCallback((state: TransactionState, payload: any, hash?: string) => {
-        return (
-            <RecentTransactionDescription
-                hash={hash ?? ''}
-                computedPayload={payload}
-                receipt={(state as { receipt: TransactionReceipt }).receipt}
-            />
-        )
+    const getTitle = useCallback((payload: any, hash?: string) => {
+        return <RecentTransactionDescription hash={hash ?? ''} computedPayload={payload} />
     }, [])
 
     const getFullMessage = useCallback(
@@ -122,7 +116,7 @@ export function TransactionSnackbar() {
                 if (progress.state.type === TransactionStateType.CONFIRMED) {
                     showSingletonSnackbar(t('plugin_wallet_snackbar_swap_successful'), {
                         ...config,
-                        ...{ message: getFullMessage(getTitle(progress.state, payload, hash), hash) },
+                        ...{ message: getFullMessage(getTitle(payload, hash), hash) },
                     })
                     return
                 }
@@ -136,7 +130,7 @@ export function TransactionSnackbar() {
                 }
             }
 
-            showSingletonSnackbar(getTitle(progress.state, payload, hash), {
+            showSingletonSnackbar(getTitle(payload, hash), {
                 ...config,
                 ...{ message: getFullMessage(config.message, hash) },
             } as ShowSnackbarOptions)
