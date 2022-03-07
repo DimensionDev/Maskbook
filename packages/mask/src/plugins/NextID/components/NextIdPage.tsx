@@ -122,7 +122,7 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
                     </Box>
                 ) : (
                     <Box className={classes.tip}>
-                        <Typography>{t.verify_other_Twitter_ID_intro()}</Typography>
+                        <Typography>{t.connect_wallet__other_user_tip_intro()}</Typography>
                     </Box>
                 )}
                 {isOwn && (
@@ -186,8 +186,8 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
             <Box>
                 {isOwn ? (
                     <Box className={classes.tip}>
-                        <Typography>{t.connect_wallet_tip_intro()}</Typography>
-                        <Typography>{t.connect_wallet_tip()}</Typography>
+                        <Typography>{t.verify_wallet_intro()}</Typography>
+                        <Typography>{t.verify_wallet()}</Typography>
                     </Box>
                 ) : (
                     <Box className={classes.tip}>

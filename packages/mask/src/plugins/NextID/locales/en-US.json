@@ -2,9 +2,11 @@
     "wallet": "Wallet",
     "persona": "Persona",
     "unsupported_network": "Unsupported Network",
-    "connect_wallet__other_user_tip_intro": "Currently no wallet is bound by this account.",
+    "connect_wallet__other_user_tip_intro": "Wallets not found. You can try as following:Broswer user's tweets;Get persona information by requiring this user to post encrypted tweets.If doesn't work, this user might not connect wallets yet.",
     "connect_wallet_tip_intro": "Connect your wallet here.",
     "connect_wallet_tip": "In this Web 3 section, you can show your address for receiving tips, your NFT collection, donation records, and other on-chain information to friends who have installed Mask Network.",
+    "verify_wallet_intro": "Verify your wallet here.",
+    "verify_wallet": "In this Web 3 section, you can show your address for receiving tips, your NFT collection, donation records, and other on-chain information to friends who have installed Mask Network.",
     "verify_Twitter_ID_intro": "Verify your Twitter ID here.",
     "verify_Twitter_ID": "In this Next.ID section, you need to verify your Twitter ID to use Next.ID-based products.",
     "verify_other_Twitter_ID_intro": "This user has not connected wallets here.",
@@ -35,5 +37,8 @@
     "unbind_persona_tip": "Choose either your Persona or the currently bound wallet to sign to unbind.",
     "unbind_wallet_tip": "Choose either your Persona or the currently bound wallet to sign to unbind.",
     "done": "Done",
-    "copy_success_of_wallet_address": "Copy wallet address successfully!"
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "copy_success_of_wallet_address": "Copy wallet address successfully!",
+    "disconnect_warning": "This wallet will no longer show up in your web 3 profile page. Your Mask friends can no longer give tips to this wallet, or browse NFTs, donations and other on-chain information of this address."
 }
