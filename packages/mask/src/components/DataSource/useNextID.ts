@@ -73,7 +73,7 @@ export function useNextIDConnectStatus() {
         isOpenedVerifyDialog = true
         isOpenedFromButton = false
         return false
-    }, [username, enableNextID, lastStateRef.value])
+    }, [username, enableNextID, lastStateRef.value, isOpenedVerifyDialog, isOpenedFromButton])
 
     return {
         isVerified,

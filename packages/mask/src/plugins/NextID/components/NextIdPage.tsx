@@ -11,10 +11,10 @@ import { BindingItem } from './BindingItem'
 import { UnbindDialog } from './UnbindDialog'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
-import { searchAllProfileTabSelector } from '../../../social-network-adaptor/twitter.com/utils/selector'
 import { queryIsBound, queryExistedBindingByPersona } from '@masknet/web3-providers'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { useNextIDConnectStatus } from '../../../components/DataSource/useNextID'
+import { searchAllProfileTabSelector } from '../../../social-network-adaptor/twitter.com/utils/selector'
 
 const useStyles = makeStyles()((theme) => ({
     tip: {
@@ -24,6 +24,19 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 8,
         alignItems: 'center',
         color: theme.palette.text.primary,
+    },
+    verifyIntro: {
+        fontWeight: 600,
+        marginBottom: '12px',
+    },
+    verifyDetail: {
+        fontWeight: 600,
+        color: '#536471',
+    },
+    verifyWarning: {
+        fontWeight: 600,
+        color: '#536471',
+        marginTop: '12px',
     },
     skeleton: {
         borderRadius: 8,
@@ -45,6 +58,7 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
     const personaConnectStatus = usePersonaConnectStatus()
     const { reset, isVerified } = useNextIDConnectStatus()
+    const [refresh, toggleRefresh] = useState(true)
 
     const [openBindDialog, toggleBindDialog] = useState(false)
     const [unbindAddress, setUnBindAddress] = useState<string>()
@@ -84,10 +98,11 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
     }, [currentPersona, isOwn, count])
 
     const onVerify = async () => {
+        reset()
         const firstTab = searchAllProfileTabSelector().evaluate()?.querySelector('div')?.parentNode
             ?.firstChild as HTMLElement
         firstTab.click()
-        reset()
+        toggleRefresh((pre) => !pre)
     }
 
     if (personaActionButton) {
@@ -117,12 +132,19 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
             <Box>
                 {isOwn ? (
                     <Box className={classes.tip}>
-                        <Typography>{t.verify_Twitter_ID_intro()}</Typography>
-                        <Typography>{t.verify_Twitter_ID()}</Typography>
+                        <Typography className={classes.verifyIntro}>{t.verify_Twitter_ID_intro()}</Typography>
+                        <Typography className={classes.verifyDetail}>{t.verify_Twitter_ID()}</Typography>
                     </Box>
                 ) : (
                     <Box className={classes.tip}>
-                        <Typography>{t.connect_wallet__other_user_tip_intro()}</Typography>
+                        <Typography className={classes.verifyIntro}>
+                            {t.connect_wallet__other_user_tip_intro()}
+                        </Typography>
+                        <Typography className={classes.verifyDetail}>{t.connect_wallet_other_user_tip1()}</Typography>
+                        <Typography className={classes.verifyDetail}>{t.connect_wallet_other_user_tip2()}</Typography>
+                        <Typography className={classes.verifyWarning}>
+                            {t.connect_wallet_other_user_warning()}
+                        </Typography>
                     </Box>
                 )}
                 {isOwn && (
@@ -186,12 +208,19 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
             <Box>
                 {isOwn ? (
                     <Box className={classes.tip}>
-                        <Typography>{t.verify_wallet_intro()}</Typography>
-                        <Typography>{t.verify_wallet()}</Typography>
+                        <Typography className={classes.verifyIntro}>{t.verify_wallet_intro()}</Typography>
+                        <Typography className={classes.verifyDetail}>{t.verify_wallet()}</Typography>
                     </Box>
                 ) : (
                     <Box className={classes.tip}>
-                        <Typography>{t.connect_wallet__other_user_tip_intro()}</Typography>
+                        <Typography className={classes.verifyIntro}>
+                            {t.connect_wallet__other_user_tip_intro()}
+                        </Typography>
+                        <Typography className={classes.verifyDetail}>{t.connect_wallet_other_user_tip1()}</Typography>
+                        <Typography className={classes.verifyDetail}>{t.connect_wallet_other_user_tip2()}</Typography>
+                        <Typography className={classes.verifyDetail}>
+                            {t.connect_wallet_other_user_warning()}
+                        </Typography>
                     </Box>
                 )}
                 {isOwn && (
