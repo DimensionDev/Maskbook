@@ -9,6 +9,8 @@ import {
     searchProfileTabListLastChildSelector,
     searchProfileTabListSelector,
     searchProfileTabPageSelector,
+    searchTwitterTimelineLoadingProgress,
+    searchTwitterTimelineLoadingFailed,
     searchProfileTabSelector,
 } from '../utils/selector'
 import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab'
@@ -145,7 +147,10 @@ export function injectProfileTabAtTwitter(signal: AbortSignal) {
     let tabInjected = false
     const contentWatcher = new MutationObserverWatcher(searchProfileTabPageSelector()).useForeach(() => {
         const elePage = searchProfileTabPageSelector().evaluate()
-        if (elePage && !tabInjected) {
+        const progressEle = searchTwitterTimelineLoadingProgress().evaluate()
+        const failedLoadingEle = searchTwitterTimelineLoadingFailed().evaluate()
+
+        if (elePage && !tabInjected && !progressEle && !failedLoadingEle) {
             const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())
             startWatch(watcher, signal)
             createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabAtTwitter />)
