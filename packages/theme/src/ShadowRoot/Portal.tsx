@@ -42,9 +42,9 @@ export function usePortalShadowRoot(renderer: (container: HTMLElement | undefine
     const preventEventPropagationList = useContext(PreventEventPropagationListContext)
     const { container, root } = useRefInit(() => {
         signal.current = new AbortController()
-
         const portal = PortalShadowRoot()
-        const root = portal.appendChild(document.createElement('div'))
+
+        const root = document.createElement('div')
         root.dataset.portalShadowRoot = ''
         const shadow = root.attachShadow({ mode: 'open' })
 
@@ -52,8 +52,22 @@ export function usePortalShadowRoot(renderer: (container: HTMLElement | undefine
         for (const each of preventEventPropagationList) {
             shadow.addEventListener(each, stop, { signal: signal.current.signal })
         }
+
         const container = shadow.appendChild(document.createElement('main'))
         sheets.map((x) => x.addContainer(shadow))
+
+        // This is proved to be important to the correct portal orders...
+        container.appendChild = (child) => {
+            if (!root.parentElement) portal.appendChild(root)
+            Node.prototype.appendChild.call(container, child)
+            return child
+        }
+        container.removeChild = (child) => {
+            Node.prototype.removeChild.call(container, child)
+            if (container.childElementCount === 0) portal.removeChild(root)
+            return child
+        }
+
         return { container, root }
     })
     useEffect(
