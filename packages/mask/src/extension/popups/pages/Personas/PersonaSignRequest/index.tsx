@@ -1,11 +1,11 @@
 import { memo, useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Button, Typography } from '@mui/material'
-import { MaskMessages, useI18N } from '../../../utils'
+import { MaskMessages, useI18N } from '../../../../../utils'
 import { useHistory, useLocation } from 'react-router-dom'
 import { ECKeyIdentifier, Identifier, PopupRoutes } from '@masknet/shared-base'
-import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
-import type { Persona } from '../../../database'
+import { useMyPersonas } from '../../../../../components/DataSource/useMyPersonas'
+import type { Persona } from '../../../../../database'
 
 const useStyles = makeStyles()(() => ({
     container: {

@@ -289,10 +289,6 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
             updatedAt: x.updatedAt.getTime(),
         }))
     },
-    async SNSAdaptor_getCurrentDetectedProfile() {
-        const { activatedSocialNetworkUI } = await import('../../social-network')
-        return activatedSocialNetworkUI.collecting.identityProvider?.recognized.value.identifier.toText()
-    },
     get_all_indexedDB_records: async () => {
         const personas = await Services.Identity.queryPersonaRecordsFromIndexedDB()
         const profiles = await Services.Identity.queryProfileRecordFromIndexedDB()
