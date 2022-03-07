@@ -47,7 +47,7 @@ const useStyles = makeStyles()((theme) => ({
         fill: 'none',
         '@supports (translate: 0)': {
             transform: 'none',
-            trasnlate: '7px 6px',
+            translate: '7px 6px',
         },
     },
     borderPath: {
@@ -83,7 +83,7 @@ const useStyles = makeStyles()((theme) => ({
         transform: 'translate(1px, -5px) ',
         '@supports (translate: 0)': {
             transform: 'none',
-            transalte: '1px, -5px',
+            translate: '1px, -5px',
         },
     },
     price: {
