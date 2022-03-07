@@ -1,8 +1,6 @@
 const shadowHeadMap = new WeakMap<ShadowRoot, HTMLHeadElement>()
 const constructableStyleSheetEnabled = true
 
-/// <reference path="" />
-
 // There are 2 rendering mode of this ShadowRootStyleSheet.
 // 1. If the host supports ConstructableStyleSheet proposal:
 //      It is the fastest but only Chrome supports it.
