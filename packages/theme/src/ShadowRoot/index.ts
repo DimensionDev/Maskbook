@@ -1,7 +1,7 @@
 export {
     createReactRootShadowedPartial,
-    type CreateRenderInShadowRootConfig,
-    type RenderInShadowRootConfig,
+    type CreateRenderInShadowRootHostConfig as CreateRenderInShadowRootConfig,
+    type RenderInShadowRootOptions as RenderInShadowRootConfig,
     type ReactRootShadowed,
 } from './createReactRootShadowed'
 export {
@@ -12,4 +12,4 @@ export {
     NoEffectUsePortalShadowRootContext,
 } from './Portal'
 export { ShadowRootMenu, ShadowRootPopper, ShadowRootTooltip } from './Wrapped'
-export { CSSVariableInjector } from './CSSVariableInjector'
+export { NestedShadowRootIsolation } from './NestedShadowRootIsolation'
