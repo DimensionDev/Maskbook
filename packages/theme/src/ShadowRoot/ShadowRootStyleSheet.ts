@@ -60,7 +60,7 @@ export class StyleSheet {
         this.implementation.flush()
         this._alreadyInsertedOrderInsensitiveRule = false
     }
-    private implementation: ConstructableStyleSheet | SynchronizeStyleSheet
+    private declare implementation: ConstructableStyleSheet | SynchronizeStyleSheet
     private _alreadyInsertedOrderInsensitiveRule = false
 }
 class ConstructableStyleSheet {
@@ -100,17 +100,17 @@ class SynchronizeStyleSheet {
             const style = createStyleElement()
             style.dataset.globalStyleOf = tag
             head.insertBefore(style, head.firstChild)
-            this.globalContainers.set(container, style)
+            this.globalStyles.set(container, style)
         }
 
         // copy styles
         const first = this.containers.entries().next()
         if (first.done) return // there is no previous styles. we are done.
 
-        const existingStyles = Array.from(first.value[1].children)
-        // append existing styles to newly joined container
         const frag = document.createDocumentFragment()
-        existingStyles.forEach((x) => frag.appendChild(x.cloneNode(true)) as HTMLStyleElement)
+        for (const x of first.value[1].children) {
+            frag.appendChild(x.cloneNode(true))
+        }
         localContainer.appendChild(frag)
     }
     insert(rule: string) {
@@ -125,7 +125,7 @@ class SynchronizeStyleSheet {
         this.ctr += 1
     }
     insertGlobal(rule: string) {
-        for (const style of this.globalContainers.values()) {
+        for (const style of this.globalStyles.values()) {
             style.appendChild(document.createTextNode(rule))
         }
     }
@@ -135,6 +135,7 @@ class SynchronizeStyleSheet {
                 tag.remove()
             }
         }
+        // TODO: how should we flush global styles?
         this.ctr = 0
     }
     private _insertTag = () => {
@@ -142,7 +143,7 @@ class SynchronizeStyleSheet {
             container.appendChild(createStyleElement())
         }
     }
-    private globalContainers = new Map<ShadowRoot, HTMLStyleElement>()
+    private globalStyles = new Map<ShadowRoot, HTMLStyleElement>()
 }
 
 function getShadowRootHead(shadow: ShadowRoot) {
