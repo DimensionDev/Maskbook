@@ -248,6 +248,7 @@ export async function queryPagedPostHistory(
         network: string
         userIds: string[]
         after?: PostIVIdentifier
+        pageOffset?: number
     },
     count: number,
 ) {
@@ -389,6 +390,11 @@ export const getCurrentPersonaAvatar = async () => {
     }
 }
 // #endregion
+
+export async function exportPersonaMnemonicWords(identifier: PersonaIdentifier) {
+    const record = await queryPersonaRecord(identifier)
+    return record?.mnemonic?.words
+}
 
 // #region Private / Public key
 export async function exportPersonaPrivateKey(identifier: PersonaIdentifier) {

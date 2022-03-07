@@ -18,4 +18,5 @@ export const TwitterRenderFragments: RenderFragmentsContextType = {
         const { hasMatch, ...events } = useTagEnhancer('cash', props.children.slice(1))
         return <Link {...events} href={target} children={props.children} />
     }),
+    Image: () => null,
 }

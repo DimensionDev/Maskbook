@@ -12,11 +12,13 @@ import type { SocialNetwork } from '../../api'
 import { useToggle } from 'react-use'
 import { UploadAvatarDialog } from '../UploadAvatarDialog'
 import { MaskAvatar } from '../../../../components/MaskAvatar'
-import { ExportPrivateKeyDialog } from '../ExportPrivateKeyDialog'
 import { useNavigate } from 'react-router-dom'
 import { LogoutPersonaDialog } from '../LogoutPersonaDialog'
 import { UserContext } from '../../../Settings/hooks/UserContext'
 import { styled } from '@mui/material/styles'
+import { PreviewDialog as ExportPersonaDialog } from '../../../SignUp/steps/PreviewDialog'
+import { useExportPrivateKey } from '../../hooks/useExportPrivateKey'
+import { useExportMnemonicWords } from '../../hooks/useExportMnemonicWords'
 
 const useStyles = makeStyles()((theme) => ({
     setting: {
@@ -91,10 +93,13 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
     const { nickname, definedSocialNetworks, identifier, profiles } = props
     const { onConnect, onDisconnect, onRename } = props
 
+    const { value: privateKey } = useExportPrivateKey(identifier)
+    const { value: words } = useExportMnemonicWords(identifier)
+
     const [avatarOn, toggleAvatar] = useToggle(false)
     const [renameDialogOpen, setRenameDialogOpen] = useState(false)
     const [logoutDialogOpen, setLogoutDialogOpen] = useState(false)
-    const [exportPrivateKeyDialogOpen, setExportPrivateKeyDialogOpen] = useState(false)
+    const [exportPersonaDialogOpen, setExportPersonaDialogOpen] = useState(false)
 
     const logoutConfirmedPasswordCallback = () =>
         confirmPassword(() => setLogoutDialogOpen(true), {
@@ -104,8 +109,8 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
             force: false,
         })
 
-    const exportPrivateKeyConfirmedPasswordCallback = () =>
-        confirmPassword(() => setExportPrivateKeyDialogOpen(true), {
+    const exportPersonaConfirmedPasswordCallback = () =>
+        confirmPassword(() => setExportPersonaDialogOpen(true), {
             tipTitle: t.personas_export_persona(),
             tipContent: t.personas_export_persona_confirm_password_tip(),
             confirmTitle: t.personas_export_persona(),
@@ -115,8 +120,8 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
         <MenuItem onClick={() => setRenameDialogOpen(true)}>
             <MenuText>{t.personas_rename()}</MenuText>
         </MenuItem>,
-        <MenuItem onClick={exportPrivateKeyConfirmedPasswordCallback}>
-            <MenuText>{t.personas_export_private()}</MenuText>
+        <MenuItem onClick={exportPersonaConfirmedPasswordCallback}>
+            <MenuText>{t.personas_export_persona()}</MenuText>
         </MenuItem>,
         <MenuItem onClick={() => navigate(DashboardRoutes.Settings, { state: { open: 'setting' } })}>
             <MenuText>{t.settings_global_backup_title()}</MenuText>
@@ -206,10 +211,14 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                 identifier={identifier}
                 onClose={() => setLogoutDialogOpen(false)}
             />
-            <ExportPrivateKeyDialog
-                open={exportPrivateKeyDialogOpen}
-                identifier={identifier}
-                onClose={() => setExportPrivateKeyDialogOpen(false)}
+            <ExportPersonaDialog
+                type="download"
+                open={exportPersonaDialogOpen}
+                onClose={() => setExportPersonaDialogOpen(false)}
+                personaName={nickname || ''}
+                id={identifier.toText()}
+                words={words?.split(' ')}
+                privateKey={privateKey || ''}
             />
         </Stack>
     )

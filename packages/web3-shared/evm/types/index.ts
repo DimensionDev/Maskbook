@@ -39,8 +39,7 @@ export interface CryptoPrice {
 export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
 export type ChainIdRecord<T> = { [k in ChainId]: T }
 
-// bigint is not in our list. iOS doesn't support that.
-export type Primitive = string | number | boolean | symbol | undefined | null
+export type Primitive = string | number | boolean | symbol | undefined | null | bigint
 
 export type Web3Constants = Record<string, { [K in ChainId]: Primitive | Primitive[] }>
 

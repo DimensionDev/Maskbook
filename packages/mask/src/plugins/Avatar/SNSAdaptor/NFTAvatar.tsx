@@ -155,7 +155,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                         </Typography>
                     ) : null}
                 </Box>
-                <EthereumChainBoundary chainId={chainId}>
+                <EthereumChainBoundary hiddenConnectButton chainId={chainId}>
                     <Box className={classes.galleryItem}>
                         <Box className={classes.gallery}>
                             {state !== SocketState.done && collectibles.length === 0
