@@ -54,23 +54,15 @@ export function ShadowRootStyleProvider(props: ShadowRootStyleProviderProps) {
     )
 }
 function init({ shadow }: ShadowRootStyleProviderProps) {
-    const head = shadow.appendChild(createElement('head', 'css-container'))
-
-    // #region Emotion
-    const MuiInsertionPoint = head.appendChild(createElement('div', 'mui-area'))
-    const TSSInsertionPoint = head.appendChild(createElement('div', 'tss-area'))
     // emotion doesn't allow numbers appears in the key
     const instanceID = Math.random().toString(36).slice(2).replace(/\d/g, 'x')
 
     const muiEmotionCache = createEmotionCache({ key: 'x' })
-    const muiStyleSheet = new StyleSheet({ key: 'mui-' + instanceID })
-    muiStyleSheet.addContainer(MuiInsertionPoint)
+    const muiStyleSheet = new StyleSheet('mui-' + instanceID, shadow)
     muiEmotionCache.sheet = muiStyleSheet
 
     const tssEmotionCache = createEmotionCache({ key: 'x' })
-    const tssStyleSheet = new StyleSheet({ key: 'tss-' + instanceID })
-    tssStyleSheet.addContainer(TSSInsertionPoint)
+    const tssStyleSheet = new StyleSheet('tss-' + instanceID, shadow)
     tssEmotionCache.sheet = tssStyleSheet
-    // #endregion
     return { muiEmotionCache, tssEmotionCache, sheets: [muiStyleSheet, tssStyleSheet] as const }
 }

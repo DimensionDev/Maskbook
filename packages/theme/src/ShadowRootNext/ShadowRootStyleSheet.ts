@@ -1,20 +1,34 @@
 /* https://github.com/emotion-js/emotion/blob/main/packages/sheet/src/index.js */
-
-export type Options = {
-    key: string
-}
+const shadowHeadMap = new WeakMap<ShadowRoot, HTMLDivElement>()
 export class StyleSheet {
+    // Unlucky, emotion will create it's own StyleSheet and use isSpeedy, tags, keys and container for Global components.
+    isSpeedy = true
     tags: any = []
-    container = document.createElement('div')
+    container: HTMLElement
+
     private ctr = 0
-    private syncContainers = new Map<Element, HTMLStyleElement[]>()
-    key: string
+    private shadowHead: HTMLDivElement
+    private syncContainers = new Map<Element | ShadowRoot, HTMLStyleElement[]>()
     private _alreadyInsertedOrderInsensitiveRule = false
-    constructor(options: Options) {
-        // key is the value of the data-emotion attribute, it's used to identify different sheets
-        this.key = options.key
+    constructor(public key: string, private containerShadow: ShadowRoot) {
+        if (!shadowHeadMap.has(containerShadow)) {
+            const div = document.createElement('div')
+            div.dataset.styleContainer = ''
+            shadowHeadMap.set(containerShadow, div)
+            containerShadow.insertBefore(div, containerShadow.firstChild)
+        }
+        const shadowHead = (this.shadowHead = shadowHeadMap.get(containerShadow)!)
+
+        const global = (this.container = document.createElement('div'))
+        global.dataset.globalOf = key
+        shadowHead.insertBefore(global, shadowHead.firstChild)
+
+        const local = document.createElement('div')
+        local.dataset.key = key
+        shadowHead.appendChild(local)
+        this.addContainer(local)
     }
-    addContainer(container: Element) {
+    addContainer(container: Element | ShadowRoot) {
         const first = this.syncContainers.entries().next()
         if (first.done) {
             this.syncContainers.set(container, [])
@@ -72,6 +86,7 @@ export class StyleSheet {
         for (const tags of this.syncContainers.values()) {
             const tag = tags.at(-1)!
             const sheet = tag.sheet!
+            if (!sheet) console.warn('NO sheet is found. The ShadowRoot is not attached to the DOM tree.')
             try {
                 // this is the ultrafast version, works across browsers
                 // the big drawback is that the css won't be editable in devtools
