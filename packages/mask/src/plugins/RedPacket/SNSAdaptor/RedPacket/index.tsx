@@ -216,7 +216,7 @@ export function RedPacket(props: RedPacketProps) {
                     </div>
                 </div>
             </Card>
-            {listOfStatus.includes(RedPacketStatus.expired) || listOfStatus.includes(RedPacketStatus.empty) ? null : (
+            {listOfStatus.includes(RedPacketStatus.empty) ? null : (
                 <OperationFooter
                     canClaim={canClaim}
                     canRefund={canRefund}
