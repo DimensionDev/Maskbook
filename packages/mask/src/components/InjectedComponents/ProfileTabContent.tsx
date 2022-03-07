@@ -82,11 +82,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         })
     }, [identity])
 
-    useEffect(() => {
-        if (hidden || loadingAddressNames) return
-        props.clear?.()
-    }, [loadingAddressNames, hidden])
-
     const ContentComponent = useMemo(() => {
         return getTabContent(selectedTabComputed?.ID ?? '')
     }, [selectedTabComputed, identity.identifier])

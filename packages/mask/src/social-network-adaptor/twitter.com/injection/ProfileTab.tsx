@@ -1,5 +1,4 @@
 import Color from 'color'
-import { useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createReactRootShadowed, startWatch, untilElementAvailable } from '../../../utils'
@@ -79,7 +78,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export async function clear() {
+async function clear() {
     const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
     if (!eleTab) return
     const style = window.getComputedStyle(eleTab)
@@ -105,10 +104,6 @@ export async function clear() {
         elePage.style.visibility = 'hidden'
         elePage.style.height = '0px'
     }
-}
-
-export function useClear() {
-    return useCallback(() => clear(), [])
 }
 
 function reset() {
