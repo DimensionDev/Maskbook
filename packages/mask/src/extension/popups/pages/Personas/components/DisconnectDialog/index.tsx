@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Button, Dialog, DialogActions, DialogContent, Typography } from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, Typography, DialogProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import type { ProfileIdentifier } from '@masknet/shared-base'
@@ -49,12 +49,11 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
-interface DisconnectDialogProps {
-    open: boolean
+interface DisconnectDialogProps extends DialogProps {
     unbundledIdentity?: ProfileIdentifier
-    onClose: () => void
     onConfirmDisconnect: () => void
     confirmLoading: boolean
+    onClose: () => void
 }
 
 export const DisconnectDialog = memo<DisconnectDialogProps>(
