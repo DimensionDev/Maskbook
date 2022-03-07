@@ -72,6 +72,7 @@ export interface ConnectedPersonaLineProps {
     isHideOperations: boolean
     onConnect: () => void
     onDisconnect: (identifier: ProfileIdentifier) => void
+    onDeleteBound?: any
     profileIdentifiers: ProfileIdentifier[]
     networkIdentifier: string
     disableAdd?: boolean
@@ -83,6 +84,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         profileIdentifiers,
         onConnect,
         onDisconnect,
+        onDeleteBound,
         networkIdentifier,
         isHideOperations,
         disableAdd,
@@ -101,6 +103,17 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
             e.stopPropagation()
             if (!proof || !proof.is_valid) {
                 onConnect()
+            }
+        }
+
+        const handleDisconnect = (profile: ProfileIdentifier) => {
+            const isProved = verification?.proofs.find((x) => {
+                return x.platform === 'twitter' && x.identity === profile.userId.toLowerCase()
+            })
+            if (!isProved) {
+                onDisconnect(profile)
+            } else {
+                onDeleteBound(verification, profile)
             }
         }
         const userIdBox = (profile: any) => {
@@ -173,7 +186,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                 </Link>
                 <DisconnectProfileDialog
                     networkIdentifier={networkIdentifier}
-                    onDisconnect={onDisconnect}
+                    onDisconnect={(profileIdentifier) => handleDisconnect(profileIdentifier)}
                     profileIdentifiers={profileIdentifiers}
                     open={openDisconnectDialog}
                     onClose={() => setOpenDisconnectDialog(false)}

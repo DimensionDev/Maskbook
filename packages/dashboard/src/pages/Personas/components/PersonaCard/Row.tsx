@@ -62,8 +62,15 @@ const MenuText = styled('span')(`
 `)
 
 export const PersonaRowCard = memo(() => {
-    const { currentPersona, connectPersona, disconnectPersona, renamePersona, definedSocialNetworks, verification } =
-        PersonaContext.useContainer()
+    const {
+        currentPersona,
+        connectPersona,
+        disconnectPersona,
+        renamePersona,
+        deleteBound,
+        definedSocialNetworks,
+        verification,
+    } = PersonaContext.useContainer()
 
     if (!currentPersona) return null
 
@@ -75,6 +82,7 @@ export const PersonaRowCard = memo(() => {
             profiles={currentPersona.linkedProfiles}
             onConnect={connectPersona}
             onDisconnect={disconnectPersona}
+            onDeleteBound={deleteBound}
             onRename={renamePersona}
             definedSocialNetworks={definedSocialNetworks}
         />
@@ -90,6 +98,7 @@ export interface PersonaRowCardUIProps {
     onDisconnect: (identifier: ProfileIdentifier) => void
     onRename: (identifier: PersonaIdentifier, target: string, callback?: () => void) => Promise<void>
     verification?: NextIDPersonaBindings
+    onDeleteBound: (identifier: PersonaIdentifier, networkIdentifier: string) => void
 }
 
 export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
@@ -99,7 +108,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
     const { confirmPassword } = useContext(UserContext)
 
     const { nickname, definedSocialNetworks, identifier, profiles, verification } = props
-    const { onConnect, onDisconnect, onRename } = props
+    const { onConnect, onDisconnect, onRename, onDeleteBound } = props
 
     const { value: privateKey } = useExportPrivateKey(identifier)
     const { value: words } = useExportMnemonicWords(identifier)
@@ -196,6 +205,9 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                                     key={networkIdentifier}
                                     onConnect={() => onConnect(identifier, networkIdentifier)}
                                     onDisconnect={onDisconnect}
+                                    onDeleteBound={() => {
+                                        onDeleteBound(identifier, networkIdentifier)
+                                    }}
                                     profileIdentifiers={currentNetworkProfiles.map((x) => x.identifier)}
                                     networkIdentifier={networkIdentifier}
                                 />
