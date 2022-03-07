@@ -1,6 +1,7 @@
 const shadowHeadMap = new WeakMap<ShadowRoot, HTMLHeadElement>()
-const constructableStyleSheetEnabled = false
-const constructableStyleSheetOrder = new WeakMap<ShadowRoot, CSSStyleSheet[][]>()
+const constructableStyleSheetEnabled = true
+
+/// <reference path="" />
 
 // There are 2 rendering mode of this ShadowRootStyleSheet.
 // 1. If the host supports ConstructableStyleSheet proposal:
@@ -52,7 +53,7 @@ export class StyleSheet {
         this.addGlobalContainer(container)
         this.implementation.addContainer(container)
     }
-    hydrate(_nodes: HTMLStyleElement[]) {
+    hydrate() {
         throw new Error('Does not support SSR.')
     }
     insert(rule: string) {
@@ -90,13 +91,32 @@ export class StyleSheet {
     }
 }
 class ConstructableStyleSheet {
-    constructor(public key: string, containerShadow: ShadowRoot) {}
-    addContainer(container: ShadowRoot) {}
-    insert(rule: string) {}
-    flush() {}
+    private sheet = new CSSStyleSheet()
+    constructor(public key: string, containerShadow: ShadowRoot) {
+        this.addContainer(containerShadow)
+    }
+    addContainer(container: ShadowRoot) {
+        container.adoptedStyleSheets = [...(container.adoptedStyleSheets || []), this.sheet]
+    }
+    insert(rule: string) {
+        try {
+            this.sheet.insertRule(rule, this.sheet.cssRules.length)
+        } catch (error) {
+            if (
+                process.env.NODE_ENV !== 'production' &&
+                !/:(-moz-placeholder|-moz-focus-inner|-moz-focusring|-ms-input-placeholder|-moz-read-write|-moz-read-only|-ms-clear){/.test(
+                    rule,
+                )
+            ) {
+                console.error(`There was a problem inserting the following rule: "${rule}"`, error)
+            }
+        }
+    }
+    flush() {
+        this.sheet.replace('')
+    }
 }
 class SynchronizeStyleSheet {
-    container!: HTMLElement
     private ctr = 0
     private containers = new Map<ShadowRoot, HTMLDivElement>()
     constructor(public key: string, containerShadow: ShadowRoot) {
