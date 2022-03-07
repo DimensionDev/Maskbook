@@ -113,7 +113,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
             if (!isProved) {
                 onDisconnect(profile)
             } else {
-                onDeleteBound(verification, profile)
+                onDeleteBound(profile)
             }
         }
         const userIdBox = (profile: any) => {

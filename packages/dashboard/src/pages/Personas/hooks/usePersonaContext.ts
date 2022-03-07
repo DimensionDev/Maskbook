@@ -28,7 +28,7 @@ function usePersonaContext() {
     const [, openProfilePage] = useOpenProfilePage()
     const [, disconnectPersona] = useDisconnectSocialNetwork()
     const [, createPersona] = useCreatePersona()
-    const [, deleteBound] = useDeleteBound(personaPublicKey as string)
+    const [, deleteBound] = useDeleteBound()
     const renamePersona = Services.Identity.renamePersona
     const changeCurrentPersona = useCallback(Services.Settings.setCurrentPersonaIdentifier, [])
 
