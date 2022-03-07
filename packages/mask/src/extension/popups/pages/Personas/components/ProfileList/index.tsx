@@ -135,13 +135,13 @@ export const ProfileList = memo(() => {
     )
 
     const { value: mergedProfiles, retry: refreshProfileList } = useAsyncRetry(async () => {
-        if (!currentPersona) return
+        if (!currentPersona) return []
         const publicHexKey = await Services.Helper.queryPersonaHexPublicKey(currentPersona.identifier)
-        if (!publicHexKey) return
+        if (!publicHexKey) return currentPersona.linkedProfiles
         const response = await queryExistedBindingByPersona(publicHexKey)
-        if (!response) return
+        if (!response) return currentPersona.linkedProfiles
 
-        return currentPersona?.linkedProfiles.map((profile) => {
+        return currentPersona.linkedProfiles.map((profile) => {
             const target = response.proofs.find(
                 (x) =>
                     profile.identifier.userId.toLowerCase() === x.identity.toLowerCase() &&
