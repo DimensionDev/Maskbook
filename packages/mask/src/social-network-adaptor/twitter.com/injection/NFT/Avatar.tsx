@@ -5,14 +5,14 @@ import { Flags } from '../../../../../shared'
 import { getInjectNodeInfo } from '../../utils/avatar'
 import { postAvatarsContentSelector } from '../../utils/selector'
 import { NFTAvatarMiniClip } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip'
+import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 
 function getTwitterId(ele: HTMLElement) {
     const twitterIdNode = (ele.firstChild?.nextSibling as HTMLElement).querySelector(
         '[dir="ltr"] > span',
     ) as HTMLSpanElement
     if (!twitterIdNode) return
-    const twitterId = twitterIdNode.innerText.trim().replace('@', '')
-    return twitterId
+    return twitterIdNode.innerText.trim().replace('@', '')
 }
 
 function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
@@ -48,6 +48,7 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                                 avatarId={info.avatarId}
                                 width={info.width - 4}
                                 height={info.height - 4}
+                                snsKey={RSS3_KEY_SNS.TWITTER}
                             />
                         )}
                     </div>,

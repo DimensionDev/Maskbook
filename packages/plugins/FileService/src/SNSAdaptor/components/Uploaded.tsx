@@ -10,12 +10,15 @@ import { useI18N } from '../../locales/i18n_generated'
 import { FileRouter } from '../../constants'
 import type { FileInfo } from '../../types'
 import { FileName } from './FileName'
+import { resolveGatewayAPI } from '../../helpers'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles()({
     container: {
         height: 250,
         flexDirection: 'column',
         justifyContent: 'space-between',
+        flexWrap: 'nowrap',
         alignItems: 'center',
         userSelect: 'none',
         paddingTop: 18,
@@ -40,6 +43,14 @@ const useStyles = makeStyles()({
         flexDirection: 'column',
         justifyContent: 'center',
     },
+    change: {
+        fontSize: 14,
+        margin: '0 auto',
+        display: 'flex',
+        padding: '0 60px',
+        flexDirection: 'column',
+        justifyContent: 'center',
+    },
     info: {
         margin: 0,
     },
@@ -49,7 +60,7 @@ export const Uploaded: React.FC = () => {
     const t = useI18N()
     const { classes } = useStyles()
     const history = useHistory()
-    const { onInsert } = useExchange()
+    const { onInsert, onDialogClose } = useExchange()
     const { state } = useLocation<FileInfo>()
     useEffect(() => {
         onInsert(state)
@@ -58,6 +69,9 @@ export const Uploaded: React.FC = () => {
         onInsert(null)
         history.replace(FileRouter.upload)
     }
+
+    // return upload route
+    onDialogClose(onBack)
     const onPreview = (event: React.MouseEvent) => {
         // ! THIS METHOD IS ONLY IN THE DEBUGGER !
         // ! Trigger: [Shift Key] + [Click] !
@@ -65,7 +79,9 @@ export const Uploaded: React.FC = () => {
         if (!event.shiftKey) {
             return
         }
-        const link = `https://arweave.net/${state.landingTxID}`
+
+        const linkPrefix = resolveGatewayAPI(state.provider)
+        const link = urlcat(linkPrefix, '/:txId', { txId: state.landingTxID })
         open(state.key ? `${link}#${state.key}` : link)
     }
     return (
@@ -73,7 +89,7 @@ export const Uploaded: React.FC = () => {
             <Grid item onClick={onPreview}>
                 <File width={96} height={120} />
             </Grid>
-            <Grid item>
+            <Grid item sx={{ width: '100%' }}>
                 <FileName name={state.name} />
                 <Typography component="section" className={classes.meta}>
                     <p className={classes.info}>
@@ -81,10 +97,10 @@ export const Uploaded: React.FC = () => {
                         <span>{'  '}</span>
                         <span>{formatDateTime(state.createdAt, 'yyyy-MM-dd HH:mm:ss')}</span>
                     </p>
-                    <Button onClick={onBack} variant="contained">
-                        {t.on_change_file()}
-                    </Button>
                 </Typography>
+                <Button className={classes.change} onClick={onBack} variant="contained">
+                    {t.on_change_file()}
+                </Button>
             </Grid>
         </Grid>
     )

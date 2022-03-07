@@ -1,6 +1,6 @@
 import { Attachment } from '@dimensiondev/common-protocols'
-import { blobToArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
-import { Checkbox, FormControlLabel, Link, Typography } from '@mui/material'
+import { encodeArrayBuffer } from '@dimensiondev/kit'
+import { Checkbox, Radio, FormControlLabel, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { isNil } from 'lodash-unified'
 import { useState } from 'react'
@@ -8,16 +8,17 @@ import { useHistory } from 'react-router-dom'
 import { useAsync } from 'react-use'
 import { useI18N, Translate } from '../../locales/i18n_generated'
 import { makeFileKey } from '../../file-key'
+import type { ProviderConfig } from '../../types'
 import { FileRouter, MAX_FILE_SIZE } from '../../constants'
 import { PluginFileServiceRPC } from '../../Worker/rpc'
 import { RecentFiles } from './RecentFiles'
 import { UploadDropArea } from './UploadDropArea'
+import { Provider } from '../../types'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
-        height: 260,
     },
     upload: {
         flex: 1,
@@ -58,13 +59,29 @@ export const Upload: React.FC = () => {
     const history = useHistory()
     const [encrypted, setEncrypted] = useState(true)
     const [useCDN, setUseCDN] = useState(false)
+    const [provider, setProvider] = useState<Provider>(Provider.arweave)
     const recent = useAsync(() => PluginFileServiceRPC.getRecentFiles(), [])
+    const allProviders: ProviderConfig[] = [
+        {
+            provider: Provider.arweave,
+            name: t.provider_arweave(),
+        },
+        {
+            provider: Provider.ipfs,
+            name: t.provider_ipfs(),
+        },
+        {
+            provider: Provider.swarm,
+            name: t.provider_swarm(),
+        },
+    ]
+
     const onFile = async (file: File) => {
         let key: string | undefined = undefined
         if (encrypted) {
             key = makeFileKey()
         }
-        const block = new Uint8Array(await blobToArrayBuffer(file))
+        const block = new Uint8Array(await file.arrayBuffer())
         const checksum = encodeArrayBuffer(await Attachment.checksum(block))
         const item = await PluginFileServiceRPC.getFileInfo(checksum)
         if (isNil(item)) {
@@ -76,11 +93,39 @@ export const Upload: React.FC = () => {
                 block,
                 checksum,
                 useCDN,
+                provider,
             })
         } else {
             history.replace(FileRouter.uploaded, item)
         }
     }
+
+    const allProviderOptions = allProviders.map((config: ProviderConfig) => (
+        <FormControlLabel
+            key={config.provider}
+            control={
+                <Radio
+                    color="primary"
+                    checked={provider === config.provider}
+                    onChange={() => setProvider(config.provider)}
+                />
+            }
+            className={classes.encrypted}
+            label={config.name}
+        />
+    ))
+
+    const cdnButton =
+        provider === Provider.arweave ? (
+            <FormControlLabel
+                control={
+                    <Checkbox color="primary" checked={useCDN} onChange={(event) => setUseCDN(event.target.checked)} />
+                }
+                className={classes.usedCDN}
+                label={t.use_cdn()}
+            />
+        ) : null
+
     return (
         <section className={classes.container}>
             <section className={classes.upload}>
@@ -99,18 +144,9 @@ export const Upload: React.FC = () => {
                     className={classes.encrypted}
                     label={t.on_encrypt_it()}
                 />
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            color="primary"
-                            checked={useCDN}
-                            onChange={(event) => setUseCDN(event.target.checked)}
-                        />
-                    }
-                    className={classes.usedCDN}
-                    label={t.use_cdn()}
-                />
+                {cdnButton}
             </section>
+            <section className={classes.checkItems}>{allProviderOptions}</section>
             <section className={classes.legal}>
                 <Typography className={classes.legalText}>
                     <Translate.legal_text

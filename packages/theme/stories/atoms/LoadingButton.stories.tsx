@@ -1,14 +1,10 @@
 import { story } from '../utils'
 import { MaskLoadingButton } from '../../src'
 import { Save } from '@mui/icons-material'
+import { delay } from '@dimensiondev/kit'
 
 const { meta, of } = story(MaskLoadingButton)
 
-function delay(time: number) {
-    return new Promise(function (resolve) {
-        setTimeout(resolve.bind(null), time)
-    })
-}
 const f = () => delay(3000)
 export default meta({
     title: 'Atoms/LoadingButton',

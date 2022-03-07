@@ -16,7 +16,7 @@ import {
     useWallet,
 } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { delay } from '@masknet/shared-base'
+import { delay } from '@dimensiondev/kit'
 import { useGasConfig } from './hooks/useGasConfig'
 import type { Coin } from '../../types'
 import { TokenPanelType, TradeInfo } from '../../types'
@@ -48,13 +48,14 @@ const useStyles = makeStyles()(() => {
 
 export interface TraderProps extends withClasses<'root'> {
     coin?: Coin
+    defaultInputCoin?: Coin
+    defaultOutputCoin?: Coin
     tokenDetailed?: FungibleTokenDetailed
     chainId?: ChainId
 }
 
 export function Trader(props: TraderProps) {
-    const { coin, tokenDetailed, chainId: targetChainId } = props
-    const { decimals } = tokenDetailed ?? coin ?? {}
+    const { defaultOutputCoin, coin, chainId: targetChainId, defaultInputCoin } = props
     const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
     const wallet = useWallet()
     const currentChainId = useChainId()
@@ -83,17 +84,33 @@ export function Trader(props: TraderProps) {
     // #region if chain id be changed, update input token be native token
     useEffect(() => {
         if (!chainIdValid) return
-        if (!inputToken) {
-            dispatchTradeStore({
-                type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
-                token:
-                    chainId === ChainId.Mainnet && coin?.is_mirrored
-                        ? UST[ChainId.Mainnet]
-                        : createNativeToken(chainId),
-            })
-        }
+
+        dispatchTradeStore({
+            type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
+            token: chainId === ChainId.Mainnet && coin?.is_mirrored ? UST[ChainId.Mainnet] : createNativeToken(chainId),
+        })
     }, [chainId, chainIdValid])
     // #endregion
+
+    const updateTradingCoin = useCallback(
+        (
+            type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN | AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
+            coin?: Coin,
+        ) => {
+            if (!coin?.contract_address) return
+            dispatchTradeStore({
+                type,
+                token: createERC20Token(chainId, coin.contract_address, coin.decimals, coin.name, coin.symbol),
+            })
+        },
+        [chainId],
+    )
+    useEffect(() => {
+        updateTradingCoin(AllProviderTradeActionType.UPDATE_INPUT_TOKEN, defaultInputCoin)
+    }, [updateTradingCoin, defaultInputCoin])
+    useEffect(() => {
+        updateTradingCoin(AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN, defaultOutputCoin)
+    }, [updateTradingCoin, defaultOutputCoin])
 
     // #region if coin be changed, update output token
     useEffect(() => {
@@ -111,14 +128,25 @@ export function Trader(props: TraderProps) {
             })
         }
         if (!outputToken) {
-            dispatchTradeStore({
-                type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
-                token: coin.contract_address
-                    ? createERC20Token(chainId, coin.contract_address, decimals, coin.name, coin.symbol)
-                    : undefined,
-            })
+            updateTradingCoin(AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN, coin)
         }
-    }, [coin, NATIVE_TOKEN_ADDRESS, inputToken, outputToken, currentChainId, targetChainId, decimals])
+    }, [coin, NATIVE_TOKEN_ADDRESS, inputToken, outputToken, currentChainId, targetChainId, updateTradingCoin])
+
+    useEffect(() => {
+        if (!defaultInputCoin) return
+        dispatchTradeStore({
+            type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
+            token: defaultInputCoin.contract_address
+                ? createERC20Token(
+                      chainId,
+                      defaultInputCoin.contract_address,
+                      defaultInputCoin.decimals,
+                      defaultInputCoin.name,
+                      defaultInputCoin.symbol,
+                  )
+                : undefined,
+        })
+    }, [defaultInputCoin, chainId])
 
     const onInputAmountChange = useCallback((amount: string) => {
         dispatchTradeStore({

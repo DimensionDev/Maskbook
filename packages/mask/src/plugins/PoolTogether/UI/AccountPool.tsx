@@ -6,7 +6,7 @@ import { makeStyles } from '@masknet/theme'
 import { PoolTogetherTrophy } from '../../../resources/PoolTogetherIcon'
 import { useI18N } from '../../../utils'
 import { useManagePoolURL } from '../hooks/usePoolURL'
-import type { AccountPool } from '../types'
+import type { AccountPool as Pool } from '../types'
 import { calculateNextPrize, calculateOdds, calculateSecondsRemaining } from '../utils'
 import { CountdownView } from './CountdownView'
 import { NetworkView } from './NetworkView'
@@ -105,7 +105,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface AccountPoolProps {
-    accountPool: AccountPool
+    accountPool: Pool
 }
 
 export function AccountPool(props: AccountPoolProps) {

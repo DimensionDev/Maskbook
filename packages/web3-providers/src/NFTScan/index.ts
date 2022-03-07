@@ -1,11 +1,11 @@
-import { ChainId, createERC721ContractDetailed, createERC721Token } from '@masknet/web3-shared-evm'
+import { ChainId, createERC721ContractDetailed, createERC721Token, resolveResourceLink } from '@masknet/web3-shared-evm'
 import addSeconds from 'date-fns/addSeconds'
 import isBefore from 'date-fns/isBefore'
 import urlcat from 'urlcat'
 import type { NonFungibleTokenAPI } from '..'
 import { NFTSCAN_ACCESS_TOKEN_URL, NFTSCAN_BASE_API } from './constants'
 import type { NFTScanAsset, NFT_Assets } from './types'
-import { isProxyENV } from '../helpers'
+import { courier, isProxyENV } from '../helpers'
 
 const tokenCache = new Map<'token', { token: string; expiration: Date }>()
 
@@ -28,7 +28,8 @@ async function getToken() {
 }
 
 async function fetchAsset<T>(path: string, body?: unknown) {
-    const response = await fetch(urlcat(NFTSCAN_BASE_API, path), {
+    const url = courier(urlcat(NFTSCAN_BASE_API, path))
+    const response = await fetch(url, {
         method: 'POST',
         headers: { 'Access-Token': await getToken(), 'Content-type': 'application/json' },
         body: JSON.stringify(body),
@@ -51,14 +52,14 @@ function createERC721TokenAsset(asset: NFTScanAsset) {
         name?: string
         description?: string
         image?: string
-    } = JSON.parse(asset.nft_json)
+    } = JSON.parse(asset.nft_json ?? '{}')
     const detailed = createERC721ContractDetailedFromAssetContract(asset)
     return createERC721Token(
         detailed,
         {
             name: payload?.name ?? asset.nft_name ?? asset.nft_platform_name ?? '',
             description: payload?.description ?? '',
-            mediaUrl: payload?.image ?? '',
+            mediaUrl: resolveResourceLink(asset.nft_cover ?? asset.nft_content_uri ?? payload.image ?? ''),
             owner: asset.nft_holder ?? '',
         },
         asset.token_id,
@@ -117,7 +118,8 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
                 data: [],
                 hasNextPage: false,
             }
-        const data = response.data.content.map(createERC721TokenAsset)
+        const data =
+            response.data.content.map(createERC721TokenAsset).map((x) => ({ ...x, provideBy: 'NFTScan' })) ?? []
         const total = response.data.total
         return {
             data,

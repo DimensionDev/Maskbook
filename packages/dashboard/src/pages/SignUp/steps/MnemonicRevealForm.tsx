@@ -1,10 +1,9 @@
 import { memo, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Button, Stack, Box, IconButton } from '@mui/material'
+import { Button, Stack, Box, IconButton, FormControlLabel, Checkbox } from '@mui/material'
 import RefreshIcon from '@mui/icons-material/Refresh'
 import { MaskColorVar, useCustomSnackbar } from '@masknet/theme'
 import { DashboardRoutes, ECKeyIdentifier } from '@masknet/shared-base'
-import { MaskAlert } from '../../../components/MaskAlert'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
 import {
     Body,
@@ -42,6 +41,7 @@ export const MnemonicRevealForm = memo(() => {
     })
     const [id, setId] = useState<ECKeyIdentifier | null>(null)
     const [privateKey, setPrivateKey] = useState('')
+    const [checked, setChecked] = useState(false)
 
     const create = async () => {
         try {
@@ -118,9 +118,19 @@ export const MnemonicRevealForm = memo(() => {
                             </Button>
                         </Stack>
                         <MnemonicReveal words={words} />
+                        <FormControlLabel
+                            control={<Checkbox checked={checked} onChange={(e) => setChecked(e.target.checked)} />}
+                            label={t.create_account_mnemonic_download_or_print()}
+                            sx={{ marginTop: '8px', color: MaskColorVar.textSecondary }}
+                        />
                         <ButtonContainer>
-                            <Button size="large" variant="rounded" color="primary" onClick={onConfirm}>
-                                {t.create_account_mnemonic_download_or_print()}
+                            <Button
+                                size="large"
+                                variant="rounded"
+                                color="primary"
+                                onClick={onConfirm}
+                                disabled={!checked}>
+                                {t.next()}
                             </Button>
                             <IconButton onClick={() => onPreview('print')}>
                                 <PrintIcon
@@ -134,10 +144,6 @@ export const MnemonicRevealForm = memo(() => {
                                 />
                             </IconButton>
                         </ButtonContainer>
-                    </Box>
-
-                    <Box sx={{ pt: 4, pb: 2, width: '100%' }}>
-                        <MaskAlert description={t.create_account_identity_warning()} type="info" />
                     </Box>
                 </Body>
             </ColumnContentLayout>

@@ -1,16 +1,27 @@
 import { FindTrumanContext } from '../context'
 import { LoadingFailCard } from './LoadingFailCard'
 import { FindTruman } from './FindTruman'
-import { PollResult, PostType, PuzzleResult, StoryInfo, UserPollStatus, UserStoryStatus } from '../types'
+import {
+    CompletionQuestionAnswer,
+    PollResult,
+    PostType,
+    PuzzleResult,
+    StoryInfo,
+    UserCompletionStatus,
+    UserPollStatus,
+    UserStoryStatus,
+} from '../types'
 import { useAccount } from '@masknet/web3-shared-evm'
 import { useEffect, useState } from 'react'
 import {
     fetchPollResult,
     fetchPuzzleResult,
     fetchStoryInfo,
+    fetchUserCompletionStatus,
     fetchUserPollStatus,
     fetchUserPuzzleStatus,
     fetchUserStoryStatus,
+    submitCompletion,
     submitPoll,
     submitPuzzle,
 } from '../Worker/apis'
@@ -36,6 +47,8 @@ export function PostInspector(props: PostInspectorProps) {
         ? PostType.Puzzle
         : url.includes('/polls/')
         ? PostType.Poll
+        : url.includes('/completions/')
+        ? PostType.Completion
         : url.includes('/puzzle_result')
         ? PostType.PuzzleResult
         : url.includes('/poll_result/')
@@ -46,6 +59,7 @@ export function PostInspector(props: PostInspectorProps) {
     const [userStoryStatus, setUserStoryStatus] = useState<UserStoryStatus>()
     const [userPuzzleStatus, setUserPuzzleStatus] = useState<UserPollStatus>()
     const [userPollStatus, setUserPollStatus] = useState<UserPollStatus>()
+    const [userCompletionStatus, setUserCompletionStatus] = useState<UserCompletionStatus>()
     const [puzzleResult, setPuzzleResult] = useState<PuzzleResult>()
     const [pollResult, setPollResult] = useState<PollResult>()
     const [clueId, setClueId] = useState('')
@@ -69,6 +83,8 @@ export function PostInspector(props: PostInspectorProps) {
             setUserPuzzleStatus(await fetchUserPuzzleStatus(targetId, account))
         } else if (postType === PostType.Poll || postType === PostType.PollResult) {
             setUserPollStatus(await fetchUserPollStatus(targetId, account))
+        } else if (postType === PostType.Completion) {
+            setUserCompletionStatus(await fetchUserCompletionStatus(targetId, account))
         }
         if (postType === PostType.PuzzleResult) {
             setPuzzleResult(await fetchPuzzleResult(targetId))
@@ -77,7 +93,7 @@ export function PostInspector(props: PostInspectorProps) {
         }
     }
 
-    const handleSubmit = async (choice: number) => {
+    const handleSubmitPoll = async (choice: number) => {
         const from = account
         const timestamp = getUnixTime(Date.now())
         if (postType === PostType.Puzzle) {
@@ -87,6 +103,17 @@ export function PostInspector(props: PostInspectorProps) {
             const target = userPollStatus?.id ?? ''
             await submitPoll(account, { target, from, timestamp, choice })
         }
+        await fetchData()
+    }
+
+    const handleSubmitCompletion = async (answers: CompletionQuestionAnswer[]) => {
+        const timestamp = getUnixTime(Date.now())
+        const quesId = userCompletionStatus?.id ?? ''
+        await submitCompletion(account, {
+            quesId,
+            answers,
+            timestamp,
+        })
         await fetchData()
     }
 
@@ -109,10 +136,12 @@ export function PostInspector(props: PostInspectorProps) {
                     userStoryStatus={userStoryStatus}
                     userPuzzleStatus={userPuzzleStatus}
                     userPollStatus={userPollStatus}
+                    userCompletionStatus={userCompletionStatus}
                     puzzleResult={puzzleResult}
                     pollResult={pollResult}
                     postType={postType}
-                    onSubmit={handleSubmit}
+                    onSubmitPoll={handleSubmitPoll}
+                    onSubmitCompletion={handleSubmitCompletion}
                 />
             </LoadingFailCard>
         </FindTrumanContext.Provider>

@@ -2,7 +2,7 @@ import type { RecentTransaction } from '../../../../../../plugins/Wallet/service
 import { makeStyles } from '@masknet/theme'
 import { memo, useMemo } from 'react'
 import { Box, Button, ListItem, ListItemText, Typography } from '@mui/material'
-import { formatEthereumAddress, TransactionStatusType } from '../../../../../../../../web3-shared/evm'
+import { formatEthereumAddress, TransactionStatusType } from '@masknet/web3-shared-evm'
 import { ArrowRightIcon, CircleCloseIcon, InteractionCircleIcon, LoaderIcon, UploadIcon } from '@masknet/icons'
 import { RecentTransactionDescription } from '../../../../../../plugins/Wallet/SNSAdaptor/WalletStatusDialog/TransactionDescription'
 import formatDateTime from 'date-fns/format'

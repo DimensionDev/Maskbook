@@ -1,15 +1,18 @@
-import { useCallback, useState, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { DialogContent, List, ListItem, Typography, Box, Link, Avatar } from '@mui/material'
+import { Avatar, Box, CircularProgress, DialogContent, Link, List, ListItem, Typography } from '@mui/material'
 import {
     ChainId,
     ERC721ContractDetailed,
-    resolveAddressLinkOnExplorer,
-    useChainId,
-    useAccount,
-    useERC721Tokens,
+    EthereumTokenType,
     formatEthereumAddress,
+    resolveAddressLinkOnExplorer,
+    SocketState,
+    useAccount,
+    useChainId,
+    useCollections,
     useERC721ContractDetailed,
+    useERC721Tokens,
 } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../messages'
@@ -20,7 +23,6 @@ import { SearchInput } from '../../../extension/options-page/DashboardComponents
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import Fuse from 'fuse.js'
 import { unionBy } from 'lodash-unified'
-import { useNFTBalance } from '../../EVM/hooks'
 import type { NonFungibleTokenAPI } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
@@ -149,7 +151,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     }, [id, setDialog])
     // #endregion
 
-    const { value: assets } = useNFTBalance(account, !open)
+    const { data: assets, state: loadingCollectionState } = useCollections(account, ChainId.Mainnet, open)
 
     const erc721InDb = useERC721Tokens()
     const allContractsInDb = unionBy(
@@ -157,9 +159,22 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
         'address',
     ).map((x) => ({ contractDetailed: x, balance: undefined }))
 
+    const renderAssets = assets.map((x) => ({
+        contractDetailed: {
+            type: EthereumTokenType.ERC721,
+            address: x.address,
+            chainId: ChainId.Mainnet,
+            name: x.name,
+            symbol: x.symbol,
+            baseURI: x.iconURL,
+            iconURL: x.iconURL,
+        } as ERC721ContractDetailed,
+        balance: x.balance,
+    }))
+
     const contractList =
-        chainId === ChainId.Mainnet && assets
-            ? unionBy([...assets, ...allContractsInDb], 'contractDetailed.address')
+        chainId === ChainId.Mainnet && renderAssets
+            ? unionBy([...renderAssets, ...allContractsInDb], 'contractDetailed.address')
             : allContractsInDb
 
     // #region fuse
@@ -182,7 +197,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     // #endregion
 
     return (
-        <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_select_a_nft_contract')} maxWidth="xs">
+        <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_select_a_nft_contract')}>
             <DialogContent className={classes.dialogContent}>
                 <div className={classes.search}>
                     <SearchInput
@@ -192,12 +207,23 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
                         }}
                     />
                 </div>
-                <SearchResultBox
-                    keyword={keyword}
-                    contractList={contractList}
-                    searchedTokenList={searchedTokenList}
-                    onSubmit={onSubmit}
-                />
+                {loadingCollectionState === SocketState.done && (
+                    <SearchResultBox
+                        keyword={keyword}
+                        contractList={contractList}
+                        searchedTokenList={searchedTokenList}
+                        onSubmit={onSubmit}
+                    />
+                )}
+                {loadingCollectionState !== SocketState.done && (
+                    <Box
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        sx={{ paddingTop: 4, paddingBottom: 4 }}>
+                        <CircularProgress size={24} />
+                    </Box>
+                )}
             </DialogContent>
         </InjectedDialog>
     )

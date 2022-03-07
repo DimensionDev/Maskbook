@@ -1,37 +1,61 @@
 import type { Plugin } from '../types'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, memo, createContext, useContext } from 'react'
 import { ErrorBoundary } from '@masknet/shared'
+import { usePluginI18NField, PluginWrapperComponent, PluginWrapperMethods } from '../hooks'
+import { emptyPluginWrapperMethods, PluginWrapperMethodsContext } from '../hooks/usePluginWrapper'
+
 type Inject<T> = Plugin.InjectUI<T>
 type Raw<T> = Plugin.InjectUIRaw<T>
 
+const PropsContext = createContext<unknown>(null)
 export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared.Definition, PropsType>(
     usePlugins: () => PluginDefinition[],
-    pickInjector: (plugin: PluginDefinition) => undefined | Inject<PropsType>,
-): React.FunctionComponent<PropsType> {
-    const picker = (plugin: PluginDefinition) => ({
-        key: plugin.ID,
-        name: plugin.name,
-        ui: pickInjector(plugin),
-    })
-    function InjectHooksRenderer(props: PropsType) {
-        const all = usePlugins()
-            .map(picker)
-            .filter((x) => x.ui)
-            .map(({ key, name, ui }) => (
-                // TODO: i18n
-                <ErrorBoundary key={key} subject={'Plugin ' + name.fallback}>
-                    <Main UI={ui!} data={props} />
+    pickInjectorHook: (plugin: PluginDefinition) => undefined | Inject<PropsType>,
+    PluginWrapperComponent?: PluginWrapperComponent<PluginDefinition>,
+) {
+    function usePluginWrapperProvider(element: JSX.Element | null, plugin: PluginDefinition) {
+        const [ref, setRef] = useState<PluginWrapperMethods | null>(null)
+        if (PluginWrapperComponent) {
+            return (
+                <PluginWrapperComponent definition={plugin} ref={setRef}>
+                    <PluginWrapperMethodsContext.Provider value={ref || emptyPluginWrapperMethods}>
+                        {element}
+                    </PluginWrapperMethodsContext.Provider>
+                </PluginWrapperComponent>
+            )
+        }
+        return element
+    }
+    function SinglePluginWithinErrorBoundary({ plugin }: { plugin: PluginDefinition }) {
+        const t = usePluginI18NField()
+        const props = useContext(PropsContext)
+        const ui = pickInjectorHook(plugin)
+        return usePluginWrapperProvider(
+            ui ? (
+                <ErrorBoundary subject={'Plugin ' + t(plugin.ID, plugin.name)}>
+                    <Main UI={ui} data={props} />
                 </ErrorBoundary>
+            ) : null,
+            plugin,
+        )
+    }
+    function PluginsInjectionHookRender(props: PropsType) {
+        const all = usePlugins()
+            .filter(pickInjectorHook)
+            .map((plugin) => (
+                <PropsContext.Provider key={plugin.ID} value={props}>
+                    <SinglePluginWithinErrorBoundary key={plugin.ID} plugin={plugin} />
+                </PropsContext.Provider>
             ))
         return <>{all}</>
     }
-    return function (props: PropsType) {
+    return memo(function PluginsInjectionHookRenderErrorBoundary(props: PropsType) {
         return (
             <ErrorBoundary>
-                <InjectHooksRenderer {...props} />
+                <PluginsInjectionHookRender {...props} />
             </ErrorBoundary>
         )
-    }
+    })
 }
 
 function Main<T>(props: { data: T; UI: Inject<any> }) {

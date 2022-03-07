@@ -9,9 +9,10 @@ import {
     ECDSASignature,
 } from 'ethereumjs-util'
 import { MaskMessages } from '../../../utils'
-import { delay, PersonaIdentifier, fromBase64URL, PopupRoutes } from '@masknet/shared-base'
+import { PersonaIdentifier, fromBase64URL, PopupRoutes } from '@masknet/shared-base'
 import { queryPersonasWithPrivateKey } from '../../../../background/database/persona/db'
-import { openPopupWindow } from '../HelperService'
+import { openPopupWindow } from '../../../../background/services/helper'
+import { delay } from '@dimensiondev/kit'
 export interface SignRequest {
     /** Use that who to sign this message. */
     identifier?: string
