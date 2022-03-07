@@ -8,7 +8,7 @@ import type { ERC721ContractDetailed } from '../types'
 import { useOpenseaAPIConstants } from '../constants'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 
-export function useERC721TokenDetailedCallback(contractDetailed: ERC721ContractDetailed | undefined) {
+export function useERC721TokenDetailedCallback(contractDetailed: ERC721ContractDetailed | null | undefined) {
     const [tokenId, setTokenId] = useState('')
     const { GET_SINGLE_ASSET_URL } = useOpenseaAPIConstants()
     const erc721TokenContract = useERC721TokenContract(contractDetailed?.address ?? '')
@@ -32,7 +32,15 @@ export function useERC721TokenDetailedCallback(contractDetailed: ERC721ContractD
             }
             return tokenDetailedFromChain
         } else {
-            return getERC721TokenDetailedFromOpensea(contractDetailed, tokenId, GET_SINGLE_ASSET_URL)
+            const tokenDetailedFromOpensea = await getERC721TokenDetailedFromOpensea(
+                contractDetailed,
+                tokenId,
+                GET_SINGLE_ASSET_URL,
+            )
+
+            if (tokenDetailedFromOpensea) tokenDetailedFromOpensea.info.hasTokenDetailed = true
+
+            return tokenDetailedFromOpensea
         }
     }, [tokenId, contractDetailed, erc721TokenContract, GET_SINGLE_ASSET_URL])
 

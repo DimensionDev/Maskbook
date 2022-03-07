@@ -4,7 +4,7 @@ import urlcat from 'urlcat'
 import { first, noop } from 'lodash-unified'
 import type { ERC721ContractDetailed, ERC721TokenInfo, ERC721TokenDetailed } from '../types'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
-import { safeNonPayableTransactionCall, createERC721Token } from '../utils'
+import { safeNonPayableTransactionCall, createERC721Token, formatNFT_TokenId } from '../utils'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 import { useOpenseaAPIConstants } from '../constants'
 
@@ -64,6 +64,7 @@ export async function getERC721TokenDetailedFromOpensea(
                 description: data.description,
                 mediaUrl: data.image_url || data.animation_url,
                 owner: first(data.top_ownerships)?.owner.address ?? '',
+                hasTokenDetailed: true,
             },
             tokenId,
         )
@@ -75,12 +76,19 @@ export async function getERC721TokenDetailedFromChain(
     contractDetailed: ERC721ContractDetailed,
     erc721TokenContract: ERC721,
     tokenId: string,
+    owner?: string,
+    queryTokenURI = true,
 ) {
     if (!contractDetailed) return
     try {
-        const tokenURI = await safeNonPayableTransactionCall(erc721TokenContract.methods.tokenURI(tokenId))
-        const owner = await safeNonPayableTransactionCall(erc721TokenContract.methods.ownerOf(tokenId))
-        const tokenInfo = { owner, tokenURI, name: `#${tokenId}`, hasTokenDetailed: false }
+        const tokenInfo = {
+            owner: owner ?? (await safeNonPayableTransactionCall(erc721TokenContract.methods.ownerOf(tokenId))),
+            tokenURI: queryTokenURI
+                ? await safeNonPayableTransactionCall(erc721TokenContract.methods.tokenURI(tokenId))
+                : '',
+            name: formatNFT_TokenId(tokenId, 2),
+            hasTokenDetailed: false,
+        }
         return createERC721Token(contractDetailed, tokenInfo, tokenId)
     } catch (err) {
         return

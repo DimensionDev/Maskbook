@@ -1,10 +1,10 @@
 import classNames from 'classnames'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { ImageIcon } from '../ImageIcon'
-import { useStylesExtends } from '@masknet/theme'
 
 interface StyleProps {
     size: number
+    isBorderColorNotDefault?: boolean
 }
 
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
@@ -18,16 +18,19 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         display: 'block',
         width: '100%',
         height: '100%',
-        borderRadius: '50%',
     },
     badgeIcon: {
         position: 'absolute',
         right: -2,
         bottom: -2,
-        borderRadius: '50%',
     },
     networkIcon: {},
-    providerIcon: {},
+    providerIcon: {
+        border: props?.isBorderColorNotDefault
+            ? `1px solid ${theme.palette.background.paper}`
+            : `1px solid ${theme.palette.background.default}`,
+        borderRadius: '50%',
+    },
 }))
 
 interface WalletIconProps extends withClasses<'networkIcon' | 'providerIcon'> {
@@ -36,19 +39,26 @@ interface WalletIconProps extends withClasses<'networkIcon' | 'providerIcon'> {
     inverse?: boolean
     networkIcon?: URL
     providerIcon?: URL
+    isBorderColorNotDefault?: boolean
 }
 
 export const WalletIcon = (props: WalletIconProps) => {
     const { size = 24, badgeSize = 14, inverse = false, networkIcon, providerIcon } = props
-    const classes = useStylesExtends(useStyles({ size: badgeSize > size ? badgeSize : size }), props)
+    const classes = useStylesExtends(
+        useStyles({
+            size: badgeSize > size ? badgeSize : size,
+            isBorderColorNotDefault: props.isBorderColorNotDefault,
+        }),
+        props,
+    )
 
-    //#region icon names
+    // #region icon names
     const names = [
         classNames(classes.mainIcon, classes.networkIcon),
         classNames(classes.badgeIcon, classes.providerIcon),
     ]
     if (inverse) names.reverse()
-    //#endregion
+    // #endregion
 
     return (
         <div

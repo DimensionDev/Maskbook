@@ -5,7 +5,7 @@ import { ChainId } from '../types'
 import { createLookupTableResolver } from '../utils'
 import { getRPCConstants } from '../constants'
 
-//#region create in-page fortmatic provider
+// #region create in-page fortmatic provider
 
 /* spell-checker: disable-next-line */
 const TEST_KEY = 'pk_test_D9EAF9A8ACEC9627'

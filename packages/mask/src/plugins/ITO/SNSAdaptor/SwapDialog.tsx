@@ -137,8 +137,7 @@ export function SwapDialog(props: SwapDialogProps) {
     const [inputAmountForUI, setInputAmountForUI] = useState(
         swapAmount.isZero() ? '' : formatBalance(swapAmount, swapToken?.decimals),
     )
-
-    //#region select token
+    // #region select token
     const [id] = useState(uuid())
     const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
@@ -184,23 +183,23 @@ export function SwapDialog(props: SwapDialogProps) {
             .sort()
             .join(),
     ])
-    //#endregion
+    // #endregion
 
-    //#region balance
+    // #region balance
     const { value: tokenBalance = '0' } = useFungibleTokenBalance(
         swapToken ? swapToken.type : EthereumTokenType.Native,
         swapToken ? swapToken.address : NATIVE_TOKEN_ADDRESS,
     )
-    //#endregion
+    // #endregion
 
-    //#region maxAmount for TokenAmountPanel
+    // #region maxAmount for TokenAmountPanel
     const maxAmount = useMemo(
         () => BigNumber.min(maxSwapAmount.multipliedBy(ratio).dp(0), tokenBalance).toFixed(),
         [maxSwapAmount, ratio, tokenBalance],
     )
-    //#endregion
+    // #endregion
 
-    //#region swap
+    // #region swap
     const { value: qualificationInfo, loading: loadingQualification } = useQualificationVerify(
         payload.qualification_address,
         payload.contract_address,
@@ -254,10 +253,11 @@ export function SwapDialog(props: SwapDialogProps) {
             }),
         })
     }, [swapState])
-    //#endregion
+    // #endregion
 
     const validationMessage = useMemo(() => {
-        if (swapAmount.isZero()) return t('plugin_ito_error_enter_amount')
+        if (swapAmount.isZero() || tokenAmount.isZero() || swapAmount.dividedBy(ratio).isLessThan(1))
+            return t('plugin_ito_error_enter_amount')
         if (swapAmount.isGreaterThan(tokenBalance)) return t('plugin_ito_error_balance', { symbol: swapToken?.symbol })
         if (tokenAmount.isGreaterThan(maxSwapAmount)) return t('plugin_ito_dialog_swap_exceed_wallet_limit')
         return ''

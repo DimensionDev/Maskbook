@@ -20,6 +20,7 @@ export interface PluginMessages extends DashboardPluginMessages {
     Wallet: typeof WalletMessages
     Transak: typeof import('../../mask/dist/src/plugins/Transak/messages').PluginTransakMessages
     Swap: typeof import('../../mask/dist/src/plugins/Trader/messages').PluginTraderMessages
+    Pets: typeof import('../../mask/dist/src/plugins/Pets/messages').PluginPetMessages
 }
 export function setService(rpc: any) {
     Services = rpc

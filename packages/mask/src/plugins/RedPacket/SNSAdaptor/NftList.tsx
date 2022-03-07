@@ -1,9 +1,10 @@
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { ERC721ContractDetailed, useERC721TokenDetailed } from '@masknet/web3-shared-evm'
-import { List, ListItem, ListProps, Skeleton, Typography } from '@mui/material'
+import { ERC721ContractDetailed, formatNFT_TokenId } from '@masknet/web3-shared-evm'
+import { List, ListItem, ListProps, Typography } from '@mui/material'
 import classnames from 'classnames'
-import type { FC, HTMLProps } from 'react'
+import { FC, HTMLProps, useState } from 'react'
 import { useI18N } from '../../../utils'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -27,6 +28,7 @@ const useStyles = makeStyles()((theme) => {
             width: 120,
             height: 185,
             flexDirection: 'column',
+            backgroundColor: theme.palette.background.paper,
             margin: '0 auto',
             borderRadius: 8,
             overflow: 'hidden',
@@ -71,44 +73,56 @@ const useStyles = makeStyles()((theme) => {
         },
         name: {
             fontSize: 12,
+            height: 18,
             textOverflow: 'ellipsis',
+            textAlign: 'center',
             overflow: 'hidden',
             whiteSpace: 'nowrap',
             padding: '2px 2px 6px',
             color: MaskColorVar.textSecondary,
         },
+        loadingFailImage: {
+            minHeight: '0px !important',
+            maxWidth: 'none',
+            transform: 'translateY(-10px)',
+            width: 64,
+            height: 64,
+        },
     }
 })
 
 interface NftItemProps extends HTMLProps<HTMLDivElement> {
-    contract: ERC721ContractDetailed | undefined
+    contract: ERC721ContractDetailed
     tokenId: string
     claimed?: boolean
+    renderOrder: number
 }
 
-export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claimed, ...rest }) => {
+export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claimed, renderOrder, ...rest }) => {
     const { t } = useI18N()
-    const result = useERC721TokenDetailed(contract, tokenId)
     const { classes } = useStyles()
-    if (!result.tokenDetailed || !contract) {
-        return (
-            <div className={classnames(className, classes.nft, classes.loading)} {...rest}>
-                <Skeleton height={185} width={120} />
-            </div>
-        )
-    }
-    const info = result.tokenDetailed.info
+    const [name, setName] = useState(formatNFT_TokenId(tokenId, 2))
+
     return (
         <div className={classnames(className, classes.nft)} {...rest}>
-            <img className={classes.media} src={info.mediaUrl} alt={info.name} />
-            <Typography className={classes.name}>{info.name}</Typography>
+            <NFTCardStyledAssetPlayer
+                classes={{
+                    loadingFailImage: classes.loadingFailImage,
+                }}
+                tokenId={tokenId}
+                renderOrder={renderOrder}
+                contractAddress={contract.address}
+                chainId={contract.chainId}
+                setERC721TokenName={setName}
+            />
+            <Typography className={classes.name}>{name}</Typography>
             {claimed && <Typography className={classes.claimedBadge}>{t('plugin_red_packet_claimed')}</Typography>}
         </div>
     )
 }
 
 interface NftListProps extends ListProps {
-    contract: ERC721ContractDetailed | undefined
+    contract: ERC721ContractDetailed
     statusList: boolean[]
     tokenIds: string[]
 }
@@ -119,7 +133,7 @@ export const NftList: FC<NftListProps> = ({ contract, statusList, tokenIds, clas
         <List className={classnames(className, classes.list)} {...rest}>
             {tokenIds.map((tokenId, index) => (
                 <ListItem className={classes.listItem} key={tokenId}>
-                    <NftItem contract={contract} claimed={statusList[index]} tokenId={tokenId} />
+                    <NftItem contract={contract} claimed={statusList[index]} tokenId={tokenId} renderOrder={index} />
                 </ListItem>
             ))}
         </List>

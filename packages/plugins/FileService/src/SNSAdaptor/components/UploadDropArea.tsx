@@ -1,7 +1,6 @@
 import { formatFileSize } from '@dimensiondev/kit'
-import { useCustomSnackbar } from '@masknet/theme'
+import { useCustomSnackbar, makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
 import { isNil } from 'lodash-unified'
 import { UploadCloud } from 'react-feather'
 import { useDropArea } from 'react-use'
@@ -22,11 +21,12 @@ const useStyles = makeStyles()((theme) => ({
         padding: 12,
         overflow: 'hidden',
         userSelect: 'none',
+        height: 200,
     },
     here: {
-        fontSize: 14,
+        fontSize: 12,
         lineHeight: 2.5,
-        color: theme.palette.grey[100],
+        color: theme.palette.mode === 'dark' ? theme.palette.grey[100] : theme.palette.grey[500],
         userSelect: 'none',
     },
     hint: {
@@ -61,8 +61,6 @@ const useStyles = makeStyles()((theme) => ({
         zIndex: 1,
     },
     uploader: {
-        position: 'absolute',
-        top: 38,
         userSelect: 'none',
         cursor: 'pointer',
         zIndex: 0,

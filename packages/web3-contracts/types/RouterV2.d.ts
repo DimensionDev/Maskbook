@@ -241,6 +241,53 @@ export interface RouterV2 extends BaseContract {
             to: string,
             deadline: number | string | BN,
         ): NonPayableTransactionObject<string[]>
+
+        swapAVAXForExactTokens(
+            amountOut: number | string | BN,
+            path: string[],
+            to: string,
+            deadline: number | string | BN,
+        ): PayableTransactionObject<string[]>
+
+        swapExactAVAXForTokensSupportingFeeOnTransferTokens(
+            amountOutMin: number | string | BN,
+            path: string[],
+            to: string,
+            deadline: number | string | BN,
+        ): PayableTransactionObject<void>
+
+        swapExactTokensForAVAX(
+            amountIn: number | string | BN,
+            amountOutMin: number | string | BN,
+            path: string[],
+            to: string,
+            deadline: number | string | BN,
+        ): NonPayableTransactionObject<string[]>
+
+        swapExactTokensForAVAXSupportingFeeOnTransferTokens(
+            amountIn: number | string | BN,
+            amountOutMin: number | string | BN,
+            path: string[],
+            to: string,
+            deadline: number | string | BN,
+        ): NonPayableTransactionObject<void>
+
+        swapTokensForExactAVAX(
+            amountOut: number | string | BN,
+            amountInMax: number | string | BN,
+            path: string[],
+            to: string,
+            deadline: number | string | BN,
+        ): NonPayableTransactionObject<string[]>
+
+        swapExactAVAXForTokens(
+            amountOutMin: number | string | BN,
+            path: string[],
+            to: string,
+            deadline: number | string | BN,
+        ): PayableTransactionObject<string[]>
+
+        WAVAX(): NonPayableTransactionObject<string>
     }
     events: {
         allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter

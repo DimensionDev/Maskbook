@@ -7,7 +7,7 @@ import { Box, ListItem, Typography, Popper, useMediaQuery, Theme } from '@mui/ma
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import { RedPacketJSONPayload, RedPacketStatus, RedPacketJSONPayloadFromChain } from '../types'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog, TokenIcon } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import {
     formatBalance,
@@ -18,7 +18,6 @@ import {
     useFungibleTokenDetailed,
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
-import { TokenIcon } from '@masknet/shared'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { StyledLinearProgress } from '../../ITO/SNSAdaptor/StyledLinearProgress'
@@ -93,13 +92,14 @@ const useStyles = makeStyles()((theme) => {
                 flexWrap: 'wrap',
             },
         },
-        div: {},
+        div: {
+            maxWidth: 350,
+        },
         icon: {
             width: 27,
             height: 27,
         },
         title: {
-            whiteSpace: 'break-spaces',
             fontWeight: 500,
             fontSize: 16,
         },
@@ -112,9 +112,16 @@ const useStyles = makeStyles()((theme) => {
         },
         actionButton: {
             height: 26,
+            background: theme.palette.mode === 'light' ? '#000' : '#fff',
+            color: theme.palette.mode === 'light' ? '#fff' : '#000',
             minHeight: 'auto',
             [smallQuery]: {
                 marginTop: theme.spacing(1),
+            },
+            '&:hover': {
+                background: theme.palette.mode === 'light' ? '#000' : '#fff',
+                color: theme.palette.mode === 'light' ? '#fff' : '#000',
+                opacity: 0.8,
             },
         },
         footer: {
@@ -165,6 +172,9 @@ const useStyles = makeStyles()((theme) => {
                 color: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.26)' : 'rgba(255, 255, 255, 0.3)',
             },
         },
+        fullWidthBox: {
+            width: '100%',
+        },
     }
 })
 
@@ -201,7 +211,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
 
     const historyToken = (history as RedPacketJSONPayload).token ?? tokenDetailed
 
-    //#region remote controlled transaction dialog
+    // #region remote controlled transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
     )
@@ -225,25 +235,25 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
             revalidateAvailability()
         }
     }, [refundState /* update tx dialog only if state changed */])
-    //#endregion
+    // #endregion
 
     const onSendOrRefund = useCallback(async () => {
         if (canRefund) await refundCallback()
         if (canSend) onSelect({ ...history, token: historyToken })
     }, [onSelect, refundCallback, canRefund, canSend, history])
 
-    //#region password lost tips
+    // #region password lost tips
     const [anchorEl, setAnchorEl] = useState<(EventTarget & HTMLButtonElement) | null>(null)
     const openPopper = Boolean(anchorEl)
-    //#endregion
+    // #endregion
 
-    //#region refund time
+    // #region refund time
     const refundDuration =
         canSend && !isPasswordValid
             ? intervalToDuration({ start: Date.now(), end: nextDay(history.creation_time, 1) })
             : null
     const formatRefundDuration = `${refundDuration?.hours}h ${refundDuration?.minutes}m`
-    //#endregion
+    // #endregion
 
     return (
         <ListItem className={classes.root}>
@@ -257,11 +267,13 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                 <Box className={classes.content}>
                     <section className={classes.section}>
                         <div className={classes.div}>
-                            <Typography variant="body1" className={classNames(classes.title, classes.message)}>
-                                {history.sender.message === ''
-                                    ? t('plugin_red_packet_best_wishes')
-                                    : history.sender.message}
-                            </Typography>
+                            <div className={classes.fullWidthBox}>
+                                <Typography variant="body1" className={classNames(classes.title, classes.message)}>
+                                    {history.sender.message === ''
+                                        ? t('plugin_red_packet_best_wishes')
+                                        : history.sender.message}
+                                </Typography>
+                            </div>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
                                 {t('plugin_red_packet_history_duration', {
                                     startTime: dateTimeFormat(new Date(history.creation_time)),
@@ -330,8 +342,6 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                         ) : null}
                     </section>
                     <StyledLinearProgress
-                        barColor="rgb(44, 164, 239)"
-                        backgroundColor="rgba(44, 164, 239, 0.2)"
                         variant="determinate"
                         value={100 * (1 - Number(history.total_remaining) / Number(history.total))}
                     />

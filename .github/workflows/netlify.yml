@@ -6,6 +6,13 @@ on:
   pull_request:
     branches: [master, develop*, released]
 
+# Cancels all previous workflow runs for pull requests that have not completed.
+concurrency:
+  # The concurrency group contains the workflow name and the branch name for
+  # pull requests or the commit hash for any other events.
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
 jobs:
   netlify:
     runs-on: ubuntu-20.04
@@ -20,9 +27,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-      - uses: pnpm/action-setup@v2
-        with:
-          version: '6.23.1'
+      - uses: pnpm/action-setup@v2.2.1
       - uses: actions/setup-node@v2
         with:
           node-version: '16'

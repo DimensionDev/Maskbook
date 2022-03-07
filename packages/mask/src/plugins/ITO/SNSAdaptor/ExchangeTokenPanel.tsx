@@ -30,6 +30,7 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         margin: theme.spacing(1),
         borderRadius: 10,
+        backgroundColor: theme.palette.background.default,
         [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
             margin: theme.spacing(0),
             padding: theme.spacing(0, 0, 0, 0.5),
@@ -78,7 +79,7 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
     } = props
     const { t } = useI18N()
     const { classes } = useStyles()
-    //#region select token dialog
+    // #region select token dialog
     const [id] = useState(uuid())
     const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
@@ -101,14 +102,14 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
             },
         })
     }, [id, isSell, exchangeToken, excludeTokensAddress.sort().join(), selectedTokensAddress.sort().join()])
-    //#endregion
+    // #endregion
 
-    //#region balance
+    // #region balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
         exchangeToken?.type ?? EthereumTokenType.Native,
         exchangeToken?.address ?? '',
     )
-    //#endregion
+    // #endregion
 
     const [inputAmountForUI, setInputAmountForUI] = useState('')
 
@@ -152,7 +153,7 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
             ) : null}
             {showRemove ? (
                 <IconButton size="large" onClick={onRemove} className={classes.button}>
-                    <RemoveIcon color="secondary" />
+                    <RemoveIcon color="error" />
                 </IconButton>
             ) : null}
         </Paper>

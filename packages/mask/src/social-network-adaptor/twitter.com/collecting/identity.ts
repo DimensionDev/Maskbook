@@ -6,7 +6,7 @@ import { creator, SocialNetworkUI as Next } from '../../../social-network'
 import Services from '../../../extension/service'
 import { twitterBase } from '../base'
 import { getAvatar, getBioDescription, getNickname, getTwitterId, getPersonalHomepage } from '../utils/user'
-import { delay } from '@masknet/shared-base'
+import { delay } from '@dimensiondev/kit'
 
 function resolveLastRecognizedIdentityInner(
     ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
@@ -80,6 +80,8 @@ function resolveCurrentVisitingIdentityInner(
             watcher.stopWatch()
         })
     }
+
+    assign()
 
     createWatcher(avatarSelector)
     createWatcher(avatarMetaSelector)

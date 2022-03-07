@@ -1,26 +1,40 @@
-import { postsContentSelector } from '../utils/selector'
-import { IntervalWatcher } from '@dimensiondev/holoflows-kit'
-import { creator, SocialNetworkUI as Next } from '../../../social-network'
+import { postsContentSelector, postsImageSelector, timelinePostContentSelector } from '../utils/selector'
+import { IntervalWatcher, DOMProxy, DOMProxyEvents } from '@dimensiondev/holoflows-kit'
+import type { EventListener } from '@servie/events'
+import { creator, globalUIState, SocialNetworkUI as Next } from '../../../social-network'
 import type { PostInfo } from '../../../social-network/PostInfo'
-import { postIdParser } from '../utils/fetch'
-import { memoize } from 'lodash-unified'
+import { postIdParser, postParser, postImagesParser, postContentMessageParser } from '../utils/fetch'
+import { memoize, noop } from 'lodash-unified'
 import Services from '../../../extension/service'
 import { injectMaskIconToPostTwitter } from '../injection/MaskIcon'
-import { postsImageSelector } from '../utils/selector'
+import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import {
-    ProfileIdentifier,
     makeTypedMessageImage,
     makeTypedMessageTupleFromList,
     makeTypedMessageEmpty,
     makeTypedMessagePromise,
     makeTypedMessageTuple,
-} from '@masknet/shared-base'
-import { postParser, postImagesParser } from '../utils/fetch'
+    isTypedMessageText,
+} from '@masknet/typed-message'
 import { untilElementAvailable } from '../../../utils/dom'
 import { twitterBase } from '../base'
 import { twitterShared } from '../shared'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context'
 import { getCurrentIdentifier } from '../../utils'
+import { IdentityProviderTwitter } from './identity'
+
+function getPostActionsNode(postNode: HTMLElement | null) {
+    if (!postNode) return null
+    return postNode.closest('[data-testid="tweet"]')?.querySelector<HTMLElement>('[role="group"] > div:last-child')
+}
+
+const getParentTweetNode = (node: HTMLElement) => {
+    return node.closest<HTMLElement>('[data-testid="tweet"]')
+}
+
+function isQuotedTweet(tweetNode: HTMLElement | null) {
+    return tweetNode?.getAttribute('role') === 'link'
+}
 
 function registerPostCollectorInner(
     postStore: Next.CollectingCapabilities.PostsProvider['posts'],
@@ -30,7 +44,7 @@ function registerPostCollectorInner(
         const root = node.closest<HTMLDivElement>(
             [
                 'article > div',
-                'div[role="link"]', // retweet in new twitter
+                'div[role="link"]', // retweet(quoted tweet) in new twitter
             ].join(),
         )
         if (!root) return null
@@ -49,32 +63,43 @@ function registerPostCollectorInner(
         return root
     }
 
-    const getParentTweetNode = (node: HTMLElement) => {
-        return node.closest<HTMLElement>('[data-testid="tweet"]')
-    }
-
     const updateProfileInfo = memoize(
         (info: PostInfo) => {
             const currentProfile = getCurrentIdentifier()
-            const profileIdentifier = info.postBy.getCurrentValue()
+            const profileIdentifier = info.author.getCurrentValue()
             Services.Identity.updateProfileInfo(profileIdentifier, {
                 nickname: info.nickname.getCurrentValue(),
-                avatarURL: info.avatarURL.getCurrentValue(),
+                avatarURL: info.avatarURL.getCurrentValue()?.toString(),
             })
             if (currentProfile?.linkedPersona) {
                 Services.Identity.createNewRelation(profileIdentifier, currentProfile.linkedPersona.identifier)
             }
         },
-        (info: PostInfo) => info.postBy.getCurrentValue()?.toText(),
+        (info: PostInfo) => info.author.getCurrentValue()?.toText(),
     )
     const watcher = new IntervalWatcher(postsContentSelector())
         .useForeach((node, _, proxy) => {
             const tweetNode = getTweetNode(node)
             if (!tweetNode) return
             const refs = createRefsForCreatePostContext()
+            let actionsElementProxy: DOMProxy | undefined = undefined
+            const actionsInjectPoint = getPostActionsNode(proxy.current)
+            let unwatchPostNodeChange = noop
+            if (actionsInjectPoint && !isQuotedTweet(tweetNode)) {
+                actionsElementProxy = DOMProxy({})
+                actionsElementProxy.realCurrent = actionsInjectPoint
+                const handleChanged: EventListener<DOMProxyEvents<HTMLElement>, 'currentChanged'> = (e) => {
+                    actionsElementProxy!.realCurrent = getPostActionsNode(e.new) || null
+                }
+                proxy.on('currentChanged', handleChanged)
+                unwatchPostNodeChange = () => {
+                    proxy.off('currentChanged', handleChanged)
+                }
+            }
             const info = twitterShared.utils.createPostContext({
                 comments: undefined,
                 rootElement: proxy,
+                actionsElement: actionsElementProxy,
                 suggestedInjectionPoint: tweetNode,
                 ...refs.subscriptions,
             })
@@ -85,9 +110,8 @@ function registerPostCollectorInner(
             run()
             cancel.addEventListener(
                 'abort',
-                info.postPayload.subscribe(() => {
-                    const payload = info.postPayload.getCurrentValue()
-                    if (!payload) return
+                info.containingMaskPayload.subscribe(() => {
+                    const payload = info.containingMaskPayload.getCurrentValue()
                     if (payload.err && refs.postMetadataImages.size === 0) return
                     updateProfileInfo(info)
                 }),
@@ -96,13 +120,16 @@ function registerPostCollectorInner(
             postStore.set(proxy, info)
             return {
                 onTargetChanged: run,
-                onRemove: () => postStore.delete(proxy),
+                onRemove: () => {
+                    postStore.delete(proxy)
+                    unwatchPostNodeChange()
+                },
                 onNodeMutation: run,
             }
         })
         .assignKeys((node) => {
             const tweetNode = getTweetNode(node)
-            const parentTweetNode = tweetNode?.getAttribute('role') === 'link' ? getParentTweetNode(tweetNode) : null
+            const parentTweetNode = isQuotedTweet(tweetNode) ? getParentTweetNode(tweetNode!) : null
             if (!tweetNode) return node.innerText
             const parentTweetId = parentTweetNode ? postIdParser(parentTweetNode) : ''
             const tweetId = postIdParser(tweetNode)
@@ -117,6 +144,27 @@ export const PostProviderTwitter: Next.CollectingCapabilities.PostsProvider = {
     start(cancel) {
         registerPostCollectorInner(this.posts, cancel)
     },
+}
+
+export function collectVerificationPost(keyword: string) {
+    const userId = IdentityProviderTwitter.recognized.value.identifier || globalUIState.profiles.value[0].identifier
+    const postNodes = timelinePostContentSelector().evaluate()
+
+    for (const postNode of postNodes) {
+        const postId = postIdParser(postNode)
+        const postContent = postContentMessageParser(postNode)
+        const isVerified =
+            postId &&
+            postContent[0] &&
+            isTypedMessageText(postContent[0]) &&
+            (postContent[0].content ?? '').toLowerCase() === keyword.toLowerCase()
+
+        if (isVerified && userId) {
+            return new PostIdentifier(userId, postId)
+        }
+    }
+
+    return null
 }
 
 function collectPostInfo(

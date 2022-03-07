@@ -1,4 +1,5 @@
 import type { ChainId, FungibleTokenDetailed, FungibleTokenOutMask } from '@masknet/web3-shared-evm'
+import type BigNumber from 'bignumber.js'
 
 export interface JSON_PayloadInMask {
     contract_address: string
@@ -41,6 +42,14 @@ export interface ClaimablePool {
     token: FungibleTokenDetailed
 }
 
+export interface SwappedTokenType {
+    pids: string[]
+    amount: BigNumber
+    token: FungibleTokenDetailed
+    isClaimable: boolean
+    unlockTime: Date
+}
+
 export interface JSON_PayloadOutMask extends Omit<JSON_PayloadInMask, 'token' | 'exchange_tokens'> {
     token: FungibleTokenOutMask
     exchange_tokens: FungibleTokenOutMask[]
@@ -81,7 +90,7 @@ export interface Availability {
     remaining: number
     started: boolean
     expired: boolean
-    unlocked: boolean
+    destructed: boolean
     unlock_time: string
     swapped: string
     exchanged_tokens: string[]
@@ -91,7 +100,7 @@ export interface Availability {
     qualification_addr?: string
 }
 
-//#region SpaceStation
+// #region SpaceStation
 export interface ClaimableCount {
     maxCount: number
     usedCount: number
@@ -114,4 +123,4 @@ export interface ClaimParams {
     powahs: number[]
     nftCoreAddress: string
 }
-//#endregion
+// #endregion

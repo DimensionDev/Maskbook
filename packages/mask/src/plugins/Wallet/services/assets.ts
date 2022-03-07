@@ -1,5 +1,5 @@
 import { unreachable } from '@dimensiondev/kit'
-import { leftShift, multipliedBy, rightShift } from '@masknet/web3-shared-base'
+import { leftShift, multipliedBy, rightShift, toFixed } from '@masknet/web3-shared-base'
 import {
     Asset,
     ChainId,
@@ -18,6 +18,7 @@ import {
     getChainShortName,
     getChainIdFromNetworkType,
     ERC721TokenCollectionInfo,
+    isNativeTokenSymbol as isNativeToken,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { values } from 'lodash-unified'
@@ -43,7 +44,7 @@ export async function getCollectionsNFT(
     size?: number,
 ): Promise<{ collections: ERC721TokenCollectionInfo[]; hasNextPage: boolean }> {
     if (provider === NonFungibleAssetProvider.OPENSEA) {
-        const collections = await EVM_RPC.getCollections({
+        const { data, hasNextPage } = await EVM_RPC.getCollections({
             address,
             chainId,
             provider,
@@ -52,8 +53,8 @@ export async function getCollectionsNFT(
         })
 
         return {
-            collections,
-            hasNextPage: collections.length === size,
+            collections: data,
+            hasNextPage,
         }
     }
 
@@ -70,22 +71,25 @@ export async function getAssetsListNFT(
     page?: number,
     size?: number,
     collection?: string,
+    continuation?: string,
 ): Promise<{ assets: ERC721TokenDetailed[]; hasNextPage: boolean }> {
     if (!EthereumAddress.isValid(address))
         return {
             assets: [],
             hasNextPage: false,
         }
-    const tokens = await EVM_RPC.getNFTsByPagination({
+    const pageInfo = { collection, continuation }
+    const { data, hasNextPage } = await EVM_RPC.getNFTsByPagination({
         from: address,
         chainId,
         provider,
         page: page ?? 0,
         size: size ?? 50,
+        pageInfo,
     })
     return {
-        assets: tokens,
-        hasNextPage: tokens.length === size,
+        assets: data,
+        hasNextPage: hasNextPage,
     }
 }
 
@@ -100,10 +104,10 @@ export async function getAssetsList(
     switch (provider) {
         case FungibleAssetProvider.ZERION:
             let result: Asset[] = []
-            //xdai-assets is not support
+            // xdai-assets is not support
             const scopes = network
                 ? [resolveZerionAssetsScopeName(network)]
-                : ['assets', 'bsc-assets', 'polygon-assets', 'arbitrum-assets']
+                : ['assets', 'bsc-assets', 'polygon-assets', 'arbitrum-assets', 'avalanche-assets']
             for (const scope of scopes) {
                 const { meta, payload } = await ZerionAPI.getAssetsList(address, scope)
                 if (meta.status !== 'ok') throw new Error('Fail to load assets.')
@@ -160,7 +164,7 @@ function formatAssetsFromDebank(data: WalletTokenRecord[], network?: NetworkType
                           ),
                 balance: rightShift(y.amount, y.decimals).toFixed(),
                 price: {
-                    [CurrencyType.USD]: new BigNumber(y.price ?? 0).toFixed(),
+                    [CurrencyType.USD]: toFixed(y.price),
                 },
                 value: {
                     [CurrencyType.USD]: multipliedBy(y.price ?? 0, y.amount).toFixed(),
@@ -177,7 +181,6 @@ function formatAssetsFromZerion(
     return data.map(({ asset, quantity }) => {
         const balance = leftShift(quantity, asset.decimals).toNumber()
         const value = (asset as ZerionAsset).price?.value ?? (asset as ZerionCovalentAsset).value ?? 0
-        const isNativeToken = (symbol: string) => ['ETH', 'BNB', 'MATIC', 'ARETH'].includes(symbol)
 
         return {
             token: {

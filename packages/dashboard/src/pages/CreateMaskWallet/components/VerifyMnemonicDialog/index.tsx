@@ -1,8 +1,7 @@
 import { memo, useState } from 'react'
 import { Box, Typography, styled, Button, Dialog, DialogTitle, DialogContent } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { LoadingButton } from '@mui/lab'
-import { MaskColorVar } from '@masknet/theme'
 import { useSnackbarCallback } from '@masknet/shared'
 import { SuccessIcon, CopyIcon } from '@masknet/icons'
 import { DesktopMnemonicConfirm } from '../../../../components/Mnemonic'
@@ -174,6 +173,7 @@ export const VerifyMnemonicDialogUI = memo<VerifyMnemonicDialogUIProps>(
                                 ) : null}
 
                                 <LoadingButton
+                                    variant="contained"
                                     loading={loading}
                                     fullWidth
                                     className={classes.button}

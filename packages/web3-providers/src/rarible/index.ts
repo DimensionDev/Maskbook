@@ -6,6 +6,7 @@ import {
     ERC721TokenDetailed,
     EthereumTokenType,
     FungibleTokenDetailed,
+    resolveResourceLink,
 } from '@masknet/web3-shared-evm'
 import {
     Ownership,
@@ -15,15 +16,9 @@ import {
     RaribleOfferResponse,
     RaribleProfileResponse,
 } from './types'
-import {
-    RaribleUserURL,
-    RaribleRopstenUserURL,
-    RaribleMainnetURL,
-    RaribleChainURL,
-    RaribleMainnetAPI_URL,
-} from './constants'
-import { toRaribleImage } from './utils'
+import { RaribleUserURL, RaribleRopstenUserURL, RaribleMainnetURL, RaribleChainURL, RaribleURL } from './constants'
 import { NonFungibleTokenAPI } from '..'
+import { isProxyENV } from '../helpers'
 
 const resolveRaribleUserNetwork = createLookupTableResolver<ChainId.Mainnet | ChainId.Ropsten, string>(
     {
@@ -35,7 +30,7 @@ const resolveRaribleUserNetwork = createLookupTableResolver<ChainId.Mainnet | Ch
 
 async function fetchFromRarible<T>(url: string, path: string, init?: RequestInit) {
     const response = await fetch(urlcat(url, path), {
-        mode: 'cors',
+        ...(!isProxyENV() && { mode: 'cors' }),
         ...init,
     })
     return response.json() as Promise<T>
@@ -56,6 +51,7 @@ function createERC721TokenFromAsset(
     tokenId: string,
     asset?: RaribleNFTItemMapResponse,
 ): ERC721TokenDetailed {
+    const imageURL = resolveResourceLink(asset?.meta.image?.url.ORIGINAL ?? asset?.meta.image?.url.PREVIEW ?? '')
     return {
         contractDetailed: {
             type: EthereumTokenType.ERC721,
@@ -67,7 +63,10 @@ function createERC721TokenFromAsset(
         info: {
             name: asset?.meta.name ?? '',
             description: asset?.meta.description ?? '',
-            mediaUrl: toRaribleImage(asset?.meta.image.url.ORIGINAL ?? asset?.meta.image.url.PREVIEW ?? ''),
+            mediaUrl:
+                resolveResourceLink(asset?.meta.animation?.url.ORIGINAL ?? asset?.meta.animation?.url.PREVIEW ?? '') ||
+                imageURL,
+            imageURL,
             owner: asset?.owners[0],
         },
         tokenId: tokenId,
@@ -81,7 +80,7 @@ function createNFTAsset(asset: RaribleNFTItemMapResponse, chainId: ChainId): Non
         is_verified: false,
         is_auction: false,
         token_address: asset.contract,
-        image_url: toRaribleImage(asset?.meta.image.url.ORIGINAL),
+        image_url: resolveResourceLink(asset?.meta.image?.url.ORIGINAL ?? ''),
         asset_contract: null,
         owner: owner
             ? {
@@ -125,6 +124,7 @@ function createNFTAsset(asset: RaribleNFTItemMapResponse, chainId: ChainId): Non
         response_: asset,
         token_id: asset.tokenId,
         safelist_request_status: '',
+        last_sale: null,
     }
 }
 
@@ -153,16 +153,36 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider {
         return createERC721TokenFromAsset(tokenAddress, tokenId, asset)
     }
 
-    async getTokens(from: string, opts: NonFungibleTokenAPI.Options): Promise<ERC721TokenDetailed[]> {
-        const requestPath = urlcat('/ethereum/nft/items/byOwner', { owner: from, size: opts.size })
+    async getTokens(from: string, opts: NonFungibleTokenAPI.Options) {
+        const requestPath = urlcat('/protocol/v0.1/ethereum/nft/items/byOwner', {
+            owner: from,
+            size: opts.size,
+            ...opts.pageInfo,
+        })
         interface Payload {
             total: number
             continuation: string
             items: RaribleNFTItemMapResponse[]
         }
-        const asset = await fetchFromRarible<Payload>(RaribleMainnetAPI_URL, requestPath)
-        if (!asset) return []
-        return asset.items.map((asset) => createERC721TokenFromAsset(asset.contract, asset.tokenId, asset))
+        const asset = await fetchFromRarible<Payload>(RaribleURL, requestPath, undefined)
+        if (!asset)
+            return {
+                data: [],
+                hasNextPage: false,
+            }
+
+        const data =
+            asset.items
+                .map((asset) => createERC721TokenFromAsset(asset.contract, asset.tokenId, asset))
+                .filter((x) => x.info?.owner?.toLowerCase() === from.toLowerCase())
+                .map((x) => ({ ...x, provideBy: 'Rarible' })) ?? []
+        return {
+            data,
+            hasNextPage: !!asset.continuation,
+            nextPageInfo: {
+                continuation: asset.continuation,
+            },
+        }
     }
 
     async getOffers(
@@ -193,7 +213,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider {
                 maker_account: {
                     user: { username: ownerInfo?.name ?? '' },
                     address: ownerInfo?.id ?? '',
-                    profile_img_url: toRaribleImage(ownerInfo?.image),
+                    profile_img_url: resolveResourceLink(ownerInfo?.image ?? ''),
                     link: `${resolveRaribleUserNetwork(chainId as number)}${ownerInfo?.id ?? ''}`,
                 },
             }
@@ -224,7 +244,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider {
                 maker_account: {
                     user: { username: ownerInfo?.name ?? '' },
                     address: ownerInfo?.id ?? '',
-                    profile_img_url: toRaribleImage(ownerInfo?.image),
+                    profile_img_url: resolveResourceLink(ownerInfo?.image ?? ''),
                     link: `${resolveRaribleUserNetwork(chainId as number)}${ownerInfo?.id ?? ''}`,
                 },
             }
@@ -312,4 +332,14 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider {
             } as NonFungibleTokenAPI.History
         })
     }
+}
+
+export function getRaribleNFTList(
+    address: string,
+    page?: number,
+    size?: number,
+    pageInfo?: { [key in string]: unknown },
+) {
+    const rarible = new RaribleAPI()
+    return rarible.getTokens(address, { page, size, pageInfo })
 }

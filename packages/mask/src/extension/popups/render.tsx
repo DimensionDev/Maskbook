@@ -1,6 +1,7 @@
 import { startPluginDashboard } from '@masknet/plugin-infra'
 import { createNormalReactRoot } from '../../utils'
-import { createPluginHost } from '../../../src/plugin-infra/host'
+import { createPluginHost } from '../../plugin-infra/host'
+import { Services } from '../service'
 import { status } from '../../setup.ui'
 import Popups from './UI'
 import { InMemoryStorages, PersistentStorages } from '../../../shared/kv-storage'
@@ -15,6 +16,8 @@ startPluginDashboard(
                 if (type === 'memory') return InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
                 else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
             },
+            personaSign: Services.Identity.signWithPersona,
+            walletSign: Services.Ethereum.personalSign,
         }
     }),
 )

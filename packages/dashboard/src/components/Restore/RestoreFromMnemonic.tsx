@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { SignUpRoutePath } from '../../pages/SignUp/routePath'
 import { LoadingButton } from '../LoadingButton'
+import { delay } from '@dimensiondev/kit'
 
 const useStyles = makeStyles()((theme) => ({
     error: {
@@ -36,9 +37,11 @@ export const RestoreFromMnemonic = () => {
             const persona = await Services.Identity.queryPersonaByMnemonic(values.join(' '), '')
             if (persona) {
                 await changeCurrentPersona(persona.identifier)
+                // Waiting persona changed event notify
+                await delay(100)
                 navigate(DashboardRoutes.Personas, { replace: true })
             } else {
-                navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.PersonaCreate}`, {
+                navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.PersonaRecovery}`, {
                     replace: false,
                     state: { mnemonic: values },
                 })

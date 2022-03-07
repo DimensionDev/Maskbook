@@ -10,12 +10,12 @@ import {
     DialogContent,
     TextField,
     Typography,
+    Autocomplete,
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { InjectedDialog } from './InjectedDialog'
-import { Autocomplete } from '@mui/material'
-import { isDataMatchJSONSchema, getKnownMetadataKeys, getMetadataSchema } from '@masknet/shared-base'
-import { ShadowRootPopper } from '../../utils/shadow-root/ShadowRootComponents'
+import { isDataMatchJSONSchema, getKnownMetadataKeys, getMetadataSchema } from '@masknet/typed-message'
+import { ShadowRootPopper } from '@masknet/theme'
 import { useState } from 'react'
 import { useI18N } from '../../utils'
 

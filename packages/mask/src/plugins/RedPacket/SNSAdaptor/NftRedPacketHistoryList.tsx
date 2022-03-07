@@ -25,8 +25,17 @@ const useStyles = makeStyles<void, 'atBottom'>()((theme, _, refs) => {
                 width: '100%',
                 padding: 0,
             },
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         placeholder: {
+            height: '100%',
+            display: 'flex',
+            width: 360,
+            margin: '0 auto',
+            justifyContent: 'center',
+            alignItems: 'center',
             textAlign: 'center',
         },
         popper: {
@@ -108,7 +117,7 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
     if (!histories?.length) {
         return (
             <Typography className={classes.placeholder} color="textSecondary">
-                {t('no_data')}
+                {t('plugin_red_packet_nft_no_history')}
             </Typography>
         )
     }

@@ -1,14 +1,18 @@
+import { usePluginIDContext, PluginId, useActivatedPlugin } from '@masknet/plugin-infra'
 import { useCallback, useEffect, useState, useLayoutEffect, useRef } from 'react'
 import { flatten, uniq } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
-import { useCustomSnackbar, VariantType, SnackbarProvider } from '@masknet/theme'
+import { SnackbarProvider, makeStyles } from '@masknet/theme'
 import { FormattedBalance, useRemoteControlledDialog } from '@masknet/shared'
 import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
 import {
     formatBalance,
+    useERC20TokenDetailed,
     TransactionStateType,
     resolveTransactionLinkOnExplorer,
+    useFungibleTokensDetailed,
+    EthereumTokenType,
+    isSameAddress,
     useITOConstants,
     ChainId,
     useChainId,
@@ -22,192 +26,199 @@ import { Flags } from '../../../../shared'
 import { useSpaceStationCampaignInfo } from './hooks/useSpaceStationCampaignInfo'
 import { NftAirdropCard } from './NftAirdropCard'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { useClaimablePools, SwappedToken } from './hooks/useClaimablePools'
+import { useClaimAll } from './hooks/useClaimAll'
 import { WalletMessages } from '../../Wallet/messages'
 import { useClaimCallback } from './hooks/useClaimCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import type { SwappedTokenType } from '../types'
 
 interface StyleProps {
     shortITOwrapper: boolean
 }
 
-const useStyles = makeStyles<StyleProps>()((theme, props) => ({
-    wrapper: {
-        paddingBottom: '0px !important',
-        paddingTop: '0px !important',
-    },
-    actionButton: {
-        margin: '0 auto',
-        minHeight: 'auto',
-        width: '100%',
-        fontSize: 18,
-        fontWeight: 400,
-    },
-    footer: {
-        marginTop: theme.spacing(2),
-        zIndex: 1,
-    },
-    footnote: {
-        fontSize: 10,
-        marginRight: theme.spacing(1),
-    },
-    footLink: {
-        cursor: 'pointer',
-        marginRight: theme.spacing(0.5),
-        '&:last-child': {
-            marginRight: 0,
+const useStyles = makeStyles<StyleProps>()((theme, props) => {
+    const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
+    const isLight = theme.palette.mode === 'light'
+    return {
+        wrapper: {
+            padding: theme.spacing(0, 4),
+            [smallQuery]: {
+                padding: theme.spacing(0, 1),
+            },
         },
-    },
-    tokenCardWrapper: {
-        width: '100%',
-        color: 'white',
-        overflow: 'auto',
-        paddingTop: theme.spacing(1),
-        marginBottom: theme.spacing(0.5),
-    },
-    tokenCard: {
-        width: 535,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        color: 'white',
-        flexDirection: 'column',
-        padding: 0,
-        marginBottom: theme.spacing(1.5),
-        alignItems: 'baseline',
-        justifyContent: 'space-between',
-    },
-    cardHeader: {
-        display: 'flex',
-        borderTopRightRadius: 10,
-        borderTopLeftRadius: 10,
-        height: 42,
-        width: '100%',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        '-webkit-font-smoothing': 'antialiased',
-        fontSize: 14,
-    },
-    cardHeaderLocked: {
-        background: theme.palette.mode === 'light' ? '#EBEEF0' : '#2F3336',
-        color: theme.palette.mode === 'light' ? '#7B8192' : '#6F767C',
-    },
-    cardHeaderClaimable: {
-        background: '#77E0B5',
-        color: 'white',
-    },
-    cardContent: {
-        display: 'flex',
-        alignItems: 'center',
-        width: '100%',
-        boxSizing: 'border-box',
-        borderBottomRightRadius: 10,
-        borderBottomLeftRadius: 10,
-        height: 62,
-        fontSize: 18,
-    },
-    cardContentLocked: {
-        background: theme.palette.mode === 'light' ? 'white' : '',
-        border: `1px solid ${theme.palette.mode === 'light' ? '#EBEEF0' : '#2F3336'}`,
-    },
-    cardContentClaimable: {
-        background: theme.palette.mode === 'light' ? 'rgba(119, 224, 181, 0.15)' : 'rgba(56, 221, 192, 0.2)',
-        border: '1px solid rgba(56, 221, 192, 0.2)',
-    },
-    content: {
-        marginBottom: theme.spacing(2),
-    },
-    contentTitle: {
-        fontSize: 18,
-        fontWeight: 300,
-    },
-    tab: {
-        height: 36,
-        minHeight: 36,
-        fontWeight: 300,
-    },
-    tabs: {
-        width: 536,
-        height: 36,
-        minHeight: 36,
-        margin: '0 auto',
-        borderRadius: 4,
-        backgroundColor: theme.palette.background.default,
-        '& .Mui-selected': {
-            color: theme.palette.primary.contrastText,
-            backgroundColor: theme.palette.primary.main,
+        actionButton: {
+            margin: '0 auto',
+            minHeight: 'auto',
+            width: '100%',
+            fontSize: 18,
+            fontWeight: 400,
         },
-    },
-    indicator: {
-        display: 'none',
-    },
-    tabPanel: {
-        marginTop: theme.spacing(3),
-    },
-    contentWrapper: {
-        display: 'flex',
-        flexDirection: 'column',
-        height: props.shortITOwrapper ? 450 : 650,
-    },
-    actionButtonWrapper: {
-        position: 'sticky',
-        width: '100%',
-        marginTop: 'auto',
-        bottom: 0,
-        zIndex: 2,
-        paddingBottom: theme.spacing(4),
-        paddingTop: theme.spacing(2),
-        backgroundColor: theme.palette.background.paper,
-    },
-    emptyContentWrapper: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: 350,
-    },
+        footer: {
+            marginTop: theme.spacing(2),
+            zIndex: 1,
+        },
+        footnote: {
+            fontSize: 10,
+            marginRight: theme.spacing(1),
+        },
+        footLink: {
+            cursor: 'pointer',
+            marginRight: theme.spacing(0.5),
+            '&:last-child': {
+                marginRight: 0,
+            },
+        },
+        tokenCardWrapper: {
+            width: '100%',
+            color: 'white',
+            overflow: 'auto',
+            paddingTop: theme.spacing(1),
+            marginBottom: theme.spacing(0.5),
+        },
+        tokenCard: {
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            color: 'white',
+            flexDirection: 'column',
+            padding: 0,
+            marginBottom: theme.spacing(1.5),
+            alignItems: 'baseline',
+            justifyContent: 'space-between',
+        },
+        cardHeader: {
+            display: 'flex',
+            borderTopRightRadius: 10,
+            borderTopLeftRadius: 10,
+            height: 42,
+            width: '100%',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            '-webkit-font-smoothing': 'antialiased',
+            fontSize: 14,
+        },
+        cardHeaderLocked: {
+            background: isLight ? '#EBEEF0' : '#2F3336',
+            color: isLight ? '#7B8192' : '#6F767C',
+        },
+        cardHeaderClaimable: {
+            background: '#77E0B5',
+            color: 'white',
+        },
+        cardContent: {
+            display: 'flex',
+            alignItems: 'center',
+            width: '100%',
+            boxSizing: 'border-box',
+            borderBottomRightRadius: 10,
+            borderBottomLeftRadius: 10,
+            height: 62,
+            fontSize: 18,
+        },
+        cardContentLocked: {
+            background: isLight ? 'white' : '',
+            border: `1px solid ${isLight ? '#EBEEF0' : '#2F3336'}`,
+        },
+        cardContentClaimable: {
+            background: 'rgba(119, 224, 181, 0.1)',
+            border: '1px solid rgba(56, 221, 192, 0.4)',
+        },
+        content: {
+            marginBottom: theme.spacing(2),
+        },
+        contentTitle: {
+            fontSize: 18,
+            fontWeight: 300,
+        },
+        tab: {
+            height: 36,
+            minHeight: 36,
+            fontWeight: 300,
+        },
+        tabs: {
+            height: 36,
+            minHeight: 36,
+            borderRadius: 4,
+            backgroundColor: theme.palette.background.default,
+            '& .Mui-selected': {
+                color: theme.palette.primary.contrastText,
+                backgroundColor: theme.palette.primary.main,
+            },
+        },
+        indicator: {
+            display: 'none',
+        },
+        tabPanel: {
+            marginTop: theme.spacing(3),
+        },
+        contentWrapper: {
+            display: 'flex',
+            flexDirection: 'column',
+            height: props.shortITOwrapper ? 450 : 650,
+        },
+        actionButtonWrapper: {
+            position: 'sticky',
+            width: '100%',
+            marginTop: 'auto',
+            bottom: 0,
+            zIndex: 2,
+            paddingBottom: theme.spacing(4),
+            paddingTop: theme.spacing(2),
+            backgroundColor: theme.palette.background.paper,
+        },
+        emptyContentWrapper: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: 350,
+        },
 
-    lockIcon: {
-        width: 22,
-        height: 22,
-        marginRight: 6,
-    },
-    textWrapper: {
-        display: 'flex',
-        alignItems: 'center',
-        marginLeft: theme.spacing(1.5),
-    },
-    unlockTime: {
-        marginRight: theme.spacing(1.5),
-    },
-    tokenBalance: {
-        marginLeft: theme.spacing(1.5),
-        color: theme.palette.mode === 'light' ? '#15181B' : '#D9D9D9',
-    },
-    tokenSymbol: {
-        color: theme.palette.mode === 'light' ? '#7B8192' : '#6F767C',
-    },
-    snackbarSuccess: {
-        backgroundColor: '#77E0B5',
-    },
-    snackbarError: {
-        backgroundColor: '#FF5555',
-    },
-    abstractTabWrapper: {
-        position: 'sticky',
-        top: 0,
-        width: '100%',
-        zIndex: 2,
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(2),
-        backgroundColor: theme.palette.background.paper,
-    },
-    walletStatusBox: {
-        width: 535,
-        margin: '24px auto',
-    },
-    claimAllButton: {},
-}))
+        lockIcon: {
+            width: 22,
+            height: 22,
+            marginRight: 6,
+        },
+        textWrapper: {
+            display: 'flex',
+            alignItems: 'center',
+            marginLeft: theme.spacing(1.5),
+        },
+        unlockTime: {
+            marginRight: theme.spacing(1.5),
+        },
+        tokenBalance: {
+            marginLeft: theme.spacing(1.5),
+            color: theme.palette.mode === 'light' ? '#15181B' : '#D9D9D9',
+        },
+        tokenSymbol: {
+            color: theme.palette.mode === 'light' ? '#7B8192' : '#6F767C',
+        },
+        snackbarSuccess: {
+            backgroundColor: '#77E0B5',
+        },
+        snackbarError: {
+            backgroundColor: '#FF5555',
+        },
+        abstractTabWrapper: {
+            position: 'sticky',
+            top: 0,
+            width: '100%',
+            zIndex: 2,
+            paddingTop: theme.spacing(1),
+            paddingBottom: theme.spacing(2),
+            backgroundColor: theme.palette.background.paper,
+        },
+        walletStatusBox: {
+            margin: theme.spacing(3, 'auto'),
+        },
+        claimAllButton: {
+            [smallQuery]: {
+                fontSize: 14,
+            },
+        },
+    }
+})
 
 interface ClaimAllDialogProps {
     onClose: () => void
@@ -217,6 +228,9 @@ interface ClaimAllDialogProps {
 export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { t } = useI18N()
     const { open, onClose } = props
+    const ITO_Definition = useActivatedPlugin(PluginId.ITO, 'any')
+    const pluginId = usePluginIDContext()
+    const chainIdList = ITO_Definition?.enableRequirement.web3?.[pluginId]?.supportedChainIds ?? []
     const DialogRef = useRef<HTMLDivElement>(null)
     const account = useAccount()
     const currentChainId = useChainId()
@@ -226,40 +240,29 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         retry: retryAirdrop,
     } = useSpaceStationCampaignInfo(account, Flags.nft_airdrop_enabled)
 
-    const [chainId, setChainId] = useState(
-        [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai].includes(currentChainId)
-            ? currentChainId
-            : ChainId.Mainnet,
+    const [chainId, setChainId] = useState(chainIdList.includes(currentChainId) ? currentChainId : ChainId.Mainnet)
+    const { value: _swappedTokens, loading: _loading, retry } = useClaimAll(account, chainId)
+    const { value: swappedTokensWithDetailed = [], loading: loadingTokenDetailed } = useFungibleTokensDetailed(
+        (_swappedTokens ?? []).map((t) => ({
+            address: t.token.address,
+            type: EthereumTokenType.ERC20,
+        })),
+        chainId,
     )
-    const { value: swappedTokens, loading, retry } = useClaimablePools(chainId)
-    const { ITO_CONTRACT_ADDRESS: ITO_CONTRACT_ADDRESS_MAINNET } = useITOConstants(ChainId.Mainnet)
+    const loading = _loading || loadingTokenDetailed
+    const swappedTokens = _swappedTokens?.map((t) => {
+        const tokenDetailed = swappedTokensWithDetailed.find((v) => isSameAddress(t.token.address, v.address))
+        if (tokenDetailed) t.token = tokenDetailed
+        return t
+    })
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants(chainId)
-    // Todo: Remove the code after the period that old ITO is being used and continues to be used for a while
-    const { value: swappedTokensOld, loading: loadingOld, retry: retryOld } = useClaimablePools(chainId, true)
-    const { showSnackbar } = useCustomSnackbar()
-    const popEnqueueSnackbar = useCallback(
-        (variant: VariantType) =>
-            showSnackbar(t('plugin_ito_claim_all_title'), {
-                variant,
-                preventDuplicate: true,
-                anchorOrigin: {
-                    vertical: 'top',
-                    horizontal: 'right',
-                },
-            }),
-        [showSnackbar],
-    )
+
     const claimablePids = uniq(flatten(swappedTokens?.filter((t) => t.isClaimable).map((t) => t.pids)))
-    const claimablePidsOld = uniq(flatten(swappedTokensOld?.filter((t) => t.isClaimable).map((t) => t.pids)))
+
     const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(claimablePids, ITO2_CONTRACT_ADDRESS)
-    const [claimStateOld, resetClaimCallbackOld] = useClaimCallback(claimablePidsOld, ITO_CONTRACT_ADDRESS_MAINNET)
     const showNftAirdrop = chainId === ChainId.Matic && campaignInfos && Flags.nft_airdrop_enabled
     const { classes } = useStyles({
-        shortITOwrapper:
-            (showNftAirdrop &&
-                (!swappedTokens || swappedTokens.length === 0) &&
-                (!swappedTokensOld || swappedTokensOld.length === 0)) ||
-            !showNftAirdrop,
+        shortITOwrapper: (showNftAirdrop && (!swappedTokens || swappedTokens.length === 0)) || !showNftAirdrop,
     })
     const [initLoading, setInitLoading] = useState(true)
     useLayoutEffect(() => {
@@ -275,57 +278,24 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         (ev) => {
             if (ev.open) return
 
-            if (claimState.type === TransactionStateType.FAILED || claimStateOld.type === TransactionStateType.FAILED)
-                popEnqueueSnackbar('error')
-
             if (claimState.type === TransactionStateType.CONFIRMED) {
                 resetClaimCallback()
                 retry()
-                onClose()
-                popEnqueueSnackbar('success')
-            }
-
-            if (claimStateOld.type === TransactionStateType.CONFIRMED) {
-                resetClaimCallbackOld()
-                retryOld()
-                onClose()
-                popEnqueueSnackbar('success')
             }
         },
     )
 
     useEffect(() => {
         resetClaimCallback()
-        resetClaimCallbackOld()
     }, [chainId])
 
     useEffect(() => {
-        if (claimStateOld.type === TransactionStateType.UNKNOWN) return
+        if (claimState.type === TransactionStateType.UNKNOWN) return
 
-        if (claimStateOld.type === TransactionStateType.HASH) {
-            const { hash } = claimStateOld
-            setTimeout(() => {
-                window.open(resolveTransactionLinkOnExplorer(chainId, hash), '_blank', 'noopener noreferrer')
-            }, 2000)
+        if (claimState.type === TransactionStateType.FAILED) {
+            setClaimTransactionDialog({ open: false })
             return
         }
-        const claimableTokens = swappedTokensOld?.filter((t) => t.isClaimable)
-        const summary = claimableTokens
-            ? 'Claim ' +
-              new Intl.ListFormat('en').format(
-                  claimableTokens.map((t) => formatBalance(t.amount, t.token.decimals) + ' ' + t.token.symbol),
-              )
-            : ''
-        setClaimTransactionDialog({
-            open: true,
-            state: claimStateOld,
-            title: t('plugin_ito_claim_all_title'),
-            summary,
-        })
-    }, [claimStateOld, swappedTokensOld /* update tx dialog only if state changed */])
-
-    useEffect(() => {
-        if (claimState.type === TransactionStateType.UNKNOWN) return
 
         if (claimState.type === TransactionStateType.HASH) {
             const { hash } = claimState
@@ -362,12 +332,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                         <WalletStatusBox />
                     </div>
                     <div className={classes.abstractTabWrapper}>
-                        <NetworkTab
-                            chainId={chainId}
-                            setChainId={setChainId}
-                            classes={classes}
-                            chains={[ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai]}
-                        />
+                        <NetworkTab chainId={chainId} setChainId={setChainId} classes={classes} chains={chainIdList} />
                     </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>
                         {(showNftAirdrop || loadingAirdrop) &&
@@ -380,40 +345,20 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                             />
                         ) : null}
 
-                        {loading || loadingOld || initLoading || !swappedTokens || !swappedTokensOld ? (
+                        {loading || initLoading || !swappedTokens ? (
                             <div className={classes.emptyContentWrapper}>
                                 <CircularProgress size={24} />
                             </div>
-                        ) : swappedTokens.length > 0 || swappedTokensOld.length > 0 ? (
-                            <>
-                                {swappedTokensOld.length > 0 ? (
-                                    <div className={classes.content}>
-                                        {swappedTokens.length > 0 && swappedTokensOld.length > 0 ? (
-                                            <Typography color="textPrimary" className={classes.contentTitle}>
-                                                {t('plugin_ito_claim_all_old_contract')}
-                                            </Typography>
-                                        ) : null}
-                                        <Content swappedTokens={swappedTokensOld} />
-                                    </div>
-                                ) : null}
-                                {swappedTokens.length > 0 ? (
-                                    <div className={classes.content}>
-                                        {swappedTokens.length > 0 && swappedTokensOld.length > 0 ? (
-                                            <Typography color="textPrimary" className={classes.contentTitle}>
-                                                {t('plugin_ito_claim_all_new_contract')}
-                                            </Typography>
-                                        ) : null}
-                                        <Content swappedTokens={swappedTokens} />
-                                    </div>
-                                ) : null}
-                            </>
+                        ) : swappedTokens.length > 0 ? (
+                            <div className={classes.content}>
+                                <Content swappedTokens={swappedTokens} chainId={chainId} />
+                            </div>
                         ) : !showNftAirdrop && !loadingAirdrop ? (
                             <div className={classes.emptyContentWrapper}>
                                 <Typography color="textPrimary">{t('plugin_ito_no_claimable_token')} </Typography>
                             </div>
                         ) : null}
                         {(swappedTokens && swappedTokens.length > 0) ||
-                        (swappedTokensOld && swappedTokensOld.length > 0) ||
                         (chainId === ChainId.Matic && Flags.nft_airdrop_enabled) ? (
                             <div className={classes.actionButtonWrapper}>
                                 <EthereumChainBoundary
@@ -422,11 +367,11 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                     noSwitchNetworkTip
                                     switchButtonStyle={{
                                         minHeight: 'auto',
-                                        width: 540,
+                                        width: '100%',
                                         fontSize: 18,
                                         fontWeight: 400,
                                     }}>
-                                    {swappedTokens?.length || swappedTokensOld?.length ? (
+                                    {swappedTokens?.length ? (
                                         <EthereumWalletConnectedBoundary
                                             classes={{
                                                 connectWallet: classes.claimAllButton,
@@ -434,7 +379,17 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                             <ActionButton
                                                 className={classNames(classes.actionButton, classes.claimAllButton)}
                                                 variant="contained"
-                                                disabled={claimablePids!.length === 0}
+                                                loading={[
+                                                    TransactionStateType.HASH,
+                                                    TransactionStateType.WAIT_FOR_CONFIRMING,
+                                                ].includes(claimState.type)}
+                                                disabled={
+                                                    claimablePids!.length === 0 ||
+                                                    [
+                                                        TransactionStateType.HASH,
+                                                        TransactionStateType.WAIT_FOR_CONFIRMING,
+                                                    ].includes(claimState.type)
+                                                }
                                                 size="large"
                                                 onClick={onClaimButtonClick}>
                                                 {t('plugin_ito_claim_all')}
@@ -454,17 +409,18 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
 }
 
 interface ContentProps {
-    swappedTokens: SwappedToken[]
+    swappedTokens: SwappedTokenType[]
+    chainId: ChainId
 }
 
 function Content(props: ContentProps) {
     const { classes } = useStyles({ shortITOwrapper: false })
-    const { swappedTokens } = props
+    const { swappedTokens, chainId } = props
     return (
         <List className={classes.tokenCardWrapper}>
             {swappedTokens.map((swappedToken, i) => (
                 <div key={i}>
-                    <SwappedToken i={i} swappedToken={swappedToken} />
+                    <SwappedToken i={i} swappedToken={swappedToken} chainId={chainId} />
                 </div>
             ))}
         </List>
@@ -473,15 +429,17 @@ function Content(props: ContentProps) {
 
 interface SwappedTokensProps {
     i: number
-    swappedToken: SwappedToken
+    swappedToken: SwappedTokenType
+    chainId: ChainId
 }
 
-function SwappedToken({ i, swappedToken }: SwappedTokensProps) {
+function SwappedToken({ i, swappedToken, chainId }: SwappedTokensProps) {
     const { t } = useI18N()
     const theme = useTheme()
     const { classes } = useStyles({ shortITOwrapper: false })
+    const { value: token } = useERC20TokenDetailed(swappedToken.token.address, undefined, chainId)
 
-    return swappedToken.token ? (
+    return token ? (
         <ListItem key={i} className={classes.tokenCard}>
             <div
                 className={classNames(
@@ -500,7 +458,7 @@ function SwappedToken({ i, swappedToken }: SwappedTokensProps) {
                         />
                     )}
                     <span>
-                        {swappedToken.token.symbol}{' '}
+                        {token.symbol}{' '}
                         {swappedToken.isClaimable
                             ? t('plugin_ito_claim_all_status_unclaimed')
                             : t('plugin_ito_claim_all_status_locked')}
@@ -526,8 +484,8 @@ function SwappedToken({ i, swappedToken }: SwappedTokensProps) {
                         symbol: classes.tokenSymbol,
                     }}
                     value={swappedToken.amount}
-                    decimals={swappedToken.token.decimals}
-                    symbol={swappedToken.token.symbol}
+                    decimals={token.decimals}
+                    symbol={token.symbol}
                     formatter={formatBalance}
                 />
             </Typography>

@@ -1,7 +1,10 @@
+<!-- cspell:disable -->
+<!-- markdownlint-disable no-inline-html first-line-heading -->
 <a href="https://mask.io">
-  <img src="https://raw.githubusercontent.com/DimensionDev/Maskbook-Website/master/img/MB--CircleCanvas--WhiteOverBlue.svg"
+  <img src="https://dimensiondev.github.io/Mask-VI/assets/Logo/MB--Logo--Geo--ForceCircle--Blue.svg"
        width="200" height="200" title="([I:b])" alt="([I:b])">
 </a>
+<!-- markdownlint-enable no-inline-html first-line-heading -->
 
 # Mask Network
 
@@ -26,7 +29,8 @@ For general introductions, see [Mask.io](https://mask.io).
 - [Mask Network on Chrome Web Store][client-chrome]
 - [Mask Network on Firefox Addon Store][client-firefox] (Works on Firefox for Android too!)
 
-- (Beta!) [Mask Network for iOS][client-ios]
+- [Mask Network for iOS][client-ios]
+- (Testflight!) [Mask Network for iOS Testflight][client-ios-testflight]
 - (Beta!) [Mask Network for Android][client-android]
 
 ## Useful Links
@@ -56,7 +60,8 @@ Please submit your **resume** to `jobs (at) mask.io`
 [client-android]: https://play.google.com/store/apps/details?id=com.dimension.maskbook
 [client-chrome]: https://chrome.google.com/webstore/detail/maskbook/jkoeaghipilijlahjplgbfiocjhldnap/
 [client-firefox]: https://addons.mozilla.org/en-US/firefox/addon/maskbook/
-[client-ios]: https://testflight.apple.com/join/OGmGmIg1
+[client-ios-testflight]: https://testflight.apple.com/join/PYomz4pJ
+[client-ios]: https://apps.apple.com/app/id1478382964
 [bounty]: https://github.com/DimensionDev/Maskbook/issues?q=is%3Aopen+is%3Aissue+label%3A%22Bounty%3A+Open%22
 [circle-ci]: https://circleci.com/gh/DimensionDev/Maskbook
 [crowdin]: https://crowdin.com/project/mask-network

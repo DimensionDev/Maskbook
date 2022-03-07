@@ -1,4 +1,4 @@
-import type { Trade, TradeComputed } from '../../types'
+import type { Trade, TradeComputed, SwapCall } from '../../types'
 import { useAccount, useWeb3 } from '@masknet/web3-shared-evm'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
 import type { TradeProvider } from '@masknet/public-api'
@@ -9,7 +9,6 @@ import BigNumber from 'bignumber.js'
 import { swapErrorToUserReadableMessage } from '../../helpers'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
 import type { SwapParameters } from '@uniswap/v2-sdk'
-import type { SwapCall } from '../../types'
 
 interface FailedCall {
     parameters: SwapParameters
@@ -32,7 +31,7 @@ interface FailedCall extends SwapCallEstimate {
 
 export function useTradeGasLimit(trade: TradeComputed<Trade> | null, tradeProvider: TradeProvider): AsyncState<number> {
     const { targetChainId } = TargetChainIdContext.useContainer()
-    const web3 = useWeb3(false, targetChainId)
+    const web3 = useWeb3({ chainId: targetChainId })
     const account = useAccount()
     const tradeParameters = useTradeParameters(trade, tradeProvider)
 

@@ -7,6 +7,8 @@ import {
     AsyncCallOptions,
     CallbackBasedChannel,
     EventBasedChannel,
+    _AsyncVersionOf,
+    _AsyncGeneratorVersionOf,
 } from 'async-call-rpc/full'
 import { isEnvironment, Environment, WebExtensionMessage, MessageTarget } from '@dimensiondev/holoflows-kit'
 import { serializer, getLocalImplementation } from '@masknet/shared-base'
@@ -26,14 +28,18 @@ export const Services = {
     Crypto: add(() => import('./background-script/CryptoService'), 'Crypto'),
     Identity: add(() => import('./background-script/IdentityService'), 'Identity'),
     Welcome: add(() => import('./background-script/WelcomeService'), 'Welcome'),
-    Helper: add(() => import('./background-script/HelperService'), 'Helper'),
+    Helper: add(() => import('../../background/services/helper'), 'Helper'),
     Ethereum: add(() => import('./background-script/EthereumService'), 'Ethereum'),
     SocialNetwork: add(() => import('./background-script/SocialNetworkService'), 'SocialNetwork'),
     Settings: add(() => import('./background-script/SettingsService'), 'Settings'),
     ThirdPartyPlugin: add(() => import('./background-script/ThirdPartyPlugin'), 'ThirdPartyPlugin'),
 }
 export default Services
-export const ServicesWithProgress = add(() => import('./service-generator'), 'ServicesWithProgress', true)
+export const ServicesWithProgress: _AsyncGeneratorVersionOf<typeof import('./service-generator')> = add(
+    () => import('./service-generator'),
+    'ServicesWithProgress',
+    true,
+) as any
 
 if (process.env.manifest === '2' && import.meta.webpackHot && isEnvironment(Environment.ManifestBackground)) {
     import.meta.webpackHot.accept(
@@ -41,7 +47,7 @@ if (process.env.manifest === '2' && import.meta.webpackHot && isEnvironment(Envi
             './background-script/CryptoService',
             './background-script/IdentityService',
             './background-script/WelcomeService',
-            './background-script/HelperService',
+            '../../background/services/helper',
             './background-script/EthereumService',
             './background-script/SettingsService',
             './background-script/ThirdPartyPlugin',
@@ -58,19 +64,19 @@ if (process.env.manifest === '2' && import.meta.webpackHot && isEnvironment(Envi
  * @param key Name of the service. Used for better debugging.
  * @param generator Is the service is a generator?
  */
-function add<T>(impl: () => Promise<T>, key: string, generator = false): T {
+function add<T extends object>(impl: () => Promise<T>, key: string, generator = false): _AsyncVersionOf<T> {
     const channel: EventBasedChannel | CallbackBasedChannel = message.events[key].bind(MessageTarget.Broadcast)
 
     const isBackground = isEnvironment(Environment.ManifestBackground)
-    const RPC: (impl: any, opts: AsyncCallOptions) => T = (generator ? AsyncGeneratorCall : AsyncCall) as any
-    const load = () => getLocalImplementation(isBackground, `Services.${key}`, impl, channel)
+    const RPC = (generator ? AsyncGeneratorCall : AsyncCall) as any as typeof AsyncCall
+    const load = () => getLocalImplementation<T>(isBackground, `Services.${key}`, impl, channel)
     const localImplementation = load()
     // No HMR support in MV3
     process.env.manifest === '2' &&
         isBackground &&
         import.meta.webpackHot &&
         document.addEventListener(SERVICE_HMR_EVENT, load)
-    const service = RPC(localImplementation, {
+    const service = RPC<T>(localImplementation, {
         key,
         serializer,
         log,
@@ -88,5 +94,5 @@ function add<T>(impl: () => Promise<T>, key: string, generator = false): T {
         Reflect.set(globalThis, key + 'Service', service)
         if (isBackground) Reflect.set(Services, key, service)
     }
-    return service as any
+    return service
 }

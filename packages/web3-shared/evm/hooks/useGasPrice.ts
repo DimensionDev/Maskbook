@@ -4,7 +4,7 @@ import { useChainId } from './useChainId'
 
 export function useGasPrice() {
     const chainId = useChainId()
-    const web3 = useWeb3(true, chainId)
+    const web3 = useWeb3({ chainId })
 
     return useAsyncRetry(async () => {
         return web3.eth.getGasPrice()

@@ -53,7 +53,7 @@ function modify(manifest: Manifest, flags: NormalizedFlags) {
         // https://developer.chrome.com/docs/extensions/mv3/intro/mv3-migration/
         manifest.manifest_version = 3
 
-        manifest.permissions = manifest.permissions.filter((x) => !x.startsWith('http'))
+        manifest.permissions = manifest.permissions.filter((x) => !x.startsWith('http')).concat('scripting')
         manifest.optional_permissions = manifest.optional_permissions.filter((x) => x !== '<all_urls>')
         manifest.host_permissions = ['<all_urls>']
 
@@ -77,6 +77,7 @@ function modify(manifest: Manifest, flags: NormalizedFlags) {
     }
 }
 
+// cspell: disable-next-line
 // ID: jkoeaghipilijlahjplgbfiocjhldnap
 // Note: with tihs key you cannot upload it to the extension store
 function stableDevelopmentExtensionID(manifest: Manifest) {

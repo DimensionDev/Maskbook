@@ -9,7 +9,7 @@ import { usePostInfoDetails, usePostInfo, PostInfoProvider } from '../../../comp
 import { noop } from 'lodash-unified'
 import { MaskMessages } from '../../../utils/messages'
 import { startWatch } from '../../../utils/watcher'
-import { extractTextFromTypedMessage } from '@masknet/shared-base'
+import { extractTextFromTypedMessage } from '@masknet/typed-message'
 
 const defaultOnPasteToCommentBox = async (
     encryptedComment: string,
@@ -29,8 +29,8 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
 ) {
     const CommentBoxUI = memo(function CommentBoxUI({ dom }: { dom: HTMLElement | null }) {
         const info = usePostInfo()
-        const payload = usePostInfoDetails.postPayload()
-        const postContent = usePostInfoDetails.transformedPostContent()
+        const payload = usePostInfoDetails.containingMaskPayload()
+        const postContent = usePostInfoDetails.rawMessagePiped()
         const { classes } = useCustomStyles()
         const iv = usePostInfoDetails.iv()
         const props = additionPropsToCommentBox(classes)

@@ -4,8 +4,9 @@ import { requestSNSAdaptorPermission } from '../../social-network/utils/permissi
 
 import { currentSetupGuideStatus } from '../../settings/settings'
 import stringify from 'json-stable-stringify'
-import { SetupGuideStep } from '../../components/InjectedComponents/SetupGuide'
-import { PersonaIdentifier, delay } from '@masknet/shared-base'
+import { SetupGuideStep } from '../../components/InjectedComponents/SetupGuide/types'
+import type { PersonaIdentifier } from '@masknet/shared-base'
+import { delay } from '@dimensiondev/kit'
 
 export async function getDefinedSocialNetworkUIs() {
     return [...definedSocialNetworkUIs.values()].map(({ networkIdentifier }) => {

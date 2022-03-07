@@ -7,7 +7,7 @@ import { ThirdPartyPluginCompositionEntry } from '../components/CompositionEntry
 import { ExternalPluginMessages } from '../messages'
 import { isLocalContext } from '../sns-context'
 import { MaskMessages } from '../../../utils'
-import { makeTypedMessageText } from '@masknet/shared-base'
+import { makeTypedMessageText } from '@masknet/typed-message'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -41,7 +41,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             </Suspense>
         )
     },
-    CompositionDialogEntry: { label: '🧩 Third party plugins', dialog: ThirdPartyPluginCompositionEntry },
+    CompositionDialogEntry: { label: '\u{1F9E9} Third party plugins', dialog: ThirdPartyPluginCompositionEntry },
     CompositionDialogMetadataBadgeRender: (key, val) =>
         key.startsWith('plugin:')
             ? {

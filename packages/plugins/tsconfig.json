@@ -1,4 +1,14 @@
 {
   "extends": "../../tsconfig.json",
-  "references": [{ "path": "./example/" }, { "path": "./Flow/" }, { "path": "./Wallet/" }, { "path": "./FileService/" }]
+  "references": [
+    { "path": "./template/" },
+    { "path": "./example/" },
+    { "path": "./Debugger/" },
+    { "path": "./Flow/" },
+    { "path": "./Wallet/" },
+    { "path": "./FileService/" },
+    { "path": "./RSS3/" },
+    { "path": "./DAO/" },
+    { "path": "./CyberConnect/" }
+  ]
 }

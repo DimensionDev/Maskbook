@@ -1,6 +1,12 @@
 import stringify from 'json-stable-stringify'
-import { MaskNetworkAPIs, NetworkType, RelationFavor } from '@masknet/public-api'
-import { encodeArrayBuffer, encodeText, unreachable } from '@dimensiondev/kit'
+import type {
+    MaskNetworkAPIs,
+    RelationFavor,
+    EC_Private_JsonWebKey as Native_EC_Private_JsonWebKey,
+    EC_Public_JsonWebKey as Native_EC_Public_JsonWebKey,
+    AESJsonWebKey as Native_AESJsonWebKey,
+} from '@masknet/public-api'
+import { encodeArrayBuffer, encodeText } from '@dimensiondev/kit'
 import { Environment, assertEnvironment } from '@dimensiondev/holoflows-kit'
 import { ECKeyIdentifier, Identifier, ProfileIdentifier } from '@masknet/shared-base'
 import { definedSocialNetworkWorkers } from '../../social-network/define'
@@ -101,44 +107,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
             })
         return stringify(connectedPersonas)
     },
-    app_isPluginEnabled: ({ pluginID }) => Services.Settings.getPluginEnabled(pluginID),
-    app_setPluginStatus: ({ pluginID, enabled }) => Services.Settings.setPluginEnabled(pluginID, enabled),
-    setting_getNetworkTraderProvider: ({ network }) => {
-        switch (network) {
-            case NetworkType.Ethereum:
-                return Services.Settings.getEthereumNetworkTradeProvider()
-            case NetworkType.Binance:
-                return Services.Settings.getBinanceNetworkTradeProvider()
-            case NetworkType.Polygon:
-                return Services.Settings.getPolygonNetworkTradeProvider()
-            case NetworkType.Arbitrum:
-                return Services.Settings.getArbitrumNetworkTradeProvider()
-            case NetworkType.xDai:
-                return Services.Settings.getxDaiNetworkTradeProvider()
-            case NetworkType.Celo:
-                return Services.Settings.getCeloNetworkTradeProvider()
-            default:
-                unreachable(network)
-        }
-    },
-    setting_setNetworkTraderProvider: ({ network, provider }) => {
-        switch (network) {
-            case NetworkType.Ethereum:
-                return Services.Settings.setEthNetworkTradeProvider(provider)
-            case NetworkType.Binance:
-                return Services.Settings.setBinanceNetworkTradeProvider(provider)
-            case NetworkType.Polygon:
-                return Services.Settings.setPolygonNetworkTradeProvider(provider)
-            case NetworkType.Arbitrum:
-                return Services.Settings.setArbitrumNetworkTradeProvider(provider)
-            case NetworkType.xDai:
-                return Services.Settings.setxDaiNetworkTradeProvider(provider)
-            case NetworkType.Celo:
-                return Services.Settings.setCeloNetworkTradeProvider(provider)
-            default:
-                unreachable(network)
-        }
-    },
+    app_isPluginEnabled: ({ pluginID }) => Services.Settings.getPluginMinimalModeEnabled(pluginID).then((x) => !x),
+    app_setPluginStatus: ({ pluginID, enabled }) => Services.Settings.setPluginMinimalModeEnabled(pluginID, !enabled),
     settings_getTrendingDataSource: () => Services.Settings.getTrendingDataSource(),
     settings_setTrendingDataSource: ({ provider }) => Services.Settings.setTrendingDataSource(provider),
     settings_getLaunchPageSettings: async () => launchPageSettings.value,
@@ -152,7 +122,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         return JSON.stringify(data)
     },
     settings_getBackupPreviewInfo: async ({ backupInfo }) => {
-        const data = Services.Welcome.parseBackupStr(backupInfo)
+        const data = await Services.Welcome.parseBackupStr(backupInfo)
         return data?.info
     },
     settings_restoreBackup: ({ backupInfo }) => {
@@ -232,6 +202,10 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     persona_backupPrivateKey: async ({ identifier }) => {
         const privateKey = await Services.Identity.exportPersonaPrivateKey(stringToPersonaIdentifier(identifier))
         return privateKey
+    },
+    persona_queryPersonaByPrivateKey: async ({ privateKey }) => {
+        const persona = await Services.Identity.queryPersonaByPrivateKey(privateKey)
+        return persona ? personaFormatter(persona) : undefined
     },
     persona_getCurrentPersonaIdentifier: async () => {
         const identifier = await Services.Settings.getCurrentPersonaIdentifier()
@@ -319,9 +293,39 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
             updatedAt: x.updatedAt.getTime(),
         }))
     },
-    async SNSAdaptor_getCurrentDetectedProfile() {
-        const { activatedSocialNetworkUI } = await import('../../social-network')
-        return activatedSocialNetworkUI.collecting.identityProvider?.recognized.value.identifier.toText()
+    get_all_indexedDB_records: async () => {
+        const personas = await Services.Identity.queryPersonaRecordsFromIndexedDB()
+        const profiles = await Services.Identity.queryProfileRecordFromIndexedDB()
+        const relations = await Services.Identity.queryRelationsRecordFromIndexedDB()
+        return {
+            personas: personas.map((x) => ({
+                mnemonic: x.mnemonic,
+                nickname: x.nickname,
+                publicKey: x.publicKey as JsonWebKey as unknown as Native_EC_Public_JsonWebKey,
+                privateKey: x.privateKey as JsonWebKey as unknown as Native_EC_Private_JsonWebKey,
+                localKey: x.localKey as JsonWebKey as unknown as Native_AESJsonWebKey,
+                identifier: x.identifier.toText(),
+                linkedProfiles: Object.fromEntries(x.linkedProfiles.__raw_map__),
+                createdAt: x.createdAt.getTime(),
+                updatedAt: x.createdAt.getTime(),
+                hasLogout: x.hasLogout,
+                uninitialized: x.uninitialized,
+            })),
+            profiles: profiles.map((x) => ({
+                identifier: x.identifier.toText(),
+                nickname: x.nickname,
+                localKey: x.localKey as JsonWebKey as unknown as Native_AESJsonWebKey,
+                linkedPersona: x.linkedPersona?.toText(),
+                createdAt: x.createdAt.getTime(),
+                updatedAt: x.updatedAt.getTime(),
+            })),
+            relations: relations.map((x) => ({
+                profile: x.profile.toText(),
+                linked: x.linked.toText(),
+                network: x.network,
+                favor: x.favor,
+            })),
+        }
     },
 }
 

@@ -58,6 +58,11 @@ export function formatEthereumAddress(address: string, size = 0) {
     return `${address_.substr(0, 2 + size)}...${address_.substr(-size)}`
 }
 
+export function formatNFT_TokenId(tokenId: string, size = 0) {
+    if (tokenId.length < 9) return tokenId
+    return `#${tokenId.substr(0, 2 + size)}...${tokenId.substr(-size)}`
+}
+
 export function formatDomainName(domain?: string, size = 4) {
     if (!domain || !isValidDomain(domain)) return domain
     const [domainName, company] = domain.split('.')
@@ -76,34 +81,6 @@ export function formatNumberString(str: string, size = 0) {
     if (!/\d+/.test(str)) return str
     if (size === 0) return str
     return `${str.substr(0, size)}...${str.substr(-size)}`
-}
-
-export function formatAmountPrecision(
-    amount?: BigNumber.Value,
-    token_decimals?: number,
-    decimalPlaces = 6,
-    precision = 12,
-): string {
-    const _amount = new BigNumber(formatBalance(amount, token_decimals))
-    const _decimalPlaces = decimalPlaces < 0 ? 6 : decimalPlaces
-    const _precision = precision < 0 ? 12 : precision
-
-    if (_amount.isZero()) {
-        return '0'
-    }
-
-    if (_amount.isLessThan(1)) {
-        return _amount.toFixed(_precision)
-    }
-
-    const len = _amount.precision() - _amount.decimalPlaces()
-    if (len <= _decimalPlaces) {
-        return _amount.toPrecision(len + _decimalPlaces)
-    } else if (len >= _precision) {
-        return _amount.toPrecision(len)
-    }
-
-    return _amount.toPrecision(_precision)
 }
 
 export function formatWeiToGwei(value: BigNumber.Value) {

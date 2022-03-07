@@ -1,6 +1,5 @@
 import { FormattedAddress, FormattedBalance } from '@masknet/shared'
 import {
-    formatAmountPrecision,
     formatBalance,
     formatEthereumAddress,
     FungibleTokenDetailed,
@@ -68,7 +67,7 @@ const useStyles = makeStyles()((theme) => ({
     title: {
         padding: theme.spacing(2),
         textAlign: 'center',
-        color: theme.palette.text.secondary,
+        color: theme.palette.text.primary,
         fontSize: 18,
     },
     line: {
@@ -87,14 +86,10 @@ const useStyles = makeStyles()((theme) => ({
         wordBreak: 'keep-all',
     },
     button: {
-        color: '#fff',
         padding: theme.spacing(2),
         [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
             padding: theme.spacing(0, 0, 1, 0),
         },
-    },
-    buttonText: {
-        color: '#fff',
     },
     link: {
         padding: 0,
@@ -208,7 +203,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
 
                 <Grid item xs={6}>
                     <Paper className={classes.label}>
-                        <Typography>{t('plugin_ito_allocation_per_wallet')}</Typography>
+                        <Typography>{t('plugin_ito_allocation_per_wallet_title')}</Typography>
                     </Paper>
                 </Grid>
                 <Grid item xs={6}>
@@ -226,7 +221,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
 
                 <Grid item xs={6}>
                     <Paper className={classes.label}>
-                        <Typography>{t('plugin_ito_begin_time')}</Typography>
+                        <Typography>{t('plugin_ito_begin_time_title')}</Typography>
                     </Paper>
                 </Grid>
                 <Grid item xs={6}>
@@ -237,7 +232,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
 
                 <Grid item xs={6}>
                     <Paper className={classes.label}>
-                        <Typography>{t('plugin_ito_end_time')}</Typography>
+                        <Typography>{t('plugin_ito_end_time_title')}</Typography>
                     </Paper>
                 </Grid>
                 <Grid item xs={6}>
@@ -314,14 +309,9 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                     </ActionButton>
                 </Grid>
                 <Grid item lg={6} xs={12} className={classes.button}>
-                    <ActionButton className={classes.buttonText} fullWidth variant="contained" onClick={onDone}>
+                    <ActionButton fullWidth variant="contained" onClick={onDone}>
                         {t('plugin_ito_send_text', {
-                            total: formatAmountPrecision(
-                                poolSettings?.total,
-                                poolSettings?.token?.decimals,
-                                undefined,
-                                poolSettings?.token?.decimals,
-                            ),
+                            total: formatBalance(poolSettings?.total, poolSettings?.token?.decimals),
                             symbol: poolSettings?.token?.symbol,
                         })}
                     </ActionButton>

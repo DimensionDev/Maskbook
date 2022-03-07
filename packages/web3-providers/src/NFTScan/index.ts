@@ -1,10 +1,11 @@
-import { ChainId, createERC721ContractDetailed, createERC721Token } from '@masknet/web3-shared-evm'
+import { ChainId, createERC721ContractDetailed, createERC721Token, resolveResourceLink } from '@masknet/web3-shared-evm'
 import addSeconds from 'date-fns/addSeconds'
 import isBefore from 'date-fns/isBefore'
 import urlcat from 'urlcat'
 import type { NonFungibleTokenAPI } from '..'
 import { NFTSCAN_ACCESS_TOKEN_URL, NFTSCAN_BASE_API } from './constants'
 import type { NFTScanAsset, NFT_Assets } from './types'
+import { courier, isProxyENV } from '../helpers'
 
 const tokenCache = new Map<'token', { token: string; expiration: Date }>()
 
@@ -13,7 +14,7 @@ async function getToken() {
     if (token && isBefore(Date.now(), token.expiration)) {
         return token.token
     }
-    const response = await fetch(NFTSCAN_ACCESS_TOKEN_URL, { mode: 'cors' })
+    const response = await fetch(NFTSCAN_ACCESS_TOKEN_URL, { ...(!isProxyENV() && { mode: 'cors' }) })
     const {
         data,
     }: {
@@ -27,9 +28,10 @@ async function getToken() {
 }
 
 async function fetchAsset<T>(path: string, body?: unknown) {
-    const response = await fetch(urlcat(NFTSCAN_BASE_API, path), {
+    const url = courier(urlcat(NFTSCAN_BASE_API, path))
+    const response = await fetch(url, {
         method: 'POST',
-        headers: { 'Access-Token': await getToken() },
+        headers: { 'Access-Token': await getToken(), 'Content-type': 'application/json' },
         body: JSON.stringify(body),
     })
     if (!response.ok) return
@@ -37,7 +39,12 @@ async function fetchAsset<T>(path: string, body?: unknown) {
 }
 
 function createERC721ContractDetailedFromAssetContract(asset: NFTScanAsset) {
-    return createERC721ContractDetailed(ChainId.Mainnet, asset.trade_contract, undefined, asset.trade_symbol)
+    return createERC721ContractDetailed(
+        ChainId.Mainnet,
+        asset.trade_contract ?? asset.nft_contract_address,
+        undefined,
+        asset.trade_symbol,
+    )
 }
 
 function createERC721TokenAsset(asset: NFTScanAsset) {
@@ -45,14 +52,14 @@ function createERC721TokenAsset(asset: NFTScanAsset) {
         name?: string
         description?: string
         image?: string
-    } = JSON.parse(asset.nft_json)
+    } = JSON.parse(asset.nft_json ?? '{}')
     const detailed = createERC721ContractDetailedFromAssetContract(asset)
     return createERC721Token(
         detailed,
         {
-            name: payload.name ?? '',
-            description: payload.description ?? '',
-            mediaUrl: payload.image ?? '',
+            name: payload?.name ?? asset.nft_name ?? asset.nft_platform_name ?? '',
+            description: payload?.description ?? '',
+            mediaUrl: resolveResourceLink(asset.nft_cover ?? asset.nft_content_uri ?? payload.image ?? ''),
             owner: asset.nft_holder ?? '',
         },
         asset.token_id,
@@ -65,13 +72,16 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
             erc: 'erc721',
             user_address: address,
         })
-        if (!response) return []
+        if (!response?.data) return []
         return response.data
             .map((x) => {
                 const contractDetailed = createERC721ContractDetailed(
                     ChainId.Mainnet,
                     x.nft_contract_address,
                     x.nft_platform_name,
+                    undefined,
+                    undefined,
+                    x.nft_platform_image,
                 )
                 const balance = x.nft_asset.length
                 return { contractDetailed, balance }
@@ -88,7 +98,10 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
         return createERC721TokenAsset(response.data)
     }
 
-    async getTokens(from: string, { chainId = ChainId.Mainnet, page = 0, size = 50 }: NonFungibleTokenAPI.Options) {
+    async getTokens(
+        from: string,
+        { chainId = ChainId.Mainnet, page = 0, size = 50, pageInfo }: NonFungibleTokenAPI.Options,
+    ) {
         const response = await fetchAsset<{
             content: NFTScanAsset[]
             page_index: number
@@ -96,11 +109,31 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
             total: number
         }>('getAllNftByUserAddress', {
             page_size: size,
-            page_index: page,
-            use_address: from,
-            erc: 'erc721',
+            page_index: page + 1,
+            user_address: from,
+            erc: pageInfo?.type ?? 'erc721',
         })
-        if (!response) return []
-        return response.data.content.map(createERC721TokenAsset)
+        if (!response?.data)
+            return {
+                data: [],
+                hasNextPage: false,
+            }
+        const data =
+            response.data.content.map(createERC721TokenAsset).map((x) => ({ ...x, provideBy: 'NFTScan' })) ?? []
+        const total = response.data.total
+        return {
+            data,
+            hasNextPage: total - (page + 1) * size > 0,
+        }
     }
+}
+
+export function getNFTScanNFTList(address: string) {
+    const nftScanAPI = new NFTScanAPI()
+    return nftScanAPI.getContractBalance(address)
+}
+
+export function getNFTScanNFTs(address: string, type: 'erc721' | 'erc1155', page?: number, size?: number) {
+    const nftScanAPI = new NFTScanAPI()
+    return nftScanAPI.getTokens(address, { page, size, pageInfo: { type } })
 }

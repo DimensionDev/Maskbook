@@ -1,9 +1,9 @@
 import type { RecentTransaction } from '../../../../../../plugins/Wallet/services'
 import { makeStyles } from '@masknet/theme'
-import React, { memo } from 'react'
+import { memo, useMemo } from 'react'
 import { Box, Button, ListItem, ListItemText, Typography } from '@mui/material'
-import { formatEthereumAddress, TransactionStatusType } from '../../../../../../../../web3-shared/evm'
-import { ArrowRightIcon, CircleCloseIcon, InteractionCircleIcon, LoaderIcon } from '@masknet/icons'
+import { formatEthereumAddress, TransactionStatusType } from '@masknet/web3-shared-evm'
+import { ArrowRightIcon, CircleCloseIcon, InteractionCircleIcon, LoaderIcon, UploadIcon } from '@masknet/icons'
 import { RecentTransactionDescription } from '../../../../../../plugins/Wallet/SNSAdaptor/WalletStatusDialog/TransactionDescription'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../../../../utils'
@@ -29,6 +29,10 @@ const useStyles = makeStyles()({
     },
     interaction: {
         stroke: '#1C68F3',
+        fill: 'none',
+    },
+    send: {
+        stroke: '#FFB915',
         fill: 'none',
     },
     description: {
@@ -69,16 +73,22 @@ export const ActivityListItem = memo<ActivityListItemProps>(
         const { Utils } = useWeb3State()
         const { value: domain } = useReverseAddress(toAddress, NetworkPluginID.PLUGIN_EVM)
 
+        const transactionIcon = useMemo(() => {
+            switch (transaction.status) {
+                case TransactionStatusType.NOT_DEPEND:
+                    return <LoaderIcon className={classes.loader} />
+                case TransactionStatusType.CANCELLED:
+                case TransactionStatusType.SUCCEED:
+                    if (transaction.computedPayload?.name === 'transfer') return <UploadIcon className={classes.send} />
+                    return <InteractionCircleIcon className={classes.interaction} />
+                case TransactionStatusType.FAILED:
+                default:
+                    return <CircleCloseIcon style={{ fill: 'none' }} />
+            }
+        }, [transaction.status, transaction.computedPayload?.name])
         return (
             <ListItem className={classes.item}>
-                {transaction.status === TransactionStatusType.NOT_DEPEND ? (
-                    <LoaderIcon className={classes.loader} />
-                ) : transaction.status === TransactionStatusType.SUCCEED ||
-                  transaction.status === TransactionStatusType.CANCELLED ? (
-                    <InteractionCircleIcon className={classes.interaction} />
-                ) : (
-                    <CircleCloseIcon style={{ fill: 'none' }} />
-                )}
+                {transactionIcon}
                 <ListItemText style={{ marginLeft: 15 }}>
                     <Typography className={classes.description}>
                         <RecentTransactionDescription {...transaction} />
@@ -91,7 +101,7 @@ export const ActivityListItem = memo<ActivityListItemProps>(
                     ) : (
                         <Typography className={classes.secondaryDesc}>
                             {transaction.at ? `${formatDateTime(transaction.at, 'MMM dd')}.  ` : null}
-                            {!!toAddress
+                            {toAddress
                                 ? t('popups_wallet_activity_to_address', {
                                       address: Utils?.formatDomainName?.(domain) || formatEthereumAddress(toAddress, 4),
                                   })

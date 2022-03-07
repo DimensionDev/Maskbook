@@ -1,6 +1,5 @@
 import { lazy, Suspense } from 'react'
-import { Redirect, Route, Switch } from 'react-router-dom'
-import { HashRouter } from 'react-router-dom'
+import { Redirect, Route, Switch, HashRouter } from 'react-router-dom'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra'
 import { PopupRoutes } from '@masknet/shared-base'
 // eslint-disable-next-line import/no-deprecated
@@ -22,7 +21,6 @@ const SwapPage = lazy(() => import('./pages/Swap'))
 const RequestPermissionPage = lazy(() => import('./RequestPermission'))
 const PermissionAwareRedirect = lazy(() => import('./PermissionAwareRedirect'))
 const ThirdPartyRequestPermission = lazy(() => import('./ThirdPartyRequestPermission'))
-const SignRequest = lazy(() => import('./SignRequest'))
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
@@ -45,9 +43,6 @@ export default function Popups() {
                             </Route>
                             <Route path={PopupRoutes.ThirdPartyRequestPermission} exact>
                                 <ThirdPartyRequestPermission />
-                            </Route>
-                            <Route path={PopupRoutes.SignRequest} exact>
-                                <SignRequest />
                             </Route>
                             <Route children={<Redirect to={PopupRoutes.Personas} />} />
                         </Switch>

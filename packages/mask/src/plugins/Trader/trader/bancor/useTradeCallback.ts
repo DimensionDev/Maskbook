@@ -1,15 +1,14 @@
 import { useCallback, useMemo, useState } from 'react'
 import stringify from 'json-stable-stringify'
 import { GasOptionConfig, TransactionState, TransactionStateType, useAccount, useWeb3 } from '@masknet/web3-shared-evm'
-import type { SwapBancorRequest } from '../../types'
-import type { TradeComputed } from '../../types'
+import type { SwapBancorRequest, TradeComputed } from '../../types'
 import { PluginTraderRPC } from '../../messages'
 import { pick } from 'lodash-unified'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest> | null, gasConfig?: GasOptionConfig) {
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-    const web3 = useWeb3(false, chainId)
+    const web3 = useWeb3({ chainId })
     const account = useAccount()
     const [tradeState, setTradeState] = useState<TransactionState>({
         type: TransactionStateType.UNKNOWN,

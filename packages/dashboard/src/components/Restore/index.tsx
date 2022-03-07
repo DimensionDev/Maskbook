@@ -1,7 +1,6 @@
 import { memo } from 'react'
 import { Tab } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { ButtonGroupTabList, useTabs } from '@masknet/theme'
+import { makeStyles, ButtonGroupTabList, useTabs } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
 import { RestoreFromLocal } from './RestoreFromLocal'
 import { RestoreFromMnemonic } from './RestoreFromMnemonic'

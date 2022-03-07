@@ -67,7 +67,7 @@ interface PollCardProps {
 export function PollCardUI(props: PollCardProps) {
     const { poll, onClick, vote, status } = props
     const { classes } = useStyles()
-    const isClosed = Date.now() > poll.end_time ? true : false
+    const isClosed = Date.now() > poll.end_time
     const { t } = useI18N()
     const lang = useLanguage()
 
@@ -143,7 +143,7 @@ export function PollCardUI(props: PollCardProps) {
                 ))}
             </List>
             <Typography variant="body2" classes={{ root: classes.deadline }}>
-                {isClosed ? `${t('plugin_poll_status_closed')}` : `${getDeadline(poll.end_time)}`}
+                {isClosed ? t('plugin_poll_status_closed') : getDeadline(poll.end_time)}
             </Typography>
         </Card>
     )

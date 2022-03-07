@@ -2,7 +2,7 @@ import { omit } from 'lodash-unified'
 import type BigNumber from 'bignumber.js'
 import type { Result } from 'ts-results'
 import { ChainId, isNativeTokenAddress } from '@masknet/web3-shared-evm'
-import { createRenderWithMetadata, createTypedMessageMetadataReader, type TypedMessage } from '@masknet/shared-base'
+import { createRenderWithMetadata, createTypedMessageMetadataReader, type TypedMessage } from '@masknet/typed-message'
 import { ITO_MetaKey_1, ITO_MetaKey_2 } from '../constants'
 import type { JSON_PayloadInMask, JSON_PayloadOutMask } from '../types'
 import schemaV1 from '../schema-v1.json'
@@ -28,6 +28,7 @@ export function gcd(a: BigNumber, b: BigNumber) {
         b_ = a_
         a_ = temp
     }
+    // eslint-disable-next-line no-constant-condition
     while (true) {
         if (b_.isZero()) return a_
         a_ = a_.mod(b_)

@@ -20,6 +20,12 @@ export enum BoxState {
     ERROR = 7,
     /** 404 */
     NOT_FOUND = 8,
+    /** leaf not found */
+    NOT_IN_WHITELIST = 9,
+    /** insufficient holder token */
+    INSUFFICIENT_HOLDER_TOKEN = 10,
+    /** not qualified */
+    NOT_QUALIFIED = 11,
 }
 
 export interface PaymentOption {
@@ -47,6 +53,7 @@ export interface BoxInfo {
     sold: number
     startAt: Date
     endAt: Date
+    started: boolean
     tokenIds: string[]
     tokenIdsPurchased: string[]
     tokenAddress: string

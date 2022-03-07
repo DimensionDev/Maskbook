@@ -1,7 +1,6 @@
 import { memo, useCallback, useEffect, useState } from 'react'
 import { Alert, Box, Button, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { MaskColorVar } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InfoIcon, RefreshIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../../../locales'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
@@ -80,7 +79,7 @@ const CreateMnemonic = memo(() => {
     const location = useLocation() as { search: Search; state: { password: string } }
     const navigate = useNavigate()
     const [open, setOpen] = useState(false)
-    const [words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback] = useMnemonicWordsPuzzle()
+    const { words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback } = useMnemonicWordsPuzzle()
     const [searchParams] = useSearchParams()
     const { value: hasPassword, loading, retry } = useAsyncRetry(PluginServices.Wallet.hasPassword, [])
 
