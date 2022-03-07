@@ -41,14 +41,23 @@ const rainbowBorderKeyFrames: Keyframes = keyframes`
 const useStyles = makeStyles()((theme) => ({
     root: {},
     miniBorder: {
-        transform: 'scale(0.94) translate(7px, 6px) translateZ(0)',
+        transform: 'scale(0.94) translate(7px, 6px)',
         strokeWidth: 6,
         stroke: '#00f8ff',
         fill: 'none',
+        '@supports (translate: 0)': {
+            transform: 'none',
+            translate: '7px 6px',
+        },
     },
     borderPath: {
         transform: 'scale(0.98, 1.035) translate(3px, -2px)',
         strokeWidth: 3,
+        '@supports (translate: 0)': {
+            transform: 'none',
+            scale: '0.98, 1.035',
+            translate: '3px, -2px',
+        },
     },
     background: {
         transform: 'scale(1, 1.05) translate(1px, -3px)',
@@ -57,6 +66,11 @@ const useStyles = makeStyles()((theme) => ({
         stroke: 'black',
         strokeLinecap: 'round',
         strokeLinejoin: 'round',
+        '@supports (translate: 0)': {
+            transform: 'none',
+            scale: '1, 1.5',
+            translate: '1px, -3px',
+        },
     },
     rainbowBorder: {
         animation: `${rainbowBorderKeyFrames} 6s linear infinite`,
@@ -67,12 +81,25 @@ const useStyles = makeStyles()((theme) => ({
     },
     text: {
         transform: 'translate(1px, -5px) ',
+        '@supports (translate: 0)': {
+            transform: 'none',
+            translate: '1px, -5px',
+        },
     },
     price: {
         transform: 'translate(0px, -5px) ',
+        '@supports (translate: 0)': {
+            transform: 'none',
+            translate: '0px, -5px',
+        },
     },
     namePath: {
         transform: 'scale(0.9) translate(10px, 10px)',
+        '@supports (translate: 0)': {
+            transform: 'none',
+            translate: '10px, 10px',
+            scale: 0.9,
+        },
     },
 }))
 
