@@ -1,6 +1,7 @@
-import { useRef, forwardRef, createContext, useContext } from 'react'
+/* eslint-disable react-hooks/rules-of-hooks */
+import { useRef, forwardRef, createContext, useContext, useEffect } from 'react'
 import type { PopperProps } from '@mui/material'
-import { StyleSheetsContext } from './Contexts'
+import { PreventEventPropagationListContext, StyleSheetsContext } from './Contexts'
 
 let mountingPoint: HTMLDivElement
 let mountingShadowRoot: ShadowRoot
@@ -31,23 +32,39 @@ export const NoEffectUsePortalShadowRootContext = createContext(false)
  * ))
  */
 export function usePortalShadowRoot(renderer: (container: HTMLElement | undefined) => null | JSX.Element) {
+    const disabled = useRef(useContext(NoEffectUsePortalShadowRootContext)).current
     // we ignore the changes on this property during multiple render
     // so we can violates the React hooks rule and still be safe.
-    const disabled = useRef(useContext(NoEffectUsePortalShadowRootContext)).current
     if (disabled) return renderer(undefined)
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const sheets = useContext(StyleSheetsContext)
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const { container } = useRefInit(() => {
+    const signal = useRef<AbortController>(null!)
+    const preventEventPropagationList = useContext(PreventEventPropagationListContext)
+    const { container, root } = useRefInit(() => {
+        signal.current = new AbortController()
+
         const portal = PortalShadowRoot()
         const root = portal.appendChild(document.createElement('div'))
         root.dataset.portalShadowRoot = ''
         const shadow = root.attachShadow({ mode: 'open' })
+
+        const stop = (e: Event): void => e.stopPropagation()
+        for (const each of preventEventPropagationList) {
+            shadow.addEventListener(each, stop, { signal: signal.current.signal })
+        }
         const container = shadow.appendChild(document.createElement('main'))
         sheets.map((x) => x.addContainer(shadow))
-        return { container }
+        return { container, root }
     })
+    useEffect(
+        () => () => {
+            setTimeout(() => {
+                root.remove()
+                signal.current.abort()
+            }, 2000)
+        },
+        [],
+    )
 
     return renderer(container)
 }
