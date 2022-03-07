@@ -145,7 +145,6 @@ export const resolveChainColor = createLookupTableResolver<ChainId, string>(
         [ChainId.Fantom]: 'rgb(19, 181, 236)',
         [ChainId.Aurora]: 'rgb(112, 212, 74)',
         [ChainId.Aurora_Testnet]: 'rgb(112, 212, 74)',
-        [ChainId.Heco]: 'rgb(0, 148, 62)',
     },
     'rgb(214, 217, 220)',
 )

@@ -17,6 +17,7 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
                 TradeProvider.DODO,
                 TradeProvider.BANCOR,
                 TradeProvider.OPENOCEAN,
+                TradeProvider.MDEX,
             ]
         case NetworkType.Polygon:
             return [
