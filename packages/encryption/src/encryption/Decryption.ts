@@ -1,11 +1,6 @@
 import { unreachable } from '@dimensiondev/kit'
-import {
-    decodeTypedMessageFromDocument,
-    decodeTypedMessageV38ToV40Format,
-    AESCryptoKey,
-    EC_Public_CryptoKey,
-    andThenAsync,
-} from '@masknet/shared-base'
+import { decodeTypedMessageFromDocument, decodeTypedMessageV38ToV40Format } from '@masknet/typed-message'
+import { AESCryptoKey, EC_Public_CryptoKey, andThenAsync } from '@masknet/shared-base'
 import { None, Result } from 'ts-results'
 import { AESAlgorithmEnum, PayloadParseResult } from '../payload'
 import { decryptWithAES, importAESFromJWK } from '../utils'

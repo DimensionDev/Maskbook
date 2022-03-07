@@ -37,16 +37,20 @@ export function usePools(
     }, [chainId, poolKeys])
 
     const poolAddresses = useMemo(() => {
-        return transformed.map((value) => {
-            if (!context?.IS_UNISWAP_V3_LIKE) return ''
-            if (!context?.FACTORY_CONTRACT_ADDRESS || !value) return ''
-            return computePoolAddress({
-                factoryAddress: context.FACTORY_CONTRACT_ADDRESS,
-                tokenA: value[0],
-                tokenB: value[1],
-                fee: value[2],
+        try {
+            return transformed.map((value) => {
+                if (!context?.IS_UNISWAP_V3_LIKE) return ''
+                if (!context?.FACTORY_CONTRACT_ADDRESS || !value) return ''
+                return computePoolAddress({
+                    factoryAddress: context.FACTORY_CONTRACT_ADDRESS,
+                    tokenA: value[0],
+                    tokenB: value[1],
+                    fee: value[2],
+                })
             })
-        })
+        } catch {
+            return []
+        }
     }, [chainId, transformed, context?.FACTORY_CONTRACT_ADDRESS])
 
     const poolContracts = usePoolContracts(poolAddresses, chainId)

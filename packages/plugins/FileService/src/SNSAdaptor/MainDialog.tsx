@@ -8,7 +8,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { Entry } from './components'
 import { META_KEY_2 } from '../constants'
 import { Exchange } from './hooks/Exchange'
-import type { FileInfo } from '../types'
+import type { FileInfo, DialogCloseCallback } from '../types'
 import { useCompositionContext } from '@masknet/plugin-infra'
 
 interface Props {
@@ -62,12 +62,28 @@ const FileServiceDialog: React.FC<Props> = (props) => {
         closeWalletStatusDialog()
         props.onClose()
     }
+
+    let onDialogCloseCallback: DialogCloseCallback | null
+    const callDialogClose = () => {
+        try {
+            onDialogCloseCallback?.()
+        } catch (error) {}
+        onDialogCloseCallback = null
+    }
+
     const onDecline = () => {
+        if (onDialogCloseCallback) {
+            callDialogClose()
+            return
+        }
         if (!uploading) {
             props.onClose()
             return
         }
         showSnackbar(t.uploading_on_cancel())
+    }
+    const onDialogClose = (cb: DialogCloseCallback) => {
+        onDialogCloseCallback = cb
     }
     return (
         <MaskDialog
@@ -75,8 +91,8 @@ const FileServiceDialog: React.FC<Props> = (props) => {
             open={props.open}
             title={t.__display_name()}
             onClose={onDecline}>
-            <DialogContent style={{ minWidth: 515 }}>
-                <Exchange onUploading={setUploading} onInsert={setSelectedFileInfo}>
+            <DialogContent>
+                <Exchange onDialogClose={onDialogClose} onUploading={setUploading} onInsert={setSelectedFileInfo}>
                     <Entry />
                 </Exchange>
             </DialogContent>

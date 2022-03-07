@@ -7,7 +7,25 @@ const proto = HTMLInputElement.prototype
 const { defineProperty, deleteProperty } = Reflect
 const setTimeoutCaptured = setTimeout.bind(window)
 const clearTimeoutCaptured = clearTimeout.bind(window)
-export function hookInputUploadOnce(...[format, fileName, fileArray]: InternalEvents['hookInputUploadOnce']) {
+
+/**
+ * This API can mock a file upload in React applications when injected script has been injected into the page.
+ *
+ * If the <input type='file' /> element is available, you can use the API like this:
+ *     input.focus()
+ *     hookInputUploadOnce(format, fileName, file, true)
+ *
+ * If the <input type='file' /> is dynamically generated after the user clicks "Upload" button on the web page, you can use the API like this:
+ *     hookInputUploadOnce(format, fileName, file, false)
+ *     uploadButton.click()
+ * @param format
+ * @param fileName
+ * @param fileArray
+ * @param triggerOnActiveElementNow
+ */
+export function hookInputUploadOnce(
+    ...[format, fileName, fileArray, triggerOnActiveElementNow]: InternalEvents['hookInputUploadOnce']
+) {
     let timer: ReturnType<typeof setTimeout> | null = null
     const e = new no_xray_Event('change', {
         bubbles: true,
@@ -35,5 +53,9 @@ export function hookInputUploadOnce(...[format, fileName, fileArray]: InternalEv
             proto.click = old
             deleteProperty(this, 'files')
         }, 200)
+    }
+
+    if (triggerOnActiveElementNow && document.activeElement instanceof HTMLInputElement) {
+        document.activeElement?.click()
     }
 }

@@ -1,8 +1,8 @@
 import { useContext, useRef, useEffect, useState, useMemo } from 'react'
 import classNames from 'classnames'
 import { Box, List, ListItem, Typography, LinearProgress, styled, Button, linearProgressClasses } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { ShadowRootTooltip, useI18N } from '../../../utils'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { useI18N } from '../../../utils'
 import millify from 'millify'
 import { SnapshotContext } from '../context'
 import { useProposal } from './hooks/useProposal'
@@ -124,7 +124,7 @@ function Content() {
                                     disablePortal: true,
                                 }}
                                 title={
-                                    <Typography color="textPrimary" className={classes.ellipsisText}>
+                                    <Typography className={classes.ellipsisText}>
                                         {result.powerDetail.reduce((sum, cur, i) => {
                                             const name =
                                                 millify(cur.power, { precision: 2, lowercase: true }) + ' ' + cur.name

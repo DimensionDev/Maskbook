@@ -112,6 +112,7 @@ export interface PersonaRecord {
         parameter: { path: string; withPassword: boolean }
     }
     publicKey: EC_Public_JsonWebKey
+    publicHexKey?: string
     privateKey?: EC_Private_JsonWebKey
     localKey?: AESJsonWebKey
     nickname?: string

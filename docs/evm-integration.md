@@ -51,7 +51,7 @@ For API-based DEX, please ref to how other DEXes integrated:
 
 ### Deploy Contracts
 
-If there is no one deployed [these contracts](https://github.com/DimensionDev/misc_smart_contract.) on the chain. Please contact the team.
+If there is no one deployed [these contracts](https://github.com/DimensionDev/misc_smart_contract) on the chain. Please contact the team.
 
 - [ ] Multicall Contract
 - [ ] BalanceChecker
