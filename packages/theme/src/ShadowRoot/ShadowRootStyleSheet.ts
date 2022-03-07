@@ -11,27 +11,52 @@ const shadowHeadMap = new WeakMap<ShadowRoot, HTMLHeadElement>()
 export class StyleSheet {
     // Unlucky, emotion will create it's own StyleSheet and use isSpeedy, tags, keys and container for Global components.
     tags: any = []
-    container: HTMLElement
+    container!: HTMLElement
 
     private ctr = 0
     private containers = new Map<ShadowRoot, HTMLDivElement>()
+    // Those global stuffs, see https://github.com/emotion-js/emotion/issues/2675
+    private globalContainers = new Map<ShadowRoot, HTMLDivElement>()
     private _alreadyInsertedOrderInsensitiveRule = false
     constructor(public key: string, containerShadow: ShadowRoot) {
-        const head = getShadowRootHead(containerShadow)
-
-        const global = (this.container = document.createElement('div'))
-        global.dataset.globalOf = key
-        head.insertBefore(global, head.firstChild)
-
         this.addContainer(containerShadow)
+
+        // Otherwise it will dead loop
+        this.globalContainers.delete(containerShadow)
+
+        const append = Node.prototype.appendChild
+        this.container.appendChild = (child) => {
+            for (const globalContainer of this.globalContainers.values()) {
+                globalContainer.appendChild(child.cloneNode(true))
+
+                if (child instanceof HTMLStyleElement) {
+                    child.appendChild = (child) => {
+                        for (const globalContainer of this.globalContainers.values()) {
+                            const last = globalContainer.lastElementChild!
+                            last.appendChild(child.cloneNode(true))
+                        }
+                        append.call(child, child)
+                        return child
+                    }
+                }
+            }
+            append.call(this.container, child)
+            return child
+        }
     }
     addContainer(container: ShadowRoot) {
         if (this.containers.has(container)) return
 
         // setup tags
+        const head = getShadowRootHead(container)
+        {
+            const globalContainer = (this.container = document.createElement('div'))
+            globalContainer.dataset.globalKey = this.key
+            head.insertBefore(globalContainer, head.firstChild)
+            this.globalContainers.set(container, globalContainer)
+        }
         const localContainer = document.createElement('div')
         localContainer.dataset.key = this.key
-        const head = getShadowRootHead(container)
         head.appendChild(localContainer)
         this.containers.set(container, localContainer)
 
@@ -57,7 +82,7 @@ export class StyleSheet {
     }
 
     insert(rule: string) {
-        if (this.ctr % 65000 === 0) {
+        if (this.ctr % 25 === 0) {
             this._insertTag()
         }
 
@@ -79,7 +104,7 @@ export class StyleSheet {
         }
 
         for (const container of this.containers.values()) {
-            const tag = Array.from(container.children).at(-1)!
+            const tag = container.lastElementChild!
             tag.appendChild(document.createTextNode(rule))
         }
         this.ctr += 1

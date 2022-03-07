@@ -45,7 +45,7 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
             .filter(pickInjectorHook)
             .map((plugin) => (
                 <PropsContext.Provider key={plugin.ID} value={props}>
-                    <NestedShadowRootIsolation>
+                    <NestedShadowRootIsolation data-plugin={plugin.ID}>
                         <SinglePluginWithinErrorBoundary key={plugin.ID} plugin={plugin} />
                     </NestedShadowRootIsolation>
                 </PropsContext.Provider>
@@ -54,9 +54,11 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
     }
     return memo(function PluginsInjectionHookRenderErrorBoundary(props: PropsType) {
         return (
-            <ErrorBoundary>
-                <PluginsInjectionHookRender {...props} />
-            </ErrorBoundary>
+            <span data-plugin-render="">
+                <ErrorBoundary>
+                    <PluginsInjectionHookRender {...props} />
+                </ErrorBoundary>
+            </span>
         )
     })
 }

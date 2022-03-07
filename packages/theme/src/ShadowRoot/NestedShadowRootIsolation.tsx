@@ -7,8 +7,11 @@ import { StyleSheetsContext } from './Contexts'
  *
  * It MUST under a <ShadowRootStyleProvider /> component.
  */
-export function NestedShadowRootIsolation(props: React.PropsWithChildren<{}>) {
-    const [dom, setDOM] = useState<HTMLDivElement | null>()
+export function NestedShadowRootIsolation({
+    children,
+    ...props
+}: React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>) {
+    const [dom, setDOM] = useState<HTMLSpanElement | null>()
     const sheets = useContext(StyleSheetsContext)
 
     const container = useRef<HTMLDivElement>()
@@ -26,8 +29,8 @@ export function NestedShadowRootIsolation(props: React.PropsWithChildren<{}>) {
     }, [dom])
 
     return (
-        <div data-style-portal ref={setDOM}>
-            {createPortal(props.children, container.current)}
-        </div>
+        <span {...props} ref={setDOM}>
+            {createPortal(children, container.current)}
+        </span>
     )
 }
