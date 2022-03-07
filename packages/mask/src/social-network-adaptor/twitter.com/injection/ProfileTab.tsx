@@ -78,7 +78,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-async function clear() {
+export async function clear() {
     const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
     if (!eleTab) return
     const style = window.getComputedStyle(eleTab)
