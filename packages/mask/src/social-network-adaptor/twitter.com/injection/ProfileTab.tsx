@@ -80,7 +80,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-async function clear() {
+async function hideTwitterActivatedContent() {
     const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
     if (!eleTab) return
     const style = window.getComputedStyle(eleTab)
@@ -108,7 +108,7 @@ async function clear() {
     }
 }
 
-function reset() {
+function resetTwitterActivatedConten() {
     const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
     if (!eleTab) return
 
@@ -136,8 +136,8 @@ export function ProfileTabAtTwitter() {
         <ProfileTab
             title="Web3"
             classes={classes}
-            reset={reset}
-            clear={clear}
+            reset={resetTwitterActivatedConten}
+            clear={hideTwitterActivatedContent}
             children={<div className={classes.line} />}
         />
     )
