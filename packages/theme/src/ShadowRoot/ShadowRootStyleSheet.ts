@@ -13,14 +13,12 @@ export class StyleSheet {
     // Unlucky, emotion will create it's own StyleSheet and use isSpeedy, tags, keys and container for Global components.
     readonly tags: any = []
     container!: HTMLElement
-    readonly isSpeedy: boolean
+    readonly isSpeedy: boolean = false
     constructor(public key: string, containerShadow: ShadowRoot) {
         if (constructableStyleSheetEnabled && 'adoptedStyleSheets' in Document.prototype) {
             this.implementation = new ConstructableStyleSheet(key, containerShadow)
-            this.isSpeedy = true
         } else {
             this.implementation = new SynchronizeStyleSheet(key, containerShadow)
-            this.isSpeedy = false
         }
         this.addContainer(containerShadow)
         // To avoid dead loop.
