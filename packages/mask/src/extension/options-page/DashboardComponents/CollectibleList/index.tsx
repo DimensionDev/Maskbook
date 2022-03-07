@@ -292,11 +292,27 @@ export function CollectionList({
 
     if (!isLoading && !collectibles.length)
         return (
-            <Box display="flex" alignItems="center" justifyContent="center">
-                <Typography color="textPrimary" sx={{ paddingTop: 4, paddingBottom: 4 }}>
-                    {t('dashboard_no_collectible_found')}
-                </Typography>
-            </Box>
+            <>
+                {addressName && (
+                    <Stack direction="row" height={42} justifyContent="flex-end" alignItems="center" px={2}>
+                        <Box display="flex" alignItems="center" justifyContent="flex-end" flexWrap="wrap">
+                            <Button
+                                onClick={onSelectAddress}
+                                className={classes.button}
+                                variant="outlined"
+                                size="small">
+                                {formatEthereumAddress(addressName.label, 5)}
+                                <KeyboardArrowDownIcon />
+                            </Button>
+                        </Box>
+                    </Stack>
+                )}
+                <Box display="flex" alignItems="center" justifyContent="center">
+                    <Typography color="textPrimary" sx={{ paddingTop: 4, paddingBottom: 4 }}>
+                        {t('dashboard_no_collectible_found')}
+                    </Typography>
+                </Box>
+            </>
         )
 
     return (
