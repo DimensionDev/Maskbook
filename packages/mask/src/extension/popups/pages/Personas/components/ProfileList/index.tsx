@@ -278,7 +278,7 @@ export const ProfileListUI = memo<ProfileListUIProps>(
                                 <Typography fontSize={12} fontWeight={600}>
                                     @{identifier.userId}
                                 </Typography>
-                                {!is_valid ? (
+                                {!is_valid && identifier.network === 'twitter.com' ? (
                                     <Typography className={classes.tag}>
                                         {t('popups_persona_to_be_verified')}
                                     </Typography>
