@@ -34,7 +34,7 @@ function getShadowRootEmotionCache(shadow: ShadowRoot) {
     if (styleSheetMap.has(shadow)) return styleSheetMap.get(shadow)!
 
     // emotion doesn't allow numbers appears in the key
-    const instanceID = Math.random().toString(36).slice(2).replace(/\d/g, 'x')
+    const instanceID = Math.random().toString(36).slice(2).replace(/\d/g, 'x').slice(0, 4)
     const keyA = 'mui-' + instanceID
     const keyB = 'tss-' + instanceID
 
