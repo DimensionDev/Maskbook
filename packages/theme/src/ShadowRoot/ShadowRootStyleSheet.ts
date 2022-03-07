@@ -39,7 +39,7 @@ export class StyleSheet {
         throw new Error('Does not support SSR.')
     }
     insert(rule: string) {
-        if (this.implementation instanceof ConstructableStyleSheet) {
+        if (process.env.NODE_ENV !== 'production') {
             const isImportRule = rule.charCodeAt(0) === 64 && rule.charCodeAt(1) === 105
             if (isImportRule && this._alreadyInsertedOrderInsensitiveRule) {
                 // this would only cause problem in speedy mode
