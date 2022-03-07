@@ -46,7 +46,6 @@ export function usePortalShadowRoot(renderer: (container: HTMLElement | undefine
         const shadow = root.attachShadow({ mode: 'open' })
         const container = shadow.appendChild(document.createElement('main'))
         sheets.map((x) => x.addContainer(shadow))
-        console.log(shadow, sheets)
         return { container }
     })
 
