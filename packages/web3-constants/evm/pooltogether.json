@@ -17,8 +17,7 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": "",
-        "Heco": ""
+        "Aurora_Testnet": ""
     },
     "MASK_POOL_ADDRESS": {
         "Mainnet": "",
@@ -38,7 +37,6 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": "",
-        "Heco": ""
+        "Aurora_Testnet": ""
     }
 }

@@ -111,7 +111,6 @@ const SUPPORTED_CHAIN_ID_LIST = [
     ChainId.Fantom,
     ChainId.Aurora,
     ChainId.Avalanche,
-    ChainId.Heco,
 ]
 
 export interface MaskAppEntry {

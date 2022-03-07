@@ -17,8 +17,7 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": "",
-        "Heco": ""
+        "Aurora_Testnet": ""
     },
     "API_URL": {
         "Mainnet": "https://api-v2.dhedge.org/graphql",
@@ -38,7 +37,6 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": "",
-        "Heco": ""
+        "Aurora_Testnet": ""
     }
 }

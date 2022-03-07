@@ -192,7 +192,6 @@ export enum NetworkType {
     Fuse = 'Fuse',
     Metis = 'Metis',
     Optimistic = 'Optimistic',
-    Heco = 'Heco',
 }
 
 export enum DataProvider {

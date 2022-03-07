@@ -17,8 +17,7 @@
         "Celo": "celo-assets",
         "Fantom": "fantom-assets",
         "Aurora": "aurora-assets",
-        "Aurora_Testnet": "",
-        "Heco": "heco-assets"
+        "Aurora_Testnet": ""
     },
     "TRANSACTIONS_SCOPE_NAME": {
         "Mainnet": "transactions",
@@ -38,7 +37,6 @@
         "Celo": "celo-transactions",
         "Fantom": "fantom-transactions",
         "Aurora": "aurora-transactions",
-        "Aurora_Testnet": "",
-        "Heco": "heco-transactions"
+        "Aurora_Testnet": ""
     }
 }
