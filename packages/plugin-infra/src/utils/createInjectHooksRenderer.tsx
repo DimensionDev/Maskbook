@@ -46,7 +46,7 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
             .map((plugin) => (
                 <PropsContext.Provider key={plugin.ID} value={props}>
                     <ShadowRootIsolation data-plugin={plugin.ID}>
-                        <SinglePluginWithinErrorBoundary key={plugin.ID} plugin={plugin} />
+                        <SinglePluginWithinErrorBoundary plugin={plugin} />
                     </ShadowRootIsolation>
                 </PropsContext.Provider>
             ))
