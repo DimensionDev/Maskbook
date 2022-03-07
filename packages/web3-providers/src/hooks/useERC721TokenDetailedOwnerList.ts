@@ -9,6 +9,7 @@ import {
     getERC721TokenDetailedFromChain,
     safeNonPayableTransactionCall,
     useChainId,
+    ChainId,
 } from '@masknet/web3-shared-evm'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 import { NFTScan } from '../'
@@ -39,7 +40,8 @@ export function useERC721TokenDetailedOwnerList(
             setRefreshing(false)
             return
         }
-        const listsFromNFTScan = await getERC721TokenDetailedOwnerListFromNFTScan(contractDetailed, owner)
+        const listsFromNFTScan =
+            chainId === ChainId.Mainnet ? await getERC721TokenDetailedOwnerListFromNFTScan(contractDetailed, owner) : []
         const lists =
             listsFromNFTScan.length > 0
                 ? listsFromNFTScan
