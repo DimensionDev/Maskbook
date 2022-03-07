@@ -12,42 +12,28 @@ const constructableStyleSheetEnabled = true
 export class StyleSheet {
     // Unlucky, emotion will create it's own StyleSheet and use isSpeedy, tags, keys and container for Global components.
     readonly tags: any = []
-    container!: HTMLElement
-    readonly isSpeedy: boolean = false
+    readonly container = document.createElement('div')
+    readonly isSpeedy = false
     constructor(public key: string, containerShadow: ShadowRoot) {
-        if (constructableStyleSheetEnabled && 'adoptedStyleSheets' in Document.prototype) {
-            this.implementation = new ConstructableStyleSheet(key, containerShadow)
-        } else {
-            this.implementation = new SynchronizeStyleSheet(key, containerShadow)
-        }
+        this.implementation =
+            constructableStyleSheetEnabled && 'adoptedStyleSheets' in Document.prototype
+                ? new ConstructableStyleSheet()
+                : new SynchronizeStyleSheet()
         this.addContainer(containerShadow)
-        // To avoid dead loop.
-        this.globalContainers.delete(containerShadow)
 
-        const append = Node.prototype.appendChild
-        this.container.appendChild = (child) => {
-            for (const globalContainer of this.globalContainers.values()) {
-                globalContainer.appendChild(child.cloneNode(true))
-
-                if (child instanceof HTMLStyleElement) {
-                    child.appendChild = (child) => {
-                        for (const globalContainer of this.globalContainers.values()) {
-                            const last = globalContainer.lastElementChild!
-                            last.appendChild(child.cloneNode(true))
-                        }
-                        append.call(child, child)
-                        return child
-                    }
+        // fix the global styles
+        this.container.insertBefore = (child) => {
+            if (child instanceof HTMLStyleElement) {
+                child.appendChild = (child) => {
+                    if (child instanceof Text) this.implementation.insertGlobal(child.wholeText)
+                    return child
                 }
             }
-            append.call(this.container, child)
             return child
         }
     }
     addContainer(container: ShadowRoot) {
-        if (this.globalContainers.has(container)) return
-        this.addGlobalContainer(container)
-        this.implementation.addContainer(container)
+        this.implementation.addContainer(container, this.key)
     }
     hydrate() {
         throw new Error('Does not support SSR.')
@@ -76,57 +62,46 @@ export class StyleSheet {
     }
     private implementation: ConstructableStyleSheet | SynchronizeStyleSheet
     private _alreadyInsertedOrderInsensitiveRule = false
-    private globalContainers = new Map<ShadowRoot, HTMLDivElement>()
-    private addGlobalContainer(container: ShadowRoot) {
-        // setup tags
-        const head = getShadowRootHead(container)
-        const globalContainer = (this.container = document.createElement('div'))
-        globalContainer.dataset.globalKey = this.key
-        head.insertBefore(globalContainer, head.firstChild)
-        this.globalContainers.set(container, globalContainer)
-    }
 }
 class ConstructableStyleSheet {
     private sheet = new CSSStyleSheet()
-    constructor(public key: string, containerShadow: ShadowRoot) {
-        this.addContainer(containerShadow)
-    }
+    private globalSheet = new CSSStyleSheet()
+    private added = new WeakSet<ShadowRoot>()
     addContainer(container: ShadowRoot) {
-        container.adoptedStyleSheets = [...(container.adoptedStyleSheets || []), this.sheet]
+        if (this.added.has(container)) return
+        this.added.add(container)
+        container.adoptedStyleSheets = [this.globalSheet, ...(container.adoptedStyleSheets || []), this.sheet]
     }
     insert(rule: string) {
-        try {
-            this.sheet.insertRule(rule, this.sheet.cssRules.length)
-        } catch (error) {
-            if (
-                process.env.NODE_ENV !== 'production' &&
-                !/:(-moz-placeholder|-moz-focus-inner|-moz-focusring|-ms-input-placeholder|-moz-read-write|-moz-read-only|-ms-clear){/.test(
-                    rule,
-                )
-            ) {
-                console.error(`There was a problem inserting the following rule: "${rule}"`, error)
-            }
-        }
+        insertRuleSpeedy(this.sheet, rule)
+    }
+    insertGlobal(rule: string) {
+        insertRuleSpeedy(this.globalSheet, rule)
     }
     flush() {
         this.sheet.replace('')
+        this.globalSheet.replace('')
     }
 }
 class SynchronizeStyleSheet {
     private ctr = 0
     private containers = new Map<ShadowRoot, HTMLDivElement>()
-    constructor(public key: string, containerShadow: ShadowRoot) {
-        this.addContainer(containerShadow)
-    }
-    addContainer(container: ShadowRoot) {
+    addContainer(container: ShadowRoot, tag: string) {
         if (this.containers.has(container)) return
 
         // setup tags
         const head = getShadowRootHead(container)
         const localContainer = document.createElement('div')
-        localContainer.dataset.key = this.key
+        localContainer.dataset.styleContainer = tag
         head.appendChild(localContainer)
         this.containers.set(container, localContainer)
+
+        {
+            const style = createStyleElement()
+            style.dataset.globalStyleOf = tag
+            head.insertBefore(style, head.firstChild)
+            this.globalContainers.set(container, style)
+        }
 
         // copy styles
         const first = this.containers.entries().next()
@@ -149,6 +124,11 @@ class SynchronizeStyleSheet {
         }
         this.ctr += 1
     }
+    insertGlobal(rule: string) {
+        for (const style of this.globalContainers.values()) {
+            style.appendChild(document.createTextNode(rule))
+        }
+    }
     flush() {
         for (const container of this.containers.values()) {
             for (const tag of container.children) {
@@ -162,6 +142,7 @@ class SynchronizeStyleSheet {
             container.appendChild(createStyleElement())
         }
     }
+    private globalContainers = new Map<ShadowRoot, HTMLStyleElement>()
 }
 
 function getShadowRootHead(shadow: ShadowRoot) {
@@ -173,11 +154,22 @@ function getShadowRootHead(shadow: ShadowRoot) {
     return shadowHeadMap.get(shadow)!
 }
 
-function createStyleElement(options: { nonce?: string } = {}): HTMLStyleElement {
+function createStyleElement(): HTMLStyleElement {
     const tag = document.createElement('style')
-    if (options.nonce !== undefined) {
-        tag.setAttribute('nonce', options.nonce)
-    }
     tag.appendChild(document.createTextNode(''))
     return tag
+}
+function insertRuleSpeedy(sheet: CSSStyleSheet, rule: string) {
+    try {
+        sheet.insertRule(rule, sheet.cssRules.length)
+    } catch (error) {
+        if (
+            process.env.NODE_ENV !== 'production' &&
+            !/:(-moz-placeholder|-moz-focus-inner|-moz-focusring|-ms-input-placeholder|-moz-read-write|-moz-read-only|-ms-clear){/.test(
+                rule,
+            )
+        ) {
+            console.error(`There was a problem inserting the following rule: "${rule}"`, error)
+        }
+    }
 }
