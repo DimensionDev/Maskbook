@@ -23,7 +23,7 @@ export const searchProfileTabListLastChildSelector: () => LiveSelector<E, true> 
     )
 
 export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="primaryColumn"] [role="navigation"] + * div')
+    querySelector<E>('[data-testid="primaryColumn"] [role="navigation"] + * > div:not([role="progressbar"])')
 
 export const searchProfileEmptySelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] [data-testid="emptyState"]')

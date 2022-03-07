@@ -35,9 +35,9 @@ const useStyles = makeStyles()((theme) => ({
 
 interface NFTLuckyDropStyledAssetPlayerProps
     extends withClasses<'loadingFailImage' | 'iframe' | 'wrapper' | 'loadingPlaceholder'> {
-    chainId: ChainId
-    contractAddress: string
-    tokenId: string
+    chainId?: ChainId
+    contractAddress?: string
+    tokenId?: string
     url?: string
     fallbackImage?: URL
     fallbackResourceLoader?: JSX.Element
@@ -47,9 +47,9 @@ interface NFTLuckyDropStyledAssetPlayerProps
 }
 export function NFTCardStyledAssetPlayer(props: NFTLuckyDropStyledAssetPlayerProps) {
     const {
-        chainId,
-        contractAddress,
-        tokenId,
+        chainId = ChainId.Mainnet,
+        contractAddress = '',
+        tokenId = '',
         fallbackImage,
         fallbackResourceLoader,
         url,
