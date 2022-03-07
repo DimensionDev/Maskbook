@@ -9,8 +9,6 @@ import {
     searchProfileTabListLastChildSelector,
     searchProfileTabListSelector,
     searchProfileTabPageSelector,
-    searchTwitterTimelineLoadingProgress,
-    searchTwitterTimelineLoadingFailed,
     searchProfileTabSelector,
 } from '../utils/selector'
 import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab'
@@ -108,7 +106,7 @@ async function hideTwitterActivatedContent() {
     }
 }
 
-function resetTwitterActivatedConten() {
+function resetTwitterActivatedContent() {
     const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
     if (!eleTab) return
 
@@ -136,7 +134,7 @@ export function ProfileTabAtTwitter() {
         <ProfileTab
             title="Web3"
             classes={classes}
-            reset={resetTwitterActivatedConten}
+            reset={resetTwitterActivatedContent}
             clear={hideTwitterActivatedContent}
             children={<div className={classes.line} />}
         />
@@ -147,10 +145,7 @@ export function injectProfileTabAtTwitter(signal: AbortSignal) {
     let tabInjected = false
     const contentWatcher = new MutationObserverWatcher(searchProfileTabPageSelector()).useForeach(() => {
         const elePage = searchProfileTabPageSelector().evaluate()
-        const progressEle = searchTwitterTimelineLoadingProgress().evaluate()
-        const failedLoadingEle = searchTwitterTimelineLoadingFailed().evaluate()
-
-        if (elePage && !tabInjected && !progressEle && !failedLoadingEle) {
+        if (elePage && !tabInjected) {
             const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())
             startWatch(watcher, signal)
             createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabAtTwitter />)
