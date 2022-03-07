@@ -59,7 +59,7 @@ const useStyles = makeStyles()((theme, props) => ({
 export interface SavingsTableProps {
     chainId: ChainId
     tab: TabType
-    protocols: SavingsProtocol
+    protocols: SavingsProtocol[]
     setTab(tab: TabType): void
     setSelectedProtocol(protocol: SavingsProtocol): void
 }

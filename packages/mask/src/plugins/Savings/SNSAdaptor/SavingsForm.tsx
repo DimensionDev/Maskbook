@@ -1,8 +1,9 @@
+import { useState, useMemo } from 'react'
+import { useAsync } from 'react-use'
 import BigNumber from 'bignumber.js'
 import { Typography } from '@mui/material'
-import { useState, useMemo, useCallback } from 'react'
-import { useAsync } from 'react-use'
 import { unreachable } from '@dimensiondev/kit'
+import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import {
     EthereumTokenType,
     useNativeTokenDetailed,
@@ -12,23 +13,15 @@ import {
     formatCurrency,
     formatBalance,
 } from '@masknet/web3-shared-evm'
-import {
-    TokenAmountPanel,
-    FormattedCurrency,
-    LoadingAnimation,
-    useRemoteControlledDialog,
-    TokenIcon,
-} from '@masknet/shared'
+import { TokenAmountPanel, FormattedCurrency, LoadingAnimation, TokenIcon } from '@masknet/shared'
 import { useTokenPrice } from '../../Wallet/hooks/useTokenPrice'
 import { useI18N } from '../../../utils'
 import { useStyles } from './SavingsFormStyles'
 import { TabType, ProtocolType, SavingsProtocol } from '../types'
-import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { PluginTraderMessages } from '../../Trader/messages'
-import type { Coin } from '../../Trader/types'
+import { AllProviderTradeActionType, AllProviderTradeContext } from '../../Trader/trader/useAllProviderTradeContext'
 
 export interface SavingsFormProps {
     chainId: number
@@ -38,7 +31,7 @@ export interface SavingsFormProps {
     onSwapDialogOpen?: () => void
 }
 
-export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProps) {
+export function SavingsForm({ chainId, protocol, tab, onClose, onSwapDialogOpen }: SavingsFormProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -51,24 +44,6 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
     const [loading, setLoading] = useState(false)
 
     const { value: nativeTokenBalance } = useFungibleTokenBalance(EthereumTokenType.Native, '', chainId)
-
-    const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
-
-    const onConvertClick = useCallback(() => {
-        const token = protocol.getFungibleTokenDetails(chainId)
-        openSwapDialog({
-            open: true,
-            traderProps: {
-                defaultInputCoin: {
-                    id: token.address,
-                    name: token.name ?? '',
-                    symbol: token.symbol ?? '',
-                    contract_address: token.address,
-                    decimals: token.decimals,
-                } as Coin,
-            },
-        })
-    }, [protocol, chainId, openSwapDialog])
 
     // #region form variables
     const tokenAmount = useMemo(() => new BigNumber(rightShift(inputAmount || '0', 18)), [inputAmount])
@@ -88,11 +63,11 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                     : await protocol.withdrawEstimate(account, chainId, web3, inputAsBN),
             )
         } catch {
-            // todo check async catch
+            // do nothing
         } finally {
             setLoading(false)
         }
-    }, [tab, protocol, chainId, inputAsBN])
+    }, [chainId, tab, protocol, inputAsBN])
     // #endregion
 
     // #region form validation
@@ -115,6 +90,12 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
         () => (inputAmount ? new BigNumber(inputAmount).times(tokenPrice).toFixed(2) : '0'),
         [inputAmount, tokenPrice],
     )
+    // #endregion
+
+    // #region trade state
+    const {
+        tradeState: [_, dispatchTradeStore],
+    } = AllProviderTradeContext.useContainer()
     // #endregion
 
     const needsSwap = protocol.type === ProtocolType.Lido && tab === TabType.Withdraw
@@ -155,7 +136,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
             )}
 
             <div className={classes.infoRow}>
-                <Typography variant="body1" className={classes.infoRowLeft}>
+                <Typography variant="body2" className={classes.infoRowLeft}>
                     <TokenIcon address={protocol.bareToken.address} classes={{ icon: classes.rowImage }} />
                     {protocol.bareToken.name} {t('plugin_savings_apr')}%
                 </Typography>
@@ -202,18 +183,23 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                             switch (tab) {
                                 case TabType.Deposit:
                                     if (!(await protocol.deposit(account, chainId, web3, tokenAmount))) {
-                                        throw new Error('Failed to deposit token')
+                                        throw new Error('Failed to deposit token.')
                                     }
                                     return
                                 case TabType.Withdraw:
                                     switch (protocol.type) {
                                         case ProtocolType.Lido:
+                                            dispatchTradeStore({
+                                                type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
+                                                token: protocol.stakeToken,
+                                            })
+
                                             onClose?.()
-                                            onConvertClick()
+                                            onSwapDialogOpen?.()
                                             return
                                         default:
                                             if (!(await protocol.withdraw(account, chainId, web3, tokenAmount))) {
-                                                throw new Error('Failed to withdraw')
+                                                throw new Error('Failed to withdraw token.')
                                             }
                                             return
                                     }

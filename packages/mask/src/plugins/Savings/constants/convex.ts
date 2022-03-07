@@ -1,3 +1,5 @@
+import { ChainId, createERC20Tokens } from '@masknet/web3-shared-evm'
+
 export const CONVEX_POOLS = [
     {
         lptoken: '0x845838DF265Dcd2c412A1Dc9e959c7d08537f8a2',
@@ -942,4 +944,140 @@ export const CONVEX_POOLS = [
         currency: 'ETH',
         name: 'cvxfxs',
     },
+]
+
+export const CONVEX_PAIRS = [
+    [
+        createERC20Tokens('USDT_ADDRESS', 'Tether USD', 'USDT', 6)[ChainId.Mainnet],
+        createERC20Tokens('CONVEX_USDT_LP_ADDRESS', 'Convex  USDT ', 'USDT', 6)[ChainId.Mainnet],
+    ],
+    [
+        createERC20Tokens('USDC_ADDRESS', 'USDC', 'USDC', 18)[ChainId.Mainnet],
+        createERC20Tokens('CONVEX_USD_LP_ADDRESS', 'Convex  USD', 'USD', 18)[ChainId.Mainnet],
+    ],
+    [
+        createERC20Tokens('CVXFXS_ADDRESS', 'CVXFXS', 'CVXFXS', 18)[ChainId.Mainnet],
+        createERC20Tokens('CONVEX_CVXFXS_LP_ADDRESS', 'cvxfxs', 'cvxfxs', 18)[ChainId.Mainnet],
+    ],
+    [
+        createERC20Tokens('CONVEX_YPOOL_ADDRESS', 'Curve.fi yDAI/yUSDC/yUSDT/yTUSD', 'cvxyDAI+yUSDC+yUSDT+yTUSDS', 18)[
+            ChainId.Mainnet
+        ],
+        createERC20Tokens(
+            'CONVEX_YPOOL_LP_ADDRESSS',
+            'Curve.fi yDAI/yUSDC/yUSDT/yTUSD',
+            'cvxyDAI+yUSDC+yUSDT+yTUSD',
+            18,
+        )[ChainId.Mainnet],
+    ],
+    [
+        createERC20Tokens(
+            'CONVEX_BUSD_ADDRESS',
+            'Curve.fi yDAI/yUSDC/yUSDT/yBUSD Convex Deposit',
+            'cvxyDAI+yUSDC+yUSDT+yBUSD',
+            18,
+        )[ChainId.Mainnet],
+        createERC20Tokens(
+            'CONVEX_BUSD_LP_ADDRESS',
+            'Curve.fi yDAI/yUSDC/yUSDT/yBUSD Convex Deposit',
+            'cvxyDAI+yUSDC+yUSDT+yBUSD',
+            18,
+        )[ChainId.Mainnet],
+    ],
+    [
+        createERC20Tokens('CONVEX_SUSD_ADDRESS', 'Curve.fi DAI/USDC/USDT/sUSD', 'crvPlain3andSUSD', 18)[
+            ChainId.Mainnet
+        ],
+        createERC20Tokens('CONVEX_SUSD_LP_ADDRESS', 'Curve.fi DAI/USDC/USDT/sUSD', 'crvPlain3andSUSD', 18)[
+            ChainId.Mainnet
+        ],
+    ],
+    [
+        createERC20Tokens('CONVEX_PAX_ADDRESS', 'Curve.fi DAI/USDC/USDT/PAX', 'ypaxCrv', 18)[ChainId.Mainnet],
+        createERC20Tokens('CONVEX_PAX_LP_ADDRESS', 'Curve.fi DAI/USDC/USDT/PAX', 'ypaxCrv', 18)[ChainId.Mainnet],
+    ],
+    [
+        createERC20Tokens('CONVEX_REN_ADDRESS', 'Curve.fi renBTC/wBTC', 'crvRenWBTC', 18)[ChainId.Mainnet],
+        createERC20Tokens('CONVEX_REN_LP_ADDRESS', 'Curve.fi renBTC/wBTC', 'crvRenWBTC', 18)[ChainId.Mainnet],
+    ],
+    [
+        createERC20Tokens('CONVEX_SBTC_ADDRESS', 'Curve.fi renBTC/wBTC/sBTC Convex Deposit ', 'cvxcrvRenWSBTC', 18)[
+            ChainId.Mainnet
+        ],
+        createERC20Tokens('CONVEX_SBTC_LP_ADDRESS', 'Curve.fi renBTC/wBTC/sBTC Convex Deposit ', 'cvxcrvRenWSBTC', 18)[
+            ChainId.Mainnet
+        ],
+    ],
+    [
+        createERC20Tokens('CONVEX_HBTC_ADDRESS', 'Curve.fi hBTC/wBTC', 'hCRV ', 18)[ChainId.Mainnet],
+        createERC20Tokens('CONVEX_HBTC_LP_ADDRESS', 'Curve.fi hBTC/wBTC', 'hCRV ', 18)[ChainId.Mainnet],
+    ],
+    [
+        createERC20Tokens(
+            'CONVEX_cvxFXSFXS-f_ADDRESS',
+            'Curve.fi Factory Crypto Pool: cvxFxs/Fxs ',
+            'cvxFXSFXS-f ',
+            18,
+        )[ChainId.Mainnet],
+        createERC20Tokens(
+            'CONVEX_cvxFXSFXS-f_LP_ADDRESS',
+            'Curve.fi Factory Crypto Pool: cvxFxs/Fxs ',
+            'cvxFXSFXS-f ',
+            18,
+        )[ChainId.Mainnet],
+    ],
+    [
+        createERC20Tokens('CONVEX_crvCVXETH_ADDRESS', 'Curve CVX-ETH', 'crvCVXETH', 18)[ChainId.Mainnet],
+        createERC20Tokens('CONVEX_crvCVXETH_LP_ADDRESS', 'Curve CVX-ETH', 'crvCVXETH', 18)[ChainId.Mainnet],
+    ],
+    [
+        createERC20Tokens('CONVEX_RAI3CRV_ADDRESS', 'RAI3CRV', 'RAI3CRV', 18)[ChainId.Mainnet],
+        createERC20Tokens('CONVEX_RAI3CRV_LP_ADDRESS', 'RAI3CRV', 'RAI3CRV', 18)[ChainId.Mainnet],
+    ],
+    [
+        createERC20Tokens(
+            'CONVEX_DOLA3POOL3CRV-f_ADDRESS',
+            'Curve.fi Factory USD Metapool: DOLA-3pool Curve LP',
+            'DOLA3POOL3CRV-f',
+            18,
+        )[ChainId.Mainnet],
+        createERC20Tokens(
+            'CONVEX_DOLA3POOL3CRV-f_LP_ADDRESS',
+            'Curve.fi Factory USD Metapool: DOLA-3pool Curve LP',
+            'DOLA3POOL3CRV-f ',
+            18,
+        )[ChainId.Mainnet],
+    ],
+    [
+        createERC20Tokens('CONVEX_crvCRVETH_ADDRESS', 'Curve CRV-ETH', 'crvCRVETH', 18)[ChainId.Mainnet],
+        createERC20Tokens('CONVEX_crvCRVETH_LP_ADDRESS', 'Curve CRV-ETH', 'crvCRVETH', 18)[ChainId.Mainnet],
+    ],
+    [
+        createERC20Tokens('CONVEX_3EURpool-f_ADDRESS', 'Curve.fi Factory Plain Pool: 3EURpool', '3EURpool-f', 18)[
+            ChainId.Mainnet
+        ],
+        createERC20Tokens('CONVEX_3EURpool-f_LP_ADDRESS', 'Curve.fi Factory Plain Pool: 3EURpool', '3EURpool-f', 18)[
+            ChainId.Mainnet
+        ],
+    ],
+    [
+        createERC20Tokens(
+            'CONVEX_ust-wormhole_ADDRESS',
+            'Curve.fi Factory USD Metapool: wormhole v2 UST-3Pool',
+            'ust-wormhole',
+            18,
+        )[ChainId.Mainnet],
+        createERC20Tokens(
+            'CONVEX_ust-wormhole_LP_ADDRESS',
+            'Curve.fi Factory USD Metapool: wormhole v2 UST-3Pool Convex Deposit',
+            'ust-wormhole',
+            18,
+        )[ChainId.Mainnet],
+    ],
+    [
+        createERC20Tokens('CONVEX_D3POOL_ADDRESSS', 'Curve.fi Factory Plain Pool: d3pool', 'D3-f', 18)[ChainId.Mainnet],
+        createERC20Tokens('CONVEX_D3POOL_LP_ADDRESS', 'Curve.fi Factory Plain Pool: d3pool Deposit', 'D3-f', 18)[
+            ChainId.Mainnet
+        ],
+    ],
 ]

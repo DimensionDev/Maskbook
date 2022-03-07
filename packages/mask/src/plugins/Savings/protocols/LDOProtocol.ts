@@ -7,6 +7,7 @@ import {
     createContract,
     FungibleTokenDetailed,
     ZERO_ADDRESS,
+    getTokenConstants,
 } from '@masknet/web3-shared-evm'
 import { ZERO } from '@masknet/web3-shared-base'
 import type { Lido } from '@masknet/web3-contracts/types/Lido'
@@ -20,16 +21,6 @@ export class LidoProtocol implements SavingsProtocol {
     readonly type = ProtocolType.Lido
 
     constructor(readonly pair: [FungibleTokenDetailed, FungibleTokenDetailed]) {}
-
-    getFungibleTokenDetails(chainId: ChainId): FungibleTokenDetailed {
-        throw new Error('Method not implemented.')
-    }
-    getApr(): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-    getBalance(chainId: ChainId, web3: Web3, account: string): Promise<BigNumber.Value> {
-        throw new Error('Method not implemented.')
-    }
 
     get apr() {
         return this._apr
@@ -60,7 +51,7 @@ export class LidoProtocol implements SavingsProtocol {
         try {
             const contract = createContract<Lido>(
                 web3,
-                getSavingsConstants(chainId).LIDO_STETH || ZERO_ADDRESS,
+                getTokenConstants(chainId).LDO_stETH || ZERO_ADDRESS,
                 LidoABI as AbiItem[],
             )
             this._balance = new BigNumber((await contract?.methods.balanceOf(account).call()) ?? '0')

@@ -20,9 +20,9 @@ import ConvexBoosterABI from '@masknet/web3-contracts/abis/ConvexBooster.json'
 import CurveFiABI from '@masknet/web3-contracts/abis/ICurveFi.json'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 
-import { ProtocolType, SavingsProtocol } from '../../types'
+import { ProtocolType, SavingsProtocol } from '../../Savings Old/types'
 
-import { CONVEX_POOLS } from './constants/index'
+import { CONVEX_POOLS } from '../constants'
 
 // https://github.com/convex-community/convex-subgraph
 
@@ -154,12 +154,14 @@ export class ConvexProtocol implements SavingsProtocol {
 
         const allowance = await stakingTokenERC20?.methods.allowance(account, boostAddress).call()
 
-        // check allowance
-        if (allowance) {
-            // eslint-disable-next-line no-sparse-arrays
-            return stakingToken?.methods.add_liquidity([new BigNumber(value).toFixed(), 0, 0, 0], account)
-        }
-        return stakingTokenERC20?.methods.approve(boostAddress, account).call()
+        // // check allowance
+        // if (allowance) {
+        //     // eslint-disable-next-line no-sparse-arrays
+        //     return stakingToken?.methods.add_liquidity([new BigNumber(value).toFixed(), 0, 0, 0], account)
+        // }
+        // return stakingTokenERC20?.methods.approve(boostAddress, account).call()
+
+        return stakingToken?.methods.add_liquidity([new BigNumber(value).toFixed(), 0, 0, 0], account)
     }
 
     public async deposit(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
