@@ -98,7 +98,7 @@ export interface PersonaRowCardUIProps {
     onDisconnect: (identifier: ProfileIdentifier) => void
     onRename: (identifier: PersonaIdentifier, target: string, callback?: () => void) => Promise<void>
     verification?: NextIDPersonaBindings
-    onDeleteBound: (identifier: PersonaIdentifier, profile: ProfileInformation, network: string) => void
+    onDeleteBound: (identifier: PersonaIdentifier, profile: ProfileIdentifier, network: string) => void
 }
 
 export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
@@ -205,11 +205,12 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                                     key={networkIdentifier}
                                     onConnect={() => onConnect(identifier, networkIdentifier)}
                                     onDisconnect={onDisconnect}
-                                    onDeleteBound={(profile: ProfileInformation) => {
+                                    onDeleteBound={(profile: ProfileIdentifier) => {
                                         onDeleteBound(identifier, profile, networkIdentifier)
                                     }}
                                     profileIdentifiers={currentNetworkProfiles.map((x) => x.identifier)}
                                     networkIdentifier={networkIdentifier}
+                                    personaIdentifier={identifier}
                                 />
                             )
                         }
