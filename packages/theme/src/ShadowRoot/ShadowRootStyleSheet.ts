@@ -60,7 +60,7 @@ export class StyleSheet {
         this.implementation.flush()
         this._alreadyInsertedOrderInsensitiveRule = false
     }
-    private declare implementation: ConstructableStyleSheet | SynchronizeStyleSheet
+    private implementation: ConstructableStyleSheet | SynchronizeStyleSheet
     private _alreadyInsertedOrderInsensitiveRule = false
 }
 class ConstructableStyleSheet {
