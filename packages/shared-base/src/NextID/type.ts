@@ -24,7 +24,7 @@ export interface NextIDPersonaBindings {
         created_at: string
         invalid_reason: string
         is_valid: boolean
-        laset_checked_at: string
+        latest_checked_at: string
     }[]
 }
 
