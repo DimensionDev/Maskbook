@@ -33,8 +33,6 @@ export function ArticleTab(props: ArticleTabProps) {
             <div className={classes.body}>
                 <NFTCardStyledAssetPlayer
                     url={resourceUrl}
-                    contractAddress=""
-                    tokenId=""
                     classes={{
                         wrapper: classes.player,
                         iframe: classes.iframe,

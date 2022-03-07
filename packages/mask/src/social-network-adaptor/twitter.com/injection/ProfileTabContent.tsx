@@ -7,7 +7,7 @@ import {
     searchProfileEmptySelector,
     searchProfileTabPageSelector,
 } from '../utils/selector'
-import { clear } from './ProfileTab'
+import { useClear } from './ProfileTab'
 
 function injectProfileTabContentForEmptyState(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileEmptySelector())
@@ -71,5 +71,6 @@ const useStyles = makeStyles()((theme) => {
 
 export function ProfileTabContentAtTwitter() {
     const { classes } = useStyles()
+    const clear = useClear()
     return <ProfileTabContent classes={classes} clear={clear} />
 }
