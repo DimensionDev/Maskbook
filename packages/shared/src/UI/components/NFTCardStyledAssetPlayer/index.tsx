@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface Props extends withClasses<'loadingFailImage' | 'iframe' | 'wrapper' | 'loadingPlaceholder'> {
-    chainId: ChainId
+    chainId?: ChainId
     contractAddress: string
     tokenId: string
     url?: string
@@ -46,7 +46,7 @@ interface Props extends withClasses<'loadingFailImage' | 'iframe' | 'wrapper' | 
 }
 export function NFTCardStyledAssetPlayer(props: Props) {
     const {
-        chainId,
+        chainId = ChainId.Mainnet,
         contractAddress,
         tokenId,
         fallbackImage,
