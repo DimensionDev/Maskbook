@@ -206,6 +206,18 @@ export function useAllTradeComputed(
         traderEstimateGas: mdexEstimateGas,
     } = useUniswapV2Like(tradeProviders, TradeProvider.MDEX, inputAmount_, inputToken, outputToken)
 
+    // Ellipsis
+    const ellipsis_ = useUniswapV2Trade(
+        TradeProvider.ELLIPSIS,
+        TradeStrategy.ExactIn,
+        inputAmount_,
+        '0',
+        tradeProviders.some((x) => x === TradeProvider.ELLIPSIS) ? inputToken : undefined,
+        tradeProviders.some((x) => x === TradeProvider.ELLIPSIS) ? outputToken : undefined,
+    )
+    const ellipsis = useUniswapTradeComputed(ellipsis_.value, inputToken, outputToken)
+    const ellipsisEstimateGas = useUniswapTradeGasLimit(ellipsis, TradeProvider.ELLIPSIS)
+
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
         { provider: TradeProvider.SUSHISWAP, ...sushiSwap_, value: sushiSwap, gas: sushiSwapEstimateGas },
@@ -223,6 +235,7 @@ export function useAllTradeComputed(
         { provider: TradeProvider.WANNASWAP, ...wannaswap_, value: wannaswap, gas: wannaSwapEstimateGas },
         { provider: TradeProvider.TRISOLARIS, ...trisolaris_, value: trisolaris, gas: trisolarisEstimateGas },
         { provider: TradeProvider.MDEX, ...mdex_, value: mdex, gas: mdexEstimateGas },
+        { provider: TradeProvider.ELLIPSIS, ...ellipsis_, value: ellipsis, gas: ellipsisEstimateGas },
     ]
 
     return nativeToken_.value

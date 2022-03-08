@@ -23,6 +23,8 @@ import {
     TRISOLARIS_CUSTOM_BASES,
     MDEX_BASE_AGAINST_TOKENS,
     MDEX_CUSTOM_BASES,
+    ELLIPSIS_BASE_AGAINST_TOKENS,
+    ELLIPSIS_CUSTOM_BASES,
 } from '../constants'
 import { unreachable } from '@dimensiondev/kit'
 import { TargetChainIdContext } from './useTargetChainIdContext'
@@ -174,6 +176,18 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     AGAINST_TOKENS: MDEX_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: MDEX_CUSTOM_BASES,
+                }
+            case TradeProvider.ELLIPSIS:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.ELLIPSIS_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.ELLIPSIS_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.ELLIPSIS_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.ELLIPSIS_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: ELLIPSIS_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: ELLIPSIS_CUSTOM_BASES,
                 }
             case TradeProvider.ZRX:
                 return {

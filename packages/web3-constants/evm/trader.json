@@ -1072,6 +1072,21 @@
     },
     "MDEX_ROUTER_ADDRESS": {
         "Mainnet": "0x74119c3bca85bEA0538A62319a79b4a372590B47",
+        "Aurora_Testnet": ""
+    },
+    "MDEX_FACTORY_ADDRESS": {
+        "Mainnet": "0x7DAe51BD3E3376B8c7c4900E9107f12Be3AF1bA8",
+        "Aurora_Testnet": ""
+    },
+    "MDEX_THEGRAPH": {
+        "Aurora_Testnet": ""
+    },
+    "MDEX_INIT_CODE_HASH": {
+        "Mainnet": "0x8ecc069c645df696f2ca5116ab459c5c2889f299e73c1b208aaa3cdd7d110b16",
+        "Aurora_Testnet": ""
+    },
+    "ELLIPSIS_ROUTER_ADDRESS": {
+        "Mainnet": "",
         "Ropsten": "",
         "Rinkeby": "",
         "Kovan": "",
@@ -1091,8 +1106,8 @@
         "Aurora_Testnet": "",
         "Conflux": ""
     },
-    "MDEX_FACTORY_ADDRESS": {
-        "Mainnet": "0x7DAe51BD3E3376B8c7c4900E9107f12Be3AF1bA8",
+    "ELLIPSIS_FACTORY_ADDRESS": {
+        "Mainnet": "",
         "Ropsten": "",
         "Rinkeby": "",
         "Kovan": "",
@@ -1112,7 +1127,7 @@
         "Aurora_Testnet": "",
         "Conflux": ""
     },
-    "MDEX_THEGRAPH": {
+    "ELLIPSIS_THEGRAPH": {
         "Mainnet": "",
         "Ropsten": "",
         "Rinkeby": "",
@@ -1133,8 +1148,8 @@
         "Aurora_Testnet": "",
         "Conflux": ""
     },
-    "MDEX_INIT_CODE_HASH": {
-        "Mainnet": "0x8ecc069c645df696f2ca5116ab459c5c2889f299e73c1b208aaa3cdd7d110b16",
+    "ELLIPSIS_INIT_CODE_HASH": {
+        "Mainnet": "",
         "Ropsten": "",
         "Rinkeby": "",
         "Kovan": "",

@@ -183,6 +183,7 @@ export enum TradeProvider {
     TRADERJOE = 13,
     PANGOLIN = 14,
     MDEX = 15,
+    ELLIPSIS = 16,
 }
 
 /** Supported language settings */

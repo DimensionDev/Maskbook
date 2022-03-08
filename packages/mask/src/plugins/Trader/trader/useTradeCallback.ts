@@ -101,6 +101,7 @@ export function useTradeCallback(
         case TradeProvider.TRISOLARIS:
             return uniswapV2Like
         case TradeProvider.MDEX:
+        case TradeProvider.ELLIPSIS:
             return uniswapV2Like
         case TradeProvider.ZRX:
             return zrx
