@@ -136,9 +136,8 @@ export const ProfileList = memo(() => {
 
     const { value: mergedProfiles, retry: refreshProfileList } = useAsyncRetry(async () => {
         if (!currentPersona) return []
-        const publicHexKey = await Services.Helper.queryPersonaHexPublicKey(currentPersona.identifier)
-        if (!publicHexKey) return currentPersona.linkedProfiles
-        const response = await queryExistedBindingByPersona(publicHexKey)
+        if (!currentPersona.publicHexKey) return currentPersona.linkedProfiles
+        const response = await queryExistedBindingByPersona(currentPersona.publicHexKey)
         if (!response) return currentPersona.linkedProfiles
 
         return currentPersona.linkedProfiles.map((profile) => {
@@ -186,7 +185,7 @@ export const ProfileList = memo(() => {
             setUnbind(null)
             refreshProfileList()
         } catch {
-            console.log('error')
+            console.log('Disconnect failed')
         }
     }, [unbind, currentPersona?.identifier, refreshProfileList])
 
