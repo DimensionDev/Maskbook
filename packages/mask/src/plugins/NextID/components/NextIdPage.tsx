@@ -83,11 +83,7 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
     const { value: isAccountVerified, loading: loadingVerifyInfo } = useAsync(() => {
         if (!currentPersona) return Promise.resolve(undefined)
         const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
-        return queryIsBound(
-            currentPersona.publicHexKey as string,
-            platform,
-            visitingPersonaIdentifier.identifier.userId,
-        )
+        return queryIsBound(currentPersona.publicHexKey!, platform, visitingPersonaIdentifier.identifier.userId)
     }, [isOwn, currentPersona, visitingPersonaIdentifier, isVerified])
 
     const { value: bindings, loading } = useAsync(async () => {

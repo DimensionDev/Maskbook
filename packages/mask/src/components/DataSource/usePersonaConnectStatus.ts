@@ -1,6 +1,7 @@
 import { DashboardRoutes, ProfileIdentifier } from '@masknet/shared-base'
 import stringify from 'json-stable-stringify'
 import { useMemo } from 'react'
+import type { Persona } from '../../database'
 import Services from '../../extension/service'
 import { currentSetupGuideStatus } from '../../settings/settings'
 import { activatedSocialNetworkUI } from '../../social-network'
@@ -27,11 +28,11 @@ export function usePersonaConnectStatus() {
     return useMemo(() => {
         const id = new ProfileIdentifier(activatedSocialNetworkUI.networkIdentifier, lastRecognized.identifier.userId)
         let connected = false
-        let currentConnectedPersona
+        let currentConnectedPersona: Persona | undefined
         personas.forEach((p) => {
             if (!p.linkedProfiles.get(id)) return
             connected = true
-            currentConnectedPersona = p.publicHexKey
+            currentConnectedPersona = p
         })
         const action = !personas.length ? createPersona : !connected ? connectPersona : null
         return { connected, action, hasPersona: !!personas.length, currentConnectedPersona }

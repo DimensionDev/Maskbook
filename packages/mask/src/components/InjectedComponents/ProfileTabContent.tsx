@@ -54,7 +54,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     )
     const currentAccountNotConnectPersona =
         currentIdentity.identifier.userId === identity.identifier.userId &&
-        personaList.findIndex((persona) => persona?.persona === currentConnectedPersona) === -1
+        personaList.findIndex((persona) => persona?.persona === currentConnectedPersona?.publicHexKey) === -1
 
     const tabs = useActivatedPluginsSNSAdaptor('any')
         .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? [])

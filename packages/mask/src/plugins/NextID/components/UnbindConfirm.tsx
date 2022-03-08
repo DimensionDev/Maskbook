@@ -1,5 +1,6 @@
 import { memo, useState } from 'react'
 import { Box, DialogContent, Button } from '@mui/material'
+import { useWeb3State } from '@masknet/plugin-infra'
 import { useI18N } from '../locales'
 import { makeStyles, MaskDialog } from '@masknet/theme'
 
@@ -46,6 +47,7 @@ export enum DialogTabs {
 export const UnbindConfirm = memo<UnbindConfirmProps>(({ onClose, unbindAddress, onConfirm }) => {
     const t = useI18N()
     const { classes } = useStyles()
+    const { Utils } = useWeb3State()
 
     const [isShow, setIsShow] = useState(true)
 
@@ -57,7 +59,7 @@ export const UnbindConfirm = memo<UnbindConfirmProps>(({ onClose, unbindAddress,
         <MaskDialog open={!!unbindAddress && isShow} maxWidth="xs" title="">
             <DialogContent className={classes.wrapper}>
                 <Box className={classes.title}>
-                    {t.delete()} {unbindAddress.slice(0, 8)}...{unbindAddress.slice(-4)} &#xFF1F;
+                    {t.delete()} {Utils?.formatAddress?.(unbindAddress, 4)} &#xFF1F;
                 </Box>
                 <Box className={classes.content}>{t.disconnect_warning()}</Box>
                 <Button className={classes.confirmButton} onClick={handleConfirm}>
