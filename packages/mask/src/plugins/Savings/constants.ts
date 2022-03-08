@@ -6,7 +6,7 @@ export const SAVINGS_PLUGIN_ID = 'com.savings'
 export const LDO_PAIRS: [FungibleTokenDetailed, FungibleTokenDetailed][] = [
     [
         createNativeToken(ChainId.Mainnet),
-        createERC20Tokens('LDO_ADDRESS', 'Lido DAO Token', 'LDO', 18)[ChainId.Mainnet],
+        createERC20Tokens('LDO_stETH_ADDRESS', 'Liquid staked Ether 2.0', 'stETH', 18)[ChainId.Mainnet],
     ],
 ]
 
