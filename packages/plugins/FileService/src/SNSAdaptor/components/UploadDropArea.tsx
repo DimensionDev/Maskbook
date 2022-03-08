@@ -40,7 +40,6 @@ const useStyles = makeStyles()((theme) => ({
         borderColor: '#2CA4EF',
         borderStyle: 'solid',
         userSelect: 'none',
-        '& > $indicator': { opacity: 1 },
     },
     indicator: {
         position: 'absolute',
