@@ -18,7 +18,7 @@ import CheckIcon from '@mui/icons-material/Check'
 import { Trans } from 'react-i18next'
 import { useUpdate } from 'react-use'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
-import { findLastIndex, uniqBy } from 'lodash-unified'
+import { findLastIndex } from 'lodash-unified'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants'
 
 interface StyleProps {
@@ -332,29 +332,15 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     const [tokenIdListInput, setTokenIdListInput] = useState<string>('')
     const [tokenIdFilterList, setTokenIdFilterList] = useState<string[]>([])
     const [nonExistedTokenIdList, setNonExistedTokenIdList] = useState<string[]>([])
-    const maxSelectShares = Math.min(NFT_RED_PACKET_MAX_SHARES, tokenDetailedOwnerList.length)
     const isSelectSharesExceed =
         (tokenDetailedOwnerList.length === 0 ? NFT_RED_PACKET_MAX_SHARES - 1 : NFT_RED_PACKET_MAX_SHARES) <
         tokenDetailedSelectedList.length
     const { classes } = useStyles({ isSelectSharesExceed })
     const [selectAll, setSelectAll] = useState(false)
     const selectAllHandler = useCallback(() => {
+        setTokenDetailedSelectedList(selectAll ? [] : tokenDetailedOwnerList)
         setSelectAll(!selectAll)
-        setTokenDetailedSelectedList(
-            tokenIdFilterList.length === 0
-                ? []
-                : selectAll
-                ? tokenDetailedSelectedList.filter((t) => !tokenIdFilterList.includes(t.tokenId))
-                : tokenDetailedSelectedList,
-        )
-
-        if (!selectAll) {
-            const newlyAdded = tokenDetailedOwnerList
-                .filter((t) => tokenIdFilterList.length === 0 || tokenIdFilterList.includes(t.tokenId))
-                .slice(0, maxSelectShares)
-            setTokenDetailedSelectedList(uniqBy(newlyAdded.concat(tokenDetailedSelectedList), 'tokenId'))
-        }
-    }, [selectAll, maxSelectShares, tokenIdFilterList, tokenDetailedSelectedList])
+    }, [selectAll, tokenDetailedOwnerList])
 
     useEffect(() => {
         setTokenDetailed(undefined)
@@ -535,9 +521,13 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             <ShadowRootTooltip
                                 title={
                                     <Typography className={classes.tooltipText}>
-                                        {t('plugin_red_packet_nft_max_shares', {
-                                            amount: NFT_RED_PACKET_MAX_SHARES,
-                                        })}
+                                        {tokenDetailedSelectedList.length > NFT_RED_PACKET_MAX_SHARES
+                                            ? t('plugin_red_packet_nft_max_shares_tip', {
+                                                  amount: NFT_RED_PACKET_MAX_SHARES,
+                                              })
+                                            : t('plugin_red_packet_nft_max_shares', {
+                                                  amount: NFT_RED_PACKET_MAX_SHARES,
+                                              })}
                                     </Typography>
                                 }
                                 placement="top-end"
@@ -691,9 +681,13 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             <ShadowRootTooltip
                                 title={
                                     <Typography className={classes.tooltipText}>
-                                        {t('plugin_red_packet_nft_max_shares', {
-                                            amount: NFT_RED_PACKET_MAX_SHARES,
-                                        })}
+                                        {tokenDetailedSelectedList.length > NFT_RED_PACKET_MAX_SHARES
+                                            ? t('plugin_red_packet_nft_max_shares_tip', {
+                                                  amount: NFT_RED_PACKET_MAX_SHARES,
+                                              })
+                                            : t('plugin_red_packet_nft_max_shares', {
+                                                  amount: NFT_RED_PACKET_MAX_SHARES,
+                                              })}
                                     </Typography>
                                 }
                                 placement="top-end"
@@ -752,6 +746,7 @@ function NFTCard(props: NFTCardProps) {
     return (
         <ListItem className={classes.selectWrapper}>
             <NFTCardStyledAssetPlayer
+                url={token.info.mediaUrl}
                 contractAddress={token.contractDetailed.address}
                 tokenId={token.tokenId}
                 renderOrder={renderOrder}

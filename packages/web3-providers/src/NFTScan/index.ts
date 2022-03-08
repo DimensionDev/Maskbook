@@ -155,7 +155,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
             info: {
                 name: t.nft_name,
                 description: t.nft_detail,
-                mediaUrl: t.nft_cover,
+                mediaUrl: resolveResourceLink(t.nft_cover ?? t.nft_content_uri ?? ''),
                 tokenURI: t.nft_token_uri,
             },
         }))

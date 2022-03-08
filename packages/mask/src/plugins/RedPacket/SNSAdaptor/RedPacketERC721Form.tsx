@@ -211,7 +211,10 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const account = useAccount()
     const chainId = useChainId()
     const [contract, setContract] = useState<ERC721ContractDetailed>()
-    const [existTokenDetailedList, setExistTokenDetailedList] = useState<OrderedERC721Token[]>([])
+    const [manualSelectedTokenDetailedList, setExistTokenDetailedList] = useState<OrderedERC721Token[]>([])
+    const [onceAllSelectedTokenDetailedList, setAllTokenDetailedList] = useState<OrderedERC721Token[]>([])
+    const tokenDetailedList =
+        selectOption === NFTSelectOption.Partial ? manualSelectedTokenDetailedList : onceAllSelectedTokenDetailedList
     const [message, setMessage] = useState('Best Wishes!')
     const {
         asyncRetry: { loading: loadingOwnerList },
@@ -257,9 +260,9 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
 
     const validationMessage = useMemo(() => {
         if (!balance) return t('plugin_red_packet_erc721_insufficient_balance')
-        if (existTokenDetailedList.length === 0) return t('plugin_wallet_select_a_token')
+        if (tokenDetailedList.length === 0) return t('plugin_wallet_select_a_token')
         return ''
-    }, [existTokenDetailedList.length, balance])
+    }, [tokenDetailedList.length, balance])
 
     return (
         <>
@@ -282,7 +285,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                 )}
                                 onClick={() => {
                                     setSelectOption(NFTSelectOption.All)
-                                    setExistTokenDetailedList(tokenDetailedOwnerList.slice(0, maxSelectShares))
+                                    setAllTokenDetailedList(tokenDetailedOwnerList.slice(0, maxSelectShares))
                                 }}>
                                 <div
                                     className={classNames(
@@ -317,7 +320,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                 {contract && balance && !loadingOwnerList ? (
                     <div className={classes.tokenSelectorParent}>
                         <List className={classes.tokenSelector}>
-                            {existTokenDetailedList.map((value, i) => (
+                            {tokenDetailedList.map((value, i) => (
                                 <div key={i}>
                                     <NFTCard token={value} removeToken={removeToken} renderOrder={i} />
                                 </div>
@@ -365,7 +368,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     open={open}
                     onClose={() => setOpen(false)}
                     contract={contract}
-                    existTokenDetailedList={existTokenDetailedList}
+                    existTokenDetailedList={tokenDetailedList}
                     setExistTokenDetailedList={setExistTokenDetailedList}
                     tokenDetailedOwnerList={tokenDetailedOwnerList}
                     loadingOwnerList={loadingOwnerList}
@@ -376,7 +379,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     message={message}
                     contract={contract}
                     open={openConfirmDialog}
-                    tokenList={existTokenDetailedList}
+                    tokenList={tokenDetailedList}
                     onBack={() => setOpenConfirmDialog(false)}
                     onClose={onClose}
                 />
