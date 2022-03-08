@@ -75,12 +75,12 @@ export const NFTList: FC<Props> = ({ selectedIds, tokens, enableTokenIds = [], o
     return (
         <List className={className}>
             {tokens.map((token) => {
-                const isOwned = !enableTokenIds.includes(token.tokenId)
-                const disabled = (reachedLimit && !selectedIds.includes(token.tokenId)) || isOwned
+                const isNotOwned = !enableTokenIds.includes(token.tokenId)
+                const disabled = (!isRadio && reachedLimit && !selectedIds.includes(token.tokenId)) || isNotOwned
                 return (
                     <ShadowRootTooltip
                         key={token.tokenId}
-                        title={isOwned ? t.nft_not_belongs_to_you() : ''}
+                        title={isNotOwned ? t.nft_not_belong_to_you() : ''}
                         placement="top">
                         <ListItem
                             key={token.tokenId}

@@ -3,8 +3,8 @@ import { usePostInfoDetails } from '@masknet/plugin-infra'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import classnames from 'classnames'
-import { FC, HTMLProps, MouseEventHandler, useCallback, useEffect, useMemo } from 'react'
-import { useAsyncFn } from 'react-use'
+import { FC, HTMLProps, MouseEventHandler, useCallback, useMemo } from 'react'
+import { useAsync, useAsyncFn } from 'react-use'
 import Services from '../../../../extension/service'
 import { PluginNextIdMessages } from '../../messages'
 import { Platform } from '../../types'
@@ -17,6 +17,12 @@ interface Props extends HTMLProps<HTMLDivElement> {
 const useStyles = makeStyles()({
     tipButton: {
         cursor: 'pointer',
+    },
+    postTipButton: {
+        display: 'flex',
+        // temporarily hard code
+        height: 46,
+        alignItems: 'center',
     },
 })
 
@@ -36,9 +42,7 @@ export const TipButton: FC<Props> = ({ className, receiver, addresses = [], ...r
         return wallets
     }, [receiver])
 
-    useEffect(() => {
-        queryBindings()
-    }, [queryBindings])
+    useAsync(queryBindings, [queryBindings])
 
     const allAddresses = useMemo(() => [...(state.value || []), ...addresses], [state.value, addresses])
 
@@ -68,5 +72,6 @@ export const TipButton: FC<Props> = ({ className, receiver, addresses = [], ...r
 
 export const PostTipButton: FC<Props> = (props) => {
     const identifier = usePostInfoDetails.author()
-    return <TipButton {...props} receiver={identifier} />
+    const { classes } = useStyles()
+    return <TipButton {...props} className={classnames(classes.postTipButton, props.className)} receiver={identifier} />
 }
