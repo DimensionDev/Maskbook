@@ -56,7 +56,6 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
     const personaConnectStatus = usePersonaConnectStatus()
     const { reset, isVerified } = useNextIDConnectStatus()
-    const [refresh, toggleRefresh] = useState(true)
 
     const [openBindDialog, toggleBindDialog] = useState(false)
     const [unbindAddress, setUnBindAddress] = useState<string>()
@@ -96,7 +95,6 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
         const firstTab = searchAllProfileTabSelector().evaluate()?.querySelector('div')?.parentNode
             ?.firstChild as HTMLElement
         firstTab.click()
-        toggleRefresh((pre) => !pre)
     }
 
     if (personaActionButton) {

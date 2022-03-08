@@ -80,6 +80,7 @@ export function useNextIDConnectStatus() {
         reset: () => {
             isOpenedVerifyDialog = false
             isOpenedFromButton = true
+            retry()
         },
     }
 }
