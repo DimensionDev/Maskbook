@@ -24,7 +24,8 @@ import SpaceStationGalaxy from '@masknet/web3-constants/evm/space-station-galaxy
 import OpenseaAPI from '@masknet/web3-constants/evm/opensea-api.json'
 import CryptoArtAI from '@masknet/web3-constants/evm/cryptoartai.json'
 import ArtBlocks from '@masknet/web3-constants/evm/artblocks.json'
-import Savings from '@masknet/web3-constants/evm/savings.json'
+import Aave from '@masknet/web3-constants/evm/aave.json'
+import Lido from '@masknet/web3-constants/evm/lido.json'
 import { hookTransform, transform, transformFromJSON } from './utils'
 
 function getEnvConstants(key: 'WEB3_CONSTANTS_RPC') {
@@ -118,5 +119,8 @@ export const useArtBlocksConstants = hookTransform(getArtBlocksConstants)
 export const getNftRedPacketConstants = transform(NftRedPacket)
 export const useNftRedPacketConstants = hookTransform(getNftRedPacketConstants)
 
-export const getSavingsConstants = transform(Savings)
-export const useSavingsConstants = hookTransform(getSavingsConstants)
+export const getLidoConstants = transform(Aave)
+export const useLidoConstants = hookTransform(getLidoConstants)
+
+export const getAaveConstants = transform(Lido)
+export const useAaveConstants = hookTransform(getAaveConstants)
