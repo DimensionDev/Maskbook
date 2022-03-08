@@ -119,6 +119,7 @@ export enum NetworkType {
     Metis = 'Metis',
     Optimistic = 'Optimistic',
     Conflux = 'Conflux',
+    Conflux_Testnet = 'Conflux_Testnet',
 }
 
 export interface Wallet {

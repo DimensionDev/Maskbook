@@ -99,6 +99,7 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
                 case NetworkType.Avalanche:
                 case NetworkType.Optimistic:
                 case NetworkType.Conflux:
+                case NetworkType.Conflux_Testnet:
                     console.error('To be implement network: ', networkType)
                     return ''
                 default:
@@ -178,6 +179,7 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
                 case NetworkType.Metis:
                 case NetworkType.Optimistic:
                 case NetworkType.Conflux:
+                case NetworkType.Conflux_Testnet:
                     console.error('To be implement network: ', networkType)
                     return ''
                 default:

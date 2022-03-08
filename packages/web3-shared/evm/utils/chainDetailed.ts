@@ -96,6 +96,7 @@ export const getChainIdFromNetworkType = createLookupTableResolver<NetworkType, 
         [NetworkType.xDai]: ChainId.xDai,
         [NetworkType.Aurora]: ChainId.Aurora,
         [NetworkType.Conflux]: ChainId.Conflux,
+        [NetworkType.Conflux_Testnet]: ChainId.Conflux_Testnet,
     },
     ChainId.Mainnet,
 )
@@ -116,6 +117,7 @@ const chainNameMap: Record<NetworkType, string> = {
     [NetworkType.Metis]: 'Metis',
     [NetworkType.Optimistic]: 'Optimistic',
     [NetworkType.Conflux]: 'Conflux',
+    [NetworkType.Conflux_Testnet]: 'Conflux_Testnet',
 }
 export function getNetworkTypeFromChainId(chainId: ChainId, value?: boolean) {
     const chainDetailed = getChainDetailed(chainId)
