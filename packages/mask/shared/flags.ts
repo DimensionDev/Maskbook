@@ -57,6 +57,7 @@ export const Flags = {
     flow_enabled: true,
     celo_enabled: true,
     aurora_enabled: true,
+    moonbeam_enabled: true,
     nft_airdrop_enabled: false,
     post_actions_enabled: false,
     next_id_tip_enabled: false,

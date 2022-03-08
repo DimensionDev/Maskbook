@@ -96,6 +96,7 @@ export const resolveNetworkAddressPrefix = createLookupTableResolver<NetworkType
         [NetworkType.Celo]: 'celo',
         [NetworkType.Fantom]: 'fantom',
         [NetworkType.Aurora]: 'Aurora',
+        [NetworkType.Moonbeam]: 'Moonbeam',
     },
     'ethereum',
 )
@@ -111,6 +112,7 @@ export const resolveNetworkName = createLookupTableResolver<NetworkType, string>
         [NetworkType.Celo]: 'Celo',
         [NetworkType.Fantom]: 'Fantom',
         [NetworkType.Aurora]: 'Aurora',
+        [NetworkType.Moonbeam]: 'Moonbeam',
     },
     'Unknown',
 )
@@ -145,6 +147,7 @@ export const resolveChainColor = createLookupTableResolver<ChainId, string>(
         [ChainId.Fantom]: 'rgb(19, 181, 236)',
         [ChainId.Aurora]: 'rgb(112, 212, 74)',
         [ChainId.Aurora_Testnet]: 'rgb(112, 212, 74)',
+        [ChainId.Moonbeam]: 'rgb(127, 39, 88)',
     },
     'rgb(214, 217, 220)',
 )
