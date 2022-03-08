@@ -1,13 +1,14 @@
 import { QRCode } from 'react-qrcode-logo'
-import { makeStyles, MaskDialog, MaskColorVar, MaskLightTheme } from '@masknet/theme'
+import { makeStyles, MaskDialog, MaskColorVar, MaskLightTheme, useCustomSnackbar } from '@masknet/theme'
 import { Box, Button, DialogContent, ThemeProvider, Typography } from '@mui/material'
 import { MnemonicReveal } from '../../../components/Mnemonic'
-import { MiniMaskIcon, InfoIcon } from '@masknet/icons'
-import { ForwardedRef, forwardRef, useRef } from 'react'
+import { MiniMaskIcon, InfoIcon, CopyIcon } from '@masknet/icons'
+import { ForwardedRef, forwardRef, useEffect, useRef } from 'react'
 import { useReactToPrint } from 'react-to-print'
 import { toJpeg } from 'html-to-image'
 import { WatermarkURL } from '../../../assets'
 import { useDashboardI18N } from '../../../locales'
+import { useCopyToClipboard } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     preview: {
@@ -37,6 +38,12 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 24,
         marginRight: 12,
     },
+    copyIcon: {
+        stroke: '#F6F6F8',
+        fontSize: '14px',
+        cursor: 'pointer',
+        verticalAlign: 'middle',
+    },
 }))
 
 interface PreviewDialogProps {
@@ -45,7 +52,7 @@ interface PreviewDialogProps {
     personaName: string
     id?: string
     privateKey: string
-    words: string[]
+    words?: string[]
     onClose(): void
 }
 
@@ -97,6 +104,17 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
     const { personaName, id, privateKey, words } = props
     const { classes } = useStyles()
     const t = useDashboardI18N()
+    const [state, copyToClipboard] = useCopyToClipboard()
+    const { showSnackbar } = useCustomSnackbar()
+
+    useEffect(() => {
+        if (state.value) {
+            showSnackbar(t.personas_export_persona_copy_success(), { variant: 'success' })
+        }
+        if (state.error?.message) {
+            showSnackbar(t.personas_export_persona_copy_failed(), { variant: 'error' })
+        }
+    }, [state])
 
     return (
         <Box
@@ -118,7 +136,7 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
                         </Box>
 
                         <Box display="flex" alignItems="center">
-                            <Typography fontSize={14} fontWeight={600} width={88}>
+                            <Typography fontSize={14} fontWeight={600} width={102}>
                                 {t.create_account_mask_id()}
                             </Typography>
                             <Typography fontSize={10} fontWeight={600} sx={{ wordBreak: 'break-all', flex: 1 }}>
@@ -127,8 +145,9 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
                         </Box>
 
                         <Box display="flex">
-                            <Typography fontSize={14} fontWeight={600} width={88}>
-                                {t.create_account_private_key()}
+                            <Typography fontSize={14} fontWeight={600} width={102}>
+                                <span style={{ verticalAlign: 'middle' }}>{t.create_account_private_key()} </span>
+                                <CopyIcon className={classes.copyIcon} onClick={() => copyToClipboard(privateKey)} />
                             </Typography>
                             <Typography
                                 fontSize={10}
@@ -146,10 +165,15 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
                         qrStyle="dots"
                     />
                 </Box>
-                <Typography margin="24px 0" fontWeight={600}>
-                    {t.create_account_identity_id()}
-                </Typography>
-                <MnemonicReveal words={words} indexed wordClass={classes.wordClass} />
+                {words?.length ? (
+                    <>
+                        <Typography margin="24px 0" fontWeight={600}>
+                            {t.create_account_identity_id()}
+                        </Typography>
+                        <MnemonicReveal words={words} indexed wordClass={classes.wordClass} />
+                    </>
+                ) : null}
+
                 <Box display="flex" alignItems="center" margin="24px 0">
                     <InfoIcon className={classes.infoIcon} />
                     <Typography fontSize={12} fontWeight={700}>

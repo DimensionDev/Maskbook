@@ -9,6 +9,11 @@ import {
     Web3ProviderType,
     resolveProviderInjectedKey,
     isInjectedProvider,
+    AddressNameType,
+    createWeb3,
+    ChainId,
+    createContract,
+    isSameAddress,
 } from '@masknet/web3-shared-evm'
 import { isPopupPage } from '@masknet/shared-base'
 import { bridgedCoin98Provider, bridgedEthereumProvider } from '@masknet/injected-script'
@@ -28,6 +33,24 @@ import type { InternalSettings } from '../settings/createSettings'
 import { Flags } from '../../shared'
 import Services from '../extension/service'
 import { getProxyWebsocketInstance } from '@masknet/web3-shared-base'
+import { TokenList, Twitter } from '@masknet/web3-providers'
+import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
+import type { AbiItem } from 'web3-utils'
+import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
+import CryptoPunks from '@masknet/web3-contracts/abis/CryptoPunks.json'
+
+const PUNK_CONTRACT_ADDRESS = '0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb'
+async function getTokenOwner(address: string, tokenId: string) {
+    const web3 = createWeb3(Services.Ethereum.request, () => ({
+        chainId: ChainId.Mainnet,
+    }))
+    if (isSameAddress(address, PUNK_CONTRACT_ADDRESS)) {
+        const PUNKContract = createContract(web3, PUNK_CONTRACT_ADDRESS, CryptoPunks as AbiItem[])
+        return PUNKContract?.methods.punkIndexToAddress(tokenId).call()
+    }
+    const ERC721Contract = createContract<ERC721>(web3, address, ERC721ABI as AbiItem[])
+    return ERC721Contract?.methods.ownerOf(tokenId).call()
+}
 
 function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderType {
     return {
@@ -121,9 +144,27 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
         getAssetsList: WalletRPC.getAssetsList,
         getAssetsListNFT: WalletRPC.getAssetsListNFT,
         getCollectionsNFT: WalletRPC.getCollectionsNFT,
-        getAddressNamesList: WalletRPC.getAddressNames,
+        getAddressNamesList: async (identity: Parameters<typeof WalletRPC.getAddressNames>[0]) => {
+            const addressNames = await WalletRPC.getAddressNames(identity)
+            if (identity.identifier.network === 'twitter.com') {
+                const result = await Twitter.getUserNftContainer(identity.identifier.userId ?? '')
+                if (result?.type_name.toUpperCase() === 'ERC721') {
+                    const contractAddress = await getTokenOwner(result.address, result.token_id)
+                    if (contractAddress)
+                        return [
+                            ...addressNames,
+                            {
+                                type: AddressNameType.TWITTER_BLUE,
+                                label: contractAddress,
+                                resolvedAddress: contractAddress,
+                            },
+                        ]
+                }
+            }
+            return addressNames
+        },
         getTransactionList: WalletRPC.getTransactionList,
-        fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
+        fetchERC20TokensFromTokenLists: TokenList.fetchERC20TokensFromTokenLists,
         providerSocket: getProxyWebsocketInstance((info) => WalletMessages.events.socketMessageUpdated.sendToAll(info)),
     }
 }

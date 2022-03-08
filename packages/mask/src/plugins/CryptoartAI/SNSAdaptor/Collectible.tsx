@@ -1,17 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import {
-    Avatar,
-    Box,
-    Button,
-    CardActions,
-    CardContent,
-    CardHeader,
-    Link,
-    Paper,
-    Tab,
-    Tabs,
-    Typography,
-} from '@mui/material'
+import { Avatar, Box, Button, CardContent, CardHeader, Link, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
@@ -24,7 +12,6 @@ import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleCard } from './CollectibleCard'
 import { PluginSkeleton } from './PluginSkeleton'
 import { TabState, TransactionType } from '../types'
-import { MaskTextIcon } from '../../../resources/MaskIcon'
 import { resolveAssetLinkOnCryptoartAI, resolveWebLinkOnCryptoartAI } from '../pipes'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { ActionBar } from './ActionBar'
@@ -54,13 +41,6 @@ const useStyles = makeStyles()((theme) => {
                 display: 'none',
             },
         },
-        footer: {
-            marginTop: -1, // merge duplicate borders
-            zIndex: 1,
-            position: 'relative',
-            borderTop: `solid 1px ${theme.palette.divider}`,
-            justifyContent: 'space-between',
-        },
         tabs: {
             height: 'var(--tabHeight)',
             width: '100%',
@@ -87,39 +67,6 @@ const useStyles = makeStyles()((theme) => {
                 color: theme.palette.text.primary,
                 fontWeight: 300,
             },
-        },
-        footnote: {
-            fontSize: 10,
-            marginRight: theme.spacing(1),
-        },
-        footLink: {
-            cursor: 'pointer',
-            marginRight: theme.spacing(0.5),
-            '&:last-child': {
-                marginRight: 0,
-            },
-        },
-        footMenu: {
-            color: theme.palette.text.secondary,
-            fontSize: 10,
-            display: 'flex',
-            alignItems: 'center',
-        },
-        footName: {
-            marginLeft: theme.spacing(0.5),
-        },
-        mask: {
-            width: 40,
-            height: 10,
-        },
-        countdown: {
-            fontSize: 12,
-            borderRadius: 8,
-            display: 'block',
-            white: '100%',
-            color: theme.palette.common.white,
-            backgroundColor: '#eb5757',
-            padding: theme.spacing(0.5, 2),
         },
     }
 })
@@ -175,7 +122,7 @@ export function Collectible(props: CollectibleProps) {
 
     return (
         <>
-            <CollectibleCard classes={classes}>
+            <CollectibleCard classes={{ root: classes.root }}>
                 <CardHeader
                     avatar={
                         <Link
@@ -317,21 +264,6 @@ export function Collectible(props: CollectibleProps) {
                         {tabIndex === TabState.HISTORY ? <HistoryTab /> : null}
                     </Paper>
                 </CardContent>
-                <CardActions className={classes.footer}>
-                    <Typography className={classes.footnote} variant="subtitle2">
-                        <span>{t('plugin_powered_by')} </span>
-                        <Link
-                            className={classes.footLink}
-                            color="textSecondary"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            title="Mask"
-                            href="https://mask.io">
-                            <MaskTextIcon classes={{ root: classes.mask }} viewBox="0 0 80 20" />
-                        </Link>
-                    </Typography>
-                    <div className={classes.footMenu} />
-                </CardActions>
             </CollectibleCard>
             <ActionBar />
         </>

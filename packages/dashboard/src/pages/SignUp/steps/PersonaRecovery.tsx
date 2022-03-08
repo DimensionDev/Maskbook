@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useCustomSnackbar } from '@masknet/theme'
-import { DashboardRoutes, delay } from '@masknet/shared-base'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../locales'
 import { SignUpRoutePath } from '../routePath'
 import { Services } from '../../../API'
@@ -9,6 +9,7 @@ import { PersonaNameUI } from './PersonaNameUI'
 import { useCreatePersonaByPrivateKey, useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
 import { useAsync } from 'react-use'
+import { delay } from '@dimensiondev/kit'
 
 export const PersonaRecovery = () => {
     const t = useDashboardI18N()

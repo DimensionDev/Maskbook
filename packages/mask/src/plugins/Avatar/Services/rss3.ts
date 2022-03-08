@@ -2,6 +2,7 @@ import { personalSign } from '../../../extension/background-script/EthereumServi
 import type { AvatarMetaDB } from '../types'
 import addSeconds from 'date-fns/addSeconds'
 import { RSS3 } from '@masknet/web3-providers'
+import type { RSS3_KEY_SNS } from '../constants'
 
 interface NFTRSSNode {
     signature: string
@@ -10,35 +11,45 @@ interface NFTRSSNode {
 
 const cache = new Map<string, [Promise<NFTRSSNode | undefined>, number]>()
 
-export async function getNFTAvatarFromRSS(userId: string, address: string) {
-    let v = cache.get(address)
+export async function getNFTAvatarFromRSS(userId: string, address: string, snsKey: RSS3_KEY_SNS) {
+    const key = `${address}, ${userId}, ${snsKey}`
+    let v = cache.get(key)
     if (!v || Date.now() > v[1]) {
-        cache.set(address, [_getNFTAvatarFromRSS(userId, address), addSeconds(Date.now(), 60).getTime()])
+        cache.set(key, [_getNFTAvatarFromRSS(userId, address, snsKey), addSeconds(Date.now(), 60).getTime()])
     }
 
-    v = cache.get(address)
+    v = cache.get(key)
     const result = await v?.[0]
     return result?.nft
 }
 
-async function _getNFTAvatarFromRSS(userId: string, address: string): Promise<NFTRSSNode | undefined> {
+export function deleteTargetCache(userId: string, address: string, snsKey: RSS3_KEY_SNS) {
+    const key = `${address}, ${userId}, ${snsKey}`
+    cache.delete(key)
+}
+
+async function _getNFTAvatarFromRSS(
+    userId: string,
+    address: string,
+    snsKey: RSS3_KEY_SNS,
+): Promise<NFTRSSNode | undefined> {
     const rss = RSS3.createRSS3(address, async (message: string) => {
         return personalSign(message, address)
     })
 
-    const nfts = await RSS3.getFileData<Record<string, NFTRSSNode>>(rss, address, '_nfts')
+    const nfts = await RSS3.getFileData<Record<string, NFTRSSNode>>(rss, address, snsKey)
     if (nfts) {
         return nfts[userId]
     }
     return RSS3.getFileData<NFTRSSNode>(rss, address, '_nft')
 }
 
-export async function saveNFTAvatarToRSS(address: string, nft: AvatarMetaDB, signature: string) {
+export async function saveNFTAvatarToRSS(address: string, nft: AvatarMetaDB, signature: string, snsKey: RSS3_KEY_SNS) {
     const rss = RSS3.createRSS3(address, async (message: string) => {
         return personalSign(message, address)
     })
 
-    let _nfts = await RSS3.getFileData<Record<string, NFTRSSNode>>(rss, address, '_nfts')
+    let _nfts = await RSS3.getFileData<Record<string, NFTRSSNode>>(rss, address, snsKey)
     if (!_nfts) {
         _nfts = {
             [nft.userId]: { signature, nft },
@@ -50,7 +61,7 @@ export async function saveNFTAvatarToRSS(address: string, nft: AvatarMetaDB, sig
         }
     }
 
-    await RSS3.setFileData(rss, address, '_nfts', _nfts)
+    await RSS3.setFileData(rss, address, snsKey, _nfts)
 
     // clear cache
     if (cache.has(address)) cache.delete(address)

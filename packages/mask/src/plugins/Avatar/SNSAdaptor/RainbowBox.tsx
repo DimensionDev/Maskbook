@@ -28,8 +28,9 @@ interface StyleProps {
     width?: number
     height?: number
     radius?: string
+    size?: number
 }
-const useStyles = makeStyles<StyleProps>()((theme, { width, height, radius = '100%' }) => ({
+const useStyles = makeStyles<StyleProps>()((theme, { width, height, radius = '100%', size = 2 }) => ({
     root: {
         animation: `${rainbowBorderKeyFrames} 6s linear infinite`,
         width,
@@ -41,11 +42,12 @@ const useStyles = makeStyles<StyleProps>()((theme, { width, height, radius = '10
         justifyContent: 'center',
         alignItems: 'center',
         lineHeight: 0,
-        border: '2px solid #00f8ff',
+        border: `${size}px solid #00f8ff`,
     },
 }))
 
 interface RainbowBoxProps extends withClasses<'root'> {
+    borderSize?: number
     width?: number
     height?: number
     radius?: string
@@ -57,6 +59,7 @@ export function RainbowBox(props: RainbowBoxProps) {
             width: props.width,
             height: props.height,
             radius: props.radius,
+            size: props.borderSize,
         }),
         props,
     )

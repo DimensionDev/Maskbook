@@ -11,6 +11,7 @@ import {
     useWeb3,
     TransactionStateType,
     isNativeTokenAddress,
+    formatNFT_TokenId,
 } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import classNames from 'classnames'
@@ -356,7 +357,7 @@ interface NFTCardProps {
 function NFTCard(props: NFTCardProps) {
     const { token, renderOrder } = props
     const { classes } = useStyles()
-    const [name, setName] = useState('#' + token.tokenId)
+    const [name, setName] = useState(formatNFT_TokenId(token.tokenId, 2))
     return (
         <ListItem className={classNames(classes.tokenSelectorWrapper)}>
             <NFTCardStyledAssetPlayer

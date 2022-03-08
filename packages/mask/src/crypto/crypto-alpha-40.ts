@@ -3,11 +3,18 @@
  * @deprecated This version of payload is not in use.
  * Please goto Crypto alpha v38
  */
-import { encodeText, encodeArrayBuffer, decodeArrayBuffer, decodeText, concatArrayBuffer } from '@dimensiondev/kit'
-import { memoizePromise } from '../../utils-pure'
+import {
+    encodeText,
+    encodeArrayBuffer,
+    decodeArrayBuffer,
+    decodeText,
+    concatArrayBuffer,
+    memoizePromise,
+} from '@dimensiondev/kit'
 import { i18n } from '../../shared-ui/locales_legacy'
 import { CryptoWorker } from '../modules/workers'
-import { EC_Private_JsonWebKey, EC_Public_JsonWebKey, AESJsonWebKey, makeTypedMessageText } from '@masknet/shared-base'
+import type { EC_Private_JsonWebKey, EC_Public_JsonWebKey, AESJsonWebKey } from '@masknet/shared-base'
+import { makeTypedMessageText } from '@masknet/typed-message'
 import {
     derive_AES_GCM_256_Key_From_PBKDF2,
     derive_AES_GCM_256_Key_From_ECDH_256k1_Keys,

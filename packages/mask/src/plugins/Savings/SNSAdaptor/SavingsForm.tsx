@@ -1,7 +1,7 @@
-import { useState, useMemo } from 'react'
-import { useAsync } from 'react-use'
 import BigNumber from 'bignumber.js'
 import { Typography } from '@mui/material'
+import { useState, useMemo, useCallback } from 'react'
+import { useAsync } from 'react-use'
 import { unreachable } from '@dimensiondev/kit'
 import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import {
@@ -13,7 +13,7 @@ import {
     formatCurrency,
     formatBalance,
 } from '@masknet/web3-shared-evm'
-import { TokenAmountPanel, FormattedCurrency, LoadingAnimation, TokenIcon } from '@masknet/shared'
+import { TokenAmountPanel, FormattedCurrency, LoadingAnimation, TokenIcon, useRemoteControlledDialog } from '@masknet/shared'
 import { useTokenPrice } from '../../Wallet/hooks/useTokenPrice'
 import { useI18N } from '../../../utils'
 import { useStyles } from './SavingsFormStyles'
@@ -21,17 +21,17 @@ import { TabType, ProtocolType, SavingsProtocol } from '../types'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { AllProviderTradeActionType, AllProviderTradeContext } from '../../Trader/trader/useAllProviderTradeContext'
+import { PluginTraderMessages } from '../../Trader/messages'
+import type { Coin } from '../../Trader/types'
 
 export interface SavingsFormProps {
     chainId: number
     protocol: SavingsProtocol
     tab: TabType
     onClose?: () => void
-    onSwapDialogOpen?: () => void
 }
 
-export function SavingsForm({ chainId, protocol, tab, onClose, onSwapDialogOpen }: SavingsFormProps) {
+export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -44,6 +44,24 @@ export function SavingsForm({ chainId, protocol, tab, onClose, onSwapDialogOpen 
     const [loading, setLoading] = useState(false)
 
     const { value: nativeTokenBalance } = useFungibleTokenBalance(EthereumTokenType.Native, '', chainId)
+
+    const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
+
+    const onConvertClick = useCallback(() => {
+        const token = protocol.stakeToken
+        openSwapDialog({
+            open: true,
+            traderProps: {
+                defaultInputCoin: {
+                    id: token.address,
+                    name: token.name ?? '',
+                    symbol: token.symbol ?? '',
+                    contract_address: token.address,
+                    decimals: token.decimals,
+                } as Coin,
+            },
+        })
+    }, [protocol, openSwapDialog])
 
     // #region form variables
     const tokenAmount = useMemo(() => new BigNumber(rightShift(inputAmount || '0', 18)), [inputAmount])
@@ -90,12 +108,6 @@ export function SavingsForm({ chainId, protocol, tab, onClose, onSwapDialogOpen 
         () => (inputAmount ? new BigNumber(inputAmount).times(tokenPrice).toFixed(2) : '0'),
         [inputAmount, tokenPrice],
     )
-    // #endregion
-
-    // #region trade state
-    const {
-        tradeState: [_, dispatchTradeStore],
-    } = AllProviderTradeContext.useContainer()
     // #endregion
 
     const needsSwap = protocol.type === ProtocolType.Lido && tab === TabType.Withdraw
@@ -189,13 +201,8 @@ export function SavingsForm({ chainId, protocol, tab, onClose, onSwapDialogOpen 
                                 case TabType.Withdraw:
                                     switch (protocol.type) {
                                         case ProtocolType.Lido:
-                                            dispatchTradeStore({
-                                                type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
-                                                token: protocol.stakeToken,
-                                            })
-
                                             onClose?.()
-                                            onSwapDialogOpen?.()
+                                            onConvertClick()
                                             return
                                         default:
                                             if (!(await protocol.withdraw(account, chainId, web3, tokenAmount))) {

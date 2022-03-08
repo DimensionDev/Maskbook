@@ -48,10 +48,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     chainIcon: {
         position: 'absolute',
-        right: -8,
+        right: -9,
         bottom: 0,
-        height: 16,
-        width: 16,
+        height: 18,
+        width: 18,
+        border: `1px solid ${theme.palette.background.default}`,
+        borderRadius: '50%',
     },
     tip: {
         padding: theme.spacing(1),

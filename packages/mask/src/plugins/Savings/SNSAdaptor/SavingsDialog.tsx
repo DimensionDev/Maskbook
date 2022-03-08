@@ -21,10 +21,9 @@ import { SavingsProtocols } from '../protocols'
 export interface SavingsDialogProps {
     open: boolean
     onClose?: () => void
-    onSwapDialogOpen?: () => void
 }
 
-export function SavingsDialog({ open, onClose, onSwapDialogOpen }: SavingsDialogProps) {
+export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const { t } = useI18N()
     const isDashboard = isDashboardPage()
     const { classes } = useStyles({ isDashboard })
@@ -67,7 +66,6 @@ export function SavingsDialog({ open, onClose, onSwapDialogOpen }: SavingsDialog
                                 chainId={chainId}
                                 protocol={selectedProtocol}
                                 onClose={onClose}
-                                onSwapDialogOpen={onSwapDialogOpen}
                             />
                         ) : (
                             <>

@@ -1,7 +1,7 @@
 import { ValueRef, isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import Services from '../extension/service'
 import { MaskMessages } from '../utils/messages'
-import { defer } from '@masknet/shared-base'
+import { defer } from '@dimensiondev/kit'
 
 export interface SettingsTexts {
     primary: () => string
@@ -14,6 +14,8 @@ export type InternalSettings<T> = ValueRef<T> & {
     readonly resolve: (value: T) => void
     readonly reject: (e: Error) => void
 }
+type ValueComparer<T> = (a: T, b: T) => boolean
+const defaultValueComparer = (a: any, b: any) => a === b
 
 const cached: Map<string, InternalSettings<any>> = new Map()
 const lastEventId: Map<string, number> = new Map()
@@ -49,7 +51,7 @@ MaskMessages.events.createInternalSettingsUpdated.on(async (payload) => {
 export function createInternalSettings<T extends browser.storage.StorageValue>(
     key: string,
     value: T,
-    comparer: (a: T, b: T) => boolean = (a, b) => a === b,
+    comparer: ValueComparer<T> = defaultValueComparer,
 ) {
     const settings = new ValueRef(value, comparer) as InternalSettings<T>
     const [readyPromise, resolve, reject] = defer<T>()
@@ -93,7 +95,7 @@ export function createGlobalSettings<T extends browser.storage.StorageValue>(
     key: string,
     value: T,
     UITexts: SettingsTexts,
-    comparer: (a: T, b: T) => boolean = (a, b) => a === b,
+    comparer: ValueComparer<T> = defaultValueComparer,
 ) {
     const settings = createInternalSettings(`settings+${key}`, value, comparer)
     return settings
@@ -103,17 +105,21 @@ export interface NetworkSettings<T> {
     [networkKey: string]: ValueRef<T> & { ready: boolean; readyPromise: Promise<T> }
 }
 
-export function createNetworkSettings<T extends browser.storage.StorageValue>(settingsKey: string, defaultValue: T) {
+export function createNetworkSettings<T extends browser.storage.StorageValue>(
+    settingsKey: string,
+    defaultValue: T,
+    comparer: ValueComparer<T> = defaultValueComparer,
+) {
     const cached: NetworkSettings<T> = {}
     MaskMessages.events.createNetworkSettingsReady.on((networkKey) => {
         if (networkKey.startsWith('plugin:') || settingsKey === 'pluginsEnabled') return
         if (!(networkKey in cached))
-            cached[networkKey] = createInternalSettings(`${networkKey}+${settingsKey}`, defaultValue)
+            cached[networkKey] = createInternalSettings(`${networkKey}+${settingsKey}`, defaultValue, comparer)
     })
     return new Proxy(cached, {
         get(target, networkKey: string) {
             if (!(networkKey in target)) {
-                const settings = createInternalSettings(`${networkKey}+${settingsKey}`, defaultValue)
+                const settings = createInternalSettings(`${networkKey}+${settingsKey}`, defaultValue, comparer)
                 target[networkKey] = settings
                 settings.readyPromise.then(() => MaskMessages.events.createNetworkSettingsReady.sendToAll(networkKey))
             }
