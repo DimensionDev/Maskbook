@@ -4,7 +4,7 @@ import { useAsyncRetry } from 'react-use'
 import Services from '../../../extension/service'
 import { isSameAddress, useAccount } from '@masknet/web3-shared-evm'
 import type { Persona } from '../../../database'
-import type { Binding } from '../types'
+import type { Binding } from '@masknet/shared-base'
 import { useCustomSnackbar } from '@masknet/theme'
 import { usePersonaSign } from '../hooks/usePersonaSign'
 import { useWalletSign } from '../hooks/useWalletSign'
@@ -25,7 +25,7 @@ export const UnbindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onCl
     const account = useAccount()
     const t = useI18N()
 
-    const [openSecondDialog, toggleSecondDialog] = useState(false)
+    const [openSecondDialog, setSecondDialog] = useState(false)
 
     const { showSnackbar } = useCustomSnackbar()
     const currentIdentifier = persona.identifier
@@ -63,7 +63,7 @@ export const UnbindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onCl
 
     return (
         <>
-            <UnbindConfirm unbindAddress={unbindAddress} onConfirm={() => toggleSecondDialog(true)} onClose={onClose} />
+            <UnbindConfirm unbindAddress={unbindAddress} onConfirm={() => setSecondDialog(true)} onClose={onClose} />
             <UnbindPanelUI
                 title={t.unbind_dialog_title()}
                 onClose={onClose}

@@ -2,7 +2,7 @@
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
 import type { TypedMessage, TypedMessageTuple } from '@masknet/typed-message'
-import type { ScopedStorage, ProfileIdentifier, PersonaIdentifier, NextIDPersonaBindings } from '@masknet/shared-base'
+import type { ScopedStorage, ProfileIdentifier, PersonaIdentifier } from '@masknet/shared-base'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
 import type { Subscription } from 'use-subscription'
@@ -408,7 +408,7 @@ export namespace Plugin.SNSAdaptor {
             TabContent: InjectUI<{
                 identity?: ProfileIdentity
                 addressNames?: ProfileAddress[]
-                personaList?: NextIDPersonaBindings[]
+                personaList?: string[]
             }>
         }
         Utils?: {

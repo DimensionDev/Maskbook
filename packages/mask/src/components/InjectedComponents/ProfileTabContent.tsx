@@ -46,7 +46,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const currentIdentity = useLastRecognizedIdentity()
     const identity = useCurrentVisitingIdentity()
     const { currentConnectedPersona } = usePersonaConnectStatus()
-    const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform | 'twitter'
+    const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
     const { value: addressNames = [], loading: loadingAddressNames } = useAddressNames(identity)
     const { value: personaList = [], loading: loadingPersonaList } = useNextIDBoundByPlatform(
         platform as NextIDPlatform,
@@ -122,7 +122,11 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                 <PageTab tabs={tabs} selectedTab={selectedTabComputed} onChange={setSelectedTab} />
             </div>
             <div className={classes.content}>
-                <ContentComponent addressNames={addressNames} identity={identity} personaList={personaList} />
+                <ContentComponent
+                    addressNames={addressNames}
+                    identity={identity}
+                    personaList={personaList?.map((persona) => persona.persona)}
+                />
             </div>
         </div>
     )

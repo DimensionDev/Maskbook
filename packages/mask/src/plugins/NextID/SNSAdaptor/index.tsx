@@ -5,6 +5,7 @@ import { NextIdPage } from '../components/NextIdPage'
 import { RootContext } from '../contexts'
 import { TipButton, TipTaskManager } from '../components/tip'
 import { Flags } from '../../../../shared'
+import { EMPTY_LIST } from '@masknet/web3-shared-evm'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -15,7 +16,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             label: 'Wallet',
             priority: 10,
             UI: {
-                TabContent: ({ personaList = [] }) => <NextIdPage personaList={personaList} />,
+                TabContent: ({ personaList = EMPTY_LIST }) => <NextIdPage personaList={personaList} />,
             },
         },
     ],
