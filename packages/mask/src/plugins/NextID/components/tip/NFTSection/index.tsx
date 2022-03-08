@@ -30,11 +30,11 @@ const useStyles = makeStyles()((theme) => ({
         gridGap: 18,
     },
     keyword: {
-        borderRadius: 6,
+        borderRadius: 8,
         marginRight: theme.spacing(1.5),
     },
     searchButton: {
-        borderRadius: 6,
+        borderRadius: 8,
         width: 100,
     },
     row: {
@@ -62,6 +62,7 @@ export const NFTSection: FC<Props> = ({ className, ...rest }) => {
     }, [erc721TokenDetailedCallback])
 
     const tokens = useMemo(() => (searchedToken ? [searchedToken] : myTokens), [searchedToken, myTokens])
+    const enableTokenIds = useMemo(() => myTokens.map((t) => t.tokenId), [myTokens])
 
     return (
         <div className={classnames(classes.root, className)} {...rest}>
@@ -85,6 +86,7 @@ export const NFTSection: FC<Props> = ({ className, ...rest }) => {
                         className={classes.list}
                         selectedIds={selectedIds}
                         tokens={tokens}
+                        enableTokenIds={enableTokenIds}
                         onChange={(ids) => {
                             setErc721TokenId(ids.length ? ids[0] : null)
                         }}

@@ -9,6 +9,7 @@ import { ExternalLink } from 'react-feather'
 import { NetworkPluginID, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
 import { useI18N } from '../locales'
 import { ImageIcon } from '@masknet/shared'
+import { TipButton } from './tip'
 
 const useStyles = makeStyles()((theme) => ({
     item: {
@@ -17,11 +18,6 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: theme.palette.background.default,
         borderRadius: 8,
         alignItems: 'center',
-    },
-    trashIcon: {
-        fontSize: 20,
-        stroke: theme.palette.text.primary,
-        cursor: 'pointer',
     },
     copy: {
         fontSize: 16,
@@ -40,15 +36,24 @@ const useStyles = makeStyles()((theme) => ({
     linkIcon: {
         marginRight: theme.spacing(1),
     },
+    tipButton: {
+        display: 'inline-block',
+    },
+    delButton: {
+        fontSize: 20,
+        stroke: theme.palette.text.primary,
+        cursor: 'pointer',
+        marginLeft: theme.spacing(1),
+    },
 }))
 interface Item {
     platform: Platform
     identity: string
-    enableAction: boolean
+    deletable: boolean
     onUnBind(address: string): void
 }
 
-export const BindingItem = memo<Item>(({ platform, identity, enableAction, onUnBind }) => {
+export const BindingItem = memo<Item>(({ platform, identity, deletable, onUnBind }) => {
     const t = useI18N()
     const { Utils } = useWeb3State() ?? {}
     const { classes } = useStyles()
@@ -77,7 +82,8 @@ export const BindingItem = memo<Item>(({ platform, identity, enableAction, onUnB
                     </Link>
                 </Stack>
                 <Box>
-                    {enableAction && <DeleteIcon className={classes.trashIcon} onClick={() => onUnBind(identity)} />}
+                    <TipButton addresses={[identity]} className={classes.tipButton} />
+                    {deletable && <DeleteIcon className={classes.delButton} onClick={() => onUnBind(identity)} />}
                 </Box>
             </Stack>
         )

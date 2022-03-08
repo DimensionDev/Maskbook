@@ -7,10 +7,10 @@ import { Box, FormControl, FormControlLabel, MenuItem, Radio, RadioGroup, Select
 import { FC, memo, useCallback, useRef, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
-import { useI18N } from '../../../../utils'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
-import { TargetChainIdContext, useTip } from '../../contexts'
+import { TargetChainIdContext, useTip, useTipValidate } from '../../contexts'
+import { useI18N } from '../../locales'
 import { TipType } from '../../types'
 import { NFTSection } from './NFTSection'
 
@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export const TipForm: FC = memo(() => {
-    const { t } = useI18N()
+    const t = useI18N()
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const { classes } = useStyles()
     const {
@@ -59,8 +59,10 @@ export const TipForm: FC = memo(() => {
         setToken,
         amount,
         setAmount,
+        isSending,
         sendTip,
     } = useTip()
+    const [isValid, validateMessage] = useTipValidate()
     const { Utils } = useWeb3State()
     const selectRef = useRef(null)
     const [id] = useState(uuid)
@@ -90,10 +92,11 @@ export const TipForm: FC = memo(() => {
         token?.address || '',
     )
     // #endregion
+    const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
 
     return (
         <Box className={classes.root}>
-            <Typography>To</Typography>
+            <Typography>{t.tip_to()}</Typography>
 
             <FormControl fullWidth>
                 <Select
@@ -126,8 +129,8 @@ export const TipForm: FC = memo(() => {
                     onChange={(e) => {
                         setTipType(e.target.value as TipType)
                     }}>
-                    <FormControlLabel value={TipType.Token} control={<Radio />} label={t('plugin_tip_token')} />
-                    <FormControlLabel value={TipType.NFT} control={<Radio />} label={t('plugin_tip_nft')} />
+                    <FormControlLabel value={TipType.Token} control={<Radio />} label={t.tip_type_token()} />
+                    <FormControlLabel value={TipType.NFT} control={<Radio />} label={t.tip_type_nft()} />
                 </RadioGroup>
             </FormControl>
             {tipType === TipType.Token ? (
@@ -164,9 +167,9 @@ export const TipForm: FC = memo(() => {
                     size="large"
                     className={classes.tipButton}
                     fullWidth
-                    disabled={false}
+                    disabled={!isValid || isSending}
                     onClick={sendTip}>
-                    {t('plugin_tip_send')}
+                    {buttonLabel}
                 </ActionButton>
             </EthereumChainBoundary>
         </Box>

@@ -60,6 +60,7 @@ export function NextIdPage({}: NextIDPageProps) {
         return Services.Identity.queryPersonaByProfile(currentProfileIdentifier.identifier)
     }, [currentProfileIdentifier, personaConnectStatus.hasPersona])
 
+    console.log('identifier', visitingPersonaIdentifier.identifier)
     const { value: bindings, loading } = useAsync(async () => {
         if (!currentPersona) return
         if (isOwn) {
@@ -102,7 +103,7 @@ export function NextIdPage({}: NextIDPageProps) {
                     <Box>
                         {bindings.proofs.map((x) => (
                             <BindingItem
-                                enableAction={isOwn}
+                                deletable={isOwn}
                                 key={x.identity}
                                 platform={x.platform as Platform}
                                 identity={x.identity}

@@ -379,7 +379,8 @@
         "walletlink",
         "wnative",
         "xdescribe",
-        "xtest"
+        "xtest",
+        "deletable"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [

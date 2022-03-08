@@ -1,28 +1,72 @@
 import { Currency } from '@masknet/icons'
-import { useAccount } from '@masknet/web3-shared-evm'
+import { usePostInfoDetails } from '@masknet/plugin-infra'
+import type { ProfileIdentifier } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
 import classnames from 'classnames'
-import { FC, HTMLProps, MouseEventHandler, useCallback } from 'react'
+import { FC, HTMLProps, MouseEventHandler, useCallback, useEffect, useMemo } from 'react'
+import { useAsyncFn } from 'react-use'
+import Services from '../../../../extension/service'
 import { PluginNextIdMessages } from '../../messages'
+import { Platform } from '../../types'
 
-interface Props extends HTMLProps<HTMLDivElement> {}
+interface Props extends HTMLProps<HTMLDivElement> {
+    addresses?: string[]
+    receiver?: ProfileIdentifier
+}
 
-export const TipButton: FC<Props> = ({ className, ...rest }) => {
-    // So far it is not possible to fetch wallets of user
-    const account = useAccount()
+const useStyles = makeStyles()({
+    tipButton: {
+        cursor: 'pointer',
+    },
+})
+
+export const TipButton: FC<Props> = ({ className, receiver, addresses = [], ...rest }) => {
+    const { classes } = useStyles()
+
+    const [state, queryBindings] = useAsyncFn(async () => {
+        if (!receiver) return []
+
+        const persona = await Services.Identity.queryPersonaByProfile(receiver)
+        if (!persona) return []
+
+        const bindings = await Services.Helper.queryExistedBinding(persona.identifier)
+        if (!bindings) return []
+
+        const wallets = bindings.proofs.filter((p) => p.platform === Platform.ethereum).map((p) => p.identity)
+        return wallets
+    }, [receiver])
+
+    useEffect(() => {
+        queryBindings()
+    }, [queryBindings])
+
+    const allAddresses = useMemo(() => [...(state.value || []), ...addresses], [state.value, addresses])
 
     const sendTip: MouseEventHandler<HTMLDivElement> = useCallback(
-        (evt) => {
+        async (evt) => {
             evt.stopPropagation()
             evt.preventDefault()
+            if (state.loading || !state.value) {
+                await queryBindings()
+            }
+            if (!allAddresses.length) return
             PluginNextIdMessages.tipTask.sendToLocal({
-                addresses: [account],
+                addresses: allAddresses,
             })
         },
-        [account],
+        [state, allAddresses],
     )
+
+    if (allAddresses.length === 0) return null
+
     return (
-        <div className={classnames(className)} {...rest} role="button" onClick={sendTip}>
+        <div className={classnames(className, classes.tipButton)} {...rest} role="button" onClick={sendTip}>
             <Currency htmlColor="#8899a6" viewBox="0 0 24 24" />
         </div>
     )
+}
+
+export const PostTipButton: FC<Props> = (props) => {
+    const identifier = usePostInfoDetails.author()
+    return <TipButton {...props} receiver={identifier} />
 }
