@@ -119,8 +119,8 @@ export const useArtBlocksConstants = hookTransform(getArtBlocksConstants)
 export const getNftRedPacketConstants = transform(NftRedPacket)
 export const useNftRedPacketConstants = hookTransform(getNftRedPacketConstants)
 
-export const getLidoConstants = transform(Aave)
-export const useLidoConstants = hookTransform(getLidoConstants)
-
-export const getAaveConstants = transform(Lido)
+export const getAaveConstants = transform(Aave)
 export const useAaveConstants = hookTransform(getAaveConstants)
+
+export const getLidoConstants = transform(Lido)
+export const useLidoConstants = hookTransform(getLidoConstants)

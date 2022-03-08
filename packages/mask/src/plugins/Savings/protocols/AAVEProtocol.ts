@@ -188,13 +188,13 @@ export class AAVEProtocol implements SavingsProtocol {
     private async createDepositTokenOperation(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
         const aaveLPoolAddress =
             getAaveConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS
-        const lPoolAdressProviderContract = createContract<AaveLendingPoolAddressProvider>(
+        const lPoolAddressProviderContract = createContract<AaveLendingPoolAddressProvider>(
             web3,
             aaveLPoolAddress,
             AaveLendingPoolAddressProviderABI as AbiItem[],
         )
 
-        const poolAddress = await lPoolAdressProviderContract?.methods.getLendingPool().call()
+        const poolAddress = await lPoolAddressProviderContract?.methods.getLendingPool().call()
 
         const contract = createContract<AaveLendingPool>(
             web3,
@@ -223,13 +223,13 @@ export class AAVEProtocol implements SavingsProtocol {
 
     public async withdrawEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
         try {
-            const lPoolAdressProviderContract = createContract<AaveLendingPoolAddressProvider>(
+            const lPoolAddressProviderContract = createContract<AaveLendingPoolAddressProvider>(
                 web3,
                 getAaveConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS,
                 AaveLendingPoolAddressProviderABI as AbiItem[],
             )
 
-            const poolAddress = await lPoolAdressProviderContract?.methods.getLendingPool().call()
+            const poolAddress = await lPoolAddressProviderContract?.methods.getLendingPool().call()
 
             const contract = createContract<AaveLendingPool>(
                 web3,
@@ -249,13 +249,13 @@ export class AAVEProtocol implements SavingsProtocol {
 
     public async withdraw(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
         try {
-            const lPoolAdressProviderContract = createContract<AaveLendingPoolAddressProvider>(
+            const lPoolAddressProviderContract = createContract<AaveLendingPoolAddressProvider>(
                 web3,
                 getAaveConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS,
                 AaveLendingPoolAddressProviderABI as AbiItem[],
             )
 
-            const poolAddress = await lPoolAdressProviderContract?.methods.getLendingPool().call()
+            const poolAddress = await lPoolAddressProviderContract?.methods.getLendingPool().call()
 
             const gasEstimate = await this.withdrawEstimate(account, chainId, web3, value)
             const contract = createContract<AaveLendingPool>(
