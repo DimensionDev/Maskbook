@@ -2,7 +2,6 @@ import { useI18N } from '../locales'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Skeleton, Stack, Typography } from '@mui/material'
 import { NextIDPlatform } from '@masknet/shared-base'
-import type { NextIDPersonaBindings } from '@masknet/shared-base'
 import { useMemo, useState } from 'react'
 import { BindDialog } from './BindDialog'
 import { useAsync, useAsyncRetry, useCounter } from 'react-use'
@@ -31,12 +30,11 @@ const useStyles = makeStyles()((theme) => ({
     },
     verifyDetail: {
         fontWeight: 600,
-        color: '#536471',
+        color: theme.palette.grey[700],
     },
-    verifyWarning: {
+    verifyInstruction: {
         fontWeight: 600,
-        color: '#536471',
-        marginTop: '12px',
+        color: theme.palette.grey[700],
     },
     skeleton: {
         borderRadius: 8,
@@ -48,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NextIDPageProps {
-    personaList: NextIDPersonaBindings[]
+    personaList: string[]
 }
 
 export function NextIdPage({ personaList }: NextIDPageProps) {
@@ -140,11 +138,11 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
                         <Typography className={classes.verifyIntro}>
                             {t.connect_wallet__other_user_tip_intro()}
                         </Typography>
+                        <Typography className={classes.verifyInstruction}>
+                            {t.connect_wallet_other_user_instruction()}
+                        </Typography>
                         <Typography className={classes.verifyDetail}>{t.connect_wallet_other_user_tip1()}</Typography>
                         <Typography className={classes.verifyDetail}>{t.connect_wallet_other_user_tip2()}</Typography>
-                        <Typography className={classes.verifyWarning}>
-                            {t.connect_wallet_other_user_warning()}
-                        </Typography>
                     </Box>
                 )}
                 {isOwn && (
@@ -167,7 +165,7 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
                             <BindingItem
                                 enableAction={isOwn}
                                 key={x.identity}
-                                platform={x.platform as NextIDPlatform}
+                                platform={x.platform}
                                 identity={x.identity}
                                 onUnBind={setUnBindAddress}
                             />
@@ -216,11 +214,11 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
                         <Typography className={classes.verifyIntro}>
                             {t.connect_wallet__other_user_tip_intro()}
                         </Typography>
+                        <Typography className={classes.verifyInstruction}>
+                            {t.connect_wallet_other_user_instruction()}
+                        </Typography>
                         <Typography className={classes.verifyDetail}>{t.connect_wallet_other_user_tip1()}</Typography>
                         <Typography className={classes.verifyDetail}>{t.connect_wallet_other_user_tip2()}</Typography>
-                        <Typography className={classes.verifyDetail}>
-                            {t.connect_wallet_other_user_warning()}
-                        </Typography>
                     </Box>
                 )}
                 {isOwn && (

@@ -26,7 +26,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         marginBottom: '16px',
         backgroundColor: 'red',
-        color: 'white',
+        color: theme.palette.common.white,
     },
     cancelButton: {
         width: '100%',
@@ -59,7 +59,7 @@ export const UnbindConfirm = memo<UnbindConfirmProps>(({ onClose, unbindAddress,
         <MaskDialog open={!!unbindAddress && isShow} maxWidth="xs" title="">
             <DialogContent className={classes.wrapper}>
                 <Box className={classes.title}>
-                    Delete {unbindAddress.slice(0, 8)}...{unbindAddress.slice(-4)} &#xFF1F;
+                    {t.delete()} {unbindAddress.slice(0, 8)}...{unbindAddress.slice(-4)} &#xFF1F;
                 </Box>
                 <Box className={classes.content}>{t.disconnect_warning()}</Box>
                 <Button className={classes.confirmButton} onClick={handleConfirm}>
