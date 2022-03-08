@@ -64,6 +64,7 @@ export default function Wallet() {
         if (value?.computedPayload) {
             switch (value.computedPayload.type) {
                 case EthereumRpcType.SIGN:
+                case EthereumRpcType.SIGN_TYPED_DATA:
                     history.replace(PopupRoutes.WalletSignRequest)
                     break
                 case EthereumRpcType.CONTRACT_INTERACTION:

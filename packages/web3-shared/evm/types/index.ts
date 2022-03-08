@@ -26,8 +26,7 @@ export interface CryptoPrice {
 export type ChainIdOptionalRecord<T> = { [k in ChainId]?: T }
 export type ChainIdRecord<T> = { [k in ChainId]: T }
 
-// bigint is not in our list. iOS doesn't support that.
-export type Primitive = string | number | boolean | symbol | undefined | null
+export type Primitive = string | number | boolean | symbol | undefined | null | bigint
 
 export type Web3Constants = Record<string, { [K in ChainId]: Primitive | Primitive[] }>
 
@@ -217,6 +216,8 @@ export interface ERC721TokenCollectionInfo {
     slug: string
     address: string
     addresses?: string[]
+    symbol: string
+    balance: number
 }
 
 // #endregion
@@ -356,7 +357,7 @@ export enum EthereumMethodType {
     ETH_CALL = 'eth_call',
     ETH_SIGN = 'eth_sign',
     ETH_DECRYPT = 'eth_decrypt',
-    ETH_SIGN_TYPED_DATA = 'eth_signTypedData',
+    ETH_SIGN_TYPED_DATA = 'eth_signTypedData_v4',
     ETH_SIGN_TRANSACTION = 'eth_signTransaction',
     ETH_GET_LOGS = 'eth_getLogs',
     ETH_GET_ENCRYPTION_PUBLIC_KEY = 'eth_getEncryptionPublicKey',
@@ -399,7 +400,7 @@ export enum EthereumRpcType {
 
     // sign
     SIGN = 'eth_sign',
-    SIGN_TYPED_DATA = 'eth_signTypedData',
+    SIGN_TYPED_DATA = 'eth_signTypedData_v4',
 
     // decrypt
     ETH_DECRYPT = 'eth_decrypt',
@@ -655,6 +656,7 @@ export enum AddressNameType {
     RSS3 = 'RSS3',
     GUN = 'GUN',
     THE_GRAPH = 'THE_GRAPH',
+    TWITTER_BLUE = 'TWITTER_BLUE',
 }
 
 export interface AddressName {

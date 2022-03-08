@@ -3,9 +3,8 @@ import { NetworkPluginID } from '@masknet/plugin-infra'
 import addSeconds from 'date-fns/addSeconds'
 import { KeyValue } from '@masknet/web3-providers'
 import { NFT_AVATAR_DB_NAME, NFT_AVATAR_DB_NAME_STORAGE } from '../constants'
-import { gun2 } from '../../../network/gun/version.2'
+import { getGunData } from '@masknet/gun-utils'
 
-const NFTAvatarGUN = gun2.get(NFT_AVATAR_DB_NAME)
 const READ_GUN_TIMEOUT = 15 * 1000
 
 const NFTAvatarDB = (network: string) => KeyValue.createJSON_Storage(NFT_AVATAR_DB_NAME + '_' + network)
@@ -18,11 +17,9 @@ function timeout<T>(promise: PromiseLike<T>, duration: number): Promise<T | unde
 }
 
 async function getDataFromGUN(userId: string) {
-    return (
-        NFTAvatarGUN
-            // @ts-expect-error
-            .get(userId).then!()
-    )
+    const data = await getGunData(NFT_AVATAR_DB_NAME, userId)
+    if (typeof data !== 'string') return undefined
+    return data
 }
 
 async function getUserAddressFromGUN(userId: string): Promise<string | undefined> {

@@ -1,11 +1,10 @@
 import * as Alpha40 from '../../../crypto/crypto-alpha-40'
 import * as Alpha39 from '../../../crypto/crypto-alpha-39'
-import { GunAPI as Gun2, GunAPISubscribe as Gun2Subscribe, GunWorker, GunAPI } from '../../../network/gun/'
-import { decodeText } from '@dimensiondev/kit'
+import { decodeArrayBuffer, decodeText, encodeArrayBuffer, delay, abortSignalTimeout } from '@dimensiondev/kit'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { i18n } from '../../../../shared-ui/locales_legacy'
 import { queryPersonaRecord, queryLocalKey } from '../../../database'
-import { ProfileIdentifier, PostIVIdentifier, delay } from '@masknet/shared-base'
+import { ProfileIdentifier, PostIVIdentifier, EC_Public_CryptoKey } from '@masknet/shared-base'
 import { PostRecord, queryPostDB, updatePostDB } from '../../../../background/database/post'
 import { getNetworkWorker, getNetworkWorkerUninitialized } from '../../../social-network/worker'
 import { cryptoProviderTable } from './cryptoProviderTable'
@@ -14,14 +13,18 @@ import { verifyOthersProve } from './verifyOthersProve'
 import { publicSharedAESKey } from '../../../crypto/crypto-alpha-38'
 import { DecryptFailedReason } from '../../../utils/constants'
 import { asyncIteratorWithResult, memorizeAsyncGenerator } from '../../../utils/type-transform/asyncIteratorHelpers'
-import { steganographyDecodeImageUrl } from '@masknet/encryption'
-import type { TypedMessage, AESJsonWebKey, Payload } from '@masknet/shared-base'
+import { DecryptStaticECDH_PostKey, steganographyDecodeImageUrl } from '@masknet/encryption'
+import type { TypedMessage } from '@masknet/typed-message'
+import type { AESJsonWebKey, Payload } from '@masknet/shared-base'
 import stringify from 'json-stable-stringify'
-import type { SharedAESKeyGun2 } from '../../../network/gun/version.2'
 import { MaskMessages } from '../../../utils/messages'
 import { Err, Ok, Result } from 'ts-results'
 import { decodeTextPayloadWorker } from '../../../social-network/utils/text-payload-worker'
 import { steganographyDownloadImage } from './utils'
+import {
+    GUN_queryPostKey_version39Or38,
+    GUN_queryPostKey_version40,
+} from '../../../../background/network/gun/encryption/queryPostKey'
 
 type Progress = (
     | { progress: 'finding_person_public_key' | 'finding_post_key' | 'init' | 'decode_post' }
@@ -32,11 +35,6 @@ type Progress = (
     type: 'progress'
     /** if this is true, this progress should not cause UI change. */
     internal: boolean
-}
-type DebugInfo = {
-    debug: 'debug_finding_hash'
-    hash: [string, string]
-    type: 'debug'
 }
 type SuccessThrough = 'author_key_not_found' | 'post_key_cached' | 'normal_decrypted'
 type Success = {
@@ -55,7 +53,7 @@ type Failure = {
 export type SuccessDecryption = Success
 export type FailureDecryption = Failure
 export type DecryptionProgress = Progress
-type ReturnOfDecryptPostContentWithProgress = AsyncGenerator<Failure | Progress | DebugInfo, Success | Failure, void>
+type ReturnOfDecryptPostContentWithProgress = AsyncGenerator<Failure | Progress, Success | Failure, void>
 
 const successDecryptionCache = new Map<string, Success>()
 const makeSuccessResultF =
@@ -180,17 +178,11 @@ async function* decryptFromPayloadWithProgress_raw(
         const mine = await queryWhoAmI().then((x) => x || delay(1000).then(queryWhoAmI))
         if (!mine?.privateKey) return makeError(DecryptFailedReason.MyCryptoKeyNotFound)
 
-        const { publicKey: minePublic, privateKey: minePrivate } = mine
-        const networkWorker = getNetworkWorkerUninitialized(whoAmI)
-        try {
-            // eslint-disable-next-line
-            if (version === -40) throw ''
-            const gunNetworkHint = networkWorker!.gunNetworkHint
-            const { keyHash, postHash } = await (
-                await import('../../../network/gun/version.2/hash')
-            ).calculatePostKeyPartition(version, iv, minePublic, gunNetworkHint)
-            yield { type: 'debug', debug: 'debug_finding_hash', hash: [postHash, keyHash] }
-        } catch {}
+        const { privateKey: minePrivate } = mine
+        const minePublic = crypto.subtle.importKey('jwk', mine.publicKey, { name: 'ECDH', namedCurve: 'K-256' }, true, [
+            'deriveKey',
+            'deriveBits',
+        ]) as Promise<EC_Public_CryptoKey>
         if (cachedPostResult) return makeSuccessResult(cachedPostResult, ['post_key_cached'])
 
         let lastError: unknown
@@ -219,16 +211,22 @@ async function* decryptFromPayloadWithProgress_raw(
         }
 
         yield makeProgress('finding_post_key')
-        const aesKeyEncrypted: Array<Alpha40.PublishedAESKey | SharedAESKeyGun2> = []
+        const aesKeyEncrypted: Array<DecryptStaticECDH_PostKey> = []
         if (version === -40) {
-            // Deprecated payload
-            // eslint-disable-next-line import/no-deprecated
-            const result = await GunAPI.queryVersion1PostAESKey(iv, whoAmI.userId)
-            if (result === undefined) return makeError(i18n.t('service_not_share_target'))
+            const result = await GUN_queryPostKey_version40(new Uint8Array(decodeArrayBuffer(iv)), whoAmI.userId)
+            if (result === null) return makeError(i18n.t('service_not_share_target'))
             aesKeyEncrypted.push(result)
         } else if (version === -39 || version === -38) {
-            const keys = await Gun2.queryPostKeysOnGun2(version, iv, minePublic, authorNetworkWorker.val.gunNetworkHint)
-            aesKeyEncrypted.push(...keys)
+            const collector = GUN_queryPostKey_version39Or38(
+                version,
+                new Uint8Array(decodeArrayBuffer(iv)),
+                await minePublic,
+                authorNetworkWorker.val.gunNetworkHint,
+                abortSignalTimeout(2000),
+            )
+            try {
+                for await (const key of collector) aesKeyEncrypted.push(key)
+            } catch {}
         }
         // If we can decrypt with current info, just do it.
         try {
@@ -249,13 +247,13 @@ async function* decryptFromPayloadWithProgress_raw(
 
         // Failed, we have to wait for the future info from gun.
         if (version === -40) return makeError(i18n.t('service_not_share_target'))
-        const subscription = Gun2Subscribe.subscribePostKeysOnGun2(
+        const subscription = GUN_queryPostKey_version39Or38(
             version,
-            iv,
-            minePublic,
+            new Uint8Array(decodeArrayBuffer(iv)),
+            await minePublic,
             authorNetworkWorker.val.gunNetworkHint,
+            new AbortController().signal,
         )
-        GunWorker?.onTerminated(() => subscription.return?.())
         for await (const aes of subscription) {
             console.log('New key received, trying', aes)
             try {
@@ -266,15 +264,21 @@ async function* decryptFromPayloadWithProgress_raw(
         }
         return makeError(i18n.t('service_not_share_target'))
 
-        async function decryptWith(
-            key:
-                | Alpha39.PublishedAESKey
-                | Alpha40.PublishedAESKey
-                | Array<Alpha39.PublishedAESKey | Alpha40.PublishedAESKey>,
-        ): Promise<Success> {
+        function convertKey(key: DecryptStaticECDH_PostKey | DecryptStaticECDH_PostKey[]): Alpha40.PublishedAESKey[] {
+            if (!Array.isArray(key)) return convertKey([key])
+            const result: Alpha40.PublishedAESKey[] = []
+            for (const k of key) {
+                result.push({
+                    salt: encodeArrayBuffer(k.postKeyIV),
+                    encryptedKey: encodeArrayBuffer(k.encryptedPostKey),
+                })
+            }
+            return []
+        }
+        async function decryptWith(key: DecryptStaticECDH_PostKey | DecryptStaticECDH_PostKey[]): Promise<Success> {
             const [contentArrayBuffer, postAESKey] = await cryptoProvider.decryptMessage1ToNByOther({
                 version,
-                AESKeyEncrypted: key,
+                AESKeyEncrypted: convertKey(key),
                 authorsPublicKeyECDH: authorPersona.publicKey,
                 encryptedContent: encryptedText,
                 privateKeyECDH: minePrivate!,

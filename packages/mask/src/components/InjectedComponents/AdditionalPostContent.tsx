@@ -1,21 +1,21 @@
 import { Typography, Card, Box, CircularProgress, CircularProgressProps } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
-import { TypedMessage, makeTypedMessageText } from '@masknet/shared-base'
-import { TypedMessageRendererProps, DefaultTypedMessageRenderer } from './TypedMessageRenderer'
+import { TypedMessage, makeTypedMessageText } from '@masknet/typed-message'
+import { TextResizeContext, TypedMessageRender } from '@masknet/typed-message/dom'
+import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context'
 import CheckIcon from '@mui/icons-material/Check'
 import CloseIcon from '@mui/icons-material/Close'
 import green from '@mui/material/colors/green'
 import { MaskIcon } from '../../resources/MaskIcon'
 import { memo, useCallback, useMemo } from 'react'
+import { activatedSocialNetworkUI } from '../../social-network/ui'
 
 export enum AdditionalIcon {
     check = 'check',
     error = 'error',
 }
-export interface AdditionalContentProps
-    extends withClasses<never>,
-        Omit<TypedMessageRendererProps<TypedMessage>, 'message'> {
+export interface AdditionalContentProps {
     title: string
     titleIcon?: keyof typeof AdditionalIcon
     headerActions?: React.ReactNode
@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const AdditionalContent = memo(function AdditionalContent(props: AdditionalContentProps): JSX.Element {
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles()
     const stop = useCallback((ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => ev.stopPropagation(), [])
     const { progress, title, message } = props
     const ProgressJSX = !progress ? null : progress === true ? (
@@ -76,7 +76,14 @@ export const AdditionalContent = memo(function AdditionalContent(props: Addition
             <header className={classes.content}>{header}</header>
             {message ? (
                 <main className={classes.content}>
-                    <DefaultTypedMessageRenderer {...props} message={TypedMessage} allowTextEnlarge />
+                    <TextResizeContext.Provider value>
+                        <TypedMessageRenderContext
+                            renderFragments={
+                                activatedSocialNetworkUI?.customization.componentOverwrite?.RenderFragments
+                            }>
+                            <TypedMessageRender message={TypedMessage} />
+                        </TypedMessageRenderContext>
+                    </TextResizeContext.Provider>
                 </main>
             ) : null}
         </Card>

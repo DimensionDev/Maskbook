@@ -25,7 +25,7 @@ const nonFungibleCollectibleAsset = async (
     } finally {
         try {
             await collectAllPageDate<ERC721TokenDetailed>(
-                (page, pageInfo) => getRaribleNFTList(openSeaApiKey, address, page, size, pageInfo),
+                (page, pageInfo) => getRaribleNFTList(address, page, size, pageInfo),
                 size,
                 push,
             )

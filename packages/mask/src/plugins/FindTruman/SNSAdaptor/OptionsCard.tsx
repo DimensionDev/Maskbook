@@ -1,10 +1,9 @@
-import type { PuzzleCondition, UserPollStatus } from '../types'
+import type { UserPollStatus } from '../types'
 import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Alert, Box, Card, CardContent, Chip, Snackbar, Typography } from '@mui/material'
 import { RadioButtonChecked, RadioButtonUnchecked, DoneOutlined, Send, RefreshOutlined } from '@mui/icons-material'
 import NoNftCard from './NoNftCard'
-import { useChainId } from '@masknet/web3-shared-evm'
 import { FindTrumanContext } from '../context'
 import { BorderLinearProgress } from './ResultCard'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -75,19 +74,16 @@ export default function OptionsCard(props: OptionsViewProps) {
     const [choice, setChoice] = useState(userStatus ? userStatus.choice : -1)
     const [submitting, setSubmitting] = useState(false)
     const [error, setError] = useState<'' | 'insufficient-nft'>('')
-    const [unmeetCondition, setUnmeetCondition] = useState<PuzzleCondition[]>([])
     const [snackVisible, setSnackVisible] = useState(false)
 
     const { classes, cx } = useOptionsStyles()
-    const chainId = useChainId()
     const { t } = useContext(FindTrumanContext)
     const parentRef = useRef<HTMLDivElement | null>(null)
 
     useEffect(() => {
         setError('')
-        setUnmeetCondition(userStatus?.notMeetConditions || [])
         userStatus && userStatus.notMeetConditions.length > 0 && setError('insufficient-nft')
-    }, [chainId, userStatus])
+    }, [userStatus])
 
     useEffect(() => {
         setChoice(userStatus ? userStatus.choice : -1)
@@ -256,12 +252,12 @@ export default function OptionsCard(props: OptionsViewProps) {
                     </Typography>
                     {renderOptions(userStatus)}
                     {!error && renderSubmitButton(userStatus)}
-                    {unmeetCondition.length > 0 && (
+                    {userStatus.notMeetConditions.length > 0 && (
                         <>
                             <Alert severity="info" sx={{ mb: 1 }}>
                                 {t('plugin_find_truman_insufficient_nft')}
                             </Alert>
-                            <NoNftCard conditions={unmeetCondition} />
+                            <NoNftCard conditions={userStatus.notMeetConditions} />
                         </>
                     )}
                 </>

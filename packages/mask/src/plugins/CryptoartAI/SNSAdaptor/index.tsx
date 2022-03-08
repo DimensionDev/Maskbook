@@ -1,12 +1,9 @@
 import { uniq } from 'lodash-unified'
-import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
-import MaskPluginWrapper from '../../MaskPluginWrapper'
+import { Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra'
 import { PostInspector } from './PostInspector'
 import { base } from '../base'
 import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils'
-import { PLUGIN_NAME } from '../constants'
-import type { PayloadType } from '../types'
-import { getTypedMessageContent } from '../../../protocols/typed-message'
+import { extractTextFromTypedMessage } from '@masknet/typed-message'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -14,24 +11,18 @@ const sns: Plugin.SNSAdaptor.Definition = {
     PostInspector: function Component() {
         const links = usePostInfoDetails.mentionedLinks()
         const link = uniq(links).find(checkUrl)
-
         const asset = getAssetInfoFromURL(link)
-
-        return asset ? renderPostInspector(asset) : null
+        usePluginWrapper(!!asset)
+        return asset ? <PostInspector payload={asset} /> : null
     },
     DecryptedInspector: function Component(props) {
-        const collectibleUrl = getRelevantUrl(getTypedMessageContent(props.message))
+        const collectibleUrl = getRelevantUrl(
+            extractTextFromTypedMessage(props.message, { linkAsText: true }).unwrapOr(''),
+        )
         const asset = getAssetInfoFromURL(collectibleUrl)
-        return asset ? renderPostInspector(asset) : null
+        usePluginWrapper(!!asset)
+        return asset ? <PostInspector payload={asset} /> : null
     },
 }
 
 export default sns
-
-function renderPostInspector(payload: PayloadType) {
-    return (
-        <MaskPluginWrapper pluginName={PLUGIN_NAME}>
-            <PostInspector payload={payload} />
-        </MaskPluginWrapper>
-    )
-}

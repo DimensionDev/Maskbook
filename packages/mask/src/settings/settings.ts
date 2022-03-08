@@ -5,6 +5,7 @@ import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'
 import { Identifier, ProfileIdentifier } from '@masknet/shared-base'
 import { PLUGIN_ID } from '../plugins/EVM/constants'
+import { isEqual } from 'lodash-unified'
 
 /**
  * Does the debug mode on
@@ -12,14 +13,6 @@ import { PLUGIN_ID } from '../plugins/EVM/constants'
 export const debugModeSetting = createGlobalSettings<boolean>('debugMode', false, {
     primary: () => i18n.t('settings_enable_debug'),
     secondary: () => i18n.t('settings_enable_debug_desc'),
-})
-
-/**
- * Whether if create substitute post for all posts
- */
-export const allPostReplacementSettings = createGlobalSettings<boolean>('post replacement all', false, {
-    primary: () => i18n.t('settings_post_replacement'),
-    secondary: () => i18n.t('settings_post_replacement_desc'),
 })
 
 // #region appearance
@@ -69,6 +62,13 @@ export const sayHelloShowed: NetworkSettings<boolean> = createNetworkSettings('s
 export const dismissPinExtensionTip = createGlobalSettings<boolean>('dismissPinExtensionTip', false, {
     primary: () => '',
 })
+export const dismissVerifyNextID: NetworkSettings<{ [key in string]: boolean }> = createNetworkSettings(
+    'dismissVerifyNextID',
+    {},
+    isEqual,
+)
+export const bioDescription: NetworkSettings<string> = createNetworkSettings('bioDescription', '')
+export const personalHomepage: NetworkSettings<string> = createNetworkSettings('personalHomepage', '')
 // This is a misuse of concept "NetworkSettings" as "namespaced settings"
 // The refactor is tracked in https://github.com/DimensionDev/Maskbook/issues/1884
 /**
@@ -95,10 +95,6 @@ export const newDashboardConnection = createGlobalSettings('beta-dashboard', fal
 })
 
 export const currentPersonaIdentifier = createGlobalSettings<string>('currentPersonaIdentifier', '', {
-    primary: () => 'DO NOT DISPLAY IT IN UI',
-})
-
-export const currentPopupWindowId = createGlobalSettings<number>('currentPopupWindowId', 0, {
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
 

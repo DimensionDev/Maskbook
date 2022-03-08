@@ -172,7 +172,15 @@ export function resolveBlockLinkOnExplorer(chainId: ChainId, block: string): str
 }
 
 export function resolveIPFSLink(ipfs: string): string {
-    return urlcat('https://ipfs.fleek.co/ipfs/:ipfs', { ipfs })
+    return urlcat('https://coldcdn.com/api/cdn/mipfsygtms/ipfs/:ipfs', { ipfs })
+}
+
+export function resolveResourceLink(originLink: string): string {
+    if (!originLink) return ''
+    if (originLink.startsWith('http') || originLink.startsWith('data')) return originLink
+    if (originLink.startsWith('ipfs://ipfs/')) return resolveIPFSLink(originLink.replace(/^ipfs:\/\/ipfs\//, ''))
+    if (originLink.startsWith('ipfs://')) return resolveIPFSLink(decodeURIComponent(originLink).replace('ipfs://', ''))
+    return resolveIPFSLink(originLink)
 }
 
 export function resolveDomainLink(domain?: string) {

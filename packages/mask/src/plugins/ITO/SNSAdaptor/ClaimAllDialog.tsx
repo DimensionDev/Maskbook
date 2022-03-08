@@ -38,181 +38,187 @@ interface StyleProps {
     shortITOwrapper: boolean
 }
 
-const useStyles = makeStyles<StyleProps>()((theme, props) => ({
-    wrapper: {
-        paddingBottom: '0px !important',
-        paddingTop: '0px !important',
-    },
-    actionButton: {
-        margin: '0 auto',
-        minHeight: 'auto',
-        width: '100%',
-        fontSize: 18,
-        fontWeight: 400,
-    },
-    footer: {
-        marginTop: theme.spacing(2),
-        zIndex: 1,
-    },
-    footnote: {
-        fontSize: 10,
-        marginRight: theme.spacing(1),
-    },
-    footLink: {
-        cursor: 'pointer',
-        marginRight: theme.spacing(0.5),
-        '&:last-child': {
-            marginRight: 0,
+const useStyles = makeStyles<StyleProps>()((theme, props) => {
+    const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
+    const isLight = theme.palette.mode === 'light'
+    return {
+        wrapper: {
+            padding: theme.spacing(0, 4),
+            [smallQuery]: {
+                padding: theme.spacing(0, 1),
+            },
         },
-    },
-    tokenCardWrapper: {
-        width: '100%',
-        color: 'white',
-        overflow: 'auto',
-        paddingTop: theme.spacing(1),
-        marginBottom: theme.spacing(0.5),
-    },
-    tokenCard: {
-        width: 535,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        color: 'white',
-        flexDirection: 'column',
-        padding: 0,
-        marginBottom: theme.spacing(1.5),
-        alignItems: 'baseline',
-        justifyContent: 'space-between',
-    },
-    cardHeader: {
-        display: 'flex',
-        borderTopRightRadius: 10,
-        borderTopLeftRadius: 10,
-        height: 42,
-        width: '100%',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        '-webkit-font-smoothing': 'antialiased',
-        fontSize: 14,
-    },
-    cardHeaderLocked: {
-        background: theme.palette.mode === 'light' ? '#EBEEF0' : '#2F3336',
-        color: theme.palette.mode === 'light' ? '#7B8192' : '#6F767C',
-    },
-    cardHeaderClaimable: {
-        background: '#77E0B5',
-        color: 'white',
-    },
-    cardContent: {
-        display: 'flex',
-        alignItems: 'center',
-        width: '100%',
-        boxSizing: 'border-box',
-        borderBottomRightRadius: 10,
-        borderBottomLeftRadius: 10,
-        height: 62,
-        fontSize: 18,
-    },
-    cardContentLocked: {
-        background: theme.palette.mode === 'light' ? 'white' : '',
-        border: `1px solid ${theme.palette.mode === 'light' ? '#EBEEF0' : '#2F3336'}`,
-    },
-    cardContentClaimable: {
-        background: 'rgba(119, 224, 181, 0.1)',
-        border: '1px solid rgba(56, 221, 192, 0.4)',
-    },
-    content: {
-        marginBottom: theme.spacing(2),
-    },
-    contentTitle: {
-        fontSize: 18,
-        fontWeight: 300,
-    },
-    tab: {
-        height: 36,
-        minHeight: 36,
-        fontWeight: 300,
-    },
-    tabs: {
-        width: 536,
-        height: 36,
-        minHeight: 36,
-        margin: '0 auto',
-        borderRadius: 4,
-        backgroundColor: theme.palette.background.default,
-        '& .Mui-selected': {
-            color: theme.palette.primary.contrastText,
-            backgroundColor: theme.palette.primary.main,
+        actionButton: {
+            margin: '0 auto',
+            minHeight: 'auto',
+            width: '100%',
+            fontSize: 18,
+            fontWeight: 400,
         },
-    },
-    indicator: {
-        display: 'none',
-    },
-    tabPanel: {
-        marginTop: theme.spacing(3),
-    },
-    contentWrapper: {
-        display: 'flex',
-        flexDirection: 'column',
-        height: props.shortITOwrapper ? 450 : 650,
-    },
-    actionButtonWrapper: {
-        position: 'sticky',
-        width: '100%',
-        marginTop: 'auto',
-        bottom: 0,
-        zIndex: 2,
-        paddingBottom: theme.spacing(4),
-        paddingTop: theme.spacing(2),
-        backgroundColor: theme.palette.background.paper,
-    },
-    emptyContentWrapper: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: 350,
-    },
+        footer: {
+            marginTop: theme.spacing(2),
+            zIndex: 1,
+        },
+        footnote: {
+            fontSize: 10,
+            marginRight: theme.spacing(1),
+        },
+        footLink: {
+            cursor: 'pointer',
+            marginRight: theme.spacing(0.5),
+            '&:last-child': {
+                marginRight: 0,
+            },
+        },
+        tokenCardWrapper: {
+            width: '100%',
+            color: 'white',
+            overflow: 'auto',
+            paddingTop: theme.spacing(1),
+            marginBottom: theme.spacing(0.5),
+        },
+        tokenCard: {
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            color: 'white',
+            flexDirection: 'column',
+            padding: 0,
+            marginBottom: theme.spacing(1.5),
+            alignItems: 'baseline',
+            justifyContent: 'space-between',
+        },
+        cardHeader: {
+            display: 'flex',
+            borderTopRightRadius: 10,
+            borderTopLeftRadius: 10,
+            height: 42,
+            width: '100%',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            '-webkit-font-smoothing': 'antialiased',
+            fontSize: 14,
+        },
+        cardHeaderLocked: {
+            background: isLight ? '#EBEEF0' : '#2F3336',
+            color: isLight ? '#7B8192' : '#6F767C',
+        },
+        cardHeaderClaimable: {
+            background: '#77E0B5',
+            color: 'white',
+        },
+        cardContent: {
+            display: 'flex',
+            alignItems: 'center',
+            width: '100%',
+            boxSizing: 'border-box',
+            borderBottomRightRadius: 10,
+            borderBottomLeftRadius: 10,
+            height: 62,
+            fontSize: 18,
+        },
+        cardContentLocked: {
+            background: isLight ? 'white' : '',
+            border: `1px solid ${isLight ? '#EBEEF0' : '#2F3336'}`,
+        },
+        cardContentClaimable: {
+            background: 'rgba(119, 224, 181, 0.1)',
+            border: '1px solid rgba(56, 221, 192, 0.4)',
+        },
+        content: {
+            marginBottom: theme.spacing(2),
+        },
+        contentTitle: {
+            fontSize: 18,
+            fontWeight: 300,
+        },
+        tab: {
+            height: 36,
+            minHeight: 36,
+            fontWeight: 300,
+        },
+        tabs: {
+            height: 36,
+            minHeight: 36,
+            borderRadius: 4,
+            backgroundColor: theme.palette.background.default,
+            '& .Mui-selected': {
+                color: theme.palette.primary.contrastText,
+                backgroundColor: theme.palette.primary.main,
+            },
+        },
+        indicator: {
+            display: 'none',
+        },
+        tabPanel: {
+            marginTop: theme.spacing(3),
+        },
+        contentWrapper: {
+            display: 'flex',
+            flexDirection: 'column',
+            height: props.shortITOwrapper ? 450 : 650,
+        },
+        actionButtonWrapper: {
+            position: 'sticky',
+            width: '100%',
+            marginTop: 'auto',
+            bottom: 0,
+            zIndex: 2,
+            paddingBottom: theme.spacing(4),
+            paddingTop: theme.spacing(2),
+            backgroundColor: theme.palette.background.paper,
+        },
+        emptyContentWrapper: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: 350,
+        },
 
-    lockIcon: {
-        width: 22,
-        height: 22,
-        marginRight: 6,
-    },
-    textWrapper: {
-        display: 'flex',
-        alignItems: 'center',
-        marginLeft: theme.spacing(1.5),
-    },
-    unlockTime: {
-        marginRight: theme.spacing(1.5),
-    },
-    tokenBalance: {
-        marginLeft: theme.spacing(1.5),
-        color: theme.palette.mode === 'light' ? '#15181B' : '#D9D9D9',
-    },
-    tokenSymbol: {
-        color: theme.palette.mode === 'light' ? '#7B8192' : '#6F767C',
-    },
-    snackbarSuccess: {
-        backgroundColor: '#77E0B5',
-    },
-    snackbarError: {
-        backgroundColor: '#FF5555',
-    },
-    abstractTabWrapper: {
-        position: 'sticky',
-        top: 0,
-        width: '100%',
-        zIndex: 2,
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(2),
-        backgroundColor: theme.palette.background.paper,
-    },
-    walletStatusBox: {
-        width: 535,
-        margin: '24px auto',
-    },
-    claimAllButton: {},
-}))
+        lockIcon: {
+            width: 22,
+            height: 22,
+            marginRight: 6,
+        },
+        textWrapper: {
+            display: 'flex',
+            alignItems: 'center',
+            marginLeft: theme.spacing(1.5),
+        },
+        unlockTime: {
+            marginRight: theme.spacing(1.5),
+        },
+        tokenBalance: {
+            marginLeft: theme.spacing(1.5),
+            color: theme.palette.mode === 'light' ? '#15181B' : '#D9D9D9',
+        },
+        tokenSymbol: {
+            color: theme.palette.mode === 'light' ? '#7B8192' : '#6F767C',
+        },
+        snackbarSuccess: {
+            backgroundColor: '#77E0B5',
+        },
+        snackbarError: {
+            backgroundColor: '#FF5555',
+        },
+        abstractTabWrapper: {
+            position: 'sticky',
+            top: 0,
+            width: '100%',
+            zIndex: 2,
+            paddingTop: theme.spacing(1),
+            paddingBottom: theme.spacing(2),
+            backgroundColor: theme.palette.background.paper,
+        },
+        walletStatusBox: {
+            margin: theme.spacing(3, 'auto'),
+        },
+        claimAllButton: {
+            [smallQuery]: {
+                fontSize: 14,
+            },
+        },
+    }
+})
 
 interface ClaimAllDialogProps {
     onClose: () => void
@@ -361,7 +367,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                     noSwitchNetworkTip
                                     switchButtonStyle={{
                                         minHeight: 'auto',
-                                        width: 540,
+                                        width: '100%',
                                         fontSize: 18,
                                         fontWeight: 400,
                                     }}>

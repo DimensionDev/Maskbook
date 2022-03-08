@@ -1,18 +1,17 @@
 import { useEffect, useState } from 'react'
-import MaskPluginWrapper from '../../MaskPluginWrapper'
-import type { TypedMessage } from '@masknet/shared-base'
+import type { TypedMessage } from '@masknet/typed-message'
 import { PluginPollRPC } from '../messages'
 import { renderWithPollMetadata, PollMetadataReader } from '../helpers'
 import type { PollGunDB } from '../Services'
 import { PollCardUI } from './Polls'
 import { PollMetaData, PollStatus } from '../types'
+import { usePluginWrapper } from '@masknet/plugin-infra'
 
 interface PollsInPostProps {
     message: TypedMessage
 }
 
 export default function PollsInPost(props: PollsInPostProps) {
-    const { message } = props
     const [status, setStatus] = useState<PollStatus>(PollStatus.Inactive)
     const [updatedPoll, setUpdatedPoll] = useState<PollMetaData | undefined>(undefined)
 
@@ -41,16 +40,15 @@ export default function PollsInPost(props: PollsInPostProps) {
         }
     }, [props.message.meta])
 
-    const jsx = message
-        ? renderWithPollMetadata(props.message.meta, (r) => {
-              return (
-                  <div>
-                      <MaskPluginWrapper width={400} pluginName="Poll">
-                          <PollCardUI poll={updatedPoll ?? r} vote={vote} status={status} />
-                      </MaskPluginWrapper>
-                  </div>
-              )
-          })
-        : null
-    return <>{jsx}</>
+    return renderWithPollMetadata(props.message.meta, (r) => {
+        return <C poll={updatedPoll ?? r} vote={vote} status={status} />
+    })
+}
+const C: typeof PollCardUI = (props) => {
+    usePluginWrapper(true, { width: 400 })
+    return (
+        <div>
+            <PollCardUI {...props} />
+        </div>
+    )
 }

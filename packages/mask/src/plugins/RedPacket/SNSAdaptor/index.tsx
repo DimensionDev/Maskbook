@@ -1,4 +1,4 @@
-import type { Plugin } from '@masknet/plugin-infra'
+import { Plugin, usePluginWrapper } from '@masknet/plugin-infra'
 import {
     ChainId,
     EthereumTokenType,
@@ -7,7 +7,6 @@ import {
     getChainIdFromName,
     useERC20TokenDetailed,
 } from '@masknet/web3-shared-evm'
-import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { base } from '../base'
 import { RedPacketMetaKey, RedPacketNftMetaKey } from '../constants'
 import {
@@ -20,7 +19,20 @@ import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '../types'
 import RedPacketDialog from './RedPacketDialog'
 import { RedPacketInPost } from './RedPacketInPost'
 import { RedPacketNftInPost } from './RedPacketNftInPost'
-import { RedPacketIcon } from '@masknet/icons'
+import { RedPacketIcon, NFTRedPacketIcon } from '@masknet/icons'
+
+function Render(props: React.PropsWithChildren<{ name: string }>) {
+    usePluginWrapper(true, { name: props.name })
+    return <>{props.children}</>
+}
+const containerStyle = {
+    display: 'flex',
+    alignItems: 'center',
+}
+const badgeSvgIconSize = {
+    width: 16,
+    height: 16,
+}
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -28,20 +40,20 @@ const sns: Plugin.SNSAdaptor.Definition = {
     DecryptedInspector(props) {
         if (RedPacketMetadataReader(props.message.meta).ok)
             return (
-                <MaskPluginWrapper pluginName="Lucky Drop" publisher={base.publisher}>
+                <Render name="Lucky Drop">
                     {renderWithRedPacketMetadata(props.message.meta, (r) => (
                         <RedPacketInPost payload={r} />
                     ))}
-                </MaskPluginWrapper>
+                </Render>
             )
 
         if (RedPacketNftMetadataReader(props.message.meta).ok)
             return (
-                <MaskPluginWrapper pluginName="NFT Lucky Drop" publisher={base.publisher}>
+                <Render name="NFT Lucky Drop">
                     {renderWithRedPacketNftMetadata(props.message.meta, (r) => (
                         <RedPacketNftInPost payload={r} />
                     ))}
-                </MaskPluginWrapper>
+                </Render>
             )
         return null
     },
@@ -56,7 +68,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
             RedPacketNftMetaKey,
             (_payload) => {
                 const payload = _payload as RedPacketNftJSONPayload
-                return { text: <>&#x1F9E7; {payload.message ? payload.message : 'An NFT Lucky Drop'}</> }
+                return {
+                    text: (
+                        <div style={containerStyle}>
+                            <NFTRedPacketIcon style={badgeSvgIconSize} />
+                            {payload.message ? payload.message : 'An NFT Lucky Drop'}
+                        </div>
+                    ),
+                }
             },
         ],
     ]),
@@ -65,7 +84,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         label: {
             fallback: (
                 <>
-                    <RedPacketIcon style={{ width: 16, height: 16 }} />
+                    <RedPacketIcon style={badgeSvgIconSize} />
                     Luck drop
                 </>
             ),
@@ -84,10 +103,11 @@ function ERC20RedpacketBadge(props: ERC20RedpacketBadgeProps) {
     const tokenDetailed =
         payload.token?.type === EthereumTokenType.Native ? chainDetailed?.nativeCurrency : payload.token ?? fetchedToken
     return (
-        <>
-            &#x1F9E7; A Lucky Drop with {formatBalance(payload.total, tokenDetailed?.decimals ?? 0)} $
+        <div style={containerStyle}>
+            <RedPacketIcon style={badgeSvgIconSize} /> A Lucky Drop with
+            {formatBalance(payload.total, tokenDetailed?.decimals ?? 0)} $
             {tokenDetailed?.symbol ?? tokenDetailed?.name ?? 'Token'} from {payload.sender.name}
-        </>
+        </div>
     )
 }
 

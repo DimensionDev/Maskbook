@@ -1,18 +1,20 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import type { PostContext, PostContextAuthor, PostContextCreation, PostContextSNSActions } from '@masknet/plugin-infra'
 import {
-    ALL_EVENTS,
     extractTextFromTypedMessage,
     isTypedMessageEqual,
     makeTypedMessageTupleFromList,
+    type TypedMessage,
+    type TypedMessageTuple,
+} from '@masknet/typed-message'
+import {
+    ALL_EVENTS,
     ObservableMap,
     ObservableSet,
     parseURL,
     Payload,
     PostIdentifier,
     ProfileIdentifier,
-    TypedMessage,
-    TypedMessageTuple,
     SubscriptionFromValueRef,
     SubscriptionDebug as debug,
     mapSubscription,
@@ -109,6 +111,7 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
                 return opt.rootElement.realCurrent
             },
             rootElement: opt.rootElement,
+            actionsElement: opt.actionsElement,
             suggestedInjectionPoint: opt.suggestedInjectionPoint,
 
             comment: opt.comments,
@@ -156,7 +159,7 @@ export function createRefsForCreatePostContext() {
     const postMessage = new ValueRef<TypedMessageTuple<readonly TypedMessage[]>>(makeTypedMessageTupleFromList())
     const postMetadataImages = new ObservableSet<string>()
     const postMetadataMentionedLinks = new ObservableMap<unknown, string>()
-    const subscriptions: Omit<PostContextCreation, 'rootElement' | 'suggestedInjectionPoint'> = {
+    const subscriptions: Omit<PostContextCreation, 'rootElement' | 'actionsElement' | 'suggestedInjectionPoint'> = {
         avatarURL: mapSubscription(SubscriptionFromValueRef(avatarURL), (x) => {
             if (!x) return null
             try {
