@@ -78,6 +78,10 @@ export enum ChainId {
 
     // Optimistic
     Optimistic = 10,
+
+    // Harmony
+    Harmony = 1666600000,
+    Harmony_Test = 1666700000,
 }
 
 export enum ProviderType {
@@ -113,6 +117,7 @@ export enum NetworkType {
     Fuse = 'Fuse',
     Metis = 'Metis',
     Optimistic = 'Optimistic',
+    Harmony = 'Harmony',
 }
 
 export interface Wallet {

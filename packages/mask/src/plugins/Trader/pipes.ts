@@ -98,6 +98,7 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
                 case NetworkType.Metis:
                 case NetworkType.Avalanche:
                 case NetworkType.Optimistic:
+                case NetworkType.Harmony:
                     console.error('To be implement network: ', networkType)
                     return ''
                 default:
@@ -172,6 +173,8 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
                     return `https://analytics-avx.sushi.com/pairs/${address}`
                 case NetworkType.Aurora:
                     return `https://analytics-aurora.sushi.com/pairs/${address}`
+                case NetworkType.Harmony:
+                    return `https://analytics-harmony.sushi.com/pairs/${address}`
                 case NetworkType.Boba:
                 case NetworkType.Fuse:
                 case NetworkType.Metis:

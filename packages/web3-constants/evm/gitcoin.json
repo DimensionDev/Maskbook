@@ -17,7 +17,9 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": ""
+        "Aurora_Testnet": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "BULK_CHECKOUT_ADDRESS": {
         "Mainnet": "0x7d655c57f71464B6f83811C55D84009Cd9f5221C",
@@ -37,7 +39,9 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": ""
+        "Aurora_Testnet": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "GITCOIN_ETH_ADDRESS": {
         "Mainnet": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -57,7 +61,9 @@
         "Celo": "",
         "Fantom": "",
         "Aurora": "",
-        "Aurora_Testnet": ""
+        "Aurora_Testnet": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     },
     "GITCOIN_TIP_PERCENTAGE": {
         "Mainnet": 5,
@@ -77,6 +83,8 @@
         "Celo": 0,
         "Fantom": 0,
         "Aurora": 0,
-        "Aurora_Testnet": 0
+        "Aurora_Testnet": 0,
+        "Harmony": 0,
+        "Harmony_Test": 0
     }
 }
