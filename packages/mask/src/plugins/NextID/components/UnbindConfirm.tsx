@@ -11,9 +11,6 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         padding: '24px !important',
     },
-    wrapper1: {
-        width: '320px !important',
-    },
     title: {
         fontSize: '16px',
         fontWeight: 500,
@@ -21,6 +18,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     content: {
         marginBottom: '36px',
+        color: theme.palette.grey[700],
     },
     confirmButton: {
         width: '100%',
