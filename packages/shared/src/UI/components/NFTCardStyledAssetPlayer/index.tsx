@@ -34,9 +34,9 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface Props extends withClasses<'loadingFailImage' | 'iframe' | 'wrapper' | 'loadingPlaceholder' | 'imgWrapper'> {
-    chainId: ChainId
-    contractAddress: string
-    tokenId: string
+    chainId?: ChainId
+    contractAddress?: string
+    tokenId?: string
     url?: string
     fallbackImage?: URL
     fallbackResourceLoader?: JSX.Element
@@ -46,9 +46,9 @@ interface Props extends withClasses<'loadingFailImage' | 'iframe' | 'wrapper' | 
 }
 export function NFTCardStyledAssetPlayer(props: Props) {
     const {
-        chainId,
-        contractAddress,
-        tokenId,
+        chainId = ChainId.Mainnet,
+        contractAddress = '',
+        tokenId = '',
         fallbackImage,
         fallbackResourceLoader,
         url,
