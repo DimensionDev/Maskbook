@@ -146,6 +146,12 @@ export const AssetPlayer = memo<AssetPlayerProps>((props) => {
         }
     }, [playerState, ref.current])
 
+    useEffect(() => {
+        if (playerState === AssetPlayerState.NORMAL) {
+            ref.current?.iFrameResizer.sendMessage({ loaded: true })
+        }
+    }, [playerState, ref.current])
+
     const IframeResizerMemo = useMemo(
         () =>
             hidden ? null : (

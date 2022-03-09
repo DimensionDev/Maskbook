@@ -1,7 +1,7 @@
 import * as bip39 from 'bip39'
 import { validateMnemonic } from 'bip39'
 import { decode, encode } from '@msgpack/msgpack'
-import { blobToArrayBuffer, decodeArrayBuffer, decodeText, encodeArrayBuffer } from '@dimensiondev/kit'
+import { decodeArrayBuffer, decodeText, encodeArrayBuffer } from '@dimensiondev/kit'
 import {
     createPersonaByJsonWebKey,
     loginPersona,
@@ -248,6 +248,7 @@ export async function queryPagedPostHistory(
         network: string
         userIds: string[]
         after?: PostIVIdentifier
+        pageOffset?: number
     },
     count: number,
 ) {
@@ -373,7 +374,7 @@ export const updateCurrentPersonaAvatar = async (avatar: Blob) => {
     const identifier = await getCurrentPersonaIdentifier()
 
     if (identifier) {
-        await storeAvatar(identifier, await blobToArrayBuffer(avatar))
+        await storeAvatar(identifier, await avatar.arrayBuffer())
         MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
     }
 }
@@ -389,6 +390,11 @@ export const getCurrentPersonaAvatar = async () => {
     }
 }
 // #endregion
+
+export async function exportPersonaMnemonicWords(identifier: PersonaIdentifier) {
+    const record = await queryPersonaRecord(identifier)
+    return record?.mnemonic?.words
+}
 
 // #region Private / Public key
 export async function exportPersonaPrivateKey(identifier: PersonaIdentifier) {

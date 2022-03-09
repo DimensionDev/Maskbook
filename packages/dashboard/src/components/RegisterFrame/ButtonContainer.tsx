@@ -3,7 +3,7 @@ import { buttonClasses, Stack } from '@mui/material'
 import type { PropsWithChildren } from 'react'
 
 const ButtonContainerUI = styled(Stack)(({ theme }) => ({
-    margin: `${theme.spacing(7)} auto`,
+    margin: `${theme.spacing(3.75)} auto`,
     width: '75%',
     [`& > .${buttonClasses.root}`]: {
         width: '100%',

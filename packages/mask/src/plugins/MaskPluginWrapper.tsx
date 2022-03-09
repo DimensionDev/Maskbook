@@ -2,18 +2,19 @@ import { Typography, SnackbarContent, Button, Link } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { activatedSocialNetworkUI } from '../social-network'
 import { MaskIcon } from '../resources/MaskIcon'
-import { Suspense, ReactNode, useMemo } from 'react'
+import { Suspense, ReactNode, useMemo, forwardRef, useImperativeHandle, useState } from 'react'
 import { isTwitter } from '../social-network-adaptor/twitter.com/base'
 import { usePersonaConnectStatus } from '../components/DataSource/usePersonaConnectStatus'
 import { useI18N } from '../utils'
 import { Box } from '@mui/system'
-import type { Plugin } from '@masknet/plugin-infra'
+import { usePluginI18NField, PluginI18NFieldRender, PluginWrapperComponent, Plugin } from '@masknet/plugin-infra'
 
 interface PluginWrapperProps extends React.PropsWithChildren<{}> {
-    pluginName: string
+    title: string
     width?: number
     action?: ReactNode
-    publisher?: Plugin.Shared.Publisher
+    publisher?: JSX.Element
+    publisherLink?: string
 }
 
 const useStyles = makeStyles()((theme) => {
@@ -62,9 +63,9 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export default function MaskPluginWrapper(props: PluginWrapperProps) {
+export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
     const { classes } = useStyles()
-    const { pluginName, children, action, publisher } = props
+    const { title, children, action, publisher, publisherLink } = props
     const personaConnectStatus = usePersonaConnectStatus()
     const { t } = useI18N()
 
@@ -72,7 +73,7 @@ export default function MaskPluginWrapper(props: PluginWrapperProps) {
         ? t('please_create_persona')
         : !personaConnectStatus.connected
         ? t('please_connect_persona')
-        : pluginName
+        : title
 
     const actionButton = useMemo(() => {
         if (!personaConnectStatus.action) return null
@@ -87,19 +88,26 @@ export default function MaskPluginWrapper(props: PluginWrapperProps) {
 
     const publisherInfo = useMemo(() => {
         if (!publisher) return null
+        const main = (
+            <Typography variant="h6" fontSize="1.1rem" fontWeight="400" color={MaskColorVar.textPrimary}>
+                {publisher}
+            </Typography>
+        )
         return (
             <Box>
                 <Typography variant="h6" fontSize="1.1rem" fontWeight="400" color={MaskColorVar.textSecondary}>
                     Provided by
                 </Typography>
-                <Link href={publisher.link} underline="none" target="_blank" rel="noopener">
-                    <Typography variant="h6" fontSize="1.1rem" fontWeight="400" color={MaskColorVar.textPrimary}>
-                        {publisher.name.fallback}
-                    </Typography>
-                </Link>
+                {publisherLink ? (
+                    <Link href={publisherLink} underline="none" target="_blank" rel="noopener">
+                        {main}
+                    </Link>
+                ) : (
+                    main
+                )}
             </Box>
         )
-    }, [publisher])
+    }, [publisher, publisherLink])
 
     const inner = (
         <div className={classes.card} onClick={(ev) => ev.stopPropagation()}>
@@ -107,7 +115,7 @@ export default function MaskPluginWrapper(props: PluginWrapperProps) {
                 <MaskIcon size={45} />
                 <div className={classes.title}>
                     <Typography variant="h6" fontSize="1.1rem" fontWeight="400">
-                        Mask Plugin {!personaConnectStatus.connected && pluginName ? `(${pluginName})` : ''}
+                        Mask Plugin {!personaConnectStatus.connected && title ? `(${title})` : ''}
                     </Typography>
                     <Typography variant="h6" fontSize="1.1rem" fontWeight="400">
                         {name}
@@ -118,5 +126,28 @@ export default function MaskPluginWrapper(props: PluginWrapperProps) {
             {personaConnectStatus.connected && children ? <div className={classes.body}>{children}</div> : null}
         </div>
     )
-    return <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />} children={inner} />
+    return <Suspense fallback={<SnackbarContent message="Mask is loading this content..." />} children={inner} />
 }
+
+export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SNSAdaptor.Definition> = forwardRef(
+    (props, ref) => {
+        const { ID, name, publisher } = props.definition
+        const t = usePluginI18NField()
+        const [width, setWidth] = useState<undefined | number>(undefined)
+        const [open, setOpen] = useState<boolean>(false)
+        const [title, setTitle] = useState<string | undefined>(undefined)
+
+        useImperativeHandle(ref, () => ({ setWidth, setWrap: setOpen, setWrapperName: setTitle }), [])
+
+        if (!open) return <>{props.children}</>
+        return (
+            <MaskPostExtraInfoWrapper
+                title={title || t(ID, name)}
+                width={width}
+                publisher={publisher ? <PluginI18NFieldRender pluginID={ID} field={publisher.name} /> : undefined}
+                publisherLink={publisher?.link}
+                children={props.children}
+            />
+        )
+    },
+)

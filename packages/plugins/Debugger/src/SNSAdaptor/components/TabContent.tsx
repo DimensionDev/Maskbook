@@ -1,4 +1,5 @@
 import { Plugin, useBalance, useBlockNumber } from '@masknet/plugin-infra'
+import { makeStyles } from '@masknet/theme'
 import { Box, List, ListItem, ListItemText, Typography } from '@mui/material'
 
 export interface TabContentProps {
@@ -6,7 +7,14 @@ export interface TabContentProps {
     addressNames?: Plugin.SNSAdaptor.ProfileAddress[]
 }
 
+const useStyles = makeStyles()({
+    container: {
+        overflow: 'auto',
+    },
+})
+
 export function TabContent({ identity, addressNames }: TabContentProps) {
+    const { classes } = useStyles()
     const renderIdentity = () => {
         return (
             <List>
@@ -28,20 +36,14 @@ export function TabContent({ identity, addressNames }: TabContentProps) {
                         secondary={identity?.homepage}
                     />
                 </ListItem>
-                <ListItem>
+                <ListItem sx={{ display: 'block' }}>
                     <ListItemText
                         primary={<Typography color="textPrimary">Avatar</Typography>}
-                        secondary={
-                            <Box>
-                                <Typography color="textSecondary" variant="body2">
-                                    {identity?.avatar}
-                                </Typography>
-                                <Box sx={{ mt: 1 }}>
-                                    <img src={identity?.avatar} />
-                                </Box>
-                            </Box>
-                        }
+                        secondary={identity?.avatar}
                     />
+                    <Box sx={{ mt: 1 }}>
+                        <img src={identity?.avatar} />
+                    </Box>
                 </ListItem>
             </List>
         )
@@ -70,7 +72,7 @@ export function TabContent({ identity, addressNames }: TabContentProps) {
     const { value: blockNumber = 0 } = useBlockNumber()
 
     return (
-        <>
+        <section className={classes.container}>
             <Typography color="textPrimary" variant="h6">
                 Balance {balance} <br />
                 BlockNumber {blockNumber} <br />
@@ -85,6 +87,6 @@ export function TabContent({ identity, addressNames }: TabContentProps) {
                 Address Names
             </Typography>
             {renderAddressNames()}
-        </>
+        </section>
     )
 }

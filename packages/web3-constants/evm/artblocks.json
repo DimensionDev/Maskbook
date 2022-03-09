@@ -1,0 +1,22 @@
+{
+    "GEN_ART_721_MINTER": {
+        "Mainnet": "0x47e312d99C09Ce61A866c83cBbbbED5A4b9d33E7",
+        "Ropsten": "0x58727f5Fc3705C30C9aDC2bcCC787AB2BA24c441",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
+    }
+}

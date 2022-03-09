@@ -4,11 +4,12 @@ import {
     usePostInfoDetails,
     Option,
     Plugin,
+    usePluginI18NField,
 } from '@masknet/plugin-infra'
-import { extractTextFromTypedMessage } from '@masknet/shared-base'
+import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Switch } from '@mui/material'
 import Services from '../../extension/service'
-import MaskPluginWrapper from '../../plugins/MaskPluginWrapper'
+import MaskPostExtraInfoWrapper from '../../plugins/MaskPluginWrapper'
 import { useI18N } from '../../utils'
 
 function useDisabledPlugins() {
@@ -32,8 +33,9 @@ export function useDisabledPluginSuggestionFromPost(postContent: Option<string>,
     return matches
 }
 
-export function useDisabledPluginSuggestionFromMeta(meta: ReadonlyMap<string, unknown>) {
+export function useDisabledPluginSuggestionFromMeta(meta: undefined | ReadonlyMap<string, unknown>) {
     const disabled = useDisabledPlugins().filter((x) => x.contribution?.metadataKeys)
+    if (!meta) return []
     const keys = [...meta.keys()]
 
     const matches = disabled.filter((x) => {
@@ -51,14 +53,15 @@ export function PossiblePluginSuggestionPostInspector() {
 }
 export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefinition[] }) {
     const { t } = useI18N()
+    const t2 = usePluginI18NField()
     const { plugins } = props
     if (!plugins.length) return null
     return (
         <>
             {plugins.map((x) => (
-                <MaskPluginWrapper
+                <MaskPostExtraInfoWrapper
                     key={x.ID}
-                    pluginName={t('plugin_not_enabled', { plugin: x.name.fallback })}
+                    title={t('plugin_not_enabled', { plugin: t2(x.ID, x.name) })}
                     action={
                         <Switch
                             sx={{ marginRight: '-12px' }}

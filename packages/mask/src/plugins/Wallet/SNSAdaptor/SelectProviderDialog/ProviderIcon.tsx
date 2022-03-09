@@ -1,5 +1,6 @@
 import { makeStyles } from '@masknet/theme'
-import { Typography, Card, ButtonBase, ButtonBaseProps } from '@mui/material'
+import { Typography, Card, ButtonBase, ButtonBaseProps, CardProps } from '@mui/material'
+import classnames from 'classnames'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -11,7 +12,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: theme.spacing(4, 1),
+        padding: theme.spacing(1),
         backgroundColor: theme.palette.background.default,
     },
     icon: {
@@ -31,17 +32,16 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ProviderIconProps {
+export interface ProviderIconProps extends CardProps {
     icon: URL
     name: React.ReactNode
-    onClick?: () => void
     ButtonBaseProps?: Partial<ButtonBaseProps>
 }
 
-export function ProviderIcon({ icon, name, onClick, ButtonBaseProps }: ProviderIconProps) {
+export function ProviderIcon({ icon, name, onClick, className, ButtonBaseProps }: ProviderIconProps) {
     const { classes } = useStyles()
     return (
-        <Card className={classes.root} elevation={0} onClick={onClick}>
+        <Card className={classnames(classes.root, className)} elevation={0} onClick={onClick}>
             <ButtonBase className={`${classes.content} dashboard-style`} {...ButtonBaseProps}>
                 <img src={icon.toString()} className={classes.icon} />
                 <Typography className={classes.name} variant="h3">

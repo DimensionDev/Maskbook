@@ -1,9 +1,12 @@
 import { LiveSelector, MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
-import type { SocialNetworkUI } from '../../../social-network/types'
-import { creator } from '../../../social-network/utils'
+
+import { creator, SocialNetworkUI } from '../../../social-network'
 import { getProfileIdentifierAtFacebook, getUserID } from '../utils/getProfileIdentifier'
 import { isMobileFacebook } from '../utils/isMobile'
 import { ProfileIdentifier } from '@masknet/shared-base'
+import { searchAvatarSelector, searchUserIdOnMobileSelector } from '../utils/selector'
+import { getAvatar, getBioDescription, getFacebookId, getNickName, getPersonalHomepage } from '../utils/user'
+import { delay } from '@dimensiondev/kit'
 
 export const IdentityProviderFacebook: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: true,
@@ -34,6 +37,59 @@ function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<Value>, signal
         .then((x) => x.url)
         .then(getUserID)
         .then((id) => id && assign({ ...ref.value, identifier: new ProfileIdentifier('facebook.com', id) }))
+}
+
+function resolveCurrentVisitingIdentityInner(
+    ref: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
+    cancel: AbortSignal,
+) {
+    const selector = isMobileFacebook ? searchUserIdOnMobileSelector() : searchAvatarSelector()
+
+    const assign = async () => {
+        await delay(500)
+        const nickname = getNickName()
+        const bio = getBioDescription()
+        const handle = getFacebookId()
+        const homepage = getPersonalHomepage()
+
+        const avatar = getAvatar()
+
+        ref.value = {
+            identifier: handle ? new ProfileIdentifier('facebook.com', handle) : ProfileIdentifier.unknown,
+            nickname,
+            avatar,
+            bio,
+            homepage,
+        }
+    }
+
+    const createWatcher = (selector: LiveSelector<HTMLElement, boolean>) => {
+        const watcher = new MutationObserverWatcher(selector)
+            .addListener('onAdd', () => assign())
+            .addListener('onChange', () => assign())
+            .startWatch({
+                childList: true,
+                subtree: true,
+                attributes: true,
+            })
+        window.addEventListener('locationchange', assign)
+        cancel.addEventListener('abort', () => {
+            window.removeEventListener('locationchange', assign)
+            watcher.stopWatch()
+        })
+    }
+
+    assign()
+
+    createWatcher(selector)
+}
+
+export const CurrentVisitingIdentityProviderFacebook: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
+    hasDeprecatedPlaceholderName: false,
+    recognized: creator.EmptyIdentityResolveProviderState(),
+    start(cancel) {
+        resolveCurrentVisitingIdentityInner(this.recognized, cancel)
+    },
 }
 
 // #region LS

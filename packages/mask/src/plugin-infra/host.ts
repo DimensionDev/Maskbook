@@ -24,12 +24,6 @@ export function createPluginHost<Context>(
 
     return {
         signal,
-        // Due to MASK-391, we don't have a user configurable "disabled" plugin.
-        // All plugins are always loaded but it might be displayed in the summary mode.
-        enabled: {
-            events: new Emitter(),
-            isEnabled: () => true,
-        },
         minimalMode,
         addI18NResource(plugin, resource) {
             createI18NBundle(plugin, resource)(i18nNextInstance)

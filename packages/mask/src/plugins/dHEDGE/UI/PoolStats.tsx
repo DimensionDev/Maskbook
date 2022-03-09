@@ -114,31 +114,33 @@ export function PoolStats(props: PoolStatsProps) {
                     </Grid>
                 </Grid>
             </div>
-            <Divider />
             {cleanDescription ? (
-                <div className={classes.description}>
-                    <Typography variant="h6" color="textPrimary">
-                        <Trans i18nKey="plugin_dhedge_strategy" />
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                        <span
-                            dangerouslySetInnerHTML={{
-                                __html: expanded
-                                    ? cleanDescription
-                                    : cleanDescription.slice(0, POOL_DESCRIPTION_LIMIT).concat('...'),
-                            }}
-                        />
-                    </Typography>
-                    {cleanDescription.length > POOL_DESCRIPTION_LIMIT ? (
-                        <Typography variant="body2" color="primary" onClick={() => setExpanded(!expanded)}>
-                            {expanded ? (
-                                <Trans i18nKey="plugin_dhedge_see_less" />
-                            ) : (
-                                <Trans i18nKey="plugin_dhedge_see_more" />
-                            )}
+                <>
+                    <Divider />
+                    <div className={classes.description}>
+                        <Typography variant="h6" color="textPrimary">
+                            <Trans i18nKey="plugin_dhedge_strategy" />
                         </Typography>
-                    ) : null}
-                </div>
+                        <Typography variant="body2" color="textSecondary">
+                            <span
+                                dangerouslySetInnerHTML={{
+                                    __html: expanded
+                                        ? cleanDescription
+                                        : cleanDescription.slice(0, POOL_DESCRIPTION_LIMIT).concat('...'),
+                                }}
+                            />
+                        </Typography>
+                        {cleanDescription.length > POOL_DESCRIPTION_LIMIT ? (
+                            <Typography variant="body2" color="primary" onClick={() => setExpanded(!expanded)}>
+                                {expanded ? (
+                                    <Trans i18nKey="plugin_dhedge_see_less" />
+                                ) : (
+                                    <Trans i18nKey="plugin_dhedge_see_more" />
+                                )}
+                            </Typography>
+                        ) : null}
+                    </div>
+                </>
             ) : null}
         </div>
     )

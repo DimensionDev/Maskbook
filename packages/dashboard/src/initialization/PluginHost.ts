@@ -8,12 +8,6 @@ import i18n from 'i18next'
 import { InMemoryStorages, PersistentStorages } from '../utils/kv-storage'
 
 const PluginHost: Plugin.__Host.Host<Plugin.Dashboard.DashboardContext> = {
-    enabled: {
-        // Due to MASK-391, we don't have a user configurable "disabled" plugin.
-        // All plugins are always loaded but it might be displayed in the invisible mode.
-        isEnabled: () => true,
-        events: new Emitter(),
-    },
     minimalMode: {
         events: new Emitter(),
         isEnabled: (id) => {

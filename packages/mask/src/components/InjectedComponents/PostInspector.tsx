@@ -3,25 +3,22 @@ import { useAsync } from 'react-use'
 import { DecryptPost } from './DecryptedPost/DecryptedPost'
 import { AddToKeyStore } from './AddToKeyStore'
 import Services from '../../extension/service'
-import {
-    ProfileIdentifier,
-    type TypedMessageTuple,
-    type PayloadAlpha40_Or_Alpha39,
-    type PayloadAlpha38,
-} from '@masknet/shared-base'
+import { ProfileIdentifier, type PayloadAlpha40_Or_Alpha39, type PayloadAlpha38 } from '@masknet/shared-base'
+import type { TypedMessageTuple } from '@masknet/typed-message'
 import type { Profile } from '../../database'
 import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'
 import { useValueRef } from '@masknet/shared'
 import { debugModeSetting } from '../../settings/settings'
-import { DebugList } from '../DebugModeUI/DebugList'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
 import { decodePublicKeyUI } from '../../social-network/utils/text-payload-ui'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 import { PossiblePluginSuggestionPostInspector } from './DisabledPluginSuggestion'
+import { MaskPostExtraPluginWrapper } from '../../plugins/MaskPluginWrapper'
 
 const PluginHooksRenderer = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
     (plugin) => plugin.PostInspector,
+    MaskPostExtraPluginWrapper,
 )
 
 export interface PostInspectorProps {
@@ -34,7 +31,6 @@ export function PostInspector(props: PostInspectorProps) {
     const postBy = usePostInfoDetails.author()
     const postContent = usePostInfoDetails.postContent()
     const encryptedPost = usePostInfoDetails.containingMaskPayload()
-    const postId = usePostInfoDetails.identifier()
     const decryptedPayloadForImage = usePostInfoDetails.decryptedPayloadForImage()
     const postImages = usePostInfoDetails.postMetadataImages()
     const isDebugging = useValueRef(debugModeSetting)
@@ -49,22 +45,6 @@ export function PostInspector(props: PostInspectorProps) {
         return Services.Crypto.getPartialSharedListOfPost(version, iv, postBy)
     }, [postBy, whoAmI, encryptedPost])
     useEffect(() => setAlreadySelectedPreviously(sharedListOfPost ?? []), [sharedListOfPost])
-
-    const debugInfo = isDebugging ? (
-        <DebugList
-            items={[
-                ['Post by', postBy.userId],
-                [
-                    'Who am I',
-                    whoAmI ? `Nickname ${whoAmI.nickname || 'unknown'}, UserID ${whoAmI.identifier.userId}` : 'Unknown',
-                ],
-                ['My fingerprint', whoAmI?.linkedPersona?.fingerprint ?? 'Unknown'],
-                ['Post ID', postId?.toText() || 'Unknown'],
-                ['Post Content', postContent],
-                ['Post Attachment Links', JSON.stringify(postImages)],
-            ]}
-        />
-    ) : null
 
     if (encryptedPost.ok || postImages.length) {
         if (!isDebugging) props.needZip()
@@ -115,7 +95,6 @@ export function PostInspector(props: PostInspectorProps) {
                 {x}
                 <PossiblePluginSuggestionPostInspector />
                 <PluginHooksRenderer />
-                {debugInfo}
                 {props.slotPosition !== 'before' && slot}
             </>
         )

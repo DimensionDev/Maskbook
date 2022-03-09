@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => {
     const props = getStyleProps()
 
     return {
-        tab: {
+        root: {
             '&:hover': {
                 backgroundColor: new Color(props.hover).alpha(0.1).toString(),
                 cursor: 'pointer',
@@ -78,7 +78,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-async function clear() {
+async function hideTwitterActivatedContent() {
     const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
     if (!eleTab) return
     const style = window.getComputedStyle(eleTab)
@@ -100,10 +100,13 @@ async function clear() {
     await untilElementAvailable(searchProfileTabPageSelector())
 
     const elePage = searchProfileTabPageSelector().evaluate()
-    if (elePage) elePage.style.visibility = 'hidden'
+    if (elePage) {
+        elePage.style.visibility = 'hidden'
+        elePage.style.height = '0px'
+    }
 }
 
-function reset() {
+function resetTwitterActivatedContent() {
     const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
     if (!eleTab) return
 
@@ -111,8 +114,10 @@ function reset() {
     if (eleEmpty) eleEmpty.style.display = ''
 
     const elePage = searchProfileTabPageSelector().evaluate()
-    if (elePage) elePage.style.visibility = 'visible'
-
+    if (elePage) {
+        elePage.style.visibility = 'visible'
+        elePage.style.height = 'auto'
+    }
     const tabList = searchProfileTabListSelector().evaluate()
     tabList.map((v) => {
         const _v = v.querySelector('div') as HTMLDivElement
@@ -129,8 +134,8 @@ export function ProfileTabAtTwitter() {
         <ProfileTab
             title="Web3"
             classes={classes}
-            reset={reset}
-            clear={clear}
+            reset={resetTwitterActivatedContent}
+            clear={hideTwitterActivatedContent}
             children={<div className={classes.line} />}
         />
     )

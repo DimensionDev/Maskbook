@@ -3,7 +3,7 @@ import type { provider as Provider } from 'web3-core'
 import { first } from 'lodash-unified'
 import createMetaMaskProvider, { MetaMaskInpageProvider } from '@dimensiondev/metamask-extension-provider'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
-import { delay } from '@masknet/shared-base'
+import { delay } from '@dimensiondev/kit'
 import { updateAccount } from '../../../../plugins/Wallet/services'
 import { currentChainIdSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
 import { replaceRecentTransaction } from '../../../../plugins/Wallet/services/transaction/database'
@@ -92,7 +92,7 @@ export async function ensureConnectedAndUnlocked() {
     try {
         const accounts = await web3.eth.requestAccounts()
         throw accounts
-    } catch (error: string[] | any) {
+    } catch (error) {
         const accounts = error
         if (Array.isArray(accounts)) {
             if (accounts.length === 0) throw new Error('MetaMask is locked or it has not connected any accounts.')

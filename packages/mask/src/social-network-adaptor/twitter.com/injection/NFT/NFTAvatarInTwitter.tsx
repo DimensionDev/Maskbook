@@ -2,7 +2,7 @@ import { createReactRootShadowed, MaskMessages, NFTAvatarEvent, startWatch } fro
 import { searchTwitterAvatarLinkSelector, searchTwitterAvatarSelector } from '../../utils/selector'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { useState, useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { resolveOpenSeaLink, useWallet } from '@masknet/web3-shared-evm'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
@@ -14,6 +14,7 @@ import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 import { useAsync, useLocation, useUpdateEffect, useWindowSize } from 'react-use'
 import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/RainbowBox'
 import { trim } from 'lodash-unified'
+import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -23,12 +24,17 @@ export function injectNFTAvatarInTwitter(signal: AbortSignal) {
 
 const useStyles = makeStyles()(() => ({
     root: {
+        transform: 'scale(1.022)',
         position: 'absolute',
         textAlign: 'center',
         color: 'white',
         zIndex: 2,
         width: '100%',
         height: '100%',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
     },
     text: {
         fontSize: '20px !important',
@@ -45,7 +51,7 @@ function NFTAvatarInTwitter() {
     const borderElement = useRef<Element | null>()
     const identity = useCurrentVisitingIdentity()
     const wallet = useWallet()
-    const { value: _avatar } = useNFTAvatar(identity.identifier.userId)
+    const { value: _avatar } = useNFTAvatar(identity.identifier.userId, RSS3_KEY_SNS.TWITTER)
     const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
     const windowSize = useWindowSize()
     const location = useLocation()
@@ -56,13 +62,13 @@ function NFTAvatarInTwitter() {
     )
 
     const size = useMemo(() => {
-        const ele = searchTwitterAvatarSelector().evaluate()
+        const ele = searchTwitterAvatarSelector().evaluate()?.querySelector('img')
         if (ele) {
             const style = window.getComputedStyle(ele)
             return Number.parseInt(style.width.replace('px', '') ?? 0, 10)
         }
         return 0
-    }, [windowSize])
+    }, [windowSize, location])
 
     const { classes } = useStyles()
 
@@ -93,6 +99,7 @@ function NFTAvatarInTwitter() {
                 avatarId: getAvatarId(identity.avatar ?? ''),
             } as AvatarMetaDB,
             identity.identifier.network,
+            RSS3_KEY_SNS.TWITTER,
         ).catch((error) => {
             setNFTEvent(undefined)
             setAvatar(undefined)
@@ -128,6 +135,7 @@ function NFTAvatarInTwitter() {
     }, [onUpdate])
 
     useEffect(() => {
+        if (!showAvatar) return
         const linkDom = searchTwitterAvatarLinkSelector().evaluate()
 
         if (linkDom?.firstElementChild && linkDom.childNodes.length === 4) {
@@ -138,7 +146,6 @@ function NFTAvatarInTwitter() {
             // create rainbow shadow border
             if (linkDom.lastElementChild?.tagName !== 'STYLE') {
                 borderElement.current = linkDom.firstElementChild
-
                 // remove useless border
                 linkDom.removeChild(linkDom.firstElementChild)
                 const style = document.createElement('style')
@@ -148,34 +155,29 @@ function NFTAvatarInTwitter() {
                 .rainbowBorder {
                     animation: ${rainbowBorderKeyFrames.name} 6s linear infinite;
                     box-shadow: 0 5px 15px rgba(0, 248, 255, 0.4), 0 10px 30px rgba(37, 41, 46, 0.2);
-                    transition: .125s ease;
-                    border: 2px solid #00f8ff;
+                    transition: none;
+                    border: 0px solid #00f8ff;
                 }
             `
-                rainBowElement.current = linkDom.firstElementChild
-                if (showAvatar) linkDom.firstElementChild.classList.add('rainbowBorder')
+                rainBowElement.current = linkDom.firstElementChild.nextElementSibling
+                linkDom.firstElementChild.nextElementSibling?.classList.add('rainbowBorder')
                 linkDom.appendChild(style)
             }
         }
-    }, [location.pathname])
 
-    useEffect(() => {
-        const linkDom = searchTwitterAvatarLinkSelector().evaluate()
-        if (showAvatar) {
-            if (borderElement.current && linkDom?.firstElementChild === borderElement.current) {
-                linkDom?.removeChild(linkDom.firstElementChild)
+        return () => {
+            if (linkDom?.lastElementChild?.tagName === 'STYLE') {
+                linkDom.removeChild(linkDom.lastElementChild)
             }
 
-            rainBowElement.current?.classList.add('rainbowBorder')
-        } else {
-            // recovery Twitter profile avatar style
             if (borderElement.current && linkDom?.firstElementChild !== borderElement.current) {
                 linkDom?.insertBefore(borderElement.current, linkDom.firstChild)
             }
-
-            rainBowElement.current?.classList.remove('rainbowBorder')
+            if (rainBowElement.current) {
+                rainBowElement.current?.classList.remove('rainbowBorder')
+            }
         }
-    }, [showAvatar])
+    }, [location.pathname, showAvatar])
 
     useUpdateEffect(() => {
         if (
@@ -189,8 +191,7 @@ function NFTAvatarInTwitter() {
 
     useUpdateEffect(() => {
         const linkParentDom = searchTwitterAvatarLinkSelector().evaluate()?.closest('div')
-
-        if (!avatar || !linkParentDom) return
+        if (!avatar || !linkParentDom || !showAvatar) return
 
         const handler = () => {
             window.open(resolveOpenSeaLink(avatar.address, avatar.tokenId), '_blank')
@@ -209,6 +210,8 @@ function NFTAvatarInTwitter() {
         <>
             {showAvatar ? (
                 <NFTBadge
+                    borderSize={5}
+                    hasRainbow
                     avatar={avatar}
                     size={size}
                     width={15}

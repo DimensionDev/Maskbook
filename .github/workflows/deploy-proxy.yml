@@ -17,9 +17,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-      - uses: pnpm/action-setup@v2
-        with:
-          version: latest
+      - uses: pnpm/action-setup@v2.2.1
       - uses: actions/setup-node@v2
         with:
           cache: pnpm
@@ -34,7 +32,9 @@ jobs:
           registry: true
       - run: pnpm install
       - run: pnpm build
+        name: Build solution
       - run: pnpm build
+        name: Build provider-proxy Package
         working-directory: packages/provider-proxy
       - run: npm publish
         working-directory: packages/provider-proxy/dist
