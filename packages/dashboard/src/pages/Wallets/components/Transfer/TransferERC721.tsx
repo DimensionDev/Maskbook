@@ -12,12 +12,12 @@ import {
     TransactionStateType,
     useAccount,
     useChainId,
-    useERC721TokenDetailedOwnerList,
     useGasLimit,
     useGasPrice,
     useNativeTokenDetailed,
     useTokenTransferCallback,
 } from '@masknet/web3-shared-evm'
+import { useERC721TokenDetailedOwnerList } from '@masknet/web3-providers'
 import { FormattedAddress, useRemoteControlledDialog } from '@masknet/shared'
 import { useDashboardI18N } from '../../../../locales'
 import { WalletMessages } from '@masknet/plugin-wallet'
