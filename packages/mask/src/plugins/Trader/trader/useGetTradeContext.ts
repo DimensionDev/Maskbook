@@ -21,6 +21,8 @@ import {
     WANNASWAP_CUSTOM_BASES,
     TRISOLARIS_BASE_AGAINST_TOKENS,
     TRISOLARIS_CUSTOM_BASES,
+    UBESWAP_BASE_AGAINST_TOKENS,
+    UBESWAP_CUSTOM_BASES,
 } from '../constants'
 import { unreachable } from '@dimensiondev/kit'
 import { TargetChainIdContext } from './useTargetChainIdContext'
@@ -149,6 +151,18 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     AGAINST_TOKENS: TRISOLARIS_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: TRISOLARIS_CUSTOM_BASES,
+                }
+            case TradeProvider.UBESWAP:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.UBESWAP_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.UBESWAP_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.UBESWAP_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.UBESWAP_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: UBESWAP_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: UBESWAP_CUSTOM_BASES,
                 }
             case TradeProvider.ZRX:
                 return {
