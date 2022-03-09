@@ -210,8 +210,7 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             // TODO - add WannaSwap analytics
             return ''
         case TradeProvider.UBESWAP:
-            // TODOAM - add WannaSwap analytics
-            return ''
+            return `https://info.ubeswap.org/pair/${address}`
         default:
             unreachable(tradeProvider)
     }
@@ -305,8 +304,7 @@ export const resolveZrxTradePoolName = createLookupTableResolver<ZrxTradePool, s
         [ZrxTradePool.PangolinDex]: 'PangolinDex',
         [ZrxTradePool.Trisolaris]: 'Trisolaris',
         [ZrxTradePool.WannaSwap]: 'WannaSwap',
-        // [ZrxTradePool.S]: 'WannaSwap',
-        // TODOAM
+        [ZrxTradePool.Ubeswap]: 'Ubeswap',
     },
     'Unknown',
 )
