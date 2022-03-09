@@ -1,6 +1,10 @@
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
+import classnames from 'classnames'
+import { HTMLProps, Fragment } from 'react'
+import { useI18N } from '../../locales'
 
-export interface DonationCardProps {
+export interface DonationCardProps extends HTMLProps<HTMLDivElement> {
     imageUrl: string
     name: string
     contribCount: number
@@ -10,31 +14,90 @@ export interface DonationCardProps {
     }[]
 }
 
-export const DonationCard = ({ imageUrl, name, contribCount, contribDetails }: DonationCardProps) => {
+const useStyles = makeStyles()((theme) => ({
+    card: {
+        borderRadius: 8,
+        display: 'flex',
+        flexDirection: 'row',
+        backgroundColor: MaskColorVar.twitterBg,
+        padding: theme.spacing(1),
+        flexGrow: 1,
+        alignItems: 'stretch',
+    },
+    cover: {
+        flexShrink: 1,
+        height: 90,
+        width: 90,
+        borderRadius: 8,
+        objectFit: 'cover',
+    },
+    title: {
+        color: theme.palette.text.primary,
+        fontSize: 16,
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+    },
+    info: {
+        flexGrow: 1,
+        marginLeft: theme.spacing(1),
+        fontSize: 16,
+        display: 'flex',
+        overflow: 'hidden',
+        flexDirection: 'column',
+        justifyContent: 'space-around',
+        fontFamily: '-apple-system,system-ui,sans-serif',
+    },
+    infoRow: {
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+    },
+    infoLabel: {
+        color: theme.palette.text.primary,
+    },
+    infoValue: {
+        color: theme.palette.text.secondary,
+    },
+}))
+
+export const DonationCard = ({
+    imageUrl,
+    name,
+    contribCount,
+    contribDetails,
+    className,
+    ...rest
+}: DonationCardProps) => {
+    const { classes } = useStyles()
+    const t = useI18N()
     return (
-        <div className="flex flex-row items-center justify-start w-full border-2 rounded cursor-pointer text-body-text bg-body-bg border-donation-bg">
-            <img
-                className="flex-shrink m-0.5 w-32 md:w-64 h-32 bg-cover bg-center bg-no-repeat rounded object-cover"
-                src={imageUrl}
-                alt={name}
-            />
-            <div className="flex-1 w-0 px-8 flex flex-col justify-around">
-                <Typography variant="h6" color="textPrimary" fontWeight={600} className="w-full truncate">
-                    {name}
-                </Typography>
-                <div className="flex flex-row w-full overflow-y-auto gap-x-6">
-                    <div className="text-donation">
-                        <Typography variant="subtitle1">{contribCount}</Typography>
-                        <Typography variant="subtitle1">Contrib</Typography>
-                    </div>
+        <div className={classnames(classes.card, className)} {...rest}>
+            <img className={classes.cover} src={imageUrl} alt={name} />
+            <dl className={classes.info}>
+                <dt className={classes.infoRow}>
+                    <Typography
+                        variant="h6"
+                        color="textPrimary"
+                        fontWeight={600}
+                        className={classes.title}
+                        title={name}>
+                        {name}
+                    </Typography>
+                </dt>
+                <dd className={classes.infoRow}>
+                    <span className={classes.infoLabel}>{contribCount}</span>
+                    <span className={classes.infoValue}> {t.contribution({ count: contribCount })}</span>
+                </dd>
+                <dd className={classes.infoRow}>
                     {contribDetails.map((contrib, i) => (
-                        <div key={i} className="text-donation">
-                            <Typography variant="subtitle1">{contrib.amount}</Typography>
-                            <Typography variant="subtitle1">{contrib.token}</Typography>
-                        </div>
+                        <Fragment key={i}>
+                            <span className={classes.infoLabel}>{contrib.amount}</span>
+                            <span className={classes.infoValue}> {contrib.token} </span>
+                        </Fragment>
                     ))}
-                </div>
-            </div>
+                </dd>
+            </dl>
         </div>
     )
 }

@@ -9,13 +9,12 @@ import {
 import { safeUnreachable } from '@dimensiondev/kit'
 import { ZRX_AFFILIATE_ADDRESS } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
-import { TradeStrategy } from '../../types'
+import { SwapQuoteResponse, TradeStrategy } from '../../types'
 import { useSlippageTolerance } from '../0x/useSlippageTolerance'
-import { useTradeProviderSettings } from '../useTradeSettings'
 import { currentNetworkSettings } from '../../../Wallet/settings'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
-import { TradeProvider } from '@masknet/public-api'
 import { useDoubleBlockBeatRetry } from '@masknet/plugin-infra'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 
 const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 
@@ -50,14 +49,13 @@ export function useTrade(
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
     temporarySlippage?: number,
-) {
+): AsyncStateRetry<SwapQuoteResponse | null> {
     const account = useAccount()
     const { targetChainId } = TargetChainIdContext.useContainer()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(targetChainId)
 
     const slippageSetting = useSlippageTolerance()
     const slippage = temporarySlippage || slippageSetting
-    const { pools } = useTradeProviderSettings(TradeProvider.ZRX)
     return useDoubleBlockBeatRetry(async () => {
         if (!inputToken || !outputToken) return null
         const isExactIn = strategy === TradeStrategy.ExactIn
@@ -92,6 +90,5 @@ export function useTrade(
         inputToken?.address,
         outputToken?.address,
         slippage,
-        pools.length,
     ])
 }

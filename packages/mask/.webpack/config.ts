@@ -64,8 +64,10 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     // Those packages are also installed as dependencies so they appears in node_modules
                     // By aliasing them to the original position,
                     // we can speed up the compile because there is no need to wait tsc build them to the dist folder.
+                    '@masknet/configuration': join(__dirname, '../../configuration/src/'),
                     '@masknet/dashboard$': require.resolve('../../dashboard/src/entry.tsx'),
                     '@masknet/injected-script': join(__dirname, '../../injected-script/sdk'),
+                    '@masknet/gun-utils': join(__dirname, '../../gun-utils/src/'),
                     '@masknet/shared': join(__dirname, '../../shared/src/'),
                     '@masknet/shared-base': join(__dirname, '../../shared-base/src/'),
                     '@masknet/theme': join(__dirname, '../../theme/src/'),
@@ -85,11 +87,15 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@masknet/plugin-solana': join(__dirname, '../../plugins/Solana/src/'),
                     '@masknet/plugin-wallet': join(__dirname, '../../plugins/Wallet/src/'),
                     '@masknet/plugin-file-service': join(__dirname, '../../plugins/FileService/src/'),
+                    '@masknet/plugin-cyberconnect': join(__dirname, '../../plugins/CyberConnect/src/'),
                     '@masknet/external-plugin-previewer': join(__dirname, '../../external-plugin-previewer/src/'),
                     '@masknet/public-api': join(__dirname, '../../public-api/src/'),
                     '@masknet/sdk': join(__dirname, '../../mask-sdk/server/'),
                     '@masknet/backup-format': join(__dirname, '../../backup-format/src/'),
                     '@masknet/encryption': join(__dirname, '../../encryption/src'),
+                    '@masknet/typed-message/dom$': require.resolve('../../typed-message/dom/index.ts'),
+                    '@masknet/typed-message$': require.resolve('../../typed-message/base/index.ts'),
+                    // @masknet/scripts: insert-here
                     '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
                 }
                 if (profiling) {
@@ -234,7 +240,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 destructuring: true,
                 forOf: true,
                 module: false,
-                bigIntLiteral: false,
+                bigIntLiteral: true,
                 // Our iOS App doesn't support dynamic import (it requires a heavy post-build time transform).
                 dynamicImport: !(runtime.architecture === 'app' && runtime.engine === 'safari'),
             },
@@ -282,7 +288,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
     // background
     if (runtime.manifest === 3) {
         entries.background = {
-            import: join(__dirname, '../src/background-worker.ts'),
+            import: join(__dirname, '../background/mv3-entry.ts'),
             filename: 'js/background.js',
         }
         plugins.push(new WebExtensionPlugin({ background: { entry: 'background', manifest: 3 } }))

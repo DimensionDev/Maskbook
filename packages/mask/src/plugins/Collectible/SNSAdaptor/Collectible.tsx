@@ -8,7 +8,7 @@ import isValidDate from 'date-fns/isValid'
 import isAfter from 'date-fns/isAfter'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
-import { useI18N, useSettingsSwitcher } from '../../../utils'
+import { useI18N, useSwitcher } from '../../../utils'
 import { ArticleTab } from './ArticleTab'
 import { TokenTab } from './TokenTab'
 import { OfferTab } from './OfferTab'
@@ -19,7 +19,6 @@ import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleCard } from './CollectibleCard'
 import { CollectibleProviderIcon } from './CollectibleProviderIcon'
 import { CollectibleTab } from '../types'
-import { MaskTextIcon } from '../../../resources/MaskIcon'
 import { resolveAssetLinkOnCurrentProvider, resolveCollectibleProviderName } from '../pipes'
 import { ActionBar } from './ActionBar'
 import { NonFungibleAssetProvider, useChainId } from '@masknet/web3-shared-evm'
@@ -27,7 +26,6 @@ import { getEnumAsArray } from '@dimensiondev/kit'
 import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/FootnoteMenu'
 import { LoadingAnimation } from '@masknet/shared'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
-import { currentNonFungibleAssetProviderSettings } from '../settings'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -35,6 +33,7 @@ const useStyles = makeStyles()((theme) => {
             width: '100%',
             border: `solid 1px ${theme.palette.divider}`,
             padding: 0,
+            marginBottom: 12,
         },
         content: {
             width: '100%',
@@ -87,17 +86,6 @@ const useStyles = makeStyles()((theme) => {
                 fontWeight: 300,
             },
         },
-        footnote: {
-            fontSize: 10,
-            marginRight: theme.spacing(1),
-        },
-        footLink: {
-            cursor: 'pointer',
-            marginRight: theme.spacing(0.5),
-            '&:last-child': {
-                marginRight: 0,
-            },
-        },
         footMenu: {
             color: theme.palette.text.secondary,
             fontSize: 10,
@@ -106,10 +94,6 @@ const useStyles = makeStyles()((theme) => {
         },
         footName: {
             marginLeft: theme.spacing(0.5),
-        },
-        mask: {
-            width: 40,
-            height: 10,
         },
         countdown: {
             fontSize: 12,
@@ -142,18 +126,19 @@ export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const chainId = useChainId()
-    const { token, asset, provider, tabIndex, setTabIndex } = CollectibleState.useContainer()
+    const { token, asset, provider, setProvider, tabIndex, setTabIndex } = CollectibleState.useContainer()
 
     // #region sync with settings
     const collectibleProviderOptions = getEnumAsArray(NonFungibleAssetProvider)
     const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
-        currentNonFungibleAssetProviderSettings.value = option.value as NonFungibleAssetProvider
+        setProvider(option.value as NonFungibleAssetProvider)
     }, [])
     // #endregion
 
     // #region provider switcher
-    const CollectibleProviderSwitcher = useSettingsSwitcher(
-        currentNonFungibleAssetProviderSettings,
+    const CollectibleProviderSwitcher = useSwitcher(
+        provider,
+        setProvider,
         getEnumAsArray(NonFungibleAssetProvider).map((x) => x.value),
         resolveCollectibleProviderName,
     )
@@ -200,7 +185,7 @@ export function Collectible(props: CollectibleProps) {
     const endDate = _asset.end_time
     return (
         <>
-            <CollectibleCard classes={classes}>
+            <CollectibleCard classes={{ root: classes.root }}>
                 <CardHeader
                     avatar={
                         <LinkingAvatar
@@ -287,18 +272,8 @@ export function Collectible(props: CollectibleProps) {
                     </Paper>
                 </CardContent>
                 <CardActions className={classes.footer}>
-                    <Typography className={classes.footnote} variant="subtitle2">
-                        <span>{t('plugin_powered_by')} </span>
-                        <Link
-                            className={classes.footLink}
-                            color="textSecondary"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            title="Mask"
-                            href="https://mask.io">
-                            <MaskTextIcon classes={{ root: classes.mask }} viewBox="0 0 80 20" />
-                        </Link>
-                    </Typography>
+                    {/* flex to make foot menu right */}
+                    <div />
                     <div className={classes.footMenu}>
                         <FootnoteMenu
                             options={collectibleProviderOptions.map((x) => ({

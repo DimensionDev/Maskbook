@@ -40,7 +40,7 @@ export function InjectedProviderBridge(props: InjectedProviderBridgeProps) {
                     result,
                     error: null,
                 })
-            } catch (error: unknown) {
+            } catch (error) {
                 EVM_Messages.events.INJECTED_PROVIDER_RPC_RESPONSE.sendToBackgroundPage({
                     payload,
                     error: error instanceof Error ? error : new Error(),

@@ -50,7 +50,8 @@ function isRGBA(color: string) {
     return color.match(/^rgba\((\d{1,3}%?),\s*(\d{1,3}%?),\s*(\d{1,3}%?),\s*(\d*(?:\.\d+)?)\)$/)
 }
 
-export function getBackgroundColor(element: HTMLElement | HTMLBodyElement) {
+export function getBackgroundColor(element: HTMLElement | HTMLBodyElement | undefined) {
+    if (!element) return ''
     const color = getComputedStyle(element).backgroundColor
     if (isRGBA(color)) {
         return fromRGBAtoRGB(color)
@@ -58,7 +59,8 @@ export function getBackgroundColor(element: HTMLElement | HTMLBodyElement) {
     return color ? toRGB(fromRGB(color)) : ''
 }
 
-export function getForegroundColor(element: HTMLElement | HTMLBodyElement) {
+export function getForegroundColor(element: HTMLElement | HTMLBodyElement | undefined) {
+    if (!element) return ''
     const color = getComputedStyle(element).color
     if (isRGBA(color)) {
         return fromRGBAtoRGB(color)

@@ -9,7 +9,7 @@ import { queryPostsDB } from '../../../../background/database/post'
 import { PersonaRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PersonaRecord'
 import { ProfileRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/ProfileRecord'
 import { PostRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PostRecord'
-import { Identifier, PersonaIdentifier, ProfileIdentifier, timeout } from '@masknet/shared-base'
+import { Identifier, PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { exportMnemonic, exportPrivateKey, getLegacyWallets, getWallets } from '../../../plugins/Wallet/services'
 import {
     LegacyWalletRecordToJSONFormat,
@@ -17,6 +17,7 @@ import {
 } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
 import { activatedPluginsWorker } from '@masknet/plugin-infra'
 import { RelationRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/RelationRecord'
+import { timeout } from '@dimensiondev/kit'
 
 export type { BackupPreview } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 export interface BackupOptions {

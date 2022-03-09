@@ -7,13 +7,14 @@ import { useMemo } from 'react'
 import type { SocialNetworkUI } from '../../../social-network'
 import { fromRGB, getBackgroundColor, getForegroundColor, isDark, shade, toRGB } from '../../../utils/theme-tools'
 import { isMobileTwitter } from '../utils/isMobile'
-import { composeAnchorSelector, composeAnchorTextSelector } from '../utils/selector'
+import { composeAnchorSelector, composeAnchorTextSelector, headingTextSelector } from '../utils/selector'
 import twitterColorSchema from './twitter-color-schema.json'
 import { parseColor } from '@masknet/theme'
+import { noop } from 'lodash-unified'
 
-const primaryColorRef = new ValueRef(toRGB([29, 161, 242]))
-const primaryColorContrastColorRef = new ValueRef(toRGB([255, 255, 255]))
-const backgroundColorRef = new ValueRef(toRGB([255, 255, 255]))
+const themeColorRef = new ValueRef('rgb(29, 161, 242)')
+const textColorRef = new ValueRef('rgb(255, 255, 255)')
+const backgroundColorRef = new ValueRef('rgb(255, 255, 255)')
 
 const currentTheme = new ValueRef<PaletteMode>('light')
 export const PaletteModeProviderTwitter: SocialNetworkUI.Customization.PaletteModeProvider = {
@@ -23,13 +24,16 @@ export const PaletteModeProviderTwitter: SocialNetworkUI.Customization.PaletteMo
 
 export function startWatchThemeColor(signal: AbortSignal) {
     function updateThemeColor() {
-        const color = getBackgroundColor(composeAnchorSelector().evaluate()!)
-        const contrastColor = getForegroundColor(composeAnchorTextSelector().evaluate()!)
+        const composeAnchor = composeAnchorSelector().evaluate()
+        const anchorText = composeAnchorTextSelector().evaluate()
+        const headingText = headingTextSelector().evaluate()
+        const themeColor = getBackgroundColor(composeAnchor)
+        const textColor = getForegroundColor(anchorText || headingText)
         const backgroundColor = getBackgroundColor(document.body)
         currentTheme.value = isDark(fromRGB(backgroundColor)!) ? 'dark' : 'light'
 
-        if (color) primaryColorRef.value = color
-        if (contrastColor) primaryColorContrastColorRef.value = contrastColor
+        if (themeColor) themeColorRef.value = themeColor
+        if (textColor) textColorRef.value = textColor
         if (backgroundColor) backgroundColorRef.value = backgroundColor
     }
     const watcher = new MutationObserverWatcher(composeAnchorSelector())
@@ -39,11 +43,27 @@ export function startWatchThemeColor(signal: AbortSignal) {
             childList: true,
             subtree: true,
         })
-    signal.addEventListener('abort', () => watcher.stopWatch())
+    const unwatchAnchor = () => watcher.stopWatch()
+    let unwatchHeadingText = noop
+
+    if (isMobileTwitter) {
+        const headingWatcher = new MutationObserverWatcher(headingTextSelector())
+            .addListener('onAdd', updateThemeColor)
+            .addListener('onChange', updateThemeColor)
+            .startWatch({
+                childList: true,
+                subtree: true,
+            })
+        unwatchHeadingText = () => headingWatcher.stopWatch()
+    }
+    signal.addEventListener('abort', () => {
+        unwatchAnchor()
+        unwatchHeadingText()
+    })
 }
 export function useThemeTwitterVariant(baseTheme: Theme) {
-    const primaryColor = useValueRef(primaryColorRef)
-    const primaryContrastColor = useValueRef(primaryColorContrastColorRef)
+    const primaryColor = useValueRef(themeColorRef)
+    const primaryContrastColor = useValueRef(textColorRef)
     const backgroundColor = useValueRef(backgroundColorRef)
     return useMemo(() => {
         const primaryColorRGB = fromRGB(primaryColor)!
@@ -249,6 +269,9 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                     },
                     tooltipArrow: {
                         backgroundColor: theme.palette.background.tipMask,
+                    },
+                    arrow: {
+                        color: theme.palette.background.tipMask,
                     },
                 },
             }

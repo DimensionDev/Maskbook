@@ -4,9 +4,9 @@ import {
     makeTypedMessagePromise,
     makeTypedMessageTuple,
     makeTypedMessageTupleFromList,
-    ProfileIdentifier,
     makeTypedMessageImage,
-} from '@masknet/shared-base'
+} from '@masknet/typed-message'
+import { ProfileIdentifier } from '@masknet/shared-base'
 import type { SocialNetworkUI as Next } from '../../../social-network/types'
 import { creator } from '../../../social-network/utils'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context'

@@ -51,6 +51,7 @@ export function AddressViewer({ addressName }: AddressViewerProps) {
         [AddressNameType.RSS3]: t.address_viewer_address_name_rns(),
         [AddressNameType.GUN]: t.address_viewer_address_name_address(),
         [AddressNameType.THE_GRAPH]: t.address_viewer_address_name_address(),
+        [AddressNameType.TWITTER_BLUE]: t.address_viewer_address_name_twitter(),
     }
 
     const rulesTipMap = [
