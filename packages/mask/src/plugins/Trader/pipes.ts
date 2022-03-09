@@ -130,7 +130,7 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
         case TradeProvider.WANNASWAP:
             return 'https://wannaswap.finance/exchange/swap'
         case TradeProvider.YOKAISWAP:
-            return 'https://wannaswap.finance/exchange/swap'
+            return 'https://www.yokaiswap.com/swap'
         default:
             unreachable(tradeProvider)
     }
