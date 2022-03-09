@@ -261,7 +261,7 @@ export function CollectionList({
     } = useNonFungibleAssets(address, undefined)
     const customCollectibles = useCustomNonFungibleAssets(address, chainId, true)
     const collectibles = (Utils?.mergeNFTList ?? mergeNFTList)([..._collectibles, ...customCollectibles])
-    console.log({ _collectibles })
+
     const isLoading = loadingCollectibleDone !== SocketState.done
 
     const renderWithRarible = useMemo(() => {
