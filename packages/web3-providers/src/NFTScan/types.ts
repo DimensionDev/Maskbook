@@ -11,6 +11,7 @@ export interface NFTScanAsset {
     nft_json?: string
     nft_value: string
     nft_name: string
+    nft_token_uri?: string
     nft_platform_name: string
     nft_contract_address: string
     token_id: string

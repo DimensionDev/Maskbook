@@ -1,9 +1,9 @@
-import type { ChainId, GasOptionConfig } from '@masknet/web3-shared-evm'
-import { useAsync } from 'react-use'
-import { formatGweiToWei, isEIP1559Supported } from '@masknet/web3-shared-evm'
-import BigNumber from 'bignumber.js'
-import { WalletRPC } from '../../../../Wallet/messages'
 import { useState } from 'react'
+import { useAsync } from 'react-use'
+import BigNumber from 'bignumber.js'
+import type { ChainId, GasOptionConfig } from '@masknet/web3-shared-evm'
+import { formatGweiToWei, isEIP1559Supported } from '@masknet/web3-shared-evm'
+import { WalletRPC } from '../../../../Wallet/messages'
 
 export function useGasConfig(chainId: ChainId) {
     const [gasConfig, setGasConfig] = useState<GasOptionConfig | undefined>()
