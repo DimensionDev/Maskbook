@@ -10,7 +10,7 @@ export const Entry: React.FC = () => (
             <Route path={FileRouter.upload} children={<Upload />} />
             <Route path={FileRouter.uploading} children={<Uploading />} />
             <Route path={FileRouter.uploaded} children={<Uploaded />} />
-            <Redirect to={FileRouter.upload} />
+            <Route path="*" children={<Redirect to={FileRouter.upload} />} />
         </Switch>
     </MemoryRouter>
 )
