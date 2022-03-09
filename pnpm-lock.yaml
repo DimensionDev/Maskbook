@@ -707,7 +707,7 @@ importers:
       date-fns: ^2.28.0
       ipfs-http-client: ^54.0.2
       react-feather: ^2.0.9
-      react-router-dom: '5'
+      react-router-dom: ^6.2.2
       react-use: ^17.3.2
       urlcat: ^2.0.4
     dependencies:
@@ -726,7 +726,7 @@ importers:
       date-fns: 2.28.0
       ipfs-http-client: 54.0.2
       react-feather: 2.0.9_react@18.0.0-rc.0
-      react-router-dom: 5.3.0_react@18.0.0-rc.0
+      react-router-dom: 6.2.2_757a802188413a36d4f24237d13b8e90
       react-use: 17.3.2_757a802188413a36d4f24237d13b8e90
       urlcat: 2.0.4
 
@@ -16389,7 +16389,6 @@ packages:
     resolution: {integrity: sha512-ZqaKwjjrAYUYfLG+htGaIIZ4nioX2L70ZUMIFysS3xvBsSG4x/n1V6TXV3N8ZYNuFGlDirFg32T7B6WOUPDYcQ==}
     dependencies:
       '@babel/runtime': 7.17.2
-    dev: true
 
   /hmac-drbg/1.0.1:
     resolution: {integrity: sha1-0nRXAQJabHdabFRXk+1QL8DGSaE=}
@@ -21682,7 +21681,6 @@ packages:
       react: 18.0.0-rc.0
       react-dom: 18.0.0-rc.0_react@18.0.0-rc.0
       react-router: 6.2.2_react@18.0.0-rc.0
-    dev: true
 
   /react-router/5.2.1_react@18.0.0-rc.0:
     resolution: {integrity: sha512-lIboRiOtDLFdg1VTemMwud9vRVuOCZmUIT/7lUoZiSpPODiiH1UQlfXy+vPLC/7IWdFYnhRwAyNqA/+I7wnvKQ==}
@@ -21720,7 +21718,6 @@ packages:
     dependencies:
       history: 5.3.0
       react: 18.0.0-rc.0
-    dev: true
 
   /react-sizeme/3.0.2:
     resolution: {integrity: sha512-xOIAOqqSSmKlKFJLO3inBQBdymzDuXx4iuwkNcJmC96jeiOg5ojByvL+g3MW9LPEsojLbC6pf68zOfobK8IPlw==}
