@@ -61,6 +61,8 @@ export const resolveTradeProviderName = createLookupTableResolver<TradeProvider,
         [TradeProvider.PANGOLIN]: 'PangolinDex',
         [TradeProvider.TRISOLARIS]: 'Trisolaris',
         [TradeProvider.WANNASWAP]: 'WannaSwap',
+        [TradeProvider.BEAMSWAP]: 'BeamSwap',
+        [TradeProvider.STELLASWAP]: 'StellaSwap',
     },
     (tradeProvider) => {
         throw new Error(`Unknown provider type: ${tradeProvider}`)
@@ -129,6 +131,10 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
             return 'https://www.trisolaris.io/#/swap'
         case TradeProvider.WANNASWAP:
             return 'https://wannaswap.finance/exchange/swap'
+        case TradeProvider.BEAMSWAP:
+            return 'https://app.beamswap.io/'
+        case TradeProvider.STELLASWAP:
+            return 'https://app.stellaswap.com/'
         default:
             unreachable(tradeProvider)
     }
@@ -206,6 +212,12 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             // TODO - add Trisolaris Analytics
             return ''
         case TradeProvider.WANNASWAP:
+            // TODO - add WannaSwap analytics
+            return ''
+        case TradeProvider.STELLASWAP:
+            // TODO - add WannaSwap analytics
+            return ''
+        case TradeProvider.BEAMSWAP:
             // TODO - add WannaSwap analytics
             return ''
         default:
@@ -301,6 +313,8 @@ export const resolveZrxTradePoolName = createLookupTableResolver<ZrxTradePool, s
         [ZrxTradePool.PangolinDex]: 'PangolinDex',
         [ZrxTradePool.Trisolaris]: 'Trisolaris',
         [ZrxTradePool.WannaSwap]: 'WannaSwap',
+        [ZrxTradePool.BeamSwap]: 'BeamSwap',
+        [ZrxTradePool.StellaSwap]: 'StellaSwap',
     },
     'Unknown',
 )

@@ -247,6 +247,30 @@ export function useAllTradeComputed(
     const wannaswap = useUniswapTradeComputed(wannaswap_.value, inputToken, outputToken)
     const wannaSwapEstimateGas = useUniswapTradeGasLimit(wannaswap, TradeProvider.WANNASWAP)
 
+    // StellaSwap
+    const stellaswap_ = useUniswapV2Trade(
+        TradeProvider.STELLASWAP,
+        TradeStrategy.ExactIn,
+        inputAmount_,
+        '0',
+        tradeProviders.some((x) => x === TradeProvider.STELLASWAP) ? inputToken : undefined,
+        tradeProviders.some((x) => x === TradeProvider.STELLASWAP) ? outputToken : undefined,
+    )
+    const stellaswap = useUniswapTradeComputed(stellaswap_.value, inputToken, outputToken)
+    const stellaswapEstimateGas = useUniswapTradeGasLimit(stellaswap, TradeProvider.STELLASWAP)
+
+    // BeamSwap
+    const beamswap_ = useUniswapV2Trade(
+        TradeProvider.BEAMSWAP,
+        TradeStrategy.ExactIn,
+        inputAmount_,
+        '0',
+        tradeProviders.some((x) => x === TradeProvider.BEAMSWAP) ? inputToken : undefined,
+        tradeProviders.some((x) => x === TradeProvider.BEAMSWAP) ? outputToken : undefined,
+    )
+    const beamswap = useUniswapTradeComputed(beamswap_.value, inputToken, outputToken)
+    const beamswapEstimateGas = useUniswapTradeGasLimit(beamswap, TradeProvider.BEAMSWAP)
+
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
         { provider: TradeProvider.SUSHISWAP, ...sushiSwap_, value: sushiSwap, gas: sushiSwapEstimateGas },
@@ -263,6 +287,8 @@ export function useAllTradeComputed(
         { provider: TradeProvider.OPENOCEAN, ...openocean_, value: openocean, gas: openoceanSwapEstimateGas },
         { provider: TradeProvider.WANNASWAP, ...wannaswap_, value: wannaswap, gas: wannaSwapEstimateGas },
         { provider: TradeProvider.TRISOLARIS, ...trisolaris_, value: trisolaris, gas: trisolarisEstimateGas },
+        { provider: TradeProvider.STELLASWAP, ...stellaswap_, value: stellaswap, gas: stellaswapEstimateGas },
+        { provider: TradeProvider.BEAMSWAP, ...beamswap_, value: beamswap, gas: beamswapEstimateGas },
     ]
 
     return nativeToken_.value
