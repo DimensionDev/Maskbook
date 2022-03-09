@@ -52,6 +52,7 @@ export const JOE = createERC20Tokens('JOE_ADDRESS', 'JoeToken', 'JOE', 18)
 export const PNG = createERC20Tokens('PNG_ADDRESS', 'Pangolin', 'PNG', 18)
 export const SHARE = createERC20Tokens('SHARE_ADDRESS', 'Beamshare Token', 'SHARE', 18)
 export const STELLA = createERC20Tokens('STELLA_ADDRESS', 'StellaSwap', 'STELLA', 18)
+export const PAD = createERC20Tokens('PAD_ADDRESS', 'Glmr Pad', 'PAD', 18)
 
 export const WNATIVE = createERC20Tokens(
     'WNATIVE_ADDRESS',

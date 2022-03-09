@@ -63,6 +63,7 @@ export const resolveTradeProviderName = createLookupTableResolver<TradeProvider,
         [TradeProvider.WANNASWAP]: 'WannaSwap',
         [TradeProvider.BEAMSWAP]: 'BeamSwap',
         [TradeProvider.STELLASWAP]: 'StellaSwap',
+        [TradeProvider.PADSWAP]: 'PADSwap',
     },
     (tradeProvider) => {
         throw new Error(`Unknown provider type: ${tradeProvider}`)
@@ -135,6 +136,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
             return 'https://app.beamswap.io/'
         case TradeProvider.STELLASWAP:
             return 'https://app.stellaswap.com/'
+        case TradeProvider.PADSWAP:
+            return 'https://padswap.exchange/swap'
         default:
             unreachable(tradeProvider)
     }
@@ -215,11 +218,12 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             // TODO - add WannaSwap analytics
             return ''
         case TradeProvider.STELLASWAP:
-            // TODO - add WannaSwap analytics
+            // TODO - add StellaSwap analytics
             return ''
         case TradeProvider.BEAMSWAP:
-            // TODO - add WannaSwap analytics
-            return ''
+            return `https://analytics.beamswap.io/paris/${address}`
+        case TradeProvider.PADSWAP:
+            return `https://glmr-info.padswap.exchange/pair/${address}`
         default:
             unreachable(tradeProvider)
     }

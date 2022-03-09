@@ -25,6 +25,8 @@ import {
     BEAMSWAP_CUSTOM_BASES,
     STELLASWAP_BASE_AGAINST_TOKENS,
     STELLASWAP_CUSTOM_BASES,
+    PADSWAP_BASE_AGAINST_TOKENS,
+    PADSWAP_CUSTOM_BASES,
 } from '../constants'
 import { unreachable } from '@dimensiondev/kit'
 import { TargetChainIdContext } from './useTargetChainIdContext'
@@ -158,10 +160,10 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                 return {
                     TYPE: tradeProvider,
                     IS_UNISWAP_V2_LIKE: true,
-                    GRAPH_API: DEX_TRADE.TRISOLARIS_THEGRAPH,
-                    INIT_CODE_HASH: DEX_TRADE.TRISOLARIS_INIT_CODE_HASH,
-                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.TRISOLARIS_ROUTER_ADDRESS,
-                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.TRISOLARIS_FACTORY_ADDRESS,
+                    GRAPH_API: DEX_TRADE.BEAMSWAP_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.BEAMSWAP_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.BEAMSWAP_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.BEAMSWAP_FACTORY_ADDRESS,
                     AGAINST_TOKENS: BEAMSWAP_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: BEAMSWAP_CUSTOM_BASES,
@@ -170,13 +172,25 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                 return {
                     TYPE: tradeProvider,
                     IS_UNISWAP_V2_LIKE: true,
-                    GRAPH_API: DEX_TRADE.TRISOLARIS_THEGRAPH,
-                    INIT_CODE_HASH: DEX_TRADE.TRISOLARIS_INIT_CODE_HASH,
-                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.TRISOLARIS_ROUTER_ADDRESS,
-                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.TRISOLARIS_FACTORY_ADDRESS,
+                    GRAPH_API: DEX_TRADE.STELLASWAP_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.STELLASWAP_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.STELLASWAP_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.STELLASWAP_FACTORY_ADDRESS,
                     AGAINST_TOKENS: STELLASWAP_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: STELLASWAP_CUSTOM_BASES,
+                }
+            case TradeProvider.PADSWAP:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.PADSWAP_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.PADSWAP_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.PADSWAP_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.PADSWAP_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: PADSWAP_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: PADSWAP_CUSTOM_BASES,
                 }
             case TradeProvider.ZRX:
                 return {

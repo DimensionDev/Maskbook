@@ -219,6 +219,7 @@ export enum TradeProvider {
     PANGOLIN = 14,
     BEAMSWAP = 15,
     STELLASWAP = 16,
+    PADSWAP = 17,
 }
 /** Supported language settings */
 export enum LanguageOptions {

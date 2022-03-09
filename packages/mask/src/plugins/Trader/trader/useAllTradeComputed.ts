@@ -271,6 +271,18 @@ export function useAllTradeComputed(
     const beamswap = useUniswapTradeComputed(beamswap_.value, inputToken, outputToken)
     const beamswapEstimateGas = useUniswapTradeGasLimit(beamswap, TradeProvider.BEAMSWAP)
 
+    // PADswap
+    const padswap_ = useUniswapV2Trade(
+        TradeProvider.PADSWAP,
+        TradeStrategy.ExactIn,
+        inputAmount_,
+        '0',
+        tradeProviders.some((x) => x === TradeProvider.PADSWAP) ? inputToken : undefined,
+        tradeProviders.some((x) => x === TradeProvider.PADSWAP) ? outputToken : undefined,
+    )
+    const padswap = useUniswapTradeComputed(padswap_.value, inputToken, outputToken)
+    const padswapEstimateGas = useUniswapTradeGasLimit(padswap, TradeProvider.PADSWAP)
+
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
         { provider: TradeProvider.SUSHISWAP, ...sushiSwap_, value: sushiSwap, gas: sushiSwapEstimateGas },
@@ -289,6 +301,7 @@ export function useAllTradeComputed(
         { provider: TradeProvider.TRISOLARIS, ...trisolaris_, value: trisolaris, gas: trisolarisEstimateGas },
         { provider: TradeProvider.STELLASWAP, ...stellaswap_, value: stellaswap, gas: stellaswapEstimateGas },
         { provider: TradeProvider.BEAMSWAP, ...beamswap_, value: beamswap, gas: beamswapEstimateGas },
+        { provider: TradeProvider.PADSWAP, ...padswap_, value: padswap, gas: padswapEstimateGas },
     ]
 
     return nativeToken_.value

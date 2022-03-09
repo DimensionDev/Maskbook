@@ -57,6 +57,7 @@ const trisolarisSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradePro
 const wannaswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+wannaswap`, '')
 const beamswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+beamswap`, '')
 const stellaswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+stellaswap`, '')
+const padswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+padswap`, '')
 
 /**
  * The general settings of specific tarde provider
@@ -97,6 +98,8 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return beamswapSettings
         case TradeProvider.STELLASWAP:
             return stellaswapSettings
+        case TradeProvider.PADSWAP:
+            return padswapSettings
         default:
             unreachable(tradeProvider)
     }

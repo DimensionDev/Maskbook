@@ -35,6 +35,7 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
                 TradeProvider.DODO,
                 TradeProvider.ZRX,
                 TradeProvider.OPENOCEAN,
+                TradeProvider.PADSWAP,
             ]
         case NetworkType.Arbitrum:
             return [TradeProvider.UNISWAP_V3, TradeProvider.OPENOCEAN, TradeProvider.DODO]
@@ -51,7 +52,7 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
         case NetworkType.Aurora:
             return [TradeProvider.DODO, TradeProvider.WANNASWAP, TradeProvider.TRISOLARIS]
         case NetworkType.Moonbeam:
-            return [TradeProvider.SUSHISWAP, TradeProvider.BEAMSWAP, TradeProvider.STELLASWAP]
+            return [TradeProvider.SUSHISWAP, TradeProvider.BEAMSWAP, TradeProvider.STELLASWAP, TradeProvider.PADSWAP]
         case NetworkType.Boba:
         case NetworkType.Fuse:
         case NetworkType.Metis:
