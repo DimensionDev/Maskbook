@@ -8,6 +8,7 @@ import { KeyValueAPI } from './kv'
 import { UserNFTContainerAtTwitterAPI } from './UserNFTContainer'
 
 export * from './types'
+export * from './hooks'
 export * from './opensea/utils'
 
 export const OpenSea = new OpenSeaAPI()
