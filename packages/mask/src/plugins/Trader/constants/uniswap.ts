@@ -1,6 +1,6 @@
+import JSBI from 'jsbi'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Percent } from '@uniswap/sdk-core'
-import JSBI from 'jsbi'
 import { AMPL, DAI, USDC, USDT, WBTC, WNATIVE, WNATIVE_ONLY } from './trader'
 import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'
 

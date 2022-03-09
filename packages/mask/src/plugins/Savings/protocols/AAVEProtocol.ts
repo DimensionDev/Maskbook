@@ -1,7 +1,7 @@
-import BigNumber from 'bignumber.js'
-import { pow10, ZERO } from '@masknet/web3-shared-base'
 import type Web3 from 'web3'
 import type { AbiItem } from 'web3-utils'
+import BigNumber from 'bignumber.js'
+import { pow10, ZERO } from '@masknet/web3-shared-base'
 import {
     ChainId,
     getAaveConstants,

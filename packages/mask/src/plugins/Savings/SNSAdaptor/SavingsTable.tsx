@@ -6,7 +6,7 @@ import { isZero, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, useWeb3, useAccount, formatBalance } from '@masknet/web3-shared-evm'
 import { ProviderIconURLs } from './IconURL'
 import { useI18N } from '../../../utils'
-import { TabType, ProtocolType, SavingsProtocol } from '../types'
+import { TabType, SavingsProtocol } from '../types'
 
 const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {
