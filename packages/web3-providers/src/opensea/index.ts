@@ -33,8 +33,10 @@ async function fetchFromOpenSea<T>(url: string, chainId: ChainId, apiKey?: strin
             headers: { 'x-api-key': apiKey ?? OPENSEA_API_KEY, Accept: 'application/json' },
             ...(!isProxyENV() && { mode: 'cors' }),
         })
-        if (response.status === 404) return
-        return response.json() as Promise<T>
+        if (response.ok) {
+            return (await response.json()) as T
+        }
+        return
     } catch {
         return
     }
@@ -274,10 +276,10 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
             limit: pageSize,
             collection: opts.pageInfo?.collection,
         })
-        const response = await fetchFromOpenSea<{ assets: OpenSeaResponse[] }>(requestPath, chainId, this._apiKey)
+        const response = await fetchFromOpenSea<{ assets?: OpenSeaResponse[] }>(requestPath, chainId, this._apiKey)
         const assets =
             response?.assets
-                .filter(
+                ?.filter(
                     (x: OpenSeaResponse) =>
                         ['non-fungible', 'semi-fungible'].includes(x.asset_contract.asset_contract_type) ||
                         ['ERC721', 'ERC1155'].includes(x.asset_contract.schema_name),

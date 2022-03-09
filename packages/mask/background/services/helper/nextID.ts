@@ -80,6 +80,7 @@ async function queryPersonaHexPublicKey(persona: PersonaIdentifier) {
     return `0x${toHex(arr)}`
 }
 
+/** @deprecated Use NextIDService */
 export async function queryExistedBinding(persona: PersonaIdentifier) {
     const publicKey = await queryPersonaHexPublicKey(persona)
     if (!publicKey) return
@@ -92,6 +93,7 @@ export async function queryExistedBinding(persona: PersonaIdentifier) {
     return first(result.ids)
 }
 
+/** @deprecated Use NextIDService */
 export async function createPersonaPayload(
     persona: PersonaIdentifier,
     action: 'create' | 'delete',

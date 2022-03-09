@@ -58,7 +58,13 @@ export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, 
                 )}
                 onClick={onClick}>
                 {collection.iconURL ? (
-                    <Image component="img" className={classes.collectionImg} src={collection.iconURL} />
+                    <Image
+                        width={24}
+                        height={24}
+                        component="img"
+                        className={classes.collectionImg}
+                        src={collection.iconURL}
+                    />
                 ) : (
                     <TokenIcon
                         classes={{ icon: classes.collectionImg }}

@@ -27,7 +27,7 @@ import {
 } from '../plugins/Wallet/settings'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import type { InternalSettings } from '../settings/createSettings'
-import { Flags } from '../../shared'
+import { Flags, isAndroidApp } from '../../shared'
 import Services from '../extension/service'
 import { TokenList, Twitter } from '@masknet/web3-providers'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
@@ -215,16 +215,25 @@ function createSubscriptionFromAsync<T>(
         trigger()
     }
     return {
-        getCurrentValue: () => {
-            if (isLoading) throw init
-            return state
-        },
+        getCurrentValue: isAndroidApp
+            ? () => state
+            : () => {
+                  if (isLoading) throw init
+                  return state
+              },
         subscribe: (sub) => {
             const a = subscribe(sub)
-            const b = onChange(() => {
-                beats += 1
-                if (beats === 1) flush()
-            })
+            const b = onChange(
+                isAndroidApp
+                    ? async () => {
+                          beats += 1
+                          if (beats === 1) await flush()
+                      }
+                    : () => {
+                          beats += 1
+                          if (beats === 1) flush()
+                      },
+            )
             return () => void [a(), b()]
         },
     }

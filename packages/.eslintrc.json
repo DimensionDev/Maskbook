@@ -66,7 +66,6 @@
         "unicorn/relative-url-style": ["error", "always"],
         "unicorn/throw-new-error": "error",
         "unused-imports/no-unused-imports-ts": "error",
-        "@dimensiondev/no-bigint": "error",
         "@dimensiondev/no-jsx-template-literal": "error",
         "@dimensiondev/no-locale-case": "error",
         "@dimensiondev/no-number-constructor": "off",

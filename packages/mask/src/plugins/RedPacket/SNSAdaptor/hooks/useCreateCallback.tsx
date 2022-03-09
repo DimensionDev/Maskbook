@@ -1,8 +1,3 @@
-import { omit } from 'lodash-unified'
-import { useCallback, useRef, useState } from 'react'
-import { useAsync } from 'react-use'
-import type { TransactionReceipt } from 'web3-core'
-import Web3Utils from 'web3-utils'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import {
@@ -15,6 +10,10 @@ import {
     useTransactionState,
 } from '@masknet/web3-shared-evm'
 import { Web3TokenType, FungibleTokenDetailed, isLessThan, toFixed } from '@masknet/web3-shared-base'
+import { omit } from 'lodash-unified'
+import { useCallback, useRef, useState } from 'react'
+import type { TransactionReceipt } from 'web3-core'
+import Web3Utils from 'web3-utils'
 import { useRedPacketContract } from './useRedPacketContract'
 
 export interface RedPacketSettings {
@@ -27,7 +26,7 @@ export interface RedPacketSettings {
     token?: FungibleTokenDetailed
 }
 
-type paramsObjType = {
+type ParamsObjType = {
     publicKey: string
     shares: number
     isRandom: boolean
@@ -41,7 +40,7 @@ type paramsObjType = {
     token?: FungibleTokenDetailed
 }
 
-function checkParams(paramsObj: paramsObjType, setCreateState?: (value: TransactionState) => void) {
+function checkParams(paramsObj: ParamsObjType, setCreateState?: (value: TransactionState) => void) {
     if (isLessThan(paramsObj.total, paramsObj.shares)) {
         setCreateState?.({
             type: TransactionStateType.FAILED,
@@ -69,11 +68,19 @@ function checkParams(paramsObj: paramsObjType, setCreateState?: (value: Transact
     return true
 }
 
+type MethodParameters = Parameters<HappyRedPacketV4['methods']['create_red_packet']>
+interface CreateParams {
+    gas: number | undefined
+    params: MethodParameters
+    paramsObj: ParamsObjType
+    gasError: Error | null
+}
+
 export function useCreateParams(redPacketSettings: RedPacketSettings | undefined, version: number, publicKey: string) {
     const redPacketContract = useRedPacketContract(version)
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const account = useAccount()
-    return useAsync(async () => {
+    const getCreateParams = useCallback(async (): Promise<CreateParams | null> => {
         if (!redPacketSettings || !redPacketContract) return null
         const { duration, isRandom, message, name, shares, total, token } = redPacketSettings
         const seed = Math.random().toString()
@@ -81,7 +88,7 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
         const tokenAddress = token!.type === Web3TokenType.Native ? NATIVE_TOKEN_ADDRESS : token!.address
         if (!tokenAddress) return null
 
-        const paramsObj: paramsObjType = {
+        const paramsObj: ParamsObjType = {
             publicKey,
             shares,
             isRandom,
@@ -95,12 +102,13 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
             token,
         }
 
-        if (!checkParams(paramsObj)) return null
+        if (!checkParams(paramsObj)) {
+            return null
+        }
 
-        type MethodParameters = Parameters<HappyRedPacketV4['methods']['create_red_packet']>
         const params = Object.values(omit(paramsObj, ['token'])) as MethodParameters
 
-        let gasError = null as Error | null
+        let gasError: Error | null = null
         const value = toFixed(paramsObj.token?.type === Web3TokenType.Native ? total : 0)
 
         const gas = await (redPacketContract as HappyRedPacketV4).methods
@@ -111,7 +119,9 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
             })
 
         return { gas: gas as number | undefined, params, paramsObj, gasError }
-    }, [redPacketSettings, account, redPacketContract]).value
+    }, [redPacketSettings, account, redPacketContract])
+
+    return getCreateParams
 }
 
 export function useCreateCallback(redPacketSettings: RedPacketSettings, version: number, publicKey: string) {
@@ -120,21 +130,22 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
     const [createState, setCreateState] = useTransactionState()
     const redPacketContract = useRedPacketContract(version)
     const [createSettings, setCreateSettings] = useState<RedPacketSettings | null>(null)
-    const paramResult = useCreateParams(redPacketSettings, version, publicKey)
+    const getCreateParams = useCreateParams(redPacketSettings, version, publicKey)
 
     const transactionHashRef = useRef<string>()
 
     const createCallback = useCallback(async () => {
         const { token } = redPacketSettings
+        const createParams = await getCreateParams()
 
-        if (!token || !redPacketContract || !paramResult) {
+        if (!token || !redPacketContract || !createParams) {
             setCreateState({
                 type: TransactionStateType.UNKNOWN,
             })
             return
         }
 
-        const { gas, params, paramsObj, gasError } = paramResult
+        const { gas, params, paramsObj, gasError } = createParams
 
         if (gasError) {
             setCreateState({
@@ -199,7 +210,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                     reject(error)
                 })
         })
-    }, [account, redPacketContract, redPacketSettings, chainId, paramResult])
+    }, [account, redPacketContract, redPacketSettings, chainId, getCreateParams])
 
     const resetCallback = useCallback(() => {
         setCreateState({

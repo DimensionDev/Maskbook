@@ -42,7 +42,7 @@ const nonFungibleCollectibleAsset = async (
         )
     } finally {
         const fromRarible = collectAllPageData<ERC721TokenDetailed>(
-            (page, pageInfo) => getRaribleNFTList(openSeaApiKey, address, page, pageSize, pageInfo),
+            (page, pageInfo) => getRaribleNFTList(address, page, pageSize, pageInfo),
             pageSize,
             push,
         )

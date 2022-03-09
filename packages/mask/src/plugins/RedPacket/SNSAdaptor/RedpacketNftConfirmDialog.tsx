@@ -9,6 +9,7 @@ import {
     useWeb3,
     TransactionStateType,
     isNativeTokenAddress,
+    formatNFT_TokenId,
 } from '@masknet/web3-shared-evm'
 import type { ERC721ContractDetailed, ERC721TokenDetailed } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog, NFTCardStyledAssetPlayer } from '@masknet/shared'
@@ -355,7 +356,7 @@ interface NFTCardProps {
 function NFTCard(props: NFTCardProps) {
     const { token, renderOrder } = props
     const { classes } = useStyles()
-    const [name, setName] = useState('#' + token.tokenId)
+    const [name, setName] = useState(formatNFT_TokenId(token.tokenId, 2))
     return (
         <ListItem className={classNames(classes.tokenSelectorWrapper)}>
             <NFTCardStyledAssetPlayer

@@ -88,7 +88,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.injection.enhancedProfileNFTAvatar?.(signal)
     ui.injection.openNFTAvatar?.(signal)
     ui.injection.postAndReplyNFTAvatar?.(signal)
-    ui.injection.collectionAvatar?.(signal)
     ui.injection.avatarClipNFT?.(signal)
 
     startPluginSNSAdaptor(
@@ -129,8 +128,18 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     function $unknownIdentityResolution() {
         const provider = ui.collecting.identityProvider
-        provider?.start(signal)
-        if (provider?.hasDeprecatedPlaceholderName) {
+        if (!provider) return
+        provider.start(signal)
+        provider.recognized.addListener((newValue, oldValue) => {
+            if (document.visibilityState === 'hidden') return
+            if (newValue.identifier.equals(oldValue.identifier)) return
+            if (newValue.identifier.isUnknown) return
+
+            MaskMessages.events.Native_visibleSNS_currentDetectedProfileUpdated.sendToBackgroundPage(
+                newValue.identifier.toText(),
+            )
+        })
+        if (provider.hasDeprecatedPlaceholderName) {
             provider.recognized.addListener((id) => {
                 if (signal.aborted) return
                 if (id.identifier.isUnknown) return

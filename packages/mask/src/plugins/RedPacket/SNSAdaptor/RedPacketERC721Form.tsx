@@ -7,13 +7,9 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { ERC721ContractSelectPanel } from '../../../web3/UI/ERC721ContractSelectPanel'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC721TokenApprovedBoundary } from '../../../web3/UI/EthereumERC721TokenApprovedBoundary'
-import {
-    useERC721TokenDetailedOwnerList,
-    useAccount,
-    useChainId,
-    useNftRedPacketConstants,
-} from '@masknet/web3-shared-evm'
+import { useAccount, useChainId, useNftRedPacketConstants, formatNFT_TokenId } from '@masknet/web3-shared-evm'
 import type { ERC721ContractDetailed, ERC721TokenDetailed } from '@masknet/web3-shared-base'
+import { useERC721TokenDetailedOwnerList } from '@masknet/web3-providers'
 import CheckIcon from '@mui/icons-material/Check'
 import CloseIcon from '@mui/icons-material/Close'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
@@ -100,6 +96,7 @@ const useStyles = makeStyles()((theme) => {
             alignItems: 'center',
             background: `${theme.palette.background.default} !important`,
             justifyContent: 'center',
+            border: `1px solid ${theme.palette.divider}`,
         },
         addIcon: {
             color: '#AFC3E1',
@@ -174,7 +171,10 @@ const useStyles = makeStyles()((theme) => {
         },
         approveAllTip: {
             color: '#FF5F5F',
-            margin: '0px 4px 24px 4px',
+            margin: '16px 4px 24px 4px',
+        },
+        unapprovedTip: {
+            color: theme.palette.grey[500],
         },
         disabledSelector: {
             opacity: 0.5,
@@ -185,6 +185,9 @@ const useStyles = makeStyles()((theme) => {
         },
         iframe: {
             minHeight: 147,
+        },
+        assetImgWrapper: {
+            maxHeight: 155,
         },
     }
 })
@@ -202,7 +205,10 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const account = useAccount()
     const chainId = useChainId()
     const [contract, setContract] = useState<ERC721ContractDetailed>()
-    const [existTokenDetailedList, setExistTokenDetailedList] = useState<OrderedERC721Token[]>([])
+    const [manualSelectedTokenDetailedList, setExistTokenDetailedList] = useState<OrderedERC721Token[]>([])
+    const [onceAllSelectedTokenDetailedList, setAllTokenDetailedList] = useState<OrderedERC721Token[]>([])
+    const tokenDetailedList =
+        selectOption === NFTSelectOption.Partial ? manualSelectedTokenDetailedList : onceAllSelectedTokenDetailedList
     const [message, setMessage] = useState('Best Wishes!')
     const {
         asyncRetry: { loading: loadingOwnerList },
@@ -248,9 +254,9 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
 
     const validationMessage = useMemo(() => {
         if (!balance) return t('plugin_red_packet_erc721_insufficient_balance')
-        if (existTokenDetailedList.length === 0) return t('plugin_wallet_select_a_token')
+        if (tokenDetailedList.length === 0) return t('plugin_wallet_select_a_token')
         return ''
-    }, [existTokenDetailedList.length, balance])
+    }, [tokenDetailedList.length, balance])
 
     return (
         <>
@@ -273,7 +279,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                 )}
                                 onClick={() => {
                                     setSelectOption(NFTSelectOption.All)
-                                    setExistTokenDetailedList(tokenDetailedOwnerList.slice(0, maxSelectShares))
+                                    setAllTokenDetailedList(tokenDetailedOwnerList.slice(0, maxSelectShares))
                                 }}>
                                 <div
                                     className={classNames(
@@ -290,12 +296,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                           })}
                                 </Typography>
                             </div>
-                            <div
-                                className={classes.option}
-                                onClick={() => {
-                                    setSelectOption(NFTSelectOption.Partial)
-                                    setExistTokenDetailedList([])
-                                }}>
+                            <div className={classes.option} onClick={() => setSelectOption(NFTSelectOption.Partial)}>
                                 <div
                                     className={classNames(
                                         classes.checkIconWrapper,
@@ -310,10 +311,10 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         </Box>
                     )
                 ) : null}
-                {contract && balance && selectOption === NFTSelectOption.Partial && !loadingOwnerList ? (
+                {contract && balance && !loadingOwnerList ? (
                     <div className={classes.tokenSelectorParent}>
                         <List className={classes.tokenSelector}>
-                            {existTokenDetailedList.map((value, i) => (
+                            {tokenDetailedList.map((value, i) => (
                                 <div key={i}>
                                     <NFTCard token={value} removeToken={removeToken} renderOrder={i} />
                                 </div>
@@ -330,9 +331,14 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     <RedpacketMessagePanel onChange={(val: string) => setMessage(val)} message={message} />
                 </div>
                 {contract && balance && !loadingOwnerList ? (
-                    <Typography className={classes.approveAllTip}>
-                        {t('plugin_red_packet_nft_approve_all_tip')}
-                    </Typography>
+                    <>
+                        <Typography className={classes.unapprovedTip}>
+                            {t('plugin_red_packet_nft_unapproved_tip')}
+                        </Typography>
+                        <Typography className={classes.approveAllTip}>
+                            {t('plugin_red_packet_nft_approve_all_tip')}
+                        </Typography>
+                    </>
                 ) : null}
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC721TokenApprovedBoundary
@@ -356,7 +362,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     open={open}
                     onClose={() => setOpen(false)}
                     contract={contract}
-                    existTokenDetailedList={existTokenDetailedList}
+                    existTokenDetailedList={tokenDetailedList}
                     setExistTokenDetailedList={setExistTokenDetailedList}
                     tokenDetailedOwnerList={tokenDetailedOwnerList}
                     loadingOwnerList={loadingOwnerList}
@@ -367,7 +373,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     message={message}
                     contract={contract}
                     open={openConfirmDialog}
-                    tokenList={existTokenDetailedList}
+                    tokenList={tokenDetailedList}
                     onBack={() => setOpenConfirmDialog(false)}
                     onClose={onClose}
                 />
@@ -385,12 +391,13 @@ interface NFTCardProps {
 function NFTCard(props: NFTCardProps) {
     const { token, removeToken, renderOrder } = props
     const { classes } = useStyles()
-    const [name, setName] = useState('#' + token.tokenId)
+    const [name, setName] = useState(formatNFT_TokenId(token.tokenId, 2))
     return (
         <ListItem className={classNames(classes.tokenSelectorWrapper)}>
             <NFTCardStyledAssetPlayer
                 contractAddress={token.contractDetailed.address}
                 chainId={token.contractDetailed.chainId}
+                url={token.info.mediaUrl || token.info.imageURL}
                 tokenId={token.tokenId}
                 tokenURI={token.info.tokenURI}
                 renderOrder={renderOrder}
@@ -398,6 +405,7 @@ function NFTCard(props: NFTCardProps) {
                 classes={{
                     loadingFailImage: classes.loadingFailImage,
                     iframe: classes.iframe,
+                    imgWrapper: classes.assetImgWrapper,
                 }}
             />
             <div className={classes.nftNameWrapper}>

@@ -329,7 +329,6 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider {
 }
 
 export function getRaribleNFTList(
-    apiKey: string,
     address: string,
     page?: number,
     pageSize?: number,

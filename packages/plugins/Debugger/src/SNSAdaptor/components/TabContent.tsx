@@ -1,4 +1,5 @@
 import { Plugin, useBalance, useBlockNumber } from '@masknet/plugin-infra'
+import { makeStyles } from '@masknet/theme'
 import { Box, List, ListItem, ListItemText, Typography } from '@mui/material'
 
 export interface TabContentProps {
@@ -6,7 +7,14 @@ export interface TabContentProps {
     addressNames?: Plugin.SNSAdaptor.ProfileAddress[]
 }
 
+const useStyles = makeStyles()({
+    container: {
+        overflow: 'auto',
+    },
+})
+
 export function TabContent({ identity, addressNames }: TabContentProps) {
+    const { classes } = useStyles()
     const renderIdentity = () => {
         return (
             <List>
@@ -64,7 +72,7 @@ export function TabContent({ identity, addressNames }: TabContentProps) {
     const { value: blockNumber = 0 } = useBlockNumber()
 
     return (
-        <>
+        <section className={classes.container}>
             <Typography color="textPrimary" variant="h6">
                 Balance {balance} <br />
                 BlockNumber {blockNumber} <br />
@@ -79,6 +87,6 @@ export function TabContent({ identity, addressNames }: TabContentProps) {
                 Address Names
             </Typography>
             {renderAddressNames()}
-        </>
+        </section>
     )
 }
