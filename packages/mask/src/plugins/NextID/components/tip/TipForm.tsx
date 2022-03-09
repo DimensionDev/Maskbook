@@ -3,7 +3,18 @@ import { SelectTokenDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { EthereumTokenType, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
-import { Box, FormControl, FormControlLabel, MenuItem, Radio, RadioGroup, Select, Typography } from '@mui/material'
+import {
+    Box,
+    BoxProps,
+    FormControl,
+    FormControlLabel,
+    MenuItem,
+    Radio,
+    RadioGroup,
+    Select,
+    Typography,
+} from '@mui/material'
+import classnames from 'classnames'
 import { FC, memo, useCallback, useRef, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
@@ -19,6 +30,12 @@ const useStyles = makeStyles()((theme) => {
         root: {
             display: 'flex',
             flexDirection: 'column',
+        },
+        main: {
+            display: 'flex',
+            flexDirection: 'column',
+            flexGrow: 1,
+            overflow: 'auto',
         },
         tipButton: {
             marginTop: theme.spacing(1.5),
@@ -45,7 +62,9 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export const TipForm: FC = memo(() => {
+interface Props extends BoxProps {}
+
+export const TipForm: FC<Props> = memo((props) => {
     const t = useI18N()
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const { classes } = useStyles()
@@ -95,63 +114,65 @@ export const TipForm: FC = memo(() => {
     const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
 
     return (
-        <Box className={classes.root}>
-            <Typography>{t.tip_to()}</Typography>
+        <Box {...props} className={classnames(classes.root, props.className)}>
+            <div className={classes.main}>
+                <Typography>{t.tip_to()}</Typography>
 
-            <FormControl fullWidth>
-                <Select
-                    ref={selectRef}
-                    value={recipient}
-                    onChange={(e) => {
-                        setRecipient(e.target.value)
-                    }}
-                    MenuProps={{
-                        anchorOrigin: {
-                            vertical: 'bottom',
-                            horizontal: 'center',
-                        },
-                        container: selectRef.current,
-                        BackdropProps: {
-                            invisible: true,
-                        },
-                    }}>
-                    {recipientAddresses.map((address) => (
-                        <MenuItem key={address} value={address}>
-                            {Utils?.formatDomainName?.(address) || address}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
-            <FormControl>
-                <RadioGroup
-                    row
-                    value={tipType}
-                    onChange={(e) => {
-                        setTipType(e.target.value as TipType)
-                    }}>
-                    <FormControlLabel value={TipType.Token} control={<Radio />} label={t.tip_type_token()} />
-                    <FormControlLabel value={TipType.NFT} control={<Radio />} label={t.tip_type_nft()} />
-                </RadioGroup>
-            </FormControl>
-            {tipType === TipType.Token ? (
-                <FormControl>
-                    <TokenAmountPanel
-                        label="Token"
-                        token={token}
-                        amount={amount}
-                        onAmountChange={setAmount}
-                        balance={tokenBalance}
-                        SelectTokenChip={{
-                            loading: loadingTokenBalance,
-                            ChipProps: {
-                                onClick: onSelectTokenChipClick,
-                            },
+                <FormControl fullWidth>
+                    <Select
+                        ref={selectRef}
+                        value={recipient}
+                        onChange={(e) => {
+                            setRecipient(e.target.value)
                         }}
-                    />
+                        MenuProps={{
+                            anchorOrigin: {
+                                vertical: 'bottom',
+                                horizontal: 'center',
+                            },
+                            container: selectRef.current,
+                            BackdropProps: {
+                                invisible: true,
+                            },
+                        }}>
+                        {recipientAddresses.map((address) => (
+                            <MenuItem key={address} value={address}>
+                                {Utils?.formatDomainName?.(address) || address}
+                            </MenuItem>
+                        ))}
+                    </Select>
                 </FormControl>
-            ) : (
-                <NFTSection />
-            )}
+                <FormControl>
+                    <RadioGroup
+                        row
+                        value={tipType}
+                        onChange={(e) => {
+                            setTipType(e.target.value as TipType)
+                        }}>
+                        <FormControlLabel value={TipType.Token} control={<Radio />} label={t.tip_type_token()} />
+                        <FormControlLabel value={TipType.NFT} control={<Radio />} label={t.tip_type_nft()} />
+                    </RadioGroup>
+                </FormControl>
+                {tipType === TipType.Token ? (
+                    <FormControl>
+                        <TokenAmountPanel
+                            label="Token"
+                            token={token}
+                            amount={amount}
+                            onAmountChange={setAmount}
+                            balance={tokenBalance}
+                            SelectTokenChip={{
+                                loading: loadingTokenBalance,
+                                ChipProps: {
+                                    onClick: onSelectTokenChipClick,
+                                },
+                            }}
+                        />
+                    </FormControl>
+                ) : (
+                    <NFTSection />
+                )}
+            </div>
 
             <EthereumChainBoundary
                 chainId={chainId}

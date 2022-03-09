@@ -9,16 +9,20 @@ import { TargetChainIdContext } from '../../contexts'
 import { TipForm } from './TipForm'
 
 const useStyles = makeStyles()((theme) => ({
-    abstractTabWrapper: {
-        width: '100%',
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(2),
-    },
     content: {
+        display: 'flex',
+        flexDirection: 'column',
+        flexBasis: '100%',
         paddingTop: 0,
         '&::-webkit-scrollbar': {
             display: 'none',
         },
+    },
+    abstractTabWrapper: {
+        width: '100%',
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(2),
+        flexShrink: 0,
     },
     tab: {
         height: 36,
@@ -33,6 +37,10 @@ const useStyles = makeStyles()((theme) => ({
         minHeight: 36,
         margin: '0 auto',
         borderRadius: 4,
+    },
+    tipForm: {
+        flexGrow: 1,
+        overflow: 'auto',
     },
 }))
 
@@ -61,7 +69,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                         chains={chainIdList}
                     />
                 </div>
-                <TipForm />
+                <TipForm className={classes.tipForm} />
             </DialogContent>
         </InjectedDialog>
     )

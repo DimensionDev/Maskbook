@@ -18,11 +18,16 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         flexDirection: 'column',
+        overflow: 'auto',
     },
     selectSection: {
         marginTop: theme.spacing(1.5),
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'auto',
     },
     list: {
+        flexGrow: 1,
         display: 'grid',
         gridTemplateColumns: 'repeat(4, 1fr)',
         maxHeight: 400,
