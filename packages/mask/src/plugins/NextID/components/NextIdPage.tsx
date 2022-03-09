@@ -25,14 +25,17 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.primary,
     },
     verifyIntro: {
+        fontSize: '14px',
         fontWeight: 500,
         marginBottom: '12px',
     },
     verifyDetail: {
+        fontSize: '14px',
         fontWeight: 400,
         color: theme.palette.grey[700],
     },
     verifyInstruction: {
+        fontSize: '14px',
         fontWeight: 400,
         color: theme.palette.grey[700],
     },
