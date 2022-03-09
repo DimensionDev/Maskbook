@@ -1,9 +1,8 @@
-import { Suspense, useMemo } from 'react'
+import { useMemo } from 'react'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, Plugin, useChainId } from '@masknet/plugin-infra'
-import { SnackbarContent } from '@mui/material'
-import MaskPluginWrapper from '../../MaskPluginWrapper'
-import { extractTextFromTypedMessage, parseURL } from '@masknet/shared-base'
+import { NetworkPluginID, Plugin, useChainId, usePluginWrapper } from '@masknet/plugin-infra'
+import { extractTextFromTypedMessage } from '@masknet/typed-message'
+import { parseURL } from '@masknet/shared-base'
 import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
 import { PreviewCard } from './PreviewCard'
 import { base } from '../base'
@@ -42,14 +41,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     const [id = ''] = props.url.match(/\d+/) ?? []
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    usePluginWrapper(true)
     return (
-        <MaskPluginWrapper pluginName="Gitcoin">
-            <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
-                <EthereumChainBoundary chainId={isGitCoinSupported(chainId) ? chainId : ChainId.Mainnet}>
-                    <PreviewCard id={id} />
-                </EthereumChainBoundary>
-            </Suspense>
-        </MaskPluginWrapper>
+        <EthereumChainBoundary chainId={isGitCoinSupported(chainId) ? chainId : ChainId.Mainnet}>
+            <PreviewCard id={id} />
+        </EthereumChainBoundary>
     )
 }
 

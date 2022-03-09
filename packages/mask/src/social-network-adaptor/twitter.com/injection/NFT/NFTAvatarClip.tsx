@@ -1,7 +1,7 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { isZero } from '@masknet/web3-shared-base'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useLocation, useWindowSize } from 'react-use'
 import { NFTAvatarClip } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip'
 import { createReactRootShadowed, startWatch } from '../../../../utils'
@@ -29,13 +29,15 @@ function NFTAvatarClipInTwitter() {
     const { classes } = useStyles()
     const windowSize = useWindowSize()
     const location = useLocation()
+    const borderElement = useRef<Element | null>()
+    const linkDom = useRef<Element | null>()
 
     const size = useMemo(() => {
-        const ele = searchTwitterAvatarNFTSelector().evaluate()
+        const ele = searchTwitterAvatarNFTSelector().evaluate()?.closest('a')?.querySelector('img')
         if (!ele) return 0
         const style = window.getComputedStyle(ele)
         return Number.parseInt(style.width.replace('px', '') ?? 0, 10)
-    }, [windowSize])
+    }, [windowSize, location])
 
     const twitterId = useMemo(() => {
         const ele = searchTwitterAvatarNFTSelector().evaluate()?.closest('a') as HTMLElement
@@ -47,15 +49,24 @@ function NFTAvatarClipInTwitter() {
     }, [location])
 
     useEffect(() => {
-        const link = searchTwitterAvatarNFTLinkSelector().evaluate()?.firstChild as HTMLElement
-        if (!link) return
-        link.style.width = ''
-        link.style.height = ''
+        setTimeout(() => {
+            linkDom.current = searchTwitterAvatarNFTLinkSelector().evaluate()
+            if (linkDom.current?.firstElementChild && linkDom.current?.childNodes.length === 4) {
+                borderElement.current = linkDom.current.firstElementChild
+                // remove useless border
+                linkDom.current.removeChild(linkDom.current?.firstElementChild)
+            }
+        }, 5000)
+
         return () => {
-            link.style.height = 'calc(100% - 4px)'
-            link.style.width = 'calc(100% - 4px)'
+            if (
+                borderElement.current &&
+                borderElement.current !== linkDom.current?.firstElementChild &&
+                linkDom.current
+            )
+                linkDom.current.insertBefore(borderElement.current, linkDom.current.firstChild)
         }
-    }, [location])
+    }, [location.pathname])
 
     if (isZero(size) || !twitterId) return null
     return (

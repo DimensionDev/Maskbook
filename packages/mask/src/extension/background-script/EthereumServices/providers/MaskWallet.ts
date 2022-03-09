@@ -4,7 +4,7 @@ import { PopupRoutes } from '@masknet/shared-base'
 import { ChainId, getChainIdFromNetworkType, getChainRPC, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 import { currentChainIdSettings } from '../../../../plugins/Wallet/settings'
 import { getWallets, selectAccountPrepare } from '../../../../plugins/Wallet/services'
-import { openPopupWindow } from '../../HelperService'
+import { openPopupWindow } from '../../../../../background/services/helper'
 
 // #region providers
 const providerPool = new Map<string, HttpProvider>()

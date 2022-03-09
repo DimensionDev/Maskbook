@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Typography, MenuItem } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { ShadowRootMenu } from '../../../../utils/shadow-root/ShadowRootComponents'
+import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import type { Coin } from '../../types'
 
 const useStyles = makeStyles()((theme) => ({

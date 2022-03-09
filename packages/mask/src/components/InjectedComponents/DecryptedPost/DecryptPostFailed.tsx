@@ -4,7 +4,7 @@ import { AdditionalContent } from '../AdditionalPostContent'
 import { DecryptFailedReason } from '../../../utils/constants'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import { wrapAuthorDifferentMessage } from './authorDifferentMessage'
-import MaskPluginWrapper from '../../../plugins/MaskPluginWrapper'
+import MaskPostExtraInfoWrapper from '../../../plugins/MaskPluginWrapper'
 
 export interface DecryptPostFailedProps {
     error: Error
@@ -18,7 +18,7 @@ export const DecryptPostFailed = memo(function DecryptPostFailed(props: DecryptP
     const { t } = useI18N()
 
     if (error?.message === DecryptFailedReason.MyCryptoKeyNotFound) {
-        return <MaskPluginWrapper pluginName="" />
+        return <MaskPostExtraInfoWrapper title="" />
     }
     return (
         <AdditionalContent

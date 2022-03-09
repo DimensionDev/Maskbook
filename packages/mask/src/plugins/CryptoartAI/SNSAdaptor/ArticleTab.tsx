@@ -1,7 +1,7 @@
-import { Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 
 const useStyles = makeStyles()({
     body: {
@@ -13,6 +13,10 @@ const useStyles = makeStyles()({
         maxWidth: '100%',
         maxHeight: '100%',
         border: 'none',
+    },
+    iframe: {
+        minWidth: 300,
+        minHeight: 300,
     },
 })
 
@@ -27,13 +31,13 @@ export function ArticleTab(props: ArticleTabProps) {
     return (
         <CollectibleTab>
             <div className={classes.body}>
-                {asset.value.ossUrl.match(/\.(mp4|avi|webm)$/i) ? (
-                    <Link href={asset.value.ossUrl} target="_blank" rel="noopener noreferrer">
-                        <img className={classes.player} src={resourceUrl} alt={asset.value.title} />
-                    </Link>
-                ) : (
-                    <img className={classes.player} src={resourceUrl} alt={asset.value.title} />
-                )}
+                <NFTCardStyledAssetPlayer
+                    url={resourceUrl}
+                    classes={{
+                        wrapper: classes.player,
+                        iframe: classes.iframe,
+                    }}
+                />
             </div>
         </CollectibleTab>
     )

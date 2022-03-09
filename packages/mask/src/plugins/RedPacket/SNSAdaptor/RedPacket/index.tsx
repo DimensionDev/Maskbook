@@ -70,21 +70,12 @@ export function RedPacket(props: RedPacketProps) {
 
     // #region remote controlled transaction dialog
     const postLink = usePostLink()
-    const shareLink = activatedSocialNetworkUI.utils
-        .getShareLinkURL?.(
-            t(
-                isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                    ? 'plugin_red_packet_share_message_official_account'
-                    : 'plugin_red_packet_share_message_not_twitter',
-                {
-                    sender: payload.sender.name,
-                    payload: postLink,
-                    network: resolveNetworkName(networkType),
-                    account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
-                },
-            ).trim(),
-        )
-        .toString()
+    const shareTextOption = {
+        sender: payload.sender.name,
+        payload: postLink,
+        network: resolveNetworkName(networkType),
+        account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
+    }
 
     const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(
         payload.contract_version,
@@ -92,6 +83,20 @@ export function RedPacket(props: RedPacketProps) {
         payload.rpid,
         payload.contract_version > 3 ? web3.eth.accounts.sign(account, payload.password).signature : payload.password,
     )
+
+    const shareLink = activatedSocialNetworkUI.utils
+        .getShareLinkURL?.(
+            (listOfStatus.includes(RedPacketStatus.claimed) || claimState.type === TransactionStateType.CONFIRMED
+                ? isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                    ? t('plugin_red_packet_share_message_official_account', shareTextOption)
+                    : t('plugin_red_packet_share_message_not_twitter', shareTextOption)
+                : isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                ? t('plugin_red_packet_share_unclaimed_message_official_account', shareTextOption)
+                : t('plugin_red_packet_share_unclaimed_message_not_twitter', shareTextOption)
+            ).trim(),
+        )
+        .toString()
+
     const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(
         payload.contract_version,
         account,
@@ -109,19 +114,13 @@ export function RedPacket(props: RedPacketProps) {
         if (state.type === TransactionStateType.UNKNOWN) return
         if (!availability || !token) return
         if (state.type === TransactionStateType.CONFIRMED) {
-            setTransactionDialog({
-                open: true,
-                shareLink: shareLink!,
-                state,
-                summary: canClaim
-                    ? t('plugin_red_packet_claiming_from', { name: payload.sender.name })
-                    : canRefund
-                    ? t('plugin_red_packet_refunding_for', {
-                          balance: formatBalance(availability.balance, token.decimals),
-                          symbol: token.symbol,
-                      })
-                    : '',
-            })
+            canClaim &&
+                setTransactionDialog({
+                    open: true,
+                    shareLink: shareLink!,
+                    state,
+                    summary: t('plugin_red_packet_claiming_from', { name: payload.sender.name }),
+                })
             resetClaimCallback()
             resetRefundCallback()
             revalidateAvailability()
@@ -130,6 +129,8 @@ export function RedPacket(props: RedPacketProps) {
     // #endregion
 
     const onClaimOrRefund = useCallback(async () => {
+        resetClaimCallback()
+        resetRefundCallback()
         if (canClaim) await claimCallback()
         else if (canRefund) await refundCallback()
     }, [canClaim, canRefund, claimCallback, refundCallback])
@@ -211,7 +212,7 @@ export function RedPacket(props: RedPacketProps) {
                     </div>
                 </div>
             </Card>
-            {listOfStatus.includes(RedPacketStatus.expired) || listOfStatus.includes(RedPacketStatus.empty) ? null : (
+            {listOfStatus.includes(RedPacketStatus.empty) ? null : (
                 <OperationFooter
                     canClaim={canClaim}
                     canRefund={canRefund}

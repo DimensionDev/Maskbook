@@ -1,6 +1,5 @@
 import type { Transaction as Web3Transaction } from 'web3-core'
 import type RSS3 from 'rss3-next'
-import type { CurrencyType } from '@masknet/plugin-infra'
 import type {
     ChainId,
     ERC20TokenDetailed,
@@ -8,6 +7,7 @@ import type {
     ERC721TokenDetailed,
     NativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
+import type { CurrencyType } from '@masknet/plugin-infra'
 
 export namespace ExplorerAPI {
     export type Transaction = Web3Transaction & {
@@ -345,5 +345,99 @@ export namespace SecurityAPI {
             chainId: number,
             listOfAddress: string[],
         ): Promise<Record<string, ContractSecurity & TokenSecurity> | void>
+    }
+}
+
+export namespace TwitterBaseAPI {
+    export interface NFTContainer {
+        has_nft_avatar: boolean
+        nft_avatar_metadata: AvatarMetadata
+    }
+
+    export interface AvatarMetadata {
+        token_id: string
+        smart_contract: {
+            __typename: 'ERC721' | 'ERC1155'
+            __isSmartContract: 'ERC721'
+            network: 'Ethereum'
+            address: string
+        }
+        metadata: {
+            creator_username: string
+            creator_address: string
+            name: string
+            description?: string
+            collection: {
+                name: string
+                metadata: {
+                    image_url: string
+                    verified: boolean
+                    description: string
+                    name: string
+                }
+            }
+            traits: {
+                trait_type: string
+                value: string
+            }[]
+        }
+    }
+    export interface Provider {
+        getUserNftContainer: (screenName: string) => Promise<
+            | {
+                  address: string
+                  token_id: string
+                  type_name: string
+              }
+            | undefined
+        >
+    }
+}
+
+export namespace TokenListBaseAPI {
+    export interface Token {
+        address: string
+        chainId: number
+        name: string
+        symbol: string
+        decimals: number
+        logoURI?: string
+    }
+
+    export interface TokenList {
+        keywords: string[]
+        logoURI: string
+        name: string
+        timestamp: string
+        tokens: Token[]
+        version: {
+            major: number
+            minor: number
+            patch: number
+        }
+    }
+
+    export interface TokenObject {
+        tokens: Record<string, Token>
+    }
+
+    export interface Provider {
+        fetchERC20TokensFromTokenLists: (urls: string[], chainId: ChainId) => Promise<ERC20TokenDetailed[]>
+    }
+}
+
+export namespace TokenPriceBaseAPI {
+    export interface PriceRecord {
+        [currency: string]: number
+    }
+
+    /** Base on response of coingecko's token price API */
+    export interface CryptoPrice {
+        [token: string]: PriceRecord
+    }
+
+    export interface Provider {
+        getTokenPrices: (platform: string, contractAddresses: string[], currency: CurrencyType) => Promise<CryptoPrice>
+        getNativeTokenPrice: (tokenIds: string[], currency: CurrencyType) => Promise<CryptoPrice>
     }
 }

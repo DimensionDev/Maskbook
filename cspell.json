@@ -25,6 +25,7 @@
         "apikey",
         "arbitrum",
         "areth",
+        "artblocks",
         "arweave",
         "avalanche",
         "avax",
@@ -32,6 +33,7 @@
         "bgcolor",
         "bignumber",
         "bips",
+        "birthdate",
         "bitcointalk",
         "blockie",
         "blockies",
@@ -59,10 +61,13 @@
         "contrib",
         "contribs",
         "cooldown",
+        "corepack",
         "counterparty",
         "crona",
         "cronaswap",
         "cronos",
+        "cyberconnect",
+        "cyberlab",
         "datas",
         "debank",
         "denorm",
@@ -77,6 +82,7 @@
         "elec",
         "encryptedmsg",
         "endregion",
+        "ethersphere",
         "ethersproject",
         "eustatius",
         "everytime",
@@ -107,6 +113,7 @@
         "imtokenv2",
         "investables",
         "ipfs",
+        "ipfshttp",
         "ipfsurl",
         "ittr",
         "jailbroken",
@@ -115,6 +122,7 @@
         "juicebox",
         "kdfparams",
         "keccak",
+        "keybase",
         "kitts",
         "kred",
         "labelledby",
@@ -137,6 +145,7 @@
         "masktext",
         "mastdon",
         "mayen",
+        "merkel",
         "merkle",
         "metas",
         "metaverse",
@@ -179,6 +188,7 @@
         "popperjs",
         "porportion",
         "presale",
+        "pressable",
         "progressbar",
         "promi",
         "proxied",
@@ -333,6 +343,7 @@
         "nftred",
         "nftx",
         "noamount",
+        "nonfungiblefriends",
         "northcutt",
         "notistack",
         "nounset",
@@ -399,6 +410,10 @@
         {
             "filename": "**/qya-AA.json",
             "enabled": false
+        },
+        {
+            "filename": ".circleci/config.yml",
+            "ignoreWords": ["cimg"]
         }
     ]
 }

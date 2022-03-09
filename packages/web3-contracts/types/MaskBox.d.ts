@@ -103,6 +103,7 @@ export interface MaskBox extends BaseContract {
             qualification: string,
             holder_token_addr: string,
             holder_min_token_amount: number | string | BN,
+            qualification_data: string | number[],
         ): NonPayableTransactionObject<void>
 
         getBoxInfo(box_id: number | string | BN): NonPayableTransactionObject<{
@@ -113,6 +114,7 @@ export interface MaskBox extends BaseContract {
             qualification: string
             holder_token_addr: string
             holder_min_token_amount: string
+            qualification_data: string
             0: string
             1: string
             2: string
@@ -120,6 +122,7 @@ export interface MaskBox extends BaseContract {
             4: string
             5: string
             6: string
+            7: string
         }>
 
         getBoxStatus(box_id: number | string | BN): NonPayableTransactionObject<{
@@ -156,9 +159,16 @@ export interface MaskBox extends BaseContract {
 
         owner(): NonPayableTransactionObject<string>
 
+        removeAdmin(addrs: string[]): NonPayableTransactionObject<void>
+
         removeWhitelist(addrs: string[]): NonPayableTransactionObject<void>
 
         renounceOwnership(): NonPayableTransactionObject<void>
+
+        setQualificationData(
+            box_id: number | string | BN,
+            qualification_data: string | number[],
+        ): NonPayableTransactionObject<void>
 
         transferOwnership(newOwner: string): NonPayableTransactionObject<void>
 

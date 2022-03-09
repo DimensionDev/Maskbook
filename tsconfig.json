@@ -12,6 +12,7 @@
     { "path": "./packages/dashboard/stories" },
     { "path": "./packages/theme/stories" },
     // Tests
+    // @masknet/scripts: insert-here 1
     { "path": "./packages/backup-format/tsconfig.tests.json" },
     { "path": "./packages/encryption/tsconfig.tests.json" },
     { "path": "./packages/shared-base/tsconfig.tests.json" },
@@ -19,20 +20,103 @@
     { "path": "./packages/plugins" }
   ],
   "compilerOptions": {
+    "paths": {
+      // # Why?
+      // TypeScript project reference requires manually declaring all referenced projects.
+
+      // For example, we have 2 projects A and B under /projects/a and /projects/b and B depends on A,
+      // if we do not list A in the references, when we write
+
+      // > /packages/b/src/index.ts
+
+      // ```ts
+      // import { something } from '../../a'
+      // ```
+
+      // If there is no "reference": [{ "path": "../a/tsconfig.json" }] in /packages/b/tsconfig.json,
+      // TypeScript will complain TS6307: "File '/packages/b/src/index.ts' is not listed within the file list of the project '/packages/b/tsconfig.json'. Projects must list all files or use an 'include' pattern."
+
+      // This is error is GOOD because it means TypeScript _can_ automatically detect the missing references.
+
+      // # What about monorepo?
+      // But TypeScript cannot detect the missing references when we install them as monorepo packages.
+      // Still the project structure above, but A is installed as "@masknet/a" in /packages/b/node_modules/@masknet/a,
+      // TypeScript will accept the missing reference to the A project,
+      // because it will go through the "moduleResolution": "Node" resolution, if `.d.ts` file is found,
+      // the project will _accidentally_ compiles, but TypeScript does DON'T know those packages has dependencies in the project reference graph.
+      // This will cause the project to randomly fail to be type-checked.
+
+      // # Solution
+      // We use "paths" to map the Node-style import path back to the relative style,
+      // therefore TypeScript can check the missing dependencies again.
+
+      // This will not introduce problems like mapping "@src/" to "/packages/a/src" which is problematic,
+      // because those projects (if they're correctly configured) is installed in the node_modules,
+      // so if any toolchain does not support the "paths" feature, it will still work.
+
+      // This will bring another problem: now we can reference a project without installing it as a monorepo dependency,
+      // which is unwanted. We need to take care of this.
+
+      "@masknet/backup-format": ["./packages/backup-format/src"],
+      "@masknet/configuration": ["./packages/configuration/src"],
+      // ! dashboard is explicitly opt-out of this feature, it and the /packages/mask has circulare reference that TypeScript does not allows.
+      // "@masknet/dashboard": ["./packages/dashboard/src"],
+      "@masknet/encryption": ["./packages/encryption/src"],
+      "@masknet/external-plugin-previewer": ["./packages/external-plugin-previewer/src"],
+      "@masknet/gun-utils": ["./packages/gun-utils/src"],
+      "@masknet/icons": ["./packages/icons"],
+      "@masknet/injected-script": ["./packages/injected-script/sdk"],
+      // @masknet/mask is not listed. it does not have a exports/main field in the package.json.
+      "@masknet/mask-sdk": ["./packages/mask-sdk/server"],
+      "@masknet/plugin-infra": ["./packages/plugin-infra/src"],
+      "@masknet/global-types/*": ["./packages/polyfills/types/*"],
+      "@masknet/provider-proxy": ["./packages/provider-proxy/src"],
+      "@masknet/public-api": ["./packages/public-api/src"],
+      // @masknet/scripts is not listed. It does not mean to be installed as a dependency and not join the type check.
+      "@masknet/shared": ["./packages/shared/src"],
+      "@masknet/shared-base": ["./packages/shared-base/src"],
+      "@masknet/storybook-shared": ["./packages/storybook-shared/src"],
+      "@masknet/theme": ["./packages/theme/src"],
+      // @masknet/web3-constants is not listed. It is not a TS project (only contains JSON files).
+      // @masknet/web3-contracts is not listed. It is not a TS project (only contains generated JSON and .d.ts files).
+      "@masknet/web3-kit": ["./packages/web3-kit/src"],
+      "@masknet/web3-providers": ["./packages/web3-providers/src"],
+      "@masknet/web3-shared-base": ["./packages/web3-shared/base/src"],
+      "@masknet/web3-shared-evm": ["./packages/web3-shared/evm/src"],
+      "@masknet/web3-shared-flow": ["./packages/web3-shared/flow/src"],
+      "@masknet/web3-shared-solana": ["./packages/web3-shared/solana/src"],
+      "@masknet/typed-message": ["./packages/typed-message/base"],
+      "@masknet/typed-message/dom": ["./packages/typed-message/dom"],
+      // @masknet/scripts: insert-here 2
+
+      // Plugins
+      "@masknet/plugin-dao": ["./packages/plugins/DAO/src"],
+      "@masknet/plugin-debugger": ["./packages/plugins/Debugger/src"],
+      "@masknet/plugin-example": ["./packages/plugins/example/src"],
+      "@masknet/plugin-file-service": ["./packages/plugins/FileService/src"],
+      "@masknet/plugin-flow": ["./packages/plugins/Flow/src"],
+      "@masknet/plugin-rss3": ["./packages/plugins/RSS3/src"],
+      "@masknet/plugin-solana": ["./packages/plugins/Solana/src"],
+      "@masknet/plugin-template": ["./packages/plugins/template/src"],
+      "@masknet/plugin-cyberconnect": ["./packages/plugins/CyberConnect/src"],
+      // @masknet/scripts: insert-here 3
+      "@masknet/plugin-wallet": ["./packages/plugins/Wallet/src"]
+    },
     // Classification follows https://www.typescriptlang.org/tsconfig
 
     // Type Checking
     "strict": true,
     // exactOptionalPropertyTypes: false,
-    "noImplicitOverride": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
+    "noImplicitOverride": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     // noPropertyAccessFromIndexSignature: false,
     // noUncheckedIndexedAccess: false,
     // noUnusedLocals: false,
     // noUnusedParameters: false,
+    "useUnknownInCatchVariables": true,
 
     // Modules
     "module": "ESNext",
@@ -45,6 +129,8 @@
     "declaration": true,
     "declarationMap": true,
     "importsNotUsedAsValues": "error",
+    "noEmitOnError": true,
+    // "preserveValueImports": true,
     "sourceMap": true,
     "stripInternal": true, // skip type emit for @internal types
 
@@ -75,6 +161,6 @@
     "compilerOptions": {
       "module": "CommonJS"
     },
-    "transpileOnly": true
+    "swc": true
   }
 }

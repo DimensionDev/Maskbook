@@ -19,15 +19,26 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
     tabs: {
         '& .MuiTabs-flexContainer': {
-            display: 'grid',
-            gridTemplateColumns: Array(props.chainLength)
-                .fill(100 / props.chainLength + '%')
-                .join(' '),
             backgroundColor: theme.palette.background.paper,
         },
         '& .Mui-selected': {
             color: '#ffffff',
             backgroundColor: `${theme.palette.primary.main}!important`,
+        },
+        '& .MuiTabs-scroller': {
+            margin: '0 1px',
+        },
+        '& .MuiTabs-scrollButtons': {
+            width: 'unset',
+            backgroundColor: !props.isDashboard
+                ? `${theme.palette.background.default}!important`
+                : `${MaskColorVar.primaryBackground2}!important`,
+            '&.Mui-disabled': {
+                opacity: 1,
+                '& svg': {
+                    opacity: 0.3,
+                },
+            },
         },
     },
 }))
@@ -52,6 +63,7 @@ export function NetworkTab(props: NetworkTabProps) {
         index: chains.indexOf(chainId),
         classes,
         hasOnlyOneChild: true,
+        scrollable: true,
     }
 
     return <AbstractTab {...tabProps} />

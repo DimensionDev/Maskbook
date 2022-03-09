@@ -1,13 +1,7 @@
-import { Fragment, useEffect, useMemo, useReducer, useState } from 'react'
-import {
-    delay,
-    makeTypedMessageTuple,
-    TypedMessageTuple,
-    type ProfileIdentifier,
-    type Payload,
-} from '@masknet/shared-base'
+import { Fragment, useEffect, useMemo, useReducer } from 'react'
+import { makeTypedMessageTuple, TypedMessageTuple } from '@masknet/typed-message'
+import type { ProfileIdentifier, Payload } from '@masknet/shared-base'
 import { or } from '@masknet/theme'
-import { unreachable } from '@dimensiondev/kit'
 
 import { ServicesWithProgress } from '../../../extension/service'
 import type { Profile } from '../../../database'
@@ -19,7 +13,6 @@ import type {
 import { DecryptPostSuccess, DecryptPostSuccessProps } from './DecryptedPostSuccess'
 import { DecryptPostAwaiting, DecryptPostAwaitingProps } from './DecryptPostAwaiting'
 import { DecryptPostFailed, DecryptPostFailedProps } from './DecryptPostFailed'
-import { DecryptedPostDebug } from './DecryptedPostDebug'
 import {
     usePostClaimedAuthor,
     usePostInfoDetails,
@@ -27,6 +20,7 @@ import {
     usePostInfo,
 } from '../../DataSource/usePostInfo'
 import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorHelpers'
+import { delay } from '@dimensiondev/kit'
 
 function progressReducer(
     state: { key: string; progress: SuccessDecryption | FailureDecryption | DecryptionProgress }[],
@@ -91,10 +85,6 @@ export function DecryptPost(props: DecryptPostProps) {
         }
     }, [props.requestAppendRecipients, postBy, whoAmI])
 
-    // #region Debug info
-    const [debugHash, setDebugHash] = useState<string>('Unknown')
-    // #endregion
-
     // #region Progress
     const [progress, dispatch] = useReducer(progressReducer, [])
     // #endregion
@@ -129,15 +119,7 @@ export function DecryptPost(props: DecryptPostProps) {
                     return refreshProgress(process.value)
                 }
                 const status = process.value
-                if (status.type === 'debug') {
-                    switch (status.debug) {
-                        case 'debug_finding_hash':
-                            setDebugHash(status.hash.join('-'))
-                            break
-                        default:
-                            unreachable(status.debug)
-                    }
-                } else refreshProgress(status)
+                refreshProgress(status)
                 if (status.type === 'progress') {
                     if (status.progress === 'intermediate_success') refreshProgress(status.data)
                     else if (status.progress === 'iv_decrypted') current.iv.value = status.iv
@@ -199,54 +181,40 @@ export function DecryptPost(props: DecryptPostProps) {
     )
 
     function renderProgress(progress: SuccessDecryption | FailureDecryption | DecryptionProgress) {
-        const render = () => {
-            switch (progress.type) {
-                case 'success':
-                    return (
-                        <Success
-                            data={progress}
-                            alreadySelectedPreviously={alreadySelectedPreviously}
-                            requestAppendRecipients={requestAppendRecipientsWrapped}
-                            profiles={profiles}
-                            sharedPublic={sharedPublic}
-                            author={authorInPayload}
-                            postedBy={currentPostBy}
-                            {...props.successComponentProps}
-                        />
-                    )
-                case 'error':
-                    return (
-                        <Failed
-                            error={new Error(progress.error)}
-                            author={authorInPayload}
-                            postedBy={currentPostBy}
-                            {...props.failedComponentProps}
-                        />
-                    )
-                case 'progress':
-                    return (
-                        <Awaiting
-                            type={progress}
-                            author={authorInPayload}
-                            postedBy={currentPostBy}
-                            {...props.waitingComponentProps}
-                        />
-                    )
-                default:
-                    return null
-            }
+        switch (progress.type) {
+            case 'success':
+                return (
+                    <Success
+                        data={progress}
+                        alreadySelectedPreviously={alreadySelectedPreviously}
+                        requestAppendRecipients={requestAppendRecipientsWrapped}
+                        profiles={profiles}
+                        sharedPublic={sharedPublic}
+                        author={authorInPayload}
+                        postedBy={currentPostBy}
+                        {...props.successComponentProps}
+                    />
+                )
+            case 'error':
+                return (
+                    <Failed
+                        error={new Error(progress.error)}
+                        author={authorInPayload}
+                        postedBy={currentPostBy}
+                        {...props.failedComponentProps}
+                    />
+                )
+            case 'progress':
+                return (
+                    <Awaiting
+                        type={progress}
+                        author={authorInPayload}
+                        postedBy={currentPostBy}
+                        {...props.waitingComponentProps}
+                    />
+                )
+            default:
+                return null
         }
-        const rendered = render()
-        if (!rendered) return null
-        return (
-            <>
-                {rendered}
-                <DecryptedPostDebug
-                    debugHash={debugHash}
-                    whoAmI={whoAmI}
-                    decryptedResult={progress.type === 'progress' ? null : progress}
-                />
-            </>
-        )
     }
 }

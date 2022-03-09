@@ -21,7 +21,6 @@ const SwapPage = lazy(() => import('./pages/Swap'))
 const RequestPermissionPage = lazy(() => import('./RequestPermission'))
 const PermissionAwareRedirect = lazy(() => import('./PermissionAwareRedirect'))
 const ThirdPartyRequestPermission = lazy(() => import('./ThirdPartyRequestPermission'))
-const PersonaSignRequest = lazy(() => import('./PersonaSignRequest'))
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
@@ -34,7 +33,6 @@ export default function Popups() {
                     <Suspense fallback="">
                         <Switch>
                             <Route path={PopupRoutes.Personas} children={frame(<Personas />)} />
-                            <Route path={PopupRoutes.PersonaSignRequest} children={frame(<PersonaSignRequest />)} />
                             <Route path={PopupRoutes.Wallet} children={frame(<Wallet />)} />
                             <Route path={PopupRoutes.Swap} children={<SwapPage />} />
                             <Route path={PopupRoutes.RequestPermission} exact>
@@ -46,7 +44,7 @@ export default function Popups() {
                             <Route path={PopupRoutes.ThirdPartyRequestPermission} exact>
                                 <ThirdPartyRequestPermission />
                             </Route>
-                            <Route children={<Redirect to={PopupRoutes.Personas} />} />
+                            <Route path="*" children={<Redirect to={PopupRoutes.Personas} />} />
                         </Switch>
                     </Suspense>
                     {/* TODO: Should only load plugins when the page is plugin-aware. */}

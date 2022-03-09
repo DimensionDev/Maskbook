@@ -5,11 +5,11 @@ import {
     type Payload,
     type PostIdentifier,
     type ProfileIdentifier,
-    type TypedMessageTuple,
 } from '@masknet/shared-base'
+import type { TypedMessageTuple } from '@masknet/typed-message'
 import { ValueRef, LiveSelector, DOMProxy } from '@dimensiondev/holoflows-kit'
 import type { Result } from 'ts-results'
-import { Context, createContext, createElement, memo, useContext } from 'react'
+import { createContext, createElement, memo, useContext } from 'react'
 import { Subscription, useSubscription } from 'use-subscription'
 export interface PostContextSNSActions {
     /** Parse payload into Payload */
@@ -34,6 +34,7 @@ export interface PostContextComment {
 }
 export interface PostContextCreation extends PostContextAuthor {
     readonly rootElement: DOMProxy
+    readonly actionsElement?: DOMProxy
     readonly suggestedInjectionPoint: HTMLElement
     readonly comments?: PostContextComment
     /**
@@ -54,6 +55,7 @@ export interface PostContext extends PostContextAuthor {
     // #region DOM knowledge
     get rootNode(): HTMLElement | null
     readonly rootElement: DOMProxy
+    readonly actionsElement?: DOMProxy
     readonly suggestedInjectionPoint: HTMLElement
     // #endregion
     readonly comment: undefined | PostContextComment

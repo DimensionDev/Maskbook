@@ -1,5 +1,5 @@
 import { selectElementContents } from '../../../utils/utils'
-import { delay } from '@masknet/shared-base'
+import { delay } from '@dimensiondev/kit'
 import { isMobileFacebook } from '../utils/isMobile'
 import { MaskMessages } from '../../../utils/messages'
 import type { PostInfo } from '../../../social-network/PostInfo'

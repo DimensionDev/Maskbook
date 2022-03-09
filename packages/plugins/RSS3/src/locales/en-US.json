@@ -1,5 +1,9 @@
 {
     "inactive_project": "Inactive Project",
     "no_activity_time": "No activity time",
-    "attended": "attended"
+    "attended": "attended",
+    "no_data": "No data",
+    "total_grants": "Total {{count}} Grants",
+    "contribution": "Contribution",
+    "contribution_other": "Contributions"
 }

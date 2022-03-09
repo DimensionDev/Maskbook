@@ -1,6 +1,7 @@
 import { memo, ReactElement, SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react'
 import { useI18N } from '../../../../../utils'
 import {
+    addGasMargin,
     Asset,
     EthereumTokenType,
     formatBalance,
@@ -364,10 +365,10 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     )
 
     const maxAmount = useMemo(() => {
-        const gasFee = formatGweiToWei(maxFeePerGas ?? 0).multipliedBy(MIN_GAS_LIMIT)
+        const gasFee = formatGweiToWei(maxFeePerGas ?? 0).multipliedBy(addGasMargin(minGasLimit ?? MIN_GAS_LIMIT))
         let amount_ = new BigNumber(tokenBalance ?? 0)
         amount_ = selectedAsset?.token.type === EthereumTokenType.Native ? amount_.minus(gasFee) : amount_
-        return formatBalance(amount_.toFixed(), selectedAsset?.token.decimals)
+        return formatBalance(BigNumber.max(0, amount_).toFixed(), selectedAsset?.token.decimals)
     }, [selectedAsset, maxFeePerGas, minGasLimit, tokenBalance])
 
     // #region set default gasLimit
@@ -396,7 +397,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         methods.setValue('amount', maxAmount)
     }, [methods.setValue, maxAmount])
 
-    const [{ loading }, onSubmit] = useAsyncFn(
+    const [{ loading, error }, onSubmit] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             const transferAmount = rightShift(data.amount || '0', selectedAsset?.token.decimals).toFixed()
 
@@ -455,12 +456,12 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
 
         if (registeredAddress && !resolveDomainError && Utils?.resolveDomainLink)
             return (
-                <Link
-                    href={Utils.resolveDomainLink(address)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    underline="none">
-                    <Box display="flex" justifyContent="space-between" alignItems="center" py={2.5} px={1.5}>
+                <Box display="flex" justifyContent="space-between" alignItems="center" py={2.5} px={1.5}>
+                    <Link
+                        href={Utils.resolveDomainLink(address)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="none">
                         <Box>
                             <Typography className={classes.domainName}>{address}</Typography>
                             <Typography className={classes.registeredAddress}>
@@ -471,9 +472,9 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                                 />
                             </Typography>
                         </Box>
-                        <RightIcon />
-                    </Box>
-                </Link>
+                    </Link>
+                    <RightIcon />
+                </Box>
             )
 
         return
