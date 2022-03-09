@@ -41,6 +41,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     tipButtonLabel: {
+        color: theme.palette.text.primary,
         fontSize: 14,
         marginLeft: theme.spacing(0.5),
     },
