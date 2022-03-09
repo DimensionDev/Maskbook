@@ -57,12 +57,15 @@ export function OperationFooter({
                 </ActionButton>
             )
         }
+        const isLoading =
+            [TransactionStateType.HASH, TransactionStateType.WAIT_FOR_CONFIRMING].includes(claimState.type) ||
+            [TransactionStateType.HASH, TransactionStateType.WAIT_FOR_CONFIRMING].includes(refundState.type)
+
         return (
             <ActionButton
                 fullWidth
-                disabled={
-                    claimState.type === TransactionStateType.HASH || refundState.type === TransactionStateType.HASH
-                }
+                disabled={isLoading}
+                loading={isLoading}
                 variant="contained"
                 size="large"
                 onClick={onClaimOrRefund}>
