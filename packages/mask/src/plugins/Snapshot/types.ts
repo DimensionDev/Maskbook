@@ -26,6 +26,11 @@ export interface Proposal {
     title: string
     version: string
     end: number
+    space: {
+        id: string
+        name: string
+        symbol: string
+    }
     start: number
     snapshot: string
     body: string
@@ -37,6 +42,7 @@ export interface Proposal {
     authorName: string | null
     authorAvatar: string | null
     network: string
+    type: string
     votes: RawVote[]
 }
 

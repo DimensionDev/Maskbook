@@ -1,9 +1,8 @@
 import { RefreshIcon } from '@masknet/icons'
 import { useChainId } from '@masknet/web3-shared-evm'
-import { Card, CardActions, CardContent, CardHeader, Link, Paper, Tab, Tabs, Typography } from '@mui/material'
+import { Card, CardContent, CardHeader, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import React, { useState } from 'react'
-import { MaskTextIcon } from '../../../resources/MaskIcon'
+import { useState } from 'react'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { useFetchPool, usePoolDepositAssets } from '../hooks/usePool'
@@ -52,41 +51,6 @@ const useStyles = makeStyles()((theme) => ({
     tab: {
         minHeight: 'unset',
         minWidth: 'unset',
-    },
-    footer: {
-        marginTop: -1, // merge duplicate borders
-        zIndex: 1,
-        position: 'relative',
-        borderTop: `solid 1px ${theme.palette.divider}`,
-        justifyContent: 'space-between',
-    },
-    footnote: {
-        fontSize: 10,
-        marginRight: theme.spacing(1),
-    },
-    footLink: {
-        cursor: 'pointer',
-        marginRight: theme.spacing(0.5),
-        '&:last-child': {
-            marginRight: 0,
-        },
-    },
-    footMenu: {
-        color: theme.palette.text.secondary,
-        fontSize: 10,
-        display: 'flex',
-        alignItems: 'center',
-    },
-    footName: {
-        marginLeft: theme.spacing(0.5),
-    },
-    mask: {
-        width: 40,
-        height: 10,
-    },
-    dhedge: {
-        height: 10,
-        margin: theme.spacing(0, 0.5),
     },
 }))
 
@@ -154,7 +118,7 @@ export function PoolView(props: PoolViewProps) {
                         textColor="primary"
                         variant="fullWidth"
                         value={tabIndex}
-                        onChange={(ev: React.ChangeEvent<{}>, newValue: number) => setTabIndex(newValue)}
+                        onChange={(_, newValue: number) => setTabIndex(newValue)}
                         TabIndicatorProps={{
                             style: {
                                 display: 'none',
@@ -167,33 +131,6 @@ export function PoolView(props: PoolViewProps) {
                         {tabIndex === 1 ? <PerformanceChart pool={pool} /> : null}
                     </Paper>
                 </CardContent>
-                <CardActions className={classes.footer}>
-                    <Typography className={classes.footnote} variant="subtitle2">
-                        <span>{t('plugin_powered_by')} </span>
-                        <Link
-                            className={classes.footLink}
-                            color="textSecondary"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            title="Mask"
-                            href="https://mask.io">
-                            <MaskTextIcon classes={{ root: classes.mask }} viewBox="0 0 80 20" />
-                        </Link>
-                    </Typography>
-                    <Typography className={classes.footnote} variant="subtitle2">
-                        <span>{t('supported_by')}</span>
-                        <Link
-                            className={classes.footLink}
-                            target="_blank"
-                            color="textSecondary"
-                            rel="noopener noreferrer"
-                            title="dHEDGE"
-                            href="https://dhedge.org">
-                            <img className={classes.dhedge} src="https://app.dhedge.org/favicon.ico" />
-                            {t('plugin_dhedge_dhedge')}
-                        </Link>
-                    </Typography>
-                </CardActions>
             </Card>
         </EthereumChainBoundary>
     )

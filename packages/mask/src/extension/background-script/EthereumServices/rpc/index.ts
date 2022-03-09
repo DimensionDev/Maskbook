@@ -59,8 +59,8 @@ export async function getComputedPayload(payload: JsonRpcPayload): Promise<Ether
         case EthereumMethodType.ETH_SIGN_TYPED_DATA:
             return {
                 type: EthereumRpcType.SIGN_TYPED_DATA,
-                to: payload.params[1],
-                data: payload.params[0],
+                to: payload.params[0],
+                data: payload.params[1],
             }
 
         // decrypt

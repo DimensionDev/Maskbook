@@ -1,9 +1,9 @@
-import type { TagType } from './types'
+import { createPluginMessage, createPluginRPC, PluginMessageEmitter } from '@masknet/plugin-infra'
 import type { DataProvider } from '@masknet/public-api'
-import { createPluginMessage, PluginMessageEmitter, createPluginRPC } from '@masknet/plugin-infra'
+import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import { PLUGIN_ID } from './constants'
 import type { TraderProps } from './SNSAdaptor/trader/Trader'
-import type { GasOptionConfig } from '../../../../web3-shared/evm'
+import type { TagType } from './types'
 
 interface CashTagEvent {
     name: string

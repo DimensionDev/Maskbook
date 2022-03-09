@@ -72,6 +72,7 @@ export const LightColor = {
     errorBackground: 'rgba(255, 95, 95, 0.15)',
     tooltipBackground: '#ffffff',
     warningBackground: 'rgba(255, 185, 21, 0.1)',
+    cyberconnectPrimary: '#000000',
 }
 export const DarkColor: typeof LightColor = {
     primary: '#1c68f3',
@@ -146,6 +147,7 @@ export const DarkColor: typeof LightColor = {
     errorBackground: 'rgba(255, 95, 95, 0.1)',
     tooltipBackground: '#1A1D20',
     warningBackground: 'rgba(255, 185, 21, 0.1)',
+    cyberconnectPrimary: '#ffffff',
 }
 
 export type Color = typeof LightColor
@@ -158,6 +160,16 @@ export function useMaskColor() {
     return getMaskColor(useTheme())
 }
 
+export function CSSVariableInjectorCSS(scheme: PaletteMode) {
+    const ns: Record<string, string> = scheme === 'light' ? LightColor : DarkColor
+    const result: Record<string, string> = {}
+    for (const key in ns) {
+        // --mask-name: val;
+        result[`--mask-${kebabCase(key)}`] = ns[key]
+        result[`--mask-${kebabCase(key)}-fragment`] = getRGBFragment(ns, key)
+    }
+    return { ':root, :host': result }
+}
 export function applyMaskColorVars(node: HTMLElement, scheme: PaletteMode) {
     const ns: Record<string, string> = scheme === 'light' ? LightColor : DarkColor
     if (node === document.body) {

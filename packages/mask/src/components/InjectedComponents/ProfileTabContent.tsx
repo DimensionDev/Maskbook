@@ -19,13 +19,7 @@ function getTabContent(tabId: string) {
 }
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 1,
-    },
+    root: {},
     tags: {
         padding: theme.spacing(2),
     },
@@ -36,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ProfileTabContentProps extends withClasses<'text' | 'button'> {}
+export interface ProfileTabContentProps extends withClasses<'text' | 'button' | 'root'> {}
 
 export function ProfileTabContent(props: ProfileTabContentProps) {
     const { t } = useI18N()
@@ -46,7 +40,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const [selectedTab, setSelectedTab] = useState<Plugin.SNSAdaptor.ProfileTab | undefined>()
 
     const identity = useCurrentVisitingIdentity()
-    const { value: addressNames, loading: loadingAddressNames } = useAddressNames(identity)
+    const { value: addressNames = [], loading: loadingAddressNames } = useAddressNames(identity)
 
     const tabs = useActivatedPluginsSNSAdaptor('any')
         .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? [])

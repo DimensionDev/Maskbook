@@ -1,4 +1,4 @@
-import { ChainId, useChainId } from '../../../../../web3-shared/evm'
+import { ChainId, useChainId } from '@masknet/web3-shared-evm'
 import { useState } from 'react'
 import { createContainer } from 'unstated-next'
 

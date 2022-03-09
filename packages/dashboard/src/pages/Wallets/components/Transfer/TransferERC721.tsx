@@ -12,12 +12,12 @@ import {
     TransactionStateType,
     useAccount,
     useChainId,
-    useERC721TokenDetailedOwnerList,
     useGasLimit,
     useGasPrice,
     useNativeTokenDetailed,
     useTokenTransferCallback,
 } from '@masknet/web3-shared-evm'
+import { useERC721TokenDetailedOwnerList } from '@masknet/web3-providers'
 import { FormattedAddress, useRemoteControlledDialog } from '@masknet/shared'
 import { useDashboardI18N } from '../../../../locales'
 import { WalletMessages } from '@masknet/plugin-wallet'
@@ -30,10 +30,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import TuneIcon from '@mui/icons-material/Tune'
 import { useNativeTokenPrice } from './useNativeTokenPrice'
-import { useNavigate } from 'react-router'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { useGasConfig } from '../../hooks/useGasConfig'
-import { useLocation } from 'react-router-dom'
 import { unionBy } from 'lodash-unified'
 import { TransferTab } from './types'
 import { NetworkPluginID, useLookupAddress, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
@@ -41,6 +40,7 @@ import { NetworkType } from '@masknet/public-api'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { multipliedBy } from '@masknet/web3-shared-base'
 import { Services } from '../../../../API'
+import { RightIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     disabled: {
@@ -226,12 +226,12 @@ export const TransferERC721 = memo(() => {
         if (resolveDomainLoading) return
         if (registeredAddress) {
             return (
-                <Link
-                    href={Utils?.resolveDomainLink?.(allFormFields.recipient)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    underline="none">
-                    <Box style={{ padding: 10 }}>
+                <Box style={{ padding: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Link
+                        href={Utils?.resolveDomainLink?.(allFormFields.recipient)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="none">
                         <Typography
                             fontSize={16}
                             lineHeight="22px"
@@ -242,8 +242,9 @@ export const TransferERC721 = memo(() => {
                         <Typography fontSize={14} lineHeight="20px" style={{ color: MaskColorVar.textSecondary }}>
                             <FormattedAddress address={registeredAddress} size={4} formatter={Utils?.formatAddress} />
                         </Typography>
-                    </Box>
-                </Link>
+                    </Link>
+                    <RightIcon />
+                </Box>
             )
         }
 

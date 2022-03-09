@@ -8,3 +8,9 @@ export const NFT_CONTRACT_JSON_VERIFIED_SERVER = 'https://configuration.r2d2.to/
 export const PLUGIN_ID = PluginId.Avatar
 export const PLUGIN_NAME = 'Avatar'
 export const PLUGIN_DESCRIPTION = 'NFT Avatar'
+
+export enum RSS3_KEY_SNS {
+    TWITTER = '_nfts',
+    FACEBOOK = '_facebook_nfts',
+    INSTAGRAM = '_instagram_nfts',
+}

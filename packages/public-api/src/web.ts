@@ -6,8 +6,8 @@ import type { PersonaRecord, ProfileRecord, RelationFavor, RelationRecord } from
  * Methods starts with "SNSAdaptor_" can only be called in SNS Adaptor.
  * Other methods can only be called in the background page.
  */
-type ProfileIdentifier_string = string
-type PersonaIdentifier_string = string
+export type ProfileIdentifier_string = string
+export type PersonaIdentifier_string = string
 export interface MaskNetworkAPIs {
     app_suspended(): Promise<void>
     app_resume(): Promise<void>
@@ -79,7 +79,6 @@ export interface MaskNetworkAPIs {
     wallet_updateEthereumAccount(params: { account: string }): Promise<void>
     wallet_updateEthereumChainId(params: { chainId: number }): Promise<void>
     wallet_getLegacyWalletInfo(): Promise<WalletInfo[]>
-    SNSAdaptor_getCurrentDetectedProfile(): Promise<ProfileIdentifier_string | undefined>
     get_all_indexedDB_records(): Promise<{
         personas: PersonaRecord[]
         profiles: ProfileRecord[]

@@ -1,5 +1,4 @@
 export * from './useAsset'
-export * from './useNFTBalance'
 export * from './useHistory'
 export * from './useOrders'
 export * from './useNetwork'

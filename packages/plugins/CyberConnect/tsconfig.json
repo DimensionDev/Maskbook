@@ -1,0 +1,16 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "tsBuildInfoFile": "dist/.tsbuildinfo"
+  },
+  "include": ["src", "src/**/*.json"],
+  "references": [
+    { "path": "../../plugin-infra" },
+    { "path": "../../theme" },
+    { "path": "../../shared-base" },
+    { "path": "../../web3-shared/evm" },
+    { "path": "../../typed-message/base" }
+  ]
+}
