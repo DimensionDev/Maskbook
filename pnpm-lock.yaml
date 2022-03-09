@@ -174,7 +174,6 @@ importers:
       react-avatar-editor: ^12.0.0
       react-hook-form: ^7.27.1
       react-qrcode-logo: ^2.5.0
-      react-router: 6.0.0-beta.0
       react-router-dom: 6.0.0-beta.0
       react-to-print: ^2.14.4
       react-use: ^17.3.2
@@ -220,7 +219,6 @@ importers:
       react-avatar-editor: 12.0.0_00d7720364c0b735f0a1e87166d68b7c
       react-hook-form: 7.27.1_react@18.0.0-rc.0
       react-qrcode-logo: 2.5.0_757a802188413a36d4f24237d13b8e90
-      react-router: 6.0.0-beta.0_history@5.2.0+react@18.0.0-rc.0
       react-router-dom: 6.0.0-beta.0_154c53788755629e2430b224cbac559e
       react-to-print: 2.14.4_757a802188413a36d4f24237d13b8e90
       react-use: 17.3.2_757a802188413a36d4f24237d13b8e90
