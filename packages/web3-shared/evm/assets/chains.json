@@ -1609,7 +1609,7 @@
     },
     {
         "name": "Moonbeam Polkadot",
-        "chain": "MOON",
+        "chain": "moonbeam",
         "network": "moonbeam",
         "rpc": [],
         "faucets": [],
@@ -1648,7 +1648,7 @@
     },
     {
         "name": "Moonbeam Testnet Moonbase Alpha",
-        "chain": "MOON",
+        "chain": "moonbeam",
         "network": "moonbase",
         "rpc": ["https://rpc.testnet.moonbeam.network", "wss://wss.testnet.moonbeam.network"],
         "faucets": [],
