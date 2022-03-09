@@ -13,7 +13,7 @@ import { usePersonaConnectStatus } from '../../../components/DataSource/usePerso
 import { queryIsBound, queryExistedBindingByPersona } from '@masknet/web3-providers'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { useNextIDConnectStatus } from '../../../components/DataSource/useNextID'
-import { searchAllProfileTabSelector } from '../../../social-network-adaptor/twitter.com/utils/selector'
+import { TAB_SELECTOR } from '../constants'
 
 const useStyles = makeStyles()((theme) => ({
     tip: {
@@ -25,15 +25,15 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.primary,
     },
     verifyIntro: {
-        fontWeight: 600,
+        fontWeight: 500,
         marginBottom: '12px',
     },
     verifyDetail: {
-        fontWeight: 600,
+        fontWeight: 400,
         color: theme.palette.grey[700],
     },
     verifyInstruction: {
-        fontWeight: 600,
+        fontWeight: 400,
         color: theme.palette.grey[700],
     },
     skeleton: {
@@ -60,7 +60,7 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
     const [openBindDialog, toggleBindDialog] = useState(false)
     const [unbindAddress, setUnBindAddress] = useState<string>()
     const [count, { inc }] = useCounter(0)
-
+    const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
     const isOwn = currentProfileIdentifier.identifier.toText() === visitingPersonaIdentifier.identifier.toText()
 
     const personaActionButton = useMemo(() => {
@@ -81,7 +81,6 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
 
     const { value: isAccountVerified, loading: loadingVerifyInfo } = useAsync(() => {
         if (!currentPersona) return Promise.resolve(undefined)
-        const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
         return queryIsBound(currentPersona.publicHexKey!, platform, visitingPersonaIdentifier.identifier.userId)
     }, [isOwn, currentPersona, visitingPersonaIdentifier, isVerified])
 
@@ -92,7 +91,7 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
 
     const onVerify = async () => {
         reset()
-        const firstTab = searchAllProfileTabSelector().evaluate()?.querySelector('div')?.parentNode
+        const firstTab = TAB_SELECTOR?.[platform]?.evaluate()?.querySelector('div')?.parentNode
             ?.firstChild as HTMLElement
         firstTab.click()
     }
