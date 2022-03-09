@@ -10,7 +10,6 @@ import { useAsyncFn, useAsyncRetry } from 'react-use'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { PluginServices, Services } from '../../../../API'
 import { DashboardRoutes } from '@masknet/shared-base'
-import type { Search } from 'history'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useMnemonicWordsPuzzle } from '../../../../hooks/useMnemonicWordsPuzzle'
 
@@ -76,7 +75,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const CreateMnemonic = memo(() => {
-    const location = useLocation() as { search: Search; state: { password: string } }
+    const location = useLocation()
     const navigate = useNavigate()
     const [open, setOpen] = useState(false)
     const { words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback } = useMnemonicWordsPuzzle()
@@ -93,7 +92,7 @@ const CreateMnemonic = memo(() => {
 
     const [walletState, onSubmit] = useAsyncFn(async () => {
         const name = new URLSearchParams(location.search).get('name')
-        const password = location.state?.password
+        const password = (location.state as any)?.password
         // if the name doesn't exist, navigate to form page
         if (!name) {
             resetCallback()
@@ -136,7 +135,7 @@ const CreateMnemonic = memo(() => {
     }, [refreshCallback, resetCallback])
 
     useEffect(() => {
-        if (!location.state?.password && !hasPassword && !loading) navigate(-1)
+        if (!(location.state as any)?.password && !hasPassword && !loading) navigate(-1)
     }, [location.state, hasPassword, loading])
 
     return (

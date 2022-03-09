@@ -13,7 +13,6 @@ import { LoadingButton } from '@mui/lab'
 import { PopupRoutes } from '@masknet/shared-base'
 import { currentAccountSettings, currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
 import { first } from 'lodash-unified'
-import type { Search } from 'history'
 
 const useStyles = makeStyles()({
     container: {
@@ -76,11 +75,12 @@ const AddDeriveWallet = memo(() => {
     const indexes = useRef(new Set<number>())
     const { t } = useI18N()
     const history = useHistory()
-    const location = useLocation() as { state: { mnemonic: string }; search: Search }
+    const location = useLocation()
+    const state = location.state as any as { mnemonic?: string } | undefined
     const { classes } = useStyles()
     const wallets = useWallets(ProviderType.MaskWallet)
     const walletName = new URLSearchParams(location.search).get('name')
-    const { mnemonic } = location.state
+    const { mnemonic } = state || {}
 
     const [page, setPage] = useState(0)
 
