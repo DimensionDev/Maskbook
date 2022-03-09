@@ -104,7 +104,7 @@ function ERC20RedpacketBadge(props: ERC20RedpacketBadgeProps) {
         payload.token?.type === EthereumTokenType.Native ? chainDetailed?.nativeCurrency : payload.token ?? fetchedToken
     return (
         <div style={containerStyle}>
-            <RedPacketIcon style={badgeSvgIconSize} /> A Lucky Drop with
+            <RedPacketIcon style={badgeSvgIconSize} /> A Lucky Drop with{' '}
             {formatBalance(payload.total, tokenDetailed?.decimals ?? 0)} $
             {tokenDetailed?.symbol ?? tokenDetailed?.name ?? 'Token'} from {payload.sender.name}
         </div>
