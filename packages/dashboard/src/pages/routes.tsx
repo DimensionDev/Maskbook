@@ -18,10 +18,13 @@ export function Pages() {
     return (
         <Suspense fallback={null}>
             <Routes>
-                <NoPersonaGuardRoute
+                <Route
                     path={DashboardRoutes.Welcome}
-                    element={<Welcome />}
-                    redirectTo={DashboardRoutes.Personas}
+                    element={
+                        <NoPersonaGuardRoute redirectTo={DashboardRoutes.Personas}>
+                            <Welcome />
+                        </NoPersonaGuardRoute>
+                    }
                 />
                 <Route path={DashboardRoutes.Setup} element={<Setup />} />
                 <Route path={`${DashboardRoutes.SignUp}/*`} element={<SignUp />} />
@@ -32,7 +35,7 @@ export function Pages() {
                 <Route path={DashboardRoutes.Settings} element={frame(<Settings />)} />
                 <Route path={DashboardRoutes.Labs} element={frame(<Labs />)} />
                 <Route path={`${DashboardRoutes.CreateMaskWallet}/*`} element={<CreateWallet />} />
-                <Route element={<Navigate to={DashboardRoutes.Personas} />} />
+                <Route path="*" element={<Navigate to={DashboardRoutes.Personas} />} />
             </Routes>
         </Suspense>
     )
