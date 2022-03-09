@@ -37,7 +37,12 @@ const useStyles = makeStyles()((theme) => ({
         marginRight: theme.spacing(1),
     },
     tipButton: {
-        display: 'inline-block',
+        display: 'inline-flex',
+        alignItems: 'center',
+    },
+    tipButtonLabel: {
+        fontSize: 14,
+        marginLeft: theme.spacing(0.5),
     },
     delButton: {
         fontSize: 20,
@@ -49,11 +54,12 @@ const useStyles = makeStyles()((theme) => ({
 interface Item {
     platform: Platform
     identity: string
-    deletable: boolean
+    tipable?: boolean
+    deletable?: boolean
     onUnBind(address: string): void
 }
 
-export const BindingItem = memo<Item>(({ platform, identity, deletable, onUnBind }) => {
+export const BindingItem = memo<Item>(({ platform, identity, tipable, deletable, onUnBind }) => {
     const t = useI18N()
     const { Utils } = useWeb3State() ?? {}
     const { classes } = useStyles()
@@ -82,8 +88,12 @@ export const BindingItem = memo<Item>(({ platform, identity, deletable, onUnBind
                     </Link>
                 </Stack>
                 <Box>
-                    <TipButton addresses={[identity]} className={classes.tipButton} />
-                    {deletable && <DeleteIcon className={classes.delButton} onClick={() => onUnBind(identity)} />}
+                    {tipable ? (
+                        <TipButton addresses={[identity]} className={classes.tipButton}>
+                            <span className={classes.tipButtonLabel}>{t.tip()}</span>
+                        </TipButton>
+                    ) : null}
+                    {deletable ? <DeleteIcon className={classes.delButton} onClick={() => onUnBind(identity)} /> : null}
                 </Box>
             </Stack>
         )

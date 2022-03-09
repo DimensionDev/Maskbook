@@ -1,6 +1,7 @@
 import { TransactionStateType, useNativeTokenDetailed } from '@masknet/web3-shared-evm'
 import { FC, useContext, useEffect, useMemo, useState } from 'react'
 import { TipTask, TipType } from '../../types'
+import { TargetChainIdContext } from '../TargetChainIdContext'
 import { ContextOptions, TipContext } from './TipContext'
 import { useNftTip } from './useNftTip'
 import { useTokenTip } from './useTokenTip'
@@ -14,8 +15,9 @@ export const TipTaskProvider: FC<Props> = ({ children, task }) => {
     const [recipients, setRecipients] = useState<string[]>(task.addresses)
     const [tipType, setTipType] = useState<TipType>(TipType.Token)
     const [amount, setAmount] = useState('')
+    const { targetChainId } = TargetChainIdContext.useContainer()
     const [erc721Contract, setErc721Contract] = useState<ContextOptions['erc721Contract']>(null)
-    const { value: nativeTokenDetailed = null } = useNativeTokenDetailed()
+    const { value: nativeTokenDetailed = null } = useNativeTokenDetailed(targetChainId)
     const [token, setToken] = useState<ContextOptions['token']>(nativeTokenDetailed)
     const [erc721TokenId, setErc721TokenId] = useState<ContextOptions['erc721TokenId']>(null)
 
@@ -33,9 +35,9 @@ export const TipTaskProvider: FC<Props> = ({ children, task }) => {
     }, [recipient, recipients])
 
     useEffect(() => {
-        if (token || !nativeTokenDetailed) return
+        if (!nativeTokenDetailed) return
         setToken(nativeTokenDetailed)
-    }, [token, nativeTokenDetailed])
+    }, [nativeTokenDetailed])
 
     const contextValue = useMemo(() => {
         return {

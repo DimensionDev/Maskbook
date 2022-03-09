@@ -26,7 +26,7 @@ const useStyles = makeStyles()({
     },
 })
 
-export const TipButton: FC<Props> = ({ className, receiver, addresses = [], ...rest }) => {
+export const TipButton: FC<Props> = ({ className, receiver, addresses = [], children, ...rest }) => {
     const { classes } = useStyles()
 
     const [state, queryBindings] = useAsyncFn(async () => {
@@ -66,6 +66,7 @@ export const TipButton: FC<Props> = ({ className, receiver, addresses = [], ...r
     return (
         <div className={classnames(className, classes.tipButton)} {...rest} role="button" onClick={sendTip}>
             <Currency htmlColor="#8899a6" viewBox="0 0 24 24" />
+            {children}
         </div>
     )
 }

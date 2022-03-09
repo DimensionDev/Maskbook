@@ -103,6 +103,7 @@ export function NextIdPage({}: NextIDPageProps) {
                         {bindings.proofs.map((x) => (
                             <BindingItem
                                 deletable={isOwn}
+                                tipable={!isOwn}
                                 key={x.identity}
                                 platform={x.platform as Platform}
                                 identity={x.identity}

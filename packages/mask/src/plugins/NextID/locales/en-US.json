@@ -32,6 +32,7 @@
     "unbind_wallet_tip": "Choose either your Persona or the currently connected wallet to sign to disconnect.",
     "done": "Done",
     "copy_success_of_wallet_address": "Copy wallet address successfully!",
+    "tip": "Tip",
     "tip_to": "To",
     "token_insufficient_balance": "Insufficient balance",
     "tip_type_token": "Token",
