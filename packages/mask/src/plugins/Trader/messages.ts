@@ -38,11 +38,6 @@ export interface TraderMessage {
     swapSettingsUpdated: SwapSettingsEvent
 
     /**
-     * Confirm swap dialog
-     */
-    swapConfirmationUpdated: SwapConfirmationEvent
-
-    /**
      * Swap dialog
      */
     swapDialogUpdated: SwapDialogEvent
