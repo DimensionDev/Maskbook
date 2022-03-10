@@ -19,8 +19,9 @@ export interface NextIDPayload {
 export interface NextIDPersonaBindings {
     persona: string
     proofs: {
-        platform: string
+        platform: NextIDPlatform
         identity: string
+        is_valid: boolean
     }[]
 }
 

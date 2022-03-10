@@ -6,6 +6,7 @@ import type { PersonaIdentifier, ProfileIdentifier } from '../Identifier/type'
 export interface PersonaInformation {
     /** The nickname of the persona. Should use profile.nickname if it presents. */
     nickname?: string
+    publicHexKey?: string
     identifier: PersonaIdentifier
     linkedProfiles: ProfileInformation[]
 }
