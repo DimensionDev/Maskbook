@@ -43,7 +43,7 @@ import { FormattedAddress, FormattedBalance, TokenIcon, useMenu } from '@masknet
 import { ChevronDown } from 'react-feather'
 import { noop } from 'lodash-unified'
 import { ExpandMore } from '@mui/icons-material'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { LoadingButton } from '@mui/lab'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { toHex } from 'web3-utils'
@@ -184,7 +184,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
 
     const chainId = useChainId()
     const network = useNetworkType()
-    const history = useHistory()
+    const navigate = useNavigate()
 
     const [minGasLimitContext, setMinGasLimitContext] = useState(0)
     const [addressTip, setAddressTip] = useState<{ type: TransferAddressError; message: string } | null>()
@@ -497,7 +497,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 handleMaxClick={handleMaxClick}
                 etherPrice={etherPrice}
                 selectedAsset={selectedAsset}
-                handleCancel={() => history.goBack()}
+                handleCancel={() => navigate(-1)}
                 handleConfirm={methods.handleSubmit(onSubmit)}
                 confirmLoading={loading}
                 popoverContent={popoverContent}
