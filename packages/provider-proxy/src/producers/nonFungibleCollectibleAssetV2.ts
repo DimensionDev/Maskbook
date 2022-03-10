@@ -14,14 +14,14 @@ const nonFungibleCollectibleAsset = async (
     getKeys: ProducerKeyFunction,
     args: NonFungibleTokenAssetArgs,
 ): Promise<void> => {
-    const { address, network, pageSize = 100 } = args
+    const { address, network, pageSize = 100, pageKey } = args
     const openSeaApiKey = await getKeys('opensea')
 
     // Alchemy api is used for polygon and flow network.
     if (network) {
         await collectAllPageData<ERC721TokenDetailed>(
             async (page) => {
-                const r = (await getAlchemyNFTList(address, network, page, pageSize)) as {
+                const r = (await getAlchemyNFTList(address, network, page, pageSize, pageKey)) as {
                     data: ERC721TokenDetailed[]
                     hasNextPage: boolean
                 }

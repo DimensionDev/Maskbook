@@ -9,11 +9,14 @@ import { resolveIPFSLink } from '@masknet/web3-shared-evm'
 interface Payload {
     ownerAddress: string
     nfts: AlchemyNFTItemDetailedResponse[]
+    total?: number
+    pageKey?: string
 }
 
 interface RawPayload {
     ownerAddress: string
     nfts: AlchemyNFTItemMetadataResponse[]
+    nftcount: number
 }
 
 async function fetchFromAlchemyFlow(path: string, network: Web3Plugin.NetworkDescriptor): Promise<Payload> {
@@ -31,7 +34,7 @@ async function fetchFromAlchemyFlow(path: string, network: Web3Plugin.NetworkDes
         return { ...x, media: { uri }, tokenUri }
     })
 
-    return { ...rawData, nfts }
+    return { ownerAddress: rawData.ownerAddress, nfts, total: rawData.nftcount }
 }
 
 async function fetchFromAlchemyEVM(path: string, network: Web3Plugin.NetworkDescriptor, owner: string) {
@@ -40,43 +43,32 @@ async function fetchFromAlchemyEVM(path: string, network: Web3Plugin.NetworkDesc
     const response = await fetch(urlcat(alchemyUrl, path))
     const resultWithNoDetailed = (await response.json()) as {
         ownedNfts: AlchemyNFTItemResponse[]
+        pageKey: string
+        totalCount: number
     }
-    const allRequest = resultWithNoDetailed.ownedNfts.map(async (t) => {
-        const requestPath = urlcat('/v1/getNFTMetadata/', {
-            contractAddress: t.contract.address,
-            tokenId: t.id.tokenId,
-            tokenType: 'ERC721',
-        })
-        const response = await fetch(urlcat(alchemyUrl, requestPath))
-        const tokenMetaData = (await response.json()) as AlchemyNFTItemMetadataResponse
-
-        return {
-            contract: {
-                name: tokenMetaData.metadata.name,
-                address: tokenMetaData.contract.address,
-                externalDomain: tokenMetaData.externalDomainViewUrl,
-            },
-            id: { tokenId: tokenMetaData.id.tokenId },
-            title: tokenMetaData.title,
-            description: tokenMetaData.description,
-            media: {
-                uri:
-                    tokenMetaData.metadata.image ||
-                    (typeof tokenMetaData.media?.[0]?.uri === 'string'
-                        ? tokenMetaData.media?.[0]?.uri
-                        : tokenMetaData.media?.[0]?.uri?.raw || tokenMetaData.media?.[0]?.uri?.gateway),
-            },
-            tokenUri: tokenMetaData.tokenUri?.raw || tokenMetaData.tokenUri?.gateway,
-        } as AlchemyNFTItemDetailedResponse
-    })
-
-    const nfts = (await Promise.allSettled(allRequest))
-        .map((v) => (v.status === 'fulfilled' && v.value ? v.value : null))
-        .filter((v) => Boolean(v)) as AlchemyNFTItemDetailedResponse[]
 
     return {
         ownerAddress: owner,
-        nfts,
+        nfts: resultWithNoDetailed.ownedNfts.map(
+            (nft) =>
+                ({
+                    contract: {
+                        address: nft.contract.address,
+                        name: nft.title,
+                    },
+                    id: {
+                        tokenId: nft.id.tokenId,
+                    },
+                    title: nft.title,
+                    description: nft.description,
+                    media: {
+                        uri: nft.metadata.animation_url,
+                    },
+                    tokenUri: nft.tokenUri.raw,
+                } as AlchemyNFTItemDetailedResponse),
+        ),
+        total: resultWithNoDetailed.totalCount,
+        pageKey: resultWithNoDetailed.pageKey || '',
     } as Payload
 }
 
@@ -105,7 +97,6 @@ function createNFT(token: AlchemyNFTItemDetailedResponse, owner: string, chainId
             chainId,
             name: token.contract.name,
             symbol: token.contract.name,
-            iconURL: token.contract.externalDomain,
         },
     }
 }
@@ -113,14 +104,20 @@ function createNFT(token: AlchemyNFTItemDetailedResponse, owner: string, chainId
 export class AlchemyAPI implements NonFungibleTokenAPI.Provider {
     async getTokens(
         from: string,
-        { page = 0, pageSize = 100 }: NonFungibleTokenAPI.Options,
+        { page = 0, pageSize = 100, pageKey = '' }: NonFungibleTokenAPI.Options,
         network: Web3Plugin.NetworkDescriptor,
     ) {
-        const requestPath = urlcat(`${PluginId.Flow}_flow` === network.ID ? '/getNFTs/' : '/v1/getNFTs/', {
-            owner: from,
-            offset: page * pageSize,
-            limit: pageSize,
-        })
+        const requestPath =
+            `${PluginId.Flow}_flow` === network.ID
+                ? urlcat('/getNFTs/', {
+                      owner: from,
+                      pageKey: pageKey || undefined,
+                  })
+                : urlcat('/v1/getNFTs/', {
+                      owner: from,
+                      offset: page * pageSize,
+                      limit: pageSize,
+                  })
 
         const result =
             `${PluginId.Flow}_flow` === network.ID
@@ -135,7 +132,9 @@ export class AlchemyAPI implements NonFungibleTokenAPI.Provider {
         const data = result.nfts.map((nft) => createNFT(nft, result.ownerAddress, network.chainId))
         return {
             data,
-            hasNextPage: data.length === pageSize,
+            hasNextPage: data.length === pageSize || Boolean(pageKey),
+            pageKey,
+            total: result.total,
         }
     }
 }
@@ -145,7 +144,8 @@ export function getAlchemyNFTList(
     network: Web3Plugin.NetworkDescriptor,
     page?: number,
     pageSize?: number,
+    pageKey?: string,
 ) {
     const alchemy = new AlchemyAPI()
-    return alchemy.getTokens(address, { page, pageSize }, network)
+    return alchemy.getTokens(address, { page, pageSize, pageKey }, network)
 }

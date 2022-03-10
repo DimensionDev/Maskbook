@@ -3,6 +3,7 @@ export type ProducerKeyFunction = (provider: string) => Promise<string>
 
 export interface ProducerArgBase {
     pageSize: number
+    pageKey?: string
 }
 
 export interface RPCMethodRegistrationValue<T extends unknown = unknown, TArgs extends unknown = any> {

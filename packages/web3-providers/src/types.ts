@@ -261,6 +261,7 @@ export namespace NonFungibleTokenAPI {
         chainId?: ChainId
         page?: number
         pageSize?: number
+        pageKey?: string
         pageInfo?: { [key in string]: unknown }
     }
 
@@ -268,6 +269,8 @@ export namespace NonFungibleTokenAPI {
         data: T[]
         hasNextPage: boolean
         nextPageInfo?: { [key in string]: unknown }
+        pageKey?: string
+        total?: number
     }
 
     export interface Provider {

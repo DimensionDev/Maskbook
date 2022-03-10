@@ -2,7 +2,6 @@ export interface AlchemyNFTItemDetailedResponse {
     contract: {
         name: string
         address: string
-        externalDomain: string
     }
     id: {
         tokenId: string
@@ -18,7 +17,6 @@ export interface AlchemyNFTItemDetailedResponse {
 export interface AlchemyNFTItemMetadataResponse {
     contract: {
         name: string
-        externalDomain: string
         address: string
     }
     id: {
@@ -54,5 +52,15 @@ export interface AlchemyNFTItemResponse {
     }
     id: {
         tokenId: string
+    }
+    title: string
+    description: string
+    tokenUri: {
+        raw: string
+        gateway: string
+    }
+    metadata: {
+        animation_url: string
+        name: string
     }
 }
