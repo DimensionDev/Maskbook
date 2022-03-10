@@ -53,5 +53,24 @@
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.wordWrap": "on",
         "editor.quickSuggestions": true
-    }
+    },
+    "i18n-ally.localesPaths": [
+        "packages/dashboard/src/locales",
+        "packages/mask/shared-ui/locales",
+        "packages/shared/src/locales",
+        "packages/shared-base/src/i18n",
+        "packages/plugins/DAO/src/locales",
+        "packages/plugins/Debugger/src/locales",
+        "packages/plugins/example/src/locales",
+        "packages/plugins/FileService/src/locales",
+        "packages/plugins/Flow/src/locales",
+        "packages/plugins/RSS3/src/locales",
+        "packages/plugins/Solana/src/locales",
+        "packages/plugins/template/src/locales",
+        "packages/plugins/Wallet/src/locales",
+        "packages/mask/src/plugins/MaskBox/locales",
+        "packages/mask/src/plugins/NextID/locales",
+        "packages/mask/src/plugins/Trader/messages",
+        "packages/mask/src/social-network-adaptor/twitter.com/locales"
+    ]
 }

@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { useAccount } from '@masknet/web3-shared-evm'
-import { PluginMessages, Services } from '../../../API'
+import { Services } from '../../../API'
 import { PersonaContext } from '../../../pages/Personas/hooks/usePersonaContext'
+import { PluginTransakMessages } from '@masknet/plugin-transak'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { PluginId } from '@masknet/plugin-infra'
 
@@ -37,7 +38,7 @@ export const FeaturePromotions = memo(() => {
     const account = useAccount()
 
     const { currentPersona, connectPersona } = PersonaContext.useContainer()
-    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
+    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 
     const isConnectedTwitter = useMemo(() => {
         if (!currentPersona) return false
