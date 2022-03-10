@@ -1,13 +1,16 @@
 import { rightShift } from '@masknet/web3-shared-base'
-import { EthereumTokenType, isSameAddress, useTokenConstants, useTokenTransferCallback } from '@masknet/web3-shared-evm'
-import { useCallback, useContext } from 'react'
-import { TipContext } from './TipContext'
+import {
+    EthereumTokenType,
+    FungibleTokenDetailed,
+    isSameAddress,
+    useTokenConstants,
+    useTokenTransferCallback,
+} from '@masknet/web3-shared-evm'
+import { useCallback } from 'react'
 import type { TipTuple } from './type'
 
-export function useTokenTip(): TipTuple {
+export function useTokenTip(recipient: string, token: FungibleTokenDetailed | null, amount: string): TipTuple {
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
-    const context = useContext(TipContext)
-    const { token, amount, recipient } = context
 
     const isNativeToken = isSameAddress(token?.address, NATIVE_TOKEN_ADDRESS)
 

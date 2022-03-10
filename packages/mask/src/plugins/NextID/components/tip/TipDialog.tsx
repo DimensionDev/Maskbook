@@ -1,11 +1,13 @@
 import { PluginId, useActivatedPlugin, usePluginIDContext } from '@masknet/plugin-infra'
 import { makeStyles } from '@masknet/theme'
-import { EMPTY_LIST } from '@masknet/web3-shared-evm'
+import { EMPTY_LIST, TransactionStateType } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
+import { useEffect, useMemo } from 'react'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { NetworkTab } from '../../../../components/shared/NetworkTab'
+import { activatedSocialNetworkUI } from '../../../../social-network'
 import { useI18N } from '../../../../utils'
-import { TargetChainIdContext } from '../../contexts'
+import { TargetChainIdContext, useTip } from '../../contexts'
 import { TipForm } from './TipForm'
 
 const useStyles = makeStyles()((theme) => ({
@@ -57,6 +59,21 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const { classes } = useStyles()
 
     const { targetChainId, setTargetChainId } = TargetChainIdContext.useContainer()
+    const { amount, token, recipientSnsId, recipient, sendState } = useTip()
+
+    const shareLink = useMemo(() => {
+        return activatedSocialNetworkUI.utils.getShareLinkURL?.(
+            `I just tipped ${amount} ${token?.symbol} to @${recipientSnsId}'s wallet address ${recipient}
+
+Install https://mask.io/download-links to tip my best friend.`,
+        )
+    }, [amount, token?.symbol, recipient, recipientSnsId])
+
+    useEffect(() => {
+        if (sendState.type !== TransactionStateType.CONFIRMED) return
+        window.open(shareLink)
+        onClose?.()
+    }, [sendState.type, onClose])
 
     return (
         <InjectedDialog open={open} onClose={onClose} title={t('plugin_tip_tip')}>

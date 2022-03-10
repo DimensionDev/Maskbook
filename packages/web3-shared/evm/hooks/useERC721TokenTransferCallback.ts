@@ -14,6 +14,7 @@ export function useERC721TokenTransferCallback(address?: string) {
 
     const transferCallback = useCallback(
         async (tokenId?: string, recipient?: string, gasConfig?: GasConfig) => {
+            console.log({ account, recipient, tokenId, erc721Contract })
             if (!account || !recipient || !tokenId || !erc721Contract) {
                 setTransferState({
                     type: TransactionStateType.UNKNOWN,

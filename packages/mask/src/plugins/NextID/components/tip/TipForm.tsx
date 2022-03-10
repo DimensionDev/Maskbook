@@ -2,7 +2,7 @@ import { useWeb3State } from '@masknet/plugin-infra'
 import { SelectTokenDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { EthereumTokenType, TransactionStateType, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
+import { EthereumTokenType, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
 import {
     Box,
     BoxProps,
@@ -15,10 +15,9 @@ import {
     Typography,
 } from '@mui/material'
 import classnames from 'classnames'
-import { FC, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { FC, memo, useCallback, useRef, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
-import { activatedSocialNetworkUI } from '../../../../social-network'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import { TargetChainIdContext, useTip, useTipValidate } from '../../contexts'
@@ -65,13 +64,12 @@ const useStyles = makeStyles()((theme) => {
 
 interface Props extends BoxProps {}
 
-export const TipForm: FC<Props> = memo((props) => {
+export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
     const t = useI18N()
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const { classes } = useStyles()
     const {
         recipient,
-        recipientSnsId,
         recipients: recipientAddresses,
         tipType,
         setTipType,
@@ -81,7 +79,6 @@ export const TipForm: FC<Props> = memo((props) => {
         amount,
         setAmount,
         isSending,
-        sendState,
         sendTip,
     } = useTip()
     const [isValid, validateMessage] = useTipValidate()
@@ -110,20 +107,6 @@ export const TipForm: FC<Props> = memo((props) => {
         })
     }, [id, token?.address, chainId])
 
-    const shareLink = useMemo(() => {
-        return activatedSocialNetworkUI.utils.getShareLinkURL?.(
-            `I just tipped ${amount} ${token?.symbol} to @${recipientSnsId}'s wallet address ${recipient}
-
-Install https://mask.io/download-links to tip my best friend.`,
-        )
-    }, [amount, token?.symbol, recipient, recipientSnsId])
-
-    useEffect(() => {
-        if (sendState.type === TransactionStateType.CONFIRMED) {
-            window.open(shareLink)
-        }
-    }, [sendState.type])
-
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
         token?.type || EthereumTokenType.Native,
@@ -131,9 +114,10 @@ Install https://mask.io/download-links to tip my best friend.`,
     )
     // #endregion
     const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
+    console.log({ isSending, buttonLabel })
 
     return (
-        <Box {...props} className={classnames(classes.root, props.className)}>
+        <Box className={classnames(classes.root, className)} {...rest}>
             <div className={classes.main}>
                 <Typography>{t.tip_to()}</Typography>
 

@@ -1,4 +1,9 @@
-import type { ERC721ContractDetailed, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import {
+    ERC721ContractDetailed,
+    FungibleTokenDetailed,
+    TransactionState,
+    TransactionStateType,
+} from '@masknet/web3-shared-evm'
 import { noop } from 'lodash-unified'
 import { createContext, Dispatch, SetStateAction } from 'react'
 import { TipType } from '../../types'
@@ -19,6 +24,9 @@ export interface ContextOptions {
     setErc721TokenId: Dispatch<SetStateAction<string | null>>
     erc721Contract: ERC721ContractDetailed | null
     setErc721Contract: Dispatch<SetStateAction<ERC721ContractDetailed | null>>
+    sendTip: () => Promise<void>
+    isSending: boolean
+    sendState: TransactionState
 }
 
 export const TipContext = createContext<ContextOptions>({
@@ -37,4 +45,7 @@ export const TipContext = createContext<ContextOptions>({
     setErc721TokenId: noop,
     erc721Contract: null,
     setErc721Contract: noop,
+    sendTip: noop as () => Promise<void>,
+    isSending: false,
+    sendState: { type: TransactionStateType.UNKNOWN },
 })

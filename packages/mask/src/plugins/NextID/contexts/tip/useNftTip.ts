@@ -1,26 +1,33 @@
-import { EthereumTokenType, TransactionStateType, useTokenTransferCallback } from '@masknet/web3-shared-evm'
-import { useCallback, useContext, useEffect } from 'react'
-import { TipContext } from './TipContext'
+import {
+    ERC721ContractDetailed,
+    EthereumTokenType,
+    TransactionStateType,
+    useTokenTransferCallback,
+} from '@masknet/web3-shared-evm'
+import { useCallback, useEffect } from 'react'
 import type { TipTuple } from './type'
 
-export function useNftTip(): TipTuple {
-    const context = useContext(TipContext)
-    const { recipient, erc721TokenId, erc721Contract } = context
-
+export function useNftTip(
+    recipient: string,
+    tokenId: string | null,
+    contract: ERC721ContractDetailed | null,
+): TipTuple {
     const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
         EthereumTokenType.ERC721,
-        erc721Contract?.address || '',
+        contract?.address || '',
     )
     useEffect(() => {
-        if (transferState.type === TransactionStateType.CONFIRMED) {
-            resetTransferCallback()
+        if (transferState.type !== TransactionStateType.CONFIRMED) {
+            return
         }
+        console.log('resetTransferCallback')
+        resetTransferCallback()
     }, [transferState.type, resetTransferCallback])
 
     const sendTip = useCallback(async () => {
-        if (!erc721TokenId) return
-        await transferCallback(erc721TokenId, recipient)
-    }, [erc721TokenId, recipient, transferCallback, resetTransferCallback])
+        if (!tokenId) return
+        await transferCallback(tokenId, recipient)
+    }, [tokenId, recipient, transferCallback])
 
     return [transferState, sendTip]
 }

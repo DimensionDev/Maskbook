@@ -38,6 +38,18 @@ export const TipTaskProvider: FC<Props> = ({ children, task }) => {
         if (!nativeTokenDetailed) return
         setToken(nativeTokenDetailed)
     }, [nativeTokenDetailed])
+    const tokenTipTuple = useTokenTip(recipient, token, amount)
+    const nftTipTuple = useNftTip(recipient, erc721TokenId, erc721Contract)
+
+    const sendTipTuple = tipType === TipType.Token ? tokenTipTuple : nftTipTuple
+    const sendState = sendTipTuple[0]
+    const sendTip = sendTipTuple[1]
+
+    const isSending = [
+        TransactionStateType.WAIT_FOR_CONFIRMING,
+        TransactionStateType.HASH,
+        TransactionStateType.RECEIPT,
+    ].includes(sendState.type)
 
     const contextValue = useMemo(() => {
         return {
@@ -56,30 +68,26 @@ export const TipTaskProvider: FC<Props> = ({ children, task }) => {
             setErc721TokenId,
             erc721Contract,
             setErc721Contract,
+            sendTip,
+            isSending,
+            sendState,
         }
-    }, [recipient, task.recipientSnsId, recipients, tipType, amount, erc721TokenId, erc721Contract, token])
+    }, [
+        recipient,
+        task.recipientSnsId,
+        recipients,
+        tipType,
+        amount,
+        erc721TokenId,
+        erc721Contract,
+        token,
+        sendTip,
+        isSending,
+        sendState,
+    ])
     return <TipContext.Provider value={contextValue}>{children}</TipContext.Provider>
 }
 
 export function useTip() {
-    const context = useContext(TipContext)
-    const tokenTipTuple = useTokenTip()
-    const nftTipTuple = useNftTip()
-
-    const sendTipTuple = context.tipType === TipType.Token ? tokenTipTuple : nftTipTuple
-    const sendState = sendTipTuple[0]
-    const sendTip = sendTipTuple[1]
-
-    const isSending = [
-        TransactionStateType.WAIT_FOR_CONFIRMING,
-        TransactionStateType.HASH,
-        TransactionStateType.RECEIPT,
-    ].includes(sendState.type)
-
-    return {
-        ...context,
-        isSending,
-        sendState,
-        sendTip,
-    }
+    return useContext(TipContext)
 }
