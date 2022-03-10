@@ -7,7 +7,6 @@ export function useFetchToken(tokenId: number) {
 
     return useAsync(async () => {
         if (!tokenId) return null
-
         return fetchToken(chainId, tokenId)
     }, [chainId, tokenId])
 }
