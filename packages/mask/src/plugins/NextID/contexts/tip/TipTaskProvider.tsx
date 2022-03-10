@@ -42,6 +42,7 @@ export const TipTaskProvider: FC<Props> = ({ children, task }) => {
     const contextValue = useMemo(() => {
         return {
             recipient,
+            recipientSnsId: task.recipientSnsId || '',
             setRecipient,
             recipients,
             setRecipients,
@@ -56,7 +57,7 @@ export const TipTaskProvider: FC<Props> = ({ children, task }) => {
             erc721Contract,
             setErc721Contract,
         }
-    }, [recipient, recipients, tipType, amount, erc721TokenId, erc721Contract, token])
+    }, [recipient, task.recipientSnsId, recipients, tipType, amount, erc721TokenId, erc721Contract, token])
     return <TipContext.Provider value={contextValue}>{children}</TipContext.Provider>
 }
 

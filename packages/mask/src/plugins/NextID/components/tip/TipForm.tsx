@@ -15,9 +15,10 @@ import {
     Typography,
 } from '@mui/material'
 import classnames from 'classnames'
-import { FC, memo, useCallback, useRef, useState } from 'react'
+import { FC, memo, useCallback, useMemo, useRef, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
+import { activatedSocialNetworkUI } from '../../../../social-network'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import { TargetChainIdContext, useTip, useTipValidate } from '../../contexts'
@@ -70,6 +71,7 @@ export const TipForm: FC<Props> = memo((props) => {
     const { classes } = useStyles()
     const {
         recipient,
+        recipientSnsId,
         recipients: recipientAddresses,
         tipType,
         setTipType,
@@ -105,6 +107,20 @@ export const TipForm: FC<Props> = memo((props) => {
             },
         })
     }, [id, token?.address])
+
+    const shareLink = useMemo(() => {
+        return activatedSocialNetworkUI.utils.getShareLinkURL?.(
+            `I just tipped ${amount} ${token?.symbol} to @${recipientSnsId}'s wallet address ${recipient}
+
+Install https://mask.io/download-links to tip my best friend.`,
+        )
+    }, [amount, token?.symbol, recipient, recipientSnsId])
+
+    const handleSend = useCallback(async () => {
+        await sendTip()
+        window.open(shareLink)
+    }, [sendTip, shareLink])
+
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
         token?.type || EthereumTokenType.Native,
@@ -189,7 +205,7 @@ export const TipForm: FC<Props> = memo((props) => {
                     className={classes.tipButton}
                     fullWidth
                     disabled={!isValid || isSending}
-                    onClick={sendTip}>
+                    onClick={handleSend}>
                     {buttonLabel}
                 </ActionButton>
             </EthereumChainBoundary>

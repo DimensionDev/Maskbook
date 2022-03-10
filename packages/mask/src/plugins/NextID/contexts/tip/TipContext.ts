@@ -5,6 +5,7 @@ import { TipType } from '../../types'
 
 export interface ContextOptions {
     recipient: string
+    recipientSnsId: string
     setRecipient: Dispatch<SetStateAction<string>>
     tipType: TipType
     setTipType: Dispatch<SetStateAction<TipType>>
@@ -22,6 +23,7 @@ export interface ContextOptions {
 
 export const TipContext = createContext<ContextOptions>({
     recipient: '',
+    recipientSnsId: '',
     setRecipient: noop,
     tipType: TipType.NFT,
     setTipType: noop,

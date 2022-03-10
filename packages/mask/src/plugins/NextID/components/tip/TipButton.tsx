@@ -29,7 +29,7 @@ const useStyles = makeStyles()({
 export const TipButton: FC<Props> = ({ className, receiver, addresses = [], children, ...rest }) => {
     const { classes } = useStyles()
 
-    const [state, queryBindings] = useAsyncFn(async () => {
+    const [walletsState, queryBindings] = useAsyncFn(async () => {
         if (!receiver) return []
 
         const persona = await Services.Identity.queryPersonaByProfile(receiver)
@@ -44,21 +44,22 @@ export const TipButton: FC<Props> = ({ className, receiver, addresses = [], chil
 
     useAsync(queryBindings, [queryBindings])
 
-    const allAddresses = useMemo(() => [...(state.value || []), ...addresses], [state.value, addresses])
+    const allAddresses = useMemo(() => [...(walletsState.value || []), ...addresses], [walletsState.value, addresses])
 
     const sendTip: MouseEventHandler<HTMLDivElement> = useCallback(
         async (evt) => {
             evt.stopPropagation()
             evt.preventDefault()
-            if (state.loading || !state.value) {
+            if (walletsState.loading || !walletsState.value) {
                 await queryBindings()
             }
-            if (!allAddresses.length) return
+            if (!allAddresses.length || !receiver?.userId) return
             PluginNextIdMessages.tipTask.sendToLocal({
+                recipientSnsId: receiver.userId,
                 addresses: allAddresses,
             })
         },
-        [state, allAddresses],
+        [walletsState, allAddresses, receiver?.userId],
     )
 
     if (allAddresses.length === 0) return null
