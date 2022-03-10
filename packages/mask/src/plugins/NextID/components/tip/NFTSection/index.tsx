@@ -1,10 +1,6 @@
 import { makeStyles } from '@masknet/theme'
-import {
-    ERC721TokenDetailed,
-    useAccount,
-    useERC721TokenDetailedCallback,
-    useERC721TokenDetailedOwnerList,
-} from '@masknet/web3-shared-evm'
+import { ERC721TokenDetailed, useAccount, useERC721TokenDetailedCallback } from '@masknet/web3-shared-evm'
+import { useERC721TokenDetailedOwnerList } from '@masknet/web3-providers'
 import { Button, FormControl } from '@mui/material'
 import classnames from 'classnames'
 import { FC, HTMLProps, useCallback, useMemo, useState } from 'react'

@@ -70,6 +70,7 @@ export function useNextIDConnectStatus() {
             status: SetupGuideStep.VerifyOnNextID,
             persona: currentPersona?.identifier.toText(),
         })
+
         isOpenedVerifyDialog = true
         isOpenedFromButton = false
         return false

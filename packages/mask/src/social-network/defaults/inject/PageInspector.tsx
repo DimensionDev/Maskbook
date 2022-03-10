@@ -2,7 +2,8 @@ import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { PageInspector, PageInspectorProps } from '../../../components/InjectedComponents/PageInspector'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
-import { Flags } from '../../../../shared'
+import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'
+import { startWatch } from '../../../utils/watcher'
 
 export function injectPageInspectorDefault<T extends string>(
     config: InjectPageInspectorDefaultConfig = {},
@@ -16,11 +17,9 @@ export function injectPageInspectorDefault<T extends string>(
     })
 
     return function injectPageInspector(signal: AbortSignal) {
-        const dom = document.body
-            .appendChild(document.createElement('div'))
-            .attachShadow({ mode: Flags.using_ShadowDOM_attach_mode })
-
-        createReactRootShadowed(dom, { signal, key: 'page-inspector' }).render(<PageInspectorDefault />)
+        const watcher = new MutationObserverWatcher(new LiveSelector().querySelector('body'))
+        startWatch(watcher, signal)
+        createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<PageInspectorDefault />)
     }
 }
 

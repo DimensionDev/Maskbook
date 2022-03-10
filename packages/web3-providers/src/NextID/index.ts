@@ -19,19 +19,21 @@ export async function bindProof(
     action: NextIDAction,
     platform: string,
     identity: string,
-    walletSignature?: string,
-    signature?: string,
-    proofLocation?: string,
+    options?: {
+        walletSignature?: string
+        signature?: string
+        proofLocation?: string
+    },
 ) {
     const requestBody = {
         action,
         platform,
         identity,
         public_key: personaPublicKey,
-        ...(proofLocation ? { proof_location: proofLocation } : {}),
+        proof_location: options?.proofLocation,
         extra: {
-            ...(walletSignature ? { wallet_signature: toBase64(fromHex(walletSignature)) } : {}),
-            ...(signature ? { signature: toBase64(fromHex(signature)) } : {}),
+            wallet_signature: options?.walletSignature ? toBase64(fromHex(options.walletSignature)) : undefined,
+            signature: options?.signature ? toBase64(fromHex(options.signature)) : undefined,
         },
     }
 

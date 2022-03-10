@@ -72,7 +72,7 @@ export async function bindProof(
     })
 }
 
-async function queryPersonaHexPublicKey(persona: PersonaIdentifier) {
+export async function queryPersonaHexPublicKey(persona: PersonaIdentifier) {
     const key256 = decompressSecp256k1Key(persona.compressedPoint.replace(/\|/g, '/'))
     if (!key256.x || !key256.y) return null
     const arr = compressSecp256k1Point(key256.x, key256.y)

@@ -23,7 +23,11 @@ export interface Binding {
 
 export interface NextIDPersonaBindings {
     persona: string
-    proofs: Binding[]
+    proofs: {
+        platform: NextIDPlatform
+        identity: string
+        is_valid: boolean
+    }[]
 }
 
 export interface NextIDBindings {

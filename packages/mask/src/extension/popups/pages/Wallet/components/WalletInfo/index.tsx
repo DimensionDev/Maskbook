@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { MoreHoriz } from '@mui/icons-material'
 import { EditIcon, MaskWalletIcon } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
-import { useHistory, useLocation, useRouteMatch } from 'react-router-dom'
+import { useNavigate, useLocation, useMatch } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { formatEthereumAddress, useWallet } from '@masknet/web3-shared-evm'
 import { CopyIconButton } from '../../../../components/CopyIconButton'
@@ -65,16 +65,13 @@ const useStyles = makeStyles()({
 
 export const WalletInfo = memo(() => {
     const wallet = useWallet()
-    const history = useHistory()
+    const navigate = useNavigate()
     const address = new URLSearchParams(useLocation().search).get('address')
 
     const { value: domain } = useReverseAddress(address ?? wallet?.address, NetworkPluginID.PLUGIN_EVM)
     const { Utils } = useWeb3State()
 
-    const excludePath = useRouteMatch({
-        path: PopupRoutes.WalletSettings,
-        exact: true,
-    })
+    const excludePath = useMatch(PopupRoutes.WalletSettings)
 
     if (!wallet) return null
 
@@ -82,8 +79,8 @@ export const WalletInfo = memo(() => {
         <WalletInfoUI
             name={wallet.name ?? ''}
             address={wallet.address}
-            onEditClick={() => history.push(PopupRoutes.WalletRename)}
-            onSettingClick={() => history.push(PopupRoutes.WalletSettings)}
+            onEditClick={() => navigate(PopupRoutes.WalletRename)}
+            onSettingClick={() => navigate(PopupRoutes.WalletSettings)}
             hideSettings={!!excludePath}
             domain={domain}
             formatDomainName={Utils?.formatDomainName}
