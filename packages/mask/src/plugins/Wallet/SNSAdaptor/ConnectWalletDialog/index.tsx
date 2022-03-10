@@ -67,7 +67,10 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             case ProviderType.WalletLink:
             case ProviderType.MathWallet:
             case ProviderType.Fortmatic:
-                ;({ account, chainId } = await Services.Ethereum.connect(providerType))
+                ;({ account, chainId } = await Services.Ethereum.connect({
+                    chainId: expectedChainId,
+                    providerType,
+                }))
                 break
             case ProviderType.CustomNetwork:
                 throw new Error('To be implemented.')

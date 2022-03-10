@@ -2,107 +2,112 @@
 
 # Mask Flavored JSON RPC API
 
-## mask_watchTransaction
+## Transaction
+
+### mask_watchTransaction
 
 Periodically retrieve the transaction receipt and cache the result in the background.
 
 > Note: The [`eth_getTransactionReceipt`](https://eth.wiki/json-rpc/API#eth_gettransactionreceipt) will read receipt from the cache instead of the RPC provider. If you really need the instant receipt you should use `mask_getTransactionReceipt`.
 
-### Parameters
+#### Parameters
 
 - `string` the hash of transaction
 - `config` the transaction config object. Learn more: [`eth_sendTransaction`](https://eth.wiki/json-rpc/API#eth_sendtransaction).
 
-### Returns
+#### Returns
 
 - `void`
 
-## mask_unwatchTransaction
+### mask_unwatchTransaction
 
 Stop watching a transaction. It means invoke [`eth_getTransactionReceipt`](https://eth.wiki/json-rpc/API#eth_gettransactionreceipt) with the given hash will always return `null`.
 
-### Parameters
+#### Parameters
 
 - `string` the hash of transaction
 
-### Returns
+#### Returns
 
 - `void`
 
-## mask_getTransactionReceipt
+### mask_getTransactionReceipt
 
 The non-hijacked version of [`eth_getTransactionReceipt`](https://eth.wiki/json-rpc/API#eth_gettransactionreceipt).
 
-## mask_replaceTransaction
+### mask_replaceTransaction
 
 Replace a transaction with the given one.
 
-### Parameters
+#### Parameters
 
 - `string` the hash of the transaction to be replaced
 - `config` the transaction config object. Learn more: [`eth_sendTransaction`](https://eth.wiki/json-rpc/API#eth_sendtransaction).
 
-### Returns
+#### Returns
 
 - `void`
 
-## mask_cancelTransaction
+### mask_cancelTransaction
 
 Cancel the given transaction.
 
-### Parameters
+#### Parameters
 
 - `string` the hash of the transaction to be canceled
 - `config` the transaction config object. Learn more: [`eth_sendTransaction`](https://eth.wiki/json-rpc/API#eth_sendtransaction).
 
-### Returns
+#### Returns
 
 - `void`
 
-## mask_confirmTransaction
+### mask_confirmTransaction
 
 Confirm to send a risk transaction.
 
-### Parameters
+#### Parameters
 
 - `void`
 
-### Returns
+#### Returns
 
 - `void`
 
-## mask_rejectTransaction
+### mask_rejectTransaction
 
 Reject to send a risk transaction.
 
-### Parameters
+#### Parameters
 
 - `void`
 
-### Returns
+#### Returns
 
 - `void`
 
-## mask_loginFortmatic
+## Wallet
 
-Pull up the fortmatic login dialog.
+### mask_requestAccounts
 
-### Parameters
+Connect to any wallet on the back of Mask Network.
 
-- `void`
+#### Parameters
 
-### Returns
+- `number` or `void` the chain id of the expected chain
+- `string` or `void` the network id of the expected chain (`NetworkPluginID`)
 
-- `void`
-
-## mask_logoutFortmatic
-
-Disconnect with the fortmatic wallet.
-
-### Parameters
+#### Returns
 
 - `void`
 
-### Returns
+### mask_dismissAccounts
+
+Disconnect with the connected wallet.
+
+#### Parameters
+
+- `void`
+
+#### Returns
 
 - `void`

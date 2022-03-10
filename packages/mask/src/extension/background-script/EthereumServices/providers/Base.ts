@@ -30,22 +30,6 @@ export class BaseProvider implements Provider {
         return this.web3
     }
 
-    async ensureConnectedAndUnlocked() {
-        try {
-            const web3 = await this.createWeb3()
-            const accounts = await web3.eth.requestAccounts()
-            throw accounts
-        } catch (error: string[] | unknown) {
-            const accounts = error
-            if (Array.isArray(accounts)) {
-                if (accounts.length === 0) throw new Error('Provider is locked or it has not connected any accounts.')
-                else if (accounts.length > 0) return // valid
-            }
-            // Any other error means failed to connect provider.
-            throw new Error('Failed to connect to provider.')
-        }
-    }
-
     async onAccountsChanged(accounts: string[]) {
         if (currentProviderSettings.value !== this.providerType) return
         await WalletRPC.updateAccount({

@@ -7,28 +7,12 @@ import { PLUGIN_ID } from './constants'
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
 
 export interface EVM_Messages {
-    INJECTED_PROVIDER_RPC_REQUEST: {
+    PROVIDER_RPC_REQUEST: {
         providerType: ProviderType
         payload: JsonRpcPayload
     }
-    INJECTED_PROVIDER_RPC_RESPONSE: {
+    PROVIDER_RPC_RESPONSE: {
         providerType: ProviderType
-        payload: JsonRpcPayload
-        result?: unknown
-        error: Error | null
-    }
-    WALLET_CONNECT_PROVIDER_RPC_REQUEST: {
-        payload: JsonRpcPayload
-    }
-    WALLET_CONNECT_PROVIDER_RPC_RESPONSE: {
-        payload: JsonRpcPayload
-        result?: unknown
-        error: Error | null
-    }
-    FORTMATIC_PROVIDER_RPC_REQUEST: {
-        payload: JsonRpcPayload
-    }
-    FORTMATIC_PROVIDER_RPC_RESPONSE: {
         payload: JsonRpcPayload
         result?: unknown
         error: Error | null

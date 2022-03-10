@@ -64,7 +64,7 @@ export class MaskWallet implements Middleware<Context> {
                 }
                 break
             case EthereumMethodType.MASK_DISMISS_ACCOUNTS:
-                context.write(undefined)
+                context.end()
                 break
             case EthereumMethodType.ETH_SEND_TRANSACTION:
                 const config = context.config

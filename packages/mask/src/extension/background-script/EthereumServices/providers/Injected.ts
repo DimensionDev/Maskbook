@@ -13,12 +13,12 @@ export class InjectedProvider extends BaseProvider implements Provider {
         const [deferred, resolve, reject] = defer<T, Error | null>()
 
         const onResponse = ({
-            providerType: type,
+            providerType: expectedProviderType,
             payload,
             result,
             error,
-        }: EVM_Messages['INJECTED_PROVIDER_RPC_RESPONSE']) => {
-            if (type !== this.providerType) return
+        }: EVM_Messages['PROVIDER_RPC_RESPONSE']) => {
+            if (expectedProviderType !== this.providerType) return
             if (payload.id !== requestId) return
             if (error) reject(error)
             else resolve(result as T)
@@ -28,16 +28,16 @@ export class InjectedProvider extends BaseProvider implements Provider {
             () => {
                 reject(new Error('The request is timeout.'))
             },
-            requestArguments.method === EthereumMethodType.ETH_REQUEST_ACCOUNTS ? 3 * 60 * 1000 : 45 * 1000,
+            requestArguments.method === EthereumMethodType.MASK_REQUEST_ACCOUNTS ? 3 * 60 * 1000 : 45 * 1000,
         )
 
         deferred.finally(() => {
             clearTimeout(timer)
-            EVM_Messages.events.INJECTED_PROVIDER_RPC_RESPONSE.off(onResponse)
+            EVM_Messages.events.PROVIDER_RPC_RESPONSE.off(onResponse)
         })
 
-        EVM_Messages.events.INJECTED_PROVIDER_RPC_RESPONSE.on(onResponse)
-        EVM_Messages.events.INJECTED_PROVIDER_RPC_REQUEST.sendToVisiblePages({
+        EVM_Messages.events.PROVIDER_RPC_RESPONSE.on(onResponse)
+        EVM_Messages.events.PROVIDER_RPC_REQUEST.sendToVisiblePages({
             providerType: this.providerType,
             payload: {
                 jsonrpc: '2.0',

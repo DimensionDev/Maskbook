@@ -69,9 +69,7 @@ export class Squash implements Middleware<Context> {
         const [promise, resolve, reject] = defer<unknown>()
 
         this.cache.set(id, promise)
-
         await next()
-
         this.cache.delete(id)
 
         if (context.error) reject(context.error)

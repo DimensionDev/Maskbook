@@ -7,6 +7,9 @@ export class Injected implements Middleware<Context> {
             case EthereumMethodType.MASK_REQUEST_ACCOUNTS:
                 context.requestArguments.method = EthereumMethodType.ETH_REQUEST_ACCOUNTS
                 break
+            case EthereumMethodType.MASK_DISMISS_ACCOUNTS:
+                context.end()
+                break
             case EthereumMethodType.PERSONAL_SIGN:
                 context.requestArguments.params = [...context.requestArguments.params.slice(0, 2), '']
                 break

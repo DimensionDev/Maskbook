@@ -4,6 +4,8 @@ import { onCoin98Event } from './bridgedCoin98'
 import { onSolanaEvent } from './bridgedSolana'
 import { sendEvent, rejectPromise, resolvePromise } from './utils'
 
+export * from '../shared'
+
 export { bridgedEthereumProvider } from './bridgedEthereum'
 export { bridgedCoin98Provider } from './bridgedCoin98'
 export { bridgedSolanaProvider } from './bridgedSolana'

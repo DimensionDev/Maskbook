@@ -379,11 +379,11 @@ export async function cancelRequest(
     )
 }
 
-export function requestAccounts(overrides?: SendOverrides, options?: RequestOptions) {
+export function requestAccounts(chainId?: ChainId, overrides?: SendOverrides, options?: RequestOptions) {
     return request<string[]>(
         {
             method: EthereumMethodType.MASK_REQUEST_ACCOUNTS,
-            parmas: [],
+            parmas: chainId ? [chainId] : [],
         },
         overrides,
         options,

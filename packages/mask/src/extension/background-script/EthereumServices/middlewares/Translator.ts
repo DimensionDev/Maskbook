@@ -49,9 +49,7 @@ export class Translator implements Middleware<Context> {
         const translator = this.translators[context.chainId]
 
         if (translator?.encode) translator.encode(context)
-
         await next()
-
         if (translator?.decode) translator.decode(context)
     }
 }

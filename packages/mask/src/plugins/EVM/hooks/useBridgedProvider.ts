@@ -1,5 +1,7 @@
 import { useMemo } from 'react'
 import { unreachable } from '@dimensiondev/kit'
+import WalletConnectSDK from '@masknet/web3-shared-evm/providers/WalletConnect'
+import FortmaticSDK from '@masknet/web3-shared-evm/providers/Fortmatic'
 import { bridgedCoin98Provider, bridgedEthereumProvider } from '@masknet/injected-script'
 import { ProviderType } from '@masknet/web3-shared-evm'
 
@@ -12,11 +14,14 @@ export function useBridgedProvider(type: ProviderType) {
                 return bridgedEthereumProvider
             case ProviderType.Coin98:
                 return bridgedCoin98Provider
-            case ProviderType.MaskWallet:
-            case ProviderType.CustomNetwork:
-            case ProviderType.Fortmatic:
             case ProviderType.WalletConnect:
-                throw new Error('Not implemented.')
+                return WalletConnectSDK
+            case ProviderType.Fortmatic:
+                return FortmaticSDK
+            case ProviderType.MaskWallet:
+                return
+            case ProviderType.CustomNetwork:
+                return
             default:
                 unreachable(type)
         }

@@ -1,8 +1,9 @@
 import Fortmatic from 'fortmatic'
-import { first } from 'lodash-unified'
+import type { RequestArguments } from 'web3-core'
+import { first, noop } from 'lodash-unified'
 import type { FmProvider } from 'fortmatic/dist/cjs/src/core/fm-provider'
-import { ChainId } from '../types'
-import { createLookupTableResolver } from '../utils'
+import { ChainId, EthereumMethodType } from '../types'
+import { createLookupTableResolver, isFortmaticSupported } from '../utils'
 import { getRPCConstants } from '../constants'
 
 // #region create in-page fortmatic provider
@@ -35,13 +36,13 @@ const resolveAPI_Key = createLookupTableResolver<ChainIdFortmatic, string>(
 
 const providerPool = new Map<ChainId, FmProvider>()
 
-export function createFortmatic(chainId: ChainIdFortmatic) {
+function createFortmatic(chainId: ChainIdFortmatic) {
     const rpcUrl = first(getRPCConstants(chainId).RPC)
     if (!rpcUrl) throw new Error('Failed to create provider.')
     return new Fortmatic(resolveAPI_Key(chainId), { chainId, rpcUrl })
 }
 
-export function createProvider(chainId: ChainIdFortmatic) {
+function createProvider(chainId: ChainIdFortmatic) {
     if (providerPool.has(chainId)) return providerPool.get(chainId)!
 
     const fm = createFortmatic(chainId)
@@ -50,12 +51,31 @@ export function createProvider(chainId: ChainIdFortmatic) {
     return provider
 }
 
-export function login(chainId: ChainIdFortmatic) {
-    const provider = createProvider(chainId)
-    return provider.enable()
-}
+export default {
+    login(chainId: ChainIdFortmatic) {
+        const provider = createProvider(chainId)
+        return provider.enable()
+    },
+    logout(chainId: ChainIdFortmatic) {
+        const fm = createFortmatic(chainId)
+        return fm.user.logout()
+    },
+    request<T extends unknown>(requestArguments: RequestArguments, chainId = ChainId.Mainnet) {
+        if (!isFortmaticSupported(chainId)) throw new Error('Not supported chain id.')
 
-export function logout(chainId: ChainIdFortmatic) {
-    const fm = createFortmatic(chainId)
-    return fm.user.logout()
+        const chainId_ = chainId as ChainIdFortmatic
+        const provider = createProvider(chainId as ChainIdFortmatic)
+
+        switch (requestArguments.method) {
+            case EthereumMethodType.MASK_REQUEST_ACCOUNTS:
+                return this.login(chainId_)
+            case EthereumMethodType.MASK_DISMISS_ACCOUNTS:
+                return this.logout(chainId_)
+            default:
+                return provider.send(requestArguments.method, requestArguments.params) as Promise<T>
+        }
+    },
+    on() {
+        return noop
+    },
 }

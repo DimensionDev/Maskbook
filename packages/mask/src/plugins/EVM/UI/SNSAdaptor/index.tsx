@@ -2,10 +2,9 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../../base'
 import { Web3UI } from '../Web3UI'
 import { setupStorage, StorageDefaultValue } from '../../storage'
-import { InjectedProviderBridge } from '../components/InjectedProviderBridge'
-import { FortmaticProviderBridge } from '../components/FortmaticProviderBridge'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { WalletConnectProviderBridge } from '../components/WalletConnectProviderBridge'
+import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
+import { ProviderBridge } from '../components/ProviderBridge'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -15,12 +14,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
     Web3UI,
     Web3State: {},
     GlobalInjection() {
+        if (isDashboardPage() || isPopupPage()) return null
         return (
             <>
-                <InjectedProviderBridge injectedProviderType={ProviderType.MetaMask} />
-                <InjectedProviderBridge injectedProviderType={ProviderType.Coin98} />
-                <WalletConnectProviderBridge />
-                <FortmaticProviderBridge />
+                <ProviderBridge providerType={ProviderType.MetaMask} />
+                <ProviderBridge providerType={ProviderType.Coin98} />
+                <ProviderBridge providerType={ProviderType.Fortmatic} />
             </>
         )
     },

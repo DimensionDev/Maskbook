@@ -1,10 +1,8 @@
 import { first } from 'lodash-unified'
-import { createLookupTableResolver, ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, createLookupTableResolver, ProviderType } from '@masknet/web3-shared-evm'
 import { InjectedProvider } from './providers/Injected'
 import { MaskWalletProvider } from './providers/MaskWallet'
-import { WalletConnectProvider } from './providers/WalletConnect'
 import { CustomNetworkProvider } from './providers/CustomNetwork'
-import { FortmaticProvider } from './providers/Fortmatic'
 import type { Provider } from './types'
 import { currentChainIdSettings, currentProviderSettings } from '../../../plugins/Wallet/settings'
 import Services from '../../service'
@@ -14,11 +12,11 @@ const getProvider = createLookupTableResolver<ProviderType, Provider | null>(
     {
         [ProviderType.MaskWallet]: new MaskWalletProvider(ProviderType.MaskWallet),
         [ProviderType.MetaMask]: new InjectedProvider(ProviderType.MetaMask),
-        [ProviderType.WalletConnect]: new WalletConnectProvider(ProviderType.WalletConnect),
+        [ProviderType.WalletConnect]: new InjectedProvider(ProviderType.WalletConnect),
         [ProviderType.Coin98]: new InjectedProvider(ProviderType.Coin98),
         [ProviderType.WalletLink]: new InjectedProvider(ProviderType.WalletLink),
         [ProviderType.MathWallet]: new InjectedProvider(ProviderType.MathWallet),
-        [ProviderType.Fortmatic]: new FortmaticProvider(ProviderType.Fortmatic),
+        [ProviderType.Fortmatic]: new InjectedProvider(ProviderType.Fortmatic),
         [ProviderType.CustomNetwork]: new CustomNetworkProvider(),
     },
     null,
@@ -67,13 +65,13 @@ export async function notifyEvent(providerType: ProviderType, name: string, even
     }
 }
 
-export async function connect(providerType: ProviderType) {
+export async function connect({ chainId, providerType }: { chainId?: ChainId; providerType: ProviderType }) {
     const account = first(
-        await Services.Ethereum.requestAccounts({
+        await Services.Ethereum.requestAccounts(chainId, {
             providerType,
         }),
     )
-    const chainId = Number.parseInt(
+    const actualChainId = Number.parseInt(
         await Services.Ethereum.getChainId({
             providerType,
         }),
@@ -81,16 +79,16 @@ export async function connect(providerType: ProviderType) {
     )
     await WalletRPC.updateAccount({
         account,
-        chainId,
+        chainId: actualChainId,
         providerType,
     })
     return {
         account,
-        chainId,
+        chainId: actualChainId,
     }
 }
 
-export async function discconect(providerType: ProviderType) {
+export async function discconect({ providerType }: { providerType: ProviderType }) {
     await Services.Ethereum.dismissAccounts({
         providerType,
     })
