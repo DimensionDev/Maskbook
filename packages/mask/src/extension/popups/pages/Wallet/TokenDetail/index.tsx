@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react'
 import { useAsync } from 'react-use'
 import { ArrowDownCircle, ArrowUpCircle } from 'react-feather'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -68,7 +68,7 @@ const TokenDetail = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const wallet = useWallet()
-    const history = useHistory()
+    const navigate = useNavigate()
     const { currentToken } = useContainer(WalletContext)
     const { value: nativeToken } = useNativeTokenDetailed()
 
@@ -149,7 +149,7 @@ const TokenDetail = memo(() => {
                         <ArrowDownCircle className={classes.icon} />
                         <Typography className={classes.text}>{t('popups_wallet_token_buy')}</Typography>
                     </div>
-                    <div onClick={() => history.push(PopupRoutes.Transfer)}>
+                    <div onClick={() => navigate(PopupRoutes.Transfer)}>
                         <ArrowUpCircle className={classes.icon} />
                         <Typography className={classes.text}>{t('popups_wallet_token_send')}</Typography>
                     </div>
