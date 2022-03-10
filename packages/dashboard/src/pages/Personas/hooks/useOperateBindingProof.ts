@@ -18,7 +18,9 @@ export function useOperateBound() {
         })
         if (!signResult) throw new Error('Failed to sign by persona.')
         const signature = signResult.signature.signature
-        await bindProof(persona_.publicHexKey, action, platform, username, undefined, signature, undefined)
+        await bindProof(persona_.publicHexKey, action, platform, username, {
+            signature: signature,
+        })
         await Services.Identity.detachProfile(profile)
     })
 }
