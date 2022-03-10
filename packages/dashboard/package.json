@@ -25,7 +25,6 @@
     "@masknet/web3-providers": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
-    "@masknet/web3-providers":"workspace:*",
     "@msgpack/msgpack": "^2.7.2",
     "@servie/events": "^3.0.0",
     "@types/color": "^3.0.3",

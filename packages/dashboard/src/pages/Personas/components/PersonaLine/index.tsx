@@ -3,10 +3,9 @@ import { Box, Button, Link, Stack, Typography } from '@mui/material'
 import { getMaskColor, MaskColorVar, makeStyles } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { DisconnectProfileDialog } from '../DisconnectProfileDialog'
-import type { NextIDPersonaBindings, PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import type { ProfileIdentifier } from '@masknet/shared-base'
 import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { PersonaContext } from '../../hooks/usePersonaContext'
-import { NextIdPersonaWarningIcon, NextIdPersonaVerifiedIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     connect: {
@@ -17,22 +16,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     link: {
         height: 28,
-    },
-    disabled: {
-        opacity: 0.6,
-        pointerEvents: 'none',
-    },
-    userIdBox: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: theme.spacing(0.5),
-    },
-    proofIconBox: {
-        display: 'flex',
-        alignItems: 'center',
-        ':hover': {
-            opacity: 0.8,
-        },
     },
 }))
 export interface UnconnectedPersonaLineProps {
@@ -72,26 +55,12 @@ export interface ConnectedPersonaLineProps {
     isHideOperations: boolean
     onConnect: () => void
     onDisconnect: (identifier: ProfileIdentifier) => void
-    onDeleteBound?: (profile: ProfileIdentifier) => void
     profileIdentifiers: ProfileIdentifier[]
     networkIdentifier: string
-    disableAdd?: boolean
-    verification?: NextIDPersonaBindings
-    personaIdentifier: PersonaIdentifier
 }
 
 export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
-    ({
-        profileIdentifiers,
-        onConnect,
-        onDisconnect,
-        onDeleteBound,
-        networkIdentifier,
-        isHideOperations,
-        disableAdd,
-        verification,
-        personaIdentifier,
-    }) => {
+    ({ profileIdentifiers, onConnect, onDisconnect, networkIdentifier, isHideOperations }) => {
         const t = useDashboardI18N()
         const { openProfilePage } = PersonaContext.useContainer()
         const { classes } = useStyles()
@@ -101,44 +70,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         const handleUserIdClick = async (network: string, userId: string) => {
             await openProfilePage(network, userId)
         }
-        const handleProofIconClick = async (e: MouseEvent, proof: any, profile: any) => {
-            e.stopPropagation()
-            if (!proof || !proof.is_valid) {
-                onConnect()
-            }
-        }
 
-        const handleDisconnect = (profile: ProfileIdentifier) => {
-            const isProved = verification?.proofs.find((x) => {
-                return x.platform === 'twitter' && x.identity === profile.userId.toLowerCase()
-            })
-
-            if (!isProved || !onDeleteBound) {
-                onDisconnect(profile)
-            } else {
-                onDeleteBound(profile)
-            }
-        }
-        const userIdBox = (profile: any) => {
-            const proofSupport = ['twitter.com'].includes(profile.network)
-            const proof = verification?.proofs.find((x) => {
-                return x.platform === 'twitter' && x.identity === profile.userId.toLowerCase()
-            })
-            return (
-                <div className={classes.userIdBox}>
-                    <div>@{profile.userId}</div>
-                    <div
-                        className={classes.proofIconBox}
-                        onClick={(e: MouseEvent) => handleProofIconClick(e, proof, profile)}>
-                        {!proofSupport ? null : proof?.is_valid ? (
-                            <NextIdPersonaVerifiedIcon />
-                        ) : (
-                            <NextIdPersonaWarningIcon />
-                        )}
-                    </div>
-                </div>
-            )
-        }
         return (
             <Box className={classes.connect} sx={{ display: 'flex', alignItems: 'center' }}>
                 <Link
@@ -158,7 +90,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                                     key={x.userId}
                                     onClick={() => handleUserIdClick(networkIdentifier, x.userId)}
                                     sx={{ color: MaskColorVar.textPrimary, fontSize: 13, mr: 1, cursor: 'pointer' }}>
-                                    {userIdBox(x)}
+                                    @{x.userId}
                                 </Typography>
                             ))}
                         </Stack>
@@ -167,7 +99,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                         <Box>
                             <Link
                                 component="button"
-                                classes={{ button: classes.link, root: disableAdd ? classes.disabled : undefined }}
+                                classes={{ button: classes.link }}
                                 variant="caption"
                                 sx={{ mr: 1 }}
                                 onClick={(e: MouseEvent) => {
@@ -182,19 +114,20 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                                 classes={{ button: classes.link }}
                                 variant="caption"
                                 onClick={() => setOpenDisconnectDialog(true)}>
-                                {t.personas_disconnect_raw()}
+                                {t.personas_disconnect()}
                             </Link>
                         </Box>
                     )}
                 </Link>
-                <DisconnectProfileDialog
-                    personaIdentifier={personaIdentifier}
-                    networkIdentifier={networkIdentifier}
-                    onDisconnect={(profileIdentifier) => handleDisconnect(profileIdentifier)}
-                    profileIdentifiers={profileIdentifiers}
-                    open={openDisconnectDialog}
-                    onClose={() => setOpenDisconnectDialog(false)}
-                />
+                {openDisconnectDialog && (
+                    <DisconnectProfileDialog
+                        networkIdentifier={networkIdentifier}
+                        onDisconnect={onDisconnect}
+                        profileIdentifiers={profileIdentifiers}
+                        open={openDisconnectDialog}
+                        onClose={() => setOpenDisconnectDialog(false)}
+                    />
+                )}
             </Box>
         )
     },

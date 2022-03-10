@@ -2,12 +2,7 @@ import { memo } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine'
-import type {
-    NextIDPersonaBindings,
-    PersonaIdentifier,
-    ProfileIdentifier,
-    ProfileInformation,
-} from '@masknet/shared-base'
+import type { PersonaIdentifier, ProfileIdentifier, ProfileInformation } from '@masknet/shared-base'
 import { formatFingerprint } from '@masknet/shared'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import type { SocialNetwork } from '../../api'
@@ -64,12 +59,11 @@ export interface PersonaCardProps {
 }
 
 export const PersonaCard = memo<PersonaCardProps>((props) => {
-    const { connectPersona, disconnectPersona, definedSocialNetworks, verification } = PersonaContext.useContainer()
+    const { connectPersona, disconnectPersona, definedSocialNetworks } = PersonaContext.useContainer()
 
     return (
         <PersonaCardUI
             {...props}
-            verification={verification}
             onConnect={connectPersona}
             onDisconnect={disconnectPersona}
             definedSocialNetworks={definedSocialNetworks}
@@ -81,11 +75,10 @@ export interface PersonaCardUIProps extends PersonaCardProps {
     definedSocialNetworks: SocialNetwork[]
     onConnect: (identifier: PersonaIdentifier, networkIdentifier: string) => void
     onDisconnect: (identifier: ProfileIdentifier) => void
-    verification?: NextIDPersonaBindings
 }
 
 export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
-    const { nickname, active = false, definedSocialNetworks, identifier, profiles, verification } = props
+    const { nickname, active = false, definedSocialNetworks, identifier, profiles } = props
     const { onConnect, onDisconnect, onClick } = props
     const { classes } = useStyles()
 
@@ -118,14 +111,12 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
                         } else {
                             return (
                                 <ConnectedPersonaLine
-                                    verification={verification}
                                     isHideOperations
                                     key={networkIdentifier}
                                     onConnect={() => onConnect(identifier, networkIdentifier)}
                                     onDisconnect={onDisconnect}
                                     profileIdentifiers={currentNetworkProfiles.map((x) => x.identifier)}
                                     networkIdentifier={networkIdentifier}
-                                    personaIdentifier={identifier}
                                 />
                             )
                         }
