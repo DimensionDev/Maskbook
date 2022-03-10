@@ -1,5 +1,5 @@
 import { first } from 'lodash-unified'
-import { ChainId, createLookupTableResolver, ProviderType } from '@masknet/web3-shared-evm'
+import { createLookupTableResolver, ProviderType } from '@masknet/web3-shared-evm'
 import { InjectedProvider } from './providers/Injected'
 import { MaskWalletProvider } from './providers/MaskWallet'
 import { WalletConnectProvider } from './providers/WalletConnect'
@@ -7,6 +7,8 @@ import { CustomNetworkProvider } from './providers/CustomNetwork'
 import { FortmaticProvider } from './providers/Fortmatic'
 import type { Provider } from './types'
 import { currentChainIdSettings, currentProviderSettings } from '../../../plugins/Wallet/settings'
+import Services from '../../service'
+import { WalletRPC } from '../../../plugins/Wallet/messages'
 
 const getProvider = createLookupTableResolver<ProviderType, Provider | null>(
     {
@@ -47,33 +49,6 @@ export function createExternalProvider(
     return provider?.createExternalProvider({ chainId, url })
 }
 
-export async function connect({
-    chainId = currentChainIdSettings.value,
-    providerType = currentProviderSettings.value,
-}: {
-    chainId?: ChainId
-    providerType?: ProviderType
-} = {}) {
-    const provider = getProvider(providerType)
-    const response = await provider?.requestAccounts?.(chainId)
-    return {
-        account: first(response?.accounts),
-        chainId: response?.chainId,
-    }
-}
-
-export async function disconnect({
-    chainId = currentChainIdSettings.value,
-    providerType = currentProviderSettings.value,
-}: {
-    chainId?: ChainId
-    providerType?: ProviderType
-} = {}) {
-    const provider = getProvider(providerType)
-    await provider?.dismissAccounts?.(chainId)
-}
-
-//#region connect injected provider
 export async function notifyEvent(providerType: ProviderType, name: string, event?: unknown) {
     const provider = getProvider(providerType)
 
@@ -91,4 +66,33 @@ export async function notifyEvent(providerType: ProviderType, name: string, even
             throw new Error(`Unknown event name: ${name}.`)
     }
 }
-// #endregion
+
+export async function connect(providerType: ProviderType) {
+    const account = first(
+        await Services.Ethereum.requestAccounts({
+            providerType,
+        }),
+    )
+    const chainId = Number.parseInt(
+        await Services.Ethereum.getChainId({
+            providerType,
+        }),
+        16,
+    )
+    await WalletRPC.updateAccount({
+        account,
+        chainId,
+        providerType,
+    })
+    return {
+        account,
+        chainId,
+    }
+}
+
+export async function discconect(providerType: ProviderType) {
+    await Services.Ethereum.dismissAccounts({
+        providerType,
+    })
+    await WalletRPC.resetAccount()
+}

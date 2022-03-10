@@ -1,10 +1,13 @@
 import { toBuffer } from 'ethereumjs-util'
+import { PopupRoutes } from '@masknet/shared-base'
 import { signTypedData, SignTypedDataVersion } from '@metamask/eth-sig-util'
 import { ChainId, EthereumMethodType, ProviderType } from '@masknet/web3-shared-evm'
 import type { Context, Middleware } from '../types'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import { MaskWalletProvider } from '../providers/MaskWallet'
 import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc'
+import { selectAccountPrepare } from '../../../../plugins/Wallet/services'
+import { openPopupWindow } from '../../../../../background/services/helper'
 
 export class MaskWallet implements Middleware<Context> {
     private provider = new MaskWalletProvider(ProviderType.MaskWallet)
@@ -43,6 +46,26 @@ export class MaskWallet implements Middleware<Context> {
         }
 
         switch (context.request.method) {
+            case EthereumMethodType.MASK_REQUEST_ACCOUNTS:
+                try {
+                    const wallets = await WalletRPC.getWallets(ProviderType.MaskWallet)
+
+                    await selectAccountPrepare((accounts, chainId) => {
+                        context.write({
+                            chainId,
+                            accounts,
+                        })
+                    })
+                    await openPopupWindow(wallets.length > 0 ? PopupRoutes.SelectWallet : undefined, {
+                        chainId: context.chainId,
+                    })
+                } catch (error) {
+                    context.abort(error, 'Failed to connect to Mask Network.')
+                }
+                break
+            case EthereumMethodType.MASK_DISMISS_ACCOUNTS:
+                context.write(undefined)
+                break
             case EthereumMethodType.ETH_SEND_TRANSACTION:
                 const config = context.config
 

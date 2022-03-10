@@ -6,7 +6,6 @@ import SDK from '@walletconnect/web3-provider'
 import { ChainId, getRPCConstants, ProviderType } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, useProviderType, useChainId } from '@masknet/plugin-infra'
 import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
-import { WalletRPC } from '../../../Wallet/messages'
 import Services from '../../../../extension/service'
 import { EVM_Messages } from '../../messages'
 
@@ -29,25 +28,14 @@ export function WalletConnectProviderBridge(props: WalletConnectProviderBridgePr
     const providerType = useProviderType<ProviderType>(NetworkPluginID.PLUGIN_EVM)
 
     const onMounted = useCallback(async () => {
-        if (!isContextMatched || providerType !== ProviderType.WalletConnect) return
-        const connected = await Services.Ethereum.connect({
-            providerType,
-        })
-        await WalletRPC.updateAccount({
-            account: connected.account,
-            chainId: connected.chainId,
-            providerType,
-        })
+        if (!isContextMatched || providerType !== ProviderType.WalletConnect || provider.connected) return
+        await Services.Ethereum.connect(providerType)
     }, [chainId, providerType])
 
     useEffect(() => {
         return EVM_Messages.events.WALLET_CONNECT_PROVIDER_RPC_REQUEST.on(async ({ payload }) => {
-            console.log('DEBUG: WALLET_CONNECT_PROVIDER_RPC_REQUEST')
-            console.log({
-                payload,
-            })
-
             if (!isContextMatched) return
+            if (!provider.connected) await provider.enable()
             try {
                 const result = await provider.request({
                     method: payload.method,
@@ -59,33 +47,55 @@ export function WalletConnectProviderBridge(props: WalletConnectProviderBridgePr
                     error: null,
                 })
             } catch (error) {
+                console.log('DEBUG: WALLET_CONNECT_PROVIDER_RPC_REQUEST error')
+                console.log({
+                    error,
+                })
+
                 EVM_Messages.events.WALLET_CONNECT_PROVIDER_RPC_RESPONSE.sendToBackgroundPage({
                     payload,
-                    error: error instanceof Error ? error : new Error(),
+                    error:
+                        error instanceof Error
+                            ? error
+                            : new Error(
+                                  (error as { message?: string } | undefined)?.message || 'Failed to send transction.',
+                              ),
                 })
             }
         })
     }, [])
 
     useEffect(() => {
-        return provider.on('accountsChanged', async (accounts: string[]) => {
+        const callback = async (accounts: string[]) => {
             if (!isContextMatched) return
             await Services.Ethereum.notifyEvent(providerType, 'accountsChanged', accounts)
-        })
+        }
+        provider.on('accountsChanged', callback)
+        return () => {
+            provider.off('accountsChanged', callback)
+        }
     }, [providerType])
 
     useEffect(() => {
-        return provider.on('chainChanged', async (chainId: ChainId) => {
+        const callback = async (chainId: ChainId) => {
             if (!isContextMatched) return
             await Services.Ethereum.notifyEvent(providerType, 'chainChanged', chainId)
-        })
+        }
+        provider.on('chainChanged', callback)
+        return () => {
+            provider.off('chainChanged', callback)
+        }
     }, [providerType])
 
     useEffect(() => {
-        return provider.on('disconnect', async () => {
+        const callback = async () => {
             if (!isContextMatched) return
             await Services.Ethereum.notifyEvent(providerType, 'disconnect')
-        })
+        }
+        provider.on('disconnect', callback)
+        return () => {
+            provider.off('disconnect', callback)
+        }
     }, [providerType])
 
     useMount(onMounted)

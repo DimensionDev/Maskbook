@@ -1,20 +1,10 @@
 import Web3 from 'web3'
 import type { HttpProvider, RequestArguments } from 'web3-core'
 import type { JsonRpcResponse } from 'web3-core-helpers'
-import { PopupRoutes } from '@masknet/shared-base'
-import {
-    ChainId,
-    createExternalProvider,
-    createPayload,
-    getChainRPC,
-    getRPCConstants,
-    ProviderType,
-} from '@masknet/web3-shared-evm'
-import { getWallets, selectAccountPrepare } from '../../../../plugins/Wallet/services'
+import { ChainId, createExternalProvider, createPayload, getChainRPC, getRPCConstants } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base'
 import type { Provider, ProviderOptions, Web3Options } from '../types'
 import { currentChainIdSettings } from '../../../../plugins/Wallet/settings'
-import { openPopupWindow } from '../../../../../background/services/helper'
 
 const WEIGHTS_LENGTH = getRPCConstants(ChainId.Mainnet).RPC_WEIGHTS?.length ?? 4
 
@@ -86,28 +76,5 @@ export class MaskWalletProvider extends BaseProvider implements Provider {
             })
         }
         return createExternalProvider(request)
-    }
-
-    override async requestAccounts(chainId?: ChainId) {
-        return new Promise<{
-            chainId: ChainId
-            accounts: string[]
-        }>(async (resolve, reject) => {
-            try {
-                const wallets = await getWallets(ProviderType.MaskWallet)
-
-                await selectAccountPrepare((accounts, chainId) => {
-                    resolve({
-                        chainId,
-                        accounts,
-                    })
-                })
-                await openPopupWindow(wallets.length > 0 ? PopupRoutes.SelectWallet : undefined, {
-                    chainId,
-                })
-            } catch {
-                reject(new Error('Failed to connect to Mask Network.'))
-            }
-        })
     }
 }

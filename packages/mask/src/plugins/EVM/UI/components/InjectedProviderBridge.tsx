@@ -5,30 +5,26 @@ import { NetworkPluginID, useChainId, useProviderType } from '@masknet/plugin-in
 import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import { EVM_Messages } from '../../messages'
 import Services from '../../../../extension/service'
-import { WalletRPC } from '../../../Wallet/messages'
 import { useBridgedProvider } from '../../hooks'
 
 const isContextMatched = !isDashboardPage() && !isPopupPage()
 
 export interface InjectedProviderBridgeProps {
-    type: ProviderType
+    injectedProviderType:
+        | ProviderType.MetaMask
+        | ProviderType.Coin98
+        | ProviderType.WalletLink
+        | ProviderType.MathWallet
 }
 
-export function InjectedProviderBridge({ type }: InjectedProviderBridgeProps) {
+export function InjectedProviderBridge({ injectedProviderType: type }: InjectedProviderBridgeProps) {
     const chainId = useChainId<ChainId>(NetworkPluginID.PLUGIN_EVM)
     const providerType = useProviderType<ProviderType>(NetworkPluginID.PLUGIN_EVM)
     const bridgedProvider = useBridgedProvider(type)
 
     const onMounted = useCallback(async () => {
         if (!isContextMatched || type !== providerType) return
-        const connected = await Services.Ethereum.connect({
-            providerType,
-        })
-        await WalletRPC.updateAccount({
-            account: connected.account,
-            chainId: connected.chainId,
-            providerType,
-        })
+        await Services.Ethereum.connect(providerType)
     }, [chainId, providerType])
 
     useEffect(() => {
@@ -46,10 +42,15 @@ export function InjectedProviderBridge({ type }: InjectedProviderBridgeProps) {
                     error: null,
                 })
             } catch (error) {
+                console.log('DEBUG: INJECTED_PROVIDER_RPC_RESPONSE error')
+                console.log({
+                    error,
+                })
+
                 EVM_Messages.events.INJECTED_PROVIDER_RPC_RESPONSE.sendToBackgroundPage({
                     providerType: type,
                     payload,
-                    error: error instanceof Error ? error : new Error(),
+                    error: error instanceof Error ? error : new Error('Failed to send transction.'),
                 })
             }
         })

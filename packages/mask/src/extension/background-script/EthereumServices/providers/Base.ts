@@ -30,16 +30,6 @@ export class BaseProvider implements Provider {
         return this.web3
     }
 
-    async requestAccounts() {
-        const web3 = await this.createWeb3()
-        const chainId = await web3.eth.getChainId()
-        const accounts = await web3.eth.requestAccounts()
-        return {
-            chainId,
-            accounts,
-        }
-    }
-
     async ensureConnectedAndUnlocked() {
         try {
             const web3 = await this.createWeb3()

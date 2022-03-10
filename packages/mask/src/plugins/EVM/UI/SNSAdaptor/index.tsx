@@ -17,8 +17,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
     GlobalInjection() {
         return (
             <>
-                <InjectedProviderBridge type={ProviderType.MetaMask} />
-                <InjectedProviderBridge type={ProviderType.Coin98} />
+                <InjectedProviderBridge injectedProviderType={ProviderType.MetaMask} />
+                <InjectedProviderBridge injectedProviderType={ProviderType.Coin98} />
                 <WalletConnectProviderBridge />
                 <FortmaticProviderBridge />
             </>

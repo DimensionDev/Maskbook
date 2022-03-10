@@ -7,8 +7,8 @@ import { WalletConnect } from '../interceptors/WalletConnect'
 export class Interceptor implements Middleware<Context> {
     private interceptors: Partial<Record<ProviderType, Middleware<Context>>> = {
         [ProviderType.MaskWallet]: new MaskWallet(),
-        [ProviderType.MetaMask]: new Injected(ProviderType.MetaMask),
-        [ProviderType.Coin98]: new Injected(ProviderType.Coin98),
+        [ProviderType.MetaMask]: new Injected(),
+        [ProviderType.Coin98]: new Injected(),
         [ProviderType.WalletConnect]: new WalletConnect(),
     }
 

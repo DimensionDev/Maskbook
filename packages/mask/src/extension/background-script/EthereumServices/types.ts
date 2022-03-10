@@ -28,12 +28,6 @@ export interface Provider {
     createProvider?(options?: ProviderOptions): Promise<HttpProvider>
     createExternalProvider(options?: ProviderOptions): Promise<ExternalProvider>
 
-    requestAccounts(chainId?: ChainId): Promise<{
-        chainId: ChainId
-        accounts: string[]
-    }>
-    dismissAccounts?(chainId?: ChainId): Promise<void>
-
     onAccountsChanged?(accounts: string[]): Promise<void>
     onChainIdChanged?(id: string): Promise<void>
     onDisconnect?(): Promise<void>

@@ -131,12 +131,14 @@ export function WalletStatusBox(props: WalletStatusBox) {
 
     const onDisconnect = useCallback(async () => {
         switch (providerType) {
+            case ProviderType.MaskWallet:
+            case ProviderType.MetaMask:
+            case ProviderType.Coin98:
             case ProviderType.WalletConnect:
             case ProviderType.Fortmatic:
-                await Services.Ethereum.disconnect({
-                    chainId,
-                    providerType: ProviderType.Fortmatic,
-                })
+                await Services.Ethereum.discconect(providerType)
+                break
+            default:
                 break
         }
     }, [chainId, providerType])

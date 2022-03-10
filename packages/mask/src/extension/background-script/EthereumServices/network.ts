@@ -378,3 +378,25 @@ export async function cancelRequest(
         options,
     )
 }
+
+export function requestAccounts(overrides?: SendOverrides, options?: RequestOptions) {
+    return request<string[]>(
+        {
+            method: EthereumMethodType.MASK_REQUEST_ACCOUNTS,
+            parmas: [],
+        },
+        overrides,
+        options,
+    )
+}
+
+export function dismissAccounts(overrides?: SendOverrides, options?: RequestOptions) {
+    return request<void>(
+        {
+            method: EthereumMethodType.MASK_DISMISS_ACCOUNTS,
+            parmas: [],
+        },
+        overrides,
+        options,
+    )
+}

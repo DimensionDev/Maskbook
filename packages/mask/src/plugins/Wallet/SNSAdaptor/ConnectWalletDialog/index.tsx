@@ -54,6 +54,8 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
 
         // a short time loading makes the user fells better
         await delay(1000)
+
+        // try to read the currently select chain id and account from the provider
         let account: string | undefined
         let chainId: ChainId | undefined
 
@@ -65,10 +67,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             case ProviderType.WalletLink:
             case ProviderType.MathWallet:
             case ProviderType.Fortmatic:
-                ;({ account, chainId } = await Services.Ethereum.connect({
-                    chainId: expectedChainId,
-                    providerType,
-                }))
+                ;({ account, chainId } = await Services.Ethereum.connect(providerType))
                 break
             case ProviderType.CustomNetwork:
                 throw new Error('To be implemented.')
@@ -80,7 +79,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
         // connection failed
         if (!account || !networkType) throw new Error(`Failed to connect to ${resolveProviderName(providerType)}.`)
 
-        // switch to the expected chain
+        // switch to the expected chain automatically
         if (chainId !== expectedChainId) {
             try {
                 const overrides = {
@@ -103,8 +102,8 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
                 }
 
                 // recheck
-                const chainIdHex = await Services.Ethereum.getChainId(overrides)
-                if (Number.parseInt(chainIdHex, 16) !== expectedChainId) throw new Error('Failed to switch chain.')
+                const chainId = Number.parseInt(await Services.Ethereum.getChainId(overrides), 16)
+                if (chainId !== expectedChainId) throw new Error('Failed to switch chain, please try again later.')
             } catch {
                 throw new Error(`Make sure your wallet is on the ${resolveNetworkName(networkType)} network.`)
             }

@@ -6,7 +6,6 @@ import * as Fortmatic from '@masknet/web3-shared-evm/providers/Fortmatic'
 import { NetworkPluginID, useChainId, useProviderType } from '@masknet/plugin-infra'
 import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import { EVM_Messages } from '../../messages'
-import { WalletRPC } from '../../../Wallet/messages'
 import Services from '../../../../extension/service'
 
 const isContextMatched = !isDashboardPage() && !isPopupPage()
@@ -20,15 +19,7 @@ export function FortmaticProviderBridge(props: FortmaticProviderBridgeProps) {
     const onMounted = useCallback(async () => {
         if (!isContextMatched) return
         if (providerType !== ProviderType.Fortmatic) return
-        const connected = await Services.Ethereum.connect({
-            chainId: isFortmaticSupported(chainId) ? chainId : ChainId.Mainnet,
-            providerType: ProviderType.Fortmatic,
-        })
-        await WalletRPC.updateAccount({
-            account: connected.account,
-            chainId: connected.chainId,
-            providerType,
-        })
+        await Services.Ethereum.connect(providerType)
     }, [chainId, providerType])
 
     useEffect(() => {
@@ -38,7 +29,7 @@ export function FortmaticProviderBridge(props: FortmaticProviderBridgeProps) {
                 if (error) {
                     EVM_Messages.events.FORTMATIC_PROVIDER_RPC_RESPONSE.sendToBackgroundPage({
                         payload,
-                        error: error instanceof Error ? error : new Error(),
+                        error: error instanceof Error ? error : new Error('Failed to send transction.'),
                     })
                     return
                 }
@@ -50,19 +41,19 @@ export function FortmaticProviderBridge(props: FortmaticProviderBridgeProps) {
             }
 
             const chainIdFinally = (
-                payload.method === EthereumMethodType.MASK_LOGIN_FORTMATIC ? first<ChainId>(payload.params) : chainId
+                payload.method === EthereumMethodType.MASK_REQUEST_ACCOUNTS ? first<ChainId>(payload.params) : chainId
             ) as Fortmatic.ChainIdFortmatic
             if (!chainIdFinally || !isFortmaticSupported(chainIdFinally)) throw new Error('Not supported.')
 
             try {
                 switch (payload.method) {
-                    case EthereumMethodType.MASK_LOGIN_FORTMATIC:
+                    case EthereumMethodType.MASK_REQUEST_ACCOUNTS:
                         handleResponse(null, {
                             chainId: chainIdFinally,
                             accounts: await Fortmatic.login(chainIdFinally),
                         })
                         break
-                    case EthereumMethodType.MASK_LOGOUT_FORTMATIC:
+                    case EthereumMethodType.MASK_DISMISS_ACCOUNTS:
                         handleResponse(null, await Fortmatic.logout(chainIdFinally))
                         break
                     default:

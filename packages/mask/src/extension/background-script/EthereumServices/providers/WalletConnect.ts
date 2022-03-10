@@ -8,21 +8,6 @@ import { EVM_Messages } from '../../../../plugins/EVM/messages'
 export class WalletConnectProvider extends BaseProvider implements Provider {
     private id = 0
 
-    // public async signPersonalMessage(data: string, address: string, password: string) {
-    //     if (!this.connector) throw new Error('Connection Lost.')
-    //     return (await this.connector.signPersonalMessage([data, address, password])) as string
-    // }
-
-    // public async sendCustomRequest(payload: IJsonRpcRequest) {
-    //     if (!this.connector) throw new Error('Connection Lost.')
-    //     return (await this.connector.sendCustomRequest(payload as IJsonRpcRequest)) as JsonRpcResponse
-    // }
-
-    // public async signTypedDataMessage(data: string, address: string) {
-    //     if (!this.connector) throw new Error('Connection Lost.')
-    //     return (await this.connector.signTypedData([data, address])) as string
-    // }
-
     override async request<T extends unknown>(requestArguments: RequestArguments) {
         const requestId = this.id++
         const [deferred, resolve, reject] = defer<T, Error | null>()
