@@ -2,7 +2,8 @@ import { createReactRootShadowedPartial, setupPortalShadowRoot, CSSVariableInjec
 import { Flags } from '../../../shared'
 import { MaskUIRoot } from '../../UIRoot'
 import { useClassicMaskSNSTheme } from '../theme'
-import { createRoot } from 'react-dom'
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
 
 const captureEvents: (keyof HTMLElementEventMap)[] = [
     'paste',
@@ -20,10 +21,12 @@ const captureEvents: (keyof HTMLElementEventMap)[] = [
 export const setupShadowRootPortal = () => {
     const shadow = setupPortalShadowRoot({ mode: Flags.using_ShadowDOM_attach_mode }, captureEvents)
     createRoot(shadow.appendChild(document.createElement('head'))).render(
-        <main>
-            <head />
-            <CSSVariableInjector useTheme={useClassicMaskSNSTheme} />
-        </main>,
+        <StrictMode>
+            <main>
+                <head />
+                <CSSVariableInjector useTheme={useClassicMaskSNSTheme} />
+            </main>
+        </StrictMode>,
     )
 }
 
