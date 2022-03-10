@@ -5,6 +5,7 @@ import { setupStorage, StorageDefaultValue } from '../../storage'
 import { InjectedProviderBridge } from '../components/InjectedProviderBridge'
 import { FortmaticProviderBridge } from '../components/FortmaticProviderBridge'
 import { ProviderType } from '@masknet/web3-shared-evm'
+import { WalletConnectProviderBridge } from '../components/WalletConnectProviderBridge'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -18,6 +19,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             <>
                 <InjectedProviderBridge type={ProviderType.MetaMask} />
                 <InjectedProviderBridge type={ProviderType.Coin98} />
+                <WalletConnectProviderBridge />
                 <FortmaticProviderBridge />
             </>
         )

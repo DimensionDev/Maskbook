@@ -1,5 +1,4 @@
 import { first } from 'lodash-unified'
-import { defer } from '@dimensiondev/kit'
 import { ChainId, createLookupTableResolver, ProviderType } from '@masknet/web3-shared-evm'
 import { InjectedProvider } from './providers/Injected'
 import { MaskWalletProvider } from './providers/MaskWallet'
@@ -74,52 +73,8 @@ export async function disconnect({
     await provider?.dismissAccounts?.(chainId)
 }
 
-// #region connect WalletConnect
-// step 1:
-// Generate the connection URI and render a QRCode for scanning by the user
-export async function createConnectionURI() {
-    const provider = getProvider(ProviderType.WalletConnect) as WalletConnectProvider
-    return (await provider.createConnector()).uri
-}
-
-// step2:
-// If user confirmed the request we will receive the 'connect' event
-let resolveConnect: ((result: { account?: string; chainId: ChainId }) => void) | undefined
-let rejectConnect: ((error: Error) => void) | undefined
-
-export async function connectWalletConnect() {
-    const [deferred, resolve, reject] = defer<{ account?: string; chainId: ChainId }>()
-
-    resolveConnect = resolve
-    rejectConnect = reject
-    createWalletConnect().then(resolve, reject)
-
-    return deferred
-}
-
-export async function createWalletConnect() {
-    const provider = getProvider(ProviderType.WalletConnect) as WalletConnectProvider
-    const connector = await provider.createConnectorIfNeeded()
-    if (connector.connected)
-        return {
-            account: first(connector.accounts),
-            chainId: connector.chainId,
-        }
-
-    const { accounts, chainId } = await provider.requestAccounts()
-    return {
-        account: first(accounts),
-        chainId,
-    }
-}
-
-export async function cancelWalletConnect() {
-    rejectConnect?.(new Error('Failed to connect to WalletConnect.'))
-}
-// #endregion
-
 //#region connect injected provider
-export async function notifyEvent(providerType: ProviderType, name: string, event: unknown) {
+export async function notifyEvent(providerType: ProviderType, name: string, event?: unknown) {
     const provider = getProvider(providerType)
 
     switch (name) {
@@ -128,6 +83,8 @@ export async function notifyEvent(providerType: ProviderType, name: string, even
             break
         case 'chainChanged':
             await provider?.onChainIdChanged?.(event as string)
+            break
+        case 'disconnect':
             break
         default:
             throw new Error(`Unknown event name: ${name}.`)

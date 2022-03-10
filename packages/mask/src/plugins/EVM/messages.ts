@@ -17,6 +17,14 @@ export interface EVM_Messages {
         result?: unknown
         error: Error | null
     }
+    WALLET_CONNECT_PROVIDER_RPC_REQUEST: {
+        payload: JsonRpcPayload
+    }
+    WALLET_CONNECT_PROVIDER_RPC_RESPONSE: {
+        payload: JsonRpcPayload
+        result?: unknown
+        error: Error | null
+    }
     FORTMATIC_PROVIDER_RPC_REQUEST: {
         payload: JsonRpcPayload
     }

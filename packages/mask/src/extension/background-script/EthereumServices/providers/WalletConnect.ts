@@ -1,127 +1,82 @@
-import type { JsonRpcResponse } from 'web3-core-helpers'
 import { first } from 'lodash-unified'
-import WalletConnect from '@walletconnect/client'
-import type { IJsonRpcRequest } from '@walletconnect/types'
-import { ProviderType, ChainId, EthereumMethodType, createPayload } from '@masknet/web3-shared-evm'
-import { resetAccount, updateAccount } from '../../../../plugins/Wallet/services'
-import { currentProviderSettings } from '../../../../plugins/Wallet/settings'
 import type { RequestArguments } from 'web3-core'
+import { defer } from '@dimensiondev/kit'
+import { EthereumMethodType, ProviderType, ChainId } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base'
 import type { Provider } from '../types'
+import { EVM_Messages } from '../../../../plugins/EVM/messages'
+import { currentChainIdSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
+import { WalletRPC } from '../../../../plugins/Wallet/messages'
 
 export class WalletConnectProvider extends BaseProvider implements Provider {
     private id = 0
-    private connector: WalletConnect | null = null
 
-    public async signPersonalMessage(data: string, address: string, password: string) {
-        if (!this.connector) throw new Error('Connection Lost.')
-        return (await this.connector.signPersonalMessage([data, address, password])) as string
-    }
+    // public async signPersonalMessage(data: string, address: string, password: string) {
+    //     if (!this.connector) throw new Error('Connection Lost.')
+    //     return (await this.connector.signPersonalMessage([data, address, password])) as string
+    // }
 
-    public async sendCustomRequest(payload: IJsonRpcRequest) {
-        if (!this.connector) throw new Error('Connection Lost.')
-        return (await this.connector.sendCustomRequest(payload as IJsonRpcRequest)) as JsonRpcResponse
-    }
+    // public async sendCustomRequest(payload: IJsonRpcRequest) {
+    //     if (!this.connector) throw new Error('Connection Lost.')
+    //     return (await this.connector.sendCustomRequest(payload as IJsonRpcRequest)) as JsonRpcResponse
+    // }
 
-    public async signTypedDataMessage(data: string, address: string) {
-        if (!this.connector) throw new Error('Connection Lost.')
-        return (await this.connector.signTypedData([data, address])) as string
-    }
+    // public async signTypedDataMessage(data: string, address: string) {
+    //     if (!this.connector) throw new Error('Connection Lost.')
+    //     return (await this.connector.signTypedData([data, address])) as string
+    // }
 
-    override async request<T>(requestArguments: RequestArguments) {
+    override async request<T extends unknown>(requestArguments: RequestArguments) {
         const requestId = this.id++
-        const { method, params } = requestArguments
+        const [deferred, resolve, reject] = defer<T, Error | null>()
 
-        switch (method) {
-            case EthereumMethodType.PERSONAL_SIGN:
-                const [data, address] = params as [string, string]
-                return this.signPersonalMessage(data, address, '') as unknown as T
-            case EthereumMethodType.ETH_SEND_TRANSACTION:
-                const response = await this.sendCustomRequest(createPayload(requestId, method, params))
-                return response.result as T
-            default:
-                throw new Error('Not implemented.')
+        const onResponse = ({ payload, result, error }: EVM_Messages['WALLET_CONNECT_PROVIDER_RPC_RESPONSE']) => {
+            if (payload.id !== requestId) return
+            if (error) reject(error)
+            else resolve(result as T)
         }
-    }
 
-    /**
-     * Create a new connector and destroy the previous one if exists
-     */
-    async createConnector() {
-        if (this.connector?.connected) return this.connector
+        const timer = setTimeout(
+            () => {
+                reject(new Error('The request is timeout.'))
+            },
+            requestArguments.method === EthereumMethodType.ETH_REQUEST_ACCOUNTS ? 3 * 60 * 1000 : 45 * 1000,
+        )
 
-        // create a new connector
-        this.connector = new WalletConnect({
-            bridge: 'https://uniswap.bridge.walletconnect.org',
-            clientMeta: {
-                name: 'Mask Network',
-                description: 'Mask Network',
-                url: 'https://mask.io',
-                icons: ['https://mask.io/apple-touch-icon.png'],
+        deferred.finally(() => {
+            clearTimeout(timer)
+            EVM_Messages.events.WALLET_CONNECT_PROVIDER_RPC_RESPONSE.off(onResponse)
+        })
+
+        EVM_Messages.events.WALLET_CONNECT_PROVIDER_RPC_RESPONSE.on(onResponse)
+        EVM_Messages.events.WALLET_CONNECT_PROVIDER_RPC_REQUEST.sendToVisiblePages({
+            payload: {
+                jsonrpc: '2.0',
+                id: requestId,
+                params: [],
+                ...requestArguments,
             },
         })
-        this.connector.on('connect', this.onConnect)
-        this.connector.on('session_update', this.onUpdate)
-        this.connector.on('disconnect', this.onDisconnect)
-        this.connector.on('error', this.onDisconnect)
-        if (!this.connector.connected) await this.connector.createSession()
-        return this.connector
+
+        return deferred
     }
 
-    async createConnectorIfNeeded() {
-        if (this.connector) return this.connector
-        return this.createConnector()
-    }
-
-    private onConnect() {
-        this.onUpdate(null)
-    }
-
-    private async onUpdate(
-        error: Error | null,
-        payload?: {
-            params: {
-                chainId: number
-                accounts: string[]
-            }[]
-        },
-    ) {
-        if (error) return
-        if (!this.connector?.accounts.length) return
+    async onAccountsChanged(accounts: string[]) {
         if (currentProviderSettings.value !== ProviderType.WalletConnect) return
-        await updateAccount({
-            name: this.connector.peerMeta?.name,
-            account: first(this.connector.accounts),
-            chainId: this.connector.chainId,
+        await WalletRPC.updateAccount({
+            account: first(accounts),
             providerType: ProviderType.WalletConnect,
         })
     }
 
-    private async onDisconnect(error: Error | null) {
-        if (this.connector?.connected) await this.connector.killSession()
-        this.connector = null
+    async onChainIdChanged(id: string) {
         if (currentProviderSettings.value !== ProviderType.WalletConnect) return
-        await resetAccount({
-            providerType: ProviderType.WalletConnect,
-        })
-    }
 
-    override async requestAccounts() {
-        const connector = await this.createConnectorIfNeeded()
-        return new Promise<{ accounts: string[]; chainId: ChainId }>(async (resolve, reject) => {
-            function resolve_() {
-                resolve({
-                    accounts: connector.accounts,
-                    chainId: connector.chainId,
-                })
-            }
-            if (connector.accounts.length) {
-                resolve_()
-                return
-            }
-            connector.on('connect', resolve_)
-            connector.on('update', resolve_)
-            connector.on('error', reject)
+        // learn more: https://docs.metamask.io/guide/ethereum-provider.html#chain-ids and https://chainid.network/
+        const chainId = Number.parseInt(id, 16) || ChainId.Mainnet
+        if (currentChainIdSettings.value === chainId) return
+        await WalletRPC.updateAccount({
+            chainId,
         })
     }
 }

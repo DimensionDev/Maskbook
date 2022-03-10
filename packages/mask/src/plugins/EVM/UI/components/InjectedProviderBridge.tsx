@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useMemo } from 'react'
+import { useEffect, useCallback } from 'react'
 import { useMount } from 'react-use'
 import type { ProviderType, ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, useChainId, useProviderType } from '@masknet/plugin-infra'
@@ -8,6 +8,8 @@ import Services from '../../../../extension/service'
 import { WalletRPC } from '../../../Wallet/messages'
 import { useBridgedProvider } from '../../hooks'
 
+const isContextMatched = !isDashboardPage() && !isPopupPage()
+
 export interface InjectedProviderBridgeProps {
     type: ProviderType
 }
@@ -16,10 +18,6 @@ export function InjectedProviderBridge({ type }: InjectedProviderBridgeProps) {
     const chainId = useChainId<ChainId>(NetworkPluginID.PLUGIN_EVM)
     const providerType = useProviderType<ProviderType>(NetworkPluginID.PLUGIN_EVM)
     const bridgedProvider = useBridgedProvider(type)
-    const isContextMatched = useMemo(() => {
-        if (isDashboardPage() || isPopupPage()) return false
-        return true
-    }, [])
 
     const onMounted = useCallback(async () => {
         if (!isContextMatched || type !== providerType) return
@@ -31,16 +29,10 @@ export function InjectedProviderBridge({ type }: InjectedProviderBridgeProps) {
             chainId: connected.chainId,
             providerType,
         })
-    }, [chainId, providerType, isContextMatched])
+    }, [chainId, providerType])
 
     useEffect(() => {
         return EVM_Messages.events.INJECTED_PROVIDER_RPC_REQUEST.on(async ({ providerType: actualType, payload }) => {
-            console.log('DEBUG: INJECTED_PROVIDER_RPC_REQUEST')
-            console.log({
-                actualType,
-                payload,
-            })
-
             if (type !== actualType || !isContextMatched) return
             try {
                 const result = await bridgedProvider.request({
@@ -61,21 +53,21 @@ export function InjectedProviderBridge({ type }: InjectedProviderBridgeProps) {
                 })
             }
         })
-    }, [type, bridgedProvider, isContextMatched])
+    }, [type, bridgedProvider])
 
     useEffect(() => {
         return bridgedProvider.on('accountsChanged', async (event) => {
             if (!isContextMatched) return
             await Services.Ethereum.notifyEvent(providerType, 'accountsChanged', event)
         })
-    }, [providerType, bridgedProvider, isContextMatched])
+    }, [providerType, bridgedProvider])
 
     useEffect(() => {
         return bridgedProvider.on('chainChanged', async (event) => {
             if (!isContextMatched) return
             await Services.Ethereum.notifyEvent(providerType, 'chainChanged', event)
         })
-    }, [providerType, bridgedProvider, isContextMatched])
+    }, [providerType, bridgedProvider])
 
     useMount(onMounted)
 

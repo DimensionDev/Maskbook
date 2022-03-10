@@ -129,20 +129,9 @@ export function WalletStatusBox(props: WalletStatusBox) {
     )
     // #endregion
 
-    // #region walletconnect
-    const { setDialog: setWalletConnectDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletConnectQRCodeDialogUpdated,
-    )
-    // #endregion
-
     const onDisconnect = useCallback(async () => {
         switch (providerType) {
             case ProviderType.WalletConnect:
-                setWalletConnectDialog({
-                    open: true,
-                    uri: await Services.Ethereum.createConnectionURI(),
-                })
-                break
             case ProviderType.Fortmatic:
                 await Services.Ethereum.disconnect({
                     chainId,
@@ -150,7 +139,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                 })
                 break
         }
-    }, [chainId, providerType, setWalletConnectDialog])
+    }, [chainId, providerType])
 
     const onChange = useCallback(() => {
         openSelectProviderDialog()

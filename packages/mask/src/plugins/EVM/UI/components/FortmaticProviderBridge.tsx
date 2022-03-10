@@ -9,6 +9,8 @@ import { EVM_Messages } from '../../messages'
 import { WalletRPC } from '../../../Wallet/messages'
 import Services from '../../../../extension/service'
 
+const isContextMatched = !isDashboardPage() && !isPopupPage()
+
 export interface FortmaticProviderBridgeProps {}
 
 export function FortmaticProviderBridge(props: FortmaticProviderBridgeProps) {
@@ -16,7 +18,7 @@ export function FortmaticProviderBridge(props: FortmaticProviderBridgeProps) {
     const providerType = useProviderType<ProviderType>(NetworkPluginID.PLUGIN_EVM)
 
     const onMounted = useCallback(async () => {
-        if (isDashboardPage() || isPopupPage()) return
+        if (!isContextMatched) return
         if (providerType !== ProviderType.Fortmatic) return
         const connected = await Services.Ethereum.connect({
             chainId: isFortmaticSupported(chainId) ? chainId : ChainId.Mainnet,
@@ -31,6 +33,7 @@ export function FortmaticProviderBridge(props: FortmaticProviderBridgeProps) {
 
     useEffect(() => {
         return EVM_Messages.events.FORTMATIC_PROVIDER_RPC_REQUEST.on(async ({ payload }) => {
+            if (!isContextMatched) return
             const handleResponse = (error: unknown, result?: any) => {
                 if (error) {
                     EVM_Messages.events.FORTMATIC_PROVIDER_RPC_RESPONSE.sendToBackgroundPage({

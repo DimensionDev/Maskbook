@@ -4,7 +4,6 @@ import { SelectTokenDialog } from './SelectTokenDialog'
 import { SelectNftContractDialog } from './SelectNftContractDialog'
 import { SelectProviderDialog } from './SelectProviderDialog'
 import { SelectWalletDialog } from './SelectWalletDialog'
-import { WalletConnectQRCodeDialog } from './WalletConnectQRCodeDialog'
 import { WalletStatusDialog } from './WalletStatusDialog'
 import { WalletRenameWalletDialog } from './RenameWalletDialog'
 import { TransactionDialog } from './TransactionDialog'
@@ -27,7 +26,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 <SelectNftContractDialog />
                 <WalletStatusDialog />
                 <ConnectWalletDialog />
-                <WalletConnectQRCodeDialog />
                 <WalletRenameWalletDialog />
                 <WalletRiskWarningDialog />
                 <RestoreLegacyWalletDialog />

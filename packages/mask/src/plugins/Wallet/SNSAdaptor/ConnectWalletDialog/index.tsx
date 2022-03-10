@@ -43,12 +43,6 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     )
     // #endregion
 
-    // #region walletconnect
-    const { setDialog: setWalletConnectDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletConnectQRCodeDialogUpdated,
-    )
-    // #endregion
-
     const connectTo = useCallback(async () => {
         if (!networkType) throw new Error('Unknown network type.')
         if (!providerType) throw new Error('Unknown provider type.')
@@ -66,6 +60,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
         switch (providerType) {
             case ProviderType.MaskWallet:
             case ProviderType.MetaMask:
+            case ProviderType.WalletConnect:
             case ProviderType.Coin98:
             case ProviderType.WalletLink:
             case ProviderType.MathWallet:
@@ -74,20 +69,6 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
                     chainId: expectedChainId,
                     providerType,
                 }))
-                break
-            case ProviderType.WalletConnect:
-                // create wallet connect QR code URI
-                const uri = await Services.Ethereum.createConnectionURI()
-                if (!uri) throw new Error('Failed to create connection URI.')
-
-                // open the QR code dialog
-                setWalletConnectDialog({
-                    open: true,
-                    uri,
-                })
-
-                // wait for walletconnect to be connected
-                ;({ account, chainId } = await Services.Ethereum.connectWalletConnect())
                 break
             case ProviderType.CustomNetwork:
                 throw new Error('To be implemented.')
