@@ -1,15 +1,15 @@
-import { useI18N } from '../locales'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Skeleton, Stack, Typography } from '@mui/material'
 import { useMemo, useState } from 'react'
-import { BindDialog } from './BindDialog'
 import { useAsync, useAsyncRetry, useCounter } from 'react-use'
-import Services from '../../../extension/service'
-import { BindingItem } from './BindingItem'
-import type { Platform } from '../types'
-import { UnbindDialog } from './UnbindDialog'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
+import Services from '../../../extension/service'
+import { useI18N } from '../locales'
+import type { Platform } from '../types'
+import { BindDialog } from './BindDialog'
+import { BindingItem } from './BindingItem'
+import { UnbindDialog } from './UnbindDialog'
 
 const useStyles = makeStyles()((theme) => ({
     tip: {

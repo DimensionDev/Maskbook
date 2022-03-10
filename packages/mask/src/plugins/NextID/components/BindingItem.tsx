@@ -10,6 +10,7 @@ import { NetworkPluginID, useNetworkDescriptor, useWeb3State } from '@masknet/pl
 import { useI18N } from '../locales'
 import { ImageIcon } from '@masknet/shared'
 import { TipButton } from './tip'
+import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
 
 const useStyles = makeStyles()((theme) => ({
     item: {
@@ -65,6 +66,7 @@ export const BindingItem = memo<Item>(({ platform, identity, tipable, deletable,
     const { Utils } = useWeb3State() ?? {}
     const { classes } = useStyles()
     const networkDescriptor = useNetworkDescriptor(ChainId.Mainnet, NetworkPluginID.PLUGIN_EVM)
+    const visitingPersona = useCurrentVisitingIdentity()
 
     if (platform === Platform.ethereum) {
         return (
@@ -90,7 +92,10 @@ export const BindingItem = memo<Item>(({ platform, identity, tipable, deletable,
                 </Stack>
                 <Box>
                     {tipable ? (
-                        <TipButton addresses={[identity]} className={classes.tipButton}>
+                        <TipButton
+                            addresses={[identity]}
+                            receiver={visitingPersona.identifier}
+                            className={classes.tipButton}>
                             <span className={classes.tipButtonLabel}>{t.tip()}</span>
                         </TipButton>
                     ) : null}

@@ -2,6 +2,7 @@ import { Currency } from '@masknet/icons'
 import { usePostInfoDetails } from '@masknet/plugin-infra'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
+import { EMPTY_LIST } from '@masknet/web3-shared-evm'
 import classnames from 'classnames'
 import { FC, HTMLProps, MouseEventHandler, useCallback, useMemo } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
@@ -24,19 +25,23 @@ const useStyles = makeStyles()({
         height: 46,
         alignItems: 'center',
     },
+    disabled: {
+        opacity: 0.4,
+        cursor: 'default',
+    },
 })
 
 export const TipButton: FC<Props> = ({ className, receiver, addresses = [], children, ...rest }) => {
     const { classes } = useStyles()
 
     const [walletsState, queryBindings] = useAsyncFn(async () => {
-        if (!receiver) return []
+        if (!receiver) return EMPTY_LIST
 
         const persona = await Services.Identity.queryPersonaByProfile(receiver)
-        if (!persona) return []
+        if (!persona) return EMPTY_LIST
 
         const bindings = await Services.Helper.queryExistedBinding(persona.identifier)
-        if (!bindings) return []
+        if (!bindings) return EMPTY_LIST
 
         const wallets = bindings.proofs.filter((p) => p.platform === Platform.ethereum).map((p) => p.identity)
         return wallets
@@ -46,10 +51,13 @@ export const TipButton: FC<Props> = ({ className, receiver, addresses = [], chil
 
     const allAddresses = useMemo(() => [...(walletsState.value || []), ...addresses], [walletsState.value, addresses])
 
+    const disabled = allAddresses.length === 0
+
     const sendTip: MouseEventHandler<HTMLDivElement> = useCallback(
         async (evt) => {
             evt.stopPropagation()
             evt.preventDefault()
+            if (disabled) return
             if (walletsState.loading || !walletsState.value) {
                 await queryBindings()
             }
@@ -59,13 +67,15 @@ export const TipButton: FC<Props> = ({ className, receiver, addresses = [], chil
                 addresses: allAddresses,
             })
         },
-        [walletsState, allAddresses, receiver?.userId],
+        [disabled, walletsState, allAddresses, receiver?.userId],
     )
 
-    if (allAddresses.length === 0) return null
-
     return (
-        <div className={classnames(className, classes.tipButton)} {...rest} role="button" onClick={sendTip}>
+        <div
+            className={classnames(className, classes.tipButton, disabled ? classes.disabled : null)}
+            {...rest}
+            role="button"
+            onClick={sendTip}>
             <Currency htmlColor="#8899a6" viewBox="0 0 24 24" />
             {children}
         </div>
