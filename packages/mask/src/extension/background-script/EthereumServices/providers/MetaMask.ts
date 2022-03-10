@@ -74,30 +74,4 @@ export class MetaMaskProvider extends BaseProvider implements Provider {
         const instance = await this.createProviderInstance()
         return instance.request?.(requestArguments) as Promise<T>
     }
-
-    async ensureConnectedAndUnlocked() {
-        try {
-            const web3 = await this.createWeb3()
-            const accounts = await web3.eth.requestAccounts()
-            throw accounts
-        } catch (error: string[] | any) {
-            const accounts = error
-            if (Array.isArray(accounts)) {
-                if (accounts.length === 0) throw new Error('MetaMask is locked or it has not connected any accounts.')
-                else if (accounts.length > 0) return // valid
-            }
-            // Any other error means failed to connect MetaMask
-            throw new Error('Failed to connect to MetaMask.')
-        }
-    }
-
-    async requestAccounts() {
-        const web3 = await this.createWeb3()
-        const chainId = await web3.eth.getChainId()
-        const accounts = await web3.eth.requestAccounts()
-        return {
-            chainId,
-            accounts,
-        }
-    }
 }

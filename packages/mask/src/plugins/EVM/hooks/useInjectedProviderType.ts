@@ -3,7 +3,7 @@ import { ProviderType } from '@masknet/web3-shared-evm'
 import { useBridgedProvider } from './useBridgedProvider'
 import { useInjectedProviderReady } from './useInjectedProviderReady'
 
-export function useInjectedProviderType(type: 'ethereum' | 'coin98') {
+export function useInjectedProviderType(type: ProviderType) {
     const bridgedProvider = useBridgedProvider(type)
     const injectedProviderReady = useInjectedProviderReady(type)
     const { value: injectedProviderType } = useAsyncRetry(async () => {

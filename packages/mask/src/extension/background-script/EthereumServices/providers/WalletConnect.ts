@@ -106,7 +106,7 @@ export class WalletConnectProvider extends BaseProvider implements Provider {
         })
     }
 
-    async requestAccounts() {
+    override async requestAccounts() {
         const connector = await this.createConnectorIfNeeded()
         return new Promise<{ accounts: string[]; chainId: ChainId }>(async (resolve, reject) => {
             function resolve_() {

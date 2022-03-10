@@ -88,7 +88,7 @@ export class MaskWalletProvider extends BaseProvider implements Provider {
         return createExternalProvider(request)
     }
 
-    async requestAccounts(chainId?: ChainId) {
+    override async requestAccounts(chainId?: ChainId) {
         return new Promise<{
             chainId: ChainId
             accounts: string[]

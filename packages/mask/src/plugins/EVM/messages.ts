@@ -1,5 +1,6 @@
 import { createPluginMessage, createPluginRPC, PluginMessageEmitter } from '@masknet/plugin-infra'
 import { serializer } from '@masknet/shared-base'
+import type { ProviderType } from '@masknet/web3-shared-evm'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { PLUGIN_ID } from './constants'
 
@@ -7,11 +8,13 @@ if (import.meta.webpackHot) import.meta.webpackHot.accept()
 
 export interface EVM_Messages {
     INJECTED_PROVIDER_RPC_REQUEST: {
+        providerType: ProviderType
         payload: JsonRpcPayload
     }
     INJECTED_PROVIDER_RPC_RESPONSE: {
+        providerType: ProviderType
         payload: JsonRpcPayload
-        result?: any
+        result?: unknown
         error: Error | null
     }
     FORTMATIC_PROVIDER_RPC_REQUEST: {
@@ -19,7 +22,7 @@ export interface EVM_Messages {
     }
     FORTMATIC_PROVIDER_RPC_RESPONSE: {
         payload: JsonRpcPayload
-        result?: any
+        result?: unknown
         error: Error | null
     }
     rpc: unknown

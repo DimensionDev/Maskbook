@@ -9,14 +9,14 @@ import type { Provider } from '../types'
 export class FortmaticProvider extends BaseProvider implements Provider {
     private id = 0
 
-    override async request<T>(requestArguments: RequestArguments) {
+    override async request<T extends unknown>(requestArguments: RequestArguments) {
         const requestId = this.id++
         const [deferred, resolve, reject] = defer<T, Error | null>()
 
         function onResponse({ payload, result, error }: EVM_Messages['FORTMATIC_PROVIDER_RPC_RESPONSE']) {
             if (payload.id !== requestId) return
             if (error) reject(error)
-            else resolve(result)
+            else resolve(result as T)
         }
 
         const timer = setTimeout(
@@ -41,7 +41,7 @@ export class FortmaticProvider extends BaseProvider implements Provider {
         return deferred
     }
 
-    async requestAccounts(chainId = ChainId.Mainnet) {
+    override async requestAccounts(chainId = ChainId.Mainnet) {
         const provider = await this.createExternalProvider()
         return provider.request<{
             chainId: ChainId

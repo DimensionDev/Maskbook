@@ -1,10 +1,14 @@
 import type { JsonRpcPayload } from 'web3-core-helpers'
-import { EthereumMethodType } from '@masknet/web3-shared-evm'
-import { MetaMaskProvider } from '../providers/MetaMask'
+import { EthereumMethodType, ProviderType } from '@masknet/web3-shared-evm'
+import { InjectedProvider } from '../providers/Injected'
 import type { Context, Middleware } from '../types'
 
-export class MetaMask implements Middleware<Context> {
-    private provider = new MetaMaskProvider()
+export class Injected implements Middleware<Context> {
+    private provider: InjectedProvider
+
+    constructor(type: ProviderType) {
+        this.provider = new InjectedProvider(type)
+    }
 
     private isPopupPayload(payload: JsonRpcPayload) {
         return [

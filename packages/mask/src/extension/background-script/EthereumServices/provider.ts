@@ -3,7 +3,6 @@ import { defer } from '@dimensiondev/kit'
 import { ChainId, createLookupTableResolver, ProviderType } from '@masknet/web3-shared-evm'
 import { InjectedProvider } from './providers/Injected'
 import { MaskWalletProvider } from './providers/MaskWallet'
-import { MetaMaskProvider } from './providers/MetaMask'
 import { WalletConnectProvider } from './providers/WalletConnect'
 import { CustomNetworkProvider } from './providers/CustomNetwork'
 import { FortmaticProvider } from './providers/Fortmatic'
@@ -13,11 +12,11 @@ import { currentChainIdSettings, currentProviderSettings } from '../../../plugin
 const getProvider = createLookupTableResolver<ProviderType, Provider | null>(
     {
         [ProviderType.MaskWallet]: new MaskWalletProvider(),
-        [ProviderType.MetaMask]: new MetaMaskProvider(),
+        [ProviderType.MetaMask]: new InjectedProvider(ProviderType.MetaMask),
         [ProviderType.WalletConnect]: new WalletConnectProvider(),
-        [ProviderType.Coin98]: new InjectedProvider(),
-        [ProviderType.WalletLink]: new InjectedProvider(),
-        [ProviderType.MathWallet]: new InjectedProvider(),
+        [ProviderType.Coin98]: new InjectedProvider(ProviderType.Coin98),
+        [ProviderType.WalletLink]: new InjectedProvider(ProviderType.WalletLink),
+        [ProviderType.MathWallet]: new InjectedProvider(ProviderType.MathWallet),
         [ProviderType.Fortmatic]: new FortmaticProvider(),
         [ProviderType.CustomNetwork]: new CustomNetworkProvider(),
     },

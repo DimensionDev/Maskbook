@@ -28,7 +28,7 @@ export interface Provider {
     createProvider?(options?: ProviderOptions): Promise<HttpProvider>
     createExternalProvider(options?: ProviderOptions): Promise<ExternalProvider>
 
-    requestAccounts?(chainId?: ChainId): Promise<{
+    requestAccounts(chainId?: ChainId): Promise<{
         chainId: ChainId
         accounts: string[]
     }>

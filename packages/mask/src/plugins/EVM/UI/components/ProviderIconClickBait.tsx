@@ -34,8 +34,8 @@ export function ProviderIconClickBait({
     const providerType = provider.type as ProviderType
     const networkType = network.type as NetworkType
 
-    const injectedEthereumProviderType = useInjectedProviderType('ethereum')
-    const injectedCoin98ProviderType = useInjectedProviderType('coin98')
+    const injectedMetaMaskProviderType = useInjectedProviderType(ProviderType.MetaMask)
+    const injectedCoin98ProviderType = useInjectedProviderType(ProviderType.Coin98)
 
     const onClickProvider = useCallback(async () => {
         // open the download page
@@ -43,7 +43,7 @@ export function ProviderIconClickBait({
             const isProviderAvailable =
                 providerType === ProviderType.Coin98
                     ? providerType === injectedCoin98ProviderType
-                    : providerType === injectedEthereumProviderType
+                    : providerType === injectedMetaMaskProviderType
 
             if (!isProviderAvailable) {
                 const downloadLink = resolveProviderDownloadLink(providerType)
@@ -72,7 +72,7 @@ export function ProviderIconClickBait({
                 unreachable(providerType)
         }
         onClick?.(network, provider)
-    }, [network, provider, injectedEthereumProviderType, injectedCoin98ProviderType, onClick])
+    }, [network, provider, injectedMetaMaskProviderType, injectedCoin98ProviderType, onClick])
 
     // hide injected provider in dashboard
     if (isInjectedProvider(providerType) && isDashboardPage()) return null

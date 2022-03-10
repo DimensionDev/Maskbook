@@ -4,6 +4,7 @@ import { Web3UI } from '../Web3UI'
 import { setupStorage, StorageDefaultValue } from '../../storage'
 import { InjectedProviderBridge } from '../components/InjectedProviderBridge'
 import { FortmaticProviderBridge } from '../components/FortmaticProviderBridge'
+import { ProviderType } from '@masknet/web3-shared-evm'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -15,8 +16,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
     GlobalInjection() {
         return (
             <>
-                <InjectedProviderBridge type="ethereum" />
-                <InjectedProviderBridge type="coin98" />
+                <InjectedProviderBridge type={ProviderType.MetaMask} />
+                <InjectedProviderBridge type={ProviderType.Coin98} />
                 <FortmaticProviderBridge />
             </>
         )
