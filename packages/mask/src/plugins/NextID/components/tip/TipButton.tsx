@@ -4,6 +4,7 @@ import type { ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { EMPTY_LIST } from '@masknet/web3-shared-evm'
 import classnames from 'classnames'
+import { uniq } from 'lodash-unified'
 import { FC, HTMLProps, MouseEventHandler, useCallback, useMemo } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import Services from '../../../../extension/service'
@@ -49,7 +50,9 @@ export const TipButton: FC<Props> = ({ className, receiver, addresses = [], chil
 
     useAsync(queryBindings, [queryBindings])
 
-    const allAddresses = useMemo(() => [...(walletsState.value || []), ...addresses], [walletsState.value, addresses])
+    const allAddresses = useMemo(() => {
+        return uniq([...(walletsState.value || []), ...addresses])
+    }, [walletsState.value, addresses])
 
     const disabled = allAddresses.length === 0
 

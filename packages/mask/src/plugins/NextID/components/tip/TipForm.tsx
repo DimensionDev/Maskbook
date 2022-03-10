@@ -99,6 +99,7 @@ export const TipForm: FC<Props> = memo((props) => {
     )
     const onSelectTokenChipClick = useCallback(() => {
         setSelectTokenDialog({
+            chainId,
             open: true,
             uuid: id,
             disableNativeToken: false,
@@ -106,7 +107,7 @@ export const TipForm: FC<Props> = memo((props) => {
                 selectedTokens: token ? [token.address] : [],
             },
         })
-    }, [id, token?.address])
+    }, [id, token?.address, chainId])
 
     const shareLink = useMemo(() => {
         return activatedSocialNetworkUI.utils.getShareLinkURL?.(
