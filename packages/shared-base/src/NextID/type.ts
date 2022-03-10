@@ -16,6 +16,11 @@ export interface NextIDPayload {
     signPayload: string
 }
 
+export interface Binding {
+    platform: NextIDPlatform
+    identity: string
+}
+
 export interface NextIDPersonaBindings {
     persona: string
     proofs: {

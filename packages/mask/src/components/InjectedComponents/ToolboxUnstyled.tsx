@@ -84,7 +84,7 @@ export interface ToolboxHintProps {
 }
 export function ToolboxHintUnstyled(props: ToolboxHintProps) {
     const { t } = useI18N()
-    const isNextIDVerified = useNextIDConnectStatus()
+    const { isVerified: isNextIDVerified } = useNextIDConnectStatus()
     const {
         ListItemButton = MuiListItemButton,
         ListItemText = MuiListItemText,

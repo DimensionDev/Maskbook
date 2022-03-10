@@ -1,16 +1,17 @@
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import { useI18N } from '../locales'
 import { useAsyncRetry } from 'react-use'
 import Services from '../../../extension/service'
 import { isSameAddress, useAccount } from '@masknet/web3-shared-evm'
 import type { Persona } from '../../../database'
-import type { Binding } from '../types'
+import type { Binding } from '@masknet/shared-base'
 import { useCustomSnackbar } from '@masknet/theme'
 import { usePersonaSign } from '../hooks/usePersonaSign'
 import { useWalletSign } from '../hooks/useWalletSign'
 import { useBindPayload } from '../hooks/useBindPayload'
 import { delay } from '@dimensiondev/kit'
 import { UnbindPanelUI } from './UnbindPanelUI'
+import { UnbindConfirm } from './UnbindConfirm'
 
 interface VerifyWalletDialogProps {
     unbindAddress: string
@@ -23,6 +24,9 @@ interface VerifyWalletDialogProps {
 export const UnbindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onClose, persona, onUnBind, bounds }) => {
     const account = useAccount()
     const t = useI18N()
+
+    const [openSecondDialog, setSecondDialog] = useState(false)
+
     const { showSnackbar } = useCustomSnackbar()
     const currentIdentifier = persona.identifier
     const isBound = !!bounds.find((x) => isSameAddress(x.identity, unbindAddress))
@@ -58,22 +62,25 @@ export const UnbindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onCl
     }, [walletSignState.value, personaSignState.value, unbindAddress])
 
     return (
-        <UnbindPanelUI
-            title={t.unbind_dialog_title()}
-            onClose={onClose}
-            open={!!unbindAddress}
-            currentPersona={persona}
-            onPersonaSign={handlePersonaSign}
-            onWalletSign={handleWalletSign}
-            isCurrentAccount={isSameAddress(account, unbindAddress)}
-            signature={{
-                persona: {
-                    value: personaSignState.value?.signature.signature,
-                    loading: personaSignState.loading,
-                },
-                wallet: walletSignState,
-            }}
-            isBound={isBound}
-        />
+        <>
+            <UnbindConfirm unbindAddress={unbindAddress} onConfirm={() => setSecondDialog(true)} onClose={onClose} />
+            <UnbindPanelUI
+                title={t.unbind_dialog_title()}
+                onClose={onClose}
+                open={!!unbindAddress && openSecondDialog}
+                currentPersona={persona}
+                onPersonaSign={handlePersonaSign}
+                onWalletSign={handleWalletSign}
+                isCurrentAccount={isSameAddress(account, unbindAddress)}
+                signature={{
+                    persona: {
+                        value: personaSignState.value?.signature.signature,
+                        loading: personaSignState.loading,
+                    },
+                    wallet: walletSignState,
+                }}
+                isBound={isBound}
+            />
+        </>
     )
 })

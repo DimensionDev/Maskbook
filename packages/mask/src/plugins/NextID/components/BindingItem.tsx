@@ -1,7 +1,7 @@
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Link, Stack, Typography } from '@mui/material'
 import { memo } from 'react'
-import { Platform } from '../types'
+import { NextIDPlatform } from '@masknet/shared-base'
 import { DeleteIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { CopyIconButton } from './CopyIconButton'
@@ -42,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 interface Item {
-    platform: Platform
+    platform: NextIDPlatform
     identity: string
     enableAction: boolean
     onUnBind(address: string): void
@@ -54,7 +54,7 @@ export const BindingItem = memo<Item>(({ platform, identity, enableAction, onUnB
     const { classes } = useStyles()
     const networkDescriptor = useNetworkDescriptor(ChainId.Mainnet, NetworkPluginID.PLUGIN_EVM)
 
-    if (platform === Platform.ethereum) {
+    if (platform === NextIDPlatform.Ethereum) {
         return (
             <Stack
                 direction="row"

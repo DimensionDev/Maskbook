@@ -31,6 +31,8 @@ export const searchProfileActiveTabSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-label][role="navigation"]  [role="tablist"] [role="tab"][aria-selected="true"]')
 export const searchProfileTabSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-label][role="navigation"]  [role="tablist"] [role="tab"][aria-selected="false"]')
+export const searchAllProfileTabSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[aria-label][role="navigation"]  [role="tablist"] [role="tab"]')
 export const searchAppBarBackSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="app-bar-back"] > div')
 export const searchProfileActiveTabStatusLineSelector: () => LiveSelector<E, true> = () =>

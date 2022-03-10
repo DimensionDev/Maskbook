@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { first } from 'lodash-unified'
+import type { NextIDPlatform } from '@masknet/shared-base'
 import { Box, CircularProgress } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useAddressNames } from '@masknet/web3-shared-evm'
@@ -8,7 +9,10 @@ import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor, Plugin, Plugi
 import { PageTab } from '../InjectedComponents/PageTab'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 import { MaskMessages, useI18N } from '../../utils'
-import { useCurrentVisitingIdentity } from '../DataSource/useActivatedUI'
+import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
+import { useNextIDBoundByPlatform } from '../DataSource/useNextID'
+import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
+import { activatedSocialNetworkUI } from '../../social-network'
 
 function getTabContent(tabId: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
@@ -39,8 +43,18 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const [hidden, setHidden] = useState(true)
     const [selectedTab, setSelectedTab] = useState<Plugin.SNSAdaptor.ProfileTab | undefined>()
 
+    const currentIdentity = useLastRecognizedIdentity()
     const identity = useCurrentVisitingIdentity()
+    const { currentConnectedPersona } = usePersonaConnectStatus()
+    const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
     const { value: addressNames = [], loading: loadingAddressNames } = useAddressNames(identity)
+    const { value: personaList = [], loading: loadingPersonaList } = useNextIDBoundByPlatform(
+        platform as NextIDPlatform,
+        identity.identifier.userId,
+    )
+    const currentAccountNotConnectPersona =
+        currentIdentity.identifier.userId === identity.identifier.userId &&
+        personaList.findIndex((persona) => persona?.persona === currentConnectedPersona?.publicHexKey) === -1
 
     const tabs = useActivatedPluginsSNSAdaptor('any')
         .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? [])
@@ -81,12 +95,15 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }, [identity])
 
     const ContentComponent = useMemo(() => {
-        return getTabContent(selectedTabComputed?.ID ?? '')
+        const tab = currentAccountNotConnectPersona
+            ? tabs?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
+            : selectedTabComputed?.ID
+        return getTabContent(tab ?? '')
     }, [selectedTabComputed, identity.identifier])
 
     if (hidden) return null
 
-    if (loadingAddressNames)
+    if (loadingAddressNames || loadingPersonaList)
         return (
             <div className={classes.root}>
                 <Box
@@ -105,7 +122,11 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                 <PageTab tabs={tabs} selectedTab={selectedTabComputed} onChange={setSelectedTab} />
             </div>
             <div className={classes.content}>
-                <ContentComponent addressNames={addressNames} identity={identity} />
+                <ContentComponent
+                    addressNames={addressNames}
+                    identity={identity}
+                    personaList={personaList?.map((persona) => persona.persona)}
+                />
             </div>
         </div>
     )
