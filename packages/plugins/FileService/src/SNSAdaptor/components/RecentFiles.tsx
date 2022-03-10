@@ -2,7 +2,7 @@ import { Button, List, ListItem, ListItemIcon, ListItemText, Typography } from '
 import { makeStyles } from '@masknet/theme'
 import formatDateTime from 'date-fns/format'
 import { File } from 'react-feather'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useI18N } from '../../locales/i18n_generated'
 import { FileRouter } from '../../constants'
 import type { FileInfo } from '../../types'
@@ -74,13 +74,13 @@ interface Props {
 
 export const RecentFiles: React.FC<Props> = ({ files, onMore }) => {
     const t = useI18N()
-    const history = useHistory()
+    const navigate = useNavigate()
     const { classes } = useStyles()
     const { classes: itemClasses } = useItemStyles()
     const { classes: itemIconClasses } = useItemIconStyles()
     const { classes: itemTextClasses } = useItemTextStyles()
     const onClick = (info: FileInfo) => () => {
-        history.replace(FileRouter.uploaded, info)
+        navigate(FileRouter.uploaded, { state: info })
     }
     const renderItem = (file: FileInfo, index: number) => (
         <ListItem classes={itemClasses} key={index} onClick={onClick(file)}>
