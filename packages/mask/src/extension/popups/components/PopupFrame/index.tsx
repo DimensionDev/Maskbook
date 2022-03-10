@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { NavLink, useHistory, useLocation, useRouteMatch } from 'react-router-dom'
+import { NavLink, useNavigate, useLocation, useMatch } from 'react-router-dom'
 import { Box, GlobalStyles, Paper } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ArrowBackIcon, MiniMaskIcon } from '@masknet/icons'
@@ -72,30 +72,30 @@ export interface PopupFrameProps extends React.PropsWithChildren<{}> {}
 
 export const PopupFrame = memo<PopupFrameProps>((props) => {
     const { t } = useI18N()
-    const history = useHistory()
-    const { classes } = useStyles()
+    const navigate = useNavigate()
+    const { classes, cx } = useStyles()
     const location = useLocation()
     const personas = useMyPersonas()
 
-    const excludePath = useRouteMatch({
-        path: [PopupRoutes.Wallet, PopupRoutes.Personas, PopupRoutes.ContractInteraction, PopupRoutes.Unlock],
-        exact: true,
-    })
+    const excludePath = [
+        useMatch(PopupRoutes.Wallet),
+        useMatch(PopupRoutes.Personas),
+        useMatch(PopupRoutes.ContractInteraction),
+        useMatch(PopupRoutes.Unlock),
+    ].some(Boolean)
 
-    const excludePersonaPath = useRouteMatch({
-        path: [
-            PopupRoutes.ContractInteraction,
-            PopupRoutes.GasSetting,
-            PopupRoutes.SelectWallet,
-            PopupRoutes.WalletRecovered,
-        ],
-        exact: true,
-    })
+    const excludePersonaPath = [
+        useMatch(PopupRoutes.ContractInteraction),
+        useMatch(PopupRoutes.GasSetting),
+        useMatch(PopupRoutes.SelectWallet),
+        useMatch(PopupRoutes.WalletRecovered),
+    ].some(Boolean)
 
-    const matchRecovery = useRouteMatch({
-        path: [PopupRoutes.WalletRecovered, PopupRoutes.Unlock],
-        exact: true,
-    })
+    const matchRecovery = [
+        //
+        useMatch(PopupRoutes.WalletRecovered),
+        useMatch(PopupRoutes.Unlock),
+    ].some(Boolean)
 
     return (
         <>
@@ -107,22 +107,23 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
                             <MiniMaskIcon style={{ fontSize: 30 }} />
                         ) : (
                             <ArrowBackIcon
-                                onClick={history.goBack}
+                                onClick={() => navigate(-1)}
                                 style={{ fill: '#ffffff', cursor: 'pointer', fontSize: 30 }}
                             />
                         )}
                     </Box>
                     <Box className={classes.right}>
                         {excludePersonaPath ? null : (
-                            <NavLink to={PopupRoutes.Personas} className={classes.nav} activeClassName={classes.active}>
+                            <NavLink
+                                to={PopupRoutes.Personas}
+                                className={({ isActive }) => cx(classes.nav, isActive ? classes.active : null)}>
                                 {t('personas')}
                             </NavLink>
                         )}
                         <NavLink
                             style={{ marginRight: 5 }}
                             to={!excludePersonaPath ? PopupRoutes.Wallet : location}
-                            className={classes.nav}
-                            activeClassName={classes.active}>
+                            className={({ isActive }) => cx(classes.nav, isActive ? classes.active : null)}>
                             {t('wallets')}
                         </NavLink>
                     </Box>

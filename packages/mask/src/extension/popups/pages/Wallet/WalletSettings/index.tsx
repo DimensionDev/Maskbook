@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { EnterDashboard } from '../../../components/EnterDashboard'
 import { BackUpIcon, CloudLinkIcon, TrashIcon } from '@masknet/icons'
 import { memo } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils'
 import { resolveAddressLinkOnExplorer, useChainId, useWallet } from '@masknet/web3-shared-evm'
@@ -40,7 +40,7 @@ const useStyles = makeStyles()({
 
 const WalletSettings = memo(() => {
     const { t } = useI18N()
-    const history = useHistory()
+    const navigate = useNavigate()
     const chainId = useChainId()
     const wallet = useWallet()
     const { classes } = useStyles()
@@ -50,12 +50,12 @@ const WalletSettings = memo(() => {
             <WalletInfo />
             <div className={classes.content}>
                 <List dense className={classes.list}>
-                    <ListItem className={classes.item} onClick={() => history.push(PopupRoutes.BackupWallet)}>
+                    <ListItem className={classes.item} onClick={() => navigate(PopupRoutes.BackupWallet)}>
                         <BackUpIcon className={classes.icon} />
                         <ListItemText className={classes.text}>{t('popups_wallet_backup_wallet')}</ListItemText>
                     </ListItem>
                     {wallet?.configurable ? (
-                        <ListItem className={classes.item} onClick={() => history.push(PopupRoutes.DeleteWallet)}>
+                        <ListItem className={classes.item} onClick={() => navigate(PopupRoutes.DeleteWallet)}>
                             <TrashIcon className={classes.icon} />
                             <ListItemText className={classes.text}>{t('delete_wallet')}</ListItemText>
                         </ListItem>

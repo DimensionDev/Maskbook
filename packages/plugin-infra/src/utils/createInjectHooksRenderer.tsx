@@ -3,7 +3,6 @@ import { useEffect, useState, useRef, memo, createContext, useContext } from 're
 import { ErrorBoundary } from '@masknet/shared'
 import { usePluginI18NField, PluginWrapperComponent, PluginWrapperMethods } from '../hooks'
 import { emptyPluginWrapperMethods, PluginWrapperMethodsContext } from '../hooks/usePluginWrapper'
-import { ShadowRootIsolation } from '@masknet/theme'
 
 type Inject<T> = Plugin.InjectUI<T>
 type Raw<T> = Plugin.InjectUIRaw<T>
@@ -45,20 +44,16 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
             .filter(pickInjectorHook)
             .map((plugin) => (
                 <PropsContext.Provider key={plugin.ID} value={props}>
-                    <ShadowRootIsolation data-plugin={plugin.ID}>
-                        <SinglePluginWithinErrorBoundary plugin={plugin} />
-                    </ShadowRootIsolation>
+                    <SinglePluginWithinErrorBoundary key={plugin.ID} plugin={plugin} />
                 </PropsContext.Provider>
             ))
         return <>{all}</>
     }
     return memo(function PluginsInjectionHookRenderErrorBoundary(props: PropsType) {
         return (
-            <span data-plugin-render="">
-                <ErrorBoundary>
-                    <PluginsInjectionHookRender {...props} />
-                </ErrorBoundary>
-            </span>
+            <ErrorBoundary>
+                <PluginsInjectionHookRender {...props} />
+            </ErrorBoundary>
         )
     })
 }

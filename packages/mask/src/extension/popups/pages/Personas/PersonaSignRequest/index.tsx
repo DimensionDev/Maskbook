@@ -2,7 +2,7 @@ import { memo, useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Button, Typography } from '@mui/material'
 import { MaskMessages, useI18N } from '../../../../../utils'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { ECKeyIdentifier, Identifier, PopupRoutes } from '@masknet/shared-base'
 import { useMyPersonas } from '../../../../../components/DataSource/useMyPersonas'
 import type { Persona } from '../../../../../database'
@@ -78,7 +78,7 @@ const useStyles = makeStyles()(() => ({
 
 const PersonaSignRequest = memo(() => {
     const { t } = useI18N()
-    const history = useHistory()
+    const navigate = useNavigate()
     const location = useLocation()
     const { classes } = useStyles()
     const [requestID, setRequestID] = useState<string>()
@@ -95,7 +95,7 @@ const PersonaSignRequest = memo(() => {
         const selectedPersona = personas.find((x) => x.identifier.toText() === identifierInURL) ?? personas[0]
 
         if (!messageInURL || !requestIDInURL || !selectedPersona) {
-            history.replace(PopupRoutes.Wallet)
+            navigate(PopupRoutes.Wallet, { replace: true })
         } else {
             setSelected(selectedPersona)
             setMessage(messageInURL)
