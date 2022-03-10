@@ -13,7 +13,7 @@ import { PriceChanged } from './PriceChanged'
 import { Linking } from './Linking'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
 import { PluginTransakMessages, useTransakAllowanceCoin } from '@masknet/plugin-transak'
-import { useAccount, formatCurrency } from '@masknet/web3-shared-evm'
+import { useAccount, formatCurrency, useChainId, EthereumTokenType } from '@masknet/web3-shared-evm'
 import type { FootnoteMenuOption } from '../trader/FootnoteMenu'
 import { TradeFooter } from '../trader/TradeFooter'
 import { currentDataProviderSettings, getCurrentPreferredCoinIdSettings } from '../../settings'
@@ -111,6 +111,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         dataProviders = [],
     } = props
     const { coin, market } = trending
+    const chainId = useChainId()
 
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
@@ -118,7 +119,13 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     // #region buy
     const transakPluginEnabled = useActivatedPluginsSNSAdaptor('any').find((x) => x.ID === PluginId.Transak)
     const account = useAccount()
-    const isAllowanceCoin = useTransakAllowanceCoin(coin)
+    const isAllowanceCoin = useTransakAllowanceCoin({
+        address: coin.contract_address ?? '',
+        symbol: coin.symbol,
+        decimals: coin.decimals ?? 18,
+        type: EthereumTokenType.ERC20,
+        chainId,
+    })
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 
     const onBuyButtonClicked = useCallback(() => {

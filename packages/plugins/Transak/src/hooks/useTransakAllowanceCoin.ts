@@ -1,4 +1,4 @@
-import type { Coin } from '@masknet/web3-providers'
+import type { ERC20TokenDetailed } from '@masknet/web3-shared-evm'
 import { useAsync } from 'react-use'
 
 const ENV = {
@@ -9,13 +9,13 @@ const ENV = {
 
 const URL = ENV[process.env.NODE_ENV]
 
-export function useTransakAllowanceCoin(coin: Coin): boolean {
+export function useTransakAllowanceCoin(coin: ERC20TokenDetailed): boolean {
     return useAsync(async () => {
-        if (coin.contract_address) {
+        if (coin.address) {
             const allowanceList = await fetch(URL, { method: 'GET' })
                 .then((res) => res.json())
                 .then((res) => res.response)
-            return allowanceList.map((val: Coin) => val.symbol).includes(coin.symbol)
+            return allowanceList.map((val: ERC20TokenDetailed) => val.symbol).includes(coin.symbol)
         }
         return false
     }).value
