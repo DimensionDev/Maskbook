@@ -40,7 +40,7 @@ export function usePortalShadowRoot(renderer: (container: HTMLElement | undefine
     const sheets = useContext(StyleSheetsContext)
     const signal = useRef<AbortController>(null!)
     const preventEventPropagationList = useContext(PreventEventPropagationListContext)
-    const { container, root } = useRefInit(() => {
+    const { container } = useRefInit(() => {
         signal.current = new AbortController()
         const portal = PortalShadowRoot()
 
@@ -68,17 +68,8 @@ export function usePortalShadowRoot(renderer: (container: HTMLElement | undefine
             return child
         }
 
-        return { container, root }
+        return { container }
     })
-    useEffect(
-        () => () => {
-            setTimeout(() => {
-                root.remove()
-                signal.current.abort()
-            }, 2000)
-        },
-        [],
-    )
 
     return renderer(container)
 }
