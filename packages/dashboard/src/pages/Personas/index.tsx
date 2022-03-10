@@ -14,7 +14,7 @@ import { PersonaContent } from './components/PersonaContent'
 import { PersonaRowCard } from './components/PersonaCard/Row'
 import { PersonaStateBar } from './components/PersonaStateBar'
 import { UserProvider } from '../Settings/hooks/UserContext'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
