@@ -378,7 +378,7 @@
     "plugin_red_packet_nft_total_amount": "总数",
     "plugin_red_packet_nft_select_collection": "选择您的收藏品系列",
     "plugin_red_packet_nft_max_shares": "NFT红包合约最多支持 {{amount}} 个NFT投放。",
-    "plugin_red_packet_nft_max_shares_tip": "NFT红包合约支持一次性选择 {{amount}} 个NFT。",
+    "plugin_red_packet_nft_max_shares_tip": "NFT红包合约最多支持 {{amount}} 个NFT投放。",
     "plugin_red_packet_nft_shift_select_tip": "您也可以使用 <text>{{text}}</text> 选择多个NFT。",
     "plugin_red_packet_nft_non_existed_tip": "Token ID <tokenIdList></tokenIdList> 不存在或不属于您。",
     "plugin_red_packet_nft_select_all_option": "全部 ({{total}} NFT)",
