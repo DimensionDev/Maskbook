@@ -90,7 +90,7 @@
     "setup_guide_verifying": "Verfiying",
     "setup_guide_verifying_failed": "Re-Verfiy",
     "user_guide_tip_connected": "You have connected to this account successfully.",
-    "user_guide_tip_need_verify_on_next_id": "Mask Network requires you to post an verification tweet to access Next.ID-based products.",
+    "user_guide_tip_need_verify_on_next_id": "Mask Network requires you to post a verification tweet to access Next.ID-based products.",
     "setup_guide_say_hello_content": "Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post. ",
     "setup_guide_say_hello_follow": "Follow {{account}} to explore Web 3.0.",
     "setup_guide_pin_tip": "Don't forget to pin Mask Network in your browser toolbar to access web 3.0 easily.",
