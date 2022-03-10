@@ -67,16 +67,19 @@ export function useTip() {
     const nftTipTuple = useNftTip()
 
     const sendTipTuple = context.tipType === TipType.Token ? tokenTipTuple : nftTipTuple
+    const sendState = sendTipTuple[0]
+    const sendTip = sendTipTuple[1]
+
     const isSending = [
         TransactionStateType.WAIT_FOR_CONFIRMING,
         TransactionStateType.HASH,
         TransactionStateType.RECEIPT,
-    ].includes(sendTipTuple[0].type)
+    ].includes(sendState.type)
 
     return {
         ...context,
         isSending,
-        sendState: sendTipTuple[0],
-        sendTip: sendTipTuple[1],
+        sendState,
+        sendTip,
     }
 }

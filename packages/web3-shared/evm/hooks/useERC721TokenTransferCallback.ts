@@ -76,6 +76,13 @@ export function useERC721TokenTransferCallback(address?: string) {
                         })
                         resolve(hash)
                     })
+                    .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
+                        setTransferState({
+                            type: TransactionStateType.CONFIRMED,
+                            no,
+                            receipt,
+                        })
+                    })
                     .on(TransactionEventType.ERROR, (error) => {
                         setTransferState({
                             type: TransactionStateType.FAILED,

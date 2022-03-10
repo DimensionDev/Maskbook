@@ -2,7 +2,7 @@ import { useWeb3State } from '@masknet/plugin-infra'
 import { SelectTokenDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { EthereumTokenType, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
+import { EthereumTokenType, TransactionStateType, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
 import {
     Box,
     BoxProps,
@@ -15,7 +15,7 @@ import {
     Typography,
 } from '@mui/material'
 import classnames from 'classnames'
-import { FC, memo, useCallback, useMemo, useRef, useState } from 'react'
+import { FC, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../../social-network'
@@ -81,6 +81,7 @@ export const TipForm: FC<Props> = memo((props) => {
         amount,
         setAmount,
         isSending,
+        sendState,
         sendTip,
     } = useTip()
     const [isValid, validateMessage] = useTipValidate()
@@ -117,10 +118,11 @@ Install https://mask.io/download-links to tip my best friend.`,
         )
     }, [amount, token?.symbol, recipient, recipientSnsId])
 
-    const handleSend = useCallback(async () => {
-        await sendTip()
-        window.open(shareLink)
-    }, [sendTip, shareLink])
+    useEffect(() => {
+        if (sendState.type === TransactionStateType.CONFIRMED) {
+            window.open(shareLink)
+        }
+    }, [sendState.type])
 
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
@@ -206,7 +208,7 @@ Install https://mask.io/download-links to tip my best friend.`,
                     className={classes.tipButton}
                     fullWidth
                     disabled={!isValid || isSending}
-                    onClick={handleSend}>
+                    onClick={sendTip}>
                     {buttonLabel}
                 </ActionButton>
             </EthereumChainBoundary>
