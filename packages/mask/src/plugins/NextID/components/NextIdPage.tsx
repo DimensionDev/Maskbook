@@ -83,8 +83,8 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
     }, [visitingPersonaIdentifier, personaConnectStatus.hasPersona])
 
     const { value: isAccountVerified, loading: loadingVerifyInfo } = useAsync(() => {
-        if (!currentPersona) return Promise.resolve(undefined)
-        return queryIsBound(currentPersona.publicHexKey!, platform, visitingPersonaIdentifier.identifier.userId)
+        if (!currentPersona?.publicHexKey) return Promise.resolve(undefined)
+        return queryIsBound(currentPersona.publicHexKey, platform, visitingPersonaIdentifier.identifier.userId)
     }, [isOwn, currentPersona, visitingPersonaIdentifier, isVerified])
 
     const { value: bindings, loading } = useAsync(async () => {
