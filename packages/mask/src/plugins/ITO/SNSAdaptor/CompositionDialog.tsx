@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import Web3Utils from 'web3-utils'
 import { DialogContent } from '@mui/material'
-import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { InjectedDialog, InjectedDialogProps, MINDS_ID, useRemoteControlledDialog } from '@masknet/shared'
 import { ITO_MetaKey_2, MSG_DELIMITER } from '../constants'
@@ -199,14 +199,14 @@ export function CompositionDialog(props: CompositionDialogProps) {
         tabs: [
             {
                 label: t('plugin_ito_create_new'),
-                children: usePortalShadowRoot(() => (
+                children: (
                     <CreateForm
                         onNext={onNext}
                         onClose={onClose}
                         origin={poolSettings}
                         onChangePoolSettings={setPoolSettings}
                     />
-                )),
+                ),
                 sx: { p: 0 },
             },
             {

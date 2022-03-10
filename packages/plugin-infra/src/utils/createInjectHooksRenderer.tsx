@@ -3,6 +3,7 @@ import { useEffect, useState, useRef, memo, createContext, useContext } from 're
 import { ErrorBoundary } from '@masknet/shared'
 import { usePluginI18NField, PluginWrapperComponent, PluginWrapperMethods } from '../hooks'
 import { emptyPluginWrapperMethods, PluginWrapperMethodsContext } from '../hooks/usePluginWrapper'
+import { ShadowRootIsolation } from '@masknet/theme'
 
 type Inject<T> = Plugin.InjectUI<T>
 type Raw<T> = Plugin.InjectUIRaw<T>
@@ -14,11 +15,11 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
     PluginWrapperComponent?: PluginWrapperComponent<PluginDefinition>,
 ) {
     function usePluginWrapperProvider(element: JSX.Element | null, plugin: PluginDefinition) {
-        const ref = useRef<PluginWrapperMethods>(emptyPluginWrapperMethods)
+        const [ref, setRef] = useState<PluginWrapperMethods | null>(null)
         if (PluginWrapperComponent) {
             return (
-                <PluginWrapperComponent definition={plugin} ref={ref}>
-                    <PluginWrapperMethodsContext.Provider value={ref.current || emptyPluginWrapperMethods}>
+                <PluginWrapperComponent definition={plugin} ref={setRef}>
+                    <PluginWrapperMethodsContext.Provider value={ref || emptyPluginWrapperMethods}>
                         {element}
                     </PluginWrapperMethodsContext.Provider>
                 </PluginWrapperComponent>
@@ -44,16 +45,20 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
             .filter(pickInjectorHook)
             .map((plugin) => (
                 <PropsContext.Provider key={plugin.ID} value={props}>
-                    <SinglePluginWithinErrorBoundary key={plugin.ID} plugin={plugin} />
+                    <ShadowRootIsolation data-plugin={plugin.ID}>
+                        <SinglePluginWithinErrorBoundary plugin={plugin} />
+                    </ShadowRootIsolation>
                 </PropsContext.Provider>
             ))
         return <>{all}</>
     }
     return memo(function PluginsInjectionHookRenderErrorBoundary(props: PropsType) {
         return (
-            <ErrorBoundary>
-                <PluginsInjectionHookRender {...props} />
-            </ErrorBoundary>
+            <span data-plugin-render="">
+                <ErrorBoundary>
+                    <PluginsInjectionHookRender {...props} />
+                </ErrorBoundary>
+            </span>
         )
     })
 }
