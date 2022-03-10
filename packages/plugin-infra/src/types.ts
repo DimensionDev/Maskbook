@@ -722,6 +722,7 @@ export enum PluginId {
     UnlockProtocol = 'com.maskbook.unlockprotocol',
     FileService = 'com.maskbook.fileservice',
     CyberConnect = 'me.cyberconnect.app',
+    Omen = 'link.eth.omen',
     // @masknet/scripts: insert-here
 }
 
