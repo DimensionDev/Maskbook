@@ -62,7 +62,7 @@ async function fetchFromAlchemyEVM(path: string, network: Web3Plugin.NetworkDesc
                     title: nft.title,
                     description: nft.description,
                     media: {
-                        uri: nft.metadata.animation_url,
+                        uri: nft.metadata.animation_url || nft.media[0].raw || nft.media[0].gateway,
                     },
                     tokenUri: nft.tokenUri.raw,
                 } as AlchemyNFTItemDetailedResponse),
@@ -111,12 +111,12 @@ export class AlchemyAPI implements NonFungibleTokenAPI.Provider {
             `${PluginId.Flow}_flow` === network.ID
                 ? urlcat('/getNFTs/', {
                       owner: from,
-                      pageKey: pageKey || undefined,
+                      offset: page * pageSize,
+                      limit: pageSize,
                   })
                 : urlcat('/v1/getNFTs/', {
                       owner: from,
-                      offset: page * pageSize,
-                      limit: pageSize,
+                      pageKey: pageKey || undefined,
                   })
 
         const result =
@@ -132,8 +132,8 @@ export class AlchemyAPI implements NonFungibleTokenAPI.Provider {
         const data = result.nfts.map((nft) => createNFT(nft, result.ownerAddress, network.chainId))
         return {
             data,
-            hasNextPage: data.length === pageSize || Boolean(pageKey),
-            pageKey,
+            hasNextPage: data.length === pageSize || Boolean(result.pageKey),
+            pageKey: result.pageKey,
             total: result.total,
         }
     }

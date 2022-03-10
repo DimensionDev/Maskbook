@@ -59,6 +59,10 @@ export interface AlchemyNFTItemResponse {
         raw: string
         gateway: string
     }
+    media: {
+        raw: string
+        gateway: string
+    }[]
     metadata: {
         animation_url: string
         name: string

@@ -20,8 +20,9 @@ export async function collectAllPageData<T>(
         await handler?.(result.data)
         data = [...data, ...result.data]
         hasNextPage =
-            (result.hasNextPage || Boolean(result.pageKey) || (result.total ?? 0) > data.length) &&
-            result.data.length > 0
+            (result.hasNextPage || Boolean(result.pageKey)) &&
+            result.data.length > 0 &&
+            (result.total ? result.total > data.length : true)
         pageInfo = result.nextPageInfo ?? {}
         pageKey = result.pageKey || ''
         page = page + 1
