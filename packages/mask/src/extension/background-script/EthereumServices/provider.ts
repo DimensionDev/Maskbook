@@ -10,13 +10,13 @@ import { currentChainIdSettings, currentProviderSettings } from '../../../plugin
 
 const getProvider = createLookupTableResolver<ProviderType, Provider | null>(
     {
-        [ProviderType.MaskWallet]: new MaskWalletProvider(),
+        [ProviderType.MaskWallet]: new MaskWalletProvider(ProviderType.MaskWallet),
         [ProviderType.MetaMask]: new InjectedProvider(ProviderType.MetaMask),
-        [ProviderType.WalletConnect]: new WalletConnectProvider(),
+        [ProviderType.WalletConnect]: new WalletConnectProvider(ProviderType.WalletConnect),
         [ProviderType.Coin98]: new InjectedProvider(ProviderType.Coin98),
         [ProviderType.WalletLink]: new InjectedProvider(ProviderType.WalletLink),
         [ProviderType.MathWallet]: new InjectedProvider(ProviderType.MathWallet),
-        [ProviderType.Fortmatic]: new FortmaticProvider(),
+        [ProviderType.Fortmatic]: new FortmaticProvider(ProviderType.Fortmatic),
         [ProviderType.CustomNetwork]: new CustomNetworkProvider(),
     },
     null,
@@ -85,6 +85,7 @@ export async function notifyEvent(providerType: ProviderType, name: string, even
             await provider?.onChainIdChanged?.(event as string)
             break
         case 'disconnect':
+            await provider?.onDisconnect?.()
             break
         default:
             throw new Error(`Unknown event name: ${name}.`)

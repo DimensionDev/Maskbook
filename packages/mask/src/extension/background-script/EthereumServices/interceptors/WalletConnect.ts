@@ -1,10 +1,10 @@
-import { EthereumMethodType } from '@masknet/web3-shared-evm'
+import { EthereumMethodType, ProviderType } from '@masknet/web3-shared-evm'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { WalletConnectProvider } from '../providers/WalletConnect'
 import type { Context, Middleware } from '../types'
 
 export class WalletConnect implements Middleware<Context> {
-    private provider = new WalletConnectProvider()
+    private provider = new WalletConnectProvider(ProviderType.WalletConnect)
 
     private isPopupPayload(payload: JsonRpcPayload) {
         return [

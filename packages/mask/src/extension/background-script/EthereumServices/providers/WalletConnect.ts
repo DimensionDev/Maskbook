@@ -1,12 +1,9 @@
-import { first } from 'lodash-unified'
 import type { RequestArguments } from 'web3-core'
 import { defer } from '@dimensiondev/kit'
-import { EthereumMethodType, ProviderType, ChainId } from '@masknet/web3-shared-evm'
+import { EthereumMethodType } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base'
 import type { Provider } from '../types'
 import { EVM_Messages } from '../../../../plugins/EVM/messages'
-import { currentChainIdSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
-import { WalletRPC } from '../../../../plugins/Wallet/messages'
 
 export class WalletConnectProvider extends BaseProvider implements Provider {
     private id = 0
@@ -59,24 +56,5 @@ export class WalletConnectProvider extends BaseProvider implements Provider {
         })
 
         return deferred
-    }
-
-    async onAccountsChanged(accounts: string[]) {
-        if (currentProviderSettings.value !== ProviderType.WalletConnect) return
-        await WalletRPC.updateAccount({
-            account: first(accounts),
-            providerType: ProviderType.WalletConnect,
-        })
-    }
-
-    async onChainIdChanged(id: string) {
-        if (currentProviderSettings.value !== ProviderType.WalletConnect) return
-
-        // learn more: https://docs.metamask.io/guide/ethereum-provider.html#chain-ids and https://chainid.network/
-        const chainId = Number.parseInt(id, 16) || ChainId.Mainnet
-        if (currentChainIdSettings.value === chainId) return
-        await WalletRPC.updateAccount({
-            chainId,
-        })
     }
 }

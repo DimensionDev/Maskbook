@@ -1,10 +1,15 @@
 import Web3 from 'web3'
 import type { RequestArguments } from 'web3-core'
-import { createExternalProvider } from '@masknet/web3-shared-evm'
+import { first } from 'lodash-unified'
+import { ChainId, createExternalProvider, ProviderType } from '@masknet/web3-shared-evm'
 import type { Provider } from '../types'
+import { currentChainIdSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
+import { WalletRPC } from '../../../../plugins/Wallet/messages'
 
 export class BaseProvider implements Provider {
     private web3: Web3 | null = null
+
+    constructor(protected providerType: ProviderType) {}
 
     // A provider should at least implement a RPC request method.
     // Then it can be used to create an external provider for web3js.
@@ -29,13 +34,6 @@ export class BaseProvider implements Provider {
         const web3 = await this.createWeb3()
         const chainId = await web3.eth.getChainId()
         const accounts = await web3.eth.requestAccounts()
-
-        console.log('DEBUG: request account succeed')
-        console.log({
-            chainId,
-            accounts,
-        })
-
         return {
             chainId,
             accounts,
@@ -56,5 +54,29 @@ export class BaseProvider implements Provider {
             // Any other error means failed to connect provider.
             throw new Error('Failed to connect to provider.')
         }
+    }
+
+    async onAccountsChanged(accounts: string[]) {
+        if (currentProviderSettings.value !== this.providerType) return
+        await WalletRPC.updateAccount({
+            account: first(accounts),
+            providerType: this.providerType,
+        })
+    }
+
+    async onChainIdChanged(id: string) {
+        if (currentProviderSettings.value !== this.providerType) return
+
+        // learn more: https://docs.metamask.io/guide/ethereum-provider.html#chain-ids and https://chainid.network/
+        const chainId = Number.parseInt(id, 16) || ChainId.Mainnet
+        if (currentChainIdSettings.value === chainId) return
+        await WalletRPC.updateAccount({
+            chainId,
+        })
+    }
+
+    async onDisconnect() {
+        if (currentProviderSettings.value !== this.providerType) return
+        await WalletRPC.resetAccount()
     }
 }

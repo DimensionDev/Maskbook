@@ -36,6 +36,7 @@ export interface Provider {
 
     onAccountsChanged?(accounts: string[]): Promise<void>
     onChainIdChanged?(id: string): Promise<void>
+    onDisconnect?(): Promise<void>
 }
 
 export interface Context {

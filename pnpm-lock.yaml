@@ -298,7 +298,6 @@ importers:
       '@balancer-labs/sor': ^1.0.0
       '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
       '@dimensiondev/mask-wallet-core': 0.1.0-20211013082857-eb62e5f
-      '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@dimensiondev/webextension-shim': 0.0.3-20210823035705-4257e12
       '@ethersproject/abi': ^5.4.0
       '@ethersproject/address': ^5.0.4
@@ -436,7 +435,6 @@ importers:
       '@balancer-labs/sor': 1.0.0
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0_webextension-polyfill@0.8.0
       '@dimensiondev/mask-wallet-core': 0.1.0-20211013082857-eb62e5f_protobufjs@6.11.2
-      '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@ethersproject/abi': 5.4.0
       '@ethersproject/address': 5.4.0
       '@ethersproject/providers': 5.4.2
@@ -1601,6 +1599,7 @@ packages:
       '@babel/types': 7.17.0
       jsesc: 2.5.2
       source-map: 0.5.7
+    dev: true
 
   /@babel/helper-annotate-as-pure/7.16.7:
     resolution: {integrity: sha512-s6t2w/IPQVTAET1HitoowRGXooX8mCgtuP5195wD/QJPV6wYjpujCGF7JuMODVX2ZAJOf1GT6DT9MHEZvLOFSw==}
@@ -1707,9 +1706,9 @@ packages:
       '@babel/core': ^7.4.0-0
     dependencies:
       '@babel/helper-compilation-targets': 7.16.7
-      '@babel/helper-module-imports': 7.16.7
-      '@babel/helper-plugin-utils': 7.16.7
-      '@babel/traverse': 7.17.3
+      '@babel/helper-module-imports': 7.16.0
+      '@babel/helper-plugin-utils': 7.16.5
+      '@babel/traverse': 7.16.10
       debug: 4.3.3
       lodash.debounce: 4.0.8
       resolve: 1.22.0
@@ -2960,8 +2959,8 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0-0
     dependencies:
-      '@babel/helper-module-imports': 7.16.7
-      '@babel/helper-plugin-utils': 7.16.7
+      '@babel/helper-module-imports': 7.16.0
+      '@babel/helper-plugin-utils': 7.16.5
       babel-plugin-polyfill-corejs2: 0.2.3
       babel-plugin-polyfill-corejs3: 0.2.4
       babel-plugin-polyfill-regenerator: 0.2.3
@@ -3345,6 +3344,7 @@ packages:
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
+    dev: true
 
   /@babel/types/7.16.8:
     resolution: {integrity: sha512-smN2DQc5s4M7fntyjGtyIPbRJv6wW4rU/94fmYJ7PKQuZkC0qGMHXJbg6sNGt12JmVr4k5YaptI/XtiLJBnmIg==}
@@ -4065,14 +4065,6 @@ packages:
       protobufjs: '>= 6.10 < 7'
     dependencies:
       protobufjs: 6.11.2
-    dev: false
-
-  /@dimensiondev/metamask-extension-provider/3.0.6-20210519045409-1835d4d:
-    resolution: {integrity: sha512-t8GFIKV7/FFqfS2AOqHmKB+VwzvtyaOnNr8BgJmLJ+O4OEtQJ2ObRvg6WYAC1dJqc3DtVdEHBJdIoTZhsMEuIw==, tarball: download/@dimensiondev/metamask-extension-provider/3.0.6-20210519045409-1835d4d/4de201e24ff4e7094b4fdbf0838a09c81798d95294556824e5dc708451078835}
-    dependencies:
-      '@metamask/inpage-provider': 8.1.0
-      detect-browser: 3.0.1
-      extension-port-stream: 1.0.0
     dev: false
 
   /@dimensiondev/patch-package/6.5.0:
@@ -5280,34 +5272,6 @@ packages:
       ethjs-util: 0.1.6
       tweetnacl: 1.0.3
       tweetnacl-util: 0.15.1
-    dev: false
-
-  /@metamask/inpage-provider/8.1.0:
-    resolution: {integrity: sha512-RB2tUfj3DITNqjsFB0UvBGQYtsUHMGccsbA+2BkeE6h/UNTmc3onwmLY6z2yrEPZywpHJvj1FMiORdvtQPhOVg==}
-    engines: {node: '>=12.0.0'}
-    deprecated: Package renamed to @metamask/providers
-    dependencies:
-      '@metamask/object-multiplex': 1.2.0
-      '@metamask/safe-event-emitter': 2.0.0
-      '@types/chrome': 0.0.136
-      detect-browser: 5.2.0
-      eth-rpc-errors: 4.0.3
-      extension-port-stream: 2.0.1
-      fast-deep-equal: 2.0.1
-      is-stream: 2.0.1
-      json-rpc-engine: 6.1.0
-      json-rpc-middleware-stream: 3.0.0
-      pump: 3.0.0
-      webextension-polyfill-ts: 0.25.0
-    dev: false
-
-  /@metamask/object-multiplex/1.2.0:
-    resolution: {integrity: sha512-hksV602d3NWE2Q30Mf2Np1WfVKaGqfJRy9vpHAmelbaD0OkDt06/0KQkRR6UVYdMbTbkuEu8xN5JDUU80inGwQ==}
-    engines: {node: '>=12.0.0'}
-    dependencies:
-      end-of-stream: 1.4.4
-      once: 1.4.0
-      readable-stream: 2.3.7
     dev: false
 
   /@metamask/safe-event-emitter/2.0.0:
@@ -8097,13 +8061,6 @@ packages:
       base-x: 3.0.8
     dev: false
 
-  /@types/chrome/0.0.136:
-    resolution: {integrity: sha512-XDEiRhLkMd+SB7Iw3ZUIj/fov3wLd4HyTdLltVszkgl1dBfc3Rb7oPMVZ2Mz2TLqnF7Ow+StbR8E7r9lqpb4DA==}
-    dependencies:
-      '@types/filesystem': 0.0.32
-      '@types/har-format': 1.2.7
-    dev: false
-
   /@types/color-convert/2.0.0:
     resolution: {integrity: sha512-m7GG7IKKGuJUXvkZ1qqG3ChccdIM/qBBo913z+Xft0nKCX4hAU/IxKwZBU4cpRZ7GS5kV4vOblUkILtSShCPXQ==}
     dependencies:
@@ -8385,16 +8342,6 @@ packages:
       '@types/serve-static': 1.13.10
     dev: true
 
-  /@types/filesystem/0.0.32:
-    resolution: {integrity: sha512-Yuf4jR5YYMR2DVgwuCiP11s0xuVRyPKmz8vo6HBY3CGdeMj8af93CFZX+T82+VD1+UqHOxTq31lO7MI7lepBtQ==}
-    dependencies:
-      '@types/filewriter': 0.0.29
-    dev: false
-
-  /@types/filewriter/0.0.29:
-    resolution: {integrity: sha512-BsPXH/irW0ht0Ji6iw/jJaK8Lj3FJemon2gvEqHKpCdDCeemHa+rI3WBGq5z7cDMZgoLjY40oninGxqk+8NzNQ==}
-    dev: false
-
   /@types/fs-extra/9.0.13:
     resolution: {integrity: sha512-nEnwB++1u5lVDM2UI4c1+5R+FYaKfaAzS4OococimjVm3nQw3TuzH5UNsocrcTBbhnerblyHj4A49qXbIiZdpA==}
     dependencies:
@@ -8438,10 +8385,6 @@ packages:
       '@types/vinyl-fs': 2.4.12
       chokidar: 3.5.2
     dev: true
-
-  /@types/har-format/1.2.7:
-    resolution: {integrity: sha512-/TPzUG0tJn5x1TUcVLlDx2LqbE58hyOzDVAc9kf8SpOEmguHjU6bKUyfqb211AdqLOmU/SNyXvLKPNP5qTlfRw==}
-    dev: false
 
   /@types/hast/2.3.4:
     resolution: {integrity: sha512-wLEm0QvaoawEDoTRwzTXp4b4jpwiJDvR5KMnFnVodm3scufTlBOWRD6N1OBf9TZMhjlNsSfcO5V+7AF4+Vy+9g==}
@@ -10703,7 +10646,7 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0-0
     dependencies:
-      '@babel/compat-data': 7.17.0
+      '@babel/compat-data': 7.16.8
       '@babel/helper-define-polyfill-provider': 0.2.4
       semver: 6.3.0
     transitivePeerDependencies:
@@ -10754,7 +10697,7 @@ packages:
       '@babel/core': ^7.0.0-0
     dependencies:
       '@babel/helper-define-polyfill-provider': 0.2.4
-      core-js-compat: 3.21.1
+      core-js-compat: 3.20.1
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -12635,6 +12578,7 @@ packages:
     dependencies:
       browserslist: 4.19.3
       semver: 7.0.0
+    dev: true
 
   /core-js-pure/3.20.1:
     resolution: {integrity: sha512-yeNNr3L9cEBwNy6vhhIJ0nko7fE7uFO6PgawcacGt2VWep4WqQx0RiqlkgSP7kqUMC1IKdfO9qPeWXcUheHLVQ==}
@@ -13568,10 +13512,6 @@ packages:
     dependencies:
       repeat-string: 1.6.1
     dev: true
-
-  /detect-browser/3.0.1:
-    resolution: {integrity: sha512-L6b76EfUxnoxGHM5Vz7nrshQPIbOHtitDWpGufrp5srQdJrEYi1xpUVZeFbfssWAJvUWo/iDIVlz8hOP4Z8OCw==}
-    dev: false
 
   /detect-browser/5.2.0:
     resolution: {integrity: sha512-tr7XntDAu50BVENgQfajMLzacmSe34D+qZc4zjnniz0ZVuw/TZcLcyxHQjYpJTM36sGEkZZlYLnIM1hH7alTMA==}
@@ -15236,20 +15176,6 @@ packages:
 
   /extend/3.0.2:
     resolution: {integrity: sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==}
-
-  /extension-port-stream/1.0.0:
-    resolution: {integrity: sha512-FsFr64yr6ituPdaGP6Io5recGFWVjJoDYt7asz2AvPkYqGN9c923nmEtyHH+413066bjGcQZaF8w5wn9HbNXiQ==}
-    dependencies:
-      readable-stream: 2.3.7
-      util: 0.11.1
-    dev: false
-
-  /extension-port-stream/2.0.1:
-    resolution: {integrity: sha512-ltrv4Dh/979I04+D4Te6TFygfRSOc5EBzzlHRldWMS8v73V80qWluxH88hqF0qyUsBXTb8NmzlmSipcre6a+rg==}
-    engines: {node: '>=12.0.0'}
-    dependencies:
-      webextension-polyfill-ts: 0.22.0
-    dev: false
 
   /extglob/2.0.4:
     resolution: {integrity: sha512-Nmb6QXkELsuBr24CJSkilo6UHHgbekK5UiZgfE6UHD3Eb27YC6oD+bhcT+tJ6cl8dmsgdQxnWlcry8ksBIBLpw==}
@@ -17693,6 +17619,7 @@ packages:
   /is-stream/2.0.1:
     resolution: {integrity: sha512-hFoiJiTl63nn+kstHGBtewWSKnQLpyb155KHheA1l39uvtO9nWIop1p3udqPcUd/xbF1VLMO4n7OI6p7RbngDg==}
     engines: {node: '>=8'}
+    dev: true
 
   /is-string/1.0.7:
     resolution: {integrity: sha512-tE2UXzivje6ofPW7l23cjDOMa09gb7xlAqG6jG5ej6uPV32TlWP3NKPigtaGeHNu9fohccRYvIiZMfOOnOYUtg==}
@@ -18702,13 +18629,6 @@ packages:
     resolution: {integrity: sha1-p6+cICg4tekFxyUOVH8a/3cligI=}
     dependencies:
       inherits: 2.0.4
-    dev: false
-
-  /json-rpc-middleware-stream/3.0.0:
-    resolution: {integrity: sha512-JmZmlehE0xF3swwORpLHny/GvW3MZxCsb2uFNBrn8TOqMqivzCfz232NSDLLOtIQlrPlgyEjiYpyzyOPFOzClw==}
-    dependencies:
-      '@metamask/safe-event-emitter': 2.0.0
-      readable-stream: 2.3.7
     dev: false
 
   /json-rpc-random-id/1.0.1:
@@ -24371,7 +24291,7 @@ packages:
       serialize-javascript: 6.0.0
       source-map: 0.6.1
       terser: 5.12.0
-      webpack: 5.70.0_65041f242a58e79379a199f62cb3d619
+      webpack: 5.70.0_@swc+core@1.2.148
     dev: true
 
   /terser-webpack-plugin/5.3.1_webpack@5.70.0:
@@ -26164,22 +26084,6 @@ packages:
       pvtsutils: 1.2.1
       tslib: 2.3.1
       webcrypto-core: 1.4.0
-    dev: false
-
-  /webextension-polyfill-ts/0.22.0:
-    resolution: {integrity: sha512-3P33ClMwZ/qiAT7UH1ROrkRC1KM78umlnPpRhdC/292UyoTTW9NcjJEqDsv83HbibcTB6qCtpVeuB2q2/oniHQ==}
-    dependencies:
-      webextension-polyfill: 0.7.0
-    dev: false
-
-  /webextension-polyfill-ts/0.25.0:
-    resolution: {integrity: sha512-ikQhwwHYkpBu00pFaUzIKY26I6L87DeRI+Q6jBT1daZUNuu8dSrg5U9l/ZbqdaQ1M/TTSPKeAa3kolP5liuedw==}
-    dependencies:
-      webextension-polyfill: 0.7.0
-    dev: false
-
-  /webextension-polyfill/0.7.0:
-    resolution: {integrity: sha512-su48BkMLxqzTTvPSE1eWxKToPS2Tv5DLGxKexLEVpwFd6Po6N8hhSLIvG6acPAg7qERoEaDL+Y5HQJeJeml5Aw==}
     dev: false
 
   /webextension-polyfill/0.8.0:
