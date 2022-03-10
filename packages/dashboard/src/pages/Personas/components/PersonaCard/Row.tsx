@@ -3,7 +3,14 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { PublicKeyIcon, SettingsIcon } from '@masknet/icons'
 import { Box, IconButton, MenuItem, Stack, Typography } from '@mui/material'
 import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine'
-import { PersonaIdentifier, ProfileIdentifier, ProfileInformation, DashboardRoutes } from '@masknet/shared-base'
+import {
+    PersonaIdentifier,
+    ProfileIdentifier,
+    ProfileInformation,
+    DashboardRoutes,
+    NextIDPersonaBindings,
+    NextIDAction,
+} from '@masknet/shared-base'
 import { useMenu } from '@masknet/shared'
 import { useDashboardI18N } from '../../../../locales'
 import { PersonaContext } from '../../hooks/usePersonaContext'
@@ -56,18 +63,27 @@ const MenuText = styled('span')(`
 `)
 
 export const PersonaRowCard = memo(() => {
-    const { currentPersona, connectPersona, disconnectPersona, renamePersona, definedSocialNetworks } =
-        PersonaContext.useContainer()
+    const {
+        currentPersona,
+        connectPersona,
+        disconnectPersona,
+        renamePersona,
+        operateBound,
+        definedSocialNetworks,
+        verification,
+    } = PersonaContext.useContainer()
 
     if (!currentPersona) return null
 
     return (
         <PersonaRowCardUI
+            verification={verification}
             nickname={currentPersona.nickname}
             identifier={currentPersona.identifier}
             profiles={currentPersona.linkedProfiles}
             onConnect={connectPersona}
             onDisconnect={disconnectPersona}
+            onDeleteBound={operateBound}
             onRename={renamePersona}
             definedSocialNetworks={definedSocialNetworks}
         />
@@ -82,6 +98,13 @@ export interface PersonaRowCardUIProps {
     onConnect: (identifier: PersonaIdentifier, networkIdentifier: string) => void
     onDisconnect: (identifier: ProfileIdentifier) => void
     onRename: (identifier: PersonaIdentifier, target: string, callback?: () => void) => Promise<void>
+    verification?: NextIDPersonaBindings
+    onDeleteBound: (
+        identifier: PersonaIdentifier,
+        profile: ProfileIdentifier,
+        network: string,
+        action: NextIDAction,
+    ) => void
 }
 
 export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
@@ -90,8 +113,8 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
     const { classes } = useStyles()
     const { confirmPassword } = useContext(UserContext)
 
-    const { nickname, definedSocialNetworks, identifier, profiles } = props
-    const { onConnect, onDisconnect, onRename } = props
+    const { nickname, definedSocialNetworks, identifier, profiles, verification } = props
+    const { onConnect, onDisconnect, onRename, onDeleteBound } = props
 
     const { value: privateKey } = useExportPrivateKey(identifier)
     const { value: words } = useExportMnemonicWords(identifier)
@@ -182,12 +205,18 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                         } else {
                             return (
                                 <ConnectedPersonaLine
+                                    verification={verification}
+                                    disableAdd={currentNetworkProfiles.length >= 5}
                                     isHideOperations={false}
                                     key={networkIdentifier}
                                     onConnect={() => onConnect(identifier, networkIdentifier)}
                                     onDisconnect={onDisconnect}
+                                    onDeleteBound={(profile: ProfileIdentifier) => {
+                                        onDeleteBound(identifier, profile, networkIdentifier, NextIDAction.Delete)
+                                    }}
                                     profileIdentifiers={currentNetworkProfiles.map((x) => x.identifier)}
                                     networkIdentifier={networkIdentifier}
+                                    personaIdentifier={identifier}
                                 />
                             )
                         }

@@ -21,6 +21,9 @@ export interface NextIDPersonaBindings {
     proofs: {
         platform: NextIDPlatform
         identity: string
+        created_at: string
+        invalid_reason: string
+        latest_checked_at: string
         is_valid: boolean
     }[]
 }
