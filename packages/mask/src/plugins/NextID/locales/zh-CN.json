@@ -4,7 +4,7 @@
     "unsupported_network": "此网络尚不支持",
     "connect_wallet__other_user_tip_intro": "目前此账号未绑定任何钱包。",
     "connect_wallet_tip_intro": "在此绑定您的钱包。",
-    "connect_wallet_tip": "在 Web3 中，您可以展示接收打赏的地址，NFT 收藏品，捐赠记录和其他链上信息给已安装Mask Network的好友。",
+    "connect_wallet_tip": "在 Web3 选项卡中，您可以向已安装 Mask Network 的好友展示接收打赏的地址、NFT 收藏品、捐赠记录和其他链上信息。",
     "verify_wallet_button": "验证您的钱包",
     "add_wallet_button": "添加钱包",
     "verify_wallet_dialog_title": "验证您的钱包",
@@ -31,5 +31,5 @@
     "unbind_persona_tip": "选择您的身份或当前绑定的钱包来进行签名解绑。",
     "unbind_wallet_tip": "选择您的身份或当前绑定的钱包来进行签名解绑。",
     "done": "完成",
-    "copy_success_of_wallet_address": "复制钱包地址成功！"
+    "copy_success_of_wallet_address": "成功复制钱包地址！"
 }
