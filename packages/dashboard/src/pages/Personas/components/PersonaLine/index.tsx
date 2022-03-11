@@ -3,7 +3,7 @@ import { Box, Button, Link, Stack, Typography } from '@mui/material'
 import { getMaskColor, MaskColorVar, makeStyles } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { DisconnectProfileDialog } from '../DisconnectProfileDialog'
-import type { NextIDPersonaBindings, PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import type { NextIDPersonaBindings, PersonaIdentifier, ProfileIdentifier, BindingProof } from '@masknet/shared-base'
 import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { NextIdPersonaWarningIcon, NextIdPersonaVerifiedIcon } from '@masknet/icons'
@@ -101,7 +101,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         const handleUserIdClick = async (network: string, userId: string) => {
             await openProfilePage(network, userId)
         }
-        const handleProofIconClick = async (e: MouseEvent, proof: any, profile: any) => {
+        const handleProofIconClick = (e: MouseEvent, proof: BindingProof | undefined) => {
             e.stopPropagation()
             if (!proof || !proof.is_valid) {
                 onConnect()
@@ -112,14 +112,13 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
             const isProved = verification?.proofs.find((x) => {
                 return x.platform === 'twitter' && x.identity === profile.userId.toLowerCase()
             })
-
-            if (!isProved || !onDeleteBound) {
-                onDisconnect(profile)
-            } else {
+            if (isProved && onDeleteBound) {
                 onDeleteBound(profile)
+                return
             }
+            onDisconnect(profile)
         }
-        const userIdBox = (profile: any) => {
+        const userIdBox = (profile: ProfileIdentifier) => {
             const proofSupport = ['twitter.com'].includes(profile.network)
             const proof = verification?.proofs.find((x) => {
                 return x.platform === 'twitter' && x.identity === profile.userId.toLowerCase()
@@ -127,9 +126,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
             return (
                 <div className={classes.userIdBox}>
                     <div>@{profile.userId}</div>
-                    <div
-                        className={classes.proofIconBox}
-                        onClick={(e: MouseEvent) => handleProofIconClick(e, proof, profile)}>
+                    <div className={classes.proofIconBox} onClick={(e: MouseEvent) => handleProofIconClick(e, proof)}>
                         {!proofSupport ? null : proof?.is_valid ? (
                             <NextIdPersonaVerifiedIcon />
                         ) : (

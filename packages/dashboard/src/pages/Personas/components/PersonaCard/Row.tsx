@@ -68,7 +68,7 @@ export const PersonaRowCard = memo(() => {
         connectPersona,
         disconnectPersona,
         renamePersona,
-        operateBound,
+        deleteBound,
         definedSocialNetworks,
         verification,
     } = PersonaContext.useContainer()
@@ -83,7 +83,7 @@ export const PersonaRowCard = memo(() => {
             profiles={currentPersona.linkedProfiles}
             onConnect={connectPersona}
             onDisconnect={disconnectPersona}
-            onDeleteBound={operateBound}
+            onDeleteBound={deleteBound}
             onRename={renamePersona}
             definedSocialNetworks={definedSocialNetworks}
         />

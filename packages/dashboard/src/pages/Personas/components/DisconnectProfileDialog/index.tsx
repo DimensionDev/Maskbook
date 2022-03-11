@@ -99,6 +99,7 @@ export const DisconnectProfileDialog = ({
                                 variant="contained"
                                 onClick={() => {
                                     onDisconnect(profileIdentifier)
+                                    setCurrentStep(steps.selection)
                                     onClose()
                                 }}>
                                 {t.confirm()}
