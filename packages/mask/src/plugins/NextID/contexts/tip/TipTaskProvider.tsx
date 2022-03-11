@@ -12,7 +12,6 @@ interface Props {
 
 export const TipTaskProvider: FC<Props> = ({ children, task }) => {
     const [recipient, setRecipient] = useState('')
-    const [recipients, setRecipients] = useState<string[]>(task.addresses)
     const [tipType, setTipType] = useState<TipType>(TipType.Token)
     const [amount, setAmount] = useState('')
     const { targetChainId } = TargetChainIdContext.useContainer()
@@ -26,13 +25,9 @@ export const TipTaskProvider: FC<Props> = ({ children, task }) => {
     }, [task.to])
 
     useEffect(() => {
-        setRecipients(task.addresses)
-    }, [task.addresses])
-
-    useEffect(() => {
-        if (recipient || recipients.length === 0) return
-        setRecipient(recipients[0])
-    }, [recipient, recipients])
+        if (recipient || task.addresses.length === 0) return
+        setRecipient(task.addresses[0])
+    }, [recipient, task.addresses])
 
     useEffect(() => {
         if (!nativeTokenDetailed) return
@@ -56,8 +51,7 @@ export const TipTaskProvider: FC<Props> = ({ children, task }) => {
             recipient,
             recipientSnsId: task.recipientSnsId || '',
             setRecipient,
-            recipients,
-            setRecipients,
+            recipients: task.addresses,
             tipType,
             setTipType,
             token,
@@ -75,7 +69,7 @@ export const TipTaskProvider: FC<Props> = ({ children, task }) => {
     }, [
         recipient,
         task.recipientSnsId,
-        recipients,
+        task.addresses,
         tipType,
         amount,
         erc721TokenId,

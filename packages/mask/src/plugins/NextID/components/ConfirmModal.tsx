@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { Button, DialogActions, DialogContent } from '@mui/material'
+import { Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import type { FC, ReactNode } from 'react'
 import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
 
@@ -49,7 +49,7 @@ export const ConfirmModal: FC<Props> = ({ className, message, icon, confirmText,
             {...rest}>
             <DialogContent className={classes.content}>
                 {icon ? <div className={classes.icon}>{icon}</div> : null}
-                <div className={classes.message}>{message}</div>
+                <Typography className={classes.message}>{message}</Typography>
             </DialogContent>
             <DialogActions className={classes.actions}>
                 <Button fullWidth onClick={onConfirm}>

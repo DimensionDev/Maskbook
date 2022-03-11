@@ -15,7 +15,6 @@ export interface ContextOptions {
     tipType: TipType
     setTipType: Dispatch<SetStateAction<TipType>>
     recipients: string[]
-    setRecipients: Dispatch<SetStateAction<string[]>>
     token: FungibleTokenDetailed | null
     setToken: Dispatch<SetStateAction<FungibleTokenDetailed | null>>
     amount: string
@@ -36,7 +35,6 @@ export const TipContext = createContext<ContextOptions>({
     tipType: TipType.NFT,
     setTipType: noop,
     recipients: [],
-    setRecipients: noop,
     token: null,
     setToken: noop,
     amount: '',

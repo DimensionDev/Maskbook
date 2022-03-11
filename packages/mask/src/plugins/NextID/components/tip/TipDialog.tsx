@@ -1,18 +1,18 @@
+import { SuccessIcon } from '@masknet/icons'
 import { PluginId, useActivatedPlugin, usePluginIDContext } from '@masknet/plugin-infra'
 import { makeStyles } from '@masknet/theme'
 import { EMPTY_LIST, TransactionStateType } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
 import { useCallback, useEffect, useMemo } from 'react'
+import { useBoolean } from 'react-use'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { NetworkTab } from '../../../../components/shared/NetworkTab'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { TargetChainIdContext, useTip } from '../../contexts'
-import { TipForm } from './TipForm'
-import { ConfirmModal } from '../ConfirmModal'
-import { useBoolean } from 'react-use'
 import { useI18N } from '../../locales'
-import { SuccessIcon } from '@masknet/icons'
 import { TipType } from '../../types'
+import { ConfirmModal } from '../ConfirmModal'
+import { TipForm } from './TipForm'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -67,13 +67,18 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const { tipType, amount, token, recipientSnsId, recipient, sendState, erc721Contract } = useTip()
 
     const shareLink = useMemo(() => {
-        const assetName = tipType === TipType.Token ? `${amount} ${token?.symbol}` : `a ${erc721Contract?.name} NFT`
+        const assetName =
+            tipType === TipType.Token
+                ? `${amount || 'some'} ${token?.symbol || 'token'}`
+                : erc721Contract?.name
+                ? `a ${erc721Contract.name} NFT`
+                : ''
         return activatedSocialNetworkUI.utils.getShareLinkURL?.(
             `I just tipped ${assetName} to @${recipientSnsId}'s wallet address ${recipient}
 
 Install https://mask.io/download-links to tip my best friend.`,
         )
-    }, [amount, tipType, erc721Contract?.name, token?.symbol, recipient, recipientSnsId])
+    }, [amount, tipType, erc721Contract?.name, token, recipient, recipientSnsId])
 
     const successMessage = t.send_tip_successfully()
 
@@ -86,7 +91,7 @@ Install https://mask.io/download-links to tip my best friend.`,
         window.open(shareLink)
         openConfirmModal(false)
         onClose?.()
-    }, [onClose])
+    }, [shareLink, onClose])
 
     return (
         <>
