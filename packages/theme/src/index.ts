@@ -44,7 +44,6 @@ export * from './hooks'
 export * from './customization'
 export * from './ShadowRoot'
 export * from './UIHelper/custom-ui-helper'
-export * from './CSSVariableInjector'
 export { getMaskColor, useMaskColor, MaskColorVar, applyMaskColorVars } from './constants'
 export type { MaskCSSVariableColor } from './constants'
 

@@ -20,7 +20,7 @@
     "@rollup/plugin-replace": "^4.0.0",
     "@rollup/plugin-sucrase": "^4.0.2",
     "date-fns": "^2.28.0",
-    "rollup": "^2.69.0",
+    "rollup": "^2.70.0",
     "rollup-plugin-dts": "4.2.0"
   }
 }

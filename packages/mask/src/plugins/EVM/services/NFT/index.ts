@@ -36,7 +36,7 @@ export async function getNFT(options: NFTOption) {
         case NonFungibleAssetProvider.OPENSEA:
             return OpenSea.getToken(address, tokenId, chainId)
         case NonFungibleAssetProvider.NFTSCAN:
-            return NFTScan.getToken(address, tokenId, chainId)
+            return NFTScan.getToken(address, tokenId)
         case NonFungibleAssetProvider.RARIBLE:
             return Rarible.getToken(address, tokenId)
         default:

@@ -1,5 +1,5 @@
-import { lazy, Suspense } from 'react'
-import { Redirect, Route, Switch, HashRouter } from 'react-router-dom'
+import { lazy } from 'react'
+import { Navigate, Route, Routes, HashRouter } from 'react-router-dom'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra'
 import { PopupRoutes } from '@masknet/shared-base'
 // eslint-disable-next-line import/no-deprecated
@@ -29,24 +29,18 @@ export default function Popups() {
         <MaskUIRoot useTheme={useAlwaysLightTheme} kind="page">
             <Web3Provider value={PopupWeb3Context}>
                 <HashRouter>
-                    {/* ! Don't remove this suspense. Otherwise react-router v5 doesn't work while changing routes.  */}
-                    <Suspense fallback="">
-                        <Switch>
-                            <Route path={PopupRoutes.Personas} children={frame(<Personas />)} />
-                            <Route path={PopupRoutes.Wallet} children={frame(<Wallet />)} />
-                            <Route path={PopupRoutes.Swap} children={<SwapPage />} />
-                            <Route path={PopupRoutes.RequestPermission} exact>
-                                <RequestPermissionPage />
-                            </Route>
-                            <Route path={PopupRoutes.PermissionAwareRedirect} exact>
-                                <PermissionAwareRedirect />
-                            </Route>
-                            <Route path={PopupRoutes.ThirdPartyRequestPermission} exact>
-                                <ThirdPartyRequestPermission />
-                            </Route>
-                            <Route children={<Redirect to={PopupRoutes.Personas} />} />
-                        </Switch>
-                    </Suspense>
+                    <Routes>
+                        <Route path={PopupRoutes.Personas + '/*'} element={frame(<Personas />)} />
+                        <Route path={PopupRoutes.Wallet + '/*'} element={frame(<Wallet />)} />
+                        <Route path={PopupRoutes.Swap} element={<SwapPage />} />
+                        <Route path={PopupRoutes.RequestPermission} element={<RequestPermissionPage />} />
+                        <Route path={PopupRoutes.PermissionAwareRedirect} element={<PermissionAwareRedirect />} />
+                        <Route
+                            path={PopupRoutes.ThirdPartyRequestPermission}
+                            element={<ThirdPartyRequestPermission />}
+                        />
+                        <Route path="*" element={<Navigate replace to={PopupRoutes.Personas} />} />
+                    </Routes>
                     {/* TODO: Should only load plugins when the page is plugin-aware. */}
                     <PluginRender />
                 </HashRouter>
