@@ -90,7 +90,11 @@ jobs:
           node-version: "16"
           cache: "pnpm"
       - run: pnpm install
-      - run: pnpm run lint:ci
+      - name: Run Eslint
+        run: |
+          # report to stdio and to file, it's cached, the second run should be fast
+          pnpm run lint:ci
+          pnpm run lint:ci-report
       - name: Upload eslint report
         uses: actions/upload-artifact@v2
         with:
