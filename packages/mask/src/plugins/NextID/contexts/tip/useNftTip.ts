@@ -17,9 +17,7 @@ export function useNftTip(
         contract?.address || '',
     )
     useEffect(() => {
-        if (transferState.type !== TransactionStateType.CONFIRMED) {
-            return
-        }
+        if (transferState.type !== TransactionStateType.CONFIRMED) return
         resetTransferCallback()
     }, [transferState.type, resetTransferCallback])
 

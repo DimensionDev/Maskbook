@@ -111,6 +111,7 @@ export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
         token?.type || EthereumTokenType.Native,
         token?.address || '',
+        chainId,
     )
     // #endregion
     const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
