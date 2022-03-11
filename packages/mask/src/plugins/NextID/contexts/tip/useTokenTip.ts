@@ -3,11 +3,10 @@ import {
     EthereumTokenType,
     FungibleTokenDetailed,
     isSameAddress,
-    TransactionStateType,
     useTokenConstants,
     useTokenTransferCallback,
 } from '@masknet/web3-shared-evm'
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import type { TipTuple } from './type'
 
 export function useTokenTip(recipient: string, token: FungibleTokenDetailed | null, amount: string): TipTuple {
@@ -16,20 +15,12 @@ export function useTokenTip(recipient: string, token: FungibleTokenDetailed | nu
     const isNativeToken = isSameAddress(token?.address, NATIVE_TOKEN_ADDRESS)
 
     const assetType = isNativeToken ? EthereumTokenType.Native : EthereumTokenType.ERC20
-    const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
-        assetType,
-        token?.address || '',
-    )
-
-    useEffect(() => {
-        if (transferState.type !== TransactionStateType.CONFIRMED) return
-        resetTransferCallback()
-    }, [transferState.type, resetTransferCallback])
+    const [transferState, transferCallback] = useTokenTransferCallback(assetType, token?.address || '')
 
     const sendTip = useCallback(async () => {
         const transferAmount = rightShift(amount || '0', token?.decimals || 0).toFixed()
         await transferCallback(transferAmount, recipient)
-    }, [amount, token, recipient, transferCallback, resetTransferCallback])
+    }, [amount, token, recipient, transferCallback])
 
     return [transferState, sendTip]
 }
