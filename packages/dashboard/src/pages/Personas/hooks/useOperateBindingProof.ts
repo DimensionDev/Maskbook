@@ -3,7 +3,7 @@ import { bindProof, createPersonaPayload } from '@masknet/web3-providers'
 import { useAsyncFn } from 'react-use'
 import { Services } from '../../../API'
 
-export function useOperateBound() {
+export function useDeleteBound() {
     return useAsyncFn(async (identifier: ECKeyIdentifier, profile, network, action) => {
         const persona_ = await Services.Identity.queryPersona(identifier)
         const username = profile.userId.toLowerCase()
@@ -21,6 +21,6 @@ export function useOperateBound() {
         await bindProof(persona_.publicHexKey, action, platform, username, {
             signature: signature,
         })
-        await Services.Identity.detachProfile(profile)
+        Services.Identity.detachProfile(profile)
     })
 }

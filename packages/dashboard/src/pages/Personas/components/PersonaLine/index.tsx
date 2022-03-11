@@ -101,7 +101,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         const handleUserIdClick = async (network: string, userId: string) => {
             await openProfilePage(network, userId)
         }
-        const handleProofIconClick = async (e: MouseEvent, proof: any, profile: any) => {
+        const handleProofIconClick = (e: MouseEvent, proof: any, profile: any) => {
             e.stopPropagation()
             if (!proof || !proof.is_valid) {
                 onConnect()
@@ -112,12 +112,11 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
             const isProved = verification?.proofs.find((x) => {
                 return x.platform === 'twitter' && x.identity === profile.userId.toLowerCase()
             })
-
-            if (!isProved || !onDeleteBound) {
-                onDisconnect(profile)
-            } else {
+            if (isProved && onDeleteBound) {
                 onDeleteBound(profile)
+                return
             }
+            onDisconnect(profile)
         }
         const userIdBox = (profile: any) => {
             const proofSupport = ['twitter.com'].includes(profile.network)
