@@ -216,6 +216,7 @@ export enum TradeProvider {
     TRISOLARIS = 12,
     TRADERJOE = 13,
     PANGOLIN = 14,
+    SOLIDLY = 15,
 }
 /** Supported language settings */
 export enum LanguageOptions {

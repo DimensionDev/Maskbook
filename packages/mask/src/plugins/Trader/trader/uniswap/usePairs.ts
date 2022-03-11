@@ -27,11 +27,11 @@ export function usePairs(tradeProvider: TradeProvider, tokenPairs: readonly Toke
 
     const listOfPairAddress = useMemo(() => {
         if (!context) return EMPTY_LIST
-        const { FACTORY_CONTRACT_ADDRESS, INIT_CODE_HASH } = context
+        const { FACTORY_CONTRACT_ADDRESS, INIT_CODE_HASH, STABLE } = context
         if (!FACTORY_CONTRACT_ADDRESS || !INIT_CODE_HASH) return EMPTY_LIST
         return tokenPairs.map(([tokenA, tokenB]) =>
             tokenA && tokenB && !tokenA.equals(tokenB)
-                ? getPairAddress(FACTORY_CONTRACT_ADDRESS, INIT_CODE_HASH, tokenA, tokenB)
+                ? getPairAddress(FACTORY_CONTRACT_ADDRESS, INIT_CODE_HASH, STABLE, tokenA, tokenB)
                 : undefined,
         )
     }, [context, tokenPairs])

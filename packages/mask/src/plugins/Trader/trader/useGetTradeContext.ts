@@ -21,6 +21,8 @@ import {
     WANNASWAP_CUSTOM_BASES,
     TRISOLARIS_BASE_AGAINST_TOKENS,
     TRISOLARIS_CUSTOM_BASES,
+    SOLIDLY_BASE_AGAINST_TOKENS,
+    SOLIDLY_CUSTOM_BASES,
 } from '../constants'
 import { unreachable } from '@dimensiondev/kit'
 import { TargetChainIdContext } from './useTargetChainIdContext'
@@ -41,6 +43,7 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     AGAINST_TOKENS: UNISWAP_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: UNISWAP_CUSTOM_BASES,
+                    STABLE: false,
                 }
             case TradeProvider.UNISWAP_V3:
                 return {
@@ -53,6 +56,7 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     AGAINST_TOKENS: UNISWAP_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: UNISWAP_CUSTOM_BASES,
+                    STABLE: false,
                 }
             case TradeProvider.SUSHISWAP:
                 return {
@@ -65,6 +69,7 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     AGAINST_TOKENS: SUSHISWAP_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: SUSHISWAP_CUSTOM_BASES,
+                    STABLE: false,
                 }
             case TradeProvider.SASHIMISWAP:
                 return {
@@ -77,6 +82,7 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     AGAINST_TOKENS: SASHIMISWAP_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: SASHIMISWAP_CUSTOM_BASES,
+                    STABLE: false,
                 }
             case TradeProvider.QUICKSWAP:
                 return {
@@ -89,6 +95,7 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     AGAINST_TOKENS: QUICKSWAP_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: QUICKSWAP_CUSTOM_BASES,
+                    STABLE: false,
                 }
             case TradeProvider.PANCAKESWAP:
                 return {
@@ -101,6 +108,7 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     AGAINST_TOKENS: PANCAKESWAP_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: PANCAKESWAP_CUSTOM_BASES,
+                    STABLE: false,
                 }
             case TradeProvider.TRADERJOE:
                 return {
@@ -113,6 +121,7 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     AGAINST_TOKENS: TRADERJOE_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: TRADERJOE_CUSTOM_BASES,
+                    STABLE: false,
                 }
             case TradeProvider.PANGOLIN:
                 return {
@@ -125,6 +134,7 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     AGAINST_TOKENS: PANGOLIN_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: PANGOLIN_CUSTOM_BASES,
+                    STABLE: false,
                 }
             case TradeProvider.WANNASWAP:
                 return {
@@ -137,6 +147,7 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     AGAINST_TOKENS: WANNASWAP_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: WANNASWAP_CUSTOM_BASES,
+                    STABLE: false,
                 }
             case TradeProvider.TRISOLARIS:
                 return {
@@ -149,6 +160,20 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     AGAINST_TOKENS: TRISOLARIS_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: TRISOLARIS_CUSTOM_BASES,
+                    STABLE: false,
+                }
+            case TradeProvider.SOLIDLY:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.SOLIDLY_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.SOLIDLY_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.SOLIDLY_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.SOLIDLY_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: SOLIDLY_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: SOLIDLY_CUSTOM_BASES,
+                    STABLE: true,
                 }
             case TradeProvider.ZRX:
                 return {

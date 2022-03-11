@@ -8,7 +8,13 @@ type PairCache = Record<string, Record<string, string>>
 const map = new Map<string, PairCache>()
 
 // This is a dynamically version of address generate algorithm borrowed from the Pair class of uniswap-skd
-export function getPairAddress(factoryAddress: string, initCodeHash: string, tokenA?: Token, tokenB?: Token) {
+export function getPairAddress(
+    factoryAddress: string,
+    initCodeHash: string,
+    stable?: boolean,
+    tokenA?: Token,
+    tokenB?: Token,
+) {
     if (!tokenA || !tokenB) return ''
     const tokens = tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA] // does safety checks
     let cache = map.get(initCodeHash)
@@ -22,7 +28,9 @@ export function getPairAddress(factoryAddress: string, initCodeHash: string, tok
                 ...cache?.[token0Addr],
                 [token1Addr]: getCreate2Address(
                     factoryAddress,
-                    keccak256(['bytes'], [pack(['address', 'address'], [token0Addr, token1Addr])]),
+                    stable
+                        ? keccak256(['bytes'], [pack(['address', 'address', 'bool'], [token0Addr, token1Addr, stable])])
+                        : keccak256(['bytes'], [pack(['address', 'address'], [token0Addr, token1Addr])]),
                     initCodeHash,
                 ),
             },

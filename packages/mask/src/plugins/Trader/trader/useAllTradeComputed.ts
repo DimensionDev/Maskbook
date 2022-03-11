@@ -247,6 +247,18 @@ export function useAllTradeComputed(
     const wannaswap = useUniswapTradeComputed(wannaswap_.value, inputToken, outputToken)
     const wannaSwapEstimateGas = useUniswapTradeGasLimit(wannaswap, TradeProvider.WANNASWAP)
 
+    // Solidly
+    const solidly_ = useUniswapV2Trade(
+        TradeProvider.SOLIDLY,
+        TradeStrategy.ExactIn,
+        inputAmount_,
+        '0',
+        tradeProviders.some((x) => x === TradeProvider.SOLIDLY) ? inputToken : undefined,
+        tradeProviders.some((x) => x === TradeProvider.SOLIDLY) ? outputToken : undefined,
+    )
+    const solidly = useUniswapTradeComputed(solidly_.value, inputToken, outputToken)
+    const solidlyEstimateGas = useUniswapTradeGasLimit(solidly, TradeProvider.SOLIDLY)
+
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
         { provider: TradeProvider.SUSHISWAP, ...sushiSwap_, value: sushiSwap, gas: sushiSwapEstimateGas },
@@ -263,6 +275,7 @@ export function useAllTradeComputed(
         { provider: TradeProvider.OPENOCEAN, ...openocean_, value: openocean, gas: openoceanSwapEstimateGas },
         { provider: TradeProvider.WANNASWAP, ...wannaswap_, value: wannaswap, gas: wannaSwapEstimateGas },
         { provider: TradeProvider.TRISOLARIS, ...trisolaris_, value: trisolaris, gas: trisolarisEstimateGas },
+        { provider: TradeProvider.SOLIDLY, ...solidly_, value: solidly, gas: solidlyEstimateGas },
     ]
 
     return nativeToken_.value

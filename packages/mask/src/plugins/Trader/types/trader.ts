@@ -75,6 +75,7 @@ export enum ZrxTradePool {
     PangolinDex = 'PangolinDex',
     Trisolaris = 'Trisolaris',
     WannaSwap = 'WannaSwap',
+    Solidly = 'Solidly',
 }
 
 export interface TradeComputed<T = unknown> {
@@ -113,6 +114,7 @@ export interface TradeContext {
     ADDITIONAL_TOKENS?: ChainIdOptionalRecord<Record<string, ERC20TokenDetailed[]>>
     AGAINST_TOKENS?: ChainIdOptionalRecord<ERC20TokenDetailed[]>
     CUSTOM_TOKENS?: ChainIdOptionalRecord<Record<string, ERC20TokenDetailed[]>>
+    STABLE?: boolean
 }
 
 export interface TradeInfo {
