@@ -1,6 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import type { NextIDPlatform } from '@masknet/shared-base'
-import Services from '../../extension/service'
+import type { NextIDPlatform, PersonaIdentifier } from '@masknet/shared-base'
 import { useMemo, useState } from 'react'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { usePersonaConnectStatus } from './usePersonaConnectStatus'
@@ -21,10 +20,26 @@ export const usePersonaBoundPlatform = (personaPublicKey: string) => {
 let isOpenedVerifyDialog = false
 let isOpenedFromButton = false
 
+const verifyPersona = (personaIdentifier?: PersonaIdentifier) => async () => {
+    if (!personaIdentifier) return
+    currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier].value = stringify({
+        status: SetupGuideStep.VerifyOnNextID,
+        persona: personaIdentifier.toText(),
+    })
+}
+
 export const useNextIDBoundByPlatform = (platform: NextIDPlatform, identity: string) => {
     return useAsyncRetry(() => {
         return queryExistedBindingByPlatform(platform, identity)
     }, [platform, identity])
+}
+
+export enum NextIDVerificationStatus {
+    WaitingLocalConnect = 'need-local-connect',
+    WaitingVerify = 'waiting-verify',
+    Verified = 'Verified',
+    HideVerifyDialog = 'hide-verify-dialog',
+    Other = 'Other',
 }
 
 export function useNextIDConnectStatus() {
@@ -46,42 +61,52 @@ export function useNextIDConnectStatus() {
         lastState.username || (lastRecognized.identifier.isUnknown ? '' : lastRecognized.identifier.userId),
     )
 
-    const { value: isVerified = false, retry } = useAsyncRetry(async () => {
-        if (lastState.status === SetupGuideStep.FindUsername) return true
-        if (isOpenedVerifyDialog) return true
-        if (!enableNextID || !username || !personaConnectStatus.connected) return true
+    const { value: VerificationStatus = NextIDVerificationStatus.Other, retry } = useAsyncRetry(async () => {
+        // Whether in connect to {platform} process
+        if (lastState.status === SetupGuideStep.FindUsername) return NextIDVerificationStatus.WaitingLocalConnect
 
-        const currentPersona = await Services.Settings.getCurrentPersona()
-        if (!currentPersona?.publicHexKey) return true
+        // Whether it has been opened in a lifecycle
+        if (isOpenedVerifyDialog) return NextIDVerificationStatus.HideVerifyDialog
 
+        // Whether current platform support next id
+        if (!enableNextID || !username || !personaConnectStatus.connected)
+            return NextIDVerificationStatus.WaitingLocalConnect
+
+        const { currentConnectedPersona } = personaConnectStatus
+        if (!currentConnectedPersona?.publicHexKey) return NextIDVerificationStatus.WaitingLocalConnect
+
+        // Whether used 'Don't show me again
         if (
-            dismissVerifyNextID[ui.networkIdentifier].value[`${username}_${currentPersona.identifier.toText()}`] &&
+            dismissVerifyNextID[ui.networkIdentifier].value[
+                `${username}_${currentConnectedPersona.identifier.toText()}`
+            ] &&
             !isOpenedFromButton
         )
-            return true
+            return NextIDVerificationStatus.HideVerifyDialog
 
+        // Whether verified in next id server
         const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
-        if (!platform) return true
+        if (!platform) return NextIDVerificationStatus.Other
 
-        const isBound = await queryIsBound(currentPersona.publicHexKey, platform, username)
-        if (isBound) return true
-
-        currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
-            status: SetupGuideStep.VerifyOnNextID,
-            persona: currentPersona?.identifier.toText(),
-        })
+        const isBound = await queryIsBound(currentConnectedPersona.publicHexKey, platform, username)
+        if (isBound) return NextIDVerificationStatus.Verified
 
         isOpenedVerifyDialog = true
         isOpenedFromButton = false
-        return false
+        return NextIDVerificationStatus.WaitingVerify
     }, [username, enableNextID, lastStateRef.value, isOpenedVerifyDialog])
 
     return {
-        isVerified,
+        isVerified: VerificationStatus === NextIDVerificationStatus.Verified,
+        status: VerificationStatus,
         reset: () => {
             isOpenedVerifyDialog = false
             isOpenedFromButton = true
             retry()
         },
+        action:
+            VerificationStatus === NextIDVerificationStatus.WaitingVerify
+                ? verifyPersona(personaConnectStatus.currentConnectedPersona?.identifier)
+                : null,
     }
 }
