@@ -114,7 +114,6 @@ export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
     )
     // #endregion
     const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
-    console.log({ isSending, buttonLabel })
 
     return (
         <Box className={classnames(classes.root, className)} {...rest}>
@@ -125,6 +124,7 @@ export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
                     <Select
                         ref={selectRef}
                         value={recipient}
+                        disabled={isSending}
                         onChange={(e) => {
                             setRecipient(e.target.value)
                         }}
@@ -152,8 +152,18 @@ export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
                         onChange={(e) => {
                             setTipType(e.target.value as TipType)
                         }}>
-                        <FormControlLabel value={TipType.Token} control={<Radio />} label={t.tip_type_token()} />
-                        <FormControlLabel value={TipType.NFT} control={<Radio />} label={t.tip_type_nft()} />
+                        <FormControlLabel
+                            disabled={isSending}
+                            value={TipType.Token}
+                            control={<Radio />}
+                            label={t.tip_type_token()}
+                        />
+                        <FormControlLabel
+                            disabled={isSending}
+                            value={TipType.NFT}
+                            control={<Radio />}
+                            label={t.tip_type_nft()}
+                        />
                     </RadioGroup>
                 </FormControl>
                 {tipType === TipType.Token ? (
@@ -164,6 +174,9 @@ export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
                             amount={amount}
                             onAmountChange={setAmount}
                             balance={tokenBalance}
+                            InputProps={{
+                                disabled: isSending,
+                            }}
                             SelectTokenChip={{
                                 loading: loadingTokenBalance,
                                 ChipProps: {

@@ -20,7 +20,6 @@ export function useNftTip(
         if (transferState.type !== TransactionStateType.CONFIRMED) {
             return
         }
-        console.log('resetTransferCallback')
         resetTransferCallback()
     }, [transferState.type, resetTransferCallback])
 

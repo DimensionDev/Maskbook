@@ -48,7 +48,7 @@ interface Props extends HTMLProps<HTMLDivElement> {}
 
 export const NFTSection: FC<Props> = ({ className, ...rest }) => {
     const { t } = useI18N()
-    const { erc721Contract, setErc721Contract, erc721TokenId, setErc721TokenId } = useTip()
+    const { erc721Contract, setErc721Contract, erc721TokenId, setErc721TokenId, isSending } = useTip()
     const [tokenId, setTokenId, erc721TokenDetailedCallback] = useERC721TokenDetailedCallback(erc721Contract)
     const { classes } = useStyles()
     const account = useAccount()
@@ -77,9 +77,16 @@ export const NFTSection: FC<Props> = ({ className, ...rest }) => {
                             classes={{ root: classes.keyword }}
                             value={tokenId}
                             onChange={(id) => setTokenId(id)}
+                            inputBaseProps={{
+                                disabled: isSending,
+                            }}
                             label=""
                         />
-                        <Button className={classes.searchButton} variant="contained" onClick={onSearch}>
+                        <Button
+                            className={classes.searchButton}
+                            variant="contained"
+                            disabled={isSending}
+                            onClick={onSearch}>
                             {t('search')}
                         </Button>
                     </FormControl>
