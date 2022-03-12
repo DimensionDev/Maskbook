@@ -3,20 +3,24 @@ import type { Web3Plugin } from '../web3-types'
 import { useSocket } from '../hooks/useSocket'
 import { isSameAddress } from './utils/isSameAddress'
 import { uniqWith } from 'lodash-unified'
+import { useMemo } from 'react'
 
 export function useNonFungibleAssets(
     address: string,
-    network?: Web3Plugin.NetworkDescriptor | null,
+    networkList: Web3Plugin.NetworkDescriptor[],
     dependReady?: boolean,
 ) {
-    const id = `mask.fetchNonFungibleCollectibleAssetV2_${address}_${network?.ID ?? 'all'}`
+    const id = useMemo(
+        () => `mask.fetchNonFungibleCollectibleAssetV2_${address}_${Date.now()}`,
+        [JSON.stringify(networkList)],
+    )
     const message = {
         id: dependReady === undefined ? id : dependReady ? id : '',
         method: 'mask.fetchNonFungibleCollectibleAssetV2',
         params: {
             address,
             pageSize: 200,
-            network,
+            networkList,
         },
     }
 

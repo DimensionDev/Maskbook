@@ -6,7 +6,7 @@ import { Web3Plugin, PluginId } from '@masknet/plugin-infra'
 
 export interface NonFungibleTokenAssetArgs extends ProducerArgBase {
     address: string
-    network?: Web3Plugin.NetworkDescriptor | null
+    networkList: Web3Plugin.NetworkDescriptor[]
 }
 
 const nonFungibleCollectibleAsset = async (
@@ -14,55 +14,60 @@ const nonFungibleCollectibleAsset = async (
     getKeys: ProducerKeyFunction,
     args: NonFungibleTokenAssetArgs,
 ): Promise<void> => {
-    const { address, network, pageSize = 100 } = args
-    const openSeaApiKey = await getKeys('opensea')
+    const { address, networkList, pageSize = 100 } = args
 
-    // Alchemy api is used for polygon and flow network.
-    if (network) {
-        await collectAllPageData<ERC721TokenDetailed>(
-            async (page, {}, pageKey) => {
-                const r = (await getAlchemyNFTList(address, network, page, pageSize, pageKey)) as {
-                    data: ERC721TokenDetailed[]
-                    hasNextPage: boolean
-                    pageKey?: string
-                    total?: number
-                }
-                return r
-            },
-            pageSize,
-            push,
-        )
-    }
+    const allRequest = networkList.map(async (network) => {
+        try {
+            const queryFromOpensea = async () => {
+                const openSeaApiKey = await getKeys('opensea')
+                await collectAllPageData<ERC721TokenDetailed>(
+                    (page) => getOpenSeaNFTList(openSeaApiKey, address, page, pageSize),
+                    pageSize,
+                    push,
+                )
+            }
 
-    if (network && network.ID !== `${PluginId.EVM}_ethereum`) return
+            const fromAlchemy = collectAllPageData<ERC721TokenDetailed>(
+                async (page, {}, pageKey) => {
+                    const r = (await getAlchemyNFTList(address, network, page, pageSize, pageKey)) as {
+                        data: ERC721TokenDetailed[]
+                        hasNextPage: boolean
+                        pageKey?: string
+                        total?: number
+                    }
+                    return r
+                },
+                pageSize,
+                push,
+            )
 
-    try {
-        await collectAllPageData<ERC721TokenDetailed>(
-            (page) => getOpenSeaNFTList(openSeaApiKey, address, page, pageSize),
-            pageSize,
-            push,
-        )
-    } finally {
-        const fromRarible = collectAllPageData<ERC721TokenDetailed>(
-            (page, pageInfo) => getRaribleNFTList(address, page, pageSize, pageInfo),
-            pageSize,
-            push,
-        )
+            await Promise.allSettled([network.ID === `${PluginId.EVM}_ethereum` && queryFromOpensea(), fromAlchemy])
+        } finally {
+            if (network.ID !== `${PluginId.EVM}_ethereum`) return
 
-        const formNFTScanERC721 = collectAllPageData<ERC721TokenDetailed>(
-            (page) => getNFTScanNFTs(address, 'erc721', page, pageSize),
-            pageSize,
-            push,
-        )
+            const fromRarible = collectAllPageData<ERC721TokenDetailed>(
+                (page, pageInfo) => getRaribleNFTList(address, page, pageSize, pageInfo),
+                pageSize,
+                push,
+            )
 
-        const fromNFTScanERC1155 = collectAllPageData<ERC721TokenDetailed>(
-            (page) => getNFTScanNFTs(address, 'erc1155', page, pageSize),
-            pageSize,
-            push,
-        )
+            const formNFTScanERC721 = collectAllPageData<ERC721TokenDetailed>(
+                (page) => getNFTScanNFTs(address, 'erc721', page, pageSize),
+                pageSize,
+                push,
+            )
 
-        await Promise.allSettled([fromRarible, formNFTScanERC721, fromNFTScanERC1155])
-    }
+            const fromNFTScanERC1155 = collectAllPageData<ERC721TokenDetailed>(
+                (page) => getNFTScanNFTs(address, 'erc1155', page, pageSize),
+                pageSize,
+                push,
+            )
+
+            await Promise.allSettled([fromRarible, formNFTScanERC721, fromNFTScanERC1155])
+        }
+    })
+
+    await Promise.allSettled(allRequest)
 }
 
 const producer: RPCMethodRegistrationValue<ERC721TokenDetailed, NonFungibleTokenAssetArgs> = {

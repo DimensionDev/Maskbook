@@ -7,6 +7,7 @@ import { Constant, transform } from '@masknet/web3-shared-evm/constants/utils'
 import { mergeNFTList, SocketState, useNonFungibleAssets, useWeb3State } from '@masknet/plugin-infra'
 import { cloneDeep, findLastIndex } from 'lodash-unified'
 import { delay } from '@dimensiondev/kit'
+import { PLUGIN_ID, PLUGIN_NETWORKS } from '../../../plugins/EVM/constants'
 import type { User, FilterContract } from '../types'
 import { Punk3D } from '../constants'
 
@@ -27,7 +28,8 @@ export function useNFTs(user: User | undefined, configNFTs: Record<string, Const
     const chainId = useChainId()
     const { Utils } = useWeb3State()
     const [fetchTotal, setFetchTotal] = useState<ERC721TokenDetailed[]>([])
-    const { data: _collectibles, state } = useNonFungibleAssets(user?.address ?? '')
+    const network = PLUGIN_NETWORKS.find((x) => x.ID === `${PLUGIN_ID}_ethereum`)!
+    const { data: _collectibles, state } = useNonFungibleAssets(user?.address ?? '', [network])
     const customCollectibles = useCustomNonFungibleAssets(user?.address ?? '', chainId, true)
     const collectibles = (Utils?.mergeNFTList ?? mergeNFTList)([..._collectibles, ...customCollectibles])
 

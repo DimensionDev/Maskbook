@@ -21,6 +21,7 @@ import { Box, Button, Skeleton, Typography, styled, Stack } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { currentNonFungibleAssetDataProviderSettings } from '../../../../plugins/Wallet/settings'
 import { useI18N } from '../../../../utils'
+import { PLUGIN_ID, PLUGIN_NETWORKS } from '../../../../plugins/EVM/constants'
 import { CollectibleCard } from './CollectibleCard'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { CollectionIcon } from './CollectionIcon'
@@ -253,12 +254,12 @@ export function CollectionList({
     const { resolvedAddress: address } = addressName
 
     const { data: collectionsFormRemote } = useNonFungibleAssetCollections(address, chainId)
-
+    const network = PLUGIN_NETWORKS.find((x) => x.ID === `${PLUGIN_ID}_ethereum`)!
     const {
         data: _collectibles,
         state: loadingCollectibleDone,
         retry: retryFetchCollectible,
-    } = useNonFungibleAssets(address, undefined)
+    } = useNonFungibleAssets(address, [network])
     const customCollectibles = useCustomNonFungibleAssets(address, chainId, true)
     const collectibles = (Utils?.mergeNFTList ?? mergeNFTList)([..._collectibles, ...customCollectibles])
 

@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useRef } from 'react'
 import { Box, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useChainId, useCustomNonFungibleAssets } from '@masknet/web3-shared-evm'
+import { useChainId, useCustomNonFungibleAssets, ChainId, NetworkType } from '@masknet/web3-shared-evm'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { CollectibleCard } from '../CollectibleCard'
@@ -52,15 +52,35 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
     const customCollectibles = useCustomNonFungibleAssets(
         account,
         chainId,
-        selectedNetwork?.ID === `${PluginId.EVM}_ethereum`,
+        selectedNetwork?.ID === `${PluginId.EVM}_ethereum` || !selectedNetwork,
     )
+
+    // Todo: remove after migrate `packages/mask/src/plugins/EVM` to `packages/plugins/EVM`
+    const currentSupportedNFT_ApiNetworkList = [
+        {
+            ID: `${PluginId.EVM}_ethereum`,
+            networkSupporterPluginID: PluginId.EVM,
+            chainId: ChainId.Mainnet,
+            type: NetworkType.Ethereum,
+            name: 'Ethereum',
+            isMainnet: true,
+        },
+        {
+            ID: `${PluginId.EVM}_polygon`,
+            networkSupporterPluginID: PluginId.EVM,
+            chainId: ChainId.Matic,
+            type: NetworkType.Polygon,
+            name: 'Polygon',
+            isMainnet: true,
+        },
+    ] as unknown as Web3Plugin.NetworkDescriptor[]
 
     const {
         data: _collectibles,
         state: loadingCollectibleDone,
         retry,
         error: collectiblesError,
-    } = useNonFungibleAssets(account, selectedNetwork)
+    } = useNonFungibleAssets(account, selectedNetwork ? [selectedNetwork] : currentSupportedNFT_ApiNetworkList)
 
     const collectibles = (Utils?.mergeNFTList ?? mergeNFTList)([..._collectibles, ...customCollectibles])
     const isQuerying = loadingCollectibleDone !== SocketState.done
