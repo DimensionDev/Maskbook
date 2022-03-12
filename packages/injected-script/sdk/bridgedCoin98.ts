@@ -1,37 +1,9 @@
 import type { RequestArguments } from 'web3-core'
-import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { EthereumProvider } from '../shared'
 import { createPromise, sendEvent } from './utils'
 
-function request(data: RequestArguments) {
-    return createPromise((id) => sendEvent('coin98BridgeSendRequest', id, data))
-}
-
-function send(payload: JsonRpcPayload, callback: (error: Error | null, result?: JsonRpcResponse) => void) {
-    createPromise((id) =>
-        sendEvent('coin98BridgeSendRequest', id, {
-            method: payload.method,
-            params: payload.params,
-        }),
-    ).then(
-        (value) => {
-            callback(null, {
-                jsonrpc: '2.0',
-                id: payload.id as number,
-                result: value,
-            })
-        },
-        (error) => {
-            if (error instanceof Error) callback(error)
-        },
-    )
-}
-
-/** Interact with the current ethereum provider */
+/** Interact with the current coin98 provider */
 export const bridgedCoin98Provider: EthereumProvider = {
-    request,
-    send,
-    sendAsync: send,
     on(event, callback) {
         if (!bridgedCoin98.has(event)) {
             bridgedCoin98.set(event, new Set())
@@ -40,6 +12,13 @@ export const bridgedCoin98Provider: EthereumProvider = {
         const map = bridgedCoin98.get(event)!
         map.add(callback)
         return () => void map.delete(callback)
+    },
+    off(event, callback) {
+        const map = bridgedCoin98.get(event)
+        if (map) map.delete(callback)
+    },
+    request<T extends unknown>(data: RequestArguments) {
+        return createPromise<T>((id) => sendEvent('coin98BridgeSendRequest', id, data))
     },
     getProperty(key) {
         return createPromise((id) => sendEvent('coin98BridgePrimitiveAccess', id, key))

@@ -1,17 +1,17 @@
 import { memo, useCallback, useEffect, useState } from 'react'
+import { useAsyncFn, useAsyncRetry } from 'react-use'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import type { Search } from 'history'
 import { Alert, Box, Button, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InfoIcon, RefreshIcon } from '@masknet/icons'
+import { ProviderType } from '@masknet/web3-shared-evm'
+import { DashboardRoutes } from '@masknet/shared-base'
+import { WalletMessages } from '@masknet/plugin-wallet'
 import { useDashboardI18N } from '../../../../locales'
-import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { MnemonicReveal } from '../../../../components/Mnemonic'
 import { VerifyMnemonicDialog } from '../VerifyMnemonicDialog'
-import { useAsyncFn, useAsyncRetry } from 'react-use'
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { PluginServices, Services } from '../../../../API'
-import { DashboardRoutes } from '@masknet/shared-base'
-import type { Search } from 'history'
-import { WalletMessages } from '@masknet/plugin-wallet'
 import { useMnemonicWordsPuzzle } from '../../../../hooks/useMnemonicWordsPuzzle'
 
 // Private key at m/purpose'/coin_type'/account'/change
@@ -120,10 +120,7 @@ const CreateMnemonic = memo(() => {
                 account: address_,
                 providerType: ProviderType.MaskWallet,
             })
-            const chainId = searchParams.get('chainId')
-            if (chainId) {
-                await PluginServices.Wallet.selectAccount([address_], Number(chainId) as ChainId)
-            }
+            await PluginServices.Wallet.selectAccount([address_])
         }
 
         return address_

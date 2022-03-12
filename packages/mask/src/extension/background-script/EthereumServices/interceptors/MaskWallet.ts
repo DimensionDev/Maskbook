@@ -6,6 +6,7 @@ import type { Context, Middleware } from '../types'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import { MaskWalletProvider } from '../providers/MaskWallet'
 import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc'
+import { currentMaskWalletAccountSettings, currentMaskWalletChainIdSettings } from '../../../../plugins/Wallet/settings'
 import { selectAccountPrepare } from '../../../../plugins/Wallet/services'
 import { openPopupWindow } from '../../../../../background/services/helper'
 
@@ -46,21 +47,28 @@ export class MaskWallet implements Middleware<Context> {
         }
 
         switch (context.request.method) {
+            case EthereumMethodType.ETH_CHAIN_ID:
+                context.write(currentMaskWalletChainIdSettings.value)
+                break
+            case EthereumMethodType.ETH_ACCOUNTS:
+                context.write(currentMaskWalletAccountSettings.value ? [currentMaskWalletAccountSettings.value] : [])
+                break
             case EthereumMethodType.MASK_REQUEST_ACCOUNTS:
                 try {
                     const wallets = await WalletRPC.getWallets(ProviderType.MaskWallet)
-
-                    await selectAccountPrepare((accounts, chainId) => {
-                        context.write({
-                            chainId,
-                            accounts,
-                        })
+                    const accounts = await new Promise<string[]>(async (resolve, reject) => {
+                        try {
+                            await openPopupWindow(wallets.length > 0 ? PopupRoutes.SelectWallet : undefined, {
+                                chainId: context.chainId,
+                            })
+                            await selectAccountPrepare(resolve)
+                        } catch (error) {
+                            reject(error)
+                        }
                     })
-                    await openPopupWindow(wallets.length > 0 ? PopupRoutes.SelectWallet : undefined, {
-                        chainId: context.chainId,
-                    })
+                    context.write(accounts)
                 } catch (error) {
-                    context.abort(error, 'Failed to connect to Mask Network.')
+                    context.abort(error, 'Failed to request accounts.')
                 }
                 break
             case EthereumMethodType.MASK_DISMISS_ACCOUNTS:

@@ -1,11 +1,10 @@
 import { useEffect, useCallback } from 'react'
 import { useMount } from 'react-use'
-import { noop } from 'lodash-unified'
 import type { ProviderType, ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, useChainId, useProviderType } from '@masknet/plugin-infra'
 import { EVM_Messages } from '../../messages'
 import Services from '../../../../extension/service'
-import { useBridgedProvider } from '../../hooks'
+import { useProvider } from '../../hooks'
 
 export interface ProviderBridgeProps {
     providerType: ProviderType
@@ -14,7 +13,7 @@ export interface ProviderBridgeProps {
 export function ProviderBridge({ providerType: expectedProviderType }: ProviderBridgeProps) {
     const chainId = useChainId<ChainId>(NetworkPluginID.PLUGIN_EVM)
     const actualProviderType = useProviderType<ProviderType>(NetworkPluginID.PLUGIN_EVM)
-    const bridgedProvider = useBridgedProvider(expectedProviderType)
+    const provider = useProvider(expectedProviderType)
 
     const onMounted = useCallback(async () => {
         if (expectedProviderType !== actualProviderType) return
@@ -33,7 +32,7 @@ export function ProviderBridge({ providerType: expectedProviderType }: ProviderB
                     payload,
                 })
 
-                const result = await bridgedProvider?.request({
+                const result = await provider?.request({
                     method: payload.method,
                     params: payload.params,
                 })
@@ -57,34 +56,41 @@ export function ProviderBridge({ providerType: expectedProviderType }: ProviderB
                 })
             }
         })
-    }, [expectedProviderType, bridgedProvider])
+    }, [expectedProviderType, provider])
 
     useEffect(() => {
-        return (
-            bridgedProvider?.on('accountsChanged', async (accounts: string[]) => {
-                if (actualProviderType !== expectedProviderType) return
-                await Services.Ethereum.notifyEvent(actualProviderType, 'accountsChanged', accounts)
-            }) ?? noop
-        )
-    }, [actualProviderType, expectedProviderType, bridgedProvider])
+        const onAccountsChanged = async (accounts: string[]) => {
+            if (actualProviderType !== expectedProviderType) return
+            await Services.Ethereum.notifyEvent(actualProviderType, 'accountsChanged', accounts)
+        }
+
+        provider?.on('accountsChanged', onAccountsChanged)
+        return () => {
+            provider?.removeListener('accountsChanged', onAccountsChanged)
+        }
+    }, [actualProviderType, expectedProviderType, provider])
 
     useEffect(() => {
-        return (
-            bridgedProvider?.on('chainChanged', async (chainId: ChainId) => {
-                if (actualProviderType !== expectedProviderType) return
-                await Services.Ethereum.notifyEvent(actualProviderType, 'chainChanged', chainId)
-            }) ?? noop
-        )
-    }, [actualProviderType, expectedProviderType, bridgedProvider])
+        const onChainChanged = async (chainId: ChainId) => {
+            if (actualProviderType !== expectedProviderType) return
+            await Services.Ethereum.notifyEvent(actualProviderType, 'chainChanged', chainId)
+        }
+        provider?.on('chainChanged', onChainChanged)
+        return () => {
+            provider?.removeListener('chainChanged', onChainChanged)
+        }
+    }, [actualProviderType, expectedProviderType, provider])
 
     useEffect(() => {
-        return (
-            bridgedProvider?.on('disconnect', async () => {
-                if (actualProviderType !== expectedProviderType) return
-                await Services.Ethereum.notifyEvent(actualProviderType, 'disconnect')
-            }) ?? noop
-        )
-    }, [actualProviderType, expectedProviderType, bridgedProvider])
+        const onDiscconnect = async () => {
+            if (actualProviderType !== expectedProviderType) return
+            await Services.Ethereum.notifyEvent(actualProviderType, 'disconnect')
+        }
+        provider?.on('disconnect', onDiscconnect)
+        return () => {
+            provider?.removeListener('disconnect', onDiscconnect)
+        }
+    }, [actualProviderType, expectedProviderType, provider])
 
     useMount(onMounted)
 

@@ -1,5 +1,4 @@
 import type { RequestArguments } from 'web3-core'
-import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 
 export const CustomEventId = 'c8a6c18e-f6a3-472a-adf3-5335deb80db6'
 export interface InternalEvents {
@@ -71,13 +70,11 @@ export interface EthereumProvider {
     /** Wait for ethereum object appears. */
     untilAvailable(): Promise<true>
     /** Send JSON RPC to the ethereum provider. */
-    request(data: RequestArguments): Promise<unknown>
-    /** Send JSON RPC  */
-    send(payload: JsonRpcPayload, callback: (error: Error | null, result?: JsonRpcResponse) => void): void
-    /** Async send JSON RPC  */
-    sendAsync(payload: JsonRpcPayload, callback: (error: Error | null, result?: JsonRpcResponse) => void): void
+    request<T extends unknown>(data: RequestArguments): Promise<T>
     /** Add event listener */
     on(event: string, callback: (...args: any) => void): () => void
+    /** Remove event listener */
+    off(event: string, callback: (...args: any) => void): void
     /** Access primitive property on the ethereum object. */
     getProperty(key: string): Promise<boolean | undefined>
 }
@@ -89,9 +86,11 @@ export type EventItemBeforeSerialization = keyof InternalEvents extends infer U
     : never
 const { parse, stringify } = JSON
 const { isArray } = Array
+
 export function encodeEvent<T extends keyof InternalEvents>(key: T, args: InternalEvents[T]) {
     return stringify([key, args])
 }
+
 export function decodeEvent(data: string): EventItemBeforeSerialization {
     const result = parse(data)
     // Do not throw new Error cause it requires a global lookup.

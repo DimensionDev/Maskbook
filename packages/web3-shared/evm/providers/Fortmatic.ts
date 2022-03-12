@@ -1,9 +1,9 @@
 import Fortmatic from 'fortmatic'
 import type { RequestArguments } from 'web3-core'
-import { first, noop } from 'lodash-unified'
+import { first } from 'lodash-unified'
 import type { FmProvider } from 'fortmatic/dist/cjs/src/core/fm-provider'
-import { ChainId, EthereumMethodType } from '../types'
-import { createLookupTableResolver, isFortmaticSupported } from '../utils'
+import { ChainId, EIP1193Provider, EthereumMethodType } from '../types'
+import { createLookupTableResolver } from '../utils'
 import { getRPCConstants } from '../constants'
 
 // #region create in-page fortmatic provider
@@ -13,14 +13,6 @@ const TEST_KEY = 'pk_test_D9EAF9A8ACEC9627'
 
 /* spell-checker: disable-next-line */
 const LIVE_KEY = 'pk_live_331BE8AA24445030'
-
-export type ChainIdFortmatic =
-    | ChainId.Mainnet
-    | ChainId.BSC
-    | ChainId.Matic
-    | ChainId.Rinkeby
-    | ChainId.Ropsten
-    | ChainId.Kovan
 
 const resolveAPI_Key = createLookupTableResolver<ChainIdFortmatic, string>(
     {
@@ -34,48 +26,68 @@ const resolveAPI_Key = createLookupTableResolver<ChainIdFortmatic, string>(
     '',
 )
 
-const providerPool = new Map<ChainId, FmProvider>()
-
-function createFortmatic(chainId: ChainIdFortmatic) {
-    const rpcUrl = first(getRPCConstants(chainId).RPC)
-    if (!rpcUrl) throw new Error('Failed to create provider.')
-    return new Fortmatic(resolveAPI_Key(chainId), { chainId, rpcUrl })
+const isFortmaticSupported = (chainId: ChainId): chainId is ChainIdFortmatic => {
+    return [ChainId.Mainnet, ChainId.BSC].includes(chainId)
 }
 
-function createProvider(chainId: ChainIdFortmatic) {
-    if (providerPool.has(chainId)) return providerPool.get(chainId)!
+export type ChainIdFortmatic =
+    | ChainId.Mainnet
+    | ChainId.BSC
+    | ChainId.Matic
+    | ChainId.Rinkeby
+    | ChainId.Ropsten
+    | ChainId.Kovan
 
-    const fm = createFortmatic(chainId)
-    const provider = fm.getProvider()
-    providerPool.set(chainId, provider)
-    return provider
-}
+export default class FortmaticSKD implements EIP1193Provider {
+    private providerPool = new Map<ChainId, FmProvider>()
 
-export default {
-    login(chainId: ChainIdFortmatic) {
-        const provider = createProvider(chainId)
-        return provider.enable()
-    },
-    logout(chainId: ChainIdFortmatic) {
-        const fm = createFortmatic(chainId)
-        return fm.user.logout()
-    },
-    request<T extends unknown>(requestArguments: RequestArguments, chainId = ChainId.Mainnet) {
+    private createFortmatic(chainId: ChainId) {
         if (!isFortmaticSupported(chainId)) throw new Error('Not supported chain id.')
 
+        const rpcUrl = first(getRPCConstants(chainId).RPC)
+        if (!rpcUrl) throw new Error('Failed to create provider.')
+        return new Fortmatic(resolveAPI_Key(chainId), { chainId, rpcUrl })
+    }
+
+    private createProvider(chainId: ChainId) {
+        if (this.providerPool.has(chainId)) return this.providerPool.get(chainId)!
+
+        const fm = this.createFortmatic(chainId)
+        const provider = fm.getProvider()
+        this.providerPool.set(chainId, provider)
+        return provider
+    }
+
+    login(chainId: ChainId) {
+        const provider = this.createProvider(chainId)
+        return provider.enable()
+    }
+    logout(chainId: ChainId) {
+        const fm = this.createFortmatic(chainId)
+        return fm.user.logout()
+    }
+
+    request<T extends unknown>(
+        requestArguments: RequestArguments,
+        { chainId = ChainId.Mainnet }: { chainId?: ChainId } = {},
+    ) {
         const chainId_ = chainId as ChainIdFortmatic
-        const provider = createProvider(chainId as ChainIdFortmatic)
+        const provider = this.createProvider(chainId as ChainIdFortmatic)
 
         switch (requestArguments.method) {
             case EthereumMethodType.MASK_REQUEST_ACCOUNTS:
-                return this.login(chainId_)
+                return this.login(chainId_) as Promise<T>
             case EthereumMethodType.MASK_DISMISS_ACCOUNTS:
-                return this.logout(chainId_)
+                return this.logout(chainId_) as Promise<T>
             default:
-                return provider.send(requestArguments.method, requestArguments.params) as Promise<T>
+                return provider.send<T>(requestArguments.method, requestArguments.params)
         }
-    },
-    on() {
-        return noop
-    },
+    }
+
+    on(name: string, listener: (event: any) => void): EIP1193Provider {
+        return this
+    }
+    removeListener(name: string, listener: (event: any) => void): EIP1193Provider {
+        return this
+    }
 }

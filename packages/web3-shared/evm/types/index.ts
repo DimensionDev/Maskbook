@@ -708,3 +708,19 @@ export enum TransactionStateType {
     /** Fail to send */
     FAILED = 5,
 }
+
+export interface EIP1193Provider {
+    request<T extends unknown>(requestArguments: RequestArguments): Promise<T>
+
+    on(name: 'connect', listener: (connectInfo: { chainId: string }) => void): EIP1193Provider
+    on(
+        name: 'disconnect',
+        listener: (error: { message: string; code: number; data?: unknown }) => void,
+    ): EIP1193Provider
+    on(name: 'chainChanged', listener: (chainId: string) => void): EIP1193Provider
+    on(name: 'accountsChanged', listener: (accounts: string[]) => void): EIP1193Provider
+    on(name: 'message', listener: (message: { type: string; data: unknown }) => void): EIP1193Provider
+    on(name: string, listener: (event: any) => void): EIP1193Provider
+
+    removeListener(name: string, listener: (event: any) => void): EIP1193Provider
+}

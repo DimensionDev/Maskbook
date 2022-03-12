@@ -104,7 +104,7 @@ const SelectWallet = memo(() => {
     const chainIdValid = useChainIdValid()
 
     const handleCancel = useCallback(async () => {
-        await WalletRPC.selectAccount([], ChainId.Mainnet)
+        await WalletRPC.selectAccount([])
         await Services.Helper.removePopupWindow()
     }, [])
 
@@ -121,7 +121,7 @@ const SelectWallet = memo(() => {
             })
         }
         if (chainId) {
-            await WalletRPC.selectAccount([selected], chainId)
+            await WalletRPC.selectAccount([selected])
         }
         return Services.Helper.removePopupWindow()
     }, [chainId, selected, isInternal])

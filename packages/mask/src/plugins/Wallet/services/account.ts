@@ -34,7 +34,7 @@ export async function updateAccount(
 
     // make sure account and provider type to be updating both
     if ((options.account && !options.providerType) || (options.account === undefined && options.providerType))
-        throw new Error('Account and provider type must be updating both')
+        throw new Error('Account and provider type must be updating both.')
 
     const { name, account, chainId, providerType, networkType } = options
 
@@ -95,14 +95,14 @@ export async function resetAccount(
 }
 
 // #region select wallet with popups
-let callbackMemorized: (accounts: string[], chainId: ChainId) => void | undefined
+let callbackMemorized: (accounts: string[]) => void | undefined
 
-export async function selectAccountPrepare(callback: (accounts: string[], chainId: ChainId) => void) {
+export async function selectAccountPrepare(callback: (accounts: string[]) => void) {
     callbackMemorized = callback
 }
 
-export async function selectAccount(accounts: string[], chainId: ChainId) {
-    callbackMemorized?.(accounts, chainId)
+export async function selectAccount(accounts: string[]) {
+    callbackMemorized?.(accounts)
 }
 // #endregion
 

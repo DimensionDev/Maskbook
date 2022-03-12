@@ -1,41 +1,50 @@
+import { first } from 'lodash-unified'
 import type { RequestArguments } from 'web3-core'
-import { first, noop } from 'lodash-unified'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import WalletConnectSDK from '@walletconnect/web3-provider'
-import { ChainId, EthereumMethodType } from '../types'
+import WalletConnect from '@walletconnect/web3-provider'
+import { ChainId, EIP1193Provider, EthereumMethodType } from '../types'
 import { getRPCConstants } from '../constants'
 
-const rpc = getEnumAsArray(ChainId).reduce<Record<number, string>>((accumulator, item) => {
-    const rpc = first(getRPCConstants(item.value).RPC)
-    if (rpc) {
-        accumulator[item.value] = rpc
-    }
-    return accumulator
-}, {})
+export default class WalletConnectSDK implements EIP1193Provider {
+    private rpc = getEnumAsArray(ChainId).reduce<Record<number, string>>((accumulator, item) => {
+        const url = first(getRPCConstants(item.value).RPC)
+        if (url) {
+            accumulator[item.value] = url
+        }
+        return accumulator
+    }, {})
 
-const sdk = new WalletConnectSDK({
-    rpc,
-})
+    private sdk = new WalletConnect({
+        rpc: this.rpc,
+    })
 
-export default {
     login() {
-        return sdk.enable()
-    },
+        return this.sdk.enable()
+    }
     logout() {
-        return sdk.disconnect()
-    },
+        return this.sdk.disconnect()
+    }
     request<T extends unknown>(requestArguments: RequestArguments) {
         switch (requestArguments.method) {
             case EthereumMethodType.MASK_REQUEST_ACCOUNTS:
-                return this.login()
+                return this.login() as Promise<T>
             case EthereumMethodType.MASK_DISMISS_ACCOUNTS:
-                return this.logout()
+                return this.logout() as Promise<T>
             default:
-                return sdk.sendAsyncPromise(requestArguments.method, requestArguments.params) as Promise<T>
+                return this.sdk.request(requestArguments) as Promise<T>
         }
-    },
-    on(name: string, callback: (error: Error | null, payload: any) => void) {
-        sdk.connector.on(name, callback)
-        return noop
-    },
+    }
+    on(name: string, listener: (event: any) => void) {
+        this.sdk.wc.on(name, listener)
+        return this
+    }
+    removeListener(name: string, listener: (event: any) => void) {
+        try {
+            // @ts-ignore the type declaration is lying
+            this.sdk.wc.off(name)
+        } catch {
+            // do nothing
+        }
+        return this
+    }
 }

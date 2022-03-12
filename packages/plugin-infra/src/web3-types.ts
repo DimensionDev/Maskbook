@@ -72,6 +72,10 @@ export declare namespace Web3Plugin {
         icon: URL
         /** The provider name */
         name: string
+        /** Enable requirements */
+        enableRequirements?: {
+            supportedChainIds?: number[]
+        }
     }
 
     export interface ApplicationCategoryDescriptor {

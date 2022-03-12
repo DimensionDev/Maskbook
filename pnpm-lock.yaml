@@ -1185,7 +1185,9 @@ importers:
 
   packages/web3-shared/evm:
     specifiers:
+      '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
       '@ensdomains/address-encoder': ^0.2.6
+      '@masknet/injected-script': '*'
       '@masknet/shared-base': workspace:*
       '@masknet/web3-constants': workspace:*
       '@masknet/web3-contracts': workspace:*
@@ -1209,6 +1211,7 @@ importers:
       web3-core-helpers: 1.5.2
       web3-utils: 1.5.2
     dependencies:
+      '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
       '@ensdomains/address-encoder': 0.2.6
       '@masknet/shared-base': link:../../shared-base
       '@masknet/web3-constants': link:../../web3-constants
@@ -1232,6 +1235,7 @@ importers:
       web3-core-helpers: 1.5.2
       web3-utils: 1.5.2
     devDependencies:
+      '@masknet/injected-script': link:../../injected-script
       '@types/use-subscription': 1.0.0
 
   packages/web3-shared/flow:

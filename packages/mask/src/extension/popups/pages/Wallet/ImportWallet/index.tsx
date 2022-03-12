@@ -181,7 +181,7 @@ const ImportWallet = memo(() => {
                                     providerType: ProviderType.MaskWallet,
                                 })
                             }
-                            await WalletRPC.selectAccount([wallet], chainId)
+                            await WalletRPC.selectAccount([wallet])
                             history.replace(PopupRoutes.Wallet)
                             await Services.Helper.removePopupWindow()
                             break
@@ -200,7 +200,7 @@ const ImportWallet = memo(() => {
                                 })
                             }
 
-                            await WalletRPC.selectAccount([privateKeyWallet], chainId)
+                            await WalletRPC.selectAccount([privateKeyWallet])
                             await Services.Helper.removePopupWindow()
                             history.replace(PopupRoutes.Wallet)
                             break
@@ -214,7 +214,7 @@ const ImportWallet = memo(() => {
                 }
             }
         },
-        [mnemonic, currentTab, keyStoreContent, keyStorePassword, privateKey, disabled, chainId, history, tabs],
+        [mnemonic, currentTab, keyStoreContent, keyStorePassword, privateKey, disabled, history, tabs],
     )
 
     const onSubmit = handleSubmit(onDerivedWallet)
