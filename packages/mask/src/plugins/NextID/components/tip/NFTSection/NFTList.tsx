@@ -1,14 +1,16 @@
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { ERC721TokenDetailed, useChainId } from '@masknet/web3-shared-evm'
-import { Checkbox, List, ListItem } from '@mui/material'
+import { Checkbox, List, ListItem, Radio } from '@mui/material'
 import classnames from 'classnames'
 import { noop } from 'lodash-unified'
 import { FC, useCallback } from 'react'
+import { useI18N } from '../../../locales'
 
 interface Props {
     selectedIds: string[]
     tokens: ERC721TokenDetailed[]
+    enableTokenIds?: string[]
     onChange?: (ids: string[]) => void
     limit?: number
     className: string
@@ -45,16 +47,17 @@ export function arrayRemove<T>(arr: T[], item: T): T[] {
     return arr.splice(idx, 1)
 }
 
-export const NFTList: FC<Props> = ({ selectedIds, onChange, limit = 1, tokens, className }) => {
+export const NFTList: FC<Props> = ({ selectedIds, tokens, enableTokenIds = [], onChange, limit = 1, className }) => {
     const chainId = useChainId()
     const { classes } = useStyles()
 
+    const isRadio = limit === 1
     const reachedLimit = selectedIds.length >= limit
 
     const toggleItem = useCallback(
         (currentId: string) => {
-            const disabled = !selectedIds.includes(currentId) && reachedLimit
-            if (!onChange || disabled) return
+            if (!onChange) return
+            if (isRadio) return onChange([currentId])
             let newIds = [...selectedIds]
             if (selectedIds.includes(currentId)) {
                 arrayRemove(newIds, currentId)
@@ -63,37 +66,52 @@ export const NFTList: FC<Props> = ({ selectedIds, onChange, limit = 1, tokens, c
             }
             onChange(newIds)
         },
-        [selectedIds, onChange, reachedLimit],
+        [selectedIds, onChange, isRadio, reachedLimit],
     )
+
+    const SelectComponent = isRadio ? Radio : Checkbox
+    const t = useI18N()
 
     return (
         <List className={className}>
-            {tokens.map((token) => (
-                <ListItem
-                    key={token.tokenId}
-                    className={classnames({
-                        [classes.nftItem]: true,
-                        [classes.disabled]: reachedLimit && !selectedIds.includes(token.tokenId),
-                    })}
-                    onClick={() => {
-                        toggleItem(token.tokenId)
-                    }}>
-                    <NFTCardStyledAssetPlayer
-                        chainId={chainId}
-                        contractAddress={token.contractDetailed.address}
-                        url={token.info.mediaUrl}
-                        tokenId={token.tokenId}
-                    />
-                    <Checkbox
-                        onChange={noop}
-                        onClick={() => {
-                            toggleItem(token.tokenId)
-                        }}
-                        className={classes.checkbox}
-                        checked={selectedIds.includes(token.tokenId)}
-                    />
-                </ListItem>
-            ))}
+            {tokens.map((token) => {
+                const isNotOwned = !enableTokenIds.includes(token.tokenId)
+                const disabled = (!isRadio && reachedLimit && !selectedIds.includes(token.tokenId)) || isNotOwned
+                return (
+                    <ShadowRootTooltip
+                        key={token.tokenId}
+                        title={isNotOwned ? t.nft_not_belong_to_you() : ''}
+                        placement="top">
+                        <ListItem
+                            key={token.tokenId}
+                            className={classnames({
+                                [classes.nftItem]: true,
+                                [classes.disabled]: disabled,
+                            })}
+                            onClick={() => {
+                                if (disabled) return
+                                toggleItem(token.tokenId)
+                            }}>
+                            <NFTCardStyledAssetPlayer
+                                chainId={chainId}
+                                contractAddress={token.contractDetailed.address}
+                                url={token.info.mediaUrl}
+                                tokenId={token.tokenId}
+                            />
+                            <SelectComponent
+                                onChange={noop}
+                                disabled={disabled}
+                                onClick={() => {
+                                    if (disabled) return
+                                    toggleItem(token.tokenId)
+                                }}
+                                className={classes.checkbox}
+                                checked={selectedIds.includes(token.tokenId)}
+                            />
+                        </ListItem>
+                    </ShadowRootTooltip>
+                )
+            })}
         </List>
     )
 }
