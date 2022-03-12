@@ -83,7 +83,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
     } = useNonFungibleAssets(account, selectedNetwork ? [selectedNetwork] : currentSupportedNFT_ApiNetworkList)
 
     const collectibles = (Utils?.mergeNFTList ?? mergeNFTList)([..._collectibles, ...customCollectibles])
-    const isQuerying = loadingCollectibleDone !== SocketState.done
+    const isLoading = loadingCollectibleDone !== SocketState.done
     const currentPluginId = usePluginIDContext()
     const onSend = useCallback(
         (detail: ERC721TokenDetailed) => {
@@ -102,8 +102,6 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
     useEffect(() => {
         PluginMessages.Wallet.events.erc721TokensUpdated.on(retry)
     }, [retry])
-
-    const isLoading = collectibles.length === 0 && isQuerying
 
     return (
         <CollectibleListUI
