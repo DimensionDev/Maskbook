@@ -3,7 +3,6 @@
         "ecmaVersion": 2020,
         "sourceType": "module"
     },
-    "extends": ["plugin:prettier/recommended"],
     "env": {
         "node": true
     },

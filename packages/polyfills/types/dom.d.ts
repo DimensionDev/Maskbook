@@ -12,11 +12,3 @@ interface ImportMeta {
      */
     url: string
 }
-
-interface ShadowRoot {
-    adoptedStyleSheets?: readonly CSSStyleSheet[]
-}
-interface CSSStyleSheet {
-    replace(text: string): Promise<void>
-    replaceSync(text: string): void
-}

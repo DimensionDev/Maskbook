@@ -5,7 +5,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoadingButton, TabContext, TabPanel } from '@mui/lab'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { JsonFileBox } from '../components/JsonFileBox'
 import { StyledInput } from '../../../components/StyledInput'
@@ -108,7 +108,7 @@ const useStyles = makeStyles()({
 
 const ImportWallet = memo(() => {
     const { t } = useI18N()
-    const history = useHistory()
+    const navigate = useNavigate()
     const chainId = useChainId()
     const { classes } = useStyles()
     const [currentTab, onChange, tabs] = useTabs('mnemonic', 'json', 'privateKey')
@@ -158,9 +158,8 @@ const ImportWallet = memo(() => {
                             // valid the mnemonic
                             await getDerivableAccounts(mnemonic, 0, 1)
                             const params = query({ name: data.name })
-                            history.replace({
-                                pathname: PopupRoutes.AddDeriveWallet,
-                                search: `?${params}`,
+                            navigate(PopupRoutes.AddDeriveWallet + '?' + params, {
+                                replace: true,
                                 state: { mnemonic },
                             })
                             break
@@ -182,7 +181,7 @@ const ImportWallet = memo(() => {
                                 })
                             }
                             await WalletRPC.selectAccount([wallet], chainId)
-                            history.replace(PopupRoutes.Wallet)
+                            navigate(PopupRoutes.Wallet, { replace: true })
                             await Services.Helper.removePopupWindow()
                             break
                         case tabs.privateKey:
@@ -202,7 +201,7 @@ const ImportWallet = memo(() => {
 
                             await WalletRPC.selectAccount([privateKeyWallet], chainId)
                             await Services.Helper.removePopupWindow()
-                            history.replace(PopupRoutes.Wallet)
+                            navigate(PopupRoutes.Wallet, { replace: true })
                             break
                         default:
                             break

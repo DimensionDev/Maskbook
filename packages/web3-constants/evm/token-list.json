@@ -22,7 +22,7 @@
             "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/421611/tokens.json"
         ],
         "xDai": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/100/tokens.json"],
-        "Boba": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/288/tokens.json"],
+        "Boba": ["https://tokens.r2d2.to/latest/288/tokens.json"],
         "Boba_Rinkeby": [],
         "Avalanche": [
             "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/43114/tokens.json"
@@ -31,8 +31,6 @@
         "Celo": ["https://tokens.r2d2.to/latest/42220/tokens.json"],
         "Fantom": ["https://tokens.r2d2.to/latest/250/tokens.json"],
         "Aurora": ["https://tokens.r2d2.to/latest/1313161554/tokens.json"],
-        "Aurora_Testnet": [],
-        "Boba": ["https://tokens.r2d2.to/latest/288/tokens.json"],
-        "Boba_Rinkeby": [],
+        "Aurora_Testnet": []
     }
 }
