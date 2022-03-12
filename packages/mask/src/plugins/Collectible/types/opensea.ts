@@ -1,14 +1,13 @@
 import type { OpenSeaPort } from 'opensea-js'
-import type {
-    AssetContractType,
-    AuctionType,
-    OpenSeaAccount,
-    TokenStandardVersion,
-    WyvernSchemaName,
-} from 'opensea-js/lib/types'
+import type { AssetContractType, OpenSeaAccount, TokenStandardVersion, WyvernSchemaName } from 'opensea-js/lib/types'
 
 export type CreateSellOrderPayload = Parameters<OpenSeaPort['createSellOrder']>[0]
 
+enum AuctionType {
+    Dutch = 'dutch',
+    English = 'english',
+    MinPrice = 'min_price',
+}
 export interface OpenSeaCustomTrait {
     trait_type: string
     value: string
