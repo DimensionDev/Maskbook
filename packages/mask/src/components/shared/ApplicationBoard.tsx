@@ -17,6 +17,8 @@ import { SavingsDialog } from '../../plugins/Savings/SNSAdaptor/SavingsDialog'
 import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialog'
 import { NetworkPluginID, PluginId, usePluginIDContext } from '@masknet/plugin-infra'
 import { FindTrumanDialog } from '../../plugins/FindTruman/SNSAdaptor/FindTrumanDialog'
+import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
+import { activatedSocialNetworkUI } from '../../social-network'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -324,7 +326,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                             new URL('./assets/mintTeam.png', import.meta.url).toString(),
                             () => setPetDialog({ open: true }),
                             [ChainId.Mainnet],
-                            currentChainId !== ChainId.Mainnet,
+                            currentChainId !== ChainId.Mainnet || !isTwitter(activatedSocialNetworkUI),
                             true,
                         ),
                     ],
