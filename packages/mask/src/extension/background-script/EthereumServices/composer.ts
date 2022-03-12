@@ -20,7 +20,7 @@ import { getError, hasError } from './error'
 import type { Context, Middleware } from './types'
 
 class Composer<T> {
-    private middlewares: Middleware<T>[] = []
+    private listOfMiddleware: Middleware<T>[] = []
 
     private compose() {
         return (context: T, next: () => Promise<void>) => {
@@ -29,8 +29,8 @@ class Composer<T> {
                 if (i <= index) return Promise.reject(new Error('next() called multiple times'))
                 index = i
                 let fn
-                if (i >= this.middlewares.length) fn = next
-                else fn = this.middlewares[i].fn.bind(this.middlewares[i])
+                if (i >= this.listOfMiddleware.length) fn = next
+                else fn = this.listOfMiddleware[i].fn.bind(this.listOfMiddleware[i])
                 if (!fn) return Promise.resolve()
                 try {
                     return Promise.resolve(fn(context, dispatch.bind(null, i + 1)))
@@ -44,7 +44,7 @@ class Composer<T> {
     }
 
     public use(middleware: Middleware<T>) {
-        this.middlewares.push(middleware)
+        this.listOfMiddleware.push(middleware)
     }
 
     public async dispatch(context: T, next: () => Promise<void>) {

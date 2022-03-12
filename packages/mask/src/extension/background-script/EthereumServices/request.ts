@@ -5,14 +5,14 @@ import { createExternalProvider } from './provider'
 import { createContext, dispatch, use } from './composer'
 
 // #region middleware
-import { Squash } from './middlewares/Squash'
-import { Nonce } from './middlewares/Nonce'
-import { Interceptor } from './middlewares/Interceptor'
-import { Popup } from './middlewares/Popup'
-import { Translator } from './middlewares/Translator'
-import { RecentTransaction } from './middlewares/Transaction'
-import { TransactionNotifier } from './middlewares/TransactionNotifier'
-import { TransactionWatcher } from './middlewares/TransactionWatcher'
+import { Squash } from './middleware/Squash'
+import { Nonce } from './middleware/Nonce'
+import { Interceptor } from './middleware/Interceptor'
+import { Popup } from './middleware/Popup'
+import { Translator } from './middleware/Translator'
+import { RecentTransaction } from './middleware/Transaction'
+import { TransactionNotifier } from './middleware/TransactionNotifier'
+import { TransactionWatcher } from './middleware/TransactionWatcher'
 
 use(new Squash())
 use(new Nonce())
