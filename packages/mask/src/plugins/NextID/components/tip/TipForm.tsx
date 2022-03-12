@@ -135,6 +135,7 @@ export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
                                 horizontal: 'center',
                             },
                             container: selectRef.current,
+                            anchorEl: selectRef.current,
                             BackdropProps: {
                                 invisible: true,
                             },
