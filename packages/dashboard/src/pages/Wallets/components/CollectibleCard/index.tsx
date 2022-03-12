@@ -1,12 +1,11 @@
-import { memo, useEffect, useMemo, useRef, useState } from 'react'
-import { Box, Button, Link, Tooltip, Typography } from '@mui/material'
+import { memo, useEffect, useRef, useState } from 'react'
+import { Box, Link } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { CollectiblePlaceholder } from '../CollectiblePlaceHolder'
 import { useHoverDirty } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
 import { WalletIcon, NFTCardStyledAssetPlayer } from '@masknet/shared'
-import { ChangeNetworkTip } from '../FungibleTokenTableRow/ChangeNetworkTip'
-import { NetworkPluginID, useNetworkDescriptor, usePluginIDContext, useWeb3State } from '@masknet/plugin-infra'
+import { useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -94,11 +93,10 @@ const useStyles = makeStyles()((theme) => ({
 export interface CollectibleCardProps {
     chainId: number
     token: ERC721TokenDetailed
-    onSend(): void
     renderOrder: number
 }
 
-export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onSend, renderOrder }) => {
+export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, renderOrder }) => {
     const t = useDashboardI18N()
     const { Utils } = useWeb3State()
     const { classes } = useStyles()
@@ -106,16 +104,10 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
     const [isHoveringTooltip, setHoveringTooltip] = useState(false)
     const isHovering = useHoverDirty(ref)
     const networkDescriptor = useNetworkDescriptor(token.contractDetailed?.chainId)
-    const isOnCurrentChain = useMemo(() => chainId === token.contractDetailed?.chainId, [chainId, token])
-    const currentPluginId = usePluginIDContext()
 
     useEffect(() => {
         setHoveringTooltip(false)
     }, [chainId])
-
-    // Sending NFT is only available on EVM currently.
-    const sendable = currentPluginId === NetworkPluginID.PLUGIN_EVM
-    const showSendButton = (isHovering || isHoveringTooltip) && sendable
 
     let nftLink
     if (Utils?.resolveNonFungibleTokenLink && token.contractDetailed) {
@@ -164,38 +156,6 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
                         <CollectiblePlaceholder chainId={token.contractDetailed?.chainId} />
                     </Box>
                 )}
-                <Box className={classes.description} py={1} px={3}>
-                    {showSendButton ? (
-                        <Box>
-                            <Tooltip
-                                onOpen={() => setHoveringTooltip(true)}
-                                onClose={() => setHoveringTooltip(false)}
-                                disableHoverListener={isOnCurrentChain}
-                                title={<ChangeNetworkTip chainId={token.contractDetailed?.chainId} />}
-                                placement="top"
-                                classes={{ tooltip: classes.tip, arrow: classes.tipArrow }}
-                                arrow>
-                                <span>
-                                    <Button
-                                        size="small"
-                                        fullWidth
-                                        disabled={!isOnCurrentChain}
-                                        onClick={onSend}
-                                        variant="rounded"
-                                        style={{ boxShadow: 'none' }}
-                                        sx={{ fontWeight: 'bolder', height: '28px' }}>
-                                        {t.send()}
-                                    </Button>
-                                </span>
-                            </Tooltip>
-                        </Box>
-                    ) : (
-                        <Typography className={classes.name} color="textPrimary" variant="body2" onClick={onSend}>
-                            {token.info.name ||
-                                '#' + Number.parseInt(token.tokenId, token.tokenId.startsWith('0x') ? 16 : 10)}
-                        </Typography>
-                    )}
-                </Box>
             </div>
         </Box>
     )
