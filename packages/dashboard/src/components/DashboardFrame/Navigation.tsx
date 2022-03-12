@@ -5,8 +5,6 @@ import {
     ListItemIcon,
     Collapse,
     Theme,
-    // see https://github.com/import-js/eslint-plugin-import/issues/2288
-    // eslint-disable-next-line import/no-deprecated
     useMediaQuery,
     styled,
     listItemClasses,
@@ -122,8 +120,6 @@ export function Navigation({ onClose }: NavigationProps) {
     const isWalletTransferPath = useMatch(DashboardRoutes.WalletsTransfer)
     const isWalletHistoryPath = useMatch(DashboardRoutes.WalletsHistory)
 
-    // see https://github.com/import-js/eslint-plugin-import/issues/2288
-    // eslint-disable-next-line import/no-deprecated
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const t = useDashboardI18N()
     const mode = useTheme().palette.mode
