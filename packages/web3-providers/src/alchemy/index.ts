@@ -74,7 +74,9 @@ async function fetchFromAlchemyEVM(path: string, network: Web3Plugin.NetworkDesc
 
 export function toHttpImage(_url?: string) {
     if (!_url) return ''
-    const url = _url.replace('ipfs://https://', 'https://').replace('ipfs://http://', 'http://')
+    const url = _url
+        .replace(/(ipfs|ipns|ar|dweb):\/\/https:\/\//, 'https://')
+        .replace(/(ipfs|ipns|ar|dweb):\/\/http:\/\//, 'http://')
     if (url.startsWith?.('ipfs://')) return resolveIPFSLink(url.replace(/^ipfs:\/\//g, ''))
     return url
 }
