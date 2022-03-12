@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef, useState } from 'react'
-import { Box, Link } from '@mui/material'
+import { Box, Link, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { CollectiblePlaceholder } from '../CollectiblePlaceHolder'
 import { useHoverDirty } from 'react-use'
@@ -156,6 +156,12 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, ren
                         <CollectiblePlaceholder chainId={token.contractDetailed?.chainId} />
                     </Box>
                 )}
+                <Box className={classes.description} py={1} px={3}>
+                    <Typography className={classes.name} color="textPrimary" variant="body2">
+                        {token.info.name ||
+                            '#' + Number.parseInt(token.tokenId, token.tokenId.startsWith('0x') ? 16 : 10)}
+                    </Typography>
+                </Box>
             </div>
         </Box>
     )
