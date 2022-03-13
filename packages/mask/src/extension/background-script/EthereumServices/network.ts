@@ -383,7 +383,7 @@ export function requestAccounts(chainId?: ChainId, overrides?: SendOverrides, op
     return request<string[]>(
         {
             method: EthereumMethodType.MASK_REQUEST_ACCOUNTS,
-            parmas: chainId ? [chainId] : [],
+            params: chainId ? [chainId] : [],
         },
         overrides,
         options,
@@ -394,7 +394,7 @@ export function dismissAccounts(overrides?: SendOverrides, options?: RequestOpti
     return request<void>(
         {
             method: EthereumMethodType.MASK_DISMISS_ACCOUNTS,
-            parmas: [],
+            params: [],
         },
         overrides,
         options,

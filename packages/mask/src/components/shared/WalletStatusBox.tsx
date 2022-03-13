@@ -136,7 +136,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
             case ProviderType.Coin98:
             case ProviderType.WalletConnect:
             case ProviderType.Fortmatic:
-                await Services.Ethereum.discconect({
+                await Services.Ethereum.disconnect({
                     providerType,
                 })
                 break

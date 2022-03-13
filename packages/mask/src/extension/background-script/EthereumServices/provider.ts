@@ -88,7 +88,7 @@ export async function connect({ chainId, providerType }: { chainId?: ChainId; pr
     }
 }
 
-export async function discconect({ providerType }: { providerType: ProviderType }) {
+export async function disconnect({ providerType }: { providerType: ProviderType }) {
     await Services.Ethereum.dismissAccounts({
         providerType,
     })

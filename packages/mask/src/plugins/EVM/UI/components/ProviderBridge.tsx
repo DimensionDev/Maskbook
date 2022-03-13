@@ -52,7 +52,7 @@ export function ProviderBridge({ providerType: expectedProviderType }: ProviderB
                 EVM_Messages.events.PROVIDER_RPC_RESPONSE.sendToBackgroundPage({
                     providerType: expectedProviderType,
                     payload,
-                    error: error instanceof Error ? error : new Error('Failed to send transction.'),
+                    error: error instanceof Error ? error : new Error('Failed to send transaction.'),
                 })
             }
         })
@@ -82,13 +82,13 @@ export function ProviderBridge({ providerType: expectedProviderType }: ProviderB
     }, [actualProviderType, expectedProviderType, provider])
 
     useEffect(() => {
-        const onDiscconnect = async () => {
+        const onDisconnect = async () => {
             if (actualProviderType !== expectedProviderType) return
             await Services.Ethereum.notifyEvent(actualProviderType, 'disconnect')
         }
-        provider?.on('disconnect', onDiscconnect)
+        provider?.on('disconnect', onDisconnect)
         return () => {
-            provider?.removeListener('disconnect', onDiscconnect)
+            provider?.removeListener('disconnect', onDisconnect)
         }
     }, [actualProviderType, expectedProviderType, provider])
 
