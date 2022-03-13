@@ -114,19 +114,13 @@ export function RedPacket(props: RedPacketProps) {
         if (state.type === TransactionStateType.UNKNOWN) return
         if (!availability || !token) return
         if (state.type === TransactionStateType.CONFIRMED) {
-            setTransactionDialog({
-                open: true,
-                shareLink: shareLink!,
-                state,
-                summary: canClaim
-                    ? t('plugin_red_packet_claiming_from', { name: payload.sender.name })
-                    : canRefund
-                    ? t('plugin_red_packet_refunding_for', {
-                          balance: formatBalance(availability.balance, token.decimals),
-                          symbol: token.symbol,
-                      })
-                    : '',
-            })
+            canClaim &&
+                setTransactionDialog({
+                    open: true,
+                    shareLink: shareLink!,
+                    state,
+                    summary: t('plugin_red_packet_claiming_from', { name: payload.sender.name }),
+                })
             resetClaimCallback()
             resetRefundCallback()
             revalidateAvailability()
@@ -135,6 +129,8 @@ export function RedPacket(props: RedPacketProps) {
     // #endregion
 
     const onClaimOrRefund = useCallback(async () => {
+        resetClaimCallback()
+        resetRefundCallback()
         if (canClaim) await claimCallback()
         else if (canRefund) await refundCallback()
     }, [canClaim, canRefund, claimCallback, refundCallback])
@@ -216,7 +212,7 @@ export function RedPacket(props: RedPacketProps) {
                     </div>
                 </div>
             </Card>
-            {listOfStatus.includes(RedPacketStatus.expired) || listOfStatus.includes(RedPacketStatus.empty) ? null : (
+            {listOfStatus.includes(RedPacketStatus.empty) ? null : (
                 <OperationFooter
                     canClaim={canClaim}
                     canRefund={canRefund}

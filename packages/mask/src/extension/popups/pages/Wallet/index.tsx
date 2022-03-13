@@ -1,9 +1,9 @@
 import { WalletStartUp } from './components/StartUp'
-import { EthereumRpcType, ProviderType, useWallet, useWallets } from '@masknet/web3-shared-evm'
+import { EthereumRpcType, useWallet } from '@masknet/web3-shared-evm'
 import { WalletAssets } from './components/WalletAssets'
-import { Route, Switch, useHistory, useLocation } from 'react-router-dom'
+import { Route, Routes, useNavigate, useLocation } from 'react-router-dom'
 import { lazy, Suspense, useEffect } from 'react'
-import { PopupRoutes } from '@masknet/shared-base'
+import { PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { WalletContext } from './hooks/useWalletContext'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder'
 import { useAsyncRetry } from 'react-use'
@@ -33,11 +33,11 @@ const WalletRecovery = lazy(() => import('./WalletRecovery'))
 const LegacyWalletRecovery = lazy(() => import('./LegacyWalletRecovery'))
 const ReplaceTransaction = lazy(() => import('./ReplaceTransaction'))
 
+const r = relativeRouteOf(PopupRoutes.Wallet)
 export default function Wallet() {
     const wallet = useWallet()
     const location = useLocation()
-    const history = useHistory()
-    const wallets = useWallets(ProviderType.MaskWallet)
+    const navigate = useNavigate()
 
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
 
@@ -65,11 +65,11 @@ export default function Wallet() {
             switch (value.computedPayload.type) {
                 case EthereumRpcType.SIGN:
                 case EthereumRpcType.SIGN_TYPED_DATA:
-                    history.replace(PopupRoutes.WalletSignRequest)
+                    navigate(PopupRoutes.WalletSignRequest, { replace: true })
                     break
                 case EthereumRpcType.CONTRACT_INTERACTION:
                 case EthereumRpcType.SEND_ETHER:
-                    history.replace(PopupRoutes.ContractInteraction)
+                    navigate(PopupRoutes.ContractInteraction, { replace: true })
                     break
                 default:
                     break
@@ -79,7 +79,7 @@ export default function Wallet() {
 
     useEffect(() => {
         if (!(isLocked && !getLockStatusLoading && location.pathname !== PopupRoutes.Unlock)) return
-        history.replace(urlcat(PopupRoutes.Unlock, { from: location.pathname }))
+        navigate(urlcat(PopupRoutes.Unlock, { from: location.pathname }), { replace: true })
     }, [isLocked, location.pathname, getLockStatusLoading])
 
     useEffect(() => {
@@ -94,31 +94,29 @@ export default function Wallet() {
                 {loading ? (
                     <LoadingPlaceholder />
                 ) : (
-                    <Switch>
-                        <Route path={PopupRoutes.WalletRecovered} children={<WalletRecovery />} exact />
-                        <Route path={PopupRoutes.LegacyWalletRecovered} children={<LegacyWalletRecovery />} exact />
-                        <Route path={PopupRoutes.Wallet} exact>
-                            {!wallet ? <WalletStartUp /> : <WalletAssets />}
-                        </Route>
-                        <Route path={PopupRoutes.ImportWallet} children={<ImportWallet />} exact />
-                        <Route path={PopupRoutes.AddDeriveWallet} children={<AddDeriveWallet />} exact />
-                        <Route path={PopupRoutes.WalletSettings} children={<WalletSettings />} exact />
-                        <Route path={PopupRoutes.WalletRename} children={<WalletRename />} exact />
-                        <Route path={PopupRoutes.DeleteWallet} children={<DeleteWallet />} exact />
-                        <Route path={PopupRoutes.CreateWallet} children={<CreateWallet />} exact />
-                        <Route path={PopupRoutes.SwitchWallet} children={<SwitchWallet />} exact />
-                        <Route path={PopupRoutes.BackupWallet} children={<BackupWallet />} exact />
-                        <Route path={PopupRoutes.AddToken} children={<AddToken />} exact />
-                        <Route path={PopupRoutes.WalletSignRequest} children={<SignRequest />} />
-                        <Route path={PopupRoutes.GasSetting} children={<GasSetting />} />
-                        <Route path={PopupRoutes.TokenDetail} children={<TokenDetail />} exact />
-                        <Route path={PopupRoutes.Transfer} children={<Transfer />} exact />
-                        <Route path={PopupRoutes.ContractInteraction} children={<ContractInteraction />} />
-                        <Route path={PopupRoutes.SelectWallet} children={<SelectWallet />} />
-                        <Route path={PopupRoutes.Unlock} children={<Unlock />} />
-                        <Route path={PopupRoutes.SetPaymentPassword} children={<SetPaymentPassword />} exact />
-                        <Route path={PopupRoutes.ReplaceTransaction} children={<ReplaceTransaction />} exact />
-                    </Switch>
+                    <Routes>
+                        <Route path="*" element={!wallet ? <WalletStartUp /> : <WalletAssets />} />
+                        <Route path={r(PopupRoutes.WalletRecovered)} element={<WalletRecovery />} />
+                        <Route path={r(PopupRoutes.LegacyWalletRecovered)} element={<LegacyWalletRecovery />} />
+                        <Route path={r(PopupRoutes.ImportWallet)} element={<ImportWallet />} />
+                        <Route path={r(PopupRoutes.AddDeriveWallet)} element={<AddDeriveWallet />} />
+                        <Route path={r(PopupRoutes.WalletSettings)} element={<WalletSettings />} />
+                        <Route path={r(PopupRoutes.WalletRename)} element={<WalletRename />} />
+                        <Route path={r(PopupRoutes.DeleteWallet)} element={<DeleteWallet />} />
+                        <Route path={r(PopupRoutes.CreateWallet)} element={<CreateWallet />} />
+                        <Route path={r(PopupRoutes.SwitchWallet)} element={<SwitchWallet />} />
+                        <Route path={r(PopupRoutes.BackupWallet)} element={<BackupWallet />} />
+                        <Route path={r(PopupRoutes.AddToken)} element={<AddToken />} />
+                        <Route path={r(PopupRoutes.WalletSignRequest)} element={<SignRequest />} />
+                        <Route path={r(PopupRoutes.GasSetting)} element={<GasSetting />} />
+                        <Route path={r(PopupRoutes.TokenDetail)} element={<TokenDetail />} />
+                        <Route path={r(PopupRoutes.Transfer)} element={<Transfer />} />
+                        <Route path={r(PopupRoutes.ContractInteraction)} element={<ContractInteraction />} />
+                        <Route path={r(PopupRoutes.SelectWallet)} element={<SelectWallet />} />
+                        <Route path={r(PopupRoutes.Unlock)} element={<Unlock />} />
+                        <Route path={r(PopupRoutes.SetPaymentPassword)} element={<SetPaymentPassword />} />
+                        <Route path={r(PopupRoutes.ReplaceTransaction)} element={<ReplaceTransaction />} />
+                    </Routes>
                 )}
             </WalletContext.Provider>
         </Suspense>

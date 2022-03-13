@@ -1,5 +1,5 @@
 import { memo, useMemo, useState } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { ReplaceType } from '../type'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
@@ -61,7 +61,7 @@ const useStyles = makeStyles()({
 
 const ReplaceTransaction = memo(() => {
     const { classes } = useStyles()
-    const history = useHistory()
+    const navigate = useNavigate()
     const { t } = useI18N()
     const location = useLocation()
     const search = new URLSearchParams(location.search)
@@ -160,7 +160,7 @@ const ReplaceTransaction = memo(() => {
                         await Services.Ethereum.replaceRequest(transaction.hash, config)
                     }
 
-                    history.goBack()
+                    navigate(-1)
                 }
             } catch (error) {
                 if (error instanceof Error) {

@@ -1,4 +1,5 @@
-import ReactDOM from 'react-dom'
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
 import { ErrorBoundary } from '../components/shared/ErrorBoundary'
 import { NoEffectUsePortalShadowRootContext } from '@masknet/theme'
 
@@ -14,9 +15,11 @@ export function createNormalReactRoot(jsx: JSX.Element, container?: HTMLElement)
         setTimeout(() => [...document.querySelectorAll('script')].forEach((x) => x.remove()), 200)
     }
 
-    return ReactDOM.createRoot(container).render(
-        <NoEffectUsePortalShadowRootContext.Provider value>
-            <ErrorBoundary>{jsx}</ErrorBoundary>
-        </NoEffectUsePortalShadowRootContext.Provider>,
+    return createRoot(container).render(
+        <StrictMode>
+            <NoEffectUsePortalShadowRootContext.Provider value>
+                <ErrorBoundary>{jsx}</ErrorBoundary>
+            </NoEffectUsePortalShadowRootContext.Provider>
+        </StrictMode>,
     )
 }
