@@ -101,7 +101,7 @@ export async function handlePromise(id: number, promise: () => any) {
         console.log('error: handle promise')
         console.log(error)
         // TODO:
-        sendEvent('rejectPromise', id, {})
+        sendEvent('rejectPromise', id, { message: (error as Error | undefined)?.message })
     }
 }
 

@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from 'react'
-import { useMount } from 'react-use'
+// import { useMount } from 'react-use'
 import type { ProviderType, ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, useChainId, useProviderType } from '@masknet/plugin-infra'
 import { EVM_Messages } from '../../messages'
@@ -52,7 +52,10 @@ export function ProviderBridge({ providerType: expectedProviderType }: ProviderB
                 EVM_Messages.events.PROVIDER_RPC_RESPONSE.sendToBackgroundPage({
                     providerType: expectedProviderType,
                     payload,
-                    error: error instanceof Error ? error : new Error('Failed to send transaction.'),
+                    error:
+                        error instanceof Error
+                            ? error
+                            : new Error((error as Error | undefined)?.message ?? 'Failed to send transaction.'),
                 })
             }
         })
@@ -92,7 +95,7 @@ export function ProviderBridge({ providerType: expectedProviderType }: ProviderB
         }
     }, [actualProviderType, expectedProviderType, provider])
 
-    useMount(onMounted)
+    // useMount(onMounted)
 
     return null
 }

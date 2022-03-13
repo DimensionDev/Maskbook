@@ -5,7 +5,7 @@ import { EVM_Messages } from '../../../../plugins/EVM/messages'
 import { BaseProvider } from './Base'
 import type { Provider } from '../types'
 
-export class InjectedProvider extends BaseProvider implements Provider {
+export class BridgeProvider extends BaseProvider implements Provider {
     private id = 0
 
     override async request<T extends unknown>(requestArguments: RequestArguments) {

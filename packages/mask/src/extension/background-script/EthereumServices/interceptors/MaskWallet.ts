@@ -1,3 +1,4 @@
+import { toHex } from 'web3-utils'
 import { toBuffer } from 'ethereumjs-util'
 import { PopupRoutes } from '@masknet/shared-base'
 import { signTypedData, SignTypedDataVersion } from '@metamask/eth-sig-util'
@@ -48,7 +49,7 @@ export class MaskWallet implements Middleware<Context> {
 
         switch (context.request.method) {
             case EthereumMethodType.ETH_CHAIN_ID:
-                context.write(currentMaskWalletChainIdSettings.value)
+                context.write(toHex(currentMaskWalletChainIdSettings.value))
                 break
             case EthereumMethodType.ETH_ACCOUNTS:
                 context.write(currentMaskWalletAccountSettings.value ? [currentMaskWalletAccountSettings.value] : [])

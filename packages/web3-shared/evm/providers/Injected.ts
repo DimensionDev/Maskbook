@@ -6,8 +6,6 @@ export default class InjectedSDK implements EIP1193Provider {
     constructor(private bridge: EthereumProvider) {}
 
     async login() {
-        const available = await this.bridge.untilAvailable()
-        if (!available) return []
         return this.request<string[]>({
             method: EthereumMethodType.ETH_REQUEST_ACCOUNTS,
             params: [],
@@ -27,7 +25,14 @@ export default class InjectedSDK implements EIP1193Provider {
     }
 
     request<T extends unknown>(requestArguments: RequestArguments): Promise<T> {
-        return this.bridge.request<T>(requestArguments)
+        switch (requestArguments.method) {
+            case EthereumMethodType.MASK_REQUEST_ACCOUNTS:
+                return this.login() as Promise<T>
+            case EthereumMethodType.MASK_DISMISS_ACCOUNTS:
+                return this.logout() as Promise<T>
+            default:
+                return this.bridge.request<T>(requestArguments)
+        }
     }
 
     removeListener(name: string, listener: (event: any) => void): EIP1193Provider {

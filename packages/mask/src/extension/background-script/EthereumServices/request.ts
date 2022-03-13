@@ -76,6 +76,11 @@ export async function request<T extends unknown>(
         } finally {
             if (context.error) reject(context.error)
             else resolve(context.result as T)
+
+            if (context.error) {
+                console.log('DEBUG: we got situation')
+                console.log(context)
+            }
         }
     })
 }

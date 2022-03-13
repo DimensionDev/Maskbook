@@ -1,6 +1,6 @@
 import { first } from 'lodash-unified'
 import { ChainId, createLookupTableResolver, ProviderType } from '@masknet/web3-shared-evm'
-import { InjectedProvider } from './providers/Injected'
+import { BridgeProvider } from './providers/Bridge'
 import { MaskWalletProvider } from './providers/MaskWallet'
 import { CustomNetworkProvider } from './providers/CustomNetwork'
 import type { Provider } from './types'
@@ -11,12 +11,12 @@ import { WalletRPC } from '../../../plugins/Wallet/messages'
 const getProvider = createLookupTableResolver<ProviderType, Provider | null>(
     {
         [ProviderType.MaskWallet]: new MaskWalletProvider(ProviderType.MaskWallet),
-        [ProviderType.MetaMask]: new InjectedProvider(ProviderType.MetaMask),
-        [ProviderType.WalletConnect]: new InjectedProvider(ProviderType.WalletConnect),
-        [ProviderType.Coin98]: new InjectedProvider(ProviderType.Coin98),
-        [ProviderType.WalletLink]: new InjectedProvider(ProviderType.WalletLink),
-        [ProviderType.MathWallet]: new InjectedProvider(ProviderType.MathWallet),
-        [ProviderType.Fortmatic]: new InjectedProvider(ProviderType.Fortmatic),
+        [ProviderType.MetaMask]: new BridgeProvider(ProviderType.MetaMask),
+        [ProviderType.WalletConnect]: new BridgeProvider(ProviderType.WalletConnect),
+        [ProviderType.Coin98]: new BridgeProvider(ProviderType.Coin98),
+        [ProviderType.WalletLink]: new BridgeProvider(ProviderType.WalletLink),
+        [ProviderType.MathWallet]: new BridgeProvider(ProviderType.MathWallet),
+        [ProviderType.Fortmatic]: new BridgeProvider(ProviderType.Fortmatic),
         [ProviderType.CustomNetwork]: new CustomNetworkProvider(),
     },
     null,
@@ -68,15 +68,21 @@ export async function notifyEvent(providerType: ProviderType, name: string, even
 export async function connect({ chainId, providerType }: { chainId?: ChainId; providerType: ProviderType }) {
     const account = first(
         await Services.Ethereum.requestAccounts(chainId, {
+            chainId,
             providerType,
         }),
     )
-    const actualChainId = Number.parseInt(
-        await Services.Ethereum.getChainId({
-            providerType,
-        }),
-        16,
-    )
+
+    const chainIdRaw = await Services.Ethereum.getChainId({
+        providerType,
+    })
+
+    console.log('DEBUG: chain id raw')
+    console.log({
+        chainIdRaw,
+    })
+
+    const actualChainId = Number.parseInt(chainIdRaw, 16)
     await WalletRPC.updateAccount({
         account,
         chainId: actualChainId,

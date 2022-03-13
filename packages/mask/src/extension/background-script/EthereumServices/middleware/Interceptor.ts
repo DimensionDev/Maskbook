@@ -1,6 +1,7 @@
 import { ProviderType } from '@masknet/web3-shared-evm'
 import type { Context, Middleware } from '../types'
 import { MaskWallet } from '../interceptors/MaskWallet'
+import { WalletConnect } from '../interceptors/WalletConnect'
 import { Injected } from '../interceptors/Injected'
 
 export class Interceptor implements Middleware<Context> {
@@ -8,7 +9,7 @@ export class Interceptor implements Middleware<Context> {
         [ProviderType.MaskWallet]: new MaskWallet(),
         [ProviderType.MetaMask]: new Injected(),
         [ProviderType.Coin98]: new Injected(),
-        [ProviderType.WalletConnect]: new Injected(),
+        [ProviderType.WalletConnect]: new WalletConnect(),
     }
 
     async fn(context: Context, next: () => Promise<void>) {

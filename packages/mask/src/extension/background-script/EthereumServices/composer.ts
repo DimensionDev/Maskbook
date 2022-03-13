@@ -166,7 +166,7 @@ class RequestContext implements Context {
         this.end(null, result)
     }
 
-    abort(error: unknown, fallback = 'Failed to send transaction.') {
+    abort(error: unknown, fallback = 'Failed to send request.') {
         this.end(error instanceof Error ? error : new Error(fallback))
     }
 

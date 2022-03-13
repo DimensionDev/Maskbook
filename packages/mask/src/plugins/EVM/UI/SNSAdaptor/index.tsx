@@ -20,6 +20,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 <ProviderBridge providerType={ProviderType.MetaMask} />
                 <ProviderBridge providerType={ProviderType.Coin98} />
                 <ProviderBridge providerType={ProviderType.Fortmatic} />
+                <ProviderBridge providerType={ProviderType.WalletConnect} />
             </>
         )
     },

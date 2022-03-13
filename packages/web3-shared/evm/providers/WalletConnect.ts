@@ -24,10 +24,16 @@ export default class WalletConnectSDK implements EIP1193Provider {
     logout() {
         return this.sdk.disconnect()
     }
-    request<T extends unknown>(requestArguments: RequestArguments) {
+    async request<T extends unknown>(requestArguments: RequestArguments) {
         switch (requestArguments.method) {
             case EthereumMethodType.MASK_REQUEST_ACCOUNTS:
-                return this.login() as Promise<T>
+                await this.logout()
+                const accounts = await this.login()
+                console.log('DEBUG: log in')
+                console.log({
+                    accounts,
+                })
+                return accounts as T
             case EthereumMethodType.MASK_DISMISS_ACCOUNTS:
                 return this.logout() as Promise<T>
             default:
