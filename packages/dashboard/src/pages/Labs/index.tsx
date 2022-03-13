@@ -32,7 +32,6 @@ import { DHEDGEIcon } from '../../../../mask/src/resources/DHEDGEIcon'
 import TutorialDialog from './components/TutorialDialog'
 import { PluginId } from '@masknet/plugin-infra'
 import ArtBlocksIcon from '../../../../mask/src/plugins/ArtBlocks/SNSAdaptor/ArtBlocksIcon'
-import { PluginTransakMessages } from '@masknet/plugin-transak'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -203,7 +202,7 @@ export default function Plugins() {
     ]
 
     const account = useAccount()
-    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
+    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
     const openTransakDialog = useCallback(
         (code?: string) => {
             setBuyDialog({

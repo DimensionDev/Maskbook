@@ -10,7 +10,6 @@ import {
     useWeb3State as useWeb3PluginState,
     Web3Plugin,
 } from '@masknet/plugin-infra'
-import { PluginTransakMessages } from '@masknet/plugin-transak'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { useWeb3State } from '@masknet/web3-shared-evm'
@@ -56,7 +55,7 @@ function Wallets() {
         networkDescriptor ?? null,
     )
 
-    const { openDialog: openBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
+    const { openDialog: openBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
     const { value: detailedTokens } = useAsync(

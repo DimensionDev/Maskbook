@@ -7,6 +7,7 @@ import type { Services as ServiceType } from '../../mask/dist/src/extension/serv
 import type { MaskEvents } from '@masknet/shared-base'
 import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import type { WalletMessages } from '@masknet/plugin-wallet'
+import type { PluginTransakMessages } from '@masknet/plugin-transak'
 
 export let Services: typeof ServiceType = null!
 export let Messages: WebExtensionMessage<MaskEvents> = null!
@@ -18,6 +19,7 @@ export interface PluginServices extends DashboardPluginServices {
 }
 export interface PluginMessages extends DashboardPluginMessages {
     Wallet: typeof WalletMessages
+    Transak: typeof PluginTransakMessages
     Swap: typeof import('../../mask/dist/src/plugins/Trader/messages').PluginTraderMessages
     Pets: typeof import('../../mask/dist/src/plugins/Pets/messages').PluginPetMessages
 }

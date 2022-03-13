@@ -1,4 +1,4 @@
-declare module '@mui/material/styles/createPalette.d' {
+module '@mui/material/styles/createPalette.d' {
     export interface Palette {
         secondaryDivider: string
     }
