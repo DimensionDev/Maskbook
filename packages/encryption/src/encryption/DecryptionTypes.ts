@@ -113,7 +113,6 @@ export interface DecryptEphemeralECDH_PostKey extends DecryptStaticECDH_PostKey 
     ephemeralPublicKeySignature?: Uint8Array
 }
 export enum DecryptProgressKind {
-    Started = 'started',
     Success = 'success',
     Error = 'error',
     Info = 'info',

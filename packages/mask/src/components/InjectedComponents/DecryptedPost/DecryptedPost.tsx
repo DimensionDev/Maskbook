@@ -19,10 +19,10 @@ import { DecryptPostSuccess, DecryptPostSuccessProps } from './DecryptedPostSucc
 import { DecryptPostAwaiting, DecryptPostAwaitingProps } from './DecryptPostAwaiting'
 import { DecryptPostFailed, DecryptPostFailedProps } from './DecryptPostFailed'
 import { usePostClaimedAuthor, usePostInfoDetails, usePostInfo } from '../../DataSource/usePostInfo'
-import { delay, encodeArrayBuffer } from '@dimensiondev/kit'
+import { delay, encodeArrayBuffer, safeUnreachable } from '@dimensiondev/kit'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import type { DecryptionContext, SocialNetworkEncodedPayload } from '../../../../background/services/crypto/decryption'
-import { DecryptProgressKind } from '@masknet/encryption'
+import { DecryptIntermediateProgressKind, DecryptProgressKind } from '@masknet/encryption'
 import type { PostContext } from '@masknet/plugin-infra'
 import { Some } from 'ts-results'
 
@@ -75,6 +75,7 @@ export function DecryptPost(props: DecryptPostProps) {
     const currentPostBy = usePostInfoDetails.author()
     const postBy = or(authorInPayload, currentPostBy)
     const postMetadataImages = usePostInfoDetails.postMetadataImages()
+    const mentionedLinks = usePostInfoDetails.mentionedLinks()
     const Success = props.successComponent || DecryptPostSuccess
     const Awaiting = props.waitingComponent || DecryptPostAwaiting
     const Failed = props.failedComponent || DecryptPostFailed
@@ -101,12 +102,35 @@ export function DecryptPost(props: DecryptPostProps) {
     useEffect(() => {
         const signal = new AbortController()
         const postURL = current.url.getCurrentValue()?.toString()
+        const report =
+            (key: string): ReportProgress =>
+            (kind, message) => {
+                if (kind === 'e2e') {
+                    dispatch({
+                        type: 'refresh',
+                        key,
+                        progress: { type: 'progress', progress: 'finding_post_key', internal: false },
+                    })
+                } else {
+                    dispatch({
+                        type: 'refresh',
+                        key,
+                        progress: { type: 'error', error: message, internal: false },
+                    })
+                }
+            }
         if (deconstructedPayload.ok) {
             makeProgress(
                 postURL,
                 postBy,
                 whoAmI,
-                { type: 'text', text: extractTextFromTypedMessage(current.rawMessage.getCurrentValue()).unwrapOr('') },
+                {
+                    type: 'text',
+                    text:
+                        extractTextFromTypedMessage(current.rawMessage.getCurrentValue()).unwrapOr('') +
+                        ' ' +
+                        mentionedLinks.join(' '),
+                },
                 (message, iv) => {
                     dispatch({
                         type: 'refresh',
@@ -120,6 +144,7 @@ export function DecryptPost(props: DecryptPostProps) {
                     })
                 },
                 current.decryptedReport,
+                report('text'),
                 signal.signal,
             )
         }
@@ -143,11 +168,12 @@ export function DecryptPost(props: DecryptPostProps) {
                     })
                 },
                 current.decryptedReport,
+                report(url),
                 signal.signal,
             )
         })
         return () => signal.abort()
-    }, [deconstructedPayload.ok, postBy.toText(), postMetadataImages.join(), whoAmI.toText()])
+    }, [deconstructedPayload.ok, postBy.toText(), postMetadataImages.join(), whoAmI.toText(), mentionedLinks.join()])
 
     // pass 3:
     // invoke callback
@@ -210,6 +236,7 @@ export function DecryptPost(props: DecryptPostProps) {
     }
 }
 
+type ReportProgress = (type: 'e2e' | 'error', message: string) => void
 async function makeProgress(
     postURL: string | undefined,
     authorHint: ProfileIdentifier,
@@ -217,6 +244,7 @@ async function makeProgress(
     payload: SocialNetworkEncodedPayload,
     done: (message: TypedMessage, iv: Uint8Array) => void,
     reporter: PostContext['decryptedReport'],
+    reportProgress: ReportProgress,
     signal: AbortSignal,
 ) {
     const context: DecryptionContext = {
@@ -237,6 +265,11 @@ async function makeProgress(
             if (progress.iv) reporter({ iv: encodeArrayBuffer(progress.iv) })
             if (progress.version) reporter({ version: progress.version })
             if (typeof progress.publicShared === 'boolean') reporter({ sharedPublic: Some(progress.publicShared) })
-        }
+        } else if (progress.type === DecryptProgressKind.Progress) {
+            if (progress.event === DecryptIntermediateProgressKind.TryDecryptByE2E) reportProgress('e2e')
+            else safeUnreachable(progress.event)
+        } else if (progress.type === DecryptProgressKind.Error) {
+            console.log(progress.message)
+        } else safeUnreachable(progress)
     }
 }
