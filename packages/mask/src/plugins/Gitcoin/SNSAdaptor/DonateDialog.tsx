@@ -80,9 +80,7 @@ export function DonateDialog(props: DonateDialogProps) {
     // #endregion
 
     // #region the selected token
-    const [token = nativeTokenDetailed.value, setToken] = useState<FungibleTokenDetailed | undefined>(
-        nativeTokenDetailed.value,
-    )
+    const [token = nativeTokenDetailed, setToken] = useState<FungibleTokenDetailed | undefined>(nativeTokenDetailed)
     const tokenBalance = useFungibleTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
     // #endregion
 

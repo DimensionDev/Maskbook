@@ -405,7 +405,7 @@ export const TransferERC721 = memo(() => {
                             <Typography fontSize="14px">
                                 {t.transfer_cost({
                                     gasFee: formatWeiToEther(gasFee).toFixed(6),
-                                    symbol: nativeToken.value?.symbol ?? '',
+                                    symbol: nativeToken.symbol ?? '',
                                     usd: gasFeeInUsd.toFixed(2),
                                 })}
                             </Typography>
