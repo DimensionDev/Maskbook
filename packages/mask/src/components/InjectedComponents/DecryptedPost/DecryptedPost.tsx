@@ -266,7 +266,7 @@ async function makeProgress(
             if (progress.version) reporter({ version: progress.version })
             if (typeof progress.publicShared === 'boolean') reporter({ sharedPublic: Some(progress.publicShared) })
         } else if (progress.type === DecryptProgressKind.Progress) {
-            if (progress.event === DecryptIntermediateProgressKind.TryDecryptByE2E) reportProgress('e2e')
+            if (progress.event === DecryptIntermediateProgressKind.TryDecryptByE2E) reportProgress('e2e', '')
             else safeUnreachable(progress.event)
         } else if (progress.type === DecryptProgressKind.Error) {
             console.log(progress.message)
