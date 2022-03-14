@@ -105,7 +105,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const transferAmount = rightShift(amount || '0', selectedToken.decimals).toFixed()
     const erc20GasLimit = useGasLimit(
         selectedToken.type === TokenType.Fungible
-            ? selectedToken.symbol === nativeToken.value?.symbol
+            ? selectedToken.symbol === nativeToken.symbol
                 ? EthereumTokenType.Native
                 : EthereumTokenType.ERC20
             : selectedToken.type,
@@ -314,7 +314,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                         <Typography fontSize="14px" title={`$${gasFeeInUsd.toString()}`}>
                             {t.transfer_cost({
                                 gasFee: formatWeiToEther(gasFee).toFixed(6),
-                                symbol: nativeToken.value?.symbol ?? '',
+                                symbol: nativeToken.symbol ?? '',
                                 usd: gasFeeInUsd.toFixed(2),
                             })}
                         </Typography>

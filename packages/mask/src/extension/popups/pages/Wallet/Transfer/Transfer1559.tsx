@@ -189,7 +189,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     const [minGasLimitContext, setMinGasLimitContext] = useState(0)
     const [addressTip, setAddressTip] = useState<{ type: TransferAddressError; message: string } | null>()
 
-    const { value: nativeToken } = useNativeTokenDetailed()
+    const nativeToken = useNativeTokenDetailed()
 
     const etherPrice = useNativeTokenPrice(nativeToken?.chainId)
 

@@ -94,7 +94,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
 
     // #region select token
-    const { value: nativeTokenDetailed } = useNativeTokenDetailed()
+    const nativeTokenDetailed = useNativeTokenDetailed()
     const [token = nativeTokenDetailed, setToken] = useState<FungibleTokenDetailed | undefined>(origin?.token)
     const [id] = useState(uuid)
     const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(

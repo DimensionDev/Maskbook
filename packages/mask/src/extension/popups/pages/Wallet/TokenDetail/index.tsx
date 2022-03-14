@@ -70,7 +70,7 @@ const TokenDetail = memo(() => {
     const wallet = useWallet()
     const navigate = useNavigate()
     const { currentToken } = useContainer(WalletContext)
-    const { value: nativeToken } = useNativeTokenDetailed()
+    const nativeToken = useNativeTokenDetailed()
 
     const { value: isActiveSocialNetwork } = useAsync(async () => {
         const urls = compact((await browser.tabs.query({ active: true })).map((tab) => tab.url))

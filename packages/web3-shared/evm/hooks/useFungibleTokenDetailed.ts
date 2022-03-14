@@ -3,6 +3,7 @@ import { unreachable } from '@dimensiondev/kit'
 import { ERC20TokenDetailed, EthereumTokenDetailedType, EthereumTokenType } from '../types'
 import { useERC20TokenDetailed } from './useERC20TokenDetailed'
 import { useNativeTokenDetailed } from './useNativeTokenDetailed'
+import { useAsyncRetry } from 'react-use'
 
 export function useFungibleTokenDetailed<
     P extends EthereumTokenDetailedType<EthereumTokenType.ERC20 | EthereumTokenType.Native>,
@@ -11,7 +12,8 @@ export function useFungibleTokenDetailed<
     address: string,
     token?: Partial<P>,
 ): AsyncStateRetry<P | undefined> {
-    const r1 = useNativeTokenDetailed()
+    const _r1 = useNativeTokenDetailed()
+    const r1 = useAsyncRetry(async () => _r1, [address, type, token])
     const r2 = useERC20TokenDetailed(
         type === EthereumTokenType.ERC20 ? address : '',
         token as unknown as ERC20TokenDetailed,

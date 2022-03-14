@@ -67,7 +67,7 @@ export const TipTaskProvider: FC<Props> = ({ children, task }) => {
     const [tipType, setTipType] = useState<TipType>(TipType.Token)
     const [amount, setAmount] = useState('0')
     const [erc721Contract, setErc721Contract] = useState<ContextOptions['erc721Contract']>(null)
-    const { value: nativeTokenDetailed = null } = useNativeTokenDetailed()
+    const nativeTokenDetailed = useNativeTokenDetailed()
     const [token, setToken] = useState<ContextOptions['token']>(nativeTokenDetailed)
     const [erc721TokenId, setErc721TokenId] = useState<ContextOptions['erc721TokenId']>(null)
 

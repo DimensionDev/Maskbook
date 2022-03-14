@@ -8,7 +8,7 @@ import { ChainId, EthereumTokenType, formatBalance, useNativeTokenDetailed } fro
 import { AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext'
 
 export function useSortedTrades(traders: TradeInfo[], chainId: ChainId, gasPrice?: string) {
-    const { value: nativeToken } = useNativeTokenDetailed(chainId)
+    const nativeToken = useNativeTokenDetailed(chainId)
     const nativeTokenPrice = useNativeTokenPrice(chainId)
 
     const {

@@ -38,7 +38,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
         const { t } = useI18N()
         const chainId = useChainId()
         const [selectedGasOption, setGasOption] = useState<GasOption | null>(gasOption)
-        const { value: nativeToken } = useNativeTokenDetailed()
+        const nativeToken = useNativeTokenDetailed()
         const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
 
         // #region Get suggest gas options data from meta swap api

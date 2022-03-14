@@ -156,7 +156,7 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
             [gasOptions, customGasPrice],
         )
 
-        const { value: nativeToken } = useNativeTokenDetailed()
+        const nativeToken = useNativeTokenDetailed()
         const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
 
         // #region Confirm function

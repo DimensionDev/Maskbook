@@ -19,7 +19,7 @@ export const Transfer = memo(() => {
     const { state } = useLocation() as {
         state: { token?: Web3Plugin.FungibleToken; erc721Token?: ERC721TokenDetailed; type?: TransferTab } | null
     }
-    const { value: nativeToken } = useNativeTokenDetailed()
+    const nativeToken = useNativeTokenDetailed()
     const transferTabsLabel: Record<TransferTab, string> = {
         [TransferTab.Token]: t.wallets_assets_token(),
         [TransferTab.Collectibles]: t.wallets_assets_collectibles(),

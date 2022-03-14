@@ -12,7 +12,7 @@ import { useMemo } from 'react'
 
 export function useERC20TokensDetailed() {
     const { ERC20 } = useTokenListConstants()
-    const { value: nativeTokenDetailed } = useNativeTokenDetailed()
+    const nativeTokenDetailed = useNativeTokenDetailed()
     const { value: erc20TokensDetailed = [], loading: erc20TokensDetailedLoading } =
         useERC20TokensDetailedFromTokenLists(ERC20)
 

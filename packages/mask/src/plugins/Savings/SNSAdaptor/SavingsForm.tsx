@@ -39,7 +39,7 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose }: Savings
     const protocol = SavingsProtocols[selectedProtocol]
     const targetChainId = chainId
 
-    const { value: nativeTokenDetailed } = useNativeTokenDetailed()
+    const nativeTokenDetailed = useNativeTokenDetailed()
     const web3 = useWeb3({ chainId })
     const account = useAccount()
 

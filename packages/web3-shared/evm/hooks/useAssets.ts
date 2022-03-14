@@ -9,12 +9,7 @@ import { formatEthereumAddress, EMPTY_LIST } from '../utils'
 
 export function useAssets(tokens: FungibleTokenDetailed[], chainId?: ChainId | 'all') {
     const wallet = useWallet()
-    const {
-        value: nativeTokenDetailed,
-        loading: nativeTokenDetailedLoading,
-        error: nativeTokenDetailedError,
-        retry: retryNativeTokenDetailed,
-    } = useNativeTokenDetailed(chainId === 'all' ? undefined : chainId)
+    const nativeTokenDetailed = useNativeTokenDetailed(chainId === 'all' ? undefined : chainId)
 
     const {
         value: assetsFromChain = EMPTY_LIST,
@@ -31,10 +26,9 @@ export function useAssets(tokens: FungibleTokenDetailed[], chainId?: ChainId | '
     } = useAssetsFromProvider(chainId)
 
     const detailedTokensRetry = useCallback(() => {
-        retryNativeTokenDetailed()
         retryAssetsDetailedChain()
         retryAssetsDetailedDebank()
-    }, [retryNativeTokenDetailed, retryAssetsDetailedChain, retryAssetsDetailedDebank])
+    }, [retryAssetsDetailedChain, retryAssetsDetailedDebank])
 
     const matchedAssetsFromChain = useMemo(
         () => assetsFromChain.filter((x) => !chainId || chainId === 'all' || x.token.chainId === chainId),
@@ -49,8 +43,8 @@ export function useAssets(tokens: FungibleTokenDetailed[], chainId?: ChainId | '
 
     return {
         value: assets,
-        error: nativeTokenDetailedError || assetsDetailedChainError || assetsDetailedProviderError,
-        loading: nativeTokenDetailedLoading || assetsDetailedChainLoading || assetsDetailedProviderLoading,
+        error: assetsDetailedChainError || assetsDetailedProviderError,
+        loading: assetsDetailedChainLoading || assetsDetailedProviderLoading,
         retry: detailedTokensRetry,
     }
 }

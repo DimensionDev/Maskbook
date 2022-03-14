@@ -51,7 +51,7 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
     const currentChainId = useChainId()
     const chainId = props.targetChainId ?? currentChainId
     const trustedERC20Tokens = useTrustedERC20Tokens()
-    const { value: nativeToken } = useNativeTokenDetailed(chainId)
+    const nativeToken = useNativeTokenDetailed(chainId)
     const [keyword, setKeyword] = useState('')
 
     const {

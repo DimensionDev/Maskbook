@@ -76,7 +76,7 @@ const ReplaceTransaction = memo(() => {
     const defaultMaxPriorityFeePerGas =
         (transaction?.computedPayload?._tx as EthereumTransactionConfig).maxPriorityFeePerGas ?? 0
 
-    const { value: nativeToken } = useNativeTokenDetailed()
+    const nativeToken = useNativeTokenDetailed()
     const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
     const networkType = useNetworkType()
     const is1559 = isEIP1559Supported(getChainIdFromNetworkType(networkType))

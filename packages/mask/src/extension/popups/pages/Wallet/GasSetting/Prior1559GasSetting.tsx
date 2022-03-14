@@ -104,7 +104,7 @@ export const Prior1559GasSetting = memo(() => {
     const [getGasLimitError, setGetGasLimitError] = useState(false)
     const navigate = useNavigate()
     const [selected, setOption] = useState<number | null>(null)
-    const { value: nativeToken } = useNativeTokenDetailed()
+    const nativeToken = useNativeTokenDetailed()
 
     const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
 

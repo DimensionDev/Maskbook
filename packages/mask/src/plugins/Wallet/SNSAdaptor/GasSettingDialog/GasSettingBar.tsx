@@ -28,7 +28,7 @@ export function GasSettingBar(props: GasSettingBarProps) {
     const { gasLimit, gasPrice, maxFee, priorityFee, onChange } = props
 
     const chainId = useChainId()
-    const { value: nativeTokenDetailed } = useNativeTokenDetailed()
+    const nativeTokenDetailed = useNativeTokenDetailed()
     const { value: gasPriceDefault = '0' } = useGasPrice()
 
     const [gasOption, setGasOption] = useState<GasOption>(GasOption.Medium)

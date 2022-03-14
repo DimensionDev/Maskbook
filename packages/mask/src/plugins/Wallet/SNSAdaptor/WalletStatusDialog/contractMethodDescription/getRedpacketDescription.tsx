@@ -39,7 +39,7 @@ export function CreateRedpacketDescription(props: CreateRedpacketDescriptionProp
     const { tokenAddress, tokenAmount } = props
     const { t } = useI18N()
 
-    const { value: nativeToken } = useNativeTokenDetailed()
+    const nativeToken = useNativeTokenDetailed()
     const { value: tokenDetailed } = useERC20TokenDetailed(tokenAddress)
     const token = isNativeTokenAddress(tokenAddress) ? nativeToken : tokenDetailed
 

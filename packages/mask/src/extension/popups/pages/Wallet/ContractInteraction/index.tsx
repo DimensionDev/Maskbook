@@ -231,7 +231,7 @@ const ContractInteraction = memo(() => {
     }, [request, t])
 
     // token detailed
-    const { value: nativeToken } = useNativeTokenDetailed()
+    const nativeToken = useNativeTokenDetailed()
     const { value: token } = useERC20TokenDetailed(isNativeTokenInteraction ? '' : tokenAddress)
 
     // gas price

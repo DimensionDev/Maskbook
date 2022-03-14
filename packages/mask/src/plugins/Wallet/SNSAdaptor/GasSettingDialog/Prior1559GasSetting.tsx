@@ -28,9 +28,9 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
         const { t } = useI18N()
         const chainId = useChainId()
         const [selectedGasOption, setGasOption] = useState<GasOption | null>(gasOption)
-        const { value: nativeToken } = useNativeTokenDetailed()
+        const nativeToken = useNativeTokenDetailed()
 
-        const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
+        const nativeTokenPrice = useNativeTokenPrice(nativeToken.chainId)
 
         // #region Get gas options from debank
         const { value: gasOptions, loading: getGasOptionsLoading } = useAsync(async () => {

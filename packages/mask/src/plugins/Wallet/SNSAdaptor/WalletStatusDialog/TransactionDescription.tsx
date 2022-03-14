@@ -119,7 +119,7 @@ export interface RecentTransactionDescriptionProps {
 export function RecentTransactionDescription(props: RecentTransactionDescriptionProps) {
     const chainId = useChainId()
     const { hash, computedPayload } = props
-    const { loading: getNativeTokenLoading, value: nativeTokenDetailed } = useNativeTokenDetailed()
+    const nativeTokenDetailed = useNativeTokenDetailed()
     let inputTokenAddress: string | undefined = ''
     let tokenAddress: string | undefined = ''
 
@@ -152,7 +152,7 @@ export function RecentTransactionDescription(props: RecentTransactionDescription
 
     const { loading: getERC20TokenLoading, value: tokenDetailed } = useERC20TokenDetailed(tokenAddress)
 
-    return !getNativeTokenLoading && !getERC20TokenLoading && !getInputERC20TokenLoading ? (
+    return !getERC20TokenLoading && !getInputERC20TokenLoading ? (
         <span>
             {getTransactionDescription(
                 chainId,
