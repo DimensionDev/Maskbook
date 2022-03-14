@@ -2,7 +2,7 @@ import type { Plugin } from '../types'
 import { useEffect, useState, useRef, memo, createContext, useContext } from 'react'
 import { ErrorBoundary } from '@masknet/shared'
 import { usePluginI18NField, PluginWrapperComponent, PluginWrapperMethods } from '../hooks'
-import { emptyPluginWrapperMethods, PluginWrapperMethodsContext } from '../hooks/usePluginWrapper'
+import { PluginWrapperMethodsContext } from '../hooks/usePluginWrapper'
 import { ShadowRootIsolation } from '@masknet/theme'
 
 type Inject<T> = Plugin.InjectUI<T>
@@ -18,10 +18,12 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
         const [ref, setRef] = useState<PluginWrapperMethods | null>(null)
         if (PluginWrapperComponent) {
             return (
-                <PluginWrapperComponent definition={plugin} ref={(r) => (ref === r ? void 0 : setRef(ref))}>
-                    <PluginWrapperMethodsContext.Provider value={ref || emptyPluginWrapperMethods}>
-                        {element}
-                    </PluginWrapperMethodsContext.Provider>
+                <PluginWrapperComponent definition={plugin} ref={setRef}>
+                    {ref ? (
+                        <PluginWrapperMethodsContext.Provider value={ref}>
+                            {element}
+                        </PluginWrapperMethodsContext.Provider>
+                    ) : null}
                 </PluginWrapperComponent>
             )
         }
@@ -81,7 +83,7 @@ function RawHookRender<T>({ UI, data }: { data: T; UI: Raw<T> }) {
     }, [ref, UI.init])
     useEffect(() => void f?.(data), [f, data])
 
-    return <div ref={(r) => ref === r || setRef(r)} />
+    return <div ref={setRef} />
 }
 function isRawInjectHook<T>(x: Inject<T>): x is Raw<T> {
     return 'type' in x && x.type === 'raw'
