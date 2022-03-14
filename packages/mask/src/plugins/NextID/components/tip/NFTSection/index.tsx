@@ -14,11 +14,16 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         flexDirection: 'column',
+        overflow: 'auto',
     },
     selectSection: {
         marginTop: theme.spacing(1.5),
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'auto',
     },
     list: {
+        flexGrow: 1,
         display: 'grid',
         gridTemplateColumns: 'repeat(4, 1fr)',
         maxHeight: 400,
@@ -26,11 +31,11 @@ const useStyles = makeStyles()((theme) => ({
         gridGap: 18,
     },
     keyword: {
-        borderRadius: 6,
+        borderRadius: 8,
         marginRight: theme.spacing(1.5),
     },
     searchButton: {
-        borderRadius: 6,
+        borderRadius: 8,
         width: 100,
     },
     row: {
@@ -43,7 +48,7 @@ interface Props extends HTMLProps<HTMLDivElement> {}
 
 export const NFTSection: FC<Props> = ({ className, ...rest }) => {
     const { t } = useI18N()
-    const { erc721Contract, setErc721Contract, erc721TokenId, setErc721TokenId } = useTip()
+    const { erc721Contract, setErc721Contract, erc721TokenId, setErc721TokenId, isSending } = useTip()
     const [tokenId, setTokenId, erc721TokenDetailedCallback] = useERC721TokenDetailedCallback(erc721Contract)
     const { classes } = useStyles()
     const account = useAccount()
@@ -58,6 +63,7 @@ export const NFTSection: FC<Props> = ({ className, ...rest }) => {
     }, [erc721TokenDetailedCallback])
 
     const tokens = useMemo(() => (searchedToken ? [searchedToken] : myTokens), [searchedToken, myTokens])
+    const enableTokenIds = useMemo(() => myTokens.map((t) => t.tokenId), [myTokens])
 
     return (
         <div className={classnames(classes.root, className)} {...rest}>
@@ -71,9 +77,16 @@ export const NFTSection: FC<Props> = ({ className, ...rest }) => {
                             classes={{ root: classes.keyword }}
                             value={tokenId}
                             onChange={(id) => setTokenId(id)}
+                            inputBaseProps={{
+                                disabled: isSending,
+                            }}
                             label=""
                         />
-                        <Button className={classes.searchButton} variant="contained" onClick={onSearch}>
+                        <Button
+                            className={classes.searchButton}
+                            variant="contained"
+                            disabled={isSending}
+                            onClick={onSearch}>
                             {t('search')}
                         </Button>
                     </FormControl>
@@ -81,6 +94,7 @@ export const NFTSection: FC<Props> = ({ className, ...rest }) => {
                         className={classes.list}
                         selectedIds={selectedIds}
                         tokens={tokens}
+                        enableTokenIds={enableTokenIds}
                         onChange={(ids) => {
                             setErc721TokenId(ids.length ? ids[0] : null)
                         }}

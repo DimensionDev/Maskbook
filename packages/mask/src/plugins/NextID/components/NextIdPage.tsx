@@ -1,19 +1,19 @@
-import { useI18N } from '../locales'
-import { makeStyles } from '@masknet/theme'
-import { Box, Button, Skeleton, Stack, Typography } from '@mui/material'
 import { NextIDPlatform } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { queryExistedBindingByPersona, queryIsBound } from '@masknet/web3-providers'
+import { Box, Button, Skeleton, Stack, Typography } from '@mui/material'
 import { useMemo, useState } from 'react'
-import { BindDialog } from './BindDialog'
 import { useAsync, useAsyncRetry, useCounter } from 'react-use'
+import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
+import { useNextIDConnectStatus } from '../../../components/DataSource/useNextID'
+import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
 import Services from '../../../extension/service'
+import { activatedSocialNetworkUI } from '../../../social-network'
+import { TAB_SELECTOR } from '../constants'
+import { useI18N } from '../locales'
+import { BindDialog } from './BindDialog'
 import { BindingItem } from './BindingItem'
 import { UnbindDialog } from './UnbindDialog'
-import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
-import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
-import { queryIsBound, queryExistedBindingByPersona } from '@masknet/web3-providers'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { useNextIDConnectStatus } from '../../../components/DataSource/useNextID'
-import { TAB_SELECTOR } from '../constants'
 
 const useStyles = makeStyles()((theme) => ({
     tip: {
@@ -159,7 +159,8 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
                     <Box>
                         {bindings.proofs.map((x) => (
                             <BindingItem
-                                enableAction={isOwn}
+                                deletable={isOwn}
+                                tipable={!isOwn}
                                 key={x.identity}
                                 platform={x.platform}
                                 identity={x.identity}

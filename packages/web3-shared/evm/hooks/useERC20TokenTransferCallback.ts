@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { useAccount } from './useAccount'
@@ -76,6 +76,13 @@ export function useERC20TokenTransferCallback(address?: string, amount?: string,
                         })
                         resolve(hash)
                     })
+                    .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
+                        setTransferState({
+                            type: TransactionStateType.CONFIRMED,
+                            no,
+                            receipt,
+                        })
+                    })
                     .on(TransactionEventType.ERROR, (error) => {
                         setTransferState({
                             type: TransactionStateType.FAILED,
@@ -93,6 +100,11 @@ export function useERC20TokenTransferCallback(address?: string, amount?: string,
             type: TransactionStateType.UNKNOWN,
         })
     }, [])
+
+    useEffect(() => {
+        if (transferState.type !== TransactionStateType.CONFIRMED) return
+        resetCallback()
+    }, [transferState.type])
 
     return [transferState, transferCallback, resetCallback] as const
 }

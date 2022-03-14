@@ -99,7 +99,6 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
                 }
                 if (profiling) {
-                    alias['react-dom$'] = 'react-dom/profiling'
                     alias['scheduler/tracing'] = 'scheduler/tracing-profiling'
                 }
                 return alias

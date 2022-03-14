@@ -3,14 +3,25 @@ import { SelectTokenDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { EthereumTokenType, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
-import { Box, FormControl, FormControlLabel, MenuItem, Radio, RadioGroup, Select, Typography } from '@mui/material'
+import {
+    Box,
+    BoxProps,
+    FormControl,
+    FormControlLabel,
+    MenuItem,
+    Radio,
+    RadioGroup,
+    Select,
+    Typography,
+} from '@mui/material'
+import classnames from 'classnames'
 import { FC, memo, useCallback, useRef, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
-import { useI18N } from '../../../../utils'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
-import { TargetChainIdContext, useTip } from '../../contexts'
+import { TargetChainIdContext, useTip, useTipValidate } from '../../contexts'
+import { useI18N } from '../../locales'
 import { TipType } from '../../types'
 import { NFTSection } from './NFTSection'
 
@@ -19,6 +30,12 @@ const useStyles = makeStyles()((theme) => {
         root: {
             display: 'flex',
             flexDirection: 'column',
+        },
+        main: {
+            display: 'flex',
+            flexDirection: 'column',
+            flexGrow: 1,
+            overflow: 'auto',
         },
         tipButton: {
             marginTop: theme.spacing(1.5),
@@ -45,8 +62,10 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export const TipForm: FC = memo(() => {
-    const { t } = useI18N()
+interface Props extends BoxProps {}
+
+export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
+    const t = useI18N()
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const { classes } = useStyles()
     const {
@@ -59,8 +78,10 @@ export const TipForm: FC = memo(() => {
         setToken,
         amount,
         setAmount,
+        isSending,
         sendTip,
     } = useTip()
+    const [isValid, validateMessage] = useTipValidate()
     const { Utils } = useWeb3State()
     const selectRef = useRef(null)
     const [id] = useState(uuid)
@@ -76,6 +97,7 @@ export const TipForm: FC = memo(() => {
     )
     const onSelectTokenChipClick = useCallback(() => {
         setSelectTokenDialog({
+            chainId,
             open: true,
             uuid: id,
             disableNativeToken: false,
@@ -83,72 +105,92 @@ export const TipForm: FC = memo(() => {
                 selectedTokens: token ? [token.address] : [],
             },
         })
-    }, [id, token?.address])
+    }, [id, token?.address, chainId])
+
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
         token?.type || EthereumTokenType.Native,
         token?.address || '',
+        chainId,
     )
     // #endregion
+    const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
 
     return (
-        <Box className={classes.root}>
-            <Typography>To</Typography>
+        <Box className={classnames(classes.root, className)} {...rest}>
+            <div className={classes.main}>
+                <Typography>{t.tip_to()}</Typography>
 
-            <FormControl fullWidth>
-                <Select
-                    ref={selectRef}
-                    value={recipient}
-                    onChange={(e) => {
-                        setRecipient(e.target.value)
-                    }}
-                    MenuProps={{
-                        anchorOrigin: {
-                            vertical: 'bottom',
-                            horizontal: 'center',
-                        },
-                        container: selectRef.current,
-                        BackdropProps: {
-                            invisible: true,
-                        },
-                    }}>
-                    {recipientAddresses.map((address) => (
-                        <MenuItem key={address} value={address}>
-                            {Utils?.formatDomainName?.(address) || address}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
-            <FormControl>
-                <RadioGroup
-                    row
-                    value={tipType}
-                    onChange={(e) => {
-                        setTipType(e.target.value as TipType)
-                    }}>
-                    <FormControlLabel value={TipType.Token} control={<Radio />} label={t('plugin_tip_token')} />
-                    <FormControlLabel value={TipType.NFT} control={<Radio />} label={t('plugin_tip_nft')} />
-                </RadioGroup>
-            </FormControl>
-            {tipType === TipType.Token ? (
-                <FormControl>
-                    <TokenAmountPanel
-                        label="Token"
-                        token={token}
-                        amount={amount}
-                        onAmountChange={setAmount}
-                        balance={tokenBalance}
-                        SelectTokenChip={{
-                            loading: loadingTokenBalance,
-                            ChipProps: {
-                                onClick: onSelectTokenChipClick,
-                            },
+                <FormControl fullWidth>
+                    <Select
+                        ref={selectRef}
+                        value={recipient}
+                        disabled={isSending}
+                        onChange={(e) => {
+                            setRecipient(e.target.value)
                         }}
-                    />
+                        MenuProps={{
+                            anchorOrigin: {
+                                vertical: 'bottom',
+                                horizontal: 'center',
+                            },
+                            container: selectRef.current,
+                            anchorEl: selectRef.current,
+                            BackdropProps: {
+                                invisible: true,
+                            },
+                        }}>
+                        {recipientAddresses.map((address) => (
+                            <MenuItem key={address} value={address}>
+                                {Utils?.formatDomainName?.(address) || address}
+                            </MenuItem>
+                        ))}
+                    </Select>
                 </FormControl>
-            ) : (
-                <NFTSection />
-            )}
+                <FormControl>
+                    <RadioGroup
+                        row
+                        value={tipType}
+                        onChange={(e) => {
+                            setTipType(e.target.value as TipType)
+                        }}>
+                        <FormControlLabel
+                            disabled={isSending}
+                            value={TipType.Token}
+                            control={<Radio />}
+                            label={t.tip_type_token()}
+                        />
+                        <FormControlLabel
+                            disabled={isSending}
+                            value={TipType.NFT}
+                            control={<Radio />}
+                            label={t.tip_type_nft()}
+                        />
+                    </RadioGroup>
+                </FormControl>
+                {tipType === TipType.Token ? (
+                    <FormControl>
+                        <TokenAmountPanel
+                            label="Token"
+                            token={token}
+                            amount={amount}
+                            onAmountChange={setAmount}
+                            balance={tokenBalance}
+                            InputProps={{
+                                disabled: isSending,
+                            }}
+                            SelectTokenChip={{
+                                loading: loadingTokenBalance,
+                                ChipProps: {
+                                    onClick: onSelectTokenChipClick,
+                                },
+                            }}
+                        />
+                    </FormControl>
+                ) : (
+                    <NFTSection />
+                )}
+            </div>
 
             <EthereumChainBoundary
                 chainId={chainId}
@@ -164,9 +206,9 @@ export const TipForm: FC = memo(() => {
                     size="large"
                     className={classes.tipButton}
                     fullWidth
-                    disabled={false}
+                    disabled={!isValid || isSending}
                     onClick={sendTip}>
-                    {t('plugin_tip_send')}
+                    {buttonLabel}
                 </ActionButton>
             </EthereumChainBoundary>
         </Box>
