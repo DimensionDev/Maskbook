@@ -116,12 +116,14 @@ export enum AESAlgorithmEnum {
     A256GCM = 'A256GCM',
 }
 export enum SocialNetworkEnum {
+    Unknown = -1,
     Facebook = 0,
     Twitter = 1,
     Instagram = 2,
     Minds = 3,
 }
 const SocialNetworkEnumToDomain: Record<SocialNetworkEnum, string> = {
+    [SocialNetworkEnum.Unknown]: 'localhost',
     [SocialNetworkEnum.Facebook]: 'facebook.com',
     [SocialNetworkEnum.Minds]: 'minds.com',
     [SocialNetworkEnum.Twitter]: 'twitter.com',

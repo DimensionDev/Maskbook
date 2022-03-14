@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { useWallet } from '@masknet/web3-shared-evm'
 import { ERC20TokenList } from '@masknet/shared'
 import { useI18N } from '../../../../../utils'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const useStyles = makeStyles()({
     header: {
@@ -41,7 +41,7 @@ const AddToken = memo(() => {
     const { t } = useI18N()
     const wallet = useWallet()
     const { classes } = useStyles()
-    const history = useHistory()
+    const navigate = useNavigate()
 
     const excludeTokens = Array.from(wallet?.erc20_token_whitelist ?? [])
 
@@ -53,7 +53,7 @@ const AddToken = memo(() => {
                 <ERC20TokenList FixedSizeListProps={{ height: 340, itemSize: 54 }} blacklist={excludeTokens} />
             </div>
             <Stack height="100%" sx={{ px: 2, pb: 2 }} justifyContent="center" alignItems="center">
-                <Button fullWidth className={classes.button} onClick={history.goBack}>
+                <Button fullWidth className={classes.button} onClick={() => navigate(-1)}>
                     {t('popups_wallet_go_back')}
                 </Button>
             </Stack>

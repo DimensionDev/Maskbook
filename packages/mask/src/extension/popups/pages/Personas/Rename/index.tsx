@@ -4,7 +4,7 @@ import { Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput'
 import { LoadingButton } from '@mui/lab'
 import { useI18N } from '../../../../../utils'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { PersonaContext } from '../hooks/usePersonaContext'
 import Services from '../../../../service'
@@ -43,7 +43,7 @@ const PERSONA_NAME_MAX_LENGTH = 24
 
 const PersonaRename = memo(() => {
     const { t } = useI18N()
-    const history = useHistory()
+    const navigate = useNavigate()
     const [name, setName] = useState('')
     const [error, setError] = useState('')
     const { currentPersona } = PersonaContext.useContainer()
@@ -62,7 +62,7 @@ const PersonaRename = memo(() => {
             setError(t('popups_persona_persona_name_exists'))
             return
         }
-        history.replace(PopupRoutes.Personas)
+        navigate(PopupRoutes.Personas, { replace: true })
     }, [currentPersona, name])
 
     return (

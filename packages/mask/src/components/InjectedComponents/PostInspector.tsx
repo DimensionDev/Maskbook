@@ -1,7 +1,6 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { useAsync } from 'react-use'
 import { DecryptPost } from './DecryptedPost/DecryptedPost'
-import { AddToKeyStore } from './AddToKeyStore'
 import Services from '../../extension/service'
 import { ProfileIdentifier, type PayloadAlpha40_Or_Alpha39, type PayloadAlpha38 } from '@masknet/shared-base'
 import type { TypedMessageTuple } from '@masknet/typed-message'
@@ -10,7 +9,6 @@ import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI
 import { useValueRef } from '@masknet/shared'
 import { debugModeSetting } from '../../settings/settings'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
-import { decodePublicKeyUI } from '../../social-network/utils/text-payload-ui'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 import { PossiblePluginSuggestionPostInspector } from './DisabledPluginSuggestion'
 import { MaskPostExtraPluginWrapper } from '../../plugins/MaskPluginWrapper'
@@ -29,7 +27,6 @@ export interface PostInspectorProps {
 }
 export function PostInspector(props: PostInspectorProps) {
     const postBy = usePostInfoDetails.author()
-    const postContent = usePostInfoDetails.postContent()
     const encryptedPost = usePostInfoDetails.containingMaskPayload()
     const decryptedPayloadForImage = usePostInfoDetails.decryptedPayloadForImage()
     const postImages = usePostInfoDetails.postMetadataImages()
@@ -37,7 +34,6 @@ export function PostInspector(props: PostInspectorProps) {
     const whoAmI = useCurrentIdentity()
     const friends = useFriendsList()
     const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Profile[]>([])
-    const provePost = useMemo(() => decodePublicKeyUI(postContent), [postContent])
 
     const { value: sharedListOfPost } = useAsync(async () => {
         if (!whoAmI || !whoAmI.identifier.equals(postBy) || !encryptedPost.ok) return []
@@ -80,8 +76,6 @@ export function PostInspector(props: PostInspectorProps) {
                 whoAmI={whoAmI ? whoAmI.identifier : ProfileIdentifier.unknown}
             />,
         )
-    } else if (provePost.length) {
-        return withAdditionalContent(<AddToKeyStore postBy={postBy} provePost={postContent} />)
     }
     return withAdditionalContent(null)
     function withAdditionalContent(x: JSX.Element | null) {

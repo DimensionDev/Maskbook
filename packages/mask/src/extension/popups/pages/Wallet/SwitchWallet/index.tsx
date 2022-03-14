@@ -2,7 +2,7 @@ import { memo, useCallback } from 'react'
 import { Button, List } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress, ProviderType, useWallet, useWallets, useWalletPrimary } from '@masknet/web3-shared-evm'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
@@ -85,7 +85,7 @@ const SwitchWallet = memo(() => {
     const walletPrimary = useWalletPrimary()
     const { classes } = useStyles()
 
-    const history = useHistory()
+    const navigate = useNavigate()
     const wallet = useWallet()
     const wallets = useWallets(ProviderType.MaskWallet)
 
@@ -98,7 +98,7 @@ const SwitchWallet = memo(() => {
                 url: browser.runtime.getURL('/dashboard.html#/create-mask-wallet'),
             })
         } else {
-            history.push(PopupRoutes.CreateWallet)
+            navigate(PopupRoutes.CreateWallet)
         }
     }, [walletPrimary, history])
 
@@ -111,7 +111,7 @@ const SwitchWallet = memo(() => {
             if (currentProviderSettings.value === ProviderType.MaskWallet)
                 await WalletRPC.updateAccount({ account: address, providerType: ProviderType.MaskWallet })
 
-            history.replace(PopupRoutes.Wallet)
+            navigate(PopupRoutes.Wallet, { replace: true })
         },
         [history],
     )
@@ -152,7 +152,7 @@ const SwitchWallet = memo(() => {
                     variant="contained"
                     disabled={wallets.length >= MAX_WALLET_LIMIT}
                     className={classes.button}
-                    onClick={() => history.push(PopupRoutes.ImportWallet)}>
+                    onClick={() => navigate(PopupRoutes.ImportWallet)}>
                     {t('import')}
                 </Button>
             </div>
