@@ -189,24 +189,20 @@ export function DepositDialog() {
 
     // #region transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
-    const shareLink = activatedSocialNetworkUI.utils
-        .getShareLinkURL?.(
-            token
-                ? t(
-                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                          ? 'plugin_pooltogether_share'
-                          : 'plugin_pooltogether_share_no_official_account',
-                      {
-                          amount: rawAmount,
-                          cashTag: cashTag,
-                          symbol: token.symbol,
-                          pool: pool?.name ?? `${pool?.tokens.underlyingToken.symbol} Pool`,
-                          account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
-                      },
-                  )
-                : '',
-        )
-        .toString()
+    const shareText = token
+        ? t(
+              isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                  ? 'plugin_pooltogether_share'
+                  : 'plugin_pooltogether_share_no_official_account',
+              {
+                  amount: rawAmount,
+                  cashTag: cashTag,
+                  symbol: token.symbol,
+                  pool: pool?.name ?? `${pool?.tokens.underlyingToken.symbol} Pool`,
+                  account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
+              },
+          )
+        : ''
 
     // on close transaction dialog
     const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
@@ -230,7 +226,7 @@ export function DepositDialog() {
         if (depositState.type === TransactionStateType.UNKNOWN) return
         setTransactionDialogOpen({
             open: true,
-            shareLink,
+            shareText,
             state: depositState,
             summary: `Depositing ${formatBalance(amount, token.decimals)}${token.symbol} on ${pool?.name} pool.`,
         })

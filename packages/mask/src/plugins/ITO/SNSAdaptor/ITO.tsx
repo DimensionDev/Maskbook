@@ -376,24 +376,20 @@ export function ITO(props: ITO_Props) {
 
     // #endregion
 
-    const shareLink = activatedSocialNetworkUI.utils
-        .getShareLinkURL?.(
-            t(
-                isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                    ? 'plugin_ito_claim_foreshow_share'
-                    : 'plugin_ito_claim_foreshow_share_no_official_account',
-                {
-                    link: postLink,
-                    name: token.name,
-                    symbol: token.symbol ?? 'token',
-                    account: isFacebook(activatedSocialNetworkUI) ? t('facebook_account') : t('twitter_account'),
-                },
-            ),
-        )
-        .toString()
+    const shareText = t(
+        isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+            ? 'plugin_ito_claim_foreshow_share'
+            : 'plugin_ito_claim_foreshow_share_no_official_account',
+        {
+            link: postLink,
+            name: token.name,
+            symbol: token.symbol ?? 'token',
+            account: isFacebook(activatedSocialNetworkUI) ? t('facebook_account') : t('twitter_account'),
+        },
+    )
     const onShare = useCallback(async () => {
-        window.open(shareLink, '_blank', 'noopener noreferrer')
-    }, [shareLink])
+        activatedSocialNetworkUI.utils.share?.(shareText)
+    }, [shareText])
     const onUnlock = useCallback(async () => {
         setClaimDialogStatus(SwapStatus.Unlock)
         setOpenClaimDialog(true)
@@ -751,7 +747,7 @@ export function ITO(props: ITO_Props) {
                                 {t('plugin_ito_unlock_in_advance')}
                             </ActionButton>
                         </Grid>
-                        {shareLink ? (
+                        {shareText ? (
                             <Grid item xs={6}>
                                 <ActionButton
                                     onClick={onShare}

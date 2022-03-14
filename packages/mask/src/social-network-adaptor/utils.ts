@@ -23,3 +23,24 @@ export const getCurrentIdentifier = () => {
         globalUIState.profiles.value[0]
     )
 }
+
+export const createCenterWindow = (width: number, height: number) => {
+    const x = window.screenX + (window.innerWidth - width) / 2
+    const y = window.screenY + (window.innerHeight - height) / 2
+    const win = window.open(
+        '',
+        '_blank',
+        [
+            `screenX=${x}`,
+            `screenY=${y}`,
+            `height=${height}`,
+            `width=${width}`,
+            'resizable=no',
+            'scrollbars=no',
+            'status=no',
+            'noopener',
+            'noreferrer',
+        ].join(','),
+    )
+    return win
+}

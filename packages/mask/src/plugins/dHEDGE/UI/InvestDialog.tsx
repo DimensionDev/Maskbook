@@ -144,24 +144,18 @@ export function InvestDialog() {
 
     // #region transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
-    const shareLink = activatedSocialNetworkUI.utils
-        .getShareLinkURL?.(
-            token
-                ? [
-                      `I just invested ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol} in ${
-                          pool?.name
-                      }. ${
-                          isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                              ? `Follow @${
-                                    isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                                } (mask.io) to invest dHEDGE pools.`
-                              : ''
-                      }`,
-                      '#mask_io',
-                  ].join('\n')
-                : '',
-        )
-        .toString()
+    const shareText = token
+        ? [
+              `I just invested ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol} in ${pool?.name}. ${
+                  isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                      ? `Follow @${
+                            isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
+                        } (mask.io) to invest dHEDGE pools.`
+                      : ''
+              }`,
+              '#mask_io',
+          ].join('\n')
+        : ''
 
     // on close transaction dialog
     const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
@@ -185,7 +179,7 @@ export function InvestDialog() {
         if (investState.type === TransactionStateType.UNKNOWN) return
         setTransactionDialogOpen({
             open: true,
-            shareLink,
+            shareText,
             state: investState,
             summary: `Investing ${formatBalance(amount, token.decimals)}${token.symbol} on ${pool?.name} pool.`,
         })

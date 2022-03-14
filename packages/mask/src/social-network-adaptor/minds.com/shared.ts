@@ -16,8 +16,9 @@ export const mindsShared: SocialNetwork.Shared & SocialNetwork.Base = {
         isValidUsername: usernameValidator,
         textPayloadPostProcessor: undefined,
         getPostURL,
-        getShareLinkURL(message) {
-            return new URL(`https://www.minds.com/newsfeed/subscriptions?intentUrl=${encodeURIComponent(message)}`)
+        share(message) {
+            const url = new URL(`https://www.minds.com/newsfeed/subscriptions?intentUrl=${encodeURIComponent(message)}`)
+            window.open(url, '_blank', 'noopener noreferrer')
         },
         createPostContext: createSNSAdaptorSpecializedPostContext({
             payloadParser: deconstructPayload,
