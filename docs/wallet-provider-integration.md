@@ -1,7 +1,17 @@
-# A new Wallet provider to Mask Network (EVM)
+# A new EVM-compatible wallet provider to Mask Network
 
-There are mainly two parts to support a EVM compatible wallet in Mask Network.
+## Overview
 
-## EIP1193 compatible provider
+```
++------------------+                             +-----------------+
+| Bridge Component | <- Runtime Messaging API -> |   RPC Composer  |
++------------------+                             +-----------------+
 
-## An Interceptor
+   Front End Page                                  Background Page
+```
+
+There are mainly two parts to integrate an EVM-compatible wallet into Mask Network.
+
+## EIP1193
+
+## Interceptor
