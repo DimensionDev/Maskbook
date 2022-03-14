@@ -2,12 +2,14 @@ import { Currency } from '@masknet/icons'
 import { usePostInfoDetails } from '@masknet/plugin-infra'
 import { NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
+import { queryIsBound } from '@masknet/web3-providers'
 import { EMPTY_LIST } from '@masknet/web3-shared-evm'
 import classnames from 'classnames'
 import { uniq } from 'lodash-unified'
 import { FC, HTMLProps, MouseEventHandler, useCallback, useMemo } from 'react'
-import { useAsync, useAsyncFn } from 'react-use'
+import { useAsync, useAsyncFn, useAsyncRetry } from 'react-use'
 import Services from '../../../../extension/service'
+import { activatedSocialNetworkUI } from '../../../../social-network'
 import { PluginNextIdMessages } from '../../messages'
 
 interface Props extends HTMLProps<HTMLDivElement> {
@@ -34,6 +36,17 @@ const useStyles = makeStyles()({
 export const TipButton: FC<Props> = ({ className, receiver, addresses = [], children, ...rest }) => {
     const { classes } = useStyles()
 
+    const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
+    const { value: receiverPersona, loading: loadingPersona } = useAsyncRetry(() => {
+        if (!receiver) return Promise.resolve(undefined)
+        return Services.Identity.queryPersonaByProfile(receiver)
+    }, [receiver])
+
+    const { value: isAccountVerified, loading: loadingVerifyInfo } = useAsync(() => {
+        if (!receiverPersona?.publicHexKey || !receiver?.userId) return Promise.resolve(false)
+        return queryIsBound(receiverPersona.publicHexKey, platform, receiver.userId)
+    }, [receiverPersona?.publicHexKey, platform, receiver?.userId])
+
     const [walletsState, queryBindings] = useAsyncFn(async () => {
         if (!receiver) return EMPTY_LIST
 
@@ -53,7 +66,7 @@ export const TipButton: FC<Props> = ({ className, receiver, addresses = [], chil
         return uniq([...(walletsState.value || []), ...addresses])
     }, [walletsState.value, addresses])
 
-    const disabled = allAddresses.length === 0
+    const disabled = loadingPersona || loadingVerifyInfo || !isAccountVerified || allAddresses.length === 0
 
     const sendTip: MouseEventHandler<HTMLDivElement> = useCallback(
         async (evt) => {
