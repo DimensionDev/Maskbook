@@ -63,21 +63,14 @@ const MenuText = styled('span')(`
 `)
 
 export const PersonaRowCard = memo(() => {
-    const {
-        currentPersona,
-        connectPersona,
-        disconnectPersona,
-        renamePersona,
-        deleteBound,
-        definedSocialNetworks,
-        verification,
-    } = PersonaContext.useContainer()
+    const { currentPersona, connectPersona, disconnectPersona, renamePersona, deleteBound, definedSocialNetworks } =
+        PersonaContext.useContainer()
 
     if (!currentPersona) return null
 
     return (
         <PersonaRowCardUI
-            verification={verification}
+            proof={currentPersona.proof}
             nickname={currentPersona.nickname}
             identifier={currentPersona.identifier}
             profiles={currentPersona.linkedProfiles}
@@ -98,7 +91,7 @@ export interface PersonaRowCardUIProps {
     onConnect: (identifier: PersonaIdentifier, networkIdentifier: string) => void
     onDisconnect: (identifier: ProfileIdentifier) => void
     onRename: (identifier: PersonaIdentifier, target: string, callback?: () => void) => Promise<void>
-    verification?: NextIDPersonaBindings
+    proof?: NextIDPersonaBindings
     onDeleteBound: (
         identifier: PersonaIdentifier,
         profile: ProfileIdentifier,
@@ -113,7 +106,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
     const { classes } = useStyles()
     const { confirmPassword } = useContext(UserContext)
 
-    const { nickname, definedSocialNetworks, identifier, profiles, verification } = props
+    const { nickname, definedSocialNetworks, identifier, profiles, proof } = props
     const { onConnect, onDisconnect, onRename, onDeleteBound } = props
 
     const { value: privateKey } = useExportPrivateKey(identifier)
@@ -205,7 +198,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                         } else {
                             return (
                                 <ConnectedPersonaLine
-                                    verification={verification}
+                                    proof={proof}
                                     disableAdd={currentNetworkProfiles.length >= 5}
                                     isHideOperations={false}
                                     key={networkIdentifier}

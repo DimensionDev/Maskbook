@@ -60,16 +60,15 @@ export interface PersonaCardProps {
     active?: boolean
     identifier: PersonaIdentifier
     profiles: ProfileInformation[]
+    proof?: NextIDPersonaBindings
     onClick(): void
 }
 
 export const PersonaCard = memo<PersonaCardProps>((props) => {
-    const { connectPersona, disconnectPersona, definedSocialNetworks, verification } = PersonaContext.useContainer()
-
+    const { connectPersona, disconnectPersona, definedSocialNetworks } = PersonaContext.useContainer()
     return (
         <PersonaCardUI
             {...props}
-            verification={verification}
             onConnect={connectPersona}
             onDisconnect={disconnectPersona}
             definedSocialNetworks={definedSocialNetworks}
@@ -85,7 +84,7 @@ export interface PersonaCardUIProps extends PersonaCardProps {
 }
 
 export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
-    const { nickname, active = false, definedSocialNetworks, identifier, profiles, verification } = props
+    const { nickname, active = false, definedSocialNetworks, identifier, profiles, proof } = props
     const { onConnect, onDisconnect, onClick } = props
     const { classes } = useStyles()
 
@@ -118,7 +117,7 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
                         } else {
                             return (
                                 <ConnectedPersonaLine
-                                    verification={verification}
+                                    proof={proof}
                                     isHideOperations
                                     key={networkIdentifier}
                                     onConnect={() => onConnect(identifier, networkIdentifier)}

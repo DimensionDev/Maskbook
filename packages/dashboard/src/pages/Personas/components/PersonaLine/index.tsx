@@ -76,7 +76,7 @@ export interface ConnectedPersonaLineProps {
     profileIdentifiers: ProfileIdentifier[]
     networkIdentifier: string
     disableAdd?: boolean
-    verification?: NextIDPersonaBindings
+    proof?: NextIDPersonaBindings
     personaIdentifier: PersonaIdentifier
 }
 
@@ -89,7 +89,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         networkIdentifier,
         isHideOperations,
         disableAdd,
-        verification,
+        proof,
         personaIdentifier,
     }) => {
         const t = useDashboardI18N()
@@ -109,7 +109,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         }
 
         const handleDisconnect = (profile: ProfileIdentifier) => {
-            const isProved = verification?.proofs.find((x) => {
+            const isProved = proof?.proofs.find((x) => {
                 return x.platform === 'twitter' && x.identity === profile.userId.toLowerCase()
             })
             if (isProved && onDeleteBound) {
@@ -120,14 +120,16 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         }
         const userIdBox = (profile: ProfileIdentifier) => {
             const proofSupport = ['twitter.com'].includes(profile.network)
-            const proof = verification?.proofs.find((x) => {
+            const isProved = proof?.proofs.find((x) => {
                 return x.platform === 'twitter' && x.identity === profile.userId.toLowerCase()
             })
             return (
                 <div className={classes.userIdBox}>
                     <div>@{profile.userId}</div>
-                    <div className={classes.proofIconBox} onClick={(e: MouseEvent) => handleProofIconClick(e, proof)}>
-                        {!proofSupport ? null : proof?.is_valid ? (
+                    <div
+                        className={classes.proofIconBox}
+                        onClick={(e: MouseEvent) => handleProofIconClick(e, isProved)}>
+                        {!proofSupport ? null : isProved?.is_valid ? (
                             <NextIdPersonaVerifiedIcon />
                         ) : (
                             <NextIdPersonaWarningIcon />

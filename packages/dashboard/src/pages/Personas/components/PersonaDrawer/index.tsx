@@ -83,10 +83,11 @@ export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
                 <Stack justifyContent="space-between" gap={2} height="100%" maxHeight="100%">
                     <Box overflow="auto">
                         {personas.map((item) => {
-                            const { identifier, nickname, linkedProfiles } = item
+                            const { identifier, nickname, linkedProfiles, proof } = item
                             return (
                                 <Box mb={2.5} key={identifier.toText()}>
                                     <PersonaCard
+                                        proof={proof}
                                         identifier={identifier}
                                         active={identifier.equals(currentPersonaIdentifier)}
                                         key={identifier.toText()}
