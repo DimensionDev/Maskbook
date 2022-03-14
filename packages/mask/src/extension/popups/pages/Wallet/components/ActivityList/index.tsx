@@ -1,5 +1,4 @@
 import urlcat from 'urlcat'
-import type { TransactionConfig, TransactionReceipt } from 'web3-core'
 import { memo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'

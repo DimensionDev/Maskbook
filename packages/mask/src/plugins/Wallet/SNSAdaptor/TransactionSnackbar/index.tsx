@@ -6,7 +6,6 @@ import {
     createLookupTableResolver,
     getPayloadConfig,
     resolveTransactionLinkOnExplorer,
-    TransactionState,
     TransactionStateType,
     useChainId,
 } from '@masknet/web3-shared-evm'

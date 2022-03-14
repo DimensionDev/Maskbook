@@ -55,7 +55,7 @@ class Composer<T> {
 let pid = 0
 
 class RequestContext implements Context {
-    private id = pid++
+    private id = pid
     private _writeable = true
     private _error: Error | null = null
     private _result: unknown
@@ -68,6 +68,11 @@ class RequestContext implements Context {
         private _overrides?: SendOverrides,
         private _options?: RequestOptions,
     ) {
+        // increase pid
+        pid += 1
+        this.id = pid
+
+        // mask wallet settings
         if (this.providerType === ProviderType.MaskWallet) {
             this._account = currentMaskWalletAccountSettings.value
             this._chainId = currentMaskWalletChainIdSettings.value
