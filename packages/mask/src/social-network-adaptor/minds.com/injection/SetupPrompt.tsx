@@ -15,11 +15,11 @@ function injectSetupPrompt<T>(ls: LiveSelector<T, true>, signal: AbortSignal) {
     startWatch(watcher, signal)
 
     watcher.useForeach((node, key, meta) => {
-        const tagsAnchor =
-            watcher.firstDOMProxy.current?.parentElement?.querySelector<HTMLAnchorElement>('a:nth-child(4)')
-        if (tagsAnchor) {
-            tagsAnchor.style.marginRight = '10px'
-        }
+        // const tagsAnchor =
+        //     watcher.firstDOMProxy.current?.parentElement?.querySelector<HTMLAnchorElement>('a:nth-child(5)')
+        // if (tagsAnchor) {
+        //     tagsAnchor.style.marginRight = '10px'
+        // }
         createReactRootShadowed(watcher.firstDOMProxy.afterShadow, {
             signal,
         }).render(<MindsNotSetupYet />)
@@ -29,7 +29,7 @@ function injectSetupPrompt<T>(ls: LiveSelector<T, true>, signal: AbortSignal) {
 const useStyles = makeStyles()({
     buttonText: {
         margin: '-2px 0 !important',
-        transform: 'translateX(160px) translateY(-70px)',
+        transform: 'translateX(200px) translateY(-78px)',
     },
     content: {
         marginRight: 5,
