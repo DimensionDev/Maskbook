@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useRef, forwardRef, createContext, useContext, useEffect } from 'react'
+import { useRef, forwardRef, createContext, useContext } from 'react'
 import type { PopperProps } from '@mui/material'
 import { PreventEventPropagationListContext, StyleSheetsContext } from './Contexts'
 
