@@ -340,11 +340,17 @@ export namespace SecurityAPI {
         is_airdrop_scam?: 0 | 1
     }
 
+    export interface SupportedChain {
+        id: ChainId
+        name: string
+    }
+
     export interface Provider {
         getTokenSecurity(
             chainId: number,
             listOfAddress: string[],
         ): Promise<Record<string, ContractSecurity & TokenSecurity> | void>
+        getSupportedChain(): Promise<SupportedChain[]>
     }
 }
 

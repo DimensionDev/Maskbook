@@ -20,4 +20,15 @@ export class GoPlusLabsAPI implements SecurityAPI.Provider {
         if (response.code !== 1) return
         return response.result
     }
+
+    async getSupportedChain(): Promise<SecurityAPI.SupportedChain[]> {
+        const { code, result } = await fetchJSON<{
+            code: 0 | 1
+            message: 'OK' | string
+            result: SecurityAPI.SupportedChain[]
+        }>(urlcat(GO_PLUS_LABS_ROOT_URL, 'api/v1/supported_chains'))
+
+        if (code !== 1) return []
+        return result
+    }
 }
