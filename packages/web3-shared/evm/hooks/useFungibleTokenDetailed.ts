@@ -13,7 +13,7 @@ export function useFungibleTokenDetailed<
     token?: Partial<P>,
 ): AsyncStateRetry<P | undefined> {
     const _r1 = useNativeTokenDetailed()
-    const r1 = useAsyncRetry(async () => _r1, [address, type, token])
+    const r1 = useAsyncRetry(async () => _r1, [])
     const r2 = useERC20TokenDetailed(
         type === EthereumTokenType.ERC20 ? address : '',
         token as unknown as ERC20TokenDetailed,
