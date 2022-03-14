@@ -5,7 +5,7 @@ import { Services } from '../../../API'
 import { useOwnedPersonas, useDefinedSocialNetworkUIs, SocialNetwork, useCurrentPersonaIdentifier } from '../api'
 import { useCreatePersona } from './useCreatePersona'
 import { queryExistedBindingByPersona } from '@masknet/web3-providers'
-import { useAsync, useAsyncRetry } from 'react-use'
+import { useAsyncRetry } from 'react-use'
 import type { ECKeyIdentifier } from '@masknet/shared-base'
 import { useDeleteBound } from './useOperateBindingProof'
 
@@ -17,10 +17,11 @@ function usePersonaContext() {
 
     const [open, setOpen] = useState(false)
 
-    const personaPublicKey = useAsync(async () => {
+    const personaPublicKey = useAsyncRetry(async () => {
         return Services.Identity.queryPersona(currentPersonaIdentifier as ECKeyIdentifier)
     }, [currentPersonaIdentifier]).value?.publicHexKey
     const verification = useAsyncRetry(async () => {
+        if (!personaPublicKey) return
         return queryExistedBindingByPersona(personaPublicKey as string)
     }, [personaPublicKey]).value
 
