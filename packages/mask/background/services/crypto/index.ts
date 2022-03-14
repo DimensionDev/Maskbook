@@ -1,3 +1,1 @@
-// import {} from '@masknet/encryption'
-// await Promise.resolve()
-export {}
+export { type DecryptionInfo, type DecryptionProgress, decryption } from './decryption'
