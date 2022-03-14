@@ -5,6 +5,12 @@
     "outDir": "../dist/sdk",
     "tsBuildInfoFile": "../dist/sdk.tsbuildinfo"
   },
-  "files": ["./index.ts", "./bridgedEthereum.ts", "./bridgedCoin98.ts", "./bridgedSolana.ts", "utils.ts"],
+  "files": [
+    "index.ts",
+    "injectedCoin98Provider.ts",
+    "injectedEthereumProvider.ts",
+    "injectedSolanaProvider.ts",
+    "utils.ts"
+  ],
   "references": [{ "path": "../shared/" }]
 }

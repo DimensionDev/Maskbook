@@ -6,18 +6,19 @@ function request(data: RequestArguments) {
 }
 
 let isConnected = false
+
 /** Interact with the current solana provider */
-export const bridgedSolanaProvider: BridgedSolanaProvider = {
+export const injectedSolanaProvider: InjectedSolanaProvider = {
     connect() {
         return createPromise((id) => sendEvent('solanaBridgeExecute', 'solana.connect', id))
     },
     request,
     on(event, callback) {
-        if (!bridgedSolana.has(event)) {
-            bridgedSolana.set(event, new Set())
+        if (!injectedSolana.has(event)) {
+            injectedSolana.set(event, new Set())
             sendEvent('solanaBridgeRequestListen', event)
         }
-        const map = bridgedSolana.get(event)!
+        const map = injectedSolana.get(event)!
         map.add(callback)
         return () => void map.delete(callback)
     },
@@ -31,20 +32,20 @@ export const bridgedSolanaProvider: BridgedSolanaProvider = {
 }
 
 async function watchConnectStatus() {
-    const connected = await bridgedSolanaProvider.getProperty('isConnected')
+    const connected = await injectedSolanaProvider.getProperty('isConnected')
     if (connected !== undefined) {
         isConnected = connected
     }
-    bridgedSolanaProvider.on('connected', () => {
+    injectedSolanaProvider.on('connected', () => {
         isConnected = true
     })
-    bridgedSolanaProvider.on('disconnect', () => {
+    injectedSolanaProvider.on('disconnect', () => {
         isConnected = false
     })
 }
 watchConnectStatus()
 
-export interface BridgedSolanaProvider {
+export interface InjectedSolanaProvider {
     // _bn: result of serialization
     connect(): Promise<{ publicKey: { _bn: string } }>
     /** Wait for window.solana object appears. */
@@ -58,10 +59,10 @@ export interface BridgedSolanaProvider {
     /** Call window.solana.isConnected */
     isConnected: boolean
 }
-const bridgedSolana = new Map<string, Set<Function>>()
+const injectedSolana = new Map<string, Set<Function>>()
 /** @internal */
 export function onSolanaEvent(event: string, data: unknown[]) {
-    for (const f of bridgedSolana.get(event) || []) {
+    for (const f of injectedSolana.get(event) || []) {
         try {
             Reflect.apply(f, null, data)
         } catch {}

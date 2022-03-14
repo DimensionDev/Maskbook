@@ -1,6 +1,6 @@
 import { first } from 'lodash-unified'
 import { ChainId, createLookupTableResolver, ProviderType } from '@masknet/web3-shared-evm'
-import { BridgeProvider } from './providers/Bridge'
+import { BridgedProvider } from './providers/Bridged'
 import { MaskWalletProvider } from './providers/MaskWallet'
 import { CustomNetworkProvider } from './providers/CustomNetwork'
 import type { Provider } from './types'
@@ -11,12 +11,12 @@ import { WalletRPC } from '../../../plugins/Wallet/messages'
 const getProvider = createLookupTableResolver<ProviderType, Provider | null>(
     {
         [ProviderType.MaskWallet]: new MaskWalletProvider(ProviderType.MaskWallet),
-        [ProviderType.MetaMask]: new BridgeProvider(ProviderType.MetaMask),
-        [ProviderType.WalletConnect]: new BridgeProvider(ProviderType.WalletConnect),
-        [ProviderType.Coin98]: new BridgeProvider(ProviderType.Coin98),
-        [ProviderType.WalletLink]: new BridgeProvider(ProviderType.WalletLink),
-        [ProviderType.MathWallet]: new BridgeProvider(ProviderType.MathWallet),
-        [ProviderType.Fortmatic]: new BridgeProvider(ProviderType.Fortmatic),
+        [ProviderType.MetaMask]: new BridgedProvider(ProviderType.MetaMask),
+        [ProviderType.WalletConnect]: new BridgedProvider(ProviderType.WalletConnect),
+        [ProviderType.Coin98]: new BridgedProvider(ProviderType.Coin98),
+        [ProviderType.WalletLink]: new BridgedProvider(ProviderType.WalletLink),
+        [ProviderType.MathWallet]: new BridgedProvider(ProviderType.MathWallet),
+        [ProviderType.Fortmatic]: new BridgedProvider(ProviderType.Fortmatic),
         [ProviderType.CustomNetwork]: new CustomNetworkProvider(),
     },
     null,

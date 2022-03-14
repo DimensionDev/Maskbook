@@ -65,7 +65,8 @@ export class MaskWalletProvider extends BaseProvider implements Provider {
         const provider = await this.createProvider(options)
         const request = <T extends unknown>(requestArguments: RequestArguments) => {
             return new Promise<T>((resolve, reject) => {
-                const requestId = this.id++
+                this.id += 1
+                const requestId = this.id
                 provider?.send(
                     createPayload(requestId, requestArguments.method, requestArguments.params),
                     (error: Error | null, response?: JsonRpcResponse) => {

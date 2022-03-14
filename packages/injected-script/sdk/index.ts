@@ -1,14 +1,14 @@
 import { CustomEventId, decodeEvent } from '../shared'
-import { onEthEvent } from './bridgedEthereum'
-import { onCoin98Event } from './bridgedCoin98'
-import { onSolanaEvent } from './bridgedSolana'
+import { onEthEvent } from './injectedEthereumProvider'
+import { onCoin98Event } from './injectedCoin98Provider'
+import { onSolanaEvent } from './injectedSolanaProvider'
 import { sendEvent, rejectPromise, resolvePromise } from './utils'
 
 export * from '../shared'
 
-export { bridgedEthereumProvider } from './bridgedEthereum'
-export { bridgedCoin98Provider } from './bridgedCoin98'
-export { bridgedSolanaProvider } from './bridgedSolana'
+export { injectedEthereumProvider } from './injectedEthereumProvider'
+export { injectedCoin98Provider } from './injectedCoin98Provider'
+export { injectedSolanaProvider } from './injectedSolanaProvider'
 
 export function pasteText(text: string) {
     sendEvent('paste', text)

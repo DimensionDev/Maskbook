@@ -1,13 +1,14 @@
 import type { ProviderType } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
-import { useBridgedProvider } from './useBridgedProvider'
+import { useInjectedProvider } from './useInjectedProvider'
 
 export function useInjectedProviderReady(
     providerType: ProviderType.MetaMask | ProviderType.Coin98 | ProviderType.MathWallet | ProviderType.WalletLink,
 ) {
-    const bridgedProvider = useBridgedProvider(providerType)
-    const { value: available = false } = useAsyncRetry(async () => {
-        return bridgedProvider.untilAvailable()
-    }, [bridgedProvider])
+    const injectedProvider = useInjectedProvider(providerType)
+    const { value: available = false } = useAsyncRetry(
+        async () => injectedProvider.untilAvailable(),
+        [injectedProvider],
+    )
     return available
 }

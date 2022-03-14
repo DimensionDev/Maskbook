@@ -2,19 +2,19 @@ import type { RequestArguments } from 'web3-core'
 import type { EthereumProvider } from '../shared'
 import { createPromise, sendEvent } from './utils'
 
-/** Interact with the current ethereum provider */
-export const bridgedEthereumProvider: EthereumProvider = {
+/** Interact with the currently injected ethereum provider */
+export const injectedEthereumProvider: EthereumProvider = {
     on(event, callback) {
-        if (!bridgedEthereum.has(event)) {
-            bridgedEthereum.set(event, new Set())
+        if (!injectedEthereum.has(event)) {
+            injectedEthereum.set(event, new Set())
             sendEvent('ethBridgeRequestListen', event)
         }
-        const map = bridgedEthereum.get(event)!
+        const map = injectedEthereum.get(event)!
         map.add(callback)
         return () => void map.delete(callback)
     },
     off(event, callback) {
-        const map = bridgedEthereum.get(event)
+        const map = injectedEthereum.get(event)
         if (map) map.delete(callback)
     },
     request<T extends unknown>(data: RequestArguments) {
@@ -28,11 +28,11 @@ export const bridgedEthereumProvider: EthereumProvider = {
     },
 }
 
-const bridgedEthereum = new Map<string, Set<Function>>()
+const injectedEthereum = new Map<string, Set<Function>>()
 
 /** @internal */
 export function onEthEvent(event: string, data: unknown[]) {
-    for (const f of bridgedEthereum.get(event) || []) {
+    for (const f of injectedEthereum.get(event) || []) {
         try {
             Reflect.apply(f, null, data)
         } catch {}

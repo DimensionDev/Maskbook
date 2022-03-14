@@ -5,11 +5,13 @@ import { EVM_Messages } from '../../../../plugins/EVM/messages'
 import { BaseProvider } from './Base'
 import type { Provider } from '../types'
 
-export class BridgeProvider extends BaseProvider implements Provider {
+export class BridgedProvider extends BaseProvider implements Provider {
     private id = 0
 
     override async request<T extends unknown>(requestArguments: RequestArguments) {
-        const requestId = this.id++
+        this.id += 1
+
+        const requestId = this.id
         const [deferred, resolve, reject] = defer<T, Error | null>()
 
         const onResponse = ({

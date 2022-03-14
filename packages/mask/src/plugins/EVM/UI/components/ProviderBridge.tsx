@@ -4,7 +4,7 @@ import type { ProviderType, ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, useChainId, useProviderType } from '@masknet/plugin-infra'
 import { EVM_Messages } from '../../messages'
 import Services from '../../../../extension/service'
-import { useProvider } from '../../hooks'
+import { useBridgedProvider } from '../../hooks'
 
 export interface ProviderBridgeProps {
     providerType: ProviderType
@@ -13,7 +13,7 @@ export interface ProviderBridgeProps {
 export function ProviderBridge({ providerType: expectedProviderType }: ProviderBridgeProps) {
     const chainId = useChainId<ChainId>(NetworkPluginID.PLUGIN_EVM)
     const actualProviderType = useProviderType<ProviderType>(NetworkPluginID.PLUGIN_EVM)
-    const provider = useProvider(expectedProviderType)
+    const provider = useBridgedProvider(expectedProviderType)
 
     const onMounted = useCallback(async () => {
         if (expectedProviderType !== actualProviderType) return
