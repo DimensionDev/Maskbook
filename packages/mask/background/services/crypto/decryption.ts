@@ -12,6 +12,7 @@ import {
     steganographyDecodeImage,
     DecryptError,
     ErrorReasons,
+    DecryptReportedInfo,
 } from '@masknet/encryption'
 import {
     AESCryptoKey,
@@ -34,14 +35,6 @@ import { queryPostDB } from '../../database/post'
 import { savePostKeyToDB } from '../../database/post/helper'
 import { GUN_queryPostKey_version39Or38, GUN_queryPostKey_version40 } from '../../network/gun/encryption/queryPostKey'
 
-export type DecryptionInfo = {
-    type: DecryptProgressKind.Info
-    iv?: Uint8Array
-    claimedAuthor?: ProfileIdentifier
-    publicShared?: boolean
-}
-export type DecryptionProgress = DecryptProgress | DecryptionInfo
-
 export interface DecryptionContext {
     currentSocialNetwork: SocialNetworkEnum
     currentProfile: ProfileIdentifier | null
@@ -62,7 +55,7 @@ const downloadImage = (url: string): Promise<ArrayBuffer> => fetch(url).then((x)
 export async function* decryptionWithSocialNetworkDecoding(
     encoded: SocialNetworkEncodedPayload,
     context: DecryptionContext,
-): AsyncGenerator<DecryptProgress | DecryptionInfo, void, undefined> {
+): AsyncGenerator<DecryptProgress, void, undefined> {
     let decoded: string
     if (encoded.type === 'text') {
         decoded = socialNetworkDecoder(context.currentSocialNetwork, encoded.text)[0]
@@ -74,8 +67,7 @@ export async function* decryptionWithSocialNetworkDecoding(
             pass: context.authorHint.toText(),
             downloadImage,
         })
-        const val = socialNetworkDecoder(context.currentSocialNetwork, result)[0]
-        decoded = val[0]
+        decoded = socialNetworkDecoder(context.currentSocialNetwork, result)[0]
     }
 
     if (!decoded) return yield new DecryptError(ErrorReasons.NoPayloadFound, undefined)
@@ -95,7 +87,17 @@ export async function* decryption(payload: string | Uint8Array, context: Decrypt
     {
         if (!iv) return null
         // iv is required to identify the post and it also used in comment encryption.
-        const info: DecryptionInfo = { type: DecryptProgressKind.Info, iv }
+        const info: DecryptReportedInfo = {
+            type: DecryptProgressKind.Info,
+            iv,
+            version: parse.val.version,
+        }
+        if (parse.val.encryption.ok) {
+            const val = parse.val.encryption.val
+            info.publicShared = val.type === 'public'
+            if (val.type === 'E2E' && val.ownersAESKeyEncrypted.ok)
+                info.ownersKeyEncrypted = val.ownersAESKeyEncrypted.val
+        }
         yield info
     }
     const id = new PostIVIdentifier(

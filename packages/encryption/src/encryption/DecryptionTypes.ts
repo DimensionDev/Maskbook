@@ -1,6 +1,6 @@
 import type { TypedMessage } from '@masknet/typed-message'
 import type { ProfileIdentifier, AESCryptoKey, EC_Public_CryptoKey } from '@masknet/shared-base'
-import type { PayloadParseResult } from '../payload'
+import type { PayloadParseResult, SupportedPayloadVersions } from '../payload'
 import { registerSerializableClass } from '@masknet/shared-base'
 
 export interface DecryptOptions {
@@ -129,6 +129,8 @@ export interface DecryptReportedInfo {
     iv?: Uint8Array
     claimedAuthor?: ProfileIdentifier
     publicShared?: boolean
+    version?: SupportedPayloadVersions
+    ownersKeyEncrypted?: Uint8Array
 }
 export interface DecryptIntermediateProgress {
     type: DecryptProgressKind.Progress

@@ -15,6 +15,7 @@ import { createPluginHost } from '../plugin-infra/host'
 import { definedSocialNetworkUIs } from './define'
 import { setupShadowRootPortal, MaskMessages } from '../utils'
 import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
+import { SocialNetworkEnum } from '@masknet/encryption'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
@@ -31,7 +32,7 @@ export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
     },
     injection: {},
     networkIdentifier: 'localhost',
-    name: '',
+    encryptionNetwork: SocialNetworkEnum.Unknown,
     shouldActivate: () => false,
     utils: { createPostContext: null! },
     notReadyForProduction: true,

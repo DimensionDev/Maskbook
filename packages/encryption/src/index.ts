@@ -10,6 +10,7 @@ export {
     type Signature,
     type PayloadParseResult,
     type PayloadWellFormed,
+    type SupportedPayloadVersions,
 } from './payload'
 export {
     decrypt,

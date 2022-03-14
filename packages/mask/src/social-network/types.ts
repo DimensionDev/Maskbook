@@ -1,5 +1,5 @@
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
-import type { GrayscaleAlgorithm } from '@masknet/encryption'
+import type { GrayscaleAlgorithm, SocialNetworkEnum } from '@masknet/encryption'
 import type { PostInfo } from '@masknet/plugin-infra'
 import type {
     Identifier,
@@ -55,7 +55,7 @@ export namespace SocialNetwork {
          * !!! THIS SHOULD NOT BE USED TO CONSTRUCT A NEW ProfileIdentifier !!!
          */
         networkIdentifier: string
-        name: string
+        encryptionNetwork: SocialNetworkEnum
         /**
          * This field _will_ be overwritten by SocialNetworkUI.permissions
          */
