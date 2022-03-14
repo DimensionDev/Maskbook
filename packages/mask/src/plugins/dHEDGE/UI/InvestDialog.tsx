@@ -27,6 +27,7 @@ import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { useInvestCallback } from '../hooks/useInvestCallback'
 import { PluginDHedgeMessages } from '../messages'
 import type { Pool } from '../types'
+import { renderString } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -144,17 +145,21 @@ export function InvestDialog() {
 
     // #region transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
+    const maskAccount = isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
+    const promoteMask =
+        isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+            ? renderString('Follow @{account} (mask.io) to invest dHEDGE pools', {
+                  account: maskAccount,
+              })
+            : ''
     const shareText = token
-        ? [
-              `I just invested ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol} in ${pool?.name}. ${
-                  isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                      ? `Follow @${
-                            isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                        } (mask.io) to invest dHEDGE pools.`
-                      : ''
-              }`,
-              '#mask_io',
-          ].join('\n')
+        ? renderString('I just invested {amount} {cashTag}{symbol} in {poolName}. {promoteMask}\n#mask_io', {
+              amount: formatBalance(amount, token?.decimals),
+              cashTag,
+              symbol: token.symbol || '',
+              poolName: pool?.name || '',
+              promoteMask,
+          })
         : ''
 
     // on close transaction dialog

@@ -37,6 +37,7 @@ import { PluginTraderMessages } from '../../messages'
 import { SettingsDialog } from './SettingsDialog'
 import { useSortedTrades } from './hooks/useSortedTrades'
 import { useUpdateBalance } from './hooks/useUpdateBalance'
+import { renderString } from '@masknet/shared-base'
 
 const useStyles = makeStyles()(() => {
     return {
@@ -286,25 +287,31 @@ export function Trader(props: TraderProps) {
     }, [dispatchTradeStore, inputToken, outputToken, inputAmount])
 
     // #region remote controlled transaction dialog
-    const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
+    const isOnTwitter = isTwitter(activatedSocialNetworkUI)
+    const cashTag = isOnTwitter ? '$' : ''
+    const maskAccount = isOnTwitter ? t('twitter_account') : t('facebook_account')
+    const promoteMask =
+        isOnTwitter || isFacebook(activatedSocialNetworkUI)
+            ? renderString(
+                  `Follow @{account} (mask.io) to swap cryptocurrencies on ${isOnTwitter ? 'Twitter' : 'Facebook'}`,
+                  {
+                      account: maskAccount,
+                  },
+              )
+            : ''
     const shareText =
         focusedTrade?.value && inputToken && outputToken
-            ? [
-                  `I just swapped ${formatBalance(focusedTrade.value.inputAmount, inputToken.decimals, 6)} ${cashTag}${
-                      inputToken.symbol
-                  } for ${formatBalance(focusedTrade.value.outputAmount, outputToken.decimals, 6)} ${cashTag}${
-                      outputToken.symbol
-                  }.${
-                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                          ? `Follow @${
-                                isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                            } (mask.io) to swap cryptocurrencies on ${
-                                isTwitter(activatedSocialNetworkUI) ? 'Twitter' : 'Facebook'
-                            }.`
-                          : ''
-                  }`,
-                  '#mask_io',
-              ].join('\n')
+            ? renderString(
+                  'I just swapped {inputAmount} {cashTag}{inputSymbol} for {outputAmount} {cashTag}{outputSymbol}. {promoteMask}\n#mask_io',
+                  {
+                      inputAmount: formatBalance(focusedTrade.value.inputAmount, inputToken.decimals, 6),
+                      cashTag,
+                      inputSymbol: inputToken.symbol || '',
+                      outputAmount: formatBalance(focusedTrade.value.outputAmount, outputToken.decimals, 6),
+                      outputSymbol: outputToken.symbol || '',
+                      promoteMask,
+                  },
+              )
             : ''
 
     // #endregion

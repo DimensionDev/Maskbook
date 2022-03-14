@@ -6,12 +6,13 @@ import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '../../Wallet/messages'
 import { useMaskClaimCallback } from './hooks/useMaskClaimCallback'
 import { useMaskITO_Packet } from './hooks/useMaskITO_Packet'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { renderString } from '@masknet/shared-base'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -71,17 +72,22 @@ export function ITO_Card(props: ITO_CardProps) {
     // #region transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
     const postLink = usePostLink()
-    const shareText = [
-        `I just claimed ${cashTag}${token?.symbol} with ${formatBalance(packet?.claimable, 18, 6)}.${
-            isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                ? `Follow @${
-                      isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                  } (mask.io) to claim airdrop.`
-                : ''
-        }`,
-        '#mask_io',
-        postLink,
-    ].join('\n')
+    const promoteMask =
+        isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+            ? renderString('Follow @{account} (mask.io) to claim airdrop.', {
+                  account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
+              })
+            : ''
+    const shareText = renderString(
+        'I just claimed {cashTag}{symbol} with {amount}. {promoteMask}\n#mask_io\n{postLink}',
+        {
+            cashTag,
+            symbol: token?.symbol || '',
+            amount: formatBalance(packet?.claimable, 18, 6),
+            postLink: postLink.toString(),
+            promoteMask,
+        },
+    )
 
     // close the transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(

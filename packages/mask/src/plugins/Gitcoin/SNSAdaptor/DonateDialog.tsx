@@ -18,7 +18,6 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
@@ -28,6 +27,8 @@ import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { useDonateCallback } from '../hooks/useDonateCallback'
 import { PluginGitcoinMessages } from '../messages'
 import { rightShift } from '@masknet/web3-shared-base'
+import { renderString } from '@masknet/shared-base'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -122,18 +123,20 @@ export function DonateDialog(props: DonateDialogProps) {
     // #region transaction dialog
 
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
+    const promoteMask =
+        isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+            ? renderString('Follow @{account} (mask.io) to donate Gitcoin grants.', {
+                  account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
+              })
+            : ''
     const shareText = token
-        ? [
-              `I just donated ${title} with ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol}. ${
-                  isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                      ? `Follow @${
-                            isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                        } (mask.io) to donate Gitcoin grants.`
-                      : ''
-              }`,
-              '#mask_io',
-              postLink,
-          ].join('\n')
+        ? renderString('I just donated {title} with {amount} {cashTag}{symbol}. {promoteMask}\n#mask_io', {
+              title,
+              amount: formatBalance(amount, token.decimals),
+              cashTag,
+              symbol: token?.symbol || '',
+              promoteMask,
+          })
         : ''
 
     // close the transaction dialog
