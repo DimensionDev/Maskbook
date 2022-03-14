@@ -295,8 +295,3 @@ export async function queryLocalKey(i: ProfileIdentifier | PersonaIdentifier): P
         return (await queryPersonaDB(i))?.localKey ?? null
     }
 }
-function cover_ECDH_256k1_KeyPair_ByMnemonicWord(
-    password: string,
-): { key: any; mnemonicRecord: any } | PromiseLike<{ key: any; mnemonicRecord: any }> {
-    throw new Error('Function not implemented.')
-}
