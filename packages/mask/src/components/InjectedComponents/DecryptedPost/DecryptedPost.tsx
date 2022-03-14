@@ -115,7 +115,6 @@ export function DecryptPost(props: DecryptPostProps) {
                             type: 'success',
                             content: message,
                             internal: false,
-                            through: [],
                             iv: encodeArrayBuffer(iv),
                         },
                     })
@@ -139,7 +138,6 @@ export function DecryptPost(props: DecryptPostProps) {
                             type: 'success',
                             content: message,
                             internal: false,
-                            through: [],
                             iv: encodeArrayBuffer(iv),
                         },
                     })
