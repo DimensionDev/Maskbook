@@ -1233,12 +1233,14 @@ importers:
     specifiers:
       '@blocto/fcl': ^0.0.78-alpha.8
       '@masknet/web3-constants': workspace:*
+      '@masknet/web3-shared-base': workspace:*
       '@onflow/types': ^0.0.5
       react-use: ^17.3.2
       urlcat: ^2.0.4
     dependencies:
       '@blocto/fcl': 0.0.78-alpha.8
       '@masknet/web3-constants': link:../../web3-constants
+      '@masknet/web3-shared-base': link:../base
       '@onflow/types': 0.0.5
       react-use: 17.3.2_bc22c48adf1a4e34a005159413cd72b5
       urlcat: 2.0.4
@@ -1246,10 +1248,12 @@ importers:
   packages/web3-shared/solana:
     specifiers:
       '@masknet/web3-constants': workspace:*
+      '@masknet/web3-shared-base': workspace:*
       react-use: ^17.3.2
       urlcat: ^2.0.4
     dependencies:
       '@masknet/web3-constants': link:../../web3-constants
+      '@masknet/web3-shared-base': link:../base
       react-use: 17.3.2_bc22c48adf1a4e34a005159413cd72b5
       urlcat: 2.0.4
 
