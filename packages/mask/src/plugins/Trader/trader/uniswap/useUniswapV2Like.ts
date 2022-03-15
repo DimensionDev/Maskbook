@@ -5,7 +5,7 @@ import { useV2Trade as useUniswapV2Trade } from './useTrade'
 import { TradeStrategy } from '../../types'
 import { useTradeComputed as useUniswapTradeComputed } from './useTradeComputed'
 import { useTradeGasLimit as useUniswapTradeGasLimit } from './useTradeGasLimit'
-export function useUniswapV2Hook(
+export function useUniswapV2Like(
     tradeProviders: TradeProvider[],
     traderProvider: TradeProvider,
     inputAmount_: string,
