@@ -1,4 +1,4 @@
-import './setup'
+import { ECDH_K256_PublicKey_CryptoKey } from './setup'
 import { test, expect } from '@jest/globals'
 import {
     decrypt,
@@ -12,7 +12,7 @@ import {
 } from '../src'
 import { importAESFromJWK } from '../src/utils'
 import { ProfileIdentifier } from '@masknet/shared-base'
-import { makeTypedMessageText } from '@masknet/typed-message'
+import { makeTypedMessageText, makeTypedMessageTupleSerializable } from '@masknet/typed-message'
 
 const publicTarget: EncryptOptions['target'] = {
     type: 'public',
@@ -24,11 +24,45 @@ const example: EncryptOptions = {
     target: publicTarget,
 }
 test('v37 public encryption', async () => {
-    await testSet('minimal v38', example, minimalEncryptIO)
-    await testSet('minimal v37', { ...example, version: -37 }, minimalEncryptIO)
+    await testSet('minimal v38', example)
+    await testSet('minimal v37', { ...example, version: -37 })
+
+    await testSet(
+        'full v38',
+        {
+            version: -38,
+            target: publicTarget,
+            message: makeTypedMessageText('hello world'),
+            author: exampleID,
+        },
+        {
+            ...minimalEncryptIO,
+            queryPublicKey: ECDH_K256_PublicKey_CryptoKey,
+        },
+    )
+
+    await testSet(
+        'full v37',
+        {
+            version: -37,
+            target: publicTarget,
+            message: complexMessage(),
+            author: exampleID,
+        },
+        {
+            ...minimalEncryptIO,
+            queryPublicKey: ECDH_K256_PublicKey_CryptoKey,
+        },
+    )
 })
 
-async function testSet(key: string, options: EncryptOptions, io: EncryptIO, waitE2E = false) {
+async function testSet(
+    key: string,
+    options: EncryptOptions,
+    io = minimalEncryptIO,
+    decryptIO = minimalDecryptIO,
+    waitE2E = false,
+) {
     const a = await encrypt(options, io)
     expect(a).toMatchSnapshot(key)
 
@@ -36,7 +70,7 @@ async function testSet(key: string, options: EncryptOptions, io: EncryptIO, wait
     expect(a1).toMatchSnapshot(key + ' parsed')
 
     const result: any[] = []
-    for await (const a2 of decrypt({ message: a1 }, minimalDecryptIO)) {
+    for await (const a2 of decrypt({ message: a1 }, decryptIO)) {
         result.push(a2)
 
         if (
@@ -99,4 +133,17 @@ async function returnNull(): Promise<null> {
 async function returnVoid(): Promise<void> {}
 async function returnTestKey() {
     return (await importAESFromJWK.AES_GCM_256(testKey)).unwrap()
+}
+
+const exampleID = new ProfileIdentifier('example.com', 'jack')
+function complexMessage() {
+    const meta = new Map<string, any>()
+    meta.set('io.plugin.something', {
+        num: 2345,
+        str: '123',
+        undef: undefined,
+        nul: null,
+        dict: { a: [1, 2], b: true, c: false },
+    })
+    return makeTypedMessageTupleSerializable([makeTypedMessageText('hi'), makeTypedMessageText('text 2')], meta)
 }

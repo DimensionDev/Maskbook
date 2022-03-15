@@ -1,10 +1,11 @@
 import { test } from '@jest/globals'
 import { webcrypto } from 'crypto'
 import { atob, btoa } from 'buffer'
+import { importAsymmetryKeyFromJsonWebKeyOrSPKI, PublicKeyAlgorithmEnum } from '../src'
 
 test('Setup env', () => {})
 
-export const ECDH_K256_PublicKey = {
+const ECDH_K256_PublicKey = {
     /* cspell:disable-next-line */
     x: 'r9tVYAq-h0m5REaTd6eMTWBSK7ZIQszwggoiU0ao5Yw',
     /* cspell:disable-next-line */
@@ -13,6 +14,10 @@ export const ECDH_K256_PublicKey = {
     key_ops: ['deriveKey', 'deriveBits'],
     crv: 'K-256',
     kty: 'EC',
+}
+export async function ECDH_K256_PublicKey_CryptoKey() {
+    const x = await importAsymmetryKeyFromJsonWebKeyOrSPKI(ECDH_K256_PublicKey, PublicKeyAlgorithmEnum.secp256k1)
+    return x.unwrap()
 }
 
 if (!Reflect.get(globalThis, 'crypto')) {
