@@ -10,8 +10,6 @@ import {
     DialogTitle,
     IconButton,
     Typography,
-    // see https://github.com/import-js/eslint-plugin-import/issues/2288
-    // eslint-disable-next-line import/no-deprecated
     useMediaQuery,
     useTheme,
 } from '@mui/material'
@@ -80,8 +78,6 @@ export function InjectedDialog(props: InjectedDialogProps) {
     } = useStylesExtends(useStyles({ clean }), props, overwrite.InjectedDialog?.classes)
 
     const t = useSharedI18N()
-    // see https://github.com/import-js/eslint-plugin-import/issues/2288
-    // eslint-disable-next-line import/no-deprecated
     const fullScreen = useMediaQuery(useTheme().breakpoints.down('xs'))
     const isDashboard = isDashboardPage()
     const { children, open, disableBackdropClick, titleBarIconStyle, onClose, title, disableTitleBorder, ...rest } =

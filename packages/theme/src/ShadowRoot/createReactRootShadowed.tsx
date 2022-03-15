@@ -3,16 +3,17 @@ import { createRoot } from 'react-dom/client'
 import type {} from 'react/next'
 import type {} from 'react-dom/next'
 import { ShadowRootStyleProvider } from './ShadowRootStyleProvider'
+import { PreventEventPropagationListContext } from './Contexts'
 
-export interface RenderInShadowRootConfig {
+export interface RenderInShadowRootOptions {
     /** Root tag. @default "main" */
     tag?: keyof HTMLElementTagNameMap
-    /** Allow to render multiple React root into a same ShadowRoot */
+    /** Used to distinguish multiple React root within a same ShadowRoot */
     key?: string
     /** The AbortSignal to stop the render */
     signal?: AbortSignal
 }
-export interface CreateRenderInShadowRootConfig {
+export interface CreateRenderInShadowRootHostConfig {
     /**
      * A list of event that want to prevent to pop out to the ShadowRoot
      *
@@ -32,18 +33,18 @@ export interface ReactRootShadowed {
  *
  * This function should be only call once for each config.key.
  */
-export function createReactRootShadowedPartial(_config: CreateRenderInShadowRootConfig) {
+export function createReactRootShadowedPartial(hostConfig: CreateRenderInShadowRootHostConfig) {
     return function createReactRootShadowed(
         shadowRoot: ShadowRoot,
-        config: RenderInShadowRootConfig = {},
+        options: RenderInShadowRootOptions = {},
     ): ReactRootShadowed {
         let jsx: React.ReactChild = ''
         let root: ReactRootShadowed | null = null
         function tryRender(): void {
-            if (config.signal?.aborted) return
+            if (options.signal?.aborted) return
             if (shadowRoot.host?.parentNode === null) return void setTimeout(tryRender, 20)
 
-            root = mount(jsx, shadowRoot, config, _config)
+            root = mount(jsx, shadowRoot, options, hostConfig)
         }
         tryRender()
         return {
@@ -59,11 +60,11 @@ export function createReactRootShadowedPartial(_config: CreateRenderInShadowRoot
 function mount(
     jsx: React.ReactChild,
     shadow: ShadowRoot,
-    instanceConfig: RenderInShadowRootConfig,
-    globalConfig: CreateRenderInShadowRootConfig,
+    options: RenderInShadowRootOptions,
+    { preventEventPropagationList, wrapJSX }: CreateRenderInShadowRootHostConfig,
 ): ReactRootShadowed {
-    const tag = instanceConfig.tag || 'main'
-    const key = instanceConfig.key || 'main'
+    const tag = options.tag || 'main'
+    const key = options.key || 'main'
     if (shadow.querySelector<HTMLElement>(`${tag}.${key}`)) {
         console.error('Tried to create root in', shadow, 'with key', key, ' which is already used. Skip rendering.')
         return {
@@ -72,39 +73,30 @@ function mount(
         }
     }
 
-    const wrap = globalConfig.wrapJSX
     jsx = getJSX(jsx)
 
     const container = shadow.appendChild(document.createElement(tag))
     container.className = key
 
-    const undoActions: Function[] = []
+    const controller = new AbortController()
+    const signal = controller.signal
 
     // prevent event popup
     {
         const stop = (e: Event): void => e.stopPropagation()
-        for (const each of globalConfig.preventEventPropagationList) {
-            container.addEventListener(each, stop)
-            undoActions.push(() => container.removeEventListener(each, stop))
+        for (const each of preventEventPropagationList) {
+            container.addEventListener(each, stop, { signal })
         }
     }
 
     const root = createRoot(container)
     root.render(jsx)
-    undoActions.push(() => root.unmount())
-    undoActions.push(() => container.remove())
 
-    function undo() {
-        for (const f of undoActions) {
-            try {
-                f()
-            } catch {}
-        }
-        undoActions.length = 0
-    }
-    instanceConfig.signal?.addEventListener('abort', undo)
+    signal.addEventListener('abort', () => [root.unmount(), container.remove()], { signal })
+    options.signal?.addEventListener('abort', () => controller.abort(), { signal })
+
     return {
-        destory: undo,
+        destory: () => controller.abort(),
         render: (jsx) => {
             root!.render(getJSX(jsx))
         },
@@ -112,7 +104,9 @@ function mount(
     function getJSX(jsx: React.ReactChild) {
         return (
             <StrictMode>
-                <ShadowRootStyleProvider shadow={shadow}>{wrap ? wrap(jsx) : jsx}</ShadowRootStyleProvider>
+                <PreventEventPropagationListContext.Provider value={preventEventPropagationList}>
+                    <ShadowRootStyleProvider shadow={shadow}>{wrapJSX ? wrapJSX(jsx) : jsx}</ShadowRootStyleProvider>
+                </PreventEventPropagationListContext.Provider>
             </StrictMode>
         )
     }

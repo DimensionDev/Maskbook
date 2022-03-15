@@ -15,12 +15,7 @@ export declare namespace PayloadParseResult {
         E extends CryptoException | PayloadException = CryptoException | PayloadException,
     > = Result<T, CheckedError<E>>
     export interface Payload {
-        /**
-         * Version starts from -42 but -42 and -41 are dropped.
-         *
-         * The latest version is -37.
-         */
-        readonly version: -40 | -39 | -38 | -37
+        readonly version: SupportedPayloadVersions
         readonly signature: OptionalField<Signature>
         /**
          * The claimed author of this payload.
@@ -56,12 +51,7 @@ export declare namespace PayloadParseResult {
 /** Well formed payload that can be encoded into the latest version */
 export declare namespace PayloadWellFormed {
     export interface Payload {
-        /**
-         * Version starts from -42 but -42 and -41 are dropped.
-         *
-         * The latest version is -37.
-         */
-        readonly version: -40 | -39 | -38 | -37
+        readonly version: SupportedPayloadVersions
         readonly signature: Option<Signature>
         /**
          * The claimed author of this payload.
@@ -116,12 +106,20 @@ export enum AESAlgorithmEnum {
     A256GCM = 'A256GCM',
 }
 export enum SocialNetworkEnum {
+    Unknown = -1,
     Facebook = 0,
     Twitter = 1,
     Instagram = 2,
     Minds = 3,
 }
+/**
+ * Version starts from -42 but -42 and -41 are dropped.
+ *
+ * The latest version is -37.
+ */
+export type SupportedPayloadVersions = -37 | -38 | -39 | -40
 const SocialNetworkEnumToDomain: Record<SocialNetworkEnum, string> = {
+    [SocialNetworkEnum.Unknown]: 'localhost',
     [SocialNetworkEnum.Facebook]: 'facebook.com',
     [SocialNetworkEnum.Minds]: 'minds.com',
     [SocialNetworkEnum.Twitter]: 'twitter.com',

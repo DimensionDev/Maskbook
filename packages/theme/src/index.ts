@@ -1,6 +1,5 @@
 /// <reference path="./extended.d.ts" />
 // see https://github.com/import-js/eslint-plugin-import/issues/2288
-// eslint-disable-next-line import/no-deprecated
 import { createTheme, PaletteMode, ThemeOptions, useMediaQuery } from '@mui/material'
 import * as Changes from './changes'
 import * as Components from './component-changes'
@@ -44,13 +43,13 @@ export * from './hooks'
 export * from './customization'
 export * from './ShadowRoot'
 export * from './UIHelper/custom-ui-helper'
+export * from './CSSVariableInjector'
 export { getMaskColor, useMaskColor, MaskColorVar, applyMaskColorVars } from './constants'
 export type { MaskCSSVariableColor } from './constants'
 
 const query = '(prefers-color-scheme: dark)'
 export function useSystemPreferencePalette(): PaletteMode {
     // see https://github.com/import-js/eslint-plugin-import/issues/2288
-    // eslint-disable-next-line import/no-deprecated
     return useMediaQuery(query) ? 'dark' : 'light'
 }
 export function currentSystemPreferencePalette(): PaletteMode {
