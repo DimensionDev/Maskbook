@@ -56,6 +56,7 @@ export class AAVEProtocol implements SavingsProtocol {
                 query: `{
                 reserves (where: {
                     underlyingAsset: "${this.bareToken.address}"
+                    pool : "0xb53c1a33016b2dc2ff3653530bff1848a515c8c5"
                 }) {
                     id
                     name
@@ -89,7 +90,7 @@ export class AAVEProtocol implements SavingsProtocol {
             const SECONDS_PER_YEAR = 31536000
 
             // APY and APR are returned here as decimals, multiply by 100 to get the percents
-            this._apr = new BigNumber(liquidityRate).div(RAY).toFixed(2)
+            this._apr = new BigNumber(liquidityRate).times(100).div(RAY).toFixed(2)
         } catch (error) {
             this._apr = AAVEProtocol.DEFAULT_APR
         }
@@ -102,6 +103,7 @@ export class AAVEProtocol implements SavingsProtocol {
                 query: `{
                 reserves (where: {
                     underlyingAsset: "${this.bareToken.address}"
+                    pool : "0xb53c1a33016b2dc2ff3653530bff1848a515c8c5"
                 }) {
                     id
                     name
