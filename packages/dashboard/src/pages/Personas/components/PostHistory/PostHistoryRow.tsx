@@ -1,6 +1,6 @@
 import { Box, Button, Link, Stack, Typography } from '@mui/material'
 import { memo, ReactNode, useCallback, useMemo } from 'react'
-import { FileMessageIcon, ITOIcon, MessageIcon, PollIcon, RedPacketIcon } from '@masknet/icons'
+import { FileMessageIcon, ITOIcon, MessageIcon, PollIcon, RedPacketIcon, NFTRedPacketIcon } from '@masknet/icons'
 import { getMaskColor, MaskColorVar, makeStyles } from '@masknet/theme'
 import { Services } from '../../../../API'
 import type { PostRecord } from '@masknet/shared-base'
@@ -56,6 +56,11 @@ const SUPPORT_PLUGIN: Record<
         icon: <RedPacketIcon />,
         messageParse: (body: any) => body.sender.message,
     },
+    'com.maskbook.red_packet_nft:1': {
+        pluginId: PluginId.RedPacket,
+        icon: <NFTRedPacketIcon />,
+        messageParse: (body: { message: string }) => body.message,
+    },
     'com.maskbook.ito:1': {
         pluginId: PluginId.ITO,
         icon: <ITOIcon />,
@@ -96,13 +101,13 @@ export const PostHistoryRow = memo(({ post, network }: PostHistoryRowProps) => {
     const postIcon = useMemo(() => {
         const { interestedMeta } = post
         const plugin = interestedMeta?.keys().next().value ?? 'text'
+
         return SUPPORT_PLUGIN[plugin]?.icon ?? <MessageIcon />
     }, [post.interestedMeta])
 
     const postMessage = useMemo(() => {
         const { interestedMeta } = post
         const meta = Array.from(interestedMeta ?? [])
-
         if (!meta.length) return null
         const [pluginName, pluginInfo] = meta[0]
         return SUPPORT_PLUGIN[pluginName]?.messageParse(pluginInfo) ?? ''

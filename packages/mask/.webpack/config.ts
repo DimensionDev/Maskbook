@@ -99,7 +99,6 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
                 }
                 if (profiling) {
-                    alias['react-dom$'] = 'react-dom/profiling'
                     alias['scheduler/tracing'] = 'scheduler/tracing-profiling'
                 }
                 return alias
@@ -240,7 +239,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 destructuring: true,
                 forOf: true,
                 module: false,
-                bigIntLiteral: false,
+                bigIntLiteral: true,
                 // Our iOS App doesn't support dynamic import (it requires a heavy post-build time transform).
                 dynamicImport: !(runtime.architecture === 'app' && runtime.engine === 'safari'),
             },

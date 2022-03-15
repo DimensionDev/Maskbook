@@ -1,8 +1,4 @@
 import { getNetworkWorker, NetworkWorkerQuery } from '../worker'
-export async function encodePublicKeyWorker(query: NetworkWorkerQuery): Promise<(text: string) => string> {
-    const f = (await getNetworkWorker(query)).utils.publicKeyEncoding?.encoder
-    return (x) => f?.(x) || x
-}
 export async function decodePublicKeyWorker(query: NetworkWorkerQuery): Promise<(text: string) => string[]> {
     const f = (await getNetworkWorker(query)).utils.publicKeyEncoding?.decoder
     if (f) return (x) => f(x).concat(x)
