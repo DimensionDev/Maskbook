@@ -12,16 +12,19 @@ function usePersonaContext() {
     const currentPersonaIdentifier = useCurrentPersonaIdentifier()
     const definedSocialNetworks: SocialNetwork[] = useDefinedSocialNetworkUIs()
     const personas = useOwnedPersonas()
-
     const currentPersona = personas.find((x) => x.identifier.equals(currentPersonaIdentifier))
-
     const [open, setOpen] = useState(false)
+
+    const { value: curProof } = useAsyncRetry(async () => {
+        return queryExistedBindingByPersona(currentPersona?.publicHexKey as string)
+    })
     useAsyncRetry(async () => {
-        personas.forEach(async (item) => {
+        personas.map(async (item) => {
             if (!item.publicHexKey) return
             return (item.proof = await queryExistedBindingByPersona(item.publicHexKey))
         })
-    }, [personas])
+    })
+
     const [, connectPersona] = useConnectSocialNetwork()
     const [, openProfilePage] = useOpenProfilePage()
     const [, disconnectPersona] = useDisconnectSocialNetwork()
@@ -41,6 +44,7 @@ function usePersonaContext() {
         definedSocialNetworks,
         personas,
         openProfilePage,
+        curProof,
         drawerOpen: open,
         toggleDrawer: () => setOpen((e) => !e),
     }
