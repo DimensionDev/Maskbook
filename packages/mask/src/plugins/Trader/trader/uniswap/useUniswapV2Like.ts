@@ -1,5 +1,5 @@
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { TradeProvider } from '@masknet/public-api'
+import type { TradeProvider } from '@masknet/public-api'
 
 import { useV2Trade as useUniswapV2Trade } from './useTrade'
 import { TradeStrategy } from '../../types'
