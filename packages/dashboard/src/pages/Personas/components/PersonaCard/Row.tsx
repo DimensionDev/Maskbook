@@ -63,20 +63,13 @@ const MenuText = styled('span')(`
 `)
 
 export const PersonaRowCard = memo(() => {
-    const {
-        currentPersona,
-        connectPersona,
-        disconnectPersona,
-        renamePersona,
-        deleteBound,
-        definedSocialNetworks,
-        curProof,
-    } = PersonaContext.useContainer()
+    const { currentPersona, connectPersona, disconnectPersona, renamePersona, deleteBound, definedSocialNetworks } =
+        PersonaContext.useContainer()
     if (!currentPersona) return null
 
     return (
         <PersonaRowCardUI
-            proof={curProof}
+            proof={currentPersona.proof}
             nickname={currentPersona.nickname}
             identifier={currentPersona.identifier}
             profiles={currentPersona.linkedProfiles}
