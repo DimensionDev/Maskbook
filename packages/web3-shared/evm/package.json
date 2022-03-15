@@ -13,7 +13,8 @@
     "@masknet/web3-shared-base": "workspace:*",
     "@types/ethereum-blockies": "^0.1.0",
     "@types/punycode": "^2.1.0",
-    "@walletconnect/web3-provider": "^1.7.4",
+    "@walletconnect/client": "^1.7.5",
+    "@walletconnect/qrcode-modal": "^1.7.5",
     "bignumber.js": "9.0.2",
     "ethereum-blockies": "^0.1.1",
     "fortmatic": "^2.2.1",
@@ -30,7 +31,7 @@
     "web3-utils": "1.5.2"
   },
   "devDependencies": {
-    "@types/use-subscription": "^1.0.0",
-    "@masknet/injected-script": "*"
+    "@masknet/injected-script": "*",
+    "@types/use-subscription": "^1.0.0"
   }
 }

@@ -17,9 +17,10 @@ export function ProviderBridge({ providerType: expectedProviderType }: ProviderB
 
     const onMounted = useCallback(async () => {
         if (expectedProviderType !== actualProviderType) return
-        await Services.Ethereum.connect({
-            providerType: actualProviderType,
-        })
+        // await Services.Ethereum.connect({
+        //     chainId:
+        //     providerType: actualProviderType,
+        // })
     }, [chainId, actualProviderType, expectedProviderType])
 
     useEffect(() => {
@@ -66,7 +67,6 @@ export function ProviderBridge({ providerType: expectedProviderType }: ProviderB
             if (actualProviderType !== expectedProviderType) return
             await Services.Ethereum.notifyEvent(actualProviderType, 'accountsChanged', accounts)
         }
-
         provider?.on('accountsChanged', onAccountsChanged)
         return () => {
             provider?.removeListener('accountsChanged', onAccountsChanged)
@@ -81,6 +81,14 @@ export function ProviderBridge({ providerType: expectedProviderType }: ProviderB
         provider?.on('chainChanged', onChainChanged)
         return () => {
             provider?.removeListener('chainChanged', onChainChanged)
+        }
+    }, [actualProviderType, expectedProviderType, provider])
+
+    useEffect(() => {
+        const onConnect = async () => {}
+        provider?.on('connect', onConnect)
+        return () => {
+            provider?.removeListener('connect', onConnect)
         }
     }, [actualProviderType, expectedProviderType, provider])
 

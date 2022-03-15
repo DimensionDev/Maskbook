@@ -38,7 +38,7 @@ export class BaseProvider implements Provider {
         })
     }
 
-    async onChainIdChanged(id: string) {
+    async onChainChanged(id: string) {
         if (currentProviderSettings.value !== this.providerType) return
 
         // learn more: https://docs.metamask.io/guide/ethereum-provider.html#chain-ids and https://chainid.network/

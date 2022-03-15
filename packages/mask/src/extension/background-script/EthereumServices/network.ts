@@ -1,11 +1,4 @@
-import type {
-    SignedTransaction,
-    Transaction,
-    TransactionConfig,
-    TransactionReceipt,
-    PastLogsOptions,
-    Log,
-} from 'web3-core'
+import type { SignedTransaction, Transaction, TransactionConfig, TransactionReceipt } from 'web3-core'
 import { toHex } from 'web3-utils'
 import {
     ChainId,
@@ -40,38 +33,6 @@ export async function getCode(address: string, overrides?: SendOverrides, option
     return request<string>(
         {
             method: EthereumMethodType.ETH_GET_CODE,
-            params: [address, 'latest'],
-        },
-        overrides,
-        options,
-    )
-}
-
-export async function getGasPrice(overrides?: SendOverrides, options?: RequestOptions) {
-    return request<string>(
-        {
-            method: EthereumMethodType.ETH_GAS_PRICE,
-        },
-        overrides,
-        options,
-    )
-}
-
-export async function getBlockNumber(overrides?: SendOverrides, options?: RequestOptions) {
-    const blockNumber = await request<string>(
-        {
-            method: EthereumMethodType.ETH_BLOCK_NUMBER,
-        },
-        overrides,
-        options,
-    )
-    return Number.parseInt(blockNumber, 16) || 0
-}
-
-export async function getBalance(address: string, overrides?: SendOverrides, options?: RequestOptions) {
-    return request<string>(
-        {
-            method: EthereumMethodType.ETH_GET_BALANCE,
             params: [address, 'latest'],
         },
         overrides,
@@ -124,54 +85,11 @@ export async function getTransactionCount(address: string, overrides?: SendOverr
     return Number.parseInt(count, 16) || 0
 }
 
-export async function getPendingTransactions(address: string, overrides?: SendOverrides, options?: RequestOptions) {
-    const filterId = await request<string>(
-        {
-            method: EthereumMethodType.ETH_NEW_PENDING_TRANSACTION_FILTER,
-            params: [],
-        },
-        overrides,
-        options,
-    )
-    const transactions = await request<string[]>(
-        {
-            method: EthereumMethodType.ETH_GET_FILTER_CHANGES,
-            params: [filterId],
-        },
-        overrides,
-        options,
-    )
-    return transactions
-}
-
 export async function call(config: TransactionConfig, overrides?: SendOverrides, options?: RequestOptions) {
     return request<string>(
         {
             method: EthereumMethodType.ETH_CALL,
             params: [config, 'latest'],
-        },
-        overrides,
-        options,
-    )
-}
-
-export async function estimateGas(config: TransactionConfig, overrides?: SendOverrides, options?: RequestOptions) {
-    const gas = await request<string>(
-        {
-            method: EthereumMethodType.ETH_ESTIMATE_GAS,
-            params: [config],
-        },
-        overrides,
-        options,
-    )
-    return Number.parseInt(gas, 16) || 0
-}
-
-export async function sign(dataToSign: string, address: string, overrides?: SendOverrides, options?: RequestOptions) {
-    return request<string>(
-        {
-            method: EthereumMethodType.ETH_SIGN,
-            params: [dataToSign, address],
         },
         overrides,
         options,
@@ -272,21 +190,6 @@ export async function sendRawTransaction(raw: string, overrides?: SendOverrides,
         },
         overrides,
         options,
-    )
-}
-
-export async function getPastLogs(config: PastLogsOptions, overrides?: SendOverrides, options?: RequestOptions) {
-    return new Promise<Log[]>((resolve, reject) =>
-        request<Log[]>(
-            {
-                method: EthereumMethodType.ETH_GET_LOGS,
-                params: [config],
-            },
-            overrides,
-            options,
-        )
-            .then((result) => resolve(result))
-            .catch(() => resolve([])),
     )
 }
 

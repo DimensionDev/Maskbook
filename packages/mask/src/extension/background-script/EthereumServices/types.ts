@@ -29,7 +29,7 @@ export interface Provider {
     createExternalProvider(options?: ProviderOptions): Promise<ExternalProvider>
 
     onAccountsChanged?(accounts: string[]): Promise<void>
-    onChainIdChanged?(id: string): Promise<void>
+    onChainChanged?(id: string): Promise<void>
     onDisconnect?(): Promise<void>
 }
 

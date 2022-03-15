@@ -5,7 +5,10 @@ export class Injected implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {
         switch (context.request.method) {
             case EthereumMethodType.PERSONAL_SIGN:
-                context.requestArguments.params = [...context.requestArguments.params.slice(0, 2), '']
+                context.requestArguments = {
+                    ...context.requestArguments,
+                    params: [...context.requestArguments.params.slice(0, 2), ''],
+                }
                 break
             default:
                 break

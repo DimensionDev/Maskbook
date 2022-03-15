@@ -17,7 +17,7 @@ import {
     useWallet,
 } from '@masknet/plugin-infra'
 import { FormattedAddress, useRemoteControlledDialog, useSnackbarCallback, WalletIcon } from '@masknet/shared'
-import { WalletMessages } from '../../plugins/Wallet/messages'
+import { WalletMessages, WalletRPC } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
 import Services from '../../extension/service'
 import { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
@@ -139,6 +139,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                 await Services.Ethereum.disconnect({
                     providerType,
                 })
+                await WalletRPC.resetAccount()
                 break
             default:
                 break
@@ -200,21 +201,17 @@ export function WalletStatusBox(props: WalletStatusBox) {
             </div>
             {!props.disableChange && (
                 <section>
-                    {providerType === ProviderType.WalletConnect || providerType === ProviderType.Fortmatic ? (
-                        <ActionButtonPromise
-                            className={classes.actionButton}
-                            color="primary"
-                            size="small"
-                            variant="contained"
-                            init={t('wallet_status_button_disconnect')}
-                            waiting={t('wallet_status_button_disconnecting')}
-                            failed={t('failed')}
-                            complete={t('done')}
-                            executor={onDisconnect}
-                            completeIcon={<></>}
-                            failIcon={<></>}
-                        />
-                    ) : null}
+                    <ActionButtonPromise
+                        className={classes.actionButton}
+                        color="primary"
+                        size="small"
+                        variant="contained"
+                        init={t('wallet_status_button_disconnect')}
+                        waiting={t('wallet_status_button_disconnecting')}
+                        failed={t('failed')}
+                        complete={t('done')}
+                        executor={onDisconnect}
+                    />
                     <Button
                         className={classNames(classes.actionButton)}
                         variant="contained"

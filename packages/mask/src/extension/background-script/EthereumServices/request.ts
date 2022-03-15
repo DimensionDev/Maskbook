@@ -68,11 +68,11 @@ export async function request<T extends unknown>(
                     const result = (await externalProvider?.request?.(context.requestArguments)) as T
                     context.write(result)
                 } catch (error) {
-                    context.abort(error, 'Failed to send request.')
+                    context.abort(error)
                 }
             })
         } catch (error) {
-            context.abort(error, 'Failed to send request.')
+            context.abort(error)
         } finally {
             if (context.error) reject(context.error)
             else resolve(context.result as T)

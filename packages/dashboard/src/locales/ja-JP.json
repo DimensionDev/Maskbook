@@ -93,7 +93,7 @@
     "settings": "設定",
     "gas_fee": "取引手数料",
     "transfer_cost": "費用 {{gasFee}} {{symbol}} <unk> ${{usd}}",
-    "done": "完了!",
+    "done": "完了",
     "labs": "Mask Labs",
     "wallet_transactions_pending": "承認待ち",
     "wallet_gas_fee_settings_low": "低い",

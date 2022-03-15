@@ -75,7 +75,7 @@
     "delete_wallet": "删除钱包",
     "hide_token": "隐藏代币",
     "hide_token_hint": "您将来可以通过钱包页面中的“添加代币”重新添加 <strong>{{token}}</strong> 。",
-    "done": "完成!",
+    "done": "完成",
     "download": "下载",
     "failed": "失败",
     "buy_now": "立即购买",

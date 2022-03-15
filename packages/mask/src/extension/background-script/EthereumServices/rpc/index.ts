@@ -1,3 +1,5 @@
+import type { TransactionConfig } from 'web3-core'
+import type { JsonRpcPayload } from 'web3-core-helpers'
 import * as ABICoder from 'web3-eth-abi'
 import {
     isSameAddress,
@@ -10,11 +12,9 @@ import {
     EthereumTransactionConfig,
     getPayloadConfig,
 } from '@masknet/web3-shared-evm'
-import type { TransactionConfig } from 'web3-core'
-import type { JsonRpcPayload } from 'web3-core-helpers'
+import { isZero } from '@masknet/web3-shared-base'
 import { getCode } from '../network'
 import { readABI } from './abi'
-import { isZero } from '@masknet/web3-shared-base'
 
 // fix the type error
 const coder = ABICoder as unknown as ABICoder.AbiCoder

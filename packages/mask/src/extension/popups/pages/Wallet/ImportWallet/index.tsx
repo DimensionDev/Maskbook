@@ -174,12 +174,6 @@ const ImportWallet = memo(() => {
                                     account: wallet,
                                 })
                             }
-                            if (!currentAccountSettings.value) {
-                                await WalletRPC.updateAccount({
-                                    account: wallet,
-                                    providerType: ProviderType.MaskWallet,
-                                })
-                            }
                             await WalletRPC.selectAccount([wallet])
                             navigate(PopupRoutes.Wallet, { replace: true })
                             await Services.Helper.removePopupWindow()
@@ -189,13 +183,6 @@ const ImportWallet = memo(() => {
                             if (!currentMaskWalletAccountSettings.value) {
                                 await WalletRPC.updateMaskAccount({
                                     account: privateKeyWallet,
-                                })
-                            }
-
-                            if (!currentAccountSettings.value) {
-                                await WalletRPC.updateAccount({
-                                    account: privateKeyWallet,
-                                    providerType: ProviderType.MaskWallet,
                                 })
                             }
 

@@ -59,8 +59,8 @@ export default class FortmaticSKD implements EIP1193Provider {
     }
 
     login(chainId: ChainId) {
-        const provider = this.createProvider(chainId)
-        return provider.enable()
+        const fm = this.createFortmatic(chainId)
+        return fm.user.login()
     }
     logout(chainId: ChainId) {
         const fm = this.createFortmatic(chainId)

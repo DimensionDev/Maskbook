@@ -221,9 +221,11 @@ export class TransactionWatcher implements Middleware<Context> {
 
             // the mask_getTransactionReceipt method will read receipt from chain
             case EthereumMethodType.MASK_GET_TRANSACTION_RECEIPT:
-                context.requestArguments = {
-                    ...context.requestArguments,
-                    method: EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
+                try {
+                    const [hash] = context.request.params as [string]
+                    context.write(await getTransactionReceipt(hash))
+                } catch (error) {
+                    context.abort(error)
                 }
                 break
             default:

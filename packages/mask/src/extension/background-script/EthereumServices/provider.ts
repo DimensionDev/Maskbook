@@ -1,4 +1,5 @@
 import { first } from 'lodash-unified'
+import { delay } from '@dimensiondev/kit'
 import { ChainId, createLookupTableResolver, ProviderType } from '@masknet/web3-shared-evm'
 import { BridgedProvider } from './providers/Bridged'
 import { MaskWalletProvider } from './providers/MaskWallet'
@@ -6,7 +7,6 @@ import { CustomNetworkProvider } from './providers/CustomNetwork'
 import type { Provider } from './types'
 import { currentChainIdSettings, currentProviderSettings } from '../../../plugins/Wallet/settings'
 import Services from '../../service'
-import { WalletRPC } from '../../../plugins/Wallet/messages'
 
 const getProvider = createLookupTableResolver<ProviderType, Provider | null>(
     {
@@ -55,7 +55,7 @@ export async function notifyEvent(providerType: ProviderType, name: string, even
             await provider?.onAccountsChanged?.(event as string[])
             break
         case 'chainChanged':
-            await provider?.onChainIdChanged?.(event as string)
+            await provider?.onChainChanged?.(event as string)
             break
         case 'disconnect':
             await provider?.onDisconnect?.()
@@ -65,7 +65,7 @@ export async function notifyEvent(providerType: ProviderType, name: string, even
     }
 }
 
-export async function connect({ chainId, providerType }: { chainId?: ChainId; providerType: ProviderType }) {
+export async function connect({ chainId, providerType }: { chainId: ChainId; providerType: ProviderType }) {
     const account = first(
         await Services.Ethereum.requestAccounts(chainId, {
             chainId,
@@ -73,20 +73,22 @@ export async function connect({ chainId, providerType }: { chainId?: ChainId; pr
         }),
     )
 
-    const chainIdRaw = await Services.Ethereum.getChainId({
-        providerType,
-    })
+    // the WalletConnect client-side needs more time to sync chain id changing
+    if (providerType === ProviderType.WalletConnect) await delay(1000)
+
+    const actualChainId = Number.parseInt(
+        await Services.Ethereum.getChainId({
+            chainId,
+            providerType,
+        }),
+        16,
+    )
 
     console.log('DEBUG: chain id raw')
     console.log({
-        chainIdRaw,
-    })
-
-    const actualChainId = Number.parseInt(chainIdRaw, 16)
-    await WalletRPC.updateAccount({
         account,
-        chainId: actualChainId,
-        providerType,
+        chainId,
+        actualChainId,
     })
     return {
         account,
@@ -98,5 +100,4 @@ export async function disconnect({ providerType }: { providerType: ProviderType 
     await Services.Ethereum.dismissAccounts({
         providerType,
     })
-    await WalletRPC.resetAccount()
 }

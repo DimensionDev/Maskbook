@@ -20,17 +20,9 @@ export const Web3Context: Web3ProviderType = {
         return () => {}
     }),
     account: createSubscriptionFromAsync(
-        async () => {
-            const providerType = await Services.Settings.getCurrentSelectedWalletProvider()
-            if (isInjectedProvider(providerType) || providerType === ProviderType.Fortmatic) return ''
-            return Services.Settings.getSelectedWalletAddress()
-        },
+        Services.Settings.getSelectedWalletAddress,
         '',
-        (callback) => {
-            const a = Messages.events.currentAccountSettings.on(callback)
-            const b = Messages.events.currentProviderSettings.on(callback)
-            return () => void [a(), b()]
-        },
+        Messages.events.currentAccountSettings.on,
     ),
     tokenPrices: createSubscriptionFromAsync(
         Services.Settings.getTokenPrices,

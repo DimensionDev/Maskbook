@@ -7,6 +7,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import type { Context, Middleware } from '../types'
+import { sendTransaction } from '../network'
 
 export class RecentTransaction implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {
@@ -14,11 +15,14 @@ export class RecentTransaction implements Middleware<Context> {
 
         switch (context.method) {
             case EthereumMethodType.MASK_REPLACE_TRANSACTION:
-                const [hash, config] = context.request.params as [string, EthereumTransactionConfig]
-                replacedHash = hash
-                context.requestArguments = {
-                    method: EthereumMethodType.ETH_SEND_TRANSACTION,
-                    params: [config],
+                try {
+                    const [hash, config] = context.request.params as [string, EthereumTransactionConfig]
+
+                    // remember the hash of the replaced tx
+                    replacedHash = hash
+                    context.write(await sendTransaction(config, context.sendOverrides, context.requestOptions))
+                } catch (error) {
+                    context.abort(error)
                 }
                 break
         }

@@ -33,7 +33,7 @@
     "delete_wallet": "ウォレットを削除する",
     "hide_token": "トークンを隠す",
     "hide_token_hint": "将来的には、ウォレットパネルで「トークンを追加」を選択することで、再び <strong>{{token}}</strong> を追加することができます。",
-    "done": "完了です！",
+    "done": "完了です",
     "download": "ダウンロード",
     "buy_now": "今すぐ購入",
     "setup_guide_find_username_text": "Mask のペルソナと接続するためにユーザー名が必要です。<br /> 正しいものを入力してください。",

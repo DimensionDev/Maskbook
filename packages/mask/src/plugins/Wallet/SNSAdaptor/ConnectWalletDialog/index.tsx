@@ -43,7 +43,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     )
     // #endregion
 
-    const connectTo = useCallback(async () => {
+    const connectTo = useCallback<() => Promise<true>>(async () => {
         if (!networkType) throw new Error('Unknown network type.')
         if (!providerType) throw new Error('Unknown provider type.')
 
@@ -54,6 +54,11 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
 
         // a short time loading makes the user fells better
         await delay(1000)
+
+        const overrides = {
+            chainId: expectedChainId,
+            providerType,
+        }
 
         // try to read the currently select chain id and account from the provider
         let account: string | undefined
@@ -85,14 +90,14 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
         // switch to the expected chain automatically
         if (chainId !== expectedChainId) {
             try {
-                const overrides = {
-                    chainId: expectedChainId,
-                    providerType,
-                }
+                const switchable =
+                    // the coin98 wallet cannot handle add/switch RPC provider correctly
+                    // it will always add a new RPC provider even if the network exists
+                    providerType !== ProviderType.Coin98 &&
+                    // to switch chain with walletconnect is not implemented widely
+                    providerType !== ProviderType.WalletConnect
 
-                // the coin98 wallet cannot handle add/switch RPC provider correctly
-                // it will always add a new RPC provider even if the network exists
-                if (providerType !== ProviderType.Coin98) {
+                if (switchable) {
                     await Promise.race([
                         (async () => {
                             await delay(30 /* seconds */ * 1000 /* milliseconds */)
@@ -105,8 +110,9 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
                 }
 
                 // recheck
-                const chainId = Number.parseInt(await Services.Ethereum.getChainId(overrides), 16)
-                if (chainId !== expectedChainId) throw new Error('Failed to switch chain, please try again later.')
+                const actualChainId = Number.parseInt(await Services.Ethereum.getChainId(overrides), 16)
+                if (actualChainId !== expectedChainId)
+                    throw new Error('Failed to switch chain, please try again later.')
             } catch {
                 throw new Error(`Make sure your wallet is on the ${resolveNetworkName(networkType)} network.`)
             }
@@ -126,8 +132,10 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
         if (!open) return true
 
         await connectTo()
-        // sync settings
+
+        // delay for syncing settings
         await delay(1000)
+
         setConnectWalletDialog({
             open: false,
             result: true,

@@ -97,7 +97,7 @@
     "settings": "設定",
     "gas_fee": "交易手續費",
     "transfer_cost": "花費 {{gasFee}} {{symbol}} ≈ ${{usd}}",
-    "done": "完成！",
+    "done": "完成",
     "wallet_transactions_pending": "待定中",
     "wallet_gas_fee_settings_low": "低",
     "wallet_gas_fee_settings_medium": "中",
