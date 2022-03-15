@@ -67,7 +67,7 @@ export const Uploading: React.FC = () => {
                 block: state.block,
                 type: state.type,
             }),
-            300000, // = 5 minute
+            300000, // = 5 minutes
         )
         setPreparing(false)
         for await (const pctComplete of PluginFileServiceRPCGenerator.upload(currentProvider, payloadTxID)) {
