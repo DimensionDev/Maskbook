@@ -73,7 +73,7 @@ export async function* decryptionWithSocialNetworkDecoding(
     if (!decoded) return yield new DecryptError(ErrorReasons.NoPayloadFound, undefined)
     yield* decryption(decoded, context)
 }
-export async function* decryption(payload: string | Uint8Array, context: DecryptionContext) {
+async function* decryption(payload: string | Uint8Array, context: DecryptionContext) {
     const parse = await parsePayload(payload)
     if (parse.err) return null
 
