@@ -2,7 +2,6 @@ import { AESCryptoKey, CheckedError } from '@masknet/shared-base'
 import { Result, Ok } from 'ts-results'
 import { AESAlgorithmEnum, PublicKeyAlgorithmEnum } from '../payload'
 import { CryptoException } from '../types'
-
 export function importAESFromJWK(key: JsonWebKey, kind: AESAlgorithmEnum): Promise<Result<AESCryptoKey, unknown>> {
     return Result.wrapAsync(() => {
         const param: Record<AESAlgorithmEnum, AesKeyAlgorithm> = {

@@ -24,22 +24,7 @@ const example: EncryptOptions = {
     target: publicTarget,
 }
 test('v37 public encryption', async () => {
-    await testSet('minimal v38', example)
     await testSet('minimal v37', { ...example, version: -37 })
-
-    await testSet(
-        'full v38',
-        {
-            version: -38,
-            target: publicTarget,
-            message: makeTypedMessageText('hello world'),
-            author: exampleID,
-        },
-        {
-            ...minimalEncryptIO,
-            queryPublicKey: ECDH_K256_PublicKey_CryptoKey,
-        },
-    )
 
     await testSet(
         'full v37',
@@ -47,6 +32,24 @@ test('v37 public encryption', async () => {
             version: -37,
             target: publicTarget,
             message: complexMessage(),
+            author: exampleID,
+        },
+        {
+            ...minimalEncryptIO,
+            queryPublicKey: ECDH_K256_PublicKey_CryptoKey,
+        },
+    )
+})
+
+test('v38 public encryption', async () => {
+    await testSet('minimal v38', example)
+
+    await testSet(
+        'full v38',
+        {
+            version: -38,
+            target: publicTarget,
+            message: makeTypedMessageText('hello world'),
             author: exampleID,
         },
         {
@@ -87,9 +90,11 @@ async function testSet(
 
 const minimalEncryptIO: EncryptIO = {
     queryLinkedPersona: reject,
-    queryLocalKey: reject,
     queryPrivateKey: reject,
     queryPublicKey: returnNull,
+    deriveAESKey: reject,
+    deriveAESKey_version38_or_older: reject,
+    encryptByLocalKey: reject,
 
     getRandomECKey: reject,
     getRandomValues: mockIV,

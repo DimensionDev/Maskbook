@@ -82,60 +82,6 @@ Object {
 }
 `;
 
-exports[`v37 public encryption: full v38 1`] = `
-Object {
-  "author": ProfileIdentifier {
-    "network": "example.com",
-    "userId": "jack",
-  },
-  "identifier": PostIVIdentifier {
-    "network": "example.com",
-    "postIV": "AAECAwQFBgcICQoLDA0ODw==",
-  },
-  "output": "🎼4/4|oEHPyYfuDpTZBp+oUpe8ChOpRJCf5CdAv8kD2NieQtbN+h4VkT+5oI44GNkCmNh6JfVmCV4V5Qtrc7IsU2tNDS9WZNWHfqjtvA14s1UHGi2Yschz9o3WwC+0tRiCfRcUAXunzP+volvqd8wNkfwqfMEou3capIT5kzQdw31RihId0xXWHjwUqzYu|AAECAwQFBgcICQoLDA0ODw==|uE2/uj+YtxNuiCBQW+q3jLZKHXRAQDxYmpia|_|Aq/bVWAKvodJuURGk3enjE1gUiu2SELM8IIKIlNGqOWM|1|ZXhhbXBsZS5jb20vamFjaw==:||",
-  "postKey": CryptoKey { [opaque crypto key material] },
-}
-`;
-
-exports[`v37 public encryption: full v38 decrypted 1`] = `
-Array [
-  Object {
-    "content": Object {
-      "content": "hello world",
-      "meta": undefined,
-      "serializable": true,
-      "type": "text",
-      "version": 1,
-    },
-    "type": "success",
-  },
-]
-`;
-
-exports[`v37 public encryption: full v38 parsed 1`] = `
-Object {
-  "author": Ok(Some(ProfileIdentifier {
-    "network": "example.com",
-    "userId": "jack",
-  })),
-  "authorPublicKey": Ok(Some(Object {
-    "algr": 2,
-    "key": CryptoKey { [opaque crypto key material] },
-  })),
-  "encrypted": Ok(Uint8Array [ b84dbfba3f98b7136e8820505beab78cb64a1d7440403c589a989a ]),
-  "encryption": Ok(Object {
-    "AESKey": Ok(Object {
-      "algr": "A256GCM",
-      "key": CryptoKey { [opaque crypto key material] },
-    }),
-    "iv": Ok(Uint8Array [ 000102030405060708090a0b0c0d0e0f ]),
-    "type": "public",
-  }),
-  "signature": Ok(None),
-  "version": -38,
-}
-`;
-
 exports[`v37 public encryption: minimal v37 1`] = `
 Object {
   "author": ProfileIdentifier {
@@ -184,22 +130,22 @@ Object {
 }
 `;
 
-exports[`v37 public encryption: minimal v38 1`] = `
+exports[`v38 public encryption: full v38 1`] = `
 Object {
   "author": ProfileIdentifier {
-    "network": "localhost",
-    "userId": "$unknown",
+    "network": "example.com",
+    "userId": "jack",
   },
   "identifier": PostIVIdentifier {
-    "network": "localhost",
+    "network": "example.com",
     "postIV": "AAECAwQFBgcICQoLDA0ODw==",
   },
-  "output": "🎼4/4|oEHPyYfuDpTZBp+oUpe8ChOpRJCf5CdAv8kD2NieQtbN+h4VkT+5oI44GNkCmNh6JfVmCV4V5Qtrc7IsU2tNDS9WZNWHfqjtvA14s1UHGi2Yschz9o3WwC+0tRiCfRcUAXunzP+volvqd8wNkfwqfMEou3capIT5kzQdw31RihId0xXWHjwUqzYu|AAECAwQFBgcICQoLDA0ODw==|uE2/uj+YtxNuiCBQW+q3jLZKHXRAQDxYmpia|_||1:||",
+  "output": "🎼4/4|oEHPyYfuDpTZBp+oUpe8ChOpRJCf5CdAv8kD2NieQtbN+h4VkT+5oI44GNkCmNh6JfVmCV4V5Qtrc7IsU2tNDS9WZNWHfqjtvA14s1UHGi2Yschz9o3WwC+0tRiCfRcUAXunzP+volvqd8wNkfwqfMEou3capIT5kzQdw31RihId0xXWHjwUqzYu|AAECAwQFBgcICQoLDA0ODw==|uE2/uj+YtxNuiCBQW+q3jLZKHXRAQDxYmpia|_|Aq/bVWAKvodJuURGk3enjE1gUiu2SELM8IIKIlNGqOWM|1|ZXhhbXBsZS5jb20vamFjaw==:||",
   "postKey": CryptoKey { [opaque crypto key material] },
 }
 `;
 
-exports[`v37 public encryption: minimal v38 decrypted 1`] = `
+exports[`v38 public encryption: full v38 decrypted 1`] = `
 Array [
   Object {
     "content": Object {
@@ -214,7 +160,61 @@ Array [
 ]
 `;
 
-exports[`v37 public encryption: minimal v38 parsed 1`] = `
+exports[`v38 public encryption: full v38 parsed 1`] = `
+Object {
+  "author": Ok(Some(ProfileIdentifier {
+    "network": "example.com",
+    "userId": "jack",
+  })),
+  "authorPublicKey": Ok(Some(Object {
+    "algr": 2,
+    "key": CryptoKey { [opaque crypto key material] },
+  })),
+  "encrypted": Ok(Uint8Array [ b84dbfba3f98b7136e8820505beab78cb64a1d7440403c589a989a ]),
+  "encryption": Ok(Object {
+    "AESKey": Ok(Object {
+      "algr": "A256GCM",
+      "key": CryptoKey { [opaque crypto key material] },
+    }),
+    "iv": Ok(Uint8Array [ 000102030405060708090a0b0c0d0e0f ]),
+    "type": "public",
+  }),
+  "signature": Ok(None),
+  "version": -38,
+}
+`;
+
+exports[`v38 public encryption: minimal v38 1`] = `
+Object {
+  "author": ProfileIdentifier {
+    "network": "localhost",
+    "userId": "$unknown",
+  },
+  "identifier": PostIVIdentifier {
+    "network": "localhost",
+    "postIV": "AAECAwQFBgcICQoLDA0ODw==",
+  },
+  "output": "🎼4/4|oEHPyYfuDpTZBp+oUpe8ChOpRJCf5CdAv8kD2NieQtbN+h4VkT+5oI44GNkCmNh6JfVmCV4V5Qtrc7IsU2tNDS9WZNWHfqjtvA14s1UHGi2Yschz9o3WwC+0tRiCfRcUAXunzP+volvqd8wNkfwqfMEou3capIT5kzQdw31RihId0xXWHjwUqzYu|AAECAwQFBgcICQoLDA0ODw==|uE2/uj+YtxNuiCBQW+q3jLZKHXRAQDxYmpia|_||1:||",
+  "postKey": CryptoKey { [opaque crypto key material] },
+}
+`;
+
+exports[`v38 public encryption: minimal v38 decrypted 1`] = `
+Array [
+  Object {
+    "content": Object {
+      "content": "hello world",
+      "meta": undefined,
+      "serializable": true,
+      "type": "text",
+      "version": 1,
+    },
+    "type": "success",
+  },
+]
+`;
+
+exports[`v38 public encryption: minimal v38 parsed 1`] = `
 Object {
   "author": Ok(None),
   "authorPublicKey": Ok(None),
