@@ -37,7 +37,7 @@ export {
     type EncodeImageOptions,
     type ImageTemplateTypes,
     type SteganographyIO,
-    steganographyDecodeImageUrl,
+    steganographyDecodeImage,
     steganographyEncodeImage,
     GrayscaleAlgorithm,
 } from './image-steganography'

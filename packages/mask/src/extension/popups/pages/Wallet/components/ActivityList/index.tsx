@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
 import type { TransactionReceipt } from 'web3-core'
 import { memo, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { useContainer } from 'unstated-next'
 import { Button, Link, List } from '@mui/material'
@@ -129,7 +129,7 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }
     const { classes } = useStyles()
     const { t } = useI18N()
     const [isExpand, setExpand] = useState(!(dataSource.length > 3))
-    const history = useHistory()
+    const navigate = useNavigate()
     const { setTransaction } = useContainer(WalletContext)
 
     if (dataSource.length === 0) return <div className={classes.empty}>{t('popups_wallet_no_transactions')}</div>
@@ -155,7 +155,7 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }
                                 onSpeedUpClick={(e) => {
                                     e.preventDefault()
                                     setTransaction(transaction)
-                                    history.push(
+                                    navigate(
                                         urlcat(PopupRoutes.ReplaceTransaction, {
                                             type: ReplaceType.SPEED_UP,
                                         }),
@@ -164,7 +164,7 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }
                                 onCancelClick={(e) => {
                                     e.preventDefault()
                                     setTransaction(transaction)
-                                    history.push(
+                                    navigate(
                                         urlcat(PopupRoutes.ReplaceTransaction, {
                                             type: ReplaceType.CANCEL,
                                         }),

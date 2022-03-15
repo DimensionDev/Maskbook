@@ -261,7 +261,11 @@
         "xlarge",
         "xlink",
         "zerion",
-        "zubin"
+        "zubin",
+        "rebalance",
+        "repayer",
+        "flashloan",
+        "lendingpool"
     ],
     "ignoreWords": [
         "aicanft",
@@ -371,7 +375,12 @@
         "walletlink",
         "wnative",
         "xdescribe",
-        "xtest"
+        "xtest",
+        "gusd",
+        "xsushi",
+        "renfil",
+        "usdp",
+        "frax"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [
