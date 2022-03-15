@@ -74,11 +74,13 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                 ? `a ${erc721Contract.name} NFT`
                 : ''
         return activatedSocialNetworkUI.utils.getShareLinkURL?.(
-            `I just tipped ${assetName} to @${recipientSnsId}'s wallet address ${recipient}
-
-Install https://mask.io/download-links to tip my best friend.`,
+            t.tip_share_post({
+                assetName,
+                recipientSnsId,
+                recipient,
+            }),
         )
-    }, [amount, tipType, erc721Contract?.name, token, recipient, recipientSnsId])
+    }, [amount, tipType, erc721Contract?.name, token, recipient, recipientSnsId, t])
 
     const successMessage = t.send_tip_successfully()
 
