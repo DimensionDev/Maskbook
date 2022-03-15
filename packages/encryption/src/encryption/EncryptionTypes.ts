@@ -1,6 +1,5 @@
 import type {
     ProfileIdentifier,
-    PersonaIdentifier,
     EC_Public_CryptoKey,
     AESCryptoKey,
     EC_Private_CryptoKey,
@@ -8,6 +7,7 @@ import type {
     IdentifierMap,
 } from '@masknet/shared-base'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
+import type { EC_Key, EC_KeyCurveEnum } from '../payload'
 
 export interface EncryptOptions {
     /** Payload version to use. */
@@ -27,8 +27,7 @@ export interface EncryptTargetE2E {
     target: ProfileIdentifier[]
 }
 export interface EncryptIO {
-    queryLinkedPersona(profile: ProfileIdentifier): Promise<PersonaIdentifier | null>
-    queryPublicKey(persona: ProfileIdentifier): Promise<EC_Public_CryptoKey | null>
+    queryPublicKey(persona: ProfileIdentifier): Promise<EC_Key<EC_Public_CryptoKey> | null>
     /**
      * This is only used in v38.
      *
@@ -37,20 +36,6 @@ export interface EncryptIO {
      * Throw in this case. v37 will resolve this problem.
      */
     encryptByLocalKey(content: Uint8Array, iv: Uint8Array): Promise<Uint8Array>
-    queryPrivateKey(persona: PersonaIdentifier): Promise<EC_Private_CryptoKey | null>
-    /**
-     * Derive an AES key by ECDH(selfPriv, targetPub).
-     *
-     * Host should derive a new AES-GCM key by the given key pair.
-     *
-     * If the provided receiver does not on the same curve with the author
-     * (e.g. The receiver has ED25519 key but there is only P-256 private key),
-     * please throw an error.
-     *
-     * Error from this function will become a fatal error.
-     * @param receiver The receiver whom you have their public key.
-     */
-    deriveAESKey(receiver: ProfileIdentifier): Promise<AESCryptoKey>
     /**
      * Derive a group of AES key for ECDH.
      *
@@ -84,7 +69,7 @@ export interface EncryptIO {
      * Generate a pair of new EC key used for ECDH.
      * This should be only provided in the test environment to create a deterministic result.
      */
-    getRandomECKey?(algr: 'ed25519' | 'P-256' | 'K-256'): Promise<[EC_Public_CryptoKey, EC_Private_CryptoKey]>
+    getRandomECKey?(algr: EC_KeyCurveEnum): Promise<[EC_Public_CryptoKey, EC_Private_CryptoKey]>
 }
 export interface EncryptResult {
     postKey: AESCryptoKey
@@ -104,7 +89,7 @@ export interface EncryptionResultE2E {
 }
 export enum EncryptErrorReasons {
     ComplexTypedMessageNotSupportedInPayload38 = '[@masknet/encryption] Complex TypedMessage is not supported in payload v38.',
-    TargetPublicKeyNotFound = '[@masknet/encryption] Target public key not found.',
+    PublicKeyNotFound = '[@masknet/encryption] Target public key not found.',
 }
 export class EncryptError extends Error {
     static Reasons = EncryptErrorReasons

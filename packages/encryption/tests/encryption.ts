@@ -1,4 +1,4 @@
-import { ECDH_K256_PublicKey_CryptoKey } from './setup'
+import { ECDH_K256_Pub } from './setup'
 import { test, expect } from '@jest/globals'
 import {
     decrypt,
@@ -36,7 +36,7 @@ test('v37 public encryption', async () => {
         },
         {
             ...minimalEncryptIO,
-            queryPublicKey: ECDH_K256_PublicKey_CryptoKey,
+            queryPublicKey: ECDH_K256_Pub,
         },
     )
 })
@@ -54,7 +54,7 @@ test('v38 public encryption', async () => {
         },
         {
             ...minimalEncryptIO,
-            queryPublicKey: ECDH_K256_PublicKey_CryptoKey,
+            queryPublicKey: ECDH_K256_Pub,
         },
     )
 })
@@ -89,10 +89,7 @@ async function testSet(
 }
 
 const minimalEncryptIO: EncryptIO = {
-    queryLinkedPersona: reject,
-    queryPrivateKey: reject,
     queryPublicKey: returnNull,
-    deriveAESKey: reject,
     deriveAESKey_version38_or_older: reject,
     encryptByLocalKey: reject,
 
