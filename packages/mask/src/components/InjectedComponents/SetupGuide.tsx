@@ -177,7 +177,8 @@ function SetupGuideUI(props: SetupGuideUIProps) {
             }
         }
 
-        if (!userPinExtension) {
+        if (!userPinExtension.value) {
+            userPinExtension.value = true
             setStep(SetupGuideStep.PinExtension)
             return
         }
@@ -186,7 +187,8 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     }
 
     const onVerifyDone = async () => {
-        if (!userPinExtension) {
+        if (!userPinExtension.value) {
+            userPinExtension.value = true
             setStep(SetupGuideStep.PinExtension)
             return
         }
@@ -195,7 +197,6 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     }
 
     const onDone = async () => {
-        userPinExtension.value = true
         const network = ui.networkIdentifier
         if (network === 'twitter.com' && userGuideStatus[network].value !== 'completed') {
             userGuideStatus[network].value = '1'
