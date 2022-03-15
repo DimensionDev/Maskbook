@@ -18,9 +18,6 @@ Object {
 exports[`v37 public encryption: full v37 decrypted 1`] = `
 Array [
   Object {
-    "type": "started",
-  },
-  Object {
     "content": Object {
       "items": Array [
         Object {
@@ -103,9 +100,6 @@ Object {
 exports[`v37 public encryption: full v38 decrypted 1`] = `
 Array [
   Object {
-    "type": "started",
-  },
-  Object {
     "content": Object {
       "content": "hello world",
       "meta": undefined,
@@ -160,9 +154,6 @@ Object {
 exports[`v37 public encryption: minimal v37 decrypted 1`] = `
 Array [
   Object {
-    "type": "started",
-  },
-  Object {
     "content": Object {
       "content": "hello world",
       "meta": undefined,
@@ -210,9 +201,6 @@ Object {
 
 exports[`v37 public encryption: minimal v38 decrypted 1`] = `
 Array [
-  Object {
-    "type": "started",
-  },
   Object {
     "content": Object {
       "content": "hello world",
