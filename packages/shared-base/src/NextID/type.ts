@@ -35,6 +35,14 @@ export interface BindingProof {
     is_valid: boolean
 }
 
+interface Pagination {
+    total: number
+    per: number
+    current: number
+    next: number
+}
+
 export interface NextIDBindings {
+    pagination: Pagination
     ids: NextIDPersonaBindings[]
 }

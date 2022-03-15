@@ -1,4 +1,12 @@
-import { fromHex, toBase64, NextIDBindings, NextIDPlatform, NextIDPayload, NextIDAction } from '@masknet/shared-base'
+import {
+    BindingProof,
+    fromHex,
+    NextIDAction,
+    NextIDBindings,
+    NextIDPayload,
+    NextIDPlatform,
+    toBase64,
+} from '@masknet/shared-base'
 import urlcat from 'urlcat'
 import { first } from 'lodash-unified'
 
@@ -14,6 +22,20 @@ interface CreatePayloadBody {
     public_key: string
 }
 
+interface CreatePayloadResponse {
+    post_content: string
+    sign_payload: string
+}
+
+export async function fetchJSON<T = unknown>(requestInfo: RequestInfo, requestInit?: RequestInit): Promise<T> {
+    const res = await globalThis.fetch(requestInfo, { mode: 'cors', ...requestInit })
+    const result = await res.json()
+
+    if (result.message || !res.ok) throw new Error(result.message)
+    return result
+}
+
+// TODO: remove 'bind' in project for business context.
 export async function bindProof(
     personaPublicKey: string,
     action: NextIDAction,
@@ -37,48 +59,46 @@ export async function bindProof(
         },
     }
 
-    const response = await fetch(urlcat(BASE_URL, '/v1/proof'), {
+    return fetchJSON(urlcat(BASE_URL, '/v1/proof'), {
         body: JSON.stringify(requestBody),
         method: 'POST',
-        mode: 'cors',
     })
-
-    const result = (await response.json()) as { message: string }
-
-    if (!response.ok) throw new Error(result.message)
-    return response
 }
 
 export async function queryExistedBindingByPersona(personaPublicKey: string) {
-    const response = await fetch(urlcat(BASE_URL, '/v1/proof', { platform: 'nextid', identity: personaPublicKey }), {
-        mode: 'cors',
-    })
-
-    const result = (await response.json()) as NextIDBindings
+    const response = await fetchJSON<NextIDBindings>(
+        urlcat(BASE_URL, '/v1/proof', { platform: NextIDPlatform.NextId, identity: personaPublicKey }),
+    )
     // Will have only one item when query by personaPublicKey
-    return first(result.ids)
+    return first(response.ids)
 }
 
-export async function queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string) {
+export async function queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page?: number) {
     if (!platform && !identity) return []
 
-    const response = await fetch(urlcat(BASE_URL, '/v1/proof', { platform: platform, identity: identity }), {
-        mode: 'cors',
-    })
+    const response = await fetchJSON<NextIDBindings>(
+        urlcat(BASE_URL, '/v1/proof', { platform: platform, identity: identity }),
+    )
 
-    const result = (await response.json()) as NextIDBindings
-    return result.ids
-}
-
-export async function queryExistedBinding(platform: NextIDPlatform, identity: string): Promise<NextIDBindings> {
-    throw new Error('To be implemented.')
+    // TODO: merge Pagination into this
+    return response.ids
 }
 
 export async function queryIsBound(personaPublicKey: string, platform: NextIDPlatform, identity: string) {
     if (!platform && !identity) return false
 
-    const ids = await queryExistedBindingByPlatform(platform, identity)
-    return ids.some((x) => x.persona.toLowerCase() === personaPublicKey.toLowerCase())
+    try {
+        await fetchJSON<BindingProof>(
+            urlcat(BASE_URL, '/v1/proof/exists', {
+                platform: platform,
+                identity: identity,
+                public_key: personaPublicKey,
+            }),
+        )
+        return true
+    } catch {
+        return false
+    }
 }
 
 export async function createPersonaPayload(
@@ -94,15 +114,13 @@ export async function createPersonaPayload(
         public_key: personaPublicKey,
     }
 
-    const response = await fetch(urlcat(BASE_URL, '/v1/proof/payload'), {
+    const response = await fetchJSON<CreatePayloadResponse>(urlcat(BASE_URL, '/v1/proof/payload'), {
         body: JSON.stringify(requestBody),
         method: 'POST',
-        mode: 'cors',
     })
 
-    const result = await response.json()
     return {
-        postContent: result.post_content,
-        signPayload: JSON.stringify(JSON.parse(result.sign_payload)),
+        postContent: response.post_content,
+        signPayload: JSON.stringify(JSON.parse(response.sign_payload)),
     }
 }
