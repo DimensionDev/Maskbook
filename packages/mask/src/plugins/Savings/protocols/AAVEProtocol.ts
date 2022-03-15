@@ -4,7 +4,7 @@ import type Web3 from 'web3'
 import type { AbiItem } from 'web3-utils'
 import {
     ChainId,
-    getSavingsConstants,
+    getAaveConstants,
     createContract,
     FungibleTokenDetailed,
     ZERO_ADDRESS,
@@ -45,7 +45,7 @@ export class AAVEProtocol implements SavingsProtocol {
 
     public async updateApr(chainId: ChainId, web3: Web3) {
         try {
-            const subgraphUrl = getSavingsConstants(chainId).AAVE_SUBGRAPHS || ''
+            const subgraphUrl = getAaveConstants(chainId).AAVE_SUBGRAPHS || ''
 
             if (!subgraphUrl) {
                 this._apr = AAVEProtocol.DEFAULT_APR
@@ -97,7 +97,7 @@ export class AAVEProtocol implements SavingsProtocol {
 
     public async updateBalance(chainId: ChainId, web3: Web3, account: string) {
         try {
-            const subgraphUrl = getSavingsConstants(chainId).AAVE_SUBGRAPHS || ''
+            const subgraphUrl = getAaveConstants(chainId).AAVE_SUBGRAPHS || ''
             const reserveBody = JSON.stringify({
                 query: `{
                 reserves (where: {
@@ -187,7 +187,7 @@ export class AAVEProtocol implements SavingsProtocol {
 
     private async createDepositTokenOperation(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
         const aaveLPoolAddress =
-            getSavingsConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS
+            getAaveConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS
         const lPoolAdressProviderContract = createContract<AaveLendingPoolAddressProvider>(
             web3,
             aaveLPoolAddress,
@@ -225,7 +225,7 @@ export class AAVEProtocol implements SavingsProtocol {
         try {
             const lPoolAdressProviderContract = createContract<AaveLendingPoolAddressProvider>(
                 web3,
-                getSavingsConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS,
+                getAaveConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS,
                 AaveLendingPoolAddressProviderABI as AbiItem[],
             )
 
@@ -251,7 +251,7 @@ export class AAVEProtocol implements SavingsProtocol {
         try {
             const lPoolAdressProviderContract = createContract<AaveLendingPoolAddressProvider>(
                 web3,
-                getSavingsConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS,
+                getAaveConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS,
                 AaveLendingPoolAddressProviderABI as AbiItem[],
             )
 

@@ -61,12 +61,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                         ) : null}
 
                         {selectedProtocol ? (
-                            <SavingsForm
-                                tab={tab}
-                                chainId={chainId}
-                                protocol={selectedProtocol}
-                                onClose={onClose}
-                            />
+                            <SavingsForm tab={tab} chainId={chainId} protocol={selectedProtocol} onClose={onClose} />
                         ) : (
                             <>
                                 <div className={classes.abstractTabWrapper}>

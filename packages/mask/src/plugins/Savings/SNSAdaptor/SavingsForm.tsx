@@ -13,7 +13,13 @@ import {
     formatCurrency,
     formatBalance,
 } from '@masknet/web3-shared-evm'
-import { TokenAmountPanel, FormattedCurrency, LoadingAnimation, TokenIcon, useRemoteControlledDialog } from '@masknet/shared'
+import {
+    TokenAmountPanel,
+    FormattedCurrency,
+    LoadingAnimation,
+    TokenIcon,
+    useRemoteControlledDialog,
+} from '@masknet/shared'
 import { useTokenPrice } from '../../Wallet/hooks/useTokenPrice'
 import { useI18N } from '../../../utils'
 import { useStyles } from './SavingsFormStyles'
