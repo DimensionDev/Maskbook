@@ -101,7 +101,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
             titleBarIconStyle={isDashboard ? 'close' : 'back'}
             open={open}
             onClose={onClose}
-            title={t('plugin_wallet_select_a_token')}>
+            title={isDashboard ? t('add_token') : t('plugin_wallet_select_a_token')}>
             <DialogContent classes={{ root: classes.content }}>
                 <ERC20TokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
