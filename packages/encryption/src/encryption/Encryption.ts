@@ -213,17 +213,7 @@ async function v37EncryptionE2E(options: EncryptOptions, io: EncryptIO): Promise
         ownersAESKeyEncrypted: await ownersAESKeyEncrypted,
     }
 
-    const payload = encodePayload
-        .NoSign({
-            version: -38,
-            author: options.author.isUnknown ? None : Some(options.author),
-            authorPublicKey: authorPublic,
-            encryption,
-            encrypted: await encryptedMessage,
-            signature: None,
-        })
-        .then((x) => x.unwrap())
-
+    // we must ensure ecdh is all resolved, otherwise we may miss some result of ephemeralPublicKey.
     const ecdhResult: EncryptResult['e2e'] = new IdentifierMap(new Map(), ProfileIdentifier)
     for (const [index, result] of await ecdh) {
         ecdhResult.set(options.target.target[index], result)
@@ -232,10 +222,19 @@ async function v37EncryptionE2E(options: EncryptOptions, io: EncryptIO): Promise
         encryption.ephemeralPublicKey.set(curve, (await keys)[0])
     }
 
+    const payload = await encodePayload.NoSign({
+        version: -38,
+        author: options.author.isUnknown ? None : Some(options.author),
+        authorPublicKey: authorPublic,
+        encryption,
+        encrypted: await encryptedMessage,
+        signature: None,
+    })
+
     return {
         author: options.author,
         identifier: new PostIVIdentifier(options.author.network, encodeArrayBuffer(iv)),
-        output: await payload,
+        output: payload.unwrap(),
         postKey: postKey,
         e2e: ecdhResult,
     }
