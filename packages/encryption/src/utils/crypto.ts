@@ -49,7 +49,7 @@ export function encryptWithAES(kind: AESAlgorithmEnum, key: CryptoKey, iv: Uint8
         [AESAlgorithmEnum.A256GCM]: { name: 'AES-GCM', iv } as AesGcmParams,
     } as const
     return Result.wrapAsync(() => {
-        return crypto.subtle.encrypt(param[kind], key, message) as Promise<Uint8Array>
+        return crypto.subtle.encrypt(param[kind], key, message).then((x) => new Uint8Array(x))
     })
 }
 export function decryptWithAES(kind: AESAlgorithmEnum, key: CryptoKey, iv: Uint8Array, message: Uint8Array) {
