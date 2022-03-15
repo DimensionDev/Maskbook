@@ -10,7 +10,9 @@ import { TokenListAPI } from './token-list'
 import { TokenPriceAPI } from './token-price'
 
 export * from './types'
+export * from './hooks'
 export * from './opensea/utils'
+export * from './NextID'
 
 export const OpenSea = new OpenSeaAPI()
 export const Rarible = new RaribleAPI()

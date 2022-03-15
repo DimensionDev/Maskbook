@@ -1,7 +1,7 @@
 /* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
-import type { TypedMessage, TypedMessageTuple } from '@masknet/typed-message'
+import type { TypedMessage } from '@masknet/typed-message'
 import type { ScopedStorage, ProfileIdentifier, PersonaIdentifier } from '@masknet/shared-base'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
@@ -141,7 +141,6 @@ export namespace Plugin.Shared {
         init(signal: AbortSignal, context: Context): void | Promise<void>
     }
     export interface Utilities {}
-    export type TypedMessageTransformer = (message: TypedMessageTuple) => TypedMessageTuple
     /** The publisher of the plugin */
     export interface Publisher {
         /** The name of the publisher */
@@ -714,6 +713,7 @@ export enum PluginId {
     Flow = 'com.mask.flow',
     RSS3 = 'bio.rss3',
     RedPacket = 'com.maskbook.red_packet',
+    RedPacketNFT = 'com.maskbook.red_packet_nft',
     Pets = 'com.maskbook.pets',
     Snapshot = 'org.snapshot',
     ITO = 'com.maskbook.ito',

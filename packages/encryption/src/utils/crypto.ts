@@ -2,7 +2,6 @@ import { AESCryptoKey, CheckedError } from '@masknet/shared-base'
 import { Result, Ok } from 'ts-results'
 import { AESAlgorithmEnum, PublicKeyAlgorithmEnum } from '../payload'
 import { CryptoException } from '../types'
-
 export function importAESFromJWK(key: JsonWebKey, kind: AESAlgorithmEnum): Promise<Result<AESCryptoKey, unknown>> {
     return Result.wrapAsync(() => {
         const param: Record<AESAlgorithmEnum, AesKeyAlgorithm> = {
@@ -49,7 +48,7 @@ export function encryptWithAES(kind: AESAlgorithmEnum, key: CryptoKey, iv: Uint8
         [AESAlgorithmEnum.A256GCM]: { name: 'AES-GCM', iv } as AesGcmParams,
     } as const
     return Result.wrapAsync(() => {
-        return crypto.subtle.encrypt(param[kind], key, message) as Promise<Uint8Array>
+        return crypto.subtle.encrypt(param[kind], key, message).then((x) => new Uint8Array(x))
     })
 }
 export function decryptWithAES(kind: AESAlgorithmEnum, key: CryptoKey, iv: Uint8Array, message: Uint8Array) {

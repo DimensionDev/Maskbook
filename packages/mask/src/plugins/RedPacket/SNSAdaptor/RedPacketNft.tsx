@@ -224,6 +224,10 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: 16,
         height: '160px !important',
     },
+    imgWrapper: {
+        maxWidth: 180,
+        marginBottom: 10,
+    },
     assetPlayerVideoIframe: {
         minWidth: 'fit-content',
     },
@@ -375,6 +379,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                                     classes.assetPlayerIframe,
                                     sourceType === 'video' ? classes.assetPlayerVideoIframe : '',
                                 ),
+                                imgWrapper: classes.imgWrapper,
                                 loadingFailImage: classes.loadingFailImage,
                             }}
                             fallbackImage={new URL('./assets/nft-preview.png', import.meta.url)}

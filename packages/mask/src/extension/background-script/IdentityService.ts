@@ -2,8 +2,8 @@ import * as bip39 from 'bip39'
 import { validateMnemonic } from 'bip39'
 import { decode, encode } from '@msgpack/msgpack'
 import { decodeArrayBuffer, decodeText, encodeArrayBuffer } from '@dimensiondev/kit'
+import { createPersonaByJsonWebKey } from '../../../background/database/persona/helper'
 import {
-    createPersonaByJsonWebKey,
     loginPersona,
     personaRecordToPersona,
     queryAvatarDataURL,
@@ -390,6 +390,11 @@ export const getCurrentPersonaAvatar = async () => {
     }
 }
 // #endregion
+
+export async function exportPersonaMnemonicWords(identifier: PersonaIdentifier) {
+    const record = await queryPersonaRecord(identifier)
+    return record?.mnemonic?.words
+}
 
 // #region Private / Public key
 export async function exportPersonaPrivateKey(identifier: PersonaIdentifier) {

@@ -57,12 +57,15 @@ export function OperationFooter({
                 </ActionButton>
             )
         }
+        const isLoading =
+            [TransactionStateType.HASH, TransactionStateType.WAIT_FOR_CONFIRMING].includes(claimState.type) ||
+            [TransactionStateType.HASH, TransactionStateType.WAIT_FOR_CONFIRMING].includes(refundState.type)
+
         return (
             <ActionButton
                 fullWidth
-                disabled={
-                    claimState.type === TransactionStateType.HASH || refundState.type === TransactionStateType.HASH
-                }
+                disabled={isLoading}
+                loading={isLoading}
                 variant="contained"
                 size="large"
                 onClick={onClaimOrRefund}>
@@ -83,9 +86,11 @@ export function OperationFooter({
                 connectWallet: classes.connectWallet,
             }}>
             <Box className={classes.footer}>
-                <ActionButton variant="contained" fullWidth size="large" onClick={handleShare}>
-                    {t('share')}
-                </ActionButton>
+                {canRefund ? null : (
+                    <ActionButton variant="contained" fullWidth size="large" onClick={handleShare}>
+                        {t('share')}
+                    </ActionButton>
+                )}
                 <ObtainButton />
             </Box>
         </EthereumWalletConnectedBoundary>

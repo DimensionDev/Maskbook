@@ -1,7 +1,7 @@
 import { encodeText, delay } from '@dimensiondev/kit'
 import { type DashboardRoutes, PopupRoutes } from '@masknet/shared-base'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
-import { createPersonaByJsonWebKey } from '../../database'
+import { createPersonaByJsonWebKey } from '../../../background/database/persona/helper'
 import { attachProfileDB, LinkedProfileDetails } from '../../../background/database/persona/db'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
 import type { PersonaIdentifier, ProfileIdentifier, AESJsonWebKey } from '@masknet/shared-base'

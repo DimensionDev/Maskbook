@@ -16,7 +16,6 @@ export const facebookShared: SocialNetwork.Shared & SocialNetwork.Base = {
         getHomePage: () => 'https://www.facebook.com',
         getProfilePage: (userId: string) => 'https://www.facebook.com',
         isValidUsername: (v) => !!isValidFacebookUsername(v),
-        publicKeyEncoding: undefined,
         textPayloadPostProcessor: undefined,
         getPostURL,
         getShareLinkURL(message) {

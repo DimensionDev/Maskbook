@@ -7,13 +7,13 @@ import { DashboardRoutes } from '@masknet/shared-base'
 import { Restore } from '../../components/Restore'
 import { UserProvider } from '../Settings/hooks/UserContext'
 import { useMemo } from 'react'
-import type { Search } from 'history'
 
 export default function SignIn() {
     const t = useDashboardI18N()
     const navigate = useNavigate()
 
-    const { state, search } = useLocation() as { state: { from: string }; search: Search }
+    const { state: _state, search } = useLocation()
+    const state = _state as any as undefined | { from?: string }
 
     const from = new URLSearchParams(search).get('from')
 

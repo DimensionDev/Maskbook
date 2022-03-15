@@ -4,7 +4,7 @@ import urlcat from 'urlcat'
 import { first, noop } from 'lodash-unified'
 import type { ERC721ContractDetailed, ERC721TokenInfo, ERC721TokenDetailed } from '../types'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
-import { safeNonPayableTransactionCall, createERC721Token } from '../utils'
+import { safeNonPayableTransactionCall, createERC721Token, formatNFT_TokenId } from '../utils'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 import { useOpenseaAPIConstants } from '../constants'
 
@@ -16,7 +16,7 @@ export function useERC721TokenDetailed(
     const erc721TokenContract = useERC721TokenContract(contractDetailed?.address ?? '')
     const tokenDetailedRef = useRef<ERC721TokenDetailed | undefined>()
     const asyncRetry = useAsyncRetry(async () => {
-        if (!erc721TokenContract || !contractDetailed || !tokenId) return
+        if (!erc721TokenContract || !contractDetailed || !tokenId || !contractDetailed.address) return
         tokenDetailedRef.current = GET_SINGLE_ASSET_URL
             ? await getERC721TokenDetailedFromOpensea(contractDetailed, tokenId, GET_SINGLE_ASSET_URL)
             : await getERC721TokenDetailedFromChain(contractDetailed, erc721TokenContract, tokenId)
@@ -86,7 +86,7 @@ export async function getERC721TokenDetailedFromChain(
             tokenURI: queryTokenURI
                 ? await safeNonPayableTransactionCall(erc721TokenContract.methods.tokenURI(tokenId))
                 : '',
-            name: `#${tokenId}`,
+            name: formatNFT_TokenId(tokenId, 2),
             hasTokenDetailed: false,
         }
         return createERC721Token(contractDetailed, tokenInfo, tokenId)

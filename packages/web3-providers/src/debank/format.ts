@@ -1,5 +1,5 @@
 import type { WalletTokenRecord } from './type'
-import { ChainId, createNativeToken, getChainIdFromName } from '@masknet/web3-shared-evm'
+import { createNativeToken, getChainIdFromName } from '@masknet/web3-shared-evm'
 import { CurrencyType, TokenType, Web3Plugin } from '@masknet/plugin-infra'
 import { multipliedBy, rightShift, toFixed } from '@masknet/web3-shared-base'
 import DeBank from '@masknet/web3-constants/evm/debank.json'
@@ -9,13 +9,15 @@ type Asset = Web3Plugin.Asset<Web3Plugin.FungibleToken>
 export function formatAssets(data: WalletTokenRecord[]): Asset[] {
     const supportedChains = Object.values(DeBank.CHAIN_ID).filter(Boolean)
 
-    return data
-        .filter((x) => x.is_verified)
-        .map((y): Asset => {
-            const chainIdFromChain = getChainIdFromName(y.chain) ?? ChainId.Mainnet
-            const address = supportedChains.includes(y.id) ? createNativeToken(chainIdFromChain).address : y.id
+    const result: Asset[] = data.reduce((list: Asset[], y) => {
+        if (!y.is_verified) return list
+        const chainIdFromChain = getChainIdFromName(y.chain)
+        if (!chainIdFromChain) return list
+        const address = supportedChains.includes(y.id) ? createNativeToken(chainIdFromChain).address : y.id
 
-            return {
+        return [
+            ...list,
+            {
                 id: address,
                 chainId: chainIdFromChain,
                 token: {
@@ -36,6 +38,8 @@ export function formatAssets(data: WalletTokenRecord[]): Asset[] {
                     [CurrencyType.USD]: multipliedBy(y.price ?? 0, y.amount).toFixed(),
                 },
                 logoURI: y.logo_url,
-            }
-        })
+            },
+        ]
+    }, [])
+    return result
 }

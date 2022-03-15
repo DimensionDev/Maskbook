@@ -49,7 +49,7 @@ export const getFungibleAssetsFn =
             // @ts-ignore getAssetList Asset[]
             dataFromProvider = await context.getAssetsList(address, FungibleAssetProvider.DEBANK)
         }
-        const assetsFromProvider: Web3Plugin.Asset<Web3Plugin.FungibleToken>[] = dataFromProvider.map((x: any) => ({
+        const assetsFromProvider: Web3Plugin.Asset<Web3Plugin.FungibleToken>[] = dataFromProvider.map((x) => ({
             id: x.token.address,
             chainId: x.token.chainId,
             balance: x.balance,
