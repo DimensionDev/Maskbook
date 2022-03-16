@@ -119,7 +119,6 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
             onDisconnect(profile)
         }
         const userIdBox = (profile: ProfileIdentifier) => {
-            const proofSupport = ['twitter.com'].includes(profile.network)
             const isProved = proof?.proofs.find((x) => {
                 return x.platform === 'twitter' && x.identity === profile.userId.toLowerCase()
             })
@@ -129,11 +128,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                     <div
                         className={classes.proofIconBox}
                         onClick={(e: MouseEvent) => handleProofIconClick(e, isProved)}>
-                        {!proofSupport ? null : isProved?.is_valid ? (
-                            <NextIdPersonaVerifiedIcon />
-                        ) : (
-                            <NextIdPersonaWarningIcon />
-                        )}
+                        {isProved?.is_valid ? <NextIdPersonaVerifiedIcon /> : <NextIdPersonaWarningIcon />}
                     </div>
                 </div>
             )

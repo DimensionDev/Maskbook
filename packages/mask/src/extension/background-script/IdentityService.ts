@@ -61,7 +61,6 @@ import { MaskMessages } from '../../utils'
 import { split_ec_k256_keypair_into_pub_priv } from '../../modules/CryptoAlgorithm/helper'
 import { first, orderBy } from 'lodash-unified'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
-import { queryExistedBindingByPersona } from '@masknet/web3-providers'
 
 assertEnvironment(Environment.ManifestBackground)
 
@@ -180,13 +179,11 @@ export async function queryOwnedPersonaInformation(): Promise<PersonaInformation
     const result: PersonaInformation[] = []
     for (const persona of personas.sort((a, b) => (a.updatedAt > b.updatedAt ? 1 : -1))) {
         const map: ProfileInformation[] = []
-        const _proof = await queryExistedBindingByPersona(persona.publicHexKey as string)
         result.push({
             nickname: persona.nickname,
             identifier: persona.identifier,
             linkedProfiles: map,
             publicHexKey: persona.publicHexKey,
-            proof: _proof,
         })
         for (const [profile] of persona.linkedProfiles) {
             const linkedProfile = await queryProfile(profile)
