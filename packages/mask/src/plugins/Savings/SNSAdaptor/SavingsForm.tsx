@@ -6,12 +6,13 @@ import { unreachable } from '@dimensiondev/kit'
 import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import {
     EthereumTokenType,
-    useNativeTokenDetailed,
     useFungibleTokenBalance,
     useWeb3,
     useAccount,
     formatCurrency,
     formatBalance,
+    isSameAddress,
+    useTokenConstants,
 } from '@masknet/web3-shared-evm'
 import {
     TokenAmountPanel,
@@ -41,13 +42,12 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const { value: nativeTokenDetailed } = useNativeTokenDetailed()
     const web3 = useWeb3({ chainId })
     const account = useAccount()
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
     const [inputAmount, setInputAmount] = useState('')
     const [estimatedGas, setEstimatedGas] = useState<BigNumber.Value>(new BigNumber('0'))
-    const [loading, setLoading] = useState(false)
 
     const { value: nativeTokenBalance } = useFungibleTokenBalance(EthereumTokenType.Native, '', chainId)
 
@@ -70,34 +70,41 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
     }, [protocol, openSwapDialog])
 
     // #region form variables
-    const tokenAmount = useMemo(() => new BigNumber(rightShift(inputAmount || '0', 18)), [inputAmount])
-    const inputAsBN = useMemo(() => new BigNumber(rightShift(inputAmount, 18)), [inputAmount])
+    const { value: inputTokenBalance } = useFungibleTokenBalance(
+        isSameAddress(protocol.bareToken.address, NATIVE_TOKEN_ADDRESS)
+            ? EthereumTokenType.Native
+            : protocol.bareToken.type ?? EthereumTokenType.Native,
+        protocol.bareToken.address,
+        chainId,
+    )
+    const tokenAmount = useMemo(
+        () => new BigNumber(rightShift(inputAmount || '0', protocol.bareToken.decimals)),
+        [inputAmount, protocol.bareToken.decimals],
+    )
     const balanceAsBN = useMemo(
-        () => (TabType.Deposit ? new BigNumber(nativeTokenBalance || '0') : protocol.balance),
-        [nativeTokenBalance, protocol.balance],
+        () => (tab === TabType.Deposit ? new BigNumber(inputTokenBalance || '0') : protocol.balance),
+        [tab, protocol.balance, inputTokenBalance],
     )
 
-    useAsync(async () => {
-        if (!(inputAsBN.toNumber() > 0)) return
+    const { loading } = useAsync(async () => {
+        if (!(tokenAmount.toNumber() > 0)) return
         try {
-            setLoading(true)
             setEstimatedGas(
                 tab === TabType.Deposit
-                    ? await protocol.depositEstimate(account, chainId, web3, inputAsBN)
-                    : await protocol.withdrawEstimate(account, chainId, web3, inputAsBN),
+                    ? await protocol.depositEstimate(account, chainId, web3, tokenAmount)
+                    : await protocol.withdrawEstimate(account, chainId, web3, tokenAmount),
             )
         } catch {
             // do nothing
-        } finally {
-            setLoading(false)
+            console.log('Failed to estimate gas')
         }
-    }, [chainId, tab, protocol, inputAsBN])
+    }, [chainId, tab, protocol, tokenAmount])
     // #endregion
 
     // #region form validation
     const validationMessage = useMemo(() => {
         if (tokenAmount.isZero() || !inputAmount) return t('plugin_trader_error_amount_absence')
-        if (isLessThan(inputAsBN, 0)) return t('plugin_trade_error_input_amount_less_minimum_amount')
+        if (isLessThan(tokenAmount, 0)) return t('plugin_trade_error_input_amount_less_minimum_amount')
 
         if (isLessThan(balanceAsBN.minus(estimatedGas), tokenAmount)) {
             return t('plugin_trader_error_insufficient_balance', {
@@ -108,7 +115,10 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
         return ''
     }, [inputAmount, tokenAmount, nativeTokenBalance, balanceAsBN])
 
-    const tokenPrice = useTokenPrice(chainId, undefined)
+    const tokenPrice = useTokenPrice(
+        chainId,
+        !isSameAddress(protocol.bareToken.address, NATIVE_TOKEN_ADDRESS) ? protocol.bareToken.address : undefined,
+    )
 
     const tokenValueUSD = useMemo(
         () => (inputAmount ? new BigNumber(inputAmount).times(tokenPrice).toFixed(2) : '0'),
@@ -128,7 +138,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                             maxAmount={balanceAsBN.minus(estimatedGas).toString()}
                             balance={balanceAsBN.toString()}
                             label={t('plugin_savings_amount')}
-                            token={nativeTokenDetailed}
+                            token={protocol.bareToken}
                             onAmountChange={setInputAmount}
                             InputProps={{ classes: { root: classes.inputTextField } }}
                             MaxChipProps={{ classes: { root: classes.maxChip } }}

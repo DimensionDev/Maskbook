@@ -44,7 +44,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
         <TargetChainIdContext.Provider>
             <AllProviderTradeContext.Provider>
                 <InjectedDialog
-                    open
+                    open={open}
                     title={t('plugin_savings')}
                     onClose={() => {
                         if (selectedProtocol === null) {

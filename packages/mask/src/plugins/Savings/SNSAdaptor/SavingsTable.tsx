@@ -96,8 +96,8 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
                 </Grid>
             </Grid>
 
-            {protocols.map((protocol) => (
-                <Grid container spacing={0} className={classes.tableRow} key={protocol.type}>
+            {protocols.map((protocol, index) => (
+                <Grid container spacing={0} className={classes.tableRow} key={index}>
                     <Grid item xs={4} className={classes.tableCell}>
                         <div className={classes.logoWrap}>
                             <TokenIcon
