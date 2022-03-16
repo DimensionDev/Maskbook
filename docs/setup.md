@@ -72,7 +72,9 @@ To debug _background service_, click links right after **Inspect views**
 
 ### Debug the content script
 
-Mask Network only injects content script with the permission approved by the user. For each new SNS website that Mask Network is going to support. It will present a prompt dialog for asking permission dynamically, rather than asking for all mightly permission at the plugin got installed.
+Mask Network only injects content script with permission from the user.
+
+For every new website that Mask Network is going to support, it will show a prompt dialog to ask permission dynamically, rather than asking for all mightly permission at the plugin got installed.
 
 To debug _content script_, open the dev tools in the web page,
 then you can select context as the following picture describes.
