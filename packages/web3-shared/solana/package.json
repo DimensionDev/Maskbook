@@ -5,7 +5,7 @@
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@masknet/web3-constants": "workspace:*",
-    "@masknet/web3-kit": "workspace:*",
+    "@masknet/web3-shared-base": "workspace:*",
     "react-use": "^17.3.2",
     "urlcat": "^2.0.4"
   }

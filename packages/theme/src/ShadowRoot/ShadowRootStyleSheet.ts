@@ -14,22 +14,27 @@ export class StyleSheet {
     readonly tags: any = []
     readonly container = document.createElement('div')
     readonly isSpeedy = false
-    constructor(public key: string, containerShadow: ShadowRoot) {
-        this.implementation =
-            constructableStyleSheetEnabled && 'adoptedStyleSheets' in Document.prototype
-                ? new ConstructableStyleSheet()
-                : new SynchronizeStyleSheet()
-        this.addContainer(containerShadow)
+    readonly key: string
+    constructor(options: { key: string; container: HTMLElement | ShadowRoot }) {
+        this.key = options.key
+        if (options.container instanceof ShadowRoot) {
+            this.implementation =
+                constructableStyleSheetEnabled && 'adoptedStyleSheets' in Document.prototype
+                    ? new ConstructableStyleSheet()
+                    : new SynchronizeStyleSheet()
+            this.addContainer(options.container)
+            Reflect.set(this.container, 'sheet', this)
+        } else {
+            // global style
+            const un_global = Reflect.get(options.container, 'sheet')
+            if (!(un_global instanceof StyleSheet)) throw new TypeError()
 
-        // fix the global styles
-        this.container.insertBefore = (child) => {
-            if (child instanceof HTMLStyleElement) {
-                child.appendChild = (child) => {
-                    if (child instanceof Text) this.implementation.insertGlobal(child.wholeText)
-                    return child
-                }
-            }
-            return child
+            return {
+                tags: [],
+                key: options.key,
+                insert: un_global.implementation.insertGlobal.bind(un_global.implementation),
+                flush: un_global.implementation.flushGlobal.bind(un_global.implementation),
+            } as any
         }
     }
     addContainer(container: ShadowRoot) {
@@ -60,7 +65,7 @@ export class StyleSheet {
         this.implementation.flush()
         this._alreadyInsertedOrderInsensitiveRule = false
     }
-    private implementation: ConstructableStyleSheet | SynchronizeStyleSheet
+    private implementation!: ConstructableStyleSheet | SynchronizeStyleSheet
     private _alreadyInsertedOrderInsensitiveRule = false
 }
 class ConstructableStyleSheet {
@@ -79,8 +84,10 @@ class ConstructableStyleSheet {
         insertRuleSpeedy(this.globalSheet, rule)
     }
     flush() {
-        this.sheet.replace('')
-        this.globalSheet.replace('')
+        this.sheet.replaceSync('')
+    }
+    flushGlobal() {
+        this.globalSheet.replaceSync('')
     }
 }
 class SynchronizeStyleSheet {
@@ -135,8 +142,10 @@ class SynchronizeStyleSheet {
                 tag.remove()
             }
         }
-        // TODO: how should we flush global styles?
         this.ctr = 0
+    }
+    flushGlobal() {
+        this.globalStyles.forEach((x) => (x.innerText = ''))
     }
     private _insertTag = () => {
         for (const container of this.containers.values()) {

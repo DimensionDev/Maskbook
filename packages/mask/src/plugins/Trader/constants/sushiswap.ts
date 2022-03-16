@@ -1,5 +1,5 @@
-import { ChainId } from '@masknet/web3-shared-evm'
 import {
+    ChainId,
     DAI,
     MSKA,
     MSKB,
@@ -17,7 +17,8 @@ import {
     BTCB,
     CUSD,
     CEUR,
-} from './trader'
+} from '@masknet/web3-shared-evm'
+
 import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'
 
 /**
