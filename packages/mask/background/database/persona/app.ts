@@ -30,6 +30,10 @@ import type {
 } from '@masknet/public-api'
 import { MaskMessages } from '../../../shared'
 import { convertPersonaHexPublicKey } from './util'
+
+export async function createPersonaDBReadonlyAccess(action: () => Promise<void>) {
+    await action()
+}
 export async function consistentPersonaDBWriteAccess(action: () => Promise<void>) {
     await action()
 }

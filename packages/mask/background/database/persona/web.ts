@@ -145,6 +145,13 @@ export async function createRelationsTransaction() {
     return createTransaction(database, 'readwrite')('relations')
 }
 
+export async function createPersonaDBReadonlyAccess(
+    action: (t: FullPersonaDBTransaction<'readonly'>) => Promise<void>,
+) {
+    const database = await db()
+    const transaction = createTransaction(database, 'readonly')('personas', 'profiles', 'relations')
+    await action(transaction)
+}
 // @deprecated Please create a transaction directly
 export async function consistentPersonaDBWriteAccess(
     action: (t: FullPersonaDBTransaction<'readwrite'>) => Promise<void>,

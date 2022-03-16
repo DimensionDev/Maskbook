@@ -5,7 +5,8 @@ import type {} from 'react-dom/next'
 
 import './initialization/isolated_bridge'
 import './initialization/i18n'
-import ReactDOM from 'react-dom'
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
 import Dashboard from './initialization/Dashboard'
 
 if (import.meta.webpackHot) {
@@ -14,4 +15,8 @@ if (import.meta.webpackHot) {
     document.getElementById('warning')?.remove()
 }
 
-ReactDOM.createRoot(document.getElementById('root')!).render(<Dashboard />)
+createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+        <Dashboard />
+    </StrictMode>,
+)

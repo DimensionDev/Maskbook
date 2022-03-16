@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useContainer } from 'unstated-next'
 import { Asset, formatBalance } from '@masknet/web3-shared-evm'
 import { PopupRoutes } from '@masknet/shared-base'
@@ -42,11 +42,11 @@ const useStyles = makeStyles()({
 })
 
 export const AssetsList = memo(() => {
-    const history = useHistory()
+    const navigate = useNavigate()
     const { assets, setCurrentToken } = useContainer(WalletContext)
     const onItemClick = useCallback((asset: Asset) => {
         setCurrentToken(asset)
-        history.push(PopupRoutes.TokenDetail)
+        navigate(PopupRoutes.TokenDetail)
     }, [])
     return <AssetsListUI dataSource={assets} onItemClick={onItemClick} />
 })
