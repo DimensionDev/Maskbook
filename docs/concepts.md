@@ -16,6 +16,6 @@
 
 ## Plugin
 
-## Network (Network as Plugin)
+## Network
 
 ## ChainId

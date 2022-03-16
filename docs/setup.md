@@ -60,7 +60,9 @@ For Firefox, it's quite the same process.
 
 ## Debugging
 
-There is no difference between extension development and normal web development. As normal web development, only one front-end page to have, but an extension could have more than one page simultaneously. A background page without a user interface running all the time and an options page just like a normal web page with which users can interact. Moreover, an extension could inject content script into the currently visiting page with the allowance from the users.
+There is no difference between extension development and normal web development. In normal web development, you only have a single web page (SPA), but an extension could have more than one page.
+
+There is an invisible "background page" running all the time and an "options page" like a normal web page. Moreover, an extension could inject "content script" into the currently visiting web page.
 
 ### Debug the background page
 
