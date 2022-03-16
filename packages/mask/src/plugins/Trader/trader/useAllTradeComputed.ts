@@ -199,16 +199,11 @@ export function useAllTradeComputed(
     } = useUniswapV2Like(tradeProviders, TradeProvider.WANNASWAP, inputAmount_, inputToken, outputToken)
 
     // ubeswap
-    const ubeswap_ = useUniswapV2Trade(
-        TradeProvider.UBESWAP,
-        TradeStrategy.ExactIn,
-        inputAmount_,
-        '0',
-        tradeProviders.some((x) => x === TradeProvider.UBESWAP) ? inputToken : undefined,
-        tradeProviders.some((x) => x === TradeProvider.UBESWAP) ? outputToken : undefined,
-    )
-    const ubeswap = useUniswapTradeComputed(ubeswap_.value, inputToken, outputToken, temporarySlippage)
-    const ubeswapEstimateGas = useUniswapTradeGasLimit(ubeswap, TradeProvider.UBESWAP)
+    const {
+        trader_: ubeswap_,
+        trader: ubeswap,
+        traderEstimateGas: ubeswapEstimateGas,
+    } = useUniswapV2Like(tradeProviders, TradeProvider.UBESWAP, inputAmount_, inputToken, outputToken)
 
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
