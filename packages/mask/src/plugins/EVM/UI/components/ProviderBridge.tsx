@@ -27,12 +27,6 @@ export function ProviderBridge({ providerType: expectedProviderType }: ProviderB
         return EVM_Messages.events.PROVIDER_RPC_REQUEST.on(async ({ providerType, payload }) => {
             if (expectedProviderType !== providerType) return
             try {
-                console.log('DEBUG: PROVIDER_RPC_RESPONSE request')
-                console.log({
-                    providerType,
-                    payload,
-                })
-
                 const result = await provider?.request({
                     method: payload.method,
                     params: payload.params,
@@ -45,11 +39,6 @@ export function ProviderBridge({ providerType: expectedProviderType }: ProviderB
                     error: null,
                 })
             } catch (error) {
-                console.log('DEBUG: PROVIDER_RPC_RESPONSE error')
-                console.log({
-                    error,
-                })
-
                 EVM_Messages.events.PROVIDER_RPC_RESPONSE.sendToBackgroundPage({
                     providerType: expectedProviderType,
                     payload,

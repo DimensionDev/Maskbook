@@ -26,8 +26,5 @@ export class WalletConnect implements Middleware<Context> {
             default:
                 break
         }
-
-        console.log('DEBUG: wallet connect')
-        console.log(context)
     }
 }

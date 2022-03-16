@@ -84,12 +84,6 @@ export async function connect({ chainId, providerType }: { chainId: ChainId; pro
         16,
     )
 
-    console.log('DEBUG: chain id raw')
-    console.log({
-        account,
-        chainId,
-        actualChainId,
-    })
     return {
         account,
         chainId: actualChainId,

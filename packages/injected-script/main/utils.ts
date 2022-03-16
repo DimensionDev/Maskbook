@@ -98,8 +98,6 @@ export async function handlePromise(id: number, promise: () => any) {
         const data = await promise()
         sendEvent('resolvePromise', id, data)
     } catch (error) {
-        console.log('error: handle promise')
-        console.log(error)
         // TODO:
         sendEvent('rejectPromise', id, { message: (error as Error | undefined)?.message })
     }
