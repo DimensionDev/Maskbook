@@ -9,6 +9,6 @@ export function usePersonaProof() {
     const res = useAsyncRetry(async () => {
         return queryExistedBindingByPersona(currentPersona?.publicHexKey as string)
     }, [])
-    useEffect(() => Messages.events.ownProofChange.on(res.retry), [res.retry])
+    useEffect(() => Messages.events.ownProofChanged.on(res.retry), [res.retry])
     return res
 }

@@ -154,7 +154,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
             })
 
             await waitingPost
-            MaskMessages.events.ownProofChange.sendToAll(undefined)
+            MaskMessages.events.ownProofChanged.sendToAll(undefined)
         }
     }
 

@@ -22,6 +22,6 @@ export function useDeleteBound() {
             signature: signature,
         })
         Services.Identity.detachProfile(profile)
-        Messages.events.ownProofChange.sendToAll(undefined)
+        Messages.events.ownProofChanged.sendToAll(undefined)
     })
 }
