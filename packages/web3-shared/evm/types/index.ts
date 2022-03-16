@@ -81,7 +81,6 @@ export enum ChainId {
 
     // Conflux
     Conflux = 1030,
-    Conflux_Testnet = 71,
 }
 
 export enum ProviderType {
