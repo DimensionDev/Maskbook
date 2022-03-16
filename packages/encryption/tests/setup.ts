@@ -1,10 +1,12 @@
 import { test } from '@jest/globals'
 import { webcrypto } from 'crypto'
 import { atob, btoa } from 'buffer'
+import { importEC_Key, EC_KeyCurveEnum, EC_Key } from '../src'
+import type { EC_Public_CryptoKey } from '@masknet/shared-base'
 
 test('Setup env', () => {})
 
-export const ECDH_K256_PublicKey = {
+const ECDH_K256_PublicKey = {
     /* cspell:disable-next-line */
     x: 'r9tVYAq-h0m5REaTd6eMTWBSK7ZIQszwggoiU0ao5Yw',
     /* cspell:disable-next-line */
@@ -13,6 +15,10 @@ export const ECDH_K256_PublicKey = {
     key_ops: ['deriveKey', 'deriveBits'],
     crv: 'K-256',
     kty: 'EC',
+}
+export async function ECDH_K256_Pub(): Promise<EC_Key<EC_Public_CryptoKey>> {
+    const x = await importEC_Key(ECDH_K256_PublicKey, EC_KeyCurveEnum.secp256k1)
+    return { algr: EC_KeyCurveEnum.secp256k1, key: x.unwrap() as EC_Public_CryptoKey }
 }
 
 if (!Reflect.get(globalThis, 'crypto')) {

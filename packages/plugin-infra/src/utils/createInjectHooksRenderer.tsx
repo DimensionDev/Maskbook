@@ -2,7 +2,8 @@ import type { Plugin } from '../types'
 import { useEffect, useState, useRef, memo, createContext, useContext } from 'react'
 import { ErrorBoundary } from '@masknet/shared'
 import { usePluginI18NField, PluginWrapperComponent, PluginWrapperMethods } from '../hooks'
-import { emptyPluginWrapperMethods, PluginWrapperMethodsContext } from '../hooks/usePluginWrapper'
+import { PluginWrapperMethodsContext } from '../hooks/usePluginWrapper'
+import { ShadowRootIsolation } from '@masknet/theme'
 
 type Inject<T> = Plugin.InjectUI<T>
 type Raw<T> = Plugin.InjectUIRaw<T>
@@ -18,9 +19,11 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
         if (PluginWrapperComponent) {
             return (
                 <PluginWrapperComponent definition={plugin} ref={setRef}>
-                    <PluginWrapperMethodsContext.Provider value={ref || emptyPluginWrapperMethods}>
-                        {element}
-                    </PluginWrapperMethodsContext.Provider>
+                    {ref ? (
+                        <PluginWrapperMethodsContext.Provider value={ref}>
+                            {element}
+                        </PluginWrapperMethodsContext.Provider>
+                    ) : null}
                 </PluginWrapperComponent>
             )
         }
@@ -44,16 +47,20 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
             .filter(pickInjectorHook)
             .map((plugin) => (
                 <PropsContext.Provider key={plugin.ID} value={props}>
-                    <SinglePluginWithinErrorBoundary key={plugin.ID} plugin={plugin} />
+                    <ShadowRootIsolation data-plugin={plugin.ID}>
+                        <SinglePluginWithinErrorBoundary plugin={plugin} />
+                    </ShadowRootIsolation>
                 </PropsContext.Provider>
             ))
         return <>{all}</>
     }
     return memo(function PluginsInjectionHookRenderErrorBoundary(props: PropsType) {
         return (
-            <ErrorBoundary>
-                <PluginsInjectionHookRender {...props} />
-            </ErrorBoundary>
+            <span data-plugin-render="">
+                <ErrorBoundary>
+                    <PluginsInjectionHookRender {...props} />
+                </ErrorBoundary>
+            </span>
         )
     })
 }
@@ -76,7 +83,7 @@ function RawHookRender<T>({ UI, data }: { data: T; UI: Raw<T> }) {
     }, [ref, UI.init])
     useEffect(() => void f?.(data), [f, data])
 
-    return <div ref={(r) => ref === r || setRef(r)} />
+    return <div ref={setRef} />
 }
 function isRawInjectHook<T>(x: Inject<T>): x is Raw<T> {
     return 'type' in x && x.type === 'raw'

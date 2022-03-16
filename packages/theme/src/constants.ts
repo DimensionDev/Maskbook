@@ -160,6 +160,16 @@ export function useMaskColor() {
     return getMaskColor(useTheme())
 }
 
+export function CSSVariableInjectorCSS(scheme: PaletteMode) {
+    const ns: Record<string, string> = scheme === 'light' ? LightColor : DarkColor
+    const result: Record<string, string> = {}
+    for (const key in ns) {
+        // --mask-name: val;
+        result[`--mask-${kebabCase(key)}`] = ns[key]
+        result[`--mask-${kebabCase(key)}-fragment`] = getRGBFragment(ns, key)
+    }
+    return { ':root, :host': result }
+}
 export function applyMaskColorVars(node: HTMLElement, scheme: PaletteMode) {
     const ns: Record<string, string> = scheme === 'light' ? LightColor : DarkColor
     if (node === document.body) {
