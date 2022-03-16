@@ -27,6 +27,7 @@ As a quick example to let you know how all stuff spins. Here is a UI button that
 
 ```tsx
 import { useWeb3 } from '@masknet/web3-shared-evm'
+
 function Example() {
   const web3 = useWeb3()
   const onClick = useCallback(async () => {
@@ -75,7 +76,7 @@ The implementation of Ethereum JSON-RPC may very different between wallets. Thos
 
 <!-- spell-checker: disable-next-line -->
 
-For this sake, the [`composer`](https://github.com/DimensionDev/Maskbook/blob/develop/packages/mask/src/extension/background-script/EthereumServices/composer.ts) creates a middleware for intercepting JSON-RPC requests. Here is a quick example that converts the Mask Network flavored [`mask_requestAccounts`](./mask-flavored-jsonrpc-api.md#mask_requestaccounts) into an Ethereum styled [`eth_accounts`](https://eth.wiki/json-rpc/API#eth_accounts).
+For this sake, the [`composer`](https://github.com/DimensionDev/Maskbook/blob/develop/packages/mask/src/extension/background-script/EthereumServices/composer.ts) creates a middleware for intercepting JSON-RPC requests. Here is a quick example that converts the Mask Network flavored [`mask_requestAccounts`](./mask-flavored-**jsonrpc**-api.md#mask_requestaccounts) into an Ethereum styled [`eth_accounts`](https://eth.wiki/json-rpc/API#eth_accounts).
 
 ```ts
 export class Example implements Middleware<Context> {

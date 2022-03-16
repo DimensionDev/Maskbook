@@ -80,15 +80,14 @@ Congratulation! You have done the coding part.
 
 ## Testing Checklist
 
-Before we ship the chain to the user, we need to do basic ability checks.
+Here is a checklist for the basic abilities of a chain. Also, if you are a hunter of chain bounty, please do this list before inviting the team.
 
 - [ ] Check if the asset list and transaction history on the dashboard page work when you choose the chain as the network.
   - Setup the chain for DeBank API.
 - [ ] Check if the trending view is working. Try to hover a new chain token in any tweets.
+
   - Setup the chain for Coingecko API.
   - Setup the chain for CoinMarketCap API.
-
-![image](https://user-images.githubusercontent.com/52657989/144754788-460bad98-bf62-4e5e-8592-ea8580430e63.png)
 
 - [ ] Check if the gas estimate dialog is working.
 

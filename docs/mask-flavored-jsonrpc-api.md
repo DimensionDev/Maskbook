@@ -4,7 +4,7 @@
 
 ## Transaction
 
-### mask_watchTransaction
+### `mask_watchTransaction`
 
 Periodically retrieve the transaction receipt and cache the result in the background.
 
@@ -19,7 +19,7 @@ Periodically retrieve the transaction receipt and cache the result in the backgr
 
 - `void`
 
-### mask_unwatchTransaction
+### `mask_unwatchTransaction`
 
 Stop watching a transaction. It means invoke [`eth_getTransactionReceipt`](https://eth.wiki/json-rpc/API#eth_gettransactionreceipt) with the given hash will always return `null`.
 
@@ -31,11 +31,11 @@ Stop watching a transaction. It means invoke [`eth_getTransactionReceipt`](https
 
 - `void`
 
-### mask_getTransactionReceipt
+### `mask_getTransactionReceipt`
 
 The non-hijacked version of [`eth_getTransactionReceipt`](https://eth.wiki/json-rpc/API#eth_gettransactionreceipt).
 
-### mask_replaceTransaction
+### `mask_replaceTransaction`
 
 Replace a transaction with the given one.
 
@@ -48,7 +48,7 @@ Replace a transaction with the given one.
 
 - `void`
 
-### mask_cancelTransaction
+### `mask_cancelTransaction`
 
 Cancel the given transaction.
 
@@ -61,7 +61,7 @@ Cancel the given transaction.
 
 - `void`
 
-### mask_confirmTransaction
+### `mask_confirmTransaction`
 
 Confirm to send a risk transaction.
 
@@ -73,7 +73,7 @@ Confirm to send a risk transaction.
 
 - `void`
 
-### mask_rejectTransaction
+### `mask_rejectTransaction`
 
 Reject to send a risk transaction.
 
@@ -87,7 +87,7 @@ Reject to send a risk transaction.
 
 ## Wallet
 
-### mask_requestAccounts
+### `mask_requestAccounts`
 
 Connect to any wallet on the back of Mask Network.
 
@@ -100,7 +100,7 @@ Connect to any wallet on the back of Mask Network.
 
 - `void`
 
-### mask_dismissAccounts
+### `mask_dismissAccounts`
 
 Disconnect with the connected wallet.
 

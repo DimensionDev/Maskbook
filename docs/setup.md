@@ -68,7 +68,7 @@ There is an invisible "background page" running all the time and an "options pag
 
 The background page of the Mask Network extension maintains a bunch of fundamental services for front-end functions. Like Crypto Algorithm, Web3 SDKs, APIs to many third-party data providers, etc. They are stand-by all the time, once to be called for a specific task.
 
-To debug _background service_, click links right after **Inspect views**
+To debug _background service_, click links right after **Inspect views**.
 
 ![An image displaying Chrome extension manage page](https://user-images.githubusercontent.com/5390719/103509131-5ce0cb00-4e9d-11eb-9aec-b24b9888b863.png)
 
@@ -78,8 +78,9 @@ Mask Network only injects content script with permission from the user.
 
 For every new website that Mask Network is going to support, it will show a prompt dialog to ask permission dynamically, rather than asking for all mightly permission at the plugin got installed.
 
-To debug _content script_, open the dev tools in the web page,
-then you can select context as the following picture describes.
+![An image displaying the Mask Network is asking the permission from the user](https://user-images.githubusercontent.com/52657989/158566232-30c52a17-0168-488c-a292-4fc4059ecb9c.png)
+
+To debug _content script_, open the dev tools in the web page, then you can select context as the following picture describes.
 
 ![An image displaying how to select Mask Network as the debug context](https://user-images.githubusercontent.com/5390719/103509436-1a6bbe00-4e9e-11eb-9b18-bde021337944.png)
 

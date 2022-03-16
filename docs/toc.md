@@ -52,7 +52,7 @@
 
 - Why there are two plugins folder in the codebase?
 - How to bypass the CSP constraint?
-- Help! My service doesn’t return a CORS header.
+- Help! My API server doesn’t return a CORS header.
 - How to read and clean my local settings?
 - How to fix cspell errors?
 - How to close react strict mode?
