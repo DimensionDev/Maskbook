@@ -95,7 +95,7 @@ Due to bug <https://github.com/facebook/react/issues/20377>, React Devtools conf
 
 Please use the following command, and it will start the development process in profile mode, which disables React Fast Refresh and enables React Devtools.
 
-> pnpx dev profile
+> pnpx dev --profile
 
 ## Contribute your working
 
