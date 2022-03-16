@@ -10,9 +10,9 @@ const CancelableJobs: CancelableJob[] = [
     NewInstalled,
     process.env.manifest === '2' ? InjectContentScript : InjectContentScriptMV3,
     IsolatedDashboardBridge,
-    CleanupProfileDatabase,
+    process.env.architecture === 'app' ? null! : CleanupProfileDatabase,
     NotificationsToMobile,
-]
+].filter(Boolean)
 
 const abort = new AbortController()
 CancelableJobs.forEach((task) => task.default(abort.signal))
