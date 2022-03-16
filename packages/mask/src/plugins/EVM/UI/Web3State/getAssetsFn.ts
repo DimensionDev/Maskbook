@@ -11,6 +11,7 @@ import {
     Web3ProviderType,
     FungibleAssetProvider,
     createExternalProvider,
+    ChainId,
 } from '@masknet/web3-shared-evm'
 import { Pageable, Pagination, TokenType, Web3Plugin } from '@masknet/plugin-infra'
 import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
@@ -19,9 +20,11 @@ import type { AbiItem } from 'web3-utils'
 import { uniqBy } from 'lodash-unified'
 import { PLUGIN_NETWORKS } from '../../constants'
 import { makeSortAssertWithoutChainFn } from '../../utils/token'
+import * as EthereumService from '../../../../extension/background-script/EthereumService'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 
-import { createGetLatestBalance } from './createGetLatestBalance'
+// native token unavailable neither from api or balance checker.
+const TokenUnavailableList = [ChainId.Conflux]
 
 export const getFungibleAssetsFn =
     (context: Web3ProviderType) =>
@@ -106,9 +109,23 @@ export const getFungibleAssetsFn =
                 balance,
             }),
         )
-        const b = await createGetLatestBalance(context)(1030, address)
-        console.log({ b })
+
         const allTokens = [...assetsFromProvider, ...assetFromChain]
+
+        const allRequest = TokenUnavailableList.map(async (x) => {
+            const b = await EthereumService.getBalance(address, { chainId: x })
+            return {
+                chainId: x,
+                balance: String(Number.parseInt(b, 16)),
+            }
+        })
+
+        const balanceResults = (await Promise.allSettled(allRequest))
+            .map((x) => (x.status === 'fulfilled' ? x.value : null))
+            .filter((x) => Boolean(x)) as {
+            chainId: ChainId
+            balance: string
+        }[]
 
         const nativeTokens: Web3Plugin.Asset<Web3Plugin.FungibleToken>[] = networks
             .filter(
@@ -122,11 +139,12 @@ export const getFungibleAssetsFn =
             )
             .map((x) => {
                 const nativeToken = createNativeToken(x.chainId)
+                const balance = balanceResults.find((y) => y.chainId === x.chainId)?.balance ?? '0'
                 return {
                     id: nativeToken.address,
                     chainId: x.chainId,
                     token: { ...nativeToken, id: nativeToken.address!, type: TokenType.Fungible },
-                    balance: '0',
+                    balance,
                 }
             })
 
