@@ -15,7 +15,7 @@ importers:
       '@dimensiondev/kit': 0.0.0-20220223101101-4e6f3b9
       '@dimensiondev/patch-package': ^6.5.0
       '@emotion/cache': ^11.7.1
-      '@emotion/react': ^11.8.1
+      '@emotion/react': ^11.8.2
       '@emotion/serialize': ^1.0.2
       '@emotion/styled': ^11.8.1
       '@emotion/utils': ^1.1.0
@@ -31,7 +31,7 @@ importers:
       '@swc/core': ^1.2.148
       '@types/lodash-es': ^4.17.6
       '@types/masknet__global-types': workspace:*
-      '@types/react': ^17.0.39
+      '@types/react': ^17.0.40
       '@types/react-dom': 17.0.13
       '@types/web': ^0.0.55
       '@typescript-eslint/experimental-utils': ^5.14.0

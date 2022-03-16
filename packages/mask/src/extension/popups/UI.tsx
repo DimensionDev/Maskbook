@@ -2,7 +2,6 @@ import { lazy } from 'react'
 import { Navigate, Route, Routes, HashRouter } from 'react-router-dom'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra'
 import { PopupRoutes } from '@masknet/shared-base'
-// eslint-disable-next-line import/no-deprecated
 import { useClassicMaskFullPageTheme } from '../../utils'
 import '../../social-network-adaptor/browser-action'
 import { Web3Provider } from '@masknet/web3-shared-evm'
@@ -12,7 +11,6 @@ import { Appearance } from '@masknet/theme'
 import { MaskUIRoot } from '../../UIRoot'
 
 function useAlwaysLightTheme() {
-    // eslint-disable-next-line import/no-deprecated
     return useClassicMaskFullPageTheme({ forcePalette: Appearance.light })
 }
 const Wallet = lazy(() => import('./pages/Wallet'))
