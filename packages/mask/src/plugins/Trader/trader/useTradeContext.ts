@@ -21,6 +21,10 @@ import {
     WANNASWAP_CUSTOM_BASES,
     TRISOLARIS_CUSTOM_BASES,
     TRISOLARIS_BASE_AGAINST_TOKENS,
+    VENONSWAP_CUSTOM_BASES,
+    VENONSWAP_BASE_AGAINST_TOKENS,
+    OPENSWAP_CUSTOM_BASES,
+    OPENSWAP_BASE_AGAINST_TOKENS,
 } from '../constants'
 import type { TradeContext as TradeContext_ } from '../types'
 import { TargetChainIdContext } from './useTargetChainIdContext'
@@ -127,6 +131,30 @@ export function useTradeContext(tradeProvider: TradeProvider) {
                     AGAINST_TOKENS: TRISOLARIS_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: TRISOLARIS_CUSTOM_BASES,
+                }
+            case TradeProvider.VENONSWAP:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.VENONSWAP_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.VENONSWAP_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.VENONSWAP_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.VENONSWAP_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: VENONSWAP_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: VENONSWAP_CUSTOM_BASES,
+                }
+            case TradeProvider.OPENSWAP:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.OPENSWAP_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.OPENSWAP_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.OPENSWAP_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.OPENSWAP_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: OPENSWAP_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: OPENSWAP_CUSTOM_BASES,
                 }
             case TradeProvider.ZRX:
                 return {

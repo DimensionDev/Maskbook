@@ -198,6 +198,20 @@ export function useAllTradeComputed(
         traderEstimateGas: wannaSwapEstimateGas,
     } = useUniswapV2Like(tradeProviders, TradeProvider.WANNASWAP, inputAmount_, inputToken, outputToken)
 
+    // VenonSwap
+    const {
+        trader_: venonswap_,
+        trader: venonswap,
+        traderEstimateGas: venonswapEstimateGas,
+    } = useUniswapV2Like(tradeProviders, TradeProvider.VENONSWAP, inputAmount_, inputToken, outputToken)
+
+    // OpenSwap
+    const {
+        trader_: openswap_,
+        trader: openswap,
+        traderEstimateGas: openswapEstimateGas,
+    } = useUniswapV2Like(tradeProviders, TradeProvider.OPENSWAP, inputAmount_, inputToken, outputToken)
+
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
         { provider: TradeProvider.SUSHISWAP, ...sushiSwap_, value: sushiSwap, gas: sushiSwapEstimateGas },
@@ -214,6 +228,8 @@ export function useAllTradeComputed(
         { provider: TradeProvider.OPENOCEAN, ...openocean_, value: openocean, gas: openoceanSwapEstimateGas },
         { provider: TradeProvider.WANNASWAP, ...wannaswap_, value: wannaswap, gas: wannaSwapEstimateGas },
         { provider: TradeProvider.TRISOLARIS, ...trisolaris_, value: trisolaris, gas: trisolarisEstimateGas },
+        { provider: TradeProvider.VENONSWAP, ...venonswap_, value: venonswap, gas: venonswapEstimateGas },
+        { provider: TradeProvider.OPENSWAP, ...openswap_, value: openswap, gas: openswapEstimateGas },
     ]
 
     return nativeToken_.value
