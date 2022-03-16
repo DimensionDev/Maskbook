@@ -14,13 +14,12 @@
     "@masknet/theme": "workspace:*",
     "@masknet/typed-message": "workspace:*",
     "@msgpack/msgpack": "^2.7.2",
-    "@masknet/web3-kit": "workspace:*",
     "arweave": "^1.10.3",
     "ipfs-http-client": "^54.0.2",
     "urlcat": "^2.0.4",
     "date-fns": "^2.28.0",
     "react-feather": "^2.0.9",
-    "react-router-dom": "5",
+    "react-router-dom": "^6.2.2",
     "react-use": "^17.3.2"
   }
 }

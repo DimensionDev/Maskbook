@@ -48,7 +48,7 @@ export const searchNewTweetButtonSelector: () => LiveSelector<E, true> = () => {
 }
 
 export const searchNickNameSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="UserProfileHeader_Items"]')
+    querySelector<E>('[data-testid="tweet"] a:not([target]) > div > div[dir="auto"] > span > span')
 export const searchAvatarSelector = () =>
     querySelector<HTMLImageElement>('[data-testid="primaryColumn"] a[href$="/photo"] img[src*="profile_images"]')
 export const searchNFTAvatarSelector = () =>

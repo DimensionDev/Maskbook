@@ -8,7 +8,7 @@ import { useAsyncFn, useUpdateEffect } from 'react-use'
 import Services from '../../../../service'
 import { LoadingButton } from '@mui/lab'
 import { toUtf8 } from 'web3-utils'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()(() => ({
@@ -82,7 +82,7 @@ const useStyles = makeStyles()(() => ({
 
 const SignRequest = memo(() => {
     const { t } = useI18N()
-    const history = useHistory()
+    const navigate = useNavigate()
     const location = useLocation()
     const { classes } = useStyles()
     const { value, loading: requestLoading } = useUnconfirmedRequest()
@@ -124,12 +124,12 @@ const SignRequest = memo(() => {
     const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
         if (!value) return
         await Services.Ethereum.rejectRequest(value.payload)
-        history.replace(PopupRoutes.Wallet)
+        navigate(PopupRoutes.Wallet, { replace: true })
     }, [value])
 
     useUpdateEffect(() => {
         if (!value && !requestLoading) {
-            history.replace(PopupRoutes.Wallet)
+            navigate(PopupRoutes.Wallet, { replace: true })
         }
     }, [value, requestLoading])
 

@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface Props extends withClasses<'loadingFailImage' | 'iframe' | 'wrapper' | 'loadingPlaceholder'> {
+interface Props extends withClasses<'loadingFailImage' | 'iframe' | 'wrapper' | 'loadingPlaceholder' | 'imgWrapper'> {
     chainId?: ChainId
     contractAddress?: string
     tokenId?: string

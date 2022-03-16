@@ -17,7 +17,8 @@ const captureEvents: (keyof HTMLElementEventMap)[] = [
     'change',
 ]
 export const setupShadowRootPortal = () => {
-    setupPortalShadowRoot({ mode: Flags.using_ShadowDOM_attach_mode })
+    const shadow = setupPortalShadowRoot({ mode: Flags.using_ShadowDOM_attach_mode })
+    createReactRootShadowed(shadow, { key: 'css-vars' }).render(<CSSVariableInjector />)
 }
 
 // https://github.com/DimensionDev/Maskbook/issues/3265 with fast refresh or import order?
