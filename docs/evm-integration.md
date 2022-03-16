@@ -57,6 +57,25 @@ If there is no one deployed [these contracts](https://github.com/DimensionDev/mi
 - [ ] BalanceChecker
 - [ ] Other contracts from the Mask team
 
+### Translate JSON-RPC
+
+For a chain that follows a different JSON-RPC protocol with the [Ethereum](https://eth.wiki/json-rpc/API), a transactor is used to `encode` and `decode` each request and make the chain just like an EVM-compatible one.
+
+E.g., the CELO chain can pay the transaction fee with non-native tokens. It supports to use [`feeCurrency`](https://docs.celo.org/celo-codebase/protocol/transactions/erc20-transaction-fees) field to set the token address, which doesn't exist in the original [`eth_sendTransaction`](https://eth.wiki/json-rpc/API#eth_sendtransaction) payload. You can fulfill this requirement by a transactor without altering any JSON-RPC facilities.
+
+```ts
+class CeloTranslator extends Base {
+  override encode(context: Context) {
+    context.config = {
+      ...context.config,
+      feeCurrency: '0x0000000000000000000000000000000000000001', // suppose it's a token address
+    }
+  }
+}
+```
+
+### 🎉
+
 Congratulation! You have done the coding part.
 
 ## Testing Checklist
@@ -72,11 +91,8 @@ Before we ship the chain to the user, we need to do basic ability checks.
 ![image](https://user-images.githubusercontent.com/52657989/144754788-460bad98-bf62-4e5e-8592-ea8580430e63.png)
 
 - [ ] Check if the gas estimate dialog is working.
+
   - Setup the chain for CoinGecko API.
-
-Goto `chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/dashboard.html#/wallets/transfer` and check the estimated USD value is working.
-
-![image](https://user-images.githubusercontent.com/52657989/144754866-9c5f389b-6eb4-4325-8f3d-ae53ee6e3b4a.png)
 
 - [ ] Trade with the DEX on the chain.
 
@@ -91,7 +107,7 @@ Goto `chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/dashboard.html#/wallet
 
 - [ ] Transfer token on the transfer page of Dashboard and the wallet tab of the plugin popup.
 
-## Learn More
+## Examples
 
 | Chain     | Pull Request Link                                    |
 | --------- | ---------------------------------------------------- |
