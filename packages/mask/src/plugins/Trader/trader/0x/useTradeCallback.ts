@@ -48,31 +48,12 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
                     ...pick(tradeComputed.trade_, ['to', 'data', 'value']),
                 })
                 .catch((error) => {
-                    console.log(error)
                     setTradeState({
                         type: TransactionStateType.FAILED,
                         error,
                     })
                     return 0
                 }),
-        }
-
-        // estimate transaction
-        try {
-            await web3.eth.call(config_)
-        } catch {
-            // for some transactions will always fail if we do estimation before a kick to the chain
-            if (
-                !confirm(
-                    'Failed to estimated the transaction, which means it may be reverted on the chain, and your transaction fee will not return. Sure to continue?',
-                )
-            ) {
-                setTradeState({
-                    type: TransactionStateType.FAILED,
-                    error: new Error('User denied the transaction.'),
-                })
-                return
-            }
         }
 
         // send transaction and wait for hash
