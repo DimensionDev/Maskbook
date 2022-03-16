@@ -21,6 +21,8 @@ import { PLUGIN_NETWORKS } from '../../constants'
 import { makeSortAssertWithoutChainFn } from '../../utils/token'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 
+import { createGetLatestBalance } from './createGetLatestBalance'
+
 export const getFungibleAssetsFn =
     (context: Web3ProviderType) =>
     async (address: string, providerType: string, network: Web3Plugin.NetworkDescriptor, pagination?: Pagination) => {
@@ -66,22 +68,28 @@ export const getFungibleAssetsFn =
             },
         }))
 
-        if (!BALANCE_CHECKER_ADDRESS) return assetsFromProvider
-        const balanceCheckerContract = createContract(web3, BALANCE_CHECKER_ADDRESS, BalanceCheckerABI as AbiItem[])
-        if (!balanceCheckerContract) return assetsFromProvider
-        let balanceList: string[]
-        try {
-            balanceList = await balanceCheckerContract?.methods
-                .balances(
-                    [address],
-                    trustedTokens.map((x) => x.address),
-                )
-                .call({
-                    from: undefined,
-                })
-            if (balanceList.length !== trustedTokens?.length) return assetsFromProvider
-        } catch {
-            balanceList = []
+        const balanceCheckerContract = createContract(
+            web3,
+            BALANCE_CHECKER_ADDRESS ?? '',
+            BalanceCheckerABI as AbiItem[],
+        )
+
+        let balanceList: string[] = []
+
+        if (BALANCE_CHECKER_ADDRESS && balanceCheckerContract) {
+            try {
+                balanceList = await balanceCheckerContract?.methods
+                    .balances(
+                        [address],
+                        trustedTokens.map((x) => x.address),
+                    )
+                    .call({
+                        from: address,
+                    })
+                if (balanceList.length !== trustedTokens?.length) return assetsFromProvider
+            } catch {
+                balanceList = []
+            }
         }
 
         const assetFromChain = balanceList.map(
@@ -98,7 +106,8 @@ export const getFungibleAssetsFn =
                 balance,
             }),
         )
-
+        const b = await createGetLatestBalance(context)(1030, address)
+        console.log({ b })
         const allTokens = [...assetsFromProvider, ...assetFromChain]
 
         const nativeTokens: Web3Plugin.Asset<Web3Plugin.FungibleToken>[] = networks
