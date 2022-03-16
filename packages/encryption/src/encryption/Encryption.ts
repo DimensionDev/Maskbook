@@ -1,5 +1,12 @@
 import { encodeArrayBuffer, unreachable } from '@dimensiondev/kit'
-import { AESCryptoKey, IdentifierMap, PostIVIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import {
+    AESCryptoKey,
+    EC_Private_CryptoKey,
+    EC_Public_CryptoKey,
+    IdentifierMap,
+    PostIVIdentifier,
+    ProfileIdentifier,
+} from '@masknet/shared-base'
 import {
     isTypedMessageText,
     encodeTypedMessageV38Format,
@@ -7,13 +14,7 @@ import {
     SerializableTypedMessages,
 } from '@masknet/typed-message'
 import { None, Option, Some } from 'ts-results'
-import {
-    AESAlgorithmEnum,
-    AsymmetryCryptoKey,
-    encodePayload,
-    PayloadWellFormed,
-    PublicKeyAlgorithmEnum,
-} from '../payload'
+import { AESAlgorithmEnum, EC_Key, encodePayload, PayloadWellFormed, EC_KeyCurveEnum } from '../payload'
 import { encryptWithAES } from '../utils'
 
 import {
@@ -95,9 +96,9 @@ async function v38EncryptionE2E(options: EncryptOptions, io: EncryptIO): Promise
     //     Note: Internal_AES is not returned by io.deriveAESKey_version38_or_older, it is internal algorithm of that method.
     const ecdh = Promise.allSettled(
         options.target.target.map(async (id): Promise<EncryptionResultE2E> => {
-            const pub = await io.queryPublicKey(id)
-            if (!pub) throw new EncryptError(EncryptErrorReasons.TargetPublicKeyNotFound)
-            const { aes, iv, ivToBePublished } = await io.deriveAESKey_version38_or_older(pub)
+            const receiverPublicKey = await io.queryPublicKey(id)
+            if (!receiverPublicKey) throw new EncryptError(EncryptErrorReasons.PublicKeyNotFound)
+            const { aes, iv, ivToBePublished } = await io.deriveAESKey_version38_or_older(receiverPublicKey.key)
             const encryptedPostKey = await encryptWithAES(AESAlgorithmEnum.A256GCM, aes, iv, await postKeyEncoded)
             return {
                 ivToBePublished,
@@ -140,7 +141,103 @@ async function v38EncryptionE2E(options: EncryptOptions, io: EncryptIO): Promise
     }
 }
 async function v37EncryptionE2E(options: EncryptOptions, io: EncryptIO): Promise<EncryptResult> {
-    throw new Error('Not implemented')
+    if (options.target.type === 'public') throw new Error('unreachable')
+
+    const iv = getIV(io)
+    const postKey = await aes256GCM(io)
+    const encodedMessage = encodeMessage(options.version, options.message)
+    const encryptedMessage = encodedMessage
+        .then((message) => encryptWithAES(AESAlgorithmEnum.A256GCM, postKey, iv, message))
+        .then((x) => x.unwrap())
+    const postKeyEncoded = crypto.subtle.exportKey('raw', postKey).then((x) => new Uint8Array(x))
+
+    const authorPublic = await queryAuthorPublicKey(options.author, io)
+    if (!authorPublic.some) throw new EncryptError(EncryptErrorReasons.PublicKeyNotFound)
+
+    const ephemeralKeys = new Map<
+        EC_KeyCurveEnum,
+        | Promise<readonly [EC_Public_CryptoKey, EC_Private_CryptoKey]>
+        | readonly [EC_Public_CryptoKey, EC_Private_CryptoKey]
+    >()
+    // get ephemeral keys, generate one if not found
+    const getEphemeralKey = async (curve: EC_KeyCurveEnum) => {
+        if (ephemeralKeys.has(curve)) return ephemeralKeys.get(curve)!
+        ephemeralKeys.set(curve, ec(io, curve))
+        return ephemeralKeys.get(curve)!
+    }
+
+    const ecdh = Promise.allSettled(
+        options.target.target.map(async (id): Promise<EncryptionResultE2E> => {
+            const receiverPublicKey = await io.queryPublicKey(id)
+            if (!receiverPublicKey) throw new EncryptError(EncryptErrorReasons.PublicKeyNotFound)
+            const [, ephemeralPrivateKey] = await getEphemeralKey(receiverPublicKey.algr)
+            const aes = await crypto.subtle.deriveKey(
+                { name: 'ECDH', public: receiverPublicKey.key },
+                ephemeralPrivateKey,
+                { name: 'AES-GCM', length: 256 },
+                true,
+                ['encrypt'],
+            )
+            // Note: we're reusing iv in the post encryption.
+            const encryptedPostKey = await encryptWithAES(AESAlgorithmEnum.A256GCM, aes, iv, await postKeyEncoded)
+            return {
+                encryptedPostKey: encryptedPostKey.unwrap(),
+                target: id,
+                // we don't need to provide `ephemeralPublicKey` field,
+                // because this is the first time encryption, the ephemeralPublicKey will be included in the payload.
+            }
+        }),
+    ).then((x) => x.entries())
+
+    const ownersAESKeyEncrypted = Promise.resolve().then(async () => {
+        const authorPublicKey = authorPublic.val
+        const [, ephemeralPrivateKey] = await getEphemeralKey(authorPublicKey.algr)
+
+        // we get rid of localKey in v38
+        const aes = await crypto.subtle.deriveKey(
+            { name: 'ECDH', public: authorPublicKey.key },
+            ephemeralPrivateKey,
+            { name: 'AES-GCM', length: 256 },
+            true,
+            ['encrypt'],
+        )
+        // Note: we're reusing iv in the post encryption.
+        const encryptedPostKey = await encryptWithAES(AESAlgorithmEnum.A256GCM, aes, iv, await postKeyEncoded)
+        return encryptedPostKey.unwrap()
+    })
+
+    const encryption: PayloadWellFormed.EndToEndEncryption = {
+        type: 'E2E',
+        ephemeralPublicKey: new Map(),
+        iv,
+        ownersAESKeyEncrypted: await ownersAESKeyEncrypted,
+    }
+
+    // we must ensure ecdh is all resolved, otherwise we may miss some result of ephemeralPublicKey.
+    const ecdhResult: EncryptResult['e2e'] = new IdentifierMap(new Map(), ProfileIdentifier)
+    for (const [index, result] of await ecdh) {
+        ecdhResult.set(options.target.target[index], result)
+    }
+    for (const [curve, keys] of ephemeralKeys) {
+        encryption.ephemeralPublicKey.set(curve, (await keys)[0])
+    }
+
+    const payload = await encodePayload.NoSign({
+        version: -38,
+        author: options.author.isUnknown ? None : Some(options.author),
+        authorPublicKey: authorPublic,
+        encryption,
+        encrypted: await encryptedMessage,
+        signature: None,
+    })
+
+    return {
+        author: options.author,
+        identifier: new PostIVIdentifier(options.author.network, encodeArrayBuffer(iv)),
+        output: payload.unwrap(),
+        postKey: postKey,
+        e2e: ecdhResult,
+    }
 }
 
 async function encodeMessage(version: -38 | -37, message: SerializableTypedMessages) {
@@ -149,15 +246,11 @@ async function encodeMessage(version: -38 | -37, message: SerializableTypedMessa
         throw new EncryptError(EncryptErrorReasons.ComplexTypedMessageNotSupportedInPayload38)
     return encodeTypedMessageV38Format(message)
 }
-async function queryAuthorPublicKey(of: ProfileIdentifier, io: EncryptIO): Promise<Option<AsymmetryCryptoKey>> {
+async function queryAuthorPublicKey(of: ProfileIdentifier, io: EncryptIO): Promise<Option<EC_Key>> {
     try {
         const key = await io.queryPublicKey(of)
         if (!key) return None
-        const k: AsymmetryCryptoKey = {
-            algr: PublicKeyAlgorithmEnum.secp256k1,
-            key,
-        }
-        return Some(k)
+        return Some(key)
     } catch (error) {
         console.warn('[@masknet/encryption] Failed when query author public key', error)
         return None
@@ -173,4 +266,21 @@ async function aes256GCM(io: EncryptIO): Promise<AESCryptoKey> {
         'encrypt',
         'decrypt',
     ])) as AESCryptoKey
+}
+
+async function ec(io: EncryptIO, kind: EC_KeyCurveEnum) {
+    if (io.getRandomECKey) return io.getRandomECKey(kind)
+    const namedCurve: Record<EC_KeyCurveEnum, string> = {
+        [EC_KeyCurveEnum.secp256p1]: 'P-256',
+        [EC_KeyCurveEnum.secp256k1]: 'K-256',
+        get [EC_KeyCurveEnum.ed25519](): string {
+            throw new Error('TODO: support ED25519')
+        },
+    }
+    const { privateKey, publicKey } = await crypto.subtle.generateKey(
+        { name: 'ECDH', namedCurve: namedCurve[kind] },
+        true,
+        ['deriveKey'],
+    )
+    return [publicKey as EC_Public_CryptoKey, privateKey as EC_Private_CryptoKey] as const
 }
