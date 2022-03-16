@@ -47,7 +47,8 @@ export const searchNewTweetButtonSelector: () => LiveSelector<E, true> = () => {
     return querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
 }
 
-export const searchNickNameSelector: () => LiveSelector<E, true> = () => querySelector<E>('[data-testid="UserName"]')
+export const searchNickNameSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-testid="tweet"] a:not([target]) > div > div[dir="auto"] > span > span')
 export const searchAvatarSelector = () =>
     querySelector<HTMLImageElement>('[data-testid="primaryColumn"] a[href$="/photo"] img[src*="profile_images"]')
 export const searchNFTAvatarSelector = () =>
