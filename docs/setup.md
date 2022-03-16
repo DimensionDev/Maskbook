@@ -104,7 +104,7 @@ Please use the following command, and it will start the development process in p
 The `develop` branch is our developing branch, and the `released` branch points to the latest released version.
 [Git flow](https://github.com/nvie/gitflow) is recommended but not enforced.
 
-Please use [Conventional Commits](https://www.conventionalcommits.org) when do committing.
+Your commit message should follow [Conventional Commits](https://www.conventionalcommits.org).
 
 ### Using Git
 
