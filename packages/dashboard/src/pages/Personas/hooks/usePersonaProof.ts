@@ -7,7 +7,8 @@ import { PersonaContext } from './usePersonaContext'
 export function usePersonaProof() {
     const { currentPersona } = PersonaContext.useContainer()
     const res = useAsyncRetry(async () => {
-        return queryExistedBindingByPersona(currentPersona?.publicHexKey as string)
+        if (!currentPersona || !currentPersona.publicHexKey) return
+        return queryExistedBindingByPersona(currentPersona.publicHexKey)
     }, [])
     useEffect(() => Messages.events.ownProofChanged.on(res.retry), [res.retry])
     return res
