@@ -1,5 +1,4 @@
 {
-    "add_to_key_store_success": "公開鍵はキーストアに追加されました。",
     "add_token": "トークンを追加",
     "additional_post_box__encrypted_post_pre": "#mask_io で復号しましょう！ {{encrypted}}",
     "additional_post_box__steganography_post_pre": "この投稿は #mask_io によって暗号化されています。 📪🔑 mask.io をインストールして復号しましょう！ ([I:b]) {{random}}",
@@ -180,8 +179,6 @@
     "plugin_trader_table_price": "価格",
     "plugin_trader_table_volume": "取引高（24時間）",
     "plugin_trader_table_updated": "更新",
-    "plugin_trader_route": "ルート",
-    "plugin_trader_portion": "分割",
     "plugin_trader_error_amount_absence": "量を入力してください。",
     "plugin_trader_error_insufficient_balance": "{{symbol}} の残高が足りません",
     "plugin_trader_error_insufficient_lp": "流動性が足りません",

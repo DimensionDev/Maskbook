@@ -10,8 +10,6 @@ import {
     Typography,
     useTheme,
     Dialog,
-    // see https://github.com/import-js/eslint-plugin-import/issues/2288
-    // eslint-disable-next-line import/no-deprecated
     useMediaQuery,
 } from '@mui/material'
 import { makeStyles, useDialogStackActor, useStylesExtends, mergeClasses } from '@masknet/theme'
@@ -82,8 +80,6 @@ export function InjectedDialog(props: InjectedDialogProps) {
         props,
         overwrite.InjectedDialog?.classes,
     )
-    // see https://github.com/import-js/eslint-plugin-import/issues/2288
-    // eslint-disable-next-line import/no-deprecated
     const fullScreen = useMediaQuery(useTheme().breakpoints.down('xs'))
     const isDashboard = isDashboardPage()
     const { children, open, disableBackdropClick, titleBarIconStyle, onClose, title, disableTitleBorder, ...rest } =

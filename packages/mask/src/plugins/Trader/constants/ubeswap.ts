@@ -1,5 +1,4 @@
-import { ChainId } from '@masknet/web3-shared-evm'
-import { WNATIVE, WNATIVE_ONLY, CUSD, CEUR, UBE } from './trader'
+import { ChainId, WNATIVE, WNATIVE_ONLY, CUSD, CEUR, UBE } from '@masknet/web3-shared-evm'
 import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'
 
 /**

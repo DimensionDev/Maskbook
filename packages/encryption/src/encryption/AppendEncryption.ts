@@ -5,7 +5,7 @@ import type {
     IdentifierMap,
     ECKeyIdentifier,
 } from '@masknet/shared-base'
-import type { EncryptIO, EncryptionResultE2E } from './Encryption'
+import type { EncryptIO, EncryptionResultE2E } from './EncryptionTypes'
 
 export interface AppendEncryptionOptions {
     version: -39 | -38 | -37

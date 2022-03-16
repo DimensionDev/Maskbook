@@ -11,12 +11,13 @@
     "erc20_token_list_loading": "正在加载代币列表...",
     "erc20_search_token_loading": "正在加载代币...",
     "erc20_search_not_token_found": "没有任何结果或合约地址不符合查询标准。",
-    "address_viewer_binding_rules_title": "Web3 按如下规则展示NFTs：",
-    "address_viewer_binding_rule1": "昵称是ENS 或 RNS。",
-    "address_viewer_binding_rule2": "您的Twitter bio 包含 ENS， RNS或有效地址。",
+    "address_viewer_binding_rules_title": "NFT 相册按如下规则展示 NFT：",
+    "address_viewer_binding_rule1": "昵称是 ENS 或 RNS。",
+    "address_viewer_binding_rule2": "您的 Twitter 资料包含 ENS、RNS 或有效地址。",
     "address_viewer_binding_rule3": "您的twitter ID + 后缀是ENS 或 RNS。",
-    "address_viewer_binding_rule4": "地址用于签署PFP NFT。",
+    "address_viewer_binding_rule4": "该地址用于签名头像 NFT。",
     "address_viewer_current_display_of": "当前显示{{type}}： ",
     "address_viewer_loading": "加载中...",
-    "address_viewer_address_name_address": "地址"
+    "address_viewer_address_name_address": "地址",
+    "address_viewer_address_name_twitter": "Twitter Blue"
 }

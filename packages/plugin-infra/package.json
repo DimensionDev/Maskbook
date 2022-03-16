@@ -14,14 +14,14 @@
     "@masknet/web3-shared-base": "workspace:*",
     "@servie/events": "^3.0.0",
     "@types/use-subscription": "^1.0.0",
-    "async-call-rpc": "^6.0.1",
+    "async-call-rpc": "^6.0.2",
     "bignumber.js": "^9.0.2",
     "react-use": "^17.3.2",
     "unstated-next": "^1.1.0",
     "use-subscription": "^1.5.1"
   },
   "devDependencies": {
-    "react-i18next": "^11.15.5"
+    "react-i18next": "^11.15.6"
   },
   "peerDependencies": {
     "react-i18next": "^11.15.3"

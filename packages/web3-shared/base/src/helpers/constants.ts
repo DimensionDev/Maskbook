@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import type { Primitive } from '../types'
+import type { Primitive } from './types'
 
 type ChainId = number
 
