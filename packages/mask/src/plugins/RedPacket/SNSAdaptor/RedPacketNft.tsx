@@ -252,7 +252,6 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         retry: retryAvailability,
         error: availabilityError,
     } = useAvailabilityNftRedPacket(payload.id, account)
-    console.log({ availability })
     const [claimState, claimCallback, resetCallback] = useClaimNftRedpacketCallback(
         payload.id,
         availability?.totalAmount,
