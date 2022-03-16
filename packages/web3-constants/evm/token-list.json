@@ -18,7 +18,7 @@
         "Fantom": ["https://tokens.r2d2.to/latest/250/tokens.json"],
         "Aurora": ["https://tokens.r2d2.to/latest/1313161554/tokens.json"],
         "Aurora_Testnet": [],
-        "Harmony": [],
-        "Harmony_Test": []
+        "Harmony": ["https://tokens.r2d2.to/latest/1666600000/tokens.json"],
+        "Harmony_Test": ["https://tokens.r2d2.to/latest/1666700000/tokens.json"]
     }
 }

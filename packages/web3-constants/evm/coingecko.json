@@ -40,7 +40,7 @@
         "Fantom": "fantom",
         "Aurora": "ethereum",
         "Aurora_Testnet": "",
-        "Harmony": "",
+        "Harmony": "harmony-shard-0",
         "Harmony_Test": ""
     }
 }
