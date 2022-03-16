@@ -2,11 +2,11 @@ export {
     parsePayload,
     encodePayload,
     AESAlgorithmEnum,
-    PublicKeyAlgorithmEnum,
+    EC_KeyCurveEnum,
     SocialNetworkEnum,
     SocialNetworkEnumToProfileDomain,
     type AESKey,
-    type AsymmetryCryptoKey,
+    type EC_Key,
     type Signature,
     type PayloadParseResult,
     type PayloadWellFormed,
@@ -60,4 +60,4 @@ export {
 } from './image-steganography'
 
 // TODO: remove them in the future
-export { importAsymmetryKeyFromJsonWebKeyOrSPKI, importAESFromJWK } from './utils'
+export { importEC_Key, importAESFromJWK } from './utils'

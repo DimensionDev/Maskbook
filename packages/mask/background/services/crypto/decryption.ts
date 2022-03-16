@@ -3,11 +3,11 @@ import {
     decrypt,
     parsePayload,
     DecryptProgressKind,
-    PublicKeyAlgorithmEnum,
+    EC_KeyCurveEnum,
     DecryptProgress,
     SocialNetworkEnum,
     SocialNetworkEnumToProfileDomain,
-    AsymmetryCryptoKey,
+    EC_Key,
     socialNetworkDecoder,
     steganographyDecodeImage,
     DecryptError,
@@ -206,14 +206,14 @@ const hasStoredAuthorPublicKey = new Set<string>()
 async function storeAuthorPublicKey(
     payloadAuthor: ProfileIdentifier,
     postAuthor: ProfileIdentifier | null,
-    pub: AsymmetryCryptoKey,
+    pub: EC_Key,
 ) {
     if (!payloadAuthor.equals(postAuthor)) {
         // ! Author detected is not equal to AuthorHint.
         // ! Skip store the public key because it might be a security problem.
         return
     }
-    if (pub.algr !== PublicKeyAlgorithmEnum.secp256k1) {
+    if (pub.algr !== EC_KeyCurveEnum.secp256k1) {
         throw new Error('TODO: support other curves')
     }
     return createProfileWithPersona(

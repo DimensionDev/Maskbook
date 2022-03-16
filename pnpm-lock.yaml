@@ -693,7 +693,6 @@ importers:
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/typed-message': workspace:*
-      '@masknet/web3-kit': workspace:*
       '@msgpack/msgpack': ^2.7.2
       arweave: ^1.10.3
       date-fns: ^2.28.0
@@ -712,7 +711,6 @@ importers:
       '@masknet/shared-base': link:../../shared-base
       '@masknet/theme': link:../../theme
       '@masknet/typed-message': link:../../typed-message
-      '@masknet/web3-kit': link:../../web3-kit
       '@msgpack/msgpack': 2.7.2
       arweave: 1.10.13
       date-fns: 2.28.0
@@ -1131,9 +1129,6 @@ importers:
       promievent: 0.1.5
       web3-eth-contract: 1.5.2
 
-  packages/web3-kit:
-    specifiers: {}
-
   packages/web3-providers:
     specifiers:
       '@masknet/plugin-infra': workspace:*
@@ -1238,14 +1233,14 @@ importers:
     specifiers:
       '@blocto/fcl': ^0.0.78-alpha.8
       '@masknet/web3-constants': workspace:*
-      '@masknet/web3-kit': workspace:*
+      '@masknet/web3-shared-base': workspace:*
       '@onflow/types': ^0.0.5
       react-use: ^17.3.2
       urlcat: ^2.0.4
     dependencies:
       '@blocto/fcl': 0.0.78-alpha.8
       '@masknet/web3-constants': link:../../web3-constants
-      '@masknet/web3-kit': link:../../web3-kit
+      '@masknet/web3-shared-base': link:../base
       '@onflow/types': 0.0.5
       react-use: 17.3.2_bc22c48adf1a4e34a005159413cd72b5
       urlcat: 2.0.4
@@ -1253,12 +1248,12 @@ importers:
   packages/web3-shared/solana:
     specifiers:
       '@masknet/web3-constants': workspace:*
-      '@masknet/web3-kit': workspace:*
+      '@masknet/web3-shared-base': workspace:*
       react-use: ^17.3.2
       urlcat: ^2.0.4
     dependencies:
       '@masknet/web3-constants': link:../../web3-constants
-      '@masknet/web3-kit': link:../../web3-kit
+      '@masknet/web3-shared-base': link:../base
       react-use: 17.3.2_bc22c48adf1a4e34a005159413cd72b5
       urlcat: 2.0.4
 
