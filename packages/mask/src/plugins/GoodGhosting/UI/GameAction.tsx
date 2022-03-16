@@ -4,6 +4,7 @@ import {
     TransactionStateType,
     useChainId,
     useERC20TokenDetailed,
+    DAI,
 } from '@masknet/web3-shared-evm'
 import { Button, Typography, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -11,7 +12,6 @@ import { useState } from 'react'
 import { useI18N } from '../../../utils'
 import { useJoinGame, useMakeDeposit, useWithdraw } from '../hooks/useGameActions'
 import type { GoodGhostingInfo } from '../types'
-import { DAI } from '../constants'
 import { GameActionDialog } from './GameActionDialog'
 import { useGameToken } from '../hooks/usePoolData'
 import { isGameActionError } from '../utils'
