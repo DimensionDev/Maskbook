@@ -23,22 +23,18 @@ export const usernameValidator: NonNullable<SocialNetwork.Utils['isValidUsername
 }
 
 export const getNickname = () => {
-    const node = searchNickNameSelector().evaluate()?.parentElement?.parentElement?.firstChild
-        ?.nextSibling as HTMLDivElement
+    const node = searchNickNameSelector().evaluate()?.querySelector('span span') as HTMLDivElement
     if (!node) return ''
 
-    const nicknameNode = node.querySelector<HTMLSpanElement>('div span')
-    if (!nicknameNode) return ''
-
-    return collectNodeText(nicknameNode)
+    return collectNodeText(node)
 }
 
 export const getTwitterId = () => {
-    const node = searchNickNameSelector().evaluate()?.parentElement?.parentElement?.firstChild?.nextSibling?.firstChild
-        ?.firstChild?.lastChild as HTMLDivElement
+    const node = searchNickNameSelector()
+        .evaluate()
+        ?.firstElementChild?.firstElementChild?.nextElementSibling?.querySelector('span') as HTMLDivElement
     if (node) {
-        const twitterIdNode = node.querySelector('div span')
-        if (twitterIdNode) return twitterIdNode.innerHTML.trim().replace('@', '')
+        return node.innerHTML.trim().replace('@', '')
     }
 
     const ele = searchAvatarSelector().evaluate()?.closest('a') || searchNFTAvatarSelector().evaluate()?.closest('a')
