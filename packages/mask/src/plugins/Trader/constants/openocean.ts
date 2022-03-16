@@ -17,5 +17,4 @@ export const networkNames: Record<NetworkType, string> = {
     [NetworkType.Metis]: '',
     [NetworkType.Optimistic]: '',
     [NetworkType.Conflux]: '',
-    [NetworkType.Conflux_Testnet]: '',
 }

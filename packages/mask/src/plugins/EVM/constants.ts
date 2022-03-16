@@ -177,16 +177,6 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         iconColor: 'rgb(112, 212, 74)',
         isMainnet: true,
     },
-    {
-        ID: `${PLUGIN_ID}_conflux_Testnet`,
-        networkSupporterPluginID: PLUGIN_ID,
-        chainId: ChainId.Conflux_Testnet,
-        type: NetworkType.Conflux_Testnet,
-        name: 'Conflux_Testnet',
-        icon: new URL('./assets/conflux.png', import.meta.url),
-        iconColor: 'rgb(112, 212, 74)',
-        isMainnet: true,
-    },
 ]
 export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
     {

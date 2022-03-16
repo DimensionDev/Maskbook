@@ -81,7 +81,6 @@ export enum ChainId {
 
     // Conflux
     Conflux = 1030,
-    Conflux_Testnet = 71,
 }
 
 export enum ProviderType {
@@ -118,7 +117,6 @@ export enum NetworkType {
     Metis = 'Metis',
     Optimistic = 'Optimistic',
     Conflux = 'Conflux',
-    Conflux_Testnet = 'Conflux_Testnet',
 }
 
 export interface Wallet {

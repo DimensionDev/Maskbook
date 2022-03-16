@@ -35,7 +35,6 @@ export function getNativeTokenLabel(networkType: NetworkType) {
         case NetworkType.Avalanche:
         case NetworkType.Optimistic:
         case NetworkType.Conflux:
-        case NetworkType.Conflux_Testnet:
             return NATIVE_TOKEN_ADDRESS
         default:
             safeUnreachable(networkType)

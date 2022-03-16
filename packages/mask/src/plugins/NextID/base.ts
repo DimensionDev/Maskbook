@@ -29,7 +29,6 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.Avalanche,
                     ChainId.Fantom,
                     ChainId.Conflux,
-                    ChainId.Conflux_Testnet,
                 ],
             },
         },

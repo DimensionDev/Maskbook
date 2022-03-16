@@ -2847,7 +2847,12 @@
         "rpc": ["https://evm.confluxrpc.com"],
         "faucets": [],
         "features": [],
-        "nativeCurrency": { "name": "CFX", "symbol": "CFX", "decimals": 18 },
+        "nativeCurrency": {
+            "name": "CFX",
+            "symbol": "CFX",
+            "decimals": 18,
+            "logoURI": "https://raw.githubusercontent.com/DimensionDev/Maskbook/e434014b17bd4622e28e21c9d4cd9ffec875889e/packages/mask/src/plugins/EVM/assets/conflux.png"
+        },
         "infoURL": "https://confluxnetwork.org",
         "shortName": "Conflux",
         "chainId": 1030,
