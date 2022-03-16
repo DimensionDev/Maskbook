@@ -292,6 +292,7 @@ importers:
       '@balancer-labs/sor': ^1.0.0
       '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
       '@dimensiondev/mask-wallet-core': 0.1.0-20211013082857-eb62e5f
+      '@dimensiondev/metamask-extension-provider': ^3.0.6-20210519045409-1835d4d
       '@dimensiondev/webextension-shim': 0.0.3-20210823035705-4257e12
       '@ethersproject/abi': ^5.4.0
       '@ethersproject/address': ^5.0.4
@@ -427,6 +428,7 @@ importers:
       '@balancer-labs/sor': 1.0.0
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0_webextension-polyfill@0.8.0
       '@dimensiondev/mask-wallet-core': 0.1.0-20211013082857-eb62e5f_protobufjs@6.11.2
+      '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@ethersproject/abi': 5.4.0
       '@ethersproject/address': 5.4.0
       '@ethersproject/providers': 5.4.2
@@ -4026,6 +4028,14 @@ packages:
       protobufjs: 6.11.2
     dev: false
 
+  /@dimensiondev/metamask-extension-provider/3.0.6-20210519045409-1835d4d:
+    resolution: {integrity: sha512-t8GFIKV7/FFqfS2AOqHmKB+VwzvtyaOnNr8BgJmLJ+O4OEtQJ2ObRvg6WYAC1dJqc3DtVdEHBJdIoTZhsMEuIw==, tarball: download/@dimensiondev/metamask-extension-provider/3.0.6-20210519045409-1835d4d/4de201e24ff4e7094b4fdbf0838a09c81798d95294556824e5dc708451078835}
+    dependencies:
+      '@metamask/inpage-provider': 8.1.0
+      detect-browser: 3.0.1
+      extension-port-stream: 1.0.0
+    dev: false
+
   /@dimensiondev/patch-package/6.5.0:
     resolution: {integrity: sha512-n+wVwEZGGemMvjaX3GVP7Tuta7lMmCJIWAieh5BGjYvImH4hU8BzHXm7IzFmWWxm5N1zT4/5QWWNIAUVrQzgLw==, tarball: download/@dimensiondev/patch-package/6.5.0/136792f9635000ae1fe0e6d7f44d1d26ada840b347ad5795b21383eb659ce7c3}
     engines: {npm: '>5'}
@@ -5232,6 +5242,38 @@ packages:
       ethjs-util: 0.1.6
       tweetnacl: 1.0.3
       tweetnacl-util: 0.15.1
+    dev: false
+
+  /@metamask/inpage-provider/8.1.0:
+    resolution: {integrity: sha512-RB2tUfj3DITNqjsFB0UvBGQYtsUHMGccsbA+2BkeE6h/UNTmc3onwmLY6z2yrEPZywpHJvj1FMiORdvtQPhOVg==}
+    engines: {node: '>=12.0.0'}
+    deprecated: Package renamed to @metamask/providers
+    dependencies:
+      '@metamask/object-multiplex': 1.2.0
+      '@metamask/safe-event-emitter': 2.0.0
+      '@types/chrome': 0.0.136
+      detect-browser: 5.2.0
+      eth-rpc-errors: 4.0.3
+      extension-port-stream: 2.0.1
+      fast-deep-equal: 2.0.1
+      is-stream: 2.0.1
+      json-rpc-engine: 6.1.0
+      json-rpc-middleware-stream: 3.0.0
+      pump: 3.0.0
+      webextension-polyfill-ts: 0.25.0
+    dev: false
+
+  /@metamask/object-multiplex/1.2.0:
+    resolution: {integrity: sha512-hksV602d3NWE2Q30Mf2Np1WfVKaGqfJRy9vpHAmelbaD0OkDt06/0KQkRR6UVYdMbTbkuEu8xN5JDUU80inGwQ==}
+    engines: {node: '>=12.0.0'}
+    dependencies:
+      end-of-stream: 1.4.4
+      once: 1.4.0
+      readable-stream: 2.3.7
+    dev: false
+
+  /@metamask/safe-event-emitter/2.0.0:
+    resolution: {integrity: sha512-/kSXhY692qiV1MXu6EeOZvg5nECLclxNXcKCxJ3cXQgYuRymRHpdx/t7JXfsK+JLjwA1e1c1/SBrlQYpusC29Q==}
     dev: false
 
   /@metaplex-foundation/mpl-auction/0.0.2:
@@ -8017,6 +8059,13 @@ packages:
       base-x: 3.0.8
     dev: false
 
+  /@types/chrome/0.0.136:
+    resolution: {integrity: sha512-XDEiRhLkMd+SB7Iw3ZUIj/fov3wLd4HyTdLltVszkgl1dBfc3Rb7oPMVZ2Mz2TLqnF7Ow+StbR8E7r9lqpb4DA==}
+    dependencies:
+      '@types/filesystem': 0.0.32
+      '@types/har-format': 1.2.8
+    dev: false
+
   /@types/color-convert/2.0.0:
     resolution: {integrity: sha512-m7GG7IKKGuJUXvkZ1qqG3ChccdIM/qBBo913z+Xft0nKCX4hAU/IxKwZBU4cpRZ7GS5kV4vOblUkILtSShCPXQ==}
     dependencies:
@@ -8298,6 +8347,16 @@ packages:
       '@types/serve-static': 1.13.10
     dev: true
 
+  /@types/filesystem/0.0.32:
+    resolution: {integrity: sha512-Yuf4jR5YYMR2DVgwuCiP11s0xuVRyPKmz8vo6HBY3CGdeMj8af93CFZX+T82+VD1+UqHOxTq31lO7MI7lepBtQ==}
+    dependencies:
+      '@types/filewriter': 0.0.29
+    dev: false
+
+  /@types/filewriter/0.0.29:
+    resolution: {integrity: sha512-BsPXH/irW0ht0Ji6iw/jJaK8Lj3FJemon2gvEqHKpCdDCeemHa+rI3WBGq5z7cDMZgoLjY40oninGxqk+8NzNQ==}
+    dev: false
+
   /@types/fs-extra/9.0.13:
     resolution: {integrity: sha512-nEnwB++1u5lVDM2UI4c1+5R+FYaKfaAzS4OococimjVm3nQw3TuzH5UNsocrcTBbhnerblyHj4A49qXbIiZdpA==}
     dependencies:
@@ -8341,6 +8400,10 @@ packages:
       '@types/vinyl-fs': 2.4.12
       chokidar: 3.5.2
     dev: true
+
+  /@types/har-format/1.2.8:
+    resolution: {integrity: sha512-OP6L9VuZNdskgNN3zFQQ54ceYD8OLq5IbqO4VK91ORLfOm7WdT/CiT/pHEBSQEqCInJ2y3O6iCm/zGtPElpgJQ==}
+    dev: false
 
   /@types/hast/2.3.4:
     resolution: {integrity: sha512-wLEm0QvaoawEDoTRwzTXp4b4jpwiJDvR5KMnFnVodm3scufTlBOWRD6N1OBf9TZMhjlNsSfcO5V+7AF4+Vy+9g==}
@@ -13354,6 +13417,10 @@ packages:
       repeat-string: 1.6.1
     dev: true
 
+  /detect-browser/3.0.1:
+    resolution: {integrity: sha512-L6b76EfUxnoxGHM5Vz7nrshQPIbOHtitDWpGufrp5srQdJrEYi1xpUVZeFbfssWAJvUWo/iDIVlz8hOP4Z8OCw==}
+    dev: false
+
   /detect-browser/5.2.0:
     resolution: {integrity: sha512-tr7XntDAu50BVENgQfajMLzacmSe34D+qZc4zjnniz0ZVuw/TZcLcyxHQjYpJTM36sGEkZZlYLnIM1hH7alTMA==}
     dev: false
@@ -14403,6 +14470,12 @@ packages:
       xtend: 4.0.2
     dev: false
 
+  /eth-rpc-errors/4.0.3:
+    resolution: {integrity: sha512-Z3ymjopaoft7JDoxZcEb3pwdGh7yiYMhOwm2doUt6ASXlMavpNlK6Cre0+IMl2VSGyEU9rkiperQhp5iRxn5Pg==}
+    dependencies:
+      fast-safe-stringify: 2.1.1
+    dev: false
+
   /eth-sig-util/1.4.2:
     resolution: {integrity: sha1-jZWCAsftuq6Dlwf7pvCf8ydgYhA=}
     deprecated: Deprecated in favor of '@metamask/eth-sig-util'
@@ -14919,6 +14992,20 @@ packages:
   /extend/3.0.2:
     resolution: {integrity: sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==}
 
+  /extension-port-stream/1.0.0:
+    resolution: {integrity: sha512-FsFr64yr6ituPdaGP6Io5recGFWVjJoDYt7asz2AvPkYqGN9c923nmEtyHH+413066bjGcQZaF8w5wn9HbNXiQ==}
+    dependencies:
+      readable-stream: 2.3.7
+      util: 0.11.1
+    dev: false
+
+  /extension-port-stream/2.0.1:
+    resolution: {integrity: sha512-ltrv4Dh/979I04+D4Te6TFygfRSOc5EBzzlHRldWMS8v73V80qWluxH88hqF0qyUsBXTb8NmzlmSipcre6a+rg==}
+    engines: {node: '>=12.0.0'}
+    dependencies:
+      webextension-polyfill-ts: 0.22.0
+    dev: false
+
   /extglob/2.0.4:
     resolution: {integrity: sha512-Nmb6QXkELsuBr24CJSkilo6UHHgbekK5UiZgfE6UHD3Eb27YC6oD+bhcT+tJ6cl8dmsgdQxnWlcry8ksBIBLpw==}
     engines: {node: '>=0.10.0'}
@@ -15021,6 +15108,10 @@ packages:
 
   /fast-levenshtein/2.0.6:
     resolution: {integrity: sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=}
+
+  /fast-safe-stringify/2.1.1:
+    resolution: {integrity: sha512-W+KJc2dmILlPplD/H4K9l9LcAHAfPtP6BY84uVLXQ6Evcz9Lcg33Y2z1IVblT6xdY54PXYVHEv+0Wpq8Io6zkA==}
+    dev: false
 
   /fast-shallow-equal/1.0.0:
     resolution: {integrity: sha512-HPtaa38cPgWvaCFmRNhlc6NG7pv6NUHqjPgVAkWGoB9mQMwYB27/K0CvOM5Czy+qpT3e8XJ6Q4aPAnzpNpzNaw==}
@@ -17323,7 +17414,6 @@ packages:
   /is-stream/2.0.1:
     resolution: {integrity: sha512-hFoiJiTl63nn+kstHGBtewWSKnQLpyb155KHheA1l39uvtO9nWIop1p3udqPcUd/xbF1VLMO4n7OI6p7RbngDg==}
     engines: {node: '>=8'}
-    dev: true
 
   /is-string/1.0.7:
     resolution: {integrity: sha512-tE2UXzivje6ofPW7l23cjDOMa09gb7xlAqG6jG5ej6uPV32TlWP3NKPigtaGeHNu9fohccRYvIiZMfOOnOYUtg==}
@@ -18314,10 +18404,25 @@ packages:
       safe-event-emitter: 1.0.1
     dev: false
 
+  /json-rpc-engine/6.1.0:
+    resolution: {integrity: sha512-NEdLrtrq1jUZyfjkr9OCz9EzCNhnRyWtt1PAnvnhwy6e8XETS0Dtc+ZNCO2gvuAoKsIn2+vCSowXTYE4CkgnAQ==}
+    engines: {node: '>=10.0.0'}
+    dependencies:
+      '@metamask/safe-event-emitter': 2.0.0
+      eth-rpc-errors: 4.0.3
+    dev: false
+
   /json-rpc-error/2.0.0:
     resolution: {integrity: sha1-p6+cICg4tekFxyUOVH8a/3cligI=}
     dependencies:
       inherits: 2.0.4
+    dev: false
+
+  /json-rpc-middleware-stream/3.0.0:
+    resolution: {integrity: sha512-JmZmlehE0xF3swwORpLHny/GvW3MZxCsb2uFNBrn8TOqMqivzCfz232NSDLLOtIQlrPlgyEjiYpyzyOPFOzClw==}
+    dependencies:
+      '@metamask/safe-event-emitter': 2.0.0
+      readable-stream: 2.3.7
     dev: false
 
   /json-rpc-random-id/1.0.1:
@@ -23731,7 +23836,7 @@ packages:
       serialize-javascript: 6.0.0
       source-map: 0.6.1
       terser: 5.12.0
-      webpack: 5.70.0_@swc+core@1.2.148
+      webpack: 5.70.0_65041f242a58e79379a199f62cb3d619
     dev: true
 
   /terser/4.8.0:
@@ -25442,6 +25547,24 @@ packages:
       webcrypto-core: 1.4.0
     dev: false
 
+  /webextension-polyfill-ts/0.22.0:
+    resolution: {integrity: sha512-3P33ClMwZ/qiAT7UH1ROrkRC1KM78umlnPpRhdC/292UyoTTW9NcjJEqDsv83HbibcTB6qCtpVeuB2q2/oniHQ==}
+    deprecated: This project has moved to @types/webextension-polyfill
+    dependencies:
+      webextension-polyfill: 0.7.0
+    dev: false
+
+  /webextension-polyfill-ts/0.25.0:
+    resolution: {integrity: sha512-ikQhwwHYkpBu00pFaUzIKY26I6L87DeRI+Q6jBT1daZUNuu8dSrg5U9l/ZbqdaQ1M/TTSPKeAa3kolP5liuedw==}
+    deprecated: This project has moved to @types/webextension-polyfill
+    dependencies:
+      webextension-polyfill: 0.7.0
+    dev: false
+
+  /webextension-polyfill/0.7.0:
+    resolution: {integrity: sha512-su48BkMLxqzTTvPSE1eWxKToPS2Tv5DLGxKexLEVpwFd6Po6N8hhSLIvG6acPAg7qERoEaDL+Y5HQJeJeml5Aw==}
+    dev: false
+
   /webextension-polyfill/0.8.0:
     resolution: {integrity: sha512-a19+DzlT6Kp9/UI+mF9XQopeZ+n2ussjhxHJ4/pmIGge9ijCDz7Gn93mNnjpZAk95T4Tae8iHZ6sSf869txqiQ==}
     dev: false
@@ -26471,7 +26594,7 @@ packages:
     dev: true
 
   github.com/ProjectOpenSea/wyvern-js/6f85f1b42f0962d2cc8e97b7e7f680865e3f26c1:
-    resolution: {tarball: https://codeload.github.com/ProjectOpenSea/wyvern-js/tar.gz/6f85f1b42f0962d2cc8e97b7e7f680865e3f26c1}
+    resolution: {commit: 6f85f1b42f0962d2cc8e97b7e7f680865e3f26c1, repo: git+ssh://git@github.com/ProjectOpenSea/wyvern-js.git, type: git}
     name: wyvern-js
     version: 3.2.0
     dependencies:
@@ -26491,7 +26614,7 @@ packages:
     dev: false
 
   github.com/ProjectOpenSea/wyvern-js/fabb7660f23f2252c141077e32193d281036299e:
-    resolution: {commit: fabb7660f23f2252c141077e32193d281036299e, repo: git+ssh://git@github.com/ProjectOpenSea/wyvern-js.git, type: git}
+    resolution: {tarball: https://codeload.github.com/ProjectOpenSea/wyvern-js/tar.gz/fabb7660f23f2252c141077e32193d281036299e}
     name: wyvern-js
     version: 3.2.0
     dependencies:
@@ -26523,7 +26646,7 @@ packages:
     dev: false
 
   github.com/ProjectOpenSea/wyvern-schemas/e1a08fcf8ce2b11a0fe9cbdc7c9f77c59fadef26:
-    resolution: {commit: e1a08fcf8ce2b11a0fe9cbdc7c9f77c59fadef26, repo: git+ssh://git@github.com/ProjectOpenSea/wyvern-schemas.git, type: git}
+    resolution: {tarball: https://codeload.github.com/ProjectOpenSea/wyvern-schemas/tar.gz/e1a08fcf8ce2b11a0fe9cbdc7c9f77c59fadef26}
     name: wyvern-schemas
     version: 0.10.7
     dependencies:
@@ -26538,7 +26661,7 @@ packages:
     dev: false
 
   github.com/ProjectWyvern/ethereumjs-abi/3d2d89641a6ad5984929b6ca4b646452ec74f73d:
-    resolution: {commit: 3d2d89641a6ad5984929b6ca4b646452ec74f73d, repo: git+ssh://git@github.com/ProjectWyvern/ethereumjs-abi.git, type: git}
+    resolution: {tarball: https://codeload.github.com/ProjectWyvern/ethereumjs-abi/tar.gz/3d2d89641a6ad5984929b6ca4b646452ec74f73d}
     name: ethereumjs-abi
     version: 0.6.6
     dependencies:
@@ -26564,7 +26687,7 @@ packages:
     dev: false
 
   github.com/frozeman/bignumber.js-nolookahead/57692b3ecfc98bbdd6b3a516cb2353652ea49934:
-    resolution: {tarball: https://codeload.github.com/frozeman/bignumber.js-nolookahead/tar.gz/57692b3ecfc98bbdd6b3a516cb2353652ea49934}
+    resolution: {commit: 57692b3ecfc98bbdd6b3a516cb2353652ea49934, repo: git+ssh://git@github.com/frozeman/bignumber.js-nolookahead.git, type: git}
     name: bignumber.js
     version: 2.0.7
     dev: false

@@ -14,11 +14,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
     Web3UI,
     Web3State: {},
     GlobalInjection() {
-        if (isDashboardPage() || isPopupPage()) return null
+        const isPopup = isPopupPage()
+        if (isPopup) return null
+
+        const isDashboard = isDashboardPage()
         return (
             <>
+                {isDashboard ? null : <ProviderBridge providerType={ProviderType.Coin98} />}
                 <ProviderBridge providerType={ProviderType.MetaMask} />
-                <ProviderBridge providerType={ProviderType.Coin98} />
                 <ProviderBridge providerType={ProviderType.Fortmatic} />
                 <ProviderBridge providerType={ProviderType.WalletConnect} />
             </>

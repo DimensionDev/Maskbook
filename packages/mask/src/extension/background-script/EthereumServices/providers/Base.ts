@@ -17,17 +17,17 @@ export class BaseProvider implements Provider {
         throw new Error('Method not implemented.')
     }
 
-    async createExternalProvider() {
-        const provider = createExternalProvider(this.request.bind(this))
-        if (!provider.request) throw new Error('Failed to create provider.')
-        return provider
-    }
-
     async createWeb3() {
         if (this.web3) return this.web3
         const provider = await this.createExternalProvider()
         this.web3 = new Web3(provider)
         return this.web3
+    }
+
+    async createExternalProvider() {
+        const provider = createExternalProvider(this.request.bind(this))
+        if (!provider.request) throw new Error('Failed to create provider.')
+        return provider
     }
 
     async onAccountsChanged(accounts: string[]) {

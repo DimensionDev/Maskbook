@@ -75,6 +75,7 @@ export declare namespace Web3Plugin {
         /** Enable requirements */
         enableRequirements?: {
             supportedChainIds?: number[]
+            supportedSNSIds?: string[]
         }
     }
 

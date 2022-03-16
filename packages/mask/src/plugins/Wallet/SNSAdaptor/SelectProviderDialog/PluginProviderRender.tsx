@@ -113,6 +113,14 @@ export function PluginProviderRender({
     const { classes } = useStyles()
     const { t } = useI18N()
 
+    console.log('DEBUG: providers')
+    console.log({
+        providers,
+        providersFiltered: providers.filter((x) => x.providerAdaptorPluginID === undeterminedPluginID),
+        undeterminedPluginID,
+        ProviderIconClickBait,
+    })
+
     return (
         <>
             <Box className={classes.root}>

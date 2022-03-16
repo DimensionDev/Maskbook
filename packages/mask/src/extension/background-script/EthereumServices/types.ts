@@ -1,5 +1,5 @@
 import type Web3 from 'web3'
-import type { HttpProvider, RequestArguments } from 'web3-core'
+import type { RequestArguments } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type {
     ChainId,
@@ -25,7 +25,6 @@ export interface Provider {
     request<T extends unknown>(requestArguments: RequestArguments): Promise<T>
 
     createWeb3(options?: Web3Options): Promise<Web3>
-    createProvider?(options?: ProviderOptions): Promise<HttpProvider>
     createExternalProvider(options?: ProviderOptions): Promise<ExternalProvider>
 
     onAccountsChanged?(accounts: string[]): Promise<void>
