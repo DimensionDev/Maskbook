@@ -23,7 +23,8 @@ import { makeSortAssertWithoutChainFn } from '../../utils/token'
 import * as EthereumService from '../../../../extension/background-script/EthereumService'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 
-// native token unavailable neither from api or balance checker.
+// tokens unavailable neither from api or balance checker.
+// https://forum.conflux.fun/t/how-to-upvote-debank-proposal-for-conflux-espace-integration/13935
 const TokenUnavailableList = [ChainId.Conflux]
 
 export const getFungibleAssetsFn =
