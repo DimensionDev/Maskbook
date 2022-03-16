@@ -92,7 +92,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         personaIdentifier,
     }) => {
         const t = useDashboardI18N()
-        const { openProfilePage, currentPersona } = PersonaContext.useContainer()
+        const { openProfilePage } = PersonaContext.useContainer()
         const { classes } = useStyles()
 
         const [openDisconnectDialog, setOpenDisconnectDialog] = useState(false)
