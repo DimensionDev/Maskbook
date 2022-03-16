@@ -23,20 +23,13 @@ export const usernameValidator: NonNullable<SocialNetwork.Utils['isValidUsername
 }
 
 export const getNickname = () => {
-    const node = searchNickNameSelector().evaluate()?.querySelector('span span') as HTMLDivElement
+    const node = searchNickNameSelector().evaluate()?.querySelector<HTMLSpanElement>('span span')
     if (!node) return ''
 
     return collectNodeText(node)
 }
 
 export const getTwitterId = () => {
-    const node = searchNickNameSelector()
-        .evaluate()
-        ?.firstElementChild?.firstElementChild?.nextElementSibling?.querySelector('span') as HTMLDivElement
-    if (node) {
-        return node.innerHTML.trim().replace('@', '')
-    }
-
     const ele = searchAvatarSelector().evaluate()?.closest('a') || searchNFTAvatarSelector().evaluate()?.closest('a')
     if (ele) {
         const link = ele.getAttribute('href')
