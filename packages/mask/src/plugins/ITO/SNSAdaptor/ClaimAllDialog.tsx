@@ -390,7 +390,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                                         TransactionStateType.WAIT_FOR_CONFIRMING,
                                                     ].includes(claimState.type)
                                                 }
-                                                size="large"
+                                                size="small"
                                                 onClick={onClaimButtonClick}>
                                                 {t('plugin_ito_claim_all')}
                                             </ActionButton>
