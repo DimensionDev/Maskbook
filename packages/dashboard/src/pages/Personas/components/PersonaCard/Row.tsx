@@ -8,7 +8,6 @@ import {
     ProfileIdentifier,
     ProfileInformation,
     DashboardRoutes,
-    NextIDPersonaBindings,
     NextIDAction,
 } from '@masknet/shared-base'
 import { useMenu } from '@masknet/shared'
@@ -69,7 +68,6 @@ export const PersonaRowCard = memo(() => {
 
     return (
         <PersonaRowCardUI
-            proof={currentPersona.proof}
             nickname={currentPersona.nickname}
             identifier={currentPersona.identifier}
             profiles={currentPersona.linkedProfiles}
@@ -90,7 +88,6 @@ export interface PersonaRowCardUIProps {
     onConnect: (identifier: PersonaIdentifier, networkIdentifier: string) => void
     onDisconnect: (identifier: ProfileIdentifier) => void
     onRename: (identifier: PersonaIdentifier, target: string, callback?: () => void) => Promise<void>
-    proof?: NextIDPersonaBindings
     onDeleteBound: (
         identifier: PersonaIdentifier,
         profile: ProfileIdentifier,
@@ -105,7 +102,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
     const { classes } = useStyles()
     const { confirmPassword } = useContext(UserContext)
 
-    const { nickname, definedSocialNetworks, identifier, profiles, proof } = props
+    const { nickname, definedSocialNetworks, identifier, profiles } = props
     const { onConnect, onDisconnect, onRename, onDeleteBound } = props
 
     const { value: privateKey } = useExportPrivateKey(identifier)
@@ -197,7 +194,6 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                         } else {
                             return (
                                 <ConnectedPersonaLine
-                                    proof={proof}
                                     disableAdd={currentNetworkProfiles.length >= 5}
                                     isHideOperations={false}
                                     key={networkIdentifier}

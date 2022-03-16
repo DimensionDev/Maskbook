@@ -3,10 +3,12 @@ import { Box, Button, Link, Stack, Typography } from '@mui/material'
 import { getMaskColor, MaskColorVar, makeStyles } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { DisconnectProfileDialog } from '../DisconnectProfileDialog'
-import type { NextIDPersonaBindings, PersonaIdentifier, ProfileIdentifier, BindingProof } from '@masknet/shared-base'
+import type { PersonaIdentifier, ProfileIdentifier, BindingProof } from '@masknet/shared-base'
 import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { NextIdPersonaWarningIcon, NextIdPersonaVerifiedIcon } from '@masknet/icons'
+import { queryExistedBindingByPersona } from '@masknet/web3-providers'
+import { useAsyncRetry } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     connect: {
@@ -76,7 +78,6 @@ export interface ConnectedPersonaLineProps {
     profileIdentifiers: ProfileIdentifier[]
     networkIdentifier: string
     disableAdd?: boolean
-    proof?: NextIDPersonaBindings
     personaIdentifier: PersonaIdentifier
 }
 
@@ -89,15 +90,16 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         networkIdentifier,
         isHideOperations,
         disableAdd,
-        proof,
         personaIdentifier,
     }) => {
         const t = useDashboardI18N()
-        const { openProfilePage } = PersonaContext.useContainer()
+        const { openProfilePage, currentPersona } = PersonaContext.useContainer()
         const { classes } = useStyles()
 
         const [openDisconnectDialog, setOpenDisconnectDialog] = useState(false)
-
+        const proof = useAsyncRetry(async () => {
+            return currentPersona?.proof || queryExistedBindingByPersona(currentPersona?.publicHexKey as string)
+        }).value
         const handleUserIdClick = async (network: string, userId: string) => {
             await openProfilePage(network, userId)
         }
