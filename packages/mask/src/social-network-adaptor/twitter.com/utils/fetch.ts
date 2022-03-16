@@ -1,6 +1,5 @@
 import { regexMatch } from '../../../utils/utils'
 import { defaultTo, flattenDeep } from 'lodash-unified'
-import { nthChild } from '../../../utils/dom'
 import { canonifyImgUrl } from './url'
 import {
     makeTypedMessageText,
@@ -52,20 +51,15 @@ export const postIdParser = (node: HTMLElement) => {
 
 export const postNameParser = (node: HTMLElement) => {
     const tweetElement = node.querySelector<HTMLElement>('[data-testid="tweet"]') ?? node
-    const nameElement = collectNodeText(tweetElement.querySelector<HTMLElement>('a[role] div[id]'))
+    const nameElement = collectNodeText(tweetElement.querySelector<HTMLElement>('div[id] a[role] div[dir="ltr"]'))
 
-    const nameElementInQuoted = nthChild(tweetElement, 0, 0, 0, 0, 0)
+    const nameElementInQuoted = tweetElement.querySelector<HTMLElement>('div[id] a[role] div[dir="auto"]')
     const nameInQuoteTweet = nameElementInQuoted ? collectNodeText(nameElementInQuoted) : ''
 
-    return (
-        [nameElement, nameInQuoteTweet]
-            .filter((x) => x?.includes('@'))
-            .map(parseNameArea)
-            .find((r) => r.name && r.handle) ?? {
-            name: '',
-            handle: '',
-        }
-    )
+    return {
+        name: nameInQuoteTweet || '',
+        handle: nameElement || '',
+    }
 }
 
 export const postAvatarParser = (node: HTMLElement) => {
