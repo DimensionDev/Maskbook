@@ -126,17 +126,19 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
             return (
                 <div className={classes.userIdBox}>
                     <div>@{profile.userId}</div>
-                    <div
-                        className={classes.proofIconBox}
-                        onClick={(e: MouseEvent) => handleProofIconClick(e, isProved)}>
-                        {proof.loading ? (
-                            <LoadingAnimation />
-                        ) : isProved?.is_valid ? (
-                            <NextIdPersonaVerifiedIcon />
-                        ) : (
-                            <NextIdPersonaWarningIcon />
-                        )}
-                    </div>
+                    {profile.network === 'twitter.com' && (
+                        <div
+                            className={classes.proofIconBox}
+                            onClick={(e: MouseEvent) => handleProofIconClick(e, isProved)}>
+                            {proof.loading ? (
+                                <LoadingAnimation />
+                            ) : isProved?.is_valid ? (
+                                <NextIdPersonaVerifiedIcon />
+                            ) : (
+                                <NextIdPersonaWarningIcon />
+                            )}
+                        </div>
+                    )}
                 </div>
             )
         }
