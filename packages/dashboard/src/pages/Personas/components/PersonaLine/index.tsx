@@ -4,11 +4,10 @@ import { getMaskColor, MaskColorVar, makeStyles } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { DisconnectProfileDialog } from '../DisconnectProfileDialog'
 import type { PersonaIdentifier, ProfileIdentifier, BindingProof } from '@masknet/shared-base'
-import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
+import { LoadingAnimation, SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { PersonaContext } from '../../hooks/usePersonaContext'
+import { usePersonaProof } from '../../hooks/usePersonaProof'
 import { NextIdPersonaWarningIcon, NextIdPersonaVerifiedIcon } from '@masknet/icons'
-import { queryExistedBindingByPersona } from '@masknet/web3-providers'
-import { useAsyncRetry } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     connect: {
@@ -97,9 +96,9 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         const { classes } = useStyles()
 
         const [openDisconnectDialog, setOpenDisconnectDialog] = useState(false)
-        const proof = useAsyncRetry(async () => {
-            return currentPersona?.proof || queryExistedBindingByPersona(currentPersona?.publicHexKey as string)
-        }).value
+
+        const proof = usePersonaProof()
+
         const handleUserIdClick = async (network: string, userId: string) => {
             await openProfilePage(network, userId)
         }
@@ -111,7 +110,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         }
 
         const handleDisconnect = (profile: ProfileIdentifier) => {
-            const isProved = proof?.proofs.find((x) => {
+            const isProved = proof?.value?.proofs.find((x) => {
                 return x.platform === 'twitter' && x.identity === profile.userId.toLowerCase()
             })
             if (isProved && onDeleteBound) {
@@ -121,16 +120,23 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
             onDisconnect(profile)
         }
         const userIdBox = (profile: ProfileIdentifier) => {
-            const isProved = proof?.proofs.find((x) => {
+            const isProved = proof?.value?.proofs.find((x) => {
                 return x.platform === 'twitter' && x.identity === profile.userId.toLowerCase()
             })
+
             return (
                 <div className={classes.userIdBox}>
                     <div>@{profile.userId}</div>
                     <div
                         className={classes.proofIconBox}
                         onClick={(e: MouseEvent) => handleProofIconClick(e, isProved)}>
-                        {isProved?.is_valid ? <NextIdPersonaVerifiedIcon /> : <NextIdPersonaWarningIcon />}
+                        {proof.loading ? (
+                            <LoadingAnimation />
+                        ) : isProved?.is_valid ? (
+                            <NextIdPersonaVerifiedIcon />
+                        ) : (
+                            <NextIdPersonaWarningIcon />
+                        )}
                     </div>
                 </div>
             )
