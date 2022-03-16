@@ -59,7 +59,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const { attachMetadata, dropMetadata } = useCompositionContext()
 
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants()
-    console.log({ ITO2_CONTRACT_ADDRESS })
+
     // #region step
     const [step, setStep] = useState(ITOCreateFormPageStep.NewItoPage)
 

@@ -11,6 +11,7 @@ import {
     Web3ProviderType,
     FungibleAssetProvider,
     createExternalProvider,
+    ChainId,
 } from '@masknet/web3-shared-evm'
 import { Pageable, Pagination, TokenType, Web3Plugin } from '@masknet/plugin-infra'
 import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
@@ -19,7 +20,12 @@ import type { AbiItem } from 'web3-utils'
 import { uniqBy } from 'lodash-unified'
 import { PLUGIN_NETWORKS } from '../../constants'
 import { makeSortAssertWithoutChainFn } from '../../utils/token'
+import * as EthereumService from '../../../../extension/background-script/EthereumService'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
+
+// tokens unavailable neither from api or balance checker.
+// https://forum.conflux.fun/t/how-to-upvote-debank-proposal-for-conflux-espace-integration/13935
+const TokenUnavailableList = [ChainId.Conflux]
 
 export const getFungibleAssetsFn =
     (context: Web3ProviderType) =>
@@ -66,22 +72,28 @@ export const getFungibleAssetsFn =
             },
         }))
 
-        if (!BALANCE_CHECKER_ADDRESS) return assetsFromProvider
-        const balanceCheckerContract = createContract(web3, BALANCE_CHECKER_ADDRESS, BalanceCheckerABI as AbiItem[])
-        if (!balanceCheckerContract) return assetsFromProvider
-        let balanceList: string[]
-        try {
-            balanceList = await balanceCheckerContract?.methods
-                .balances(
-                    [address],
-                    trustedTokens.map((x) => x.address),
-                )
-                .call({
-                    from: undefined,
-                })
-            if (balanceList.length !== trustedTokens?.length) return assetsFromProvider
-        } catch {
-            balanceList = []
+        const balanceCheckerContract = createContract(
+            web3,
+            BALANCE_CHECKER_ADDRESS ?? '',
+            BalanceCheckerABI as AbiItem[],
+        )
+
+        let balanceList: string[] = []
+
+        if (BALANCE_CHECKER_ADDRESS && balanceCheckerContract) {
+            try {
+                balanceList = await balanceCheckerContract?.methods
+                    .balances(
+                        [address],
+                        trustedTokens.map((x) => x.address),
+                    )
+                    .call({
+                        from: address,
+                    })
+                if (balanceList.length !== trustedTokens?.length) return assetsFromProvider
+            } catch {
+                balanceList = []
+            }
         }
 
         const assetFromChain = balanceList.map(
@@ -101,6 +113,21 @@ export const getFungibleAssetsFn =
 
         const allTokens = [...assetsFromProvider, ...assetFromChain]
 
+        const allRequest = TokenUnavailableList.map(async (x) => {
+            const b = await EthereumService.getBalance(address, { chainId: x })
+            return {
+                chainId: x,
+                balance: String(Number.parseInt(b, 16)),
+            }
+        })
+
+        const balanceResults = (await Promise.allSettled(allRequest))
+            .map((x) => (x.status === 'fulfilled' ? x.value : null))
+            .filter((x) => Boolean(x)) as {
+            chainId: ChainId
+            balance: string
+        }[]
+
         const nativeTokens: Web3Plugin.Asset<Web3Plugin.FungibleToken>[] = networks
             .filter(
                 (t) =>
@@ -113,11 +140,12 @@ export const getFungibleAssetsFn =
             )
             .map((x) => {
                 const nativeToken = createNativeToken(x.chainId)
+                const balance = balanceResults.find((y) => y.chainId === x.chainId)?.balance ?? '0'
                 return {
                     id: nativeToken.address,
                     chainId: x.chainId,
                     token: { ...nativeToken, id: nativeToken.address!, type: TokenType.Fungible },
-                    balance: '0',
+                    balance,
                 }
             })
 
