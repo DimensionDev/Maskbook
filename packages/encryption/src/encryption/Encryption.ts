@@ -26,11 +26,15 @@ import {
     EncryptResult,
     EncryptTargetE2E,
 } from './EncryptionTypes'
+import { deriveAESByECDH_version38OrOlderExtraSteps } from './v38-ecdh'
 
 export * from './EncryptionTypes'
 export async function encrypt(options: EncryptOptions, io: EncryptIO): Promise<EncryptResult> {
     const postIV = getIV(io)
     const postKey = await aes256GCM(io)
+    if (!postKey.usages.includes('encrypt') || !postKey.usages.includes('decrypt') || !postKey.extractable) {
+        throw new EncryptError(EncryptErrorReasons.AESKeyUsageError)
+    }
     const authorPublic = queryAuthorPublicKey(options.author, io)
 
     const encodedMessage = encodeMessage(options.version, options.message)
@@ -185,7 +189,12 @@ async function e2e_v38(
         target.target.map(async (id): Promise<EncryptionResultE2E> => {
             const receiverPublicKey = id.isUnknown ? undefined : await io.queryPublicKey(id)
             if (!receiverPublicKey) throw new EncryptError(EncryptErrorReasons.PublicKeyNotFound)
-            const { aes, iv, ivToBePublished } = await io.deriveAESKey_version38_or_older(receiverPublicKey.key)
+            const ivToBePublished = getIV(io)
+            const [[aes, iv]] = await deriveAESByECDH_version38OrOlderExtraSteps(
+                async (e) => [await io.deriveAESKey(e)],
+                receiverPublicKey.key,
+                ivToBePublished,
+            )
             const encryptedPostKey = await encryptWithAES(AESAlgorithmEnum.A256GCM, aes, iv, await postKeyEncoded)
             return {
                 ivToBePublished,

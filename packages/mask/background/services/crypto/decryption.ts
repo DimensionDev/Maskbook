@@ -28,7 +28,6 @@ import {
     createProfileWithPersona,
     decryptByLocalKey,
     deriveAESByECDH,
-    deriveAESByECDH_version38_or_older,
     hasLocalKeyOf,
 } from '../../database/persona/helper'
 import { queryPostDB } from '../../database/post'
@@ -139,9 +138,6 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
             decryptByLocalKey: decryptByLocalKey,
             async deriveAESKey(pub) {
                 return Array.from((await deriveAESByECDH(pub)).values())
-            },
-            async deriveAESKey_version38_or_older(pub, iv) {
-                return Array.from((await deriveAESByECDH_version38_or_older(pub, iv)).values())
             },
             queryAuthorPublicKey(author, signal) {
                 return queryPublicKey(author || authorHint, false, signal)
