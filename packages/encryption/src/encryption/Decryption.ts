@@ -116,7 +116,6 @@ async function* v37ECDHE(
                 encryptedPostKey: encryption.ownersAESKeyEncrypted.val,
                 postKeyIV: iv,
             }
-            debugger
             yield key
         }
         yield* io.queryPostKey_version37(iv, signal)

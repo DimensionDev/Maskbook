@@ -97,6 +97,7 @@ Object {
     "network": "localhost",
     "userId": "alice",
   },
+  "e2e": undefined,
   "identifier": PostIVIdentifier {
     "network": "localhost",
     "postIV": "AAECAwQFBgcICQoLDA0ODw==",
@@ -178,6 +179,7 @@ Object {
     "network": "localhost",
     "userId": "alice",
   },
+  "e2e": undefined,
   "identifier": PostIVIdentifier {
     "network": "localhost",
     "postIV": "AAECAwQFBgcICQoLDA0ODw==",
@@ -229,6 +231,7 @@ Object {
     "network": "localhost",
     "userId": "alice",
   },
+  "e2e": undefined,
   "identifier": PostIVIdentifier {
     "network": "localhost",
     "postIV": "AAECAwQFBgcICQoLDA0ODw==",
@@ -283,6 +286,7 @@ Object {
     "network": "localhost",
     "userId": "alice",
   },
+  "e2e": undefined,
   "identifier": PostIVIdentifier {
     "network": "localhost",
     "postIV": "AAECAwQFBgcICQoLDA0ODw==",
