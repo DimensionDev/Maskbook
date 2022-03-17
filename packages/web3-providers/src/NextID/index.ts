@@ -13,7 +13,7 @@ import { first } from 'lodash-unified'
 const BASE_URL =
     process.env.channel === 'stable' && process.env.NODE_ENV === 'production'
         ? 'https://proof-service.next.id/'
-        : 'https://js43x8ol17.execute-api.ap-east-1.amazonaws.com/api/'
+        : 'https://proof-service.nextnext.id/'
 
 interface CreatePayloadBody {
     action: string
