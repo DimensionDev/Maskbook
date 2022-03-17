@@ -108,7 +108,12 @@ export const TransferERC721 = memo(() => {
         if (contract && !isSameAddress(contract.address, state.erc721Token.contractDetailed.address)) return
 
         setContract(state.erc721Token.contractDetailed)
-        setValue('contract', state.erc721Token.contractDetailed.name)
+        setValue(
+            'contract',
+            state.erc721Token.contractDetailed.name ||
+                state.erc721Token.contractDetailed.symbol ||
+                state.erc721Token.contractDetailed.address,
+        )
         setValue('tokenId', state.erc721Token.tokenId)
         setDefaultToken(state.erc721Token)
     }, [state])

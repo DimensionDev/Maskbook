@@ -22,5 +22,6 @@ export const CollectibleCard = of({
                 symbol: '',
             },
         },
+        onSend() {},
     },
 })

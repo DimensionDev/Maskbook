@@ -1,6 +1,7 @@
 import { FormEvent, memo, useCallback, useEffect, useState } from 'react'
-import { MaskDialog, MaskTextField } from '@masknet/theme'
-import { Box, Button, DialogActions, DialogContent } from '@mui/material'
+import { makeStyles, MaskDialog, MaskTextField } from '@masknet/theme'
+import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
+import { ImageIcon } from '@masknet/shared'
 import {
     isSameAddress,
     useERC721ContractDetailed,
@@ -14,6 +15,7 @@ import { z } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PluginServices } from '../../../../API'
+import { useNetworkDescriptor } from '@masknet/plugin-infra'
 
 export interface AddCollectibleDialogProps {
     open: boolean
@@ -77,9 +79,22 @@ export interface AddCollectibleDialogUIProps {
     onSubmit: () => void
 }
 
+const useStyles = makeStyles()((theme) => ({
+    chainTipWrapper: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    tip: {
+        marginLeft: 16,
+        maxWidth: 400,
+    },
+}))
+
 export const AddCollectibleDialogUI = memo<AddCollectibleDialogUIProps>(
     ({ open, onClose, onAddressChange, onTokenIdChange, onSubmit }) => {
         const t = useDashboardI18N()
+        const network = useNetworkDescriptor()
+        const { classes } = useStyles()
 
         const schema = z.object({
             address: z
@@ -130,6 +145,12 @@ export const AddCollectibleDialogUI = memo<AddCollectibleDialogUIProps>(
             <MaskDialog open={open} title={t.wallets_add_collectible()} onClose={handleClose}>
                 <form noValidate onSubmit={handleFormSubmit}>
                     <DialogContent>
+                        <Box className={classes.chainTipWrapper} sx={{ mb: 3 }}>
+                            <ImageIcon icon={network?.icon} />
+                            <Typography className={classes.tip}>
+                                {t.wallets_add_collectible_network_tip({ network: network?.name })}
+                            </Typography>
+                        </Box>
                         <Box>
                             <Controller
                                 control={control}

@@ -169,6 +169,7 @@
     "wallets_address": "Wallet Address",
     "wallets_receive_tips": "Scan the QR code and transfer {{chainName}} assets to it",
     "wallets_add_collectible": "Add Collectible",
+    "wallets_add_collectible_network_tip": "You are currently on the {{network}} Blockchain. Please add {{network}} NFT.",
     "wallets_incorrect_address": "Incorrect contract address.",
     "wallets_collectible_been_added": "The Collectible has already been added.",
     "wallets_collectible_error_not_exist": "The collectible does not exist or belong to you.",

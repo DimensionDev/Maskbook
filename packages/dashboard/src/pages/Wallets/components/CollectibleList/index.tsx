@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef } from 'react'
+import { memo, useCallback, useEffect, useRef } from 'react'
 import { Box, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useChainId, useCustomNonFungibleAssets, ChainId, NetworkType } from '@masknet/web3-shared-evm'
@@ -7,8 +7,13 @@ import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { CollectibleCard } from '../CollectibleCard'
 import { useDashboardI18N } from '../../../../locales'
 import { PluginMessages } from '../../../../API'
+import { useNavigate } from 'react-router-dom'
+import { DashboardRoutes } from '@masknet/shared-base'
+import { TransferTab } from '../Transfer'
 import {
     Web3Plugin,
+    usePluginIDContext,
+    NetworkPluginID,
     mergeNFTList,
     useWeb3State,
     useAccount,
@@ -40,6 +45,7 @@ interface CollectibleListProps {
 }
 
 export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) => {
+    const navigate = useNavigate()
     const account = useAccount()
     const chainId = useChainId()
     const { Utils } = useWeb3State()
@@ -78,6 +84,20 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
 
     const collectibles = (Utils?.mergeNFTList ?? mergeNFTList)([..._collectibles, ...customCollectibles])
     const isLoading = loadingCollectibleDone !== SocketState.done
+    const currentPluginId = usePluginIDContext()
+    const onSend = useCallback(
+        (detail: ERC721TokenDetailed) => {
+            // Sending NFT is only available on EVM currently.
+            if (currentPluginId !== NetworkPluginID.PLUGIN_EVM) return
+            navigate(DashboardRoutes.WalletsTransfer, {
+                state: {
+                    type: TransferTab.Collectibles,
+                    erc721Token: detail,
+                },
+            })
+        },
+        [currentPluginId],
+    )
 
     useEffect(() => {
         PluginMessages.Wallet.events.erc721TokensUpdated.on(retry)
@@ -89,6 +109,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
             isEmpty={!!collectiblesError || collectibles.length === 0}
             dataSource={collectibles}
             chainId={selectedNetwork?.chainId ?? 1}
+            onSend={onSend}
         />
     )
 })
@@ -98,9 +119,10 @@ export interface CollectibleListUIProps {
     isEmpty: boolean
     chainId: number
     dataSource: ERC721TokenDetailed[]
+    onSend(detail: ERC721TokenDetailed): void
 }
 
-export const CollectibleListUI = memo<CollectibleListUIProps>(({ isLoading, isEmpty, chainId, dataSource }) => {
+export const CollectibleListUI = memo<CollectibleListUIProps>(({ isLoading, isEmpty, chainId, dataSource, onSend }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const ref = useRef<HTMLDivElement>(null)
@@ -116,7 +138,13 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(({ isLoading, isEm
                     <div className={classes.root}>
                         {dataSource.map((x, index) => (
                             <div className={classes.card} key={index}>
-                                <CollectibleCard chainId={chainId} token={x} renderOrder={index} />
+                                <CollectibleCard
+                                    chainId={chainId}
+                                    token={x}
+                                    renderOrder={index}
+                                    // TODO: transfer not support multi chain, should remove is after supported
+                                    onSend={() => onSend(x as unknown as any)}
+                                />
                             </div>
                         ))}
                     </div>
