@@ -1,4 +1,4 @@
-import { useValueRef } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared-base'
 import { currentSingleHopOnlySettings } from '../../settings'
 
 export function useSingleHopOnly() {

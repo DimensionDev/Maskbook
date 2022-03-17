@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base'
 import { useAccount } from '@masknet/web3-shared-evm'
 import { WalletMessages, WalletRPC } from '../messages'
 

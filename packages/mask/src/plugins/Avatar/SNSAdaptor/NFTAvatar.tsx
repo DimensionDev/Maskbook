@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { uniqBy } from 'lodash-unified'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import {
     ChainId,

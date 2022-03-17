@@ -1,1 +1,1 @@
-export { ErrorBoundary, withErrorBoundary } from '@masknet/shared'
+export { ErrorBoundary, withErrorBoundary } from '@masknet/shared-base'

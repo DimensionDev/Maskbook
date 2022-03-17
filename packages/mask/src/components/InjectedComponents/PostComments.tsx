@@ -1,5 +1,5 @@
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
-import { useValueRef } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared-base'
 import { Chip } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import type { ChipProps } from '@mui/material/Chip'

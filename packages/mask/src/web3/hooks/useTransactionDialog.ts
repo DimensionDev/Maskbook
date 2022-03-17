@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base'
 import { TransactionState, TransactionStateType } from '@masknet/web3-shared-evm'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 

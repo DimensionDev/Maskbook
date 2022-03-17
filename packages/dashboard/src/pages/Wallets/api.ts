@@ -1,4 +1,4 @@
-import { createGlobalState } from '@masknet/shared'
+import { createGlobalState } from '@masknet/shared-base'
 import { Messages, Services } from '../../API'
 
 export const [useCurrentCollectibleDataProvider] = createGlobalState(

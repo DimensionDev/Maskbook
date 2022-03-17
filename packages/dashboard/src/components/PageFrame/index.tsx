@@ -17,12 +17,11 @@ import {
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Close as CloseIcon, Menu as MenuIcon } from '@mui/icons-material'
 import Color from 'color'
-import { ErrorBoundary } from '@masknet/shared'
 import { DashboardContext } from '../DashboardFrame/context'
 import { Navigation } from '../DashboardFrame/Navigation'
 import { MaskBannerIcon, MaskNotSquareIcon } from '@masknet/icons'
 import { FeaturePromotions } from './FeaturePromotions'
-import { DashboardRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, ErrorBoundary } from '@masknet/shared-base'
 import { NavigationVersionFooter } from '../NavigationVersionFooter'
 
 const featurePromotionsEnabled = [

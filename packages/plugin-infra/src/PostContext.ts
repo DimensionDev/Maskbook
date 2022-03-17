@@ -1,5 +1,6 @@
-import { useObservableValues, useValueRef } from '@masknet/shared'
 import {
+    useObservableValues,
+    useValueRef,
     ObservableMap,
     ObservableSet,
     type Payload,

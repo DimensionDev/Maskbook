@@ -2,7 +2,7 @@ import { forwardRef, useImperativeHandle, useMemo, useRef, useState, startTransi
 import { Typography, Chip, Button } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import type { TypedMessage } from '@masknet/typed-message'
-import { useValueRef } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { ImagePayloadIcon } from '@masknet/icons'
 import { Send } from '@mui/icons-material'
