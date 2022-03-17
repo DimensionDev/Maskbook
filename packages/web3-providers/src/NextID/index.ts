@@ -25,6 +25,8 @@ interface CreatePayloadBody {
 interface CreatePayloadResponse {
     post_content: string
     sign_payload: string
+    uuid: string
+    created_at: string
 }
 
 export async function fetchJSON<T = unknown>(requestInfo: RequestInfo, requestInit?: RequestInit): Promise<T> {
@@ -37,10 +39,12 @@ export async function fetchJSON<T = unknown>(requestInfo: RequestInfo, requestIn
 
 // TODO: remove 'bind' in project for business context.
 export async function bindProof(
+    uuid: string,
     personaPublicKey: string,
     action: NextIDAction,
     platform: string,
     identity: string,
+    createdAt: string,
     options?: {
         walletSignature?: string
         signature?: string
@@ -48,6 +52,7 @@ export async function bindProof(
     },
 ) {
     const requestBody = {
+        uuid,
         action,
         platform,
         identity,
@@ -57,6 +62,7 @@ export async function bindProof(
             wallet_signature: options?.walletSignature ? toBase64(fromHex(options.walletSignature)) : undefined,
             signature: options?.signature ? toBase64(fromHex(options.signature)) : undefined,
         },
+        created_at: createdAt,
     }
 
     return fetchJSON(urlcat(BASE_URL, '/v1/proof'), {
@@ -122,5 +128,7 @@ export async function createPersonaPayload(
     return {
         postContent: response.post_content,
         signPayload: JSON.stringify(JSON.parse(response.sign_payload)),
+        createdAt: response.created_at,
+        uuid: response.uuid,
     }
 }

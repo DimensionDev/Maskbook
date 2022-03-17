@@ -1,10 +1,10 @@
 import { memo } from 'react'
 import { useI18N } from '../locales'
 import { useAsyncRetry } from 'react-use'
-import Services from '../../../extension/service'
 import { isSameAddress } from '@masknet/web3-shared-evm'
 import type { Persona } from '../../../database'
 import type { Binding } from '@masknet/shared-base'
+import { NextIDAction, NextIDPlatform } from '@masknet/shared-base'
 import { BindPanelUI } from './BindPanelUI'
 import { useAccount } from '@masknet/plugin-infra'
 import { useCustomSnackbar } from '@masknet/theme'
@@ -12,6 +12,7 @@ import { delay } from '@dimensiondev/kit'
 import { useBindPayload } from '../hooks/useBindPayload'
 import { usePersonaSign } from '../hooks/usePersonaSign'
 import { useWalletSign } from '../hooks/useWalletSign'
+import { bindProof } from '@masknet/web3-providers'
 
 interface BindDialogProps {
     open: boolean
@@ -28,20 +29,24 @@ export const BindDialog = memo<BindDialogProps>(({ open, onClose, persona, onBin
     const currentIdentifier = persona.identifier
     const isBound = !!bounds.find((x) => isSameAddress(x.identity, account))
 
-    const { value: message } = useBindPayload('create', account, currentIdentifier)
-    const [personaSignState, handlePersonaSign] = usePersonaSign(message, currentIdentifier)
-    const [walletSignState, handleWalletSign] = useWalletSign(message, account)
+    const { value: message } = useBindPayload(NextIDAction.Create, account, persona.publicHexKey)
+    const [personaSignState, handlePersonaSign] = usePersonaSign(message?.signPayload, currentIdentifier)
+    const [walletSignState, handleWalletSign] = useWalletSign(message?.signPayload, account)
 
     useAsyncRetry(async () => {
-        if (!personaSignState.value || !walletSignState.value || isBound) return
+        if (!personaSignState.value || !walletSignState.value || isBound || !message || !persona.publicHexKey) return
         try {
-            await Services.Helper.bindProof(
-                currentIdentifier,
-                'create',
-                'ethereum',
+            await bindProof(
+                message.uuid,
+                persona.publicHexKey,
+                NextIDAction.Create,
+                NextIDPlatform.Ethereum,
                 account,
-                walletSignState.value,
-                personaSignState.value.signature.signature,
+                message.createdAt,
+                {
+                    walletSignature: walletSignState.value,
+                    signature: personaSignState.value.signature.signature,
+                },
             )
             showSnackbar(t.notify_wallet_sign_request_title(), {
                 variant: 'success',

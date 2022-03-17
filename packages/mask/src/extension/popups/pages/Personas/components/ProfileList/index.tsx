@@ -160,7 +160,8 @@ export const ProfileList = memo(() => {
         // fetch signature payload
         try {
             if (!currentPersona) return
-            const publicHexKey = await Services.Helper.queryPersonaHexPublicKey(currentPersona.identifier)
+            const publicHexKey = currentPersona.publicHexKey
+
             if (!publicHexKey || !unbind || !unbind.identity || !unbind.platform) return
             const result = await createPersonaPayload(
                 publicHexKey,
@@ -177,9 +178,17 @@ export const ProfileList = memo(() => {
 
             if (!signatureResult) return
 
-            await bindProof(publicHexKey, NextIDAction.Delete, unbind.platform, unbind.identity, {
-                signature: signatureResult.signature.signature,
-            })
+            await bindProof(
+                result.uuid,
+                publicHexKey,
+                NextIDAction.Delete,
+                unbind.platform,
+                unbind.identity,
+                result.createdAt,
+                {
+                    signature: signatureResult.signature.signature,
+                },
+            )
 
             await delay(2000)
             setUnbind(null)

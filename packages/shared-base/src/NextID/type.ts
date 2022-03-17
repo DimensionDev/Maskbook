@@ -14,6 +14,8 @@ export enum NextIDPlatform {
 export interface NextIDPayload {
     postContent: string
     signPayload: string
+    uuid: string
+    createdAt: string
 }
 
 export interface Binding {

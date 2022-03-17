@@ -139,10 +139,18 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                     const post = collectVerificationPost?.(postContent)
                     if (post && persona_.publicHexKey) {
                         clearInterval(verifyPostCollectTimer.current!)
-                        await bindProof(persona_.publicHexKey, NextIDAction.Create, platform, username, {
-                            signature,
-                            proofLocation: post.postId,
-                        })
+                        await bindProof(
+                            payload.uuid,
+                            persona_.publicHexKey,
+                            NextIDAction.Create,
+                            platform,
+                            username,
+                            payload.createdAt,
+                            {
+                                signature,
+                                proofLocation: post.postId,
+                            },
+                        )
                         resolve()
                     }
                 }, 1000)

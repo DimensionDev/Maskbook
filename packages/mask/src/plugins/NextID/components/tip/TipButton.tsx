@@ -2,7 +2,7 @@ import { Currency } from '@masknet/icons'
 import { usePostInfoDetails } from '@masknet/plugin-infra'
 import { NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { queryIsBound } from '@masknet/web3-providers'
+import { queryExistedBindingByPersona, queryIsBound } from '@masknet/web3-providers'
 import { EMPTY_LIST } from '@masknet/web3-shared-evm'
 import classnames from 'classnames'
 import { uniq } from 'lodash-unified'
@@ -51,9 +51,9 @@ export const TipButton: FC<Props> = ({ className, receiver, addresses = [], chil
         if (!receiver) return EMPTY_LIST
 
         const persona = await Services.Identity.queryPersonaByProfile(receiver)
-        if (!persona) return EMPTY_LIST
+        if (!persona?.publicHexKey) return EMPTY_LIST
 
-        const bindings = await Services.Helper.queryExistedBinding(persona.identifier)
+        const bindings = await queryExistedBindingByPersona(persona.publicHexKey)
         if (!bindings) return EMPTY_LIST
 
         const wallets = bindings.proofs.filter((p) => p.platform === NextIDPlatform.Ethereum).map((p) => p.identity)

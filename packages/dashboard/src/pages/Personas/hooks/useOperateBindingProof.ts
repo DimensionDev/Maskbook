@@ -18,7 +18,7 @@ export function useDeleteBound() {
         })
         if (!signResult) throw new Error('Failed to sign by persona.')
         const signature = signResult.signature.signature
-        await bindProof(persona_.publicHexKey, action, platform, username, {
+        await bindProof(payload.uuid, persona_.publicHexKey, action, platform, username, payload.createdAt, {
             signature: signature,
         })
         Services.Identity.detachProfile(profile)
