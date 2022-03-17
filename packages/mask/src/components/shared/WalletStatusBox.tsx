@@ -5,7 +5,8 @@ import classNames from 'classnames'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import { isDashboardPage, useRemoteControlledDialog } from '@masknet/shared-base'
+import { isDashboardPage } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
     useAccount,
     useWeb3State,

@@ -6,7 +6,7 @@ import { ChainId, ProviderType, useAccount, useChainId } from '@masknet/web3-sha
 import { getRegisteredWeb3Networks, NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra'
 import { currentMaskWalletAccountSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
 import { ChainIcon, useMenuConfig, WalletIcon } from '@masknet/shared'
-import { useValueRef } from '@masknet/shared-base'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { ArrowDownRound } from '@masknet/icons'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 

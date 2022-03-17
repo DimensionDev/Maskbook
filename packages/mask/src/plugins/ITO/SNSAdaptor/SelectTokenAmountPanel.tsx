@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react'
 import { v4 as uuid } from 'uuid'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import type { ERC20TokenListProps } from '@masknet/shared'
-import { useRemoteControlledDialog } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { TokenAmountPanel, TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
 

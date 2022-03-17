@@ -1,5 +1,5 @@
 import { createContext, useEffect, useMemo, useState } from 'react'
-import { useValueRef } from '@masknet/shared-base'
+import { useValueRef } from '@masknet/shared-base-ui'
 import {
     AddressName,
     ChainId,

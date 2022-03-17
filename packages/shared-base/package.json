@@ -21,12 +21,10 @@
     "immer": "^9.0.12",
     "pvtsutils": "^1.2.2",
     "react": "../empty",
-    "react-use": "^17.3.2",
     "tiny-secp256k1": "^2.2.1",
     "typeson": "^7.0.1",
     "typeson-registry": "^2.0.0",
     "use-subscription": "^1.5.1",
-    "uuid": "^8.3.2",
     "z-schema": "^5.0.2"
   }
 }

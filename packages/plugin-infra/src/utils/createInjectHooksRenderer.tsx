@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, memo, createContext, useContext } from 'react'
-import { ErrorBoundary } from '@masknet/shared-base'
+import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { ShadowRootIsolation } from '@masknet/theme'
 import type { Plugin } from '../types'
 import { usePluginI18NField, PluginWrapperComponent, PluginWrapperMethods } from '../hooks'

@@ -12,7 +12,7 @@ import { calculateNextPrize, calculateSecondsRemaining, getPrizePeriod } from '.
 import { NetworkView } from './NetworkView'
 import { useI18N } from '../../../utils'
 import { TokenIcon } from '@masknet/shared'
-import { useRemoteControlledDialog } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

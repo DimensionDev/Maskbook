@@ -21,7 +21,8 @@ import { DashboardContext } from '../DashboardFrame/context'
 import { Navigation } from '../DashboardFrame/Navigation'
 import { MaskBannerIcon, MaskNotSquareIcon } from '@masknet/icons'
 import { FeaturePromotions } from './FeaturePromotions'
-import { DashboardRoutes, ErrorBoundary } from '@masknet/shared-base'
+import { DashboardRoutes } from '@masknet/shared-base'
+import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { NavigationVersionFooter } from '../NavigationVersionFooter'
 
 const featurePromotionsEnabled = [

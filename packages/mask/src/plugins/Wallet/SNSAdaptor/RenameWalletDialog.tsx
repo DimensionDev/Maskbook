@@ -6,7 +6,7 @@ import { WalletMessages, WalletRPC } from '../messages'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useSnackbarCallback } from '@masknet/shared'
-import { useRemoteControlledDialog } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

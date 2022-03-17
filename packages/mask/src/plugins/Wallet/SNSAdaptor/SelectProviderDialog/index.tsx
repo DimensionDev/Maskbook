@@ -9,7 +9,8 @@ import {
     useNetworkType,
     useWeb3UI,
 } from '@masknet/plugin-infra'
-import { isDashboardPage, useRemoteControlledDialog, useValueRef } from '@masknet/shared-base'
+import { isDashboardPage } from '@masknet/shared-base'
+import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { WalletMessages } from '../../messages'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'

@@ -140,6 +140,7 @@ importers:
       '@masknet/public-api': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
+      '@masknet/shared-base-ui': workspace:*
       '@masknet/storybook-shared': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/web3-providers': workspace:*
@@ -193,6 +194,7 @@ importers:
       '@masknet/public-api': link:../public-api
       '@masknet/shared': link:../shared
       '@masknet/shared-base': link:../shared-base
+      '@masknet/shared-base-ui': link:../shared-base-ui
       '@masknet/storybook-shared': link:../storybook-shared
       '@masknet/theme': link:../theme
       '@masknet/web3-providers': link:../web3-providers
@@ -244,11 +246,13 @@ importers:
     specifiers:
       '@dimensiondev/stego-js': 0.11.1-20201027083223-8ab41be
       '@masknet/shared-base': workspace:*
+      '@masknet/shared-base-ui': workspace:*
       '@masknet/typed-message': workspace:*
       '@msgpack/msgpack': ^2.7.2
     dependencies:
       '@dimensiondev/stego-js': 0.11.1-20201027083223-8ab41be
       '@masknet/shared-base': link:../shared-base
+      '@masknet/shared-base-ui': link:../shared-base-ui
       '@masknet/typed-message': link:../typed-message
       '@msgpack/msgpack': 2.7.2
 
@@ -319,6 +323,7 @@ importers:
       '@masknet/sdk': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
+      '@masknet/shared-base-ui': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/typed-message': workspace:*
       '@masknet/web3-contracts': workspace:*
@@ -455,6 +460,7 @@ importers:
       '@masknet/sdk': link:../mask-sdk
       '@masknet/shared': link:../shared
       '@masknet/shared-base': link:../shared-base
+      '@masknet/shared-base-ui': link:../shared-base-ui
       '@masknet/theme': link:../theme
       '@masknet/typed-message': link:../typed-message
       '@masknet/web3-contracts': link:../web3-contracts
@@ -583,6 +589,7 @@ importers:
     specifiers:
       '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
       '@masknet/shared-base': workspace:*
+      '@masknet/shared-base-ui': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/typed-message': workspace:*
       '@masknet/web3-shared-base': workspace:*
@@ -597,6 +604,7 @@ importers:
     dependencies:
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
       '@masknet/shared-base': link:../shared-base
+      '@masknet/shared-base-ui': link:../shared-base-ui
       '@masknet/theme': link:../theme
       '@masknet/typed-message': link:../typed-message
       '@masknet/web3-shared-base': link:../web3-shared/base
@@ -615,6 +623,7 @@ importers:
       '@cyberlab/cyberconnect': ^4.2.2
       '@masknet/plugin-infra': workspace:*
       '@masknet/shared-base': workspace:*
+      '@masknet/shared-base-ui': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/web3-shared-evm': workspace:*
       boring-avatars: ^1.5.8
@@ -623,6 +632,7 @@ importers:
       '@cyberlab/cyberconnect': 4.2.2
       '@masknet/plugin-infra': link:../../plugin-infra
       '@masknet/shared-base': link:../../shared-base
+      '@masknet/shared-base-ui': link:../../shared-base-ui
       '@masknet/theme': link:../../theme
       '@masknet/web3-shared-evm': link:../../web3-shared/evm
       boring-avatars: 1.6.1
@@ -635,6 +645,7 @@ importers:
       '@masknet/plugin-infra': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
+      '@masknet/shared-base-ui': workspace:*
       bignumber.js: ^9.0.2
       date-fns: ^2.28.0
       iframe-resizer-react: ^1.1.0
@@ -646,6 +657,7 @@ importers:
       '@masknet/plugin-infra': link:../../plugin-infra
       '@masknet/shared': link:../../shared
       '@masknet/shared-base': link:../../shared-base
+      '@masknet/shared-base-ui': link:../../shared-base-ui
       bignumber.js: 9.0.2
       date-fns: 2.28.0
       iframe-resizer-react: 1.1.0_bc22c48adf1a4e34a005159413cd72b5
@@ -658,6 +670,7 @@ importers:
       '@masknet/plugin-infra': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
+      '@masknet/shared-base-ui': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/web3-providers': workspace:*
       '@masknet/web3-shared-base': workspace:*
@@ -671,6 +684,7 @@ importers:
       '@masknet/plugin-infra': link:../../plugin-infra
       '@masknet/shared': link:../../shared
       '@masknet/shared-base': link:../../shared-base
+      '@masknet/shared-base-ui': link:../../shared-base-ui
       '@masknet/theme': link:../../theme
       '@masknet/web3-providers': link:../../web3-providers
       '@masknet/web3-shared-base': link:../../web3-shared/base
@@ -689,6 +703,7 @@ importers:
       '@masknet/plugin-wallet': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
+      '@masknet/shared-base-ui': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/typed-message': workspace:*
       '@msgpack/msgpack': ^2.7.2
@@ -707,6 +722,7 @@ importers:
       '@masknet/plugin-wallet': link:../Wallet
       '@masknet/shared': link:../../shared
       '@masknet/shared-base': link:../../shared-base
+      '@masknet/shared-base-ui': link:../../shared-base-ui
       '@masknet/theme': link:../../theme
       '@masknet/typed-message': link:../../typed-message
       '@msgpack/msgpack': 2.7.2
@@ -725,6 +741,7 @@ importers:
       '@masknet/plugin-infra': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
+      '@masknet/shared-base-ui': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/web3-providers': workspace:*
       '@masknet/web3-shared-base': workspace:*
@@ -737,6 +754,7 @@ importers:
       '@masknet/plugin-infra': link:../../plugin-infra
       '@masknet/shared': link:../../shared
       '@masknet/shared-base': link:../../shared-base
+      '@masknet/shared-base-ui': link:../../shared-base-ui
       '@masknet/theme': link:../../theme
       '@masknet/web3-providers': link:../../web3-providers
       '@masknet/web3-shared-base': link:../../web3-shared/base
@@ -750,6 +768,7 @@ importers:
       '@masknet/plugin-infra': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
+      '@masknet/shared-base-ui': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/web3-providers': workspace:*
       '@masknet/web3-shared-base': workspace:*
@@ -764,6 +783,7 @@ importers:
       '@masknet/plugin-infra': link:../../plugin-infra
       '@masknet/shared': link:../../shared
       '@masknet/shared-base': link:../../shared-base
+      '@masknet/shared-base-ui': link:../../shared-base-ui
       '@masknet/theme': link:../../theme
       '@masknet/web3-providers': link:../../web3-providers
       '@masknet/web3-shared-base': link:../../web3-shared/base
@@ -781,6 +801,7 @@ importers:
       '@masknet/plugin-infra': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
+      '@masknet/shared-base-ui': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/web3-providers': workspace:*
       '@masknet/web3-shared-base': workspace:*
@@ -801,6 +822,7 @@ importers:
       '@masknet/plugin-infra': link:../../plugin-infra
       '@masknet/shared': link:../../shared
       '@masknet/shared-base': link:../../shared-base
+      '@masknet/shared-base-ui': link:../../shared-base-ui
       '@masknet/theme': link:../../theme
       '@masknet/web3-providers': link:../../web3-providers
       '@masknet/web3-shared-base': link:../../web3-shared/base
@@ -847,11 +869,13 @@ importers:
       '@masknet/plugin-infra': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
+      '@masknet/shared-base-ui': workspace:*
       react-use: ^17.3.2
     dependencies:
       '@masknet/plugin-infra': link:../../plugin-infra
       '@masknet/shared': link:../../shared
       '@masknet/shared-base': link:../../shared-base
+      '@masknet/shared-base-ui': link:../../shared-base-ui
       react-use: 17.3.2_bc22c48adf1a4e34a005159413cd72b5
 
   packages/polyfills:
@@ -960,6 +984,7 @@ importers:
       '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
       '@masknet/icons': workspace:*
       '@masknet/shared-base': workspace:*
+      '@masknet/shared-base-ui': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-evm': workspace:*
@@ -978,6 +1003,7 @@ importers:
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
       '@masknet/icons': link:../icons
       '@masknet/shared-base': link:../shared-base
+      '@masknet/shared-base-ui': link:../shared-base-ui
       '@masknet/theme': link:../theme
       '@masknet/web3-shared-base': link:../web3-shared/base
       '@masknet/web3-shared-evm': link:../web3-shared/evm
@@ -1011,12 +1037,10 @@ importers:
       immer: ^9.0.12
       pvtsutils: ^1.2.2
       react: ../empty
-      react-use: ^17.3.2
       tiny-secp256k1: ^2.2.1
       typeson: ^7.0.1
       typeson-registry: ^2.0.0
       use-subscription: ^1.5.1
-      uuid: ^8.3.2
       z-schema: ^5.0.2
     dependencies:
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
@@ -1035,13 +1059,25 @@ importers:
       immer: 9.0.12
       pvtsutils: 1.2.2
       react: link:../empty
-      react-use: 17.3.2_bc22c48adf1a4e34a005159413cd72b5
       tiny-secp256k1: 2.2.1
       typeson: 7.0.1
       typeson-registry: 2.0.0
       use-subscription: 1.5.1_react@18.0.0-rc.2
-      uuid: 8.3.2
       z-schema: 5.0.2
+
+  packages/shared-base-ui:
+    specifiers:
+      '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
+      '@masknet/shared-base': workspace:*
+      react-use: ^17.3.2
+      use-subscription: ^1.5.1
+      uuid: ^8.3.2
+    dependencies:
+      '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
+      '@masknet/shared-base': link:../shared-base
+      react-use: 17.3.2_bc22c48adf1a4e34a005159413cd72b5
+      use-subscription: 1.5.1_react@18.0.0-rc.2
+      uuid: 8.3.2
 
   packages/storybook-shared:
     specifiers:
@@ -1186,6 +1222,7 @@ importers:
     specifiers:
       '@ensdomains/address-encoder': ^0.2.6
       '@masknet/shared-base': workspace:*
+      '@masknet/shared-base-ui': workspace:*
       '@masknet/web3-constants': workspace:*
       '@masknet/web3-contracts': workspace:*
       '@masknet/web3-shared-base': workspace:*
@@ -1209,6 +1246,7 @@ importers:
     dependencies:
       '@ensdomains/address-encoder': 0.2.6
       '@masknet/shared-base': link:../../shared-base
+      '@masknet/shared-base-ui': link:../../shared-base-ui
       '@masknet/web3-constants': link:../../web3-constants
       '@masknet/web3-contracts': link:../../web3-contracts
       '@masknet/web3-shared-base': link:../base

@@ -17,7 +17,7 @@ import {
     useTokenConstants,
     useTokenTransferCallback,
 } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { isGreaterThan, isZero, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import {
