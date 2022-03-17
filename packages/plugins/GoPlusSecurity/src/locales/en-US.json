@@ -1,3 +1,19 @@
 {
-    "dialog_title": "Check Security"
+    "dialog_title": "Check Security",
+    "powered_by_go_plus": "Powered by Go+",
+    "search": "Search",
+    "token_info": "Token info",
+    "more_details": "More Details",
+    "security_detection": "Security Detection",
+    "security_info_code_not_verify_title": "Contract source code not verified",
+    "security_info_code_not_verify_message": "This token contract has not been verified. We cannot check the contract code for details. Unsourced token contracts are likely to have malicious functions to defraud users of their assets",
+    "security_info_functions_that_can_suspend_trading_title": "Functions that can suspend trading",
+    "security_info_functions_that_can_suspend_trading_message": "If a suspendable code is included, the token maybe neither be bought nor sold (honeypot risk). ",
+    "token_info_token_name": "Token Name",
+    "token_info_token_contract_address": "Token Contract Address",
+    "token_info_contract_creator": "Contract Creator",
+    "token_info_contract_owner": "Contract Owner",
+    "token_info_total_supply": "Total Supply",
+    "default_placeholder": "Note: Scams detections might not be 100% guaranteed.",
+    "not_found_tip": "Network error or the on-chain data is abnormal. Please switch to the correct network or check the address again."
 }

@@ -324,6 +324,7 @@ export namespace SecurityAPI {
         is_mintable?: 0 | 1
         can_take_back_ownership?: string
         owner_address?: string
+        creator_address?: string
     }
 
     export interface TokenSecurity {

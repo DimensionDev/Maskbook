@@ -189,7 +189,7 @@
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
-                "namespace": "__template__",
+                "namespace": "io.gopluslabs.security",
                 "trans": "Translate",
                 "sourceMap": "inline"
             }
