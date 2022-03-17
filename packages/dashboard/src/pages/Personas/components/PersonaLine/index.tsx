@@ -3,8 +3,8 @@ import { Box, Button, Link, Stack, Typography } from '@mui/material'
 import { getMaskColor, MaskColorVar, makeStyles } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { DisconnectProfileDialog } from '../DisconnectProfileDialog'
-import type { NextIDPersonaBindings, PersonaIdentifier, ProfileIdentifier, BindingProof } from '@masknet/shared-base'
-import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
+import type { PersonaIdentifier, ProfileIdentifier, BindingProof, NextIDPersonaBindings } from '@masknet/shared-base'
+import { LoadingAnimation, SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { NextIdPersonaWarningIcon, NextIdPersonaVerifiedIcon } from '@masknet/icons'
 
@@ -76,8 +76,8 @@ export interface ConnectedPersonaLineProps {
     profileIdentifiers: ProfileIdentifier[]
     networkIdentifier: string
     disableAdd?: boolean
-    verification?: NextIDPersonaBindings
     personaIdentifier: PersonaIdentifier
+    proof: { loading: boolean; value?: NextIDPersonaBindings }
 }
 
 export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
@@ -89,8 +89,8 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         networkIdentifier,
         isHideOperations,
         disableAdd,
-        verification,
         personaIdentifier,
+        proof,
     }) => {
         const t = useDashboardI18N()
         const { openProfilePage } = PersonaContext.useContainer()
@@ -109,7 +109,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         }
 
         const handleDisconnect = (profile: ProfileIdentifier) => {
-            const isProved = verification?.proofs.find((x) => {
+            const isProved = proof.value?.proofs.find((x) => {
                 return x.platform === 'twitter' && x.identity === profile.userId.toLowerCase()
             })
             if (isProved && onDeleteBound) {
@@ -119,20 +119,26 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
             onDisconnect(profile)
         }
         const userIdBox = (profile: ProfileIdentifier) => {
-            const proofSupport = ['twitter.com'].includes(profile.network)
-            const proof = verification?.proofs.find((x) => {
+            const isProved = proof.value?.proofs.find((x) => {
                 return x.platform === 'twitter' && x.identity === profile.userId.toLowerCase()
             })
+
             return (
                 <div className={classes.userIdBox}>
                     <div>@{profile.userId}</div>
-                    <div className={classes.proofIconBox} onClick={(e: MouseEvent) => handleProofIconClick(e, proof)}>
-                        {!proofSupport ? null : proof?.is_valid ? (
-                            <NextIdPersonaVerifiedIcon />
-                        ) : (
-                            <NextIdPersonaWarningIcon />
-                        )}
-                    </div>
+                    {profile.network === 'twitter.com' && (
+                        <div
+                            className={classes.proofIconBox}
+                            onClick={(e: MouseEvent) => handleProofIconClick(e, isProved)}>
+                            {proof.loading ? (
+                                <LoadingAnimation />
+                            ) : isProved?.is_valid ? (
+                                <NextIdPersonaVerifiedIcon />
+                            ) : (
+                                <NextIdPersonaWarningIcon />
+                            )}
+                        </div>
+                    )}
                 </div>
             )
         }

@@ -14,7 +14,6 @@
     "@masknet/theme": "workspace:*",
     "@masknet/typed-message": "workspace:*",
     "@msgpack/msgpack": "^2.7.2",
-    "@masknet/web3-kit": "workspace:*",
     "arweave": "^1.10.3",
     "ipfs-http-client": "^54.0.2",
     "urlcat": "^2.0.4",

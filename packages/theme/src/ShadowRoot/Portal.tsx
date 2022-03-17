@@ -1,29 +1,16 @@
-import { useRef, useEffect, forwardRef, useState, createContext, useContext } from 'react'
-import { useCurrentShadowRootStyles } from './ShadowRootStyleProvider'
+/* eslint-disable react-hooks/rules-of-hooks */
+import { useRef, forwardRef, useContext } from 'react'
 import type { PopperProps } from '@mui/material'
+import { DisableShadowRootContext, PreventEventPropagationListContext, StyleSheetsContext } from './Contexts'
 
-/**
- * ! Do not export !
- *
- * You SHOULD NOT use this in React directly
- */
 let mountingPoint: HTMLDivElement
 let mountingShadowRoot: ShadowRoot
-export function setupPortalShadowRoot(
-    init: ShadowRootInit,
-    preventEventPropagationList: (keyof HTMLElementEventMap)[],
-) {
-    if (mountingPoint) return mountingShadowRoot!
+export function setupPortalShadowRoot(init: ShadowRootInit) {
+    if (mountingShadowRoot) return mountingShadowRoot
     mountingShadowRoot = document.body.appendChild(document.createElement('div')).attachShadow(init)
-    for (const each of preventEventPropagationList) {
-        mountingShadowRoot.addEventListener(each, (e) => e.stopPropagation())
-    }
     mountingPoint = mountingShadowRoot.appendChild(document.createElement('div'))
-    return mountingShadowRoot!
+    return mountingShadowRoot
 }
-
-/** usePortalShadowRoot under this context does not do anything. (And it will return an empty container). */
-export const NoEffectUsePortalShadowRootContext = createContext(false)
 
 /**
  * Render to a React Portal in to the page needs this hook. It will provide a wrapped container that provides ShadowRoot isolation and CSS support for it.
@@ -41,64 +28,47 @@ export const NoEffectUsePortalShadowRootContext = createContext(false)
  *      />
  * ))
  */
-export function usePortalShadowRoot(renderer: (container: HTMLDivElement | undefined) => null | JSX.Element) {
+export function usePortalShadowRoot(renderer: (container: HTMLElement | undefined) => null | JSX.Element) {
+    const disabled = useRef(useContext(DisableShadowRootContext)).current
     // we ignore the changes on this property during multiple render
     // so we can violates the React hooks rule and still be safe.
-    const disabled = useRef(useContext(NoEffectUsePortalShadowRootContext)).current
     if (disabled) return renderer(undefined)
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [findMountingShadowRef, setRef] = useState<HTMLSpanElement | null>(null)
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const doms = useSideEffectRef(() => {
+    const sheets = useContext(StyleSheetsContext)
+    const signal = useRef<AbortController>(null!)
+    const preventEventPropagationList = useContext(PreventEventPropagationListContext)
+    const { container } = useRefInit(() => {
+        signal.current = new AbortController()
+        const portal = PortalShadowRoot()
+
         const root = document.createElement('div')
-        const container = root.appendChild(document.createElement('div'))
-        const style = root.appendChild(document.createElement('style'))
-        return { root, container, style }
+        root.dataset.portalShadowRoot = ''
+        const shadow = root.attachShadow({ mode: 'open' })
+
+        const stop = (e: Event): void => e.stopPropagation()
+        for (const each of preventEventPropagationList) {
+            shadow.addEventListener(each, stop, { signal: signal.current.signal })
+        }
+
+        const container = shadow.appendChild(document.createElement('main'))
+        sheets.map((x) => x.addContainer(shadow))
+
+        // This is proved to be important to the correct portal orders...
+        container.appendChild = (child) => {
+            if (!root.parentElement) portal.appendChild(root)
+            Node.prototype.appendChild.call(container, child)
+            return child
+        }
+        container.removeChild = (child) => {
+            Node.prototype.removeChild.call(container, child)
+            if (container.childElementCount === 0) portal.removeChild(root)
+            return child
+        }
+
+        return { container }
     })
-    const { container } = doms
 
-    return (
-        <IsolatedRender {...doms} findMountingShadowRef={findMountingShadowRef}>
-            <span style={{ display: 'none' }} ref={(ref) => findMountingShadowRef !== ref && setRef(ref)} />
-            {renderer(container)}
-        </IsolatedRender>
-    )
-}
-
-/*
-Here is a strange problem that `useMemo` in the `useCurrentShadowRootStyles` will re-render every event loop _even_ findMountingShadowRef is the same.
-React is isolating their render process in the unit of components. Split it into another component solves the problem.
-(And now it no longer re-render every event loop).
- */
-type IsolatedRenderProps = React.PropsWithChildren<{
-    root: HTMLElement
-    container: HTMLElement
-    style: HTMLStyleElement
-    findMountingShadowRef: HTMLSpanElement | null
-}>
-const IsolatedRender = ({ container, root, style, children, findMountingShadowRef }: IsolatedRenderProps) => {
-    const update = useUpdate()
-    const css = useCurrentShadowRootStyles(findMountingShadowRef)
-    const containerInUse = container.children.length !== 0
-
-    useEffect(() => {
-        container.appendChild = bind(container.appendChild, container, update)
-        container.removeChild = bind(container.removeChild, container, update)
-    }, [])
-
-    useEffect(() => {
-        if (!containerInUse) return root.remove()
-        const shadow = PortalShadowRoot()
-        if (root.parentElement === shadow) return
-        shadow.appendChild(root)
-    }, [containerInUse, root])
-
-    useEffect(() => {
-        if (findMountingShadowRef && style.textContent !== css) style.textContent = css
-    }, [style, css, findMountingShadowRef])
-
-    return children as any
+    return renderer(container)
 }
 
 export function createShadowRootForwardedComponent<
@@ -129,22 +99,7 @@ function PortalShadowRoot(): Element {
     return mountingPoint
 }
 
-function bind(f: Function, thisArg: unknown, hook: Function) {
-    return (...args: any) => {
-        try {
-            return f.apply(thisArg, args)
-        } finally {
-            hook()
-        }
-    }
-}
-
-function useUpdate() {
-    const [, _update] = useState(0)
-    return () => _update((i) => i + 1)
-}
-
-function useSideEffectRef<T>(f: () => T): T {
+function useRefInit<T>(f: () => T): T {
     const ref = useRef<T>(undefined!)
     if (!ref.current) ref.current = f()
     return ref.current

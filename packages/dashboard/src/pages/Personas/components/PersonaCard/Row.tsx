@@ -8,7 +8,6 @@ import {
     ProfileIdentifier,
     ProfileInformation,
     DashboardRoutes,
-    NextIDPersonaBindings,
     NextIDAction,
 } from '@masknet/shared-base'
 import { useMenu } from '@masknet/shared'
@@ -26,6 +25,7 @@ import { styled } from '@mui/material/styles'
 import { PreviewDialog as ExportPersonaDialog } from '../../../SignUp/steps/PreviewDialog'
 import { useExportPrivateKey } from '../../hooks/useExportPrivateKey'
 import { useExportMnemonicWords } from '../../hooks/useExportMnemonicWords'
+import { usePersonaProof } from '../../hooks/usePersonaProof'
 
 const useStyles = makeStyles()((theme) => ({
     setting: {
@@ -63,21 +63,13 @@ const MenuText = styled('span')(`
 `)
 
 export const PersonaRowCard = memo(() => {
-    const {
-        currentPersona,
-        connectPersona,
-        disconnectPersona,
-        renamePersona,
-        deleteBound,
-        definedSocialNetworks,
-        verification,
-    } = PersonaContext.useContainer()
-
-    if (!currentPersona) return null
+    const { currentPersona, connectPersona, disconnectPersona, renamePersona, deleteBound, definedSocialNetworks } =
+        PersonaContext.useContainer()
+    if (!currentPersona || !currentPersona.publicHexKey) return null
 
     return (
         <PersonaRowCardUI
-            verification={verification}
+            publicKey={currentPersona.publicHexKey}
             nickname={currentPersona.nickname}
             identifier={currentPersona.identifier}
             profiles={currentPersona.linkedProfiles}
@@ -95,10 +87,10 @@ export interface PersonaRowCardUIProps {
     identifier: PersonaIdentifier
     profiles: ProfileInformation[]
     definedSocialNetworks: SocialNetwork[]
+    publicKey: string
     onConnect: (identifier: PersonaIdentifier, networkIdentifier: string) => void
     onDisconnect: (identifier: ProfileIdentifier) => void
     onRename: (identifier: PersonaIdentifier, target: string, callback?: () => void) => Promise<void>
-    verification?: NextIDPersonaBindings
     onDeleteBound: (
         identifier: PersonaIdentifier,
         profile: ProfileIdentifier,
@@ -113,12 +105,11 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
     const { classes } = useStyles()
     const { confirmPassword } = useContext(UserContext)
 
-    const { nickname, definedSocialNetworks, identifier, profiles, verification } = props
+    const { nickname, definedSocialNetworks, identifier, profiles, publicKey } = props
     const { onConnect, onDisconnect, onRename, onDeleteBound } = props
-
     const { value: privateKey } = useExportPrivateKey(identifier)
     const { value: words } = useExportMnemonicWords(identifier)
-
+    const proof = usePersonaProof(publicKey)
     const [avatarOn, toggleAvatar] = useToggle(false)
     const [renameDialogOpen, setRenameDialogOpen] = useState(false)
     const [logoutDialogOpen, setLogoutDialogOpen] = useState(false)
@@ -205,7 +196,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                         } else {
                             return (
                                 <ConnectedPersonaLine
-                                    verification={verification}
+                                    proof={proof}
                                     disableAdd={currentNetworkProfiles.length >= 5}
                                     isHideOperations={false}
                                     key={networkIdentifier}

@@ -17,8 +17,6 @@ export * from './DecryptionTypes'
 const ErrorReasons = DecryptError.Reasons
 type Version = PayloadParseResult.Payload['version']
 export async function* decrypt(options: DecryptOptions, io: DecryptIO): AsyncIterableIterator<DecryptProgress> {
-    yield progress(DecryptProgressKind.Started)
-
     const { author: _author, encrypted: _encrypted, encryption: _encryption, version } = options.message
     const { authorPublicKey: _authorPublicKey } = options.message
 
@@ -219,7 +217,6 @@ async function importAESKeyFromJWKFromTextEncoder(aes_raw: Uint8Array) {
 }
 
 function progress(kind: DecryptProgressKind.Success, rest: Omit<DecryptSuccess, 'type'>): DecryptSuccess
-function progress(kind: DecryptProgressKind.Started): DecryptProgress
 function progress(kind: DecryptProgressKind, rest?: object): DecryptProgress {
     return { type: kind, ...rest } as any
 }
