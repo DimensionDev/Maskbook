@@ -101,6 +101,9 @@ export const postEditorDraftContentSelector = () => {
             '[contenteditable][aria-label][spellcheck],textarea[aria-label][spellcheck]',
         )
     }
+    if (location.pathname.match(/^\/\w+\/status\/\d+$/)) {
+        return querySelector<HTMLElement>('div[data-testid="tweetTextarea_0"]')
+    }
     return (isCompose() ? postEditorInPopupSelector() : postEditorInTimelineSelector()).querySelector<HTMLElement>(
         '.public-DraftEditor-content, [contenteditable][aria-label][spellcheck]',
     )
@@ -264,3 +267,15 @@ export const searchTwitterAvatarNFTSelector = () =>
     querySelector<E>('a[href$="/nft"]').closest<E>(1).querySelector('a div:nth-child(3) > div')
 
 export const searchTwitterAvatarNFTLinkSelector = () => querySelector<E>('a[href$="/nft"]')
+
+export const searchReplyToolbarSelector = () =>
+    querySelector<E>('div[data-testid="primaryColumn"] div[data-testid="toolBar"]').querySelector<E>(
+        'div[data-testid="geoButton"]',
+    )
+
+export const searchReplyButttonSelector = () => querySelector<E>('div[data-testid="tweetButtonInline"]')
+
+export const isReply = () => !!location.pathname.match(/^\/\w+\/status\/\d+$/)
+
+export const searchRejectReplyTextSelector = () =>
+    querySelector<E>('div[data-testid="tweetTextarea_0"] > div > div > div > span')

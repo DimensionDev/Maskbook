@@ -1,6 +1,6 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'
-import { postEditorInTimelineSelector, postEditorInPopupSelector } from '../utils/selector'
+import { isReply, postEditorInPopupSelector, searchReplyToolbarSelector } from '../utils/selector'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
 import { MaskMessages } from '../../../utils/messages'
@@ -12,6 +12,7 @@ import { twitterBase } from '../base'
 import { sayHelloShowed } from '../../../settings/settings'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { useI18N } from '../../../utils'
+import { pasteTextToReplyTwitter } from '../automation/pasteTextToComposition'
 
 const useStyles = makeStyles()((theme) => ({
     iconButton: {
@@ -29,7 +30,8 @@ const useStyles = makeStyles()((theme) => ({
 
 export function injectPostDialogHintAtTwitter(signal: AbortSignal) {
     const emptyNode = document.createElement('div')
-    renderPostDialogHintTo('timeline', postEditorInTimelineSelector(), signal)
+    renderPostDialogHintTo('timeline', searchReplyToolbarSelector(), signal)
+
     renderPostDialogHintTo(
         'popup',
         postEditorInPopupSelector().map((x) => (isCompose() && hasEditor() ? x : emptyNode)),
@@ -49,6 +51,8 @@ function renderPostDialogHintTo<T>(reason: 'timeline' | 'popup', ls: LiveSelecto
 function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
     const { classes } = useStyles()
     const { t } = useI18N()
+    const [reply, setReply] = useState(false)
+
     const onHintButtonClicked = useCallback(() => {
         const content = sayHelloShowed[twitterBase.networkIdentifier].value
             ? undefined
@@ -56,9 +60,20 @@ function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
                   t('setup_guide_say_hello_content') +
                       t('setup_guide_say_hello_follow', { account: '@realMaskNetwork' }),
               )
-        MaskMessages.events.requestComposition.sendToLocal({ reason, open: true, content })
+
+        MaskMessages.events.requestComposition.sendToLocal({ reason, open: true, content, reply })
         sayHelloShowed[twitterBase.networkIdentifier].value = true
-    }, [reason])
+    }, [reason, reply])
+
+    useEffect(() => {
+        setReply(isReply())
+    }, [location])
+
+    useEffect(() => {
+        return MaskMessages.events.message.on(async (data) => {
+            pasteTextToReplyTwitter?.(data.text, { recover: true })
+        })
+    }, [])
     return (
         <PostDialogHint
             classes={{ iconButton: classes.iconButton, tooltip: classes.tooltip }}

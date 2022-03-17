@@ -42,6 +42,7 @@ const useStyles = makeStyles()({
 })
 
 export interface CompositionProps {
+    reply: boolean
     maxLength?: number
     onSubmit(data: SubmitComposition): Promise<void>
     onChange?(message: TypedMessage): void
@@ -60,6 +61,7 @@ export interface SubmitComposition {
     target: 'Everyone' | Profile[]
     content: TypedMessage
     encode: 'text' | 'image'
+    reply: boolean
 }
 export interface CompositionRef {
     setMessage(message: TypedMessage): void
@@ -155,6 +157,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                 content: Editor.current.value,
                 encode: encodingKind,
                 target: encryptionKind === 'E2E' ? recipients : 'Everyone',
+                reply: props.reply,
             })
             .finally(reset)
     }, [encodingKind, encryptionKind, recipients, props.onSubmit])
