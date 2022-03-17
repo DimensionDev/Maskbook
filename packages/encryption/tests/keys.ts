@@ -98,6 +98,21 @@ export async function queryTestPublicKey(id: ProfileIdentifier) {
     if (id.userId === 'jack') return toPublic(jack_k256_private)
     return null
 }
+export function deriveAESKey(as: 'bob' | 'jack') {
+    const keys = [toPrivate(bob_k256_private), toPrivate(jack_k256_private)]
+    return async (pub: EC_Public_CryptoKey) => {
+        const k = (await Promise.all(keys))[as === 'bob' ? 0 : 1]
+        return [
+            await crypto.subtle.deriveKey(
+                { name: 'ECDH', public: pub },
+                k.key,
+                { name: 'AES-GCM', length: 256 },
+                false,
+                ['decrypt'],
+            ),
+        ] as AESCryptoKey[]
+    }
+}
 
 async function toPublic({
     d,

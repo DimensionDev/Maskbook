@@ -12,7 +12,7 @@ import {
 import { importAESFromJWK } from '../src/utils'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { makeTypedMessageText, makeTypedMessageTupleSerializable } from '@masknet/typed-message'
-import { getRandomValues, getTestRandomAESKey, getTestRandomECKey, queryTestPublicKey } from './keys'
+import { deriveAESKey, getRandomValues, getTestRandomAESKey, getTestRandomECKey, queryTestPublicKey } from './keys'
 
 const publicTarget: EncryptOptions['target'] = {
     type: 'public',
@@ -70,7 +70,6 @@ test('v37 E2E encryption', async () => {
         version: -37,
     }
 
-    debugger
     const encrypted = await encrypt(payload, {
         encryptByLocalKey: reject,
         deriveAESKey_version38_or_older: reject,
@@ -79,8 +78,42 @@ test('v37 E2E encryption', async () => {
         getRandomECKey: getTestRandomECKey(),
         getRandomValues: getRandomValues(),
     })
-
     expect(encrypted).toMatchSnapshot('encrypted')
+
+    const parsed = (await parsePayload(encrypted.output)).unwrap()
+    expect(parsed).toMatchSnapshot('parsed')
+
+    // decrypt as author
+    {
+        const result: any[] = []
+        const decryptIO: DecryptIO = {
+            ...minimalDecryptIO,
+            deriveAESKey: deriveAESKey('bob'),
+        }
+        for await (const progress of decrypt({ message: parsed }, decryptIO)) {
+            result.push(progress)
+        }
+        expect(result).toMatchSnapshot('decrypted as author')
+    }
+
+    // decrypt as jack
+    {
+        const result: any[] = []
+        const decryptIO: DecryptIO = {
+            ...minimalDecryptIO,
+            deriveAESKey: deriveAESKey('jack'),
+            async *queryPostKey_version37() {
+                for (const [, each] of encrypted.e2e!) {
+                    if (each.status === 'rejected') continue
+                    yield { encryptedPostKey: each.value.encryptedPostKey }
+                }
+            },
+        }
+        for await (const progress of decrypt({ message: parsed }, decryptIO)) {
+            result.push(progress)
+        }
+        expect(result).toMatchSnapshot('decrypted as jack')
+    }
 })
 test('v38 E2E encryption', async () => {})
 
@@ -127,7 +160,7 @@ const minimalDecryptIO: DecryptIO = {
     deriveAESKey: reject,
     deriveAESKey_version38_or_older: reject,
     getPostKeyCache: returnNull,
-    hasLocalKeyOf: async () => false,
+    hasLocalKeyOf: returnFalse,
     queryAuthorPublicKey: returnNull,
     queryPostKey_version37: rejectGenerator,
     queryPostKey_version38: rejectGenerator,
@@ -158,6 +191,9 @@ async function returnNull(): Promise<null> {
     return null
 }
 async function returnVoid(): Promise<void> {}
+async function returnFalse(): Promise<boolean> {
+    return false
+}
 async function returnTestKey() {
     return (await importAESFromJWK.AES_GCM_256(testKey)).unwrap()
 }

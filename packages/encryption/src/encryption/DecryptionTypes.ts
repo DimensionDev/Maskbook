@@ -107,7 +107,9 @@ export interface DecryptStaticECDH_PostKey {
     encryptedPostKey: Uint8Array
     postKeyIV: Uint8Array
 }
-export interface DecryptEphemeralECDH_PostKey extends DecryptStaticECDH_PostKey {
+export interface DecryptEphemeralECDH_PostKey {
+    encryptedPostKey: Uint8Array
+    postKeyIV?: Uint8Array
     // It might be contained in the original payload.
     ephemeralPublicKey?: EC_Public_CryptoKey
     ephemeralPublicKeySignature?: Uint8Array

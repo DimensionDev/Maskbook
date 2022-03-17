@@ -53,8 +53,8 @@ export async function* decrypt(options: DecryptOptions, io: DecryptIO): AsyncIte
                 try {
                     const aes_raw = await io.decryptByLocalKey(author.unwrapOr(null), ownersAESKeyEncrypted.val, iv)
                     const aes = await importAESKeyFromJWKFromTextEncoder(aes_raw)
-                    io.setPostKeyCache(aes).catch(() => {})
-                    return yield* decryptWithPostAESKey(version, aes, iv, encrypted)
+                    io.setPostKeyCache(aes.unwrap()).catch(() => {})
+                    return yield* decryptWithPostAESKey(version, aes.unwrap(), iv, encrypted)
                 } catch (err) {
                     if (await hasAuthorLocalKey) {
                         // If we fall into this branch, it means we failed to decrypt as author.
@@ -116,6 +116,7 @@ async function* v37ECDHE(
                 encryptedPostKey: encryption.ownersAESKeyEncrypted.val,
                 postKeyIV: iv,
             }
+            debugger
             yield key
         }
         yield* io.queryPostKey_version37(iv, signal)
@@ -125,7 +126,7 @@ async function* v37ECDHE(
         type: 'ephemeral',
         derive: (key) => (key ? io.deriveAESKey(key) : inlinedECDHE_derived),
     }
-    return yield* decryptByECDH(-37, io, postKey(), ecdh, iv, encrypted)
+    return yield* decryptByECDH(-37, io, postKey(), ecdh, importAESKeyFromRaw, iv, encrypted)
 }
 
 async function* v38To40StaticECDH(
@@ -149,9 +150,8 @@ async function* v38To40StaticECDH(
         type: 'static-v38-or-older',
         derive: (postKeyIV) => io.deriveAESKey_version38_or_older(authorECPub, postKeyIV),
     }
-    return yield* decryptByECDH(version, io, postKey, ecdh, iv, encrypted)
+    return yield* decryptByECDH(version, io, postKey, ecdh, importAESKeyFromJWKFromTextEncoder, iv, encrypted)
 }
-
 type StaticV38OrOlderECDH = {
     type: 'static-v38-or-older'
     derive: (postKeyIV: Uint8Array) => Promise<readonly [key: AESCryptoKey, iv: Uint8Array][]>
@@ -167,6 +167,7 @@ async function* decryptByECDH(
     io: DecryptIO,
     possiblePostKeyIterator: AsyncIterableIterator<DecryptEphemeralECDH_PostKey>,
     ecdhProvider: StaticV38OrOlderECDH | EphemeralECDH,
+    postKeyDecoder: (raw: Uint8Array) => Promise<Result<AESCryptoKey, unknown>>,
     iv: Uint8Array,
     encrypted: Uint8Array,
 ) {
@@ -177,12 +178,12 @@ async function* decryptByECDH(
         // TODO: what to do if provider throws?
         const derivedKeys =
             type === 'static-v38-or-older'
-                ? await derive(postKeyIV)
+                ? await derive(postKeyIV || iv)
                 : await derive(ephemeralPublicKey).then((aesArr) => aesArr.map((aes) => [aes, iv] as const))
         for (const [derivedKey, derivedKeyNewIV] of derivedKeys) {
             const possiblePostKey = await andThenAsync(
                 decryptWithAES(AESAlgorithmEnum.A256GCM, derivedKey, derivedKeyNewIV, encryptedPostKey),
-                (postKeyRaw) => Result.wrapAsync(() => importAESKeyFromJWKFromTextEncoder(postKeyRaw)),
+                postKeyDecoder,
             )
             if (possiblePostKey.err) continue
             const decrypted = await decryptWithAES(AESAlgorithmEnum.A256GCM, possiblePostKey.val, iv, encrypted)
@@ -216,10 +217,20 @@ async function* parseTypedMessage(version: Version, raw: Uint8Array): AsyncItera
 }
 
 // uint8 |> TextDecoder |> JSON.parse |> importAESKeyFromJWK
-async function importAESKeyFromJWKFromTextEncoder(aes_raw: Uint8Array) {
-    const aes_text = new TextDecoder().decode(aes_raw)
-    const aes_jwk = JSON.parse(aes_text)
-    return (await importAESFromJWK.AES_GCM_256(aes_jwk)).unwrap()
+function importAESKeyFromJWKFromTextEncoder(aes_raw: Uint8Array) {
+    return Result.wrapAsync(async () => {
+        const aes_text = new TextDecoder().decode(aes_raw)
+        const aes_jwk = JSON.parse(aes_text)
+        return (await importAESFromJWK.AES_GCM_256(aes_jwk)).unwrap()
+    })
+}
+
+function importAESKeyFromRaw(aes_raw: Uint8Array) {
+    return Result.wrapAsync(async () => {
+        return crypto.subtle.importKey('raw', aes_raw, { name: 'AES-GCM', length: 256 }, false, [
+            'decrypt',
+        ]) as Promise<AESCryptoKey>
+    })
 }
 
 function progress(kind: DecryptProgressKind.Success, rest: Omit<DecryptSuccess, 'type'>): DecryptSuccess
