@@ -13,6 +13,9 @@ import {
     formatBalance,
     isSameAddress,
     useTokenConstants,
+    createERC20Token,
+    getAaveConstants,
+    ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import {
     TokenAmountPanel,
@@ -30,6 +33,7 @@ import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
+import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 
 export interface SavingsFormProps {
     chainId: number
@@ -45,7 +49,6 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
     const web3 = useWeb3({ chainId })
     const account = useAccount()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
-
     const [inputAmount, setInputAmount] = useState('')
     const [estimatedGas, setEstimatedGas] = useState<BigNumber.Value>(new BigNumber('0'))
 
@@ -126,6 +129,21 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
     )
     // #endregion
 
+    const { approveToken, approveAmount, approveAddress } = useMemo(() => {
+        const token = protocol.bareToken
+        const aavePoolAddress =
+            getAaveConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS
+
+        return {
+            approveToken:
+                token.type === EthereumTokenType.ERC20
+                    ? createERC20Token(chainId, token.address, token.decimals, token.name, token.symbol)
+                    : undefined,
+            approveAmount: new BigNumber(inputAmount).shiftedBy(token.decimals),
+            approveAddress: aavePoolAddress,
+        }
+    }, [protocol.bareToken, inputAmount, chainId])
+
     const needsSwap = protocol.type === ProtocolType.Lido && tab === TabType.Withdraw
 
     return (
@@ -186,51 +204,58 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                 <EthereumWalletConnectedBoundary
                     ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}
                     classes={{ connectWallet: classes.connectWallet, button: classes.button }}>
-                    <ActionButtonPromise
-                        fullWidth
-                        color="primary"
-                        size="large"
-                        variant="contained"
-                        init={
-                            needsSwap
-                                ? 'Swap ' + protocol.bareToken.symbol
-                                : validationMessage ||
-                                  (tab === TabType.Deposit
-                                      ? t('plugin_savings_deposit') + ' ' + protocol.bareToken.symbol
-                                      : t('plugin_savings_withdraw') + ' ' + protocol.stakeToken.symbol)
-                        }
-                        waiting={
-                            TabType.Deposit ? t('plugin_savings_process_deposit') : t('plugin_savings_process_withdraw')
-                        }
-                        failed={t('failed')}
-                        failedOnClick="use executor"
-                        complete={t('done')}
-                        disabled={validationMessage !== '' && !needsSwap}
-                        noUpdateEffect
-                        executor={async () => {
-                            switch (tab) {
-                                case TabType.Deposit:
-                                    if (!(await protocol.deposit(account, chainId, web3, tokenAmount))) {
-                                        throw new Error('Failed to deposit token.')
-                                    }
-                                    return
-                                case TabType.Withdraw:
-                                    switch (protocol.type) {
-                                        case ProtocolType.Lido:
-                                            onClose?.()
-                                            onConvertClick()
-                                            return
-                                        default:
-                                            if (!(await protocol.withdraw(account, chainId, web3, tokenAmount))) {
-                                                throw new Error('Failed to withdraw token.')
-                                            }
-                                            return
-                                    }
-                                default:
-                                    unreachable(tab)
+                    <EthereumERC20TokenApprovedBoundary
+                        amount={approveAmount.toFixed()}
+                        token={approveToken}
+                        spender={approveAddress}>
+                        <ActionButtonPromise
+                            fullWidth
+                            color="primary"
+                            size="large"
+                            variant="contained"
+                            init={
+                                needsSwap
+                                    ? 'Swap ' + protocol.bareToken.symbol
+                                    : validationMessage ||
+                                      (tab === TabType.Deposit
+                                          ? t('plugin_savings_deposit') + ' ' + protocol.bareToken.symbol
+                                          : t('plugin_savings_withdraw') + ' ' + protocol.stakeToken.symbol)
                             }
-                        }}
-                    />
+                            waiting={
+                                TabType.Deposit
+                                    ? t('plugin_savings_process_deposit')
+                                    : t('plugin_savings_process_withdraw')
+                            }
+                            failed={t('failed')}
+                            failedOnClick="use executor"
+                            complete={t('done')}
+                            disabled={validationMessage !== '' && !needsSwap}
+                            noUpdateEffect
+                            executor={async () => {
+                                switch (tab) {
+                                    case TabType.Deposit:
+                                        if (!(await protocol.deposit(account, chainId, web3, tokenAmount))) {
+                                            throw new Error('Failed to deposit token.')
+                                        }
+                                        return
+                                    case TabType.Withdraw:
+                                        switch (protocol.type) {
+                                            case ProtocolType.Lido:
+                                                onClose?.()
+                                                onConvertClick()
+                                                return
+                                            default:
+                                                if (!(await protocol.withdraw(account, chainId, web3, tokenAmount))) {
+                                                    throw new Error('Failed to withdraw token.')
+                                                }
+                                                return
+                                        }
+                                    default:
+                                        unreachable(tab)
+                                }
+                            }}
+                        />
+                    </EthereumERC20TokenApprovedBoundary>
                 </EthereumWalletConnectedBoundary>
             </EthereumChainBoundary>
         </div>
