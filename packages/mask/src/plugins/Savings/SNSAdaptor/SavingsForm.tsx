@@ -16,6 +16,7 @@ import {
     createERC20Token,
     getAaveConstants,
     ZERO_ADDRESS,
+    createContract,
 } from '@masknet/web3-shared-evm'
 import {
     TokenAmountPanel,
@@ -34,6 +35,9 @@ import { ActionButtonPromise } from '../../../extension/options-page/DashboardCo
 import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
+import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider'
+import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
+import type { AbiItem } from 'web3-utils'
 
 export interface SavingsFormProps {
     chainId: number
@@ -129,10 +133,18 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
     )
     // #endregion
 
-    const { approveToken, approveAmount, approveAddress } = useMemo(() => {
+    const { value: approvalData } = useAsync(async () => {
         const token = protocol.bareToken
         const aavePoolAddress =
             getAaveConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS
+
+        const lPoolAddressProviderContract = createContract<AaveLendingPoolAddressProvider>(
+            web3,
+            aavePoolAddress,
+            AaveLendingPoolAddressProviderABI as AbiItem[],
+        )
+
+        const poolAddress = await lPoolAddressProviderContract?.methods.getLendingPool().call()
 
         return {
             approveToken:
@@ -140,7 +152,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                     ? createERC20Token(chainId, token.address, token.decimals, token.name, token.symbol)
                     : undefined,
             approveAmount: new BigNumber(inputAmount).shiftedBy(token.decimals),
-            approveAddress: aavePoolAddress,
+            approveAddress: poolAddress,
         }
     }, [protocol.bareToken, inputAmount, chainId])
 
@@ -205,9 +217,9 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                     ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}
                     classes={{ connectWallet: classes.connectWallet, button: classes.button }}>
                     <EthereumERC20TokenApprovedBoundary
-                        amount={approveAmount.toFixed()}
-                        token={approveToken}
-                        spender={approveAddress}>
+                        amount={approvalData?.approveAmount.toFixed() ?? ''}
+                        token={approvalData?.approveToken}
+                        spender={approvalData?.approveAddress}>
                         <ActionButtonPromise
                             fullWidth
                             color="primary"
