@@ -50,6 +50,7 @@ export const CUSD = createERC20Tokens('cUSD_ADDRESS', 'Celo Dollar', 'cUSD', 18)
 export const CEUR = createERC20Tokens('cEUR_ADDRESS', 'Celo Euro', 'cEUR', 18)
 export const JOE = createERC20Tokens('JOE_ADDRESS', 'JoeToken', 'JOE', 18)
 export const PNG = createERC20Tokens('PNG_ADDRESS', 'Pangolin', 'PNG', 18)
+export const fUSD = createERC20Tokens('fUSD_ADDRESS', 'Fuse Dollar', 'FUSD', 18)
 
 export const WNATIVE = createERC20Tokens(
     'WNATIVE_ADDRESS',
