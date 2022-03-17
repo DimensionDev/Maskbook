@@ -220,7 +220,8 @@ async function* parseTypedMessage(version: Version, raw: Uint8Array): AsyncItera
 function importAESKeyFromJWKFromTextEncoder(aes_raw: Uint8Array) {
     return Result.wrapAsync(async () => {
         const aes_text = new TextDecoder().decode(aes_raw)
-        const aes_jwk = JSON.parse(aes_text)
+        const aes_jwk = JSON.parse(aes_text) as JsonWebKey
+        if (!aes_jwk.key_ops!.includes('decrypt')) aes_jwk.key_ops!.push('decrypt')
         return (await importAESFromJWK.AES_GCM_256(aes_jwk)).unwrap()
     })
 }

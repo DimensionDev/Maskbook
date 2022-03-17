@@ -10,7 +10,7 @@ const alice_K256_publicKey = {
     x: 'r9tVYAq-h0m5REaTd6eMTWBSK7ZIQszwggoiU0ao5Yw',
     y: 'kx1ZdZAABlMcRqc_hLM6A3Vd--Vn7FBMRw3SREQN1j4',
     ext: true,
-    key_ops: ['deriveKey', 'deriveBits'],
+    key_ops: ['deriveKey'],
     crv: 'K-256',
     kty: 'EC',
 }
@@ -27,7 +27,7 @@ const bob_localKey = {
     alg: 'A256GCM',
     ext: true,
     k: 'ZlIcRMamDiiScGeSv_4B3mW1gKGew8knz_FZt2b7Cys',
-    key_ops: ['encrypt'],
+    key_ops: ['encrypt', 'decrypt'],
     kty: 'oct',
 }
 const jack_k256_private = {
@@ -40,13 +40,32 @@ const jack_k256_private = {
     kty: 'EC',
 }
 
+export async function getBobLocalKey(): Promise<AESCryptoKey> {
+    const x = await crypto.subtle.importKey('jwk', bob_localKey, { name: 'AES-GCM', length: 256 }, true, [
+        'encrypt',
+        'decrypt',
+    ])
+    return x as AESCryptoKey
+}
+export function encryptDecryptWith(f: typeof getBobLocalKey) {
+    return {
+        async encrypt(message: Uint8Array, iv: Uint8Array) {
+            const key = await f()
+            return crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, message)
+        },
+        async decrypt(message: Uint8Array, iv: Uint8Array) {
+            const key = await f()
+            return crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, message)
+        },
+    }
+}
 export function getTestRandomAESKey() {
     const aesKeys = [
         {
             alg: 'A256GCM',
             ext: true,
             k: 'x4E0fVsEz57G8Ou7d8b7ng1HOtBheGCSlXEkjbiShKY',
-            key_ops: ['encrypt'],
+            key_ops: ['encrypt', 'decrypt'],
             kty: 'oct',
         },
     ]
@@ -55,6 +74,7 @@ export function getTestRandomAESKey() {
         const key = aesKeys.shift()!
         return (await crypto.subtle.importKey('jwk', key, { name: 'AES-GCM', length: 256 }, true, [
             'encrypt',
+            'decrypt',
         ])) as AESCryptoKey
     }
 }
@@ -98,19 +118,21 @@ export async function queryTestPublicKey(id: ProfileIdentifier) {
     if (id.userId === 'jack') return toPublic(jack_k256_private)
     return null
 }
-export function deriveAESKey(as: 'bob' | 'jack') {
+export function deriveAESKey(as: 'bob' | 'jack', type: 'single'): (pub: EC_Public_CryptoKey) => Promise<AESCryptoKey>
+export function deriveAESKey(as: 'bob' | 'jack', type: 'array'): (pub: EC_Public_CryptoKey) => Promise<AESCryptoKey[]>
+export function deriveAESKey(as: 'bob' | 'jack', type: 'array' | 'single') {
     const keys = [toPrivate(bob_k256_private), toPrivate(jack_k256_private)]
     return async (pub: EC_Public_CryptoKey) => {
         const k = (await Promise.all(keys))[as === 'bob' ? 0 : 1]
-        return [
-            await crypto.subtle.deriveKey(
-                { name: 'ECDH', public: pub },
-                k.key,
-                { name: 'AES-GCM', length: 256 },
-                false,
-                ['decrypt'],
-            ),
-        ] as AESCryptoKey[]
+        const key = (await crypto.subtle.deriveKey(
+            { name: 'ECDH', public: pub },
+            k.key,
+            { name: 'AES-GCM', length: 256 },
+            true,
+            ['decrypt', 'encrypt'],
+        )) as AESCryptoKey
+        if (type === 'array') return [key]
+        return key
     }
 }
 
