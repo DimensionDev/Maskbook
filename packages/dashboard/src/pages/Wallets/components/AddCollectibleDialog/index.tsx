@@ -148,7 +148,7 @@ export const AddCollectibleDialogUI = memo<AddCollectibleDialogUIProps>(
                         <Box className={classes.chainTipWrapper} sx={{ mb: 3 }}>
                             <ImageIcon icon={network?.icon} />
                             <Typography className={classes.tip}>
-                                {t.wallets_add_collectible_network_tip({ network: network?.name })}
+                                {t.wallets_add_collectible_network_tip({ network: network?.name ?? '' })}
                             </Typography>
                         </Box>
                         <Box>
