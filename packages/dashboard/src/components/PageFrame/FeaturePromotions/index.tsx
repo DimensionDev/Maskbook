@@ -5,7 +5,7 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { useAccount } from '@masknet/web3-shared-evm'
 import { PluginMessages, Services } from '../../../API'
 import { PersonaContext } from '../../../pages/Personas/hooks/usePersonaContext'
-import { DashboardRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, EnhanceableSite } from '@masknet/shared-base'
 import { PluginId } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
@@ -28,9 +28,6 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const TWITTER_NETWORK = 'twitter.com'
-const TWITTER_ADDRESS = 'https://www.twitter.com'
-
 export const FeaturePromotions = memo(() => {
     const { classes } = useStyles()
     const navigate = useNavigate()
@@ -45,7 +42,7 @@ export const FeaturePromotions = memo(() => {
         const { linkedProfiles } = currentPersona
         if (linkedProfiles.length === 0) return false
 
-        return !!linkedProfiles.find((profile) => profile.identifier.network === TWITTER_NETWORK)
+        return !!linkedProfiles.find((profile) => profile.identifier.network === EnhanceableSite.Twitter)
     }, [currentPersona])
 
     const openTransakDialog = useCallback(() => {
@@ -61,13 +58,13 @@ export const FeaturePromotions = memo(() => {
             return
         }
         if (isConnectedTwitter) {
-            await Services.SocialNetwork.openSNSAndActivatePlugin(`${TWITTER_ADDRESS}/home`, pluginId)
+            await Services.SocialNetwork.openSNSAndActivatePlugin('https://twitter.com/home', pluginId)
             return
         }
-        connectPersona(currentPersona.identifier, TWITTER_NETWORK)
+        connectPersona(currentPersona.identifier, EnhanceableSite.Twitter)
     }
 
-    const openMaskNetwork = () => window.open(`${TWITTER_ADDRESS}/realMaskNetwork`)
+    const openMaskNetwork = () => window.open('https://twitter.com/realMaskNetwork')
 
     return (
         <div className={classes.container}>

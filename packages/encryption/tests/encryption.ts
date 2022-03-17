@@ -1,4 +1,3 @@
-import { ECDH_K256_Pub } from './setup'
 import { test, expect } from '@jest/globals'
 import {
     decrypt,
@@ -13,13 +12,22 @@ import {
 import { importAESFromJWK } from '../src/utils'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { makeTypedMessageText, makeTypedMessageTupleSerializable } from '@masknet/typed-message'
+import {
+    deriveAESKey,
+    encryptDecryptWith,
+    getBobLocalKey,
+    getRandomValues,
+    getTestRandomAESKey,
+    getTestRandomECKey,
+    queryTestPublicKey,
+} from './keys'
 
 const publicTarget: EncryptOptions['target'] = {
     type: 'public',
 }
 const example: EncryptOptions = {
     version: -38,
-    author: ProfileIdentifier.unknown,
+    author: new ProfileIdentifier('localhost', 'alice'),
     message: makeTypedMessageText('hello world'),
     target: publicTarget,
 }
@@ -32,11 +40,11 @@ test('v37 public encryption', async () => {
             version: -37,
             target: publicTarget,
             message: complexMessage(),
-            author: exampleID,
+            author: example.author,
         },
         {
             ...minimalEncryptIO,
-            queryPublicKey: ECDH_K256_Pub,
+            queryPublicKey: queryTestPublicKey,
         },
     )
 })
@@ -50,13 +58,129 @@ test('v38 public encryption', async () => {
             version: -38,
             target: publicTarget,
             message: makeTypedMessageText('hello world'),
-            author: exampleID,
+            author: example.author,
         },
         {
             ...minimalEncryptIO,
-            queryPublicKey: ECDH_K256_Pub,
+            queryPublicKey: queryTestPublicKey,
         },
     )
+})
+
+test('v37 E2E encryption', async () => {
+    const payload: EncryptOptions = {
+        author: new ProfileIdentifier('localhost', 'bob'),
+        message: makeTypedMessageText('hello world'),
+        target: {
+            type: 'E2E',
+            target: [new ProfileIdentifier('localhost', 'jack')],
+        },
+        version: -37,
+    }
+
+    const encrypted = await encrypt(payload, {
+        encryptByLocalKey: reject,
+        deriveAESKey: reject,
+        queryPublicKey: queryTestPublicKey,
+        getRandomAESKey: getTestRandomAESKey(),
+        getRandomECKey: getTestRandomECKey(),
+        getRandomValues: getRandomValues(),
+    })
+    expect(encrypted).toMatchSnapshot('encrypted')
+
+    const parsed = (await parsePayload(encrypted.output)).unwrap()
+    expect(parsed).toMatchSnapshot('parsed')
+
+    // decrypt as author
+    {
+        const result: any[] = []
+        const decryptIO: DecryptIO = {
+            ...minimalDecryptIO,
+            deriveAESKey: deriveAESKey('bob', 'array'),
+        }
+        for await (const progress of decrypt({ message: parsed }, decryptIO)) {
+            result.push(progress)
+        }
+        expect(result).toMatchSnapshot('decrypted as author')
+    }
+
+    // decrypt as jack
+    {
+        const result: any[] = []
+        const decryptIO: DecryptIO = {
+            ...minimalDecryptIO,
+            deriveAESKey: deriveAESKey('jack', 'array'),
+            async *queryPostKey_version37() {
+                for (const [, each] of encrypted.e2e!) {
+                    if (each.status === 'rejected') continue
+                    yield { encryptedPostKey: each.value.encryptedPostKey }
+                }
+            },
+        }
+        for await (const progress of decrypt({ message: parsed }, decryptIO)) {
+            result.push(progress)
+        }
+        expect(result).toMatchSnapshot('decrypted as jack')
+    }
+})
+test('v38 E2E encryption', async () => {
+    const payload: EncryptOptions = {
+        author: new ProfileIdentifier('localhost', 'bob'),
+        message: makeTypedMessageText('hello world'),
+        target: {
+            type: 'E2E',
+            target: [new ProfileIdentifier('localhost', 'jack')],
+        },
+        version: -38,
+    }
+
+    const { decrypt: decryptByBobLocalKey, encrypt: encryptByBobLocalKey } = encryptDecryptWith(getBobLocalKey)
+    const encrypted = await encrypt(payload, {
+        encryptByLocalKey: encryptByBobLocalKey,
+        deriveAESKey: deriveAESKey('bob', 'single'),
+        queryPublicKey: queryTestPublicKey,
+        getRandomAESKey: getTestRandomAESKey(),
+        getRandomECKey: getTestRandomECKey(),
+        getRandomValues: getRandomValues(),
+    })
+    expect(encrypted).toMatchSnapshot('encrypted')
+
+    const parsed = (await parsePayload(encrypted.output)).unwrap()
+    expect(parsed).toMatchSnapshot('parsed')
+
+    // decrypt as author
+    {
+        const result: any[] = []
+        const decryptIO: DecryptIO = {
+            ...minimalDecryptIO,
+            decryptByLocalKey: (a, b, c) => decryptByBobLocalKey(b, c),
+            hasLocalKeyOf: async () => true,
+        }
+        for await (const progress of decrypt({ message: parsed }, decryptIO)) {
+            result.push(progress)
+        }
+        expect(result).toMatchSnapshot('decrypted as author')
+    }
+
+    // decrypt as jack
+    {
+        const result: any[] = []
+        const decryptIO: DecryptIO = {
+            ...minimalDecryptIO,
+            deriveAESKey: deriveAESKey('jack', 'array'),
+            async *queryPostKey_version38() {
+                for (const [, each] of encrypted.e2e!) {
+                    if (each.status === 'rejected') continue
+                    if (!each.value.ivToBePublished) throw new Error('ivToBePublished is missing!')
+                    yield { encryptedPostKey: each.value.encryptedPostKey, postKeyIV: each.value.ivToBePublished }
+                }
+            },
+        }
+        for await (const progress of decrypt({ message: parsed }, decryptIO)) {
+            result.push(progress)
+        }
+        expect(result).toMatchSnapshot('decrypted as jack')
+    }
 })
 
 async function testSet(
@@ -90,7 +214,7 @@ async function testSet(
 
 const minimalEncryptIO: EncryptIO = {
     queryPublicKey: returnNull,
-    deriveAESKey_version38_or_older: reject,
+    deriveAESKey: reject,
     encryptByLocalKey: reject,
 
     getRandomECKey: reject,
@@ -100,9 +224,8 @@ const minimalEncryptIO: EncryptIO = {
 const minimalDecryptIO: DecryptIO = {
     decryptByLocalKey: reject,
     deriveAESKey: reject,
-    deriveAESKey_version38_or_older: reject,
     getPostKeyCache: returnNull,
-    hasLocalKeyOf: async () => false,
+    hasLocalKeyOf: returnFalse,
     queryAuthorPublicKey: returnNull,
     queryPostKey_version37: rejectGenerator,
     queryPostKey_version38: rejectGenerator,
@@ -133,17 +256,18 @@ async function returnNull(): Promise<null> {
     return null
 }
 async function returnVoid(): Promise<void> {}
+async function returnFalse(): Promise<boolean> {
+    return false
+}
 async function returnTestKey() {
     return (await importAESFromJWK.AES_GCM_256(testKey)).unwrap()
 }
 
-const exampleID = new ProfileIdentifier('example.com', 'jack')
 function complexMessage() {
     const meta = new Map<string, any>()
     meta.set('io.plugin.something', {
         num: 2345,
         str: '123',
-        undef: undefined,
         nul: null,
         dict: { a: [1, 2], b: true, c: false },
     })
