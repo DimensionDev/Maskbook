@@ -24,23 +24,17 @@ export const getCurrentIdentifier = () => {
     )
 }
 
-export const createCenterWindow = (width: number, height: number) => {
+export const createCenterWindowConfig = (width: number, height: number) => {
     const x = window.screenX + (window.innerWidth - width) / 2
     const y = window.screenY + (window.innerHeight - height) / 2
-    const win = window.open(
-        '',
-        '_blank',
-        [
-            `screenX=${x}`,
-            `screenY=${y}`,
-            `height=${height}`,
-            `width=${width}`,
-            'resizable=no',
-            'scrollbars=no',
-            'status=no',
-            'noopener',
-            'noreferrer',
-        ].join(','),
-    )
-    return win
+    return [
+        `screenX=${x}`,
+        `screenY=${y}`,
+        'toolbar=1',
+        'status=1',
+        'resizable=1',
+        'scrollbars=1',
+        `height=${height}`,
+        `width=${width}`,
+    ].join(',')
 }

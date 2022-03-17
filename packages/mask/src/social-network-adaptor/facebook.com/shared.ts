@@ -19,10 +19,14 @@ export const facebookShared: SocialNetwork.Shared & SocialNetwork.Base = {
         textPayloadPostProcessor: undefined,
         getPostURL,
         share(message) {
+            const url = this.getShareLinkURL!(message)
+            window.open(url, '_blank', 'noopener noreferrer')
+        },
+        getShareLinkURL(message) {
             const url = new URL('https://www.facebook.com/sharer/sharer.php')
             url.searchParams.set('quote', message)
             url.searchParams.set('u', 'mask.io')
-            window.open(url, '_blank', 'noopener noreferrer')
+            return url
         },
         createPostContext: createSNSAdaptorSpecializedPostContext({
             payloadParser: deconstructPayload,
