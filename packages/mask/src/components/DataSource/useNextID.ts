@@ -3,13 +3,14 @@ import type { NextIDPlatform, PersonaIdentifier } from '@masknet/shared-base'
 import { useMemo, useState } from 'react'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { usePersonaConnectStatus } from './usePersonaConnectStatus'
-import { currentSetupGuideStatus, dismissVerifyNextID } from '../../settings/settings'
+import { currentPersonaIdentifier, currentSetupGuideStatus, dismissVerifyNextID } from '../../settings/settings'
 import stringify from 'json-stable-stringify'
 import { SetupGuideStep } from '../InjectedComponents/SetupGuide/types'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
 import { useLastRecognizedIdentity } from './useActivatedUI'
 import { useValueRef } from '@masknet/shared'
 import { queryExistedBindingByPersona, queryExistedBindingByPlatform, queryIsBound } from '@masknet/web3-providers'
+import Services from '../../extension/service'
 
 export const usePersonaBoundPlatform = (personaPublicKey: string) => {
     return useAsyncRetry(() => {
@@ -73,6 +74,11 @@ export function useNextIDConnectStatus() {
             return NextIDVerificationStatus.WaitingLocalConnect
 
         const { currentConnectedPersona } = personaConnectStatus
+
+        const currentPersonaIdentity = await Services.Settings.getCurrentPersonaIdentifier()
+        if (currentPersonaIdentity !== currentConnectedPersona?.identifier)
+            return NextIDVerificationStatus.WaitingLocalConnect
+
         if (!currentConnectedPersona?.publicHexKey) return NextIDVerificationStatus.WaitingLocalConnect
 
         // Whether used 'Don't show me again
@@ -94,7 +100,7 @@ export function useNextIDConnectStatus() {
         isOpenedVerifyDialog = true
         isOpenedFromButton = false
         return NextIDVerificationStatus.WaitingVerify
-    }, [username, enableNextID, lastStateRef.value, isOpenedVerifyDialog])
+    }, [username, enableNextID, lastStateRef.value, isOpenedVerifyDialog, currentPersonaIdentifier.value])
 
     return {
         isVerified: VerificationStatus === NextIDVerificationStatus.Verified,
