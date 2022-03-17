@@ -13,6 +13,7 @@ import {
     DecryptEphemeralECDH_PostKey,
     DecryptSuccess,
 } from './DecryptionTypes'
+import { deriveAESByECDH_version38OrOlderExtraSteps } from './v38-ecdh'
 export * from './DecryptionTypes'
 const ErrorReasons = DecryptError.Reasons
 type Version = PayloadParseResult.Payload['version']
@@ -147,13 +148,13 @@ async function* v38To40StaticECDH(
 
     const ecdh: StaticV38OrOlderECDH = {
         type: 'static-v38-or-older',
-        derive: (postKeyIV) => io.deriveAESKey_version38_or_older(authorECPub, postKeyIV),
+        derive: (postKeyIV) => deriveAESByECDH_version38OrOlderExtraSteps(io.deriveAESKey, authorECPub, postKeyIV),
     }
     return yield* decryptByECDH(version, io, postKey, ecdh, importAESKeyFromJWKFromTextEncoder, iv, encrypted)
 }
 type StaticV38OrOlderECDH = {
     type: 'static-v38-or-older'
-    derive: (postKeyIV: Uint8Array) => Promise<readonly [key: AESCryptoKey, iv: Uint8Array][]>
+    derive: (postKeyIV: Uint8Array) => Promise<(readonly [key: AESCryptoKey, iv: Uint8Array])[]>
 }
 type EphemeralECDH = {
     type: 'ephemeral'

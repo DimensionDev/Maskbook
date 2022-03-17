@@ -158,7 +158,6 @@ const minimalEncryptIO: EncryptIO = {
 const minimalDecryptIO: DecryptIO = {
     decryptByLocalKey: reject,
     deriveAESKey: reject,
-    deriveAESKey_version38_or_older: reject,
     getPostKeyCache: returnNull,
     hasLocalKeyOf: returnFalse,
     queryAuthorPublicKey: returnNull,
