@@ -1,4 +1,3 @@
-import { ECDH_K256_Pub } from './setup'
 import { test, expect } from '@jest/globals'
 import {
     decrypt,
@@ -13,6 +12,7 @@ import {
 import { importAESFromJWK } from '../src/utils'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { makeTypedMessageText, makeTypedMessageTupleSerializable } from '@masknet/typed-message'
+import { queryTestPublicKey } from './keys'
 
 const publicTarget: EncryptOptions['target'] = {
     type: 'public',
@@ -36,7 +36,7 @@ test('v37 public encryption', async () => {
         },
         {
             ...minimalEncryptIO,
-            queryPublicKey: ECDH_K256_Pub,
+            queryPublicKey: () => queryTestPublicKey(new ProfileIdentifier('localhost', 'alice')),
         },
     )
 })
@@ -54,7 +54,7 @@ test('v38 public encryption', async () => {
         },
         {
             ...minimalEncryptIO,
-            queryPublicKey: ECDH_K256_Pub,
+            queryPublicKey: () => queryTestPublicKey(new ProfileIdentifier('localhost', 'alice')),
         },
     )
 })

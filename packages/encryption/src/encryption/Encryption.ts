@@ -96,7 +96,7 @@ async function v38EncryptionE2E(options: EncryptOptions, io: EncryptIO): Promise
     //     Note: Internal_AES is not returned by io.deriveAESKey_version38_or_older, it is internal algorithm of that method.
     const ecdh = Promise.allSettled(
         options.target.target.map(async (id): Promise<EncryptionResultE2E> => {
-            const receiverPublicKey = await io.queryPublicKey(id)
+            const receiverPublicKey = id.isUnknown ? undefined : await io.queryPublicKey(id)
             if (!receiverPublicKey) throw new EncryptError(EncryptErrorReasons.PublicKeyNotFound)
             const { aes, iv, ivToBePublished } = await io.deriveAESKey_version38_or_older(receiverPublicKey.key)
             const encryptedPostKey = await encryptWithAES(AESAlgorithmEnum.A256GCM, aes, iv, await postKeyEncoded)
@@ -168,7 +168,7 @@ async function v37EncryptionE2E(options: EncryptOptions, io: EncryptIO): Promise
 
     const ecdh = Promise.allSettled(
         options.target.target.map(async (id): Promise<EncryptionResultE2E> => {
-            const receiverPublicKey = await io.queryPublicKey(id)
+            const receiverPublicKey = id.isUnknown ? undefined : await io.queryPublicKey(id)
             if (!receiverPublicKey) throw new EncryptError(EncryptErrorReasons.PublicKeyNotFound)
             const [, ephemeralPrivateKey] = await getEphemeralKey(receiverPublicKey.algr)
             const aes = await crypto.subtle.deriveKey(
@@ -248,6 +248,7 @@ async function encodeMessage(version: -38 | -37, message: SerializableTypedMessa
 }
 async function queryAuthorPublicKey(of: ProfileIdentifier, io: EncryptIO): Promise<Option<EC_Key>> {
     try {
+        if (of.isUnknown) return None
         const key = await io.queryPublicKey(of)
         if (!key) return None
         return Some(key)
