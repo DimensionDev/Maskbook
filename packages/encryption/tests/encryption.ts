@@ -19,7 +19,7 @@ const publicTarget: EncryptOptions['target'] = {
 }
 const example: EncryptOptions = {
     version: -38,
-    author: ProfileIdentifier.unknown,
+    author: new ProfileIdentifier('localhost', 'alice'),
     message: makeTypedMessageText('hello world'),
     target: publicTarget,
 }
@@ -32,11 +32,11 @@ test('v37 public encryption', async () => {
             version: -37,
             target: publicTarget,
             message: complexMessage(),
-            author: exampleID,
+            author: example.author,
         },
         {
             ...minimalEncryptIO,
-            queryPublicKey: () => queryTestPublicKey(new ProfileIdentifier('localhost', 'alice')),
+            queryPublicKey: queryTestPublicKey,
         },
     )
 })
@@ -50,11 +50,11 @@ test('v38 public encryption', async () => {
             version: -38,
             target: publicTarget,
             message: makeTypedMessageText('hello world'),
-            author: exampleID,
+            author: example.author,
         },
         {
             ...minimalEncryptIO,
-            queryPublicKey: () => queryTestPublicKey(new ProfileIdentifier('localhost', 'alice')),
+            queryPublicKey: queryTestPublicKey,
         },
     )
 })
@@ -137,7 +137,6 @@ async function returnTestKey() {
     return (await importAESFromJWK.AES_GCM_256(testKey)).unwrap()
 }
 
-const exampleID = new ProfileIdentifier('example.com', 'jack')
 function complexMessage() {
     const meta = new Map<string, any>()
     meta.set('io.plugin.something', {
