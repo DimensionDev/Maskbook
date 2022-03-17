@@ -76,7 +76,8 @@ export function useNextIDConnectStatus() {
         const { currentConnectedPersona } = personaConnectStatus
 
         const currentPersonaIdentity = await Services.Settings.getCurrentPersonaIdentifier()
-        if (currentPersonaIdentity !== currentConnectedPersona?.identifier)
+
+        if (currentPersonaIdentity?.toText() !== currentConnectedPersona?.identifier.toText())
             return NextIDVerificationStatus.WaitingLocalConnect
 
         if (!currentConnectedPersona?.publicHexKey) return NextIDVerificationStatus.WaitingLocalConnect
