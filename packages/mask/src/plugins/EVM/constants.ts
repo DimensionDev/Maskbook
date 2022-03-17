@@ -122,7 +122,7 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         networkSupporterPluginID: PLUGIN_ID,
         chainId: ChainId.xDai,
         type: NetworkType.xDai,
-        name: 'Gnosis Chain',
+        name: 'Gnosis',
         icon: new URL('./assets/xdai.png', import.meta.url),
         iconColor: 'rgb(73, 169, 166)',
         isMainnet: true,
