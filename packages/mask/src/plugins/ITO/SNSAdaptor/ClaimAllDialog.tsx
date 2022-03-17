@@ -365,6 +365,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                     chainId={chainId}
                                     classes={{ switchButton: classes.claimAllButton }}
                                     noSwitchNetworkTip
+                                    disablePadding
                                     switchButtonStyle={{
                                         minHeight: 'auto',
                                         width: '100%',
