@@ -59,14 +59,14 @@ export function useAllTradeComputed(
         trader_: uniswapV2_,
         trader: uniswapV2,
         traderEstimateGas: uniswapV2EstimateGas,
-    } = useUniswapV2Like(tradeProviders, TradeProvider.WANNASWAP, inputAmount_, inputToken, outputToken)
+    } = useUniswapV2Like(tradeProviders, TradeProvider.UNISWAP_V2, inputAmount_, inputToken, outputToken)
 
     // sushi swap
     const {
         trader_: sushiSwap_,
         trader: sushiSwap,
         traderEstimateGas: sushiSwapEstimateGas,
-    } = useUniswapV2Like(tradeProviders, TradeProvider.WANNASWAP, inputAmount_, inputToken, outputToken)
+    } = useUniswapV2Like(tradeProviders, TradeProvider.SUSHISWAP, inputAmount_, inputToken, outputToken)
 
     // sashimi swap
     const {
@@ -165,7 +165,7 @@ export function useAllTradeComputed(
         trader_: pangolindex_,
         trader: pangolindex,
         traderEstimateGas: pangolinEstimateGas,
-    } = useUniswapV2Like(tradeProviders, TradeProvider.TRADERJOE, inputAmount_, inputToken, outputToken)
+    } = useUniswapV2Like(tradeProviders, TradeProvider.PANGOLIN, inputAmount_, inputToken, outputToken)
 
     // openocean
     const openocean_ = useOpenOceanTrade(
@@ -189,7 +189,7 @@ export function useAllTradeComputed(
         trader_: trisolaris_,
         trader: trisolaris,
         traderEstimateGas: trisolarisEstimateGas,
-    } = useUniswapV2Like(tradeProviders, TradeProvider.TRADERJOE, inputAmount_, inputToken, outputToken)
+    } = useUniswapV2Like(tradeProviders, TradeProvider.TRISOLARIS, inputAmount_, inputToken, outputToken)
 
     // WannaSwap
     const {
