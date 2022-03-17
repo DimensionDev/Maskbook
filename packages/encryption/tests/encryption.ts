@@ -70,6 +70,7 @@ test('v37 E2E encryption', async () => {
         version: -37,
     }
 
+    debugger
     const encrypted = await encrypt(payload, {
         encryptByLocalKey: reject,
         deriveAESKey_version38_or_older: reject,
@@ -166,7 +167,6 @@ function complexMessage() {
     meta.set('io.plugin.something', {
         num: 2345,
         str: '123',
-        undef: undefined,
         nul: null,
         dict: { a: [1, 2], b: true, c: false },
     })
