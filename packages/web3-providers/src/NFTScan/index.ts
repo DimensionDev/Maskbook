@@ -69,7 +69,7 @@ function createERC721TokenAsset(asset: NFTScanAsset) {
             mediaUrl: resolveResourceLink(asset.nft_cover ?? asset.nft_content_uri ?? payload.image ?? ''),
             owner: asset.nft_holder ?? '',
         },
-        asset.token_id,
+        Number.parseInt(asset.token_id, asset.token_id.startsWith('0x') ? 16 : 10).toString(),
     )
 }
 

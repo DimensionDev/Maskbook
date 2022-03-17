@@ -83,7 +83,7 @@ export function toHttpImage(_url?: string) {
 
 function createNFT(token: AlchemyNFTItemDetailedResponse, owner: string, chainId: number): ERC721TokenDetailed {
     return {
-        tokenId: token.id.tokenId,
+        tokenId: Number.parseInt(token.id.tokenId, token.id.tokenId.startsWith('0x') ? 16 : 10).toString(),
         info: {
             name: token.title,
             description: token.description,

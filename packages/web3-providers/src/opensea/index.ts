@@ -73,7 +73,7 @@ function createERC721TokenFromAsset(
             mediaUrl: asset?.animation_url ?? toImage(asset?.image_original_url ?? imageURL),
             owner: asset?.owner.address ?? '',
         },
-        tokenId,
+        Number.parseInt(tokenId, tokenId.startsWith('0x') ? 16 : 10).toString(),
         {
             name: asset.collection.name,
             image: asset.collection.image_url || undefined,
