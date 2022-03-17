@@ -1,7 +1,7 @@
 import type { ECKeyIdentifier } from '@masknet/shared-base'
 import { bindProof, createPersonaPayload } from '@masknet/web3-providers'
 import { useAsyncFn } from 'react-use'
-import { Services } from '../../../API'
+import { Services, Messages } from '../../../API'
 
 export function useDeleteBound() {
     return useAsyncFn(async (identifier: ECKeyIdentifier, profile, network, action) => {
@@ -22,5 +22,6 @@ export function useDeleteBound() {
             signature: signature,
         })
         Services.Identity.detachProfile(profile)
+        Messages.events.ownProofChanged.sendToAll(undefined)
     })
 }

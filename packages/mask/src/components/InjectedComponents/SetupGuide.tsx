@@ -111,7 +111,6 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         // auto-finish the setup process
         if (!persona_?.hasPrivateKey) throw new Error('invalid persona')
         await Services.Identity.setupPersona(persona_?.identifier)
-        MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
     }
 
     const onVerify = async () => {
@@ -155,6 +154,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
             })
 
             await waitingPost
+            MaskMessages.events.ownProofChanged.sendToAll(undefined)
         }
     }
 

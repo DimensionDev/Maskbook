@@ -12,6 +12,7 @@ import { formatFingerprint } from '@masknet/shared'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import type { SocialNetwork } from '../../api'
 import classNames from 'classnames'
+import { usePersonaProof } from '../../hooks/usePersonaProof'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -60,16 +61,15 @@ export interface PersonaCardProps {
     active?: boolean
     identifier: PersonaIdentifier
     profiles: ProfileInformation[]
+    publicKey: string
     onClick(): void
 }
 
 export const PersonaCard = memo<PersonaCardProps>((props) => {
-    const { connectPersona, disconnectPersona, definedSocialNetworks, verification } = PersonaContext.useContainer()
-
+    const { connectPersona, disconnectPersona, definedSocialNetworks } = PersonaContext.useContainer()
     return (
         <PersonaCardUI
             {...props}
-            verification={verification}
             onConnect={connectPersona}
             onDisconnect={disconnectPersona}
             definedSocialNetworks={definedSocialNetworks}
@@ -85,10 +85,10 @@ export interface PersonaCardUIProps extends PersonaCardProps {
 }
 
 export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
-    const { nickname, active = false, definedSocialNetworks, identifier, profiles, verification } = props
+    const { nickname, active = false, definedSocialNetworks, identifier, profiles, publicKey } = props
     const { onConnect, onDisconnect, onClick } = props
     const { classes } = useStyles()
-
+    const proof = usePersonaProof(publicKey)
     return (
         <div className={classes.card}>
             <div className={classNames(classes.status, active ? classes.statusActivated : classes.statusInactivated)} />
@@ -118,7 +118,7 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
                         } else {
                             return (
                                 <ConnectedPersonaLine
-                                    verification={verification}
+                                    proof={proof}
                                     isHideOperations
                                     key={networkIdentifier}
                                     onConnect={() => onConnect(identifier, networkIdentifier)}

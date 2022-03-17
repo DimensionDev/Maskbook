@@ -4,9 +4,6 @@ import { useConnectSocialNetwork, useDisconnectSocialNetwork, useOpenProfilePage
 import { Services } from '../../../API'
 import { useOwnedPersonas, useDefinedSocialNetworkUIs, SocialNetwork, useCurrentPersonaIdentifier } from '../api'
 import { useCreatePersona } from './useCreatePersona'
-import { queryExistedBindingByPersona } from '@masknet/web3-providers'
-import { useAsync, useAsyncRetry } from 'react-use'
-import type { ECKeyIdentifier } from '@masknet/shared-base'
 import { useDeleteBound } from './useOperateBindingProof'
 
 function usePersonaContext() {
@@ -14,15 +11,7 @@ function usePersonaContext() {
     const definedSocialNetworks: SocialNetwork[] = useDefinedSocialNetworkUIs()
     const personas = useOwnedPersonas()
     const currentPersona = personas.find((x) => x.identifier.equals(currentPersonaIdentifier))
-
     const [open, setOpen] = useState(false)
-
-    const personaPublicKey = useAsync(async () => {
-        return Services.Identity.queryPersona(currentPersonaIdentifier as ECKeyIdentifier)
-    }, [currentPersonaIdentifier]).value?.publicHexKey
-    const verification = useAsyncRetry(async () => {
-        return queryExistedBindingByPersona(personaPublicKey as string)
-    }, [personaPublicKey]).value
 
     const [, connectPersona] = useConnectSocialNetwork()
     const [, openProfilePage] = useOpenProfilePage()
@@ -45,7 +34,6 @@ function usePersonaContext() {
         openProfilePage,
         drawerOpen: open,
         toggleDrawer: () => setOpen((e) => !e),
-        verification,
     }
 }
 
