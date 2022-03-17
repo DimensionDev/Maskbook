@@ -12,6 +12,7 @@ import {
     useFungibleTokenBalance,
     useTokenConstants,
     useWallet,
+    UST,
 } from '@masknet/web3-shared-evm'
 import { Web3TokenType, FungibleTokenDetailed } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -22,7 +23,6 @@ import { TokenPanelType, TradeInfo } from '../../types'
 import { useI18N } from '../../../../utils'
 import { TradeForm } from './TradeForm'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
-import { UST } from '../../constants'
 import { SelectTokenDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
 import { useUnmount, useUpdateEffect } from 'react-use'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'

@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ErrorBoundary } from '../components/shared/ErrorBoundary'
-import { NoEffectUsePortalShadowRootContext } from '@masknet/theme'
+import { DisableShadowRootContext } from '@masknet/theme'
 
 export function createNormalReactRoot(jsx: JSX.Element, container?: HTMLElement) {
     if (!container) container = document.getElementById('root') ?? void 0
@@ -17,9 +17,9 @@ export function createNormalReactRoot(jsx: JSX.Element, container?: HTMLElement)
 
     return createRoot(container).render(
         <StrictMode>
-            <NoEffectUsePortalShadowRootContext.Provider value>
+            <DisableShadowRootContext.Provider value>
                 <ErrorBoundary>{jsx}</ErrorBoundary>
-            </NoEffectUsePortalShadowRootContext.Provider>
+            </DisableShadowRootContext.Provider>
         </StrictMode>,
     )
 }

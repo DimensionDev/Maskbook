@@ -13,7 +13,7 @@ import { verifyOthersProve } from './verifyOthersProve'
 import { publicSharedAESKey } from '../../../crypto/crypto-alpha-38'
 import { DecryptFailedReason } from '../../../utils/constants'
 import { asyncIteratorWithResult, memorizeAsyncGenerator } from '../../../utils/type-transform/asyncIteratorHelpers'
-import { DecryptStaticECDH_PostKey, steganographyDecodeImageUrl } from '@masknet/encryption'
+import { DecryptStaticECDH_PostKey, steganographyDecodeImage } from '@masknet/encryption'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { AESJsonWebKey, Payload } from '@masknet/shared-base'
 import stringify from 'json-stable-stringify'
@@ -319,7 +319,7 @@ async function* decryptFromImageUrlWithProgress_raw(
 ): ReturnOfDecryptPostContentWithProgress {
     if (successDecryptionCache.has(url)) return successDecryptionCache.get(url)!
     yield makeProgress('decode_post', true)
-    const post = await steganographyDecodeImageUrl(url, {
+    const post = await steganographyDecodeImage(url, {
         pass: author.toText(),
         downloadImage: steganographyDownloadImage,
     })

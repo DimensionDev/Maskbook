@@ -5,7 +5,6 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import { Wallet, useChainIdValid } from '@masknet/web3-shared-evm'
 import { ERC721TokenDetailed, Web3TokenType } from '@masknet/web3-shared-base'
 import { useMenu, useI18N } from '../../../utils'
-// eslint-disable-next-line import/no-deprecated
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardWalletHideTokenConfirmDialog, DashboardWalletTransferDialogNFT } from '../DashboardDialogs/Wallet'
 
@@ -28,9 +27,7 @@ export function ActionsBarNFT(props: ActionsBarNFT_Props) {
 
     const chainIdValid = useChainIdValid()
 
-    // eslint-disable-next-line import/no-deprecated
     const [transferDialog, , openTransferDialogOpen] = useModal(DashboardWalletTransferDialogNFT)
-    // eslint-disable-next-line import/no-deprecated
     const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
     const [menu, openMenu] = useMenu([
         token.contractDetailed.type === Web3TokenType.ERC721 ? (
