@@ -54,6 +54,7 @@ function resolveCurrentVisitingIdentityInner(
             avatar,
             bio,
         }
+
         Services.Helper.resolveTCOLink(homepage).then((link) => {
             if (cancel?.aborted || !link) return
             ref.value = {
