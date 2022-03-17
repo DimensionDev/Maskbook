@@ -22,8 +22,10 @@ interface CreatePayloadBody {
     public_key: string
 }
 
+type PostContentLanguages = 'default' | 'zh_CN'
+
 interface CreatePayloadResponse {
-    post_content: string
+    post_content: { [key in PostContentLanguages]: string }
     sign_payload: string
     uuid: string
     created_at: string
@@ -112,6 +114,7 @@ export async function createPersonaPayload(
     action: NextIDAction,
     identity: string,
     platform: NextIDPlatform,
+    language?: string,
 ): Promise<NextIDPayload | null> {
     const requestBody: CreatePayloadBody = {
         action,
@@ -120,13 +123,15 @@ export async function createPersonaPayload(
         public_key: personaPublicKey,
     }
 
+    const nextIDLanguageFormat = language?.replace('-', '_') as PostContentLanguages
+
     const response = await fetchJSON<CreatePayloadResponse>(urlcat(BASE_URL, '/v1/proof/payload'), {
         body: JSON.stringify(requestBody),
         method: 'POST',
     })
 
     return {
-        postContent: response.post_content,
+        postContent: response.post_content[nextIDLanguageFormat ?? 'default'] ?? response.post_content.default,
         signPayload: JSON.stringify(JSON.parse(response.sign_payload)),
         createdAt: response.created_at,
         uuid: response.uuid,

@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared'
 import { useI18N, MaskMessages } from '../../utils'
 import { activatedSocialNetworkUI, SocialNetworkUI } from '../../social-network'
-import { currentSetupGuideStatus, userGuideStatus, userPinExtension } from '../../settings/settings'
+import { currentSetupGuideStatus, languageSettings, userGuideStatus, userPinExtension } from '../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import {
@@ -122,7 +122,13 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
         const isBound = await queryIsBound(persona_.publicHexKey, platform, username)
         if (!isBound) {
-            const payload = await createPersonaPayload(persona_.publicHexKey, NextIDAction.Create, username, platform)
+            const payload = await createPersonaPayload(
+                persona_.publicHexKey,
+                NextIDAction.Create,
+                username,
+                platform,
+                languageSettings.value ?? 'default',
+            )
             if (!payload) throw new Error('Failed to create persona payload.')
             const signResult = await Services.Identity.signWithPersona({
                 method: 'eth',
