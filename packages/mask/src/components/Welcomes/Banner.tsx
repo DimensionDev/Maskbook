@@ -24,8 +24,9 @@ interface BannerUIProps extends withClasses<never | 'header' | 'content' | 'acti
     iconType?: string
 }
 
-const ICON_MAP: { [key: string]: JSX.Element } = {
+const ICON_MAP: Record<string, JSX.Element> = {
     minds: <MaskIconInMinds />,
+    default: <MaskSharpIcon color="primary" />,
 }
 const useStyles = makeStyles()({
     buttonText: {
@@ -43,11 +44,7 @@ export function BannerUI(props: BannerUIProps) {
 
     return props.nextStep === 'hidden' ? null : (
         <IconButton size="large" className={classes.buttonText} onClick={props.nextStep.onClick}>
-            {props?.iconType && ICON_MAP?.[props.iconType] ? (
-                ICON_MAP[props.iconType]
-            ) : (
-                <MaskSharpIcon color="primary" />
-            )}
+            {ICON_MAP?.[props?.iconType ?? 'default']}
         </IconButton>
     )
 }
