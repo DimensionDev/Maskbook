@@ -1,6 +1,6 @@
 // This file contains normalized Payload.
 // Internal payload should not be exported
-import type { ProfileIdentifier, CheckedError, OptionalResult } from '@masknet/shared-base'
+import type { ProfileIdentifier, CheckedError, OptionalResult, EC_CryptoKey } from '@masknet/shared-base'
 import type { Result, Option } from 'ts-results'
 import type { CryptoException, PayloadException } from '../types'
 
@@ -15,12 +15,7 @@ export declare namespace PayloadParseResult {
         E extends CryptoException | PayloadException = CryptoException | PayloadException,
     > = Result<T, CheckedError<E>>
     export interface Payload {
-        /**
-         * Version starts from -42 but -42 and -41 are dropped.
-         *
-         * The latest version is -37.
-         */
-        readonly version: -40 | -39 | -38 | -37
+        readonly version: SupportedPayloadVersions
         readonly signature: OptionalField<Signature>
         /**
          * The claimed author of this payload.
@@ -29,7 +24,7 @@ export declare namespace PayloadParseResult {
         /**
          * The claimed public key of author.
          */
-        readonly authorPublicKey: OptionalField<AsymmetryCryptoKey, CryptoException>
+        readonly authorPublicKey: OptionalField<EC_Key, CryptoException>
         /** The encryption method this payload used. */
         readonly encryption: RequiredField<PublicEncryption | EndToEndEncryption>
         /** The encrypted content. */
@@ -50,18 +45,13 @@ export declare namespace PayloadParseResult {
         readonly type: 'E2E'
         readonly ownersAESKeyEncrypted: RequiredField<Uint8Array>
         readonly iv: RequiredField<Uint8Array>
-        readonly ephemeralPublicKey: Record<string, RequiredField<AsymmetryCryptoKey, CryptoException>>
+        readonly ephemeralPublicKey: Record<string, RequiredField<EC_Key, CryptoException>>
     }
 }
 /** Well formed payload that can be encoded into the latest version */
 export declare namespace PayloadWellFormed {
     export interface Payload {
-        /**
-         * Version starts from -42 but -42 and -41 are dropped.
-         *
-         * The latest version is -37.
-         */
-        readonly version: -40 | -39 | -38 | -37
+        readonly version: SupportedPayloadVersions
         readonly signature: Option<Signature>
         /**
          * The claimed author of this payload.
@@ -70,7 +60,7 @@ export declare namespace PayloadWellFormed {
         /**
          * The claimed public key of author.
          */
-        readonly authorPublicKey: Option<AsymmetryCryptoKey>
+        readonly authorPublicKey: Option<EC_Key>
         /** The encryption method this payload used. */
         readonly encryption: PublicEncryption | EndToEndEncryption
         /** The encrypted content. */
@@ -92,22 +82,22 @@ export declare namespace PayloadWellFormed {
         readonly type: 'E2E'
         readonly ownersAESKeyEncrypted: Uint8Array
         readonly iv: Uint8Array
-        readonly ephemeralPublicKey: Map<PublicKeyAlgorithmEnum, CryptoKey>
+        readonly ephemeralPublicKey: Map<EC_KeyCurveEnum, CryptoKey>
     }
 }
 export interface Signature {
     readonly signee: Uint8Array
     readonly signature: Uint8Array
 }
-export interface AsymmetryCryptoKey {
-    readonly algr: PublicKeyAlgorithmEnum
-    readonly key: CryptoKey
+export interface EC_Key<K extends EC_CryptoKey = EC_CryptoKey> {
+    readonly algr: EC_KeyCurveEnum
+    readonly key: K
 }
 export interface AESKey {
     readonly algr: AESAlgorithmEnum
     readonly key: CryptoKey
 }
-export enum PublicKeyAlgorithmEnum {
+export enum EC_KeyCurveEnum {
     ed25519 = 0,
     secp256p1 = 1, // P-256
     secp256k1 = 2, // K-256
@@ -122,6 +112,12 @@ export enum SocialNetworkEnum {
     Instagram = 2,
     Minds = 3,
 }
+/**
+ * Version starts from -42 but -42 and -41 are dropped.
+ *
+ * The latest version is -37.
+ */
+export type SupportedPayloadVersions = -37 | -38 | -39 | -40
 const SocialNetworkEnumToDomain: Record<SocialNetworkEnum, string> = {
     [SocialNetworkEnum.Unknown]: 'localhost',
     [SocialNetworkEnum.Facebook]: 'facebook.com',

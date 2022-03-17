@@ -1,6 +1,6 @@
 import type { TypedMessage } from '@masknet/typed-message'
 import type { ProfileIdentifier, AESCryptoKey, EC_Public_CryptoKey } from '@masknet/shared-base'
-import type { PayloadParseResult } from '../payload'
+import type { PayloadParseResult, SupportedPayloadVersions } from '../payload'
 import { registerSerializableClass } from '@masknet/shared-base'
 
 export interface DecryptOptions {
@@ -113,7 +113,6 @@ export interface DecryptEphemeralECDH_PostKey extends DecryptStaticECDH_PostKey 
     ephemeralPublicKeySignature?: Uint8Array
 }
 export enum DecryptProgressKind {
-    Started = 'started',
     Success = 'success',
     Error = 'error',
     Info = 'info',
@@ -129,6 +128,8 @@ export interface DecryptReportedInfo {
     iv?: Uint8Array
     claimedAuthor?: ProfileIdentifier
     publicShared?: boolean
+    version?: SupportedPayloadVersions
+    ownersKeyEncrypted?: Uint8Array
 }
 export interface DecryptIntermediateProgress {
     type: DecryptProgressKind.Progress
@@ -141,6 +142,7 @@ export interface DecryptSuccess {
     type: DecryptProgressKind.Success
     content: TypedMessage
 }
+// TODO: rename as DecryptErrorReasons
 export enum ErrorReasons {
     PayloadBroken = '[@masknet/encryption] Payload is broken.',
     PayloadDecryptedButTypedMessageBroken = "[@masknet/encryption] Payload decrypted, but it's inner TypedMessage is broken.",
@@ -152,6 +154,7 @@ export enum ErrorReasons {
     // Not used in this library.
     UnrecognizedAuthor = '[@masknet/encryption] No author is recognized which is required for the image steganography decoding.',
     CurrentProfileDoesNotConnectedToPersona = '[@masknet/encryption] Cannot decrypt by E2E because no persona is linked with the current profile.',
+    NoPayloadFound = '[@masknet/encryption] No payload found in this material.',
 }
 export class DecryptError extends Error {
     static Reasons = ErrorReasons

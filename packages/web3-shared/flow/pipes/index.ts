@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { createLookupTableResolver } from '@masknet/web3-kit'
+import { createLookupTableResolver } from '@masknet/web3-shared-base'
 import { ChainId, ProviderType } from '../types'
 
 export const resolveChainName = createLookupTableResolver<ChainId, string>(

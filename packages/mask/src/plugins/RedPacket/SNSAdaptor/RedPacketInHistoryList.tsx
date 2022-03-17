@@ -1,8 +1,6 @@
 import { useState, useCallback, useEffect, MouseEvent } from 'react'
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
-// see https://github.com/import-js/eslint-plugin-import/issues/2288
-// eslint-disable-next-line import/no-deprecated
 import { Box, ListItem, Typography, Popper, useMediaQuery, Theme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
@@ -187,8 +185,6 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const { history, onSelect } = props
     const { t } = useI18N()
     const { classes } = useStyles()
-    // see https://github.com/import-js/eslint-plugin-import/issues/2288
-    // eslint-disable-next-line import/no-deprecated
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
     const {
         value: availability,
