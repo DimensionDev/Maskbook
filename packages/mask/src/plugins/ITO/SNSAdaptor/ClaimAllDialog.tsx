@@ -365,6 +365,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                     chainId={chainId}
                                     classes={{ switchButton: classes.claimAllButton }}
                                     noSwitchNetworkTip
+                                    disablePadding
                                     switchButtonStyle={{
                                         minHeight: 'auto',
                                         width: '100%',
@@ -390,7 +391,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                                         TransactionStateType.WAIT_FOR_CONFIRMING,
                                                     ].includes(claimState.type)
                                                 }
-                                                size="large"
+                                                size="small"
                                                 onClick={onClaimButtonClick}>
                                                 {t('plugin_ito_claim_all')}
                                             </ActionButton>

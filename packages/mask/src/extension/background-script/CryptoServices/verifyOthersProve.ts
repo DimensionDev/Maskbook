@@ -1,6 +1,7 @@
 import { type ProfileIdentifier, decompressSecp256k1Key, ECKeyIdentifierFromJsonWebKey } from '@masknet/shared-base'
 import { decodePublicKeyWorker } from '../../../social-network/utils/text-payload-worker'
-import { createProfileWithPersona, queryPersonaRecord } from '../../../database'
+import { queryPersonaRecord } from '../../../database'
+import { createProfileWithPersona } from '../../../../background/database/persona/helper'
 
 export async function verifyOthersProve(bio: string | { raw: string }, others: ProfileIdentifier): Promise<boolean> {
     const compressedX = typeof bio === 'string' ? (await decodePublicKeyWorker(others.network))(bio) : [bio.raw]

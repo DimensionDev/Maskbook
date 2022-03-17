@@ -12,9 +12,7 @@
     { "path": "../../shared-base" },
     { "path": "../../typed-message/base" },
     { "path": "../../shared" },
-    { "path": "../../web3-kit" },
     { "path": "../../icons" },
-    { "path": "../../web3-kit" },
     { "path": "../Wallet" }
   ]
 }
