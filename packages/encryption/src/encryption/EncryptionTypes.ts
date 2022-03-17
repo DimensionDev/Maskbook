@@ -69,7 +69,7 @@ export interface EncryptIO {
      * Generate a pair of new EC key used for ECDH.
      * This should be only provided in the test environment to create a deterministic result.
      */
-    getRandomECKey?(algr: EC_KeyCurveEnum): Promise<[EC_Public_CryptoKey, EC_Private_CryptoKey]>
+    getRandomECKey?(algr: EC_KeyCurveEnum): Promise<readonly [EC_Public_CryptoKey, EC_Private_CryptoKey]>
 }
 export interface EncryptResult {
     postKey: AESCryptoKey

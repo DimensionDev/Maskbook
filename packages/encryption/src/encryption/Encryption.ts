@@ -223,7 +223,7 @@ async function v37EncryptionE2E(options: EncryptOptions, io: EncryptIO): Promise
     }
 
     const payload = await encodePayload.NoSign({
-        version: -38,
+        version: -37,
         author: options.author.isUnknown ? None : Some(options.author),
         authorPublicKey: authorPublic,
         encryption,

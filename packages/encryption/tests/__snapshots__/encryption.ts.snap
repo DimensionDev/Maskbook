@@ -1,5 +1,39 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`v37 E2E encryption: encrypted 1`] = `
+Object {
+  "author": ProfileIdentifier {
+    "network": "localhost",
+    "userId": "bob",
+  },
+  "e2e": IdentifierMap {
+    "__raw_map__": Map {
+      "person:localhost/jack" => Object {
+        "status": "fulfilled",
+        "value": Object {
+          "encryptedPostKey": Uint8Array [ 2efdd4b0b30e637e0a5477269e9ffe0603739d0b2dc381b20ac256cf897b822cc6a8263039bf8a56c723528b8919a336 ],
+          "target": ProfileIdentifier {
+            "network": "localhost",
+            "userId": "jack",
+          },
+        },
+      },
+    },
+    "constructorName": Array [
+      "ProfileIdentifier",
+    ],
+    Symbol(immer-draftable): true,
+    Symbol(Symbol.toStringTag): undefined,
+  },
+  "identifier": PostIVIdentifier {
+    "network": "localhost",
+    "postIV": "Z/9AS037AaQi7QQQfq+OIw==",
+  },
+  "output": Uint8Array [ 9300c5013397d0dba96c6f63616c686f7374a3626f6202c4583056301006072a8648ce3d020106052b8104000a03420004fbdd1a19eeb484e44ced760c141ff185b4bef2eb8998a052054cb7e4548716bf1032b7bbdae5dd881e40cf98e40d196bfd1f0dc2d20c3c8f71e6eb7330b5f1a19401c430e3b51fe6c57b5831460666e8ddf01b49ebb513848cc9eb014a4c322b3afbbf0af21a902912080179494adc12941bc3dbc41067ff404b4dfb01a422ed04107eaf8e2381a132c4583056301006072a8648ce3d020106052b8104000a03420004640c0574dbba0be00e7e6f0080fb2f4428f72245b5adb4d3bd95694d645a6b2423c6d09bab7075a1b9f63d7c6760189bc6b0cfa341ea1be9fe3d8b95fda37268c42251312d4d2137b78846f8cd793113e78726fef59ec68c2335a51d6a27d12d4c78172dc0 ],
+  "postKey": CryptoKey { [opaque crypto key material] },
+}
+`;
+
 exports[`v37 public encryption: full v37 1`] = `
 Object {
   "author": ProfileIdentifier {

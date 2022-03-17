@@ -12,7 +12,7 @@ import {
 import { importAESFromJWK } from '../src/utils'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { makeTypedMessageText, makeTypedMessageTupleSerializable } from '@masknet/typed-message'
-import { queryTestPublicKey } from './keys'
+import { getRandomValues, getTestRandomAESKey, getTestRandomECKey, queryTestPublicKey } from './keys'
 
 const publicTarget: EncryptOptions['target'] = {
     type: 'public',
@@ -58,6 +58,30 @@ test('v38 public encryption', async () => {
         },
     )
 })
+
+test('v37 E2E encryption', async () => {
+    const payload: EncryptOptions = {
+        author: new ProfileIdentifier('localhost', 'bob'),
+        message: makeTypedMessageText('hello world'),
+        target: {
+            type: 'E2E',
+            target: [new ProfileIdentifier('localhost', 'jack')],
+        },
+        version: -37,
+    }
+
+    const encrypted = await encrypt(payload, {
+        encryptByLocalKey: reject,
+        deriveAESKey_version38_or_older: reject,
+        queryPublicKey: queryTestPublicKey,
+        getRandomAESKey: getTestRandomAESKey(),
+        getRandomECKey: getTestRandomECKey(),
+        getRandomValues: getRandomValues(),
+    })
+
+    expect(encrypted).toMatchSnapshot('encrypted')
+})
+test('v38 E2E encryption', async () => {})
 
 async function testSet(
     key: string,
