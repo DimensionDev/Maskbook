@@ -79,7 +79,7 @@ export const PersonaCard = memo<PersonaCardProps>((props) => {
 
 export interface PersonaCardUIProps extends PersonaCardProps {
     definedSocialNetworks: SocialNetwork[]
-    onConnect: (identifier: PersonaIdentifier, networkIdentifier: string) => void
+    onConnect: (identifier: PersonaIdentifier, networkIdentifier: string, type?: 'local' | 'nextID') => void
     onDisconnect: (identifier: ProfileIdentifier) => void
     verification?: NextIDPersonaBindings
 }
@@ -121,7 +121,7 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
                                     proof={proof}
                                     isHideOperations
                                     key={networkIdentifier}
-                                    onConnect={() => onConnect(identifier, networkIdentifier)}
+                                    onConnect={(type) => onConnect(identifier, networkIdentifier, type)}
                                     onDisconnect={onDisconnect}
                                     profileIdentifiers={currentNetworkProfiles.map((x) => x.identifier)}
                                     networkIdentifier={networkIdentifier}

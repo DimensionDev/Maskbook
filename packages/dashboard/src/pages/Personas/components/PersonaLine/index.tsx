@@ -70,7 +70,7 @@ export const UnconnectedPersonaLine = memo<UnconnectedPersonaLineProps>(({ onCon
 
 export interface ConnectedPersonaLineProps {
     isHideOperations: boolean
-    onConnect: () => void
+    onConnect: (type: 'nextID' | 'local') => void
     onDisconnect: (identifier: ProfileIdentifier) => void
     onDeleteBound?: (profile: ProfileIdentifier) => void
     profileIdentifiers: ProfileIdentifier[]
@@ -104,7 +104,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         const handleProofIconClick = (e: MouseEvent, proof: BindingProof | undefined) => {
             e.stopPropagation()
             if (!proof || !proof.is_valid) {
-                onConnect()
+                onConnect('nextID')
             }
         }
 
@@ -175,7 +175,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                                 sx={{ mr: 1 }}
                                 onClick={(e: MouseEvent) => {
                                     e.stopPropagation()
-                                    onConnect()
+                                    onConnect('local')
                                 }}>
                                 {t.personas_add()}
                             </Link>
