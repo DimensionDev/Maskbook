@@ -1,14 +1,14 @@
 import { useAsyncRetry } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import Services from '../../../../service'
 import { useEffect } from 'react'
 import { WalletMessages } from '@masknet/plugin-wallet'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 export const useUnconfirmedRequest = () => {
     const result = useAsyncRetry(async () => {
         const payload = await WalletRPC.firstUnconfirmedRequest()
         if (!payload) return
-        const computedPayload = await Services.Ethereum.getComputedPayload(payload)
+        const computedPayload = await EVM_RPC.getComputedPayload(payload)
         return {
             payload,
             computedPayload,

@@ -40,8 +40,8 @@ import { NetworkPluginID, useLookupAddress, useNetworkDescriptor, useWeb3State }
 import { NetworkType } from '@masknet/public-api'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { multipliedBy } from '@masknet/web3-shared-base'
-import { Services } from '../../../../API'
 import { RightIcon } from '@masknet/icons'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 const useStyles = makeStyles()((theme) => ({
     disabled: {
@@ -141,7 +141,7 @@ export const TransferERC721 = memo(() => {
                 message: t.wallets_transfer_error_same_address_with_current_account(),
             })
         }
-        const result = await Services.Ethereum.getCode(recipient)
+        const result = await EVM_RPC.getCode(recipient)
         if (result !== '0x') {
             setRecipientError({
                 type: 'contractAddress',

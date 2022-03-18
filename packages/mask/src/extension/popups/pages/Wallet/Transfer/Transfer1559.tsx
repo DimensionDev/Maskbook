@@ -331,7 +331,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
             return
         }
 
-        const result = await Services.Ethereum.getCode(address)
+        const result = await EVM_RPC.getCode(address)
 
         if (result !== '0x') {
             setAddressTip({

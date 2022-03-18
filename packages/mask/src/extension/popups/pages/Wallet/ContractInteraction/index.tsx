@@ -26,11 +26,11 @@ import { isGreaterThan, leftShift, pow10 } from '@masknet/web3-shared-base'
 import { unreachable } from '@dimensiondev/kit'
 import { useI18N } from '../../../../../utils'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import Services from '../../../../service'
 import { useNativeTokenPrice, useTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
 import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
 import { CopyIconButton } from '../../../components/CopyIconButton'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -257,7 +257,7 @@ const ContractInteraction = memo(() => {
     // handlers
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
         try {
-            await Services.Ethereum.confirmRequest()
+            await EVM_RPC.confirmRequest()
             navigate(-1)
         } catch (error_) {
             setTransferError(true)
@@ -265,7 +265,7 @@ const ContractInteraction = memo(() => {
     }, [request, location.search, history])
 
     const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
-        await Services.Ethereum.rejectRequest()
+        await EVM_RPC.rejectRequest()
         navigate(PopupRoutes.Wallet, { replace: true })
     }, [])
 

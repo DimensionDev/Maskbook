@@ -2,8 +2,7 @@ import { useEffect, useCallback } from 'react'
 // import { useMount } from 'react-use'
 import type { ProviderType, ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, useChainId, useProviderType } from '@masknet/plugin-infra'
-import { EVM_Messages } from '../../messages'
-import Services from '../../../../extension/service'
+import { EVM_Messages, EVM_RPC } from '../../messages'
 import { useBridgedProvider } from '../../hooks'
 
 export interface ProviderBridgeProps {
@@ -17,7 +16,7 @@ export function ProviderBridge({ providerType: expectedProviderType }: ProviderB
 
     const onMounted = useCallback(async () => {
         if (expectedProviderType !== actualProviderType) return
-        // await Services.Ethereum.connect({
+        // await EVM_RPC.connect({
         //     chainId:
         //     providerType: actualProviderType,
         // })
@@ -54,7 +53,7 @@ export function ProviderBridge({ providerType: expectedProviderType }: ProviderB
     useEffect(() => {
         const onAccountsChanged = async (accounts: string[]) => {
             if (actualProviderType !== expectedProviderType) return
-            await Services.Ethereum.notifyEvent(actualProviderType, 'accountsChanged', accounts)
+            await EVM_RPC.notifyEvent(actualProviderType, 'accountsChanged', accounts)
         }
         provider?.on('accountsChanged', onAccountsChanged)
         return () => {
@@ -65,7 +64,7 @@ export function ProviderBridge({ providerType: expectedProviderType }: ProviderB
     useEffect(() => {
         const onChainChanged = async (chainId: ChainId) => {
             if (actualProviderType !== expectedProviderType) return
-            await Services.Ethereum.notifyEvent(actualProviderType, 'chainChanged', chainId)
+            await EVM_RPC.notifyEvent(actualProviderType, 'chainChanged', chainId)
         }
         provider?.on('chainChanged', onChainChanged)
         return () => {
@@ -84,7 +83,7 @@ export function ProviderBridge({ providerType: expectedProviderType }: ProviderB
     useEffect(() => {
         const onDisconnect = async () => {
             if (actualProviderType !== expectedProviderType) return
-            await Services.Ethereum.notifyEvent(actualProviderType, 'disconnect')
+            await EVM_RPC.notifyEvent(actualProviderType, 'disconnect')
         }
         provider?.on('disconnect', onDisconnect)
         return () => {

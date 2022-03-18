@@ -6,6 +6,7 @@ import { Services, Messages } from '../API'
 import { createI18NBundle } from '@masknet/shared-base'
 import i18n from 'i18next'
 import { InMemoryStorages, PersistentStorages } from '../utils/kv-storage'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 const PluginHost: Plugin.__Host.Host<Plugin.Dashboard.DashboardContext> = {
     minimalMode: {
@@ -24,7 +25,7 @@ const PluginHost: Plugin.__Host.Host<Plugin.Dashboard.DashboardContext> = {
                 else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
             },
             personaSign: Services.Identity.signWithPersona,
-            walletSign: Services.Ethereum.personalSign,
+            walletSign: EVM_RPC.personalSign,
         }
     },
 }

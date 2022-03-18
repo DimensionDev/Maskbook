@@ -16,7 +16,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { WalletMessages, WalletRPC } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
-import Services from '../../../../extension/service'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -72,7 +72,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             case ProviderType.WalletLink:
             case ProviderType.MathWallet:
             case ProviderType.Fortmatic:
-                ;({ account, chainId } = await Services.Ethereum.connect({
+                ;({ account, chainId } = await EVM_RPC.connect({
                     chainId: expectedChainId,
                     providerType,
                 }))
@@ -104,13 +104,13 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
                             throw new Error('Timeout!')
                         })(),
                         networkType === NetworkType.Ethereum
-                            ? Services.Ethereum.switchEthereumChain(ChainId.Mainnet, overrides)
-                            : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account, overrides),
+                            ? EVM_RPC.switchEthereumChain(ChainId.Mainnet, overrides)
+                            : EVM_RPC.addEthereumChain(chainDetailedCAIP, account, overrides),
                     ])
                 }
 
                 // recheck
-                const actualChainId = Number.parseInt(await Services.Ethereum.getChainId(overrides), 16)
+                const actualChainId = Number.parseInt(await EVM_RPC.getChainId(overrides), 16)
                 if (actualChainId !== expectedChainId)
                     throw new Error('Failed to switch chain, please try again later.')
             } catch {

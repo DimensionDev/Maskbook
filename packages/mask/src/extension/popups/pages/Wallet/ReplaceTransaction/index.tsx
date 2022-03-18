@@ -26,8 +26,8 @@ import { isEmpty } from 'lodash-unified'
 import { useAsyncFn } from 'react-use'
 import { useContainer } from 'unstated-next'
 import { WalletContext } from '../hooks/useWalletContext'
-import Services from '../../../../service'
 import { isPositive, multipliedBy } from '@masknet/web3-shared-base'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 const useStyles = makeStyles()({
     container: {
@@ -155,9 +155,9 @@ const ReplaceTransaction = memo(() => {
                     }
 
                     if (type === ReplaceType.CANCEL) {
-                        await Services.Ethereum.cancelRequest(transaction.hash, config)
+                        await EVM_RPC.cancelRequest(transaction.hash, config)
                     } else {
-                        await Services.Ethereum.replaceRequest(transaction.hash, config)
+                        await EVM_RPC.replaceRequest(transaction.hash, config)
                     }
 
                     navigate(-1)

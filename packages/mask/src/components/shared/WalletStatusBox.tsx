@@ -22,6 +22,7 @@ import { WalletMessages, WalletRPC } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
 import Services from '../../extension/service'
 import { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     content: {
@@ -137,7 +138,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
             case ProviderType.Coin98:
             case ProviderType.WalletConnect:
             case ProviderType.Fortmatic:
-                await Services.Ethereum.disconnect({
+                await EVM_RPC.disconnect({
                     providerType,
                 })
                 await WalletRPC.resetAccount()

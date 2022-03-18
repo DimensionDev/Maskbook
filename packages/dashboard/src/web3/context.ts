@@ -9,11 +9,11 @@ import {
     EthereumTokenType,
     NetworkType,
     Web3ProviderType,
-    isInjectedProvider,
 } from '@masknet/web3-shared-evm'
 import { getProxyWebsocketInstance } from '@masknet/web3-shared-base'
 import { Services, Messages, PluginServices, PluginMessages } from '../API'
 import { TokenList } from '@masknet/web3-providers'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 export const Web3Context: Web3ProviderType = {
     allowTestnet: createSubscriptionFromAsync(Services.Settings.getWalletAllowTestChain, false, () => {
@@ -80,7 +80,7 @@ export const Web3Context: Web3ProviderType = {
     trustToken: PluginServices.Wallet.trustToken,
     blockToken: PluginServices.Wallet.blockToken,
 
-    request: Services.Ethereum.request,
+    request: EVM_RPC.request,
 
     getAssetsList: PluginServices.Wallet.getAssetsList,
     getAssetsListNFT: PluginServices.Wallet.getAssetsListNFT,

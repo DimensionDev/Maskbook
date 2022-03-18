@@ -12,8 +12,8 @@ import {
 import { makeStyles, ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
 import { WalletMessages } from '../../messages'
 import { RecentTransactionDescription } from '../WalletStatusDialog/TransactionDescription'
-import Services from '../../../../extension/service'
 import { useI18N } from '../../../../utils'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 const useStyles = makeStyles()({
     link: {
@@ -99,9 +99,7 @@ export function TransactionSnackbar() {
             if (location.href.includes('popups.html')) return
             if (progress.state.type === TransactionStateType.UNKNOWN) return
 
-            const payload = await Services.Ethereum.getSendTransactionComputedPayload(
-                getPayloadConfig(progress.payload),
-            )
+            const payload = await EVM_RPC.getSendTransactionComputedPayload(getPayloadConfig(progress.payload))
             const config = resolveSnackbarConfig(progress.state.type)
             const hash =
                 (progress.state as { hash?: string }).hash ??

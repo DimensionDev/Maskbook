@@ -41,7 +41,7 @@ import CryptoPunks from '@masknet/web3-contracts/abis/CryptoPunks.json'
 
 const PUNK_CONTRACT_ADDRESS = '0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb'
 async function getTokenOwner(address: string, tokenId: string) {
-    const web3 = createWeb3(Services.Ethereum.request, () => ({
+    const web3 = createWeb3(EVM_RPCrequest, () => ({
         chainId: ChainId.Mainnet,
     }))
     if (isSameAddress(address, PUNK_CONTRACT_ADDRESS)) {
@@ -126,7 +126,7 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
         trustToken: WalletRPC.trustToken,
         blockToken: WalletRPC.blockToken,
 
-        request: Services.Ethereum.request,
+        request: EVM_RPCrequest,
         getSendOverrides: () =>
             isMask
                 ? {

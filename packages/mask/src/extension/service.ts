@@ -29,7 +29,6 @@ export const Services = {
     Identity: add(() => import('./background-script/IdentityService'), 'Identity'),
     Welcome: add(() => import('./background-script/WelcomeService'), 'Welcome'),
     Helper: add(() => import('../../background/services/helper'), 'Helper'),
-    Ethereum: add(() => import('./background-script/EthereumService'), 'Ethereum'),
     SocialNetwork: add(() => import('./background-script/SocialNetworkService'), 'SocialNetwork'),
     Settings: add(() => import('./background-script/SettingsService'), 'Settings'),
     ThirdPartyPlugin: add(() => import('./background-script/ThirdPartyPlugin'), 'ThirdPartyPlugin'),
@@ -44,11 +43,10 @@ export const ServicesWithProgress: _AsyncGeneratorVersionOf<typeof import('./ser
 if (process.env.manifest === '2' && import.meta.webpackHot && isEnvironment(Environment.ManifestBackground)) {
     import.meta.webpackHot.accept(
         [
+            '../../background/services/helper',
             './background-script/CryptoService',
             './background-script/IdentityService',
             './background-script/WelcomeService',
-            '../../background/services/helper',
-            './background-script/EthereumService',
             './background-script/SettingsService',
             './background-script/ThirdPartyPlugin',
             './background-script/SocialNetworkService',

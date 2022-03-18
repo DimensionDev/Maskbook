@@ -7,4 +7,4 @@ export interface ContractMethodInfo {
     chainId: ChainId
 }
 
-export type ComputedPayload = UnboxPromise<ReturnType<typeof Services.Ethereum.getSendTransactionComputedPayload>>
+export type ComputedPayload = UnboxPromise<ReturnType<typeof EVM_RPCgetSendTransactionComputedPayload>>

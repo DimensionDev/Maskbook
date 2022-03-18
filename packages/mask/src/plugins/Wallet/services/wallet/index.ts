@@ -9,9 +9,9 @@ import { MAX_DERIVE_COUNT, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugi
 import * as sdk from './maskwallet'
 import * as database from './database'
 import * as password from './password'
-import * as EthereumServices from '../../../../extension/background-script/EthereumService'
 import { hasNativeAPI } from '../../../../../shared/native-rpc'
 import type { WalletRecord } from './type'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 function bumpDerivationPath(path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`) {
     const splitted = path.split('/')
@@ -61,7 +61,7 @@ export async function getWallets(providerType?: ProviderType): Promise<
         if (providerType && providerType !== ProviderType.MaskWallet) return []
 
         // read wallet from rpc
-        const accounts = await EthereumServices.getAccounts()
+        const accounts = await EVM_RPC.getAccounts()
         const address = first(accounts) ?? ''
         if (!address) return []
 

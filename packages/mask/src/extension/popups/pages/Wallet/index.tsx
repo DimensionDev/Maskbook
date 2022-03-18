@@ -8,10 +8,10 @@ import { WalletContext } from './hooks/useWalletContext'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder'
 import { useAsyncRetry } from 'react-use'
 import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages'
-import Services from '../../../service'
 import SelectWallet from './SelectWallet'
 import { useWalletLockStatus } from './hooks/useWalletLockStatus'
 import urlcat from 'urlcat'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 const ImportWallet = lazy(() => import('./ImportWallet'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet'))
@@ -55,7 +55,7 @@ export default function Wallet() {
         const payload = await WalletRPC.firstUnconfirmedRequest()
         if (!payload) return
 
-        const computedPayload = await Services.Ethereum.getComputedPayload(payload)
+        const computedPayload = await EVM_RPC.getComputedPayload(payload)
         const value = {
             payload,
             computedPayload,

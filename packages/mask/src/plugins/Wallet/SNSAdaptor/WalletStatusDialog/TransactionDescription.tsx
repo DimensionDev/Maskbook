@@ -27,7 +27,7 @@ function getTransactionDescription(
     chainId: ChainId,
     nativeTokenDetailed?: NativeTokenDetailed | ERC20TokenDetailed,
     tokenDetailed?: ERC20TokenDetailed,
-    computedPayload?: UnboxPromise<ReturnType<typeof Services.Ethereum.getSendTransactionComputedPayload>> | null,
+    computedPayload?: UnboxPromise<ReturnType<typeof EVM_RPCgetSendTransactionComputedPayload>> | null,
 ) {
     if (!computedPayload) return
     const type = computedPayload.type
@@ -115,7 +115,7 @@ function getTransactionDescription(
 
 export interface RecentTransactionDescriptionProps {
     hash: string
-    computedPayload?: UnboxPromise<ReturnType<typeof Services.Ethereum.getSendTransactionComputedPayload>> | null
+    computedPayload?: UnboxPromise<ReturnType<typeof EVM_RPCgetSendTransactionComputedPayload>> | null
 }
 
 export function RecentTransactionDescription(props: RecentTransactionDescriptionProps) {

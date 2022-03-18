@@ -104,12 +104,12 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         throw new Error('Timeout!')
                     })(),
                     networkType === NetworkType.Ethereum
-                        ? Services.Ethereum.switchEthereumChain(expectedChainId, overrides)
-                        : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account, overrides),
+                        ? EVM_RPCswitchEthereumChain(expectedChainId, overrides)
+                        : EVM_RPCaddEthereumChain(chainDetailedCAIP, account, overrides),
                 ])
 
                 // recheck
-                const chainIdHex = await Services.Ethereum.getChainId(overrides)
+                const chainIdHex = await EVM_RPC.getChainId(overrides)
                 if (Number.parseInt(chainIdHex, 16) !== expectedChainId) throw new Error('Failed to switch chain.')
             } catch {
                 throw new Error(

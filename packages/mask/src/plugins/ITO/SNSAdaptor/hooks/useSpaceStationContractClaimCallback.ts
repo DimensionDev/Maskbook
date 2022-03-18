@@ -11,7 +11,7 @@ import type { CampaignInfo } from '../../types'
 import type { SpaceStationGalaxy } from '@masknet/web3-contracts/types/SpaceStationGalaxy'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { getAccountClaimSignature, mutationParticipate } from '../../Worker/apis/spaceStationGalaxy'
-import Services from '../../../../extension/service'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 export function useSpaceStationContractClaimCallback(campaignInfo: CampaignInfo) {
     const account = useAccount()
@@ -32,7 +32,7 @@ export function useSpaceStationContractClaimCallback(campaignInfo: CampaignInfo)
 
         let useSignature = ''
         try {
-            useSignature = await Services.Ethereum.personalSign(
+            useSignature = await EVM_RPC.personalSign(
                 `${campaignInfo.name}
 
 ${campaignInfo.description}`,

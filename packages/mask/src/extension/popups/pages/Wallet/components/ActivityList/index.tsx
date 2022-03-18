@@ -183,7 +183,7 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }
 })
 
 function getToAddress(
-    computedPayload?: UnboxPromise<ReturnType<typeof Services.Ethereum.getSendTransactionComputedPayload>> | null,
+    computedPayload?: UnboxPromise<ReturnType<typeof EVM_RPCgetSendTransactionComputedPayload>> | null,
 ) {
     if (!computedPayload) return undefined
     switch (computedPayload.type) {

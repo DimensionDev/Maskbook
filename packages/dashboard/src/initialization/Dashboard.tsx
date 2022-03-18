@@ -27,7 +27,7 @@ import { Pages } from '../pages/routes'
 import { Web3Context } from '../web3/context'
 import { useAppearance, usePluginID } from '../pages/Personas/api'
 import { PersonaContext } from '../pages/Personas/hooks/usePersonaContext'
-import { fixWeb3State } from '@masknet/plugin-evm/src/UI'
+// import { fixWeb3State } from '@masknet/plugin-evm/src/UI'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
@@ -37,7 +37,7 @@ export default function DashboardRoot() {
 
     // TODO:
     // migrate EVM plugin
-    fixWeb3State(PluginsWeb3State[NetworkPluginID.PLUGIN_EVM], Web3Context)
+    // fixWeb3State(PluginsWeb3State[NetworkPluginID.PLUGIN_EVM], Web3Context)
 
     // #region theme
     const appearance = useAppearance()

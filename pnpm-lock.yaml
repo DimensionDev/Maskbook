@@ -707,6 +707,7 @@ importers:
       web3: 1.5.2
       web3-core: 1.5.2
       web3-core-helpers: 1.5.2
+      web3-eth-abi: 1.5.2
       web3-utils: ^1.7.1
     dependencies:
       '@masknet/icons': link:../../icons
@@ -724,6 +725,7 @@ importers:
       web3: 1.5.2
       web3-core: 1.5.2
       web3-core-helpers: 1.5.2
+      web3-eth-abi: 1.5.2
       web3-utils: 1.7.1
 
   packages/plugins/FileService:

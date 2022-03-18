@@ -6,7 +6,7 @@ import { MaskWalletProvider } from './providers/MaskWallet'
 import { CustomNetworkProvider } from './providers/CustomNetwork'
 import type { Provider } from './types'
 import { currentChainIdSettings, currentProviderSettings } from '../../../plugins/Wallet/settings'
-import Services from '../../service'
+import { dismissAccounts, getChainId, requestAccounts } from './network'
 
 const getProvider = createLookupTableResolver<ProviderType, Provider | null>(
     {
@@ -22,7 +22,7 @@ const getProvider = createLookupTableResolver<ProviderType, Provider | null>(
     null,
 )
 
-export function createWeb3(
+export async function createWeb3(
     chainId = currentChainIdSettings.value,
     providerType = currentProviderSettings.value,
     keys: string[] = [],
@@ -38,7 +38,7 @@ export function createWeb3(
     )
 }
 
-export function createExternalProvider(
+export async function createExternalProvider(
     chainId = currentChainIdSettings.value,
     providerType = currentProviderSettings.value,
     url?: string,
@@ -67,7 +67,7 @@ export async function notifyEvent(providerType: ProviderType, name: string, even
 
 export async function connect({ chainId, providerType }: { chainId: ChainId; providerType: ProviderType }) {
     const account = first(
-        await Services.Ethereum.requestAccounts(chainId, {
+        await requestAccounts(chainId, {
             chainId,
             providerType,
         }),
@@ -77,7 +77,7 @@ export async function connect({ chainId, providerType }: { chainId: ChainId; pro
     if (providerType === ProviderType.WalletConnect) await delay(1000)
 
     const actualChainId = Number.parseInt(
-        await Services.Ethereum.getChainId({
+        await getChainId({
             chainId,
             providerType,
         }),
@@ -91,7 +91,7 @@ export async function connect({ chainId, providerType }: { chainId: ChainId; pro
 }
 
 export async function disconnect({ providerType }: { providerType: ProviderType }) {
-    await Services.Ethereum.dismissAccounts({
+    await dismissAccounts({
         providerType,
     })
 }

@@ -39,7 +39,7 @@ startPluginDashboard(
                 else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
             },
             personaSign: Services.Identity.signWithPersona,
-            walletSign: Services.Ethereum.personalSign,
+            walletSign: EVM_RPCpersonalSign,
         }
     }),
 )
