@@ -97,6 +97,7 @@ Object {
     "network": "localhost",
     "userId": "alice",
   },
+  "e2e": undefined,
   "identifier": PostIVIdentifier {
     "network": "localhost",
     "postIV": "AAECAwQFBgcICQoLDA0ODw==",
@@ -178,6 +179,7 @@ Object {
     "network": "localhost",
     "userId": "alice",
   },
+  "e2e": undefined,
   "identifier": PostIVIdentifier {
     "network": "localhost",
     "postIV": "AAECAwQFBgcICQoLDA0ODw==",
@@ -223,12 +225,100 @@ Object {
 }
 `;
 
+exports[`v38 E2E encryption: decrypted as author 1`] = `
+Array [
+  Object {
+    "content": Object {
+      "content": "hello world",
+      "meta": undefined,
+      "serializable": true,
+      "type": "text",
+      "version": 1,
+    },
+    "type": "success",
+  },
+]
+`;
+
+exports[`v38 E2E encryption: decrypted as jack 1`] = `
+Array [
+  Object {
+    "content": Object {
+      "content": "hello world",
+      "meta": undefined,
+      "serializable": true,
+      "type": "text",
+      "version": 1,
+    },
+    "type": "success",
+  },
+]
+`;
+
+exports[`v38 E2E encryption: encrypted 1`] = `
+Object {
+  "author": ProfileIdentifier {
+    "network": "localhost",
+    "userId": "bob",
+  },
+  "e2e": IdentifierMap {
+    "__raw_map__": Map {
+      "person:localhost/jack" => Object {
+        "status": "fulfilled",
+        "value": Object {
+          "encryptedPostKey": Uint8Array [ 369a0d0df3233ff06da2647b4a5b58d48ec7f8c29ee42c7a81526f322dcc4e203ac7bc72f56e396d5344d0bb6b443ac369c0a382bc54600e3c9a0ea3fa1a0b3ccd1e715f7ec9b0bcb532c32907a80d4c96a20623a83435e47a18dc263651d51718773f9d50d5a3d75409c3f26cbd6fed5ea25234007f6d1a04372f56e7cf56f3a2f9cb57441df4dd6304 ],
+          "ivToBePublished": Uint8Array [ 96a47ca504418e8c6040f10f80e720ba ],
+          "target": ProfileIdentifier {
+            "network": "localhost",
+            "userId": "jack",
+          },
+        },
+      },
+    },
+    "constructorName": Array [
+      "ProfileIdentifier",
+    ],
+    Symbol(immer-draftable): true,
+    Symbol(Symbol.toStringTag): undefined,
+  },
+  "identifier": PostIVIdentifier {
+    "network": "localhost",
+    "postIV": "Z/9AS037AaQi7QQQfq+OIw==",
+  },
+  "output": "🎼4/4|ze6k+g+ozWUy6n7x2o781Az0uvcnaCV9yioJX9becu2U+DEvm3WwAHvnAalsWE3pZ5A6tDEnJ5ind6u2TZ3UnxFIHnpNuUwafW6hmE96pXdAo3FbPjtccSx2rXNGemLhmc1nAPTUVIkDgvSWaWDV2yN+LotSpIXYta/R9nxVozk4l6cUjFd5YKUO|Z/9AS037AaQi7QQQfq+OIw==|q1TVIE/Xa49R+MXl/IIHVZD7HFXJncTWgre5|_|A/vdGhnutITkTO12DBQf8YW0vvLriZigUgVMt+RUhxa/|0|bG9jYWxob3N0L2JvYg==:||",
+  "postKey": CryptoKey { [opaque crypto key material] },
+}
+`;
+
+exports[`v38 E2E encryption: parsed 1`] = `
+Object {
+  "author": Ok(Some(ProfileIdentifier {
+    "network": "localhost",
+    "userId": "bob",
+  })),
+  "authorPublicKey": Ok(Some(Object {
+    "algr": 2,
+    "key": CryptoKey { [opaque crypto key material] },
+  })),
+  "encrypted": Ok(Uint8Array [ ab54d5204fd76b8f51f8c5e5fc82075590fb1c55c99dc4d682b7b9 ]),
+  "encryption": Ok(Object {
+    "ephemeralPublicKey": Object {},
+    "iv": Ok(Uint8Array [ 67ff404b4dfb01a422ed04107eaf8e23 ]),
+    "ownersAESKeyEncrypted": Ok(Uint8Array [ cdeea4fa0fa8cd6532ea7ef1da8efcd40cf4baf72768257dca2a095fd6de72ed94f8312f9b75b0007be701a96c584de967903ab431272798a777abb64d9dd49f11481e7a4db94c1a7d6ea1984f7aa57740a3715b3e3b5c712c76ad73467a62e199cd6700f4d454890382f4966960d5db237e2e8b52a485d8b5afd1f67c55a3393897a7148c577960a50e ]),
+    "type": "E2E",
+  }),
+  "signature": Ok(None),
+  "version": -38,
+}
+`;
+
 exports[`v38 public encryption: full v38 1`] = `
 Object {
   "author": ProfileIdentifier {
     "network": "localhost",
     "userId": "alice",
   },
+  "e2e": undefined,
   "identifier": PostIVIdentifier {
     "network": "localhost",
     "postIV": "AAECAwQFBgcICQoLDA0ODw==",
@@ -283,6 +373,7 @@ Object {
     "network": "localhost",
     "userId": "alice",
   },
+  "e2e": undefined,
   "identifier": PostIVIdentifier {
     "network": "localhost",
     "postIV": "AAECAwQFBgcICQoLDA0ODw==",

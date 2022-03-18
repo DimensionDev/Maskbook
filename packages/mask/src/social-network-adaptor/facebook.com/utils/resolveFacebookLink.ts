@@ -1,5 +1,5 @@
-import { FACEBOOK_ID } from '../base'
+import { EnhanceableSite } from '@masknet/shared-base'
 
 export function resolveFacebookLink(link: string, id: string) {
-    return id === FACEBOOK_ID ? link.replace(/\?fbclid=[\S\s]*#/, '#') : link
+    return id === EnhanceableSite.Facebook ? link.replace(/\?fbclid=[\S\s]*#/, '#') : link
 }

@@ -6,5 +6,5 @@
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
   "include": ["./src/**/*"],
-  "references": [{ "path": "../shared-base" }, { "path": "../typed-message/base" }]
+  "references": [{ "path": "../shared-base" }, { "path": "../shared-base-ui" }, { "path": "../typed-message/base" }]
 }

@@ -1,6 +1,6 @@
-import type { ValueRef } from '@dimensiondev/holoflows-kit'
-import { Subscription, useSubscription } from 'use-subscription'
 import { useMemo } from 'react'
+import { Subscription, useSubscription } from 'use-subscription'
+import type { ValueRef } from '@dimensiondev/holoflows-kit'
 
 export function useValueRef<T>(ref: ValueRef<T>) {
     const subscription = useMemo<Subscription<T>>(

@@ -1,4 +1,3 @@
-import { concatArrayBuffer, decodeArrayBuffer } from '@dimensiondev/kit'
 import {
     AESCryptoKey,
     AESJsonWebKey,
@@ -86,7 +85,7 @@ async function getLocalKeyOf(id: ProfileIdentifier, tx: FullPersonaDBTransaction
 // #endregion
 
 // #region ECDH
-export async function deriveAESByECDH(pub: EC_Public_CryptoKey, extractable = true) {
+export async function deriveAESByECDH(pub: EC_Public_CryptoKey) {
     const curve = (pub.algorithm as EcKeyAlgorithm).namedCurve || ''
     const sameCurvePrivateKeys = new IdentifierMap<ECKeyIdentifier, EC_Private_JsonWebKey>(new Map(), ECKeyIdentifier)
 
@@ -102,21 +101,21 @@ export async function deriveAESByECDH(pub: EC_Public_CryptoKey, extractable = tr
     const deriveResult = new IdentifierMap<ECKeyIdentifier, AESCryptoKey>(new Map(), ECKeyIdentifier)
     const result = await Promise.allSettled(
         [...sameCurvePrivateKeys].map(async ([id, key]) => {
-            const k = await crypto.subtle.importKey(
+            const privateKey = await crypto.subtle.importKey(
                 'jwk',
                 key,
                 { name: 'ECDH', namedCurve: key.crv! } as EcKeyAlgorithm,
                 false,
                 ['deriveKey'],
             )
-            const result = await crypto.subtle.deriveKey(
+            const derived = await crypto.subtle.deriveKey(
                 { name: 'ECDH', public: pub },
-                k,
+                privateKey,
                 { name: 'AES-GCM', length: 256 },
-                extractable,
+                true,
                 ['encrypt', 'decrypt'],
             )
-            deriveResult.set(id, result as AESCryptoKey)
+            deriveResult.set(id, derived as AESCryptoKey)
         }),
     )
     const failed = result.filter((x): x is PromiseRejectedResult => x.status === 'rejected')
@@ -124,40 +123,6 @@ export async function deriveAESByECDH(pub: EC_Public_CryptoKey, extractable = tr
         console.warn('Failed to ECDH', ...failed.map((x) => x.reason))
     }
     return deriveResult
-}
-
-const KEY = decodeArrayBuffer('KEY')
-const IV = decodeArrayBuffer('IV')
-export async function deriveAESByECDH_version38_or_older(
-    pub: EC_Public_CryptoKey,
-    iv: Uint8Array,
-    extractable = false,
-) {
-    const deriveResult = (await deriveAESByECDH(pub, true)).__raw_map__
-    type R = [key: AESCryptoKey, iv: Uint8Array]
-    const next_map = new Map<string, R>()
-
-    for (const [id, key] of deriveResult) {
-        const derivedKeyRaw = await crypto.subtle.exportKey('raw', key)
-        const _a = concatArrayBuffer(derivedKeyRaw, iv)
-        const nextAESKeyMaterial = await crypto.subtle.digest('SHA-256', concatArrayBuffer(_a, iv, KEY))
-        const iv_pre = new Uint8Array(await crypto.subtle.digest('SHA-256', concatArrayBuffer(_a, iv, IV)))
-        const nextIV = new Uint8Array(16)
-        for (let i = 0; i <= 16; i += 1) {
-            // eslint-disable-next-line no-bitwise
-            nextIV[i] = iv_pre[i] ^ iv_pre[16 + i]
-        }
-        const nextAESKey = await crypto.subtle.importKey(
-            'raw',
-            nextAESKeyMaterial,
-            { name: 'AES-GCM', length: 256 },
-            extractable,
-            ['encrypt', 'decrypt'],
-        )
-        next_map.set(id, [nextAESKey as AESCryptoKey, nextIV])
-    }
-
-    return new IdentifierMap<ECKeyIdentifier, R>(next_map, ECKeyIdentifier)
 }
 // #endregion
 

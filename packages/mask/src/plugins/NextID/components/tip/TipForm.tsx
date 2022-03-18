@@ -1,6 +1,6 @@
 import { useWeb3State } from '@masknet/plugin-infra'
 import { SelectTokenDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { EthereumTokenType, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
 import { Box, FormControl, FormControlLabel, MenuItem, Radio, RadioGroup, Select, Typography } from '@mui/material'
