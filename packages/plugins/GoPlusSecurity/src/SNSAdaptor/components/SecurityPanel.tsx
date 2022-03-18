@@ -3,33 +3,13 @@ import { useI18N } from '../../locales'
 import { ExternalLink } from 'react-feather'
 import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
-import { IconMapping, SecurityMessageType, TokenSecurity } from './Conmmon'
+import { IconMapping, SecurityMessageLevel, TokenSecurity } from './Common'
+import { SecurityMessages } from '../rules'
+import { RiskCard } from './RiskCard'
 
 interface TokenCardProps {
     tokenSecurity: TokenSecurity
 }
-
-interface SecurityMessage {
-    type: SecurityMessageType
-    condition(info: TokenSecurity): boolean
-    titleKey: keyof ReturnType<typeof useI18N>
-    messageKey: keyof ReturnType<typeof useI18N>
-}
-
-const SecurityMessages: SecurityMessage[] = [
-    {
-        type: 'high',
-        condition: (info: TokenSecurity) => true,
-        titleKey: 'security_info_code_not_verify_title',
-        messageKey: 'security_info_code_not_verify_message',
-    },
-    {
-        type: 'medium',
-        condition: (info: TokenSecurity) => true,
-        titleKey: 'security_info_functions_that_can_suspend_trading_title',
-        messageKey: 'security_info_functions_that_can_suspend_trading_message',
-    },
-]
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -38,12 +18,17 @@ const useStyles = makeStyles()(() => ({
     link: {},
 }))
 
-export const TokenCard = memo<TokenCardProps>(({ tokenSecurity }) => {
+export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
     const { classes } = useStyles()
     const t = useI18N()
-    const getSecurityMessageType = (): SecurityMessageType => 'high'
 
     const makeMessageList = SecurityMessages.filter((x) => x.condition(tokenSecurity))
+
+    const getSecurityMessageType = () => {
+        if (makeMessageList.find((x) => x.level === SecurityMessageLevel.High)) return SecurityMessageLevel.High
+        if (makeMessageList.find((x) => x.level === SecurityMessageLevel.Medium)) return SecurityMessageLevel.Medium
+        return SecurityMessageLevel.Safe
+    }
 
     return (
         <Stack>
@@ -91,17 +76,9 @@ export const TokenCard = memo<TokenCardProps>(({ tokenSecurity }) => {
             <Stack maxHeight={300}>
                 <Typography variant="h3">{t.security_detection()}</Typography>
                 <Box>
-                    {makeMessageList.map((x) => {
-                        return (
-                            <Stack key={x.titleKey}>
-                                <Box>{IconMapping[x.type]}</Box>
-                                <Box>
-                                    <Typography>{t[x.titleKey]()}</Typography>
-                                    <Typography>{t[x.messageKey]()}</Typography>
-                                </Box>
-                            </Stack>
-                        )
-                    })}
+                    {makeMessageList.map((x, i) => (
+                        <RiskCard info={x} key={i} />
+                    ))}
                 </Box>
             </Stack>
         </Stack>

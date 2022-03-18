@@ -7,9 +7,9 @@ import { SearchBox } from './components/SearchBox'
 import { useAsyncFn } from 'react-use'
 import { GoPlusLabs } from '@masknet/web3-providers'
 import { Searching } from './components/Searching'
-import { TokenCard } from './components/TokenCard'
+import { SecurityPanel } from './components/SecurityPanel'
 import { Footer } from './components/Footer'
-import type { TokenSecurity } from './components/Conmmon'
+import type { TokenSecurity } from './components/Common'
 import { DefaultPlaceholder } from './components/DefaultPlaceholder'
 import { NotFound } from './components/NotFound'
 
@@ -51,7 +51,7 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
                     <Stack>
                         {searching && <Searching />}
                         {error && <NotFound />}
-                        {!error && !searching && value && <TokenCard tokenSecurity={value} />}
+                        {!error && !searching && value && <SecurityPanel tokenSecurity={value} />}
                         {!error && !searching && !value && <DefaultPlaceholder />}
                     </Stack>
                     <Footer />
