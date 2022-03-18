@@ -11,8 +11,10 @@ import {
     useWeb3,
     TransactionStateType,
     isNativeTokenAddress,
+    formatNFT_TokenId,
 } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog, NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import classNames from 'classnames'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { Button, Grid, Link, Typography, DialogContent, List, ListItem } from '@mui/material'
@@ -356,7 +358,7 @@ interface NFTCardProps {
 function NFTCard(props: NFTCardProps) {
     const { token, renderOrder } = props
     const { classes } = useStyles()
-    const [name, setName] = useState('#' + token.tokenId)
+    const [name, setName] = useState(formatNFT_TokenId(token.tokenId, 2))
     return (
         <ListItem className={classNames(classes.tokenSelectorWrapper)}>
             <NFTCardStyledAssetPlayer

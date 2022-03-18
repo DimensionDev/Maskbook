@@ -1,10 +1,11 @@
+import { SocialNetworkEnum } from '@masknet/encryption'
 import type { SocialNetwork, SocialNetworkWorker } from '../../social-network/types'
 
 const id = 'twitter.com'
 const origins = ['https://mobile.twitter.com/*', 'https://twitter.com/*']
 export const twitterBase: SocialNetwork.Base = {
     networkIdentifier: id,
-    name: 'twitter',
+    encryptionNetwork: SocialNetworkEnum.Twitter,
     declarativePermissions: { origins },
     shouldActivate(location) {
         return location.hostname.endsWith('twitter.com')

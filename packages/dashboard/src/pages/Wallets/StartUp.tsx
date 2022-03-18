@@ -3,7 +3,7 @@ import { CloudLinkIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import { Paper, Stack, Box } from '@mui/material'
 import { ActionCard } from '../../components/ActionCard'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginMessages } from '../../API'
 
 const Container = styled('div')`

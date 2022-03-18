@@ -4,7 +4,7 @@ import { Checkbox, Radio, FormControlLabel, Link, Typography } from '@mui/materi
 import { makeStyles } from '@masknet/theme'
 import { isNil } from 'lodash-unified'
 import { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAsync } from 'react-use'
 import { useI18N, Translate } from '../../locales/i18n_generated'
 import { makeFileKey } from '../../file-key'
@@ -56,7 +56,7 @@ const useStyles = makeStyles()((theme) => ({
 export const Upload: React.FC = () => {
     const t = useI18N()
     const { classes } = useStyles()
-    const history = useHistory()
+    const navigate = useNavigate()
     const [encrypted, setEncrypted] = useState(true)
     const [useCDN, setUseCDN] = useState(false)
     const [provider, setProvider] = useState<Provider>(Provider.arweave)
@@ -85,18 +85,20 @@ export const Upload: React.FC = () => {
         const checksum = encodeArrayBuffer(await Attachment.checksum(block))
         const item = await PluginFileServiceRPC.getFileInfo(checksum)
         if (isNil(item)) {
-            history.replace(FileRouter.uploading, {
-                key,
-                name: file.name,
-                size: file.size,
-                type: file.type,
-                block,
-                checksum,
-                useCDN,
-                provider,
+            navigate(FileRouter.uploading, {
+                state: {
+                    key,
+                    name: file.name,
+                    size: file.size,
+                    type: file.type,
+                    block,
+                    checksum,
+                    useCDN,
+                    provider,
+                },
             })
         } else {
-            history.replace(FileRouter.uploaded, item)
+            navigate(FileRouter.uploaded, { state: item })
         }
     }
 

@@ -29,7 +29,7 @@ import { ChevronDown } from 'react-feather'
 import { noop } from 'lodash-unified'
 import { makeStyles } from '@masknet/theme'
 import { ExpandMore } from '@mui/icons-material'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { LoadingButton } from '@mui/lab'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { toHex } from 'web3-utils'
@@ -151,7 +151,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     const wallet = useWallet()
     const chainId = useChainId()
     const [minGasLimitContext, setMinGasLimitContext] = useState(0)
-    const history = useHistory()
+    const navigate = useNavigate()
 
     const [addressTip, setAddressTip] = useState<{ type: TransferAddressError; message: string } | null>()
 
@@ -338,7 +338,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                 openAccountMenu={openMenu}
                 openAssetMenu={openAssetMenu}
                 handleMaxClick={handleMaxClick}
-                handleCancel={() => history.goBack()}
+                handleCancel={() => navigate(-1)}
                 handleConfirm={methods.handleSubmit(onSubmit)}
                 confirmLoading={loading}
                 maxAmount={maxAmount}

@@ -1,4 +1,3 @@
-/* eslint-disable import/no-deprecated */
 import type { LinkedProfileDetails } from '../../../../../background/database/persona/db'
 import type { BackupJSONFileVersion1 } from './version-1'
 import {

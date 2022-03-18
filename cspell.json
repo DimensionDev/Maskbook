@@ -32,6 +32,7 @@
         "bgcolor",
         "bignumber",
         "bips",
+        "birthdate",
         "bitcointalk",
         "blockie",
         "blockies",
@@ -77,6 +78,7 @@
         "elec",
         "encryptedmsg",
         "endregion",
+        "enhanceable",
         "ethersphere",
         "ethersproject",
         "eustatius",
@@ -263,6 +265,7 @@
         "xlarge",
         "xlink",
         "zerion",
+        "zora",
         "zubin"
     ],
     "ignoreWords": [
