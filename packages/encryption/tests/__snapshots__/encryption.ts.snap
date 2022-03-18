@@ -3,6 +3,10 @@
 exports[`v37 E2E encryption: decrypted as author 1`] = `
 Array [
   Object {
+    "event": "E2E",
+    "type": "progress",
+  },
+  Object {
     "content": Object {
       "content": "hello world",
       "meta": undefined,
@@ -17,6 +21,10 @@ Array [
 
 exports[`v37 E2E encryption: decrypted as jack 1`] = `
 Array [
+  Object {
+    "event": "E2E",
+    "type": "progress",
+  },
   Object {
     "content": Object {
       "content": "hello world",
@@ -242,6 +250,10 @@ Array [
 
 exports[`v38 E2E encryption: decrypted as jack 1`] = `
 Array [
+  Object {
+    "event": "E2E",
+    "type": "progress",
+  },
   Object {
     "content": Object {
       "content": "hello world",
