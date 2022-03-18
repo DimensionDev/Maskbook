@@ -122,11 +122,11 @@
         "infoURL": "https://goerli.net/#about"
     },
     {
-        "name": "Binance Smart Chain Mainnet",
+        "name": "BNB Chain Mainnet",
         "chainId": 56,
         "fullName": "Binance",
         "shortName": "bnb",
-        "chain": "BSC",
+        "chain": "BNB Chain",
         "network": "mainnet",
         "networkId": 56,
         "nativeCurrency": {
@@ -985,8 +985,8 @@
         "networkId": 99
     },
     {
-        "name": "xDai Chain",
-        "chain": "xDai",
+        "name": "Gnosis Chain",
+        "chain": "Gnosis",
         "network": "mainnet",
         "rpc": [
             "https://rpc.xdaichain.com",

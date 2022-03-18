@@ -1,5 +1,5 @@
 import { memo, useCallback, useRef, useState } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { TableContainer, TablePagination, tablePaginationClasses, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { NetworkSelector } from '../../../components/NetworkSelector'
@@ -74,7 +74,7 @@ const useStyles = makeStyles()({
 const AddDeriveWallet = memo(() => {
     const indexes = useRef(new Set<number>())
     const { t } = useI18N()
-    const history = useHistory()
+    const navigate = useNavigate()
     const location = useLocation()
     const state = location.state as any as { mnemonic?: string } | undefined
     const { classes } = useStyles()
@@ -150,7 +150,7 @@ const AddDeriveWallet = memo(() => {
                 })
             }
         }
-        history.replace(PopupRoutes.Wallet)
+        navigate(PopupRoutes.Wallet, { replace: true })
     }, [mnemonic, walletName, wallets.length])
 
     return (

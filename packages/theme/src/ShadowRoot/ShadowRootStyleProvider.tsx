@@ -39,11 +39,11 @@ function getShadowRootEmotionCache(shadow: ShadowRoot) {
     const keyB = 'tss-' + instanceID
 
     const muiEmotionCache = createEmotionCache({ key: keyA })
-    const muiStyleSheet = new StyleSheet(keyA, shadow)
+    const muiStyleSheet = new StyleSheet({ key: keyA, container: shadow })
     muiEmotionCache.sheet = muiStyleSheet
 
     const tssEmotionCache = createEmotionCache({ key: keyB })
-    const tssStyleSheet = new StyleSheet(keyB, shadow)
+    const tssStyleSheet = new StyleSheet({ key: keyB, container: shadow })
     tssEmotionCache.sheet = tssStyleSheet
 
     styleSheetMap.set(shadow, [muiEmotionCache, tssEmotionCache, [muiStyleSheet, tssStyleSheet]])

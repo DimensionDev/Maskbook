@@ -93,7 +93,7 @@ export async function steganographyEncodeImage(buf: ArrayBuffer, options: Encode
 
 export type DecodeImageOptions = SteganographyIO & Partial<EncodeOptions> & Pick<EncodeOptions, 'pass'>
 
-async function steganographyDecodeImage(buf: ArrayBuffer, options: DecodeImageOptions) {
+async function inner(buf: ArrayBuffer, options: DecodeImageOptions) {
     const dimension = getDimension(buf)
     const preset = dimensionPreset.find((d) => isSameDimension(d, dimension))
     if (!preset) return ''
@@ -104,6 +104,6 @@ async function steganographyDecodeImage(buf: ArrayBuffer, options: DecodeImageOp
     })
 }
 
-export async function steganographyDecodeImageUrl(url: string, options: DecodeImageOptions) {
-    return steganographyDecodeImage(await options.downloadImage(url), options)
+export async function steganographyDecodeImage(image: Blob | string, options: DecodeImageOptions) {
+    return inner(typeof image === 'string' ? await options.downloadImage(image) : await image.arrayBuffer(), options)
 }

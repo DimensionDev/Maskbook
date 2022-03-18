@@ -9,7 +9,6 @@ import {
     toBase64URL,
     decompressSecp256k1Key,
 } from '@masknet/shared-base'
-import { split_ec_k256_keypair_into_pub_priv } from '../../modules/CryptoAlgorithm/helper'
 
 // Private key at m/44'/coinType'/account'/change/addressIndex
 // coinType = ether
@@ -66,4 +65,14 @@ function HDKeyToJwk(hdk: wallet.HDKey): JsonWebKey {
     const jwk = decompressSecp256k1Key(encodeArrayBuffer(hdk.publicKey))
     jwk.d = hdk.privateKey ? toBase64URL(hdk.privateKey) : undefined
     return jwk
+}
+
+export async function split_ec_k256_keypair_into_pub_priv(
+    key: Readonly<JsonWebKey>,
+): Promise<JsonWebKeyPair<EC_Public_JsonWebKey, EC_Private_JsonWebKey>> {
+    const { d, ...pub } = key
+    if (!d) throw new TypeError('split_ec_k256_keypair_into_pub_priv requires a private key (jwk.d)')
+    // TODO: maybe should do some extra check on properties
+    // @ts-expect-error Do a force transform
+    return { privateKey: { ...key }, publicKey: pub }
 }

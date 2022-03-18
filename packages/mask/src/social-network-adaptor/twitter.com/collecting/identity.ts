@@ -48,7 +48,6 @@ function resolveCurrentVisitingIdentityInner(
         const nickname = getNickname()
         const handle = getTwitterId()
         const avatar = getAvatar()
-
         ref.value = {
             identifier: new ProfileIdentifier(twitterBase.networkIdentifier, handle),
             nickname,

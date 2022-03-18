@@ -1,10 +1,11 @@
+import { SocialNetworkEnum } from '@masknet/encryption'
 import type { SocialNetwork, SocialNetworkWorker } from '../../social-network/types'
 
 const id = 'instagram.com'
 const origins = ['https://www.instagram.com/*', 'https://m.instagram.com/*', 'https://instagram.com/*']
 export const instagramBase: SocialNetwork.Base = {
     networkIdentifier: id,
-    name: 'instagram',
+    encryptionNetwork: SocialNetworkEnum.Instagram,
     declarativePermissions: { origins },
     shouldActivate(location) {
         return location.host.endsWith(id)

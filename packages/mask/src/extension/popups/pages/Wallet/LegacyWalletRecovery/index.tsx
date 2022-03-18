@@ -16,7 +16,7 @@ import { PasswordField } from '../../../components/PasswordField'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { LoadingButton } from '@mui/lab'
 import Services from '../../../../service'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const useStyles = makeStyles()({
     container: {
@@ -74,7 +74,7 @@ const useStyles = makeStyles()({
 const WalletRecovery = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const history = useHistory()
+    const navigate = useNavigate()
     const { hasPassword, loading: getHasPasswordLoading } = useHasPassword()
 
     const {
@@ -129,7 +129,7 @@ const WalletRecovery = memo(() => {
         )
 
         await Services.Helper.removePopupWindow()
-        history.replace(PopupRoutes.Wallet)
+        navigate(PopupRoutes.Wallet, { replace: true })
     }, [onSubmit, hasPassword, legacyWallets.map((x) => x.address).join(), history])
 
     return getHasPasswordLoading || getLegacyWalletsLoading ? (
