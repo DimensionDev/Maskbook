@@ -13,8 +13,8 @@ import {
     useMediaQuery,
 } from '@mui/material'
 import { makeStyles, useDialogStackActor, useStylesExtends, mergeClasses } from '@masknet/theme'
-import { ErrorBoundary } from '@masknet/shared'
 import { EnhanceableSite, isDashboardPage } from '@masknet/shared-base'
+import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { useI18N, usePortalShadowRoot } from '../../utils'
 import { DialogDismissIconUI } from '../InjectedComponents/DialogDismissIcon'
 import { activatedSocialNetworkUI } from '../../social-network'

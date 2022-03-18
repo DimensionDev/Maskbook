@@ -1,10 +1,10 @@
-import { Box, Button, IconButton, Typography, Alert, AlertTitle, styled } from '@mui/material'
-import { useMemo, useState, useContext } from 'react'
 import { useTimeoutFn } from 'react-use'
+import { useMemo, useState, useContext } from 'react'
+import { Box, Button, IconButton, Typography, Alert, AlertTitle, styled } from '@mui/material'
 import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
 import { ErrorBoundaryBuildInfoContext, ErrorBoundaryError } from './context'
-import { useSharedI18N } from '../../../locales'
+import { useSharedBaseI18N } from '../../locales'
 
 export type CrashUIProps = ErrorBoundaryError & {
     /** Type of the Error */
@@ -19,7 +19,7 @@ export type CrashUIProps = ErrorBoundaryError & {
 }
 export function CrashUI({ onRetry, subject, ...error }: CrashUIProps) {
     const context = useContext(ErrorBoundaryBuildInfoContext)
-    const t = useSharedI18N()
+    const t = useSharedBaseI18N()
 
     const [showStack, setShowStack] = useState(false)
 
