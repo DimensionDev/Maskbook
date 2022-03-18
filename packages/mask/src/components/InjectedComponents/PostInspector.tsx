@@ -6,7 +6,7 @@ import { ProfileIdentifier, type PayloadAlpha40_Or_Alpha39, type PayloadAlpha38 
 import type { TypedMessageTuple } from '@masknet/typed-message'
 import type { Profile } from '../../database'
 import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'
-import { useValueRef } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { debugModeSetting } from '../../settings/settings'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'

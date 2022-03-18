@@ -9,7 +9,7 @@ import {
     useTokenTransferCallback,
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Image } from '../../../../components/shared/Image'
 import { WalletMessages } from '../../../../plugins/Wallet/messages'
 import { MaskIconOutlined } from '../../../../resources/MaskIcon'

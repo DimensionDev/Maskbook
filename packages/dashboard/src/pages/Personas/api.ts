@@ -1,4 +1,4 @@
-import { createGlobalState } from '@masknet/shared'
+import { createGlobalState } from '@masknet/shared-base-ui'
 import { Services, Messages } from '../../API'
 
 export type SocialNetwork = {
