@@ -153,7 +153,7 @@ namespace Version38Or39 {
         const N = 2
 
         const hash = await work(encodeArrayBuffer(iv), hashPair)
-        return networkHint + hash.substring(0, N)
+        return networkHint + '-' + hash.substring(0, N)
     }
 
     // The difference between V38 and V39 is: V39 is not stable (JSON.stringify)
