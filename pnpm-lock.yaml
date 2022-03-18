@@ -983,6 +983,7 @@ importers:
     specifiers:
       '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
       '@masknet/icons': workspace:*
+      '@masknet/plugin-infra': workspace:*
       '@masknet/shared-base': workspace:*
       '@masknet/shared-base-ui': workspace:*
       '@masknet/theme': workspace:*
@@ -1002,6 +1003,7 @@ importers:
     dependencies:
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
       '@masknet/icons': link:../icons
+      '@masknet/plugin-infra': link:../plugin-infra
       '@masknet/shared-base': link:../shared-base
       '@masknet/shared-base-ui': link:../shared-base-ui
       '@masknet/theme': link:../theme

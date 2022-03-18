@@ -17,6 +17,7 @@ import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { AddNFT } from './AddNFT'
 import { NFTImage } from './NFTImage'
 import { useAccount, useWeb3State } from '@masknet/plugin-infra'
+import { ReverseAddress } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -142,7 +143,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                     </Typography>
                     {account ? (
                         <Typography variant="body1" color="textPrimary" className={classes.account}>
-                            {t('nft_wallet_label')}: {Utils?.formatAddress?.(account, 4) || account}
+                            {t('nft_wallet_label')}: <ReverseAddress address={account} addressSize={4} />
                             {!hideWallet ? (
                                 <Button
                                     variant="text"

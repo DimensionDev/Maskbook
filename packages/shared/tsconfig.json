@@ -11,6 +11,7 @@
     { "path": "../theme" },
     { "path": "../shared-base" },
     { "path": "../shared-base-ui" },
-    { "path": "../icons" }
+    { "path": "../icons" },
+    { "path": "../plugin-infra" }
   ]
 }
