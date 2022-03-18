@@ -10,7 +10,8 @@
     { "path": "../shared-base-ui" },
     { "path": "../theme" },
     { "path": "../web3-shared/base" },
-    { "path": "../typed-message/base" }
+    { "path": "../typed-message/base" },
+    { "path": "../encryption" }
   ],
   "ts-node": {
     "swc": true,

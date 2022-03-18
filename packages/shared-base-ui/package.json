@@ -10,6 +10,7 @@
     "react-use": "^17.3.2",
     "use-subscription": "^1.5.1",
     "@types/use-subscription": "^1.0.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "@types/uuid": "^8.3.4"
   }
 }
