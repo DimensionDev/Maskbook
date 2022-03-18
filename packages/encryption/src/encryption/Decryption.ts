@@ -12,6 +12,8 @@ import {
     DecryptError,
     DecryptEphemeralECDH_PostKey,
     DecryptSuccess,
+    DecryptIntermediateProgress,
+    DecryptIntermediateProgressKind,
 } from './DecryptionTypes'
 import { deriveAESByECDH_version38OrOlderExtraSteps } from './v38-ecdh'
 export * from './DecryptionTypes'
@@ -77,6 +79,7 @@ export async function* decrypt(options: DecryptOptions, io: DecryptIO): AsyncIte
 
         // #region // ! decrypt by ECDH
         const authorPublicKey = _authorPublicKey.unwrapOr(None)
+        yield progress(DecryptProgressKind.Progress, { event: DecryptIntermediateProgressKind.TryDecryptByE2E })
         if (version === -37) {
             return yield* v37ECDHE(io, encryption, encrypted, options.signal)
         } else {
@@ -235,6 +238,7 @@ function importAESKeyFromRaw(aes_raw: Uint8Array) {
 }
 
 function progress(kind: DecryptProgressKind.Success, rest: Omit<DecryptSuccess, 'type'>): DecryptSuccess
+function progress(kind: DecryptProgressKind.Progress, rest: Omit<DecryptIntermediateProgress, 'type'>): DecryptSuccess
 function progress(kind: DecryptProgressKind, rest?: object): DecryptProgress {
     return { type: kind, ...rest } as any
 }
