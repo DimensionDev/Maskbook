@@ -5,6 +5,7 @@ import { registerSerializableClass } from '@masknet/shared-base'
 
 export interface DecryptOptions {
     message: PayloadParseResult.Payload
+    onDecrypted?(message: TypedMessage): void
     signal?: AbortSignal
 }
 export interface DecryptIO {
