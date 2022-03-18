@@ -1,3 +1,4 @@
+import { safeUnreachable } from '@dimensiondev/kit'
 import {
     AESCryptoKey,
     AESJsonWebKey,
@@ -98,7 +99,7 @@ async function getLocalKeyOf(id: ProfileIdentifier, tx: FullPersonaDBTransaction
 // #endregion
 
 // #region ECDH
-export async function deriveAESByECDH(pub: EC_Public_CryptoKey, of?: ProfileIdentifier) {
+export async function deriveAESByECDH(pub: EC_Public_CryptoKey, of?: ProfileIdentifier | PersonaIdentifier) {
     const curve = (pub.algorithm as EcKeyAlgorithm).namedCurve || ''
     const sameCurvePrivateKeys = new IdentifierMap<ECKeyIdentifier, EC_Private_JsonWebKey>(new Map(), ECKeyIdentifier)
 
@@ -107,7 +108,13 @@ export async function deriveAESByECDH(pub: EC_Public_CryptoKey, of?: ProfileIden
         for (const persona of personas) {
             if (!persona.privateKey) continue
             if (persona.privateKey.crv !== curve) continue
-            if (of && !persona.linkedProfiles.has(of)) continue
+            if (of) {
+                if (of instanceof ProfileIdentifier) {
+                    if (!persona.linkedProfiles.has(of)) continue
+                } else if (of instanceof ECKeyIdentifier) {
+                    if (!persona.identifier.equals(of)) continue
+                } else safeUnreachable(of)
+            }
             sameCurvePrivateKeys.set(persona.identifier, persona.privateKey)
         }
     })

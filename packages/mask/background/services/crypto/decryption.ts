@@ -201,10 +201,11 @@ function getNetworkHint(x: SocialNetworkEnum) {
     unreachable(x)
 }
 
-async function getPostKeyCache(id: PostIVIdentifier) {
+/** @internal */
+export async function getPostKeyCache(id: PostIVIdentifier) {
     const post = await queryPostDB(id)
     if (!post?.postCryptoKey) return null
-    const k = await crypto.subtle.importKey('jwk', post.postCryptoKey, { name: 'AES-GCM', length: 256 }, false, [
+    const k = await crypto.subtle.importKey('jwk', post.postCryptoKey, { name: 'AES-GCM', length: 256 }, true, [
         'decrypt',
     ])
     return k as AESCryptoKey
