@@ -71,9 +71,10 @@ export interface EncryptResult {
     output: string | Uint8Array
     identifier: PostIVIdentifier
     author: ProfileIdentifier
-    /** Additional information that need to be send to the internet in order to allow recipients to decrypt */
-    e2e?: IdentifierMap<ProfileIdentifier, PromiseSettledResult<EncryptionResultE2E>>
+    e2e?: EncryptionResultE2EMap
 }
+/** Additional information that need to be send to the internet in order to allow recipients to decrypt */
+export type EncryptionResultE2EMap = IdentifierMap<ProfileIdentifier, PromiseSettledResult<EncryptionResultE2E>>
 export interface EncryptionResultE2E {
     target: ProfileIdentifier
     encryptedPostKey: Uint8Array

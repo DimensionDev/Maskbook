@@ -6,7 +6,7 @@ import {
     PluginI18NFieldRender,
     usePluginI18NField,
 } from '@masknet/plugin-infra'
-import { ErrorBoundary } from '@masknet/shared'
+import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { Result } from 'ts-results'
 import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
 import { ITO_PluginID } from '../../plugins/ITO/constants'

@@ -10,7 +10,7 @@ import {
     resolveTransactionLinkOnExplorer,
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../messages'
 
