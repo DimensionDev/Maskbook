@@ -1,8 +1,4 @@
 {
-    "error_boundary_crash_title": "crwdns1969:0{{subject}}crwdne1969:0",
-    "error_boundary_try_to_recover": "crwdns1971:0crwdne1971:0",
-    "error_boundary_report_github": "crwdns1973:0crwdne1973:0",
-    "error_boundary_report_email": "crwdns1975:0crwdne1975:0",
     "snackbar_done": "crwdns1977:0crwdne1977:0",
     "import": "crwdns8001:0crwdne8001:0",
     "balance": "crwdns8023:0crwdne8023:0",
@@ -22,5 +18,6 @@
     "address_viewer_address_name_uns": "crwdns10797:0crwdne10797:0",
     "address_viewer_address_name_dns": "crwdns10799:0crwdne10799:0",
     "address_viewer_address_name_rns": "crwdns10801:0crwdne10801:0",
-    "address_viewer_address_name_address": "crwdns10803:0crwdne10803:0"
+    "address_viewer_address_name_address": "crwdns10803:0crwdne10803:0",
+    "address_viewer_address_name_twitter": "crwdns14534:0crwdne14534:0"
 }
