@@ -1,5 +1,6 @@
 import { test, expect } from '@jest/globals'
 import {
+    appendEncryptionTarget,
     decrypt,
     DecryptIntermediateProgressKind,
     DecryptIO,
@@ -122,6 +123,42 @@ test('v37 E2E encryption', async () => {
         }
         expect(result).toMatchSnapshot('decrypted as jack')
     }
+
+    // append another receiver
+    const appendResult = await appendEncryptionTarget(
+        {
+            iv: encrypted.identifier.toIV(),
+            postAESKey: encrypted.postKey,
+            target: [new ProfileIdentifier('localhost', 'joey')],
+            version: -37,
+        },
+        {
+            getRandomValues: getRandomValues(),
+            getRandomECKey: getTestRandomECKey(),
+            queryPublicKey: queryTestPublicKey,
+            deriveAESKey: reject,
+        },
+    )
+    expect(appendResult).toMatchSnapshot('append target to joey')
+
+    // decrypt as joey
+    {
+        const result: any[] = []
+        const decryptIO: DecryptIO = {
+            ...minimalDecryptIO,
+            deriveAESKey: deriveAESKey('joey', 'array'),
+            async *queryPostKey_version37() {
+                for (const [, each] of appendResult) {
+                    if (each.status === 'rejected') continue
+                    yield { encryptedPostKey: each.value.encryptedPostKey }
+                }
+            },
+        }
+        for await (const progress of decrypt({ message: parsed }, decryptIO)) {
+            result.push(progress)
+        }
+        expect(result).toMatchSnapshot('decrypted as joey')
+    }
 })
 test('v38 E2E encryption', async () => {
     const payload: EncryptOptions = {
@@ -180,6 +217,43 @@ test('v38 E2E encryption', async () => {
             result.push(progress)
         }
         expect(result).toMatchSnapshot('decrypted as jack')
+    }
+
+    // append another receiver
+    const appendResult = await appendEncryptionTarget(
+        {
+            iv: encrypted.identifier.toIV(),
+            postAESKey: encrypted.postKey,
+            target: [new ProfileIdentifier('localhost', 'joey')],
+            version: -38,
+        },
+        {
+            getRandomValues: getRandomValues(),
+            getRandomECKey: getTestRandomECKey(),
+            queryPublicKey: queryTestPublicKey,
+            deriveAESKey: deriveAESKey('bob', 'single'),
+        },
+    )
+    expect(appendResult).toMatchSnapshot('append target to joey')
+
+    // decrypt as joey
+    {
+        const result: any[] = []
+        const decryptIO: DecryptIO = {
+            ...minimalDecryptIO,
+            deriveAESKey: deriveAESKey('joey', 'array'),
+            async *queryPostKey_version38() {
+                for (const [, each] of appendResult) {
+                    if (each.status === 'rejected') continue
+                    if (!each.value.ivToBePublished) throw new Error('ivToBePublished is missing!')
+                    yield { encryptedPostKey: each.value.encryptedPostKey, postKeyIV: each.value.ivToBePublished }
+                }
+            },
+        }
+        for await (const progress of decrypt({ message: parsed }, decryptIO)) {
+            result.push(progress)
+        }
+        expect(result).toMatchSnapshot('decrypted as joey')
     }
 })
 

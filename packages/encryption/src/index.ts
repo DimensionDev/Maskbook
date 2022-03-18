@@ -21,6 +21,7 @@ export {
     type EncryptIO,
     type EncryptResult,
     type EncryptTargetE2E,
+    type EncryptionResultE2EMap,
     type EncryptTargetPublic,
     type EncryptionResultE2E,
 } from './encryption'
@@ -40,6 +41,13 @@ export {
     type DecryptIntermediateProgress,
     type DecryptReportedInfo,
     type DecryptSuccess,
+} from './encryption'
+
+export {
+    //
+    type AppendEncryptionIO,
+    type AppendEncryptionOptions,
+    appendEncryptionTarget,
 } from './encryption'
 
 export {

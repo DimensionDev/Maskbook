@@ -1,7 +1,7 @@
 import { unreachable } from '@dimensiondev/kit'
 import type { ProfileIdentifier, AESCryptoKey } from '@masknet/shared-base'
 import { encodePostKey } from './Encryption'
-import type { EncryptIO, EncryptResult, EncryptTargetE2E } from './EncryptionTypes'
+import type { EncryptIO, EncryptionResultE2EMap, EncryptTargetE2E } from './EncryptionTypes'
 import { createEphemeralKeysMap } from './utils'
 import { v37_addReceiver } from './v37-ecdh'
 import { v38_addReceiver } from './v38-ecdh'
@@ -17,7 +17,7 @@ export interface AppendEncryptionIO
 export async function appendEncryptionTarget(
     options: AppendEncryptionOptions,
     io: AppendEncryptionIO,
-): Promise<EncryptResult['e2e']> {
+): Promise<EncryptionResultE2EMap> {
     const target: EncryptTargetE2E = { type: 'E2E', target: options.target }
     const postKeyEncoded = encodePostKey(options.version, options.postAESKey)
 

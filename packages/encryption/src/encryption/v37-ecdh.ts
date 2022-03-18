@@ -8,6 +8,7 @@ import {
     EncryptError,
     EncryptErrorReasons,
     type EncryptionResultE2E,
+    EncryptionResultE2EMap,
 } from './EncryptionTypes'
 import { createEphemeralKeysMap, fillIV } from './utils'
 
@@ -21,7 +22,7 @@ export async function v37_addReceiver(
     },
     target: EncryptTargetE2E,
     io: Pick<EncryptIO, 'getRandomECKey' | 'queryPublicKey' | 'getRandomValues'>,
-): Promise<EncryptResult['e2e']> {
+): Promise<EncryptionResultE2EMap> {
     const { getEphemeralKey, postIV, postKeyEncoded } = context
 
     const ecdh = Promise.allSettled(

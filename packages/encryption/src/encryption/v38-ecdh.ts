@@ -7,6 +7,7 @@ import {
     EncryptErrorReasons,
     EncryptIO,
     EncryptionResultE2E,
+    EncryptionResultE2EMap,
     EncryptResult,
     EncryptTargetE2E,
 } from './EncryptionTypes'
@@ -56,7 +57,7 @@ export async function v38_addReceiver(
     postKeyEncoded: Promise<Uint8Array>,
     target: EncryptTargetE2E,
     io: Pick<EncryptIO, 'deriveAESKey' | 'queryPublicKey' | 'getRandomValues'>,
-): Promise<EncryptResult['e2e']> {
+): Promise<EncryptionResultE2EMap> {
     // For every receiver R,
     //     1. Let R_pub = R.publicKey
     //     2. Let Internal_AES be the result of ECDH with the sender's private key and R_pub
