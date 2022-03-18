@@ -68,7 +68,11 @@ export const NFTSection: FC<Props> = ({ className, ...rest }) => {
     return (
         <div className={classnames(classes.root, className)} {...rest}>
             <FormControl>
-                <ERC721ContractSelectPanel contract={erc721Contract} onContractChange={setErc721Contract} />
+                <ERC721ContractSelectPanel
+                    label="Contracts"
+                    contract={erc721Contract}
+                    onContractChange={setErc721Contract}
+                />
             </FormControl>
             {erc721Contract ? (
                 <div className={classes.selectSection}>

@@ -71,12 +71,14 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
 })
 
 export interface ERC721TokenSelectPanelProps {
+    label?: string
+    chainId?: string
     onContractChange: (contract: ERC721ContractDetailed) => void
     onBalanceChange?: (balance: number) => void
     contract: ERC721ContractDetailed | null | undefined
 }
 export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
-    const { onContractChange, onBalanceChange, contract } = props
+    const { onContractChange, onBalanceChange, contract, label } = props
     const account = useAccount()
     const { classes } = useStyles({ hasIcon: Boolean(contract?.iconURL) })
     const { value: balanceFromChain, loading: loadingFromChain } = useERC721ContractBalance(contract?.address, account)
@@ -135,7 +137,7 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
         <Box className={classes.root}>
             <div className={classes.wrapper}>
                 <Typography className={classes.title} color="textSecondary" variant="body2" component="span">
-                    {t('dashboard_tab_collectibles')}
+                    {label ?? t('dashboard_tab_collectibles')}
                 </Typography>
                 {!contract?.address || !EthereumAddress.isValid(contract.address) ? null : loading ? (
                     <CircularProgress size={16} />
