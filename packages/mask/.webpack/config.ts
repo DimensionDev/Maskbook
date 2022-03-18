@@ -80,6 +80,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@masknet/plugin-infra': join(__dirname, '../../plugin-infra/src/'),
                     '@masknet/plugin-example': join(__dirname, '../../plugins/example/src/'),
                     '@masknet/plugin-debugger': join(__dirname, '../../plugins/Debugger/src/'),
+                    '@masknet/plugin-evm': join(__dirname, '../../plugins/EVM/src/'),
                     '@masknet/plugin-flow': join(__dirname, '../../plugins/Flow/src/'),
                     '@masknet/plugin-rss3': join(__dirname, '../../plugins/RSS3/src/'),
                     '@masknet/plugin-dao': join(__dirname, '../../plugins/DAO/src/'),

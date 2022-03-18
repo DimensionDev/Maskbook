@@ -14,6 +14,7 @@
     "@masknet/backup-format": "workspace:*",
     "@masknet/icons": "workspace:*",
     "@masknet/plugin-example": "workspace:*",
+    "@masknet/plugin-evm": "workspace:*",
     "@masknet/plugin-flow": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/plugin-wallet": "workspace:*",

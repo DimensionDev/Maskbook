@@ -11,7 +11,6 @@ import {
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
-
     icon: PLUGIN_ICON,
     name: { fallback: PLUGIN_NAME },
     description: { fallback: PLUGIN_DESCRIPTION },

@@ -24,6 +24,7 @@
     "@masknet/plugin-debugger": "workspace:*",
     "@masknet/plugin-example": "workspace:*",
     "@masknet/plugin-file-service": "workspace:*",
+    "@masknet/plugin-evm": "workspace:*",
     "@masknet/plugin-flow": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/plugin-rss3": "workspace:*",

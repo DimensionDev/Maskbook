@@ -1,0 +1,19 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "tsBuildInfoFile": "dist/.tsbuildinfo"
+  },
+  "include": ["src", "src/**/*.json"],
+  "references": [
+    { "path": "../../icons" },
+    { "path": "../../plugin-infra" },
+    { "path": "../../theme" },
+    { "path": "../../shared" },
+    { "path": "../../shared-base" },
+    { "path": "../../web3-shared/base" },
+    { "path": "../../web3-shared/evm" },
+    { "path": "../../web3-providers" }
+  ]
+}
