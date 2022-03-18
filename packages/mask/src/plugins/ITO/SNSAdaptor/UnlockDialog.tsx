@@ -2,7 +2,7 @@ import { Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState } from 'react'
 import { v4 as uuid } from 'uuid'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import {

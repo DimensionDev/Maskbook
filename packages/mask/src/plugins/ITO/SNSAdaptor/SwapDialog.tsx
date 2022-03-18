@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid'
 import { CircularProgress, Slider, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import {
     ChainId,

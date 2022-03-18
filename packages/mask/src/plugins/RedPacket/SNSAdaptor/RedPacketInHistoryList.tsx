@@ -5,7 +5,8 @@ import { Box, ListItem, Typography, Popper, useMediaQuery, Theme } from '@mui/ma
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import { RedPacketJSONPayload, RedPacketStatus, RedPacketJSONPayloadFromChain } from '../types'
-import { useRemoteControlledDialog, TokenIcon } from '@masknet/shared'
+import { TokenIcon } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../utils'
 import {
     formatBalance,

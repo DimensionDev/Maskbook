@@ -7,7 +7,8 @@ import {
     MaskDarkTheme,
     useSystemPreferencePalette,
 } from '@masknet/theme'
-import { ErrorBoundary, I18NextProviderHMR } from '@masknet/shared'
+import { I18NextProviderHMR } from '@masknet/shared'
+import { ErrorBoundary } from '@masknet/shared-base-ui'
 import {
     createInjectHooksRenderer,
     NetworkPluginID,
