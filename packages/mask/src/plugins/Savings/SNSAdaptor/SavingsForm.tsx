@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { Typography } from '@mui/material'
 import { useState, useMemo, useCallback } from 'react'
-import { useAsync } from 'react-use'
+import { useAsync, useAsyncFn } from 'react-use'
 import { unreachable } from '@dimensiondev/kit'
 import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import {
@@ -156,6 +156,34 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
         }
     }, [protocol.bareToken, inputAmount, chainId])
 
+    const [, executor] = useAsyncFn(async () => {
+        switch (tab) {
+            case TabType.Deposit:
+                if (!(await protocol.deposit(account, chainId, web3, tokenAmount))) {
+                    throw new Error('Failed to deposit token.')
+                } else {
+                    await protocol.updateBalance(chainId, web3, account)
+                }
+                return
+            case TabType.Withdraw:
+                switch (protocol.type) {
+                    case ProtocolType.Lido:
+                        onClose?.()
+                        onConvertClick()
+                        return
+                    default:
+                        if (!(await protocol.withdraw(account, chainId, web3, tokenAmount))) {
+                            throw new Error('Failed to withdraw token.')
+                        } else {
+                            await protocol.updateBalance(chainId, web3, account)
+                        }
+                        return
+                }
+            default:
+                unreachable(tab)
+        }
+    }, [tab, protocol, account, chainId, web3, tokenAmount])
+
     const needsSwap = protocol.type === ProtocolType.Lido && tab === TabType.Withdraw
 
     return (
@@ -243,29 +271,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                             complete={t('done')}
                             disabled={validationMessage !== '' && !needsSwap}
                             noUpdateEffect
-                            executor={async () => {
-                                switch (tab) {
-                                    case TabType.Deposit:
-                                        if (!(await protocol.deposit(account, chainId, web3, tokenAmount))) {
-                                            throw new Error('Failed to deposit token.')
-                                        }
-                                        return
-                                    case TabType.Withdraw:
-                                        switch (protocol.type) {
-                                            case ProtocolType.Lido:
-                                                onClose?.()
-                                                onConvertClick()
-                                                return
-                                            default:
-                                                if (!(await protocol.withdraw(account, chainId, web3, tokenAmount))) {
-                                                    throw new Error('Failed to withdraw token.')
-                                                }
-                                                return
-                                        }
-                                    default:
-                                        unreachable(tab)
-                                }
-                            }}
+                            executor={executor}
                         />
                     </EthereumERC20TokenApprovedBoundary>
                 </EthereumWalletConnectedBoundary>
