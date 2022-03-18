@@ -10,7 +10,7 @@ import {
     useWeb3State as useWeb3PluginState,
     Web3Plugin,
 } from '@masknet/plugin-infra'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { DashboardRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { useWeb3State } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'

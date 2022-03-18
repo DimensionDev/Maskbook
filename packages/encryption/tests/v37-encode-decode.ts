@@ -1,9 +1,9 @@
-import { ECDH_K256_PublicKey_CryptoKey } from './setup'
 import { test, expect } from '@jest/globals'
 import { None, Some } from 'ts-results'
-import { encodePayload, AESAlgorithmEnum, parsePayload, PayloadWellFormed, PublicKeyAlgorithmEnum } from '../src'
+import { encodePayload, AESAlgorithmEnum, parsePayload, PayloadWellFormed } from '../src'
 import { importAESFromJWK } from '../src/utils'
 import { ProfileIdentifier } from '@masknet/shared-base'
+import { queryTestPublicKey } from './keys'
 
 test('Encode v37 payload', async () => {
     const payload: PayloadWellFormed.Payload = {
@@ -36,17 +36,15 @@ test('Encode v37 payload', async () => {
     {
         const newPayload = { ...payload }
         newPayload.author = Some(new ProfileIdentifier('localhost', 'unknown'))
-        const k256Key = await ECDH_K256_PublicKey_CryptoKey()
-        newPayload.authorPublicKey = Some({
-            algr: PublicKeyAlgorithmEnum.secp256k1,
-            key: k256Key,
-        })
+        const k256Key = (await queryTestPublicKey(new ProfileIdentifier('localhost', 'alice')))!
+        newPayload.authorPublicKey = Some(k256Key)
         newPayload.encryption = {
             type: 'E2E',
             iv: payload.encryption.iv,
-            ephemeralPublicKey: new Map([[PublicKeyAlgorithmEnum.secp256k1, k256Key]]),
+            ephemeralPublicKey: new Map(),
             ownersAESKeyEncrypted: new Uint8Array([5, 6, 7, 8, 9, 10]),
         }
+        newPayload.encryption.ephemeralPublicKey.set(k256Key.algr, k256Key.key)
 
         const encoded = (await encodePayload.NoSign(newPayload).then((x) => x.unwrap())) as Uint8Array
         expect(encoded).toMatchSnapshot('Full payload')

@@ -3,11 +3,11 @@ import {
     decrypt,
     parsePayload,
     DecryptProgressKind,
-    PublicKeyAlgorithmEnum,
+    EC_KeyCurveEnum,
     DecryptProgress,
     SocialNetworkEnum,
     SocialNetworkEnumToProfileDomain,
-    AsymmetryCryptoKey,
+    EC_Key,
     socialNetworkDecoder,
     steganographyDecodeImage,
     DecryptError,
@@ -28,7 +28,6 @@ import {
     createProfileWithPersona,
     decryptByLocalKey,
     deriveAESByECDH,
-    deriveAESByECDH_version38_or_older,
     hasLocalKeyOf,
 } from '../../database/persona/helper'
 import { queryPostDB } from '../../database/post'
@@ -140,9 +139,6 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
             async deriveAESKey(pub) {
                 return Array.from((await deriveAESByECDH(pub)).values())
             },
-            async deriveAESKey_version38_or_older(pub, iv) {
-                return Array.from((await deriveAESByECDH_version38_or_older(pub, iv)).values())
-            },
             queryAuthorPublicKey(author, signal) {
                 return queryPublicKey(author || authorHint, false, signal)
             },
@@ -206,14 +202,14 @@ const hasStoredAuthorPublicKey = new Set<string>()
 async function storeAuthorPublicKey(
     payloadAuthor: ProfileIdentifier,
     postAuthor: ProfileIdentifier | null,
-    pub: AsymmetryCryptoKey,
+    pub: EC_Key,
 ) {
     if (!payloadAuthor.equals(postAuthor)) {
         // ! Author detected is not equal to AuthorHint.
         // ! Skip store the public key because it might be a security problem.
         return
     }
-    if (pub.algr !== PublicKeyAlgorithmEnum.secp256k1) {
+    if (pub.algr !== EC_KeyCurveEnum.secp256k1) {
         throw new Error('TODO: support other curves')
     }
     return createProfileWithPersona(

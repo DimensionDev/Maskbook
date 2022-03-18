@@ -1,4 +1,4 @@
-import { ProfileIdentifier, CheckedError, OptionalResult } from '@masknet/shared-base'
+import { ProfileIdentifier, CheckedError, OptionalResult, EnhanceableSite } from '@masknet/shared-base'
 import { Ok } from 'ts-results'
 import { PayloadParseResult, SocialNetworkEnum } from '../payload'
 import { CryptoException, PayloadException } from '../types'
@@ -36,10 +36,10 @@ export function parseAuthor(network: unknown, id: unknown): PayloadParseResult.P
     if (typeof id !== 'string') return new CheckedError(PayloadException.InvalidPayload, 'Invalid user id').toErr()
 
     let net = ''
-    if (network === SocialNetworkEnum.Facebook) net = 'facebook.com'
-    else if (network === SocialNetworkEnum.Twitter) net = 'twitter.com'
-    else if (network === SocialNetworkEnum.Instagram) net = 'instagram.com'
-    else if (network === SocialNetworkEnum.Minds) net = 'minds.com'
+    if (network === SocialNetworkEnum.Facebook) net = EnhanceableSite.Facebook
+    else if (network === SocialNetworkEnum.Twitter) net = EnhanceableSite.Twitter
+    else if (network === SocialNetworkEnum.Instagram) net = EnhanceableSite.Instagram
+    else if (network === SocialNetworkEnum.Minds) net = EnhanceableSite.Minds
     else if (typeof network === 'string') net = network
     else if (typeof network !== 'number')
         return new CheckedError(PayloadException.InvalidPayload, 'Invalid network').toErr()

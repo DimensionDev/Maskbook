@@ -1,3 +1,4 @@
+import { EnhanceableSite } from '@masknet/shared-base'
 import {
     bioDescriptionSelectorOnMobile,
     searchAvatarSelector,
@@ -13,7 +14,6 @@ import {
 import { collectNodeText } from '../../../utils'
 import { isMobileFacebook } from './isMobile'
 import { bioDescription, personalHomepage } from '../../../settings/settings'
-import { FACEBOOK_ID } from '../base'
 
 export const getNickName = () => {
     const node = isMobileFacebook ? searchNickNameSelectorOnMobile().evaluate() : searchNickNameSelector().evaluate()
@@ -42,12 +42,12 @@ export const getBioDescription = () => {
 
     if (intro && node) {
         const text = collectNodeText(node)
-        bioDescription[FACEBOOK_ID].value = text
+        bioDescription[EnhanceableSite.Facebook].value = text
     } else if (intro) {
-        bioDescription[FACEBOOK_ID].value = ''
+        bioDescription[EnhanceableSite.Facebook].value = ''
     }
 
-    return bioDescription[FACEBOOK_ID].value
+    return bioDescription[EnhanceableSite.Facebook].value
 }
 
 export const getFacebookId = () => {
@@ -79,10 +79,10 @@ export const getPersonalHomepage = () => {
         if (text && !text.startsWith('http')) {
             text = 'http://' + text
         }
-        personalHomepage[FACEBOOK_ID].value = text
+        personalHomepage[EnhanceableSite.Facebook].value = text
     } else if (intro) {
-        personalHomepage[FACEBOOK_ID].value = ''
+        personalHomepage[EnhanceableSite.Facebook].value = ''
     }
 
-    return personalHomepage[FACEBOOK_ID].value
+    return personalHomepage[EnhanceableSite.Facebook].value
 }

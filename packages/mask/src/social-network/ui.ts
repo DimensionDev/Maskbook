@@ -7,7 +7,13 @@ import type { SocialNetworkUI } from './types'
 import { managedStateCreator } from './utils'
 import { currentSetupGuideStatus } from '../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../settings/types'
-import { ECKeyIdentifier, Identifier, createSubscriptionFromAsync, PersonaIdentifier } from '@masknet/shared-base'
+import {
+    ECKeyIdentifier,
+    Identifier,
+    createSubscriptionFromAsync,
+    PersonaIdentifier,
+    EnhanceableSite,
+} from '@masknet/shared-base'
 import { Environment, assertNotEnvironment } from '@dimensiondev/holoflows-kit'
 import { startPluginSNSAdaptor } from '@masknet/plugin-infra'
 import { getCurrentSNSNetwork } from '../social-network-adaptor/utils'
@@ -31,8 +37,8 @@ export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
         throw new Error()
     },
     injection: {},
-    networkIdentifier: 'localhost',
     encryptionNetwork: SocialNetworkEnum.Unknown,
+    networkIdentifier: EnhanceableSite.Localhost,
     shouldActivate: () => false,
     utils: { createPostContext: null! },
     notReadyForProduction: true,

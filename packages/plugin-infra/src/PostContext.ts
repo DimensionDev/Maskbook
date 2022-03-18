@@ -1,4 +1,3 @@
-import { useObservableValues, useValueRef } from '@masknet/shared'
 import {
     ObservableMap,
     ObservableSet,
@@ -6,6 +5,7 @@ import {
     type PostIdentifier,
     type ProfileIdentifier,
 } from '@masknet/shared-base'
+import { useObservableValues, useValueRef } from '@masknet/shared-base-ui'
 import type { TypedMessageTuple } from '@masknet/typed-message'
 import { ValueRef, LiveSelector, DOMProxy } from '@dimensiondev/holoflows-kit'
 import type { Result, Some } from 'ts-results'
