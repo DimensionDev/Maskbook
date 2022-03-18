@@ -143,8 +143,7 @@ export async function queryIsBound(
             enableCache,
         )
         return true
-    } catch (err) {
-        console.log('error', err)
+    } catch {
         return false
     }
 }

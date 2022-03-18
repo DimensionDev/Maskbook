@@ -51,8 +51,9 @@
     "tip_type_nft": "NFT",
     "send_tip": "Send",
     "sending_tip": "Sending...",
-    "nft_not_belong_to_you": "It doesn't belong to you",
+    "nft_not_belong_to_you": "The collectible doesn't exist or belong to you.",
     "send_tip_successfully": "Sent tip successfully",
     "tip_share": "Share",
+    "search": "Search",
     "tip_share_post": "I just tipped {{assetName}} to @{{recipientSnsId}}'s wallet address {{recipient}}\n\nInstall https://mask.io/download-links to send my first tip."
 }
