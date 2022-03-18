@@ -9,7 +9,7 @@ import {
     getChainName,
     getNetworkTypeFromChainId,
     isChainIdValid,
-    isValidAddress,
+    isValidAddress as isValidEthereumAddress,
     NetworkType,
     ProviderType,
     resolveNetworkName,
@@ -139,7 +139,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         if (!isChainMatched) await switchToChain()
         if (!isPluginMatched) {
             await switchToPlugin()
-            if (!networkType || isValidAddress(account)) return
+            if (!networkType || networkType !== NetworkType.Ethereum || isValidEthereumAddress(account)) return
             setConnectWalletDialog({
                 open: true,
                 providerType: ProviderType.MetaMask,
