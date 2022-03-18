@@ -1136,7 +1136,6 @@ importers:
       '@masknet/web3-contracts': workspace:*
       '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-evm': workspace:*
-      '@sozialhelden/fetch-cache': ^2.0.1
       '@types/lru-cache': ^7.5.0
       bignumber.js: 9.0.2
       date-fns: ^2.28.0
@@ -1155,7 +1154,6 @@ importers:
       '@masknet/web3-contracts': link:../web3-contracts
       '@masknet/web3-shared-base': link:../web3-shared/base
       '@masknet/web3-shared-evm': link:../web3-shared/evm
-      '@sozialhelden/fetch-cache': 2.0.1
       bignumber.js: 9.0.2
       date-fns: 2.28.0
       json-stable-stringify: 1.0.1
@@ -6103,18 +6101,6 @@ packages:
       - bufferutil
       - utf-8-validate
     dev: false
-
-  /@sozialhelden/fetch-cache/2.0.1:
-    resolution: {integrity: sha512-vMlsdT5JQCGjx1fcFxmMNh7ZKppjjsfUAeZEhhNwhEL7GaqbZXsD1OXEyx2IcRa25ZuZtvJSV6Q3rE77VRdLvg==}
-    dependencies:
-      '@sozialhelden/hamster-cache': 1.0.0
-    dev: false
-    bundledDependencies: []
-
-  /@sozialhelden/hamster-cache/1.0.0:
-    resolution: {integrity: sha512-/TEGA8mdMawZp4Yq/GrkL+72YL5EGuSeVXC3pKW12YY1t3C+zCN/HZ0HRp4zWF/e67svXcxuz/B0AEQxEdvi7A==}
-    dev: false
-    bundledDependencies: []
 
   /@stablelib/aead/1.0.1:
     resolution: {integrity: sha512-q39ik6sxGHewqtO0nP4BuSe3db5G1fEJE8ukvngS2gLkBXyy6E7pLubhbYgnkDFv6V8cWaxcE4Xn0t6LWcJkyg==}

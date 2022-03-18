@@ -7,7 +7,7 @@ import { FC, HTMLProps, useCallback, useMemo, useState } from 'react'
 import { SearchInput } from '../../../../../extension/options-page/DashboardComponents/SearchInput'
 import { useI18N } from '../../../../../utils'
 import { ERC721ContractSelectPanel } from '../../../../../web3/UI/ERC721ContractSelectPanel'
-import { useTip } from '../../../contexts'
+import { TargetChainIdContext, useTip } from '../../../contexts'
 import { NFTList } from './NFTList'
 
 const useStyles = makeStyles()((theme) => ({
@@ -48,6 +48,7 @@ interface Props extends HTMLProps<HTMLDivElement> {}
 
 export const NFTSection: FC<Props> = ({ className, ...rest }) => {
     const { t } = useI18N()
+    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const { erc721Contract, setErc721Contract, erc721TokenId, setErc721TokenId, isSending } = useTip()
     const [tokenId, setTokenId, erc721TokenDetailedCallback] = useERC721TokenDetailedCallback(erc721Contract)
     const { classes } = useStyles()
@@ -69,6 +70,7 @@ export const NFTSection: FC<Props> = ({ className, ...rest }) => {
         <div className={classnames(classes.root, className)} {...rest}>
             <FormControl>
                 <ERC721ContractSelectPanel
+                    chainId={chainId}
                     label="Contracts"
                     contract={erc721Contract}
                     onContractChange={setErc721Contract}

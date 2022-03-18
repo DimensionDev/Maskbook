@@ -21,6 +21,10 @@ export const TipTaskProvider: FC<Props> = ({ children, task }) => {
     const [erc721TokenId, setErc721TokenId] = useState<ContextOptions['erc721TokenId']>(null)
 
     useEffect(() => {
+        setTipType(TipType.Token)
+    }, [targetChainId])
+
+    useEffect(() => {
         setRecipient(task.to || '')
     }, [task.to])
 

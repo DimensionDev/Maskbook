@@ -1,7 +1,7 @@
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { ERC721TokenDetailed, useChainId } from '@masknet/web3-shared-evm'
-import { Checkbox, List, ListItem, Radio } from '@mui/material'
+import { ERC721TokenDetailed, formatNFT_TokenId, useChainId } from '@masknet/web3-shared-evm'
+import { Checkbox, List, ListItem, Radio, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { noop } from 'lodash-unified'
 import { FC, useCallback } from 'react'
@@ -39,6 +39,10 @@ const useStyles = makeStyles()((theme) => ({
     disabled: {
         opacity: 0.5,
         cursor: 'not-allowed',
+    },
+    loadingFailImage: {
+        width: 64,
+        height: 64,
     },
 }))
 
@@ -97,7 +101,13 @@ export const NFTList: FC<Props> = ({ selectedIds, tokens, enableTokenIds = [], o
                                 contractAddress={token.contractDetailed.address}
                                 url={token.info.mediaUrl}
                                 tokenId={token.tokenId}
+                                classes={{
+                                    loadingFailImage: classes.loadingFailImage,
+                                }}
                             />
+                            <Typography variant="subtitle1" textAlign="center">
+                                {formatNFT_TokenId(token.tokenId, 2)}
+                            </Typography>
                             <SelectComponent
                                 onChange={noop}
                                 disabled={disabled}
