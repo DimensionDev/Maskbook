@@ -9,6 +9,7 @@ import { useAsync } from 'react-use'
 import Services from '../../extension/service'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
+import { decodeArrayBuffer } from '@dimensiondev/kit'
 
 const useStyle = makeStyles()({
     root: {
@@ -52,7 +53,11 @@ export function PostComment(props: PostCommentProps) {
     const dec = useAsync(async () => {
         const decryptedText = extractTextFromTypedMessage(postContent).unwrap()
         if (!iv || !decryptedText) throw new Error('Decrypt comment failed')
-        const result = await Services.Crypto.decryptComment(iv, decryptedText, comment)
+        const result = await Services.Crypto.decryptComment(
+            new Uint8Array(decodeArrayBuffer(iv)),
+            decryptedText,
+            comment,
+        )
         if (result === null) throw new Error('Decrypt result empty')
         return result
     }, [iv, postContent, comment])
