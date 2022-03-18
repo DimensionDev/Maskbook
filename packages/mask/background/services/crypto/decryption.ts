@@ -11,7 +11,7 @@ import {
     socialNetworkDecoder,
     steganographyDecodeImage,
     DecryptError,
-    ErrorReasons,
+    DecryptErrorReasons,
     DecryptReportedInfo,
 } from '@masknet/encryption'
 import {
@@ -61,7 +61,7 @@ export async function* decryptionWithSocialNetworkDecoding(
         decoded = socialNetworkDecoder(context.currentSocialNetwork, encoded.text)[0]
     } else {
         if (!context.authorHint || context.authorHint.isUnknown) {
-            return yield new DecryptError(ErrorReasons.UnrecognizedAuthor, undefined)
+            return yield new DecryptError(DecryptErrorReasons.UnrecognizedAuthor, undefined)
         }
         const result = await steganographyDecodeImage(encoded.image, {
             pass: context.authorHint.toText(),
@@ -70,7 +70,7 @@ export async function* decryptionWithSocialNetworkDecoding(
         decoded = socialNetworkDecoder(context.currentSocialNetwork, result)[0]
     }
 
-    if (!decoded) return yield new DecryptError(ErrorReasons.NoPayloadFound, undefined)
+    if (!decoded) return yield new DecryptError(DecryptErrorReasons.NoPayloadFound, undefined)
     yield* decryption(decoded, context)
 }
 
@@ -159,7 +159,8 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
             },
             async *queryPostKey_version38(iv, signal) {
                 const author = await queryPublicKey(context.currentProfile, true)
-                if (!author) throw new DecryptError(ErrorReasons.CurrentProfileDoesNotConnectedToPersona, undefined)
+                if (!author)
+                    throw new DecryptError(DecryptErrorReasons.CurrentProfileDoesNotConnectedToPersona, undefined)
                 yield* GUN_queryPostKey_version39Or38(
                     -38,
                     iv,
@@ -170,7 +171,8 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
             },
             async *queryPostKey_version39(iv, signal) {
                 const author = await queryPublicKey(context.currentProfile, true)
-                if (!author) throw new DecryptError(ErrorReasons.CurrentProfileDoesNotConnectedToPersona, undefined)
+                if (!author)
+                    throw new DecryptError(DecryptErrorReasons.CurrentProfileDoesNotConnectedToPersona, undefined)
                 yield* GUN_queryPostKey_version39Or38(
                     -39,
                     iv,
