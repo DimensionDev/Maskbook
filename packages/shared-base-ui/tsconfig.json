@@ -5,7 +5,7 @@
     "outDir": "./dist/",
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
-  "include": ["./src", "./src/**/*.json"],
+  "include": ["./src", "./src/**/*.json", "../shared/src/UI/components/ReverseAddress/index.tsx", "../shared/src/UI/components/ReverseAddress/index.tsx"],
   // Only type-level dependency.
   "references": [{ "path": "../public-api" }, { "path": "../shared-base" }]
 }
