@@ -17,6 +17,8 @@
     { "path": "../web3-providers" },
     { "path": "../icons/" },
     { "path": "../plugin-infra" },
+    { "path": "../plugins/Solana/" },
+    { "path": "../plugins/EVM/" },
     { "path": "../plugins/Flow/" },
     { "path": "../plugins/Wallet/" },
     { "path": "../backup-format/" },

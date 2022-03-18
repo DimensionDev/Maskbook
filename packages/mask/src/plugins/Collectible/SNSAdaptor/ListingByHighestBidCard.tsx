@@ -18,7 +18,7 @@ import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { PluginCollectibleRPC } from '../messages'
 import { toAsset } from '../helpers'
 import getUnixTime from 'date-fns/getUnixTime'
-import type { useAsset } from '../../EVM/hooks'
+import type { useAsset } from '@masknet/plugin-evm/src/hooks'
 import { isWyvernSchemaName } from '../utils'
 
 const useStyles = makeStyles()((theme) => ({

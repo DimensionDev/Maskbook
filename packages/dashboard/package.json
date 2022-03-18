@@ -16,6 +16,7 @@
     "@masknet/plugin-example": "workspace:*",
     "@masknet/plugin-evm": "workspace:*",
     "@masknet/plugin-flow": "workspace:*",
+    "@masknet/plugin-solana": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/plugin-wallet": "workspace:*",
     "@masknet/public-api": "workspace:*",

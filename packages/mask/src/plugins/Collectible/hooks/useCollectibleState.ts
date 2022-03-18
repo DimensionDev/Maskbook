@@ -3,7 +3,7 @@ import { createContainer } from 'unstated-next'
 import { OrderSide } from 'opensea-js/lib/types'
 import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 import { CollectibleTab, CollectibleToken } from '../types'
-import { useAsset, useHistory, useOrders } from '../../EVM/hooks'
+import { useAsset, useHistory, useOrders } from '@masknet/plugin-evm/src/hooks'
 import { useAssetOrder } from './useAssetOrder'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 // Make TypeScript happy

@@ -23,7 +23,7 @@ import {
 import BigNumber from 'bignumber.js'
 import { values } from 'lodash-unified'
 import { EthereumAddress } from 'wallet.ts'
-import { EVM_RPC } from '../../EVM/messages'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 import * as DebankAPI from '../apis/debank'
 import * as ZerionAPI from '../apis/zerion'
 import { resolveChainByScope, resolveZerionAssetsScopeName } from '../pipes'

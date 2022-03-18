@@ -4,7 +4,7 @@ import { LaunchPage } from './types'
 import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'
 import { Identifier, ProfileIdentifier } from '@masknet/shared-base'
-import { PLUGIN_ID } from '../plugins/EVM/constants'
+import { PluginId } from '@masknet/plugin-infra'
 import { isEqual } from 'lodash-unified'
 
 /**
@@ -30,7 +30,7 @@ export const languageSettings = createGlobalSettings<LanguageOptions>('language'
 // #endregion
 
 // #region web3 plugin ID
-export const pluginIDSettings = createGlobalSettings<string>('pluginID', PLUGIN_ID, {
+export const pluginIDSettings = createGlobalSettings<string>('pluginID', PluginId.EVM, {
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
 // #endregion

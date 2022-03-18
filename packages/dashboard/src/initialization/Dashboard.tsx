@@ -27,7 +27,7 @@ import { Pages } from '../pages/routes'
 import { Web3Context } from '../web3/context'
 import { useAppearance, usePluginID } from '../pages/Personas/api'
 import { PersonaContext } from '../pages/Personas/hooks/usePersonaContext'
-import { fixWeb3State } from '../../../mask/src/plugins/EVM/UI/Web3State'
+import { fixWeb3State } from '@masknet/plugin-evm/src/UI'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 

@@ -9,7 +9,7 @@ import {
     resolveIPFSLink,
 } from '@masknet/web3-shared-evm'
 import { EVM_RPC } from '../messages'
-import { resolveAvatarLinkOnCurrentProvider } from '../../Collectible/pipes'
+// import { resolveAvatarLinkOnCurrentProvider } from '../../Collectible/pipes'
 
 export function useAsset(address: string, tokenId: string, provider: NonFungibleAssetProvider) {
     const account = useAccount()
@@ -26,7 +26,7 @@ export function useAsset(address: string, tokenId: string, provider: NonFungible
             isOrderWeth: isSameAddress(asset?.desktopOrder?.payment_token ?? '', WNATIVE_ADDRESS) ?? false,
             isCollectionWeth: asset?.collection?.payment_tokens?.some(currySameAddress(WNATIVE_ADDRESS)) ?? false,
             isOwner: asset?.top_ownerships.some((item) => isSameAddress(item.owner.address, account)) ?? false,
-            collectionLinkUrl: resolveAvatarLinkOnCurrentProvider(chainId, asset, provider),
+            // collectionLinkUrl: resolveAvatarLinkOnCurrentProvider(chainId, asset, provider),
         }
     }, [account, chainId, WNATIVE_ADDRESS, address, tokenId, provider])
 }

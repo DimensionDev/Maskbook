@@ -1,10 +1,10 @@
+import BigNumber from 'bignumber.js'
 import { isNull } from 'lodash-unified'
 import { ChainId, NonFungibleAssetProvider, formatBalance } from '@masknet/web3-shared-evm'
-import { EVM_RPC } from '../../EVM/messages'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 import Services from '../../../extension/service'
 import { getOrderUnitPrice, NonFungibleTokenAPI } from '@masknet/web3-providers'
 import { ZERO } from '@masknet/web3-shared-base'
-import BigNumber from 'bignumber.js'
 
 function getLastSalePrice(lastSale?: NonFungibleTokenAPI.AssetEvent | null) {
     if (!lastSale?.total_price || !lastSale?.payment_token?.decimals) return

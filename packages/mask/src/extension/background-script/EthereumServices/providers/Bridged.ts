@@ -1,7 +1,7 @@
 import type { RequestArguments } from 'web3-core'
 import { defer } from '@dimensiondev/kit'
 import { EthereumMethodType } from '@masknet/web3-shared-evm'
-import { EVM_Messages } from '../../../../plugins/EVM/messages'
+import { EVM_Messages } from '@masknet/plugin-evm/src/messages'
 import { BaseProvider } from './Base'
 import type { Provider } from '../types'
 
