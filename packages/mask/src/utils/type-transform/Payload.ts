@@ -3,9 +3,9 @@ import type { SocialNetwork } from '../../social-network'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { i18n } from '../../../shared-ui/locales_legacy'
 import { Result, Ok, Err } from 'ts-results'
-import { decodeTextPayloadUI, encodeTextPayloadUI } from '../../social-network/utils/text-payload-ui'
+import { decodeTextPayloadUI } from '../../social-network/utils/text-payload-ui'
 
-import { Identifier, Payload, PayloadAlpha38, ProfileIdentifier } from '@masknet/shared-base'
+import { Identifier, Payload, ProfileIdentifier } from '@masknet/shared-base'
 
 /**
  * Detect if there is version -40, -39 or -38 payload
@@ -74,7 +74,6 @@ const versions = new Set([deconstructAlpha40_Or_Alpha39_Or_Alpha38, deconstructA
  * @type Decoder - defines decoder. if null, auto select decoder.
  */
 type Decoder = SocialNetwork.PayloadEncoding['decoder'] | null
-type Encoder = SocialNetwork.PayloadEncoding['encoder']
 
 export function deconstructPayload(str: string, networkDecoder?: Decoder): Result<Payload, TypeError> {
     if (!networkDecoder) {
@@ -91,21 +90,4 @@ export function deconstructPayload(str: string, networkDecoder?: Decoder): Resul
     }
     if (str.includes('\u{1F3BC}') && str.includes(':||')) return Err(new TypeError(i18n.t('service_unknown_payload')))
     return Err(new TypeError(i18n.t('payload_not_found')))
-}
-
-export function constructAlpha38(data: PayloadAlpha38, encoder?: Encoder) {
-    if (!encoder) {
-        encoder = isEnvironment(Environment.ContentScript) ? encodeTextPayloadUI : (x) => x
-    }
-    const userID = data.authorUserID?.toText().replace('person:', '') || ''
-    const fields = [
-        data.AESKeyEncrypted,
-        data.iv,
-        data.encryptedText,
-        data.signature,
-        data.authorPublicKey,
-        data.sharedPublic ? '1' : '0',
-        userID.includes('|') ? undefined : btoa(userID),
-    ]
-    return encoder(`\u{1F3BC}4/4|${fields.join('|')}:||`)
 }

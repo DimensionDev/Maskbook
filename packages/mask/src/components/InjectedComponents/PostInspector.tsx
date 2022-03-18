@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAsync } from 'react-use'
 import { DecryptPost } from './DecryptedPost/DecryptedPost'
 import Services from '../../extension/service'
-import { ProfileIdentifier } from '@masknet/shared-base'
+import { PostIVIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import type { TypedMessageTuple } from '@masknet/typed-message'
 import type { Profile } from '../../database'
 import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'
@@ -52,13 +52,12 @@ export function PostInspector(props: PostInspectorProps) {
                 requestAppendRecipients={
                     // version -40 does not support append receiver
                     // version -37 is not implemented yet.
-                    ownersKeyEncrypted && iv && version && version !== -40 && version !== -37
+                    ownersKeyEncrypted && iv && version && version === -38
                         ? async (profile) => {
                               setAlreadySelectedPreviously(alreadySelectedPreviously.concat(profile))
                               return Services.Crypto.appendShareTarget(
                                   version,
-                                  ownersKeyEncrypted,
-                                  iv,
+                                  new PostIVIdentifier(whoAmI!.identifier.network, iv),
                                   profile.map((x) => x.identifier),
                                   whoAmI!.identifier,
                                   { type: 'direct', at: new Date() },
