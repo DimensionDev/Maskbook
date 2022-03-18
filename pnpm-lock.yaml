@@ -1158,6 +1158,7 @@ importers:
       '@masknet/web3-shared-evm': workspace:*
       bignumber.js: 9.0.2
       date-fns: ^2.28.0
+      graphql-request: ^3.4.0
       json-stable-stringify: ^1.0.1
       lodash-unified: 1.0.2
       react-use: ^17.3.2
@@ -1174,6 +1175,7 @@ importers:
       '@masknet/web3-shared-evm': link:../web3-shared/evm
       bignumber.js: 9.0.2
       date-fns: 2.28.0
+      graphql-request: 3.5.0
       json-stable-stringify: 1.0.1
       lodash-unified: 1.0.2_da03a4540fbd16bbaafbb96724306afd
       react-use: 17.3.2_bc22c48adf1a4e34a005159413cd72b5
@@ -16026,6 +16028,16 @@ packages:
 
   /graceful-fs/4.2.9:
     resolution: {integrity: sha512-NtNxqUcXgpW2iMrfqSfR73Glt39K+BLwWsPs94yR63v45T0Wbej7eRmL5cWfwEgqXnmjQp3zaJTshdRW/qC2ZQ==}
+
+  /graphql-request/3.5.0:
+    resolution: {integrity: sha512-Io89QpfU4rqiMbqM/KwMBzKaDLOppi8FU8sEccCE4JqCgz95W9Q8bvxQ4NfPALLSMvg9nafgg8AkYRmgKSlukA==}
+    peerDependencies:
+      graphql: 14.x || 15.x
+    dependencies:
+      cross-fetch: 3.1.4
+      extract-files: 9.0.0
+      form-data: 3.0.1
+    dev: false
 
   /graphql-request/3.5.0_graphql@15.5.3:
     resolution: {integrity: sha512-Io89QpfU4rqiMbqM/KwMBzKaDLOppi8FU8sEccCE4JqCgz95W9Q8bvxQ4NfPALLSMvg9nafgg8AkYRmgKSlukA==}
