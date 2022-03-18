@@ -138,6 +138,4 @@ export interface iOSNativeAPIs extends SharedNativeAPIs {}
 /**
  * APIs that only implemented by Android Mask Network
  */
-export interface AndroidNativeAPIs extends SharedNativeAPIs {
-    sendJsonString(payload: string): Promise<string>
-}
+export interface AndroidNativeAPIs extends SharedNativeAPIs {}
