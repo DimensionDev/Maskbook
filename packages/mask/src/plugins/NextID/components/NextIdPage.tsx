@@ -121,33 +121,19 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
         )
     }
 
-    if (!isAccountVerified) {
+    if (!isAccountVerified && isOwn) {
         return (
             <Box>
-                {isOwn ? (
-                    <Box className={classes.tip}>
-                        <Typography className={classes.verifyIntro}>{t.verify_Twitter_ID_intro()}</Typography>
-                        <Typography className={classes.verifyDetail}>{t.verify_Twitter_ID()}</Typography>
-                    </Box>
-                ) : (
-                    <Box className={classes.tip}>
-                        <Typography className={classes.verifyIntro}>
-                            {t.connect_wallet__other_user_tip_intro()}
-                        </Typography>
-                        <Typography className={classes.verifyInstruction}>
-                            {t.connect_wallet_other_user_instruction()}
-                        </Typography>
-                        <Typography className={classes.verifyDetail}>{t.connect_wallet_other_user_tip1()}</Typography>
-                        <Typography className={classes.verifyDetail}>{t.connect_wallet_other_user_tip2()}</Typography>
-                    </Box>
-                )}
-                {isOwn && (
-                    <Stack justifyContent="center" direction="row" mt="24px">
-                        <Button variant="contained" onClick={onVerify}>
-                            {t.verify_Twitter_ID_button()}
-                        </Button>
-                    </Stack>
-                )}
+                <Box className={classes.tip}>
+                    <Typography className={classes.verifyIntro}>{t.verify_Twitter_ID_intro()}</Typography>
+                    <Typography className={classes.verifyDetail}>{t.verify_Twitter_ID()}</Typography>
+                </Box>
+
+                <Stack justifyContent="center" direction="row" mt="24px">
+                    <Button variant="contained" onClick={onVerify}>
+                        {t.verify_Twitter_ID_button()}
+                    </Button>
+                </Stack>
             </Box>
         )
     }
