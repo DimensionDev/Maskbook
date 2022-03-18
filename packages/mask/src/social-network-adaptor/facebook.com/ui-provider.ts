@@ -22,7 +22,7 @@ import { GrayscaleAlgorithm } from '@masknet/encryption'
 import { PaletteModeProviderFacebook, useThemeFacebookVariant } from './customization/custom'
 import { unreachable } from '@dimensiondev/kit'
 import { makeStyles } from '@masknet/theme'
-import { ProfileIdentifier } from '@masknet/shared-base'
+import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
 import { globalUIState } from '../../social-network'
 import { injectToolboxHintAtFacebook as injectToolboxAtFacebook } from './injection/Toolbar'
 import { injectProfileNFTAvatarInFaceBook } from './injection/NFT/ProfileNFTAvatar'
@@ -205,7 +205,7 @@ const facebookUI: SocialNetworkUI.Definition = {
             password() {
                 // ! Change this might be a breaking change !
                 return new ProfileIdentifier(
-                    'facebook.com',
+                    EnhanceableSite.Facebook,
                     ProfileIdentifier.getUserName(IdentityProviderFacebook.recognized.value.identifier) ||
                         ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
                         unreachable('Cannot figure out password' as never),

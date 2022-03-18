@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { StyledInput } from '../../../components/StyledInput'
 import { useWallet } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useI18N } from '../../../../../utils'
 import { useAsyncFn } from 'react-use'
 import { LoadingButton } from '@mui/lab'
@@ -43,7 +43,7 @@ const useStyles = makeStyles()({
 
 const WalletRename = memo(() => {
     const { t } = useI18N()
-    const history = useHistory()
+    const navigate = useNavigate()
     const { classes } = useStyles()
     const wallet = useWallet()
 
@@ -58,7 +58,7 @@ const WalletRename = memo(() => {
         async ({ name }: zod.infer<typeof schema>) => {
             if (!wallet?.address || !name) return
             await WalletRPC.renameWallet(wallet.address, name)
-            return history.goBack()
+            return navigate(-1)
         },
         [wallet?.address],
     )

@@ -2,7 +2,7 @@ import { memo, useCallback, useState } from 'react'
 import { Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { WalletIcon, WarningIcon } from '@masknet/icons'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { ProviderType, useWallet, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { PopupRoutes } from '@masknet/shared-base'
 import { first } from 'lodash-unified'
@@ -95,7 +95,7 @@ const useStyles = makeStyles()({
 
 const DeleteWallet = memo(() => {
     const { t } = useI18N()
-    const history = useHistory()
+    const navigate = useNavigate()
     const wallet = useWallet()
     const { classes } = useStyles()
     const [password, setPassword] = useState('')
@@ -123,7 +123,7 @@ const DeleteWallet = memo(() => {
                         providerType: ProviderType.MaskWallet,
                     })
                 }
-                history.replace(PopupRoutes.Wallet)
+                navigate(PopupRoutes.Wallet, { replace: true })
             } catch (error) {
                 if (error instanceof Error) {
                     setErrorMessage(error.message)
@@ -169,7 +169,7 @@ const DeleteWallet = memo(() => {
                     variant="contained"
                     color="inherit"
                     className={classes.cancelButton}
-                    onClick={() => history.goBack()}>
+                    onClick={() => navigate(-1)}>
                     {t('cancel')}
                 </Button>
                 <Button variant="contained" color="error" className={classes.deleteButton} onClick={onConfirm}>

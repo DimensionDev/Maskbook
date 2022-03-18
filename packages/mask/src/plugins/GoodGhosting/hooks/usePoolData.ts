@@ -1,8 +1,14 @@
-import { useAssets, useChainId, useERC20TokenContract, useERC20TokenDetailed } from '@masknet/web3-shared-evm'
+import {
+    useAssets,
+    useChainId,
+    useERC20TokenContract,
+    useERC20TokenDetailed,
+    DAI,
+    WNATIVE as WETH,
+} from '@masknet/web3-shared-evm'
 import { useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import { DAI, WETH } from '../constants'
 import { useGoodGhostingContract } from '../contracts/useGoodGhostingContract'
 import { useGoodGhostingIncentiveContract } from '../contracts/useGoodGhostingIncentivesContract'
 import type { GameAssets, GoodGhostingInfo, LendingPoolData } from '../types'

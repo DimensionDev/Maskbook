@@ -23,6 +23,7 @@ import { Err, Result } from 'ts-results'
 import type { Subscription } from 'use-subscription'
 import { activatedSocialNetworkUI } from '../'
 import { resolveFacebookLink } from '../../social-network-adaptor/facebook.com/utils/resolveFacebookLink'
+import type { SupportedPayloadVersions } from '@masknet/encryption'
 
 export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSActions) {
     return function createPostContext(opt: PostContextCreation): PostContext {
@@ -104,8 +105,15 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
                 return () => void [a(), b()]
             },
         })
+        const iv = new ValueRef<string | null>(null)
+        const isPublicShared = new ValueRef<boolean | undefined>(undefined)
+        const ownersAESKeyEncrypted = new ValueRef<string | undefined>(undefined)
+        const version = new ValueRef<SupportedPayloadVersions | undefined>(undefined)
         return {
-            ...author,
+            author: author.author,
+            avatarURL: author.avatarURL,
+            nickname: author.nickname,
+            snsID: author.snsID,
 
             get rootNode() {
                 return opt.rootElement.realCurrent
@@ -139,15 +147,16 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             postContent: SubscriptionFromValueRef(postContent),
 
             containingMaskPayload: SubscriptionFromValueRef(postPayload),
-            decryptedPayloadForImage: new ValueRef(null),
-            iv: new ValueRef(null),
-            publicShared: debug({
-                getCurrentValue: () =>
-                    postPayload.value
-                        .map((val) => val.version === -38 && val.sharedPublic)
-                        .unwrapOr<undefined>(undefined),
-                subscribe: (sub) => postPayload.addListener(sub),
-            }),
+            iv,
+            publicShared: SubscriptionFromValueRef(isPublicShared),
+            ownersKeyEncrypted: SubscriptionFromValueRef(ownersAESKeyEncrypted),
+            version: SubscriptionFromValueRef(version),
+            decryptedReport(opts) {
+                if (opts.iv) iv.value = opts.iv
+                if (opts.sharedPublic?.some) isPublicShared.value = opts.sharedPublic.val
+                if (opts.ownersAESKeyEncrypted) ownersAESKeyEncrypted.value = opts.ownersAESKeyEncrypted
+                if (opts.version) version.value = opts.version
+            },
         }
     }
 }
