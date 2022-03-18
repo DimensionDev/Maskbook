@@ -1,11 +1,10 @@
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { ERC721TokenDetailed, useChainId } from '@masknet/web3-shared-evm'
-import { Checkbox, List, ListItem, Radio } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
+import { ERC721TokenDetailed, formatNFT_TokenId, useChainId } from '@masknet/web3-shared-evm'
+import { Checkbox, List, ListItem, Radio, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { noop } from 'lodash-unified'
 import { FC, useCallback } from 'react'
-import { useI18N } from '../../../locales'
 
 interface Props {
     selectedIds: string[]
@@ -40,6 +39,10 @@ const useStyles = makeStyles()((theme) => ({
         opacity: 0.5,
         cursor: 'not-allowed',
     },
+    loadingFailImage: {
+        width: 64,
+        height: 64,
+    },
 }))
 
 export function arrayRemove<T>(arr: T[], item: T): T[] {
@@ -70,7 +73,6 @@ export const NFTList: FC<Props> = ({ selectedIds, tokens, enableTokenIds = [], o
     )
 
     const SelectComponent = isRadio ? Radio : Checkbox
-    const t = useI18N()
 
     return (
         <List className={className}>
@@ -78,38 +80,39 @@ export const NFTList: FC<Props> = ({ selectedIds, tokens, enableTokenIds = [], o
                 const isNotOwned = !enableTokenIds.includes(token.tokenId)
                 const disabled = (!isRadio && reachedLimit && !selectedIds.includes(token.tokenId)) || isNotOwned
                 return (
-                    <ShadowRootTooltip
+                    <ListItem
                         key={token.tokenId}
-                        title={isNotOwned ? t.nft_not_belong_to_you() : ''}
-                        placement="top">
-                        <ListItem
-                            key={token.tokenId}
-                            className={classnames({
-                                [classes.nftItem]: true,
-                                [classes.disabled]: disabled,
-                            })}
+                        className={classnames({
+                            [classes.nftItem]: true,
+                            [classes.disabled]: disabled,
+                        })}
+                        onClick={() => {
+                            if (disabled) return
+                            toggleItem(token.tokenId)
+                        }}>
+                        <NFTCardStyledAssetPlayer
+                            chainId={chainId}
+                            contractAddress={token.contractDetailed.address}
+                            url={token.info.mediaUrl}
+                            tokenId={token.tokenId}
+                            classes={{
+                                loadingFailImage: classes.loadingFailImage,
+                            }}
+                        />
+                        <Typography variant="subtitle1" textAlign="center">
+                            {formatNFT_TokenId(token.tokenId, 2)}
+                        </Typography>
+                        <SelectComponent
+                            onChange={noop}
+                            disabled={disabled}
                             onClick={() => {
                                 if (disabled) return
                                 toggleItem(token.tokenId)
-                            }}>
-                            <NFTCardStyledAssetPlayer
-                                chainId={chainId}
-                                contractAddress={token.contractDetailed.address}
-                                url={token.info.mediaUrl}
-                                tokenId={token.tokenId}
-                            />
-                            <SelectComponent
-                                onChange={noop}
-                                disabled={disabled}
-                                onClick={() => {
-                                    if (disabled) return
-                                    toggleItem(token.tokenId)
-                                }}
-                                className={classes.checkbox}
-                                checked={selectedIds.includes(token.tokenId)}
-                            />
-                        </ListItem>
-                    </ShadowRootTooltip>
+                            }}
+                            className={classes.checkbox}
+                            checked={selectedIds.includes(token.tokenId)}
+                        />
+                    </ListItem>
                 )
             })}
         </List>

@@ -1,14 +1,14 @@
 import { makeStyles } from '@masknet/theme'
 import { ERC721TokenDetailed, useAccount, useERC721TokenDetailedCallback } from '@masknet/web3-shared-evm'
 import { useERC721TokenDetailedOwnerList } from '@masknet/web3-providers'
-import { Button, FormControl } from '@mui/material'
+import { Button, FormControl, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { FC, HTMLProps, useCallback, useMemo, useState } from 'react'
 import { SearchInput } from '../../../../../extension/options-page/DashboardComponents/SearchInput'
-import { useI18N } from '../../../../../utils'
 import { ERC721ContractSelectPanel } from '../../../../../web3/UI/ERC721ContractSelectPanel'
-import { useTip } from '../../../contexts'
+import { TargetChainIdContext, useTip } from '../../../contexts'
 import { NFTList } from './NFTList'
+import { useI18N } from '../../../locales'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -24,11 +24,15 @@ const useStyles = makeStyles()((theme) => ({
     },
     list: {
         flexGrow: 1,
+        marginTop: theme.spacing(2),
         display: 'grid',
         gridTemplateColumns: 'repeat(4, 1fr)',
         maxHeight: 400,
         overflow: 'auto',
         gridGap: 18,
+        backgroundColor: theme.palette.background.default,
+        borderRadius: 4,
+        padding: theme.spacing(1),
     },
     keyword: {
         borderRadius: 8,
@@ -42,12 +46,19 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'row',
     },
+    errorMessage: {
+        marginTop: theme.spacing(3),
+        fontSize: 12,
+        color: theme.palette.error.main,
+        marginBottom: theme.spacing(3),
+    },
 }))
 
 interface Props extends HTMLProps<HTMLDivElement> {}
 
 export const NFTSection: FC<Props> = ({ className, ...rest }) => {
-    const { t } = useI18N()
+    const t = useI18N()
+    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const { erc721Contract, setErc721Contract, erc721TokenId, setErc721TokenId, isSending } = useTip()
     const [tokenId, setTokenId, erc721TokenDetailedCallback] = useERC721TokenDetailedCallback(erc721Contract)
     const { classes } = useStyles()
@@ -68,7 +79,12 @@ export const NFTSection: FC<Props> = ({ className, ...rest }) => {
     return (
         <div className={classnames(classes.root, className)} {...rest}>
             <FormControl>
-                <ERC721ContractSelectPanel contract={erc721Contract} onContractChange={setErc721Contract} />
+                <ERC721ContractSelectPanel
+                    chainId={chainId}
+                    label="Contracts"
+                    contract={erc721Contract}
+                    onContractChange={setErc721Contract}
+                />
             </FormControl>
             {erc721Contract ? (
                 <div className={classes.selectSection}>
@@ -87,7 +103,7 @@ export const NFTSection: FC<Props> = ({ className, ...rest }) => {
                             variant="contained"
                             disabled={isSending}
                             onClick={onSearch}>
-                            {t('search')}
+                            {t.search()}
                         </Button>
                     </FormControl>
                     <NFTList
@@ -100,6 +116,11 @@ export const NFTSection: FC<Props> = ({ className, ...rest }) => {
                         }}
                     />
                 </div>
+            ) : null}
+            {tokens.length === 1 && !enableTokenIds.includes(tokens[0].tokenId) ? (
+                <Typography variant="body1" className={classes.errorMessage}>
+                    {t.nft_not_belong_to_you()}
+                </Typography>
             ) : null}
         </div>
     )

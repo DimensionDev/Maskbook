@@ -44,7 +44,7 @@ export const TipButton: FC<Props> = ({ className, receiver, addresses = [], chil
 
     const { value: isAccountVerified, loading: loadingVerifyInfo } = useAsync(() => {
         if (!receiverPersona?.publicHexKey || !receiver?.userId) return Promise.resolve(false)
-        return queryIsBound(receiverPersona.publicHexKey, platform, receiver.userId)
+        return queryIsBound(receiverPersona.publicHexKey, platform, receiver.userId, true)
     }, [receiverPersona?.publicHexKey, platform, receiver?.userId])
 
     const [walletsState, queryBindings] = useAsyncFn(async () => {
@@ -53,7 +53,7 @@ export const TipButton: FC<Props> = ({ className, receiver, addresses = [], chil
         const persona = await Services.Identity.queryPersonaByProfile(receiver)
         if (!persona?.publicHexKey) return EMPTY_LIST
 
-        const bindings = await queryExistedBindingByPersona(persona.publicHexKey)
+        const bindings = await queryExistedBindingByPersona(persona.publicHexKey, true)
         if (!bindings) return EMPTY_LIST
 
         const wallets = bindings.proofs.filter((p) => p.platform === NextIDPlatform.Ethereum).map((p) => p.identity)

@@ -7,6 +7,7 @@ const useStyles = makeStyles()((theme) => ({
     confirmDialog: {
         width: 480,
         height: 290,
+        backgroundImage: 'none',
     },
     content: {
         display: 'flex',
@@ -45,6 +46,11 @@ export const ConfirmModal: FC<Props> = ({ className, message, icon, confirmText,
         <InjectedDialog
             classes={{
                 paper: classes.confirmDialog,
+            }}
+            BackdropProps={{
+                style: {
+                    opacity: 0,
+                },
             }}
             {...rest}>
             <DialogContent className={classes.content}>

@@ -2,7 +2,7 @@ import { useWeb3State } from '@masknet/plugin-infra'
 import { SelectTokenDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { EthereumTokenType, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
+import { EthereumTokenType, useChainId, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
 import {
     Box,
     BoxProps,
@@ -66,6 +66,7 @@ interface Props extends BoxProps {}
 
 export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
     const t = useI18N()
+    const currentChainId = useChainId()
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const { classes } = useStyles()
     const {
@@ -161,7 +162,7 @@ export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
                             label={t.tip_type_token()}
                         />
                         <FormControlLabel
-                            disabled={isSending}
+                            disabled={isSending || chainId !== currentChainId}
                             value={TipType.NFT}
                             control={<Radio />}
                             label={t.tip_type_nft()}

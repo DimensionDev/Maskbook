@@ -7,6 +7,7 @@ import {
     NextIDPlatform,
     toBase64,
 } from '@masknet/shared-base'
+import LRU from 'lru-cache'
 import urlcat from 'urlcat'
 import { first } from 'lodash-unified'
 
@@ -31,11 +32,40 @@ interface CreatePayloadResponse {
     created_at: string
 }
 
-export async function fetchJSON<T = unknown>(requestInfo: RequestInfo, requestInit?: RequestInit): Promise<T> {
-    const res = await globalThis.fetch(requestInfo, { mode: 'cors', ...requestInit })
-    const result = await res.json()
+const fetchCache = new LRU<string, any>({
+    max: 100,
+    ttl: 20000,
+})
 
-    if (result.message || !res.ok) throw new Error(result.message)
+export async function fetchJSON<T = unknown>(
+    url: string,
+    requestInit?: RequestInit,
+    enableCache?: boolean,
+): Promise<T> {
+    type FetchCache = LRU<string, Promise<Response> | T>
+
+    const cached = enableCache ? (fetchCache as FetchCache).get(url) : undefined
+    const isPending = cached instanceof Promise
+    if (cached && !isPending) {
+        return cached
+    }
+    let pendingResponse: Promise<Response>
+    if (isPending) {
+        pendingResponse = cached
+    } else {
+        pendingResponse = globalThis.fetch(url, { mode: 'cors', ...requestInit })
+        if (enableCache) {
+            fetchCache.set(url, pendingResponse)
+        }
+    }
+    const response = await pendingResponse
+
+    const result = await response.clone().json()
+
+    if (result.message || !response.ok) {
+        throw new Error(result.message)
+    }
+    fetchCache.set(url, result)
     return result
 }
 
@@ -73,9 +103,11 @@ export async function bindProof(
     })
 }
 
-export async function queryExistedBindingByPersona(personaPublicKey: string) {
+export async function queryExistedBindingByPersona(personaPublicKey: string, enableCache?: boolean) {
     const response = await fetchJSON<NextIDBindings>(
         urlcat(BASE_URL, '/v1/proof', { platform: NextIDPlatform.NextId, identity: personaPublicKey }),
+        {},
+        enableCache,
     )
     // Will have only one item when query by personaPublicKey
     return first(response.ids)
@@ -92,7 +124,12 @@ export async function queryExistedBindingByPlatform(platform: NextIDPlatform, id
     return response.ids
 }
 
-export async function queryIsBound(personaPublicKey: string, platform: NextIDPlatform, identity: string) {
+export async function queryIsBound(
+    personaPublicKey: string,
+    platform: NextIDPlatform,
+    identity: string,
+    enableCache?: boolean,
+) {
     if (!platform && !identity) return false
 
     try {
@@ -102,6 +139,8 @@ export async function queryIsBound(personaPublicKey: string, platform: NextIDPla
                 identity: identity,
                 public_key: personaPublicKey,
             }),
+            {},
+            enableCache,
         )
         return true
     } catch {
