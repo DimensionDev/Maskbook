@@ -6,7 +6,7 @@ import { PostDBAccess, queryPostDB, createPostDB, updatePostDB, PostRecord } fro
 export async function savePostKeyToDB(
     id: PostIVIdentifier,
     key: AESCryptoKey,
-    extraInfo: Omit<PostRecord, 'identifier' | 'foundAt'>,
+    extraInfo: Omit<PostRecord, 'identifier' | 'foundAt' | 'postCryptoKey'>,
 ): Promise<void> {
     const jwk = await CryptoKeyToJsonWebKey(key)
     {

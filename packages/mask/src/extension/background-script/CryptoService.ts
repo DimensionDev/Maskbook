@@ -4,7 +4,8 @@ import { steganographyDownloadImage } from './CryptoServices/utils'
 assertEnvironment(Environment.ManifestBackground)
 
 export { encryptComment, decryptComment } from '../../crypto/crypto-alpha-40'
-export { encryptTo, publishPostAESKey } from './CryptoServices/encryptTo'
+// export { encryptTo, publishPostAESKey } from './CryptoServices/encryptTo'
+export { encryptTo } from '../../../background/services/crypto/encryption'
 export { appendShareTarget } from './CryptoServices/appendShareTarget'
 export { getPartialSharedListOfPost } from './CryptoServices/getPartialSharedListOfPost'
 

@@ -16,7 +16,6 @@ import {
 } from '@masknet/encryption'
 import {
     AESCryptoKey,
-    EC_Public_CryptoKey,
     EC_Public_JsonWebKey,
     IdentifierMap,
     PostIVIdentifier,
@@ -24,12 +23,12 @@ import {
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import { noop } from 'lodash-unified'
-import { queryPersonaByProfileDB } from '../../database/persona/db'
 import {
     createProfileWithPersona,
     decryptByLocalKey,
     deriveAESByECDH,
     hasLocalKeyOf,
+    queryPublicKey,
 } from '../../database/persona/helper'
 import { queryPostDB } from '../../database/post'
 import { savePostKeyToDB } from '../../database/post/helper'
@@ -232,17 +231,4 @@ async function storeAuthorPublicKey(
             publicKey: (await crypto.subtle.exportKey('jwk', pub.key)) as EC_Public_JsonWebKey,
         },
     )
-}
-
-async function queryPublicKey(author: ProfileIdentifier | null, extractable = false, signal?: AbortSignal) {
-    if (!author) return null
-    const persona = await queryPersonaByProfileDB(author)
-    if (!persona) return null
-    return (await crypto.subtle.importKey(
-        'jwk',
-        persona.publicKey,
-        { name: 'ECDH', namedCurve: persona.publicKey.crv! } as EcKeyAlgorithm,
-        extractable,
-        ['deriveKey'],
-    )) as EC_Public_CryptoKey
 }
