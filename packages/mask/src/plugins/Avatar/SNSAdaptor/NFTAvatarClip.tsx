@@ -45,19 +45,10 @@ const useStyles = makeStyles()((theme) => ({
         strokeWidth: 6,
         stroke: '#00f8ff',
         fill: 'none',
-        '@supports (translate: 0)': {
-            transform: 'none',
-            translate: '7px 6px',
-        },
     },
     borderPath: {
         transform: 'scale(0.98, 1.035) translate(3px, -2px)',
         strokeWidth: 3,
-        '@supports (translate: 0)': {
-            transform: 'none',
-            scale: '0.98, 1.035',
-            translate: '3px, -2px',
-        },
     },
     background: {
         transform: 'scale(1, 1.05) translate(1px, -3px)',
@@ -66,11 +57,6 @@ const useStyles = makeStyles()((theme) => ({
         stroke: 'black',
         strokeLinecap: 'round',
         strokeLinejoin: 'round',
-        '@supports (translate: 0)': {
-            transform: 'none',
-            scale: '1, 1.5',
-            translate: '1px, -3px',
-        },
     },
     rainbowBorder: {
         animation: `${rainbowBorderKeyFrames} 6s linear infinite`,
@@ -88,18 +74,9 @@ const useStyles = makeStyles()((theme) => ({
     },
     price: {
         transform: 'translate(0px, -5px) ',
-        '@supports (translate: 0)': {
-            transform: 'none',
-            translate: '0px, -5px',
-        },
     },
     namePath: {
         transform: 'scale(0.9) translate(10px, 10px)',
-        '@supports (translate: 0)': {
-            transform: 'none',
-            translate: '10px, 10px',
-            scale: 0.9,
-        },
     },
 }))
 
@@ -221,25 +198,26 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
                     xlinkHref={`#${id}-border-path`}
                     className={classNames(classes.rainbowBorder, classes.borderPath)}
                 />
-
-                <Text
-                    xlinkHref={`#${id}-name-path`}
-                    fill={`url(#${id}-pattern)`}
-                    text={
-                        loading || loadingNFT
-                            ? 'loading...'
-                            : `${formatText(name, avatarMetadata?.token_id ?? '')} ${
-                                  slug.toLowerCase() === 'ens' ? 'ENS' : ''
-                              }`
-                    }
-                    classes={{ root: classes.text }}
-                />
-                <Text
-                    fill={`url(#${id}-pattern)`}
-                    xlinkHref={`#${id}-price-path`}
-                    classes={{ root: classes.price }}
-                    text={loading || loadingNFT ? '' : formatPrice(amount, symbol)}
-                />
+                <g className={classes.text}>
+                    <Text
+                        xlinkHref={`#${id}-name-path`}
+                        fill={`url(#${id}-pattern)`}
+                        text={
+                            loading || loadingNFT
+                                ? 'loading...'
+                                : `${formatText(name, avatarMetadata?.token_id ?? '')} ${
+                                      slug.toLowerCase() === 'ens' ? 'ENS' : ''
+                                  }`
+                        }
+                    />
+                </g>
+                <g className={classes.price}>
+                    <Text
+                        fill={`url(#${id}-pattern)`}
+                        xlinkHref={`#${id}-price-path`}
+                        text={loading || loadingNFT ? '' : formatPrice(amount, symbol)}
+                    />
+                </g>
             </g>
         </svg>
     )
