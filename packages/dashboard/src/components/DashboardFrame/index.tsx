@@ -1,7 +1,7 @@
 import { memo, Suspense, useMemo, useState } from 'react'
 import { Grid, styled, Theme, useMediaQuery } from '@mui/material'
 import { MaskColorVar } from '@masknet/theme'
-import { ErrorBoundary } from '@masknet/shared'
+import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { DashboardContext } from './context'
 import { Navigation } from './Navigation'
 import { NavigationVersionFooter } from '../NavigationVersionFooter'

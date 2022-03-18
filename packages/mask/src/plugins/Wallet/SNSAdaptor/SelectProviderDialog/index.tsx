@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
-import { useRemoteControlledDialog, useValueRef } from '@masknet/shared'
 import {
     getRegisteredWeb3Networks,
     getRegisteredWeb3Providers,
@@ -11,6 +10,7 @@ import {
     useWeb3UI,
 } from '@masknet/plugin-infra'
 import { isDashboardPage } from '@masknet/shared-base'
+import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { WalletMessages } from '../../messages'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'

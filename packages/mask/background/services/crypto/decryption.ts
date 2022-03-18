@@ -22,13 +22,13 @@ import {
     PostIVIdentifier,
     ProfileIdentifier,
 } from '@masknet/shared-base'
+import type { TypedMessage } from '@masknet/typed-message'
 import { noop } from 'lodash-unified'
 import { queryPersonaByProfileDB } from '../../database/persona/db'
 import {
     createProfileWithPersona,
     decryptByLocalKey,
     deriveAESByECDH,
-    deriveAESByECDH_version38_or_older,
     hasLocalKeyOf,
 } from '../../database/persona/helper'
 import { queryPostDB } from '../../database/post'
@@ -73,6 +73,8 @@ export async function* decryptionWithSocialNetworkDecoding(
     if (!decoded) return yield new DecryptError(ErrorReasons.NoPayloadFound, undefined)
     yield* decryption(decoded, context)
 }
+
+const inMemoryCache = new IdentifierMap<PostIVIdentifier, TypedMessage>(new Map(), PostIVIdentifier)
 async function* decryption(payload: string | Uint8Array, context: DecryptionContext) {
     const parse = await parsePayload(payload)
     if (parse.err) return null
@@ -106,7 +108,10 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
     )
     // #endregion
 
-    // TODO: read in-memory cache to avoid db lookup
+    if (inMemoryCache.has(id)) {
+        const p: DecryptProgress = { type: DecryptProgressKind.Success, content: inMemoryCache.get(id)! }
+        return void (yield p)
+    }
 
     // #region store author public key into the database
     try {
@@ -120,7 +125,12 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
     // #endregion
 
     const progress = decrypt(
-        { message: parse.val },
+        {
+            message: parse.val,
+            onDecrypted(message) {
+                inMemoryCache.set(id, message)
+            },
+        },
         {
             getPostKeyCache: getPostKeyCache.bind(null, id),
             setPostKeyCache: (key) => {
@@ -139,9 +149,6 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
             decryptByLocalKey: decryptByLocalKey,
             async deriveAESKey(pub) {
                 return Array.from((await deriveAESByECDH(pub)).values())
-            },
-            async deriveAESKey_version38_or_older(pub, iv) {
-                return Array.from((await deriveAESByECDH_version38_or_older(pub, iv)).values())
             },
             queryAuthorPublicKey(author, signal) {
                 return queryPublicKey(author || authorHint, false, signal)

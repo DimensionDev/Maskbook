@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
     formatBalance,
     formatEthereumAddress,
@@ -14,16 +15,19 @@ import {
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import { isZero, ZERO, isGreaterThan } from '@masknet/web3-shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Box, Card, Grid, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { BigNumber } from 'bignumber.js'
 import classNames from 'classnames'
 import formatDateTime from 'date-fns/format'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import urlcat from 'urlcat'
+import { startCase } from 'lodash-unified'
+import { EnhanceableSite } from '@masknet/shared-base'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { TokenIcon, useRemoteControlledDialog } from '@masknet/shared'
+import { TokenIcon } from '@masknet/shared'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { getAssetAsBlobURL, getTextUILength, useI18N } from '../../../utils'
 import { WalletMessages } from '../../Wallet/messages'
@@ -38,9 +42,7 @@ import { checkRegionRestrict, decodeRegionCode, useIPRegion } from './hooks/useR
 import { ITO_Status, JSON_PayloadInMask } from '../types'
 import { StyledLinearProgress } from './StyledLinearProgress'
 import { SwapGuide, SwapStatus } from './SwapGuide'
-import urlcat from 'urlcat'
-import { startCase } from 'lodash-unified'
-import { FACEBOOK_ID, isFacebook } from '../../../social-network-adaptor/facebook.com/base'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 
 export interface IconProps {
@@ -75,8 +77,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'end',
-        width: props.snsId === FACEBOOK_ID ? '98%' : '100%',
-        maxWidth: props.snsId === FACEBOOK_ID ? 'auto' : 470,
+        width: props.snsId === EnhanceableSite.Facebook ? '98%' : '100%',
+        maxWidth: props.snsId === EnhanceableSite.Facebook ? 'auto' : 470,
     },
     title: {
         fontSize: props.titleLength! > 31 ? '1.3rem' : '1.6rem',
@@ -122,7 +124,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     footer: {
         position: 'absolute',
         width: '90%',
-        maxWidth: props.snsId === FACEBOOK_ID ? 'auto' : 470,
+        maxWidth: props.snsId === EnhanceableSite.Facebook ? 'auto' : 470,
         bottom: theme.spacing(2),
         display: 'flex',
         justifyContent: 'space-between',

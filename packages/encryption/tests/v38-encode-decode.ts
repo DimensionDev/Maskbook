@@ -1,9 +1,9 @@
-import { ECDH_K256_Pub } from './setup'
 import { expect, test } from '@jest/globals'
 import { AESAlgorithmEnum, encodePayload, parsePayload, PayloadWellFormed } from '../src'
 import { None, Some } from 'ts-results'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { importAESFromJWK } from '../src/utils'
+import { queryTestPublicKey } from './keys'
 
 test('Parse v38 encoded by old infra', async () => {
     const out = (await parsePayload(oldInfraOutput)).unwrap()
@@ -18,7 +18,7 @@ test('Parse older v38 payload that does not have newer field', async () => {
 test('Encode v38 payload', async () => {
     const payload: PayloadWellFormed.Payload = {
         author: Some(new ProfileIdentifier('facebook.com', 'test')),
-        authorPublicKey: Some(await ECDH_K256_Pub()),
+        authorPublicKey: Some((await queryTestPublicKey(new ProfileIdentifier('localhost', 'alice')))!),
         encrypted: new Uint8Array(Buffer.from('3a0d6ee692c6f46896b196f14301c01ad2fa26aa', 'hex')),
         encryption: {
             type: 'public',

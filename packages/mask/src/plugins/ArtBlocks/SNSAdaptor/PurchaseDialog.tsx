@@ -24,9 +24,10 @@ import {
 } from '@masknet/web3-shared-evm'
 import { Trans } from 'react-i18next'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback'
-import { TokenAmountPanel, useRemoteControlledDialog } from '@masknet/shared'
+import { TokenAmountPanel } from '@masknet/shared'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { leftShift } from '@masknet/web3-shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '../../Wallet/messages'
 
 import type { Project } from '../types'

@@ -7,7 +7,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '../../Wallet/messages'
 import { useMaskClaimCallback } from './hooks/useMaskClaimCallback'
 import { useMaskITO_Packet } from './hooks/useMaskITO_Packet'
