@@ -2,7 +2,7 @@ import { expect, test } from '@jest/globals'
 import { encodePayload, parsePayload, PayloadWellFormed } from '../src'
 import { None, Some } from 'ts-results'
 import { ProfileIdentifier } from '@masknet/shared-base'
-import { importAESFromJWK } from '../src/utils'
+import { importAES } from '../src/utils'
 import { queryTestPublicKey } from './keys'
 
 test('Parse v38 encoded by old infra', async () => {
@@ -23,7 +23,7 @@ test('Encode v38 payload', async () => {
         encryption: {
             type: 'public',
             iv: new Uint8Array(Buffer.from('0633db7e24805c2bdcff69ea2afda7cd', 'hex')),
-            AESKey: await importAESFromJWK(AESKey).then((x) => x.unwrap()),
+            AESKey: await importAES(AESKey).then((x) => x.unwrap()),
         },
         signature: None,
         version: -38,

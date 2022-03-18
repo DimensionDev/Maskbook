@@ -65,4 +65,4 @@ export {
 } from './image-steganography'
 
 // TODO: remove them in the future
-export { importEC_Key, importAESFromJWK } from './utils'
+export { importEC_Key, importAES as importAESFromJWK } from './utils'

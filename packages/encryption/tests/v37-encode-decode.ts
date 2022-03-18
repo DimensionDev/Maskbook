@@ -1,7 +1,7 @@
 import { test, expect } from '@jest/globals'
 import { None, Some } from 'ts-results'
 import { encodePayload, parsePayload, PayloadWellFormed } from '../src'
-import { importAESFromJWK } from '../src/utils'
+import { importAES } from '../src/utils'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { queryTestPublicKey } from './keys'
 
@@ -55,7 +55,7 @@ test('Encode v37 payload', async () => {
 })
 
 async function getAESKey(): Promise<PayloadWellFormed.PublicEncryption['AESKey']> {
-    return (await importAESFromJWK(testKey)).unwrap()
+    return (await importAES(testKey)).unwrap()
 }
 const testKey = {
     alg: 'A256GCM',

@@ -1,10 +1,10 @@
 import type { PayloadParserResult } from '.'
 import type { PayloadParseResult } from '../payload'
 import { CryptoException, PayloadException, assertArray, assertUint8Array } from '../types'
-import { AESCryptoKey, andThenAsync, CheckedError, OptionalResult } from '@masknet/shared-base'
+import { andThenAsync, CheckedError, OptionalResult } from '@masknet/shared-base'
 import { Ok, Result } from 'ts-results'
 import { EC_Key, EC_KeyCurveEnum } from '../payload/types'
-import { decodeMessagePackF, assertIVLengthEq16, importAESFromJWK, importEC_Key } from '../utils'
+import { decodeMessagePackF, assertIVLengthEq16, importAES, importEC_Key } from '../utils'
 import { safeUnreachable } from '@dimensiondev/kit'
 import { parseSignatureContainer } from './SignatureContainer'
 import { parseAuthor } from './shared'
@@ -14,7 +14,7 @@ import { parseAuthor } from './shared'
 const decode = decodeMessagePackF(PayloadException.InvalidPayload, PayloadException.DecodeFailed)
 const InvalidPayload = (msg?: string) => new CheckedError(PayloadException.InvalidPayload, msg).toErr()
 const importSpki = CheckedError.withErr(importEC_Key, CryptoException.InvalidCryptoKey)
-const importAES256 = CheckedError.withErr(importAESFromJWK, CryptoException.InvalidCryptoKey)
+const importAES256 = CheckedError.withErr(importAES, CryptoException.InvalidCryptoKey)
 export async function parse37(input: Uint8Array): PayloadParserResult {
     const signatureContainer = parseSignatureContainer(input)
     if (signatureContainer.err) return signatureContainer
@@ -87,13 +87,7 @@ async function parseEncryption(encryption: unknown): Promise<PayloadParseResult.
     }
 }
 async function parseAES(aes: unknown) {
-    if (typeof aes === 'string') {
-        const jwk: JsonWebKey = { ext: true, key_ops: ['encrypt', 'decrypt'], kty: 'oct', alg: 'A256GCM', k: aes }
-        const key = await importAES256(jwk)
-        if (key.err) return key
-        return Ok<AESCryptoKey>(key.val)
-    }
-    return new CheckedError(CryptoException.UnsupportedAlgorithm, null).toErr()
+    return andThenAsync(assertUint8Array(aes, 'aes', CryptoException.InvalidCryptoKey), importAES256)
 }
 function importAsymmetryKey(algr: unknown, key: unknown, name: string) {
     type T = Promise<Result<EC_Key, CheckedError<CryptoException>>>

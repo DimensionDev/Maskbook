@@ -7,7 +7,7 @@ import {
     decodeTextF,
     decryptWithAES,
     assertIVLengthEq16,
-    importAESFromJWK,
+    importAES,
     importEC_Key,
     JSONParseF,
 } from '../utils'
@@ -114,7 +114,7 @@ async function decodePublicSharedAESKey(
     const publicSharedKey = await get_v38PublicSharedCryptoKey()
     if (publicSharedKey.err) return publicSharedKey
 
-    const import_AES_GCM_256 = CheckedError.withErr(importAESFromJWK, CryptoException.InvalidCryptoKey)
+    const import_AES_GCM_256 = CheckedError.withErr(importAES, CryptoException.InvalidCryptoKey)
     const decrypt = CheckedError.withErr(decryptWithAES, CryptoException.InvalidCryptoKey)
 
     const jwk_in_u8arr = await decrypt(publicSharedKey.val, iv.val, encryptedKey.val)

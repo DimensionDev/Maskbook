@@ -3,7 +3,7 @@ import { decodeTypedMessageFromDocument, decodeTypedMessageV38ToV40Format, Typed
 import { AESCryptoKey, EC_Public_CryptoKey, andThenAsync } from '@masknet/shared-base'
 import { None, Result } from 'ts-results'
 import type { PayloadParseResult } from '../payload'
-import { decryptWithAES, importAESFromJWK } from '../utils'
+import { decryptWithAES, importAES } from '../utils'
 import {
     DecryptOptions,
     DecryptIO,
@@ -244,7 +244,7 @@ function importAESKeyFromJWKFromTextEncoder(aes_raw: Uint8Array) {
         const aes_text = new TextDecoder().decode(aes_raw)
         const aes_jwk = JSON.parse(aes_text) as JsonWebKey
         if (!aes_jwk.key_ops!.includes('decrypt')) aes_jwk.key_ops!.push('decrypt')
-        return (await importAESFromJWK(aes_jwk)).unwrap()
+        return (await importAES(aes_jwk)).unwrap()
     })
 }
 

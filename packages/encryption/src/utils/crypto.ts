@@ -2,8 +2,14 @@ import { AESCryptoKey, CheckedError, EC_CryptoKey } from '@masknet/shared-base'
 import { Result, Ok } from 'ts-results'
 import { EC_KeyCurveEnum } from '../payload'
 import { CryptoException } from '../types'
-export function importAESFromJWK(key: JsonWebKey): Promise<Result<AESCryptoKey, unknown>> {
+export function importAES(key: JsonWebKey | Uint8Array): Promise<Result<AESCryptoKey, unknown>> {
     return Result.wrapAsync(() => {
+        if (key instanceof Uint8Array) {
+            return crypto.subtle.importKey('raw', key, { name: 'AES-GCM', length: 256 }, true, [
+                'encrypt',
+                'decrypt',
+            ]) as any
+        }
         return crypto.subtle.importKey('jwk', key, { name: 'AES-GCM', length: 256 }, true, [
             'encrypt',
             'decrypt',

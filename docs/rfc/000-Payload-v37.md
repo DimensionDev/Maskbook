@@ -155,7 +155,7 @@ type PublicEncrypted = [kind: EncryptionKind.Public, AES_KEY: AES_KEY, iv: Binar
 
 ###### `AES_KEY`
 
-This field represents the AES key (JsonWebKey.k) of this payload.
+This field represents the raw AES-256-GCM key (binary) of this payload.
 
 ###### `iv` field
 
