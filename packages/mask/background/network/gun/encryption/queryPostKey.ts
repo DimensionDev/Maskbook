@@ -104,7 +104,7 @@ namespace Version38Or39 {
                     if (result.status === 'rejected') continue
                     const { encryptedPostKey, target, ivToBePublished } = result.value
                     if (!ivToBePublished) throw new Error('Missing salt')
-                    const pub = await queryPublicKey(target, true)
+                    const pub = await queryPublicKey(target)
                     if (!pub) throw new Error('missing key')
                     const jwk = await CryptoKeyToJsonWebKey(pub)
                     const keyHash = await hashKey38(jwk)

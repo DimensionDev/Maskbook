@@ -150,14 +150,14 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
                 return Array.from((await deriveAESByECDH(pub)).values())
             },
             queryAuthorPublicKey(author, signal) {
-                return queryPublicKey(author || authorHint, false, signal)
+                return queryPublicKey(author || authorHint)
             },
             // TODO: get a gun instance
             async *queryPostKey_version37() {
                 throw new Error('TODO')
             },
             async *queryPostKey_version38(iv, signal) {
-                const author = await queryPublicKey(context.currentProfile, true)
+                const author = await queryPublicKey(context.currentProfile)
                 if (!author)
                     throw new DecryptError(DecryptErrorReasons.CurrentProfileDoesNotConnectedToPersona, undefined)
                 yield* GUN_queryPostKey_version39Or38(
@@ -169,7 +169,7 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
                 )
             },
             async *queryPostKey_version39(iv, signal) {
-                const author = await queryPublicKey(context.currentProfile, true)
+                const author = await queryPublicKey(context.currentProfile)
                 if (!author)
                     throw new DecryptError(DecryptErrorReasons.CurrentProfileDoesNotConnectedToPersona, undefined)
                 yield* GUN_queryPostKey_version39Or38(

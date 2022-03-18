@@ -198,7 +198,7 @@ export async function createProfileWithPersona(
 }
 // #endregion
 
-export async function queryPublicKey(author: ProfileIdentifier | null, extractable = false, signal?: AbortSignal) {
+export async function queryPublicKey(author: ProfileIdentifier | null) {
     if (!author) return null
     const persona = await queryPersonaByProfileDB(author)
     if (!persona) return null
@@ -206,7 +206,7 @@ export async function queryPublicKey(author: ProfileIdentifier | null, extractab
         'jwk',
         persona.publicKey,
         { name: 'ECDH', namedCurve: persona.publicKey.crv! } as EcKeyAlgorithm,
-        extractable,
+        true,
         ['deriveKey'],
     )) as EC_Public_CryptoKey
 }
