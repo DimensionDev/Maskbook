@@ -98,10 +98,8 @@ export class AAVEProtocol implements SavingsProtocol {
         }
     }
 
-  
     public async updateBalance(chainId: ChainId, web3: Web3, account: string) {
         try {
-
             const subgraphUrl = getAaveConstants(chainId).AAVE_SUBGRAPHS || ''
 
             if (!subgraphUrl) {
@@ -127,27 +125,22 @@ export class AAVEProtocol implements SavingsProtocol {
                 headers: { 'Content-Type': 'application/json' },
                 body: body,
             })
-            
+
             const fullResponse: {
                 data: {
-                    reserves: {                        
+                    reserves: {
                         aToken: {
                             id: string
                         }
                     }[]
                 }
             } = await response.json()
-            
-            const aTokenId = fullResponse.data.reserves[0].aToken.id;
-            const contract = createContract<ERC20>(
-                web3,
-                aTokenId || ZERO_ADDRESS,
-                ERC20ABI as AbiItem[],
-            )
+
+            const aTokenId = fullResponse.data.reserves[0].aToken.id
+            const contract = createContract<ERC20>(web3, aTokenId || ZERO_ADDRESS, ERC20ABI as AbiItem[])
             this._balance = new BigNumber((await contract?.methods.balanceOf(account).call()) ?? '0')
-            
         } catch (error) {
-            console.error('AAVE BALANCE ERROR: ',error)
+            console.error('AAVE BALANCE ERROR: ', error)
             this._balance = ZERO
         }
     }
@@ -161,7 +154,7 @@ export class AAVEProtocol implements SavingsProtocol {
 
             return new BigNumber(gasEstimate || 0)
         } catch (error) {
-            console.error('AAVE DEPOSITESTIMATE ERROR: ',error)
+            console.error('AAVE deposit estimate ERROR: ', error)
             return ZERO
         }
     }
