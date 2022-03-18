@@ -118,7 +118,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     settings_setLanguage: ({ language }) => Services.Settings.setLanguage(language),
     settings_createBackupJson: (options) => Services.Welcome.generateBackupJSON(options),
     settings_getBackupPreviewInfo: async ({ backupInfo }) => {
-        const data = Services.Welcome.parseBackupStr(backupInfo)
+        const data = await Services.Welcome.parseBackupStr(backupInfo)
         return data?.info
     },
     settings_restoreBackup: ({ backupInfo }) => {
@@ -288,10 +288,6 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
             createdAt: x.createdAt.getTime(),
             updatedAt: x.updatedAt.getTime(),
         }))
-    },
-    async SNSAdaptor_getCurrentDetectedProfile() {
-        const { activatedSocialNetworkUI } = await import('../../social-network')
-        return activatedSocialNetworkUI.collecting.identityProvider?.recognized.value.identifier.toText()
     },
     get_all_indexedDB_records: async () => {
         const personas = await Services.Identity.queryPersonaRecordsFromIndexedDB()

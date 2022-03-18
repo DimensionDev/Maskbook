@@ -1,9 +1,8 @@
-import { Suspense, useMemo } from 'react'
-import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
-import { extractTextFromTypedMessage, parseURL } from '@masknet/shared-base'
-import { SnackbarContent } from '@mui/material'
+import { useMemo } from 'react'
+import { Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra'
+import { extractTextFromTypedMessage } from '@masknet/typed-message'
+import { parseURL } from '@masknet/shared-base'
 import { base } from '../base'
-import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { PoolView } from '../UI/PoolView'
 import { InvestDialog } from '../UI/InvestDialog'
 import { createMatchLink } from '../constants'
@@ -49,11 +48,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
 export default sns
 
 function Renderer(props: React.PropsWithChildren<{ link: string; address: string }>) {
-    return (
-        <MaskPluginWrapper pluginName="dHEDGE">
-            <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
-                <PoolView address={props.address} link={props.link} />
-            </Suspense>
-        </MaskPluginWrapper>
-    )
+    usePluginWrapper(true)
+    return <PoolView address={props.address} link={props.link} />
 }

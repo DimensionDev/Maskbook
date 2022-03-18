@@ -1,16 +1,18 @@
 import { useState } from 'react'
 import { createContainer } from 'unstated-next'
 import { OrderSide } from 'opensea-js/lib/types'
+import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 import { CollectibleTab, CollectibleToken } from '../types'
 import { useAsset, useHistory, useOrders } from '../../EVM/hooks'
 import { useAssetOrder } from './useAssetOrder'
-import { useValueRef } from '@masknet/shared'
-import { currentNonFungibleAssetProviderSettings } from '../settings'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+// Make TypeScript happy
+type T = AsyncStateRetry<CollectibleToken | null>
 
 function useCollectibleState(token?: CollectibleToken) {
     const [tabIndex, setTabIndex] = useState(CollectibleTab.ARTICLE)
 
-    const provider = useValueRef(currentNonFungibleAssetProviderSettings)
+    const [provider, setProvider] = useState(NonFungibleAssetProvider.OPENSEA)
 
     const asset = useAsset(token?.contractAddress ?? '', token?.tokenId ?? '', provider)
 
@@ -56,9 +58,10 @@ function useCollectibleState(token?: CollectibleToken) {
     return {
         token,
         asset,
-        provider,
-
         assetOrder,
+
+        provider,
+        setProvider,
 
         tabIndex,
         setTabIndex,

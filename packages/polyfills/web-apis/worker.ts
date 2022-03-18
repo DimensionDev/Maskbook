@@ -1,1 +1,1 @@
-import './implementation/EventTarget.constructor'
+export {}

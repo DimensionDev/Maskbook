@@ -2,7 +2,7 @@ import { memo, useCallback } from 'react'
 import { Button, List } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress, ProviderType, useWallet, useWallets, useWalletPrimary } from '@masknet/web3-shared-evm'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
@@ -10,6 +10,8 @@ import { useCopyToClipboard } from 'react-use'
 import { NetworkSelector } from '../../../components/NetworkSelector'
 import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
 import { WalletItem } from './WalletItem'
+import { MAX_WALLET_LIMIT } from '@masknet/shared'
+import classNames from 'classnames'
 
 const useStyles = makeStyles()({
     header: {
@@ -72,6 +74,10 @@ const useStyles = makeStyles()({
         fontSize: 14,
         lineHeight: '20px',
     },
+    secondaryButton: {
+        backgroundColor: '#F7F9FA',
+        color: '#1C68F3',
+    },
 })
 
 const SwitchWallet = memo(() => {
@@ -79,7 +85,7 @@ const SwitchWallet = memo(() => {
     const walletPrimary = useWalletPrimary()
     const { classes } = useStyles()
 
-    const history = useHistory()
+    const navigate = useNavigate()
     const wallet = useWallet()
     const wallets = useWallets(ProviderType.MaskWallet)
 
@@ -92,7 +98,7 @@ const SwitchWallet = memo(() => {
                 url: browser.runtime.getURL('/dashboard.html#/create-mask-wallet'),
             })
         } else {
-            history.push(PopupRoutes.CreateWallet)
+            navigate(PopupRoutes.CreateWallet)
         }
     }, [walletPrimary, history])
 
@@ -105,7 +111,7 @@ const SwitchWallet = memo(() => {
             if (currentProviderSettings.value === ProviderType.MaskWallet)
                 await WalletRPC.updateAccount({ account: address, providerType: ProviderType.MaskWallet })
 
-            history.replace(PopupRoutes.Wallet)
+            navigate(PopupRoutes.Wallet, { replace: true })
         },
         [history],
     )
@@ -137,15 +143,16 @@ const SwitchWallet = memo(() => {
             <div className={classes.controller}>
                 <Button
                     variant="contained"
-                    className={classes.button}
-                    onClick={handleClickCreate}
-                    style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}>
+                    className={classNames(classes.button, classes.secondaryButton)}
+                    disabled={wallets.length >= MAX_WALLET_LIMIT}
+                    onClick={handleClickCreate}>
                     {t('create')}
                 </Button>
                 <Button
                     variant="contained"
+                    disabled={wallets.length >= MAX_WALLET_LIMIT}
                     className={classes.button}
-                    onClick={() => history.push(PopupRoutes.ImportWallet)}>
+                    onClick={() => navigate(PopupRoutes.ImportWallet)}>
                     {t('import')}
                 </Button>
             </div>

@@ -1,16 +1,15 @@
 import { useState, useCallback } from 'react'
-import { useHistory } from 'react-router-dom'
 import { Button, DialogActions, DialogContent } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { ProviderType, useWallets, useWallet, NetworkType } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared'
-import { DashboardRoutes, delay } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../utils'
 import { WalletMessages, WalletRPC } from '../messages'
 import { WalletInList } from '../../../components/shared/SelectWallet/WalletInList'
 import Services from '../../../extension/service'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
+import { delay } from '@dimensiondev/kit'
 
 const useStyles = makeStyles()({
     content: {
@@ -49,12 +48,10 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     )
 
     // #region create new wallet
-    const history = useHistory()
     const onCreate = useCallback(async () => {
         closeDialog()
         await delay(100)
-        if (isEnvironment(Environment.ManifestOptions)) history.push('')
-        else await Services.Welcome.openOptionsPage(DashboardRoutes.CreateMaskWallet, `create=${Date.now()}`)
+        await Services.Welcome.openOptionsPage(DashboardRoutes.CreateMaskWallet, `create=${Date.now()}`)
     }, [history, closeDialog])
     // #endregion
 

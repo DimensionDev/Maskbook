@@ -35,8 +35,10 @@ async function fetchFromOpenSea<T>(url: string, chainId: ChainId, apiKey?: strin
             headers: { 'x-api-key': apiKey ?? OPENSEA_API_KEY, Accept: 'application/json' },
             ...(!isProxyENV() && { mode: 'cors' }),
         })
-        if (response.status === 404) return
-        return response.json() as Promise<T>
+        if (response.ok) {
+            return (await response.json()) as T
+        }
+        return
     } catch {
         return
     }
@@ -63,7 +65,7 @@ function createERC721TokenFromAsset(
     chainId: ChainId,
     asset: OpenSeaResponse,
 ): ERC721TokenDetailed {
-    const imageURL = asset?.image_url ?? asset?.image_preview_url ?? ''
+    const imageURL = asset?.image_preview_url ?? asset?.image_url ?? ''
     return createERC721Token(
         createERC721ContractFromAssetContract(asset?.asset_contract?.address, chainId, asset?.asset_contract),
         {
@@ -276,15 +278,16 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
             limit: size,
             collection: opts.pageInfo?.collection,
         })
-        const response = await fetchFromOpenSea<{ assets: OpenSeaResponse[] }>(requestPath, chainId, this._apiKey)
+        const response = await fetchFromOpenSea<{ assets?: OpenSeaResponse[] }>(requestPath, chainId, this._apiKey)
         const assets =
             response?.assets
-                .filter(
+                ?.filter(
                     (x: OpenSeaResponse) =>
                         ['non-fungible', 'semi-fungible'].includes(x.asset_contract.asset_contract_type) ||
                         ['ERC721', 'ERC1155'].includes(x.asset_contract.schema_name),
                 )
-                .map((asset: OpenSeaResponse) => createERC721TokenFromAsset(from, asset.token_id, chainId, asset)) ?? []
+                .map((asset: OpenSeaResponse) => createERC721TokenFromAsset(from, asset.token_id, chainId, asset))
+                .map((x) => ({ ...x, provideBy: 'OpenSea' })) ?? []
         return {
             data: assets,
             hasNextPage: assets.length === size,
@@ -305,7 +308,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
         const response = await fetchFromOpenSea<{
             asset_events: OpenSeaAssetEvent[]
         }>(requestPath, chainId)
-        return response?.asset_events.map(createNFTHistory) ?? []
+        return response?.asset_events?.map(createNFTHistory) ?? []
     }
 
     async getOrders(

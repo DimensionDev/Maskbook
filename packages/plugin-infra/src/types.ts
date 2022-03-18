@@ -1,13 +1,8 @@
 /* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
-import type {
-    TypedMessage,
-    TypedMessageTuple,
-    ScopedStorage,
-    ProfileIdentifier,
-    PersonaIdentifier,
-} from '@masknet/shared-base'
+import type { TypedMessage } from '@masknet/typed-message'
+import type { ScopedStorage, ProfileIdentifier, PersonaIdentifier } from '@masknet/shared-base'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
 import type { Subscription } from 'use-subscription'
@@ -145,13 +140,7 @@ export namespace Plugin.Shared {
          */
         init(signal: AbortSignal, context: Context): void | Promise<void>
     }
-    export interface Utilities {
-        /**
-         * A pure function that convert a TypedMessage into another one
-         */
-        typedMessageTransformer?: TypedMessageTransformer
-    }
-    export type TypedMessageTransformer = (message: TypedMessageTuple) => TypedMessageTuple
+    export interface Utilities {}
     /** The publisher of the plugin */
     export interface Publisher {
         /** The name of the publisher */
@@ -237,6 +226,8 @@ export namespace Plugin.SNSAdaptor {
     export interface Definition extends Shared.DefinitionDeferred<SNSAdaptorContext> {
         /** This UI will be rendered for each post found. */
         PostInspector?: InjectUI<{}>
+        /** This UI will be rendered for action of each post found. */
+        PostActions?: InjectUI<{}>
         /** This UI will be rendered for each decrypted post. */
         DecryptedInspector?: InjectUI<{ message: TypedMessage }>
         /** This UI will be rendered under the Search of the SNS. */
@@ -259,6 +250,13 @@ export namespace Plugin.SNSAdaptor {
         ProfileSliders?: ProfileSlider[]
         /** This UI will be rendered as tabs on the profile page */
         ProfileTabs?: ProfileTab[]
+        /**
+         * A hook for if this plugin can enhance the #hash or $cash tag.
+         */
+        enhanceTag?: {
+            onClick?: (kind: 'cash' | 'hash', content: string, event: React.MouseEvent<HTMLAnchorElement>) => void
+            onHover?: (kind: 'cash' | 'hash', content: string, event: React.MouseEvent<HTMLAnchorElement>) => () => void
+        }
     }
     // #region Composition entry
     /**
@@ -412,7 +410,7 @@ export namespace Plugin.SNSAdaptor {
             /**
              * If it returns false, this tab will not be displayed.
              */
-            shouldDisplay?: (identity?: ProfileIdentity, addressNames?: ProfileAddress[]) => boolean
+            shouldDisplay?(identity?: ProfileIdentity, addressNames?: ProfileAddress[]): boolean
 
             /**
              * Sort address name in expected order.
@@ -692,6 +690,7 @@ export enum CurrentSNSNetwork {
  */
 export enum PluginId {
     Avatar = 'com.maskbook.avatar',
+    ArtBlocks = 'io.artblocks',
     Collectible = 'com.maskbook.collectibles',
     CryptoArtAI = 'com.maskbook.cryptoartai',
     dHEDGE = 'org.dhedge',
@@ -705,6 +704,7 @@ export enum PluginId {
     Poll = 'com.maskbook.poll',
     Profile = 'com.mask.profile',
     Trader = 'com.maskbook.trader',
+    Tip = 'com.maskbook.tip',
     Transak = 'com.maskbook.transak',
     Valuables = 'com.maskbook.tweet',
     DAO = 'money.juicebox',
@@ -713,6 +713,7 @@ export enum PluginId {
     Flow = 'com.mask.flow',
     RSS3 = 'bio.rss3',
     RedPacket = 'com.maskbook.red_packet',
+    RedPacketNFT = 'com.maskbook.red_packet_nft',
     Pets = 'com.maskbook.pets',
     Snapshot = 'org.snapshot',
     ITO = 'com.maskbook.ito',
@@ -720,6 +721,8 @@ export enum PluginId {
     PoolTogether = 'com.pooltogether',
     UnlockProtocol = 'com.maskbook.unlockprotocol',
     FileService = 'com.maskbook.fileservice',
+    CyberConnect = 'me.cyberconnect.app',
+    // @masknet/scripts: insert-here
 }
 
 export interface Pagination {
@@ -741,19 +744,9 @@ export interface Pageable<T> {
 export namespace Plugin.__Host {
     export interface Host<Context = undefined> {
         /**
-         * Control if the plugin is enabled or not.
-         *
-         * Note: This API currently is not in use.
-         *
-         * The "enabled/disabled" UI in the dashboard actually reflects to the "minimalMode" below.
-         */
-        enabled: EnabledStatusReporter
-        /**
          * Control if the plugin is in the minimal mode.
          *
          * If it is in the minimal mode, it will be omitted in some cases.
-         *
-         * Plugin can use
          */
         minimalMode: EnabledStatusReporter
         addI18NResource(pluginID: string, resources: Plugin.Shared.I18NResource): void

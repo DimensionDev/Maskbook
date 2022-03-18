@@ -19,8 +19,8 @@ This section is going to help you to set up the development environment of Mask 
 
 To develop Mask Network, you need to have ...
 
-- Node 15 or higher
-- [pnpm](https://pnpm.js.org) 5+
+- Node 16 or higher
+- [pnpm](https://pnpm.js.org) 6.32.1
 
 ## Development
 

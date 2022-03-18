@@ -1,9 +1,8 @@
-import { Suspense, useMemo } from 'react'
-import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
-import { SnackbarContent } from '@mui/material'
+import { useMemo } from 'react'
+import { Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra'
 import { base } from '../base'
-import { extractTextFromTypedMessage, parseURL } from '@masknet/shared-base'
-import MaskPluginWrapper from '../../MaskPluginWrapper'
+import { extractTextFromTypedMessage } from '@masknet/typed-message'
+import { parseURL } from '@masknet/shared-base'
 import { FurucomboView } from '../UI/FurucomboView'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
@@ -31,15 +30,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
 
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     const [, category, chainId, address] = props.url.match(matchLink) ?? []
-
+    usePluginWrapper(true)
     return (
-        <MaskPluginWrapper pluginName="Furucombo">
-            <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
-                <EthereumChainBoundary chainId={Number.parseInt(chainId, 10)}>
-                    <FurucomboView category={category} address={address} />
-                </EthereumChainBoundary>
-            </Suspense>
-        </MaskPluginWrapper>
+        <EthereumChainBoundary chainId={Number.parseInt(chainId, 10)}>
+            <FurucomboView category={category} address={address} />
+        </EthereumChainBoundary>
     )
 }
 

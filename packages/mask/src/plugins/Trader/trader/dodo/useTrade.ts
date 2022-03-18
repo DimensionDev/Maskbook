@@ -7,11 +7,12 @@ import {
     useTraderConstants,
 } from '@masknet/web3-shared-evm'
 import { PluginTraderRPC } from '../../messages'
-import type { TradeStrategy } from '../../types'
+import type { SwapRouteData, TradeStrategy } from '../../types'
 import { useSlippageTolerance } from './useSlippageTolerance'
 import { first } from 'lodash-unified'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { useDoubleBlockBeatRetry } from '@masknet/plugin-infra'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 
 export function useTrade(
     strategy: TradeStrategy,
@@ -20,7 +21,7 @@ export function useTrade(
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
     temporarySlippage?: number,
-) {
+): AsyncStateRetry<SwapRouteData | null> {
     const slippageSetting = useSlippageTolerance()
     const slippage = temporarySlippage || slippageSetting
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()

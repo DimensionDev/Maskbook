@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { MaskWalletIcon } from '@masknet/icons'
 import { Typography } from '@mui/material'
@@ -59,7 +59,7 @@ const Unlock = memo(() => {
     const location = useLocation()
     const [password, setPassword] = useState('')
 
-    const history = useHistory()
+    const navigate = useNavigate()
 
     const [{ value: verified, loading }, handleUnlock] = useAsyncFn(async () => {
         return WalletRPC.unlockWallet(password)
@@ -70,7 +70,7 @@ const Unlock = memo(() => {
     useAsync(async () => {
         if (!(isLocked === false && !getLockStatusLoading)) return
         const from = new URLSearchParams(location.search).get('from')
-        history.replace({ pathname: from ?? PopupRoutes.Wallet, search: location.search })
+        navigate({ pathname: from ?? PopupRoutes.Wallet, search: location.search }, { replace: true })
     }, [isLocked, getLockStatusLoading, location.search])
 
     return (

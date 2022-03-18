@@ -1,7 +1,6 @@
 import '../utils/debug/general'
 import '../utils/debug/ui'
 import Services from '../extension/service'
-import { untilDomLoaded } from '../utils/dom'
 import { Flags, InMemoryStorages, PersistentStorages } from '../../shared'
 import i18nNextInstance from '../../shared-ui/locales_legacy'
 import type { SocialNetworkUI } from './types'
@@ -11,9 +10,9 @@ import type { SetupGuideCrossContextStatus } from '../settings/types'
 import {
     ECKeyIdentifier,
     Identifier,
-    delay,
     createSubscriptionFromAsync,
     PersonaIdentifier,
+    EnhanceableSite,
 } from '@masknet/shared-base'
 import { Environment, assertNotEnvironment } from '@dimensiondev/holoflows-kit'
 import { startPluginSNSAdaptor } from '@masknet/plugin-infra'
@@ -21,6 +20,8 @@ import { getCurrentSNSNetwork } from '../social-network-adaptor/utils'
 import { createPluginHost } from '../plugin-infra/host'
 import { definedSocialNetworkUIs } from './define'
 import { setupShadowRootPortal, MaskMessages } from '../utils'
+import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
+import { SocialNetworkEnum } from '@masknet/encryption'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
@@ -36,8 +37,8 @@ export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
         throw new Error()
     },
     injection: {},
-    networkIdentifier: 'localhost',
-    name: '',
+    encryptionNetwork: SocialNetworkEnum.Unknown,
+    networkIdentifier: EnhanceableSite.Localhost,
     shouldActivate: () => false,
     utils: { createPostContext: null! },
     notReadyForProduction: true,
@@ -65,7 +66,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             activateSocialNetworkUIInner(ui_deferred)
         })
     }
-    await untilDomLoaded()
+    await waitDocumentReadyState('interactive')
 
     i18nOverwrite()
     const state = await ui.init(signal)
@@ -94,7 +95,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.injection.enhancedProfileNFTAvatar?.(signal)
     ui.injection.openNFTAvatar?.(signal)
     ui.injection.postAndReplyNFTAvatar?.(signal)
-    ui.injection.collectionAvatar?.(signal)
     ui.injection.avatarClipNFT?.(signal)
 
     startPluginSNSAdaptor(
@@ -135,8 +135,18 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     function $unknownIdentityResolution() {
         const provider = ui.collecting.identityProvider
-        provider?.start(signal)
-        if (provider?.hasDeprecatedPlaceholderName) {
+        if (!provider) return
+        provider.start(signal)
+        provider.recognized.addListener((newValue, oldValue) => {
+            if (document.visibilityState === 'hidden') return
+            if (newValue.identifier.equals(oldValue.identifier)) return
+            if (newValue.identifier.isUnknown) return
+
+            MaskMessages.events.Native_visibleSNS_currentDetectedProfileUpdated.sendToBackgroundPage(
+                newValue.identifier.toText(),
+            )
+        })
+        if (provider.hasDeprecatedPlaceholderName) {
             provider.recognized.addListener((id) => {
                 if (signal.aborted) return
                 if (id.identifier.isUnknown) return
@@ -157,6 +167,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             const { signal: postSignal } = abort
             ui.injection.enhancedPostRenderer?.(postSignal, value)
             ui.injection.postInspector?.(postSignal, value)
+            ui.injection.postActions?.(postSignal, value)
             ui.injection.commentComposition?.compositionBox(postSignal, value)
             ui.injection.commentComposition?.commentInspector(postSignal, value)
         })

@@ -6,6 +6,7 @@
     "tsBuildInfoFile": "./dist/src.tsbuildinfo"
   },
   "include": ["./src", "./src/**/*.json"],
+  "exclude": ["./src/initialization/plugins.js"],
   "references": [
     { "path": "../public-api" },
     { "path": "../theme/" },
@@ -13,11 +14,13 @@
     { "path": "../web3-shared/base/" },
     { "path": "../web3-shared/evm/" },
     { "path": "../web3-shared/flow/" },
+    { "path": "../web3-providers" },
     { "path": "../icons/" },
     { "path": "../plugin-infra" },
     { "path": "../plugins/Flow/" },
     { "path": "../plugins/Wallet/" },
     { "path": "../backup-format/" },
-    { "path": "../shared-base" }
+    { "path": "../shared-base" },
+    { "path": "../shared-base-ui" }
   ]
 }

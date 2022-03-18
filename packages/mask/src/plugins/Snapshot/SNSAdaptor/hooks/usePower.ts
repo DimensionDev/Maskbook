@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { useAccount, useBlockNumber } from '@masknet/web3-shared-evm'
+import { useAccount } from '@masknet/web3-shared-evm'
 import { PluginSnapshotRPC } from '../../messages'
 import type { ProposalIdentifier } from '../../types'
 import { useProposal } from './useProposal'
@@ -9,14 +9,12 @@ export function usePower(identifier: ProposalIdentifier) {
     const { payload: proposal } = useProposal(identifier.id)
 
     const account = useAccount()
-    const { value: blockNumber = 0 } = useBlockNumber()
     return useAsyncRetry(async () => {
         if (!account) return 0
         return (
             await PluginSnapshotRPC.getScores(
                 proposal.snapshot,
                 [account],
-                blockNumber,
                 proposal.network,
                 identifier.space,
                 proposal.strategies,
@@ -26,5 +24,5 @@ export function usePower(identifier: ProposalIdentifier) {
             .reduce((acc, cur) => {
                 return acc + (cur[account.toLowerCase()] ?? 0)
             }, 0)
-    }, [blockNumber, account])
+    }, [account])
 }

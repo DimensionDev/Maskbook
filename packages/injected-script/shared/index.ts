@@ -17,7 +17,7 @@ export interface InternalEvents {
      * How to use:
      * Call this event, then invoke the file selector (SNS). It will invoke click on some input, then let's replace with the result.
      */
-    hookInputUploadOnce: [format: string, fileName: string, file: number[]]
+    hookInputUploadOnce: [format: string, fileName: string, file: number[], triggerOnActiveElementNow: boolean]
 
     // #region Eth inpage provider bridge
     /** Request the bridge to listen on an event. */

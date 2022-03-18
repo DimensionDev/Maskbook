@@ -1,5 +1,7 @@
 # Payload version -37
 
+<!-- markdownlint-disable no-duplicate-heading -->
+
 ## Design target
 
 - MUST be a binary format.
@@ -89,8 +91,7 @@ enum PublicKeyAlgorithmEnum {
 
 This field represents the format version.
 
-The first and the current binary version is `-37`.
-The implementation MUST fail when the version is less than `-37` (e.g. `-38`).
+The first and the current binary version is `0`.
 
 #### `authorNetwork` field
 

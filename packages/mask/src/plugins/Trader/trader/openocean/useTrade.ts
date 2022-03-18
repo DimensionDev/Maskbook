@@ -8,11 +8,12 @@ import {
     useTraderConstants,
 } from '@masknet/web3-shared-evm'
 import { PluginTraderRPC } from '../../messages'
-import type { TradeStrategy } from '../../types'
+import type { SwapOOData, TradeStrategy } from '../../types'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { useSlippageTolerance } from './useSlippageTolerance'
 import { OPENOCEAN_SUPPORTED_CHAINS } from './constants'
 import { useDoubleBlockBeatRetry } from '@masknet/plugin-infra'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 
 export function useTrade(
     strategy: TradeStrategy,
@@ -21,7 +22,7 @@ export function useTrade(
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
     temporarySlippage?: number,
-) {
+): AsyncStateRetry<SwapOOData | null> {
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const slippageSetting = useSlippageTolerance()
     const slippage = temporarySlippage || slippageSetting

@@ -66,7 +66,7 @@ export function FortmaticProviderBridge(props: FortmaticProviderBridgeProps) {
                         handleResponse(null, await provider.send(payload.method, payload.params))
                         break
                 }
-            } catch (error: unknown) {
+            } catch (error) {
                 handleResponse(error)
             }
         })
