@@ -93,7 +93,7 @@
     "json2csv": "^5.0.6",
     "millify": "^4.0.0",
     "next-tick": "^1.0.0",
-    "opensea-js": "^1.2.7",
+    "opensea-js": "2.0.1-beta.5",
     "promievent": "^0.1.4",
     "protobufjs": "^6.11.2",
     "react-draggable": "^4.4.4",

@@ -95,6 +95,7 @@ export interface ActionButtonPromiseProps extends ButtonProps {
     noUpdateEffect?: boolean
 }
 type ActionButtonPromiseState = 'init' | 'complete' | 'wait' | 'fail'
+
 export function ActionButtonPromise(props: ActionButtonPromiseProps) {
     const { classes } = useStyles()
     const {

@@ -1,11 +1,5 @@
 import type { OpenSeaPort } from 'opensea-js'
-import type {
-    AssetContractType,
-    AuctionType,
-    OpenSeaAccount,
-    TokenStandardVersion,
-    WyvernSchemaName,
-} from 'opensea-js/lib/types'
+import type { AssetContractType, OpenSeaAccount, TokenStandardVersion, WyvernSchemaName } from 'opensea-js/lib/types'
 
 export type CreateSellOrderPayload = Parameters<OpenSeaPort['createSellOrder']>[0]
 
@@ -34,15 +28,10 @@ export interface OpenSeaCustomCollection extends OpenSeaCollection {
     slug: string
 }
 
-interface AssetToken {
-    address: string
-    decimals: number
-    eth_price: string
-    id: number
-    image_url: string
-    name: string
-    symbol: string
-    usd_price: string
+export enum AuctionType {
+    Dutch = 'dutch',
+    English = 'english',
+    MinPrice = 'min_price',
 }
 
 export enum OpenSeaAssetEventType {

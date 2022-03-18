@@ -142,7 +142,7 @@ function createNFTAsset(asset: OpenSeaResponse, chainId: ChainId): NonFungibleTo
             link: createAssetLink(asset.creator),
         },
         token_id: asset.token_id,
-        token_address: asset.token_address,
+        token_address: asset.asset_contract.address || asset.token_address,
         traits: asset.traits,
         safelist_request_status: asset.collection?.safelist_request_status ?? '',
         description: asset.description,

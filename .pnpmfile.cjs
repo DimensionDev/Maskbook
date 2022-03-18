@@ -13,11 +13,8 @@ const approvedList = new Map([
             'https://github.com/ProjectWyvern/ethereumjs-abi.git',
         ],
     ],
-    [
-        'wyvern-js',
-        ['git+https://github.com/ProjectOpenSea/wyvern-js.git#v3.2.1', 'github:ProjectOpenSea/wyvern-js#semver:^3.2.1'],
-    ],
-    ['wyvern-schemas', 'git+https://github.com/ProjectOpenSea/wyvern-schemas.git#v0.13.1'],
+    ['wyvern-js', ['git+https://github.com/ProjectOpenSea/wyvern-js.git#josh/package-lock-npm']],
+    ['wyvern-schemas', ['git+https://github.com/ProjectOpenSea/wyvern-schemas.git#josh/package-lock-npm2']],
     /* cspell:disable-next-line */
     ['async-eventemitter', 'github:ahultgren/async-eventemitter#fa06e39e56786ba541c180061dbf2c0a5bbf951c'],
     // opensea-js (v1), (and more, run `pnpm -r why web3@0.20.7`) -> web3
@@ -69,8 +66,8 @@ function validatePackage({ dependencies, devDependencies, optionalDependencies, 
 function lockPackage(pkg) {
     if (pkg.name === 'opensea-js') {
         const prefix = 'git+https://github.com/ProjectOpenSea/wyvern-'
-        pkg.dependencies['wyvern-js'] = `${prefix}js.git#fabb7660f23f2252c141077e32193d281036299e`
-        pkg.dependencies['wyvern-schemas'] = `${prefix}schemas.git#e1a08fcf8ce2b11a0fe9cbdc7c9f77c59fadef26`
+        pkg.dependencies['wyvern-js'] = `${prefix}js.git#a106e07cc5974ca295d25cf9be6f78e61b54d380`
+        pkg.dependencies['wyvern-schemas'] = `${prefix}schemas.git#db45776f81586494e036fe7f23abc63be3abc9c2`
     }
 }
 

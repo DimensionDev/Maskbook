@@ -23,7 +23,7 @@ export const OpenSeaAccountURL = 'https://opensea.io/accounts/'
 export const OpenSeaTraitURL =
     '/assets/known-origin?search[stringTraits][0][name]=Tag&search[stringTraits][0][values][0]='
 export const NullAddress = 'NullAddress'
-export const ReferrerAddress = ''
+export const ReferrerAddress = '0x934B510D4C9103E6a87AEf13b816fb080286D649'
 export const OpenSeaMainnetURL = 'https://opensea.io'
 export const OpenSeaTestnetURL = 'https://testnets.opensea.io'
 

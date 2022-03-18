@@ -111,7 +111,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
             expirationTime: !isAuction ? getUnixTime(expirationDateTime) : undefined,
             paymentTokenAddress: token.value.type === EthereumTokenType.Native ? undefined : token.value.address,
         })
-    }, [asset?.value, token, account, amount, expirationDateTime, isAuction])
+    }, [asset?.value, token.value, account, amount, expirationDateTime, isAuction])
 
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
