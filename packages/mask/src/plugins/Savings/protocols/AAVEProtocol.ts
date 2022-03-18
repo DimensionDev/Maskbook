@@ -14,6 +14,8 @@ import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/typ
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
 import AaveLendingPoolABI from '@masknet/web3-contracts/abis/AaveLendingPool.json'
 import { ProtocolType, SavingsProtocol } from '../types'
+import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
+import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 
 export class AAVEProtocol implements SavingsProtocol {
     static DEFAULT_APR = '0.17'
@@ -96,80 +98,56 @@ export class AAVEProtocol implements SavingsProtocol {
         }
     }
 
+  
     public async updateBalance(chainId: ChainId, web3: Web3, account: string) {
         try {
+
             const subgraphUrl = getAaveConstants(chainId).AAVE_SUBGRAPHS || ''
-            const reserveBody = JSON.stringify({
+
+            if (!subgraphUrl) {
+                this._apr = AAVEProtocol.DEFAULT_APR
+                return
+            }
+
+            const body = JSON.stringify({
                 query: `{
                 reserves (where: {
                     underlyingAsset: "${this.bareToken.address}"
                     pool : "0xb53c1a33016b2dc2ff3653530bff1848a515c8c5"
                 }) {
                     id
-                    name
-                    underlyingAsset
-                }
-            }`,
+                    aToken {
+                      id
+                    }
+                    }
+                }`,
             })
-
-            const reserveResponse = await fetch(subgraphUrl, {
+            const response = await fetch(subgraphUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: reserveBody,
+                body: body,
             })
+            
             const fullResponse: {
                 data: {
-                    reserves: {
-                        id: string
-                        name: string
-                        decimals: number
-                        underlyingAsset: string
+                    reserves: {                        
+                        aToken: {
+                            id: string
+                        }
                     }[]
                 }
-            } = await reserveResponse.json()
-            const reserveId = fullResponse.data.reserves[0].id
-
-            // Get User Reserve
-            const userReserveBody = JSON.stringify({
-                query: `{
-                    userReserves(where: {
-                        user: "${account}",
-                        reserve: "${reserveId}"
-
-                        }) {
-                      id
-                      scaledATokenBalance
-                      currentATokenBalance
-                      reserve{
-                        id
-                        symbol
-                        underlyingAsset
-                        decimals
-                      }
-                      user {
-                        id
-                      }
-                    }
-                  }`,
-            })
-
-            const userReserveResponse = await fetch(subgraphUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: userReserveBody,
-            })
-
-            const userResponse: {
-                data: {
-                    userReserves: {
-                        scaledATokenBalance: string
-                        currentATokenBalance: string
-                    }[]
-                }
-            } = await userReserveResponse.json()
-
-            this._balance = new BigNumber(userResponse.data.userReserves[0].currentATokenBalance || '0')
+            } = await response.json()
+            
+            const aTokenId = fullResponse.data.reserves[0].aToken.id;
+            const contract = createContract<ERC20>(
+                web3,
+                aTokenId || ZERO_ADDRESS,
+                ERC20ABI as AbiItem[],
+            )
+            this._balance = new BigNumber((await contract?.methods.balanceOf(account).call()) ?? '0')
+            
         } catch (error) {
+            console.error('AAVE BALANCE ERROR: ',error)
             this._balance = ZERO
         }
     }
@@ -183,6 +161,7 @@ export class AAVEProtocol implements SavingsProtocol {
 
             return new BigNumber(gasEstimate || 0)
         } catch (error) {
+            console.error('AAVE DEPOSITESTIMATE ERROR: ',error)
             return ZERO
         }
     }
