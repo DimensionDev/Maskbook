@@ -1,6 +1,6 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { createContext, FC, useContext, useMemo } from 'react'
-import { useValueRef } from '../../hooks'
+import { useValueRef } from '@masknet/shared-base-ui'
 import type { SharedComponentOverwrite } from './types'
 
 export const sharedUINetworkIdentifier = new ValueRef('unknown')

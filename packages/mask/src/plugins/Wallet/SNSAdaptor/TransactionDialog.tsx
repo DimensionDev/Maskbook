@@ -9,8 +9,9 @@ import {
     TransactionStateType,
     resolveTransactionLinkOnExplorer,
 } from '@masknet/web3-shared-evm'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
-import { InjectedDialog, useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '../messages'
 
 const useStyles = makeStyles()((theme) => ({

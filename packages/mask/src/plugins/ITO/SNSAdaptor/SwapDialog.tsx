@@ -1,4 +1,5 @@
-import { useRemoteControlledDialog, usePickToken } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { usePickToken } from '@masknet/shared'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { leftShift, rightShift, ZERO } from '@masknet/web3-shared-base'
 import {

@@ -1,4 +1,5 @@
-import { isDashboardPage } from '@masknet/shared-base'
+import { EnhanceableSite, isDashboardPage } from '@masknet/shared-base'
+import { ErrorBoundary, useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, mergeClasses, useDialogStackActor, usePortalShadowRoot, useStylesExtends } from '@masknet/theme'
 import {
     Dialog,
@@ -14,10 +15,7 @@ import {
     useTheme,
 } from '@mui/material'
 import { Children, cloneElement } from 'react'
-import { FACEBOOK_ID, MINDS_ID } from '../../constants'
-import { useValueRef } from '../../hooks'
 import { useSharedI18N } from '../../locales'
-import { ErrorBoundary } from '../../UI'
 import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '../base'
 import { DialogDismissIcon } from './DialogDismissIcon'
 
@@ -65,7 +63,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
     const snsId = useValueRef(sharedUINetworkIdentifier)
     const overwrite = useValueRef(sharedUIComponentOverwrite)
     props = overwrite.InjectedDialog?.props?.(props) ?? props
-    const clean = snsId === MINDS_ID || snsId === FACEBOOK_ID
+    const clean = snsId === EnhanceableSite.Minds || snsId === EnhanceableSite.Facebook
     const {
         dialogActions,
         dialogCloseButton,

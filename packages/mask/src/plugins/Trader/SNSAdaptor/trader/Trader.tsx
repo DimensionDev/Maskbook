@@ -14,8 +14,10 @@ import {
     useFungibleTokenBalance,
     useTokenConstants,
     useWallet,
+    UST,
 } from '@masknet/web3-shared-evm'
-import { usePickToken, useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { usePickToken } from '@masknet/shared'
 import { delay } from '@dimensiondev/kit'
 import { useGasConfig } from './hooks/useGasConfig'
 import type { Coin } from '../../types'
@@ -23,7 +25,6 @@ import { TokenPanelType, TradeInfo } from '../../types'
 import { useI18N } from '../../../../utils'
 import { TradeForm } from './TradeForm'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
-import { UST } from '../../constants'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useUnmount, useUpdateEffect } from 'react-use'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'

@@ -3,7 +3,8 @@ import { Button, DialogContent, DialogActions, TextField } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { Wallet } from '@masknet/web3-shared-evm'
 import { WalletMessages, WalletRPC } from '../messages'
-import { InjectedDialog, useRemoteControlledDialog, useSnackbarCallback } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { InjectedDialog, useSnackbarCallback } from '@masknet/shared'
 import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles()((theme) => ({

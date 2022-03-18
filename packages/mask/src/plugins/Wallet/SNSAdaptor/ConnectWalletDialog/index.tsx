@@ -12,7 +12,8 @@ import {
     resolveNetworkName,
     resolveProviderName,
 } from '@masknet/web3-shared-evm'
-import { InjectedDialog, useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { InjectedDialog } from '@masknet/shared'
 import { WalletMessages, WalletRPC } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
 import Services from '../../../../extension/service'

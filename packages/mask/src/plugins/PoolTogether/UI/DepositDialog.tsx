@@ -1,4 +1,5 @@
-import { usePickToken, InjectedDialog, useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { usePickToken, InjectedDialog } from '@masknet/shared'
 import { keyframes, makeStyles } from '@masknet/theme'
 import { isZero, rightShift } from '@masknet/web3-shared-base'
 import {

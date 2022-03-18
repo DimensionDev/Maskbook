@@ -5,7 +5,7 @@ import { PluginTraderMessages } from '../../messages'
 import { WalletMessages } from '../../../Wallet/messages'
 import type { TagType } from '../../types'
 import type { DataProvider } from '@masknet/public-api'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginTransakMessages } from '../../../Transak/messages'
 
 export interface TrendingPopperProps {

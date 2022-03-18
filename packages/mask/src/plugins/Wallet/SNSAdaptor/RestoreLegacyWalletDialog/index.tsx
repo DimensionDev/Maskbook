@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { InjectedDialog, useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { InjectedDialog } from '@masknet/shared'
 import { Box } from '@mui/system'
 import { makeStyles } from '@masknet/theme'
 import { ProviderType } from '@masknet/web3-shared-evm'

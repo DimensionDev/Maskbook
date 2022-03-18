@@ -1,5 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { isGreaterThan, rightShift } from '@masknet/web3-shared-base'
+import { useCallback, useState } from 'react'
 import {
     ERC20TokenDetailed,
     EthereumTokenType,
@@ -11,7 +12,6 @@ import {
     useITOConstants,
 } from '@masknet/web3-shared-evm'
 import { Link, Typography } from '@mui/material'
-import { useCallback, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { usePickToken } from '@masknet/shared'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'

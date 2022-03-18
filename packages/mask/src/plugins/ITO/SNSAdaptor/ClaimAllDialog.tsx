@@ -3,7 +3,8 @@ import { useCallback, useEffect, useState, useLayoutEffect, useRef } from 'react
 import { flatten, uniq } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
 import { SnackbarProvider, makeStyles } from '@masknet/theme'
-import { InjectedDialog, FormattedBalance, useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { InjectedDialog, FormattedBalance } from '@masknet/shared'
 import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@mui/material'
 import {
     formatBalance,
@@ -364,6 +365,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                     chainId={chainId}
                                     classes={{ switchButton: classes.claimAllButton }}
                                     noSwitchNetworkTip
+                                    disablePadding
                                     switchButtonStyle={{
                                         minHeight: 'auto',
                                         width: '100%',
@@ -389,7 +391,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                                         TransactionStateType.WAIT_FOR_CONFIRMING,
                                                     ].includes(claimState.type)
                                                 }
-                                                size="large"
+                                                size="small"
                                                 onClick={onClaimButtonClick}>
                                                 {t('plugin_ito_claim_all')}
                                             </ActionButton>

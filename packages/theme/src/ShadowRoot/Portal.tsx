@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useRef, forwardRef, createContext, useContext } from 'react'
+import { useRef, forwardRef, useContext } from 'react'
 import type { PopperProps } from '@mui/material'
-import { PreventEventPropagationListContext, StyleSheetsContext } from './Contexts'
+import { DisableShadowRootContext, PreventEventPropagationListContext, StyleSheetsContext } from './Contexts'
 
 let mountingPoint: HTMLDivElement
 let mountingShadowRoot: ShadowRoot
@@ -11,9 +11,6 @@ export function setupPortalShadowRoot(init: ShadowRootInit) {
     mountingPoint = mountingShadowRoot.appendChild(document.createElement('div'))
     return mountingShadowRoot
 }
-
-/** usePortalShadowRoot under this context does not do anything. (And it will return an empty container). */
-export const NoEffectUsePortalShadowRootContext = createContext(false)
 
 /**
  * Render to a React Portal in to the page needs this hook. It will provide a wrapped container that provides ShadowRoot isolation and CSS support for it.
@@ -32,7 +29,7 @@ export const NoEffectUsePortalShadowRootContext = createContext(false)
  * ))
  */
 export function usePortalShadowRoot(renderer: (container: HTMLElement | undefined) => null | JSX.Element) {
-    const disabled = useRef(useContext(NoEffectUsePortalShadowRootContext)).current
+    const disabled = useRef(useContext(DisableShadowRootContext)).current
     // we ignore the changes on this property during multiple render
     // so we can violates the React hooks rule and still be safe.
     if (disabled) return renderer(undefined)
