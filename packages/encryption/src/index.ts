@@ -1,11 +1,9 @@
 export {
     encodePayload,
     parsePayload,
-    AESAlgorithmEnum,
     EC_KeyCurveEnum,
     SocialNetworkEnum,
     SocialNetworkEnumToProfileDomain,
-    type AESKey,
     type EC_Key,
     type Signature,
     type PayloadParseResult,

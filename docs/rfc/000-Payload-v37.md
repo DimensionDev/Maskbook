@@ -155,7 +155,7 @@ type PublicEncrypted = [kind: EncryptionKind.Public, AES_KEY: AES_KEY, iv: Binar
 
 ###### `AES_KEY`
 
-This field represents the AES key of this payload.
+This field represents the AES key (JsonWebKey.k) of this payload.
 
 ###### `iv` field
 
@@ -216,41 +216,6 @@ Here is an example of the `secp256k1` public key in Binary.
   181, 245, 168, 182, 150,  19, 182, 240, 202,  62, 202, 219,
    21, 175, 144, 205
 ]
-```
-
-### `AES_KEY`
-
-```typescript
-type AES_KEY = [alg: String, k: String]
-```
-
-This type is used in this specification to represent section 6.4 of a [JsonWebKey][rfc7518] of [AES family key][rfc7518-aes-family-key].
-
-[rfc7518]: https://datatracker.ietf.org/doc/html/rfc7518
-[rfc7518-aes-family-key]: https://datatracker.ietf.org/doc/html/rfc7518#section-6.4
-
-The implementation MUST fail when the `alg` is not recognized as a known algorithm.
-The implementation MUST fail when the `k` is not valid for the given `alg`.
-
-When encrypting with AES key, the implementation MUST NOT use `additionalData`, the `tagLength` MUST be 128.
-
-#### Encoding from JsonWebKey `jwk`
-
-```js
-function fromJsonWebKey(jwk) {
-  return [jwk.alg, jwk.k]
-}
-```
-
-#### Decoding from `key`
-
-```js
-function toJsonWebKey(key) {
-  const k = { ext: true, key_ops: ['encrypt', 'decrypt'], kty: 'oct' }
-  k.alg = key[0]
-  k.k = key[1]
-  return k
-}
 ```
 
 ## FAQ

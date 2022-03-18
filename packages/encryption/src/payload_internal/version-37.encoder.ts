@@ -42,7 +42,7 @@ export async function encode37(payload: PayloadWellFormed.Payload) {
         payload_arr[Index.encryption] = subArr
     } else {
         const { AESKey, iv } = payload.encryption
-        const subArr = [0, [AESKey.algr, (await crypto.subtle.exportKey('jwk', AESKey.key)).k], iv]
+        const subArr = [0, (await crypto.subtle.exportKey('jwk', AESKey)).k, iv]
         payload_arr[Index.encryption] = subArr
     }
     payload_arr[Index.data] = payload.encrypted

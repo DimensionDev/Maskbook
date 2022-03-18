@@ -1,9 +1,9 @@
 import type { PayloadParserResult } from '.'
 import type { PayloadParseResult } from '../payload'
 import { CryptoException, PayloadException, assertArray, assertUint8Array } from '../types'
-import { andThenAsync, CheckedError, OptionalResult } from '@masknet/shared-base'
+import { AESCryptoKey, andThenAsync, CheckedError, OptionalResult } from '@masknet/shared-base'
 import { Ok, Result } from 'ts-results'
-import { AESKey, AESAlgorithmEnum, EC_Key, EC_KeyCurveEnum } from '../payload/types'
+import { EC_Key, EC_KeyCurveEnum } from '../payload/types'
 import { decodeMessagePackF, assertIVLengthEq16, importAESFromJWK, importEC_Key } from '../utils'
 import { safeUnreachable } from '@dimensiondev/kit'
 import { parseSignatureContainer } from './SignatureContainer'
@@ -86,21 +86,14 @@ async function parseEncryption(encryption: unknown): Promise<PayloadParseResult.
         return [key, result] as const
     }
 }
-function parseAES(aes: unknown) {
-    type T = Promise<PayloadParseResult.PublicEncryption['AESKey']>
-
-    return andThenAsync(assertArray('aes', CryptoException.InvalidCryptoKey)(aes), async (aes): T => {
-        const [algr, k] = aes
-        if (typeof k === 'string') {
-            if (algr === AESAlgorithmEnum.A256GCM) {
-                const jwk: JsonWebKey = { ext: true, key_ops: ['encrypt', 'decrypt'], kty: 'oct', alg: algr, k }
-                const key = await importAES256(jwk, algr)
-                if (key.err) return key
-                return Ok<AESKey>({ algr, key: key.val })
-            }
-        }
-        return new CheckedError(CryptoException.UnsupportedAlgorithm, null).toErr()
-    })
+async function parseAES(aes: unknown) {
+    if (typeof aes === 'string') {
+        const jwk: JsonWebKey = { ext: true, key_ops: ['encrypt', 'decrypt'], kty: 'oct', alg: 'A256GCM', k: aes }
+        const key = await importAES256(jwk)
+        if (key.err) return key
+        return Ok<AESCryptoKey>(key.val)
+    }
+    return new CheckedError(CryptoException.UnsupportedAlgorithm, null).toErr()
 }
 function importAsymmetryKey(algr: unknown, key: unknown, name: string) {
     type T = Promise<Result<EC_Key, CheckedError<CryptoException>>>

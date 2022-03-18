@@ -334,7 +334,7 @@ async function returnFalse(): Promise<boolean> {
     return false
 }
 async function returnTestKey() {
-    return (await importAESFromJWK.AES_GCM_256(testKey)).unwrap()
+    return (await importAESFromJWK(testKey)).unwrap()
 }
 
 function complexMessage() {

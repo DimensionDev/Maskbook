@@ -1,5 +1,5 @@
 import { expect, test } from '@jest/globals'
-import { AESAlgorithmEnum, encodePayload, parsePayload, PayloadWellFormed } from '../src'
+import { encodePayload, parsePayload, PayloadWellFormed } from '../src'
 import { None, Some } from 'ts-results'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { importAESFromJWK } from '../src/utils'
@@ -23,10 +23,7 @@ test('Encode v38 payload', async () => {
         encryption: {
             type: 'public',
             iv: new Uint8Array(Buffer.from('0633db7e24805c2bdcff69ea2afda7cd', 'hex')),
-            AESKey: {
-                algr: AESAlgorithmEnum.A256GCM,
-                key: await importAESFromJWK(AESKey, AESAlgorithmEnum.A256GCM).then((x) => x.unwrap() as any),
-            },
+            AESKey: await importAESFromJWK(AESKey).then((x) => x.unwrap()),
         },
         signature: None,
         version: -38,

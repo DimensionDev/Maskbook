@@ -4,7 +4,7 @@ import { PayloadParseResult, SocialNetworkEnum } from '../payload'
 import { CryptoException, PayloadException } from '../types'
 import { importAESFromJWK } from '../utils'
 
-const import_AES_GCM_256 = CheckedError.withErr(importAESFromJWK.AES_GCM_256, CryptoException.InvalidCryptoKey)
+const import_AES_GCM_256 = CheckedError.withErr(importAESFromJWK, CryptoException.InvalidCryptoKey)
 
 /**
  * @internal
