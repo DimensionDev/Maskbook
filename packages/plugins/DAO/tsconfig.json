@@ -11,7 +11,6 @@
     { "path": "../../plugin-infra" },
     { "path": "../../shared" },
     { "path": "../../shared-base" },
-    { "path": "../../shared-base-ui" },
     { "path": "../../theme" },
     { "path": "../../web3-providers" },
     { "path": "../../configuration" }
