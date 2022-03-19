@@ -1,10 +1,11 @@
 import { decodeArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
-import type { DecryptStaticECDH_PostKey } from '@masknet/encryption'
+import type { DecryptStaticECDH_PostKey, EncryptionResultE2EMap } from '@masknet/encryption'
 import type { EC_Public_CryptoKey, EC_Public_JsonWebKey } from '@masknet/shared-base'
 import { CryptoKeyToJsonWebKey } from '../../../../utils-pure'
 import { getGunData, pushToGunDataArray, subscribeGunMapData } from '@masknet/gun-utils'
 import { EventIterator } from 'event-iterator'
 import { noop } from 'lodash-unified'
+import { queryPublicKey } from '../../../database/persona/helper'
 
 // !!! Change how this file access Gun will break the compatibility of v40 payload decryption.
 export async function GUN_queryPostKey_version40(
@@ -86,15 +87,38 @@ namespace Version38Or39 {
         version: -39 | -38,
         postIV: Uint8Array,
         networkHint: string,
-        receiversKeys: PublishedAESKeyRecord[],
+        receiversKeys: PublishedAESKeyRecord[] | EncryptionResultE2EMap,
     ) {
         const postHash = await hashIV(networkHint, postIV)
-        // Store AES key to gun
-        receiversKeys.forEach(async ({ aesKey, receiverKey }) => {
-            const keyHash = await (version === -38 ? hashKey38 : hashKey39)(receiverKey)
-            console.log(`gun[${postHash}][${keyHash}].push(`, aesKey, ')')
-            pushToGunDataArray([postHash, keyHash], aesKey)
-        })
+        if (Array.isArray(receiversKeys)) {
+            // Store AES key to gun
+            receiversKeys.forEach(async ({ aesKey, receiverKey }) => {
+                const keyHash = await (version === -38 ? hashKey38 : hashKey39)(receiverKey)
+                console.log(`gun[${postHash}][${keyHash}].push(`, aesKey, ')')
+                pushToGunDataArray([postHash, keyHash], aesKey)
+            })
+        } else {
+            if (version === -39) throw new Error('unreachable')
+            for (const result of receiversKeys.values()) {
+                try {
+                    if (result.status === 'rejected') continue
+                    const { encryptedPostKey, target, ivToBePublished } = result.value
+                    if (!ivToBePublished) throw new Error('Missing salt')
+                    const pub = await queryPublicKey(target)
+                    if (!pub) throw new Error('missing key')
+                    const jwk = await CryptoKeyToJsonWebKey(pub)
+                    const keyHash = await hashKey38(jwk)
+                    const post: PublishedAESKeyRecord['aesKey'] = {
+                        encryptedKey: encodeArrayBuffer(encryptedPostKey),
+                        salt: encodeArrayBuffer(ivToBePublished),
+                    }
+                    console.log(`gun[${postHash}][${keyHash}].push(`, post, ')')
+                    pushToGunDataArray([postHash, keyHash], post)
+                } catch (error) {
+                    console.error('[@masknet/encryption] An error occurs when sending E2E keys', error)
+                }
+            }
+        }
     }
 
     type DataOnGun = {
@@ -129,7 +153,7 @@ namespace Version38Or39 {
         const N = 2
 
         const hash = await work(encodeArrayBuffer(iv), hashPair)
-        return networkHint + hash.substring(0, N)
+        return networkHint + '-' + hash.substring(0, N)
     }
 
     // The difference between V38 and V39 is: V39 is not stable (JSON.stringify)

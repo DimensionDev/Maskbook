@@ -7,7 +7,7 @@ import { PasswordField } from '../../../components/PasswordField'
 import { makeStyles } from '@masknet/theme'
 import { useAsyncFn } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { LoadingButton } from '@mui/lab'
 import { usePasswordForm } from '../hooks/usePasswordForm'
@@ -65,7 +65,7 @@ const useStyles = makeStyles()({
 const SetPaymentPassword = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const history = useHistory()
+    const navigate = useNavigate()
 
     const {
         control,
@@ -79,7 +79,7 @@ const SetPaymentPassword = memo(() => {
         async (data: zod.infer<typeof schema>) => {
             try {
                 await WalletRPC.setPassword(data.password)
-                history.replace(PopupRoutes.ImportWallet)
+                navigate(PopupRoutes.ImportWallet, { replace: true })
             } catch (error) {
                 if (error instanceof Error) {
                     setError('password', { message: error.message })

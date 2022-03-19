@@ -9,9 +9,10 @@ import {
     EthereumTokenType,
     FungibleTokenDetailed,
     isSameAddress,
+    WNATIVE,
 } from '@masknet/web3-shared-evm'
 import { pow10, isGreaterThan } from '@masknet/web3-shared-base'
-import { ONE_HUNDRED_PERCENT, WNATIVE, ZERO_PERCENT } from '../constants'
+import { ONE_HUNDRED_PERCENT, ZERO_PERCENT } from '../constants'
 
 export function swapErrorToUserReadableMessage(error: any): string {
     let reason: string | undefined

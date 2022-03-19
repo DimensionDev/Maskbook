@@ -17,6 +17,7 @@ import {
     useTokenConstants,
     useTokenTransferCallback,
 } from '@masknet/web3-shared-evm'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { isGreaterThan, isZero, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import {
@@ -27,7 +28,7 @@ import {
     useWeb3State,
     Web3Plugin,
 } from '@masknet/plugin-infra'
-import { FormattedAddress, TokenAmountPanel, useRemoteControlledDialog } from '@masknet/shared'
+import { FormattedAddress, TokenAmountPanel } from '@masknet/shared'
 import TuneIcon from '@mui/icons-material/Tune'
 import { EthereumAddress } from 'wallet.ts'
 import { useDashboardI18N } from '../../../../locales'

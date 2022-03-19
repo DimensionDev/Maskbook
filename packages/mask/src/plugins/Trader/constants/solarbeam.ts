@@ -1,5 +1,5 @@
-import { ChainId } from '@masknet/web3-shared-evm'
 import {
+    ChainId,
     DAI,
     RUNE,
     USDC,
@@ -17,8 +17,7 @@ import {
     mCELO,
     mCUSD,
     SOLAR,
-    CBTC,
-} from './trader'
+} from '@masknet/web3-shared-evm'
 import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'
 
 /**
@@ -33,8 +32,7 @@ export const SOLARBEAM_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
     [ChainId.Matic]: [WNATIVE, USDC, WBTC, DAI, USDT].map((x) => x[ChainId.Matic]),
     [ChainId.BSC]: [WNATIVE, DAI, BUSD, USDC, USDT, BTCB].map((x) => x[ChainId.BSC]),
     [ChainId.xDai]: [WNATIVE, USDC, USDT, WBTC].map((x) => x[ChainId.xDai]),
-    [ChainId.Celo]: [WNATIVE, CUSD, CEUR, CBTC, mcEUR, mCELO, mCUSD].map((x) => x[ChainId.Celo]),
+    [ChainId.Celo]: [WNATIVE, CUSD, CEUR, mcEUR, mCELO, mCUSD].map((x) => x[ChainId.Celo]),
     [ChainId.Fantom]: [WNATIVE, DAI, USDC, WBTC].map((x) => x[ChainId.Fantom]),
     [ChainId.Moonriver]: [WNATIVE, DAI, USDC, SOLAR, BUSD].map((x) => x[ChainId.Moonriver]),
-    // [ChainId.Avalanche]: [WNATIVE, DAI, USDT, WBTC].map((x) => x[ChainId.Avalanche]),
 }

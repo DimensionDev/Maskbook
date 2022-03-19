@@ -146,6 +146,7 @@ export function dispatchEventRaw<T extends Event>(
 }
 
 const { includes } = String.prototype
-function isTwitter(): Boolean {
+
+function isTwitter() {
     return apply(includes, window.location.href, ['twitter.com'])
 }

@@ -79,6 +79,7 @@
         "elec",
         "encryptedmsg",
         "endregion",
+        "enhanceable",
         "ethersphere",
         "ethersproject",
         "eustatius",
@@ -152,8 +153,8 @@
         "monofont",
         "monospace",
         "mooniswap",
-        "Moonriver",
-        "MOVR",
+        "moonriver",
+        "movr",
         "msgpack",
         "mska",
         "mskb",
@@ -268,6 +269,7 @@
         "xlarge",
         "xlink",
         "zerion",
+        "zora",
         "zubin"
     ],
     "ignoreWords": [

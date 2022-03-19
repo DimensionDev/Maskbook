@@ -1,7 +1,7 @@
 import { memo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { PersonaContext } from '../hooks/usePersonaContext'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { DeleteIcon, MasksIcon, EditIcon } from '@masknet/icons'
 import { Button, Typography } from '@mui/material'
 import { formatFingerprint, MAX_PERSONA_LIMIT } from '@masknet/shared'
@@ -95,9 +95,8 @@ const PersonaHome = memo(() => {
     const { classes } = useStyles()
     const [isExpand, setExpand] = useState(true)
     const { currentPersona, setDeletingPersona, personas } = PersonaContext.useContainer()
-    const history = useHistory()
+    const navigate = useNavigate()
 
-    console.log(personas)
     return (
         <>
             <div className={classes.content}>
@@ -111,7 +110,7 @@ const PersonaHome = memo(() => {
                                 {currentPersona?.nickname}
                                 <EditIcon
                                     className={classes.editIcon}
-                                    onClick={() => history.push(PopupRoutes.PersonaRename)}
+                                    onClick={() => navigate(PopupRoutes.PersonaRename)}
                                 />
                             </Typography>
                             <Typography className={classes.identifier}>
@@ -120,7 +119,7 @@ const PersonaHome = memo(() => {
                                     className={classes.trashIcon}
                                     onClick={() => {
                                         setDeletingPersona(currentPersona)
-                                        history.push(PopupRoutes.Logout)
+                                        navigate(PopupRoutes.Logout)
                                     }}
                                 />
                             </Typography>
