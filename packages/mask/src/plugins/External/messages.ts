@@ -1,5 +1,6 @@
 import { createPluginMessage } from '@masknet/plugin-infra'
-import { TypedMessage, serializer } from '@masknet/shared-base'
+import type { TypedMessage } from '@masknet/typed-message'
+import { serializer } from '@masknet/shared-base'
 import type { MaskSDK_SNS_ContextIdentifier } from './sns-context'
 
 // Make TS happy

@@ -1,14 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
-// see https://github.com/import-js/eslint-plugin-import/issues/2288
-// eslint-disable-next-line import/no-deprecated
 import { DialogContent, Theme, useMediaQuery } from '@mui/material'
 import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
 import { FungibleTokenDetailed, useChainId, ChainId, useTokenConstants } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../../Wallet/messages'
 import { useI18N } from '../../../utils'
-import { ERC20TokenList, ERC20TokenListProps, useRemoteControlledDialog } from '@masknet/shared'
-import { delay } from '@masknet/shared-base'
+import { ERC20TokenList, ERC20TokenListProps } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { delay } from '@dimensiondev/kit'
 import { MINDS_ID } from '../../../social-network-adaptor/minds.com/base'
 import { activatedSocialNetworkUI } from '../../../social-network'
 
@@ -52,7 +51,6 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
     )
     const chainId = useChainId()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
-    // eslint-disable-next-line import/no-deprecated
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
 
     const [id, setId] = useState('')

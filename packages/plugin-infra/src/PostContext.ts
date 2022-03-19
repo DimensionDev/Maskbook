@@ -1,16 +1,17 @@
-import { useObservableValues, useValueRef } from '@masknet/shared'
 import {
     ObservableMap,
     ObservableSet,
     type Payload,
     type PostIdentifier,
     type ProfileIdentifier,
-    type TypedMessageTuple,
 } from '@masknet/shared-base'
+import { useObservableValues, useValueRef } from '@masknet/shared-base-ui'
+import type { TypedMessageTuple } from '@masknet/typed-message'
 import { ValueRef, LiveSelector, DOMProxy } from '@dimensiondev/holoflows-kit'
-import type { Result } from 'ts-results'
-import { Context, createContext, createElement, memo, useContext } from 'react'
+import type { Result, Some } from 'ts-results'
+import { createContext, createElement, memo, useContext } from 'react'
 import { Subscription, useSubscription } from 'use-subscription'
+import type { SupportedPayloadVersions } from '@masknet/encryption'
 export interface PostContextSNSActions {
     /** Parse payload into Payload */
     payloadParser(raw: string): Result<Payload, Error>
@@ -34,6 +35,7 @@ export interface PostContextComment {
 }
 export interface PostContextCreation extends PostContextAuthor {
     readonly rootElement: DOMProxy
+    readonly actionsElement?: DOMProxy
     readonly suggestedInjectionPoint: HTMLElement
     readonly comments?: PostContextComment
     /**
@@ -54,6 +56,7 @@ export interface PostContext extends PostContextAuthor {
     // #region DOM knowledge
     get rootNode(): HTMLElement | null
     readonly rootElement: DOMProxy
+    readonly actionsElement?: DOMProxy
     readonly suggestedInjectionPoint: HTMLElement
     // #endregion
     readonly comment: undefined | PostContextComment
@@ -75,14 +78,22 @@ export interface PostContext extends PostContextAuthor {
     // #endregion
     // #region Post payload discovered in the rawMessage
     readonly containingMaskPayload: Subscription<Result<Payload, unknown>>
-    /** @deprecated Use postPayload instead */
-    readonly decryptedPayloadForImage: ValueRef<Payload | null>
     // TODO: should be a Subscription
     readonly iv: ValueRef<string | null>
     /**
      * undefined => payload not found
      */
     readonly publicShared: Subscription<boolean | undefined>
+    /** @deprecated */
+    readonly ownersKeyEncrypted: Subscription<string | undefined>
+    /** @deprecated */
+    readonly version: Subscription<SupportedPayloadVersions | undefined>
+    decryptedReport(content: {
+        sharedPublic?: Some<boolean>
+        iv?: string
+        ownersAESKeyEncrypted?: string
+        version?: SupportedPayloadVersions
+    }): void
     // #endregion
 }
 export type PostInfo = PostContext
@@ -133,12 +144,4 @@ function isSubscription(x: any): x is Subscription<any> {
         x !== null &&
         Boolean((x as Subscription<any>).getCurrentValue && (x as Subscription<any>).subscribe)
     )
-}
-
-export function usePostInfoSharedPublic(): boolean {
-    const info = usePostInfoDetails.containingMaskPayload()
-    if (info.err) return false
-    const payload = info.val
-    if (payload.version !== -38) return false
-    return !!payload.sharedPublic
 }

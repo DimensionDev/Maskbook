@@ -2,13 +2,22 @@ import { useContext, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { FindTrumanContext } from '../context'
 import { Alert, Avatar, Box, Card, CardHeader, CardMedia, Chip, Skeleton, Tooltip, Typography } from '@mui/material'
-import type { PollResult, PuzzleResult, StoryInfo, UserPollStatus, UserStoryStatus } from '../types'
+import type {
+    CompletionQuestionAnswer,
+    PollResult,
+    PuzzleResult,
+    StoryInfo,
+    UserCompletionStatus,
+    UserPollStatus,
+    UserStoryStatus,
+} from '../types'
 import { FindTrumanI18nFunction, PostType } from '../types'
 import ResultCard from './ResultCard'
 import OptionsCard from './OptionsCard'
 import Footer from './Footer'
 import StageCard from './StageCard'
 import EncryptionCard from './EncryptionCard'
+import CompletionCard from './CompletionCard'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -99,9 +108,11 @@ interface FindTrumanProps {
     userStoryStatus?: UserStoryStatus
     userPuzzleStatus?: UserPollStatus
     userPollStatus?: UserPollStatus
+    userCompletionStatus?: UserCompletionStatus
     puzzleResult?: PuzzleResult
     pollResult?: PollResult
-    onSubmit(choice: number): Promise<void>
+    onSubmitPoll(choice: number): Promise<void>
+    onSubmitCompletion(answers: CompletionQuestionAnswer[]): Promise<void>
 }
 
 export function getPostTypeTitle(t: FindTrumanI18nFunction, postType: PostType) {
@@ -110,6 +121,8 @@ export function getPostTypeTitle(t: FindTrumanI18nFunction, postType: PostType) 
             return t('plugin_find_truman_status_poll')
         case PostType.Puzzle:
             return t('plugin_find_truman_status_puzzle')
+        case PostType.Completion:
+            return t('plugin_find_truman_status_completion')
         case PostType.PuzzleResult:
             return t('plugin_find_truman_status_puzzle_result')
         case PostType.PollResult:
@@ -131,24 +144,35 @@ export function FindTruman(props: FindTrumanProps) {
         userStoryStatus,
         userPuzzleStatus,
         userPollStatus,
+        userCompletionStatus,
         puzzleResult,
         pollResult,
-        onSubmit,
+        onSubmitPoll,
+        onSubmitCompletion,
     } = props
 
     const [loadImg, setLoadImg] = useState(true)
 
-    const isCritical = userPuzzleStatus?.critical || userPollStatus?.critical
+    const isCritical = userPuzzleStatus?.critical || userPollStatus?.critical || userCompletionStatus?.critical
     const isNoncritical =
-        (userPuzzleStatus && !userPuzzleStatus.critical) || (userPollStatus && !userPollStatus.critical)
+        (userPuzzleStatus && !userPuzzleStatus.critical) ||
+        (userPollStatus && !userPollStatus.critical) ||
+        (userCompletionStatus && !userCompletionStatus.critical)
 
     const renderCard = () => {
         if (postType === PostType.Status) {
             return <StageCard userStoryStatus={userStoryStatus} />
         } else if (postType === PostType.Puzzle && userPuzzleStatus) {
-            return <OptionsCard onSubmit={onSubmit} userStatus={userPuzzleStatus} />
+            return <OptionsCard onSubmit={onSubmitPoll} userStatus={userPuzzleStatus} />
         } else if (postType === PostType.Poll && userPollStatus) {
-            return <OptionsCard onSubmit={onSubmit} userStatus={userPollStatus} />
+            return <OptionsCard onSubmit={onSubmitPoll} userStatus={userPollStatus} />
+        } else if (postType === PostType.Completion) {
+            return (
+                <CompletionCard
+                    onSubmit={(_, answers) => onSubmitCompletion(answers)}
+                    completionStatus={userCompletionStatus}
+                />
+            )
         } else if (postType === PostType.PuzzleResult && puzzleResult) {
             return <ResultCard type={PostType.PuzzleResult} userStatus={userPuzzleStatus} result={puzzleResult} />
         } else if (postType === PostType.PollResult && pollResult) {

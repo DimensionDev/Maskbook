@@ -5,6 +5,6 @@
     "outDir": "./dist",
     "tsBuildInfoFile": "./dist/src.tsbuildinfo"
   },
-  "include": ["./src", "./src/env.d.ts", "./src/**/*.json"],
+  "include": ["./src", "./src/**/*.json"],
   "references": [{ "path": "../../injected-script/sdk" }]
 }

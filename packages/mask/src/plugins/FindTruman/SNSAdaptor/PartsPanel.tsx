@@ -1,14 +1,27 @@
-import { useAccount } from '@masknet/web3-shared-evm'
+import { useAccount, formatNFT_TokenId } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { useControlledDialog } from '../../../utils'
 import { useAsyncRetry } from 'react-use'
 import { fetchUserPartsInfo, openMysteryBox } from '../Worker/apis'
 import type { FindTrumanI18nFunction, MysteryBox, Part, Quest } from '../types'
 import { PartType } from '../types'
-import { Box, Button, Chip, DialogContent, Grid, Skeleton, Tooltip, Typography } from '@mui/material'
+import {
+    Alert,
+    AlertTitle,
+    Avatar,
+    Box,
+    Button,
+    Chip,
+    DialogContent,
+    Grid,
+    Link,
+    Skeleton,
+    Tooltip,
+    Typography,
+} from '@mui/material'
 import formatDateTime from 'date-fns/format'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { useContext, useState } from 'react'
+import { useContext, useMemo, useState } from 'react'
 import { LoadingButton } from '@mui/lab'
 import getUnixTime from 'date-fns/getUnixTime'
 import { FindTrumanContext } from '../context'
@@ -76,8 +89,8 @@ const useStyles = makeStyles()((theme, props) => ({
         backgroundColor: '#8c8c8c',
     },
     cover: {
-        width: '120px',
-        height: '120px',
+        width: '100%',
+        objectFit: 'contain',
         borderRadius: '8px',
         position: 'relative',
         trans: 'all .3s',
@@ -101,10 +114,9 @@ export default function PartsPanel(props: PartsPanelProps) {
     }, [account])
 
     return (
-        <Box pl={1} pr={2}>
+        <Box>
             {loading ? (
                 <Grid container spacing={2}>
-                    <PartSkeleton />
                     <PartSkeleton />
                     <PartSkeleton />
                     <PartSkeleton />
@@ -112,17 +124,17 @@ export default function PartsPanel(props: PartsPanelProps) {
             ) : partsInfo ? (
                 <Grid alignItems="center" container spacing={2}>
                     {partsInfo.quests.map((quest) => (
-                        <Grid key={quest.id} item xs={3}>
+                        <Grid key={quest.id} item xs={4}>
                             <QuestItem quest={quest} />
                         </Grid>
                     ))}
                     {partsInfo.boxes.map((box) => (
-                        <Grid key={box.id} item xs={3}>
+                        <Grid key={box.id} item xs={4}>
                             <MysteryBoxItem account={account} onOpened={() => retry()} box={box} />
                         </Grid>
                     ))}
                     {partsInfo.parts.map((part) => (
-                        <Grid key={part.tokenId} item xs={3}>
+                        <Grid key={part.tokenId} item xs={4}>
                             <PartItem part={part} />
                         </Grid>
                     ))}
@@ -132,13 +144,36 @@ export default function PartsPanel(props: PartsPanelProps) {
     )
 }
 
+interface PoapLabelProps {
+    id?: string | number
+    poapImg: string
+    size?: 'small' | 'medium'
+}
+
+function PoapLabel(props: PoapLabelProps) {
+    const { id, poapImg, size } = props
+
+    return id ? (
+        <Chip avatar={<Avatar src={poapImg ?? ''} />} label={`#${id}`} size={size ?? 'small'} variant="filled" />
+    ) : (
+        <img
+            src={poapImg}
+            style={{
+                width: '24px',
+                height: '24px',
+                borderRadius: '100%',
+            }}
+        />
+    )
+}
+
 function PartSkeleton() {
     const { classes } = useStyles()
     return (
-        <Grid className={classes.skeleton} item xs={3}>
-            <Skeleton animation="wave" width={80} height={18} />
-            <Skeleton variant="rectangular" animation="wave" width={120} height={120} />
-            <Skeleton animation="wave" width={120} height={30} />
+        <Grid className={classes.skeleton} item xs={4}>
+            <Skeleton animation="wave" width={80} height={24} />
+            <Skeleton variant="rectangular" animation="wave" width={168} height={168} />
+            <Skeleton animation="wave" width={168} height={30} />
         </Grid>
     )
 }
@@ -161,22 +196,28 @@ export function getPartName(t: FindTrumanI18nFunction, type: PartType) {
 function PartItem(props: { part: Part }) {
     const { part } = props
     const { classes } = useStyles()
-    const { t } = useContext(FindTrumanContext)
+    const { t, const: consts } = useContext(FindTrumanContext)
     return (
-        <div style={{ position: 'relative' }}>
-            <img className={classes.cover} src={part.img} />
-            <Box columnGap={1} display="flex" alignItems="center" height="30px">
+        <div>
+            <Tooltip
+                PopperProps={{
+                    disablePortal: true,
+                }}
+                arrow
+                title={part.name}>
+                <Typography lineHeight="24px" noWrap textAlign="center" variant="body1" color="text.primary">
+                    {part.name}
+                </Typography>
+            </Tooltip>
+            <div style={{ position: 'relative' }}>
+                <img className={classes.cover} src={part.img} />
+            </div>
+
+            <Box display="flex" alignItems="center" justifyContent="space-between" height="30px">
                 <Chip size="small" label={getPartName(t, part.type)} color="primary" />
-                <Tooltip
-                    PopperProps={{
-                        disablePortal: true,
-                    }}
-                    arrow
-                    title={part.name}>
-                    <Typography noWrap variant="body2" color="text.primary">
-                        {part.name}
-                    </Typography>
-                </Tooltip>
+                {part.fromBox?.completedQuest?.needPoap && !!part.fromBox.completedQuest.tokenId && (
+                    <PoapLabel poapImg={consts?.poapImg ?? ''} id={part.fromBox.completedQuest.tokenId} />
+                )}
             </Box>
         </div>
     )
@@ -189,10 +230,20 @@ function QuestItem(props: { quest: Quest }) {
 
     const { open: isQuestDialogOpen, onOpen: onQuestDialogOpen, onClose: onQuestDialogClose } = useControlledDialog()
 
+    const meetPoap = useMemo(() => {
+        return !quest.needPoap || !!quest.poaps.find((e) => !e.used)
+    }, [quest])
+
     return (
         <div>
+            <Box sx={{ height: '24px' }} />
             <div className={classes.ribbonWrapper}>
                 <img className={classes.cover} src={consts?.boxImg} />
+                {quest.needPoap && (
+                    <Box position="absolute" top="4px" right="4px">
+                        <PoapLabel size="medium" poapImg={consts?.poapImg ?? ''} />
+                    </Box>
+                )}
                 <div className={cx(classes.ribbon, classes.ribbonGray)}>
                     <Typography className={cx(classes.ribbonContent, classes.ribbonContentGray)} variant="body2">
                         {t('plugin_find_truman_dialog_ribbon_lacked')}
@@ -200,7 +251,7 @@ function QuestItem(props: { quest: Quest }) {
                 </div>
             </div>
             <Button size="small" color="primary" variant="outlined" fullWidth onClick={onQuestDialogOpen}>
-                {t('plugin_find_truman_dialog_get')}
+                {meetPoap ? t('plugin_find_truman_dialog_get') : t('plugin_find_truman_poap_required_title_simple')}
             </Button>
             <QuestDialog quest={quest} open={isQuestDialogOpen} onClose={onQuestDialogClose} />
         </div>
@@ -231,8 +282,14 @@ function MysteryBoxItem(props: { account: string; box: MysteryBox; onOpened: () 
 
     return (
         <div>
+            <Box sx={{ height: '24px' }} />
             <div className={classes.ribbonWrapper}>
                 <img className={classes.cover} src={box.isOpened ? box.img : consts?.boxImg} />
+                {!box.isOpened && box.completedQuest?.needPoap && !!box.completedQuest.tokenId && (
+                    <Box position="absolute" top="4px" right="4px">
+                        <PoapLabel size="medium" id={box.completedQuest.tokenId} poapImg={consts?.poapImg ?? ''} />
+                    </Box>
+                )}
                 <div className={box.isOpened ? cx(classes.ribbon, classes.ribbonGray) : classes.ribbon}>
                     {box.isOpened ? (
                         <Typography className={cx(classes.ribbonContent, classes.ribbonContentGray)} variant="body2">
@@ -246,8 +303,13 @@ function MysteryBoxItem(props: { account: string; box: MysteryBox; onOpened: () 
                 </div>
             </div>
             {box.isOpened ? (
-                <Box display="flex" alignItems="center" height="30px">
+                <Box display="flex" alignItems="center" justifyContent="space-between" height="30px">
                     <Chip size="small" label={getPartName(t, box.partType)} color="primary" />
+                    {box.completedQuest?.needPoap && !!box.completedQuest.tokenId && (
+                        <Box position="absolute" top="4px" right="4px">
+                            <PoapLabel size="medium" id={box.completedQuest.tokenId} poapImg={consts?.poapImg ?? ''} />
+                        </Box>
+                    )}
                 </Box>
             ) : (
                 <LoadingButton
@@ -274,6 +336,14 @@ function QuestDialog(props: QuestDialogProps) {
     const { quest, open, onClose } = props
     const { classes } = useStyles()
     const { t, const: consts } = useContext(FindTrumanContext)
+
+    const poapIds = useMemo(() => {
+        return quest.poaps.map((e) => formatNFT_TokenId(e.tokenId.toString(), 2)).join(', ')
+    }, [quest])
+
+    const availablePoap = useMemo(() => {
+        return quest.poaps.find((e) => !e.used)
+    }, [quest])
 
     return (
         <InjectedDialog title={t('plugin_find_truman_dialog_get_box_title')} open={open} onClose={onClose}>
@@ -302,6 +372,39 @@ function QuestDialog(props: QuestDialogProps) {
                 <Typography variant="body1" color="text.primary" sx={{ whiteSpace: 'pre-wrap' }}>
                     {quest.desc}
                 </Typography>
+                {quest.needPoap && (
+                    <Alert severity={availablePoap ? 'success' : 'error'} sx={{ marginTop: 2 }}>
+                        <AlertTitle>{t('plugin_find_truman_poap_required_title')}</AlertTitle>
+                        {quest.poaps.length === 0 ? (
+                            <div>
+                                <Typography variant="body2" gutterBottom>
+                                    {t('plugin_find_truman_poap_required_empty')}
+                                </Typography>
+                                <Link
+                                    rel="noopener noreferrer"
+                                    component="a"
+                                    target="_blank"
+                                    href={consts?.getPoapUrl}
+                                    variant="body2"
+                                    sx={{ fontWeight: 'bold', fontSize: '12px' }}>
+                                    {t('plugin_find_truman_poap_required_get')}
+                                </Link>
+                            </div>
+                        ) : availablePoap ? (
+                            t('plugin_find_truman_poap_required_meet', {
+                                id: `#${availablePoap.tokenId}`,
+                            })
+                        ) : quest.poaps.length > 1 ? (
+                            t('plugin_find_truman_poap_required_used_pl', {
+                                id: poapIds,
+                            })
+                        ) : (
+                            t('plugin_find_truman_poap_required_used', {
+                                id: poapIds,
+                            })
+                        )}
+                    </Alert>
+                )}
             </DialogContent>
         </InjectedDialog>
     )

@@ -1,11 +1,14 @@
-import { makeTypedMessageText, TypedMessage, delay } from '@masknet/shared-base'
-import { untilDocumentReady } from '../../../utils/dom'
+import { makeTypedMessageText, SerializableTypedMessages } from '@masknet/typed-message'
+import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
 import { i18n } from '../../../../shared-ui/locales_legacy'
 import { MaskMessages, CompositionRequest } from '../../../utils/messages'
 import { composeButtonSelector, composeDialogIndicatorSelector, composeTextareaSelector } from '../utils/selector'
 
-export async function openComposeBoxMinds(content: string | TypedMessage, options?: CompositionRequest['options']) {
-    await untilDocumentReady()
+export async function openComposeBoxMinds(
+    content: string | SerializableTypedMessages,
+    options?: CompositionRequest['options'],
+) {
+    await waitDocumentReadyState('interactive')
     await delay(800)
 
     // active the compose dialog

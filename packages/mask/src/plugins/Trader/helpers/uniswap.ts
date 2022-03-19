@@ -9,9 +9,10 @@ import {
     EthereumTokenType,
     FungibleTokenDetailed,
     isSameAddress,
+    WNATIVE,
 } from '@masknet/web3-shared-evm'
 import { pow10, isGreaterThan } from '@masknet/web3-shared-base'
-import { ONE_HUNDRED_PERCENT, WNATIVE, ZERO_PERCENT } from '../constants'
+import { ONE_HUNDRED_PERCENT, ZERO_PERCENT } from '../constants'
 
 export function swapErrorToUserReadableMessage(error: any): string {
     let reason: string | undefined
@@ -83,7 +84,11 @@ export function toUniswapCurrencyAmount(chainId: ChainId, token?: FungibleTokenD
     if (!token || !amount) return
     const currency = toUniswapCurrency(chainId, token)
     if (!currency) return
-    if (isGreaterThan(amount, 0)) return CurrencyAmount.fromRawAmount(currency, JSBI.BigInt(amount))
+    try {
+        if (isGreaterThan(amount, 0)) return CurrencyAmount.fromRawAmount(currency, JSBI.BigInt(amount))
+    } catch {
+        return
+    }
     return
 }
 

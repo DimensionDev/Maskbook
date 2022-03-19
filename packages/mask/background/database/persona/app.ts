@@ -29,6 +29,11 @@ import type {
     AESJsonWebKey as Native_AESJsonWebKey,
 } from '@masknet/public-api'
 import { MaskMessages } from '../../../shared'
+import { convertPersonaHexPublicKey } from './util'
+
+export async function createPersonaDBReadonlyAccess(action: () => Promise<void>) {
+    await action()
+}
 export async function consistentPersonaDBWriteAccess(action: () => Promise<void>) {
     await action()
 }
@@ -392,11 +397,14 @@ function partialPersonaRecordToDB(
 }
 
 function personaRecordOutDB(x: NativePersonaRecord): PersonaRecord {
+    const identifier = Identifier.fromString(x.identifier, ECKeyIdentifier).unwrap()
+
     return {
         publicKey: x.publicKey as JsonWebKey as unknown as EC_Public_JsonWebKey,
+        publicHexKey: convertPersonaHexPublicKey(identifier),
         privateKey: x.privateKey as JsonWebKey as unknown as EC_Private_JsonWebKey,
         localKey: x.localKey as JsonWebKey as unknown as AESJsonWebKey,
-        identifier: Identifier.fromString(x.identifier, ECKeyIdentifier).unwrap(),
+        identifier,
         linkedProfiles: new IdentifierMap(new Map(Object.entries(x.linkedProfiles)), ProfileIdentifier),
         createdAt: new Date(x.createdAt),
         updatedAt: new Date(x.updatedAt),

@@ -97,7 +97,7 @@ export async function handlePromise(id: number, promise: () => any) {
     try {
         const data = await promise()
         sendEvent('resolvePromise', id, data)
-    } catch (error: unknown) {
+    } catch (error) {
         // TODO:
         sendEvent('rejectPromise', id, {})
     }

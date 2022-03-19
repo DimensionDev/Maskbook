@@ -172,7 +172,15 @@ export function resolveBlockLinkOnExplorer(chainId: ChainId, block: string): str
 }
 
 export function resolveIPFSLink(ipfs: string): string {
-    return urlcat('https://ipfs.fleek.co/ipfs/:ipfs', { ipfs })
+    return urlcat('https://coldcdn.com/api/cdn/mipfsygtms/ipfs/:ipfs', { ipfs })
+}
+
+export function resolveResourceLink(originLink: string): string {
+    if (!originLink) return ''
+    if (originLink.startsWith('http') || originLink.startsWith('data')) return originLink
+    if (originLink.startsWith('ipfs://ipfs/')) return resolveIPFSLink(originLink.replace(/^ipfs:\/\/ipfs\//, ''))
+    if (originLink.startsWith('ipfs://')) return resolveIPFSLink(decodeURIComponent(originLink).replace('ipfs://', ''))
+    return resolveIPFSLink(originLink)
 }
 
 export function resolveDomainLink(domain?: string) {
@@ -189,6 +197,8 @@ export function resolveCollectibleProviderLink(chainId: ChainId, provider: NonFu
             return 'https://rarible.com'
         case NonFungibleAssetProvider.NFTSCAN:
             return 'https://nftscan.com'
+        case NonFungibleAssetProvider.ZORA:
+            return 'https://zora.co'
         default:
             unreachable(provider)
     }
@@ -203,6 +213,8 @@ export function resolveCollectibleAssetLink(chainId: ChainId, provider: NonFungi
         case NonFungibleAssetProvider.RARIBLE:
             return ''
         case NonFungibleAssetProvider.NFTSCAN:
+            return ''
+        case NonFungibleAssetProvider.ZORA:
             return ''
         default:
             unreachable(provider)
@@ -223,6 +235,8 @@ export function resolveCollectibleLink(
         case NonFungibleAssetProvider.RARIBLE:
             return ''
         case NonFungibleAssetProvider.NFTSCAN:
+            return ''
+        case NonFungibleAssetProvider.ZORA:
             return ''
         default:
             unreachable(provider)

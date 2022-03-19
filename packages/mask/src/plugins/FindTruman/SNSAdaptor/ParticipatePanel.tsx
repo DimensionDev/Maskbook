@@ -1,20 +1,28 @@
 import { useAccount } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends, useTabs } from '@masknet/theme'
 import { useAsyncRetry } from 'react-use'
-import { fetchAllPollsOrPuzzles, fetchUserStoryStatus, submitPoll, submitPuzzle } from '../Worker/apis'
-import { Box, Button, Card, DialogActions, DialogContent } from '@mui/material'
+import { fetchQuestions, fetchUserStoryStatus, submitCompletion, submitPoll, submitPuzzle } from '../Worker/apis'
+import { Box, Button, Card, DialogActions, DialogContent, Typography } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import StageCard from './StageCard'
 import { useControlledDialog } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { useContext, useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import OptionsCard from './OptionsCard'
 import ResultCard from './ResultCard'
 import getUnixTime from 'date-fns/getUnixTime'
-import { PostType, UserPollOrPuzzleStatus } from '../types'
+import {
+    BasicQuestion,
+    CompletionQuestionAnswer,
+    PostType,
+    QuestionGroup,
+    UserCompletionStatus,
+    UserPollOrPuzzleStatus,
+} from '../types'
 import { FindTrumanContext } from '../context'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { useTabsStyles } from './FindTrumanDialog'
+import CompletionCard from './CompletionCard'
 
 const useStyles = makeStyles()((theme, props) => ({
     panel: {},
@@ -120,15 +128,28 @@ function ParticipateDialog(props: ParticipateDialogProps) {
 
     const [currentTab, onChange, tabs] = useTabs(ParticipationType.Critical, ParticipationType.NonCritical)
 
-    const [polls, setPolls] = useState<UserPollOrPuzzleStatus[]>([])
+    const [questions, setQuestions] = useState<QuestionGroup>()
 
-    useEffect(() => {
-        if (account) {
-            fetchAllPollsOrPuzzles(account).then((polls) => setPolls(polls))
-        }
+    const updateQuestions = useCallback(async () => {
+        if (!account) return
+        const questions = await fetchQuestions(account)
+        questions.fills = questions.fills.map((f) => {
+            return { ...f, type: PostType.Completion }
+        })
+        questions.polls = questions.polls.map((f) => {
+            return { ...f, type: PostType.Poll }
+        })
+        questions.puzzles = questions.puzzles.map((f) => {
+            return { ...f, type: PostType.Puzzle }
+        })
+        setQuestions(questions)
     }, [account, open])
 
-    const handleSubmit = async (postType: PostType, pollId: string, choice: number) => {
+    useEffect(() => {
+        updateQuestions()
+    }, [account, open])
+
+    const handleSubmitPoll = async (postType: PostType, pollId: string, choice: number) => {
         const target = pollId
         const from = account
         const timestamp = getUnixTime(Date.now())
@@ -137,35 +158,76 @@ function ParticipateDialog(props: ParticipateDialogProps) {
         } else if (postType === PostType.Poll) {
             await submitPoll(account, { target, from, timestamp, choice })
         }
-        const polls = await fetchAllPollsOrPuzzles(account)
-        setPolls(polls)
+        await updateQuestions()
         onUpdate()
     }
 
-    const renderPoll = (poll: UserPollOrPuzzleStatus) => {
-        return poll.status ? (
-            <Card key={`${poll.type}_${poll.id}`} variant="outlined" className={classes.wrapper}>
-                <OptionsCard
-                    userStatus={poll}
-                    onSubmit={async (choice) => {
-                        return handleSubmit(poll.type, poll.id, choice)
-                    }}
-                />
-            </Card>
-        ) : (
-            <Card key={`${poll.type}_${poll.id}`} variant="outlined" className={classes.wrapper}>
-                <ResultCard
-                    type={poll.type}
-                    userStatus={poll}
-                    result={{
-                        ...poll,
-                        correct: poll.result,
-                        count: poll.count || [],
-                    }}
-                />
-            </Card>
-        )
+    const handleSubmitCompletion = async (quesId: string, answers: CompletionQuestionAnswer[]) => {
+        const timestamp = getUnixTime(Date.now())
+        await submitCompletion(account, {
+            quesId,
+            answers,
+            timestamp,
+        })
+        await updateQuestions()
+        onUpdate()
     }
+
+    const renderItem = (question: BasicQuestion) => {
+        if (question.type === PostType.Completion) {
+            return (
+                <Card key={`${question.type}_${question.id}`} variant="outlined" className={classes.wrapper}>
+                    <CompletionCard
+                        onSubmit={handleSubmitCompletion}
+                        completionStatus={question as UserCompletionStatus}
+                    />
+                </Card>
+            )
+        } else {
+            const poll = question as UserPollOrPuzzleStatus
+            return poll.status ? (
+                <Card key={`${poll.type}_${poll.id}`} variant="outlined" className={classes.wrapper}>
+                    <OptionsCard
+                        userStatus={poll}
+                        onSubmit={async (choice) => {
+                            return handleSubmitPoll(poll.type, poll.id, choice)
+                        }}
+                    />
+                </Card>
+            ) : (
+                <Card key={`${poll.type}_${poll.id}`} variant="outlined" className={classes.wrapper}>
+                    <ResultCard
+                        type={poll.type}
+                        userStatus={poll}
+                        result={{
+                            ...poll,
+                            correct: poll.result,
+                            count: poll.count || [],
+                        }}
+                    />
+                </Card>
+            )
+        }
+    }
+
+    const itemsCritical = useMemo(
+        () =>
+            [
+                ...(questions?.fills || []).filter((d) => d.critical),
+                ...(questions?.polls || []).filter((d) => d.critical),
+                ...(questions?.puzzles || []).filter((d) => d.critical),
+            ].sort((a, b) => b.order - a.order),
+        [questions],
+    )
+    const itemsNonCritical = useMemo(
+        () =>
+            [
+                ...(questions?.fills || []).filter((d) => !d.critical),
+                ...(questions?.polls || []).filter((d) => !d.critical),
+                ...(questions?.puzzles || []).filter((d) => !d.critical),
+            ].sort((a, b) => b.order - a.order),
+        [questions],
+    )
 
     return (
         <InjectedDialog title={t('plugin_find_truman_dialog_participation_title')} open={open} onClose={onClose}>
@@ -175,11 +237,17 @@ function ParticipateDialog(props: ParticipateDialogProps) {
                         <FindTrumanDialogTabs currentTab={currentTab} setTab={(tab) => onChange(null, tab)} />
                     </div>
                     <Box className={classes.tabPaneWrapper}>
-                        <TabPanel className={classes.tabPane} value={ParticipationType.Critical}>
-                            {polls?.filter((e) => e.critical).map((p) => renderPoll(p))}
+                        <TabPanel
+                            className={classes.tabPane}
+                            value={ParticipationType.Critical}
+                            sx={{ height: '522px' }}>
+                            {!itemsCritical.length ? <EmptyTip /> : itemsCritical.map((e) => renderItem(e))}
                         </TabPanel>
-                        <TabPanel className={classes.tabPane} value={ParticipationType.NonCritical}>
-                            {polls?.filter((e) => !e.critical).map((p) => renderPoll(p))}
+                        <TabPanel
+                            className={classes.tabPane}
+                            value={ParticipationType.NonCritical}
+                            sx={{ height: '522px' }}>
+                            {!itemsNonCritical.length ? <EmptyTip /> : itemsNonCritical.map((e) => renderItem(e))}
                         </TabPanel>
                     </Box>
                 </TabContext>
@@ -195,7 +263,7 @@ interface ParticipationTabsProps
 }
 
 function FindTrumanDialogTabs(props: ParticipationTabsProps) {
-    const classes = useStylesExtends(useTabsStyles(), props)
+    const classes = useStylesExtends(useTabsStyles({ columns: 'repeat(2, 50%)' }), props)
     const { t } = useContext(FindTrumanContext)
     const { currentTab, setTab } = props
 
@@ -218,4 +286,15 @@ function FindTrumanDialogTabs(props: ParticipationTabsProps) {
     }
 
     return <AbstractTab {...tabProps} />
+}
+
+function EmptyTip() {
+    const { t } = useContext(FindTrumanContext)
+    return (
+        <Box display="flex" height="100%" alignItems="center">
+            <Typography margin="auto" textAlign="center" variant="h6" color="textSecondary">
+                {t('plugin_find_truman_coming_soon')}
+            </Typography>
+        </Box>
+    )
 }

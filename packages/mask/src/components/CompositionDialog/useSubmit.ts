@@ -2,7 +2,7 @@ import { ProfileIdentifier } from '@masknet/shared-base'
 import { useCallback } from 'react'
 import Services from '../../extension/service'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/SNSAdaptor/helpers'
-import type { ImageTemplateTypes } from '@masknet/encryption'
+import { ImageTemplateTypes, socialNetworkEncoder } from '@masknet/encryption'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 import { useI18N } from '../../utils'
@@ -27,12 +27,9 @@ export function useSubmit(onClose: () => void) {
                     unreachable('Cannot figure out current profile' as never),
             )
 
-            const [encrypted, token] = await Services.Crypto.encryptTo(
-                content,
-                target === 'Everyone' ? [] : target.map((x) => x.identifier),
-                whoAmI?.identifier ?? currentProfile,
-                target === 'Everyone',
-            )
+            const _encrypted = await Services.Crypto.encryptTo(content, target, whoAmI?.identifier ?? currentProfile)
+            const encrypted = socialNetworkEncoder(activatedSocialNetworkUI.encryptionNetwork, _encrypted)
+
             const redPacketPreText =
                 isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
                     ? t('additional_post_box__encrypted_post_pre_red_packet_twitter_official_account', {
@@ -58,8 +55,6 @@ export function useSubmit(onClose: () => void) {
                         t('additional_post_box__encrypted_post_pre', { encrypted }),
                 )
             }
-            // This step write data on gun. There is nothing to write if it shared with public
-            if (target !== 'Everyone') Services.Crypto.publishPostAESKey(token)
             onClose()
         },
         [t, whoAmI, onClose],

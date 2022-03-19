@@ -12,7 +12,6 @@ import {
 import { makeStyles } from '@masknet/theme'
 import { ThemeProvider } from '@mui/material/styles'
 import CloseIcon from '@mui/icons-material/Close'
-// eslint-disable-next-line import/no-deprecated
 import { extendsTheme, useClassicMaskFullPageTheme, useMatchXS } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
@@ -78,7 +77,6 @@ function reducer<Props extends object>(
 
 /** @deprecated */
 export function useModal<DialogProps extends object, AdditionalPropsAppendByDispatch extends Partial<DialogProps>>(
-    // eslint-disable-next-line import/no-deprecated
     Modal: React.FunctionComponent<WrappedDialogProps<DialogProps>>,
     ComponentProps?: DialogProps,
 ): [React.ReactNode, () => void, (props: AdditionalPropsAppendByDispatch) => void] {
@@ -96,7 +94,6 @@ export function useModal<DialogProps extends object, AdditionalPropsAppendByDisp
     const compositeProps =
         ComponentProps || props ? { ComponentProps: { ...ComponentProps, ...props } as DialogProps } : {}
 
-    // eslint-disable-next-line import/no-deprecated
     const modalProps: WrappedDialogProps<DialogProps> = {
         TransitionProps: { onExited },
         ...compositeProps,
@@ -104,7 +101,6 @@ export function useModal<DialogProps extends object, AdditionalPropsAppendByDisp
         onClose,
     }
     // Restore old theme
-    // eslint-disable-next-line import/no-deprecated
     const theme = useClassicMaskFullPageTheme()
     const renderedComponent =
         state === DialogState.Destroyed ? null : (

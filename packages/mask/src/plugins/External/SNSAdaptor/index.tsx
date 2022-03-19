@@ -7,7 +7,7 @@ import { ThirdPartyPluginCompositionEntry } from '../components/CompositionEntry
 import { ExternalPluginMessages } from '../messages'
 import { isLocalContext } from '../sns-context'
 import { MaskMessages } from '../../../utils'
-import { makeTypedMessageText } from '@masknet/shared-base'
+import { makeTypedMessageText } from '@masknet/typed-message'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,

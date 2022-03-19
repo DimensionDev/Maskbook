@@ -3,13 +3,14 @@ import { useI18N } from '../../../../utils'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
 import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import type { FungibleTokenDetailed, Wallet } from '@masknet/web3-shared-evm'
 import { EthereumTokenType, formatBalance, formatPercentage } from '@masknet/web3-shared-evm'
 import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
-import { FormattedBalance, SelectTokenChip, useRemoteControlledDialog } from '@masknet/shared'
+import { FormattedBalance, SelectTokenChip } from '@masknet/shared'
 import { ChevronUpIcon, DropIcon } from '@masknet/icons'
 import classnames from 'classnames'
 import { TraderInfo } from './TraderInfo'
@@ -90,6 +91,9 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             marginLeft: theme.spacing(0.5),
         },
         section: {
+            width: '100%',
+        },
+        chainBoundary: {
             width: '100%',
         },
         button: {
@@ -450,6 +454,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 chainId={chainId}
                                 noSwitchNetworkTip
                                 disablePadding
+                                className={classes.chainBoundary}
                                 ActionButtonPromiseProps={{
                                     fullWidth: true,
                                     classes: { root: classes.button, disabled: classes.disabledButton },

@@ -24,7 +24,7 @@ import { Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput'
 import { LoadingButton } from '@mui/lab'
 import { isEmpty } from 'lodash-unified'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { PopupRoutes } from '@masknet/shared-base'
 import { toHex } from 'web3-utils'
@@ -102,7 +102,7 @@ export const Prior1559GasSetting = memo(() => {
     const chainId = useChainId()
     const { value, loading: getValueLoading } = useUnconfirmedRequest()
     const [getGasLimitError, setGetGasLimitError] = useState(false)
-    const history = useHistory()
+    const navigate = useNavigate()
     const [selected, setOption] = useState<number | null>(null)
     const { value: nativeToken } = useNativeTokenDetailed()
 
@@ -217,8 +217,9 @@ export const Prior1559GasSetting = memo(() => {
     }, [value, setValue, chainId])
 
     useUpdateEffect(() => {
-        if (gas) setValue('gasLimit', new BigNumber(gas).toString())
-    }, [gas, setValue])
+        const gasLimit = minGasLimit || gas
+        if (gasLimit) setValue('gasLimit', new BigNumber(gasLimit).toString())
+    }, [minGasLimit, gas, setValue])
 
     useEffect(() => {
         if (selected !== null) setValue('gasPrice', formatWeiToGwei(options[selected].gasPrice).toString())
@@ -236,7 +237,7 @@ export const Prior1559GasSetting = memo(() => {
                 ...value.payload,
                 params: config,
             })
-            history.goBack()
+            navigate(-1)
         },
         [value],
     )
@@ -245,7 +246,7 @@ export const Prior1559GasSetting = memo(() => {
 
     useUpdateEffect(() => {
         if (!value && !getValueLoading) {
-            history.replace(PopupRoutes.Wallet)
+            navigate(PopupRoutes.Wallet, { replace: true })
         }
     }, [value, getValueLoading])
 
@@ -266,7 +267,10 @@ export const Prior1559GasSetting = memo(() => {
                         <Typography>{formatWeiToGwei(gasPrice ?? 0).toString()} Gwei</Typography>
                         <Typography className={classes.gasUSD}>
                             {t('popups_wallet_gas_fee_settings_usd', {
-                                usd: formatWeiToEther(gasPrice).times(nativeTokenPrice).times(21000).toPrecision(3),
+                                usd: formatWeiToEther(gasPrice)
+                                    .times(nativeTokenPrice)
+                                    .times(minGasLimit || 21000)
+                                    .toPrecision(3),
                             })}
                         </Typography>
                     </div>

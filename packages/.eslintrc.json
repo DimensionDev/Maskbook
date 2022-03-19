@@ -19,7 +19,12 @@
                     { "name": "date-fns", "message": "Please use date-fns/{submodule} instead." },
                     { "name": "date-fns/esm", "message": "Please use date-fns/{submodule} instead." },
                     { "name": "idb", "message": "Please use idb/with-async-ittr instead." },
-                    { "name": "idb/with-async-ittr-cjs", "message": "Please use idb/with-async-ittr instead." }
+                    { "name": "idb/with-async-ittr-cjs", "message": "Please use idb/with-async-ittr instead." },
+                    { "name": "@masknet/typed-message/base", "message": "Please use @masknet/typed-message instead." },
+                    {
+                        "name": "@dimensiondev/holoflows-kit/es",
+                        "message": "Please use @dimensiondev/holoflows-kit instead."
+                    }
                 ]
             }
         ],
@@ -45,7 +50,7 @@
         "react/self-closing-comp": ["warn", { "component": true, "html": true }],
         "react-hooks/exhaustive-deps": "off",
         "react-hooks/rules-of-hooks": "error",
-        "import/no-deprecated": "error",
+        "import/no-deprecated": "off",
         "import/no-duplicates": "error",
         "unicorn/better-regex": "error",
         "unicorn/catch-error-name": ["error", { "ignore": ["^err$"] }],
@@ -60,8 +65,6 @@
         "unicorn/prefer-number-properties": "error",
         "unicorn/relative-url-style": ["error", "always"],
         "unicorn/throw-new-error": "error",
-        "unused-imports/no-unused-imports-ts": "error",
-        "@dimensiondev/no-bigint": "error",
         "@dimensiondev/no-jsx-template-literal": "error",
         "@dimensiondev/no-locale-case": "error",
         "@dimensiondev/no-number-constructor": "off",

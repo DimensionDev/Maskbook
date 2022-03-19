@@ -44,6 +44,7 @@ async function fetchProposalFromGraphql(id: string) {
                     space {
                       id
                       name
+                      symbol
                     }
                 }
                 votes(first: 10000, where: { proposal: $id }) {
@@ -74,6 +75,7 @@ async function fetchProposalFromGraphql(id: string) {
                 space: {
                     id: string
                     name: string
+                    symbol: string
                 }
                 state: string
                 title: string
@@ -107,19 +109,16 @@ export async function fetch3BoxProfiles(addresses: string[]): Promise<Profile3Bo
 export async function getScores(
     snapshot: string,
     voters: string[],
-    blockNumber: number,
     network: string,
     space: string,
     strategies: Strategy[],
 ) {
-    const provider = ss.utils.getProvider(network)
-    const blockTag = Number(snapshot) > blockNumber ? 'latest' : Number(snapshot)
     const scores: { [key in string]: number }[] = await ss.utils.getScores(
         space,
         strategies,
         network,
         voters,
-        blockTag,
+        Number(snapshot),
         SNAPSHOT_GET_SCORE_API,
     )
     return scores.map((score) =>
@@ -129,20 +128,71 @@ export async function getScores(
     )
 }
 
-export async function vote(identifier: ProposalIdentifier, choice: number, address: string) {
-    const msg = JSON.stringify({
-        version: '0.1.3',
-        timestamp: (Date.now() / 1e3).toFixed(),
+export async function vote(identifier: ProposalIdentifier, choice: number, address: string, voteType: string) {
+    const message = {
+        from: address,
         space: identifier.space,
-        type: 'vote',
-        payload: {
-            proposal: identifier.id,
-            choice,
-            metadata: {},
-        },
-    })
+        timestamp: Math.floor(Date.now() / 1e3),
+        proposal: identifier.id,
+        choice: voteType === 'single-choice' ? choice : [choice],
+        metadata: JSON.stringify({}),
+    }
 
-    const sig = await Services.Ethereum.personalSign(msg, address)
+    const domain = {
+        name: 'snapshot',
+        version: '0.1.4',
+    }
+
+    const types = {
+        Vote: [
+            {
+                name: 'from',
+                type: 'address',
+            },
+            {
+                name: 'space',
+                type: 'string',
+            },
+            {
+                name: 'timestamp',
+                type: 'uint64',
+            },
+            {
+                name: 'proposal',
+                type: 'string',
+            },
+            {
+                name: 'choice',
+                type: voteType === 'single-choice' ? 'uint32' : 'uint32[]',
+            },
+            {
+                name: 'metadata',
+                type: 'string',
+            },
+        ],
+    }
+
+    const data = {
+        message,
+        domain,
+        types,
+    }
+
+    const sig = await Services.Ethereum.typedDataSign(
+        address,
+        JSON.stringify({
+            domain,
+            types: {
+                EIP712Domain: [
+                    { name: 'name', type: 'string' },
+                    { name: 'version', type: 'string' },
+                ],
+                Vote: types.Vote,
+            },
+            primaryType: 'Vote',
+            message,
+        }),
+    )
 
     const response = await fetch('https://hub.snapshot.org/api/msg', {
         method: 'POST',
@@ -150,7 +200,7 @@ export async function vote(identifier: ProposalIdentifier, choice: number, addre
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ msg, sig, address }),
+        body: JSON.stringify({ data, sig, address }),
     })
 
     const result: VoteSuccess = await response.json()
