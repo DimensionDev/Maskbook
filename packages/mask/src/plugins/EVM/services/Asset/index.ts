@@ -1,6 +1,6 @@
 import { unreachable } from '@dimensiondev/kit'
 import { ChainId, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
-import { NonFungibleTokenAPI, OpenSea, Rarible } from '@masknet/web3-providers'
+import { NonFungibleTokenAPI, OpenSea, Rarible, Zora } from '@masknet/web3-providers'
 
 export interface AssetOption {
     address: string
@@ -56,6 +56,8 @@ export async function getAsset(options: AssetOption) {
             return
         case NonFungibleAssetProvider.RARIBLE:
             return Rarible.getAsset(options.address, options.tokenId, { chainId: options.chainId })
+        case NonFungibleAssetProvider.ZORA:
+            return Zora.getAsset(options.address, options.tokenId)
         default:
             unreachable(options.provider)
     }
@@ -74,6 +76,8 @@ export async function getOrders(options: OrderOption) {
             return []
         case NonFungibleAssetProvider.RARIBLE:
             return Rarible.getOrders(address, tokenId, side, { chainId })
+        case NonFungibleAssetProvider.ZORA:
+            return Zora.getOrders(address, tokenId, side)
         default:
             unreachable(provider)
     }
@@ -88,6 +92,8 @@ export async function getListings(options: ListOption) {
             return []
         case NonFungibleAssetProvider.RARIBLE:
             return Rarible.getListings(address, tokenId, { chainId })
+        case NonFungibleAssetProvider.ZORA:
+            return Zora.getListings(address, tokenId)
         default:
             unreachable(provider)
     }
@@ -102,6 +108,8 @@ export async function getHistory(options: HistoryOption) {
             return []
         case NonFungibleAssetProvider.RARIBLE:
             return Rarible.getHistory(address, tokenId)
+        case NonFungibleAssetProvider.ZORA:
+            return Zora.getHistory(address, tokenId)
         default:
             unreachable(provider)
     }
@@ -115,6 +123,8 @@ export async function getCollections(options: CollectionOption) {
         case NonFungibleAssetProvider.RARIBLE:
             return defaultPageableData
         case NonFungibleAssetProvider.NFTSCAN:
+            return defaultPageableData
+        case NonFungibleAssetProvider.ZORA:
             return defaultPageableData
         default:
             unreachable(provider)

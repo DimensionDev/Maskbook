@@ -2,7 +2,7 @@ import { useState, useMemo, ReactNode } from 'react'
 import { useTimeout } from 'react-use'
 import { isSameAddress } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends, useCustomSnackbar, ShadowRootPopper } from '@masknet/theme'
-import { useValueRef } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared-base-ui'
 import {
     TextField,
     Typography,

@@ -78,6 +78,7 @@
         "elec",
         "encryptedmsg",
         "endregion",
+        "enhanceable",
         "ethersphere",
         "ethersproject",
         "eustatius",
@@ -267,6 +268,7 @@
         "xlarge",
         "xlink",
         "zerion",
+        "zora",
         "zubin"
     ],
     "ignoreWords": [

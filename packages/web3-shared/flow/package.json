@@ -6,7 +6,7 @@
   "dependencies": {
     "@blocto/fcl": "^0.0.78-alpha.8",
     "@masknet/web3-constants": "workspace:*",
-    "@masknet/web3-kit": "workspace:*",
+    "@masknet/web3-shared-base": "workspace:*",
     "@onflow/types": "^0.0.5",
     "react-use": "^17.3.2",
     "urlcat": "^2.0.4"

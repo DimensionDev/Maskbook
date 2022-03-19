@@ -16,7 +16,7 @@ import { EthereumTokenType, useAccount, useFungibleTokenWatched } from '@masknet
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { UnreviewedWarning } from './UnreviewedWarning'
 import { useI18N } from '../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import ActionButton, { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { PluginCollectibleRPC } from '../messages'

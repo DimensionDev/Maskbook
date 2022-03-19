@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useAsync, useTimeout } from 'react-use'
 import type { Constant } from '@masknet/web3-shared-evm/constants/utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { DialogContent } from '@mui/material'
 import { PluginPetMessages, PluginPetRPC } from '../messages'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'

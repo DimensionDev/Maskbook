@@ -77,7 +77,7 @@
         "Arbitrum": [0, 0, 0, 0, 0],
         "Arbitrum_Rinkeby": [0, 0, 0, 0, 0],
         "xDai": [0, 0, 0, 0, 0],
-        "Optimistic": [0, 0, 0, 0],
+        "Optimistic": [0, 1, 2, 3, 4],
         "Optimistic_Kovan": [0, 0, 0, 0],
         "Optimistic_Goerli": [0, 0, 0, 0],
         "Avalanche": [0, 0, 0, 0, 0],

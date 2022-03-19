@@ -12,6 +12,7 @@ export const {
     queryPersonaByProfileDB,
     createPersonaDB,
     attachProfileDB,
+    createPersonaDBReadonlyAccess,
     consistentPersonaDBWriteAccess,
     updatePersonaDB,
     createOrUpdatePersonaDB,

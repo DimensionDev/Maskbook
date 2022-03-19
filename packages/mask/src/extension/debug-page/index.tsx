@@ -1,9 +1,8 @@
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 
 import { Entry } from './Entry'
 
 const container = document.createElement('main')
 
-ReactDOM.render(<Entry />, container, () => {
-    document.body.appendChild(container)
-})
+document.body.appendChild(container)
+createRoot(container).render(<Entry />)
