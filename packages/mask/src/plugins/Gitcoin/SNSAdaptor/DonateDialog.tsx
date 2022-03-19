@@ -3,8 +3,6 @@ import {
     formatBalance,
     FungibleTokenDetailed,
     TransactionStateType,
-    useAccount,
-    useChainId,
     useGitcoinConstants,
     useNativeTokenDetailed,
     useFungibleTokenBalance,
@@ -28,6 +26,7 @@ import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { useDonateCallback } from '../hooks/useDonateCallback'
 import { PluginGitcoinMessages } from '../messages'
 import { rightShift } from '@masknet/web3-shared-base'
+import { NetworkPluginID, useAccount, useChainId } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -62,8 +61,8 @@ export function DonateDialog(props: DonateDialogProps) {
     const [postLink, setPostLink] = useState<string | URL>('')
 
     // context
-    const account = useAccount()
-    const chainId = useChainId()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const nativeTokenDetailed = useNativeTokenDetailed()
     const { BULK_CHECKOUT_ADDRESS } = useGitcoinConstants()
 

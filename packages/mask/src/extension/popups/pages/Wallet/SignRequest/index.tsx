@@ -3,7 +3,7 @@ import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
-import { EthereumRpcType, useWallet } from '@masknet/web3-shared-evm'
+import { EthereumRPC_Type, useWallet } from '@masknet/web3-shared-evm'
 import { useAsyncFn, useUpdateEffect } from 'react-use'
 import { LoadingButton } from '@mui/lab'
 import { toUtf8 } from 'web3-utils'
@@ -91,8 +91,8 @@ const SignRequest = memo(() => {
 
     const { data, address } = useMemo(() => {
         if (
-            value?.computedPayload?.type === EthereumRpcType.SIGN ||
-            value?.computedPayload?.type === EthereumRpcType.SIGN_TYPED_DATA
+            value?.computedPayload?.type === EthereumRPC_Type.SIGN ||
+            value?.computedPayload?.type === EthereumRPC_Type.SIGN_TYPED_DATA
         ) {
             let message = value.computedPayload.data
             try {

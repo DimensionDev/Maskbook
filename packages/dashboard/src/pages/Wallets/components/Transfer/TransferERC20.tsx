@@ -9,7 +9,6 @@ import {
     isEIP1559Supported,
     isSameAddress,
     TransactionStateType,
-    useChainId,
     useFungibleTokenBalance,
     useGasLimit,
     useGasPrice,
@@ -23,6 +22,7 @@ import BigNumber from 'bignumber.js'
 import {
     NetworkPluginID,
     TokenType,
+    useChainId,
     useLookupAddress,
     useNetworkDescriptor,
     useWeb3State,
@@ -73,7 +73,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const { value: defaultGasPrice = '0' } = useGasPrice()
 
     const [selectedToken, setSelectedToken] = useState<FungibleTokenDetailed | Web3Plugin.FungibleToken>(token)
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const is1559Supported = useMemo(() => isEIP1559Supported(chainId), [chainId])
 
     const { Utils } = useWeb3State()

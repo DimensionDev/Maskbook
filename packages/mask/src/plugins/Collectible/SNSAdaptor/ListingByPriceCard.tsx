@@ -7,7 +7,6 @@ import {
     FungibleTokenDetailed,
     FungibleTokenWatched,
     isNativeTokenAddress,
-    useAccount,
 } from '@masknet/web3-shared-evm'
 import { isZero, isGreaterThan } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
@@ -21,6 +20,7 @@ import { toAsset } from '../helpers'
 import getUnixTime from 'date-fns/getUnixTime'
 import type { useAsset } from '@masknet/plugin-evm/src/hooks'
 import { isWyvernSchemaName } from '../utils'
+import { NetworkPluginID, useAccount } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -62,7 +62,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     const [scheduleTime, setScheduleTime] = useState(new Date())
     const [expirationTime, setExpirationTime] = useState(new Date())

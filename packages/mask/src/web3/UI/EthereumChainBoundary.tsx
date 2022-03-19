@@ -2,7 +2,14 @@ import React, { useCallback } from 'react'
 import { Box, Typography, Theme } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import type { SxProps } from '@mui/system'
-import { NetworkPluginID, useActivatedPlugin, usePluginIDContext } from '@masknet/plugin-infra'
+import {
+    NetworkPluginID,
+    useAccount,
+    useActivatedPlugin,
+    useAllowTestnet,
+    useChainId,
+    usePluginIDContext,
+} from '@masknet/plugin-infra'
 import {
     ChainId,
     getChainDetailedCAIP,
@@ -12,9 +19,6 @@ import {
     NetworkType,
     ProviderType,
     resolveNetworkName,
-    useAccount,
-    useAllowTestnet,
-    useChainId,
 } from '@masknet/web3-shared-evm'
 import { useValueRef, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { delay } from '@dimensiondev/kit'
@@ -25,8 +29,8 @@ import ActionButton, {
 import { currentProviderSettings } from '../../plugins/Wallet/settings'
 import { useI18N } from '../../utils'
 import { WalletMessages, WalletRPC } from '../../plugins/Wallet/messages'
-import Services from '../../extension/service'
 import { pluginIDSettings } from '../../settings/settings'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 const useStyles = makeStyles()(() => ({}))
 
@@ -48,9 +52,9 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const pluginID = usePluginIDContext()
     const plugin = useActivatedPlugin(pluginID, 'any')
 
-    const account = useAccount()
-    const chainId = useChainId()
-    const allowTestnet = useAllowTestnet()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const allowTestnet = useAllowTestnet(NetworkPluginID.PLUGIN_EVM)
     const providerType = useValueRef(currentProviderSettings)
 
     const { noSwitchNetworkTip = false } = props
@@ -104,8 +108,8 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                         throw new Error('Timeout!')
                     })(),
                     networkType === NetworkType.Ethereum
-                        ? EVM_RPCswitchEthereumChain(expectedChainId, overrides)
-                        : EVM_RPCaddEthereumChain(chainDetailedCAIP, account, overrides),
+                        ? EVM_RPC.switchEthereumChain(expectedChainId, overrides)
+                        : EVM_RPC.addEthereumChain(chainDetailedCAIP, account, overrides),
                 ])
 
                 // recheck

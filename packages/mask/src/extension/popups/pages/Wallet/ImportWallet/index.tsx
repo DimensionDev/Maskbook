@@ -18,7 +18,8 @@ import { getDerivableAccounts } from '../../../../../plugins/Wallet/services'
 import { PageHeader } from '../components/PageHeader'
 import { PasswordField } from '../../../components/PasswordField'
 import { currentAccountSettings, currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
-import { ProviderType, useChainId } from '@masknet/web3-shared-evm'
+import { ProviderType } from '@masknet/web3-shared-evm'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()({
     container: {
@@ -109,7 +110,7 @@ const useStyles = makeStyles()({
 const ImportWallet = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { classes } = useStyles()
     const [currentTab, onChange, tabs] = useTabs('mnemonic', 'json', 'privateKey')
     const [mnemonic, setMnemonic] = useState('')

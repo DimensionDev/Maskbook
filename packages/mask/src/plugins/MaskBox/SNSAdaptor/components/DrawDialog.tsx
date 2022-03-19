@@ -5,14 +5,8 @@ import { Add, Remove } from '@mui/icons-material'
 import { useProviderDescriptor } from '@masknet/plugin-infra'
 import { FormattedAddress, FormattedBalance, ImageIcon } from '@masknet/shared'
 import { Box, Button, DialogContent, TextField, Typography } from '@mui/material'
-import {
-    formatBalance,
-    formatEthereumAddress,
-    useAccount,
-    useChainId,
-    useMaskBoxConstants,
-    EthereumTokenType,
-} from '@masknet/web3-shared-evm'
+import { formatBalance, formatEthereumAddress, useMaskBoxConstants, EthereumTokenType } from '@masknet/web3-shared-evm'
+import { NetworkPluginID, useAccount, useChainId } from '@masknet/plugin-infra'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
@@ -112,8 +106,8 @@ export function DrawDialog(props: DrawDialogProps) {
     } = useContainer(Context)
 
     const providerDescriptor = useProviderDescriptor()
-    const account = useAccount()
-    const chainId = useChainId()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const onCount = useCallback(
         (step: number) => {

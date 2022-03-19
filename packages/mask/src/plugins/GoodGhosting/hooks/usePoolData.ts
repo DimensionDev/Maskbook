@@ -1,10 +1,11 @@
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 import {
     useAssets,
-    useChainId,
     useERC20TokenContract,
     useERC20TokenDetailed,
     DAI,
     WNATIVE as WETH,
+    ChainId,
 } from '@masknet/web3-shared-evm'
 import { useState } from 'react'
 import { useAsyncRetry } from 'react-use'
@@ -45,12 +46,12 @@ export function usePoolData(info: GoodGhostingInfo) {
 }
 
 export function useGameToken() {
-    const chainId = useChainId()
+    const chainId = useChainId<ChainId>(NetworkPluginID.PLUGIN_EVM)
     return DAI[chainId]
 }
 
 export function useRewardToken() {
-    const chainId = useChainId()
+    const chainId = useChainId<ChainId>(NetworkPluginID.PLUGIN_EVM)
     return WETH[chainId]
 }
 

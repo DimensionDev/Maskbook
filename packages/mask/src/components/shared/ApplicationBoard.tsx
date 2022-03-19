@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import classNames from 'classnames'
 import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { ChainId, useChainId, useAccount, useWallet } from '@masknet/web3-shared-evm'
+import { ChainId, useWallet } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { MaskMessages } from '../../utils/messages'
 import { useControlledDialog } from '../../utils/hooks/useControlledDialog'
@@ -15,7 +15,7 @@ import { EntrySecondLevelDialog } from './EntrySecondLevelDialog'
 import { NetworkTab } from './NetworkTab'
 import { SavingsDialog } from '../../plugins/Savings/SNSAdaptor/SavingsDialog'
 import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialog'
-import { NetworkPluginID, PluginId, usePluginIDContext } from '@masknet/plugin-infra'
+import { NetworkPluginID, PluginId, useAccount, useChainId, usePluginIDContext } from '@masknet/plugin-infra'
 import { FindTrumanDialog } from '../../plugins/FindTruman/SNSAdaptor/FindTrumanDialog'
 
 const useStyles = makeStyles()((theme) => {
@@ -129,8 +129,8 @@ interface MaskApplicationBoxProps {
 
 export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskApplicationBoxProps) {
     const { classes } = useStyles()
-    const currentChainId = useChainId()
-    const account = useAccount()
+    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const selectedWallet = useWallet()
     const currentPluginId = usePluginIDContext()
     const isNotEvm = currentPluginId !== NetworkPluginID.PLUGIN_EVM

@@ -7,13 +7,13 @@ import {
     getPayloadConfig,
     resolveTransactionLinkOnExplorer,
     TransactionStateType,
-    useChainId,
 } from '@masknet/web3-shared-evm'
 import { makeStyles, ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
 import { WalletMessages } from '../../messages'
 import { RecentTransactionDescription } from '../WalletStatusDialog/TransactionDescription'
 import { useI18N } from '../../../../utils'
 import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()({
     link: {
@@ -23,8 +23,8 @@ const useStyles = makeStyles()({
 })
 
 export function TransactionSnackbar() {
-    const chainId = useChainId()
     const { classes } = useStyles()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()
     const { t } = useI18N()
     const snackbarKeyRef = useRef<SnackbarKey>()

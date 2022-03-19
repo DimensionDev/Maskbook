@@ -16,8 +16,6 @@ import {
     useTokenConstants,
     useFungibleTokensDetailed,
     EthereumTokenType,
-    useChainId,
-    useAccount,
     useERC20TokenAllowance,
     useERC20TokenDetailed,
     useERC721ContractDetailed,
@@ -27,6 +25,7 @@ import {
     isNativeTokenAddress,
     formatBalance,
 } from '@masknet/web3-shared-evm'
+import { NetworkPluginID, useAccount, useChainId } from '@masknet/plugin-infra'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { BoxInfo, BoxState } from '../type'
 import { useMaskBoxInfo } from './useMaskBoxInfo'
@@ -50,8 +49,8 @@ import {
 function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const now = new Date()
     const beat = useBeat()
-    const account = useAccount()
-    const chainId = useChainId()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(ChainId.Mainnet)
     const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants()
     const coder = ABICoder as unknown as ABICoder.AbiCoder

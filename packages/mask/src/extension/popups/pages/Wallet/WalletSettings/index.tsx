@@ -8,7 +8,8 @@ import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils'
-import { resolveAddressLinkOnExplorer, useChainId, useWallet } from '@masknet/web3-shared-evm'
+import { resolveAddressLinkOnExplorer, useWallet } from '@masknet/web3-shared-evm'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()({
     content: {
@@ -41,7 +42,7 @@ const useStyles = makeStyles()({
 const WalletSettings = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const wallet = useWallet()
     const { classes } = useStyles()
     return (

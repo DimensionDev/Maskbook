@@ -1,12 +1,12 @@
 import { FormattedAddress, FormattedBalance } from '@masknet/shared'
 import {
+    ChainId,
     formatBalance,
     formatEthereumAddress,
     FungibleTokenDetailed,
     isNativeTokenAddress,
     resolveAddressLinkOnExplorer,
     resolveTokenLinkOnExplorer,
-    useChainId,
     useITOConstants,
 } from '@masknet/web3-shared-evm'
 import { ONE } from '@masknet/web3-shared-base'
@@ -20,6 +20,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { useI18N } from '../../../utils'
 import type { PoolSettings } from './hooks/useFill'
 import { decodeRegionCode, regionCodes } from './hooks/useRegion'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 
 const useSwapItemStyles = makeStyles()({
     root: {
@@ -118,7 +119,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     const { poolSettings, onDone, onBack, onClose } = props
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const chainId = useChainId<ChainId>(NetworkPluginID.PLUGIN_EVM)
     const { DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants()
     const showQualification =
         poolSettings?.advanceSettingData.contract &&

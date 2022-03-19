@@ -1,6 +1,7 @@
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { ERC721TokenDetailed, useChainId } from '@masknet/web3-shared-evm'
+import { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { Checkbox, List, ListItem } from '@mui/material'
 import classnames from 'classnames'
 import { noop } from 'lodash-unified'
@@ -46,7 +47,7 @@ export function arrayRemove<T>(arr: T[], item: T): T[] {
 }
 
 export const NFTList: FC<Props> = ({ selectedIds, onChange, limit = 1, tokens, className }) => {
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { classes } = useStyles()
 
     const reachedLimit = selectedIds.length >= limit

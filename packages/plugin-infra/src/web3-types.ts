@@ -1,5 +1,6 @@
 import type { BigNumber } from 'bignumber.js'
 import type { Subscription } from 'use-subscription'
+import type { ChainId } from '../../web3-shared/evm'
 import type { Pagination, Plugin, Pageable } from './types'
 
 /**
@@ -255,6 +256,7 @@ export declare namespace Web3Plugin {
         export interface AssetState {
             /** Get fungible assets of given account. */
             getFungibleAssets?: (
+                chainId: ChainId,
                 address: string,
                 providerType: string,
                 network: NetworkDescriptor,
@@ -262,6 +264,7 @@ export declare namespace Web3Plugin {
             ) => Promise<Asset<FungibleToken>[]>
             /** Get non-fungible assets of given account. */
             getNonFungibleAssets?: (
+                chainId: ChainId,
                 address: string,
                 pagination: Pagination,
                 providerType?: string,
@@ -269,8 +272,8 @@ export declare namespace Web3Plugin {
             ) => Promise<Pageable<NonFungibleToken>>
         }
         export interface NameServiceState {
-            lookup?: (domain: string) => Promise<string | undefined>
-            reverse?: (address: string) => Promise<string | undefined>
+            lookup?: (chainId: number, domain: string) => Promise<string | undefined>
+            reverse?: (chainId: number, address: string) => Promise<string | undefined>
         }
         export interface TokenState {
             addToken: (token: Token) => Promise<void>
@@ -332,6 +335,7 @@ export declare namespace Web3Plugin {
 
             resolveTransactionLink?: (chainId: number, transactionId: string) => string
             resolveAddressLink?: (chainId: number, address: string) => string
+            resolveFungibleTokenLink?: (chainId: number, address: string) => string
             resolveNonFungibleTokenLink?: (chainId: number, address: string, tokenId: string) => string
             resolveBlockLink?: (chainId: number, blockNumber: string) => string
 
@@ -342,7 +346,6 @@ export declare namespace Web3Plugin {
             getAverageBlockDelay?: (chainId: number, scale?: number) => number
         }
         export interface Capabilities {
-            Shared?: SharedState
             AddressBook?: AddressBook
             Asset?: AssetState
             NameService?: NameServiceState
@@ -350,6 +353,7 @@ export declare namespace Web3Plugin {
             Token?: TokenState
             TokenList?: TokenListState
             Transaction?: TransactionState
+            Shared?: SharedState
             Utils?: Others
         }
     }

@@ -12,12 +12,12 @@ import AbstractTab, { AbstractTabProps } from '../../../components/shared/Abstra
 import { payloadOutMask } from './helpers'
 import { PoolList } from './PoolList'
 import { PluginITO_RPC } from '../messages'
-import { formatBalance, useChainId, useAccount, TransactionStateType, useITOConstants } from '@masknet/web3-shared-evm'
+import { formatBalance, TransactionStateType, useITOConstants } from '@masknet/web3-shared-evm'
 import { PoolSettings, useFillCallback } from './hooks/useFill'
 import { ConfirmDialog } from './ConfirmDialog'
 import { WalletMessages } from '../../Wallet/messages'
 import { omit, set } from 'lodash-unified'
-import { useCompositionContext } from '@masknet/plugin-infra'
+import { NetworkPluginID, useAccount, useChainId, useCompositionContext } from '@masknet/plugin-infra'
 import { MINDS_ID } from '../../../social-network-adaptor/minds.com/base'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
@@ -53,8 +53,8 @@ export interface CompositionDialogProps extends withClasses<'root'>, Omit<Inject
 export function CompositionDialog(props: CompositionDialogProps) {
     const { t } = useI18N()
 
-    const account = useAccount()
-    const chainId = useChainId()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
     const { attachMetadata, dropMetadata } = useCompositionContext()
 

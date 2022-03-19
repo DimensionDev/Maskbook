@@ -31,12 +31,13 @@ import { StartUp } from './StartUp'
 import { getTokenUSDValue } from './utils/getTokenUSDValue'
 
 const r = relativeRouteOf(DashboardRoutes.Wallets)
+
 function Wallets() {
+    const t = useDashboardI18N()
     const wallet = useWallet()
     const wallets = useWallets()
     const navigate = useNavigate()
-    const t = useDashboardI18N()
-    const currentChainId = useChainId()
+    const chainId = useChainId()
     const { Asset } = useWeb3PluginState()
     const account = useAccount()
     const { portfolioProvider } = useWeb3State()
@@ -60,7 +61,7 @@ function Wallets() {
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
     const { value: detailedTokens } = useAsync(
-        async () => Asset?.getFungibleAssets?.(account, portfolioProvider, network!),
+        async () => Asset?.getFungibleAssets?.(chainId, account, portfolioProvider, network!),
         [account, Asset, portfolioProvider, network],
     )
     const renderNetworks = useMemo(() => {
@@ -127,7 +128,7 @@ function Wallets() {
                         <Route path={r(DashboardRoutes.WalletsTransfer)} element={<Transfer />} />
                         <Route
                             path={r(DashboardRoutes.WalletsHistory)}
-                            element={<History selectedChainId={selectedNetwork?.chainId ?? currentChainId} />}
+                            element={<History selectedChainId={selectedNetwork?.chainId ?? chainId} />}
                         />
                     </Routes>
                 </>

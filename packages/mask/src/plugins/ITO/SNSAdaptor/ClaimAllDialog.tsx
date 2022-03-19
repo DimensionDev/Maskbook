@@ -1,4 +1,11 @@
-import { usePluginIDContext, PluginId, useActivatedPlugin } from '@masknet/plugin-infra'
+import {
+    usePluginIDContext,
+    PluginId,
+    useActivatedPlugin,
+    useAccount,
+    useChainId,
+    NetworkPluginID,
+} from '@masknet/plugin-infra'
 import { useCallback, useEffect, useState, useLayoutEffect, useRef } from 'react'
 import { flatten, uniq } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
@@ -16,8 +23,6 @@ import {
     isSameAddress,
     useITOConstants,
     ChainId,
-    useChainId,
-    useAccount,
 } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
@@ -233,8 +238,8 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const pluginId = usePluginIDContext()
     const chainIdList = ITO_Definition?.enableRequirement.web3?.[pluginId]?.supportedChainIds ?? []
     const DialogRef = useRef<HTMLDivElement>(null)
-    const account = useAccount()
-    const currentChainId = useChainId()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const currentChainId = useChainId<ChainId>(NetworkPluginID.PLUGIN_EVM)
     const {
         value: campaignInfos,
         loading: loadingAirdrop,

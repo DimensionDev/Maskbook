@@ -1,4 +1,4 @@
-import { useAccount } from '@masknet/web3-shared-evm'
+import { useAccount } from '@masknet/plugin-infra'
 import { makeStyles } from '@masknet/theme'
 import { useAsync } from 'react-use'
 import { fetchUserPoap } from '../Worker/apis'

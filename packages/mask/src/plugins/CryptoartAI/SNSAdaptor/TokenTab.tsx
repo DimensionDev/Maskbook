@@ -5,10 +5,11 @@ import { useI18N } from '../../../utils'
 import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { FormattedAddress } from '@masknet/shared'
-import { resolveAddressLinkOnExplorer, getChainName, useChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { resolveAddressLinkOnExplorer, getChainName, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { Account } from './Account'
 import { resolveWebLinkOnCryptoartAI } from '../pipes'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -65,7 +66,7 @@ export interface TokenTabProps {}
 export function TokenTab(props: TokenTabProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { token, asset } = CollectibleState.useContainer()
 
     const assetSource = useMemo(() => {

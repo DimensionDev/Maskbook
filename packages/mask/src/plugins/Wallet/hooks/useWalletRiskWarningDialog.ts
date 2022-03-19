@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useAccount } from '@masknet/web3-shared-evm'
+import { useAccount } from '@masknet/plugin-infra'
 import { WalletMessages, WalletRPC } from '../messages'
 
 export const useWalletRiskWarningDialog = () => {

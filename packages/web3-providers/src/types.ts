@@ -427,13 +427,10 @@ export namespace TokenListBaseAPI {
 }
 
 export namespace TokenPriceBaseAPI {
-    export interface PriceRecord {
-        [currency: string]: number
-    }
-
-    /** Base on response of coingecko's token price API */
     export interface CryptoPrice {
-        [token: string]: PriceRecord
+        [token: string]: {
+            [currency: string]: number
+        }
     }
 
     export interface Provider {

@@ -1,11 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import {
-    formatGweiToEther,
-    useChainId,
-    useNativeTokenDetailed,
-    GasOption,
-    formatGweiToWei,
-} from '@masknet/web3-shared-evm'
+import { formatGweiToEther, useNativeTokenDetailed, GasOption, formatGweiToWei } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import BigNumber from 'bignumber.js'
@@ -29,6 +23,7 @@ import {
     multipliedBy,
     toFixed,
 } from '@masknet/web3-shared-base'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 
 const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 
@@ -36,7 +31,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
     ({ gasLimit, minGasLimit = 0, gasOption = GasOption.Medium, onConfirm = noop }) => {
         const { classes } = useGasSettingStyles()
         const { t } = useI18N()
-        const chainId = useChainId()
+        const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
         const [selectedGasOption, setGasOption] = useState<GasOption | null>(gasOption)
         const { value: nativeToken } = useNativeTokenDetailed()
         const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)

@@ -6,19 +6,19 @@ import { useContainer } from 'unstated-next'
 import { Button, Link, List } from '@mui/material'
 import {
     ChainId,
-    EthereumRpcType,
+    EthereumRPC_Type,
     isNativeTokenAddress,
     isSameAddress,
     resolveTransactionLinkOnExplorer,
-    useChainId,
 } from '@masknet/web3-shared-evm'
 import { PopupRoutes } from '@masknet/shared-base'
 import { WalletContext } from '../../hooks/useWalletContext'
 import type { RecentTransaction } from '../../../../../../plugins/Wallet/services'
-import type Services from '../../../../../service'
 import { useI18N } from '../../../../../../utils'
 import { ReplaceType } from '../../type'
 import { ActivityListItem } from './ActivityListItem'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
+import type { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 const useStyles = makeStyles()({
     list: {
@@ -104,9 +104,9 @@ export const ActivityList = memo<ActivityListProps>(({ tokenAddress }) => {
         transactions?.filter((transaction) => {
             if (!tokenAddress) return true
             else if (isNativeTokenAddress(tokenAddress))
-                return transaction.computedPayload?.type === EthereumRpcType.SEND_ETHER
+                return transaction.computedPayload?.type === EthereumRPC_Type.SEND_ETHER
             else if (
-                transaction.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION &&
+                transaction.computedPayload?.type === EthereumRPC_Type.CONTRACT_INTERACTION &&
                 (transaction.computedPayload?.name === 'transfer' ||
                     transaction.computedPayload?.name === 'transferFrom')
             ) {
@@ -115,7 +115,7 @@ export const ActivityList = memo<ActivityListProps>(({ tokenAddress }) => {
             return false
         }) ?? []
 
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     return <ActivityListUI dataSource={dataSource} chainId={chainId} />
 })
 
@@ -183,13 +183,13 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }
 })
 
 function getToAddress(
-    computedPayload?: UnboxPromise<ReturnType<typeof EVM_RPCgetSendTransactionComputedPayload>> | null,
+    computedPayload?: UnboxPromise<ReturnType<typeof EVM_RPC.getSendTransactionComputedPayload>> | null,
 ) {
     if (!computedPayload) return undefined
     switch (computedPayload.type) {
-        case EthereumRpcType.SEND_ETHER:
+        case EthereumRPC_Type.SEND_ETHER:
             return computedPayload._tx.to
-        case EthereumRpcType.CONTRACT_INTERACTION:
+        case EthereumRPC_Type.CONTRACT_INTERACTION:
             switch (computedPayload.name) {
                 case 'transfer':
                 case 'transferFrom':
@@ -198,10 +198,10 @@ function getToAddress(
                 default:
                     return computedPayload._tx.to
             }
-        case EthereumRpcType.CONTRACT_DEPLOYMENT:
+        case EthereumRPC_Type.CONTRACT_DEPLOYMENT:
             return computedPayload._tx.to
-        case EthereumRpcType.CANCEL:
-        case EthereumRpcType.RETRY:
+        case EthereumRPC_Type.CANCEL:
+        case EthereumRPC_Type.RETRY:
         default:
             return undefined
     }

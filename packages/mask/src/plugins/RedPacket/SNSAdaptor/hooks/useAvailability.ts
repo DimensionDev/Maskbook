@@ -1,10 +1,11 @@
 import { useAsyncRetry } from 'react-use'
-import { ChainId, useChainId } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { useRedPacketContract } from './useRedPacketContract'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 
 export function useAvailability(version: number, from: string, id: string, redpacketChainId: ChainId) {
     const redPacketContract = useRedPacketContract(version)
-    const currentChainId = useChainId()
+    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     return useAsyncRetry(async () => {
         if (!id || redpacketChainId !== currentChainId) return null
         if (!redPacketContract) return null

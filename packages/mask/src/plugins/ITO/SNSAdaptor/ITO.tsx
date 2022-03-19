@@ -8,9 +8,6 @@ import {
     currySameAddress,
     resolveLinkOnExplorer,
     TransactionStateType,
-    useAccount,
-    useChainId,
-    useChainIdValid,
     useTokenConstants,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
@@ -44,6 +41,7 @@ import { StyledLinearProgress } from './StyledLinearProgress'
 import { SwapGuide, SwapStatus } from './SwapGuide'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { NetworkPluginID, useAccount, useChainId, useChainIdValid } from '@masknet/plugin-infra'
 
 export interface IconProps {
     size?: number
@@ -224,10 +222,10 @@ export interface ITO_Props {
 
 export function ITO(props: ITO_Props) {
     // context
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
     const postLink = usePostLink()
-    const chainId = useChainId()
-    const chainIdValid = useChainIdValid()
     const [destructState, destructCallback, resetDestructCallback] = useDestructCallback(props.payload.contract_address)
     const [openClaimDialog, setOpenClaimDialog] = useState(false)
     const [claimDialogStatus, setClaimDialogStatus] = useState(SwapStatus.Remind)

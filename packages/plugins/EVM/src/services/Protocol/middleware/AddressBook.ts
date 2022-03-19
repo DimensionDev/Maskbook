@@ -1,4 +1,4 @@
-import { EthereumMethodType, EthereumRpcType, isSameAddress, isZeroAddress } from '@masknet/web3-shared-evm'
+import { EthereumMethodType, EthereumRPC_Type, isSameAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import { getSendTransactionComputedPayload } from '../rpc'
 import type { Context, Middleware } from '../types'
@@ -15,9 +15,9 @@ export class AddressBook implements Middleware<Context> {
     private getTo(computedPayload: ComputedPayload) {
         if (!computedPayload) return
         switch (computedPayload.type) {
-            case EthereumRpcType.SEND_ETHER:
+            case EthereumRPC_Type.SEND_ETHER:
                 return computedPayload._tx.to
-            case EthereumRpcType.CONTRACT_INTERACTION:
+            case EthereumRPC_Type.CONTRACT_INTERACTION:
                 if (['transfer', 'transferFrom'].includes(computedPayload.name ?? ''))
                     return computedPayload.parameters?.to as string | undefined
         }

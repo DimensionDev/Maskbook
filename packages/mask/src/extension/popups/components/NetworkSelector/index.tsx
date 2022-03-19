@@ -2,8 +2,8 @@ import { memo, useCallback } from 'react'
 import { Box, MenuItem, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Flags } from '../../../../../shared'
-import { ChainId, ProviderType, useAccount, useChainId } from '@masknet/web3-shared-evm'
-import { getRegisteredWeb3Networks, NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra'
+import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
+import { getRegisteredWeb3Networks, NetworkPluginID, useAccount, useChainId, Web3Plugin } from '@masknet/plugin-infra'
 import { currentMaskWalletAccountSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
 import { ChainIcon, useMenuConfig, WalletIcon } from '@masknet/shared'
 import { useValueRef } from '@masknet/shared-base-ui'
@@ -51,8 +51,8 @@ const useStyles = makeStyles()((theme) => ({
 
 export const NetworkSelector = memo(() => {
     const networks = getRegisteredWeb3Networks()
-    const account = useAccount()
-    const chainId = useChainId()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const providerType = useValueRef(currentProviderSettings)
     const onChainChange = useCallback(
         async (chainId: ChainId) => {

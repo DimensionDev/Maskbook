@@ -1,3 +1,5 @@
 export * from './Asset'
+export * from './Collectible'
 export * from './NFT'
 export * from './Protocol'
+export * from './Name'

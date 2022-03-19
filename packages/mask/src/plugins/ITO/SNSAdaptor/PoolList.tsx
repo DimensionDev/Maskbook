@@ -1,4 +1,4 @@
-import { useAccount } from '@masknet/web3-shared-evm'
+import { useAccount } from '@masknet/plugin-infra'
 import { Box, CircularProgress, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useAllPoolsAsSeller } from './hooks/useAllPoolsAsSeller'

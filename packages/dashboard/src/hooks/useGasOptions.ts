@@ -1,13 +1,14 @@
-import { GasOption, isEIP1559Supported, useChainId } from '@masknet/web3-shared-evm'
+import { GasOption, isEIP1559Supported } from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'
 import { useAsync } from 'react-use'
 import { useDashboardI18N } from '../locales'
 import { PluginServices } from '../API'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 
 const { Wallet: WalletRPC } = PluginServices
 export function useGasOptions() {
     const t = useDashboardI18N()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const is1559Supported = useMemo(() => isEIP1559Supported(chainId), [chainId])
     const { value: gasFromMetaMask, loading: getFromMetaMaskLoading } = useAsync(async () => {
         if (!is1559Supported) return

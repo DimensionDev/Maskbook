@@ -1,5 +1,4 @@
 import { RefreshIcon } from '@masknet/icons'
-import { useChainId } from '@masknet/web3-shared-evm'
 import { Card, CardContent, CardHeader, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useState } from 'react'
@@ -9,6 +8,7 @@ import { useFetchPool, usePoolDepositAssets } from '../hooks/usePool'
 import { PerformanceChart } from './PerformanceChart'
 import { PoolStats } from './PoolStats'
 import { PoolViewDeck } from './PoolViewDeck'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -62,7 +62,7 @@ interface PoolViewProps {
 export function PoolView(props: PoolViewProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const currentChainId = useChainId()
+    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     // #region allowed tokens
     const { value: pool, error, loading, retry } = useFetchPool(props.address ?? '')

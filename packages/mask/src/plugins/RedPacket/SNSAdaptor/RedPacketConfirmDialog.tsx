@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import { useEffect } from 'react'
-import { formatBalance, isNativeTokenAddress, resolveTokenLinkOnExplorer, useChainId } from '@masknet/web3-shared-evm'
+import { formatBalance, isNativeTokenAddress, resolveTokenLinkOnExplorer } from '@masknet/web3-shared-evm'
 import { Grid, Link, Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import LaunchIcon from '@mui/icons-material/Launch'
@@ -9,6 +9,7 @@ import { FormattedBalance } from '@masknet/shared'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
 import type { RedPacketSettings } from './hooks/useCreateCallback'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -75,7 +76,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const { t } = useI18N()
     const { onBack, settings, onCreate, onClose } = props
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     useEffect(() => {
         if (settings?.token?.chainId !== chainId) onClose()

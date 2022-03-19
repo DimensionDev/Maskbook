@@ -1,6 +1,5 @@
 import { useCallback, useMemo } from 'react'
 import {
-    useChainId,
     useFungibleTokenDetailed,
     EthereumTokenType,
     FungibleTokenDetailed,
@@ -14,6 +13,7 @@ import { isCompactPayload } from './helpers'
 import { usePoolPayload } from './hooks/usePoolPayload'
 import type { JSON_PayloadInMask } from '../types'
 import { ITO, ITO_Error, ITO_Loading } from './ITO'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 
 export interface PostInspectorProps {
     payload: JSON_PayloadInMask
@@ -24,7 +24,7 @@ export function PostInspector(props: PostInspectorProps) {
     const isCompactPayload_ = isCompactPayload(props.payload)
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const {
         value: payload,
         error,

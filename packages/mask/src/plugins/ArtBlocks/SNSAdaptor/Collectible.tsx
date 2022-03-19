@@ -4,11 +4,12 @@ import { useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { CollectionView } from './CollectionView'
 import { DetailsView } from './DetailsView'
-import { formatWeiToEther, useChainId } from '@masknet/web3-shared-evm'
+import { formatWeiToEther } from '@masknet/web3-shared-evm'
 import { useFetchProject } from '../hooks/useProject'
 import { ActionBar } from './ActionBar'
 import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes'
 import { ArtBlocksLogoUrl } from '../constants'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -58,7 +59,7 @@ interface CollectibleProps {
 export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [tabIndex, setTabIndex] = useState(0)
 
     const { value, loading, error } = useFetchProject(props.projectId)

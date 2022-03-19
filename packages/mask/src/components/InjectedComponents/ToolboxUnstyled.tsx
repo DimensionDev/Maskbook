@@ -21,6 +21,7 @@ import {
     useChainDetailed,
     useWeb3State,
     useReverseAddress,
+    NetworkPluginID,
 } from '@masknet/plugin-infra'
 import { useCallback, useMemo } from 'react'
 import { WalletIcon } from '@masknet/shared'
@@ -165,7 +166,7 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
 
 function useToolbox() {
     const { t } = useI18N()
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const selectedWallet = useWallet()
     const chainColor = useChainColor()
     const chainIdValid = useChainIdValid()

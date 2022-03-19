@@ -10,8 +10,6 @@ import {
     isSameAddress,
     isValidAddress,
     TransactionStateType,
-    useAccount,
-    useChainId,
     useGasLimit,
     useGasPrice,
     useNativeTokenDetailed,
@@ -36,7 +34,14 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useGasConfig } from '../../hooks/useGasConfig'
 import { unionBy } from 'lodash-unified'
 import { TransferTab } from './types'
-import { NetworkPluginID, useLookupAddress, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
+import {
+    NetworkPluginID,
+    useAccount,
+    useChainId,
+    useLookupAddress,
+    useNetworkDescriptor,
+    useWeb3State,
+} from '@masknet/plugin-infra'
 import { NetworkType } from '@masknet/public-api'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { multipliedBy } from '@masknet/web3-shared-base'
@@ -164,7 +169,7 @@ export const TransferERC721 = memo(() => {
     }, [erc721GasLimit.value])
     const { gasConfig, onCustomGasSetting, gasLimit } = useGasConfig(gasLimit_, GAS_LIMIT)
 
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const nativeToken = useNativeTokenDetailed()
     const nativeTokenPrice = useNativeTokenPrice()
     const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(

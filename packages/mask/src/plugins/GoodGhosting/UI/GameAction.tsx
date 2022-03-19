@@ -2,9 +2,9 @@ import {
     formatBalance,
     resolveTransactionLinkOnExplorer,
     TransactionStateType,
-    useChainId,
     useERC20TokenDetailed,
     DAI,
+    ChainId,
 } from '@masknet/web3-shared-evm'
 import { Button, Typography, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -15,6 +15,7 @@ import type { GoodGhostingInfo } from '../types'
 import { GameActionDialog } from './GameActionDialog'
 import { useGameToken } from '../hooks/usePoolData'
 import { isGameActionError } from '../utils'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -28,7 +29,7 @@ interface GameActionProps {
 }
 
 export function GameAction(props: GameActionProps) {
-    const chainId = useChainId()
+    const chainId = useChainId<ChainId>(NetworkPluginID.PLUGIN_EVM)
     const gameToken = useGameToken()
 
     const { classes } = useStyles()

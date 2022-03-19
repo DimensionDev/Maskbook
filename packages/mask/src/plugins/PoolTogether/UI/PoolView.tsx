@@ -2,7 +2,7 @@ import { first } from 'lodash-unified'
 import type { Pool } from '../types'
 import { Typography, Grid, CircularProgress, Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useChainId, useERC20TokenDetailed } from '@masknet/web3-shared-evm'
+import { useERC20TokenDetailed } from '@masknet/web3-shared-evm'
 import { RefreshIcon } from '@masknet/icons'
 import { usePoolURL } from '../hooks/usePoolURL'
 import { CountdownView } from './CountdownView'
@@ -13,6 +13,7 @@ import { NetworkView } from './NetworkView'
 import { useI18N } from '../../../utils'
 import { TokenIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -169,7 +170,7 @@ export function PoolView(props: PoolProps) {
     const { t } = useI18N()
 
     const poolURL = usePoolURL(pool)
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [prize, setPrize] = useState('TBD')
     const [period, setPeriod] = useState('Custom Period')
 

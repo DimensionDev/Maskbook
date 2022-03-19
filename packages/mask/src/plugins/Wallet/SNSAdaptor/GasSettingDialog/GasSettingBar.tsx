@@ -4,7 +4,6 @@ import {
     formatWeiToEther,
     GasOption,
     isEIP1559Supported,
-    useChainId,
     useGasPrice,
     useNativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
@@ -15,6 +14,7 @@ import { Box, IconButton, Typography } from '@mui/material'
 import { WalletMessages } from '../../messages'
 import { TokenPrice } from '../../../../components/shared/TokenPrice'
 import { multipliedBy } from '@masknet/web3-shared-base'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 
 export interface GasSettingBarProps {
     gasLimit: number
@@ -27,7 +27,7 @@ export interface GasSettingBarProps {
 export function GasSettingBar(props: GasSettingBarProps) {
     const { gasLimit, gasPrice, maxFee, priorityFee, onChange } = props
 
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { value: nativeTokenDetailed } = useNativeTokenDetailed()
     const { value: gasPriceDefault = '0' } = useGasPrice()
 

@@ -1,5 +1,5 @@
 import { WalletStartUp } from './components/StartUp'
-import { EthereumRpcType, useWallet } from '@masknet/web3-shared-evm'
+import { EthereumRPC_Type, useWallet } from '@masknet/web3-shared-evm'
 import { WalletAssets } from './components/WalletAssets'
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom'
 import { lazy, Suspense, useEffect } from 'react'
@@ -63,12 +63,12 @@ export default function Wallet() {
 
         if (value?.computedPayload) {
             switch (value.computedPayload.type) {
-                case EthereumRpcType.SIGN:
-                case EthereumRpcType.SIGN_TYPED_DATA:
+                case EthereumRPC_Type.SIGN:
+                case EthereumRPC_Type.SIGN_TYPED_DATA:
                     navigate(PopupRoutes.WalletSignRequest, { replace: true })
                     break
-                case EthereumRpcType.CONTRACT_INTERACTION:
-                case EthereumRpcType.SEND_ETHER:
+                case EthereumRPC_Type.CONTRACT_INTERACTION:
+                case EthereumRPC_Type.SEND_ETHER:
                     navigate(PopupRoutes.ContractInteraction, { replace: true })
                     break
                 default:

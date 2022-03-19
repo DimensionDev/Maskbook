@@ -14,7 +14,6 @@ import {
     FungibleTokenDetailed,
     resolveTransactionLinkOnExplorer,
     TransactionStateType,
-    useChainId,
     useFungibleTokenBalance,
     useFungibleTokenDetailed,
     isSameAddress,
@@ -30,6 +29,7 @@ import { SwapStatus } from './SwapGuide'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { useQualificationVerify } from './hooks/useQualificationVerify'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -114,7 +114,7 @@ export function SwapDialog(props: SwapDialogProps) {
         exchangeTokens,
     } = props
 
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const classes = useStylesExtends(useStyles(), props)
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const [ratio, setRatio] = useState<BigNumber>(

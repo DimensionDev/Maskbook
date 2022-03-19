@@ -1,5 +1,5 @@
 import { Appearance, applyMaskColorVars, makeStyles } from '@masknet/theme'
-import { TransactionStatusType, useChainId, useWallet, Web3Provider } from '@masknet/web3-shared-evm'
+import { TransactionStatusType, useWallet, Web3Provider } from '@masknet/web3-shared-evm'
 import { ThemeProvider, Typography } from '@mui/material'
 import { useCallback } from 'react'
 import { useRecentTransactions } from '../../../../plugins/Wallet/hooks/useRecentTransactions'
@@ -9,7 +9,7 @@ import { SwapBox } from './SwapBox'
 import { SwapWeb3Context } from '../../../../web3/context'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N, usePopupsMaskFullPageTheme } from '../../../../utils'
-import { NetworkPluginID, useReverseAddress } from '@masknet/plugin-infra'
+import { NetworkPluginID, useChainId, useReverseAddress } from '@masknet/plugin-infra'
 import { TargetChainIdContext } from '../../../../plugins/Trader/trader/useTargetChainIdContext'
 import { AllProviderTradeContext } from '../../../../plugins/Trader/trader/useAllProviderTradeContext'
 
@@ -66,7 +66,7 @@ const useStyles = makeStyles()((theme) => {
 export default function SwapPage() {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const theme = usePopupsMaskFullPageTheme()
     const { value: pendingTransactions = [] } = useRecentTransactions({
         status: TransactionStatusType.NOT_DEPEND,

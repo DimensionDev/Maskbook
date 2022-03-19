@@ -23861,7 +23861,7 @@ packages:
       serialize-javascript: 6.0.0
       source-map: 0.6.1
       terser: 5.12.0
-      webpack: 5.70.0_@swc+core@1.2.148
+      webpack: 5.70.0_65041f242a58e79379a199f62cb3d619
     dev: true
 
   /terser/4.8.0:

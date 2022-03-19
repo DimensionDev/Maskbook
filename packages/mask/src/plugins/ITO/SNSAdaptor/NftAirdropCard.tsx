@@ -1,11 +1,5 @@
 import formatDateTime from 'date-fns/format'
-import {
-    ChainId,
-    TransactionStateType,
-    useAccount,
-    resolveTransactionLinkOnExplorer,
-    useChainId,
-} from '@masknet/web3-shared-evm'
+import { ChainId, TransactionStateType, resolveTransactionLinkOnExplorer } from '@masknet/web3-shared-evm'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { Box, Typography, Button, TextField, CircularProgress, Link } from '@mui/material'
 import { useSpaceStationClaimableTokenCountCallback } from './hooks/useSpaceStationClaimableTokenCountCallback'
@@ -18,6 +12,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import classNames from 'classnames'
 import type { CampaignInfo } from '../types'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { NetworkPluginID, useAccount, useChainId } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -182,8 +177,8 @@ export function NftAirdropCard(props: NftAirdropCardProps) {
         spaceStationAccountClaimableCallback,
         spaceStationAccountClaimableLoading,
     ] = useSpaceStationClaimableTokenCountCallback()
-    const account = useAccount()
-    const currentChainId = useChainId()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { classes } = useStyles()
 
     const claimableCount = campaignInfos

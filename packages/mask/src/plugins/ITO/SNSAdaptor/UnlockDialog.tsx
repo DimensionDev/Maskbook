@@ -12,7 +12,6 @@ import {
     formatBalance,
     formatEthereumAddress,
     resolveAddressLinkOnExplorer,
-    useChainId,
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
 import { isGreaterThan, rightShift } from '@masknet/web3-shared-base'
@@ -21,6 +20,7 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { Trans } from 'react-i18next'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 
 function isMoreThanMillion(allowance: string, decimals: number) {
     return isGreaterThan(allowance, `100000000000e${decimals}`) // 100 billion
@@ -47,7 +47,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
     const { classes } = useStyles()
 
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     // #region select token
     const [token, setToken] = useState<ERC20TokenDetailed>(tokens[0])

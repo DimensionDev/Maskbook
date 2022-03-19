@@ -6,7 +6,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import {
-    EthereumRpcType,
+    EthereumRPC_Type,
     formatBalance,
     formatCurrency,
     formatGweiToWei,
@@ -163,7 +163,7 @@ const ContractInteraction = memo(() => {
         if (!type) return {}
 
         switch (type) {
-            case EthereumRpcType.CONTRACT_INTERACTION:
+            case EthereumRPC_Type.CONTRACT_INTERACTION:
                 switch (request.computedPayload.name) {
                     case 'approve':
                         return {
@@ -203,7 +203,7 @@ const ContractInteraction = memo(() => {
                             amount: request.computedPayload._tx.value,
                         }
                 }
-            case EthereumRpcType.SEND_ETHER:
+            case EthereumRPC_Type.SEND_ETHER:
                 return {
                     isNativeTokenInteraction: true,
                     typeName: t('wallet_transfer_send'),
@@ -215,15 +215,15 @@ const ContractInteraction = memo(() => {
                     maxPriorityFeePerGas: request.computedPayload._tx.maxPriorityFeePerGas,
                     amount: request.computedPayload._tx.value,
                 }
-            case EthereumRpcType.CONTRACT_DEPLOYMENT:
-            case EthereumRpcType.ETH_DECRYPT:
-            case EthereumRpcType.ETH_GET_ENCRYPTION_PUBLIC_KEY:
-            case EthereumRpcType.WATCH_ASSET:
-            case EthereumRpcType.WALLET_SWITCH_ETHEREUM_CHAIN:
-            case EthereumRpcType.CANCEL:
-            case EthereumRpcType.RETRY:
-            case EthereumRpcType.SIGN:
-            case EthereumRpcType.SIGN_TYPED_DATA:
+            case EthereumRPC_Type.CONTRACT_DEPLOYMENT:
+            case EthereumRPC_Type.ETH_DECRYPT:
+            case EthereumRPC_Type.ETH_GET_ENCRYPTION_PUBLIC_KEY:
+            case EthereumRPC_Type.WATCH_ASSET:
+            case EthereumRPC_Type.WALLET_SWITCH_ETHEREUM_CHAIN:
+            case EthereumRPC_Type.CANCEL:
+            case EthereumRPC_Type.RETRY:
+            case EthereumRPC_Type.SIGN:
+            case EthereumRPC_Type.SIGN_TYPED_DATA:
                 throw new Error('To be implemented.')
             default:
                 unreachable(type)
@@ -310,7 +310,7 @@ const ContractInteraction = memo(() => {
                     ) : null}
                     <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
                         {to}
-                        {request?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION &&
+                        {request?.computedPayload?.type === EthereumRPC_Type.CONTRACT_INTERACTION &&
                         request.computedPayload.name === 'approve' &&
                         to ? (
                             <CopyIconButton text={to} className={classes.copy} />

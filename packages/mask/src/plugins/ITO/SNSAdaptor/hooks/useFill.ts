@@ -8,8 +8,6 @@ import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import {
     TransactionEventType,
     TransactionStateType,
-    useAccount,
-    useChainId,
     useTransactionState,
     useWeb3,
     FungibleTokenDetailed,
@@ -23,6 +21,7 @@ import { gcd, sortTokens } from '../helpers'
 import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../../constants'
 import type { AdvanceSettingData } from '../AdvanceSetting'
 import { useI18N } from '../../../../utils/i18n-next-ui'
+import { NetworkPluginID, useAccount, useChainId } from '@masknet/plugin-infra'
 
 export interface PoolSettings {
     password: string
@@ -64,8 +63,8 @@ type paramsObjType = {
 export function useFillCallback(poolSettings?: PoolSettings) {
     const { t } = useI18N()
     const web3 = useWeb3()
-    const account = useAccount()
-    const chainId = useChainId()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { contract: ITO_Contract } = useITO_Contract()
     const [fillState, setFillState] = useTransactionState()
     const [fillSettings, setFillSettings] = useState(poolSettings)

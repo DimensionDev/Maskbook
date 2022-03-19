@@ -1,11 +1,12 @@
 import { Table, TableHead, TableBody, TableRow, TableCell, Typography, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Image } from '../../../components/shared/Image'
-import { ERC20TokenDetailed, useChainId, formatBalance } from '@masknet/web3-shared-evm'
+import { ERC20TokenDetailed, formatBalance } from '@masknet/web3-shared-evm'
 import { resolveAssetLinkOnCurrentProvider } from '../pipes'
 import { useI18N } from '../../../utils'
 import type { Order } from 'opensea-js/lib/types'
 import { CollectibleState } from '../hooks/useCollectibleState'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     itemInfo: {
@@ -22,7 +23,7 @@ export function CheckoutOrder() {
     const { token, asset, assetOrder, provider } = CollectibleState.useContainer()
     const order = assetOrder?.value ?? asset?.value?.desktopOrder
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     if (!asset?.value || !token) return null
     if (!order) return null
 

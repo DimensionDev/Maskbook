@@ -1,6 +1,6 @@
 import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
-import { useChainId } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 import { useI18N } from '../../../../utils'
 import { CollectibleTab } from '../CollectibleTab'
 import { CollectibleState } from '../../hooks/useCollectibleState'
@@ -37,7 +37,7 @@ export interface HistoryTabProps {}
 export function HistoryTab(props: HistoryTabProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { events } = CollectibleState.useContainer()
 
     if (events.loading) return <LoadingTable />

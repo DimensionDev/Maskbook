@@ -10,11 +10,9 @@ import {
     formatGweiToWei,
     isSameAddress,
     NetworkType,
-    useChainId,
     useFungibleTokenBalance,
     useGasLimit,
     useNativeTokenDetailed,
-    useNetworkType,
     useTokenTransferCallback,
     useWallet,
 } from '@masknet/web3-shared-evm'
@@ -47,10 +45,11 @@ import { useNavigate } from 'react-router-dom'
 import { LoadingButton } from '@mui/lab'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { toHex } from 'web3-utils'
-import { NetworkPluginID, useLookupAddress, useWeb3State } from '@masknet/plugin-infra'
+import { NetworkPluginID, useChainId, useLookupAddress, useNetworkType, useWeb3State } from '@masknet/plugin-infra'
 import { AccountItem } from './AccountItem'
 import Services from '../../../../service'
 import { TransferAddressError } from '../type'
+import { EVM_RPC } from '@masknet/plugin-evm/src/messages'
 
 const useStyles = makeStyles()({
     container: {
@@ -182,8 +181,8 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     const { classes } = useStyles()
     const wallet = useWallet()
 
-    const chainId = useChainId()
-    const network = useNetworkType()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const network = useNetworkType(NetworkPluginID.PLUGIN_EVM)
     const navigate = useNavigate()
 
     const [minGasLimitContext, setMinGasLimitContext] = useState(0)

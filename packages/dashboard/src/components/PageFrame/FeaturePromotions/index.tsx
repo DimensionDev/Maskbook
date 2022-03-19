@@ -2,11 +2,10 @@ import { memo, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useAccount } from '@masknet/web3-shared-evm'
 import { PluginMessages, Services } from '../../../API'
 import { PersonaContext } from '../../../pages/Personas/hooks/usePersonaContext'
 import { DashboardRoutes, EnhanceableSite } from '@masknet/shared-base'
-import { PluginId } from '@masknet/plugin-infra'
+import { NetworkPluginID, PluginId, useAccount } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -31,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
 export const FeaturePromotions = memo(() => {
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     const { currentPersona, connectPersona } = PersonaContext.useContainer()
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)

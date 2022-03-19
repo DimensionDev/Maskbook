@@ -3,8 +3,8 @@ import type { JsonRpcPayload } from 'web3-core-helpers'
 import * as ABICoder from 'web3-eth-abi'
 import {
     isSameAddress,
-    EthereumRpcComputed,
-    EthereumRpcType,
+    EthereumRPC_Computed,
+    EthereumRPC_Type,
     EthereumMethodType,
     getChainDetailedCAIP,
     ZERO_ADDRESS,
@@ -48,19 +48,19 @@ function getFunctionParameters(tx: TransactionConfig) {
     return data?.slice(10)
 }
 
-export async function getComputedPayload(payload: JsonRpcPayload): Promise<EthereumRpcComputed | undefined> {
+export async function getComputedPayload(payload: JsonRpcPayload): Promise<EthereumRPC_Computed | undefined> {
     switch (payload.method) {
         // sign
         case EthereumMethodType.ETH_SIGN:
         case EthereumMethodType.PERSONAL_SIGN:
             return {
-                type: EthereumRpcType.SIGN,
+                type: EthereumRPC_Type.SIGN,
                 to: payload.params[1],
                 data: payload.params[0],
             }
         case EthereumMethodType.ETH_SIGN_TYPED_DATA:
             return {
-                type: EthereumRpcType.SIGN_TYPED_DATA,
+                type: EthereumRPC_Type.SIGN_TYPED_DATA,
                 to: payload.params[0],
                 data: payload.params[1],
             }
@@ -68,13 +68,13 @@ export async function getComputedPayload(payload: JsonRpcPayload): Promise<Ether
         // decrypt
         case EthereumMethodType.ETH_DECRYPT:
             return {
-                type: EthereumRpcType.ETH_DECRYPT,
+                type: EthereumRPC_Type.ETH_DECRYPT,
                 to: payload.params[1],
                 secret: payload.params[0],
             }
         case EthereumMethodType.ETH_GET_ENCRYPTION_PUBLIC_KEY:
             return {
-                type: EthereumRpcType.ETH_GET_ENCRYPTION_PUBLIC_KEY,
+                type: EthereumRPC_Type.ETH_GET_ENCRYPTION_PUBLIC_KEY,
                 account: payload.params[0],
             }
 
@@ -82,26 +82,26 @@ export async function getComputedPayload(payload: JsonRpcPayload): Promise<Ether
         case EthereumMethodType.WATCH_ASSET:
         case EthereumMethodType.WATCH_ASSET_LEGACY:
             return {
-                type: EthereumRpcType.WATCH_ASSET,
+                type: EthereumRPC_Type.WATCH_ASSET,
                 asset: payload.params[0],
             }
 
         // wallet
         case EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN:
             return {
-                type: EthereumRpcType.WALLET_SWITCH_ETHEREUM_CHAIN,
+                type: EthereumRPC_Type.WALLET_SWITCH_ETHEREUM_CHAIN,
                 chain: getChainDetailedCAIP(Number.parseInt(payload.params[0], 16)),
             }
         case EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN:
             return {
-                type: EthereumRpcType.WALLET_SWITCH_ETHEREUM_CHAIN,
+                type: EthereumRPC_Type.WALLET_SWITCH_ETHEREUM_CHAIN,
                 chain: payload.params[0],
             }
 
         // contract interaction
         case EthereumMethodType.ETH_SEND_TRANSACTION:
             return getSendTransactionComputedPayload(getPayloadConfig(payload)) as Promise<
-                EthereumRpcComputed | undefined
+                EthereumRPC_Computed | undefined
             >
 
         default:
@@ -126,7 +126,7 @@ export async function getSendTransactionComputedPayload(config?: EthereumTransac
         if (abi) {
             try {
                 return {
-                    type: EthereumRpcType.CONTRACT_INTERACTION,
+                    type: EthereumRPC_Type.CONTRACT_INTERACTION,
                     name: abi.name,
                     parameters: coder.decodeParameters(abi.parameters, parameters ?? ''),
                     _tx: config,
@@ -139,7 +139,7 @@ export async function getSendTransactionComputedPayload(config?: EthereumTransac
         // contract deployment
         if (isZeroAddress(to)) {
             return {
-                type: EthereumRpcType.CONTRACT_DEPLOYMENT,
+                type: EthereumRPC_Type.CONTRACT_DEPLOYMENT,
                 code: data,
                 _tx: config,
             }
@@ -157,7 +157,7 @@ export async function getSendTransactionComputedPayload(config?: EthereumTransac
         // cancel tx
         if (isSameAddress(from, to) && isZero(value)) {
             return {
-                type: EthereumRpcType.CANCEL,
+                type: EthereumRPC_Type.CANCEL,
                 _tx: config,
             }
         }
@@ -165,12 +165,12 @@ export async function getSendTransactionComputedPayload(config?: EthereumTransac
         // send ether
         if (isEmptyHex(code)) {
             return {
-                type: EthereumRpcType.SEND_ETHER,
+                type: EthereumRPC_Type.SEND_ETHER,
                 _tx: config,
             }
         } else {
             return {
-                type: EthereumRpcType.CONTRACT_INTERACTION,
+                type: EthereumRPC_Type.CONTRACT_INTERACTION,
                 _tx: config,
             }
         }

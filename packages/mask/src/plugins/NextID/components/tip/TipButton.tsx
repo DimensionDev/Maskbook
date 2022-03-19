@@ -1,5 +1,5 @@
 import { Currency } from '@masknet/icons'
-import { useAccount } from '@masknet/web3-shared-evm'
+import { useAccount } from '@masknet/plugin-infra'
 import classnames from 'classnames'
 import { FC, HTMLProps, MouseEventHandler, useCallback } from 'react'
 import { PluginNextIdMessages } from '../../messages'

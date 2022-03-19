@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { useAccount, useChainId } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId } from '@masknet/plugin-infra'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { WalletRPC } from '../messages'
 import type { RecentTransactionOptions } from '../services'

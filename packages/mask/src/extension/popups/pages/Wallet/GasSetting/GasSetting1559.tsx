@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { memo, useEffect, useMemo, useState } from 'react'
 import {
-    EthereumRpcType,
+    EthereumRPC_Type,
     formatGweiToEther,
     formatGweiToWei,
     useChainId,
@@ -155,8 +155,8 @@ export const GasSetting1559 = memo(() => {
     const gas = useMemo(() => {
         if (
             value &&
-            (value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
-                value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION)
+            (value?.computedPayload?.type === EthereumRPC_Type.SEND_ETHER ||
+                value?.computedPayload?.type === EthereumRPC_Type.CONTRACT_INTERACTION)
         ) {
             return new BigNumber(value?.computedPayload?._tx.gas ?? 0).toNumber()
         }
@@ -168,8 +168,8 @@ export const GasSetting1559 = memo(() => {
     const { value: minGasLimit } = useAsync(async () => {
         if (
             value &&
-            (value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
-                value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION)
+            (value?.computedPayload?.type === EthereumRPC_Type.SEND_ETHER ||
+                value?.computedPayload?.type === EthereumRPC_Type.CONTRACT_INTERACTION)
         ) {
             try {
                 return web3.eth.estimateGas({
@@ -236,11 +236,11 @@ export const GasSetting1559 = memo(() => {
     // #region If the payload type be SEND_ETHER or CONTRACT_INTERACTION and there are maxFeePerGas and maxPriorityFeePerGas parameters on tx, set them to the form data
     useUpdateEffect(() => {
         if (
-            value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
-            value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION
+            value?.computedPayload?.type === EthereumRPC_Type.SEND_ETHER ||
+            value?.computedPayload?.type === EthereumRPC_Type.CONTRACT_INTERACTION
         ) {
             if (
-                value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION &&
+                value?.computedPayload?.type === EthereumRPC_Type.CONTRACT_INTERACTION &&
                 !['transfer', 'transferFrom', 'approve'].includes(value?.computedPayload.name)
             ) {
                 setOption(1)

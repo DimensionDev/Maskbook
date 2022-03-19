@@ -1,11 +1,12 @@
 import { useMemo } from 'react'
 import { useAsync } from 'react-use'
-import { useChainId, GasOption } from '@masknet/web3-shared-evm'
+import { GasOption } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 
 export function useGasOptions() {
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { t } = useI18N()
 
     // #region Get gas options from debank

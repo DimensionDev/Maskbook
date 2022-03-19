@@ -1,7 +1,7 @@
 import { Typography, List } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { RedPacketJSONPayload } from '../types'
-import { useAccount, useChainId } from '@masknet/web3-shared-evm'
+import { NetworkPluginID, useAccount, useChainId } from '@masknet/plugin-infra'
 import { RedPacketInHistoryList } from './RedPacketInHistoryList'
 import { useRedPacketHistory } from './hooks/useRedPacketHistory'
 import { useEffect } from 'react'
@@ -39,8 +39,8 @@ export function RedPacketHistoryList(props: RedPacketHistoryListProps) {
     const { onSelect } = props
     const { t } = useI18N()
     const { classes } = useStyles()
-    const account = useAccount()
-    const chainId = useChainId()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { value: histories, loading, retry } = useRedPacketHistory(account, chainId)
 
     useEffect(() => {

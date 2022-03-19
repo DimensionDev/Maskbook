@@ -7,7 +7,7 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import {
     ChainId,
-    EthereumRpcType,
+    EthereumRPC_Type,
     formatGweiToWei,
     formatWeiToEther,
     formatWeiToGwei,
@@ -142,8 +142,8 @@ export const Prior1559GasSetting = memo(() => {
     const gas = useMemo(() => {
         if (
             value &&
-            (value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
-                value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION)
+            (value?.computedPayload?.type === EthereumRPC_Type.SEND_ETHER ||
+                value?.computedPayload?.type === EthereumRPC_Type.CONTRACT_INTERACTION)
         ) {
             return new BigNumber(value?.computedPayload?._tx.gas ?? 0).toNumber()
         }
@@ -153,8 +153,8 @@ export const Prior1559GasSetting = memo(() => {
     const { value: minGasLimit } = useAsync(async () => {
         if (
             value &&
-            (value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
-                value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION)
+            (value?.computedPayload?.type === EthereumRPC_Type.SEND_ETHER ||
+                value?.computedPayload?.type === EthereumRPC_Type.CONTRACT_INTERACTION)
         ) {
             try {
                 return web3.eth.estimateGas(value.computedPayload._tx)
@@ -199,8 +199,8 @@ export const Prior1559GasSetting = memo(() => {
 
     useUpdateEffect(() => {
         if (
-            value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
-            value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION
+            value?.computedPayload?.type === EthereumRPC_Type.SEND_ETHER ||
+            value?.computedPayload?.type === EthereumRPC_Type.CONTRACT_INTERACTION
         ) {
             // if rpc payload contain gas price, set it to default values
             if (value?.computedPayload._tx.gasPrice) {

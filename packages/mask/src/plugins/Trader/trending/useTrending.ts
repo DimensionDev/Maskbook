@@ -1,12 +1,13 @@
-import { useChainId, useERC20TokenDetailed } from '@masknet/web3-shared-evm'
+import { useERC20TokenDetailed } from '@masknet/web3-shared-evm'
 import { useAsync } from 'react-use'
 import { PluginTraderRPC } from '../messages'
 import type { Coin, TagType } from '../types'
 import type { DataProvider } from '@masknet/public-api'
 import { useCurrentCurrency } from './useCurrentCurrency'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 
 export function useTrendingByKeyword(tagType: TagType, keyword: string, dataProvider: DataProvider) {
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const currency = useCurrentCurrency(dataProvider)
     const {
         value: trending,

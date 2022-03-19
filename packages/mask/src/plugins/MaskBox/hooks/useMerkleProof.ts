@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { useAccount } from '@masknet/web3-shared-evm'
+import { useAccount } from '@masknet/plugin-infra'
 import { getMerkleProof } from '../apis'
 
 export function useMerkelProof(root?: string) {

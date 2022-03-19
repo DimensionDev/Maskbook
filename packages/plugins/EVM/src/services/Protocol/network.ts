@@ -29,6 +29,27 @@ export async function getAccounts(overrides?: SendOverrides, options?: RequestOp
     )
 }
 
+export async function getBlockNumber(overrides?: SendOverrides, options?: RequestOptions) {
+    return request<number>(
+        {
+            method: EthereumMethodType.ETH_BLOCK_NUMBER,
+        },
+        overrides,
+        options,
+    )
+}
+
+export async function getBalance(address: string, overrides?: SendOverrides, options?: RequestOptions) {
+    return request<string>(
+        {
+            method: EthereumMethodType.ETH_GET_BALANCE,
+            params: [address],
+        },
+        overrides,
+        options,
+    )
+}
+
 export async function getCode(address: string, overrides?: SendOverrides, options?: RequestOptions) {
     return request<string>(
         {

@@ -1,9 +1,9 @@
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 import { useAsyncRetry } from 'react-use'
-import { useChainId } from '@masknet/web3-shared-evm'
 import { fetchToken } from '../apis'
 
 export function useFetchToken(tokenId: number) {
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     return useAsyncRetry(async () => {
         if (!tokenId) return null

@@ -1,5 +1,6 @@
+import { NetworkPluginID, useAccount } from '@masknet/plugin-infra'
 import { makeStyles } from '@masknet/theme'
-import { ERC721TokenDetailed, isSameAddress, useAccount } from '@masknet/web3-shared-evm'
+import { ERC721TokenDetailed, isSameAddress } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -38,7 +39,7 @@ export function AddNFT(props: AddNFTProps) {
     const [tokenId, setTokenId] = useState('')
     const [message, setMessage] = useState('')
     const { onClose, open, onAddClick } = props
-    const account = useAccount()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     const onClick = useCallback(async () => {
         if (!address) {

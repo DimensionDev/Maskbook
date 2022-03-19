@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { useAccount } from '@masknet/web3-shared-evm'
+import { useAccount } from '@masknet/plugin-infra'
 import { PluginSnapshotRPC } from '../../messages'
 import type { ProposalIdentifier } from '../../types'
 import { useProposal } from './useProposal'

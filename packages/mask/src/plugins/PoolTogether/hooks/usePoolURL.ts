@@ -1,9 +1,10 @@
-import { ChainId, useChainId } from '@masknet/web3-shared-evm'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { APP_URL, COMMUNITY_URL } from '../constants'
 import type { Pool } from '../types'
 
 export function usePoolURL(pool: Pool) {
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const chainName = (ChainId[chainId] as keyof typeof ChainId).toLowerCase()
 
     return pool.isCommunityPool
@@ -12,7 +13,7 @@ export function usePoolURL(pool: Pool) {
 }
 
 export function useManagePoolURL(pool: Pool) {
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const chainName = (ChainId[chainId] as keyof typeof ChainId).toLowerCase()
 
     return pool.isCommunityPool

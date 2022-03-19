@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { useAsync } from 'react-use'
 import { Typography, DialogContent } from '@mui/material'
-import { ChainId, getChainIdFromNetworkType, useChainId } from '@masknet/web3-shared-evm'
+import { ChainId, getChainIdFromNetworkType } from '@masknet/web3-shared-evm'
 import { isDashboardPage } from '@masknet/shared-base'
 import { useI18N } from '../../../utils'
 import { EMPTY_LIST } from '../../../../utils-pure'
@@ -18,6 +18,7 @@ import { SavingsProtocols } from '../protocols'
 import { useStyles } from './SavingsDialogStyles'
 import { SavingsTable } from './SavingsTable'
 import { SavingsForm } from './SavingsForm'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 
 interface SavingsDialogProps {
     open: boolean
@@ -29,7 +30,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const isDashboard = isDashboardPage()
     const { classes } = useStyles({ isDashboard })
 
-    const currentChainId = useChainId()
+    const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [chainId, setChainId] = useState<ChainId>(currentChainId)
     const [tab, setTab] = useState<TabType>(TabType.Deposit)
     const [selectedProtocol, setSelectedProtocol] = useState<ProtocolType | null>(null)

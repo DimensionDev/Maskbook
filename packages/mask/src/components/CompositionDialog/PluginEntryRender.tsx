@@ -5,6 +5,8 @@ import {
     Plugin,
     PluginI18NFieldRender,
     usePluginI18NField,
+    useChainId,
+    NetworkPluginID,
 } from '@masknet/plugin-infra'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { Result } from 'ts-results'
@@ -13,8 +15,8 @@ import { ITO_PluginID } from '../../plugins/ITO/constants'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState, useRef, forwardRef, memo, useImperativeHandle } from 'react'
-import { useChainId } from '@masknet/web3-shared-evm'
 import { Trans } from 'react-i18next'
+
 const useStyles = makeStyles()({
     sup: {
         paddingLeft: 2,
@@ -27,7 +29,7 @@ export const PluginEntryRender = memo(
     forwardRef<PluginEntryRenderRef, { readonly: boolean }>((props, ref) => {
         const [trackPluginRef] = useSetPluginEntryRenderRef(ref)
         const pluginField = usePluginI18NField()
-        const chainId = useChainId()
+        const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
         const pluginID = usePluginIDContext()
         const operatingSupportedChainMapping = useActivatedPluginSNSAdaptor_Web3Supported(chainId, pluginID)
         const result = [...useActivatedPluginsSNSAdaptor('any')]

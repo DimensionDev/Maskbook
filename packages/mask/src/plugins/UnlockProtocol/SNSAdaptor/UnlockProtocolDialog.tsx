@@ -1,4 +1,4 @@
-import { useAccount, useChainId } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId } from '@masknet/plugin-infra'
 import { DialogActions, DialogContent, DialogProps, Chip, Button, InputBase } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'

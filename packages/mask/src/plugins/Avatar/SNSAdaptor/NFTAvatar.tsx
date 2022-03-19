@@ -3,20 +3,13 @@ import { uniqBy } from 'lodash-unified'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import {
-    ChainId,
-    SocketState,
-    ERC721TokenDetailed,
-    useChainId,
-    useCollectibles,
-    useImageChecker,
-} from '@masknet/web3-shared-evm'
+import { ChainId, SocketState, ERC721TokenDetailed, useCollectibles, useImageChecker } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, Typography } from '@mui/material'
 import { useI18N } from '../../../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { AddNFT } from './AddNFT'
 import { NFTImage } from './NFTImage'
-import { useAccount, useWeb3State } from '@masknet/plugin-infra'
+import { NetworkPluginID, useAccount, useChainId, useWeb3State } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -95,7 +88,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const { onChange, hideWallet } = props
     const classes = useStylesExtends(useStyles(), props)
     const account = useAccount()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [selectedToken, setSelectedToken] = useState<ERC721TokenDetailed | undefined>()
     const [open_, setOpen_] = useState(false)
     const [collectibles_, setCollectibles_] = useState<ERC721TokenDetailed[]>([])

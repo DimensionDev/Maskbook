@@ -1,11 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import {
-    formatWeiToEther,
-    formatWeiToGwei,
-    GasOption,
-    useChainId,
-    useNativeTokenDetailed,
-} from '@masknet/web3-shared-evm'
+import { formatWeiToEther, formatWeiToGwei, GasOption, useNativeTokenDetailed } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import BigNumber from 'bignumber.js'
@@ -21,12 +15,13 @@ import { WalletRPC } from '../../../Wallet/messages'
 import { useNativeTokenPrice } from '../../hooks/useTokenPrice'
 import type { GasSettingProps } from './types'
 import { useGasSettingStyles } from './useGasSettingStyles'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 
 export const Prior1559GasSetting: FC<GasSettingProps> = memo(
     ({ gasLimit, minGasLimit = 0, gasOption = GasOption.Medium, onConfirm = noop }) => {
         const { classes } = useGasSettingStyles()
         const { t } = useI18N()
-        const chainId = useChainId()
+        const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
         const [selectedGasOption, setGasOption] = useState<GasOption | null>(gasOption)
         const { value: nativeToken } = useNativeTokenDetailed()
 

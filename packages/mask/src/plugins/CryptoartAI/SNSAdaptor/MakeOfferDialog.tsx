@@ -6,7 +6,6 @@ import BigNumber from 'bignumber.js'
 import {
     FungibleTokenDetailed,
     useFungibleTokenWatched,
-    useChainId,
     isNativeTokenAddress,
     formatBalance,
     TransactionStateType,
@@ -24,6 +23,7 @@ import { usePlaceBidCallback } from '../hooks/usePlaceBidCallback'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -90,7 +90,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const is24Auction = assetSource?.is24Auction ?? false
     const isVerified = (!assetSource?.isSoldOut && !assetSource?.is_owner) ?? false
 
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const paymentTokens = resolvePaymentTokensOnCryptoartAI(chainId) ?? []
     const selectedPaymentToken = first(paymentTokens)

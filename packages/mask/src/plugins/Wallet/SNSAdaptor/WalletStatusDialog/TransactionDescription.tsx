@@ -2,8 +2,7 @@ import { first, last } from 'lodash-unified'
 import {
     ChainId,
     useNativeTokenDetailed,
-    EthereumRpcType,
-    useChainId,
+    EthereumRPC_Type,
     formatBalance,
     NativeTokenDetailed,
     ERC20TokenDetailed,
@@ -11,8 +10,9 @@ import {
     useERC20TokenDetailed,
 } from '@masknet/web3-shared-evm'
 import { pow10 } from '@masknet/web3-shared-base'
-import type Services from '../../../../extension/service'
 import { getContractMethodDescription } from './contractMethodDescription'
+import type { EVM_RPC } from '@masknet/plugin-evm/src/messages'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 
 function getTokenAmountDescription(amount = '0', tokenDetailed?: FungibleTokenDetailed, negative?: boolean) {
     const symbol = negative ? '- ' : ''
@@ -27,18 +27,18 @@ function getTransactionDescription(
     chainId: ChainId,
     nativeTokenDetailed?: NativeTokenDetailed | ERC20TokenDetailed,
     tokenDetailed?: ERC20TokenDetailed,
-    computedPayload?: UnboxPromise<ReturnType<typeof EVM_RPCgetSendTransactionComputedPayload>> | null,
+    computedPayload?: UnboxPromise<ReturnType<typeof EVM_RPC.getSendTransactionComputedPayload>> | null,
 ) {
     if (!computedPayload) return
     const type = computedPayload.type
 
     switch (type) {
-        case EthereumRpcType.SEND_ETHER:
+        case EthereumRPC_Type.SEND_ETHER:
             return `Send token -${getTokenAmountDescription(
                 computedPayload._tx.value as string | undefined,
                 nativeTokenDetailed,
             )}`
-        case EthereumRpcType.CONTRACT_INTERACTION:
+        case EthereumRPC_Type.CONTRACT_INTERACTION:
             switch (computedPayload.name) {
                 case 'approve':
                     return `Approve spend ${getTokenAmountDescription(
@@ -98,15 +98,15 @@ function getTransactionDescription(
                         }`
                     )
             }
-        case EthereumRpcType.CONTRACT_DEPLOYMENT:
+        case EthereumRPC_Type.CONTRACT_DEPLOYMENT:
             return `Contract Deployment ${getTokenAmountDescription(
                 computedPayload._tx.value as string | undefined,
                 nativeTokenDetailed,
                 true,
             )}`
-        case EthereumRpcType.CANCEL:
+        case EthereumRPC_Type.CANCEL:
             return 'Cancel Transaction'
-        case EthereumRpcType.RETRY:
+        case EthereumRPC_Type.RETRY:
             return 'Retry Transaction'
         default:
             return '-'
@@ -115,17 +115,17 @@ function getTransactionDescription(
 
 export interface RecentTransactionDescriptionProps {
     hash: string
-    computedPayload?: UnboxPromise<ReturnType<typeof EVM_RPCgetSendTransactionComputedPayload>> | null
+    computedPayload?: UnboxPromise<ReturnType<typeof EVM_RPC.getSendTransactionComputedPayload>> | null
 }
 
 export function RecentTransactionDescription(props: RecentTransactionDescriptionProps) {
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { hash, computedPayload } = props
     const { loading: getNativeTokenLoading, value: nativeTokenDetailed } = useNativeTokenDetailed()
     let inputTokenAddress: string | undefined = ''
     let tokenAddress: string | undefined = ''
 
-    if (computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION) {
+    if (computedPayload?.type === EthereumRPC_Type.CONTRACT_INTERACTION) {
         switch (computedPayload.name) {
             case 'approve':
             case 'transfer':

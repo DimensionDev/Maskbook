@@ -1,10 +1,11 @@
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { isEIP1559Supported, useChainId } from '@masknet/web3-shared-evm'
+import { isEIP1559Supported } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../../utils'
 import { GasSetting1559 } from './GasSetting1559'
 import { Prior1559GasSetting } from './Prior1559GasSetting'
+import { NetworkPluginID, useChainId } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -28,7 +29,7 @@ const useStyles = makeStyles()(() => ({
 const GasSetting = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     return (
         <main className={classes.container}>
             <Typography className={classes.title}>{t('popups_wallet_gas_fee_settings')}</Typography>
