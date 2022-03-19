@@ -1,5 +1,4 @@
-import { ChainId } from '@masknet/web3-shared-evm'
-import { USDC, USDT, WBTC, WNATIVE, OLO, BOBA, WNATIVE_ONLY } from './trader'
+import { ChainId, USDC, USDT, WBTC, WNATIVE, OLO, BOBA, WNATIVE_ONLY } from '@masknet/web3-shared-evm'
 import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'
 
 /**

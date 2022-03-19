@@ -1,10 +1,11 @@
+import { SocialNetworkEnum } from '@masknet/encryption'
 import type { SocialNetwork, SocialNetworkWorker } from '../../social-network/types'
 
 export const MINDS_ID = 'minds.com'
 const origins = ['https://www.minds.com/*', 'https://minds.com/*', 'https://cdn.minds.com/*']
 export const mindsBase: SocialNetwork.Base = {
     networkIdentifier: MINDS_ID,
-    name: 'minds',
+    encryptionNetwork: SocialNetworkEnum.Minds,
     declarativePermissions: { origins },
     shouldActivate(location) {
         return location.hostname.endsWith('minds.com')

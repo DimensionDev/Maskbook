@@ -23,12 +23,13 @@
     "postinstall": "patch-package",
     "prepare": "husky install",
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
+    "test:update": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js -u",
     "spellcheck": "cspell lint --no-must-find-files"
   },
   "dependencies": {
     "@dimensiondev/kit": "0.0.0-20220223101101-4e6f3b9",
     "@emotion/cache": "^11.7.1",
-    "@emotion/react": "^11.8.1",
+    "@emotion/react": "^11.8.2",
     "@emotion/serialize": "^1.0.2",
     "@emotion/styled": "^11.8.1",
     "@emotion/utils": "^1.1.0",
@@ -37,7 +38,7 @@
     "@mui/material": "5.5.0",
     "@mui/system": "5.5.0",
     "@types/masknet__global-types": "workspace:*",
-    "@types/react": "^17.0.39",
+    "@types/react": "^17.0.40",
     "@types/react-dom": "17.0.13",
     "@types/web": "^0.0.55",
     "i18next": "^21.6.14",

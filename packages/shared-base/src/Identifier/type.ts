@@ -1,4 +1,6 @@
+import { decodeArrayBuffer } from '@dimensiondev/kit'
 import { Result, Ok, Err } from 'ts-results'
+import { EnhanceableSite } from '../Site/type'
 
 /**
  * @internal symbol that used to construct this type from the Identifier
@@ -87,7 +89,7 @@ export class ProfileIdentifier extends Identifier {
             return x.userId
         }
     }
-    static readonly unknown = new ProfileIdentifier('localhost', '$unknown')
+    static readonly unknown = new ProfileIdentifier(EnhanceableSite.Localhost, '$unknown')
     get isUnknown() {
         return this.equals(ProfileIdentifier.unknown)
     }
@@ -174,6 +176,10 @@ export class PostIVIdentifier extends Identifier {
     }
     toText() {
         return `post_iv:${this.network}/${this.postIV.replace(/\//g, '|')}`
+    }
+    toIV() {
+        const x = this.postIV.replace(/\|/g, '/')
+        return new Uint8Array(decodeArrayBuffer(x))
     }
     static [$fromString](str: string) {
         const [network, iv] = str.split('/')

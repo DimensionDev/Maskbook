@@ -72,7 +72,6 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@masknet/shared-base': join(__dirname, '../../shared-base/src/'),
                     '@masknet/theme': join(__dirname, '../../theme/src/'),
                     '@masknet/icons': join(__dirname, '../../icons/index.ts'),
-                    '@masknet/web3-kit': join(__dirname, '../../web3-kit/src/'),
                     '@masknet/web3-providers': join(__dirname, '../../web3-providers/src'),
                     '@masknet/web3-shared-base': join(__dirname, '../../web3-shared/base/src'),
                     '@masknet/web3-shared-evm': join(__dirname, '../../web3-shared/evm/'),

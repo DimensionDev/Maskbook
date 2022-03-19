@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import { useValueRef } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import type { Profile } from '../../database'
 import type { SocialNetworkUI } from '../../social-network'

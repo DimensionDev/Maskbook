@@ -1,4 +1,4 @@
-import { useScrollBottomEvent } from '@masknet/shared'
+import { useScrollBottomEvent } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import { ERC721ContractDetailed, useAccount, useChainId, ChainId } from '@masknet/web3-shared-evm'

@@ -1,5 +1,5 @@
 import { clamp } from 'lodash-unified'
-import { useValueRef } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { SLIPPAGE_MAX, SLIPPAGE_MIN } from '../../constants'
 import { toUniswapPercent } from '../../helpers'
 import { currentSlippageSettings } from '../../settings'
