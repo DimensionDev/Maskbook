@@ -12,7 +12,7 @@ const enum Index {
     data = 6,
 }
 export async function encode37(payload: PayloadWellFormed.Payload) {
-    const payload_arr: any[] = [-37]
+    const payload_arr: any[] = [0]
 
     if (payload.author.some) {
         const { network, userId } = payload.author.val

@@ -6,7 +6,8 @@ import { decodeMessagePackF, encodeMessagePack } from '../utils'
 
 const decode = decodeMessagePackF(PayloadException.InvalidPayload, PayloadException.DecodeFailed)
 export function encodeSignatureContainer(payload: Uint8Array, signature: Uint8Array | null) {
-    const container = [0, payload, signature]
+    const container = [0, payload]
+    if (signature !== null) container.push(signature)
     return encodeMessagePack(container)
 }
 export interface SignatureContainer {
@@ -24,7 +25,7 @@ export function parseSignatureContainer(
                 return new CheckedError(PayloadException.UnknownVersion, 'Unknown Signature container version').toErr()
             return assertUint8Array(rawPayload, 'SignatureContainer[1]', PayloadException.InvalidPayload).andThen(
                 (payload) => {
-                    if (rawSignature === null) return Ok({ payload, signature: OptionalResult.None })
+                    if (!rawSignature) return Ok({ payload, signature: OptionalResult.None })
                     const signature = assertUint8Array(
                         rawSignature,
                         'SignatureContainer[2]',
