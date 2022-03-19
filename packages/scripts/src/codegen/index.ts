@@ -17,5 +17,6 @@ export const codegenWatch = series(
 watchTask(codegen, codegenWatch, 'codegen', 'All codegen tasks combined into one')
 
 export * from './i18n-codegen'
+export * from './icon-codegen'
 export * from './typescript'
 export * from './resource-files'

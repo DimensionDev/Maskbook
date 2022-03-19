@@ -75,9 +75,12 @@ importers:
       eslint-plugin-react-hooks: ^4.6.0
       eslint-plugin-unicorn: ^42.0.0
       eslint-plugin-unused-imports: ^2.0.0
+      glob: ^7.2.0
+      glob-promise: ^4.2.2
       gulp: ^4.0.2
       husky: ^8.0.1
       i18next: ^21.8.2
+      immer: 9.0.12
       jest: ^28.1.1
       lint-staged: ^13.0.2
       lodash: ^4.17.21
@@ -108,7 +111,10 @@ importers:
       '@types/react': 18.0.9
       '@types/react-dom': 18.0.5
       '@types/web': 0.0.68
+      glob: 7.2.3
+      glob-promise: 4.2.2_glob@7.2.3
       i18next: 21.8.2
+      immer: 9.0.12
       lodash: 4.17.21
       lodash-es: 4.17.21
       lodash-unified: 1.0.2_3ib2ivapxullxkx3xftsimdk7u
@@ -18007,6 +18013,16 @@ packages:
       glob: 7.2.3
     dev: true
 
+  /glob-promise/4.2.2_glob@7.2.3:
+    resolution: {integrity: sha512-xcUzJ8NWN5bktoTIX7eOclO1Npxd/dyVqUJxlLIDasT4C7KZyqlPIwkdJ0Ypiy3p2ZKahTjK4M9uC3sNSfNMzw==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      glob: ^7.1.6
+    dependencies:
+      '@types/glob': 7.2.0
+      glob: 7.2.3
+    dev: false
+
   /glob-stream/6.1.0:
     resolution: {integrity: sha1-cEXJlBOz65SIjYOrRtC0BMx73eQ=}
     engines: {node: '>= 0.10'}
@@ -18908,7 +18924,7 @@ packages:
   /i18next/21.8.2:
     resolution: {integrity: sha512-H/oQvA/OXcqurXHemlyDwdIzr9GHYg5/xBuDeFXTXJGMOJFH0ke1wgbsDjFFk2noD4cJfzicVPpUtp39Z+OzgQ==}
     dependencies:
-      '@babel/runtime': 7.17.9
+      '@babel/runtime': 7.18.3
     dev: false
 
   /iconv-lite/0.4.24:
@@ -19004,6 +19020,10 @@ packages:
 
   /immediate/3.3.0:
     resolution: {integrity: sha512-HR7EVodfFUdQCTIeySw+WDRFJlPcLOJbXfwwZ7Oom6tjsvZ3bOkCDJHehQC3nxJrv7+f9XecwazynjU8e4Vw3Q==}
+    dev: false
+
+  /immer/9.0.12:
+    resolution: {integrity: sha512-lk7UNmSbAukB5B6dh9fnh5D0bJTOFKxVg2cyJWTYrWRfhLrLMBquONcUs3aFq507hNoIZEDDh8lb8UtOizSMhA==}
     dev: false
 
   /immer/9.0.15_6jcdg7ah6q6tk4odwno72n5llq:
