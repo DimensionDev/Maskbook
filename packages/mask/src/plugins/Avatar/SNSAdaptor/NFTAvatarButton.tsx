@@ -1,4 +1,4 @@
-import { GearSettingsIcon } from '@masknet/icons'
+import { Icon } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useI18N } from '../../../utils'
@@ -44,7 +44,7 @@ export function NFTAvatarButton(props: NFTAvatarButtonProps) {
             <ApplicationSmallIcon className={classes.icon} />
             <Typography variant="body1" className={classes.text}>
                 <span style={{ marginLeft: 4, fontWeight: 600 }}>{t('nft_avatar')}</span>
-                {props.showSetting ? <GearSettingsIcon className={classes.setIcon} /> : null}
+                {props.showSetting ? <Icon type="gearSettings" className={classes.setIcon} /> : null}
             </Typography>
         </div>
     )

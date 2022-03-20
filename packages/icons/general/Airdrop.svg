@@ -14,8 +14,8 @@
                 fill="#E1EAFF"
             />
             <path
-                fillRule="evenodd"
-                clipRule="evenodd"
+                fill-rule="evenodd"
+                clip-rule="evenodd"
                 d="M21.184 60.71l-.438.916-1.741-1.575-.075-.068c-.186.628-.07 1.328.306 1.668.31.282.715.241 1.041-.055l.337.306-.368.77c-.086.181-.251.245-.366.14L18.207 61.3c-.115-.104-.138-.337-.051-.519l.938-1.96 2.09 1.89zm-1.107.704c-.233.155-.499.155-.71-.036-.212-.19-.318-.527-.306-.883l1.016.92zm-.489-1.834c-.164-.148-.39-.08-.532.149l.178.16c.065-.077.156-.095.223-.034.067.06.09.181.065.295l.178.161c.095-.269.052-.582-.112-.73zm.894.81c-.164-.149-.391-.08-.532.148l.178.161c.065-.078.155-.096.223-.035.067.06.09.181.065.295l.177.161c.096-.27.052-.583-.111-.73zm.975-.877c.116.105.138.337.052.52l-.193.402-2.09-1.89.193-.403c.087-.182.252-.246.367-.141l1.671 1.512z"
                 fill="#4081FF"
             />
@@ -71,9 +71,9 @@
                 y1="65.271"
                 x2="25.459"
                 y2="62.971"
-                gradientUnits="userSpaceOnUse">
-                <stop stopColor="#7FABFF" />
-                <stop offset="1" stopColor="#4780EF" />
+                gradient-units="userSpaceOnUse">
+                <stop stop-color="#7FABFF" />
+                <stop offset="1" stop-color="#4780EF" />
             </linearGradient>
             <linearGradient
                 id="airdrop_paint1_linear"
@@ -81,9 +81,9 @@
                 y1="55.309"
                 x2="24.65"
                 y2="63.776"
-                gradientUnits="userSpaceOnUse">
-                <stop stopColor="#A3D5FA" />
-                <stop offset="1" stopColor="#A3C2FF" />
+                gradient-units="userSpaceOnUse">
+                <stop stop-color="#A3D5FA" />
+                <stop offset="1" stop-color="#A3C2FF" />
             </linearGradient>
             <linearGradient
                 id="airdrop_paint2_linear"
@@ -91,9 +91,9 @@
                 y1="22.928"
                 x2="33.288"
                 y2="39.755"
-                gradientUnits="userSpaceOnUse">
-                <stop stopColor="#002CC9" />
-                <stop offset="1" stopColor="#91CFFF" />
+                gradient-units="userSpaceOnUse">
+                <stop stop-color="#002CC9" />
+                <stop offset="1" stop-color="#91CFFF" />
             </linearGradient>
             <linearGradient
                 id="airdrop_paint3_linear"
@@ -101,9 +101,9 @@
                 y1="14.002"
                 x2="49.094"
                 y2="36.927"
-                gradientUnits="userSpaceOnUse">
-                <stop stopColor="#1462F8" />
-                <stop offset="1" stopColor="#D9E3FF" />
+                gradient-units="userSpaceOnUse">
+                <stop stop-color="#1462F8" />
+                <stop offset="1" stop-color="#D9E3FF" />
             </linearGradient>
             <linearGradient
                 id="airdrop_paint4_linear"
@@ -111,9 +111,9 @@
                 y1="7.7"
                 x2="12.819"
                 y2="22.918"
-                gradientUnits="userSpaceOnUse">
-                <stop stopColor="#06F" />
-                <stop offset="1" stopColor="#fff" />
+                gradient-units="userSpaceOnUse">
+                <stop stop-color="#06F" />
+                <stop offset="1" stop-color="#fff" />
             </linearGradient>
             <linearGradient
                 id="airdrop_paint5_linear"
@@ -121,9 +121,9 @@
                 y1="11.386"
                 x2="42.795"
                 y2="33.629"
-                gradientUnits="userSpaceOnUse">
-                <stop stopColor="#1463FB" />
-                <stop offset="1" stopColor="#fff" />
+                gradient-units="userSpaceOnUse">
+                <stop stop-color="#1463FB" />
+                <stop offset="1" stop-color="#fff" />
             </linearGradient>
             <clipPath id="clip0">
                 <path fill="#fff" transform="matrix(.90794 .41846 -.4237 .9061 19.137 56.68)" d="M0 0h4.436v6.27H0z" />
@@ -131,4 +131,4 @@
         </defs>
     </g>
 </svg>
-
+  

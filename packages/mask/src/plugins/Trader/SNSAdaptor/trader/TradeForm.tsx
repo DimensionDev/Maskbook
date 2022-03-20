@@ -24,7 +24,7 @@ import {
     useSelectAdvancedSettings,
     useTokenSecurity,
 } from '@masknet/shared'
-import { ChevronUpIcon, DropIcon, RefreshIcon, ArrowDownwardIcon } from '@masknet/icons'
+import { Icon, RefreshIcon, ArrowDownwardIcon } from '@masknet/icons'
 import classnames from 'classnames'
 import { isNativeTokenWrapper } from '../../helpers'
 import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo'
@@ -472,9 +472,10 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 onClick: () => onTokenChipClick(TokenPanelType.Input),
                                 onDelete: () => onTokenChipClick(TokenPanelType.Input),
                                 deleteIcon: (
-                                    <DropIcon
+                                    <Icon
+                                        type="drop"
                                         className={classes.dropIcon}
-                                        style={{ fill: !inputToken ? '#ffffff' : undefined }}
+                                        color={inputToken ? undefined : '#fff'}
                                     />
                                 ),
                             },
@@ -500,9 +501,10 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     onClick: () => onTokenChipClick(TokenPanelType.Output),
                                     onDelete: () => onTokenChipClick(TokenPanelType.Output),
                                     deleteIcon: (
-                                        <DropIcon
+                                        <Icon
+                                            type="drop"
                                             className={classes.dropIcon}
-                                            style={{ fill: !outputToken ? '#ffffff' : undefined }}
+                                            color={outputToken ? undefined : '#fff'}
                                         />
                                     ),
                                 }}
@@ -536,7 +538,8 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 </Collapse>
                                 {trades.filter((x) => !!x.value).length > 1 ? (
                                     <Box width="100%" display="flex" justifyContent="center" marginTop={1.5}>
-                                        <ChevronUpIcon
+                                        <Icon
+                                            type="chevronUp"
                                             className={classnames(
                                                 classes.chevron,
                                                 isExpand ? classes.reverseChevron : null,
