@@ -39,6 +39,18 @@
             }
         },
         {
+            "input": "./packages/shared-base-ui/src/locales/en-US.json",
+            "output": "./packages/shared-base-ui/src/locales/i18n_generated",
+            "parser": "i18next",
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useSharedBaseI18N",
+                "namespace": "shareBase",
+                "trans": "SharedBaseTrans",
+                "sourceMap": "inline"
+            }
+        },
+        {
             "input": "./packages/dashboard/src/locales/en-US.json",
             "output": "./packages/dashboard/src/locales/i18n_generated",
             "parser": "i18next",

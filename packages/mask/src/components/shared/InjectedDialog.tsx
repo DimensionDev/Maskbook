@@ -10,18 +10,14 @@ import {
     Typography,
     useTheme,
     Dialog,
-    // see https://github.com/import-js/eslint-plugin-import/issues/2288
-    // eslint-disable-next-line import/no-deprecated
     useMediaQuery,
 } from '@mui/material'
 import { makeStyles, useDialogStackActor, useStylesExtends, mergeClasses } from '@masknet/theme'
-import { ErrorBoundary } from '@masknet/shared'
-import { isDashboardPage } from '@masknet/shared-base'
+import { EnhanceableSite, isDashboardPage } from '@masknet/shared-base'
+import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { useI18N, usePortalShadowRoot } from '../../utils'
 import { DialogDismissIconUI } from '../InjectedComponents/DialogDismissIcon'
 import { activatedSocialNetworkUI } from '../../social-network'
-import { MINDS_ID } from '../../social-network-adaptor/minds.com/base'
-import { FACEBOOK_ID } from '../../social-network-adaptor/facebook.com/base'
 
 interface StyleProps {
     snsId: string
@@ -43,7 +39,9 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
         color: theme.palette.text.primary,
     },
     paper: {
-        ...(snsId === MINDS_ID || snsId === FACEBOOK_ID ? { width: 'auto', backgroundImage: 'none' } : {}),
+        ...(snsId === EnhanceableSite.Minds || snsId === EnhanceableSite.Facebook
+            ? { width: 'auto', backgroundImage: 'none' }
+            : {}),
     },
 }))
 
@@ -82,8 +80,6 @@ export function InjectedDialog(props: InjectedDialogProps) {
         props,
         overwrite.InjectedDialog?.classes,
     )
-    // see https://github.com/import-js/eslint-plugin-import/issues/2288
-    // eslint-disable-next-line import/no-deprecated
     const fullScreen = useMediaQuery(useTheme().breakpoints.down('xs'))
     const isDashboard = isDashboardPage()
     const { children, open, disableBackdropClick, titleBarIconStyle, onClose, title, disableTitleBorder, ...rest } =

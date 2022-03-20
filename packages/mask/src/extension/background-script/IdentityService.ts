@@ -2,8 +2,8 @@ import * as bip39 from 'bip39'
 import { validateMnemonic } from 'bip39'
 import { decode, encode } from '@msgpack/msgpack'
 import { decodeArrayBuffer, decodeText, encodeArrayBuffer } from '@dimensiondev/kit'
+import { createPersonaByJsonWebKey } from '../../../background/database/persona/helper'
 import {
-    createPersonaByJsonWebKey,
     loginPersona,
     personaRecordToPersona,
     queryAvatarDataURL,
@@ -58,9 +58,11 @@ import { convertBackupFileToObject, fixBackupFilePermission } from '../../utils/
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { getCurrentPersonaIdentifier } from './SettingsService'
 import { MaskMessages } from '../../utils'
-import { split_ec_k256_keypair_into_pub_priv } from '../../modules/CryptoAlgorithm/helper'
 import { first, orderBy } from 'lodash-unified'
-import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
+import {
+    recover_ECDH_256k1_KeyPair_ByMnemonicWord,
+    split_ec_k256_keypair_into_pub_priv,
+} from '../../utils/mnemonic-code'
 
 assertEnvironment(Environment.ManifestBackground)
 
@@ -113,13 +115,7 @@ export function removeProfile(id: ProfileIdentifier): Promise<void> {
 // #endregion
 
 // #region Persona
-export {
-    queryPersona,
-    createPersonaByMnemonic,
-    createPersonaByMnemonicV2,
-    renamePersona,
-    queryPrivateKey,
-} from '../../database'
+export { queryPersona, createPersonaByMnemonic, createPersonaByMnemonicV2, renamePersona } from '../../database'
 
 export async function queryPersonaByMnemonic(mnemonic: string, password: '') {
     const verify = validateMnemonic(mnemonic)
@@ -390,6 +386,11 @@ export const getCurrentPersonaAvatar = async () => {
     }
 }
 // #endregion
+
+export async function exportPersonaMnemonicWords(identifier: PersonaIdentifier) {
+    const record = await queryPersonaRecord(identifier)
+    return record?.mnemonic?.words
+}
 
 // #region Private / Public key
 export async function exportPersonaPrivateKey(identifier: PersonaIdentifier) {
