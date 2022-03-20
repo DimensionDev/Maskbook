@@ -7,9 +7,15 @@ maintainer:
 
 # Plugin Development Guide
 
+## Run
+
+> npx gulp new-pkg
+
+To create a new plugin
+
 ## Minimum File Structure
 
-`packages/plugins/example/src` is an example of this structure.
+The following folder is automatically created by the command above.
 
 ```plaintext
 packages/mask/src/plugins/{your-plugin-name}
@@ -34,22 +40,14 @@ The file need to provide this information:
 - Reference resource list
 - Known issues / Caveats
 
-## Registration
-
-Import your plugin definition at: `packages/mask/src/plugin-infra/register.ts`.
-
-If your plugin is defined at `packages/plugins/*` instead of `packages/mask/src/plugins/*`, please make sure you have set up the monorepo correctly.
-
-Plugins defined at `packages/plugins/*` and compatible with the isolated dashboard should also be registered in `packages/dashboard/src/initialization/plugins.ts`
-
 ## Plugin APIs
 
 - Plugin definition: `packages/plugin-infra/src/types.ts`
 - Database: `context.getDatabaseStorage()` (2nd parameter of the `init` method of your `Worker` definition). See example in `packages/plugins/example/src/Worker/index.ts`.
-- Message emitter: `createPluginMessage` in `packages/plugin-infra/src/utils/message.ts`
-- RPC: `createPluginRPC` in `packages/plugin-infra/src/utils/rpc.ts`
-- Metadata reader: `createTypedMessageMetadataReader` in `packages/mask/src/protocols/typed-message/metadata.ts`
-- React renderer with metadata reader: `createRenderWithMetadata` in `packages/mask/src/protocols/typed-message/metadata.ts`
+- Message emitter: `createPluginMessage` exported from `@masknet/plugin-infra`
+- RPC: `createPluginRPC` exported from `@masknet/plugin-infra`
+- Metadata reader: `createTypedMessageMetadataReader` in `@masknet/shared-base`
+- React renderer with metadata reader: `createRenderWithMetadata` in `@masknet/shared-base`
 
 ## Architecture
 

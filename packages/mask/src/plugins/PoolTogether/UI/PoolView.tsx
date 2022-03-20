@@ -11,7 +11,8 @@ import { useCallback, useEffect, useState } from 'react'
 import { calculateNextPrize, calculateSecondsRemaining, getPrizePeriod } from '../utils'
 import { NetworkView } from './NetworkView'
 import { useI18N } from '../../../utils'
-import { TokenIcon, useRemoteControlledDialog } from '@masknet/shared'
+import { TokenIcon } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -172,24 +173,24 @@ export function PoolView(props: PoolProps) {
     const [prize, setPrize] = useState('TBD')
     const [period, setPeriod] = useState('Custom Period')
 
-    //#region pool token
+    // #region pool token
     const {
         value: token,
         loading: loadingToken,
         retry: retryToken,
         error: errorToken,
     } = useERC20TokenDetailed(pool.tokens.underlyingToken.address)
-    //#endregion
+    // #endregion
 
-    //#region process data
+    // #region process data
     const prizePeriodSeconds = Number.parseInt(pool.config.prizePeriodSeconds, 10)
     useEffect(() => {
         setPrize(calculateNextPrize(pool))
         setPeriod(getPrizePeriod(t, prizePeriodSeconds))
     }, [pool])
-    //#endregion
+    // #endregion
 
-    //#region the deposit dialog
+    // #region the deposit dialog
     const { setDialog: openDepositDialog } = useRemoteControlledDialog(PluginPoolTogetherMessages.DepositDialogUpdated)
 
     const onDeposit = useCallback(() => {
@@ -200,7 +201,7 @@ export function PoolView(props: PoolProps) {
             token: token,
         })
     }, [pool, token, openDepositDialog])
-    //#endregion
+    // #endregion
 
     if (loadingToken) {
         return (
@@ -261,7 +262,7 @@ export function PoolView(props: PoolProps) {
                 </Grid>
                 <Grid item>
                     <Button className={classes.deposit} variant="contained" fullWidth size="small" onClick={onDeposit}>
-                        {t('plugin_pooltogether_deposit', { token: token.symbol })}
+                        {t('plugin_pooltogether_deposit', { token: token.symbol ?? '' })}
                     </Button>
                 </Grid>
                 <Grid container item className={classes.info}>

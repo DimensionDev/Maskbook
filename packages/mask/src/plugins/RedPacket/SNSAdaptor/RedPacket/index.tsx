@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { useCallback, useEffect, useMemo } from 'react'
-import { useRemoteControlledDialog } from '@masknet/shared'
-import { Card, Skeleton, Typography } from '@mui/material'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { Card, Typography } from '@mui/material'
 import {
     ChainId,
     formatBalance,
@@ -12,7 +12,9 @@ import {
     useFungibleTokenDetailed,
     useNetworkType,
     useWeb3,
+    useTokenConstants,
     EthereumTokenType,
+    isSameAddress,
 } from '@masknet/web3-shared-evm'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../../social-network'
@@ -38,44 +40,42 @@ export function RedPacket(props: RedPacketProps) {
 
     const { t } = useI18N()
     const { classes } = useStyles()
+
     // context
     const web3 = useWeb3()
     const account = useAccount()
     const networkType = useNetworkType()
 
-    //#region token detailed
+    // #region token detailed
     const {
         value: availability,
         computed: availabilityComputed,
         retry: revalidateAvailability,
     } = useAvailabilityComputed(account, payload)
 
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
+
     const { value: tokenDetailed } = useFungibleTokenDetailed(
-        payload.token?.type ?? payload.token_type ?? EthereumTokenType.Native,
-        payload.token?.address ?? '',
+        payload.token?.type ??
+            payload.token_type ??
+            (isSameAddress(NATIVE_TOKEN_ADDRESS, payload.token_address)
+                ? EthereumTokenType.Native
+                : EthereumTokenType.ERC20),
+        payload.token?.address ?? payload.token_address ?? '',
     )
     const token = payload.token ?? tokenDetailed
-    //#endregion
+    // #endregion
 
     const { canFetch, canClaim, canRefund, listOfStatus } = availabilityComputed
 
-    //#region remote controlled transaction dialog
+    // #region remote controlled transaction dialog
     const postLink = usePostLink()
-    const shareLink = activatedSocialNetworkUI.utils
-        .getShareLinkURL?.(
-            t(
-                isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                    ? 'plugin_red_packet_share_message_official_account'
-                    : 'plugin_red_packet_share_message_not_twitter',
-                {
-                    sender: payload.sender.name,
-                    payload: postLink,
-                    network: resolveNetworkName(networkType),
-                    account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
-                },
-            ).trim(),
-        )
-        .toString()
+    const shareTextOption = {
+        sender: payload.sender.name,
+        payload: postLink,
+        network: resolveNetworkName(networkType),
+        account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
+    }
 
     const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(
         payload.contract_version,
@@ -83,6 +83,20 @@ export function RedPacket(props: RedPacketProps) {
         payload.rpid,
         payload.contract_version > 3 ? web3.eth.accounts.sign(account, payload.password).signature : payload.password,
     )
+
+    const shareLink = activatedSocialNetworkUI.utils
+        .getShareLinkURL?.(
+            (listOfStatus.includes(RedPacketStatus.claimed) || claimState.type === TransactionStateType.CONFIRMED
+                ? isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                    ? t('plugin_red_packet_share_message_official_account', shareTextOption)
+                    : t('plugin_red_packet_share_message_not_twitter', shareTextOption)
+                : isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                ? t('plugin_red_packet_share_unclaimed_message_official_account', shareTextOption)
+                : t('plugin_red_packet_share_unclaimed_message_not_twitter', shareTextOption)
+            ).trim(),
+        )
+        .toString()
+
     const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(
         payload.contract_version,
         account,
@@ -99,29 +113,24 @@ export function RedPacket(props: RedPacketProps) {
         const state = canClaim ? claimState : refundState
         if (state.type === TransactionStateType.UNKNOWN) return
         if (!availability || !token) return
-        if (state.type === TransactionStateType.HASH) {
-            setTransactionDialog({
-                open: true,
-                shareLink: shareLink!.toString(),
-                state,
-                summary: canClaim
-                    ? t('plugin_red_packet_claiming_from', { name: payload.sender.name })
-                    : canRefund
-                    ? t('plugin_red_packet_refunding_for', {
-                          balance: formatBalance(availability.balance, token.decimals),
-                          symbol: token.symbol,
-                      })
-                    : '',
-            })
-        } else if (state.type === TransactionStateType.CONFIRMED) {
+        if (state.type === TransactionStateType.CONFIRMED) {
+            canClaim &&
+                setTransactionDialog({
+                    open: true,
+                    shareLink: shareLink!,
+                    state,
+                    summary: t('plugin_red_packet_claiming_from', { name: payload.sender.name }),
+                })
             resetClaimCallback()
             resetRefundCallback()
             revalidateAvailability()
         }
     }, [claimState, refundState /* update tx dialog only if state changed */])
-    //#endregion
+    // #endregion
 
     const onClaimOrRefund = useCallback(async () => {
+        resetClaimCallback()
+        resetRefundCallback()
         if (canClaim) await claimCallback()
         else if (canRefund) await refundCallback()
     }, [canClaim, canRefund, claimCallback, refundCallback])
@@ -159,7 +168,6 @@ export function RedPacket(props: RedPacketProps) {
         return t('plugin_red_packet_description_failover', {
             total: formatBalance(payload.total, token.decimals),
             symbol: token.symbol,
-            name: payload.sender.name ?? '-',
             shares: payload.shares ?? '-',
         })
     }, [availability, canRefund, token, t, payload, listOfStatus])
@@ -169,27 +177,9 @@ export function RedPacket(props: RedPacketProps) {
         return (
             <EthereumChainBoundary chainId={getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet}>
                 <Card className={classes.root} component="article" elevation={0}>
-                    <Skeleton
-                        animation="wave"
-                        variant="rectangular"
-                        width="30%"
-                        height={12}
-                        style={{ marginTop: 16 }}
-                    />
-                    <Skeleton
-                        animation="wave"
-                        variant="rectangular"
-                        width="40%"
-                        height={12}
-                        style={{ marginTop: 16 }}
-                    />
-                    <Skeleton
-                        animation="wave"
-                        variant="rectangular"
-                        width="70%"
-                        height={12}
-                        style={{ marginBottom: 16 }}
-                    />
+                    <Typography className={classes.loadingText} variant="body2">
+                        {t('loading')}
+                    </Typography>
                 </Card>
             </EthereumChainBoundary>
         )
@@ -206,7 +196,7 @@ export function RedPacket(props: RedPacketProps) {
                     ) : null}
                 </div>
                 <div className={classNames(classes.content)}>
-                    <div>
+                    <div className={classes.fullWidthBox}>
                         <Typography className={classes.words} variant="h6">
                             {payload.sender.message}
                         </Typography>
@@ -222,14 +212,16 @@ export function RedPacket(props: RedPacketProps) {
                     </div>
                 </div>
             </Card>
-            <OperationFooter
-                canClaim={canClaim}
-                canRefund={canRefund}
-                claimState={claimState}
-                refundState={refundState}
-                shareLink={shareLink}
-                onClaimOrRefund={onClaimOrRefund}
-            />
+            {listOfStatus.includes(RedPacketStatus.empty) ? null : (
+                <OperationFooter
+                    canClaim={canClaim}
+                    canRefund={canRefund}
+                    claimState={claimState}
+                    refundState={refundState}
+                    shareLink={shareLink}
+                    onClaimOrRefund={onClaimOrRefund}
+                />
+            )}
         </EthereumChainBoundary>
     )
 }

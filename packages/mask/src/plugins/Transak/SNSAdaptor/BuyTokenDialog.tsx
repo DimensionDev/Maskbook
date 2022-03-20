@@ -1,4 +1,4 @@
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { DialogContent, IconButton } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import CloseIcon from '@mui/icons-material/Close'
@@ -47,14 +47,13 @@ export function BuyTokenDialog(props: BuyTokenDialogProps) {
         walletAddress: address,
     })
 
-    //#region remote controlled buy token dialog
+    // #region remote controlled buy token dialog
     const { open, closeDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated, (ev) => {
-        if (ev.open) {
-            setCode(ev.code ?? 'ETH')
-            setAddress(ev.address)
-        }
+        if (!ev.open) return
+        setCode(ev.code ?? 'ETH')
+        setAddress(ev.address)
     })
-    //#endregion
+    // #endregion
 
     return (
         <div className={classes.root}>

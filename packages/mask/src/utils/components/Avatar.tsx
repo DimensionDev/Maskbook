@@ -9,7 +9,7 @@ export function mapContactAvatarColor(string: string, theme: 'light' | 'dark') {
         // eslint-disable-next-line no-bitwise
         return next & next
     }, 0)
-    return `hsl(${hash % 360}, ${theme === 'dark' ? `78%` : '98%'}, ${theme === 'dark' ? `50%` : '70%'})`
+    return `hsl(${hash % 360}, ${theme === 'dark' ? '78%' : '98%'}, ${theme === 'dark' ? '50%' : '70%'})`
 }
 
 interface Props extends AvatarProps {

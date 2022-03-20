@@ -1,11 +1,10 @@
 import { memo, Suspense, useMemo, useState } from 'react'
-// see https://github.com/import-js/eslint-plugin-import/issues/2288
-// eslint-disable-next-line import/no-deprecated
 import { Grid, styled, Theme, useMediaQuery } from '@mui/material'
 import { MaskColorVar } from '@masknet/theme'
-import { ErrorBoundary } from '@masknet/shared'
+import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { DashboardContext } from './context'
 import { Navigation } from './Navigation'
+import { NavigationVersionFooter } from '../NavigationVersionFooter'
 
 const Root = styled(Grid)(({ theme }) => ({
     backgroundColor: MaskColorVar.primaryBackground,
@@ -17,13 +16,15 @@ const LeftContainer = styled(Grid)(({ theme }) => ({
         // Just meet the design size
         minWidth: 232,
     },
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    paddingBottom: '22px',
 }))
 
 export interface DashboardFrameProps extends React.PropsWithChildren<{}> {}
 
 export const DashboardFrame = memo((props: DashboardFrameProps) => {
-    // see https://github.com/import-js/eslint-plugin-import/issues/2288
-    // eslint-disable-next-line import/no-deprecated
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const [navigationExpanded, setNavigationExpanded] = useState(true)
     const [drawerOpen, setDrawerOpen] = useState(false)
@@ -44,6 +45,7 @@ export const DashboardFrame = memo((props: DashboardFrameProps) => {
                 {isLargeScreen && (
                     <LeftContainer item xs={2}>
                         <Navigation />
+                        <NavigationVersionFooter />
                     </LeftContainer>
                 )}
                 <Grid container direction="column" item xs={isLargeScreen ? 10 : 12}>

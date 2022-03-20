@@ -1,11 +1,10 @@
 import { memo, useMemo, useState } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { formatBalance, NetworkType, ProviderType, useWallets } from '@masknet/web3-shared-evm'
 import { MenuItem, Typography } from '@mui/material'
-import { FormattedBalance, TokenIcon, useMenu, useValueRef } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
+import { formatBalance, isEIP1559Supported, ProviderType, useChainId, useWallets } from '@masknet/web3-shared-evm'
+import { FormattedBalance, TokenIcon, useMenu } from '@masknet/shared'
 import { useContainer } from 'unstated-next'
 import { WalletContext } from '../hooks/useWalletContext'
-import { currentNetworkSettings } from '../../../../../plugins/Wallet/settings'
 import { Transfer1559 } from './Transfer1559'
 import { Prior1559Transfer } from './Prior1559Transfer'
 
@@ -26,7 +25,7 @@ const useStyles = makeStyles()({
 
 const Transfer = memo(() => {
     const { classes } = useStyles()
-    const networkType = useValueRef(currentNetworkSettings)
+    const chainId = useChainId()
     const wallets = useWallets(ProviderType.MaskWallet)
     const { assets, currentToken } = useContainer(WalletContext)
     const [selectedAsset, setSelectedAsset] = useState(currentToken)
@@ -59,7 +58,7 @@ const Transfer = memo(() => {
 
     return (
         <>
-            {networkType === NetworkType.Ethereum ? (
+            {isEIP1559Supported(chainId) ? (
                 <Transfer1559 selectedAsset={selectedAsset} otherWallets={otherWallets} openAssetMenu={openAssetMenu} />
             ) : (
                 <Prior1559Transfer

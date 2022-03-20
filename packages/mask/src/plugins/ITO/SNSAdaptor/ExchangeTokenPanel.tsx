@@ -6,7 +6,7 @@ import RemoveIcon from '@mui/icons-material/RemoveOutlined'
 import { useCallback, useEffect, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import { useI18N } from '../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
@@ -30,6 +30,7 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         margin: theme.spacing(1),
         borderRadius: 10,
+        backgroundColor: theme.palette.background.default,
         [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
             margin: theme.spacing(0),
             padding: theme.spacing(0, 0, 0, 0.5),
@@ -78,7 +79,7 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
     } = props
     const { t } = useI18N()
     const { classes } = useStyles()
-    //#region select token dialog
+    // #region select token dialog
     const [id] = useState(uuid())
     const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
@@ -95,20 +96,20 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
             open: true,
             uuid: id,
             disableNativeToken: isSell,
-            FixedTokenListProps: {
+            FungibleTokenListProps: {
                 blacklist: excludeTokensAddress,
                 selectedTokens: [exchangeToken?.address ?? '', ...selectedTokensAddress],
             },
         })
     }, [id, isSell, exchangeToken, excludeTokensAddress.sort().join(), selectedTokensAddress.sort().join()])
-    //#endregion
+    // #endregion
 
-    //#region balance
+    // #region balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
         exchangeToken?.type ?? EthereumTokenType.Native,
         exchangeToken?.address ?? '',
     )
-    //#endregion
+    // #endregion
 
     const [inputAmountForUI, setInputAmountForUI] = useState('')
 
@@ -152,7 +153,7 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
             ) : null}
             {showRemove ? (
                 <IconButton size="large" onClick={onRemove} className={classes.button}>
-                    <RemoveIcon color="secondary" />
+                    <RemoveIcon color="error" />
                 </IconButton>
             ) : null}
         </Paper>

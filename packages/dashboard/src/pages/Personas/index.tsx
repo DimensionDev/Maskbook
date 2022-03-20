@@ -8,14 +8,14 @@ import { PersonaSetup } from './components/PersonaSetup'
 import { PersonaDrawer } from './components/PersonaDrawer'
 import { PersonaContext } from './hooks/usePersonaContext'
 import { useDashboardI18N } from '../../locales'
-import type { PersonaInformation } from '@masknet/shared'
+import type { PersonaInformation } from '@masknet/shared-base'
 import { ContentContainer } from '../../components/ContentContainer'
 import { PersonaContent } from './components/PersonaContent'
 import { PersonaRowCard } from './components/PersonaCard/Row'
 import { PersonaStateBar } from './components/PersonaStateBar'
 import { UserProvider } from '../Settings/hooks/UserContext'
-import { useNavigate } from 'react-router'
-import { RoutePaths } from '../../type'
+import { useNavigate } from 'react-router-dom'
+import { DashboardRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     tabPanel: {
@@ -53,10 +53,9 @@ function Personas() {
         PersonaContext.useContainer()
 
     useEffect(() => {
-        if (personas?.length === 0) {
-            showSnackbar(t.personas_setup_tip(), { variant: 'warning' })
-            navigate(RoutePaths.Setup)
-        }
+        if (personas?.length !== 0) return
+        showSnackbar(t.personas_setup_tip(), { variant: 'warning' })
+        navigate(DashboardRoutes.Setup)
     }, [personas])
 
     const [activeTab, setActiveTab] = useState(
@@ -71,7 +70,7 @@ function Personas() {
         <UserProvider>
             <PageFrame
                 title={t.personas()}
-                noBackgroundFill={true}
+                noBackgroundFill
                 primaryAction={
                     <PersonaStateBar
                         nickname={currentPersona?.nickname}
@@ -85,7 +84,7 @@ function Personas() {
                 </Paper>
                 <ContentContainer style={{ display: 'flex', flexDirection: 'column' }}>
                     <TabContext value={activeTab}>
-                        <Tabs value={!!activeTab ? activeTab : false} onChange={(event, tab) => setActiveTab(tab)}>
+                        <Tabs value={activeTab ? activeTab : false} onChange={(event, tab) => setActiveTab(tab)}>
                             {definedSocialNetworks.map(({ networkIdentifier }) => (
                                 <Tab
                                     key={networkIdentifier}

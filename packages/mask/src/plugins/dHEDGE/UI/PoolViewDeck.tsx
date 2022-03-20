@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import { Trans } from 'react-i18next'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useAvatar } from '../hooks/useManager'
 import { PluginDHedgeMessages } from '../messages'
@@ -66,14 +66,14 @@ export function PoolViewDeck(props: PoolDeckProps) {
     const blockie = useAvatar(pool.managerAddress)
     const chainId = useChainId()
 
-    //#region manager share
+    // #region manager share
     const managerShare = new BigNumber(pool.balanceOfManager)
         .dividedBy(pool.totalSupply)
         .multipliedBy(100)
         .integerValue(BigNumber.ROUND_UP)
-    //#endregion
+    // #endregion
 
-    //#region the invest dialog
+    // #region the invest dialog
     const { setDialog: openInvestDialog } = useRemoteControlledDialog(PluginDHedgeMessages.InvestDialogUpdated)
     const onInvest = useCallback(() => {
         if (!pool || !inputTokens) return
@@ -83,7 +83,7 @@ export function PoolViewDeck(props: PoolDeckProps) {
             tokens: inputTokens,
         })
     }, [pool, inputTokens, openInvestDialog])
-    //#endregion
+    // #endregion
 
     return (
         <Grid container className={classes.meta} direction="row">

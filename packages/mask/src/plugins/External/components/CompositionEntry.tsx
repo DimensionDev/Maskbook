@@ -1,12 +1,13 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { usePortalShadowRoot } from '@masknet/theme'
-import { MaskDialog } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
 import { useEffect } from 'react'
-import { MaskMessages } from '../../../utils'
+import { MaskMessages, useI18N } from '../../../utils'
 import { PluginLoader } from './PluginLoader'
+import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 
 export function ThirdPartyPluginCompositionEntry(props: Plugin.SNSAdaptor.CompositionDialogEntry_DialogProps) {
+    const { t } = useI18N()
     useEffect(
         () =>
             MaskMessages.events.replaceComposition.on(() => {
@@ -15,14 +16,14 @@ export function ThirdPartyPluginCompositionEntry(props: Plugin.SNSAdaptor.Compos
         [props.onClose],
     )
     return usePortalShadowRoot((container) => (
-        <MaskDialog
+        <InjectedDialog
             open={props.open}
-            title="🧩 Load external plugins (Nightly feature)"
+            title={t('plugin_external_entry_title')}
             onClose={props.onClose}
-            DialogProps={{ container }}>
+            container={container}>
             <DialogContent sx={{ minHeight: 200, minWidth: 400 }}>
                 <PluginLoader />
             </DialogContent>
-        </MaskDialog>
+        </InjectedDialog>
     ))
 }

@@ -1,5 +1,5 @@
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { TransactionState, TransactionStateType, useAccount, useChainIdValid } from '@masknet/web3-shared-evm'
 import { Box } from '@mui/material'
 import { useCallback } from 'react'
@@ -29,11 +29,11 @@ export function OperationFooter({
     const account = useAccount()
     const chainIdValid = useChainIdValid()
 
-    //#region remote controlled select provider dialog
+    // #region remote controlled select provider dialog
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
-    //#endregion
+    // #endregion
 
     const handleShare = useCallback(() => {
         if (!shareLink) return
@@ -57,15 +57,17 @@ export function OperationFooter({
                 </ActionButton>
             )
         }
+        const isLoading =
+            [TransactionStateType.HASH, TransactionStateType.WAIT_FOR_CONFIRMING].includes(claimState.type) ||
+            [TransactionStateType.HASH, TransactionStateType.WAIT_FOR_CONFIRMING].includes(refundState.type)
+
         return (
             <ActionButton
                 fullWidth
-                disabled={
-                    claimState.type === TransactionStateType.HASH || refundState.type === TransactionStateType.HASH
-                }
+                disabled={isLoading}
+                loading={isLoading}
                 variant="contained"
                 size="large"
-                className={classes.button}
                 onClick={onClaimOrRefund}>
                 {canClaim
                     ? claimState.type === TransactionStateType.HASH
@@ -84,14 +86,11 @@ export function OperationFooter({
                 connectWallet: classes.connectWallet,
             }}>
             <Box className={classes.footer}>
-                <ActionButton
-                    variant="contained"
-                    fullWidth
-                    size="large"
-                    onClick={handleShare}
-                    className={classes.button}>
-                    {t('share')}
-                </ActionButton>
+                {canRefund ? null : (
+                    <ActionButton variant="contained" fullWidth size="large" onClick={handleShare}>
+                        {t('share')}
+                    </ActionButton>
+                )}
                 <ObtainButton />
             </Box>
         </EthereumWalletConnectedBoundary>

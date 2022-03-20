@@ -6,7 +6,7 @@ import CheckIcon from '@mui/icons-material/Check'
 import ErrorIcon from '@mui/icons-material/Error'
 import { red, green } from '@mui/material/colors'
 import classNames from 'classnames'
-import { useDebounce, useAsyncFn } from 'react-use'
+import { useDebounce, useAsyncFn, useUpdateEffect } from 'react-use'
 import { useErrorStyles } from '../../../utils/theme'
 
 const circle = <CircularProgress color="inherit" size={18} />
@@ -27,10 +27,9 @@ function useDebounceAsync<T extends any[]>(
     useDebounce(() => setDebounceLoading(state.loading), 500, [state])
     const f = useCallback(
         (...args: T) => {
-            if (!state.loading) {
-                setDebounceLoading(false)
-                startAsyncFn(...args)
-            }
+            if (state.loading) return
+            setDebounceLoading(false)
+            startAsyncFn(...args)
         },
         [startAsyncFn, state.loading],
     )
@@ -81,18 +80,19 @@ export default function ActionButton<T extends React.ComponentType<any> = React.
     )
 }
 
-interface ActionButtonPromiseProps extends ButtonProps {
+export interface ActionButtonPromiseProps extends ButtonProps {
     executor: () => Promise<void>
     init: React.ReactChild
     complete: React.ReactChild
     completeOnClick?: 'use executor' | (() => void)
     waiting: React.ReactChild
     waitingOnClick?: () => ActionButtonPromiseState
-    failed: React.ReactChild
+    failed?: React.ReactChild
     failedOnClick?: 'use executor' | (() => void)
     completeIcon?: React.ReactNode
     failIcon?: React.ReactNode
     onComplete?: () => void
+    noUpdateEffect?: boolean
 }
 type ActionButtonPromiseState = 'init' | 'complete' | 'wait' | 'fail'
 export function ActionButtonPromise(props: ActionButtonPromiseProps) {
@@ -107,6 +107,7 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
         waitingOnClick,
         failedOnClick,
         onComplete,
+        noUpdateEffect,
         completeIcon = <CheckIcon />,
         failIcon = <ErrorIcon />,
         ...b
@@ -123,7 +124,10 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
                 setState('complete')
                 onComplete?.()
             },
-            () => setState('fail'),
+            (error) => {
+                if (error.message.includes('Switch Chain Error')) setState('init')
+                else setState('fail')
+            },
         )
     }
     const cancel = () => {
@@ -132,6 +136,13 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
     }
     const completeClick = completeOnClick === 'use executor' ? run : completeOnClick
     const failClick = failedOnClick === 'use executor' ? run : failedOnClick
+
+    useUpdateEffect(() => {
+        if (!noUpdateEffect) {
+            setState((prev) => (prev === 'init' ? prev : 'init'))
+        }
+    }, [executor, noUpdateEffect])
+
     if (state === 'wait')
         return <Button {...b} startIcon={circle} disabled={!waitingOnClick} children={waiting} onClick={cancel} />
     if (state === 'complete')
@@ -168,6 +179,7 @@ const useStyles = makeStyles()({
     },
     failed: {
         backgroundColor: red[500],
+        color: '#fff',
         '&:hover': {
             backgroundColor: red[700],
         },

@@ -5,6 +5,7 @@ import { useAccount, useChainId } from '@masknet/web3-shared-evm'
 import { RedPacketInHistoryList } from './RedPacketInHistoryList'
 import { useRedPacketHistory } from './hooks/useRedPacketHistory'
 import { useEffect } from 'react'
+import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -20,6 +21,9 @@ const useStyles = makeStyles()((theme) => {
             [smallQuery]: {
                 padding: 0,
             },
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         placeholder: {
             textAlign: 'center',
@@ -33,6 +37,7 @@ interface RedPacketHistoryListProps {
 
 export function RedPacketHistoryList(props: RedPacketHistoryListProps) {
     const { onSelect } = props
+    const { t } = useI18N()
     const { classes } = useStyles()
     const account = useAccount()
     const chainId = useChainId()
@@ -45,7 +50,7 @@ export function RedPacketHistoryList(props: RedPacketHistoryListProps) {
     if (loading) {
         return (
             <Typography className={classes.placeholder} color="textSecondary">
-                Loading...
+                {t('loading')}
             </Typography>
         )
     }
@@ -54,7 +59,7 @@ export function RedPacketHistoryList(props: RedPacketHistoryListProps) {
         <div className={classes.root}>
             {!histories || histories.length === 0 ? (
                 <Typography className={classes.placeholder} color="textSecondary">
-                    No Data
+                    {t('no_data')}
                 </Typography>
             ) : (
                 <List>

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Button, DialogActions, DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '../../messages'
 import Services from '../../../../extension/service'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
@@ -28,12 +28,12 @@ const useStyles = makeStyles()({
 export const WalletConnectQRCodeDialog: React.FC = () => {
     const [uri, setURI] = useState('')
 
-    //#region remote controlled dialog logic
+    // #region remote controlled dialog logic
     const { open, closeDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletConnectQRCodeDialogUpdated,
         (ev) => ev.open && setURI(ev.uri),
     )
-    //#endregion
+    // #endregion
 
     let mode: QRCodeDialogProps['mode'] = 'qrcode'
     if (process.env.architecture === 'app' && process.env.engine === 'firefox') {

@@ -1,13 +1,12 @@
-import { blobToArrayBuffer } from '@dimensiondev/kit'
-import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/esm/grayscale'
+import { GrayscaleAlgorithm, type ImageTemplateTypes } from '@masknet/encryption'
 import Services from '../../extension/service'
-import { ImageTemplateTypes, ImagePayloadURLs } from '../../resources/image-payload'
+import { ImagePayloadURLs } from '../../resources/image-payload'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { downloadUrl } from '../../utils/utils'
 
 export async function SteganographyTextPayload(template: ImageTemplateTypes, text: string) {
     const pass = activatedSocialNetworkUI.configuration.steganography?.password?.() || 'mask'
-    const blankImage = await downloadUrl(ImagePayloadURLs[template]).then(blobToArrayBuffer)
+    const blankImage = await downloadUrl(ImagePayloadURLs[template]).then((x) => x.arrayBuffer())
     const secretImage = await Services.Crypto.steganographyEncodeImage(new Uint8Array(blankImage), {
         text,
         pass,

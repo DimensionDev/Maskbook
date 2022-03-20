@@ -1,7 +1,6 @@
 import { memo } from 'react'
 import { Box, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { MaskColorVar } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { LoadingAnimation } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
@@ -20,8 +19,8 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(2.5),
     },
     icon: {
-        width: 60,
-        height: 60,
+        width: 30,
+        height: 30,
         fill: MaskColorVar.primary,
     },
 }))

@@ -3,22 +3,15 @@ import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShad
 import { PostInfoProvider } from '../../../components/DataSource/usePostInfo'
 import { PostReplacer, PostReplacerProps } from '../../../components/InjectedComponents/PostReplacer'
 import type { PostInfo } from '../../PostInfo'
-import { makeStyles } from '@masknet/theme'
 import type { DOMProxy } from '@dimensiondev/holoflows-kit'
 import { noop } from 'lodash-unified'
 
-export function injectPostReplacer<T extends string>(
-    config: injectPostReplacerConfig = {},
-    additionalPropsToPostReplacer: (classes: Record<T, string>) => Partial<PostReplacerProps> = () => ({}),
-    useCustomStyles: (props?: any) => { classes: Record<T, string> } = makeStyles()({}) as any,
-) {
+export function injectPostReplacer(config: injectPostReplacerConfig = {}) {
     const PostReplacerDefault = memo(function PostReplacerDefault(props: {
         zipPost: PostReplacerProps['zip']
         unZipPost: PostReplacerProps['unzip']
     }) {
-        const { classes } = useCustomStyles()
-        const additionalProps = additionalPropsToPostReplacer(classes)
-        return <PostReplacer {...additionalProps} zip={props.zipPost} unzip={props.unZipPost} />
+        return <PostReplacer zip={props.zipPost} unzip={props.unZipPost} />
     })
 
     const { zipPost, unzipPost } = config
@@ -26,14 +19,14 @@ export function injectPostReplacer<T extends string>(
     const unzipPostF = unzipPost || noop
     return function injectPostReplacer(current: PostInfo, signal: AbortSignal) {
         signal.addEventListener('abort', unzipPostF)
-        createReactRootShadowed(current.rootNodeProxy.afterShadow, {
+        createReactRootShadowed(current.rootElement.afterShadow, {
             key: 'post-replacer',
             signal,
         }).render(
             <PostInfoProvider post={current}>
                 <PostReplacerDefault
-                    zipPost={() => zipPostF(current.rootNodeProxy)}
-                    unZipPost={() => unzipPostF(current.rootNodeProxy)}
+                    zipPost={() => zipPostF(current.rootElement)}
+                    unZipPost={() => unzipPostF(current.rootElement)}
                     {...current}
                 />
             </PostInfoProvider>,

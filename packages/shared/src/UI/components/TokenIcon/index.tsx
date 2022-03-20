@@ -6,7 +6,6 @@ import {
     getChainDetailed,
     getTokenConstants,
     isSameAddress,
-    useBlockie,
     useChainId,
     useTokenAssetBaseURLConstants,
 } from '@masknet/web3-shared-evm'
@@ -14,6 +13,7 @@ import { Avatar, AvatarProps } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useImageFailOver } from '../../hooks'
 import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
+import NO_IMAGE_COLOR from './constants'
 
 function getFallbackIcons(address: string, baseURIs: string[]) {
     const checkSummedAddress = formatEthereumAddress(address)
@@ -44,19 +44,18 @@ export interface TokenIconProps extends withClasses<'icon'> {
 }
 
 export function TokenIcon(props: TokenIconProps) {
-    const { address, logoURI, name, chainId, AvatarProps, classes } = props
-    const _chainId = useChainId()
+    const currentChainId = useChainId()
+    const { address, logoURI, name, chainId = currentChainId, AvatarProps, classes } = props
     let _logoURI = logoURI
 
     if (!logoURI && isSameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS, formatEthereumAddress(address))) {
-        const nativeToken = getChainDetailed(chainId ?? _chainId)
+        const nativeToken = getChainDetailed(chainId)
         _logoURI = nativeToken?.nativeCurrency.logoURI
     }
 
-    const { TOKEN_ASSET_BASE_URI } = useTokenAssetBaseURLConstants(chainId ?? _chainId)
+    const { TOKEN_ASSET_BASE_URI } = useTokenAssetBaseURLConstants(chainId)
     const fallbackLogos = getFallbackIcons(address, TOKEN_ASSET_BASE_URI ?? [])
 
-    const tokenBlockie = useBlockie(address)
     const images = _logoURI
         ? Array.isArray(_logoURI)
             ? [..._logoURI, ...fallbackLogos]
@@ -66,7 +65,7 @@ export function TokenIcon(props: TokenIconProps) {
 
     return (
         <TokenIconUI
-            logoURL={loading || trustedLogoURI ? trustedLogoURI : tokenBlockie}
+            logoURL={loading ? undefined : trustedLogoURI}
             AvatarProps={AvatarProps}
             classes={classes}
             name={name}
@@ -82,11 +81,21 @@ export interface TokenIconUIProps extends withClasses<'icon'> {
 
 export const TokenIconUI = memo<TokenIconUIProps>((props) => {
     const { logoURL, AvatarProps, name } = props
+
+    // add background color to no-img token icon
+    const defaultBackgroundColorNumber = name?.split('')?.reduce((total, cur) => total + Number(cur?.charCodeAt(0)), 0)
+    const defaultBackgroundColor = defaultBackgroundColorNumber
+        ? NO_IMAGE_COLOR?.[defaultBackgroundColorNumber % 5]
+        : undefined
     const classes = useStylesExtends(useStyles(), props)
 
     return (
-        <Avatar className={classes.icon} src={logoURL} {...AvatarProps}>
-            {name?.substr(0, 1).toLocaleUpperCase()}
+        <Avatar
+            className={classes.icon}
+            src={logoURL}
+            style={{ backgroundColor: logoURL ? undefined : defaultBackgroundColor }}
+            {...AvatarProps}>
+            {name?.substr(0, 1).toUpperCase()}
         </Avatar>
     )
 })

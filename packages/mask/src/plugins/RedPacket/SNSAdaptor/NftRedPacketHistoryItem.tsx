@@ -1,11 +1,13 @@
-import { TokenIcon } from '@masknet/shared'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { ERC721ContractDetailed, useAccount, useERC721ContractDetailed } from '@masknet/web3-shared-evm'
-import { Box, ListItem, Typography } from '@mui/material'
-import classNames from 'classnames'
-import { fill } from 'lodash-unified'
 import { FC, memo, MouseEventHandler, useCallback } from 'react'
 import { Trans } from 'react-i18next'
+import classNames from 'classnames'
+import { fill } from 'lodash-unified'
+import { TokenIcon } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { makeStyles } from '@masknet/theme'
+import { WalletMessages } from '@masknet/plugin-wallet'
+import { ERC721ContractDetailed, useAccount, useERC721ContractDetailed } from '@masknet/web3-shared-evm'
+import { Box, ListItem, Typography } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
@@ -24,7 +26,7 @@ const useStyles = makeStyles()((theme) => {
             position: 'static !important' as any,
             height: 'auto !important',
             padding: theme.spacing(2),
-            backgroundColor: MaskColorVar.lightBackground,
+            backgroundColor: theme.palette.background.default,
             [smallQuery]: {
                 padding: theme.spacing(2, 1.5),
             },
@@ -130,6 +132,12 @@ const useStyles = makeStyles()((theme) => {
                 color: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.26)' : 'rgba(255, 255, 255, 0.3)',
             },
         },
+        ellipsis: {
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            maxWidth: 360,
+        },
     }
 })
 
@@ -148,12 +156,14 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
             computed: { canSend, isPasswordValid },
         } = useNftAvailabilityComputed(account, history.payload)
         const { value: contractDetailed } = useERC721ContractDetailed(history.token_contract.address)
-
+        const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
+            WalletMessages.events.walletStatusDialogUpdated,
+        )
         const handleSend = useCallback(() => {
-            if (canSend && contractDetailed && isPasswordValid) {
-                onSend(history, contractDetailed)
-            }
-        }, [onSend, canSend, history, contractDetailed, isPasswordValid])
+            if (!(canSend && contractDetailed && isPasswordValid)) return
+            onSend(history, contractDetailed)
+            closeWalletStatusDialog()
+        }, [onSend, closeWalletStatusDialog, canSend, history, contractDetailed, isPasswordValid])
 
         const { value: redpacketStatus } = useAvailabilityNftRedPacket(history.rpid, account)
         const bitStatusList = redpacketStatus
@@ -175,12 +185,17 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                         classes={{ icon: classes.icon }}
                         address={contractDetailed?.address ?? ''}
                         name={contractDetailed?.name ?? '-'}
-                        logoURI={contractDetailed?.iconURL ?? ''}
+                        logoURI={
+                            contractDetailed?.iconURL ??
+                            new URL('../../../resources/maskFilledIcon.png', import.meta.url).toString()
+                        }
                     />
                     <Box className={classes.content}>
                         <section className={classes.section}>
                             <div>
-                                <Typography variant="body1" className={classNames(classes.title, classes.message)}>
+                                <Typography
+                                    variant="body1"
+                                    className={classNames(classes.title, classes.message, classes.ellipsis)}>
                                     {history.message === '' ? t('plugin_red_packet_best_wishes') : history.message}
                                 </Typography>
                                 <Typography variant="body1" className={classNames(classes.info, classes.message)}>
@@ -210,7 +225,12 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                         </section>
                         <section className={classes.nftList}>
                             <NftList
-                                contract={contractDetailed}
+                                contract={
+                                    {
+                                        address: history.token_contract.address,
+                                        chainId: history.token_contract.chain_id,
+                                    } as ERC721ContractDetailed
+                                }
                                 statusList={bitStatusList}
                                 tokenIds={history.token_ids}
                             />

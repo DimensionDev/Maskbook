@@ -1,42 +1,36 @@
-import { Dispatch, memo, SetStateAction, useCallback, useEffect, useState } from 'react'
+import { Dispatch, memo, SetStateAction, useCallback, useEffect, useRef, useState } from 'react'
 import { Box, Stack, TablePagination } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import {
-    ChainId,
-    CollectibleProvider,
-    ERC721TokenDetailed,
-    EthereumTokenType,
-    formatEthereumAddress,
-    isSameAddress,
-    useAccount,
-    useChainId,
-    useCollectibles,
-    useWallet,
-    useWeb3State,
-} from '@masknet/web3-shared-evm'
+import { EMPTY_LIST } from '@masknet/web3-shared-evm'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { CollectibleCard } from '../CollectibleCard'
 import { useDashboardI18N } from '../../../../locales'
 import { PluginMessages } from '../../../../API'
-import { useNavigate } from 'react-router'
-import { RoutePaths } from '../../../../type'
-import { useCollectibleOwners } from '../../hooks/useCollectibleOwners'
+import { useNavigate } from 'react-router-dom'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { TransferTab } from '../Transfer'
+import {
+    useNetworkDescriptor,
+    useWeb3State as useWeb3PluginState,
+    Web3Plugin,
+    useAccount,
+    usePluginIDContext,
+    NetworkPluginID,
+} from '@masknet/plugin-infra'
+import { useAsyncRetry } from 'react-use'
 
 const useStyles = makeStyles()({
     root: {
+        flex: 1,
         padding: '24px 26px 0px',
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fill, 140px)',
         gridGap: '20px',
         justifyContent: 'space-between',
     },
-    card: {
-        // padding: '10px 14px',
-    },
+    card: {},
     footer: {
-        flex: 1,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -44,77 +38,79 @@ const useStyles = makeStyles()({
 })
 
 interface CollectibleListProps {
-    selectedChainId: ChainId | null
-    provider: CollectibleProvider
+    selectedNetwork: Web3Plugin.NetworkDescriptor | null
 }
 
-export const CollectibleList = memo<CollectibleListProps>(({ selectedChainId, provider }) => {
+const ITEM_SIZE = {
+    width: 150,
+    height: 250,
+}
+
+export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) => {
     const [page, setPage] = useState(0)
     const navigate = useNavigate()
-    const chainId = useChainId()
-    const wallet = useWallet()
     const account = useAccount()
-    const erc721Tokens = useWeb3State().erc721Tokens
-    const { value: erc721TokensOwners = [], loading: loadingERC721Owners } = useCollectibleOwners(erc721Tokens)
+    const { Asset } = useWeb3PluginState()
+    const network = useNetworkDescriptor()
+    const [loadingSize, setLoadingSize] = useState(0)
+    const [renderData, setRenderData] = useState<Web3Plugin.NonFungibleToken[]>([])
 
+    const {
+        value = { data: EMPTY_LIST, hasNextPage: false },
+        error: collectiblesError,
+        loading: isQuerying,
+        retry,
+    } = useAsyncRetry(
+        async () =>
+            Asset?.getNonFungibleAssets?.(account, { page: page, size: 20 }, undefined, selectedNetwork || undefined),
+        [account, Asset?.getNonFungibleAssets, network, selectedNetwork],
+    )
+
+    useEffect(() => {
+        if (!loadingSize) return
+        const render = value.data.slice(page * loadingSize, (page + 1) * loadingSize)
+        setRenderData(render)
+    }, [value.data, loadingSize, page])
+
+    const currentPluginId = usePluginIDContext()
     const onSend = useCallback(
-        (detail: ERC721TokenDetailed) =>
-            navigate(RoutePaths.WalletsTransfer, {
+        (detail: Web3Plugin.NonFungibleToken) => {
+            // Sending NFT is only available on EVM currently.
+            if (currentPluginId !== NetworkPluginID.PLUGIN_EVM) return
+            navigate(DashboardRoutes.WalletsTransfer, {
                 state: {
                     type: TransferTab.Collectibles,
                     erc721Token: detail,
                 },
-            }),
-        [],
+            })
+        },
+        [currentPluginId],
     )
 
-    const {
-        value = { collectibles: [], hasNextPage: false },
-        loading: collectiblesLoading,
-        error: collectiblesError,
-        retry,
-    } = useCollectibles(account, selectedChainId, provider, page, 20)
-
     useEffect(() => {
-        PluginMessages.Wallet.events.erc721TokensUpdated.on(() => {
-            retry()
+        PluginMessages.Wallet.events.erc721TokensUpdated.on(() => retry())
+        PluginMessages.Wallet.events.socketMessageUpdated.on((info) => {
+            if (!info.done) {
+                retry()
+            }
         })
     }, [retry])
 
-    const { collectibles = [], hasNextPage } = value
-
-    const dataSource = collectibles.filter((x) => {
-        if (selectedChainId !== null && x.contractDetailed.chainId !== selectedChainId) return false
-
-        const owner = erc721TokensOwners.find(
-            (e) =>
-                e && isSameAddress(e.contractDetailed.address, x.contractDetailed.address) && x.tokenId === e.tokenId,
-        )
-        if (owner && !isSameAddress(owner.info.owner, account)) {
-            return false
-        }
-
-        const key = `${formatEthereumAddress(x.contractDetailed.address)}_${x.tokenId}`
-        switch (x.contractDetailed.type) {
-            case EthereumTokenType.ERC721:
-                return wallet?.erc721_token_blacklist ? !wallet?.erc721_token_blacklist.has(key) : true
-            default:
-                return false
-        }
-    })
+    const hasNextPage = (page + 1) * loadingSize < value.data.length
+    const isLoading = renderData.length === 0 && isQuerying
 
     return (
         <CollectibleListUI
-            isLoading={collectiblesLoading || loadingERC721Owners}
-            isEmpty={!!collectiblesError || dataSource.length === 0}
+            isLoading={isLoading}
+            isEmpty={!!collectiblesError || renderData.length === 0}
             page={page}
             onPageChange={setPage}
             hasNextPage={hasNextPage}
-            showPagination={!collectiblesLoading && !(page === 0 && dataSource.length === 0)}
-            dataSource={dataSource}
-            chainId={chainId}
-            provider={provider}
+            showPagination={!isQuerying && !(page === 0 && !hasNextPage)}
+            dataSource={renderData}
+            chainId={network?.chainId ?? 1}
             onSend={onSend}
+            setLoadingSize={(size) => setLoadingSize(size)}
         />
     )
 })
@@ -126,10 +122,10 @@ export interface CollectibleListUIProps {
     isLoading: boolean
     isEmpty: boolean
     showPagination: boolean
-    chainId: ChainId
-    provider: CollectibleProvider
-    dataSource: ERC721TokenDetailed[]
-    onSend(detail: ERC721TokenDetailed): void
+    chainId: number
+    dataSource: Web3Plugin.NonFungibleToken[]
+    onSend(detail: Web3Plugin.NonFungibleToken): void
+    setLoadingSize(fn: (pre: number | undefined) => number): void
 }
 
 export const CollectibleListUI = memo<CollectibleListUIProps>(
@@ -141,37 +137,47 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
         hasNextPage,
         showPagination,
         chainId,
-        provider,
         dataSource,
         onSend,
+        setLoadingSize,
     }) => {
         const t = useDashboardI18N()
         const { classes } = useStyles()
+        const ref = useRef<HTMLDivElement>(null)
+
+        useEffect(() => {
+            if (!ref.current) return
+            const width = ref.current.offsetWidth
+            const height = ref.current.offsetHeight - 60
+            const baseSize = Math.floor(width / ITEM_SIZE.width) * Math.floor(height / ITEM_SIZE.height)
+            // Ensure load 10 NFTs at least.
+            setLoadingSize((prev) => prev || Math.max(Math.floor(baseSize * 0.8), 10))
+        }, [ref.current])
 
         return (
-            <Stack flexDirection="column" justifyContent="space-between" height="100%">
-                <>
-                    {isLoading ? (
-                        <LoadingPlaceholder />
-                    ) : isEmpty ? (
-                        <EmptyPlaceholder children={t.wallets_empty_collectible_tip()} />
-                    ) : (
-                        <Box>
-                            <div className={classes.root}>
-                                {dataSource.map((x) => (
-                                    <div className={classes.card} key={x.tokenId}>
-                                        <CollectibleCard
-                                            chainId={chainId}
-                                            provider={provider}
-                                            token={x}
-                                            onSend={() => onSend(x)}
-                                        />
-                                    </div>
-                                ))}
-                            </div>
-                        </Box>
-                    )}
-                </>
+            <Stack flexDirection="column" justifyContent="space-between" height="100%" ref={ref}>
+                {isLoading ? (
+                    <LoadingPlaceholder />
+                ) : isEmpty ? (
+                    <EmptyPlaceholder children={t.wallets_empty_collectible_tip()} />
+                ) : (
+                    <Box>
+                        <div className={classes.root}>
+                            {dataSource.map((x, index) => (
+                                <div className={classes.card} key={index}>
+                                    <CollectibleCard
+                                        chainId={chainId}
+                                        token={x}
+                                        renderOrder={index}
+                                        // TODO: transfer not support multi chain, should remove is after supported
+                                        onSend={() => onSend(x as unknown as any)}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </Box>
+                )}
+
                 {showPagination ? (
                     <Box className={classes.footer}>
                         <TablePagination

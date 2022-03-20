@@ -1,7 +1,10 @@
 // !!! There is some relative path installation source in the dependency tree,
 // !!! but if we do not allow those packages to run install scripts anyway, it might be safe.
 // !!! If we can resolve 'link:../empty' to something like 'workspaceRoot:/projects/empty', it will be safe to install.
+/** @type {Map<string, string | string[]>} */
+// @ts-expect-error
 const approvedList = new Map([
+    // opensea-js https://github.com/ProjectOpenSea/opensea-js/issues/407
     [
         'ethereumjs-abi',
         [
@@ -14,14 +17,19 @@ const approvedList = new Map([
         'wyvern-js',
         ['git+https://github.com/ProjectOpenSea/wyvern-js.git#v3.2.1', 'github:ProjectOpenSea/wyvern-js#semver:^3.2.1'],
     ],
-    ['wyvern-schemas', 'git+https://github.com/ProjectOpenSea/wyvern-schemas.git#v0.11.1'],
-    ['bignumber.js', 'git+https://github.com/frozeman/bignumber.js-nolookahead.git'],
-    /* cspell:disable-next-line */
-    ['html-parse-stringify2', 'github:locize/html-parse-stringify2'],
+    ['wyvern-schemas', 'git+https://github.com/ProjectOpenSea/wyvern-schemas.git#v0.13.1'],
     /* cspell:disable-next-line */
     ['async-eventemitter', 'github:ahultgren/async-eventemitter#fa06e39e56786ba541c180061dbf2c0a5bbf951c'],
-    // !!! Relative path
-    ['xhr2-cookies', 'link:./package-overrides/xhr2-cookies'],
+    // opensea-js (v1), (and more, run `pnpm -r why web3@0.20.7`) -> web3
+    ['bignumber.js', 'git+https://github.com/frozeman/bignumber.js-nolookahead.git'],
+
+    // https://github.com/i18next/i18next-translation-parser/issues/11
+    // @magic-works/i18n-codegen -> i18next-translation-parser
+    /* cspell:disable-next-line */
+    ['html-parse-stringify2', 'github:locize/html-parse-stringify2'],
+
+    // ipfs https://github.com/ipfs/js-ipfs-utils/issues/158
+    ['node-fetch', 'https://registry.npmjs.org/@achingbrain/node-fetch/-/node-fetch-2.6.7.tgz'],
 ])
 
 /**
@@ -58,8 +66,17 @@ function validatePackage({ dependencies, devDependencies, optionalDependencies, 
     for (const [k, v] of notNormativeInstall(peerDependencies)) assertInstallationSourceValid(name, k, v)
 }
 
+function lockPackage(pkg) {
+    if (pkg.name === 'opensea-js') {
+        const prefix = 'git+https://github.com/ProjectOpenSea/wyvern-'
+        pkg.dependencies['wyvern-js'] = `${prefix}js.git#fabb7660f23f2252c141077e32193d281036299e`
+        pkg.dependencies['wyvern-schemas'] = `${prefix}schemas.git#e1a08fcf8ce2b11a0fe9cbdc7c9f77c59fadef26`
+    }
+}
+
 function readPackage(pkg, context) {
     validatePackage(pkg)
+    lockPackage(pkg)
     return pkg
 }
 

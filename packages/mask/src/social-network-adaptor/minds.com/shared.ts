@@ -1,4 +1,4 @@
-import type { PostIdentifier } from '@masknet/shared'
+import type { PostIdentifier } from '@masknet/shared-base'
 import type { SocialNetwork } from '../../social-network/types'
 import { createSNSAdaptorSpecializedPostContext } from '../../social-network/utils/create-post-context'
 import { deconstructPayload } from '../../utils'
@@ -14,7 +14,6 @@ export const mindsShared: SocialNetwork.Shared & SocialNetwork.Base = {
         getHomePage: () => 'https://www.minds.com',
         getProfilePage: () => 'https://www.minds.com',
         isValidUsername: usernameValidator,
-        publicKeyEncoding: undefined,
         textPayloadPostProcessor: undefined,
         getPostURL,
         getShareLinkURL(message) {

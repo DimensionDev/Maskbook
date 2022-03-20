@@ -33,7 +33,7 @@ export function useERC721TokenTransferCallback(address?: string) {
             // error: invalid ownership
             const ownerOf = await erc721Contract.methods.ownerOf(tokenId).call()
 
-            if (!ownerOf || !isSameAddress(ownerOf, account) || isSameAddress(ownerOf, recipient)) {
+            if (!ownerOf || !isSameAddress(ownerOf, account)) {
                 setTransferState({
                     type: TransactionStateType.FAILED,
                     error: new Error('Invalid ownership'),

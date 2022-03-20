@@ -1,9 +1,17 @@
 import { FC, memo } from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
-import { TransactionStatusType } from '@masknet/web3-shared-evm'
+import { EMPTY_LIST, ProviderType, TransactionStatusType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { FormattedAddress, LoadingAnimation, useRemoteControlledDialog, WalletIcon } from '@masknet/shared'
-import { useNetworkDescriptor, useProviderDescriptor, useWallet, useWeb3State, Web3Plugin } from '@masknet/plugin-infra'
+import { FormattedAddress, LoadingAnimation, WalletIcon } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import {
+    useNetworkDescriptor,
+    useProviderDescriptor,
+    useWallet,
+    useWeb3State,
+    Web3Plugin,
+    useReverseAddress,
+} from '@masknet/plugin-infra'
 import { PluginMessages } from '../../../../API'
 import { useRecentTransactions } from '../../hooks/useRecentTransactions'
 import { useDashboardI18N } from '../../../../locales'
@@ -12,10 +20,25 @@ import { useNetworkSelector } from './useNetworkSelector'
 const useStyles = makeStyles()((theme) => ({
     bar: {
         minWidth: 80,
-        borderRadius: 30,
         lineHeight: '28px',
         height: '28px',
         cursor: 'pointer',
+        position: 'relative',
+        '&::after': {
+            borderRadius: 30,
+            pointerEvents: 'none',
+            content: '""',
+            inset: 0,
+            margin: 'auto',
+            position: 'absolute',
+            backgroundColor: 'var(--network-icon-color, transparent)',
+            opacity: 0.1,
+            zIndex: 0,
+        },
+        '& > span': {
+            position: 'relative',
+            zIndex: 1,
+        },
     },
     dot: {
         position: 'relative',
@@ -27,6 +50,13 @@ const useStyles = makeStyles()((theme) => ({
         height: 10,
         borderRadius: 5,
     },
+    domain: {
+        fontSize: 14,
+        marginLeft: 20,
+        background: theme.palette.mode === 'dark' ? 'rgba(73, 137, 255, 0.2)' : 'rgba(28, 104, 243, 0.1)',
+        padding: '2px 8px',
+        borderRadius: 4,
+    },
 }))
 
 export const WalletStateBar = memo(() => {
@@ -35,8 +65,9 @@ export const WalletStateBar = memo(() => {
     const wallet = useWallet()
     const networkDescriptor = useNetworkDescriptor()
     const providerDescriptor = useProviderDescriptor()
-
-    const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)
+    const { value: pendingTransactions = EMPTY_LIST } = useRecentTransactions({
+        status: TransactionStatusType.NOT_DEPEND,
+    })
 
     const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
         PluginMessages.Wallet.events.walletStatusDialogUpdated,
@@ -48,6 +79,8 @@ export const WalletStateBar = memo(() => {
 
     const [menu, openMenu] = useNetworkSelector()
 
+    const { value: domain } = useReverseAddress(wallet?.address)
+
     if (!wallet) {
         return <Button onClick={openConnectWalletDialog}>{t.wallets_connect_wallet_connect()}</Button>
     }
@@ -55,6 +88,7 @@ export const WalletStateBar = memo(() => {
         <WalletStateBarUI
             isPending={!!pendingTransactions.length}
             wallet={wallet}
+            domain={domain}
             network={networkDescriptor}
             provider={providerDescriptor}
             openConnectWalletDialog={openWalletStatusDialog}
@@ -69,6 +103,7 @@ interface WalletStateBarUIProps {
     network?: Web3Plugin.NetworkDescriptor
     provider?: Web3Plugin.ProviderDescriptor
     wallet?: Web3Plugin.Wallet
+    domain?: string
     openConnectWalletDialog(): void
     openMenu: ReturnType<typeof useNetworkSelector>[1]
 }
@@ -78,6 +113,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
     network,
     provider,
     wallet,
+    domain,
     openConnectWalletDialog,
     openMenu,
     children,
@@ -94,7 +130,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
                 direction="row"
                 alignItems="center"
                 justifyContent="center"
-                sx={{ background: network.iconColor.replace(')', ', 0.1)'), px: 2, mr: 1 }}
+                sx={{ '--network-icon-color': network.iconColor, px: 2, mr: 1 }}
                 color={network.iconColor ?? ''}
                 className={classes.bar}
                 onClick={openMenu}>
@@ -108,7 +144,12 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
                     direction="row"
                     alignItems="center"
                     justifyContent="center"
-                    sx={{ px: 2, background: MaskColorVar.orangeMain.alpha(0.1), color: MaskColorVar.orangeMain }}
+                    sx={{
+                        borderRadius: 9999,
+                        px: 2,
+                        background: MaskColorVar.orangeMain.alpha(0.1),
+                        color: MaskColorVar.orangeMain,
+                    }}
                     className={classes.bar}>
                     <LoadingAnimation sx={{ fontSize: 12, mr: 0.8, color: MaskColorVar.orangeMain }} />
                     <Typography component="span" fontSize={12} display="inline-block">
@@ -121,7 +162,19 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
                     <WalletIcon providerIcon={provider.icon} inverse size={38} />
                 </Stack>
                 <Box sx={{ userSelect: 'none' }}>
-                    <Box fontSize={16}>{wallet.name}</Box>
+                    {provider.type !== ProviderType.MaskWallet ? (
+                        <Box fontSize={16} display="flex" alignItems="center">
+                            {domain && Utils?.formatDomainName ? Utils.formatDomainName(domain) : provider.name}
+                        </Box>
+                    ) : (
+                        <Box fontSize={16} display="flex" alignItems="center">
+                            {wallet.name}
+                            {domain && Utils?.formatDomainName ? (
+                                <Typography className={classes.domain}>{Utils.formatDomainName(domain)}</Typography>
+                            ) : null}
+                        </Box>
+                    )}
+
                     <Box fontSize={12}>
                         <FormattedAddress address={wallet.address} size={10} formatter={Utils?.formatAddress} />
                     </Box>

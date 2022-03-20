@@ -20,20 +20,27 @@ import {
     useChainIdValid,
     useChainDetailed,
     useWeb3State,
+    useReverseAddress,
 } from '@masknet/plugin-infra'
-import { useCallback } from 'react'
-import { useRemoteControlledDialog, WalletIcon } from '@masknet/shared'
+import { useCallback, useMemo } from 'react'
+import { WalletIcon } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '../../plugins/Wallet/messages'
-import { hasNativeAPI, nativeAPI, useI18N } from '../../utils'
+import { useI18N } from '../../utils'
+import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
 import { useRecentTransactions } from '../../plugins/Wallet/hooks/useRecentTransactions'
 import GuideStep from '../GuideStep'
 import { MaskFilledIcon } from '../../resources/MaskIcon'
 import { makeStyles } from '@masknet/theme'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
+import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
+import { useNextIDConnectStatus } from '../DataSource/useNextID'
 
 const useStyles = makeStyles()((theme) => ({
-    font: {
+    title: {
         color: theme.palette.mode === 'dark' ? theme.palette.text.primary : 'rgb(15, 20, 25)',
+        display: 'flex',
+        alignItems: 'center',
     },
     paper: {
         borderRadius: 4,
@@ -78,6 +85,7 @@ export interface ToolboxHintProps {
 }
 export function ToolboxHintUnstyled(props: ToolboxHintProps) {
     const { t } = useI18N()
+    const isNextIDVerified = useNextIDConnectStatus()
     const {
         ListItemButton = MuiListItemButton,
         ListItemText = MuiListItemText,
@@ -93,12 +101,26 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
 
     const networkDescriptor = useNetworkDescriptor()
     const providerDescriptor = useProviderDescriptor()
+    const personaConnectStatus = usePersonaConnectStatus()
+
+    const title = useMemo(() => {
+        return !personaConnectStatus.hasPersona
+            ? t('create_persona')
+            : !personaConnectStatus.connected
+            ? t('connect_persona')
+            : walletTitle
+    }, [personaConnectStatus, walletTitle, t])
+
+    const onClick = () => {
+        if (!isNextIDVerified) return
+        personaConnectStatus.action ? personaConnectStatus.action() : openWallet()
+    }
 
     return (
         <>
-            <GuideStep step={1} total={2} tip={t('user_guide_tip_1')}>
+            <GuideStep step={1} total={3} tip={t('user_guide_tip_1')}>
                 <Container>
-                    <ListItemButton onClick={openWallet}>
+                    <ListItemButton onClick={onClick}>
                         <ListItemIcon>
                             {isWalletValid ? (
                                 <WalletIcon
@@ -106,6 +128,7 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
                                     badgeSize={badgeSize}
                                     networkIcon={providerDescriptor?.icon} // switch the icon to meet design
                                     providerIcon={networkDescriptor?.icon}
+                                    isBorderColorNotDefault
                                 />
                             ) : (
                                 <MaskFilledIcon size={iconSize} />
@@ -120,7 +143,7 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
                                             justifyContent: 'space-between',
                                             alignItems: 'center',
                                         }}>
-                                        <Typography className={classes.font}>{walletTitle}</Typography>
+                                        <Typography className={classes.title}>{title}</Typography>
                                         {shouldDisplayChainIndicator ? (
                                             <FiberManualRecordIcon
                                                 className={classes.chainIcon}
@@ -149,30 +172,35 @@ function useToolbox() {
     const chainDetailed = useChainDetailed()
     const { Utils } = useWeb3State()
 
-    //#region recent pending transactions
-    const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)
-    //#endregion
+    // #region recent pending transactions
+    const { value: pendingTransactions = [] } = useRecentTransactions({
+        status: TransactionStatusType.NOT_DEPEND,
+    })
+    // #endregion
 
-    //#region Wallet
+    // #region Wallet
     const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
     )
-    //#endregion
+    // #endregion
 
     const isWalletValid = !!account && selectedWallet && chainIdValid
 
+    const { value: domain } = useReverseAddress(account)
+
     function renderButtonText() {
-        if (!account) return t('plugin_wallet_on_connect')
+        if (!account) return t('mask_network')
         if (!chainIdValid) return t('plugin_wallet_wrong_network')
-        if (pendingTransactions.length <= 0) return Utils?.formatAddress?.(account, 4) ?? account
+        if (pendingTransactions.length <= 0)
+            return Utils?.formatDomainName?.(domain) || Utils?.formatAddress?.(account, 4) || account
         return (
             <>
-                <span>
+                <span style={{ marginRight: 12 }}>
                     {t('plugin_wallet_pending_transactions', {
                         count: pendingTransactions.length,
                     })}
                 </span>
-                <CircularProgress sx={{ marginLeft: 1.5 }} thickness={6} size={20} color="inherit" />
+                <CircularProgress thickness={6} size={20} color="inherit" />
             </>
         )
     }

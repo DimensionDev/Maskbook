@@ -24,6 +24,7 @@ export enum PopupRoutes {
     Personas = '/personas',
     Logout = '/personas/logout',
     PersonaRename = '/personas/rename',
+    PersonaSignRequest = '/personas/sign-request',
     PermissionAwareRedirect = '/redirect',
     RequestPermission = '/request-permission',
     ThirdPartyRequestPermission = '/3rd-request-permission',

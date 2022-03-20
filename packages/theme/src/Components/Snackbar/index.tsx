@@ -11,8 +11,7 @@ import {
     SnackbarAction,
     OptionsObject,
 } from 'notistack'
-import { Typography } from '@mui/material'
-import { IconButton } from '@mui/material'
+import { Typography, IconButton } from '@mui/material'
 import classnames from 'classnames'
 import { Close as CloseIcon } from '@mui/icons-material'
 import WarningIcon from '@mui/icons-material/Warning'
@@ -27,10 +26,10 @@ export { SnackbarProvider, useSnackbar } from 'notistack'
 export type { VariantType, OptionsObject, SnackbarKey, SnackbarMessage } from 'notistack'
 
 interface StyleProps {
-    isfacebook?: boolean
+    offsetY?: number
 }
 
-const useStyles = makeStyles<StyleProps>()((theme, { isfacebook }, createRef) => {
+const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, { offsetY }, refs) => {
     const { palette } = theme
     const isDark = palette.mode === 'dark'
     const spinningAnimationKeyFrames = keyframes`
@@ -39,14 +38,12 @@ to {
 }`
 
     const title = {
-        ref: createRef(),
         color: MaskColorVar.textPrimary,
         fontWeight: 400,
         fontSize: 14,
         lineHeight: '20px',
     } as const
     const message = {
-        ref: createRef(),
         color: MaskColorVar.textSecondary,
         fontWeight: 400,
         display: 'flex',
@@ -56,17 +53,17 @@ to {
     const defaultVariant = {
         background: isDark ? '#17191D' : '#F7F9FA',
         color: isDark ? '#D9D9D9' : '#0F1419',
-        [`& .${title.ref}`]: {
+        [`& .${refs.title}`]: {
             color: isDark ? '#D9D9D9' : palette.grey['800'],
         },
     }
     const success = {
         backgroundColor: '#60DFAB',
         color: '#ffffff',
-        [`& .${title.ref}`]: {
+        [`& .${refs.title}`]: {
             color: 'inherit',
         },
-        [`& .${message.ref}`]: {
+        [`& .${refs.message}`]: {
             color: 'inherit',
         },
     } as const
@@ -74,10 +71,10 @@ to {
     const error = {
         background: '#FF5F5F',
         color: '#ffffff',
-        [`& .${title.ref}`]: {
+        [`& .${refs.title}`]: {
             color: 'inherit',
         },
-        [`& .${message.ref}`]: {
+        [`& .${refs.message}`]: {
             color: 'inherit',
         },
     } as const
@@ -85,22 +82,21 @@ to {
     const info = {
         background: '#8CA3C7',
         color: '#ffffff',
-        [`& .${title.ref}`]: {
+        [`& .${refs.title}`]: {
             color: 'inherit',
         },
-        [`& .${message.ref}`]: {
+        [`& .${refs.message}`]: {
             color: 'inherit',
         },
     }
 
     const warning = {
-        ref: createRef(),
         backgroundColor: '#FFB915',
         color: '#ffffff',
-        [`& .${title.ref}`]: {
+        [`& .${refs.title}`]: {
             color: 'inherit',
         },
-        [`& .${message.ref}`]: {
+        [`& .${refs.message}`]: {
             color: 'inherit',
         },
     } as const
@@ -108,7 +104,7 @@ to {
     return {
         root: {
             zIndex: 9999,
-            transform: isfacebook ? 'translateY(100px)' : 'none',
+            transform: typeof offsetY !== undefined ? `translateY(${80}px)` : 'none',
             color: MaskColorVar.textLight,
             pointerEvents: 'inherit',
         },
@@ -176,7 +172,7 @@ export interface CustomSnackbarContentProps {
     processing?: boolean
     variant?: VariantType
     action?: SnackbarAction
-    isfacebook?: boolean
+    offsetY?: number
     classes?: Partial<ReturnType<typeof useStyles>['classes']>
 }
 const IconMap: Record<VariantType, React.ReactNode> = {
@@ -188,7 +184,7 @@ const IconMap: Record<VariantType, React.ReactNode> = {
 }
 
 export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarContentProps>((props, ref) => {
-    const classes = useStylesExtends(useStyles({ isfacebook: props.isfacebook }), props)
+    const classes = useStylesExtends(useStyles({ offsetY: props.offsetY }), props)
     const snackbar = useSnackbar()
     const loadingIcon = <LoadingIcon color="inherit" className={classes.spinning} />
     const variantIcon = props.processing ? loadingIcon : props.variant ? IconMap[props.variant] : null
@@ -218,9 +214,9 @@ export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarCo
     )
 })
 
-export const CustomSnackbarProvider = memo<SnackbarProviderProps & { isfacebook?: string }>((props) => {
+export const CustomSnackbarProvider = memo<SnackbarProviderProps & { offsetY?: number }>(({ offsetY, ...rest }) => {
     const ref = useRef<SnackbarProvider>(null)
-    const { classes } = useStyles({ isfacebook: Boolean(props.isfacebook) })
+    const { classes } = useStyles({ offsetY: offsetY })
     const onDismiss = (key: string | number) => () => {
         ref.current?.closeSnackbar(key)
     }
@@ -233,12 +229,7 @@ export const CustomSnackbarProvider = memo<SnackbarProviderProps & { isfacebook?
             anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             hideIconVariant
             content={(key, title) => (
-                <CustomSnackbarContent
-                    id={key}
-                    variant={props.variant ?? 'default'}
-                    title={title}
-                    isfacebook={Boolean(props.isfacebook)}
-                />
+                <CustomSnackbarContent id={key} variant={rest.variant ?? 'default'} title={title} offsetY={offsetY} />
             )}
             action={(key) => (
                 <IconButton size="large" onClick={onDismiss(key)} sx={{ color: 'inherit' }}>
@@ -252,7 +243,7 @@ export const CustomSnackbarProvider = memo<SnackbarProviderProps & { isfacebook?
                 variantInfo: classes.info,
                 variantWarning: classes.warning,
             }}
-            {...props}
+            {...rest}
         />
     )
 })

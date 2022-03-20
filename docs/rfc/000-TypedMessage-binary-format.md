@@ -1,6 +1,6 @@
 # TypedMessage binary format
 
-Playground: copy [the playground file](./000-TypedMessage-and-Payload-37-playground.js) into a https: web page.
+<!-- markdownlint-disable no-duplicate-heading -->
 
 ## Design target
 
@@ -58,7 +58,12 @@ Version less than 0 is invalid.
 All TypedMessage must starts with the following fields:
 
 ```typescript
-type TypedMessageBase = [type: TypedMessageTypeEnum | String, metadata: Map | Nil, ...rest: Array<Any>]
+type TypedMessageBase = [
+  type: TypedMessageTypeEnum | String,
+  version: Integer,
+  metadata: Map | Nil,
+  ...rest: Array<Any>
+]
 enum TypedMessageTypeEnum {
   Tuple = 0,
   Text = 1,
@@ -76,6 +81,10 @@ When it is `TypedMessageTypeEnum`, it represents a well-known TypedMessage defin
 When it is a `String`, it represents a custom extension of TypedMessage.
 
 An implementation MAY ignore an unknown type or render a hint.
+
+#### `version`
+
+This field represents the version of this TypedMessage contains.
 
 #### `metadata`
 

@@ -5,14 +5,13 @@ import {
     FungibleToken,
     getChainDetailed,
     isSameAddress,
-    isZero,
-    pow10,
     TransactionStateType,
     useAccount,
     useFungibleTokenDetailed,
     useFungibleTokensDetailed,
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
+import { isZero } from '@masknet/web3-shared-base'
 import {
     Box,
     Card,
@@ -80,9 +79,6 @@ const useStyles = makeStyles()((theme) => {
                 flexDirection: 'column',
             },
         },
-        actionButton: {
-            color: '#fff',
-        },
         button: {
             borderRadius: 50,
             [smallQuery]: {
@@ -117,13 +113,18 @@ const useStyles = makeStyles()((theme) => {
             borderRadius: 0,
         },
         cell: {
-            border: '1px solid rgba(224, 224, 224, 1)',
+            border: `1px solid ${theme.palette.divider}`,
             color: theme.palette.text.primary,
             wordBreak: 'break-word',
         },
         head: {
-            border: '1px solid rgba(224, 224, 224, 1)',
+            border: `1px solid ${theme.palette.divider}`,
             color: theme.palette.text.secondary,
+        },
+        ellipsis: {
+            maxWidth: 350,
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
         },
     }
 })
@@ -139,7 +140,7 @@ export function PoolInList(props: PoolInListProps) {
     const { classes } = useStyles()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
-    //#region Fetch tokens detailed
+    // #region Fetch tokens detailed
     const { value: _tokenDetailed } = useFungibleTokenDetailed(
         EthereumTokenType.ERC20,
         (pool as JSON_PayloadFromChain).token_address ?? (pool as JSON_PayloadInMask).token.address,
@@ -158,9 +159,9 @@ export function PoolInList(props: PoolInListProps) {
 
     const { value: _exchangeTokens } = useFungibleTokensDetailed(_poolTokens)
     const exchangeTokens = (pool as JSON_PayloadInMask).exchange_tokens ?? _exchangeTokens
-    //#endregion
+    // #endregion
 
-    //#region Calculate out exchange_out_volumes
+    // #region Calculate out exchange_out_volumes
     const exchangeOutVolumes =
         exchange_out_volumes.length === exchange_in_volumes.length
             ? exchange_out_volumes
@@ -169,15 +170,15 @@ export function PoolInList(props: PoolInListProps) {
                   new BigNumber(v).div(pool.exchange_amounts[i * 2]).times(pool.exchange_amounts[i * 2 + 1]),
               )
             : []
-    //#endregion
+    // #endregion
 
-    //#region withdraw
+    // #region withdraw
     const [destructState, destructCallback, resetDestructCallback] = useDestructCallback(pool.contract_address)
     useTransactionDialog(null, destructState, TransactionStateType.CONFIRMED, () => {
         onRetry()
         resetDestructCallback()
     })
-    //#endregion
+    // #endregion
 
     const account = useAccount()
     const { computed: availabilityComputed, loading: loadingAvailability } = useAvailabilityComputed(pool)
@@ -199,12 +200,7 @@ export function PoolInList(props: PoolInListProps) {
         return (
             <>
                 {loadingTradeInfo || loadingAvailability ? null : canWithdraw ? (
-                    <ActionButton
-                        fullWidth
-                        size="small"
-                        variant="contained"
-                        onClick={() => destructCallback(pool.pid)}
-                        className={classes.actionButton}>
+                    <ActionButton fullWidth size="small" variant="contained" onClick={() => destructCallback(pool.pid)}>
                         {t('plugin_ito_withdraw')}
                     </ActionButton>
                 ) : canSend ? (
@@ -219,17 +215,11 @@ export function PoolInList(props: PoolInListProps) {
                                     'exchange_token_addresses',
                                 ]) as JSON_PayloadInMask,
                             )
-                        }
-                        className={classes.actionButton}>
+                        }>
                         {t('plugin_ito_list_button_send')}
                     </ActionButton>
                 ) : isWithdrawn ? (
-                    <ActionButton
-                        fullWidth
-                        size="small"
-                        variant="contained"
-                        disabled={true}
-                        className={classes.actionButton}>
+                    <ActionButton fullWidth size="small" variant="contained" disabled>
                         {t('plugin_ito_withdrawn')}
                     </ActionButton>
                 ) : null}
@@ -250,7 +240,7 @@ export function PoolInList(props: PoolInListProps) {
                 <Box className={classes.content}>
                     <Box className={classes.header}>
                         <Box className={classes.title}>
-                            <Typography variant="body1" color="textPrimary">
+                            <Typography variant="body1" color="textPrimary" className={classes.ellipsis}>
                                 {title}
                             </Typography>
                             <Typography className={classes.date} variant="body2" color="textSecondary">
@@ -339,10 +329,8 @@ export function PoolInList(props: PoolInListProps) {
                                                 {formatBalance(
                                                     new BigNumber(pool.exchange_amounts[index * 2])
                                                         .dividedBy(pool.exchange_amounts[index * 2 + 1])
-                                                        .multipliedBy(
-                                                            pow10(poolToken.decimals - exchangeTokens[index].decimals),
-                                                        )
-                                                        .multipliedBy(pow10(exchangeTokens[index].decimals))
+                                                        .shiftedBy(poolToken.decimals - exchangeTokens[index].decimals)
+                                                        .shiftedBy(exchangeTokens[index].decimals)
                                                         .integerValue(),
                                                     token.decimals,
                                                     6,

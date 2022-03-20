@@ -1,10 +1,10 @@
-import type { Plugin } from '@masknet/plugin-infra'
+import { NetworkPluginID, Plugin } from '@masknet/plugin-infra'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { RedPacketPluginID } from './constants'
+import { RedPacketMetaKey, RedPacketNftMetaKey, RedPacketPluginID } from './constants'
 
 export const base: Plugin.Shared.Definition = {
     ID: RedPacketPluginID,
-    icon: '🧧',
+    icon: '\u{1F9E7}',
     name: { fallback: 'Lucky drop' },
     description: {
         fallback:
@@ -16,7 +16,21 @@ export const base: Plugin.Shared.Definition = {
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
         web3: {
-            supportedOperationalChains: [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai],
+            [NetworkPluginID.PLUGIN_EVM]: {
+                supportedChainIds: [
+                    ChainId.Mainnet,
+                    ChainId.BSC,
+                    ChainId.Matic,
+                    ChainId.Arbitrum,
+                    ChainId.xDai,
+                    ChainId.Fantom,
+                    ChainId.Avalanche,
+                    ChainId.Aurora,
+                ],
+            },
         },
+    },
+    contribution: {
+        metadataKeys: new Set([RedPacketMetaKey, RedPacketNftMetaKey]),
     },
 }

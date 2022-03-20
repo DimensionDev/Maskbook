@@ -5,8 +5,10 @@ import { MaskExternalPluginPreviewRenderer, RenderContext } from '@masknet/exter
 import { PermissionAwareRedirectOf } from '../../../extension/popups'
 import { createThirdPartyPopupContext } from '../sns-context'
 import { useExternalPluginManifest, useExternalPluginTemplate } from '../loader'
+import { useI18N } from '../../../utils'
 
 export function ExternalPluginRenderer(props: ExternalPluginLoadDetails) {
+    const { t } = useI18N()
     const manifest = useExternalPluginManifest(props.url)
     const template = useExternalPluginTemplate(props.url, manifest.value, props.metaKey)
     const retry = (
@@ -27,17 +29,17 @@ export function ExternalPluginRenderer(props: ExternalPluginLoadDetails) {
             <CardHeader
                 title={
                     <>
-                        External plugin: {manifest.value.name}
+                        {t('plugin_external_name')}: {manifest.value.name}
                         {retry}
                     </>
                 }
                 subheader={
                     <>
                         <Typography variant="caption" sx={{ display: 'block' }}>
-                            Publisher: {manifest.value.publisher} (Unverified)
+                            {t('plugin_external_unverified_publisher', { publisher: manifest.value.publisher })}
                         </Typography>
                         <Typography variant="caption" sx={{ display: 'block' }}>
-                            Plugin URL:{' '}
+                            {t('plugin_external_plugin_url')}
                             <Link href={props.url} target="_blank">
                                 {props.url}
                             </Link>

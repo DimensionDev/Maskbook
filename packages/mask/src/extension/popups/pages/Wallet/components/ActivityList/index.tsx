@@ -1,29 +1,25 @@
 import urlcat from 'urlcat'
 import type { TransactionReceipt } from 'web3-core'
 import { memo, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { useContainer } from 'unstated-next'
-import { Box, Button, Link, List, ListItem, ListItemText, Typography } from '@mui/material'
+import { Button, Link, List } from '@mui/material'
 import {
     ChainId,
     EthereumRpcType,
-    formatEthereumAddress,
-    isNative,
+    isNativeTokenAddress,
     isSameAddress,
     resolveTransactionLinkOnExplorer,
-    TransactionStatusType,
     useChainId,
 } from '@masknet/web3-shared-evm'
 import { PopupRoutes } from '@masknet/shared-base'
-import formatDateTime from 'date-fns/format'
-import { ArrowRightIcon, CircleCloseIcon, InteractionCircleIcon, LoaderIcon } from '@masknet/icons'
 import { WalletContext } from '../../hooks/useWalletContext'
-import { RecentTransactionDescription } from '../../../../../../plugins/Wallet/SNSAdaptor/WalletStatusDialog/TransactionDescription'
 import type { RecentTransaction } from '../../../../../../plugins/Wallet/services'
 import type Services from '../../../../../service'
 import { useI18N } from '../../../../../../utils'
 import { ReplaceType } from '../../type'
+import { ActivityListItem } from './ActivityListItem'
 
 const useStyles = makeStyles()({
     list: {
@@ -108,7 +104,8 @@ export const ActivityList = memo<ActivityListProps>(({ tokenAddress }) => {
     const dataSource =
         transactions?.filter((transaction) => {
             if (!tokenAddress) return true
-            else if (isNative(tokenAddress)) return transaction.computedPayload?.type === EthereumRpcType.SEND_ETHER
+            else if (isNativeTokenAddress(tokenAddress))
+                return transaction.computedPayload?.type === EthereumRpcType.SEND_ETHER
             else if (
                 transaction.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION &&
                 (transaction.computedPayload?.name === 'transfer' ||
@@ -131,8 +128,8 @@ export interface ActivityListUIProps {
 export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }) => {
     const { classes } = useStyles()
     const { t } = useI18N()
-    const [isExpand, setIsExpand] = useState(!(dataSource.length > 3))
-    const history = useHistory()
+    const [isExpand, setExpand] = useState(!(dataSource.length > 3))
+    const navigate = useNavigate()
     const { setTransaction } = useContainer(WalletContext)
 
     if (dataSource.length === 0) return <div className={classes.empty}>{t('popups_wallet_no_transactions')}</div>
@@ -144,91 +141,44 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }
                     const toAddress = getToAddress(transaction.receipt, transaction.computedPayload)
                     return (
                         <Link
-                            href={resolveTransactionLinkOnExplorer(chainId, transaction.hash)}
+                            href={resolveTransactionLinkOnExplorer(
+                                chainId,
+                                transaction.receipt?.transactionHash ?? transaction.hash,
+                            )}
                             target="_blank"
                             rel="noopener noreferrer"
                             key={index}
                             style={{ textDecoration: 'none' }}>
-                            <ListItem className={classes.item}>
-                                {transaction.status === TransactionStatusType.NOT_DEPEND ? (
-                                    <LoaderIcon className={classes.loader} />
-                                ) : transaction.status === TransactionStatusType.SUCCEED ||
-                                  transaction.status === TransactionStatusType.CANCELLED ? (
-                                    <InteractionCircleIcon className={classes.interaction} />
-                                ) : (
-                                    <CircleCloseIcon style={{ fill: 'none' }} />
-                                )}
-                                <ListItemText style={{ marginLeft: 15 }}>
-                                    <Typography className={classes.description}>
-                                        <RecentTransactionDescription {...transaction} />
-                                    </Typography>
-
-                                    {transaction.status === TransactionStatusType.NOT_DEPEND ? (
-                                        <Typography fontSize={12} color="#FFB915" fontWeight={600} lineHeight="16px">
-                                            {t('pending')}
-                                        </Typography>
-                                    ) : (
-                                        <Typography className={classes.secondaryDesc}>
-                                            {transaction.at ? `${formatDateTime(transaction.at, 'MMM dd')}.  ` : null}
-                                            {!!toAddress
-                                                ? t('popups_wallet_activity_to_address', {
-                                                      address: formatEthereumAddress(toAddress, 4),
-                                                  })
-                                                : null}
-                                        </Typography>
-                                    )}
-
-                                    {transaction.status === TransactionStatusType.NOT_DEPEND ? (
-                                        <Box display="flex" mt={1}>
-                                            {!transaction.payloadReplacement ? (
-                                                <Button
-                                                    className={classes.button}
-                                                    variant="contained"
-                                                    onClick={(e) => {
-                                                        e.preventDefault()
-                                                        setTransaction(transaction)
-                                                        history.push(
-                                                            urlcat(PopupRoutes.ReplaceTransaction, {
-                                                                type: ReplaceType.SPEED_UP,
-                                                            }),
-                                                        )
-                                                    }}>
-                                                    {t('speed_up')}
-                                                </Button>
-                                            ) : null}
-                                            <Button
-                                                className={classes.button}
-                                                style={{ color: '#1C68F3', backgroundColor: '#F7F9FA', marginLeft: 2 }}
-                                                onClick={(e) => {
-                                                    e.preventDefault()
-                                                    setTransaction(transaction)
-                                                    history.push(
-                                                        urlcat(PopupRoutes.ReplaceTransaction, {
-                                                            type: ReplaceType.CANCEL,
-                                                        }),
-                                                    )
-                                                }}>
-                                                {t('cancel')}
-                                            </Button>
-                                        </Box>
-                                    ) : null}
-
-                                    {transaction.status === TransactionStatusType.FAILED ? (
-                                        <Typography fontSize={12} color="#FF5F5F" fontWeight={600} lineHeight="16px">
-                                            {t('failed')}
-                                        </Typography>
-                                    ) : null}
-                                </ListItemText>
-                                <ArrowRightIcon className={classes.arrow} style={{ fill: 'none' }} />
-                            </ListItem>
+                            <ActivityListItem
+                                transaction={transaction}
+                                toAddress={toAddress}
+                                onSpeedUpClick={(e) => {
+                                    e.preventDefault()
+                                    setTransaction(transaction)
+                                    navigate(
+                                        urlcat(PopupRoutes.ReplaceTransaction, {
+                                            type: ReplaceType.SPEED_UP,
+                                        }),
+                                    )
+                                }}
+                                onCancelClick={(e) => {
+                                    e.preventDefault()
+                                    setTransaction(transaction)
+                                    navigate(
+                                        urlcat(PopupRoutes.ReplaceTransaction, {
+                                            type: ReplaceType.CANCEL,
+                                        }),
+                                    )
+                                }}
+                            />
                         </Link>
                     )
                 })}
             </List>
             {!isExpand ? (
                 <div className={classes.buttonContainer}>
-                    <Button fullWidth className={classes.moreButton} onClick={() => setIsExpand(true)}>
-                        More
+                    <Button fullWidth className={classes.moreButton} onClick={() => setExpand(true)}>
+                        {t('more')}
                     </Button>
                 </div>
             ) : null}

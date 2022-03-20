@@ -1,17 +1,5 @@
-import { useCallback } from 'react'
-import {
-    Avatar,
-    Box,
-    Button,
-    CardActions,
-    CardContent,
-    CardHeader,
-    Link,
-    Paper,
-    Tab,
-    Tabs,
-    Typography,
-} from '@mui/material'
+import { ReactElement, useCallback } from 'react'
+import { Box, Button, CardActions, CardContent, CardHeader, Link, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import { findIndex } from 'lodash-unified'
@@ -20,25 +8,24 @@ import isValidDate from 'date-fns/isValid'
 import isAfter from 'date-fns/isAfter'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
-import { useI18N, useSettingsSwitcher } from '../../../utils'
+import { useI18N, useSwitcher } from '../../../utils'
 import { ArticleTab } from './ArticleTab'
 import { TokenTab } from './TokenTab'
 import { OfferTab } from './OfferTab'
 import { ListingTab } from './ListingTab'
 import { HistoryTab } from './HistoryTab'
+import { LinkingAvatar } from './LinkingAvatar'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleCard } from './CollectibleCard'
 import { CollectibleProviderIcon } from './CollectibleProviderIcon'
-import { PluginSkeleton } from './PluginSkeleton'
-import { CollectibleProvider, CollectibleTab } from '../types'
-import { currentCollectibleProviderSettings } from '../settings'
-import { MaskTextIcon } from '../../../resources/MaskIcon'
-import { resolveAssetLinkOnOpenSea, resolveCollectibleProviderName } from '../pipes'
-import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
+import { CollectibleTab } from '../types'
+import { resolveAssetLinkOnCurrentProvider, resolveCollectibleProviderName } from '../pipes'
 import { ActionBar } from './ActionBar'
-import { useChainId } from '@masknet/web3-shared-evm'
+import { NonFungibleAssetProvider, useChainId } from '@masknet/web3-shared-evm'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/FootnoteMenu'
+import { LoadingAnimation } from '@masknet/shared'
+import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -46,6 +33,7 @@ const useStyles = makeStyles()((theme) => {
             width: '100%',
             border: `solid 1px ${theme.palette.divider}`,
             padding: 0,
+            marginBottom: 12,
         },
         content: {
             width: '100%',
@@ -98,17 +86,6 @@ const useStyles = makeStyles()((theme) => {
                 fontWeight: 300,
             },
         },
-        footnote: {
-            fontSize: 10,
-            marginRight: theme.spacing(1),
-        },
-        footLink: {
-            cursor: 'pointer',
-            marginRight: theme.spacing(0.5),
-            '&:last-child': {
-                marginRight: 0,
-            },
-        },
         footMenu: {
             color: theme.palette.text.secondary,
             fontSize: 10,
@@ -117,10 +94,6 @@ const useStyles = makeStyles()((theme) => {
         },
         footName: {
             marginLeft: theme.spacing(0.5),
-        },
-        mask: {
-            width: 40,
-            height: 10,
         },
         countdown: {
             fontSize: 12,
@@ -131,6 +104,19 @@ const useStyles = makeStyles()((theme) => {
             backgroundColor: '#eb5757',
             padding: theme.spacing(0.5, 2),
         },
+        loading: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+            padding: theme.spacing(8, 0),
+        },
+        markdown: {
+            'text-overflow': 'ellipsis',
+            display: '-webkit-box',
+            '-webkit-box-orient': 'vertical',
+            '-webkit-line-clamp': '3',
+        },
     }
 })
 
@@ -140,25 +126,25 @@ export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const chainId = useChainId()
-    const { asset, provider, tabIndex, setTabIndex } = CollectibleState.useContainer()
+    const { token, asset, provider, setProvider, tabIndex, setTabIndex } = CollectibleState.useContainer()
 
-    //#region sync with settings
-    const collectibleProviderOptions = getEnumAsArray(CollectibleProvider)
+    // #region sync with settings
+    const collectibleProviderOptions = getEnumAsArray(NonFungibleAssetProvider)
     const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
-        currentCollectibleProviderSettings.value = option.value as CollectibleProvider
+        setProvider(option.value as NonFungibleAssetProvider)
     }, [])
-    //#endregion
+    // #endregion
 
-    //#region provider switcher
-    const CollectibleProviderSwitcher = useSettingsSwitcher(
-        currentCollectibleProviderSettings,
-        getEnumAsArray(CollectibleProvider).map((x) => x.value),
+    // #region provider switcher
+    const CollectibleProviderSwitcher = useSwitcher(
+        provider,
+        setProvider,
+        getEnumAsArray(NonFungibleAssetProvider).map((x) => x.value),
         resolveCollectibleProviderName,
     )
-    //#endregion
+    // #endregion
 
-    if (asset.loading) return <PluginSkeleton />
-    if (!asset.value)
+    if (!asset.value || !token)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
                 <Typography color="textPrimary" sx={{ marginTop: 8, marginBottom: 8 }}>
@@ -175,7 +161,6 @@ export function Collectible(props: CollectibleProps) {
                 </Button>
             </Box>
         )
-
     const tabs = [
         <Tab className={classes.tab} key="article" label={t('plugin_collectible_article')} />,
         <Tab className={classes.tab} key="details" label={t('plugin_collectible_details')} />,
@@ -184,60 +169,77 @@ export function Collectible(props: CollectibleProps) {
         <Tab className={classes.tab} key="history" label={t('plugin_collectible_history')} />,
     ]
 
-    const endDate = asset.value?.end_time
+    const renderTab = (tabIndex: CollectibleTab) => {
+        const tabMap: Record<CollectibleTab, ReactElement> = {
+            [CollectibleTab.ARTICLE]: <ArticleTab />,
+            [CollectibleTab.TOKEN]: <TokenTab />,
+            [CollectibleTab.OFFER]: <OfferTab />,
+            [CollectibleTab.LISTING]: <ListingTab />,
+            [CollectibleTab.HISTORY]: <HistoryTab />,
+        }
+
+        return tabMap[tabIndex] || null
+    }
+
+    const _asset = asset.value
+    const endDate = _asset.end_time
     return (
         <>
-            <CollectibleCard classes={classes}>
+            <CollectibleCard classes={{ root: classes.root }}>
                 <CardHeader
                     avatar={
-                        <Link
-                            href={asset.value.owner?.link}
-                            title={asset.value.owner?.user?.username ?? asset.value.owner?.address ?? ''}
-                            target="_blank"
-                            rel="noopener noreferrer">
-                            <Avatar src={asset.value.owner?.profile_img_url ?? ''} />
-                        </Link>
+                        <LinkingAvatar
+                            href={_asset.collectionLinkUrl}
+                            title={_asset.owner?.user?.username ?? _asset.owner?.address ?? ''}
+                            src={
+                                _asset.collection?.image_url ??
+                                _asset.creator?.profile_img_url ??
+                                _asset.owner?.profile_img_url ??
+                                ''
+                            }
+                        />
                     }
                     title={
                         <Typography style={{ display: 'flex', alignItems: 'center' }}>
-                            {asset.value.token_address && asset.value.token_id ? (
+                            {token ? (
                                 <Link
                                     color="primary"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    href={resolveAssetLinkOnOpenSea(
+                                    href={resolveAssetLinkOnCurrentProvider(
                                         chainId,
-                                        asset.value.token_address,
-                                        asset.value.token_id,
+                                        token.contractAddress,
+                                        token.tokenId,
+                                        provider,
                                     )}>
-                                    {asset.value.name ?? ''}
+                                    {_asset.name ?? ''}
                                 </Link>
                             ) : (
-                                asset.value.name ?? ''
+                                _asset.name ?? ''
                             )}
-                            {asset.value.safelist_request_status === 'verified' ? (
+                            {_asset.safelist_request_status === 'verified' ? (
                                 <VerifiedUserIcon color="primary" fontSize="small" sx={{ marginLeft: 0.5 }} />
                             ) : null}
                         </Typography>
                     }
                     subheader={
                         <>
-                            {asset.value.description ? (
+                            {_asset.description ? (
                                 <Box display="flex" alignItems="center">
                                     <Typography className={classes.subtitle} component="div" variant="body2">
-                                        <Markdown content={asset.value.description} />
+                                        <Markdown classes={{ root: classes.markdown }} content={_asset.description} />
                                     </Typography>
                                 </Box>
                             ) : null}
 
-                            {asset.value?.current_price ? (
+                            {_asset?.current_price ? (
                                 <Box display="flex" alignItems="center" sx={{ marginTop: 1 }}>
                                     <Typography className={classes.description} component="span">
                                         <Trans
                                             i18nKey="plugin_collectible_description"
                                             values={{
-                                                price: asset.value?.current_price,
-                                                symbol: asset.value?.current_symbol,
+                                                price: _asset?.current_price,
+                                                symbol: _asset?.current_symbol,
                                             }}
                                         />
                                     </Typography>
@@ -262,26 +264,16 @@ export function Collectible(props: CollectibleProps) {
                         {tabs}
                     </Tabs>
                     <Paper className={classes.body}>
-                        {tabIndex === CollectibleTab.ARTICLE ? <ArticleTab /> : null}
-                        {tabIndex === CollectibleTab.TOKEN ? <TokenTab /> : null}
-                        {tabIndex === CollectibleTab.OFFER ? <OfferTab /> : null}
-                        {tabIndex === CollectibleTab.LISTING ? <ListingTab /> : null}
-                        {tabIndex === CollectibleTab.HISTORY ? <HistoryTab /> : null}
+                        {(asset.loading && (
+                            <div className={classes.loading}>
+                                <LoadingAnimation />
+                            </div>
+                        )) || <>{renderTab(tabIndex)}</>}
                     </Paper>
                 </CardContent>
                 <CardActions className={classes.footer}>
-                    <Typography className={classes.footnote} variant="subtitle2">
-                        <span>{t('plugin_powered_by')} </span>
-                        <Link
-                            className={classes.footLink}
-                            color="textSecondary"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            title="Mask"
-                            href="https://mask.io">
-                            <MaskTextIcon classes={{ root: classes.mask }} viewBox="0 0 80 20" />
-                        </Link>
-                    </Typography>
+                    {/* flex to make foot menu right */}
+                    <div />
                     <div className={classes.footMenu}>
                         <FootnoteMenu
                             options={collectibleProviderOptions.map((x) => ({
@@ -311,7 +303,7 @@ export function Collectible(props: CollectibleProps) {
                     </Typography>
                 </Box>
             )}
-            {provider === CollectibleProvider.OPENSEA ? <ActionBar /> : null}
+            {provider === NonFungibleAssetProvider.OPENSEA ? <ActionBar /> : null}
         </>
     )
 }

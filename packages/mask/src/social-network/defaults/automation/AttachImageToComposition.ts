@@ -1,4 +1,5 @@
-import { delay, downloadUrl, MaskMessages, pasteImageToActiveElements, untilDocumentReady } from '../../../utils'
+import { downloadUrl, MaskMessages, pasteImageToActiveElements } from '../../../utils'
+import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
 import type { SocialNetworkUI } from '../../types'
 import { activatedSocialNetworkUI } from '../../ui'
 
@@ -8,7 +9,7 @@ export function pasteImageToCompositionDefault(hasSucceed: () => Promise<boolean
         { recover, relatedTextPayload }: SocialNetworkUI.AutomationCapabilities.NativeCompositionAttachImageOptions,
     ) {
         const image = typeof url === 'string' ? await downloadUrl(url) : url
-        await untilDocumentReady()
+        await waitDocumentReadyState('interactive')
         if (relatedTextPayload) {
             activatedSocialNetworkUI.automation.nativeCompositionDialog?.appendText?.(relatedTextPayload, {
                 recover: false,

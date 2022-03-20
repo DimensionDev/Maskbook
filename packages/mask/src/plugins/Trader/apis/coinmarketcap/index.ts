@@ -1,5 +1,6 @@
 import { CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from '../../constants'
 import { Flags } from '../../../../../shared'
+import getUnixTime from 'date-fns/getUnixTime'
 
 export interface Status {
     credit_count: number
@@ -18,13 +19,13 @@ export interface Currency {
     space: string
 }
 
-//#region get all currency
+// #region get all currency
 export function getAllCurrencies(): Currency[] {
     return []
 }
-//#endregion
+// #endregion
 
-//#region get all coins
+// #region get all coins
 export interface Coin {
     id: number
     name: string
@@ -51,9 +52,9 @@ export async function getAllCoins() {
         status: Status
     }>
 }
-//#endregion
+// #endregion
 
-//#regin get quote info
+// #regin get quote info
 export interface QuotesInfo {
     circulating_supply: number
     cmc_rank: number
@@ -102,9 +103,9 @@ export async function getQuotesInfo(id: string, currency: string) {
         }
     }
 }
-//#endregion
+// #endregion
 
-//#region get coin info
+// #region get coin info
 export interface PlatformInfo {
     coin: {
         id: string
@@ -175,9 +176,9 @@ export async function getCoinInfo(id: string) {
         status: response.status,
     }
 }
-//#endregion
+// #endregion
 
-//#region historical
+// #region historical
 export type Stat = [number, number, number]
 export interface HistoricalCoinInfo {
     id: number
@@ -188,20 +189,13 @@ export interface HistoricalCoinInfo {
     symbol: string
 }
 
-export async function getHistorical(
-    id: string,
-    currency: string,
-    startDate: Date,
-    endDate: Date,
-    interval: string = '1d',
-) {
-    const toUnixTimestamp = (d: Date) => String(Math.floor(d.getTime() / 1000))
+export async function getHistorical(id: string, currency: string, startDate: Date, endDate: Date, interval = '1d') {
     const params = new URLSearchParams('format=chart_crypto_details')
     params.append('convert', currency)
     params.append('id', id)
     params.append('interval', interval)
-    params.append('time_end', toUnixTimestamp(endDate))
-    params.append('time_start', toUnixTimestamp(startDate))
+    params.append('time_end', getUnixTime(endDate).toString())
+    params.append('time_start', getUnixTime(startDate).toString())
 
     const response = await fetch(`${CMC_V1_BASE_URL}/cryptocurrency/quotes/historical?${params.toString()}`, {
         cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
@@ -211,9 +205,9 @@ export async function getHistorical(
         status: Status
     }>
 }
-//#endregion
+// #endregion
 
-//#region latest market pairs
+// #region latest market pairs
 export interface Pair {
     exchange: {
         id: number
@@ -287,4 +281,4 @@ export async function getLatestMarketPairs(id: string, currency: string) {
         }
     }
 }
-//#endregion
+// #endregion

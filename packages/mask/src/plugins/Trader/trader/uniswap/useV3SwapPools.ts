@@ -3,6 +3,7 @@ import { FeeAmount, Pool } from '@uniswap/v3-sdk'
 import { useMemo } from 'react'
 import { useAllCurrencyCombinations } from './useAllCommonPairs'
 import { PoolState, usePools } from './usePools'
+import { TradeProvider } from '@masknet/public-api'
 
 /**
  * Returns all the existing pools that should be considered for swapping between an input currency and an output currency
@@ -16,7 +17,7 @@ export function useV3SwapPools(
     pools: Pool[]
     loading: boolean
 } {
-    const allCurrencyCombinations = useAllCurrencyCombinations(currencyIn, currencyOut)
+    const allCurrencyCombinations = useAllCurrencyCombinations(TradeProvider.UNISWAP_V3, currencyIn, currencyOut)
 
     const allCurrencyCombinationsWithAllFees: [Token, Token, FeeAmount][] = useMemo(
         () =>
@@ -29,7 +30,7 @@ export function useV3SwapPools(
             }, []),
         [allCurrencyCombinations],
     )
-    const pools = usePools(allCurrencyCombinationsWithAllFees)
+    const pools = usePools(TradeProvider.UNISWAP_V3, allCurrencyCombinationsWithAllFees)
 
     return useMemo(() => {
         return {

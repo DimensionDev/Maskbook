@@ -1,4 +1,4 @@
-import type { ProfileIdentifier, PostIdentifier } from '../../../database/type'
+import type { ProfileIdentifier, PostIdentifier } from '@masknet/shared-base'
 import { isMobileFacebook } from './isMobile'
 import { i18n } from '../../../../shared-ui/locales_legacy'
 
@@ -25,7 +25,7 @@ export function getPostUrlAtFacebook(post: PostIdentifier<ProfileIdentifier>) {
     const { userId } = id
     const host = getFacebookHostName()
     if (!isValidFacebookUsername(userId)) return host
-    if (parseFloat(userId)) return `${host}/permalink.php?story_fbid=${postId}&id=${userId}`
+    if (Number.parseFloat(userId)) return `${host}/permalink.php?story_fbid=${postId}&id=${userId}`
     return `${host}/${userId}/posts/${postId}`
 }
 /**
@@ -37,7 +37,7 @@ export function getProfilePageUrlAtFacebook(user: ProfileIdentifier) {
     const host = getFacebookHostName()
     const username = user.userId
     if (!isValidFacebookUsername(username)) throw new TypeError(i18n.t('service_username_invalid'))
-    if (parseFloat(username)) return `${host}/profile.php?id=${username}`
+    if (Number.parseFloat(username)) return `${host}/profile.php?id=${username}`
     return `${host}/${username}`
 }
 export function getFacebookHostName() {

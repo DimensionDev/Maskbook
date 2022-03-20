@@ -1,18 +1,16 @@
 import { memo, useEffect, useMemo, useState } from 'react'
 import { Alert, Box, Button, formHelperTextClasses, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar, MaskTextField } from '@masknet/theme'
 import { z as zod } from 'zod'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useNavigate } from 'react-router-dom'
-import { RoutePaths } from '../../../../type'
-import { MaskColorVar } from '@masknet/theme'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../../locales'
 import { useAsyncRetry } from 'react-use'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { PluginServices } from '../../../../API'
 import urlcat from 'urlcat'
-import { MaskTextField } from '@masknet/theme'
 import PasswordField from '../../../../components/PasswordField'
 import { InfoIcon } from '@masknet/icons'
 
@@ -92,7 +90,7 @@ const CreateWalletForm = memo(() => {
     const [open, setOpen] = useState(true)
     const { classes } = useStyles()
     const navigate = useNavigate()
-
+    const [searchParams] = useSearchParams()
     const { value: hasPassword, loading, retry } = useAsyncRetry(PluginServices.Wallet.hasPassword, [])
 
     useEffect(() => {
@@ -141,7 +139,7 @@ const CreateWalletForm = memo(() => {
 
     const onSubmit = handleSubmit((data) => {
         navigate(
-            urlcat(RoutePaths.CreateMaskWalletMnemonic, { name: data.name }),
+            urlcat(DashboardRoutes.CreateMaskWalletMnemonic, { name: data.name, chainId: searchParams.get('chainId') }),
             data.password
                 ? {
                       state: { password: data.password },

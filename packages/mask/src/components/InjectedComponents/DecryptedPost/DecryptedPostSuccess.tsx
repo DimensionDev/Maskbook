@@ -1,23 +1,21 @@
 import { memo } from 'react'
 import { useI18N } from '../../../utils'
-import { AdditionalContent, AdditionalContentProps } from '../AdditionalPostContent'
+import { AdditionalContent } from '../AdditionalPostContent'
 import { useShareMenu } from '../SelectPeopleDialog'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Link } from '@mui/material'
 import type { Profile } from '../../../database'
-import type { TypedMessage } from '../../../protocols/typed-message'
-import type { ProfileIdentifier } from '../../../database/type'
+import type { TypedMessage } from '@masknet/typed-message'
+import type { ProfileIdentifier } from '@masknet/shared-base'
 import { wrapAuthorDifferentMessage } from './authorDifferentMessage'
-import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
+import { DecryptedUI_PluginRendererWithSuggestion } from '../DecryptedPostMetadataRender'
 
-const PluginRenderer = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (x) => x.DecryptedInspector)
 export interface DecryptPostSuccessProps extends withClasses<never> {
     data: { content: TypedMessage }
     requestAppendRecipients?(to: Profile[]): Promise<void>
     alreadySelectedPreviously: Profile[]
     profiles: Profile[]
-    sharedPublic?: boolean
-    AdditionalContentProps?: Partial<AdditionalContentProps>
+    sharedPublic?: boolean | null
     /** The author in the payload */
     author?: ProfileIdentifier
     /** The author of the encrypted post */
@@ -47,7 +45,7 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
         props.requestAppendRecipients || (async () => {}),
         props.alreadySelectedPreviously,
     )
-    const rightActions = props.requestAppendRecipients && !props.sharedPublic && (
+    const rightActions = props.requestAppendRecipients && props.sharedPublic === false && (
         <Link color="primary" onClick={shareMenu.showShare} className={classes.addRecipientsLink}>
             {t('decrypted_postbox_add_recipients')}
         </Link>
@@ -56,12 +54,11 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
         <>
             {shareMenu.ShareMenu}
             <AdditionalContent
-                metadataRenderer={{ after: PluginRenderer }}
                 headerActions={wrapAuthorDifferentMessage(author, postedBy, rightActions)}
                 title={t('decrypted_postbox_title')}
                 message={content}
-                {...props.AdditionalContentProps}
             />
+            <DecryptedUI_PluginRendererWithSuggestion message={content} metadata={content.meta} />
         </>
     )
 })

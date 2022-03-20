@@ -1,9 +1,9 @@
-import { createGlobalState } from '@masknet/shared'
+import { createGlobalState } from '@masknet/shared-base-ui'
 import { Messages, Services } from '../../API'
 
 export const [useCurrentCollectibleDataProvider] = createGlobalState(
     Services.Settings.getCurrentCollectibleDataProvider,
-    (x) => Messages.events.currentCollectibleDataProviderSettings.on(x),
+    (x) => Messages.events.currentNonFungibleAssetDataProviderSettings.on(x),
 )
 
 export const [useCurrentSelectedWalletNetwork] = createGlobalState(

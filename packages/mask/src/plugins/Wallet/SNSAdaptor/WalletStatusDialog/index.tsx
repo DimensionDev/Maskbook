@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import ErrorIcon from '@mui/icons-material/Error'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useChainIdValid } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
@@ -44,7 +44,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     const { classes } = useStyles()
     const chainIdValid = useChainIdValid()
 
-    //#region remote controlled dialog logic
+    // #region remote controlled dialog logic
     const { open, closeDialog: _closeDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
     )
@@ -56,7 +56,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
             open: false,
         })
     }, [])
-    //#endregion
+    // #endregion
 
     return (
         <InjectedDialog title="Mask Network" open={open} onClose={closeDialog} maxWidth="sm">

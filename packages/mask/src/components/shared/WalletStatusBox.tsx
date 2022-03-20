@@ -5,6 +5,8 @@ import classNames from 'classnames'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
 import { getMaskColor, makeStyles } from '@masknet/theme'
+import { isDashboardPage } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
     useAccount,
     useWeb3State,
@@ -12,13 +14,16 @@ import {
     useNetworkDescriptor,
     useProviderDescriptor,
     useProviderType,
+    useReverseAddress,
+    useWallet,
 } from '@masknet/plugin-infra'
-import { FormattedAddress, useRemoteControlledDialog, useSnackbarCallback, WalletIcon } from '@masknet/shared'
+import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
 import Services from '../../extension/service'
+import { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     content: {
         padding: theme.spacing(2, 3, 3),
     },
@@ -26,7 +31,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1.5),
         marginBottom: theme.spacing(2),
         display: 'flex',
-        backgroundColor: getMaskColor(theme).twitterBackground,
+        backgroundColor: isDashboard ? getMaskColor(theme).primaryBackground2 : theme.palette.background.default,
         borderRadius: 8,
         alignItems: 'center',
     },
@@ -41,7 +46,6 @@ const useStyles = makeStyles()((theme) => ({
     accountName: {
         fontSize: 16,
         marginRight: 6,
-        marginBottom: 6,
     },
     infoRow: {
         display: 'flex',
@@ -66,11 +70,7 @@ const useStyles = makeStyles()((theme) => ({
     linkIcon: {
         marginRight: theme.spacing(1),
     },
-    dashboardProvider: {
-        border: `1px solid ${theme.palette.background.default}`,
-    },
     twitterProviderBorder: {
-        border: `1px solid ${getMaskColor(theme).twitterBackground}`,
         width: 14,
         height: 14,
     },
@@ -80,23 +80,36 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         margin: theme.spacing(2, 0),
     },
+    domain: {
+        fontSize: 16,
+        lineHeight: '18px',
+        marginLeft: 6,
+        padding: 4,
+        borderRadius: 8,
+        backgroundColor: '#ffffff',
+        color: theme.palette.common.black,
+    },
 }))
 interface WalletStatusBox {
     isDashboard?: boolean
+    disableChange?: boolean
 }
 export function WalletStatusBox(props: WalletStatusBox) {
     const { t } = useI18N()
-    const { classes } = useStyles()
 
+    const isDashboard = isDashboardPage()
+    const { classes } = useStyles({ isDashboard })
     const chainId = useChainId()
     const account = useAccount()
-
+    const wallet = useWallet()
     const providerType = useProviderType()
     const providerDescriptor = useProviderDescriptor()
     const networkDescriptor = useNetworkDescriptor()
     const { Utils } = useWeb3State() ?? {}
 
-    //#region copy addr to clipboard
+    const { value: domain } = useReverseAddress(account)
+
+    // #region copy addr to clipboard
     const [, copyToClipboard] = useCopyToClipboard()
     const onCopy = useSnackbarCallback(
         async (ev: React.MouseEvent<HTMLAnchorElement>) => {
@@ -109,27 +122,33 @@ export function WalletStatusBox(props: WalletStatusBox) {
         undefined,
         t('copy_success_of_wallet_addr'),
     )
-    //#endregion
+    // #endregion
 
-    //#region change provider
+    // #region change provider
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
-    //#endregion
+    // #endregion
 
-    //#region walletconnect
+    // #region walletconnect
     const { setDialog: setWalletConnectDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletConnectQRCodeDialogUpdated,
     )
-    //#endregion
+    // #endregion
 
     const onDisconnect = useCallback(async () => {
-        if (providerType !== ProviderType.WalletConnect) return
-        setWalletConnectDialog({
-            open: true,
-            uri: await Services.Ethereum.createConnectionURI(),
-        })
-    }, [providerType, setWalletConnectDialog])
+        switch (providerType) {
+            case ProviderType.WalletConnect:
+                setWalletConnectDialog({
+                    open: true,
+                    uri: await Services.Ethereum.createConnectionURI(),
+                })
+                break
+            case ProviderType.Fortmatic:
+                await Services.Ethereum.disconnectFortmatic(chainId)
+                break
+        }
+    }, [chainId, providerType, setWalletConnectDialog])
 
     const onChange = useCallback(() => {
         openSelectProviderDialog()
@@ -142,17 +161,29 @@ export function WalletStatusBox(props: WalletStatusBox) {
                 badgeSize={16}
                 networkIcon={providerDescriptor?.icon} // switch providerIcon and networkIcon to meet design
                 providerIcon={networkDescriptor?.icon}
-                classes={{
-                    providerIcon: props.isDashboard ? classes.dashboardProvider : classes.twitterProviderBorder,
-                }}
             />
             <div className={classes.accountInfo}>
-                <div className={classes.infoRow}>
-                    <Typography className={classes.accountName}>{providerDescriptor?.name}</Typography>
+                <div className={classes.infoRow} style={{ marginBottom: 6 }}>
+                    {providerType !== ProviderType.MaskWallet ? (
+                        <Typography className={classes.accountName}>
+                            {domain && Utils?.formatDomainName
+                                ? Utils.formatDomainName(domain)
+                                : providerDescriptor?.name}
+                        </Typography>
+                    ) : (
+                        <>
+                            <Typography className={classes.accountName}>
+                                {wallet?.name ?? providerDescriptor?.name}
+                            </Typography>
+                            {domain && Utils?.formatDomainName ? (
+                                <Typography className={classes.domain}>{Utils.formatDomainName(domain)}</Typography>
+                            ) : null}
+                        </>
+                    )}
                 </div>
                 <div className={classes.infoRow}>
-                    <Typography className={classes.address} variant="body2">
-                        <FormattedAddress address={account} size={9} formatter={Utils?.formatAddress} />
+                    <Typography className={classes.address} variant="body2" title={account}>
+                        <FormattedAddress address={account} size={4} formatter={Utils?.formatAddress} />
                     </Typography>
                     <Link
                         className={classes.link}
@@ -172,26 +203,32 @@ export function WalletStatusBox(props: WalletStatusBox) {
                     </Link>
                 </div>
             </div>
-            <section>
-                {providerType === ProviderType.WalletConnect ? (
+            {!props.disableChange && (
+                <section>
+                    {providerType === ProviderType.WalletConnect || providerType === ProviderType.Fortmatic ? (
+                        <ActionButtonPromise
+                            className={classes.actionButton}
+                            color="primary"
+                            size="small"
+                            variant="contained"
+                            init={t('wallet_status_button_disconnect')}
+                            waiting={t('wallet_status_button_disconnecting')}
+                            failed={t('failed')}
+                            complete={t('done')}
+                            executor={onDisconnect}
+                            completeIcon={<></>}
+                            failIcon={<></>}
+                        />
+                    ) : null}
                     <Button
-                        className={classes.actionButton}
-                        color="primary"
-                        size="small"
+                        className={classNames(classes.actionButton)}
                         variant="contained"
-                        onClick={onDisconnect}>
-                        {t('wallet_status_button_disconnect')}
+                        size="small"
+                        onClick={onChange}>
+                        {t('wallet_status_button_change')}
                     </Button>
-                ) : null}
-                <Button
-                    className={classNames(classes.actionButton)}
-                    color="primary"
-                    variant="contained"
-                    size="small"
-                    onClick={onChange}>
-                    {t('wallet_status_button_change')}
-                </Button>
-            </section>
+                </section>
+            )}
         </section>
     ) : (
         <section className={classes.connectButtonWrapper}>

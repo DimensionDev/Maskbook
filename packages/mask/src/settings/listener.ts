@@ -8,23 +8,14 @@ import {
 import type { MaskSettingsEvents } from '@masknet/shared-base'
 import {
     currentAccountSettings,
-    currentBalanceSettings,
-    currentBlockNumberSettings,
     currentChainIdSettings,
-    currentCollectibleDataProviderSettings,
+    currentNonFungibleAssetDataProviderSettings,
     currentNetworkSettings,
-    currentPortfolioDataProviderSettings,
+    currentFungibleAssetDataProviderSettings,
     currentProviderSettings,
     currentTokenPricesSettings,
 } from '../plugins/Wallet/settings'
-import {
-    currentDataProviderSettings,
-    ethereumNetworkTradeProviderSettings,
-    polygonNetworkTradeProviderSettings,
-    binanceNetworkTradeProviderSettings,
-    arbitrumNetworkTradeProviderSettings,
-    xdaiNetworkTradeProviderSettings,
-} from '../plugins/Trader/settings'
+import { currentDataProviderSettings } from '../plugins/Trader/settings'
 import type { InternalSettings } from './createSettings'
 
 type ToBeListedSettings = { [key in keyof MaskSettingsEvents]: InternalSettings<MaskSettingsEvents[key]> }
@@ -35,20 +26,13 @@ export function ToBeListened(): ToBeListedSettings {
         languageSettings,
         debugModeSetting,
         currentChainIdSettings,
-        currentBalanceSettings,
-        currentBlockNumberSettings,
         currentTokenPricesSettings,
         currentDataProviderSettings,
         currentProviderSettings,
         currentNetworkSettings,
         currentAccountSettings,
-        currentPortfolioDataProviderSettings,
-        currentCollectibleDataProviderSettings,
+        currentFungibleAssetDataProviderSettings,
+        currentNonFungibleAssetDataProviderSettings,
         currentPersonaIdentifier,
-        ethereumNetworkTradeProviderSettings,
-        polygonNetworkTradeProviderSettings,
-        binanceNetworkTradeProviderSettings,
-        arbitrumNetworkTradeProviderSettings,
-        xdaiNetworkTradeProviderSettings,
     }
 }

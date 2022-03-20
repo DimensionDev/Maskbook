@@ -9,11 +9,12 @@ import {
     useNativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
 import { Tune } from '@mui/icons-material'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { Box, IconButton, Typography } from '@mui/material'
 import { WalletMessages } from '../../messages'
 import { TokenPrice } from '../../../../components/shared/TokenPrice'
+import { multipliedBy } from '@masknet/web3-shared-base'
 
 export interface GasSettingBarProps {
     gasLimit: number
@@ -60,8 +61,8 @@ export function GasSettingBar(props: GasSettingBarProps) {
                 (isEIP1559Supported(chainId)
                     ? {
                           gas: evt.gasLimit,
-                          maxFee: evt.maxFee,
-                          priorityFee: evt.priorityFee,
+                          maxFeePerGas: evt.maxFee,
+                          maxPriorityFeePerGas: evt.priorityFee,
                       }
                     : {
                           gas: evt.gasLimit,
@@ -72,18 +73,19 @@ export function GasSettingBar(props: GasSettingBarProps) {
     }, [])
 
     const gasFee = useMemo(() => {
-        return new BigNumber(gasLimit).multipliedBy(
+        return multipliedBy(
+            gasLimit,
             isEIP1559Supported(chainId) && maxFee ? new BigNumber(maxFee) : gasPrice ?? gasPriceDefault,
         )
-    }, [chainId, gasLimit, gasPrice, maxFee])
+    }, [chainId, gasLimit, gasPrice, maxFee, gasPriceDefault])
 
     return (
         <Box display="flex" flexDirection="row" alignItems="center">
             <Typography fontSize="14px" sx={{ marginRight: 1 }}>
                 <span>
-                    {formatWeiToEther(gasFee).toFixed(6)} {nativeTokenDetailed?.symbol ?? ''} ≈
+                    {formatWeiToEther(gasFee).toFixed(6)} {nativeTokenDetailed?.symbol ?? ''} &asymp;
                 </span>
-                <TokenPrice chainId={chainId} contractAddress={nativeTokenDetailed?.address ?? ''} amount={gasFee} />
+                <TokenPrice chainId={chainId} amount={formatWeiToEther(gasFee)} />
             </Typography>
             <IconButton size="small" onClick={onOpenGasSettingDialog}>
                 <Tune fontSize="small" color="inherit" />

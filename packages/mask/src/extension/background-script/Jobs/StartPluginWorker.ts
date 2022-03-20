@@ -2,6 +2,7 @@ import { startPluginWorker, Plugin } from '@masknet/plugin-infra'
 import { InMemoryStorages, PersistentStorages } from '../../../../shared'
 import { createPluginDatabase } from '../../../database/Plugin'
 import { createPluginHost } from '../../../plugin-infra/host'
+import { Services } from '../../service'
 export default function (signal: AbortSignal) {
     startPluginWorker(createPluginHost(signal, createWorkerContext))
 }
@@ -16,5 +17,7 @@ function createWorkerContext(pluginID: string, signal: AbortSignal): Plugin.Work
             if (type === 'memory') return InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
             else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
         },
+        personaSign: Services.Identity.signWithPersona,
+        walletSign: Services.Ethereum.personalSign,
     }
 }

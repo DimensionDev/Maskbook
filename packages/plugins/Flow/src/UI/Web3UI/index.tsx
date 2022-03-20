@@ -5,4 +5,5 @@ export const Web3UI: Web3Plugin.UI.UI = {
     SelectProviderDialog: {
         ProviderIconClickBait,
     },
+    WalletStatusDialog: {},
 }

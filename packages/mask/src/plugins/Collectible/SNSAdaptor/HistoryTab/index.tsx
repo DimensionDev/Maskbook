@@ -5,14 +5,17 @@ import { useI18N } from '../../../../utils'
 import { CollectibleTab } from '../CollectibleTab'
 import { CollectibleState } from '../../hooks/useCollectibleState'
 import { Row } from './Row'
-import { CollectibleProvider } from '../../types'
 import { TableListPagination } from '../Pagination'
-import { LoadingTable } from '../LoadingTable'
+import { LoadingAnimation } from '@masknet/shared'
+import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {
         root: {
             overflow: 'auto',
+        },
+        head: {
+            wordBreak: 'keep-all',
         },
         content: {
             padding: '0 !important',
@@ -41,15 +44,20 @@ export function HistoryTab(props: HistoryTabProps) {
     const { classes } = useStyles()
     const { provider, events, eventPage, setEventPage } = CollectibleState.useContainer()
 
-    //#region If there is a different asset, the unit price and quantity should be displayed
+    // #region If there is a different asset, the unit price and quantity should be displayed
     const isDifferenceToken = useMemo(() => {
-        if (provider === CollectibleProvider.OPENSEA)
-            return events.value?.data.some((item) => item.price?.paymentToken?.symbol !== 'ETH')
+        if (provider === NonFungibleAssetProvider.OPENSEA)
+            return events.value?.data.some((item) => item.price?.asset?.asset_contract.symbol !== 'ETH')
         else return false
     }, [events.value, provider])
-    //#endregion
+    // #endregion
 
-    if (events.loading) return <LoadingTable />
+    if (events.loading)
+        return (
+            <div className={classes.empty}>
+                <LoadingAnimation />
+            </div>
+        )
     if (!events.value || events.error || !events.value?.data.length)
         return (
             <Table size="small" stickyHeader>
@@ -68,21 +76,13 @@ export function HistoryTab(props: HistoryTabProps) {
                         </TableCell>
                     </TableRow>
                 </TableBody>
-                <TableListPagination
-                    handlePrevClick={() => setEventPage((prev) => prev - 1)}
-                    handleNextClick={() => setEventPage((prev) => prev + 1)}
-                    prevDisabled={eventPage === 0}
-                    nextDisabled={!events.value?.hasNextPage}
-                    page={eventPage}
-                    pageCount={10}
-                />
             </Table>
         )
 
     return (
         <CollectibleTab classes={{ root: classes.root, content: classes.content }}>
             <Table size="small" stickyHeader>
-                <TableHead>
+                <TableHead className={classes.head}>
                     <TableRow>
                         <TableCell>{t('plugin_collectible_event')}</TableCell>
                         {isDifferenceToken ? (
@@ -103,7 +103,7 @@ export function HistoryTab(props: HistoryTabProps) {
                         <Row key={order.id} event={order} isDifferenceToken={isDifferenceToken} />
                     ))}
                 </TableBody>
-                {(provider === CollectibleProvider.OPENSEA && events.value.data.length) || eventPage > 0 ? (
+                {(provider === NonFungibleAssetProvider.OPENSEA && events.value.data.length) || eventPage > 0 ? (
                     <TableListPagination
                         handlePrevClick={() => setEventPage((prev) => prev - 1)}
                         handleNextClick={() => setEventPage((prev) => prev + 1)}

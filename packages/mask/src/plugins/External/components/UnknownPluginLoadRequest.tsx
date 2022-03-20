@@ -12,6 +12,7 @@ import {
 } from '@mui/material'
 import ListItemButton from '@mui/material/ListItemButton'
 import { useMap } from 'react-use'
+import { useI18N } from '../../../utils'
 import type { ExternalPluginLoadDetails } from '../types'
 
 export function UnknownPluginLoadRequestUI({ plugins, onConfirm }: UnknownPluginLoadRequestProps) {
@@ -20,6 +21,8 @@ export function UnknownPluginLoadRequestUI({ plugins, onConfirm }: UnknownPlugin
     const confirmAll = () => onConfirm(plugins)
     const selected = plugins.filter((x) => _selected[x.url])
     const confirmSelected = () => onConfirm(selected)
+
+    const { t } = useI18N()
 
     if (plugins.length === 0) return null
     if (plugins.length === 1)
@@ -32,11 +35,7 @@ export function UnknownPluginLoadRequestUI({ plugins, onConfirm }: UnknownPlugin
     return (
         <Card variant="outlined">
             <CardContent sx={{ paddingBottom: 0 }}>
-                <List
-                    dense
-                    subheader={
-                        <ListSubheader>New unknown Mask plugins found. Do you want to load them?</ListSubheader>
-                    }>
+                <List dense subheader={<ListSubheader>{t('plugin_external_unknown_plugin')}</ListSubheader>}>
                     {plugins.map((x) => (
                         <ListItemButton dense onClick={() => set(x.url, !get(x.url))} key={x.url}>
                             <ListItemIcon>
@@ -49,9 +48,9 @@ export function UnknownPluginLoadRequestUI({ plugins, onConfirm }: UnknownPlugin
             </CardContent>
             <CardActions disableSpacing sx={{ flexDirection: 'row-reverse' }}>
                 <Button disabled={selected.length === 0} onClick={confirmSelected}>
-                    Load
+                    {t('load')}
                 </Button>
-                <Button onClick={confirmAll}>Load All</Button>
+                <Button onClick={confirmAll}>{t('load_all')}</Button>
             </CardActions>
         </Card>
     )

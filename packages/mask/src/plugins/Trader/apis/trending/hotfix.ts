@@ -1,4 +1,9 @@
-import { NetworkType } from '@masknet/web3-shared-evm'
+import {
+    getChainIdFromNetworkType,
+    getCoinGeckoConstants,
+    getCoinMarketCapConstants,
+    NetworkType,
+} from '@masknet/web3-shared-evm'
 import { TagType } from '../../types'
 import { DataProvider } from '@masknet/public-api'
 import MIRRORED_TOKENS from './mirrored_tokens.json'
@@ -6,6 +11,7 @@ import STOCKS_KEYWORDS from './stocks.json'
 import CASHTAG_KEYWORDS from './cashtag.json'
 import HASHTAG_KEYWORDS from './hashtag.json'
 import { currentNetworkSettings } from '../../../Wallet/settings'
+import { getEnumAsArray } from '@dimensiondev/kit'
 
 const BLACKLIST_MAP: {
     [key in DataProvider]: {
@@ -20,7 +26,7 @@ const BLACKLIST_MAP: {
     [DataProvider.COIN_GECKO]: {
         [NetworkType.Ethereum]: ['swaptoken', 'nftx-hashmasks-index'],
     },
-    // use token address as id and all letters should be lowercased
+    // use token address as id and all letters should be lower-case
     [DataProvider.UNISWAP_INFO]: {
         [NetworkType.Ethereum]: [],
     },
@@ -88,23 +94,21 @@ const ID_ADDRESS_MAP: {
     [DataProvider.UNISWAP_INFO]: {},
 }
 
-const ID_NETWORK_MAP: Record<DataProvider, Record<string, NetworkType>> = {
-    [DataProvider.COIN_GECKO]: {
-        ethereum: NetworkType.Ethereum,
-        'binance-smart-chain': NetworkType.Binance,
-        'polygon-pos': NetworkType.Polygon,
-        'arbitrum-one': NetworkType.Arbitrum,
-        xdai: NetworkType.xDai,
-    },
-    [DataProvider.COIN_MARKET_CAP]: {
-        '1027': NetworkType.Ethereum,
-        '1839': NetworkType.Binance,
-        '3890': NetworkType.Polygon,
-        '11841': NetworkType.Arbitrum,
-        '5601': NetworkType.xDai,
-    },
+const NETWORK_ID_MAP: {
+    [key in DataProvider]: {
+        [key in NetworkType]?: string
+    }
+} = {
+    [DataProvider.COIN_GECKO]: {},
+    [DataProvider.COIN_MARKET_CAP]: {},
     [DataProvider.UNISWAP_INFO]: {},
 }
+
+getEnumAsArray(NetworkType).map(({ value: networkType }) => {
+    const chainId = getChainIdFromNetworkType(networkType)
+    NETWORK_ID_MAP[DataProvider.COIN_GECKO][networkType] = getCoinGeckoConstants(chainId).PLATFORM_ID ?? ''
+    NETWORK_ID_MAP[DataProvider.COIN_MARKET_CAP][networkType] = getCoinMarketCapConstants(chainId).CHAIN_ID ?? ''
+})
 
 export function resolveAlias(keyword: string, dataProvider: DataProvider) {
     if (dataProvider === DataProvider.UNISWAP_INFO) return keyword
@@ -121,7 +125,8 @@ export function resolveCoinAddress(id: string, dataProvider: DataProvider) {
 
 export function resolveNetworkType(id: string, dataProvider: DataProvider) {
     if (dataProvider === DataProvider.UNISWAP_INFO) return NetworkType.Ethereum
-    return ID_NETWORK_MAP[dataProvider][id]
+    const networks = NETWORK_ID_MAP[dataProvider]
+    return Object.entries(networks).find(([_, key]) => key === id)?.[0]
 }
 
 export function isBlockedId(id: string, dataProvider: DataProvider) {

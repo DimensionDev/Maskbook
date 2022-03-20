@@ -1,4 +1,4 @@
-import { PostIdentifier, ProfileIdentifier } from '@masknet/shared'
+import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import type { SocialNetwork } from '../../social-network/types'
 import { createSNSAdaptorSpecializedPostContext } from '../../social-network/utils/create-post-context'
 import { deconstructPayload } from '../../utils'
@@ -16,14 +16,6 @@ export const twitterShared: SocialNetwork.Shared & SocialNetwork.Base = {
         getHomePage: () => 'https://twitter.com',
         getProfilePage: (userId) => `https://twitter.com/${userId}`,
         isValidUsername: usernameValidator,
-        publicKeyEncoding: {
-            encoder(text) {
-                return twitterEncoding.publicKeyEncoder(text)
-            },
-            decoder(text) {
-                return twitterEncoding.publicKeyDecoder(text)
-            },
-        },
         textPayloadPostProcessor: {
             encoder(text) {
                 return twitterEncoding.payloadEncoder(text)

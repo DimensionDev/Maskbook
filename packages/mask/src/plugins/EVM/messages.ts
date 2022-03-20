@@ -14,6 +14,14 @@ export interface EVM_Messages {
         result?: any
         error: Error | null
     }
+    FORTMATIC_PROVIDER_RPC_REQUEST: {
+        payload: JsonRpcPayload
+    }
+    FORTMATIC_PROVIDER_RPC_RESPONSE: {
+        payload: JsonRpcPayload
+        result?: any
+        error: Error | null
+    }
     rpc: unknown
 }
 

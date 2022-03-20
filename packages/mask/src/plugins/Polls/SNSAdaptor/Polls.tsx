@@ -2,7 +2,7 @@ import { Card, Typography, CircularProgress, List, ListItem } from '@mui/materia
 import { makeStyles } from '@masknet/theme'
 import isValid from 'date-fns/isValid'
 import formatDistance from 'date-fns/formatDistance'
-import { zhTW, enUS, ja, zhCN, ko, es, ru, it, faIR, fr } from 'date-fns/locale'
+import { zhTW, enUS, ja, zhCN, ko } from 'date-fns/locale'
 import { useI18N, useLanguage } from '../../../utils'
 import type { PollGunDB } from '../Services'
 import { PollStatus } from '../types'
@@ -67,7 +67,7 @@ interface PollCardProps {
 export function PollCardUI(props: PollCardProps) {
     const { poll, onClick, vote, status } = props
     const { classes } = useStyles()
-    const isClosed = Date.now() > poll.end_time ? true : false
+    const isClosed = Date.now() > poll.end_time
     const { t } = useI18N()
     const lang = useLanguage()
 
@@ -84,11 +84,6 @@ export function PollCardUI(props: PollCardProps) {
                 if (lang === SupportedLanguages.zhTW) return zhTW
                 if (lang === SupportedLanguages.zhCN) return zhCN
                 if (lang === SupportedLanguages.koKR) return ko
-                if (lang === SupportedLanguages.esES) return es
-                if (lang === SupportedLanguages.itIT) return it
-                if (lang === SupportedLanguages.ruRU) return ru
-                if (lang === SupportedLanguages.faIR) return faIR
-                if (lang === SupportedLanguages.frFR) return fr
                 safeUnreachable(lang)
                 return enUS
             }
@@ -148,7 +143,7 @@ export function PollCardUI(props: PollCardProps) {
                 ))}
             </List>
             <Typography variant="body2" classes={{ root: classes.deadline }}>
-                {isClosed ? `${t('plugin_poll_status_closed')}` : `${getDeadline(poll.end_time)}`}
+                {isClosed ? t('plugin_poll_status_closed') : getDeadline(poll.end_time)}
             </Typography>
         </Card>
     )

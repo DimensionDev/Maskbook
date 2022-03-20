@@ -93,6 +93,7 @@ to {
             textOverflow: 'ellipsis',
             overflow: 'hidden',
             width: '85%',
+            minWidth: 300,
             [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
                 fontSize: 14,
             },
@@ -156,6 +157,14 @@ to {
         },
         connectWallet: {
             marginTop: 16,
+        },
+        fullWidthBox: {
+            width: '100%',
+        },
+        loadingText: {
+            textAlign: 'center',
+            fontSize: 24,
+            marginTop: 210,
         },
     }
 })

@@ -53,7 +53,7 @@ export function useCreateNftRedpacketCallback(
                 type: TransactionStateType.WAIT_FOR_CONFIRMING,
             })
 
-            //#region check ownership
+            // #region check ownership
             type CheckMethodParameters = Parameters<NftRedPacket['methods']['check_ownership']>
 
             const checkParams: CheckMethodParameters = [tokenIdList, contractAddress]
@@ -68,7 +68,7 @@ export function useCreateNftRedpacketCallback(
                 return
             }
 
-            //#endregion
+            // #endregion
 
             type FillMethodParameters = Parameters<NftRedPacket['methods']['create_red_packet']>
 
@@ -98,6 +98,13 @@ export function useCreateNftRedpacketCallback(
                 nftRedPacketContract.methods
                     .create_red_packet(...params)
                     .send(config as NonPayableTx)
+                    // Note: DO NOT remove this event listener since it relates to password saving.
+                    .on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
+                        setCreateState({
+                            type: TransactionStateType.HASH,
+                            hash,
+                        })
+                    })
                     .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
                         setCreateState({
                             type: TransactionStateType.CONFIRMED,

@@ -1,4 +1,3 @@
-import { useContext } from 'react'
 import type { Trade as V2Trade } from '@uniswap/v2-sdk'
 import type { Trade as V3Trade } from '@uniswap/v3-sdk'
 import type { Currency, TradeType } from '@uniswap/sdk-core'
@@ -10,6 +9,7 @@ import type {
     SwapBancorRequest,
     SwapRouteSuccessResponse,
     TradeComputed,
+    SwapOOSuccessResponse,
 } from '../types'
 import { useTradeCallback as useNativeTokenWrapperCallback } from './native/useTradeCallback'
 import { useTradeCallback as useZrxCallback } from './0x/useTradeCallback'
@@ -17,17 +17,25 @@ import { useTradeCallback as useUniswapCallback } from './uniswap/useTradeCallba
 import { useTradeCallback as useBalancerCallback } from './balancer/useTradeCallback'
 import { useTradeCallback as useDODOCallback } from './dodo/useTradeCallback'
 import { useTradeCallback as useBancorCallback } from './bancor/useTradeCallback'
+import { useTradeCallback as useOpenOceanCallback } from './openocean/useTradeCallback'
 import { useExchangeProxyContract } from '../contracts/balancer/useExchangeProxyContract'
 import type { NativeTokenWrapper } from './native/useTradeComputed'
 import { isNativeTokenWrapper } from '../helpers'
-import { TradeContext } from './useTradeContext'
+import { useGetTradeContext } from './useGetTradeContext'
+import { TargetChainIdContext } from './useTargetChainIdContext'
+import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 
-export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeComputed<unknown> | null) {
+export function useTradeCallback(
+    provider?: TradeProvider,
+    tradeComputed?: TradeComputed<unknown> | null,
+    gasConfig?: GasOptionConfig,
+    allowedSlippage?: number,
+) {
     // trade context
-    const context = useContext(TradeContext)
-
+    const context = useGetTradeContext(provider)
+    const { targetChainId } = TargetChainIdContext.useContainer()
     // create trade computed
-    const isNativeTokenWrapper_ = isNativeTokenWrapper(tradeComputed)
+    const isNativeTokenWrapper_ = isNativeTokenWrapper(tradeComputed ?? null)
     const tradeComputedForUniswapV2Like =
         context?.IS_UNISWAP_V2_LIKE && !isNativeTokenWrapper_
             ? (tradeComputed as TradeComputed<V2Trade<Currency, Currency, TradeType>>)
@@ -42,25 +50,36 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
         ? (tradeComputed as TradeComputed<SwapRouteSuccessResponse>)
         : null
     const tradeComputedForBancor = !isNativeTokenWrapper_ ? (tradeComputed as TradeComputed<SwapBancorRequest>) : null
-
+    const tradeComputedForOpenOcean = !isNativeTokenWrapper_
+        ? (tradeComputed as TradeComputed<SwapOOSuccessResponse>)
+        : null
     // uniswap like providers
-    const uniswapV2Like = useUniswapCallback(tradeComputedForUniswapV2Like)
-    const uniswapV3Like = useUniswapCallback(tradeComputedForUniswapV3Like)
+    const uniswapV2Like = useUniswapCallback(tradeComputedForUniswapV2Like, provider, gasConfig, allowedSlippage)
+    const uniswapV3Like = useUniswapCallback(tradeComputedForUniswapV3Like, provider, gasConfig, allowedSlippage)
 
     // balancer
-    const exchangeProxyContract = useExchangeProxyContract()
+    const exchangeProxyContract = useExchangeProxyContract(targetChainId)
     const balancer = useBalancerCallback(
         provider === TradeProvider.BALANCER ? tradeComputedForBalancer : null,
         exchangeProxyContract,
+        allowedSlippage,
+        gasConfig,
     )
 
     // other providers
-    const zrx = useZrxCallback(provider === TradeProvider.ZRX ? tradeComputedForZRX : null)
-    const dodo = useDODOCallback(provider === TradeProvider.DODO ? tradeComputedForDODO : null)
-    const bancor = useBancorCallback(provider === TradeProvider.BANCOR ? tradeComputedForBancor : null)
+    const zrx = useZrxCallback(provider === TradeProvider.ZRX ? tradeComputedForZRX : null, gasConfig)
+    const dodo = useDODOCallback(provider === TradeProvider.DODO ? tradeComputedForDODO : null, gasConfig)
+    const bancor = useBancorCallback(provider === TradeProvider.BANCOR ? tradeComputedForBancor : null, gasConfig)
+    const openocean = useOpenOceanCallback(
+        provider === TradeProvider.OPENOCEAN ? tradeComputedForOpenOcean : null,
+        gasConfig,
+    )
 
     // the trade is an ETH-WETH pair
-    const nativeTokenWrapper = useNativeTokenWrapperCallback(tradeComputed as TradeComputed<NativeTokenWrapper>)
+    const nativeTokenWrapper = useNativeTokenWrapperCallback(
+        tradeComputed as TradeComputed<NativeTokenWrapper>,
+        gasConfig,
+    )
     if (isNativeTokenWrapper_) return nativeTokenWrapper
 
     // handle trades by various provider
@@ -77,6 +96,12 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
             return uniswapV2Like
         case TradeProvider.PANCAKESWAP:
             return uniswapV2Like
+        case TradeProvider.WANNASWAP:
+            return uniswapV2Like
+        case TradeProvider.TRISOLARIS:
+            return uniswapV2Like
+        case TradeProvider.MDEX:
+            return uniswapV2Like
         case TradeProvider.ZRX:
             return zrx
         case TradeProvider.BALANCER:
@@ -85,7 +110,14 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
             return dodo
         case TradeProvider.BANCOR:
             return bancor
+        case TradeProvider.TRADERJOE:
+            return uniswapV2Like
+        case TradeProvider.PANGOLIN:
+            return uniswapV2Like
+        case TradeProvider.OPENOCEAN:
+            return openocean
         default:
-            unreachable(provider)
+            if (provider) unreachable(provider)
+            return []
     }
 }

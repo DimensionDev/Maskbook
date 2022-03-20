@@ -1,23 +1,13 @@
-import { memo } from 'react'
-import { useMatch } from 'react-router-dom'
-import { Box, Button, buttonClasses, styled, Typography } from '@mui/material'
-import { MaskColorVar } from '@masknet/theme'
-import { useDashboardI18N } from '../../../../locales'
 import { CardIcon, DownloadIcon, MaskWalletIcon, SendIcon, SwapIcon } from '@masknet/icons'
-import { MiniNetworkSelector } from '@masknet/shared'
 import type { Web3Plugin } from '@masknet/plugin-infra'
-import { RoutePaths } from '../../../../type'
-
-export interface BalanceCardProps {
-    balance: number
-    onSend(): void
-    onBuy(): void
-    onSwap(): void
-    onReceive(): void
-    networks: Web3Plugin.NetworkDescriptor[]
-    selectedNetwork: Web3Plugin.NetworkDescriptor | null
-    onSelectNetwork(network: Web3Plugin.NetworkDescriptor | null): void
-}
+import { MiniNetworkSelector } from '@masknet/shared'
+import { DashboardRoutes } from '@masknet/shared-base'
+import { MaskColorVar } from '@masknet/theme'
+import { Box, Button, buttonClasses, styled, Typography } from '@mui/material'
+import { noop } from 'lodash-unified'
+import { memo } from 'react'
+import { useDashboardI18N } from '../../../../locales'
+import { useIsMatched } from '../../hooks'
 
 const BalanceContainer = styled('div')(
     ({ theme }) => `
@@ -71,6 +61,7 @@ const ButtonGroup = styled('div')`
     grid-template-columns: repeat(4, 1fr);
     & > * {
         font-size: 12px;
+        white-space: nowrap;
         & .${buttonClasses.endIcon} > *:nth-of-type(1) {
             font-size: 16px;
             fill: none;
@@ -78,15 +69,27 @@ const ButtonGroup = styled('div')`
     }
 `
 
+export interface BalanceCardProps {
+    balance: number
+    onSend(): void
+    onBuy(): void
+    onSwap(): void
+    onReceive(): void
+    networks: Web3Plugin.NetworkDescriptor[]
+    selectedNetwork: Web3Plugin.NetworkDescriptor | null
+    showOperations: boolean
+    onSelectNetwork(network: Web3Plugin.NetworkDescriptor | null): void
+}
+
 export const Balance = memo<BalanceCardProps>(
-    ({ balance, onSend, onBuy, onSwap, onReceive, onSelectNetwork, networks, selectedNetwork }) => {
+    ({ balance, onSend, onBuy, onSwap, onReceive, onSelectNetwork, networks, selectedNetwork, showOperations }) => {
         const t = useDashboardI18N()
 
-        const isWalletTransferPath = useMatch(RoutePaths.WalletsTransfer)
-        const isWalletHistoryPath = useMatch(RoutePaths.WalletsHistory)
+        const isWalletTransferPath = useIsMatched(DashboardRoutes.WalletsTransfer)
+        const isWalletHistoryPath = useIsMatched(DashboardRoutes.WalletsHistory)
 
         const isDisabledNonCurrentChainSelect = !!isWalletTransferPath
-        const isHiddenAllButton = !!isWalletHistoryPath || !!isWalletTransferPath
+        const isHiddenAllButton = isWalletHistoryPath || isWalletTransferPath || networks.length <= 1
 
         return (
             <BalanceContainer>
@@ -99,8 +102,8 @@ export const Balance = memo<BalanceCardProps>(
                             {t.wallets_balance()} {selectedNetwork?.name ?? t.wallets_balance_all_chain()}
                         </BalanceTitle>
                         <BalanceContent sx={{ py: 1.5 }}>
-                            {isNaN(balance)
-                                ? '-'
+                            {Number.isNaN(balance)
+                                ? '$0'
                                 : balance.toLocaleString('en', {
                                       style: 'currency',
                                       currency: 'USD',
@@ -111,28 +114,32 @@ export const Balance = memo<BalanceCardProps>(
                             disabledNonCurrentNetwork={isDisabledNonCurrentChainSelect}
                             selectedNetwork={selectedNetwork}
                             networks={networks}
-                            onSelect={onSelectNetwork}
+                            onSelect={(network: Web3Plugin.NetworkDescriptor | null) =>
+                                networks.length <= 1 ? noop : onSelectNetwork(network)
+                            }
                         />
                     </BalanceDisplayContainer>
                 </Box>
-                <ButtonGroup>
-                    <Button size="small" onClick={onSend} endIcon={<SendIcon fontSize="inherit" />}>
-                        {t.wallets_balance_Send()}
-                    </Button>
-                    <Button size="small" onClick={onBuy} endIcon={<CardIcon fill="none" fontSize="inherit" />}>
-                        {t.wallets_balance_Buy()}
-                    </Button>
-                    <Button size="small" onClick={onSwap} endIcon={<SwapIcon fontSize="inherit" />}>
-                        {t.wallets_balance_Swap()}
-                    </Button>
-                    <Button
-                        size="small"
-                        color="secondary"
-                        onClick={onReceive}
-                        endIcon={<DownloadIcon fontSize="inherit" style={{ stroke: MaskColorVar.textLink }} />}>
-                        {t.wallets_balance_Receive()}
-                    </Button>
-                </ButtonGroup>
+                {showOperations && (
+                    <ButtonGroup>
+                        <Button size="small" onClick={onSend} endIcon={<SendIcon fontSize="inherit" />}>
+                            {t.wallets_balance_Send()}
+                        </Button>
+                        <Button size="small" onClick={onBuy} endIcon={<CardIcon fill="none" fontSize="inherit" />}>
+                            {t.wallets_balance_Buy()}
+                        </Button>
+                        <Button size="small" onClick={onSwap} endIcon={<SwapIcon fontSize="inherit" />}>
+                            {t.wallets_balance_Swap()}
+                        </Button>
+                        <Button
+                            size="small"
+                            color="secondary"
+                            onClick={onReceive}
+                            endIcon={<DownloadIcon fontSize="inherit" style={{ stroke: MaskColorVar.textLink }} />}>
+                            {t.wallets_balance_Receive()}
+                        </Button>
+                    </ButtonGroup>
+                )}
             </BalanceContainer>
         )
     },

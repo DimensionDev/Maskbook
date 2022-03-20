@@ -1,15 +1,48 @@
 import type { BigNumber } from 'bignumber.js'
 import type { Subscription } from 'use-subscription'
-import type { Pagination, Plugin } from './types'
+import type { Pagination, Plugin, Pageable } from './types'
+
+/**
+ * A network plugin defines the way to connect to a single chain.
+ */
+export enum NetworkPluginID {
+    PLUGIN_EVM = 'com.mask.evm',
+    PLUGIN_FLOW = 'com.mask.flow',
+    PLUGIN_SOLANA = 'com.mask.solana',
+}
+
+export enum CurrencyType {
+    NATIVE = 'native',
+    BTC = 'btc',
+    USD = 'usd',
+}
+
+export enum TokenType {
+    Fungible = 'Fungible',
+    NonFungible = 'NonFungible',
+}
+
+export type Color =
+    | `rgb(${number}, ${number}, ${number})`
+    | `rgba(${number}, ${number}, ${number}, ${number})`
+    | `#${string}${string}${string}${string}${string}${string}`
+    | `#${string}${string}${string}`
+    | `hsl(${number}, ${number}%, ${number}%)`
 
 export declare namespace Web3Plugin {
-    export interface EnableRequirement {
-        /**
-         * Plugin can declare what chain it supports to trigger side effects (e.g. create a new transaction).
-         * When the current chain is not supported, the composition entry will be hidden.
-         */
-        supportedOperationalChains?: number[]
-    }
+    /**
+     * Plugin can declare what chain it supports to trigger side effects (e.g. create a new transaction).
+     * When the current chain is not supported, the composition entry will be hidden.
+     */
+    export type EnableRequirement = Partial<
+        Record<
+            NetworkPluginID,
+            {
+                supportedChainIds?: number[]
+            }
+        >
+    >
+
     export interface NetworkDescriptor {
         /** An unique ID for each network */
         ID: string
@@ -22,7 +55,7 @@ export declare namespace Web3Plugin {
         /** The network icon */
         icon: URL
         /** The network icon in fixed color */
-        iconColor: string
+        iconColor: Color
         /** The network name */
         name: string
         /** Is a mainnet network */
@@ -38,6 +71,15 @@ export declare namespace Web3Plugin {
         /** The provider icon */
         icon: URL
         /** The provider name */
+        name: string
+    }
+
+    export interface ApplicationCategoryDescriptor {
+        /** An unique ID for each category */
+        ID: string
+        /** The category icon */
+        icon: URL
+        /** The category name */
         name: string
     }
 
@@ -64,7 +106,7 @@ export declare namespace Web3Plugin {
         /** true: Derivable Wallet. false: UnDerivable Wallet */
         hasDerivationPath: boolean
     }
-    export interface Asset {
+    export interface Asset<T extends Token = Token> {
         id: string
         chainId: number
         balance: string
@@ -77,7 +119,7 @@ export declare namespace Web3Plugin {
             [key in CurrencyType]?: string
         }
         logoURI?: string
-        token: Token
+        token: T
     }
 
     export interface AddressName {
@@ -117,14 +159,19 @@ export declare namespace Web3Plugin {
         decimals?: number
         name: string
         symbol: string
+        logoURI?: string | string[]
     }
 
-    export interface NonFungibleToken extends Token {
+    export interface NonFungibleContract {
         id: string
-        type: TokenType.Fungible
+        chainId: number
         name: string
-        description?: string
+        symbol: string
+        address: string
+        iconURL?: string
+        balance?: number
     }
+
     export interface FungibleTokenMetadata {
         name: string
         symbol: string
@@ -139,7 +186,18 @@ export declare namespace Web3Plugin {
         mediaType: string
         iconURL?: string
         assetURL?: string
-        token: NonFungibleToken
+    }
+
+    export interface NonFungibleToken extends Token {
+        // chainId_contractAddress_tokenId
+        id: string
+        tokenId: string
+        type: TokenType.NonFungible
+        name: string
+        description?: string
+        owner?: string
+        metadata?: NonFungibleTokenMetadata
+        contract?: NonFungibleContract
     }
 
     export interface TokenList {
@@ -147,6 +205,11 @@ export declare namespace Web3Plugin {
         description?: string
         tokens: Token[]
     }
+
+    export type DomainAddressBook = {
+        [chainId: number]: Record<string, string> | undefined
+    }
+
     export namespace ObjectCapabilities {
         export interface SharedState {
             allowTestnet?: Subscription<boolean>
@@ -154,10 +217,6 @@ export declare namespace Web3Plugin {
             chainId?: Subscription<number>
             /** The address of the currently chosen wallet. */
             account?: Subscription<string>
-            /** The balance of the currently chosen account. */
-            balance?: Subscription<string>
-            /** The currently tracked block height. */
-            blockNumber?: Subscription<number>
             /** The network type. */
             networkType?: Subscription<string | undefined>
             /** The wallet provider type. */
@@ -190,22 +249,26 @@ export declare namespace Web3Plugin {
                 providerType: string,
                 network: NetworkDescriptor,
                 pagination?: Pagination,
-            ) => Promise<Asset[]>
+            ) => Promise<Asset<FungibleToken>[]>
             /** Get non-fungible assets of given account. */
             getNonFungibleAssets?: (
                 address: string,
-                providerType: string,
-                network: NetworkDescriptor,
-                pagination?: Pagination,
-            ) => Promise<Asset[]>
+                pagination: Pagination,
+                providerType?: string,
+                network?: NetworkDescriptor,
+            ) => Promise<Pageable<NonFungibleToken>>
         }
-        export interface TokenManage {
+        export interface NameServiceState {
+            lookup?: (domain: string) => Promise<string | undefined>
+            reverse?: (address: string) => Promise<string | undefined>
+        }
+        export interface TokenState {
             addToken: (token: Token) => Promise<void>
             removeToken: (token: Token) => Promise<void>
             trustToken: (token: Token) => Promise<void>
             blockToken: (token: Token) => Promise<void>
         }
-        export interface TransactionState {
+        export interface ProviderState {
             /** Get latest transactions of given account. */
             getTransactions: (
                 address: string,
@@ -231,6 +294,9 @@ export declare namespace Web3Plugin {
             ) => Promise<TokenList[]>
         }
         export interface Others {
+            getLatestBlockNumber?: (chainId: number) => Promise<number>
+            getLatestBalance?: (chainId: number, account: string) => Promise<string>
+
             isChainIdValid?: (chainId: number, allowTestnet: boolean) => boolean
             getChainDetailed?: (chainId: number) => ChainDetailed | undefined
             getFungibleTokenMetadata?: (token: FungibleToken) => Promise<FungibleTokenMetadata>
@@ -246,13 +312,21 @@ export declare namespace Web3Plugin {
 
             resolveTransactionLink?: (chainId: number, transactionId: string) => string
             resolveAddressLink?: (chainId: number, address: string) => string
+            resolveNonFungibleTokenLink?: (chainId: number, address: string, tokenId: string) => string
             resolveBlockLink?: (chainId: number, blockNumber: string) => string
+
+            resolveDomainLink?: (domain: string) => string
+            isValidDomain?: (domain: string) => boolean
+            formatDomainName?: (domain?: string, size?: number) => string | undefined
+
+            getAverageBlockDelay?: (chainId: number, scale?: number) => number
         }
         export interface Capabilities {
             Shared?: SharedState
             Asset?: AssetState
-            Token?: TokenManage
-            Transaction?: TransactionState
+            NameService?: NameServiceState
+            Token?: TokenState
+            Provider?: ProviderState
             TokenList?: TokenListState
             Utils?: Others
         }
@@ -272,6 +346,9 @@ export declare namespace Web3Plugin {
             onClick?: (network: NetworkDescriptor, provider: ProviderDescriptor) => void
             onSubmit?: (network: NetworkDescriptor, provider: ProviderDescriptor) => void
         }
+        export interface ApplicationCategoryIconClickBaitProps {
+            category: ApplicationCategoryDescriptor
+        }
         export interface AddressFormatterProps {
             address: string
             size?: number
@@ -287,25 +364,10 @@ export declare namespace Web3Plugin {
                 /** This UI will receive provider icon as children component, and the plugin may hook click handle on it. */
                 ProviderIconClickBait?: Plugin.InjectUIReact<UI.ProviderIconClickBaitProps>
             }
+            WalletStatusDialog?: {
+                /** This UI will receive application category icon as children component, and the plugin may hook click handle on it. */
+                ApplicationCategoryIconClickBait?: Plugin.InjectUIReact<UI.ApplicationCategoryIconClickBaitProps>
+            }
         }
     }
-}
-
-/**
- * A network plugin defines the way to connect to a single chain.
- */
-export enum NetworkPluginID {
-    PLUGIN_EVM = 'com.mask.evm',
-    PLUGIN_FLOW = 'com.mask.flow',
-}
-
-export enum CurrencyType {
-    NATIVE = 'native',
-    BTC = 'btc',
-    USD = 'usd',
-}
-
-export enum TokenType {
-    Fungible = 'Fungible',
-    NonFungible = 'NonFungible',
 }

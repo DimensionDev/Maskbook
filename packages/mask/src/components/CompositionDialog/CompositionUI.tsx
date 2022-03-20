@@ -1,9 +1,10 @@
 import { forwardRef, useImperativeHandle, useMemo, useRef, useState, startTransition, useCallback } from 'react'
 import { Typography, Chip, Button } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
-import type { TypedMessage } from '@masknet/shared-base'
-import { useValueRef } from '@masknet/shared'
+import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
+import { ImagePayloadIcon } from '@masknet/icons'
 import { Send } from '@mui/icons-material'
 import { PluginEntryRender, PluginEntryRenderRef } from './PluginEntryRender'
 import { TypedMessageEditor, TypedMessageEditorRef } from './TypedMessageEditor'
@@ -14,13 +15,15 @@ import { debugModeSetting } from '../../settings/settings'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients'
 import type { Profile } from '../../database'
-import { CompositionContext } from './CompositionContext'
+import { CompositionContext } from '@masknet/plugin-infra'
 import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
+import { Trans } from 'react-i18next'
+import type { EncryptTargetE2E, EncryptTargetPublic } from '@masknet/encryption'
 
 const useStyles = makeStyles()({
     root: {
         '& > *': {
-            marginBottom: `10px !important`,
+            marginBottom: '10px !important',
         },
     },
     flex: {
@@ -35,7 +38,7 @@ const useStyles = makeStyles()({
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center',
-        '& > *': { marginLeft: `12px !important` },
+        '& > *': { marginLeft: '12px !important' },
     },
 })
 
@@ -55,12 +58,12 @@ export interface CompositionProps {
     onQueryClipboardPermission?(): void
 }
 export interface SubmitComposition {
-    target: 'Everyone' | Profile[]
-    content: TypedMessage
+    target: EncryptTargetPublic | EncryptTargetE2E
+    content: SerializableTypedMessages
     encode: 'text' | 'image'
 }
 export interface CompositionRef {
-    setMessage(message: TypedMessage): void
+    setMessage(message: SerializableTypedMessages): void
     setEncryptionKind(kind: 'E2E' | 'Everyone'): void
     startPlugin(id: string): void
     reset(): void
@@ -130,8 +133,11 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                 checked={imagePayloadSelected}
                 label={
                     <>
+                        <ImagePayloadIcon style={{ width: 16, height: 16 }} />
                         {t('post_dialog__image_payload')}
-                        {Flags.image_payload_marked_as_beta && <sup className={classes.sup}>(Beta)</sup>}
+                        {Flags.image_payload_marked_as_beta && (
+                            <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />
+                        )}
                     </>
                 }
                 onClick={() => setEncoding(encodingKind === 'image' ? 'text' : 'image')}
@@ -141,7 +147,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
         ...useMetadataDebugger(context, Editor.current),
     ].filter(Boolean)
 
-    const submitAvailable = currentPostSize > 0 && currentPostSize < (props.maxLength ?? Infinity)
+    const submitAvailable = currentPostSize > 0 && currentPostSize < (props.maxLength ?? Number.POSITIVE_INFINITY)
     const onSubmit = useCallback(() => {
         if (!Editor.current) return
         setSending(true)
@@ -149,7 +155,10 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
             .onSubmit({
                 content: Editor.current.value,
                 encode: encodingKind,
-                target: encryptionKind === 'E2E' ? recipients : 'Everyone',
+                target:
+                    encryptionKind === 'E2E'
+                        ? { type: 'E2E', target: recipients.map((x) => x.identifier) }
+                        : { type: 'public' },
             })
             .finally(reset)
     }, [encodingKind, encryptionKind, recipients, props.onSubmit])
@@ -168,14 +177,17 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                         updatePostSize(Editor.current?.estimatedLength || 0)
                     }}
                 />
-
                 <Typography>
-                    Plugins <sup>(Experimental)</sup>
+                    <Trans
+                        i18nKey="post_dialog_plugins_experimental"
+                        components={{
+                            sup: <sup />,
+                        }}
+                    />
                 </Typography>
                 <div className={classes.flex}>
                     <PluginEntryRender readonly={sending} ref={PluginEntry} />
                 </div>
-
                 <Typography>{t('post_dialog__select_recipients_title')}</Typography>
                 <div className={classes.flex}>
                     <ClickableChip
@@ -199,7 +211,6 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                         />
                     )}
                 </div>
-
                 {MoreOptions.length ? (
                     <>
                         <Typography>{t('post_dialog__more_options_title')}</Typography>
@@ -211,7 +222,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                 {props.maxLength ? <CharLimitIndicator value={currentPostSize} max={props.maxLength} /> : null}
                 {props.requireClipboardPermission && !props.hasClipboardPermission && (
                     <Button variant="outlined" onClick={props.onRequestClipboardPermission}>
-                        Enable auto paste
+                        {t('post_dialog_enable_paste_auto')}
                     </Button>
                 )}
                 <LoadingButton

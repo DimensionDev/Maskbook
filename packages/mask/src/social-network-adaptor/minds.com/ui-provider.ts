@@ -1,5 +1,4 @@
-import { ProfileIdentifier } from '../../database/type'
-import { currentSelectedIdentity } from '../../settings/settings'
+import { ProfileIdentifier } from '@masknet/shared-base'
 import { globalUIState, SocialNetworkUI, stateCreator } from '../../social-network'
 import { injectPostCommentsDefault } from '../../social-network/defaults'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector'
@@ -21,7 +20,7 @@ import injectCommentBoxAtMinds from './injection/CommentBox'
 import { injectPostBoxComposed } from './injection/inject'
 import { injectPostInspectorAtMinds } from './injection/PostInspector'
 import { injectPostReplacerAtMinds } from './injection/PostReplacer'
-import { injectSearchResultBoxAtMinds } from './injection/SearchResult'
+import { injectSearchResultBoxAtMinds } from './injection/SearchResultBox'
 import { injectSetupPromptAtMinds } from './injection/SetupPrompt'
 import { injectToolboxHintAtMinds } from './injection/ToolboxHint'
 import { mindsShared } from './shared'
@@ -171,7 +170,6 @@ const mindsUI: SocialNetworkUI.Definition = {
                 return new ProfileIdentifier(
                     'minds.com',
                     ProfileIdentifier.getUserName(IdentityProviderMinds.recognized.value.identifier) ||
-                        ProfileIdentifier.getUserName(currentSelectedIdentity[mindsBase.networkIdentifier].value) ||
                         ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
                         unreachable('Cannot figure out password' as never),
                 ).toText()

@@ -1,7 +1,7 @@
 import { ToolboxHintUnstyled } from '../../../components/InjectedComponents/ToolboxUnstyled'
-// see https://github.com/import-js/eslint-plugin-import/issues/2288
-// eslint-disable-next-line import/no-deprecated
-import { styled, ListItemButton, Typography, ListItemIcon, useMediaQuery } from '@mui/material'
+import { styled, ListItemButton, Typography, ListItemIcon, useMediaQuery, Box } from '@mui/material'
+import GuideStep from '../../../components/GuideStep'
+import { useI18N } from '../../../utils'
 
 const twitterBreakPoint = 1265
 const Container = styled('div')`
@@ -14,7 +14,7 @@ const ListItem = styled(ListItemButton)`
     display: inline-flex;
     &:hover {
         background: rgba(15, 20, 25, 0.1);
-        ${({ theme }) => (theme.palette.mode === 'dark' ? `background: rgba(217, 217, 217, 0.1);` : '')}
+        ${({ theme }) => (theme.palette.mode === 'dark' ? 'background: rgba(217, 217, 217, 0.1);' : '')}
     }
     /* twitter break point */
     @media screen and (max-width: ${twitterBreakPoint}px) {
@@ -36,8 +36,6 @@ const Icon = styled(ListItemIcon)`
 `
 
 export function ToolboxHintAtTwitter() {
-    // see https://github.com/import-js/eslint-plugin-import/issues/2288
-    // eslint-disable-next-line import/no-deprecated
     const mini = useMediaQuery(`(max-width: ${twitterBreakPoint}px)`)
     return (
         <ToolboxHintUnstyled
@@ -47,5 +45,14 @@ export function ToolboxHintAtTwitter() {
             ListItemButton={ListItem}
             Container={Container}
         />
+    )
+}
+
+export function ProfileLinkAtTwitter() {
+    const { t } = useI18N()
+    return (
+        <GuideStep step={2} total={3} tip={t('user_guide_tip_2')}>
+            <Box sx={{ position: 'absolute', left: 0, right: 0, width: '100%', height: '100%' }} />
+        </GuideStep>
     )
 }

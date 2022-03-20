@@ -14,10 +14,18 @@ export enum BoxState {
     SOLD_OUT = 4,
     /** drawed all personal limited tokens */
     DRAWED_OUT = 5,
+    /** canceled */
+    CANCELED = 6,
     /** error occur */
-    ERROR = 6,
+    ERROR = 7,
     /** 404 */
-    NOT_FOUND = 7,
+    NOT_FOUND = 8,
+    /** leaf not found */
+    NOT_IN_WHITELIST = 9,
+    /** insufficient holder token */
+    INSUFFICIENT_HOLDER_TOKEN = 10,
+    /** not qualified */
+    NOT_QUALIFIED = 11,
 }
 
 export interface PaymentOption {
@@ -40,15 +48,20 @@ export interface BoxInfo {
     personalRemaining: number
     payments: PaymentInfo[]
     remaining: number
-    total: string
+    availableAmount: number
+    total: number
     sold: number
     startAt: Date
     endAt: Date
+    started: boolean
     tokenIds: string[]
     tokenIdsPurchased: string[]
     tokenAddress: string
     heroImageURL: string
     qualificationAddress: string
+    canceled: boolean
+    holderMinTokenAmount: string
+    holderTokenAddress: string
 }
 
 export enum MediaType {

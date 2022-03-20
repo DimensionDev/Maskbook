@@ -1,12 +1,11 @@
 import { memo, useMemo, useState } from 'react'
-import { Tab, Tabs, TextField, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { Tab, Tabs, Typography } from '@mui/material'
+import { makeStyles, useTabs } from '@masknet/theme'
 import { Controller, useForm } from 'react-hook-form'
 import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { getEnumAsArray } from '@dimensiondev/kit'
 import { LoadingButton, TabContext, TabPanel } from '@mui/lab'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { JsonFileBox } from '../components/JsonFileBox'
 import { StyledInput } from '../../../components/StyledInput'
@@ -18,7 +17,7 @@ import Services from '../../../../service'
 import { getDerivableAccounts } from '../../../../../plugins/Wallet/services'
 import { PageHeader } from '../components/PageHeader'
 import { PasswordField } from '../../../components/PasswordField'
-import { currentAccountSettings } from '../../../../../plugins/Wallet/settings'
+import { currentAccountSettings, currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
 import { ProviderType, useChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()({
@@ -66,18 +65,24 @@ const useStyles = makeStyles()({
     },
     tabPanel: {
         padding: '16px 0 0 0',
+        flex: 1,
+        position: 'relative',
     },
     multiline: {
         width: '100%',
+        height: '100%',
+        position: 'absolute',
     },
     multilineInput: {
         padding: 6,
         borderRadius: 6,
         backgroundColor: '#F7F9FA',
+        height: '100%',
     },
     textArea: {
         padding: 0,
         fontSize: 12,
+        height: '100%!important',
     },
     button: {
         fontWeight: 600,
@@ -87,7 +92,7 @@ const useStyles = makeStyles()({
     error: {
         color: '#FF5F5F',
         fontSize: 12,
-        marginTop: 8,
+        marginTop: 24,
         lineHeight: '16px',
         wordBreak: 'break-all',
     },
@@ -101,25 +106,17 @@ const useStyles = makeStyles()({
     },
 })
 
-enum ImportWalletTab {
-    Mnemonic = 'Mnemonic',
-    JsonFile = 'Json File',
-    PrivateKey = 'Private Key',
-}
-
 const ImportWallet = memo(() => {
     const { t } = useI18N()
-    const history = useHistory()
+    const navigate = useNavigate()
     const chainId = useChainId()
-    const location = useLocation()
     const { classes } = useStyles()
-    const [currentTab, setCurrentTab] = useState(ImportWalletTab.Mnemonic)
+    const [currentTab, onChange, tabs] = useTabs('mnemonic', 'json', 'privateKey')
     const [mnemonic, setMnemonic] = useState('')
     const [keyStoreContent, setKeyStoreContent] = useState('')
     const [keyStorePassword, setKeyStorePassword] = useState('')
     const [privateKey, setPrivateKey] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
-
     const schema = useMemo(() => {
         return zod.object({
             name: zod.string().min(1).max(12),
@@ -141,60 +138,70 @@ const ImportWallet = memo(() => {
     const disabled = useMemo(() => {
         if (!isValid) return true
         switch (currentTab) {
-            case ImportWalletTab.Mnemonic:
+            case tabs.mnemonic:
                 return !mnemonic
-            case ImportWalletTab.JsonFile:
+            case tabs.json:
                 return !keyStoreContent
-            case ImportWalletTab.PrivateKey:
+            case tabs.privateKey:
                 return !privateKey
             default:
                 return true
         }
-    }, [currentTab, mnemonic, keyStorePassword, keyStoreContent, privateKey, isValid])
+    }, [currentTab, mnemonic, keyStorePassword, keyStoreContent, privateKey, isValid, tabs])
 
     const [{ loading }, onDerivedWallet] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             if (!disabled) {
                 try {
                     switch (currentTab) {
-                        case ImportWalletTab.Mnemonic:
+                        case tabs.mnemonic:
                             // valid the mnemonic
                             await getDerivableAccounts(mnemonic, 0, 1)
-
-                            const params = query({ mnemonic, name: data.name })
-                            history.replace({
-                                pathname: PopupRoutes.AddDeriveWallet,
-                                search: `?${params}`,
+                            const params = query({ name: data.name })
+                            navigate(PopupRoutes.AddDeriveWallet + '?' + params, {
+                                replace: true,
+                                state: { mnemonic },
                             })
                             break
-                        case ImportWalletTab.JsonFile:
+                        case tabs.json:
                             const wallet = await WalletRPC.recoverWalletFromKeyStoreJSON(
                                 data.name,
                                 keyStoreContent,
                                 keyStorePassword,
                             )
+                            if (!currentMaskWalletAccountSettings.value) {
+                                await WalletRPC.updateMaskAccount({
+                                    account: wallet,
+                                })
+                            }
                             if (!currentAccountSettings.value) {
                                 await WalletRPC.updateAccount({
                                     account: wallet,
                                     providerType: ProviderType.MaskWallet,
                                 })
-
-                                await WalletRPC.selectAccount([wallet], chainId)
                             }
-                            history.replace(PopupRoutes.Wallet)
+                            await WalletRPC.selectAccount([wallet], chainId)
+                            navigate(PopupRoutes.Wallet, { replace: true })
                             await Services.Helper.removePopupWindow()
                             break
-                        case ImportWalletTab.PrivateKey:
+                        case tabs.privateKey:
                             const privateKeyWallet = await WalletRPC.recoverWalletFromPrivateKey(data.name, privateKey)
+                            if (!currentMaskWalletAccountSettings.value) {
+                                await WalletRPC.updateMaskAccount({
+                                    account: privateKeyWallet,
+                                })
+                            }
+
                             if (!currentAccountSettings.value) {
                                 await WalletRPC.updateAccount({
                                     account: privateKeyWallet,
                                     providerType: ProviderType.MaskWallet,
                                 })
-                                await WalletRPC.selectAccount([privateKeyWallet], chainId)
                             }
+
+                            await WalletRPC.selectAccount([privateKeyWallet], chainId)
                             await Services.Helper.removePopupWindow()
-                            history.replace(PopupRoutes.Wallet)
+                            navigate(PopupRoutes.Wallet, { replace: true })
                             break
                         default:
                             break
@@ -206,7 +213,7 @@ const ImportWallet = memo(() => {
                 }
             }
         },
-        [mnemonic, currentTab, keyStoreContent, keyStorePassword, privateKey, location.search, disabled, chainId],
+        [mnemonic, currentTab, keyStoreContent, keyStorePassword, privateKey, disabled, chainId, history, tabs],
     )
 
     const onSubmit = handleSubmit(onDerivedWallet)
@@ -242,39 +249,43 @@ const ImportWallet = memo(() => {
                         classes={{ indicator: classes.indicator }}
                         onChange={(event, tab) => {
                             if (errorMessage) setErrorMessage('')
-                            setCurrentTab(tab)
+                            onChange(event, tab)
                         }}>
-                        {getEnumAsArray(ImportWalletTab).map(({ key, value }) => (
-                            <Tab
-                                key={key}
-                                label={key}
-                                value={value}
-                                classes={{ root: classes.tab, selected: classes.selected }}
-                            />
-                        ))}
+                        <Tab
+                            label={t('popups_wallet_name_mnemonic')}
+                            value={tabs.mnemonic}
+                            classes={{ root: classes.tab, selected: classes.selected }}
+                        />
+                        <Tab
+                            label={t('popups_wallet_name_json_file')}
+                            value={tabs.json}
+                            classes={{ root: classes.tab, selected: classes.selected }}
+                        />
+                        <Tab
+                            label={t('popups_wallet_name_private_key')}
+                            value={tabs.privateKey}
+                            classes={{ root: classes.tab, selected: classes.selected }}
+                        />
                     </Tabs>
-                    <TabPanel value={ImportWalletTab.Mnemonic} className={classes.tabPanel}>
-                        <TextField
-                            variant="filled"
+                    <TabPanel value={tabs.mnemonic} className={classes.tabPanel}>
+                        <StyledInput
                             multiline
                             value={mnemonic}
                             onChange={(e) => {
                                 if (errorMessage) setErrorMessage('')
-                                setMnemonic(e.target.value)
+                                setMnemonic(e.target.value.replaceAll('\n', ' '))
                             }}
-                            minRows={4}
-                            maxRows={10}
-                            placeholder="Please enter 12 mnemonic words separated by spaces"
+                            placeholder={t('popups_wallet_name_mnemonic_placeholder')}
                             InputProps={{ disableUnderline: true, classes: { root: classes.multilineInput } }}
                             className={classes.multiline}
                             inputProps={{ className: classes.textArea }}
                         />
                     </TabPanel>
-                    <TabPanel value={ImportWalletTab.JsonFile} className={classes.tabPanel}>
+                    <TabPanel value={tabs.json} className={classes.tabPanel}>
                         <JsonFileBox onChange={(content: string) => setKeyStoreContent(content)} />
                         <PasswordField
                             classes={{ root: classes.textField }}
-                            placeholder="Original Password"
+                            placeholder={t('popups_wallet_name_origin_password')}
                             onChange={(e) => {
                                 if (errorMessage) setErrorMessage('')
                                 setKeyStorePassword(e.target.value)
@@ -282,9 +293,8 @@ const ImportWallet = memo(() => {
                             value={keyStorePassword}
                         />
                     </TabPanel>
-                    <TabPanel value={ImportWalletTab.PrivateKey} className={classes.tabPanel}>
-                        <TextField
-                            variant="filled"
+                    <TabPanel value={tabs.privateKey} className={classes.tabPanel}>
+                        <StyledInput
                             multiline
                             value={privateKey}
                             onChange={(e) => {
@@ -292,7 +302,7 @@ const ImportWallet = memo(() => {
                                 setPrivateKey(e.target.value)
                             }}
                             rows={4}
-                            placeholder="Private Key"
+                            placeholder={t('popups_wallet_name_private_key')}
                             InputProps={{ disableUnderline: true, classes: { root: classes.multilineInput } }}
                             className={classes.multiline}
                             inputProps={{ className: classes.textArea }}

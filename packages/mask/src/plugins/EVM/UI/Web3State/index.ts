@@ -1,22 +1,35 @@
+import Ens from 'ethjs-ens'
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import {
+    ChainId,
     formatBalance,
     formatCurrency,
     formatEthereumAddress,
     getChainDetailed,
     isChainIdValid,
+    isSameAddress,
+    isValidAddress,
     NetworkType,
-    PortfolioProvider,
+    NonFungibleAssetProvider,
     resolveAddressLinkOnExplorer,
     resolveBlockLinkOnExplorer,
     resolveChainColor,
     resolveChainFullName,
     resolveChainName,
+    resolveCollectibleLink,
     resolveTransactionLinkOnExplorer,
     Web3ProviderType,
+    isValidDomain,
+    resolveDomainLink,
+    formatDomainName,
+    isZeroAddress,
+    createWeb3,
+    createExternalProvider,
 } from '@masknet/web3-shared-evm'
+import { getStorage } from '../../storage'
+import { getFungibleAssetsFn, getNonFungibleTokenFn } from './getAssetsFn'
 
-export const Web3State: Web3Plugin.ObjectCapabilities.Capabilities = {}
+const ZERO_X_ERROR_ADDRESS = '0x'
 
 export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities, context?: Web3ProviderType) {
     if (!state || !context) return
@@ -25,37 +38,95 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
         allowTestnet: context.allowTestnet,
         chainId: context.chainId,
         account: context.account,
-        balance: context.balance,
-        blockNumber: context.blockNumber,
         networkType: context.networkType,
         providerType: context.providerType,
         walletPrimary: context.walletPrimary,
         wallets: context.wallets,
     }
     state.Asset = state.Asset ?? {
-        getFungibleAssets: async (address, providerType, network, pagination) => {
-            if (!network) return []
-            const assets = await context.getAssetsList(
-                address,
-                providerType as unknown as PortfolioProvider,
-                network.type as unknown as NetworkType,
-            )
-            return assets.map((x) => ({
-                id: x.token.address,
-                chainId: x.token.chainId,
-                balance: x.balance,
-                price: x.price,
-                value: x.value,
-                logoURI: x.logoURI,
-                token: {
-                    ...x.token,
-                    id: x.token.address,
-                    chainId: x.token.chainId,
-                },
-            }))
+        getFungibleAssets: getFungibleAssetsFn(context),
+        getNonFungibleAssets: getNonFungibleTokenFn(context),
+    }
+    state.NameService = state.NameService ?? {
+        lookup: async (domain: string) => {
+            const chainId = context.chainId.getCurrentValue()
+            const network = context.networkType.getCurrentValue()
+
+            // Only support Ethereum on evm
+            if (network !== NetworkType.Ethereum) return undefined
+
+            const domainAddressBook = getStorage().domainAddressBook.value
+
+            const cacheAddress = domainAddressBook[chainId]?.[domain]
+            if (cacheAddress && isValidAddress(cacheAddress)) return cacheAddress
+
+            const address = await new Ens({
+                provider: createExternalProvider(context.request, context.getSendOverrides, context.getRequestOptions),
+                network: chainId,
+            }).lookup(domain)
+
+            if (isZeroAddress(address) || isSameAddress(address, ZERO_X_ERROR_ADDRESS) || !isValidAddress(address)) {
+                return undefined
+            }
+
+            if (address)
+                await getStorage().domainAddressBook.setValue({
+                    ...domainAddressBook,
+                    [chainId]: {
+                        ...domainAddressBook[chainId],
+                        ...{ [address]: domain, [domain]: address },
+                    },
+                })
+
+            return address
+        },
+        reverse: async (address: string) => {
+            if (!isValidAddress(address)) return undefined
+            const chainId = context.chainId.getCurrentValue()
+            const network = context.networkType.getCurrentValue()
+
+            // Only support Ethereum on evm
+            if (network !== NetworkType.Ethereum) return undefined
+
+            const domainAddressBook = getStorage().domainAddressBook.value
+            const cacheDomain = domainAddressBook[chainId]?.[address]
+            if (cacheDomain) return cacheDomain
+
+            const domain = await new Ens({
+                provider: createExternalProvider(context.request, context.getSendOverrides, context.getRequestOptions),
+                network: chainId,
+            }).reverse(address)
+
+            if (isZeroAddress(domain) || isSameAddress(domain, ZERO_X_ERROR_ADDRESS)) {
+                return undefined
+            }
+
+            if (domain)
+                await getStorage().domainAddressBook.setValue({
+                    ...domainAddressBook,
+                    [chainId]: {
+                        ...domainAddressBook[chainId],
+                        ...{ [address]: domain, [domain]: address },
+                    },
+                })
+
+            return domain
         },
     }
     state.Utils = state.Utils ?? {
+        getLatestBalance: (chainId: ChainId, account: string) => {
+            const web3 = createWeb3(context.request, () => ({
+                chainId,
+            }))
+            return web3.eth.getBalance(account)
+        },
+        getLatestBlockNumber: (chainId: ChainId) => {
+            const web3 = createWeb3(context.request, () => ({
+                chainId,
+            }))
+            return web3.eth.getBlockNumber()
+        },
+
         getChainDetailed,
         isChainIdValid,
 
@@ -70,6 +141,14 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
         resolveTransactionLink: resolveTransactionLinkOnExplorer,
         resolveAddressLink: resolveAddressLinkOnExplorer,
         resolveBlockLink: resolveBlockLinkOnExplorer,
+        isValidDomain,
+        resolveDomainLink,
+        formatDomainName,
+        resolveNonFungibleTokenLink: (chainId: ChainId, address: string, tokenId: string) =>
+            resolveCollectibleLink(chainId as ChainId, NonFungibleAssetProvider.OPENSEA, {
+                contractDetailed: { address: address },
+                tokenId: tokenId,
+            } as unknown as any),
     }
     return state
 }

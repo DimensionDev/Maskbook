@@ -2,7 +2,7 @@ import { memo, useCallback, useState } from 'react'
 import { Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { WalletIcon, WarningIcon } from '@masknet/icons'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { ProviderType, useWallet, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { PopupRoutes } from '@masknet/shared-base'
 import { first } from 'lodash-unified'
@@ -10,7 +10,7 @@ import { FormattedAddress } from '@masknet/shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 import { PasswordField } from '../../../components/PasswordField'
-import { currentAccountSettings } from '../../../../../plugins/Wallet/settings'
+import { currentAccountSettings, currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
 
 const useStyles = makeStyles()({
     content: {
@@ -95,7 +95,7 @@ const useStyles = makeStyles()({
 
 const DeleteWallet = memo(() => {
     const { t } = useI18N()
-    const history = useHistory()
+    const navigate = useNavigate()
     const wallet = useWallet()
     const { classes } = useStyles()
     const [password, setPassword] = useState('')
@@ -107,9 +107,15 @@ const DeleteWallet = memo(() => {
                 await WalletRPC.removeWallet(wallet.address, password)
                 const wallets = await WalletRPC.getWallets(ProviderType.MaskWallet)
 
-                await WalletRPC.updateMaskAccount({
-                    account: first(wallets)?.address ?? '',
-                })
+                const otherWalletAddress = first(wallets)?.address
+
+                if (otherWalletAddress) {
+                    await WalletRPC.updateMaskAccount({
+                        account: otherWalletAddress,
+                    })
+                } else {
+                    currentMaskWalletAccountSettings.value = ''
+                }
 
                 if (currentAccountSettings.value === wallet.address) {
                     await WalletRPC.updateAccount({
@@ -117,7 +123,7 @@ const DeleteWallet = memo(() => {
                         providerType: ProviderType.MaskWallet,
                     })
                 }
-                history.replace(PopupRoutes.Wallet)
+                navigate(PopupRoutes.Wallet, { replace: true })
             } catch (error) {
                 if (error instanceof Error) {
                     setErrorMessage(error.message)
@@ -148,7 +154,7 @@ const DeleteWallet = memo(() => {
 
                 <Typography className={classes.label}>{t('popups_wallet_confirm_payment_password')}</Typography>
                 <PasswordField
-                    placeholder="Input your password"
+                    placeholder={t('popups_wallet_backup_input_password')}
                     value={password}
                     error={!!errorMessage}
                     helperText={errorMessage}
@@ -163,7 +169,7 @@ const DeleteWallet = memo(() => {
                     variant="contained"
                     color="inherit"
                     className={classes.cancelButton}
-                    onClick={() => history.goBack()}>
+                    onClick={() => navigate(-1)}>
                     {t('cancel')}
                 </Button>
                 <Button variant="contained" color="error" className={classes.deleteButton} onClick={onConfirm}>

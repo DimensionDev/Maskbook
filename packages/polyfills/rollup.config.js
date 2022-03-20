@@ -7,14 +7,6 @@ import { join } from 'path'
 
 export default [
     {
-        input: join(__dirname, './ecmascript/index.ts'),
-        output: {
-            file: 'esnext.js',
-            format: 'iife',
-        },
-        plugins: plugins(),
-    },
-    {
         input: join(__dirname, './ecmascript-intl/index.ts'),
         output: {
             file: 'intl.js',
@@ -56,6 +48,6 @@ function plugins() {
             exclude: ['node_modules/**'],
             transforms: ['typescript'],
         }),
-        terser(),
+        terser({ mangle: false }),
     ]
 }

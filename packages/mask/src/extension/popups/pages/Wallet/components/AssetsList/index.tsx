@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useContainer } from 'unstated-next'
 import { Asset, formatBalance } from '@masknet/web3-shared-evm'
 import { PopupRoutes } from '@masknet/shared-base'
@@ -8,6 +8,7 @@ import { makeStyles } from '@masknet/theme'
 import { ArrowRightIcon } from '@masknet/icons'
 import { TokenIcon, FormattedBalance } from '@masknet/shared'
 import { WalletContext } from '../../hooks/useWalletContext'
+import { isNaN } from 'lodash-unified'
 
 const useStyles = makeStyles()({
     list: {
@@ -41,11 +42,11 @@ const useStyles = makeStyles()({
 })
 
 export const AssetsList = memo(() => {
-    const history = useHistory()
+    const navigate = useNavigate()
     const { assets, setCurrentToken } = useContainer(WalletContext)
     const onItemClick = useCallback((asset: Asset) => {
         setCurrentToken(asset)
-        history.push(PopupRoutes.TokenDetail)
+        navigate(PopupRoutes.TokenDetail)
     }, [])
     return <AssetsListUI dataSource={assets} onItemClick={onItemClick} />
 })
@@ -73,8 +74,8 @@ export const AssetsListUI = memo<AssetsListUIProps>(({ dataSource, onItemClick }
                         <ListItemText className={classes.text}>
                             <FormattedBalance
                                 classes={{ symbol: classes.symbol, balance: classes.balance }}
-                                value={asset.balance}
-                                decimals={asset.token.decimals}
+                                value={isNaN(asset.balance) ? 0 : asset.balance}
+                                decimals={isNaN(asset.token.decimals) ? 0 : asset.token.decimals}
                                 symbol={asset.token.symbol}
                                 significant={6}
                                 formatter={formatBalance}

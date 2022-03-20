@@ -156,14 +156,13 @@ export async function fetchTokensByKeyword(keyword: string) {
     // so cased keywords will be added too
     const listOfKeywords = [keyword, keyword.toLowerCase(), keyword.toUpperCase()]
 
-    const data = await fetchFromUniswapV2Subgraph<{
-        tokens: {
-            id: string
-            name: string
-            symbol: string
-            decimals: number
-        }[]
-    }>(`
+    type Token = {
+        id: string
+        name: string
+        symbol: string
+        decimals: number
+    }
+    const data = await fetchFromUniswapV2Subgraph<{ tokens: Token[] }>(`
         query tokens {
             tokens (where: { symbol_in: ${stringify(listOfKeywords)} }, orderBy: tradeVolume, orderDirection: desc) {
                 id
@@ -227,7 +226,7 @@ export async function fetchTokenData(address: string, blockNumber?: string) {
         ${TokenFields}
         ${PairFields}
         query tokens {
-            tokens(${blockNumber ? `block : {number: ${blockNumber}}` : ``} where: {id:"${address}"}) {
+            tokens(${blockNumber ? `block : {number: ${blockNumber}}` : ''} where: {id:"${address}"}) {
                 ...TokenFields
             }
             pairs0: pairs(where: {token0: "${address}"}, first: 50, orderBy: reserveUSD, orderDirection: desc) {
@@ -301,7 +300,7 @@ export async function fetchPairData(pairAddress: string, blockNumber?: string) {
     }>(`
          ${PairFields}
          query pairs {
-            pairs(${blockNumber ? `block : {number: ${blockNumber}}` : ``} where: { id: "${pairAddress}"} ) {
+            pairs(${blockNumber ? `block : {number: ${blockNumber}}` : ''} where: { id: "${pairAddress}"} ) {
                 ...PairFields
             }
         }

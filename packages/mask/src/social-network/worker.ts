@@ -1,7 +1,7 @@
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { definedSocialNetworkWorkers } from './define'
 import type { SocialNetworkWorker } from './types'
-import type { ProfileIdentifier } from '@masknet/shared'
+import type { ProfileIdentifier } from '@masknet/shared-base'
 
 export const definedSocialNetworkWorkersResolved = new Set<SocialNetworkWorker.Definition>()
 
@@ -21,16 +21,7 @@ async function activateNetworkWorker(id: string): Promise<SocialNetworkWorker.De
     }
     throw new Error('Worker not found')
 }
-export type NetworkWorkerQuery = string | ProfileIdentifier
-export async function getNetworkWorker(network: NetworkWorkerQuery): Promise<SocialNetworkWorker.Definition> {
+export async function getNetworkWorker(network: string | ProfileIdentifier): Promise<SocialNetworkWorker.Definition> {
     if (typeof network === 'string') return activateNetworkWorker(network)
     return getNetworkWorker(network.network)
-}
-
-export function getNetworkWorkerUninitialized(
-    network: string | ProfileIdentifier,
-): SocialNetworkWorker.DeferredDefinition | undefined {
-    if (typeof network === 'string')
-        return [...definedSocialNetworkWorkers].find((x) => x.networkIdentifier === network)
-    return getNetworkWorkerUninitialized(network.network)
 }

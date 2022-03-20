@@ -1,7 +1,8 @@
 import { memo } from 'react'
 import { Avatar, Link, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { definedSocialNetworkUIs } from '../../../../../../social-network'
-import { ProfileIdentifier, ProfileInformation, SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
+import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
+import { ProfileIdentifier, ProfileInformation, EnhanceableSite } from '@masknet/shared-base'
 import { compact } from 'lodash-unified'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../../../utils'
@@ -68,7 +69,7 @@ export const ProfileList = memo(() => {
 
     const definedSocialNetworks = compact(
         [...definedSocialNetworkUIs.values()].map(({ networkIdentifier }) => {
-            if (networkIdentifier === 'localhost') return null
+            if (networkIdentifier === EnhanceableSite.Localhost) return null
             return networkIdentifier
         }),
     )

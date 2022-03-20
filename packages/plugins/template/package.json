@@ -1,0 +1,12 @@
+{
+  "name": "@masknet/plugin-template",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@masknet/plugin-infra": "workspace:*",
+    "@masknet/shared": "workspace:*",
+    "@masknet/shared-base": "workspace:*",
+    "react-use": "^17.3.2"
+  }
+}

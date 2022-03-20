@@ -1,26 +1,23 @@
 import { Trash2 as TrashIcon } from 'react-feather'
-import { Button } from '@mui/material'
+import { Button, Box, BoxProps } from '@mui/material'
 import { unreachable } from '@dimensiondev/kit'
 import {
     ERC20TokenDetailed,
     ERC721TokenDetailed,
     EthereumTokenType,
     FungibleTokenDetailed,
-    isNative,
+    isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import { useSnackbarCallback } from '@masknet/shared'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../utils'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
-// eslint-disable-next-line import/no-deprecated
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 import type { Wallet } from '@masknet/web3-shared-evm'
-import { Box, BoxProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 
 export function DashboardWalletHideTokenConfirmDialog(
-    // eslint-disable-next-line import/no-deprecated
     props: WrappedDialogProps<{ wallet: Wallet; token: FungibleTokenDetailed | ERC721TokenDetailed }>,
 ) {
     const { wallet, token } = props.ComponentProps!
@@ -52,7 +49,7 @@ export function DashboardWalletHideTokenConfirmDialog(
         props.onClose,
     )
 
-    if (isNative(tokenAddress)) return null
+    if (isNativeTokenAddress(tokenAddress)) return null
     return (
         <DashboardDialogCore fullScreen={false} {...props}>
             <DashboardDialogWrapper

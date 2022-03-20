@@ -1,0 +1,22 @@
+{
+    "CHAIN_ID": {
+        "Mainnet": "1027",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "1839",
+        "BSCT": "",
+        "Matic": "3890",
+        "Mumbai": "",
+        "Arbitrum": "11841",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "5601",
+        "Avalanche": "43114",
+        "Avalanche_Fuji": "",
+        "Celo": "5567",
+        "Fantom": "3513",
+        "Aurora": "1313161554",
+        "Aurora_Testnet": ""
+    }
+}

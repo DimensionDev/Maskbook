@@ -5,7 +5,7 @@ import { useAccount } from './useAccount'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { useTransactionState } from './useTransactionState'
 import { TransactionStateType, GasConfig, TransactionEventType } from '../types'
-import { isGreaterThan, isZero } from '../utils'
+import { isGreaterThan, isZero } from '@masknet/web3-shared-base'
 
 export function useERC20TokenTransferCallback(address?: string, amount?: string, recipient?: string) {
     const account = useAccount()

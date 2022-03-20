@@ -1,6 +1,5 @@
 import { regexMatch } from '../../../utils/utils'
 import { defaultTo, flattenDeep } from 'lodash-unified'
-import { nthChild } from '../../../utils/dom'
 import { canonifyImgUrl } from './url'
 import {
     makeTypedMessageText,
@@ -10,27 +9,8 @@ import {
     isTypedMessageEmpty,
     isTypedMessageText,
     TypedMessageText,
-} from '@masknet/shared'
+} from '@masknet/typed-message'
 import { collectNodeText, collectTwitterEmoji } from '../../../utils'
-
-/**
- * @example
- * parseNameArea("nickname@handle")
- */
-const parseNameArea = (nameArea: string) => {
-    const atIndex = nameArea.lastIndexOf('@')
-    const name = nameArea.slice(0, atIndex).replace(/\n+/g, '')
-    const handle = nameArea.slice(atIndex + 1).replace(/\n+/g, '')
-    return name && handle
-        ? {
-              name,
-              handle,
-          }
-        : {
-              name: '',
-              handle: '',
-          }
-}
 
 const parseId = (t: string) => {
     return regexMatch(t, /status\/(\d+)/, 1)!
@@ -52,25 +32,39 @@ export const postIdParser = (node: HTMLElement) => {
 
 export const postNameParser = (node: HTMLElement) => {
     const tweetElement = node.querySelector<HTMLElement>('[data-testid="tweet"]') ?? node
-    const nameElement = collectNodeText(tweetElement.querySelector<HTMLElement>('a[role] div[id]'))
-
-    const nameElementInQuoted = nthChild(tweetElement, 0, 0, 0, 0, 0)
-    const nameInQuoteTweet = nameElementInQuoted ? collectNodeText(nameElementInQuoted) : ''
-
-    return (
-        [nameElement, nameInQuoteTweet]
-            .filter((x) => x?.includes('@'))
-            .map(parseNameArea)
-            .find((r) => r.name && r.handle) ?? {
-            name: '',
-            handle: '',
-        }
+    const name = collectNodeText(
+        tweetElement.querySelector<HTMLElement>('a:not([target]) > div > div[dir="auto"] > span'),
     )
+    const handle = collectNodeText(tweetElement.querySelector<HTMLElement>('a[tabindex="-1"] span'))
+
+    if (name && handle) {
+        return {
+            name,
+            handle: handle.slice(1),
+        }
+    }
+    const quotedTweetName = collectNodeText(
+        tweetElement.querySelector<HTMLElement>('div[role="link"] div[dir="auto"] > span'),
+    )
+    const quotedTweetHandle = collectNodeText(
+        tweetElement.querySelector<HTMLElement>('div[role="link"] div[dir="ltr"] > span'),
+    )
+
+    if (quotedTweetName && quotedTweetHandle) {
+        return {
+            name: quotedTweetName,
+            handle: quotedTweetHandle.slice(1),
+        }
+    }
+    return {
+        name: '',
+        handle: '',
+    }
 }
 
 export const postAvatarParser = (node: HTMLElement) => {
     const tweetElement = node.querySelector('[data-testid="tweet"]') ?? node
-    const avatarElement = tweetElement.children[0].querySelector<HTMLImageElement>(`img[src*="twimg.com"]`)
+    const avatarElement = tweetElement.children[0].querySelector<HTMLImageElement>('img[src*="twimg.com"]')
     return avatarElement ? avatarElement.src : undefined
 }
 
@@ -90,7 +84,7 @@ export const postContentMessageParser = (node: HTMLElement) => {
             const href = anchor.getAttribute('title') ?? anchor.getAttribute('href')
             const content = anchor.textContent
             if (!content) return makeTypedMessageEmpty()
-            return makeTypedMessageAnchor(resolve(content), href ?? 'javascript: void 0;', content)
+            return makeTypedMessageAnchor(resolve(content), href ?? '', content)
         } else if (node instanceof HTMLImageElement) {
             const image = node
             const src = image.getAttribute('src')

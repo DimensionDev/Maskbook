@@ -8,7 +8,7 @@ import { useAsyncFn, useUpdateEffect } from 'react-use'
 import Services from '../../../../service'
 import { LoadingButton } from '@mui/lab'
 import { toUtf8 } from 'web3-utils'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()(() => ({
@@ -47,12 +47,22 @@ const useStyles = makeStyles()(() => ({
         lineHeight: '16px',
         flex: 1,
         wordBreak: 'break-all',
+        maxHeight: 260,
+        overflow: 'auto',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     controller: {
         display: 'grid',
         gridTemplateColumns: 'repeat(2, 1fr)',
         gap: 20,
         padding: 16,
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        width: '100%',
+        backgroundColor: '#ffffff',
     },
     button: {
         fontWeight: 600,
@@ -72,7 +82,7 @@ const useStyles = makeStyles()(() => ({
 
 const SignRequest = memo(() => {
     const { t } = useI18N()
-    const history = useHistory()
+    const navigate = useNavigate()
     const location = useLocation()
     const { classes } = useStyles()
     const { value, loading: requestLoading } = useUnconfirmedRequest()
@@ -80,7 +90,10 @@ const SignRequest = memo(() => {
     const [transferError, setTransferError] = useState(false)
 
     const { data, address } = useMemo(() => {
-        if (value?.computedPayload?.type === EthereumRpcType.SIGN) {
+        if (
+            value?.computedPayload?.type === EthereumRpcType.SIGN ||
+            value?.computedPayload?.type === EthereumRpcType.SIGN_TYPED_DATA
+        ) {
             let message = value.computedPayload.data
             try {
                 message = toUtf8(message)
@@ -109,15 +122,14 @@ const SignRequest = memo(() => {
     }, [value, location.search, history])
 
     const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
-        if (value) {
-            await Services.Ethereum.rejectRequest(value.payload)
-            history.replace(PopupRoutes.Wallet)
-        }
+        if (!value) return
+        await Services.Ethereum.rejectRequest(value.payload)
+        navigate(PopupRoutes.Wallet, { replace: true })
     }, [value])
 
     useUpdateEffect(() => {
         if (!value && !requestLoading) {
-            history.replace(PopupRoutes.Wallet)
+            navigate(PopupRoutes.Wallet, { replace: true })
         }
     }, [value, requestLoading])
 

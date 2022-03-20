@@ -1,8 +1,11 @@
-import { isZero, useChainId, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import { isZero } from '@masknet/web3-shared-base'
 import { TradeStrategy } from '../../types'
 import { toUniswapCurrencyAmount, toUniswapCurrency } from '../../helpers'
 import { useV2BestTradeExactIn, useV2BestTradeExactOut } from './useV2BestTrade'
 import { useV3BestTradeExactIn, useV3BestTradeExactOut } from './useV3BestTrade'
+import type { TradeProvider } from '@masknet/public-api'
+import { TargetChainIdContext } from '../useTargetChainIdContext'
 
 function useTrade(
     strategy: TradeStrategy = TradeStrategy.ExactIn,
@@ -19,8 +22,7 @@ function useTrade(
         !outputToken ||
         (inputAmount === '0' && isExactIn) ||
         (outputAmount === '0' && !isExactIn)
-
-    const chainId = useChainId()
+    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const inputCurrency = toUniswapCurrency(chainId, inputToken)
     const outputCurrency = toUniswapCurrency(chainId, outputToken)
     const tradeAmount = toUniswapCurrencyAmount(
@@ -38,6 +40,7 @@ function useTrade(
 }
 
 export function useV2Trade(
+    tradeProvider: TradeProvider,
     strategy: TradeStrategy = TradeStrategy.ExactIn,
     inputAmount: string,
     outputAmount: string,
@@ -52,10 +55,14 @@ export function useV2Trade(
         outputToken,
     )
 
-    //#region v2
-    const v2BestTradeExactIn = useV2BestTradeExactIn(isExactIn ? tradeAmount : undefined, outputCurrency)
-    const v2BestTradeExactOut = useV2BestTradeExactOut(inputCurrency, !isExactIn ? tradeAmount : undefined)
-    //#endregion
+    // #region v2
+    const v2BestTradeExactIn = useV2BestTradeExactIn(tradeProvider, isExactIn ? tradeAmount : undefined, outputCurrency)
+    const v2BestTradeExactOut = useV2BestTradeExactOut(
+        tradeProvider,
+        inputCurrency,
+        !isExactIn ? tradeAmount : undefined,
+    )
+    // #endregion
 
     const v2Trade = isExactIn ? v2BestTradeExactIn : v2BestTradeExactOut
 
@@ -66,6 +73,7 @@ export function useV2Trade(
             loading: false,
             value: null,
         }
+
     return {
         ...v2Trade,
         value: v2Trade.value,
@@ -87,10 +95,10 @@ export function useV3Trade(
         outputToken,
     )
 
-    //#region v2
+    // #region v3
     const v3BestTradeExactIn = useV3BestTradeExactIn(isExactIn ? tradeAmount : undefined, outputCurrency)
     const v3BestTradeExactOut = useV3BestTradeExactOut(inputCurrency, !isExactIn ? tradeAmount : undefined)
-    //#endregion
+    // #endregion
 
     const v3Trade = isExactIn ? v3BestTradeExactIn : v3BestTradeExactOut
 

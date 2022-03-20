@@ -1,9 +1,8 @@
 import { omit } from 'lodash-unified'
 import type BigNumber from 'bignumber.js'
 import type { Result } from 'ts-results'
-import { ChainId, isNative } from '@masknet/web3-shared-evm'
-import type { TypedMessage } from '../../../protocols/typed-message'
-import { createTypedMessageMetadataReader, createRenderWithMetadata } from '../../../protocols/typed-message/metadata'
+import { ChainId, isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { createRenderWithMetadata, createTypedMessageMetadataReader, type TypedMessage } from '@masknet/typed-message'
 import { ITO_MetaKey_1, ITO_MetaKey_2 } from '../constants'
 import type { JSON_PayloadInMask, JSON_PayloadOutMask } from '../types'
 import schemaV1 from '../schema-v1.json'
@@ -29,6 +28,7 @@ export function gcd(a: BigNumber, b: BigNumber) {
         b_ = a_
         a_ = temp
     }
+    // eslint-disable-next-line no-constant-condition
     while (true) {
         if (b_.isZero()) return a_
         a_ = a_.mod(b_)
@@ -40,8 +40,8 @@ export function gcd(a: BigNumber, b: BigNumber) {
 export function sortTokens(tokenA: { address: string }, tokenB: { address: string }) {
     const addressA = tokenA.address.toLowerCase()
     const addressB = tokenB.address.toLowerCase()
-    if (isNative(addressA)) return -1
-    if (isNative(addressB)) return 1
+    if (isNativeTokenAddress(addressA)) return -1
+    if (isNativeTokenAddress(addressB)) return 1
     return addressA < addressB ? -1 : 1
 }
 

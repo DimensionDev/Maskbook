@@ -1,10 +1,14 @@
-import { isTypedMessageEqual, isTypedMessageText, makeTypedMessageText, TypedMessage } from '@masknet/shared-base'
+import {
+    isTypedMessageEqual,
+    isTypedMessageText,
+    makeTypedMessageText,
+    TypedMessage,
+    editTypedMessageMeta,
+    SerializableTypedMessages,
+} from '@masknet/typed-message'
 import { makeStyles } from '@masknet/theme'
 import { InputBase, Alert, Button } from '@mui/material'
-import { useCallback, useImperativeHandle, useState } from 'react'
-import { useRef } from 'react'
-import { forwardRef, memo } from 'react'
-import { editTypedMessageMeta } from '../../protocols/typed-message'
+import { useCallback, useImperativeHandle, useState, useRef, forwardRef, memo } from 'react'
 import { useI18N } from '../../utils'
 import { BadgeRenderer } from './BadgeRenderer'
 
@@ -21,14 +25,14 @@ const useStyles = makeStyles()({
     },
 })
 export interface TypedMessageEditorProps {
-    defaultValue?: TypedMessage
+    defaultValue?: SerializableTypedMessages
     onChange?(message: TypedMessage): void
     readonly?: boolean
     autoFocus?: boolean
 }
 export interface TypedMessageEditorRef {
     /** Current message, it is a getter/setter. */
-    value: TypedMessage
+    value: SerializableTypedMessages
     /** The length of the current message. */
     readonly estimatedLength: number
     /** Clean the editor. */
@@ -55,7 +59,7 @@ export const TypedMessageEditor = memo(
         currentValue.current = value
 
         const setMessage = useCallback(
-            (value: TypedMessage) => {
+            (value: SerializableTypedMessages) => {
                 if (isTypedMessageEqual(currentValue.current, value)) return
                 setValue(value)
                 currentValue.current = value
@@ -106,8 +110,14 @@ export const TypedMessageEditor = memo(
             const reset = () => setAsText('')
             // We don't have an rich text editor yet.
             return (
-                <Alert severity="error" action={<Button onClick={reset}>Reset editor</Button>}>
-                    Only TypedMessageText is supported currently.
+                <Alert
+                    severity="error"
+                    action={
+                        <Button onClick={reset}>
+                            {t('reset')} {t('editor')}
+                        </Button>
+                    }>
+                    {t('typed_message_text_alert')}
                 </Alert>
             )
         }

@@ -2,7 +2,7 @@ import { FC, useState } from 'react'
 import { DialogContent } from '@mui/material'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { makeStyles } from '@masknet/theme'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { GasOption } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../../utils'
@@ -39,12 +39,13 @@ export const GasSettingDialog: FC = () => {
                     onGasLimitChange={setGasLimit}
                     gasOption={gasOption}
                     onGasOptionChange={setGasOption}
-                    onConfirm={({ gasPrice, gasLimit, maxFee, gasOption }) => {
+                    onConfirm={({ gasPrice, gasLimit, maxFee, priorityFee, gasOption }) => {
                         setDialog({
                             open: false,
                             gasOption,
                             gasPrice,
                             gasLimit,
+                            priorityFee,
                             maxFee,
                         })
                     }}

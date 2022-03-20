@@ -32,7 +32,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
 
         const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
 
-        //#region Get gas options from debank
+        // #region Get gas options from debank
         const { value: gasOptions, loading: getGasOptionsLoading } = useAsync(async () => {
             const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
             if (!response) return { slow: 0, standard: 0, fast: 0 }
@@ -42,7 +42,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                 fast: response.data.fast.price,
             }
         }, [chainId])
-        //#endregion
+        // #endregion
 
         const options = useMemo(
             () => [
@@ -69,7 +69,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
         const schema = useMemo(() => {
             return zod.object({
                 gasLimit: zod
-                    .number()
+                    .string()
                     .min(1, t('wallet_transfer_error_gas_limit_absence'))
                     .refine(
                         (gasLimit) => new BigNumber(gasLimit).gte(minGasLimit),
@@ -89,7 +89,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
             mode: 'onChange',
             resolver: zodResolver(schema),
             defaultValues: {
-                gasLimit: gasLimit ?? 0,
+                gasLimit: new BigNumber(gasLimit ?? 0).toString(),
                 gasPrice: '',
             },
             context: {
@@ -100,7 +100,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
         const [inputGasLimit] = watch(['gasLimit'])
 
         useUpdateEffect(() => {
-            if (gasLimit) setValue('gasLimit', gasLimit)
+            if (gasLimit) setValue('gasLimit', new BigNumber(gasLimit).toString())
         }, [gasLimit, setValue])
 
         useEffect(() => {

@@ -1,3 +1,4 @@
+/* eslint-disable @dimensiondev/unicode-specific-set */
 import { MenuItem } from '@mui/material'
 import { useLanguage } from '../api'
 import { Services } from '../../../API'
@@ -18,15 +19,10 @@ export default function LanguageSetting() {
         <SettingSelect value={lang} onChange={handleChange}>
             <MenuItem value={LanguageOptions.__auto__}>{t.settings_language_auto()}</MenuItem>
             <MenuItem value={LanguageOptions.enUS}>English</MenuItem>
-            {process.env.channel !== 'stable' && <MenuItem value={LanguageOptions.zhCN}>简体中文</MenuItem>}
+            <MenuItem value={LanguageOptions.zhCN}>简体中文</MenuItem>
             <MenuItem value={LanguageOptions.zhTW}>繁体中文</MenuItem>
             <MenuItem value={LanguageOptions.jaJP}>日本語</MenuItem>
             <MenuItem value={LanguageOptions.koKR}>한국인</MenuItem>
-            {process.env.channel !== 'stable' && <MenuItem value={LanguageOptions.esES}>lengua española</MenuItem>}
-            {process.env.channel !== 'stable' && <MenuItem value={LanguageOptions.itIT}>lingua italiana</MenuItem>}
-            {process.env.channel !== 'stable' && <MenuItem value={LanguageOptions.frFR}>langue française</MenuItem>}
-            {process.env.channel !== 'stable' && <MenuItem value={LanguageOptions.ruRU}>русский язык</MenuItem>}
-            {process.env.channel !== 'stable' && <MenuItem value={LanguageOptions.faIR}>زبان فارسی</MenuItem>}
         </SettingSelect>
     )
 }

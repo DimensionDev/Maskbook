@@ -7,51 +7,53 @@ import {
     EthereumTokenType,
     ProviderType,
     Web3ProviderType,
-    resolveProviderIdentityKey,
+    resolveProviderInjectedKey,
     isInjectedProvider,
+    AddressNameType,
+    createWeb3,
+    ChainId,
+    createContract,
+    isSameAddress,
 } from '@masknet/web3-shared-evm'
-import { bridgedEthereumProvider } from '@masknet/injected-script'
+import { isPopupPage } from '@masknet/shared-base'
+import { bridgedCoin98Provider, bridgedEthereumProvider } from '@masknet/injected-script'
 import {
-    currentBlockNumberSettings,
-    currentBalanceSettings,
     currentAccountSettings,
     currentNetworkSettings,
     currentProviderSettings,
     currentChainIdSettings,
-    currentPortfolioDataProviderSettings,
+    currentFungibleAssetDataProviderSettings,
     currentTokenPricesSettings,
     currentMaskWalletChainIdSettings,
     currentMaskWalletNetworkSettings,
     currentMaskWalletAccountSettings,
-    currentMaskWalletBalanceSettings,
 } from '../plugins/Wallet/settings'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import type { InternalSettings } from '../settings/createSettings'
-import { Flags } from '../../shared'
-import { createExternalProvider } from './helpers'
+import { Flags, isAndroidApp } from '../../shared'
 import Services from '../extension/service'
+import { getProxyWebsocketInstance } from '@masknet/web3-shared-base'
+import { TokenList, Twitter } from '@masknet/web3-providers'
+import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
+import type { AbiItem } from 'web3-utils'
+import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
+import CryptoPunks from '@masknet/web3-contracts/abis/CryptoPunks.json'
+
+const PUNK_CONTRACT_ADDRESS = '0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb'
+async function getTokenOwner(address: string, tokenId: string) {
+    const web3 = createWeb3(Services.Ethereum.request, () => ({
+        chainId: ChainId.Mainnet,
+    }))
+    if (isSameAddress(address, PUNK_CONTRACT_ADDRESS)) {
+        const PUNKContract = createContract(web3, PUNK_CONTRACT_ADDRESS, CryptoPunks as AbiItem[])
+        return PUNKContract?.methods.punkIndexToAddress(tokenId).call()
+    }
+    const ERC721Contract = createContract<ERC721>(web3, address, ERC721ABI as AbiItem[])
+    return ERC721Contract?.methods.ownerOf(tokenId).call()
+}
 
 function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderType {
-    const Web3Provider = createExternalProvider(
-        () =>
-            isMask
-                ? {
-                      account: currentMaskWalletAccountSettings.value,
-                      chainId: currentMaskWalletChainIdSettings.value,
-                      providerType: ProviderType.MaskWallet,
-                  }
-                : {
-                      account: currentAccountSettings.value,
-                      chainId: currentChainIdSettings.value,
-                      providerType: currentProviderSettings.value,
-                  },
-        () => ({
-            popupsWindow: !disablePopup,
-        }),
-    )
-
     return {
-        provider: createStaticSubscription(() => Web3Provider),
         allowTestnet: createStaticSubscription(() => Flags.wallet_allow_testnet),
         chainId: createSubscriptionFromSettings(isMask ? currentMaskWalletChainIdSettings : currentChainIdSettings),
         account: createSubscriptionFromAsync(
@@ -67,13 +69,16 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
                 const account = isMask ? currentMaskWalletAccountSettings.value : currentAccountSettings.value
                 const providerType = currentProviderSettings.value
 
-                if (location.href.includes('popups.html')) return account
+                if (isPopupPage()) return account
+                if (providerType === ProviderType.Fortmatic) return account
                 if (!isInjectedProvider(providerType)) return account
 
                 try {
-                    const propertyKey = resolveProviderIdentityKey(providerType)
-                    if (!propertyKey) return ''
-                    const propertyValue = await bridgedEthereumProvider.getProperty(propertyKey)
+                    const bridgedProvider =
+                        providerType === ProviderType.Coin98 ? bridgedCoin98Provider : bridgedEthereumProvider
+                    const injectedKey = resolveProviderInjectedKey(providerType)
+                    if (!injectedKey) return ''
+                    const propertyValue = await bridgedProvider.getProperty(injectedKey)
                     if (propertyValue === true) return account
                     return ''
                 } catch (error) {
@@ -88,8 +93,6 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
                 return () => void [a(), b(), c()]
             },
         ),
-        balance: createSubscriptionFromSettings(isMask ? currentMaskWalletBalanceSettings : currentBalanceSettings),
-        blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
         tokenPrices: createSubscriptionFromSettings(currentTokenPricesSettings),
         walletPrimary: createSubscriptionFromAsync(
             WalletRPC.getWalletPrimary,
@@ -116,18 +119,53 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
             [],
             WalletMessages.events.erc1155TokensUpdated.on,
         ),
-        portfolioProvider: createSubscriptionFromSettings(currentPortfolioDataProviderSettings),
+        portfolioProvider: createSubscriptionFromSettings(currentFungibleAssetDataProviderSettings),
 
         addToken: WalletRPC.addToken,
         removeToken: WalletRPC.removeToken,
         trustToken: WalletRPC.trustToken,
         blockToken: WalletRPC.blockToken,
 
+        request: Services.Ethereum.request,
+        getSendOverrides: () =>
+            isMask
+                ? {
+                      account: currentMaskWalletAccountSettings.value,
+                      chainId: currentMaskWalletChainIdSettings.value,
+                      providerType: ProviderType.MaskWallet,
+                  }
+                : {
+                      account: currentAccountSettings.value,
+                      chainId: currentChainIdSettings.value,
+                      providerType: currentProviderSettings.value,
+                  },
+        getRequestOptions: () => ({ popupsWindow: !disablePopup }),
+
         getAssetsList: WalletRPC.getAssetsList,
         getAssetsListNFT: WalletRPC.getAssetsListNFT,
-        getAddressNamesList: WalletRPC.getAddressNames,
+        getCollectionsNFT: WalletRPC.getCollectionsNFT,
+        getAddressNamesList: async (identity: Parameters<typeof WalletRPC.getAddressNames>[0]) => {
+            const addressNames = await WalletRPC.getAddressNames(identity)
+            if (identity.identifier.network === 'twitter.com') {
+                const result = await Twitter.getUserNftContainer(identity.identifier.userId ?? '')
+                if (result?.type_name.toUpperCase() === 'ERC721') {
+                    const contractAddress = await getTokenOwner(result.address, result.token_id)
+                    if (contractAddress)
+                        return [
+                            ...addressNames,
+                            {
+                                type: AddressNameType.TWITTER_BLUE,
+                                label: contractAddress,
+                                resolvedAddress: contractAddress,
+                            },
+                        ]
+                }
+            }
+            return addressNames
+        },
         getTransactionList: WalletRPC.getTransactionList,
-        fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
+        fetchERC20TokensFromTokenLists: TokenList.fetchERC20TokensFromTokenLists,
+        providerSocket: getProxyWebsocketInstance((info) => WalletMessages.events.socketMessageUpdated.sendToAll(info)),
     }
 }
 
@@ -187,16 +225,25 @@ function createSubscriptionFromAsync<T>(
         trigger()
     }
     return {
-        getCurrentValue: () => {
-            if (isLoading) throw init
-            return state
-        },
+        getCurrentValue: isAndroidApp
+            ? () => state
+            : () => {
+                  if (isLoading) throw init
+                  return state
+              },
         subscribe: (sub) => {
             const a = subscribe(sub)
-            const b = onChange(() => {
-                beats += 1
-                if (beats === 1) flush()
-            })
+            const b = onChange(
+                isAndroidApp
+                    ? async () => {
+                          beats += 1
+                          if (beats === 1) await flush()
+                      }
+                    : () => {
+                          beats += 1
+                          if (beats === 1) flush()
+                      },
+            )
             return () => void [a(), b()]
         },
     }
@@ -204,7 +251,7 @@ function createSubscriptionFromAsync<T>(
 function getEventTarget() {
     const event = new EventTarget()
     const EVENT = 'event'
-    let timer: NodeJS.Timeout
+    let timer: ReturnType<typeof setTimeout>
     function trigger() {
         clearTimeout(timer)
         // delay to update state to ensure that all settings to be synced globally

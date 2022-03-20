@@ -1,0 +1,1 @@
+export { decryptionWithSocialNetworkDecoding } from './decryption'

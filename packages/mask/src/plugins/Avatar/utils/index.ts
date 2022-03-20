@@ -1,74 +1,56 @@
+import { isNull } from 'lodash-unified'
+import { ChainId, NonFungibleAssetProvider, formatBalance } from '@masknet/web3-shared-evm'
+import { EVM_RPC } from '../../EVM/messages'
+import Services from '../../../extension/service'
+import { getOrderUnitPrice, NonFungibleTokenAPI } from '@masknet/web3-providers'
+import { ZERO } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
-import { head, isNull } from 'lodash-unified'
-import { PluginCollectibleRPC } from '../../Collectible/messages'
-import { getLastSalePrice, getOrderUnitPrice, getOrderUSDPrice } from '../../Collectible/utils'
-import { ChainId, createERC721Token, EthereumTokenType } from '@masknet/web3-shared-evm'
-import type { AssetOrder } from '../../Collectible/types'
+
+function getLastSalePrice(lastSale?: NonFungibleTokenAPI.AssetEvent | null) {
+    if (!lastSale?.total_price || !lastSale?.payment_token?.decimals) return
+    return formatBalance(lastSale.total_price, lastSale.payment_token.decimals)
+}
 
 export async function getNFT(address: string, tokenId: string) {
-    const asset = await PluginCollectibleRPC.getAsset(address, tokenId, ChainId.Mainnet)
-
-    let orders: AssetOrder[] = []
-    if (asset.sell_orders?.length) {
-        orders = asset.sell_orders
-    } else if (asset.orders?.length) {
-        orders = asset.orders
-    } else if (asset.buy_orders?.length) {
-        orders = asset.buy_orders
-    }
-
-    const order = head(
-        orders.sort((a, b) =>
-            new BigNumber(
-                getOrderUSDPrice(
-                    b.current_price,
-                    b.payment_token_contract?.usd_price,
-                    b.payment_token_contract?.decimals,
-                ) ?? 0,
-            )
-                .minus(
-                    getOrderUSDPrice(
-                        a.current_price,
-                        a.payment_token_contract?.usd_price,
-                        a.payment_token_contract?.decimals,
-                    ) ?? 0,
-                )
-                .toNumber(),
-        ),
-    )
-
+    const asset = await EVM_RPC.getAsset({
+        address,
+        tokenId,
+        chainId: ChainId.Mainnet,
+        provider: NonFungibleAssetProvider.OPENSEA,
+    })
+    const amount =
+        getOrderUnitPrice(
+            asset?.desktopOrder?.current_price,
+            asset?.desktopOrder?.payment_token_contract?.decimals ?? 0,
+            asset?.desktopOrder?.quantity ?? '1',
+        ) ??
+        getLastSalePrice(asset?.last_sale) ??
+        ZERO
     return {
-        amount: order
-            ? new BigNumber(
-                  getOrderUnitPrice(order.current_price, order.payment_token_contract?.decimals, order.quantity) ?? 0,
-              ).toFixed()
-            : getLastSalePrice(asset.last_sale) ?? '0',
-        name: asset.name,
-        symbol: order?.payment_token_contract?.symbol ?? asset.last_sale?.payment_token?.symbol ?? 'ETH',
-        image: asset.image_url_original ?? asset.image_url ?? asset.image_preview_url ?? '',
-        owner: asset.owner.address,
+        amount: new BigNumber(amount).toFixed(),
+        name: asset?.name ?? '',
+        symbol: asset?.desktopOrder?.payment_token_contract?.symbol ?? 'ETH',
+        image: asset?.image_url ?? '',
+        owner: asset?.top_ownerships[0].owner.address ?? '',
+        slug: asset?.slug ?? '',
     }
 }
 
 export async function createNFT(address: string, tokenId: string) {
-    const asset = await PluginCollectibleRPC.getAsset(address, tokenId, ChainId.Mainnet)
-    const token = createERC721Token(
-        {
-            chainId: ChainId.Mainnet,
-            type: EthereumTokenType.ERC721,
-            name: asset.asset_contract.name,
-            symbol: asset.asset_contract.token_symbol,
-            address: asset.asset_contract.address,
-        },
-        {
-            name: asset.name,
-            description: asset.description,
-            image: asset.image_url_original ?? asset.image_url ?? asset.image_preview_url ?? '',
-            owner: asset.top_ownerships[0].owner.address,
-        },
-        tokenId,
-    )
-    return token
+    return EVM_RPC.getNFT({ address, tokenId, chainId: ChainId.Mainnet, provider: NonFungibleAssetProvider.OPENSEA })
+}
+
+export async function getImage(image: string): Promise<string> {
+    const blob = await Services.Helper.fetch(image)
+    return (await blobToBase64(blob)) as string
+}
+
+function blobToBase64(blob: Blob) {
+    return new Promise((resolve, _) => {
+        const reader = new FileReader()
+        reader.onloadend = () => resolve(reader.result)
+        reader.readAsDataURL(blob)
+    })
 }
 
 export function toPNG(image: string) {
@@ -90,4 +72,22 @@ export function toPNG(image: string) {
         img.setAttribute('CrossOrigin', 'Anonymous')
         img.src = image
     })
+}
+
+export function formatPrice(amount: string, symbol: string) {
+    const _amount = new BigNumber(amount ?? '0')
+    if (_amount.isZero()) return ''
+    if (_amount.isLessThan(1)) return `${_amount.toFixed(2)} ${symbol}`
+    if (_amount.isLessThan(1e3)) return `${_amount.toFixed(1)} ${symbol}`
+    if (_amount.isLessThan(1e6)) return `${_amount.div(1e6).toFixed(1)}K ${symbol}`
+    return `${_amount.div(1e6).toFixed(1)}M ${symbol}`
+}
+
+export function formatText(name: string, tokenId: string) {
+    const _name = name.replace(/#\d*/, '').trim()
+    let token = tokenId
+    if (tokenId.length > 10) {
+        token = tokenId.slice(0, 6) + '...' + tokenId.slice(-4)
+    }
+    return `${_name} #${token}`
 }

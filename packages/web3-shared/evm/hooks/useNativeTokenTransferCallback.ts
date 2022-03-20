@@ -5,7 +5,7 @@ import { useAccount } from './useAccount'
 import { useChainId } from './useChainId'
 import { useTransactionState } from './useTransactionState'
 import { useWeb3 } from './useWeb3'
-import { isGreaterThan, isZero } from '../utils'
+import { isGreaterThan, isZero } from '@masknet/web3-shared-base'
 import { TransactionStateType, GasConfig } from '../types'
 
 export function useNativeTransferCallback() {

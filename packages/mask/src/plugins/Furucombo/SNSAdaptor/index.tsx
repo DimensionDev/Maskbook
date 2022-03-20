@@ -1,10 +1,8 @@
-import { Suspense, useMemo } from 'react'
-import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
-import { SnackbarContent } from '@mui/material'
+import { useMemo } from 'react'
+import { Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra'
 import { base } from '../base'
-import { extractTextFromTypedMessage } from '../../../protocols/typed-message'
-import { parseURL } from '../../../utils/utils'
-import MaskPluginWrapper from '../../MaskPluginWrapper'
+import { extractTextFromTypedMessage } from '@masknet/typed-message'
+import { parseURL } from '@masknet/shared-base'
 import { FurucomboView } from '../UI/FurucomboView'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
@@ -15,17 +13,16 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     DecryptedInspector: function Comp(props) {
-        const text = useMemo(() => extractTextFromTypedMessage(props.message), [props.message])
-        const link = useMemo(() => parseURL(text.val || ''), [text.val]).find(isFurucomboLink)
-        if (!text.ok) return null
+        const link = useMemo(() => {
+            const x = extractTextFromTypedMessage(props.message)
+            if (x.none) return null
+            return parseURL(x.val).find(isFurucomboLink)
+        }, [props.message])
         if (!link) return null
         return <Renderer url={link} />
     },
     PostInspector: function Component() {
-        const link = usePostInfoDetails
-            .postMetadataMentionedLinks()
-            .concat(usePostInfoDetails.postMentionedLinks())
-            .find(isFurucomboLink)
+        const link = usePostInfoDetails.mentionedLinks().find(isFurucomboLink)
         if (!link) return null
         return <Renderer url={link} />
     },
@@ -33,15 +30,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
 
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     const [, category, chainId, address] = props.url.match(matchLink) ?? []
-
+    usePluginWrapper(true)
     return (
-        <MaskPluginWrapper pluginName="Furucombo">
-            <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
-                <EthereumChainBoundary chainId={Number.parseInt(chainId, 10)}>
-                    <FurucomboView category={category} address={address} />
-                </EthereumChainBoundary>
-            </Suspense>
-        </MaskPluginWrapper>
+        <EthereumChainBoundary chainId={Number.parseInt(chainId, 10)}>
+            <FurucomboView category={category} address={address} />
+        </EthereumChainBoundary>
     )
 }
 

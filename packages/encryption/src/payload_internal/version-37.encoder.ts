@@ -12,7 +12,7 @@ const enum Index {
     data = 6,
 }
 export async function encode37(payload: PayloadWellFormed.Payload) {
-    const payload_arr: any[] = [-37]
+    const payload_arr: any[] = [0]
 
     if (payload.author.some) {
         const { network, userId } = payload.author.val
@@ -50,7 +50,7 @@ export async function encode37(payload: PayloadWellFormed.Payload) {
 }
 function warn(key: CryptoKey, err: any) {
     console.warn(
-        `[@masknet/encryption] Failed to encode a public key object into spki format. key is`,
+        '[@masknet/encryption] Failed to encode a public key object into spki format. key is',
         key,
         'and the error is',
         err,

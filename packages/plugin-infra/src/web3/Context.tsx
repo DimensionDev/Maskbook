@@ -2,7 +2,7 @@ import React, { createContext, useContext, useMemo } from 'react'
 import { createContainer } from 'unstated-next'
 import { useSubscription } from 'use-subscription'
 import { CurrencyType, NetworkPluginID, Web3Plugin } from '../web3-types'
-import { createConstantSubscription } from '@masknet/shared'
+import { createConstantSubscription } from '@masknet/shared-base'
 
 // constant subscriptions
 const ZERO = createConstantSubscription(0)
@@ -10,6 +10,7 @@ const ZERO_STRING = createConstantSubscription('0')
 const USD_CURRENCY = createConstantSubscription(CurrencyType.USD)
 const EMPTY_STRING = createConstantSubscription('')
 const EMPTY_ARRAY = createConstantSubscription([])
+const EMPTY_OBJECT = createConstantSubscription({})
 const FALSE = createConstantSubscription(false)
 const NULL = createConstantSubscription(null)
 
@@ -30,8 +31,6 @@ function usePluginWeb3State(pluginID: string, context: Record<string, Web3Plugin
     const allowTestnet = useSubscription(Shared?.allowTestnet ?? FALSE)
     const chainId = useSubscription(Shared?.chainId ?? ZERO)
     const account = useSubscription(Shared?.account ?? EMPTY_STRING)
-    const balance = useSubscription(Shared?.balance ?? ZERO_STRING)
-    const blockNumber = useSubscription(Shared?.blockNumber ?? ZERO)
     const networkType = useSubscription(Shared?.networkType ?? EMPTY_STRING)
     const providerType = useSubscription(Shared?.providerType ?? EMPTY_STRING)
     const assetType = useSubscription(Shared?.assetType ?? EMPTY_STRING)
@@ -49,8 +48,6 @@ function usePluginWeb3State(pluginID: string, context: Record<string, Web3Plugin
         allowTestnet,
         chainId,
         account,
-        balance,
-        blockNumber,
         networkType,
         providerType,
         assetType,
@@ -70,12 +67,14 @@ function usePluginsWeb3State() {
     const context = usePluginsWeb3Context()
     const pluginStateEVM = usePluginWeb3State(NetworkPluginID.PLUGIN_EVM, context)
     const pluginStateFlow = usePluginWeb3State(NetworkPluginID.PLUGIN_FLOW, context)
+    const pluginStateSolana = usePluginWeb3State(NetworkPluginID.PLUGIN_SOLANA, context)
     return useMemo(
         () => ({
             [NetworkPluginID.PLUGIN_EVM]: pluginStateEVM,
             [NetworkPluginID.PLUGIN_FLOW]: pluginStateFlow,
+            [NetworkPluginID.PLUGIN_SOLANA]: pluginStateSolana,
         }),
-        [pluginStateEVM, pluginStateFlow],
+        [pluginStateEVM, pluginStateFlow, pluginStateSolana],
     )
 }
 

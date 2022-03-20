@@ -1,13 +1,14 @@
 import { memo } from 'react'
-import { Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { MoreHoriz } from '@mui/icons-material'
 import { EditIcon, MaskWalletIcon } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
-import { useHistory, useRouteMatch } from 'react-router-dom'
+import { useNavigate, useLocation, useMatch } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
-import { useWallet, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, useWallet } from '@masknet/web3-shared-evm'
 import { CopyIconButton } from '../../../../components/CopyIconButton'
+import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()({
     container: {
@@ -20,6 +21,7 @@ const useStyles = makeStyles()({
     left: {
         display: 'flex',
         alignItems: 'center',
+        flex: 1,
     },
     name: {
         display: 'flex',
@@ -63,12 +65,13 @@ const useStyles = makeStyles()({
 
 export const WalletInfo = memo(() => {
     const wallet = useWallet()
-    const history = useHistory()
+    const navigate = useNavigate()
+    const address = new URLSearchParams(useLocation().search).get('address')
 
-    const excludePath = useRouteMatch({
-        path: PopupRoutes.WalletSettings,
-        exact: true,
-    })
+    const { value: domain } = useReverseAddress(address ?? wallet?.address, NetworkPluginID.PLUGIN_EVM)
+    const { Utils } = useWeb3State()
+
+    const excludePath = useMatch(PopupRoutes.WalletSettings)
 
     if (!wallet) return null
 
@@ -76,9 +79,11 @@ export const WalletInfo = memo(() => {
         <WalletInfoUI
             name={wallet.name ?? ''}
             address={wallet.address}
-            onEditClick={() => history.push(PopupRoutes.WalletRename)}
-            onSettingClick={() => history.push(PopupRoutes.WalletSettings)}
+            onEditClick={() => navigate(PopupRoutes.WalletRename)}
+            onSettingClick={() => navigate(PopupRoutes.WalletSettings)}
             hideSettings={!!excludePath}
+            domain={domain}
+            formatDomainName={Utils?.formatDomainName}
         />
     )
 })
@@ -89,31 +94,41 @@ export interface WalletInfoUIProps {
     onSettingClick: () => void
     onEditClick: () => void
     hideSettings: boolean
+    domain?: string
+    formatDomainName?: (domain?: string, size?: number) => string | undefined
 }
 
-export const WalletInfoUI = memo<WalletInfoUIProps>(({ name, address, onSettingClick, onEditClick, hideSettings }) => {
-    const { classes } = useStyles()
-    return (
-        <div className={classes.container}>
-            <div className={classes.left}>
-                <div className={classes.walletBackground}>
-                    <MaskWalletIcon />
-                </div>
-                <div>
-                    {name && (
-                        <Typography className={classes.name}>
-                            {name} <EditIcon onClick={onEditClick} className={classes.edit} />
+export const WalletInfoUI = memo<WalletInfoUIProps>(
+    ({ name, address, onSettingClick, onEditClick, hideSettings, domain, formatDomainName }) => {
+        const { classes } = useStyles()
+
+        return (
+            <div className={classes.container}>
+                <div className={classes.left}>
+                    <div className={classes.walletBackground}>
+                        <MaskWalletIcon />
+                    </div>
+                    <div>
+                        {name && (
+                            <Box display="flex" justifyContent="space-between" alignItems="center">
+                                <Typography className={classes.name}>
+                                    {name} <EditIcon onClick={onEditClick} className={classes.edit} />
+                                </Typography>
+                                {domain && formatDomainName ? (
+                                    <Typography className={classes.name}>{formatDomainName(domain)}</Typography>
+                                ) : null}
+                            </Box>
+                        )}
+                        <Typography className={classes.address}>
+                            <FormattedAddress address={address} size={16} formatter={formatEthereumAddress} />
+                            <CopyIconButton text={address ?? ''} className={classes.copy} />
                         </Typography>
-                    )}
-                    <Typography className={classes.address}>
-                        <FormattedAddress address={address} size={12} formatter={formatEthereumAddress} />
-                        <CopyIconButton text={address ?? ''} className={classes.copy} />
-                    </Typography>
+                    </div>
                 </div>
+                {!hideSettings ? (
+                    <MoreHoriz color="primary" style={{ cursor: 'pointer' }} onClick={onSettingClick} />
+                ) : null}
             </div>
-            {!hideSettings ? (
-                <MoreHoriz color="primary" style={{ cursor: 'pointer' }} onClick={onSettingClick} />
-            ) : null}
-        </div>
-    )
-})
+        )
+    },
+)

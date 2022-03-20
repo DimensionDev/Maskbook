@@ -1,13 +1,12 @@
 import { memo, useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { PersonaContext } from '../../hooks/usePersonaContext'
-import type { PersonaInformation } from '@masknet/shared-base'
+import type { PersonaInformation, ECKeyIdentifier } from '@masknet/shared-base'
 import { ListItemButton, List, Typography } from '@mui/material'
 import { DeleteIcon, MasksIcon } from '@masknet/icons'
 import { formatFingerprint } from '@masknet/shared'
 import { PopupRoutes } from '@masknet/shared-base'
-import { useHistory } from 'react-router-dom'
-import type { ECKeyIdentifier } from '@masknet/shared-base'
+import { useNavigate } from 'react-router-dom'
 import Services from '../../../../../service'
 
 const useStyles = makeStyles()((theme) => ({
@@ -54,12 +53,12 @@ const useStyles = makeStyles()((theme) => ({
 
 export const PersonaList = memo(() => {
     const { personas, setDeletingPersona } = PersonaContext.useContainer()
-    const history = useHistory()
+    const navigate = useNavigate()
 
     const onLogout = useCallback(
         (persona: PersonaInformation) => {
             setDeletingPersona(persona)
-            history.push(PopupRoutes.Logout)
+            navigate(PopupRoutes.Logout)
         },
         [setDeletingPersona],
     )

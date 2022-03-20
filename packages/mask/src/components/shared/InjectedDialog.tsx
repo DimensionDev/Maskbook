@@ -1,3 +1,4 @@
+import { Children, cloneElement } from 'react'
 import {
     DialogActions,
     DialogClassKey,
@@ -9,18 +10,14 @@ import {
     Typography,
     useTheme,
     Dialog,
-    // see https://github.com/import-js/eslint-plugin-import/issues/2288
-    // eslint-disable-next-line import/no-deprecated
     useMediaQuery,
 } from '@mui/material'
 import { makeStyles, useDialogStackActor, useStylesExtends, mergeClasses } from '@masknet/theme'
-import { Children, cloneElement } from 'react'
+import { EnhanceableSite, isDashboardPage } from '@masknet/shared-base'
+import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { useI18N, usePortalShadowRoot } from '../../utils'
 import { DialogDismissIconUI } from '../InjectedComponents/DialogDismissIcon'
-import { ErrorBoundary } from '@masknet/shared'
 import { activatedSocialNetworkUI } from '../../social-network'
-import { MINDS_ID } from '../../social-network-adaptor/minds.com/base'
-import { FACEBOOK_ID } from '../../social-network-adaptor/facebook.com/base'
 
 interface StyleProps {
     snsId: string
@@ -31,16 +28,20 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
         padding: theme.spacing(1, 2),
         borderBottom: `1px solid ${theme.palette.divider}`,
     },
+    dialogContent: {
+        overscrollBehavior: 'contain',
+    },
     dialogTitleTypography: {
         marginLeft: 6,
         verticalAlign: 'middle',
     },
-    dialogBackdropRoot: {},
     dialogCloseButton: {
         color: theme.palette.text.primary,
     },
     paper: {
-        ...(snsId === MINDS_ID || snsId === FACEBOOK_ID ? { width: 'auto', backgroundImage: 'none' } : {}),
+        ...(snsId === EnhanceableSite.Minds || snsId === EnhanceableSite.Facebook
+            ? { width: 'auto', backgroundImage: 'none' }
+            : {}),
     },
 }))
 
@@ -58,6 +59,7 @@ export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'titl
     onClose?(): void
     title?: React.ReactChild
     disableBackdropClick?: boolean
+    disableTitleBorder?: boolean
     titleBarIconStyle?: 'auto' | 'back' | 'close'
 }
 
@@ -78,11 +80,10 @@ export function InjectedDialog(props: InjectedDialogProps) {
         props,
         overwrite.InjectedDialog?.classes,
     )
-    // see https://github.com/import-js/eslint-plugin-import/issues/2288
-    // eslint-disable-next-line import/no-deprecated
     const fullScreen = useMediaQuery(useTheme().breakpoints.down('xs'))
-
-    const { children, open, disableBackdropClick, titleBarIconStyle, onClose, title, ...rest } = props
+    const isDashboard = isDashboardPage()
+    const { children, open, disableBackdropClick, titleBarIconStyle, onClose, title, disableTitleBorder, ...rest } =
+        props
     const { t } = useI18N()
     const actions = CopyElementWithNewProps(children, DialogActions, { root: dialogActions })
     const content = CopyElementWithNewProps(children, DialogContent, { root: dialogContent })
@@ -113,13 +114,21 @@ export function InjectedDialog(props: InjectedDialogProps) {
                 {...extraProps}>
                 <ErrorBoundary>
                     {title ? (
-                        <DialogTitle className="dashboard-dialog-title-hook" classes={{ root: dialogTitle }}>
+                        <DialogTitle
+                            className="dashboard-dialog-title-hook"
+                            classes={{ root: dialogTitle }}
+                            style={{
+                                border: isDashboard || disableTitleBorder ? 'none' : undefined,
+                                fontSize: isDashboard ? 24 : undefined,
+                            }}>
                             <IconButton
                                 size="large"
                                 classes={{ root: dialogCloseButton }}
                                 aria-label={t('post_dialog__dismiss_aria')}
                                 onClick={onClose}>
-                                <DialogDismissIconUI style={shouldReplaceExitWithBack ? 'back' : titleBarIconStyle} />
+                                <DialogDismissIconUI
+                                    style={shouldReplaceExitWithBack && !isDashboard ? 'back' : titleBarIconStyle}
+                                />
                             </IconButton>
                             <Typography className={dialogTitleTypography} display="inline" variant="inherit">
                                 {title}

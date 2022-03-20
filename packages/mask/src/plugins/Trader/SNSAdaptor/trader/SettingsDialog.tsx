@@ -1,35 +1,17 @@
 import { useState, useCallback, useEffect } from 'react'
-import stringify from 'json-stable-stringify'
-import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary,
-    Button,
-    Card,
-    CardActions,
-    CardContent,
-    DialogContent,
-    Paper,
-    Switch,
-    Typography,
-} from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useValueRef, useRemoteControlledDialog } from '@masknet/shared'
-import { TradeProvider } from '@masknet/public-api'
-import { getEnumAsArray } from '@dimensiondev/kit'
+import { Accordion, AccordionDetails, AccordionSummary, Alert, DialogContent, Typography } from '@mui/material'
+import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
+import { useValueRef, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../../utils'
-import { ZrxTradePool } from '../../types'
 import { SlippageSlider } from './SlippageSlider'
-import {
-    currentSingleHopOnlySettings,
-    currentSlippageSettings,
-    currentTradeProviderSettings,
-    getCurrentTradeProviderGeneralSettings,
-} from '../../settings'
-import { SLIPPAGE_DEFAULT } from '../../constants'
+import { currentSlippageSettings } from '../../settings'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { PluginTraderMessages } from '../../messages'
-import { useSingleHopOnly } from '../../trader/uniswap/useSingleHopOnly'
+import { ExpandMore } from '@mui/icons-material'
+import { Gas1559Settings } from './Gas1559Settings'
+import { GasPrior1559Settings } from './GasPrior1559Settings'
+import { GasOptionConfig, isEIP1559Supported, useChainId } from '@masknet/web3-shared-evm'
+import { InfoIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -40,15 +22,38 @@ const useStyles = makeStyles()((theme) => {
         },
         heading: {
             flex: 1,
+            fontWeight: 500,
+            fontSize: 16,
+            lineHeight: '22px',
+        },
+        summary: {
+            padding: 0,
         },
         accordion: {
-            backgroundColor: theme.palette.background.default,
+            backgroundColor: 'inherit',
         },
-        details: {
+        slippage: {
             display: 'flex',
+            paddingLeft: 10,
+            paddingRight: 10,
+        },
+        alert: {
+            backgroundColor: MaskColorVar.twitterInfoBackground.alpha(0.1),
+            color: MaskColorVar.redMain,
+            marginTop: 12,
+            fontSize: 12,
+            lineHeight: '16px',
+            padding: '12px 20px',
+            display: 'flex',
+            alignItems: 'center',
+        },
+        warningIcon: {
+            color: MaskColorVar.redMain,
         },
     }
 })
+
+const WARNING_SLIPPAGE = 1000
 
 export interface SettingsDialogProps extends withClasses<'root'> {}
 
@@ -56,78 +61,75 @@ export function SettingsDialog(props: SettingsDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const provider = useValueRef(currentTradeProviderSettings)
     const slippage = useValueRef(currentSlippageSettings)
-    const singleHopOnly = useSingleHopOnly()
-    const [unconfirmedSlippage, setUnconfirmedSlippage] = useState(slippage)
+    const chainId = useChainId()
 
-    //#region remote controlled dialog
-    const { open, closeDialog } = useRemoteControlledDialog(PluginTraderMessages.swapSettingsUpdated)
-    //#endregion
+    const [gasConfig, setGasConfig] = useState<GasOptionConfig>()
+    const [unconfirmedSlippage, setUnconfirmedSlippage] = useState(slippage)
+    const [warningVisible, setWarningVisible] = useState(unconfirmedSlippage >= WARNING_SLIPPAGE)
+
+    // #region remote controlled dialog
+    const { open, setDialog, closeDialog } = useRemoteControlledDialog(PluginTraderMessages.swapSettingsUpdated)
+    // #endregion
 
     useEffect(() => {
         setUnconfirmedSlippage(slippage)
     }, [slippage])
 
-    const onSubmit = useCallback(() => {
-        currentSlippageSettings.value = unconfirmedSlippage
-        closeDialog()
-    }, [unconfirmedSlippage, closeDialog])
+    useEffect(() => {
+        setWarningVisible(unconfirmedSlippage >= WARNING_SLIPPAGE)
+    }, [unconfirmedSlippage])
 
-    const onReset = useCallback(() => {
-        currentSlippageSettings.value = SLIPPAGE_DEFAULT
-        if (provider === TradeProvider.ZRX)
-            getCurrentTradeProviderGeneralSettings(provider).value = stringify({
-                pools: getEnumAsArray(ZrxTradePool).map((x) => x.value),
+    const onSaveSlippage = useCallback(() => {
+        currentSlippageSettings.value = unconfirmedSlippage
+    }, [unconfirmedSlippage])
+
+    const onSubmit = useCallback(
+        (gasConfig?: GasOptionConfig) => {
+            setGasConfig(gasConfig)
+            setDialog({
+                open: false,
+                gasConfig,
             })
-    }, [provider])
+        },
+        [closeDialog],
+    )
 
     return (
-        <InjectedDialog open={open} onClose={closeDialog} title={t('plugin_trader_swap_settings')} maxWidth="xs">
+        <InjectedDialog open={open} onClose={closeDialog} title={t('plugin_trader_slippage_tolerance')}>
             <DialogContent>
-                <Paper component="section" elevation={0}>
-                    <Card elevation={0}>
-                        <CardContent>
-                            <Accordion className={classes.accordion} elevation={0}>
-                                <AccordionSummary>
-                                    <Typography className={classes.heading}>
-                                        {t('plugin_trader_slippage_tolerance')}
-                                    </Typography>
-                                    <Typography>{unconfirmedSlippage / 100}%</Typography>
-                                </AccordionSummary>
-                                <AccordionDetails className={classes.details}>
-                                    <SlippageSlider value={unconfirmedSlippage} onChange={setUnconfirmedSlippage} />
-                                </AccordionDetails>
-                            </Accordion>
-                            {provider === TradeProvider.UNISWAP_V3 ? (
-                                <Accordion className={classes.accordion} elevation={0} expanded={false}>
-                                    <AccordionSummary>
-                                        <Typography className={classes.heading}>
-                                            {t('plugin_trader_single_hop_only')}
-                                        </Typography>
-                                        <Switch
-                                            color="primary"
-                                            size="small"
-                                            checked={singleHopOnly}
-                                            onChange={(ev) => {
-                                                ev.stopPropagation()
-                                                currentSingleHopOnlySettings.value = ev.target.checked
-                                            }}
-                                        />
-                                    </AccordionSummary>
-                                </Accordion>
-                            ) : null}
-                        </CardContent>
-                        <CardActions className={classes.footer}>
-                            <Button variant="text" onClick={onSubmit}>
-                                {t('confirm')}
-                            </Button>
-                            <Button variant="text" onClick={onReset}>
-                                {t('reset')}
-                            </Button>
-                        </CardActions>
-                    </Card>
-                </Paper>
+                <Accordion className={classes.accordion} elevation={0} defaultExpanded>
+                    <AccordionSummary className={classes.summary} expandIcon={<ExpandMore />}>
+                        <Typography className={classes.heading}>{t('plugin_trader_max_slippage')}</Typography>
+                        <Typography>{unconfirmedSlippage / 100}%</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails className={classes.slippage}>
+                        <SlippageSlider value={unconfirmedSlippage} onChange={setUnconfirmedSlippage} />
+                    </AccordionDetails>
+                    {warningVisible ? (
+                        <Alert
+                            className={classes.alert}
+                            severity="info"
+                            icon={<InfoIcon className={classes.warningIcon} />}>
+                            {t('plugin_trader_slippage_warning')}
+                        </Alert>
+                    ) : null}
+                </Accordion>
+                {isEIP1559Supported(chainId) ? (
+                    <Gas1559Settings
+                        onCancel={closeDialog}
+                        onSave={onSubmit}
+                        gasConfig={gasConfig}
+                        onSaveSlippage={onSaveSlippage}
+                    />
+                ) : (
+                    <GasPrior1559Settings
+                        onCancel={closeDialog}
+                        onSave={onSubmit}
+                        gasConfig={gasConfig}
+                        onSaveSlippage={onSaveSlippage}
+                    />
+                )}
             </DialogContent>
         </InjectedDialog>
     )

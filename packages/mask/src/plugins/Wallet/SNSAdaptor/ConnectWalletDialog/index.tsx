@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { DialogContent } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { safeUnreachable } from '@dimensiondev/kit'
+import { safeUnreachable, delay } from '@dimensiondev/kit'
 import {
     ChainId,
     getChainDetailedCAIP,
@@ -12,17 +12,15 @@ import {
     resolveNetworkName,
     resolveProviderName,
 } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared'
-import { delay } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { WalletMessages, WalletRPC } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
 import Services from '../../../../extension/service'
-import { useInjectedProviderType } from '../../../EVM/hooks'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
-        padding: theme.spacing(5),
+        padding: theme.spacing(2.5),
     },
 }))
 
@@ -30,12 +28,11 @@ export interface ConnectWalletDialogProps {}
 
 export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
-    const injectedProviderType = useInjectedProviderType()
 
     const [providerType, setProviderType] = useState<ProviderType | undefined>()
     const [networkType, setNetworkType] = useState<NetworkType | undefined>()
 
-    //#region remote controlled dialog
+    // #region remote controlled dialog
     const { open, setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.connectWalletDialogUpdated,
         (ev) => {
@@ -44,13 +41,13 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             setNetworkType(ev.networkType)
         },
     )
-    //#endregion
+    // #endregion
 
-    //#region walletconnect
+    // #region walletconnect
     const { setDialog: setWalletConnectDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletConnectQRCodeDialogUpdated,
     )
-    //#endregion
+    // #endregion
 
     const connectTo = useCallback(async () => {
         if (!networkType) throw new Error('Unknown network type.')
@@ -92,6 +89,9 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             case ProviderType.MathWallet:
                 ;({ account, chainId } = await Services.Ethereum.connectInjected())
                 break
+            case ProviderType.Fortmatic:
+                ;({ account, chainId } = await Services.Ethereum.connectFortmatic(expectedChainId))
+                break
             case ProviderType.CustomNetwork:
                 throw new Error('To be implemented.')
             default:
@@ -102,22 +102,27 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
         // connection failed
         if (!account || !networkType) throw new Error(`Failed to connect to ${resolveProviderName(providerType)}.`)
 
-        // need to switch chain
+        // switch to the expected chain
         if (chainId !== expectedChainId) {
             try {
                 const overrides = {
                     chainId: expectedChainId,
                     providerType,
                 }
-                await Promise.race([
-                    (async () => {
-                        await delay(30 /* seconds */ * 1000 /* milliseconds */)
-                        throw new Error('Timeout!')
-                    })(),
-                    networkType === NetworkType.Ethereum
-                        ? Services.Ethereum.switchEthereumChain(ChainId.Mainnet, overrides)
-                        : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account, overrides),
-                ])
+
+                // the coin98 wallet cannot handle add/switch RPC provider correctly
+                // it will always add a new RPC provider even if the network exists
+                if (providerType !== ProviderType.Coin98) {
+                    await Promise.race([
+                        (async () => {
+                            await delay(30 /* seconds */ * 1000 /* milliseconds */)
+                            throw new Error('Timeout!')
+                        })(),
+                        networkType === NetworkType.Ethereum
+                            ? Services.Ethereum.switchEthereumChain(ChainId.Mainnet, overrides)
+                            : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account, overrides),
+                    ])
+                }
 
                 // recheck
                 const chainIdHex = await Services.Ethereum.getChainId(overrides)
@@ -135,7 +140,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             providerType,
         })
         return true as const
-    }, [networkType, providerType, injectedProviderType])
+    }, [networkType, providerType])
 
     const connection = useAsyncRetry<true>(async () => {
         if (!open) return true

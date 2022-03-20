@@ -4,14 +4,15 @@ import { createReactRootShadowed, startWatch } from '../../../../utils'
 import { Flags } from '../../../../../shared'
 import { getInjectNodeInfo } from '../../utils/avatar'
 import { postAvatarsContentSelector } from '../../utils/selector'
+import { NFTAvatarMiniClip } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip'
+import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 
 function getTwitterId(ele: HTMLElement) {
     const twitterIdNode = (ele.firstChild?.nextSibling as HTMLElement).querySelector(
         '[dir="ltr"] > span',
     ) as HTMLSpanElement
     if (!twitterIdNode) return
-    const twitterId = twitterIdNode.innerText.trim().replace('@', '')
-    return twitterId
+    return twitterIdNode.innerText.trim().replace('@', '')
 }
 
 function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
@@ -35,16 +36,21 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                     <div
                         style={{
                             position: 'absolute',
-                            left: -2,
-                            top: -2,
-                            zIndex: -1,
+                            left: 0,
+                            top: 0,
+                            zIndex: 2,
                         }}>
-                        <NFTBadgeTimeline
-                            userId={twitterId}
-                            avatarId={info.avatarId}
-                            width={info.width}
-                            height={info.height}
-                        />
+                        {info.isTwitterNFT ? (
+                            <NFTAvatarMiniClip width={info.width} height={info.height} screenName={twitterId} />
+                        ) : (
+                            <NFTBadgeTimeline
+                                userId={twitterId}
+                                avatarId={info.avatarId}
+                                width={info.width - 4}
+                                height={info.height - 4}
+                                snsKey={RSS3_KEY_SNS.TWITTER}
+                            />
+                        )}
                     </div>,
                 )
                 remover = root.destory

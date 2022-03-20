@@ -1,13 +1,12 @@
-import type { Plugin } from '@masknet/plugin-infra'
+import { Plugin, usePluginWrapper } from '@masknet/plugin-infra'
 import { base } from '../base'
 import { useMemo, Suspense } from 'react'
 import { Skeleton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { PostInspector } from './PostInspector'
 import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
-import { extractTextFromTypedMessage } from '../../../protocols/typed-message'
-import { parseURL } from '@masknet/shared'
+import { extractTextFromTypedMessage } from '@masknet/typed-message'
+import { parseURL } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -25,24 +24,23 @@ const isSnapshotURL = (x: string): boolean =>
 
 function Renderer({ url }: { url: string }) {
     const { classes } = useStyles()
+    usePluginWrapper(true)
+    const fallbackUI = Array.from({ length: 2 })
+        .fill(0)
+        .map((_, i) => (
+            <Skeleton
+                key={i}
+                className={classes.skeleton}
+                animation="wave"
+                variant="rectangular"
+                width={i === 0 ? '80%' : '60%'}
+                height={15}
+            />
+        ))
     return (
-        <MaskPluginWrapper pluginName="Snapshot">
-            <Suspense
-                fallback={Array.from({ length: 2 })
-                    .fill(0)
-                    .map((_, i) => (
-                        <Skeleton
-                            key={i}
-                            className={classes.skeleton}
-                            animation="wave"
-                            variant="rectangular"
-                            width={i === 0 ? '80%' : '60%'}
-                            height={15}
-                        />
-                    ))}>
-                <PostInspector url={url} />
-            </Suspense>
-        </MaskPluginWrapper>
+        <Suspense fallback={fallbackUI}>
+            <PostInspector url={url} />
+        </Suspense>
     )
 }
 
@@ -50,14 +48,16 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     DecryptedInspector: function Component(props): JSX.Element | null {
-        const text = useMemo(() => extractTextFromTypedMessage(props.message), [props.message])
-        const link = useMemo(() => parseURL(text.val || ''), [text.val]).find(isSnapshotURL)
-        if (!text.ok) return null
+        const link = useMemo(() => {
+            const x = extractTextFromTypedMessage(props.message)
+            if (x.none) return null
+            return parseURL(x.val).find(isSnapshotURL)
+        }, [props.message])
         if (!link) return null
         return <Renderer url={link} />
     },
     PostInspector: function Component(): JSX.Element | null {
-        const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks())
+        const links = usePostInfoDetails.mentionedLinks()
 
         const link = links.find(isSnapshotURL)
         if (!link) return null

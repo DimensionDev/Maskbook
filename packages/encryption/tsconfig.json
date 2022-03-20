@@ -3,9 +3,8 @@
   "compilerOptions": {
     "rootDir": "./src/",
     "outDir": "./dist/",
-    "tsBuildInfoFile": "./dist/.tsbuildinfo",
-    "stripInternal": true
+    "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
   "include": ["./src/**/*"],
-  "references": [{ "path": "../shared-base" }]
+  "references": [{ "path": "../shared-base" }, { "path": "../typed-message/base" }]
 }

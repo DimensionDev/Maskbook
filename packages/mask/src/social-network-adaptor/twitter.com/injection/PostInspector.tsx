@@ -1,3 +1,4 @@
+/* eslint @dimensiondev/unicode-specific-set: ["error", { "only": "code" }] */
 import type { PostInfo } from '../../../social-network/PostInfo'
 import { injectPostInspectorDefault } from '../../../social-network/defaults/inject/PostInspector'
 import { twitterEncoding } from '../encoding'
@@ -20,7 +21,7 @@ export function injectPostInspectorAtTwitter(signal: AbortSignal, current: PostI
                 // match (.) (\n) (—§—) (any space) (/*)
                 // Note: In Chinese we can't hide dom because "解密这条推文。\n—§—" is in the same DOM
                 // hide it will break the sentence.
-                if (span.innerText.match(/^\.\n—§— +\/\* $/)) hideDOM(span)
+                if (span.innerText.match(/^\.\n\u2014\u00A7\u2014 +\/\* $/)) hideDOM(span)
                 // match (any space) (*/) (any space)
                 if (span.innerText.match(/^ +\*\/ ?$/)) hideDOM(span)
             }

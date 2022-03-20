@@ -1,11 +1,9 @@
 import { useMemo } from 'react'
-import { useAccount, useMultipleContractSingleData } from '@masknet/web3-shared-evm'
+import { useAccount, useMultipleContractSingleData, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { usePoolTogetherTicketContracts } from '../contracts/usePoolTogetherTicket'
 import type { PoolTogetherTicket } from '@masknet/web3-contracts/types/PoolTogetherTicket'
 import { useAsyncRetry } from 'react-use'
 import type { AccountPool, Pool } from '../types'
-
-const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 /**
  * A callback for getting account balances of ticket pools

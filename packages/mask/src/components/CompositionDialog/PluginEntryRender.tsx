@@ -1,18 +1,20 @@
 import {
-    useActivatedPluginSNSAdaptor_withSupportOperateChain,
+    usePluginIDContext,
+    useActivatedPluginSNSAdaptor_Web3Supported,
     useActivatedPluginsSNSAdaptor,
     Plugin,
+    PluginI18NFieldRender,
+    usePluginI18NField,
 } from '@masknet/plugin-infra'
-import { ErrorBoundary } from '@masknet/shared'
+import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { Result } from 'ts-results'
-import { PluginI18NFieldRender, usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
 import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
 import { ITO_PluginID } from '../../plugins/ITO/constants'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState, useRef, forwardRef, memo, useImperativeHandle } from 'react'
 import { useChainId } from '@masknet/web3-shared-evm'
-
+import { Trans } from 'react-i18next'
 const useStyles = makeStyles()({
     sup: {
         paddingLeft: 2,
@@ -26,8 +28,9 @@ export const PluginEntryRender = memo(
         const [trackPluginRef] = useSetPluginEntryRenderRef(ref)
         const pluginField = usePluginI18NField()
         const chainId = useChainId()
-        const operatingSupportedChainMapping = useActivatedPluginSNSAdaptor_withSupportOperateChain(chainId)
-        const result = [...useActivatedPluginsSNSAdaptor()]
+        const pluginID = usePluginIDContext()
+        const operatingSupportedChainMapping = useActivatedPluginSNSAdaptor_Web3Supported(chainId, pluginID)
+        const result = [...useActivatedPluginsSNSAdaptor('any')]
             .sort((plugin) => {
                 // TODO: support priority order
                 if (plugin.ID === RedPacketPluginID || plugin.ID === ITO_PluginID) return -1
@@ -92,7 +95,7 @@ const CustomEntry = memo(
                 label={
                     <>
                         <PluginI18NFieldRender field={label} pluginID={id} />
-                        {unstable && <sup className={classes.sup}>(Beta)</sup>}
+                        {unstable && <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />}
                     </>
                 }
                 onClick={onClick}
@@ -115,7 +118,7 @@ const DialogEntry = memo(
                 label={
                     <>
                         <PluginI18NFieldRender field={label} pluginID={id} />
-                        {unstable && <sup className={classes.sup}>(Beta)</sup>}
+                        {unstable && <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />}
                     </>
                 }
                 disabled={props.readonly}

@@ -7,7 +7,7 @@ import { useAsyncFn } from 'react-use'
 import { PersonaContext } from '../hooks/usePersonaContext'
 import Services from '../../../../service'
 import { LoadingButton } from '@mui/lab'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import type { PersonaInformation } from '@masknet/shared-base'
 import { formatFingerprint } from '@masknet/shared'
@@ -84,7 +84,7 @@ const useStyles = makeStyles()((theme) => ({
 
 const Logout = memo(() => {
     const { deletingPersona } = PersonaContext.useContainer()
-    const history = useHistory()
+    const navigate = useNavigate()
     const backupPassword = useMemo(() => {
         try {
             const password = localStorage.getItem('backupPassword')
@@ -96,17 +96,14 @@ const Logout = memo(() => {
     }, [])
 
     const [{ loading }, onLogout] = useAsyncFn(async () => {
-        if (deletingPersona) {
-            await Services.Identity.logoutPersona(deletingPersona.identifier)
-            const currentPersona = await Services.Settings.getCurrentPersonaIdentifier()
-            if (!currentPersona) {
-                const lastCreatedPersona = await Services.Identity.queryLastPersonaCreated()
-                if (lastCreatedPersona)
-                    await Services.Settings.setCurrentPersonaIdentifier(lastCreatedPersona.identifier)
-            }
-
-            history.replace(PopupRoutes.Personas)
+        if (!deletingPersona) return
+        await Services.Identity.logoutPersona(deletingPersona.identifier)
+        const currentPersona = await Services.Settings.getCurrentPersonaIdentifier()
+        if (!currentPersona) {
+            const lastCreatedPersona = await Services.Identity.queryLastPersonaCreated()
+            if (lastCreatedPersona) await Services.Settings.setCurrentPersonaIdentifier(lastCreatedPersona.identifier)
         }
+        navigate(PopupRoutes.Personas, { replace: true })
     }, [deletingPersona, history])
     return (
         <LogoutUI
@@ -114,7 +111,7 @@ const Logout = memo(() => {
             backupPassword={backupPassword ?? ''}
             loading={loading}
             onLogout={onLogout}
-            onCancel={() => history.goBack()}
+            onCancel={() => navigate(-1)}
         />
     )
 })

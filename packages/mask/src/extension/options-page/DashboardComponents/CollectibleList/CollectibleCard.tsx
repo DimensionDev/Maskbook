@@ -1,16 +1,8 @@
-import { Card, Link } from '@mui/material'
+import { Card, Link, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import {
-    Wallet,
-    useChainId,
-    ERC721TokenDetailed,
-    resolveCollectibleLink,
-    CollectibleProvider,
-} from '@masknet/web3-shared-evm'
-import { Image } from '../../../../components/shared/Image'
-import { MaskSharpIconOfSize } from '../../../../resources/MaskIcon'
+import { Wallet, ERC721TokenDetailed, resolveCollectibleLink, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { ActionsBarNFT } from '../ActionsBarNFT'
-import { Video } from '../../../../components/shared/Video'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -18,8 +10,11 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 4,
-        position: 'relative',
-        backgroundColor: theme.palette.background.paper,
+        position: 'absolute',
+        zIndex: 1,
+        backgroundColor: theme.palette.mode === 'light' ? '#F7F9FA' : '#2F3336',
+        width: 172,
+        height: 172,
     },
     icon: {
         top: theme.spacing(1),
@@ -34,46 +29,64 @@ const useStyles = makeStyles()((theme) => ({
         height: 64,
         opacity: 0.1,
     },
-    video: {
-        width: 160,
-        height: 220,
+    loadingFailImage: {
+        minHeight: '0px !important',
+        maxWidth: 'none',
+        width: 64,
+        height: 64,
+    },
+    wrapper: {
+        width: '172px !important',
+        height: '172px !important',
+    },
+    blocker: {
+        position: 'absolute',
+        zIndex: 2,
+        width: 172,
+        height: 172,
+    },
+    linkWrapper: {
+        position: 'relative',
+        display: 'block',
+        width: 172,
+        height: 172,
     },
 }))
 
 export interface CollectibleCardProps {
-    provider: CollectibleProvider
+    provider: NonFungibleAssetProvider
     wallet?: Wallet
     token: ERC721TokenDetailed
     readonly?: boolean
+    renderOrder: number
 }
 
 export function CollectibleCard(props: CollectibleCardProps) {
-    const { wallet, token, provider, readonly } = props
+    const { wallet, token, provider, readonly, renderOrder } = props
     const { classes } = useStyles()
-    const chainId = useChainId()
-
-    const isVideo = token.info.image?.match(/\.(mp4|webm|mov|ogg|mp3|wav)$/i)
+    const theme = useTheme()
     return (
-        <Link target="_blank" rel="noopener noreferrer" href={resolveCollectibleLink(chainId, provider, token)}>
-            <Card className={classes.root} style={{ width: 160, height: 220 }}>
+        <Link
+            target="_blank"
+            rel="noopener noreferrer"
+            className={classes.linkWrapper}
+            href={resolveCollectibleLink(token.contractDetailed.chainId, provider, token)}>
+            <div className={classes.blocker} />
+            <Card className={classes.root}>
                 {readonly || !wallet ? null : (
                     <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} token={token} />
                 )}
-                {token.info.image ? (
-                    isVideo ? (
-                        <Video src={token.info.image} VideoProps={{ className: classes.video }} />
-                    ) : (
-                        <Image
-                            component="img"
-                            width={160}
-                            height={220}
-                            style={{ objectFit: 'contain' }}
-                            src={token.info.image}
-                        />
-                    )
-                ) : (
-                    <MaskSharpIconOfSize classes={{ root: classes.placeholderIcon }} size={22} />
-                )}
+                <NFTCardStyledAssetPlayer
+                    contractAddress={token.contractDetailed.address}
+                    chainId={token.contractDetailed.chainId}
+                    url={token.info.mediaUrl}
+                    renderOrder={renderOrder}
+                    tokenId={token.tokenId}
+                    classes={{
+                        loadingFailImage: classes.loadingFailImage,
+                        wrapper: classes.wrapper,
+                    }}
+                />
             </Card>
         </Link>
     )

@@ -10,10 +10,9 @@ import {
     resolveTransactionLinkOnExplorer,
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../messages'
-import { JSON_RPC_ErrorCode } from '../constants'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -48,7 +47,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
 
     const chainId = useChainId()
 
-    //#region remote controlled dialog
+    // #region remote controlled dialog
     const [state, setState] = useState<TransactionState | null>(null)
     const [shareLink, setShareLink] = useState('')
     const [summary, setSummary] = useState('')
@@ -68,7 +67,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
         if (shareLink) window.open(shareLink, '_blank', 'noopener noreferrer')
         closeDialog()
     }, [shareLink, closeDialog])
-    //#endregion
+    // #endregion
 
     if (!state) return null
     return (
@@ -129,20 +128,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
                     <>
                         <WarningIcon className={classes.icon} />
                         <Typography className={classes.primary} color="textPrimary">
-                            {
-                                // it is trick, log(e) print {"code": 4001 ...}, log(e.code) print -1
-                                state.error.message === 'MetaMask Message Signature: User denied message signature.'
-                                    ? t('plugin_wallet_cancel_sign')
-                                    : state.error.message.includes('User denied transaction signature.')
-                                    ? t('plugin_wallet_transaction_rejected')
-                                    : state.error.code === JSON_RPC_ErrorCode.INTERNAL_ERROR ||
-                                      state.error.message.includes(`"code":${JSON_RPC_ErrorCode.INTERNAL_ERROR}`) ||
-                                      (state.error.code &&
-                                          state.error.code <= JSON_RPC_ErrorCode.SERVER_ERROR_RANGE_START &&
-                                          state.error.code >= JSON_RPC_ErrorCode.SERVER_ERROR_RANGE_END)
-                                    ? t('plugin_wallet_transaction_server_error')
-                                    : state.error.message
-                            }
+                            {state.error.message}
                         </Typography>
                     </>
                 ) : null}

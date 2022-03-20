@@ -6,12 +6,12 @@ import { first } from 'lodash-unified'
 import { createTransaction } from '../../../../background/database/utils/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import type { LegacyWalletRecord } from '../database/types'
-import { HexStringToUint8Array as hex2buf, Uint8ArrayToHexString as buf2hex } from '../../../../utils-pure'
+import { fromHex, toHex } from '@masknet/shared-base'
 import { currySameAddress, isSameAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { LegacyWalletRecordOutDB } from './helpers'
 import { currentAccountSettings, currentProviderSettings } from '../settings'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../constants'
-import { hasNativeAPI } from '../../../utils/native-rpc'
+import { hasNativeAPI } from '../../../../shared/native-rpc'
 import { getAccounts } from '../../../extension/background-script/EthereumService'
 
 function sortWallet(a: LegacyWalletRecord, b: LegacyWalletRecord) {
@@ -92,7 +92,7 @@ async function makePrivateKey(record: LegacyWalletRecord) {
     const { privateKey } = record._private_key_
         ? await recoverWalletFromPrivateKey(record._private_key_)
         : await recoverWalletFromMnemonicWords(record.mnemonic, record.passphrase, record.path)
-    return `0x${buf2hex(privateKey)}`
+    return `0x${toHex(privateKey)}`
 }
 
 export async function freezeLegacyWallet(address: string) {
@@ -125,7 +125,7 @@ async function recoverWalletFromMnemonicWords(
         address: EthereumAddress.from(walletPublicKey).address,
         privateKey: walletPrivateKey,
         privateKeyValid: true,
-        privateKeyInHex: `0x${buf2hex(walletPrivateKey)}`,
+        privateKeyInHex: `0x${toHex(walletPrivateKey)}`,
         path,
         mnemonic,
         passphrase,
@@ -138,7 +138,7 @@ async function recoverWalletFromPrivateKey(privateKey: string) {
     const key = ec.keyFromPrivate(privateKey_)
     return {
         address: EthereumAddress.from(key.getPublic(false, 'array') as any).address,
-        privateKey: hex2buf(privateKey_),
+        privateKey: fromHex(privateKey_),
         privateKeyValid: privateKeyVerify(privateKey_),
         privateKeyInHex: privateKey.startsWith('0x') ? privateKey : `0x${privateKey}`,
         mnemonic: [],

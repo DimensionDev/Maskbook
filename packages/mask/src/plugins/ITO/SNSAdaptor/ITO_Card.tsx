@@ -7,7 +7,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '../../Wallet/messages'
 import { useMaskClaimCallback } from './hooks/useMaskClaimCallback'
 import { useMaskITO_Packet } from './hooks/useMaskITO_Packet'
@@ -40,7 +40,7 @@ const useStyles = makeStyles()((theme) => ({
         color: '#fff',
     },
     button: {
-        //TODO: https://github.com/mui-org/material-ui/issues/25011
+        // TODO: https://github.com/mui-org/material-ui/issues/25011
         '&[disabled]': {
             opacity: 0.5,
             color: '#fff',
@@ -61,14 +61,14 @@ export function ITO_Card(props: ITO_CardProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { value: packet, loading: packetLoading, error: packetError, retry: packetRetry } = useMaskITO_Packet()
 
-    //#region claim
+    // #region claim
     const [claimState, claimCallback, resetClaimCallback] = useMaskClaimCallback()
     const onClaimButtonClick = useCallback(() => {
         claimCallback()
     }, [claimCallback])
-    //#endregion
+    // #endregion
 
-    //#region transaction dialog
+    // #region transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
     const postLink = usePostLink()
     const shareLink = activatedSocialNetworkUI.utils
@@ -109,14 +109,14 @@ export function ITO_Card(props: ITO_CardProps) {
             summary: `Claiming ${formatBalance(packet.claimable, 18, 6)} ${token?.symbol ?? 'Token'}.`,
         })
     }, [claimState /* update tx dialog only if state changed */])
-    //#endregion
+    // #endregion
 
-    //#region update parent amount
+    // #region update parent amount
     useEffect(() => {
         if (!packet) return
         onUpdateAmount(packet.claimable)
     }, [packet, onUpdateAmount])
-    //#endregion
+    // #endregion
 
     if (!token) return null
 
@@ -142,7 +142,7 @@ export function ITO_Card(props: ITO_CardProps) {
                 <Box className={classes.content}>
                     <Typography>{packetError.message}</Typography>
                     <ActionButton className={classes.button} variant="contained" onClick={() => packetRetry()}>
-                        Retry
+                        {t('retry')}
                     </ActionButton>
                 </Box>
             </Box>
@@ -152,7 +152,7 @@ export function ITO_Card(props: ITO_CardProps) {
         <Box className={classes.root}>
             <Box className={classes.content}>
                 <Box display="flex" flexDirection="column" justifyContent="space-between">
-                    <Typography>ITO locked:</Typography>
+                    <Typography>{t('plugin_ito_locked')}</Typography>
                     <Typography className={classes.amount}>
                         {packet && packet.claimable !== '0'
                             ? formatBalance(packet.claimable, token.decimals, 6)
@@ -169,7 +169,7 @@ export function ITO_Card(props: ITO_CardProps) {
                                 packet.claimable === '0'
                             }
                             onClick={onClaimButtonClick}>
-                            Claim
+                            {t('plugin_ito_claim')}
                         </ActionButton>
                     </Box>
                 ) : null}
@@ -177,7 +177,9 @@ export function ITO_Card(props: ITO_CardProps) {
             {packet ? (
                 <Box className={classes.ITOAlertContainer}>
                     <Alert icon={false} className={classes.ITOAlert}>
-                        ITO Mask unlock time is {new Date(Number.parseInt(packet.unlockTime, 10) * 1000).toUTCString()}.
+                        {t('plugin_ito_unlock_time_cert', {
+                            date: new Date(Number.parseInt(packet.unlockTime, 10) * 1000).toUTCString(),
+                        })}
                     </Alert>
                 </Box>
             ) : null}

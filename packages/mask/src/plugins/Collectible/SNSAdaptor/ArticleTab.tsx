@@ -1,40 +1,49 @@
-import type { FC } from 'react'
-import { Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { Video } from '../../../components/shared/Video'
 import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
+import { AssetPlayer } from '@masknet/shared'
+import { useMemo } from 'react'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     body: {
         display: 'flex',
         justifyContent: 'center',
+        minHeight: 300,
     },
     player: {
         maxWidth: '100%',
         maxHeight: '100%',
         border: 'none',
     },
-})
-
-interface AssetPlayerProps {
-    src?: string
-    alt: string
-}
-
-// opensea supports: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV, OGG, GLB, GLTF.
-const AssetPlayer: FC<AssetPlayerProps> = ({ src, alt }) => {
-    const { classes } = useStyles()
-    if (!src) {
-        return null
-    }
-    const isVideo = src.match(/\.(mp4|webm)$/i)
-    if (isVideo) {
-        return <Video src={src} VideoProps={{ className: classes.player }} />
-    } else {
-        return <img className={classes.player} src={src} alt={alt} />
-    }
-}
+    errorPlaceholder: {
+        padding: '82px 0',
+        backgroundColor: theme.palette.background.default,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 12,
+        width: '100%',
+    },
+    loadingPlaceholder: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        padding: '74px 0',
+    },
+    loadingIcon: {
+        width: 36,
+        height: 52,
+    },
+    errorIcon: {
+        width: 36,
+        height: 36,
+    },
+    iframe: {
+        minWidth: 300,
+        minHeight: 300,
+    },
+}))
 
 export interface ArticleTabProps {}
 
@@ -42,19 +51,22 @@ export function ArticleTab(props: ArticleTabProps) {
     const { classes } = useStyles()
     const { asset } = CollectibleState.useContainer()
 
-    if (!asset.value) return null
-    const resourceUrl = asset.value.image_url || asset.value.animation_url
-    return (
-        <CollectibleTab>
-            <div className={classes.body}>
-                {asset.value.animation_url ? (
-                    <Link href={asset.value.animation_url} target="_blank" rel="noopener noreferrer">
-                        <AssetPlayer src={resourceUrl} alt={asset.value.name} />
-                    </Link>
-                ) : (
-                    <AssetPlayer src={resourceUrl} alt={asset.value.name} />
-                )}
-            </div>
-        </CollectibleTab>
-    )
+    return useMemo(() => {
+        if (!asset.value) return null
+        const resourceUrl = asset.value.animation_url || asset.value.image_url
+        return (
+            <CollectibleTab>
+                <div className={classes.body}>
+                    <AssetPlayer
+                        url={resourceUrl}
+                        options={{
+                            playsInline: true,
+                        }}
+                        classes={classes}
+                        isFixedIframeSize={false}
+                    />
+                </div>
+            </CollectibleTab>
+        )
+    }, [asset.value?.animation_url, asset.value?.image_url, classes])
 }

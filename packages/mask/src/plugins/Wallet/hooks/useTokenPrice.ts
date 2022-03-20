@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import { pollingTask } from '@masknet/shared'
+import { pollingTask } from '@masknet/shared-base'
 import { UPDATE_CHAIN_STATE_DELAY } from '@masknet/plugin-wallet'
 import { WalletRPC } from '../messages'
 import { currentTokenPricesSettings } from '../settings'
-import { ChainId, CurrencyType, getCoingeckoCoinId, getCoingeckoPlatformId } from '@masknet/web3-shared-evm'
+import { ChainId, CurrencyType, getCoinGeckoCoinId, getCoinGeckoPlatformId } from '@masknet/web3-shared-evm'
 
 const task = pollingTask(
     async () => {
@@ -23,11 +23,11 @@ export function useTokenPrice(
     let platformId: string | undefined = undefined
     let coinId: string | undefined = undefined
     if (chainId) {
-        platformId = getCoingeckoPlatformId(chainId)
-        coinId = getCoingeckoCoinId(chainId)
+        platformId = getCoinGeckoPlatformId(chainId)
+        coinId = getCoinGeckoCoinId(chainId)
     }
 
-    const category = contractAddress || coinId
+    const category = (contractAddress || coinId)?.toLowerCase()
 
     const [price, setPrice] = useState(0)
     useEffect(() => {

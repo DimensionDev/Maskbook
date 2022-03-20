@@ -1,6 +1,6 @@
 import { map } from 'lodash-unified'
 import { makeNewBugIssueURL } from './issue'
-
+import { useI18N } from '../../utils'
 export const DEBUG_INFO = {
     'User Agent': navigator.userAgent,
     'Mask Version': process.env.VERSION,
@@ -15,6 +15,7 @@ export const DEBUG_INFO = {
 }
 
 export const DebugInfo = () => {
+    const { t } = useI18N()
     const onNewBugIssue = () => {
         open(makeNewBugIssueURL())
     }
@@ -22,7 +23,7 @@ export const DebugInfo = () => {
     return (
         <>
             <pre>{map(DEBUG_INFO, (value, key) => `${key}: ${value}`).join('\n')}</pre>
-            <button onClick={onNewBugIssue}>New bug issue</button>
+            <button onClick={onNewBugIssue}>{t('debug_new_bug_issue')}</button>
         </>
     )
 }

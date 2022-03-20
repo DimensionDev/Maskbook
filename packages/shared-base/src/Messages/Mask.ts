@@ -1,13 +1,13 @@
-import type { TypedMessage } from '../TypedMessage'
+import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier/type'
 import type { RelationFavor } from '../Persona/type'
-import type { Appearance, LanguageOptions, TradeProvider, DataProvider } from '../../../public-api/src/web'
+import type { Appearance, LanguageOptions, DataProvider } from '../../../public-api/src/web'
 import type {
     CryptoPrice,
     NetworkType,
     ProviderType,
-    PortfolioProvider,
-    CollectibleProvider,
+    FungibleAssetProvider,
+    NonFungibleAssetProvider,
 } from '../../../web3-shared/evm'
 
 export interface MaskSettingsEvents {
@@ -16,21 +16,14 @@ export interface MaskSettingsEvents {
     debugModeSetting: boolean
     pluginIDSettings: string
     currentChainIdSettings: number
-    currentBalanceSettings: string
-    currentBlockNumberSettings: number
     currentTokenPricesSettings: CryptoPrice
     currentDataProviderSettings: DataProvider
     currentProviderSettings: ProviderType
     currentNetworkSettings: NetworkType
     currentAccountSettings: string
-    currentPortfolioDataProviderSettings: PortfolioProvider
-    currentCollectibleDataProviderSettings: CollectibleProvider
+    currentFungibleAssetDataProviderSettings: FungibleAssetProvider
+    currentNonFungibleAssetDataProviderSettings: NonFungibleAssetProvider
     currentPersonaIdentifier: string
-    ethereumNetworkTradeProviderSettings: TradeProvider
-    polygonNetworkTradeProviderSettings: TradeProvider
-    binanceNetworkTradeProviderSettings: TradeProvider
-    arbitrumNetworkTradeProviderSettings: TradeProvider
-    xdaiNetworkTradeProviderSettings: TradeProvider
 }
 
 export interface MaskMobileOnlyEvents {
@@ -42,13 +35,15 @@ export interface MaskSNSEvents {
     // TODO: Maybe in-page UI related messages should use Context instead of messages?
     autoPasteFailed: AutoPasteFailedEvent
     requestComposition: CompositionRequest
-    replaceComposition: TypedMessage
+    replaceComposition: SerializableTypedMessages
     // TODO: move to plugin message
-    profileNFTsPageUpdated: ProfileNFTsPageEvent
+    profileTabUpdated: ProfileNFTsPageEvent
     // TODO: move to plugin message
     profileNFTsTabUpdated: 'reset'
     NFTAvatarUpdated: NFTAvatarEvent
     NFTAvatarTimelineUpdated: NFTAvatarEvent
+    nftAvatarSettingDialogUpdated: NFTAvatarSettingDialogEvent
+    Native_visibleSNS_currentDetectedProfileUpdated: string
 }
 
 export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, MaskSNSEvents {
@@ -66,14 +61,15 @@ export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, Ma
     restoreSuccess: void
     profilesChanged: UpdateEvent<ProfileIdentifier>[]
     relationsChanged: RelationChangedEvent[]
-    pluginEnabled: string
-    pluginDisabled: string
+    pluginMinimalModeChanged: [id: string, newStatus: boolean]
 
     requestExtensionPermission: RequestExtensionPermissionEvent
-    signRequestApproved: PersonaSignApprovedEvent
+    personaSignRequest: PersonaSignRequestEvent
     maskSDKHotModuleReload: void
     __kv_backend_persistent__: [string, unknown]
     __kv_backend_in_memory__: [string, unknown]
+    /** @deprecated do not use it in new code. */
+    wallet_is_locked: ['request'] | ['response', boolean]
 }
 
 export interface UpdateEvent<Data> {
@@ -84,11 +80,15 @@ export interface UpdateEvent<Data> {
 export interface CompositionRequest {
     readonly reason: 'timeline' | 'popup'
     readonly open: boolean
-    readonly content?: TypedMessage
+    readonly content?: SerializableTypedMessages
     readonly options?: {
         target?: 'E2E' | 'Everyone'
         startupPlugin?: string
     }
+}
+
+export interface NFTAvatarSettingDialogEvent {
+    open: boolean
 }
 
 export interface SettingsUpdateEvent {
@@ -125,7 +125,7 @@ export type RelationChangedEvent = UpdateEvent<ProfileIdentifier> & {
     favor: RelationFavor
 }
 
-export interface PersonaSignApprovedEvent {
+export interface PersonaSignRequestEvent {
     requestID: string
-    selectedPersona: PersonaIdentifier
+    selectedPersona?: PersonaIdentifier
 }

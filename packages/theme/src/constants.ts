@@ -7,8 +7,9 @@ export const LightColor = {
     background: '#FFFFFF',
     secondary: '#e8f0fe',
     secondaryContrastText: '#1c68f3',
-
+    input: '#F6F6F8',
     primaryBackground: '#ffffff',
+    primaryBackground2: '#FBFBFC',
     secondaryBackground: '#f9fafa',
     lightBackground: '#F9FAFA',
     mainBackground: '#ffffff',
@@ -16,6 +17,20 @@ export const LightColor = {
     normalBackground: '#F3F3F4',
     twitterBackground: '#F7F9FA',
     twitterBackgroundHover: '#EFF1F2',
+    twitterInputBackground: '#F6F8F8',
+    twitterButton: '#111418',
+    twitterButtonText: '#ffffff',
+    twitterBlue: '#1C68F3',
+    twitterBorderLine: '#EDF1F2',
+    twitterSecond: '#7B8192',
+    twitterMain: '#0F1419',
+    twitterBottom: '#ffffff',
+    twitterInfoBackground: '#AFC3E1',
+    twitterInfo: '#8CA3C7',
+    twitterBg: '#F6F8F8',
+    twitterTooltipBg: 'rgba(0,0,0,.6)',
+    twitterInput: '#EDF1F2',
+    twitterLine: '#EBEEF0',
     redMain: '#ff5f5f',
     redLight: '#ffafaf',
     redContrastText: '#ffffff',
@@ -31,6 +46,7 @@ export const LightColor = {
     divider: '#eff3f4',
 
     border: '#F3F3F4',
+    borderSecondary: '#536471',
 
     textPrimary: '#111432',
     textSecondary: '#7b8192',
@@ -39,6 +55,7 @@ export const LightColor = {
     normalText: '#7B8192',
 
     infoBackground: 'rgba(175, 195, 225, 0.15)',
+    success: '#60DFAB',
     warning: '#FFB915',
     blue: '#1C68F3',
     textLink: '#1C68F3',
@@ -53,6 +70,9 @@ export const LightColor = {
     bottom: '#F9FAFA',
     main: '#1C68F3',
     errorBackground: 'rgba(255, 95, 95, 0.15)',
+    tooltipBackground: '#ffffff',
+    warningBackground: 'rgba(255, 185, 21, 0.1)',
+    cyberconnectPrimary: '#000000',
 }
 export const DarkColor: typeof LightColor = {
     primary: '#1c68f3',
@@ -60,15 +80,30 @@ export const DarkColor: typeof LightColor = {
     background: '#15171A',
     secondary: '#242e57',
     secondaryContrastText: '#ffffff',
-
+    input: '#282B49',
     primaryBackground: '#212442',
+    primaryBackground2: '#212442',
     secondaryBackground: '#252846',
     lightBackground: '#2E314F',
     mainBackground: '#111432',
     suspensionBackground: 'rgba(27, 30, 60, 0.8)',
     normalBackground: '#262947',
+    twitterInputBackground: '#17191D',
     twitterBackground: '#17191D',
     twitterBackgroundHover: '#17191D',
+    twitterButton: '#EFF3F4',
+    twitterButtonText: '#0F1419',
+    twitterBlue: '#4989FF',
+    twitterBorderLine: '#2F3336',
+    twitterInput: '#1D2023',
+    twitterSecond: '#636B72',
+    twitterMain: '#D9D9D9',
+    twitterBottom: '#000000',
+    twitterInfoBackground: '#AFC3E1',
+    twitterInfo: '#8CA3C7',
+    twitterLine: '#2F3336',
+    twitterBg: '#15171A',
+    twitterTooltipBg: 'rgba(91,112,131,.6)',
     redMain: '#ff5f5f',
     redLight: '#46304a',
     redContrastText: '#ffffff',
@@ -84,6 +119,7 @@ export const DarkColor: typeof LightColor = {
     divider: '#3e455e',
 
     border: '#3E455E',
+    borderSecondary: '#6e767d',
 
     // TODO: ?
     textPrimary: '#ffffff',
@@ -94,6 +130,7 @@ export const DarkColor: typeof LightColor = {
     normalText: 'rgba(255, 255, 255, 0.8)',
 
     infoBackground: 'rgba(175, 195, 225, 0.15)',
+    success: '#60DFAB',
     warning: '#FFB915',
     blue: '#1C68F3',
     textLink: '#ffffff',
@@ -108,6 +145,9 @@ export const DarkColor: typeof LightColor = {
     bottom: '#000000',
     main: '#D4D4D4',
     errorBackground: 'rgba(255, 95, 95, 0.1)',
+    tooltipBackground: '#1A1D20',
+    warningBackground: 'rgba(255, 185, 21, 0.1)',
+    cyberconnectPrimary: '#ffffff',
 }
 
 export type Color = typeof LightColor
@@ -120,6 +160,16 @@ export function useMaskColor() {
     return getMaskColor(useTheme())
 }
 
+export function CSSVariableInjectorCSS(scheme: PaletteMode) {
+    const ns: Record<string, string> = scheme === 'light' ? LightColor : DarkColor
+    const result: Record<string, string> = {}
+    for (const key in ns) {
+        // --mask-name: val;
+        result[`--mask-${kebabCase(key)}`] = ns[key]
+        result[`--mask-${kebabCase(key)}-fragment`] = getRGBFragment(ns, key)
+    }
+    return { ':root, :host': result }
+}
 export function applyMaskColorVars(node: HTMLElement, scheme: PaletteMode) {
     const ns: Record<string, string> = scheme === 'light' ? LightColor : DarkColor
     if (node === document.body) {
@@ -138,7 +188,7 @@ export function applyMaskColorVars(node: HTMLElement, scheme: PaletteMode) {
             rule += `    --mask-${kebabCase(key)}: ${ns[key]};\n`
             rule += `    --mask-${kebabCase(key)}-fragment: ${getRGBFragment(ns, key)};\n`
         }
-        node.innerHTML = rule + '}'
+        node.textContent = rule + '}'
     } else {
         for (const key in ns) {
             node.style.setProperty('--mask-' + kebabCase(key), ns[key])
@@ -153,7 +203,7 @@ function getRGBFragment(x: Record<string, string>, key: string) {
     return [r, g, b].join(', ')
 }
 
-type MaskCSSVariableColor = string & {
+export type MaskCSSVariableColor = string & {
     /** Append alpha channel to the original color */
     alpha(alpha: number): string
 } & ((defaultValue?: string) => string)

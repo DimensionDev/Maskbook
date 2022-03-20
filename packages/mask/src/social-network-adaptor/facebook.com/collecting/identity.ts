@@ -1,9 +1,11 @@
 import { LiveSelector, MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
-import type { SocialNetworkUI } from '../../../social-network/types'
-import { creator } from '../../../social-network/utils'
+import { creator, SocialNetworkUI } from '../../../social-network'
 import { getProfileIdentifierAtFacebook, getUserID } from '../utils/getProfileIdentifier'
 import { isMobileFacebook } from '../utils/isMobile'
-import { ProfileIdentifier } from '../../../database/type'
+import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
+import { searchAvatarSelector, searchUserIdOnMobileSelector } from '../utils/selector'
+import { getAvatar, getBioDescription, getFacebookId, getNickName, getPersonalHomepage } from '../utils/user'
+import { delay } from '@dimensiondev/kit'
 
 export const IdentityProviderFacebook: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: true,
@@ -33,14 +35,67 @@ function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<Value>, signal
     fetch('/me', { method: 'HEAD', signal })
         .then((x) => x.url)
         .then(getUserID)
-        .then((id) => id && assign({ ...ref.value, identifier: new ProfileIdentifier('facebook.com', id) }))
+        .then((id) => id && assign({ ...ref.value, identifier: new ProfileIdentifier(EnhanceableSite.Facebook, id) }))
 }
 
-//#region LS
+function resolveCurrentVisitingIdentityInner(
+    ref: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
+    cancel: AbortSignal,
+) {
+    const selector = isMobileFacebook ? searchUserIdOnMobileSelector() : searchAvatarSelector()
+
+    const assign = async () => {
+        await delay(500)
+        const nickname = getNickName()
+        const bio = getBioDescription()
+        const handle = getFacebookId()
+        const homepage = getPersonalHomepage()
+
+        const avatar = getAvatar()
+
+        ref.value = {
+            identifier: handle ? new ProfileIdentifier(EnhanceableSite.Facebook, handle) : ProfileIdentifier.unknown,
+            nickname,
+            avatar,
+            bio,
+            homepage,
+        }
+    }
+
+    const createWatcher = (selector: LiveSelector<HTMLElement, boolean>) => {
+        const watcher = new MutationObserverWatcher(selector)
+            .addListener('onAdd', () => assign())
+            .addListener('onChange', () => assign())
+            .startWatch({
+                childList: true,
+                subtree: true,
+                attributes: true,
+            })
+        window.addEventListener('locationchange', assign)
+        cancel.addEventListener('abort', () => {
+            window.removeEventListener('locationchange', assign)
+            watcher.stopWatch()
+        })
+    }
+
+    assign()
+
+    createWatcher(selector)
+}
+
+export const CurrentVisitingIdentityProviderFacebook: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
+    hasDeprecatedPlaceholderName: false,
+    recognized: creator.EmptyIdentityResolveProviderState(),
+    start(cancel) {
+        resolveCurrentVisitingIdentityInner(this.recognized, cancel)
+    },
+}
+
+// #region LS
 // Try to resolve my identities
 const myUsernameLiveSelectorPC = new LiveSelector()
     .querySelectorAll<HTMLAnchorElement>(
-        `[data-pagelet="LeftRail"] > [data-visualcompletion="ignore-dynamic"]:first-child > div:first-child > ul [role="link"]`,
+        '[data-pagelet="LeftRail"] > [data-visualcompletion="ignore-dynamic"]:first-child > div:first-child > ul [role="link"]',
     )
 
     .filter((x) => x.innerText)
@@ -49,4 +104,4 @@ const myUsernameLiveSelectorMobile = new LiveSelector().querySelector<HTMLAnchor
 )
 
 type Value = SocialNetworkUI.CollectingCapabilities.IdentityResolved
-//#endregion
+// #endregion

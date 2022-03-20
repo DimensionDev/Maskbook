@@ -1,6 +1,6 @@
 import { NetworkType } from '@masknet/web3-shared-evm'
 
-export const DODO_BASE_URL = 'https://dodo-route.dodoex.io'
+export const DODO_BASE_URL = 'https://dodoex.r2d2.to'
 
 export const networkNames: Record<NetworkType, string> = {
     [NetworkType.Ethereum]: 'mainnet',
@@ -8,4 +8,12 @@ export const networkNames: Record<NetworkType, string> = {
     [NetworkType.Polygon]: 'matic',
     [NetworkType.Arbitrum]: 'arbitrum',
     [NetworkType.xDai]: 'xdai',
+    [NetworkType.Avalanche]: 'avalanche',
+    [NetworkType.Celo]: 'celo',
+    [NetworkType.Fantom]: 'fantom',
+    [NetworkType.Aurora]: 'aurora',
+    [NetworkType.Boba]: '',
+    [NetworkType.Fuse]: '',
+    [NetworkType.Metis]: '',
+    [NetworkType.Optimistic]: '',
 }

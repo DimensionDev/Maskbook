@@ -1,7 +1,6 @@
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, AMPL, DAI, MSKA, MSKB, MSKC, USDC, USDT, WBTC, WNATIVE, WNATIVE_ONLY } from '@masknet/web3-shared-evm'
 import { Percent } from '@uniswap/sdk-core'
 import JSBI from 'jsbi'
-import { AMPL, DAI, MSKA, MSKB, MSKC, USDC, USDT, WBTC, WNATIVE, WNATIVE_ONLY } from './trader'
 import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'
 
 /**
@@ -12,11 +11,15 @@ export const UNISWAP_CUSTOM_BASES: ERC20TokenCustomizedBase = {
     [ChainId.Mainnet]: {
         [AMPL[ChainId.Mainnet].address]: [DAI, WNATIVE].map((x) => x[ChainId.Mainnet]),
     },
+    [ChainId.Matic]: {
+        [AMPL[ChainId.Matic].address]: [DAI, WNATIVE].map((x) => x[ChainId.Matic]),
+    },
 }
 
 export const UNISWAP_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
     ...WNATIVE_ONLY,
     [ChainId.Mainnet]: [WNATIVE, DAI, USDC, USDT, WBTC].map((x) => x[ChainId.Mainnet]),
+    [ChainId.Matic]: [WNATIVE, DAI, USDC, USDT, WBTC].map((x) => x[ChainId.Matic]),
     [ChainId.Rinkeby]: [WNATIVE, MSKA, MSKB, MSKC].map((x) => x[ChainId.Rinkeby]),
 }
 

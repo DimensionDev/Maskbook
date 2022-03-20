@@ -1,18 +1,20 @@
 import { Suspense } from 'react'
-import { I18nextProvider } from 'react-i18next'
 import { CustomSnackbarProvider } from '@masknet/theme'
 import { Web3Provider } from '@masknet/web3-shared-evm'
 import { CssBaseline, StyledEngineProvider, Theme, ThemeProvider } from '@mui/material'
 import { NetworkPluginID, PluginsWeb3ContextProvider, useAllPluginsWeb3State } from '@masknet/plugin-infra'
-import { ErrorBoundary, ErrorBoundaryBuildInfoContext, useValueRef } from '@masknet/shared'
+import { I18NextProviderHMR } from '@masknet/shared'
+import { ErrorBoundary, ErrorBoundaryBuildInfoContext, useValueRef } from '@masknet/shared-base-ui'
 import i18nNextInstance from '../shared-ui/locales_legacy'
 import { Web3Context } from './web3/context'
-import { buildInfoMarkdown } from './extension/background-script/Jobs/PrintBuildFlags'
+import { buildInfoMarkdown } from './utils/BuildInfoMarkdown'
 import { activatedSocialNetworkUI } from './social-network'
 import { isFacebook } from './social-network-adaptor/facebook.com/base'
 import { pluginIDSettings } from './settings/settings'
 import { fixWeb3State } from './plugins/EVM/UI/Web3State'
-
+import { getBackgroundColor } from './utils'
+import { MaskIconPaletteContext } from '@masknet/icons'
+import { isTwitter } from './social-network-adaptor/twitter.com/base'
 const identity = (jsx: React.ReactNode) => jsx as JSX.Element
 function compose(init: React.ReactNode, ...f: ((children: React.ReactNode) => JSX.Element)[]) {
     return f.reduceRight((prev, curr) => curr(prev), <>{init}</>)
@@ -25,15 +27,25 @@ type MaskThemeProvider = React.PropsWithChildren<{
 function MaskThemeProvider({ children, baseline, useTheme }: MaskThemeProvider) {
     const theme = useTheme()
 
+    const backgroundColor = getBackgroundColor(document.body)
+    const isDark = theme.palette.mode === 'dark'
+    const isDarker = backgroundColor === 'rgb(0,0,0)'
+
     return compose(
         children,
+        (jsx) => (
+            <MaskIconPaletteContext.Provider
+                value={isDark ? (!isDarker && isTwitter(activatedSocialNetworkUI) ? 'dim' : 'dark') : 'light'}>
+                {jsx}
+            </MaskIconPaletteContext.Provider>
+        ),
         (jsx) => <ThemeProvider theme={theme} children={jsx} />,
         (jsx) => (
             <CustomSnackbarProvider
                 disableWindowBlurListener={false}
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 children={jsx}
-                isfacebook={Boolean(isFacebook(activatedSocialNetworkUI)).toString()}
+                offsetY={isFacebook(activatedSocialNetworkUI) ? 80 : undefined}
             />
         ),
         baseline
@@ -69,7 +81,7 @@ export function MaskUIRoot({ children, kind, useTheme }: MaskUIRootProps) {
                 <PluginsWeb3ContextProvider pluginID={pluginID} value={PluginsWeb3State} children={jsx} />
             </Web3Provider>
         ),
-        (jsx) => <I18nextProvider i18n={i18nNextInstance} children={jsx} />,
+        (jsx) => <I18NextProviderHMR i18n={i18nNextInstance} children={jsx} />,
         kind === 'page' ? (jsx) => <StyledEngineProvider injectFirst children={jsx} /> : identity,
         (jsx) => (
             <MaskThemeProvider useTheme={useTheme} baseline={kind === 'page'}>

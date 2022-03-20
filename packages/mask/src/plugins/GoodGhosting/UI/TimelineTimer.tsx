@@ -35,14 +35,14 @@ export function TimelineTimer(props: TimelineTimerProps) {
     const timeline = useTimeline(props.info)
 
     const [timelineIndex, setTimelineIndex] = useState(getNextTimelineIndex(timeline))
-    const [isLastEvent, setIsLastEvent] = useState(isEndOfTimeline(timelineIndex, timeline))
+    const [isLastEvent, setLastEvent] = useState(isEndOfTimeline(timelineIndex, timeline))
 
     const nextTimelineEvent = timeline[timelineIndex]
 
     const onUpdateTargetDate = () => {
         const index = getNextTimelineIndex(timeline)
         setTimelineIndex(index)
-        setIsLastEvent(isEndOfTimeline(timelineIndex, timeline))
+        setLastEvent(isEndOfTimeline(timelineIndex, timeline))
     }
 
     return (

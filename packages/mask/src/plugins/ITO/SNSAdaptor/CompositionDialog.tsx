@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
 import Web3Utils from 'web3-utils'
 import { DialogContent } from '@mui/material'
-import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
 import { ITO_MetaKey_2, MSG_DELIMITER } from '../constants'
 import { DialogTabs, JSON_PayloadInMask } from '../types'
@@ -18,7 +18,7 @@ import { PoolSettings, useFillCallback } from './hooks/useFill'
 import { ConfirmDialog } from './ConfirmDialog'
 import { WalletMessages } from '../../Wallet/messages'
 import { omit, set } from 'lodash-unified'
-import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
+import { useCompositionContext } from '@masknet/plugin-infra'
 import { MINDS_ID } from '../../../social-network-adaptor/minds.com/base'
 import { activatedSocialNetworkUI } from '../../../social-network'
 
@@ -60,7 +60,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants()
 
-    //#region step
+    // #region step
     const [step, setStep] = useState(ITOCreateFormPageStep.NewItoPage)
 
     const onNext = useCallback(() => {
@@ -70,16 +70,16 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const onBack = useCallback(() => {
         if (step === ITOCreateFormPageStep.ConfirmItoPage) setStep(ITOCreateFormPageStep.NewItoPage)
     }, [step])
-    //#endregion
+    // #endregion
 
     const [poolSettings, setPoolSettings] = useState<PoolSettings>()
 
-    //#region blocking
+    // #region blocking
     const [fillSettings, fillState, fillCallback, resetFillCallback] = useFillCallback(poolSettings)
     const onDone = useCallback(() => {
         fillCallback()
     }, [fillCallback])
-    //#endregion
+    // #endregion
 
     const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
@@ -143,7 +143,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
         },
     )
 
-    //#region tabs
+    // #region tabs
     const state = useState<DialogTabs>(DialogTabs.create)
 
     const onCreateOrSelect = useCallback(
@@ -201,14 +201,14 @@ export function CompositionDialog(props: CompositionDialogProps) {
         tabs: [
             {
                 label: t('plugin_ito_create_new'),
-                children: usePortalShadowRoot(() => (
+                children: (
                     <CreateForm
                         onNext={onNext}
                         onClose={onClose}
                         origin={poolSettings}
                         onChangePoolSettings={setPoolSettings}
                     />
-                )),
+                ),
                 sx: { p: 0 },
             },
             {
@@ -219,7 +219,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
         ],
         state,
     }
-    //#endregion
+    // #endregion
 
     // open the transaction dialog
     useEffect(() => {
@@ -233,7 +233,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             }),
         })
     }, [fillState, poolSettings, setTransactionDialog])
-    //#endregion
+    // #endregion
 
     useEffect(() => {
         if (!ITO2_CONTRACT_ADDRESS) onClose()

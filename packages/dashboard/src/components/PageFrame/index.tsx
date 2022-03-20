@@ -11,22 +11,25 @@ import {
     Theme,
     Toolbar,
     Typography,
-    // see https://github.com/import-js/eslint-plugin-import/issues/2288
-    // eslint-disable-next-line import/no-deprecated
     useMediaQuery,
     useTheme,
 } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Close as CloseIcon, Menu as MenuIcon } from '@mui/icons-material'
 import Color from 'color'
-import { ErrorBoundary } from '@masknet/shared'
 import { DashboardContext } from '../DashboardFrame/context'
 import { Navigation } from '../DashboardFrame/Navigation'
 import { MaskBannerIcon, MaskNotSquareIcon } from '@masknet/icons'
 import { FeaturePromotions } from './FeaturePromotions'
-import { RoutePaths } from '../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
+import { ErrorBoundary } from '@masknet/shared-base-ui'
+import { NavigationVersionFooter } from '../NavigationVersionFooter'
 
-const featurePromotionsEnabled = [RoutePaths.Wallets, RoutePaths.WalletsTransfer, RoutePaths.WalletsHistory]
+const featurePromotionsEnabled = [
+    DashboardRoutes.Wallets,
+    DashboardRoutes.WalletsTransfer,
+    DashboardRoutes.WalletsHistory,
+]
 
 const MaskLogo = styled(Grid)`
     flex-basis: 212px;
@@ -56,7 +59,7 @@ const PageTitle = styled(Grid)(({ theme }) => ({
 const Containment = styled(Grid)(({ theme }) => ({
     maxWidth: '100%',
     display: 'flex',
-    height: `calc(100vh - 64px)`,
+    height: 'calc(100vh - 64px)',
     overflow: 'hidden',
 }))
 
@@ -66,9 +69,13 @@ const NavigationDrawer = styled(Drawer)(({ theme }) => ({
     [`& > .${paperClasses.root}`]: {
         width: 232,
         top: theme.mixins.toolbar.minHeight,
-        paddingTop: theme.spacing(7.5),
+        paddingTop: '28px',
         background: new Color(theme.palette.background.paper).alpha(0.8).toString(),
         backdropFilter: 'blur(4px)',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        paddingBottom: `calc( 22px + ${theme.mixins.toolbar.minHeight}px)`,
     },
 }))
 
@@ -123,8 +130,6 @@ export const PageFrame = memo((props: PageFrameProps) => {
     const location = useLocation()
     const left = typeof props.title === 'string' ? <Typography variant="h6">{props.title}</Typography> : props.title
     const right = props.primaryAction
-    // see https://github.com/import-js/eslint-plugin-import/issues/2288
-    // eslint-disable-next-line import/no-deprecated
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const { drawerOpen, toggleDrawer } = useContext(DashboardContext)
     const showFeaturePromotions = featurePromotionsEnabled.some((path: string) => path === location.pathname)
@@ -164,6 +169,7 @@ export const PageFrame = memo((props: PageFrameProps) => {
                         variant="temporary"
                         elevation={0}>
                         <Navigation onClose={toggleDrawer} />
+                        <NavigationVersionFooter />
                     </NavigationDrawer>
                 )}
                 <ShapeHelper>

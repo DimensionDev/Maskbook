@@ -56,6 +56,12 @@ export function useClaimCallback(version: number, from: string, id?: string, pas
         return new Promise<void>((resolve, reject) => {
             claim()
                 .send(config as NonPayableTx)
+                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
+                    setClaimState({
+                        type: TransactionStateType.HASH,
+                        hash,
+                    })
+                })
                 .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
                     setClaimState({
                         type: TransactionStateType.CONFIRMED,

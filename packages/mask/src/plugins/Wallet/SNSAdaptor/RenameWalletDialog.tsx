@@ -5,7 +5,8 @@ import type { Wallet } from '@masknet/web3-shared-evm'
 import { WalletMessages, WalletRPC } from '../messages'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useRemoteControlledDialog, useSnackbarCallback } from '@masknet/shared'
+import { useSnackbarCallback } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -25,10 +26,9 @@ export function WalletRenameWalletDialog() {
     const [wallet, setWallet] = useState<Wallet | null>(null)
     const { open, setDialog } = useRemoteControlledDialog(WalletMessages.events.walletRenameDialogUpdated)
     WalletMessages.events.walletRenameDialogUpdated.on((data) => {
-        if (data.open) {
-            setName(data.wallet?.name ?? '')
-            setWallet(data.wallet)
-        }
+        if (!data.open) return
+        setName(data.wallet?.name ?? '')
+        setWallet(data.wallet)
     })
     const handleClose = useCallback(() => {
         setDialog({
@@ -63,7 +63,7 @@ export function WalletRenameWalletDialog() {
             </DialogContent>
             <DialogActions className={classes.dialogActions}>
                 <Button fullWidth color="inherit" variant="outlined" onClick={handleClose}>
-                    Cancel
+                    {t('confirm')}
                 </Button>
                 <Button
                     className={classes.actionButton}
@@ -71,7 +71,7 @@ export function WalletRenameWalletDialog() {
                     onClick={handleRename}
                     disabled={!name}
                     fullWidth>
-                    Confirm
+                    {t('cancel')}
                 </Button>
             </DialogActions>
         </InjectedDialog>

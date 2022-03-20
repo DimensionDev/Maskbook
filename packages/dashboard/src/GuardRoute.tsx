@@ -1,15 +1,12 @@
 import { PersonaContext } from './pages/Personas/hooks/usePersonaContext'
-import { Navigate, Route } from 'react-router-dom'
-import type { RoutePaths } from './type'
+import { Navigate } from 'react-router-dom'
 
 interface GuardRouteProps {
-    path: RoutePaths
-    element?: JSX.Element
-    redirectTo?: string
+    redirectTo: string
 }
 
-export default function NoPersonaGuardRoute(props: GuardRouteProps) {
-    const { redirectTo, ...rest } = props
+export default function NoPersonaGuardRoute(props: React.PropsWithChildren<GuardRouteProps>) {
+    const { redirectTo } = props
     const { currentPersona } = PersonaContext.useContainer()
-    return currentPersona ? <Navigate to={redirectTo ?? '/'} replace /> : <Route {...rest} />
+    return currentPersona ? <Navigate to={redirectTo} replace /> : <>{props.children}</>
 }

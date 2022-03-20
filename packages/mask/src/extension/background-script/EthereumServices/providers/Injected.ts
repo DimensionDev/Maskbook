@@ -1,14 +1,14 @@
 import { first } from 'lodash-unified'
+import { defer } from '@dimensiondev/kit'
 import Web3 from 'web3'
 import type { RequestArguments } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, EthereumMethodType, ProviderType } from '@masknet/web3-shared-evm'
 import { EVM_Messages } from '../../../../plugins/EVM/messages'
-import { defer } from '@masknet/shared-base'
 import { currentChainIdSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
 import { updateAccount } from '../../../../plugins/Wallet/services'
 
-//#region redirect requests to the content page
+// #region redirect requests to the content page
 let id = 0
 
 async function request(requestArguments: RequestArguments) {
@@ -22,7 +22,10 @@ async function request(requestArguments: RequestArguments) {
         else resolve(result)
     }
 
-    setTimeout(() => reject(new Error('The request is timeout.')), 45 * 1000)
+    setTimeout(
+        () => reject(new Error('The request is timeout.')),
+        requestArguments.method === EthereumMethodType.ETH_REQUEST_ACCOUNTS ? 3 * 60 * 1000 : 45 * 1000,
+    )
     EVM_Messages.events.INJECTED_PROVIDER_RPC_RESPONSE.on(onResponse)
     EVM_Messages.events.INJECTED_PROVIDER_RPC_REQUEST.sendToVisiblePages({
         payload: {
@@ -56,7 +59,7 @@ function send(payload: JsonRpcPayload, callback: (error: Error | null, response?
             callback(error)
         })
 }
-//#endregion
+// #endregion
 
 let web3: Web3 | null = null
 
@@ -89,7 +92,7 @@ export async function ensureConnectedAndUnlocked() {
     try {
         const accounts = await web3.eth.requestAccounts()
         throw accounts
-    } catch (error: string[] | any) {
+    } catch (error) {
         const accounts = error
         if (Array.isArray(accounts)) {
             if (accounts.length === 0) throw new Error('Injected Web3 is locked or it has not connected any accounts.')

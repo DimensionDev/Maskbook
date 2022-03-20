@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useContainer } from 'unstated-next'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Skeleton, Typography } from '@mui/material'
@@ -12,7 +12,7 @@ import { BoxState, CardTab } from '../../type'
 import { ArticlesTab } from './ArticlesTab'
 import { DetailsTab } from './DetailsTab'
 import { DrawResultDialog } from './DrawResultDialog'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '../../../Wallet/messages'
 
 const useTabsStyles = makeStyles()((theme) => ({
@@ -74,6 +74,7 @@ export function PreviewCard(props: PreviewCardProps) {
         setOpenBoxTransactionOverrides,
 
         // retry
+        retryMaskBoxStatus,
         retryMaskBoxInfo,
         retryBoxInfo,
         retryMaskBoxCreationSuccessEvent,
@@ -81,13 +82,17 @@ export function PreviewCard(props: PreviewCardProps) {
         retryMaskBoxPurchasedTokens,
     } = useContainer(Context)
 
-    //#region open box
-    const [openBoxState, openBoxCallback, resetOpenBoxCallback] = useTransactionCallback(
-        TransactionStateType.CONFIRMED,
-        {
+    const txConfig = useMemo(() => {
+        return {
             ...openBoxTransaction?.config,
             gas: openBoxTransactionOverrides?.gas ?? openBoxTransactionGasLimit,
-        },
+        }
+    }, [openBoxTransaction?.config, openBoxTransactionOverrides, openBoxTransactionGasLimit])
+
+    // #region open box
+    const [openBoxState, openBoxCallback, resetOpenBoxCallback] = useTransactionCallback(
+        TransactionStateType.CONFIRMED,
+        txConfig,
         openBoxTransaction?.method,
     )
     const onRefresh = useCallback(() => {
@@ -106,11 +111,17 @@ export function PreviewCard(props: PreviewCardProps) {
         retryMaskBoxTokensForSale,
         retryMaskBoxPurchasedTokens,
     ])
+    const [drawing, setDrawing] = useState(false)
     const onDraw = useCallback(async () => {
-        setOpenDrawDialog(false)
+        setDrawing(true)
         refreshLastPurchasedTokenIds()
-        await openBoxCallback()
-    }, [openBoxCallback, refreshLastPurchasedTokenIds])
+        try {
+            await openBoxCallback()
+            retryMaskBoxStatus()
+            setOpenDrawDialog(false)
+        } catch {}
+        setDrawing(false)
+    }, [openBoxCallback, refreshLastPurchasedTokenIds, retryMaskBoxStatus])
 
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
@@ -132,7 +143,7 @@ export function PreviewCard(props: PreviewCardProps) {
             summary: `Open ${boxInfo?.name ?? 'box'}...`,
         })
     }, [openBoxState.type])
-    //#endregion
+    // #endregion
 
     if (boxState === BoxState.UNKNOWN)
         return (
@@ -187,19 +198,23 @@ export function PreviewCard(props: PreviewCardProps) {
                     variant="contained"
                     disabled={boxState !== BoxState.READY}
                     onClick={() => setOpenDrawDialog(true)}>
-                    {boxState === BoxState.READY && paymentTokenAddress ? (
-                        <>
-                            {boxStateMessage} ({formatBalance(paymentTokenPrice, paymentTokenDetailed?.decimals ?? 0)}{' '}
-                            {paymentTokenDetailed?.symbol} each box)
-                        </>
-                    ) : (
-                        boxStateMessage
-                    )}
+                    {(() => {
+                        return boxState === BoxState.READY && paymentTokenAddress ? (
+                            <>
+                                {boxStateMessage} (
+                                {formatBalance(paymentTokenPrice, paymentTokenDetailed?.decimals ?? 0)}{' '}
+                                {paymentTokenDetailed?.symbol}/Time)
+                            </>
+                        ) : (
+                            boxStateMessage
+                        )
+                    })()}
                 </ActionButton>
             </EthereumWalletConnectedBoundary>
             <DrawDialog
                 boxInfo={boxInfo}
                 open={openDrawDialog}
+                drawing={drawing}
                 onClose={() => {
                     setOpenBoxTransactionOverrides(null)
                     setOpenDrawDialog(false)

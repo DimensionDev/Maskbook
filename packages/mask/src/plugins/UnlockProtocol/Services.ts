@@ -79,7 +79,7 @@ export const verifyPurchase = async (_userAddress: String, _lockAddress: String,
     const data = await graphQLClients[_lockChain].request(query, variables)
     if (data.locks[0].owner === _userAddress.toLowerCase()) {
         flag = true
-    } else if (!!data.locks[0].keys.length) {
+    } else if (data.locks[0].keys.length) {
         data.locks[0].keys.forEach((key: { owner: { id: string } }) => {
             if (key.owner.id === _userAddress.toLowerCase()) flag = true
         })
@@ -109,7 +109,7 @@ export const getLocks = async <UnlockLocks>(_address1: String) => {
         const data = await graphQLClients[key].request(query, variables)
         data.lockManagers.forEach(
             (element: { lock: { chain: number; name: string; price?: string; address: string } }) => {
-                element.lock.chain = parseInt(key, 10)
+                element.lock.chain = Number.parseInt(key, 10)
                 dataRes.push(element)
             },
         )
@@ -135,7 +135,7 @@ export const getPurchasedLocks = async (_address: string) => {
     for (const key of Object.keys(graphEndpointKeyVal)) {
         const data = await graphQLClients[key].request(query, variables)
         data.keyPurchases.forEach((element: { lock: string; chain: number }) => {
-            element.chain = parseInt(key, 10)
+            element.chain = Number.parseInt(key, 10)
             dataRes.push(element)
         })
     }

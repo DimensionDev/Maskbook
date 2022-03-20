@@ -10,13 +10,14 @@ import {
     DialogContent,
     TextField,
     Typography,
+    Autocomplete,
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { InjectedDialog } from './InjectedDialog'
-import { Autocomplete } from '@mui/material'
-import { isDataMatchJSONSchema, metadataSchemaStoreReadonly } from '../../protocols/typed-message'
-import { ShadowRootPopper } from '../../utils/shadow-root/ShadowRootComponents'
+import { isDataMatchJSONSchema, getKnownMetadataKeys, getMetadataSchema } from '@masknet/typed-message'
+import { ShadowRootPopper } from '@masknet/theme'
 import { useState } from 'react'
+import { useI18N } from '../../utils'
 
 export interface DebugMetadataInspectorProps {
     meta: ReadonlyMap<string, any>
@@ -29,15 +30,16 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
     const { meta, onExit, onDeleteMeta, onNewMeta } = props
     const [field, setField] = useState('')
     const [content, setContent] = useState('{}')
+    const { t } = useI18N()
 
-    const knownMetadata = [...metadataSchemaStoreReadonly.keys()]
+    const knownMetadata = getKnownMetadataKeys()
     const result = isValid(content)
     const isInvalid = result !== true
     const editor = onNewMeta ? (
         <Card variant="outlined">
             <CardContent>
                 <Typography color="textSecondary" gutterBottom>
-                    Add new metadata or replace existing metadata
+                    {t('debug_metadata_title')}
                 </Typography>
                 <form>
                     <Autocomplete
@@ -84,7 +86,7 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
                     size="small"
                     variant="contained"
                     disabled={isInvalid || field?.length <= 3}>
-                    Put metadata
+                    {t('debug_metadata_put_metadata')}
                 </Button>
                 <Button
                     onClick={() => {
@@ -93,7 +95,7 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
                     }}
                     size="small"
                     variant="text">
-                    Clear
+                    {t('clear')}
                 </Button>
             </CardActions>
         </Card>
@@ -118,7 +120,7 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
                                                 setField(key)
                                                 setContent(JSON.stringify(content, undefined, 4))
                                             }}>
-                                            Edit
+                                            {t('edit')}
                                         </Button>
                                     ) : null}
 
@@ -128,7 +130,7 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
                                             size="small"
                                             color="secondary"
                                             onClick={() => onDeleteMeta(key)}>
-                                            Delete
+                                            {t('delete')}
                                         </Button>
                                     ) : null}
                                 </Typography>
@@ -153,9 +155,9 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
         } catch {
             return 'Invalid JSON'
         }
-        const validator = metadataSchemaStoreReadonly.get(field)
-        if (validator) {
-            const valid = isDataMatchJSONSchema(JSON.parse(newData), validator)
+        const validator = getMetadataSchema(field)
+        if (validator.some) {
+            const valid = isDataMatchJSONSchema(JSON.parse(newData), validator.val)
             if (valid.err) return 'Metadata content is invalid:\n' + valid.val.map((x) => '    ' + x.message).join('\n')
         }
         return true

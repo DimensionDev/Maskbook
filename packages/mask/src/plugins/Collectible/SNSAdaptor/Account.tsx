@@ -7,8 +7,8 @@ export interface AccountProps {
 }
 
 export function Account({ address, username }: AccountProps) {
-    const account = useAccount()
     const { t } = useI18N()
+    const account = useAccount()
 
     return <>{isSameAddress(account, address ?? '') ? t('plugin_collectible_you') : username || address?.slice(2, 8)}</>
 }

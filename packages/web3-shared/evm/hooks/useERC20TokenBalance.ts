@@ -1,22 +1,29 @@
-import { useAsyncRetry } from 'react-use'
+import { toHex } from 'web3-utils'
+import { useBeatRetry } from '@masknet/web3-shared-base'
 import { useAccount } from './useAccount'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { useChainId } from './useChainId'
-import { useBlockNumber } from './useBlockNumber'
+import type { ChainId } from '../types'
 
 /**
  * Fetch token balance from chain
- * @param token
+ * @param address
+ * @param targetChainId
  */
-export function useERC20TokenBalance(address?: string) {
+export function useERC20TokenBalance(address?: string, targetChainId?: ChainId) {
     const account = useAccount()
-    const chainId = useChainId()
-    const blockNumber = useBlockNumber()
+    const defaultChainId = useChainId()
+    const chainId = targetChainId ?? defaultChainId
     const erc20Contract = useERC20TokenContract(address)
-    return useAsyncRetry(async () => {
-        if (!account || !address || !erc20Contract) return undefined
-        return erc20Contract.methods.balanceOf(account).call({
-            from: account,
-        })
-    }, [account, blockNumber, chainId, address, erc20Contract])
+    return useBeatRetry(
+        async () => {
+            if (!account || !address || !erc20Contract) return undefined
+            return erc20Contract.methods.balanceOf(account).call({
+                from: account,
+                chainId: toHex(chainId),
+            })
+        },
+        30 * 1000,
+        [account, chainId, address, erc20Contract],
+    )
 }

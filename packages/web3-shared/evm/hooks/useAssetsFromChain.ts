@@ -1,23 +1,25 @@
+import { useMemo } from 'react'
 import { first } from 'lodash-unified'
 import { Asset, ChainId, EthereumTokenType, FungibleTokenDetailed } from '../types'
 import { useTokensBalance } from './useTokensBalance'
 import { useChainDetailed } from './useChainDetailed'
+import { getChainDetailed, EMPTY_LIST } from '../utils'
 import { useBalance } from './useBalance'
-import { getChainDetailed } from '../utils'
 
 export function useAssetsFromChain(tokens: FungibleTokenDetailed[], chainId?: ChainId) {
-    const balance = useBalance()
+    const { value: balance = '0' } = useBalance(chainId)
     const chainDetailed = useChainDetailed()
     const passedChainDetailed = getChainDetailed(chainId)
 
     const chain = passedChainDetailed?.shortName.toLowerCase() ?? chainDetailed?.shortName.toLowerCase() ?? 'unknown'
     const nativeToken = first(tokens.filter((x) => x.type === EthereumTokenType.Native))
-    const erc20Tokens = tokens.filter((x) => x.type === EthereumTokenType.ERC20)
+    const erc20Tokens = useMemo(() => tokens.filter((x) => x.type === EthereumTokenType.ERC20), [tokens])
+    const erc20TokenAddresses = useMemo(() => erc20Tokens.map((x) => x.address), [erc20Tokens])
 
-    const { value: listOfBalance = [], loading, error, retry } = useTokensBalance(erc20Tokens.map((x) => x.address))
+    const { value: listOfBalance = EMPTY_LIST, loading, error, retry } = useTokensBalance(erc20TokenAddresses, chainId)
 
-    return {
-        value: [
+    const assets = useMemo(() => {
+        return [
             ...(nativeToken
                 ? [
                       {
@@ -38,7 +40,11 @@ export function useAssetsFromChain(tokens: FungibleTokenDetailed[], chainId?: Ch
                       }),
                   )
                 : []),
-        ],
+        ]
+    }, [nativeToken, chain, balance, listOfBalance, erc20Tokens])
+
+    return {
+        value: assets,
         loading,
         error,
         retry,

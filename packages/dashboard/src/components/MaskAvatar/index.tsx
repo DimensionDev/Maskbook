@@ -1,4 +1,4 @@
-import { Avatar, Box } from '@mui/material'
+import { Avatar, Stack } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { MenuPersonasActiveIcon } from '@masknet/icons'
 import { memo } from 'react'
@@ -20,16 +20,22 @@ export const MaskAvatar = memo<MaskAvatarProps>(({ size = 36, onClick }) => {
     const { classes } = useStyles()
     const avatar = usePersonaAvatar()
     const commonProps = {
-        sx: { width: size, height: size, display: 'inline-block' },
+        sx: {
+            width: size,
+            height: size,
+            display: 'inline-block',
+            background: MaskColorVar.lightBackground,
+            borderRadius: '50%',
+        },
         onClick: onClick,
         className: classes.author,
     }
 
     if (!avatar) {
         return (
-            <Box borderRadius="50%" sx={{ background: MaskColorVar.lightBackground }} height={size}>
+            <Stack justifyContent="center" width="100%" height={size} flexDirection="row">
                 <MenuPersonasActiveIcon {...commonProps} />
-            </Box>
+            </Stack>
         )
     }
 

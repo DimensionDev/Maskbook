@@ -1,17 +1,17 @@
 import {
     ObservableMap,
     ObservableSet,
-    Payload,
-    PostIdentifier,
-    ProfileIdentifier,
-    TypedMessageTuple,
-    useObservableValues,
-    useValueRef,
-} from '@masknet/shared'
+    type Payload,
+    type PostIdentifier,
+    type ProfileIdentifier,
+} from '@masknet/shared-base'
+import { useObservableValues, useValueRef } from '@masknet/shared-base-ui'
+import type { TypedMessageTuple } from '@masknet/typed-message'
 import { ValueRef, LiveSelector, DOMProxy } from '@dimensiondev/holoflows-kit'
-import type { Result } from 'ts-results'
-import { Context, createContext, createElement, memo, useContext } from 'react'
+import type { Result, Some } from 'ts-results'
+import { createContext, createElement, memo, useContext } from 'react'
 import { Subscription, useSubscription } from 'use-subscription'
+import type { SupportedPayloadVersions } from '@masknet/encryption'
 export interface PostContextSNSActions {
     /** Parse payload into Payload */
     payloadParser(raw: string): Result<Payload, Error>
@@ -24,12 +24,10 @@ export interface PostContextSNSActions {
 }
 export interface PostContextAuthor {
     readonly nickname: Subscription<string | null>
-    // TODO: change type to URL
-    readonly avatarURL: Subscription<string | null>
-    // TODO: rename to author
-    readonly postBy: Subscription<ProfileIdentifier>
-    // TODO: rename to id
-    readonly postID: Subscription<string | null>
+    readonly avatarURL: Subscription<URL | null>
+    readonly author: Subscription<ProfileIdentifier>
+    /** ID on the SNS network. */
+    readonly snsID: Subscription<string | null>
 }
 export interface PostContextComment {
     readonly commentsSelector: LiveSelector<HTMLElement, false>
@@ -37,6 +35,7 @@ export interface PostContextComment {
 }
 export interface PostContextCreation extends PostContextAuthor {
     readonly rootElement: DOMProxy
+    readonly actionsElement?: DOMProxy
     readonly suggestedInjectionPoint: HTMLElement
     readonly comments?: PostContextComment
     /**
@@ -54,47 +53,48 @@ export interface PostContextCreation extends PostContextAuthor {
     readonly signal?: AbortSignal
 }
 export interface PostContext extends PostContextAuthor {
-    //#region DOM knowledge
+    // #region DOM knowledge
     get rootNode(): HTMLElement | null
-    // TODO: rename to rootElement
-    readonly rootNodeProxy: DOMProxy
-    // TODO: rename to suggestedInjectionPoint
-    readonly postContentNode: HTMLElement
-    //#endregion
+    readonly rootElement: DOMProxy
+    readonly actionsElement?: DOMProxy
+    readonly suggestedInjectionPoint: HTMLElement
+    // #endregion
     readonly comment: undefined | PostContextComment
-    //#region Metadata of a post (author, mentioned items, ...)
+    // #region Metadata of a post (author, mentioned items, ...)
     /** Auto computed */
-    // TODO: rename to identifier
-    readonly postIdentifier: Subscription<null | PostIdentifier<ProfileIdentifier>>
+    readonly identifier: Subscription<null | PostIdentifier<ProfileIdentifier>>
     readonly url: Subscription<URL | null>
     // Meta
-    // TODO: rename to mentionedLinks
-    readonly postMentionedLinks: Subscription<string[]>
+    readonly mentionedLinks: Subscription<string[]>
     /** @deprecated It should appears in rawMessage */
     readonly postMetadataImages: Subscription<string[]>
-    /** @deprecated Use postMentionedLinks instead */
-    readonly postMetadataMentionedLinks: Subscription<string[]>
-    //#endregion
-    //#region Raw post content (not decrypted)
-    // TODO: rename to rawMessage
-    readonly postMessage: Subscription<TypedMessageTuple>
-    // TODO: rename to rawMessagePiped, should be a Subscription
-    readonly transformedPostContent: ValueRef<TypedMessageTuple>
+    // #endregion
+    // #region Raw post content (not decrypted)
+    readonly rawMessage: Subscription<TypedMessageTuple>
+    // TODO: should be a Subscription
+    readonly rawMessagePiped: ValueRef<TypedMessageTuple>
     /** @deprecated Use postMessage or transformedPostContent (depends on your usage) instead */
     readonly postContent: Subscription<string>
-    //#endregion
-    //#region Post payload discovered in the rawMessage
-    // TODO: rename to payload
-    readonly postPayload: Subscription<Result<Payload, unknown>>
-    /** @deprecated Use postPayload instead */
-    readonly decryptedPayloadForImage: ValueRef<Payload | null>
+    // #endregion
+    // #region Post payload discovered in the rawMessage
+    readonly containingMaskPayload: Subscription<Result<Payload, unknown>>
     // TODO: should be a Subscription
     readonly iv: ValueRef<string | null>
     /**
      * undefined => payload not found
      */
     readonly publicShared: Subscription<boolean | undefined>
-    //#endregion
+    /** @deprecated */
+    readonly ownersKeyEncrypted: Subscription<string | undefined>
+    /** @deprecated */
+    readonly version: Subscription<SupportedPayloadVersions | undefined>
+    decryptedReport(content: {
+        sharedPublic?: Some<boolean>
+        iv?: string
+        ownersAESKeyEncrypted?: string
+        version?: SupportedPayloadVersions
+    }): void
+    // #endregion
 }
 export type PostInfo = PostContext
 
@@ -144,12 +144,4 @@ function isSubscription(x: any): x is Subscription<any> {
         x !== null &&
         Boolean((x as Subscription<any>).getCurrentValue && (x as Subscription<any>).subscribe)
     )
-}
-
-export function usePostInfoSharedPublic(): boolean {
-    const info = usePostInfoDetails.postPayload()
-    if (info.err) return false
-    const payload = info.val
-    if (payload.version !== -38) return false
-    return !!payload.sharedPublic
 }

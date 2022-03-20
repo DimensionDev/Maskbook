@@ -1,10 +1,14 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import type { PostContext, PostContextAuthor, PostContextCreation, PostContextSNSActions } from '@masknet/plugin-infra'
 import {
-    ALL_EVENTS,
     extractTextFromTypedMessage,
     isTypedMessageEqual,
     makeTypedMessageTupleFromList,
+    type TypedMessage,
+    type TypedMessageTuple,
+} from '@masknet/typed-message'
+import {
+    ALL_EVENTS,
     ObservableMap,
     ObservableSet,
     parseURL,
@@ -13,28 +17,28 @@ import {
     ProfileIdentifier,
     SubscriptionFromValueRef,
     SubscriptionDebug as debug,
-    TypedMessage,
-    TypedMessageTuple,
-} from '@masknet/shared'
+    mapSubscription,
+} from '@masknet/shared-base'
 import { Err, Result } from 'ts-results'
 import type { Subscription } from 'use-subscription'
 import { activatedSocialNetworkUI } from '../'
 import { resolveFacebookLink } from '../../social-network-adaptor/facebook.com/utils/resolveFacebookLink'
+import type { SupportedPayloadVersions } from '@masknet/encryption'
 
 export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSActions) {
     return function createPostContext(opt: PostContextCreation): PostContext {
         const cancel: (Function | undefined)[] = []
         opt.signal?.addEventListener('abort', () => cancel.forEach((fn) => fn?.()))
 
-        //#region Post text content
+        // #region Post text content
         const postContent = new ValueRef(extractText())
         cancel.push(opt.rawMessage.subscribe(() => (postContent.value = extractText())))
         function extractText() {
             return extractTextFromTypedMessage(opt.rawMessage.getCurrentValue()).unwrapOr('')
         }
-        //#endregion
+        // #endregion
 
-        //#region Mentioned links
+        // #region Mentioned links
         const links = new ObservableSet<string>()
         cancel.push(
             postContent.addListener((post) => {
@@ -59,9 +63,9 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             getCurrentValue: () => [...links],
             subscribe: (sub) => links.event.on(ALL_EVENTS, sub),
         })
-        //#endregion
+        // #endregion
 
-        //#region Parse payload
+        // #region Parse payload
         const postPayload = new ValueRef<Result<Payload, unknown>>(Err(new Error('Empty')))
         parsePayload()
         cancel.push(postContent.addListener(parsePayload))
@@ -80,39 +84,47 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             }
             if (postPayload.value.err) postPayload.value = lastResult
         }
-        //#endregion
+        // #endregion
         const author: PostContextAuthor = {
             avatarURL: opt.avatarURL,
             nickname: opt.nickname,
-            postBy: opt.postBy,
-            postID: opt.postID,
+            author: opt.author,
+            snsID: opt.snsID,
         }
         const transformedPostContent = new ValueRef(makeTypedMessageTupleFromList(), isTypedMessageEqual)
         const postIdentifier = debug({
             getCurrentValue: () => {
-                const by = opt.postBy.getCurrentValue()
-                const id = opt.postID.getCurrentValue()
+                const by = opt.author.getCurrentValue()
+                const id = opt.snsID.getCurrentValue()
                 if (by.isUnknown || id === null) return null
                 return new PostIdentifier(by, id)
             },
             subscribe: (sub) => {
-                const a = opt.postBy.subscribe(sub)
-                const b = opt.postID.subscribe(sub)
+                const a = opt.author.subscribe(sub)
+                const b = opt.snsID.subscribe(sub)
                 return () => void [a(), b()]
             },
         })
+        const iv = new ValueRef<string | null>(null)
+        const isPublicShared = new ValueRef<boolean | undefined>(undefined)
+        const ownersAESKeyEncrypted = new ValueRef<string | undefined>(undefined)
+        const version = new ValueRef<SupportedPayloadVersions | undefined>(undefined)
         return {
-            ...author,
+            author: author.author,
+            avatarURL: author.avatarURL,
+            nickname: author.nickname,
+            snsID: author.snsID,
 
             get rootNode() {
                 return opt.rootElement.realCurrent
             },
-            rootNodeProxy: opt.rootElement,
-            postContentNode: opt.suggestedInjectionPoint,
+            rootElement: opt.rootElement,
+            actionsElement: opt.actionsElement,
+            suggestedInjectionPoint: opt.suggestedInjectionPoint,
 
             comment: opt.comments,
 
-            postIdentifier,
+            identifier: postIdentifier,
             url: debug({
                 getCurrentValue: () => {
                     const id = postIdentifier.getCurrentValue()
@@ -122,29 +134,29 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
                 subscribe: (sub) => postIdentifier.subscribe(sub),
             }),
 
-            postMentionedLinks: linksSubscribe,
+            mentionedLinks: linksSubscribe,
             postMetadataImages:
                 opt.postImagesProvider ||
                 debug({
                     getCurrentValue: () => [],
                     subscribe: () => () => {},
                 }),
-            postMetadataMentionedLinks: linksSubscribe,
 
-            postMessage: opt.rawMessage,
-            transformedPostContent,
+            rawMessage: opt.rawMessage,
+            rawMessagePiped: transformedPostContent,
             postContent: SubscriptionFromValueRef(postContent),
 
-            postPayload: SubscriptionFromValueRef(postPayload),
-            decryptedPayloadForImage: new ValueRef(null),
-            iv: new ValueRef(null),
-            publicShared: debug({
-                getCurrentValue: () =>
-                    postPayload.value
-                        .map((val) => val.version === -38 && val.sharedPublic)
-                        .unwrapOr<undefined>(undefined),
-                subscribe: (sub) => postPayload.addListener(sub),
-            }),
+            containingMaskPayload: SubscriptionFromValueRef(postPayload),
+            iv,
+            publicShared: SubscriptionFromValueRef(isPublicShared),
+            ownersKeyEncrypted: SubscriptionFromValueRef(ownersAESKeyEncrypted),
+            version: SubscriptionFromValueRef(version),
+            decryptedReport(opts) {
+                if (opts.iv) iv.value = opts.iv
+                if (opts.sharedPublic?.some) isPublicShared.value = opts.sharedPublic.val
+                if (opts.ownersAESKeyEncrypted) ownersAESKeyEncrypted.value = opts.ownersAESKeyEncrypted
+                if (opts.version) version.value = opts.version
+            },
         }
     }
 }
@@ -153,15 +165,20 @@ export function createRefsForCreatePostContext() {
     const nickname = new ValueRef<string | null>(null)
     const postBy = new ValueRef<ProfileIdentifier>(ProfileIdentifier.unknown, ProfileIdentifier.equals)
     const postID = new ValueRef<string | null>(null)
-    const url = new ValueRef<URL | null>(null)
     const postMessage = new ValueRef<TypedMessageTuple<readonly TypedMessage[]>>(makeTypedMessageTupleFromList())
     const postMetadataImages = new ObservableSet<string>()
     const postMetadataMentionedLinks = new ObservableMap<unknown, string>()
-    const subscriptions: Omit<PostContextCreation, 'rootElement' | 'suggestedInjectionPoint'> = {
-        avatarURL: SubscriptionFromValueRef(avatarURL),
+    const subscriptions: Omit<PostContextCreation, 'rootElement' | 'actionsElement' | 'suggestedInjectionPoint'> = {
+        avatarURL: mapSubscription(SubscriptionFromValueRef(avatarURL), (x) => {
+            if (!x) return null
+            try {
+                return new URL(x)
+            } catch {}
+            return null
+        }),
         nickname: SubscriptionFromValueRef(nickname),
-        postBy: SubscriptionFromValueRef(postBy),
-        postID: SubscriptionFromValueRef(postID),
+        author: SubscriptionFromValueRef(postBy),
+        snsID: SubscriptionFromValueRef(postID),
         rawMessage: SubscriptionFromValueRef(postMessage),
         postImagesProvider: debug({
             getCurrentValue: () => [...postMetadataImages],

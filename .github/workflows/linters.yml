@@ -6,6 +6,13 @@ on:
   pull_request:
     branches: [master, develop*, released]
 
+# Cancels all previous workflow runs for pull requests that have not completed.
+concurrency:
+  # The concurrency group contains the workflow name and the branch name for
+  # pull requests or the commit hash for any other events.
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
 jobs:
   prettier:
     runs-on: ubuntu-20.04
@@ -14,21 +21,42 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v2
-      - run: npx prettier@2.5.0 --list-different .
-  locale-kit:
+      - run: npx prettier@2.5.0 --check .
+  markdownlint:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v2
-      - name: pnpm cache
-        uses: actions/cache@v2
+      - run: npx markdownlint-cli .
+  editorconfig:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
         with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: ${{ runner.os }}-node-
-      - run: npm install --global pnpm
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: DimensionDev/setup-editorconfig-action@latest
+      - run: editorconfig-checker
+  anti-trojan-source:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v2
+      - run: npx anti-trojan-source --files='packages/**/src/**/*.{ts,tsx,js}'
+  locale-kit:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: pnpm/action-setup@v2.2.1
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+          cache: "pnpm"
       - run: pnpm install
       - run: npx gulp locale-kit
   type-check-and-jest:
@@ -41,28 +69,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+      - uses: pnpm/action-setup@v2.2.1
       - uses: actions/setup-node@v2
         with:
-          node-version: '16'
-      - name: pnpm cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: ${{ runner.os }}-node-
-      - name: Restore TypeScript incremental build cache
-        uses: actions/cache@v2
-        with:
-          path: packages/**/dist
-          # actions/cache will not upload changes in cache if primary key hits
-          # by adding date to the primary key, we can ensure the cache updates on the first build of the day
-          key: ${{ runner.os }}-tsc-v3-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
-          # Allow fallback to cache of different dependencies but not allowing fallback to different tsconfig
-          # because that might indicates a structural/flags changes in tsc emit.
-          restore-keys: |
-            ${{ runner.os }}-tsc-v3-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}
-            ${{ runner.os }}-tsc-v3-${{ hashFiles('packages/**/tsconfig.json') }}
-      - run: npm install --global pnpm
+          node-version: "16"
+          cache: "pnpm"
       - run: pnpm install
       - run: npx gulp codegen
       - run: npx gulp polyfill
@@ -73,17 +84,17 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+      - uses: pnpm/action-setup@v2.2.1
       - uses: actions/setup-node@v2
-      - name: pnpm cache
-        uses: actions/cache@v2
         with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: ${{ runner.os }}-node-
-      - run: npm install --global pnpm
+          node-version: "16"
+          cache: "pnpm"
       - run: pnpm install
-      - run: pnpm run lint:ci -- --max-warnings=0
-      - run: pnpm run lint:ci -- --format=junit --output-file=reports/junit/eslint-results.xml
+      - name: Run Eslint
+        run: |
+          # report to stdio and to file, it's cached, the second run should be fast
+          pnpm run lint:ci
+          pnpm run lint:ci-report
       - name: Upload eslint report
         uses: actions/upload-artifact@v2
         with:

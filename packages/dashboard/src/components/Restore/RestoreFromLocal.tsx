@@ -9,7 +9,7 @@ import { MaskAlert } from '../MaskAlert'
 import FileUpload from '../FileUpload'
 import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
 import { useNavigate } from 'react-router-dom'
-import { RoutePaths } from '../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { blobToText } from '@dimensiondev/kit'
 import { LoadingCard } from './steps/LoadingCard'
 import { decryptBackup } from '@masknet/backup-format'
@@ -98,7 +98,7 @@ export const RestoreFromLocal = memo(() => {
                 await changeCurrentPersona(lastedPersona.identifier)
             }
         }
-        navigate(RoutePaths.Personas, { replace: true })
+        navigate(DashboardRoutes.Personas, { replace: true })
     }, [currentPersona, changeCurrentPersona])
 
     const restoreDB = useCallback(async () => {

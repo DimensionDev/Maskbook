@@ -8,7 +8,8 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import Services from '../../../../service'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
 import { Typography } from '@mui/material'
-import { FormattedAddress, useValueRef } from '@masknet/shared'
+import { FormattedAddress } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { useHasPassword } from '../../../hook/useHasPassword'
 import type { z as zod } from 'zod'
 import { Controller } from 'react-hook-form'
@@ -184,7 +185,7 @@ const WalletRecovery = memo(() => {
                                             helperText={!isValid ? errors.confirm?.message : ''}
                                             type="password"
                                             variant="filled"
-                                            placeholder="Re-enter the payment password"
+                                            placeholder={t('popups_wallet_re_payment_password')}
                                         />
                                     )}
                                     name="confirm"
@@ -200,6 +201,7 @@ const WalletRecovery = memo(() => {
                 <LoadingButton
                     loading={setPasswordLoading || confirmLoading}
                     fullWidth
+                    loadingPosition="end"
                     disabled={!hasPassword ? !isValid : false}
                     classes={{ root: classes.button, disabled: classes.disabled }}
                     variant="contained"

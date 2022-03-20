@@ -1,6 +1,6 @@
 import { Button, useTheme } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { RoutePaths } from '../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout'
 import { styled } from '@mui/material/styles'
 import { memo, MutableRefObject, useEffect, useMemo, useRef } from 'react'
@@ -34,7 +34,7 @@ export default function Welcome() {
     const mode = useTheme().palette.mode
     const navigate = useNavigate()
 
-    const agreementContentPageURL = new URL(`./en.html`, import.meta.url).toString()
+    const agreementContentPageURL = new URL('./en.html', import.meta.url).toString()
     const privacyPolicyDocument = useMemo(() => () => iframeRef?.current?.contentWindow?.document, [iframeRef])
 
     useEffect(
@@ -54,7 +54,7 @@ export default function Welcome() {
         if (!iframeDocument) return
 
         const style = iframeDocument.createElement('style')
-        style.innerHTML = `
+        style.textContent = `
               h3, h6 { color: ${mode === 'dark' ? '#FFFFFF' : '#111432'}; }
               p { color: ${mode === 'dark' ? 'rgba(255, 255, 255, 0.8);' : '#7b8192'}; }
             `
@@ -80,7 +80,7 @@ export default function Welcome() {
             iframeRef={iframeRef}
             privacyPolicyURL={agreementContentPageURL}
             iframeLoadHandler={handleIFrameLoad}
-            agreeHandler={() => navigate(RoutePaths.Setup)}
+            agreeHandler={() => navigate(DashboardRoutes.Setup)}
             cancelHandler={() => window.close()}
         />
     )

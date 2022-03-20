@@ -1,6 +1,6 @@
 import { ECKeyIdentifier, Identifier, ProfileIdentifier } from '@masknet/shared-base'
 import type { BackupJSONFileLatest } from '../latest'
-import type { RelationRecord } from '../../../../../database/Persona/Persona.db'
+import type { RelationRecord } from '../../../../../../background/database/persona/db'
 
 export function RelationRecordToJSONFormat(relation: RelationRecord): BackupJSONFileLatest['relations'][0] {
     return {

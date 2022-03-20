@@ -15,7 +15,6 @@ import {
     useNetworkType,
 } from '@masknet/web3-shared-evm'
 import { SwapStatus } from './SwapGuide'
-import { getMaskColor } from '@masknet/theme'
 import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
@@ -47,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     wrapper: {
         padding: theme.spacing(2),
-        background: getMaskColor(theme).twitterBackground,
+        background: theme.palette.background.default,
         borderRadius: theme.shape.borderRadius,
     },
     tokenWrapper: {

@@ -6,9 +6,15 @@
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
   "include": ["./src"],
-  "references": [{ "path": "../shared/" }, { "path": "../theme" }],
+  "references": [
+    { "path": "../shared-base-ui" },
+    { "path": "../theme" },
+    { "path": "../web3-shared/base" },
+    { "path": "../typed-message/base" },
+    { "path": "../encryption" }
+  ],
   "ts-node": {
-    "transpileOnly": true,
+    "swc": true,
     "compilerOptions": { "module": "CommonJS" }
   }
 }

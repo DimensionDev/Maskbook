@@ -1,7 +1,7 @@
+import { useMemo, useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import {
     formatEthereumAddress,
-    isNative,
     resolveAddressLinkOnExplorer,
     useChainId,
     useWallet,
@@ -10,8 +10,11 @@ import {
     ERC721TokenDetailed,
     useWeb3,
     TransactionStateType,
-    resolveTransactionLinkOnExplorer,
+    isNativeTokenAddress,
+    formatNFT_TokenId,
 } from '@masknet/web3-shared-evm'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import classNames from 'classnames'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { Button, Grid, Link, Typography, DialogContent, List, ListItem } from '@mui/material'
@@ -21,11 +24,9 @@ import LaunchIcon from '@mui/icons-material/Launch'
 import { useI18N } from '../../../utils'
 import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCallback'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
-import { useMemo, useCallback, useEffect, useState } from 'react'
-import { useCustomSnackbar } from '@masknet/theme'
-import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
+import { useCompositionContext } from '@masknet/plugin-infra'
 import { RedPacketNftMetaKey } from '../constants'
-import OpenInNewIcon from '@mui/icons-material/OpenInNew'
+import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketRPC } from '../messages'
 
 const useStyles = makeStyles()((theme) => ({
@@ -68,7 +69,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         height: 420,
         overflowY: 'auto',
-        background: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
+        background: theme.palette.background.default,
         borderRadius: 12,
         marginTop: theme.spacing(1.5),
         marginBottom: theme.spacing(1.5),
@@ -87,17 +88,12 @@ const useStyles = makeStyles()((theme) => ({
         height: 180,
         overflow: 'hidden',
     },
-    imgWrapper: {
-        height: 160,
-        width: '100%',
-        overflow: 'hidden',
-    },
     nftImg: {
         maxWidth: '100%',
     },
     nftNameWrapper: {
         width: '100%',
-        background: theme.palette.mode === 'light' ? 'none' : '#2F3336',
+        background: theme.palette.background.paper,
         borderBottomRightRadius: 8,
         borderBottomLeftRadius: 8,
         paddingTop: 2,
@@ -117,19 +113,8 @@ const useStyles = makeStyles()((theme) => ({
         minHeight: 36,
         height: 36,
     },
-    cancelButton: {
-        backgroundColor: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
-        color: '#1C68F3',
-        '&:hover': {
-            backgroundColor: theme.palette.mode === 'light' ? '#EDF1F2' : '#16181C',
-        },
-    },
-    sendButton: {
-        backgroundColor: '#1C68F3',
-        '&:hover': {
-            backgroundColor: '#1854c4',
-        },
-    },
+    cancelButton: {},
+    sendButton: {},
     snackBarText: {
         fontSize: 14,
     },
@@ -147,6 +132,21 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
         transform: 'translateY(1px)',
+    },
+    loadingFailImage: {
+        minHeight: '0px !important',
+        maxWidth: 'none',
+        transform: 'translateY(10px)',
+        width: 64,
+        height: 64,
+    },
+    iframe: {
+        minHeight: 147,
+    },
+    ellipsis: {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
     },
 }))
 export interface RedpacketNftConfirmDialogProps {
@@ -179,9 +179,11 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
         contract.address,
         tokenIdList,
     )
+    const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletStatusDialogUpdated,
+    )
 
-    const isSending = createState.type === TransactionStateType.WAIT_FOR_CONFIRMING
-    const { showSnackbar } = useCustomSnackbar()
+    const isSending = [TransactionStateType.WAIT_FOR_CONFIRMING, TransactionStateType.HASH].includes(createState.type)
     const onSendTx = useCallback(() => createCallback(publicKey), [publicKey])
     const [txid, setTxid] = useState('')
     const onSendPost = useCallback(
@@ -199,11 +201,12 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                 privateKey,
                 chainId: contract.chainId,
             })
+            closeWalletStatusDialog()
         },
         [duration, message, senderName, contract, privateKey, txid],
     )
     useEffect(() => {
-        if (createState.type === TransactionStateType.WAIT_FOR_CONFIRMING && createState.hash) {
+        if (createState.type === TransactionStateType.HASH && createState.hash) {
             setTxid(createState.hash)
             RedPacketRPC.addRedPacketNft({ id: createState.hash, password: privateKey, contract_version: 1 })
         }
@@ -212,36 +215,18 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
             return
         }
 
-        if (createState.type === TransactionStateType.FAILED) {
-            showSnackbar(createState.error.message, { variant: 'error' })
-        } else if (createState.type === TransactionStateType.CONFIRMED && createState.no === 0) {
+        if (createState.type === TransactionStateType.CONFIRMED && createState.no === 0) {
             const { receipt } = createState
 
             const { id } = (receipt.events?.CreationSuccess.returnValues ?? {}) as {
                 id: string
             }
             onSendPost(id)
-            showSnackbar(
-                <div className={classes.snackBar}>
-                    <Typography className={classes.snackBarText}>{t('plugin_wallet_transaction_confirmed')}</Typography>
-                    <Link
-                        href={resolveTransactionLinkOnExplorer(contract!.chainId, createState.receipt.transactionHash)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={classes.snackBarLink}>
-                        <OpenInNewIcon className={classes.openIcon} />
-                    </Link>
-                </div>,
-                {
-                    variant: 'success',
-                    anchorOrigin: { horizontal: 'right', vertical: 'top' },
-                },
-            )
             onClose()
         }
 
         resetCallback()
-    }, [createState, onSendPost, contract])
+    }, [createState, onSendPost])
 
     return (
         <InjectedDialog open={open} onClose={onBack} title={t('confirm')} maxWidth="xs">
@@ -259,7 +244,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                             align="right"
                             className={classNames(classes.account, classes.bold, classes.text)}>
                             ({wallet?.name}) {formatEthereumAddress(account, 4)}
-                            {isNative(wallet?.address!) ? null : (
+                            {isNativeTokenAddress(wallet) ? null : (
                                 <Link
                                     color="textPrimary"
                                     className={classes.link}
@@ -282,7 +267,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                             variant="body1"
                             color="textPrimary"
                             align="right"
-                            className={(classes.text, classes.bold)}>
+                            className={(classes.text, classes.bold, classes.ellipsis)}>
                             {message}
                         </Typography>
                     </Grid>
@@ -306,16 +291,9 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                     <Grid item xs={12}>
                         <List className={classes.tokenSelector}>
                             {tokenList.map((value, i) => (
-                                <ListItem key={i.toString()} className={classNames(classes.tokenSelectorWrapper)}>
-                                    <div className={classes.imgWrapper}>
-                                        <img className={classes.nftImg} src={value.info.image} />
-                                    </div>
-                                    <div className={classes.nftNameWrapper}>
-                                        <Typography className={classes.nftName} color="textSecondary">
-                                            {value.info.name}
-                                        </Typography>
-                                    </div>
-                                </ListItem>
+                                <div key={i}>
+                                    <NFTCard token={value} renderOrder={i} />
+                                </div>
                             ))}
                         </List>
                     </Grid>
@@ -369,5 +347,37 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                 </Grid>
             </DialogContent>
         </InjectedDialog>
+    )
+}
+
+interface NFTCardProps {
+    token: ERC721TokenDetailed
+    renderOrder: number
+}
+
+function NFTCard(props: NFTCardProps) {
+    const { token, renderOrder } = props
+    const { classes } = useStyles()
+    const [name, setName] = useState(formatNFT_TokenId(token.tokenId, 2))
+    return (
+        <ListItem className={classNames(classes.tokenSelectorWrapper)}>
+            <NFTCardStyledAssetPlayer
+                contractAddress={token.contractDetailed.address}
+                chainId={token.contractDetailed.chainId}
+                tokenId={token.tokenId}
+                renderOrder={renderOrder}
+                setERC721TokenName={setName}
+                classes={{
+                    loadingFailImage: classes.loadingFailImage,
+                    iframe: classes.iframe,
+                }}
+            />
+
+            <div className={classes.nftNameWrapper}>
+                <Typography className={classes.nftName} color="textSecondary">
+                    {name}
+                </Typography>
+            </div>
+        </ListItem>
     )
 }

@@ -1,6 +1,6 @@
 # Payload version -37
 
-Playground: copy [the playground file](./000-TypedMessage-and-Payload-37-playground.js) into a https: web page.
+<!-- markdownlint-disable no-duplicate-heading -->
 
 ## Design target
 
@@ -91,8 +91,7 @@ enum PublicKeyAlgorithmEnum {
 
 This field represents the format version.
 
-The first and the current binary version is `-37`.
-The implementation MUST fail when the version is less than `-37` (e.g. `-38`).
+The first and the current binary version is `0`.
 
 #### `authorNetwork` field
 

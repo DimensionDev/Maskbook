@@ -1,25 +1,25 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useCustomSnackbar } from '@masknet/theme'
 import { Card, CardActions, CardContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
     EthereumTokenType,
     FungibleTokenDetailed,
-    isLessThan,
-    isNative,
-    isZero,
     FungibleTokenWatched,
+    isNativeTokenAddress,
     useAccount,
 } from '@masknet/web3-shared-evm'
+import { isZero, isLessThan } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../utils'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/SNSAdaptor/SelectTokenAmountPanel'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
-import type { useAsset } from '../hooks/useAsset'
 import { PluginCollectibleRPC } from '../messages'
-import { toAsset, toUnixTimestamp } from '../helpers'
+import { toAsset } from '../helpers'
+import getUnixTime from 'date-fns/getUnixTime'
+import type { useAsset } from '../../EVM/hooks'
+import { isWyvernSchemaName } from '../utils'
 
 const useStyles = makeStyles()((theme) => ({
     footer: {
@@ -50,10 +50,8 @@ export interface ListingByHighestBidCardProps {
 export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
     const { asset, tokenWatched, paymentTokens, open, onClose } = props
     const { amount, token, balance, setAmount, setToken } = tokenWatched
-
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { showSnackbar } = useCustomSnackbar()
 
     const account = useAccount()
 
@@ -73,27 +71,21 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!token?.value) return
         if (token.value.type !== EthereumTokenType.ERC20) return
-        try {
-            await PluginCollectibleRPC.createSellOrder({
-                asset: toAsset({
-                    tokenId: asset.value.token_id,
-                    tokenAddress: asset.value.token_address,
-                    schemaName: asset.value.asset_contract.schema_name,
-                }),
-                accountAddress: account,
-                startAmount: Number.parseFloat(amount),
-                expirationTime: toUnixTimestamp(expirationDateTime),
-                englishAuctionReservePrice: Number.parseFloat(reservePrice),
-                waitForHighestBid: true,
-                paymentTokenAddress: token.value.address, // english auction must be erc20 token
-            })
-        } catch (error) {
-            if (error instanceof Error) {
-                showSnackbar(error.message, { variant: 'error', preventDuplicate: true })
-            }
-            throw error
-        }
-    }, [asset?.value, token, amount, account, reservePrice, expirationDateTime, showSnackbar])
+        const schemaName = asset.value.asset_contract?.schemaName
+        await PluginCollectibleRPC.createSellOrder({
+            asset: toAsset({
+                tokenId: asset.value.token_id,
+                tokenAddress: asset.value.token_address,
+                schemaName: isWyvernSchemaName(schemaName) ? schemaName : undefined,
+            }),
+            accountAddress: account,
+            startAmount: Number.parseFloat(amount),
+            expirationTime: getUnixTime(expirationDateTime),
+            englishAuctionReservePrice: Number.parseFloat(reservePrice),
+            waitForHighestBid: true,
+            paymentTokenAddress: token.value.address, // english auction must be erc20 token
+        })
+    }, [asset?.value, token, amount, account, reservePrice, expirationDateTime])
 
     useEffect(() => {
         setAmount('')
@@ -108,7 +100,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                     amount={amount}
                     balance={balance.value ?? '0'}
                     token={token.value as FungibleTokenDetailed}
-                    disableNativeToken={!paymentTokens.some((x) => isNative(x.address))}
+                    disableNativeToken={!paymentTokens.some(isNativeTokenAddress)}
                     onAmountChange={setAmount}
                     onTokenChange={setToken}
                     TokenAmountPanelProps={{
@@ -120,7 +112,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                             helperText: t('plugin_collectible_set_starting_bid_price'),
                         },
                     }}
-                    FixedTokenListProps={{
+                    FungibleTokenListProps={{
                         selectedTokens: token.value ? [token.value.address] : [],
                         tokens: paymentTokens,
                         whitelist: paymentTokens.map((x) => x.address),

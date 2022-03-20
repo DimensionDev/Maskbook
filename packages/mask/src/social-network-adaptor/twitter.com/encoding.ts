@@ -1,4 +1,4 @@
-import { batchReplace, parseURL, regexMatchAll } from '../../utils/utils'
+import { TwitterDecoder, __TwitterEncoder } from '@masknet/encryption'
 import { isNull } from 'lodash-unified'
 const ICAO9303Checksum = {
     encode: (input: string) => {
@@ -7,7 +7,7 @@ const ICAO9303Checksum = {
                 .toUpperCase()
                 .replace(/[+/=]/g, '0')
                 .split('')
-                .map((d, i) => parseInt(d, 36) * [7, 3, 1][i % 3])
+                .map((d, i) => Number.parseInt(d, 36) * [7, 3, 1][i % 3])
                 .reduce((l, r) => l + r, 0) % 19
         )
             .toString(19)
@@ -29,7 +29,7 @@ export const twitterEncoding = {
     /**
      * @link https://github.com/DimensionDev/Maskbook/issues/191
      */
-    publicKeyEncoder: (text: string) => `🎭${ICAO9303Checksum.encode(text)}🎭`,
+    publicKeyEncoder: (text: string) => `\u{1F3AD}${ICAO9303Checksum.encode(text)}\u{1F3AD}`,
     publicKeyDecoder: (text: string): string[] => {
         const r = regexMatchAll(text, /([\d+/=A-Za-z]{20,60})/)
         if (isNull(r)) {
@@ -44,44 +44,33 @@ export const twitterEncoding = {
         }
         return []
     },
-    /**
-     * @link https://github.com/DimensionDev/Maskbook/issues/198
-     */
-    payloadEncoder: (text: string) =>
-        `https://mask.io/?PostData_v1=${batchReplace(text, [
-            ['🎼', '%20'],
-            [':||', '%40'],
-            ['+', '-'],
-            ['=', '_'],
-            [/\|/g, '.'],
-        ])}`,
+    payloadEncoder: __TwitterEncoder,
     payloadDecoder: (text: string): string[] => {
-        if (!text) return []
-        if (!text.includes('%20') || !text.includes('%40')) return []
-        const payloadLink = parseURL(text)
-            .map((x) => x.replace(/…$/, ''))
-            .filter((x) => x.endsWith('%40'))[0]
-        try {
-            const { search, pathname } = new URL(payloadLink)
-            const payload = search ? search.slice(1) : pathname.slice(1)
-            if (!payload) return []
-            return [
-                `🎼${batchReplace(
-                    payload
-                        // https://github.com/sindresorhus/eslint-plugin-unicorn/issues/1476
-                        // eslint-disable-next-line unicorn/better-regex
-                        .replace(/^PostData_v\d=/i, '')
-                        .replace(/^%20/, '')
-                        .replace(/%40$/, ''),
-                    [
-                        ['-', '+'],
-                        ['_', '='],
-                        [/\./g, '|'],
-                    ],
-                )}:||`,
-            ]
-        } catch {
-            return []
-        }
+        return TwitterDecoder(text)
+            .map((x) => [x])
+            .unwrapOr([])
     },
+}
+
+function regexMatchAll(str: string, regexp: RegExp, index = 1) {
+    const gPos = regexp.flags.indexOf('g')
+    const withoutG = gPos >= 0 ? `${regexp.flags.slice(0, gPos)}${regexp.flags.slice(gPos + 1)}` : regexp.flags
+    const o = new RegExp(regexp.source, withoutG)
+    const g = new RegExp(regexp.source, `${withoutG}g`)
+    const r = str.match(g)
+    if (isNull(r)) {
+        return null
+    }
+    const sto = []
+    for (const v of r) {
+        const retV = v.match(o)
+        if (isNull(retV)) {
+            continue
+        }
+        sto.push(retV[index])
+    }
+    if (sto.length === 0) {
+        return null
+    }
+    return sto
 }

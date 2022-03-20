@@ -6,7 +6,7 @@ import { WalletInfo } from '../WalletInfo'
 import { TabContext, TabPanel } from '@mui/lab'
 import { EnterDashboard } from '../../../../components/EnterDashboard'
 import { AssetsList } from '../AssetsList'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { ActivityList } from '../ActivityList'
 import { useI18N } from '../../../../../../utils'
@@ -75,8 +75,8 @@ enum WalletTabs {
 }
 
 export const WalletAssets = memo(() => {
-    const history = useHistory()
-    return <WalletAssetsUI onAddTokenClick={() => history.push(PopupRoutes.AddToken)} />
+    const navigate = useNavigate()
+    return <WalletAssetsUI onAddTokenClick={() => navigate(PopupRoutes.AddToken)} />
 })
 
 export interface WalletAssetsUIProps {

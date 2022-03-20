@@ -1,21 +1,20 @@
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
     EthereumTokenType,
     formatBalance,
     FungibleTokenDetailed,
-    isGreaterThan,
-    isZero,
-    pow10,
     useAccount,
     useNativeTokenDetailed,
     useRedPacketConstants,
     useFungibleTokenBalance,
+    useChainId,
 } from '@masknet/web3-shared-evm'
+import { isGreaterThan, isZero, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import { omit } from 'lodash-unified'
 import { FormControl, InputLabel, MenuItem, MenuProps, Select, TextField } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
-import { ChangeEvent, useCallback, useMemo, useState } from 'react'
+import { ChangeEvent, useCallback, useMemo, useState, useEffect } from 'react'
 import { v4 as uuid } from 'uuid'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -33,7 +32,7 @@ const duration = 60 * 60 * 24
 const useStyles = makeStyles()((theme) => ({
     field: {
         display: 'flex',
-        margin: theme.spacing(1),
+        margin: theme.spacing(1, 0),
     },
     line: {
         display: 'flex',
@@ -91,12 +90,13 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const { onChange, onNext, origin } = props
     // context
     const account = useAccount()
+    const chainId = useChainId()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
 
-    //#region select token
+    // #region select token
     const { value: nativeTokenDetailed } = useNativeTokenDetailed()
     const [token = nativeTokenDetailed, setToken] = useState<FungibleTokenDetailed | undefined>(origin?.token)
-    const [id] = useState(uuid())
+    const [id] = useState(uuid)
     const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
         useCallback(
@@ -112,15 +112,15 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             open: true,
             uuid: id,
             disableNativeToken: false,
-            FixedTokenListProps: {
+            FungibleTokenListProps: {
                 selectedTokens: token ? [token.address] : [],
             },
         })
     }, [id, token?.address])
-    //#endregion
+    // #endregion
 
-    //#region packet settings
-    const [isRandom, setIsRandom] = useState(origin?.isRandom ? 1 : 0)
+    // #region packet settings
+    const [isRandom, setRandom] = useState(origin?.isRandom ? 1 : 0)
     const [message, setMessage] = useState(origin?.message || t('plugin_red_packet_best_wishes'))
     const currentIdentity = useCurrentIdentity()
     const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
@@ -146,18 +146,24 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             ? formatBalance(origin?.total, origin.token?.decimals ?? 0)
             : formatBalance(new BigNumber(origin?.total ?? '0').div(origin?.shares ?? 1), origin?.token?.decimals ?? 0),
     )
-    const amount = new BigNumber(rawAmount ?? '0').multipliedBy(pow10(token?.decimals ?? 0))
-    const totalAmount = useMemo(
-        () => (isRandom ? new BigNumber(amount) : new BigNumber(amount).multipliedBy(shares ?? '0')),
-        [amount, shares],
-    )
+    const amount = rightShift(rawAmount ?? '0', token?.decimals)
+    const totalAmount = useMemo(() => multipliedBy(amount, isRandom ? 1 : shares ?? '0'), [amount, shares])
+    const isDivisible = !totalAmount.dividedBy(shares).isLessThan(1)
+
+    useEffect(() => {
+        setToken(nativeTokenDetailed)
+    }, [chainId, nativeTokenDetailed])
+
+    useEffect(() => {
+        setRawAmount('0')
+    }, [token])
 
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
         token?.type ?? EthereumTokenType.Native,
         token?.address ?? '',
     )
-    //#endregion
+    // #endregion
 
     const validationMessage = useMemo(() => {
         if (!token) return t('plugin_wallet_select_a_token')
@@ -167,6 +173,11 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         if (isZero(amount)) return t('plugin_dhedge_enter_an_amount')
         if (isGreaterThan(totalAmount, tokenBalance))
             return t('plugin_gitcoin_insufficient_balance', { symbol: token.symbol })
+        if (!isDivisible)
+            return t('plugin_red_packet_indivisible', {
+                symbol: token.symbol,
+                amount: formatBalance(1, token.decimals),
+            })
         return ''
     }, [account, amount, totalAmount, shares, token, tokenBalance])
 
@@ -200,7 +211,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                             // foolproof, reset amount since the meaning of amount changed:
                             // 'total amount' <=> 'amount per share'
                             setRawAmount('0')
-                            setIsRandom(e.target.value as number)
+                            setRandom(e.target.value as number)
                         }}
                         MenuProps={{
                             anchorOrigin: {

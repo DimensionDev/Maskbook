@@ -1,18 +1,20 @@
-import type { FungibleTokenDetailed } from '../types'
+import type { FungibleTokenDetailed, ChainId } from '../types'
 import { useAssetsFromChain } from './useAssetsFromChain'
 import { useAssetsFromProvider } from './useAssetsFromProvider'
 import { useCallback, useEffect, useState } from 'react'
 import { isSameAddress } from '../utils'
 import { sortBy, uniqBy } from 'lodash-unified'
 
-export function useAssetsByTokenList(tokens: FungibleTokenDetailed[]) {
+export function useAssetsByTokenList(tokens: FungibleTokenDetailed[], targetChainId?: ChainId) {
     const [tokensForAsset, setTokensForAsset] = useState<FungibleTokenDetailed[]>([])
 
     // merge tokens to avoid fetch asset from chain all the time
     useEffect(() => {
-        const uniqTokens = uniqBy([...tokensForAsset, ...tokens], (x) => x.address)
-        const sortedTokens = sortBy(uniqTokens, (x) => x.address)
-        setTokensForAsset(sortedTokens)
+        setTokensForAsset((oldTokensForAsset) => {
+            const uniqTokens = uniqBy([...tokens, ...oldTokensForAsset], (x) => x.address)
+            const sortedTokens = sortBy(uniqTokens, (x) => x.address)
+            return sortedTokens
+        })
     }, [tokens.map((x) => x.address.slice(0, 5)).join('')])
 
     const {
@@ -20,14 +22,14 @@ export function useAssetsByTokenList(tokens: FungibleTokenDetailed[]) {
         loading: assetsDetailedChainLoading,
         error: assetsDetailedChainError,
         retry: retryAssetsDetailedChain,
-    } = useAssetsFromChain(tokensForAsset)
+    } = useAssetsFromChain(tokensForAsset, targetChainId)
 
     const {
         value: assetsDetailedProvider = [],
         loading: assetsDetailedProviderLoading,
         error: assetsDetailedProviderError,
         retry: retryAssetsDetailedDebank,
-    } = useAssetsFromProvider()
+    } = useAssetsFromProvider(targetChainId)
 
     const detailedTokensRetry = useCallback(() => {
         retryAssetsDetailedChain()

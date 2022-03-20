@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import classnames from 'classnames'
 import { Trans } from 'react-i18next'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { formatEthereumAddress, useAccount } from '@masknet/web3-shared-evm'
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh'
 import { Avatar, Button, DialogActions, DialogContent, Paper, Typography } from '@mui/material'
@@ -28,7 +28,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     cancel: {
-        backgroundColor: getMaskColor(theme).twitterBackground,
+        backgroundColor: theme.palette.background.default,
         border: 'none',
     },
     title: {
@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: 'rgba(255, 95, 95, 0.2)',
     },
     wallet: {
-        backgroundColor: getMaskColor(theme).twitterBackground,
+        backgroundColor: theme.palette.background.default,
         marginTop: theme.spacing(2),
         padding: theme.spacing(2),
         borderRadius: theme.spacing(1),
@@ -65,8 +65,8 @@ export function WalletRiskWarningDialog() {
     const { open, setDialog } = useRemoteControlledDialog(WalletMessages.events.walletRiskWarningDialogUpdated)
 
     const onClose = useCallback(async () => {
-        if (account) await WalletRPC.setRiskWarningConfirmed(account, false)
         setDialog({ open: false, type: 'cancel' })
+        if (account) await WalletRPC.setRiskWarningConfirmed(account, false)
     }, [setDialog])
 
     const onConfirm = useCallback(async () => {
@@ -105,7 +105,7 @@ export function WalletRiskWarningDialog() {
                     />
                     <Paper elevation={0} className={`${classes.wallet} dashboard-style`}>
                         <Typography variant="body1" color="textSecondary">
-                            Wallet
+                            {t('nft_wallet_label')}
                         </Typography>
                         <Typography variant="body1" color="textPrimary">
                             {isMobile ? formatEthereumAddress(account, 5) : account}

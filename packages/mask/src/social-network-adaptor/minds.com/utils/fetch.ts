@@ -7,8 +7,8 @@ import {
     makeTypedMessageText,
     TypedMessage,
     TypedMessageText,
-} from '../../../protocols/typed-message'
-import { assertNonNull } from '../../../../utils-pure'
+} from '@masknet/typed-message'
+import { assertNonNull } from '@dimensiondev/kit'
 
 const parseNameArea = (nameArea: HTMLAnchorElement) => {
     const displayNameNode = nameArea.querySelector('strong')
@@ -49,7 +49,7 @@ export const postContentMessageParser = (node: HTMLElement) => {
             const href = anchor.getAttribute('title') ?? anchor.getAttribute('href')
             const content = anchor.textContent
             if (!content) return makeTypedMessageEmpty()
-            return makeTypedMessageAnchor(resolve(content), href ?? 'javascript: void 0;', content)
+            return makeTypedMessageAnchor(resolve(content), href ?? '', content)
         } else if (node instanceof HTMLImageElement) {
             const image = node
             const src = image.getAttribute('src')

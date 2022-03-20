@@ -19,7 +19,7 @@ export const Video = forwardRef<VideoRef, VideoProps>(function Video(props, outg
     const videoRef = useRef<HTMLVideoElement>(null)
 
     const { loading, error, value } = useAsync(async () => {
-        if (typeof src !== 'string') return
+        if (typeof src !== 'string') return src
         return Services.Helper.fetch(src)
     }, [src])
 
@@ -33,7 +33,7 @@ export const Video = forwardRef<VideoRef, VideoProps>(function Video(props, outg
         return <Skeleton variant="rectangular" {...SkeletonProps} />
     }
     return (
-        <video ref={videoRef} {...VideoProps}>
+        <video ref={videoRef} muted {...VideoProps}>
             {blobURL ? <source src={blobURL} type="video/mp4" /> : null}
         </video>
     )

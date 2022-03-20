@@ -7,7 +7,8 @@ import {
     MaskDarkTheme,
     useSystemPreferencePalette,
 } from '@masknet/theme'
-import { ErrorBoundary } from '@masknet/shared'
+import { I18NextProviderHMR } from '@masknet/shared'
+import { ErrorBoundary } from '@masknet/shared-base-ui'
 import {
     createInjectHooksRenderer,
     NetworkPluginID,
@@ -18,7 +19,6 @@ import {
 import { Web3Provider } from '@masknet/web3-shared-evm'
 
 import i18n from 'i18next'
-import { I18nextProvider } from 'react-i18next'
 
 import '../utils/kv-storage'
 
@@ -39,7 +39,7 @@ export default function DashboardRoot() {
     // migrate EVM plugin
     fixWeb3State(PluginsWeb3State[NetworkPluginID.PLUGIN_EVM], Web3Context)
 
-    //#region theme
+    // #region theme
     const appearance = useAppearance()
     const mode = useSystemPreferencePalette()
     const themes: Record<typeof appearance, Theme> = {
@@ -50,12 +50,12 @@ export default function DashboardRoot() {
     const theme = themes[appearance]
 
     applyMaskColorVars(document.body, appearance === 'default' ? mode : appearance)
-    //#endregion
+    // #endregion
 
     return (
         <Web3Provider value={Web3Context}>
             <PluginsWeb3ContextProvider pluginID={pluginID} value={PluginsWeb3State}>
-                <I18nextProvider i18n={i18n}>
+                <I18NextProviderHMR i18n={i18n}>
                     <StyledEngineProvider injectFirst>
                         <ThemeProvider theme={theme}>
                             <PersonaContext.Provider>
@@ -71,7 +71,7 @@ export default function DashboardRoot() {
                             </PersonaContext.Provider>
                         </ThemeProvider>
                     </StyledEngineProvider>
-                </I18nextProvider>
+                </I18NextProviderHMR>
             </PluginsWeb3ContextProvider>
         </Web3Provider>
     )
