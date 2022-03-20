@@ -5,6 +5,7 @@ import {
     formatCurrency,
     formatEthereumAddress,
     getChainDetailed,
+    isSameAddress,
     isChainIdValid,
     NetworkType,
     NonFungibleAssetProvider,
@@ -19,15 +20,15 @@ import {
     resolveDomainLink,
     formatDomainName,
     ProviderType,
+    ChainOptions,
 } from '@masknet/web3-shared-evm'
-import { getMemory } from '../../storage'
 import {
     createConstantSubscription,
     getEnhanceableSiteType,
     getExtensionSiteType,
     mapSubscription,
 } from '@masknet/shared-base'
-import type { ChainOptions } from '../../types'
+import { getMemory } from '../../storage'
 import { EVM_RPC } from '../../messages'
 
 function createSubscriptionFromChainOptions<T>(getter: (value: ChainOptions | undefined) => T) {
@@ -66,6 +67,9 @@ export function creatWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabiliti
             getNonFungibleAssets: EVM_RPC.getNonFungibleTokenFn,
         },
         Utils: {
+            isValidDomain,
+            isSameAddress,
+
             getLatestBalance: (chainId: ChainId, account: string) => {
                 return EVM_RPC.getBalance(account, {
                     chainId,
@@ -93,7 +97,6 @@ export function creatWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabiliti
             resolveBlockLink: resolveBlockLinkOnExplorer,
 
             resolveDomainLink,
-            isValidDomain,
             formatDomainName,
 
             resolveNonFungibleTokenLink: (chainId: ChainId, address: string, tokenId: string) =>

@@ -3,6 +3,6 @@ import { useActivatedPluginWeb3State } from '../hooks/useActivatedPluginWeb3Stat
 import type { NetworkPluginID } from '..'
 
 export function useWeb3State(expectedPluginID?: NetworkPluginID) {
-    const pluginID = usePluginIDContext()
-    return useActivatedPluginWeb3State(expectedPluginID ?? pluginID) ?? {}
+    const pluginID = usePluginIDContext(expectedPluginID)
+    return useActivatedPluginWeb3State(pluginID) ?? {}
 }

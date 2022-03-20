@@ -1,12 +1,10 @@
 import { useAsyncRetry } from 'react-use'
-import type { BaseContract } from '@masknet/web3-contracts/types/types'
-import { useAccount } from './useAccount'
+import { useERC165Contract } from '../contracts/useERC165Contract'
 
 export const ERC165_INTERFACE_ID = '0x01ffc9a7'
 
-export function useERC165<T extends BaseContract>(contract: T | null, address: string, interfaceId: string) {
-    const account = useAccount()
-
+export function useERC165(account: string, address: string, interfaceId: string) {
+    const contract = useERC165Contract(address)
     return useAsyncRetry<boolean>(async () => {
         if (!contract) return false
         try {

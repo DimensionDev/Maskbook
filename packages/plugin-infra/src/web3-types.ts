@@ -317,10 +317,13 @@ export declare namespace Web3Plugin {
             watchTransaction?: (chainId: number, id: string) => Promise<void>
         }
         export interface Others {
+            isChainIdValid?: (chainId: number, allowTestnet: boolean) => boolean
+            isValidDomain?: (domain: string) => boolean
+            isSameAddress?: (address?: string, otherAddress?: string) => boolean
+
             getLatestBlockNumber?: (chainId: number) => Promise<number>
             getLatestBalance?: (chainId: number, account: string) => Promise<string>
 
-            isChainIdValid?: (chainId: number, allowTestnet: boolean) => boolean
             getChainDetailed?: (chainId: number) => ChainDetailed | undefined
             getFungibleTokenMetadata?: (token: FungibleToken) => Promise<FungibleTokenMetadata>
             getNonFungibleTokenMetadata?: (token: NonFungibleToken) => Promise<NonFungibleTokenMetadata>
@@ -328,20 +331,18 @@ export declare namespace Web3Plugin {
             formatAddress?: (address: string, size?: number) => string
             formatCurrency?: (value: BigNumber.Value, sign?: string, symbol?: string) => string
             formatBalance?: (value: BigNumber.Value, decimals?: number, significant?: number) => string
+            formatDomainName?: (domain?: string, size?: number) => string | undefined
 
             resolveChainName?: (chainId: number) => string
-            resolveChainFullName?: (chainId: number) => string
             resolveChainColor?: (chainId: number) => string
+            resolveChainFullName?: (chainId: number) => string
 
             resolveTransactionLink?: (chainId: number, transactionId: string) => string
             resolveAddressLink?: (chainId: number, address: string) => string
             resolveFungibleTokenLink?: (chainId: number, address: string) => string
             resolveNonFungibleTokenLink?: (chainId: number, address: string, tokenId: string) => string
             resolveBlockLink?: (chainId: number, blockNumber: string) => string
-
             resolveDomainLink?: (domain: string) => string
-            isValidDomain?: (domain: string) => boolean
-            formatDomainName?: (domain?: string, size?: number) => string | undefined
 
             getAverageBlockDelay?: (chainId: number, scale?: number) => number
         }
