@@ -53,8 +53,10 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: theme.spacing(1),
     },
 }))
+
+type Platform = 'twitter' | 'nextid' | 'keybase' | 'ethereum' | 'github'
 interface Item {
-    platform: NextIDPlatform
+    platform: Platform
     identity: string
     tipable?: boolean
     deletable?: boolean
