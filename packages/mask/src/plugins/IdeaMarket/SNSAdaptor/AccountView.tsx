@@ -21,9 +21,6 @@ const useStyles = makeStyles()((theme) => {
             height: '100%',
             padding: theme.spacing(8, 0),
         },
-        message: {
-            textAlign: 'center',
-        },
         actionButtons: {
             width: 96,
         },
@@ -63,7 +60,7 @@ export function AccountView() {
 
     if (error || !value) {
         return (
-            <Typography className={classes.message} color="textPrimary">
+            <Typography className={classes.empty} color="textPrimary">
                 {t('plugin_ideamarket_smthg_wrong')}
             </Typography>
         )
