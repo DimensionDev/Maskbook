@@ -212,6 +212,7 @@ export interface ERC721TokenRecordInDatabase extends ERC721TokenDetailed {
 
 export interface ERC721TokenCollectionInfo {
     name: string
+    chainId?: ChainId
     iconURL?: string
     slug: string
     address: string

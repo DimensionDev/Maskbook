@@ -2,7 +2,6 @@ import { useCallback, useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Avatar, Box, CircularProgress, DialogContent, Link, List, ListItem, Typography } from '@mui/material'
 import {
-    ChainId,
     ERC721ContractDetailed,
     EthereumTokenType,
     formatEthereumAddress,
@@ -117,9 +116,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const currentChainId = useChainId()
-    const [targetChainId, setTargetChainId] = useState<ChainId | undefined>(currentChainId)
-    const chainId = targetChainId || currentChainId
+    const chainId = useChainId()
 
     const [id, setId] = useState('')
     const [keyword, setKeyword] = useState('')
@@ -131,7 +128,6 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
         (ev) => {
             if (!ev.open) return
             setId(ev.uuid)
-            setTargetChainId(ev.chainId)
         },
     )
     const onSubmit = useCallback(
