@@ -8,6 +8,7 @@ import type {
     NativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
 import type { CurrencyType } from '@masknet/plugin-infra'
+import { api } from '@dimensiondev/mask-wallet-core/proto'
 
 export namespace ExplorerAPI {
     export type Transaction = Web3Transaction & {
@@ -437,4 +438,20 @@ export namespace TokenPriceBaseAPI {
         getTokenPrices: (platform: string, contractAddresses: string[], currency: CurrencyType) => Promise<CryptoPrice>
         getNativeTokenPrice: (tokenIds: string[], currency: CurrencyType) => Promise<CryptoPrice>
     }
+}
+
+export namespace MaskBaseAPI {
+    export type Input = { id: number; data: api.IMWRequest }
+    export type Output = { id: number; response: api.MWResponse }
+
+    export type Request = InstanceType<typeof api.MWRequest>
+    export type Response = InstanceType<typeof api.MWResponse>
+
+    export type Coin = api.Coin
+    export type StoredKeyType = api.StoredKeyType
+    export type StoredKeyInfo = api.StoredKeyInfo
+    export type StoredKeyImportType = api.StoredKeyImportType
+    export type StoredKeyExportType = api.StoredKeyExportType
+
+    export interface Provider {}
 }

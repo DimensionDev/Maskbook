@@ -35,6 +35,7 @@ export const MemoryDefaultValue: MemoryStorage = {
 }
 
 export const PersistentDefaultValue: PersistentStorage = {
+    addressBook: [],
     wallets: [],
     transactions: [],
     fungibleTokens: [],

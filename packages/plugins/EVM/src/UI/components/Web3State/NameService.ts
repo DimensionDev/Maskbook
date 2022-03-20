@@ -3,7 +3,7 @@ import type { Web3Plugin } from '@masknet/plugin-infra'
 import { ChainId, createExternalProvider, isSameAddress, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { EVM_RPC } from '../../../messages'
 
-export class NameService implements Web3Plugin.ObjectCapabilities.NameServiceState {
+export class NameServiceState implements Web3Plugin.ObjectCapabilities.NameServiceState {
     private provider = createExternalProvider(EVM_RPC.request, () => ({
         chainId: ChainId.Mainnet,
     }))
@@ -38,7 +38,7 @@ export class NameService implements Web3Plugin.ObjectCapabilities.NameServiceSta
 
         if (
             isZeroAddress(address) ||
-            isSameAddress(address, NameService.ZERO_X_ERROR_ADDRESS) ||
+            isSameAddress(address, NameServiceState.ZERO_X_ERROR_ADDRESS) ||
             !isValidAddress(address)
         )
             return
@@ -57,7 +57,7 @@ export class NameService implements Web3Plugin.ObjectCapabilities.NameServiceSta
 
         const domain = await this.ens.reverse(address)
 
-        if (isZeroAddress(domain) || isSameAddress(domain, NameService.ZERO_X_ERROR_ADDRESS)) return
+        if (isZeroAddress(domain) || isSameAddress(domain, NameServiceState.ZERO_X_ERROR_ADDRESS)) return
 
         if (domain) await this.setDomainAddressBook(chainId, address, domain)
 

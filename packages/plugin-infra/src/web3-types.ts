@@ -23,6 +23,13 @@ export enum TokenType {
     NonFungible = 'NonFungible',
 }
 
+export enum TransactionStatusType {
+    NOT_DEPEND = 0,
+    SUCCEED = 1,
+    FAILED = 2,
+    CANCELLED = 3,
+}
+
 export type Color =
     | `rgb(${number}, ${number}, ${number})`
     | `rgba(${number}, ${number}, ${number}, ${number})`
@@ -62,6 +69,7 @@ export declare namespace Web3Plugin {
         /** Is a mainnet network */
         isMainnet: boolean
     }
+
     export interface ProviderDescriptor {
         /** An unique ID for each wallet provider */
         ID: string
@@ -94,6 +102,7 @@ export declare namespace Web3Plugin {
             [key in CurrencyType]?: number
         }
     }
+
     export interface ChainDetailed {
         name: string
         chainId: number
@@ -102,6 +111,7 @@ export declare namespace Web3Plugin {
         chainName?: string
         network?: string // mainnet
     }
+
     export interface Wallet {
         /** User define wallet name. Default address.prefix(6) */
         name: string
@@ -111,7 +121,12 @@ export declare namespace Web3Plugin {
         hasStoredKeyInfo: boolean
         /** true: Derivable Wallet. false: UnDerivable Wallet */
         hasDerivationPath: boolean
+        /** record created at */
+        createdAt: Date
+        /** record updated at */
+        updatedAt: Date
     }
+
     export interface Asset<T extends Token = Token> {
         id: string
         chainId: number
@@ -138,19 +153,30 @@ export declare namespace Web3Plugin {
         resolvedAddress?: string
     }
 
-    export interface Transaction {
-        id: string
-        type: string
-        title: string
-        from: string
-        to: string
-        timestamp: string
-        /** 0: failed 1: succeed */
-        status: 0 | 1
-        /** estimated tx fee */
-        fee: {
-            [key in CurrencyType]?: string
-        }
+    // export interface Transaction {
+    //     id: string
+    //     type: string
+    //     title: string
+    //     from: string
+    //     to: string
+    //     timestamp: string
+    //     /** 0: failed 1: succeed */
+    //     status: 0 | 1
+    //     /** estimated tx fee */
+    //     fee: {
+    //         [key in CurrencyType]?: string
+    //     }
+    // }
+
+    export interface RecentTransaction {
+        /** ID */
+        ID: string
+        /** status type */
+        status: TransactionStatusType
+        /** record created at */
+        createdAt: Date
+        /** record updated at */
+        updatedAt: Date
     }
 
     export interface Token {
@@ -212,8 +238,16 @@ export declare namespace Web3Plugin {
         tokens: Token[]
     }
 
-    export type DomainAddressBook = {
+    export interface DomainBook {
         [chainId: number]: Record<string, string> | undefined
+    }
+
+    export interface AddressBook {
+        [chainId: number]: string[]
+    }
+
+    export interface AddressList {
+        [address: string]: string[]
     }
 
     export namespace ObjectCapabilities {
@@ -250,7 +284,7 @@ export declare namespace Web3Plugin {
             /** The user added non-fungible tokens. */
             nonFungibleTokens?: Subscription<NonFungibleToken[]>
         }
-        export interface AddressBook {
+        export interface AddressBookState {
             getAllAddress: (chainId: number) => Promise<string[]>
             addAddress: (chainId: number, address: string) => Promise<void>
             removeAddress: (chainId: number, address: string) => Promise<void>
@@ -307,6 +341,13 @@ export declare namespace Web3Plugin {
             getTransaction?: (chainId: number, id: string) => Promise<unknown>
             getAllTransactions?: (chainId: number, address: string) => Promise<unknown>
         }
+
+        export interface WalletState {
+            addWallet?: (chainId: number, id: string, wallet: Wallet) => Promise<void>
+            removeWallet?: (chainId: number, id: string) => Promise<void>
+            getAllWallets?: (chainId: number) => Promise<Wallet[]>
+        }
+
         export interface Others {
             isChainIdValid?: (chainId: number, allowTestnet: boolean) => boolean
             isValidDomain?: (domain: string) => boolean
@@ -338,7 +379,7 @@ export declare namespace Web3Plugin {
             getAverageBlockDelay?: (chainId: number, scale?: number) => number
         }
         export interface Capabilities {
-            AddressBook?: AddressBook
+            AddressBook?: AddressBookState
             Asset?: AssetState
             NameService?: NameServiceState
             Provider?: ProviderState
