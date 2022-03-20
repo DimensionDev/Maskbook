@@ -2,7 +2,7 @@ import type { Web3Plugin } from '@masknet/plugin-infra'
 import type { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
 import type { ChainOptions, CryptoPrice, GasOptions, RecentTransaction } from '@masknet/web3-shared-evm'
 
-export interface MemeoryStorage {
+export interface MemoryStorage {
     /** cached chain options depend on currently visiting site */
     chainOptions: Record<EnhanceableSite | ExtensionSite, ChainOptions>
     /** cached gas options */
@@ -26,7 +26,7 @@ export interface PersistentStorage {
     /** list of non-fungible tokens */
     nonFungibleTokens: Web3Plugin.NonFungibleToken[]
     /** a token address maps to a set of wallet address */
-    fungibleTokenBlockedBy: Map<string, Set<string>>
+    fungibleTokenBlockedBy: Record<string, Set<string>>
     /** a token address maps to a set of wallet address */
-    nonFungibleTokenBlockedBy: Map<string, Set<string>>
+    nonFungibleTokenBlockedBy: Record<string, Set<string>>
 }

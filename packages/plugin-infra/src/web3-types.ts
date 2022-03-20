@@ -235,6 +235,8 @@ export declare namespace Web3Plugin {
             collectibleType?: Subscription<string | undefined>
             /** The transaction data provider. */
             transactionType?: Subscription<string | undefined>
+            /** The token list data provider. */
+            tokenListType?: Subscription<string | undefined>
             /** The currency of estimated values and prices. */
             currencyType?: Subscription<CurrencyType>
             /** The tracked token prices which stored as address and price pairs. */
@@ -292,29 +294,18 @@ export declare namespace Web3Plugin {
         }
         export interface TokenListState {
             /** Get the token lists of supported fungible tokens. */
-            getFungibleTokenLists: (
-                address: string,
-                providerType: string,
-                network: NetworkDescriptor,
-                pagination?: Pagination,
-            ) => Promise<TokenList[]>
+            getFungibleTokenLists?: (chainId: number) => Promise<TokenList>
             /** Get the token lists of supported non-fungible tokens. */
-            getNonFungibleTokenLists: (
-                address: string,
-                providerType: string,
-                network: NetworkDescriptor,
-                pagination?: Pagination,
-            ) => Promise<TokenList[]>
+            getNonFungibleTokenLists?: (chainId: number) => Promise<TokenList>
         }
         export interface TransactionState {
             addTransaction?: (chainId: number, id: string, tx: unknown) => Promise<void>
             removeTransaction?: (chainId: number, id: string) => Promise<void>
+            replaceTransaction?: (chainId: number, id: string, newId: string) => Promise<void>
+            updateTransaction?: (chainId: number, id: string, newId: string) => Promise<void>
             clearTransactions?: (chainId: number, address: string) => Promise<void>
             getTransaction?: (chainId: number, id: string) => Promise<unknown>
             getAllTransactions?: (chainId: number, address: string) => Promise<unknown>
-            replaceTransaction?: (chainId: number, id: string, newId: string) => Promise<void>
-            cancelTransaction?: (chainId: number, id: string) => Promise<void>
-            watchTransaction?: (chainId: number, id: string) => Promise<void>
         }
         export interface Others {
             isChainIdValid?: (chainId: number, allowTestnet: boolean) => boolean

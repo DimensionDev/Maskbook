@@ -1,6 +1,6 @@
 {
-    "ERC20": {
-        "Mainnet": ["https://tokens.r2d2.to/latest/1/tokens.json"],
+    "FUNGIBLE_TOKEN_LISTS": {
+        "Mainnet": [],
         "Ropsten": ["https://tokens.r2d2.to/latest/3/tokens.json"],
         "Rinkeby": ["https://tokens.r2d2.to/latest/4/tokens.json"],
         "Kovan": ["https://irhonin.github.io/kovan-token-list/kovan-token-list.json"],
@@ -17,6 +17,24 @@
         "Celo": ["https://tokens.r2d2.to/latest/42220/tokens.json"],
         "Fantom": ["https://tokens.r2d2.to/latest/250/tokens.json"],
         "Aurora": ["https://tokens.r2d2.to/latest/1313161554/tokens.json"],
+        "Aurora_Testnet": []
+    },
+    "NON_FUNGIBLE_TOKEN_LISTS": {
+        "Mainnet": [],
+        "Ropsten": [],
+        "Rinkeby": [],
+        "Kovan": [],
+        "BSC": [],
+        "BSCT": [],
+        "Matic": [],
+        "Mumbai": [],
+        "Arbitrum": [],
+        "Arbitrum_Rinkeby": [],
+        "xDai": [],
+        "Avalanche": [],
+        "Celo": [],
+        "Fantom": [],
+        "Aurora": [],
         "Aurora_Testnet": []
     }
 }

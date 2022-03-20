@@ -1,3 +1,4 @@
+import type { Subscription } from 'use-subscription'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { EnhanceableSite, ExtensionSite, ScopedStorage } from '@masknet/shared-base'
 import {
@@ -9,17 +10,19 @@ import {
     TransactionDataProvider,
     CurrencyType,
     ChainOptions,
+    DomainProvider,
 } from '@masknet/web3-shared-evm'
-import type { MemeoryStorage, PersistentStorage } from '../types'
+import type { MemoryStorage, PersistentStorage } from '../types'
 
-export const MemoryDefaultValue: MemeoryStorage = {
+export const MemoryDefaultValue: MemoryStorage = {
     chainOptions: [...getEnumAsArray(EnhanceableSite), ...getEnumAsArray(ExtensionSite)].reduce((accumulator, site) => {
         accumulator[site.value] = {
             chainId: ChainId.Mainnet,
             account: '',
-            networkType: NetworkType.Ethereum,
             providerType: ProviderType.MaskWallet,
+            networkType: NetworkType.Ethereum,
             assetType: FungibleAssetProvider.DEBANK,
+            nameType: DomainProvider.ENS,
             collectibleType: NonFungibleAssetProvider.OPENSEA,
             transationType: TransactionDataProvider.SCANNER,
             currencyType: CurrencyType.USD,
@@ -36,25 +39,61 @@ export const PersistentDefaultValue: PersistentStorage = {
     transactions: [],
     fungibleTokens: [],
     nonFungibleTokens: [],
-    fungibleTokenBlockedBy: new Map(),
-    nonFungibleTokenBlockedBy: new Map(),
+    fungibleTokenBlockedBy: {},
+    nonFungibleTokenBlockedBy: {},
 }
 
-let memory: ScopedStorage<typeof MemoryDefaultValue> = null!
-let persistent: ScopedStorage<typeof PersistentDefaultValue> = null!
-
-export function setupMemory(_: typeof memory) {
-    memory = _
+const storage: {
+    memory: ScopedStorage<typeof MemoryDefaultValue>
+    persistent: ScopedStorage<typeof PersistentDefaultValue>
+} = {
+    memory: null!,
+    persistent: null!,
 }
 
-export function getMemory() {
-    return memory.storage
+export function setupStorage<
+    T extends 'memory' | 'persistent',
+    S extends T extends 'memory' ? MemoryStorage : PersistentStorage,
+>(type: T, _: ScopedStorage<S>) {
+    // @ts-ignore
+    storage[type] = _
 }
 
-export function setupPersistent(_: typeof persistent) {
-    persistent = _
+export async function getStorageValue<
+    T extends 'memory' | 'persistent',
+    N extends T extends 'memory' ? keyof MemoryStorage : keyof PersistentStorage,
+    V extends N extends keyof MemoryStorage
+        ? MemoryStorage[N]
+        : N extends keyof PersistentStorage
+        ? PersistentStorage[N]
+        : never,
+>(type: T, name: N): Promise<V> {
+    // @ts-ignore
+    return storage[type].storage[name]
 }
 
-export function getPersistent() {
-    return persistent.storage
+export async function getStorageSubscription<
+    T extends 'memory' | 'persistent',
+    N extends T extends 'memory' ? keyof MemoryStorage : keyof PersistentStorage,
+    V extends N extends keyof MemoryStorage
+        ? MemoryStorage[N]
+        : N extends keyof PersistentStorage
+        ? PersistentStorage[N]
+        : never,
+>(type: T, name: N): Promise<Subscription<V>> {
+    // @ts-ignore
+    return storage[type].storage[name].subscription
+}
+
+export async function setStorageValue<
+    T extends 'memory' | 'persistent',
+    N extends T extends 'memory' ? keyof MemoryStorage : keyof PersistentStorage,
+    V extends N extends keyof MemoryStorage
+        ? MemoryStorage[N]
+        : N extends keyof PersistentStorage
+        ? PersistentStorage[N]
+        : never,
+>(type: T, name: N, value: V): Promise<void> {
+    // @ts-ignore
+    await storage[type].storage[name].setValue(value)
 }

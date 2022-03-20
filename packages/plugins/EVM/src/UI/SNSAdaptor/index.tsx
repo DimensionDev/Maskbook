@@ -1,32 +1,20 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../../base'
-import { Web3UI } from '../Web3UI'
-import { setupMemory, MemoryDefaultValue } from '../../storage'
-import { ProviderType } from '@masknet/web3-shared-evm'
-import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
-import { ProviderBridge } from '../components/ProviderBridge'
+import { Web3UI } from '../components/Web3UI'
+import { createWeb3State } from '../components/Web3State'
+import { GlobalInjection } from '../components/GlobalInjection'
+import { MemoryDefaultValue, PersistentDefaultValue, setupStorage } from '../../storage'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal, context) {
-        setupMemory(context.createKVStorage('memory', MemoryDefaultValue))
+    async init(signal, context) {
+        setupStorage('memory', context.createKVStorage('memory', MemoryDefaultValue))
+        setupStorage('persistent', context.createKVStorage('persistent', PersistentDefaultValue))
+
+        sns.Web3State = await createWeb3State(signal)
     },
     Web3UI,
-    Web3State: {},
-    GlobalInjection() {
-        const isPopup = isPopupPage()
-        if (isPopup) return null
-
-        const isDashboard = isDashboardPage()
-        return (
-            <>
-                {isDashboard ? null : <ProviderBridge providerType={ProviderType.Coin98} />}
-                <ProviderBridge providerType={ProviderType.MetaMask} />
-                <ProviderBridge providerType={ProviderType.Fortmatic} />
-                <ProviderBridge providerType={ProviderType.WalletConnect} />
-            </>
-        )
-    },
+    GlobalInjection,
 }
 
 export default sns

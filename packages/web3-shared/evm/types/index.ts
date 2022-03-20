@@ -574,6 +574,7 @@ export interface ChainOptions {
     providerType: ProviderType
     networkType: NetworkType
     assetType: FungibleAssetProvider
+    nameType: DomainProvider
     collectibleType: NonFungibleAssetProvider
     transationType: TransactionDataProvider
     currencyType: CurrencyType
