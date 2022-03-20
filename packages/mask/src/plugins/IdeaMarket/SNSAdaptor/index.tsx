@@ -18,7 +18,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
             if (x.none) return null
             return parseURL(x.val)
         }, [props.message])
+
         if (!links) return null
+
         const link = uniq(links).find(checkUrl)
         if (!link) return null
 

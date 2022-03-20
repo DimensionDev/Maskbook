@@ -40,52 +40,6 @@ const useStyles = makeStyles()((theme) => {
             minHeight: 'unset',
             minWidth: 'unset',
         },
-        footer: {
-            marginTop: -1,
-            zIndex: 1,
-            position: 'relative',
-            borderTop: `solid 1px ${theme.palette.divider}`,
-            justifyContent: 'space-between',
-        },
-        footnote: {
-            fontSize: 10,
-            marginRight: theme.spacing(1),
-        },
-        footLink: {
-            cursor: 'pointer',
-            marginRight: theme.spacing(0.5),
-            '&:last-child': {
-                marginRight: 0,
-            },
-        },
-        footMenu: {
-            color: theme.palette.text.secondary,
-            fontSize: 10,
-            display: 'flex',
-            alignItems: 'center',
-        },
-        footName: {
-            marginLeft: theme.spacing(0.5),
-        },
-        mask: {
-            width: 40,
-            height: 10,
-        },
-        dhedge: {
-            height: 10,
-            margin: theme.spacing(0, 0.5),
-        },
-        empty: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100%',
-            padding: theme.spacing(8, 0),
-        },
-        message: {
-            textAlign: 'center',
-        },
     }
 })
 

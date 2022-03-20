@@ -2,13 +2,11 @@ import Table from '@mui/material/Table'
 import TableContainer from '@mui/material/TableContainer'
 import Paper from '@mui/material/Paper'
 import { makeStyles } from '@masknet/theme'
-import { Grid, Link, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
+import { Button, Grid, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
 import { useFetchUserTokens } from '../hooks/useFetchUserTokens'
 import { useAccount } from '@masknet/web3-shared-evm'
 import { LoadingAnimation } from '@masknet/shared'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { useState } from 'react'
-import { SellButton } from './SellButton'
 import { leftShift } from '@masknet/web3-shared-base'
 import type { UserIdeaTokenBalance } from '../types'
 import { composeIdeaURL } from '../utils'
@@ -45,9 +43,6 @@ const useStyles = makeStyles()((theme) => {
                 backgroundColor: theme.palette.background.default,
             },
         },
-        buttonContainer: {
-            marginTop: -5,
-        },
     }
 })
 
@@ -56,7 +51,6 @@ export function AccountView() {
     const { classes } = useStyles()
     const account = useAccount()
     const { value, error, loading } = useFetchUserTokens(account)
-    const [open, setOpenDialog] = useState(false)
     const userTokenBalances = value?.ideaTokenBalances
 
     if (loading) {
@@ -74,8 +68,6 @@ export function AccountView() {
             </Typography>
         )
     }
-
-    const onClose = () => setOpenDialog(false)
 
     return (
         <>
@@ -118,20 +110,16 @@ export function AccountView() {
                                     <TableCell>&#36;{totalBalance}</TableCell>
                                     {/* <TableCell>{formatWithOperator(balance.token.dayChange)}</TableCell> */}
                                     <TableCell className={classes.actionButtons}>
-                                        <Grid
-                                            className={classes.buttonContainer}
-                                            container
-                                            alignContent="center"
-                                            justifyContent="center">
-                                            <Grid container item justifyContent="center">
-                                                <Link
-                                                    href={composeIdeaURL(balance.token.market.name, balance.token.name)}
-                                                    target="_blank">
-                                                    View
-                                                </Link>
-                                            </Grid>
+                                        <Grid container alignContent="center" justifyContent="center">
                                             <Grid item>
-                                                <SellButton tokenContractAddress={balance.token.id} />
+                                                <Button
+                                                    href={composeIdeaURL(balance.token.market.name, balance.token.name)}
+                                                    target="_blank"
+                                                    color="primary"
+                                                    size="small"
+                                                    variant="contained">
+                                                    Sell
+                                                </Button>
                                             </Grid>
                                         </Grid>
                                     </TableCell>

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useFetchIdeaTokensBySearch } from '../hooks/useFetchIdeaTokens'
 import { makeStyles } from '@masknet/theme'
-import { Box, Grid, IconButton, Link, Stack, TextField } from '@mui/material'
+import { Box, Button, Grid, IconButton, Stack, TextField } from '@mui/material'
 import { DataGrid, GridColDef, GridRenderCellParams, GridValueFormatterParams } from '@mui/x-data-grid'
 import type { IdeaToken } from '../types'
 import { composeIdeaURL, formatterToUSD, truncate } from '../utils'
@@ -10,7 +10,6 @@ import { SearchIcon } from '@masknet/icons'
 import ClearIcon from '@mui/icons-material/Clear'
 import { LoadingAnimation } from '@masknet/shared'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { BuyButton } from './BuyButton'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -31,6 +30,10 @@ const useStyles = makeStyles()((theme) => {
                 },
             },
         },
+        box: {
+            padding: 0.5,
+            paddingBottom: 0,
+        },
         market: {
             color: 'rgba(8,87,224,1)',
             marginLeft: theme.spacing(0.25),
@@ -43,6 +46,16 @@ const useStyles = makeStyles()((theme) => {
             height: '100%',
             padding: theme.spacing(8, 0),
         },
+        textField: {
+            margin: theme.spacing(1, 0.5, 1.5),
+            '& .MuiSvgIcon-root': {
+                marginRight: theme.spacing(0.5),
+            },
+            '& .MuiInput-underline:before': {
+                borderBottom: 1,
+                borderColor: 'divider',
+            },
+        },
     }
 })
 
@@ -53,13 +66,12 @@ interface QuickSearchToolbarProps {
 }
 
 function QuickSearchToolbar(props: QuickSearchToolbarProps) {
+    const { classes } = useStyles()
+
     return (
-        <Box
-            sx={{
-                p: 0.5,
-                pb: 0,
-            }}>
+        <Box className={classes.box}>
             <TextField
+                className={classes.textField}
                 variant="standard"
                 value={props.value}
                 onChange={props.onChange}
@@ -76,20 +88,6 @@ function QuickSearchToolbar(props: QuickSearchToolbarProps) {
                             <ClearIcon fontSize="small" />
                         </IconButton>
                     ),
-                }}
-                sx={{
-                    width: {
-                        xs: 1,
-                        sm: 'auto',
-                    },
-                    m: (theme) => theme.spacing(1, 0.5, 1.5),
-                    '& .MuiSvgIcon-root': {
-                        mr: 0.5,
-                    },
-                    '& .MuiInput-underline:before': {
-                        borderBottom: 1,
-                        borderColor: 'divider',
-                    },
                 }}
             />
         </Box>
@@ -160,13 +158,15 @@ export function ListingsView() {
             align: 'right' as const,
             renderCell: (params: GridRenderCellParams) => (
                 <Grid container alignContent="center" justifyContent="center">
-                    <Grid container item justifyContent="center">
-                        <Link href={composeIdeaURL(params.row.market, params.row.name)} target="_blank">
-                            View
-                        </Link>
-                    </Grid>
                     <Grid item>
-                        <BuyButton params={params} />
+                        <Button
+                            href={composeIdeaURL(params.row.market, params.row.name)}
+                            target="_blank"
+                            color="primary"
+                            size="small"
+                            variant="contained">
+                            Buy
+                        </Button>
                     </Grid>
                 </Grid>
             ),
