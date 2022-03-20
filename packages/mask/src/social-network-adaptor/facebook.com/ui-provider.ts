@@ -30,6 +30,7 @@ import { injectNFTAvatarInFacebook } from './injection/NFT/NFTAvatarInFacebook'
 import { injectUserNFTAvatarAtFacebook } from './injection/NFT/NFTAvatarInTimeline'
 import { injectOpenNFTAvatarEditProfileButton } from './injection/NFT/NFTAvatarEditProfile'
 import { injectProfileTabAtFacebook } from './injection/ProfileTab'
+import { injectPostReplacerAtFacebook } from './injection/PostReplacer'
 import { injectProfileTabContentAtFacebook } from './injection/ProfileContent'
 import { FacebookRenderFragments } from './customization/render-fragments'
 
@@ -168,8 +169,6 @@ const facebookUI: SocialNetworkUI.Definition = {
                 image: true,
             },
         },
-        // Not supported yet
-        enhancedPostRenderer: undefined,
         userBadge: undefined,
         searchResult: undefined,
         setupPrompt: injectSetupPromptFacebook,
@@ -191,6 +190,7 @@ const facebookUI: SocialNetworkUI.Definition = {
         enhancedProfileNFTAvatar: injectProfileNFTAvatarInFaceBook,
         profileAvatar: injectNFTAvatarInFacebook,
         openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
+        enhancedPostRenderer: injectPostReplacerAtFacebook,
         postInspector: injectPostInspectorFacebook,
         pageInspector: injectPageInspectorDefault(),
         setupWizard: createTaskStartSetupGuideDefault(),
