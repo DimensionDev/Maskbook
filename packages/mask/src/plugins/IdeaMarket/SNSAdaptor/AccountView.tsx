@@ -58,7 +58,6 @@ export function AccountView() {
     const { value, error, loading } = useFetchUserTokens(account)
     const [open, setOpenDialog] = useState(false)
     const userTokenBalances = value?.ideaTokenBalances
-    console.log(value, error)
 
     if (loading) {
         return (
@@ -101,9 +100,10 @@ export function AccountView() {
                                     : balance.token.name
                             const tokenPrice = Number(balance.token.latestPricePoint.price).toFixed(2)
                             const userTokenBalance = leftShift(balance.amount, 18).toFixed(2, 1)
-                            const balanceValue = (
+                            const balanceValue =
                                 balance.token.latestPricePoint.price * leftShift(balance.amount, 18).toNumber()
-                            ).toFixed(2)
+
+                            const totalBalance = (Number(balanceValue) - Number(balanceValue) * 0.01).toFixed(2)
 
                             return (
                                 <TableRow className={classes.row} key={balance.id}>
@@ -115,7 +115,7 @@ export function AccountView() {
                                     </TableCell>
                                     <TableCell>&#36;{tokenPrice}</TableCell>
                                     <TableCell>{userTokenBalance}</TableCell>
-                                    <TableCell>&#36;{balanceValue}</TableCell>
+                                    <TableCell>&#36;{totalBalance}</TableCell>
                                     {/* <TableCell>{formatWithOperator(balance.token.dayChange)}</TableCell> */}
                                     <TableCell className={classes.actionButtons}>
                                         <Grid

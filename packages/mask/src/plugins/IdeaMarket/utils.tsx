@@ -1,15 +1,8 @@
 import { BASE_URL, ideaMarketPathnameRegexMatcher } from './constants'
-import { TwitterIcon } from './icons/TwitterIcon'
 import { MarketAvailable } from './types'
-import LanguageIcon from '@mui/icons-material/Language'
 
 export function checkUrl(url: string): boolean {
-    // const protocol = 'https://'
-    // const _url = new URL(url.startsWith(protocol) ? url : protocol + url)
     return url.includes('ideamarket.io')
-
-    // return ideaMarketHostnames.includes(_url.hostname)
-    //  && ideaMarketPathnameRegexMatcher.test(_url.pathname)
 }
 
 export function getAssetInfoFromURL(url?: string) {
@@ -25,7 +18,6 @@ export function getAssetInfoFromURL(url?: string) {
         }
     }
 
-    // nothing matched
     return
 }
 
@@ -63,19 +55,6 @@ export function composeIdeaURL(marketName: string, ideaName: string) {
         return `${BASE_URL}/i/${marketName.toLowerCase()}/${ideaName.substring(1)}`
 
     return `${BASE_URL}/i/${marketName.toLowerCase()}/${ideaName}`
-}
-
-export function selectIconFromMarket(market: string) {
-    switch (market) {
-        case MarketAvailable.Twitter:
-            return <TwitterIcon />
-
-        case MarketAvailable.Url:
-            return <LanguageIcon />
-
-        default:
-            return <LanguageIcon />
-    }
 }
 
 export function formatWithOperator(value: string | number): string {

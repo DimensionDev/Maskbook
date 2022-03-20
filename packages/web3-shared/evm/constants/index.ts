@@ -25,6 +25,7 @@ import OpenseaAPI from '@masknet/web3-constants/evm/opensea-api.json'
 import CryptoArtAI from '@masknet/web3-constants/evm/cryptoartai.json'
 import ArtBlocks from '@masknet/web3-constants/evm/artblocks.json'
 import Savings from '@masknet/web3-constants/evm/savings.json'
+import IdeaMarket from '@masknet/web3-constants/evm/ideamarket.json'
 import { hookTransform, transform, transformFromJSON } from './utils'
 
 function getEnvConstants(key: 'WEB3_CONSTANTS_RPC') {
@@ -120,3 +121,6 @@ export const useNftRedPacketConstants = hookTransform(getNftRedPacketConstants)
 
 export const getSavingsConstants = transform(Savings)
 export const useSavingsConstants = hookTransform(getSavingsConstants)
+
+export const getIdeaMarketConstants = transform(IdeaMarket)
+export const useIdeaMarketConstants = hookTransform(getIdeaMarketConstants)

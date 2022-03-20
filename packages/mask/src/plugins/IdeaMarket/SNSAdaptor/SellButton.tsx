@@ -15,7 +15,6 @@ export function SellButton(props: SellButtonProps) {
     const { setDialog: setSellDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
     const formattedSymbol = !token?.symbol || !token?.name ? '' : formatSymbol(`${token?.symbol} (${token?.name})`)
-    console.log(token)
 
     return (
         <>

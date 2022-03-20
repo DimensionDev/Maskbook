@@ -1,0 +1,143 @@
+[
+    {
+        "inputs": [
+            { "internalType": "address", "name": "ideaTokenExchange", "type": "address" },
+            { "internalType": "address", "name": "ideaTokenFactory", "type": "address" },
+            { "internalType": "address", "name": "ideaTokenVault", "type": "address" },
+            { "internalType": "address", "name": "dai", "type": "address" },
+            { "internalType": "address", "name": "swapRouter", "type": "address" },
+            { "internalType": "address", "name": "quoter", "type": "address" },
+            { "internalType": "address", "name": "weth", "type": "address" }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "inputs": [],
+        "name": "HIGH_POOL_FEE",
+        "outputs": [{ "internalType": "uint24", "name": "", "type": "uint24" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "LOW_POOL_FEE",
+        "outputs": [{ "internalType": "uint24", "name": "", "type": "uint24" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "MEDIUM_POOL_FEE",
+        "outputs": [{ "internalType": "uint24", "name": "", "type": "uint24" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "_dai",
+        "outputs": [{ "internalType": "contract IERC20", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "_uniswapV3Factory",
+        "outputs": [{ "internalType": "contract IUniswapV3Factory", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "_uniswapV3Quoter",
+        "outputs": [{ "internalType": "contract IQuoter", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "_uniswapV3SwapRouter",
+        "outputs": [{ "internalType": "contract ISwapRouter", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "_weth",
+        "outputs": [{ "internalType": "contract IWETH", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "string", "name": "tokenName", "type": "string" },
+            { "internalType": "uint256", "name": "marketID", "type": "uint256" },
+            { "internalType": "uint256", "name": "amount", "type": "uint256" },
+            { "internalType": "uint256", "name": "lockDuration", "type": "uint256" },
+            { "internalType": "address", "name": "recipient", "type": "address" }
+        ],
+        "name": "addAndBuy",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "address", "name": "ideaToken", "type": "address" },
+            { "internalType": "uint256", "name": "amount", "type": "uint256" },
+            { "internalType": "uint256", "name": "fallbackAmount", "type": "uint256" },
+            { "internalType": "uint256", "name": "cost", "type": "uint256" },
+            { "internalType": "uint256", "name": "lockDuration", "type": "uint256" },
+            { "internalType": "address", "name": "recipient", "type": "address" }
+        ],
+        "name": "buyAndLock",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "string", "name": "tokenName", "type": "string" },
+            { "internalType": "uint256", "name": "marketID", "type": "uint256" },
+            { "internalType": "address", "name": "inputCurrency", "type": "address" },
+            { "internalType": "uint256", "name": "amount", "type": "uint256" },
+            { "internalType": "uint256", "name": "fallbackAmount", "type": "uint256" },
+            { "internalType": "uint256", "name": "cost", "type": "uint256" },
+            { "internalType": "uint256", "name": "lockDuration", "type": "uint256" },
+            { "internalType": "address", "name": "recipient", "type": "address" }
+        ],
+        "name": "convertAddAndBuy",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "address", "name": "inputCurrency", "type": "address" },
+            { "internalType": "address", "name": "ideaToken", "type": "address" },
+            { "internalType": "uint256", "name": "amount", "type": "uint256" },
+            { "internalType": "uint256", "name": "fallbackAmount", "type": "uint256" },
+            { "internalType": "uint256", "name": "cost", "type": "uint256" },
+            { "internalType": "uint256", "name": "lockDuration", "type": "uint256" },
+            { "internalType": "address", "name": "recipient", "type": "address" }
+        ],
+        "name": "convertAndBuy",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "address", "name": "outputCurrency", "type": "address" },
+            { "internalType": "address", "name": "ideaToken", "type": "address" },
+            { "internalType": "uint256", "name": "amount", "type": "uint256" },
+            { "internalType": "uint256", "name": "minPrice", "type": "uint256" },
+            { "internalType": "address payable", "name": "recipient", "type": "address" }
+        ],
+        "name": "sellAndConvert",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    { "stateMutability": "payable", "type": "receive" }
+]

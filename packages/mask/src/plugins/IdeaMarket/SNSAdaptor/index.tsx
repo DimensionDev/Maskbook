@@ -20,8 +20,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
         }, [props.message])
         if (!links) return null
         const link = uniq(links).find(checkUrl)
-        // const asset = getAssetInfoFromURL(link)
-        // if (!asset?.market_name || !asset?.idea_name) return null
         if (!link) return null
 
         return <Renderer />
@@ -29,8 +27,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
     PostInspector: function Component() {
         const links = usePostInfoDetails.mentionedLinks()
         const link = uniq(links).find(checkUrl)
-        // const asset = getAssetInfoFromURL(link)
-        // if (!asset?.market_name || !asset?.idea_name) return null
         if (!link) return null
 
         return <Renderer />

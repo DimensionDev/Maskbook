@@ -21,6 +21,14 @@ const useStyles = makeStyles()((theme) => {
         grid: {
             '& .MuiDataGrid-row:nth-child(odd)': {
                 backgroundColor: theme.palette.background.default,
+                '&:hover': {
+                    backgroundColor: theme.palette.background.default,
+                },
+            },
+            '& .MuiDataGrid-row:nth-child(even)': {
+                '&:hover': {
+                    backgroundColor: 'inherit',
+                },
             },
         },
         market: {
@@ -123,7 +131,6 @@ export function ListingsView() {
             headerAlign: 'right' as const,
             valueFormatter: (params: GridValueFormatterParams) => {
                 const value = Number(params.value) * 100
-                console.log('value', value)
                 const operator = value >= 0 ? '+' : ''
                 return `${operator}${value.toFixed()}%`
             },
