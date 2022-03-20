@@ -120,10 +120,16 @@ export function ListingsView() {
     )
 
     const columns: GridColDef[] = [
-        { field: 'name', headerName: 'Name', headerAlign: 'left' as const, flex: 1, renderCell: renderNameCell },
+        {
+            field: 'name',
+            headerName: t('plugin_ideamarket_name'),
+            headerAlign: 'left' as const,
+            flex: 1,
+            renderCell: renderNameCell,
+        },
         {
             field: 'dayChange',
-            headerName: '24H',
+            headerName: t('plugin_ideamarket_24h'),
             type: 'number',
             width: 75,
             headerAlign: 'right' as const,
@@ -135,7 +141,7 @@ export function ListingsView() {
         },
         {
             field: 'price',
-            headerName: 'Price',
+            headerName: t('plugin_ideamarket_price'),
             type: 'number',
             width: 70,
             headerAlign: 'center' as const,
@@ -144,7 +150,7 @@ export function ListingsView() {
         },
         {
             field: 'deposits',
-            headerName: 'Deposits',
+            headerName: t('plugin_ideamarket_deposits'),
             headerAlign: 'center' as const,
             type: 'number',
             align: 'center' as const,
@@ -165,7 +171,7 @@ export function ListingsView() {
                             color="primary"
                             size="small"
                             variant="contained">
-                            Buy
+                            {t('plugin_ideamarket_buy')}
                         </Button>
                     </Grid>
                 </Grid>

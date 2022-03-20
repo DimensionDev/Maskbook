@@ -115,7 +115,7 @@ export function AccountView() {
                                                     color="primary"
                                                     size="small"
                                                     variant="contained">
-                                                    Sell
+                                                    {t('plugin_ideamarket_sell')}
                                                 </Button>
                                             </Grid>
                                         </Grid>
