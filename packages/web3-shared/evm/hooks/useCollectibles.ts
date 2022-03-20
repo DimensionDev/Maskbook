@@ -13,6 +13,7 @@ export function useCollections(address: string, chainId: ChainId | null, dependR
         params: {
             address: address,
             pageSize: 200,
+            chainId,
             // TODO chainId
         },
     }
