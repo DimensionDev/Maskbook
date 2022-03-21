@@ -23,6 +23,7 @@ const useStyles = makeStyles()({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        fontFamily: '-apple-system, system-ui, sans-serif',
     },
     postTipButton: {
         display: 'flex',

@@ -146,7 +146,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
 
     return (
         <>
-            <InjectedDialog open={open} onClose={onClose} title={t.tip()}>
+            <InjectedDialog open={open} onClose={onClose} title={t.tips()}>
                 <DialogContent className={classes.content}>
                     <div className={classes.abstractTabWrapper}>
                         <NetworkTab
@@ -160,7 +160,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                 </DialogContent>
             </InjectedDialog>
             <ConfirmModal
-                title={t.tip()}
+                title={t.tips()}
                 open={confirmModalIsOpen}
                 onClose={() => openConfirmModal(false)}
                 icon={isTokenTip ? <SuccessIcon style={{ height: 64, width: 64 }} /> : null}
