@@ -217,8 +217,9 @@ export enum TradeProvider {
     TRISOLARIS = 12,
     TRADERJOE = 13,
     PANGOLIN = 14,
-    SOLARBEAM = 15,
-    HUCKLEBERRY = 16,
+    MDEX = 15,
+    SOLARBEAM = 16,
+    HUCKLEBERRY = 17,
 }
 /** Supported language settings */
 export enum LanguageOptions {

@@ -25,6 +25,8 @@ import {
     SOLARBEAM_CUSTOM_BASES,
     HUCKLEBERRY_BASE_AGAINST_TOKENS,
     HUCKLEBERRY_CUSTOM_BASES,
+    MDEX_BASE_AGAINST_TOKENS,
+    MDEX_CUSTOM_BASES,
 } from '../constants'
 import { unreachable } from '@dimensiondev/kit'
 import { TargetChainIdContext } from './useTargetChainIdContext'
@@ -177,6 +179,18 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     AGAINST_TOKENS: HUCKLEBERRY_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: HUCKLEBERRY_CUSTOM_BASES,
+                }
+            case TradeProvider.MDEX:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.MDEX_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.MDEX_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.MDEX_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.MDEX_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: MDEX_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: MDEX_CUSTOM_BASES,
                 }
             case TradeProvider.ZRX:
                 return {
