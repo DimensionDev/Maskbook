@@ -44,6 +44,7 @@
     "delete": "Delete",
     "copy_success_of_wallet_address": "Copy wallet address successfully!",
     "disconnect_warning": "This wallet will no longer show up in your web 3 profile page. Your Mask friends can no longer give tips to this wallet, or browse NFTs, donations and other on-chain information of this address.",
+    "tip": "Tip",
     "tips": "Tips",
     "tip_to": "To",
     "token_insufficient_balance": "Insufficient balance",
