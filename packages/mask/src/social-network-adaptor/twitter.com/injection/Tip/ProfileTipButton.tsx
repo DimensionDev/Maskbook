@@ -36,6 +36,9 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         marginBottom: props.marginBottom,
         verticalAlign: 'top',
         color: theme.palette.text.primary,
+        '&:hover': {
+            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(239,243,244,0.1)' : 'rgba(15,20,25,0.1)',
+        },
     },
     label: {
         fontSize: 14,
