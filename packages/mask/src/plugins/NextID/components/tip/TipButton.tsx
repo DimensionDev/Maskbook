@@ -20,12 +20,16 @@ interface Props extends HTMLProps<HTMLDivElement> {
 const useStyles = makeStyles()({
     tipButton: {
         cursor: 'pointer',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     postTipButton: {
         display: 'flex',
         // temporarily hard code
         height: 46,
         alignItems: 'center',
+        color: '#8899a6',
     },
     disabled: {
         opacity: 0.4,
@@ -91,7 +95,7 @@ export const TipButton: FC<Props> = ({ className, receiver, addresses = [], chil
             {...rest}
             role="button"
             onClick={sendTip}>
-            <TipCoin htmlColor="#8899a6" viewBox="0 0 24 24" />
+            <TipCoin viewBox="0 0 24 24" />
             {children}
         </div>
     )
