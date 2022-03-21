@@ -4,6 +4,7 @@ import { LoaderContext } from 'webpack'
 
 export default function loader(this: LoaderContext<any>, source: Buffer) {
     return new Promise((resolve, reject) => {
+        // cspell:ignore binaryen
         const cli = join(__dirname, '../node_modules/binaryen/bin/wasm2js')
         const child = spawn(process.execPath, [cli, relative(process.cwd(), this.resourcePath)], { cwd: process.cwd() })
         const out: string[] = []
