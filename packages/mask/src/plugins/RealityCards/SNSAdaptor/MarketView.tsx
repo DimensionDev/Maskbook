@@ -189,7 +189,7 @@ function MarketDetails(props: MarketDetailsProps) {
         setDay(new Date(diff).getUTCDate() - 1)
         setHour(new Date(diff).getUTCHours())
         setMinute(new Date(diff).getUTCMinutes())
-    }, 10)
+    },  1000)
 
     return (
         <Grid container direction="column">
