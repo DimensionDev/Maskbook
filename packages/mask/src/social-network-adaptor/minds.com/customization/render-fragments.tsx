@@ -9,14 +9,33 @@ export const MindsRenderFragments: RenderFragmentsContextType = {
     }),
     HashLink: memo(function (props) {
         const text = props.children.slice(1)
-        const target = `/hashtag/${encodeURIComponent(text)}?src=hashtag_click`
+        const target = `/discovery/search?q=%23${encodeURIComponent(text)}`
         const { hasMatch, ...events } = useTagEnhancer('hash', text)
-        return <Link {...events} href={target} children={props.children} />
+        return (
+            <Link
+                {...events}
+                href={target}
+                children={props.children}
+                onClick={(e) => {
+                    e.stopPropagation()
+                }}
+            />
+        )
     }),
     CashLink: memo(function (props) {
-        const target = `/search?q=${encodeURIComponent(props.children)}&src=cashtag_click`
-        const { hasMatch, ...events } = useTagEnhancer('cash', props.children.slice(1))
-        return <Link {...events} href={target} children={props.children} />
+        const text = props.children.slice(1)
+        const target = `/discovery/search?q=$${encodeURIComponent(text)}`
+        const { hasMatch, ...events } = useTagEnhancer('cash', text)
+        return (
+            <Link
+                {...events}
+                href={target}
+                children={props.children}
+                onClick={(e) => {
+                    e.stopPropagation()
+                }}
+            />
+        )
     }),
     Image: () => null,
 }
