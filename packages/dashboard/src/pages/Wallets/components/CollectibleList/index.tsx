@@ -51,7 +51,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
     const { Utils } = useWeb3State()
     const customCollectibles = useCustomNonFungibleAssets(
         account,
-        chainId,
+        selectedNetwork?.chainId,
         selectedNetwork?.ID === `${PluginId.EVM}_ethereum` || !selectedNetwork,
     )
 
