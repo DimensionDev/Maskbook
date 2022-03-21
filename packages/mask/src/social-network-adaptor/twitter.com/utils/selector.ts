@@ -95,13 +95,15 @@ export const sideBarProfileSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="banner"] [role="navigation"] [aria-label="Lists"] > div')
 export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div [role="button"][aria-label]:nth-child(6)')
+
+export const isReply = () => !!location.pathname.match(/^\/\w+\/status\/\d+$/)
 export const postEditorDraftContentSelector = () => {
     if (location.pathname === '/compose/tweet') {
         return querySelector<HTMLDivElement>(
             '[contenteditable][aria-label][spellcheck],textarea[aria-label][spellcheck]',
         )
     }
-    if (location.pathname.match(/^\/\w+\/status\/\d+$/)) {
+    if (isReply()) {
         return querySelector<HTMLElement>('div[data-testid="tweetTextarea_0"]')
     }
     return (isCompose() ? postEditorInPopupSelector() : postEditorInTimelineSelector()).querySelector<HTMLElement>(
@@ -272,10 +274,6 @@ export const searchReplyToolbarSelector = () =>
     querySelector<E>('div[data-testid="primaryColumn"] div[data-testid="toolBar"]').querySelector<E>(
         'div[data-testid="geoButton"]',
     )
-
-export const searchReplyButttonSelector = () => querySelector<E>('div[data-testid="tweetButtonInline"]')
-
-export const isReply = () => !!location.pathname.match(/^\/\w+\/status\/\d+$/)
 
 export const searchRejectReplyTextSelector = () =>
     querySelector<E>('div[data-testid="tweetTextarea_0"] > div > div > div > span')
