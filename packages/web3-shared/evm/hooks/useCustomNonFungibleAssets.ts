@@ -2,7 +2,7 @@ import { useWeb3Context } from '../context'
 import { isSameAddress } from '../utils'
 import type { ChainId } from '../types'
 
-// Only support evm mainnet currently.
+// Only support EVM network currently.
 export function useCustomNonFungibleAssets(
     address: string,
     chainId: ChainId | null | undefined,
