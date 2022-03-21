@@ -2853,7 +2853,7 @@
             "decimals": 18,
             "logoURI": "https://raw.githubusercontent.com/DimensionDev/Maskbook/e434014b17bd4622e28e21c9d4cd9ffec875889e/packages/mask/src/plugins/EVM/assets/conflux.png"
         },
-        "infoURL": "https://confluxnetwork.org",
+        "infoURL": "https://evm.confluxscan.net",
         "shortName": "Conflux",
         "chainId": 1030,
         "networkId": 1030
