@@ -13,6 +13,7 @@
         "pnpm-lock.yaml"
     ],
     "words": [
+        "jugglerred",
         "aave",
         "adai",
         "addrs",
@@ -116,6 +117,7 @@
         "jailbroken",
         "jsbi",
         "jsonml",
+        "jugglered",
         "juicebox",
         "kdfparams",
         "keccak",
@@ -142,6 +144,7 @@
         "masktext",
         "mastdon",
         "mayen",
+        "mdex",
         "merkel",
         "merkle",
         "metas",
@@ -167,6 +170,7 @@
         "ongswap",
         "oolongswap",
         "opensea",
+        "optmistic",
         "overridable",
         "overscan",
         "pageable",

@@ -218,6 +218,12 @@ export function useAllTradeComputed(
         trader: senpaiswap,
         traderEstimateGas: senpaiswapEstimateGas,
     } = useUniswapV2Like(tradeProviders, TradeProvider.SENPAISWAP, inputAmount_, inputToken, outputToken)
+    // Mdex
+    const {
+        trader_: mdex_,
+        trader: mdex,
+        traderEstimateGas: mdexEstimateGas,
+    } = useUniswapV2Like(tradeProviders, TradeProvider.MDEX, inputAmount_, inputToken, outputToken)
 
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
@@ -238,6 +244,7 @@ export function useAllTradeComputed(
         { provider: TradeProvider.OOLONGSWAP, ...oolongswap_, value: oolongswap, gas: oolongswapEstimateGas },
         { provider: TradeProvider.SWAPPERCHAN, ...swapperchan_, value: swapperchan, gas: swapperchanEstimateGas },
         { provider: TradeProvider.SENPAISWAP, ...senpaiswap_, value: senpaiswap, gas: senpaiswapEstimateGas },
+        { provider: TradeProvider.MDEX, ...mdex_, value: mdex, gas: mdexEstimateGas },
     ]
 
     return nativeToken_.value
