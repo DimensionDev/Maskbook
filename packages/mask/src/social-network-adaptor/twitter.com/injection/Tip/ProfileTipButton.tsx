@@ -23,14 +23,14 @@ interface StyleProps {
 }
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     button: {
-        height: 36,
-        width: 36,
+        height: 34,
+        width: 34,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 1,
         borderStyle: 'solid',
-        borderColor: theme.palette.mode === 'dark' ? '#536471' : 'rgb(217 225 229)',
+        borderColor: theme.palette.mode === 'dark' ? '#536471' : '#d2dbe0',
         borderRadius: 999,
         marginRight: theme.spacing(1),
         marginBottom: props.marginBottom,
