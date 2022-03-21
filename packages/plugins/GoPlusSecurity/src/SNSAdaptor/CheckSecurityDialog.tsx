@@ -1,4 +1,3 @@
-import { useRemoteControlledDialog } from '@masknet/shared'
 import { DialogContent, Stack } from '@mui/material'
 import { makeStyles, MaskDialog, useStylesExtends } from '@masknet/theme'
 import { PluginGoPlusSecurityMessages } from '../messages'
@@ -12,6 +11,7 @@ import { Footer } from './components/Footer'
 import type { TokenSecurity } from './components/Common'
 import { DefaultPlaceholder } from './components/DefaultPlaceholder'
 import { NotFound } from './components/NotFound'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -44,7 +44,7 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
     }, [])
 
     return (
-        <MaskDialog title={t.dialog_title()} open={open} onClose={closeDialog}>
+        <MaskDialog title={t.dialog_title()} open onClose={closeDialog}>
             <DialogContent className={classes.content}>
                 <Stack>
                     <SearchBox onSearch={onSearch} />

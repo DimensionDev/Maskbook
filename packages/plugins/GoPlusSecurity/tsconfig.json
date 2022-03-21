@@ -6,5 +6,5 @@
     "tsBuildInfoFile": "dist/.tsbuildinfo"
   },
   "include": ["src", "src/**/*.json"],
-  "references": [{ "path": "../../plugin-infra" }, { "path": "../../web3-providers" }]
+  "references": [{ "path": "../../plugin-infra" }, { "path": "../../shared" }, { "path": "../../web3-providers" }]
 }

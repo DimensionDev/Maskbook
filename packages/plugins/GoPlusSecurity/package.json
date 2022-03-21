@@ -8,6 +8,7 @@
     "@masknet/icons": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/shared": "workspace:*",
+    "@masknet/shared-base-ui": "workspace:*",
     "@masknet/shared-base": "workspace:*",
     "@masknet/theme": "workspace:*",
     "@masknet/web3-providers": "workspace:*",

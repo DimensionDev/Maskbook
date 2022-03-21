@@ -762,6 +762,7 @@ importers:
       '@masknet/plugin-infra': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
+      '@masknet/shared-base-ui': workspace:*
       '@masknet/theme': workspace:*
       react-use: ^17.3.2
     dependencies:
@@ -769,6 +770,7 @@ importers:
       '@masknet/plugin-infra': link:../../plugin-infra
       '@masknet/shared': link:../../shared
       '@masknet/shared-base': link:../../shared-base
+      '@masknet/shared-base-ui': link:../../shared-base-ui
       '@masknet/theme': link:../../theme
       react-use: 17.3.2_bc22c48adf1a4e34a005159413cd72b5
 

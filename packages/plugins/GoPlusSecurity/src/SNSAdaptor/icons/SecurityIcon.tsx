@@ -2,7 +2,7 @@ import { createIcon } from '@masknet/icons'
 
 export const SecurityIcon = createIcon(
     'SecurityIcon',
-    <>
+    <g>
         <path
             d="M9.84 42.96C9.84 43.4268 11.256 43.8745 13.7765 44.2045C16.297 44.5346 19.7155 44.72 23.28 44.72C26.8445 44.72 30.263 44.5346 32.7835 44.2045C35.304 43.8745 36.72 43.4268 36.72 42.96C36.72 42.4932 35.304 42.0456 32.7835 41.7155C30.263 41.3854 26.8445 41.2 23.28 41.2C19.7155 41.2 16.297 41.3854 13.7765 41.7155C11.256 42.0456 9.84 42.4932 9.84 42.96Z"
             fill="url(#paint0_linear_296_32169)"
@@ -48,7 +48,6 @@ export const SecurityIcon = createIcon(
                 <stop offset="1" stopColor="#8DB3F9" stopOpacity="0" />
             </linearGradient>
         </defs>
-    </>,
+    </g>,
     '0 0 48 48',
-    [48, 48],
 )

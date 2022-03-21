@@ -2,6 +2,7 @@
     "dialog_title": "Check Security",
     "powered_by_go_plus": "Powered by Go+",
     "search": "Search",
+    "search_input_placeholder": "Please enter token contract address.",
     "token_info": "Token info",
     "more_details": "More Details",
     "security_detection": "Security Detection",

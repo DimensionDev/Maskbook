@@ -9,7 +9,10 @@ export class GoPlusLabsAPI implements SecurityAPI.Provider {
         const response = await fetchJSON<{
             code: 0 | 1
             message: 'OK' | string
-            result: Record<string, SecurityAPI.ContractSecurity & SecurityAPI.TokenSecurity>
+            result: Record<
+                string,
+                SecurityAPI.ContractSecurity & SecurityAPI.TokenSecurity & SecurityAPI.TradingSecurity
+            >
         }>(
             urlcat(GO_PLUS_LABS_ROOT_URL, 'api/v1/token_security/:id', {
                 id: chainId,
