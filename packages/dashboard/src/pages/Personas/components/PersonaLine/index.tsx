@@ -3,7 +3,13 @@ import { Box, Button, Link, Stack, Typography } from '@mui/material'
 import { getMaskColor, MaskColorVar, makeStyles } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { DisconnectProfileDialog } from '../DisconnectProfileDialog'
-import type { PersonaIdentifier, ProfileIdentifier, BindingProof, NextIDPersonaBindings } from '@masknet/shared-base'
+import {
+    PersonaIdentifier,
+    ProfileIdentifier,
+    BindingProof,
+    NextIDPersonaBindings,
+    NextIDPlatform,
+} from '@masknet/shared-base'
 import { LoadingAnimation, SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { NextIdPersonaWarningIcon, NextIdPersonaVerifiedIcon } from '@masknet/icons'
@@ -110,7 +116,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
 
         const handleDisconnect = (profile: ProfileIdentifier) => {
             const isProved = proof.value?.proofs.find((x) => {
-                return x.platform === 'twitter' && x.identity === profile.userId.toLowerCase()
+                return x.platform === NextIDPlatform.Twitter && x.identity === profile.userId.toLowerCase()
             })
             if (isProved && onDeleteBound) {
                 onDeleteBound(profile)
@@ -120,14 +126,16 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         }
         const userIdBox = (profile: ProfileIdentifier) => {
             const isProved = proof.value?.proofs.find((x) => {
-                return x.platform === 'twitter' && x.identity === profile.userId.toLowerCase()
+                return x.platform === NextIDPlatform.Twitter && x.identity === profile.userId.toLowerCase()
             })
 
             return (
-                <div className={classes.userIdBox}>
-                    <div>@{profile.userId}</div>
+                <Typography className={classes.userIdBox}>
+                    <Typography variant="caption" sx={{ fontSize: 13 }}>
+                        @{profile.userId}
+                    </Typography>
                     {profile.network === 'twitter.com' && (
-                        <div
+                        <Typography
                             className={classes.proofIconBox}
                             onClick={(e: MouseEvent) => handleProofIconClick(e, isProved)}>
                             {proof.loading ? (
@@ -137,9 +145,9 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                             ) : (
                                 <NextIdPersonaWarningIcon />
                             )}
-                        </div>
+                        </Typography>
                     )}
-                </div>
+                </Typography>
             )
         }
         return (

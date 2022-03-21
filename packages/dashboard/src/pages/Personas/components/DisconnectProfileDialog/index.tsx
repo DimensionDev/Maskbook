@@ -89,7 +89,9 @@ export const DisconnectProfileDialog = ({
                         <Typography variant="caption" sx={{ color: MaskColorVar.textPrimary, fontSize: 13, mr: 1 }}>
                             {t.personas_disconnect_warning()}
                         </Typography>
-                        <div className={classes.personaTextZone}>persona: {personaIdentifier.compressedPoint}</div>
+                        <Typography className={classes.personaTextZone}>
+                            persona: {personaIdentifier.compressedPoint}
+                        </Typography>
                         <Stack mt={3} mb={1} direction="row" justifyContent="space-around" gap={4}>
                             <Button sx={{ flex: 1 }} onClick={onClose} color="secondary">
                                 {t.cancel()}
