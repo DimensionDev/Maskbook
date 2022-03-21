@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useValueRef } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { getCurrentPreferredCoinIdSettings } from '../settings'
 import type { DataProvider } from '@masknet/public-api'
 

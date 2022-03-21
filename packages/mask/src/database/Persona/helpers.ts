@@ -21,14 +21,7 @@ import {
 } from '../../utils/mnemonic-code'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
 import { validateMnemonic } from 'bip39'
-import {
-    ProfileIdentifier,
-    type PersonaIdentifier,
-    IdentifierMap,
-    type EC_Public_JsonWebKey,
-    type EC_Private_JsonWebKey,
-    type AESJsonWebKey,
-} from '@masknet/shared-base'
+import { ProfileIdentifier, type PersonaIdentifier, IdentifierMap } from '@masknet/shared-base'
 import { createPersonaByJsonWebKey } from '../../../background/database/persona/helper'
 
 export async function profileRecordToProfile(record: ProfileRecord): Promise<Profile> {
@@ -177,17 +170,6 @@ export function queryPersonaRecord(i: ProfileIdentifier | PersonaIdentifier): Pr
     return i instanceof ProfileIdentifier ? queryPersonaByProfileDB(i) : queryPersonaDB(i)
 }
 
-export async function queryPublicKey(
-    i: ProfileIdentifier | PersonaIdentifier,
-): Promise<EC_Public_JsonWebKey | undefined> {
-    return queryPersonaRecord(i).then((x) => x?.publicKey)
-}
-export async function queryPrivateKey(
-    i: ProfileIdentifier | PersonaIdentifier,
-): Promise<EC_Private_JsonWebKey | undefined> {
-    return queryPersonaRecord(i).then((x) => x?.privateKey)
-}
-
 export async function createPersonaByMnemonic(
     nickname: string | undefined,
     password: string,
@@ -223,16 +205,4 @@ export async function createPersonaByMnemonicV2(mnemonicWord: string, nickname: 
         nickname,
         uninitialized: false,
     })
-}
-
-export async function queryLocalKey(i: ProfileIdentifier | PersonaIdentifier): Promise<AESJsonWebKey | null> {
-    if (i instanceof ProfileIdentifier) {
-        const profile = await queryProfileDB(i)
-        if (!profile) return null
-        if (profile.localKey) return profile.localKey
-        if (!profile.linkedPersona) return null
-        return queryLocalKey(profile.linkedPersona)
-    } else {
-        return (await queryPersonaDB(i))?.localKey ?? null
-    }
 }

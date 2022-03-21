@@ -1,10 +1,11 @@
 import { defineSocialNetworkUI, definedSocialNetworkUIs, SocialNetworkUI, SocialNetwork } from '../../social-network'
 import { isEnvironment, Environment, ValueRef } from '@dimensiondev/holoflows-kit'
+import { SocialNetworkEnum } from '@masknet/encryption'
 import { IdentifierMap, EnhanceableSite } from '@masknet/shared-base'
 
 const base: SocialNetwork.Base = {
+    encryptionNetwork: SocialNetworkEnum.Unknown,
     networkIdentifier: EnhanceableSite.Localhost,
-    name: '',
     declarativePermissions: { origins: [] },
     shouldActivate(location) {
         return isEnvironment(Environment.ManifestAction)

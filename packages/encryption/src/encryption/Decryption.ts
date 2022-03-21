@@ -1,5 +1,5 @@
 import { unreachable } from '@dimensiondev/kit'
-import { decodeTypedMessageFromDocument, decodeTypedMessageV38ToV40Format } from '@masknet/typed-message'
+import { decodeTypedMessageFromDocument, decodeTypedMessageV38ToV40Format, TypedMessage } from '@masknet/typed-message'
 import { AESCryptoKey, EC_Public_CryptoKey, andThenAsync } from '@masknet/shared-base'
 import { None, Result } from 'ts-results'
 import { AESAlgorithmEnum, PayloadParseResult } from '../payload'
@@ -12,6 +12,8 @@ import {
     DecryptError,
     DecryptEphemeralECDH_PostKey,
     DecryptSuccess,
+    DecryptIntermediateProgress,
+    DecryptIntermediateProgressKind,
 } from './DecryptionTypes'
 import { deriveAESByECDH_version38OrOlderExtraSteps } from './v38-ecdh'
 export * from './DecryptionTypes'
@@ -30,7 +32,7 @@ export async function* decrypt(options: DecryptOptions, io: DecryptIO): AsyncIte
     {
         const cacheKey = await io.getPostKeyCache().catch(() => null)
         const iv = encryption.iv.unwrapOr(null)
-        if (cacheKey && iv) return yield* decryptWithPostAESKey(version, cacheKey, iv, encrypted)
+        if (cacheKey && iv) return yield* decryptWithPostAESKey(version, cacheKey, iv, encrypted, options.onDecrypted)
     }
 
     if (encryption.type === 'public') {
@@ -38,7 +40,13 @@ export async function* decrypt(options: DecryptOptions, io: DecryptIO): AsyncIte
         if (AESKey.err) return yield new DecryptError(ErrorReasons.PayloadBroken, AESKey.val)
         if (iv.err) return yield new DecryptError(ErrorReasons.PayloadBroken, iv.val)
         // Not calling setPostCache here. It's public post and saving key is wasting storage space.
-        return yield* decryptWithPostAESKey(version, AESKey.val.key as AESCryptoKey, iv.val, encrypted)
+        return yield* decryptWithPostAESKey(
+            version,
+            AESKey.val.key as AESCryptoKey,
+            iv.val,
+            encrypted,
+            options.onDecrypted,
+        )
     } else if (encryption.type === 'E2E') {
         const { iv: _iv, ownersAESKeyEncrypted } = encryption
         if (_iv.err) return yield new DecryptError(ErrorReasons.PayloadBroken, _iv.val)
@@ -55,7 +63,7 @@ export async function* decrypt(options: DecryptOptions, io: DecryptIO): AsyncIte
                     const aes_raw = await io.decryptByLocalKey(author.unwrapOr(null), ownersAESKeyEncrypted.val, iv)
                     const aes = await importAESKeyFromJWKFromTextEncoder(aes_raw)
                     io.setPostKeyCache(aes.unwrap()).catch(() => {})
-                    return yield* decryptWithPostAESKey(version, aes.unwrap(), iv, encrypted)
+                    return yield* decryptWithPostAESKey(version, aes.unwrap(), iv, encrypted, options.onDecrypted)
                 } catch (err) {
                     if (await hasAuthorLocalKey) {
                         // If we fall into this branch, it means we failed to decrypt as author.
@@ -77,8 +85,9 @@ export async function* decrypt(options: DecryptOptions, io: DecryptIO): AsyncIte
 
         // #region // ! decrypt by ECDH
         const authorPublicKey = _authorPublicKey.unwrapOr(None)
+        yield progress(DecryptProgressKind.Progress, { event: DecryptIntermediateProgressKind.TryDecryptByE2E })
         if (version === -37) {
-            return yield* v37ECDHE(io, encryption, encrypted, options.signal)
+            return yield* v37ECDHE(io, encryption, encrypted, options.signal, options.onDecrypted)
         } else {
             // Static ECDH
             // to do static ECDH, we need to have the authors public key first. bail if not found.
@@ -88,7 +97,15 @@ export async function* decrypt(options: DecryptOptions, io: DecryptIO): AsyncIte
             })
             if (authorECPub.err) return yield new DecryptError(ErrorReasons.AuthorPublicKeyNotFound, authorECPub.val)
             if (!authorECPub.val) return yield new DecryptError(ErrorReasons.AuthorPublicKeyNotFound, undefined)
-            return yield* v38To40StaticECDH(version, io, authorECPub.val, iv, encrypted, options.signal)
+            return yield* v38To40StaticECDH(
+                version,
+                io,
+                authorECPub.val,
+                iv,
+                encrypted,
+                options.signal,
+                options.onDecrypted,
+            )
         }
         // #endregion
     }
@@ -100,6 +117,7 @@ async function* v37ECDHE(
     encryption: PayloadParseResult.EndToEndEncryption,
     encrypted: Uint8Array,
     signal: AbortSignal | undefined,
+    report: ((message: TypedMessage) => void) | undefined,
 ) {
     // checked before
     const iv = encryption.iv.unwrap()
@@ -126,7 +144,7 @@ async function* v37ECDHE(
         type: 'ephemeral',
         derive: (key) => (key ? io.deriveAESKey(key) : inlinedECDHE_derived),
     }
-    return yield* decryptByECDH(-37, io, postKey(), ecdh, importAESKeyFromRaw, iv, encrypted)
+    return yield* decryptByECDH(-37, io, postKey(), ecdh, importAESKeyFromRaw, iv, encrypted, report)
 }
 
 async function* v38To40StaticECDH(
@@ -136,6 +154,7 @@ async function* v38To40StaticECDH(
     iv: Uint8Array,
     encrypted: Uint8Array,
     signal: AbortSignal | undefined,
+    report: ((message: TypedMessage) => void) | undefined,
 ): AsyncIterableIterator<DecryptProgress> {
     const postKey = {
         '-40': async function* (iv: Uint8Array) {
@@ -150,7 +169,7 @@ async function* v38To40StaticECDH(
         type: 'static-v38-or-older',
         derive: (postKeyIV) => deriveAESByECDH_version38OrOlderExtraSteps(io.deriveAESKey, authorECPub, postKeyIV),
     }
-    return yield* decryptByECDH(version, io, postKey, ecdh, importAESKeyFromJWKFromTextEncoder, iv, encrypted)
+    return yield* decryptByECDH(version, io, postKey, ecdh, importAESKeyFromJWKFromTextEncoder, iv, encrypted, report)
 }
 type StaticV38OrOlderECDH = {
     type: 'static-v38-or-older'
@@ -170,6 +189,7 @@ async function* decryptByECDH(
     postKeyDecoder: (raw: Uint8Array) => Promise<Result<AESCryptoKey, unknown>>,
     iv: Uint8Array,
     encrypted: Uint8Array,
+    report: ((message: TypedMessage) => void) | undefined,
 ) {
     const { derive, type } = ecdhProvider
     for await (const _ of possiblePostKeyIterator) {
@@ -192,7 +212,7 @@ async function* decryptByECDH(
             io.setPostKeyCache(possiblePostKey.val).catch(() => {})
             // If we'd able to decrypt the raw message, we will stop here.
             // because try further key cannot resolve the problem of parseTypedMessage failed.
-            return yield* parseTypedMessage(version, decrypted.val)
+            return yield* parseTypedMessage(version, decrypted.val, report)
         }
     }
     return void (yield new DecryptError(ErrorReasons.NotShareTarget, undefined))
@@ -203,16 +223,24 @@ async function* decryptWithPostAESKey(
     postAESKey: AESCryptoKey,
     iv: Uint8Array,
     encrypted: Uint8Array,
+    report: ((message: TypedMessage) => void) | undefined,
 ): AsyncIterableIterator<DecryptProgress> {
     const { err, val } = await decryptWithAES(AESAlgorithmEnum.A256GCM, postAESKey, iv, encrypted)
     if (err) return yield new DecryptError(ErrorReasons.DecryptFailed, val)
-    return yield* parseTypedMessage(version, val)
+    return yield* parseTypedMessage(version, val, report)
 }
 
-async function* parseTypedMessage(version: Version, raw: Uint8Array): AsyncIterableIterator<DecryptProgress> {
+async function* parseTypedMessage(
+    version: Version,
+    raw: Uint8Array,
+    report: ((message: TypedMessage) => void) | undefined,
+): AsyncIterableIterator<DecryptProgress> {
     const { err, val } =
         version === -37 ? decodeTypedMessageFromDocument(raw) : decodeTypedMessageV38ToV40Format(raw, version)
     if (err) return yield new DecryptError(ErrorReasons.PayloadDecryptedButTypedMessageBroken, val)
+    try {
+        report?.(val)
+    } catch {}
     return yield progress(DecryptProgressKind.Success, { content: val })
 }
 
@@ -235,6 +263,7 @@ function importAESKeyFromRaw(aes_raw: Uint8Array) {
 }
 
 function progress(kind: DecryptProgressKind.Success, rest: Omit<DecryptSuccess, 'type'>): DecryptSuccess
+function progress(kind: DecryptProgressKind.Progress, rest: Omit<DecryptIntermediateProgress, 'type'>): DecryptSuccess
 function progress(kind: DecryptProgressKind, rest?: object): DecryptProgress {
     return { type: kind, ...rest } as any
 }
