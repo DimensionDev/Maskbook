@@ -58,8 +58,10 @@ export const searchNFTAvatarSelector = () =>
 export const searchAvatarMetaSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('head > meta[property="og:image"]:last-child')
 
-export const profileButtonNextToMenuButtonSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="primaryColumn"] [aria-haspopup="menu"][data-testid="userActions"] ~ div')
+export const profileFollowButtonSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>(
+        '[data-testid="primaryColumn"] [aria-haspopup="menu"][data-testid="userActions"] ~ [data-testid="placementTracking"]',
+    )
 // To get margin bottom of menu button, and apply it to tip button to align it.
 export const profileMenuButtonSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] [aria-haspopup="menu"][data-testid="userActions"]')

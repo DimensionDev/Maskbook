@@ -1,7 +1,7 @@
 import { TipCoin } from '@masknet/icons'
 import { usePostInfoDetails } from '@masknet/plugin-infra'
 import { NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { queryExistedBindingByPersona, queryIsBound } from '@masknet/web3-providers'
 import { EMPTY_LIST } from '@masknet/web3-shared-evm'
 import classnames from 'classnames'
@@ -89,8 +89,7 @@ export const TipButton: FC<Props> = ({ className, receiver, addresses = [], chil
         },
         [disabled, walletsState, allAddresses, receiver?.userId, queryBindings],
     )
-
-    return (
+    const dom = (
         <div
             className={classnames(className, classes.tipButton, disabled ? classes.disabled : null)}
             {...rest}
@@ -100,6 +99,14 @@ export const TipButton: FC<Props> = ({ className, receiver, addresses = [], chil
             {children}
         </div>
     )
+
+    if (disabled)
+        return (
+            <ShadowRootTooltip title="Wallets not found." placement="top" arrow>
+                {dom}
+            </ShadowRootTooltip>
+        )
+    return dom
 }
 
 export const PostTipButton: FC<Props> = (props) => {

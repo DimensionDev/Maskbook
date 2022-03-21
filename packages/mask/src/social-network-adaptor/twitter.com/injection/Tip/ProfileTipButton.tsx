@@ -7,7 +7,7 @@ import { startWatch, createReactRootShadowed } from '../../../../utils'
 import { useLocationChange } from '../../../../utils/hooks/useLocationChange'
 import {
     profileMenuButtonSelector as menuButtonSelector,
-    profileButtonNextToMenuButtonSelector as selector,
+    profileFollowButtonSelector as selector,
 } from '../../utils/selector'
 
 export function injectOpenTipButtonOnProfile(signal: AbortSignal) {
@@ -23,13 +23,14 @@ interface StyleProps {
 }
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     button: {
-        height: 34,
-        paddingLeft: theme.spacing(1.5),
-        paddingRight: theme.spacing(1.5),
+        height: 36,
+        width: 36,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        border: '1px solid #536471',
+        borderWidth: 1,
+        borderStyle: 'solid',
+        borderColor: theme.palette.mode === 'dark' ? '#536471' : 'rgb(217 225 229)',
         borderRadius: 999,
         marginRight: theme.spacing(1),
         marginBottom: props.marginBottom,
@@ -62,9 +63,5 @@ function OpenTipDialog() {
     useLocationChange(setStyleFromEditProfileSelector)
 
     const { classes } = useStyles(style)
-    return (
-        <TipButton className={classes.button} receiver={visitingPersona.identifier}>
-            <span className={classes.label}>Tips</span>
-        </TipButton>
-    )
+    return <TipButton className={classes.button} receiver={visitingPersona.identifier} />
 }

@@ -2,18 +2,8 @@ import { useWeb3State } from '@masknet/plugin-infra'
 import { SelectTokenDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { EthereumTokenType, useChainId, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
-import {
-    Box,
-    BoxProps,
-    FormControl,
-    FormControlLabel,
-    MenuItem,
-    Radio,
-    RadioGroup,
-    Select,
-    Typography,
-} from '@mui/material'
+import { EthereumTokenType, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
+import { Box, BoxProps, FormControl, MenuItem, Select, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { FC, memo, useCallback, useRef, useState } from 'react'
 import { v4 as uuid } from 'uuid'
@@ -22,8 +12,6 @@ import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import { TargetChainIdContext, useTip, useTipValidate } from '../../contexts'
 import { useI18N } from '../../locales'
-import { TipType } from '../../types'
-import { NFTSection } from './NFTSection'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -59,6 +47,9 @@ const useStyles = makeStyles()((theme) => {
             borderRadius: 24,
             height: 'auto',
         },
+        tokenField: {
+            marginTop: theme.spacing(2),
+        },
     }
 })
 
@@ -66,14 +57,11 @@ interface Props extends BoxProps {}
 
 export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
     const t = useI18N()
-    const currentChainId = useChainId()
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const { classes } = useStyles()
     const {
         recipient,
         recipients: recipientAddresses,
-        tipType,
-        setTipType,
         setRecipient,
         token,
         setToken,
@@ -148,49 +136,24 @@ export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
                         ))}
                     </Select>
                 </FormControl>
-                <FormControl>
-                    <RadioGroup
-                        row
-                        value={tipType}
-                        onChange={(e) => {
-                            setTipType(e.target.value as TipType)
-                        }}>
-                        <FormControlLabel
-                            disabled={isSending}
-                            value={TipType.Token}
-                            control={<Radio />}
-                            label={t.tip_type_token()}
-                        />
-                        <FormControlLabel
-                            disabled={isSending || chainId !== currentChainId}
-                            value={TipType.NFT}
-                            control={<Radio />}
-                            label={t.tip_type_nft()}
-                        />
-                    </RadioGroup>
+                <FormControl className={classes.tokenField}>
+                    <TokenAmountPanel
+                        label="Token"
+                        token={token}
+                        amount={amount}
+                        onAmountChange={setAmount}
+                        balance={tokenBalance}
+                        InputProps={{
+                            disabled: isSending,
+                        }}
+                        SelectTokenChip={{
+                            loading: loadingTokenBalance,
+                            ChipProps: {
+                                onClick: onSelectTokenChipClick,
+                            },
+                        }}
+                    />
                 </FormControl>
-                {tipType === TipType.Token ? (
-                    <FormControl>
-                        <TokenAmountPanel
-                            label="Token"
-                            token={token}
-                            amount={amount}
-                            onAmountChange={setAmount}
-                            balance={tokenBalance}
-                            InputProps={{
-                                disabled: isSending,
-                            }}
-                            SelectTokenChip={{
-                                loading: loadingTokenBalance,
-                                ChipProps: {
-                                    onClick: onSelectTokenChipClick,
-                                },
-                            }}
-                        />
-                    </FormControl>
-                ) : (
-                    <NFTSection />
-                )}
             </div>
 
             <EthereumChainBoundary
