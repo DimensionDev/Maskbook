@@ -7,8 +7,8 @@
   "scripts": {},
   "dependencies": {
     "@dimensiondev/holoflows-kit": "^0.9.0-20210902104757-7c3d0d0",
-    "@masknet/shared": "workspace:*",
-    "@masknet/shared-base": "workspace:*",
+    "@masknet/encryption": "workspace:*",
+    "@masknet/shared-base-ui": "workspace:*",
     "@masknet/theme": "workspace:*",
     "@masknet/typed-message": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",

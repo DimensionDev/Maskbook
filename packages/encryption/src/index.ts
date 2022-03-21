@@ -1,12 +1,12 @@
 export {
-    parsePayload,
     encodePayload,
+    parsePayload,
     AESAlgorithmEnum,
-    PublicKeyAlgorithmEnum,
+    EC_KeyCurveEnum,
     SocialNetworkEnum,
     SocialNetworkEnumToProfileDomain,
     type AESKey,
-    type AsymmetryCryptoKey,
+    type EC_Key,
     type Signature,
     type PayloadParseResult,
     type PayloadWellFormed,
@@ -21,6 +21,7 @@ export {
     type EncryptIO,
     type EncryptResult,
     type EncryptTargetE2E,
+    type EncryptionResultE2EMap,
     type EncryptTargetPublic,
     type EncryptionResultE2E,
 } from './encryption'
@@ -30,8 +31,7 @@ export {
     DecryptError,
     DecryptProgressKind,
     DecryptIntermediateProgressKind,
-    // TODO: rename to DecryptErrorReasons
-    ErrorReasons,
+    DecryptErrorReasons,
     type DecryptOptions,
     type DecryptIO,
     type DecryptEphemeralECDH_PostKey,
@@ -40,6 +40,13 @@ export {
     type DecryptIntermediateProgress,
     type DecryptReportedInfo,
     type DecryptSuccess,
+} from './encryption'
+
+export {
+    //
+    type AppendEncryptionIO,
+    type AppendEncryptionOptions,
+    appendEncryptionTarget,
 } from './encryption'
 
 export {
@@ -60,4 +67,4 @@ export {
 } from './image-steganography'
 
 // TODO: remove them in the future
-export { importAsymmetryKeyFromJsonWebKeyOrSPKI, importAESFromJWK } from './utils'
+export { importEC_Key, importAESFromJWK } from './utils'
