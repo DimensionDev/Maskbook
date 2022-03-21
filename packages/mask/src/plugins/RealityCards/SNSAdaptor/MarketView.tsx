@@ -153,7 +153,7 @@ function MarketDetails(props: MarketDetailsProps) {
         }
         if (market.state === MarketState.Withdraw) {
             return {
-                abel: t('plugin_realitycards_event_state_ended'),
+                label: t('plugin_realitycards_event_state_ended'),
                 color: 'default',
                 potSize: t('plugin_realitycards_event_final_pot_size'),
             }
