@@ -142,6 +142,7 @@
         "masktext",
         "mastdon",
         "mayen",
+        "mdex",
         "merkel",
         "merkle",
         "metas",
@@ -265,6 +266,7 @@
         "xlarge",
         "xlink",
         "zerion",
+        "zora",
         "zubin"
     ],
     "ignoreWords": [

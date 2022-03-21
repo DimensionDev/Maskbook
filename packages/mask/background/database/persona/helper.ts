@@ -1,3 +1,4 @@
+import { safeUnreachable } from '@dimensiondev/kit'
 import {
     AESCryptoKey,
     AESJsonWebKey,
@@ -73,6 +74,19 @@ export async function decryptByLocalKey(
     )
 }
 
+export async function encryptByLocalKey(who: ProfileIdentifier, content: Uint8Array, iv: Uint8Array) {
+    let key: AESCryptoKey | undefined
+    await createPersonaDBReadonlyAccess(async (tx) => {
+        const jwk = await getLocalKeyOf(who, tx)
+        if (!jwk) return
+        const k = await crypto.subtle.importKey('jwk', jwk, { name: 'AES-GCM', length: 256 }, false, ['encrypt'])
+        key = k as AESCryptoKey
+    })
+    if (!key) throw new Error('No local key found')
+    const result = await crypto.subtle.encrypt({ iv, name: 'AES-GCM' }, key, content)
+    return result as Uint8Array
+}
+
 async function getLocalKeyOf(id: ProfileIdentifier, tx: FullPersonaDBTransaction<'readonly'>) {
     const profile = await queryProfileDB(id, tx)
     if (!profile) return
@@ -85,7 +99,7 @@ async function getLocalKeyOf(id: ProfileIdentifier, tx: FullPersonaDBTransaction
 // #endregion
 
 // #region ECDH
-export async function deriveAESByECDH(pub: EC_Public_CryptoKey) {
+export async function deriveAESByECDH(pub: EC_Public_CryptoKey, of?: ProfileIdentifier | PersonaIdentifier) {
     const curve = (pub.algorithm as EcKeyAlgorithm).namedCurve || ''
     const sameCurvePrivateKeys = new IdentifierMap<ECKeyIdentifier, EC_Private_JsonWebKey>(new Map(), ECKeyIdentifier)
 
@@ -94,6 +108,13 @@ export async function deriveAESByECDH(pub: EC_Public_CryptoKey) {
         for (const persona of personas) {
             if (!persona.privateKey) continue
             if (persona.privateKey.crv !== curve) continue
+            if (of) {
+                if (of instanceof ProfileIdentifier) {
+                    if (!persona.linkedProfiles.has(of)) continue
+                } else if (of instanceof ECKeyIdentifier) {
+                    if (!persona.identifier.equals(of)) continue
+                } else safeUnreachable(of)
+            }
             sameCurvePrivateKeys.set(persona.identifier, persona.privateKey)
         }
     })
@@ -183,6 +204,19 @@ export async function createProfileWithPersona(
     })
 }
 // #endregion
+
+export async function queryPublicKey(author: ProfileIdentifier | null) {
+    if (!author) return null
+    const persona = await queryPersonaByProfileDB(author)
+    if (!persona) return null
+    return (await crypto.subtle.importKey(
+        'jwk',
+        persona.publicKey,
+        { name: 'ECDH', namedCurve: persona.publicKey.crv! } as EcKeyAlgorithm,
+        true,
+        ['deriveKey'],
+    )) as EC_Public_CryptoKey
+}
 
 function abort() {
     throw new Error('Cancelled')

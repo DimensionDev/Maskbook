@@ -1,6 +1,6 @@
 export {
-    parsePayload,
     encodePayload,
+    parsePayload,
     AESAlgorithmEnum,
     EC_KeyCurveEnum,
     SocialNetworkEnum,
@@ -31,8 +31,7 @@ export {
     DecryptError,
     DecryptProgressKind,
     DecryptIntermediateProgressKind,
-    // TODO: rename to DecryptErrorReasons
-    ErrorReasons,
+    DecryptErrorReasons,
     type DecryptOptions,
     type DecryptIO,
     type DecryptEphemeralECDH_PostKey,

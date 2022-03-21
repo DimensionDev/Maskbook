@@ -9,7 +9,7 @@ import type {
     ProfileIdentifier,
     ReadonlyIdentifierMap,
 } from '@masknet/shared-base'
-import type { TypedMessage } from '@masknet/typed-message'
+import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { RenderFragmentsContextType } from '@masknet/typed-message/dom'
 import type { PaletteMode, Theme } from '@mui/material'
 import type { Subscription } from 'use-subscription'
@@ -197,7 +197,7 @@ export namespace SocialNetworkUI {
             recover?: boolean
         }
         export interface MaskCompositionDialog {
-            open?(content: TypedMessage, options?: MaskCompositionDialogOpenOptions): void
+            open?(content: SerializableTypedMessages, options?: MaskCompositionDialogOpenOptions): void
         }
         export interface MaskCompositionDialogOpenOptions {
             target?: 'E2E' | 'Everyone'
