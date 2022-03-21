@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react'
 import { useAsync } from 'react-use'
 import { DecryptPost } from './DecryptedPost/DecryptedPost'
 import Services from '../../extension/service'
-import { ProfileIdentifier, type PayloadAlpha40_Or_Alpha39, type PayloadAlpha38 } from '@masknet/shared-base'
+import { PostIVIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import type { TypedMessageTuple } from '@masknet/typed-message'
 import type { Profile } from '../../database'
 import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'
-import { useValueRef } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { debugModeSetting } from '../../settings/settings'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
@@ -28,7 +28,9 @@ export interface PostInspectorProps {
 export function PostInspector(props: PostInspectorProps) {
     const postBy = usePostInfoDetails.author()
     const encryptedPost = usePostInfoDetails.containingMaskPayload()
-    const decryptedPayloadForImage = usePostInfoDetails.decryptedPayloadForImage()
+    const ownersKeyEncrypted = usePostInfoDetails.ownersKeyEncrypted()
+    const version = usePostInfoDetails.version()
+    const iv = usePostInfoDetails.iv()
     const postImages = usePostInfoDetails.postMetadataImages()
     const isDebugging = useValueRef(debugModeSetting)
     const whoAmI = useCurrentIdentity()
@@ -48,22 +50,14 @@ export function PostInspector(props: PostInspectorProps) {
             <DecryptPost
                 onDecrypted={props.onDecrypted}
                 requestAppendRecipients={
-                    // So should not create new data on version -40
-                    (encryptedPost.ok && encryptedPost.val.version !== -40) || decryptedPayloadForImage
+                    // version -40 does not support append receiver
+                    // version -37 is not implemented yet.
+                    ownersKeyEncrypted && iv && version && version === -38
                         ? async (profile) => {
-                              const val = (postImages ? decryptedPayloadForImage : encryptedPost.val) as
-                                  | PayloadAlpha40_Or_Alpha39
-                                  | PayloadAlpha38
-
-                              const { iv, version } = val
-                              const ownersAESKeyEncrypted =
-                                  val.version === -38 ? val.AESKeyEncrypted : val.ownersAESKeyEncrypted
-
                               setAlreadySelectedPreviously(alreadySelectedPreviously.concat(profile))
                               return Services.Crypto.appendShareTarget(
                                   version,
-                                  ownersAESKeyEncrypted,
-                                  iv,
+                                  new PostIVIdentifier(whoAmI!.identifier.network, iv),
                                   profile.map((x) => x.identifier),
                                   whoAmI!.identifier,
                                   { type: 'direct', at: new Date() },

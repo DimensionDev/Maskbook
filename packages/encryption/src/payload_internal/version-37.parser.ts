@@ -26,7 +26,8 @@ function parsePayload37(payload: Uint8Array, signature: PayloadParseResult.Paylo
     const _ = decode(payload).andThen(assertArray('Payload', PayloadException.InvalidPayload))
     return andThenAsync(_, async (item) => {
         const [version, authorNetwork, authorID, authorPublicKeyAlg, authorPublicKey, encryption, data] = item
-        if (version !== -37) return new CheckedError(PayloadException.UnknownVersion, null).toErr()
+        // 0 in payload means -37, 1 means -36, ...etc
+        if (version !== 0) return new CheckedError(PayloadException.UnknownVersion, null).toErr()
 
         const normalized: PayloadParseResult.Payload = {
             version: -37,

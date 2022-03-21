@@ -6,6 +6,7 @@ import { ProviderType } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { isDashboardPage } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
     useAccount,
     useWeb3State,
@@ -16,7 +17,7 @@ import {
     useReverseAddress,
     useWallet,
 } from '@masknet/plugin-infra'
-import { FormattedAddress, useRemoteControlledDialog, useSnackbarCallback, WalletIcon } from '@masknet/shared'
+import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
 import Services from '../../extension/service'
