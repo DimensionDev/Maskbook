@@ -2,7 +2,7 @@ import { memo, useCallback, useState } from 'react'
 import { Avatar, Link, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { definedSocialNetworkUIs } from '../../../../../../social-network'
 import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
-import type { ProfileIdentifier, ProfileInformation } from '@masknet/shared-base'
+import { ProfileIdentifier, ProfileInformation, EnhanceableSite , NextIDAction, NextIDPlatform } from '@masknet/shared-base'
 import { compact } from 'lodash-unified'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../../../utils'
@@ -12,7 +12,6 @@ import Services from '../../../../../service'
 import { GrayMasks } from '@masknet/icons'
 import { DisconnectDialog } from '../DisconnectDialog'
 import { bindProof, createPersonaPayload, queryExistedBindingByPersona } from '@masknet/web3-providers'
-import { NextIDAction, NextIDPlatform } from '@masknet/shared-base'
 import { delay } from '@dimensiondev/kit'
 import classNames from 'classnames'
 
@@ -100,7 +99,7 @@ export const ProfileList = memo(() => {
 
     const definedSocialNetworks = compact(
         [...definedSocialNetworkUIs.values()].map(({ networkIdentifier }) => {
-            if (networkIdentifier === 'localhost') return null
+            if (networkIdentifier === EnhanceableSite.Localhost) return null
             return networkIdentifier
         }),
     )

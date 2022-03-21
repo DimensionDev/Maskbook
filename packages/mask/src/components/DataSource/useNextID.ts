@@ -8,7 +8,7 @@ import stringify from 'json-stable-stringify'
 import { SetupGuideStep } from '../InjectedComponents/SetupGuide/types'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
 import { useLastRecognizedIdentity } from './useActivatedUI'
-import { useValueRef } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { queryExistedBindingByPersona, queryExistedBindingByPlatform, queryIsBound } from '@masknet/web3-providers'
 import Services from '../../extension/service'
 

@@ -51,21 +51,22 @@ function createERC721TokenFromAsset(
     tokenId: string,
     asset?: RaribleNFTItemMapResponse,
 ): ERC721TokenDetailed {
-    const imageURL = resolveResourceLink(asset?.meta.image?.url.ORIGINAL ?? asset?.meta.image?.url.PREVIEW ?? '')
+    const imageURL = resolveResourceLink(asset?.meta?.image?.url.ORIGINAL ?? asset?.meta?.image?.url.PREVIEW ?? '')
     return {
         contractDetailed: {
             type: EthereumTokenType.ERC721,
             chainId: ChainId.Mainnet,
             address: tokenAddress,
-            name: asset?.meta.name ?? '',
+            name: asset?.meta?.name ?? '',
             symbol: '',
         },
         info: {
-            name: asset?.meta.name ?? '',
-            description: asset?.meta.description ?? '',
+            name: asset?.meta?.name ?? '',
+            description: asset?.meta?.description ?? '',
             mediaUrl:
-                resolveResourceLink(asset?.meta.animation?.url.ORIGINAL ?? asset?.meta.animation?.url.PREVIEW ?? '') ||
-                imageURL,
+                resolveResourceLink(
+                    asset?.meta?.animation?.url.ORIGINAL ?? asset?.meta?.animation?.url.PREVIEW ?? '',
+                ) || imageURL,
             imageURL,
             owner: asset?.owners[0],
         },
@@ -80,7 +81,7 @@ function createNFTAsset(asset: RaribleNFTItemMapResponse, chainId: ChainId): Non
         is_verified: false,
         is_auction: false,
         token_address: asset.contract,
-        image_url: resolveResourceLink(asset?.meta.image?.url.ORIGINAL ?? ''),
+        image_url: resolveResourceLink(asset?.meta?.image?.url.ORIGINAL ?? ''),
         asset_contract: null,
         owner: owner
             ? {
@@ -98,11 +99,11 @@ function createNFTAsset(asset: RaribleNFTItemMapResponse, chainId: ChainId): Non
                   link: '',
               }
             : null,
-        traits: asset?.meta.attributes.map(({ key, value }) => ({ trait_type: key, value })),
-        description: asset?.meta.description ?? '',
-        name: asset?.meta.name ?? 'Unknown',
+        traits: asset?.meta?.attributes.map(({ key, value }) => ({ trait_type: key, value })) ?? [],
+        description: asset?.meta?.description ?? '',
+        name: asset?.meta?.name ?? 'Unknown',
         collection_name: '',
-        animation_url: asset.meta.animation?.url.PREVIEW,
+        animation_url: asset.meta?.animation?.url.PREVIEW,
         current_price: 0,
         current_symbol: 'ETH',
         end_time: null,
