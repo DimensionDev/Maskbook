@@ -2,7 +2,13 @@ import { memo, useCallback, useState } from 'react'
 import { Avatar, Link, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { definedSocialNetworkUIs } from '../../../../../../social-network'
 import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
-import { ProfileIdentifier, ProfileInformation, EnhanceableSite , NextIDAction, NextIDPlatform } from '@masknet/shared-base'
+import {
+    ProfileIdentifier,
+    ProfileInformation,
+    EnhanceableSite,
+    NextIDAction,
+    NextIDPlatform,
+} from '@masknet/shared-base'
 import { compact } from 'lodash-unified'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../../../utils'
