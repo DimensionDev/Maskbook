@@ -144,24 +144,26 @@ function MarketDetails(props: MarketDetailsProps) {
         color: 'default' | 'error' | 'success' | 'warning' | 'primary' | 'secondary' | 'info' | undefined
         potSize: string
     } = useMemo(() => {
-        return market.state === MarketState.Open
-            ? {
+        if (market.state === MarketState.Open) {
+          return {
                   label: t('plugin_realitycards_event_state_open'),
                   color: 'success',
                   potSize: t('plugin_realitycards_event_pot_size'),
               }
-            : market.state === MarketState.Withdraw
-            ? {
-                  label: t('plugin_realitycards_event_state_ended'),
+        }
+        if (market.state === MarketState.Withdraw) {
+          return {
+            abel: t('plugin_realitycards_event_state_ended'),
                   color: 'default',
                   potSize: t('plugin_realitycards_event_final_pot_size'),
-              }
-            : {
+          }
+        }
+       return {
                   label: t('plugin_realitycards_event_state_locked'),
                   color: 'warning',
                   potSize: t('plugin_realitycards_event_final_pot_size'),
               }
-    }, [market.state])
+    }, [market.state, t])
 
     const avgRental = useMemo(() => {
         const utcTimestamp = new Date(Date.now() + new Date().getTimezoneOffset() * 60 * 1000).getTime() / 1000
@@ -187,7 +189,7 @@ function MarketDetails(props: MarketDetailsProps) {
         setDay(new Date(diff).getUTCDate() - 1)
         setHour(new Date(diff).getUTCHours())
         setMinute(new Date(diff).getUTCMinutes())
-    }, 10)
+    },  1000)
 
     return (
         <Grid container direction="column">

@@ -35,7 +35,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
             if (text.none) return []
             return parseURL(text?.val ?? '')
         }, [props.message])
-        console.log(links)
 
         const market = getMarketFromLinks(links)
         usePluginWrapper(!!market?.slug)
