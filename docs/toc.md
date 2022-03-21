@@ -24,7 +24,7 @@
 - Plugin Development Guide
 - Website Integration Guide
 - Blockchain Integration Guide
-- Wallet Provider Integration Guide
+- [Wallet Provider Integration Guide](./wallet-provider-integration.md)
 - i18n
 - Form Guide
 

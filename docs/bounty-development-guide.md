@@ -18,7 +18,7 @@ The codebase is totally open sourced. Anyone can review it. If you are familiar 
 
 ## General Content
 
-Firstly, you can clone the repository and [set up the development environment](setup.md). The codebase is easy to understand, although with a huge size. It's only a tree of packages. Each package serves a specific purpose, as its name says. Let's take a quick tour.
+Firstly, you can clone the repository and [set up the development environment](setup.md). The codebase is easy to understand, although with a huge size. It divides into many packages. Each package serves a specific purpose, as its name says. Let's take a quick tour.
 
 ### Core Packages
 
@@ -27,13 +27,16 @@ Firstly, you can clone the repository and [set up the development environment](s
 
 ### Plugin Packages
 
-- `packages/plugins/*`
+- `packages/plugins/*` All of integrated plugins.
 
 ### Shared Packages
 
+- `packages/shared` Shared UI components and utilities.
+- `packages/shared-base` Shared types, constants, and atomic units. Must be as pure as possible and testable.
+
 ### Web3 Related Packages
 
-- `packages/web3-*`
+- `packages/web3-constants` Constants
 
 ## Plugin
 
