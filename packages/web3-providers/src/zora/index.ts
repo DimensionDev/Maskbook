@@ -1,13 +1,7 @@
 import { GraphQLClient } from 'graphql-request'
 import { first } from 'lodash-unified'
-import {
-    formatWeiToEther,
-    ChainId,
-    FungibleTokenDetailed,
-    ERC721TokenDetailed,
-    EthereumTokenType,
-} from '@masknet/web3-shared-evm'
-
+import { formatWeiToEther, ChainId, FungibleTokenDetailed, ERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import { Web3TokenType } from '@masknet/web3-shared-base'
 import { NonFungibleTokenAPI } from '..'
 import type { ZoraToken, ZoraHistory, ZoraBid, ZoraAsk } from './types'
 import { getAssetQuery, getTokenHistoryQuery, getBidsQuery, getAsksQuery } from './queries'
@@ -74,7 +68,7 @@ function createNFTAsset(asset: ZoraToken): NonFungibleTokenAPI.Asset {
 function createERC721TokenFromAsset(tokenAddress: string, tokenId: string, asset?: ZoraToken): ERC721TokenDetailed {
     return {
         contractDetailed: {
-            type: EthereumTokenType.ERC721,
+            type: Web3TokenType.ERC721,
             chainId: ChainId.Mainnet,
             address: tokenAddress,
             name: asset?.tokenContract.name ?? '',
