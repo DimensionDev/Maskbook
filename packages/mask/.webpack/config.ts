@@ -117,8 +117,6 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 javascript: {
                     // Treat as missing export as error
                     strictExportPresence: true,
-                    // gun and @unstoppabledomains/resolution
-                    exprContextCritical: false,
                 },
             },
             rules: [
@@ -203,6 +201,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 patterns: [
                     { from: join(__dirname, '../public/'), to: distFolder },
                     { from: join(__dirname, '../../injected-script/dist/injected-script.js'), to: distFolder },
+                    { from: join(__dirname, '../../gun-utils/gun.js'), to: distFolder },
                     { from: join(__dirname, '../../mask-sdk/dist/mask-sdk.js'), to: distFolder },
                     {
                         context: join(__dirname, '../../polyfills/dist/'),
@@ -307,6 +306,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 chunks: ['background'],
                 filename: 'background.html',
                 secp256k1: true,
+                gun: true,
                 sourceMap: !!sourceMapKind,
             }),
         )
@@ -331,13 +331,22 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         }
     }
 }
-function addHTMLEntry(options: HTMLPlugin.Options & { secp256k1?: boolean; sourceMap: boolean }) {
+function addHTMLEntry(
+    options: HTMLPlugin.Options & {
+        secp256k1?: boolean
+        sourceMap: boolean
+        gun?: boolean
+    },
+) {
     let templateContent = readFileSync(join(__dirname, './template.html'), 'utf8')
     if (options.secp256k1) {
         templateContent = templateContent.replace(
             `<!-- secp256k1 -->`,
             '<script src="/polyfill/secp256k1.js"></script>',
         )
+    }
+    if (options.gun) {
+        templateContent = templateContent.replace(`<!-- Gun -->`, '<script src="/gun.js"></script>')
     }
     if (options.sourceMap) {
         templateContent = templateContent.replace(
