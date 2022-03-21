@@ -26,6 +26,7 @@ import { injectToolboxHintAtMinds } from './injection/ToolboxHint'
 import { mindsShared } from './shared'
 import { makeStyles } from '@masknet/theme'
 import { MindsRenderFragments } from './customization/render-fragments'
+import { enableFbStyleTextPayloadReplace } from '../../../shared-ui/TypedMessageRender/transformer'
 
 const useInjectedDialogClassesOverwriteMinds = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -137,6 +138,7 @@ const mindsUI: SocialNetworkUI.Definition = {
         const profiles = stateCreator.profiles()
         InitAutonomousStateFriends(signal, friends, mindsShared.networkIdentifier)
         InitAutonomousStateProfiles(signal, profiles, mindsShared.networkIdentifier)
+        enableFbStyleTextPayloadReplace()
         return { friends, profiles }
     },
     injection: {

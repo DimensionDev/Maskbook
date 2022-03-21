@@ -35,6 +35,7 @@ import { injectProfileTabAtFacebook } from './injection/ProfileTab'
 import { injectPostReplacerAtFacebook } from './injection/PostReplacer'
 import { injectProfileTabContentAtFacebook } from './injection/ProfileContent'
 import { FacebookRenderFragments } from './customization/render-fragments'
+import { enableFbStyleTextPayloadReplace } from '../../../shared-ui/TypedMessageRender/transformer'
 
 const useInjectedDialogClassesOverwriteFacebook = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -158,6 +159,7 @@ const facebookUI: SocialNetworkUI.Definition = {
         const profiles = stateCreator.profiles()
         InitAutonomousStateFriends(signal, friends, facebookShared.networkIdentifier)
         InitAutonomousStateProfiles(signal, profiles, facebookShared.networkIdentifier)
+        enableFbStyleTextPayloadReplace()
         return { friends, profiles }
     },
     injection: {
