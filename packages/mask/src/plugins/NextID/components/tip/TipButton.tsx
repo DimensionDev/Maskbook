@@ -1,4 +1,4 @@
-import { Currency } from '@masknet/icons'
+import { TipCoin } from '@masknet/icons'
 import { usePostInfoDetails } from '@masknet/plugin-infra'
 import { NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
@@ -82,7 +82,7 @@ export const TipButton: FC<Props> = ({ className, receiver, addresses = [], chil
                 addresses: allAddresses,
             })
         },
-        [disabled, walletsState, allAddresses, receiver?.userId],
+        [disabled, walletsState, allAddresses, receiver?.userId, queryBindings],
     )
 
     return (
@@ -91,7 +91,7 @@ export const TipButton: FC<Props> = ({ className, receiver, addresses = [], chil
             {...rest}
             role="button"
             onClick={sendTip}>
-            <Currency htmlColor="#8899a6" viewBox="0 0 24 24" />
+            <TipCoin htmlColor="#8899a6" viewBox="0 0 24 24" />
             {children}
         </div>
     )
