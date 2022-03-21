@@ -1,6 +1,5 @@
 import {
     EthereumTokenType,
-    formatAmount,
     TransactionStateType,
     useAccount,
     useFungibleTokenBalance,
@@ -84,7 +83,7 @@ export function DepositDialog(props: DepositDialogProps) {
     // #endregion
 
     // #region amount
-    const amount = new BigNumber(formatAmount(new BigNumber(_inputAmount ?? 0), token.decimals))
+    const amount = new BigNumber(_inputAmount ?? 0).shiftedBy(token.decimals)
     // #endregion
 
     // #region blocking

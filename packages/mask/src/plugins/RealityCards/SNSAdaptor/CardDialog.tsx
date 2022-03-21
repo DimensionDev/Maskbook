@@ -1,6 +1,5 @@
 import {
     EthereumTokenType,
-    formatAmount,
     formatBalance,
     isSameAddress,
     TransactionStateType,
@@ -154,7 +153,7 @@ export function CardDialog(props: CardDialogProps) {
     // #endregion
 
     // #region priceHourly
-    const priceHourly = new BigNumber(formatAmount(new BigNumber(inputPrice ?? 0), token.decimals))
+    const priceHourly = new BigNumber(inputPrice ?? 0).shiftedBy(token.decimals)
     const pricePerMinute = useMemo(() => {
         return priceHourly.div(60)
     }, [priceHourly])

@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import BigNumber from 'bignumber.js'
 import {
     useAccount,
     useTransactionState,
@@ -10,6 +9,7 @@ import {
 import { useMarketContract } from '../contracts/useMarketContract'
 import type { Card, Market } from '../types'
 import { isAddress } from 'web3-utils'
+import { ZERO } from '@masknet/web3-shared-base'
 
 export function useRentCallback(market: Market, price: string, card: Card, duration = 0) {
     const account = useAccount()
@@ -32,7 +32,7 @@ export function useRentCallback(market: Market, price: string, card: Card, durat
         // step 1: estimate gas
         const config = {
             from: account,
-            value: new BigNumber(0).toFixed(),
+            value: ZERO.toFixed(),
         }
         const estimatedGas = await contract.methods
             .newRental(price, duration, ZERO_ADDRESS, card.marketCardIndex)
