@@ -25,6 +25,9 @@ const useStyles = makeStyles()((theme) => {
         max: {
             marginRight: theme.spacing(0.5),
             borderRadius: 8,
+            '&:hover': {
+                backgroundColor: 'rgba(26, 139, 216, 0.9) !important',
+            },
         },
         token: {
             whiteSpace: 'pre',
