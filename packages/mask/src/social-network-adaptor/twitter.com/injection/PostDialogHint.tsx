@@ -12,7 +12,7 @@ import { twitterBase } from '../base'
 import { sayHelloShowed } from '../../../settings/settings'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { useI18N } from '../../../utils'
-import { pasteTextToReplyTwitter } from '../automation/pasteTextToComposition'
+import { pasteTextToCompositionTwitter } from '../automation/pasteTextToComposition'
 
 const useStyles = makeStyles()((theme) => ({
     iconButton: {
@@ -71,7 +71,7 @@ function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
 
     useEffect(() => {
         return MaskMessages.events.message.on(async (data) => {
-            pasteTextToReplyTwitter?.(data.text, { recover: true })
+            pasteTextToCompositionTwitter?.(data.text, { recover: true, reply: true })
         })
     }, [])
     return (
