@@ -137,7 +137,6 @@ export const getFungibleAssetsFn =
                 chainId: x,
                 price: price,
                 balance,
-                value: new BigNumber(balance),
             }
         })
 
