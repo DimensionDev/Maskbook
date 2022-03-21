@@ -40,6 +40,8 @@ const useStyles = makeStyles()((theme) => ({
     tipButton: {
         display: 'inline-flex',
         alignItems: 'center',
+        color: theme.palette.text.primary,
+        marginRight: theme.spacing(0.5),
     },
     tipButtonLabel: {
         color: theme.palette.text.primary,
@@ -98,7 +100,7 @@ export const BindingItem = memo<Item>(({ platform, identity, tipable, deletable,
                             addresses={[identity]}
                             receiver={visitingPersona.identifier}
                             className={classes.tipButton}>
-                            <span className={classes.tipButtonLabel}>{t.tip()}</span>
+                            <span className={classes.tipButtonLabel}>{t.tips()}</span>
                         </TipButton>
                     ) : null}
                     {deletable ? <DeleteIcon className={classes.delButton} onClick={() => onUnBind(identity)} /> : null}
