@@ -82,9 +82,11 @@ export function NFTAvatarSettingDialog() {
                 window.location.reload()
 
                 setOpen(false)
-            } catch (error: any) {
-                window.alert(error.message)
-                return
+            } catch (error) {
+                if (error instanceof Error) {
+                    window.alert(error.message)
+                    return
+                }
             }
         },
         [identity, wallet],
