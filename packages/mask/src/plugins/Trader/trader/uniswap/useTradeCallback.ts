@@ -1,11 +1,18 @@
 import { useCallback, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import type { SwapParameters } from '@uniswap/v2-sdk'
-import { GasOptionConfig, TransactionState, TransactionStateType, useAccount, useWeb3 } from '@masknet/web3-shared-evm'
+import {
+    GasOptionConfig,
+    TransactionState,
+    TransactionStateType,
+    useAccount,
+    useWeb3,
+    ChainId,
+} from '@masknet/web3-shared-evm'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
 import type { SwapCall, Trade, TradeComputed } from '../../types'
 import { swapErrorToUserReadableMessage } from '../../helpers'
-import type { TradeProvider } from '@masknet/public-api'
+import { TradeProvider } from '@masknet/public-api'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { FeeMarketEIP1559Transaction } from '@ethereumjs/tx'
 
@@ -27,6 +34,8 @@ interface FailedCall extends SwapCallEstimate {
     call: SwapCall
     error: Error
 }
+
+const SUPPORTED_OPTMISTIC_CHAIN_ID_LIST = [ChainId.Optimistic, ChainId.Boba, ChainId.Metis]
 
 export function useTradeCallback(
     trade: TradeComputed<Trade> | null,
@@ -123,8 +132,8 @@ export function useTradeCallback(
             bestCallOption = firstNoErrorCall
         }
 
-        // check if boba network
-        if (targetChainId === 288) {
+        // check if optimistic network
+        if (SUPPORTED_OPTMISTIC_CHAIN_ID_LIST && !!TradeProvider.OPENOCEAN && !!TradeProvider.DODO) {
             return new Promise<string>(async (resolve, reject) => {
                 if (!bestCallOption) {
                     setTradeState({
@@ -145,8 +154,8 @@ export function useTradeCallback(
                     ...('gasEstimate' in bestCallOption
                         ? {
                               gas: bestCallOption.gasEstimate.toFixed(),
-                              maxFeePerGas: '1.5',
-                              maxPriorityFeePerGas: '1.5',
+                              maxFeePerGas: gasConfig?.maxFeePerGas,
+                              maxPriorityFeePerGas: gasConfig?.maxPriorityFeePerGas,
                           }
                         : {}),
                     ...(!value || /^0x0*$/.test(value) ? {} : { value }),
