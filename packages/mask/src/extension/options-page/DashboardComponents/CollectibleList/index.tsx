@@ -5,7 +5,6 @@ import {
     ChainId,
     ERC721ContractDetailed,
     ERC721TokenDetailed,
-    formatEthereumAddress,
     isSameAddress,
     NonFungibleAssetProvider,
     SocketState,
@@ -22,6 +21,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { CollectionIcon } from './CollectionIcon'
 import { uniqBy } from 'lodash-unified'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import { ReverseAddress } from '@masknet/shared'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -301,7 +301,7 @@ export function CollectionList({
                                 className={classes.button}
                                 variant="outlined"
                                 size="small">
-                                {formatEthereumAddress(addressName.label, 5)}
+                                <ReverseAddress address={addressName.resolvedAddress} addressSize={5} />
                                 <KeyboardArrowDownIcon />
                             </Button>
                         </Box>
@@ -330,7 +330,7 @@ export function CollectionList({
                 </Stack>
                 <Box display="flex" alignItems="center" justifyContent="flex-end" flexWrap="wrap">
                     <Button onClick={onSelectAddress} className={classes.button} variant="outlined" size="small">
-                        {formatEthereumAddress(addressName.label, 5)}
+                        <ReverseAddress address={addressName.resolvedAddress} addressSize={5} />
                         <KeyboardArrowDownIcon />
                     </Button>
                 </Box>
