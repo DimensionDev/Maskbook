@@ -1,6 +1,9 @@
 {
     "dialog_title": "Check Security",
     "powered_by_go_plus": "Powered by Go+",
+    "high_risk": "High Risk",
+    "low_risk": "Low Risk",
+    "medium_risk": "Medium Risk",
     "search": "Search",
     "search_input_placeholder": "Please enter token contract address.",
     "token_info": "Token info",

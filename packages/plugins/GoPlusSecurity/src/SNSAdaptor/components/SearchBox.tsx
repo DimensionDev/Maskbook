@@ -100,7 +100,7 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
                 </Box>
                 <Button
                     className={classes.searchButton}
-                    disabled={!!searchContent}
+                    disabled={!searchContent}
                     onClick={() => onSearch(selectedNetwork?.id ?? DEFAULT_SEARCH_NETWORK, searchContent ?? '')}
                     variant="contained">
                     {t.search()}

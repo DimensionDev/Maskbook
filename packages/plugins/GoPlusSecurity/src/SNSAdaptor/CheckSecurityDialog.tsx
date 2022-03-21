@@ -48,7 +48,7 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
     return (
         <MaskDialog title={t.dialog_title()} open onClose={closeDialog}>
             <DialogContent className={classes.content}>
-                <Stack height="100%">
+                <Stack height="100%" spacing={2}>
                     <Box>
                         <SearchBox onSearch={onSearch} />
                     </Box>
