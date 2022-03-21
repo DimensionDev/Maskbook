@@ -64,7 +64,7 @@ function OpenTipDialog() {
     const { classes } = useStyles(style)
     return (
         <TipButton className={classes.button} receiver={visitingPersona.identifier}>
-            <span className={classes.label}>Tip</span>
+            <span className={classes.label}>Tips</span>
         </TipButton>
     )
 }

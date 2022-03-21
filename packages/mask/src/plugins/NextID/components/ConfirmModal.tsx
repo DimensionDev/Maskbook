@@ -6,7 +6,6 @@ import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/
 const useStyles = makeStyles()((theme) => ({
     confirmDialog: {
         width: 480,
-        height: 290,
         backgroundImage: 'none',
     },
     content: {
@@ -16,19 +15,17 @@ const useStyles = makeStyles()((theme) => ({
         justifyItems: 'center',
         padding: theme.spacing(3),
         boxSizing: 'border-box',
+        color: theme.palette.text.primary,
+        textAlign: 'center',
+        fontSize: 18,
     },
     icon: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
     },
-    message: {
-        color: theme.palette.text.primary,
-        textAlign: 'center',
-        fontSize: 18,
-    },
     actions: {
-        marginTop: theme.spacing(3),
+        padding: theme.spacing(0, 3, 3),
     },
 }))
 
@@ -55,7 +52,7 @@ export const ConfirmModal: FC<Props> = ({ className, message, icon, confirmText,
             {...rest}>
             <DialogContent className={classes.content}>
                 {icon ? <div className={classes.icon}>{icon}</div> : null}
-                <Typography className={classes.message}>{message}</Typography>
+                {typeof message === 'string' ? <Typography>{message}</Typography> : message}
             </DialogContent>
             <DialogActions className={classes.actions}>
                 <Button fullWidth onClick={onConfirm}>

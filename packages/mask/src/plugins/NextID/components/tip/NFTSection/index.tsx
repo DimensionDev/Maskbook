@@ -10,6 +10,8 @@ import { TargetChainIdContext, useTip } from '../../../contexts'
 import { NFTList } from './NFTList'
 import { useI18N } from '../../../locales'
 
+export * from './NFTList'
+
 const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',

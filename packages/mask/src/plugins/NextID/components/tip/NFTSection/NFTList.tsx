@@ -45,13 +45,37 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function arrayRemove<T>(arr: T[], item: T): T[] {
+function arrayRemove<T>(arr: T[], item: T): T[] {
     const idx = arr.indexOf(item)
     return arr.splice(idx, 1)
 }
 
-export const NFTList: FC<Props> = ({ selectedIds, tokens, enableTokenIds = [], onChange, limit = 1, className }) => {
+interface NFTItemProps {
+    token: ERC721TokenDetailed
+}
+
+export const NFTItem: FC<NFTItemProps> = ({ token }) => {
+    const { classes } = useStyles()
     const chainId = useChainId()
+    return (
+        <>
+            <NFTCardStyledAssetPlayer
+                chainId={chainId}
+                contractAddress={token.contractDetailed.address}
+                url={token.info.mediaUrl}
+                tokenId={token.tokenId}
+                classes={{
+                    loadingFailImage: classes.loadingFailImage,
+                }}
+            />
+            <Typography variant="subtitle1" textAlign="center">
+                {formatNFT_TokenId(token.tokenId, 2)}
+            </Typography>
+        </>
+    )
+}
+
+export const NFTList: FC<Props> = ({ selectedIds, tokens, enableTokenIds = [], onChange, limit = 1, className }) => {
     const { classes } = useStyles()
 
     const isRadio = limit === 1
@@ -90,18 +114,7 @@ export const NFTList: FC<Props> = ({ selectedIds, tokens, enableTokenIds = [], o
                             if (disabled) return
                             toggleItem(token.tokenId)
                         }}>
-                        <NFTCardStyledAssetPlayer
-                            chainId={chainId}
-                            contractAddress={token.contractDetailed.address}
-                            url={token.info.mediaUrl}
-                            tokenId={token.tokenId}
-                            classes={{
-                                loadingFailImage: classes.loadingFailImage,
-                            }}
-                        />
-                        <Typography variant="subtitle1" textAlign="center">
-                            {formatNFT_TokenId(token.tokenId, 2)}
-                        </Typography>
+                        <NFTItem token={token} />
                         <SelectComponent
                             onChange={noop}
                             disabled={disabled}

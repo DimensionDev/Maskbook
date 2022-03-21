@@ -1,8 +1,9 @@
 import { SuccessIcon } from '@masknet/icons'
 import { PluginId, useActivatedPlugin, usePluginIDContext } from '@masknet/plugin-infra'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { EMPTY_LIST, TransactionStateType } from '@masknet/web3-shared-evm'
-import { DialogContent } from '@mui/material'
+import { EMPTY_LIST, TransactionStateType, useChainId, useERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import { DialogContent, Typography } from '@mui/material'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useBoolean } from 'react-use'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
@@ -48,6 +49,26 @@ const useStyles = makeStyles()((theme) => ({
         flexGrow: 1,
         overflow: 'auto',
     },
+    nftContainer: {
+        height: 100,
+        width: 100,
+    },
+    nftMessage: {
+        textAlign: 'center',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    nftMessageText: {
+        fontSize: 18,
+        color: '#3DC233',
+        marginTop: theme.spacing(3),
+        lineHeight: '30px',
+    },
+    loadingFailImage: {
+        width: 64,
+        height: 64,
+    },
 }))
 
 interface TipDialogProps {
@@ -64,15 +85,15 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
 
     const [confirmModalIsOpen, openConfirmModal] = useBoolean(false)
     const { targetChainId, setTargetChainId } = TargetChainIdContext.useContainer()
-    const { tipType, amount, token, recipientSnsId, recipient, sendState, erc721Contract } = useTip()
+    const { tipType, amount, token, recipientSnsId, recipient, sendState, erc721Contract, erc721TokenId } = useTip()
 
+    const isTokenTip = tipType === TipType.Token
     const shareLink = useMemo(() => {
-        const assetName =
-            tipType === TipType.Token
-                ? `${amount || 'some'} ${token?.symbol || 'token'}`
-                : erc721Contract?.name
-                ? `a ${erc721Contract.name} NFT`
-                : ''
+        const assetName = isTokenTip
+            ? `${amount || 'some'} ${token?.symbol || 'token'}`
+            : erc721Contract?.name
+            ? `a ${erc721Contract.name} NFT`
+            : ''
         return activatedSocialNetworkUI.utils.getShareLinkURL?.(
             t.tip_share_post({
                 assetName,
@@ -80,9 +101,37 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                 recipient,
             }),
         )
-    }, [amount, tipType, erc721Contract?.name, token, recipient, recipientSnsId, t])
+    }, [amount, isTokenTip, erc721Contract?.name, token, recipient, recipientSnsId, t])
 
-    const successMessage = t.send_tip_successfully()
+    const { tokenDetailed: erc721Token } = useERC721TokenDetailed(erc721Contract, erc721TokenId)
+
+    const chainId = useChainId()
+    const successMessage = useMemo(() => {
+        if (isTokenTip) return t.send_tip_successfully()
+        if (erc721Token)
+            return (
+                <div className={classes.nftMessage}>
+                    <div className={classes.nftContainer}>
+                        <NFTCardStyledAssetPlayer
+                            chainId={chainId}
+                            contractAddress={erc721Token.contractDetailed.address}
+                            url={erc721Token.info.mediaUrl}
+                            tokenId={erc721Token.tokenId}
+                            classes={{
+                                loadingFailImage: classes.loadingFailImage,
+                            }}
+                        />
+                    </div>
+                    <Typography className={classes.nftMessageText}>
+                        {t.send_specific_tip_successfully({
+                            amount: '1',
+                            name: erc721Token.info.name || 'NFT',
+                        })}
+                    </Typography>
+                </div>
+            )
+        return t.send_tip_successfully()
+    }, [t, isTokenTip, classes.nftMessage, erc721Token])
 
     useEffect(() => {
         if (sendState.type !== TransactionStateType.CONFIRMED) return
@@ -114,7 +163,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                 title={t.tip()}
                 open={confirmModalIsOpen}
                 onClose={() => openConfirmModal(false)}
-                icon={<SuccessIcon style={{ height: 64, width: 64 }} />}
+                icon={isTokenTip ? <SuccessIcon style={{ height: 64, width: 64 }} /> : null}
                 message={successMessage}
                 confirmText={t.tip_share()}
                 onConfirm={handleConfirm}
