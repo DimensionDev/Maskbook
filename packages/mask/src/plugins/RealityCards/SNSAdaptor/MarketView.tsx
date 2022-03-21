@@ -145,24 +145,24 @@ function MarketDetails(props: MarketDetailsProps) {
         potSize: string
     } = useMemo(() => {
         if (market.state === MarketState.Open) {
-          return {
-                  label: t('plugin_realitycards_event_state_open'),
-                  color: 'success',
-                  potSize: t('plugin_realitycards_event_pot_size'),
-              }
+            return {
+                label: t('plugin_realitycards_event_state_open'),
+                color: 'success',
+                potSize: t('plugin_realitycards_event_pot_size'),
+            }
         }
         if (market.state === MarketState.Withdraw) {
-          return {
-            abel: t('plugin_realitycards_event_state_ended'),
-                  color: 'default',
-                  potSize: t('plugin_realitycards_event_final_pot_size'),
-          }
+            return {
+                abel: t('plugin_realitycards_event_state_ended'),
+                color: 'default',
+                potSize: t('plugin_realitycards_event_final_pot_size'),
+            }
         }
-       return {
-                  label: t('plugin_realitycards_event_state_locked'),
-                  color: 'warning',
-                  potSize: t('plugin_realitycards_event_final_pot_size'),
-              }
+        return {
+            label: t('plugin_realitycards_event_state_locked'),
+            color: 'warning',
+            potSize: t('plugin_realitycards_event_final_pot_size'),
+        }
     }, [market.state, t])
 
     const avgRental = useMemo(() => {
@@ -189,7 +189,7 @@ function MarketDetails(props: MarketDetailsProps) {
         setDay(new Date(diff).getUTCDate() - 1)
         setHour(new Date(diff).getUTCHours())
         setMinute(new Date(diff).getUTCMinutes())
-    },  1000)
+    }, 1000)
 
     return (
         <Grid container direction="column">
