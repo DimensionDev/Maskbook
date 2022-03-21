@@ -1,14 +1,11 @@
 import { spawn } from 'child_process'
-import { writeFileSync } from 'fs'
-import { join } from 'path'
+import { join, relative } from 'path'
 import { LoaderContext } from 'webpack'
 
 export default function loader(this: LoaderContext<any>, source: Buffer) {
     return new Promise((resolve, reject) => {
-        const child = spawn(process.execPath, [
-            join(__dirname, '../node_modules/binaryen/bin/wasm2js'),
-            this.resourcePath,
-        ])
+        const cli = join(__dirname, '../node_modules/binaryen/bin/wasm2js')
+        const child = spawn(process.execPath, [cli, relative(process.cwd(), this.resourcePath)], { cwd: process.cwd() })
         const out: string[] = []
         const err: string[] = []
         child.stdout.setEncoding('utf-8')
