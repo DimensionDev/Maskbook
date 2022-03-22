@@ -40,7 +40,7 @@ export const DefineMapping: DefineMapping = {
         i18nKey: 'medium_risk',
         titleColor: '#FFB915',
         bgColor: 'rgba(255, 185, 21, 0.1)',
-        icon: (size: number) => <InfoIcon sx={{ fontSize: size ?? 24 }} />,
+        icon: (size: number) => <InfoIcon sx={{ fontSize: size ?? 24, color: '#FFB915' }} />,
     },
     [SecurityMessageLevel.Safe]: {
         i18nKey: 'low_risk',

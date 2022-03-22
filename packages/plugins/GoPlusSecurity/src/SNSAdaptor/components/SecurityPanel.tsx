@@ -78,13 +78,16 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                     <Stack direction="row" className={classes.card} spacing={2}>
                         <Stack
                             spacing={1.5}
+                            borderRadius={0.5}
                             sx={{ background: DefineMapping[securityMessageLevel].bgColor }}
                             width={128}
                             height={128}
                             justifyContent="center"
                             alignItems="center">
                             {DefineMapping[securityMessageLevel].icon(33)}
-                            <Typography>{t[DefineMapping[securityMessageLevel].i18nKey]}</Typography>
+                            <Typography color={DefineMapping[securityMessageLevel].titleColor} fontSize={14}>
+                                {t[DefineMapping[securityMessageLevel].i18nKey]()}
+                            </Typography>
                         </Stack>
                         <Stack height={128} justifyContent="space-between" flex={1}>
                             <Stack direction="row" justifyContent="space-between">
@@ -121,11 +124,11 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                     </Stack>
                 </Stack>
             </Stack>
-            <Stack maxHeight={300} spacing={2}>
+            <Stack spacing={2}>
                 <Typography variant="h6" className={classes.header}>
                     {t.security_detection()}
                 </Typography>
-                <Stack spacing={1}>
+                <Stack spacing={1} maxHeight={240} sx={{ overflowY: 'scroll' }}>
                     {makeMessageList.map((x, i) => (
                         <RiskCard info={x} key={i} />
                     ))}

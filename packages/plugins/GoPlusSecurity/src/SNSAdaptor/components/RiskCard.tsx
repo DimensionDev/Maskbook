@@ -10,8 +10,16 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: theme.palette.background.default,
         borderRadius: 8,
     },
+    icon: {
+        display: 'inline-flex',
+        lineHeight: '22px',
+        height: 22,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     header: {
         fontSize: 14,
+        lineHeight: '22px',
     },
     description: {
         fontSize: 12,
@@ -27,12 +35,12 @@ export const RiskCard = memo<RiskCardProps>(({ info }) => {
     const { classes } = useStyles()
     return (
         <Stack spacing={1} key={info.titleKey} p={1.5} direction="row" className={classes.detectionCard}>
-            <Box>{DefineMapping[info.level].icon()}</Box>
+            <Box className={classes.icon}>{DefineMapping[info.level].icon(14)}</Box>
             <Box>
-                <Typography classes={classes.header} color={DefineMapping[info.level].titleColor}>
+                <Typography className={classes.header} color={DefineMapping[info.level].titleColor}>
                     {t[info.titleKey]()}
                 </Typography>
-                <Typography classes={classes.description}>{t[info.messageKey]()}</Typography>
+                <Typography className={classes.description}>{t[info.messageKey]()}</Typography>
             </Box>
         </Stack>
     )
