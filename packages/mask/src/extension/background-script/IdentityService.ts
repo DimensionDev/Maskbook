@@ -19,7 +19,6 @@ import {
     ProfileIdentifier,
     ECKeyIdentifierFromJsonWebKey,
     EC_JsonWebKey,
-    EC_Private_JsonWebKey,
     PersonaInformation,
     ProfileInformation,
     PostIVIdentifier,
@@ -157,13 +156,6 @@ export function queryMyPersonas(network?: string): Promise<Persona[]> {
 export async function queryLastPersonaCreated() {
     const all = await queryPersonas(undefined, true)
     return first(orderBy(all, (x) => x.createdAt, 'desc'))
-}
-
-export async function backupPersonaPrivateKey(
-    identifier: PersonaIdentifier,
-): Promise<EC_Private_JsonWebKey | undefined> {
-    const x = await queryPersonaDB(identifier)
-    return x?.privateKey
 }
 
 export async function queryOwnedPersonaInformation(): Promise<PersonaInformation[]> {
