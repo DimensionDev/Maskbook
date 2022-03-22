@@ -104,6 +104,7 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
                                 name={protocol.bareToken.name}
                                 address={protocol.bareToken.address}
                                 classes={{ icon: classes.logo }}
+                                chainId={chainId}
                             />
                             <img src={ProviderIconURLs[protocol.type]} className={classes.logoMini} />
                         </div>
