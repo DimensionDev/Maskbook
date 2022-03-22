@@ -56,9 +56,8 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-type Platform = 'twitter' | 'nextid' | 'keybase' | 'ethereum' | 'github'
 interface Item {
-    platform: Platform
+    platform: NextIDPlatform
     identity: string
     tipable?: boolean
     deletable?: boolean

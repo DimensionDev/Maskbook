@@ -77,13 +77,13 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
         )
     }, [personaConnectStatus, t])
 
-    const { value: currentPersona, loading: loadingPersona } = useAsyncRetry(() => {
-        if (!visitingPersonaIdentifier) return Promise.resolve(undefined)
+    const { value: currentPersona, loading: loadingPersona } = useAsyncRetry(async () => {
+        if (!visitingPersonaIdentifier) return
         return Services.Identity.queryPersonaByProfile(visitingPersonaIdentifier.identifier)
     }, [visitingPersonaIdentifier, personaConnectStatus.hasPersona])
 
-    const { value: isAccountVerified, loading: loadingVerifyInfo } = useAsync(() => {
-        if (!currentPersona?.publicHexKey) return Promise.resolve(undefined)
+    const { value: isAccountVerified, loading: loadingVerifyInfo } = useAsync(async () => {
+        if (!currentPersona?.publicHexKey) return
         return queryIsBound(currentPersona.publicHexKey, platform, visitingPersonaIdentifier.identifier.userId)
     }, [isOwn, currentPersona, visitingPersonaIdentifier, isVerified])
 
