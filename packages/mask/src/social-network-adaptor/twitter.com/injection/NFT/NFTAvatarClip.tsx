@@ -57,10 +57,8 @@ function NFTAvatarClipInTwitter() {
                 linkDom.current.removeChild(linkDom.current?.firstElementChild)
             }
             const link = linkDom.current as HTMLElement
-            if (link.style) {
-                link.style.backgroundColor = 'transparent'
-                link.style.boxShadow = 'none'
-            }
+            link.style.backgroundColor = 'transparent'
+            link.style.boxShadow = 'none'
         }, 5000)
 
         return () => {
