@@ -20,7 +20,7 @@ export const pasteTextToCompositionTwitter: SocialNetworkUI.AutomationCapabiliti
                 if (abort.aborted) throw new Error('Aborted')
             }
 
-            if (!isCompose() && !hasEditor() && !opt?.reply) {
+            if (!isCompose() && !hasEditor() && opt?.reason !== 'reply') {
                 // open tweet window
                 await untilElementAvailable(newPostButtonSelector())
                 newPostButtonSelector().evaluate()!.click()

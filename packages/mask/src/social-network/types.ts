@@ -192,11 +192,11 @@ export namespace SocialNetworkUI {
         export interface NativeCompositionAttachImageOptions {
             recover?: boolean
             relatedTextPayload?: string
-            reply?: boolean
+            reason?: 'timeline' | 'popup' | 'reply'
         }
         export interface NativeCompositionAttachTextOptions {
             recover?: boolean
-            reply?: boolean
+            reason?: 'timeline' | 'popup' | 'reply'
         }
         export interface MaskCompositionDialog {
             open?(content: SerializableTypedMessages, options?: MaskCompositionDialogOpenOptions): void

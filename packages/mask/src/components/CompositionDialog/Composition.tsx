@@ -18,7 +18,7 @@ let openOnInitAnswered = false
 export function Composition({ type = 'timeline', requireClipboardPermission }: PostDialogProps) {
     const { t } = useI18N()
 
-    const [reply, setReply] = useState(false)
+    const [reason, setReason] = useState<'timeline' | 'popup' | 'reply'>('timeline')
     // #region Open
     const [open, setOpen] = useState(false)
     const onClose = useCallback(() => {
@@ -46,9 +46,9 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
 
     useEffect(() => {
         return MaskMessages.events.requestComposition.on(({ reason, open, content, options, reply }) => {
-            if (reason !== type || globalUIState.profiles.value.length <= 0) return
+            if (reason !== 'reply' && (reason !== type || globalUIState.profiles.value.length <= 0)) return
             setOpen(open)
-            setReply(reply ?? false)
+            setReason(reason)
             if (content) UI.current?.setMessage(content)
             if (options?.target) UI.current?.setEncryptionKind(options.target)
             if (options?.startupPlugin) UI.current?.startPlugin(options.startupPlugin)
@@ -65,7 +65,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     // #endregion
 
     // #region submit
-    const onSubmit_ = useSubmit(onClose, reply)
+    const onSubmit_ = useSubmit(onClose, reason)
     // #endregion
 
     const UI = useRef<CompositionRef>(null)

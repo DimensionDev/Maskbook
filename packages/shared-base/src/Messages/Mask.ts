@@ -62,7 +62,6 @@ export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, Ma
     profilesChanged: UpdateEvent<ProfileIdentifier>[]
     relationsChanged: RelationChangedEvent[]
     pluginMinimalModeChanged: [id: string, newStatus: boolean]
-    message: AutoPasteFailedEvent
 
     requestExtensionPermission: RequestExtensionPermissionEvent
     personaSignRequest: PersonaSignRequestEvent
@@ -79,7 +78,7 @@ export interface UpdateEvent<Data> {
 }
 
 export interface CompositionRequest {
-    readonly reason: 'timeline' | 'popup'
+    readonly reason: 'timeline' | 'popup' | 'reply'
     readonly open: boolean
     readonly reply?: boolean
     readonly content?: SerializableTypedMessages

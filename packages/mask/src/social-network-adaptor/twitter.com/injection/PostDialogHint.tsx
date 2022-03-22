@@ -12,7 +12,6 @@ import { twitterBase } from '../base'
 import { sayHelloShowed } from '../../../settings/settings'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { useI18N } from '../../../utils'
-import { pasteTextToCompositionTwitter } from '../automation/pasteTextToComposition'
 
 const useStyles = makeStyles()((theme) => ({
     iconButton: {
@@ -61,7 +60,12 @@ function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
                       t('setup_guide_say_hello_follow', { account: '@realMaskNetwork' }),
               )
 
-        MaskMessages.events.requestComposition.sendToLocal({ reason, open: true, content, reply })
+        MaskMessages.events.requestComposition.sendToLocal({
+            reason: isReply() ? 'reply' : reason,
+            open: true,
+            content,
+            reply,
+        })
         sayHelloShowed[twitterBase.networkIdentifier].value = true
     }, [reason, reply])
 
@@ -69,11 +73,6 @@ function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
         setReply(isReply())
     }, [location])
 
-    useEffect(() => {
-        return MaskMessages.events.message.on(async (data) => {
-            pasteTextToCompositionTwitter?.(data.text, { recover: true, reply: true })
-        })
-    }, [])
     return (
         <PostDialogHint
             classes={{ iconButton: classes.iconButton, tooltip: classes.tooltip }}
