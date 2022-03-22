@@ -38,10 +38,9 @@ export function PostInspector(props: PostInspectorProps) {
     const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Profile[]>([])
 
     const { value: sharedListOfPost } = useAsync(async () => {
-        if (!whoAmI || !whoAmI.identifier.equals(postBy) || !encryptedPost.ok) return []
-        const { iv, version } = encryptedPost.val
-        return Services.Crypto.getPartialSharedListOfPost(version, iv, postBy)
-    }, [postBy, whoAmI, encryptedPost])
+        if (!whoAmI || !whoAmI.identifier.equals(postBy) || !iv) return []
+        return Services.Crypto.getPartialSharedListOfPost(new PostIVIdentifier(whoAmI.identifier.network, iv))
+    }, [postBy, whoAmI, iv])
     useEffect(() => setAlreadySelectedPreviously(sharedListOfPost ?? []), [sharedListOfPost])
 
     if (encryptedPost.ok || postImages.length) {
