@@ -73,7 +73,14 @@ export const rootSelector: () => LiveSelector<E, true> = () => querySelector<E>(
 
 // `aside *` selectors are for mobile mode
 export const composeAnchorSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
-    querySelector<HTMLAnchorElement>('header[role=banner] a[href="/compose/tweet"],aside a[href="/compose/tweet"]')
+    querySelector<HTMLAnchorElement>(
+        [
+            'header[role=banner] a[href="/compose/tweet"]',
+            'aside a[href="/compose/tweet"]',
+            // can't see the compose button on share popup, use the tweetButton instead
+            '[role=main] [role=button][data-testid=tweetButton]',
+        ].join(),
+    )
 export const composeAnchorTextSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
     querySelector<HTMLAnchorElement>(
         'header[role=banner] a[href="/compose/tweet"] div[dir],aside a[href="/compose/tweet"] div[dir]',
