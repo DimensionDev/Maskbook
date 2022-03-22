@@ -94,7 +94,7 @@ export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<
     *values() {
         for (const [k, v] of this.entries()) yield v
     }
-    public [Symbol.toStringTag]: string;
+    public [Symbol.toStringTag]!: string;
     [Symbol.iterator](): Generator<[IdentifierType, T], void, unknown> {
         return this.entries()
     }

@@ -13,6 +13,7 @@
     "@ethersproject/providers": "^5.0.9",
     "@ethersproject/solidity": "^5.0.4",
     "@hookform/resolvers": "2.8.8",
+    "@masknet/backup-format": "workspace:*",
     "@masknet/dashboard": "workspace:*",
     "@masknet/encryption": "workspace:^0.0.0",
     "@masknet/external-plugin-previewer": "workspace:*",

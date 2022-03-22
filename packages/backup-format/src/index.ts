@@ -1,2 +1,2 @@
-export * from './v3-EncryptedJSON'
+export * from './version-3'
 export * from './BackupErrors'
