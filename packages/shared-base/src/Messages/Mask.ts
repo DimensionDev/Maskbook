@@ -38,6 +38,7 @@ export interface MaskSNSEvents {
     replaceComposition: SerializableTypedMessages
     // TODO: move to plugin message
     profileTabUpdated: ProfileNFTsPageEvent
+    profileTabHidden: { hidden: boolean }
     // TODO: move to plugin message
     profileNFTsTabUpdated: 'reset'
     NFTAvatarUpdated: NFTAvatarEvent

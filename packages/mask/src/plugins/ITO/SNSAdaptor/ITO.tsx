@@ -240,10 +240,13 @@ export function ITO(props: ITO_Props) {
     const { token, total: payload_total, exchange_amounts, exchange_tokens, limit, message } = payload
 
     const { t } = useI18N()
-    const sellerName =
-        message.split(MSG_DELIMITER)[0] === message
-            ? formatEthereumAddress(payload.seller.address, 4)
-            : message.split(MSG_DELIMITER)[0]
+
+    const sellerName = payload.seller.name
+        ? payload.seller.name
+        : message.split(MSG_DELIMITER)[0] === message
+        ? formatEthereumAddress(payload.seller.address, 4)
+        : message.split(MSG_DELIMITER)[0]
+
     const title = message.split(MSG_DELIMITER)[1] ?? message
     const regions = message.split(MSG_DELIMITER)[2] ?? defaultRegions
     const { classes } = useStyles({
