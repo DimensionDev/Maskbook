@@ -62,13 +62,13 @@ export interface ConnectedPersonaLineProps {
 export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
     ({ profileIdentifiers, onConnect, onDisconnect, networkIdentifier, isHideOperations }) => {
         const t = useDashboardI18N()
-        const { openProfilePage } = PersonaContext.useContainer()
+        const { openProfilePage, currentPersona } = PersonaContext.useContainer()
         const { classes } = useStyles()
 
         const [openDisconnectDialog, setOpenDisconnectDialog] = useState(false)
 
         const handleUserIdClick = async (network: string, userId: string) => {
-            await openProfilePage(network, userId)
+            await openProfilePage(network, userId, currentPersona?.identifier)
         }
 
         return (

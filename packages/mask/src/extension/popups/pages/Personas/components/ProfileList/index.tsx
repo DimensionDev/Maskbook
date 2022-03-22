@@ -106,7 +106,7 @@ export const ProfileList = memo(() => {
 export interface ProfileListUIProps {
     onConnect: (networkIdentifier: string) => void
     onDisconnect: (identifier: ProfileIdentifier) => void
-    openProfilePage: (network: string, userId: string) => void
+    openProfilePage: (network: string, userId: string, identifier?: ProfileIdentifier) => void
     profiles: ProfileInformation[]
     networks: string[]
 }
@@ -145,7 +145,7 @@ export const ProfileListUI = memo<ProfileListUIProps>(
                             <ListItemText
                                 className={classes.text}
                                 style={{ cursor: 'pointer' }}
-                                onClick={() => openProfilePage(identifier.network, identifier.userId)}>
+                                onClick={() => openProfilePage(identifier.network, identifier.userId, identifier)}>
                                 <Typography fontSize={12} fontWeight={600}>
                                     @{identifier.userId}
                                 </Typography>

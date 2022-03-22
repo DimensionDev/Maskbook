@@ -29,12 +29,16 @@ export async function connectSocialNetwork(identifier: PersonaIdentifier, networ
     home && browser.tabs.create({ active: true, url: home })
 }
 
-export async function openProfilePage(network: string, userId?: string) {
+export async function openProfilePage(network: string, userId?: string, identifier?: PersonaIdentifier) {
     const ui = await loadSocialNetworkUI(network)
     const profile = ui.utils.getProfilePage?.(userId)
     if (!Flags.no_web_extension_dynamic_permission_request) {
         if (!(await requestSNSAdaptorPermission(ui))) return
     }
+    currentSetupGuideStatus[network].value = stringify({
+        status: SetupGuideStep.FindUsername,
+        persona: identifier?.toText(),
+    })
     await delay(100)
     profile && browser.tabs.create({ active: true, url: profile })
 }

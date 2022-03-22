@@ -85,11 +85,11 @@ interface PostHistoryRowProps {
 
 export const PostHistoryRow = memo(({ post, network }: PostHistoryRowProps) => {
     const t = useDashboardI18N()
-    const { openProfilePage } = PersonaContext.useContainer()
+    const { openProfilePage, currentPersona } = PersonaContext.useContainer()
 
     const recipientClickHandler = useCallback(async (event: React.MouseEvent<HTMLSpanElement>, userId: string) => {
         event.stopPropagation()
-        await openProfilePage(network, userId)
+        await openProfilePage(network, userId, currentPersona?.identifier)
     }, [])
 
     const rowClickHandler = useCallback((event: React.MouseEvent<HTMLElement>) => {
