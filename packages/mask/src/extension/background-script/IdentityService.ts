@@ -1,13 +1,12 @@
 import * as bip39 from 'bip39'
 import { validateMnemonic } from 'bip39'
-import { decode, encode } from '@msgpack/msgpack'
-import { decodeArrayBuffer, decodeText, encodeArrayBuffer } from '@dimensiondev/kit'
+import { decode } from '@msgpack/msgpack'
+import { decodeArrayBuffer, decodeText } from '@dimensiondev/kit'
 import {
     loginPersona,
     personaRecordToPersona,
     queryAvatarDataURL,
     queryPersona,
-    queryPersonaRecord,
     queryPostPagedDB,
     queryProfile,
     queryProfilesWithQuery,
@@ -385,13 +384,6 @@ export const getCurrentPersonaAvatar = async () => {
 // #endregion
 
 // #region Private / Public key
-export async function exportPersonaPrivateKey(identifier: PersonaIdentifier) {
-    const profile = await queryPersonaRecord(identifier)
-    if (!profile?.privateKey) return ''
-
-    const encodePrivateKey = encode(profile.privateKey)
-    return encodeArrayBuffer(encodePrivateKey)
-}
 
 export async function queryPersonaByPrivateKey(privateKeyString: string) {
     const privateKey = decode(decodeArrayBuffer(privateKeyString)) as EC_JsonWebKey
