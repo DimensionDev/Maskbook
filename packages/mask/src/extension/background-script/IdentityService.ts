@@ -67,6 +67,7 @@ import {
 assertEnvironment(Environment.ManifestBackground)
 
 export { validateMnemonic } from '../../utils/mnemonic-code'
+export { signWithPersona } from '../../../background/services/identity'
 
 // #region Profile
 export { queryProfile, queryProfilePaged, queryPersonaByProfile } from '../../database'
@@ -421,5 +422,3 @@ export async function createPersonaByPrivateKey(privateKeyString: string, nickna
     return createPersonaByJsonWebKey({ privateKey: key.privateKey, publicKey: key.publicKey, nickname })
 }
 // #endregion
-
-export * from './IdentityServices/sign'
