@@ -40,6 +40,9 @@ const useStyles = makeStyles()((theme) => ({
         padding: '8px 10px',
         borderBottom: '1px solid #dadde1',
     },
+    tooltip: {
+        color: 'white',
+    },
 }))
 
 const EntryIconButton = memo((props: PostDialogHintUIProps) => {
