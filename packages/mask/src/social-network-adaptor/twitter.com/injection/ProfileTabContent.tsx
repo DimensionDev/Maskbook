@@ -24,17 +24,15 @@ function injectProfileTabContentState(signal: AbortSignal) {
 export function injectProfileTabContentAtTwitter(signal: AbortSignal) {
     const contentLoseConnectionWatcher = new MutationObserverWatcher(
         searchProfileTabLoseConnectionPageSelector(),
-    ).useForeach(() => {
-        MaskMessages.events.profileTabHidden.sendToLocal({ hidden: true })
-    })
+    ).useForeach(() => MaskMessages.events.profileTabHidden.sendToLocal({ hidden: true }))
 
-    const contentContentWatcher = new MutationObserverWatcher(searchProfileTabPageSelector()).useForeach(() => {
-        MaskMessages.events.profileTabHidden.sendToLocal({ hidden: false })
-    })
+    const contentContentWatcher = new MutationObserverWatcher(searchProfileTabPageSelector()).useForeach(() =>
+        MaskMessages.events.profileTabHidden.sendToLocal({ hidden: false }),
+    )
 
-    const ContentForEmptyWatcher = new MutationObserverWatcher(searchProfileEmptySelector()).useForeach(() => {
-        MaskMessages.events.profileTabHidden.sendToLocal({ hidden: false })
-    })
+    const ContentForEmptyWatcher = new MutationObserverWatcher(searchProfileEmptySelector()).useForeach(() =>
+        MaskMessages.events.profileTabHidden.sendToLocal({ hidden: false }),
+    )
 
     startWatch(contentLoseConnectionWatcher, signal)
     startWatch(contentContentWatcher, signal)
