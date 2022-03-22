@@ -77,7 +77,7 @@ export async function __deprecated__setStorage<T extends browser.storage.Storage
     key: string,
     value: T,
     options: { howToUpdate: 'merge' | 'replace' } = { howToUpdate: 'replace' },
-) {
+): Promise<void> {
     if (typeof browser === 'undefined' || !browser.storage) return
     if (options.howToUpdate === 'merge') value = merge((await storage.getStorage(key)) ?? {}, value)
     return storage.setStorage(key, value)

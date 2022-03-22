@@ -2,7 +2,6 @@ import * as bip39 from 'bip39'
 import { validateMnemonic } from 'bip39'
 import { decode, encode } from '@msgpack/msgpack'
 import { decodeArrayBuffer, decodeText, encodeArrayBuffer } from '@dimensiondev/kit'
-import { createPersonaByJsonWebKey } from '../../../background/database/persona/helper'
 import {
     loginPersona,
     personaRecordToPersona,
@@ -59,15 +58,12 @@ import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { getCurrentPersonaIdentifier } from './SettingsService'
 import { MaskMessages } from '../../utils'
 import { first, orderBy } from 'lodash-unified'
-import {
-    recover_ECDH_256k1_KeyPair_ByMnemonicWord,
-    split_ec_k256_keypair_into_pub_priv,
-} from '../../utils/mnemonic-code'
+import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 
 assertEnvironment(Environment.ManifestBackground)
 
 export { validateMnemonic } from '../../utils/mnemonic-code'
-export { signWithPersona } from '../../../background/services/identity'
+export * from '../../../background/services/identity'
 
 // #region Profile
 export { queryProfile, queryProfilePaged, queryPersonaByProfile } from '../../database'
@@ -413,12 +409,5 @@ export async function queryPersonaByPrivateKey(privateKeyString: string) {
     }
 
     return null
-}
-
-export async function createPersonaByPrivateKey(privateKeyString: string, nickname: string) {
-    const privateKey = decode(decodeArrayBuffer(privateKeyString)) as EC_JsonWebKey
-    const key = await split_ec_k256_keypair_into_pub_priv(privateKey)
-
-    return createPersonaByJsonWebKey({ privateKey: key.privateKey, publicKey: key.publicKey, nickname })
 }
 // #endregion
