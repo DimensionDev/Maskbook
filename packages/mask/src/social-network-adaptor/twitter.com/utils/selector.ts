@@ -96,14 +96,14 @@ export const sideBarProfileSelector: () => LiveSelector<E, true> = () =>
 export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div [role="button"][aria-label]:nth-child(6)')
 
-export const isReply = () => !!location.pathname.match(/^\/\w+\/status\/\d+$/)
+export const isReplyPageSelector = () => !!location.pathname.match(/^\/\w+\/status\/\d+$/)
 export const postEditorDraftContentSelector = () => {
     if (location.pathname === '/compose/tweet') {
         return querySelector<HTMLDivElement>(
             '[contenteditable][aria-label][spellcheck],textarea[aria-label][spellcheck]',
         )
     }
-    if (isReply()) {
+    if (isReplyPageSelector()) {
         return querySelector<HTMLElement>('div[data-testid="tweetTextarea_0"]')
     }
     return (isCompose() ? postEditorInPopupSelector() : postEditorInTimelineSelector()).querySelector<HTMLElement>(

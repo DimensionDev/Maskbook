@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'
-import { isReply, postEditorInPopupSelector, searchReplyToolbarSelector } from '../utils/selector'
+import { isReplyPageSelector, postEditorInPopupSelector, searchReplyToolbarSelector } from '../utils/selector'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
 import { MaskMessages } from '../../../utils/messages'
@@ -50,7 +50,7 @@ function renderPostDialogHintTo<T>(reason: 'timeline' | 'popup', ls: LiveSelecto
 function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
     const { classes } = useStyles()
     const { t } = useI18N()
-    const [reply, setReply] = useState(false)
+    const [isReply, setIsReply] = useState(false)
 
     const onHintButtonClicked = useCallback(() => {
         const content = sayHelloShowed[twitterBase.networkIdentifier].value
@@ -61,16 +61,15 @@ function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
               )
 
         MaskMessages.events.requestComposition.sendToLocal({
-            reason: isReply() ? 'reply' : reason,
+            reason: isReplyPageSelector() ? 'reply' : reason,
             open: true,
             content,
-            reply,
         })
         sayHelloShowed[twitterBase.networkIdentifier].value = true
-    }, [reason, reply])
+    }, [reason, isReplyPageSelector])
 
     useEffect(() => {
-        setReply(isReply())
+        setIsReply(isReplyPageSelector())
     }, [location])
 
     return (
