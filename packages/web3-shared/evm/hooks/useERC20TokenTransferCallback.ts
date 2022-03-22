@@ -75,7 +75,7 @@ export function useERC20TokenTransferCallback(address?: string, amount?: string,
                             no,
                             receipt,
                         })
-                        resolve(receipt.blockHash)
+                        resolve(receipt.transactionHash)
                     })
                     .on(TransactionEventType.ERROR, (error) => {
                         setTransferState({

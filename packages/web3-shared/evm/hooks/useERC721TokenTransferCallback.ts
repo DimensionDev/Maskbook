@@ -75,7 +75,7 @@ export function useERC721TokenTransferCallback(address?: string) {
                             no,
                             receipt,
                         })
-                        resolve(receipt.blockHash)
+                        resolve(receipt.transactionHash)
                     })
                     .on(TransactionEventType.ERROR, (error) => {
                         setTransferState({
