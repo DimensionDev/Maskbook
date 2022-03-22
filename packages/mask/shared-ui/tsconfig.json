@@ -10,8 +10,8 @@
   "include": ["./", "./**/*.json"],
   "references": [
     { "path": "../utils-pure" },
-    { "path": "../../shared-base" },
     { "path": "../../shared/" },
+    { "path": "../../shared-base" },
     { "path": "../../typed-message/base" },
     { "path": "../../typed-message/dom" },
     { "path": "../../theme" },

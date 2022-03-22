@@ -1,4 +1,4 @@
-import { createGlobalState } from '@masknet/shared'
+import { createGlobalState } from '@masknet/shared-base-ui'
 import { Messages, Services } from '../../API'
 import type { DataProvider } from '@masknet/public-api'
 import type { AccountType, BackupFileInfo, Scenario, Locale } from './type'

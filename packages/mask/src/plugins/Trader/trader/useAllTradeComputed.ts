@@ -198,13 +198,20 @@ export function useAllTradeComputed(
         traderEstimateGas: wannaSwapEstimateGas,
     } = useUniswapV2Like(tradeProviders, TradeProvider.WANNASWAP, inputAmount_, inputToken, outputToken)
 
+    // Mdex
+    const {
+        trader_: mdex_,
+        trader: mdex,
+        traderEstimateGas: mdexEstimateGas,
+    } = useUniswapV2Like(tradeProviders, TradeProvider.MDEX, inputAmount_, inputToken, outputToken)
+
     // ubeswap
     const {
         trader_: ubeswap_,
         trader: ubeswap,
         traderEstimateGas: ubeswapEstimateGas,
     } = useUniswapV2Like(tradeProviders, TradeProvider.UBESWAP, inputAmount_, inputToken, outputToken)
-
+    
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
         { provider: TradeProvider.SUSHISWAP, ...sushiSwap_, value: sushiSwap, gas: sushiSwapEstimateGas },
@@ -212,7 +219,7 @@ export function useAllTradeComputed(
         { provider: TradeProvider.QUICKSWAP, ...quickSwap_, value: quickSwap, gas: quickSwapEstimateGas },
         { provider: TradeProvider.PANCAKESWAP, ...pancakeSwap_, value: pancakeSwap, gas: pancakeSwapEstimateGas },
         { provider: TradeProvider.UNISWAP_V3, ...uniswapV3_, value: uniswapV3, gas: uniswapV3SwapEstimateGas },
-        { provider: TradeProvider.ZRX, ...zrx_, value: zrx, gas: { value: zrxSwapEstimateGas, loading: false } },
+        { provider: TradeProvider.ZRX, ...zrx_, value: zrx, gas: zrxSwapEstimateGas },
         { provider: TradeProvider.BALANCER, ...balancer_, value: balancer, gas: balancerSwapEstimateGas },
         { provider: TradeProvider.DODO, ...dodo_, value: dodo, gas: dodoSwapEstimateGas },
         { provider: TradeProvider.BANCOR, ...bancor_, value: bancor, gas: bancorSwapEstimateGas },
@@ -221,6 +228,7 @@ export function useAllTradeComputed(
         { provider: TradeProvider.OPENOCEAN, ...openocean_, value: openocean, gas: openoceanSwapEstimateGas },
         { provider: TradeProvider.WANNASWAP, ...wannaswap_, value: wannaswap, gas: wannaSwapEstimateGas },
         { provider: TradeProvider.TRISOLARIS, ...trisolaris_, value: trisolaris, gas: trisolarisEstimateGas },
+        { provider: TradeProvider.MDEX, ...mdex_, value: mdex, gas: mdexEstimateGas },
         { provider: TradeProvider.UBESWAP, ...ubeswap_, value: ubeswap, gas: ubeswapEstimateGas },
     ]
 

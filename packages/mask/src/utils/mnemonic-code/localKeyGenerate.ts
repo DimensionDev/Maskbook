@@ -1,7 +1,6 @@
 import { encodeText } from '@dimensiondev/kit'
-import { CryptoWorker } from '../../modules/workers'
-import type { EC_Public_JsonWebKey, AESJsonWebKey } from '@masknet/shared-base'
-import { derive_AES_GCM_256_Key_From_PBKDF2 } from '../../modules/CryptoAlgorithm/helper'
+import type { EC_Public_JsonWebKey, AESJsonWebKey, AESCryptoKey } from '@masknet/shared-base'
+import { CryptoKeyToJsonWebKey } from '../../../utils-pure'
 
 /**
  * Local key (AES key) is used to encrypt message to myself.
@@ -13,6 +12,16 @@ export async function deriveLocalKeyFromECDHKey(
     mnemonicWord: string,
 ): Promise<AESJsonWebKey> {
     // ? Derive method: publicKey as "password" and password for the mnemonicWord as hash
-    const pbkdf2 = await CryptoWorker.import_pbkdf2(encodeText(pub.x! + pub.y!))
-    return derive_AES_GCM_256_Key_From_PBKDF2(pbkdf2, encodeText(mnemonicWord))
+    const pbkdf2 = await crypto.subtle.importKey('raw', encodeText(pub.x! + pub.y!), 'PBKDF2', false, [
+        'deriveBits',
+        'deriveKey',
+    ])
+    const aes = await crypto.subtle.deriveKey(
+        { name: 'PBKDF2', salt: encodeText(mnemonicWord), iterations: 100000, hash: 'SHA-256' },
+        pbkdf2,
+        { name: 'AES-GCM', length: 256 },
+        true,
+        ['encrypt', 'decrypt'],
+    )
+    return CryptoKeyToJsonWebKey(aes as AESCryptoKey)
 }

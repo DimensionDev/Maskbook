@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import classnames from 'classnames'
 import { Trans } from 'react-i18next'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { formatEthereumAddress, useAccount } from '@masknet/web3-shared-evm'
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh'
 import { Avatar, Button, DialogActions, DialogContent, Paper, Typography } from '@mui/material'
