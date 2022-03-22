@@ -211,7 +211,7 @@ export function useAllTradeComputed(
         trader: ubeswap,
         traderEstimateGas: ubeswapEstimateGas,
     } = useUniswapV2Like(tradeProviders, TradeProvider.UBESWAP, inputAmount_, inputToken, outputToken)
-    
+
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
         { provider: TradeProvider.SUSHISWAP, ...sushiSwap_, value: sushiSwap, gas: sushiSwapEstimateGas },
