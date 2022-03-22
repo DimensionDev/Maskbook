@@ -65,7 +65,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     // #endregion
 
     // #region submit
-    const onSubmit_ = useSubmit(onClose)
+    const onSubmit_ = useSubmit(onClose, reply)
     // #endregion
 
     const UI = useRef<CompositionRef>(null)
@@ -76,7 +76,6 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                 <DialogContent>
                     <CompositionDialogUI
                         ref={UI}
-                        reply={reply}
                         hasClipboardPermission={hasClipboardPermission}
                         onRequestClipboardPermission={onRequestClipboardPermission}
                         requireClipboardPermission={requireClipboardPermission}

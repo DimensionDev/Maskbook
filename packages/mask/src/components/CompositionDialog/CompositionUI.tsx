@@ -43,7 +43,6 @@ const useStyles = makeStyles()({
 })
 
 export interface CompositionProps {
-    reply: boolean
     maxLength?: number
     onSubmit(data: SubmitComposition): Promise<void>
     onChange?(message: TypedMessage): void
@@ -62,7 +61,6 @@ export interface SubmitComposition {
     target: EncryptTargetPublic | EncryptTargetE2E
     content: SerializableTypedMessages
     encode: 'text' | 'image'
-    reply: boolean
 }
 export interface CompositionRef {
     setMessage(message: SerializableTypedMessages): void
@@ -157,7 +155,6 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
             .onSubmit({
                 content: Editor.current.value,
                 encode: encodingKind,
-                reply: props.reply,
                 target:
                     encryptionKind === 'E2E'
                         ? { type: 'E2E', target: recipients.map((x) => x.identifier) }

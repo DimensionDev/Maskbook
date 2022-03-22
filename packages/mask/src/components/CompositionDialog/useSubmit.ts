@@ -12,13 +12,13 @@ import { unreachable } from '@dimensiondev/kit'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { isFacebook } from '../../social-network-adaptor/facebook.com/base'
 
-export function useSubmit(onClose: () => void) {
+export function useSubmit(onClose: () => void, reply: boolean) {
     const { t } = useI18N()
     const whoAmI = useLastRecognizedIdentity()
 
     return useCallback(
         async (info: SubmitComposition) => {
-            const { content, encode, target, reply } = info
+            const { content, encode, target } = info
 
             const network = activatedSocialNetworkUI.networkIdentifier
             const currentProfile = new ProfileIdentifier(
@@ -58,7 +58,7 @@ export function useSubmit(onClose: () => void) {
             }
             onClose()
         },
-        [t, whoAmI, onClose],
+        [t, whoAmI, onClose, reply],
     )
 }
 
