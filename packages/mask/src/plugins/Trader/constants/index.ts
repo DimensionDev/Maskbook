@@ -13,5 +13,7 @@ export * from './traderjoe'
 export * from './pangolindex'
 export * from './wannaswap'
 export * from './trisolaris'
+export * from './mdex'
 export * from './ubeswap'
+
 export type { ERC20TokenCustomizedBase, ERC20AgainstToken } from './types'

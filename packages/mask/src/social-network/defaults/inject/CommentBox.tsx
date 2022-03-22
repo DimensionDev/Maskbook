@@ -10,6 +10,7 @@ import { noop } from 'lodash-unified'
 import { MaskMessages } from '../../../utils/messages'
 import { startWatch } from '../../../utils/watcher'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
+import { decodeArrayBuffer } from '@dimensiondev/kit'
 
 const defaultOnPasteToCommentBox = async (
     encryptedComment: string,
@@ -29,21 +30,24 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
 ) {
     const CommentBoxUI = memo(function CommentBoxUI({ dom }: { dom: HTMLElement | null }) {
         const info = usePostInfo()
-        const payload = usePostInfoDetails.containingMaskPayload()
         const postContent = usePostInfoDetails.rawMessagePiped()
         const { classes } = useCustomStyles()
         const iv = usePostInfoDetails.iv()
         const props = additionPropsToCommentBox(classes)
         const onCallback = useCallback(
             async (content) => {
-                const postIV = iv || payload.unwrap().iv
                 const decryptedText = extractTextFromTypedMessage(postContent).unwrap()
-                const encryptedComment = await Services.Crypto.encryptComment(postIV, decryptedText, content)
+                const encryptedComment = await Services.Crypto.encryptComment(
+                    new Uint8Array(decodeArrayBuffer(iv!)),
+                    decryptedText,
+                    content,
+                )
                 onPasteToCommentBox(encryptedComment, info!, dom).catch(console.error)
             },
-            [payload, postContent, info, dom, iv],
+            [postContent, info, dom, iv],
         )
 
+        if (!iv) return null
         if (!postContent.items.length) return null
         return <CommentBox onSubmit={onCallback} {...props} />
     })

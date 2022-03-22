@@ -1,5 +1,5 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import { useValueRef } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { SubscriptionFromValueRef } from '@masknet/shared-base'
 import { Appearance, or, makeStyles, parseColor } from '@masknet/theme'
 import { LanguageOptions, SupportedLanguages } from '@masknet/public-api'

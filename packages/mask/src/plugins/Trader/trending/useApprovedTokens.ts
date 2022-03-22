@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useValueRef } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared-base-ui'
 import stringify from 'json-stable-stringify'
 import { approvedTokensFromUniswap } from '../settings'
 import { APPROVED_TOKENS_MAX } from '../constants'

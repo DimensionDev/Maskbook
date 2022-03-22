@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { ErrorBoundary } from '../components/shared/ErrorBoundary'
+import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { DisableShadowRootContext } from '@masknet/theme'
 
 export function createNormalReactRoot(jsx: JSX.Element, container?: HTMLElement) {
