@@ -69,19 +69,13 @@ export function useERC721TokenTransferCallback(address?: string) {
                 erc721Contract.methods
                     .transferFrom(account, recipient, tokenId)
                     .send(config as NonPayableTx)
-                    .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
-                        setTransferState({
-                            type: TransactionStateType.HASH,
-                            hash,
-                        })
-                        resolve(hash)
-                    })
                     .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                         setTransferState({
                             type: TransactionStateType.CONFIRMED,
                             no,
                             receipt,
                         })
+                        resolve(receipt.blockHash)
                     })
                     .on(TransactionEventType.ERROR, (error) => {
                         setTransferState({

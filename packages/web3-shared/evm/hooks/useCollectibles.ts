@@ -14,7 +14,6 @@ export function useCollections(address: string, chainId: ChainId | null, dependR
             address: address,
             pageSize: 200,
             chainId,
-            // TODO chainId
         },
     }
     const collections = useSocket<ERC721TokenCollectionInfo>(message)

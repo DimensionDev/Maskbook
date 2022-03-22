@@ -69,19 +69,13 @@ export function useERC20TokenTransferCallback(address?: string, amount?: string,
                 erc20Contract.methods
                     .transfer(recipient, amount)
                     .send(config as NonPayableTx)
-                    .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
-                        setTransferState({
-                            type: TransactionStateType.HASH,
-                            hash,
-                        })
-                        resolve(hash)
-                    })
                     .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                         setTransferState({
                             type: TransactionStateType.CONFIRMED,
                             no,
                             receipt,
                         })
+                        resolve(receipt.blockHash)
                     })
                     .on(TransactionEventType.ERROR, (error) => {
                         setTransferState({

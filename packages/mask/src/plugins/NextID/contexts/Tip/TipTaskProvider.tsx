@@ -44,13 +44,13 @@ export const TipTaskProvider: FC<Props> = ({ children, task }) => {
     const sendState = sendTipTuple[0]
     const sendTip = sendTipTuple[1]
 
-    const isSending = [
-        TransactionStateType.WAIT_FOR_CONFIRMING,
-        TransactionStateType.HASH,
-        TransactionStateType.RECEIPT,
-    ].includes(sendState.type)
-
     const contextValue = useMemo(() => {
+        const isSending = [
+            TransactionStateType.WAIT_FOR_CONFIRMING,
+            TransactionStateType.HASH,
+            TransactionStateType.RECEIPT,
+        ].includes(sendState.type)
+
         return {
             recipient,
             recipientSnsId: task.recipientSnsId || '',
@@ -80,7 +80,6 @@ export const TipTaskProvider: FC<Props> = ({ children, task }) => {
         erc721Contract,
         token,
         sendTip,
-        isSending,
         sendState,
     ])
     return <TipContext.Provider value={contextValue}>{children}</TipContext.Provider>
