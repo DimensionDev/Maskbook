@@ -13,7 +13,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     personaTextZone: {
-        margin: `${theme.spacing(4)} 0`,
+        margin: theme.spacing(4, 0),
         fontSize: '13px',
     },
 }))
