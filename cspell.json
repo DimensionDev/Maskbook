@@ -130,6 +130,7 @@
         "linkedin",
         "linkswap",
         "locationchange",
+        "lockdown",
         "maarten",
         "macbinary",
         "majeure",
@@ -143,6 +144,7 @@
         "masktext",
         "mastdon",
         "mayen",
+        "mdex",
         "merkel",
         "merkle",
         "metas",
@@ -267,6 +269,7 @@
         "xlarge",
         "xlink",
         "zerion",
+        "zora",
         "zubin"
     ],
     "ignoreWords": [
@@ -289,6 +292,7 @@
         "cotm",
         "cryptoart",
         "cryptoartai",
+        "csrftoken",
         "cusd",
         "defi",
         "devnet",

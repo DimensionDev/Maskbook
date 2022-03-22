@@ -1,5 +1,17 @@
 import { concatArrayBuffer, decodeArrayBuffer } from '@dimensiondev/kit'
-import type { AESCryptoKey, EC_Public_CryptoKey } from '@masknet/shared-base'
+import { AESCryptoKey, EC_Public_CryptoKey, IdentifierMap, ProfileIdentifier } from '@masknet/shared-base'
+import { AESAlgorithmEnum } from '../payload'
+import { encryptWithAES } from '../utils'
+import {
+    EncryptError,
+    EncryptErrorReasons,
+    EncryptIO,
+    EncryptionResultE2E,
+    EncryptionResultE2EMap,
+    EncryptResult,
+    EncryptTargetE2E,
+} from './EncryptionTypes'
+import { fillIV } from './utils'
 
 const KEY = decodeArrayBuffer('KEY')
 const IV = decodeArrayBuffer('IV')
@@ -10,7 +22,7 @@ const IV = decodeArrayBuffer('IV')
  *
  * !! https://github.com/DimensionDev/Maskbook/blob/f3d83713d60dd0aad462e0648c4d38586c106edc/packages/mask/src/crypto/crypto-alpha-40.ts#L29-L58
  *
- * Error from this function will become a fatal error.
+ * @internal
  */
 export async function deriveAESByECDH_version38OrOlderExtraSteps(
     deriveAESByECDH: (key: EC_Public_CryptoKey) => Promise<AESCryptoKey[]>,
@@ -38,4 +50,44 @@ export async function deriveAESByECDH_version38OrOlderExtraSteps(
         return [nextAESKey as AESCryptoKey, nextIV] as const
     })
     return Promise.all(extraSteps)
+}
+
+/** @internal */
+export async function v38_addReceiver(
+    postKeyEncoded: Promise<Uint8Array>,
+    target: EncryptTargetE2E,
+    io: Pick<EncryptIO, 'deriveAESKey' | 'queryPublicKey' | 'getRandomValues'>,
+): Promise<EncryptionResultE2EMap> {
+    // For every receiver R,
+    //     1. Let R_pub = R.publicKey
+    //     2. Let Internal_AES be the result of ECDH with the sender's private key and R_pub
+    //     Note: To keep compatibility, here we use the algorithm in
+    //     https://github.com/DimensionDev/Maskbook/blob/f3d83713d60dd0aad462e0648c4d38586c106edc/packages/mask/src/crypto/crypto-alpha-40.ts#L29-L58
+    //     3. Let ivToBePublish be a new generated IV. This should be sent to the receiver.
+    //     4. Calculate new AES key and IV based on Internal_AES and ivToBePublish.
+    //     Note: Internal_AES is not returned by io.deriveAESKey_version38_or_older, it is internal algorithm of that method.
+    const ecdh = Promise.allSettled(
+        target.target.map(async (id): Promise<EncryptionResultE2E> => {
+            const receiverPublicKey = id.isUnknown ? undefined : await io.queryPublicKey(id)
+            if (!receiverPublicKey) throw new EncryptError(EncryptErrorReasons.PublicKeyNotFound)
+            const ivToBePublished = fillIV(io)
+            const [[aes, iv]] = await deriveAESByECDH_version38OrOlderExtraSteps(
+                async (e) => [await io.deriveAESKey(e)],
+                receiverPublicKey.key,
+                ivToBePublished,
+            )
+            const encryptedPostKey = await encryptWithAES(AESAlgorithmEnum.A256GCM, aes, iv, await postKeyEncoded)
+            return {
+                ivToBePublished,
+                encryptedPostKey: encryptedPostKey.unwrap(),
+                target: id,
+            }
+        }),
+    ).then((x) => x.entries())
+
+    const ecdhResult: EncryptResult['e2e'] = new IdentifierMap(new Map(), ProfileIdentifier)
+    for (const [index, result] of await ecdh) {
+        ecdhResult.set(target.target[index], result)
+    }
+    return ecdhResult
 }

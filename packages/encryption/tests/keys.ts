@@ -4,6 +4,7 @@ import { test } from '@jest/globals'
 import type { AESCryptoKey, EC_Private_CryptoKey, EC_Public_CryptoKey, ProfileIdentifier } from '@masknet/shared-base'
 import { type EC_Key, EC_KeyCurveEnum } from '../src/payload'
 import { importEC_Key } from '../src/utils'
+import { unreachable } from '@dimensiondev/kit'
 test('test keys', () => {})
 
 const alice_K256_publicKey = {
@@ -34,6 +35,15 @@ const jack_k256_private = {
     d: 'p_iwDlnyRWcKtfReb_XTmypLDUmdsqEzzERxPEmjCys',
     x: '-7iUBcLcwDLjvRNo_12mkBWWoairAGgDwV9RbbLtTT0',
     y: 'bMKjWpYz3p_ysN9A_STKPd8U8eO7qsY81HmQpZTu6XA',
+    ext: true,
+    key_ops: ['deriveKey'],
+    crv: 'K-256',
+    kty: 'EC',
+}
+const joey_k256_private = {
+    d: 'BjMKJdp1u_ZRP7j0defYFMdaA1qYTm_F4A8MG8YFSCI',
+    x: 'phWxCscx9XzhK1QpxZwdOCY8qFt-GcYvJ-AVzYTQ9FM',
+    y: 'dfzGWykbyGA0xwpznlKY9NJ7IUL2Vke991gyyZi08Cc',
     ext: true,
     key_ops: ['deriveKey'],
     crv: 'K-256',
@@ -116,14 +126,21 @@ export async function queryTestPublicKey(id: ProfileIdentifier) {
     if (id.userId === 'alice') return toPublic(alice_K256_publicKey)
     if (id.userId === 'bob') return toPublic(bob_k256_private)
     if (id.userId === 'jack') return toPublic(jack_k256_private)
+    if (id.userId === 'joey') return toPublic(joey_k256_private)
     return null
 }
-export function deriveAESKey(as: 'bob' | 'jack', type: 'single'): (pub: EC_Public_CryptoKey) => Promise<AESCryptoKey>
-export function deriveAESKey(as: 'bob' | 'jack', type: 'array'): (pub: EC_Public_CryptoKey) => Promise<AESCryptoKey[]>
-export function deriveAESKey(as: 'bob' | 'jack', type: 'array' | 'single') {
-    const keys = [toPrivate(bob_k256_private), toPrivate(jack_k256_private)]
+
+type Person = 'bob' | 'jack' | 'joey'
+export function deriveAESKey(as: Person, type: 'single'): (pub: EC_Public_CryptoKey) => Promise<AESCryptoKey>
+export function deriveAESKey(as: Person, type: 'array'): (pub: EC_Public_CryptoKey) => Promise<AESCryptoKey[]>
+export function deriveAESKey(as: Person, type: 'array' | 'single') {
     return async (pub: EC_Public_CryptoKey) => {
-        const k = (await Promise.all(keys))[as === 'bob' ? 0 : 1]
+        const k = await (() => {
+            if (as === 'bob') return toPrivate(bob_k256_private)
+            if (as === 'jack') return toPrivate(jack_k256_private)
+            if (as === 'joey') return toPrivate(joey_k256_private)
+            unreachable(as)
+        })()
         const key = (await crypto.subtle.deriveKey(
             { name: 'ECDH', public: pub },
             k.key,

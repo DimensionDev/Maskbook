@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import type { DataProvider } from '@masknet/public-api'
-import { useValueRef } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { currentDataProviderSettings } from '../settings'
 
 export function useCurrentDataProvider(availableDataProviders: DataProvider[]) {

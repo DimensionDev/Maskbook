@@ -17,7 +17,7 @@ import {
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../messages'
 import { useI18N } from '../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { EthereumAddress } from 'wallet.ts'
 import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'

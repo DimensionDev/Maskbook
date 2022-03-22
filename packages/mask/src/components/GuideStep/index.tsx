@@ -1,4 +1,4 @@
-import { useValueRef } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Typography, styled, Portal } from '@mui/material'
 import classNames from 'classnames'
