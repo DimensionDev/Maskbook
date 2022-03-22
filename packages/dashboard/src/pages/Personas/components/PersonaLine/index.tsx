@@ -9,6 +9,7 @@ import {
     BindingProof,
     NextIDPersonaBindings,
     NextIDPlatform,
+    EnhanceableSite,
 } from '@masknet/shared-base'
 import { LoadingAnimation, SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { PersonaContext } from '../../hooks/usePersonaContext'
@@ -134,7 +135,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                     <Typography variant="caption" sx={{ fontSize: 13 }}>
                         @{profile.userId}
                     </Typography>
-                    {profile.network === 'twitter.com' && (
+                    {profile.network === EnhanceableSite.Twitter && (
                         <Typography
                             className={classes.proofIconBox}
                             onClick={(e: MouseEvent) => handleProofIconClick(e, isProved)}>
