@@ -92,7 +92,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                                 <SavingsTable
                                                     chainId={chainId}
                                                     tab={TabType.Withdraw}
-                                                    protocols={protocols}
+                                                    protocols={protocols.filter((x) => !x.balance.isZero())}
                                                     setTab={setTab}
                                                     setSelectedProtocol={setSelectedProtocol}
                                                 />

@@ -181,6 +181,83 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
 
     const needsSwap = protocol.type === ProtocolType.Lido && tab === TabType.Withdraw
 
+    const buttonDom = useMemo(() => {
+        if (tab === TabType.Deposit)
+            return (
+                <EthereumChainBoundary
+                    chainId={chainId}
+                    noSwitchNetworkTip
+                    disablePadding
+                    ActionButtonPromiseProps={{
+                        fullWidth: true,
+                        classes: { root: classes.button, disabled: classes.disabledButton },
+                        color: 'primary',
+                        style: { padding: '13px 0', marginTop: 0 },
+                    }}>
+                    <EthereumWalletConnectedBoundary
+                        ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}
+                        classes={{ connectWallet: classes.connectWallet, button: classes.button }}>
+                        <EthereumERC20TokenApprovedBoundary
+                            amount={approvalData?.approveAmount.toFixed() ?? ''}
+                            token={approvalData?.approveToken}
+                            spender={approvalData?.approveAddress}>
+                            <ActionButtonPromise
+                                fullWidth
+                                color="primary"
+                                size="large"
+                                variant="contained"
+                                init={
+                                    needsSwap
+                                        ? 'Swap ' + protocol.bareToken.symbol
+                                        : validationMessage ||
+                                          t('plugin_savings_deposit') + ' ' + protocol.bareToken.symbol
+                                }
+                                waiting={t('plugin_savings_process_deposit')}
+                                failed={t('failed')}
+                                failedOnClick="use executor"
+                                complete={t('done')}
+                                disabled={validationMessage !== '' && !needsSwap}
+                                noUpdateEffect
+                                executor={executor}
+                            />
+                        </EthereumERC20TokenApprovedBoundary>
+                    </EthereumWalletConnectedBoundary>
+                </EthereumChainBoundary>
+            )
+
+        return (
+            <EthereumChainBoundary
+                chainId={chainId}
+                noSwitchNetworkTip
+                disablePadding
+                ActionButtonPromiseProps={{
+                    fullWidth: true,
+                    classes: { root: classes.button, disabled: classes.disabledButton },
+                    color: 'primary',
+                    style: { padding: '13px 0', marginTop: 0 },
+                }}>
+                <EthereumWalletConnectedBoundary
+                    ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}
+                    classes={{ connectWallet: classes.connectWallet, button: classes.button }}>
+                    <ActionButtonPromise
+                        fullWidth
+                        color="primary"
+                        size="large"
+                        variant="contained"
+                        init={validationMessage || t('plugin_savings_withdraw') + ' ' + protocol.stakeToken.symbol}
+                        waiting={t('plugin_savings_process_withdraw')}
+                        failed={t('failed')}
+                        failedOnClick="use executor"
+                        complete={t('done')}
+                        disabled={validationMessage !== ''}
+                        noUpdateEffect
+                        executor={executor}
+                    />
+                </EthereumWalletConnectedBoundary>
+            </EthereumChainBoundary>
+        )
+    }, [executor, validationMessage, needsSwap, protocol, tab, approvalData, chainId])
+
     return (
         <div className={classes.containerWrap}>
             {needsSwap ? null : (
@@ -225,52 +302,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
                     {protocol.apr}%
                 </Typography>
             </div>
-
-            <EthereumChainBoundary
-                chainId={chainId}
-                noSwitchNetworkTip
-                disablePadding
-                ActionButtonPromiseProps={{
-                    fullWidth: true,
-                    classes: { root: classes.button, disabled: classes.disabledButton },
-                    color: 'primary',
-                    style: { padding: '13px 0', marginTop: 0 },
-                }}>
-                <EthereumWalletConnectedBoundary
-                    ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}
-                    classes={{ connectWallet: classes.connectWallet, button: classes.button }}>
-                    <EthereumERC20TokenApprovedBoundary
-                        amount={approvalData?.approveAmount.toFixed() ?? ''}
-                        token={approvalData?.approveToken}
-                        spender={approvalData?.approveAddress}>
-                        <ActionButtonPromise
-                            fullWidth
-                            color="primary"
-                            size="large"
-                            variant="contained"
-                            init={
-                                needsSwap
-                                    ? 'Swap ' + protocol.bareToken.symbol
-                                    : validationMessage ||
-                                      (tab === TabType.Deposit
-                                          ? t('plugin_savings_deposit') + ' ' + protocol.bareToken.symbol
-                                          : t('plugin_savings_withdraw') + ' ' + protocol.stakeToken.symbol)
-                            }
-                            waiting={
-                                TabType.Deposit
-                                    ? t('plugin_savings_process_deposit')
-                                    : t('plugin_savings_process_withdraw')
-                            }
-                            failed={t('failed')}
-                            failedOnClick="use executor"
-                            complete={t('done')}
-                            disabled={validationMessage !== '' && !needsSwap}
-                            noUpdateEffect
-                            executor={executor}
-                        />
-                    </EthereumERC20TokenApprovedBoundary>
-                </EthereumWalletConnectedBoundary>
-            </EthereumChainBoundary>
+            {buttonDom}
         </div>
     )
 }
