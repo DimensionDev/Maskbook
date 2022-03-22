@@ -1,7 +1,8 @@
 import Color from 'color'
+import { useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createReactRootShadowed, startWatch, untilElementAvailable } from '../../../utils'
+import { createReactRootShadowed, startWatch, untilElementAvailable, MaskMessages } from '../../../utils'
 import {
     searchAppBarBackSelector,
     searchNewTweetButtonSelector,
@@ -137,8 +138,14 @@ function resetTwitterActivatedContent() {
 
 export function ProfileTabAtTwitter() {
     const { classes } = useStyles()
+    const [hidden, setHidden] = useState(false)
+    useEffect(() => {
+        return MaskMessages.events.profileTabHidden.on((data) => {
+            setHidden(data.hidden)
+        })
+    }, [])
 
-    return (
+    return hidden ? null : (
         <ProfileTab
             title="Web3"
             classes={classes}

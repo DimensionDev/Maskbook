@@ -75,6 +75,12 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }, [identity.identifier])
 
     useEffect(() => {
+        return MaskMessages.events.profileTabHidden.on((data) => {
+            if (data.hidden) setHidden(data.hidden)
+        })
+    }, [identity])
+
+    useEffect(() => {
         return MaskMessages.events.profileTabUpdated.on((data) => {
             setHidden(!data.show)
         })
