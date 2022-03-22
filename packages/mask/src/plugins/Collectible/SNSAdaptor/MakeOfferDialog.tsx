@@ -145,7 +145,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
             setInsufficientBalance(true)
             return t('plugin_collectible_insufficient_balance')
         }
-        if (!isAuction && expirationDateTime.getTime() - Date.now() <= 0)
+        if (!isAuction && expirationDateTime.getTime() - Date.now() <= 15 * 60 * 1000)
             return t('plugin_collectible_invalid_expiration_date')
         if (!isVerified && !unreviewedChecked) return t('plugin_collectible_ensure_unreviewed_item')
         if (!ToS_Checked) return t('plugin_collectible_check_tos_document')
