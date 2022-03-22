@@ -3,13 +3,14 @@ import { usePostInfoDetails } from '@masknet/plugin-infra'
 import { NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { queryExistedBindingByPersona, queryIsBound } from '@masknet/web3-providers'
-import { EMPTY_LIST } from '@masknet/web3-shared-evm'
+import { EMPTY_LIST, isSameAddress } from '@masknet/web3-shared-evm'
 import classnames from 'classnames'
-import { uniq } from 'lodash-unified'
+import { uniqBy } from 'lodash-unified'
 import { FC, HTMLProps, MouseEventHandler, useCallback, useMemo } from 'react'
 import { useAsync, useAsyncFn, useAsyncRetry } from 'react-use'
 import Services from '../../../../extension/service'
 import { activatedSocialNetworkUI } from '../../../../social-network'
+import { useI18N } from '../../locales'
 import { PluginNextIdMessages } from '../../messages'
 
 interface Props extends HTMLProps<HTMLDivElement> {
@@ -38,12 +39,13 @@ const useStyles = makeStyles()({
     },
 })
 
-export const TipButton: FC<Props> = ({ className, receiver, addresses = [], children, ...rest }) => {
+export const TipButton: FC<Props> = ({ className, receiver, addresses = EMPTY_LIST, children, ...rest }) => {
     const { classes } = useStyles()
+    const t = useI18N()
 
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
-    const { value: receiverPersona, loading: loadingPersona } = useAsyncRetry(() => {
-        if (!receiver) return Promise.resolve(undefined)
+    const { value: receiverPersona, loading: loadingPersona } = useAsyncRetry(async () => {
+        if (!receiver) return
         return Services.Identity.queryPersonaByProfile(receiver)
     }, [receiver])
 
@@ -68,7 +70,7 @@ export const TipButton: FC<Props> = ({ className, receiver, addresses = [], chil
     useAsync(queryBindings, [queryBindings])
 
     const allAddresses = useMemo(() => {
-        return uniq([...(walletsState.value || []), ...addresses])
+        return uniqBy([...(walletsState.value || []), ...addresses], isSameAddress)
     }, [walletsState.value, addresses])
 
     const disabled = loadingPersona || loadingVerifyInfo || !isAccountVerified || allAddresses.length === 0
@@ -102,7 +104,7 @@ export const TipButton: FC<Props> = ({ className, receiver, addresses = [], chil
 
     if (disabled)
         return (
-            <ShadowRootTooltip title="Wallets not found." placement="top" arrow>
+            <ShadowRootTooltip title={t.tip_wallets_missed()} placement="top" arrow>
                 {dom}
             </ShadowRootTooltip>
         )

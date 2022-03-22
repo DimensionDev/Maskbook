@@ -1,13 +1,13 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
-import { TipButton } from '../../../../plugins/NextID/components/tip/TipButton'
-import { startWatch, createReactRootShadowed } from '../../../../utils'
+import { TipButton } from '../../../../plugins/NextID/components/Tip/TipButton'
+import { createReactRootShadowed, startWatch } from '../../../../utils'
 import { useLocationChange } from '../../../../utils/hooks/useLocationChange'
 import {
-    profileMenuButtonSelector as menuButtonSelector,
     profileFollowButtonSelector as selector,
+    profileMenuButtonSelector as menuButtonSelector,
 } from '../../utils/selector'
 
 export function injectOpenTipButtonOnProfile(signal: AbortSignal) {
@@ -55,9 +55,9 @@ function OpenTipDialog() {
         if (!menuButton) return
         const css = window.getComputedStyle(menuButton)
         setStyle({
-            minHeight: Number(css.minHeight.replace('px', '')),
-            fontSize: Number(css.fontSize.replace('px', '')),
-            marginBottom: Number(css.marginBottom.replace('px', '')),
+            minHeight: Number.parseFloat(css.minHeight.replace('px', '')),
+            fontSize: Number.parseFloat(css.fontSize.replace('px', '')),
+            marginBottom: Number.parseFloat(css.marginBottom.replace('px', '')),
         })
     }
 

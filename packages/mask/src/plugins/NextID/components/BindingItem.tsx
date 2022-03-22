@@ -9,7 +9,7 @@ import { ExternalLink } from 'react-feather'
 import { NetworkPluginID, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
 import { useI18N } from '../locales'
 import { ImageIcon } from '@masknet/shared'
-import { TipButton } from './tip'
+import { TipButton } from './Tip'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
 
 const useStyles = makeStyles()((theme) => ({

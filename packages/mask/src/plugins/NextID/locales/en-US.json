@@ -49,6 +49,7 @@
     "token_insufficient_balance": "Insufficient balance",
     "tip_type_token": "Token",
     "tip_type_nft": "NFT",
+    "tip_wallets_missed": "Wallets not found.",
     "send_tip": "Send",
     "sending_tip": "Sending...",
     "nft_not_belong_to_you": "The collectible doesn't exist or belong to you.",
@@ -56,5 +57,7 @@
     "send_specific_tip_successfully": "Sent {{amount}} {{name}} tip successfully",
     "tip_share": "Share",
     "search": "Search",
-    "tip_share_post": "I just tipped {{assetName}} to @{{recipientSnsId}}'s wallet address {{recipient}}\n\nInstall https://mask.io/download-links to send my first tip."
+    "tip_contracts": "Contracts",
+    "tip_token_share_post": "I just tipped {{amount}} {{symbol}} to @{{recipientSnsId}}'s wallet address {{recipient}}\n\nInstall https://mask.io/download-links to send my first tip.",
+    "tip_nft_share_post": "I just tipped a {{name}} to @{{recipientSnsId}}'s wallet address {{recipient}}\n\nInstall https://mask.io/download-links to send my first tip."
 }

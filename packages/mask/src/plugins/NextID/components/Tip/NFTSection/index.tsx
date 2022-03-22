@@ -83,7 +83,7 @@ export const NFTSection: FC<Props> = ({ className, ...rest }) => {
             <FormControl>
                 <ERC721ContractSelectPanel
                     chainId={chainId}
-                    label="Contracts"
+                    label={t.tip_contracts()}
                     contract={erc721Contract}
                     onContractChange={setErc721Contract}
                 />

@@ -89,18 +89,19 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
 
     const isTokenTip = tipType === TipType.Token
     const shareLink = useMemo(() => {
-        const assetName = isTokenTip
-            ? `${amount || 'some'} ${token?.symbol || 'token'}`
-            : erc721Contract?.name
-            ? `a ${erc721Contract.name} NFT`
-            : ''
-        return activatedSocialNetworkUI.utils.getShareLinkURL?.(
-            t.tip_share_post({
-                assetName,
-                recipientSnsId,
-                recipient,
-            }),
-        )
+        const message = isTokenTip
+            ? t.tip_token_share_post({
+                  amount,
+                  symbol: token?.symbol || 'token',
+                  recipientSnsId,
+                  recipient,
+              })
+            : t.tip_nft_share_post({
+                  name: erc721Contract?.name || '',
+                  recipientSnsId,
+                  recipient,
+              })
+        return activatedSocialNetworkUI.utils.getShareLinkURL?.(message)
     }, [amount, isTokenTip, erc721Contract?.name, token, recipient, recipientSnsId, t])
 
     const { tokenDetailed: erc721Token } = useERC721TokenDetailed(erc721Contract, erc721TokenId)
