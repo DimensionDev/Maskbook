@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { EthereumTokenType, useAccount, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
 import { Box, BoxProps, FormControl, MenuItem, Select, Typography } from '@mui/material'
 import classnames from 'classnames'
-import { FC, memo, useCallback, useMemo, useRef, useState } from 'react'
+import { FC, memo, useCallback, useRef, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
@@ -107,12 +107,8 @@ export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
         chainId,
     )
     // #endregion
-    const buttonLabel = useMemo(() => {
-        if (!account) return 'Connect Wallet'
-        if (isSending) return t.sending_tip()
-        if (isValid || !validateMessage) return t.send_tip()
-        return validateMessage
-    }, [account, isSending, t, isValid, validateMessage])
+
+    const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
 
     return (
         <Box className={classnames(classes.root, className)} {...rest}>
@@ -164,25 +160,36 @@ export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
                     />
                 </FormControl>
             </div>
-            <EthereumChainBoundary
-                chainId={chainId}
-                noSwitchNetworkTip
-                disablePadding
-                ActionButtonPromiseProps={{
-                    fullWidth: true,
-                    classes: { root: classes.button, disabled: classes.disabledButton },
-                    color: 'primary',
-                }}>
+            {account ? (
+                <EthereumChainBoundary
+                    chainId={chainId}
+                    noSwitchNetworkTip
+                    disablePadding
+                    ActionButtonPromiseProps={{
+                        fullWidth: true,
+                        classes: { root: classes.button, disabled: classes.disabledButton },
+                        color: 'primary',
+                    }}>
+                    <ActionButton
+                        variant="contained"
+                        size="large"
+                        className={classes.actionButton}
+                        fullWidth
+                        disabled={!isValid || isSending}
+                        onClick={sendTip}>
+                        {buttonLabel}
+                    </ActionButton>
+                </EthereumChainBoundary>
+            ) : (
                 <ActionButton
                     variant="contained"
                     size="large"
                     className={classes.actionButton}
                     fullWidth
-                    disabled={account ? !isValid || isSending : false}
-                    onClick={account ? sendTip : openSelectProviderDialog}>
-                    {buttonLabel}
+                    onClick={openSelectProviderDialog}>
+                    {t.tip_connect_wallet()}
                 </ActionButton>
-            </EthereumChainBoundary>
+            )}
         </Box>
     )
 })
