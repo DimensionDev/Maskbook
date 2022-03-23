@@ -80,7 +80,7 @@ export interface UpdateEvent<Data> {
 }
 
 export interface CompositionRequest {
-    readonly reason: 'timeline' | 'popup'
+    readonly reason: 'timeline' | 'popup' | 'reply'
     readonly open: boolean
     readonly content?: SerializableTypedMessages
     readonly options?: {

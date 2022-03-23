@@ -1,6 +1,6 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'
-import { postEditorInTimelineSelector, postEditorInPopupSelector } from '../utils/selector'
+import { isReplyPageSelector, postEditorInPopupSelector, searchReplyToolbarSelector } from '../utils/selector'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
 import { MaskMessages } from '../../../utils/messages'
@@ -30,7 +30,8 @@ const useStyles = makeStyles()((theme) => ({
 
 export function injectPostDialogHintAtTwitter(signal: AbortSignal) {
     const emptyNode = document.createElement('div')
-    renderPostDialogHintTo('timeline', postEditorInTimelineSelector(), signal)
+    renderPostDialogHintTo('timeline', searchReplyToolbarSelector(), signal)
+
     renderPostDialogHintTo(
         'popup',
         postEditorInPopupSelector().map((x) => (isCompose() && hasEditor() ? x : emptyNode)),
@@ -50,6 +51,8 @@ function renderPostDialogHintTo<T>(reason: 'timeline' | 'popup', ls: LiveSelecto
 function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
     const { classes } = useStyles()
     const { t } = useI18N()
+    const [isReply, setIsReply] = useState(false)
+
     const onHintButtonClicked = useCallback(() => {
         const content = sayHelloShowed[twitterBase.networkIdentifier].value
             ? undefined
@@ -57,14 +60,24 @@ function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
                   t('setup_guide_say_hello_content') +
                       t('setup_guide_say_hello_follow', { account: '@realMaskNetwork' }),
               )
-        MaskMessages.events.requestComposition.sendToLocal({ reason, open: true, content })
+
+        MaskMessages.events.requestComposition.sendToLocal({
+            reason: isReplyPageSelector() ? 'reply' : reason,
+            open: true,
+            content,
+        })
         sayHelloShowed[twitterBase.networkIdentifier].value = true
-    }, [reason])
+    }, [reason, isReplyPageSelector])
+
+    useEffect(() => {
+        setIsReply(isReplyPageSelector())
+    }, [location])
+
     return (
         <PostDialogHint
             disableGuideTip={reason === 'popup'}
             classes={{ iconButton: classes.iconButton, tooltip: classes.tooltip }}
-            size={17}
+            size={20}
             onHintButtonClicked={onHintButtonClicked}
             tooltip={{ disabled: false }}
         />

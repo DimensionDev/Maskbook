@@ -24,7 +24,7 @@ export interface PostDialogHintUIProps extends withClasses<'buttonTransform' | '
 const useStyles = makeStyles()((theme) => ({
     button: {
         // TODO: is it correct? (what about twitter?)
-        padding: isMobileFacebook ? 0 : '8px',
+        padding: isMobileFacebook ? 0 : '7px',
     },
     text: {
         fontSize: 14,
@@ -37,6 +37,9 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         padding: '8px 10px',
         borderBottom: '1px solid #dadde1',
+    },
+    tooltip: {
+        color: 'white',
     },
 }))
 
