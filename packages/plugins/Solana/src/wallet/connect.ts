@@ -6,6 +6,12 @@ type BNLike = {
     _bn: string
 }
 
+export async function clearConnection() {
+    const storage = getStorage()
+    await storage.publicKey.setValue(null)
+    await storage.chainId.setValue(null)
+}
+
 export async function storeConnection(pubKey: string | BNLike, chainId?: number) {
     const base58Key = typeof pubKey === 'string' ? pubKey : hexToBase58(pubKey._bn)
     const storage = getStorage()
@@ -19,6 +25,10 @@ export async function connectWallet(init = false) {
     if (rsp?.publicKey) {
         await storeConnection(rsp.publicKey)
     }
+    const off = bridgedSolanaProvider.on('disconnect', async () => {
+        await clearConnection()
+        off()
+    })
     return rsp?.publicKey
 }
 
