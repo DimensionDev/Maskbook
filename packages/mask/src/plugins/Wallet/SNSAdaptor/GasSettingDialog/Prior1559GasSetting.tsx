@@ -5,6 +5,8 @@ import {
     GasOption,
     useChainId,
     useNativeTokenDetailed,
+    ChainIdOptionalRecord,
+    ChainId,
 } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
@@ -21,6 +23,12 @@ import { WalletRPC } from '../../../Wallet/messages'
 import { useNativeTokenPrice } from '../../hooks/useTokenPrice'
 import type { GasSettingProps } from './types'
 import { useGasSettingStyles } from './useGasSettingStyles'
+
+const minGasPriceOfChain: ChainIdOptionalRecord<string> = {
+    [ChainId.BSC]: '0x12a05f200', // 5
+    [ChainId.Conflux]: '0x12a05f200', // 5
+    [ChainId.Matic]: '0x6fc23ac00', // 30
+}
 
 export const Prior1559GasSetting: FC<GasSettingProps> = memo(
     ({ gasLimit, minGasLimit = 0, gasOption = GasOption.Medium, onConfirm = noop }) => {
@@ -109,10 +117,11 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
         }, [gasLimit, setValue])
 
         useEffect(() => {
-            if (currentGasOption) {
-                setValue('gasPrice', formatWeiToGwei(currentGasOption.gasPrice).toString())
+            const minGasPrice = minGasPriceOfChain[chainId]
+            if (currentGasOption || minGasPrice) {
+                setValue('gasPrice', formatWeiToGwei(currentGasOption?.gasPrice ?? minGasPrice ?? 0).toString())
             }
-        }, [currentGasOption, setValue])
+        }, [currentGasOption, setValue, chainId])
 
         const handleConfirm = useCallback(
             (data: zod.infer<typeof schema>) => {

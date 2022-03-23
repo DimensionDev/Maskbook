@@ -92,6 +92,7 @@ const useStyles = makeStyles()((theme) => ({
 
 const minGasPriceOfChain: ChainIdOptionalRecord<string> = {
     [ChainId.BSC]: '0x12a05f200', // 5
+    [ChainId.Conflux]: '0x12a05f200', // 5
     [ChainId.Matic]: '0x6fc23ac00', // 30
 }
 
