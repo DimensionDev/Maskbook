@@ -287,32 +287,26 @@ export function Trader(props: TraderProps) {
 
     // #region remote controlled transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
-    const shareLink = activatedSocialNetworkUI.utils
-        .getShareLinkURL?.(
-            focusedTrade?.value && inputToken && outputToken
-                ? [
-                      `I just swapped ${formatBalance(
-                          focusedTrade.value.inputAmount,
-                          inputToken.decimals,
-                          6,
-                      )} ${cashTag}${inputToken.symbol} for ${formatBalance(
-                          focusedTrade.value.outputAmount,
-                          outputToken.decimals,
-                          6,
-                      )} ${cashTag}${outputToken.symbol}.${
-                          isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                              ? `Follow @${
-                                    isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                                } (mask.io) to swap cryptocurrencies on ${
-                                    isTwitter(activatedSocialNetworkUI) ? 'Twitter' : 'Facebook'
-                                }.`
-                              : ''
-                      }`,
-                      '#mask_io',
-                  ].join('\n')
-                : '',
-        )
-        .toString()
+    const shareText =
+        focusedTrade?.value && inputToken && outputToken
+            ? [
+                  `I just swapped ${formatBalance(focusedTrade.value.inputAmount, inputToken.decimals, 6)} ${cashTag}${
+                      inputToken.symbol
+                  } for ${formatBalance(focusedTrade.value.outputAmount, outputToken.decimals, 6)} ${cashTag}${
+                      outputToken.symbol
+                  }.${
+                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                          ? `Follow @${
+                                isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
+                            } (mask.io) to swap cryptocurrencies on ${
+                                isTwitter(activatedSocialNetworkUI) ? 'Twitter' : 'Facebook'
+                            }.`
+                          : ''
+                  }`,
+                  '#mask_io',
+              ].join('\n')
+            : ''
+
     // #endregion
 
     // #region close the transaction dialog
@@ -336,7 +330,7 @@ export function Trader(props: TraderProps) {
         if (tradeState?.type === TransactionStateType.UNKNOWN) return
         setTransactionDialog({
             open: true,
-            shareLink,
+            shareText,
             state: tradeState,
         })
     }, [tradeState /* update tx dialog only if state changed */])
