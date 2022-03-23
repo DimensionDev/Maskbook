@@ -74,20 +74,13 @@ export function useNativeTransferCallback() {
             // send transaction and wait for hash
             return new Promise<string>((resolve, reject) => {
                 web3.eth
-                    .sendTransaction(config, (error, hash) => {
-                        if (error) {
-                            setTransferState({
-                                type: TransactionStateType.FAILED,
-                                error,
-                            })
-                            reject(error)
-                        } else {
-                            setTransferState({
-                                type: TransactionStateType.HASH,
-                                hash,
-                            })
-                            resolve(hash)
-                        }
+                    .sendTransaction(config, (error) => {
+                        if (!error) return
+                        setTransferState({
+                            type: TransactionStateType.FAILED,
+                            error,
+                        })
+                        reject(error)
                     })
                     .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                         setTransferState({
@@ -95,6 +88,7 @@ export function useNativeTransferCallback() {
                             no,
                             receipt,
                         })
+                        resolve(receipt.transactionHash)
                     })
             })
         },
