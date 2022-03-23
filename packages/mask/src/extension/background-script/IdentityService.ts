@@ -34,7 +34,6 @@ import {
     createOrUpdateProfileDB,
     createProfileDB,
     createRelationDB,
-    createRelationsTransaction,
     deleteProfileDB,
     queryPersonaDB,
     queryPersonasDB,
@@ -49,6 +48,7 @@ import {
     queryPersonasDB as queryPersonasFromIndexedDB,
     queryProfilesDB as queryProfilesFromIndexedDB,
     queryRelations as queryRelationsFromIndexedDB,
+    createRelationsTransaction,
 } from '../../../background/database/persona/web'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
 import { restoreBackup } from './WelcomeServices/restoreBackup'
