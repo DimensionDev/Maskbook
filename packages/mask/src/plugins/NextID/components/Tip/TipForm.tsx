@@ -2,7 +2,7 @@ import { useWeb3State } from '@masknet/plugin-infra'
 import { SelectTokenDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { EthereumTokenType, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
+import { EthereumTokenType, useAccount, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
 import { Box, BoxProps, FormControl, MenuItem, Select, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { FC, memo, useCallback, useRef, useState } from 'react'
@@ -25,7 +25,7 @@ const useStyles = makeStyles()((theme) => {
             flexGrow: 1,
             overflow: 'auto',
         },
-        tipButton: {
+        actionButton: {
             marginTop: theme.spacing(1.5),
             fontSize: 16,
         },
@@ -74,6 +74,10 @@ export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
     const { Utils } = useWeb3State()
     const selectRef = useRef(null)
     const [id] = useState(uuid)
+    const account = useAccount()
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
     const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
         useCallback(
@@ -103,6 +107,7 @@ export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
         chainId,
     )
     // #endregion
+
     const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
 
     return (
@@ -138,7 +143,7 @@ export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
                 </FormControl>
                 <FormControl className={classes.tokenField}>
                     <TokenAmountPanel
-                        label="Token"
+                        label=""
                         token={token}
                         amount={amount}
                         onAmountChange={setAmount}
@@ -155,26 +160,36 @@ export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
                     />
                 </FormControl>
             </div>
-
-            <EthereumChainBoundary
-                chainId={chainId}
-                noSwitchNetworkTip
-                disablePadding
-                ActionButtonPromiseProps={{
-                    fullWidth: true,
-                    classes: { root: classes.button, disabled: classes.disabledButton },
-                    color: 'primary',
-                }}>
+            {account ? (
+                <EthereumChainBoundary
+                    chainId={chainId}
+                    noSwitchNetworkTip
+                    disablePadding
+                    ActionButtonPromiseProps={{
+                        fullWidth: true,
+                        classes: { root: classes.button, disabled: classes.disabledButton },
+                        color: 'primary',
+                    }}>
+                    <ActionButton
+                        variant="contained"
+                        size="large"
+                        className={classes.actionButton}
+                        fullWidth
+                        disabled={!isValid || isSending}
+                        onClick={sendTip}>
+                        {buttonLabel}
+                    </ActionButton>
+                </EthereumChainBoundary>
+            ) : (
                 <ActionButton
                     variant="contained"
                     size="large"
-                    className={classes.tipButton}
+                    className={classes.actionButton}
                     fullWidth
-                    disabled={!isValid || isSending}
-                    onClick={sendTip}>
-                    {buttonLabel}
+                    onClick={openSelectProviderDialog}>
+                    {t.tip_connect_wallet()}
                 </ActionButton>
-            </EthereumChainBoundary>
+            )}
         </Box>
     )
 })

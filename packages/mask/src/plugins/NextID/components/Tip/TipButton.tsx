@@ -3,9 +3,9 @@ import { usePostInfoDetails } from '@masknet/plugin-infra'
 import { NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { queryExistedBindingByPersona, queryIsBound } from '@masknet/web3-providers'
-import { EMPTY_LIST, isSameAddress } from '@masknet/web3-shared-evm'
+import { EMPTY_LIST } from '@masknet/web3-shared-evm'
 import classnames from 'classnames'
-import { uniqBy } from 'lodash-unified'
+import { uniq } from 'lodash-unified'
 import { FC, HTMLProps, MouseEventHandler, useCallback, useMemo } from 'react'
 import { useAsync, useAsyncFn, useAsyncRetry } from 'react-use'
 import Services from '../../../../extension/service'
@@ -70,7 +70,7 @@ export const TipButton: FC<Props> = ({ className, receiver, addresses = EMPTY_LI
     useAsync(queryBindings, [queryBindings])
 
     const allAddresses = useMemo(() => {
-        return uniqBy([...(walletsState.value || []), ...addresses], isSameAddress)
+        return uniq([...(walletsState.value || []), ...addresses])
     }, [walletsState.value, addresses])
 
     const disabled = loadingPersona || loadingVerifyInfo || !isAccountVerified || allAddresses.length === 0
