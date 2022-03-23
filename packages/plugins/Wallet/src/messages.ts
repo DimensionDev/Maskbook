@@ -131,6 +131,7 @@ export type SelectNftContractDialogEvent = {
     open: boolean
     uuid: string
 
+    chainId?: ChainId
     /**
      * The selected detailed nft contract.
      */

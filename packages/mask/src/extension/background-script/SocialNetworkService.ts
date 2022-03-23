@@ -15,14 +15,14 @@ export async function getDefinedSocialNetworkUIs() {
         }
     })
 }
-export async function connectSocialNetwork(identifier: PersonaIdentifier, network: string) {
+export async function connectSocialNetwork(identifier: PersonaIdentifier, network: string, type?: 'local' | 'nextID') {
     const ui = await loadSocialNetworkUI(network)
     const home = ui.utils.getHomePage?.()
     if (!Flags.no_web_extension_dynamic_permission_request) {
         if (!(await requestSNSAdaptorPermission(ui))) return
     }
     currentSetupGuideStatus[network].value = stringify({
-        status: SetupGuideStep.FindUsername,
+        status: type === 'nextID' ? SetupGuideStep.VerifyOnNextID : SetupGuideStep.FindUsername,
         persona: identifier.toText(),
     })
     await delay(100)

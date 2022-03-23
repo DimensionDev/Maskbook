@@ -167,6 +167,7 @@ export async function queryOwnedPersonaInformation(): Promise<PersonaInformation
             nickname: persona.nickname,
             identifier: persona.identifier,
             linkedProfiles: map,
+            publicHexKey: persona.publicHexKey,
         })
         for (const [profile] of persona.linkedProfiles) {
             const linkedProfile = await queryProfile(profile)

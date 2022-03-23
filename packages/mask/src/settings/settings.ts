@@ -62,6 +62,9 @@ export const sayHelloShowed: NetworkSettings<boolean> = createNetworkSettings('s
 export const dismissPinExtensionTip = createGlobalSettings<boolean>('dismissPinExtensionTip', false, {
     primary: () => '',
 })
+export const userPinExtension = createGlobalSettings<boolean>('userPinExtension', false, {
+    primary: () => '',
+})
 export const dismissVerifyNextID: NetworkSettings<{ [key in string]: boolean }> = createNetworkSettings(
     'dismissVerifyNextID',
     {},

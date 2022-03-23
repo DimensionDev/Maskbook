@@ -38,6 +38,8 @@ export const searchProfileActiveTabSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-label][role="navigation"]  [role="tablist"] [role="tab"][aria-selected="true"]')
 export const searchProfileTabSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-label][role="navigation"]  [role="tablist"] [role="tab"][aria-selected="false"]')
+export const searchAllProfileTabSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[aria-label][role="navigation"]  [role="tablist"] [role="tab"]')
 export const searchAppBarBackSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="app-bar-back"] > div')
 export const searchProfileActiveTabStatusLineSelector: () => LiveSelector<E, true> = () =>
@@ -62,6 +64,14 @@ export const searchNFTAvatarSelector = () =>
     querySelector<HTMLImageElement>('[data-testid="primaryColumn"] a[href$="/nft"] img[src*="profile_images"]')
 export const searchAvatarMetaSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('head > meta[property="og:image"]:last-child')
+
+export const profileFollowButtonSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>(
+        '[data-testid="primaryColumn"] [aria-haspopup="menu"][data-testid="userActions"] ~ [data-testid="placementTracking"]',
+    )
+// To get margin bottom of menu button, and apply it to tip button to align it.
+export const profileMenuButtonSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-testid="primaryColumn"] [aria-haspopup="menu"][data-testid="userActions"]')
 
 export const searchEditProfileSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] a[href="/settings/profile"]')
