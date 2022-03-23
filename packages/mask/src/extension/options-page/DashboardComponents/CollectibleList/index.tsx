@@ -247,8 +247,11 @@ export function CollectionList({
     const [selectedCollection, setSelectedCollection] = useState<ERC721ContractDetailed | 'all' | undefined>('all')
     const { resolvedAddress: address } = addressName
 
-    const { data: collectionsFormRemote } = useCollections(address, chainId)
+    useEffect(() => {
+        setSelectedCollection('all')
+    }, [address])
 
+    const { data: collectionsFormRemote } = useCollections(address, chainId)
     const {
         data: collectibles,
         state: loadingCollectibleDone,
