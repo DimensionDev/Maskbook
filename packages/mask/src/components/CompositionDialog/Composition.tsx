@@ -45,7 +45,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     }, [onQueryClipboardPermission])
 
     useEffect(() => {
-        return MaskMessages.events.requestComposition.on(({ reason, open, content, options, reply }) => {
+        return MaskMessages.events.requestComposition.on(({ reason, open, content, options }) => {
             if (reason !== 'reply' && (reason !== type || globalUIState.profiles.value.length <= 0)) return
             setOpen(open)
             setReason(reason)
