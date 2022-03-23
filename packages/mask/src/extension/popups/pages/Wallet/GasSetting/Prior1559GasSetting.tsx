@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { isLessThan } from '@masknet/web3-shared-base'
+import { isLessThan, pow10 } from '@masknet/web3-shared-base'
 import { memo, useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../../../utils'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
@@ -91,9 +91,9 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
-    [ChainId.BSC]: new BigNumber(5).multipliedBy(Math.pow(10, 9)), // 5 Gwei
-    [ChainId.Conflux]: new BigNumber(5).multipliedBy(Math.pow(10, 9)), // 5 Gwei
-    [ChainId.Matic]: new BigNumber(30).multipliedBy(Math.pow(10, 9)), // 30 Gwei
+    [ChainId.BSC]: pow10(9).multipliedBy(5), // 5 Gwei
+    [ChainId.Conflux]: pow10(9).multipliedBy(5), // 5 Gwei
+    [ChainId.Matic]: pow10(9).multipliedBy(30), // 30 Gwei
 }
 
 export const Prior1559GasSetting = memo(() => {
