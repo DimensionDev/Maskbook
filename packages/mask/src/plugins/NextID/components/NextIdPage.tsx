@@ -1,9 +1,8 @@
-import { delay } from '@dimensiondev/kit'
 import { NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { queryExistedBindingByPersona, queryIsBound } from '@masknet/web3-providers'
 import { Box, Button, Skeleton, Stack, Typography } from '@mui/material'
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo, useState } from 'react'
 import { useAsync, useAsyncRetry } from 'react-use'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 import { useNextIDConnectStatus } from '../../../components/DataSource/useNextID'
@@ -61,10 +60,6 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
     const personaConnectStatus = usePersonaConnectStatus()
     const { reset, isVerified, action } = useNextIDConnectStatus()
 
-    useEffect(() => {
-        action?.()
-    }, [action])
-
     const [openBindDialog, toggleBindDialog] = useState(false)
     const [unbindAddress, setUnBindAddress] = useState<string>()
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
@@ -102,8 +97,6 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
 
     const onVerify = async () => {
         reset()
-        await delay(1000)
-
         const firstTab = TAB_SELECTOR?.[platform]?.evaluate()?.querySelector('div')?.parentNode
             ?.firstChild as HTMLElement
         firstTab.click()

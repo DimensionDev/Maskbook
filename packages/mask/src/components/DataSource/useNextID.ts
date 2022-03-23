@@ -98,6 +98,9 @@ export function useNextIDConnectStatus() {
         const isBound = await queryIsBound(currentConnectedPersona.publicHexKey, platform, username)
         if (isBound) return NextIDVerificationStatus.Verified
 
+        if (isOpenedFromButton) {
+            verifyPersona(personaConnectStatus.currentConnectedPersona?.identifier)()
+        }
         isOpenedVerifyDialog = true
         isOpenedFromButton = false
         return NextIDVerificationStatus.WaitingVerify
