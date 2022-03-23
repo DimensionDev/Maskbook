@@ -1,9 +1,9 @@
 import type { ScopedStorage } from '@masknet/shared-base'
-import { hexToBase58 } from '../utils'
+import type { ChainId } from '@masknet/web3-shared-solana'
 
 export const StorageDefaultValue = {
     publicKey: null as null | string,
-    chainId: null as null | number,
+    chainId: null as null | ChainId,
 }
 
 let storage: ScopedStorage<typeof StorageDefaultValue> = null!
@@ -14,16 +14,4 @@ export function setupStorage(_: typeof storage) {
 
 export function getStorage() {
     return storage.storage
-}
-
-type BNLike = {
-    _bn: string
-}
-export async function storeConnection(pubKey: string | BNLike, chainId?: number) {
-    const base58Key = typeof pubKey === 'string' ? pubKey : hexToBase58(pubKey._bn)
-    const storage = getStorage()
-    await storage.publicKey.setValue(base58Key)
-    if (chainId) {
-        await storage.chainId.setValue(chainId)
-    }
 }
