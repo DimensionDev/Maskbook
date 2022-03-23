@@ -90,10 +90,10 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const minGasPriceOfChain: ChainIdOptionalRecord<string> = {
-    [ChainId.BSC]: '0x12a05f200', // 5
-    [ChainId.Conflux]: '0x12a05f200', // 5
-    [ChainId.Matic]: '0x6fc23ac00', // 30
+const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
+    [ChainId.BSC]: new BigNumber(5).multipliedBy(Math.pow(10, 9)), // 5 Gwei
+    [ChainId.Conflux]: new BigNumber(5).multipliedBy(Math.pow(10, 9)), // 5 Gwei
+    [ChainId.Matic]: new BigNumber(30).multipliedBy(Math.pow(10, 9)), // 30 Gwei
 }
 
 export const Prior1559GasSetting = memo(() => {

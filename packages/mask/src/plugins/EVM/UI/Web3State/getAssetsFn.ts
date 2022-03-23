@@ -13,7 +13,6 @@ import {
     createExternalProvider,
     getCoinGeckoCoinId,
     CurrencyType,
-    CryptoPrice,
     PriceRecord,
     ChainId,
 } from '@masknet/web3-shared-evm'
@@ -28,18 +27,11 @@ import { makeSortAssertWithoutChainFn } from '../../utils/token'
 import { createGetLatestBalance } from './createGetLatestBalance'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 import { pow10 } from '@masknet/web3-shared-base'
+import { TokenPrice } from '@masknet/web3-providers'
 
 // tokens unavailable neither from api or balance checker.
 // https://forum.conflux.fun/t/how-to-upvote-debank-proposal-for-conflux-espace-integration/13935
 const TokenUnavailableFromDebankList = [ChainId.Conflux]
-
-const TOKEN_PRICE_COINGECKO_URL_BASE = 'https://api.coingecko.com/api/v3'
-
-async function getNativeTokenPrice(tokenId: string) {
-    const requestPath = `${TOKEN_PRICE_COINGECKO_URL_BASE}/simple/price?ids=${tokenId}&vs_currencies=${CurrencyType.USD}`
-    const prices = await fetch(requestPath).then((r) => r.json() as Promise<CryptoPrice>)
-    return prices
-}
 
 export const getFungibleAssetsFn =
     (context: Web3ProviderType) =>
@@ -48,9 +40,12 @@ export const getFungibleAssetsFn =
         const wallet = context.wallets.getCurrentValue().find((x) => isSameAddress(x.address, address))
         const socket = await context.providerSocket
         const networks = PLUGIN_NETWORKS
-        const trustedTokens = context.erc20Tokens
-            .getCurrentValue()
-            .filter((x) => wallet?.erc20_token_whitelist.has(formatEthereumAddress(x.address)))
+        const trustedTokens = uniqBy(
+            context.erc20Tokens
+                .getCurrentValue()
+                .filter((x) => wallet?.erc20_token_whitelist.has(formatEthereumAddress(x.address))),
+            (x) => `${x.chainId}_${formatEthereumAddress(x.address)}`,
+        )
 
         const web3 = new Web3(
             createExternalProvider(context.request, context.getSendOverrides, context.getRequestOptions),
@@ -131,7 +126,7 @@ export const getFungibleAssetsFn =
         const allRequest = TokenUnavailableFromDebankList.map(async (x) => {
             const balance = await getBalance(x, address)
             const coinId = getCoinGeckoCoinId(x)
-            const price = (await getNativeTokenPrice(coinId))[coinId]
+            const price = (await TokenPrice.getNativeTokenPrice([coinId], CurrencyType.USD))[coinId]
 
             return {
                 chainId: x,
