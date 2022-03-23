@@ -13,6 +13,7 @@ import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../DataSo
 import { useNextIDBoundByPlatform } from '../DataSource/useNextID'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { activatedSocialNetworkUI } from '../../social-network'
+import { EMPTY_LIST } from '../../../utils-pure'
 
 function getTabContent(tabId: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
@@ -47,8 +48,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const identity = useCurrentVisitingIdentity()
     const { currentConnectedPersona } = usePersonaConnectStatus()
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
-    const { value: addressNames = [], loading: loadingAddressNames } = useAddressNames(identity)
-    const { value: personaList = [], loading: loadingPersonaList } = useNextIDBoundByPlatform(
+    const { value: addressNames = EMPTY_LIST, loading: loadingAddressNames } = useAddressNames(identity)
+    const { value: personaList = EMPTY_LIST, loading: loadingPersonaList } = useNextIDBoundByPlatform(
         platform as NextIDPlatform,
         identity.identifier.userId,
     )
