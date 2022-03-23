@@ -2,7 +2,7 @@
 
 Integrate [Ideamarket](https://ideamarket.io/) to mask.io
 
-- [x] Detect idemarket url
+- [x] Detect ideamarket url
 - [x] lists all ideamarket tokens
 - [x] list user tokens
 - [x] Able to search for any tokens by name (server-side)
