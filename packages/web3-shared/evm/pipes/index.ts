@@ -202,6 +202,8 @@ export function resolveCollectibleProviderLink(chainId: ChainId, provider: NonFu
             return 'https://nftscan.com'
         case NonFungibleAssetProvider.ZORA:
             return 'https://zora.co'
+        case NonFungibleAssetProvider.SHOYU:
+            return 'https://shoyunft.com'
         default:
             unreachable(provider)
     }
@@ -219,6 +221,8 @@ export function resolveCollectibleAssetLink(chainId: ChainId, provider: NonFungi
             return ''
         case NonFungibleAssetProvider.ZORA:
             return ''
+        case NonFungibleAssetProvider.SHOYU:
+                return ''
         default:
             unreachable(provider)
     }
@@ -241,6 +245,8 @@ export function resolveCollectibleLink(
             return ''
         case NonFungibleAssetProvider.ZORA:
             return ''
+        case NonFungibleAssetProvider.SHOYU:
+                return ''
         default:
             unreachable(provider)
     }

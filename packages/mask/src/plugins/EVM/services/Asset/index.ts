@@ -1,6 +1,6 @@
 import { unreachable } from '@dimensiondev/kit'
 import { ChainId, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
-import { NonFungibleTokenAPI, OpenSea, Rarible, Zora } from '@masknet/web3-providers'
+import { NonFungibleTokenAPI, OpenSea, Rarible, Zora, Shoyu } from '@masknet/web3-providers'
 
 export interface AssetOption {
     address: string
@@ -78,6 +78,8 @@ export async function getOrders(options: OrderOption) {
             return Rarible.getOrders(address, tokenId, side, { chainId })
         case NonFungibleAssetProvider.ZORA:
             return Zora.getOrders(address, tokenId, side)
+        case NonFungibleAssetProvider.SHOYU:
+            return Shoyu.getOrders(address, tokenId, side)
         default:
             unreachable(provider)
     }
@@ -94,6 +96,8 @@ export async function getListings(options: ListOption) {
             return Rarible.getListings(address, tokenId, { chainId })
         case NonFungibleAssetProvider.ZORA:
             return Zora.getListings(address, tokenId)
+        case NonFungibleAssetProvider.SHOYU:
+            return Shoyu.getListings(address, tokenId)
         default:
             unreachable(provider)
     }
@@ -110,6 +114,8 @@ export async function getHistory(options: HistoryOption) {
             return Rarible.getHistory(address, tokenId)
         case NonFungibleAssetProvider.ZORA:
             return Zora.getHistory(address, tokenId)
+        case NonFungibleAssetProvider.SHOYU:
+            return Shoyu.getHistory(address, tokenId)
         default:
             unreachable(provider)
     }
@@ -125,6 +131,8 @@ export async function getCollections(options: CollectionOption) {
         case NonFungibleAssetProvider.NFTSCAN:
             return defaultPageableData
         case NonFungibleAssetProvider.ZORA:
+            return defaultPageableData
+        case NonFungibleAssetProvider.SHOYU:
             return defaultPageableData
         default:
             unreachable(provider)

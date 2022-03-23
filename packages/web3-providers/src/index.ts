@@ -3,6 +3,7 @@ import { OpenSeaAPI } from './opensea'
 import { RaribleAPI } from './rarible'
 import { NFTScanAPI } from './NFTScan'
 import { ZoraAPI } from './zora'
+import { ShoyuAPI } from './shoyu'
 import { NativeExplorerAPI } from './explorer'
 import { RSS3API } from './rss3'
 import { KeyValueAPI } from './kv'
@@ -20,6 +21,7 @@ export const OpenSea = new OpenSeaAPI()
 export const Rarible = new RaribleAPI()
 export const NFTScan = new NFTScanAPI()
 export const Zora = new ZoraAPI()
+export const Shoyu = new ShoyuAPI()
 export const CoinGecko = new CoinGeckoAPI()
 export const Explorer = new NativeExplorerAPI()
 export const RSS3 = new RSS3API()

@@ -57,6 +57,7 @@ export const resolveCollectibleProviderName = createLookupTableResolver<NonFungi
         [NonFungibleAssetProvider.RARIBLE]: 'Rarible',
         [NonFungibleAssetProvider.NFTSCAN]: 'NFTScan',
         [NonFungibleAssetProvider.ZORA]: 'Zora',
+        [NonFungibleAssetProvider.SHOYU]: 'SHOYU',
     },
     (providerType) => {
         throw new Error(`Unknown provider type: ${providerType}.`)
@@ -96,6 +97,13 @@ export const resolveLinkOnZora = createLookupTableResolver<ChainId, string>(
     'https://zora.co',
 )
 
+export const resolveLinkOnShoyu = createLookupTableResolver<ChainId, string>(
+    {
+        [ChainId.Mainnet]: 'https://shoyunft.com',
+    },
+    'https://shoyunft.com',
+)
+
 export function resolveTraitLinkOnOpenSea(chainId: ChainId, slug: string, search: string, value: string) {
     if (chainId === ChainId.Rinkeby) {
         return `https://testnets.opensea.io/assets/${slug}?search[stringTraits][0][name]=${search}&search[stringTraits][0][values][0]=${value}`
@@ -119,6 +127,8 @@ export function resolveAssetLinkOnCurrentProvider(
             return ''
         case NonFungibleAssetProvider.ZORA:
             return urlcat(resolveLinkOnZora(chainId), '/collections/:address/:id', { address, id })
+        case NonFungibleAssetProvider.SHOYU:
+            return urlcat(resolveLinkOnShoyu(chainId), '/collections/:address/:id', { address, id })
         default:
             return ''
     }
@@ -138,6 +148,8 @@ export function resolveUserUrlOnCurrentProvider(
         case NonFungibleAssetProvider.NFTSCAN:
             return ''
         case NonFungibleAssetProvider.ZORA:
+            return urlcat(resolveLinkOnZora(chainId), `/${address}`)
+        case NonFungibleAssetProvider.SHOYU:
             return urlcat(resolveLinkOnZora(chainId), `/${address}`)
         default:
             return ''

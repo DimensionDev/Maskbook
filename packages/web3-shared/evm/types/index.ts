@@ -589,6 +589,7 @@ export enum NonFungibleAssetProvider {
     RARIBLE = 'Rarible',
     NFTSCAN = 'NFTScan',
     ZORA = 'Zora',
+    SHOYU = 'Shoyu',
 }
 
 export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<infer R>

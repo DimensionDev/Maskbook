@@ -1,4 +1,4 @@
-import { OpenSea, Rarible, NFTScan, Zora } from '@masknet/web3-providers'
+import { OpenSea, Rarible, NFTScan, Zora, Shoyu } from '@masknet/web3-providers'
 import { unreachable } from '@dimensiondev/kit'
 import { ChainId, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 
@@ -41,6 +41,8 @@ export async function getNFT(options: NFTOption) {
             return Rarible.getToken(address, tokenId)
         case NonFungibleAssetProvider.ZORA:
             return Zora.getToken(address, tokenId)
+        case NonFungibleAssetProvider.SHOYU:
+            return Shoyu.getToken(address, tokenId)
         default:
             unreachable(provider)
     }
@@ -53,6 +55,7 @@ export async function getNFTBalance(options: BalanceOption) {
         case NonFungibleAssetProvider.OPENSEA:
         case NonFungibleAssetProvider.NFTSCAN:
         case NonFungibleAssetProvider.ZORA:
+        case NonFungibleAssetProvider.SHOYU:
             return NFTScan.getContractBalance(address)
 
         default:
@@ -70,6 +73,8 @@ export async function getNFTContract(options: ContractOption) {
             return
         case NonFungibleAssetProvider.ZORA:
             return
+        case NonFungibleAssetProvider.SHOYU:
+            return
         default:
             unreachable(provider)
     }
@@ -86,6 +91,8 @@ export async function getNFTsByPagination(options: NFTsByPaginationOption) {
             return Rarible.getTokens(from, options)
         case NonFungibleAssetProvider.ZORA:
             return Rarible.getTokens(from, options)
+        case NonFungibleAssetProvider.SHOYU:
+            return Shoyu.getTokens(from, options)
         default:
             unreachable(provider)
     }

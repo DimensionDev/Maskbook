@@ -24,7 +24,7 @@ const useStyles = makeStyles()({
 })
 
 const NFTScanIcon = new URL('../../../resources/NFTScanIcon.png', import.meta.url).toString()
-
+const ShoyuIcon = new URL('../../../resources/shoyunft-icon.png', import.meta.url).toString()
 export interface CollectibleProviderIconProps {
     provider: NonFungibleAssetProvider
 }
@@ -40,6 +40,8 @@ export function CollectibleProviderIcon(props: CollectibleProviderIconProps) {
             return <RaribleIcon classes={{ root: classes.rarible }} viewBox="0 0 16 16" />
         case NonFungibleAssetProvider.ZORA:
             return <ZoraIcon classes={{ root: classes.rarible }} viewBox="0 0 16 16" />
+        case NonFungibleAssetProvider.SHOYU:
+            return <ShoyuIcon classes={{ root: classes.rarible }} viewBox="0 0 16 16" />
         default:
             unreachable(props.provider)
     }
