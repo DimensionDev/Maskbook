@@ -9,7 +9,7 @@ import {
     resolveBlockLinkOnExplorer,
     resolveTransactionLinkOnExplorer,
 } from '@masknet/web3-shared-solana'
-import { getFungibleAssets, getNonFungibleAssets } from '../../apis'
+import { getFungibleAssets, getNonFungibleAssets, lookup, reverse } from '../../apis'
 import { formatAddress, formatCurrency } from '../../helpers'
 import { getStorage, StorageDefaultValue } from '../../storage'
 
@@ -57,6 +57,10 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
             resolveTransactionLink: resolveTransactionLinkOnExplorer,
             resolveAddressLink: resolveAddressLinkOnExplorer,
             resolveBlockLink: resolveBlockLinkOnExplorer,
+        },
+        NameService: {
+            lookup,
+            reverse,
         },
     }
 }
