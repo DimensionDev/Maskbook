@@ -67,7 +67,7 @@ export function useNextIDConnectStatus() {
         if (lastState.status === SetupGuideStep.FindUsername) return NextIDVerificationStatus.WaitingLocalConnect
 
         // Whether it has been opened in a lifecycle
-        if (isOpenedVerifyDialog) return NextIDVerificationStatus.HideVerifyDialog
+        if (isOpenedVerifyDialog && !isOpenedFromButton) return NextIDVerificationStatus.HideVerifyDialog
 
         // Whether current platform support next id
         if (!enableNextID || !username || !personaConnectStatus.connected)

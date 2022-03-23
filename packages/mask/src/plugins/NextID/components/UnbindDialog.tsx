@@ -1,4 +1,4 @@
-import { memo, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { useI18N } from '../locales'
 import { useAsyncRetry } from 'react-use'
 import { isSameAddress, useAccount } from '@masknet/web3-shared-evm'
@@ -17,12 +17,12 @@ import { bindProof } from '@masknet/web3-providers'
 interface VerifyWalletDialogProps {
     unbindAddress: string
     persona: Persona
-    onUnBind(): void
+    onUnBound(): void
     onClose(): void
     bounds: Binding[]
 }
 
-export const UnbindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onClose, persona, onUnBind, bounds }) => {
+export const UnbindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onClose, persona, onUnBound, bounds }) => {
     const account = useAccount()
     const t = useI18N()
 
@@ -57,7 +57,7 @@ export const UnbindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onCl
                 message: t.notify_wallet_sign_request_success(),
             })
             await delay(2000)
-            onUnBind()
+            onUnBound()
             onClose()
         } catch {
             showSnackbar(t.notify_wallet_sign_request_title(), {
@@ -67,9 +67,11 @@ export const UnbindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onCl
         }
     }, [walletSignState.value, personaSignState.value, unbindAddress])
 
+    const handleConfirm = useCallback(() => setSecondDialog(true), [])
+
     return (
         <>
-            <UnbindConfirm unbindAddress={unbindAddress} onConfirm={() => setSecondDialog(true)} onClose={onClose} />
+            <UnbindConfirm unbindAddress={unbindAddress} onConfirm={handleConfirm} onClose={onClose} />
             <UnbindPanelUI
                 title={t.unbind_dialog_title()}
                 onClose={onClose}
