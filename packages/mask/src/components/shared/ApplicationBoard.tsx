@@ -292,7 +292,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             new URL('./assets/swap.png', import.meta.url).toString(),
             onSwapDialogOpen,
             undefined,
-            isNotEvm,
+            isNotEvm || currentChainId === ChainId.Conflux,
         ),
         createEntry(
             'Fiat On-Ramp',
