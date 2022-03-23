@@ -18,7 +18,7 @@ export type TransactionDialogEvent =
     | {
           open: true
           state: TransactionState
-          shareLink?: string
+          shareText?: string
           summary?: string
           title?: string
       }

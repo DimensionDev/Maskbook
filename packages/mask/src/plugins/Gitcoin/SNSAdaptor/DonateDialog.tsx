@@ -122,25 +122,19 @@ export function DonateDialog(props: DonateDialogProps) {
     // #region transaction dialog
 
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
-    const shareLink = activatedSocialNetworkUI.utils
-        .getShareLinkURL?.(
-            token
-                ? [
-                      `I just donated ${title} with ${formatBalance(amount, token.decimals)} ${cashTag}${
-                          token.symbol
-                      }. ${
-                          isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                              ? `Follow @${
-                                    isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                                } (mask.io) to donate Gitcoin grants.`
-                              : ''
-                      }`,
-                      '#mask_io',
-                      postLink,
-                  ].join('\n')
-                : '',
-        )
-        .toString()
+    const shareText = token
+        ? [
+              `I just donated ${title} with ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol}. ${
+                  isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                      ? `Follow @${
+                            isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
+                        } (mask.io) to donate Gitcoin grants.`
+                      : ''
+              }`,
+              '#mask_io',
+              postLink,
+          ].join('\n')
+        : ''
 
     // close the transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
@@ -158,7 +152,7 @@ export function DonateDialog(props: DonateDialogProps) {
         if (donateState.type === TransactionStateType.UNKNOWN) return
         setTransactionDialog({
             open: true,
-            shareLink,
+            shareText,
             state: donateState,
             summary: `Donating ${formatBalance(amount, token.decimals)} ${token.symbol} for ${title}.`,
         })
