@@ -1,10 +1,10 @@
 import { getHashedName, getNameAccountKey, NameRegistryState, performReverseLookup } from '@bonfida/spl-name-service'
 import { clusterApiUrl, Connection, PublicKey } from '@solana/web3.js'
 
-const SOL_TLD_AUTBORITY = new PublicKey('58PwtjSDuFHuUkYjH9BYnnQKHfwo9reZhC2zMJv9JPkx')
+const SOL_TLD_AUTHORITY = new PublicKey('58PwtjSDuFHuUkYjH9BYnnQKHfwo9reZhC2zMJv9JPkx')
 const getKey = async (name: string) => {
     const hashedName = await getHashedName(name)
-    const domainKey = await getNameAccountKey(hashedName, undefined, SOL_TLD_AUTBORITY)
+    const domainKey = await getNameAccountKey(hashedName, undefined, SOL_TLD_AUTHORITY)
     return { domainKey, hashedName }
 }
 
