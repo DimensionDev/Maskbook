@@ -11,7 +11,7 @@ export async function storeConnection(pubKey: string | BNLike, chainId?: number)
     const storage = getStorage()
     await storage.publicKey.setValue(base58Key)
     if (chainId) {
-        await storage.network.setValue(chainId)
+        await storage.chainId.setValue(chainId)
     }
 }
 export async function connectWallet(init = false) {

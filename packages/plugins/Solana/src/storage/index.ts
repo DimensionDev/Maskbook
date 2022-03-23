@@ -3,7 +3,7 @@ import { hexToBase58 } from '../utils'
 
 export const StorageDefaultValue = {
     publicKey: null as null | string,
-    network: null as null | number,
+    chainId: null as null | number,
 }
 
 let storage: ScopedStorage<typeof StorageDefaultValue> = null!
@@ -24,6 +24,6 @@ export async function storeConnection(pubKey: string | BNLike, chainId?: number)
     const storage = getStorage()
     await storage.publicKey.setValue(base58Key)
     if (chainId) {
-        await storage.network.setValue(chainId)
+        await storage.chainId.setValue(chainId)
     }
 }
