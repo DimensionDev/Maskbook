@@ -11,7 +11,7 @@ import {
 } from '@masknet/shared-base'
 import { compact } from 'lodash-unified'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../../../../utils'
+import { useI18N, MaskMessages } from '../../../../../../utils'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import Services from '../../../../../service'
@@ -194,12 +194,13 @@ export const ProfileList = memo(() => {
                     signature: signatureResult.signature.signature,
                 },
             )
-
             await delay(2000)
             setUnbind(null)
             refreshProfileList()
         } catch {
             console.log('Disconnect failed')
+        } finally {
+            MaskMessages.events.ownProofChanged.sendToAll(undefined)
         }
     }, [unbind, currentPersona?.identifier, refreshProfileList])
 
