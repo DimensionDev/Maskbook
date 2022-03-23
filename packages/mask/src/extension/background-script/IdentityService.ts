@@ -1,7 +1,7 @@
 import * as bip39 from 'bip39'
 import { validateMnemonic } from 'bip39'
 import { decode } from '@msgpack/msgpack'
-import { decodeArrayBuffer, decodeText } from '@dimensiondev/kit'
+import { decodeArrayBuffer } from '@dimensiondev/kit'
 import {
     loginPersona,
     personaRecordToPersona,
@@ -13,8 +13,6 @@ import {
     storeAvatar,
 } from '../../database'
 import {
-    ECKeyIdentifier,
-    Identifier,
     PersonaIdentifier,
     ProfileIdentifier,
     ECKeyIdentifierFromJsonWebKey,
@@ -48,10 +46,7 @@ import {
     queryProfilesDB as queryProfilesFromIndexedDB,
     queryRelations as queryRelationsFromIndexedDB,
 } from '../../../background/database/persona/web'
-import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
-import { restoreBackup } from './WelcomeServices/restoreBackup'
 import { restoreNewIdentityWithMnemonicWord } from './WelcomeService'
-import { convertBackupFileToObject, fixBackupFilePermission } from '../../utils/type-transform/BackupFile'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { getCurrentPersonaIdentifier } from './SettingsService'
@@ -59,6 +54,8 @@ import { MaskMessages } from '../../utils'
 import { first, orderBy } from 'lodash-unified'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { bindProof } from '@masknet/web3-providers'
+
+export { restoreFromBase64, restoreFromBackup } from '../../../background/services/backup/restore'
 
 assertEnvironment(Environment.ManifestBackground)
 
@@ -179,14 +176,6 @@ export async function queryOwnedPersonaInformation(): Promise<PersonaInformation
     }
     return result
 }
-export async function restoreFromObject(object: null | BackupJSONFileLatest): Promise<Persona | null> {
-    if (!object) return null
-    await restoreBackup(object)
-    if (object?.personas?.length) {
-        return queryPersona(Identifier.fromString(object.personas[0].identifier, ECKeyIdentifier).unwrap())
-    }
-    return null
-}
 export async function restoreFromMnemonicWords(
     mnemonicWords: string,
     nickname: string,
@@ -198,12 +187,6 @@ export async function restoreFromMnemonicWords(
     })
 
     return queryPersona(identifier)
-}
-export async function restoreFromBase64(base64: string): Promise<Persona | null> {
-    return restoreFromObject(JSON.parse(decodeText(decodeArrayBuffer(base64))) as BackupJSONFileLatest)
-}
-export async function restoreFromBackup(backup: string): Promise<Persona | null> {
-    return restoreFromObject(fixBackupFilePermission(UpgradeBackupJSONFile(convertBackupFileToObject(backup))))
 }
 // #endregion
 

@@ -60,11 +60,11 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
             const data = await Services.Welcome.parseBackupStr(backupText)
 
             if (data?.info.wallets) {
-                await Services.Welcome.checkPermissionAndOpenWalletRecovery(data.id)
+                await Services.Welcome.restoreBackupWithIDAndPermissionAndWallet({ id: data.id })
                 return
             } else {
                 if (data?.id) {
-                    await Services.Welcome.checkPermissionsAndRestore(data.id)
+                    await Services.Welcome.restoreBackupWithIDAndPermission({ id: data.id })
                 }
 
                 restoreCallback()

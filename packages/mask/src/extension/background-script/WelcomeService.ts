@@ -1,27 +1,30 @@
-import { encodeText, delay } from '@dimensiondev/kit'
-import { type DashboardRoutes, PopupRoutes } from '@masknet/shared-base'
+import { encodeText } from '@dimensiondev/kit'
+import type { DashboardRoutes, PersonaIdentifier, ProfileIdentifier, AESJsonWebKey } from '@masknet/shared-base'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { createPersonaByJsonWebKey } from '../../../background/database/persona/helper'
 import { attachProfileDB, LinkedProfileDetails } from '../../../background/database/persona/db'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
-import type { PersonaIdentifier, ProfileIdentifier, AESJsonWebKey } from '@masknet/shared-base'
-import { BackupOptions, generateBackupJSON } from './WelcomeServices/generateBackupJSON'
-import { requestExtensionPermission, openPopupWindow } from './../../../background/services/helper'
 import { saveFileFromBuffer } from '../../../shared'
-import {
-    BackupJSONFileLatest,
-    getBackupPreviewInfo,
-    UpgradeBackupJSONFile,
-} from '../../utils/type-transform/BackupFormat/JSON/latest'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { convertBackupFileToObject, extraPermissions, fixBackupFilePermission } from '../../utils'
-import { v4 as uuid } from 'uuid'
-import { getUnconfirmedBackup, restoreBackup, setUnconfirmedBackup } from './WelcomeServices/restoreBackup'
 import formatDateTime from 'date-fns/format'
+import './legacy'
 
-export { generateBackupJSON, generateBackupPreviewInfo } from './WelcomeServices/generateBackupJSON'
-export * from './WelcomeServices/restoreBackup'
+export {
+    mobile_generateBackupJSON,
+    mobile_generateBackupJSONOnlyForPersona,
+    generateBackupPreviewInfo,
+    createBackupFile,
+} from '../../../background/services/backup/create'
+export {
+    restoreBackup,
+    parseBackupStr,
+    getUnconfirmedBackup,
+    restoreBackupWithID,
+    restoreBackupWithIDAndPermission,
+    restoreBackupWithIDAndPermissionAndWallet,
+} from '../../../background/services/backup/restore'
+
 assertEnvironment(Environment.ManifestBackground)
 
 /**
@@ -68,26 +71,6 @@ export async function downloadBackupV2(buffer: ArrayBuffer) {
     saveFileFromBuffer(buffer, 'application/octet-stream', makeBackupName('bin'))
 }
 
-export async function createBackupFile(
-    options: { download: boolean; onlyBackupWhoAmI: boolean } & Partial<BackupOptions>,
-): Promise<BackupJSONFileLatest> {
-    const obj = await generateBackupJSON(options)
-    if (!options.download) return obj
-    // Don't make the download pop so fast
-    await delay(1000)
-    return downloadBackup(obj)
-}
-
-export async function createBackupUrl(
-    options: { download: boolean; onlyBackupWhoAmI: boolean } & Partial<BackupOptions>,
-) {
-    const obj = await generateBackupJSON(options)
-    const { buffer, mimeType, fileName } = await createBackupInfo(obj)
-    const blob = new Blob([buffer], { type: mimeType })
-    const url = URL.createObjectURL(blob)
-    return { url, fileName }
-}
-
 async function createBackupInfo<T>(obj: T, type?: 'txt' | 'json') {
     const string = typeof obj === 'string' ? obj : JSON.stringify(obj)
     const buffer = encodeText(string)
@@ -103,44 +86,6 @@ export async function openOptionsPage(route?: DashboardRoutes, search?: string) 
 }
 
 export { createPersonaByMnemonic } from '../../database'
-
-export function parseBackupStr(str: string) {
-    const json = fixBackupFilePermission(UpgradeBackupJSONFile(convertBackupFileToObject(str)))
-    if (json) {
-        const info = getBackupPreviewInfo(json)
-        const id = uuid()
-        setUnconfirmedBackup(id, json)
-        return { info, id }
-    } else {
-        return null
-    }
-}
-
-export async function checkPermissionsAndRestore(id: string) {
-    const json = await getUnconfirmedBackup(id)
-    if (json) {
-        const permissions = await extraPermissions(json.grantedHostPermissions)
-        if (permissions.length) {
-            const granted = await requestExtensionPermission({ origins: permissions })
-            if (!granted) return
-        }
-
-        await restoreBackup(json)
-    }
-}
-
-export async function checkPermissionAndOpenWalletRecovery(id: string) {
-    const json = await getUnconfirmedBackup(id)
-    if (json) {
-        const permissions = await extraPermissions(json.grantedHostPermissions)
-        if (permissions.length) {
-            const granted = await requestExtensionPermission({ origins: permissions })
-            if (!granted) return
-        }
-
-        await openPopupWindow(PopupRoutes.WalletRecovered, { backupId: id })
-    }
-}
 
 function makeBackupName(extension: string) {
     const now = formatDateTime(Date.now(), 'yyyy-MM-dd')

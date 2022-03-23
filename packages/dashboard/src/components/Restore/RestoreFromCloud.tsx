@@ -13,14 +13,13 @@ import { useNavigate } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { Step, Stepper } from '../Stepper'
 import { LoadingCard } from './steps/LoadingCard'
-import { decryptBackup } from '@masknet/backup-format'
+import { BackupPreview, decryptBackup } from '@masknet/backup-format'
 import { decode, encode } from '@msgpack/msgpack'
 import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
 import { AccountType } from '../../pages/Settings/type'
 import { UserContext } from '../../pages/Settings/hooks/UserContext'
 import { ConfirmSynchronizePasswordDialog } from './ConfirmSynchronizePasswordDialog'
 import { LoadingButton } from '../LoadingButton'
-import type { BackupPreview } from '../../../../mask/src/utils'
 
 export const RestoreFromCloud = memo(() => {
     const t = useDashboardI18N()
@@ -105,10 +104,10 @@ export const RestoreFromCloud = memo(() => {
         async (backupInfo: { info: BackupPreview; id: string }, account: any) => {
             try {
                 if (backupInfo.info?.wallets) {
-                    await Services.Welcome.checkPermissionAndOpenWalletRecovery(backupInfo.id)
+                    await Services.Welcome.restoreBackupWithIDAndPermissionAndWallet({ id: backupInfo.id })
                     return
                 } else {
-                    await Services.Welcome.checkPermissionsAndRestore(backupInfo.id)
+                    await Services.Welcome.restoreBackupWithIDAndPermission({ id: backupInfo.id })
 
                     await restoreCallback()
                 }

@@ -10,6 +10,7 @@ import {
     IdentifierMap,
 } from '@masknet/shared-base'
 import { isObjectLike } from 'lodash-unified'
+import { None, Some } from 'ts-results'
 import { createEmptyNormalizedBackup } from '../normalize'
 import type { NormalizedBackup } from '../normalize/type'
 
@@ -29,8 +30,8 @@ export function normalizeBackupVersion1(file: BackupJSONFileVersion1): Normalize
     const backup = createEmptyNormalizedBackup()
 
     backup.meta.version = 1
-    if (!file.grantedHostPermissions) backup.meta.maskVersion = '<=1.5.2'
-    else if (!file.maskbookVersion) backup.meta.maskVersion = '<=1.6.0'
+    if (!file.grantedHostPermissions) backup.meta.maskVersion = Some('<=1.5.2')
+    else if (!file.maskbookVersion) backup.meta.maskVersion = Some('<=1.6.0')
 
     if (file.grantedHostPermissions) {
         backup.settings.grantedHostPermissions = file.grantedHostPermissions
@@ -40,26 +41,38 @@ export function normalizeBackupVersion1(file: BackupJSONFileVersion1): Normalize
     for (const { network, publicKey, userId, nickname, localKey, privateKey } of [...whoami, ...(people || [])]) {
         const profile: NormalizedBackup.ProfileBackup = {
             identifier: new ProfileIdentifier(network, userId),
-            nickname,
+            nickname: nickname ? Some(nickname) : None,
+            createdAt: None,
+            updatedAt: None,
+            localKey: None,
+            linkedPersona: None,
         }
 
         if (isEC_Public_JsonWebKey(publicKey)) {
             const personaID = ECKeyIdentifierFromJsonWebKey(publicKey)
-            const persona = backup.personas.get(personaID) || {
+            const persona: NormalizedBackup.PersonaBackup = backup.personas.get(personaID) || {
                 identifier: personaID,
-                publicKey,
+                nickname: None,
                 linkedProfiles: new IdentifierMap(new Map(), ProfileIdentifier),
+                publicKey,
+                privateKey: None,
+                localKey: None,
+                mnemonic: None,
+                createdAt: None,
+                updatedAt: None,
             }
+            profile.linkedPersona = Some(personaID)
+
             if (isEC_Private_JsonWebKey(privateKey)) {
-                persona.privateKey = privateKey
+                persona.privateKey = Some(privateKey)
             }
+            backup.personas.set(personaID, persona)
             persona.linkedProfiles.set(profile.identifier, void 0)
-            profile.linkedPersona = personaID
         }
         if (isAESJsonWebKey(localKey)) {
-            profile.localKey = localKey
-            if (profile.linkedPersona && backup.personas.has(profile.linkedPersona)) {
-                backup.personas.get(profile.linkedPersona)!.localKey = localKey
+            profile.localKey = Some(localKey)
+            if (profile.linkedPersona.some && backup.personas.has(profile.linkedPersona.val)) {
+                backup.personas.get(profile.linkedPersona.val)!.localKey = Some(localKey)
             }
         }
     }

@@ -116,15 +116,15 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     settings_setTheme: ({ theme }) => Services.Settings.setTheme(theme),
     settings_getLanguage: () => Services.Settings.getLanguage(),
     settings_setLanguage: ({ language }) => Services.Settings.setLanguage(language),
-    settings_createBackupJson: (options) => Services.Welcome.generateBackupJSON(options),
+    settings_createBackupJson: (options) => Services.Welcome.mobile_generateBackupJSON(options),
     settings_getBackupPreviewInfo: async ({ backupInfo }) => {
         const data = await Services.Welcome.parseBackupStr(backupInfo)
         return data?.info
     },
-    settings_restoreBackup: ({ backupInfo }) => {
+    settings_restoreBackup: async ({ backupInfo }) => {
         try {
             const json = JSON.parse(backupInfo)
-            return Services.Welcome.restoreBackup(json)
+            await Services.Welcome.restoreBackup(json)
         } catch (error) {
             throw new Error('invalid json')
         }
@@ -151,14 +151,10 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     persona_removePersona: ({ identifier }) =>
         Services.Identity.deletePersona(stringToPersonaIdentifier(identifier), 'delete even with private'),
     persona_restoreFromJson: async ({ backup }) => {
-        const result = await Services.Identity.restoreFromBackup(backup)
-
-        if (!result) throw new Error('invalid json')
+        await Services.Identity.restoreFromBackup(backup)
     },
     persona_restoreFromBase64: async ({ backup }) => {
-        const result = await Services.Identity.restoreFromBase64(backup)
-
-        if (!result) throw new Error('invalid base64')
+        await Services.Identity.restoreFromBase64(backup)
     },
     persona_connectProfile: async ({ profileIdentifier, personaIdentifier }) => {
         const profileId = stringToProfileIdentifier(profileIdentifier)
@@ -179,12 +175,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         return persona.mnemonic?.words
     },
     persona_backupJson: async ({ identifier }) => {
-        const persona = await Services.Identity.queryPersona(stringToPersonaIdentifier(identifier))
-        return Services.Welcome.generateBackupJSON({
-            noPosts: true,
-            noWallets: true,
-            filter: { type: 'persona', wanted: [persona.identifier] },
-        })
+        return Services.Welcome.mobile_generateBackupJSONOnlyForPersona(stringToPersonaIdentifier(identifier))
     },
     persona_restoreFromPrivateKey: async ({ privateKey, nickname }) => {
         const identifier = await Services.Identity.createPersonaByPrivateKey(privateKey, nickname)

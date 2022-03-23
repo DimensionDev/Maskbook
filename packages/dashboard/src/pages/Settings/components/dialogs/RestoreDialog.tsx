@@ -85,7 +85,7 @@ export default function RestoreDialog({ open, onClose }: RestoreDialogProps) {
     const handleConfirm = async () => {
         if (!json) return
 
-        await Services.Welcome.checkPermissionsAndRestore(id)
+        await Services.Welcome.restoreBackupWithIDAndPermission({ id })
     }
 
     useAsync(async () => {

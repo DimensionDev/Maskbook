@@ -10,6 +10,7 @@ import {
     ProfileIdentifier,
 } from '@masknet/shared-base'
 import { isObjectLike } from 'lodash-unified'
+import { None, Some } from 'ts-results'
 import { createEmptyNormalizedBackup } from '../normalize'
 import type { NormalizedBackup } from '../normalize/type'
 
@@ -27,7 +28,7 @@ export function isBackupVersion0(obj: unknown): obj is BackupJSONFileVersion0 {
 export function normalizeBackupVersion0(file: BackupJSONFileVersion0): NormalizedBackup.Data {
     const backup = createEmptyNormalizedBackup()
     backup.meta.version = 0
-    backup.meta.maskVersion = '<=1.3.2'
+    backup.meta.maskVersion = Some('<=1.3.2')
 
     const { local } = file
     const { username, key } = file.key
@@ -39,17 +40,24 @@ export function normalizeBackupVersion0(file: BackupJSONFileVersion0): Normalize
         identifier: ECKeyIdentifierFromJsonWebKey(publicKey),
         publicKey,
         linkedProfiles: new IdentifierMap<ProfileIdentifier, any>(new Map(), ProfileIdentifier),
+        localKey: isAESJsonWebKey(local) ? Some(local) : None,
+        privateKey: isEC_Private_JsonWebKey(privateKey) ? Some(privateKey) : None,
+        mnemonic: None,
+        nickname: None,
+        createdAt: None,
+        updatedAt: None,
     }
-    if (isEC_Private_JsonWebKey(privateKey)) persona.privateKey = privateKey
-    if (isAESJsonWebKey(local)) persona.localKey = local
     backup.personas.set(persona.identifier, persona)
 
     if (username && username !== '$unknown' && username !== '$local') {
         const profile: NormalizedBackup.ProfileBackup = {
             identifier: new ProfileIdentifier('facebook.com', username),
-            linkedPersona: persona.identifier,
+            linkedPersona: Some(persona.identifier),
+            createdAt: None,
+            updatedAt: None,
+            localKey: isAESJsonWebKey(local) ? Some(local) : None,
+            nickname: None,
         }
-        if (isAESJsonWebKey(local)) persona.localKey = local
         backup.profiles.set(profile.identifier, profile)
         persona.linkedProfiles.set(profile.identifier, void 0)
     }
