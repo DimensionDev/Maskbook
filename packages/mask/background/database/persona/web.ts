@@ -29,6 +29,7 @@ import type {
     PersonaRecord,
 } from './type'
 import { isEmpty } from 'lodash-unified'
+import { convertPersonaHexPublicKey } from './util'
 /**
  * Database structure:
  *
@@ -144,6 +145,13 @@ export async function createRelationsTransaction() {
     return createTransaction(database, 'readwrite')('relations')
 }
 
+export async function createPersonaDBReadonlyAccess(
+    action: (t: FullPersonaDBTransaction<'readonly'>) => Promise<void>,
+) {
+    const database = await db()
+    const transaction = createTransaction(database, 'readonly')('personas', 'profiles', 'relations')
+    await action(transaction)
+}
 // @deprecated Please create a transaction directly
 export async function consistentPersonaDBWriteAccess(
     action: (t: FullPersonaDBTransaction<'readwrite'>) => Promise<void>,
@@ -428,7 +436,14 @@ export async function queryProfilesDB(
             if (query.hasLinkedPersona && !out.linkedPersona) continue
             if (query.identifiers.some((x) => out.identifier.equals(x))) result.push(out)
         }
+    } else {
+        for await (const each of t.objectStore('profiles').iterate()) {
+            const out = profileOutDB(each.value)
+            if (query.hasLinkedPersona && !out.linkedPersona) continue
+            result.push(out)
+        }
     }
+
     return result
 }
 
@@ -694,9 +709,12 @@ function personaRecordToDB(x: PersonaRecord): PersonaRecordDB {
 function personaRecordOutDB(x: PersonaRecordDB): PersonaRecord {
     // @ts-ignore
     delete x.hasPrivateKey
+    const identifier = Identifier.fromString(x.identifier, ECKeyIdentifier).unwrap()
+
     const obj: PersonaRecord = {
         ...x,
-        identifier: Identifier.fromString(x.identifier, ECKeyIdentifier).unwrap(),
+        identifier,
+        publicHexKey: convertPersonaHexPublicKey(identifier),
         linkedProfiles: new IdentifierMap(x.linkedProfiles, ProfileIdentifier),
     }
     return obj

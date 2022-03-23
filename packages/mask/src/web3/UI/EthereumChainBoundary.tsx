@@ -2,22 +2,22 @@ import React, { useCallback } from 'react'
 import { Box, Typography, Theme } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import type { SxProps } from '@mui/system'
-import { NetworkPluginID, useActivatedPlugin, usePluginIDContext } from '@masknet/plugin-infra'
+import { NetworkPluginID, useActivatedPlugin, usePluginIDContext, useAccount } from '@masknet/plugin-infra'
 import {
     ChainId,
     getChainDetailedCAIP,
     getChainName,
     getNetworkTypeFromChainId,
     isChainIdValid,
+    isValidAddress as isValidEthereumAddress,
     NetworkType,
     ProviderType,
     resolveNetworkName,
-    useAccount,
     useAllowTestnet,
     useChainId,
 } from '@masknet/web3-shared-evm'
-import { useValueRef, useRemoteControlledDialog } from '@masknet/shared'
-import { delay } from '@masknet/shared-base'
+import { useValueRef, useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { delay } from '@dimensiondev/kit'
 import ActionButton, {
     ActionButtonPromise,
     ActionButtonPromiseProps,
@@ -31,9 +31,11 @@ import { pluginIDSettings } from '../../settings/settings'
 const useStyles = makeStyles()(() => ({}))
 
 export interface EthereumChainBoundaryProps extends withClasses<'switchButton'> {
+    className?: string
     chainId: ChainId
     noSwitchNetworkTip?: boolean
     disablePadding?: boolean
+    hiddenConnectButton?: boolean
     switchButtonStyle?: SxProps<Theme>
     children?: React.ReactNode
     isValidChainId?: (actualChainId: ChainId, expectedChainId: ChainId) => boolean
@@ -69,6 +71,22 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     // is the actual chain id a valid one even if it does not match with the expected one?
     const isValid = props?.isValidChainId?.(actualChainId, expectedChainId) ?? false
 
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
+
+    // #region connect wallet dialog
+    const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
+        WalletMessages.events.connectWalletDialogUpdated,
+        (ev) => {
+            if (ev.open) return
+        },
+    )
+    // #endregion
+
+    // request ethereum-compatible network
+    const networkType = getNetworkTypeFromChainId(expectedChainId)
+
     const onSwitchChain = useCallback(async () => {
         // a short time loading makes the user fells better
         await delay(1000)
@@ -88,8 +106,6 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                 return
             }
 
-            // request ethereum-compatible network
-            const networkType = getNetworkTypeFromChainId(expectedChainId)
             if (!networkType) return
             try {
                 const overrides = {
@@ -121,16 +137,21 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         }
 
         if (!isChainMatched) await switchToChain()
-        if (!isPluginMatched) await switchToPlugin()
+        if (!isPluginMatched) {
+            await switchToPlugin()
+            if (!networkType || networkType !== NetworkType.Ethereum || isValidEthereumAddress(account)) return
+            setConnectWalletDialog({
+                open: true,
+                providerType: ProviderType.MetaMask,
+                networkType,
+            })
+        }
     }, [account, isAllowed, isChainMatched, isPluginMatched, providerType, expectedChainId])
-
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
 
     const renderBox = (children?: React.ReactNode) => {
         return (
             <Box
+                className={props.className}
                 display="flex"
                 flexDirection="column"
                 alignItems="center"
@@ -146,13 +167,15 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                 <Typography color="textPrimary">
                     <span>{t('plugin_wallet_connect_wallet_tip')}</span>
                 </Typography>
-                <ActionButton
-                    variant="contained"
-                    size="small"
-                    sx={{ marginTop: 1.5 }}
-                    onClick={openSelectProviderDialog}>
-                    {t('plugin_wallet_connect_wallet')}
-                </ActionButton>
+                {!props.hiddenConnectButton ? (
+                    <ActionButton
+                        variant="contained"
+                        size="small"
+                        sx={{ marginTop: 1.5 }}
+                        onClick={openSelectProviderDialog}>
+                        {t('plugin_wallet_connect_wallet')}
+                    </ActionButton>
+                ) : null}
             </>,
         )
 

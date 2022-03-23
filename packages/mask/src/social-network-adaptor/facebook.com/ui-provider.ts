@@ -5,7 +5,7 @@ import { facebookShared } from './shared'
 import { getProfilePageUrlAtFacebook } from './utils/parse-username'
 import { taskOpenComposeBoxFacebook } from './automation/openComposeBox'
 import { pasteTextToCompositionFacebook } from './automation/pasteTextToComposition'
-import { IdentityProviderFacebook } from './collecting/identity'
+import { CurrentVisitingIdentityProviderFacebook, IdentityProviderFacebook } from './collecting/identity'
 import { InitAutonomousStateFriends } from '../../social-network/defaults/state/InitFriends'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles'
 import { injectCompositionFacebook } from './injection/Composition'
@@ -14,6 +14,8 @@ import { injectPostCommentsDefault } from '../../social-network/defaults/inject/
 import { pasteToCommentBoxFacebook } from './automation/pasteToCommentBoxFacebook'
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/inject/CommentBox'
 import { injectPostInspectorFacebook } from './injection/PostInspector'
+import getSearchedKeywordAtFacebook from './collecting/getSearchedKeyword'
+import { injectSearchResultBoxAtFacebook } from './injection/SearchResultBox'
 import { PostProviderFacebook } from './collecting/posts'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector'
@@ -22,9 +24,18 @@ import { GrayscaleAlgorithm } from '@masknet/encryption'
 import { PaletteModeProviderFacebook, useThemeFacebookVariant } from './customization/custom'
 import { unreachable } from '@dimensiondev/kit'
 import { makeStyles } from '@masknet/theme'
-import { ProfileIdentifier } from '@masknet/shared-base'
+import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
 import { globalUIState } from '../../social-network'
 import { injectToolboxHintAtFacebook as injectToolboxAtFacebook } from './injection/Toolbar'
+import { injectProfileNFTAvatarInFaceBook } from './injection/NFT/ProfileNFTAvatar'
+import { injectNFTAvatarInFacebook } from './injection/NFT/NFTAvatarInFacebook'
+import { injectUserNFTAvatarAtFacebook } from './injection/NFT/NFTAvatarInTimeline'
+import { injectOpenNFTAvatarEditProfileButton } from './injection/NFT/NFTAvatarEditProfile'
+import { injectProfileTabAtFacebook } from './injection/ProfileTab'
+import { injectPostReplacerAtFacebook } from './injection/PostReplacer'
+import { injectProfileTabContentAtFacebook } from './injection/ProfileContent'
+import { FacebookRenderFragments } from './customization/render-fragments'
+import { enableFbStyleTextPayloadReplace } from '../../../shared-ui/TypedMessageRender/transformer'
 
 const useInjectedDialogClassesOverwriteFacebook = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -129,7 +140,9 @@ const facebookUI: SocialNetworkUI.Definition = {
     },
     collecting: {
         identityProvider: IdentityProviderFacebook,
+        currentVisitingIdentityProvider: CurrentVisitingIdentityProviderFacebook,
         postsProvider: PostProviderFacebook,
+        getSearchedKeyword: getSearchedKeywordAtFacebook,
     },
     customization: {
         paletteMode: PaletteModeProviderFacebook,
@@ -137,6 +150,7 @@ const facebookUI: SocialNetworkUI.Definition = {
             InjectedDialog: {
                 classes: useInjectedDialogClassesOverwriteFacebook,
             },
+            RenderFragments: FacebookRenderFragments,
         },
         useTheme: useThemeFacebookVariant,
     },
@@ -145,6 +159,7 @@ const facebookUI: SocialNetworkUI.Definition = {
         const profiles = stateCreator.profiles()
         InitAutonomousStateFriends(signal, friends, facebookShared.networkIdentifier)
         InitAutonomousStateProfiles(signal, profiles, facebookShared.networkIdentifier)
+        enableFbStyleTextPayloadReplace()
         return { friends, profiles }
     },
     injection: {
@@ -159,10 +174,8 @@ const facebookUI: SocialNetworkUI.Definition = {
                 image: true,
             },
         },
-        // Not supported yet
-        enhancedPostRenderer: undefined,
         userBadge: undefined,
-        searchResult: undefined,
+        searchResult: injectSearchResultBoxAtFacebook,
         setupPrompt: injectSetupPromptFacebook,
         commentComposition: {
             compositionBox: injectPostCommentsDefault(),
@@ -178,10 +191,17 @@ const facebookUI: SocialNetworkUI.Definition = {
                 },
             ),
         },
+        userAvatar: injectUserNFTAvatarAtFacebook,
+        enhancedProfileNFTAvatar: injectProfileNFTAvatarInFaceBook,
+        profileAvatar: injectNFTAvatarInFacebook,
+        openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
+        enhancedPostRenderer: injectPostReplacerAtFacebook,
         postInspector: injectPostInspectorFacebook,
         pageInspector: injectPageInspectorDefault(),
         setupWizard: createTaskStartSetupGuideDefault(),
         toolbox: injectToolboxAtFacebook,
+        profileTab: injectProfileTabAtFacebook,
+        profileTabContent: injectProfileTabContentAtFacebook,
     },
     configuration: {
         steganography: {
@@ -190,7 +210,7 @@ const facebookUI: SocialNetworkUI.Definition = {
             password() {
                 // ! Change this might be a breaking change !
                 return new ProfileIdentifier(
-                    'facebook.com',
+                    EnhanceableSite.Facebook,
                     ProfileIdentifier.getUserName(IdentityProviderFacebook.recognized.value.identifier) ||
                         ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
                         unreachable('Cannot figure out password' as never),

@@ -11,20 +11,18 @@ import {
     Theme,
     Toolbar,
     Typography,
-    // see https://github.com/import-js/eslint-plugin-import/issues/2288
-    // eslint-disable-next-line import/no-deprecated
     useMediaQuery,
     useTheme,
 } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Close as CloseIcon, Menu as MenuIcon } from '@mui/icons-material'
 import Color from 'color'
-import { ErrorBoundary } from '@masknet/shared'
 import { DashboardContext } from '../DashboardFrame/context'
 import { Navigation } from '../DashboardFrame/Navigation'
 import { MaskBannerIcon, MaskNotSquareIcon } from '@masknet/icons'
 import { FeaturePromotions } from './FeaturePromotions'
 import { DashboardRoutes } from '@masknet/shared-base'
+import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { NavigationVersionFooter } from '../NavigationVersionFooter'
 
 const featurePromotionsEnabled = [
@@ -132,8 +130,6 @@ export const PageFrame = memo((props: PageFrameProps) => {
     const location = useLocation()
     const left = typeof props.title === 'string' ? <Typography variant="h6">{props.title}</Typography> : props.title
     const right = props.primaryAction
-    // see https://github.com/import-js/eslint-plugin-import/issues/2288
-    // eslint-disable-next-line import/no-deprecated
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const { drawerOpen, toggleDrawer } = useContext(DashboardContext)
     const showFeaturePromotions = featurePromotionsEnabled.some((path: string) => path === location.pathname)

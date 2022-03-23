@@ -12,6 +12,7 @@ import {
     useWeb3State,
     Web3Plugin,
 } from '@masknet/plugin-infra'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { useDashboardI18N } from '../../../../locales'
 import { ChangeNetworkTip } from './ChangeNetworkTip'
 import { getTokenUSDValue } from '../../utils/getTokenUSDValue'
@@ -48,10 +49,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     chainIcon: {
         position: 'absolute',
-        right: -8,
+        right: -9,
         bottom: 0,
-        height: 16,
-        width: 16,
+        height: 18,
+        width: 18,
         border: `1px solid ${theme.palette.background.default}`,
         borderRadius: '50%',
     },
@@ -151,7 +152,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                         </span>
                     </Tooltip>
                     <Tooltip
-                        disableHoverListener={isOnCurrentChain}
+                        disableHoverListener={isOnCurrentChain || asset.token.chainId !== ChainId.Conflux}
                         disableTouchListener
                         title={<ChangeNetworkTip chainId={asset.token.chainId} />}
                         placement="top"
@@ -160,8 +161,12 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                         <span>
                             <Button
                                 size="small"
-                                style={!isOnCurrentChain ? { pointerEvents: 'none' } : {}}
-                                disabled={!isOnCurrentChain}
+                                style={
+                                    !isOnCurrentChain || asset.token.chainId === ChainId.Conflux
+                                        ? { pointerEvents: 'none' }
+                                        : {}
+                                }
+                                disabled={!isOnCurrentChain || asset.token.chainId === ChainId.Conflux}
                                 variant="outlined"
                                 color="secondary"
                                 onClick={onSwap}

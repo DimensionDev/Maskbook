@@ -8,7 +8,7 @@ export function useFungibleTokenBalance(
     address?: string,
     chainId?: ChainId,
 ) {
-    const r1 = useNativeTokenBalance()
+    const r1 = useNativeTokenBalance(chainId)
     const r2 = useERC20TokenBalance(type === EthereumTokenType.ERC20 ? address : undefined, chainId)
 
     const type_ = type

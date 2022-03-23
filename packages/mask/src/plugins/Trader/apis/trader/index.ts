@@ -18,6 +18,7 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
                 TradeProvider.ONE_INCH,
                 TradeProvider.BANCOR,
                 TradeProvider.OPENOCEAN,
+                TradeProvider.MDEX,
             ]
         case NetworkType.Polygon:
             return [
@@ -38,11 +39,12 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
                 TradeProvider.ZRX,
                 TradeProvider.ONE_INCH,
                 TradeProvider.OPENOCEAN,
+                TradeProvider.MDEX,
             ]
         case NetworkType.Arbitrum:
             return [TradeProvider.UNISWAP_V3, TradeProvider.OPENOCEAN, TradeProvider.DODO, TradeProvider.ONE_INCH]
         case NetworkType.xDai:
-            return [TradeProvider.SUSHISWAP]
+            return [TradeProvider.SUSHISWAP, TradeProvider.OPENOCEAN]
         case NetworkType.Avalanche:
             return [
                 TradeProvider.SUSHISWAP,
@@ -63,6 +65,7 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
         case NetworkType.Fuse:
         case NetworkType.Metis:
         case NetworkType.Optimistic:
+        case NetworkType.Conflux:
             console.error('To be implement network: ', networkType)
             return []
         default:

@@ -2,7 +2,8 @@ import { FC, memo } from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import { EMPTY_LIST, ProviderType, TransactionStatusType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { FormattedAddress, LoadingAnimation, useRemoteControlledDialog, WalletIcon } from '@masknet/shared'
+import { FormattedAddress, LoadingAnimation, WalletIcon } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
     useNetworkDescriptor,
     useProviderDescriptor,
@@ -143,7 +144,12 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
                     direction="row"
                     alignItems="center"
                     justifyContent="center"
-                    sx={{ px: 2, background: MaskColorVar.orangeMain.alpha(0.1), color: MaskColorVar.orangeMain }}
+                    sx={{
+                        borderRadius: 9999,
+                        px: 2,
+                        background: MaskColorVar.orangeMain.alpha(0.1),
+                        color: MaskColorVar.orangeMain,
+                    }}
                     className={classes.bar}>
                     <LoadingAnimation sx={{ fontSize: 12, mr: 0.8, color: MaskColorVar.orangeMain }} />
                     <Typography component="span" fontSize={12} display="inline-block">

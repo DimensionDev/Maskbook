@@ -1,4 +1,4 @@
-import type { TypedMessage } from '../TypedMessage'
+import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier/type'
 import type { RelationFavor } from '../Persona/type'
 import type { Appearance, LanguageOptions, DataProvider } from '../../../public-api/src/web'
@@ -35,13 +35,16 @@ export interface MaskSNSEvents {
     // TODO: Maybe in-page UI related messages should use Context instead of messages?
     autoPasteFailed: AutoPasteFailedEvent
     requestComposition: CompositionRequest
-    replaceComposition: TypedMessage
+    replaceComposition: SerializableTypedMessages
     // TODO: move to plugin message
     profileTabUpdated: ProfileNFTsPageEvent
+    profileTabHidden: { hidden: boolean }
     // TODO: move to plugin message
     profileNFTsTabUpdated: 'reset'
     NFTAvatarUpdated: NFTAvatarEvent
     NFTAvatarTimelineUpdated: NFTAvatarEvent
+    nftAvatarSettingDialogUpdated: NFTAvatarSettingDialogEvent
+    Native_visibleSNS_currentDetectedProfileUpdated: string
 }
 
 export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, MaskSNSEvents {
@@ -56,6 +59,7 @@ export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, Ma
     /** emit when the settings finished syncing with storage. */
     createInternalSettingsUpdated: SettingsUpdateEvent
     ownPersonaChanged: void
+    ownProofChanged: void
     restoreSuccess: void
     profilesChanged: UpdateEvent<ProfileIdentifier>[]
     relationsChanged: RelationChangedEvent[]
@@ -66,6 +70,8 @@ export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, Ma
     maskSDKHotModuleReload: void
     __kv_backend_persistent__: [string, unknown]
     __kv_backend_in_memory__: [string, unknown]
+    /** @deprecated do not use it in new code. */
+    wallet_is_locked: ['request'] | ['response', boolean]
 }
 
 export interface UpdateEvent<Data> {
@@ -74,13 +80,17 @@ export interface UpdateEvent<Data> {
 }
 
 export interface CompositionRequest {
-    readonly reason: 'timeline' | 'popup'
+    readonly reason: 'timeline' | 'popup' | 'reply'
     readonly open: boolean
-    readonly content?: TypedMessage
+    readonly content?: SerializableTypedMessages
     readonly options?: {
         target?: 'E2E' | 'Everyone'
         startupPlugin?: string
     }
+}
+
+export interface NFTAvatarSettingDialogEvent {
+    open: boolean
 }
 
 export interface SettingsUpdateEvent {

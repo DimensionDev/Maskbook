@@ -9,7 +9,7 @@ import { pasteTextToCompositionTwitter } from './automation/pasteTextToCompositi
 import { gotoNewsFeedPageTwitter } from './automation/gotoNewsFeedPage'
 import { gotoProfilePageTwitter } from './automation/gotoProfilePage'
 import { IdentityProviderTwitter, CurrentVisitingIdentityProviderTwitter } from './collecting/identity'
-import { PostProviderTwitter } from './collecting/post'
+import { collectVerificationPost, PostProviderTwitter } from './collecting/post'
 import { PaletteModeProviderTwitter, useThemeTwitterVariant } from './customization/custom'
 import { injectToolboxHintAtTwitter } from './injection/ToolboxHint'
 import { i18NOverwriteTwitter } from './customization/i18n'
@@ -25,15 +25,18 @@ import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/
 import { injectMaskUserBadgeAtTwitter } from './injection/MaskIcon'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector'
-import { ProfileIdentifier } from '@masknet/shared-base'
+import { injectPostActionsAtTwitter } from './injection/PostActions'
+import { NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { unreachable } from '@dimensiondev/kit'
 import { makeStyles } from '@masknet/theme'
 import { injectNFTAvatarInTwitter } from './injection/NFT/NFTAvatarInTwitter'
+import { injectOpenTipButtonOnProfile } from './injection/Tip/index'
 import { injectProfileNFTAvatarInTwitter } from './injection/NFT/ProfileNFTAvatar'
 import { injectUserNFTAvatarAtTwitter } from './injection/NFT/Avatar'
 import { injectOpenNFTAvatarEditProfileButton } from './injection/NFT/NFTAvatarEditProfile'
 import { injectUserNFTAvatarAtTweet } from './injection/NFT/TweetNFTAvatar'
-import { injectNFTContractAtTwitter } from './injection/NFT/NFTContract'
+import { injectNFTAvatarClipInTwitter } from './injection/NFT/NFTAvatarClip'
+import { TwitterRenderFragments } from './customization/render-fragments'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -135,6 +138,7 @@ const twitterUI: SocialNetworkUI.Definition = {
             InjectedDialog: {
                 classes: useInjectedDialogClassesOverwriteTwitter,
             },
+            RenderFragments: TwitterRenderFragments,
         },
         useTheme: useThemeTwitterVariant,
         i18nOverwrite: i18NOverwriteTwitter,
@@ -155,6 +159,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         enhancedPostRenderer: injectPostReplacerAtTwitter,
         pageInspector: injectPageInspectorDefault(),
         postInspector: injectPostInspectorAtTwitter,
+        postActions: injectPostActionsAtTwitter,
         setupPrompt: injectSetupPromptAtTwitter,
         newPostComposition: {
             start: injectPostBoxComposed,
@@ -173,11 +178,17 @@ const twitterUI: SocialNetworkUI.Definition = {
         userAvatar: injectUserNFTAvatarAtTwitter,
         enhancedProfileNFTAvatar: injectProfileNFTAvatarInTwitter,
         profileAvatar: injectNFTAvatarInTwitter,
+        profileTip: injectOpenTipButtonOnProfile,
         openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
         postAndReplyNFTAvatar: injectUserNFTAvatarAtTweet,
-        collectionAvatar: injectNFTContractAtTwitter,
+        avatarClipNFT: injectNFTAvatarClipInTwitter,
     },
     configuration: {
+        nextIDConfig: {
+            enable: true,
+            platform: NextIDPlatform.Twitter,
+            collectVerificationPost,
+        },
         steganography: {
             password() {
                 // ! Change this might be a breaking change !
@@ -191,4 +202,5 @@ const twitterUI: SocialNetworkUI.Definition = {
         },
     },
 }
+
 export default twitterUI

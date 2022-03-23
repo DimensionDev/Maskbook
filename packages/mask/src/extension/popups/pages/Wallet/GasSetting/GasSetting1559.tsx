@@ -20,7 +20,7 @@ import { StyledInput } from '../../../components/StyledInput'
 import { LoadingButton } from '@mui/lab'
 import { isEmpty } from 'lodash-unified'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { PopupRoutes } from '@masknet/shared-base'
 import { toHex, fromWei } from 'web3-utils'
@@ -117,7 +117,7 @@ export const GasSetting1559 = memo(() => {
     const { classes } = useStyles()
     const web3 = useWeb3()
     const chainId = useChainId()
-    const history = useHistory()
+    const navigate = useNavigate()
     const [selected, setOption] = useState<number | null>(null)
     const [getGasLimitError, setGetGasLimitError] = useState(false)
     const { value: nativeToken } = useNativeTokenDetailed()
@@ -278,15 +278,15 @@ export const GasSetting1559 = memo(() => {
             const config = value.payload.params.map((param) => ({
                 ...param,
                 gas: toHex(new BigNumber(data.gasLimit).toString()),
-                maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toString()),
-                maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toString()),
+                maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
+                maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
             }))
 
             await WalletRPC.updateUnconfirmedRequest({
                 ...value.payload,
                 params: config,
             })
-            history.goBack()
+            navigate(-1)
         },
         [value, history],
     )
@@ -328,7 +328,7 @@ export const GasSetting1559 = memo(() => {
     // #region If the payload is consumed it needs to be redirected
     useUpdateEffect(() => {
         if (!value && !getValueLoading) {
-            history.replace(PopupRoutes.Wallet)
+            navigate(PopupRoutes.Wallet, { replace: true })
         }
     }, [value, getValueLoading])
     // #endregion

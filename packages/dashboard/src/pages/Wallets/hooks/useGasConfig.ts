@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { toHex } from 'web3-utils'
 import BigNumber from 'bignumber.js'
 import { formatGweiToWei, GasOption, isEIP1559Supported, useChainId, useGasPrice } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useGasOptions } from '../../../hooks/useGasOptions'
 
@@ -66,7 +66,7 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
         } else {
             setCustomGasPrice(gasOptions.medium as number)
         }
-    }, [chainId])
+    }, [chainId, gasOptions?.medium])
 
     const gasConfig = useMemo(() => {
         return is1559Supported

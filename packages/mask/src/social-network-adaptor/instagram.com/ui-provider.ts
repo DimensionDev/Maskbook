@@ -3,11 +3,16 @@ import { instagramShared } from './shared'
 import { instagramBase } from './base'
 import { IdentityProviderInstagram } from './collecting/identity-provider'
 import { PostProviderInstagram } from './collecting/posts'
-import { createTaskStartSetupGuideDefault } from '../../social-network/defaults'
+import { createTaskStartSetupGuideDefault, InitAutonomousStateProfiles } from '../../social-network/defaults'
 import { pasteInstagram } from '@masknet/injected-script'
 import { injectPostInspectorInstagram } from './injection/post-inspector'
-import { newPostCompositionInstagram } from './injection/newPostComposition'
-import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles'
+import { CurrentVisitingIdentityProviderInstagram } from './collecting/identity'
+import { injectProfileNFTAvatarInInstagram } from './injection/NFT/ProfileNFTAvatar'
+import { injectNFTAvatarInInstagram } from './injection/NFT/NFTAvatarInInstagram'
+import { injectOpenNFTAvatarEditProfileButton } from './injection/NFT/NFTAvatarEditProfile'
+import { injectUserNFTAvatarAtInstagram } from './injection/NFT/NFTAvatarInTimeline'
+import { injectProfileTabAtInstagram } from './injection/ProfileTab'
+import { injectProfileTabContentAtInstagram } from './injection/ProfileTabContent'
 
 const define: SocialNetworkUI.Definition = {
     ...instagramShared,
@@ -22,6 +27,7 @@ const define: SocialNetworkUI.Definition = {
     },
     collecting: {
         identityProvider: IdentityProviderInstagram,
+        currentVisitingIdentityProvider: CurrentVisitingIdentityProviderInstagram,
         postsProvider: PostProviderInstagram,
     },
     configuration: {
@@ -40,11 +46,17 @@ const define: SocialNetworkUI.Definition = {
     injection: {
         setupWizard: createTaskStartSetupGuideDefault(),
         postInspector: injectPostInspectorInstagram,
-        newPostComposition: {
+        profileAvatar: injectNFTAvatarInInstagram,
+        enhancedProfileNFTAvatar: injectProfileNFTAvatarInInstagram,
+        openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
+        userAvatar: injectUserNFTAvatarAtInstagram,
+        profileTab: injectProfileTabAtInstagram,
+        profileTabContent: injectProfileTabContentAtInstagram,
+        /* newPostComposition: {
             start: newPostCompositionInstagram,
             supportedInputTypes: { text: true, image: true },
             supportedOutputTypes: { text: false, image: true },
-        },
+        },*/
     },
 }
 export default define

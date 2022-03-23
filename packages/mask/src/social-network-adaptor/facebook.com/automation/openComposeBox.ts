@@ -1,8 +1,8 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
 import { MaskMessages, CompositionRequest } from '../../../utils/messages'
 import { i18n } from '../../../../shared-ui/locales_legacy'
-import { untilDocumentReady } from '../../../utils/dom'
-import { makeTypedMessageText, TypedMessage, delay } from '@masknet/shared-base'
+import { makeTypedMessageText, SerializableTypedMessages } from '@masknet/typed-message'
+import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
 
 const nativeComposeButtonSelector = () =>
     new LiveSelector()
@@ -35,10 +35,10 @@ const nativeComposeDialogIndicatorSelector = () =>
     )
 
 export async function taskOpenComposeBoxFacebook(
-    content: string | TypedMessage,
+    content: string | SerializableTypedMessages,
     options?: CompositionRequest['options'],
 ) {
-    await untilDocumentReady()
+    await waitDocumentReadyState('interactive')
     await delay(200)
 
     // active the compose dialog

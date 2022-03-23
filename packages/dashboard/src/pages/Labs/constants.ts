@@ -30,6 +30,7 @@ export const TUTORIAL_URLS_EN: TUTORIAL_URLS_OPT = {
         'https://realmasknetwork.notion.site/Cultivate-a-weekly-saving-habit-via-GoodGhosting-on-Twitter-Polygon-only-f94aa38b01404b9c99c7a03935840962',
     [PluginId.MaskBox]:
         'https://realmasknetwork.notion.site/How-to-participate-in-a-MaskBox-sale-d0941687649a4ef7a38d71f23ecbe4da',
+    [PluginId.CyberConnect]: 'https://cyberconnect.me',
 }
 
 export const TUTORIAL_URLS_CN: TUTORIAL_URLS_OPT = {
@@ -47,4 +48,5 @@ export const TUTORIAL_URLS_CN: TUTORIAL_URLS_OPT = {
     [PluginId.Valuables]: 'https://realmaskbook.notion.site/Mask-Valuables-NFT-fb0654509984448295e71aab90221d2c',
     [PluginId.Poll]: '',
     [PluginId.Pets]: '',
+    [PluginId.CyberConnect]: 'https://cyberconnect.me',
 }

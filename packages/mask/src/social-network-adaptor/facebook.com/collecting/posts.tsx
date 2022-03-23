@@ -3,7 +3,12 @@ import type { SocialNetworkUI as Next } from '../../../social-network/types'
 import { creator } from '../../../social-network/utils'
 import { isMobileFacebook } from '../utils/isMobile'
 import { getProfileIdentifierAtFacebook } from '../utils/getProfileIdentifier'
-import { TypedMessage, makeTypedMessageText, makeTypedMessageImage, makeTypedMessageTuple } from '@masknet/shared-base'
+import {
+    TypedMessage,
+    makeTypedMessageText,
+    makeTypedMessageImage,
+    makeTypedMessageTuple,
+} from '@masknet/typed-message'
 import { clickSeeMore } from '../injection/PostInspector'
 import { startWatch } from '../../../utils/watcher'
 import { facebookShared } from '../shared'
@@ -13,7 +18,7 @@ import { collectNodeText } from '../../../utils'
 import { None, Some, Option } from 'ts-results'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
-    isMobileFacebook ? '.story_body_container > div' : '[role=article] [data-ad-preview="message"]',
+    isMobileFacebook ? '.story_body_container > div' : '[role=article] div[dir="auto"] > [id] > div > div',
 )
 
 export const PostProviderFacebook: Next.CollectingCapabilities.PostsProvider = {
@@ -34,13 +39,13 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
         new MutationObserverWatcher(posts).useForeach((node, key, metadata) => {
             const root = new LiveSelector()
                 .replace(() => [metadata.realCurrent])
-                .closest('[role=article]')
-                .map((x) => x.parentElement?.parentElement?.parentElement)
+                .closest('[role=article] div[dir="auto"] > [id] > div > div')
+
             const rootProxy = DOMProxy({
                 afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode },
                 beforeShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode },
             })
-            rootProxy.realCurrent = root.evaluate()[0]
+            rootProxy.realCurrent = root.evaluate()[0] as HTMLElement
 
             // ? inject after comments
             const commentSelectorPC = root
@@ -80,7 +85,7 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
 
             store.set(metadata, postInfo)
             function collectPostInfo() {
-                rootProxy.realCurrent = root.evaluate()[0]
+                rootProxy.realCurrent = root.evaluate()[0] as HTMLElement
                 const nextTypedMessage: TypedMessage[] = []
                 info.postBy.value = getPostBy(
                     metadata,

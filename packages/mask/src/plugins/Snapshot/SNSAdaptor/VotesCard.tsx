@@ -6,11 +6,11 @@ import {
     formatPercentage,
 } from '@masknet/web3-shared-evm'
 import { Avatar, Badge, Box, Link, List, ListItem, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import classNames from 'classnames'
 import millify from 'millify'
 import { useContext } from 'react'
-import { useI18N, ShadowRootTooltip } from '../../../utils'
+import { useI18N } from '../../../utils'
 import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie'
 import { SnapshotContext } from '../context'
 import { useRetry } from './hooks/useRetry'
@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'space-between',
             borderBottom: `1px solid ${theme.palette.divider}`,
         },
-        anchorTopRight: {
+        badge: {
             transform: 'translateX(40px) translateY(2.5px)',
         },
         avatarWrapper: {
@@ -86,11 +86,7 @@ function Content() {
     return (
         <SnapshotCard
             title={
-                <Badge
-                    max={9999999}
-                    classes={{ anchorOriginTopRightRectangular: classes.anchorTopRight }}
-                    badgeContent={votes.length}
-                    color="primary">
+                <Badge max={9999999} classes={{ badge: classes.badge }} badgeContent={votes.length} color="primary">
                     {t('plugin_snapshot_votes_title')}
                 </Badge>
             }>

@@ -22,8 +22,9 @@ import {
     useWeb3State,
     useReverseAddress,
 } from '@masknet/plugin-infra'
-import { useCallback, useMemo } from 'react'
-import { useRemoteControlledDialog, WalletIcon } from '@masknet/shared'
+import { useCallback, useEffect, useMemo } from 'react'
+import { WalletIcon } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
 import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
@@ -33,6 +34,7 @@ import { MaskFilledIcon } from '../../resources/MaskIcon'
 import { makeStyles } from '@masknet/theme'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
+import { NextIDVerificationStatus, useNextIDConnectStatus } from '../DataSource/useNextID'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -83,6 +85,7 @@ export interface ToolboxHintProps {
 }
 export function ToolboxHintUnstyled(props: ToolboxHintProps) {
     const { t } = useI18N()
+    const nextIDConnectStatus = useNextIDConnectStatus()
     const {
         ListItemButton = MuiListItemButton,
         ListItemText = MuiListItemText,
@@ -108,6 +111,15 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
             : walletTitle
     }, [personaConnectStatus, walletTitle, t])
 
+    useEffect(() => {
+        if (personaConnectStatus.action) return
+        const { status, isVerified, action } = nextIDConnectStatus
+        if (isVerified || status === NextIDVerificationStatus.WaitingLocalConnect) return
+        if (action) {
+            action()
+        }
+    }, [nextIDConnectStatus.status])
+
     const onClick = () => {
         personaConnectStatus.action ? personaConnectStatus.action() : openWallet()
     }
@@ -124,6 +136,7 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
                                     badgeSize={badgeSize}
                                     networkIcon={providerDescriptor?.icon} // switch the icon to meet design
                                     providerIcon={networkDescriptor?.icon}
+                                    isBorderColorNotDefault
                                 />
                             ) : (
                                 <MaskFilledIcon size={iconSize} />

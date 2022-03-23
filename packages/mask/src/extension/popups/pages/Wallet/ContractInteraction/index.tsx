@@ -1,6 +1,6 @@
 import { memo, useMemo, useState } from 'react'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import {
@@ -11,7 +11,6 @@ import {
     formatWeiToEther,
     getChainIdFromNetworkType,
     isEIP1559Supported,
-    NetworkType,
     useChainId,
     useERC20TokenDetailed,
     useNativeTokenDetailed,
@@ -143,7 +142,7 @@ const ContractInteraction = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const location = useLocation()
-    const history = useHistory()
+    const navigate = useNavigate()
     const chainId = useChainId()
     const networkType = useNetworkType()
     const [transferError, setTransferError] = useState(false)
@@ -237,14 +236,14 @@ const ContractInteraction = memo(() => {
 
     // gas price
     const { value: defaultPrices } = useAsync(async () => {
-        if (networkType === NetworkType.Ethereum && !maxFeePerGas && !maxPriorityFeePerGas) {
+        if (isEIP1559Supported(chainId) && !maxFeePerGas && !maxPriorityFeePerGas) {
             const response = await WalletRPC.getEstimateGasFees(chainId)
             // Gwei to wei
             return {
                 maxPriorityFeePerGas: toHex(
-                    formatGweiToWei(response?.medium?.suggestedMaxPriorityFeePerGas ?? 0).toString(),
+                    formatGweiToWei(response?.medium?.suggestedMaxPriorityFeePerGas ?? 0).toFixed(0),
                 ),
-                maxFeePerGas: toHex(formatGweiToWei(response?.medium?.suggestedMaxFeePerGas ?? 0).toString()),
+                maxFeePerGas: toHex(formatGweiToWei(response?.medium?.suggestedMaxFeePerGas ?? 0).toFixed(0)),
             }
         } else if (!gasPrice) {
             const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
@@ -260,7 +259,7 @@ const ContractInteraction = memo(() => {
         if (request) {
             try {
                 await Services.Ethereum.confirmRequest(request.payload)
-                history.goBack()
+                navigate(-1)
             } catch (error_) {
                 setTransferError(true)
             }
@@ -271,7 +270,7 @@ const ContractInteraction = memo(() => {
     const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
         if (!request) return
         await Services.Ethereum.rejectRequest(request.payload)
-        history.replace(PopupRoutes.Wallet)
+        navigate(PopupRoutes.Wallet, { replace: true })
     }, [request])
 
     // Wei
@@ -312,7 +311,7 @@ const ContractInteraction = memo(() => {
 
     useUpdateEffect(() => {
         if (!request && !requestLoading) {
-            history.replace(PopupRoutes.Wallet)
+            navigate(PopupRoutes.Wallet, { replace: true })
         }
     }, [request, requestLoading])
 
@@ -380,7 +379,7 @@ const ContractInteraction = memo(() => {
                             />
                             <Link
                                 component="button"
-                                onClick={() => history.push(PopupRoutes.GasSetting)}
+                                onClick={() => navigate(PopupRoutes.GasSetting)}
                                 style={{ marginLeft: 10, fontSize: 'inherit', lineHeight: 'inherit' }}>
                                 {t('popups_wallet_contract_interaction_edit')}
                             </Link>

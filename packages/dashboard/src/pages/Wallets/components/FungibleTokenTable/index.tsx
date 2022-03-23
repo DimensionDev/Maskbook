@@ -7,7 +7,7 @@ import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { FungibleTokenTableRow } from '../FungibleTokenTableRow'
 import { useWeb3State } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginMessages } from '../../../../API'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { useNavigate } from 'react-router-dom'
@@ -95,10 +95,10 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
         openSwapDialog({
             open: true,
             traderProps: {
-                coin: {
+                defaultInputCoin: {
                     id: token.id,
-                    name: token.name ?? '',
-                    symbol: token.symbol ?? '',
+                    name: token.name || '',
+                    symbol: token.symbol || '',
                     contract_address: token.address,
                     decimals: token.decimals,
                 },

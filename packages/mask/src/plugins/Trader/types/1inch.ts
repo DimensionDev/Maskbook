@@ -64,6 +64,11 @@ export interface SwapOneValidationErrorResponse {
 
 export interface SwapOneServerErrorResponse {
     reason: string
+    validationErrors: {
+        code: number
+        field: string
+        reason: string
+    }[]
 }
 
 export type SwapOneErrorResponse = SwapOneValidationErrorResponse | SwapOneServerErrorResponse

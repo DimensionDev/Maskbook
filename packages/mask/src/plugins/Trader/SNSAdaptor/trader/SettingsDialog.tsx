@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import { Accordion, AccordionDetails, AccordionSummary, Alert, DialogContent, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
-import { useValueRef, useRemoteControlledDialog } from '@masknet/shared'
+import { useValueRef, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../../utils'
 import { SlippageSlider } from './SlippageSlider'
 import { currentSlippageSettings } from '../../settings'
@@ -10,7 +10,7 @@ import { PluginTraderMessages } from '../../messages'
 import { ExpandMore } from '@mui/icons-material'
 import { Gas1559Settings } from './Gas1559Settings'
 import { GasPrior1559Settings } from './GasPrior1559Settings'
-import { GasOptionConfig, NetworkType, useNetworkType } from '@masknet/web3-shared-evm'
+import { GasOptionConfig, isEIP1559Supported, useChainId } from '@masknet/web3-shared-evm'
 import { InfoIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => {
@@ -62,7 +62,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const slippage = useValueRef(currentSlippageSettings)
-    const networkType = useNetworkType()
+    const chainId = useChainId()
 
     const [gasConfig, setGasConfig] = useState<GasOptionConfig>()
     const [unconfirmedSlippage, setUnconfirmedSlippage] = useState(slippage)
@@ -115,7 +115,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
                         </Alert>
                     ) : null}
                 </Accordion>
-                {networkType === NetworkType.Ethereum ? (
+                {isEIP1559Supported(chainId) ? (
                     <Gas1559Settings
                         onCancel={closeDialog}
                         onSave={onSubmit}

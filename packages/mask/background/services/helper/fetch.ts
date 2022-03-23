@@ -1,9 +1,10 @@
-export async function fetch(url: string) {
+export async function fetch(url: string): Promise<Blob> {
     const res = await globalThis.fetch(url)
     return res.blob()
 }
 
-export async function fetchJSON<T = unknown>(url: string): Promise<T> {
+/** @deprecated */
+export async function fetchJSON(url: string): Promise<unknown> {
     const res = await globalThis.fetch(url)
     return res.json()
 }

@@ -9,12 +9,11 @@ import {
     useTokenTransferCallback,
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Image } from '../../../../components/shared/Image'
 import { WalletMessages } from '../../../../plugins/Wallet/messages'
 import { MaskIconOutlined } from '../../../../resources/MaskIcon'
 import { CollectibleContext } from '../../DashboardComponents/CollectibleList'
-// eslint-disable-next-line import/no-deprecated
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 
 const useTransferDialogStylesNFT = makeStyles()((theme) => ({
@@ -31,7 +30,6 @@ const useTransferDialogStylesNFT = makeStyles()((theme) => ({
     },
 }))
 
-// eslint-disable-next-line import/no-deprecated
 export function DashboardWalletTransferDialogNFT(props: WrappedDialogProps<{ token: ERC721TokenDetailed }>) {
     const { token } = props.ComponentProps!
     const { onClose } = props

@@ -1,8 +1,4 @@
 {
-    "error_boundary_crash_title": "{{subject}} has an error",
-    "error_boundary_try_to_recover": "Try to recover",
-    "error_boundary_report_github": "Report on GitHub",
-    "error_boundary_report_email": "Report by Email",
     "snackbar_done": "Done",
     "import": "Import",
     "balance": "Balance",
@@ -22,5 +18,6 @@
     "address_viewer_address_name_uns": "UNS",
     "address_viewer_address_name_dns": "DNS",
     "address_viewer_address_name_rns": "RNS",
-    "address_viewer_address_name_address": "address"
+    "address_viewer_address_name_address": "address",
+    "address_viewer_address_name_twitter": "twitter blue"
 }

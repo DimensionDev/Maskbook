@@ -14,4 +14,5 @@ export const ONE_INCH_BASE_URL: Record<NetworkType, string> = {
     [NetworkType.Fuse]: 'https://api.1inch.exchange/v4.0/122/',
     [NetworkType.Metis]: 'https://api.1inch.exchange/v4.0/1088/',
     [NetworkType.Optimistic]: 'https://api.1inch.exchange/v4.0/10/',
+    [NetworkType.Conflux]: '',
 }

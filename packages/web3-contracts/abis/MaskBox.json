@@ -311,6 +311,11 @@
                 "internalType": "uint256",
                 "name": "holder_min_token_amount",
                 "type": "uint256"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "qualification_data",
+                "type": "bytes32"
             }
         ],
         "name": "createBox",
@@ -362,6 +367,11 @@
                 "internalType": "uint256",
                 "name": "holder_min_token_amount",
                 "type": "uint256"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "qualification_data",
+                "type": "bytes32"
             }
         ],
         "stateMutability": "view",
@@ -537,6 +547,19 @@
                 "type": "address[]"
             }
         ],
+        "name": "removeAdmin",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address[]",
+                "name": "addrs",
+                "type": "address[]"
+            }
+        ],
         "name": "removeWhitelist",
         "outputs": [],
         "stateMutability": "nonpayable",
@@ -545,6 +568,24 @@
     {
         "inputs": [],
         "name": "renounceOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "box_id",
+                "type": "uint256"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "qualification_data",
+                "type": "bytes32"
+            }
+        ],
+        "name": "setQualificationData",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"

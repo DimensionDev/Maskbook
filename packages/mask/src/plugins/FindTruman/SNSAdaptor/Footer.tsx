@@ -29,6 +29,7 @@ export default function Footer() {
         <Box className={classes.footer}>
             {consts && (
                 <Link
+                    rel="noopener noreferrer"
                     component="a"
                     target="_blank"
                     href={consts.faqUrl}

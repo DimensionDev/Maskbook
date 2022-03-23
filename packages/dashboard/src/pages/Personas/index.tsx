@@ -14,7 +14,7 @@ import { PersonaContent } from './components/PersonaContent'
 import { PersonaRowCard } from './components/PersonaCard/Row'
 import { PersonaStateBar } from './components/PersonaStateBar'
 import { UserProvider } from '../Settings/hooks/UserContext'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -90,7 +90,7 @@ function Personas() {
                                     key={networkIdentifier}
                                     value={networkIdentifier}
                                     // They should be localized
-                                    label={capitalize(networkIdentifier.replace('.com', ''))}
+                                    label={capitalize(networkIdentifier.split('.')[0])}
                                 />
                             ))}
                         </Tabs>

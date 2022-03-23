@@ -11,7 +11,8 @@ import { useCallback, useEffect, useState } from 'react'
 import { calculateNextPrize, calculateSecondsRemaining, getPrizePeriod } from '../utils'
 import { NetworkView } from './NetworkView'
 import { useI18N } from '../../../utils'
-import { TokenIcon, useRemoteControlledDialog } from '@masknet/shared'
+import { TokenIcon } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -261,7 +262,7 @@ export function PoolView(props: PoolProps) {
                 </Grid>
                 <Grid item>
                     <Button className={classes.deposit} variant="contained" fullWidth size="small" onClick={onDeposit}>
-                        {t('plugin_pooltogether_deposit', { token: token.symbol })}
+                        {t('plugin_pooltogether_deposit', { token: token.symbol ?? '' })}
                     </Button>
                 </Grid>
                 <Grid container item className={classes.info}>

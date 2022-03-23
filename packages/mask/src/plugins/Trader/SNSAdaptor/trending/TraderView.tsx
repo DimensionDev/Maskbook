@@ -123,7 +123,7 @@ export function TraderView(props: TraderViewProps) {
 
     // #region merge trending
     const coinId = usePreferredCoinId(name, dataProvider)
-    const trendingById = useTrendingById(name ? '' : coinId, dataProvider)
+    const trendingById = useTrendingById(coinId, dataProvider)
     const trendingByKeyword = useTrendingByKeyword(tagType, coinId ? '' : name, dataProvider)
     const {
         value: { currency, trending },

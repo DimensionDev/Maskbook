@@ -16,20 +16,22 @@ function awaitChildProcess(child) {
     })
 }
 
+const version = JSON.parse(await readFile(join(__dirname, 'package.json'), 'utf-8')).version
+const buildVersion = process.env.BUILD_VERSION ?? formatDate(Date.now(), 'yyyymmddHHMMss')
+const fullVersion = `${version}-${buildVersion}`
+
 const rollup = awaitChildProcess(
-    spawn('pnpm run build:rollup', {
+    spawn(`PROXY_VERSION=${fullVersion} pnpm run build:rollup`, {
         cwd: __dirname,
         shell: true,
         stdio: 'inherit',
     }),
 )
 await rollup
-const version = JSON.parse(await readFile(join(__dirname, 'package.json'), 'utf-8')).version
-const buildVersion = process.env.BUILD_VERSION ?? formatDate(Date.now(), 'yyyymmddHHMMss')
 const packageJSON = {
     name: '@dimensiondev/provider-proxy',
     repository: 'https://github.com/DimensionDev/Maskbook',
-    version: `${version}-${buildVersion}`,
+    version: fullVersion,
     dependencies: {
         // 'wallet.ts': '1.0.1',
         'bignumber.js': '9.0.1',

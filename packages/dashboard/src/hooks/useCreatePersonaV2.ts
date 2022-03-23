@@ -1,4 +1,4 @@
-import { delay } from '@masknet/shared-base'
+import { delay } from '@dimensiondev/kit'
 import { Messages, Services } from '../API'
 
 export function useCreatePersonaV2() {

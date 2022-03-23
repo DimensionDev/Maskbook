@@ -1,6 +1,3 @@
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { isTwitter } from '../base'
-
 /**
  * Listing all possible pathnames start from /search that the search box will keep existing on twitter.
  * That means the keyword will not be cleaned and related components keep injecting.
@@ -17,9 +14,8 @@ const SAFE_PATHNAMES_ON_TWITTER = [
 ]
 
 export default function getSearchedKeywordAtTwitter(): string {
-    if (!isTwitter(activatedSocialNetworkUI)) return ''
     const params = new URLSearchParams(location.search)
-    const hashTagMatched = location.pathname.match(/\/hashtag\/([A-Za-z]+)/)
+    const hashTagMatched = location.pathname.match(/\/hashtag\/([\dA-Za-z]+)/)
     const isTabAvailable = ['top'].includes(params.get('f') ?? '')
     if (location.pathname === '/search' && (!params.get('f') || isTabAvailable))
         return decodeURIComponent(params.get('q') ?? '')

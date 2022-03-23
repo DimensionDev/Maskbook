@@ -55,9 +55,10 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
     }
 
     for (const [_, x] of data.wallets.entries()) {
-        const record = WalletRecordFromJSONFormat(x)
-        const name = record.name
         try {
+            const record = WalletRecordFromJSONFormat(x)
+            const name = record.name
+
             if (record.storedKeyInfo && record.derivationPath)
                 await addWallet(record.address, name, record.derivationPath, record.storedKeyInfo)
             else if (record.privateKey) await recoverWalletFromPrivateKey(name, record.privateKey)
@@ -73,6 +74,7 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
             }
         } catch (error) {
             console.error(error)
+            continue
         }
     }
     {

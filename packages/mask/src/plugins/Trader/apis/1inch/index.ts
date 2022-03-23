@@ -5,12 +5,11 @@ import type {
     SwapOneErrorResponse,
     SwapQuoteOneResponse,
     SwapQuoteOneRequest,
-    SwapOneServerErrorResponse,
-    SwapOneValidationErrorResponse,
 } from '../../types'
 import urlcat from 'urlcat'
 
 import { getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared-evm'
+import { fetchJSON } from '@masknet/web3-providers'
 
 export async function swapOneQuote(request: SwapQuoteOneRequest) {
     const params: Record<string, string | number> = {}
@@ -21,16 +20,13 @@ export async function swapOneQuote(request: SwapQuoteOneRequest) {
 
     const netType: NetworkType = getNetworkTypeFromChainId(request.chainId)!
 
-    const response = await fetch(urlcat(ONE_INCH_BASE_URL[netType], 'swap', params))
-    const response_ = (await response.json()) as SwapQuoteOneResponse | SwapOneErrorResponse
+    const response_ = await fetchJSON<SwapQuoteOneResponse | SwapOneErrorResponse>(
+        urlcat(ONE_INCH_BASE_URL[netType], 'swap', params),
+    )
 
-    const validationErrorResponse = response_ as SwapOneValidationErrorResponse
-    if (validationErrorResponse.code)
-        throw new Error(first(validationErrorResponse.validationErrors)?.reason ?? 'Unknown Error')
+    if ('code' in response_) throw new Error(first(response_.validationErrors)?.reason ?? 'Unknown Error')
 
-    const serverErrorResponse = response_ as SwapOneServerErrorResponse
-    if (serverErrorResponse.reason)
-        throw new Error(first(validationErrorResponse.validationErrors)?.reason || 'Unknown Error')
+    if ('reason' in response_) throw new Error(first(response_.validationErrors)?.reason || 'Unknown Error')
 
     const successResponse = response_ as SwapQuoteOneResponse
     return successResponse

@@ -24,5 +24,8 @@
     "drop_here": "Drop a file here to upload",
     "error_101": "The input is not a single file.",
     "error_102": "The file is too large; limit is {{limit}}.",
-    "on_change_file": "Change File"
+    "on_change_file": "Change File",
+    "provider_arweave": "Arweave",
+    "provider_ipfs": "IPFS",
+    "provider_swarm": "Swarm"
 }

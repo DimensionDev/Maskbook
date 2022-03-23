@@ -1,25 +1,42 @@
-import { createContext, useEffect, useMemo } from 'react'
-import { useValueRef } from '@masknet/shared'
+import { createContext, useEffect, useMemo, useState } from 'react'
+import { useValueRef } from '@masknet/shared-base-ui'
 import {
+    AddressName,
     ChainId,
+    ERC721ContractDetailed,
     ERC721TokenDetailed,
+    isSameAddress,
     NonFungibleAssetProvider,
     SocketState,
     useCollectibles,
     useCollections,
     Wallet,
 } from '@masknet/web3-shared-evm'
-import { Box, Button, Skeleton, Typography } from '@mui/material'
+import { Box, Button, Skeleton, Stack, styled, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { currentNonFungibleAssetDataProviderSettings } from '../../../../plugins/Wallet/settings'
 import { useI18N } from '../../../../utils'
 import { CollectibleCard } from './CollectibleCard'
-import { Image } from '../../../../components/shared/Image'
 import { WalletMessages } from '@masknet/plugin-wallet'
+import { CollectionIcon } from './CollectionIcon'
+import { uniqBy } from 'lodash-unified'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import { ReversedAddress } from '@masknet/shared'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
 }>(null!)
+
+const AllNetworkButton = styled(Button)(({ theme }) => ({
+    display: 'inline-block',
+    padding: 0,
+    borderRadius: '50%',
+    fontSize: 12,
+    '&:hover': {
+        boxShadow: 'none',
+    },
+    opacity: 0.5,
+}))
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -35,19 +52,18 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         height: '100%',
     },
-    button: {
-        marginTop: theme.spacing(1),
-    },
+    button: {},
     container: {
         height: 'calc(100% - 52px)',
         overflow: 'auto',
     },
     card: {
+        width: 172,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         position: 'relative',
-        padding: theme.spacing(1),
+        padding: theme.spacing(1, 0),
     },
     description: {
         background: theme.palette.mode === 'light' ? '#F7F9FA' : '#2F3336',
@@ -79,6 +95,20 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         height: '100%',
         borderRadius: '50%',
+    },
+    networkSelected: {
+        width: 24,
+        height: 24,
+        minHeight: 24,
+        minWidth: 24,
+        lineHeight: '24px',
+        background: theme.palette.primary.main,
+        color: '#ffffff',
+        fontSize: 10,
+        opacity: 1,
+        '&:hover': {
+            background: theme.palette.primary.main,
+        },
     },
 }))
 
@@ -167,7 +197,7 @@ function CollectibleListUI(props: CollectibleListUIProps) {
                                 provider={provider}
                                 wallet={wallet}
                                 readonly={readonly}
-                                key={i}
+                                key={x.tokenId + x.contractDetailed.address}
                             />
                         ))}
                     </Box>
@@ -179,7 +209,6 @@ function CollectibleListUI(props: CollectibleListUIProps) {
 
 export interface CollectibleListProps extends withClasses<'empty' | 'button'> {
     address: string
-    collection?: string
     collectibles: ERC721TokenDetailed[]
     error?: string
     loading: boolean
@@ -205,118 +234,186 @@ export function CollectibleList(props: CollectibleListProps) {
     )
 }
 
-export function CollectionList({ address }: { address: string }) {
+export function CollectionList({
+    addressName,
+    onSelectAddress,
+}: {
+    addressName: AddressName
+    onSelectAddress: (event: React.MouseEvent<HTMLButtonElement>) => void
+}) {
     const chainId = ChainId.Mainnet
     const { t } = useI18N()
     const { classes } = useStyles()
+    const [selectedCollection, setSelectedCollection] = useState<ERC721ContractDetailed | 'all' | undefined>('all')
+    const { resolvedAddress: address } = addressName
 
-    const {
-        data: collections,
-        retry: retryFetchCollection,
-        state: loadingCollectionDone,
-    } = useCollections(address, chainId)
+    useEffect(() => {
+        setSelectedCollection('all')
+    }, [address])
+
+    const { data: collectionsFormRemote } = useCollections(address, chainId)
     const {
         data: collectibles,
         state: loadingCollectibleDone,
         retry: retryFetchCollectible,
-    } = useCollectibles(address, chainId, !!collections.length)
+    } = useCollectibles(address, chainId)
 
-    const isLoading = loadingCollectibleDone !== SocketState.done || loadingCollectionDone !== SocketState.done
+    const isLoading = loadingCollectibleDone !== SocketState.done
 
     const renderWithRarible = useMemo(() => {
         if (isLoading) return []
         return collectibles.filter((item) => !item.collection)
-    }, [collections?.length, collectibles?.length])
+    }, [collectibles?.length])
 
-    if (loadingCollectionDone !== SocketState.done) {
+    const renderCollectibles = useMemo(() => {
+        if (selectedCollection === 'all') return collectibles
+        if (!selectedCollection) return collectibles.filter((x) => !x.collection)
+
+        return (collectibles ?? []).filter((x) => {
+            return isSameAddress(selectedCollection.address, x.contractDetailed.address)
+        })
+    }, [selectedCollection, collectibles.length])
+
+    const collections = useMemo(() => {
+        return uniqBy(
+            collectibles.map((x) => x.contractDetailed),
+            (x) => x.address.toLowerCase(),
+        ).map((x) => {
+            const item = collectionsFormRemote.find((c) => isSameAddress(c.address, x.address))
+            if (item) {
+                return {
+                    name: item.name,
+                    symbol: item.name,
+                    baseURI: item.iconURL,
+                    iconURL: item.iconURL,
+                    address: item.address,
+                } as ERC721ContractDetailed
+            }
+            return x
+        })
+    }, [collectibles.length, collectionsFormRemote.length])
+
+    if (!isLoading && !collectibles.length)
         return (
-            <Box className={classes.root}>
-                {Array.from({ length: 3 })
-                    .fill(0)
-                    .map((_, i) => (
-                        <Box className={classes.card} display="flex" flexDirection="column" key={i}>
-                            <Skeleton animation="wave" variant="rectangular" width={172} height={172} />
-                            <Skeleton
-                                animation="wave"
-                                variant="text"
-                                width={172}
-                                height={20}
-                                style={{ marginTop: 4 }}
-                            />
+            <>
+                {addressName && (
+                    <Stack direction="row" height={42} justifyContent="flex-end" alignItems="center" px={2}>
+                        <Box display="flex" alignItems="center" justifyContent="flex-end" flexWrap="wrap">
+                            <Button
+                                onClick={onSelectAddress}
+                                className={classes.button}
+                                variant="outlined"
+                                size="small">
+                                <ReversedAddress address={addressName.resolvedAddress} />
+                                <KeyboardArrowDownIcon />
+                            </Button>
                         </Box>
-                    ))}
-            </Box>
-        )
-    }
-
-    if (!isLoading && !collections.length)
-        return (
-            <Box display="flex" alignItems="center" justifyContent="center">
-                <Typography color="textPrimary" sx={{ paddingTop: 4, paddingBottom: 4 }}>
-                    {t('dashboard_no_collectible_found')}
-                </Typography>
-            </Box>
+                    </Stack>
+                )}
+                <Box display="flex" alignItems="center" justifyContent="center">
+                    <Typography color="textPrimary" sx={{ paddingTop: 4, paddingBottom: 4 }}>
+                        {t('dashboard_no_collectible_found')}
+                    </Typography>
+                </Box>
+            </>
         )
 
     return (
         <Box>
-            {(collections ?? []).map((x, i) => {
-                const renderCollectibles = collectibles.filter((c) => c.contractDetailed.address === x.address)
-                return (
-                    <Box key={i}>
-                        <Box display="flex" alignItems="center" sx={{ marginTop: '16px' }}>
-                            <Box className={classes.collectionWrap}>
-                                {x.image ? (
-                                    <Image component="img" className={classes.collectionImg} src={x.image} />
-                                ) : null}
+            <Stack direction="row" justifyContent="space-between" alignItems="center" px={2}>
+                <Stack display="inline-flex">
+                    <AllNetworkButton className={classes.networkSelected} onClick={() => setSelectedCollection('all')}>
+                        ALL
+                    </AllNetworkButton>
+                    <Typography align="center" color={(theme) => theme.palette.primary.main} fontSize="12px">
+                        {t('dashboard_collectible_menu_all', {
+                            count: collectibles.length,
+                        })}
+                    </Typography>
+                </Stack>
+                <Box display="flex" alignItems="center" justifyContent="flex-end" flexWrap="wrap">
+                    <Button onClick={onSelectAddress} className={classes.button} variant="outlined" size="small">
+                        <ReversedAddress address={addressName.resolvedAddress} />
+                        <KeyboardArrowDownIcon />
+                    </Button>
+                </Box>
+            </Stack>
+            <Stack spacing={1} direction="row" mt={1.5}>
+                <Box sx={{ flexGrow: 1 }}>
+                    <Box>
+                        {!selectedCollection && selectedCollection !== 'all' && (
+                            <Box display="flex" alignItems="center">
+                                <Typography
+                                    className={classes.name}
+                                    color="textPrimary"
+                                    variant="body2"
+                                    sx={{ fontSize: '16px' }}>
+                                    Other
+                                    {loadingCollectibleDone && renderCollectibles.length
+                                        ? `(${renderCollectibles.length})`
+                                        : null}
+                                </Typography>
                             </Box>
-                            <Typography
-                                className={classes.name}
-                                color="textPrimary"
-                                variant="body2"
-                                sx={{ fontSize: '16px' }}>
-                                {x.name}
-                                {loadingCollectibleDone && renderCollectibles.length
-                                    ? `(${renderCollectibles.length})`
-                                    : null}
-                            </Typography>
-                        </Box>
+                        )}
+                        {selectedCollection && selectedCollection !== 'all' && (
+                            <Box display="flex" alignItems="center">
+                                <CollectionIcon collection={selectedCollection} />
+                                <Typography
+                                    className={classes.name}
+                                    color="textPrimary"
+                                    variant="body2"
+                                    sx={{ fontSize: '16px' }}>
+                                    {selectedCollection.name}
+                                    {loadingCollectibleDone && renderCollectibles.length
+                                        ? `(${renderCollectibles.length})`
+                                        : null}
+                                </Typography>
+                            </Box>
+                        )}
                         <CollectibleList
                             address={address}
-                            collection={x.slug}
-                            retry={() => {
-                                retryFetchCollectible()
-                                retryFetchCollection()
-                            }}
+                            retry={retryFetchCollectible}
                             collectibles={renderCollectibles}
-                            loading={isLoading}
+                            loading={loadingCollectibleDone !== SocketState.done && renderCollectibles.length === 0}
                         />
                     </Box>
-                )
-            })}
-            {!!renderWithRarible.length && (
-                <Box key="rarible">
-                    <Box display="flex" alignItems="center" sx={{ marginTop: '16px' }}>
-                        <Typography
-                            className={classes.name}
-                            color="textPrimary"
-                            variant="body2"
-                            sx={{ fontSize: '16px' }}>
-                            Rarible ({renderWithRarible.length})
-                        </Typography>
-                    </Box>
-                    <CollectibleList
-                        address={address}
-                        collection="Rarible"
-                        retry={() => {
-                            retryFetchCollectible()
-                            retryFetchCollection()
-                        }}
-                        collectibles={renderWithRarible}
-                        loading={false}
-                    />
                 </Box>
-            )}
+                <Box>
+                    {collections.map((x, i) => {
+                        return (
+                            <Box
+                                display="flex"
+                                key={i}
+                                alignItems="center"
+                                justifyContent="center"
+                                sx={{ marginTop: '8px', marginBottom: '12px', minWidth: 30, maxHeight: 24 }}>
+                                <CollectionIcon
+                                    selectedCollection={
+                                        selectedCollection === 'all' ? undefined : selectedCollection?.address
+                                    }
+                                    collection={x}
+                                    onClick={() => setSelectedCollection(x)}
+                                />
+                            </Box>
+                        )
+                    })}
+                    {!!renderWithRarible.length && (
+                        <Box
+                            key="other"
+                            display="flex"
+                            alignItems="center"
+                            justifyContent="center"
+                            sx={{ marginTop: '8px', marginBottom: '12px', minWidth: 30, maxHeight: 24 }}>
+                            <CollectionIcon
+                                selectedCollection={
+                                    selectedCollection === 'all' ? undefined : selectedCollection?.address
+                                }
+                                onClick={() => setSelectedCollection(undefined)}
+                            />
+                        </Box>
+                    )}
+                </Box>
+            </Stack>
         </Box>
     )
 }

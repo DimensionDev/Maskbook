@@ -17,12 +17,13 @@ import {
     SwapServiceIcon,
     TransakIcon,
     ValuablesIcon,
+    CyberConnectIcon,
 } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import MarketTrendSettingDialog from './components/MarketTrendSettingDialog'
 import { useAccount } from '@masknet/web3-shared-evm'
 import { Messages, Services, PluginMessages } from '../../API'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { TUTORIAL_URLS_EN } from './constants'
 import { ContentContainer } from '../../components/ContentContainer'
 import { WalletStateBar } from '../Wallets/components/WalletStateBar'
@@ -30,6 +31,7 @@ import { PoolTogetherURL } from '../../assets'
 import { DHEDGEIcon } from '../../../../mask/src/resources/DHEDGEIcon'
 import TutorialDialog from './components/TutorialDialog'
 import { PluginId } from '@masknet/plugin-infra'
+import ArtBlocksIcon from '../../../../mask/src/plugins/ArtBlocks/SNSAdaptor/ArtBlocksIcon'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -69,6 +71,8 @@ export default function Plugins() {
         [PluginId.MaskBox]: true,
         [PluginId.GoodGhosting]: true,
         [PluginId.PoolTogether]: true,
+        [PluginId.ArtBlocks]: true,
+        [PluginId.CyberConnect]: true,
     })
 
     useEffect(
@@ -180,6 +184,20 @@ export default function Plugins() {
             desc: t.labs_pool_together_desc(),
             icon: <PoolTogetherIcon />,
             enabled: pluginStatus[PluginId.PoolTogether],
+        },
+        {
+            id: PluginId.ArtBlocks,
+            title: t.labs_art_blocks(),
+            desc: t.labs_art_blocks_desc(),
+            icon: <ArtBlocksIcon />,
+            enabled: pluginStatus[PluginId.ArtBlocks],
+        },
+        {
+            id: PluginId.CyberConnect,
+            title: t.labs_cyber_connect(),
+            desc: t.labs_cyber_connect_desc(),
+            icon: <CyberConnectIcon />,
+            enabled: pluginStatus[PluginId.CyberConnect],
         },
     ]
 

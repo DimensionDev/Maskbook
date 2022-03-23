@@ -1,7 +1,8 @@
 import Color from 'color'
+import { useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createReactRootShadowed, startWatch, untilElementAvailable } from '../../../utils'
+import { createReactRootShadowed, startWatch, untilElementAvailable, MaskMessages } from '../../../utils'
 import {
     searchAppBarBackSelector,
     searchNewTweetButtonSelector,
@@ -10,6 +11,7 @@ import {
     searchProfileTabListSelector,
     searchProfileTabPageSelector,
     searchProfileTabSelector,
+    searchProfileTabLoseConnectionPageSelector,
 } from '../utils/selector'
 import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab'
 
@@ -37,7 +39,7 @@ const useStyles = makeStyles()((theme) => {
     const props = getStyleProps()
 
     return {
-        tab: {
+        root: {
             '&:hover': {
                 backgroundColor: new Color(props.hover).alpha(0.1).toString(),
                 cursor: 'pointer',
@@ -78,8 +80,9 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-async function clear() {
+async function hideTwitterActivatedContent() {
     const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
+    const loseConnectionEle = searchProfileTabLoseConnectionPageSelector().evaluate()
     if (!eleTab) return
     const style = window.getComputedStyle(eleTab)
 
@@ -92,24 +95,26 @@ async function clear() {
         line.style.display = 'none'
     })
 
+    if (loseConnectionEle) return
+
     // hide the empty list indicator on the page
     const eleEmpty = searchProfileEmptySelector().evaluate()
     if (eleEmpty) eleEmpty.style.display = 'none'
 
     // hide the content page
     await untilElementAvailable(searchProfileTabPageSelector())
+
     const elePage = searchProfileTabPageSelector().evaluate()
-    if (elePage) elePage.style.visibility = 'hidden'
+    if (elePage) {
+        elePage.style.visibility = 'hidden'
+        elePage.style.height = '0px'
+    }
 }
 
-function reset() {
+function resetTwitterActivatedContent() {
     const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
+    const loseConnectionEle = searchProfileTabLoseConnectionPageSelector().evaluate()
     if (!eleTab) return
-
-    const eleEmpty = searchProfileEmptySelector().evaluate()
-    if (eleEmpty) eleEmpty.style.display = ''
-    const elePage = searchProfileTabPageSelector().evaluate()
-    if (elePage) elePage.style.visibility = 'visible'
 
     const tabList = searchProfileTabListSelector().evaluate()
     tabList.map((v) => {
@@ -118,17 +123,34 @@ function reset() {
         const line = v.querySelector('div > div') as HTMLDivElement
         line.style.display = ''
     })
+
+    if (loseConnectionEle) return
+
+    const eleEmpty = searchProfileEmptySelector().evaluate()
+    if (eleEmpty) eleEmpty.style.display = ''
+
+    const elePage = searchProfileTabPageSelector().evaluate()
+    if (elePage) {
+        elePage.style.visibility = 'visible'
+        elePage.style.height = 'auto'
+    }
 }
 
 export function ProfileTabAtTwitter() {
     const { classes } = useStyles()
+    const [hidden, setHidden] = useState(false)
+    useEffect(() => {
+        return MaskMessages.events.profileTabHidden.on((data) => {
+            setHidden(data.hidden)
+        })
+    }, [])
 
-    return (
+    return hidden ? null : (
         <ProfileTab
             title="Web3"
             classes={classes}
-            reset={reset}
-            clear={clear}
+            reset={resetTwitterActivatedContent}
+            clear={hideTwitterActivatedContent}
             children={<div className={classes.line} />}
         />
     )
@@ -136,7 +158,7 @@ export function ProfileTabAtTwitter() {
 
 export function injectProfileTabAtTwitter(signal: AbortSignal) {
     let tabInjected = false
-    const contentWatcher = new MutationObserverWatcher(searchProfileTabPageSelector()).useForeach((node, key, meta) => {
+    const contentWatcher = new MutationObserverWatcher(searchProfileTabPageSelector()).useForeach(() => {
         const elePage = searchProfileTabPageSelector().evaluate()
         if (elePage && !tabInjected) {
             const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())

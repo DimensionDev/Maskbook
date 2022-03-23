@@ -3,10 +3,11 @@ import { CustomSnackbarProvider } from '@masknet/theme'
 import { Web3Provider } from '@masknet/web3-shared-evm'
 import { CssBaseline, StyledEngineProvider, Theme, ThemeProvider } from '@mui/material'
 import { NetworkPluginID, PluginsWeb3ContextProvider, useAllPluginsWeb3State } from '@masknet/plugin-infra'
-import { ErrorBoundary, ErrorBoundaryBuildInfoContext, useValueRef, I18NextProviderHMR } from '@masknet/shared'
+import { I18NextProviderHMR } from '@masknet/shared'
+import { ErrorBoundary, ErrorBoundaryBuildInfoContext, useValueRef } from '@masknet/shared-base-ui'
 import i18nNextInstance from '../shared-ui/locales_legacy'
 import { Web3Context } from './web3/context'
-import { buildInfoMarkdown } from './extension/background-script/Jobs/PrintBuildFlags'
+import { buildInfoMarkdown } from './utils/BuildInfoMarkdown'
 import { activatedSocialNetworkUI } from './social-network'
 import { isFacebook } from './social-network-adaptor/facebook.com/base'
 import { pluginIDSettings } from './settings/settings'
@@ -44,7 +45,7 @@ function MaskThemeProvider({ children, baseline, useTheme }: MaskThemeProvider) 
                 disableWindowBlurListener={false}
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 children={jsx}
-                isFacebook={isFacebook(activatedSocialNetworkUI)}
+                offsetY={isFacebook(activatedSocialNetworkUI) ? 80 : undefined}
             />
         ),
         baseline

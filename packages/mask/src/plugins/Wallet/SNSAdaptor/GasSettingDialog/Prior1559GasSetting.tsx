@@ -5,6 +5,8 @@ import {
     GasOption,
     useChainId,
     useNativeTokenDetailed,
+    ChainIdOptionalRecord,
+    ChainId,
 } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
@@ -21,6 +23,13 @@ import { WalletRPC } from '../../../Wallet/messages'
 import { useNativeTokenPrice } from '../../hooks/useTokenPrice'
 import type { GasSettingProps } from './types'
 import { useGasSettingStyles } from './useGasSettingStyles'
+import { pow10 } from '@masknet/web3-shared-base'
+
+const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
+    [ChainId.BSC]: pow10(9).multipliedBy(5), // 5 Gwei
+    [ChainId.Conflux]: pow10(9).multipliedBy(5), // 5 Gwei
+    [ChainId.Matic]: pow10(9).multipliedBy(30), // 30 Gwei
+}
 
 export const Prior1559GasSetting: FC<GasSettingProps> = memo(
     ({ gasLimit, minGasLimit = 0, gasOption = GasOption.Medium, onConfirm = noop }) => {
@@ -35,7 +44,9 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
         // #region Get gas options from debank
         const { value: gasOptions, loading: getGasOptionsLoading } = useAsync(async () => {
             const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
-            if (!response) return { slow: 0, standard: 0, fast: 0 }
+
+            if (!response) return null
+
             return {
                 slow: response.data.slow.price,
                 standard: response.data.normal.price,
@@ -45,26 +56,29 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
         // #endregion
 
         const options = useMemo(
-            () => [
-                {
-                    title: t('popups_wallet_gas_fee_settings_low'),
-                    gasOption: GasOption.Low,
-                    gasPrice: gasOptions?.slow ?? 0,
-                },
-                {
-                    title: t('popups_wallet_gas_fee_settings_medium'),
-                    gasOption: GasOption.Medium,
-                    gasPrice: gasOptions?.standard ?? 0,
-                },
-                {
-                    title: t('popups_wallet_gas_fee_settings_high'),
-                    gasOption: GasOption.High,
-                    gasPrice: gasOptions?.fast ?? 0,
-                },
-            ],
+            () =>
+                gasOptions
+                    ? [
+                          {
+                              title: t('popups_wallet_gas_fee_settings_low'),
+                              gasOption: GasOption.Low,
+                              gasPrice: gasOptions?.slow ?? 0,
+                          },
+                          {
+                              title: t('popups_wallet_gas_fee_settings_medium'),
+                              gasOption: GasOption.Medium,
+                              gasPrice: gasOptions?.standard ?? 0,
+                          },
+                          {
+                              title: t('popups_wallet_gas_fee_settings_high'),
+                              gasOption: GasOption.High,
+                              gasPrice: gasOptions?.fast ?? 0,
+                          },
+                      ]
+                    : null,
             [gasOptions],
         )
-        const currentGasOption = options.find((opt) => opt.gasOption === selectedGasOption)
+        const currentGasOption = options ? options.find((opt) => opt.gasOption === selectedGasOption) : null
 
         const schema = useMemo(() => {
             return zod.object({
@@ -104,10 +118,11 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
         }, [gasLimit, setValue])
 
         useEffect(() => {
-            if (currentGasOption) {
-                setValue('gasPrice', formatWeiToGwei(currentGasOption.gasPrice).toString())
+            const minGasPrice = minGasPriceOfChain[chainId]
+            if (currentGasOption || minGasPrice) {
+                setValue('gasPrice', formatWeiToGwei(currentGasOption?.gasPrice ?? minGasPrice ?? 0).toString())
             }
-        }, [currentGasOption, setValue])
+        }, [currentGasOption, setValue, chainId])
 
         const handleConfirm = useCallback(
             (data: zod.infer<typeof schema>) => {
@@ -124,25 +139,27 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
 
         return (
             <>
-                <div className={classes.options}>
-                    {options.map(({ title, gasPrice, gasOption }, index) => (
-                        <div
-                            key={gasOption}
-                            onClick={() => setGasOption(gasOption)}
-                            className={selectedGasOption === gasOption ? classes.selected : undefined}>
-                            <Typography className={classes.optionsTitle}>{title}</Typography>
-                            <Typography>{formatWeiToGwei(gasPrice ?? 0).toString()} Gwei</Typography>
-                            <Typography className={classes.gasUSD}>
-                                {t('popups_wallet_gas_fee_settings_usd', {
-                                    usd: formatWeiToEther(gasPrice)
-                                        .times(nativeTokenPrice)
-                                        .times(inputGasLimit || '1')
-                                        .toPrecision(3),
-                                })}
-                            </Typography>
-                        </div>
-                    ))}
-                </div>
+                {options ? (
+                    <div className={classes.options}>
+                        {options.map(({ title, gasPrice, gasOption }, index) => (
+                            <div
+                                key={gasOption}
+                                onClick={() => setGasOption(gasOption)}
+                                className={selectedGasOption === gasOption ? classes.selected : undefined}>
+                                <Typography className={classes.optionsTitle}>{title}</Typography>
+                                <Typography>{formatWeiToGwei(gasPrice ?? 0).toString()} Gwei</Typography>
+                                <Typography className={classes.gasUSD}>
+                                    {t('popups_wallet_gas_fee_settings_usd', {
+                                        usd: formatWeiToEther(gasPrice)
+                                            .times(nativeTokenPrice)
+                                            .times(inputGasLimit || '1')
+                                            .toPrecision(3),
+                                    })}
+                                </Typography>
+                            </div>
+                        ))}
+                    </div>
+                ) : null}
                 <form onSubmit={onSubmit}>
                     <Typography className={classes.label}>{t('popups_wallet_gas_fee_settings_gas_limit')}</Typography>
                     <Controller

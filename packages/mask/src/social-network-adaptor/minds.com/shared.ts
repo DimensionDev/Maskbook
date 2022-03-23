@@ -14,9 +14,12 @@ export const mindsShared: SocialNetwork.Shared & SocialNetwork.Base = {
         getHomePage: () => 'https://www.minds.com',
         getProfilePage: () => 'https://www.minds.com',
         isValidUsername: usernameValidator,
-        publicKeyEncoding: undefined,
         textPayloadPostProcessor: undefined,
         getPostURL,
+        share(message) {
+            const url = this.getShareLinkURL!(message)
+            window.open(url, '_blank', 'noopener noreferrer')
+        },
         getShareLinkURL(message) {
             return new URL(`https://www.minds.com/newsfeed/subscriptions?intentUrl=${encodeURIComponent(message)}`)
         },

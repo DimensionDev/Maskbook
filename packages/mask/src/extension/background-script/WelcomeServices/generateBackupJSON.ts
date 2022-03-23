@@ -9,7 +9,7 @@ import { queryPostsDB } from '../../../../background/database/post'
 import { PersonaRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PersonaRecord'
 import { ProfileRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/ProfileRecord'
 import { PostRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PostRecord'
-import { Identifier, PersonaIdentifier, ProfileIdentifier, timeout } from '@masknet/shared-base'
+import { Identifier, PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { exportMnemonic, exportPrivateKey, getLegacyWallets, getWallets } from '../../../plugins/Wallet/services'
 import {
     LegacyWalletRecordToJSONFormat,
@@ -17,6 +17,7 @@ import {
 } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
 import { activatedPluginsWorker } from '@masknet/plugin-infra'
 import { RelationRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/RelationRecord'
+import { timeout } from '@dimensiondev/kit'
 
 export type { BackupPreview } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 export interface BackupOptions {
@@ -146,7 +147,7 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
                         const result = await timeout(backupCreator!(), 3000)
                         if (result.none) return
                         // We limit the plugin contributed backups must be simple objects.
-                        // We may allow plugin to store binary if we're moving to binary backup format like messagepack.
+                        // We may allow plugin to store binary if we're moving to binary backup format like MessagePack.
                         plugins[plugin.ID] = result.map(JSON.stringify).map(JSON.parse).val
                     }
                     if (process.env.NODE_ENV === 'development') return backupPlugin()

@@ -2,7 +2,8 @@ import { FC, memo, MouseEventHandler, useCallback } from 'react'
 import { Trans } from 'react-i18next'
 import classNames from 'classnames'
 import { fill } from 'lodash-unified'
-import { TokenIcon, useRemoteControlledDialog } from '@masknet/shared'
+import { TokenIcon } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { ERC721ContractDetailed, useAccount, useERC721ContractDetailed } from '@masknet/web3-shared-evm'
@@ -224,7 +225,12 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                         </section>
                         <section className={classes.nftList}>
                             <NftList
-                                contract={contractDetailed}
+                                contract={
+                                    {
+                                        address: history.token_contract.address,
+                                        chainId: history.token_contract.chain_id,
+                                    } as ERC721ContractDetailed
+                                }
                                 statusList={bitStatusList}
                                 tokenIds={history.token_ids}
                             />

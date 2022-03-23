@@ -1,32 +1,26 @@
-import { Fragment, useEffect, useMemo, useReducer, useState } from 'react'
+import { Fragment, useEffect, useMemo, useReducer } from 'react'
 import {
-    delay,
+    extractTextFromTypedMessage,
     makeTypedMessageTuple,
+    TypedMessage,
     TypedMessageTuple,
-    type ProfileIdentifier,
-    type Payload,
-} from '@masknet/shared-base'
+} from '@masknet/typed-message'
+import type { ProfileIdentifier } from '@masknet/shared-base'
 import { or } from '@masknet/theme'
-import { unreachable } from '@dimensiondev/kit'
 
 import { ServicesWithProgress } from '../../../extension/service'
 import type { Profile } from '../../../database'
-import type {
-    DecryptionProgress,
-    FailureDecryption,
-    SuccessDecryption,
-} from '../../../extension/background-script/CryptoServices/decryptFrom'
+import type { DecryptionProgress, FailureDecryption, SuccessDecryption } from './types'
 import { DecryptPostSuccess, DecryptPostSuccessProps } from './DecryptedPostSuccess'
 import { DecryptPostAwaiting, DecryptPostAwaitingProps } from './DecryptPostAwaiting'
 import { DecryptPostFailed, DecryptPostFailedProps } from './DecryptPostFailed'
-import { DecryptedPostDebug } from './DecryptedPostDebug'
-import {
-    usePostClaimedAuthor,
-    usePostInfoDetails,
-    usePostInfoSharedPublic,
-    usePostInfo,
-} from '../../DataSource/usePostInfo'
-import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorHelpers'
+import { usePostClaimedAuthor, usePostInfoDetails, usePostInfo } from '../../DataSource/usePostInfo'
+import { delay, encodeArrayBuffer, safeUnreachable } from '@dimensiondev/kit'
+import { activatedSocialNetworkUI } from '../../../social-network'
+import type { DecryptionContext, SocialNetworkEncodedPayload } from '../../../../background/services/crypto/decryption'
+import { DecryptIntermediateProgressKind, DecryptProgressKind } from '@masknet/encryption'
+import type { PostContext } from '@masknet/plugin-infra'
+import { Some } from 'ts-results'
 
 function progressReducer(
     state: { key: string; progress: SuccessDecryption | FailureDecryption | DecryptionProgress }[],
@@ -75,9 +69,9 @@ export function DecryptPost(props: DecryptPostProps) {
     const authorInPayload = usePostClaimedAuthor()
     const current = usePostInfo()!
     const currentPostBy = usePostInfoDetails.author()
-    const decryptedPayloadForImage = usePostInfoDetails.decryptedPayloadForImage()
     const postBy = or(authorInPayload, currentPostBy)
     const postMetadataImages = usePostInfoDetails.postMetadataImages()
+    const mentionedLinks = usePostInfoDetails.mentionedLinks()
     const Success = props.successComponent || DecryptPostSuccess
     const Awaiting = props.waitingComponent || DecryptPostAwaiting
     const Failed = props.failedComponent || DecryptPostFailed
@@ -91,10 +85,6 @@ export function DecryptPost(props: DecryptPostProps) {
         }
     }, [props.requestAppendRecipients, postBy, whoAmI])
 
-    // #region Debug info
-    const [debugHash, setDebugHash] = useState<string>('Unknown')
-    // #endregion
-
     // #region Progress
     const [progress, dispatch] = useReducer(progressReducer, [])
     // #endregion
@@ -103,78 +93,83 @@ export function DecryptPost(props: DecryptPostProps) {
 
     // pass 1:
     // decrypt post content and image attachments
-    const decryptedPayloadForImageAlpha38 = decryptedPayloadForImage?.version === -38 ? decryptedPayloadForImage : null
-    const sharedPublic = usePostInfoSharedPublic() || decryptedPayloadForImageAlpha38?.sharedPublic || false
+    const sharedPublic = usePostInfoDetails.publicShared()
 
     useEffect(() => {
         const signal = new AbortController()
-        async function makeProgress(
-            key: string,
-            decryptionProcess: ReturnType<typeof ServicesWithProgress.decryptFromText>,
-        ) {
-            const refreshProgress = (progress: SuccessDecryption | FailureDecryption | DecryptionProgress) =>
-                dispatch({
-                    type: 'refresh',
-                    key,
-                    progress,
-                })
-            for await (const process of asyncIteratorWithResult(decryptionProcess)) {
-                if (signal.signal.aborted)
-                    return decryptionProcess.return?.({ type: 'error', internal: true, error: 'aborted' })
-                if (process.done) {
-                    if (process.value.type === 'success') {
-                        current.iv.value = process.value.iv
-                        current.decryptedPayloadForImage.value = process.value.decryptedPayloadForImage
-                    }
-                    return refreshProgress(process.value)
-                }
-                const status = process.value
-                if (status.type === 'debug') {
-                    switch (status.debug) {
-                        case 'debug_finding_hash':
-                            setDebugHash(status.hash.join('-'))
-                            break
-                        default:
-                            unreachable(status.debug)
-                    }
-                } else refreshProgress(status)
-                if (status.type === 'progress') {
-                    if (status.progress === 'intermediate_success') refreshProgress(status.data)
-                    else if (status.progress === 'iv_decrypted') current.iv.value = status.iv
-                    else if (status.progress === 'payload_decrypted')
-                        current.decryptedPayloadForImage.value = status.decryptedPayloadForImage
+        const postURL = current.url.getCurrentValue()?.toString()
+        const report =
+            (key: string): ReportProgress =>
+            (kind, message) => {
+                if (kind === 'e2e') {
+                    dispatch({
+                        type: 'refresh',
+                        key,
+                        progress: { type: 'progress', progress: 'finding_post_key', internal: false },
+                    })
+                } else {
+                    dispatch({
+                        type: 'refresh',
+                        key,
+                        progress: { type: 'error', error: message, internal: false },
+                    })
                 }
             }
-        }
-
-        const postURL = current.url.getCurrentValue()?.toString()
-        if (deconstructedPayload.ok)
+        if (deconstructedPayload.ok) {
             makeProgress(
-                'post text',
-                ServicesWithProgress.decryptFromText(deconstructedPayload.val, postBy, whoAmI.network, whoAmI, postURL),
+                postURL,
+                postBy,
+                whoAmI,
+                {
+                    type: 'text',
+                    text:
+                        extractTextFromTypedMessage(current.rawMessage.getCurrentValue()).unwrapOr('') +
+                        ' ' +
+                        mentionedLinks.join(' '),
+                },
+                (message, iv) => {
+                    dispatch({
+                        type: 'refresh',
+                        key: 'text',
+                        progress: {
+                            type: 'success',
+                            content: message,
+                            internal: false,
+                            iv: encodeArrayBuffer(iv),
+                        },
+                    })
+                },
+                current.decryptedReport,
+                report('text'),
+                signal.signal,
             )
+        }
         postMetadataImages.forEach((url) => {
             if (signal.signal.aborted) return
-            makeProgress(url, ServicesWithProgress.decryptFromImageUrl(url, postBy, whoAmI.network, whoAmI, postURL))
+            makeProgress(
+                postURL,
+                postBy,
+                whoAmI,
+                { type: 'image-url', image: url },
+                (message, iv) => {
+                    dispatch({
+                        type: 'refresh',
+                        key: url,
+                        progress: {
+                            type: 'success',
+                            content: message,
+                            internal: false,
+                            iv: encodeArrayBuffer(iv),
+                        },
+                    })
+                },
+                current.decryptedReport,
+                report(url),
+                signal.signal,
+            )
         })
         return () => signal.abort()
-    }, [
-        current.iv,
-        deconstructedPayload.ok,
-        (deconstructedPayload.val as Payload)?.encryptedText,
-        postBy.toText(),
-        postMetadataImages.join(),
-        whoAmI.toText(),
-    ])
-
-    // pass 2:
-    // decrypt rest attachments which depend on post content
-    // const decryptedPostContent = progress.find((p) => p.key === postContent)
-    // useEffect(() => {
-    //     if (decryptedPostContent?.progress.type !== 'success') return
-    //     // TODO:
-    //     // decrypt shuffled image here
-    // }, [decryptedPostContent])
+    }, [deconstructedPayload.ok, postBy.toText(), postMetadataImages.join(), whoAmI.toText(), mentionedLinks.join()])
 
     // pass 3:
     // invoke callback
@@ -199,54 +194,78 @@ export function DecryptPost(props: DecryptPostProps) {
     )
 
     function renderProgress(progress: SuccessDecryption | FailureDecryption | DecryptionProgress) {
-        const render = () => {
-            switch (progress.type) {
-                case 'success':
-                    return (
-                        <Success
-                            data={progress}
-                            alreadySelectedPreviously={alreadySelectedPreviously}
-                            requestAppendRecipients={requestAppendRecipientsWrapped}
-                            profiles={profiles}
-                            sharedPublic={sharedPublic}
-                            author={authorInPayload}
-                            postedBy={currentPostBy}
-                            {...props.successComponentProps}
-                        />
-                    )
-                case 'error':
-                    return (
-                        <Failed
-                            error={new Error(progress.error)}
-                            author={authorInPayload}
-                            postedBy={currentPostBy}
-                            {...props.failedComponentProps}
-                        />
-                    )
-                case 'progress':
-                    return (
-                        <Awaiting
-                            type={progress}
-                            author={authorInPayload}
-                            postedBy={currentPostBy}
-                            {...props.waitingComponentProps}
-                        />
-                    )
-                default:
-                    return null
-            }
+        switch (progress.type) {
+            case 'success':
+                return (
+                    <Success
+                        data={progress}
+                        alreadySelectedPreviously={alreadySelectedPreviously}
+                        requestAppendRecipients={requestAppendRecipientsWrapped}
+                        profiles={profiles}
+                        sharedPublic={sharedPublic}
+                        author={authorInPayload}
+                        postedBy={currentPostBy}
+                        {...props.successComponentProps}
+                    />
+                )
+            case 'error':
+                return (
+                    <Failed
+                        error={new Error(progress.error)}
+                        author={authorInPayload}
+                        postedBy={currentPostBy}
+                        {...props.failedComponentProps}
+                    />
+                )
+            case 'progress':
+                return (
+                    <Awaiting
+                        type={progress}
+                        author={authorInPayload}
+                        postedBy={currentPostBy}
+                        {...props.waitingComponentProps}
+                    />
+                )
+            default:
+                return null
         }
-        const rendered = render()
-        if (!rendered) return null
-        return (
-            <>
-                {rendered}
-                <DecryptedPostDebug
-                    debugHash={debugHash}
-                    whoAmI={whoAmI}
-                    decryptedResult={progress.type === 'progress' ? null : progress}
-                />
-            </>
-        )
+    }
+}
+
+type ReportProgress = (type: 'e2e' | 'error', message: string) => void
+async function makeProgress(
+    postURL: string | undefined,
+    authorHint: ProfileIdentifier,
+    currentProfile: ProfileIdentifier,
+    payload: SocialNetworkEncodedPayload,
+    done: (message: TypedMessage, iv: Uint8Array) => void,
+    reporter: PostContext['decryptedReport'],
+    reportProgress: ReportProgress,
+    signal: AbortSignal,
+) {
+    const context: DecryptionContext = {
+        postURL,
+        authorHint,
+        currentProfile,
+        currentSocialNetwork: activatedSocialNetworkUI.encryptionNetwork,
+    }
+    let iv: Uint8Array | undefined
+    for await (const progress of ServicesWithProgress.decryptionWithSocialNetworkDecoding(payload, context)) {
+        if (signal.aborted) return
+        if (progress.type === DecryptProgressKind.Success) {
+            done(progress.content, iv || new Uint8Array())
+        } else if (progress.type === DecryptProgressKind.Info) {
+            iv ??= progress.iv
+            if (progress.ownersKeyEncrypted)
+                reporter({ ownersAESKeyEncrypted: encodeArrayBuffer(progress.ownersKeyEncrypted) })
+            if (progress.iv) reporter({ iv: encodeArrayBuffer(progress.iv) })
+            if (progress.version) reporter({ version: progress.version })
+            if (typeof progress.publicShared === 'boolean') reporter({ sharedPublic: Some(progress.publicShared) })
+        } else if (progress.type === DecryptProgressKind.Progress) {
+            if (progress.event === DecryptIntermediateProgressKind.TryDecryptByE2E) reportProgress('e2e', '')
+            else safeUnreachable(progress.event)
+        } else if (progress.type === DecryptProgressKind.Error) {
+            console.log(progress.message)
+        } else safeUnreachable(progress)
     }
 }

@@ -1,4 +1,4 @@
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
     EthereumTokenType,
     formatBalance,
@@ -96,7 +96,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     // #region select token
     const { value: nativeTokenDetailed } = useNativeTokenDetailed()
     const [token = nativeTokenDetailed, setToken] = useState<FungibleTokenDetailed | undefined>(origin?.token)
-    const [id] = useState(uuid())
+    const [id] = useState(uuid)
     const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
         useCallback(

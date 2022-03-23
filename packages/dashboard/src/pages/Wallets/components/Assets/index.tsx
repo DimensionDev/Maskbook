@@ -7,7 +7,7 @@ import { FungibleTokenTable } from '../FungibleTokenTable'
 import { useDashboardI18N } from '../../../../locales'
 import { CollectibleList } from '../CollectibleList'
 import { AddCollectibleDialog } from '../AddCollectibleDialog'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginMessages } from '../../../../API'
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
@@ -90,6 +90,7 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
                                         ? setSelectToken({
                                               open: true,
                                               uuid: id,
+                                              title: t.wallets_add_token(),
                                               FungibleTokenListProps: { whitelist: [] },
                                           })
                                         : setAddCollectibleOpen(true)

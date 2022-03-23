@@ -6,6 +6,7 @@ import { PersonaCard } from '../PersonaCard'
 import { useDashboardI18N } from '../../../../locales'
 import { PersonaIdentifier, PersonaInformation, DashboardRoutes } from '@masknet/shared-base'
 import { useNavigate } from 'react-router-dom'
+import { MAX_PERSONA_LIMIT } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -82,10 +83,12 @@ export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
                 <Stack justifyContent="space-between" gap={2} height="100%" maxHeight="100%">
                     <Box overflow="auto">
                         {personas.map((item) => {
-                            const { identifier, nickname, linkedProfiles } = item
+                            const { identifier, nickname, linkedProfiles, publicHexKey } = item
+                            if (!publicHexKey) return null
                             return (
                                 <Box mb={2.5} key={identifier.toText()}>
                                     <PersonaCard
+                                        publicKey={publicHexKey}
                                         identifier={identifier}
                                         active={identifier.equals(currentPersonaIdentifier)}
                                         key={identifier.toText()}
@@ -97,7 +100,11 @@ export const PersonaDrawerUI = memo<PersonaDrawerUIProps>(
                             )
                         })}
                         <Box className={classes.buttons}>
-                            <Button onClick={() => navigate(DashboardRoutes.SignUp)}>{t.personas_add_persona()}</Button>
+                            <Button
+                                onClick={() => navigate(DashboardRoutes.SignUp)}
+                                disabled={personas.length >= MAX_PERSONA_LIMIT}>
+                                {t.personas_add_persona()}
+                            </Button>
                             <Button
                                 color="warning"
                                 onClick={() =>

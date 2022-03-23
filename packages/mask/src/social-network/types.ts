@@ -1,20 +1,21 @@
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
+import type { GrayscaleAlgorithm, SocialNetworkEnum } from '@masknet/encryption'
+import type { PostInfo } from '@masknet/plugin-infra'
 import type {
     Identifier,
+    ObservableWeakMap,
     PersonaIdentifier,
     PostIdentifier,
     ProfileIdentifier,
     ReadonlyIdentifierMap,
-    ObservableWeakMap,
-    TypedMessage,
 } from '@masknet/shared-base'
+import type { SerializableTypedMessages } from '@masknet/typed-message'
+import type { RenderFragmentsContextType } from '@masknet/typed-message/dom'
 import type { PaletteMode, Theme } from '@mui/material'
+import type { Subscription } from 'use-subscription'
 import type { InjectedDialogClassKey, InjectedDialogProps } from '../components/shared/InjectedDialog'
 import type { Profile } from '../database'
-import type { PostInfo } from './PostInfo'
-import type { GrayscaleAlgorithm } from '@masknet/encryption'
 import type { createSNSAdaptorSpecializedPostContext } from './utils/create-post-context'
-import type { Subscription } from 'use-subscription'
 
 type ClassNameMap<ClassKey extends string = string> = { [P in ClassKey]: string }
 // Don't define values in namespaces
@@ -36,12 +37,12 @@ export namespace SocialNetwork {
         getPostURL?(post: PostIdentifier<Identifier>): URL | null
         /** Is this username valid in this network */
         isValidUsername?(username: string): boolean
-        /** How to encode/decode public keys when it is put in the bio. */
-        publicKeyEncoding?: PayloadEncoding
         /** How to encode/decode text payload (e.g. make it into a link so it will be shortened by SNS). */
         textPayloadPostProcessor?: PayloadEncoding
         /** Given a text, return a URL that will allow user to share this text */
         getShareLinkURL?(text: string): URL
+        /** Handle share */
+        share?(text: string): void
         createPostContext: ReturnType<typeof createSNSAdaptorSpecializedPostContext>
     }
     export interface Shared {
@@ -54,7 +55,7 @@ export namespace SocialNetwork {
          * !!! THIS SHOULD NOT BE USED TO CONSTRUCT A NEW ProfileIdentifier !!!
          */
         networkIdentifier: string
-        name: string
+        encryptionNetwork: SocialNetworkEnum
         /**
          * This field _will_ be overwritten by SocialNetworkUI.permissions
          */
@@ -114,6 +115,8 @@ export namespace SocialNetworkUI {
             enhancedPostRenderer?(signal: AbortSignal, current: PostInfo): void
             /** Display the additional content (decrypted, plugin, ...) below the post */
             postInspector?(signal: AbortSignal, current: PostInfo): void
+            /** Add custom actions buttons to the post */
+            postActions?(signal: AbortSignal, author: PostInfo): void
             /** Inject a tool box that displayed in the navigation bar of the SNS */
             toolbox?(signal: AbortSignal): void
             /** Inject the UI that used to notify if the user has not completely setup the current network. */
@@ -147,6 +150,8 @@ export namespace SocialNetworkUI {
             /** @deprecated same reason as userAvatar */
             profileAvatar?(signal: AbortSignal): void
             /** @deprecated same reason as userAvatar */
+            profileTip?(signal: AbortSignal): void
+            /** @deprecated same reason as userAvatar */
             postAvatar?(signal: AbortSignal, current: PostInfo): void
             /** @deprecated same reason as userAvatar */
             openNFTAvatar?(signal: AbortSignal): void
@@ -154,6 +159,8 @@ export namespace SocialNetworkUI {
             postAndReplyNFTAvatar?(signal: AbortSignal): void
             /** @deprecated same reason as userAvatar */
             collectionAvatar?(signal: AbortSignal): void
+            /** @deprecated same reason as useAvatar */
+            avatarClipNFT?(signal: AbortSignal): void
         }
         export interface NewPostComposition {
             start(signal: AbortSignal): void
@@ -189,12 +196,14 @@ export namespace SocialNetworkUI {
         export interface NativeCompositionAttachImageOptions {
             recover?: boolean
             relatedTextPayload?: string
+            reason?: 'timeline' | 'popup' | 'reply'
         }
         export interface NativeCompositionAttachTextOptions {
             recover?: boolean
+            reason?: 'timeline' | 'popup' | 'reply'
         }
         export interface MaskCompositionDialog {
-            open?(content: TypedMessage, options?: MaskCompositionDialogOpenOptions): void
+            open?(content: SerializableTypedMessages, options?: MaskCompositionDialogOpenOptions): void
         }
         export interface MaskCompositionDialogOpenOptions {
             target?: 'E2E' | 'Everyone'
@@ -269,6 +278,7 @@ export namespace SocialNetworkUI {
         }
         export interface ComponentOverwrite {
             InjectedDialog?: ComponentOverwriteConfig<InjectedDialogProps, InjectedDialogClassKey>
+            RenderFragments?: RenderFragmentsContextType
         }
         export interface ComponentOverwriteConfig<Props extends { classes?: any }, Classes extends string> {
             classes?: () => { classes: Partial<ClassNameMap<Classes>> }
@@ -286,6 +296,7 @@ export namespace SocialNetworkUI {
     }
     export namespace Configuration {
         export interface Define {
+            nextIDConfig?: NextIDConfig
             steganography?: SteganographyConfig
             setupWizard?: SetupWizardConfig
         }
@@ -299,6 +310,11 @@ export namespace SocialNetworkUI {
         }
         export interface SetupWizardConfig {
             disableSayHello?: boolean
+        }
+        export interface NextIDConfig {
+            enable?: boolean
+            platform: string
+            collectVerificationPost: (keyword: string) => PostIdentifier | null
         }
     }
 }
