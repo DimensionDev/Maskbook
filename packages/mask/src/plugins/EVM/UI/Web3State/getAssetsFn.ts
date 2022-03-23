@@ -25,7 +25,7 @@ import type { AbiItem } from 'web3-utils'
 import { uniqBy } from 'lodash-unified'
 import { PLUGIN_NETWORKS } from '../../constants'
 import { makeSortAssertWithoutChainFn } from '../../utils/token'
-import * as EthereumService from '../../../../extension/background-script/EthereumService'
+import { createGetLatestBalance } from './createGetLatestBalance'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 import { pow10 } from '@masknet/web3-shared-base'
 
@@ -127,11 +127,11 @@ export const getFungibleAssetsFn =
 
         const allTokens = [...assetsFromProvider, ...assetFromChain]
 
+        const getBalance = createGetLatestBalance(context)
         const allRequest = TokenUnavailableFromDebankList.map(async (x) => {
-            const b = await EthereumService.getBalance(address, { chainId: x })
+            const balance = await getBalance(x, address)
             const coinId = getCoinGeckoCoinId(x)
             const price = (await getNativeTokenPrice(coinId))[coinId]
-            const balance = String(Number.parseInt(b, 16))
 
             return {
                 chainId: x,
