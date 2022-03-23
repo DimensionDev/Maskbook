@@ -24,6 +24,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 2,
         padding: 4,
         background: MaskColorVar.twitterTooltipBg,
+        color: MaskColorVar.white,
     },
 }))
 
