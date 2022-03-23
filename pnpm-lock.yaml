@@ -316,6 +316,7 @@ importers:
       '@masknet/plugin-infra': workspace:*
       '@masknet/plugin-rss3': workspace:*
       '@masknet/plugin-solana': workspace:*
+      '@masknet/plugin-test': workspace:*
       '@masknet/plugin-wallet': workspace:*
       '@masknet/public-api': workspace:*
       '@masknet/sdk': workspace:*
@@ -454,6 +455,7 @@ importers:
       '@masknet/plugin-infra': link:../plugin-infra
       '@masknet/plugin-rss3': link:../plugins/RSS3
       '@masknet/plugin-solana': link:../plugins/Solana
+      '@masknet/plugin-test': link:../plugins/Test
       '@masknet/plugin-wallet': link:../plugins/Wallet
       '@masknet/public-api': link:../public-api
       '@masknet/sdk': link:../mask-sdk
@@ -824,6 +826,18 @@ importers:
       bn.js: 4.12.0
       bs58: 4.0.1
       buffer: 6.0.3
+      react-use: 17.3.2_bc22c48adf1a4e34a005159413cd72b5
+
+  packages/plugins/Test:
+    specifiers:
+      '@masknet/plugin-infra': workspace:*
+      '@masknet/shared': workspace:*
+      '@masknet/shared-base': workspace:*
+      react-use: ^17.3.2
+    dependencies:
+      '@masknet/plugin-infra': link:../../plugin-infra
+      '@masknet/shared': link:../../shared
+      '@masknet/shared-base': link:../../shared-base
       react-use: 17.3.2_bc22c48adf1a4e34a005159413cd72b5
 
   packages/plugins/Wallet:

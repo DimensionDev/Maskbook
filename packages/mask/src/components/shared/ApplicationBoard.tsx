@@ -246,6 +246,14 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             false,
         ),
         createEntry(
+            'Test',
+            new URL('./assets/files.png', import.meta.url).toString(),
+            () => openEncryptedMessage(PluginId.Test),
+            undefined,
+            false,
+            false,
+        ),
+        createEntry(
             'ITO',
             new URL('./assets/token.png', import.meta.url).toString(),
             () => openEncryptedMessage(ITO_PluginID),
