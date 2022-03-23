@@ -39,7 +39,6 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: 'inherit',
     },
     tabs: {
-        width: 535,
         height: 36,
         minHeight: 36,
         margin: '0 auto',

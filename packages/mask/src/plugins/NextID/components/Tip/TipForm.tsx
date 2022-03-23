@@ -108,7 +108,7 @@ export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
     )
     // #endregion
     const buttonLabel = useMemo(() => {
-        if (account) return 'Connect Wallet'
+        if (!account) return 'Connect Wallet'
         if (isSending) return t.sending_tip()
         if (isValid || !validateMessage) return t.send_tip()
         return validateMessage
@@ -147,7 +147,7 @@ export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
                 </FormControl>
                 <FormControl className={classes.tokenField}>
                     <TokenAmountPanel
-                        label="Token"
+                        label=""
                         token={token}
                         amount={amount}
                         onAmountChange={setAmount}
