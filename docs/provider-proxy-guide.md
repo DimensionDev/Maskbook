@@ -42,10 +42,11 @@ Production environment will be deployed manually at release time
 
 ## Debug on local
 
-1. Install [Miniflare](https://miniflare.dev/get-started/cli)
-2. Clone [Hyper proxy](https://github.com/DimensionDev/hyper-proxy) in to local
+1. Install [Miniflare](https://miniflare.dev/get-started/cli).
+2. Clone [Hyper proxy](https://github.com/DimensionDev/hyper-proxy) in to local.
    ```shell
    git clone https://github.com/DimensionDev/hyper-proxy.git
    ```
-3. Change the `@dimensiondev/provider-proxy` dependency to your `maskbook/packages/provider-proxy/dist` in package.json.
-4. Run `npm install && npm run dev`
+3. Run `pnpm build && node ./packages/provider-proxy/build.mjs` in Maskbook repository.
+4. Run `npm link {path-to-repo}/maskbook/packages/provider-proxy/dist`.
+5. Run `npm install && npm run dev`.
