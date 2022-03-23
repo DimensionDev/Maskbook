@@ -17,12 +17,12 @@ import { bindProof } from '@masknet/web3-providers'
 interface BindDialogProps {
     open: boolean
     onClose(): void
-    onBind(): void
+    onBound(): void
     persona: Persona
     bounds: Binding[]
 }
 
-export const BindDialog = memo<BindDialogProps>(({ open, onClose, persona, onBind, bounds }) => {
+export const BindDialog = memo<BindDialogProps>(({ open, onClose, persona, onBound, bounds }) => {
     const account = useAccount()
     const t = useI18N()
     const { showSnackbar } = useCustomSnackbar()
@@ -53,7 +53,7 @@ export const BindDialog = memo<BindDialogProps>(({ open, onClose, persona, onBin
                 message: t.notify_wallet_sign_request_success(),
             })
             await delay(2000)
-            onBind()
+            onBound()
             onClose()
         } catch {
             showSnackbar(t.notify_wallet_sign_request_title(), {

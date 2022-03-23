@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { queryExistedBindingByPersona, queryIsBound } from '@masknet/web3-providers'
 import { Box, Button, Skeleton, Stack, Typography } from '@mui/material'
 import { useMemo, useState } from 'react'
-import { useAsync, useAsyncRetry, useCounter } from 'react-use'
+import { useAsync, useAsyncRetry } from 'react-use'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 import { useNextIDConnectStatus } from '../../../components/DataSource/useNextID'
 import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
@@ -58,11 +58,10 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
     const currentProfileIdentifier = useLastRecognizedIdentity()
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
     const personaConnectStatus = usePersonaConnectStatus()
-    const { reset, isVerified } = useNextIDConnectStatus()
+    const { reset, isVerified, action } = useNextIDConnectStatus()
 
     const [openBindDialog, toggleBindDialog] = useState(false)
     const [unbindAddress, setUnBindAddress] = useState<string>()
-    const [count, { inc }] = useCounter(0)
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
     const isOwn = currentProfileIdentifier.identifier.toText() === visitingPersonaIdentifier.identifier.toText()
 
@@ -87,10 +86,14 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
         return queryIsBound(currentPersona.publicHexKey, platform, visitingPersonaIdentifier.identifier.userId)
     }, [isOwn, currentPersona, visitingPersonaIdentifier, isVerified])
 
-    const { value: bindings, loading } = useAsync(async () => {
+    const {
+        value: bindings,
+        loading,
+        retry: retryQueryBinding,
+    } = useAsyncRetry(async () => {
         if (!currentPersona) return
         return queryExistedBindingByPersona(currentPersona.publicHexKey!)
-    }, [currentPersona, isOwn, count])
+    }, [currentPersona, isOwn])
 
     const onVerify = async () => {
         reset()
@@ -168,7 +171,7 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
                         onClose={() => toggleBindDialog(false)}
                         persona={currentPersona}
                         bounds={bindings?.proofs ?? []}
-                        onBind={() => inc(1)}
+                        onBound={retryQueryBinding}
                     />
                 )}
                 {unbindAddress && currentPersona && isOwn && (
@@ -176,7 +179,7 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
                         unbindAddress={unbindAddress}
                         onClose={() => setUnBindAddress(undefined)}
                         persona={currentPersona}
-                        onUnBind={() => inc(1)}
+                        onUnBound={retryQueryBinding}
                         bounds={bindings?.proofs ?? []}
                     />
                 )}
@@ -218,7 +221,7 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
                     onClose={() => toggleBindDialog(false)}
                     persona={currentPersona}
                     bounds={bindings?.proofs ?? []}
-                    onBind={() => inc(1)}
+                    onBound={retryQueryBinding}
                 />
             )}
         </>
