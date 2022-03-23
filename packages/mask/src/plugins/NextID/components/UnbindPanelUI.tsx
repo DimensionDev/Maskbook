@@ -14,8 +14,8 @@ import AbstractTab, { AbstractTabProps } from '../../../components/shared/Abstra
 
 const useStyles = makeStyles()((theme) => ({
     persona: {
-        padding: theme.spacing(1.7),
-        marginBottom: theme.spacing(2),
+        padding: theme.spacing(1.8),
+        marginBottom: theme.spacing(3),
         backgroundColor: theme.palette.background.default,
         borderRadius: 8,
         alignItems: 'center',
