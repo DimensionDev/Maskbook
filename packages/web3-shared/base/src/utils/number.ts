@@ -49,7 +49,7 @@ export function pow10(n: BigNumber.Value) {
 }
 
 /** scale 10 ** n * m */
-export function scale10(m: BigNumber.Value, n: BigNumber.Value) {
+export function scale10(m: BigNumber.Value, n: BigNumber.Value = 1) {
     return shiftBy(10, n).multipliedBy(m)
 }
 
