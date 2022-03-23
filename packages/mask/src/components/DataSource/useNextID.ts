@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import type { NextIDPlatform, PersonaIdentifier } from '@masknet/shared-base'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { usePersonaConnectStatus } from './usePersonaConnectStatus'
 import { currentPersonaIdentifier, currentSetupGuideStatus, dismissVerifyNextID } from '../../settings/settings'
@@ -11,6 +11,7 @@ import { useLastRecognizedIdentity } from './useActivatedUI'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { queryExistedBindingByPersona, queryExistedBindingByPlatform, queryIsBound } from '@masknet/web3-providers'
 import Services from '../../extension/service'
+import { MaskMessages } from '../../utils'
 
 export const usePersonaBoundPlatform = (personaPublicKey: string) => {
     return useAsyncRetry(() => {
@@ -30,9 +31,11 @@ const verifyPersona = (personaIdentifier?: PersonaIdentifier) => async () => {
 }
 
 export const useNextIDBoundByPlatform = (platform: NextIDPlatform, identity: string) => {
-    return useAsyncRetry(() => {
+    const res = useAsyncRetry(() => {
         return queryExistedBindingByPlatform(platform, identity)
     }, [platform, identity])
+    useEffect(() => MaskMessages.events.ownProofChanged.on(res.retry), [res.retry])
+    return res
 }
 
 export enum NextIDVerificationStatus {
