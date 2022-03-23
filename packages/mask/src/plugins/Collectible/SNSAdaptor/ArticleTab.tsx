@@ -57,7 +57,9 @@ export function ArticleTab(props: ArticleTabProps) {
 
     return useMemo(() => {
         if (!asset.value) return null
-        const resourceUrl = asset.value.image_url || asset.value.animation_url
+        const resourceUrl = hasNativeAPI
+            ? asset.value.image_url || asset.value.animation_url
+            : asset.value.animation_url || asset.value.image_url
         return (
             <CollectibleTab>
                 <div className={classes.body}>
