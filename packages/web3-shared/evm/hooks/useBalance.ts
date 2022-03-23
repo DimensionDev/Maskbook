@@ -12,9 +12,5 @@ export function useBalance(expectedChainId?: ChainId, expectedAccount?: string) 
 
     const web3 = useWeb3({ chainId })
 
-    return useAsyncRetry(async () => {
-        const b = await web3.eth.getBalance(account)
-        console.log({ b })
-        return b
-    }, [web3, account])
+    return useAsyncRetry(async () => web3.eth.getBalance(account), [web3, account])
 }
