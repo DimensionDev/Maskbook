@@ -38,15 +38,16 @@ The GitHub action of hyper-proxy's repository will check for new packages every 
 
 ### Production environment
 
-Production environment will be deployed manually at release time
+Production environment will be deployed manually at release time.
 
 ## Debug on local
 
-1. Install [Miniflare](https://miniflare.dev/get-started/cli).
-2. Clone [Hyper proxy](https://github.com/DimensionDev/hyper-proxy) in to local.
+1. Clone [Hyper proxy](https://github.com/DimensionDev/hyper-proxy) in to local.
+
    ```shell
    git clone https://github.com/DimensionDev/hyper-proxy.git
    ```
-3. Run `pnpm build && node ./packages/provider-proxy/build.mjs` in Maskbook repository.
-4. Run `npm link {path-to-repo}/maskbook/packages/provider-proxy/dist`.
-5. Run `npm install && npm run dev`.
+
+2. Run `pnpm build && node ./packages/provider-proxy/build.mjs` in Maskbook repository.
+3. Run `npm link {path-to-repo}/maskbook/packages/provider-proxy/dist`.
+4. Run `npm install && npm run dev`.
