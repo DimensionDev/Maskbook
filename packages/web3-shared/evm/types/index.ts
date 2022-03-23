@@ -78,6 +78,9 @@ export enum ChainId {
 
     // Optimistic
     Optimistic = 10,
+
+    // Conflux
+    Conflux = 1030,
 }
 
 export enum ProviderType {
@@ -113,6 +116,7 @@ export enum NetworkType {
     Fuse = 'Fuse',
     Metis = 'Metis',
     Optimistic = 'Optimistic',
+    Conflux = 'Conflux',
 }
 
 export interface Wallet {

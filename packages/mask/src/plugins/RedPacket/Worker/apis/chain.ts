@@ -65,7 +65,6 @@ export async function getRedPacketHistory(
     }
 
     const { result } = await response.json()
-
     if (!result.length) return []
 
     const payloadList: RedPacketJSONPayloadFromChain[] = result.reduce(
