@@ -3,6 +3,8 @@
 Currently, we use a lot of third-party data sources, the stability of the data source and changes may lead to abnormalities in the operation of the plug-in, in view of the delay in the release of the plug-in, we can not respond to changes in a timely manner, so through the proxy to solve this problem.
 
 ## Architecture
+![image](https://user-images.githubusercontent.com/19925717/159650079-43773772-b832-4358-96b8-bb0516fcf2bc.png)
+
 
 ## How to write a producer
 
