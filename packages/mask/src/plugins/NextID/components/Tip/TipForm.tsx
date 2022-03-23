@@ -2,10 +2,10 @@ import { useWeb3State } from '@masknet/plugin-infra'
 import { SelectTokenDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { EthereumTokenType, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
+import { EthereumTokenType, useAccount, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
 import { Box, BoxProps, FormControl, MenuItem, Select, Typography } from '@mui/material'
 import classnames from 'classnames'
-import { FC, memo, useCallback, useRef, useState } from 'react'
+import { FC, memo, useCallback, useMemo, useRef, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
@@ -25,7 +25,7 @@ const useStyles = makeStyles()((theme) => {
             flexGrow: 1,
             overflow: 'auto',
         },
-        tipButton: {
+        actionButton: {
             marginTop: theme.spacing(1.5),
             fontSize: 16,
         },
@@ -74,6 +74,10 @@ export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
     const { Utils } = useWeb3State()
     const selectRef = useRef(null)
     const [id] = useState(uuid)
+    const account = useAccount()
+    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
     const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
         useCallback(
@@ -103,7 +107,12 @@ export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
         chainId,
     )
     // #endregion
-    const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
+    const buttonLabel = useMemo(() => {
+        if (account) return 'Connect Wallet'
+        if (isSending) return t.sending_tip()
+        if (isValid || !validateMessage) return t.send_tip()
+        return validateMessage
+    }, [account, isSending, t, isValid, validateMessage])
 
     return (
         <Box className={classnames(classes.root, className)} {...rest}>
@@ -155,7 +164,6 @@ export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
                     />
                 </FormControl>
             </div>
-
             <EthereumChainBoundary
                 chainId={chainId}
                 noSwitchNetworkTip
@@ -168,10 +176,10 @@ export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
                 <ActionButton
                     variant="contained"
                     size="large"
-                    className={classes.tipButton}
+                    className={classes.actionButton}
                     fullWidth
-                    disabled={!isValid || isSending}
-                    onClick={sendTip}>
+                    disabled={account ? !isValid || isSending : false}
+                    onClick={account ? sendTip : openSelectProviderDialog}>
                     {buttonLabel}
                 </ActionButton>
             </EthereumChainBoundary>
