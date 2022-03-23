@@ -194,6 +194,9 @@ export const ProfileList = memo(() => {
                     signature: signatureResult.signature.signature,
                 },
             )
+
+            await Services.Identity.detachProfile(unbind.identifier)
+
             await delay(2000)
             setUnbind(null)
             refreshProfileList()
