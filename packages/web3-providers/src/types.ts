@@ -319,8 +319,8 @@ export namespace SecurityAPI {
     }
 
     export interface TradingSecurity {
-        buy_tax: string
-        sell_tax: string
+        buy_tax?: string
+        sell_tax?: string
         slippage_modifiable: '0' | '1'
         is_honeypot: '0' | '1'
         transfer_pausable: '0' | '1'
@@ -341,6 +341,9 @@ export namespace SecurityAPI {
     }
 
     export interface TokenSecurity {
+        token_name: string
+        token_symbol: string
+
         holder_count?: number
         total_supply?: number
         holders?: Holder[]

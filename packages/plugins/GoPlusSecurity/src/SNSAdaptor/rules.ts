@@ -10,7 +10,7 @@ export interface SecurityMessage {
     messageKey: keyof ReturnType<typeof useI18N>
 }
 
-const percentageToNumber = (value: string) => parseInt(value.replace('%', ''))
+const percentageToNumber = (value?: string) => parseInt((value ?? '').replace('%', ''))
 
 export const SecurityMessages: SecurityMessage[] = [
     // open source

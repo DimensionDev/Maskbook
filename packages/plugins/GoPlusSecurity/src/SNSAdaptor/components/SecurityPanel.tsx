@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { memo, useMemo, useState } from 'react'
 import { DefineMapping, SecurityMessageLevel, TokenSecurity } from './Common'
 import { SecurityMessages } from '../rules'
-import { RiskCard } from './RiskCard'
+import { RiskCard, RiskCardUI } from './RiskCard'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 
@@ -46,13 +46,18 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
     const t = useI18N()
     const [isFold, setFold] = useState(false)
 
-    const makeMessageList = SecurityMessages.filter((x) => x.condition(tokenSecurity))
+    const makeMessageList = SecurityMessages.filter(
+        (x) => x.condition(tokenSecurity) && x.level !== SecurityMessageLevel.Safe,
+    )
+
+    const riskyFactors = makeMessageList.filter((x) => x.level === SecurityMessageLevel.High).length
+    const attentionFactors = makeMessageList.filter((x) => x.level === SecurityMessageLevel.Medium).length
 
     const securityMessageLevel = useMemo(() => {
-        if (makeMessageList.find((x) => x.level === SecurityMessageLevel.High)) return SecurityMessageLevel.High
-        if (makeMessageList.find((x) => x.level === SecurityMessageLevel.Medium)) return SecurityMessageLevel.Medium
+        if (riskyFactors) return SecurityMessageLevel.High
+        if (attentionFactors) return SecurityMessageLevel.Medium
         return SecurityMessageLevel.Safe
-    }, [makeMessageList.map((x) => x.titleKey).join()])
+    }, [riskyFactors, attentionFactors])
 
     return (
         <Stack spacing={2}>
@@ -95,14 +100,14 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                                 alignItems="center">
                                 {DefineMapping[securityMessageLevel].icon(33)}
                                 <Typography color={DefineMapping[securityMessageLevel].titleColor} fontSize={14}>
-                                    {t[DefineMapping[securityMessageLevel].i18nKey]()}
+                                    {t[DefineMapping[securityMessageLevel].i18nKey]({ quantity: '' })}
                                 </Typography>
                             </Stack>
                             <Stack height={128} justifyContent="space-between" flex={1}>
                                 <Stack direction="row" justifyContent="space-between">
                                     <Typography className={classes.subtitle}>{t.token_info_token_name()}</Typography>
                                     <Typography className={classes.cardValue}>
-                                        {formatEthereumAddress(tokenSecurity.contract, 4)}
+                                        {tokenSecurity.token_symbol}({tokenSecurity.token_name})
                                     </Typography>
                                 </Stack>
                                 <Stack direction="row" justifyContent="space-between">
@@ -139,13 +144,40 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                 )}
             </Stack>
             <Stack spacing={2}>
-                <Typography variant="h6" className={classes.header}>
-                    {t.security_detection()}
-                </Typography>
+                <Stack direction="row" alignItems="center" spacing={3.5}>
+                    <Typography variant="h6" className={classes.header}>
+                        {t.security_detection()}
+                    </Typography>
+                    <Stack direction="row" alignItems="center" spacing={1.5}>
+                        {riskyFactors !== 0 && (
+                            <Stack direction="row" alignItems="center" spacing={0.5}>
+                                {DefineMapping[securityMessageLevel].icon(14)}
+                                <Typography component="span">
+                                    {t.risky_factors({ quantity: riskyFactors.toString() })}
+                                </Typography>
+                            </Stack>
+                        )}
+                        {attentionFactors !== 0 && (
+                            <Stack direction="row" alignItems="center" spacing={0.5}>
+                                {DefineMapping[securityMessageLevel].icon(14)}
+                                <Typography component="span">
+                                    {t.attention_factors({ quantity: attentionFactors.toString() })}
+                                </Typography>
+                            </Stack>
+                        )}
+                    </Stack>
+                </Stack>
                 <Stack spacing={1} maxHeight={isFold ? 402 : 240} sx={{ overflowY: 'scroll' }}>
                     {makeMessageList.map((x, i) => (
                         <RiskCard info={x} key={i} />
                     ))}
+                    {makeMessageList.length && securityMessageLevel === SecurityMessageLevel.Safe && (
+                        <RiskCardUI
+                            icon={DefineMapping[SecurityMessageLevel.Safe].icon(14)}
+                            title={t.risk_safe_description()}
+                            titleColor={DefineMapping[SecurityMessageLevel.Safe].titleColor}
+                        />
+                    )}
                 </Stack>
             </Stack>
         </Stack>
