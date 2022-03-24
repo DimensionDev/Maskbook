@@ -5,7 +5,7 @@ import { requestSNSAdaptorPermission } from '../../social-network/utils/permissi
 import { currentSetupGuideStatus } from '../../settings/settings'
 import stringify from 'json-stable-stringify'
 import { SetupGuideStep } from '../../components/InjectedComponents/SetupGuide/types'
-import type { PersonaIdentifier } from '@masknet/shared-base'
+import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { delay } from '@dimensiondev/kit'
 
 export async function getDefinedSocialNetworkUIs() {
@@ -15,7 +15,12 @@ export async function getDefinedSocialNetworkUIs() {
         }
     })
 }
-export async function connectSocialNetwork(identifier: PersonaIdentifier, network: string, type?: 'local' | 'nextID') {
+export async function connectSocialNetwork(
+    identifier: PersonaIdentifier,
+    network: string,
+    type?: 'local' | 'nextID',
+    porfile?: ProfileIdentifier,
+) {
     const ui = await loadSocialNetworkUI(network)
     const home = ui.utils.getHomePage?.()
     if (!Flags.no_web_extension_dynamic_permission_request) {
@@ -24,6 +29,7 @@ export async function connectSocialNetwork(identifier: PersonaIdentifier, networ
     currentSetupGuideStatus[network].value = stringify({
         status: type === 'nextID' ? SetupGuideStep.VerifyOnNextID : SetupGuideStep.FindUsername,
         persona: identifier.toText(),
+        username: porfile?.userId,
     })
     await delay(100)
     home && browser.tabs.create({ active: true, url: home })
