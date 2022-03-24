@@ -13,7 +13,7 @@ feat/fantasy
 # merge the develop branch and never mind conflicts in lockfile
 > git merge develop
 
-# revoke lockfile to the one on the develop branch
+# check out the lock file from the base branch
 > git checkout develop -- pnpm-lock.yaml
 
 # up the lockfile to date
