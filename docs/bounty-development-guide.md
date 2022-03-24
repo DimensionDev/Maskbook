@@ -14,7 +14,8 @@ Mask Network extension is mainly written in TypeScript. The UI part is building 
 
 > If your bounty task is related to another project, it could have extra requirements that need to consider.
 
-The codebase is totally open sourced. Anyone can review it. If you are familiar with these libraries mentioned above, it will take less friction for you to get start.
+If you are familiar with these libraries mentioned above, it will take less effort for you to get started.
+The codebase is open-sourced under the AGPLv3 license.
 
 ## General Content
 
