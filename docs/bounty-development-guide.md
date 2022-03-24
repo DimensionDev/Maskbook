@@ -22,7 +22,8 @@ Firstly, you can clone the repository and [set up the development environment](s
 
 ### Core Packages
 
-- `packages/mask` The core part of the extension which adapts multiple social networks into the system, keeps the user's data safty, implements encrpytion & decryption protocols, and hosts a plugin system.
+- `packages/mask` The main extension which has multiple websites supports, keeps the user's data safe and hosts a plugin system.
+- `packages/encryption` The encryption & decryption of mask network.
 - `packages/plugin-infra` The definition of the plugin system, with a bunch of APIs to expose the core abilities to plugins.
 
 ### Plugin Packages
