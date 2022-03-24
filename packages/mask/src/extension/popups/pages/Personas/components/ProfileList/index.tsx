@@ -17,7 +17,7 @@ import { useAsyncFn, useAsyncRetry } from 'react-use'
 import Services from '../../../../../service'
 import { GrayMasks } from '@masknet/icons'
 import { DisconnectDialog } from '../DisconnectDialog'
-import { bindProof, createPersonaPayload, queryExistedBindingByPersona } from '@masknet/web3-providers'
+import { createPersonaPayload, queryExistedBindingByPersona } from '@masknet/web3-providers'
 import { delay } from '@dimensiondev/kit'
 import classNames from 'classnames'
 
@@ -188,7 +188,9 @@ export const ProfileList = memo(() => {
 
             if (!signatureResult) return
 
-            await bindProof(
+            // workaround: should remove this service method
+            await Services.Identity.detachProfileWithNextID(
+                unbind.identifier,
                 result.uuid,
                 publicHexKey,
                 NextIDAction.Delete,
@@ -199,8 +201,6 @@ export const ProfileList = memo(() => {
                     signature: signatureResult.signature.signature,
                 },
             )
-
-            await Services.Identity.detachProfile(unbind.identifier)
 
             await delay(2000)
             setUnbind(null)
