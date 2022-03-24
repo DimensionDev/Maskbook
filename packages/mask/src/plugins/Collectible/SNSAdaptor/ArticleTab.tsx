@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
-import { AssetPlayer } from '@masknet/shared'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { useMemo } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
@@ -43,6 +43,9 @@ const useStyles = makeStyles()((theme) => ({
         minWidth: 300,
         minHeight: 300,
     },
+    imgWrapper: {
+        maxWidth: 300,
+    },
 }))
 
 export interface ArticleTabProps {}
@@ -57,14 +60,7 @@ export function ArticleTab(props: ArticleTabProps) {
         return (
             <CollectibleTab>
                 <div className={classes.body}>
-                    <AssetPlayer
-                        url={resourceUrl}
-                        options={{
-                            playsInline: true,
-                        }}
-                        classes={classes}
-                        isFixedIframeSize={false}
-                    />
+                    <NFTCardStyledAssetPlayer url={resourceUrl} classes={classes} />
                 </div>
             </CollectibleTab>
         )
