@@ -29,6 +29,6 @@ Learn more: [`cspell.json`](https://cspell.org/configuration/#cspelljson)
 
 ## Why were my components rendered many times?
 
-All components are working in [Strict Mode](https://reactjs.org/docs/strict-mode.html). See from the document. It helps to develop robust components in many ways. If you need to escape from it for some purpose, try to comment out those `<StrictMode />` components to turn it off. After you finish your work, remember to render your components again with it turned on. **NEVER PUSH CODE WITHOUT TESTING IN STRICT MODE**
+All components are working in [Strict Mode](https://reactjs.org/docs/strict-mode.html). The strict mode helps to develop robust components in many ways. If you need to escape from it for some purpose, try to comment out those `<StrictMode />` components to turn it off. After you finish your work, remember to render your components again with it turned on. **NEVER PUSH CODE WITHOUT TESTING IN STRICT MODE**
 
 ## How to download CI builds?
