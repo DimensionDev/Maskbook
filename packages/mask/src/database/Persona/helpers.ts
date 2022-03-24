@@ -9,7 +9,6 @@ import {
     detachProfileDB,
     deletePersonaDB,
     safeDeletePersonaDB,
-    queryPersonaByProfileDB,
     consistentPersonaDBWriteAccess,
     updatePersonaDB,
     queryProfilesPagedDB,
@@ -164,10 +163,6 @@ export async function setupPersona(id: PersonaIdentifier) {
 
 export async function queryPersonaByProfile(i: ProfileIdentifier) {
     return (await queryProfile(i)).linkedPersona
-}
-
-export function queryPersonaRecord(i: ProfileIdentifier | PersonaIdentifier): Promise<PersonaRecord | null> {
-    return i instanceof ProfileIdentifier ? queryPersonaByProfileDB(i) : queryPersonaDB(i)
 }
 
 export async function createPersonaByMnemonic(

@@ -193,6 +193,7 @@ export enum NetworkType {
     Metis = 'Metis',
     Optimistic = 'Optimistic',
     Harmony = 'Harmony',
+    Conflux = 'Conflux',
 }
 
 export enum DataProvider {

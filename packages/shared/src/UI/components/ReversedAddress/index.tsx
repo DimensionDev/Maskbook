@@ -5,14 +5,14 @@ interface ReverseAddressProps {
     address: string
     pluginId?: NetworkPluginID
     domainSize?: number
-    addressSize?: number
+    size?: number
 }
 
-export const ReverseAddress = memo<ReverseAddressProps>(({ address, pluginId, domainSize, addressSize }) => {
+export const ReversedAddress = memo<ReverseAddressProps>(({ address, pluginId, domainSize, size = 5 }) => {
     const { value: domain } = useReverseAddress(address, pluginId)
     const { Utils } = useWeb3State(pluginId)
 
-    if (!domain || !Utils?.formatDomainName) return <>{Utils?.formatAddress?.(address, addressSize) ?? address}</>
+    if (!domain || !Utils?.formatDomainName) return <>{Utils?.formatAddress?.(address, size) ?? address}</>
 
     return <>{Utils.formatDomainName(domain, domainSize)}</>
 })

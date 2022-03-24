@@ -8,6 +8,7 @@ import { MaskMessages } from '../../utils/messages'
 import { useControlledDialog } from '../../utils/hooks/useControlledDialog'
 import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
 import { ITO_PluginID } from '../../plugins/ITO/constants'
+import { base as ITO_Definition } from '../../plugins/ITO/base'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { PluginPetMessages } from '../../plugins/Pets/messages'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
@@ -17,6 +18,8 @@ import { SavingsDialog } from '../../plugins/Savings/SNSAdaptor/SavingsDialog'
 import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialog'
 import { NetworkPluginID, PluginId, usePluginIDContext } from '@masknet/plugin-infra'
 import { FindTrumanDialog } from '../../plugins/FindTruman/SNSAdaptor/FindTrumanDialog'
+import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
+import { activatedSocialNetworkUI } from '../../social-network'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -230,6 +233,10 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
         }
     }
 
+    // Todo: remove this after refactor applicationBoard
+    const isITOSupportedChain =
+        ITO_Definition.enableRequirement.web3![NetworkPluginID.PLUGIN_EVM]?.supportedChainIds?.includes(currentChainId)
+
     const firstLevelEntries: MaskAppEntry[] = [
         createEntry(
             'Lucky Drop',
@@ -251,14 +258,14 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             new URL('./assets/token.png', import.meta.url).toString(),
             () => openEncryptedMessage(ITO_PluginID),
             undefined,
-            isNotEvm,
+            !isITOSupportedChain,
         ),
         createEntry(
             'Claim',
             new URL('./assets/gift.png', import.meta.url).toString(),
             onClaimAllDialogOpen,
             undefined,
-            isNotEvm,
+            !isITOSupportedChain,
         ),
         createEntry(
             'Mask Bridge',
@@ -288,7 +295,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             new URL('./assets/swap.png', import.meta.url).toString(),
             onSwapDialogOpen,
             undefined,
-            isNotEvm,
+            isNotEvm || currentChainId === ChainId.Conflux,
         ),
         createEntry(
             'Fiat On-Ramp',
@@ -325,7 +332,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                             new URL('./assets/mintTeam.png', import.meta.url).toString(),
                             () => setPetDialog({ open: true }),
                             [ChainId.Mainnet],
-                            currentChainId !== ChainId.Mainnet,
+                            currentChainId !== ChainId.Mainnet || !isTwitter(activatedSocialNetworkUI),
                             true,
                         ),
                     ],

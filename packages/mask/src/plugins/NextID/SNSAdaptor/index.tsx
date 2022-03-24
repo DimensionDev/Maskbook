@@ -3,8 +3,9 @@ import { base } from '../base'
 import { PLUGIN_ID } from '../constants'
 import { NextIdPage } from '../components/NextIdPage'
 import { RootContext } from '../contexts'
-import { TipButton, TipTaskManager } from '../components/tip'
+import { PostTipButton, TipTaskManager } from '../components/Tip'
 import { Flags } from '../../../../shared'
+import { EMPTY_LIST } from '@masknet/web3-shared-evm'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -15,7 +16,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             label: 'Wallet',
             priority: 10,
             UI: {
-                TabContent: NextIdPage,
+                TabContent: ({ personaList = EMPTY_LIST }) => <NextIdPage personaList={personaList} />,
             },
         },
     ],
@@ -31,7 +32,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         if (!Flags.next_id_tip_enabled) return null
         return (
             <RootContext>
-                <TipButton />
+                <PostTipButton />
             </RootContext>
         )
     },

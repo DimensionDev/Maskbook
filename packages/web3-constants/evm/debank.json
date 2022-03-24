@@ -18,7 +18,8 @@
         "Fantom": "ftm",
         "Aurora": "aurora",
         "Aurora_Testnet": "",
-        "Harmony": "hym",
+        "Conflux": "",
+        "Harmony": "hmy",
         "Harmony_Test": ""
     }
 }

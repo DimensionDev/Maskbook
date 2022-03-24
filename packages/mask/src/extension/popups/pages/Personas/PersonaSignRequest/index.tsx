@@ -135,7 +135,10 @@ const PersonaSignRequest = memo(() => {
             </Typography>
             <Typography className={classes.message}>{message}</Typography>
             <div className={classes.controller}>
-                <Button className={classes.button} onClick={onCancel}>
+                <Button
+                    className={classes.button}
+                    style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
+                    onClick={onCancel}>
                     {t('cancel')}
                 </Button>
                 <Button className={classes.button} onClick={onSign} variant="contained">
