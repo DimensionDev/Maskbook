@@ -18,6 +18,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "GET_SINGLE_ASSET_URL": {
@@ -39,6 +40,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "GET_ASSETS_URL": {
@@ -60,6 +62,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     }
 }
