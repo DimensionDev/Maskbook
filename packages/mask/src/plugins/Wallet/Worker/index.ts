@@ -1,6 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { base } from '@masknet/plugin-wallet'
-import { MaskMessages } from '../../../utils'
+import { base, MaskMessages } from '@masknet/plugin-wallet'
 import '../messages'
 import { isLocked } from '../services'
 

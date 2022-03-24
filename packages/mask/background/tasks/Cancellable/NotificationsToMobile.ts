@@ -1,5 +1,5 @@
 import { notify } from 'async-call-rpc/full'
-import { MaskMessages } from '../../../shared'
+import { MaskMessages } from '@masknet/plugin-wallet'
 import { nativeAPI, hasNativeAPI } from '../../../shared/native-rpc'
 export default function NotificationsToMobile(signal: AbortSignal) {
     if (!hasNativeAPI) return

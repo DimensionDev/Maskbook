@@ -11,7 +11,7 @@ import { useLastRecognizedIdentity } from './useActivatedUI'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { queryExistedBindingByPersona, queryExistedBindingByPlatform, queryIsBound } from '@masknet/web3-providers'
 import Services from '../../extension/service'
-import { MaskMessages } from '../../utils'
+import { MaskMessages } from '@masknet/plugin-wallet'
 
 export const usePersonaBoundPlatform = (personaPublicKey: string) => {
     return useAsyncRetry(() => {

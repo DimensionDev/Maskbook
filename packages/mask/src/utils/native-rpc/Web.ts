@@ -13,10 +13,9 @@ import { definedSocialNetworkWorkers } from '../../social-network/define'
 import { launchPageSettings } from '../../settings/settings'
 import Services from '../../extension/service'
 import type { Persona, Profile } from '../../database'
-import { WalletMessages } from '@masknet/plugin-wallet'
+import { WalletMessages, MaskMessages } from '@masknet/plugin-wallet'
 import { WalletRPC } from '../../plugins/Wallet/messages'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { MaskMessages } from '../messages'
 import type { PersonaInformation } from '@masknet/shared-base'
 
 const stringToPersonaIdentifier = (str: string) => Identifier.fromString(str, ECKeyIdentifier).unwrap()

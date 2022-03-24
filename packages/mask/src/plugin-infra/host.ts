@@ -4,7 +4,7 @@ import './register'
 import type { Plugin } from '@masknet/plugin-infra'
 import { Emitter } from '@servie/events'
 // Do not export from '../utils/' to prevent initialization failure
-import { MaskMessages } from '../utils/messages'
+import { MaskMessages } from '@masknet/plugin-wallet'
 import i18nNextInstance from '../../shared-ui/locales_legacy'
 import Services from '../extension/service'
 import { createI18NBundle } from '@masknet/shared-base'

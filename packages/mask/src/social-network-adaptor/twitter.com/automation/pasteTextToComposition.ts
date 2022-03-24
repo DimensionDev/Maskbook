@@ -5,7 +5,7 @@ import type { SocialNetworkUI } from '../../../social-network'
 import { getEditorContent, hasEditor, hasFocus, isCompose } from '../utils/postBox'
 import { untilElementAvailable } from '../../../utils/dom'
 import { isMobileTwitter } from '../utils/isMobile'
-import { MaskMessages } from '../../../utils/messages'
+import { MaskMessages } from '@masknet/plugin-wallet'
 
 /**
  * Wait for up to 5000 ms

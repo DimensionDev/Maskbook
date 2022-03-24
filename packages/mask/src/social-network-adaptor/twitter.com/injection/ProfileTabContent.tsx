@@ -1,7 +1,8 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { ProfileTabContent } from '../../../components/InjectedComponents/ProfileTabContent'
-import { createReactRootShadowed, startWatch, MaskMessages } from '../../../utils'
+import { MaskMessages } from '@masknet/plugin-wallet'
+import { createReactRootShadowed, startWatch } from '../../../utils'
 import {
     searchNewTweetButtonSelector,
     searchProfileEmptySelector,
