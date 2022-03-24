@@ -1,5 +1,5 @@
 import type { PostInfo } from '../../../social-network/PostInfo'
-import { MaskMessages } from '../../../utils/messages'
+import { MaskMessages } from '@masknet/plugin-wallet'
 import { delay } from '@dimensiondev/kit'
 import { selectElementContents } from '../../../utils/utils'
 import { pasteText } from '@masknet/injected-script'

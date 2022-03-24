@@ -8,7 +8,7 @@ import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
 import { useI18N } from '../../../../utils'
 import { WalletMessages } from '../../messages'
-import { MaskMessages } from '../../../../utils/messages'
+import { MaskMessages } from '@masknet/plugin-wallet'
 import { ApplicationBoard } from '../../../../components/shared/ApplicationBoard'
 
 const useStyles = makeStyles()((theme) => ({

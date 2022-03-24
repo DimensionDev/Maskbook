@@ -24,7 +24,8 @@ import {
     currentMaskWalletChainIdSettings,
     currentMaskWalletNetworkSettings,
 } from '../../plugins/Wallet/settings'
-import { Flags, MaskMessages } from '../../../shared'
+import { Flags } from '../../../shared'
+import { MaskMessages } from '@masknet/plugin-wallet'
 import { indexedDB_KVStorageBackend, inMemory_KVStorageBackend } from '../../../background/database/kv-storage'
 import type { Persona } from '../../database'
 

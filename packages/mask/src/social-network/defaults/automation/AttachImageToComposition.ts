@@ -1,4 +1,5 @@
-import { downloadUrl, MaskMessages, pasteImageToActiveElements } from '../../../utils'
+import { downloadUrl, pasteImageToActiveElements } from '../../../utils'
+import { MaskMessages } from '@masknet/plugin-wallet'
 import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
 import type { SocialNetworkUI } from '../../types'
 import { activatedSocialNetworkUI } from '../../ui'

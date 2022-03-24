@@ -1,6 +1,6 @@
 import type { SocialNetworkUI } from '../../../social-network'
 import { untilElementAvailable } from '../../../utils/dom'
-import { MaskMessages } from '../../../utils/messages'
+import { MaskMessages } from '@masknet/plugin-wallet'
 import { selectElementContents } from '../../../utils/utils'
 import { abortSignalTimeout, delay } from '@dimensiondev/kit'
 import { inputText } from '@masknet/injected-script'

@@ -8,7 +8,7 @@ import {
     publicToAddress,
     ECDSASignature,
 } from 'ethereumjs-util'
-import { MaskMessages } from '../../../../shared'
+import { MaskMessages } from '@masknet/plugin-wallet'
 import { PersonaIdentifier, fromBase64URL, PopupRoutes } from '@masknet/shared-base'
 import { queryPersonasWithPrivateKey } from '../../../../background/database/persona/db'
 import { openPopupWindow } from '../../../../background/services/helper'

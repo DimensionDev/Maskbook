@@ -7,7 +7,7 @@ import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShad
 import { makeStyles } from '@masknet/theme'
 import { usePostInfoDetails, usePostInfo, PostInfoProvider } from '../../../components/DataSource/usePostInfo'
 import { noop } from 'lodash-unified'
-import { MaskMessages } from '../../../utils/messages'
+import { MaskMessages } from '@masknet/plugin-wallet'
 import { startWatch } from '../../../utils/watcher'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { decodeArrayBuffer } from '@dimensiondev/kit'

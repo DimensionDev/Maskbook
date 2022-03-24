@@ -1,7 +1,7 @@
 import { Environment, isEnvironment } from '@dimensiondev/holoflows-kit'
 import type { MaskSettingsEvents } from '@masknet/shared-base'
 import { ToBeListened } from '../../../settings/listener'
-import { MaskMessages } from '../../../utils'
+import { MaskMessages } from '@masknet/plugin-wallet'
 
 export default function (signal: AbortSignal) {
     if (!isEnvironment(Environment.ManifestBackground)) return

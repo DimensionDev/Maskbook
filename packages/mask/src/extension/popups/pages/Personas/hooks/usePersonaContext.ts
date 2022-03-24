@@ -6,7 +6,7 @@ import { useAsyncRetry } from 'react-use'
 import Services from '../../../../service'
 import { head } from 'lodash-unified'
 import { useEffect, useState } from 'react'
-import { MaskMessages } from '../../../../../utils'
+import { MaskMessages } from '@masknet/plugin-wallet'
 
 function usePersonaContext() {
     const [deletingPersona, setDeletingPersona] = useState<PersonaInformation>()

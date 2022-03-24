@@ -1,4 +1,5 @@
-import { MaskMessages, CompositionRequest } from '../../../utils/messages'
+import type { CompositionRequest } from '../../../utils/messages'
+import { MaskMessages } from '@masknet/plugin-wallet'
 import { makeTypedMessageText, SerializableTypedMessages } from '@masknet/typed-message'
 
 export function openComposeBoxTwitter(

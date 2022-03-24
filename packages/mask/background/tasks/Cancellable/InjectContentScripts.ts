@@ -1,5 +1,5 @@
 import { noop } from 'lodash-unified'
-import { MaskMessages } from '../../../shared/messages'
+import { MaskMessages } from '@masknet/plugin-wallet'
 import { Flags } from '../../../shared/flags'
 
 type Args = browser.webNavigation.TransitionNavListener extends browser.webNavigation.NavListener<infer U> ? U : never

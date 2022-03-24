@@ -1,6 +1,6 @@
 import { PopupRoutes } from '@masknet/shared-base'
 import urlcat from 'urlcat'
-import { MaskMessages } from '../../../shared'
+import { MaskMessages } from '@masknet/plugin-wallet'
 
 let currentPopupWindowId = 0
 function isLocked() {

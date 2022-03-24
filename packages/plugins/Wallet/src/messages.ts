@@ -12,6 +12,8 @@ import type {
     ChainId,
 } from '@masknet/web3-shared-evm'
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
+import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
+import { serializer, MaskEvents } from '@masknet/shared-base'
 import { PLUGIN_ID } from './constants'
 
 export type TransactionDialogEvent =
@@ -237,3 +239,8 @@ if (import.meta.webpackHot) import.meta.webpackHot.accept()
 export const WalletMessages: { events: PluginMessageEmitter<WalletMessage> } = {
     events: createPluginMessage<WalletMessage>(PLUGIN_ID),
 }
+
+export const MaskMessages = new WebExtensionMessage<MaskEvents>({ domain: 'mask' })
+MaskMessages.serialization = serializer
+
+Object.assign(globalThis, { MaskMessages })

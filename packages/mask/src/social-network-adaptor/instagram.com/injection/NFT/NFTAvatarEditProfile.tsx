@@ -4,7 +4,8 @@ import {
     searchInstagramProfileAvatarButtonSelector,
     searchInstagramProfileEditButton,
 } from '../../utils/selector'
-import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils'
+import { createReactRootShadowed, startWatch } from '../../../../utils'
+import { MaskMessages } from '@masknet/plugin-wallet'
 import { useCallback, useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'

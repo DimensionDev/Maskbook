@@ -1,4 +1,4 @@
-import { MaskMessages } from '../../utils'
+import { MaskMessages } from '@masknet/plugin-wallet'
 import { startEffects } from '../../../utils-pure'
 
 const { signal } = startEffects(import.meta.webpackHot)

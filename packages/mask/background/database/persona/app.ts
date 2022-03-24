@@ -28,7 +28,7 @@ import type {
     EC_Public_JsonWebKey as Native_EC_Public_JsonWebKey,
     AESJsonWebKey as Native_AESJsonWebKey,
 } from '@masknet/public-api'
-import { MaskMessages } from '../../../shared'
+import { MaskMessages } from '@masknet/plugin-wallet'
 import { convertPersonaHexPublicKey } from './util'
 
 export async function createPersonaDBReadonlyAccess(action: () => Promise<void>) {

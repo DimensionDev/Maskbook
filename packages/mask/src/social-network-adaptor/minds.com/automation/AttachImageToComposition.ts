@@ -1,5 +1,5 @@
 import type { SocialNetworkUI } from '../../../social-network'
-import { MaskMessages } from '../../../utils/messages'
+import { MaskMessages } from '@masknet/plugin-wallet'
 import { downloadUrl } from '../../../utils/utils'
 import { composerModalTextAreaSelector, composerPreviewSelector } from '../utils/selector'
 import { pasteTextToCompositionMinds } from './pasteTextToComposition'
