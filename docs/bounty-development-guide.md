@@ -18,7 +18,7 @@ The codebase is totally open sourced. Anyone can review it. If you are familiar 
 
 ## General Content
 
-Firstly, you can clone the repository and [set up the development environment](setup.md). The codebase is easy to understand, although with a huge size. It divides into many packages. Each package serves a specific purpose, as its name says. Let's take a quick tour.
+After cloning the repository and [set up the development environment](setup.md). The codebase is constructed as a monorepo with many internal packages. Each package serves a specific purpose. Let's take a quick tour.
 
 ### Core Packages
 
