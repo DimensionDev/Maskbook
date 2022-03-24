@@ -58,8 +58,8 @@ export const Flags = {
     celo_enabled: true,
     aurora_enabled: true,
     nft_airdrop_enabled: false,
-    post_actions_enabled: false,
-    next_id_tip_enabled: false,
+    post_actions_enabled: true,
+    next_id_tip_enabled: true,
 
     // #region Functionality missing / broken
     /**

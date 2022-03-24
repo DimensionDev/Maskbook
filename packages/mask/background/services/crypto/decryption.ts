@@ -16,7 +16,6 @@ import {
 } from '@masknet/encryption'
 import {
     AESCryptoKey,
-    EC_Public_CryptoKey,
     EC_Public_JsonWebKey,
     IdentifierMap,
     PostIVIdentifier,
@@ -24,12 +23,12 @@ import {
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import { noop } from 'lodash-unified'
-import { queryPersonaByProfileDB } from '../../database/persona/db'
 import {
     createProfileWithPersona,
     decryptByLocalKey,
     deriveAESByECDH,
     hasLocalKeyOf,
+    queryPublicKey,
 } from '../../database/persona/helper'
 import { queryPostDB } from '../../database/post'
 import { savePostKeyToDB } from '../../database/post/helper'
@@ -151,14 +150,14 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
                 return Array.from((await deriveAESByECDH(pub)).values())
             },
             queryAuthorPublicKey(author, signal) {
-                return queryPublicKey(author || authorHint, false, signal)
+                return queryPublicKey(author || authorHint)
             },
             // TODO: get a gun instance
             async *queryPostKey_version37() {
                 throw new Error('TODO')
             },
             async *queryPostKey_version38(iv, signal) {
-                const author = await queryPublicKey(context.currentProfile, true)
+                const author = await queryPublicKey(context.currentProfile)
                 if (!author)
                     throw new DecryptError(DecryptErrorReasons.CurrentProfileDoesNotConnectedToPersona, undefined)
                 yield* GUN_queryPostKey_version39Or38(
@@ -170,7 +169,7 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
                 )
             },
             async *queryPostKey_version39(iv, signal) {
-                const author = await queryPublicKey(context.currentProfile, true)
+                const author = await queryPublicKey(context.currentProfile)
                 if (!author)
                     throw new DecryptError(DecryptErrorReasons.CurrentProfileDoesNotConnectedToPersona, undefined)
                 yield* GUN_queryPostKey_version39Or38(
@@ -202,10 +201,11 @@ function getNetworkHint(x: SocialNetworkEnum) {
     unreachable(x)
 }
 
-async function getPostKeyCache(id: PostIVIdentifier) {
+/** @internal */
+export async function getPostKeyCache(id: PostIVIdentifier) {
     const post = await queryPostDB(id)
     if (!post?.postCryptoKey) return null
-    const k = await crypto.subtle.importKey('jwk', post.postCryptoKey, { name: 'AES-GCM', length: 256 }, false, [
+    const k = await crypto.subtle.importKey('jwk', post.postCryptoKey, { name: 'AES-GCM', length: 256 }, true, [
         'decrypt',
     ])
     return k as AESCryptoKey
@@ -232,17 +232,4 @@ async function storeAuthorPublicKey(
             publicKey: (await crypto.subtle.exportKey('jwk', pub.key)) as EC_Public_JsonWebKey,
         },
     )
-}
-
-async function queryPublicKey(author: ProfileIdentifier | null, extractable = false, signal?: AbortSignal) {
-    if (!author) return null
-    const persona = await queryPersonaByProfileDB(author)
-    if (!persona) return null
-    return (await crypto.subtle.importKey(
-        'jwk',
-        persona.publicKey,
-        { name: 'ECDH', namedCurve: persona.publicKey.crv! } as EcKeyAlgorithm,
-        extractable,
-        ['deriveKey'],
-    )) as EC_Public_CryptoKey
 }

@@ -66,7 +66,6 @@
     "select_specific_friends_dialog__title": "特定の連絡先を選ぶ",
     "service_decryption_failed": "復号に失敗",
     "service_invalid_backup_file": "これは Mask のバックアップではないかもしれません。",
-    "service_publish_post_aes_key_failed": "AES キーを公開するのに失敗しました。",
     "service_unknown_payload": "投稿のバージョンが不明です。Mask のアップデートが必要かもしれません。",
     "service_username_invalid": "無効なユーザー名",
     "settings_enable_debug": "デバッグモード",

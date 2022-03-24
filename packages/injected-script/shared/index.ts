@@ -47,7 +47,7 @@ export interface InternalEvents {
 
     // #region Solana inpage provider bridge
     /** Request the bridge to call function. */
-    solanaBridgeExecute: [path: string, req_id: number]
+    solanaBridgeExecute: [path: string, req_id: number, opts?: { onlyIfTrusted: boolean }]
     /** Request the bridge to listen on an event. */
     solanaBridgeRequestListen: [eventName: string]
     /** When a event happened. */

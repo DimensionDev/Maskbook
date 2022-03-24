@@ -1,9 +1,4 @@
-import Gun from 'gun'
-import 'gun/sea'
-import 'gun/lib/radix'
-import 'gun/lib/radisk'
-import 'gun/lib/store'
-import 'gun/lib/rindexed'
+declare const Gun: typeof import('gun')
 import { gunServers } from './server'
 
 export type GunRoot = ReturnType<typeof createGun>

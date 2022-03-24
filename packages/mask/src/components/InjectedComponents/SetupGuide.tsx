@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { useI18N, MaskMessages } from '../../utils'
 import { activatedSocialNetworkUI, SocialNetworkUI } from '../../social-network'
-import { currentSetupGuideStatus, dismissPinExtensionTip, userGuideStatus } from '../../settings/settings'
+import { currentSetupGuideStatus, languageSettings, userGuideStatus, userPinExtension } from '../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import {
@@ -112,7 +112,6 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         // auto-finish the setup process
         if (!persona_?.hasPrivateKey) throw new Error('invalid persona')
         await Services.Identity.setupPersona(persona_?.identifier)
-        MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
     }
 
     const onVerify = async () => {
@@ -124,7 +123,13 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
         const isBound = await queryIsBound(persona_.publicHexKey, platform, username)
         if (!isBound) {
-            const payload = await createPersonaPayload(persona_.publicHexKey, NextIDAction.Create, username, platform)
+            const payload = await createPersonaPayload(
+                persona_.publicHexKey,
+                NextIDAction.Create,
+                username,
+                platform,
+                languageSettings.value ?? 'default',
+            )
             if (!payload) throw new Error('Failed to create persona payload.')
             const signResult = await Services.Identity.signWithPersona({
                 method: 'eth',
@@ -142,13 +147,16 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                     if (post && persona_.publicHexKey) {
                         clearInterval(verifyPostCollectTimer.current!)
                         await bindProof(
+                            payload.uuid,
                             persona_.publicHexKey,
                             NextIDAction.Create,
                             platform,
                             username,
-                            undefined,
-                            signature,
-                            post.postId,
+                            payload.createdAt,
+                            {
+                                signature,
+                                proofLocation: post.postId,
+                            },
                         )
                         resolve()
                     }
@@ -161,6 +169,9 @@ function SetupGuideUI(props: SetupGuideUIProps) {
             })
 
             await waitingPost
+            const isBound = await queryIsBound(persona_.publicHexKey, platform, username)
+            if (!isBound) throw new Error('Failed to verify.')
+            MaskMessages.events.ownProofChanged.sendToAll(undefined)
         }
     }
 
@@ -169,9 +180,8 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         setStep(SetupGuideStep.Close)
     }
 
-    const onDone = async () => {
-        // check verify nextID id state
-        if (step === SetupGuideStep.FindUsername && enableNextID && persona_?.publicHexKey) {
+    const onConnected = async () => {
+        if (enableNextID && persona_?.publicHexKey && platform && username) {
             const isBound = await queryIsBound(persona_.publicHexKey, platform, username)
             if (!isBound) {
                 currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
@@ -182,22 +192,26 @@ function SetupGuideUI(props: SetupGuideUIProps) {
             }
         }
 
-        // check pin tip status
-        if (step === SetupGuideStep.FindUsername && !dismissPinExtensionTip.value) {
-            currentSetupGuideStatus[ui.networkIdentifier].value = stringify({ status: SetupGuideStep.PinExtension })
+        if (!userPinExtension.value) {
+            userPinExtension.value = true
             setStep(SetupGuideStep.PinExtension)
             return
         }
 
-        // check verify on next id status
-        if (step === SetupGuideStep.VerifyOnNextID && enableNextID && persona_ && persona_.publicHexKey) {
-            const isBound = await queryIsBound(persona_.publicHexKey, platform, username)
-            if (!isBound) return
+        onDone()
+    }
+
+    const onVerifyDone = async () => {
+        if (!userPinExtension.value) {
+            userPinExtension.value = true
             setStep(SetupGuideStep.PinExtension)
             return
         }
 
-        // check user guide status
+        onDone()
+    }
+
+    const onDone = async () => {
         const network = ui.networkIdentifier
         if (network === EnhanceableSite.Twitter && userGuideStatus[network].value !== 'completed') {
             userGuideStatus[network].value = '1'
@@ -228,7 +242,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                     avatar={lastRecognized.avatar}
                     onUsernameChange={setUsername}
                     onConnect={onConnect}
-                    onDone={onDone}
+                    onDone={onConnected}
                     onClose={onClose}
                     enableNextID={enableNextID}
                 />
@@ -243,7 +257,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                     avatar={lastRecognized.avatar}
                     onUsernameChange={setUsername}
                     onVerify={onVerify}
-                    onDone={onDone}
+                    onDone={onVerifyDone}
                     onClose={onClose}
                 />
             )

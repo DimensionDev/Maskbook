@@ -48,6 +48,12 @@ export function pow10(n: BigNumber.Value) {
     return new BigNumber(10).pow(n)
 }
 
+/** scale 10 ** n * m */
+export function scale10(m: BigNumber.Value, n = 1) {
+    const x = new BigNumber(10).shiftedBy(n)
+    return n === 1 ? x : x.multipliedBy(m)
+}
+
 /** n * (10 ** m) */
 export function rightShift(n: BigNumber.Value, m: number | undefined | null) {
     return new BigNumber(n).shiftedBy(+(m ?? 0))

@@ -2,7 +2,6 @@ import { useCallback, useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Avatar, Box, CircularProgress, DialogContent, Link, List, ListItem, Typography } from '@mui/material'
 import {
-    ChainId,
     ERC721ContractDetailed,
     EthereumTokenType,
     formatEthereumAddress,
@@ -151,7 +150,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     }, [id, setDialog])
     // #endregion
 
-    const { data: assets, state: loadingCollectionState } = useCollections(account, ChainId.Mainnet, open)
+    const { data: assets, state: loadingCollectionState } = useCollections(account, chainId, open)
 
     const erc721InDb = useERC721Tokens()
     const allContractsInDb = unionBy(
@@ -163,7 +162,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
         contractDetailed: {
             type: EthereumTokenType.ERC721,
             address: x.address,
-            chainId: ChainId.Mainnet,
+            chainId,
             name: x.name,
             symbol: x.symbol,
             baseURI: x.iconURL,
@@ -172,10 +171,9 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
         balance: x.balance,
     }))
 
-    const contractList =
-        chainId === ChainId.Mainnet && renderAssets
-            ? unionBy([...renderAssets, ...allContractsInDb], 'contractDetailed.address')
-            : allContractsInDb
+    const contractList = renderAssets
+        ? unionBy([...renderAssets, ...allContractsInDb], 'contractDetailed.address')
+        : allContractsInDb
 
     // #region fuse
     const fuse = useMemo(
@@ -282,7 +280,7 @@ interface ContractListItemProps {
 function ContractListItem(props: ContractListItemProps) {
     const { onSubmit, contract } = props
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const chainId = contract.contractDetailed.chainId
 
     return (
         <div style={{ position: 'relative' }}>
