@@ -10,7 +10,7 @@ E.g., your `feat/fantasy` branch conflicts with `develop` branch.
 > git branch --show-current
 feat/fantasy
 
-# merge the develop branch and never mind conflicts in lockfile
+# merge the develop branch and never manually handle the conflicts in lock file
 > git merge develop
 
 # check out the lock file from the base branch
