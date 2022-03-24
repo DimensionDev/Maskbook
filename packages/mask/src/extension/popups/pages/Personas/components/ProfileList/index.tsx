@@ -193,9 +193,10 @@ export const ProfileList = memo(() => {
                     signature: signatureResult.signature.signature,
                 },
             )
-            setUnbind(null)
+
             await Services.Identity.detachProfile(unbind.identifier)
             refreshProfileList()
+            setUnbind(null)
         } catch {
             console.log('Disconnect failed')
         } finally {

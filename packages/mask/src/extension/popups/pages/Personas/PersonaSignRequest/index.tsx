@@ -6,6 +6,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { ECKeyIdentifier, Identifier, PopupRoutes } from '@masknet/shared-base'
 import { useMyPersonas } from '../../../../../components/DataSource/useMyPersonas'
 import type { Persona } from '../../../../../database'
+import Services from '../../../../service'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -112,13 +113,13 @@ const PersonaSignRequest = memo(() => {
                 ECKeyIdentifier,
             ).unwrap(),
         })
-        window.close()
+        Services.Helper.removePopupWindow()
     }
 
     const onCancel = () => {
         if (!requestID) return
         MaskMessages.events.personaSignRequest.sendToBackgroundPage({ requestID })
-        window.close()
+        Services.Helper.removePopupWindow()
     }
 
     return (
