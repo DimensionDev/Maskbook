@@ -2,7 +2,7 @@ import { Grid, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useState } from 'react'
 import { File } from 'react-feather'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useAsync } from 'react-use'
 import { useI18N } from '../../locales/i18n_generated'
 import { timeout } from '@dimensiondev/kit'
@@ -48,12 +48,12 @@ interface RouteState {
 export const Uploading: React.FC = () => {
     const t = useI18N()
     const { classes } = useStyles()
-    const history = useHistory()
+    const navigate = useNavigate()
     const { onUploading } = useExchange()
     const [startedAt] = useState(Date.now())
     const [preparing, setPreparing] = useState(true)
     const [sendSize, setSendSize] = useState(0)
-    const { state } = useLocation<RouteState>()
+    const state = useLocation().state as RouteState
     useEffect(() => {
         onUploading(true)
         return () => onUploading(false)
@@ -96,7 +96,7 @@ export const Uploading: React.FC = () => {
             landingTxID: landingTxID,
         }
         await PluginFileServiceRPC.setFileInfo(item)
-        history.replace(FileRouter.uploaded, item)
+        navigate(FileRouter.uploaded, { state: item })
     }, [])
     useEffect(() => {
         if (error) {

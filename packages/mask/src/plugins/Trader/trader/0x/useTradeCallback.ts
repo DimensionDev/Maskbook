@@ -21,14 +21,14 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
         if (!account || !tradeComputed?.trade_ || !SUPPORTED_CHAIN_ID_LIST.includes(chainId)) return null
         return {
             from: account,
-            ...pick(tradeComputed.trade_, ['to', 'data', 'value', 'gas', 'gasPrice']),
+            ...pick(tradeComputed.trade_, ['to', 'data', 'value']),
             ...gasConfig,
         } as TransactionConfig
     }, [account, tradeComputed])
 
     const tradeCallback = useCallback(async () => {
         // validate config
-        if (!account || !config) {
+        if (!account || !config || !tradeComputed) {
             setTradeState({
                 type: TransactionStateType.UNKNOWN,
             })
@@ -40,27 +40,25 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
 
-        // estimate transaction
-        try {
-            await web3.eth.call(config)
-        } catch {
-            // for some transactions will always fail if we do estimation before a kick to the chain
-            if (
-                !confirm(
-                    'Failed to estimated the transaction, which means it may be reverted on the chain, and your transaction fee will not return. Sure to continue?',
-                )
-            ) {
-                setTradeState({
-                    type: TransactionStateType.FAILED,
-                    error: new Error('User denied the transaction.'),
+        const config_ = {
+            ...config,
+            gas: await web3.eth
+                .estimateGas({
+                    from: account,
+                    ...pick(tradeComputed.trade_, ['to', 'data', 'value']),
                 })
-                return
-            }
+                .catch((error) => {
+                    setTradeState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    return 0
+                }),
         }
 
         // send transaction and wait for hash
         return new Promise<string>((resolve, reject) => {
-            web3.eth.sendTransaction(config, (error, hash) => {
+            web3.eth.sendTransaction(config_, (error, hash) => {
                 if (error) {
                     setTradeState({
                         type: TransactionStateType.FAILED,

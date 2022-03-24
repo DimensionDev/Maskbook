@@ -1,4 +1,5 @@
-import { createRoot } from 'react-dom'
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
 import type {} from 'react/next'
 import type {} from 'react-dom/next'
 import { ShadowRootStyleProvider } from './ShadowRootStyleProvider'
@@ -102,9 +103,11 @@ function mount(
     }
     function getJSX(jsx: React.ReactChild) {
         return (
-            <PreventEventPropagationListContext.Provider value={preventEventPropagationList}>
-                <ShadowRootStyleProvider shadow={shadow}>{wrapJSX ? wrapJSX(jsx) : jsx}</ShadowRootStyleProvider>
-            </PreventEventPropagationListContext.Provider>
+            <StrictMode>
+                <PreventEventPropagationListContext.Provider value={preventEventPropagationList}>
+                    <ShadowRootStyleProvider shadow={shadow}>{wrapJSX ? wrapJSX(jsx) : jsx}</ShadowRootStyleProvider>
+                </PreventEventPropagationListContext.Provider>
+            </StrictMode>
         )
     }
 }

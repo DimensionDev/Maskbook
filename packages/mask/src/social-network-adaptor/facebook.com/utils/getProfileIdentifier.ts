@@ -1,4 +1,4 @@
-import { ProfileIdentifier } from '@masknet/shared-base'
+import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
 import Services from '../../../extension/service'
 import type { Profile } from '../../../database'
 import { getCurrentIdentifier } from '../../utils'
@@ -33,7 +33,7 @@ export function getProfileIdentifierAtFacebook(
             .filter((x) => x.id)
         const { dom, id, nickname } = result[0] || {}
         if (id) {
-            const result = new ProfileIdentifier('facebook.com', id)
+            const result = new ProfileIdentifier(EnhanceableSite.Facebook, id)
             const currentProfile = getCurrentIdentifier()
             let avatar: string | null = null
             try {

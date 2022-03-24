@@ -97,6 +97,7 @@ export const resolveNetworkAddressPrefix = createLookupTableResolver<NetworkType
         [NetworkType.Fantom]: 'fantom',
         [NetworkType.Aurora]: 'Aurora',
         [NetworkType.Moonbeam]: 'Moonbeam',
+        [NetworkType.Conflux]: 'conflux',
     },
     'ethereum',
 )
@@ -113,6 +114,7 @@ export const resolveNetworkName = createLookupTableResolver<NetworkType, string>
         [NetworkType.Fantom]: 'Fantom',
         [NetworkType.Aurora]: 'Aurora',
         [NetworkType.Moonbeam]: 'Moonbeam',
+        [NetworkType.Conflux]: 'Conflux',
     },
     'Unknown',
 )
@@ -146,6 +148,7 @@ export const resolveChainColor = createLookupTableResolver<ChainId, string>(
         [ChainId.Celo]: 'rgb(53, 208, 127)',
         [ChainId.Fantom]: 'rgb(19, 181, 236)',
         [ChainId.Aurora]: 'rgb(112, 212, 74)',
+        [ChainId.Conflux]: 'rgb(24, 163, 138)',
         [ChainId.Aurora_Testnet]: 'rgb(112, 212, 74)',
         [ChainId.Moonbeam]: 'rgb(127, 39, 88)',
     },
@@ -200,6 +203,8 @@ export function resolveCollectibleProviderLink(chainId: ChainId, provider: NonFu
             return 'https://rarible.com'
         case NonFungibleAssetProvider.NFTSCAN:
             return 'https://nftscan.com'
+        case NonFungibleAssetProvider.ZORA:
+            return 'https://zora.co'
         default:
             unreachable(provider)
     }
@@ -214,6 +219,8 @@ export function resolveCollectibleAssetLink(chainId: ChainId, provider: NonFungi
         case NonFungibleAssetProvider.RARIBLE:
             return ''
         case NonFungibleAssetProvider.NFTSCAN:
+            return ''
+        case NonFungibleAssetProvider.ZORA:
             return ''
         default:
             unreachable(provider)
@@ -234,6 +241,8 @@ export function resolveCollectibleLink(
         case NonFungibleAssetProvider.RARIBLE:
             return ''
         case NonFungibleAssetProvider.NFTSCAN:
+            return ''
+        case NonFungibleAssetProvider.ZORA:
             return ''
         default:
             unreachable(provider)

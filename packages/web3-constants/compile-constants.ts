@@ -59,6 +59,7 @@ compileConstants(path.join(__dirname, 'evm'), [
     'Fantom',
     'Aurora',
     'Aurora_Testnet',
+    'Conflux',
     'Moonbeam',
 ])
 

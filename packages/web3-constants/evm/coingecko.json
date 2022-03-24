@@ -18,6 +18,7 @@
         "Fantom": "fantom",
         "Aurora": "aurora",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": "moonbeam"
     },
     "COIN_ID": {
@@ -39,6 +40,7 @@
         "Fantom": "fantom",
         "Aurora": "ethereum",
         "Aurora_Testnet": "",
+        "Conflux": "conflux-token",
         "Moonbeam": "moonbeam"
     }
 }

@@ -3,7 +3,7 @@
   "compilerOptions": {
     "noEmit": true,
     "tsBuildInfoFile": "./dist/tests.tsbuildinfo",
-    "types": ["node"]
+    "types": ["node", "web"]
   },
   "include": ["./tests"],
   "references": [{ "path": "./tsconfig.json" }]

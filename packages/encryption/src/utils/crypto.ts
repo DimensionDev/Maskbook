@@ -1,8 +1,7 @@
-import { AESCryptoKey, CheckedError } from '@masknet/shared-base'
+import { AESCryptoKey, CheckedError, EC_CryptoKey } from '@masknet/shared-base'
 import { Result, Ok } from 'ts-results'
-import { AESAlgorithmEnum, PublicKeyAlgorithmEnum } from '../payload'
+import { AESAlgorithmEnum, EC_KeyCurveEnum } from '../payload'
 import { CryptoException } from '../types'
-
 export function importAESFromJWK(key: JsonWebKey, kind: AESAlgorithmEnum): Promise<Result<AESCryptoKey, unknown>> {
     return Result.wrapAsync(() => {
         const param: Record<AESAlgorithmEnum, AesKeyAlgorithm> = {
@@ -26,20 +25,21 @@ export function exportCryptoKeyToRaw(key: CryptoKey) {
     return Result.wrapAsync(() => crypto.subtle.exportKey('raw', key).then((x) => new Uint8Array(x)))
 }
 
-export function importAsymmetryKeyFromJsonWebKeyOrSPKI(key: JsonWebKey | Uint8Array, kind: PublicKeyAlgorithmEnum) {
+export function importEC_Key(key: JsonWebKey | Uint8Array, kind: EC_KeyCurveEnum) {
     const DeriveKeyUsage: KeyUsage[] = ['deriveKey', 'deriveBits']
     const ImportParamsMap = {
-        [PublicKeyAlgorithmEnum.secp256k1]: { name: 'ECDH', namedCurve: 'K-256' } as EcKeyImportParams,
-        [PublicKeyAlgorithmEnum.secp256p1]: { name: 'ECDH', namedCurve: 'P-256' } as EcKeyImportParams,
+        [EC_KeyCurveEnum.secp256k1]: { name: 'ECDH', namedCurve: 'K-256' } as EcKeyImportParams,
+        [EC_KeyCurveEnum.secp256p1]: { name: 'ECDH', namedCurve: 'P-256' } as EcKeyImportParams,
     } as const
     return Result.wrapAsync(async () => {
-        if (kind === PublicKeyAlgorithmEnum.ed25519) {
+        if (kind === EC_KeyCurveEnum.ed25519) {
             throw new CheckedError(CryptoException.UnsupportedAlgorithm, 'TODO: support ED25519')
         }
+        const args = [ImportParamsMap[kind], true, DeriveKeyUsage] as const
         if (key instanceof Uint8Array) {
-            return crypto.subtle.importKey('spki', key, ImportParamsMap[kind], true, DeriveKeyUsage)
+            return crypto.subtle.importKey('spki', key, ...args) as Promise<EC_CryptoKey>
         } else {
-            return crypto.subtle.importKey('jwk', key, ImportParamsMap[kind], true, DeriveKeyUsage)
+            return crypto.subtle.importKey('jwk', key, ...args) as Promise<EC_CryptoKey>
         }
     })
 }
@@ -49,7 +49,7 @@ export function encryptWithAES(kind: AESAlgorithmEnum, key: CryptoKey, iv: Uint8
         [AESAlgorithmEnum.A256GCM]: { name: 'AES-GCM', iv } as AesGcmParams,
     } as const
     return Result.wrapAsync(() => {
-        return crypto.subtle.encrypt(param[kind], key, message) as Promise<Uint8Array>
+        return crypto.subtle.encrypt(param[kind], key, message).then((x) => new Uint8Array(x))
     })
 }
 export function decryptWithAES(kind: AESAlgorithmEnum, key: CryptoKey, iv: Uint8Array, message: Uint8Array) {

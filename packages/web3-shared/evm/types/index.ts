@@ -81,6 +81,9 @@ export enum ChainId {
 
     // Moonbeam
     Moonbeam = 1284,
+
+    // Conflux
+    Conflux = 1030,
 }
 
 export enum ProviderType {
@@ -117,6 +120,7 @@ export enum NetworkType {
     Metis = 'Metis',
     Optimistic = 'Optimistic',
     Moonbeam = 'Moonbeam',
+    Conflux = 'Conflux',
 }
 
 export interface Wallet {
@@ -216,6 +220,7 @@ export interface ERC721TokenRecordInDatabase extends ERC721TokenDetailed {
 
 export interface ERC721TokenCollectionInfo {
     name: string
+    chainId?: ChainId
     iconURL?: string
     slug: string
     address: string
@@ -587,6 +592,7 @@ export enum NonFungibleAssetProvider {
     OPENSEA = 'OpenSea',
     RARIBLE = 'Rarible',
     NFTSCAN = 'NFTScan',
+    ZORA = 'Zora',
 }
 
 export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<infer R>

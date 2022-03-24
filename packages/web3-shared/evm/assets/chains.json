@@ -122,11 +122,11 @@
         "infoURL": "https://goerli.net/#about"
     },
     {
-        "name": "Binance Smart Chain Mainnet",
+        "name": "BNB Chain Mainnet",
         "chainId": 56,
         "fullName": "Binance",
         "shortName": "bnb",
-        "chain": "BSC",
+        "chain": "BNB Chain",
         "network": "mainnet",
         "networkId": 56,
         "nativeCurrency": {
@@ -985,8 +985,8 @@
         "networkId": 99
     },
     {
-        "name": "xDai Chain",
-        "chain": "xDai",
+        "name": "Gnosis Chain",
+        "chain": "Gnosis",
         "network": "mainnet",
         "rpc": [
             "https://rpc.xdaichain.com",
@@ -2826,5 +2826,36 @@
         "shortName": "palm",
         "chainId": 11297108109,
         "networkId": 11297108109
+    },
+    {
+        "name": "Conflux eSpace Testnet",
+        "chain": "Conflux",
+        "network": "testnet",
+        "rpc": ["https://evmtestnet.confluxrpc.com"],
+        "faucets": [],
+        "features": [],
+        "nativeCurrency": { "name": "CFX", "symbol": "CFX", "decimals": 18 },
+        "infoURL": "https://confluxnetwork.org",
+        "shortName": "Conflux",
+        "chainId": 71,
+        "networkId": 71
+    },
+    {
+        "name": "Conflux eSpace",
+        "chain": "Conflux",
+        "network": "mainnet",
+        "rpc": ["https://evm.confluxrpc.com"],
+        "faucets": [],
+        "features": [],
+        "nativeCurrency": {
+            "name": "CFX",
+            "symbol": "CFX",
+            "decimals": 18,
+            "logoURI": "https://raw.githubusercontent.com/DimensionDev/Maskbook/e434014b17bd4622e28e21c9d4cd9ffec875889e/packages/mask/src/plugins/EVM/assets/conflux.png"
+        },
+        "infoURL": "https://evm.confluxscan.net",
+        "shortName": "Conflux",
+        "chainId": 1030,
+        "networkId": 1030
     }
 ]

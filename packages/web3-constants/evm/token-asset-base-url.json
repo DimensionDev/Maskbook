@@ -48,6 +48,10 @@
         "Fantom": [],
         "Aurora": [],
         "Aurora_Testnet": [],
-        "Moonbeam": []
+        "Conflux": [],
+        "Moonbeam": [
+            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/moonbeam",
+            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/moonbeam"
+        ]
     }
 }

@@ -224,6 +224,10 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: 16,
         height: '160px !important',
     },
+    imgWrapper: {
+        maxWidth: 180,
+        marginBottom: 10,
+    },
     assetPlayerVideoIframe: {
         minWidth: 'fit-content',
     },
@@ -248,7 +252,6 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         retry: retryAvailability,
         error: availabilityError,
     } = useAvailabilityNftRedPacket(payload.id, account)
-
     const [claimState, claimCallback, resetCallback] = useClaimNftRedpacketCallback(
         payload.id,
         availability?.totalAmount,
@@ -288,37 +291,33 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     // #region on share
     const postLink = usePostLink()
     const networkType = useNetworkType()
-    const shareLink = activatedSocialNetworkUI.utils
-        .getShareLinkURL?.(
-            availability?.isClaimed
-                ? t(
-                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                          ? 'plugin_red_packet_nft_share_claimed_message'
-                          : 'plugin_red_packet_nft_share_claimed_message_not_twitter',
-                      {
-                          sender: payload.senderName,
-                          payload: postLink,
-                          network: resolveNetworkName(networkType),
-                          account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
-                      },
-                  ).trim()
-                : t(
-                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                          ? 'plugin_red_packet_nft_share_foreshow_message'
-                          : 'plugin_red_packet_nft_share_foreshow_message_not_twitter',
-                      {
-                          sender: payload.senderName,
-                          payload: postLink,
-                          network: resolveNetworkName(networkType),
-                          account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
-                      },
-                  ).trim(),
-        )
-        .toString()
+    const shareText = availability?.isClaimed
+        ? t(
+              isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                  ? 'plugin_red_packet_nft_share_claimed_message'
+                  : 'plugin_red_packet_nft_share_claimed_message_not_twitter',
+              {
+                  sender: payload.senderName,
+                  payload: postLink,
+                  network: resolveNetworkName(networkType),
+                  account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
+              },
+          ).trim()
+        : t(
+              isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                  ? 'plugin_red_packet_nft_share_foreshow_message'
+                  : 'plugin_red_packet_nft_share_foreshow_message_not_twitter',
+              {
+                  sender: payload.senderName,
+                  payload: postLink,
+                  network: resolveNetworkName(networkType),
+                  account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
+              },
+          ).trim()
 
     const onShare = useCallback(() => {
-        if (shareLink) window.open(shareLink, '_blank', 'noopener noreferrer')
-    }, [shareLink])
+        if (shareText) activatedSocialNetworkUI.utils.share?.(shareText)
+    }, [shareText])
     // #endregion
 
     if (availabilityError)
@@ -375,6 +374,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                                     classes.assetPlayerIframe,
                                     sourceType === 'video' ? classes.assetPlayerVideoIframe : '',
                                 ),
+                                imgWrapper: classes.imgWrapper,
                                 loadingFailImage: classes.loadingFailImage,
                             }}
                             fallbackImage={new URL('./assets/nft-preview.png', import.meta.url)}

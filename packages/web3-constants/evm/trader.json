@@ -18,6 +18,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "UNISWAP_V2_FACTORY_ADDRESS": {
@@ -39,6 +40,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "UNISWAP_V2_THEGRAPH": {
@@ -60,6 +62,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "UNISWAP_V2_INIT_CODE_HASH": {
@@ -81,6 +84,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "UNISWAP_SWAP_ROUTER_ADDRESS": {
@@ -102,6 +106,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "UNISWAP_V3_FACTORY_ADDRESS": {
@@ -123,6 +128,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "UNISWAP_V3_QUOTER_ADDRESS": {
@@ -144,6 +150,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "UNISWAP_V3_THEGRAPH": {
@@ -165,6 +172,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "UNISWAP_V3_INIT_CODE_HASH": {
@@ -186,6 +194,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "SUSHISWAP_ROUTER_ADDRESS": {
@@ -207,6 +216,7 @@
         "Fantom": "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506",
         "Aurora": "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "SUSHISWAP_FACTORY_ADDRESS": {
@@ -228,6 +238,7 @@
         "Fantom": "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "SUSHISWAP_THEGRAPH": {
@@ -249,6 +260,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "SUSHISWAP_INIT_CODE_HASH": {
@@ -270,6 +282,7 @@
         "Fantom": "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "SASHIMISWAP_ROUTER_ADDRESS": {
@@ -291,6 +304,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "SASHIMISWAP_FACTORY_ADDRESS": {
@@ -312,6 +326,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "SASHIMISWAP_THEGRAPH": {
@@ -333,6 +348,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "SASHIMISWAP_INIT_CODE_HASH": {
@@ -354,6 +370,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "QUICKSWAP_ROUTER_ADDRESS": {
@@ -375,6 +392,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "QUICKSWAP_FACTORY_ADDRESS": {
@@ -396,6 +414,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "QUICKSWAP_THEGRAPH": {
@@ -417,6 +436,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "QUICKSWAP_INIT_CODE_HASH": {
@@ -438,6 +458,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "PANCAKESWAP_ROUTER_ADDRESS": {
@@ -459,6 +480,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "PANCAKESWAP_FACTORY_ADDRESS": {
@@ -480,6 +502,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "PANCAKESWAP_THEGRAPH": {
@@ -501,6 +524,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "PANCAKESWAP_INIT_CODE_HASH": {
@@ -522,6 +546,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "BALANCER_ETH_ADDRESS": {
@@ -543,6 +568,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "BALANCER_EXCHANGE_PROXY_ADDRESS": {
@@ -564,6 +590,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "BALANCER_POOLS_URL": {
@@ -585,6 +612,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "DODO_ETH_ADDRESS": {
@@ -606,6 +634,7 @@
         "Fantom": "",
         "Aurora": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "DODO_EXCHANGE_PROXY_ADDRESS": {
@@ -627,6 +656,7 @@
         "Fantom": "",
         "Aurora": "0x335aC99bb3E51BDbF22025f092Ebc1Cf2c5cC619",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "BANCOR_ETH_ADDRESS": {
@@ -648,6 +678,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "BANCOR_EXCHANGE_PROXY_ADDRESS": {
@@ -669,6 +700,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "TRADERJOE_ROUTER_ADDRESS": {
@@ -690,6 +722,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "TRADERJOE_FACTORY_ADDRESS": {
@@ -711,6 +744,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "TRADERJOE_THEGRAPH": {
@@ -732,6 +766,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "TRADERJOE_INIT_CODE_HASH": {
@@ -753,6 +788,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "OPENOCEAN_ETH_ADDRESS": {
@@ -774,6 +810,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "OPENOCEAN_EXCHANGE_PROXY_ADDRESS": {
@@ -795,6 +832,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "PANGOLIN_ROUTER_ADDRESS": {
@@ -816,6 +854,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "PANGOLIN_FACTORY_ADDRESS": {
@@ -837,6 +876,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "PANGOLIN_THEGRAPH": {
@@ -858,6 +898,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "PANGOLIN_INIT_CODE_HASH": {
@@ -879,6 +920,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "WANNASWAP_ROUTER_V2_ADDRESS": {
@@ -900,6 +942,7 @@
         "Fantom": "",
         "Aurora": "0xa3a1eF5Ae6561572023363862e238aFA84C72ef5",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "WANNASWAP_ROUTER_ADDRESS": {
@@ -921,6 +964,7 @@
         "Fantom": "",
         "Aurora": "0x8f1E0Cf0f9f269Bc977C38635E560aa5b0E63323",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "WANNASWAP_FACTORY_ADDRESS": {
@@ -942,6 +986,7 @@
         "Fantom": "",
         "Aurora": "0x7928D4FeA7b2c90C732c10aFF59cf403f0C38246",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "WANNASWAP_THEGRAPH": {
@@ -963,6 +1008,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "WANNASWAP_INIT_CODE_HASH": {
@@ -984,6 +1030,7 @@
         "Fantom": "",
         "Aurora": "0xa06b8b0642cf6a9298322d0c8ac3c68c291ca24dc66245cf23aa2abc33b57e21",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "TRISOLARIS_ROUTER_ADDRESS": {
@@ -1005,6 +1052,7 @@
         "Fantom": "",
         "Aurora": "0x2CB45Edb4517d5947aFdE3BEAbF95A582506858B",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "TRISOLARIS_FACTORY_ADDRESS": {
@@ -1026,6 +1074,7 @@
         "Fantom": "",
         "Aurora": "0xc66F594268041dB60507F00703b152492fb176E7",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "TRISOLARIS_THEGRAPH": {
@@ -1047,6 +1096,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "TRISOLARIS_INIT_CODE_HASH": {
@@ -1068,6 +1118,95 @@
         "Fantom": "",
         "Aurora": "0x754e1d90e536e4c1df81b7f030f47b4ca80c87120e145c294f098c83a6cb5ace",
         "Aurora_Testnet": "",
+        "Conflux": "",
+        "Moonbeam": ""
+    },
+    "MDEX_ROUTER_ADDRESS": {
+        "Mainnet": "0x74119c3bca85bEA0538A62319a79b4a372590B47",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "0x0384E9ad329396C3A6A401243Ca71633B2bC4333",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": "",
+        "Conflux": "",
+        "Moonbeam": ""
+    },
+    "MDEX_FACTORY_ADDRESS": {
+        "Mainnet": "0x7DAe51BD3E3376B8c7c4900E9107f12Be3AF1bA8",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "0x3CD1C46068dAEa5Ebb0d3f55F6915B10648062B8",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": "",
+        "Conflux": "",
+        "Moonbeam": ""
+    },
+    "MDEX_THEGRAPH": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": "",
+        "Conflux": "",
+        "Moonbeam": "0x985BcA32293A7A496300a48081947321177a86FD"
+    },
+    "MDEX_INIT_CODE_HASH": {
+        "Mainnet": "0x8ecc069c645df696f2ca5116ab459c5c2889f299e73c1b208aaa3cdd7d110b16",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "0x0d994d996174b05cfc7bed897dc1b20b4c458fc8d64fe98bc78b3c64a6b4d093",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "BEAMSWAP_ROUTER_ADDRESS": {
@@ -1089,6 +1228,7 @@
         "Fantom": "",
         "Aurora": "0x2CB45Edb4517d5947aFdE3BEAbF95A582506858B",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": "0x96b244391D98B62D19aE89b1A4dCcf0fc56970C7"
     },
     "BEAMSWAP_FACTORY_ADDRESS": {
@@ -1110,6 +1250,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": "0x985BcA32293A7A496300a48081947321177a86FD"
     },
     "BEAMSWAP_THEGRAPH": {
@@ -1131,6 +1272,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "BEAMSWAP_INIT_CODE_HASH": {
@@ -1152,6 +1294,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": "0xe31da4209ffcce713230a74b5287fa8ec84797c9e77e1f7cfeccea015cdc97ea"
     },
     "STELLASWAP_ROUTER_ADDRESS": {
@@ -1173,6 +1316,7 @@
         "Fantom": "",
         "Aurora": "0x2CB45Edb4517d5947aFdE3BEAbF95A582506858B",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": "0xd0A01ec574D1fC6652eDF79cb2F880fd47D34Ab1"
     },
     "STELLASWAP_FACTORY_ADDRESS": {
@@ -1194,6 +1338,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": "0x68A384D826D3678f78BB9FB1533c7E9577dACc0E"
     },
     "STELLASWAP_THEGRAPH": {
@@ -1215,6 +1360,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "STELLASWAP_INIT_CODE_HASH": {
@@ -1236,6 +1382,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": "0x48a6ca3d52d0d0a6c53a83cc3c8688dd46ea4cb786b169ee959b95ad30f61643"
     },
     "PADSWAP_ROUTER_ADDRESS": {
@@ -1257,6 +1404,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": "0x40F1fEF0Fe68Fd10ff904070ee00a7769EE7fe34 "
     },
     "PADSWAP_FACTORY_ADDRESS": {
@@ -1278,6 +1426,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": "0x663a07a2648296f1A3C02EE86A126fE1407888E5"
     },
     "PADSWAP_THEGRAPH": {
@@ -1299,6 +1448,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": ""
     },
     "PADSWAP_INIT_CODE_HASH": {
@@ -1320,6 +1470,7 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": "",
+        "Conflux": "",
         "Moonbeam": "0x3eb475f0bc063c4f457199bae925b27d909f4af70ef7db78ba734972fc1a8543"
     }
 }

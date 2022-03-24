@@ -9,7 +9,7 @@ export {
     setupPortalShadowRoot,
     createShadowRootForwardedComponent,
     createShadowRootForwardedPopperComponent,
-    NoEffectUsePortalShadowRootContext,
 } from './Portal'
 export { ShadowRootMenu, ShadowRootPopper, ShadowRootTooltip } from './Wrapped'
 export { ShadowRootIsolation } from './ShadowRootIsolation'
+export { DisableShadowRootContext } from './Contexts'

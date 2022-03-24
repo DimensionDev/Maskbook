@@ -193,6 +193,7 @@ export enum NetworkType {
     Metis = 'Metis',
     Optimistic = 'Optimistic',
     Moonbeam = 'Moonbeam',
+    Conflux = 'Conflux',
 }
 
 export enum DataProvider {
@@ -217,9 +218,10 @@ export enum TradeProvider {
     TRISOLARIS = 12,
     TRADERJOE = 13,
     PANGOLIN = 14,
-    BEAMSWAP = 15,
-    STELLASWAP = 16,
-    PADSWAP = 17,
+    MDEX = 15,
+    BEAMSWAP = 16,
+    STELLASWAP = 17,
+    PADSWAP = 18,
 }
 /** Supported language settings */
 export enum LanguageOptions {
