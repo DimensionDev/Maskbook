@@ -42,7 +42,6 @@ import {
     ProfileRecord,
     LinkedProfileDetails,
     RelationRecord,
-    detachProfileDB,
 } from '../../../background/database/persona/db'
 import {
     queryPersonasDB as queryPersonasFromIndexedDB,
@@ -396,10 +395,8 @@ export async function queryPersonaByPrivateKey(privateKeyString: string) {
 // #endregion
 
 export async function detachProfileWithNextID(
-    profile: ProfileIdentifier,
     uuid: string,
     personaPublicKey: string,
-    action: NextIDAction,
     platform: string,
     identity: string,
     createdAt: string,
@@ -412,6 +409,5 @@ export async function detachProfileWithNextID(
     await bindProof(uuid, personaPublicKey, NextIDAction.Delete, platform, identity, createdAt, {
         signature: options?.signature,
     })
-    await detachProfileDB(profile)
     MaskMessages.events.ownProofChanged.sendToAll(undefined)
 }
