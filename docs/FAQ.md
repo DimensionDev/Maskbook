@@ -49,7 +49,6 @@ DO NOT remove `<StrictMode />`.
 
 ## How to download CI builds?
 
-There are many kinds of builds. Check the following table.
 
 | Name | Description |
 | ---- | ----------- |
