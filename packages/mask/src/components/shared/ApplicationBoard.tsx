@@ -35,7 +35,9 @@ export function ApplicationBoard() {
                         return acc.concat(cur.ApplicationEntries ?? [])
                     }, [])
                     .sort((a, b) => a.defaultSortingPriority - b.defaultSortingPriority)
-                    .map((x) => x.RenderEntryComponent())}
+                    .map((x, i) => (
+                        <div key={i}>{x.RenderEntryComponent()}</div>
+                    ))}
             </section>
         </>
     )
