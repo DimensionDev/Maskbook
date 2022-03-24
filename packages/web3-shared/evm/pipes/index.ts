@@ -174,6 +174,7 @@ export function resolveBlockLinkOnExplorer(chainId: ChainId, block: string): str
     return urlcat(resolveLinkOnExplorer(chainId), '/block/:block', { block })
 }
 
+// TODO check ipfs inside before resolving
 export function resolveIPFSLink(ipfs: string): string {
     return urlcat('https://coldcdn.com/api/cdn/mipfsygtms/ipfs/:ipfs', { ipfs })
 }
