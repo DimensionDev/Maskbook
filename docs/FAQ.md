@@ -32,3 +32,20 @@ Learn more: [`cspell.json`](https://cspell.org/configuration/#cspelljson)
 All components are working in [Strict Mode](https://reactjs.org/docs/strict-mode.html). The strict mode helps to develop robust components in many ways. If you need to escape from it for some purpose, try to comment out those `<StrictMode />` components to turn it off. After you finish your work, remember to render your components again with it turned on. **NEVER PUSH CODE WITHOUT TESTING IN STRICT MODE**
 
 ## How to download CI builds?
+
+There are many kinds of builds. Check the following table.
+
+| Name | Description |
+| ---- | ----------- |
+| MaskNetwork.base.zip | The default build, just like the Chromium one. |
+| MaskNetwork.chromium-beta.zip | Build for Chromium based browsers with some insider features turned on. |
+| MaskNetwork.chromium.zip | Build for Chromium based browsers |
+| MaskNetwork.firefox.zip | Build for Firefox |
+| MaskNetwork.gecko.zip | Build for Gecko based browsers |
+| MaskNetwork.iOS.zip | Build for iOS native Mask app |
+
+You can download these builds in two places.
+
++ Github: Open the pull request page, and click the **Actions** tab. Then on the opened page, click the **build** sub-item on the **Compile** item. On the action detailed page, click the **Summary** tab. Now you can download builds on the **Artifacts** section. E.g., https://github.com/DimensionDev/Maskbook/actions/runs/2026749204
++ CircleCI: Open the pull request page, and scroll down to the review status card. Click **Show all checks** to find the **
+ci/circleci: build** item, and click the **details** link. On the opended CircleCI page, click the **ARTIFACTS** tab. E.g., https://app.circleci.com/pipelines/github/DimensionDev/Maskbook/24886/workflows/eeabcc93-6152-437f-a65d-24f0acee34a9/jobs/52795/artifacts
