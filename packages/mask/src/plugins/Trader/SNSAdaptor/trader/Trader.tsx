@@ -292,12 +292,10 @@ export function Trader(props: TraderProps) {
     const maskAccount = isOnTwitter ? t('twitter_account') : t('facebook_account')
     const promoteMask =
         isOnTwitter || isFacebook(activatedSocialNetworkUI)
-            ? renderString(
-                  `Follow @{account} (mask.io) to swap cryptocurrencies on ${isOnTwitter ? 'Twitter' : 'Facebook'}`,
-                  {
-                      account: maskAccount,
-                  },
-              )
+            ? renderString('Follow @{account} (mask.io) to swap cryptocurrencies on {platform}', {
+                  account: maskAccount,
+                  platform: isOnTwitter ? 'Twitter' : 'Facebook',
+              })
             : ''
     const shareText =
         focusedTrade?.value && inputToken && outputToken
