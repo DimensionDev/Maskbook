@@ -9,6 +9,7 @@ import {
     useChainId,
     useWeb3,
     GasOptionConfig,
+    TransactionEventType,
 } from '@masknet/web3-shared-evm'
 import type { SwapOOSuccessResponse, TradeComputed } from '../../types'
 
@@ -61,21 +62,29 @@ export function useTradeCallback(
 
         // send transaction and wait for hash
         return new Promise<string>((resolve, reject) => {
-            web3.eth.sendTransaction(config_, (error, hash) => {
-                if (error) {
+            web3.eth
+                .sendTransaction(config_, (error, hash) => {
+                    if (error) {
+                        setTradeState({
+                            type: TransactionStateType.FAILED,
+                            error,
+                        })
+                        reject(error)
+                    } else {
+                        setTradeState({
+                            type: TransactionStateType.HASH,
+                            hash,
+                        })
+                        resolve(hash)
+                    }
+                })
+                .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                     setTradeState({
-                        type: TransactionStateType.FAILED,
-                        error,
+                        type: TransactionStateType.CONFIRMED,
+                        no,
+                        receipt,
                     })
-                    reject(error)
-                } else {
-                    setTradeState({
-                        type: TransactionStateType.HASH,
-                        hash,
-                    })
-                    resolve(hash)
-                }
-            })
+                })
         })
     }, [web3, account, chainId, stringify(config)])
 

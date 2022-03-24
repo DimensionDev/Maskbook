@@ -1,7 +1,14 @@
 import { useCallback, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import type { SwapParameters } from '@uniswap/v2-sdk'
-import { GasOptionConfig, TransactionState, TransactionStateType, useAccount, useWeb3 } from '@masknet/web3-shared-evm'
+import {
+    GasOptionConfig,
+    TransactionEventType,
+    TransactionState,
+    TransactionStateType,
+    useAccount,
+    useWeb3,
+} from '@masknet/web3-shared-evm'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
 import type { SwapCall, Trade, TradeComputed } from '../../types'
 import { swapErrorToUserReadableMessage } from '../../helpers'
@@ -135,43 +142,51 @@ export function useTradeCallback(
                 call: { address, calldata, value },
             } = bestCallOption
 
-            web3.eth.sendTransaction(
-                {
-                    from: account,
-                    to: address,
-                    data: calldata,
-                    ...('gasEstimate' in bestCallOption ? { gas: bestCallOption.gasEstimate.toFixed() } : {}),
-                    ...(!value || /^0x0*$/.test(value) ? {} : { value }),
-                    ...gasConfig,
-                },
-                async (error, hash) => {
-                    if (error) {
-                        if ((error as any)?.code) {
-                            const error_ = new Error(
-                                (error as any)?.message === 'Unable to add more requests.'
-                                    ? 'Unable to add more requests.'
-                                    : 'Transaction rejected.',
-                            )
-                            setTradeState({
-                                type: TransactionStateType.FAILED,
-                                error: error_,
-                            })
-                            reject(error_)
+            web3.eth
+                .sendTransaction(
+                    {
+                        from: account,
+                        to: address,
+                        data: calldata,
+                        ...('gasEstimate' in bestCallOption ? { gas: bestCallOption.gasEstimate.toFixed() } : {}),
+                        ...(!value || /^0x0*$/.test(value) ? {} : { value }),
+                        ...gasConfig,
+                    },
+                    async (error, hash) => {
+                        if (error) {
+                            if ((error as any)?.code) {
+                                const error_ = new Error(
+                                    (error as any)?.message === 'Unable to add more requests.'
+                                        ? 'Unable to add more requests.'
+                                        : 'Transaction rejected.',
+                                )
+                                setTradeState({
+                                    type: TransactionStateType.FAILED,
+                                    error: error_,
+                                })
+                                reject(error_)
+                            } else {
+                                setTradeState({
+                                    type: TransactionStateType.FAILED,
+                                    error: new Error(`Swap failed: ${swapErrorToUserReadableMessage(error)}`),
+                                })
+                            }
                         } else {
                             setTradeState({
-                                type: TransactionStateType.FAILED,
-                                error: new Error(`Swap failed: ${swapErrorToUserReadableMessage(error)}`),
+                                type: TransactionStateType.HASH,
+                                hash: hash,
                             })
+                            resolve(hash)
                         }
-                    } else {
-                        setTradeState({
-                            type: TransactionStateType.HASH,
-                            hash: hash,
-                        })
-                        resolve(hash)
-                    }
-                },
-            )
+                    },
+                )
+                .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
+                    setTradeState({
+                        type: TransactionStateType.CONFIRMED,
+                        no,
+                        receipt,
+                    })
+                })
         })
     }, [web3, account, tradeParameters, gasConfig])
 
