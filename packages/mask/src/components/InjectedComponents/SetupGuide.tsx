@@ -71,6 +71,11 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         lastState.username || (lastRecognized.identifier.isUnknown ? '' : lastRecognized.identifier.userId)
     const [username, setUsername] = useState(getUsername)
 
+    const disableVerify =
+        lastRecognized.identifier.isUnknown || !lastState.username
+            ? false
+            : lastRecognized.identifier.userId !== lastState.username
+
     useEffect(() => {
         const handler = (val: SocialNetworkUI.CollectingCapabilities.IdentityResolved) => {
             if (username === '' && !val.identifier.isUnknown) setUsername(val.identifier.userId)
@@ -259,6 +264,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                     onVerify={onVerify}
                     onDone={onVerifyDone}
                     onClose={onClose}
+                    disableVerify={disableVerify}
                 />
             )
         case SetupGuideStep.PinExtension:
