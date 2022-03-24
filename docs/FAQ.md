@@ -20,9 +20,6 @@ feat/fantasy
 > pnpm install
 ```
 
-
-Then run `pnpm install` to up the lockfile to date.
-
 ## Why my Git hooks don't work?
 
 ```bash
