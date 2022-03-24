@@ -6,6 +6,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { ECKeyIdentifier, Identifier, PopupRoutes } from '@masknet/shared-base'
 import { useMyPersonas } from '../../../../../components/DataSource/useMyPersonas'
 import type { Persona } from '../../../../../database'
+import { delay } from '@dimensiondev/kit'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -103,7 +104,7 @@ const PersonaSignRequest = memo(() => {
         }
     }, [personas, location.search])
 
-    const onSign = () => {
+    const onSign = async () => {
         if (!requestID || !selected) return
         MaskMessages.events.personaSignRequest.sendToBackgroundPage({
             requestID,
@@ -112,12 +113,15 @@ const PersonaSignRequest = memo(() => {
                 ECKeyIdentifier,
             ).unwrap(),
         })
+
+        await delay(200)
         window.close()
     }
 
-    const onCancel = () => {
+    const onCancel = async () => {
         if (!requestID) return
         MaskMessages.events.personaSignRequest.sendToBackgroundPage({ requestID })
+        await delay(200)
         window.close()
     }
 
