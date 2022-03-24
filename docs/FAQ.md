@@ -2,13 +2,28 @@
 
 ## How to resolve merge conflicts in `pnpm-lock.yaml`?
 
-Do not try to pick either side of the lockfile.
+Merge the target branch into yours and never mind those conflicts in `pnpm-lock.yaml`. And checkout the file to be the one on the target branch to revert changes your branch took in. Then run `pnpm install` to up the lockfile to date.
 
-Drop both "ours" and "theirs" version (then the file will be in the base version).
+E.g., your `feat/fantasy` branch conflicts with `develop` branch.
+
+```bash
+> git branch --show-current
+feat/fantasy
+
+# merge the develop branch and never mind conflicts in lockfile
+> git merge develop
+
+# revoke lockfile to the one on the develop branch
+> git checkout develop -- pnpm-lock.yaml
+
+# up the lockfile to date
+> pnpm install
+```
+
 
 Then run `pnpm install` to up the lockfile to date.
 
-## My Git hooks don't work.
+## Why my Git hooks don't work?
 
 ```bash
 npx husky install # on project root directory
