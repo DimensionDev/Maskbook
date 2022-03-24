@@ -1,14 +1,12 @@
 import * as bip39 from 'bip39'
 import { validateMnemonic } from 'bip39'
-import { decode, encode } from '@msgpack/msgpack'
-import { decodeArrayBuffer, decodeText, encodeArrayBuffer } from '@dimensiondev/kit'
-import { createPersonaByJsonWebKey } from '../../../background/database/persona/helper'
+import { decode } from '@msgpack/msgpack'
+import { decodeArrayBuffer, decodeText } from '@dimensiondev/kit'
 import {
     loginPersona,
     personaRecordToPersona,
     queryAvatarDataURL,
     queryPersona,
-    queryPersonaRecord,
     queryPostPagedDB,
     queryProfile,
     queryProfilesWithQuery,
@@ -21,7 +19,6 @@ import {
     ProfileIdentifier,
     ECKeyIdentifierFromJsonWebKey,
     EC_JsonWebKey,
-    EC_Private_JsonWebKey,
     PersonaInformation,
     ProfileInformation,
     PostIVIdentifier,
@@ -59,13 +56,13 @@ import { convertBackupFileToObject, fixBackupFilePermission } from '../../utils/
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { getCurrentPersonaIdentifier } from './SettingsService'
 import { MaskMessages } from '../../utils'
-import { split_ec_k256_keypair_into_pub_priv } from '../../modules/CryptoAlgorithm/helper'
 import { first, orderBy } from 'lodash-unified'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 
 assertEnvironment(Environment.ManifestBackground)
 
 export { validateMnemonic } from '../../utils/mnemonic-code'
+export * from '../../../background/services/identity'
 
 // #region Profile
 export { queryProfile, queryProfilePaged, queryPersonaByProfile } from '../../database'
@@ -114,13 +111,7 @@ export function removeProfile(id: ProfileIdentifier): Promise<void> {
 // #endregion
 
 // #region Persona
-export {
-    queryPersona,
-    createPersonaByMnemonic,
-    createPersonaByMnemonicV2,
-    renamePersona,
-    queryPrivateKey,
-} from '../../database'
+export { queryPersona, createPersonaByMnemonic, createPersonaByMnemonicV2, renamePersona } from '../../database'
 
 export async function queryPersonaByMnemonic(mnemonic: string, password: '') {
     const verify = validateMnemonic(mnemonic)
@@ -166,13 +157,6 @@ export function queryMyPersonas(network?: string): Promise<Persona[]> {
 export async function queryLastPersonaCreated() {
     const all = await queryPersonas(undefined, true)
     return first(orderBy(all, (x) => x.createdAt, 'desc'))
-}
-
-export async function backupPersonaPrivateKey(
-    identifier: PersonaIdentifier,
-): Promise<EC_Private_JsonWebKey | undefined> {
-    const x = await queryPersonaDB(identifier)
-    return x?.privateKey
 }
 
 export async function queryOwnedPersonaInformation(): Promise<PersonaInformation[]> {
@@ -394,19 +378,7 @@ export const getCurrentPersonaAvatar = async () => {
 }
 // #endregion
 
-export async function exportPersonaMnemonicWords(identifier: PersonaIdentifier) {
-    const record = await queryPersonaRecord(identifier)
-    return record?.mnemonic?.words
-}
-
 // #region Private / Public key
-export async function exportPersonaPrivateKey(identifier: PersonaIdentifier) {
-    const profile = await queryPersonaRecord(identifier)
-    if (!profile?.privateKey) return ''
-
-    const encodePrivateKey = encode(profile.privateKey)
-    return encodeArrayBuffer(encodePrivateKey)
-}
 
 export async function queryPersonaByPrivateKey(privateKeyString: string) {
     const privateKey = decode(decodeArrayBuffer(privateKeyString)) as EC_JsonWebKey
@@ -420,13 +392,4 @@ export async function queryPersonaByPrivateKey(privateKeyString: string) {
 
     return null
 }
-
-export async function createPersonaByPrivateKey(privateKeyString: string, nickname: string) {
-    const privateKey = decode(decodeArrayBuffer(privateKeyString)) as EC_JsonWebKey
-    const key = await split_ec_k256_keypair_into_pub_priv(privateKey)
-
-    return createPersonaByJsonWebKey({ privateKey: key.privateKey, publicKey: key.publicKey, nickname })
-}
 // #endregion
-
-export * from './IdentityServices/sign'

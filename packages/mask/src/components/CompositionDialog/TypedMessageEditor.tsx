@@ -4,6 +4,7 @@ import {
     makeTypedMessageText,
     TypedMessage,
     editTypedMessageMeta,
+    SerializableTypedMessages,
 } from '@masknet/typed-message'
 import { makeStyles } from '@masknet/theme'
 import { InputBase, Alert, Button } from '@mui/material'
@@ -24,14 +25,14 @@ const useStyles = makeStyles()({
     },
 })
 export interface TypedMessageEditorProps {
-    defaultValue?: TypedMessage
+    defaultValue?: SerializableTypedMessages
     onChange?(message: TypedMessage): void
     readonly?: boolean
     autoFocus?: boolean
 }
 export interface TypedMessageEditorRef {
     /** Current message, it is a getter/setter. */
-    value: TypedMessage
+    value: SerializableTypedMessages
     /** The length of the current message. */
     readonly estimatedLength: number
     /** Clean the editor. */
@@ -58,7 +59,7 @@ export const TypedMessageEditor = memo(
         currentValue.current = value
 
         const setMessage = useCallback(
-            (value: TypedMessage) => {
+            (value: SerializableTypedMessages) => {
                 if (isTypedMessageEqual(currentValue.current, value)) return
                 setValue(value)
                 currentValue.current = value

@@ -1,9 +1,9 @@
-import { ECDH_K256_Pub } from './setup'
 import { test, expect } from '@jest/globals'
 import { None, Some } from 'ts-results'
 import { encodePayload, AESAlgorithmEnum, parsePayload, PayloadWellFormed } from '../src'
 import { importAESFromJWK } from '../src/utils'
 import { ProfileIdentifier } from '@masknet/shared-base'
+import { queryTestPublicKey } from './keys'
 
 test('Encode v37 payload', async () => {
     const payload: PayloadWellFormed.Payload = {
@@ -36,7 +36,7 @@ test('Encode v37 payload', async () => {
     {
         const newPayload = { ...payload }
         newPayload.author = Some(new ProfileIdentifier('localhost', 'unknown'))
-        const k256Key = await ECDH_K256_Pub()
+        const k256Key = (await queryTestPublicKey(new ProfileIdentifier('localhost', 'alice')))!
         newPayload.authorPublicKey = Some(k256Key)
         newPayload.encryption = {
             type: 'E2E',

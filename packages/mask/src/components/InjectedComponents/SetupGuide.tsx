@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect, useRef } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { useValueRef } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { useI18N, MaskMessages } from '../../utils'
 import { activatedSocialNetworkUI, SocialNetworkUI } from '../../social-network'
 import { currentSetupGuideStatus, dismissPinExtensionTip, userGuideStatus } from '../../settings/settings'
@@ -15,6 +15,7 @@ import {
     toBase64,
     fromHex,
     NextIDAction,
+    EnhanceableSite,
 } from '@masknet/shared-base'
 import Services from '../../extension/service'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
@@ -82,7 +83,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     }, [username])
 
     useEffect(() => {
-        if (username || ui.networkIdentifier !== 'twitter.com') return
+        if (username || ui.networkIdentifier !== EnhanceableSite.Twitter) return
         // In order to collect user info after login, need to reload twitter once
         let reloaded = false
         const handler = () => {
@@ -198,7 +199,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
         // check user guide status
         const network = ui.networkIdentifier
-        if (network === 'twitter.com' && userGuideStatus[network].value !== 'completed') {
+        if (network === EnhanceableSite.Twitter && userGuideStatus[network].value !== 'completed') {
             userGuideStatus[network].value = '1'
         } else {
             onCreate()
@@ -209,7 +210,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
     const onCreate = async () => {
         let content = t('setup_guide_say_hello_content')
-        if (ui.networkIdentifier === 'twitter.com') {
+        if (ui.networkIdentifier === EnhanceableSite.Twitter) {
             content += t('setup_guide_say_hello_follow', { account: '@realMaskNetwork' })
         }
 

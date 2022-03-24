@@ -5,6 +5,7 @@ import { registerSerializableClass } from '@masknet/shared-base'
 
 export interface DecryptOptions {
     message: PayloadParseResult.Payload
+    onDecrypted?(message: TypedMessage): void
     signal?: AbortSignal
 }
 export interface DecryptIO {
@@ -80,35 +81,16 @@ export interface DecryptIO {
      * @param publicKey The public key used in ECDH
      */
     deriveAESKey(publicKey: EC_Public_CryptoKey): Promise<AESCryptoKey[]>
-    /**
-     * Derive a group of AES key for ECDH.
-     *
-     * !! Note: This part is not simple ECDH.
-     *
-     * !! For the compatibility, you should refer to the original implementation:
-     *
-     * !! https://github.com/DimensionDev/Maskbook/blob/f3d83713d60dd0aad462e0648c4d38586c106edc/packages/mask/src/crypto/crypto-alpha-40.ts#L29-L58
-     *
-     * Host should derive a new AES-GCM key for each private key they have access to.
-     *
-     * If the provided key cannot derive AES with any key (e.g. The given key is ED25519 but there is only P-256 private keys)
-     * please return an empty array.
-     *
-     * Error from this function will become a fatal error.
-     * @param publicKey The public key used in ECDH
-     * @param iv The IV used to generate new set of IVs
-     */
-    deriveAESKey_version38_or_older(
-        publicKey: EC_Public_CryptoKey,
-        iv: Uint8Array,
-    ): Promise<[aes: AESCryptoKey, iv: Uint8Array][]>
 }
 export interface DecryptStaticECDH_PostKey {
     encryptedPostKey: Uint8Array
     postKeyIV: Uint8Array
 }
-export interface DecryptEphemeralECDH_PostKey extends DecryptStaticECDH_PostKey {
-    // It might be contained in the original payload.
+export interface DecryptEphemeralECDH_PostKey {
+    encryptedPostKey: Uint8Array
+    /** For the first time encryption, it might be included in the post payload. */
+    postKeyIV?: Uint8Array
+    /** For the first time encryption, it might be included in the post payload. */
     ephemeralPublicKey?: EC_Public_CryptoKey
     ephemeralPublicKeySignature?: Uint8Array
 }
@@ -143,7 +125,7 @@ export interface DecryptSuccess {
     content: TypedMessage
 }
 // TODO: rename as DecryptErrorReasons
-export enum ErrorReasons {
+export enum DecryptErrorReasons {
     PayloadBroken = '[@masknet/encryption] Payload is broken.',
     PayloadDecryptedButTypedMessageBroken = "[@masknet/encryption] Payload decrypted, but it's inner TypedMessage is broken.",
     CannotDecryptAsAuthor = '[@masknet/encryption] Failed decrypt as the author of this payload.',
@@ -157,9 +139,9 @@ export enum ErrorReasons {
     NoPayloadFound = '[@masknet/encryption] No payload found in this material.',
 }
 export class DecryptError extends Error {
-    static Reasons = ErrorReasons
+    static Reasons = DecryptErrorReasons
     readonly type = DecryptProgressKind.Error
-    constructor(public override message: ErrorReasons, cause: any, public recoverable = false) {
+    constructor(public override message: DecryptErrorReasons, cause: any, public recoverable = false) {
         super(message, { cause })
     }
 }

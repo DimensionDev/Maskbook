@@ -13,7 +13,8 @@ import {
     isNativeTokenAddress,
     formatNFT_TokenId,
 } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog, NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import classNames from 'classnames'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { Button, Grid, Link, Typography, DialogContent, List, ListItem } from '@mui/material'

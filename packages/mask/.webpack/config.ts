@@ -20,7 +20,7 @@ import './clean-hmr'
 
 export function createConfiguration(rawFlags: BuildFlags): Configuration {
     const normalizedFlags = normalizeBuildFlags(rawFlags)
-    const { sourceMapKind } = computedBuildFlags(normalizedFlags)
+    const { sourceMapKind, supportWebAssembly } = computedBuildFlags(normalizedFlags)
     const { hmr, mode, profiling, reactRefresh, readonlyCache, reproducibleBuild, runtime, outputPath } =
         normalizedFlags
 
@@ -39,7 +39,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         devtool: sourceMapKind,
         target: ['web', 'es2019'],
         entry: {},
-        experiments: { backCompat: false, asyncWebAssembly: true },
+        experiments: { backCompat: false, asyncWebAssembly: supportWebAssembly },
         cache: {
             type: 'filesystem',
             buildDependencies: { config: [__filename] },
@@ -72,7 +72,6 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@masknet/shared-base': join(__dirname, '../../shared-base/src/'),
                     '@masknet/theme': join(__dirname, '../../theme/src/'),
                     '@masknet/icons': join(__dirname, '../../icons/index.ts'),
-                    '@masknet/web3-kit': join(__dirname, '../../web3-kit/src/'),
                     '@masknet/web3-providers': join(__dirname, '../../web3-providers/src'),
                     '@masknet/web3-shared-base': join(__dirname, '../../web3-shared/base/src'),
                     '@masknet/web3-shared-evm': join(__dirname, '../../web3-shared/evm/'),
@@ -118,13 +117,19 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 javascript: {
                     // Treat as missing export as error
                     strictExportPresence: true,
-                    // gun and @unstoppabledomains/resolution
-                    exprContextCritical: false,
                 },
             },
             rules: [
                 // Opt in source map
                 { test: /(async-call|webextension).+\.js$/, enforce: 'pre', use: ['source-map-loader'] },
+                // Manifest v3 does not support
+                !supportWebAssembly
+                    ? {
+                          test: /\.wasm?$/,
+                          loader: require.resolve('./wasm-to-asm.ts'),
+                          type: 'javascript/auto',
+                      }
+                    : undefined!,
                 // TypeScript
                 {
                     test: /\.tsx?$/,
@@ -196,6 +201,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 patterns: [
                     { from: join(__dirname, '../public/'), to: distFolder },
                     { from: join(__dirname, '../../injected-script/dist/injected-script.js'), to: distFolder },
+                    { from: join(__dirname, '../../gun-utils/gun.js'), to: distFolder },
                     { from: join(__dirname, '../../mask-sdk/dist/mask-sdk.js'), to: distFolder },
                     {
                         context: join(__dirname, '../../polyfills/dist/'),
@@ -266,6 +272,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         } as DevServerConfiguration,
         stats: process.env.CI ? 'errors-warnings' : undefined,
     }
+    baseConfig.module!.rules = baseConfig.module!.rules!.filter(Boolean)
 
     const plugins = baseConfig.plugins!
     const entries: Record<string, EntryDescription> = (baseConfig.entry = {
@@ -299,6 +306,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 chunks: ['background'],
                 filename: 'background.html',
                 secp256k1: true,
+                gun: true,
                 sourceMap: !!sourceMapKind,
             }),
         )
@@ -323,13 +331,22 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         }
     }
 }
-function addHTMLEntry(options: HTMLPlugin.Options & { secp256k1?: boolean; sourceMap: boolean }) {
+function addHTMLEntry(
+    options: HTMLPlugin.Options & {
+        secp256k1?: boolean
+        sourceMap: boolean
+        gun?: boolean
+    },
+) {
     let templateContent = readFileSync(join(__dirname, './template.html'), 'utf8')
     if (options.secp256k1) {
         templateContent = templateContent.replace(
             `<!-- secp256k1 -->`,
             '<script src="/polyfill/secp256k1.js"></script>',
         )
+    }
+    if (options.gun) {
+        templateContent = templateContent.replace(`<!-- Gun -->`, '<script src="/gun.js"></script>')
     }
     if (options.sourceMap) {
         templateContent = templateContent.replace(

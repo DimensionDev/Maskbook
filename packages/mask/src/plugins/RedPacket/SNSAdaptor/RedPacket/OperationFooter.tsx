@@ -1,5 +1,5 @@
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { TransactionState, TransactionStateType, useAccount, useChainIdValid } from '@masknet/web3-shared-evm'
 import { Box } from '@mui/material'
 import { useCallback } from 'react'

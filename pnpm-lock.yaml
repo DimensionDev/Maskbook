@@ -140,6 +140,7 @@ importers:
       '@masknet/public-api': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
+      '@masknet/shared-base-ui': workspace:*
       '@masknet/storybook-shared': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/web3-providers': workspace:*
@@ -193,6 +194,7 @@ importers:
       '@masknet/public-api': link:../public-api
       '@masknet/shared': link:../shared
       '@masknet/shared-base': link:../shared-base
+      '@masknet/shared-base-ui': link:../shared-base-ui
       '@masknet/storybook-shared': link:../storybook-shared
       '@masknet/theme': link:../theme
       '@masknet/web3-providers': link:../web3-providers
@@ -319,6 +321,7 @@ importers:
       '@masknet/sdk': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
+      '@masknet/shared-base-ui': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/typed-message': workspace:*
       '@masknet/web3-contracts': workspace:*
@@ -356,6 +359,7 @@ importers:
       assert: ^2.0.0
       async-call-rpc: ^6.0.2
       bignumber.js: ^9.0.2
+      binaryen: ^106.0.0
       bip39: ^3.0.2
       buffer: ^6.0.3
       classnames: ^2.3.1
@@ -455,6 +459,7 @@ importers:
       '@masknet/sdk': link:../mask-sdk
       '@masknet/shared': link:../shared
       '@masknet/shared-base': link:../shared-base
+      '@masknet/shared-base-ui': link:../shared-base-ui
       '@masknet/theme': link:../theme
       '@masknet/typed-message': link:../typed-message
       '@masknet/web3-contracts': link:../web3-contracts
@@ -553,6 +558,7 @@ importers:
       '@pmmmwh/react-refresh-webpack-plugin': 0.5.4_cb46ffc29cbac33b1cd7a2454d0f4425
       '@typescript-eslint/eslint-plugin': 5.14.0_f4054b8c3cd621db16ae1b9d571bccc0
       '@typescript-eslint/parser': 5.14.0_eslint@8.10.0+typescript@4.6.2
+      binaryen: 106.0.0
       copy-webpack-plugin: 10.2.4_webpack@5.70.0
       html-webpack-plugin: 5.5.0_webpack@5.70.0
       react-devtools-core: 4.23.0
@@ -582,8 +588,8 @@ importers:
   packages/plugin-infra:
     specifiers:
       '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
-      '@masknet/shared': workspace:*
-      '@masknet/shared-base': workspace:*
+      '@masknet/encryption': workspace:*
+      '@masknet/shared-base-ui': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/typed-message': workspace:*
       '@masknet/web3-shared-base': workspace:*
@@ -597,8 +603,8 @@ importers:
       use-subscription: ^1.5.1
     dependencies:
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
-      '@masknet/shared': link:../shared
-      '@masknet/shared-base': link:../shared-base
+      '@masknet/encryption': link:../encryption
+      '@masknet/shared-base-ui': link:../shared-base-ui
       '@masknet/theme': link:../theme
       '@masknet/typed-message': link:../typed-message
       '@masknet/web3-shared-base': link:../web3-shared/base
@@ -691,9 +697,9 @@ importers:
       '@masknet/plugin-wallet': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
+      '@masknet/shared-base-ui': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/typed-message': workspace:*
-      '@masknet/web3-kit': workspace:*
       '@msgpack/msgpack': ^2.7.2
       arweave: ^1.10.3
       date-fns: ^2.28.0
@@ -710,9 +716,9 @@ importers:
       '@masknet/plugin-wallet': link:../Wallet
       '@masknet/shared': link:../../shared
       '@masknet/shared-base': link:../../shared-base
+      '@masknet/shared-base-ui': link:../../shared-base-ui
       '@masknet/theme': link:../../theme
       '@masknet/typed-message': link:../../typed-message
-      '@masknet/web3-kit': link:../../web3-kit
       '@msgpack/msgpack': 2.7.2
       arweave: 1.10.13
       date-fns: 2.28.0
@@ -963,6 +969,7 @@ importers:
     specifiers:
       '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
       '@masknet/icons': workspace:*
+      '@masknet/plugin-infra': workspace:*
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/web3-shared-base': workspace:*
@@ -981,6 +988,7 @@ importers:
     dependencies:
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
       '@masknet/icons': link:../icons
+      '@masknet/plugin-infra': link:../plugin-infra
       '@masknet/shared-base': link:../shared-base
       '@masknet/theme': link:../theme
       '@masknet/web3-shared-base': link:../web3-shared/base
@@ -1042,6 +1050,20 @@ importers:
       typeson-registry: 2.0.0
       use-subscription: 1.5.1_react@18.0.0-rc.2
       z-schema: 5.0.2
+
+  packages/shared-base-ui:
+    specifiers:
+      '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
+      '@masknet/shared-base': workspace:*
+      react-use: ^17.3.2
+      use-subscription: ^1.5.1
+      uuid: ^8.3.2
+    dependencies:
+      '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
+      '@masknet/shared-base': link:../shared-base
+      react-use: 17.3.2_bc22c48adf1a4e34a005159413cd72b5
+      use-subscription: 1.5.1_react@18.0.0-rc.2
+      uuid: 8.3.2
 
   packages/storybook-shared:
     specifiers:
@@ -1131,9 +1153,6 @@ importers:
       promievent: 0.1.5
       web3-eth-contract: 1.5.2
 
-  packages/web3-kit:
-    specifiers: {}
-
   packages/web3-providers:
     specifiers:
       '@masknet/plugin-infra': workspace:*
@@ -1143,6 +1162,7 @@ importers:
       '@masknet/web3-shared-evm': workspace:*
       bignumber.js: 9.0.2
       date-fns: ^2.28.0
+      graphql-request: ^3.4.0
       json-stable-stringify: ^1.0.1
       lodash-unified: 1.0.2
       react-use: ^17.3.2
@@ -1159,6 +1179,7 @@ importers:
       '@masknet/web3-shared-evm': link:../web3-shared/evm
       bignumber.js: 9.0.2
       date-fns: 2.28.0
+      graphql-request: 3.5.0
       json-stable-stringify: 1.0.1
       lodash-unified: 1.0.2_da03a4540fbd16bbaafbb96724306afd
       react-use: 17.3.2_bc22c48adf1a4e34a005159413cd72b5
@@ -1238,14 +1259,14 @@ importers:
     specifiers:
       '@blocto/fcl': ^0.0.78-alpha.8
       '@masknet/web3-constants': workspace:*
-      '@masknet/web3-kit': workspace:*
+      '@masknet/web3-shared-base': workspace:*
       '@onflow/types': ^0.0.5
       react-use: ^17.3.2
       urlcat: ^2.0.4
     dependencies:
       '@blocto/fcl': 0.0.78-alpha.8
       '@masknet/web3-constants': link:../../web3-constants
-      '@masknet/web3-kit': link:../../web3-kit
+      '@masknet/web3-shared-base': link:../base
       '@onflow/types': 0.0.5
       react-use: 17.3.2_bc22c48adf1a4e34a005159413cd72b5
       urlcat: 2.0.4
@@ -1253,12 +1274,12 @@ importers:
   packages/web3-shared/solana:
     specifiers:
       '@masknet/web3-constants': workspace:*
-      '@masknet/web3-kit': workspace:*
+      '@masknet/web3-shared-base': workspace:*
       react-use: ^17.3.2
       urlcat: ^2.0.4
     dependencies:
       '@masknet/web3-constants': link:../../web3-constants
-      '@masknet/web3-kit': link:../../web3-kit
+      '@masknet/web3-shared-base': link:../base
       react-use: 17.3.2_bc22c48adf1a4e34a005159413cd72b5
       urlcat: 2.0.4
 
@@ -11110,6 +11131,11 @@ packages:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
     engines: {node: '>=8'}
 
+  /binaryen/106.0.0:
+    resolution: {integrity: sha512-AuYxvPDPZKt9hYhyw2xFoNhrleI8dQDMMjSunETPJtViUsRSJmvA48GweKV6PZUU7F8E7ipsvmhZLSAsDIamRw==}
+    hasBin: true
+    dev: true
+
   /bindings/1.5.0:
     resolution: {integrity: sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==}
     dependencies:
@@ -16011,6 +16037,16 @@ packages:
 
   /graceful-fs/4.2.9:
     resolution: {integrity: sha512-NtNxqUcXgpW2iMrfqSfR73Glt39K+BLwWsPs94yR63v45T0Wbej7eRmL5cWfwEgqXnmjQp3zaJTshdRW/qC2ZQ==}
+
+  /graphql-request/3.5.0:
+    resolution: {integrity: sha512-Io89QpfU4rqiMbqM/KwMBzKaDLOppi8FU8sEccCE4JqCgz95W9Q8bvxQ4NfPALLSMvg9nafgg8AkYRmgKSlukA==}
+    peerDependencies:
+      graphql: 14.x || 15.x
+    dependencies:
+      cross-fetch: 3.1.4
+      extract-files: 9.0.0
+      form-data: 3.0.1
+    dev: false
 
   /graphql-request/3.5.0_graphql@15.5.3:
     resolution: {integrity: sha512-Io89QpfU4rqiMbqM/KwMBzKaDLOppi8FU8sEccCE4JqCgz95W9Q8bvxQ4NfPALLSMvg9nafgg8AkYRmgKSlukA==}

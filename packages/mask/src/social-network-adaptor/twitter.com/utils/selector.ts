@@ -23,7 +23,14 @@ export const searchProfileTabListLastChildSelector: () => LiveSelector<E, true> 
     )
 
 export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="primaryColumn"] [role="navigation"] + * > div:not([role="progressbar"])')
+    querySelector<E>(
+        '[data-testid="primaryColumn"] [role="navigation"] + * > div[aria-label]:not([role="progressbar"])',
+    )
+
+export const searchProfileTabLoseConnectionPageSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>(
+        '[data-testid="primaryColumn"] [role="navigation"] + * > div[dir="auto"]:not([role="progressbar"])',
+    )
 
 export const searchProfileEmptySelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] [data-testid="emptyState"]')
@@ -48,7 +55,7 @@ export const searchNewTweetButtonSelector: () => LiveSelector<E, true> = () => {
 }
 
 export const searchNickNameSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="UserProfileHeader_Items"]')
+    querySelector<E>('[data-testid="tweet"] a:not([target]) > div > div[dir="auto"] > span > span')
 export const searchAvatarSelector = () =>
     querySelector<HTMLImageElement>('[data-testid="primaryColumn"] a[href$="/photo"] img[src*="profile_images"]')
 export const searchNFTAvatarSelector = () =>
