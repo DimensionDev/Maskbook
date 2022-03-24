@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useFetchIdeaTokensBySearch } from '../hooks/useFetchIdeaTokens'
 import { makeStyles } from '@masknet/theme'
-import { Box, Button, Grid, IconButton, Stack, TextField } from '@mui/material'
+import { Box, Button, Grid, IconButton, Stack, TextField, Typography } from '@mui/material'
 import { DataGrid, GridColDef, GridRenderCellParams, GridValueFormatterParams } from '@mui/x-data-grid'
 import type { IdeaToken } from '../types'
 import { composeIdeaURL, formatterToUSD, truncate } from '../utils'
-import { formatWeiToEther } from '@masknet/web3-shared-evm'
+import { formatWeiToEther, EMPTY_LIST } from '@masknet/web3-shared-evm'
 import { SearchIcon } from '@masknet/icons'
 import ClearIcon from '@mui/icons-material/Clear'
 import { LoadingAnimation } from '@masknet/shared'
@@ -114,8 +114,8 @@ export function ListingsView() {
 
     const renderNameCell = (params: GridRenderCellParams<String>) => (
         <Grid container direction="column">
-            <div title={params.row.name}>{truncate(params.row.name, 25)}</div>
-            <div className={classes.market}>{params.row.market}</div>
+            <Typography title={params.row.name}>{truncate(params.row.name, 25)}</Typography>
+            <Typography className={classes.market}>{params.row.market}</Typography>
         </Grid>
     )
 
@@ -207,7 +207,7 @@ export function ListingsView() {
         <div className={classes.root}>
             <DataGrid
                 className={classes.grid}
-                rowsPerPageOptions={[]}
+                rowsPerPageOptions={EMPTY_LIST}
                 headerHeight={18}
                 components={{
                     Toolbar: QuickSearchToolbar,
@@ -216,7 +216,7 @@ export function ListingsView() {
                     NoRowsOverlay: NoRowsCustomOverlay,
                 }}
                 rowHeight={60}
-                rows={formattedData ?? []}
+                rows={formattedData ?? EMPTY_LIST}
                 loading={loading}
                 columns={columns}
                 componentsProps={{

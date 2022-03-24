@@ -56,7 +56,7 @@ export function IdeaMarketView() {
     const tabs = [
         <Tab className={classes.tab} key="listings" label={t('plugin_ideamarket_tab_listings')} />,
         <Tab className={classes.tab} key="account" label={t('plugin_ideamarket_tab_account')} />,
-    ].filter(Boolean)
+    ]
 
     return (
         <Card className={classes.root} elevation={0}>

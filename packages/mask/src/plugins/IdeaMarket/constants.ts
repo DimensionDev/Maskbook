@@ -1,3 +1,4 @@
+export const IDEAMARKET_PLUGIN_ID = 'io.ideamarket'
 export const SUBGRAPH_URL = 'https://subgraph.backend.ideamarket.io/subgraphs/name/Ideamarket/Ideamarket/'
 export const TESTNET_SUBGRAPH_URL =
     'https://subgraph-test-avm-l2.backend.ideamarket.io/subgraphs/name/Ideamarket/IdeamarketTESTAVML2/'

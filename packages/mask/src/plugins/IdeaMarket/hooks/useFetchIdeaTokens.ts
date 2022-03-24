@@ -1,12 +1,9 @@
-import { escapeRegExp } from 'lodash-unified'
 import { useAsync } from 'react-use'
-import { fetchAllTokens } from '../apis'
+import { PluginIdeaMarketRPC } from '../messages'
 
 export function useFetchIdeaTokensBySearch(searchText: string) {
-    const searchRegex = new RegExp(escapeRegExp(searchText), 'i')
-
     const { value, error, loading } = useAsync(async () => {
-        return fetchAllTokens(searchText)
+        return PluginIdeaMarketRPC.fetchAllTokens(searchText)
     }, [searchText])
 
     return { tokens: value?.ideaTokens, error, loading }

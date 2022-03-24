@@ -1,8 +1,9 @@
 import type { Plugin } from '@masknet/plugin-infra'
+import { IDEAMARKET_PLUGIN_ID } from './constants'
 import { IdeaMarketIcon } from './icons/IdeaMarketIcon'
 
 export const base: Plugin.Shared.Definition = {
-    ID: 'io.ideamarket',
+    ID: IDEAMARKET_PLUGIN_ID,
     icon: <IdeaMarketIcon />,
     name: { fallback: 'IdeaMarket' },
     description: {

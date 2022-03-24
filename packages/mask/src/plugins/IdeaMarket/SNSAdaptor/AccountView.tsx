@@ -78,7 +78,6 @@ export function AccountView() {
                             <TableCell key="price">Price</TableCell>
                             <TableCell key="balance">Balance</TableCell>
                             <TableCell key="value">Value</TableCell>
-                            {/* <TableCell key="dayChange">24H change</TableCell> */}
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -87,25 +86,31 @@ export function AccountView() {
                                 balance.token.name.length > 30
                                     ? balance.token.name.slice(0, 30).concat('...')
                                     : balance.token.name
-                            const tokenPrice = Number(balance.token.latestPricePoint.price).toFixed(2)
+                            const tokenPrice = Number.parseFloat(
+                                balance.token.latestPricePoint.price.toString(),
+                            ).toFixed(2)
                             const userTokenBalance = leftShift(balance.amount, 18).toFixed(2, 1)
                             const balanceValue =
                                 balance.token.latestPricePoint.price * leftShift(balance.amount, 18).toNumber()
 
-                            const totalBalance = (Number(balanceValue) - Number(balanceValue) * 0.01).toFixed(2)
+                            const totalBalance = (
+                                Number.parseFloat(balanceValue.toString()) -
+                                Number.parseFloat(balanceValue.toString()) * 0.01
+                            ).toFixed(2)
 
                             return (
                                 <TableRow className={classes.row} key={balance.id}>
                                     <TableCell className={classes.name}>
                                         <Grid container direction="column">
-                                            <div title={balance.token.name}>{name}</div>
-                                            <div className={classes.market}>{balance.token.market.name}</div>
+                                            <Typography title={balance.token.name}>{name}</Typography>
+                                            <Typography className={classes.market}>
+                                                {balance.token.market.name}
+                                            </Typography>
                                         </Grid>
                                     </TableCell>
                                     <TableCell>&#36;{tokenPrice}</TableCell>
                                     <TableCell>{userTokenBalance}</TableCell>
                                     <TableCell>&#36;{totalBalance}</TableCell>
-                                    {/* <TableCell>{formatWithOperator(balance.token.dayChange)}</TableCell> */}
                                     <TableCell className={classes.actionButtons}>
                                         <Grid container alignContent="center" justifyContent="center">
                                             <Grid item>
