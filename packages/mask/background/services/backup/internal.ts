@@ -17,6 +17,11 @@ export function delegatePluginBackup(f: typeof backupPlugins) {
 /** @internal */
 export interface InternalBackupOptions {
     hasPrivateKeyOnly?: boolean
+    noPosts?: boolean
+    noWallets?: boolean
+    noPersonas?: boolean
+    noProfiles?: boolean
+    onlyForPersona?: PersonaIdentifier
 }
 /**
  * @internal
@@ -24,22 +29,23 @@ export interface InternalBackupOptions {
  */
 // TODO: use a single readonly transaction in this operation.
 export async function createNewBackup(options: InternalBackupOptions): Promise<NormalizedBackup.Data> {
+    const { noPersonas, noPosts, noProfiles, noWallets, onlyForPersona } = options
     const file = createEmptyNormalizedBackup()
     const { meta, personas, posts, profiles, relations, settings } = file
 
     meta.version = 2
-    meta.maskVersion = Some(process.env.VERSION)
+    meta.maskVersion = Some(process.env.VERSION || '>=2.5.0')
     meta.createdAt = Some(new Date())
 
     settings.grantedHostPermissions = (await browser.permissions.getAll()).origins || []
 
     await Promise.allSettled([
-        backupPersonas(),
-        backupAllRelations(),
-        backupPosts(),
-        backupProfiles(),
+        noPersonas || backupPersonas(onlyForPersona ? [onlyForPersona] : undefined),
+        noProfiles || backupProfiles(onlyForPersona),
+        (noPersonas && noProfiles) || backupAllRelations(),
+        noPosts || backupPosts(),
+        noWallets || backupWallets().then((w) => (file.wallets = w)),
         backupPlugins().then((p) => (file.plugins = p)),
-        backupWallets().then((w) => (file.wallets = w)),
     ])
 
     return file
@@ -105,12 +111,15 @@ export async function createNewBackup(options: InternalBackupOptions): Promise<N
         }
     }
 
-    async function backupProfiles(of?: ProfileIdentifier[]) {
+    async function backupProfiles(of?: PersonaIdentifier) {
         const data = await queryProfilesDB({
-            identifiers: of,
             hasLinkedPersona: true,
         })
         for (const profile of data) {
+            if (of) {
+                if (!profile.linkedPersona) continue
+                if (!profile.linkedPersona.equals(of)) continue
+            }
             profiles.set(profile.identifier, {
                 identifier: profile.identifier,
                 nickname: profile.nickname ? Some(profile.nickname) : None,
