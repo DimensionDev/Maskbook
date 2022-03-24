@@ -20,6 +20,7 @@ export const {
     createOrUpdateProfileDB,
     createProfileDB,
     createRelationDB,
+    createRelationsTransaction,
     deleteProfileDB,
     queryRelationsPagedDB,
     updateRelationDB,
