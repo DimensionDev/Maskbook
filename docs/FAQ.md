@@ -57,7 +57,7 @@ There are many kinds of builds. Check the following table.
 | MaskNetwork.chromium-beta.zip | Build for Chromium based browsers with some insider features turned on. |
 | MaskNetwork.chromium.zip | Build for Chromium based browsers |
 | MaskNetwork.firefox.zip | Build for Firefox |
-| MaskNetwork.gecko.zip | Build for Gecko based browsers |
+| MaskNetwork.gecko.zip | Build for Android native Mask app |
 | MaskNetwork.iOS.zip | Build for iOS native Mask app |
 
 You can download these builds in two places.
