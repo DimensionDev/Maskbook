@@ -1,6 +1,6 @@
 import { Menu, Popper, Tooltip } from '@mui/material'
 import { createShadowRootForwardedComponent, createShadowRootForwardedPopperComponent } from './Portal'
 
-export const ShadowRootTooltip = createShadowRootForwardedPopperComponent(Tooltip)
-export const ShadowRootMenu = createShadowRootForwardedComponent(Menu)
-export const ShadowRootPopper = createShadowRootForwardedComponent(Popper)
+export const ShadowRootTooltip: typeof Tooltip = createShadowRootForwardedPopperComponent(Tooltip)
+export const ShadowRootMenu: typeof Menu = createShadowRootForwardedComponent(Menu)
+export const ShadowRootPopper: typeof Popper = createShadowRootForwardedComponent(Popper)
