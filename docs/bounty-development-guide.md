@@ -4,7 +4,9 @@ Hi, Awesome people! Welcome to start a bounty task on Mask Network.
 
 ## Tech Reqirements
 
-Mask Network extension is mainly written in TypeScript. The UI part is building with React upon [MUI](https://mui.com/getting-started/installation/) framework. Also, we write [CSS-in-JS](css-in-js.md). Use webpack to build the project. Besides that, we prefer widely adopting tech solutions that includes:
+Mask Network extension is written in TypeScript. The UI is written by React and [@mui](https://mui.com/) framework. We write CSS in [CSS-in-JS](css-in-js.md) style.
+
+We prefer widely adopting tech solutions that include:
 
 - [Web3.js](https://web3js.readthedocs.io/) Ethereum JavaScript API
 - [react-use](https://streamich.github.io/react-use/) React Hooks — 👍
