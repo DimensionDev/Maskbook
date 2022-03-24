@@ -24,7 +24,7 @@ export function usePluginWrapper(open: boolean, options?: { width?: number; name
 
     useEffect(() => {
         setWrap(open)
-        return () => setWrap(false)
+        return () => setWrap(open)
     }, [open, setWrap])
     useEffect(() => setWidth(width), [width, setWidth])
     useEffect(() => setWrapperName(name), [name, setWrapperName])
