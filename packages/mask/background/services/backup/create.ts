@@ -1,6 +1,6 @@
 import type { PersonaIdentifier } from '@masknet/shared-base'
 import { BackupPreview, generateBackupRAW, getBackupPreviewInfo } from '@masknet/backup-format'
-import { createNewBackup } from './internal'
+import { createNewBackup } from './internal_create'
 
 export interface MobileBackupOptions {
     noPosts?: boolean
