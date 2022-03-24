@@ -65,10 +65,10 @@ Almost all bounty tasks for the Mask Network plugin relate to a plugin. After le
 
 ## Pull Request Conversions
 
-After bounty hacker opening a pull request. Reviewer will label it with `Type: Bounty`, and update a statu tags while the request on-going.
+After bounty hacker opening a pull request. Reviewer will label it with `Type: Bounty`, and update a status tag while the progress on-going.
 
 | Status              | Description                                                                  |
 | ------------------- | ---------------------------------------------------------------------------- |
 | `Bounty: Started`   | The DEV team noticed your request. You will receive comments from reviewers. |
-| `Bounty: Reviewed`  | The QA team notcied your request. You will receive bugs from reviewers.      |
+| `Bounty: Reviewed`  | The QA team noticed your request. You will receive bugs from reviewers.      |
 | `Bounty: Qualified` | Your request is qualifed. It will ship soon.                                 |
