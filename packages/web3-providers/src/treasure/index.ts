@@ -191,9 +191,9 @@ export class TreasureAPI implements NonFungibleTokenAPI.Provider {
 
         if (!this.collectionsCache) return
 
-        return this.collectionsCache.collections
+        return first(this.collectionsCache.collections
             .filter((e) => e.name.toLowerCase().replace(' ', '-') === collectionName)
-            .map((e) => e.id)[0]
+            .map((e) => e.id))
     }
 
     // Resolve a collection name or a contract address to the Treasure collection ID
