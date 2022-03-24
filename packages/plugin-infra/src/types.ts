@@ -336,7 +336,13 @@ export namespace Plugin.SNSAdaptor {
     // #endregion
 
     export interface ApplicationEntry {
+        /**
+         * Render entry component
+         */
         RenderEntryComponent: () => JSX.Element | null
+        /**
+         * Used to order the applications on the board
+         */
         defaultSortingPriority: number
     }
 
