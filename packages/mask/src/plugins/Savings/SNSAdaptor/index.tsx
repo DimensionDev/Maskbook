@@ -7,15 +7,17 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal) {},
     ApplicationEntries: [
         {
-            RenderEntryComponent() {
+            RenderEntryComponent(key) {
                 const currentPluginId = usePluginIDContext()
 
                 return currentPluginId !== NetworkPluginID.PLUGIN_EVM ? null : (
-                    <ApplicationEntry
-                        title="Savings"
-                        icon={new URL('./assets/savings.png', import.meta.url).toString()}
-                        onClick={() => {}}
-                    />
+                    <div key={key}>
+                        <ApplicationEntry
+                            title="Savings"
+                            icon={new URL('./assets/savings.png', import.meta.url).toString()}
+                            onClick={() => {}}
+                        />
+                    </div>
                 )
             },
             defaultSortingPriority: 7,

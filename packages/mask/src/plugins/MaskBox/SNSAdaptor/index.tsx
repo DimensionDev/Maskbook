@@ -29,25 +29,29 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent() {
+            RenderEntryComponent(key) {
                 return (
-                    <ApplicationEntry
-                        title="Mask Bridge"
-                        icon={new URL('../assets/bridge.png', import.meta.url).toString()}
-                        onClick={() => window.open('https://bridge.mask.io/#/', '_blank', 'noopener noreferrer')}
-                    />
+                    <div key={key}>
+                        <ApplicationEntry
+                            title="Mask Bridge"
+                            icon={new URL('../assets/bridge.png', import.meta.url).toString()}
+                            onClick={() => window.open('https://bridge.mask.io/#/', '_blank', 'noopener noreferrer')}
+                        />
+                    </div>
                 )
             },
             defaultSortingPriority: 5,
         },
         {
-            RenderEntryComponent() {
+            RenderEntryComponent(key) {
                 return (
-                    <ApplicationEntry
-                        title="MaskBox"
-                        icon={new URL('../assets/mask_box.png', import.meta.url).toString()}
-                        onClick={() => window.open('https://box.mask.io/#/', '_blank', 'noopener noreferrer')}
-                    />
+                    <div key={key}>
+                        <ApplicationEntry
+                            title="MaskBox"
+                            icon={new URL('../assets/mask_box.png', import.meta.url).toString()}
+                            onClick={() => window.open('https://box.mask.io/#/', '_blank', 'noopener noreferrer')}
+                        />
+                    </div>
                 )
             },
             defaultSortingPriority: 6,

@@ -64,24 +64,26 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent() {
+            RenderEntryComponent(key) {
                 const currentPluginId = usePluginIDContext()
                 const chainId = useChainId()
                 const isHidden =
                     currentPluginId !== NetworkPluginID.PLUGIN_EVM ||
                     !base.enableRequirement.web3![NetworkPluginID.PLUGIN_EVM]!.supportedChainIds!.includes(chainId)
                 return isHidden ? null : (
-                    <ApplicationEntry
-                        title="ITO"
-                        icon={new URL('../assets/token.png', import.meta.url).toString()}
-                        onClick={() => requestComposition(base.ID)}
-                    />
+                    <div key={key}>
+                        <ApplicationEntry
+                            title="ITO"
+                            icon={new URL('../assets/token.png', import.meta.url).toString()}
+                            onClick={() => requestComposition(base.ID)}
+                        />
+                    </div>
                 )
             },
             defaultSortingPriority: 3,
         },
         {
-            RenderEntryComponent() {
+            RenderEntryComponent(key) {
                 const currentPluginId = usePluginIDContext()
                 const chainId = useChainId()
                 const [open, setOpen] = useState(false)
@@ -89,14 +91,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     currentPluginId !== NetworkPluginID.PLUGIN_EVM ||
                     !base.enableRequirement.web3![NetworkPluginID.PLUGIN_EVM]!.supportedChainIds!.includes(chainId)
                 return isHidden ? null : (
-                    <>
+                    <div key={key}>
                         <ApplicationEntry
                             title="Claim"
                             icon={new URL('../assets/gift.png', import.meta.url).toString()}
                             onClick={() => setOpen(true)}
                         />
                         <ClaimAllDialog open={open} onClose={() => setOpen(false)} />
-                    </>
+                    </div>
                 )
             },
             defaultSortingPriority: 4,

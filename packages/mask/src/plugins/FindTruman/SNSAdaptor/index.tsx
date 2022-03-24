@@ -94,18 +94,18 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent() {
+            RenderEntryComponent(key) {
                 const [open, setOpen] = useState(false)
                 const currentPluginId = usePluginIDContext()
                 return currentPluginId !== NetworkPluginID.PLUGIN_EVM ? null : (
-                    <>
+                    <div key={key}>
                         <ApplicationEntry
                             title="FindTruman"
                             icon={new URL('../assets/findtruman.png', import.meta.url).toString()}
                             onClick={() => setOpen(true)}
                         />
                         <FindTrumanDialog open={open} onClose={() => setOpen(false)} />
-                    </>
+                    </div>
                 )
             },
             defaultSortingPriority: 11,

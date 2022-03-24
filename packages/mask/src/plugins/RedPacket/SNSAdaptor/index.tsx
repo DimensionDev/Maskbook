@@ -94,14 +94,16 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent() {
+            RenderEntryComponent(key) {
                 const currentPluginId = usePluginIDContext()
                 return currentPluginId !== NetworkPluginID.PLUGIN_EVM ? null : (
-                    <ApplicationEntry
-                        title="Lucky Drop"
-                        icon={new URL('./assets/lucky_drop.png', import.meta.url).toString()}
-                        onClick={() => requestComposition(base.ID)}
-                    />
+                    <div key={key}>
+                        <ApplicationEntry
+                            title="Lucky Drop"
+                            icon={new URL('./assets/lucky_drop.png', import.meta.url).toString()}
+                            onClick={() => requestComposition(base.ID)}
+                        />
+                    </div>
                 )
             },
             defaultSortingPriority: 1,

@@ -13,15 +13,17 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent() {
+            RenderEntryComponent(key) {
                 const { openDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 
                 return (
-                    <ApplicationEntry
-                        title="Fiat On-Ramp"
-                        icon={new URL('../assets/fiat_ramp.png', import.meta.url).toString()}
-                        onClick={openDialog}
-                    />
+                    <div key={key}>
+                        <ApplicationEntry
+                            title="Fiat On-Ramp"
+                            icon={new URL('../assets/fiat_ramp.png', import.meta.url).toString()}
+                            onClick={openDialog}
+                        />
+                    </div>
                 )
             },
             defaultSortingPriority: 9,

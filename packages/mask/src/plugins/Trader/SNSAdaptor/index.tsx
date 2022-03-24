@@ -24,7 +24,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     enhanceTag,
     ApplicationEntries: [
         {
-            RenderEntryComponent() {
+            RenderEntryComponent(key) {
                 const currentPluginId = usePluginIDContext()
                 const chainId = useChainId()
                 const isHidden =
@@ -33,11 +33,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 const { openDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
                 return isHidden ? null : (
-                    <ApplicationEntry
-                        title="Swap"
-                        icon={new URL('../assets/swap.png', import.meta.url).toString()}
-                        onClick={openDialog}
-                    />
+                    <div key={key}>
+                        <ApplicationEntry
+                            title="Swap"
+                            icon={new URL('../assets/swap.png', import.meta.url).toString()}
+                            onClick={openDialog}
+                        />
+                    </div>
                 )
             },
             defaultSortingPriority: 8,

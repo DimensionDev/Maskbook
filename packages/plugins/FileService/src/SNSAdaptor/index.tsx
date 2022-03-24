@@ -36,13 +36,15 @@ const definition: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent() {
+            RenderEntryComponent(key) {
                 return (
-                    <ApplicationEntry
-                        title="File Service"
-                        icon={new URL('./files.png', import.meta.url).toString()}
-                        onClick={() => requestComposition(base.ID)}
-                    />
+                    <div key={key}>
+                        <ApplicationEntry
+                            title="File Service"
+                            icon={new URL('./files.png', import.meta.url).toString()}
+                            onClick={() => requestComposition(base.ID)}
+                        />
+                    </div>
                 )
             },
             defaultSortingPriority: 2,

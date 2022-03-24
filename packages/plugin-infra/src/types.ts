@@ -313,7 +313,7 @@ export namespace Plugin.SNSAdaptor {
         /**
          * Render entry component
          */
-        RenderEntryComponent: () => JSX.Element | null
+        RenderEntryComponent: (key: number) => JSX.Element | null
         /**
          * Used to order the applications on the board
          */
