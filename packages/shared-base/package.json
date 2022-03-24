@@ -17,7 +17,7 @@
     "anchorme": "^2.1.2",
     "async-call-rpc": "^6.0.2",
     "bignumber.js": "^9.0.2",
-    "idb": "^7.0.0",
+    "idb": "^7.0.1",
     "immer": "^9.0.12",
     "pvtsutils": "^1.2.2",
     "react": "../empty",
