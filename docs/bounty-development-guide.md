@@ -40,7 +40,10 @@ After cloning the repository and [set up the development environment](setup.md).
 
 ### Web3 Related Packages
 
-- `packages/web3-constants` Constants
+- `packages/web3-constants` Each Web3 constant must set up for all kowned chain IDs.
+- `packages/web3-contracts` EVM contract ABIs and compiled TypeScript definitions.
+- `packages/web3-provider` A hub of APIs for external data source.
+- `packages/web3-shared-*` Shared hooks, utilities, types for each network.
 
 ## Plugin
 

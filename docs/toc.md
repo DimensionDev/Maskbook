@@ -21,7 +21,8 @@
 
 ## Guides
 
-- Plugin Development Guide
+- [Bounty Development Guide](./bounty-development-guide.md)
+- [Plugin Development Guide](./plugin-development-guide.md)
 - Website Integration Guide
 - Blockchain Integration Guide
 - [Wallet Provider Integration Guide](./wallet-provider-integration.md)
@@ -33,15 +34,15 @@
 - shared
 - Mask Icons
 
-## ECOSYSTEM
+## Ecosystem
 
-- MaskBox
-- MaskBridge
+- [MaskBox](https://box.mask.io/)
+- [MaskBridge](http://bridge.mask.io/)
 
 ## Reference
 
 - TypedMessage
-- Mask Flavored EVM JSON RPC methods
+- [Mask Flavored EVM JSON RPC methods](./mask-flavored-jsonrpc-api.md)
 - @mask/plugin-infra
 - @mask/web3-constants
 - @mask/web3-contracts
