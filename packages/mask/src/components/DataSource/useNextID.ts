@@ -27,7 +27,7 @@ const verifyPersona = (personaIdentifier?: PersonaIdentifier, username?: string)
     currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier].value = stringify({
         status: SetupGuideStep.VerifyOnNextID,
         persona: personaIdentifier.toText(),
-        username: username,
+        username,
     })
 }
 
