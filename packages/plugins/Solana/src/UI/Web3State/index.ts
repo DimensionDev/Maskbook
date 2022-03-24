@@ -59,8 +59,8 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
             resolveBlockLink: resolveBlockLinkOnExplorer,
         },
         NameService: {
-            lookup,
-            reverse,
+            lookup: (domain: string) => lookup(domain, chainId),
+            reverse: (address: string) => reverse(address, chainId),
         },
     }
 }
