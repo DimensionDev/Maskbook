@@ -28,7 +28,7 @@ npx husky install # on project root directory
 
 ## How to fix cspell errors in CI?
 
-This project uses [cspell](https://github.com/streetsidesoftware/cspell) for checking typoes. You can add unlisted words into `cspell.json` to bypass cspell checking. After you update the configuration file, you could run checking locally before pushing it to make sure your patch is working.
+This project uses [cspell](https://github.com/streetsidesoftware/cspell) for checking typos. You can add unlisted words into `cspell.json` to bypass cspell checking. After you update the configuration file, you could run checking locally before pushing it to make sure your patch is working.
 
 ```bash
 npx cspell lint pattern_that_match_your_files
@@ -62,12 +62,12 @@ You can download these builds in two places.
 
 - Github: Open the pull request page, and click the **Actions** tab. Then on the opened page, click the **build** sub-item on the **Compile** item. On the action detailed page, click the **Summary** tab. Now you can download builds on the **Artifacts** section.
 
-  E.g., https://github.com/DimensionDev/Maskbook/actions/runs/2026749204
+  E.g., <https://github.com/DimensionDev/Maskbook/actions/runs/2026749204>
 
 - CircleCI: Open the pull request page, and scroll down to the review status card. Click **Show all checks** to find the **
-  ci/circleci: build** item, and click the **details** link. On the opended CircleCI page, click the **ARTIFACTS** tab.
+  ci/circleci: build** item, and click the **details** link. On the opened CircleCI page, click the **ARTIFACTS** tab.
 
-  E.g., https://app.circleci.com/pipelines/github/DimensionDev/Maskbook/24886/workflows/eeabcc93-6152-437f-a65d-24f0acee34a9/jobs/52795/artifacts
+  E.g., <https://app.circleci.com/pipelines/github/DimensionDev/Maskbook/24886/workflows/eeabcc93-6152-437f-a65d-24f0acee34a9/jobs/52795/artifacts>
 
 ## Help! The data service doesn’t return a CORS header.
 
@@ -102,6 +102,6 @@ Open the background.html of the extension and execute the following scripts in t
 // get all storage
 browser.storage.local.get(null).then(console.log)
 
-// clear all stroage
+// clear all storage
 browser.storage.local.clear()
 ```

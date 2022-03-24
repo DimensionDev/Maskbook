@@ -19,7 +19,7 @@ We prefer widely adopting tech solutions that include:
 If you are familiar with these libraries mentioned above, it will take less effort for you to get started.
 The codebase is open-sourced under the AGPLv3 license.
 
-## General Content
+## Packages
 
 After cloning the repository and [set up the development environment](setup.md). The codebase is constructed as a monorepo with many internal packages. Each package serves a specific purpose. Let's take a quick tour.
 
@@ -38,17 +38,37 @@ After cloning the repository and [set up the development environment](setup.md).
 - `packages/shared` Shared UI components and utilities.
 - `packages/shared-base` Shared types, constants, and atomic units. Must be as pure as possible and testable.
 
-### Web3 Related Packages
+### Web3 Packages
 
 - `packages/web3-constants` Each Web3 constant must set up for all kowned chain IDs.
 - `packages/web3-contracts` EVM contract ABIs and compiled TypeScript definitions.
 - `packages/web3-provider` A hub of APIs for external data source.
 - `packages/web3-shared-*` Shared hooks, utilities, types for each network.
 
-## Plugin
+## Learn Through Examples
 
-If you want's add plugin, then MUST read this file [Plugin Development Guide](plugin-development-guide.md)
+Almost all bounty tasks for the Mask Network plugin relate to a plugin. After learning the basics, checkout those pull requests or plugins to learn quick from examples.
 
-## Internationalization (i18n)
+### Dapp Plugins
 
-If you want's update locale, then MUST read this file [i18n Guide](i18n-guide.md)
+| Plugin      | Pull Request Links                                                                              |
+| ----------- | ----------------------------------------------------------------------------------------------- |
+| Collectible | <https://github.com/DimensionDev/Maskbook/pulls?q=is%3Apr+label%3A%22Plugin%3A+Collectibles%22> |
+| Trader      | <https://github.com/DimensionDev/Maskbook/pulls?q=is%3Apr+label%3A%22Plugin%3A+Trader%22>       |
+| Savings     | <https://github.com/DimensionDev/Maskbook/pulls?q=is%3Apr+label%3A%22Plugin%3A+Savings%22>      |
+
+### Network Plugins
+
+| Plugin     | Pull Request Links                                                                     |
+| ---------- | -------------------------------------------------------------------------------------- |
+| EVM Chains | <https://github.com/DimensionDev/Maskbook/pulls?q=is%3Apr+label%3A%22Plugin%3A+EVM%22> |
+
+## Pull Request Conversions
+
+After bounty hacker opening a pull request. Reviewer will label it with `Type: Bounty`, and update a statu tags while the request on-going.
+
+| Status              | Description                                                                  |
+| ------------------- | ---------------------------------------------------------------------------- |
+| `Bounty: Started`   | The DEV team noticed your request. You will receive comments from reviewers. |
+| `Bounty: Reviewed`  | The QA team notcied your request. You will receive bugs from reviewers.      |
+| `Bounty: Qualified` | Your request is qualifed. It will ship soon.                                 |

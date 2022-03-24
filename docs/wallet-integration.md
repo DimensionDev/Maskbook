@@ -1,4 +1,4 @@
-# A new EVM-compatible wallet provider to Mask Network
+# Wallet Integration
 
 Any wallet available in a browser environment can integrate into Mask Network. Well know wallets like [MetaMask](https://metamask.io/), [WalletConnect](https://docs.walletconnect.com/) and [Fortmatic](https://fortmatic.com/) have already been integrated. Besides that, Mask Network is also able to host accounts by itself.
 
@@ -95,3 +95,11 @@ export class Example implements Middleware<Context> {
   }
 }
 ```
+
+## Examples
+
+| Wallet        | Implementation |
+| ------------- | -------------- |
+| MetaMask      | \-             |
+| WalletConnect | \-             |
+| Fortmatic     | \-             |
