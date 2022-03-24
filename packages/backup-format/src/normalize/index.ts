@@ -7,11 +7,21 @@ import { generateBackupVersion2, isBackupVersion2, normalizeBackupVersion2 } fro
 import type { NormalizedBackup } from './type'
 
 export * from './type'
-export function normalizeBackup(data: unknown): NormalizedBackup.Data {
+function __normalizeBackup(data: unknown): NormalizedBackup.Data {
     if (isBackupVersion2(data)) return normalizeBackupVersion2(data)
     if (isBackupVersion1(data)) return normalizeBackupVersion1(data)
     if (isBackupVersion0(data)) return normalizeBackupVersion0(data)
     throw new TypeError(BackupErrors.UnknownFormat)
+}
+
+export function normalizeBackup(data: unknown): NormalizedBackup.Data {
+    const normalized = __normalizeBackup(data)
+
+    // fix invalid URL
+    normalized.settings.grantedHostPermissions = normalized.settings.grantedHostPermissions.filter((url) =>
+        /^(http|<all_urls>)/.test(url),
+    )
+    return normalized
 }
 
 /** It will return the internal format. DO NOT rely on the detail of it! */

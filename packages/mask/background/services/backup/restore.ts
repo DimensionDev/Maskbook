@@ -1,18 +1,26 @@
-import type { BackupPreview, NormalizedBackup } from '@masknet/backup-format'
+import { decodeArrayBuffer, decodeText } from '@dimensiondev/kit'
+import { BackupPreview, normalizeBackup, NormalizedBackup } from '@masknet/backup-format'
 
 /**
  * Only for mobile. Throw when no Persona is restored
  */
-export async function restoreFromBase64(backup: string): Promise<void> {
+export async function mobile_restoreFromBase64(rawString: string): Promise<void> {
     if (process.env.architecture !== 'app') throw new Error('Only for mobile')
+
+    const raw = JSON.parse(decodeText(decodeArrayBuffer(rawString)))
+    const backup = normalizeBackup(raw)
+    // restore backup
     throw new TypeError('Not implemented')
 }
 
 /**
  * Only for mobile. Throw when no Persona is restored.
  */
-export async function restoreFromBackup(backup: string): Promise<void> {
+export async function mobile_restoreFromBackup(rawString: string): Promise<void> {
     if (process.env.architecture !== 'app') throw new Error('Only for mobile')
+
+    const backup = normalizeBackup(JSON.parse(rawString))
+    // restore backup
     throw new TypeError('Not implemented')
 }
 

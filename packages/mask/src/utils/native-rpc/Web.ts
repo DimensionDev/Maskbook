@@ -151,10 +151,10 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     persona_removePersona: ({ identifier }) =>
         Services.Identity.deletePersona(stringToPersonaIdentifier(identifier), 'delete even with private'),
     persona_restoreFromJson: async ({ backup }) => {
-        await Services.Identity.restoreFromBackup(backup)
+        await Services.Identity.mobile_restoreFromBackup(backup)
     },
     persona_restoreFromBase64: async ({ backup }) => {
-        await Services.Identity.restoreFromBase64(backup)
+        await Services.Identity.mobile_restoreFromBase64(backup)
     },
     persona_connectProfile: async ({ profileIdentifier, personaIdentifier }) => {
         const profileId = stringToProfileIdentifier(profileIdentifier)
