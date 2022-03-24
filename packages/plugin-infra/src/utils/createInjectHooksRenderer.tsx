@@ -3,7 +3,7 @@ import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { ShadowRootIsolation } from '@masknet/theme'
 import type { Plugin } from '../types'
 import { usePluginI18NField, PluginWrapperComponent, PluginWrapperMethods } from '../hooks'
-import { PluginWrapperMethodsContext } from '../hooks/usePluginWrapper'
+import { emptyPluginWrapperMethods, PluginWrapperMethodsContext } from '../hooks/usePluginWrapper'
 
 type Inject<T> = Plugin.InjectUI<T>
 type Raw<T> = Plugin.InjectUIRaw<T>
@@ -19,11 +19,9 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
         if (PluginWrapperComponent) {
             return (
                 <PluginWrapperComponent definition={plugin} ref={(r) => (ref === r ? void 0 : setRef(ref))}>
-                    {ref ? (
-                        <PluginWrapperMethodsContext.Provider value={ref}>
-                            {element}
-                        </PluginWrapperMethodsContext.Provider>
-                    ) : null}
+                    <PluginWrapperMethodsContext.Provider value={ref || emptyPluginWrapperMethods}>
+                        {element}
+                    </PluginWrapperMethodsContext.Provider>
                 </PluginWrapperComponent>
             )
         }

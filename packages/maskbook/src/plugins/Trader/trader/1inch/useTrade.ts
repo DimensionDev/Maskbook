@@ -4,10 +4,10 @@ import {
     isNative,
     useBlockNumber,
     useTokenConstants,
+    useAccount,
 } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
 import { safeUnreachable } from '@dimensiondev/kit'
-import { useAccount } from '@masknet/web3-shared-evm'
 import { PluginTraderRPC } from '../../messages'
 import { TradeStrategy } from '../../types'
 import { useSlippageTolerance } from '../0x/useSlippageTolerance'

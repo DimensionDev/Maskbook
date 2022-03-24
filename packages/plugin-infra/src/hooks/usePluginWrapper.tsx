@@ -5,7 +5,7 @@ export type PluginWrapperComponent<T extends Plugin.Shared.Definition = Plugin.S
     ForwardRefExoticComponent<React.PropsWithChildren<RefAttributes<PluginWrapperMethods> & { definition: T }>>
 
 /** @internal */
-const emptyPluginWrapperMethods = {
+export const emptyPluginWrapperMethods = {
     setWrap: noop,
     setWrapperName: noop,
     setWidth: noop,
@@ -24,7 +24,7 @@ export function usePluginWrapper(open: boolean, options?: { width?: number; name
 
     useEffect(() => {
         setWrap(open)
-        return () => setWrap(false)
+        return () => setWrap(open)
     }, [open, setWrap])
     useEffect(() => setWidth(width), [width, setWidth])
     useEffect(() => setWrapperName(name), [name, setWrapperName])
