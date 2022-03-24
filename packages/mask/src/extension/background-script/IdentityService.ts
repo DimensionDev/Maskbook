@@ -43,6 +43,7 @@ import {
     ProfileRecord,
     LinkedProfileDetails,
     RelationRecord,
+    queryRelations,
 } from '../../../background/database/persona/db'
 import {
     queryPersonasDB as queryPersonasFromIndexedDB,
@@ -270,9 +271,11 @@ export async function patchCreateOrUpdateRelation(
     await consistentPersonaDBWriteAccess(async (t) => {
         for (const persona of personas) {
             for (const profile of profiles) {
-                const relationInDB = await t.objectStore('relations').get([persona.toText(), profile.toText()])
-                if (relationInDB) {
-                    await updateRelationDB({ profile: profile, linked: persona, favor: defaultFavor }, t, true)
+                const relationsInDB = await queryRelations(persona, profile)
+                if (relationsInDB.length > 0) {
+                    for (const _ of relationsInDB) {
+                        await updateRelation(profile, persona, defaultFavor)
+                    }
                     continue
                 }
                 await createRelationDB({ profile: profile, linked: persona, favor: defaultFavor }, t, true)
@@ -285,12 +288,12 @@ export async function patchCreateOrUpdateRelation(
 export async function patchCreateNewRelation(relations: Omit<RelationRecord, 'network'>[]) {
     await consistentPersonaDBWriteAccess(async (t) => {
         for (const relation of relations) {
-            const relationInDB = await t
-                .objectStore('relations')
-                .get([relation.linked.toText(), relation.profile.toText()])
+            const relationsInDB = await queryRelations(relation.linked, relation.profile, t)
 
-            if (relationInDB) {
-                await updateRelationDB(relation, t, true)
+            if (relationsInDB.length > 0) {
+                for (const relation of relationsInDB) {
+                    await updateRelationDB(relation, t, true)
+                }
                 continue
             }
 
@@ -312,14 +315,14 @@ export async function createNewRelation(
     favor = RelationFavor.UNCOLLECTED,
 ) {
     const t = await createRelationsTransaction()
-    const relationInDB = await t.objectStore('relations').get([linked.toText(), profile.toText()])
-    if (relationInDB) return
+    const relationInDB = await queryRelations(linked, profile, t)
+    if (relationInDB.length > 0) return
 
     await createRelationDB({ profile, linked, favor }, t)
 }
 
 export async function queryRelationsRecordFromIndexedDB(): Promise<RelationRecord[]> {
-    return queryRelationsFromIndexedDB(() => true)
+    return queryRelationsFromIndexedDB()
 }
 
 export async function queryRelationPaged(

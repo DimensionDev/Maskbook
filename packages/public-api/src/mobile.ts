@@ -7,6 +7,7 @@ import type {
     LinkedProfileDetails,
     RelationRecord,
     PostRecord,
+    RedPacketAvailability,
 } from './types'
 import type { ProfileIdentifier_string } from './web'
 
@@ -91,6 +92,7 @@ export interface SharedNativeAPIs {
     }): Promise<void>
     detach_profile(params: { identifier: string }): Promise<void>
     create_relation(params: { relation: Omit<RelationRecord, 'network'> }): Promise<RelationRecord | undefined>
+    query_relation(params: { personaIdentifier?: string; profileIdentifier?: string }): Promise<RelationRecord[]>
     query_relations(params: {
         options?: {
             personaIdentifier?: string
@@ -113,6 +115,20 @@ export interface SharedNativeAPIs {
         pageOption?: PageOption
     }): Promise<PostRecord[]>
     update_post(params: { post: Partial<PostRecord>; options: { mode: 0 | 1 } }): Promise<PostRecord[]>
+    /**
+     * Mask Plugins
+     */
+    notifyRedpacket(params: {
+        redpacketPayload: any
+        availability: RedPacketAvailability
+        postLink: string
+    }): Promise<void>
+
+    claimOrRefundRedpacket(params: {
+        redpacketPayload: any
+        availability: RedPacketAvailability
+        postLink: string
+    }): Promise<void>
     notify_visible_detected_profile_changed(newID: ProfileIdentifier_string): Promise<void>
 }
 /**

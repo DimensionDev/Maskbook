@@ -30,6 +30,7 @@ import { useClaimCallback } from '../hooks/useClaimCallback'
 import { useRefundCallback } from '../hooks/useRefundCallback'
 import { OperationFooter } from './OperationFooter'
 import { useStyles } from './useStyles'
+import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc'
 
 export interface RedPacketProps {
     payload: RedPacketJSONPayload
@@ -135,6 +136,22 @@ export function RedPacket(props: RedPacketProps) {
         else if (canRefund) await refundCallback()
     }, [canClaim, canRefund, claimCallback, refundCallback])
 
+    const onClaimOrRefundOnNative = useCallback(async () => {
+        if (!availability) return
+        await nativeAPI?.api.claimOrRefundRedpacket({
+            redpacketPayload: payload,
+            availability: {
+                token_address: availability.token_address,
+                balance: availability.balance,
+                total: availability.total,
+                claimed: availability.claimed,
+                expired: availability.expired,
+                claimed_amount: (availability as RedPacketAvailability).claimed_amount,
+            },
+            postLink: postLink.toString(),
+        })
+    }, [availability, JSON.stringify(payload), postLink])
+
     const myStatus = useMemo(() => {
         if (token && listOfStatus.includes(RedPacketStatus.claimed))
             return t(
@@ -171,6 +188,24 @@ export function RedPacket(props: RedPacketProps) {
             shares: payload.shares ?? '-',
         })
     }, [availability, canRefund, token, t, payload, listOfStatus])
+
+    useEffect(() => {
+        if (!availability) return
+        if (hasNativeAPI) {
+            nativeAPI?.api.notifyRedpacket({
+                redpacketPayload: payload,
+                availability: {
+                    token_address: availability.token_address,
+                    balance: availability.balance,
+                    total: availability.total,
+                    claimed: availability.claimed,
+                    expired: availability.expired,
+                    claimed_amount: (availability as RedPacketAvailability).claimed_amount,
+                },
+                postLink: postLink.toString(),
+            })
+        }
+    }, [availability, JSON.stringify(payload), postLink, hasNativeAPI])
 
     // the red packet can fetch without account
     if (!availability || !token)
@@ -219,7 +254,7 @@ export function RedPacket(props: RedPacketProps) {
                     claimState={claimState}
                     refundState={refundState}
                     shareLink={shareLink}
-                    onClaimOrRefund={onClaimOrRefund}
+                    onClaimOrRefund={hasNativeAPI ? onClaimOrRefundOnNative : onClaimOrRefund}
                 />
             )}
         </EthereumChainBoundary>

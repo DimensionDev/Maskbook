@@ -129,7 +129,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
             const signResult = await Services.Identity.signWithPersona({
                 method: 'eth',
                 message: payload.signPayload,
-                identifier: persona_.publicHexKey,
+                identifier: persona_.identifier.toText(),
             })
             if (!signResult) throw new Error('Failed to sign by persona.')
             const signature = signResult.signature.signature

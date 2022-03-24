@@ -109,7 +109,7 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
     }
 
     async function backupAllRelations() {
-        const data = (await queryRelations(() => true)).map(RelationRecordToJSONFormat)
+        const data = (await queryRelations()).map(RelationRecordToJSONFormat)
         relations.push(...data)
     }
 

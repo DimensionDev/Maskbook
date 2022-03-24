@@ -82,7 +82,7 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
     const redPacketContract = useRedPacketContract(version)
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const account = useAccount()
-    const getCreateParams = useCallback(async (): Promise<CreateParams | null> => {
+    return useCallback(async (): Promise<CreateParams | null> => {
         if (!redPacketSettings || !redPacketContract) return null
         const { duration, isRandom, message, name, shares, total, token } = redPacketSettings
         const seed = Math.random().toString()
@@ -124,8 +124,6 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
 
         return { gas: gas as number | undefined, params, paramsObj, gasError }
     }, [redPacketSettings, account, redPacketContract])
-
-    return getCreateParams
 }
 
 export function useCreateCallback(redPacketSettings: RedPacketSettings, version: number, publicKey: string) {
