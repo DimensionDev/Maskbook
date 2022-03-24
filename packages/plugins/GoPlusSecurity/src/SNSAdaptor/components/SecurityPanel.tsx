@@ -47,8 +47,10 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
     const [isFold, setFold] = useState(false)
 
     const makeMessageList = SecurityMessages.filter(
-        (x) => x.condition(tokenSecurity) && x.level !== SecurityMessageLevel.Safe,
+        (x) => x.condition(tokenSecurity) && x.level !== SecurityMessageLevel.Safe && x.shouldHide(tokenSecurity),
     )
+
+    console.log(makeMessageList)
 
     const riskyFactors = makeMessageList.filter((x) => x.level === SecurityMessageLevel.High).length
     const attentionFactors = makeMessageList.filter((x) => x.level === SecurityMessageLevel.Medium).length
@@ -171,7 +173,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                     {makeMessageList.map((x, i) => (
                         <RiskCard info={x} key={i} />
                     ))}
-                    {makeMessageList.length && securityMessageLevel === SecurityMessageLevel.Safe && (
+                    {(makeMessageList.length || securityMessageLevel === SecurityMessageLevel.Safe) && (
                         <RiskCardUI
                             icon={DefineMapping[SecurityMessageLevel.Safe].icon(14)}
                             title={t.risk_safe_description()}

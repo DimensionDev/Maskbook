@@ -321,13 +321,13 @@ export namespace SecurityAPI {
     export interface TradingSecurity {
         buy_tax?: string
         sell_tax?: string
-        slippage_modifiable: '0' | '1'
-        is_honeypot: '0' | '1'
-        transfer_pausable: '0' | '1'
-        is_blacklisted: '0' | '1'
-        is_whitelisted: '0' | '1'
-        is_in_dex: '0' | '1'
-        is_anti_whale: '0' | '1'
+        slippage_modifiable?: '0' | '1'
+        is_honeypot?: '0' | '1'
+        transfer_pausable?: '0' | '1'
+        is_blacklisted?: '0' | '1'
+        is_whitelisted?: '0' | '1'
+        is_in_dex?: '0' | '1'
+        is_anti_whale?: '0' | '1'
     }
 
     export interface ContractSecurity {
@@ -341,8 +341,8 @@ export namespace SecurityAPI {
     }
 
     export interface TokenSecurity {
-        token_name: string
-        token_symbol: string
+        token_name?: string
+        token_symbol?: string
 
         holder_count?: number
         total_supply?: number
