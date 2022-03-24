@@ -6,6 +6,7 @@ import { parseURL } from '@masknet/shared-base'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { PreviewCard } from './components/PreviewCard'
 import { Context } from '../hooks/useContext'
+import { ApplicationEntry } from '@masknet/shared'
 
 const isMaskBox = (x: string) => x.startsWith('https://box-beta.mask.io') || x.startsWith('https://box.mask.io')
 
@@ -26,6 +27,32 @@ const sns: Plugin.SNSAdaptor.Definition = {
         if (!link) return null
         return <Renderer url={link} />
     },
+    ApplicationEntries: [
+        {
+            RenderEntryComponent() {
+                return (
+                    <ApplicationEntry
+                        title="Mask Bridge"
+                        icon={new URL('../assets/bridge.png', import.meta.url).toString()}
+                        onClick={() => window.open('https://bridge.mask.io/#/', '_blank', 'noopener noreferrer')}
+                    />
+                )
+            },
+            defaultSortingPriority: 5,
+        },
+        {
+            RenderEntryComponent() {
+                return (
+                    <ApplicationEntry
+                        title="MaskBox"
+                        icon={new URL('../assets/mask_box.png', import.meta.url).toString()}
+                        onClick={() => window.open('https://box.mask.io/#/', '_blank', 'noopener noreferrer')}
+                    />
+                )
+            },
+            defaultSortingPriority: 6,
+        },
+    ],
 }
 
 export default sns

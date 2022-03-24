@@ -124,6 +124,7 @@ export namespace Plugin.Shared {
         contribution?: Contribution
         /** Declare ability this plugin supported. */
         ability?: Ability
+        /** Declare relative application entries of the plugin to render */
     }
     /**
      * This part is shared between Dashboard, SNSAdaptor and Worker part
@@ -245,7 +246,7 @@ export namespace Plugin.SNSAdaptor {
         /** This UI will be rendered as an entry in the toolbar (if the SNS has a Toolbar support) */
         ToolbarEntry?: ToolbarEntry
         /** This UI will be rendered as an entry in the wallet status dialog */
-        ApplicationEntry?: ApplicationEntry
+        ApplicationEntries?: ApplicationEntry[]
         /** This UI will be rendered as sliders on the profile page */
         ProfileSliders?: ProfileSlider[]
         /** This UI will be rendered as tabs on the profile page */
@@ -335,26 +336,8 @@ export namespace Plugin.SNSAdaptor {
     // #endregion
 
     export interface ApplicationEntry {
-        /**
-         * The icon image URL
-         */
-        icon: URL
-        /**
-         * The name of the application
-         */
-        label: I18NStringField | string
-        /**
-         * Also an entrance in a sub-folder
-         */
-        categoryID?: string
-        /**
-         * Used to order the applications on the board
-         */
-        priority: number
-        /**
-         * What to do if the application icon is clicked.
-         */
-        onClick(): void
+        RenderEntryComponent: () => JSX.Element | null
+        defaultSortingPriority: number
     }
 
     export interface ProfileIdentity {

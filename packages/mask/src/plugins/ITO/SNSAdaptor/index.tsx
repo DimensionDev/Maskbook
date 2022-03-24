@@ -1,4 +1,5 @@
-import { Plugin, usePluginWrapper } from '@masknet/plugin-infra'
+import { Plugin, usePluginWrapper, usePluginIDContext, NetworkPluginID } from '@masknet/plugin-infra'
+import { useState } from 'react'
 import { ItoLabelIcon } from '../assets/ItoLabelIcon'
 import { makeStyles } from '@masknet/theme'
 import {
@@ -6,6 +7,7 @@ import {
     formatBalance,
     useFungibleTokenDetailed,
     EthereumTokenType,
+    useChainId,
 } from '@masknet/web3-shared-evm'
 import { PostInspector } from './PostInspector'
 import { base } from '../base'
@@ -16,6 +18,9 @@ import { CompositionDialog } from './CompositionDialog'
 import { set } from 'lodash-unified'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { MarketsIcon } from '@masknet/icons'
+import { ApplicationEntry } from '@masknet/shared'
+import { requestComposition } from '@masknet/plugin-wallet'
+import { ClaimAllDialog } from './ClaimAllDialog'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -57,6 +62,46 @@ const sns: Plugin.SNSAdaptor.Definition = {
             ),
         },
     },
+    ApplicationEntries: [
+        {
+            RenderEntryComponent() {
+                const currentPluginId = usePluginIDContext()
+                const chainId = useChainId()
+                const isHidden =
+                    currentPluginId !== NetworkPluginID.PLUGIN_EVM ||
+                    !base.enableRequirement.web3![NetworkPluginID.PLUGIN_EVM]!.supportedChainIds!.includes(chainId)
+                return isHidden ? null : (
+                    <ApplicationEntry
+                        title="ITO"
+                        icon={new URL('../assets/token.png', import.meta.url).toString()}
+                        onClick={() => requestComposition(base.ID)}
+                    />
+                )
+            },
+            defaultSortingPriority: 3,
+        },
+        {
+            RenderEntryComponent() {
+                const currentPluginId = usePluginIDContext()
+                const chainId = useChainId()
+                const [open, setOpen] = useState(false)
+                const isHidden =
+                    currentPluginId !== NetworkPluginID.PLUGIN_EVM ||
+                    !base.enableRequirement.web3![NetworkPluginID.PLUGIN_EVM]!.supportedChainIds!.includes(chainId)
+                return isHidden ? null : (
+                    <>
+                        <ApplicationEntry
+                            title="Claim"
+                            icon={new URL('../assets/gift.png', import.meta.url).toString()}
+                            onClick={() => setOpen(true)}
+                        />
+                        <ClaimAllDialog open={open} onClose={() => setOpen(false)} />
+                    </>
+                )
+            },
+            defaultSortingPriority: 4,
+        },
+    ],
 }
 
 function onAttached_ITO(payload: JSON_PayloadComposeMask) {

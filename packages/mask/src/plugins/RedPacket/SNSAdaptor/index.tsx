@@ -1,4 +1,4 @@
-import { Plugin, usePluginWrapper } from '@masknet/plugin-infra'
+import { Plugin, usePluginWrapper, usePluginIDContext, NetworkPluginID } from '@masknet/plugin-infra'
 import {
     ChainId,
     EthereumTokenType,
@@ -20,6 +20,8 @@ import RedPacketDialog from './RedPacketDialog'
 import { RedPacketInPost } from './RedPacketInPost'
 import { RedPacketNftInPost } from './RedPacketNftInPost'
 import { RedPacketIcon, NFTRedPacketIcon } from '@masknet/icons'
+import { ApplicationEntry } from '@masknet/shared'
+import { requestComposition } from '@masknet/plugin-wallet'
 
 function Render(props: React.PropsWithChildren<{ name: string }>) {
     usePluginWrapper(true, { name: props.name })
@@ -90,6 +92,21 @@ const sns: Plugin.SNSAdaptor.Definition = {
             ),
         },
     },
+    ApplicationEntries: [
+        {
+            RenderEntryComponent() {
+                const currentPluginId = usePluginIDContext()
+                return currentPluginId !== NetworkPluginID.PLUGIN_EVM ? null : (
+                    <ApplicationEntry
+                        title="Lucky Drop"
+                        icon={new URL('./assets/lucky_drop.png', import.meta.url).toString()}
+                        onClick={() => requestComposition(base.ID)}
+                    />
+                )
+            },
+            defaultSortingPriority: 1,
+        },
+    ],
 }
 interface ERC20RedpacketBadgeProps {
     payload: RedPacketJSONPayload
