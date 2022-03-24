@@ -111,9 +111,14 @@ export const ProfileList = memo(() => {
     )
 
     const [, onConnect] = useAsyncFn(
-        async (networkIdentifier: string) => {
+        async (networkIdentifier: string, type?: 'local' | 'nextID', profile?: ProfileIdentifier) => {
             if (currentPersona) {
-                await Services.SocialNetwork.connectSocialNetwork(currentPersona.identifier, networkIdentifier)
+                await Services.SocialNetwork.connectSocialNetwork(
+                    currentPersona.identifier,
+                    networkIdentifier,
+                    type,
+                    profile,
+                )
             }
         },
         [currentPersona],
@@ -234,7 +239,7 @@ interface MergedProfileInformation extends ProfileInformation {
 }
 
 export interface ProfileListUIProps {
-    onConnect: (networkIdentifier: string) => void
+    onConnect: (networkIdentifier: string, type?: 'local' | 'nextID', profile?: ProfileIdentifier) => void
     onDisconnect: (
         identifier: ProfileIdentifier,
         is_valid?: boolean,
@@ -296,7 +301,13 @@ export const ProfileListUI = memo<ProfileListUIProps>(
                                     @{identifier.userId}
                                 </Typography>
                                 {!is_valid && identifier.network === 'twitter.com' ? (
-                                    <Typography className={classes.tag}>
+                                    <Typography
+                                        className={classes.tag}
+                                        style={{ cursor: 'pointer' }}
+                                        onClick={(e) => {
+                                            onConnect(identifier.network, 'nextID', identifier)
+                                            e.stopPropagation()
+                                        }}>
                                         {t('popups_persona_to_be_verified')}
                                     </Typography>
                                 ) : null}

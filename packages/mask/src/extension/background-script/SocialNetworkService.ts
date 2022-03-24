@@ -19,7 +19,7 @@ export async function connectSocialNetwork(
     identifier: PersonaIdentifier,
     network: string,
     type?: 'local' | 'nextID',
-    porfile?: ProfileIdentifier,
+    profile?: ProfileIdentifier,
 ) {
     const ui = await loadSocialNetworkUI(network)
     const home = ui.utils.getHomePage?.()
@@ -29,7 +29,7 @@ export async function connectSocialNetwork(
     currentSetupGuideStatus[network].value = stringify({
         status: type === 'nextID' ? SetupGuideStep.VerifyOnNextID : SetupGuideStep.FindUsername,
         persona: identifier.toText(),
-        username: porfile?.userId,
+        username: profile?.userId,
     })
     await delay(100)
     home && browser.tabs.create({ active: true, url: home })
