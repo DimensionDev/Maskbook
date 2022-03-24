@@ -53,7 +53,7 @@ There are many kinds of builds. Check the following table.
 
 | Name | Description |
 | ---- | ----------- |
-| MaskNetwork.base.zip | The default build, just like the Chromium one. |
+| MaskNetwork.base.zip | The default build, currently is the same as the Chromium build. |
 | MaskNetwork.chromium-beta.zip | Build for Chromium based browsers with some insider features turned on. |
 | MaskNetwork.chromium.zip | Build for Chromium based browsers |
 | MaskNetwork.firefox.zip | Build for Firefox |
