@@ -80,8 +80,8 @@ Please contact the service maintainer to add CORS headers, the extension will se
 
 The Chromium extension has a fixed id, but only on production mode. And the Firefox browser will set a new id each time it boots an extension. So, in summary, it's better to allow all origins which match the regexp below.
 
-```ts
-;/.*-extension:\/\/[^\S]+/
+```txt
+/.*-extension:\/\/[^\S]+/
 ```
 
 If you cannot reach the service maintainer another workaround is to use a proxy server to add CORS headers. To enable it try to change the request URL into `https://cors.r2d2.to/?=[url]`.
