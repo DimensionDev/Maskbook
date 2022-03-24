@@ -18,7 +18,6 @@ import Services from '../../../../../service'
 import { GrayMasks } from '@masknet/icons'
 import { DisconnectDialog } from '../DisconnectDialog'
 import { bindProof, createPersonaPayload, queryExistedBindingByPersona } from '@masknet/web3-providers'
-import { delay } from '@dimensiondev/kit'
 import classNames from 'classnames'
 
 const useStyles = makeStyles()((theme) => ({
@@ -194,11 +193,8 @@ export const ProfileList = memo(() => {
                     signature: signatureResult.signature.signature,
                 },
             )
-
-            await Services.Identity.detachProfile(unbind.identifier)
-
-            await delay(2000)
             setUnbind(null)
+            await Services.Identity.detachProfile(unbind.identifier)
             refreshProfileList()
         } catch {
             console.log('Disconnect failed')
