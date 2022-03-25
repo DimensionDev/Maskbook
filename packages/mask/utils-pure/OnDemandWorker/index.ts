@@ -1,5 +1,5 @@
 /**
- * A Worker-like class that create/destory Worker on demand.
+ * A Worker-like class that create/destroy Worker on demand.
  *
  * The worker passed in MUST post a message "Alive" to notify the OnDemandWorker it is ready to receive message.
  * This "Alive" MUST be the first message.
@@ -41,7 +41,7 @@ export interface OnDemandWorkerEventMap extends WorkerEventMap {
 
 // Implementation detail
 /**
- * A Worker-like class that create/destory Worker on demand.
+ * A Worker-like class that create/destroy Worker on demand.
  *
  * The worker passed in MUST post a message "Alive" to notify the OnDemandWorker it is ready to receive message.
  * This "Alive" MUST be the first message.
@@ -50,7 +50,7 @@ export class OnDemandWorker extends EventTarget implements OnDemandWorker {
     protected readonly __init: WorkerConstructorParameters
     protected worker?: Worker = undefined
     /**
-     * A Worker-like class that create/destory Worker on demand.
+     * A Worker-like class that create/destroy Worker on demand.
      *
      * The worker passed in MUST post a message "Alive" to notify the OnDemandWorker it is ready to receive message.
      * This "Alive" MUST be the first message.
