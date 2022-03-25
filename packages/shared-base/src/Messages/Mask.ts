@@ -6,7 +6,8 @@ import type {
     NetworkType,
     ProviderType,
     FungibleAssetProvider,
-    NonFungibleAssetProvider, } from '@masknet/public-api'
+    NonFungibleAssetProvider,
+} from '@masknet/public-api'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier/type'
 import type { RelationFavor } from '../Persona/type'
