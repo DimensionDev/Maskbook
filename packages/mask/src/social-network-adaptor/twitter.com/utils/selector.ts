@@ -110,9 +110,7 @@ export const postEditorContentInPopupSelector: () => LiveSelector<E, true> = () 
         '[aria-labelledby="modal-header"] > div:first-child > div:first-child > div:first-child > div:nth-child(3)',
     )
 export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>(
-        '[aria-labelledby="modal-header"] > div:first-child > div:first-child > div:first-child > div:nth-child(3) > div:first-child [role="button"][aria-label]:nth-child(6)',
-    )
+    querySelector<E>('[aria-labelledby="modal-header"]  div[data-testid="toolBar"] div[data-testid="geoButton"]')
 export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="banner"] [role="navigation"] > div')
 export const sideBarProfileSelector: () => LiveSelector<E, true> = () =>
@@ -157,7 +155,7 @@ export const bioPageUserNickNameSelector = () =>
         .map((x) => x.parentElement?.parentElement?.previousElementSibling)
         .querySelector<HTMLDivElement>('div[dir]')
 export const bioPageUserIDSelector = (selector: () => LiveSelector<HTMLSpanElement, true>) =>
-    selector().map((x) => (x.parentElement?.nextElementSibling as HTMLElement).innerText.replace('@', ''))
+    selector().map((x) => (x.parentElement?.nextElementSibling as HTMLElement)?.innerText?.replace('@', ''))
 export const floatingBioCardSelector = () =>
     querySelector<HTMLSpanElement>(
         '[style~="left:"] a[role=link] > div:first-child > div:first-child > div:first-child[dir="auto"]',
@@ -267,7 +265,7 @@ export const searchProfileSetAvatarSelector = () =>
         ? searchProfessionalButtonSelector()
               .closest<E>(4)
               .querySelector('div > div:nth-child(2) >div > div:nth-child(2)')
-        : querySelector<E>('[data-testid="ProfileBirthdate"]')
+        : querySelector<E>('[data-testid^="ProfileBirthdate"]')
               .closest<E>(5)
               .querySelector('div > div:nth-child(2) > div:nth-child(2)')
 // #endregion

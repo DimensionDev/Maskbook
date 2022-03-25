@@ -1,6 +1,6 @@
 import { FC, memo } from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
-import { EMPTY_LIST, ProviderType, TransactionStatusType } from '@masknet/web3-shared-evm'
+import { ProviderType, TransactionStatusType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { FormattedAddress, LoadingAnimation, WalletIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -12,6 +12,7 @@ import {
     Web3Plugin,
     useReverseAddress,
 } from '@masknet/plugin-infra'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { PluginMessages } from '../../../../API'
 import { useRecentTransactions } from '../../hooks/useRecentTransactions'
 import { useDashboardI18N } from '../../../../locales'

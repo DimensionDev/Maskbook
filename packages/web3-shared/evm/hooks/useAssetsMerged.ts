@@ -1,8 +1,9 @@
-import { uniqBy } from 'lodash-unified'
 import { useMemo } from 'react'
+import { uniqBy } from 'lodash-unified'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { useTokenConstants } from '../constants'
 import type { Asset } from '../types'
-import { formatEthereumAddress, makeSortAssertFn, EMPTY_LIST } from '../utils'
+import { formatEthereumAddress, makeSortAssertFn } from '../utils'
 import { useChainId } from './useChainId'
 
 /**

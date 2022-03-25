@@ -235,7 +235,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
 
     // Todo: remove this after refactor applicationBoard
     const isITOSupportedChain =
-        ITO_Definition.enableRequirement.web3![NetworkPluginID.PLUGIN_EVM]?.supportedChainIds?.includes(currentChainId)
+        ITO_Definition.enableRequirement.web3![currentPluginId]?.supportedChainIds?.includes(currentChainId)
 
     const firstLevelEntries: MaskAppEntry[] = [
         createEntry(

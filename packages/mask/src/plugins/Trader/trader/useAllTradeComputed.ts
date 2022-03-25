@@ -1,4 +1,5 @@
-import { EMPTY_LIST, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { multipliedBy, pow10 } from '@masknet/web3-shared-base'
 import { useTrade as useNativeTokenTrade } from './native/useTrade'
 import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed'
