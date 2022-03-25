@@ -7,6 +7,8 @@
         "@masknet/plugin-infra": "workspace:*",
         "@masknet/shared": "workspace:*",
         "@masknet/shared-base": "workspace:*",
+        "@masknet/web3-shared-evm":"workspace:*",
+        "@masknet/web3-contracts":"workspace:*",
         "react-use": "^17.3.2"
     }
 }

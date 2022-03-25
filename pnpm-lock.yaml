@@ -833,11 +833,15 @@ importers:
       '@masknet/plugin-infra': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
+      '@masknet/web3-contracts': workspace:*
+      '@masknet/web3-shared-evm': workspace:*
       react-use: ^17.3.2
     dependencies:
       '@masknet/plugin-infra': link:../../plugin-infra
       '@masknet/shared': link:../../shared
       '@masknet/shared-base': link:../../shared-base
+      '@masknet/web3-contracts': link:../../web3-contracts
+      '@masknet/web3-shared-evm': link:../../web3-shared/evm
       react-use: 17.3.2_bc22c48adf1a4e34a005159413cd72b5
 
   packages/plugins/Wallet:
@@ -26595,7 +26599,7 @@ packages:
     dev: false
 
   github.com/ProjectWyvern/ethereumjs-abi/3d2d89641a6ad5984929b6ca4b646452ec74f73d:
-    resolution: {tarball: https://codeload.github.com/ProjectWyvern/ethereumjs-abi/tar.gz/3d2d89641a6ad5984929b6ca4b646452ec74f73d}
+    resolution: {commit: 3d2d89641a6ad5984929b6ca4b646452ec74f73d, repo: git+ssh://git@github.com/ProjectWyvern/ethereumjs-abi.git, type: git}
     name: ethereumjs-abi
     version: 0.6.6
     dependencies:
@@ -26621,7 +26625,7 @@ packages:
     dev: false
 
   github.com/frozeman/bignumber.js-nolookahead/57692b3ecfc98bbdd6b3a516cb2353652ea49934:
-    resolution: {tarball: https://codeload.github.com/frozeman/bignumber.js-nolookahead/tar.gz/57692b3ecfc98bbdd6b3a516cb2353652ea49934}
+    resolution: {commit: 57692b3ecfc98bbdd6b3a516cb2353652ea49934, repo: git+ssh://git@github.com/frozeman/bignumber.js-nolookahead.git, type: git}
     name: bignumber.js
     version: 2.0.7
     dev: false

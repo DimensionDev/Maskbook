@@ -1,4 +1,11 @@
 {
     "name": "Example Plugin",
-    "__entry__": "🤔 Example"
+    "__entry__": "🤔 Example",
+    "ens": "Etherenum Name Service",
+    "search": "search",
+    "parent": "PARENT",
+    "registrant": "REGISTRANT",
+    "controller": "CONTROLLER",
+    "expiration_date": "EXPIRATION DATE",
+    "buy": "buy"
 }
