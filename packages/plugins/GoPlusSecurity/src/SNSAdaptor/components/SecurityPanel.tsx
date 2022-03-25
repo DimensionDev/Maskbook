@@ -1,13 +1,14 @@
-import { Link, Stack, Typography } from '@mui/material'
+import { Link, Stack, Tooltip, Typography } from '@mui/material'
 import { useI18N } from '../../locales'
 import { ExternalLink } from 'react-feather'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { memo, useMemo, useState } from 'react'
 import { DefineMapping, SecurityMessageLevel, TokenSecurity } from './Common'
 import { SecurityMessages } from '../rules'
 import { RiskCard, RiskCardUI } from './RiskCard'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import BigNumber from 'bignumber.js'
 
 interface TokenCardProps {
     tokenSecurity: TokenSecurity
@@ -32,6 +33,10 @@ const useStyles = makeStyles()((theme) => ({
     cardValue: {
         color: theme.palette.text.primary,
     },
+    tooltip: {
+        color: theme.palette.text.buttonText,
+        fontSize: 12,
+    },
     header: {
         fontWeight: 500,
         fontSize: 18,
@@ -41,19 +46,45 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+const DEFAULT_PLACEHOLDER = '--'
+
+function formatTotalSupply(total?: number) {
+    if (!total) return DEFAULT_PLACEHOLDER
+    return new BigNumber(total).toFormat(3)
+}
+
 export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
     const { classes } = useStyles()
     const t = useI18N()
     const [isFold, setFold] = useState(false)
 
-    const makeMessageList = SecurityMessages.filter(
-        (x) => x.condition(tokenSecurity) && x.level !== SecurityMessageLevel.Safe && x.shouldHide(tokenSecurity),
-    )
-
-    console.log(makeMessageList)
+    const makeMessageList =
+        tokenSecurity.is_whitelisted === '1'
+            ? []
+            : SecurityMessages.filter(
+                  (x) =>
+                      x.condition(tokenSecurity) &&
+                      x.level !== SecurityMessageLevel.Safe &&
+                      !x.shouldHide(tokenSecurity),
+              )
 
     const riskyFactors = makeMessageList.filter((x) => x.level === SecurityMessageLevel.High).length
     const attentionFactors = makeMessageList.filter((x) => x.level === SecurityMessageLevel.Medium).length
+
+    const totalSupply = usePortalShadowRoot((container) => {
+        return (
+            <Tooltip
+                PopperProps={{ container }}
+                arrow
+                title={
+                    <Typography color={(theme) => theme.palette.text.buttonText} className={classes.tooltip}>
+                        {tokenSecurity.total_supply}
+                    </Typography>
+                }>
+                <Typography className={classes.cardValue}>{formatTotalSupply(tokenSecurity.total_supply)}</Typography>
+            </Tooltip>
+        )
+    })
 
     const securityMessageLevel = useMemo(() => {
         if (riskyFactors) return SecurityMessageLevel.High
@@ -117,7 +148,9 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                                         {t.token_info_token_contract_address()}
                                     </Typography>
                                     <Typography className={classes.cardValue}>
-                                        {formatEthereumAddress(tokenSecurity.contract, 4)}
+                                        {tokenSecurity.contract
+                                            ? formatEthereumAddress(tokenSecurity.contract, 4)
+                                            : DEFAULT_PLACEHOLDER}
                                     </Typography>
                                 </Stack>
                                 <Stack direction="row" justifyContent="space-between">
@@ -125,7 +158,9 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                                         {t.token_info_contract_creator()}
                                     </Typography>
                                     <Typography className={classes.cardValue}>
-                                        {formatEthereumAddress(tokenSecurity.creator_address ?? '', 4)}
+                                        {tokenSecurity.creator_address
+                                            ? formatEthereumAddress(tokenSecurity.creator_address ?? '', 4)
+                                            : DEFAULT_PLACEHOLDER}
                                     </Typography>
                                 </Stack>
                                 <Stack direction="row" justifyContent="space-between">
@@ -133,12 +168,14 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                                         {t.token_info_contract_owner()}
                                     </Typography>
                                     <Typography className={classes.cardValue}>
-                                        {formatEthereumAddress(tokenSecurity.owner_address ?? '', 4)}
+                                        {tokenSecurity.owner_address
+                                            ? formatEthereumAddress(tokenSecurity.owner_address ?? '', 4)
+                                            : DEFAULT_PLACEHOLDER}
                                     </Typography>
                                 </Stack>
                                 <Stack direction="row" justifyContent="space-between">
                                     <Typography className={classes.subtitle}>{t.token_info_total_supply()}</Typography>
-                                    <Typography className={classes.cardValue}>{tokenSecurity.total_supply}</Typography>
+                                    {totalSupply}
                                 </Stack>
                             </Stack>
                         </Stack>
@@ -173,7 +210,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                     {makeMessageList.map((x, i) => (
                         <RiskCard info={x} key={i} />
                     ))}
-                    {(makeMessageList.length || securityMessageLevel === SecurityMessageLevel.Safe) && (
+                    {(!makeMessageList.length || securityMessageLevel === SecurityMessageLevel.Safe) && (
                         <RiskCardUI
                             icon={DefineMapping[SecurityMessageLevel.Safe].icon(14)}
                             title={t.risk_safe_description()}

@@ -5,8 +5,10 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { makeStyles, MaskColorVar, MaskTextField, ShadowRootMenu } from '@masknet/theme'
 import { SearchIcon } from '@masknet/icons'
 import { useI18N } from '../../locales'
-import { GoPlusLabs } from '@masknet/web3-providers'
 import type { SecurityAPI } from '@masknet/web3-providers'
+import { GoPlusLabs } from '@masknet/web3-providers'
+import { ChainId, getChainDetailed } from '@masknet/web3-shared-evm'
+import parseInt from 'lodash-es/parseInt'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -35,10 +37,16 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface SearchBoxProps {
-    onSearch(chainId: number, content: string): void
+    onSearch(chainId: string, content: string): void
 }
 
-const DEFAULT_SEARCH_NETWORK = 1
+const DEFAULT_SEARCH_NETWORK = '1'
+
+function getChainName(chain?: SecurityAPI.SupportedChain) {
+    if (!chain) return getChainDetailed(ChainId.Mainnet)?.chain
+    if (chain.id === ChainId.BSC.toString()) return getChainDetailed(ChainId.BSCT)?.chain ?? chain.name
+    return getChainDetailed(parseInt(chain.id))?.chain ?? chain.name
+}
 
 export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
     const t = useI18N()
@@ -64,7 +72,7 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
                             setSelectedNetwork(chain)
                             onClose()
                         }}>
-                        <Typography sx={{ marginLeft: 1 }}>{chain.name}</Typography>
+                        <Typography sx={{ marginLeft: 1 }}>{getChainName(chain)}</Typography>
                     </MenuItem>
                 )
             }) ?? []
@@ -76,7 +84,7 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
             <Box width={110} height={48}>
                 <Button onClick={onOpen} variant="outlined" className={classes.selectedButton}>
                     <Stack display="inline-flex" direction="row" justifyContent="space-between" width="100%">
-                        <Typography fontSize={16}>{selectedNetwork?.name ?? 'eth'}</Typography>
+                        <Typography fontSize={16}>{getChainName(selectedNetwork)}</Typography>
                         <KeyboardArrowDownIcon />
                     </Stack>
                 </Button>
@@ -87,6 +95,10 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
                         placeholder={t.search_input_placeholder()}
                         autoFocus
                         fullWidth
+                        onKeyPress={(e: React.KeyboardEvent) => {
+                            if (e.key !== 'Enter') return
+                            onSearch(selectedNetwork?.id ?? DEFAULT_SEARCH_NETWORK, searchContent ?? '')
+                        }}
                         onChange={(e) => setSearchSearchContent(e.target.value)}
                         InputProps={{
                             classes: { root: classes.search },

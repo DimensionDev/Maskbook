@@ -39,7 +39,7 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
     )
     // #endregion
 
-    const [{ value, loading: searching, error }, onSearch] = useAsyncFn(async (chainId: number, content: string) => {
+    const [{ value, loading: searching, error }, onSearch] = useAsyncFn(async (chainId: string, content: string) => {
         const values = await GoPlusLabs.getTokenSecurity(chainId, [content])
         if (!Object.keys(values ?? {}).length) throw new Error()
         return Object.entries(values ?? {}).map((x) => ({ ...x[1], contract: x[0] }))[0] as TokenSecurity | undefined
@@ -59,11 +59,7 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
                                 <Searching />{' '}
                             </Center>
                         )}
-                        {error && (
-                            <Center>
-                                <NotFound />
-                            </Center>
-                        )}
+                        {error && !searching && <NotFound />}
                         {!error && !searching && value && <SecurityPanel tokenSecurity={value} />}
                         {!error && !searching && !value && (
                             <Center>

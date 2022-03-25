@@ -5,7 +5,7 @@ import { fetchJSON } from '../helpers'
 import { GO_PLUS_LABS_ROOT_URL } from './constants'
 
 export class GoPlusLabsAPI implements SecurityAPI.Provider {
-    async getTokenSecurity(chainId: number, listOfAddress: string[]) {
+    async getTokenSecurity(chainId: string | number, listOfAddress: string[]) {
         const response = await fetchJSON<{
             code: 0 | 1
             message: 'OK' | string
