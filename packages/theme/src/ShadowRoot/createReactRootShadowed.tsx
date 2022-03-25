@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { noop } from 'lodash-unified'
 import type {} from 'react/next'
 import type {} from 'react-dom/next'
 import { ShadowRootStyleProvider } from './ShadowRootStyleProvider'
@@ -68,8 +69,8 @@ function mount(
     if (shadow.querySelector<HTMLElement>(`${tag}.${key}`)) {
         console.error('Tried to create root in', shadow, 'with key', key, ' which is already used. Skip rendering.')
         return {
-            destroy: () => {},
-            render: () => {},
+            destroy: noop,
+            render: noop,
         }
     }
 
