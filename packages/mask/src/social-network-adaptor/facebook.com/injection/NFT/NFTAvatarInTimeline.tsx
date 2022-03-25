@@ -93,7 +93,7 @@ function _(selector: () => LiveSelector<HTMLElement | SVGElement, false>, signal
                     </div>,
                 )
 
-                remove = root.destory
+                remove = root.destroy
             }
 
             run()
