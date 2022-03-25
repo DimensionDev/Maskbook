@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { compact, first } from 'lodash-unified'
-import { ChainId, createLookupTableResolver, resolveResourceLink } from '@masknet/web3-shared-evm'
+import { ChainId, createLookupTableResolver, resolveIPFSLinkFromURL } from '@masknet/web3-shared-evm'
 import { FungibleTokenDetailed, Web3TokenType, ERC721TokenDetailed } from '@masknet/web3-shared-base'
 import {
     Ownership,
@@ -45,7 +45,7 @@ function createERC721TokenFromAsset(
     tokenId: string,
     asset?: RaribleNFTItemMapResponse,
 ): ERC721TokenDetailed {
-    const imageURL = resolveResourceLink(asset?.meta?.image?.url.ORIGINAL ?? asset?.meta?.image?.url.PREVIEW ?? '')
+    const imageURL = resolveIPFSLinkFromURL(asset?.meta?.image?.url.ORIGINAL ?? asset?.meta?.image?.url.PREVIEW ?? '')
     return {
         contractDetailed: {
             type: Web3TokenType.ERC721,
@@ -58,7 +58,7 @@ function createERC721TokenFromAsset(
             name: asset?.meta?.name ?? '',
             description: asset?.meta?.description ?? '',
             mediaUrl:
-                resolveResourceLink(
+                resolveIPFSLinkFromURL(
                     asset?.meta?.animation?.url.ORIGINAL ?? asset?.meta?.animation?.url.PREVIEW ?? '',
                 ) || imageURL,
             imageURL,
@@ -75,7 +75,7 @@ function createNFTAsset(asset: RaribleNFTItemMapResponse, chainId: ChainId): Non
         is_verified: false,
         is_auction: false,
         token_address: asset.contract,
-        image_url: resolveResourceLink(asset?.meta?.image?.url.ORIGINAL ?? ''),
+        image_url: resolveIPFSLinkFromURL(asset?.meta?.image?.url.ORIGINAL ?? ''),
         asset_contract: null,
         owner: owner
             ? {
@@ -208,7 +208,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider {
                 maker_account: {
                     user: { username: ownerInfo?.name ?? '' },
                     address: ownerInfo?.id ?? '',
-                    profile_img_url: resolveResourceLink(ownerInfo?.image ?? ''),
+                    profile_img_url: resolveIPFSLinkFromURL(ownerInfo?.image ?? ''),
                     link: `${resolveRaribleUserNetwork(chainId as number)}${ownerInfo?.id ?? ''}`,
                 },
             }
@@ -239,7 +239,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider {
                 maker_account: {
                     user: { username: ownerInfo?.name ?? '' },
                     address: ownerInfo?.id ?? '',
-                    profile_img_url: resolveResourceLink(ownerInfo?.image ?? ''),
+                    profile_img_url: resolveIPFSLinkFromURL(ownerInfo?.image ?? ''),
                     link: `${resolveRaribleUserNetwork(chainId as number)}${ownerInfo?.id ?? ''}`,
                 },
             }
