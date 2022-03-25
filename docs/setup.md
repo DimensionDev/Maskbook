@@ -67,7 +67,7 @@ To debug _background service_, click links right after **Inspect views**.
 
 Mask Network only injects content script with permission from the user.
 
-For every new website that Mask Network is going to support, it will show a prompt dialog to ask permission dynamically, rather than asking for all mightly permission at the plugin got installed.
+For every new website that Mask Network is going to support, it will show a prompt dialog to ask permission dynamically, rather than asking for all permission when the plugin is installed.
 
 ![An image displaying the Mask Network is asking the permission from the user](https://user-images.githubusercontent.com/52657989/158566232-30c52a17-0168-488c-a292-4fc4059ecb9c.png)
 
