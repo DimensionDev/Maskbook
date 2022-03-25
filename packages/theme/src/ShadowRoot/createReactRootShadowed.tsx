@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { noop } from 'lodash-unified'
 import type {} from 'react/next'
 import type {} from 'react-dom/next'
 import { ShadowRootStyleProvider } from './ShadowRootStyleProvider'
@@ -25,7 +26,7 @@ export interface CreateRenderInShadowRootHostConfig {
 export interface ReactRootShadowed {
     render(jsx: React.ReactChild): void
     // do not name it as unmount otherwise it might be compatible with ReactDOM's Root interface.
-    destory(): void
+    destroy(): void
 }
 /**
  * @returns
@@ -52,7 +53,7 @@ export function createReactRootShadowedPartial(hostConfig: CreateRenderInShadowR
                 if (!root) jsx = _jsx
                 else root.render(_jsx)
             },
-            destory: () => root?.destory(),
+            destroy: () => root?.destroy(),
         }
     }
 }
@@ -68,8 +69,8 @@ function mount(
     if (shadow.querySelector<HTMLElement>(`${tag}.${key}`)) {
         console.error('Tried to create root in', shadow, 'with key', key, ' which is already used. Skip rendering.')
         return {
-            destory: () => {},
-            render: () => {},
+            destroy: noop,
+            render: noop,
         }
     }
 
@@ -96,7 +97,7 @@ function mount(
     options.signal?.addEventListener('abort', () => controller.abort(), { signal })
 
     return {
-        destory: () => controller.abort(),
+        destroy: () => controller.abort(),
         render: (jsx) => {
             root!.render(getJSX(jsx))
         },

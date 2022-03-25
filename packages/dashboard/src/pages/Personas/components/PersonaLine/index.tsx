@@ -77,7 +77,7 @@ export const UnconnectedPersonaLine = memo<UnconnectedPersonaLineProps>(({ onCon
 
 export interface ConnectedPersonaLineProps {
     isHideOperations: boolean
-    onConnect: (type: 'nextID' | 'local') => void
+    onConnect: (type: 'nextID' | 'local', profile?: ProfileIdentifier) => void
     onDisconnect: (identifier: ProfileIdentifier) => void
     onDeleteBound?: (profile: ProfileIdentifier) => void
     profileIdentifiers: ProfileIdentifier[]
@@ -108,10 +108,10 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
         const handleUserIdClick = async (network: string, userId: string) => {
             await openProfilePage(network, userId)
         }
-        const handleProofIconClick = (e: MouseEvent, proof: BindingProof | undefined) => {
+        const handleProofIconClick = (e: MouseEvent, proof: BindingProof | undefined, profile: ProfileIdentifier) => {
             e.stopPropagation()
             if (!proof || !proof.is_valid) {
-                onConnect('nextID')
+                onConnect('nextID', profile)
             }
         }
 
@@ -138,7 +138,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                     {profile.network === EnhanceableSite.Twitter && (
                         <Typography
                             className={classes.proofIconBox}
-                            onClick={(e: MouseEvent) => handleProofIconClick(e, isProved)}>
+                            onClick={(e: MouseEvent) => handleProofIconClick(e, isProved, profile)}>
                             {proof.loading ? (
                                 <LoadingAnimation />
                             ) : isProved?.is_valid ? (

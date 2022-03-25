@@ -4,7 +4,6 @@ import { isReplyPageSelector, postEditorInPopupSelector, searchReplyToolbarSelec
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
 import { MaskMessages } from '../../../utils/messages'
-import { hasEditor, isCompose } from '../utils/postBox'
 import { startWatch } from '../../../utils/watcher'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { alpha } from '@mui/material'
@@ -12,6 +11,7 @@ import { twitterBase } from '../base'
 import { sayHelloShowed } from '../../../settings/settings'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { useI18N } from '../../../utils'
+import { hasEditor, isCompose } from '../utils/postBox'
 
 const useStyles = makeStyles()((theme) => ({
     iconButton: {

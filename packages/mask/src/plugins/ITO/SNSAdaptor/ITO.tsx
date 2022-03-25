@@ -786,7 +786,7 @@ export function ITO(props: ITO_Props) {
                 status={claimDialogStatus}
                 total_remaining={total_remaining}
                 payload={{ ...payload, qualification_address: qualificationAddress }}
-                shareSuccessLink={successShareText}
+                shareSuccessText={successShareText}
                 isBuyer={isBuyer}
                 exchangeTokens={exchange_tokens}
                 open={openClaimDialog}

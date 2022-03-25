@@ -1,9 +1,10 @@
 import { useMemo } from 'react'
 import { first } from 'lodash-unified'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { Asset, ChainId, EthereumTokenType, FungibleTokenDetailed } from '../types'
 import { useTokensBalance } from './useTokensBalance'
 import { useChainDetailed } from './useChainDetailed'
-import { getChainDetailed, EMPTY_LIST } from '../utils'
+import { getChainDetailed } from '../utils'
 import { useBalance } from './useBalance'
 
 export function useAssetsFromChain(tokens: FungibleTokenDetailed[], chainId?: ChainId) {

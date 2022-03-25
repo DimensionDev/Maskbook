@@ -9,7 +9,7 @@ import {
     ECDSASignature,
 } from 'ethereumjs-util'
 import { MaskMessages } from '../../../../shared'
-import { PersonaIdentifier, fromBase64URL, PopupRoutes } from '@masknet/shared-base'
+import { PersonaIdentifier, fromBase64URL, PopupRoutes, ECKeyIdentifier } from '@masknet/shared-base'
 import { queryPersonasWithPrivateKey } from '../../../../background/database/persona/db'
 import { openPopupWindow } from '../../../../background/services/helper'
 import { delay } from '@dimensiondev/kit'
@@ -49,6 +49,10 @@ export async function signWithPersona({ message, method, identifier }: SignReque
         })
     })
     const signer = await waitForApprove
+    return generateSignResult(signer, message)
+}
+
+export async function generateSignResult(signer: ECKeyIdentifier, message: string) {
     const persona = (await queryPersonasWithPrivateKey()).find((x) => x.identifier.equals(signer))
     if (!persona) throw new Error('Persona not found')
 
