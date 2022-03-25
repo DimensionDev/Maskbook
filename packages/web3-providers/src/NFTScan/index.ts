@@ -159,7 +159,6 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
                 tokenURI: t.nft_token_uri,
             },
         }))
-        console.log({ d: response.data })
         return {
             data,
             hasNextPage: total - (page + 1) * size > 0,
