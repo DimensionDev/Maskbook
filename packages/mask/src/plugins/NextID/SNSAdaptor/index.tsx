@@ -1,11 +1,11 @@
 import type { Plugin } from '@masknet/plugin-infra'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { base } from '../base'
 import { PLUGIN_ID } from '../constants'
 import { NextIdPage } from '../components/NextIdPage'
 import { RootContext } from '../contexts'
 import { PostTipButton, TipTaskManager } from '../components/Tip'
 import { Flags } from '../../../../shared'
-import { EMPTY_LIST } from '@masknet/web3-shared-evm'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,

@@ -1080,6 +1080,7 @@ importers:
     specifiers:
       '@babel/core': ^7.17.8
       '@masknet/icons': workspace:*
+      '@masknet/shared-base': workspace:*
       '@masknet/storybook-shared': workspace:*
       '@storybook/addon-actions': ^6.4.19
       '@storybook/addon-essentials': ^6.4.19
@@ -1100,6 +1101,7 @@ importers:
       use-subscription: ^1.5.1
     dependencies:
       '@masknet/icons': link:../icons
+      '@masknet/shared-base': link:../shared-base
       '@masknet/storybook-shared': link:../storybook-shared
       '@types/qrcode': 1.4.2
       '@types/tinycolor2': 1.4.3

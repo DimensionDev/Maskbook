@@ -6,5 +6,10 @@
     "tsBuildInfoFile": "../dist/evm.tsbuildinfo"
   },
   "include": ["./", "./**/*.json"],
-  "references": [{ "path": "../../injected-script/sdk" }, { "path": "../base" }]
+  "references": [
+    { "path": "../../injected-script/sdk" },
+    { "path": "../base" },
+    { "path": "../../shared-base" },
+    { "path": "../../public-api" }
+  ]
 }

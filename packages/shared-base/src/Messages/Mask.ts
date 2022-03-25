@@ -8,7 +8,7 @@ import type {
     ProviderType,
     FungibleAssetProvider,
     NonFungibleAssetProvider,
-} from '../../../web3-shared/evm'
+} from '../../../public-api'
 
 export interface MaskSettingsEvents {
     appearanceSettings: Appearance
