@@ -17,7 +17,6 @@
         "Celo": "celo",
         "Fantom": "ftm",
         "Aurora": "aurora",
-        "Aurora_Testnet": "",
-        "Conflux": ""
+        "Aurora_Testnet": ""
     }
 }
