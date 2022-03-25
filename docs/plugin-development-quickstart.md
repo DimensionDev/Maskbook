@@ -16,6 +16,7 @@ You can create a plugin folder by entering following command
 
 After entering related information about the plugin you want to create, a plugin folder will be created in `packages/plugins`. This folder contains lots of files, and core files are `SNSAdaptor` and `Worker`. The former contains all the code related to front-end interaction, the latter plays a database-like role.
 Since we want to add a application into maskbook, we need to add related config:
+
 `pnpm-lock.yaml`
 
 ```JavaScript
@@ -23,15 +24,7 @@ Since we want to add a application into maskbook, we need to add related config:
     '@masknet/plugin-ENS': link:../plugins/ENS
 ```
 
-<<<<<<< HEAD
 `packages/mask/package.json`
-=======
-
-1. change definitions in SNSAdaptor to add entry
-2. what is metadata and how to decode and encode metadata
-   if we want to inject ui in a post, we need metadata that contains related information
-3. write ui by our component
-   > > > > > > > develop
 
 ```JavaScript
     "@masknet/plugin-ENS": "workspace:*",
@@ -68,7 +61,7 @@ createEntry(
         ),
 ```
 
-the `openEncryptedMessage` will open our plugin composition, therefore, we need to add following config in
+The `openEncryptedMessage` will open our plugin composition, therefore, we need to add following config in
 `Plugin.SNSAdaptor.Definition`:
 
 ```JavaScript
@@ -132,7 +125,7 @@ const handleSearch = useCallback(async () => {
 
 ### 4.2 Rent an ENS on application board
 
-ENS domain is not permanent, we need to rent a ENS domain that is not registered by others. Since we need to change data in blockchain, we need to call payable function of smart contract. For completing rent an ENS domain, we need to commit and register.
+ENS domain is not permanent, we need to rent a ENS domain that is not registered by others. Since data on blockchain is changed, we need to call payable function of smart contract. For completing renting an ENS domain, we take two steps to commit and register.
 
 ```JavaScript
 import { useContract,useAccount } from '@masknet/web3-shared-evm'
