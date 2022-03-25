@@ -52,8 +52,7 @@ function sliceString(x: string): string[] {
 
     if (index === -1) return [x]
     while (index !== -1) {
-        result.push(x.slice(pos, index))
-        result.push('\n')
+        result.push(x.slice(pos, index), '\n')
         pos = index + 1
         index = x.indexOf('\n', pos)
     }
