@@ -16,6 +16,8 @@ import {
 } from '@masknet/encryption'
 import {
     AESCryptoKey,
+    ECKeyIdentifierFromJsonWebKey,
+    EC_JsonWebKey,
     EC_Public_JsonWebKey,
     IdentifierMap,
     PostIVIdentifier,
@@ -231,6 +233,10 @@ async function storeAuthorPublicKey(
     const profile = await queryProfileDB(payloadAuthor)
     const persona = profile?.linkedPersona ? await queryPersonaDB(profile.linkedPersona) : undefined
     if (persona?.privateKey) return
+
+    const key = (await crypto.subtle.exportKey('jwk', pub.key)) as EC_JsonWebKey
+    const otherPersona = await queryPersonaDB(ECKeyIdentifierFromJsonWebKey(key))
+    if (otherPersona?.privateKey) return
 
     return createProfileWithPersona(
         payloadAuthor,
