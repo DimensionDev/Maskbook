@@ -69,7 +69,7 @@ You can download these builds in two places.
 
   E.g., <https://app.circleci.com/pipelines/github/DimensionDev/Maskbook/24886/workflows/eeabcc93-6152-437f-a65d-24f0acee34a9/jobs/52795/artifacts>
 
-## Help! The data service doesn’t return a CORS header.
+## Help! The data service doesn’t return a CORS header
 
 Please contact the service maintainer to add CORS headers, the extension will send requests in following origins:
 
