@@ -6,7 +6,7 @@ author: Randolph
 
 ## 1. Introduction
 
-This is an example of how to develop plugin according to tools provided by Mask. And our task is to develop an app related to Etherenum Name Service, people can purchase ENS in application board and see details about specific ENS domain in timeline and profile of twitter.
+This is an example of how to develop plugin according to tools provided by Mask. And our task is to develop an app related to Ethereum Name Service, people can purchase ENS in application board and see details about specific ENS domain in timeline and profile of twitter.
 
 ## 2. Start a plugin file
 
@@ -14,7 +14,7 @@ You can create a plugin folder by entering following command
 
 > npx gulp new-pkg
 
-After entering related infomation about the plugin you want to create, a plugin folder will be created in `packages/plugins`. This folder contains lots of files, and core files are `SNSAdaptor` and `Worker`. The former contains all the code related to front-end interaction, the latter plays a database-like role.
+After entering related information about the plugin you want to create, a plugin folder will be created in `packages/plugins`. This folder contains lots of files, and core files are `SNSAdaptor` and `Worker`. The former contains all the code related to front-end interaction, the latter plays a database-like role.
 Since we want to add a application into maskbook, we need to add related config:
 `pnpm-lock.yaml`
 
@@ -116,14 +116,14 @@ We have successfully injected entries in twitter, now we can focus on the UI and
 
 ### 4.1 Acquire ens details in profile tab and timeline.
 
-We can grab user's ens in their profile and ENS url in timeline, and we want to inject a card to show details like owner and expiration date of this ENS domain. For acquiring infomation from blockchain, we need smart contract address of ENS which can be found in ENS website. The smart contract address we need is `0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5`, so we need to call related function of this smart contract.
+We can grab user's ens in their profile and ENS url in timeline, and we want to inject a card to show details like owner and expiration date of this ENS domain. For acquiring information from blockchain, we need smart contract address of ENS which can be found in ENS website. The smart contract address we need is `0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5`, so we need to call related function of this smart contract.
 Copy ABI of this smart contract from `etherscan` and make it as a `json` file. Mask provide tools to use it:
 
 ```JavaScript
 import { useContract } from '@masknet/web3-shared-evm'
-import ENSABI from '@masknet/web3-contracts/abis/ENS.json'
+import ENS_ABI from '@masknet/web3-contracts/abis/ENS.json'
 
-const contract = useContract('0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5', ENSABI)
+const contract = useContract('0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5', ENS_ABI)
 
 const handleSearch = useCallback(async () => {
         const res = await contract?.methods.available(ensName).call({ from: account }) // we use call to use smart contract function without gas fee
@@ -136,9 +136,9 @@ ENS domain is not permanent, we need to rent a ENS domain that is not registered
 
 ```JavaScript
 import { useContract,useAccount } from '@masknet/web3-shared-evm'
-import ENSABI from '@masknet/web3-contracts/abis/ENS.json'
+import ENS_ABI from '@masknet/web3-contracts/abis/ENS.json'
 
-const contract = useContract('0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5', ENSABI)
+const contract = useContract('0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5', ENS_ABI)
 const account = useAccount() // a hook to acquire current wallet address
 const value = await contract.methods.rentPrice('ran121',2); // first param is ENS name, second param is duration
 const commitment = '0x72616e646f6c70687068700000000000000000000000000000000000000000'
@@ -157,7 +157,7 @@ const handleBuy = useCallback(async () => {
                 gasForCommit
             }
 
-        await contract.methods   // send a tranaction to commit on blockchain
+        await contract.methods   // send a transaction to commit on blockchain
             .commit(commitment)
             .send(configForCommit)
             .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
