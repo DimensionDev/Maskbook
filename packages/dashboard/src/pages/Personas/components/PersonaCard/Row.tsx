@@ -88,7 +88,12 @@ export interface PersonaRowCardUIProps {
     profiles: ProfileInformation[]
     definedSocialNetworks: SocialNetwork[]
     publicKey: string
-    onConnect: (identifier: PersonaIdentifier, networkIdentifier: string, type?: 'local' | 'nextID') => void
+    onConnect: (
+        identifier: PersonaIdentifier,
+        networkIdentifier: string,
+        type?: 'local' | 'nextID',
+        profile?: ProfileIdentifier,
+    ) => void
     onDisconnect: (identifier: ProfileIdentifier) => void
     onRename: (identifier: PersonaIdentifier, target: string, callback?: () => void) => Promise<void>
     onDeleteBound: (
@@ -200,7 +205,9 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                                     disableAdd={currentNetworkProfiles.length >= 5}
                                     isHideOperations={false}
                                     key={networkIdentifier}
-                                    onConnect={(type) => onConnect(identifier, networkIdentifier, type)}
+                                    onConnect={(type, profile) =>
+                                        onConnect(identifier, networkIdentifier, type, profile)
+                                    }
                                     onDisconnect={onDisconnect}
                                     onDeleteBound={(profile: ProfileIdentifier) => {
                                         onDeleteBound(identifier, profile, networkIdentifier, NextIDAction.Delete)

@@ -7,7 +7,13 @@ import { isTwitter } from '../social-network-adaptor/twitter.com/base'
 import { usePersonaConnectStatus } from '../components/DataSource/usePersonaConnectStatus'
 import { useI18N } from '../utils'
 import { Box } from '@mui/system'
-import { usePluginI18NField, PluginI18NFieldRender, PluginWrapperComponent, Plugin } from '@masknet/plugin-infra'
+import {
+    usePluginI18NField,
+    PluginI18NFieldRender,
+    PluginWrapperComponent,
+    Plugin,
+    PluginWrapperMethods,
+} from '@masknet/plugin-infra'
 
 interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     title: string
@@ -137,7 +143,15 @@ export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SNSAdapto
         const [open, setOpen] = useState<boolean>(false)
         const [title, setTitle] = useState<string | undefined>(undefined)
 
-        useImperativeHandle(ref, () => ({ setWidth, setWrap: setOpen, setWrapperName: setTitle }), [])
+        const refItem = useMemo((): PluginWrapperMethods => {
+            return {
+                setWidth,
+                setWrap: setOpen,
+                setWrapperName: setTitle,
+            }
+        }, [])
+
+        useImperativeHandle(ref, () => refItem, [refItem])
 
         if (!open) return <>{props.children}</>
         return (

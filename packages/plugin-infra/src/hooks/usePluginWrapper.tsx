@@ -5,7 +5,7 @@ export type PluginWrapperComponent<T extends Plugin.Shared.Definition = Plugin.S
     ForwardRefExoticComponent<React.PropsWithChildren<RefAttributes<PluginWrapperMethods> & { definition: T }>>
 
 /** @internal */
-const emptyPluginWrapperMethods = {
+export const emptyPluginWrapperMethods = {
     setWrap: noop,
     setWrapperName: noop,
     setWidth: noop,

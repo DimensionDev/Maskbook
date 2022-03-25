@@ -22,11 +22,12 @@ export const usePersonaBoundPlatform = (personaPublicKey: string) => {
 let isOpenedVerifyDialog = false
 let isOpenedFromButton = false
 
-const verifyPersona = (personaIdentifier?: PersonaIdentifier) => async () => {
+const verifyPersona = (personaIdentifier?: PersonaIdentifier, username?: string) => async () => {
     if (!personaIdentifier) return
     currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier].value = stringify({
         status: SetupGuideStep.VerifyOnNextID,
         persona: personaIdentifier.toText(),
+        username,
     })
 }
 
@@ -106,7 +107,7 @@ export function useNextIDConnectStatus() {
         isOpenedVerifyDialog = true
         isOpenedFromButton = false
         return NextIDVerificationStatus.WaitingVerify
-    }, [username, enableNextID, lastStateRef.value, isOpenedVerifyDialog, currentPersonaIdentifier.value])
+    }, [username, enableNextID, isOpenedVerifyDialog, currentPersonaIdentifier.value])
 
     return {
         isVerified: VerificationStatus === NextIDVerificationStatus.Verified,
@@ -118,7 +119,7 @@ export function useNextIDConnectStatus() {
         },
         action:
             VerificationStatus === NextIDVerificationStatus.WaitingVerify
-                ? verifyPersona(personaConnectStatus.currentConnectedPersona?.identifier)
+                ? verifyPersona(personaConnectStatus.currentConnectedPersona?.identifier, lastState.username)
                 : null,
     }
 }

@@ -73,7 +73,7 @@ export const useWizardDialogStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
     },
     button: {
-        width: 150,
+        minWidth: 150,
         height: 40,
         minHeight: 40,
         marginLeft: 0,
