@@ -25,7 +25,7 @@ export interface CreateRenderInShadowRootHostConfig {
 export interface ReactRootShadowed {
     render(jsx: React.ReactChild): void
     // do not name it as unmount otherwise it might be compatible with ReactDOM's Root interface.
-    destory(): void
+    destroy(): void
 }
 /**
  * @returns
@@ -52,7 +52,7 @@ export function createReactRootShadowedPartial(hostConfig: CreateRenderInShadowR
                 if (!root) jsx = _jsx
                 else root.render(_jsx)
             },
-            destory: () => root?.destory(),
+            destroy: () => root?.destroy(),
         }
     }
 }
@@ -68,7 +68,7 @@ function mount(
     if (shadow.querySelector<HTMLElement>(`${tag}.${key}`)) {
         console.error('Tried to create root in', shadow, 'with key', key, ' which is already used. Skip rendering.')
         return {
-            destory: () => {},
+            destroy: () => {},
             render: () => {},
         }
     }
@@ -96,7 +96,7 @@ function mount(
     options.signal?.addEventListener('abort', () => controller.abort(), { signal })
 
     return {
-        destory: () => controller.abort(),
+        destroy: () => controller.abort(),
         render: (jsx) => {
             root!.render(getJSX(jsx))
         },

@@ -3,6 +3,7 @@ import { useWeb3Context } from '../context'
 import { uniqWith } from 'lodash-unified'
 import { isSameAddress } from '../utils'
 import { useSocket } from './useSocket'
+import { useMemo } from 'react'
 
 export function useCollections(address: string, chainId: ChainId | null, dependReady?: boolean) {
     const id = `mask.fetchNonFungibleCollectionAsset_${address}_${chainId}`
@@ -12,9 +13,20 @@ export function useCollections(address: string, chainId: ChainId | null, dependR
         params: {
             address: address,
             pageSize: 200,
+            chainId,
         },
     }
-    return useSocket<ERC721TokenCollectionInfo>(message)
+    const collections = useSocket<ERC721TokenCollectionInfo>(message)
+    // TODO Pass chainId to websocket, and filter from data side.
+    const filtered = useMemo(() => {
+        return chainId
+            ? {
+                  ...collections,
+                  data: collections.data.filter((x) => x.chainId === chainId),
+              }
+            : collections
+    }, [collections, chainId])
+    return filtered
 }
 
 export function useCollectibles(address: string, chainId: ChainId | null, dependReady?: boolean) {
