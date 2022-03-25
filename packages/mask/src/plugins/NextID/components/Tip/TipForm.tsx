@@ -2,7 +2,8 @@ import { useWeb3State } from '@masknet/plugin-infra'
 import { SelectTokenDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { EthereumTokenType, useAccount, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
+import { useAccount, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
+import { Web3TokenType } from '@masknet/web3-shared-base'
 import { Box, BoxProps, FormControl, MenuItem, Select, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { FC, memo, useCallback, useRef, useState } from 'react'
@@ -102,7 +103,7 @@ export const TipForm: FC<Props> = memo(({ className, ...rest }) => {
 
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
-        token?.type || EthereumTokenType.Native,
+        token?.type || Web3TokenType.Native,
         token?.address || '',
         chainId,
     )
