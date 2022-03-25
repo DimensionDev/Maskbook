@@ -94,14 +94,10 @@ fetch('https://api.com')
 fetch('https://cors.r2d2.to/?=https://api.com')
 ```
 
-## How to read the local settings?
+## How to clear the local settings?
 
 Open the background.html of the extension and execute the following scripts in the console.
 
-```ts
-// get all storage
-browser.storage.local.get(null).then(console.log)
-
-// clear all storage
+```js
 browser.storage.local.clear()
 ```
