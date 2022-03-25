@@ -255,6 +255,11 @@ export function CollectionList({
 
     const { data: collectionsFormRemote } = useNonFungibleAssetCollections(address, chainId)
     const network = PLUGIN_NETWORKS.find((x) => x.ID === `${PLUGIN_ID}_ethereum`)!
+
+    useEffect(() => {
+        setSelectedCollection('all')
+    }, [address])
+
     const {
         data: _collectibles,
         state: loadingCollectibleDone,

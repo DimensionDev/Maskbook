@@ -8,14 +8,25 @@ import {
     Web3ProviderType,
     FungibleAssetProvider,
     createExternalProvider,
+    getCoinGeckoCoinId,
+    CurrencyType,
+    PriceRecord,
+    ChainId,
 } from '@masknet/web3-shared-evm'
+import BigNumber from 'bignumber.js'
 import { Pagination, TokenType, Web3Plugin } from '@masknet/plugin-infra'
 import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
 import type { AbiItem } from 'web3-utils'
 import { uniqBy } from 'lodash-unified'
 import { PLUGIN_NETWORKS } from '../../constants'
 import { makeSortAssertWithoutChainFn } from '../../utils/token'
-import { getProxyWebsocketInstance } from '@masknet/web3-shared-base'
+import { getProxyWebsocketInstance, pow10 } from '@masknet/web3-shared-base'
+import { createGetLatestBalance } from './createGetLatestBalance'
+import { TokenPrice } from '@masknet/web3-providers'
+
+// tokens unavailable neither from api or balance checker.
+// https://forum.conflux.fun/t/how-to-upvote-debank-proposal-for-conflux-espace-integration/13935
+const TokenUnavailableFromDebankList = [ChainId.Conflux]
 
 export const getFungibleAssetsFn =
     (context: Web3ProviderType) =>
@@ -24,9 +35,12 @@ export const getFungibleAssetsFn =
         const chainId = context.chainId.getCurrentValue()
         const wallet = context.wallets.getCurrentValue().find((x) => isSameAddress(x.address, address))
         const networks = PLUGIN_NETWORKS
-        const trustedTokens = context.erc20Tokens
-            .getCurrentValue()
-            .filter((x) => wallet?.erc20_token_whitelist.has(formatEthereumAddress(x.address)))
+        const trustedTokens = uniqBy(
+            context.erc20Tokens
+                .getCurrentValue()
+                .filter((x) => wallet?.erc20_token_whitelist.has(formatEthereumAddress(x.address))),
+            (x) => `${x.chainId}_${formatEthereumAddress(x.address)}`,
+        )
 
         const web3 = new Web3(
             createExternalProvider(context.request, context.getSendOverrides, context.getRequestOptions),
@@ -62,22 +76,28 @@ export const getFungibleAssetsFn =
             },
         }))
 
-        if (!BALANCE_CHECKER_ADDRESS) return assetsFromProvider
-        const balanceCheckerContract = createContract(web3, BALANCE_CHECKER_ADDRESS, BalanceCheckerABI as AbiItem[])
-        if (!balanceCheckerContract) return assetsFromProvider
-        let balanceList: string[]
-        try {
-            balanceList = await balanceCheckerContract?.methods
-                .balances(
-                    [address],
-                    trustedTokens.map((x) => x.address),
-                )
-                .call({
-                    from: undefined,
-                })
-            if (balanceList.length !== trustedTokens?.length) return assetsFromProvider
-        } catch {
-            balanceList = []
+        const balanceCheckerContract = createContract(
+            web3,
+            BALANCE_CHECKER_ADDRESS ?? '',
+            BalanceCheckerABI as AbiItem[],
+        )
+
+        let balanceList: string[] = []
+
+        if (BALANCE_CHECKER_ADDRESS && balanceCheckerContract) {
+            try {
+                balanceList = await balanceCheckerContract?.methods
+                    .balances(
+                        [address],
+                        trustedTokens.map((x) => x.address),
+                    )
+                    .call({
+                        from: address,
+                    })
+                if (balanceList.length !== trustedTokens?.length) return assetsFromProvider
+            } catch {
+                balanceList = []
+            }
         }
 
         const assetFromChain = balanceList.map(
@@ -97,6 +117,27 @@ export const getFungibleAssetsFn =
 
         const allTokens = [...assetsFromProvider, ...assetFromChain]
 
+        const getBalance = createGetLatestBalance(context)
+        const allRequest = TokenUnavailableFromDebankList.map(async (x) => {
+            const balance = await getBalance(x, address)
+            const coinId = getCoinGeckoCoinId(x)
+            const price = (await TokenPrice.getNativeTokenPrice([coinId], CurrencyType.USD))[coinId]
+
+            return {
+                chainId: x,
+                price: price,
+                balance,
+            }
+        })
+
+        const tokenUnavailableFromDebankResults = (await Promise.allSettled(allRequest))
+            .map((x) => (x.status === 'fulfilled' ? x.value : null))
+            .filter((x) => Boolean(x)) as {
+            chainId: ChainId
+            balance: string
+            price: PriceRecord
+        }[]
+
         const nativeTokens: Web3Plugin.Asset<Web3Plugin.FungibleToken>[] = networks
             .filter(
                 (t) =>
@@ -109,11 +150,19 @@ export const getFungibleAssetsFn =
             )
             .map((x) => {
                 const nativeToken = createNativeToken(x.chainId)
+                const result = tokenUnavailableFromDebankResults.find((y) => y.chainId === x.chainId)
                 return {
                     id: nativeToken.address,
                     chainId: x.chainId,
                     token: { ...nativeToken, id: nativeToken.address!, type: TokenType.Fungible },
-                    balance: '0',
+                    balance: result?.balance ?? '0',
+                    price: result?.price,
+                    value: {
+                        [CurrencyType.USD]: new BigNumber(result?.balance ?? '0')
+                            .dividedBy(pow10(nativeToken.decimals))
+                            .multipliedBy(result ? result.price[CurrencyType.USD] : '0')
+                            .toFixed(),
+                    },
                 }
             })
 

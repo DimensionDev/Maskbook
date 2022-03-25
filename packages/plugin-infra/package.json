@@ -22,7 +22,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "react-i18next": "^11.15.6"
+    "react-i18next": "^11.16.1"
   },
   "peerDependencies": {
     "react-i18next": "^11.15.3"

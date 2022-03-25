@@ -18,11 +18,6 @@ export const InMemoryStorages = {
         address: '',
         tokenId: '',
     }),
-    InstagramNFTEvent: createInMemoryKVStorage('InstagramNFTEvent', {
-        userId: '',
-        address: '',
-        tokenId: '',
-    }),
 }
 export const PersistentStorages = {
     Plugin: createPersistentKVStorage('plugin', {}),

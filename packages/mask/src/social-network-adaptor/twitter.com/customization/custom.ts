@@ -248,7 +248,8 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                         backgroundColor: theme.palette.primary.main,
                         color: theme.palette.common.white,
                         '&:hover': {
-                            backgroundColor: parseColor(theme.palette.text.primary).setAlpha(0.1).toRgbString(),
+                            backgroundColor: `${theme.palette.primary.main} !important`,
+                            opacity: 0.9,
                         },
                     },
                 },

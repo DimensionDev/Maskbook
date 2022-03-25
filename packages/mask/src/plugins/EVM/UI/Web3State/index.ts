@@ -29,7 +29,7 @@ import {
 import { mergeNFTList } from '@masknet/plugin-infra'
 import { getStorage } from '../../storage'
 import { getFungibleAssetsFn } from './getAssetsFn'
-
+import { createGetLatestBalance } from './createGetLatestBalance'
 const ZERO_X_ERROR_ADDRESS = '0x'
 
 export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities, context?: Web3ProviderType) {
@@ -114,12 +114,7 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
         },
     }
     state.Utils = state.Utils ?? {
-        getLatestBalance: (chainId: ChainId, account: string) => {
-            const web3 = createWeb3(context.request, () => ({
-                chainId,
-            }))
-            return web3.eth.getBalance(account)
-        },
+        getLatestBalance: createGetLatestBalance(context),
         getLatestBlockNumber: (chainId: ChainId) => {
             const web3 = createWeb3(context.request, () => ({
                 chainId,

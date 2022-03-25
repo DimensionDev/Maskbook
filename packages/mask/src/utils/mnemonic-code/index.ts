@@ -67,7 +67,7 @@ function HDKeyToJwk(hdk: wallet.HDKey): JsonWebKey {
     return jwk
 }
 
-export async function split_ec_k256_keypair_into_pub_priv(
+async function split_ec_k256_keypair_into_pub_priv(
     key: Readonly<JsonWebKey>,
 ): Promise<JsonWebKeyPair<EC_Public_JsonWebKey, EC_Private_JsonWebKey>> {
     const { d, ...pub } = key

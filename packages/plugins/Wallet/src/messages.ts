@@ -17,7 +17,7 @@ export type TransactionDialogEvent =
     | {
           open: true
           state: TransactionState
-          shareLink?: string
+          shareText?: string
           summary?: string
           title?: string
       }
@@ -115,6 +115,7 @@ export type SelectTokenDialogEvent =
               tokens?: FungibleTokenDetailed[]
               selectedTokens?: string[]
           }
+          title?: string
       }
     | {
           open: false
@@ -124,12 +125,14 @@ export type SelectTokenDialogEvent =
            * The selected detailed token.
            */
           token?: FungibleTokenDetailed
+          title?: string
       }
 
 export type SelectNftContractDialogEvent = {
     open: boolean
     uuid: string
 
+    chainId?: ChainId
     /**
      * The selected detailed nft contract.
      */

@@ -78,24 +78,20 @@ export function PurchaseDialog(props: ActionBarProps) {
     }, [project.pricePerTokenInWei, token.value?.decimals])
 
     const postLink = usePostLink()
-    const shareLink = activatedSocialNetworkUI.utils
-        .getShareLinkURL?.(
-            [
-                t(
-                    isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                        ? 'plugin_artblocks_share'
-                        : 'plugin_artblocks_share_no_official_account',
-                    {
-                        name: project.name,
-                        price: price,
-                        symbol: token.value?.symbol,
-                    },
-                ),
-                '#mask_io #artblocks_io #nft',
-                postLink,
-            ].join('\n'),
-        )
-        .toString()
+    const shareText = [
+        t(
+            isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                ? 'plugin_artblocks_share'
+                : 'plugin_artblocks_share_no_official_account',
+            {
+                name: project.name,
+                price: price,
+                symbol: token.value?.symbol,
+            },
+        ),
+        '#mask_io #artblocks_io #nft',
+        postLink,
+    ].join('\n')
 
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
@@ -123,7 +119,7 @@ export function PurchaseDialog(props: ActionBarProps) {
         if (purchaseState.type === TransactionStateType.UNKNOWN) return
         setTransactionDialog({
             open: true,
-            shareLink,
+            shareText,
             state: purchaseState,
             summary: `Minting a new collectible from '${project.name}' collection.`,
         })

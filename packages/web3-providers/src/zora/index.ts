@@ -1,6 +1,12 @@
 import { GraphQLClient } from 'graphql-request'
 import { first } from 'lodash-unified'
-import { formatWeiToEther, ChainId, FungibleTokenDetailed, ERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import {
+    formatWeiToEther,
+    ChainId,
+    FungibleTokenDetailed,
+    ERC721TokenDetailed,
+    resolveIPFSLink,
+} from '@masknet/web3-shared-evm'
 import { Web3TokenType } from '@masknet/web3-shared-base'
 import { NonFungibleTokenAPI } from '..'
 import type { ZoraToken, ZoraHistory, ZoraBid, ZoraAsk } from './types'
@@ -11,8 +17,14 @@ function createNFTAsset(asset: ZoraToken): NonFungibleTokenAPI.Asset {
     return {
         is_verified: false,
         is_auction: asset.currentAuction !== null,
-        image_url:
-            asset.metadata.json.animation_url ?? asset.metadata.json.image_url ?? asset.metadata.json.image ?? '',
+        image_url: resolveIPFSLink(
+            (
+                asset.metadata.json.image ??
+                asset.metadata.json.animation_url ??
+                asset.metadata.json.image_url ??
+                ''
+            ).replace('ipfs://', ''),
+        ),
         asset_contract: {
             name: asset.tokenContract.name,
             description: '',
@@ -43,7 +55,9 @@ function createNFTAsset(asset: ZoraToken): NonFungibleTokenAPI.Asset {
         description: asset.metadata.json.description,
         name: asset.name ?? asset.metadata.json.name,
         collection_name: '',
-        animation_url: asset.metadata.json.animation_url,
+        animation_url: resolveIPFSLink(
+            (asset.metadata.json.image ?? asset.metadata.json.animation_url).replace('ipfs://', ''),
+        ),
         end_time: asset.currentAuction ? new Date(asset.currentAuction.expiresAt) : null,
         order_payment_tokens: [] as FungibleTokenDetailed[],
         offer_payment_tokens: [] as FungibleTokenDetailed[],

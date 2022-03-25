@@ -78,6 +78,9 @@ export enum ChainId {
 
     // Optimistic
     Optimistic = 10,
+
+    // Conflux
+    Conflux = 1030,
 }
 
 export enum ProviderType {
@@ -113,6 +116,7 @@ export enum NetworkType {
     Fuse = 'Fuse',
     Metis = 'Metis',
     Optimistic = 'Optimistic',
+    Conflux = 'Conflux',
 }
 
 export interface Wallet {
@@ -212,6 +216,7 @@ export interface ERC721TokenRecordInDatabase extends ERC721TokenDetailed {
 
 export interface ERC721TokenCollectionInfo {
     name: string
+    chainId?: ChainId
     iconURL?: string
     slug: string
     address: string

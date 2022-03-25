@@ -165,7 +165,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
         contractDetailed: {
             type: Web3TokenType.ERC721,
             address: x.address,
-            chainId: ChainId.Mainnet,
+            chainId,
             name: x.name,
             symbol: x.symbol,
             baseURI: x.iconURL,
@@ -174,10 +174,9 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
         balance: x.balance,
     }))
 
-    const contractList =
-        chainId === ChainId.Mainnet && renderAssets
-            ? unionBy([...renderAssets, ...allContractsInDb], 'contractDetailed.address')
-            : allContractsInDb
+    const contractList = renderAssets
+        ? unionBy([...renderAssets, ...allContractsInDb], 'contractDetailed.address')
+        : allContractsInDb
 
     // #region fuse
     const fuse = useMemo(
@@ -284,7 +283,7 @@ interface ContractListItemProps {
 function ContractListItem(props: ContractListItemProps) {
     const { onSubmit, contract } = props
     const { classes } = useStyles()
-    const chainId = useChainId()
+    const chainId = contract.contractDetailed.chainId
 
     return (
         <div style={{ position: 'relative' }}>

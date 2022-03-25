@@ -94,6 +94,7 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
                                         ? setSelectToken({
                                               open: true,
                                               uuid: id,
+                                              title: t.wallets_add_token(),
                                               FungibleTokenListProps: { whitelist: [] },
                                           })
                                         : setAddCollectibleOpen(true)

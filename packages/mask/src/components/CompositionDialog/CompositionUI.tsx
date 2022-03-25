@@ -106,8 +106,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
         })
     }, [])
 
-    useImperativeHandle(
-        ref,
+    const refItem = useMemo(
         (): CompositionRef => ({
             setMessage: (msg) => {
                 if (Editor.current) Editor.current.value = msg
@@ -118,6 +117,8 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
         }),
         [reset],
     )
+
+    useImperativeHandle(ref, () => refItem, [refItem])
 
     const context = useMemo(
         (): CompositionContext => ({
