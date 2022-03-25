@@ -151,7 +151,7 @@
         "chainId": 97,
         "fullName": "Binance",
         "shortName": "bnbt",
-        "chain": "BSC",
+        "chain": "BNB Chain",
         "network": "chapel",
         "networkId": 97,
         "nativeCurrency": {
