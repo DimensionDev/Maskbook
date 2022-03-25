@@ -68,19 +68,12 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest>
         return new Promise<string>((resolve, reject) => {
             web3.eth
                 .sendTransaction(config_, (error, hash) => {
-                    if (error) {
-                        setTradeState({
-                            type: TransactionStateType.FAILED,
-                            error,
-                        })
-                        reject(error)
-                    } else {
-                        setTradeState({
-                            type: TransactionStateType.HASH,
-                            hash,
-                        })
-                        resolve(hash)
-                    }
+                    if (!error) return
+                    setTradeState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    reject(error)
                 })
                 .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                     setTradeState({
@@ -88,6 +81,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest>
                         no,
                         receipt,
                     })
+                    resolve(receipt.transactionHash)
                 })
         })
     }, [web3, account, chainId, stringify(trade), gasConfig])
