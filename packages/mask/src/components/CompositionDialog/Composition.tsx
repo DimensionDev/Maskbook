@@ -46,7 +46,12 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
 
     useEffect(() => {
         return MaskMessages.events.requestComposition.on(({ reason, open, content, options }) => {
-            if (reason !== 'reply' && (reason !== type || globalUIState.profiles.value.length <= 0)) return
+            if (
+                (reason !== 'reply' && reason !== type) ||
+                (reason === 'reply' && type === 'popup') ||
+                globalUIState.profiles.value.length <= 0
+            )
+                return
             setOpen(open)
             setReason(reason)
             if (content) UI.current?.setMessage(content)
