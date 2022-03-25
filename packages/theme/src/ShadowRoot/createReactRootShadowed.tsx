@@ -69,7 +69,7 @@ function mount(
     if (shadow.querySelector<HTMLElement>(`${tag}.${key}`)) {
         console.error('Tried to create root in', shadow, 'with key', key, ' which is already used. Skip rendering.')
         return {
-            destory: noop,
+            destroy: noop,
             render: noop,
         }
     }
