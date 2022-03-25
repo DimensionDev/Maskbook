@@ -1,19 +1,18 @@
 import { TipCoin } from '@masknet/icons'
 import { usePostInfoDetails } from '@masknet/plugin-infra'
-import { NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
+import { EMPTY_LIST, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
-import { EMPTY_LIST } from '@masknet/web3-shared-evm'
 import type { TooltipProps } from '@mui/material'
 import classnames from 'classnames'
 import { uniq } from 'lodash-unified'
 import { FC, HTMLProps, MouseEventHandler, useCallback, useEffect, useMemo } from 'react'
 import { useAsync, useAsyncFn, useAsyncRetry } from 'react-use'
+import { MaskMessages } from '../../../../../shared'
 import Services from '../../../../extension/service'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { useI18N } from '../../locales'
 import { PluginNextIdMessages } from '../../messages'
-import { MaskMessages } from '../../../../../shared'
 
 interface Props extends HTMLProps<HTMLDivElement> {
     addresses?: string[]
