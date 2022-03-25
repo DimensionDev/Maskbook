@@ -6,7 +6,7 @@ import {
     FungibleTokenDetailed,
     ERC721TokenDetailed,
     EthereumTokenType,
-    resolveIPFSLink,
+    resolveIPFSLinkFromURL,
 } from '@masknet/web3-shared-evm'
 
 import { NonFungibleTokenAPI } from '..'
@@ -15,17 +15,13 @@ import { getAssetQuery, getTokenHistoryQuery, getBidsQuery, getAsksQuery } from 
 import { ZORA_MAINNET_GRAPHQL_URL } from './constants'
 
 function createNFTAsset(asset: ZoraToken): NonFungibleTokenAPI.Asset {
+    const image_url =
+        asset.metadata.json.image ?? asset.metadata.json.animation_url ?? asset.metadata.json.image_url ?? ''
+    const animation_url = asset.metadata.json.image ?? asset.metadata.json.animation_url ?? ''
     return {
         is_verified: false,
         is_auction: asset.currentAuction !== null,
-        image_url: resolveIPFSLink(
-            (
-                asset.metadata.json.image ??
-                asset.metadata.json.animation_url ??
-                asset.metadata.json.image_url ??
-                ''
-            ).replace('ipfs://', ''),
-        ),
+        image_url: resolveIPFSLinkFromURL(image_url),
         asset_contract: {
             name: asset.tokenContract.name,
             description: '',
@@ -56,9 +52,7 @@ function createNFTAsset(asset: ZoraToken): NonFungibleTokenAPI.Asset {
         description: asset.metadata.json.description,
         name: asset.name ?? asset.metadata.json.name,
         collection_name: '',
-        animation_url: resolveIPFSLink(
-            (asset.metadata.json.image ?? asset.metadata.json.animation_url).replace('ipfs://', ''),
-        ),
+        animation_url: resolveIPFSLinkFromURL(animation_url),
         end_time: asset.currentAuction ? new Date(asset.currentAuction.expiresAt) : null,
         order_payment_tokens: [] as FungibleTokenDetailed[],
         offer_payment_tokens: [] as FungibleTokenDetailed[],
