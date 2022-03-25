@@ -15,7 +15,7 @@ input following code to start a plugin file
 ## 2. How to inject ui
 
 1. change definitions in SNSAdaptor to add entry
-2. what is metadata and how to decode and encode metadata  
+2. what is metadata and how to decode and encode metadata
    if we want to inject ui in a post, we need metadata that contains related infomation
 3. write ui by our component
 
