@@ -155,10 +155,11 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
             info: {
                 name: t.nft_name,
                 description: t.nft_detail,
-                mediaUrl: resolveIPFSLinkFromURL(t.nft_cover ?? t.nft_content_uri ?? ''),
+                mediaUrl: resolveIPFSLinkFromURL(JSON.parse(t.nft_json ?? '{}').image ?? t.nft_content_uri ?? ''),
                 tokenURI: t.nft_token_uri,
             },
         }))
+        console.log({ d: response.data })
         return {
             data,
             hasNextPage: total - (page + 1) * size > 0,
