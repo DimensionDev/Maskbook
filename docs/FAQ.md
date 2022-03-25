@@ -69,7 +69,7 @@ You can download these builds in two places.
 
   E.g., <https://app.circleci.com/pipelines/github/DimensionDev/Maskbook/24886/workflows/eeabcc93-6152-437f-a65d-24f0acee34a9/jobs/52795/artifacts>
 
-## Help! The data service doesn’t return a CORS header.
+## How to resolve "No CORS Headers" problem
 
 Please contact the service maintainer to add CORS headers, the extension will send requests in following origins:
 
@@ -94,14 +94,10 @@ fetch('https://api.com')
 fetch('https://cors.r2d2.to/?=https://api.com')
 ```
 
-## How to read the local settings?
+## How to clear the local settings?
 
 Open the background.html of the extension and execute the following scripts in the console.
 
-```ts
-// get all storage
-browser.storage.local.get(null).then(console.log)
-
-// clear all storage
+```js
 browser.storage.local.clear()
 ```

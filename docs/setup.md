@@ -4,30 +4,21 @@ Hi, Welcome to the Mask Network. This guide will quickly take you through settin
 
 ## Requirements
 
-Here is a snippet of engines requirements in the `package.json` of Mask Network. As you see, `NodeJS` and `pnpm` are required at least a specific version.
+Here is a snippet of engines requirements in the [`package.json`](../package.json) of Mask Network. As you can see, `NodeJS` and `pnpm` are required at least a specific version.
 
-```json
-"engines": {
-    "node": ">=16.0.0",
-    "pnpm": ">=6.32.1",
-  }
-```
+We suggest you to use the latest Node.js version, and enable [corepack](https://nodejs.org/api/corepack.html).
 
 ## Install
 
-### NodeJS
-
-Please install NodeJS from the official document [here](https://nodejs.org/en/). Or install it from a Node version manager, e.g., [nvm](https://github.com/nvm-sh/nvm).
-
 ### pnpm
 
-The [pnpm](https://pnpm.io/) is a disk space-efficient package manager. After NodeJS is preinstalled. You could easily get pnpm from
+The [pnpm](https://pnpm.io/) is a disk space-efficient package manager. After NodeJS is preinstalled.
 
-```bash
-npm install -g pnpm
-```
+If you have [corepack](https://nodejs.org/api/corepack.html) enabled, you can skip the `pnpm` section, `pnpm` is already available!
 
-Now, you will need to have packages installed to start development.
+If you want to setup pnpm manually, here is the [installation guide from pnpm](https://pnpm.io/installation).
+
+Now, you will need to have tools installed to start development.
 
 ```bash
 pnpm install
@@ -39,7 +30,7 @@ pnpm install
 
 For Chromium-based browsers (Chrome, Opera, Edge, etc.), please run `pnpm start`. It's preset of many development commands.
 
-If you need to develop in other environments (for example, Firefox), please run `pnpm run go`. It is an interactive CLI tool to help you learn how to compose the build flags.
+If you need to develop in other environments (for example, Firefox), please run `npx dev --help` to see the documentation.
 
 ### Load the extension into your browser
 
@@ -76,7 +67,7 @@ To debug _background service_, click links right after **Inspect views**.
 
 Mask Network only injects content script with permission from the user.
 
-For every new website that Mask Network is going to support, it will show a prompt dialog to ask permission dynamically, rather than asking for all mightly permission at the plugin got installed.
+For every new website that Mask Network is going to support, it will show a prompt dialog to ask permission dynamically, rather than asking for all permission when the plugin is installed.
 
 ![An image displaying the Mask Network is asking the permission from the user](https://user-images.githubusercontent.com/52657989/158566232-30c52a17-0168-488c-a292-4fc4059ecb9c.png)
 
@@ -94,9 +85,7 @@ Run the following command to start the React Devtools. It doesn't work if you in
 
 > pnpx react-devtools
 
-Due to bug <https://github.com/facebook/react/issues/20377>, React Devtools conflicts with React Fast Refresh.
-
-Please use the following command, and it will start the development process in profile mode, which disables React Fast Refresh and enables React Devtools.
+And start the development by the following command:
 
 > pnpx dev --profile
 
@@ -105,7 +94,6 @@ Please use the following command, and it will start the development process in p
 ### Git conversions
 
 The `develop` branch is our developing branch, and the `released` branch points to the latest released version.
-[Git flow](https://github.com/nvie/gitflow) is recommended but not enforced.
 
 Your commit message should follow [Conventional Commits](https://www.conventionalcommits.org).
 

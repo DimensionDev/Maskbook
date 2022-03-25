@@ -2,7 +2,7 @@
 author: Randolph
 ---
 
-# Quickstart for Plugin Development
+# Quick start for Plugin Development
 
 ## 1. Introduction
 
@@ -23,7 +23,15 @@ Since we want to add a application into maskbook, we need to add related config:
     '@masknet/plugin-ENS': link:../plugins/ENS
 ```
 
+<<<<<<< HEAD
 `packages/mask/package.json`
+=======
+
+1. change definitions in SNSAdaptor to add entry
+2. what is metadata and how to decode and encode metadata
+   if we want to inject ui in a post, we need metadata that contains related information
+3. write ui by our component
+   > > > > > > > develop
 
 ```JavaScript
     "@masknet/plugin-ENS": "workspace:*",
