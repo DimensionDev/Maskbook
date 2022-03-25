@@ -7,9 +7,8 @@
   },
   "include": ["./", "./**/*.json"],
   "references": [
-    { "path": "../../injected-script/sdk" },
     { "path": "../base" },
     { "path": "../../shared-base" },
-    { "path": "../../public-api" }
+    { "path": "../../injected-script/sdk" },
   ]
 }

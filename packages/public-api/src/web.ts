@@ -177,6 +177,53 @@ export enum LaunchPage {
     dashboard = 'dashboard',
 }
 
+export enum DataProvider {
+    COIN_GECKO = 0,
+    COIN_MARKET_CAP = 1,
+    UNISWAP_INFO = 2,
+}
+
+export enum TradeProvider {
+    UNISWAP_V2 = 0,
+    ZRX = 1,
+    SUSHISWAP = 2,
+    SASHIMISWAP = 3,
+    BALANCER = 4,
+    QUICKSWAP = 5,
+    PANCAKESWAP = 6,
+    DODO = 7,
+    UNISWAP_V3 = 8,
+    BANCOR = 9,
+    OPENOCEAN = 10,
+    WANNASWAP = 11,
+    TRISOLARIS = 12,
+    TRADERJOE = 13,
+    PANGOLIN = 14,
+    MDEX = 15,
+}
+
+/** Supported language settings */
+export enum LanguageOptions {
+    __auto__ = 'auto',
+    enUS = 'en-US',
+    zhCN = 'zh-CN',
+    zhTW = 'zh-TW',
+    koKR = 'ko-KR',
+    jaJP = 'ja-JP',
+}
+
+/** Supported display languages */
+export enum SupportedLanguages {
+    enUS = 'en-US',
+    zhCN = 'zh-CN',
+    zhTW = 'zh-TW',
+    koKR = 'ko-KR',
+    jaJP = 'ja-JP',
+}
+
+/**
+ * Keep updating to packages/web3-shared/evm/types/index.ts
+ */
 export enum NetworkType {
     Ethereum = 'Ethereum',
     Binance = 'Binance',
@@ -214,49 +261,7 @@ export enum NonFungibleAssetProvider {
     OPENSEA = 'OpenSea',
     RARIBLE = 'Rarible',
     NFTSCAN = 'NFTScan',
-}
-
-export enum DataProvider {
-    COIN_GECKO = 0,
-    COIN_MARKET_CAP = 1,
-    UNISWAP_INFO = 2,
-}
-
-export enum TradeProvider {
-    UNISWAP_V2 = 0,
-    ZRX = 1,
-    SUSHISWAP = 2,
-    SASHIMISWAP = 3,
-    BALANCER = 4,
-    QUICKSWAP = 5,
-    PANCAKESWAP = 6,
-    DODO = 7,
-    UNISWAP_V3 = 8,
-    BANCOR = 9,
-    OPENOCEAN = 10,
-    WANNASWAP = 11,
-    TRISOLARIS = 12,
-    TRADERJOE = 13,
-    PANGOLIN = 14,
-    MDEX = 15,
-}
-/** Supported language settings */
-export enum LanguageOptions {
-    __auto__ = 'auto',
-    enUS = 'en-US',
-    zhCN = 'zh-CN',
-    zhTW = 'zh-TW',
-    koKR = 'ko-KR',
-    jaJP = 'ja-JP',
-}
-
-/** Supported display languages */
-export enum SupportedLanguages {
-    enUS = 'en-US',
-    zhCN = 'zh-CN',
-    zhTW = 'zh-TW',
-    koKR = 'ko-KR',
-    jaJP = 'ja-JP',
+    ZORA = 'Zora',
 }
 
 export interface PriceRecord {

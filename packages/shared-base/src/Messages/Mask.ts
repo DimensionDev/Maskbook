@@ -1,14 +1,15 @@
-import type { SerializableTypedMessages } from '@masknet/typed-message'
-import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier/type'
-import type { RelationFavor } from '../Persona/type'
-import type { Appearance, LanguageOptions, DataProvider } from '../../../public-api/src/web'
 import type {
+    Appearance,
+    LanguageOptions,
+    DataProvider,
     CryptoPrice,
     NetworkType,
     ProviderType,
     FungibleAssetProvider,
-    NonFungibleAssetProvider,
-} from '../../../public-api'
+    NonFungibleAssetProvider, } from '@masknet/public-api'
+import type { SerializableTypedMessages } from '@masknet/typed-message'
+import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier/type'
+import type { RelationFavor } from '../Persona/type'
 
 export interface MaskSettingsEvents {
     appearanceSettings: Appearance

@@ -1,11 +1,5 @@
 import type { TransactionConfig as TransactionConfig_ } from 'web3-core'
 import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types'
-import type { ProviderType } from '../../../public-api'
-
-// TODO: remove the depends of MaskSettingsEvents
-export { NetworkType, ProviderType, FungibleAssetProvider, NonFungibleAssetProvider } from '../../../public-api'
-
-export type { PriceRecord, CryptoPrice } from '../../../public-api'
 
 export interface SendOverrides {
     chainId?: ChainId
@@ -646,4 +640,56 @@ export enum TransactionStateType {
     CONFIRMED = 4,
     /** Fail to send */
     FAILED = 5,
+}
+
+/**
+ * Keep updating to packages/public-api/src/web.ts
+ */
+export enum NetworkType {
+    Ethereum = 'Ethereum',
+    Binance = 'Binance',
+    Polygon = 'Polygon',
+    Arbitrum = 'Arbitrum',
+    xDai = 'xDai',
+    Celo = 'Celo',
+    Fantom = 'Fantom',
+    Aurora = 'Aurora',
+    Avalanche = 'Avalanche',
+    Boba = 'Boba',
+    Fuse = 'Fuse',
+    Metis = 'Metis',
+    Optimistic = 'Optimistic',
+    Conflux = 'Conflux',
+}
+
+export enum ProviderType {
+    MaskWallet = 'Maskbook',
+    MetaMask = 'MetaMask',
+    WalletConnect = 'WalletConnect',
+    Fortmatic = 'Fortmatic',
+    Coin98 = 'Coin98',
+    MathWallet = 'MathWallet',
+    WalletLink = 'WalletLink',
+    CustomNetwork = 'CustomNetwork',
+}
+
+export enum FungibleAssetProvider {
+    ZERION = 'Zerion',
+    DEBANK = 'Debank',
+}
+
+export enum NonFungibleAssetProvider {
+    OPENSEA = 'OpenSea',
+    RARIBLE = 'Rarible',
+    NFTSCAN = 'NFTScan',
+    ZORA = 'Zora',
+}
+
+export interface PriceRecord {
+    [currency: string]: number
+}
+
+/** Base on response of coingecko's token price API */
+export interface CryptoPrice {
+    [token: string]: PriceRecord
 }

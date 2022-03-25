@@ -1008,6 +1008,7 @@ importers:
   packages/shared-base:
     specifiers:
       '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
+      '@masknet/public-api': workspace:*
       '@masknet/typed-message': workspace:*
       '@msgpack/msgpack': ^2.7.2
       '@mui/icons-material': link:..\empty
@@ -1030,6 +1031,7 @@ importers:
       z-schema: ^5.0.2
     dependencies:
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
+      '@masknet/public-api': link:../public-api
       '@masknet/typed-message': link:../typed-message
       '@msgpack/msgpack': 2.7.2
       '@mui/icons-material': link:../empty
