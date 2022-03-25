@@ -6,7 +6,7 @@ import type { useI18N } from '../../locales'
 
 export type TokenSecurity = SecurityAPI.ContractSecurity &
     SecurityAPI.TokenSecurity &
-    SecurityAPI.TradingSecurity & { contract: string }
+    SecurityAPI.TradingSecurity & { contract: string; chainId: string }
 
 export enum SecurityMessageLevel {
     High = 'High',

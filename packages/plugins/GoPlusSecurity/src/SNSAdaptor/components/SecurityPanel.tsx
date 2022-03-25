@@ -6,9 +6,17 @@ import { memo, useMemo, useState } from 'react'
 import { DefineMapping, SecurityMessageLevel, TokenSecurity } from './Common'
 import { SecurityMessages } from '../rules'
 import { RiskCard, RiskCardUI } from './RiskCard'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import {
+    ERC20Token,
+    formatEthereumAddress,
+    resolveAddressLinkOnExplorer,
+    resolveTokenLinkOnExplorer,
+} from '@masknet/web3-shared-evm'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import BigNumber from 'bignumber.js'
+import { useTheme } from '@mui/system'
+import { resolveGoLabLink } from '../../utils/helper'
+import parseInt from 'lodash-es/parseInt'
 
 interface TokenCardProps {
     tokenSecurity: TokenSecurity
@@ -56,6 +64,7 @@ function formatTotalSupply(total?: number) {
 export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
     const { classes } = useStyles()
     const t = useI18N()
+    const theme = useTheme()
     const [isFold, setFold] = useState(false)
 
     const makeMessageList =
@@ -112,11 +121,11 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                         <Link
                             className={classes.link}
                             lineHeight="14px"
-                            href="#"
+                            href={resolveGoLabLink(tokenSecurity.chainId, tokenSecurity.contract)}
                             target="_blank"
                             title={t.more_details()}
                             rel="noopener noreferrer">
-                            <ExternalLink size={14} />
+                            <ExternalLink color={theme.palette.text.strong} size={14} />
                         </Link>
                     </Stack>
                 </Stack>
@@ -147,31 +156,77 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                                     <Typography className={classes.subtitle}>
                                         {t.token_info_token_contract_address()}
                                     </Typography>
-                                    <Typography className={classes.cardValue}>
-                                        {tokenSecurity.contract
-                                            ? formatEthereumAddress(tokenSecurity.contract, 4)
-                                            : DEFAULT_PLACEHOLDER}
-                                    </Typography>
+                                    <Stack display="inline-flex" direction="row" alignItems="center" spacing={0.625}>
+                                        <Typography className={classes.cardValue}>
+                                            {tokenSecurity.contract
+                                                ? formatEthereumAddress(tokenSecurity.contract, 4)
+                                                : DEFAULT_PLACEHOLDER}
+                                        </Typography>
+                                        <Link
+                                            className={classes.link}
+                                            lineHeight="14px"
+                                            href={resolveTokenLinkOnExplorer({
+                                                chainId: parseInt(tokenSecurity.chainId),
+                                                address: tokenSecurity.contract,
+                                            } as ERC20Token)}
+                                            target="_blank"
+                                            title={t.token_info_token_contract_address()}
+                                            rel="noopener noreferrer">
+                                            <ExternalLink color={theme.palette.text.strong} size={14} />
+                                        </Link>
+                                    </Stack>
                                 </Stack>
                                 <Stack direction="row" justifyContent="space-between">
                                     <Typography className={classes.subtitle}>
                                         {t.token_info_contract_creator()}
                                     </Typography>
-                                    <Typography className={classes.cardValue}>
-                                        {tokenSecurity.creator_address
-                                            ? formatEthereumAddress(tokenSecurity.creator_address ?? '', 4)
-                                            : DEFAULT_PLACEHOLDER}
-                                    </Typography>
+                                    <Stack display="inline-flex" direction="row" alignItems="center" spacing={0.625}>
+                                        <Typography className={classes.cardValue}>
+                                            {tokenSecurity.creator_address
+                                                ? formatEthereumAddress(tokenSecurity.creator_address ?? '', 4)
+                                                : DEFAULT_PLACEHOLDER}
+                                        </Typography>
+                                        {tokenSecurity.creator_address && (
+                                            <Link
+                                                className={classes.link}
+                                                lineHeight="14px"
+                                                href={resolveAddressLinkOnExplorer(
+                                                    parseInt(tokenSecurity.chainId),
+                                                    tokenSecurity.creator_address,
+                                                )}
+                                                target="_blank"
+                                                title={t.token_info_contract_creator()}
+                                                rel="noopener noreferrer">
+                                                <ExternalLink color={theme.palette.text.strong} size={14} />
+                                            </Link>
+                                        )}
+                                    </Stack>
                                 </Stack>
                                 <Stack direction="row" justifyContent="space-between">
                                     <Typography className={classes.subtitle}>
                                         {t.token_info_contract_owner()}
                                     </Typography>
-                                    <Typography className={classes.cardValue}>
-                                        {tokenSecurity.owner_address
-                                            ? formatEthereumAddress(tokenSecurity.owner_address ?? '', 4)
-                                            : DEFAULT_PLACEHOLDER}
-                                    </Typography>
+                                    <Stack display="inline-flex" direction="row" alignItems="center" spacing={0.625}>
+                                        <Typography className={classes.cardValue}>
+                                            {tokenSecurity.owner_address
+                                                ? formatEthereumAddress(tokenSecurity.owner_address ?? '', 4)
+                                                : DEFAULT_PLACEHOLDER}
+                                        </Typography>
+                                        {tokenSecurity.owner_address && (
+                                            <Link
+                                                className={classes.link}
+                                                lineHeight="14px"
+                                                href={resolveAddressLinkOnExplorer(
+                                                    parseInt(tokenSecurity.chainId),
+                                                    tokenSecurity.owner_address,
+                                                )}
+                                                target="_blank"
+                                                title={t.token_info_contract_owner()}
+                                                rel="noopener noreferrer">
+                                                <ExternalLink color={theme.palette.text.strong} size={14} />
+                                            </Link>
+                                        )}
+                                    </Stack>
                                 </Stack>
                                 <Stack direction="row" justifyContent="space-between">
                                     <Typography className={classes.subtitle}>{t.token_info_total_supply()}</Typography>
@@ -206,7 +261,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                         )}
                     </Stack>
                 </Stack>
-                <Stack spacing={1} maxHeight={isFold ? 402 : 240} sx={{ overflowY: 'scroll' }}>
+                <Stack spacing={1} maxHeight={isFold ? 402 : 240} sx={{ overflowY: 'auto' }}>
                     {makeMessageList.map((x, i) => (
                         <RiskCard info={x} key={i} />
                     ))}

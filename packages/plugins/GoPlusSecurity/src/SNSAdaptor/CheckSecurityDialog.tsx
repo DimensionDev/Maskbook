@@ -42,11 +42,13 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
     const [{ value, loading: searching, error }, onSearch] = useAsyncFn(async (chainId: string, content: string) => {
         const values = await GoPlusLabs.getTokenSecurity(chainId, [content])
         if (!Object.keys(values ?? {}).length) throw new Error()
-        return Object.entries(values ?? {}).map((x) => ({ ...x[1], contract: x[0] }))[0] as TokenSecurity | undefined
+        return Object.entries(values ?? {}).map((x) => ({ ...x[1], contract: x[0], chainId }))[0] as
+            | TokenSecurity
+            | undefined
     }, [])
 
     return (
-        <MaskDialog title={t.dialog_title()} open onClose={closeDialog}>
+        <MaskDialog title={t.dialog_title()} open onBack={closeDialog}>
             <DialogContent className={classes.content}>
                 <Stack height="100%" spacing={2}>
                     <Box>
