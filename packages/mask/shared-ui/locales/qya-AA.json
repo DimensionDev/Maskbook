@@ -83,6 +83,7 @@
     "setup_guide_connect_auto": "crwdns4177:0crwdne4177:0",
     "setup_guide_connect_failed": "crwdns4179:0crwdne4179:0",
     "setup_guide_verify": "crwdns14586:0crwdne14586:0",
+    "setup_guide_verify_should_change_profile": "crwdns14798:0crwdne14798:0",
     "setup_guide_verify_dismiss": "crwdns14588:0crwdne14588:0",
     "setup_guide_verify_checking": "crwdns14590:0crwdne14590:0",
     "setup_guide_verify_post_not_found": "crwdns14592:0crwdne14592:0",
