@@ -1,5 +1,7 @@
-import { getHashedName, getNameAccountKey, NameRegistryState, performReverseLookup } from '@bonfida/spl-name-service'
+import { performReverseLookup } from '@bonfida/spl-name-service'
 import type { ChainId } from '@masknet/web3-shared-solana'
+import { getHashedName, getNameAccountKey, NameRegistryState } from '@solana/spl-name-service'
+
 import { Connection, PublicKey } from '@solana/web3.js'
 import { NETWORK_ENDPOINTS } from '../constants'
 
@@ -16,13 +18,11 @@ const connection = (chainId: ChainId) => {
 
 export async function lookup(name: string, chainId: ChainId) {
     const { domainKey } = await getKey(name)
-    console.log(domainKey)
-    console.log(name)
-    const { registry, nftOwner } = await NameRegistryState.retrieve(connection(chainId), domainKey)
-    return nftOwner?.toBase58()
+    const registry = await NameRegistryState.retrieve(connection(chainId), domainKey)
+    return registry.owner.toBase58()
 }
 
-export async function reverse(name: string, chainId: ChainId) {
-    const domainKey = new PublicKey(name)
-    return performReverseLookup(connection(chainId), domainKey)
+export async function reverse(owner: string, chainId: ChainId) {
+    const accountKey = new PublicKey(owner)
+    return performReverseLookup(connection(chainId), accountKey)
 }
