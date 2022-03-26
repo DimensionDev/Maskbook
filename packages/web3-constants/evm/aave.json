@@ -38,5 +38,25 @@
         "Fantom": "",
         "Aurora": "",
         "Aurora_Testnet": ""
+    },
+    "AAVE_PROTOCOL_DATA_PROVIDER_CONTRACT_ADDRESS": {
+        "Mainnet": "0x057835Ad21a177dbdd3090bB1CAE03EaCF78Fc6d",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": ""
     }
 }
