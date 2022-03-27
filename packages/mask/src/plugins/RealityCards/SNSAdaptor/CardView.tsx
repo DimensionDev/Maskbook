@@ -57,8 +57,8 @@ export function CardView(props: CardViewProps) {
     const [cardDialogOpen, setCardDialogOpen] = useState(false)
     const isWinner = isSameAddress(card.id, market.winningOutcome?.id ?? '')
     const token = useBaseToken()
-    const priceHourly = new BigNumber(card.price).div(24).toFixed(SIGNIFICANT_DIGITS)
-    const share = new BigNumber(card.price).div(market.sumOfAllPrices).toFixed(SIGNIFICANT_DIGITS)
+    const priceHourly = new BigNumber(card.price).dividedBy(24).toFixed(SIGNIFICANT_DIGITS)
+    const share = new BigNumber(card.price).dividedBy(market.sumOfAllPrices).toFixed(SIGNIFICANT_DIGITS)
     const ownerAddress = market.state === MarketState.Open ? card.originalNft.owner.id : card.longestOwner.id
 
     return (

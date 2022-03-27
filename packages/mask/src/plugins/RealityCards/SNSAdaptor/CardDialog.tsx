@@ -155,7 +155,7 @@ export function CardDialog(props: CardDialogProps) {
     // #region priceHourly
     const priceHourly = new BigNumber(inputPrice ?? 0).shiftedBy(token.decimals)
     const pricePerMinute = useMemo(() => {
-        return priceHourly.div(60)
+        return priceHourly.dividedBy(60)
     }, [priceHourly])
 
     const pricePerDay = useMemo(() => {

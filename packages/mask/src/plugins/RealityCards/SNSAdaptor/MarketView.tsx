@@ -24,6 +24,7 @@ import { CardView } from './CardView'
 import { MarketDescriptionIcon, MarketDescriptionPopup } from './MarketDescription'
 import { ExplorerIcon, GiveawayIcon } from './icons'
 import { useInterval } from 'react-use'
+import getUnixTime from 'date-fns/getUnixTime'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -166,12 +167,12 @@ function MarketDetails(props: MarketDetailsProps) {
     }, [market.state, t])
 
     const avgRental = useMemo(() => {
-        const utcTimestamp = new Date(Date.now() + new Date().getTimezoneOffset() * 60 * 1000).getTime() / 1000
+        const utcTimestamp = getUnixTime(new Date())
         const elapsedTime = utcTimestamp - Number.parseInt(market.openingTime, 10)
         return formatBalance(
             new BigNumber(market.totalCollected)
                 .minus(market.sponsorAmount)
-                .div(elapsedTime)
+                .dividedBy(elapsedTime)
                 .multipliedBy(60 * 60),
             token.decimals,
             1,
