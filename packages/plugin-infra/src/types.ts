@@ -404,7 +404,11 @@ export namespace Plugin.SNSAdaptor {
             /**
              * The injected tab content
              */
-            TabContent: InjectUI<{ identity?: ProfileIdentity; addressNames?: ProfileAddress[] }>
+            TabContent: InjectUI<{
+                identity?: ProfileIdentity
+                addressNames?: ProfileAddress[]
+                personaList?: string[]
+            }>
         }
         Utils?: {
             /**

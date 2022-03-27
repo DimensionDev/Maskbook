@@ -84,18 +84,15 @@ export function RedPacket(props: RedPacketProps) {
         payload.contract_version > 3 ? web3.eth.accounts.sign(account, payload.password).signature : payload.password,
     )
 
-    const shareLink = activatedSocialNetworkUI.utils
-        .getShareLinkURL?.(
-            (listOfStatus.includes(RedPacketStatus.claimed) || claimState.type === TransactionStateType.CONFIRMED
-                ? isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                    ? t('plugin_red_packet_share_message_official_account', shareTextOption)
-                    : t('plugin_red_packet_share_message_not_twitter', shareTextOption)
-                : isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                ? t('plugin_red_packet_share_unclaimed_message_official_account', shareTextOption)
-                : t('plugin_red_packet_share_unclaimed_message_not_twitter', shareTextOption)
-            ).trim(),
-        )
-        .toString()
+    const shareText = (
+        listOfStatus.includes(RedPacketStatus.claimed) || claimState.type === TransactionStateType.CONFIRMED
+            ? isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                ? t('plugin_red_packet_share_message_official_account', shareTextOption)
+                : t('plugin_red_packet_share_message_not_twitter', shareTextOption)
+            : isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+            ? t('plugin_red_packet_share_unclaimed_message_official_account', shareTextOption)
+            : t('plugin_red_packet_share_unclaimed_message_not_twitter', shareTextOption)
+    ).trim()
 
     const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(
         payload.contract_version,
@@ -117,7 +114,7 @@ export function RedPacket(props: RedPacketProps) {
             canClaim &&
                 setTransactionDialog({
                     open: true,
-                    shareLink: shareLink!,
+                    shareText,
                     state,
                     summary: t('plugin_red_packet_claiming_from', { name: payload.sender.name }),
                 })
@@ -172,6 +169,11 @@ export function RedPacket(props: RedPacketProps) {
         })
     }, [availability, canRefund, token, t, payload, listOfStatus])
 
+    const handleShare = useCallback(() => {
+        if (!shareText || !activatedSocialNetworkUI.utils.share) return
+        activatedSocialNetworkUI.utils.share(shareText)
+    }, [shareText])
+
     // the red packet can fetch without account
     if (!availability || !token)
         return (
@@ -218,7 +220,7 @@ export function RedPacket(props: RedPacketProps) {
                     canRefund={canRefund}
                     claimState={claimState}
                     refundState={refundState}
-                    shareLink={shareLink}
+                    onShare={handleShare}
                     onClaimOrRefund={onClaimOrRefund}
                 />
             )}

@@ -18,6 +18,7 @@ let openOnInitAnswered = false
 export function Composition({ type = 'timeline', requireClipboardPermission }: PostDialogProps) {
     const { t } = useI18N()
 
+    const [reason, setReason] = useState<'timeline' | 'popup' | 'reply'>('timeline')
     // #region Open
     const [open, setOpen] = useState(false)
     const onClose = useCallback(() => {
@@ -45,8 +46,14 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
 
     useEffect(() => {
         return MaskMessages.events.requestComposition.on(({ reason, open, content, options }) => {
-            if (reason !== type || globalUIState.profiles.value.length <= 0) return
+            if (
+                (reason !== 'reply' && reason !== type) ||
+                (reason === 'reply' && type === 'popup') ||
+                globalUIState.profiles.value.length <= 0
+            )
+                return
             setOpen(open)
+            setReason(reason)
             if (content) UI.current?.setMessage(content)
             if (options?.target) UI.current?.setEncryptionKind(options.target)
             if (options?.startupPlugin) UI.current?.startPlugin(options.startupPlugin)
@@ -63,11 +70,10 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     // #endregion
 
     // #region submit
-    const onSubmit_ = useSubmit(onClose)
+    const onSubmit_ = useSubmit(onClose, reason)
     // #endregion
 
     const UI = useRef<CompositionRef>(null)
-
     const networkSupport = activatedSocialNetworkUI.injection.newPostComposition?.supportedOutputTypes
     return (
         <DialogStackingProvider>
