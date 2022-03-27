@@ -217,29 +217,23 @@ export function CardDialog(props: CardDialogProps) {
     )
     // #endregion
 
-    const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
-    const shareLink = activatedSocialNetworkUI.utils
-        .getShareLinkURL?.(
-            token
-                ? [
-                      t('plugin_realitycards_share_message', {
-                          outcome: card.outcomeName,
-                          amount: inputPrice,
-                          symbol: token.symbol,
-                          cashTag,
-                      }),
-                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                          ? t('plugin_realitycards_follow_message', {
-                                handle: isTwitter(activatedSocialNetworkUI)
-                                    ? t('twitter_account')
-                                    : t('facebook_account'),
-                            })
-                          : '',
-                      '#mask_io',
-                  ].join('\n')
-                : '',
-        )
-        .toString()
+    const shareText = useMemo(() => {
+        return token
+            ? [
+                  t('plugin_realitycards_share_message', {
+                      outcome: card.outcomeName,
+                      amount: inputPrice,
+                      symbol: token.symbol,
+                  }),
+                  isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                      ? t('plugin_realitycards_follow_message', {
+                            handle: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
+                        })
+                      : '',
+                  '#mask_io',
+              ].join('\n')
+            : ''
+    }, [activatedSocialNetworkUI, card.outcomeName, inputPrice, token.symbol])
 
     useEffect(() => {
         if (!token || !open) return
@@ -248,7 +242,7 @@ export function CardDialog(props: CardDialogProps) {
         setTransactionDialogOpen({
             open: true,
             state: rentState,
-            shareLink,
+            shareText,
             summary: t('plugin_realitycards_rent_summary', {
                 outcome: card.outcomeName,
                 amount: inputPrice,
@@ -410,6 +404,7 @@ export function CardDialog(props: CardDialogProps) {
                                         onClick={exitCallback}
                                         variant="contained"
                                         style={{ backgroundColor: 'maroon' }}
+                                        sx={{ textTransform: 'uppercase' }}
                                         loading={false}>
                                         {t('plugin_realitycards_exit_position')}
                                     </ActionButton>
