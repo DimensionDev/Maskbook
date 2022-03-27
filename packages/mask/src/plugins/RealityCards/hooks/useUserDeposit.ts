@@ -7,7 +7,7 @@ export function useUserDeposit() {
     const contract = useTreasuryContract()
 
     return useAsyncRetry(async () => {
-        if (!contract || !account) return undefined
+        if (!contract || !account) return
         return contract.methods.userDeposit(account).call()
     }, [contract, account])
 }
