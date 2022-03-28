@@ -36,7 +36,5 @@ export function useAddressCheck(address: string) {
     const isERC721 = useCheckERC721(address)
     const isERC1155 = useCheckERC1155(address)
 
-    if (isContract && isERC1155) return 'ERC1155'
-    if (isContract && isERC721) return 'ERC721'
-    return 'ERC20'
+    return isERC1155 ? 'ERC1155' : isERC721 ? 'ERC721' : isContract ? 'ERC20' : ''
 }
