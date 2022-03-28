@@ -1,4 +1,4 @@
-import { useAsync } from 'react-use'
+import { useAsyncRetry } from 'react-use'
 import type { AbiItem } from 'web3-utils'
 import { useERC721TokenContract } from '../contracts'
 import { createContract } from './useContract'
@@ -11,10 +11,10 @@ const ERC1155_ENUMERABLE_INTERFACE_ID = '0xd9b67a26'
 
 function useCheckContract(address: string) {
     const web3 = useWeb3()
-    return useAsync(async () => {
+    return useAsyncRetry(async () => {
         const result = await web3.eth.getCode(address)
         return result !== '0x'
-    }, [address]).value
+    }, [address])
 }
 
 function useCheckERC721(address: string) {
@@ -22,17 +22,22 @@ function useCheckERC721(address: string) {
     return useERC165(erc721Contract, address, ERC721_ENUMERABLE_INTERFACE_ID)
 }
 
-function useCheckERC1155(address: string) {
+function useCreateERC1155TokenContract(address: string) {
     const web3 = useWeb3()
     const erc1155Contract = createContract(web3, address, ERC1155 as AbiItem[])
+    return erc1155Contract
+}
+
+function useCheckERC1155(address: string) {
+    const erc1155Contract = useCreateERC1155TokenContract(address)
     return useERC165(erc1155Contract, address, ERC1155_ENUMERABLE_INTERFACE_ID)
 }
 
 export function useAddressCheck(address: string) {
-    const isContract = useCheckContract(address)
+    const { value: isContract, loading: loadingContract } = useCheckContract(address)
     const { value: isERC721, loading: loadingERC721 } = useCheckERC721(address)
     const { value: isERC1155, loading: loadingERC1155 } = useCheckERC1155(address)
 
-    if (loadingERC1155 || loadingERC721) return
+    if (loadingERC1155 || loadingERC721 || loadingContract) return
     return isERC1155 ? 'ERC1155' : isERC721 ? 'ERC721' : isContract ? 'ERC20' : ''
 }
