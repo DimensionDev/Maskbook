@@ -7,6 +7,7 @@ import { useI18N } from '../../../../utils'
 import type { Coin, Currency, Stat } from '../../types'
 import { useDimension, Dimension } from '../../../hooks/useDimension'
 import { usePriceLineChart } from '../../../hooks/usePriceLineChart'
+import { openWindow } from '@masknet/shared-base-ui'
 
 const DEFAULT_DIMENSION: Dimension = {
     top: 32,
@@ -110,9 +111,7 @@ export function PriceChart(props: PriceChartProps) {
                         viewBox={`0 0 ${dimension.width} ${dimension.height}`}
                         preserveAspectRatio="xMidYMid meet"
                         onClick={() => {
-                            props.stats.length &&
-                                props.coin?.platform_url &&
-                                window.open(props.coin.platform_url, '_blank', 'noopener noreferrer')
+                            props.stats.length && openWindow(props.coin?.platform_url)
                         }}
                     />
                 </>

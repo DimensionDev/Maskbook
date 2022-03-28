@@ -3,6 +3,7 @@ import { DialogContent } from '@mui/material'
 import { DialogStackingProvider } from '@masknet/theme'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
 import { MaskMessages, useI18N } from '../../utils'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useFriendsList as useRecipientsList } from '../DataSource/useActivatedUI'
 import { InjectedDialog } from '../shared/InjectedDialog'
 import { CompositionDialogUI, CompositionRef } from './CompositionUI'
@@ -45,8 +46,13 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     }, [onQueryClipboardPermission])
 
     useEffect(() => {
-        return MaskMessages.events.requestComposition.on(({ reason, open, content, options }) => {
-            if (reason !== 'reply' && (reason !== type || globalUIState.profiles.value.length <= 0)) return
+        return CrossIsolationMessages.events.requestComposition.on(({ reason, open, content, options }) => {
+            if (
+                (reason !== 'reply' && reason !== type) ||
+                (reason === 'reply' && type === 'popup') ||
+                globalUIState.profiles.value.length <= 0
+            )
+                return
             setOpen(open)
             setReason(reason)
             if (content) UI.current?.setMessage(content)

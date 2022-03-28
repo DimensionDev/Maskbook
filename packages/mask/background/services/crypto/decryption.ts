@@ -16,6 +16,8 @@ import {
 } from '@masknet/encryption'
 import {
     AESCryptoKey,
+    ECKeyIdentifierFromJsonWebKey,
+    EC_JsonWebKey,
     EC_Public_JsonWebKey,
     IdentifierMap,
     PostIVIdentifier,
@@ -23,6 +25,7 @@ import {
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import { noop } from 'lodash-unified'
+import { queryProfileDB, queryPersonaDB } from '../../database/persona/db'
 import {
     createProfileWithPersona,
     decryptByLocalKey,
@@ -225,6 +228,16 @@ async function storeAuthorPublicKey(
     if (pub.algr !== EC_KeyCurveEnum.secp256k1) {
         throw new Error('TODO: support other curves')
     }
+
+    // if privateKey, we should possibly not recreate it
+    const profile = await queryProfileDB(payloadAuthor)
+    const persona = profile?.linkedPersona ? await queryPersonaDB(profile.linkedPersona) : undefined
+    if (persona?.privateKey) return
+
+    const key = (await crypto.subtle.exportKey('jwk', pub.key)) as EC_JsonWebKey
+    const otherPersona = await queryPersonaDB(ECKeyIdentifierFromJsonWebKey(key))
+    if (otherPersona?.privateKey) return
+
     return createProfileWithPersona(
         payloadAuthor,
         { connectionConfirmState: 'confirmed' },

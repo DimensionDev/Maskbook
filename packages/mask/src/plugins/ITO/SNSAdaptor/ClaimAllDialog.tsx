@@ -4,7 +4,7 @@ import { flatten, uniq } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
 import { SnackbarProvider, makeStyles } from '@masknet/theme'
 import { FormattedBalance } from '@masknet/shared'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@mui/material'
 import {
     formatBalance,
@@ -301,7 +301,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         if (claimState.type === TransactionStateType.HASH) {
             const { hash } = claimState
             setTimeout(() => {
-                window.open(resolveTransactionLinkOnExplorer(chainId, hash), '_blank', 'noopener noreferrer')
+                openWindow(resolveTransactionLinkOnExplorer(chainId, hash))
             }, 2000)
             return
         }

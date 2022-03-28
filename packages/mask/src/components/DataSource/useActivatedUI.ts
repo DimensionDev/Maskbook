@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { ProfileIdentifier } from '@masknet/shared-base'
+import { EMPTY_LIST, ProfileIdentifier } from '@masknet/shared-base'
 import type { Profile } from '../../database'
 import type { SocialNetworkUI } from '../../social-network'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
@@ -9,7 +9,7 @@ import { Subscription, useSubscription } from 'use-subscription'
 
 export function useFriendsList() {
     const ref = useValueRef(globalUIState.friends)
-    return useMemo(() => [...ref.values()], [ref])
+    return useMemo(() => (ref.values.length ? [...ref.values()] : EMPTY_LIST), [ref])
 }
 
 const default_ = new ValueRef({ identifier: ProfileIdentifier.unknown })

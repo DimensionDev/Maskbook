@@ -174,16 +174,14 @@ export function resolveBlockLinkOnExplorer(chainId: ChainId, block: string): str
     return urlcat(resolveLinkOnExplorer(chainId), '/block/:block', { block })
 }
 
+// TODO check ipfs inside before resolving
 export function resolveIPFSLink(ipfs: string): string {
     return urlcat('https://coldcdn.com/api/cdn/mipfsygtms/ipfs/:ipfs', { ipfs })
 }
 
-export function resolveResourceLink(originLink: string): string {
-    if (!originLink) return ''
-    if (originLink.startsWith('http') || originLink.startsWith('data')) return originLink
-    if (originLink.startsWith('ipfs://ipfs/')) return resolveIPFSLink(originLink.replace(/^ipfs:\/\/ipfs\//, ''))
-    if (originLink.startsWith('ipfs://')) return resolveIPFSLink(decodeURIComponent(originLink).replace('ipfs://', ''))
-    return resolveIPFSLink(originLink)
+export function resolveIPFSLinkFromURL(url: string): string {
+    if (!url.startsWith('ipfs://')) return url
+    return resolveIPFSLink(url.replace(/^ipfs:\/\/(ipfs\/)?/, ''))
 }
 
 export function resolveDomainLink(domain?: string) {
