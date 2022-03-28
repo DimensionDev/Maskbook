@@ -230,50 +230,6 @@ export async function queryPagedPostHistory(
 // #endregion
 
 // #region Relation
-export async function patchCreateOrUpdateRelation(
-    profiles: ProfileIdentifier[],
-    personas: PersonaIdentifier[],
-    defaultFavor = RelationFavor.UNCOLLECTED,
-) {
-    await consistentPersonaDBWriteAccess(async (t) => {
-        for (const persona of personas) {
-            for (const profile of profiles) {
-                const relationInDB = await t.objectStore('relations').get([persona.toText(), profile.toText()])
-                if (relationInDB) {
-                    await updateRelationDB({ profile: profile, linked: persona, favor: defaultFavor }, t, true)
-                    continue
-                }
-                await createRelationDB({ profile: profile, linked: persona, favor: defaultFavor }, t, true)
-            }
-        }
-    })
-    return
-}
-
-export async function patchCreateNewRelation(relations: Omit<RelationRecord, 'network'>[]) {
-    await consistentPersonaDBWriteAccess(async (t) => {
-        for (const relation of relations) {
-            const relationInDB = await t
-                .objectStore('relations')
-                .get([relation.linked.toText(), relation.profile.toText()])
-
-            if (relationInDB) {
-                await updateRelationDB(relation, t, true)
-                continue
-            }
-
-            await createRelationDB(
-                {
-                    ...relation,
-                    favor: relation.favor === RelationFavor.DEPRECATED ? RelationFavor.UNCOLLECTED : relation.favor,
-                },
-                t,
-            )
-        }
-    })
-    return
-}
-
 export async function createNewRelation(
     profile: ProfileIdentifier,
     linked: PersonaIdentifier,

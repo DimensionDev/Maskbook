@@ -1,4 +1,4 @@
-export { decryptBackup, encryptBackup } from './version-3'
+export { encryptBackup, decryptBackup } from './version-3'
 export { BackupErrors } from './BackupErrors'
 export {
     normalizeBackup,
