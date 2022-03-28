@@ -858,7 +858,6 @@ importers:
 
   packages/plugins/Wallet:
     specifiers:
-      '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
       '@masknet/plugin-infra': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/theme': workspace:*
@@ -867,7 +866,6 @@ importers:
       react-use: ^17.3.2
       web3-core-helpers: 1.5.2
     dependencies:
-      '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
       '@masknet/plugin-infra': link:../../plugin-infra
       '@masknet/shared': link:../../shared
       '@masknet/theme': link:../../theme
@@ -23537,7 +23535,7 @@ packages:
       safe-buffer: 5.2.1
       tough-cookie: 2.5.0
       tunnel-agent: 0.6.0
-      uuid: 3.4.0
+      uuid: 3.3.2
     dev: false
 
   /require-directory/2.1.1:

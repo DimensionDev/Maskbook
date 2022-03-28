@@ -1,5 +1,5 @@
 import { createIndexedDB_KVStorageBackend, createInMemoryKVStorageBackend } from '@masknet/shared-base'
-import { MaskMessages } from '@masknet/plugin-wallet'
+import { MaskMessages } from '../../shared'
 
 export const indexedDB_KVStorageBackend = createIndexedDB_KVStorageBackend('mask-kv', (k, v) =>
     MaskMessages.events.__kv_backend_persistent__.sendByBroadcast([k, v]),

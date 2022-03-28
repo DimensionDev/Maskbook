@@ -2,8 +2,7 @@ import { useEffect } from 'react'
 import { useCustomSnackbar } from '@masknet/theme'
 import { Button, Box, Typography } from '@mui/material'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
-import { useMatchXS, useI18N } from '../../utils'
-import { MaskMessages } from '@masknet/plugin-wallet'
+import { useMatchXS, MaskMessages, useI18N } from '../../utils'
 import { useAutoPasteFailedDialog } from './AutoPasteFailedDialog'
 
 const PluginRender = createInjectHooksRenderer(

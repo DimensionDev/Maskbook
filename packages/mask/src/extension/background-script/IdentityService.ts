@@ -55,7 +55,7 @@ import { convertBackupFileToObject, fixBackupFilePermission } from '../../utils/
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { getCurrentPersonaIdentifier } from './SettingsService'
-import { MaskMessages } from '@masknet/plugin-wallet'
+import { MaskMessages } from '../../utils'
 import { first, orderBy } from 'lodash-unified'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { bindProof } from '@masknet/web3-providers'
