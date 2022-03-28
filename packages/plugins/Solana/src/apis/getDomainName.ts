@@ -3,9 +3,8 @@ import type { ChainId } from '@masknet/web3-shared-solana'
 import { getHashedName, getNameAccountKey, NameRegistryState } from '@solana/spl-name-service'
 
 import { Connection, PublicKey } from '@solana/web3.js'
-import { NETWORK_ENDPOINTS } from '../constants'
+import { NETWORK_ENDPOINTS, SOL_TLD_AUTHORITY } from '../constants'
 
-const SOL_TLD_AUTHORITY = new PublicKey('58PwtjSDuFHuUkYjH9BYnnQKHfwo9reZhC2zMJv9JPkx')
 const getKey = async (name: string) => {
     const hashedName = await getHashedName(name)
     const domainKey = await getNameAccountKey(hashedName, undefined, SOL_TLD_AUTHORITY)
