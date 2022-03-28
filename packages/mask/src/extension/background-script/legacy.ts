@@ -1,18 +1,82 @@
-import { isSameAddress, ProviderType } from '@masknet/web3-shared-evm'
-import { exportMnemonic, exportPrivateKey, getLegacyWallets, getWallets } from '../../plugins/Wallet/services'
-import { activatedPluginsWorker } from '@masknet/plugin-infra'
+import { currySameAddress, isSameAddress, ProviderType } from '@masknet/web3-shared-evm'
+import {
+    exportMnemonic,
+    exportPrivateKey,
+    getDerivableAccounts,
+    getLegacyWallets,
+    getWallets,
+    recoverWalletFromMnemonic,
+    recoverWalletFromPrivateKey,
+} from '../../plugins/Wallet/services'
+import { activatedPluginsWorker, registeredPluginIDs } from '@masknet/plugin-infra'
 import { Some, None } from 'ts-results'
 import { isNonNull, timeout } from '@dimensiondev/kit'
 import { delegatePluginBackup, delegateWalletBackup } from '../../../background/services/backup/internal_create'
 import type { NormalizedBackup } from '@masknet/backup-format'
 import type { LegacyWalletRecord } from '../../plugins/Wallet/database/types'
-import { keyToAddr, keyToJWK } from '../../utils/type-transform/SECP256k1-ETH'
+import { JWKToKey, keyToAddr, keyToJWK } from '../../utils/type-transform/SECP256k1-ETH'
 import type { WalletRecord } from '../../plugins/Wallet/services/wallet/type'
+import { delegatePluginRestore, delegateWalletRestore } from '../../../background/services/backup/internal_restore'
+import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
 
 delegatePluginBackup(backupAllPlugins)
+delegatePluginRestore(async function (backup) {
+    const plugins = [...activatedPluginsWorker]
+    const works = new Set<Promise<void>>()
+    for (const [pluginID, item] of Object.entries(backup)) {
+        const plugin = plugins.find((x) => x.ID === pluginID)
+        // should we warn user here?
+        if (!plugin) {
+            if ([...registeredPluginIDs].includes(pluginID))
+                console.warn(`[@masknet/plugin-infra] Found a backup of a not enabled plugin ${plugin}`, item)
+            else console.warn(`[@masknet/plugin-infra] Found an unknown plugin backup of ${plugin}`, item)
+            continue
+        }
+
+        const f = plugin.backup?.onRestore
+        if (!f) {
+            console.warn(
+                `[@masknet/plugin-infra] Found a backup of plugin ${plugin} but it did not register a onRestore callback.`,
+                item,
+            )
+            continue
+        }
+        works.add(
+            (async () => {
+                const x = await f(item)
+                if (x.err) console.error(`[@masknet/plugin-infra] Plugin ${plugin} failed to restore its backup.`, item)
+                return x.unwrap()
+            })(),
+        )
+    }
+    await Promise.allSettled(works)
+})
 delegateWalletBackup(async function () {
     const wallet = await Promise.all([backupAllWallets(), backupAllLegacyWallets()])
     return wallet.flat()
+})
+delegateWalletRestore(async function (backup) {
+    for (const wallet of backup) {
+        try {
+            const name = wallet.name
+
+            if (wallet.privateKey.some)
+                await recoverWalletFromPrivateKey(name, JWKToKey(wallet.privateKey.val, 'private'))
+            else if (wallet.mnemonic.some) {
+                // fix a backup bug of pre-v2.2.2 versions
+                const accounts = await getDerivableAccounts(wallet.mnemonic.val.words, 1, 5)
+                const index = accounts.findIndex(currySameAddress(wallet.address))
+                await recoverWalletFromMnemonic(
+                    name,
+                    wallet.mnemonic.val.words,
+                    index > -1 ? `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${index}` : wallet.mnemonic.val.path,
+                )
+            }
+        } catch (error) {
+            console.error(error)
+            continue
+        }
+    }
 })
 async function backupAllWallets(): Promise<NormalizedBackup.WalletBackup[]> {
     const allSettled = await Promise.allSettled(
@@ -36,7 +100,7 @@ async function backupAllLegacyWallets(): Promise<NormalizedBackup.WalletBackup[]
     return x.map(LegacyWalletRecordToJSONFormat)
 }
 
-export function WalletRecordToJSONFormat(
+function WalletRecordToJSONFormat(
     wallet: Omit<WalletRecord, 'type'> & {
         mnemonic?: string
         privateKey?: string
