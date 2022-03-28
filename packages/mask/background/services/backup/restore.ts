@@ -49,6 +49,12 @@ export async function addUnconfirmedBackup(raw: string): Promise<Result<{ info: 
     })
 }
 
-export async function getUnconfirmedBackup(id: string): Promise<{ wallets: NormalizedBackup.WalletBackup[] }> {
-    throw new TypeError('Not implemented')
+export async function getUnconfirmedBackup(
+    id: string,
+): Promise<undefined | { wallets: { address: string; name: string }[] }> {
+    if (!unconfirmedBackup.has(id)) return undefined
+    const backup = unconfirmedBackup.get(id)!
+    return {
+        wallets: backup.wallets.map((x) => ({ address: x.address, name: x.name })),
+    }
 }
