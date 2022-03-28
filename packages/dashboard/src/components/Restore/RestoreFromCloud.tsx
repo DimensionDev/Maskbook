@@ -57,27 +57,27 @@ export const RestoreFromCloud = memo(() => {
 
     const onValidated = useCallback(
         async (downloadLink: string, accountValue: string, password: string, type: AccountType) => {
-            const backupValue = await fetchBackupValueFn(downloadLink)
-            const backupText = await decryptBackupFn(accountValue, password, backupValue)
+            const backupEncrypted = await fetchBackupValueFn(downloadLink)
+            const backupDecrypted = await decryptBackupFn(accountValue, password, backupEncrypted)
 
-            if (!backupText) {
+            if (!backupDecrypted) {
                 return t.sign_in_account_cloud_backup_decrypt_failed()
             }
 
-            const backupInfo = await Services.Welcome.parseBackupStr(backupText)
-            if (backupInfo) {
-                setBackupId(backupInfo.id)
-                setAccount({ type, value: accountValue, password })
-                setStep({
-                    name: 'restore',
-                    params: {
-                        backupJson: backupInfo.info,
-                        handleRestore: () => onRestore(backupInfo, { type, value: accountValue, password }),
-                    },
-                })
-                return null
-            }
-            return t.sign_in_account_cloud_backup_decrypt_failed()
+            const backupNormalized = await Services.Welcome.addUnconfirmedBackup(backupDecrypted)
+            if (backupNormalized.err) return t.sign_in_account_cloud_backup_decrypt_failed()
+
+            const { id, info } = backupNormalized.val
+            setBackupId(id)
+            setAccount({ type, value: accountValue, password })
+            setStep({
+                name: 'restore',
+                params: {
+                    backupJson: info,
+                    handleRestore: () => onRestore(backupNormalized.val),
+                },
+            })
+            return null
         },
         [],
     )
@@ -101,7 +101,7 @@ export const RestoreFromCloud = memo(() => {
     }, [currentPersona, account, user, toggleSynchronizePasswordDialog])
 
     const onRestore = useCallback(
-        async (backupInfo: { info: BackupPreview; id: string }, account: any) => {
+        async (backupInfo: { info: BackupPreview; id: string }) => {
             try {
                 if (backupInfo.info?.wallets) {
                     await Services.Welcome.restoreBackupWithIDAndPermissionAndWallet({ id: backupInfo.id })

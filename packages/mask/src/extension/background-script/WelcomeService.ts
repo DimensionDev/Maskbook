@@ -18,7 +18,7 @@ export {
 } from '../../../background/services/backup/create'
 export {
     restoreBackup,
-    parseBackupStr,
+    addUnconfirmedBackup,
     getUnconfirmedBackup,
     restoreBackupWithID,
     restoreBackupWithIDAndPermission,

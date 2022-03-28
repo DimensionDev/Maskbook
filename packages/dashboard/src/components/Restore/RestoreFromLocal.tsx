@@ -62,18 +62,12 @@ export const RestoreFromLocal = memo(() => {
         if (!backupValue) return
 
         setRestoreStatus(RestoreStatus.Verifying)
-        try {
-            const backupInfo = await Services.Welcome.parseBackupStr(backupValue)
-
-            if (backupInfo) {
-                setJSON(backupInfo.info)
-                setBackupId(backupInfo.id)
-                setRestoreStatus(RestoreStatus.Verified)
-            } else {
-                setRestoreStatus(RestoreStatus.WaitingInput)
-                setBackupValue('')
-            }
-        } catch {
+        const backupInfo = await Services.Welcome.addUnconfirmedBackup(backupValue)
+        if (backupInfo.ok) {
+            setJSON(backupInfo.val.info)
+            setBackupId(backupInfo.val.id)
+            setRestoreStatus(RestoreStatus.Verified)
+        } else {
             showSnackbar(t.sign_in_account_cloud_backup_not_support(), { variant: 'error' })
             setRestoreStatus(RestoreStatus.WaitingInput)
             setBackupValue('')
