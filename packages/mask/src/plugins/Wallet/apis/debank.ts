@@ -17,7 +17,12 @@ export async function getAssetsList(address: string) {
         `${DEBANK_OPEN_API}/v1/user/token_list?is_all=true&has_balance=true&id=${address.toLowerCase()}`,
     )
     try {
-        return ((await response.json()) ?? []) as WalletTokenRecord[]
+        const records = ((await response.json()) ?? []) as WalletTokenRecord[]
+        return records.map((x) => ({
+            ...x,
+            id: x.id === 'bsc' ? 'bnb' : x.id,
+            chain: x.chain === 'bsc' ? 'bnb' : x.chain,
+        }))
     } catch {
         return []
     }

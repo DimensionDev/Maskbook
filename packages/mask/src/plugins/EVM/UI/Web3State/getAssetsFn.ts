@@ -38,7 +38,6 @@ export const getFungibleAssetsFn =
     async (address: string, providerType: string, network: Web3Plugin.NetworkDescriptor, pagination?: Pagination) => {
         const chainId = context.chainId.getCurrentValue()
         const wallet = context.wallets.getCurrentValue().find((x) => isSameAddress(x.address, address))
-        const socket = await context.providerSocket
         const networks = PLUGIN_NETWORKS
         const trustedTokens = uniqBy(
             context.erc20Tokens
@@ -51,19 +50,7 @@ export const getFungibleAssetsFn =
             createExternalProvider(context.request, context.getSendOverrides, context.getRequestOptions),
         )
         const { BALANCE_CHECKER_ADDRESS } = getEthereumConstants(chainId)
-        const socketId = `mask.fetchFungibleTokenAsset_${address}`
-        let dataFromProvider = await socket.sendAsync<Web3Plugin.Asset<Web3Plugin.FungibleToken>>({
-            id: socketId,
-            method: 'mask.fetchFungibleTokenAsset',
-            params: {
-                address: address,
-                pageSize: 10000,
-            },
-        })
-        if (!dataFromProvider.length) {
-            // @ts-ignore getAssetList Asset[]
-            dataFromProvider = await context.getAssetsList(address, FungibleAssetProvider.DEBANK)
-        }
+        const dataFromProvider = await context.getAssetsList(address, FungibleAssetProvider.DEBANK)
         const assetsFromProvider: Web3Plugin.Asset<Web3Plugin.FungibleToken>[] = dataFromProvider.map((x) => ({
             id: x.token.address,
             chainId: x.token.chainId,
@@ -108,7 +95,7 @@ export const getFungibleAssetsFn =
         const assetFromChain = balanceList.map(
             (balance, idx): Web3Plugin.Asset<Web3Plugin.FungibleToken> => ({
                 id: trustedTokens[idx].address,
-                chainId: chainId,
+                chainId,
                 token: {
                     ...trustedTokens[idx],
                     id: trustedTokens[idx].address,

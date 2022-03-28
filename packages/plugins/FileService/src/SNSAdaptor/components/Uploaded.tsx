@@ -12,6 +12,7 @@ import type { FileInfo } from '../../types'
 import { FileName } from './FileName'
 import { resolveGatewayAPI } from '../../helpers'
 import urlcat from 'urlcat'
+import { openWindow } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()({
     container: {
@@ -82,7 +83,7 @@ export const Uploaded: React.FC = () => {
 
         const linkPrefix = resolveGatewayAPI(state.provider)
         const link = urlcat(linkPrefix, '/:txId', { txId: state.landingTxID })
-        open(state.key ? `${link}#${state.key}` : link)
+        openWindow(state.key ? `${link}#${state.key}` : link)
     }
     return (
         <Grid container className={classes.container}>
