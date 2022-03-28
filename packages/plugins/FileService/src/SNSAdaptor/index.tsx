@@ -9,7 +9,7 @@ import FileServiceDialog from './MainDialog'
 import { Preview } from './Preview'
 import { FileServiceIcon } from '@masknet/icons'
 import { ApplicationEntry } from '@masknet/shared'
-import { requestComposition } from '@masknet/plugin-wallet'
+import { requestComposition } from '@masknet/shared-base'
 
 const definition: Plugin.SNSAdaptor.Definition = {
     ...base,

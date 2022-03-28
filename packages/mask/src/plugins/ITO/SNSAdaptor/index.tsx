@@ -19,7 +19,7 @@ import { set } from 'lodash-unified'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { MarketsIcon } from '@masknet/icons'
 import { ApplicationEntry } from '@masknet/shared'
-import { requestComposition } from '@masknet/plugin-wallet'
+import { requestComposition } from '@masknet/shared-base'
 import { ClaimAllDialog } from './ClaimAllDialog'
 
 const useStyles = makeStyles()((theme) => ({
