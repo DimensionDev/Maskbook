@@ -49,14 +49,14 @@ export const UnbindConfirm = memo<UnbindConfirmProps>(({ onClose, unbindAddress,
     const { classes } = useStyles()
     const { Utils } = useWeb3State()
 
-    const [isShow, setIsShow] = useState(true)
+    const [isVisible, setVisible] = useState(true)
 
     const handleConfirm = () => {
         onConfirm()
-        setIsShow(false)
+        setVisible(false)
     }
     return (
-        <MaskDialog open={!!unbindAddress && isShow} maxWidth="xs" title="">
+        <MaskDialog open={!!unbindAddress && isVisible} maxWidth="xs" title="">
             <DialogContent className={classes.wrapper}>
                 <Box className={classes.title}>
                     {t.delete()} {Utils?.formatAddress?.(unbindAddress, 4)} &#xFF1F;
