@@ -152,31 +152,24 @@ export function useTradeCallback(
                         ...(!value || /^0x0*$/.test(value) ? {} : { value }),
                         ...gasConfig,
                     },
-                    async (error, hash) => {
-                        if (error) {
-                            if ((error as any)?.code) {
-                                const error_ = new Error(
-                                    (error as any)?.message === 'Unable to add more requests.'
-                                        ? 'Unable to add more requests.'
-                                        : 'Transaction rejected.',
-                                )
-                                setTradeState({
-                                    type: TransactionStateType.FAILED,
-                                    error: error_,
-                                })
-                                reject(error_)
-                            } else {
-                                setTradeState({
-                                    type: TransactionStateType.FAILED,
-                                    error: new Error(`Swap failed: ${swapErrorToUserReadableMessage(error)}`),
-                                })
-                            }
+                    async (error) => {
+                        if (!error) return
+                        if ((error as any).code) {
+                            const error_ = new Error(
+                                (error as any)?.message === 'Unable to add more requests.'
+                                    ? 'Unable to add more requests.'
+                                    : 'Transaction rejected.',
+                            )
+                            setTradeState({
+                                type: TransactionStateType.FAILED,
+                                error: error_,
+                            })
+                            reject(error_)
                         } else {
                             setTradeState({
-                                type: TransactionStateType.HASH,
-                                hash: hash,
+                                type: TransactionStateType.FAILED,
+                                error: new Error(`Swap failed: ${swapErrorToUserReadableMessage(error)}`),
                             })
-                            resolve(hash)
                         }
                     },
                 )
@@ -186,6 +179,7 @@ export function useTradeCallback(
                         no,
                         receipt,
                     })
+                    resolve(receipt.transactionHash)
                 })
         })
     }, [web3, account, tradeParameters, gasConfig])
