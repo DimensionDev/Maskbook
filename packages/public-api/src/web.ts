@@ -162,8 +162,10 @@ export interface BackupPreview {
     accounts: number
     posts: number
     contacts: number
+    relations: number
     files: number
     wallets: number
+    createdAt: number
 }
 
 export enum Appearance {

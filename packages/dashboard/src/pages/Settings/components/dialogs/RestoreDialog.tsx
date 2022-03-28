@@ -7,7 +7,7 @@ import ConfirmDialog from '../../../../components/ConfirmDialog'
 import FileUpload from '../../../../components/FileUpload'
 import { Services } from '../../../../API'
 import BackupPreviewCard from '../BackupPreviewCard'
-import type { BackupPreview } from '../BackupPreviewCard'
+import type { BackupPreview } from '@masknet/backup-format'
 
 const useStyles = makeStyles()(() => ({
     container: { flex: 1 },

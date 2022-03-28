@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
 import { Box, Card } from '@mui/material'
-import type { BackupPreview } from '@masknet/public-api'
+import type { BackupPreview } from '@masknet/backup-format'
 import { useDashboardI18N } from '../../locales'
 import { Messages, Services } from '../../API'
 import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard'
