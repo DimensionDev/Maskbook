@@ -30,11 +30,6 @@ export function generateBackupRAW(data: NormalizedBackup.Data): unknown {
     return result
 }
 
-export function generateBackupFile(data: NormalizedBackup.Data): unknown {
-    const result = generateBackupRAW(data)
-    return JSON.stringify(result)
-}
-
 export function createEmptyNormalizedBackup(): NormalizedBackup.Data {
     return {
         meta: { version: 2, createdAt: None, maskVersion: None },
