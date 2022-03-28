@@ -4,6 +4,7 @@ export { useMetadataRender, type MetadataRenderProps } from './Renderer/Metadata
 
 // Render behavior
 export { TextResizeContext } from './Renderer/utils/TextResizerContext'
+export { TUPLE_RENDER_STYLE } from './Renderer/Core/Tuple'
 
 // Render Registry
 export { type RenderConfig, createTypedMessageRenderRegistry } from './Renderer/registry'

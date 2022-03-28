@@ -11,10 +11,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import type { AaveLendingPool } from '@masknet/web3-contracts/types/AaveLendingPool'
 import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider'
-
-
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
-import AaveProtocolDataProviderABI from '@masknet/web3-contracts/abis/AaveProtocolDataProvider.json'
 import AaveLendingPoolABI from '@masknet/web3-contracts/abis/AaveLendingPool.json'
 import { ProtocolType, SavingsProtocol } from '../types'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
@@ -162,7 +159,6 @@ export class AAVEProtocol implements SavingsProtocol {
             return ZERO
         }
     }
-
 
     private async createDepositTokenOperation(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
         const aaveLPoolAddress =
