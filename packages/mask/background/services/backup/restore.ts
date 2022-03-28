@@ -17,15 +17,6 @@ export async function mobile_restoreFromBase64(rawString: string): Promise<void>
     return restoreNormalizedBackup(backup)
 }
 
-/**
- * Only for mobile.
- */
-export async function mobile_restoreFromBackup(rawString: string): Promise<void> {
-    if (process.env.architecture !== 'app') throw new Error('Only for mobile')
-    const backup = normalizeBackup(JSON.parse(rawString))
-    return restoreNormalizedBackup(backup)
-}
-
 const unconfirmedBackup = new Map<string, NormalizedBackup.Data>()
 export interface RestoreUnconfirmedBackupOptions {
     /** The backup ID */
@@ -45,9 +36,13 @@ export async function restoreUnconfirmedBackup({ id, action }: RestoreUnconfirme
     const granted = await requestHostPermission(backup.settings.grantedHostPermissions)
     if (!granted) return
 
-    if (action === 'confirm') return restoreNormalizedBackup(backup)
-    else if (action === 'wallet') return openPopupWindow(PopupRoutes.WalletRecovered, { backupId: id })
-    else unreachable(action)
+    try {
+        if (action === 'confirm') await restoreNormalizedBackup(backup)
+        else if (action === 'wallet') await openPopupWindow(PopupRoutes.WalletRecovered, { backupId: id })
+        else unreachable(action)
+    } finally {
+        unconfirmedBackup.delete(id)
+    }
 }
 
 export async function addUnconfirmedBackup(raw: string): Promise<Result<{ info: BackupPreview; id: string }, unknown>> {

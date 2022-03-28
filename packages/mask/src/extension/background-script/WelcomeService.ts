@@ -20,7 +20,6 @@ export {
     addUnconfirmedBackup,
     getUnconfirmedBackup,
     restoreUnconfirmedBackup,
-    mobile_restoreFromBackup,
     mobile_restoreFromBase64,
 } from '../../../background/services/backup/restore'
 
