@@ -1,7 +1,6 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { searchFacebookAvatarOnMobileSelector, searchFacebookAvatarSelector } from '../../utils/selector'
-import { createReactRootShadowed, startWatch } from '../../../../utils'
-import { MaskMessages } from '@masknet/plugin-wallet'
+import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils'
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import type { NFTAvatarEvent } from '@masknet/shared-base'
 import { max, pickBy } from 'lodash-unified'

@@ -2,7 +2,7 @@ import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '@masknet/shared-base-ui'
 import Services from '../../extension/service'
 import { PersonaArrayComparer } from '../../utils/comparer'
-import { MaskMessages } from '@masknet/plugin-wallet'
+import { MaskMessages } from '../../utils/messages'
 import type { Persona } from '../../database'
 import { debounce } from 'lodash-unified'
 

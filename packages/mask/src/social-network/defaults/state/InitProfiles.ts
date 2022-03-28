@@ -1,4 +1,4 @@
-import { MaskMessages } from '@masknet/plugin-wallet'
+import { MaskMessages } from '../../../utils/messages'
 import Services from '../../../extension/service'
 import type { SocialNetworkUI } from '../../types'
 import type { ValueRef } from '@dimensiondev/holoflows-kit'

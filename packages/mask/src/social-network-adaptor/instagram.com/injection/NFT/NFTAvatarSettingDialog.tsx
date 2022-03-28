@@ -1,5 +1,4 @@
-import { useI18N } from '../../../../utils'
-import { MaskMessages } from '@masknet/plugin-wallet'
+import { MaskMessages, useI18N } from '../../../../utils'
 import { useCallback, useState } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { toPNG } from '../../../../plugins/Avatar/utils'

@@ -1,7 +1,6 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { searchInstagramAvatarListSelector } from '../../utils/selector'
-import { MaskMessages } from '@masknet/plugin-wallet'
-import { createReactRootShadowed, startWatch, useI18N } from '../../../../utils'
+import { createReactRootShadowed, MaskMessages, startWatch, useI18N } from '../../../../utils'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useLayoutEffect, useState } from 'react'
 import { useLocationChange } from '../../../../utils/hooks/useLocationChange'

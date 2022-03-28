@@ -1,8 +1,7 @@
 import { makeTypedMessageText, SerializableTypedMessages } from '@masknet/typed-message'
 import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
 import { i18n } from '../../../../shared-ui/locales_legacy'
-import type { CompositionRequest } from '../../../utils/messages'
-import { MaskMessages } from '@masknet/plugin-wallet'
+import { MaskMessages, CompositionRequest } from '../../../utils/messages'
 import { composeButtonSelector, composeDialogIndicatorSelector, composeTextareaSelector } from '../utils/selector'
 
 export async function openComposeBoxMinds(

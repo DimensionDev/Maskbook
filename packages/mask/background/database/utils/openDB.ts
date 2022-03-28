@@ -13,7 +13,7 @@ import type {
     IDBPCursor,
 } from 'idb/with-async-ittr'
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { MaskMessages } from '@masknet/plugin-wallet'
+import { MaskMessages } from '../../../shared'
 
 const iOSFix =
     process.env.engine === 'safari' ? import('safari-14-idb-fix').then(({ default: ready }) => ready()) : undefined

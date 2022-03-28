@@ -1,6 +1,6 @@
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { queryAvatarDB, isAvatarOutdatedDB, storeAvatarDB, IdentifierWithAvatar, createAvatarDBAccess } from './db'
-import { MaskMessages } from '@masknet/plugin-wallet'
+import { MaskMessages } from '../../../shared'
 import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
 import { blobToDataURL, memoizePromise } from '@dimensiondev/kit'
 import { createTransaction } from '../utils/openDB'

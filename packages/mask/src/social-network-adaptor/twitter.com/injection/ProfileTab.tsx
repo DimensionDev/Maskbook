@@ -2,8 +2,7 @@ import Color from 'color'
 import { useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { MaskMessages } from '@masknet/plugin-wallet'
-import { createReactRootShadowed, startWatch, untilElementAvailable } from '../../../utils'
+import { createReactRootShadowed, startWatch, untilElementAvailable, MaskMessages } from '../../../utils'
 import {
     searchAppBarBackSelector,
     searchNewTweetButtonSelector,

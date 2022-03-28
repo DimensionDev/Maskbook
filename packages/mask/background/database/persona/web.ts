@@ -12,7 +12,7 @@ import {
     ProfileIdentifier,
     RelationFavor,
 } from '@masknet/shared-base'
-import { MaskMessages } from '@masknet/plugin-wallet'
+import { MaskMessages } from '../../../shared'
 import type {
     FullPersonaDBTransaction,
     ProfileTransaction,
