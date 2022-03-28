@@ -10,14 +10,24 @@ import {
 } from '../../plugins/Wallet/services'
 import { activatedPluginsWorker, registeredPluginIDs } from '@masknet/plugin-infra'
 import { Some, None } from 'ts-results'
-import { isNonNull, timeout } from '@dimensiondev/kit'
+import { concatArrayBuffer, isNonNull, timeout } from '@dimensiondev/kit'
 import { delegatePluginBackup, delegateWalletBackup } from '../../../background/services/backup/internal_create'
 import type { NormalizedBackup } from '@masknet/backup-format'
 import type { LegacyWalletRecord } from '../../plugins/Wallet/database/types'
-import { JWKToKey, keyToAddr, keyToJWK } from '../../utils/type-transform/SECP256k1-ETH'
 import type { WalletRecord } from '../../plugins/Wallet/services/wallet/type'
 import { delegatePluginRestore, delegateWalletRestore } from '../../../background/services/backup/internal_restore'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
+import { ec as EC } from 'elliptic'
+import { EthereumAddress } from 'wallet.ts'
+import {
+    toBase64URL,
+    fromBase64URL,
+    EC_Public_JsonWebKey,
+    EC_Private_JsonWebKey,
+    EC_JsonWebKey,
+    isSecp256k1Point,
+    isSecp256k1PrivateKey,
+} from '@masknet/shared-base'
 
 delegatePluginBackup(backupAllPlugins)
 delegatePluginRestore(async function (backup) {
@@ -184,4 +194,48 @@ async function backupAllPlugins() {
 
     await Promise.all(allPlugins.map(backup))
     return plugins
+}
+
+function keyToJWK(key: string, type: 'public'): EC_Public_JsonWebKey
+function keyToJWK(key: string, type: 'private'): EC_Private_JsonWebKey
+function keyToJWK(key: string, type: 'public' | 'private'): JsonWebKey {
+    const ec = new EC('secp256k1')
+    const key_ = key.replace(/^0x/, '')
+    const keyPair = type === 'public' ? ec.keyFromPublic(key_) : ec.keyFromPrivate(key_)
+    const pubKey = keyPair.getPublic()
+    const privKey = keyPair.getPrivate()
+    return {
+        crv: 'K-256',
+        ext: true,
+        x: base64(pubKey.getX().toArray()),
+        y: base64(pubKey.getY().toArray()),
+        key_ops: ['deriveKey', 'deriveBits'],
+        kty: 'EC',
+        d: type === 'private' ? base64(privKey.toArray()) : undefined,
+    }
+    function base64(nums: number[]) {
+        return toBase64URL(new Uint8Array(nums).buffer)
+    }
+}
+
+function JWKToKey(jwk: EC_JsonWebKey, type: 'public' | 'private'): string {
+    const ec = new EC('secp256k1')
+    if (type === 'public' && jwk.x && jwk.y) {
+        const xb = fromBase64URL(jwk.x)
+        const yb = fromBase64URL(jwk.y)
+        const point = new Uint8Array(concatArrayBuffer(new Uint8Array([0x04]), xb, yb))
+        if (isSecp256k1Point(point)) return `0x${ec.keyFromPublic(point).getPublic(false, 'hex')}`
+    }
+    if (type === 'private' && jwk.d) {
+        const db = fromBase64URL(jwk.d)
+        if (isSecp256k1PrivateKey(db)) return `0x${ec.keyFromPrivate(db).getPrivate('hex')}`
+    }
+    throw new Error('invalid private key')
+}
+
+function keyToAddr(key: string, type: 'public' | 'private'): string {
+    const ec = new EC('secp256k1')
+    const key_ = key.replace(/^0x/, '')
+    const keyPair = type === 'public' ? ec.keyFromPublic(key_) : ec.keyFromPrivate(key_)
+    return EthereumAddress.from(keyPair.getPublic(false, 'array') as any).address
 }
