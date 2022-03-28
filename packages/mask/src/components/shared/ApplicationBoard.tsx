@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ChainId, useChainId, useAccount, useWallet } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useControlledDialog } from '../../utils/hooks/useControlledDialog'
 import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
@@ -269,7 +269,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
         createEntry(
             'Mask Bridge',
             new URL('./assets/bridge.png', import.meta.url).toString(),
-            () => window.open('https://bridge.mask.io/#/', '_blank', 'noopener noreferrer'),
+            () => openWindow('https://bridge.mask.io'),
             undefined,
             isNotEvm,
             false,
@@ -277,7 +277,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
         createEntry(
             'MaskBox',
             new URL('./assets/mask_box.png', import.meta.url).toString(),
-            () => window.open('https://box.mask.io/#/', '_blank', 'noopener noreferrer'),
+            () => openWindow('https://box.mask.io'),
             undefined,
             isNotEvm,
             false,
@@ -314,7 +314,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                         createEntry(
                             'MaskBox',
                             new URL('./assets/mask_box.png', import.meta.url).toString(),
-                            () => window.open('https://box.mask.io/#/', '_blank', 'noopener noreferrer'),
+                            () => openWindow('https://box.mask.io'),
                             undefined,
                             false,
                             false,

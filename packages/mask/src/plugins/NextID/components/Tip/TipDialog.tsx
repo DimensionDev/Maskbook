@@ -1,6 +1,7 @@
 import { SuccessIcon } from '@masknet/icons'
 import { PluginId, useActivatedPlugin, usePluginIDContext } from '@masknet/plugin-infra'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { EMPTY_LIST, TransactionStateType, useChainId, useERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { DialogContent, Typography } from '@mui/material'
@@ -142,7 +143,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     }, [sendState.type])
 
     const handleConfirm = useCallback(() => {
-        window.open(shareLink)
+        openWindow(shareLink)
         openConfirmModal(false)
         onClose?.()
     }, [shareLink, onClose])
