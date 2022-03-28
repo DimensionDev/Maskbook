@@ -678,6 +678,22 @@ export async function updateRelationDB(
     }
 }
 
+export async function createOrUpdateRelationDB(
+    record: Omit<RelationRecord, 'network'>,
+    t: RelationTransaction<'readwrite'>,
+    silent = false,
+) {
+    const old = await t
+        .objectStore('relations')
+        .get(IDBKeyRange.only([record.linked.toText(), record.profile.toText()]))
+
+    if (old) {
+        await updateRelationDB(record, t, silent)
+    } else {
+        await createRelationDB(record, t, silent)
+    }
+}
+
 // #endregion
 
 // #region out db & to db

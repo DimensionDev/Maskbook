@@ -368,6 +368,25 @@ export async function updateRelationDB(
     }
 }
 
+// TODO: should have a batch API for this.
+export async function createOrUpdateRelationDB(
+    record: Omit<RelationRecord, 'network'>,
+    t: RelationTransaction<'readwrite'>,
+    silent = false,
+) {
+    const old = await nativeAPI?.api.query_relations({
+        options: {
+            personaIdentifier: record.linked.toText(),
+        },
+    })
+
+    if (old?.length) {
+        await updateRelationDB(record, t, silent)
+    } else {
+        await createRelationDB(record, t, silent)
+    }
+}
+
 // #region out db & to db
 function personaRecordToDB(x: PersonaRecord): NativePersonaRecord {
     return {
