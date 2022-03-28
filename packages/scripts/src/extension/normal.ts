@@ -13,7 +13,10 @@ const presets = ['chromium', 'firefox', 'android', 'iOS', 'base'] as const
 const otherFlags = ['beta', 'insider', 'reproducible', 'profile', 'mv3', 'readonlyCache', 'progress'] as const
 
 export async function extension(f?: Function | ExtensionBuildArgs) {
-    await Promise.all([buildPolyfill(), buildInjectedScript(), buildMaskSDK(), buildGun()])
+    await buildPolyfill()
+    await buildInjectedScript()
+    await buildGun()
+    await buildMaskSDK()
     if (typeof f === 'function') return awaitChildProcess(webpack('build'))
     return awaitChildProcess(webpack('build', f))
 }

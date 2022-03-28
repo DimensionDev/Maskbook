@@ -2,13 +2,13 @@
   "name": "mask-network",
   "packageManager": "pnpm@6.32.2",
   "engines": {
-    "node": ">=16.0.0",
+    "node": ">=17.0.0",
     "pnpm": ">=6.32.1",
     "we-only-allow-pnpm-in-our-project": ">=999.0.0",
     "yarn": ">=999.0.0",
     "npm": ">=999.0.0"
   },
-  "version": "2.5.0",
+  "version": "2.6.0",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
