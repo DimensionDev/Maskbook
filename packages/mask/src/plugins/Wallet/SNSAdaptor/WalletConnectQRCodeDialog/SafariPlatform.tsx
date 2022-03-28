@@ -5,8 +5,8 @@ import { createElement } from 'react'
 import { useI18N } from '../../../../utils'
 import { Provider } from '../Provider'
 import { IMTokenIcon, MetaMaskIcon, RainbowIcon, TrustIcon } from './Icons'
-import { openWindow } from '../../../../../../shared-base-ui/src/bom/open-window'
 import urlcat from 'urlcat'
+import { openWindow } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()({
     container: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' },
