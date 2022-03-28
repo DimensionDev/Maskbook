@@ -4,7 +4,7 @@ import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ChainId, useChainId, useAccount, useWallet } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { MaskMessages } from '../../utils/messages'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useControlledDialog } from '../../utils/hooks/useControlledDialog'
 import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
 import { ITO_PluginID } from '../../plugins/ITO/constants'
@@ -141,7 +141,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     // #region Encrypted message
     const openEncryptedMessage = useCallback(
         (id?: string) =>
-            MaskMessages.events.requestComposition.sendToLocal({
+            CrossIsolationMessages.events.requestComposition.sendToLocal({
                 reason: 'timeline',
                 open: true,
                 options: {
