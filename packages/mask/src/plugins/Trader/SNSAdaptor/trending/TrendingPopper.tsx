@@ -21,6 +21,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
     const [type, setType] = useState<TagType | undefined>()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const [availableDataProviders, setAvailableDataProviders] = useState<DataProvider[]>([])
+    const popper = useRef<HTMLDivElement | null>(null)
 
     // #region select token and provider dialog could be open by trending view
     const onFreezed = useCallback((ev) => setFreezed(ev.open), [])
@@ -60,6 +61,24 @@ export function TrendingPopper(props: TrendingPopperProps) {
         [anchorEl],
     )
 
+    useEffect(() => {
+        let timeId: NodeJS.Timeout
+        const onMouseLeave = () => {
+            timeId = setTimeout(() => setAnchorEl(null), 1500)
+        }
+        const onMouseEnter = () => {
+            clearTimeout(timeId)
+        }
+        popper.current?.addEventListener('mouseleave', onMouseLeave)
+        popper.current?.addEventListener('mouseenter', onMouseEnter)
+        anchorEl?.addEventListener('mouseleave', onMouseLeave)
+        return () => {
+            popper.current?.removeEventListener('mouseleave', onMouseLeave)
+            popper.current?.removeEventListener('mouseenter', onMouseEnter)
+            anchorEl?.removeEventListener('mouseleave', onMouseLeave)
+        }
+    }, [popper.current, anchorEl])
+
     // close popper if location was changed
     const location = useLocation()
     useEffect(() => setAnchorEl(null), [location.state?.key, location.href])
@@ -85,6 +104,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
                 if (!freezed) setAnchorEl(null)
             }}>
             <Popper
+                ref={popper}
                 open={Boolean(anchorEl)}
                 anchorEl={anchorEl}
                 disablePortal
