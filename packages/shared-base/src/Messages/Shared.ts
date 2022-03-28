@@ -1,4 +1,5 @@
 import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
+import type { CompositionRequest } from './Mask'
 
 /**
  * @deprecated
@@ -14,4 +15,6 @@ import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 // TODO: find a way to use a good API for cross isolation communication.
 export const CrossIsolationMessages = new WebExtensionMessage<CrossIsolationEvents>({ domain: '_' })
 
-export interface CrossIsolationEvents {}
+export interface CrossIsolationEvents {
+    requestComposition: CompositionRequest
+}
