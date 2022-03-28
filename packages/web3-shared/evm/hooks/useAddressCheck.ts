@@ -7,7 +7,7 @@ import ERC1155 from '@masknet/web3-contracts/abis/ERC1155.json'
 
 const ERC721_ENUMERABLE_INTERFACE_ID = '0x780e9d63'
 const ERC1155_ENUMERABLE_INTERFACE_ID = '0xd9b67a26'
-                                                                                   '
+
 function useCheckContract(address: string) {
     const web3 = useWeb3()
     return useAsync(async () => {
@@ -26,7 +26,7 @@ function useCheckERC721(address: string) {
 function useCheckERC1155(address: string) {
     const web3 = useWeb3()
     const erc1155Contract = createContract(web3, address, ERC1155 as AbiItem[])
-    return useAsync(async() => {
+    return useAsync(async () => {
         return erc1155Contract?.methods.supportsInterface(ERC1155_ENUMERABLE_INTERFACE_ID).call()
     }, [erc1155Contract])
 }
