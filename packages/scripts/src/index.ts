@@ -8,7 +8,7 @@ export {
     resourceCopy,
     resourceCopyWatch,
 } from './codegen'
-export { ciBuild } from './extension'
+export { ciBuild, extensionWatch } from './extension'
 export { buildNetlify } from './netlify'
 
 // Tools

@@ -126,7 +126,7 @@ async function* checkProfileLink(
     }
     const designatedPersona = restorePrototype(invalidLinkedPersona, ECKeyIdentifier.prototype)
     const persona = await t.objectStore('personas').get(designatedPersona.toText())
-    if (!persona) {
+    if (!persona?.linkedProfiles.has(profile.toText())) {
         yield { type: Type.One_Way_Link_In_Profile, profile, designatedPersona }
     }
 }

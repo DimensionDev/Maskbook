@@ -48,6 +48,11 @@ export function normalizeBackupVersion2(item: BackupJSONFileVersion2): Normalize
             nickname: persona.nickname ? Some(persona.nickname) : None,
             mnemonic: None,
         }
+        for (const [profile] of persona.linkedProfiles) {
+            const id = ProfileIdentifier.fromString(profile, ProfileIdentifier)
+            if (id.err) continue
+            normalizedPersona.linkedProfiles.set(id.val, null)
+        }
         if (persona.mnemonic) {
             const { words, parameter } = persona.mnemonic
             normalizedPersona.mnemonic = Some({ words, hasPassword: parameter.withPassword, path: parameter.path })
@@ -64,16 +69,10 @@ export function normalizeBackupVersion2(item: BackupJSONFileVersion2): Normalize
             createdAt: Some(new Date(profile.createdAt)),
             updatedAt: Some(new Date(profile.updatedAt)),
             nickname: profile.nickname ? Some(profile.nickname) : None,
-            linkedPersona: None,
+            linkedPersona: profile.linkedPersona
+                ? ECKeyIdentifier.fromString(profile.linkedPersona, ECKeyIdentifier).toOption()
+                : None,
             localKey: isAESJsonWebKey(profile.localKey) ? Some(profile.localKey) : None,
-        }
-        if (profile.linkedPersona) {
-            const id = ECKeyIdentifier.fromString(profile.linkedPersona, ECKeyIdentifier)
-            if (id.ok) {
-                if (backup.personas.has(id.val) && backup.personas.get(id.val)!.linkedProfiles.has(identifier.val)) {
-                    normalizedProfile.linkedPersona = Some(id.val)
-                }
-            }
         }
         backup.profiles.set(identifier.val, normalizedProfile)
     }
@@ -133,7 +132,7 @@ export function normalizeBackupVersion2(item: BackupJSONFileVersion2): Normalize
         backup.posts.set(identifier.val, normalizedPost)
     }
 
-    for (const relation of relations) {
+    for (const relation of relations || []) {
         const { profile, persona, favor } = relation
         const a = ProfileIdentifier.fromString(profile, ProfileIdentifier)
         const b = ECKeyIdentifier.fromString(persona, ECKeyIdentifier)
@@ -146,7 +145,7 @@ export function normalizeBackupVersion2(item: BackupJSONFileVersion2): Normalize
         }
     }
 
-    for (const wallet of wallets) {
+    for (const wallet of wallets || []) {
         const normalizedWallet: NormalizedBackup.WalletBackup = {
             address: wallet.address,
             name: wallet.name,
@@ -258,7 +257,7 @@ export function generateBackupVersion2(item: NormalizedBackup.Data): BackupJSONF
     }
 
     for (const data of item.relations) {
-        result.relations.push({
+        result.relations!.push({
             profile: data.profile.toText(),
             persona: data.persona.toText(),
             favor: data.favor,
@@ -266,7 +265,7 @@ export function generateBackupVersion2(item: NormalizedBackup.Data): BackupJSONF
     }
 
     for (const data of item.wallets) {
-        result.wallets.push({
+        result.wallets!.push({
             address: data.address,
             name: data.name,
             passphrase: data.passphrase.unwrapOr(undefined),
@@ -328,7 +327,7 @@ interface BackupJSONFileVersion2 {
         createdAt: number // Unix timestamp
         updatedAt: number // Unix timestamp
     }>
-    relations: Array<{
+    relations?: Array<{
         profile: string // ProfileIdentifier.toText()
         persona: string // PersonaIdentifier.toText()
         favor: RelationFavor
@@ -348,7 +347,7 @@ interface BackupJSONFileVersion2 {
         summary?: string
         interestedMeta?: string // encoded by MessagePack
     }>
-    wallets: Array<{
+    wallets?: Array<{
         address: string
         name: string
         passphrase?: string

@@ -320,20 +320,10 @@ export async function updatePersonaDB(
 
 export async function createOrUpdatePersonaDB(
     record: Partial<PersonaRecord> & Pick<PersonaRecord, 'identifier' | 'publicKey'>,
-    howToMerge: Parameters<typeof updatePersonaDB>[1] & { protectPrivateKey?: boolean },
+    howToMerge: Parameters<typeof updatePersonaDB>[1],
     t: PersonasTransaction<'readwrite'>,
 ) {
     const personaInDB = await t.objectStore('personas').get(record.identifier.toText())
-
-    if (howToMerge.protectPrivateKey && !!personaInDB?.privateKey && !record.privateKey) return
-
-    if (howToMerge.protectPrivateKey && !!personaInDB?.privateKey) {
-        const nextRecord = personaRecordOutDB(personaInDB)
-        nextRecord.hasLogout = false
-
-        return updatePersonaDB(nextRecord, howToMerge, t)
-    }
-
     if (personaInDB) return updatePersonaDB(record, howToMerge, t)
     else
         return createPersonaDB(
@@ -341,7 +331,7 @@ export async function createOrUpdatePersonaDB(
                 ...record,
                 createdAt: record.createdAt ?? new Date(),
                 updatedAt: record.updatedAt ?? new Date(),
-                linkedProfiles: new IdentifierMap(new Map()),
+                linkedProfiles: record.linkedProfiles ?? new IdentifierMap(new Map()),
             },
             t,
         )

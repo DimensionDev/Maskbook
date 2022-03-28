@@ -13,7 +13,7 @@ export interface AESJsonWebKey extends JsonWebKey, Nominal<'AES'> {}
 export function isAESJsonWebKey(x: unknown): x is AESJsonWebKey {
     if (typeof x !== 'object' || x === null) return false
     const { alg, k, key_ops, kty } = x as JsonWebKey
-    if (!alg || !k || Array.isArray(key_ops) || kty !== 'oct') return false
+    if (!alg || !k || !Array.isArray(key_ops) || kty !== 'oct') return false
     return true
 }
 export function assertAESJsonWebKey(x: JsonWebKey): asserts x is AESJsonWebKey {
@@ -23,7 +23,7 @@ export function assertAESJsonWebKey(x: JsonWebKey): asserts x is AESJsonWebKey {
 export function isEC_Public_JsonWebKey(o: unknown): o is EC_Public_JsonWebKey {
     if (typeof o !== 'object' || o === null) return false
     const { crv, key_ops, kty, x, y } = o as JsonWebKey
-    if (!crv || Array.isArray(key_ops) || !kty || !x || !y) return false
+    if (!crv || !Array.isArray(key_ops) || !kty || !x || !y) return false
     return true
 }
 export function assertEC_Public_JsonWebKey(o: JsonWebKey): asserts o is EC_Public_JsonWebKey {
