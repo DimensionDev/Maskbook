@@ -5,11 +5,12 @@ import { Box, Button, Grid, IconButton, Stack, TextField, Typography } from '@mu
 import { DataGrid, GridColDef, GridRenderCellParams, GridValueFormatterParams } from '@mui/x-data-grid'
 import type { IdeaToken } from '../types'
 import { composeIdeaURL, formatterToUSD, truncate } from '../utils'
-import { formatWeiToEther, EMPTY_LIST } from '@masknet/web3-shared-evm'
+import { formatWeiToEther } from '@masknet/web3-shared-evm'
 import { SearchIcon } from '@masknet/icons'
 import ClearIcon from '@mui/icons-material/Clear'
 import { LoadingAnimation } from '@masknet/shared'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
