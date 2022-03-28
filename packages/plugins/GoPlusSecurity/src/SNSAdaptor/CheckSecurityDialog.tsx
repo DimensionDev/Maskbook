@@ -1,6 +1,5 @@
 import { Box, DialogContent, Stack } from '@mui/material'
 import { makeStyles, MaskDialog, useStylesExtends } from '@masknet/theme'
-import { PluginGoPlusSecurityMessages } from '../messages'
 import { useI18N } from '../locales'
 import { SearchBox } from './components/SearchBox'
 import { useAsyncFn } from 'react-use'
@@ -11,7 +10,6 @@ import { Footer } from './components/Footer'
 import { Center, TokenSecurity } from './components/Common'
 import { DefaultPlaceholder } from './components/DefaultPlaceholder'
 import { NotFound } from './components/NotFound'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -24,20 +22,15 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface BuyTokenDialogProps extends withClasses<never | 'root'> {}
+export interface BuyTokenDialogProps extends withClasses<never | 'root'> {
+    open: boolean
+    onClose(): void
+}
 
 export function CheckSecurityDialog(props: BuyTokenDialogProps) {
     const t = useI18N()
     const classes = useStylesExtends(useStyles(), props)
-
-    // #region remote controlled buy token dialog
-    const { open, closeDialog } = useRemoteControlledDialog(
-        PluginGoPlusSecurityMessages.checkSecurityDialogEvent,
-        (ev) => {
-            if (!ev.open) return
-        },
-    )
-    // #endregion
+    const { open, onClose } = props
 
     const [{ value, loading: searching, error }, onSearch] = useAsyncFn(async (chainId: string, content: string) => {
         const values = await GoPlusLabs.getTokenSecurity(chainId, [content])
@@ -48,7 +41,7 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
     }, [])
 
     return (
-        <MaskDialog title={t.dialog_title()} open onBack={closeDialog}>
+        <MaskDialog title={t.dialog_title()} open={open} onBack={onClose}>
             <DialogContent className={classes.content}>
                 <Stack height="100%" spacing={2}>
                     <Box>
