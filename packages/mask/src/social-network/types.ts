@@ -1,5 +1,5 @@
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
-import type { GrayscaleAlgorithm } from '@masknet/encryption'
+import type { GrayscaleAlgorithm, SocialNetworkEnum } from '@masknet/encryption'
 import type { PostInfo } from '@masknet/plugin-infra'
 import type {
     Identifier,
@@ -9,7 +9,7 @@ import type {
     ProfileIdentifier,
     ReadonlyIdentifierMap,
 } from '@masknet/shared-base'
-import type { TypedMessage } from '@masknet/typed-message'
+import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { RenderFragmentsContextType } from '@masknet/typed-message/dom'
 import type { PaletteMode, Theme } from '@mui/material'
 import type { Subscription } from 'use-subscription'
@@ -37,12 +37,12 @@ export namespace SocialNetwork {
         getPostURL?(post: PostIdentifier<Identifier>): URL | null
         /** Is this username valid in this network */
         isValidUsername?(username: string): boolean
-        /** How to encode/decode public keys when it is put in the bio. */
-        publicKeyEncoding?: PayloadEncoding
         /** How to encode/decode text payload (e.g. make it into a link so it will be shortened by SNS). */
         textPayloadPostProcessor?: PayloadEncoding
         /** Given a text, return a URL that will allow user to share this text */
         getShareLinkURL?(text: string): URL
+        /** Handle share */
+        share?(text: string): void
         createPostContext: ReturnType<typeof createSNSAdaptorSpecializedPostContext>
     }
     export interface Shared {
@@ -55,7 +55,7 @@ export namespace SocialNetwork {
          * !!! THIS SHOULD NOT BE USED TO CONSTRUCT A NEW ProfileIdentifier !!!
          */
         networkIdentifier: string
-        name: string
+        encryptionNetwork: SocialNetworkEnum
         /**
          * This field _will_ be overwritten by SocialNetworkUI.permissions
          */
@@ -150,6 +150,8 @@ export namespace SocialNetworkUI {
             /** @deprecated same reason as userAvatar */
             profileAvatar?(signal: AbortSignal): void
             /** @deprecated same reason as userAvatar */
+            profileTip?(signal: AbortSignal): void
+            /** @deprecated same reason as userAvatar */
             postAvatar?(signal: AbortSignal, current: PostInfo): void
             /** @deprecated same reason as userAvatar */
             openNFTAvatar?(signal: AbortSignal): void
@@ -194,12 +196,14 @@ export namespace SocialNetworkUI {
         export interface NativeCompositionAttachImageOptions {
             recover?: boolean
             relatedTextPayload?: string
+            reason?: 'timeline' | 'popup' | 'reply'
         }
         export interface NativeCompositionAttachTextOptions {
             recover?: boolean
+            reason?: 'timeline' | 'popup' | 'reply'
         }
         export interface MaskCompositionDialog {
-            open?(content: TypedMessage, options?: MaskCompositionDialogOpenOptions): void
+            open?(content: SerializableTypedMessages, options?: MaskCompositionDialogOpenOptions): void
         }
         export interface MaskCompositionDialogOpenOptions {
             target?: 'E2E' | 'Everyone'

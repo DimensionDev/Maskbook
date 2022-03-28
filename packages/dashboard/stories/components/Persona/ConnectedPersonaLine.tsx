@@ -1,7 +1,7 @@
 import { story } from '@masknet/storybook-shared'
 import { ConnectedPersonaLine as C } from '../../../src/pages/Personas/components/PersonaLine'
 import { action } from '@storybook/addon-actions'
-import { ProfileIdentifier } from '@masknet/shared-base'
+import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
 
 const { meta, of } = story(C)
 
@@ -11,7 +11,7 @@ export default meta({
 
 export const ConnectedPersonaLine = of({
     args: {
-        profileIdentifiers: [new ProfileIdentifier('twitter.com', 'userId')],
+        profileIdentifiers: [new ProfileIdentifier(EnhanceableSite.Twitter, 'userId')],
         onDisconnect: action('onDisconnect'),
     },
 })

@@ -5,7 +5,8 @@ import { Box, ListItem, Typography, Popper, useMediaQuery, Theme } from '@mui/ma
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import { RedPacketJSONPayload, RedPacketStatus, RedPacketJSONPayloadFromChain } from '../types'
-import { useRemoteControlledDialog, TokenIcon } from '@masknet/shared'
+import { TokenIcon } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useI18N } from '../../../utils'
 import {
     formatBalance,
@@ -139,20 +140,20 @@ const useStyles = makeStyles()((theme) => {
         popper: {
             overflow: 'visible',
             backgroundColor: theme.palette.mode === 'light' ? 'rgba(15, 20, 25, 1)' : '#fff',
-            transform: 'translate(183px, -32px)',
+            transform: 'translate(134px, 66px)',
             borderRadius: 8,
             width: 328,
             padding: 10,
         },
         arrow: {
             position: 'absolute',
-            bottom: 0,
-            right: 80,
+            top: -12,
+            right: 40,
             width: 0,
             height: 0,
             borderLeft: '6px solid transparent',
             borderRight: '6px solid transparent',
-            borderTop: `6px solid ${theme.palette.mode === 'light' ? 'rgba(15, 20, 25, 1)' : '#fff'}`,
+            borderBottom: `6px solid ${theme.palette.mode === 'light' ? 'rgba(15, 20, 25, 1)' : '#fff'}`,
             transform: 'translateY(6px)',
         },
         popperText: {

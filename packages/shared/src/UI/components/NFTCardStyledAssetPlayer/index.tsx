@@ -41,6 +41,7 @@ interface Props extends withClasses<'loadingFailImage' | 'iframe' | 'wrapper' | 
     fallbackImage?: URL
     fallbackResourceLoader?: JSX.Element
     renderOrder?: number
+    isNative?: boolean
     setERC721TokenName?: (name: string) => void
     setSourceType?: (type: string) => void
 }
@@ -49,6 +50,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
         chainId = ChainId.Mainnet,
         contractAddress = '',
         tokenId = '',
+        isNative = false,
         fallbackImage,
         fallbackResourceLoader,
         url,
@@ -69,7 +71,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
             ? new URL('./nft_token_fallback_dark.png', import.meta.url)
             : new URL('./nft_token_fallback.png', import.meta.url)
 
-    return isImageToken ? (
+    return isImageToken || isNative ? (
         <div className={classes.imgWrapper}>
             <img
                 width="100%"

@@ -6,7 +6,7 @@ import schemaV2 from './schema-v2.json'
 import type { Result } from 'ts-results'
 import { isNil } from 'lodash-unified'
 import { encodeArrayBuffer, encodeText } from '@dimensiondev/kit'
-import { createLookupTableResolver } from '@masknet/web3-kit'
+import { createLookupTableResolver } from '@masknet/web3-shared-base'
 
 const reader_v1 = createTypedMessageMetadataReader<FileInfoV1>(META_KEY_1, schemaV1)
 const reader_v2 = createTypedMessageMetadataReader<FileInfo>(META_KEY_2, schemaV2)

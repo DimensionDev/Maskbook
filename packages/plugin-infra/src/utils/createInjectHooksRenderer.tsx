@@ -1,9 +1,9 @@
-import type { Plugin } from '../types'
 import { useEffect, useState, useRef, memo, createContext, useContext } from 'react'
-import { ErrorBoundary } from '@masknet/shared'
+import { ErrorBoundary } from '@masknet/shared-base-ui'
+import { ShadowRootIsolation } from '@masknet/theme'
+import type { Plugin } from '../types'
 import { usePluginI18NField, PluginWrapperComponent, PluginWrapperMethods } from '../hooks'
 import { PluginWrapperMethodsContext } from '../hooks/usePluginWrapper'
-import { ShadowRootIsolation } from '@masknet/theme'
 
 type Inject<T> = Plugin.InjectUI<T>
 type Raw<T> = Plugin.InjectUIRaw<T>

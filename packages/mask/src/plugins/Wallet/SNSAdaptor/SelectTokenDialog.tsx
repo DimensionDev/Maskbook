@@ -5,7 +5,8 @@ import { FungibleTokenDetailed, useChainId, ChainId, useTokenConstants } from '@
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../../Wallet/messages'
 import { useI18N } from '../../../utils'
-import { ERC20TokenList, ERC20TokenListProps, useRemoteControlledDialog } from '@masknet/shared'
+import { ERC20TokenList, ERC20TokenListProps } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { delay } from '@dimensiondev/kit'
 import { MINDS_ID } from '../../../social-network-adaptor/minds.com/base'
 import { activatedSocialNetworkUI } from '../../../social-network'
@@ -56,6 +57,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
     const [targetChainId, setChainId] = useState<ChainId | undefined>(chainId)
     const [rowSize, setRowSize] = useState(54)
 
+    const [title, setTitle] = useState(t('plugin_wallet_select_a_token'))
     const [disableNativeToken, setDisableNativeToken] = useState(true)
     const [disableSearchBar, setDisableSearchBar] = useState(false)
     const [FungibleTokenListProps, setFungibleTokenListProps] = useState<ERC20TokenListProps | null>(null)
@@ -71,6 +73,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
 
     const { open, setDialog } = useRemoteControlledDialog(WalletMessages.events.selectTokenDialogUpdated, (ev) => {
         if (!ev.open) return
+        setTitle(ev.title ?? t('plugin_wallet_select_a_token'))
         setId(ev.uuid)
         setDisableNativeToken(ev.disableNativeToken ?? true)
         setDisableSearchBar(ev.disableSearchBar ?? false)
@@ -97,11 +100,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
     }, [id, setDialog])
 
     return (
-        <InjectedDialog
-            titleBarIconStyle={isDashboard ? 'close' : 'back'}
-            open={open}
-            onClose={onClose}
-            title={t('plugin_wallet_select_a_token')}>
+        <InjectedDialog titleBarIconStyle={isDashboard ? 'close' : 'back'} open={open} onClose={onClose} title={title}>
             <DialogContent classes={{ root: classes.content }}>
                 <ERC20TokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}

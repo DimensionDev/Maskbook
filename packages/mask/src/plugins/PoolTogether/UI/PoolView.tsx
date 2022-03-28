@@ -11,7 +11,8 @@ import { useCallback, useEffect, useState } from 'react'
 import { calculateNextPrize, calculateSecondsRemaining, getPrizePeriod } from '../utils'
 import { NetworkView } from './NetworkView'
 import { useI18N } from '../../../utils'
-import { TokenIcon, useRemoteControlledDialog } from '@masknet/shared'
+import { TokenIcon } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
