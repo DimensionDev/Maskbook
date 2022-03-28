@@ -90,14 +90,14 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
         // iv is required to identify the post and it also used in comment encryption.
         const info: DecryptReportedInfo = {
             type: DecryptProgressKind.Info,
-            iv,
+            iv: [...iv],
             version: parse.val.version,
         }
         if (parse.val.encryption.ok) {
             const val = parse.val.encryption.val
             info.publicShared = val.type === 'public'
             if (val.type === 'E2E' && val.ownersAESKeyEncrypted.ok)
-                info.ownersKeyEncrypted = val.ownersAESKeyEncrypted.val
+                info.ownersKeyEncrypted = [...val.ownersAESKeyEncrypted.val]
         }
         yield info
     }

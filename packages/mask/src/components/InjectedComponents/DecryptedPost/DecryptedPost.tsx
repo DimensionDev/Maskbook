@@ -255,10 +255,10 @@ async function makeProgress(
         if (progress.type === DecryptProgressKind.Success) {
             done(progress.content, iv || new Uint8Array())
         } else if (progress.type === DecryptProgressKind.Info) {
-            iv ??= progress.iv
+            iv ??= new Uint8Array(progress.iv!)
             if (progress.ownersKeyEncrypted)
-                reporter({ ownersAESKeyEncrypted: encodeArrayBuffer(progress.ownersKeyEncrypted) })
-            if (progress.iv) reporter({ iv: encodeArrayBuffer(progress.iv) })
+                reporter({ ownersAESKeyEncrypted: encodeArrayBuffer(new Uint8Array(progress.ownersKeyEncrypted)) })
+            if (progress.iv) reporter({ iv: encodeArrayBuffer(new Uint8Array(progress.iv)) })
             if (progress.version) reporter({ version: progress.version })
             if (typeof progress.publicShared === 'boolean') reporter({ sharedPublic: Some(progress.publicShared) })
         } else if (progress.type === DecryptProgressKind.Progress) {

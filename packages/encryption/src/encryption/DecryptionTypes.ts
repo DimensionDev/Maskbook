@@ -107,11 +107,11 @@ export interface DecryptIntermediateProgress {
 export type DecryptProgress = DecryptSuccess | DecryptError | DecryptIntermediateProgress | DecryptReportedInfo
 export interface DecryptReportedInfo {
     type: DecryptProgressKind.Info
-    iv?: Uint8Array
+    iv?: number[]
     claimedAuthor?: ProfileIdentifier
     publicShared?: boolean
     version?: SupportedPayloadVersions
-    ownersKeyEncrypted?: Uint8Array
+    ownersKeyEncrypted?: number[]
 }
 export interface DecryptIntermediateProgress {
     type: DecryptProgressKind.Progress
