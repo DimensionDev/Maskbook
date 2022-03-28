@@ -4,7 +4,7 @@ interface BehaviorFlags {
     popup?: boolean
     toolbar?: boolean
     status?: boolean
-    resizeable?: boolean
+    resizable?: boolean
     scrollbars?: boolean
 }
 
