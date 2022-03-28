@@ -1,4 +1,4 @@
-import { useRef, useEffect, forwardRef, useImperativeHandle, useState } from 'react'
+import { useRef, useEffect, forwardRef, useImperativeHandle, useState, useMemo } from 'react'
 import { useAsync } from 'react-use'
 import Services from '../../extension/service'
 import { Skeleton, SkeletonProps } from '@mui/material'
@@ -78,7 +78,8 @@ export const Image = forwardRef<ImageRef, ImageProps>(function Image(props, outg
 
     const url: string | undefined = blobURL || (typeof src === 'string' ? src : undefined)
     useEffect(() => void (url && onURL?.(url)), [onURL, url])
-    useImperativeHandle(outgoingRef, () => ({ canvas: canvasRef.current, img: imgRef.current }), [])
+    const outgoingRefItem = useMemo(() => ({ canvas: canvasRef.current, img: imgRef.current }), [])
+    useImperativeHandle(outgoingRef, () => outgoingRefItem, [outgoingRefItem])
 
     // TODO: handle image loading error
     const { loading, error, value } = useAsync(

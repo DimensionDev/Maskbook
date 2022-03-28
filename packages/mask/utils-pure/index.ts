@@ -1,5 +1,4 @@
 export * from './type'
-export * from './misc'
 export * from './hmr'
 export * from './crypto'
 export * from './OnDemandWorker'

@@ -1,11 +1,12 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { ProfileTabContent } from '../../../components/InjectedComponents/ProfileTabContent'
-import { createReactRootShadowed, startWatch } from '../../../utils'
+import { createReactRootShadowed, startWatch, MaskMessages } from '../../../utils'
 import {
     searchNewTweetButtonSelector,
     searchProfileEmptySelector,
     searchProfileTabPageSelector,
+    searchProfileTabLoseConnectionPageSelector,
 } from '../utils/selector'
 
 function injectProfileTabContentForEmptyState(signal: AbortSignal) {
@@ -21,6 +22,22 @@ function injectProfileTabContentState(signal: AbortSignal) {
 }
 
 export function injectProfileTabContentAtTwitter(signal: AbortSignal) {
+    const contentLoseConnectionWatcher = new MutationObserverWatcher(
+        searchProfileTabLoseConnectionPageSelector(),
+    ).useForeach(() => MaskMessages.events.profileTabHidden.sendToLocal({ hidden: true }))
+
+    const contentContentWatcher = new MutationObserverWatcher(searchProfileTabPageSelector()).useForeach(() =>
+        MaskMessages.events.profileTabHidden.sendToLocal({ hidden: false }),
+    )
+
+    const ContentForEmptyWatcher = new MutationObserverWatcher(searchProfileEmptySelector()).useForeach(() =>
+        MaskMessages.events.profileTabHidden.sendToLocal({ hidden: false }),
+    )
+
+    startWatch(contentLoseConnectionWatcher, signal)
+    startWatch(contentContentWatcher, signal)
+    startWatch(ContentForEmptyWatcher, signal)
+
     injectProfileTabContentForEmptyState(signal)
     injectProfileTabContentState(signal)
 }

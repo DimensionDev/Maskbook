@@ -1,5 +1,5 @@
-import { EMPTY_LIST } from '@masknet/web3-shared-evm'
 import { FC, useCallback, useEffect, useState } from 'react'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { TipTaskProvider } from '../../contexts'
 import { PluginNextIdMessages } from '../../messages'
 import type { TipTask } from '../../types'

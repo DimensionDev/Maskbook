@@ -18,7 +18,7 @@ function isLocked() {
 
 const exclusionDetectLocked = [PopupRoutes.PersonaSignRequest]
 
-export async function openPopupWindow(route?: PopupRoutes, params?: Record<string, any>) {
+export async function openPopupWindow(route?: PopupRoutes, params?: Record<string, any>): Promise<void> {
     const windows = await browser.windows.getAll()
     const popup = windows.find((win) => win && win.type === 'popup' && win.id === currentPopupWindowId)
 
@@ -83,7 +83,7 @@ export async function openPopupWindow(route?: PopupRoutes, params?: Record<strin
     }
 }
 
-export async function removePopupWindow() {
+export async function removePopupWindow(): Promise<void> {
     if (!currentPopupWindowId) return
     browser.windows.remove(currentPopupWindowId)
     currentPopupWindowId = 0
