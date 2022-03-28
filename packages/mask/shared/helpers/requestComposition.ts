@@ -1,6 +1,6 @@
-import { MaskMessages } from '@masknet/plugin-wallet'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 export function requestComposition(startupPlugin: string) {
-    MaskMessages.events.requestComposition.sendToLocal({
+    CrossIsolationMessages.events.requestComposition.sendToLocal({
         reason: 'timeline',
         open: true,
         options: {
