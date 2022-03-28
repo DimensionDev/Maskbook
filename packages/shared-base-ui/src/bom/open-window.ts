@@ -31,7 +31,7 @@ export function openWindow(
         if (value) flags.push(`${name}=1`)
     }
     if (!features?.opener) flags.push('noopener')
-    if (!features?.referrer) flags.push('noopener')
+    if (!features?.referrer) flags.push('noreferrer')
     if (Number.isFinite(features?.width)) flags.push(`width=${features?.width}`)
     if (Number.isFinite(features?.height)) flags.push(`height=${features?.height}`)
     if (Number.isFinite(features?.screenX)) flags.push(`screenX=${features?.screenX}`)
