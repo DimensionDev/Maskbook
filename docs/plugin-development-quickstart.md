@@ -123,6 +123,8 @@ const handleSearch = useCallback(async () => {
     }, [ensName])
 ```
 
+The above is an example to check whether an ENS name is registered or not. If you want to get other information about ENS, you can refer to its ABI, calling other methods to read the data from blockchain.
+
 ### 4.2 Rent an ENS on application board
 
 ENS domain is not permanent, we need to rent a ENS domain that is not registered by others. Since data on blockchain is changed, we need to call payable function of smart contract. For completing renting an ENS domain, we take two steps to commit and register.
@@ -131,10 +133,12 @@ ENS domain is not permanent, we need to rent a ENS domain that is not registered
 import { useContract,useAccount } from '@masknet/web3-shared-evm'
 import ENS_ABI from '@masknet/web3-contracts/abis/ENS.json'
 
+// For registering an ENS, you need ENS name、duration and secret
+
 const contract = useContract('0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5', ENS_ABI)
 const account = useAccount() // a hook to acquire current wallet address
-const value = await contract.methods.rentPrice('ran121',2); // first param is ENS name, second param is duration
-const commitment = '0x72616e646f6c70687068700000000000000000000000000000000000000000'
+const value = await contract.methods.rentPrice(name,duration); // first param is ENS name, second param is duration
+const commitment = await contract.methods.makeCommitment(name,address,secret); // get commitment
 
 const handleBuy = useCallback(async () => {
         const gasForCommit = await contract.methods     //estimate gas for commit function
@@ -161,7 +165,7 @@ const handleBuy = useCallback(async () => {
             })
 
         const gasForRegister = await contract.methods     //estimate gas for register function
-            .register(1,'ran121',account,1,'0x696c0000000000000000000000000000000000000000000000000000000000')
+            .register(register amount,name,account,duration,secret)
             .estimateGas({ from: account,value })
             .catch((error: Error) => {
                 gasError = error
@@ -174,7 +178,7 @@ const handleBuy = useCallback(async () => {
         }
         return new Promise<void>(async (resolve, reject) => {
             contract.methods                       // send a transaction to register
-                .register(1,'ran121',account,1,'0x696c0000000000000000000000000000000000000000000000000000000000')
+                .register(register amount,name,account,duration,secret)
                 .send(configForRegister as PayableTx)
                 .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
                     resolve()
