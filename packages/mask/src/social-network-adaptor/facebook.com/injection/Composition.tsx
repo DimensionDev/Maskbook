@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { Composition } from '../../../components/CompositionDialog/Composition'
 import { isMobileFacebook } from '../utils/isMobile'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
-import { MaskMessages } from '../../../utils/messages'
 import { startWatch } from '../../../utils/watcher'
 import { taskOpenComposeBoxFacebook } from '../automation/openComposeBox'
 import { makeStyles } from '@masknet/theme'
@@ -53,7 +53,7 @@ export function injectCompositionFacebook(signal: AbortSignal) {
 
     signal.addEventListener(
         'abort',
-        MaskMessages.events.requestComposition.on((data) => {
+        CrossIsolationMessages.events.requestComposition.on((data) => {
             if (data.reason === 'popup') return
             if (data.open === false) return
             taskOpenComposeBoxFacebook(data.content || '', data.options)
@@ -63,7 +63,7 @@ export function injectCompositionFacebook(signal: AbortSignal) {
 function UI() {
     const { classes } = useStyles()
     const onHintButtonClicked = useCallback(
-        () => MaskMessages.events.requestComposition.sendToLocal({ reason: 'popup', open: true }),
+        () => CrossIsolationMessages.events.requestComposition.sendToLocal({ reason: 'popup', open: true }),
         [],
     )
     return (
