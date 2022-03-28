@@ -17,10 +17,11 @@ export {
     createBackupFile,
 } from '../../../background/services/backup/create'
 export {
-    restoreBackup,
     addUnconfirmedBackup,
     getUnconfirmedBackup,
     restoreUnconfirmedBackup,
+    mobile_restoreFromBackup,
+    mobile_restoreFromBase64,
 } from '../../../background/services/backup/restore'
 
 assertEnvironment(Environment.ManifestBackground)

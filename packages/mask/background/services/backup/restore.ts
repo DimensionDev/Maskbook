@@ -8,33 +8,22 @@ import { requestHostPermission } from '../helper/request-permission'
 import { restoreNormalizedBackup } from './internal_restore'
 
 /**
- * Only for mobile. Throw when no Persona is restored
+ * Only for mobile.
  */
 export async function mobile_restoreFromBase64(rawString: string): Promise<void> {
     if (process.env.architecture !== 'app') throw new Error('Only for mobile')
-
     const raw = JSON.parse(decodeText(decodeArrayBuffer(rawString)))
     const backup = normalizeBackup(raw)
-    // restore backup
-    throw new TypeError('Not implemented')
+    return restoreNormalizedBackup(backup)
 }
 
 /**
- * Only for mobile. Throw when no Persona is restored.
+ * Only for mobile.
  */
 export async function mobile_restoreFromBackup(rawString: string): Promise<void> {
     if (process.env.architecture !== 'app') throw new Error('Only for mobile')
-
     const backup = normalizeBackup(JSON.parse(rawString))
-    // restore backup
-    throw new TypeError('Not implemented')
-}
-
-/**
- * Throw when no Persona is restored.
- */
-export async function restoreBackup(backup: string): Promise<void> {
-    throw new TypeError('Not implemented')
+    return restoreNormalizedBackup(backup)
 }
 
 const unconfirmedBackup = new Map<string, NormalizedBackup.Data>()

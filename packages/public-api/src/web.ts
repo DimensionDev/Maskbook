@@ -46,6 +46,7 @@ export interface MaskNetworkAPIs {
         data: { nickname: string }
     }): Promise<void>
     persona_removePersona(params: { identifier: PersonaIdentifier_string }): Promise<void>
+    /** @deprecated It's an alias of settings_restoreBackup */
     persona_restoreFromJson(params: { backup: string }): Promise<void>
     persona_restoreFromBase64(params: { backup: string }): Promise<void>
     persona_restoreFromPrivateKey(params: { privateKey: string; nickname: string }): Promise<Persona>

@@ -122,12 +122,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         return data.unwrap().info
     },
     settings_restoreBackup: async ({ backupInfo }) => {
-        try {
-            const json = JSON.parse(backupInfo)
-            await Services.Welcome.restoreBackup(json)
-        } catch (error) {
-            throw new Error('invalid json')
-        }
+        await Services.Welcome.mobile_restoreFromBackup(backupInfo)
     },
     persona_createPersonaByMnemonic: async ({ mnemonic, nickname, password }) => {
         const x = await Services.Identity.restoreFromMnemonicWords(mnemonic, nickname, password)
@@ -151,10 +146,10 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     persona_removePersona: ({ identifier }) =>
         Services.Identity.deletePersona(stringToPersonaIdentifier(identifier), 'delete even with private'),
     persona_restoreFromJson: async ({ backup }) => {
-        await Services.Identity.mobile_restoreFromBackup(backup)
+        await Services.Welcome.mobile_restoreFromBackup(backup)
     },
     persona_restoreFromBase64: async ({ backup }) => {
-        await Services.Identity.mobile_restoreFromBase64(backup)
+        await Services.Welcome.mobile_restoreFromBase64(backup)
     },
     persona_connectProfile: async ({ profileIdentifier, personaIdentifier }) => {
         const profileId = stringToProfileIdentifier(profileIdentifier)

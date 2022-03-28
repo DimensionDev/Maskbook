@@ -55,8 +55,6 @@ import { first, orderBy } from 'lodash-unified'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { bindProof } from '@masknet/web3-providers'
 
-export { mobile_restoreFromBase64, mobile_restoreFromBackup } from '../../../background/services/backup/restore'
-
 assertEnvironment(Environment.ManifestBackground)
 
 export { validateMnemonic } from '../../utils/mnemonic-code'
