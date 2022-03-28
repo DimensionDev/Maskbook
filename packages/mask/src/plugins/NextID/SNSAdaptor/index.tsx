@@ -1,4 +1,4 @@
-import type { Plugin } from '@masknet/plugin-infra'
+import { NetworkPluginID, Plugin, usePluginIDContext } from '@masknet/plugin-infra'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { base } from '../base'
 import { PLUGIN_ID } from '../constants'
@@ -29,7 +29,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
         )
     },
     PostActions() {
-        if (!Flags.next_id_tip_enabled) return null
+        const pluginId = usePluginIDContext()
+        if (!Flags.next_id_tip_enabled || pluginId !== NetworkPluginID.PLUGIN_EVM) return null
         return (
             <RootContext>
                 <PostTipButton />

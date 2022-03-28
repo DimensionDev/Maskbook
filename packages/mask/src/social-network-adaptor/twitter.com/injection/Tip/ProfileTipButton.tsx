@@ -1,4 +1,5 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useState } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
@@ -49,6 +50,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
 function OpenTipDialog() {
     const [style, setStyle] = useState<StyleProps>({ size: 34, fontSize: 14, marginBottom: 11 })
     const visitingPersona = useCurrentVisitingIdentity()
+    const pluginId = usePluginIDContext()
 
     const setStyleFromEditProfileSelector = () => {
         const menuButton = menuButtonSelector().evaluate()
@@ -66,5 +68,6 @@ function OpenTipDialog() {
     useLocationChange(setStyleFromEditProfileSelector)
 
     const { classes } = useStyles(style)
+    if (pluginId !== NetworkPluginID.PLUGIN_EVM) return null
     return <TipButton className={classes.button} receiver={visitingPersona.identifier} />
 }

@@ -1,11 +1,11 @@
-import { createGlobalSettings, createNetworkSettings, NetworkSettings } from './createSettings'
-import { i18n } from '../../shared-ui/locales_legacy'
-import { LaunchPage } from './types'
-import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'
 import { Identifier, ProfileIdentifier } from '@masknet/shared-base'
-import { PLUGIN_ID } from '../plugins/EVM/constants'
+import { Appearance } from '@masknet/theme'
 import { isEqual } from 'lodash-unified'
+import { i18n } from '../../shared-ui/locales_legacy'
+import { PLUGIN_ID } from '../plugins/EVM/constants'
+import { createGlobalSettings, createNetworkSettings, NetworkSettings } from './createSettings'
+import { LaunchPage } from './types'
 
 /**
  * Does the debug mode on

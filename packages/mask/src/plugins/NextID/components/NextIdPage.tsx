@@ -1,3 +1,4 @@
+import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
 import { NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { queryExistedBindingByPersona, queryIsBound } from '@masknet/web3-providers'
@@ -58,12 +59,14 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
     const currentProfileIdentifier = useLastRecognizedIdentity()
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
     const personaConnectStatus = usePersonaConnectStatus()
-    const { reset, isVerified, action } = useNextIDConnectStatus()
+    const { reset, isVerified } = useNextIDConnectStatus()
 
     const [openBindDialog, toggleBindDialog] = useState(false)
     const [unbindAddress, setUnBindAddress] = useState<string>()
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
     const isOwn = currentProfileIdentifier.identifier.toText() === visitingPersonaIdentifier.identifier.toText()
+    const pluginId = usePluginIDContext()
+    const tipable = !isOwn && pluginId === NetworkPluginID.PLUGIN_EVM
 
     const personaActionButton = useMemo(() => {
         if (!personaConnectStatus.action) return null
@@ -149,7 +152,7 @@ export function NextIdPage({ personaList }: NextIDPageProps) {
                         {bindings.proofs.map((x) => (
                             <BindingItem
                                 deletable={isOwn}
-                                tipable={!isOwn}
+                                tipable={tipable}
                                 key={x.identity}
                                 platform={x.platform}
                                 identity={x.identity}
