@@ -15,6 +15,9 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         width: 600,
     },
+    paperRoot: {
+        backgroundImage: 'none',
+    },
     content: {
         width: 552,
         height: 580,
@@ -41,7 +44,11 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
     }, [])
 
     return (
-        <MaskDialog title={t.dialog_title()} open={open} onBack={onClose}>
+        <MaskDialog
+            DialogProps={{ classes: { paper: classes.paperRoot } }}
+            title={t.dialog_title()}
+            open={open}
+            onBack={onClose}>
             <DialogContent className={classes.content}>
                 <Stack height="100%" spacing={2}>
                     <Box>
