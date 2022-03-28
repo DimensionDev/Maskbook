@@ -1,5 +1,5 @@
-import { EMPTY_LIST } from '@masknet/web3-shared-evm'
 import { useAsync } from 'react-use'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { PluginProfileRPC } from '../../messages'
 
 export function useDonations(address: string) {

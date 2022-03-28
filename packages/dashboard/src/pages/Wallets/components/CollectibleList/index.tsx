@@ -1,14 +1,14 @@
 import { memo, useCallback, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Box, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useChainId, useCustomNonFungibleAssets, ChainId, NetworkType } from '@masknet/web3-shared-evm'
+import { useCustomNonFungibleAssets, ChainId, NetworkType } from '@masknet/web3-shared-evm'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { CollectibleCard } from '../CollectibleCard'
 import { useDashboardI18N } from '../../../../locales'
 import { PluginMessages } from '../../../../API'
-import { useNavigate } from 'react-router-dom'
-import { DashboardRoutes } from '@masknet/shared-base'
 import { TransferTab } from '../Transfer'
 import {
     Web3Plugin,
@@ -47,7 +47,6 @@ interface CollectibleListProps {
 export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) => {
     const navigate = useNavigate()
     const account = useAccount()
-    const chainId = useChainId()
     const { Utils } = useWeb3State()
     const customCollectibles = useCustomNonFungibleAssets(
         account,

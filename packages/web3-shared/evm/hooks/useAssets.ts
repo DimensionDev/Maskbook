@@ -1,4 +1,5 @@
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import type { ChainId } from '../types'
 import { useWallet } from './useWallet'
 import { useNativeTokenDetailed } from './useNativeTokenDetailed'
@@ -6,7 +7,7 @@ import { useAssetsFromChain } from './useAssetsFromChain'
 import { useAssetsFromProvider } from './useAssetsFromProvider'
 import { useCallback, useMemo } from 'react'
 import { useAssetsMerged } from './useAssetsMerged'
-import { formatEthereumAddress, EMPTY_LIST } from '../utils'
+import { formatEthereumAddress } from '../utils'
 
 export function useAssets(tokens: FungibleTokenDetailed[], chainId?: ChainId | 'all') {
     const wallet = useWallet()
