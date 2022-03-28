@@ -20,9 +20,7 @@ export {
     restoreBackup,
     addUnconfirmedBackup,
     getUnconfirmedBackup,
-    restoreBackupWithID,
-    restoreBackupWithIDAndPermission,
-    restoreBackupWithIDAndPermissionAndWallet,
+    restoreUnconfirmedBackup,
 } from '../../../background/services/backup/restore'
 
 assertEnvironment(Environment.ManifestBackground)

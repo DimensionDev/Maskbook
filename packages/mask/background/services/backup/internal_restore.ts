@@ -9,3 +9,4 @@ export function delegateWalletRestore(f: typeof restoreWallets) {
 export function delegatePluginRestore(f: typeof restorePlugins) {
     restorePlugins = f
 }
+export async function restoreNormalizedBackup(backup: NormalizedBackup.Data) {}

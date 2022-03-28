@@ -99,10 +99,10 @@ export const RestoreFromLocal = memo(() => {
         try {
             // If json has wallets, restore in popup.
             if (json?.wallets) {
-                await Services.Welcome.restoreBackupWithIDAndPermissionAndWallet({ id: backupId })
+                await Services.Welcome.restoreUnconfirmedBackup({ id: backupId, action: 'wallet' })
                 return
             } else {
-                await Services.Welcome.restoreBackupWithIDAndPermission({ id: backupId })
+                await Services.Welcome.restoreUnconfirmedBackup({ id: backupId, action: 'confirm' })
 
                 await restoreCallback()
             }

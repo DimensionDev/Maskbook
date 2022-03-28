@@ -104,11 +104,10 @@ export const RestoreFromCloud = memo(() => {
         async (backupInfo: { info: BackupPreview; id: string }) => {
             try {
                 if (backupInfo.info?.wallets) {
-                    await Services.Welcome.restoreBackupWithIDAndPermissionAndWallet({ id: backupInfo.id })
+                    await Services.Welcome.restoreUnconfirmedBackup({ id: backupInfo.id, action: 'wallet' })
                     return
                 } else {
-                    await Services.Welcome.restoreBackupWithIDAndPermission({ id: backupInfo.id })
-
+                    await Services.Welcome.restoreUnconfirmedBackup({ id: backupInfo.id, action: 'confirm' })
                     await restoreCallback()
                 }
             } catch {

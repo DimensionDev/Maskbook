@@ -120,7 +120,7 @@ const WalletRecovery = memo(() => {
         if (backupId) {
             const json = await Services.Welcome.getUnconfirmedBackup(backupId)
             if (json) {
-                await Services.Welcome.restoreBackupWithID({ id: backupId })
+                await Services.Welcome.restoreUnconfirmedBackup({ id: backupId, action: 'confirm' })
 
                 // Set default wallet
                 if (json.wallets) await WalletRPC.setDefaultWallet()
