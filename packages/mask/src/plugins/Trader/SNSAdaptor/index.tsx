@@ -1,6 +1,5 @@
-import { Plugin, useCurrentWeb3NetworkPluginID, NetworkPluginID } from '@masknet/plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base'
-import { useChainId } from '@masknet/web3-shared-evm'
 import { TraderDialog } from './trader/TraderDialog'
 import { SearchResultInspector } from './trending/SearchResultInspector'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -24,17 +23,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
     enhanceTag,
     ApplicationEntries: [
         {
-            RenderEntryComponent() {
-                const currentPluginId = useCurrentWeb3NetworkPluginID()
-                const chainId = useChainId()
-                const isDisabled =
-                    currentPluginId !== NetworkPluginID.PLUGIN_EVM ||
-                    !base.enableRequirement.web3![NetworkPluginID.PLUGIN_EVM]!.supportedChainIds!.includes(chainId)
+            RenderEntryComponent({ disabled }) {
                 const { openDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
                 return (
                     <ApplicationEntry
-                        disabled={isDisabled}
+                        disabled={disabled}
                         title="Swap"
                         icon={new URL('../assets/swap.png', import.meta.url).toString()}
                         onClick={openDialog}

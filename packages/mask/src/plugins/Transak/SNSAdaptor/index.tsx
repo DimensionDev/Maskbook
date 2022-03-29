@@ -13,12 +13,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent() {
+            RenderEntryComponent({ disabled }) {
                 const { openDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 
                 return (
                     <ApplicationEntry
                         title="Fiat On-Ramp"
+                        disabled={disabled}
                         icon={new URL('../assets/fiat_ramp.png', import.meta.url).toString()}
                         onClick={openDialog}
                     />

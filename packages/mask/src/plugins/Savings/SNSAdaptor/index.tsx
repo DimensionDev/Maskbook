@@ -1,7 +1,6 @@
-import { Plugin, useCurrentWeb3NetworkPluginID, NetworkPluginID } from '@masknet/plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
 import { useState } from 'react'
-import { useChainId } from '@masknet/web3-shared-evm'
 import { base } from '../base'
 import { SavingsDialog } from './SavingsDialog'
 
@@ -10,17 +9,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal) {},
     ApplicationEntries: [
         {
-            RenderEntryComponent() {
-                const currentPluginId = useCurrentWeb3NetworkPluginID()
-                const chainId = useChainId()
+            RenderEntryComponent({ disabled }) {
                 const [open, setOpen] = useState(false)
-                const isDisabled =
-                    currentPluginId !== NetworkPluginID.PLUGIN_EVM ||
-                    !base.enableRequirement.web3![NetworkPluginID.PLUGIN_EVM]!.supportedChainIds!.includes(chainId)
                 return (
                     <>
                         <ApplicationEntry
-                            disabled={isDisabled}
+                            disabled={disabled}
                             title="Savings"
                             icon={new URL('./assets/savings.png', import.meta.url).toString()}
                             onClick={() => setOpen(true)}

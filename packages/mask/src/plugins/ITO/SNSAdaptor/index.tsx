@@ -1,4 +1,4 @@
-import { Plugin, usePluginWrapper, useCurrentWeb3NetworkPluginID, NetworkPluginID } from '@masknet/plugin-infra'
+import { Plugin, usePluginWrapper } from '@masknet/plugin-infra'
 import { useState } from 'react'
 import { ItoLabelIcon } from '../assets/ItoLabelIcon'
 import { makeStyles } from '@masknet/theme'
@@ -7,7 +7,6 @@ import {
     formatBalance,
     useFungibleTokenDetailed,
     EthereumTokenType,
-    useChainId,
 } from '@masknet/web3-shared-evm'
 import { PostInspector } from './PostInspector'
 import { base } from '../base'
@@ -64,15 +63,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent() {
-                const currentPluginId = useCurrentWeb3NetworkPluginID()
-                const chainId = useChainId()
-                const isDisabled =
-                    currentPluginId !== NetworkPluginID.PLUGIN_EVM ||
-                    !base.enableRequirement.web3![NetworkPluginID.PLUGIN_EVM]!.supportedChainIds!.includes(chainId)
+            RenderEntryComponent({ disabled }) {
                 return (
                     <ApplicationEntry
-                        disabled={isDisabled}
+                        disabled={disabled}
                         title="ITO"
                         icon={new URL('../assets/token.png', import.meta.url).toString()}
                         onClick={() =>
@@ -90,18 +84,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
             defaultSortingPriority: 3,
         },
         {
-            RenderEntryComponent() {
-                const currentPluginId = useCurrentWeb3NetworkPluginID()
-                const chainId = useChainId()
+            RenderEntryComponent({ disabled }) {
                 const [open, setOpen] = useState(false)
-                const isDisabled =
-                    currentPluginId !== NetworkPluginID.PLUGIN_EVM ||
-                    !base.enableRequirement.web3![NetworkPluginID.PLUGIN_EVM]!.supportedChainIds!.includes(chainId)
                 return (
                     <>
                         <ApplicationEntry
                             title="Claim"
-                            disabled={isDisabled}
+                            disabled={disabled}
                             icon={new URL('../assets/gift.png', import.meta.url).toString()}
                             onClick={() => setOpen(true)}
                         />

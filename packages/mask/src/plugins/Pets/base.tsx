@@ -18,6 +18,8 @@ export const base: Plugin.Shared.Definition = {
             [NetworkPluginID.PLUGIN_EVM]: {
                 supportedChainIds: [ChainId.Mainnet],
             },
+            [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },
+            [NetworkPluginID.PLUGIN_SOLANA]: { supportedChainIds: [] },
         },
         target: 'stable',
     },

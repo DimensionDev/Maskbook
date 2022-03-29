@@ -2,13 +2,7 @@ import { base } from '../base'
 import { useMemo, Suspense, useState } from 'react'
 import { Skeleton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import {
-    type Plugin,
-    usePostInfoDetails,
-    usePluginWrapper,
-    useCurrentWeb3NetworkPluginID,
-    NetworkPluginID,
-} from '@masknet/plugin-infra'
+import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
 import { PostInspector } from './PostInspector'
@@ -94,13 +88,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent() {
+            RenderEntryComponent({ disabled }) {
                 const [open, setOpen] = useState(false)
-                const currentPluginId = useCurrentWeb3NetworkPluginID()
                 return (
                     <>
                         <ApplicationEntry
-                            disabled={currentPluginId !== NetworkPluginID.PLUGIN_EVM}
+                            disabled={disabled}
                             title="FindTruman"
                             icon={new URL('../assets/findtruman.png', import.meta.url).toString()}
                             onClick={() => setOpen(true)}

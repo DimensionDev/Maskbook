@@ -36,10 +36,11 @@ const definition: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent() {
+            RenderEntryComponent({ disabled }) {
                 return (
                     <ApplicationEntry
                         title="File Service"
+                        disabled={disabled}
                         icon={new URL('./files.png', import.meta.url).toString()}
                         onClick={() =>
                             CrossIsolationMessages.events.requestComposition.sendToLocal({

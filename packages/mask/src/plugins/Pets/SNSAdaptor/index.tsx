@@ -1,7 +1,4 @@
-import { Plugin, useCurrentWeb3NetworkPluginID, NetworkPluginID } from '@masknet/plugin-infra'
-import { useChainId } from '@masknet/web3-shared-evm'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { getCurrentSNSNetwork } from '../../../social-network-adaptor/utils'
+import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base'
 import AnimatePic from './Animate'
 import { PetDialog } from './PetDialog'
@@ -22,21 +19,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent() {
-                const currentPluginId = useCurrentWeb3NetworkPluginID()
-                const chainId = useChainId()
-                const currentSNSNetwork = getCurrentSNSNetwork(activatedSocialNetworkUI.networkIdentifier)
-
-                const isDisabled =
-                    currentPluginId !== NetworkPluginID.PLUGIN_EVM ||
-                    !base.enableRequirement.web3![NetworkPluginID.PLUGIN_EVM]!.supportedChainIds!.includes(chainId) ||
-                    !base.enableRequirement.networks.networks[currentSNSNetwork]
-
+            RenderEntryComponent({ disabled }) {
                 const { openDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated)
 
                 return (
                     <ApplicationEntry
-                        disabled={isDisabled}
+                        disabled={disabled}
                         title="Non-F Friends"
                         icon={new URL('../assets/mintTeam.png', import.meta.url).toString()}
                         onClick={openDialog}

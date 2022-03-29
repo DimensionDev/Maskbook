@@ -30,10 +30,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent() {
+            RenderEntryComponent({ disabled }) {
                 return (
                     <ApplicationEntry
                         title="Mask Bridge"
+                        disabled={disabled}
                         icon={new URL('../assets/bridge.png', import.meta.url).toString()}
                         onClick={() => openWindow('https://bridge.mask.io/#/')}
                     />
@@ -42,10 +43,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
             defaultSortingPriority: 5,
         },
         {
-            RenderEntryComponent() {
+            RenderEntryComponent({ disabled }) {
                 return (
                     <ApplicationEntry
                         title="MaskBox"
+                        disabled={disabled}
                         icon={new URL('../assets/mask_box.png', import.meta.url).toString()}
                         onClick={() => openWindow('https://box.mask.io/#/')}
                     />

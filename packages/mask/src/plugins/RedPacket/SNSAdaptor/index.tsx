@@ -1,4 +1,4 @@
-import { Plugin, usePluginWrapper, useCurrentWeb3NetworkPluginID, NetworkPluginID } from '@masknet/plugin-infra'
+import { Plugin, usePluginWrapper } from '@masknet/plugin-infra'
 import {
     ChainId,
     EthereumTokenType,
@@ -94,12 +94,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent() {
-                const currentPluginId = useCurrentWeb3NetworkPluginID()
+            RenderEntryComponent({ disabled }) {
                 return (
                     <ApplicationEntry
                         title="Lucky Drop"
-                        disabled={currentPluginId !== NetworkPluginID.PLUGIN_EVM}
+                        disabled={disabled}
                         icon={new URL('./assets/lucky_drop.png', import.meta.url).toString()}
                         onClick={() =>
                             CrossIsolationMessages.events.requestComposition.sendToLocal({

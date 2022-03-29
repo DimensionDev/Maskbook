@@ -1,7 +1,10 @@
 import { Fragment } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
+import { useChainId } from '@masknet/web3-shared-evm'
+import { useActivatedPluginsSNSAdaptor, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra'
 import type { Plugin } from '@masknet/plugin-infra'
+import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
+import { activatedSocialNetworkUI } from '../../social-network'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -27,20 +30,48 @@ const useStyles = makeStyles()((theme) => {
 export function ApplicationBoard() {
     const { classes } = useStyles()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
+    const currentWeb3Network = useCurrentWeb3NetworkPluginID()
+    const chainId = useChainId()
+    const currentSNSNetwork = getCurrentSNSNetwork(activatedSocialNetworkUI.networkIdentifier)
+
     return (
         <>
             <section className={classes.applicationWrapper}>
                 {snsAdaptorPlugins
-                    .reduce<Plugin.SNSAdaptor.ApplicationEntry[]>((acc, cur) => {
-                        if (!cur.ApplicationEntries) return acc
-                        return acc.concat(cur.ApplicationEntries ?? [])
-                    }, [])
-                    .sort((a, b) => a.defaultSortingPriority - b.defaultSortingPriority)
-                    .map((X, i) => (
-                        <Fragment key={i}>
-                            <X.RenderEntryComponent />
-                        </Fragment>
-                    ))}
+                    .reduce<{ entry: Plugin.SNSAdaptor.ApplicationEntry; enabled: boolean; pluginId: string }[]>(
+                        (acc, cur) => {
+                            if (!cur.ApplicationEntries) return acc
+                            const currentWeb3NetworkSupportedChainIds = cur.enableRequirement.web3?.[currentWeb3Network]
+                            const isWeb3Enabled = Boolean(
+                                currentWeb3NetworkSupportedChainIds === undefined ||
+                                    currentWeb3NetworkSupportedChainIds.supportedChainIds?.includes(chainId),
+                            )
+
+                            const currentSNSIsSupportedNetwork =
+                                cur.enableRequirement.networks.networks[currentSNSNetwork]
+                            const isSNSEnabled =
+                                currentSNSIsSupportedNetwork === undefined || currentSNSIsSupportedNetwork
+
+                            return acc.concat(
+                                cur.ApplicationEntries.map((x) => {
+                                    return {
+                                        entry: x,
+                                        enabled: isWeb3Enabled && isSNSEnabled,
+                                        pluginId: cur.ID,
+                                    }
+                                }) ?? [],
+                            )
+                        },
+                        [],
+                    )
+                    .sort((a, b) => a.entry.defaultSortingPriority - b.entry.defaultSortingPriority)
+                    .map((X, i) => {
+                        return (
+                            <Fragment key={i + X.pluginId}>
+                                <X.entry.RenderEntryComponent disabled={!X.enabled} />
+                            </Fragment>
+                        )
+                    })}
             </section>
         </>
     )
