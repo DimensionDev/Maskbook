@@ -74,8 +74,8 @@ export function useShareMenu(
     SelectPeopleDialogProps?: Partial<SelectProfileDialogProps>,
 ) {
     const [visible, setVisible] = useState(false)
-    const showShare = () => setVisible(true)
-    const onClose = () => setVisible(false)
+    const showShare = useCallback(() => setVisible(true), [])
+    const hideShare = useCallback(() => setVisible(false), [])
 
     return {
         showShare,
@@ -84,7 +84,7 @@ export function useShareMenu(
                 alreadySelectedPreviously={alreadySelectedPreviously}
                 profiles={people}
                 open={visible}
-                onClose={onClose}
+                onClose={hideShare}
                 onSelect={onSelect}
                 {...SelectPeopleDialogProps}
             />

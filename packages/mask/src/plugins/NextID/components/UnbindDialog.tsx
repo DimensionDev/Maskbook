@@ -1,4 +1,4 @@
-import { memo, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { useI18N } from '../locales'
 import { useAsyncRetry } from 'react-use'
 import { isSameAddress, useAccount } from '@masknet/web3-shared-evm'
@@ -67,7 +67,7 @@ export const UnbindDialog = memo<VerifyWalletDialogProps>(({ unbindAddress, onCl
         }
     }, [walletSignState.value, personaSignState.value, unbindAddress])
 
-    const handleConfirm = () => setSecondDialog(true)
+    const handleConfirm = useCallback(() => setSecondDialog(true), [])
 
     return (
         <>
