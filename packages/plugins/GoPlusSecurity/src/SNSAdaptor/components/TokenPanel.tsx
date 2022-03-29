@@ -2,7 +2,7 @@ import { Link, Stack, Tooltip, Typography } from '@mui/material'
 import { DefineMapping, SecurityMessageLevel, TokenSecurity } from './Common'
 import parseInt from 'lodash-es/parseInt'
 import { useI18N } from '../../locales'
-import { memo } from 'react'
+import React from 'react'
 import { useTheme } from '@mui/system'
 import { ExternalLink } from 'react-feather'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
@@ -47,7 +47,7 @@ interface TokenPanelProps {
     securityMessageLevel: SecurityMessageLevel
 }
 
-export const TokenPanel = memo<TokenPanelProps>(({ tokenSecurity, securityMessageLevel }) => {
+export const TokenPanel = React.forwardRef(({ tokenSecurity, securityMessageLevel }: TokenPanelProps, ref) => {
     const t = useI18N()
     const { classes } = useStyles()
     const theme = useTheme()

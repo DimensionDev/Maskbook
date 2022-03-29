@@ -1,4 +1,4 @@
-import { Link, Stack, Typography } from '@mui/material'
+import { Collapse, Link, Stack, Typography } from '@mui/material'
 import { useI18N } from '../../locales'
 import { ExternalLink } from 'react-feather'
 import { makeStyles } from '@masknet/theme'
@@ -34,12 +34,17 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+const LIST_HEIGHT = {
+    min: 218,
+    max: 374,
+}
+
 export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
     const { classes } = useStyles()
     const t = useI18N()
     const theme = useTheme()
 
-    const [isFold, setFold] = useState(false)
+    const [isCollapse, setCollapse] = useState(false)
 
     const makeMessageList =
         tokenSecurity.is_whitelisted === '1'
@@ -69,7 +74,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                             {t.token_info()}
                         </Typography>
                         <KeyboardArrowDownIcon
-                            onClick={() => setFold(!isFold)}
+                            onClick={() => setCollapse(!isCollapse)}
                             sx={{ fontSize: 15, cursor: 'pointer' }}
                         />
                     </Stack>
@@ -87,10 +92,11 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                         </Link>
                     </Stack>
                 </Stack>
-
-                {!isFold && <TokenPanel tokenSecurity={tokenSecurity} securityMessageLevel={securityMessageLevel} />}
+                <Collapse in={!isCollapse}>
+                    <TokenPanel tokenSecurity={tokenSecurity} securityMessageLevel={securityMessageLevel} />
+                </Collapse>
             </Stack>
-            <Stack spacing={2}>
+            <Stack spacing={2} flex={1}>
                 <Stack direction="row" alignItems="center" spacing={3.5}>
                     <Typography variant="h6" className={classes.header}>
                         {t.security_detection()}
@@ -114,18 +120,28 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                         )}
                     </Stack>
                 </Stack>
-                <Stack spacing={1} maxHeight={isFold ? 382 : 237} className={classes.detectionCollection}>
-                    {makeMessageList.map((x, i) => (
-                        <RiskCard info={x} key={i} />
-                    ))}
-                    {(!makeMessageList.length || securityMessageLevel === SecurityMessageLevel.Safe) && (
-                        <RiskCardUI
-                            icon={DefineMapping[SecurityMessageLevel.Safe].icon(14)}
-                            title={t.risk_safe_description()}
-                            titleColor={DefineMapping[SecurityMessageLevel.Safe].titleColor}
-                        />
-                    )}
-                </Stack>
+                <Collapse
+                    in={isCollapse}
+                    timeout={{
+                        enter: 1500,
+                        exit: 10,
+                    }}
+                    collapsedSize={LIST_HEIGHT.min}
+                    className={classes.detectionCollection}
+                    sx={{ maxHeight: LIST_HEIGHT.max, overflowY: 'auto' }}>
+                    <Stack spacing={1}>
+                        {[...makeMessageList, ...makeMessageList].map((x, i) => (
+                            <RiskCard info={x} key={i} />
+                        ))}
+                        {(!makeMessageList.length || securityMessageLevel === SecurityMessageLevel.Safe) && (
+                            <RiskCardUI
+                                icon={DefineMapping[SecurityMessageLevel.Safe].icon(14)}
+                                title={t.risk_safe_description()}
+                                titleColor={DefineMapping[SecurityMessageLevel.Safe].titleColor}
+                            />
+                        )}
+                    </Stack>
+                </Collapse>
             </Stack>
         </Stack>
     )
