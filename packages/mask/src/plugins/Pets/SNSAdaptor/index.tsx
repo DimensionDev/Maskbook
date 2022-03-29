@@ -22,7 +22,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent(key) {
+            RenderEntryComponent() {
                 const currentPluginId = useCurrentWeb3NetworkPluginID()
                 const chainId = useChainId()
                 const currentSNSNetwork = getCurrentSNSNetwork(activatedSocialNetworkUI.networkIdentifier)
@@ -35,14 +35,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 const { openDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated)
 
                 return (
-                    <div key={key}>
-                        <ApplicationEntry
-                            disabled={isDisabled}
-                            title="Non-F Friends"
-                            icon={new URL('../assets/mintTeam.png', import.meta.url).toString()}
-                            onClick={openDialog}
-                        />
-                    </div>
+                    <ApplicationEntry
+                        disabled={isDisabled}
+                        title="Non-F Friends"
+                        icon={new URL('../assets/mintTeam.png', import.meta.url).toString()}
+                        onClick={openDialog}
+                    />
                 )
             },
             defaultSortingPriority: 10,

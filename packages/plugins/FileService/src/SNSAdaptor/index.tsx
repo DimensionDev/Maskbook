@@ -36,23 +36,21 @@ const definition: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent(key) {
+            RenderEntryComponent() {
                 return (
-                    <div key={key}>
-                        <ApplicationEntry
-                            title="File Service"
-                            icon={new URL('./files.png', import.meta.url).toString()}
-                            onClick={() =>
-                                CrossIsolationMessages.events.requestComposition.sendToLocal({
-                                    reason: 'timeline',
-                                    open: true,
-                                    options: {
-                                        startupPlugin: base.ID,
-                                    },
-                                })
-                            }
-                        />
-                    </div>
+                    <ApplicationEntry
+                        title="File Service"
+                        icon={new URL('./files.png', import.meta.url).toString()}
+                        onClick={() =>
+                            CrossIsolationMessages.events.requestComposition.sendToLocal({
+                                reason: 'timeline',
+                                open: true,
+                                options: {
+                                    startupPlugin: base.ID,
+                                },
+                            })
+                        }
+                    />
                 )
             },
             defaultSortingPriority: 2,

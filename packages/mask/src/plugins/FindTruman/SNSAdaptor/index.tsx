@@ -94,11 +94,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent(key) {
+            RenderEntryComponent() {
                 const [open, setOpen] = useState(false)
                 const currentPluginId = useCurrentWeb3NetworkPluginID()
                 return (
-                    <div key={key}>
+                    <>
                         <ApplicationEntry
                             disabled={currentPluginId !== NetworkPluginID.PLUGIN_EVM}
                             title="FindTruman"
@@ -106,7 +106,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             onClick={() => setOpen(true)}
                         />
                         <FindTrumanDialog open={open} onClose={() => setOpen(false)} />
-                    </div>
+                    </>
                 )
             },
             defaultSortingPriority: 11,

@@ -10,7 +10,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal) {},
     ApplicationEntries: [
         {
-            RenderEntryComponent(key) {
+            RenderEntryComponent() {
                 const currentPluginId = useCurrentWeb3NetworkPluginID()
                 const chainId = useChainId()
                 const [open, setOpen] = useState(false)
@@ -18,7 +18,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     currentPluginId !== NetworkPluginID.PLUGIN_EVM ||
                     !base.enableRequirement.web3![NetworkPluginID.PLUGIN_EVM]!.supportedChainIds!.includes(chainId)
                 return (
-                    <div key={key}>
+                    <>
                         <ApplicationEntry
                             disabled={isDisabled}
                             title="Savings"
@@ -26,7 +26,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             onClick={() => setOpen(true)}
                         />
                         <SavingsDialog open={open} onClose={() => setOpen(false)} />
-                    </div>
+                    </>
                 )
             },
             defaultSortingPriority: 7,

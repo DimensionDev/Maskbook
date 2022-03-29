@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 import type { Plugin } from '@masknet/plugin-infra'
@@ -35,7 +36,11 @@ export function ApplicationBoard() {
                         return acc.concat(cur.ApplicationEntries ?? [])
                     }, [])
                     .sort((a, b) => a.defaultSortingPriority - b.defaultSortingPriority)
-                    .map((x, i) => x.RenderEntryComponent(i))}
+                    .map((X, i) => (
+                        <Fragment key={i}>
+                            <X.RenderEntryComponent />
+                        </Fragment>
+                    ))}
             </section>
         </>
     )

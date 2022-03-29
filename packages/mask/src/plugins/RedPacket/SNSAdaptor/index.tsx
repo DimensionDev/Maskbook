@@ -94,25 +94,23 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent(key) {
+            RenderEntryComponent() {
                 const currentPluginId = useCurrentWeb3NetworkPluginID()
                 return (
-                    <div key={key}>
-                        <ApplicationEntry
-                            title="Lucky Drop"
-                            disabled={currentPluginId !== NetworkPluginID.PLUGIN_EVM}
-                            icon={new URL('./assets/lucky_drop.png', import.meta.url).toString()}
-                            onClick={() =>
-                                CrossIsolationMessages.events.requestComposition.sendToLocal({
-                                    reason: 'timeline',
-                                    open: true,
-                                    options: {
-                                        startupPlugin: base.ID,
-                                    },
-                                })
-                            }
-                        />
-                    </div>
+                    <ApplicationEntry
+                        title="Lucky Drop"
+                        disabled={currentPluginId !== NetworkPluginID.PLUGIN_EVM}
+                        icon={new URL('./assets/lucky_drop.png', import.meta.url).toString()}
+                        onClick={() =>
+                            CrossIsolationMessages.events.requestComposition.sendToLocal({
+                                reason: 'timeline',
+                                open: true,
+                                options: {
+                                    startupPlugin: base.ID,
+                                },
+                            })
+                        }
+                    />
                 )
             },
             defaultSortingPriority: 1,

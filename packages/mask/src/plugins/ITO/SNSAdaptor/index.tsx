@@ -64,50 +64,49 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            RenderEntryComponent(key) {
+            RenderEntryComponent() {
                 const currentPluginId = useCurrentWeb3NetworkPluginID()
                 const chainId = useChainId()
                 const isDisabled =
                     currentPluginId !== NetworkPluginID.PLUGIN_EVM ||
                     !base.enableRequirement.web3![NetworkPluginID.PLUGIN_EVM]!.supportedChainIds!.includes(chainId)
                 return (
-                    <div key={key}>
-                        <ApplicationEntry
-                            disabled={isDisabled}
-                            title="ITO"
-                            icon={new URL('../assets/token.png', import.meta.url).toString()}
-                            onClick={() =>
-                                CrossIsolationMessages.events.requestComposition.sendToLocal({
-                                    reason: 'timeline',
-                                    open: true,
-                                    options: {
-                                        startupPlugin: base.ID,
-                                    },
-                                })
-                            }
-                        />
-                    </div>
+                    <ApplicationEntry
+                        disabled={isDisabled}
+                        title="ITO"
+                        icon={new URL('../assets/token.png', import.meta.url).toString()}
+                        onClick={() =>
+                            CrossIsolationMessages.events.requestComposition.sendToLocal({
+                                reason: 'timeline',
+                                open: true,
+                                options: {
+                                    startupPlugin: base.ID,
+                                },
+                            })
+                        }
+                    />
                 )
             },
             defaultSortingPriority: 3,
         },
         {
-            RenderEntryComponent(key) {
+            RenderEntryComponent() {
                 const currentPluginId = useCurrentWeb3NetworkPluginID()
                 const chainId = useChainId()
                 const [open, setOpen] = useState(false)
-                const isHidden =
+                const isDisabled =
                     currentPluginId !== NetworkPluginID.PLUGIN_EVM ||
                     !base.enableRequirement.web3![NetworkPluginID.PLUGIN_EVM]!.supportedChainIds!.includes(chainId)
-                return isHidden ? null : (
-                    <div key={key}>
+                return (
+                    <>
                         <ApplicationEntry
                             title="Claim"
+                            disabled={isDisabled}
                             icon={new URL('../assets/gift.png', import.meta.url).toString()}
                             onClick={() => setOpen(true)}
                         />
                         <ClaimAllDialog open={open} onClose={() => setOpen(false)} />
-                    </div>
+                    </>
                 )
             },
             defaultSortingPriority: 4,
