@@ -36,7 +36,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         <ApplicationEntry
                             title="Mask Bridge"
                             icon={new URL('../assets/bridge.png', import.meta.url).toString()}
-                            onClick={() => openWindow('https://bridge.mask.io/#/', '_blank', 'noopener noreferrer')}
+                            onClick={() => openWindow('https://bridge.mask.io/#/')}
                         />
                     </div>
                 )
@@ -50,7 +50,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         <ApplicationEntry
                             title="MaskBox"
                             icon={new URL('../assets/mask_box.png', import.meta.url).toString()}
-                            onClick={() => openWindow('https://box.mask.io/#/', '_blank', 'noopener noreferrer')}
+                            onClick={() => openWindow('https://box.mask.io/#/')}
                         />
                     </div>
                 )
