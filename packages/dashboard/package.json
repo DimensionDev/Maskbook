@@ -46,12 +46,12 @@
     "react-use": "^17.3.2",
     "unstated-next": "^1.1.0",
     "urlcat": "^2.0.4",
-    "use-subscription": "^1.5.1",
+    "use-subscription": "^1.6.0",
     "uuid": "^8.3.2",
     "wallet.ts": "^1.0.1",
     "web3-core-helpers": "1.5.2",
     "web3-utils": "^1.5.3",
-    "zod": "^3.14.2"
+    "zod": "^3.14.3"
   },
   "devDependencies": {
     "@babel/core": "^7.17.8",
