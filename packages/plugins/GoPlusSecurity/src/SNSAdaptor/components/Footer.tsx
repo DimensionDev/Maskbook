@@ -1,6 +1,7 @@
-import { Box, Stack, Typography } from '@mui/material'
+import { Box, Link, Stack, Typography } from '@mui/material'
 import { useI18N } from '../../locales'
 import { GoPlusLabLogo } from '../icons/Logo'
+import { PLUGIN_OFFICIAL_WEBSITE } from '../../constants'
 
 export const Footer = () => {
     const t = useI18N()
@@ -12,7 +13,9 @@ export const Footer = () => {
                         {t.powered_by_go_plus()}
                     </Typography>
                 </Box>
-                <GoPlusLabLogo />
+                <Link href={PLUGIN_OFFICIAL_WEBSITE} target="_blank" rel="noopener noreferrer">
+                    <GoPlusLabLogo />
+                </Link>
             </Stack>
         </Stack>
     )
