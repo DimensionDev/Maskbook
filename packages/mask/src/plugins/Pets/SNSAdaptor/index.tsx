@@ -1,4 +1,4 @@
-import { Plugin, usePluginIDContext, NetworkPluginID } from '@masknet/plugin-infra'
+import { Plugin, useCurrentWeb3NetworkPluginID, NetworkPluginID } from '@masknet/plugin-infra'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { getCurrentSNSNetwork } from '../../../social-network-adaptor/utils'
@@ -23,7 +23,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         {
             RenderEntryComponent(key) {
-                const currentPluginId = usePluginIDContext()
+                const currentPluginId = useCurrentWeb3NetworkPluginID()
                 const chainId = useChainId()
                 const currentSNSNetwork = getCurrentSNSNetwork(activatedSocialNetworkUI.networkIdentifier)
 

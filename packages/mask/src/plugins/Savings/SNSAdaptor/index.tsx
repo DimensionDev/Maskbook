@@ -1,4 +1,4 @@
-import { Plugin, usePluginIDContext, NetworkPluginID } from '@masknet/plugin-infra'
+import { Plugin, useCurrentWeb3NetworkPluginID, NetworkPluginID } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
 import { useState } from 'react'
 import { useChainId } from '@masknet/web3-shared-evm'
@@ -11,7 +11,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         {
             RenderEntryComponent(key) {
-                const currentPluginId = usePluginIDContext()
+                const currentPluginId = useCurrentWeb3NetworkPluginID()
                 const chainId = useChainId()
                 const [open, setOpen] = useState(false)
                 const isDisabled =

@@ -1,4 +1,4 @@
-import { Plugin, usePluginWrapper, usePluginIDContext, NetworkPluginID } from '@masknet/plugin-infra'
+import { Plugin, usePluginWrapper, useCurrentWeb3NetworkPluginID, NetworkPluginID } from '@masknet/plugin-infra'
 import {
     ChainId,
     EthereumTokenType,
@@ -95,7 +95,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         {
             RenderEntryComponent(key) {
-                const currentPluginId = usePluginIDContext()
+                const currentPluginId = useCurrentWeb3NetworkPluginID()
                 return (
                     <div key={key}>
                         <ApplicationEntry

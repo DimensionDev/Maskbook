@@ -6,7 +6,7 @@ import {
     type Plugin,
     usePostInfoDetails,
     usePluginWrapper,
-    usePluginIDContext,
+    useCurrentWeb3NetworkPluginID,
     NetworkPluginID,
 } from '@masknet/plugin-infra'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
@@ -96,7 +96,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         {
             RenderEntryComponent(key) {
                 const [open, setOpen] = useState(false)
-                const currentPluginId = usePluginIDContext()
+                const currentPluginId = useCurrentWeb3NetworkPluginID()
                 return (
                     <div key={key}>
                         <ApplicationEntry

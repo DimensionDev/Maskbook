@@ -1,4 +1,4 @@
-import { Plugin, usePluginIDContext, NetworkPluginID } from '@masknet/plugin-infra'
+import { Plugin, useCurrentWeb3NetworkPluginID, NetworkPluginID } from '@masknet/plugin-infra'
 import { base } from '../base'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { TraderDialog } from './trader/TraderDialog'
@@ -25,7 +25,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         {
             RenderEntryComponent(key) {
-                const currentPluginId = usePluginIDContext()
+                const currentPluginId = useCurrentWeb3NetworkPluginID()
                 const chainId = useChainId()
                 const isDisabled =
                     currentPluginId !== NetworkPluginID.PLUGIN_EVM ||

@@ -1,4 +1,4 @@
-import { Plugin, usePluginWrapper, usePluginIDContext, NetworkPluginID } from '@masknet/plugin-infra'
+import { Plugin, usePluginWrapper, useCurrentWeb3NetworkPluginID, NetworkPluginID } from '@masknet/plugin-infra'
 import { useState } from 'react'
 import { ItoLabelIcon } from '../assets/ItoLabelIcon'
 import { makeStyles } from '@masknet/theme'
@@ -65,7 +65,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         {
             RenderEntryComponent(key) {
-                const currentPluginId = usePluginIDContext()
+                const currentPluginId = useCurrentWeb3NetworkPluginID()
                 const chainId = useChainId()
                 const isDisabled =
                     currentPluginId !== NetworkPluginID.PLUGIN_EVM ||
@@ -93,7 +93,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         },
         {
             RenderEntryComponent(key) {
-                const currentPluginId = usePluginIDContext()
+                const currentPluginId = useCurrentWeb3NetworkPluginID()
                 const chainId = useChainId()
                 const [open, setOpen] = useState(false)
                 const isHidden =
