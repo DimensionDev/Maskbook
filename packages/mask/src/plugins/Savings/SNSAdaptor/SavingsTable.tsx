@@ -14,7 +14,7 @@ const useStyles = makeStyles()((theme, props) => ({
     },
     tableContainer: {
         maxHeight: 350,
-        overflow: 'scroll',
+        overflowY: 'scroll',
     },
     tableHeader: {
         display: 'flex',

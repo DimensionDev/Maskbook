@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { useAsync } from 'react-use'
+import { useAsync, useUpdateEffect } from 'react-use'
 import { Typography, DialogContent } from '@mui/material'
 import { isDashboardPage, EMPTY_LIST } from '@masknet/shared-base'
 import { FolderTabPanel, FolderTabs } from '@masknet/theme'
@@ -96,6 +96,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
         }) ?? [],
         chainId,
     )
+
     const protocols = useMemo(
         () => [
             ...LDO_PAIRS.filter((x) => x[0].chainId === chainId).map((pair) => new LidoProtocol(pair)),
@@ -103,6 +104,10 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
         ],
         [chainId, detailedAaveTokens],
     )
+
+    useUpdateEffect(() => {
+        setChainId(currentChainId)
+    }, [currentChainId])
 
     return (
         <TargetChainIdContext.Provider>
