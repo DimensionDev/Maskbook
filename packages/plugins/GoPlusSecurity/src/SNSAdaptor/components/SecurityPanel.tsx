@@ -130,7 +130,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                     className={classes.detectionCollection}
                     sx={{ maxHeight: LIST_HEIGHT.max, overflowY: 'auto' }}>
                     <Stack spacing={1}>
-                        {[...makeMessageList, ...makeMessageList].map((x, i) => (
+                        {makeMessageList.map((x, i) => (
                             <RiskCard info={x} key={i} />
                         ))}
                         {(!makeMessageList.length || securityMessageLevel === SecurityMessageLevel.Safe) && (
