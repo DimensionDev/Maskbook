@@ -1,15 +1,6 @@
-import {
-    FormControl,
-    ListItemIcon,
-    MenuItem,
-    Select,
-    styled,
-    Typography,
-    FilledInput,
-    SelectChangeEvent,
-} from '@mui/material'
+import { FormControl, ListItemIcon, MenuItem, Select, styled, Typography, FilledInput } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { useDashboardI18N } from '../../locales'
 
 const useStyles = makeStyles()((theme) => ({
@@ -52,7 +43,7 @@ export function CreateWalletForm(props: CreateWalletFormProps) {
                     classes={{ filled: classes.filled }}
                     variant="filled"
                     value={selected}
-                    onChange={useCallback((event: SelectChangeEvent<string>) => setSelected(event.target.value), [])}>
+                    onChange={(event) => setSelected(event.target.value)}>
                     {options.map(({ label, icon, value }) => (
                         <MenuItem value={value} key={label}>
                             <ListItemIcon>{icon}</ListItemIcon>

@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from 'react'
+import { memo, useState } from 'react'
 import { Alert, alertClasses, Collapse, styled, IconButton } from '@mui/material'
 import { Close as CloseIcon } from '@mui/icons-material'
 import { getMaskColor, MaskColorVar } from '@masknet/theme'
@@ -83,11 +83,7 @@ export const MaskAlert = memo(({ description, type = 'info' }: MaskAlertProps) =
                 icon={AlertIconMapping[type]}
                 severity={type}
                 action={
-                    <IconButton
-                        aria-label="close"
-                        color="inherit"
-                        size="small"
-                        onClick={useCallback(() => setOpenAlert(false), [])}>
+                    <IconButton aria-label="close" color="inherit" size="small" onClick={() => setOpenAlert(false)}>
                         <CloseIcon fontSize="inherit" />
                     </IconButton>
                 }>
