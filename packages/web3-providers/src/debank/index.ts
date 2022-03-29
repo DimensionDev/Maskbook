@@ -14,7 +14,13 @@ export async function getAssetListFromDebank(address: string) {
     )
     try {
         const result = ((await response.json()) ?? []) as WalletTokenRecord[]
-        return formatAssets(result)
+        return formatAssets(
+            result.map((x) => ({
+                ...x,
+                id: x.id === 'bsc' ? 'bnb' : x.id,
+                chain: x.chain === 'bsc' ? 'bnb' : x.chain,
+            })),
+        )
     } catch {
         return []
     }

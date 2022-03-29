@@ -14,6 +14,9 @@ import {
     isSameAddress,
     useTokenConstants,
     createERC20Token,
+    getAaveConstants,
+    ZERO_ADDRESS,
+    createContract,
 } from '@masknet/web3-shared-evm'
 import { TokenAmountPanel, FormattedCurrency, LoadingAnimation, TokenIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -27,6 +30,9 @@ import { ActionButtonPromise } from '../../../extension/options-page/DashboardCo
 import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
+import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider'
+import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
+import type { AbiItem } from 'web3-utils'
 
 export interface SavingsFormProps {
     chainId: number
@@ -92,6 +98,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
             )
         } catch {
             // do nothing
+            console.log('Failed to estimate gas')
         }
     }, [chainId, tab, protocol, tokenAmount])
     // #endregion
@@ -123,13 +130,24 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
 
     const { value: approvalData } = useAsync(async () => {
         const token = protocol.bareToken
+        const aavePoolAddress =
+            getAaveConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS
+
+        const lPoolAddressProviderContract = createContract<AaveLendingPoolAddressProvider>(
+            web3,
+            aavePoolAddress,
+            AaveLendingPoolAddressProviderABI as AbiItem[],
+        )
+
+        const poolAddress = await lPoolAddressProviderContract?.methods.getLendingPool().call()
+
         return {
             approveToken:
                 token.type === EthereumTokenType.ERC20
                     ? createERC20Token(chainId, token.address, token.decimals, token.name, token.symbol)
                     : undefined,
             approveAmount: new BigNumber(inputAmount).shiftedBy(token.decimals),
-            approveAddress: protocol.stakeToken.address,
+            approveAddress: protocol.approveAddress,
         }
     }, [protocol.bareToken, inputAmount, chainId])
 

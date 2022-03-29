@@ -11,8 +11,8 @@ export enum ProtocolType {
     Lido = 0,
     BENQI = 2,
     Compound = 3,
+    AAVE = 1,
 }
-
 export interface SavingsProtocol {
     readonly type: ProtocolType
 
