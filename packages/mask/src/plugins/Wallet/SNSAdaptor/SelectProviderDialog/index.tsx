@@ -17,7 +17,6 @@ import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc'
 import { PluginProviderRender } from './PluginProviderRender'
 import { pluginIDSettings } from '../../../../settings/settings'
-import { PLUGIN_NETWORKS } from '../../../EVM/constants'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -52,7 +51,7 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const pluginID = useValueRef(pluginIDSettings) as NetworkPluginID
     const network = useNetworkDescriptor()
     const [undeterminedPluginID, setUndeterminedPluginID] = useState(pluginID)
-    const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(network?.ID ?? PLUGIN_NETWORKS[0].ID)
+    const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(network?.ID ?? NetworkPluginID.PLUGIN_EVM)
     const undeterminedNetwork = useNetworkDescriptor(undeterminedNetworkID, undeterminedPluginID)
 
     const networkType = useNetworkType(undeterminedPluginID)
