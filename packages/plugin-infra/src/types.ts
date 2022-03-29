@@ -124,7 +124,6 @@ export namespace Plugin.Shared {
         contribution?: Contribution
         /** Declare ability this plugin supported. */
         ability?: Ability
-        /** Declare relative application entries of the plugin to render */
     }
     /**
      * This part is shared between Dashboard, SNSAdaptor and Worker part

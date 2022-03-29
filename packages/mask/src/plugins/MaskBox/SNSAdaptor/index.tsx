@@ -7,6 +7,7 @@ import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { PreviewCard } from './components/PreviewCard'
 import { Context } from '../hooks/useContext'
 import { ApplicationEntry } from '@masknet/shared'
+import { openWindow } from '@masknet/shared-base-ui'
 
 const isMaskBox = (x: string) => x.startsWith('https://box-beta.mask.io') || x.startsWith('https://box.mask.io')
 
@@ -35,7 +36,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         <ApplicationEntry
                             title="Mask Bridge"
                             icon={new URL('../assets/bridge.png', import.meta.url).toString()}
-                            onClick={() => window.open('https://bridge.mask.io/#/', '_blank', 'noopener noreferrer')}
+                            onClick={() => openWindow('https://bridge.mask.io/#/', '_blank', 'noopener noreferrer')}
                         />
                     </div>
                 )
@@ -49,7 +50,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         <ApplicationEntry
                             title="MaskBox"
                             icon={new URL('../assets/mask_box.png', import.meta.url).toString()}
-                            onClick={() => window.open('https://box.mask.io/#/', '_blank', 'noopener noreferrer')}
+                            onClick={() => openWindow('https://box.mask.io/#/', '_blank', 'noopener noreferrer')}
                         />
                     </div>
                 )
