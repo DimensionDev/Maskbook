@@ -139,8 +139,8 @@ export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SNSAdapto
     (props, ref) => {
         const { ID, name, publisher } = props.definition
         const t = usePluginI18NField()
-        const [width, setWidth] = useState<undefined | number>(undefined)
-        const [open, setOpen] = useState<boolean>(false)
+        const [width, setWidth] = useState<number | undefined>(undefined)
+        const [open, setOpen] = useState(false)
         const [title, setTitle] = useState<string | undefined>(undefined)
 
         const refItem = useMemo((): PluginWrapperMethods => {
