@@ -19,7 +19,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             icon={new URL('../assets/security-icon.png', import.meta.url).toString()}
                             onClick={() => setOpen(true)}
                         />
-                        <CheckSecurityDialog open={open} onClose={() => setOpen(false)} />
+                        {open && <CheckSecurityDialog open={open} onClose={() => setOpen(false)} />}
                     </div>
                 )
             },
