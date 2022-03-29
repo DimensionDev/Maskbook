@@ -90,17 +90,20 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
 
     const isTokenTip = tipType === TipType.Token
     const shareLink = useMemo(() => {
+        const promote = t.tip_mask_promote()
         const message = isTokenTip
             ? t.tip_token_share_post({
                   amount,
                   symbol: token?.symbol || 'token',
                   recipientSnsId,
                   recipient,
+                  promote,
               })
             : t.tip_nft_share_post({
                   name: erc721Contract?.name || '',
                   recipientSnsId,
                   recipient,
+                  promote,
               })
         return activatedSocialNetworkUI.utils.getShareLinkURL?.(message)
     }, [amount, isTokenTip, erc721Contract?.name, token, recipient, recipientSnsId, t])
