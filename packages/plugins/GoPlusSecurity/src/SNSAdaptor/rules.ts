@@ -11,7 +11,7 @@ export interface SecurityMessage {
     shouldHide(info: TokenSecurity): boolean
 }
 
-const percentageToNumber = (value?: string) => parseInt((value ?? '').replace('%', ''))
+const percentageToNumber = (value?: string) => parseInt((value ?? '').replace('%', '')) * 100
 
 export const SecurityMessages: SecurityMessage[] = [
     // open source
@@ -120,8 +120,7 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: 'contract-security',
         level: SecurityMessageLevel.High,
-        condition: (info: TokenSecurity) =>
-            percentageToNumber(info.buy_tax) >= 10 && percentageToNumber(info.buy_tax) >= 50,
+        condition: (info: TokenSecurity) => percentageToNumber(info.buy_tax) >= 50,
         titleKey: 'risk_buy_tax_title',
         messageKey: 'risk_buy_tax_body',
         shouldHide: (info: TokenSecurity) => info.buy_tax === undefined,
@@ -131,8 +130,8 @@ export const SecurityMessages: SecurityMessage[] = [
         type: 'transaction-security',
         level: SecurityMessageLevel.Safe,
         condition: (info: TokenSecurity) => percentageToNumber(info.sell_tax) < 10,
-        titleKey: 'risk_buy_tax_title',
-        messageKey: 'risk_buy_tax_body',
+        titleKey: 'risk_sell_tax_title',
+        messageKey: 'risk_sell_tax_body',
         shouldHide: (info: TokenSecurity) => info.sell_tax === undefined,
     },
     {
@@ -140,17 +139,16 @@ export const SecurityMessages: SecurityMessage[] = [
         level: SecurityMessageLevel.Medium,
         condition: (info: TokenSecurity) =>
             percentageToNumber(info.buy_tax) >= 10 && percentageToNumber(info.sell_tax) < 50,
-        titleKey: 'risk_buy_tax_title',
-        messageKey: 'risk_buy_tax_body',
+        titleKey: 'risk_sell_tax_title',
+        messageKey: 'risk_sell_tax_body',
         shouldHide: (info: TokenSecurity) => info.sell_tax === undefined,
     },
     {
         type: 'contract-security',
         level: SecurityMessageLevel.High,
-        condition: (info: TokenSecurity) =>
-            percentageToNumber(info.buy_tax) >= 10 && percentageToNumber(info.sell_tax) >= 50,
-        titleKey: 'risk_buy_tax_title',
-        messageKey: 'risk_buy_tax_body',
+        condition: (info: TokenSecurity) => percentageToNumber(info.sell_tax) >= 50,
+        titleKey: 'risk_sell_tax_title',
+        messageKey: 'risk_sell_tax_body',
         shouldHide: (info: TokenSecurity) => info.sell_tax === undefined,
     },
     // honeypot

@@ -52,6 +52,12 @@ const useStyles = makeStyles()((theme) => ({
     detectionCard: {
         backgroundColor: theme.palette.background.default,
     },
+    detectionCollection: {
+        overflowY: 'auto',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
+    },
 }))
 
 const DEFAULT_PLACEHOLDER = '--'
@@ -75,7 +81,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                       x.condition(tokenSecurity) &&
                       x.level !== SecurityMessageLevel.Safe &&
                       !x.shouldHide(tokenSecurity),
-              )
+              ).sort((a) => (a.level === SecurityMessageLevel.High ? -1 : 1))
 
     const riskyFactors = makeMessageList.filter((x) => x.level === SecurityMessageLevel.High).length
     const attentionFactors = makeMessageList.filter((x) => x.level === SecurityMessageLevel.Medium).length
@@ -245,7 +251,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                     <Stack direction="row" alignItems="center" spacing={1.5}>
                         {riskyFactors !== 0 && (
                             <Stack direction="row" alignItems="center" spacing={0.5}>
-                                {DefineMapping[securityMessageLevel].icon(14)}
+                                {DefineMapping[SecurityMessageLevel.High].icon(14)}
                                 <Typography component="span">
                                     {t.risky_factors({ quantity: riskyFactors.toString() })}
                                 </Typography>
@@ -253,7 +259,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                         )}
                         {attentionFactors !== 0 && (
                             <Stack direction="row" alignItems="center" spacing={0.5}>
-                                {DefineMapping[securityMessageLevel].icon(14)}
+                                {DefineMapping[SecurityMessageLevel.Medium].icon(14)}
                                 <Typography component="span">
                                     {t.attention_factors({ quantity: attentionFactors.toString() })}
                                 </Typography>
@@ -261,7 +267,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                         )}
                     </Stack>
                 </Stack>
-                <Stack spacing={1} maxHeight={isFold ? 402 : 240} sx={{ overflowY: 'auto' }}>
+                <Stack spacing={1} maxHeight={isFold ? 402 : 237} className={classes.detectionCollection}>
                     {makeMessageList.map((x, i) => (
                         <RiskCard info={x} key={i} />
                     ))}
