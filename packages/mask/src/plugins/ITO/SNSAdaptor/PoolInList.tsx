@@ -2,7 +2,7 @@ import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import {
     EthereumTokenType,
     formatBalance,
-    FungibleToken,
+    FungibleTokenInitial,
     getChainDetailed,
     isSameAddress,
     TransactionStateType,
@@ -153,7 +153,7 @@ export function PoolInList(props: PoolInListProps) {
                   ({
                       address: v,
                       type: isSameAddress(v, NATIVE_TOKEN_ADDRESS) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
-                  } as Pick<FungibleToken, 'address' | 'type'>),
+                  } as Pick<FungibleTokenInitial, 'address' | 'type'>),
           )
         : []
 
