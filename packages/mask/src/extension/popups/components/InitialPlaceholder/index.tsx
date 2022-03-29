@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useEnterDashboard } from '../../hook/useEnterDashboard'
-import { useRouteMatch } from 'react-router-dom'
+import { useMatch } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { MasksIcon, MaskWalletIcon } from '@masknet/icons'
 import { useI18N } from '../../../../utils'
@@ -35,7 +35,7 @@ const useStyles = makeStyles()({
 export const InitialPlaceholder = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const matchWallet = useRouteMatch(PopupRoutes.Wallet)
+    const matchWallet = useMatch(PopupRoutes.Wallet)
     const onEnter = useEnterDashboard()
 
     return (

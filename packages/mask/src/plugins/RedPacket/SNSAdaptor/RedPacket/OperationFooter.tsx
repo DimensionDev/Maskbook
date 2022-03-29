@@ -1,8 +1,7 @@
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { TransactionState, TransactionStateType, useAccount, useChainIdValid } from '@masknet/web3-shared-evm'
 import { Box } from '@mui/material'
-import { useCallback } from 'react'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
 import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
@@ -13,7 +12,7 @@ interface OperationFooterProps {
     canRefund: boolean
     claimState: TransactionState
     refundState: TransactionState
-    shareLink?: string
+    onShare?(): void
     onClaimOrRefund: () => void | Promise<void>
 }
 export function OperationFooter({
@@ -21,7 +20,7 @@ export function OperationFooter({
     canRefund,
     claimState,
     refundState,
-    shareLink,
+    onShare,
     onClaimOrRefund,
 }: OperationFooterProps) {
     const { classes } = useStyles()
@@ -34,11 +33,6 @@ export function OperationFooter({
         WalletMessages.events.selectProviderDialogUpdated,
     )
     // #endregion
-
-    const handleShare = useCallback(() => {
-        if (!shareLink) return
-        window.open(shareLink, '_blank', 'noopener noreferrer')
-    }, [shareLink])
 
     const ObtainButton = () => {
         if (!canClaim && !canRefund) return null
@@ -57,12 +51,15 @@ export function OperationFooter({
                 </ActionButton>
             )
         }
+        const isLoading =
+            [TransactionStateType.HASH, TransactionStateType.WAIT_FOR_CONFIRMING].includes(claimState.type) ||
+            [TransactionStateType.HASH, TransactionStateType.WAIT_FOR_CONFIRMING].includes(refundState.type)
+
         return (
             <ActionButton
                 fullWidth
-                disabled={
-                    claimState.type === TransactionStateType.HASH || refundState.type === TransactionStateType.HASH
-                }
+                disabled={isLoading}
+                loading={isLoading}
                 variant="contained"
                 size="large"
                 onClick={onClaimOrRefund}>
@@ -83,9 +80,11 @@ export function OperationFooter({
                 connectWallet: classes.connectWallet,
             }}>
             <Box className={classes.footer}>
-                <ActionButton variant="contained" fullWidth size="large" onClick={handleShare}>
-                    {t('share')}
-                </ActionButton>
+                {canRefund ? null : (
+                    <ActionButton variant="contained" fullWidth size="large" onClick={onShare}>
+                        {t('share')}
+                    </ActionButton>
+                )}
                 <ObtainButton />
             </Box>
         </EthereumWalletConnectedBoundary>

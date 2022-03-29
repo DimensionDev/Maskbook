@@ -12,13 +12,13 @@ import {
     TransactionStateType,
     useAccount,
     useChainId,
-    useERC721TokenDetailedOwnerList,
     useGasLimit,
     useGasPrice,
     useNativeTokenDetailed,
     useTokenTransferCallback,
 } from '@masknet/web3-shared-evm'
-import { FormattedAddress, useRemoteControlledDialog } from '@masknet/shared'
+import { useERC721TokenDetailedOwnerList } from '@masknet/web3-providers'
+import { FormattedAddress } from '@masknet/shared'
 import { useDashboardI18N } from '../../../../locales'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { SelectNFTList } from './SelectNFTList'
@@ -30,10 +30,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import TuneIcon from '@mui/icons-material/Tune'
 import { useNativeTokenPrice } from './useNativeTokenPrice'
-import { useNavigate } from 'react-router'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useGasConfig } from '../../hooks/useGasConfig'
-import { useLocation } from 'react-router-dom'
 import { unionBy } from 'lodash-unified'
 import { TransferTab } from './types'
 import { NetworkPluginID, useLookupAddress, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'

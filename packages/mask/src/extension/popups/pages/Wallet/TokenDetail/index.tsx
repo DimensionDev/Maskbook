@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react'
 import { useAsync } from 'react-use'
 import { ArrowDownCircle, ArrowUpCircle } from 'react-feather'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -23,6 +23,7 @@ import Services from '../../../../service'
 import { compact, intersectionWith } from 'lodash-unified'
 import urlcat from 'urlcat'
 import { ActivityList } from '../components/ActivityList'
+import { openWindow } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()({
     content: {
@@ -68,7 +69,7 @@ const TokenDetail = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const wallet = useWallet()
-    const history = useHistory()
+    const navigate = useNavigate()
     const { currentToken } = useContainer(WalletContext)
     const { value: nativeToken } = useNativeTokenDetailed()
 
@@ -93,30 +94,25 @@ const TokenDetail = memo(() => {
                 open: 'Transak',
                 code: currentToken?.token.symbol ?? currentToken?.token.name,
             })
-            window.open(browser.runtime.getURL(url), 'BUY_DIALOG', 'noopener noreferrer')
+            openWindow(browser.runtime.getURL(url), 'BUY_DIALOG')
         }
     }, [wallet?.address, isActiveSocialNetwork, currentToken])
 
     const openSwapDialog = useCallback(async () => {
-        window.open(
-            browser.runtime.getURL(
-                urlcat(
-                    'popups.html#/',
-                    PopupRoutes.Swap,
-                    !isSameAddress(nativeToken?.address, currentToken?.token.address)
-                        ? {
-                              id: currentToken?.token.address,
-                              name: currentToken?.token.name,
-                              symbol: currentToken?.token.symbol,
-                              contract_address: currentToken?.token.address,
-                              decimals: currentToken?.token.decimals,
-                          }
-                        : {},
-                ),
-            ),
-            'SWAP_DIALOG',
-            'noopener noreferrer',
+        const url = urlcat(
+            'popups.html#/',
+            PopupRoutes.Swap,
+            !isSameAddress(nativeToken?.address, currentToken?.token.address)
+                ? {
+                      id: currentToken?.token.address,
+                      name: currentToken?.token.name,
+                      symbol: currentToken?.token.symbol,
+                      contract_address: currentToken?.token.address,
+                      decimals: currentToken?.token.decimals,
+                  }
+                : {},
         )
+        openWindow(browser.runtime.getURL(url), 'SWAP_DIALOG')
     }, [currentToken, nativeToken])
 
     if (!currentToken) return null
@@ -149,7 +145,7 @@ const TokenDetail = memo(() => {
                         <ArrowDownCircle className={classes.icon} />
                         <Typography className={classes.text}>{t('popups_wallet_token_buy')}</Typography>
                     </div>
-                    <div onClick={() => history.push(PopupRoutes.Transfer)}>
+                    <div onClick={() => navigate(PopupRoutes.Transfer)}>
                         <ArrowUpCircle className={classes.icon} />
                         <Typography className={classes.text}>{t('popups_wallet_token_send')}</Typography>
                     </div>

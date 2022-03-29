@@ -9,14 +9,14 @@ import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 import { useOpenseaAPIConstants } from '../constants'
 
 export function useERC721TokenDetailed(
-    contractDetailed: ERC721ContractDetailed | undefined,
-    tokenId: string | undefined,
+    contractDetailed: ERC721ContractDetailed | null | undefined,
+    tokenId: string | null | undefined,
 ) {
     const { GET_SINGLE_ASSET_URL } = useOpenseaAPIConstants()
     const erc721TokenContract = useERC721TokenContract(contractDetailed?.address ?? '')
     const tokenDetailedRef = useRef<ERC721TokenDetailed | undefined>()
     const asyncRetry = useAsyncRetry(async () => {
-        if (!erc721TokenContract || !contractDetailed || !tokenId) return
+        if (!erc721TokenContract || !contractDetailed || !tokenId || !contractDetailed.address) return
         tokenDetailedRef.current = GET_SINGLE_ASSET_URL
             ? await getERC721TokenDetailedFromOpensea(contractDetailed, tokenId, GET_SINGLE_ASSET_URL)
             : await getERC721TokenDetailedFromChain(contractDetailed, erc721TokenContract, tokenId)

@@ -53,7 +53,7 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                         )}
                     </div>,
                 )
-                remover = root.destory
+                remover = root.destroy
             }
 
             run()

@@ -1,5 +1,5 @@
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
-import { useValueRef } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { Chip } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import type { ChipProps } from '@mui/material/Chip'
@@ -9,6 +9,7 @@ import { useAsync } from 'react-use'
 import Services from '../../extension/service'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
+import { decodeArrayBuffer } from '@dimensiondev/kit'
 
 const useStyle = makeStyles()({
     root: {
@@ -47,17 +48,19 @@ export function PostComment(props: PostCommentProps) {
     const { needZip } = props
     const comment = useValueRef(props.comment)
     const postContent = usePostInfoDetails.rawMessagePiped()
-    const containingPayload = usePostInfoDetails.containingMaskPayload()
     const iv = usePostInfoDetails.iv()
-    const postIV = containingPayload.map((x) => x.iv).unwrapOr(iv)
 
     const dec = useAsync(async () => {
         const decryptedText = extractTextFromTypedMessage(postContent).unwrap()
-        if (!postIV || !decryptedText) throw new Error('Decrypt comment failed')
-        const result = await Services.Crypto.decryptComment(postIV, decryptedText, comment)
+        if (!iv || !decryptedText) throw new Error('Decrypt comment failed')
+        const result = await Services.Crypto.decryptComment(
+            new Uint8Array(decodeArrayBuffer(iv)),
+            decryptedText,
+            comment,
+        )
         if (result === null) throw new Error('Decrypt result empty')
         return result
-    }, [postIV, postContent, comment])
+    }, [iv, postContent, comment])
 
     useEffect(() => void (dec.value && needZip()), [dec.value, needZip])
     if (dec.value) return <PostCommentDecrypted>{dec.value}</PostCommentDecrypted>

@@ -7,7 +7,10 @@ import type { Token } from './types'
 export function checkUrl(url: string): boolean {
     const protocol = 'https://'
     const _url = new URL(url.startsWith(protocol) ? url : protocol + url)
-    return [mainNetwork.hostname, testNetwork.hostname].includes(_url.hostname) && _url.pathname.includes(prefixPath)
+    return (
+        [mainNetwork.hostname, testNetwork.hostname].includes(_url.hostname.replace(/^www\./, '')) &&
+        _url.pathname.includes(prefixPath)
+    )
 }
 
 export function getRelevantUrl(textContent: string) {

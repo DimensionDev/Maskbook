@@ -5,6 +5,7 @@ import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'
 import { Identifier, ProfileIdentifier } from '@masknet/shared-base'
 import { PLUGIN_ID } from '../plugins/EVM/constants'
+import { isEqual } from 'lodash-unified'
 
 /**
  * Does the debug mode on
@@ -61,9 +62,13 @@ export const sayHelloShowed: NetworkSettings<boolean> = createNetworkSettings('s
 export const dismissPinExtensionTip = createGlobalSettings<boolean>('dismissPinExtensionTip', false, {
     primary: () => '',
 })
+export const userPinExtension = createGlobalSettings<boolean>('userPinExtension', false, {
+    primary: () => '',
+})
 export const dismissVerifyNextID: NetworkSettings<{ [key in string]: boolean }> = createNetworkSettings(
     'dismissVerifyNextID',
     {},
+    isEqual,
 )
 export const bioDescription: NetworkSettings<string> = createNetworkSettings('bioDescription', '')
 export const personalHomepage: NetworkSettings<string> = createNetworkSettings('personalHomepage', '')

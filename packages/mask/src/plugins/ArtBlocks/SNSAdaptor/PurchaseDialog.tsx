@@ -24,9 +24,10 @@ import {
 } from '@masknet/web3-shared-evm'
 import { Trans } from 'react-i18next'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback'
-import { TokenAmountPanel, useRemoteControlledDialog } from '@masknet/shared'
+import { TokenAmountPanel } from '@masknet/shared'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { leftShift } from '@masknet/web3-shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '../../Wallet/messages'
 
 import type { Project } from '../types'
@@ -84,24 +85,20 @@ export function PurchaseDialog(props: ActionBarProps) {
     }, [project.pricePerTokenInWei, token.value?.decimals])
 
     const postLink = usePostLink()
-    const shareLink = activatedSocialNetworkUI.utils
-        .getShareLinkURL?.(
-            [
-                t(
-                    isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                        ? 'plugin_artblocks_share'
-                        : 'plugin_artblocks_share_no_official_account',
-                    {
-                        name: project.name,
-                        price: price,
-                        symbol: token.value?.symbol,
-                    },
-                ),
-                '#mask_io #artblocks_io #nft',
-                postLink,
-            ].join('\n'),
-        )
-        .toString()
+    const shareText = [
+        t(
+            isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                ? 'plugin_artblocks_share'
+                : 'plugin_artblocks_share_no_official_account',
+            {
+                name: project.name,
+                price: price,
+                symbol: token.value?.symbol,
+            },
+        ),
+        '#mask_io #artblocks_io #nft',
+        postLink,
+    ].join('\n')
 
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
@@ -129,7 +126,7 @@ export function PurchaseDialog(props: ActionBarProps) {
         if (purchaseState.type === TransactionStateType.UNKNOWN) return
         setTransactionDialog({
             open: true,
-            shareLink,
+            shareText,
             state: purchaseState,
             summary: `Minting a new collectible from '${project.name}' collection.`,
         })

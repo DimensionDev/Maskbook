@@ -5,7 +5,7 @@ import { Controller } from 'react-hook-form'
 import type { z as zod } from 'zod'
 import { NetworkSelector } from '../../../components/NetworkSelector'
 import { StyledInput } from '../../../components/StyledInput'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 
@@ -45,7 +45,7 @@ const useStyles = makeStyles()({
 
 const CreateWallet = memo(() => {
     const { t } = useI18N()
-    const history = useHistory()
+    const navigate = useNavigate()
     const { classes } = useStyles()
     const [errorMessage, setErrorMessage] = useState('')
 
@@ -59,7 +59,7 @@ const CreateWallet = memo(() => {
     const onCreate = useCallback(async ({ name }: zod.infer<typeof schema>) => {
         try {
             await WalletRPC.deriveWallet(name)
-            history.goBack()
+            navigate(-1)
         } catch (error) {
             if (error instanceof Error) {
                 setErrorMessage(errorMessage)
