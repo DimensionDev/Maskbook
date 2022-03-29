@@ -44,14 +44,6 @@ export function useTransactionCallback<T extends unknown>(
         return new Promise<void>(async (resolve, reject) => {
             method
                 .send(gasExpectedConfig)
-                .once(TransactionEventType.TRANSACTION_HASH, (hash) => {
-                    if (type !== TransactionStateType.HASH) return
-                    setState({
-                        type: TransactionStateType.HASH,
-                        hash,
-                    })
-                    resolve()
-                })
                 .once(TransactionEventType.RECEIPT, (receipt) => {
                     if (type !== TransactionStateType.RECEIPT) return
                     setState({

@@ -59,19 +59,20 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
                 wrapperContract.methods
                     .deposit()
                     .send(config as PayableTx)
-                    .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
-                        setTransactionState({
-                            type: TransactionStateType.HASH,
-                            hash,
-                        })
-                        resolve(hash)
-                    })
                     .on(TransactionEventType.ERROR, (error) => {
                         setTransactionState({
                             type: TransactionStateType.FAILED,
                             error,
                         })
                         reject(error)
+                    })
+                    .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
+                        setTransactionState({
+                            type: TransactionStateType.CONFIRMED,
+                            no,
+                            receipt,
+                        })
+                        resolve(receipt.transactionHash)
                     })
             })
         },
@@ -136,19 +137,20 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
                 wrapperContract.methods
                     .withdraw(withdrawAmount)
                     .send(config as NonPayableTx)
-                    .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
-                        setTransactionState({
-                            type: TransactionStateType.HASH,
-                            hash,
-                        })
-                        resolve(hash)
-                    })
                     .on(TransactionEventType.ERROR, (error) => {
                         setTransactionState({
                             type: TransactionStateType.FAILED,
                             error,
                         })
                         reject(error)
+                    })
+                    .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
+                        setTransactionState({
+                            type: TransactionStateType.CONFIRMED,
+                            no,
+                            receipt,
+                        })
+                        resolve(receipt.transactionHash)
                     })
             })
         },

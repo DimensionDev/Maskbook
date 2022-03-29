@@ -66,19 +66,20 @@ export function useInvestCallback(pool: Pool | undefined, amount: string, token?
                     ...config,
                     gas: estimatedGas,
                 })
-                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
-                    setInvestState({
-                        type: TransactionStateType.HASH,
-                        hash,
-                    })
-                    resolve(hash)
-                })
                 .on(TransactionEventType.ERROR, (error) => {
                     setInvestState({
                         type: TransactionStateType.FAILED,
                         error,
                     })
                     reject(error)
+                })
+                .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
+                    setInvestState({
+                        type: TransactionStateType.CONFIRMED,
+                        no,
+                        receipt,
+                    })
+                    resolve(receipt.transactionHash)
                 })
         })
     }, [pool, account, amount, token])

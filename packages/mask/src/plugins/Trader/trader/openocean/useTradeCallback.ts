@@ -64,7 +64,7 @@ export function useTradeCallback(
         return new Promise<string>((resolve, reject) => {
             web3.eth
                 .sendTransaction(config_, (error) => {
-                    if (error) return
+                    if (!error) return
                     setTradeState({
                         type: TransactionStateType.FAILED,
                         error,
