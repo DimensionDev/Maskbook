@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { useCopyToClipboard } from 'react-use'
 import { NetworkSelector } from '../../../components/NetworkSelector'
 import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
 import { WalletItem } from './WalletItem'
@@ -27,7 +26,7 @@ const useStyles = makeStyles()({
         flexDirection: 'column',
     },
     list: {
-        backgroundColor: '#ffffff',
+        backgroundColor: '#F7F9FA',
         padding: 0,
         height: 'calc(100vh - 168px)',
         overflow: 'auto',
@@ -84,12 +83,9 @@ const SwitchWallet = memo(() => {
     const { t } = useI18N()
     const walletPrimary = useWalletPrimary()
     const { classes } = useStyles()
-
     const navigate = useNavigate()
     const wallet = useWallet()
     const wallets = useWallets(ProviderType.MaskWallet)
-
-    const [, copyToClipboard] = useCopyToClipboard()
 
     const handleClickCreate = useCallback(() => {
         if (!walletPrimary) {
@@ -100,28 +96,18 @@ const SwitchWallet = memo(() => {
         } else {
             navigate(PopupRoutes.CreateWallet)
         }
-    }, [walletPrimary, history])
+    }, [walletPrimary])
 
-    const handleSelect = useCallback(
-        async (address) => {
-            await WalletRPC.updateMaskAccount({
-                account: address,
-            })
+    const handleSelect = useCallback(async (address) => {
+        await WalletRPC.updateMaskAccount({
+            account: address,
+        })
 
-            if (currentProviderSettings.value === ProviderType.MaskWallet)
-                await WalletRPC.updateAccount({ account: address, providerType: ProviderType.MaskWallet })
+        if (currentProviderSettings.value === ProviderType.MaskWallet)
+            await WalletRPC.updateAccount({ account: address, providerType: ProviderType.MaskWallet })
 
-            navigate(PopupRoutes.Wallet, { replace: true })
-        },
-        [history],
-    )
-
-    const onCopy = useCallback(
-        (address: string) => {
-            copyToClipboard(address)
-        },
-        [copyToClipboard],
-    )
+        navigate(PopupRoutes.Wallet, { replace: true })
+    }, [])
 
     return (
         <>

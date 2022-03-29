@@ -11,6 +11,7 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 import { PasswordField } from '../../../components/PasswordField'
 import { currentAccountSettings, currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
+import { WalletContext } from '../hooks/useWalletContext'
 
 const useStyles = makeStyles()({
     content: {
@@ -96,7 +97,10 @@ const useStyles = makeStyles()({
 const DeleteWallet = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
-    const wallet = useWallet()
+    const { selectedWallet } = WalletContext.useContainer()
+    const currentWallet = useWallet()
+    const wallet = selectedWallet ?? currentWallet
+
     const { classes } = useStyles()
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState('')

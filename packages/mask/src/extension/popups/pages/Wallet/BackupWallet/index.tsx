@@ -10,6 +10,7 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 import { PasswordField } from '../../../components/PasswordField'
 import Services from '../../../../service'
+import { WalletContext } from '../hooks/useWalletContext'
 
 const useStyles = makeStyles()({
     header: {
@@ -112,7 +113,10 @@ enum BackupTabs {
 const BackupWallet = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const wallet = useWallet()
+    const { selectedWallet } = WalletContext.useContainer()
+    const currentWallet = useWallet()
+    const wallet = selectedWallet ?? currentWallet
+
     const [currentTab, setCurrentTab] = useState(BackupTabs.JsonFile)
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState('')

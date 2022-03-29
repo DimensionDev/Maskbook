@@ -11,6 +11,7 @@ import { LoadingButton } from '@mui/lab'
 import type { z as zod } from 'zod'
 import { Controller } from 'react-hook-form'
 import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm'
+import { WalletContext } from '../hooks/useWalletContext'
 
 const useStyles = makeStyles()({
     header: {
@@ -45,7 +46,9 @@ const WalletRename = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
     const { classes } = useStyles()
-    const wallet = useWallet()
+    const { selectedWallet } = WalletContext.useContainer()
+    const currentWallet = useWallet()
+    const wallet = selectedWallet ?? currentWallet
 
     const {
         control,
