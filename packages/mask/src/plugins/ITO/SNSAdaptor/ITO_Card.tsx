@@ -71,21 +71,17 @@ export function ITO_Card(props: ITO_CardProps) {
     // #region transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
     const postLink = usePostLink()
-    const shareLink = activatedSocialNetworkUI.utils
-        .getShareLinkURL?.(
-            [
-                `I just claimed ${cashTag}${token?.symbol} with ${formatBalance(packet?.claimable, 18, 6)}.${
-                    isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                        ? `Follow @${
-                              isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                          } (mask.io) to claim airdrop.`
-                        : ''
-                }`,
-                '#mask_io',
-                postLink,
-            ].join('\n'),
-        )
-        .toString()
+    const shareText = [
+        `I just claimed ${cashTag}${token?.symbol} with ${formatBalance(packet?.claimable, 18, 6)}.${
+            isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                ? `Follow @${
+                      isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
+                  } (mask.io) to claim airdrop.`
+                : ''
+        }`,
+        '#mask_io',
+        postLink,
+    ].join('\n')
 
     // close the transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
@@ -104,7 +100,7 @@ export function ITO_Card(props: ITO_CardProps) {
         if (claimState.type === TransactionStateType.UNKNOWN) return
         setTransactionDialog({
             open: true,
-            shareLink,
+            shareText,
             state: claimState,
             summary: `Claiming ${formatBalance(packet.claimable, 18, 6)} ${token?.symbol ?? 'Token'}.`,
         })

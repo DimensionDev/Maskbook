@@ -15,6 +15,7 @@ import { useAsync, useLocation, useUpdateEffect, useWindowSize } from 'react-use
 import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/RainbowBox'
 import { trim } from 'lodash-unified'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
+import { openWindow } from '@masknet/shared-base-ui'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -194,7 +195,7 @@ function NFTAvatarInTwitter() {
         if (!avatar || !linkParentDom || !showAvatar) return
 
         const handler = () => {
-            window.open(resolveOpenSeaLink(avatar.address, avatar.tokenId), '_blank')
+            openWindow(resolveOpenSeaLink(avatar.address, avatar.tokenId))
         }
 
         linkParentDom.addEventListener('click', handler)

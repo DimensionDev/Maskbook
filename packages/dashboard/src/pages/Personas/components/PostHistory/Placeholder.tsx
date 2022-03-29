@@ -4,6 +4,7 @@ import { EmptyIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../../../locales'
 import urlcat from 'urlcat'
 import { MaskColorVar } from '@masknet/theme'
+import { openWindow } from '@masknet/shared-base-ui'
 
 interface PlaceholderProps {
     network: string
@@ -13,7 +14,7 @@ export const Placeholder = memo<PlaceholderProps>(({ network }) => {
     const t = useDashboardI18N()
     const url = urlcat('https://www.:network', { network: network })
 
-    const handleClick = () => window.open(url)
+    const handleClick = () => openWindow(url)
 
     return (
         <Stack height="100%" alignItems="center" justifyContent="center" mt={-3.5}>

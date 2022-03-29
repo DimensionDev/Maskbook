@@ -113,24 +113,20 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     }, [placeBidCallback, amount])
 
     const assetLink = resolveAssetLinkOnCryptoartAI(assetSource?.creator?.username, assetSource?.token_id, chainId)
-    const shareLink = activatedSocialNetworkUI.utils
-        .getShareLinkURL?.(
-            token
-                ? t(
-                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                          ? 'plugin_cryptoartai_offer_share'
-                          : 'plugin_cryptoartai_offer_share_no_official_account',
-                      {
-                          amount: amount,
-                          symbol: token?.value?.symbol,
-                          title: assetSource?.title,
-                          assetLink: assetLink,
-                          account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
-                      },
-                  )
-                : '',
-        )
-        .toString()
+    const shareText = token
+        ? t(
+              isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                  ? 'plugin_cryptoartai_offer_share'
+                  : 'plugin_cryptoartai_offer_share_no_official_account',
+              {
+                  amount: amount,
+                  symbol: token?.value?.symbol,
+                  title: assetSource?.title,
+                  assetLink: assetLink,
+                  account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
+              },
+          )
+        : ''
 
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
@@ -152,7 +148,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         if (placeBidState.type === TransactionStateType.UNKNOWN) return
         setTransactionDialog({
             open: true,
-            shareLink,
+            shareText,
             state: placeBidState,
             summary:
                 (assetSource?.is24Auction
