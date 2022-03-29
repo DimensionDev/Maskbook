@@ -69,16 +69,12 @@ export function PurchaseDialog(props: ActionBarProps) {
     })
 
     const [ToS_Checked, setToS_Checked] = useState(false)
-    const [purchaseState, purchaseCallback, resetCallback] = usePurchaseCallback(
+    const [purchaseState, onCheckout, resetCallback] = usePurchaseCallback(
         project.projectId,
         project.pricePerTokenInWei,
         token.value?.type,
     )
     const { GEN_ART_721_MINTER: spender } = useArtBlocksConstants()
-
-    const onCheckout = useCallback(() => {
-        purchaseCallback()
-    }, [usePurchaseCallback])
 
     const price = useMemo(() => {
         return leftShift(project.pricePerTokenInWei, token.value?.decimals)
@@ -190,7 +186,7 @@ export function PurchaseDialog(props: ActionBarProps) {
                                     disabled={!!validationMessage}
                                     color="primary"
                                     variant="contained"
-                                    onClick={purchaseCallback}
+                                    onClick={onCheckout}
                                     fullWidth>
                                     {validationMessage || isTransaction
                                         ? t('plugin_artblocks_purchase')
