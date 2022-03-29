@@ -1,36 +1,16 @@
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 
 export const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     walletStatusBox: {
         width: 535,
         margin: '24px auto',
     },
-    abstractTabWrapper: {
-        width: '100%',
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(2),
+    networkTab: {
+        width: 535,
+        margin: theme.spacing(1, 'auto', 2),
     },
     tableTabWrapper: {
         padding: theme.spacing(2),
-    },
-    tab: {
-        height: 36,
-        minHeight: 36,
-        backgroundColor: isDashboard ? `${MaskColorVar.primaryBackground2}!important` : undefined,
-    },
-    tabPaper: {
-        backgroundColor: 'inherit',
-    },
-    tabs: {
-        width: 535,
-        height: 36,
-        minHeight: 36,
-        margin: '0 auto',
-        borderRadius: 4,
-        '& .Mui-selected': {
-            color: '#ffffff',
-            backgroundColor: `${theme.palette.primary.main}!important`,
-        },
     },
     indicator: {
         display: 'none',

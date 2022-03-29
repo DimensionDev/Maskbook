@@ -73,13 +73,7 @@ export const BindingItem = memo<Item>(({ platform, identity, tipable, deletable,
 
     if (platform === NextIDPlatform.Ethereum) {
         return (
-            <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-                mx={1}
-                mb={4}
-                className={classes.item}>
+            <Stack direction="row" justifyContent="space-between" alignItems="center" className={classes.item}>
                 <Stack direction="row" alignItems="center" gap="12px">
                     <ImageIcon size={18} icon={networkDescriptor?.icon} />
                     <Typography className={classes.address}>{formatEthereumAddress(identity, 4)}</Typography>
