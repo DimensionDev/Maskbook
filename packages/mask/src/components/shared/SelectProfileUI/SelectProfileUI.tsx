@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback, ChangeEvent } from 'react'
 import { ListItem, ListItemText, InputBase, Button, List, Box, Chip } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../../utils'
@@ -98,7 +98,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                 <InputBase
                     className={classes.input}
                     value={disabled ? '' : search}
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={useCallback((e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value), [])}
                     onKeyDown={(e) => {
                         if (search === '' && e.key === 'Backspace') {
                             onSetSelected(selected.slice(0, selected.length - 1) as Profile[])
