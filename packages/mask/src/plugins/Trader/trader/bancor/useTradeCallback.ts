@@ -77,11 +77,9 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest>
         })
     }, [web3, account, chainId, stringify(trade), gasConfig])
 
-    const resetCallback = useCallback(() => {
-        setTradeState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
+    const resetCallback = () => {
+        setTradeState({ type: TransactionStateType.UNKNOWN })
+    }
 
     return [tradeState, tradeCallback, resetCallback] as const
 }

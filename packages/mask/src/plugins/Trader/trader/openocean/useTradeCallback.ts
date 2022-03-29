@@ -79,11 +79,11 @@ export function useTradeCallback(
         })
     }, [web3, account, chainId, stringify(config)])
 
-    const resetCallback = useCallback(() => {
+    const resetCallback = () => {
         setTradeState({
             type: TransactionStateType.UNKNOWN,
         })
-    }, [])
+    }
 
     return [tradeState, tradeCallback, resetCallback] as const
 }

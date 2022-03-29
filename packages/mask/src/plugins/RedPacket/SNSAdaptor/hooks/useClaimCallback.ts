@@ -80,11 +80,9 @@ export function useClaimCallback(version: number, from: string, id?: string, pas
         })
     }, [id, password, from, redPacketContract])
 
-    const resetCallback = useCallback(() => {
-        setClaimState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
+    const resetCallback = () => {
+        setClaimState({ type: TransactionStateType.UNKNOWN })
+    }
 
     return [claimState, claimCallback, resetCallback] as const
 }

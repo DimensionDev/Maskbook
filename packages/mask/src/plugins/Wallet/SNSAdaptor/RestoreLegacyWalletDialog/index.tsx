@@ -27,9 +27,9 @@ export function RestoreLegacyWalletDialog() {
     // const navigate = useNavigate()
     const { open, setDialog } = useRemoteControlledDialog(WalletMessages.events.restoreLegacyWalletDialogUpdated)
 
-    const onClose = useCallback(() => {
+    const onClose = () => {
         setDialog({ open: false })
-    }, [setDialog])
+    }
 
     const { value: legacyWallets = [] } = useAsyncRetry(async () => {
         const now = new Date()

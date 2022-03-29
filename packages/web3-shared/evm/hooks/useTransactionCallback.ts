@@ -79,11 +79,9 @@ export function useTransactionCallback<T extends unknown>(
         })
     }, [type, config, method])
 
-    const resetCallback = useCallback(() => {
-        setState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
+    const resetCallback = () => {
+        setState({ type: TransactionStateType.UNKNOWN })
+    }
 
     return [state, updateCallback, resetCallback] as const
 }

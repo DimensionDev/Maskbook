@@ -86,9 +86,9 @@ const CreateMnemonic = memo(() => {
         WalletMessages.events.walletLockStatusUpdated.on(retry)
     }, [retry])
 
-    const onVerifyClick = useCallback(() => {
+    const onVerifyClick = () => {
         setOpen(true)
-    }, [])
+    }
 
     const [walletState, onSubmit] = useAsyncFn(async () => {
         const name = new URLSearchParams(location.search).get('name')

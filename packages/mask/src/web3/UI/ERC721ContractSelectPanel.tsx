@@ -126,12 +126,8 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
     )
 
     const openDialog = useCallback(() => {
-        setNftContractDialog({
-            open: true,
-            chainId,
-            uuid: id,
-        })
-    }, [setNftContractDialog, uuid, chainId])
+        setNftContractDialog({ open: true, chainId, uuid: id })
+    }, [id, chainId])
     // #endregion
 
     return (

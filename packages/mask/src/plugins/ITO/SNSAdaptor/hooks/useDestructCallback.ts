@@ -73,11 +73,9 @@ export function useDestructCallback(ito_address: string) {
         [ITO_Contract],
     )
 
-    const resetCallback = useCallback(() => {
-        setDestructState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
+    const resetCallback = () => {
+        setDestructState({ type: TransactionStateType.UNKNOWN })
+    }
 
     return [destructState, destructCallback, resetCallback] as const
 }

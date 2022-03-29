@@ -130,11 +130,9 @@ export function usePlaceBidCallback(is24Auction: boolean, editionNumber: string)
         [account, chainId, is24Auction, editionNumber, artistAcceptingBidsV2_contract, cANFTMarket_contract],
     )
 
-    const resetCallback = useCallback(() => {
-        setPlaceBidState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
+    const resetCallback = () => {
+        setPlaceBidState({ type: TransactionStateType.UNKNOWN })
+    }
 
     return [placeBidState, placeBidCallback, resetCallback] as const
 }

@@ -88,9 +88,9 @@ export function useClaimCallback(pids: string[], contractAddress: string | undef
         })
     }, [account, chainId, ITO_Contract, stringify(pids), isV1])
 
-    const resetCallback = useCallback(() => {
+    const resetCallback = () => {
         setClaimState({ type: TransactionStateType.UNKNOWN })
-    }, [])
+    }
 
     return [claimState, claimCallback, resetCallback] as const
 }

@@ -83,11 +83,9 @@ export function useInvestCallback(pool: Pool | undefined, amount: string, token?
         })
     }, [pool, account, amount, token])
 
-    const resetCallback = useCallback(() => {
-        setInvestState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
+    const resetCallback = () => {
+        setInvestState({ type: TransactionStateType.UNKNOWN })
+    }
 
     return [investState, investCallback, resetCallback] as const
 }

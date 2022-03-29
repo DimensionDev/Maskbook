@@ -261,10 +261,10 @@ export function Trader(props: TraderProps) {
         setTemporarySlippage(undefined)
     }, [tradeCallback])
 
-    const onConfirmDialogClose = useCallback(() => {
+    const onConfirmDialogClose = () => {
         setOpenConfirmDialog(false)
         setTemporarySlippage(undefined)
-    }, [])
+    }
     // #endregion
 
     // #region the click handler of switch arrow

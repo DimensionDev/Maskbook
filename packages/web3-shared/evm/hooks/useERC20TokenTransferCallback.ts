@@ -89,11 +89,9 @@ export function useERC20TokenTransferCallback(address?: string, amount?: string,
         [account, address, amount, recipient, erc20Contract],
     )
 
-    const resetCallback = useCallback(() => {
-        setTransferState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
+    const resetCallback = () => {
+        setTransferState({ type: TransactionStateType.UNKNOWN })
+    }
 
     useEffect(() => {
         if (transferState.type !== TransactionStateType.CONFIRMED) return

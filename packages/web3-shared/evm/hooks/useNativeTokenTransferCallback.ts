@@ -95,11 +95,9 @@ export function useNativeTransferCallback() {
         [web3, account, chainId],
     )
 
-    const resetCallback = useCallback(() => {
-        setTransferState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
+    const resetCallback = () => {
+        setTransferState({ type: TransactionStateType.UNKNOWN })
+    }
 
     useEffect(() => {
         if (transferState.type !== TransactionStateType.CONFIRMED) return

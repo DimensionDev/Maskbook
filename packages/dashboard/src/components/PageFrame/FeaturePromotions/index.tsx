@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -45,12 +45,9 @@ export const FeaturePromotions = memo(() => {
         return !!linkedProfiles.find((profile) => profile.identifier.network === EnhanceableSite.Twitter)
     }, [currentPersona])
 
-    const openTransakDialog = useCallback(() => {
-        setBuyDialog({
-            open: true,
-            address: account ?? '',
-        })
-    }, [])
+    const openTransakDialog = () => {
+        setBuyDialog({ open: true, address: account ?? '' })
+    }
 
     const openTwitter = (pluginId: string) => async () => {
         if (!currentPersona) {

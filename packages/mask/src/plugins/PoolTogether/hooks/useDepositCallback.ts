@@ -84,11 +84,9 @@ export function useDepositCallback(
         })
     }, [address, account, amount, token, referrer, controlledToken])
 
-    const resetCallback = useCallback(() => {
-        setDepositState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
+    const resetCallback = () => {
+        setDepositState({ type: TransactionStateType.UNKNOWN })
+    }
 
     return [depositState, depositCallback, resetCallback] as const
 }

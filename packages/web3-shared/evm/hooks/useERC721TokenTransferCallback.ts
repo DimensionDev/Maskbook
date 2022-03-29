@@ -89,11 +89,9 @@ export function useERC721TokenTransferCallback(address?: string) {
         [account, erc721Contract],
     )
 
-    const resetCallback = useCallback(() => {
-        setTransferState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
+    const resetCallback = () => {
+        setTransferState({ type: TransactionStateType.UNKNOWN })
+    }
 
     useEffect(() => {
         if (transferState.type !== TransactionStateType.CONFIRMED) return

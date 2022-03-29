@@ -133,21 +133,14 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     const onSubmit = useCallback(
         (contract: ERC721ContractDetailed) => {
             setKeyword('')
-            setDialog({
-                open: false,
-                uuid: id,
-                contract,
-            })
+            setDialog({ open: false, uuid: id, contract })
         },
         [id, setDialog, setKeyword],
     )
     const onClose = useCallback(() => {
         setKeyword('')
-        setDialog({
-            open: false,
-            uuid: id,
-        })
-    }, [id, setDialog])
+        setDialog({ open: false, uuid: id })
+    }, [id])
     // #endregion
 
     const { data: assets, state: loadingCollectionState } = useCollections(account, chainId, open)

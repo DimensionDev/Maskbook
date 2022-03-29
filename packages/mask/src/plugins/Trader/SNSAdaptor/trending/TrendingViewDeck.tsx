@@ -123,11 +123,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 
     const onBuyButtonClicked = useCallback(() => {
-        setBuyDialog({
-            open: true,
-            code: coin.symbol,
-            address: account,
-        })
+        setBuyDialog({ open: true, code: coin.symbol, address: account })
     }, [account, trending?.coin?.symbol])
     // #endregion
 

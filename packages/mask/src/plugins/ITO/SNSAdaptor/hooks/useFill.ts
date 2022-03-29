@@ -162,11 +162,9 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         })
     }, [web3, account, chainId, ITO_Contract, poolSettings, paramResult, setFillState])
 
-    const resetCallback = useCallback(() => {
-        setFillState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
+    const resetCallback = () => {
+        setFillState({ type: TransactionStateType.UNKNOWN })
+    }
 
     return [fillSettings, fillState, fillCallback, resetCallback] as const
 }

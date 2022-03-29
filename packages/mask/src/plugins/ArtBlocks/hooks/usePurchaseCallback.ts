@@ -80,11 +80,9 @@ export function usePurchaseCallback(projectId: string, amount: string, tokenType
         })
     }, [account, amount, chainId, genArt721MinterContract, tokenType])
 
-    const resetCallback = useCallback(() => {
-        setPurchaseState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
+    const resetCallback = () => {
+        setPurchaseState({ type: TransactionStateType.UNKNOWN })
+    }
 
     return [purchaseState, purchaseCallback, resetCallback] as const
 }

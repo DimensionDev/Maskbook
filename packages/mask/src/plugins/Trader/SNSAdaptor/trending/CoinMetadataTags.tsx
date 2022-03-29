@@ -1,6 +1,6 @@
 import { Chip, DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { Linking } from './Linking'
 
@@ -22,13 +22,13 @@ export function CoinMetadataTags(props: CoinMetadataTagsProps) {
     const { tags } = props
     const [open, setOpen] = useState(false)
 
-    const onClick = useCallback(() => {
+    const onClick = () => {
         setOpen((open) => !open)
-    }, [])
+    }
 
-    const onClose = useCallback(() => {
+    const onClose = () => {
         setOpen(false)
-    }, [])
+    }
 
     if (!tags) return null
     return (

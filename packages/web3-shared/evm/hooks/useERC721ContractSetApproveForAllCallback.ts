@@ -72,9 +72,9 @@ export function useERC721ContractSetApproveForAllCallback(
         })
     }, [account, chainId, erc721TokenContract, approved, contractAddress, operator, setApproveState])
 
-    const resetCallback = useCallback(() => {
+    const resetCallback = () => {
         setApproveState({ type: TransactionStateType.UNKNOWN })
-    }, [])
+    }
 
     return [approveState, approveCallback, resetCallback] as const
 }

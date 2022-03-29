@@ -155,11 +155,9 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
         [account, wrapperContract],
     )
 
-    const resetCallback = useCallback(() => {
-        setTransactionState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
+    const resetCallback = () => {
+        setTransactionState({ type: TransactionStateType.UNKNOWN })
+    }
 
     return [transactionState, wrapCallback, unwrapCallback, resetCallback] as const
 }

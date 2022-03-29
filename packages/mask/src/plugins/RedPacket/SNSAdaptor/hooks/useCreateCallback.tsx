@@ -216,11 +216,9 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
         })
     }, [account, redPacketContract, redPacketSettings, chainId, getCreateParams])
 
-    const resetCallback = useCallback(() => {
-        setCreateState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
+    const resetCallback = () => {
+        setCreateState({ type: TransactionStateType.UNKNOWN })
+    }
 
     return [createSettings, createState, createCallback, resetCallback] as const
 }

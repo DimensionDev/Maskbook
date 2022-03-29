@@ -92,9 +92,7 @@ export function InvestDialog() {
             open: true,
             uuid: id,
             disableNativeToken: true,
-            FungibleTokenListProps: {
-                whitelist: allowedTokens,
-            },
+            FungibleTokenListProps: { whitelist: allowedTokens },
         })
     }, [id, token?.address, allowedTokens])
     // #endregion

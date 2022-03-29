@@ -139,11 +139,9 @@ export function useTradeCallback(
         })
     }, [chainId, trade, tradeAmount, exchangeProxyContract, BALANCER_ETH_ADDRESS])
 
-    const resetCallback = useCallback(() => {
-        setTradeState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
+    const resetCallback = () => {
+        setTradeState({ type: TransactionStateType.UNKNOWN })
+    }
 
     return [tradeState, tradeCallback, resetCallback] as const
 }

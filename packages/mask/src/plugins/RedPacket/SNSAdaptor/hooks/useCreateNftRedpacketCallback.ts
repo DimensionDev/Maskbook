@@ -132,11 +132,9 @@ export function useCreateNftRedpacketCallback(
         },
         [duration, message, name, contractAddress, tokenIdList, nftRedPacketContract, setCreateState, account, chainId],
     )
-    const resetCallback = useCallback(() => {
-        setCreateState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
+    const resetCallback = () => {
+        setCreateState({ type: TransactionStateType.UNKNOWN })
+    }
 
     return [createState, createCallback, resetCallback] as const
 }

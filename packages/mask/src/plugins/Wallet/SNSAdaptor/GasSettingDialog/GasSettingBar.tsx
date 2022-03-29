@@ -34,22 +34,11 @@ export function GasSettingBar(props: GasSettingBarProps) {
     const [gasOption, setGasOption] = useState<GasOption>(GasOption.Medium)
     const { setDialog: setGasSettingDialog } = useRemoteControlledDialog(WalletMessages.events.gasSettingDialogUpdated)
     const onOpenGasSettingDialog = useCallback(() => {
-        setGasSettingDialog(
-            isEIP1559Supported(chainId)
-                ? {
-                      open: true,
-                      gasLimit,
-                      maxFee,
-                      priorityFee,
-                      gasOption,
-                  }
-                : {
-                      open: true,
-                      gasLimit,
-                      gasPrice,
-                      gasOption,
-                  },
-        )
+        if (isEIP1559Supported(chainId)) {
+            setGasSettingDialog({ open: true, gasLimit, gasOption, maxFee, priorityFee })
+        } else {
+            setGasSettingDialog({ open: true, gasLimit, gasOption, gasPrice })
+        }
     }, [chainId, gasLimit, gasPrice, maxFee, priorityFee, gasOption])
 
     // set initial options

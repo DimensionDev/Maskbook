@@ -76,11 +76,9 @@ export function useMaskClaimCallback() {
         })
     }, [account, chainId, MaskITO_Contract])
 
-    const resetCallback = useCallback(() => {
-        setClaimState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
+    const resetCallback = () => {
+        setClaimState({ type: TransactionStateType.UNKNOWN })
+    }
 
     return [claimState, claimCallback, resetCallback] as const
 }

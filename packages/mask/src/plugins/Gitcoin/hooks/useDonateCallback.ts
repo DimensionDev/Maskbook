@@ -100,11 +100,9 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
         })
     }, [account, amount, token, donations])
 
-    const resetCallback = useCallback(() => {
-        setDonateState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
+    const resetCallback = () => {
+        setDonateState({ type: TransactionStateType.UNKNOWN })
+    }
 
     return [donateState, donateCallback, resetCallback] as const
 }

@@ -217,11 +217,9 @@ export function useSwapCallback(
         })
     }, [ITO_Contract, chainId, qualificationContract, account, payload, total, token.address, isQualificationHasLucky])
 
-    const resetCallback = useCallback(() => {
-        setSwapState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
+    const resetCallback = () => {
+        setSwapState({ type: TransactionStateType.UNKNOWN })
+    }
 
     return [swapState, swapCallback, resetCallback] as const
 }

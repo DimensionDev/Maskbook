@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { Button, DialogContent, DialogActions, TextField } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { Wallet } from '@masknet/web3-shared-evm'
@@ -30,12 +30,9 @@ export function WalletRenameWalletDialog() {
         setName(data.wallet?.name ?? '')
         setWallet(data.wallet)
     })
-    const handleClose = useCallback(() => {
-        setDialog({
-            open: false,
-            wallet: null,
-        })
-    }, [])
+    const handleClose = () => {
+        setDialog({ open: false, wallet: null })
+    }
     const handleRename = useSnackbarCallback(
         () => {
             if (!wallet?.address) {

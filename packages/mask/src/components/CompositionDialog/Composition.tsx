@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { DialogContent } from '@mui/material'
 import { DialogStackingProvider } from '@masknet/theme'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
@@ -22,10 +22,10 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const [reason, setReason] = useState<'timeline' | 'popup' | 'reply'>('timeline')
     // #region Open
     const [open, setOpen] = useState(false)
-    const onClose = useCallback(() => {
+    const onClose = () => {
         setOpen(false)
         UI.current?.reset()
-    }, [])
+    }
 
     useEffect(() => {
         if (openOnInitAnswered) return

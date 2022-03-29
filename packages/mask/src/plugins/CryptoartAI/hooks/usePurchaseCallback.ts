@@ -78,11 +78,9 @@ export function usePurchaseCallback(editionNumber: string, priceInWei: number) {
         })
     }, [account, chainId, knownOriginDigitalAssetV2_contract])
 
-    const resetCallback = useCallback(() => {
-        setPurchaseState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
+    const resetCallback = () => {
+        setPurchaseState({ type: TransactionStateType.UNKNOWN })
+    }
 
     return [purchaseState, purchaseCallback, resetCallback] as const
 }

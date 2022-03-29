@@ -88,7 +88,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         const [, setValue] = state
         setValue(DialogTabs.create)
         props.onClose()
-    }, [props, state])
+    }, [props.onClose, state])
 
     const { address: publicKey, privateKey } = useMemo(() => web3.eth.accounts.create(), [])
 

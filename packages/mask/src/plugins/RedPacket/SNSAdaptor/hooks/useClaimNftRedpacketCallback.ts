@@ -80,11 +80,9 @@ export function useClaimNftRedpacketCallback(id: string, totalAmount: number | u
         })
     }, [id, signedMsg, account, chainId, totalAmount, claimState])
 
-    const resetCallback = useCallback(() => {
-        setClaimState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [account])
+    const resetCallback = () => {
+        setClaimState({ type: TransactionStateType.UNKNOWN })
+    }
 
     return [claimState, claimCallback, resetCallback] as const
 }

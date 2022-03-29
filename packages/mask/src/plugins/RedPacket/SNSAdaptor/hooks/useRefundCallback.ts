@@ -69,11 +69,9 @@ export function useRefundCallback(version: number, from: string, id?: string) {
         })
     }, [id, redPacketContract, from])
 
-    const resetCallback = useCallback(() => {
-        setRefundState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
+    const resetCallback = () => {
+        setRefundState({ type: TransactionStateType.UNKNOWN })
+    }
 
     return [refundState, refundCallback, resetCallback] as const
 }
