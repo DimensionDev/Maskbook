@@ -40,7 +40,7 @@ interface SearchBoxProps {
     onSearch(chainId: string, content: string): void
 }
 
-const DEFAULT_SEARCH_NETWORK = '1'
+const DEFAULT_SEARCH_CHAIN = '1'
 
 function getChainName(chain?: SecurityAPI.SupportedChain) {
     if (!chain) return getChainDetailed(ChainId.Mainnet)?.chain
@@ -51,7 +51,7 @@ function getChainName(chain?: SecurityAPI.SupportedChain) {
 export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
     const t = useI18N()
     const { classes } = useStyles()
-    const [selectedNetwork, setSelectedNetwork] = useState<SecurityAPI.SupportedChain>()
+    const [selectedChain, setSelectedChain] = useState<SecurityAPI.SupportedChain>()
     const [searchContent, setSearchSearchContent] = useState<string>()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
@@ -62,14 +62,14 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
 
     const menuElements = useMemo(() => {
         if (!supportedChains.length) return
-        setSelectedNetwork(supportedChains[0])
+        setSelectedChain(supportedChains[0])
         return (
             supportedChains.map((chain) => {
                 return (
                     <MenuItem
                         key={chain.id}
                         onClick={() => {
-                            setSelectedNetwork(chain)
+                            setSelectedChain(chain)
                             onClose()
                         }}>
                         <Typography sx={{ marginLeft: 1 }}>{getChainName(chain)}</Typography>
@@ -84,7 +84,7 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
             <Box width={110} height={48}>
                 <Button onClick={onOpen} variant="outlined" className={classes.selectedButton}>
                     <Stack display="inline-flex" direction="row" justifyContent="space-between" width="100%">
-                        <Typography fontSize={16}>{getChainName(selectedNetwork)}</Typography>
+                        <Typography fontSize={16}>{getChainName(selectedChain)}</Typography>
                         <KeyboardArrowDownIcon />
                     </Stack>
                 </Button>
@@ -97,7 +97,7 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
                         fullWidth
                         onKeyPress={(e: React.KeyboardEvent) => {
                             if (e.key !== 'Enter') return
-                            onSearch(selectedNetwork?.id ?? DEFAULT_SEARCH_NETWORK, searchContent ?? '')
+                            onSearch(selectedChain?.id ?? DEFAULT_SEARCH_CHAIN, searchContent ?? '')
                         }}
                         onChange={(e) => setSearchSearchContent(e.target.value)}
                         InputProps={{
@@ -113,7 +113,7 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
                 <Button
                     className={classes.searchButton}
                     disabled={!searchContent}
-                    onClick={() => onSearch(selectedNetwork?.id ?? DEFAULT_SEARCH_NETWORK, searchContent ?? '')}
+                    onClick={() => onSearch(selectedChain?.id ?? DEFAULT_SEARCH_CHAIN, searchContent ?? '')}
                     variant="contained">
                     {t.search()}
                 </Button>

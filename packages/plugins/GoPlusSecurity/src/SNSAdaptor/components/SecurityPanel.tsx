@@ -123,7 +123,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                 <Collapse
                     in={isCollapse}
                     timeout={{
-                        enter: 1500,
+                        enter: 1200,
                         exit: 10,
                     }}
                     collapsedSize={LIST_HEIGHT.min}
