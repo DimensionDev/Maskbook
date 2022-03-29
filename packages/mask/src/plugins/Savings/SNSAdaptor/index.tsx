@@ -14,12 +14,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 const currentPluginId = usePluginIDContext()
                 const chainId = useChainId()
                 const [open, setOpen] = useState(false)
-                const isHidden =
+                const isDisabled =
                     currentPluginId !== NetworkPluginID.PLUGIN_EVM ||
                     !base.enableRequirement.web3![NetworkPluginID.PLUGIN_EVM]!.supportedChainIds!.includes(chainId)
-                return isHidden ? null : (
+                return (
                     <div key={key}>
                         <ApplicationEntry
+                            disabled={isDisabled}
                             title="Savings"
                             icon={new URL('./assets/savings.png', import.meta.url).toString()}
                             onClick={() => setOpen(true)}

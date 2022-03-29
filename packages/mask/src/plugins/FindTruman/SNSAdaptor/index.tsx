@@ -97,9 +97,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
             RenderEntryComponent(key) {
                 const [open, setOpen] = useState(false)
                 const currentPluginId = usePluginIDContext()
-                return currentPluginId !== NetworkPluginID.PLUGIN_EVM ? null : (
+                return (
                     <div key={key}>
                         <ApplicationEntry
+                            disabled={currentPluginId !== NetworkPluginID.PLUGIN_EVM}
                             title="FindTruman"
                             icon={new URL('../assets/findtruman.png', import.meta.url).toString()}
                             onClick={() => setOpen(true)}

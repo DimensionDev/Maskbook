@@ -27,16 +27,17 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 const chainId = useChainId()
                 const currentSNSNetwork = getCurrentSNSNetwork(activatedSocialNetworkUI.networkIdentifier)
 
-                const isHidden =
+                const isDisabled =
                     currentPluginId !== NetworkPluginID.PLUGIN_EVM ||
                     !base.enableRequirement.web3![NetworkPluginID.PLUGIN_EVM]!.supportedChainIds!.includes(chainId) ||
                     !base.enableRequirement.networks.networks[currentSNSNetwork]
 
                 const { openDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated)
 
-                return isHidden ? null : (
+                return (
                     <div key={key}>
                         <ApplicationEntry
+                            disabled={isDisabled}
                             title="Non-F Friends"
                             icon={new URL('../assets/mintTeam.png', import.meta.url).toString()}
                             onClick={openDialog}

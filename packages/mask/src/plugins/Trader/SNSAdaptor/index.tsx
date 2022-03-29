@@ -27,14 +27,15 @@ const sns: Plugin.SNSAdaptor.Definition = {
             RenderEntryComponent(key) {
                 const currentPluginId = usePluginIDContext()
                 const chainId = useChainId()
-                const isHidden =
+                const isDisabled =
                     currentPluginId !== NetworkPluginID.PLUGIN_EVM ||
                     !base.enableRequirement.web3![NetworkPluginID.PLUGIN_EVM]!.supportedChainIds!.includes(chainId)
                 const { openDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
-                return isHidden ? null : (
+                return (
                     <div key={key}>
                         <ApplicationEntry
+                            disabled={isDisabled}
                             title="Swap"
                             icon={new URL('../assets/swap.png', import.meta.url).toString()}
                             onClick={openDialog}

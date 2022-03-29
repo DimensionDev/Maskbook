@@ -96,10 +96,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
         {
             RenderEntryComponent(key) {
                 const currentPluginId = usePluginIDContext()
-                return currentPluginId !== NetworkPluginID.PLUGIN_EVM ? null : (
+                return (
                     <div key={key}>
                         <ApplicationEntry
                             title="Lucky Drop"
+                            disabled={currentPluginId !== NetworkPluginID.PLUGIN_EVM}
                             icon={new URL('./assets/lucky_drop.png', import.meta.url).toString()}
                             onClick={() =>
                                 CrossIsolationMessages.events.requestComposition.sendToLocal({
