@@ -43,6 +43,11 @@ const useStyles = makeStyles()({
             backgroundColor: 'rgba(20,155,240,0.1)',
         },
     },
+    tooltip: {
+        backgroundColor: 'rgb(102,102,102)',
+        color: 'white',
+        marginTop: '0 !important',
+    },
     disabled: {
         opacity: 0.4,
         cursor: 'default',
@@ -121,26 +126,24 @@ export const TipButton: FC<Props> = ({
 
     if (disabled)
         return (
-            <ShadowRootTooltip title={t.tip_wallets_missed()} placement="top" arrow {...tooltipProps}>
+            <ShadowRootTooltip
+                classes={{ tooltip: classes.tooltip }}
+                title={t.tip_wallets_missed()}
+                placement="bottom"
+                arrow={false}
+                {...tooltipProps}>
                 {dom}
             </ShadowRootTooltip>
         )
     return dom
 }
 
-const postTipButtonTooltip = { placement: 'bottom', arrow: false } as const
-
-export const PostTipButton: FC<Props> = (props) => {
+export const PostTipButton: FC<Props> = ({ className, ...rest }) => {
     const identifier = usePostInfoDetails.author()
     const { classes } = useStyles()
     return (
         <div className={classes.buttonWrapper}>
-            <TipButton
-                {...props}
-                className={classnames(classes.postTipButton, props.className)}
-                tooltipProps={postTipButtonTooltip}
-                receiver={identifier}
-            />
+            <TipButton className={classnames(classes.postTipButton, className)} {...rest} receiver={identifier} />
         </div>
     )
 }
