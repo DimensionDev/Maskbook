@@ -39,7 +39,7 @@ export function useMenuConfig(
         window.requestAnimationFrame(update)
     }, [])
     const update = useUpdate()
-    const close = useCallback(() => setOpen(false), [])
+    const close = () => setOpen(false)
     const Menu = useContext(useMenuContext)
     return [
         <Menu key="menu" open={status} onClose={close} onClick={close} anchorEl={anchorEl} {...config}>

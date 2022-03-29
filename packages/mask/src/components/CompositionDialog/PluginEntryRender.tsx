@@ -12,7 +12,7 @@ import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
 import { ITO_PluginID } from '../../plugins/ITO/constants'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import { makeStyles } from '@masknet/theme'
-import { useCallback, useState, useRef, forwardRef, memo, useImperativeHandle, useMemo } from 'react'
+import { useState, useRef, forwardRef, memo, useImperativeHandle, useMemo } from 'react'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { Trans } from 'react-i18next'
 const useStyles = makeStyles()({
@@ -111,8 +111,8 @@ const DialogEntry = memo(
         const { classes } = useStyles()
         const { dialog: Dialog, id, label, unstable, keepMounted } = props
         const [open, setOpen] = useState(false)
-        const opener = useCallback(() => setOpen(true), [])
-        const close = useCallback(() => setOpen(false), [])
+        const opener = () => setOpen(true)
+        const close = () => setOpen(false)
         useSetPluginRef(ref, opener)
         const chip = (
             <ClickableChip

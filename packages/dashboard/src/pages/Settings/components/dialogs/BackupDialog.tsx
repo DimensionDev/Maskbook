@@ -30,7 +30,7 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
     const [paymentPassword, setPaymentPassword] = useState('')
     const [incorrectBackupPassword, setIncorrectBackupPassword] = useState(false)
     const [incorrectPaymentPassword, setIncorrectPaymentPassword] = useState(false)
-    const [showPassword, setShowPassword] = useState({
+    const [showPassword, setVisiblePassword] = useState({
         base: true,
         wallet: false,
     })
@@ -92,7 +92,7 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
     }, [backupPassword, paymentPassword])
 
     const handleContentChange = ({ baseChecked, walletChecked }: BackupContentCheckedStatus) => {
-        setShowPassword({
+        setVisiblePassword({
             base: baseChecked,
             wallet: walletChecked,
         })

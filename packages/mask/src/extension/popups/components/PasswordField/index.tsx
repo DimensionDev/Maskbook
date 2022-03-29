@@ -5,23 +5,23 @@ import { EyeIcon, EyeOffIcon } from '@masknet/icons'
 
 export const PasswordField = memo(
     forwardRef<{}, TextFieldProps>((props, ref) => {
-        const [showPassword, setShowPassword] = useState(false)
+        const [visiblePassword, setVisiblePassword] = useState(false)
 
         return (
             <StyledInput
                 {...props}
-                type={showPassword ? 'text' : 'password'}
+                type={visiblePassword ? 'text' : 'password'}
                 ref={ref}
                 InputProps={{
                     endAdornment: (
                         <InputAdornment position="end">
                             <IconButton
                                 aria-label="toggle password visibility"
-                                onClick={() => setShowPassword(!showPassword)}
+                                onClick={() => setVisiblePassword(!visiblePassword)}
                                 onMouseDown={(event) => event.preventDefault()}
                                 edge="end"
                                 size="small">
-                                {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                                {visiblePassword ? <EyeOffIcon /> : <EyeIcon />}
                             </IconButton>
                         </InputAdornment>
                     ),

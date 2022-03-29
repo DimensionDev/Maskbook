@@ -92,7 +92,7 @@ export function NFTAvatarSettingDialog() {
         [identity, wallet],
     )
 
-    const onClose = useCallback(() => setOpen(false), [])
+    const onClose = () => setOpen(false)
 
     useMount(() => {
         return MaskMessages.events.nftAvatarSettingDialogUpdated.on((data) => setOpen(data.open))

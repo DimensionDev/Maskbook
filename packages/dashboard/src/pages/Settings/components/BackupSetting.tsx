@@ -15,7 +15,7 @@ export default function BackupSetting() {
     const { state } = useLocation() as { state: { open: 'setting' | null } }
     const { ensurePasswordSet } = useContext(UserContext)
     const [merged, setMerged] = useState(false)
-    const [showDialog, setShowDialog] = useState({
+    const [visibleDialog, setVisibleDialog] = useState({
         backup: false,
         mode: false,
         verify: false,
@@ -27,20 +27,20 @@ export default function BackupSetting() {
 
     useEffect(() => {
         if (!state?.open || state?.open !== 'setting') return
-        ensurePasswordSet(() => setShowDialog({ ...showDialog, mode: true }))
+        ensurePasswordSet(() => setVisibleDialog({ ...visibleDialog, mode: true }))
     }, [state?.open])
 
     const onBackup = () => {
-        ensurePasswordSet(() => setShowDialog({ ...showDialog, mode: true }))
+        ensurePasswordSet(() => setVisibleDialog({ ...visibleDialog, mode: true }))
     }
 
     const onSelectMode = (mode: 'local' | 'cloud') => {
         if (mode === 'cloud') {
             setLocalMode(false)
-            setShowDialog({ ...showDialog, mode: false, verify: true })
+            setVisibleDialog({ ...visibleDialog, mode: false, verify: true })
         } else {
             setLocalMode(true)
-            setShowDialog({ ...showDialog, mode: false, backup: true })
+            setVisibleDialog({ ...visibleDialog, mode: false, backup: true })
         }
     }
 
@@ -49,9 +49,9 @@ export default function BackupSetting() {
 
         if (fileInfo) {
             setCloudFileInfo(fileInfo)
-            setShowDialog({ ...showDialog, verify: false, merge: true })
+            setVisibleDialog({ ...visibleDialog, verify: false, merge: true })
         } else {
-            setShowDialog({ ...showDialog, verify: false, backup: true })
+            setVisibleDialog({ ...visibleDialog, verify: false, backup: true })
         }
     }
 
@@ -60,25 +60,25 @@ export default function BackupSetting() {
             <SettingButton size="large" onClick={onBackup}>
                 {t.settings_button_backup()}
             </SettingButton>
-            {showDialog.backup ? (
+            {visibleDialog.backup ? (
                 <BackupDialog
                     local={localMode}
                     params={params}
-                    open={showDialog.backup}
+                    open={visibleDialog.backup}
                     merged={merged}
-                    onClose={() => setShowDialog({ ...showDialog, backup: false })}
+                    onClose={() => setVisibleDialog({ ...visibleDialog, backup: false })}
                 />
             ) : null}
 
             <BackupModeSelectDialog
-                open={showDialog.mode}
-                onClose={() => setShowDialog({ ...showDialog, mode: false })}
+                open={visibleDialog.mode}
+                onClose={() => setVisibleDialog({ ...visibleDialog, mode: false })}
                 onSelect={onSelectMode}
             />
-            {showDialog.verify ? (
+            {visibleDialog.verify ? (
                 <CloudBackupVerifyDialog
-                    open={showDialog.verify}
-                    onClose={() => setShowDialog({ ...showDialog, verify: false })}
+                    open={visibleDialog.verify}
+                    onClose={() => setVisibleDialog({ ...visibleDialog, verify: false })}
                     onNext={handleVerified}
                 />
             ) : null}
@@ -87,11 +87,11 @@ export default function BackupSetting() {
                 <CloudBackupMergeDialog
                     account={params.account}
                     info={cloudFileInfo}
-                    open={showDialog.merge}
-                    onClose={() => setShowDialog({ ...showDialog, merge: false })}
+                    open={visibleDialog.merge}
+                    onClose={() => setVisibleDialog({ ...visibleDialog, merge: false })}
                     onMerged={(merged) => {
                         setMerged(merged)
-                        setShowDialog({ ...showDialog, merge: false, backup: true })
+                        setVisibleDialog({ ...visibleDialog, merge: false, backup: true })
                     }}
                 />
             ) : null}

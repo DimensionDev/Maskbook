@@ -21,7 +21,7 @@ export function CrashUI({ onRetry, subject, ...error }: CrashUIProps) {
     const context = useContext(ErrorBoundaryBuildInfoContext)
     const t = useSharedBaseI18N()
 
-    const [showStack, setShowStack] = useState(false)
+    const [visibleStack, setVisibleStack] = useState(false)
 
     // This is a rarely reported crash. It is likely a race condition.
     // https://github.com/DimensionDev/Maskbook/issues?q=Failed+to+execute+%27insertBefore%27+on+%27Node%27+
@@ -67,11 +67,11 @@ Error stack:
                         {t.error_boundary_report_github()}
                     </Button>
                     <Box sx={{ flex: 1 }} />
-                    <IconButton color="inherit" size="small" onClick={() => setShowStack((x) => !x)}>
-                        {showStack ? <ExpandMore /> : <ExpandLess />}
+                    <IconButton color="inherit" size="small" onClick={() => setVisibleStack((x) => !x)}>
+                        {visibleStack ? <ExpandMore /> : <ExpandLess />}
                     </IconButton>
                 </ActionArea>
-                {showStack ? (
+                {visibleStack ? (
                     <ErrorStack>
                         <Typography component="pre">
                             <code>{error.stack}</code>

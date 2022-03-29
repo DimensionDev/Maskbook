@@ -6,23 +6,23 @@ import { EyeIcon, EyeOffIcon } from '@masknet/icons'
 export type PasswordFieldProps = Exclude<MaskTextFieldProps, 'type'>
 
 const PasswordField = forwardRef((props: PasswordFieldProps, ref: ForwardedRef<any>) => {
-    const [showPassword, setShowPassword] = useState(false)
+    const [visiblePassword, setVisiblePassword] = useState(false)
     return (
         <MaskTextField
             {...props}
             ref={ref}
-            type={showPassword ? 'text' : 'password'}
+            type={visiblePassword ? 'text' : 'password'}
             InputProps={{
                 ...props.InputProps,
                 endAdornment: (
                     <InputAdornment position="end">
                         <IconButton
                             aria-label="toggle password visibility"
-                            onClick={() => setShowPassword(!showPassword)}
+                            onClick={() => setVisiblePassword(!visiblePassword)}
                             onMouseDown={(event) => event.preventDefault()}
                             edge="end"
                             size="small">
-                            {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                            {visiblePassword ? <EyeOffIcon /> : <EyeIcon />}
                         </IconButton>
                     </InputAdornment>
                 ),

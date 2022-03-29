@@ -1,5 +1,5 @@
 import { Dialog, DialogActions, DialogContent, DialogProps } from '@mui/material'
-import { memo, ReactNode, useCallback, useState } from 'react'
+import { memo, ReactNode, useState } from 'react'
 import { usePortalShadowRoot } from '../../ShadowRoot'
 import { MaskDialogTitle, MaskDialogTitleProps } from './DialogTitle'
 import { useDialogStackActor } from './DialogStack'
@@ -42,7 +42,7 @@ export const MaskDialog = memo((props: MaskDialogProps) => {
 
 export function useMaskDialog(title: string, content: ReactNode, actions: ReactNode) {
     const [isOpen, setOpen] = useState(false)
-    const onClose = useCallback(() => setOpen(false), [])
+    const onClose = () => setOpen(false)
     return (
         <MaskDialog onClose={onClose} open={isOpen} title={title}>
             <DialogContent>{content}</DialogContent>
