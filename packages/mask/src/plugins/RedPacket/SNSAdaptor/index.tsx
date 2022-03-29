@@ -20,8 +20,8 @@ import RedPacketDialog from './RedPacketDialog'
 import { RedPacketInPost } from './RedPacketInPost'
 import { RedPacketNftInPost } from './RedPacketNftInPost'
 import { RedPacketIcon, NFTRedPacketIcon } from '@masknet/icons'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ApplicationEntry } from '@masknet/shared'
-import { requestComposition } from '@masknet/shared-base'
 
 function Render(props: React.PropsWithChildren<{ name: string }>) {
     usePluginWrapper(true, { name: props.name })
@@ -101,7 +101,15 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         <ApplicationEntry
                             title="Lucky Drop"
                             icon={new URL('./assets/lucky_drop.png', import.meta.url).toString()}
-                            onClick={() => requestComposition(base.ID)}
+                            onClick={() =>
+                                CrossIsolationMessages.events.requestComposition.sendToLocal({
+                                    reason: 'timeline',
+                                    open: true,
+                                    options: {
+                                        startupPlugin: base.ID,
+                                    },
+                                })
+                            }
                         />
                     </div>
                 )

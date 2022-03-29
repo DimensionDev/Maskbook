@@ -8,8 +8,8 @@ import type { FileInfo } from '../types'
 import FileServiceDialog from './MainDialog'
 import { Preview } from './Preview'
 import { FileServiceIcon } from '@masknet/icons'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ApplicationEntry } from '@masknet/shared'
-import { requestComposition } from '@masknet/shared-base'
 
 const definition: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -42,7 +42,15 @@ const definition: Plugin.SNSAdaptor.Definition = {
                         <ApplicationEntry
                             title="File Service"
                             icon={new URL('./files.png', import.meta.url).toString()}
-                            onClick={() => requestComposition(base.ID)}
+                            onClick={() =>
+                                CrossIsolationMessages.events.requestComposition.sendToLocal({
+                                    reason: 'timeline',
+                                    open: true,
+                                    options: {
+                                        startupPlugin: base.ID,
+                                    },
+                                })
+                            }
                         />
                     </div>
                 )

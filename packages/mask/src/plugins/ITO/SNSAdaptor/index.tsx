@@ -19,7 +19,7 @@ import { set } from 'lodash-unified'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { MarketsIcon } from '@masknet/icons'
 import { ApplicationEntry } from '@masknet/shared'
-import { requestComposition } from '@masknet/shared-base'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ClaimAllDialog } from './ClaimAllDialog'
 
 const useStyles = makeStyles()((theme) => ({
@@ -75,7 +75,15 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         <ApplicationEntry
                             title="ITO"
                             icon={new URL('../assets/token.png', import.meta.url).toString()}
-                            onClick={() => requestComposition(base.ID)}
+                            onClick={() =>
+                                CrossIsolationMessages.events.requestComposition.sendToLocal({
+                                    reason: 'timeline',
+                                    open: true,
+                                    options: {
+                                        startupPlugin: base.ID,
+                                    },
+                                })
+                            }
                         />
                     </div>
                 )
