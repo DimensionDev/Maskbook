@@ -13,6 +13,8 @@ export interface TrendingPopperProps {
     PopperProps?: Partial<PopperProps>
 }
 
+const TIMEOUT = 1500
+
 export function TrendingPopper(props: TrendingPopperProps) {
     const popperRef = useRef<{ update(): void } | null>(null)
     const [freezed, setFreezed] = useState(false) // disable any click
@@ -22,6 +24,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const [availableDataProviders, setAvailableDataProviders] = useState<DataProvider[]>([])
     const popper = useRef<HTMLDivElement | null>(null)
+    const [mouseIn, setMouseIn] = useState(false)
 
     // #region select token and provider dialog could be open by trending view
     const onFreezed = useCallback((ev) => setFreezed(ev.open), [])
@@ -64,10 +67,12 @@ export function TrendingPopper(props: TrendingPopperProps) {
     useEffect(() => {
         let timeId: NodeJS.Timeout
         const onMouseLeave = () => {
-            timeId = setTimeout(() => setAnchorEl(null), 1500)
+            timeId = setTimeout(() => setAnchorEl(null), TIMEOUT)
+            setMouseIn(false)
         }
         const onMouseEnter = () => {
             clearTimeout(timeId)
+            setMouseIn(true)
         }
         popper.current?.addEventListener('mouseleave', onMouseLeave)
         popper.current?.addEventListener('mouseenter', onMouseEnter)
@@ -89,11 +94,12 @@ export function TrendingPopper(props: TrendingPopperProps) {
         if (!anchorEl) return
         const { top } = anchorEl.getBoundingClientRect()
         if (
-            top < 0 || // out off top bound
-            top > document.documentElement.clientHeight // out off bottom bound
+            (top < 0 || // out off top bound
+                top > document.documentElement.clientHeight) && // out off bottom bound
+            !mouseIn
         )
-            setAnchorEl(null)
-    }, [anchorEl, Math.floor(position.y / 50)])
+            setTimeout(() => setAnchorEl(null), TIMEOUT)
+    }, [anchorEl, Math.floor(position.y / 50), mouseIn])
     // #endregion
 
     if (locked) return null
