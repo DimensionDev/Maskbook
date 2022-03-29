@@ -30,7 +30,7 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
     const [paymentPassword, setPaymentPassword] = useState('')
     const [incorrectBackupPassword, setIncorrectBackupPassword] = useState(false)
     const [incorrectPaymentPassword, setIncorrectPaymentPassword] = useState(false)
-    const [showPassword, setVisiblePassword] = useState({
+    const [visiblePassword, setVisiblePassword] = useState({
         base: true,
         wallet: false,
     })
@@ -46,7 +46,7 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
         }
 
         try {
-            if (showPassword.wallet) {
+            if (visiblePassword.wallet) {
                 const verified = await PluginServices.Wallet.verifyPassword(paymentPassword)
                 if (!verified) {
                     setIncorrectPaymentPassword(true)
@@ -55,10 +55,10 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
             }
 
             const fileJson = await Services.Welcome.createBackupFile({
-                noPosts: !showPassword.base,
-                noPersonas: !showPassword.base,
-                noProfiles: !showPassword.base,
-                noWallets: !showPassword.wallet,
+                noPosts: !visiblePassword.base,
+                noPersonas: !visiblePassword.base,
+                noProfiles: !visiblePassword.base,
+                noWallets: !visiblePassword.wallet,
                 download: false,
                 onlyBackupWhoAmI: false,
             })
@@ -99,7 +99,7 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
     }
 
     const backupDisabled = useMemo(() => {
-        return !backupPassword || (showPassword.wallet && !paymentPassword) || loading
+        return !backupPassword || (visiblePassword.wallet && !paymentPassword) || loading
     }, [backupPassword, paymentPassword, loading])
 
     useEffect(() => {
@@ -136,7 +136,7 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
                         helperText={incorrectBackupPassword ? t.settings_dialogs_incorrect_password() : ''}
                     />
 
-                    {showPassword.wallet ? (
+                    {visiblePassword.wallet ? (
                         <PasswordFiled
                             fullWidth
                             value={paymentPassword}
