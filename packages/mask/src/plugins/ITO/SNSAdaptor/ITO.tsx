@@ -493,7 +493,7 @@ export function ITO(props: ITO_Props) {
         tradeInfo?.buyInfo?.token.symbol,
     ])
 
-    const footerStartTime = useMemo(() => {
+    const FooterStartTime = useMemo(() => {
         return (
             <Typography variant="body1" className={classes.footerInfo}>
                 {t('plugin_ito_list_start_date', { date: formatDateTime(startTime, 'yyyy-MM-dd HH:mm') })}
@@ -501,7 +501,7 @@ export function ITO(props: ITO_Props) {
         )
     }, [startTime])
 
-    const footerEndTime = useMemo(
+    const FooterEndTime = useMemo(
         () => (
             <Typography variant="body1" className={classes.footerInfo}>
                 {t('plugin_ito_swap_end_date', { date: formatDateTime(endTime, 'yyyy-MM-dd HH:mm') })}
@@ -510,13 +510,13 @@ export function ITO(props: ITO_Props) {
         [endTime, t],
     )
 
-    const footerSwapInfo = useMemo(
+    const FooterSwapInfo = useMemo(
         () => (
             <>
                 <Typography variant="body1" className={classes.footerInfo}>
                     {swapResultText}
                 </Typography>
-                {footerEndTime}
+                {FooterEndTime}
                 {hasLockTime &&
                 !isUnlocked &&
                 unlockTime > Date.now() &&
@@ -529,10 +529,10 @@ export function ITO(props: ITO_Props) {
                 ) : null}
             </>
         ),
-        [footerEndTime, swapResultText],
+        [FooterEndTime, swapResultText],
     )
 
-    const footerNormal = useMemo(
+    const FooterNormal = useMemo(
         () => (
             <>
                 <Typography variant="body1" className={classes.footerInfo}>
@@ -543,16 +543,16 @@ export function ITO(props: ITO_Props) {
                 </Typography>
 
                 {listOfStatus.includes(ITO_Status.waited)
-                    ? footerStartTime
+                    ? FooterStartTime
                     : listOfStatus.includes(ITO_Status.started)
-                    ? footerEndTime
+                    ? FooterEndTime
                     : null}
             </>
         ),
-        [footerEndTime, footerStartTime, limit, listOfStatus, token.decimals, token.symbol],
+        [FooterEndTime, FooterStartTime, limit, listOfStatus, token.decimals, token.symbol],
     )
 
-    const footerBuyerLockedButton = useMemo(() => {
+    const FooterBuyerLockedButton = useMemo(() => {
         if (!availability?.claimed) {
             return (
                 <ActionButton
@@ -576,11 +576,11 @@ export function ITO(props: ITO_Props) {
         return null
     }, [availability?.claimed, canWithdraw, claimState])
 
-    const footerBuyerWithLockTimeButton = useMemo(
+    const FooterBuyerWithLockTimeButton = useMemo(
         () => (
             <Grid item xs={noRemain || listOfStatus.includes(ITO_Status.expired) ? 12 : 6}>
                 {(() => {
-                    if (isUnlocked) return footerBuyerLockedButton
+                    if (isUnlocked) return FooterBuyerLockedButton
 
                     return (
                         <ActionButton
@@ -598,11 +598,11 @@ export function ITO(props: ITO_Props) {
         [noRemain, listOfStatus, isUnlocked],
     )
 
-    const footerBuyerButton = useMemo(
+    const FooterBuyerButton = useMemo(
         () => (
             <Grid container spacing={2}>
                 {(() => {
-                    if (hasLockTime) return footerBuyerWithLockTimeButton
+                    if (hasLockTime) return FooterBuyerWithLockTimeButton
                     if (canWithdraw) {
                         return (
                             <ActionButton
@@ -680,10 +680,10 @@ export function ITO(props: ITO_Props) {
                 <Box className={classes.footer}>
                     <div className={classes.footerInfo}>
                         {isBuyer
-                            ? footerSwapInfo
+                            ? FooterSwapInfo
                             : listOfStatus.includes(ITO_Status.expired)
-                            ? footerEndTime
-                            : footerNormal}
+                            ? FooterEndTime
+                            : FooterNormal}
                     </div>
                     <Typography variant="body1" className={classes.fromText}>
                         From: @{sellerName}
@@ -741,7 +741,7 @@ export function ITO(props: ITO_Props) {
                         )
                     }
 
-                    if (isBuyer) return footerBuyerButton
+                    if (isBuyer) return FooterBuyerButton
 
                     if (canWithdraw) {
                         return (
