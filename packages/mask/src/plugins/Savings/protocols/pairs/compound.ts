@@ -66,18 +66,5 @@ export const COMPOUND_PAIRS_LIST: [FungibleTokenDetailed, FungibleTokenDetailed]
     ],
 ]
 
-console.log(
-    'COMPOUND_PAIRS_LIST',
-    JSON.stringify(
-        COMPOUND_PAIRS_LIST.map((_) => {
-            return {
-                bareToken: _[0],
-                stakeToken: _[1],
-            }
-        }),
-        null,
-        2,
-    ),
-)
 
 export const COMPOUND_PAIRS = COMPOUND_PAIRS_LIST.map((pair) => new CompoundProtocol(pair))
