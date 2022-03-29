@@ -69,7 +69,7 @@ export function ListingTab() {
         })
     }, [orders, asset.value])
 
-    if (asset.loading) return <LoadingTable />
+    if (asset.loading || orders.loading) return <LoadingTable />
     if (!asset.value || asset.error || !dataSource.length)
         return (
             <>

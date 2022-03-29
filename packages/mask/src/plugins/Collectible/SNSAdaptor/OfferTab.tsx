@@ -61,7 +61,7 @@ export function OfferTab() {
         return offers.value.data
     }, [offers])
 
-    if (asset.loading) return <LoadingTable />
+    if (asset.loading || offers.loading) return <LoadingTable />
     if (!offers.value?.data.length || asset.error || !dataSource.length)
         return (
             <Table size="small" stickyHeader>
