@@ -26939,7 +26939,7 @@ packages:
     dev: true
 
   github.com/ProjectOpenSea/wyvern-js/a106e07cc5974ca295d25cf9be6f78e61b54d380_typescript@4.6.3:
-    resolution: {commit: a106e07cc5974ca295d25cf9be6f78e61b54d380, repo: git+ssh://git@github.com/ProjectOpenSea/wyvern-js.git, type: git}
+    resolution: {tarball: https://codeload.github.com/ProjectOpenSea/wyvern-js/tar.gz/a106e07cc5974ca295d25cf9be6f78e61b54d380}
     id: github.com/ProjectOpenSea/wyvern-js/a106e07cc5974ca295d25cf9be6f78e61b54d380
     name: wyvern-js
     version: 3.2.0
@@ -26986,7 +26986,7 @@ packages:
     dev: false
 
   github.com/ProjectWyvern/ethereumjs-abi/3d2d89641a6ad5984929b6ca4b646452ec74f73d:
-    resolution: {commit: 3d2d89641a6ad5984929b6ca4b646452ec74f73d, repo: git+ssh://git@github.com/ProjectWyvern/ethereumjs-abi.git, type: git}
+    resolution: {tarball: https://codeload.github.com/ProjectWyvern/ethereumjs-abi/tar.gz/3d2d89641a6ad5984929b6ca4b646452ec74f73d}
     name: ethereumjs-abi
     version: 0.6.6
     dependencies:
@@ -27010,7 +27010,7 @@ packages:
     dev: false
 
   github.com/locize/html-parse-stringify2/d463109433b2c49c74a081044f54b2a6a1ccad7c:
-    resolution: {commit: d463109433b2c49c74a081044f54b2a6a1ccad7c, repo: git+ssh://git@github.com/locize/html-parse-stringify2.git, type: git}
+    resolution: {tarball: https://codeload.github.com/locize/html-parse-stringify2/tar.gz/d463109433b2c49c74a081044f54b2a6a1ccad7c}
     name: html-parse-stringify2
     version: 2.0.1
     dependencies:
