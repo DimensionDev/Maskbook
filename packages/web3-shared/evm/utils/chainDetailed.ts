@@ -116,6 +116,7 @@ const chainNameMap: Record<NetworkType, string> = {
     [NetworkType.Metis]: 'Metis',
     [NetworkType.Optimistic]: 'Optimistic',
     [NetworkType.Conflux]: 'Conflux',
+    [NetworkType.KardiaChain]: 'KardiaChain',
 }
 export function getNetworkTypeFromChainId(chainId: ChainId, value?: boolean) {
     const chainDetailed = getChainDetailed(chainId)

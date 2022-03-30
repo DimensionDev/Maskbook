@@ -2857,5 +2857,30 @@
         "shortName": "Conflux",
         "chainId": 1030,
         "networkId": 1030
+    },
+    {
+        "name": "KardiaChain",
+        "chain": "Kardia",
+        "network": "mainnet",
+        "rpc": ["https://rpc.kardiachain.io/"],
+        "faucets": [],
+        "features": [],
+        "nativeCurrency": {
+            "name": "KAI",
+            "symbol": "KAI",
+            "decimals": 18,
+            "logoURI": "https://kairdrop.s3-ap-southeast-1.amazonaws.com/images/f1671a27da0d2e9ce543050a58eb79dc519c01bc8716AAB613.png"
+        },
+        "infoURL": "https://kardiachain.io/",
+        "explorers": [
+            {
+                "name": "KardiaChain Explorer",
+                "url": "https://explorer.kardiachain.io/",
+                "standard": "EIP3091"
+            }
+        ],
+        "shortName": "kai",
+        "chainId": 24,
+        "networkId": 0
     }
 ]

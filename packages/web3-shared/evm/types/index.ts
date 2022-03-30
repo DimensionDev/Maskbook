@@ -81,6 +81,9 @@ export enum ChainId {
 
     // Conflux
     Conflux = 1030,
+
+    // Kardiachain
+    KardiaChain = 24,
 }
 
 export enum ProviderType {
@@ -117,6 +120,7 @@ export enum NetworkType {
     Metis = 'Metis',
     Optimistic = 'Optimistic',
     Conflux = 'Conflux',
+    KardiaChain = 'KardiaChain',
 }
 
 export interface Wallet {

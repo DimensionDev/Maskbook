@@ -177,6 +177,16 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         iconColor: 'rgb(112, 212, 74)',
         isMainnet: true,
     },
+    {
+        ID: `${PLUGIN_ID}_kardiachain`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.KardiaChain,
+        type: NetworkType.KardiaChain,
+        name: 'KardiaChain',
+        icon: new URL('./assets/kardiachain.png', import.meta.url),
+        iconColor: 'rgb(27, 27, 27)',
+        isMainnet: true,
+    },
 ]
 export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
     {
