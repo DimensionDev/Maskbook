@@ -4,8 +4,7 @@ import { PersonaContext } from '../hooks/usePersonaContext'
 import { useNavigate } from 'react-router-dom'
 import { DeleteIcon, MasksIcon, EditIcon } from '@masknet/icons'
 import { Button, Typography } from '@mui/material'
-import { formatFingerprint, MAX_PERSONA_LIMIT } from '@masknet/shared'
-import { PopupRoutes } from '@masknet/shared-base'
+import { PopupRoutes, formatPersonaFingerprint, MAX_PERSONA_LIMIT } from '@masknet/shared-base'
 import { ChevronDown, ChevronUp } from 'react-feather'
 import { ProfileList } from '../components/ProfileList'
 import { EnterDashboard } from '../../../components/EnterDashboard'
@@ -114,7 +113,7 @@ const PersonaHome = memo(() => {
                                 />
                             </Typography>
                             <Typography className={classes.identifier}>
-                                {formatFingerprint(currentPersona?.identifier.compressedPoint ?? '', 10)}
+                                {formatPersonaFingerprint(currentPersona?.identifier.compressedPoint ?? '', 10)}
                                 <DeleteIcon
                                     className={classes.trashIcon}
                                     onClick={() => {

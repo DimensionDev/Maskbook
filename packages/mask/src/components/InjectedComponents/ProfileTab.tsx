@@ -1,8 +1,7 @@
 import { ReactElement, useCallback, useState } from 'react'
 import classnames from 'classnames'
 import { Typography } from '@mui/material'
-import { MaskMessages, useMatchXS } from '../../utils'
-import { useLocationChange } from '../../utils/hooks/useLocationChange'
+import { MaskMessages, useMatchXS, useLocationChange } from '../../utils'
 
 export interface ProfileTabProps extends withClasses<'tab' | 'button' | 'selected'> {
     clear(): void
@@ -20,6 +19,8 @@ export function ProfileTab(props: ProfileTabProps) {
     const isMobile = useMatchXS()
 
     const onClick = useCallback(() => {
+        // Change the url hashtag to trigger `locationchange` event from e.g. 'hostname/medias#web3 => hostname/medias'
+        location.assign('#web3')
         MaskMessages.events.profileTabUpdated.sendToLocal({ show: true })
         setActive(true)
         clear()

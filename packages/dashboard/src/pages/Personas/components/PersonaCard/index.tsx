@@ -2,13 +2,13 @@ import { memo } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine'
-import type {
-    NextIDPersonaBindings,
-    PersonaIdentifier,
-    ProfileIdentifier,
-    ProfileInformation,
+import {
+    type NextIDPersonaBindings,
+    type PersonaIdentifier,
+    type ProfileIdentifier,
+    type ProfileInformation,
+    formatPersonaFingerprint,
 } from '@masknet/shared-base'
-import { formatFingerprint } from '@masknet/shared'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import type { SocialNetwork } from '../../api'
 import classNames from 'classnames'
@@ -79,7 +79,12 @@ export const PersonaCard = memo<PersonaCardProps>((props) => {
 
 export interface PersonaCardUIProps extends PersonaCardProps {
     definedSocialNetworks: SocialNetwork[]
-    onConnect: (identifier: PersonaIdentifier, networkIdentifier: string, type?: 'local' | 'nextID') => void
+    onConnect: (
+        identifier: PersonaIdentifier,
+        networkIdentifier: string,
+        type?: 'local' | 'nextID',
+        profile?: ProfileIdentifier,
+    ) => void
     onDisconnect: (identifier: ProfileIdentifier) => void
     verification?: NextIDPersonaBindings
 }
@@ -98,7 +103,7 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
                         {nickname}
                     </Typography>
                     <Typography variant="caption" sx={{ cursor: 'pointer' }} onClick={onClick}>
-                        {formatFingerprint(identifier.compressedPoint, 4)}
+                        {formatPersonaFingerprint(identifier.compressedPoint, 4)}
                     </Typography>
                 </div>
                 <div className={classes.content}>
@@ -121,7 +126,9 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
                                     proof={proof}
                                     isHideOperations
                                     key={networkIdentifier}
-                                    onConnect={(type) => onConnect(identifier, networkIdentifier, type)}
+                                    onConnect={(type, profile) =>
+                                        onConnect(identifier, networkIdentifier, type, profile)
+                                    }
                                     onDisconnect={onDisconnect}
                                     profileIdentifiers={currentNetworkProfiles.map((x) => x.identifier)}
                                     networkIdentifier={networkIdentifier}

@@ -70,7 +70,7 @@ function _(selector: () => LiveSelector<HTMLImageElement, false>, signal: AbortS
                     />,
                 )
 
-                remove = root.destory
+                remove = root.destroy
             }
 
             run()

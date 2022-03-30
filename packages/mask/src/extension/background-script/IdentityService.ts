@@ -23,6 +23,7 @@ import {
     ProfileInformation,
     PostIVIdentifier,
     RelationFavor,
+    NextIDAction,
 } from '@masknet/shared-base'
 import type { Persona, Profile } from '../../database/Persona/types'
 import {
@@ -57,6 +58,7 @@ import { getCurrentPersonaIdentifier } from './SettingsService'
 import { MaskMessages } from '../../utils'
 import { first, orderBy } from 'lodash-unified'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
+import { bindProof } from '@masknet/web3-providers'
 
 assertEnvironment(Environment.ManifestBackground)
 
@@ -391,3 +393,21 @@ export async function queryPersonaByPrivateKey(privateKeyString: string) {
     return null
 }
 // #endregion
+
+export async function detachProfileWithNextID(
+    uuid: string,
+    personaPublicKey: string,
+    platform: string,
+    identity: string,
+    createdAt: string,
+    options?: {
+        walletSignature?: string
+        signature?: string
+        proofLocation?: string
+    },
+) {
+    await bindProof(uuid, personaPublicKey, NextIDAction.Delete, platform, identity, createdAt, {
+        signature: options?.signature,
+    })
+    MaskMessages.events.ownProofChanged.sendToAll(undefined)
+}

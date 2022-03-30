@@ -1,5 +1,5 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
-import { MaskMessages, CompositionRequest } from '../../../utils/messages'
+import { CrossIsolationMessages, CompositionRequest } from '@masknet/shared-base'
 import { i18n } from '../../../../shared-ui/locales_legacy'
 import { makeTypedMessageText, SerializableTypedMessages } from '@masknet/typed-message'
 import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
@@ -56,7 +56,7 @@ export async function taskOpenComposeBoxFacebook(
     }
 
     await delay(2000)
-    MaskMessages.events.requestComposition.sendToLocal({
+    CrossIsolationMessages.events.requestComposition.sendToLocal({
         reason: 'popup',
         open: true,
         content: typeof content === 'string' ? makeTypedMessageText(content) : content,

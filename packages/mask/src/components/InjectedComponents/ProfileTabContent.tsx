@@ -1,19 +1,17 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { first } from 'lodash-unified'
-import type { NextIDPlatform } from '@masknet/shared-base'
+import { NextIDPlatform, EMPTY_LIST } from '@masknet/shared-base'
 import { Box, CircularProgress } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useAddressNames } from '@masknet/web3-shared-evm'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor, Plugin, PluginId } from '@masknet/plugin-infra'
 import { PageTab } from '../InjectedComponents/PageTab'
-import { useLocationChange } from '../../utils/hooks/useLocationChange'
-import { MaskMessages, useI18N } from '../../utils'
+import { MaskMessages, useI18N, useLocationChange } from '../../utils'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { useNextIDBoundByPlatform } from '../DataSource/useNextID'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { activatedSocialNetworkUI } from '../../social-network'
-import { EMPTY_LIST } from '../../../utils-pure'
 
 function getTabContent(tabId: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
