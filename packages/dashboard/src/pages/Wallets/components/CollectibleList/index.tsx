@@ -1,21 +1,20 @@
 import { Dispatch, memo, SetStateAction, useCallback, useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Box, Stack, TablePagination } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { EMPTY_LIST } from '@masknet/web3-shared-evm'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
+import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { CollectibleCard } from '../CollectibleCard'
 import { useDashboardI18N } from '../../../../locales'
 import { PluginMessages } from '../../../../API'
-import { useNavigate } from 'react-router-dom'
-import { DashboardRoutes } from '@masknet/shared-base'
 import { TransferTab } from '../Transfer'
 import {
     useNetworkDescriptor,
     useWeb3State as useWeb3PluginState,
     Web3Plugin,
     useAccount,
-    usePluginIDContext,
+    useCurrentWeb3NetworkPluginID,
     NetworkPluginID,
 } from '@masknet/plugin-infra'
 import { useAsyncRetry } from 'react-use'
@@ -72,7 +71,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
         setRenderData(render)
     }, [value.data, loadingSize, page])
 
-    const currentPluginId = usePluginIDContext()
+    const currentPluginId = useCurrentWeb3NetworkPluginID()
     const onSend = useCallback(
         (detail: Web3Plugin.NonFungibleToken) => {
             // Sending NFT is only available on EVM currently.

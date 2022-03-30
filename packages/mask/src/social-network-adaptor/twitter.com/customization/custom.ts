@@ -1,6 +1,6 @@
 import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
 import { SubscriptionFromValueRef } from '@masknet/shared-base'
-import { useValueRef } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared-base-ui'
 import { PaletteMode, Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
 import produce, { setAutoFreeze } from 'immer'
 import { useMemo } from 'react'
@@ -248,7 +248,8 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                         backgroundColor: theme.palette.primary.main,
                         color: theme.palette.common.white,
                         '&:hover': {
-                            backgroundColor: parseColor(theme.palette.text.primary).setAlpha(0.1).toRgbString(),
+                            backgroundColor: `${theme.palette.primary.main} !important`,
+                            opacity: 0.9,
                         },
                     },
                 },

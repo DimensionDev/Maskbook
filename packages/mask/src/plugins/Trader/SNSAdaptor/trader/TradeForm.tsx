@@ -3,13 +3,14 @@ import { useI18N } from '../../../../utils'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
 import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import type { FungibleTokenDetailed, Wallet } from '@masknet/web3-shared-evm'
 import { EthereumTokenType, formatBalance, formatPercentage } from '@masknet/web3-shared-evm'
 import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
-import { FormattedBalance, SelectTokenChip, useRemoteControlledDialog } from '@masknet/shared'
+import { FormattedBalance, SelectTokenChip } from '@masknet/shared'
 import { ChevronUpIcon, DropIcon } from '@masknet/icons'
 import classnames from 'classnames'
 import { TraderInfo } from './TraderInfo'
@@ -212,7 +213,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         const { t } = useI18N()
         const { classes } = useStyles({ isDashboard, isPopup })
         const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-        const [isExpand, setIsExpand] = useState(false)
+        const [isExpand, setExpand] = useState(false)
 
         // #region approve token
         const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(
@@ -284,7 +285,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         // #endregion
 
         useUpdateEffect(() => {
-            setIsExpand(false)
+            setExpand(false)
         }, [chainId, inputToken, inputAmount, outputToken])
 
         useUpdateEffect(() => {
@@ -426,7 +427,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                             classes.chevron,
                                             isExpand ? classes.reverseChevron : null,
                                         )}
-                                        onClick={() => setIsExpand(!isExpand)}
+                                        onClick={() => setExpand(!isExpand)}
                                     />
                                 </Box>
                             </>

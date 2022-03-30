@@ -14,8 +14,9 @@ import {
     useFungibleTokenBalance,
     useTokenConstants,
     useWallet,
+    UST,
 } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { delay } from '@dimensiondev/kit'
 import { useGasConfig } from './hooks/useGasConfig'
 import type { Coin } from '../../types'
@@ -23,7 +24,6 @@ import { TokenPanelType, TradeInfo } from '../../types'
 import { useI18N } from '../../../../utils'
 import { TradeForm } from './TradeForm'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
-import { UST } from '../../constants'
 import { SelectTokenDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
 import { useUnmount, useUpdateEffect } from 'react-use'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
@@ -287,32 +287,26 @@ export function Trader(props: TraderProps) {
 
     // #region remote controlled transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
-    const shareLink = activatedSocialNetworkUI.utils
-        .getShareLinkURL?.(
-            focusedTrade?.value && inputToken && outputToken
-                ? [
-                      `I just swapped ${formatBalance(
-                          focusedTrade.value.inputAmount,
-                          inputToken.decimals,
-                          6,
-                      )} ${cashTag}${inputToken.symbol} for ${formatBalance(
-                          focusedTrade.value.outputAmount,
-                          outputToken.decimals,
-                          6,
-                      )} ${cashTag}${outputToken.symbol}.${
-                          isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                              ? `Follow @${
-                                    isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                                } (mask.io) to swap cryptocurrencies on ${
-                                    isTwitter(activatedSocialNetworkUI) ? 'Twitter' : 'Facebook'
-                                }.`
-                              : ''
-                      }`,
-                      '#mask_io',
-                  ].join('\n')
-                : '',
-        )
-        .toString()
+    const shareText =
+        focusedTrade?.value && inputToken && outputToken
+            ? [
+                  `I just swapped ${formatBalance(focusedTrade.value.inputAmount, inputToken.decimals, 6)} ${cashTag}${
+                      inputToken.symbol
+                  } for ${formatBalance(focusedTrade.value.outputAmount, outputToken.decimals, 6)} ${cashTag}${
+                      outputToken.symbol
+                  }.${
+                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                          ? `Follow @${
+                                isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
+                            } (mask.io) to swap cryptocurrencies on ${
+                                isTwitter(activatedSocialNetworkUI) ? 'Twitter' : 'Facebook'
+                            }.`
+                          : ''
+                  }`,
+                  '#mask_io',
+              ].join('\n')
+            : ''
+
     // #endregion
 
     // #region close the transaction dialog
@@ -336,7 +330,7 @@ export function Trader(props: TraderProps) {
         if (tradeState?.type === TransactionStateType.UNKNOWN) return
         setTransactionDialog({
             open: true,
-            shareLink,
+            shareText,
             state: tradeState,
         })
     }, [tradeState /* update tx dialog only if state changed */])

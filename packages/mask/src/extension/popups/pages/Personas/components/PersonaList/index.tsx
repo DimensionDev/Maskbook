@@ -1,11 +1,14 @@
 import { memo, useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { PersonaContext } from '../../hooks/usePersonaContext'
-import type { PersonaInformation, ECKeyIdentifier } from '@masknet/shared-base'
+import {
+    formatPersonaFingerprint,
+    PopupRoutes,
+    type PersonaInformation,
+    type ECKeyIdentifier,
+} from '@masknet/shared-base'
 import { ListItemButton, List, Typography } from '@mui/material'
 import { DeleteIcon, MasksIcon } from '@masknet/icons'
-import { formatFingerprint } from '@masknet/shared'
-import { PopupRoutes } from '@masknet/shared-base'
 import { useNavigate } from 'react-router-dom'
 import Services from '../../../../../service'
 
@@ -95,7 +98,7 @@ export const PersonaListUI = memo<PersonaListUIProps>(({ personas, onLogout, onC
                         <div>
                             <Typography className={classes.name}>{nickname}</Typography>
                             <Typography className={classes.identifier}>
-                                {formatFingerprint(identifier.compressedPoint ?? '', 10)}
+                                {formatPersonaFingerprint(identifier.compressedPoint ?? '', 10)}
                                 <DeleteIcon
                                     className={classes.trashIcon}
                                     onClick={(e) => {

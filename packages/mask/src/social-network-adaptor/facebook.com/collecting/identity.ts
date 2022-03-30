@@ -1,9 +1,8 @@
 import { LiveSelector, MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
-
 import { creator, SocialNetworkUI } from '../../../social-network'
 import { getProfileIdentifierAtFacebook, getUserID } from '../utils/getProfileIdentifier'
 import { isMobileFacebook } from '../utils/isMobile'
-import { ProfileIdentifier } from '@masknet/shared-base'
+import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
 import { searchAvatarSelector, searchUserIdOnMobileSelector } from '../utils/selector'
 import { getAvatar, getBioDescription, getFacebookId, getNickName, getPersonalHomepage } from '../utils/user'
 import { delay } from '@dimensiondev/kit'
@@ -36,7 +35,7 @@ function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<Value>, signal
     fetch('/me', { method: 'HEAD', signal })
         .then((x) => x.url)
         .then(getUserID)
-        .then((id) => id && assign({ ...ref.value, identifier: new ProfileIdentifier('facebook.com', id) }))
+        .then((id) => id && assign({ ...ref.value, identifier: new ProfileIdentifier(EnhanceableSite.Facebook, id) }))
 }
 
 function resolveCurrentVisitingIdentityInner(
@@ -55,7 +54,7 @@ function resolveCurrentVisitingIdentityInner(
         const avatar = getAvatar()
 
         ref.value = {
-            identifier: handle ? new ProfileIdentifier('facebook.com', handle) : ProfileIdentifier.unknown,
+            identifier: handle ? new ProfileIdentifier(EnhanceableSite.Facebook, handle) : ProfileIdentifier.unknown,
             nickname,
             avatar,
             bio,

@@ -9,7 +9,7 @@ import {
     useNativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
 import { Tune } from '@mui/icons-material'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { Box, IconButton, Typography } from '@mui/material'
 import { WalletMessages } from '../../messages'

@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
-// see https://github.com/import-js/eslint-plugin-import/issues/2288
-// eslint-disable-next-line import/no-deprecated
 import { DialogContent, Theme, useMediaQuery } from '@mui/material'
 import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
 import { FungibleTokenDetailed, useChainId, ChainId, useTokenConstants } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../../Wallet/messages'
 import { useI18N } from '../../../utils'
-import { ERC20TokenList, ERC20TokenListProps, useRemoteControlledDialog } from '@masknet/shared'
+import { ERC20TokenList, ERC20TokenListProps } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { delay } from '@dimensiondev/kit'
 import { MINDS_ID } from '../../../social-network-adaptor/minds.com/base'
 import { activatedSocialNetworkUI } from '../../../social-network'
@@ -52,13 +51,13 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
     )
     const chainId = useChainId()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
-    // eslint-disable-next-line import/no-deprecated
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
 
     const [id, setId] = useState('')
     const [targetChainId, setChainId] = useState<ChainId | undefined>(chainId)
     const [rowSize, setRowSize] = useState(54)
 
+    const [title, setTitle] = useState(t('plugin_wallet_select_a_token'))
     const [disableNativeToken, setDisableNativeToken] = useState(true)
     const [disableSearchBar, setDisableSearchBar] = useState(false)
     const [FungibleTokenListProps, setFungibleTokenListProps] = useState<ERC20TokenListProps | null>(null)
@@ -74,6 +73,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
 
     const { open, setDialog } = useRemoteControlledDialog(WalletMessages.events.selectTokenDialogUpdated, (ev) => {
         if (!ev.open) return
+        setTitle(ev.title ?? t('plugin_wallet_select_a_token'))
         setId(ev.uuid)
         setDisableNativeToken(ev.disableNativeToken ?? true)
         setDisableSearchBar(ev.disableSearchBar ?? false)
@@ -100,11 +100,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
     }, [id, setDialog])
 
     return (
-        <InjectedDialog
-            titleBarIconStyle={isDashboard ? 'close' : 'back'}
-            open={open}
-            onClose={onClose}
-            title={t('plugin_wallet_select_a_token')}>
+        <InjectedDialog titleBarIconStyle={isDashboard ? 'close' : 'back'} open={open} onClose={onClose} title={title}>
             <DialogContent classes={{ root: classes.content }}>
                 <ERC20TokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}

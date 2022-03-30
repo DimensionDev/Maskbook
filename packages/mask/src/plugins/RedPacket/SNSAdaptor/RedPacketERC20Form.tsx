@@ -1,4 +1,4 @@
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
     EthereumTokenType,
     formatBalance,

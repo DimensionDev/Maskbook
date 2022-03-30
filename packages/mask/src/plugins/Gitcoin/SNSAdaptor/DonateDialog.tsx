@@ -20,7 +20,7 @@ import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { useI18N } from '../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
@@ -120,25 +120,19 @@ export function DonateDialog(props: DonateDialogProps) {
     // #region transaction dialog
 
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
-    const shareLink = activatedSocialNetworkUI.utils
-        .getShareLinkURL?.(
-            token
-                ? [
-                      `I just donated ${title} with ${formatBalance(amount, token.decimals)} ${cashTag}${
-                          token.symbol
-                      }. ${
-                          isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                              ? `Follow @${
-                                    isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                                } (mask.io) to donate Gitcoin grants.`
-                              : ''
-                      }`,
-                      '#mask_io',
-                      postLink,
-                  ].join('\n')
-                : '',
-        )
-        .toString()
+    const shareText = token
+        ? [
+              `I just donated ${title} with ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol}. ${
+                  isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                      ? `Follow @${
+                            isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
+                        } (mask.io) to donate Gitcoin grants.`
+                      : ''
+              }`,
+              '#mask_io',
+              postLink,
+          ].join('\n')
+        : ''
 
     // close the transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
@@ -156,7 +150,7 @@ export function DonateDialog(props: DonateDialogProps) {
         if (donateState.type === TransactionStateType.UNKNOWN) return
         setTransactionDialog({
             open: true,
-            shareLink,
+            shareText,
             state: donateState,
             summary: `Donating ${formatBalance(amount, token.decimals)} ${token.symbol} for ${title}.`,
         })

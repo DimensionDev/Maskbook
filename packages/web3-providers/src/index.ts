@@ -2,12 +2,14 @@ import { CoinGeckoAPI } from './coingecko'
 import { OpenSeaAPI } from './opensea'
 import { RaribleAPI } from './rarible'
 import { NFTScanAPI } from './NFTScan'
+import { ZoraAPI } from './zora'
 import { NativeExplorerAPI } from './explorer'
 import { RSS3API } from './rss3'
 import { KeyValueAPI } from './kv'
 import { TwitterAPI } from './twitter'
 import { TokenListAPI } from './token-list'
 import { TokenPriceAPI } from './token-price'
+import { InstagramAPI } from './instagram'
 
 export * from './types'
 export * from './hooks'
@@ -17,12 +19,13 @@ export * from './NextID'
 export const OpenSea = new OpenSeaAPI()
 export const Rarible = new RaribleAPI()
 export const NFTScan = new NFTScanAPI()
+export const Zora = new ZoraAPI()
 export const CoinGecko = new CoinGeckoAPI()
 export const Explorer = new NativeExplorerAPI()
 export const RSS3 = new RSS3API()
 export const KeyValue = new KeyValueAPI()
 export const Twitter = new TwitterAPI()
-
+export const Instagram = new InstagramAPI()
 export const TokenList = new TokenListAPI()
 export const TokenPrice = new TokenPriceAPI()
 

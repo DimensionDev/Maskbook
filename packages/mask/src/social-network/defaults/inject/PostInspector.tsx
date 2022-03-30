@@ -41,7 +41,7 @@ export function injectPostInspectorDefault<T extends string>(
             signal,
         })
         root.render(jsx)
-        return root.destory
+        return root.destroy
     }
 }
 

@@ -1,4 +1,4 @@
-import type { RenderFragmentsContextType } from '@masknet/typed-message/dom'
+import { DefaultRenderFragments, RenderFragmentsContextType } from '@masknet/typed-message/dom'
 import { memo } from 'react'
 import { Link } from '@mui/material'
 import { useTagEnhancer } from '../../../../shared-ui/TypedMessageRender/Components/Text'
@@ -14,4 +14,8 @@ export const FacebookRenderFragments: RenderFragmentsContextType = {
     HashLink: memo(Hash),
     // Facebook has no native cashtag support. Treat it has a hash.
     CashLink: memo(Hash),
+    Image: memo((props) => {
+        if (props.src.includes('emoji.php')) return null
+        return <DefaultRenderFragments.Image {...props} />
+    }),
 }

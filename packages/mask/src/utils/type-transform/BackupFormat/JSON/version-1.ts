@@ -1,4 +1,3 @@
-/* eslint-disable import/no-deprecated */
 import type { BackupJSONFileVersion0 } from './version-0'
 import type {
     ProfileIdentifier,

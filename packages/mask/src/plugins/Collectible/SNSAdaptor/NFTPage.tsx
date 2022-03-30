@@ -4,7 +4,7 @@ import { MenuItem } from '@mui/material'
 import type { AddressName } from '@masknet/web3-shared-evm'
 import { CollectionList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
 import { first, uniqBy } from 'lodash-unified'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { ReversedAddress } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -71,7 +71,7 @@ export function NFTPage(props: NFTPageProps) {
                 {uniqBy(addressNames ?? [], (x) => x.resolvedAddress.toLowerCase()).map((x) => {
                     return (
                         <MenuItem key={x.resolvedAddress} value={x.resolvedAddress} onClick={() => onSelect(x)}>
-                            {formatEthereumAddress(x.label, 5)}
+                            <ReversedAddress address={x.resolvedAddress} />
                         </MenuItem>
                     )
                 })}

@@ -12,7 +12,7 @@ import { BoxState, CardTab } from '../../type'
 import { ArticlesTab } from './ArticlesTab'
 import { DetailsTab } from './DetailsTab'
 import { DrawResultDialog } from './DrawResultDialog'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '../../../Wallet/messages'
 
 const useTabsStyles = makeStyles()((theme) => ({
