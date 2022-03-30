@@ -310,13 +310,13 @@ importers:
       '@masknet/plugin-cyberconnect': workspace:*
       '@masknet/plugin-dao': workspace:*
       '@masknet/plugin-debugger': workspace:*
+      '@masknet/plugin-ens': workspace:*
       '@masknet/plugin-example': workspace:*
       '@masknet/plugin-file-service': workspace:*
       '@masknet/plugin-flow': workspace:*
       '@masknet/plugin-infra': workspace:*
       '@masknet/plugin-rss3': workspace:*
       '@masknet/plugin-solana': workspace:*
-      '@masknet/plugin-test': workspace:*
       '@masknet/plugin-wallet': workspace:*
       '@masknet/public-api': workspace:*
       '@masknet/sdk': workspace:*
@@ -449,13 +449,13 @@ importers:
       '@masknet/plugin-cyberconnect': link:../plugins/CyberConnect
       '@masknet/plugin-dao': link:../plugins/DAO
       '@masknet/plugin-debugger': link:../plugins/Debugger
+      '@masknet/plugin-ens': link:../plugins/ENS
       '@masknet/plugin-example': link:../plugins/example
       '@masknet/plugin-file-service': link:../plugins/FileService
       '@masknet/plugin-flow': link:../plugins/Flow
       '@masknet/plugin-infra': link:../plugin-infra
       '@masknet/plugin-rss3': link:../plugins/RSS3
       '@masknet/plugin-solana': link:../plugins/Solana
-      '@masknet/plugin-test': link:../plugins/Test
       '@masknet/plugin-wallet': link:../plugins/Wallet
       '@masknet/public-api': link:../public-api
       '@masknet/sdk': link:../mask-sdk
@@ -690,6 +690,24 @@ importers:
       react-use: 17.3.2_581fa33d3647c30d8078674dcd1b240a
       urlcat: 2.0.4
 
+  packages/plugins/ENS:
+    specifiers:
+      '@masknet/plugin-infra': workspace:*
+      '@masknet/shared': workspace:*
+      '@masknet/shared-base': workspace:*
+      '@masknet/web3-contracts': workspace:*
+      '@masknet/web3-shared-evm': workspace:*
+      eth-ens-namehash: 2.0.8
+      react-use: ^17.3.2
+    dependencies:
+      '@masknet/plugin-infra': link:../../plugin-infra
+      '@masknet/shared': link:../../shared
+      '@masknet/shared-base': link:../../shared-base
+      '@masknet/web3-contracts': link:../../web3-contracts
+      '@masknet/web3-shared-evm': link:../../web3-shared/evm
+      eth-ens-namehash: 2.0.8
+      react-use: 17.3.2_581fa33d3647c30d8078674dcd1b240a
+
   packages/plugins/FileService:
     specifiers:
       '@dimensiondev/common-protocols': 1.6.0-20210723072221-8f46a92
@@ -827,22 +845,6 @@ importers:
       bs58: 4.0.1
       buffer: 6.0.3
       react-use: 17.3.2_581fa33d3647c30d8078674dcd1b240a
-
-  packages/plugins/Test:
-    specifiers:
-      '@masknet/plugin-infra': workspace:*
-      '@masknet/shared': workspace:*
-      '@masknet/shared-base': workspace:*
-      '@masknet/web3-contracts': workspace:*
-      '@masknet/web3-shared-evm': workspace:*
-      react-use: ^17.3.2
-    dependencies:
-      '@masknet/plugin-infra': link:../../plugin-infra
-      '@masknet/shared': link:../../shared
-      '@masknet/shared-base': link:../../shared-base
-      '@masknet/web3-contracts': link:../../web3-contracts
-      '@masknet/web3-shared-evm': link:../../web3-shared/evm
-      react-use: 17.3.2_bc22c48adf1a4e34a005159413cd72b5
 
   packages/plugins/Wallet:
     specifiers:
@@ -23449,7 +23451,7 @@ packages:
       safe-buffer: 5.2.1
       tough-cookie: 2.5.0
       tunnel-agent: 0.6.0
-      uuid: 3.3.2
+      uuid: 3.4.0
     dev: false
 
   /require-directory/2.1.1:
@@ -27887,7 +27889,7 @@ packages:
     dev: false
 
   github.com/ProjectWyvern/ethereumjs-abi/3d2d89641a6ad5984929b6ca4b646452ec74f73d:
-    resolution: {commit: 3d2d89641a6ad5984929b6ca4b646452ec74f73d, repo: git+ssh://git@github.com/ProjectWyvern/ethereumjs-abi.git, type: git}
+    resolution: {tarball: https://codeload.github.com/ProjectWyvern/ethereumjs-abi/tar.gz/3d2d89641a6ad5984929b6ca4b646452ec74f73d}
     name: ethereumjs-abi
     version: 0.6.6
     dependencies:
@@ -27913,7 +27915,7 @@ packages:
     dev: false
 
   github.com/frozeman/bignumber.js-nolookahead/57692b3ecfc98bbdd6b3a516cb2353652ea49934:
-    resolution: {commit: 57692b3ecfc98bbdd6b3a516cb2353652ea49934, repo: git+ssh://git@github.com/frozeman/bignumber.js-nolookahead.git, type: git}
+    resolution: {tarball: https://codeload.github.com/frozeman/bignumber.js-nolookahead/tar.gz/57692b3ecfc98bbdd6b3a516cb2353652ea49934}
     name: bignumber.js
     version: 2.0.7
     dev: false

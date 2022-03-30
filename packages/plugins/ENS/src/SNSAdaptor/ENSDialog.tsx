@@ -3,10 +3,12 @@ import { makeStyles } from '@masknet/theme'
 import { Box } from '@mui/system'
 import { ChangeEvent, useCallback, useState } from 'react'
 import { TextField, Button } from '@mui/material'
-import { useContract, useAccount } from '@masknet/web3-shared-evm'
-import ENSABI from '@masknet/web3-contracts/abis/ENS.json'
+import { useAccount } from '@masknet/web3-shared-evm'
+import { hash } from 'eth-ens-namehash'
 import { useI18N } from '../locales/index'
 import ENSDetail from './ENSDetail'
+import type { ENS_Info_type } from './types'
+import { useENSContract } from './hook/useENSContract'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -37,31 +39,14 @@ interface TestDialogProps {
     onClose: () => void
 }
 
-interface CreateParams {
-    gas: number | undefined
-    params: MethodParameters
-    paramsObj: ParamsObjType
-    gasError: Error | null
-}
-
 const TestDialog: React.FC<TestDialogProps> = (props) => {
     const { classes } = useStyles()
     const { t } = useI18N()
     const [ensName, setEnsName] = useState('')
+    const [ENSInfo, setENSInfo] = useState<ENS_Info_type>()
     const account = useAccount()
 
-    const contract = useContract('0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41', ENSABI)
-
-    const getCreateParams = useCallback(async (): Promise<CreateParams | null> => {
-        const gas = await contract.methods
-            .create_red_packet(...params)
-            .estimateGas({ from: account, value })
-            .catch((error: Error) => {
-                gasError = error
-            })
-
-        return { gas: gas as number | undefined, params, paramsObj, gasError }
-    }, [redPacketSettings, account, redPacketContract])
+    const contract = useENSContract()
 
     const handleEnsNameChange = useCallback((ev: ChangeEvent<HTMLInputElement>) => {
         const ens_ = ev.currentTarget.value
@@ -69,14 +54,17 @@ const TestDialog: React.FC<TestDialogProps> = (props) => {
     }, [])
 
     const handleSearch = useCallback(async () => {
-        const k = await contract?.methods.available(ensName).call({ from: account })
-        // const m = await k.send()
-        console.log(k)
+        const nameHash = hash(ensName)
+        const owner = await contract?.methods?.owner(nameHash)?.call({ from: account })
+        const resolver = await contract?.methods?.resolver(nameHash)?.call({ from: account })
+        const ttl = await contract?.methods?.ttl(nameHash)?.call({ from: account })
+        setENSInfo({
+            owner,
+            ttl,
+            resolver,
+        })
     }, [ensName])
 
-    const handleBuy = useCallback(async () => {
-        console.log(ensName)
-    }, [ensName])
     return (
         <MaskDialog open={props.open} title="test" onClose={props.onClose}>
             <Box className={classes.wrapper}>
@@ -108,12 +96,7 @@ const TestDialog: React.FC<TestDialogProps> = (props) => {
                     </Button>
                 </section>
             </Box>
-            <ENSDetail ensInfo="kk" />
-            <section>
-                <Button className={classes.button} variant="contained" size="small" onClick={handleBuy}>
-                    {t('buy')}
-                </Button>
-            </section>
+            <ENSDetail style={{ marginLeft: '16px' }} ENS_Info={ENSInfo} />
         </MaskDialog>
     )
 }

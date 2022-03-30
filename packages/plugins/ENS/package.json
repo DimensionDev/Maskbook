@@ -1,5 +1,5 @@
 {
-    "name": "@masknet/plugin-test",
+    "name": "@masknet/plugin-ens",
     "private": true,
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
@@ -9,6 +9,7 @@
         "@masknet/shared-base": "workspace:*",
         "@masknet/web3-shared-evm":"workspace:*",
         "@masknet/web3-contracts":"workspace:*",
-        "react-use": "^17.3.2"
+        "react-use": "^17.3.2",
+        "eth-ens-namehash":"2.0.8"
     }
 }

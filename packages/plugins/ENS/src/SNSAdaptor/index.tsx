@@ -1,6 +1,6 @@
 import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
 import { base } from '../base'
-import TestDialog from './TestDialog'
+import ENSDialog from './ENSDialog'
 import ENSCard from './ENSCard'
 import { PLUGIN_ID } from '../constants'
 
@@ -10,8 +10,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal, context) {},
     CompositionDialogEntry: {
-        label: 'aaa',
-        dialog: TestDialog,
+        label: 'ENS',
+        dialog: ENSDialog,
     },
     PostInspector: function Component(): JSX.Element | null {
         const links = usePostInfoDetails.mentionedLinks()
@@ -25,7 +25,16 @@ const sns: Plugin.SNSAdaptor.Definition = {
             label: 'ENS',
             priority: 10,
             UI: {
-                TabContent: () => <ENSCard url="kk" />,
+                TabContent: (identity) => (
+                    <ENSCard
+                        url="kk"
+                        identity={{
+                            userId: identity?.identity?.identifier?.userId,
+                            bio: identity?.identity?.bio,
+                            nickname: identity?.identity?.nickname,
+                        }}
+                    />
+                ),
             },
         },
     ],

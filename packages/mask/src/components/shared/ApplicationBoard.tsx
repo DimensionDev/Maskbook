@@ -253,9 +253,9 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             false,
         ),
         createEntry(
-            'Test',
+            'ENS',
             new URL('./assets/files.png', import.meta.url).toString(),
-            () => openEncryptedMessage(PluginId.Test),
+            () => openEncryptedMessage(PluginId.ENS),
             undefined,
             false,
             false,
