@@ -13,19 +13,22 @@ import { NotFound } from './components/NotFound'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
-        width: 624,
+        width: 600,
     },
     paperRoot: {
         backgroundImage: 'none',
         '&>h2': {
+            height: 30,
             border: `1px solid ${theme.palette.divider}`,
+            padding: theme.spacing(1.875, 2.5, 1.875, 2.5),
             marginBottom: 24,
         },
     },
     content: {
         width: 552,
-        height: 580,
-        maxHeight: 580,
+        height: 510,
+        maxHeight: 510,
+        paddingBottom: theme.spacing(3),
     },
 }))
 

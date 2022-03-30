@@ -35,8 +35,8 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const LIST_HEIGHT = {
-    min: 218,
-    max: 374,
+    min: 154,
+    max: 308,
 }
 
 export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
@@ -96,7 +96,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity }) => {
                     <TokenPanel tokenSecurity={tokenSecurity} securityMessageLevel={securityMessageLevel} />
                 </Collapse>
             </Stack>
-            <Stack spacing={2} flex={1}>
+            <Stack spacing={1.5} flex={1}>
                 <Stack direction="row" alignItems="center" spacing={3.5}>
                     <Typography variant="h6" className={classes.header}>
                         {t.security_detection()}
