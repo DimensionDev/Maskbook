@@ -43,6 +43,8 @@ export class Translator implements Middleware<Context> {
         [ChainId.Metis]: new Base(),
 
         [ChainId.Optimistic]: new Base(),
+
+        [ChainId.Conflux]: new Base(),
     }
 
     async fn(context: Context, next: () => Promise<void>) {
