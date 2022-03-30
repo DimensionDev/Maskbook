@@ -10,7 +10,7 @@ import type { Persona } from '../../../database'
 import { LoadingAnimation } from '@masknet/shared'
 import { formatPersonaFingerprint } from '@masknet/shared-base'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
+import { NetworkPluginID, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     persona: {
@@ -94,7 +94,7 @@ export const BindPanelUI = memo<BindPanelUIProps>(
     ({ onPersonaSign, onWalletSign, currentPersona, signature, isBound, title, onClose, open, isCurrentAccount }) => {
         const t = useI18N()
         const { classes } = useStyles()
-        const pluginId = usePluginIDContext()
+        const pluginId = useCurrentWeb3NetworkPluginID()
         const isSupported = SUPPORTED_PLUGINS.includes(pluginId)
 
         const isWalletSigned = !!signature.wallet.value

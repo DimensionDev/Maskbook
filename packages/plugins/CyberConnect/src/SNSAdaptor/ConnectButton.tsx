@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useWeb3, isSameAddress } from '@masknet/web3-shared-evm'
-import { useAccount, usePluginIDContext, NetworkPluginID } from '@masknet/plugin-infra'
+import { useAccount, useCurrentWeb3NetworkPluginID, NetworkPluginID } from '@masknet/plugin-infra'
 import CyberConnect, { Env } from '@cyberlab/cyberconnect'
 import { PluginCyberConnectRPC } from '../messages'
 import { CircularProgress, useTheme, Typography } from '@mui/material'
@@ -96,7 +96,7 @@ export default function ConnectButton({
     const [cc, setCc] = useState<CyberConnect | null>(null)
     const [isFollowing, setFollowing] = useState(false)
     const [isLoading, setLoading] = useState(false)
-    const blockChainNetwork = usePluginIDContext()
+    const blockChainNetwork = useCurrentWeb3NetworkPluginID()
     useAsync(async () => {
         if (isSameAddress(myAddress, address)) return
         const res = await PluginCyberConnectRPC.fetchFollowStatus(myAddress, address)

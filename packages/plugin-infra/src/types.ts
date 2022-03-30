@@ -242,10 +242,8 @@ export namespace Plugin.SNSAdaptor {
         CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be use when there is known badges. */
         CompositionDialogMetadataBadgeRender?: CompositionMetadataBadgeRender
-        /** This UI will be rendered as an entry in the toolbar (if the SNS has a Toolbar support) */
-        ToolbarEntry?: ToolbarEntry
         /** This UI will be rendered as an entry in the wallet status dialog */
-        ApplicationEntry?: ApplicationEntry
+        ApplicationEntries?: ApplicationEntry[]
         /** This UI will be rendered as sliders on the profile page */
         ProfileSliders?: ProfileSlider[]
         /** This UI will be rendered as tabs on the profile page */
@@ -310,51 +308,15 @@ export namespace Plugin.SNSAdaptor {
     }
     // #endregion
 
-    // #region Toolbar entry
-    export interface ToolbarEntry {
-        image: string
-        // TODO: remove string
-        label: I18NStringField | string
-        /**
-         * Used to order the toolbars
-         *
-         * TODO: can we make them unordered?
-         */
-        priority: number
-        /**
-         * This is a React hook. If it returns false, this entry will not be displayed.
-         */
-        useShouldDisplay?(): boolean
-        /**
-         * What to do if the entry is clicked.
-         */
-        // TODO: add support for DialogEntry.
-        // TODO: add support for onClick event.
-        onClick: 'openCompositionEntry'
-    }
-    // #endregion
-
     export interface ApplicationEntry {
         /**
-         * The icon image URL
+         * Render entry component
          */
-        icon: URL
-        /**
-         * The name of the application
-         */
-        label: I18NStringField | string
-        /**
-         * Also an entrance in a sub-folder
-         */
-        categoryID?: string
+        RenderEntryComponent: (props: { disabled: boolean }) => JSX.Element
         /**
          * Used to order the applications on the board
          */
-        priority: number
-        /**
-         * What to do if the application icon is clicked.
-         */
-        onClick(): void
+        defaultSortingPriority: number
     }
 
     export interface ProfileIdentity {
