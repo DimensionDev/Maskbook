@@ -706,7 +706,7 @@ importers:
       '@masknet/web3-contracts': link:../../web3-contracts
       '@masknet/web3-shared-evm': link:../../web3-shared/evm
       eth-ens-namehash: 2.0.8
-      react-use: 17.3.2_581fa33d3647c30d8078674dcd1b240a
+      react-use: 17.3.2_react-dom@18.0.0+react@18.0.0
 
   packages/plugins/FileService:
     specifiers:
@@ -19806,7 +19806,7 @@ packages:
   /jsonfile/4.0.0:
     resolution: {integrity: sha1-h3Gq4HmbZAdrdmQPygWPnBDjPss=}
     optionalDependencies:
-      graceful-fs: 4.2.8
+      graceful-fs: 4.2.9
 
   /jsonfile/6.1.0:
     resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
