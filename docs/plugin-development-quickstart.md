@@ -6,35 +6,16 @@ author: Randolph
 
 ## 1. Introduction
 
-This is an example of how to develop plugin according to tools provided by Mask. And our task is to develop an app related to Ethereum Name Service, people can purchase ENS in application board and see details about specific ENS domain in timeline and profile of twitter.
+This is an example of how to develop plugin according to tools provided by Mask. And our task is to obtain ENS from user data, and display details about the ENS domain in timeline and profile of twitter. Besides, user can search specific ENS details in application board.
 
 ## 2. Start a plugin file
 
-You can create a plugin folder by entering following command
+Create a plugin folder by entering following command
 
 > npx gulp new-pkg
 
-After entering related information about the plugin you want to create, a plugin folder will be created in `packages/plugins`. This folder contains lots of files, and core files are `SNSAdaptor` and `Worker`. The former contains all the code related to front-end interaction, the latter plays a database-like role.
-Since we want to add a application into maskbook, we need to add related config:
-
-`pnpm-lock.yaml`
-
-```JavaScript
-    '@masknet/plugin-ENS': workspace:*
-    '@masknet/plugin-ENS': link:../plugins/ENS
-```
-
-`packages/mask/package.json`
-
-```JavaScript
-    "@masknet/plugin-ENS": "workspace:*",
-```
-
-`packages/mask/.webpack/config.ts`
-
-```JavaScript
-    '@masknet/plugin-ENS': join(__dirname, '../../plugins/your file name/src/'),
-```
+After entering related information about the plugin, a plugin folder will be created in `packages/plugins`. This folder contains lots of files, and core files are `SNSAdaptor` and `Worker`. The former contains all the code related to front-end interaction, the latter plays a database-like role.
+Since we want to add a application into maskbook, we need to add related config to register:
 
 `packages/mask/src/plugin-infra/register.js`
 
@@ -103,90 +84,27 @@ We have injected `web3` tab in user profile, so we add a tab called `ENS` under 
 
 Now we have created entries to inject UI, the rest is to add style and interaction logic like writing a web page in `ENSCard` and `ENSDialog` to meet our needs.
 
-## 4. How to get data from blockchain and send a transaction
+## 4. How to get data from blockchain
 
-We have successfully injected entries in twitter, now we can focus on the UI and interaction. Additionally, we want to see ENS details and buy an ENS domain in our plugin, so we need to acquire information and send transactions on blockchain.
-
-### 4.1 Acquire ens details in profile tab and timeline
-
-We can grab user's ens in their profile and ENS url in timeline, and we want to inject a card to show details like owner and expiration date of this ENS domain. For acquiring information from blockchain, we need smart contract address of ENS which can be found in ENS website. The smart contract address we need is `0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5`, so we need to call related function of this smart contract.
+We have successfully injected entries in twitter, now we can focus on the UI and interaction. Additionally, we want to see ENS details, so we need to acquire information on blockchain.
+We can grab user's ENS in their profile and ENS url in timeline, and we want to inject a card to show details like owner and expiration date of this ENS domain. For acquiring information from blockchain, we need smart contract address of ENS which can be found in ENS website. The smart contract address we need is `0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e`, so we need to call related function of this smart contract.
 Copy ABI of this smart contract from `etherscan` and make it as a `json` file. Mask provide tools to use it:
 
 ```JavaScript
 import { useContract } from '@masknet/web3-shared-evm'
-import ENS_ABI from '@masknet/web3-contracts/abis/ENS.json'
+import ENS_REGISTRY_ABI from '@masknet/web3-contracts/abis/ens_registry.json'
+import { hash } from 'eth-ens-namehash'
 
-const contract = useContract('0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5', ENS_ABI)
+const contract = useContract('0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e', ENS_REGISTRY_ABI)
 
 const handleSearch = useCallback(async () => {
-        const res = await contract?.methods.available(ensName).call({ from: account }) // we use call to use smart contract function without gas fee
+        const nameHash = hash(ensName) // name string should be hashed to be a node
+        const owner = await contract?.methods?.owner(nameHash)?.call({ from: account }) // get owner
+        const resolver = await contract?.methods?.resolver(nameHash)?.call({ from: account }) // get resolver
+        const ttl = await contract?.methods?.ttl(nameHash)?.call({ from: account }) // get ttl
+        console.log({ owner, resolver, ttl, nameHash })
     }, [ensName])
 ```
 
-The above is an example to check whether an ENS name is registered or not. If you want to get other information about ENS, you can refer to its ABI, calling other methods to read the data from blockchain.
-
-### 4.2 Rent an ENS on application board
-
-ENS domain is not permanent, we need to rent a ENS domain that is not registered by others. Since data on blockchain is changed, we need to call payable function of smart contract. For completing renting an ENS domain, we take two steps to commit and register.
-
-```JavaScript
-import { useContract,useAccount } from '@masknet/web3-shared-evm'
-import ENS_ABI from '@masknet/web3-contracts/abis/ENS.json'
-
-// For registering an ENS, you need ENS name、duration and secret
-
-const contract = useContract('0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5', ENS_ABI)
-const account = useAccount() // a hook to acquire current wallet address
-const value = await contract.methods.rentPrice(name,duration); // first param is ENS name, second param is duration
-const commitment = await contract.methods.makeCommitment(name,address,secret); // get commitment
-
-const handleBuy = useCallback(async () => {
-        const gasForCommit = await contract.methods     //estimate gas for commit function
-            .commit(commitment)
-            .estimateGas({ from: account })
-            .catch((error: Error) => {
-                gasError = error
-            })
-
-        const configForCommit = {
-                from: account,
-                0,
-                gasForCommit
-            }
-
-        await contract.methods   // send a transaction to commit on blockchain
-            .commit(commitment)
-            .send(configForCommit)
-            .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
-                resolve()
-            })
-            .on(TransactionEventType.ERROR, (error: Error) => {
-                reject(error)
-            })
-
-        const gasForRegister = await contract.methods     //estimate gas for register function
-            .register(register amount,name,account,duration,secret)
-            .estimateGas({ from: account,value })
-            .catch((error: Error) => {
-                gasError = error
-            })
-
-        const configForRegister = {
-            from: account,
-            value,
-            gasForRegister
-        }
-        return new Promise<void>(async (resolve, reject) => {
-            contract.methods                       // send a transaction to register
-                .register(register amount,name,account,duration,secret)
-                .send(configForRegister as PayableTx)
-                .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
-                    resolve()
-                })
-                .on(TransactionEventType.ERROR, (error: Error) => {
-                    reject(error)
-                })
-        })
-
-    }, [ensName])
-```
+Be carefule about contract address and ABI. If you use mismatched information, the function call will fail
+The above is an example to get some basic information about ENS. If you need more, you can refer to its ABI, calling other methods to read the data from blockchain.
