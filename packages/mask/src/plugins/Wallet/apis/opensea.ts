@@ -1,6 +1,5 @@
-import { ChainId } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
-import { OPENSEA_API_KEY } from '../constants'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 interface AssetContract {
     address: string
@@ -155,7 +154,6 @@ async function request<T>(chainId: ChainId, requestPath: string, params: object)
     const response = await fetch(urlcat(domain, requestPath, params), {
         method: 'GET',
         mode: 'cors',
-        headers: { 'x-api-key': OPENSEA_API_KEY },
     })
     return response.json()
 }
