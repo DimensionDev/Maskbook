@@ -11,11 +11,10 @@ import {
     toBase64,
 } from '@masknet/shared-base'
 import type { NextIDBaseAPI } from '../types'
+import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD } from './constants'
 
 const BASE_URL =
-    process.env.channel === 'stable' && process.env.NODE_ENV === 'production'
-        ? 'https://proof-service.next.id/'
-        : 'https://proof-service.nextnext.id/'
+    process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
 
 interface CreatePayloadBody {
     action: string

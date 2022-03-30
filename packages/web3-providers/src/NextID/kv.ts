@@ -6,6 +6,7 @@ import type { NextIDKVPayload, NextIDPlatform } from '@masknet/shared-base'
 import { fetchJSON } from './helper'
 import type { Result } from 'ts-results'
 import type { NextIDBaseAPI } from '../types'
+import { KV_BASE_URL_DEV, KV_BASE_URL_PROD, MASK_STORAGE_KEY } from './constants'
 
 interface CreatePayloadResponse {
     uuid: string
@@ -14,9 +15,7 @@ interface CreatePayloadResponse {
 }
 
 const BASE_URL =
-    process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? '' : 'https://kv-service.nextnext.id'
-
-const MASK_STORAGE_KEY = 'com.mask.plugin'
+    process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? KV_BASE_URL_PROD : KV_BASE_URL_DEV
 
 function formatPatchData(platform: NextIDPlatform, identity: string, data: unknown) {
     return {
