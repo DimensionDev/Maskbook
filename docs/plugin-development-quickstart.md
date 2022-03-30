@@ -106,5 +106,5 @@ const handleSearch = useCallback(async () => {
     }, [ensName])
 ```
 
-Be carefule about contract address and ABI. If you use mismatched information, the function call will fail
+Be careful about contract address and ABI. If you use mismatched information, the function call will fail
 The above is an example to get some basic information about ENS. If you need more, you can refer to its ABI, calling other methods to read the data from blockchain.
