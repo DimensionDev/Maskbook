@@ -295,7 +295,7 @@ const ImportWallet = memo(() => {
                     </TabPanel>
                     <TabPanel value={tabs.privateKey} className={classes.tabPanel}>
                         <StyledInput
-                            multiline
+                            type="password"
                             value={privateKey}
                             onChange={(e) => {
                                 if (errorMessage) setErrorMessage('')
@@ -303,9 +303,8 @@ const ImportWallet = memo(() => {
                             }}
                             rows={4}
                             placeholder={t('popups_wallet_name_private_key')}
-                            InputProps={{ disableUnderline: true, classes: { root: classes.multilineInput } }}
-                            className={classes.multiline}
-                            inputProps={{ className: classes.textArea }}
+                            InputProps={{ disableUnderline: true }}
+                            className={classes.textField}
                         />
                     </TabPanel>
                 </TabContext>
