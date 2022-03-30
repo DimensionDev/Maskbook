@@ -17,8 +17,7 @@
         "Celo": "celo",
         "Fantom": "fantom",
         "Aurora": "aurora",
-        "Aurora_Testnet": "",
-        "Conflux": ""
+        "Aurora_Testnet": ""
     },
     "COIN_ID": {
         "Mainnet": "ethereum",
@@ -38,7 +37,6 @@
         "Celo": "celo",
         "Fantom": "fantom",
         "Aurora": "ethereum",
-        "Aurora_Testnet": "",
-        "Conflux": "conflux-token"
+        "Aurora_Testnet": ""
     }
 }
