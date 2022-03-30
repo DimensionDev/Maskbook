@@ -256,7 +256,7 @@ export function RedPacket(props: RedPacketProps) {
                     claimState={claimState}
                     refundState={refundState}
                     onShare={handleShare}
-                    onClaimOrRefund={onClaimOrRefund}
+                    onClaimOrRefund={hasNativeAPI ? onClaimOrRefundOnNative : onClaimOrRefund}
                 />
             )}
         </EthereumChainBoundary>
