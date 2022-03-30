@@ -7,7 +7,8 @@ import DoneIcon from '@mui/icons-material/Done'
 import { useI18N } from '../locales'
 import { getMaskColor, makeStyles, MaskColorVar } from '@masknet/theme'
 import type { Persona } from '../../../database'
-import { formatFingerprint, LoadingAnimation } from '@masknet/shared'
+import { LoadingAnimation } from '@masknet/shared'
+import { formatPersonaFingerprint } from '@masknet/shared-base'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { NetworkPluginID, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
@@ -116,7 +117,7 @@ export const UnbindPanelUI = memo<BindPanelUIProps>(
                                 <div>
                                     <Typography className={classes.name}>{currentPersona?.nickname}</Typography>
                                     <Typography className={classes.identifier}>
-                                        {formatFingerprint(currentPersona?.identifier.compressedPoint ?? '', 10)}
+                                        {formatPersonaFingerprint(currentPersona?.identifier.compressedPoint ?? '', 10)}
                                     </Typography>
                                 </div>
                             </Stack>
