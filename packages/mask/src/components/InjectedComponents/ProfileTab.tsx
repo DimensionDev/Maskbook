@@ -19,6 +19,7 @@ export function ProfileTab(props: ProfileTabProps) {
     const isMobile = useMatchXS()
 
     const onClick = useCallback(() => {
+        location.assign('#')
         MaskMessages.events.profileTabUpdated.sendToLocal({ show: true })
         setActive(true)
         clear()
