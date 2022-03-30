@@ -18,6 +18,7 @@ const useStyles = makeStyles()((theme) => ({
     card: {
         borderColor: theme.palette.divider,
         borderStyle: 'solid',
+        borderWidth: 1,
         padding: theme.spacing(1.5),
         borderRadius: 9,
     },
@@ -28,6 +29,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     cardValue: {
         color: theme.palette.text.primary,
+        fontSize: 14,
     },
     tooltip: {
         color: theme.palette.text.buttonText,
@@ -80,7 +82,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, securityMessageLeve
                     alignItems="center">
                     {DefineMapping[securityMessageLevel].icon(33)}
                     <Typography color={DefineMapping[securityMessageLevel].titleColor} fontSize={14}>
-                        {t[DefineMapping[securityMessageLevel].i18nKey]({ quantity: '' })}
+                        {t[DefineMapping[securityMessageLevel].i18nKey]({ quantity: '', rate: '' })}
                     </Typography>
                 </Stack>
                 <Stack height={128} justifyContent="space-between" flex={1}>

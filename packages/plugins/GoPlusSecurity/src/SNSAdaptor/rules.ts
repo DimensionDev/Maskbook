@@ -2,12 +2,15 @@ import { SecurityMessageLevel, TokenSecurity } from './components/Common'
 import type { useI18N } from '../locales'
 import parseInt from 'lodash-es/parseInt'
 
+export type I18nOptions = 'rate' | 'quantity'
+
 export interface SecurityMessage {
     type: 'contract-security' | 'transaction-security'
     level: SecurityMessageLevel
     condition(info: TokenSecurity): boolean
     titleKey: keyof ReturnType<typeof useI18N>
     messageKey: keyof ReturnType<typeof useI18N>
+    i18nParams?: (info: TokenSecurity) => { [key in I18nOptions]: string }
     shouldHide(info: TokenSecurity): boolean
 }
 
@@ -106,6 +109,10 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => percentageToNumber(info.buy_tax) < 10,
         titleKey: 'risk_buy_tax_title',
         messageKey: 'risk_buy_tax_body',
+        i18nParams: (info: TokenSecurity) => ({
+            rate: `${percentageToNumber(info.buy_tax)}%`,
+            quantity: '',
+        }),
         shouldHide: (info: TokenSecurity) => info.buy_tax === undefined,
     },
     {
@@ -115,6 +122,10 @@ export const SecurityMessages: SecurityMessage[] = [
             percentageToNumber(info.buy_tax) >= 10 && percentageToNumber(info.buy_tax) < 50,
         titleKey: 'risk_buy_tax_title',
         messageKey: 'risk_buy_tax_body',
+        i18nParams: (info: TokenSecurity) => ({
+            rate: `${percentageToNumber(info.buy_tax)}%`,
+            quantity: '',
+        }),
         shouldHide: (info: TokenSecurity) => info.buy_tax === undefined,
     },
     {
@@ -123,6 +134,10 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => percentageToNumber(info.buy_tax) >= 50,
         titleKey: 'risk_buy_tax_title',
         messageKey: 'risk_buy_tax_body',
+        i18nParams: (info: TokenSecurity) => ({
+            rate: `${percentageToNumber(info.buy_tax)}%`,
+            quantity: '',
+        }),
         shouldHide: (info: TokenSecurity) => info.buy_tax === undefined,
     },
     // sell tax
@@ -132,15 +147,23 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => percentageToNumber(info.sell_tax) < 10,
         titleKey: 'risk_sell_tax_title',
         messageKey: 'risk_sell_tax_body',
+        i18nParams: (info: TokenSecurity) => ({
+            rate: `${percentageToNumber(info.sell_tax)}%`,
+            quantity: '',
+        }),
         shouldHide: (info: TokenSecurity) => info.sell_tax === undefined,
     },
     {
         type: 'contract-security',
         level: SecurityMessageLevel.Medium,
         condition: (info: TokenSecurity) =>
-            percentageToNumber(info.buy_tax) >= 10 && percentageToNumber(info.sell_tax) < 50,
+            percentageToNumber(info.sell_tax) >= 10 && percentageToNumber(info.sell_tax) < 50,
         titleKey: 'risk_sell_tax_title',
         messageKey: 'risk_sell_tax_body',
+        i18nParams: (info: TokenSecurity) => ({
+            rate: `${percentageToNumber(info.sell_tax)}%`,
+            quantity: '',
+        }),
         shouldHide: (info: TokenSecurity) => info.sell_tax === undefined,
     },
     {
@@ -149,6 +172,10 @@ export const SecurityMessages: SecurityMessage[] = [
         condition: (info: TokenSecurity) => percentageToNumber(info.sell_tax) >= 50,
         titleKey: 'risk_sell_tax_title',
         messageKey: 'risk_sell_tax_body',
+        i18nParams: (info: TokenSecurity) => ({
+            rate: `${percentageToNumber(info.sell_tax)}%`,
+            quantity: '',
+        }),
         shouldHide: (info: TokenSecurity) => info.sell_tax === undefined,
     },
     // honeypot
@@ -215,8 +242,8 @@ export const SecurityMessages: SecurityMessage[] = [
         type: 'contract-security',
         level: SecurityMessageLevel.Medium,
         condition: (info: TokenSecurity) => info.slippage_modifiable === '1',
-        titleKey: 'risk_slippage_modifiable_body',
-        messageKey: 'risk_slippage_modifiable_title',
+        titleKey: 'risk_slippage_modifiable_title',
+        messageKey: 'risk_slippage_modifiable_body',
         shouldHide: (info: TokenSecurity) => info.slippage_modifiable === undefined,
     },
     // black list

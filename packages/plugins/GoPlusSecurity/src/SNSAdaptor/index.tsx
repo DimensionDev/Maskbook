@@ -1,4 +1,4 @@
-import { NetworkPluginID, Plugin, usePluginIDContext } from '@masknet/plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base'
 import { CheckSecurityDialog } from './CheckSecurityDialog'
 import { useState } from 'react'
@@ -9,18 +9,18 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal) {},
     ApplicationEntries: [
         {
-            RenderEntryComponent(key) {
+            RenderEntryComponent({ disabled }) {
                 const [open, setOpen] = useState(false)
-                const currentPluginId = usePluginIDContext()
-                return currentPluginId !== NetworkPluginID.PLUGIN_EVM ? null : (
-                    <div key={key}>
+                return (
+                    <>
                         <ApplicationEntry
                             title="Check Security"
+                            disabled={disabled}
                             icon={new URL('../assets/security-icon.png', import.meta.url).toString()}
                             onClick={() => setOpen(true)}
                         />
                         {open && <CheckSecurityDialog open={open} onClose={() => setOpen(false)} />}
-                    </div>
+                    </>
                 )
             },
             defaultSortingPriority: 12,

@@ -780,8 +780,8 @@ importers:
       '@masknet/web3-providers': link:../../web3-providers
       '@masknet/web3-shared-evm': link:../../web3-shared/evm
       bignumber.js: 9.0.2
-      react-feather: 2.0.9_react@18.0.0-rc.3
-      react-use: 17.3.2_581fa33d3647c30d8078674dcd1b240a
+      react-feather: 2.0.9_react@18.0.0
+      react-use: 17.3.2_react-dom@18.0.0+react@18.0.0
       urlcat: 2.0.4
 
   packages/plugins/RSS3:
@@ -19816,7 +19816,7 @@ packages:
   /jsonfile/4.0.0:
     resolution: {integrity: sha1-h3Gq4HmbZAdrdmQPygWPnBDjPss=}
     optionalDependencies:
-      graceful-fs: 4.2.8
+      graceful-fs: 4.2.9
 
   /jsonfile/6.1.0:
     resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
@@ -23535,7 +23535,7 @@ packages:
       safe-buffer: 5.2.1
       tough-cookie: 2.5.0
       tunnel-agent: 0.6.0
-      uuid: 3.3.2
+      uuid: 3.4.0
     dev: false
 
   /require-directory/2.1.1:

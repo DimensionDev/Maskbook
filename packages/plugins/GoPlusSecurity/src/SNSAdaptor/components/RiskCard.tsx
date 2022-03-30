@@ -1,5 +1,5 @@
 import { memo, ReactNode } from 'react'
-import { DefineMapping } from './Common'
+import { DefineMapping, TokenSecurity } from './Common'
 import { Box, Stack, Typography } from '@mui/material'
 import type { SecurityMessage } from '../rules'
 import { useI18N } from '../../locales'
@@ -28,16 +28,17 @@ const useStyles = makeStyles()((theme) => ({
 
 interface RiskCardProps {
     info: SecurityMessage
+    tokenSecurity: TokenSecurity
 }
 
-export const RiskCard = memo<RiskCardProps>(({ info }) => {
+export const RiskCard = memo<RiskCardProps>(({ info, tokenSecurity }) => {
     const t = useI18N()
     return (
         <RiskCardUI
             icon={DefineMapping[info.level].icon(14)}
-            title={t[info.titleKey]({ quantity: '' })}
+            title={t[info.titleKey]({ quantity: '', rate: info.i18nParams?.(tokenSecurity).rate ?? '' })}
             titleColor={DefineMapping[info.level].titleColor}
-            description={t[info.messageKey]({ quantity: '' })}
+            description={t[info.messageKey]({ quantity: '', rate: info.i18nParams?.(tokenSecurity).rate ?? '' })}
         />
     )
 })
