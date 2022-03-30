@@ -13,6 +13,7 @@ export enum ProtocolType {
     Compound = 3,
     AAVE = 1,
 }
+
 export interface SavingsProtocol {
     readonly type: ProtocolType
 
@@ -33,6 +34,7 @@ export interface SavingsProtocol {
 
     readonly bareToken: FungibleTokenDetailed
     readonly stakeToken: FungibleTokenDetailed
+    readonly approveAddress: string | undefined
 
     updateApr(chainId: ChainId, web3: Web3): Promise<void>
     updateBalance(chainId: ChainId, web3: Web3, account: string): Promise<void>
@@ -41,4 +43,8 @@ export interface SavingsProtocol {
     deposit(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value): Promise<boolean>
     withdrawEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value): Promise<BigNumber.Value>
     withdraw(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value): Promise<boolean>
+}
+
+export interface ProtocolPairsResolver {
+    resolve(chainId: ChainId, web3: Web3): Promise<SavingsProtocol[]>
 }

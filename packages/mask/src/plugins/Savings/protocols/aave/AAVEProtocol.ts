@@ -10,10 +10,8 @@ import {
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import type { AaveLendingPool } from '@masknet/web3-contracts/types/AaveLendingPool'
-import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider'
-import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
 import AaveLendingPoolABI from '@masknet/web3-contracts/abis/AaveLendingPool.json'
-import { ProtocolType, SavingsProtocol } from '../types'
+import { ProtocolType, SavingsProtocol } from '../../types'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 
@@ -22,8 +20,11 @@ export class AAVEProtocol implements SavingsProtocol {
 
     private _apr = '0.00'
     private _balance = ZERO
+    private poolAddress
 
-    constructor(readonly pair: [FungibleTokenDetailed, FungibleTokenDetailed]) {}
+    constructor(readonly pair: [FungibleTokenDetailed, FungibleTokenDetailed], poolAddress: string) {
+        this.poolAddress = poolAddress
+    }
 
     get type() {
         return ProtocolType.AAVE
@@ -43,6 +44,10 @@ export class AAVEProtocol implements SavingsProtocol {
 
     get stakeToken() {
         return this.pair[1]
+    }
+
+    get approveAddress() {
+        return this.poolAddress
     }
 
     public async updateApr(chainId: ChainId, web3: Web3) {
@@ -89,7 +94,6 @@ export class AAVEProtocol implements SavingsProtocol {
             const liquidityRate = +fullResponse.data.reserves[0].liquidityRate
 
             const RAY = pow10(27) // 10 to the power 27
-            const SECONDS_PER_YEAR = 31536000
 
             // APY and APR are returned here as decimals, multiply by 100 to get the percents
             this._apr = new BigNumber(liquidityRate).times(100).div(RAY).toFixed(2)
@@ -161,21 +165,7 @@ export class AAVEProtocol implements SavingsProtocol {
     }
 
     private async createDepositTokenOperation(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
-        const aaveLPoolAddress =
-            getAaveConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS
-        const lPoolAddressProviderContract = createContract<AaveLendingPoolAddressProvider>(
-            web3,
-            aaveLPoolAddress,
-            AaveLendingPoolAddressProviderABI as AbiItem[],
-        )
-
-        const poolAddress = await lPoolAddressProviderContract?.methods.getLendingPool().call()
-
-        const contract = createContract<AaveLendingPool>(
-            web3,
-            poolAddress || ZERO_ADDRESS,
-            AaveLendingPoolABI as AbiItem[],
-        )
+        const contract = createContract<AaveLendingPool>(web3, this.poolAddress, AaveLendingPoolABI as AbiItem[])
         return contract?.methods.deposit(this.bareToken.address, new BigNumber(value).toFixed(), account, '0')
     }
 
@@ -198,19 +188,7 @@ export class AAVEProtocol implements SavingsProtocol {
 
     public async withdrawEstimate(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
         try {
-            const lPoolAddressProviderContract = createContract<AaveLendingPoolAddressProvider>(
-                web3,
-                getAaveConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS,
-                AaveLendingPoolAddressProviderABI as AbiItem[],
-            )
-
-            const poolAddress = await lPoolAddressProviderContract?.methods.getLendingPool().call()
-
-            const contract = createContract<AaveLendingPool>(
-                web3,
-                poolAddress || ZERO_ADDRESS,
-                AaveLendingPoolABI as AbiItem[],
-            )
+            const contract = createContract<AaveLendingPool>(web3, this.poolAddress, AaveLendingPoolABI as AbiItem[])
             const gasEstimate = await contract?.methods
                 .withdraw(this.bareToken.address, new BigNumber(value).toFixed(), account)
                 .estimateGas({
@@ -224,20 +202,8 @@ export class AAVEProtocol implements SavingsProtocol {
 
     public async withdraw(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
         try {
-            const lPoolAddressProviderContract = createContract<AaveLendingPoolAddressProvider>(
-                web3,
-                getAaveConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS,
-                AaveLendingPoolAddressProviderABI as AbiItem[],
-            )
-
-            const poolAddress = await lPoolAddressProviderContract?.methods.getLendingPool().call()
-
             const gasEstimate = await this.withdrawEstimate(account, chainId, web3, value)
-            const contract = createContract<AaveLendingPool>(
-                web3,
-                poolAddress || ZERO_ADDRESS,
-                AaveLendingPoolABI as AbiItem[],
-            )
+            const contract = createContract<AaveLendingPool>(web3, this.poolAddress, AaveLendingPoolABI as AbiItem[])
             await contract?.methods.withdraw(this.bareToken.address, new BigNumber(value).toFixed(), account).send({
                 from: account,
                 gas: gasEstimate.toNumber(),

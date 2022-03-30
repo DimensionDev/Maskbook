@@ -3,26 +3,26 @@ import type { AbiItem } from 'web3-utils'
 import BigNumber from 'bignumber.js'
 import { ZERO } from '@masknet/web3-shared-base'
 import { ChainId, createContract, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { ProtocolType, SavingsProtocol } from '../types'
-import type { CERC20 } from '@masknet/web3-contracts/types/CERC20'
-import type { CEther } from '@masknet/web3-contracts/types/CEther'
-import CERC20ABI from '@masknet/web3-contracts/abis/CERC20.json'
-import CEtherABI from '@masknet/web3-contracts/abis/CEther.json'
+import { ProtocolType, SavingsProtocol } from '../../types'
+import type { QiERC20 } from '@masknet/web3-contracts/types/QiERC20'
+import type { QiAvax } from '@masknet/web3-contracts/types/QiAvax'
+import QiERC20ABI from '@masknet/web3-contracts/abis/QiERC20.json'
+import QiAvaxABI from '@masknet/web3-contracts/abis/QiAvax.json'
 
-export const BLOCKS_PER_DAY = 6570
+export const TIMESTAMPS_PER_DAY = 60 * 60 * 24
 export const DAYS_PER_YEAR = 365
 
-export class CompoundProtocol implements SavingsProtocol {
+export class BenQiProtocol implements SavingsProtocol {
     static DEFAULT_APR = '0.00'
 
     private _apr = '0.00'
     private _balance = ZERO
-    private _nativeToken = 'cETH'
+    private _nativeToken = 'qiAVAX'
 
     constructor(readonly pair: [FungibleTokenDetailed, FungibleTokenDetailed]) {}
 
     get type() {
-        return ProtocolType.Compound
+        return ProtocolType.BENQI
     }
 
     get apr() {
@@ -41,14 +41,18 @@ export class CompoundProtocol implements SavingsProtocol {
         return this.pair[1]
     }
 
+    get approveAddress() {
+        return this.stakeToken.address
+    }
+
     get isNativeToken() {
         return this.stakeToken.symbol === this._nativeToken
     }
 
     public getPoolContract(web3: Web3) {
         const contract = this.isNativeToken
-            ? createContract<CEther>(web3, this.stakeToken.address, CEtherABI as AbiItem[])
-            : createContract<CERC20>(web3, this.stakeToken.address, CERC20ABI as AbiItem[])
+            ? createContract<QiAvax>(web3, this.stakeToken.address, QiAvaxABI as AbiItem[])
+            : createContract<QiERC20>(web3, this.stakeToken.address, QiERC20ABI as AbiItem[])
         return contract
     }
 
@@ -56,15 +60,15 @@ export class CompoundProtocol implements SavingsProtocol {
         try {
             const contract = this.getPoolContract(web3)
             if (contract === null) {
-                this._apr = CompoundProtocol.DEFAULT_APR
+                this._apr = BenQiProtocol.DEFAULT_APR
                 return
             }
-            const supplyRate = await contract.methods.supplyRatePerBlock().call()
-            const supplyBase = new BigNumber(supplyRate).shiftedBy(-18).times(BLOCKS_PER_DAY).plus(1)
+            const supplyRate = await contract.methods.supplyRatePerTimestamp().call()
+            const supplyBase = new BigNumber(supplyRate).shiftedBy(-18).times(TIMESTAMPS_PER_DAY).plus(1)
             const apy = supplyBase.pow(DAYS_PER_YEAR).minus(1).times(100)
             this._apr = apy.toFixed(2)
         } catch (error) {
-            this._apr = CompoundProtocol.DEFAULT_APR
+            this._apr = BenQiProtocol.DEFAULT_APR
         }
     }
 
@@ -103,7 +107,7 @@ export class CompoundProtocol implements SavingsProtocol {
     private async createDepositTokenOperation(web3: Web3, value: BigNumber.Value) {
         const contract = this.getPoolContract(web3)
         if (this.isNativeToken) {
-            return (contract as CEther)?.methods.mint()
+            return (contract as QiAvax)?.methods.mint()
         } else {
             return contract?.methods.mint(value.toString())
         }

@@ -6,7 +6,7 @@ import {
     FungibleTokenDetailed,
 } from '@masknet/web3-shared-evm'
 
-import { BenQiProtocol } from '../BenQiProtocol'
+import { BenQiProtocol } from './BenQiProtocol'
 
 export const BENQI_PAIRS_LIST: [FungibleTokenDetailed, FungibleTokenDetailed][] = [
     [

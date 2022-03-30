@@ -3,7 +3,7 @@ import { Typography } from '@mui/material'
 import { useState, useMemo, useCallback } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import { unreachable } from '@dimensiondev/kit'
-import { isLessThan, rightShift } from '@masknet/web3-shared-base'
+import { isGreaterThan, isLessThan, rightShift, ZERO } from '@masknet/web3-shared-base'
 import {
     EthereumTokenType,
     useFungibleTokenBalance,
@@ -14,9 +14,6 @@ import {
     isSameAddress,
     useTokenConstants,
     createERC20Token,
-    getAaveConstants,
-    ZERO_ADDRESS,
-    createContract,
 } from '@masknet/web3-shared-evm'
 import { TokenAmountPanel, FormattedCurrency, LoadingAnimation, TokenIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -30,10 +27,6 @@ import { ActionButtonPromise } from '../../../extension/options-page/DashboardCo
 import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider'
-import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
-import type { AbiItem } from 'web3-utils'
-
 export interface SavingsFormProps {
     chainId: number
     protocol: SavingsProtocol
@@ -49,7 +42,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
     const account = useAccount()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const [inputAmount, setInputAmount] = useState('')
-    const [estimatedGas, setEstimatedGas] = useState<BigNumber.Value>(new BigNumber('0'))
+    const [estimatedGas, setEstimatedGas] = useState<BigNumber.Value>(ZERO)
 
     const { value: nativeTokenBalance } = useFungibleTokenBalance(EthereumTokenType.Native, '', chainId)
 
@@ -89,7 +82,7 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
     )
 
     const { loading } = useAsync(async () => {
-        if (!(tokenAmount.toNumber() > 0)) return
+        if (!isGreaterThan(tokenAmount, 0)) return
         try {
             setEstimatedGas(
                 tab === TabType.Deposit
@@ -98,7 +91,6 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
             )
         } catch {
             // do nothing
-            console.log('Failed to estimate gas')
         }
     }, [chainId, tab, protocol, tokenAmount])
     // #endregion
@@ -130,17 +122,6 @@ export function SavingsForm({ chainId, protocol, tab, onClose }: SavingsFormProp
 
     const { value: approvalData } = useAsync(async () => {
         const token = protocol.bareToken
-        const aavePoolAddress =
-            getAaveConstants(chainId).AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS || ZERO_ADDRESS
-
-        const lPoolAddressProviderContract = createContract<AaveLendingPoolAddressProvider>(
-            web3,
-            aavePoolAddress,
-            AaveLendingPoolAddressProviderABI as AbiItem[],
-        )
-
-        const poolAddress = await lPoolAddressProviderContract?.methods.getLendingPool().call()
-
         return {
             approveToken:
                 token.type === EthereumTokenType.ERC20

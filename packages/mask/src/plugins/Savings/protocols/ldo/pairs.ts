@@ -1,5 +1,5 @@
 import { ChainId, createERC20Tokens, createNativeToken, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { LidoProtocol } from '../LDOProtocol'
+import { LidoProtocol } from './LDOProtocol'
 
 export const LDO_PAIRS_LIST: [FungibleTokenDetailed, FungibleTokenDetailed][] = [
     [

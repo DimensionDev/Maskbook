@@ -1,5 +1,5 @@
 import { ChainId, createERC20Token, createNativeToken, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { CompoundProtocol } from '../CompoundProtocol'
+import { CompoundProtocol } from './CompoundProtocol'
 
 export const COMPOUND_PAIRS_LIST: [FungibleTokenDetailed, FungibleTokenDetailed][] = [
     [
@@ -65,6 +65,5 @@ export const COMPOUND_PAIRS_LIST: [FungibleTokenDetailed, FungibleTokenDetailed]
         ),
     ],
 ]
-
 
 export const COMPOUND_PAIRS = COMPOUND_PAIRS_LIST.map((pair) => new CompoundProtocol(pair))

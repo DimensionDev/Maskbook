@@ -1,11 +1,8 @@
-import { BENQI_PAIRS } from './pairs/benqi'
-import { COMPOUND_PAIRS } from './pairs/compound'
-import { LDO_PAIRS } from './pairs/ldo'
-import { AAVE_PAIRS } from '../constants'
+import { BENQI_PAIRS } from './benqi/pairs'
+import { COMPOUND_PAIRS } from './compound/pairs'
+import { LDO_PAIRS } from './ldo/pairs'
+import { aaveLazyResolver } from './aave/AAVEResolver'
 
-export const SavingsProtocols = [
-    ...LDO_PAIRS,
-    ...BENQI_PAIRS,
-    ...COMPOUND_PAIRS,
-    ...AAVE_PAIRS.map((pair) => new AAVEProtocol(pair))
-]
+export const SavingsProtocols = [...LDO_PAIRS, ...BENQI_PAIRS, ...COMPOUND_PAIRS]
+
+export const LazyProtocolsResolvers = [aaveLazyResolver]
