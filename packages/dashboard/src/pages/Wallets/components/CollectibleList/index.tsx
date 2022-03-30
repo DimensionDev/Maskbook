@@ -12,7 +12,7 @@ import { PluginMessages } from '../../../../API'
 import { TransferTab } from '../Transfer'
 import {
     Web3Plugin,
-    usePluginIDContext,
+    useCurrentWeb3NetworkPluginID,
     NetworkPluginID,
     mergeNFTList,
     useWeb3State,
@@ -83,7 +83,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
 
     const collectibles = (Utils?.mergeNFTList ?? mergeNFTList)([..._collectibles, ...customCollectibles])
     const isLoading = loadingCollectibleDone !== SocketState.done
-    const currentPluginId = usePluginIDContext()
+    const currentPluginId = useCurrentWeb3NetworkPluginID()
     const onSend = useCallback(
         (detail: ERC721TokenDetailed) => {
             // Sending NFT is only available on EVM currently.

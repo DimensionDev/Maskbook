@@ -3,12 +3,13 @@ import type { ChainId } from '../types'
 import { Web3TokenType } from '@masknet/web3-shared-base'
 import { useERC20TokenBalance } from './useERC20TokenBalance'
 import { useNativeTokenBalance } from './useNativeTokenBalance'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 
 export function useFungibleTokenBalance(
     type: Web3TokenType.Native | Web3TokenType.ERC20,
     address?: string,
     chainId?: ChainId,
-) {
+): AsyncStateRetry<string | undefined> {
     const r1 = useNativeTokenBalance(chainId)
     const r2 = useERC20TokenBalance(type === Web3TokenType.ERC20 ? address : undefined, chainId)
 

@@ -1,4 +1,5 @@
 import { Plugin, usePluginWrapper } from '@masknet/plugin-infra'
+import { useState } from 'react'
 import { ItoLabelIcon } from '../assets/ItoLabelIcon'
 import { makeStyles } from '@masknet/theme'
 import { formatEthereumAddress, formatBalance, useFungibleTokenDetailed } from '@masknet/web3-shared-evm'
@@ -12,6 +13,9 @@ import { CompositionDialog } from './CompositionDialog'
 import { set } from 'lodash-unified'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { MarketsIcon } from '@masknet/icons'
+import { ApplicationEntry } from '@masknet/shared'
+import { CrossIsolationMessages } from '@masknet/shared-base'
+import { ClaimAllDialog } from './ClaimAllDialog'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -53,6 +57,46 @@ const sns: Plugin.SNSAdaptor.Definition = {
             ),
         },
     },
+    ApplicationEntries: [
+        {
+            RenderEntryComponent({ disabled }) {
+                return (
+                    <ApplicationEntry
+                        disabled={disabled}
+                        title="ITO"
+                        icon={new URL('../assets/token.png', import.meta.url).toString()}
+                        onClick={() =>
+                            CrossIsolationMessages.events.requestComposition.sendToLocal({
+                                reason: 'timeline',
+                                open: true,
+                                options: {
+                                    startupPlugin: base.ID,
+                                },
+                            })
+                        }
+                    />
+                )
+            },
+            defaultSortingPriority: 3,
+        },
+        {
+            RenderEntryComponent({ disabled }) {
+                const [open, setOpen] = useState(false)
+                return (
+                    <>
+                        <ApplicationEntry
+                            title="Claim"
+                            disabled={disabled}
+                            icon={new URL('../assets/gift.png', import.meta.url).toString()}
+                            onClick={() => setOpen(true)}
+                        />
+                        <ClaimAllDialog open={open} onClose={() => setOpen(false)} />
+                    </>
+                )
+            },
+            defaultSortingPriority: 4,
+        },
+    ],
 }
 
 function onAttached_ITO(payload: JSON_PayloadComposeMask) {

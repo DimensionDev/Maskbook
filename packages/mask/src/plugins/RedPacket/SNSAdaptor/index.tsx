@@ -20,6 +20,8 @@ import RedPacketDialog from './RedPacketDialog'
 import { RedPacketInPost } from './RedPacketInPost'
 import { RedPacketNftInPost } from './RedPacketNftInPost'
 import { RedPacketIcon, NFTRedPacketIcon } from '@masknet/icons'
+import { CrossIsolationMessages } from '@masknet/shared-base'
+import { ApplicationEntry } from '@masknet/shared'
 
 function Render(props: React.PropsWithChildren<{ name: string }>) {
     usePluginWrapper(true, { name: props.name })
@@ -90,6 +92,29 @@ const sns: Plugin.SNSAdaptor.Definition = {
             ),
         },
     },
+    ApplicationEntries: [
+        {
+            RenderEntryComponent({ disabled }) {
+                return (
+                    <ApplicationEntry
+                        title="Lucky Drop"
+                        disabled={disabled}
+                        icon={new URL('./assets/lucky_drop.png', import.meta.url).toString()}
+                        onClick={() =>
+                            CrossIsolationMessages.events.requestComposition.sendToLocal({
+                                reason: 'timeline',
+                                open: true,
+                                options: {
+                                    startupPlugin: base.ID,
+                                },
+                            })
+                        }
+                    />
+                )
+            },
+            defaultSortingPriority: 1,
+        },
+    ],
 }
 interface ERC20RedpacketBadgeProps {
     payload: RedPacketJSONPayload

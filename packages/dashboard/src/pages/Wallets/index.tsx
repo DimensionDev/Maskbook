@@ -4,7 +4,7 @@ import {
     useAccount,
     useChainId,
     useNetworkDescriptor,
-    usePluginIDContext,
+    useCurrentWeb3NetworkPluginID,
     useWallet,
     useWallets,
     useWeb3State as useWeb3PluginState,
@@ -51,7 +51,7 @@ function Wallets() {
 
     const networks = getRegisteredWeb3Networks()
     const networkDescriptor = useNetworkDescriptor()
-    const pluginId = usePluginIDContext()
+    const pluginId = useCurrentWeb3NetworkPluginID()
     const [selectedNetwork, setSelectedNetwork] = useState<Web3Plugin.NetworkDescriptor | null>(
         networkDescriptor ?? null,
     )

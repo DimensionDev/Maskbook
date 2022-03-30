@@ -3,6 +3,7 @@ import { usePostInfoDetails } from '@masknet/plugin-infra'
 import { EMPTY_LIST, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { queryExistedBindingByPersona, queryIsBound } from '@masknet/web3-providers'
+import type { TooltipProps } from '@mui/material'
 import classnames from 'classnames'
 import { uniq } from 'lodash-unified'
 import { FC, HTMLProps, MouseEventHandler, useCallback, useMemo } from 'react'
@@ -15,6 +16,7 @@ import { PluginNextIdMessages } from '../../messages'
 interface Props extends HTMLProps<HTMLDivElement> {
     addresses?: string[]
     receiver?: ProfileIdentifier
+    tooltipProps?: Partial<TooltipProps>
 }
 
 const useStyles = makeStyles()({
@@ -25,12 +27,26 @@ const useStyles = makeStyles()({
         alignItems: 'center',
         fontFamily: '-apple-system, system-ui, sans-serif',
     },
-    postTipButton: {
-        display: 'flex',
+    buttonWrapper: {
         // temporarily hard code
         height: 46,
+        display: 'flex',
         alignItems: 'center',
         color: '#8899a6',
+    },
+    postTipButton: {
+        cursor: 'pointer',
+        width: 34,
+        height: 34,
+        borderRadius: '100%',
+        '&:hover': {
+            backgroundColor: 'rgba(20,155,240,0.1)',
+        },
+    },
+    tooltip: {
+        backgroundColor: 'rgb(102,102,102)',
+        color: 'white',
+        marginTop: '0 !important',
     },
     disabled: {
         opacity: 0.4,
@@ -38,7 +54,14 @@ const useStyles = makeStyles()({
     },
 })
 
-export const TipButton: FC<Props> = ({ className, receiver, addresses = EMPTY_LIST, children, ...rest }) => {
+export const TipButton: FC<Props> = ({
+    className,
+    receiver,
+    addresses = EMPTY_LIST,
+    children,
+    tooltipProps,
+    ...rest
+}) => {
     const { classes } = useStyles()
     const t = useI18N()
 
@@ -103,15 +126,24 @@ export const TipButton: FC<Props> = ({ className, receiver, addresses = EMPTY_LI
 
     if (disabled)
         return (
-            <ShadowRootTooltip title={t.tip_wallets_missed()} placement="top" arrow>
+            <ShadowRootTooltip
+                classes={{ tooltip: classes.tooltip }}
+                title={t.tip_wallets_missed()}
+                placement="bottom"
+                arrow={false}
+                {...tooltipProps}>
                 {dom}
             </ShadowRootTooltip>
         )
     return dom
 }
 
-export const PostTipButton: FC<Props> = (props) => {
+export const PostTipButton: FC<Props> = ({ className, ...rest }) => {
     const identifier = usePostInfoDetails.author()
     const { classes } = useStyles()
-    return <TipButton {...props} className={classnames(classes.postTipButton, props.className)} receiver={identifier} />
+    return (
+        <div className={classes.buttonWrapper}>
+            <TipButton className={classnames(classes.postTipButton, className)} {...rest} receiver={identifier} />
+        </div>
+    )
 }

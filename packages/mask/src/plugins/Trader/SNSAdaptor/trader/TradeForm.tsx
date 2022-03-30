@@ -213,7 +213,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         const { t } = useI18N()
         const { classes } = useStyles({ isDashboard, isPopup })
         const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-        const [isExpand, setIsExpand] = useState(false)
+        const [isExpand, setExpand] = useState(false)
 
         // #region approve token
         const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(
@@ -285,7 +285,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         // #endregion
 
         useUpdateEffect(() => {
-            setIsExpand(false)
+            setExpand(false)
         }, [chainId, inputToken, inputAmount, outputToken])
 
         useUpdateEffect(() => {
@@ -427,7 +427,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                             classes.chevron,
                                             isExpand ? classes.reverseChevron : null,
                                         )}
-                                        onClick={() => setIsExpand(!isExpand)}
+                                        onClick={() => setExpand(!isExpand)}
                                     />
                                 </Box>
                             </>

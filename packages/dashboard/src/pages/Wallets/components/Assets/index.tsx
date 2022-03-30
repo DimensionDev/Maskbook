@@ -10,7 +10,7 @@ import { AddCollectibleDialog } from '../AddCollectibleDialog'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginMessages } from '../../../../API'
 import type { Web3Plugin } from '@masknet/plugin-infra'
-import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
+import { NetworkPluginID, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra'
 import { v4 as uuid } from 'uuid'
 
 const useStyles = makeStyles()((theme) => ({
@@ -46,7 +46,7 @@ interface TokenAssetsProps {
 
 export const Assets = memo<TokenAssetsProps>(({ network }) => {
     const t = useDashboardI18N()
-    const pluginId = usePluginIDContext()
+    const pluginId = useCurrentWeb3NetworkPluginID()
     const { classes } = useStyles()
     const [id] = useState(uuid())
     const assetTabsLabel: Record<AssetTab, string> = {

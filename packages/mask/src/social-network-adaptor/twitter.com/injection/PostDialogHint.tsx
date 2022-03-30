@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback } from 'react'
 import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { isReplyPageSelector, postEditorInPopupSelector, searchReplyToolbarSelector } from '../utils/selector'
@@ -51,7 +51,6 @@ function renderPostDialogHintTo<T>(reason: 'timeline' | 'popup', ls: LiveSelecto
 function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
     const { classes } = useStyles()
     const { t } = useI18N()
-    const [isReply, setIsReply] = useState(false)
 
     const onHintButtonClicked = useCallback(() => {
         const content = sayHelloShowed[twitterBase.networkIdentifier].value
@@ -68,10 +67,6 @@ function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
         })
         sayHelloShowed[twitterBase.networkIdentifier].value = true
     }, [reason, isReplyPageSelector])
-
-    useEffect(() => {
-        setIsReply(isReplyPageSelector())
-    }, [location])
 
     return (
         <PostDialogHint

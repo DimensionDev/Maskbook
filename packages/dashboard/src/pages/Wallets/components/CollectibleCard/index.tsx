@@ -6,7 +6,12 @@ import { useHoverDirty } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
 import { WalletIcon, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { ChangeNetworkTip } from '../FungibleTokenTableRow/ChangeNetworkTip'
-import { NetworkPluginID, useNetworkDescriptor, usePluginIDContext, useWeb3State } from '@masknet/plugin-infra'
+import {
+    NetworkPluginID,
+    useNetworkDescriptor,
+    useCurrentWeb3NetworkPluginID,
+    useWeb3State,
+} from '@masknet/plugin-infra'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared-base'
 import { useChainId } from '@masknet/web3-shared-evm'
 
@@ -109,7 +114,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
     const isHovering = useHoverDirty(ref)
     const networkDescriptor = useNetworkDescriptor(token.contractDetailed?.chainId)
     const isOnCurrentChain = useMemo(() => currentChainId === token.contractDetailed?.chainId, [currentChainId, token])
-    const currentPluginId = usePluginIDContext()
+    const currentPluginId = useCurrentWeb3NetworkPluginID()
 
     useEffect(() => {
         setHoveringTooltip(false)
