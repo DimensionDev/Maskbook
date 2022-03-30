@@ -30,12 +30,12 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 interface ENSDetailProps {
-    ENS_Info: ENS_Info_type
+    ENS_Info?: ENS_Info_type
 }
 
 const ENSDetail: React.FC<ENSDetailProps> = ({ ENS_Info }) => {
     const { classes } = useStyles()
-    const { t } = useI18N()
+    const t = useI18N()
     const [ensName, setEnsName] = useState('')
 
     const handleEnsNameChange = useCallback((ev: ChangeEvent<HTMLInputElement>) => {
@@ -49,25 +49,25 @@ const ENSDetail: React.FC<ENSDetailProps> = ({ ENS_Info }) => {
     return (
         <>
             <Box className={classes.wrapper}>
-                <Typography variant="subtitle1">{t('parent')}:</Typography>
+                <Typography variant="subtitle1">{t.parent()}:</Typography>
                 <Typography marginLeft={2} variant="subtitle1">
                     eth
                 </Typography>
             </Box>
             <Box className={classes.wrapper}>
-                <Typography variant="subtitle1">{t('owner')}:</Typography>
+                <Typography variant="subtitle1">{t.owner()}:</Typography>
                 <Typography variant="subtitle1" marginLeft={2}>
                     {ENS_Info?.owner}
                 </Typography>
             </Box>
             <Box className={classes.wrapper}>
-                <Typography variant="subtitle1">{t('resolver')}:</Typography>
+                <Typography variant="subtitle1">{t.resolver()}:</Typography>
                 <Typography variant="subtitle1" marginLeft={2}>
                     {ENS_Info?.resolver}
                 </Typography>
             </Box>
             <Box className={classes.wrapper}>
-                <Typography variant="subtitle1">{t('ttl')}:</Typography>
+                <Typography variant="subtitle1">{t.ttl()}:</Typography>
                 <Typography variant="subtitle1" marginLeft={2}>
                     {ENS_Info?.ttl === '0' ? 'not found' : ENS_Info?.ttl}
                 </Typography>

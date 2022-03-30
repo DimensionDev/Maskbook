@@ -3,7 +3,7 @@ import { Box } from '@mui/system'
 import { useAsyncRetry } from 'react-use'
 import { Card, CardHeader, Typography, CardContent } from '@mui/material'
 import { useI18N } from '../locales/index'
-import { hash } from 'eth-ens-namehash'
+const { hash } = require('eth-ens-namehash')
 import { useAccount } from '@masknet/web3-shared-evm'
 import { useENSContract } from './hook/useENSContract'
 import ENSDetail from './ENSDetail'
@@ -63,7 +63,7 @@ interface ENSCardProps {
 
 const ENSCard: React.FC<ENSCardProps> = ({ url, identity }) => {
     const { classes } = useStyles()
-    const { t } = useI18N()
+    const t = useI18N()
     const contract = useENSContract()
     const account = useAccount()
 
@@ -93,7 +93,7 @@ const ENSCard: React.FC<ENSCardProps> = ({ url, identity }) => {
                         justifyContent="space-between">
                         <Typography sx={{ marginRight: 1 }}>
                             <Typography component="span" color="textSecondary" sx={{ marginRight: 0.5 }}>
-                                Ethereum Name Service
+                                {t['Ethereum Name Service']}
                             </Typography>
                             <Typography variant="h6" component="span">
                                 #{ENS_Info?.ENS_name}

@@ -10,6 +10,7 @@
         "@masknet/web3-shared-evm":"workspace:*",
         "@masknet/web3-contracts":"workspace:*",
         "react-use": "^17.3.2",
-        "eth-ens-namehash":"2.0.8"
+        "eth-ens-namehash":"2.0.8",
+        "web3-utils":"1.5.3"
     }
 }

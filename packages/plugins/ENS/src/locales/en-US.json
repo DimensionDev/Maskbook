@@ -7,5 +7,9 @@
     "registrant": "REGISTRANT",
     "controller": "CONTROLLER",
     "expiration_date": "EXPIRATION DATE",
-    "buy": "buy"
+    "buy": "buy",
+    "Ethereum Name Service": "Ethereum Name Service",
+    "resolver": "resolver",
+    "owner": "owner",
+    "ttl": "time-to-live"
 }

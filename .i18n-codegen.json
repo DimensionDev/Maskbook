@@ -183,8 +183,8 @@
             }
         },
         {
-            "input": "./packages/plugins/Test/src/locales/en-US.json",
-            "output": "./packages/plugins/Test/src/locales/i18n_generated",
+            "input": "./packages/plugins/ENS/src/locales/en-US.json",
+            "output": "./packages/plugins/ENS/src/locales/i18n_generated",
             "parser": "i18next",
             "generator": {
                 "type": "i18next/react-hooks",

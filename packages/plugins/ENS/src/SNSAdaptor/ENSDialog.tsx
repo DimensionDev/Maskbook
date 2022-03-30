@@ -4,7 +4,7 @@ import { Box } from '@mui/system'
 import { ChangeEvent, useCallback, useState } from 'react'
 import { TextField, Button } from '@mui/material'
 import { useAccount } from '@masknet/web3-shared-evm'
-import { hash } from 'eth-ens-namehash'
+const { hash } = require('eth-ens-namehash')
 import { useI18N } from '../locales/index'
 import ENSDetail from './ENSDetail'
 import type { ENS_Info_type } from './types'
@@ -41,7 +41,7 @@ interface TestDialogProps {
 
 const TestDialog: React.FC<TestDialogProps> = (props) => {
     const { classes } = useStyles()
-    const { t } = useI18N()
+    const t = useI18N()
     const [ensName, setEnsName] = useState('')
     const [ENSInfo, setENSInfo] = useState<ENS_Info_type>()
     const account = useAccount()
@@ -86,17 +86,17 @@ const TestDialog: React.FC<TestDialogProps> = (props) => {
                     //         shrink: classes.inputShrinkLabel,
                     //     },
                     // }}
-                    label={t('ens')}
+                    label={t.ens()}
                     value={ensName}
                     onChange={handleEnsNameChange}
                 />
                 <section>
                     <Button className={classes.button} variant="contained" size="small" onClick={handleSearch}>
-                        {t('search')}
+                        {t.search()}
                     </Button>
                 </section>
             </Box>
-            <ENSDetail style={{ marginLeft: '16px' }} ENS_Info={ENSInfo} />
+            <ENSDetail ENS_Info={ENSInfo} />
         </MaskDialog>
     )
 }
