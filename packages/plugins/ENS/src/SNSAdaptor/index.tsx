@@ -1,4 +1,6 @@
 import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
+import { ApplicationEntry } from '@masknet/shared'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { base } from '../base'
 import ENSDialog from './ENSDialog'
 import ENSCard from './ENSCard'
@@ -36,6 +38,29 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     />
                 ),
             },
+        },
+    ],
+    ApplicationEntries: [
+        {
+            RenderEntryComponent({ disabled }) {
+                return (
+                    <ApplicationEntry
+                        title="ENS"
+                        disabled={disabled}
+                        icon={new URL('./assets/ens.png', import.meta.url).toString()}
+                        onClick={() =>
+                            CrossIsolationMessages.events.requestComposition.sendToLocal({
+                                reason: 'timeline',
+                                open: true,
+                                options: {
+                                    startupPlugin: base.ID,
+                                },
+                            })
+                        }
+                    />
+                )
+            },
+            defaultSortingPriority: 1,
         },
     ],
 }
