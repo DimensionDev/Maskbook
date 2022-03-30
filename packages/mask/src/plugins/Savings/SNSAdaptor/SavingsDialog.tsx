@@ -10,11 +10,11 @@ import {
     getChainIdFromNetworkType,
     useChainId,
     useWeb3,
-    EthereumTokenType,
     useFungibleTokensDetailed,
     getAaveConstants,
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
+import { Web3TokenType } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
@@ -92,7 +92,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
 
     const { value: detailedAaveTokens } = useFungibleTokensDetailed(
         compact(flatten(aaveTokens ?? [])).map((m) => {
-            return { address: m, type: EthereumTokenType.ERC20 }
+            return { address: m, type: Web3TokenType.ERC20 }
         }) ?? [],
         chainId,
     )
