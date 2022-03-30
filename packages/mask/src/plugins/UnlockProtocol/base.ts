@@ -16,6 +16,8 @@ export const base: Plugin.Shared.Definition = {
             [NetworkPluginID.PLUGIN_EVM]: {
                 supportedChainIds: [ChainId.Mainnet, ChainId.xDai, ChainId.Matic, ChainId.Rinkeby],
             },
+            [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },
+            [NetworkPluginID.PLUGIN_SOLANA]: { supportedChainIds: [] },
         },
     },
     contribution: {

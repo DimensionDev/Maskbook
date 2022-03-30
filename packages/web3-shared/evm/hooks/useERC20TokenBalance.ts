@@ -4,13 +4,14 @@ import { useAccount } from './useAccount'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { useChainId } from './useChainId'
 import type { ChainId } from '../types'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 
 /**
  * Fetch token balance from chain
  * @param address
  * @param targetChainId
  */
-export function useERC20TokenBalance(address?: string, targetChainId?: ChainId) {
+export function useERC20TokenBalance(address?: string, targetChainId?: ChainId): AsyncStateRetry<string | undefined> {
     const account = useAccount()
     const defaultChainId = useChainId()
     const chainId = targetChainId ?? defaultChainId
