@@ -72,7 +72,7 @@ const useStyles = makeStyles()((theme) => {
 
 export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
     const { classes } = useStyles()
-    const { title, children, action, publisher, publisherLink } = props
+    const { open, title, children, action, publisher, publisherLink } = props
     const personaConnectStatus = usePersonaConnectStatus()
     const { t } = useI18N()
 
