@@ -3,7 +3,7 @@ import {
     Plugin,
     PluginId,
     useActivatedPluginsSNSAdaptor,
-    useAvailabilePlugins,
+    useAvailablePlugins,
 } from '@masknet/plugin-infra'
 import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
@@ -62,7 +62,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         personaList.findIndex((persona) => persona?.persona === currentConnectedPersona?.publicHexKey) === -1
 
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
-    const tabs = useAvailabilePlugins(activatedPlugins)
+    const tabs = useAvailablePlugins(activatedPlugins)
         .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? [])
         .filter((z) => z.Utils?.shouldDisplay?.(identity, addressNames) ?? true)
         .sort((a, z) => {
