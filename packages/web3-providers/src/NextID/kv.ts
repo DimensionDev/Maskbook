@@ -13,9 +13,7 @@ interface CreatePayloadResponse {
 }
 
 const BASE_URL =
-    process.env.channel === 'stable' && process.env.NODE_ENV === 'production'
-        ? 'https://kv-service.nextnext.id/healthz'
-        : ''
+    process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? '' : 'https://kv-service.nextnext.id'
 
 /**
  * Get current KV of a persona
