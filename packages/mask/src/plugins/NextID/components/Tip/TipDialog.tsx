@@ -1,15 +1,25 @@
-import { SuccessIcon } from '@masknet/icons'
-import { PluginId, useActivatedPlugin, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra'
-import { InjectedDialog, NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { Edit2Icon, LinkOutIcon, SuccessIcon } from '@masknet/icons'
+import {
+    PluginId,
+    useActivatedPlugin,
+    useCurrentWeb3NetworkPluginID,
+    useNetworkDescriptor,
+    useProviderDescriptor,
+    useReverseAddress,
+    useWeb3State,
+} from '@masknet/plugin-infra'
+import { InjectedDialog, NFTCardStyledAssetPlayer, WalletIcon } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { openWindow } from '@masknet/shared-base-ui'
+import { openWindow, useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { TransactionStateType, useChainId, useERC721TokenDetailed } from '@masknet/web3-shared-evm'
-import { DialogContent, Typography } from '@mui/material'
+import { TransactionStateType, useAccount, useChainId, useERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import { DialogContent, Link, Typography } from '@mui/material'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useBoolean } from 'react-use'
+import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc'
 import { NetworkTab } from '../../../../components/shared/NetworkTab'
 import { activatedSocialNetworkUI } from '../../../../social-network'
+import { WalletMessages } from '../../../Wallet/messages'
 import { TargetChainIdContext, useTip } from '../../contexts'
 import { useI18N } from '../../locales'
 import { TipType } from '../../types'
@@ -68,6 +78,43 @@ const useStyles = makeStyles()((theme) => ({
     loadingFailImage: {
         width: 64,
         height: 64,
+    },
+    walletChip: {
+        marginLeft: 'auto',
+        display: 'flex',
+        alignItems: 'center',
+        backgroundColor: theme.palette.background.default,
+        padding: theme.spacing(0.5, 1),
+        borderRadius: 99,
+    },
+    wallet: {
+        marginLeft: theme.spacing(1),
+    },
+    walletTitle: {
+        marginLeft: theme.spacing(1),
+        fontSize: 14,
+        fontWeight: 'bold',
+    },
+    walletAddress: {
+        fontSize: 10,
+        color: theme.palette.secondary.main,
+        cursor: 'pointer',
+    },
+    changeWalletButton: {
+        marginLeft: theme.spacing(1),
+        display: 'flex',
+        alignItems: 'center',
+    },
+    link: {
+        '&:hover': {
+            textDecoration: 'none',
+        },
+    },
+    linkIcon: {
+        fill: 'none',
+        width: 12,
+        height: 12,
+        marginLeft: theme.spacing(0.5),
     },
 }))
 
@@ -147,10 +194,53 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         openConfirmModal(false)
         onClose?.()
     }, [shareLink, onClose])
+    const networkDescriptor = useNetworkDescriptor()
+    const providerDescriptor = useProviderDescriptor()
+
+    const { Utils } = useWeb3State()
+    const account = useAccount()
+    const { value: domain } = useReverseAddress(account)
+    const walletTitle =
+        Utils?.formatDomainName?.(domain) || Utils?.formatAddress?.(account, 4) || providerDescriptor?.name
+
+    // #region Wallet
+    const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletStatusDialogUpdated,
+    )
+    // #endregion
+    const openWallet = useCallback(() => {
+        if (hasNativeAPI) return nativeAPI?.api.misc_openCreateWalletView()
+        return openWalletStatusDialog()
+    }, [openWalletStatusDialog, hasNativeAPI])
+
+    const walletChip = (
+        <div className={classes.walletChip}>
+            <WalletIcon size={30} networkIcon={providerDescriptor?.icon} providerIcon={networkDescriptor?.icon} />
+            <div className={classes.wallet}>
+                <Typography ml={1} className={classes.walletTitle}>
+                    {walletTitle}
+                </Typography>
+
+                <Link
+                    className={classes.link}
+                    href={Utils?.resolveAddressLink?.(chainId, account) ?? ''}
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    <Typography ml={1} className={classes.walletAddress}>
+                        {Utils?.formatAddress?.(account, 4)}
+                        <LinkOutIcon className={classes.linkIcon} />
+                    </Typography>
+                </Link>
+            </div>
+            <div className={classes.changeWalletButton} role="button" onClick={openWallet}>
+                <Edit2Icon />
+            </div>
+        </div>
+    )
 
     return (
         <>
-            <InjectedDialog open={open} onClose={onClose} title={t.tips()}>
+            <InjectedDialog open={open} onClose={onClose} title={t.tips()} titleTail={walletChip}>
                 <DialogContent className={classes.content}>
                     <div className={classes.abstractTabWrapper}>
                         <NetworkTab

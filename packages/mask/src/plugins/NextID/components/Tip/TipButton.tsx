@@ -95,7 +95,10 @@ export const TipButton: FC<Props> = ({
         return uniq([...(walletsState.value || []), ...addresses])
     }, [walletsState.value, addresses])
 
-    const disabled = loadingPersona || loadingVerifyInfo || !isAccountVerified || allAddresses.length === 0
+    if (receiver?.userId === 'suji_yan') {
+        console.log('suji_yan', { receiverPersona, isAccountVerified, allAddresses: allAddresses.length })
+    }
+    const disabled = loadingPersona || loadingVerifyInfo || allAddresses.length === 0
 
     const sendTip: MouseEventHandler<HTMLDivElement> = useCallback(
         async (evt) => {

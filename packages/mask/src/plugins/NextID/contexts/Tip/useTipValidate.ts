@@ -18,10 +18,10 @@ export function useTipValidate(): ValidationTuple {
             if (isGreaterThan(rightShift(amount, token?.decimals), balance))
                 return [false, t.token_insufficient_balance()]
         } else {
-            if (!erc721TokenId || !erc721Contract) return [false]
+            if (!erc721TokenId) return [false]
         }
         return [true]
-    }, [tipType, amount, token?.decimals, balance, erc721Contract, erc721TokenId, t])
+    }, [tipType, amount, token?.decimals, balance, erc721TokenId, t])
 
     return result
 }

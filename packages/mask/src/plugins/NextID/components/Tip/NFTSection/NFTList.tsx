@@ -1,15 +1,15 @@
+import type { Web3Plugin } from '@masknet/plugin-infra'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
-import { ERC721TokenDetailed, formatNFT_TokenId, useChainId } from '@masknet/web3-shared-evm'
-import { Checkbox, List, ListItem, Radio, Typography } from '@mui/material'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { formatNFT_TokenId, useChainId } from '@masknet/web3-shared-evm'
+import { Checkbox, List, ListItem, Radio, Tooltip } from '@mui/material'
 import classnames from 'classnames'
 import { noop } from 'lodash-unified'
 import { FC, useCallback } from 'react'
 
 interface Props {
     selectedIds: string[]
-    tokens: ERC721TokenDetailed[]
-    enableTokenIds?: string[]
+    tokens: Web3Plugin.NonFungibleToken[]
     onChange?: (ids: string[]) => void
     limit?: number
     className: string
@@ -21,6 +21,11 @@ const useStyles = makeStyles()((theme) => ({
         right: 0,
         top: 0,
     },
+    list: {
+        gridGap: 13,
+        display: 'grid',
+        gridTemplateColumns: 'repeat(5, 1fr)',
+    },
     nftItem: {
         position: 'relative',
         cursor: 'pointer',
@@ -30,9 +35,9 @@ const useStyles = makeStyles()((theme) => ({
         padding: 0,
         flexDirection: 'column',
         borderRadius: 8,
-        height: 180,
+        height: 100,
         userSelect: 'none',
-        width: 120,
+        width: 100,
         justifyContent: 'center',
     },
     disabled: {
@@ -51,31 +56,26 @@ function arrayRemove<T>(arr: T[], item: T): T[] {
 }
 
 interface NFTItemProps {
-    token: ERC721TokenDetailed
+    token: Web3Plugin.NonFungibleToken
 }
 
 export const NFTItem: FC<NFTItemProps> = ({ token }) => {
     const { classes } = useStyles()
     const chainId = useChainId()
     return (
-        <>
-            <NFTCardStyledAssetPlayer
-                chainId={chainId}
-                contractAddress={token.contractDetailed.address}
-                url={token.info.mediaUrl}
-                tokenId={token.tokenId}
-                classes={{
-                    loadingFailImage: classes.loadingFailImage,
-                }}
-            />
-            <Typography variant="subtitle1" textAlign="center">
-                {formatNFT_TokenId(token.tokenId, 2)}
-            </Typography>
-        </>
+        <NFTCardStyledAssetPlayer
+            chainId={chainId}
+            contractAddress={token.contract?.address}
+            url={token.metadata?.assetURL}
+            tokenId={token.tokenId}
+            classes={{
+                loadingFailImage: classes.loadingFailImage,
+            }}
+        />
     )
 }
 
-export const NFTList: FC<Props> = ({ selectedIds, tokens, enableTokenIds = [], onChange, limit = 1, className }) => {
+export const NFTList: FC<Props> = ({ selectedIds, tokens, onChange, limit = 1, className }) => {
     const { classes } = useStyles()
 
     const isRadio = limit === 1
@@ -99,33 +99,38 @@ export const NFTList: FC<Props> = ({ selectedIds, tokens, enableTokenIds = [], o
     const SelectComponent = isRadio ? Radio : Checkbox
 
     return (
-        <List className={className}>
+        <List className={classnames(classes.list, className)}>
             {tokens.map((token) => {
-                const isNotOwned = !enableTokenIds.includes(token.tokenId)
-                const disabled = (!isRadio && reachedLimit && !selectedIds.includes(token.tokenId)) || isNotOwned
+                const disabled = !isRadio && reachedLimit && !selectedIds.includes(token.tokenId)
                 return (
-                    <ListItem
+                    <ShadowRootTooltip
                         key={token.tokenId}
-                        className={classnames({
-                            [classes.nftItem]: true,
-                            [classes.disabled]: disabled,
-                        })}
-                        onClick={() => {
-                            if (disabled) return
-                            toggleItem(token.tokenId)
-                        }}>
-                        <NFTItem token={token} />
-                        <SelectComponent
-                            onChange={noop}
-                            disabled={disabled}
+                        title={formatNFT_TokenId(token.tokenId, 2)}
+                        placement="top"
+                        arrow>
+                        <ListItem
+                            key={token.tokenId}
+                            className={classnames(classes.nftItem, {
+                                [classes.disabled]: disabled,
+                            })}
                             onClick={() => {
                                 if (disabled) return
                                 toggleItem(token.tokenId)
-                            }}
-                            className={classes.checkbox}
-                            checked={selectedIds.includes(token.tokenId)}
-                        />
-                    </ListItem>
+                            }}>
+                            <NFTItem token={token} />
+                            <SelectComponent
+                                size="small"
+                                onChange={noop}
+                                disabled={disabled}
+                                onClick={() => {
+                                    if (disabled) return
+                                    toggleItem(token.tokenId)
+                                }}
+                                className={classes.checkbox}
+                                checked={selectedIds.includes(token.tokenId)}
+                            />
+                        </ListItem>
+                    </ShadowRootTooltip>
                 )
             })}
         </List>
